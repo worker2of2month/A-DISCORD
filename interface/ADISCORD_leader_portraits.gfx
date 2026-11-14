@@ -1843,4 +1843,94 @@ spriteTypes = {
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
 	}
+
+	spriteType = {
+		name = "GFX_portrait_IVN_Commune_Council"
+		texturefile = "gfx/leaders/IVN/portrait_IVN_Commune_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_IVN_Marches_Council"
+		texturefile = "gfx/leaders/IVN/portrait_IVN_Marches_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Shift_Councils"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Shift_Councils.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SLI_Island_Council"
+		texturefile = "gfx/leaders/SLI/portrait_SLI_Island_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_CIN_VAL_commission"
+		texturefile = "gfx/leaders/CIN/portrait_CIN_VAL_commission.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_OSF_VAL_commission"
+		texturefile = "gfx/leaders/OSF/portrait_OSF_VAL_commission.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_APH_VAL_commission"
+		texturefile = "gfx/leaders/APH/portrait_APH_VAL_commission.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_VAL_party_administration"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_party_administration.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_OCA_Contract_Council"
+		texturefile = "gfx/leaders/OCA/portrait_OCA_Contract_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_ECA_Contract_Council"
+		texturefile = "gfx/leaders/ECA/portrait_ECA_Contract_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_DCA_Contract_Council"
+		texturefile = "gfx/leaders/DCA/portrait_DCA_Contract_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_YPR_Contract_Council"
+		texturefile = "gfx/leaders/YPR/portrait_YPR_Contract_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_WCA_Contract_Council"
+		texturefile = "gfx/leaders/WCA/portrait_WCA_Contract_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SFD_Farhad_Mehr"
+		texturefile = "gfx/leaders/SFD/portrait_SFD_Farhad_Mehr.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SCD_Nadir_Vezran"
+		texturefile = "gfx/leaders/SCD/portrait_SCD_Nadir_Vezran.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SMD_Laleh_Sorani"
+		texturefile = "gfx/leaders/SMD/portrait_SMD_Laleh_Sorani.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SOD_Bahram_Kord"
+		texturefile = "gfx/leaders/SOD/portrait_SOD_Bahram_Kord.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SDA_Samira_Radan"
+		texturefile = "gfx/leaders/SDA/portrait_SDA_Samira_Radan.png"
+	}
 }

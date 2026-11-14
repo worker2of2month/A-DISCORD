@@ -1,0 +1,549 @@
+{
+  "tool": "built-in image_gen",
+  "template": "tools/assets/source/portrait.psd",
+  "canvas": [
+    156,
+    210
+  ],
+  "portraits": [
+    {
+      "id": "RIN_Northern_Court_Regency",
+      "name": "Регентский совет Северного двора",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_9.png"
+      ],
+      "file": "common/characters/ADISCORD_inner_frontier_characters.txt",
+      "country": "Рина",
+      "description": "После того как Аларик IV поддержал южные хартии, верные северной присяге дома собрали регентский совет при Палатинском Дворе. Он ведёт войну от имени короны и сохраняет обязательства перед Монтерой до решения вопроса о власти в Рине.",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_9"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE collective government portrait for the A-Discord game, matching the supplied reference images' gritty realistic painted-photographic aesthetic. A small GROUP OF EXACTLY THREE ADULTS jointly representing an institution. Waist-up composition around a narrow table at the bottom of frame, staggered close together with all THREE FACES LARGE, clear, separated and equally important; never crop a head, never hide a face, avoid a distant meeting hall. Vertical 26:35 composition to be reduced to 156x210 pixels. Figures and table form a single cutout silhouette, real TRANSPARENT ALPHA behind heads and shoulders. Headroom 4 percent, table occupies only bottom 15 percent. Realistic natural anatomy and hands; minimal visible hands resting on table. Strong modeled light from upper left, muted brown-grey palette, natural age texture, subtle photographic retouching, sober expressions. No writing or readable text, no symbols, no logos, no flag, no frame, no background scenery. No CRT lines or horizontal screen texture baked in, since the actual Photoshop template adds these later. The collective reference demonstrates composition; do not copy its specific people's identities. The individual reference demonstrates rendering and lighting. Regency Council of the Northern Court of Rina: three aristocratic civilian regents, a stern silver-haired man about 65 in a dark burgundy high-collared coat, a poised mature woman about 52 with pinned dark hair in a black formal dress, and a lean middle-aged man with a neat moustache in a charcoal frock coat. Restrained old-court dress without crowns or lavish regalia. A folded parchment charter and dark leather folio on the table. Cautious dignified expressions.",
+      "sprite": "GFX_portrait_RIN_Northern_Court_Regency",
+      "runtime_path": "gfx/leaders/RIN/portrait_RIN_Northern_Court_Regency.png",
+      "source_file": "exec-1a90cd61-3937-472c-84a0-4cb93c0eaca9.png",
+      "runtime_sha256": "114f78e39b4487cf6ca3d18a515bcdbe746b999c804f30d4f12d831e4a73ccfc"
+    },
+    {
+      "id": "RLY_Relay_Assembly_17",
+      "name": "Станционный совет Релейна",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+      ],
+      "file": "common/characters/ADISCORD_inner_frontier_characters.txt",
+      "country": "Релейн",
+      "description": "В Релейне нет единоличного главы. Начальники смен, инженеры очистки и хранители архива заседают в Станционном совете, совместно утверждая аварийные протоколы и порядок использования уцелевшей инфраструктуры.",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4"
+        ]
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE collective government portrait for the A-Discord game, matching the supplied reference images' gritty realistic painted-photographic aesthetic. A small GROUP OF EXACTLY THREE ADULTS jointly representing an institution. Waist-up composition around a narrow table at the bottom of frame, staggered close together with all THREE FACES LARGE, clear, separated and equally important; never crop a head, never hide a face, avoid a distant meeting hall. Vertical 26:35 composition to be reduced to 156x210 pixels. Figures and table form a single cutout silhouette, real TRANSPARENT ALPHA behind heads and shoulders. Headroom 4 percent, table occupies only bottom 15 percent. Realistic natural anatomy and hands; minimal visible hands resting on table. Strong modeled light from upper left, muted brown-grey palette, natural age texture, subtle photographic retouching, sober expressions. No writing or readable text, no symbols, no logos, no flag, no frame, no background scenery. No CRT lines or horizontal screen texture baked in, since the actual Photoshop template adds these later. The collective reference demonstrates composition; do not copy its specific people's identities. The individual reference demonstrates rendering and lighting. Relayne Station Council: three equal delegates, a middle-aged woman in a faded blue engineering jacket with short practical hair, a lean older male archivist with round glasses in a brown wool vest, and a younger bearded male shift supervisor in charcoal work clothes. Creased infrastructure diagrams and a mechanical measuring tool on the narrow table. Focused practical expressions, modest functional clothes.",
+      "sprite": "GFX_portrait_RLY_Relay_Assembly_17",
+      "runtime_path": "gfx/leaders/RLY/portrait_RLY_Relay_Assembly_17.png",
+      "source_file": "exec-2384d3f0-0144-4ae6-b9e2-4bff12762204.png",
+      "runtime_sha256": "d8fcb91b8d59707a05a84ae467bcdc8b7d99a2c008c3494811facde7bb101e8d"
+    },
+    {
+      "id": "DRV_Council_of_Free_Valleys",
+      "name": "Сход свободных долин",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
+      ],
+      "file": "common/characters/ADISCORD_northern_characters.txt",
+      "country": "Дравен",
+      "description": "Дравен не имеет постоянного правительства: делегаты долин собираются для ремонта дорог, разрешения споров и общей обороны. Такая система плохо переносит долгую централизацию, но почти не оставляет места далёкой бюрократии.",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_3"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Assembly of the Free Valleys of Draven: three rural delegates of equal standing, a weathered older woman with grey braid in a heavy brown wool coat, a sturdy middle-aged clean-shaven man in a green work jacket, and a younger man with curly dark hair in a plain muted grey sweater. Rough wooden table, a folded map of roads and simple written petitions. Calm independent ordinary citizens, no ceremonial regalia. Composition: candid STANDING conversation, no table. The grey-braided woman on the left is in three-quarter profile speaking with one open palm; the sturdy man stands at the right turned toward her, and the curly-haired man stands further back between them holding a folded road map at chest level. All eyes are directed toward one another, not toward the viewer. Uneven shoulder heights, asymmetrical silhouettes.",
+      "sprite": "GFX_portrait_DRV_Council_of_Free_Valleys",
+      "runtime_path": "gfx/leaders/DRV/portrait_DRV_Council_of_Free_Valleys.png",
+      "source_file": "exec-6550dd04-cf8e-4b79-8dca-f3edd12a2486.png",
+      "discarded_variants": [
+        {
+          "source_file": "exec-ebd645e0-0c7e-4804-b1a1-ef8170f761b8.png",
+          "reason": "Replaced to vary group pose and interaction."
+        }
+      ],
+      "runtime_sha256": "3600f289b3cbbe892b68f51935880c47aea1ea58ec41bb0c652e6f338622afac"
+    },
+    {
+      "id": "MZR_Ration_Assembly",
+      "name": "Собрание распределителей",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+      ],
+      "file": "common/characters/ADISCORD_southern_desert_characters.txt",
+      "country": "Мазар",
+      "description": "Мазар подчинил хозяйство простому принципу: каждая капля должна принести наибольшую пользу большинству. Представители поселений выбирают распределителей по результатам их работы с запасами и водовозами.",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Mazar Assembly of Distributors: three mature desert-town delegates of equal rank with olive-brown skin, a lean elderly man with a white moustache in a sand-colored work jacket, a serious middle-aged woman with dark braided hair in a muted brown blouse, and a broad clean-shaven man in a faded blue-grey shirt and vest. Neatly stacked ration ledgers and a simple metal water cup on the table. Practical civic clothing, sun-weathered faces. Composition: intimate SIDE VIEW of a working session. The white-moustached man sits nearest the lower right reading an open ledger; the woman sits on the left facing him with a pencil, while the broad-faced man leans in from the upper left to check the same page. Three faces at different angles, only one may glance toward the viewer. No centered standing person.",
+      "sprite": "GFX_portrait_MZR_Ration_Assembly",
+      "runtime_path": "gfx/leaders/MZR/portrait_MZR_Ration_Assembly.png",
+      "source_file": "exec-fd7c28a0-97a2-4d8d-807e-b760ca36726b.png",
+      "discarded_variants": [
+        {
+          "source_file": "exec-204fb6d3-d56a-454b-a842-60826f70d1c3.png",
+          "reason": "Replaced to vary group pose and interaction."
+        }
+      ],
+      "runtime_sha256": "6b4b3ac09a3b8aeb264020304b7b5e7fb8c988bd51cf8d73fe15e8fa1b4590fa"
+    },
+    {
+      "id": "KYZ_Qanat_Assembly",
+      "name": "Собрание арычных общин",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
+      ],
+      "file": "common/characters/ADISCORD_southern_desert_characters.txt",
+      "country": "Кейзан",
+      "description": "Поселения Кейзана не признают постоянной столицы. Делегаты сходятся у главного водосбора лишь для решения споров о каналах, пастбищах и общей обороне.",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_3"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Qanat Communities Assembly of Keyzan: three desert village delegates, an older man with a short grey beard and simple beige head wrap, a middle-aged woman with a loose dark green headscarf and earth-colored coat, and a young adult man with thick black hair and an ochre work shirt. Equal prominence, worn plain linen and wool, a hand-drawn irrigation diagram and modest notebook on the table. Thoughtful conversational poses. Composition: three delegates seated in a shallow CURVED arrangement seen from a slightly elevated angle. The man with the head wrap is at left in profile, the woman at right speaks with a small open-hand gesture, the young man between them turns toward her and holds a rolled irrigation sketch. They are discussing rather than posing. Face positions form a descending diagonal, not a symmetric triangle.",
+      "sprite": "GFX_portrait_KYZ_Qanat_Assembly",
+      "runtime_path": "gfx/leaders/KYZ/portrait_KYZ_Qanat_Assembly.png",
+      "source_file": "exec-7bfe682d-0541-479f-844f-016b8ff2f9f2.png",
+      "runtime_sha256": "bb48c50853d52c7812801eb89faba1a0a0264c50299736399f0942b56d0ff1fd"
+    },
+    {
+      "id": "SFD_administrative_board",
+      "name": "Управление наместничества",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+      ],
+      "file": "common/characters/ADISCORD_southern_desert_characters.txt",
+      "country": "Дирекция кяризов",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Qanat Directorate administrative board: three regional civil servants, a middle-aged clean-shaven man with rectangular glasses in a dark olive service tunic, a local woman with dark hair tied back in a sand-colored practical coat, and an older olive-skinned bearded male hydraulic engineer in a faded grey jacket. A ruler and rolled channel plan on the desk. Organized restrained administrative atmosphere. Composition: the hydraulic engineer STANDS at the left holding a rolled channel plan vertically; the woman sits in the lower center studying a page, and the bespectacled official at right bends forward toward her. View slightly from above, no one faces straight at the camera; the left standing figure is tallest.",
+      "sprite": "GFX_portrait_SFD_administrative_board",
+      "runtime_path": "gfx/leaders/SFD/portrait_SFD_administrative_board.png",
+      "source_file": "exec-fd909d43-940b-44c5-82cb-fbccc48f0751.png",
+      "runtime_sha256": "bc93396b7cb0774497d28c853a1e1a634b64164bd4f1cf46da1031ab7b6eb8e6"
+    },
+    {
+      "id": "SCD_administrative_board",
+      "name": "Управление наместничества",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+      ],
+      "file": "common/characters/ADISCORD_southern_desert_characters.txt",
+      "country": "Дирекция Большого тракта",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Great Road Directorate administrative board: three road and transport officials, a stocky moustached middle-aged man in a dust-brown service coat, a younger olive-skinned woman with short curly hair in charcoal office clothing, and a long-faced grey-haired man in a dark green logistics jacket. A road map and closed dispatch ledger on the desk. Restrained coordinated teamwork. Composition: all three officials STAND in a compact diagonal line, tallest man at back LEFT and the female clerk at front RIGHT. The older logistics official in the middle holds a folded road map at chest level, and the other two turn to inspect it. No table, no symmetrical arrangement, distinct head directions.",
+      "sprite": "GFX_portrait_SCD_administrative_board",
+      "runtime_path": "gfx/leaders/SCD/portrait_SCD_administrative_board.png",
+      "source_file": "exec-401c1ba8-22ee-496e-8488-f8f07f95d28c.png",
+      "runtime_sha256": "349377bc786d1abc829cc9d3c33e511e6f8548f1de53b23c9bd5f1e6ba52642d"
+    },
+    {
+      "id": "SMD_administrative_board",
+      "name": "Управление наместничества",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+      ],
+      "file": "common/characters/ADISCORD_southern_desert_characters.txt",
+      "country": "Дирекция побережья",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Coastal Directorate administrative board: three port administrators, an older grey-bearded olive-skinned man in a navy-blue wool coat, a middle-aged woman with dark hair in a low bun in a pale grey civilian jacket, and a younger clean-shaven man with thin metal glasses in a charcoal service jacket. A shipping ledger and folded harbour chart on the table. Quiet maritime administration. Composition: two seated officials face each other ACROSS the near corner of a desk, the grey-bearded man at left and the woman at right. The younger clerk stands behind the RIGHT shoulder of the woman holding a closed shipping folio. Camera sees their faces in different three-quarter angles as they speak. Empty transparent space above left, right-heavy silhouette.",
+      "sprite": "GFX_portrait_SMD_administrative_board",
+      "runtime_path": "gfx/leaders/SMD/portrait_SMD_administrative_board.png",
+      "source_file": "exec-00212763-a137-4152-a580-6837d0763bd4.png",
+      "runtime_sha256": "651745019dc779a5fbe68a513b60be6efadbfea5aea9f95ec0c572a9bcb7971e"
+    },
+    {
+      "id": "SOD_administrative_board",
+      "name": "Управление наместничества",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+      ],
+      "file": "common/characters/ADISCORD_southern_desert_characters.txt",
+      "country": "Дирекция нефтяного пояса",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Oil Belt Directorate administrative board: three industrial administrators, a middle-aged olive-skinned woman with short dark hair in a charcoal work coat, a broad older man with a greying moustache in a brown service jacket, and a thin younger male technical clerk with wavy black hair and a dark green vest. A rolled engineering plan and plain closed ledger on the table. Practical industrial authority, no protective helmets. Composition: the woman at front LEFT leans forward over a diagonal desk edge and indicates an engineering drawing with a pencil. The older moustached official is seated at lower right, turned inward; the younger clerk stands immediately behind him, looking down at the drawing. Candid working action, no central high figure.",
+      "sprite": "GFX_portrait_SOD_administrative_board",
+      "runtime_path": "gfx/leaders/SOD/portrait_SOD_administrative_board.png",
+      "source_file": "exec-30e4887f-624a-46bb-96d9-6ed2edd1c6cc.png",
+      "runtime_sha256": "ac4a2f79365902ff7ce66d4bd1c4bf13996bda8f99fdc31c4d9d19160f68c536"
+    },
+    {
+      "id": "WKR_Emergency_Coordination_Committee",
+      "name": "Чрезвычайный координационный комитет",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
+      ],
+      "file": "common/characters/ADISCORD_vorkerland_collapse_characters.txt",
+      "country": "Воркерландский чрезвычайный комитет",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_3"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Vorkerland Emergency Coordination Committee: three emergency delegates, a tired middle-aged male factory organizer with a square jaw and short dark hair in a worn charcoal jacket, an older woman with cropped greying hair in a plain dark coat, and a younger male logistics officer with a narrow face in an unadorned olive service tunic. A folded city map and two file folders on the table. Serious solidarity and collective responsibility, no party insignia. Composition: the factory organizer sits nearest the lower LEFT with his head supported lightly by fingers at the temple, eyes unobscured and looking toward his colleagues. The older woman stands behind RIGHT holding a thin folder; the young logistics officer sits at right leaning back, half-turned to listen. Tired working meeting, uneven head heights, diagonal desk edge, no formal camera gaze.",
+      "sprite": "GFX_portrait_WKR_Emergency_Coordination_Committee",
+      "runtime_path": "gfx/leaders/WKR/portrait_WKR_Emergency_Coordination_Committee.png",
+      "source_file": "exec-f1dd9049-7ca4-4a6d-9012-b9f4a21f3d87.png",
+      "runtime_sha256": "775edb841941313ea547bc5a453c58fc5e8b39662bc6273277c1a6752f624bce"
+    },
+    {
+      "id": "WTD_Central_Engineering_Council",
+      "name": "Ойтфортский инженерный совет",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+      ],
+      "file": "common/characters/ADISCORD_vorkerland_collapse_characters.txt",
+      "country": "Ойтфортский технический комитет",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Oitfort Engineering Council: three technical delegates, an elderly slim male engineer with round spectacles and a grey moustache in a brown tweed jacket, a middle-aged woman with short auburn hair in a dark blue work coat, and a broad younger man with black curly hair in a charcoal vest and open light shirt. Simple calipers and one blueprint on the table. Intent analytical expressions, equal importance. Composition: all three engineers lean forward from the SAME SIDE of a diagonal table, heads aligned on a descending slope from upper left to lower right. The young engineer at right points with a pencil to a blueprint; the older engineer peers downward through glasses, the woman turns her face toward the young engineer. Close candid group, no one centered upright above the others.",
+      "sprite": "GFX_portrait_WTD_Central_Engineering_Council",
+      "runtime_path": "gfx/leaders/WTD/portrait_WTD_Central_Engineering_Council.png",
+      "source_file": "exec-b9bd6bd3-c6e6-44a4-88e2-cb022dbb3377.png",
+      "runtime_sha256": "1d71c8231e85d48b42540660ab7dce353b5a08725f681ead73ef7aee6f2a9b98"
+    },
+    {
+      "id": "IVN_Commune_Council",
+      "name": "Совет делегатов общин",
+      "textures": [
+        "gfx/leaders/Europe/Portrait_Europe_Generic_land_4.dds"
+      ],
+      "file": "common/characters/IVN.txt",
+      "country": "Итора",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Europe_Generic_land_4"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Itora Commune Delegates Council: three civilian representatives, an older broad-faced woman with silver hair in a low bun wearing a plain brown jacket, a middle-aged bearded male workshop delegate in faded olive work clothes, and a younger clean-shaven man with a narrow face in a muted blue knitted sweater. Rough wooden table and local petitions. Everyday people with calm resolute expressions, no authority uniforms. Composition: three standing commune delegates in a loose SIDEWAYS semicircle, no table. The bearded man at center is seen in three-quarter profile with a folded petition at chest level; the older woman at right gestures calmly toward it, the young man at left listens with arms loosely folded. All faces visible and turned toward one another, no formal frontal pose.",
+      "sprite": "GFX_portrait_IVN_Commune_Council",
+      "runtime_path": "gfx/leaders/IVN/portrait_IVN_Commune_Council.png",
+      "source_file": "exec-c476e12a-c6b5-406f-9aaf-762fc7c33242.png",
+      "runtime_sha256": "47b8803dac842897d712d2b9270d91e9a7b61078cfb8861b209f63101a894ecd"
+    },
+    {
+      "id": "IVN_Marches_Council",
+      "name": "Совет марочных управленцев",
+      "textures": [
+        "gfx/leaders/Europe/Portrait_Europe_Generic_land_5.dds"
+      ],
+      "file": "common/characters/IVN.txt",
+      "country": "Итора",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Europe_Generic_land_5"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Itora March Administrators Council: three provincial administrators, a tall older man with a narrow grey moustache in a dark green high-collared jacket, a middle-aged woman with pinned brown hair in a charcoal suit, and a younger man with a broad face and close dark beard in a plain brown service coat. A boundary map and tidy leather folder on the desk. Measured formal expressions, practical civil government. Composition: the moustached administrator sits on the LEFT in profile with a closed folder across his lap. The woman and younger man stand close together on the RIGHT, the woman slightly farther back and the younger man closer to the camera presenting a map. No table across the foreground, right-heavy group silhouette.",
+      "sprite": "GFX_portrait_IVN_Marches_Council",
+      "runtime_path": "gfx/leaders/IVN/portrait_IVN_Marches_Council.png",
+      "source_file": "exec-359db9a1-80ec-46fa-875a-c3711a2a6e56.png",
+      "runtime_sha256": "5bfd4577351785c7dfc70b7228f1738de0033bc24defd6b52da36f03d4c75266"
+    },
+    {
+      "id": "SHL_Shift_Councils",
+      "name": "Совет смен",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_8.png"
+      ],
+      "file": "common/characters/SHL.txt",
+      "country": "Шахрабад",
+      "description": "Выборные делегаты всех главных печей. Совет не имеет постоянного председателя; его решения подписывает дежурный мастер.",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_8"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Shahrabad Shift Councils: three equal furnace-worker delegates, not a single ruler. At the LEFT is Salima Darzi, the middle-aged olive-skinned woman in the identity reference, preserve her broad angular face, short wavy black hair, prominent brows and stern expression; she wears her dark worn work coat. At center a different older olive-skinned male furnace worker with short greying beard and brown work jacket. At right a younger olive-skinned woman with dark hair tied back in a faded blue-grey work blouse. A shift logbook and a simple pencil on the table. Worn clean work clothes, thoughtful exhausted dignified faces. No furnace background. Composition: an informal shift-log discussion viewed diagonally along a workbench. Salima Darzi is seated at the LEFT in recognizable three-quarter view, one hand on the logbook; the grey-bearded worker stands behind the RIGHT side leaning forward, while the younger woman sits in the lower RIGHT looking up toward him. Salima is not a central queen-like figure. Faces look toward one another and the logbook, not all at the viewer.",
+      "sprite": "GFX_portrait_SHL_Shift_Councils",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Shift_Councils.png",
+      "source_file": "exec-37e81d65-5e36-4afa-8b4c-b187c0650970.png",
+      "runtime_sha256": "e4d01ea69a801cd55f39ce8652b30495c71337563ea944af1d96a8b3afd99496"
+    },
+    {
+      "id": "SLI_Island_Council",
+      "name": "Островной совет",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+      ],
+      "file": "common/characters/SLI.txt",
+      "country": "Стеландские острова",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Stelander Islands Council: three elected island representatives, an older fair-skinned woman with windblown short grey hair in a deep navy wool coat, a heavy-set middle-aged man with a sandy beard in a brown fisherman's sweater, and a younger lean clean-shaven man with dark hair in a charcoal civilian jacket. A folded coastal map and worn notebook on the table. Weathered calm faces and practical maritime clothes. Composition: three island representatives sit shoulder-to-shoulder on a narrow BENCH, all at similar head height but with different torso angles. The older woman on left looks out toward viewer's left, the bearded man in center turns toward the younger man on right, who holds a folded coastal chart between his hands. No desk, no standing person, relaxed but serious discussion.",
+      "sprite": "GFX_portrait_SLI_Island_Council",
+      "runtime_path": "gfx/leaders/SLI/portrait_SLI_Island_Council.png",
+      "source_file": "exec-7fed6450-816c-4b36-9031-b5e315159bae.png",
+      "runtime_sha256": "98420b337ecce20f7031863c2b85ea9324305f7567d6536708bcabb3abc110ff"
+    },
+    {
+      "id": "CIN_VAL_commission",
+      "name": "Комиссия пограничного управления",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+      ],
+      "file": "common/characters/VAL.txt",
+      "country": "Tribus Cineris",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Border Administration Commission for the northern Ash Tribe territory: three appointed civil officials, a stern grey-haired clean-shaven man in a plain dark olive service jacket, a middle-aged woman with dark shoulder-length hair in a charcoal field coat, and a younger man with a short brown moustache in a brown civilian jacket. A local boundary sketch and sealed document folder on the desk. Plain border-service dress without badges, restrained expressions. Composition: the grey-haired commissioner stands at the RIGHT in three-quarter profile explaining a document held at chest height to two seated colleagues grouped lower LEFT. The woman looks up toward him; the younger man turns a page on his lap. No frontal symmetrical council pose and no wide table.",
+      "sprite": "GFX_portrait_CIN_VAL_commission",
+      "runtime_path": "gfx/leaders/CIN/portrait_CIN_VAL_commission.png",
+      "source_file": "exec-c6215748-36be-4af7-8734-80995e45c791.png",
+      "runtime_sha256": "0f996eebd049cc091aea0e2c3a3ff2aaf27dbdc69d5c75d6c99b654dfa9becee"
+    },
+    {
+      "id": "OSF_VAL_commission",
+      "name": "Комиссия пограничного управления",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+      ],
+      "file": "common/characters/VAL.txt",
+      "country": "Foedus Ossifractorum",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Border Administration Commission for the Bonebreakers Union territory: three appointed officials, a broad balding middle-aged man with a trimmed grey beard in a dark brown service coat, a younger serious woman with tied-back fair hair in an olive jacket, and an older long-faced man with small rectangular glasses in charcoal civilian clothes. A land-survey map and simple ledger on the table. Muted practical clothing, no weapons or insignia. Composition: two officials stand in the FOREGROUND turned toward each other, the bearded man at left and fair-haired woman at right, both half-profile. The older bespectacled official sits behind between them, visible over a small stack of ledgers, looking up at the woman. Two high side heads and one low middle head, opposite of a central elevated figure.",
+      "sprite": "GFX_portrait_OSF_VAL_commission",
+      "runtime_path": "gfx/leaders/OSF/portrait_OSF_VAL_commission.png",
+      "source_file": "exec-87691555-b220-4982-bcb4-94c77619f024.png",
+      "runtime_sha256": "a90fd91e57f4666a7183dec455d92af18a5b09937c98ed9b0b2b848c0a2214d0"
+    },
+    {
+      "id": "APH_VAL_commission",
+      "name": "Комиссия пограничного управления",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+      ],
+      "file": "common/characters/VAL.txt",
+      "country": "Anthropophagorum",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Border Administration Commission for the Anthropophagorum territory: three appointed civic officials, a middle-aged woman with dark hair pulled into a tight bun in a grey service coat, a lean silver-haired man with a dark moustache in a muted olive tunic, and a younger clean-shaven man with wavy brown hair in a brown field jacket. A compact stack of administrative papers and leather folio on the desk. Sober competent expressions, ordinary civilian administration. Composition: the woman is seated at the lower RIGHT signing a page, face in a readable three-quarter view looking slightly down. The older moustached man bends in from LEFT to observe, while the younger man stands farther back at upper LEFT carrying a leather folder under one arm. Clearly asymmetric placement and active desk work.",
+      "sprite": "GFX_portrait_APH_VAL_commission",
+      "runtime_path": "gfx/leaders/APH/portrait_APH_VAL_commission.png",
+      "source_file": "exec-6aa522d1-7541-4469-8265-9f8c224b3387.png",
+      "runtime_sha256": "34791cd887ef1df774e1f56bf1a48c3bb55763c2113c97de508b931747c26a86"
+    },
+    {
+      "id": "VAL_party_administration",
+      "name": "Партийная администрация",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
+      ],
+      "file": "common/characters/VAL.txt",
+      "country": "Кефрейт",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_3"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Kefreit Party Administration: three civilian party administrators, a stocky middle-aged man with short black hair and square spectacles in a dark charcoal suit, a stern older woman with swept-back grey hair in a navy jacket, and a younger narrow-faced man with sandy hair in a plain dark brown suit and modest tie. An orderly stack of files and closed ledger on the table. Controlled bureaucratic formality, no insignia or symbols. Composition: three administrators seated at an oblique narrow table at the SAME HEAD HEIGHT. The older woman at left faces right and speaks quietly; the stocky man in the middle looks down at a file through glasses, the younger man at right turns away slightly toward viewer's right while holding the file open. No upright figure rising in the center, no universal camera gaze.",
+      "sprite": "GFX_portrait_VAL_party_administration",
+      "runtime_path": "gfx/leaders/VAL/portrait_VAL_party_administration.png",
+      "source_file": "exec-876e8bec-4a59-4dde-be72-9eb9b6aae3f0.png",
+      "runtime_sha256": "df0966f927814872528c51eab0abfcc03fc40b78869e146cd165067a6c5b2cc7"
+    },
+    {
+      "id": "OCA_Contract_Council",
+      "name": "Временная административная коллегия",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+      ],
+      "file": "common/characters/VAL.txt",
+      "country": "Окцидская договорная администрация",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Occidian Temporary Administrative College: three officials from a postwar civil administration, a mature woman with auburn hair in a low bun wearing a muted charcoal suit, a lean older man with white hair and round spectacles wearing a brown jacket, and a younger man with short dark hair wearing a dark green service tunic without insignia. A folded regional map and contractual papers on the desk. Serious reserved expressions. Composition: an informal STANDING group around the corner of a desk, the woman at near LEFT is reading a contract held in both hands, the bespectacled man behind RIGHT leans sideways to see it, the younger official at far right stands straight with a closed folder. Three-quarter view from the left, no front-facing symmetric line.",
+      "sprite": "GFX_portrait_OCA_Contract_Council",
+      "runtime_path": "gfx/leaders/OCA/portrait_OCA_Contract_Council.png",
+      "source_file": "exec-4daf8d61-8137-40d4-bfc0-f7c61c5a3748.png",
+      "runtime_sha256": "a3280de2ea0e92a88e9613dccb927c056e5f5f33854c3c9c38869a18aaf9ed79"
+    },
+    {
+      "id": "ECA_Contract_Council",
+      "name": "Эсносский договорный совет",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+      ],
+      "file": "common/characters/VAL.txt",
+      "country": "Эсносская договорная администрация",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Esnos Contract Council: three local and appointed administrators, a broad older man with grey wavy hair and heavy moustache in a dark navy civilian coat, a middle-aged woman with short black hair in a muted brown jacket, and a younger clean-shaven man with an angular face in a plain grey service tunic. A regional ledger and one folded contract on the table. Practical formal dress and restrained collective authority. Composition: the older moustached man is seated at the far LEFT foreground, torso turned right; the younger man stands just behind his LEFT shoulder leaning over a ledger; the woman stands separately at RIGHT with her hands lightly resting on the desk edge and addresses them. Clear lateral space between two small clusters, faces still large.",
+      "sprite": "GFX_portrait_ECA_Contract_Council",
+      "runtime_path": "gfx/leaders/ECA/portrait_ECA_Contract_Council.png",
+      "source_file": "exec-785da04b-6114-4d05-bd87-cebd978b2381.png",
+      "runtime_sha256": "b479123d1b11006ae565f932b00e55d484e4fd8e344fa7a4c377500f78077b70"
+    },
+    {
+      "id": "DCA_Contract_Council",
+      "name": "Дучебский договорный совет",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+      ],
+      "file": "common/characters/VAL.txt",
+      "country": "Дучебская договорная администрация",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Ducheb Contract Council: three regional administrators, a lean elderly man with a neatly trimmed white beard in a charcoal coat, a middle-aged fair-haired woman with metal-rimmed glasses in a dark green jacket, and a younger dark-haired man with a short moustache in a brown civilian suit. A boundary plan and a closed document case on the desk. Wary attentive expressions, equal visual standing. Composition: the fair-haired woman stands in the LEFT foreground holding an unfolded contract; the white-bearded man is seated at lower RIGHT with one hand resting on a document case; the younger moustached man stands just behind him angled inward. All attention on the contract, not the camera; a descending left-to-right head line.",
+      "sprite": "GFX_portrait_DCA_Contract_Council",
+      "runtime_path": "gfx/leaders/DCA/portrait_DCA_Contract_Council.png",
+      "source_file": "exec-47a63fae-ad92-44de-b348-72521cd1afd4.png",
+      "runtime_sha256": "26541f9c8ab8373d5b3fe9d371359c3a4445caf833e266eaf6dc37d8c69efde8"
+    },
+    {
+      "id": "YPR_Contract_Council",
+      "name": "Исхайтский договорный совет",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+      ],
+      "file": "common/characters/VAL.txt",
+      "country": "Юборская Народная Республика",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_4"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Iskhait Contract Council: three civil delegates, a mature dark-haired woman with a broad face in a navy high-collared jacket, a thin older clean-shaven man with receding grey hair in a brown suit, and a middle-aged man with a short dark beard and rectangular glasses in a muted olive service coat. Signed pages and a small closed ledger on the table. Careful sober administrative formality. Composition: the dark-haired woman sits near CENTER foreground studying a paper in her hands, the older man sits at far LEFT facing inward, and the bearded official stands behind RIGHT speaking with a restrained open-hand gesture. Her head is lower than both men; no front-facing group pose or centered standing figure.",
+      "sprite": "GFX_portrait_YPR_Contract_Council",
+      "runtime_path": "gfx/leaders/YPR/portrait_YPR_Contract_Council.png",
+      "source_file": "exec-1f046ce9-64b9-4b4f-8f91-1f198ecf257c.png",
+      "runtime_sha256": "75c67b240505e8a6d1feb27c92c98424c527cf8b07a036810b3c886364bc6a41"
+    },
+    {
+      "id": "WCA_Contract_Council",
+      "name": "Южная контрактная комиссия",
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+      ],
+      "file": "common/characters/VAL.txt",
+      "country": "Южная контрактная администрация",
+      "description": "",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_6"
+        ]
+      ],
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of a governing body, jointly represented. This is a candid moment of them WORKING OR DISCUSSING, not all posing toward the camera. Follow the individual composition instructions precisely. Close waist-up group with three clearly readable faces; keep every head in frame, do not obscure any face. Unequal positions and body angles should look natural. Vertical ratio 26:35, intended for 156x210 pixels. True transparent alpha behind the group and any minimal furniture. The attached single-person image is ONLY a reference for realistic rendering, modeled side lighting, muted color and facial texture; do not copy its identity and do not include CRT lines. Photoshop adds the final background and screen texture afterward. Natural hands, restrained gestures, modest realistic clothing. No scenery, no writing or readable text, no emblems, flags, border, or collage panels. Southern Contract Commission: three southern transport and civil administrators, an olive-skinned middle-aged man with a trimmed dark moustache in a grey service jacket, a middle-aged woman with curly dark hair pinned up in a muted sand-colored coat, and an older tan-skinned man with a silver beard in a navy civilian jacket. A route map and closed dispatch book on the desk. Dust-worn practical formal clothes, calm determined expressions. Composition: the moustached administrator stands at RIGHT holding a folded route map at chest height; the woman and older bearded man sit closely together lower LEFT, heads angled in different directions as they check a dispatch book. Strong diagonal grouping from lower left to upper right, candid discussion instead of a formal portrait.",
+      "sprite": "GFX_portrait_WCA_Contract_Council",
+      "runtime_path": "gfx/leaders/WCA/portrait_WCA_Contract_Council.png",
+      "source_file": "exec-f0d3d435-d57d-44f3-b31a-0f55607f1237.png",
+      "runtime_sha256": "bc1a77badd98727517083c7ea59aaf87abb1a5824010ed889f779c1e9943b44e"
+    },
+    {
+      "id": "SDA_administrative_board",
+      "name": "РЈРїСЂР°РІР\"РµРЅРёРµ РЅР°РјРµСЃС‚РЅРёС‡РµСЃС‚РІР°",
+      "country": "Р”РёСЂРµРєС†РёСЏ РЎСѓС…РѕРіРѕ СЂСѓСЃР\"Р°",
+      "description": "",
+      "file": "common/characters/ADISCORD_southern_desert_characters.txt",
+      "refs": [
+        [
+          "large",
+          "GFX_Portrait_Forul_Generic_7"
+        ]
+      ],
+      "textures": [
+        "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+      ],
+      "sprite": "GFX_portrait_SDA_administrative_board",
+      "runtime_path": "gfx/leaders/SDA/portrait_SDA_administrative_board.png",
+      "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of the Dry Riverbed Directorate, a desert civil administration under Shahrabad. Candid inspection briefing, NOT a formal posed row. Distinctive arrangement: all three STANDING closely, a mature dark-haired woman in a dusty olive civil-service tunic at LEFT facing three-quarter right and gesturing with her open palm toward the others; a short stocky elderly Central Asian man with a close silver beard and sand-colored work jacket at CENTER holding a closed blue ledger against his chest; a tall lean clean-shaven Central Asian man about 40 at RIGHT in a dark brown engineer's jacket looks down at the woman while resting one hand on a rolled survey plan. No table. Three large clear separated faces, heads at naturally unequal heights, restrained serious conversation. Waist-up vertical 26:35 group, preserve all heads and shoulders with only 4 percent headroom, to remain readable at 156x210. Clothing modest and practical, distinct people and natural anatomy. True transparent alpha behind the group. The supplied individual portrait is ONLY a style reference for realistic facial texture, subdued earthy palette and modeled side light. Do not copy his identity. No CRT lines, no background or scenery, no flags, readable writing, emblems, borders. Photoshop will add the background and screen texture.",
+      "source_file": "exec-79f519e6-131a-4c37-86d4-6fc208bedc05.png",
+      "runtime_sha256": "e0205eca70da5add688b1f9f2aafca8efb2214e5c097a91eb1b2acc889804167"
+    }
+  ],
+  "template_sha256": "b3e90d7f944497f9de055684bcfcda9c721f9511b7957e0a103c045dc86e2360",
+  "render_fit": "contain"
+}

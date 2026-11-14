@@ -1,0 +1,384 @@
+{
+  "sites": [
+    {
+      "state": 67,
+      "province": 4912,
+      "position": [
+        3719.0,
+        10.38,
+        612.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620067,
+      "height_span": 0.4,
+      "height_offset": 0.18,
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    },
+    {
+      "state": 688,
+      "province": 16866,
+      "position": [
+        3614.0,
+        10.98,
+        609.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620688,
+      "height_span": 0.4,
+      "height_offset": 0.18,
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    },
+    {
+      "state": 689,
+      "province": 7639,
+      "position": [
+        3671.0,
+        10.98,
+        545.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620689,
+      "height_span": 0.4,
+      "height_offset": 0.18,
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    },
+    {
+      "state": 690,
+      "province": 11926,
+      "position": [
+        3683.0,
+        11.78,
+        557.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620690,
+      "height_span": 0.8,
+      "height_offset": 0.38,
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    },
+    {
+      "state": 719,
+      "province": 6961,
+      "position": [
+        3708.0,
+        10.78,
+        548.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620719,
+      "height_span": 0.7,
+      "height_offset": 0.38,
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    }
+  ],
+  "relocations": [
+    {
+      "state": 688,
+      "type": "supply_node",
+      "from": [
+        3618.0,
+        611.0
+      ],
+      "to": [
+        3618.0,
+        10.6,
+        616.0
+      ]
+    },
+    {
+      "state": 688,
+      "type": "fuel_silo",
+      "from": [
+        3621.0,
+        608.0
+      ],
+      "to": [
+        3623.0,
+        11.0,
+        608.0
+      ]
+    },
+    {
+      "state": 688,
+      "type": "special_project_facility_spawn",
+      "from": [
+        3619.0,
+        609.0
+      ],
+      "to": [
+        3623.0,
+        10.8,
+        611.0
+      ]
+    },
+    {
+      "state": 690,
+      "type": "arms_factory",
+      "from": [
+        3698.0,
+        561.0
+      ],
+      "to": [
+        3698.0,
+        10.9,
+        562.0
+      ]
+    },
+    {
+      "state": 719,
+      "type": "supply_node",
+      "from": [
+        3708.0,
+        558.0
+      ],
+      "to": [
+        3708.0,
+        10.8,
+        559.0
+      ]
+    },
+    {
+      "state": 690,
+      "type": "supply_node",
+      "from": [
+        3682.0,
+        559.0
+      ],
+      "to": [
+        3687.0,
+        12.6,
+        564.0
+      ]
+    },
+    {
+      "state": 719,
+      "type": "special_project_facility_spawn",
+      "from": [
+        3707.0,
+        554.0
+      ],
+      "to": [
+        3705.0,
+        10.7,
+        559.0
+      ]
+    },
+    {
+      "state": 719,
+      "type": "air_base",
+      "from": [
+        3708.0,
+        558.0
+      ],
+      "to": [
+        3711.0,
+        10.6,
+        559.0
+      ]
+    },
+    {
+      "state": 719,
+      "type": "nuclear_reactor_spawn",
+      "from": [
+        3708.0,
+        558.0
+      ],
+      "to": [
+        3708.0,
+        11.8,
+        562.0
+      ]
+    },
+    {
+      "state": 719,
+      "type": "rocket_site_spawn",
+      "from": [
+        3708.0,
+        558.0
+      ],
+      "to": [
+        3711.0,
+        11.5,
+        562.0
+      ]
+    },
+    {
+      "state": 719,
+      "type": "synthetic_refinery",
+      "from": [
+        3708.0,
+        558.0
+      ],
+      "to": [
+        3714.0,
+        10.4,
+        559.0
+      ]
+    },
+    {
+      "state": 67,
+      "type": "anti_air_building",
+      "from": [
+        3714.0,
+        609.0
+      ],
+      "to": [
+        3714.0,
+        10.6,
+        607.0
+      ]
+    },
+    {
+      "state": 688,
+      "type": "arms_factory",
+      "from": [
+        3609.0,
+        615.0
+      ],
+      "to": [
+        3609.0,
+        10.6,
+        616.0
+      ]
+    },
+    {
+      "state": 688,
+      "type": "air_base",
+      "from": [
+        3606.0,
+        609.0
+      ],
+      "to": [
+        3605.0,
+        10.3,
+        609.0
+      ]
+    },
+    {
+      "state": 688,
+      "type": "supply_node",
+      "from": [
+        3618.0,
+        614.0
+      ],
+      "to": [
+        3618.0,
+        10.6,
+        616.0
+      ]
+    },
+    {
+      "state": 688,
+      "type": "special_project_facility_spawn",
+      "from": [
+        3608.0,
+        606.0
+      ],
+      "to": [
+        3605.0,
+        10.3,
+        606.0
+      ]
+    },
+    {
+      "state": 689,
+      "type": "arms_factory",
+      "from": [
+        3673.0,
+        543.0
+      ],
+      "to": [
+        3673.0,
+        10.5,
+        538.0
+      ]
+    },
+    {
+      "state": 689,
+      "type": "supply_node",
+      "from": [
+        3672.0,
+        549.0
+      ],
+      "to": [
+        3670.0,
+        11.0,
+        552.0
+      ]
+    },
+    {
+      "state": 690,
+      "type": "supply_node",
+      "from": [
+        3687.0,
+        559.0
+      ],
+      "to": [
+        3687.0,
+        12.6,
+        564.0
+      ]
+    },
+    {
+      "state": 690,
+      "type": "special_project_facility_spawn",
+      "from": [
+        3683.0,
+        552.0
+      ],
+      "to": [
+        3683.0,
+        11.0,
+        550.0
+      ]
+    },
+    {
+      "state": 719,
+      "type": "special_project_facility_spawn",
+      "from": [
+        3700.0,
+        545.0
+      ],
+      "to": [
+        3699.0,
+        10.1,
+        546.0
+      ]
+    }
+  ]
+}

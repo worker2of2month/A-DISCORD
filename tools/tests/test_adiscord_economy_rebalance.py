@@ -16,6 +16,7 @@ from tools.tests.test_adiscord_economy_weekly_contracts import (
 )
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.lib.focus_sources import read_focus_source
+from tools.tests.test_adiscord_resource_projects import ProjectFixture
 from tools.tests.test_adiscord_stp_preparation import matches_conditions, scalar
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -184,7 +185,6 @@ class EconomyRefreshCadenceTests(unittest.TestCase):
             "update_demographic_fatigue",
             "update_workforce_drain",
             "update_stretched",
-            "update_public_investment_stock",
             "calculate_development_multiplier",
             "check_economic_development_upgrade",
             "refresh_spending_ideas",
@@ -367,33 +367,82 @@ class ProductiveIncomeTests(unittest.TestCase):
 
 
 class DebtRepaymentGateTests(unittest.TestCase):
-    def test_standard_repayment_requires_the_full_income_scaled_chunk(self):
-        triggers = read("common/scripted_triggers/ADISCORD_economy_triggers.txt")
-        effects = read("common/scripted_effects/ADISCORD_economy_effects.txt")
-        gui = read("common/scripted_guis/ADISCORD_economy_scripted_gui.txt")
-        ru = read("localisation/russian/ADISCORD_economy_l_russian.yml")
-        en = read("localisation/english/ADISCORD_economy_l_english.yml")
+    def test_single_repayment_uses_exact_current_principal_and_rechecks_payment(self):
+        for debt, price in ((800, 500), (75, 75), (0.125, 0.125), (0, 0)):
+            for short in (False, True):
+                for action in ("repay_debt", "gui_try_repay_debt"):
+                    with self.subTest(debt=debt, short=short, action=action):
+                        f = EconomyScriptFixture(stubs=tuple(P + name for name in (
+                            "initialize_country", "calculate_debt_metrics",
+                            "reconcile_debt_state_after_action", "update_macro_confidence",
+                            "mark_dirty", "refresh_after_debt_action",
+                        )))
+                        v = f.scopes["A"]
+                        cash = max(0, price - 0.001) if short else price
+                        v.update({P + "weekly_income": 25, P + "treasury": cash,
+                                  P + "debt": debt, P + "fiscal_stress": 20})
+                        f.run(P + "calculate_financing_offers")
+                        self.assertEqual(v[P + "repay_cash_temp"], price)
+                        can_pay = debt > 0 and cash >= price
+                        self.assertEqual(f.condition(parse_clausewitz(
+                            P + "can_repay_debt = yes")), can_pay)
+                        # A previously displayed quote cannot authorize a stale debit.
+                        v[P + "repay_cash_temp"] = 0
+                        f.run(P + action)
+                        paid = price if can_pay else 0
+                        self.assertAlmostEqual(v[P + "treasury"], cash - paid)
+                        self.assertAlmostEqual(v[P + "debt"], debt - paid)
+                        self.assertAlmostEqual(v.get(P + "current_month_debt_paid", 0), paid)
+                        self.assertEqual(v[P + "fiscal_stress"], 17 if paid else 20)
+                        f.run(P + action)
+                        self.assertAlmostEqual(v[P + "treasury"], cash - paid)
+                        self.assertAlmostEqual(v.get(P + "current_month_debt_paid", 0), paid)
 
-        gate = block(triggers, "ADISCORD_economy_can_repay_debt")
-        self.assertIn("ADISCORD_economy_has_debt = yes", gate)
-        self.assertIn(
-            "check_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_repay_offer_cash compare = greater_than_or_equals }",
-            gate,
-        )
+    def test_repayment_preview_tracks_country_debt_without_changing_balances(self):
+        f = EconomyScriptFixture()
+        v = f.scopes["A"]
+        v.update({P + "weekly_income": 25, P + "treasury": 80, P + "debt": 800})
+        f.run(P + "calculate_financing_offers")
+        self.assertEqual(v[P + "repay_cash_temp"], 500)
+        v[P + "debt"] = 75
+        f.run(P + "update_gui")
+        self.assertEqual(v[P + "repay_cash_temp"], 75)
+        self.assertEqual(v[P + "treasury"], 80)
+        self.assertEqual(v[P + "debt"], 75)
+        self.assertEqual(v.get(P + "current_month_debt_paid", 0), 0)
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_economy_l_{language}.yml")
+            row = re.search(r"^ ADISCORD_economy_action_repay_debt_tt:.*$", text, re.M).group()
+            self.assertIn("[?" + P + "repay_cash_temp|3]", row)
 
-        gui_try = block(effects, "ADISCORD_economy_gui_try_repay_debt")
-        repay = block(effects, "ADISCORD_economy_repay_debt")
-        self.assertIn("ADISCORD_economy_can_repay_debt = yes", gui_try)
-        self.assertIn("ADISCORD_economy_can_repay_debt = yes", repay)
-        self.assertIn("value = ADISCORD_economy_repay_offer_cash }", repay)
-        self.assertNotIn("value = ADISCORD_economy_treasury", repay)
+    def test_removed_treasury_programmes_have_no_runtime_or_ai_entry_points(self):
+        runtime = "\n".join(read(path) for path in (
+            "common/scripted_effects/ADISCORD_economy_effects.txt",
+            "common/scripted_triggers/ADISCORD_economy_triggers.txt",
+            "common/scripted_guis/ADISCORD_economy_scripted_gui.txt",
+            "common/ideas/ADISCORD_economy_ideas.txt", "interface/ADISCORD_economy.gui",
+            "localisation/russian/ADISCORD_economy_l_russian.yml",
+            "localisation/english/ADISCORD_economy_l_english.yml",
+        ))
+        for token in ("early_repay", "invest_reserves", "civilian_stimulus", "civilian_investment",
+                      "military_investment", "public_investment_stock", "public_capital_decay",
+                      "investment_price", "recent_investment"):
+            self.assertNotIn(token, runtime)
+        gui = read("interface/ADISCORD_economy.gui")
+        rows = re.findall(r'^.*name = "ADISCORD_economy_action_[^"\n]+".*$', gui, re.M)
+        self.assertEqual(len(rows), 8)
+        rectangles = []
+        for row in rows:
+            x, y = map(int, re.search(r'position = \{ x = (\d+) y = (\d+) \}', row).groups())
+            width, height = map(int, re.search(r'size = \{ x = (\d+) y = (\d+) \}', row).groups())
+            self.assertLessEqual(x + width, 462)
+            self.assertLessEqual(y + height, 374)
+            for left, top, right, bottom in rectangles:
+                self.assertTrue(x >= right or x + width <= left or y >= bottom or y + height <= top)
+            rectangles.append((x, y, x + width, y + height))
+        self.assertEqual({r[0] for r in rectangles}, {18, 243})
+        self.assertEqual({r[1] for r in rectangles}, {256, 286, 316, 346})
 
-        self.assertIn(
-            "ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_repay_debt = yes }",
-            gui,
-        )
-        self.assertIn("[?ADISCORD_economy_repay_offer_cash|0]", ru)
-        self.assertIn("[?ADISCORD_economy_repay_offer_cash|0]", en)
 
 
 class NorthernCampaignRouteTests(unittest.TestCase):
@@ -643,31 +692,32 @@ def building_budget_fixture(business=12, clusters=4, science=2):
 
 
 class BuildingIncomeTests(unittest.TestCase):
-    def test_developed_building_economy_exceeds_100_net_per_week(self):
+    def test_developed_building_economy_keeps_a_bounded_investable_surplus(self):
         f = building_budget_fixture()
         values = f.scopes['A']
         self.assertGreater(values[P + 'monthly_expenses'], 40)
         self.assertEqual(values[P + 'debt_service'], 6)
         self.assertEqual(values[P + 'final_overall_income_factor_bp'], 100)
         self.assertEqual(values.get(P + 'final_weekly_income_bonus', 0), 0)
-        self.assertGreaterEqual(values[P + 'weekly_balance'], 100)
+        self.assertGreaterEqual(values[P + 'weekly_balance'], 50)
+        self.assertLess(values[P + 'weekly_balance'], 60)
 
-    def test_business_center_adds_at_least_six_net_weekly_without_low_caps(self):
+    def test_business_center_adds_bounded_net_weekly_without_low_caps(self):
         for count in (0, 4, 12, 24):
             with self.subTest(existing_centers=count):
                 before = building_budget_fixture(business=count).scopes['A']
                 after = building_budget_fixture(business=count + 1).scopes['A']
                 self.assertGreaterEqual(
-                    after[P + 'weekly_balance'] - before[P + 'weekly_balance'], 6
+                    after[P + 'weekly_balance'] - before[P + 'weekly_balance'], 2
                 )
 
-    def test_industrial_cluster_adds_at_least_two_net_weekly_without_low_caps(self):
+    def test_industrial_cluster_adds_bounded_net_weekly_without_low_caps(self):
         for count in (0, 4, 12, 24):
             with self.subTest(existing_clusters=count):
                 before = building_budget_fixture(clusters=count).scopes['A']
                 after = building_budget_fixture(clusters=count + 1).scopes['A']
                 self.assertGreaterEqual(
-                    after[P + 'weekly_balance'] - before[P + 'weekly_balance'], 2
+                    after[P + 'weekly_balance'] - before[P + 'weekly_balance'], 0.8
                 )
 
     def test_large_network_tax_preview_matches_full_calculation_and_never_pays(self):
@@ -694,7 +744,7 @@ class BuildingIncomeTests(unittest.TestCase):
             )
         )
         balance = f.scopes['A'][P + 'weekly_balance']
-        self.assertGreaterEqual(balance, 100)
+        self.assertGreaterEqual(balance, 50)
         for _ in range(13):
             f.run(P + 'apply_weekly_balance')
         self.assertAlmostEqual(f.scopes['A'][P + 'treasury'], 100 + 13 * balance)
@@ -866,51 +916,6 @@ class ReserveInvestmentTests(unittest.TestCase):
             f.run(P + "recalculate_treasury_cap")
             self.assertEqual(f.scopes["A"][P + "treasury_cap"], expected)
 
-    def test_regular_programs_require_and_charge_one_hundred(self):
-        for name, gate in (
-            ("invest_reserves", "can_expand_public_capital"),
-            ("civilian_investment_action", "can_use_civilian_stimulus"),
-            ("military_investment_action", "can_use_military_investment"),
-        ):
-            f = EconomyScriptFixture(
-                facts={
-                    P + gate: True,
-                    **{
-                        P + "model_is_" + model: False
-                        for model in (
-                            "decentralized_market",
-                            "mixed",
-                            "technocratic",
-                            "oligarchic_clan",
-                            "state_coordinated",
-                            "planned_bureaucratic",
-                        )
-                    },
-                },
-                stubs=(
-                    P + "initialize_country",
-                    P + "mark_dirty",
-                    P + "check_economic_development_upgrade",
-                    "add_timed_idea",
-                ),
-            )
-            f.scopes["A"][P + "treasury"] = 100
-            f.run(P + name)
-            self.assertEqual(f.scopes["A"][P + "treasury"], 0)
-            self.assertEqual(f.scopes["A"][P + "current_month_action_costs"], 100)
-        for name in ("can_invest_reserves", "can_use_military_investment"):
-            entries = parse_clausewitz(block(TRIGGERS, P + name))
-            money_gate = [
-                n
-                for n in entries
-                if n.key == "check_variable"
-                and any(c.value == P + "treasury" for c in n.value)
-            ]
-            self.assertEqual(len(money_gate), 1)
-            f = self.fixture(cash=99.99)
-            self.assertFalse(f.condition(money_gate))
-            f.scopes["A"][P + "treasury"] = 100
-            self.assertTrue(f.condition(money_gate))
 
 
 class PostwarProgramPriceTests(unittest.TestCase):
@@ -1045,7 +1050,7 @@ class BudgetAndLawBalanceTests(unittest.TestCase):
             f.run(P + "calculate_research_expenses")
             f.run(P + "calculate_social_expenses")
             costs.append((v[P + "research_expenses"], v[P + "social_expenses"]))
-        self.assertEqual([c[0] for c in costs], [2.5, 5.0, 7.5])
+        self.assertEqual([c[0] for c in costs], [2.5, 3.75, 5.0])
         self.assertAlmostEqual(costs[1][1] / costs[0][1], 1.5)
         self.assertAlmostEqual(costs[2][1] / costs[0][1], 2)
         development = block(EFFECTS, P + "calculate_development_multiplier")
@@ -1530,7 +1535,7 @@ class BattalionArmyUpkeepTests(unittest.TestCase):
         self.assertEqual(costs, [10, 10, 10])
 
     def test_war_funding_and_weekly_conversion_apply_once(self):
-        for mode, factor in ((1, 0.25), (2, 0.6), (3, 1), (4, 1.3), (5, 1.7)):
+        for mode, factor in ((1, 0.65), (2, 0.8), (3, 1), (4, 1.3), (5, 1.7)):
             for war in (False, True):
                 f = self.calculate(100, mode, war)
                 expected = 10 * factor * (1.25 if war else 1)
@@ -1719,9 +1724,9 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
             self.calculate(divisions=d).scopes["A"][P + "army_expenses"]
             for d in (20, 21, 33, 34, 80, 81)
         ]
-        self.assertAlmostEqual(costs[1] - costs[0], 0.5)
-        self.assertAlmostEqual(costs[3] - costs[2], 2.5)
-        self.assertAlmostEqual(costs[5] - costs[4], 2.5)
+        self.assertAlmostEqual(costs[1] - costs[0], 0.1)
+        self.assertAlmostEqual(costs[3] - costs[2], 2.1)
+        self.assertAlmostEqual(costs[5] - costs[4], 2.1)
 
     def test_starting_industry_allows_33_in_peace_and_39_in_war(self):
         for war, cap in ((False, 33), (True, 39)):
@@ -1766,7 +1771,7 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
     def test_low_funding_does_not_raise_capacity_and_previews_do_not_erase_pressure(
         self,
     ):
-        for level, factor in ((1, 0.25), (2, 0.6), (3, 1), (4, 1.3), (5, 1.7)):
+        for level, factor in ((1, 0.65), (2, 0.8), (3, 1), (4, 1.3), (5, 1.7)):
             with self.subTest(level=level):
                 live = self.calculate(divisions=50, mode=level)
                 baseline = self.calculate(divisions=50, mode=3)
@@ -1899,6 +1904,367 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
             "every_state",
         ):
             self.assertNotIn(forbidden, effect)
+
+
+class PurchaseFixture(ProjectFixture):
+    """Execute stock deliveries and both currencies, retaining native branch order."""
+
+    def execute(self, entries, scope, previous, root):
+        segment = []
+        for node in entries:
+            if node.key not in ("add_political_power", "add_manpower"):
+                segment.append(node)
+                continue
+            if segment:
+                super().execute(segment, scope, previous, root)
+                segment = []
+            resource = "has_political_power" if node.key == "add_political_power" else "has_manpower"
+            self.scopes[scope][resource] = self.scopes[scope].get(resource, 0) + self.number(node.value, scope, previous)
+        if segment:
+            super().execute(segment, scope, previous, root)
+
+
+class IncomeScaledTransactionTests(unittest.TestCase):
+    def test_national_order_prices_match_debit_receipt_and_cancellation(self):
+        cases = (
+            ("WKR_siege_plenipotentiary_order", 250, 50, 0, 0),
+            ("WKR_contract_reconstruction_order", 200, 40, 1500, None),
+            ("WKR_vow_engineer_brigades", 300, 25, 0, 300),
+            ("TVA_lab_order_prototype_series", 75, 30, 0, 75),
+            ("TVA_lab_order_accelerated_series", 90, 25, 0, None),
+            ("WKR_measure_licence_purchase", 225, 20, 0, 225),
+        )
+        decisions = read("common/decisions/ADISCORD_vorkerland_decisions.txt")
+        for name, cash, pp, manpower, refund in cases:
+            with self.subTest(decision=name):
+                f = PurchaseFixture(treasury=cash)
+                for filename in ("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt",
+                                 "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+                                 "common/scripted_effects/ADISCORD_shared_action_effects.txt"):
+                    f.definitions.update({n.key: n.value for n in parse_clausewitz(read(filename))})
+                f.stubs.update(("TVA_refresh_administration", P + "initialize_country"))
+                f.facts.update({"WKR_contract_building_site": True,
+                                "TVA_lab_prototype_series_available": True})
+                f.scopes["FROM"] = {}
+                v = f.scopes["A"]
+                v.update({"FROM": 32, "has_political_power": pp, "has_manpower": manpower})
+                body = {n.key: n.value for n in parse_clausewitz(block(decisions, name))}
+                for resource, price in ((P + "treasury", cash), ("has_political_power", pp)):
+                    v[resource] = price - .001
+                    self.assertFalse(f.condition(body["custom_cost_trigger"]))
+                    v[resource] = price
+                self.assertTrue(f.condition(body["custom_cost_trigger"]))
+                f.execute(body["complete_effect"], "A", None, "A")
+                self.assertEqual(v[P + "treasury"], 0)
+                self.assertEqual(v["has_political_power"], 0)
+                self.assertEqual(v["has_manpower"], 0)
+                self.assertEqual(v[P + "current_month_action_costs"], cash)
+                if name == "WKR_contract_reconstruction_order":
+                    self.assertEqual(v["WKR_contract_rebuild_state"], 32)
+                if name == "TVA_lab_order_prototype_series":
+                    self.assertEqual(v["TVA_lab_order_treasury"], cash)
+                if refund is not None:
+                    f.execute(body["cancel_effect"], "A", None, "A")
+                    self.assertEqual(v[P + "treasury"], refund)
+                    self.assertEqual(v.get(P + "current_month_action_income", 0), refund)
+                    self.assertEqual(v["has_political_power"], pp if refund else 0)
+                    if name in ("WKR_vow_engineer_brigades", "TVA_lab_order_prototype_series"):
+                        f.execute(body["cancel_effect"], "A", None, "A")
+                        self.assertEqual(v[P + "treasury"], refund)
+
+    def test_budget_bonuses_leave_combat_specialisation_to_national_routes(self):
+        ideas = read("common/ideas/ADISCORD_economy_ideas.txt")
+        for level in range(1, 6):
+            army = block(ideas, P + f"army_spending_{level}")
+            self.assertNotIn("army_attack_factor", army)
+            self.assertNotIn("army_defence_factor", army)
+        for level, org, research, stability in ((4, .03, .04, .025), (5, .06, .08, .05)):
+            for family, modifier, expected in (("army", "army_org_factor", org),
+                                               ("research", "research_speed_factor", research),
+                                               ("social", "stability_factor", stability)):
+                body = block(ideas, P + f"{family}_spending_{level}")
+                actual = float(re.search(rf"\b{modifier}\s*=\s*([-\d.]+)", body)[1])
+                self.assertEqual(actual, expected)
+
+    def test_wkr_armour_order_charges_delivers_or_refunds_both_currencies(self):
+        source = read("common/decisions/ADISCORD_vorkerland_decisions.txt")
+        decision = parse_clausewitz(block(source, "WKR_measure_armour_contract"))
+        payload = {node.key: node.value for node in decision}
+        for licensed in (False, True):
+            for cancelled in (False, True):
+                with self.subTest(licensed=licensed, cancelled=cancelled):
+                    f = PurchaseFixture(treasury=275)
+                    for path in ("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt",
+                                 "common/scripted_effects/ADISCORD_vorkerland_effects.txt"):
+                        f.definitions.update({node.key: node.value for node in parse_clausewitz(read(path))})
+                    if licensed:
+                        f.focuses.add("WKR_measure_foreign_licences")
+                    v = f.scopes["A"]
+                    v["has_political_power"] = 45
+                    gate = payload["custom_cost_trigger"]
+                    self.assertTrue(f.condition(gate))
+                    for currency, price in ((P + "treasury", 275), ("has_political_power", 45)):
+                        v[currency] = price - 0.001
+                        self.assertFalse(f.condition(gate), currency)
+                        v[currency] = price
+                    f.execute(payload["complete_effect"], "A", None, "A")
+                    self.assertEqual(v[P + "treasury"], 0)
+                    self.assertEqual(v["has_political_power"], 0)
+                    self.assertEqual(v[P + "current_month_action_costs"], 275)
+                    self.assertEqual(f.equipment, {})
+                    terminal = "cancel_effect" if cancelled else "remove_effect"
+                    f.execute(payload[terminal], "A", None, "A")
+                    if cancelled:
+                        self.assertEqual(v[P + "treasury"], 275)
+                        self.assertEqual(v["has_political_power"], 45)
+                        self.assertEqual(v[P + "current_month_action_income"], 275)
+                        self.assertEqual(f.equipment, {})
+                    else:
+                        self.assertEqual(v[P + "treasury"], 0)
+                        self.assertEqual(v["has_political_power"], 0)
+                        self.assertEqual(f.equipment, {
+                            "ADISCORD_combat_platform_2170": 36,
+                            "ADISCORD_armored_carrier_2163": 68 if licensed else 48,
+                            **({} if licensed else {"motorized_equipment_1": 40}),
+                        })
+
+    def test_val_contraband_price_exceeds_its_best_export_value(self):
+        source = read("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")
+        decision = parse_clausewitz(block(source, "VAL_buy_contraband_arms"))
+        f = PurchaseFixture()
+        f.stubs.add("VAL_change_black_market_pressure")
+        values = f.scopes["A"]
+        gate = next(e.value for e in decision if e.key == "custom_cost_trigger")
+        values[P + "treasury"] = 399.99
+        self.assertFalse(f.condition(gate))
+        values[P + "treasury"] = 400
+        self.assertTrue(f.condition(gate))
+        f.execute(next(e.value for e in decision if e.key == "complete_effect"), "A", None, "A")
+        self.assertEqual(values[P + "treasury"], 0)
+        self.assertEqual(values[P + "current_month_action_costs"], 400)
+        self.assertEqual(f.equipment, {"infantry_equipment": 15000})
+        self.assertGreater(400, 15000 * (5000 / 200000))
+
+    def test_custom_price_decisions_use_explicit_payment_and_loadable_price_variants(self):
+        localised = {}
+        for language in ("russian", "english"):
+            entries = {}
+            paths = sorted((ROOT / "localisation" / language).glob("*.yml"))
+            paths += sorted((ROOT / "localisation/replace").glob(f"*_l_{language}.yml"))
+            for path in paths:
+                entries.update(re.findall(
+                    r'^\s*([\w.-]+):(?:\d+)?\s+"((?:[^"\\\r\n]|\\.)*)"\s*(?:#.*)?$',
+                    path.read_text(encoding="utf-8-sig"), re.M,
+                ))
+            localised[language] = entries
+        for path in (ROOT / "common/decisions").glob("*.txt"):
+            for category in parse_clausewitz(read(path)):
+                if not isinstance(category.value, list):
+                    continue
+                for decision in category.value:
+                    if not isinstance(decision.value, list):
+                        continue
+                    body = {node.key: node.value for node in decision.value}
+                    key = body.get("custom_cost_text")
+                    if not isinstance(key, str):
+                        continue
+                    with self.subTest(decision=decision.key):
+                        self.assertEqual(body.get("cost"), "0")
+                        self.assertIn("custom_cost_trigger", body)
+                        for language, entries in localised.items():
+                            for suffix in ("", "_blocked", "_tooltip"):
+                                self.assertIn(key + suffix, entries, language)
+
+    def test_rebalanced_price_lines_and_blocked_variants_match_paid_contracts(self):
+        prices = {
+            "WKR_measure_armour_contract_cost": [(45, "political_power"), (275, "ADISCORD_economy_treasury")],
+            "WKR_siege_plenipotentiary_cost": [(50, 'political_power'), (250, 'ADISCORD_economy_treasury')],
+            "WKR_contract_reconstruction_cost": [(40, 'political_power'), (1500, 'manpower'), (200, 'ADISCORD_economy_treasury')],
+            "WKR_vow_brigade_cost": [(25, 'political_power'), (300, 'ADISCORD_economy_treasury')],
+            "TVA_lab_prototype_series_cost": [(30, 'political_power'), (75, 'ADISCORD_economy_treasury')],
+            "TVA_lab_accelerated_series_cost": [(25, 'political_power'), (90, 'ADISCORD_economy_treasury')],
+            "WKR_measure_licence_purchase_cost": [(20, 'political_power'), (225, 'ADISCORD_economy_treasury')],
+            "NAM_war_arms_purchase_cost": [(35, "political_power"), (300, "ADISCORD_economy_treasury")],
+            "RUS_surface_industrial_contract_cost": [(25, "political_power"), (350, "ADISCORD_economy_treasury"), (45, "support_equipment")],
+            "VAL_logistics_cost_400": [(400, "ADISCORD_economy_treasury")],
+            "NAM_cost_pirate_fence": [(50, "NAM_pirate_loot")],
+            "RUS_rifle_order_cost": [(50, "political_power"), (300, "ADISCORD_economy_treasury")],
+        }
+        scripted = parse_clausewitz(read("common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt"))
+        definitions = {
+            scalar(node.value, "name"): node.value for node in scripted if node.key == "defined_text"
+        }
+        for language in ("russian", "english"):
+            loc = {}
+            for family in ("vorkerland", "nam_resource_war", "RUS", "VAL_logistics_market"):
+                path = ROOT / f"localisation/{language}/ADISCORD_{family}_l_{language}.yml"
+                self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+                loc.update(re.findall(r'^\s*([\w.]+):(?:\d+)?\s+"((?:[^"\\]|\\.)*)"\s*$',
+                                      path.read_text(encoding="utf-8-sig"), re.M))
+            for key, amounts in prices.items():
+                for suffix in ("", "_blocked", "_tooltip"):
+                    with self.subTest(language=language, key=key + suffix):
+                        line = loc[key + suffix]
+                        line = re.sub(r"\$([\w.]+)\$", lambda m: loc[m[1]], line)
+                        # Rifle orders select each currency's colour independently.
+                        if key == "RUS_rifle_order_cost":
+                            f = PurchaseFixture(treasury=299.999 if suffix == "_blocked" else 300)
+                            f.scopes["A"]["has_political_power"] = 49.999 if suffix == "_blocked" else 50
+                            def select(match):
+                                for node in definitions[match[1]]:
+                                    if node.key != "text":
+                                        continue
+                                    gate = next((n.value for n in node.value if n.key == "trigger"), [])
+                                    if f.condition(gate):
+                                        return loc[scalar(node.value, "localization_key")]
+                                self.fail(match[1])
+                            line = re.sub(r"\[(Get\w+)\]", select, line)
+                            colour = "R" if suffix == "_blocked" else "Y"
+                            self.assertEqual(line.count(chr(167) + colour), 2)
+                        plain = re.sub(chr(167) + r".", "", line)
+                        rendered = [(int(amount), icon) for amount, icon in
+                                    re.findall(r"(\d+)\s+" + chr(163) + r"(\w+)_texticon", plain)]
+                        self.assertEqual(rendered, amounts)
+
+    def fixture(self):
+        return EconomyScriptFixture(
+            facts={
+                P + "model_is_state_coordinated": False,
+                P + "model_is_planned_bureaucratic": False,
+                P + "can_expand_money_emission": True,
+            },
+            stubs=(P + "initialize_country", P + "mark_dirty",
+                   P + "calculate_macro_indicators", "add_timed_idea"),
+        )
+
+
+    def test_emission_quote_matches_capacity_limited_delivery_and_ui(self):
+        for room, expected in ((1000, 750), (35.5, 35.5), (35.555, 35.55)):
+            with self.subTest(room=room):
+                f = self.fixture()
+                v = f.scopes["A"]
+                v.update({P + "weekly_income": 100, P + "treasury": 1000,
+                          P + "treasury_cap": 1000 + room})
+                f.run(P + "calculate_financing_offers")
+                self.assertAlmostEqual(v.get(P + "emission_cash_temp", -1), expected)
+                f.run(P + "expand_money_emission")
+                self.assertAlmostEqual(v[P + "treasury"] - 1000, expected)
+                self.assertAlmostEqual(v[P + "emission_principal"], expected)
+                self.assertLessEqual(v[P + "treasury"], v[P + "treasury_cap"])
+        for language in ("russian", "english"):
+            loc = read(f"localisation/{language}/ADISCORD_economy_l_{language}.yml")
+            row = re.search(r"^ ADISCORD_economy_action_emission_tt:.*$", loc, re.M).group()
+            self.assertIn("[?" + P + "emission_cash_temp|2]", row)
+
+    def test_emission_preview_refreshes_after_other_treasury_transactions(self):
+        f = self.fixture()
+        v = f.scopes["A"]
+        v.update({P + "weekly_income": 100, P + "treasury": 1000,
+                  P + "treasury_cap": 2000})
+        f.run(P + "calculate_financing_offers")
+        self.assertEqual(v[P + "emission_cash_temp"], 750)
+        v[P + "treasury"] = 1964.5
+        f.run(P + "update_gui")
+        self.assertEqual(v[P + "emission_cash_temp"], 35.5)
+        self.assertEqual(v[P + "treasury"], 1964.5)
+        self.assertEqual(v.get(P + "emission_principal", 0), 0)
+        self.assertEqual(v.get(P + "current_month_action_income", 0), 0)
+
+    def test_buyback_accepts_displayed_cents_and_preserves_the_final_remainder(self):
+        f = self.fixture()
+        v = f.scopes["A"]
+        v.update({P + "emission_principal": 136, P + "money_printing_level": 3})
+        for step in range(3):
+            v[P + "recent_money_printing"] = 0
+            f.run(P + "calculate_financing_offers")
+            price = v[P + "emission_buyback_cash"]
+            if step == 0:
+                self.assertAlmostEqual(price, 45.33)
+            self.assertAlmostEqual(price, round(price, 2))
+            v[P + "treasury"] = float(f"{price:.2f}")
+            f.run(P + "reduce_money_emission")
+            self.assertAlmostEqual(v[P + "treasury"], 0)
+        self.assertEqual(v[P + "money_printing_level"], 0)
+        self.assertAlmostEqual(v[P + "emission_principal"], 0)
+        self.assertAlmostEqual(v[P + "current_month_action_costs"], 136)
+
+    def test_integer_tooltip_quotes_have_no_hidden_fractional_price(self):
+        f = self.fixture()
+        v = f.scopes["A"]
+        v[P + "weekly_income"] = 7.123
+        f.run(P + "calculate_financing_offers")
+        for name in ("bond_offer_cash", "external_offer_cash", "war_tax_offer_cash",
+                     "stabilization_price", "repay_offer_cash"):
+            with self.subTest(quote=name):
+                self.assertEqual(v[P + name], round(v[P + name]))
+
+    def test_rounded_stabilization_and_debt_prices_accept_exact_visible_cash(self):
+        for action, ledger in (("stabilization_package", "current_month_action_costs"),
+                               ("repay_debt", "current_month_debt_paid")):
+            for cash in (141.999, 142):
+                with self.subTest(action=action, cash=cash):
+                    f = self.fixture()
+                    f.stubs.update(P + name for name in (
+                        "calculate_debt_metrics", "reconcile_debt_state_after_action",
+                        "update_macro_confidence",
+                    ))
+                    v = f.scopes["A"]
+                    v.update({P + "weekly_income": 7.123, P + "treasury": cash,
+                              P + "debt": 1000, P + "inflation": 30,
+                              P + "fiscal_stress": 30})
+                    f.run(P + "calculate_financing_offers")
+                    self.assertEqual(v[P + "stabilization_price"], 142)
+                    self.assertEqual(v[P + "repay_offer_cash"], 142)
+                    f.run(P + action)
+                    paid = 142 if cash == 142 else 0
+                    self.assertAlmostEqual(v[P + "treasury"], cash - paid)
+                    self.assertEqual(v.get(P + ledger, 0), paid)
+                    if action == "repay_debt":
+                        self.assertEqual(v[P + "debt"], 1000 - paid)
+                    else:
+                        self.assertEqual(v[P + "inflation"], 18 if paid else 30)
+
+    def test_emission_buyback_preserves_principal_through_income_changes_and_reload(self):
+        from copy import deepcopy
+
+        f = self.fixture()
+        values = f.scopes["A"]
+        issued = 0
+        for offer, room in ((750, 1000), (200, 35.5), (50, 1000)):
+            values[P + "treasury"] = 1000
+            values[P + "treasury_cap"] = 1000 + room
+            values[P + "weekly_income"] = offer / 20
+            f.run(P + "expand_money_emission")
+            issued += min(offer, room)
+        self.assertEqual(values[P + "emission_principal"], issued)
+        self.assertEqual(values[P + "money_printing_level"], 3)
+        restored = self.fixture()
+        restored.scopes = deepcopy(f.scopes)
+        f = restored
+        values = f.scopes["A"]
+        values[P + "inflation"] = 17
+        spent = values.get(P + "current_month_action_costs", 0)
+        for income in (1, 1000, 0):
+            # Advance past the native timed idea and monthly action lock.
+            values[P + "recent_money_printing"] = 0
+            values[P + "weekly_income"] = income
+            f.run(P + "calculate_financing_offers")
+            price = values[P + "emission_buyback_cash"]
+            values[P + "treasury"] = price - 0.01
+            before = values[P + "emission_principal"]
+            f.run(P + "reduce_money_emission")
+            self.assertEqual(values[P + "emission_principal"], before)
+            values[P + "treasury"] = price
+            values[P + "emission_buyback_cash"] = 0
+            f.run(P + "reduce_money_emission")
+            self.assertAlmostEqual(values[P + "treasury"], 0)
+            self.assertEqual(values[P + "inflation"], 17)
+            after = values[P + "emission_principal"]
+            f.run(P + "reduce_money_emission")
+            self.assertEqual(values[P + "emission_principal"], after)
+        self.assertAlmostEqual(values[P + "current_month_action_costs"] - spent, issued)
+        self.assertAlmostEqual(values[P + "emission_principal"], 0)
+        self.assertEqual(values[P + "money_printing_level"], 0)
 
 
 if __name__ == "__main__":

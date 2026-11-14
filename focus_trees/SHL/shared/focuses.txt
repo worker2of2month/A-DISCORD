@@ -358,6 +358,16 @@ shared_focus = {
 				add_manpower = 4000
 			}
 		}
+		731 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					is_controlled_by = SHL
+					infrastructure < 5
+				}
+				add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+			}
+		}
 	}
 	ai_will_do = { base = 4 }
 }
@@ -576,6 +586,17 @@ shared_focus = {
 				}
 			}
 		}
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = SHL_conclave_power_dummy_idea
+				add_idea = SHL_pow_veyran_forts_idea
+			}
+		}
+		hidden_effect = {
+			add_to_variable = { var = SHL_pow_army_defence value = 0.03 }
+			add_to_variable = { var = SHL_pow_max_dig_in value = 2 }
+			SHL_refresh_conclave_power = yes
+		}
 	}
 	ai_will_do = { base = 4 }
 }
@@ -664,6 +685,17 @@ shared_focus = {
 				}
 			}
 		}
+		733 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					is_controlled_by = SHL
+					infrastructure < 5
+				}
+				add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+			}
+		}
+		add_command_power = 15
 	}
 	ai_will_do = { base = 4 }
 }
@@ -1224,6 +1256,17 @@ shared_focus = {
 			uses = 1
 			category = industry
 		}
+		add_political_power = 30
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = SHL_conclave_power_dummy_idea
+				add_idea = SHL_pow_archive_of_the_conclave_idea
+			}
+		}
+		hidden_effect = {
+			add_to_variable = { var = SHL_pow_research_speed value = 0.03 }
+			SHL_refresh_conclave_power = yes
+		}
 	}
 	ai_will_do = { base = 4 }
 }
@@ -1233,7 +1276,7 @@ shared_focus = {
 	icon = GFX_focus_generic_university_1
 	x = 61
 	y = 2
-	cost = 5
+	cost = 9
 	search_filters = { FOCUS_FILTER_RESEARCH }
 	prerequisite = {
 		focus = SHL_archive_of_the_conclave

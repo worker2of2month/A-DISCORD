@@ -77,6 +77,120 @@ SHARED_HISTORY_SOURCES = frozenset({
 })
 
 
+# A war tree replaces each of its prior trees for one campaign and gives it
+# back. Native load_focus_tree keeps only the completed focuses that exist in
+# the new tree, so the war tree also lists every root shown by its prior trees
+# and each prior tree lists the war tree's roots. allow_branch on has_focus_tree
+# hides every focus of a carried source outside its own tree: a focus with its
+# own allow_branch is shown or hidden independently of its parent.
+TREE_SWAPS = {
+    "NAM/south_war/focuses.txt": (
+        "NAM_south_war_focus",
+        (
+            "NAM/main/focuses.txt",
+            "NAM/postwar/focuses.txt",
+            "NAM/defeated/focuses.txt",
+            "NAM/exile_humanist/focuses.txt",
+            "NAM/exile_radical/focuses.txt",
+            "NAM/exile_corporate/focuses.txt",
+        ),
+    ),
+    "SHL/south_war/focuses.txt": ("SHL_south_war_focus", ("SHL/main/focuses.txt",)),
+}
+
+
+def shown_roots(source: str) -> list[str]:
+    """Roots a tree displays: its own unconditioned focuses and its shared references."""
+    trees = [row for row in parse_clausewitz(source) if row.key == "focus_tree"]
+    if len(trees) != 1:
+        raise ValueError("A swapped tree source must contain exactly one focus tree")
+    roots = []
+    for row in trees[0].value:
+        if row.key == "shared_focus" and isinstance(row.value, str):
+            roots.append(row.value)
+        elif row.key == "focus" and not any(child.key == "prerequisite" for child in row.value):
+            roots.append(next(child.value for child in row.value if child.key == "id"))
+    return roots
+
+
+def swap_plan(sources: dict[str, str]) -> tuple[dict[str, list[str]], dict[str, str]]:
+    """Carried shared references per source and the allow_branch clause per carried root."""
+    carried: dict[str, list[str]] = {}
+    clauses: dict[str, str] = {}
+    for war, (tree_id, priors) in TREE_SWAPS.items():
+        war_roots = shown_roots(sources[war])
+        for root in war_roots:
+            clauses[root] = f"has_focus_tree = {tree_id}"
+        for prior in priors:
+            prior_roots = shown_roots(sources[prior])
+            for root in prior_roots:
+                if clauses.get(root, f"NOT = {{ has_focus_tree = {tree_id} }}") != f"NOT = {{ has_focus_tree = {tree_id} }}":
+                    raise ValueError(f"Root {root} is carried in both directions")
+                clauses[root] = f"NOT = {{ has_focus_tree = {tree_id} }}"
+                if root not in carried.setdefault(war, []):
+                    carried[war].append(root)
+            prior_carried = carried.setdefault(prior, [])
+            for root in war_roots:
+                if root not in prior_carried:
+                    prior_carried.append(root)
+    return carried, clauses
+
+
+FOCUS_DEFINITION = re.compile(r"(?m)^([ \t]*)(?:shared_)?focus\s*=\s*\{\s*\n\s*id\s*=\s*(\w+)[ \t]*\n")
+
+
+def source_clauses(sources: dict[str, str], clauses: dict[str, str]) -> dict[str, str]:
+    """The swap clause of each source that defines a carried root.
+
+    A focus with its own allow_branch is evaluated separately from its parent,
+    so every focus of such a source carries the clause, not only the root.
+    """
+    owners: dict[str, str] = {}
+    for source, text in sources.items():
+        for match in FOCUS_DEFINITION.finditer(text):
+            if match[2] in clauses:
+                if match[2] in owners:
+                    raise ValueError(f"Carried root {match[2]} is defined twice")
+                owners[match[2]] = source
+    missing = sorted(set(clauses) - set(owners))
+    if missing:
+        raise ValueError(f"Carried roots need an authored definition: {missing}")
+    result: dict[str, str] = {}
+    for root, source in owners.items():
+        if result.setdefault(source, clauses[root]) != clauses[root]:
+            raise ValueError(f"{source} defines roots carried in both directions")
+    return result
+
+
+def hide_carried_roots(source: str, clause: str | None) -> str:
+    """Add the swap clause to the allow_branch of every focus defined here."""
+    if clause is None:
+        return source
+    for match in reversed(list(FOCUS_DEFINITION.finditer(source))):
+        opening = source.index("{", match.start())
+        end = block_end(source, opening)
+        body = source[match.end():end]
+        indent = match[1] + "\t"
+        existing = re.search(r"(?m)^[ \t]*allow_branch\s*=\s*\{", body)
+        if existing:
+            insert = match.end() + existing.end()
+            source = source[:insert] + f" {clause}" + source[insert:]
+        else:
+            source = source[:match.end()] + f"{indent}allow_branch = {{ {clause} }}\n" + source[match.end():]
+    return source
+
+
+def carry_shared_roots(rendered: str, roots: list[str]) -> str:
+    """List carried roots at the end of the tree block of a shared-history output."""
+    if not roots:
+        return rendered
+    tree = re.search(r"(?m)^focus_tree\s*=\s*\{", rendered)
+    end = block_end(rendered, rendered.index("{", tree.start()))
+    lines = "".join(f"\tshared_focus = {root}\n" for root in roots)
+    head = rendered[: end - 1].rstrip() + "\n\n\t# Carried across the war-tree swap; hidden by allow_branch.\n"
+    return head + lines + rendered[end - 1:]
+
+
 def block_end(source: str, opening: int) -> int:
     """Locate a native block without treating quoted payloads or comments as braces."""
     depth = 0
@@ -216,6 +330,10 @@ def render_source(
 def expected_outputs() -> dict[Path, bytes]:
     outputs = {}
     used_sections: set[tuple[Path, str]] = set()
+    expanded = {source: render_source(source, used_sections) for source in SOURCES}
+    carried, clauses = swap_plan(expanded)
+    per_source = source_clauses(expanded, clauses)
+    hidden = {source: hide_carried_roots(text, per_source.get(source)) for source, text in expanded.items()}
     for source, filename in SOURCES.items():
         header = (
             "# Generated by tools/builders/build_adiscord_focus_trees.py; do not edit.\n"
@@ -224,9 +342,9 @@ def expected_outputs() -> dict[Path, bytes]:
         if source in SHARED_HISTORY_SOURCES:
             header += "# Native layout: shared focus history; tools read the authored focus tree.\n"
         header += "\n"
-        outputs[OUTPUT_ROOT / filename] = (
-            header + render_native_source(source, render_source(source, used_sections))
-        ).encode("utf-8")
+        native = render_native_source(source, hidden[source])
+        native = carry_shared_roots(native, carried.get(source, []))
+        outputs[OUTPUT_ROOT / filename] = (header + native).encode("utf-8")
     for path in SOURCE_ROOT.rglob("*.txt"):
         text = path.read_text(encoding="utf-8")
         if text.startswith("\ufeff"):

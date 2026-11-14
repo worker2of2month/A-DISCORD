@@ -15,7 +15,7 @@ from tools.validators.validate_adiscord_economy_ai import (
     debt_reconciler_issues,
     debt_transition_flow_issues,
     fresh_economy_initialization_issues,
-    migration_contract_issues,
+    construction_policy_retirement_issues,
     policy_effect_selector_issues,
     policy_selector_issues,
     reachable_script_entries,
@@ -486,119 +486,6 @@ def task7_weekly_on_action_issues(
             issues.extend(weekly_reachability_issues(source_texts, tuple(graph_roots)))
         except AssertionError as error:
             issues.append(f"weekly hook graph is incomplete: {error}")
-    return issues
-
-
-def task7_schema_fifteen_cache_migration_issues(text):
-    """Bind the one-shot Task 7 cache upgrade after the Task 6 migration."""
-
-    try:
-        migration = _parsed_definition(text, "ADISCORD_economy_migrate_schema")
-        defaults = _parsed_definition(text, "ADISCORD_economy_set_default_values")
-    except (AssertionError, ValueError) as error:
-        return [f"schema 15 cache migration is missing: {error}"]
-
-    issues = []
-    schema_fourteen = [
-        entry
-        for entry in migration.value
-        if entry.key == "if"
-        and _exact_direct_check_set(
-            entry,
-            [("ADISCORD_economy_schema_version", "14", "less_than")],
-        )
-    ]
-    schema_fifteen = [
-        entry
-        for entry in migration.value
-        if entry.key == "if"
-        and _exact_direct_check_set(
-            entry,
-            [("ADISCORD_economy_schema_version", "15", "less_than")],
-        )
-    ]
-    if len(schema_fourteen) != 1 or len(schema_fifteen) != 1:
-        return [
-            "schema 15 cache upgrade requires one exact owner after one schema 14 owner"
-        ]
-    owner = schema_fifteen[0]
-    if migration.value.index(schema_fourteen[0]) >= migration.value.index(owner):
-        issues.append(
-            "schema 15 cache upgrade runs before the Task 6 schema 14 migration"
-        )
-
-    def signature(entry):
-        if entry.key == "set_variable" and isinstance(entry.value, list):
-            return (
-                entry.key,
-                _entry_scalar(entry.value, "var"),
-                _entry_scalar(entry.value, "value"),
-            )
-        return (entry.key, entry.value)
-
-    actual_sequence = [
-        signature(entry) for entry in owner.value if entry.key != "limit"
-    ]
-    expected_sequence = [
-        (
-            "set_variable",
-            "ADISCORD_economy_weekly_source_cache_ready",
-            "0",
-        ),
-        ("set_variable", "ADISCORD_economy_weekly_ready", "0"),
-        ("set_variable", "ADISCORD_economy_needs_full_refresh", "1"),
-        ("ADISCORD_economy_full_refresh_if_needed", "yes"),
-        ("set_variable", "ADISCORD_economy_schema_version", "15"),
-    ]
-    if actual_sequence != expected_sequence:
-        issues.append(
-            "schema 15 cache upgrade is not invalidate, request, refresh, then complete"
-        )
-
-    schema_fifteen_checks = [
-        entry
-        for _, entry in _walk_parsed(migration.value)
-        if entry.key == "check_variable"
-        and isinstance(entry.value, list)
-        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
-        and _entry_scalar(entry.value, "value") == "15"
-    ]
-    schema_fifteen_writes = [
-        entry
-        for _, entry in _walk_parsed(migration.value)
-        if entry.key == "set_variable"
-        and isinstance(entry.value, list)
-        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
-        and _entry_scalar(entry.value, "value") == "15"
-    ]
-    if len(schema_fifteen_checks) != 1 or len(schema_fifteen_writes) != 1:
-        issues.append(
-            "schema 15 guard or completion watermark is duplicated or missing"
-        )
-
-    direct_fallbacks = [
-        entry
-        for entry in migration.value
-        if entry.key == "ADISCORD_economy_full_refresh_if_needed"
-        and entry.value == "yes"
-    ]
-    if len(direct_fallbacks) != 1 or migration.value.index(
-        direct_fallbacks[0]
-    ) <= migration.value.index(owner):
-        issues.append("schema migration lacks one final bounded dirty-refresh fallback")
-
-    default_schema = [
-        entry
-        for entry in defaults.value
-        if entry.key == "set_variable"
-        and isinstance(entry.value, list)
-        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
-    ]
-    if not (
-        len(default_schema) == 1
-        and _entry_scalar(default_schema[0].value, "value") == "15"
-    ):
-        issues.append("new countries do not start at schema 15")
     return issues
 
 
@@ -1201,301 +1088,6 @@ def task6_policy_preview_persistent_state_issues(text):
         if writes & persistent
         else []
     )
-
-
-def task6_schema_fourteen_migration_issues(text):
-    """Validate safe migration without manufacturing old streak evidence."""
-
-    try:
-        migration = _parsed_definition(text, "ADISCORD_economy_migrate_schema")
-    except (AssertionError, ValueError) as error:
-        return [f"schema 14 migration is missing: {error}"]
-    issues = []
-    owners = [
-        entry
-        for entry in migration.value
-        if entry.key == "if"
-        and _exact_direct_check_set(
-            entry,
-            [("ADISCORD_economy_schema_version", "14", "less_than")],
-        )
-    ]
-    if len(owners) != 1:
-        return [f"schema 14 requires one exact top-level owner, found {len(owners)}"]
-    owner = owners[0]
-    assert isinstance(owner.value, list)
-    schema_fourteen_checks = [
-        (ancestors, entry)
-        for ancestors, entry in _walk_parsed(migration.value)
-        if entry.key == "check_variable"
-        and isinstance(entry.value, list)
-        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
-        and _entry_scalar(entry.value, "value") == "14"
-    ]
-    if len(schema_fourteen_checks) != 1:
-        issues.append("schema 14 guard is duplicated or has a second unowned check")
-
-    variable_write_operations = {
-        "set_variable",
-        "add_to_variable",
-        "subtract_from_variable",
-        "multiply_variable",
-        "divide_variable",
-        "clamp_variable",
-        "clear_variable",
-    }
-    state_operations = [
-        (ancestors, entry)
-        for ancestors, entry in _walk_parsed(owner.value)
-        if entry.key in variable_write_operations
-        and (
-            entry.value == "ADISCORD_economy_debt_state"
-            or (
-                isinstance(entry.value, list)
-                and _entry_scalar(entry.value, "var") == "ADISCORD_economy_debt_state"
-            )
-        )
-    ]
-    global_state_operations = [
-        (ancestors, entry)
-        for ancestors, entry in _walk_parsed(migration.value)
-        if entry.key in variable_write_operations
-        and (
-            entry.value == "ADISCORD_economy_debt_state"
-            or (
-                isinstance(entry.value, list)
-                and _entry_scalar(entry.value, "var") == "ADISCORD_economy_debt_state"
-            )
-        )
-    ]
-    direct_state_zero = [
-        entry
-        for entry in owner.value
-        if entry.key == "set_variable"
-        and isinstance(entry.value, list)
-        and len(entry.value) == 2
-        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_debt_state"
-        and _entry_scalar(entry.value, "value") == "0"
-    ]
-    mapping_branches = [
-        entry
-        for entry in owner.value
-        if entry.key in {"if", "else_if"}
-        and isinstance(entry.value, list)
-        and any(
-            child.key == "set_variable"
-            and isinstance(child.value, list)
-            and _entry_scalar(child.value, "var") == "ADISCORD_economy_debt_state"
-            for child in entry.value
-        )
-    ]
-    mapping_ok = bool(
-        len(direct_state_zero) == 1
-        and len(mapping_branches) == 2
-        and [branch.key for branch in mapping_branches] == ["if", "else_if"]
-        and owner.value.index(direct_state_zero[0])
-        < owner.value.index(mapping_branches[0])
-        and owner.value.index(mapping_branches[0]) + 1
-        == owner.value.index(mapping_branches[1])
-        and _exact_direct_check_set(
-            mapping_branches[0],
-            [("ADISCORD_economy_debt_crisis_level", "2", "greater_than_or_equals")],
-        )
-        and _exact_direct_variable_write(
-            mapping_branches[0], "set_variable", "ADISCORD_economy_debt_state", 2
-        )
-        and _exact_direct_check_set(
-            mapping_branches[1],
-            [("ADISCORD_economy_debt_crisis_level", "1", "greater_than_or_equals")],
-        )
-        and _exact_direct_variable_write(
-            mapping_branches[1], "set_variable", "ADISCORD_economy_debt_state", 1
-        )
-        and len(state_operations) == 3
-        and len(global_state_operations) == 3
-        and all(
-            ancestors and ancestors[0] is owner
-            for ancestors, _ in global_state_operations
-        )
-        and {
-            _entry_scalar(entry.value, "value")
-            for _, entry in state_operations
-            if entry.key == "set_variable" and isinstance(entry.value, list)
-        }
-        == {"0", "1", "2"}
-    )
-    if not mapping_ok:
-        issues.append("schema 14 safe state 0/1/2 mapping lacks exact branch ownership")
-
-    exact_writes = {
-        "ADISCORD_economy_debt_emergency_streak": "0",
-        "ADISCORD_economy_debt_default_streak": "0",
-        "ADISCORD_economy_pending_debt_notification_kind": "0",
-        "ADISCORD_economy_pending_debt_notification_amount": "0",
-        "ADISCORD_economy_pending_debt_notification_previous_state": (
-            "ADISCORD_economy_debt_state"
-        ),
-        "ADISCORD_economy_pending_debt_notification_new_state": (
-            "ADISCORD_economy_debt_state"
-        ),
-        "ADISCORD_economy_last_notified_debt_state": "ADISCORD_economy_debt_state",
-    }
-    initialization_entries = []
-    initialization_by_variable = {}
-    for variable, value in exact_writes.items():
-        direct = [
-            entry
-            for entry in owner.value
-            if entry.key == "set_variable"
-            and isinstance(entry.value, list)
-            and _entry_scalar(entry.value, "var") == variable
-        ]
-        all_owned = [
-            (ancestors, entry)
-            for ancestors, entry in _walk_parsed(migration.value)
-            if entry.key in variable_write_operations
-            and (
-                entry.value == variable
-                or (
-                    isinstance(entry.value, list)
-                    and _entry_scalar(entry.value, "var") == variable
-                )
-            )
-        ]
-        if not (
-            len(direct) == len(all_owned) == 1
-            and all_owned[0][0]
-            and all_owned[0][0][0] is owner
-            and all_owned[0][1] is direct[0]
-            and len(direct[0].value) == 2
-            and _entry_scalar(direct[0].value, "value") == value
-        ):
-            issues.append(
-                f"schema 14 does not initialize {variable} exactly to {value}"
-            )
-        else:
-            initialization_entries.append(direct[0])
-            initialization_by_variable[variable] = direct[0]
-    previous_state_cache = initialization_by_variable.get(
-        "ADISCORD_economy_pending_debt_notification_previous_state"
-    )
-    new_state_cache = initialization_by_variable.get(
-        "ADISCORD_economy_pending_debt_notification_new_state"
-    )
-    last_notified = initialization_by_variable.get(
-        "ADISCORD_economy_last_notified_debt_state"
-    )
-    if not (
-        mapping_branches
-        and previous_state_cache is not None
-        and new_state_cache is not None
-        and last_notified is not None
-        and owner.value.index(mapping_branches[-1])
-        < owner.value.index(previous_state_cache)
-        < owner.value.index(new_state_cache)
-        < owner.value.index(last_notified)
-    ):
-        issues.append(
-            "schema 14 state caches and notification watermark do not follow mapping"
-        )
-
-    direct_clear_first = [
-        entry
-        for entry in owner.value
-        if entry.key == "clear_variable"
-        and entry.value == "ADISCORD_economy_first_loan_notified"
-    ]
-    all_clear_first = [
-        (ancestors, entry)
-        for ancestors, entry in _walk_parsed(migration.value)
-        if entry.key == "clear_variable"
-        and entry.value == "ADISCORD_economy_first_loan_notified"
-    ]
-    marker_owners = [
-        entry
-        for entry in owner.value
-        if entry.key == "if"
-        and isinstance(entry.value, list)
-        and _exact_direct_variable_write(
-            entry, "set_variable", "ADISCORD_economy_first_loan_notified", 1
-        )
-    ]
-    all_first_markers = [
-        (ancestors, entry)
-        for ancestors, entry in _walk_parsed(migration.value)
-        if entry.key in variable_write_operations
-        and isinstance(entry.value, list)
-        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_first_loan_notified"
-    ]
-    first_loan_ok = bool(
-        len(direct_clear_first) == 1
-        and len(all_clear_first) == 1
-        and len(all_clear_first[0][0]) == 1
-        and all_clear_first[0][0][0] is owner
-        and all_clear_first[0][1] is direct_clear_first[0]
-        and len(marker_owners) == 1
-        and len(all_first_markers) == 1
-        and all_first_markers[0][0]
-        and all_first_markers[0][0][0] is owner
-        and _exact_direct_check_set(
-            marker_owners[0],
-            [("ADISCORD_economy_debt", "0", "greater_than")],
-        )
-        and owner.value.index(direct_clear_first[0])
-        < owner.value.index(marker_owners[0])
-    )
-    if not first_loan_ok:
-        issues.append(
-            "schema 14 first-loan marker does not preserve existing debt safely"
-        )
-
-    completion = [
-        entry
-        for _, entry in _walk_parsed(migration.value)
-        if entry.key == "set_variable"
-        and isinstance(entry.value, list)
-        and len(entry.value) == 2
-        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
-        and _entry_scalar(entry.value, "value") == "14"
-    ]
-    direct_completion = [
-        entry
-        for entry in owner.value
-        if entry.key == "set_variable"
-        and isinstance(entry.value, list)
-        and len(entry.value) == 2
-        and _entry_scalar(entry.value, "var") == "ADISCORD_economy_schema_version"
-        and _entry_scalar(entry.value, "value") == "14"
-    ]
-    completion_ok = len(completion) == len(direct_completion) == 1
-    if completion_ok:
-        completion_position = owner.value.index(direct_completion[0])
-        required_before_completion = list(initialization_entries)
-        if mapping_branches:
-            required_before_completion.append(mapping_branches[-1])
-        if marker_owners:
-            required_before_completion.append(marker_owners[0])
-        completion_ok = bool(
-            required_before_completion
-            and max(owner.value.index(entry) for entry in required_before_completion)
-            < completion_position
-            and completion_position == len(owner.value) - 2
-            and _exact_direct_variable_write(
-                owner,
-                "set_variable",
-                "ADISCORD_economy_needs_full_refresh",
-                1,
-            )
-            and owner.value[-1].key == "set_variable"
-            and isinstance(owner.value[-1].value, list)
-            and _entry_scalar(owner.value[-1].value, "var")
-            == "ADISCORD_economy_needs_full_refresh"
-        )
-    if not completion_ok:
-        issues.append(
-            "schema 14 completion write is missing, unowned, duplicated, or early"
-        )
-    return issues
 
 
 def task6_notification_queue_issues(text):
@@ -3036,13 +2628,14 @@ ADISCORD_economy_calculate_debt_metrics = {
 }
 """
 
-    def test_schema_migration_exception_is_exact_and_live_legacy_use_is_rejected(self):
-        self.assertEqual(migration_contract_issues(self.MIGRATION), [])
+    def test_retired_policy_and_migration_bodies_are_rejected(self):
+        self.assertEqual(construction_policy_retirement_issues(""), [])
+        self.assertTrue(construction_policy_retirement_issues(self.MIGRATION))
         injected = (
             self.MIGRATION
             + "\nADISCORD_live = { ADISCORD_economy_construction_spending_mode = yes }"
         )
-        self.assertTrue(migration_contract_issues(injected))
+        self.assertTrue(construction_policy_retirement_issues(injected))
 
     def test_capacity_boundary_covers_omitted_common_surfaces_and_mixed_migration_operations(
         self,
@@ -3602,7 +3195,7 @@ ADISCORD_economy_ai_monthly_policy = {
             + [
                 f"if = {{ limit = {{ check_variable = {{ var = ADISCORD_economy_research_spending_mode value = {level} compare = equals }} }} multiply_variable = {{ var = ADISCORD_economy_research_expenses value = {factor} }} }}"
                 for level, factor in enumerate(
-                    ("0.30", "0.65", "1.00", "2.00", "3.00"), 1
+                    ("0.65", "0.80", "1.00", "1.50", "2.00"), 1
                 )
             ]
             + ["}"]
@@ -4289,72 +3882,11 @@ ADISCORD_economy_apply_weekly_balance = {
 
 
 class WeeklyEconomyContracts(unittest.TestCase):
-    def test_schema_twelve_maps_construction_policy_to_research_without_resetting_ledger(
-        self,
-    ):
-        self.assertFalse(migration_contract_issues(EFFECTS))
-        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        self.assertRegex(
-            migration,
-            r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_schema_version"
-            r"\s+value\s*=\s*12\s+compare\s*=\s*less_than\s*\}",
-        )
-        self.assertEqual(
-            len(
-                re.findall(
-                    r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_schema_version"
-                    r"\s+value\s*=\s*12\s*\}",
-                    migration,
-                )
-            ),
-            1,
-        )
-        self.assertRegex(
-            migration,
-            r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_spending_mode"
-            r"\s+value\s*=\s*ADISCORD_economy_construction_spending_mode\s*\}",
-        )
-        self.assertRegex(
-            migration,
-            r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_budget_change_cooldown"
-            r"\s+value\s*=\s*0\s*\}",
-        )
-        for obsolete in (
-            "ADISCORD_economy_construction_spending_mode",
-            "ADISCORD_economy_construction_budget_change_cooldown",
-        ):
-            self.assertRegex(migration, rf"clear_variable\s*=\s*{obsolete}\b")
-        for idea in range(1, 6):
-            self.assertIn(f"ADISCORD_economy_construction_spending_{idea}", migration)
-
-        protected_ledger = (
-            "treasury",
-            "debt",
-            "accounting_period_treasury_start",
-            "last_period_treasury_before",
-            "last_period_treasury_after",
-            "last_period_income",
-            "last_period_expenses",
-            "last_period_balance",
-            "last_period_debt_added",
-            "last_period_debt_paid",
-            "current_month_action_income",
-            "current_month_action_costs",
-            "current_month_debt_added",
-            "current_month_debt_paid",
-        )
-        for suffix in protected_ledger:
-            variable = f"ADISCORD_economy_{suffix}"
-            self.assertNotRegex(
-                migration,
-                rf"(?:set_variable|clear_variable)\s*=\s*(?:\{{[^{{}}]*var\s*=\s*)?{variable}\b",
-                variable,
-            )
 
     def test_construction_policy_is_retired_and_construction_spend_tracks_real_activity(
         self,
     ):
-        retirement_issues = migration_contract_issues(
+        retirement_issues = construction_policy_retirement_issues(
             EFFECTS,
             {
                 "triggers": TRIGGERS,
@@ -4364,10 +3896,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 "economy_ai": ECONOMY_AI,
             },
         )
-        live_issues = [
-            issue for issue in retirement_issues if "outside migration" in issue
-        ]
-        self.assertFalse(live_issues, f"live construction-policy API: {live_issues}")
+        self.assertFalse(retirement_issues, retirement_issues)
 
         construction = unique_block(
             EFFECTS, "ADISCORD_economy_calculate_construction_expenses"
@@ -4445,16 +3974,16 @@ class WeeklyEconomyContracts(unittest.TestCase):
         )
 
         expected = {
-            1: ("§G-70%§!", "§R-8%§!"),
-            2: ("§G-35%§!", "§R-3%§!"),
+            1: ("§G-35%§!", "§R-10%§!"),
+            2: ("§G-20%§!", "§R-4%§!"),
             3: ("§Y0%§!", "§Y0%§!"),
-            4: ("§R+100%§!", "§G+8%§!"),
-            5: ("§R+200%§!", "§G+15%§!"),
+            4: ("§R+50%§!", "§G+4%§!"),
+            5: ("§R+100%§!", "§G+8%§!"),
         }
         for expense, research_speed in expected.values():
             self.assertIn(expense, controls)
             self.assertIn(research_speed, controls)
-        self.assertIn("скорость строительства §G+5%§!", controls)
+        self.assertNotIn("скорость строительства", controls)
 
         keys = localisation_key_set(ECONOMY_LOC)
         for level, (expense, research_speed) in expected.items():
@@ -4478,10 +4007,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                     "стабильность",
                 ):
                     self.assertNotIn(obsolete_claim, value.lower())
-                if level == 5:
-                    self.assertIn("§G+5%§! £construction_speed_texticon", value)
-                else:
-                    self.assertNotIn("£construction_speed_texticon", value)
+                self.assertNotIn("£construction_speed_texticon", value)
 
             mode = localisation_value(
                 ECONOMY_LOC, f"ADISCORD_economy_research_funding_mode_{level}"
@@ -4500,10 +4026,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 f"скорость исследований {research_speed}".lower(),
                 idea_description.lower(),
             )
-            if level == 5:
-                self.assertIn("скорость строительства §G+5%§!", idea_description)
-            else:
-                self.assertNotIn("строительств", idea_description.lower())
+            self.assertNotIn("строительств", idea_description.lower())
 
         for arrow_key in (
             "ADISCORD_economy_research_decrease_tt",
@@ -4511,7 +4034,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
         ):
             self.assertIn("наук", localisation_value(ECONOMY_LOC, arrow_key).lower())
 
-    def test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded(
+    def test_research_policy_has_five_levels_without_a_construction_bonus(
         self,
     ):
         self.assertFalse(research_policy_flow_issues(EFFECTS))
@@ -4525,7 +4048,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 research,
             )
         }
-        self.assertEqual(multipliers, {0.30, 0.65, 1.00, 2.00, 3.00})
+        self.assertEqual(multipliers, {0.65, 0.80, 1.00, 1.50, 2.00})
         self.assertRegex(
             EFFECTS,
             r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_spending_mode"
@@ -4537,7 +4060,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             r"\s+min\s*=\s*0\s+max\s*=\s*3\s*\}",
         )
 
-        expected_research = {1: -0.08, 2: -0.03, 3: 0.0, 4: 0.08, 5: 0.15}
+        expected_research = {1: -0.10, 2: -0.04, 3: 0.0, 4: 0.04, 5: 0.08}
         for level, expected in expected_research.items():
             idea = unique_block(
                 ECONOMY_IDEAS, f"ADISCORD_economy_research_spending_{level}"
@@ -4546,10 +4069,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             construction_bonuses = numeric_values(
                 idea, "production_speed_buildings_factor"
             )
-            if level == 5:
-                self.assertEqual(construction_bonuses, [0.05])
-            else:
-                self.assertEqual(construction_bonuses, [])
+            self.assertEqual(construction_bonuses, [])
         all_construction_bonuses = numeric_values(
             "\n".join(
                 unique_block(
@@ -4559,7 +4079,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             ),
             "production_speed_buildings_factor",
         )
-        self.assertTrue(all(value <= 0.05 for value in all_construction_bonuses))
+        self.assertEqual(all_construction_bonuses, [])
 
     def test_policy_accounting_tables_have_five_exact_condition_owned_levels(self):
         tax_outputs = {
@@ -4591,7 +4111,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                     level: (
                         ("multiply_variable", "ADISCORD_economy_army_expenses", factor),
                     )
-                    for level, factor in enumerate((0.25, 0.60, 1.00, 1.30, 1.70), 1)
+                    for level, factor in enumerate((0.65, 0.80, 1.00, 1.30, 1.70), 1)
                 },
             ),
             "research": (
@@ -4606,7 +4126,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                             factor,
                         ),
                     )
-                    for level, factor in enumerate((0.30, 0.65, 1.00, 2.00, 3.00), 1)
+                    for level, factor in enumerate((0.65, 0.80, 1.00, 1.50, 2.00), 1)
                 },
             ),
             "social": (
@@ -4621,7 +4141,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                             factor,
                         ),
                     )
-                    for level, factor in enumerate((0.25, 0.60, 1.00, 1.50, 2.00), 1)
+                    for level, factor in enumerate((0.60, 0.80, 1.00, 1.50, 2.00), 1)
                 },
             ),
         }
@@ -5195,31 +4715,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
                     )
         self.assertFalse(retired_capacity_boundary_issues(scanned_boundary))
 
-        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        for retired_cache in (
-            "ADISCORD_economy_capacity_factor_temp",
-            "ADISCORD_economy_capacity_temp",
-            "ADISCORD_economy_policy_preview_saved_capacity_factor_temp_temp",
-            "ADISCORD_economy_policy_preview_saved_capacity_temp_temp",
-            "ADISCORD_economy_policy_preview_saved_debt_capacity_temp",
-        ):
-            self.assertRegex(
-                migration,
-                rf"clear_variable\s*=\s*{retired_cache}\b",
-                retired_cache,
-            )
-        for line in migration.splitlines():
-            if "debt_capacity" in line.casefold():
-                self.assertRegex(
-                    line,
-                    r"clear_variable\s*=\s*ADISCORD_[A-Za-z0-9_]*debt_capacity[A-Za-z0-9_]*",
-                    "schema migration may only delete the retired API",
-                )
-
         scanned = {
-            "common/scripted_effects/ADISCORD_economy_effects.txt": EFFECTS.replace(
-                migration, ""
-            ),
+            "common/scripted_effects/ADISCORD_economy_effects.txt": EFFECTS,
         }
         patterns = (
             "common/scripted_effects/*.txt",
@@ -5305,7 +4802,6 @@ class WeeklyEconomyContracts(unittest.TestCase):
     ):
         for effect_name in (
             "ADISCORD_economy_repay_debt",
-            "ADISCORD_economy_early_repay_debt",
             "ADISCORD_economy_restructure_debt",
         ):
             repayment = unique_block(EFFECTS, effect_name)
@@ -5708,7 +5204,6 @@ class WeeklyEconomyContracts(unittest.TestCase):
         self.assertFalse(debt_reconciler_issues(EFFECTS))
         for effect_name in (
             "ADISCORD_economy_repay_debt",
-            "ADISCORD_economy_early_repay_debt",
             "ADISCORD_economy_restructure_debt",
         ):
             repayment = unique_block(EFFECTS, effect_name)
@@ -5988,49 +5483,6 @@ class WeeklyEconomyContracts(unittest.TestCase):
             r"ADISCORD_economy_apply_weekly_balance\s*=\s*yes",
         )
 
-    def test_schema_fifteen_bootstraps_task_seven_caches_after_task_six(self):
-        self.assertFalse(task6_schema_fourteen_migration_issues(EFFECTS))
-        self.assertFalse(task7_schema_fifteen_cache_migration_issues(EFFECTS))
-
-        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        invalidate = (
-            "\t\tset_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }\n"
-            "\t\tset_variable = { var = ADISCORD_economy_weekly_ready value = 0 }\n"
-            "\t\tset_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }"
-        )
-        refresh = "\t\tADISCORD_economy_full_refresh_if_needed = yes"
-        completion = (
-            "\t\tset_variable = { var = ADISCORD_economy_schema_version value = 15 }"
-        )
-        for anchor in (invalidate, refresh, completion):
-            self.assertIn(anchor, migration)
-
-        migration_mutations = {
-            "schema 14 cache readiness is not invalidated": migration.replace(
-                invalidate.splitlines()[0] + "\n", "", 1
-            ),
-            "schema 14 cache rebuild is skipped": migration.replace(
-                refresh + "\n", "", 1
-            ),
-            "schema completion watermark is missing": migration.replace(
-                completion + "\n", "", 1
-            ),
-            "schema completes before the cache rebuild": migration.replace(
-                refresh + "\n" + completion,
-                completion + "\n" + refresh,
-                1,
-            ),
-        }
-        for name, mutated_migration in migration_mutations.items():
-            with self.subTest(schema15_mutation=name):
-                self.assertNotEqual(mutated_migration, migration)
-                mutated_effects = EFFECTS.replace(migration, mutated_migration, 1)
-                self.assertTrue(parse_clausewitz(mutated_effects))
-                self.assertTrue(
-                    task7_schema_fifteen_cache_migration_issues(mutated_effects),
-                    name,
-                )
-
     def test_weekly_query_caches_have_bounded_refresh_and_invalidation_owners(self):
         self.assertFalse(task7_cache_invalidation_issues(EFFECTS, MODIFIER_EFFECTS))
         factory_cache = unique_block(
@@ -6106,7 +5558,6 @@ class WeeklyEconomyContracts(unittest.TestCase):
         all_sources = (EFFECTS, MODIFIER_EFFECTS, TRIGGERS)
         for owner in (
             "ADISCORD_economy_initialize_country",
-            "ADISCORD_economy_migrate_schema",
             "ADISCORD_economy_monthly_update",
             "ADISCORD_economy_yearly_update",
             "ADISCORD_economy_open_window",
@@ -6118,8 +5569,6 @@ class WeeklyEconomyContracts(unittest.TestCase):
             self.assertIn(
                 "ADISCORD_economy_cache_weekly_policy_sources", reachable, owner
             )
-        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        self.assertIn("ADISCORD_economy_full_refresh_if_needed = yes", migration)
         dirty = unique_block(EFFECTS, "ADISCORD_economy_mark_sources_dirty")
         self.assertIn(
             "set_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 }",
@@ -7391,7 +6840,6 @@ ADISCORD_task10_forbidden_cache_consumer = {
         self.assertTrue(task10_doc_schema_contract_issues(schema_mutation))
         for required in (
             "schema 15",
-            "schema 12",
             "10%",
             "25%",
             "40%",
@@ -7643,12 +7091,8 @@ ADISCORD_task10_forbidden_cache_consumer = {
         # The reserve, stimulus and emission operations returned to the dashboard
         # as guarded buttons; each wrapper is owned by its scripted GUI click.
         for action, wrapper in (
-            ("early_repay", "early_repay_debt"),
             ("emission", "expand_emission"),
             ("emission_buyback", "reduce_emission"),
-            ("invest_reserves", "invest_reserves"),
-            ("civilian_stimulus", "civilian_investment"),
-            ("military_investment", "military_investment"),
         ):
             self.assertIn(
                 f"ADISCORD_economy_action_{action}_click = {{ ADISCORD_economy_gui_try_{wrapper} = yes }}",
@@ -8036,7 +7480,6 @@ ADISCORD_task10_forbidden_cache_consumer = {
         self.assertIn("ADISCORD_economy_weekly_ready value = 1", prepare)
         for forbidden in (
             "ADISCORD_economy_initialize_country",
-            "ADISCORD_economy_migrate_schema",
             "ADISCORD_economy_set_simulation_tier",
             "ADISCORD_economy_is_primary_tier_country",
             "any_enemy_country",
@@ -8241,162 +7684,6 @@ ADISCORD_task10_forbidden_cache_consumer = {
             )
         self.assertNotIn("ADISCORD_economy_auto_loan_popup_script", SCRIPTED_GUI)
 
-    def test_schema_fourteen_initializes_persistent_debt_state_without_load_spam(self):
-        self.assertFalse(task6_schema_fourteen_migration_issues(EFFECTS))
-        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        self.assertIn(
-            "check_variable = { var = ADISCORD_economy_schema_version value = 14 compare = less_than }",
-            migration,
-        )
-        for variable in (
-            "ADISCORD_economy_debt_state",
-            "ADISCORD_economy_debt_emergency_streak",
-            "ADISCORD_economy_debt_default_streak",
-            "ADISCORD_economy_last_notified_debt_state",
-            "ADISCORD_economy_pending_debt_notification_kind",
-            "ADISCORD_economy_pending_debt_notification_amount",
-            "ADISCORD_economy_pending_debt_notification_previous_state",
-            "ADISCORD_economy_pending_debt_notification_new_state",
-        ):
-            self.assertIn(variable, migration)
-        schema_fourteen = migration[migration.index("value = 14 compare = less_than") :]
-        self.assertNotRegex(
-            schema_fourteen,
-            r"ADISCORD_economy_debt_state\s+value\s*=\s*[34]\b",
-        )
-        self.assertRegex(
-            schema_fourteen,
-            r"check_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_debt"
-            r"\s+value\s*=\s*0\s+compare\s*=\s*greater_than\s*\}"
-            r"(?s:.*?)set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_first_loan_notified\s+value\s*=\s*1\s*\}",
-        )
-        defaults = unique_block(EFFECTS, "ADISCORD_economy_set_default_values")
-        self.assertIn("ADISCORD_economy_schema_version value = 15", defaults)
-        self.assertNotIn("ADISCORD_economy_first_loan_notified", defaults)
-
-        migration_mutations = {
-            "legacy save jumps directly to emergency": migration.replace(
-                "set_variable = { var = ADISCORD_economy_debt_state value = 2 }",
-                "set_variable = { var = ADISCORD_economy_debt_state value = 3 }",
-                1,
-            ),
-            "streak evidence manufactured on load": migration.replace(
-                "set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }",
-                "set_variable = { var = ADISCORD_economy_debt_emergency_streak value = 1 }",
-                1,
-            ),
-            "notification watermark reset below migrated state": migration.replace(
-                "set_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }",
-                "set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 0 }",
-                1,
-            ),
-            "existing debt no longer suppresses first-loan spam": migration.replace(
-                "check_variable = { var = ADISCORD_economy_debt value = 0 compare = greater_than }",
-                "check_variable = { var = ADISCORD_economy_debt value = 0 compare = less_than }",
-                1,
-            ),
-            "schema completion removed": migration.replace(
-                "set_variable = { var = ADISCORD_economy_schema_version value = 14 }",
-                "",
-                1,
-            ),
-            "state two write moved outside legacy owner": migration.replace(
-                "\t\tif = {\n"
-                "\t\t\tlimit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals } }\n"
-                "\t\t\tset_variable = { var = ADISCORD_economy_debt_state value = 2 }\n"
-                "\t\t}",
-                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 2 }\n"
-                "\t\tif = {\n"
-                "\t\t\tlimit = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals } }\n"
-                "\t\t}",
-                1,
-            ),
-            "schema owner guard reversed": migration.replace(
-                "ADISCORD_economy_schema_version value = 14 compare = less_than",
-                "ADISCORD_economy_schema_version value = 14 compare = greater_than_or_equals",
-                1,
-            ),
-            "schema owner made dead": migration.replace(
-                "limit = { check_variable = { var = ADISCORD_economy_schema_version value = 14 compare = less_than } }",
-                "limit = { check_variable = { var = ADISCORD_economy_schema_version value = 14 compare = less_than } always = no }",
-                1,
-            ),
-            "watermark moved before legacy mapping": migration.replace(
-                "\t\tset_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }\n",
-                "",
-                1,
-            ).replace(
-                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 0 }\n",
-                "\t\tset_variable = { var = ADISCORD_economy_last_notified_debt_state value = ADISCORD_economy_debt_state }\n"
-                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 0 }\n",
-                1,
-            ),
-            "schema completion moved outside owner": migration.replace(
-                "\t\tset_variable = { var = ADISCORD_economy_schema_version value = 14 }\n",
-                "",
-                1,
-            ).replace(
-                "\t}\n}",
-                "\t}\n\tset_variable = { var = ADISCORD_economy_schema_version value = 14 }\n}",
-                1,
-            ),
-            "schema completion before final debuff refresh": migration.replace(
-                "\t\tset_variable = { var = ADISCORD_economy_schema_version value = 14 }\n",
-                "",
-                1,
-            ).replace(
-                "\t\tset_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n"
-                "\t\tremove_ideas = {",
-                "\t\tset_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }\n"
-                "\t\tset_variable = { var = ADISCORD_economy_schema_version value = 14 }\n"
-                "\t\tremove_ideas = {",
-                1,
-            ),
-            "unowned duplicate state write": migration
-            + "\n\tset_variable = { var = ADISCORD_economy_debt_state value = 2 }",
-            "unowned duplicate streak reset": migration
-            + "\n\tset_variable = { var = ADISCORD_economy_debt_emergency_streak value = 0 }",
-            "first-loan clear hidden behind dead owner": migration.replace(
-                "\t\tclear_variable = ADISCORD_economy_first_loan_notified",
-                "\t\tif = { limit = { always = no } clear_variable = ADISCORD_economy_first_loan_notified }",
-                1,
-            ),
-            "pending state caches moved before legacy mapping": migration.replace(
-                "\t\tset_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = ADISCORD_economy_debt_state }\n"
-                "\t\tset_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = ADISCORD_economy_debt_state }\n",
-                "",
-                1,
-            ).replace(
-                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 0 }\n",
-                "\t\tset_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = ADISCORD_economy_debt_state }\n"
-                "\t\tset_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = ADISCORD_economy_debt_state }\n"
-                "\t\tset_variable = { var = ADISCORD_economy_debt_state value = 0 }\n",
-                1,
-            ),
-        }
-        for name, mutated_migration in migration_mutations.items():
-            with self.subTest(schema14_mutation=name):
-                self.assertNotEqual(mutated_migration, migration)
-                mutated_effects = EFFECTS.replace(migration, mutated_migration, 1)
-                self.assertTrue(parse_clausewitz(mutated_effects))
-                self.assertTrue(task6_schema_fourteen_migration_issues(mutated_effects))
-
-    def test_schema_twelve_initializes_reserve_and_postwar_state_without_resetting_treasury(
-        self,
-    ):
-        migration = block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        self.assertIn("value = 12", migration)
-        self.assertIn("ADISCORD_economy_was_at_war", migration)
-        self.assertIn("ADISCORD_economy_postwar_demobilization_months", migration)
-        self.assertIn("ADISCORD_economy_initialize_variables = yes", migration)
-        initialization = block(EFFECTS, "ADISCORD_economy_initialize_variables")
-        self.assertIn("ADISCORD_economy_safe_reserve", initialization)
-        self.assertIn("ADISCORD_economy_recalculate_policy_modifiers = yes", migration)
-        self.assertNotRegex(
-            migration,
-            r"set_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_treasury\s+value\s*=\s*100",
-        )
-
     def test_reserve_growth_factor_is_fully_retired(self):
         for text in (
             EFFECTS,
@@ -8421,17 +7708,11 @@ ADISCORD_task10_forbidden_cache_consumer = {
         settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
         self.assertNotIn("ADISCORD_economy_last_period_unfunded_deficit", settlement)
         self.assertNotIn("ADISCORD_economy_last_uncovered_deficit", settlement)
-        migration = unique_block(EFFECTS, "ADISCORD_economy_migrate_schema")
-        live_effects = EFFECTS.replace(migration, "")
         for retired_unfunded_state in (
             "ADISCORD_economy_last_period_unfunded_deficit",
             "ADISCORD_economy_last_uncovered_deficit",
         ):
-            self.assertNotIn(retired_unfunded_state, live_effects)
-            self.assertRegex(
-                migration,
-                rf"clear_variable\s*=\s*{retired_unfunded_state}\b",
-            )
+            self.assertNotIn(retired_unfunded_state, EFFECTS)
 
     def test_automatic_borrowing_does_not_add_unfunded_deficit_pressure(self):
         settlement = block(EFFECTS, "ADISCORD_economy_apply_weekly_balance")
@@ -8754,12 +8035,12 @@ ADISCORD_task10_forbidden_cache_consumer = {
     def test_building_tooltips_lead_with_role_and_budget_impact(self):
         self.assertNotIn("Строятся в обычном меню", ECONOMY_LOC)
         for key, role, budget in (
-            ("ADISCORD_business_center_desc", "Роль: доход", "+30,15"),
+            ("ADISCORD_business_center_desc", "Роль: доход", "+7,75"),
             ("ADISCORD_science_center_desc", "Роль: исследования", "-0,62"),
             (
                 "ADISCORD_industrial_cluster_desc",
                 "Роль: доход и местное военное производство",
-                "+9,86",
+                "+3,86",
             ),
         ):
             match = re.search(rf'(?m)^\s*{key}:\d*\s+"([^"]*)"', ECONOMY_LOC)
@@ -8776,9 +8057,9 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "Деловой центр",
             "Научный центр",
             "Промышленный кластер",
-            "30 + 0.25 - 0.10 = +30.15",
+            "8 + 0.25 - 0.50 = +7.75",
             "0.20 - 0.35 * 2 - 0.12 = -0.62",
-            "10 + 0.16 - 0.18 - 0.12 = +9.86",
+            "4 + 0.16 - 0.18 - 0.12 = +3.86",
             "10% × сумма(исправные военные заводы региона × уровень кластера)",
             "3 / 13",
         ):
@@ -10130,66 +9411,6 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                 for key, value in preserved.items():
                     self.assertEqual(values[key], value, key)
 
-    def test_investment_programs_double_their_progress_and_preserve_cash_accounting(
-        self,
-    ):
-        p = self.PREFIX
-        cases = (
-            (
-                "invest_reserves",
-                "can_expand_public_capital",
-                "economic",
-                (12, 16, 16, 20, 12, 12, 12),
-            ),
-            (
-                "civilian_investment_action",
-                "can_use_civilian_stimulus",
-                "economic",
-                (24, 40, 34, 44, 34, 24, 24),
-            ),
-            (
-                "military_investment_action",
-                "can_use_military_investment",
-                "army",
-                (20, 20, 20, 20, 20, 28, 32),
-            ),
-        )
-        models = (
-            "other",
-            "decentralized_market",
-            "mixed",
-            "technocratic",
-            "oligarchic_clan",
-            "state_coordinated",
-            "planned_bureaucratic",
-        )
-        for effect, gate, development, rewards in cases:
-            for model, reward in zip(models, rewards):
-                fixture = EconomyScriptFixture(
-                    facts={
-                        p + gate: True,
-                        **{p + "model_is_" + name: name == model for name in models},
-                    },
-                    stubs=(
-                        p + "initialize_country",
-                        p + "mark_dirty",
-                        p + "check_economic_development_upgrade",
-                        "add_timed_idea",
-                    ),
-                )
-                values = fixture.scopes["A"]
-                values.update({p + "treasury": 500, p + "public_investment_stock": 9})
-                fixture.run(p + effect)
-                self.assertEqual(values[p + "treasury"], 400)
-                self.assertEqual(values[p + "current_month_action_costs"], 100)
-                self.assertEqual(
-                    values["ADISCORD_" + development + "_development_progress"],
-                    reward,
-                    (effect, model),
-                )
-                if effect == "invest_reserves":
-                    self.assertEqual(values[p + "public_investment_stock"], 10)
-
     def test_emission_and_stabilization_deliver_the_larger_packages(self):
         p = self.PREFIX
         stubs = (
@@ -10207,7 +9428,7 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                 {
                     p + "treasury": 100,
                     p + "treasury_cap": 100 + room,
-                    p + "emission_offer_cash": 750,
+                    p + "weekly_income": 37.5,
                 }
             )
             fixture.run(p + "expand_money_emission")
@@ -10343,12 +9564,11 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
         self,
     ):
         p = self.PREFIX
-        for effect, maximum in (("repay_debt", 500), ("early_repay_debt", 1000)):
+        for effect, maximum in (("repay_debt", 500),):
             for cash, debt in ((3000, 5000), (150, 5000), (3000, 125)):
                 fixture = EconomyScriptFixture(
                     facts={
                         p + "has_debt": True,
-                        p + "can_early_repay_debt": True,
                     },
                     stubs=tuple(
                         p + name
@@ -10363,10 +9583,10 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                 )
                 values = fixture.scopes["A"]
                 values.update(
-                    {p + "treasury": cash, p + "debt": debt, p + "repay_offer_cash": 500}
+                    {p + "treasury": cash, p + "debt": debt, p + "weekly_income": 25}
                 )
                 fixture.run(p + effect)
-                paid = 0 if effect == "repay_debt" and cash < 500 else min(maximum, cash, debt)
+                paid = min(maximum, debt) if cash >= min(maximum, debt) else 0
                 self.assertEqual(values[p + "treasury"], cash - paid)
                 self.assertEqual(values[p + "debt"], debt - paid)
                 self.assertEqual(values.get(p + "current_month_debt_paid", 0), paid)
@@ -10461,11 +9681,11 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
             }
         )
         fixture.run(p + "calculate_personal_income")
-        self.assertAlmostEqual(values[p + "personal_income"], 13, places=2)
+        self.assertAlmostEqual(values[p + "personal_income"], 43, places=2)
 
     def test_business_centres_follow_their_state_rate_and_industrializing_model(self):
         p = self.PREFIX
-        for rate, expected in ((15, 30), (None, 60)):
+        for rate, expected in ((6, 12), (None, 16)):
             with self.subTest(rate=rate):
                 fixture = EconomyScriptFixture()
                 values = fixture.scopes["A"]
@@ -10481,7 +9701,7 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                 fixture.run(p + "calculate_business_income")
                 self.assertAlmostEqual(values[p + "business_income"], expected)
         recount = block(EFFECTS, "ADISCORD_economy_recount_economic_buildings")
-        self.assertIn("clamp_temp_variable = { var = ADISCORD_economy_state_service_rate_temp min = 12 max = 30 }", recount)
+        self.assertIn("clamp_temp_variable = { var = ADISCORD_economy_state_service_rate_temp min = 4 max = 8 }", recount)
         model_refresh = block(EFFECTS, "ADISCORD_economy_update_model_and_cycle")
         self.assertIn(
             "ADISCORD_economy_has_idea_economic_system_industrializing = yes } set_variable = { var = ADISCORD_economy_model value = 8 }",
@@ -10876,7 +10096,7 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                     self.PREFIX + "treasury": treasury,
                     self.PREFIX + "debt": 500,
                     self.PREFIX + "inflation": 15,
-                    self.PREFIX + "repay_offer_cash": 500,
+                    self.PREFIX + "weekly_income": 25,
                     self.PREFIX + "stabilization_price": 500,
                 }
             )

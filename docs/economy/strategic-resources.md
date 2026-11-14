@@ -104,7 +104,7 @@ are integrated into the main economy dashboard and require no overlay state.
 
 ## Paid industrial programmes
 
-Kefreite and postwar Shabrat receive nine-focus investment branches after their
+Kefreite and postwar Shabrat receive ten- and nine-focus investment branches after their
 existing economic-recovery finales. Focuses authorize investment; they do not
 charge treasury or produce unresearched equipment. The final focus requires one
 completed capital programme, not merely all preceding focuses.

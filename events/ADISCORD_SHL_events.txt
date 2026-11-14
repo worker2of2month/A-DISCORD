@@ -2827,3 +2827,14 @@ news_event = {
 		name = ADISCORD_SHL_news.9.a
 	}
 }
+
+# Hidden territory dispatch after the native annexation handler has completed.
+country_event = {
+	id = ADISCORD_shl_fire.12
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		clr_country_flag = SHL_furnace_administrations_pending
+		SHL_form_furnace_administrations = yes
+	}
+}

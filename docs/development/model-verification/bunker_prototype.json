@@ -1,0 +1,39 @@
+{
+  "generator": "tools/builders/build_adiscord_bunker_prototype.py",
+  "generator_sha256": "a1d3719e5434a3b4dea3c7e943604ebaddcecbc7708215f142e423b98fed54cc",
+  "purpose": "Design prototype only; no runtime installation",
+  "native_export_verified": false,
+  "hoi4_runtime_verified": false,
+  "materials": "Procedural Blender materials; native texture baking pending approval",
+  "intact": {
+    "objects": 50,
+    "triangles": 1304,
+    "geometry_validated": true
+  },
+  "destroyed": {
+    "objects": 69,
+    "triangles": 2274,
+    "geometry_validated": true
+  },
+  "small_renders": "Direct orthographic renders at 256, 128 and 64 pixels; not game screenshots",
+  "sources": {
+    "bunker_destroyed_prototype.blend": "d58442c59a9e23a32bc8e5541990911a361aa175bc306c9c72649389ac7b3991",
+    "bunker_prototype.blend": "ef5a0417d27a624ca0cb61e8692301508203b6dbce2e6dda7e517c2913a62ca0"
+  },
+  "previews": {
+    "front.png": "aecf6c8b0c9f0ba39fb1f2368fb9b5e6b48c7a37f36741284662220e37bac2a2",
+    "opposite.png": "2ed54b9ce0a20b74c56e3f9a87def1cbef160fb5cba1390c1bd67fe28d9480c8",
+    "rear.png": "6f62d3a22abc0925b74a5f6473cb9224d465bd566bc72c161a1f78e22166c3f4",
+    "map.png": "787813f7ca8740dea8b13f39983fb423e62f4f4f80cfe8db68fb394773fd37ae",
+    "top.png": "0045e67c9b11b72c839b955ea322f4d89e999125aefa4ddaf2cc3ae9fd5925ac",
+    "map_256.png": "e2e8b90c54887547ee0a4ee0fad8748c84f3ed86397abe461e302a65060e7bc2",
+    "map_128.png": "5de0fdeb3b37880bcaac187c3afe9eb09eb2d7112cb4e91be125af7fcac62c8c",
+    "map_64.png": "2336078f260819564bece4d807c1a8c2352e467dacb94976bbf1b83b366690cb",
+    "destroyed_front.png": "bab9a8377e04be3cb963667c726def984f0a44d29183ff3a4e442ecb9e80118e",
+    "destroyed_map.png": "bb714823bb6a531fc93b202df1b1166dc17783c921a0704bfd80f2e0fe8944bb",
+    "destroyed_map_128.png": "d74ea1d76d32efd9faa2a603afb56f3396fc865c0165b03d3ecee2b75356e8a7",
+    "review_angles.png": "0687038dae870c4dbb137d7962b7bf032bdd32a9500ddd537526ca1aefc08e8b",
+    "review_small.png": "d68b88e6aceacabee2908cd5a75a28cde9888f5a0dc3acc7f9e9c67e084f702c",
+    "review_destroyed.png": "5c042e9d49def68a94c496e5bad14505f7aa121bf7294ee8069b102212fa3cb0"
+  }
+}

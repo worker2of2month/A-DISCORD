@@ -722,7 +722,7 @@ soundeffect = {
 	name = superevent_south_federation_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_regency_sound
+		sound = superevent_south_federation_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -734,7 +734,7 @@ soundeffect = {
 	name = superevent_south_oil_union_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_nur_sound
+		sound = superevent_south_oil_union_sound
 	}
 	is3d = no
 	max_audible = 1

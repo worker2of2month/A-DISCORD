@@ -523,7 +523,10 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
             issues.append(f'{source_name} does not parse')
             continue
         if any(
-            token.startswith('ADISCORD_economy_construction_')
+            (
+                token.startswith('ADISCORD_economy_construction_')
+                and token != 'ADISCORD_economy_construction_expenses'
+            )
             or token.startswith('GetADISCORDConstruction')
             for token in tokens
         ):
@@ -1558,7 +1561,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                     'ADISCORD_economy_weekly_expenses',
                     'ADISCORD_economy_weekly_balance',
                     'ADISCORD_economy_safe_reserve',
-                    'ADISCORD_economy_deficit_runway',
+                    'GetADISCORDEconomyPlanningSummary',
                     'ADISCORD_economy_resource_income',
                     'ADISCORD_economy_debt_service',
                 ),
@@ -1571,6 +1574,22 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             delayed = localisation_value(self.localisation, delayed_key)
             for token in required:
                 self.assertIn(token, delayed, delayed_key)
+        planning = named_assignment_body(
+            self.scripted_loc, 'defined_text', 'GetADISCORDEconomyPlanningSummary'
+        )
+        self.assertIn('localization_key = ADISCORD_economy_planning_summary', planning)
+        self.assertIn(
+            '[GetADISCORDEconomyRunwayLoc]',
+            localisation_value(self.localisation, 'ADISCORD_economy_planning_summary'),
+        )
+        runway = named_assignment_body(
+            self.scripted_loc, 'defined_text', 'GetADISCORDEconomyRunwayLoc'
+        )
+        self.assertIn('localization_key = ADISCORD_economy_runway_weeks', runway)
+        self.assertIn(
+            'ADISCORD_economy_deficit_runway',
+            localisation_value(self.localisation, 'ADISCORD_economy_runway_weeks'),
+        )
         self.assertIn(
             '4',
             localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'),
@@ -1988,12 +2007,8 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             'restructure_debt',
             'stabilization',
             'war_taxes',
-            'early_repay',
             'emission',
             'emission_buyback',
-            'invest_reserves',
-            'civilian_stimulus',
-            'military_investment',
         )
         for action in actions:
             node_name = f'ADISCORD_economy_action_{action}'

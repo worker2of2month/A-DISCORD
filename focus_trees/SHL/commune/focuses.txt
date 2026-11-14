@@ -274,6 +274,8 @@
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_commune_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -892,6 +894,17 @@
 					amount = 2
 					state = 67
 				}
+			}
+			add_fuel = 4000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_k_oil_commune_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_consumer_goods value = -0.02 }
+				SHL_refresh_conclave_power = yes
 			}
 		}
 		ai_will_do = { base = 50 }

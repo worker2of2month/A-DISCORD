@@ -1,0 +1,1361 @@
+{
+  "models": {
+    "level_1": {
+      "vertices": 2390,
+      "triangles": 988,
+      "materials": 1,
+      "bounds": [
+        [
+          -15.0,
+          15.0
+        ],
+        [
+          -12.0,
+          12.0
+        ],
+        [
+          -12.2,
+          7.2
+        ]
+      ]
+    },
+    "level_2": {
+      "vertices": 4025,
+      "triangles": 1648,
+      "materials": 1,
+      "bounds": [
+        [
+          -21.0,
+          21.0
+        ],
+        [
+          -15.0,
+          15.0
+        ],
+        [
+          -12.2,
+          8.8
+        ]
+      ]
+    },
+    "level_3": {
+      "vertices": 4914,
+      "triangles": 2038,
+      "materials": 1,
+      "bounds": [
+        [
+          -29.0,
+          29.0
+        ],
+        [
+          -20.0,
+          20.0
+        ],
+        [
+          -12.2,
+          11.35
+        ]
+      ]
+    },
+    "level_4": {
+      "vertices": 7132,
+      "triangles": 2942,
+      "materials": 1,
+      "bounds": [
+        [
+          -36.0,
+          36.0
+        ],
+        [
+          -26.0,
+          26.0
+        ],
+        [
+          -12.2,
+          16.85
+        ]
+      ]
+    },
+    "level_5": {
+      "vertices": 22970,
+      "triangles": 9444,
+      "materials": 1,
+      "bounds": [
+        [
+          -64.0,
+          64.0
+        ],
+        [
+          -46.0,
+          46.0
+        ],
+        [
+          -12.2,
+          23.45
+        ]
+      ]
+    }
+  },
+  "native_reimport": true,
+  "hoi4_runtime_verified": false,
+  "files": {
+    "gfx/models/buildings/NAM_export_office/ADISCORD_NAM_export_office_diffuse.dds": "1e3f3f497141a2b057237ab65c2acb3efc5c827863a1bd6d7032df40a178853a",
+    "gfx/models/buildings/NAM_export_office/ADISCORD_NAM_export_office_normal.dds": "a5829b2be1939d68849cfde42294e29b1ec882e8daead7c7476b6b78163dd970",
+    "gfx/models/buildings/NAM_export_office/ADISCORD_NAM_export_office_specular.dds": "18a72eac52890e2378a2574df71ae3c27dae66e702928c86edc8a19905014f8d",
+    "gfx/models/buildings/NAM_export_office/ADISCORD_NAM_export_office_level_1.mesh": "7a7f3de04c8229dd4e8cff5fcba886635249436157a909933144b21b4e64edf1",
+    "gfx/models/buildings/NAM_export_office/ADISCORD_NAM_export_office_level_2.mesh": "3d44d0243f65382becf00aa0c6e7c7d0b448fd4ce63414006411653b3a35ac41",
+    "gfx/models/buildings/NAM_export_office/ADISCORD_NAM_export_office_level_3.mesh": "1aabe22c6e86f9a68d84f7f2c368739b64e65c32ccabd0f6ccb3f0d99a003ab8",
+    "gfx/models/buildings/NAM_export_office/ADISCORD_NAM_export_office_level_4.mesh": "0e7af5a202d6e5984051c655e378c8fc1ef00ac1affed84135c1e21b56a26925",
+    "gfx/models/buildings/NAM_export_office/ADISCORD_NAM_export_office_level_5.mesh": "bda9f54343bffdcb575f72e22f4b68ac22c5288fc12cb0ba1ef7f3bb19792c15",
+    "tools/assets/source/buildings/NAM/export_office/level_1.blend": "36359af56f1bd78afdc4cef311f2bf3ae833796493ba6a47109672a02d6f7978",
+    "tools/assets/source/buildings/NAM/export_office/level_2.blend": "343a3fae2e9f9a9b206bbcc6d923ac78486374fb811b2e610dfd40a391b5c027",
+    "tools/assets/source/buildings/NAM/export_office/level_3.blend": "d3fd5434a48ed3d342e6efd361a944cddf0d0f9138b076516efc1edc6104dfab",
+    "tools/assets/source/buildings/NAM/export_office/level_4.blend": "eb5c1c0cc34b28c9b92ca969c84ec5a84acb0798ada7e0213c11ed53321cd9e4",
+    "tools/assets/source/buildings/NAM/export_office/level_5.blend": "3115bf7928c8a45e1f304431d98eed4d2bbb896acdbd6ba21621b01bf12f95a4"
+  },
+  "input_sha256": {
+    "tools/builders/build_adiscord_nam_export_offices.py": "3075682ee74cd7ad70b3044b8bbf83fe459718d60d95f87bdf45b57941664262",
+    "tools/builders/build_adiscord_factory_models.py": "989d2424402c558fb99c0bc2ce6d6a497b67b41a49bc2b02d60758208ffc6016",
+    "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a",
+    "map/provinces.bmp": "93b448a04aaa9a1b30b4240d11710a1e897f13219fd98239e7d1d1a674d0b27b",
+    "map/heightmap.bmp": "80a3d7f8d1d01c2207b25307077d9bbb6672c1ca69b363b6418d79c202dc6100",
+    "map/rivers.bmp": "75846aa4838e868248dc97239497ab4b9487f7e0dca8dfe7875152ccaa7f155e",
+    "map/definition.csv": "a0e3b3df96b34c709cf804d2645fbcc3d0058c1b55ddd3f47dc3ff3cf8875b56",
+    "map/buildings.txt": "d55dc0923eb9ccaf8af377ed7b88e5ec2b500e9f0880f7b20b1a312cc0780032",
+    "map/ambient_object.txt": "46b93df6b1e8e7da5020008ae1ea6c702be6d7187a8e99a03d63c0121409b646",
+    "map/railways.txt": "06b56f28e048d778efa72a1cf4f5aa9e2472a5f768bc6d0387e304ed08c9e1cb",
+    "tools/data/nam_export_office_sites.json": "1aab20aa609f60daa82d7a511c89ca94a956e852c8973059ac21f74960cb5fa0",
+    "map/trees.bmp": "f24ff71ace41ae4df0a4a1a712bb3750d39f0ec1a3f32de382044885ec8fb868",
+    "map/cities.bmp": "071b59150a0635698e35f0b867c1070cec53b92bf95c68fc09645fa38759a024",
+    "map/cities.txt": "1eb7b939e746a527526cb53aa7d81db130c873be2b17adb95221ba9f2c7b3092",
+    "map/terrain.bmp": "c75f523acdd83c0f7260216ee91c6098b09b06cc5d4f2f9872f0cefbc573a8d8",
+    "common/terrain/00_terrain.txt": "a19d80df72f5fb77f3caa329f8f84b7717c4ccd8d4e31e0f6e12c809b1167aa8",
+    "map/unitstacks.txt": "6458a98642296940ec8e5138a0dd64ac7fcf4b24ed3eadde267c99583123e48b",
+    "history/states/67-67.txt": "af69cc35030e0d3c20890442addcab8029de548e31fadfa8a4eea1bfaea8689f",
+    "history/states/688-Svetlogorsk.txt": "a0ff369222d738ceb385598bd153be05e8fbf9b22364eb4c1beb0352d3e7d76e",
+    "history/states/689-South-Coast.txt": "19c29ea559833fdb2b1c0ec08cefa9656573c366a07a7d9444797f23c594764d",
+    "history/states/690-Dryriver.txt": "09d3fa8961b6be7f595de488fd2952065cdfdf6a0405610aaa72dd4cd2f074c7",
+    "history/states/719-East-Dryriver.txt": "9fae15794ac74b0acb5a111198c2ae1c22562a02a42a1fde627dffa2399d8c55",
+    "scripted_entity_obstacles": "0c7494b3a1bd311659d9978bf045d0292cbbebef6c6c7ca7cc00dabe94db0ea9"
+  },
+  "placements": [
+    {
+      "state": 67,
+      "province": 4912,
+      "position": [
+        3719.0,
+        10.38,
+        612.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620067,
+      "height_span": 0.4,
+      "height_offset": 0.18,
+      "tier_terrain": [
+        {
+          "height_offset": 0.08,
+          "height_span": 0.2
+        },
+        {
+          "height_offset": 0.08,
+          "height_span": 0.2
+        },
+        {
+          "height_offset": 0.08,
+          "height_span": 0.2
+        },
+        {
+          "height_offset": 0.08,
+          "height_span": 0.3
+        },
+        {
+          "height_offset": 0.18,
+          "height_span": 0.4
+        }
+      ],
+      "terrain_grid": [
+        [
+          -1.3,
+          -1.3,
+          -1.3,
+          -1.3,
+          -1.3,
+          -1.3,
+          0.1,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.5,
+          -1.3,
+          -1.3
+        ],
+        [
+          -0.5,
+          -1.3,
+          -1.3,
+          -1.3,
+          -1.3,
+          0.1,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.1,
+          -0.1
+        ],
+        [
+          -0.5,
+          -1.3,
+          -1.3,
+          -0.1,
+          0.1,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.1,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2
+        ],
+        [
+          -0.2,
+          0.1,
+          0.1,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.2,
+          -0.2,
+          -0.2
+        ],
+        [
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.1,
+          -0.1,
+          -0.1,
+          0.0,
+          -0.1,
+          -0.1,
+          -0.2,
+          -0.2
+        ],
+        [
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1,
+          0.0,
+          0.0,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1
+        ],
+        [
+          0.0,
+          0.0,
+          -0.1,
+          -0.1,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.1,
+          -0.1
+        ],
+        [
+          0.1,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.0,
+          0.0,
+          0.0,
+          -0.1
+        ],
+        [
+          0.2,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.3,
+          0.3,
+          0.2,
+          0.2,
+          0.1,
+          0.1,
+          0.2,
+          0.2,
+          0.2,
+          0.1,
+          0.1,
+          0.0,
+          0.0
+        ],
+        [
+          0.4,
+          0.4,
+          0.3,
+          0.2,
+          0.1,
+          0.1,
+          0.2,
+          0.2,
+          0.2,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.6,
+          0.4,
+          0.3,
+          0.2,
+          0.2,
+          0.2,
+          0.3,
+          0.3,
+          0.3,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.6,
+          0.5,
+          0.4,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.4,
+          0.4,
+          0.3
+        ]
+      ],
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    },
+    {
+      "state": 688,
+      "province": 16866,
+      "position": [
+        3614.0,
+        10.98,
+        609.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620688,
+      "height_span": 0.4,
+      "height_offset": 0.18,
+      "tier_terrain": [
+        {
+          "height_offset": 0.18,
+          "height_span": 0.2
+        },
+        {
+          "height_offset": 0.18,
+          "height_span": 0.2
+        },
+        {
+          "height_offset": 0.18,
+          "height_span": 0.4
+        },
+        {
+          "height_offset": 0.18,
+          "height_span": 0.4
+        },
+        {
+          "height_offset": 0.18,
+          "height_span": 0.4
+        }
+      ],
+      "terrain_grid": [
+        [
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2
+        ],
+        [
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0,
+          -0.2
+        ],
+        [
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0,
+          -0.2
+        ],
+        [
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0,
+          -0.2
+        ],
+        [
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0,
+          0.0,
+          -0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0,
+          0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0,
+          0.2,
+          0.2,
+          0.2,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.0,
+          0.2,
+          0.2
+        ],
+        [
+          -0.3,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.2,
+          0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.2
+        ],
+        [
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.2
+        ]
+      ],
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    },
+    {
+      "state": 689,
+      "province": 7639,
+      "position": [
+        3671.0,
+        10.98,
+        545.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620689,
+      "height_span": 0.4,
+      "height_offset": 0.18,
+      "tier_terrain": [
+        {
+          "height_offset": -0.02,
+          "height_span": 0.0
+        },
+        {
+          "height_offset": -0.02,
+          "height_span": 0.0
+        },
+        {
+          "height_offset": -0.02,
+          "height_span": 0.0
+        },
+        {
+          "height_offset": 0.18,
+          "height_span": 0.4
+        },
+        {
+          "height_offset": 0.18,
+          "height_span": 0.4
+        }
+      ],
+      "terrain_grid": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.2,
+          0.2
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          -0.2,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.2,
+          -0.2,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          -0.2,
+          -0.2,
+          0.0,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0
+        ],
+        [
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0
+        ],
+        [
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          0.0
+        ],
+        [
+          0.0,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2
+        ],
+        [
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.2
+        ]
+      ],
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    },
+    {
+      "state": 690,
+      "province": 11926,
+      "position": [
+        3683.0,
+        11.78,
+        557.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620690,
+      "height_span": 0.8,
+      "height_offset": 0.38,
+      "tier_terrain": [
+        {
+          "height_offset": 0.08,
+          "height_span": 0.3
+        },
+        {
+          "height_offset": 0.08,
+          "height_span": 0.3
+        },
+        {
+          "height_offset": 0.08,
+          "height_span": 0.4
+        },
+        {
+          "height_offset": 0.28,
+          "height_span": 0.7
+        },
+        {
+          "height_offset": 0.38,
+          "height_span": 0.8
+        }
+      ],
+      "terrain_grid": [
+        [
+          0.0,
+          0.1,
+          0.2,
+          0.2,
+          0.4,
+          0.6,
+          1.0,
+          1.1,
+          1.1,
+          0.9,
+          0.8,
+          0.7,
+          0.4
+        ],
+        [
+          -0.1,
+          0.0,
+          0.0,
+          0.0,
+          0.1,
+          0.3,
+          0.7,
+          0.8,
+          0.8,
+          0.6,
+          0.4,
+          0.3,
+          0.2
+        ],
+        [
+          -0.3,
+          -0.2,
+          -0.1,
+          -0.1,
+          0.0,
+          0.2,
+          0.4,
+          0.6,
+          0.5,
+          0.4,
+          0.2,
+          0.0,
+          -0.1
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.1,
+          0.0,
+          0.1,
+          0.3,
+          0.4,
+          0.4,
+          0.2,
+          0.0,
+          -0.1,
+          -0.3
+        ],
+        [
+          -0.4,
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.1,
+          0.0,
+          0.2,
+          0.3,
+          0.2,
+          0.1,
+          -0.1,
+          -0.3,
+          -0.4
+        ],
+        [
+          -0.4,
+          -0.4,
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.1,
+          0.1,
+          0.1,
+          0.0,
+          -0.1,
+          -0.2,
+          -0.3,
+          -0.4
+        ],
+        [
+          -0.3,
+          -0.4,
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.2,
+          0.0,
+          -0.1,
+          -0.2,
+          -0.2,
+          -0.3,
+          -0.4,
+          -0.4
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.4,
+          -0.4,
+          -0.3,
+          -0.2,
+          -0.2,
+          -0.2,
+          -0.3,
+          -0.3,
+          -0.4,
+          -0.4,
+          -0.4
+        ],
+        [
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4
+        ],
+        [
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.3,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4
+        ],
+        [
+          -0.4,
+          -0.3,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4
+        ],
+        [
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4
+        ],
+        [
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4,
+          -0.4
+        ]
+      ],
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    },
+    {
+      "state": 719,
+      "province": 6961,
+      "position": [
+        3708.0,
+        10.78,
+        548.0
+      ],
+      "scale": 0.07,
+      "actor_id": 620719,
+      "height_span": 0.7,
+      "height_offset": 0.38,
+      "tier_terrain": [
+        {
+          "height_offset": 0.08,
+          "height_span": 0.1
+        },
+        {
+          "height_offset": 0.08,
+          "height_span": 0.1
+        },
+        {
+          "height_offset": 0.08,
+          "height_span": 0.2
+        },
+        {
+          "height_offset": 0.28,
+          "height_span": 0.4
+        },
+        {
+          "height_offset": 0.38,
+          "height_span": 0.7
+        }
+      ],
+      "terrain_grid": [
+        [
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.1,
+          -0.1,
+          -0.1,
+          0.0,
+          0.0,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.1,
+          -0.1,
+          0.0,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.2,
+          -0.1,
+          -0.1,
+          0.0,
+          0.0,
+          -0.1,
+          -0.1,
+          -0.3,
+          -0.1,
+          -0.1
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.3,
+          -0.1,
+          -0.1,
+          0.0,
+          0.0,
+          0.0,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1
+        ],
+        [
+          -0.3,
+          -0.3,
+          -0.1,
+          -0.1,
+          -0.1,
+          0.0,
+          0.0,
+          0.0,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1,
+          -0.1
+        ],
+        [
+          -0.3,
+          -0.1,
+          -0.1,
+          -0.1,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.1,
+          -0.1,
+          -0.3,
+          -0.1,
+          -0.1
+        ],
+        [
+          -0.1,
+          -0.1,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.3,
+          -0.1,
+          -0.1
+        ],
+        [
+          -0.1,
+          0.0,
+          0.0,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.0,
+          0.0,
+          0.0,
+          -0.1,
+          -0.1
+        ],
+        [
+          0.0,
+          0.1,
+          0.1,
+          0.2,
+          0.3,
+          0.3,
+          0.2,
+          0.1,
+          0.1,
+          0.0,
+          0.0,
+          0.0,
+          -0.1
+        ],
+        [
+          0.1,
+          0.2,
+          0.3,
+          0.3,
+          0.4,
+          0.4,
+          0.3,
+          0.2,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.5,
+          0.5,
+          0.4,
+          0.3,
+          0.2,
+          0.2,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.6,
+          0.6,
+          0.5,
+          0.4,
+          0.3,
+          0.2,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.3,
+          0.4,
+          0.5,
+          0.5,
+          0.6,
+          0.6,
+          0.6,
+          0.4,
+          0.3,
+          0.2,
+          0.2,
+          0.1,
+          0.1
+        ]
+      ],
+      "reserved_footprint": [
+        9,
+        7
+      ],
+      "maximum_model_footprint": [
+        8.96,
+        6.44
+      ]
+    }
+  ],
+  "native_scale": 0.07,
+  "source": "Original procedural architecture; shared in-repository material atlas",
+  "placement_validation": {
+    "native_actor_collision_verified": false,
+    "clearance_margin": 0.2,
+    "building_anchor_half_extent": {
+      "bunker_coastal_bunker_anti_air": 1.5,
+      "other": 3.5
+    },
+    "ambient_anchor_half_extent": {
+      "oilfield": 2.25,
+      "combine": 10,
+      "other": 8
+    },
+    "railway_model": "Three-pixel corridor along linked province-center segments",
+    "terrain_checks": "Whole maximum-tier footprint inside its land state; no city, tree or river pixels; city centers have separate clearance",
+    "grounding": "Per-tier terrain-relative height; buried foundation below the lowest footprint sample"
+  }
+}

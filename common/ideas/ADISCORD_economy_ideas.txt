@@ -90,10 +90,10 @@ ideas = {
 			removal_cost = -1
 			picture = generic_manpower_bonus
 			modifier = {
-				army_org_factor = -0.12
-				army_morale_factor = -0.10
+				army_org_factor = -0.15
+				army_morale_factor = -0.15
 				training_time_factor = 0.15
-				mobilization_speed = -0.10
+				mobilization_speed = -0.15
 				war_support_factor = -0.04
 			}
 		}
@@ -103,8 +103,8 @@ ideas = {
 			removal_cost = -1
 			picture = generic_manpower_bonus
 			modifier = {
-				army_org_factor = -0.05
-				army_morale_factor = -0.04
+				army_org_factor = -0.06
+				army_morale_factor = -0.06
 				training_time_factor = 0.06
 				war_support_factor = -0.01
 			}
@@ -122,12 +122,10 @@ ideas = {
 			picture = generic_manpower_bonus
 
 			modifier = {
-				army_org_factor = 0.10
-				army_morale_factor = 0.08
-				mobilization_speed = 0.25
-				command_power_gain = 0.05
-				army_attack_factor = 0.05
-				army_defence_factor = 0.03
+				army_org_factor = 0.03
+				army_morale_factor = 0.05
+				mobilization_speed = 0.10
+				command_power_gain = 0.025
 			}
 		}
 		ADISCORD_economy_army_spending_5 = {
@@ -137,14 +135,12 @@ ideas = {
 			picture = generic_manpower_bonus
 
 			modifier = {
-				army_org_factor = 0.20
-				army_morale_factor = 0.15
-				mobilization_speed = 0.50
-				training_time_factor = -0.10
-				command_power_gain = 0.10
+				army_org_factor = 0.06
+				army_morale_factor = 0.10
+				mobilization_speed = 0.20
+				training_time_factor = -0.05
+				command_power_gain = 0.05
 				stability_factor = -0.02
-				army_attack_factor = 0.10
-				army_defence_factor = 0.05
 			}
 		}
 
@@ -154,7 +150,7 @@ ideas = {
 			removal_cost = -1
 			picture = generic_research_bonus
 			modifier = {
-				research_speed_factor = -0.08
+				research_speed_factor = -0.10
 			}
 		}
 		ADISCORD_economy_research_spending_2 = {
@@ -163,7 +159,7 @@ ideas = {
 			removal_cost = -1
 			picture = generic_research_bonus
 			modifier = {
-				research_speed_factor = -0.03
+				research_speed_factor = -0.04
 			}
 		}
 		ADISCORD_economy_research_spending_3 = {
@@ -182,7 +178,7 @@ ideas = {
 			picture = generic_research_bonus
 
 			modifier = {
-				research_speed_factor = 0.08
+				research_speed_factor = 0.04
 			}
 		}
 		ADISCORD_economy_research_spending_5 = {
@@ -192,8 +188,7 @@ ideas = {
 			picture = generic_research_bonus
 
 			modifier = {
-				research_speed_factor = 0.15
-				production_speed_buildings_factor = 0.05
+				research_speed_factor = 0.08
 			}
 		}
 
@@ -202,14 +197,17 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_manpower_bonus
-			modifier = { stability_factor = -0.04 political_power_gain = -0.03 }
+			modifier = {
+				stability_factor = -0.06
+				political_power_gain = -0.05
+			}
 		}
 		ADISCORD_economy_social_spending_2 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_manpower_bonus
-			modifier = { stability_factor = -0.015 }
+			modifier = { stability_factor = -0.025 }
 		}
 		ADISCORD_economy_social_spending_3 = {
 			allowed = { always = no }
@@ -224,9 +222,9 @@ ideas = {
 			picture = generic_manpower_bonus
 
 			modifier = {
-				stability_factor = 0.05
-				political_power_gain = 0.05
-				monthly_population = 0.15
+				stability_factor = 0.025
+				political_power_gain = 0.025
+				monthly_population = 0.05
 			}
 		}
 		ADISCORD_economy_social_spending_5 = {
@@ -236,35 +234,12 @@ ideas = {
 			picture = generic_manpower_bonus
 
 			modifier = {
-				stability_factor = 0.10
-				political_power_gain = 0.10
-				monthly_population = 0.25
+				stability_factor = 0.05
+				political_power_gain = 0.05
+				monthly_population = 0.10
 			}
 		}
 
-		ADISCORD_economy_civilian_investment = {
-			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			picture = generic_production_bonus
-			modifier = {
-				production_speed_buildings_factor = 0.05
-				production_speed_industrial_complex_factor = 0.05
-				ADISCORD_country_development_economic_growth_factor = 0.20
-			}
-		}
-		ADISCORD_economy_military_investment = {
-			allowed = { always = no }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			picture = generic_fascism_drift_bonus
-			modifier = {
-				production_speed_arms_factory_factor = 0.07
-				industrial_capacity_factory = 0.04
-				army_org_factor = 0.02
-			}
-		}
 		ADISCORD_economy_money_printing = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }

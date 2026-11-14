@@ -689,15 +689,17 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
                     self.apply('remove_effect', f, country, '4'), {'power': 0, 'cores': 1}
                 )
 
-    def test_svetlogorye_treaty_districts_keep_their_own_programme(self):
+    def test_svetlogorye_treaty_districts_may_also_be_nationalised(self):
+        # After the victorious settlement the six treaty districts keep their paid
+        # incorporation programme and may also take the slower nationalisation.
         self.use('NAM')
         self.adjacency = {'1': ['701'], '701': ['1']}
         f = self.facts('NAM')
         self.assertTrue(self.eligible(f, 'NAM', '701'))
         f['701', 'has_global_flag', 'ADISCORD_nam_resource_war_nam_victory'] = True
-        self.assertFalse(self.eligible(f, 'NAM', '701'))
+        self.assertTrue(self.eligible(f, 'NAM', '701'))
         target = self.expand(block(self.decision(), 'target_trigger'), 'NAM', '701')
-        self.assertFalse(matches_conditions(target, f, 'NAM'))
+        self.assertTrue(matches_conditions(target, f, 'NAM'))
 
     def test_svetlogorye_direct_rule_blocks_and_refunds(self):
         self.use('NAM')

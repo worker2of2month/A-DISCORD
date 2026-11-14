@@ -1309,7 +1309,16 @@ focus_tree = {
 			hidden_effect = { NAM_receive_250 = yes }
 			add_political_power = 30
 
-			add_research_slot = 1
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_tax_rolls_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
 			unlock_decision_tooltip = NAM_council_registrar_contract
 			custom_effect_tooltip = NAM_council_registrar_contract_unlock_tt
 		}
@@ -2577,7 +2586,7 @@ focus_tree = {
 		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 31
 		y = 12
-		cost = 3
+		cost = 9
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		prerequisite = { focus = NAM_civilian_combine }
 		available = {

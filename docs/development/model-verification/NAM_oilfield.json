@@ -27,13 +27,14 @@
   "hoi4_runtime_verified": false,
   "source_blend_sha256": "c0a60ef2df328511e76f3f61ae879008655782b96c7a8aefb188dce6195e0513",
   "input_sha256": {
-    "tools/builders/build_adiscord_nam_oilfields.py": "6d1fee7fbaa63ee404fc997ca94bb53ca5ac713bcbf29377898e64d4c5f7bdfc",
+    "tools/builders/build_adiscord_nam_oilfields.py": "2edbc42a1bdfbae9e225c443038160077c2b220514355665374de9839b785f86",
     "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a",
     "map/heightmap.bmp": "80a3d7f8d1d01c2207b25307077d9bbb6672c1ca69b363b6418d79c202dc6100",
     "map/provinces.bmp": "93b448a04aaa9a1b30b4240d11710a1e897f13219fd98239e7d1d1a674d0b27b",
     "map/rivers.bmp": "75846aa4838e868248dc97239497ab4b9487f7e0dca8dfe7875152ccaa7f155e",
     "map/definition.csv": "a0e3b3df96b34c709cf804d2645fbcc3d0058c1b55ddd3f47dc3ff3cf8875b56",
-    "map/buildings.txt": "97dfeb693ed9ac8b46c266839bfbb56dce27e3459db680e3fbffb9ce65eed79e",
+    "map/buildings.txt": "d55dc0923eb9ccaf8af377ed7b88e5ec2b500e9f0880f7b20b1a312cc0780032",
+    "tools/data/nam_export_office_sites.json": "1aab20aa609f60daa82d7a511c89ca94a956e852c8973059ac21f74960cb5fa0",
     "history/states/67-67.txt": "af69cc35030e0d3c20890442addcab8029de548e31fadfa8a4eea1bfaea8689f",
     "history/states/689-South-Coast.txt": "19c29ea559833fdb2b1c0ec08cefa9656573c366a07a7d9444797f23c594764d",
     "history/states/690-Dryriver.txt": "09d3fa8961b6be7f595de488fd2952065cdfdf6a0405610aaa72dd4cd2f074c7"

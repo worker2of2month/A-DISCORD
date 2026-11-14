@@ -34,7 +34,7 @@ characters = {
 	}
 	MZR_Ration_Assembly = {
 		name = MZR_Ration_Assembly
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		portraits = { civilian = { large = GFX_portrait_MZR_Ration_Assembly } }
 		country_leader = {
 			ideology = utilitarism_ideology
 			expire = "2200.1.1.1"
@@ -45,7 +45,7 @@ characters = {
 	}
 	KYZ_Qanat_Assembly = {
 		name = KYZ_Qanat_Assembly
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } }
+		portraits = { civilian = { large = GFX_portrait_KYZ_Qanat_Assembly } }
 		country_leader = {
 			ideology = anarchism_ideology
 			expire = "2200.1.1.1"
@@ -182,6 +182,86 @@ characters = {
 		country_leader = {
 			ideology = hedonism_ideology
 			expire = "2200.1.1.1"
+		}
+	}
+
+	SFD_Farhad_Mehr = {
+		name = SFD_Farhad_Mehr
+		portraits = {
+			civilian = {
+				large = GFX_portrait_SFD_Farhad_Mehr
+			}
+		}
+		country_leader = {
+			ideology = service_etatism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SFD_Farhad_Mehr_desc
+			traits = { }
+		}
+	}
+
+	SCD_Nadir_Vezran = {
+		name = SCD_Nadir_Vezran
+		portraits = {
+			civilian = {
+				large = GFX_portrait_SCD_Nadir_Vezran
+			}
+		}
+		country_leader = {
+			ideology = service_etatism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SCD_Nadir_Vezran_desc
+			traits = { }
+		}
+	}
+
+	SMD_Laleh_Sorani = {
+		name = SMD_Laleh_Sorani
+		portraits = {
+			civilian = {
+				large = GFX_portrait_SMD_Laleh_Sorani
+			}
+		}
+		country_leader = {
+			ideology = service_etatism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SMD_Laleh_Sorani_desc
+			traits = { }
+		}
+	}
+
+	SOD_Bahram_Kord = {
+		name = SOD_Bahram_Kord
+		portraits = {
+			civilian = {
+				large = GFX_portrait_SOD_Bahram_Kord
+			}
+		}
+		country_leader = {
+			ideology = service_etatism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SOD_Bahram_Kord_desc
+			traits = { }
+		}
+	}
+
+	SDA_Samira_Radan = {
+		name = SDA_Samira_Radan
+		portraits = {
+			civilian = {
+				large = GFX_portrait_SDA_Samira_Radan
+			}
+		}
+		country_leader = {
+			ideology = service_etatism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SDA_Samira_Radan_desc
+			traits = { }
 		}
 	}
 }

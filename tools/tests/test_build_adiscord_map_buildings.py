@@ -84,6 +84,39 @@ class BorderDamTests(unittest.TestCase):
         self.assertEqual(builder.synchronize_buildings(self.root, apply=True), [])
         self.assertEqual((self.root / "map/buildings.txt").read_bytes(), before)
 
+    def test_scripted_dam_has_both_anchors_without_starting_buildings(self):
+        for state, province in ((688, 145), (67, 70)):
+            (self.root / f"history/states/{state}.txt").write_text(
+                f"state = {{ id = {state} provinces = {{ {province} }} }}",
+                encoding="utf-8",
+            )
+        with (
+            mock.patch.object(builder, "NAM_DAM_PROVINCES", {688: 145, 67: 70}),
+            mock.patch.object(builder, "NAM_DAM_ANCHOR", FIXTURE_BORDER_ANCHOR),
+        ):
+            planned, changed = builder.dam_province_plan(self.root, self.lines)
+            self.assertEqual(planned[-2:], [
+                "688;dam_spawn;1.86;10.00;1.00;0.00;0",
+                "67;dam_spawn;1.86;10.00;1.00;0.00;0",
+            ])
+            self.assertIn(4, changed)
+            self.assertIn(5, changed)
+            self.assertEqual(builder.dam_province_plan(self.root, planned), (planned, []))
+
+    def test_svetlogorsk_anchor_crosses_the_actual_river_and_scripted_provinces(self):
+        x, _height, z, _angle = map(float, builder.NAM_DAM_ANCHOR)
+        colors = builder.load_province_by_color()
+        with (
+            Image.open(builder.ROOT / "map/provinces.bmp") as provinces,
+            Image.open(builder.ROOT / "map/rivers.bmp") as rivers,
+        ):
+            banks = {
+                colors[provinces.getpixel((convert(x), provinces.height - 1 - convert(z)))]
+                for convert in (int, round)
+            }
+            self.assertEqual(banks, set(builder.NAM_DAM_PROVINCES.values()))
+            self.assertIn(rivers.getpixel((int(x), rivers.height - 1 - int(z))), range(3, 12))
+
 
 if __name__ == "__main__":
     unittest.main()

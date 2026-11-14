@@ -20,6 +20,220 @@ EVENTS = ROOT / "events/ADISCORD_south_final_war_events.txt"
 PEACE = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
 REGIONAL = ("EFL", "AZH", "WEF", "KDR", "RHM", "SDR", "MZR", "KYZ", "GLP")
 CHAMPIONS = ("NAM", "SHL")
+FURNACE_ADMINISTRATIONS = {"SFD", "SCD", "SMD", "SOD", "SDA"}
+FURNACE_DIRECT_TERRITORY = {
+    262, 263, 264, 268, 269, 273, 276, 277, 278, 279, 280, 281, 282, 283,
+    284, 285, 286, 297, 298, 299, 300, 301, 302, 304, 305, 706, 708,
+}
+
+
+class FurnaceAdministrationModel:
+    """Bounded ownership interpreter; it does not emulate native country creation."""
+
+    def __init__(self):
+        self.effects = definitions(ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt")
+        self.triggers = definitions(ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt")
+        self.owners = {}
+        self.controllers = {}
+        self.subjects = {}
+        self.cores = set()
+        self.targets = {}
+        self.calls = []
+        self.course = 3
+        self.active_war = False
+
+    def resolve(self, value):
+        if value.startswith("event_target:"):
+            return self.targets[value.split(":", 1)[1]]
+        return value
+
+    def exists(self, tag):
+        return tag == "SHL" or tag in self.owners.values()
+
+    def condition(self, entry, scope):
+        key, value = entry.key, entry.value
+        if key in ("OR", "AND", "NOT", "hidden_trigger"):
+            checks = [self.condition(child, scope) for child in value]
+            return {"OR": any(checks), "AND": all(checks),
+                    "NOT": not any(checks), "hidden_trigger": all(checks)}[key]
+        if key in FURNACE_ADMINISTRATIONS or key == "SHL":
+            return self.matches(value, key)
+        if key == "SHL_country_operable":
+            return scope == "SHL"
+        if key == "ADISCORD_south_final_active":
+            return self.active_war == (value == "yes")
+        if key in self.triggers:
+            return self.matches(self.triggers[key], scope) == (value == "yes")
+        if key == "tag":
+            return scope == value
+        if key == "exists":
+            return self.exists(scope) == (value == "yes")
+        if key == "is_subject":
+            return (scope in self.subjects) == (value == "yes")
+        if key == "is_subject_of":
+            return self.subjects.get(scope) == value
+        if key == "is_owned_by":
+            return self.owners.get(scope) == value
+        if key == "is_controlled_by":
+            return self.controllers.get(scope) == value
+        if key == "check_variable":
+            assert scalar(value, "var") == "SHL_political_course"
+            assert scalar(value, "compare") == "equals"
+            return self.course == int(scalar(value, "value"))
+        raise AssertionError(f"Unsupported administration condition: {key}")
+
+    def matches(self, items, scope):
+        return all(self.condition(item, scope) for item in items)
+
+    def execute(self, items, scope="SHL", previous=None):
+        for entry in items:
+            key, value = entry.key, entry.value
+            if key == "if":
+                if self.matches(block(value, "limit"), scope):
+                    self.execute([item for item in value if item.key != "limit"], scope, previous)
+            elif key in self.effects:
+                self.execute(self.effects[key], scope, previous)
+            elif key in FURNACE_ADMINISTRATIONS or key == "SHL" or key.isdigit() or key.startswith("event_target:"):
+                self.execute(value, self.resolve(key), scope)
+            elif key == "save_event_target_as":
+                self.targets[value] = scope
+            elif key == "add_core_of":
+                self.cores.add((scope, self.resolve(value)))
+            elif key == "transfer_state":
+                assert value == "PREV"
+                self.owners[previous] = scope
+                self.controllers[previous] = scope
+            elif key == "set_autonomy":
+                assert scalar(value, "target") == "PREV"
+                assert self.exists(previous)
+                self.subjects[previous] = scope
+                self.calls.append((key, previous, scalar(value, "autonomy_state")))
+            elif key in ("ADISCORD_economy_initialize_country", "ADISCORD_economy_mark_dirty", "ADISCORD_release_non_participating_minor_optimization",
+                         "ADISCORD_south_bind_to_champion"):
+                self.calls.append((key, scope))
+            else:
+                raise AssertionError(f"Unsupported administration effect: {key}")
+
+    def run(self):
+        self.execute(self.effects["SHL_form_furnace_administrations"])
+
+    def acquire(self, *states):
+        for state in states:
+            self.owners[str(state)] = "SHL"
+            self.controllers[str(state)] = "SHL"
+
+
+class FurnaceAdministrationTests(unittest.TestCase):
+    def test_geography_covers_the_south_once_and_crosses_old_borders(self):
+        model = FurnaceAdministrationModel()
+        historical = {}
+        for path in (ROOT / "history/states").glob("*.txt"):
+            text = path.read_text(encoding="utf-8-sig")
+            owner = re.search(r"\bowner\s*=\s*(\w+)", text)
+            state = re.search(r"\bid\s*=\s*(\d+)", text)
+            if owner and owner[1] in set(REGIONAL) | set(CHAMPIONS):
+                historical[state[1]] = owner[1]
+        model.acquire(*historical)
+        model.run()
+        for state, owner in historical.items():
+            if owner == "SHL" or int(state) in FURNACE_DIRECT_TERRITORY:
+                self.assertEqual(model.owners[state], "SHL", state)
+            else:
+                self.assertIn(model.owners[state], FURNACE_ADMINISTRATIONS, state)
+                self.assertIn((state, model.owners[state]), model.cores)
+                self.assertEqual(model.controllers[state], model.owners[state])
+        for tag in FURNACE_ADMINISTRATIONS:
+            territory = {state for state, owner in model.owners.items() if owner == tag}
+            origins = {historical[state] for state in territory}
+            self.assertTrue(origins, tag)
+            for origin in origins:
+                self.assertNotEqual(territory, {state for state, owner in historical.items() if owner == origin}, tag)
+        self.assertEqual(model.subjects, dict.fromkeys(FURNACE_ADMINISTRATIONS, "SHL"))
+        source = body(ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt", "SHL_form_furnace_administrations")
+        states = re.findall(r"(\d+) = \{ SHL_transfer_furnace_administration_land = yes \}", source)
+        self.assertEqual(len(states), len(set(states)))
+
+    def test_incremental_conquest_preserves_existing_offices_and_is_idempotent(self):
+        model = FurnaceAdministrationModel()
+        model.acquire(265, 246)
+        model.run()
+        self.assertEqual(model.owners, {"265": "SFD", "246": "SMD"})
+        self.assertEqual(len([call for call in model.calls if call[0] == "set_autonomy"]), 2)
+        model.acquire(267, 245, 234)
+        model.run()
+        self.assertEqual([model.owners[str(state)] for state in (267, 245, 234)], ["SFD", "SMD", "SCD"])
+        snapshot = (model.owners.copy(), model.controllers.copy(), model.subjects.copy(), model.cores.copy())
+        model.run()
+        self.assertEqual(snapshot, (model.owners, model.controllers, model.subjects, model.cores))
+        self.assertEqual(len([call for call in model.calls if call[0] == "set_autonomy"]), 3)
+
+    def test_foreign_occupation_liberation_and_other_courses_are_not_overwritten(self):
+        model = FurnaceAdministrationModel()
+        model.acquire(265, 267, 258)
+        model.controllers["265"] = "MZR"
+        model.owners["258"] = "RHM"
+        model.owners["705"] = "SFD"
+        model.controllers["705"] = "SFD"
+        before = (model.owners.copy(), model.controllers.copy())
+        model.run()
+        self.assertEqual(before, (model.owners, model.controllers))
+        self.assertEqual(model.subjects, {})
+        for course in (1, 2, 4, 5):
+            model = FurnaceAdministrationModel()
+            model.course = course
+            model.acquire(265, 258, 688)
+            model.run()
+            self.assertEqual(set(model.owners.values()), {"SHL"})
+        model = FurnaceAdministrationModel()
+        model.subjects["SHL"] = "NAM"
+        model.acquire(280)
+        model.run()
+        self.assertEqual(model.owners["280"], "SHL")
+
+    def test_new_offices_join_active_war_and_settlement_dispatch_is_deferred(self):
+        model = FurnaceAdministrationModel()
+        model.active_war = True
+        model.acquire(265)
+        model.run()
+        self.assertIn(("ADISCORD_south_bind_to_champion", "SFD"), model.calls)
+        peace = PEACE.read_text(encoding="utf-8")
+        section = peace.split("# BEGIN shahrabad:on_annex", 1)[1].split("# END shahrabad:on_annex", 1)[0]
+        self.assertIn("ROOT = { SHL_queue_furnace_administrations = yes }", section)
+        queue = body(ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt", "SHL_queue_furnace_administrations")
+        self.assertIn("hours = 1", queue)
+        self.assertIn("NOT = { has_country_flag = SHL_furnace_administrations_pending }", queue)
+        settlement = body(EFFECTS, "ADISCORD_south_apply_settlement")
+        self.assertLess(settlement.index("ADISCORD_south_settle_member"), settlement.index("SHL_form_furnace_administrations"))
+
+    def test_direct_rule_expansion_and_office_capitals_remain_in_their_territories(self):
+        model = FurnaceAdministrationModel()
+        model.acquire(*FURNACE_DIRECT_TERRITORY, 705, 702, 246, 704, 688)
+        model.run()
+        model.run()
+        for state in FURNACE_DIRECT_TERRITORY:
+            self.assertEqual(model.owners[str(state)], "SHL", state)
+            self.assertFalse(any(core_state == str(state) for core_state, _ in model.cores))
+        for tag in FURNACE_ADMINISTRATIONS:
+            history = ROOT / f"history/countries/{tag} - Furnace Administration.txt"
+            capital = re.search(r"capital = (\d+)", history.read_text(encoding="utf-8"))[1]
+            self.assertEqual(model.owners[capital], tag)
+
+    def test_assets_have_native_sizes_and_distinct_flags(self):
+        from PIL import Image
+        from tools.builders.build_adiscord_shl_administration_assets import outputs, SIZES
+
+        for path, expected in outputs().items():
+            self.assertEqual((ROOT / path).read_bytes(), expected, str(path))
+        for folder, size in SIZES.items():
+            pixels = set()
+            for tag in FURNACE_ADMINISTRATIONS:
+                with Image.open(ROOT / "gfx/flags" / folder / f"{tag}.tga") as image:
+                    self.assertEqual(image.size, size)
+                    pixels.add(image.tobytes())
+            self.assertEqual(len(pixels), len(FURNACE_ADMINISTRATIONS))
+        with Image.open(ROOT / "gfx/interface/autonomy/autonomy_SHL_furnace_administration_icon.png") as image:
+            self.assertEqual(image.size, (35, 36))
+            self.assertEqual(image.getextrema()[3], (0, 255))
 
 
 def definitions(path):
@@ -110,14 +324,14 @@ class SouthFinalWarContractTests(unittest.TestCase):
             calls = set(re.findall(r"\b([A-Z]{3}) = \{", body(EFFECTS, name)))
             self.assertEqual(calls, set(REGIONAL), name)
         bound = scope_calls(body(EFFECTS, "ADISCORD_south_assign_bound_sides"), "ADISCORD_south_bind_to_champion")
-        self.assertEqual(bound, set(REGIONAL) | {"NAM"})
+        self.assertEqual(bound, set(REGIONAL) | {"NAM"} | FURNACE_ADMINISTRATIONS)
         for name, effect in (
             ("ADISCORD_south_end_final_wars", "ADISCORD_south_end_member_wars"),
             ("ADISCORD_south_mark_losers", "ADISCORD_south_mark_loser"),
             ("ADISCORD_south_clear_participants", "ADISCORD_south_clear_participant"),
             ("ADISCORD_south_apply_settlement", "ADISCORD_south_settle_member"),
         ):
-            self.assertEqual(scope_calls(body(EFFECTS, name), effect), set(REGIONAL) | set(CHAMPIONS), name)
+            self.assertEqual(scope_calls(body(EFFECTS, name), effect), set(REGIONAL) | set(CHAMPIONS) | FURNACE_ADMINISTRATIONS, name)
         regional = body(TRIGGERS, "ADISCORD_south_regional_country")
         self.assertEqual(set(re.findall(r"tag = ([A-Z]{3})", regional)), set(REGIONAL))
 
@@ -473,6 +687,39 @@ class SouthLifecycleTests(unittest.TestCase):
 
     def trigger_matches(self, name, scope="SHL"):
         return self.matches(self.triggers[name], scope)
+
+    def test_map_distinguishes_leaders_from_allies_and_northern_successors(self):
+        self.facts[("KDR", "exists", "yes")] = True
+        self.facts[("KDR", "is_subject_of", "SHL")] = True
+        self.assertTrue(self.trigger_matches("ADISCORD_south_map_country_shl", "KDR"))
+        self.assertFalse(self.trigger_matches("ADISCORD_south_map_country_shl_leader", "KDR"))
+        self.assertTrue(self.trigger_matches("ADISCORD_south_map_country_shl_leader", "SHL"))
+        for leader, next_leader in (("NAM", "EFL"), ("EFL", "AZH")):
+            self.assertTrue(self.trigger_matches("ADISCORD_south_map_country_north_leader", leader))
+            self.assertFalse(self.trigger_matches("ADISCORD_south_map_country_north_leader", next_leader))
+            self.facts[(leader, "is_subject", "no")] = False
+            self.facts[(leader, "is_subject_of", next_leader)] = True
+            self.assertTrue(self.trigger_matches("ADISCORD_south_map_country_north", leader))
+            self.assertFalse(self.trigger_matches("ADISCORD_south_map_country_north_leader", leader))
+        self.assertTrue(self.trigger_matches("ADISCORD_south_map_country_north_leader", "AZH"))
+
+    def test_map_shades_follow_control_in_war_and_ownership_after_peace(self):
+        self.flag("ADISCORD_south_final_started")
+        self.variable("ADISCORD_south_side", 1, "SHL")
+        self.variable("ADISCORD_south_side", 2, "NAM")
+        self.variable("ADISCORD_south_side", 2, "EFL")
+        self.facts[("NAM", "has_country_flag", "ADISCORD_south_north_leader")] = True
+        self.facts[("NAM", "has_capitulated", "no")] = False
+        self.facts[("699", "owner")] = "SHL"
+        self.facts[("699", "controller")] = "EFL"
+        self.assertTrue(self.trigger_matches("ADISCORD_south_map_state_north", "699"))
+        self.assertFalse(self.trigger_matches("ADISCORD_south_map_state_north_leader", "699"))
+        self.facts[("699", "controller")] = "NAM"
+        self.assertTrue(self.trigger_matches("ADISCORD_south_map_state_north_leader", "699"))
+        self.assertFalse(self.trigger_matches("ADISCORD_south_map_state_shl_leader", "699"))
+        self.flag("ADISCORD_south_final_resolved")
+        self.assertTrue(self.trigger_matches("ADISCORD_south_map_state_shl_leader", "699"))
+        self.assertFalse(self.trigger_matches("ADISCORD_south_map_state_north_leader", "699"))
 
     def execute(self, name, scope="SHL"):
         self.execute_entries(self.effects[name], scope)
@@ -1293,6 +1540,47 @@ class SouthWarOperationsTests(unittest.TestCase):
         gate = triggers[triggers.index("NAM_war_programmes_operable = {"):]
         self.assertIn("NAM_war_campaign_active = yes", gate[:gate.index("\n}")])
         self.assertIn("has_completed_focus = NAM_sw_conscription_of_the_south", triggers[triggers.index("NAM_war_campaign_active = {"):])
+
+    def test_swapped_trees_carry_each_others_roots_hidden(self):
+        # Native load_focus_tree keeps only completed focuses present in the new
+        # tree, so every root crosses the swap as a hidden shared focus.
+        from tools.builders import build_adiscord_focus_trees as builder
+
+        outputs = {path.name: data.decode("utf-8") for path, data in builder.expected_outputs().items()}
+        expanded = {source: builder.render_source(source) for source in builder.SOURCES}
+        definitions = "\n".join(outputs.values())
+
+        def definition(root):
+            start = re.search(rf"(?m)^\t?(?:shared_)?focus = \{{\n\s*id = {root}\n", definitions)
+            self.assertIsNotNone(start, root)
+            end = definitions.find("\nshared_focus = {", start.end())
+            return definitions[start.end():end if end > 0 else len(definitions)]
+
+        for war, (tree_id, priors) in builder.TREE_SWAPS.items():
+            war_output = outputs[builder.SOURCES[war]]
+            for prior in priors:
+                prior_output = outputs[builder.SOURCES[prior]]
+                for root in builder.shown_roots(expanded[prior]):
+                    self.assertRegex(war_output, rf"(?m)^\tshared_focus = {root}$", (war, root))
+                    self.assertIn(f"allow_branch = {{ NOT = {{ has_focus_tree = {tree_id} }}", definition(root), root)
+                for root in builder.shown_roots(expanded[war]):
+                    self.assertRegex(prior_output, rf"(?m)^\tshared_focus = {root}$", (prior, root))
+                    self.assertIn(f"allow_branch = {{ has_focus_tree = {tree_id}", definition(root), root)
+        # A focus with its own allow_branch is shown independently of a hidden
+        # parent, so every focus of a carried source carries the swap clause.
+        per_source = builder.source_clauses(expanded, builder.swap_plan(expanded)[1])
+        for source, clause in per_source.items():
+            native = parse_clausewitz(outputs[builder.SOURCES[source]])
+            focuses = [e.value for e in native if e.key == "shared_focus" and isinstance(e.value, list)]
+            self.assertTrue(focuses, source)
+            for focus in focuses:
+                allow = block(focus, "allow_branch")
+                rendered = " ".join(f"{e.key} = {e.value}" if isinstance(e.value, str) else repr(e) for e in allow)
+                expected = "has_focus_tree" if clause.startswith("has_focus_tree") else "NOT"
+                self.assertIn("has_focus_tree", repr(allow), (source, scalar(focus, "id")))
+                self.assertEqual(allow[0].key, expected if expected == "NOT" else "has_focus_tree", (source, scalar(focus, "id"), rendered))
+        for name in ("ADISCORD_south_load_war_tree", "ADISCORD_south_restore_prior_tree"):
+            self.assertIn("mark_focus_tree_layout_dirty = yes", body(EFFECTS, name))
 
     def test_expedition_and_defector_escrow_settles_exactly_once(self):
         decisions = south_decisions()

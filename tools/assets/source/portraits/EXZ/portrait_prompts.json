@@ -1,0 +1,69 @@
+{
+  "template": "tools/assets/source/portrait.psd",
+  "canvas": [
+    156,
+    210
+  ],
+  "countries": [
+    "EXZ",
+    "SLA",
+    "RZA",
+    "MLR",
+    "ERT",
+    "IRT",
+    "SCA"
+  ],
+  "portraits": [
+    {
+      "id": "EXZ_Generic_1",
+      "source_file": "1766367353934-019b43b2-61f0-72d8-be3a-b948fbe5a625-removebg-preview.png",
+      "source_kind": "user-supplied original",
+      "prompt": null,
+      "runtime_path": "gfx/leaders/EXZ/default/portrait_EXZ_Generic_1.png",
+      "sprite": "GFX_Portrait_EXZ_Generic_1",
+      "runtime_sha256": "09fd759f1fa9426c52d72f09fd41d95617102eb5440c4cf5af49637e9c2776f0"
+    },
+    {
+      "id": "EXZ_Generic_2",
+      "source_file": "exec-fb2bea4a-be5c-4495-8433-0dc39716a44a.png",
+      "source_kind": "built-in image_gen",
+      "prompt": "Create one isolated head and upper torso portrait cutout for the A-Discord strategy game, matching the attached reference's gritty realistic photographic rendering and worn post-apocalyptic protective equipment. A fictional adult whose face is completely concealed by protective gear; no visible eyes or skin. Restrained desaturated olive, charcoal and brown palette, natural worn materials, dramatic light from upper left, dark sculpted shadows, realistic proportions. Head fully within frame with a small margin above it; shoulders reach both bottom corners. Vertical 26:35 aspect ratio. Genuine transparent alpha background, no scene, no text, no emblems, no border. No CRT scanlines or screen effects: the game's Photoshop portrait template adds those later. The image is a style and equipment reference, not an edit target. Produce a visually distinct person and gear silhouette. Subject: heavy charcoal rubberized hood with no fur, black full-face respirator with two small circular smoked glass eyepieces and a single large ribbed canister on the left cheek, scuffed dark grey field coat with canvas straps. Three-quarter view facing viewer's left. Compact head and broad shoulders.",
+      "runtime_path": "gfx/leaders/EXZ/default/portrait_EXZ_Generic_2.png",
+      "sprite": "GFX_Portrait_EXZ_Generic_2",
+      "runtime_sha256": "3b0685e620e1027d124302f46509493881910f37fc11bf92f6f937d6d183fa2f"
+    },
+    {
+      "id": "EXZ_Generic_3",
+      "source_file": "exec-4ae4a0f1-a503-42ba-a67b-168b88e5c3af.png",
+      "source_kind": "built-in image_gen",
+      "prompt": "Create one isolated head and upper torso portrait cutout for the A-Discord strategy game, matching the attached reference's gritty realistic photographic rendering and worn post-apocalyptic protective equipment. A fictional adult whose face is completely concealed by protective gear; no visible eyes or skin. Restrained desaturated olive, charcoal and brown palette, natural worn materials, dramatic light from upper left, dark sculpted shadows, realistic proportions. Head fully within frame with a small margin above it; shoulders reach both bottom corners. Vertical 26:35 aspect ratio. Genuine transparent alpha background, no scene, no text, no emblems, no border. No CRT scanlines or screen effects: the game's Photoshop portrait template adds those later. The image is a style and equipment reference, not an edit target. Produce a visually distinct person and gear silhouette. Subject: worn olive canvas hood loosely surrounding a pale grey full-face rubber gas mask with two large round dark eyepieces, a central corrugated breathing hose running down toward the chest, patched olive protective coat with high collar and narrow backpack shoulder straps. Slight three-quarter turn facing viewer's right. Tall narrow mask and sloping shoulders.",
+      "runtime_path": "gfx/leaders/EXZ/default/portrait_EXZ_Generic_3.png",
+      "sprite": "GFX_Portrait_EXZ_Generic_3",
+      "runtime_sha256": "2226c5b479d73193a8c7c7adcc2e45c88281f51ae6fcf23ebfab0e46834c4d60"
+    },
+    {
+      "id": "EXZ_Generic_4",
+      "source_file": "exec-5d313792-4d92-4897-8e46-4538630a9cc8.png",
+      "source_kind": "built-in image_gen",
+      "prompt": "Create one isolated head and upper torso portrait cutout for the A-Discord strategy game, matching the attached reference's gritty realistic photographic rendering and worn post-apocalyptic protective equipment. A fictional adult whose face is completely concealed by protective gear; no visible eyes or skin. Restrained desaturated olive, charcoal and brown palette, natural worn materials, dramatic light from upper left, dark sculpted shadows, realistic proportions. Head fully within frame with a small margin above it; shoulders reach both bottom corners. Vertical 26:35 aspect ratio. Genuine transparent alpha background, no scene, no text, no emblems, no border. No CRT scanlines or screen effects: the game's Photoshop portrait template adds those later. The image is a style and equipment reference, not an edit target. Produce a visually distinct person and gear silhouette. Subject: faded tan canvas protective hood over a charcoal full-face industrial respirator with one wide curved smoked visor and two squat round side filter cartridges. Thick brown field jacket with broad padded collar and weathered webbing. Almost frontal, head tilted very slightly to viewer's left. Clearly distinct silhouette from the reference's fur hood.",
+      "runtime_path": "gfx/leaders/EXZ/default/portrait_EXZ_Generic_4.png",
+      "sprite": "GFX_Portrait_EXZ_Generic_4",
+      "runtime_sha256": "2766cca2d3399a6a38a5fc4f9445a949e7d13637ee46da36d0c9b733814c6627"
+    }
+  ],
+  "council_defaults": {
+    "SLA_Starolesye_District_Board": 1,
+    "RZA_Reactor_Technical_Directorate": 4,
+    "MLR_Lowland_Interim_Rada": 3,
+    "ERT_Eastern_Restoration_Administration": 2,
+    "IRT_Interior_Republican_Council": 3,
+    "SCA_Southern_Corridor_Administration": 1
+  },
+  "roles": [
+    "army",
+    "navy",
+    "operative",
+    "political"
+  ],
+  "template_sha256": "b3e90d7f944497f9de055684bcfcda9c721f9511b7957e0a103c045dc86e2360"
+}

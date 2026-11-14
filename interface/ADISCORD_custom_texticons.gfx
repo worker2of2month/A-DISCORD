@@ -1,4 +1,30 @@
 spriteTypes = {
+	# Equipment names are separate from vanilla tank-role badges and unit icons.
+	spriteType = {
+		name = "GFX_ADISCORD_anti_air_texticon"
+		texturefile = "gfx/texticons/anti_air_texticon.dds"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_anti_tank_texticon"
+		texturefile = "gfx/texticons/unit_anti_tank_icon_small.dds"
+		legacy_lazy_load = no
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_train_texticon"
+		texturefile = "gfx/texticons/train_texticon.dds"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_motorized_texticon"
+		texturefile = "gfx/texticons/attrition_supply_truck_texticon.dds"
+		legacy_lazy_load = no
+	}
+
 	spriteType = {
 		name = "GFX_war_support_texticon"
 		texturefile = "gfx/texticons/war_support_modifiericons_texticon.dds"

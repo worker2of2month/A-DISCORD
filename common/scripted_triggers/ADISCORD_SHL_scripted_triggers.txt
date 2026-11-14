@@ -972,10 +972,10 @@ SHL_revanche_kyz_ready = {
 	}
 	KYZ = { SHL_revanche_neighbour_open = yes }
 	OR = {
-		280 = { is_owned_by = SHL }
-		284 = { is_owned_by = SHL }
-		285 = { is_owned_by = SHL }
-		286 = { is_owned_by = SHL }
+		280 = { SHL_direct_or_administration_land = yes }
+		284 = { SHL_direct_or_administration_land = yes }
+		285 = { SHL_direct_or_administration_land = yes }
+		286 = { SHL_direct_or_administration_land = yes }
 	}
 }
 
@@ -986,10 +986,10 @@ SHL_revanche_glp_ready = {
 	}
 	GLP = { SHL_revanche_neighbour_open = yes }
 	OR = {
-		297 = { is_owned_by = SHL }
-		298 = { is_owned_by = SHL }
-		299 = { is_owned_by = SHL }
-		708 = { is_owned_by = SHL }
+		297 = { SHL_direct_or_administration_land = yes }
+		298 = { SHL_direct_or_administration_land = yes }
+		299 = { SHL_direct_or_administration_land = yes }
+		708 = { SHL_direct_or_administration_land = yes }
 	}
 }
 
@@ -1000,8 +1000,8 @@ SHL_revanche_mzr_ready = {
 	}
 	MZR = { SHL_revanche_neighbour_open = yes }
 	OR = {
-		269 = { is_owned_by = SHL }
-		268 = { is_owned_by = SHL }
+		269 = { SHL_direct_or_administration_land = yes }
+		268 = { SHL_direct_or_administration_land = yes }
 	}
 }
 
@@ -1230,5 +1230,55 @@ SHL_neighbour_dispute_closed = {
 		SHL_glp_settled = yes
 		has_country_flag = SHL_qanat_war_closed
 		has_country_flag = SHL_glp_war_closed
+	}
+}
+
+# COUNTRY. Only the ratified Directorate can create territorial offices.
+SHL_furnace_administrations_enabled = {
+	exists = yes
+	is_subject = no
+	tag = SHL
+	SHL_country_operable = yes
+	check_variable = { var = SHL_political_course value = 3 compare = equals }
+}
+
+# COUNTRY recipient. Liberation never silently restores subjection.
+SHL_furnace_administration_receivable = {
+	OR = {
+		exists = no
+		is_subject_of = SHL
+	}
+}
+
+# STATE. Only settled, directly held land can be redistributed.
+SHL_furnace_administration_land = {
+	is_owned_by = SHL
+	is_controlled_by = SHL
+}
+
+# STATE. A disputed frontier remains disputed when an office administers it.
+SHL_direct_or_administration_land = {
+	OR = {
+		is_owned_by = SHL
+		AND = {
+			is_owned_by = SFD
+			SFD = { is_subject_of = SHL }
+		}
+		AND = {
+			is_owned_by = SCD
+			SCD = { is_subject_of = SHL }
+		}
+		AND = {
+			is_owned_by = SMD
+			SMD = { is_subject_of = SHL }
+		}
+		AND = {
+			is_owned_by = SOD
+			SOD = { is_subject_of = SHL }
+		}
+		AND = {
+			is_owned_by = SDA
+			SDA = { is_subject_of = SHL }
+		}
 	}
 }

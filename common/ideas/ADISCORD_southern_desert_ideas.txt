@@ -243,14 +243,24 @@ ideas = {
 		}
 		SHL_general_governorate = {
 			picture = generic_central_management
-			allowed = { original_tag = SHL }
+			allowed = {
+				OR = {
+					original_tag = SHL
+					original_tag = SFD
+					original_tag = SCD
+					original_tag = SMD
+					original_tag = SOD
+					original_tag = SDA
+				}
+			}
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				resistance_target = -0.10
-				compliance_gain = 0.05
+				production_speed_infrastructure_factor = 0.20
+				production_speed_industrial_complex_factor = 0.20
 			}
 		}
+
 		# Course charters (ratified constitutions) and victory spirits of the
 		# War for the South, one pair per course.
 		SHL_conclave_of_ten_spirit = {
@@ -795,6 +805,97 @@ ideas = {
 			picture = GFX_idea_generic_production_bonus
 			allowed = { always = no }
 			modifier = { }
+		}
+
+		SHL_pow_law_of_continuous_fire_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_pow_r_house_mines_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				local_resources_factor = 0.05
+			}
+		}
+
+		SHL_pow_k_oil_commune_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		SHL_pow_d_darban_engineers_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		SHL_pow_d_cannon_works_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.05
+			}
+		}
+
+		SHL_pow_archive_of_the_conclave_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		SHL_pow_veyran_forts_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				max_dig_in = 2
+			}
+		}
+
+		SHL_pow_c_southern_council_slot_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.04
+			}
+		}
+
+		SHL_pow_d_evacuation_plan_slot_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		SHL_pow_d_nur_legacy_slot_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
 		}
 
 		SHL_pow_common_industrial_account_idea = {

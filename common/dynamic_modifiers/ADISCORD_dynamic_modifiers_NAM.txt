@@ -508,13 +508,6 @@ NAM_mil_forward_depot = {
 	local_org_regain = 0.10
 }
 
-# STATE. Grid capacity belongs to the physical hydroelectric works.
-NAM_svetlogorsk_hydropower = {
-	icon = GFX_modifiers_ADISCORD_hydropower
-	enable = { always = yes }
-	state_production_speed_buildings_factor = 0.15
-}
-
 NAM_captured_wells_shock = {
 	icon = GFX_modifiers_sabotaged_resource
 	enable = {
@@ -618,4 +611,45 @@ NAM_south_war_dynamic = {
 	consumer_goods_factor = NAM_sw_consumer_goods
 	resistance_growth = NAM_sw_resistance
 	compliance_gain = NAM_sw_compliance
+}
+
+# The completed complex remains a property of the state after ownership changes.
+NAM_combine_industrial_heart = {
+	icon = GFX_modifiers_ADISCORD_reactor_industrial_legacy
+	enable = { always = yes }
+	state_production_speed_buildings_factor = 1.00
+	local_building_slots_factor = 1.00
+	local_factory_energy_consumption = -0.50
+	local_supplies = 5
+}
+
+# Regional export offices retain their tier while exports are suspended.
+NAM_export_office_1 = {
+	icon = GFX_modifiers_NAM_export_office_1
+	enable = { always = yes }
+	state_resource_oil = NAM_export_office_oil_delta
+}
+
+NAM_export_office_2 = {
+	icon = GFX_modifiers_NAM_export_office_2
+	enable = { always = yes }
+	state_resource_oil = NAM_export_office_oil_delta
+}
+
+NAM_export_office_3 = {
+	icon = GFX_modifiers_NAM_export_office_3
+	enable = { always = yes }
+	state_resource_oil = NAM_export_office_oil_delta
+}
+
+NAM_export_office_4 = {
+	icon = GFX_modifiers_NAM_export_office_4
+	enable = { always = yes }
+	state_resource_oil = NAM_export_office_oil_delta
+}
+
+NAM_export_office_5 = {
+	icon = GFX_modifiers_NAM_export_office_5
+	enable = { always = yes }
+	state_resource_oil = NAM_export_office_oil_delta
 }

@@ -1088,6 +1088,89 @@ ideas = {
 			}
 		}
 
+		NAM_adm_hum_union_accepted_slot_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		NAM_adm_tax_rolls_slot_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		NAM_adm_national_university_slot_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.05
+			}
+		}
+
+		NAM_adm_engineering_collegium_slot_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		NAM_adm_port_polytechnic_slot_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.02
+			}
+		}
+
+		NAM_adm_district_scholarships_slot_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		NAM_adm_pw_returnee_registration_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+				production_speed_industrial_complex_factor = 0.05
+			}
+		}
+
+		NAM_adm_pw_employment_offices_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_tax_collection_factor = 0.03
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		NAM_adm_pw_district_hospitals_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
 		NAM_adm_armed_peace_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_national_spirit

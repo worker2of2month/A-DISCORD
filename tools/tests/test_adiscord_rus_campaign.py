@@ -681,7 +681,7 @@ class RusCampaignTests(unittest.TestCase):
             "ADISCORD_science_development_monthly_growth": 2,
             "ADISCORD_country_development_final_global_growth_factor_bp": 120,
         })
-        for budget, expected in ((2, 3.12), (4, 9.6), (2, 3.12)):
+        for budget, expected in ((2, 3.84), (4, 7.2), (2, 3.84)):
             with self.subTest(budget=budget):
                 world.variables["ADISCORD_economy_research_spending_mode"] = budget
                 before = world.value("ADISCORD_science_development_progress")
@@ -1394,7 +1394,7 @@ class RusCampaignTests(unittest.TestCase):
             "mobile_preparation": (30, 65, 30),
             "aimaq_public_works": (15, 100, 35),
             "chancery_reconstruction": (25, 135, 45),
-            "surface_industrial_contract": (25, 135, 45),
+            "surface_industrial_contract": (25, 350, 45),
             "subterranean_supply_contract": (25, 115, 40),
         }
         for suffix, price in prices.items():
@@ -1856,7 +1856,7 @@ class RusCampaignTests(unittest.TestCase):
                     with self.subTest(language=language, key=key):
                         plain = re.sub(r"§.", "", loc[key])
                         durations = re.findall(r"\b(\d+)\s+(?:дн\.|дней|день|days\b)", plain)
-                        self.assertEqual(durations, [str(days)])
+                        self.assertEqual(durations, [] if suffix == "_desc" else [str(days)])
 
     def test_bunker_work_and_food_tooltips_follow_actual_focus_upgrades(self):
         for upgraded in (False, True):
@@ -2018,7 +2018,7 @@ class RusCampaignTests(unittest.TestCase):
         world.execute(block(self.decisions["RUS_rifle_order"], "complete_effect"))
         bought = world.equipment["infantry_equipment"] - rifles
         price = cash - world.value("ADISCORD_economy_treasury")
-        self.assertEqual((bought, price, world.pp), (25000, 200, 50))
+        self.assertEqual((bought, price, world.pp), (25000, 300, 50))
         stock = world.equipment["infantry_equipment"]
         cash = world.value("ADISCORD_economy_treasury")
         world.execute(block(self.decisions["RUS_market_surplus"], "complete_effect"))
@@ -2895,8 +2895,8 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertFalse(clean.matches(block(rows, "available")))
                 effect = block(rows, "complete_effect")
                 previews = [row.value for row in effect if row.key == "custom_effect_tooltip"]
-                self.assertEqual(previews[0], f"RUS_suspicion_relief_{-relief}_tt")
-                self.assertIn(previews[0], self.loc)
+                self.assertEqual(previews.count(f"RUS_suspicion_relief_{-relief}_tt"), 1)
+                self.assertIn(f"RUS_suspicion_relief_{-relief}_tt", self.loc)
                 gate = block(block(block(effect, "hidden_effect"), "if"), "limit")
                 self.assertIn(f"{name}_affordable", {row.key for row in gate})
 
@@ -2965,7 +2965,7 @@ class RusCampaignTests(unittest.TestCase):
                 for suffix in ("", "_desc", "_cost", "_cost_blocked", "_cost_tooltip"):
                     self.assertIn(f"{name}{suffix}", self.loc)
                 previews = [row.value for row in block(rows, "complete_effect") if row.key == "custom_effect_tooltip"]
-                self.assertEqual(previews[0], f"RUS_suspicion_gain_{noise}_tt")
+                self.assertEqual(previews.count(f"RUS_suspicion_gain_{noise}_tt"), 1)
                 world = self.suspicion_world(ceiling - 0.01)
                 world.pp = 100
                 world.variables["ADISCORD_economy_treasury"] = 100

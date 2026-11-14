@@ -43,6 +43,7 @@ INPUTS = (
     Path("tools/assets/source/build_shl_palace.py"),
     Path("map/heightmap.bmp"), Path("map/provinces.bmp"), Path("map/rivers.bmp"),
     Path("map/definition.csv"), Path("map/buildings.txt"),
+    Path("tools/data/nam_export_office_sites.json"),
 )
 
 
@@ -88,6 +89,7 @@ def placements():
         if fields[0].isdigit() and len(fields) >= 7:
             definitions[int(fields[0])] = fields
     obstacles = []
+    offices = json.loads((ROOT / "tools/data/nam_export_office_sites.json").read_text(encoding="utf-8"))["sites"]
     for line in (ROOT / "map/buildings.txt").read_text().splitlines():
         fields = line.split(";")
         if fields[0].isdigit() and len(fields) >= 5:
@@ -117,6 +119,10 @@ def placements():
                     if span > .5 or float(patch.min()) < 10:
                         continue
                     x, z = float(col), float(len(heights) - 1 - row)
+                    if any(abs(x - site["position"][0]) < site["maximum_model_footprint"][0] / 2 + 2.45
+                           and abs(z - site["position"][2]) < site["maximum_model_footprint"][1] / 2 + 2.45
+                           for site in offices):
+                        continue
                     if any((x - ox) ** 2 + (z - oz) ** 2 < 5 ** 2 for ox, oz in obstacles):
                         continue
                     score = (col - cx) ** 2 + (row - cy) ** 2 + span * 100

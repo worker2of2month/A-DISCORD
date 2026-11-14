@@ -32,6 +32,17 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 40
+			add_stability = 0.03
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_law_of_continuous_fire_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_political_power_gain value = 0.05 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -919,6 +930,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_house_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -997,6 +1010,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_city_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -1074,6 +1089,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_directorate_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -1174,7 +1191,7 @@ focus_tree = {
 		icon = GFX_focus_generic_reorient_production
 		x = 22
 		y = 4
-		cost = 5
+		cost = 9
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_factory_air_defence

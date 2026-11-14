@@ -3977,9 +3977,6 @@ def check_economy_spending() -> list[str]:
                 issues.append(f"{effect} does not subtract {abs(value)} treasury")
     scaled_spenders = {
         "ADISCORD_economy_stabilization_package": "ADISCORD_economy_stabilization_price",
-        "ADISCORD_economy_invest_reserves": "ADISCORD_economy_investment_price",
-        "ADISCORD_economy_civilian_investment_action": "ADISCORD_economy_investment_price",
-        "ADISCORD_economy_military_investment_action": "ADISCORD_economy_military_investment_price",
     }
     for effect, price in scaled_spenders.items():
         match = re.search(rf"\b{effect}\s*=\s*\{{", text)

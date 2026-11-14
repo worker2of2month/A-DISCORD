@@ -50,7 +50,7 @@ characters = {
 	IVN_Commune_Council = {
 		name = IVN_Commune_Council
 		portraits = {
-			civilian = { large = GFX_Portrait_Europe_Generic_land_4 }
+			civilian = { large = GFX_portrait_IVN_Commune_Council }
 		}
 		country_leader = {
 			ideology = anarchism_ideology
@@ -61,7 +61,7 @@ characters = {
 	IVN_Marches_Council = {
 		name = IVN_Marches_Council
 		portraits = {
-			civilian = { large = GFX_Portrait_Europe_Generic_land_5 }
+			civilian = { large = GFX_portrait_IVN_Marches_Council }
 		}
 		country_leader = {
 			ideology = pragmatism_ideology

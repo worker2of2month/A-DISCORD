@@ -192,7 +192,7 @@ class WeeklyTradeTests(unittest.TestCase):
                 self.execute(self.effects["VAL_logistics_market_weekly"])
                 count = mask.bit_count()
                 self.assertEqual(self.variables["VAL_trade_corridors_active"], count)
-                income = 30 * count + (20 if mask & 1 else 0) + (30 if count < 4 else 0)
+                income = 6 * count + (4 if mask & 1 else 0) + (6 if count < 4 else 0)
                 delta = 3 * (4 - count) if count < 4 else -2
                 self.assertEqual(
                     self.variables["ADISCORD_economy_treasury"], 100 + income
@@ -299,9 +299,9 @@ class WeeklyTradeTests(unittest.TestCase):
         self.facts["33", "is_owned_by", "WRK"] = True
         self.facts["33", "is_controlled_by", "WRK"] = True
         for peaceful, treasury, pressure in (
-            (True, 160, 19),
-            (False, 190, 31),
-            (True, 244, 40),
+            (True, 112, 19),
+            (False, 118, 31),
+            (True, 128.8, 40),
         ):
             with self.subTest(peaceful=peaceful, treasury=treasury):
                 self.facts["WRK", "has_war", "no"] = peaceful
@@ -635,10 +635,13 @@ class RefugeeAdmissionTests(unittest.TestCase):
         self.assertIn(
             "VAL_open_refugee_waves = yes", vorkerland_events[dirty : dirty + 500]
         )
+        from tools.tests.test_adiscord_economy_weekly_contracts import block
+
         civil = stelander_effects.index("set_global_flag = STP_cw_started")
-        self.assertIn(
-            "VAL_open_refugee_waves = yes", stelander_effects[civil : civil + 500]
-        )
+        owner = list(re.finditer(r"(?m)^(STP_\w+) = \{", stelander_effects[:civil]))[-1][1]
+        payload = block(stelander_effects, owner)
+        self.assertGreater(payload.index("VAL_open_refugee_waves = yes"),
+                           payload.index("set_global_flag = STP_cw_started"))
 
     def test_no_population_faucet_or_permanent_stability_farming(self):
         def walk(items):
@@ -867,7 +870,7 @@ class CorridorProjectTests(unittest.TestCase):
         }
         self.variables = {"ADISCORD_economy_treasury": 3000}
         self.facts = {("VAL", "has_capitulated", "no"): True}
-        for region in ("occidia", "west", "stelander", "vorkerland"):
+        for region in ("occidia", "west", "stelander", "vorkerland", "south"):
             self.facts[("VAL", f"VAL_trade_route_{region}_open", "yes")] = True
         self.rewards = []
 
@@ -933,16 +936,16 @@ class CorridorProjectTests(unittest.TestCase):
 
     def test_one_paid_project_blocks_other_routes_and_delivers_only_once(self):
         self.run_effect("VAL_begin_occidia_corridor_project")
-        self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2250)
+        self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2600)
         self.assertEqual(
-            self.variables["ADISCORD_economy_current_month_action_costs"], 750
+            self.variables["ADISCORD_economy_current_month_action_costs"], 400
         )
         self.assertEqual(self.rewards, [])
         self.run_effect("VAL_begin_west_corridor_project")
         self.assertEqual(self.variables["VAL_corridor_project"], 1)
-        self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2250)
+        self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2600)
         self.decision_effect("VAL_upgrade_north_route", "cancel_effect")
-        self.assertEqual(self.variables["VAL_corridor_deposit"], 750)
+        self.assertEqual(self.variables["VAL_corridor_deposit"], 400)
         self.decision_effect("VAL_upgrade_occidia_route", "remove_effect")
         count = len(self.rewards)
         self.assertGreater(count, 0)
@@ -954,27 +957,66 @@ class CorridorProjectTests(unittest.TestCase):
 
     def test_loss_at_delivery_refunds_exact_payment_and_allows_retry(self):
         self.run_effect("VAL_begin_west_corridor_project")
-        self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2000)
+        self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2500)
         self.facts[("VAL", "VAL_trade_route_west_open", "yes")] = False
         self.decision_effect("VAL_upgrade_north_route", "remove_effect")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 3000)
         self.assertEqual(
-            self.variables["ADISCORD_economy_current_month_action_income"], 1000
+            self.variables["ADISCORD_economy_current_month_action_income"], 500
         )
         self.assertEqual(self.rewards, [])
         self.decision_effect("VAL_upgrade_north_route", "cancel_effect")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 3000)
         self.facts[("VAL", "VAL_trade_route_west_open", "yes")] = True
         self.run_effect("VAL_begin_west_corridor_project")
-        self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2000)
+        self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2500)
 
     def test_affordability_boundary(self):
-        self.variables["ADISCORD_economy_treasury"] = 749
+        self.variables["ADISCORD_economy_treasury"] = 399.999
         self.run_effect("VAL_begin_occidia_corridor_project")
         self.assertNotIn("VAL_corridor_deposit", self.variables)
-        self.variables["ADISCORD_economy_treasury"] = 750
+        self.variables["ADISCORD_economy_treasury"] = 400
         self.run_effect("VAL_begin_occidia_corridor_project")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 0)
+
+    def test_every_corridor_quote_matches_payment_and_single_refund(self):
+        projects = (
+            ("occidia", "occidia", 400),
+            ("west", "north", 500),
+            ("stelander", "stelander", 300),
+            ("vorkerland", "vorkerland", 300),
+            ("south", "south", 400),
+        )
+        for region, decision_route, price in projects:
+            with self.subTest(region=region):
+                self.setUp()
+                decision_id = f"VAL_upgrade_{decision_route}_route"
+                decision = self.decisions[decision_id]
+                self.assertEqual(scalar(decision, "cost"), "0")
+                quote = scalar(decision, "custom_cost_text")
+                for language in ("russian", "english"):
+                    path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+                    text = path.read_text(encoding="utf-8-sig")
+                    for suffix in ("", "_blocked", "_tooltip"):
+                        match = re.search(rf'^\s*{quote}{suffix}:\d*\s*"(.*)"$', text, re.M)
+                        self.assertIsNotNone(match, (language, quote, suffix))
+                        self.assertRegex(re.sub(r"§.", "", match[1]), rf'{price} £ADISCORD_economy_treasury_texticon')
+                begin = f"VAL_begin_{region}_corridor_project"
+                self.variables["ADISCORD_economy_treasury"] = price - 0.001
+                self.run_effect(begin)
+                self.assertNotIn("VAL_corridor_deposit", self.variables)
+                self.variables["ADISCORD_economy_treasury"] = price
+                self.run_effect(begin)
+                self.assertEqual(self.variables["ADISCORD_economy_treasury"], 0)
+                self.assertEqual(self.variables["VAL_corridor_deposit"], price)
+                self.assertEqual(self.variables["ADISCORD_economy_current_month_action_costs"], price)
+                self.variables["ADISCORD_economy_treasury"] = 17
+                self.decision_effect(decision_id, "cancel_effect")
+                self.decision_effect(decision_id, "cancel_effect")
+                self.assertEqual(self.variables["ADISCORD_economy_treasury"], price + 17)
+                self.assertEqual(self.variables["ADISCORD_economy_current_month_action_income"], price)
+                self.assertNotIn("VAL_corridor_deposit", self.variables)
+                self.assertEqual(self.rewards, [])
 
     def test_formations_are_offered_after_assembly_with_time_left_for_reply(self):
         categories = load("common/decisions/ADISCORD_VAL_decisions.txt")
@@ -1260,8 +1302,8 @@ class GreyMarketIncomeTests(unittest.TestCase):
                 )
                 f.run("VAL_black_market_reduce_monthly_income", scope="VAL")
                 f.run("VAL_black_market_reduce_weekly_bonus", scope="VAL")
-                f.run("VAL_corridor_income_20", scope="VAL")
-                f.run("VAL_corridor_income_10", scope="VAL")
+                f.run("VAL_corridor_income_6", scope="VAL")
+                f.run("VAL_corridor_income_4", scope="VAL")
                 self.assertAlmostEqual(
                     v["ADISCORD_economy_monthly_income"], 1300 * (1 - rate)
                 )
@@ -1269,14 +1311,14 @@ class GreyMarketIncomeTests(unittest.TestCase):
                     v["ADISCORD_economy_final_weekly_income_bonus"], 20 * (1 - rate)
                 )
                 self.assertAlmostEqual(
-                    v["ADISCORD_economy_treasury"], 100 + 30 * (1 - rate)
+                    v["ADISCORD_economy_treasury"], 100 + 10 * (1 - rate)
                 )
                 self.assertAlmostEqual(
-                    v["ADISCORD_economy_current_month_action_income"], 30 * (1 - rate)
+                    v["ADISCORD_economy_current_month_action_income"], 10 * (1 - rate)
                 )
                 f.run("VAL_black_market_record_budget_loss", scope="VAL")
-                self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 350 * rate)
-                self.assertAlmostEqual(v["VAL_black_market_loss_total"], 350 * rate)
+                self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 330 * rate)
+                self.assertAlmostEqual(v["VAL_black_market_loss_total"], 330 * rate)
                 self.assertEqual(v["VAL_black_market_route_loss_pending"], 0)
 
     def test_forecasts_do_not_count_as_losses_and_settlement_consumes_pending_once(
@@ -1291,13 +1333,13 @@ class GreyMarketIncomeTests(unittest.TestCase):
             f.run("VAL_black_market_reduce_monthly_income", scope="VAL")
             f.run("VAL_black_market_reduce_weekly_bonus", scope="VAL")
         self.assertEqual(v.get("VAL_black_market_loss_total", 0), 0)
-        f.run("VAL_corridor_income_20", scope="VAL")
+        f.run("VAL_corridor_income_4", scope="VAL")
         f.run("VAL_black_market_record_budget_loss", scope="VAL")
-        self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 170)
-        self.assertAlmostEqual(v["VAL_black_market_loss_total"], 170)
+        self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 162)
+        self.assertAlmostEqual(v["VAL_black_market_loss_total"], 162)
         f.run("VAL_black_market_record_budget_loss", scope="VAL")
         self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 160)
-        self.assertAlmostEqual(v["VAL_black_market_loss_total"], 330)
+        self.assertAlmostEqual(v["VAL_black_market_loss_total"], 322)
 
     def test_zero_income_and_negative_bonus_do_not_create_fictitious_losses(self):
         f, v = self.fixture(100)
@@ -1332,13 +1374,13 @@ class GreyMarketIncomeTests(unittest.TestCase):
         f.run("ADISCORD_economy_calculate_monthly_balance", scope="VAL")
         f.run("ADISCORD_economy_calculate_weekly_budget", scope="VAL")
         self.assertAlmostEqual(v["ADISCORD_economy_monthly_balance"] * 3 / 13, 130)
-        f.run("VAL_corridor_income_20", scope="VAL")
-        f.run("VAL_corridor_income_10", scope="VAL")
+        f.run("VAL_corridor_income_6", scope="VAL")
+        f.run("VAL_corridor_income_4", scope="VAL")
         f.run("ADISCORD_economy_apply_weekly_balance", scope="VAL")
-        self.assertAlmostEqual(v["ADISCORD_economy_treasury"], 245)
+        self.assertAlmostEqual(v["ADISCORD_economy_treasury"], 235)
         self.assertAlmostEqual(v["ADISCORD_economy_last_period_unexplained_delta"], 0)
-        self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 175)
-        self.assertAlmostEqual(v["VAL_black_market_loss_total"], 175)
+        self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 165)
+        self.assertAlmostEqual(v["VAL_black_market_loss_total"], 165)
 
     def test_full_and_tax_only_income_refresh_apply_loss_once(self):
         f, v = self.fixture(75)
@@ -1430,9 +1472,9 @@ class GreyMarketIncomeTests(unittest.TestCase):
                                 loc[scalar(entry.value, "localization_key")]
                             )
                             break
-                    f.run("VAL_corridor_income_30", scope="VAL")
+                    f.run("VAL_corridor_income_6", scope="VAL")
                     if upgraded:
-                        f.run("VAL_corridor_income_20", scope="VAL")
+                        f.run("VAL_corridor_income_4", scope="VAL")
                     self.assertAlmostEqual(v["ADISCORD_economy_treasury"], expected)
 
     def test_loading_a_save_preserves_recorded_losses(self):
@@ -1478,7 +1520,7 @@ class GreyMarketIncomeTests(unittest.TestCase):
 
     def test_route_loss_survives_recovery_before_budget_settlement(self):
         f, v = self.fixture(75)
-        f.run("VAL_corridor_income_20", scope="VAL")
+        f.run("VAL_corridor_income_4", scope="VAL")
         v.update(
             VAL_black_market_pressure=0,
             ADISCORD_economy_monthly_income=1300,
@@ -1487,11 +1529,11 @@ class GreyMarketIncomeTests(unittest.TestCase):
         f.run("VAL_black_market_reduce_monthly_income", scope="VAL")
         f.run("VAL_black_market_reduce_weekly_bonus", scope="VAL")
         f.run("VAL_black_market_record_budget_loss", scope="VAL")
-        self.assertEqual(v["VAL_black_market_loss_last_week"], 10)
-        self.assertEqual(v["VAL_black_market_loss_total"], 10)
+        self.assertEqual(v["VAL_black_market_loss_last_week"], 2)
+        self.assertEqual(v["VAL_black_market_loss_total"], 2)
         f.run("VAL_black_market_record_budget_loss", scope="VAL")
         self.assertEqual(v["VAL_black_market_loss_last_week"], 0)
-        self.assertEqual(v["VAL_black_market_loss_total"], 10)
+        self.assertEqual(v["VAL_black_market_loss_total"], 2)
 
 
 if __name__ == "__main__":

@@ -31,4 +31,39 @@ spriteTypes = {
 		name = "GFX_portrait_WEF_Elina_Fenn"
 		texturefile = "gfx/leaders/WEF/portrait_WEF_Elina_Fenn.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_MZR_Ration_Assembly"
+		texturefile = "gfx/leaders/MZR/portrait_MZR_Ration_Assembly.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_KYZ_Qanat_Assembly"
+		texturefile = "gfx/leaders/KYZ/portrait_KYZ_Qanat_Assembly.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SFD_administrative_board"
+		texturefile = "gfx/leaders/SFD/portrait_SFD_administrative_board.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SCD_administrative_board"
+		texturefile = "gfx/leaders/SCD/portrait_SCD_administrative_board.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SMD_administrative_board"
+		texturefile = "gfx/leaders/SMD/portrait_SMD_administrative_board.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SOD_administrative_board"
+		texturefile = "gfx/leaders/SOD/portrait_SOD_administrative_board.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SDA_administrative_board"
+		texturefile = "gfx/leaders/SDA/portrait_SDA_administrative_board.png"
+	}
 }

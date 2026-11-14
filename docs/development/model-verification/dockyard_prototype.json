@@ -1,0 +1,45 @@
+{
+  "generator": "tools/builders/build_adiscord_dockyard_prototype.py",
+  "inputs": {
+    "tools/builders/build_adiscord_dockyard_prototype.py": "65cba30095b739d5b9e08112e551f4262731472e72c6e83bb086bc8984135410",
+    "tools/builders/build_adiscord_bunker_prototype.py": "a1d3719e5434a3b4dea3c7e943604ebaddcecbc7708215f142e423b98fed54cc"
+  },
+  "purpose": "Development-only dry-dock study",
+  "native_export_verified": false,
+  "hoi4_runtime_verified": false,
+  "intact": {
+    "objects": 161,
+    "triangles": 2608,
+    "geometry_validated": true
+  },
+  "damaged": {
+    "objects": 154,
+    "triangles": 2628,
+    "geometry_validated": true
+  },
+  "clearances": {
+    "main_hook_above_hull": 0.153034,
+    "hull_width": 1.55
+  },
+  "materials": "Procedural Blender review materials",
+  "terrain_note": "Dock floor is above model ground; the mesh does not excavate map terrain. Review water is not an exported asset.",
+  "sources": {
+    "dockyard_damaged_prototype.blend": "d9e3f06c3add68a85a1c8d0b91fee6301eb9d60dfff9c5e77da8a42637ea4ef3",
+    "dockyard_prototype.blend": "d5f55e30432ada56248c24f2606784fe2535b65eb08228267aefa14f0f9ae670"
+  },
+  "previews": {
+    "front.png": "b8b92c8e33ba3fd6f7df095945486d0555c7f6bf6b4eaab613a693c4b8eaf036",
+    "opposite.png": "fed2a68d56083a03f34069824fa2aeb7b56877f564d3b1dc2b24b7bea5feb5df",
+    "rear.png": "17fea26016d450d0708c123f45aff48cb7b0491a110f1bab6b7cab91e5e1b7ac",
+    "map.png": "238907a1e8f1aabd4f08b013e8278603aba90869844b8cba18ceb170b47072b6",
+    "top.png": "2865f10a4b32eac024ed0d58e4a7adfb36be86c597533f7cdcbb371f60bfa6d7",
+    "map_256.png": "fdeab092357e9c29a60d1b8efa246814f65734eb533c8184ad7cdae9c0343496",
+    "map_128.png": "1d2ef80da6ca6e230b8d6960afb77914ff649d11a8385170b5734b34093ba643",
+    "map_64.png": "02f44e984fffab87548b97b69e991aaf86534abd0cbbec96b1e17bf6998e9f1e",
+    "damaged_front.png": "32958af04afdba9c6521b3ffdf05b0048b6eef748f83abc84461c00b946f55d9",
+    "damaged_map.png": "42a6e41e91bdd7c58a11e212490effac02b78ad3d645a0c3cdc9e5bd7664b119",
+    "review_angles.png": "0cb340d54fb12dd8ff592dbda36c0cbebb8e717ff6ff859edce7c7c023d8bd87",
+    "review_small.png": "ec629ccb893f16602f4280fbc9ce44744dfe30ac48e9c587825620d21b61c3e8",
+    "review_damaged.png": "294472560c67fecfe22860dbcfe8300cef1f86b46d4ee7ff7aab85c4879c0eab"
+  }
+}

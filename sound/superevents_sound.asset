@@ -334,3 +334,15 @@ sound = {
 	name = "superevent_south_civil_service_sound"
 	file = "superevents/superevent_south_civil_service_sound.wav"
 }
+
+# Slow Meadow, Crown of Amber Canopy; credits in South/audio_sources.json.
+sound = {
+	name = "superevent_south_federation_sound"
+	file = "superevents/superevent_south_federation_sound.wav"
+}
+
+# Northaunt, Until Dawn Do Us Part; credits in South/audio_sources.json.
+sound = {
+	name = "superevent_south_oil_union_sound"
+	file = "superevents/superevent_south_oil_union_sound.wav"
+}

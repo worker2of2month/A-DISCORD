@@ -177,10 +177,19 @@ focus_tree = {
 	# Эпилог виден по ADISCORD_south_hegemon_SHL и растёт из общего фокуса
 	# SHL_south_crown_of_the_south (колонка 10, строка 4).
 
+	# Carried across the war-tree swap; hidden by allow_branch.
+	shared_focus = SHL_sw_war_conclave
+	shared_focus = SHL_h_hired_contracts
+	shared_focus = SHL_c_charters_for_occupied
+	shared_focus = SHL_d_war_orders_all
+	shared_focus = SHL_r_hire_armies
+	shared_focus = SHL_k_shift_brigades
+	shared_focus = SHL_n_emergency_conclave
 }
 
 shared_focus = {
 		id = SHL_law_of_continuous_fire
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_steel_mill
 		x = 13
 		y = 0
@@ -192,12 +201,24 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 40
+			add_stability = 0.03
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_law_of_continuous_fire_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_political_power_gain value = 0.05 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_census_of_nine
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_central_planning
 		x = 13
 		y = 1
@@ -224,6 +245,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_reserve_for_next_shift
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_resource_extraction
 		x = 13
 		y = 2
@@ -251,6 +273,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_conclave_rules
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_improve_the_administration
 		x = 13
 		y = 3
@@ -282,6 +305,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_common_industrial_account
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_currency_reforms
 		x = 13
 		y = 5
@@ -314,6 +338,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_engineer_society
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_industrial_experts
 		x = 13
 		y = 6
@@ -340,6 +365,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_right_to_land
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_land_reclamation
 		x = 13
 		y = 7
@@ -367,6 +393,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_common_fund
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_price_controls
 		x = 12
 		y = 8
@@ -393,6 +420,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_own_transport
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_supply_line
 		x = 14
 		y = 8
@@ -453,6 +481,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_workers_charter
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_workers
 		x = 13
 		y = 9
@@ -485,6 +514,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_build_tenth_complex
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_construction2
 		x = 13
 		y = 10
@@ -506,6 +536,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_first_pour_focus
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_steel
 		x = 13
 		y = 11
@@ -527,6 +558,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_tenth_voice
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_vote
 		x = 13
 		y = 12
@@ -560,6 +592,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_houses_railway
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_railroad
 		x = 3
 		y = 2
@@ -609,6 +642,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_school_of_masters
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_education
 		x = 1
 		y = 3
@@ -632,6 +666,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_baryat_mines
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_mining_industry
 		x = 5
 		y = 3
@@ -670,6 +705,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_careful_smelting
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_industry_1
 		x = 0
 		y = 4
@@ -700,6 +736,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_overtime_shift
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_industry_2
 		x = 2
 		y = 4
@@ -730,6 +767,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_ore_prospecting
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_mineral_prospecting
 		x = 5
 		y = 4
@@ -771,6 +809,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_repair_without_extinction
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_modernize_industry
 		x = 1
 		y = 5
@@ -794,6 +833,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_smelter_quarters
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_construct_civ_factory
 		x = 5
 		y = 5
@@ -845,6 +885,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_metal_market
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_concessions
 		x = 3
 		y = 6
@@ -875,6 +916,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_quarter_listening
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_public_meetings
 		x = 7
 		y = 2
@@ -904,6 +946,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_heralds_table
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_conference
 		x = 7
 		y = 3
@@ -930,6 +973,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_shift_arbitration
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_court
 		x = 7
 		y = 4
@@ -962,6 +1006,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_incident_office
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_national_security
 		x = 7
 		y = 5
@@ -982,6 +1027,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_counting_chamber
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_reduce_unneccessary_expenditure
 		x = 7
 		y = 6
@@ -1001,6 +1047,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_new_house
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_industrialists
 		x = 10
 		y = 4
@@ -1029,6 +1076,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_house_compromise
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_improve_relations
 		x = 10
 		y = 5
@@ -1061,6 +1109,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_house_war_mandate
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_money_for_equipment
 		x = 9
 		y = 6
@@ -1073,12 +1122,15 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_house_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_open_conclave
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_social_democracy
 		x = 16
 		y = 4
@@ -1107,6 +1159,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_city_charters
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_freedom_council
 		x = 16
 		y = 5
@@ -1139,6 +1192,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_city_war_mandate
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_manpower
 		x = 17
 		y = 6
@@ -1151,12 +1205,15 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_city_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_nur_directorate
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_military_dictatorship
 		x = 19
 		y = 4
@@ -1184,6 +1241,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_common_dispatch
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_radio_communication
 		x = 19
 		y = 5
@@ -1216,6 +1274,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_directorate_war_mandate
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_construct_military
 		x = 20
 		y = 6
@@ -1228,12 +1287,15 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_directorate_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_railway_guard
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_home_defense
 		x = 25
 		y = 2
@@ -1265,6 +1327,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_factory_air_defence
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_air_defense
 		x = 22
 		y = 3
@@ -1301,6 +1364,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_factory_militia
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_allies_build_infantry
 		x = 25
 		y = 3
@@ -1323,10 +1387,11 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_industrial_evacuation
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_reorient_production
 		x = 22
 		y = 4
-		cost = 5
+		cost = 9
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_factory_air_defence
@@ -1344,6 +1409,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_campaign_logistics
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_truck
 		x = 24
 		y = 4
@@ -1362,6 +1428,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_southern_watch
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_defence
 		x = 26
 		y = 4
@@ -1394,6 +1461,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_furnace_arsenals
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_RUS_industrial_belt
 		x = 22
 		y = 5
@@ -1445,6 +1513,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_desert_guard_contracts
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_desert_training
 		x = 24
 		y = 5
@@ -1464,6 +1533,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_mobilise_furnaces
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_small_arms
 		x = 26
 		y = 5
@@ -1489,6 +1559,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_cannon_foundries
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_army_artillery
 		x = 22
 		y = 6
@@ -1517,6 +1588,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_conclave_army
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_soldier_salute
 		x = 25
 		y = 6
@@ -1549,6 +1621,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_water_question
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_construct_infrastructure
 		x = 29
 		y = 3
@@ -1571,6 +1644,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_qanat_guard
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_territory_or_war
 		x = 29
 		y = 4
@@ -1592,6 +1666,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_veyr_duties
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_trade
 		x = 31
 		y = 3
@@ -1614,6 +1689,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_veyr_ultimatum
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_demand_territory
 		x = 31
 		y = 4
@@ -1635,6 +1711,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_no_more_rations
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_provoke_border_clashes
 		x = 28
 		y = 5
@@ -1654,6 +1731,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_peace_has_a_price
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_economic_recovery
 		x = 28
 		y = 6
@@ -1675,6 +1753,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_southern_horizon
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_major_alliance
 		x = 28
 		y = 7
@@ -1710,6 +1789,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_admit_tenth_house
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_improve_the_administration_2
 		x = 10
 		y = 13
@@ -1756,6 +1836,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_rights_without_fire
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_universal_suffrage
 		x = 16
 		y = 13
@@ -1806,6 +1887,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_state_furnaces
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_stalinist_industry
 		x = 19
 		y = 13
@@ -1846,6 +1928,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_regency_of_crests
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_monarchy_1
 		x = 22
 		y = 13
@@ -1883,6 +1966,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_commune_of_shift_councils
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_red_flags
 		x = 7
 		y = 13
@@ -1920,6 +2004,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_shift_councils
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_self_management
 		x = 4
 		y = 15
@@ -1941,6 +2026,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_delegates
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_vote
 		x = 0
 		y = 16
@@ -1966,6 +2052,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_standing_council
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_freedom_council
 		x = 2
 		y = 16
@@ -2004,6 +2091,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_furnaces_to_workers
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_expropriate_industrialist
 		x = 4
 		y = 16
@@ -2030,6 +2118,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_rotating_smelting
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_steel
 		x = 6
 		y = 16
@@ -2077,6 +2166,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_no_crests
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_strike_at_democracy1
 		x = 1
 		y = 17
@@ -2103,6 +2193,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_common_smelting
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_industry_3
 		x = 3
 		y = 17
@@ -2125,6 +2216,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_qanat_brotherhood
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_workers_and_farmers_rise
 		x = 5
 		y = 17
@@ -2168,6 +2260,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_commune_war_mandate
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_red_flags
 		x = 7
 		y = 17
@@ -2183,12 +2276,15 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_commune_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_k_shift_school
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_education
 		x = 0
 		y = 18
@@ -2210,6 +2306,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_common_treasury
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_stockpile_currency
 		x = 2
 		y = 18
@@ -2237,6 +2334,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_commune_of_fire
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_major_alliance
 		x = 4
 		y = 18
@@ -2288,6 +2386,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_commune_charter
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_national_unity
 		x = 1
 		y = 19
@@ -2311,6 +2410,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_commune_prog_ending_a
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_support_communism
 		x = 3
 		y = 19
@@ -2352,6 +2452,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_commune_prog_ending_b
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_worker_administration
 		x = 5
 		y = 19
@@ -2393,6 +2494,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_brotherly_supply
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_truck
 		x = 6
 		y = 18
@@ -2415,6 +2517,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_cauldron_plus
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_industry_1
 		x = 7
 		y = 19
@@ -2437,6 +2540,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_workers_rail
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_railroad
 		x = 6
 		y = 20
@@ -2493,6 +2597,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_workers_wells
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_land_reclamation
 		x = 8
 		y = 20
@@ -2522,6 +2627,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_arms_for_shifts
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_small_arms
 		x = 7
 		y = 21
@@ -2552,6 +2658,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_councils_abroad
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_worker_expansion
 		x = 4
 		y = 20
@@ -2581,6 +2688,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_councils_term
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_political_pressure
 		x = 0
 		y = 21
@@ -2613,6 +2721,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_weber_contact
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_smugglers
 		x = 2
 		y = 22
@@ -2648,6 +2757,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_oil_underground
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_ADISCORD_sabotage
 		x = 4
 		y = 21
@@ -2676,6 +2786,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_k_strike_support
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_strike_at_democracy2
 		x = 0
 		y = 22
@@ -2701,6 +2812,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_oil_uprising
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_support_communism
 		x = 4
 		y = 22
@@ -2739,7 +2851,7 @@ shared_focus = {
 		y = 20
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ANNEXATION }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_south_crown_of_the_south
 		}
@@ -2762,7 +2874,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_k_union_of_councils
 		}
@@ -2786,6 +2898,17 @@ shared_focus = {
 					state = 67
 				}
 			}
+			add_fuel = 4000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_k_oil_commune_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_consumer_goods value = -0.02 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 50 }
 	}
@@ -2797,7 +2920,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_k_union_of_councils
 		}
@@ -2856,7 +2979,7 @@ shared_focus = {
 		y = 22
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_k_oil_commune
 			focus = SHL_k_furnace_commune
@@ -2879,7 +3002,7 @@ shared_focus = {
 		y = 22
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_k_oil_commune
 			focus = SHL_k_furnace_commune
@@ -2967,7 +3090,7 @@ shared_focus = {
 		y = 23
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_k_no_more_crests
 		}
@@ -2986,6 +3109,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_golden_gate_cartel
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_positive_trade_relations
 		x = 19
 		y = 15
@@ -3009,6 +3133,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_cartel_price
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_price_controls
 		x = 16
 		y = 16
@@ -3047,6 +3172,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_metal_exchange
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_industry_investment
 		x = 18
 		y = 16
@@ -3074,6 +3200,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_house_guards
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_commonwealth_build_infantry
 		x = 20
 		y = 16
@@ -3099,6 +3226,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_veyr_partnership
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_treaty
 		x = 22
 		y = 16
@@ -3140,6 +3268,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_guild_schools
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_university_1
 		x = 17
 		y = 17
@@ -3176,6 +3305,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_house_guards_charter
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_allies_build_infantry
 		x = 19
 		y = 17
@@ -3208,6 +3338,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_conclave_mercenaries
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_military_mission
 		x = 21
 		y = 17
@@ -3232,6 +3363,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_golden_gate_festival
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_happy_cheer
 		x = 17
 		y = 18
@@ -3253,6 +3385,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_heralds_court
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_sympathetic_judges
 		x = 20
 		y = 18
@@ -3278,6 +3411,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_conclave_of_ten
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_ADISCORD_industrial_development
 		x = 22
 		y = 18
@@ -3329,6 +3463,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_council_of_ten
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_vote
 		x = 19
 		y = 19
@@ -3361,6 +3496,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_houses_prog_ending_a
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_monarchy_1
 		x = 21
 		y = 19
@@ -3399,6 +3535,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_houses_prog_ending_b
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_major_alliance
 		x = 23
 		y = 19
@@ -3436,6 +3573,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_tenth_house_seat
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_monarchy_2
 		x = 19
 		y = 20
@@ -3456,6 +3594,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_export_houses
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_industrialists
 		x = 30
 		y = 16
@@ -3482,6 +3621,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_rail_to_sea
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_railroad
 		x = 29
 		y = 17
@@ -3538,6 +3678,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_rail_to_qanats
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_construct_infrastructure
 		x = 31
 		y = 17
@@ -3594,6 +3735,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_cargo_insurance
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_merchant_fleet
 		x = 29
 		y = 18
@@ -3616,6 +3758,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_house_credit
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_money_for_equipment
 		x = 31
 		y = 18
@@ -3638,6 +3781,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_veyr_harbour_share
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_construct_naval_dockyard
 		x = 29
 		y = 19
@@ -3686,6 +3830,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_bank_of_houses
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_currency_reforms
 		x = 30
 		y = 20
@@ -3715,6 +3860,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_debt_network
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_trade
 		x = 22
 		y = 20
@@ -3754,6 +3900,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_debt_term
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_stockpile_currency
 		x = 20
 		y = 21
@@ -3782,6 +3929,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_trade_protectorates
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_dangerous_deal
 		x = 22
 		y = 21
@@ -3812,6 +3960,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_great_road
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_improve_roads
 		x = 22
 		y = 22
@@ -3842,6 +3991,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_kerdan_trading_house
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_improve_relations
 		x = 24
 		y = 22
@@ -3882,6 +4032,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_h_road_stations
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_supply_line
 		x = 20
 		y = 23
@@ -3939,6 +4090,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_oil_for_furnaces
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_forceful_treaty
 		x = 22
 		y = 23
@@ -3977,7 +4129,7 @@ shared_focus = {
 		y = 20
 		cost = 3
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_south_crown_of_the_south
 		}
@@ -4002,7 +4154,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_h_concession_of_svetlogorye
 		}
@@ -4049,7 +4201,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_h_concession_of_svetlogorye
 		}
@@ -4081,7 +4233,7 @@ shared_focus = {
 		y = 22
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_h_southern_exchange
 			focus = SHL_h_southern_bank
@@ -4104,7 +4256,7 @@ shared_focus = {
 		y = 23
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_h_crown_of_trade
 		}
@@ -4133,7 +4285,7 @@ shared_focus = {
 		y = 23
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_h_crown_of_trade
 		}
@@ -4160,6 +4312,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_council_of_cities
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_the_council_of_europe
 		x = 38
 		y = 15
@@ -4184,6 +4337,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_fire_and_water
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 37
 		y = 16
@@ -4226,6 +4380,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_workers_brigades
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_limited_social_mobilization
 		x = 39
 		y = 16
@@ -4253,6 +4408,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_southern_compact
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_alliance
 		x = 38
 		y = 17
@@ -4303,6 +4459,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_cities_prog_ending_a
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_welfare
 		x = 37
 		y = 18
@@ -4345,6 +4502,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_cities_prog_ending_b
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_low_cost_housing
 		x = 39
 		y = 18
@@ -4387,6 +4545,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_mariam_cabinet
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_advisors
 		x = 35
 		y = 16
@@ -4408,6 +4567,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_council_delegates
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_vote
 		x = 34
 		y = 17
@@ -4433,6 +4593,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_shift_assembly
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_workers
 		x = 36
 		y = 17
@@ -4463,6 +4624,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_regular_elections
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_election
 		x = 35
 		y = 18
@@ -4487,6 +4649,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_quarter_militia
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_home_defense
 		x = 34
 		y = 19
@@ -4517,6 +4680,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_compact_army
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_army_doctrines
 		x = 36
 		y = 19
@@ -4555,6 +4719,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_registry_of_all
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_universal_suffrage
 		x = 34
 		y = 20
@@ -4584,6 +4749,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_open_ledger
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_reduce_unneccessary_expenditure
 		x = 36
 		y = 20
@@ -4615,6 +4781,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_charter_of_cities
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_democratic_europe
 		x = 35
 		y = 21
@@ -4638,6 +4805,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_civic_orders_plus
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_production2
 		x = 49
 		y = 16
@@ -4671,6 +4839,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_furnace_schools
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_education
 		x = 48
 		y = 17
@@ -4692,6 +4861,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_quarter_hospitals
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_field_hostpital
 		x = 50
 		y = 17
@@ -4713,6 +4883,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_cooperative_bank
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_stockpile_currency
 		x = 49
 		y = 18
@@ -4741,6 +4912,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_water_works
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_land_reclamation
 		x = 48
 		y = 19
@@ -4768,6 +4940,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_harbour_works
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_merchant_fleet
 		x = 50
 		y = 19
@@ -4796,6 +4969,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_common_rail
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_railroad
 		x = 49
 		y = 20
@@ -4842,6 +5016,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_wells_charters
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_league_of_nations
 		x = 38
 		y = 19
@@ -4873,6 +5048,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_compact_staff
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_full_social_mobilization
 		x = 38
 		y = 20
@@ -4901,6 +5077,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_free_road
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_road_investment
 		x = 38
 		y = 21
@@ -4929,6 +5106,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_charter_round
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_conference
 		x = 40
 		y = 20
@@ -4957,6 +5135,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_compact_court
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_court
 		x = 40
 		y = 21
@@ -4996,6 +5175,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_c_cistern_charter
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_improve_relations
 		x = 40
 		y = 22
@@ -5031,6 +5211,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_war_of_charters
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_military_sphere
 		x = 38
 		y = 22
@@ -5069,7 +5250,7 @@ shared_focus = {
 		y = 20
 		cost = 3
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_south_crown_of_the_south
 		}
@@ -5092,7 +5273,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_RESEARCH }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_c_svetlogorye_charter
 		}
@@ -5105,7 +5286,23 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_research_slot = 1
+			add_political_power = 40
+			add_tech_bonus = {
+				name = SHL_c_southern_council
+				bonus = 1
+				uses = 1
+				category = industry
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_c_southern_council_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_research_speed value = 0.04 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 50 }
 	}
@@ -5117,7 +5314,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_c_svetlogorye_charter
 		}
@@ -5180,7 +5377,7 @@ shared_focus = {
 		y = 22
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_c_southern_council
 		}
@@ -5203,7 +5400,7 @@ shared_focus = {
 		y = 22
 		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_c_southern_commons
 		}
@@ -5231,7 +5428,7 @@ shared_focus = {
 		y = 23
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_c_compact_assembly
 			focus = SHL_c_open_seats
@@ -5249,6 +5446,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_war_directorate
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_military_industry
 		x = 57
 		y = 15
@@ -5281,6 +5479,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_right_to_water
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_more_territorial_claims
 		x = 56
 		y = 16
@@ -5309,6 +5508,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_key_to_sea
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_occupy_start_coast
 		x = 58
 		y = 16
@@ -5342,6 +5542,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_iron_shahrabad
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_army_attack
 		x = 57
 		y = 17
@@ -5400,6 +5601,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_directorate_prog_ending_a
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_production
 		x = 56
 		y = 18
@@ -5442,6 +5644,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_directorate_prog_ending_b
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_mass_production
 		x = 58
 		y = 18
@@ -5485,6 +5688,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_nur_director
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_improve_the_administration_2
 		x = 54
 		y = 16
@@ -5507,6 +5711,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_state_furnaces_law
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_central_planning
 		x = 53
 		y = 17
@@ -5596,6 +5801,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_concessions_law
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_concessions
 		x = 55
 		y = 17
@@ -5624,6 +5830,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_darban_engineers
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_industrial_experts
 		x = 54
 		y = 18
@@ -5644,12 +5851,24 @@ shared_focus = {
 				uses = 2
 				category = industry
 			}
+			add_political_power = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_d_darban_engineers_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_efficiency_gain value = 0.05 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_d_military_directorate
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_construct_military
 		x = 53
 		y = 19
@@ -5695,6 +5914,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_industrial_directorate
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_construct_civ_factory
 		x = 55
 		y = 19
@@ -5740,6 +5960,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_directorate_courts
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_court
 		x = 53
 		y = 20
@@ -5767,6 +5988,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_quotas_law
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_manpower
 		x = 55
 		y = 20
@@ -5789,6 +6011,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_iron_charter
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_stalinist_industry
 		x = 54
 		y = 21
@@ -5812,6 +6035,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_directorate_railway
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_railroad
 		x = 69
 		y = 16
@@ -5833,6 +6057,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_state_bank
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_stockpile_currency
 		x = 67
 		y = 17
@@ -5859,6 +6084,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_arsenal_orders_plus
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_small_arms
 		x = 71
 		y = 17
@@ -5894,6 +6120,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_fuel_depots
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_supply_line
 		x = 67
 		y = 18
@@ -5927,6 +6154,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_cannon_works
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_army_artillery
 		x = 70
 		y = 18
@@ -5948,12 +6176,29 @@ shared_focus = {
 				amount = 150
 				producer = SHL
 			}
+			add_tech_bonus = {
+				name = SHL_d_cannon_works
+				bonus = 0.5
+				uses = 1
+				category = artillery
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_d_cannon_works_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_arms_speed value = 0.05 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_d_truck_works
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_truck
 		x = 72
 		y = 18
@@ -5975,12 +6220,28 @@ shared_focus = {
 				amount = 450
 				producer = SHL
 			}
+			707 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+						infrastructure < 5
+					}
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 10
+				producer = SHL
+			}
 		}
 		ai_will_do = { base = 1 }
 	}
 
 shared_focus = {
 		id = SHL_d_evacuation_plan
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_reorient_production
 		x = 69
 		y = 19
@@ -6001,13 +6262,30 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_research_slot = 1
+			add_tech_bonus = {
+				name = SHL_d_evacuation_plan
+				bonus = 1
+				uses = 1
+				category = industry
+			}
+			add_stability = 0.02
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_d_evacuation_plan_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_research_speed value = 0.03 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_south_water_and_sea
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_annex_country
 		x = 57
 		y = 19
@@ -6038,6 +6316,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_last_ration
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_occupy_start_war
 		x = 57
 		y = 20
@@ -6066,6 +6345,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_iron_march
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_army_doctrines_2
 		x = 57
 		y = 21
@@ -6096,6 +6376,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_ultimatum_term
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_demand_territory
 		x = 59
 		y = 20
@@ -6124,6 +6405,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_march_logistics
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_camel_corps
 		x = 59
 		y = 21
@@ -6145,6 +6427,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_d_occupation_administration
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_national_security
 		x = 59
 		y = 22
@@ -6159,13 +6442,13 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_ideas = SHL_general_governorate
-			unlock_decision_tooltip = SHL_nationalise_region
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_south_last_pour
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_major_war
 		x = 57
 		y = 22
@@ -6204,7 +6487,7 @@ shared_focus = {
 		y = 20
 		cost = 3
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_south_crown_of_the_south
 		}
@@ -6218,6 +6501,36 @@ shared_focus = {
 			hidden_effect = {
 				SHL_annex_integration_directorate = yes
 			}
+			SFD = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
+			SCD = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
+			SMD = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
+			SOD = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
+			SDA = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
 		}
 		ai_will_do = { base = 50 }
 	}
@@ -6229,7 +6542,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_d_general_governorate
 		}
@@ -6245,7 +6558,10 @@ shared_focus = {
 			699 = {
 				if = {
 					limit = {
-						is_owned_by = SHL
+						OR = {
+							is_owned_by = SHL
+							owner = { is_subject_of = SHL }
+						}
 						free_building_slots = { building = infrastructure size = 1 include_locked = no }
 					}
 					add_building_construction = {
@@ -6258,7 +6574,10 @@ shared_focus = {
 			292 = {
 				if = {
 					limit = {
-						is_owned_by = SHL
+						OR = {
+							is_owned_by = SHL
+							owner = { is_subject_of = SHL }
+						}
 						free_building_slots = { building = infrastructure size = 1 include_locked = no }
 					}
 					add_building_construction = {
@@ -6271,7 +6590,10 @@ shared_focus = {
 			67 = {
 				if = {
 					limit = {
-						is_owned_by = SHL
+						OR = {
+							is_owned_by = SHL
+							owner = { is_subject_of = SHL }
+						}
 						free_building_slots = { building = infrastructure size = 1 include_locked = no }
 					}
 					add_building_construction = {
@@ -6292,7 +6614,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_MANPOWER }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_d_general_governorate
 		}
@@ -6324,7 +6646,7 @@ shared_focus = {
 		y = 22
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_d_iron_south_rail
 			focus = SHL_d_iron_south_garrisons
@@ -6359,7 +6681,7 @@ shared_focus = {
 		y = 23
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_d_iron_crown
 		}
@@ -6393,7 +6715,7 @@ shared_focus = {
 		y = 23
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_d_iron_crown
 		}
@@ -6403,13 +6725,30 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_research_slot = 1
+			add_political_power = 50
+			add_tech_bonus = {
+				name = SHL_d_nur_legacy
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_d_nur_legacy_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_research_speed value = 0.03 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 50 }
 	}
 
 shared_focus = {
 		id = SHL_regency_council
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_monarchist_sentiment
 		x = 79
 		y = 15
@@ -6430,6 +6769,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_safir_cabinet
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_improve_the_administration
 		x = 76
 		y = 16
@@ -6451,6 +6791,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_restore_privileges
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_sympathetic_judges
 		x = 78
 		y = 16
@@ -6476,6 +6817,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_new_registry
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_vote
 		x = 80
 		y = 16
@@ -6557,6 +6899,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_regent_war_mandate
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_political_pressure
 		x = 82
 		y = 16
@@ -6569,12 +6912,15 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_regent_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
 		id = SHL_private_armies
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_special_forces
 		x = 77
 		y = 17
@@ -6605,6 +6951,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_regent_guard
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_allies_build_infantry
 		x = 79
 		y = 17
@@ -6630,6 +6977,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_debt_shifts
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_stockpile_currency
 		x = 81
 		y = 17
@@ -6651,6 +6999,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_crest_press
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_propaganda
 		x = 76
 		y = 18
@@ -6683,6 +7032,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_hereditary_republic
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_monarchy_2
 		x = 79
 		y = 18
@@ -6732,6 +7082,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_debt_courts
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_court
 		x = 82
 		y = 18
@@ -6752,6 +7103,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_hereditary_seats_restored
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_monarchy_1
 		x = 76
 		y = 19
@@ -6782,6 +7134,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_regency_prog_ending_a
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_army_doctrines
 		x = 78
 		y = 19
@@ -6824,6 +7177,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_regency_prog_ending_b
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_monarchist_workers
 		x = 80
 		y = 19
@@ -6865,6 +7219,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_regency_charter
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_treaty
 		x = 79
 		y = 20
@@ -6886,6 +7241,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_sell_concessions
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_concessions
 		x = 90
 		y = 16
@@ -6906,6 +7262,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_pledge_plus
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_currency_reforms
 		x = 88
 		y = 17
@@ -6933,6 +7290,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_crest_bank
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_money_for_equipment
 		x = 92
 		y = 17
@@ -6960,6 +7318,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_house_mines
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_mining_industry
 		x = 89
 		y = 18
@@ -6988,12 +7347,24 @@ shared_focus = {
 					state = 291
 				}
 			}
+			add_political_power = 30
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_r_house_mines_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_resource_factor value = 0.05 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 10 }
 	}
 
 shared_focus = {
 		id = SHL_r_house_rails
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_railroad
 		x = 91
 		y = 18
@@ -7032,6 +7403,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_tolls
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_consumer_goods
 		x = 90
 		y = 19
@@ -7063,6 +7435,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_throne_and_crests
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_military_deal
 		x = 79
 		y = 21
@@ -7090,6 +7463,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_toll_debtors
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_political_pressure
 		x = 79
 		y = 22
@@ -7120,6 +7494,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_kadir_marriage
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_improve_relations
 		x = 81
 		y = 22
@@ -7175,6 +7550,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_toll_term
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_demand_territory
 		x = 77
 		y = 23
@@ -7209,6 +7585,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_veyr_debt
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_focus_generic_smugglers
 		x = 79
 		y = 23
@@ -7237,6 +7614,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_r_fief_promises
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_dangerous_deal
 		x = 81
 		y = 24
@@ -7269,6 +7647,7 @@ shared_focus = {
 
 shared_focus = {
 		id = SHL_south_war_of_arms
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } }
 		icon = GFX_goal_generic_territory_or_war
 		x = 79
 		y = 24
@@ -7307,7 +7686,7 @@ shared_focus = {
 		y = 20
 		cost = 3
 		search_filters = { FOCUS_FILTER_ANNEXATION }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_south_crown_of_the_south
 		}
@@ -7332,7 +7711,7 @@ shared_focus = {
 		y = 20
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_south_crown_of_the_south
 		}
@@ -7376,7 +7755,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_r_fiefs_of_the_south
 		}
@@ -7408,7 +7787,7 @@ shared_focus = {
 		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_r_fiefs_of_the_south
 		}
@@ -7435,7 +7814,7 @@ shared_focus = {
 		y = 22
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_r_debt_empire
 			focus = SHL_r_crest_empire
@@ -7458,7 +7837,7 @@ shared_focus = {
 		y = 23
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
 		prerequisite = {
 			focus = SHL_r_crown_of_crests
 		}

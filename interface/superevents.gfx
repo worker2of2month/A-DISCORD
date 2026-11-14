@@ -315,7 +315,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_superevent_south_oil_union"
-		textureFile = "gfx/interface/superevents/NAM/superevent_south_boards.png"
+		textureFile = "gfx/interface/superevents/South/superevent_south_oil_union.png"
 	}
 
 	spriteType = {

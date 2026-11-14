@@ -23,6 +23,9 @@
     "isaiah_clock_tower",
     "nam_oilfields",
     "factory_models",
+    "nam_combine",
+    "nam_export_office_icons",
+    "nam_export_offices",
     "minimap",
     "startup_ui_assets",
     "decision_ui_assets",
@@ -48,11 +51,13 @@
     "stp_regions_map",
     "vorkerland_capital_map",
     "nam_basin_map",
+    "south_influence_map",
     "nam_piracy_map",
     "island_administration_icon",
     "party_texticons",
     "vorkerland_flags",
     "stp_flags",
+    "shl_administration_assets",
     "stp_portraits",
     "stp_party_ideologies",
     "ideology_icons",
@@ -99,6 +104,40 @@
       "overlap_explanation": "Owns only marked factory sections in shared registries, two native factory models and their shared textures. Other map meshes and building aliases remain unchanged. Native rebuilding requires Blender and io_pdx_mesh; previews are opt-in."
     },
     {
+      "id": "nam_combine",
+      "owner_module": "tools.builders.build_adiscord_nam_combine",
+      "source_inputs": [
+        "tools/builders/build_adiscord_nam_combine.py",
+        "tools/builders/build_adiscord_factory_models.py",
+        "tools/assets/source/build_shl_palace.py"
+      ],
+      "output_globs": [
+        "gfx/models/buildings/NAM_combine/*.mesh",
+        "gfx/models/buildings/NAM_combine/*.dds",
+        "gfx/entities/mapitems_custom.gfx",
+        "gfx/entities/mapitems_custom.asset",
+        "tools/assets/source/buildings/NAM/combine/*.blend",
+        "docs/development/model-verification/NAM_combine.json",
+        "docs/development/previews/NAM_combine/*.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_combine"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_combine",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns only the marked NAM combine registry sections, three construction meshes and one unplaced reserve factory. Native sources and verification report belong to this builder; previews are opt-in."
+    },
+    {
       "id": "nam_oilfields",
       "owner_module": "tools.builders.build_adiscord_nam_oilfields",
       "source_inputs": [
@@ -109,7 +148,8 @@
         "map/provinces.bmp",
         "map/heightmap.bmp",
         "map/rivers.bmp",
-        "map/buildings.txt"
+        "map/buildings.txt",
+        "tools/data/nam_export_office_sites.json"
       ],
       "output_globs": [
         "gfx/models/buildings/NAM_oilfield/*.mesh",
@@ -646,7 +686,8 @@
         "map/provinces.bmp",
         "map/heightmap.bmp",
         "map/unitstacks.txt",
-        "history/states/*.txt"
+        "history/states/*.txt",
+        "tools/data/nam_export_office_sites.json"
       ],
       "check_command": [
         "{python}",
@@ -2405,6 +2446,41 @@
       "ownership_mode": "exclusive"
     },
     {
+      "id": "south_influence_map",
+      "owner_module": "tools.builders.build_adiscord_south_influence_map",
+      "output_globs": [
+        "gfx/interface/south_influence/*.png",
+        "interface/ADISCORD_south_final_war.gui",
+        "interface/ADISCORD_south_final_war.gfx",
+        "common/scripted_guis/ADISCORD_south_final_war_scripted_gui.txt",
+        "localisation/russian/ADISCORD_south_final_war_l_russian.yml",
+        "localisation/english/ADISCORD_south_final_war_l_english.yml"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_south_influence_map.py",
+        "history/states/*.txt",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "gfx/flags/medium/*.tga"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_south_influence_map"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_south_influence_map",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns south_influence textures and the native GUI/GFX/scripted-GUI files; localisation ownership is limited to BEGIN/END GENERATED SOUTH INFLUENCE MAP sections."
+    },
+    {
       "id": "nam_piracy_map",
       "owner_module": "tools.builders.build_adiscord_nam_piracy_map",
       "output_globs": [
@@ -3032,7 +3108,9 @@
         "sound/superevents/superevent_south_safir_victory_sound.wav",
         "sound/superevents/superevent_south_commune_victory_sound.wav",
         "sound/superevents/superevent_south_rom_iron_victory_sound.wav",
-        "sound/superevents/superevent_south_civil_service_sound.wav"
+        "sound/superevents/superevent_south_civil_service_sound.wav",
+        "sound/superevents/superevent_south_federation_sound.wav",
+        "sound/superevents/superevent_south_oil_union_sound.wav"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_superevent_music.py",
@@ -3124,7 +3202,8 @@
         "gfx/interface/superevents/South/superevent_south_directorate.png",
         "gfx/interface/superevents/VAL/superevent_val_council_proclamation.png",
         "gfx/interface/superevents/WRK/superevent_west_veyran.png",
-        "gfx/interface/superevents/South/superevent_south_war.png"
+        "gfx/interface/superevents/South/superevent_south_war.png",
+        "gfx/interface/superevents/South/superevent_south_oil_union.png"
       ],
       "check_command": [
         "{python}",
@@ -3213,6 +3292,113 @@
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Owns marked starting fleet sections, pre-OOB naval technology grants and minimum convoy reserves. Country generators retain land formations and political history; the remainder-country generator uses the same naval renderer."
+    },
+    {
+      "id": "shl_administration_assets",
+      "owner_module": "tools.builders.build_adiscord_shl_administration_assets",
+      "source_inputs": [
+        "tools/builders/build_adiscord_shl_administration_assets.py"
+      ],
+      "output_globs": [
+        "gfx/flags/**/SFD.tga",
+        "gfx/flags/**/SCD.tga",
+        "gfx/flags/**/SMD.tga",
+        "gfx/flags/**/SOD.tga",
+        "gfx/flags/**/SDA.tga",
+        "gfx/interface/autonomy/autonomy_SHL_furnace_administration_icon.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_shl_administration_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_shl_administration_assets",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "nam_export_offices",
+      "owner_module": "tools.builders.build_adiscord_nam_export_offices",
+      "source_inputs": [
+        "tools/builders/build_adiscord_nam_export_offices.py",
+        "tools/builders/build_adiscord_factory_models.py",
+        "tools/assets/source/build_shl_palace.py",
+        "tools/data/nam_export_office_sites.json",
+        "history/states/*.txt",
+        "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "map/heightmap.bmp",
+        "map/rivers.bmp",
+        "map/buildings.txt",
+        "map/ambient_object.txt",
+        "map/railways.txt",
+        "map/cities.bmp",
+        "map/cities.txt",
+        "map/trees.bmp",
+        "map/terrain.bmp",
+        "common/terrain/00_terrain.txt"
+      ],
+      "output_globs": [
+        "gfx/models/buildings/NAM_export_office/*.mesh",
+        "gfx/models/buildings/NAM_export_office/*.dds",
+        "gfx/entities/mapitems_custom.gfx",
+        "gfx/entities/mapitems_custom.asset",
+        "common/scripted_effects/ADISCORD_NAM_export_office_visuals.txt",
+        "tools/assets/source/buildings/NAM/export_office/*.blend",
+        "docs/development/model-verification/NAM_export_office.json",
+        "docs/development/previews/NAM_export_office/*.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_export_offices"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_export_offices",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns only marked export-office entity/mesh registry sections, five native models, packed sources, state-scoped visual effects and the verification report. Sites are shared authoring inputs with the map-building and oilfield owners; temporary previews are opt-in."
+    },
+    {
+      "id": "nam_export_office_icons",
+      "owner_module": "tools.builders.build_adiscord_nam_export_office_icons",
+      "source_inputs": [
+        "tools/builders/build_adiscord_nam_export_office_icons.py",
+        "tools/builders/build_adiscord_nam_export_office_icons.ps1",
+        "gfx/interface/state_modifiers/adiscord/company_quarters.png"
+      ],
+      "output_globs": [
+        "gfx/interface/state_modifiers/adiscord/nam_export_office_*.png"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_export_office_icons"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_nam_export_office_icons",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
     }
   ]
 }

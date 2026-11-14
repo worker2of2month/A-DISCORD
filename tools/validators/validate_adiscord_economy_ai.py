@@ -151,76 +151,20 @@ def reachable_script_entries(
     return dict(sorted(reachable.items()))
 
 
-def migration_contract_issues(
+def construction_policy_retirement_issues(
     effects: str, other_runtime: dict[str, str] | None = None
 ) -> list[str]:
-    """Validate the sole schema-12 exception to construction-policy retirement."""
-
-    issues: list[str] = []
-    definitions = _definitions((effects,))
-    migration = definitions.get("ADISCORD_economy_migrate_schema")
-    if migration is None:
-        return ["missing unique ADISCORD_economy_migrate_schema"]
-    body = migration.value
-    assert isinstance(body, list)
-    copy_ok = any(
-        entry.key == "set_variable"
-        and isinstance(entry.value, list)
-        and _direct_scalar(entry.value, "var")
-        == "ADISCORD_economy_research_spending_mode"
-        and _direct_scalar(entry.value, "value")
-        == "ADISCORD_economy_construction_spending_mode"
-        for _, entry in _walk_entries(body)
-    )
-    if not copy_ok:
-        issues.append("schema 12 lacks the exact construction-to-research copy")
-    required_counts = {
-        "ADISCORD_economy_construction_spending_mode": 2,
-        "ADISCORD_economy_construction_budget_change_cooldown": 1,
-        **{
-            f"ADISCORD_economy_construction_spending_{level}": 1
-            for level in range(1, 6)
-        },
-    }
-    tokens = _tokens_in(body)
-    for token, count in required_counts.items():
-        if tokens.count(token) != count:
-            issues.append(
-                f"migration has non-exact legacy use {token}: {tokens.count(token)}"
-            )
-    for variable in LEGACY_CONSTRUCTION[:2]:
-        if not any(
-            entry.key == "clear_variable" and entry.value == variable
-            for _, entry in _walk_entries(body)
-        ):
-            issues.append(f"migration does not clear {variable}")
-    removed: set[str] = set()
-    for _, entry in _walk_entries(body):
-        if entry.key != "remove_ideas":
-            continue
-        if isinstance(entry.value, str):
-            removed.add(entry.value)
-        else:
-            removed.update(
-                value
-                for value in _tokens_in(entry.value)
-                if value.startswith("ADISCORD_")
-            )
-    for idea in LEGACY_CONSTRUCTION[2:]:
-        if idea not in removed:
-            issues.append(f"migration does not remove {idea}")
-    outside_tokens: list[str] = []
-    for name, definition in definitions.items():
-        if name != migration.key:
-            outside_tokens.extend(_tokens_in([definition]))
-    for path, text in (other_runtime or {}).items():
+    """Reject retired policies and old-save upgrade bodies on every runtime surface."""
+    issues = []
+    for path, text in {"effects": effects, **(other_runtime or {})}.items():
         try:
-            outside_tokens.extend(_tokens_in(parse_clausewitz(text)))
+            tokens = _tokens_in(parse_clausewitz(text))
         except ValueError as error:
             issues.append(f"{path}: Clausewitz parse error: {error}")
-    for token in LEGACY_CONSTRUCTION:
-        if token in outside_tokens:
-            issues.append(f"live construction-policy token outside migration: {token}")
+            continue
+        for token in (*LEGACY_CONSTRUCTION, "ADISCORD_economy_migrate_schema"):
+            if token in tokens:
+                issues.append(f"{path}: retired economy token: {token}")
     return issues
 
 
@@ -252,22 +196,8 @@ def retired_capacity_boundary_issues(sources: dict[str, str]) -> list[str]:
         except (AssertionError, ValueError) as error:
             issues.append(f"{path}: Clausewitz parse error: {error}")
             continue
-        migration = definitions.get("ADISCORD_economy_migrate_schema")
-        for name, definition in definitions.items():
-            if definition is migration:
-                for _, entry in _walk_entries(definition.value):
-                    refs = [entry.key] + (
-                        [entry.value] if isinstance(entry.value, str) else []
-                    )
-                    if not any(forbidden.search(ref) for ref in refs):
-                        continue
-                    if not (
-                        entry.key == "clear_variable" and isinstance(entry.value, str)
-                    ):
-                        issues.append(
-                            f"{path}:{entry.line}: capacity migration operation is not a clear"
-                        )
-            elif forbidden.search(" ".join(_tokens_in([definition]))):
+        for definition in definitions.values():
+            if forbidden.search(" ".join(_tokens_in([definition]))):
                 issues.append(f"{path}:{definition.line}: retired debt-capacity API")
     return issues
 
@@ -1657,7 +1587,7 @@ def research_policy_flow_issues(text: str) -> list[str]:
     effect = definitions.get("ADISCORD_economy_calculate_research_expenses")
     if effect is None or not isinstance(effect.value, list):
         return ["missing research expense calculation"]
-    expected = {"1": 0.30, "2": 0.65, "3": 1.00, "4": 2.00, "5": 3.00}
+    expected = {"1": 0.65, "2": 0.80, "3": 1.00, "4": 1.50, "5": 2.00}
     found: dict[str, list[float]] = {}
     all_multipliers = [
         entry
@@ -3237,7 +3167,7 @@ def validate(root: Path = ROOT) -> list[str]:
             issues.append(message)
 
     issues.extend(
-        migration_contract_issues(
+        construction_policy_retirement_issues(
             effects,
             {
                 "triggers": triggers,
@@ -3334,11 +3264,11 @@ def validate(root: Path = ROOT) -> list[str]:
 
     require(
         "ADISCORD_economy_schema_version" in effects,
-        "economy lacks a schema-versioned migration",
+        "economy lacks a current-campaign format marker",
     )
     require(
-        "ADISCORD_economy_migrate_schema" in effects,
-        "economy lacks ADISCORD_economy_migrate_schema",
+        "ADISCORD_economy_migrate_schema" not in effects,
+        "economy retains an old-save migration body",
     )
 
     for name in (
@@ -3820,8 +3750,6 @@ def validate(root: Path = ROOT) -> list[str]:
 
     timed_actions = {
         "ADISCORD_economy_expand_money_emission": "ADISCORD_economy_money_printing",
-        "ADISCORD_economy_civilian_investment_action": "ADISCORD_economy_civilian_investment",
-        "ADISCORD_economy_military_investment_action": "ADISCORD_economy_military_investment",
         "ADISCORD_economy_war_taxes_action": "ADISCORD_economy_war_taxes",
     }
     for effect_name, idea_name in timed_actions.items():
@@ -3845,14 +3773,6 @@ def validate(root: Path = ROOT) -> list[str]:
             "ADISCORD_economy_can_reduce_money_emission",
             "ADISCORD_economy_money_printing",
         ),
-        (
-            "ADISCORD_economy_can_use_civilian_stimulus",
-            "ADISCORD_economy_civilian_investment",
-        ),
-        (
-            "ADISCORD_economy_can_use_military_investment",
-            "ADISCORD_economy_military_investment",
-        ),
         ("ADISCORD_economy_can_use_war_taxes", "ADISCORD_economy_war_taxes"),
     ):
         require(
@@ -3861,14 +3781,9 @@ def validate(root: Path = ROOT) -> list[str]:
         )
 
     repay = block(effects, "ADISCORD_economy_repay_debt")
-    early_repay = block(effects, "ADISCORD_economy_early_repay_debt")
     require(
         "1.20" not in repay,
         "ordinary debt repayment still destroys more debt than treasury",
-    )
-    require(
-        "1.25" not in early_repay,
-        "early debt repayment still destroys more debt than treasury",
     )
     restructure = block(effects, "ADISCORD_economy_restructure_debt")
     require(
@@ -3884,7 +3799,6 @@ def validate(root: Path = ROOT) -> list[str]:
         require(bool(block(effects, effect_name)), f"schema 12 lacks {effect_name}")
     for repayment_name in (
         "ADISCORD_economy_repay_debt",
-        "ADISCORD_economy_early_repay_debt",
         "ADISCORD_economy_restructure_debt",
     ):
         repayment = block(effects, repayment_name)
@@ -3919,7 +3833,7 @@ def validate(root: Path = ROOT) -> list[str]:
     )
 
     social_expenses = block(effects, "ADISCORD_economy_calculate_social_expenses")
-    for multiplier in ("0.25", "0.60", "1.00", "1.50", "2.00"):
+    for multiplier in ("0.60", "0.80", "1.00", "1.50", "2.00"):
         require(
             f"value = {multiplier}" in social_expenses,
             f"social budget lacks the distinct {multiplier} cost multiplier",
@@ -3988,10 +3902,6 @@ def validate(root: Path = ROOT) -> list[str]:
     require(
         "damaged_building_level@industrial_complex" in recount,
         "bombing disruption is not connected to actual damaged industry",
-    )
-    require(
-        "ADISCORD_economy_public_investment_stock" in effects,
-        "reserve investment has no persistent productive-capital stock",
     )
     require(
         recount.count("every_owned_state") == 1 and "every_country" not in recount,
@@ -4137,29 +4047,6 @@ def validate(root: Path = ROOT) -> list[str]:
         "retired construction policy remains in the idea signature",
     )
 
-    migration = block(effects, "ADISCORD_economy_migrate_schema")
-    require(
-        "value = 12 compare = less_than" in migration,
-        "economy save migration was not advanced to schema 12",
-    )
-    require(
-        "ADISCORD_economy_research_spending_mode" in migration
-        and "value = ADISCORD_economy_construction_spending_mode" in migration,
-        "schema 12 does not map the former construction setting to research",
-    )
-    require(
-        "ADISCORD_economy_research_budget_change_cooldown value = 0" in migration,
-        "schema 12 does not release the new research-policy cooldown",
-    )
-    require(
-        "ADISCORD_economy_recalculate_policy_modifiers = yes" in migration,
-        "schema 12 does not initialize weekly policy caches for existing saves",
-    )
-    require(
-        "ADISCORD_economy_was_at_war" in migration
-        and "ADISCORD_economy_postwar_demobilization_months" in migration,
-        "schema 12 does not preserve postwar demobilization state",
-    )
     weekly_budget = block(effects, "ADISCORD_economy_calculate_weekly_budget")
     require(
         "ADISCORD_economy_safe_reserve value = ADISCORD_economy_weekly_expenses"
@@ -4180,10 +4067,6 @@ def validate(root: Path = ROOT) -> list[str]:
         "ADISCORD_economy_auto_loan_enabled",
         "ADISCORD_economy_toggle_auto_loan",
         "ADISCORD_economy_gui_page",
-        # The two retired construction variables have one exact schema-12
-        # migration exception, validated structurally by
-        # migration_contract_issues() above.  Do not reject that migration via
-        # this coarse whole-file substring guard.
         "ADISCORD_economy_admin_spending_mode",
         "ADISCORD_economy_weekly_player_refresh",
     ):
@@ -4410,16 +4293,12 @@ def validate(root: Path = ROOT) -> list[str]:
         "ADISCORD_economy_action_restructure_debt",
         "ADISCORD_economy_action_stabilization",
         "ADISCORD_economy_action_war_taxes",
-        "ADISCORD_economy_action_early_repay",
         "ADISCORD_economy_action_emission",
         "ADISCORD_economy_action_emission_buyback",
-        "ADISCORD_economy_action_invest_reserves",
-        "ADISCORD_economy_action_civilian_stimulus",
-        "ADISCORD_economy_action_military_investment",
     }
     require(
         visible_actions == expected_actions,
-        "economy UI must expose exactly twelve treasury operations",
+        "economy UI must expose exactly eight treasury operations",
     )
     require(
         'pdx_tooltip = "ADISCORD_economy_balance_tt"' in gui
@@ -4469,12 +4348,8 @@ def validate(root: Path = ROOT) -> list[str]:
         "restructure_debt": "restructure_debt",
         "stabilization": "stabilization",
         "war_taxes": "war_taxes",
-        "early_repay": "early_repay_debt",
         "emission": "expand_emission",
         "emission_buyback": "reduce_emission",
-        "invest_reserves": "invest_reserves",
-        "civilian_stimulus": "civilian_investment",
-        "military_investment": "military_investment",
     }
     for action, effect in guarded_actions.items():
         require(

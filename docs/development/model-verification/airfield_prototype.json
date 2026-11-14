@@ -1,0 +1,54 @@
+{
+  "generator": "tools/builders/build_adiscord_airfield_prototype.py",
+  "inputs": {
+    "tools/builders/build_adiscord_airfield_prototype.py": "53c57bb4bee1080038e388ade7aafdcde05a778695d53cee0a96f32c18504572",
+    "tools/builders/build_adiscord_bunker_prototype.py": "a1d3719e5434a3b4dea3c7e943604ebaddcecbc7708215f142e423b98fed54cc"
+  },
+  "purpose": "Development-only airfield design study",
+  "native_export_verified": false,
+  "hoi4_runtime_verified": false,
+  "intact": {
+    "objects": 202,
+    "triangles": 2730,
+    "geometry_validated": true
+  },
+  "damaged": {
+    "objects": 161,
+    "triangles": 2778,
+    "geometry_validated": true
+  },
+  "parking_clearances": {
+    "west": {
+      "nose_to_apron_edge": 0.1,
+      "tail_to_apron_rear": 0.3,
+      "opening_minus_wingspan": 0.63
+    },
+    "east": {
+      "nose_to_apron_edge": 0.1,
+      "tail_to_apron_rear": 0.3,
+      "opening_minus_wingspan": 0.63,
+      "tail_to_closed_door": 0.2275
+    }
+  },
+  "damage_note": "Exploratory damaged geometry; vanilla air base uses particles in a damaged state",
+  "materials": "Provisional procedural Blender shaders",
+  "sources": {
+    "airfield_damaged_prototype.blend": "520c3a3e9667dee9562a3ba3d7fc1bae55808f1b94f1100f26f5afbfe090e003",
+    "airfield_prototype.blend": "50f4604e27ab9423bc07c7eaaf03612057fccc13b7b10b0218bce89a63fe70c5"
+  },
+  "previews": {
+    "front.png": "d5552356f992ffd104c3e886bd82472569b23549f9770270d977153407dbdcc3",
+    "opposite.png": "4b69676e4bf9315198ed96b5d4ef16c7d454ddd6488a3a95459a897489a0116c",
+    "rear.png": "641cf44577aea102d5c577716b9ae0f0cbcba9a8fb16957273319bbf181c8911",
+    "map.png": "4d718245c28f072bd1c58ea04568fa50e482b9061b45070b81c08f3aa13d5b0d",
+    "top.png": "29ab1511725a4799729edef66df80a247f5ffeaceea614a4e2513ca52ab25713",
+    "map_256.png": "c6d4552f2056ede729316bd8a914a17d566b321f7a22a4bfda2b9aceb747b441",
+    "map_128.png": "32c9c7a23410cc82937ff796c32f94248eefec260378208047459ce3dd81faa0",
+    "map_64.png": "51b31dfee6f5ab2a0346dbb97c4cef621befca36b7493c6de14bc7e5ec183476",
+    "damaged_front.png": "9c1b2a38edcfad92b0b211fb74c0fe591f1cf58c9f5a6ef087f77359e22b9d0e",
+    "damaged_map.png": "c6ca157ef9a0f43e16b9d8ebe8b36701e6a323337ab1494013bd71f715f4d036",
+    "review_angles.png": "5a80f8562821aebf4902639d80aca17ef712c341721c5c5c603456fb000f594c",
+    "review_small.png": "390948106efa35aa48b32569867bfe542871f2df66dfc8e7a41e529047de72fd",
+    "review_damaged.png": "fd41bef955570b6f7f8aa9a0a8bc6c1012e3182474abf34428550581573eb3a8"
+  }
+}

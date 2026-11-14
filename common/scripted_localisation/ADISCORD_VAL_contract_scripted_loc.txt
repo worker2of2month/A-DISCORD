@@ -387,12 +387,12 @@ defined_text = {
 
 defined_text = {
 	name = VALMarketQuoteIncome
-	text = { trigger = { event_target:VAL_contract_partner = { tag = CIN } } localization_key = VAL_market_quote_5 }
-	text = { trigger = { event_target:VAL_contract_partner = { tag = OSF } } localization_key = VAL_market_quote_8 }
-	text = { trigger = { event_target:VAL_contract_partner = { tag = APH } } localization_key = VAL_market_quote_2 }
-	text = { trigger = { event_target:VAL_contract_partner = { tag = COF } } localization_key = VAL_market_quote_10 }
-	text = { trigger = { event_target:VAL_contract_partner = { tag = TFF } } localization_key = VAL_market_quote_12 }
-	text = { trigger = { event_target:VAL_contract_partner = { tag = YPR } } localization_key = VAL_market_quote_15 }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = CIN } } localization_key = VAL_market_income_CIN }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = OSF } } localization_key = VAL_market_income_OSF }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = APH } } localization_key = VAL_market_income_APH }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = COF } } localization_key = VAL_market_income_COF }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = TFF } } localization_key = VAL_market_income_TFF }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = YPR } } localization_key = VAL_market_income_YPR }
 	text = { localization_key = VAL_market_quote_none }
 }
 
@@ -821,12 +821,12 @@ defined_text = {
 
 defined_text = {
 	name = VALTradeDecisionIncome
-	text = { trigger = { FROM = { tag = CIN } } localization_key = VAL_market_quote_5 }
-	text = { trigger = { FROM = { tag = OSF } } localization_key = VAL_market_quote_8 }
-	text = { trigger = { FROM = { tag = APH } } localization_key = VAL_market_quote_2 }
-	text = { trigger = { FROM = { tag = COF } } localization_key = VAL_market_quote_10 }
-	text = { trigger = { FROM = { tag = TFF } } localization_key = VAL_market_quote_12 }
-	text = { trigger = { FROM = { tag = YPR } } localization_key = VAL_market_quote_15 }
+	text = { trigger = { FROM = { tag = CIN } } localization_key = VAL_market_income_CIN }
+	text = { trigger = { FROM = { tag = OSF } } localization_key = VAL_market_income_OSF }
+	text = { trigger = { FROM = { tag = APH } } localization_key = VAL_market_income_APH }
+	text = { trigger = { FROM = { tag = COF } } localization_key = VAL_market_income_COF }
+	text = { trigger = { FROM = { tag = TFF } } localization_key = VAL_market_income_TFF }
+	text = { trigger = { FROM = { tag = YPR } } localization_key = VAL_market_income_YPR }
 	text = { localization_key = VAL_market_quote_none }
 }
 

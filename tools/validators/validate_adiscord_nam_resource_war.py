@@ -171,6 +171,11 @@ OIL_BUYERS = {
     "SHL", "RUS", "WEF", "KDR", "SDR", "GLP", "KYZ",
 }
 FIELD_CAPACITY = {67: 5, 688: 1, 689: 3, 690: 2, 719: 1}
+BORDER_REGIONS = {
+    "eflor": ("701", "720", "721", "723"),
+    "azhar": ("722", "727"),
+}
+BORDER_PROGRAMMES = {"reconstruction": (35, 400), "incorporation": (75, 500)}
 PROJECT_PRICES = {
     "NAM_project_repair_wells": (25, 150, 45, "NAM_project_complete_repair"),
     "NAM_project_refinery": (40, 300, 90, "NAM_project_complete_refinery"),
@@ -386,9 +391,12 @@ def check_oil_monopoly(
             and "NAM_project_begin = yes" in complete,
             f"{decision_name} must debit each currency once into the state escrow",
         )
+        cancel = named_block(decision, "cancel_effect")
+        for refund in re.findall(r"\b(NAM_project_refund_\w+) = yes", cancel):
+            cancel += named_block(effects, refund)
         check(
             f"{completion} = yes" in named_block(decision, "remove_effect")
-            and "NAM_project_release = yes" in named_block(decision, "cancel_effect"),
+            and "NAM_project_release = yes" in cancel,
             f"{decision_name} must settle at completion and refund on cancellation",
         )
         settle_block = named_block(effects, completion)
@@ -404,6 +412,62 @@ def check_oil_monopoly(
         "has_state_flag = NAM_project_in_progress" in named_block(effects, "NAM_project_release"),
         "a project refund must settle only a state holding the escrow",
     )
+    refinery = named_block(decisions, "NAM_project_refinery")
+    refinery_complete = named_block(refinery, "complete_effect")
+    check(
+        "state_target = yes" not in refinery
+        and "NAM_refinery_site_available = yes" in named_block(refinery, "available")
+        and "NAM_refinery_site_available = yes" in refinery_complete
+        and "limit = { NAM_refinery_site_ready = yes }" in named_block(refinery_complete, "random_owned_controlled_state")
+        and all(
+            f"{state} = {{ NAM_project_complete_refinery = yes }}" in named_block(refinery, "remove_effect")
+            and f"{state} = {{ NAM_project_refund_refinery = yes }}" in named_block(refinery, "cancel_effect")
+            for state in FIELD_CAPACITY
+        ),
+        "the refinery order must draw one eligible oilfield and settle every field by its escrow",
+    )
+    for region, states in BORDER_REGIONS.items():
+        for programme, (pp, treasury) in BORDER_PROGRAMMES.items():
+            name = f"NAM_border_{programme}_{region}"
+            decision = named_block(decisions, name)
+            complete = named_block(decision, "complete_effect")
+            check(
+                "state_target = yes" not in decision
+                and "cost = 0" in decision
+                and f"custom_cost_text = NAM_border_{programme}_cost" in decision
+                and f"NOT = {{ has_political_power < {pp} }}" in named_block(decision, "custom_cost_trigger")
+                and f"value = {treasury} compare = greater_than_or_equals" in named_block(decision, "custom_cost_trigger")
+                and "NAM_project_slot_free = yes" in named_block(decision, "available")
+                and complete.count(f"add_political_power = -{pp}") == 1
+                and complete.count(f"var = NAM_treasury_amount value = {treasury}") == 1
+                and complete.count("NAM_spend_treasury = yes") == 1
+                and f"NAM_border_{region}_district = yes" in complete
+                and f"NAM_border_{programme}_begin = yes" in complete,
+                f"{name} must debit each currency once and draw one district of its region",
+            )
+            check(
+                all(
+                    f"{state} = {{ NAM_border_{programme}_finish = yes }}" in named_block(decision, "remove_effect")
+                    and f"{state} = {{ NAM_border_{programme}_refund = yes }}" in named_block(decision, "cancel_effect")
+                    for state in states
+                ),
+                f"{name} must settle and refund every district of its region by escrow",
+            )
+        region_trigger = named_block(triggers, f"NAM_border_{region}_district")
+        check(
+            sorted(re.findall(r"state = (\d+)", region_trigger)) == sorted(states),
+            f"NAM_border_{region}_district drifted from its treaty sites",
+        )
+    for programme, (pp, treasury) in BORDER_PROGRAMMES.items():
+        begin = named_block(effects, f"NAM_border_{programme}_begin")
+        receipt = named_block(triggers, f"NAM_border_{programme}_receipt")
+        check(
+            f"var = NAM_project_deposit value = {treasury}" in begin
+            and f"var = NAM_project_pp_deposit value = {pp}" in begin
+            and f"var = NAM_project_deposit value = {treasury} compare = equals" in receipt
+            and f"var = NAM_project_pp_deposit value = {pp} compare = equals" in receipt,
+            f"NAM_border_{programme} escrow and receipt must use the same price",
+        )
     for decision_name, focus in DECISION_FOCUS_GATES.items():
         decision = named_block(decisions, decision_name)
         visible = named_block(decision, "visible")
@@ -2244,9 +2308,11 @@ def main() -> int:
         "defence lines must fortify every border province through the native selector",
     )
     check(
-        "any_neighbor_state = { NOT = { is_owned_by = ROOT } }"
-        in named_block(line_decision, "visible"),
-        "defence lines may be offered only for states with a foreign land border",
+        has_script_fragment(
+            named_block(line_decision, "visible"),
+            "any_neighbor_state = { NOT = { is_owned_by = ROOT } owner = { NAM_line_threat = yes } }",
+        ),
+        "defence lines may be offered only for states bordering a threatening owner",
     )
 
     # Paid mobilisation: custom price, exact boundaries, escrow counters and a

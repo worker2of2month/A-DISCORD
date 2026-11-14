@@ -1125,14 +1125,15 @@ VAL_trade_routes = {
 			}
 		}
 		cost = 0
-		custom_cost_text = VAL_route_cost_750
+		custom_cost_text = VAL_route_cost_400
 		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
 		}
 		days_remove = 30
 		cancel_if_not_visible = no
 		complete_effect = {
 			custom_effect_tooltip = VAL_route_upgrade_tt
+			custom_effect_tooltip = VAL_corridor_occidia_result_tt
 			hidden_effect = { VAL_begin_occidia_corridor_project = yes }
 		}
 		cancel_trigger = {
@@ -1192,14 +1193,15 @@ VAL_trade_routes = {
 			}
 		}
 		cost = 0
-		custom_cost_text = VAL_route_cost_1000
+		custom_cost_text = VAL_route_cost_500
 		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
 		}
 		days_remove = 30
 		cancel_if_not_visible = no
 		complete_effect = {
 			custom_effect_tooltip = VAL_route_upgrade_tt
+			custom_effect_tooltip = VAL_corridor_north_result_tt
 			hidden_effect = { VAL_begin_west_corridor_project = yes }
 		}
 		cancel_trigger = {
@@ -1259,14 +1261,15 @@ VAL_trade_routes = {
 			}
 		}
 		cost = 0
-		custom_cost_text = VAL_route_cost_500
+		custom_cost_text = VAL_route_cost_300
 		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
 		}
 		days_remove = 30
 		cancel_if_not_visible = no
 		complete_effect = {
 			custom_effect_tooltip = VAL_route_upgrade_tt
+			custom_effect_tooltip = VAL_corridor_stelander_result_tt
 			hidden_effect = { VAL_begin_stelander_corridor_project = yes }
 		}
 		cancel_trigger = {
@@ -1326,14 +1329,15 @@ VAL_trade_routes = {
 			}
 		}
 		cost = 0
-		custom_cost_text = VAL_route_cost_500
+		custom_cost_text = VAL_route_cost_300
 		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
 		}
 		days_remove = 30
 		cancel_if_not_visible = no
 		complete_effect = {
 			custom_effect_tooltip = VAL_route_upgrade_tt
+			custom_effect_tooltip = VAL_corridor_vorkerland_result_tt
 			hidden_effect = { VAL_begin_vorkerland_corridor_project = yes }
 		}
 		cancel_trigger = {
@@ -1393,14 +1397,15 @@ VAL_trade_routes = {
 			}
 		}
 		cost = 0
-		custom_cost_text = VAL_route_cost_750
+		custom_cost_text = VAL_route_cost_400
 		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
 		}
 		days_remove = 30
 		cancel_if_not_visible = no
 		complete_effect = {
 			custom_effect_tooltip = VAL_route_upgrade_tt
+			custom_effect_tooltip = VAL_corridor_south_result_tt
 			hidden_effect = { VAL_begin_south_corridor_project = yes }
 		}
 		cancel_trigger = {

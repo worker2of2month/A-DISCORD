@@ -152,6 +152,13 @@
       "prompt": "Create a wide 16:9 historical-scene illustration, photorealistic analogue war correspondent colour photograph, for a fictional mid-20th-century strategy game event titled War for the South (do not write the title). A military convoy starts crossing a vast barren ochre desert toward a distant industrial city with steel furnace smokestacks and oil derricks. View from a rocky roadside rise: one believable weathered 1940s halftrack in middle distance and a staggered line of canvas covered military lorries along a curving road, dust trails partly obscuring vehicles, a few small helmeted soldiers seen from behind beside the lead lorry. The geography is dry Caspian and Iranian plateau, a low ridge, smoking furnaces beyond the horizon, a thin plume of distant artillery smoke, overcast amber-grey dawn. A sense of an irreversible major war beginning, documentary restraint and natural imperfect composition, no parade, no victory celebrations. Distinct coherent vehicles, mechanically plausible wheels and tracks, very few small distant human figures. Muted warm earth tones, cold heavy sky, film grain, photograph rather than glossy game concept art. Important action in central upper three quarters, calm darker ground near bottom for an overlay. No flags, no emblems, no writing, no border, no watermark, no screen effects; a PSD filter will be added later.",
       "source_sha256": "fd095c9e1f9695e4b59c75f9d35b6d1fd8621d941547dbcd1b0190eaa4cb65a8",
       "runtime_sha256": "4347ccdbeaea76e349820fb8ee505165430c707348d2cf73c5d3476752644bfa"
+    },
+    "superevent_south_oil_union": {
+      "runtime_file": "gfx/interface/superevents/South/superevent_south_oil_union.png",
+      "generated_file": "01a1d0ec-0d80-7203-80ab-f40641969575/exec-450eaf59-6d61-40dc-aff4-98ff75bca462.png",
+      "prompt": "Widescreen 16:9 photorealistic alternate-history industrial event illustration. Gigantic oil refinery and integrated heavy factory extending to the horizon, seen from a workers' access walkway before sunrise. Colossal brick-and-steel factory hall with amber windows, coherent distillation towers, straight pipe racks, cylindrical tanks and chimneys. Cold blue-gray dawn, layered steam, desaturated steel and rust, fine archival color-film grain. Three tiny workers seen from behind in worn mid-century work coats and caps provide scale. Calm industrial power built and run by ordinary workers. Plausible machinery, readable silhouettes, dark quiet lower fifth for the quote. No lettering, flags, logos, border, UI or baked-in CRT; apply the supplied PSD separately.",
+      "source_sha256": "7759929c9a60af99bdc24f03c52d157e5abd07439fbc45a2b52a98736957d4b1",
+      "runtime_sha256": "acf4bf0f3544164266f18611a36eaacf947c3e10d519b437206027f4198330dc"
     }
   },
   "retained": {
@@ -585,18 +592,18 @@
     "superevent_south_federation": {
       "texture": "gfx/interface/superevents/WRK/superevent_west_worker.png",
       "effect": "superevent_south_federation_sound_e",
-      "sample": "superevent_south_regency_sound",
-      "audio_file": "superevents/superevent_south_regency_sound.wav",
+      "sample": "superevent_south_federation_sound",
+      "audio_file": "superevents/superevent_south_federation_sound.wav",
       "scene_note": "A civilian delegate assembly also represents a federation settlement.",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "theme_note": "Slow Meadow - Crown of Amber Canopy, with assembly ambience, successive charter signatures, applause and press cameras; no music ducking."
     },
     "superevent_south_oil_union": {
-      "texture": "gfx/interface/superevents/NAM/superevent_south_boards.png",
+      "texture": "gfx/interface/superevents/South/superevent_south_oil_union.png",
       "effect": "superevent_south_oil_union_sound_e",
-      "sample": "superevent_south_nur_sound",
-      "audio_file": "superevents/superevent_south_nur_sound.wav",
-      "scene_note": "Joint pipeline commissioning represents both the oil union and oil boards.",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "sample": "superevent_south_oil_union_sound",
+      "audio_file": "superevents/superevent_south_oil_union_sound.wav",
+      "scene_note": "An immense oil refinery and factory complex at dawn, with workers entering their shift.",
+      "theme_note": "Northaunt - Until Dawn Do Us Part, with quiet continuous factory ambience, two brief pump passages and one distant factory whistle; no music ducking."
     },
     "superevent_south_contract_republic": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_cities.png",

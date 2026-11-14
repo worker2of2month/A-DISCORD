@@ -38,10 +38,17 @@ focus_tree = {
 
 	# ----- A second chapter for Svetlogorye -----
 
+	# Carried across the war-tree swap; hidden by allow_branch.
+	shared_focus = NAM_south_war_council
+	shared_focus = NAM_sw_s_occupation_namestniks
+	shared_focus = NAM_sw_f_charter_reserve
+	shared_focus = NAM_sw_p_logistics_contracts
+	shared_focus = NAM_sw_n_defence_council
 }
 
 shared_focus = {
 		id = NAM_defeat_count_losses
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_open_ledgers
 		x = 12
 		y = 0
@@ -66,6 +73,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_rump_cabinet
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_RUS_trained_administrators
 		x = 2
 		y = 1
@@ -89,6 +97,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_harbour_economy
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_harbour_service
 		x = 12
 		y = 1
@@ -119,6 +128,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_island_refuge
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_underground_reports
 		x = 22
 		y = 1
@@ -166,6 +176,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_purge_of_seals
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_underground_reports
 		x = 2
 		y = 2
@@ -200,6 +211,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_island_foundries
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		x = 20
 		y = 2
@@ -230,6 +242,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_refugee_quarters
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 24
 		y = 2
@@ -286,6 +299,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_revenge
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_basin_is_ours
 		x = 16
 		y = 2
@@ -317,6 +331,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_accommodation
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_commissioner_plan
 		x = 8
 		y = 2
@@ -366,6 +381,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_rebuild_arsenal
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_metropolitan_depots
 		x = 14
 		y = 3
@@ -423,6 +439,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_hidden_reserve
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		bypass = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_war_of_return_resolved_focus_condition_tt
@@ -454,6 +471,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_officer_cadres
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		bypass = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_war_of_return_resolved_focus_condition_tt
@@ -489,6 +507,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_new_levies
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_oilfield_militia
 		x = 20
 		y = 4
@@ -515,6 +534,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_war_chest
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		bypass = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_war_of_return_resolved_focus_condition_tt
@@ -547,6 +567,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_war_of_return
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_basin_is_ours
 		x = 16
 		y = 6
@@ -583,6 +604,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_early_tribute
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_wrk_trade_house
 		x = 10
 		y = 3
@@ -632,6 +654,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_oil_union
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_well_register
 		x = 6
 		y = 3
@@ -665,6 +688,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_open_border
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_independence_day
 		x = 10
 		y = 4
@@ -692,6 +716,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_road_south
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_VAL_Logistics_Command
 		x = 8
 		y = 5
@@ -750,6 +775,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_oil_peace
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_commissioner_plan
 		x = 6
 		y = 6
@@ -768,8 +794,8 @@ shared_focus = {
 			add_stability = 0.05
 			add_political_power = 60
 			add_fuel = 5000
-			unlock_decision_tooltip = NAM_pw_export_shipment
-			custom_effect_tooltip = NAM_pw_export_shipment_unlock_tt
+			unlock_decision_tooltip = NAM_export_office_expand
+			custom_effect_tooltip = NAM_export_office_expand_unlock_tt
 			custom_effect_tooltip = NAM_defeat_oil_peace_tt
 			hidden_effect = { clr_country_flag = ADISCORD_south_offensive_order }
 		}
@@ -780,6 +806,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_southern_charter
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_VAL_State_Contract
 		x = 10
 		y = 6
@@ -820,10 +847,11 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_second_chapter
+		allow_branch = { NOT = { has_focus_tree = NAM_south_war_focus } }
 		icon = GFX_focus_NAM_independence_day
 		x = 12
 		y = 7
-		cost = 6
+		cost = 9
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }
 		prerequisite = {
 			focus = NAM_defeat_war_of_return

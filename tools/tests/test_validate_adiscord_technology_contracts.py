@@ -394,9 +394,7 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
         path = validator.ROOT / "common/scripted_effects/ADISCORD_economy_effects.txt"
         source = validator.read_text(path)
         for effect, price in (
-            ("invest_reserves", "investment_price"),
-            ("civilian_investment_action", "investment_price"),
-            ("military_investment_action", "military_investment_price"),
+            ("stabilization_package", "stabilization_price"),
         ):
             key = f"ADISCORD_economy_{effect}"
             body = validator.extract_block(source, source.index(f"{key} = {{"))
@@ -536,10 +534,9 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
                     unlocked_units = set()
                     for tech in closure:
                         self.assertIn(tech, self.tech_blocks)
-                        for definition in parse_clausewitz(self.tech_blocks[tech]):
-                            for entry in definition.value:
-                                if entry.key == "enable_subunits":
-                                    unlocked_units.update(child.key for child in entry.value)
+                        for entry in parse_clausewitz(self.tech_blocks[tech]):
+                            if entry.key == "enable_subunits":
+                                unlocked_units.update(child.value for child in entry.value)
                     with self.subTest(template=template.key, research=required):
                         self.assertEqual(target_units & inactive_units - unlocked_units, set(),
                                          "AI target is available before its subunits are researched")

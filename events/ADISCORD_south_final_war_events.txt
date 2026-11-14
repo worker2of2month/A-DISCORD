@@ -394,8 +394,18 @@ country_event = {
 		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals } }
 	}
 	title = {
+		text = ADISCORD_south.40.t_furnaces
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
+			FROM = { SHL_furnace_administrations_enabled = yes }
+		}
+	}
+	title = {
 		text = ADISCORD_south.40.t_annex
-		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
+			NOT = { FROM = { SHL_furnace_administrations_enabled = yes } }
+		}
 	}
 	title = {
 		text = ADISCORD_south.40.t_alliance
@@ -442,8 +452,18 @@ country_event = {
 		}
 	}
 	desc = {
+		text = ADISCORD_south.40.d_furnaces
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
+			FROM = { SHL_furnace_administrations_enabled = yes }
+		}
+	}
+	desc = {
 		text = ADISCORD_south.40.d_annex
-		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
+			NOT = { FROM = { SHL_furnace_administrations_enabled = yes } }
+		}
 	}
 	desc = {
 		text = ADISCORD_south.40.d_alliance_switch
@@ -498,7 +518,11 @@ country_event = {
 		}
 		else_if = {
 			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } } }
-			custom_effect_tooltip = ADISCORD_south_offer_annex_accept_tt
+			if = {
+				limit = { hidden_trigger = { FROM = { SHL_furnace_administrations_enabled = yes } } }
+				custom_effect_tooltip = ADISCORD_south_offer_furnaces_accept_tt
+			}
+			else = { custom_effect_tooltip = ADISCORD_south_offer_annex_accept_tt }
 		}
 		else_if = {
 			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } } }

@@ -158,9 +158,9 @@ class WartimeRewardsTests(unittest.TestCase):
             facts[(tag, "has_idea", idea)] = False
             facts[(tag, "has_completed_focus", focus)] = False
             self.assertFalse(matches_conditions(one(decision, "visible"), facts, tag))
-            self.assertEqual(list(selected_effects(
+            self.assertEqual([entry for entry in selected_effects(
                 self.expand_plan_triggers(one(decision, "complete_effect")), facts, tag
-            )), [])
+            ) if entry[1].key != "custom_effect_tooltip"], [])
 
     def test_campaign_readiness_is_untimed_and_consumed_once(self):
         cases = (

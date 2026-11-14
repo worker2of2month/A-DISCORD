@@ -168,6 +168,8 @@
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_regent_campaign_aid
+			add_command_power = 20
+			army_experience = 10
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -593,6 +595,17 @@
 					amount = 6
 					state = 291
 				}
+			}
+			add_political_power = 30
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_r_house_mines_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_resource_factor value = 0.05 }
+				SHL_refresh_conclave_power = yes
 			}
 		}
 		ai_will_do = { base = 10 }

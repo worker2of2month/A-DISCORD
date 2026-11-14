@@ -1,4 +1,5 @@
 import re
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -12,6 +13,80 @@ from tools.validators.validate_adiscord_division_templates import (
     Entry,
     parse_clausewitz,
 )
+from tools.validators.validate_adiscord_strategic_resources_ui import (
+    EQUIPMENT_TEXTICONS,
+    validate_texticons,
+)
+
+
+class ResourceTexticonTests(unittest.TestCase):
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.root = Path(directory.name) / "mod"
+        self.base = Path(directory.name) / "game"
+        (self.root / "interface").mkdir(parents=True)
+        (self.base / "interface").mkdir(parents=True)
+        (self.root / "localisation").mkdir()
+        blocks = []
+        for token, (texture, frames) in EQUIPMENT_TEXTICONS.items():
+            blocks.append(
+                f'spriteType = {{ name = "GFX_{token}" texturefile = "{texture}" '
+                f'noOfFrames = {frames} }}'
+            )
+            path = self.root / texture
+            path.parent.mkdir(parents=True, exist_ok=True)
+            image = Image.new("RGBA", (24 * frames, 16), (0, 0, 0, 0))
+            image.putpixel((0, 0), (255, 255, 255, 255))
+            image.save(path)
+        self.gfx = self.root / "interface/equipment.gfx"
+        self.gfx.write_text("spriteTypes = {\n" + "\n".join(blocks) + "\n}", encoding="utf-8")
+        self.loc = self.root / "localisation/equipment.yml"
+        self.loc.write_text(
+            'l_english:\n DELIVERY: "30 £ADISCORD_train_texticon"\n', encoding="utf-8-sig"
+        )
+
+    def test_valid_equipment_bindings(self):
+        self.assertEqual(validate_texticons(self.root, self.base), [])
+
+    def test_active_vanilla_binding_cannot_replace_equipment(self):
+        (self.base / "interface/texticons.gfx").write_text(
+            'spriteTypes = { spriteType = { name = "GFX_ADISCORD_train_texticon" '
+            'texturefile = "gfx/helmet.dds" } }', encoding="utf-8"
+        )
+        self.assertTrue(any("conflicting active" in issue for issue in validate_texticons(self.root, self.base)))
+
+    def test_replaced_vanilla_file_is_not_an_active_collision(self):
+        (self.base / "interface/equipment.gfx").write_text(
+            'spriteTypes = { spriteType = { name = "GFX_ADISCORD_train_texticon" '
+            'texturefile = "gfx/helmet.dds" } }', encoding="utf-8"
+        )
+        self.assertEqual(validate_texticons(self.root, self.base), [])
+
+    def test_equal_duplicate_does_not_mask_a_conflicting_third_definition(self):
+        self.gfx.write_text(self.gfx.read_text() + self.gfx.read_text(), encoding="utf-8")
+        self.test_active_vanilla_binding_cannot_replace_equipment()
+
+    def test_localisation_cannot_use_retired_alias_or_missing_frame(self):
+        self.loc.write_text(
+            'l_english:\n DELIVERY: "30 £motorized_texticon; 2 £ADISCORD_train_texticon|2"\n',
+            encoding="utf-8-sig",
+        )
+        issues = validate_texticons(self.root, self.base)
+        self.assertTrue(any("ambiguous resource texticon motorized_texticon" in issue for issue in issues))
+        self.assertTrue(any("text requests frames [2] from 1" in issue for issue in issues))
+
+    def test_wrong_artwork_cannot_pass_by_retaining_sprite_name(self):
+        text = self.gfx.read_text().replace("gfx/texticons/cas_texticon.dds", "gfx/plane.dds")
+        self.gfx.write_text(text, encoding="utf-8")
+        self.assertTrue(any("GFX_cas_texticon: expected equipment binding" in issue
+                            for issue in validate_texticons(self.root, self.base)))
+
+    def test_opaque_equipment_texture_is_rejected(self):
+        texture, _ = EQUIPMENT_TEXTICONS["ADISCORD_train_texticon"]
+        Image.new("RGBA", (20, 20), "white").save(self.root / texture)
+        self.assertTrue(any("transparent and opaque pixels" in issue
+                            for issue in validate_texticons(self.root, self.base)))
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -593,12 +668,8 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             "action_restructure_debt",
             "action_stabilization",
             "action_war_taxes",
-            "action_early_repay",
             "action_emission",
             "action_emission_buyback",
-            "action_invest_reserves",
-            "action_civilian_stimulus",
-            "action_military_investment",
         )
         for control in mutation_controls:
             enabled = direct(
@@ -814,12 +885,8 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             "restructure_debt",
             "stabilization",
             "war_taxes",
-            "early_repay",
             "emission",
             "emission_buyback",
-            "invest_reserves",
-            "civilian_stimulus",
-            "military_investment",
         )
         for action in actions:
             self.assertEqual(

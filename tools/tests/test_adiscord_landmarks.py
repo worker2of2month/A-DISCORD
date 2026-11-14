@@ -309,5 +309,89 @@ class IsaiahTowerTests(unittest.TestCase):
                 self.assertEqual(isaiah.section_outputs(), first)
 
 
+class NamCombineLandmarkTests(unittest.TestCase):
+    def test_only_completed_combine_emits_smoke_from_all_six_chimneys(self):
+        from tools.builders import build_adiscord_nam_combine as combine
+        from tools.tests.test_adiscord_nam_focus import parsed, block, scalar
+
+        definitions = parsed("gfx/entities/mapitems_custom.asset")
+        for stage in combine.ASSETS:
+            entity = next(entry.value for entry in definitions
+                          if entry.key == "entity"
+                          and scalar(entry.value, "name") == combine.name(stage) + "_entity")
+            locators = [entry.value for entry in entity if entry.key == "locator"]
+            if stage != "complete":
+                self.assertEqual(locators, [])
+                self.assertNotIn("state", [entry.key for entry in entity])
+                continue
+            self.assertEqual(len(locators), 6)
+            self.assertEqual(scalar(entity, "cull_radius"), "180")
+            for index, (locator, (x, y, height)) in enumerate(zip(locators, combine.CHIMNEYS), 1):
+                self.assertEqual(scalar(locator, "name"), f"chimney_{index}")
+                self.assertEqual([float(entry.value) for entry in block(locator, "position")],
+                                 [x, height, y])
+            self.assertEqual(scalar(entity, "default_state"), "idle")
+            events = [entry.value for entry in block(entity, "state") if entry.key == "event"]
+            self.assertEqual(len(events), 6)
+            self.assertEqual({scalar(event, "node") for event in events},
+                             {scalar(locator, "name") for locator in locators})
+            for event in events:
+                self.assertEqual(scalar(event, "particle"), combine.SMOKE_PARTICLE)
+                self.assertEqual(scalar(event, "trigger_once"), "yes")
+                self.assertEqual(scalar(event, "keep_particle"), "no")
+        gfx = (ROOT / "gfx/entities/mapitems_custom.gfx").read_text()
+        self.assertEqual(gfx.count(f'name = "{combine.SMOKE_PARTICLE}"'), 1)
+        self.assertIn('type = "factory_smoke_file"', gfx)
+
+    def test_native_exports_and_unplaced_reserve_are_current(self):
+        from tools.builders import build_adiscord_nam_combine as combine
+
+        self.assertEqual(combine.stale(), [])
+        report = json.loads((ROOT / combine.REPORT).read_text())
+        self.assertTrue(report["native_reimport"])
+        self.assertEqual(set(report["models"]), set(combine.ASSETS))
+        self.assertEqual(report["models"]["reserve"]["triangles"], 3326)
+        for stage in combine.STAGES:
+            self.assertEqual(report["models"][stage]["bounds"][:2], [[-63, 63], [-41, 41]])
+            self.assertLess(report["models"][stage]["vertices"], 65536)
+            self.assertEqual(report["models"][stage]["materials"], 1)
+        effects = (ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8")
+        self.assertNotIn("ADISCORD_NAM_combine_reserve_entity", effects)
+
+    def test_landmark_foundation_covers_live_terrain_and_stays_in_its_state(self):
+        from tools.tests.test_adiscord_nam_focus import parsed, block, scalar
+
+        effect = block(parsed("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"), "NAM_combine_sync_visual")
+        actors = [block(branch.value, "create_entity") for branch in effect if isinstance(branch.value, list)]
+        positions = [tuple(float(scalar(actor, field)) for field in ("x", "y", "z", "scale", "rotation")) for actor in actors]
+        self.assertEqual(len(set(positions)), 1)
+        x, z, height, scale, rotation = positions[0]
+        self.assertEqual(rotation, 0)
+        state = (ROOT / "history/states/723-Loren-Coast.txt").read_text()
+        ids = set(re.search(r"provinces\s*=\s*\{([^}]+)", state)[1].split())
+        with (ROOT / "map/definition.csv").open(encoding="utf-8-sig") as stream:
+            colors = {tuple(map(int, row[1:4])) for row in csv.reader(stream, delimiter=";") if row and row[0] in ids}
+        with Image.open(ROOT / "map/provinces.bmp") as provinces, Image.open(ROOT / "map/heightmap.bmp") as heights, Image.open(ROOT / "map/rivers.bmp") as rivers:
+            self.assertEqual(provinces.getpixel((int(x), provinces.height - 1 - int(z))), (225, 167, 40))
+            for px in range(math.floor(x - 63 * scale), math.ceil(x + 63 * scale) + 1):
+                for pz in range(math.floor(z - 41 * scale), math.ceil(z + 41 * scale) + 1):
+                    pixel = (px, provinces.height - 1 - pz)
+                    self.assertIn(provinces.getpixel(pixel), colors)
+                    self.assertEqual(rivers.getpixel(pixel), 255)
+                    ground = heights.getpixel(pixel) / 10
+                    self.assertLessEqual(height - 14 * scale, ground)
+                    self.assertGreaterEqual(height, ground)
+
+    def test_combine_localisation_preserves_bom_and_loadable_quotes(self):
+        from tools.validators.validate_adiscord_english_localisation import ENTRY
+
+        for lang in ("russian", "english"):
+            path = ROOT / f"localisation/{lang}/ADISCORD_nam_resource_war_l_{lang}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            lines = [line for line in path.read_text(encoding="utf-8-sig").splitlines() if line.lstrip().startswith("NAM_combine_")]
+            self.assertGreaterEqual(len(lines), 11)
+            self.assertTrue(all(ENTRY.match(line) for line in lines))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -4459,7 +4459,7 @@ WKR_siege_chronicle_affordable = {
 
 WKR_siege_plenipotentiary_affordable = {
 	NOT = { has_political_power < 50 }
-	NOT = { check_variable = { ADISCORD_economy_treasury < 100 } }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 250 } }
 }
 
 WKR_siege_officer_course_affordable = {
@@ -4928,7 +4928,7 @@ WKR_measure_vehicle_recovery_affordable = {
 
 WKR_measure_licence_purchase_affordable = {
 	NOT = { has_political_power < 20 }
-	NOT = { check_variable = { ADISCORD_economy_treasury < 120 } }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 225 } }
 }
 
 WKR_measure_armour_contract_affordable = {
@@ -4992,7 +4992,7 @@ WKR_contract_building_site = {
 WKR_contract_reconstruction_affordable = {
 	NOT = { has_political_power < 40 }
 	NOT = { has_manpower < 1500 }
-	NOT = { check_variable = { ADISCORD_economy_treasury < 100 } }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 200 } }
 }
 
 WKR_contract_canteens_affordable = {
@@ -5471,7 +5471,7 @@ TVA_lab_prototype_series_available = {
 
 TVA_lab_prototype_series_affordable = {
 	NOT = { has_political_power < 30 }
-	NOT = { check_variable = { ADISCORD_economy_treasury < 40 } }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 75 } }
 }
 
 TVA_lab_theory_cycle_available = {
@@ -5498,7 +5498,7 @@ TVA_lab_range_trials_affordable = {
 
 TVA_lab_accelerated_series_affordable = {
 	NOT = { has_political_power < 25 }
-	NOT = { check_variable = { ADISCORD_economy_treasury < 60 } }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 90 } }
 }
 
 # --- TVA laboratories and allies: block 2, partners ---
@@ -5723,7 +5723,7 @@ WKR_vow_special_run_affordable = {
 
 WKR_vow_brigade_affordable = {
 	NOT = { has_political_power < 25 }
-	NOT = { check_variable = { ADISCORD_economy_treasury < 100 } }
+	NOT = { check_variable = { ADISCORD_economy_treasury < 300 } }
 }
 
 # --- B4 executive story: prices and sites of the new programmes ---

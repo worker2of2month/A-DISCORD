@@ -3693,7 +3693,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_voice_of_the_aimaqs_slot_held } }
 		}
-		cost = 10
+		cost = 25
 		days_remove = 45
 		days_re_enable = 75
 		modifier = {
@@ -3736,7 +3736,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_bread_and_shelter_slot_held } }
 		}
-		cost = 10
+		cost = 25
 		days_remove = 60
 		days_re_enable = 80
 		modifier = {
@@ -3780,7 +3780,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_rifles_protect_home_slot_held } }
 		}
-		cost = 10
+		cost = 35
 		days_remove = 50
 		days_re_enable = 70
 		modifier = {
@@ -3825,7 +3825,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_the_khan_keeps_his_word_slot_held } }
 		}
-		cost = 10
+		cost = 25
 		days_remove = 60
 		days_re_enable = 90
 		modifier = {
@@ -3868,7 +3868,7 @@ RUS_public_campaigns = {
 			}
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_surface_trade_slot_held } }
 		}
-		cost = 10
+		cost = 25
 		days_remove = 45
 		days_re_enable = 70
 		modifier = {
@@ -3909,7 +3909,7 @@ RUS_public_campaigns = {
 			hidden_trigger = { NOT = { has_country_flag = RUS_campaign_last_order_slot_held } }
 			has_war = yes
 		}
-		cost = 10
+		cost = 35
 		days_remove = 35
 		days_re_enable = 70
 		modifier = {

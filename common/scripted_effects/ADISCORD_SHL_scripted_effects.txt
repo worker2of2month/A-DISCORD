@@ -1631,6 +1631,7 @@ SHL_commit_state_course = {
 		custom_effect_tooltip = SHL_rename_state_tt
 		hidden_effect = {
 			set_cosmetic_tag = SHL_iron_directorate
+			SHL_queue_furnace_administrations = yes
 			SHL_announce_course_news = yes
 		}
 	}
@@ -1638,6 +1639,7 @@ SHL_commit_state_course = {
 }
 
 SHL_abort_annexed_operations = {
+	clr_country_flag = SHL_furnace_administrations_pending
 	SHL_clear_obligation = yes
 	clr_country_flag = SHL_cycle_pending
 	SHL_clear_project_receipt = yes
@@ -7326,21 +7328,21 @@ SHL_resolve_revanche = {
 # STATE scope helpers.
 SHL_revanche_claim_kyz = {
 	if = {
-		limit = { is_owned_by = SHL }
+		limit = { SHL_direct_or_administration_land = yes }
 		add_claim_by = KYZ
 	}
 }
 
 SHL_revanche_claim_glp = {
 	if = {
-		limit = { is_owned_by = SHL }
+		limit = { SHL_direct_or_administration_land = yes }
 		add_claim_by = GLP
 	}
 }
 
 SHL_revanche_claim_mzr = {
 	if = {
-		limit = { is_owned_by = SHL }
+		limit = { SHL_direct_or_administration_land = yes }
 		add_claim_by = MZR
 	}
 }
@@ -7486,13 +7488,7 @@ SHL_annex_integration_cities = {
 SHL_annex_integration_directorate = {
 	set_variable = { var = SHL_integration_price value = 0 }
 	SHL_integrate_all_satellites = yes
-	if = {
-		limit = {
-			check_variable = { var = SHL_integrated_count value = 0 compare = greater_than }
-			NOT = { has_idea = SHL_general_governorate }
-		}
-		add_timed_idea = { idea = SHL_general_governorate days = 365 }
-	}
+	SHL_form_furnace_administrations = yes
 	SHL_finish_integration = yes
 }
 
@@ -9135,5 +9131,163 @@ SHL_open_second_volume = {
 			check_variable = { var = SHL_book_next value = 2 compare = less_than }
 		}
 		country_event = { id = ADISCORD_shl_book.11 }
+	}
+}
+
+# ----- Territorial furnace administrations -----
+# COUNTRY SHL. Annex callbacks run before the generic handler's final state
+# writes; a single delayed dispatch consumes all acquisitions in that tick.
+SHL_queue_furnace_administrations = {
+	if = {
+		limit = {
+			SHL_furnace_administrations_enabled = yes
+			NOT = { has_country_flag = SHL_furnace_administrations_pending }
+		}
+		set_country_flag = SHL_furnace_administrations_pending
+		country_event = { id = ADISCORD_shl_fire.12 hours = 1 }
+	}
+}
+
+# STATE. The recipient is local to this dispatch, never a persistent global target.
+SHL_transfer_furnace_administration_land = {
+	if = {
+		limit = { SHL_furnace_administration_land = yes }
+		add_core_of = event_target:SHL_furnace_recipient
+		event_target:SHL_furnace_recipient = { transfer_state = PREV }
+	}
+}
+
+# COUNTRY recipient. Repeated land grants preserve politics, armies and autonomy.
+SHL_finish_furnace_administration = {
+	if = {
+		limit = {
+			exists = yes
+			is_subject = no
+		}
+		SHL = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_SHL_furnace_administration
+				freedom_level = 0.0
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+	}
+	if = {
+		limit = { exists = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_economy_mark_dirty = yes
+		if = {
+			limit = { ADISCORD_south_final_active = yes }
+			ADISCORD_south_bind_to_champion = yes
+		}
+	}
+}
+
+# COUNTRY SHL. State rosters follow continuous administrative corridors across
+# former borders. Keyzan, Veyr and the Mazar-Sardan approaches remain under
+# direct SHL rule; foreign land is untouched.
+SHL_form_furnace_administrations = {
+	if = {
+		limit = { SHL_furnace_administrations_enabled = yes }
+		if = {
+			limit = { SFD = { SHL_furnace_administration_receivable = yes } }
+			SFD = { save_event_target_as = SHL_furnace_recipient }
+			174 = { SHL_transfer_furnace_administration_land = yes }
+			175 = { SHL_transfer_furnace_administration_land = yes }
+			265 = { SHL_transfer_furnace_administration_land = yes }
+			266 = { SHL_transfer_furnace_administration_land = yes }
+			267 = { SHL_transfer_furnace_administration_land = yes }
+			270 = { SHL_transfer_furnace_administration_land = yes }
+			271 = { SHL_transfer_furnace_administration_land = yes }
+			272 = { SHL_transfer_furnace_administration_land = yes }
+			274 = { SHL_transfer_furnace_administration_land = yes }
+			275 = { SHL_transfer_furnace_administration_land = yes }
+			705 = { SHL_transfer_furnace_administration_land = yes }
+			SFD = { SHL_finish_furnace_administration = yes }
+		}
+		if = {
+			limit = { SCD = { SHL_furnace_administration_receivable = yes } }
+			SCD = { save_event_target_as = SHL_furnace_recipient }
+			234 = { SHL_transfer_furnace_administration_land = yes }
+			235 = { SHL_transfer_furnace_administration_land = yes }
+			236 = { SHL_transfer_furnace_administration_land = yes }
+			241 = { SHL_transfer_furnace_administration_land = yes }
+			242 = { SHL_transfer_furnace_administration_land = yes }
+			702 = { SHL_transfer_furnace_administration_land = yes }
+			725 = { SHL_transfer_furnace_administration_land = yes }
+			726 = { SHL_transfer_furnace_administration_land = yes }
+			729 = { SHL_transfer_furnace_administration_land = yes }
+			SCD = { SHL_finish_furnace_administration = yes }
+		}
+		if = {
+			limit = { SMD = { SHL_furnace_administration_receivable = yes } }
+			SMD = { save_event_target_as = SHL_furnace_recipient }
+			237 = { SHL_transfer_furnace_administration_land = yes }
+			238 = { SHL_transfer_furnace_administration_land = yes }
+			239 = { SHL_transfer_furnace_administration_land = yes }
+			244 = { SHL_transfer_furnace_administration_land = yes }
+			245 = { SHL_transfer_furnace_administration_land = yes }
+			246 = { SHL_transfer_furnace_administration_land = yes }
+			247 = { SHL_transfer_furnace_administration_land = yes }
+			SMD = { SHL_finish_furnace_administration = yes }
+		}
+		if = {
+			limit = { SOD = { SHL_furnace_administration_receivable = yes } }
+			SOD = { save_event_target_as = SHL_furnace_recipient }
+			67 = { SHL_transfer_furnace_administration_land = yes }
+			68 = { SHL_transfer_furnace_administration_land = yes }
+			69 = { SHL_transfer_furnace_administration_land = yes }
+			70 = { SHL_transfer_furnace_administration_land = yes }
+			225 = { SHL_transfer_furnace_administration_land = yes }
+			226 = { SHL_transfer_furnace_administration_land = yes }
+			227 = { SHL_transfer_furnace_administration_land = yes }
+			228 = { SHL_transfer_furnace_administration_land = yes }
+			229 = { SHL_transfer_furnace_administration_land = yes }
+			230 = { SHL_transfer_furnace_administration_land = yes }
+			231 = { SHL_transfer_furnace_administration_land = yes }
+			688 = { SHL_transfer_furnace_administration_land = yes }
+			689 = { SHL_transfer_furnace_administration_land = yes }
+			690 = { SHL_transfer_furnace_administration_land = yes }
+			691 = { SHL_transfer_furnace_administration_land = yes }
+			692 = { SHL_transfer_furnace_administration_land = yes }
+			700 = { SHL_transfer_furnace_administration_land = yes }
+			701 = { SHL_transfer_furnace_administration_land = yes }
+			719 = { SHL_transfer_furnace_administration_land = yes }
+			720 = { SHL_transfer_furnace_administration_land = yes }
+			721 = { SHL_transfer_furnace_administration_land = yes }
+			722 = { SHL_transfer_furnace_administration_land = yes }
+			723 = { SHL_transfer_furnace_administration_land = yes }
+			724 = { SHL_transfer_furnace_administration_land = yes }
+			727 = { SHL_transfer_furnace_administration_land = yes }
+			728 = { SHL_transfer_furnace_administration_land = yes }
+			SOD = { SHL_finish_furnace_administration = yes }
+		}
+		if = {
+			limit = { SDA = { SHL_furnace_administration_receivable = yes } }
+			SDA = { save_event_target_as = SHL_furnace_recipient }
+			240 = { SHL_transfer_furnace_administration_land = yes }
+			243 = { SHL_transfer_furnace_administration_land = yes }
+			248 = { SHL_transfer_furnace_administration_land = yes }
+			249 = { SHL_transfer_furnace_administration_land = yes }
+			250 = { SHL_transfer_furnace_administration_land = yes }
+			251 = { SHL_transfer_furnace_administration_land = yes }
+			252 = { SHL_transfer_furnace_administration_land = yes }
+			253 = { SHL_transfer_furnace_administration_land = yes }
+			254 = { SHL_transfer_furnace_administration_land = yes }
+			255 = { SHL_transfer_furnace_administration_land = yes }
+			256 = { SHL_transfer_furnace_administration_land = yes }
+			257 = { SHL_transfer_furnace_administration_land = yes }
+			258 = { SHL_transfer_furnace_administration_land = yes }
+			259 = { SHL_transfer_furnace_administration_land = yes }
+			260 = { SHL_transfer_furnace_administration_land = yes }
+			261 = { SHL_transfer_furnace_administration_land = yes }
+			703 = { SHL_transfer_furnace_administration_land = yes }
+			704 = { SHL_transfer_furnace_administration_land = yes }
+			SDA = { SHL_finish_furnace_administration = yes }
+		}
+		ADISCORD_economy_mark_dirty = yes
 	}
 }

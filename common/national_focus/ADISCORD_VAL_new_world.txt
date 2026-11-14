@@ -939,7 +939,7 @@ focus_tree = {
 				add_ideas = VAL_cabinet_bread_delta
 			}
 			hidden_effect = {
-				add_to_variable = { var = VAL_peace_order_weekly_income value = 15 }
+				add_to_variable = { var = VAL_peace_order_weekly_income value = 4 }
 				add_to_variable = { var = VAL_peace_order_consumer_goods value = -0.03 }
 				VAL_peace_order_update = yes
 			}

@@ -33,7 +33,7 @@ characters = {
 	}
 	RIN_Northern_Court_Regency = {
 		name = RIN_Northern_Court_Regency
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_9 } }
+		portraits = { civilian = { large = GFX_portrait_RIN_Northern_Court_Regency } }
 	}
 	KRM_Ivo_Kremen = {
 		name = KRM_Ivo_Kremen
@@ -58,7 +58,7 @@ characters = {
 	}
 	RLY_Relay_Assembly_17 = {
 		name = RLY_Relay_Assembly_17
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+		portraits = { civilian = { large = GFX_portrait_RLY_Relay_Assembly_17 } }
 		country_leader = {
 			ideology = technocracy_ideology
 			expire = "2200.1.1.1"

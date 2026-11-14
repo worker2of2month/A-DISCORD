@@ -281,10 +281,10 @@ characters = {
 			legacy_id = -1
 		}
 	}
-	CIN_VAL_commission = { name = CIN_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
-	OSF_VAL_commission = { name = OSF_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
-	APH_VAL_commission = { name = APH_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
-	VAL_party_administration = { name = VAL_party_administration portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+	CIN_VAL_commission = { name = CIN_VAL_commission portraits = { civilian = { large = GFX_portrait_CIN_VAL_commission } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+	OSF_VAL_commission = { name = OSF_VAL_commission portraits = { civilian = { large = GFX_portrait_OSF_VAL_commission } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+	APH_VAL_commission = { name = APH_VAL_commission portraits = { civilian = { large = GFX_portrait_APH_VAL_commission } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+	VAL_party_administration = { name = VAL_party_administration portraits = { civilian = { large = GFX_portrait_VAL_party_administration } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
 
 
 	NKA_Contract_Council = {
@@ -294,7 +294,7 @@ characters = {
 	}
 	OCA_Contract_Council = {
 		name = OCA_Contract_Council
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+		portraits = { civilian = { large = GFX_portrait_OCA_Contract_Council } }
 		country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
 	}
 
@@ -308,17 +308,17 @@ characters = {
 	}
 	ECA_Contract_Council = {
 		name = ECA_Contract_Council
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+		portraits = { civilian = { large = GFX_portrait_ECA_Contract_Council } }
 		country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
 	}
 	DCA_Contract_Council = {
 		name = DCA_Contract_Council
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
+		portraits = { civilian = { large = GFX_portrait_DCA_Contract_Council } }
 		country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
 	}
 	YPR_Contract_Council = {
 		name = YPR_Contract_Council
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+		portraits = { civilian = { large = GFX_portrait_YPR_Contract_Council } }
 	}
 
 	VAL_Anton_Rein = {
@@ -352,7 +352,7 @@ characters = {
 	}
 	WCA_Contract_Council = {
 		name = WCA_Contract_Council
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
+		portraits = { civilian = { large = GFX_portrait_WCA_Contract_Council } }
 		country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
 	}
 

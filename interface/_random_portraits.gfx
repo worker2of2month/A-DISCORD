@@ -394,4 +394,56 @@ spriteTypes = {
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no
 	}
+
+	spriteType = {
+		name = "GFX_Portrait_EXZ_Generic_1"
+		texturefile = "gfx/leaders/EXZ/default/portrait_EXZ_Generic_1.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_EXZ_Generic_1_small"
+		texturefile = "gfx/leaders/EXZ/default/portrait_EXZ_Generic_1.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_EXZ_Generic_2"
+		texturefile = "gfx/leaders/EXZ/default/portrait_EXZ_Generic_2.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_EXZ_Generic_2_small"
+		texturefile = "gfx/leaders/EXZ/default/portrait_EXZ_Generic_2.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_EXZ_Generic_3"
+		texturefile = "gfx/leaders/EXZ/default/portrait_EXZ_Generic_3.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_EXZ_Generic_3_small"
+		texturefile = "gfx/leaders/EXZ/default/portrait_EXZ_Generic_3.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_EXZ_Generic_4"
+		texturefile = "gfx/leaders/EXZ/default/portrait_EXZ_Generic_4.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_EXZ_Generic_4_small"
+		texturefile = "gfx/leaders/EXZ/default/portrait_EXZ_Generic_4.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 }

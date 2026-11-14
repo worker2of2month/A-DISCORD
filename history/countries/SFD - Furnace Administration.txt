@@ -1,0 +1,10 @@
+capital = 705
+set_politics = {
+	ruling_party = etatism
+	elections_allowed = no
+}
+set_popularities = { etatism = 100 }
+set_stability = 0.45
+set_war_support = 0.50
+set_research_slots = 2
+recruit_character = SFD_Farhad_Mehr

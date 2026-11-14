@@ -52,6 +52,16 @@
       "recorded": "1958-11-05, Kotka, Finland",
       "sha256": "90af46b378ad34708889c71a9b2b1d936f0e8d21c664db17609618f524603798",
       "changes": "Public preview converted to stereo 44100 Hz FLAC. Runtime excerpts, gain and fades are specified in the cue list."
+    },
+    "sfx_industrial_water_pump.flac": {
+      "file": "sfx_industrial_water_pump.flac",
+      "title": "pumping water.wav",
+      "artist": "gecop",
+      "source_page": "https://freesound.org/people/gecop/sounds/568859/",
+      "source_audio": "https://cdn.freesound.org/previews/568/568859_3562198-hq.mp3",
+      "license": "CC0 1.0",
+      "sha256": "e786d2632e15008eadf82be0b98de01aa02bc55199aea1728af274502788500a",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Runtime excerpt, gain and fades are specified in the cue list."
     }
   },
   "superevent_south_free_islands_sound": {
@@ -894,5 +904,174 @@
     "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
     "runtime_file": "sound/superevents/superevent_south_civil_service_sound.wav",
     "runtime_sha256": "6d4394761a1ef8a188c659abff4ffd5117f0ce5a184e273767bd8c28a79fc522"
+  },
+  "superevent_south_federation_sound": {
+    "music": {
+      "artist": "Slow Meadow",
+      "title": "Crown of Amber Canopy",
+      "album": "Slow Meadow",
+      "source_page": "https://slowmeadow.bandcamp.com/track/crown-of-amber-canopy",
+      "file": "slow_meadow_crown_of_amber_canopy_excerpt.flac",
+      "excerpt_seconds": [
+        60,
+        116
+      ],
+      "sha256": "44135a8b2bb974a22187f1d5a43b134c969a04363ad61ed7a0ac7a25d4fdff97",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "STP/sfx_banquet_room.flac",
+        "start": 2,
+        "offset": 4,
+        "duration": 8,
+        "gain": 0.08,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 11,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.3,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 13,
+        "offset": 2,
+        "duration": 4,
+        "gain": 3.5,
+        "fade": 0.4,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 20,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.25,
+        "fade": 0.03,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 22,
+        "offset": 10,
+        "duration": 4,
+        "gain": 3.5,
+        "fade": 0.4,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_small_applause.flac",
+        "start": 30,
+        "offset": 1,
+        "duration": 12,
+        "gain": 0.8,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 33,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.16,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_vintage_camera.flac",
+        "start": 35,
+        "offset": 0,
+        "duration": 1.15,
+        "gain": 0.12,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_courtyard.flac",
+        "start": 46,
+        "offset": 25,
+        "duration": 8,
+        "gain": 1.2,
+        "fade": 2.0,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_federation_sound.wav",
+    "runtime_sha256": "561c17482f4c5c1399ffc676a6d91b779a9ad9b871447363f8eec104424b6189"
+  },
+  "superevent_south_oil_union_sound": {
+    "music": {
+      "artist": "Northaunt",
+      "title": "Until Dawn Do Us Part",
+      "album": "HORIZONS",
+      "source_page": "https://northaunt.bandcamp.com/track/until-dawn-do-us-part",
+      "file": "northaunt_until_dawn_do_us_part_excerpt.flac",
+      "excerpt_seconds": [
+        0,
+        56
+      ],
+      "sha256": "9fefe199e2e58ba1d656dd7dd9c81125b7f79843dafb451f5988d372f2a94a2d",
+      "rights": "Copyrighted recording; public artist preview."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_factory_machine.flac",
+        "start": 0,
+        "offset": 8,
+        "duration": 56,
+        "gain": 0.16,
+        "fade": 4.0,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_industrial_water_pump.flac",
+        "start": 8,
+        "offset": 2,
+        "duration": 10,
+        "gain": 0.22,
+        "fade": 2.0,
+        "peak_limit": 0.08
+      },
+      {
+        "source": "South/sfx_industrial_water_pump.flac",
+        "start": 30,
+        "offset": 20,
+        "duration": 10,
+        "gain": 0.18,
+        "fade": 2.0,
+        "peak_limit": 0.08
+      },
+      {
+        "source": "South/sfx_factory_whistle.flac",
+        "start": 43,
+        "offset": 2,
+        "duration": 8,
+        "gain": 0.18,
+        "fade": 1.5,
+        "peak_limit": 0.16
+      }
+    ],
+    "shared_source_metadata": [],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
+    "runtime_file": "sound/superevents/superevent_south_oil_union_sound.wav",
+    "runtime_sha256": "86abfc56bc7201354e512e4c229dfa7b69f6ef8c83a8703bedefafbb90823c08"
   }
 }

@@ -11769,7 +11769,7 @@ ADISCORD_vorkerland_wkr_siege_category = {
 			custom_effect_tooltip = WKR_siege_paid_order_cancellation_tt
 			hidden_effect = {
 				add_political_power = -50
-				ADISCORD_economy_spend_100 = yes
+				ADISCORD_economy_spend_250 = yes
 				set_country_flag = WKR_siege_plenipotentiary_running
 			}
 		}
@@ -14311,15 +14311,15 @@ ADISCORD_vorkerland_wkr_norm_army_category = {
 			custom_effect_tooltip = WKR_measure_programme_lapse_tt
 			hidden_effect = {
 				add_political_power = -20
-				set_temp_variable = { WKR_measure_treasury_cost = 120 }
+				set_temp_variable = { WKR_measure_treasury_cost = 225 }
 				WKR_measure_spend_treasury = yes
 			}
 		}
 		cancel_effect = {
 			add_political_power = 20
-			add_to_variable = { var = ADISCORD_economy_treasury value = 120 }
+			add_to_variable = { var = ADISCORD_economy_treasury value = 225 }
 			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 120 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 225 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
@@ -18091,8 +18091,8 @@ ADISCORD_vorkerland_tva_laboratories_category = {
 			custom_effect_tooltip = TVA_lab_network_up_8_tt
 			hidden_effect = {
 				add_political_power = -25
-				add_to_variable = { var = ADISCORD_economy_treasury value = -60 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 }
+				add_to_variable = { var = ADISCORD_economy_treasury value = -90 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 90 }
 				ADISCORD_economy_mark_dirty = yes
 				add_to_variable = { var = TVA_network_load value = 8 }
 				TVA_refresh_administration = yes
@@ -19025,7 +19025,7 @@ ADISCORD_vorkerland_wkr_war_communism_category = {
 			base = 2
 			modifier = {
 				factor = 0
-				check_variable = { ADISCORD_economy_treasury < 200 }
+				check_variable = { ADISCORD_economy_treasury < 350 }
 			}
 		}
 	}

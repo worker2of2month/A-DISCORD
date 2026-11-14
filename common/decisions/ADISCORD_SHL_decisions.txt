@@ -3353,7 +3353,11 @@ SHL_quarters_and_borders = {
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = SHL_integrate_satellite_decision_description_rules_tt
-			custom_effect_tooltip = SHL_integrate_satellite_tt
+			if = {
+				limit = { hidden_trigger = { SHL_furnace_administrations_enabled = yes } }
+				custom_effect_tooltip = SHL_integrate_furnace_administration_tt
+			}
+			else = { custom_effect_tooltip = SHL_integrate_satellite_tt }
 			hidden_effect = { SHL_begin_integration = yes }
 		}
 		remove_effect = { hidden_effect = { SHL_finish_integration_decision = yes } }

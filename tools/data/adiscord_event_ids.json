@@ -5885,6 +5885,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_shl_fire.12",
+      "namespace": "ADISCORD_shl_fire",
+      "number": 12,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_furnace_administrations",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_shl_crisis.1",
       "namespace": "ADISCORD_shl_crisis",
       "number": 1,

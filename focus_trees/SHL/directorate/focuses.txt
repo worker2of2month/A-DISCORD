@@ -404,6 +404,17 @@
 				uses = 2
 				category = industry
 			}
+			add_political_power = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_d_darban_engineers_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_efficiency_gain value = 0.05 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -712,6 +723,22 @@
 				amount = 150
 				producer = SHL
 			}
+			add_tech_bonus = {
+				name = SHL_d_cannon_works
+				bonus = 0.5
+				uses = 1
+				category = artillery
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_d_cannon_works_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_arms_speed value = 0.05 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -737,6 +764,21 @@
 			add_equipment_to_stockpile = {
 				type = motorized_equipment_1
 				amount = 450
+				producer = SHL
+			}
+			707 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+						infrastructure < 5
+					}
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 10
 				producer = SHL
 			}
 		}
@@ -765,7 +807,23 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_research_slot = 1
+			add_tech_bonus = {
+				name = SHL_d_evacuation_plan
+				bonus = 1
+				uses = 1
+				category = industry
+			}
+			add_stability = 0.02
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_d_evacuation_plan_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_research_speed value = 0.03 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -927,7 +985,6 @@
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_ideas = SHL_general_governorate
-			unlock_decision_tooltip = SHL_nationalise_region
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -992,6 +1049,36 @@
 			hidden_effect = {
 				SHL_annex_integration_directorate = yes
 			}
+			SFD = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
+			SCD = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
+			SMD = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
+			SOD = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
+			SDA = {
+				if = {
+					limit = { is_subject_of = SHL }
+					add_timed_idea = { idea = SHL_general_governorate days = 365 }
+				}
+			}
 		}
 		ai_will_do = { base = 50 }
 	}
@@ -1019,7 +1106,10 @@
 			699 = {
 				if = {
 					limit = {
-						is_owned_by = SHL
+						OR = {
+							is_owned_by = SHL
+							owner = { is_subject_of = SHL }
+						}
 						free_building_slots = { building = infrastructure size = 1 include_locked = no }
 					}
 					add_building_construction = {
@@ -1032,7 +1122,10 @@
 			292 = {
 				if = {
 					limit = {
-						is_owned_by = SHL
+						OR = {
+							is_owned_by = SHL
+							owner = { is_subject_of = SHL }
+						}
 						free_building_slots = { building = infrastructure size = 1 include_locked = no }
 					}
 					add_building_construction = {
@@ -1045,7 +1138,10 @@
 			67 = {
 				if = {
 					limit = {
-						is_owned_by = SHL
+						OR = {
+							is_owned_by = SHL
+							owner = { is_subject_of = SHL }
+						}
 						free_building_slots = { building = infrastructure size = 1 include_locked = no }
 					}
 					add_building_construction = {
@@ -1177,7 +1273,23 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_research_slot = 1
+			add_political_power = 50
+			add_tech_bonus = {
+				name = SHL_d_nur_legacy
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_d_nur_legacy_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_research_speed value = 0.03 }
+				SHL_refresh_conclave_power = yes
+			}
 		}
 		ai_will_do = { base = 50 }
 	}

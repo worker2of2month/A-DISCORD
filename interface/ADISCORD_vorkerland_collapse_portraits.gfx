@@ -17,4 +17,14 @@ spriteTypes = {
 		name = "GFX_portrait_PSD_Marta_Cinder"
 		texturefile = "gfx/leaders/PSD/portrait_PSD_Marta_Cinder.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_WKR_Emergency_Coordination_Committee"
+		texturefile = "gfx/leaders/WKR/portrait_WKR_Emergency_Coordination_Committee.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_WTD_Central_Engineering_Council"
+		texturefile = "gfx/leaders/WTD/portrait_WTD_Central_Engineering_Council.png"
+	}
 }

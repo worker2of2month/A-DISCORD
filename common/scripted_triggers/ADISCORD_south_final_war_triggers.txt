@@ -1,6 +1,153 @@
 # Southern final war: Svetlogorye (or the Restitution Alliance that absorbed it)
 # against Shahrabad. Side numbers: 1 = Shahrabad, 2 = the northern champion.
 
+# COUNTRY. Presentation reads the committed war side only while that war is active.
+# Outside it, sovereignty and existing alliances determine the political map.
+ADISCORD_south_map_country_shl = {
+	exists = yes
+	OR = {
+		AND = {
+			ADISCORD_south_final_active = yes
+			ADISCORD_south_on_shl_side = yes
+		}
+		AND = {
+			ADISCORD_south_final_active = no
+			SHL = {
+				exists = yes
+				is_subject = no
+			}
+			OR = {
+				tag = SHL
+				is_subject_of = SHL
+				is_in_faction_with = SHL
+			}
+		}
+	}
+}
+
+ADISCORD_south_map_country_north = {
+	exists = yes
+	ADISCORD_south_map_country_shl = no
+	OR = {
+		AND = {
+			ADISCORD_south_final_active = yes
+			ADISCORD_south_on_north_side = yes
+		}
+		AND = {
+			ADISCORD_south_final_active = no
+			OR = {
+				AND = {
+					NAM = { ADISCORD_south_champion_viable = yes }
+					OR = {
+						tag = NAM
+						is_subject_of = NAM
+						is_in_faction_with = NAM
+					}
+				}
+				AND = {
+					NOT = { NAM = { ADISCORD_south_champion_viable = yes } }
+					EFL = { ADISCORD_south_champion_viable = yes }
+					OR = {
+						tag = EFL
+						is_subject_of = EFL
+						is_in_faction_with = EFL
+					}
+				}
+				AND = {
+					NOT = { NAM = { ADISCORD_south_champion_viable = yes } }
+					NOT = { EFL = { ADISCORD_south_champion_viable = yes } }
+					AZH = { ADISCORD_south_champion_viable = yes }
+					OR = {
+						tag = AZH
+						is_subject_of = AZH
+						is_in_faction_with = AZH
+					}
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY. A committed northern leader remains the leader through wartime
+# capitulation; peacetime succession follows the same order as war entry.
+ADISCORD_south_map_country_shl_leader = {
+	tag = SHL
+	ADISCORD_south_map_country_shl = yes
+}
+
+ADISCORD_south_map_country_north_leader = {
+	ADISCORD_south_map_country_north = yes
+	OR = {
+		AND = {
+			ADISCORD_south_final_active = yes
+			has_country_flag = ADISCORD_south_north_leader
+		}
+		AND = {
+			ADISCORD_south_final_active = no
+			ADISCORD_south_declarer_valid = yes
+		}
+	}
+}
+
+# STATE. Before and after the war the map shows ownership; during it, control.
+ADISCORD_south_map_state_shl = {
+	OR = {
+		AND = {
+			ADISCORD_south_final_active = yes
+			controller = { ADISCORD_south_map_country_shl = yes }
+		}
+		AND = {
+			ADISCORD_south_final_active = no
+			owner = { ADISCORD_south_map_country_shl = yes }
+		}
+	}
+}
+
+ADISCORD_south_map_state_north = {
+	OR = {
+		AND = {
+			ADISCORD_south_final_active = yes
+			controller = { ADISCORD_south_map_country_north = yes }
+		}
+		AND = {
+			ADISCORD_south_final_active = no
+			owner = { ADISCORD_south_map_country_north = yes }
+		}
+	}
+}
+
+ADISCORD_south_map_state_shl_leader = {
+	OR = {
+		AND = {
+			ADISCORD_south_final_active = yes
+			controller = { ADISCORD_south_map_country_shl_leader = yes }
+		}
+		AND = {
+			ADISCORD_south_final_active = no
+			owner = { ADISCORD_south_map_country_shl_leader = yes }
+		}
+	}
+}
+
+ADISCORD_south_map_state_north_leader = {
+	OR = {
+		AND = {
+			ADISCORD_south_final_active = yes
+			controller = { ADISCORD_south_map_country_north_leader = yes }
+		}
+		AND = {
+			ADISCORD_south_final_active = no
+			owner = { ADISCORD_south_map_country_north_leader = yes }
+		}
+	}
+}
+
+ADISCORD_south_map_state_occupied = {
+	owner = {
+		NOT = { controls_state = PREV }
+	}
+}
+
 # GLOBAL. The resource war has a result, or its bounded entry path was stopped.
 ADISCORD_south_resource_question_closed = {
 	OR = {

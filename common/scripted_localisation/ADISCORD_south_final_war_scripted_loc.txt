@@ -1,3 +1,50 @@
+# COUNTRY. Map tooltips use the same alignment predicates as the colour layers.
+defined_text = {
+	name = ADISCORDSouthMapAlignment
+	text = {
+		trigger = { exists = no }
+		localization_key = ADISCORD_south_map_absent
+	}
+	text = {
+		trigger = { ADISCORD_south_map_country_shl_leader = yes }
+		localization_key = ADISCORD_south_map_shl_leader
+	}
+	text = {
+		trigger = { ADISCORD_south_map_country_north_leader = yes }
+		localization_key = ADISCORD_south_map_north_leader
+	}
+	text = {
+		trigger = { ADISCORD_south_map_country_shl = yes }
+		localization_key = ADISCORD_south_map_shl
+	}
+	text = {
+		trigger = { ADISCORD_south_map_country_north = yes }
+		localization_key = ADISCORD_south_map_north
+	}
+	text = { localization_key = ADISCORD_south_map_neutral }
+}
+
+defined_text = {
+	name = ADISCORDSouthMapPhase
+	text = {
+		trigger = { ADISCORD_south_final_active = yes }
+		localization_key = ADISCORD_south_map_phase_war
+	}
+	text = {
+		trigger = { has_global_flag = ADISCORD_south_final_resolved }
+		localization_key = ADISCORD_south_map_phase_resolved
+	}
+	text = {
+		trigger = { has_global_flag = ADISCORD_south_crisis_warned }
+		localization_key = ADISCORD_south_map_phase_warning
+	}
+	text = {
+		trigger = { has_global_flag = ADISCORD_south_preparation_started }
+		localization_key = ADISCORD_south_map_phase_preparing
+	}
+	text = { localization_key = ADISCORD_south_map_phase_waiting }
+}
+
 defined_text = {
 	name = ADISCORDSouthNorthSide
 	# During the war the flagged leader; before it, the first viable candidate.

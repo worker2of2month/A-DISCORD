@@ -3049,7 +3049,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("ruling_party = technocracy", appointment)
         self.assertIn("character = PWR_Alexey_Lange", appointment)
         self.assertIn("ideology = technocracy_ideology", appointment)
-        self.assertIn("portrait = GFX_Portrait_Forul_Generic_4", appointment)
+        self.assertIn("portrait = GFX_portrait_PWR_Alexey_Lange", appointment)
         self.assertNotIn("recruit_character", appointment)
         self.assertIn('PWR_rimat_republic: "Риматская инженерная директория"', loc)
         self.assertIn('PWR_Alexey_Lange: "Алексей Ланге"', collapse_loc)

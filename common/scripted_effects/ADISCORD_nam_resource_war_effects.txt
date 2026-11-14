@@ -3740,31 +3740,40 @@ NAM_hold_field_reward = {
 
 # COUNTRY NAM. One-time setup from NAM_groups_initialize.
 NAM_oil_initialize = {
+	set_variable = { var = NAM_export_office_price_bonus value = 0 }
+	set_variable = { var = NAM_export_office_capacity_bonus value = 0 }
+	set_variable = { var = NAM_export_office_unpaid value = 0 }
+	set_variable = { var = NAM_export_office_last_income value = 0 }
 	67 = {
+		NAM_export_office_initialize = yes
 		set_variable = { var = NAM_field_capacity value = 5 }
 		set_variable = { var = NAM_field_max_capacity value = 11 }
 		set_variable = { var = NAM_field_condition value = 80 }
 		set_variable = { var = NAM_field_applied_oil value = 40 }
 	}
 	688 = {
+		NAM_export_office_initialize = yes
 		set_variable = { var = NAM_field_capacity value = 1 }
 		set_variable = { var = NAM_field_max_capacity value = 3 }
 		set_variable = { var = NAM_field_condition value = 80 }
 		set_variable = { var = NAM_field_applied_oil value = 8 }
 	}
 	689 = {
+		NAM_export_office_initialize = yes
 		set_variable = { var = NAM_field_capacity value = 3 }
 		set_variable = { var = NAM_field_max_capacity value = 7 }
 		set_variable = { var = NAM_field_condition value = 80 }
 		set_variable = { var = NAM_field_applied_oil value = 24 }
 	}
 	690 = {
+		NAM_export_office_initialize = yes
 		set_variable = { var = NAM_field_capacity value = 2 }
 		set_variable = { var = NAM_field_max_capacity value = 5 }
 		set_variable = { var = NAM_field_condition value = 80 }
 		set_variable = { var = NAM_field_applied_oil value = 16 }
 	}
 	719 = {
+		NAM_export_office_initialize = yes
 		set_variable = { var = NAM_field_capacity value = 1 }
 		set_variable = { var = NAM_field_max_capacity value = 3 }
 		set_variable = { var = NAM_field_condition value = 80 }
@@ -4034,6 +4043,7 @@ NAM_field_update_units = {
 		}
 	}
 	NAM = { add_to_variable = { var = NAM_oil_throughput value = PREV.NAM_field_units } }
+	NAM_export_office_refresh = yes
 }
 
 # COUNTRY NAM. Commissioning a plant affects extraction only after a feeder is installed.
@@ -4417,6 +4427,7 @@ NAM_oil_settle_clients = {
 # COUNTRY NAM. on_monthly_NAM: contracts, tribute expiry, the island levy,
 # the steel concession and the crisis-coalition offer. Fixed tags only.
 NAM_oil_monthly = {
+	NAM_export_office_monthly = yes
 	NAM_oil_validate_clients = yes
 	NAM_oil_settle_clients = yes
 	if = {
@@ -4566,6 +4577,7 @@ NAM_project_release = {
 			limit = { has_variable = NAM_project_pp_deposit }
 			NAM = { add_political_power = PREV.NAM_project_pp_deposit }
 		}
+		clear_variable = NAM_export_office_order
 		clear_variable = NAM_project_pp_deposit
 		clear_variable = NAM_project_deposit
 	}
@@ -4573,6 +4585,7 @@ NAM_project_release = {
 
 # STATE target. Finished project: the deposit is spent and the slot frees.
 NAM_project_close = {
+	clear_variable = NAM_export_office_order
 	clr_state_flag = NAM_project_in_progress
 	clear_variable = NAM_project_pp_deposit
 	clear_variable = NAM_project_deposit
@@ -4720,6 +4733,14 @@ NAM_project_complete_refinery = {
 			has_state_flag = NAM_project_in_progress
 			check_variable = { var = NAM_project_deposit value = 300 compare = equals }
 		}
+		NAM_project_release = yes
+	}
+}
+
+# STATE. Cancellation returns only the refinery escrow.
+NAM_project_refund_refinery = {
+	if = {
+		limit = { NAM_refinery_receipt = yes }
 		NAM_project_release = yes
 	}
 }
@@ -6127,6 +6148,12 @@ NAM_apply_ending_federation = {
 }
 
 NAM_apply_ending_oil_union = {
+	723 = {
+		if = {
+			limit = { NOT = { has_variable = NAM_combine_stage } }
+			set_variable = { var = NAM_combine_stage value = 0 }
+		}
+	}
 	hidden_effect = { set_country_flag = NAM_ladder_settled }
 	if = {
 		limit = {
@@ -10744,35 +10771,6 @@ NAM_pw_district_cooperative_settle = {
 	else = { NAM_pw_district_cooperative_refund = yes }
 }
 
-NAM_pw_export_shipment_refund = {
-	if = {
-		limit = { has_country_flag = NAM_pw_export_shipment_paid }
-		clr_country_flag = NAM_pw_export_shipment_paid
-		clr_country_flag = NAM_pw_civil_busy
-		add_political_power = 25
-		add_fuel = 60000
-	}
-}
-
-NAM_pw_export_shipment_settle = {
-	if = {
-		limit = {
-			has_country_flag = NAM_pw_export_shipment_paid
-			NAM_pw_export_shipment_ready = yes
-		}
-		clr_country_flag = NAM_pw_export_shipment_paid
-		clr_country_flag = NAM_pw_civil_busy
-		if = {
-			limit = { has_completed_focus = NAM_freight_brokerage }
-			set_temp_variable = { var = NAM_treasury_amount value = 125 }
-			NAM_add_treasury = yes
-		}
-		set_temp_variable = { var = NAM_treasury_amount value = 450 }
-		NAM_add_treasury = yes
-	}
-	else = { NAM_pw_export_shipment_refund = yes }
-}
-
 # ----- National naval procurement -----
 # The fixed-price template stays locked while the permanent programme is open;
 # ordinary recruitment remains available independently of paid orders.
@@ -11531,7 +11529,30 @@ NAM_project_complete_hydroelectric = {
 				level = 2
 				instant_build = yes
 			}
-			add_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower }
+			add_building_construction = {
+				type = dam
+				level = 1
+				instant_build = yes
+				province = 3127
+			}
+			add_building_construction = {
+				type = hidden_dam
+				level = 1
+				instant_build = yes
+			}
+			67 = {
+				add_building_construction = {
+					type = dam
+					level = 1
+					instant_build = yes
+					province = 12668
+				}
+				add_building_construction = {
+					type = hidden_dam
+					level = 1
+					instant_build = yes
+				}
+			}
 			NAM = {
 				NAM_grid_refresh_connections = yes
 				ADISCORD_economy_mark_dirty = yes
@@ -12197,14 +12218,18 @@ NAM_war_refugee_registration_settle = {
 	else = { NAM_war_refugee_registration_refund = yes }
 }
 
+# STATE. The regional decision has debited both prices; the escrow names the district.
+NAM_border_reconstruction_begin = {
+	set_variable = { var = NAM_project_deposit value = 400 }
+	set_variable = { var = NAM_project_pp_deposit value = 35 }
+	NAM_project_begin = yes
+}
+
 # STATE. The receipt remains authoritative across occupation and delayed callbacks.
+# Regional callbacks visit every district of their part; only the receipt holder settles.
 NAM_border_reconstruction_finish = {
 	if = {
-		limit = {
-			has_state_flag = NAM_project_in_progress
-			check_variable = { var = NAM_project_deposit value = 400 compare = equals }
-			check_variable = { var = NAM_project_pp_deposit value = 35 compare = equals }
-		}
+		limit = { NAM_border_reconstruction_receipt = yes }
 		if = {
 			limit = { NAM_border_integration_site = yes }
 			NAM_project_close = yes
@@ -12217,23 +12242,21 @@ NAM_border_reconstruction_finish = {
 
 NAM_border_reconstruction_refund = {
 	if = {
-		limit = {
-			has_state_flag = NAM_project_in_progress
-			check_variable = { var = NAM_project_deposit value = 400 compare = equals }
-			check_variable = { var = NAM_project_pp_deposit value = 35 compare = equals }
-		}
+		limit = { NAM_border_reconstruction_receipt = yes }
 		NAM_project_release = yes
 	}
+}
+
+NAM_border_incorporation_begin = {
+	set_variable = { var = NAM_project_deposit value = 500 }
+	set_variable = { var = NAM_project_pp_deposit value = 75 }
+	NAM_project_begin = yes
 }
 
 # STATE. The receipt remains authoritative across occupation and delayed callbacks.
 NAM_border_incorporation_finish = {
 	if = {
-		limit = {
-			has_state_flag = NAM_project_in_progress
-			check_variable = { var = NAM_project_deposit value = 500 compare = equals }
-			check_variable = { var = NAM_project_pp_deposit value = 75 compare = equals }
-		}
+		limit = { NAM_border_incorporation_receipt = yes }
 		if = {
 			limit = { NAM_border_citizenship_ready = yes }
 			NAM_project_close = yes
@@ -12246,11 +12269,7 @@ NAM_border_incorporation_finish = {
 
 NAM_border_incorporation_refund = {
 	if = {
-		limit = {
-			has_state_flag = NAM_project_in_progress
-			check_variable = { var = NAM_project_deposit value = 500 compare = equals }
-			check_variable = { var = NAM_project_pp_deposit value = 75 compare = equals }
-		}
+		limit = { NAM_border_incorporation_receipt = yes }
 		NAM_project_release = yes
 	}
 }
@@ -12871,7 +12890,7 @@ NAM_program_cadastre_settle = {
 			limit = {
 				NAM_program_cadastre_ready = yes
 			}
-			set_variable = { var = NAM_adm_land_rent value = 20 }
+			set_variable = { var = NAM_adm_land_rent value = 10 }
 			NAM_refresh_administration = yes
 			set_country_flag = NAM_land_register_ratified
 			clr_country_flag = NAM_program_cadastre_paid
@@ -14872,5 +14891,364 @@ NAM_veyran_close_external = {
 			}
 		}
 		NAM = { NAM_veyran_settle_defeat = yes }
+	}
+}
+
+# ----- Great Shift industrial landmark -----
+# COUNTRY. The state project escrow owns both currencies until this phase settles.
+NAM_combine_begin = {
+	add_political_power = -75
+	set_temp_variable = { var = NAM_treasury_amount value = 750 }
+	NAM_spend_treasury = yes
+	723 = {
+		set_variable = { var = NAM_project_deposit value = 750 }
+		set_variable = { var = NAM_project_pp_deposit value = 75 }
+		set_state_flag = NAM_combine_underway
+		NAM_project_begin = yes
+		if = {
+			limit = { check_variable = { NAM_combine_stage < 1 } }
+			set_variable = { var = NAM_combine_stage value = 1 }
+		}
+		NAM_combine_sync_visual = yes
+	}
+}
+
+# STATE. Preserve built structures; return only the unfinished phase's escrow.
+NAM_combine_refund = {
+	if = {
+		limit = { has_state_flag = NAM_combine_underway }
+		clr_state_flag = NAM_combine_underway
+		NAM_project_release = yes
+		NAM = {
+			NAM_combine_support_refund = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+NAM_combine_deliver_frame = {
+	if = {
+		limit = {
+			has_state_flag = NAM_combine_underway
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_combine_stage value = 1 compare = equals }
+			NAM = { NAM_combine_operable = yes }
+		}
+		clr_state_flag = NAM_combine_underway
+		NAM_project_close = yes
+		set_variable = { var = NAM_combine_stage value = 2 }
+		NAM_combine_sync_visual = yes
+		NAM = {
+			NAM_combine_support_refund = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	else = { NAM_combine_refund = yes }
+}
+
+NAM_combine_deliver_plant = {
+	if = {
+		limit = {
+			has_state_flag = NAM_combine_underway
+			has_state_flag = NAM_project_in_progress
+			check_variable = { var = NAM_combine_stage value = 2 compare = equals }
+			NAM = { NAM_combine_operable = yes }
+			NAM_combine_capacity = yes
+		}
+		clr_state_flag = NAM_combine_underway
+		NAM_project_close = yes
+		set_variable = { var = NAM_combine_stage value = 3 }
+		add_dynamic_modifier = { modifier = NAM_combine_industrial_heart }
+		NAM = {
+			add_victory_points = {
+				province = 11219
+				value = 15
+			}
+			set_province_name = {
+				id = 11219
+				name = NAM_combine_city
+			}
+		}
+		add_extra_state_shared_building_slots = 3
+		add_building_construction = {
+			type = industrial_complex
+			level = 2
+			instant_build = yes
+		}
+		add_building_construction = {
+			type = synthetic_refinery
+			level = 1
+			instant_build = yes
+		}
+		NAM_combine_sync_visual = yes
+		NAM = {
+			NAM_combine_support_refund = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	else = { NAM_combine_refund = yes }
+}
+
+# STATE 723 owns the actor across country annexation and current-campaign save/load.
+# create_entity uses x/map-y/height, unlike ambient_object's x/height/map-z.
+NAM_combine_sync_visual = {
+	destroy_entity = 610723
+	if = {
+		limit = { check_variable = { var = NAM_combine_stage value = 1 compare = equals } }
+		create_entity = {
+			entity = ADISCORD_NAM_combine_foundations_entity
+			id = 610723
+			x = 3657
+			y = 653
+			z = 11.61
+			rotation = 0
+			scale = 0.09
+			min_zoom = 2000
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_combine_stage value = 2 compare = equals } }
+		create_entity = {
+			entity = ADISCORD_NAM_combine_assembly_entity
+			id = 610723
+			x = 3657
+			y = 653
+			z = 11.61
+			rotation = 0
+			scale = 0.09
+			min_zoom = 2000
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_combine_stage value = 3 compare = equals } }
+		create_entity = {
+			entity = ADISCORD_NAM_combine_complete_entity
+			id = 610723
+			x = 3657
+			y = 653
+			z = 11.61
+			rotation = 0
+			scale = 0.09
+			min_zoom = 2000
+		}
+	}
+}
+
+# COUNTRY. Only one support order can hold a receipt; settlement is tied to its phase.
+NAM_combine_support_refund = {
+	if = {
+		limit = { has_variable = NAM_combine_support_cash }
+		set_temp_variable = { var = NAM_treasury_amount value = NAM_combine_support_cash }
+		NAM_add_treasury = yes
+		add_political_power = NAM_combine_support_pp
+		NAM_combine_support_close = yes
+	}
+}
+
+NAM_combine_support_close = {
+	clear_variable = NAM_combine_support_cash
+	clear_variable = NAM_combine_support_pp
+	clear_variable = NAM_combine_support_phase
+	clear_variable = NAM_combine_support_days
+}
+
+NAM_combine_support_deliver = {
+	if = {
+		limit = { NAM_combine_support_current = yes }
+		if = {
+			limit = { check_variable = { var = NAM_combine_support_phase value = 1 compare = equals } }
+			if = {
+				limit = { check_variable = { NAM_combine_support_days > 45 } }
+				add_days_mission_timeout = {
+					mission = NAM_combine_frame_process
+					days = -60
+				}
+			}
+			else = {
+				add_days_mission_timeout = {
+					mission = NAM_combine_frame_process
+					days = -30
+				}
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_combine_support_phase value = 2 compare = equals } }
+			if = {
+				limit = { check_variable = { NAM_combine_support_days > 45 } }
+				add_days_mission_timeout = {
+					mission = NAM_combine_plant_process
+					days = -60
+				}
+			}
+			else = {
+				add_days_mission_timeout = {
+					mission = NAM_combine_plant_process
+					days = -30
+				}
+			}
+		}
+		NAM_combine_support_close = yes
+	}
+	else = { NAM_combine_support_refund = yes }
+}
+
+# ----- Regional export offices -----
+# STATE. Called only by the new-campaign field initializer.
+NAM_export_office_initialize = {
+	set_variable = { var = NAM_export_office_rate value = 0.3 }
+	set_variable = { var = NAM_export_office_level value = 0 }
+	set_variable = { var = NAM_export_office_cost value = 200 }
+	set_variable = { var = NAM_export_office_oil value = 0 }
+	set_variable = { var = NAM_export_office_oil_delta value = 0 }
+	set_variable = { var = NAM_export_office_last_day value = global.num_days }
+}
+
+# STATE. Integrate the previous quota before any change. Repeated refreshes on
+# the same date add nothing; pausing and recapture cannot create a full month's sale.
+NAM_export_office_accrue = {
+	set_temp_variable = { var = NAM_export_office_elapsed value = global.num_days }
+	subtract_from_temp_variable = { var = NAM_export_office_elapsed value = NAM_export_office_last_day }
+	multiply_temp_variable = { var = NAM_export_office_elapsed value = NAM_export_office_oil }
+	multiply_temp_variable = { var = NAM_export_office_elapsed value = NAM_export_office_rate }
+	NAM = { add_to_variable = { var = NAM_export_office_unpaid value = PREV.NAM_export_office_elapsed } }
+	set_variable = { var = NAM_export_office_last_day value = global.num_days }
+}
+
+# STATE. Withhold a quota through a modifier, never through add_resource: the
+# field ledger remains gross extraction and unrelated oil rewards stay intact.
+NAM_export_office_refresh = {
+	if = {
+		limit = { check_variable = { NAM_export_office_level > 0 } }
+		NAM_export_office_accrue = yes
+		set_variable = { var = NAM_export_office_rate value = 0.3 }
+		add_to_variable = { var = NAM_export_office_rate value = NAM.NAM_export_office_price_bonus }
+		set_variable = { var = NAM_export_office_capacity value = 4 }
+		add_to_variable = { var = NAM_export_office_capacity value = NAM.NAM_export_office_capacity_bonus }
+		multiply_variable = { var = NAM_export_office_capacity value = NAM_export_office_level }
+		set_temp_variable = { var = NAM_export_office_next value = 0 }
+		if = {
+			limit = { NAM_export_office_operating_site = yes }
+			set_temp_variable = { var = NAM_export_office_next value = NAM_export_office_capacity }
+			clamp_temp_variable = { var = NAM_export_office_next min = 0 max = NAM_field_oil }
+		}
+		if = {
+			limit = {
+				NOT = { check_variable = { var = NAM_export_office_oil value = NAM_export_office_next compare = equals } }
+			}
+			set_variable = { var = NAM_export_office_oil value = NAM_export_office_next }
+			set_variable = { var = NAM_export_office_oil_delta value = NAM_export_office_oil }
+			multiply_variable = { var = NAM_export_office_oil_delta value = -1 }
+			force_update_dynamic_modifier = yes
+			NAM = { ADISCORD_economy_mark_dirty = yes }
+			owner = { ADISCORD_economy_mark_dirty = yes }
+		}
+		set_variable = { var = NAM_export_office_month_estimate value = NAM_export_office_oil }
+		multiply_variable = { var = NAM_export_office_month_estimate value = NAM_export_office_rate }
+		multiply_variable = { var = NAM_export_office_month_estimate value = 30 }
+	}
+}
+
+# COUNTRY NAM. Only the five established mainland fields are visited.
+NAM_export_office_refresh_all = {
+	67 = { NAM_export_office_refresh = yes }
+	688 = { NAM_export_office_refresh = yes }
+	689 = { NAM_export_office_refresh = yes }
+	690 = { NAM_export_office_refresh = yes }
+	719 = { NAM_export_office_refresh = yes }
+}
+
+NAM_export_office_monthly = {
+	NAM_export_office_refresh_all = yes
+	set_variable = { var = NAM_export_office_last_income value = NAM_export_office_unpaid }
+	if = {
+		limit = { check_variable = { NAM_export_office_unpaid > 0 } }
+		set_temp_variable = { var = NAM_treasury_amount value = NAM_export_office_unpaid }
+		NAM_add_treasury = yes
+		# A substantial paid statement can back one exchange receipt and a bond
+		# certificate. Bond repayment itself remains in the existing monthly hook.
+		if = {
+			limit = { check_variable = { var = NAM_export_office_unpaid value = 100 compare = greater_than_or_equals } }
+			if = {
+				limit = { NAM_exchange_can_write_receipt = yes }
+				add_to_variable = { var = NAM_exchange_receipts value = 1 }
+			}
+			if = {
+				limit = {
+					OR = {
+						has_completed_focus = NAM_customs_clearinghouse
+						has_completed_focus = NAM_prag_ending_directorate
+					}
+				}
+				NAM_certify_shipping_manifest = yes
+			}
+		}
+		set_variable = { var = NAM_export_office_unpaid value = 0 }
+	}
+}
+
+# STATE. A paid order owns the existing project escrow until delivery or refund.
+NAM_export_office_settle = {
+	if = {
+		limit = { has_variable = NAM_export_office_order }
+		if = {
+			limit = {
+				NAM_export_office_build_site = yes
+				has_state_flag = NAM_project_in_progress
+				NAM = { NAM_independent_programmes_operable = yes }
+			}
+			NAM_export_office_accrue = yes
+			set_variable = { var = NAM_export_office_level value = NAM_export_office_order }
+			NAM_project_close = yes
+			set_variable = { var = NAM_export_office_cost value = NAM_export_office_level }
+			multiply_variable = { var = NAM_export_office_cost value = 150 }
+			add_to_variable = { var = NAM_export_office_cost value = 200 }
+			NAM_export_office_install_modifier = yes
+			NAM_export_office_refresh = yes
+			NAM_export_office_sync_visual = yes
+		}
+		else = { NAM_project_release = yes }
+	}
+}
+
+NAM_export_office_install_modifier = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_export_office_1 } }
+		remove_dynamic_modifier = { modifier = NAM_export_office_1 }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_export_office_2 } }
+		remove_dynamic_modifier = { modifier = NAM_export_office_2 }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_export_office_3 } }
+		remove_dynamic_modifier = { modifier = NAM_export_office_3 }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_export_office_4 } }
+		remove_dynamic_modifier = { modifier = NAM_export_office_4 }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_export_office_5 } }
+		remove_dynamic_modifier = { modifier = NAM_export_office_5 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_export_office_level value = 1 compare = equals } }
+		add_dynamic_modifier = { modifier = NAM_export_office_1 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_export_office_level value = 2 compare = equals } }
+		add_dynamic_modifier = { modifier = NAM_export_office_2 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_export_office_level value = 3 compare = equals } }
+		add_dynamic_modifier = { modifier = NAM_export_office_3 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_export_office_level value = 4 compare = equals } }
+		add_dynamic_modifier = { modifier = NAM_export_office_4 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_export_office_level value = 5 compare = equals } }
+		add_dynamic_modifier = { modifier = NAM_export_office_5 }
 	}
 }

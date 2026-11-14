@@ -197,7 +197,7 @@ ideas = {
 			name = VAL_peace_order
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_weekly_income = 15
+				ADISCORD_economy_weekly_income = 4
 				consumer_goods_factor = -0.03
 			}
 		}
@@ -317,7 +317,7 @@ ideas = {
 			removal_cost = -1
 			on_add = { ADISCORD_economy_mark_dirty = yes }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { ADISCORD_economy_weekly_income = 15 ADISCORD_economy_trade_income_factor = 0.03 }
+			modifier = { ADISCORD_economy_weekly_income = 4 ADISCORD_economy_trade_income_factor = 0.03 }
 		}
 		OCA_chartered_administration = {
 			picture = VAL_contract_state
@@ -327,7 +327,7 @@ ideas = {
 			removal_cost = -1
 			on_add = { ADISCORD_economy_mark_dirty = yes }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { stability_factor = 0.05 ADISCORD_economy_weekly_income = 10 }
+			modifier = { stability_factor = 0.05 ADISCORD_economy_weekly_income = 3 }
 		}
 		OCA_joint_clearing_house = {
 			picture = VAL_contract_state
@@ -337,7 +337,7 @@ ideas = {
 			removal_cost = -1
 			on_add = { ADISCORD_economy_mark_dirty = yes }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { ADISCORD_economy_trade_income_factor = 0.10 ADISCORD_economy_weekly_income = 10 }
+			modifier = { ADISCORD_economy_trade_income_factor = 0.10 ADISCORD_economy_weekly_income = 3 }
 		}
 		OCA_civilian_contract_board = {
 			picture = VAL_contract_state
@@ -367,7 +367,7 @@ ideas = {
 			removal_cost = -1
 			on_add = { ADISCORD_economy_mark_dirty = yes }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { ADISCORD_economy_weekly_income = 12 }
+			modifier = { ADISCORD_economy_weekly_income = 3 }
 		}
 		OCA_mining_concession_income = {
 			picture = VAL_contract_state
@@ -377,7 +377,7 @@ ideas = {
 			removal_cost = -1
 			on_add = { ADISCORD_economy_mark_dirty = yes }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { ADISCORD_economy_weekly_income = 12 }
+			modifier = { ADISCORD_economy_weekly_income = 3 }
 		}
 		OCA_supply_service = {
 			picture = VAL_contract_state
@@ -397,7 +397,7 @@ ideas = {
 			removal_cost = -1
 			on_add = { ADISCORD_economy_mark_dirty = yes }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { ADISCORD_economy_weekly_income = 15 stability_factor = 0.05 }
+			modifier = { ADISCORD_economy_weekly_income = 4 stability_factor = 0.05 }
 		}
 
 		VAL_staff_war_mandate = {
@@ -441,7 +441,7 @@ ideas = {
 		VAL_regional_settlement = {
 			picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
 			on_add = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { ADISCORD_economy_weekly_income = 10 stability_factor = 0.05 }
+			modifier = { ADISCORD_economy_weekly_income = 3 stability_factor = 0.05 }
 		}
 		VAL_stelander_trade_terms = {
 			picture = VAL_contract_state allowed = { always = yes } removal_cost = -1
@@ -742,7 +742,7 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				ADISCORD_economy_weekly_income = 20
+				ADISCORD_economy_weekly_income = 6
 				ADISCORD_economy_trade_income_factor = 0.20
 				ADISCORD_economy_civilian_factory_income_factor = 0.05
 				ADISCORD_economy_military_industry_income_factor = 0.12
@@ -772,7 +772,7 @@ ideas = {
 			on_add = { ADISCORD_economy_mark_dirty = yes }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
 			modifier = {
-				ADISCORD_economy_weekly_income = -25
+				ADISCORD_economy_weekly_income = -8
 				industrial_capacity_factory = -0.10
 				ADISCORD_economy_trade_income_factor = -0.60
 				ADISCORD_economy_resource_rent_income_factor = -0.50

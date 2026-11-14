@@ -14,9 +14,99 @@ from tools.builders.build_adiscord_resource_assets import (
     validate as validate_assets,
 )
 from tools.lib.paths import repository_root
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
 ROOT = repository_root()
+BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
+
+# Equipment texticons retain role-specific artwork and native frame layout.
+EQUIPMENT_TEXTICONS = {
+    "ADISCORD_motorized_texticon": ("gfx/texticons/attrition_supply_truck_texticon.dds", 1),
+    "ADISCORD_anti_air_texticon": ("gfx/texticons/anti_air_texticon.dds", 1),
+    "ADISCORD_anti_tank_texticon": ("gfx/texticons/unit_anti_tank_icon_small.dds", 2),
+    "ADISCORD_train_texticon": ("gfx/texticons/train_texticon.dds", 1),
+    "ADISCORD_artillery_texticon": ("gfx/texticons/adiscord/custom/artillery.png", 1),
+    "support_equipment_texticon": ("gfx/texticons/adiscord/custom/support_equipment.png", 1),
+    "infantry_equipment_texticon": ("gfx/texticons/infantry_equipment_texticon.dds", 1),
+    "cas_texticon": ("gfx/texticons/cas_texticon.dds", 1),
+    "command_power_texticon": ("gfx/texticons/command_power_texticon.dds", 1),
+}
+RETIRED_RESOURCE_TEXTICONS = {
+    "motorized_texticon", "motorized_equipment_texticon", "unit_motorized_icon_small",
+    "anti_air_texticon", "anti_air_gun_texticon", "anti_tank_texticon", "train_texticon",
+    "command_power", "infantry_equipment_text_icon",
+    "oil_texticon", "aluminium_texticon", "rubber_texticon", "tungsten_texticon",
+    "steel_texticon", "chromium_texticon",
+}
+TEXTICON_TOKEN = re.compile(r"£([A-Za-z_][A-Za-z0-9_]*)(?:\|(\d+))?£?")
+
+
+def _texticon_bindings(root: Path, masked_by: Path | None = None) -> dict:
+    bindings = {}
+    for path in sorted((root / "interface").rglob("*.gfx")):
+        relative = path.relative_to(root)
+        if masked_by is not None and (masked_by / relative).is_file():
+            continue
+        text = path.read_text(encoding="utf-8-sig")
+        for group in parse_clausewitz(text):
+            if group.key.lower() != "spritetypes" or not isinstance(group.value, list):
+                continue
+            for sprite in group.value:
+                if sprite.key.lower() != "spritetype" or not isinstance(sprite.value, list):
+                    continue
+                fields = {row.key.lower(): row.value for row in sprite.value}
+                name = fields.get("name")
+                texture = fields.get("texturefile")
+                if isinstance(name, str) and isinstance(texture, str):
+                    binding = (texture, int(fields.get("noofframes", "1")))
+                    bindings.setdefault(name, []).append((relative.as_posix(), binding))
+    return bindings
+
+
+def validate_texticons(root: Path = ROOT, base_game: Path = BASE_GAME) -> list[str]:
+    """Check live sprite collisions after filename masking, not file load order."""
+    issues = []
+    bindings = _texticon_bindings(root)
+    for name, definitions in _texticon_bindings(base_game, masked_by=root).items():
+        bindings.setdefault(name, []).extend(definitions)
+    used = {}
+    for path in sorted((root / "localisation").rglob("*.yml")):
+        text = path.read_text(encoding="utf-8-sig")
+        for match in TEXTICON_TOKEN.finditer(text):
+            token, frame = match.groups()
+            used.setdefault(token, set()).add(int(frame or 1))
+            if token in RETIRED_RESOURCE_TEXTICONS:
+                issues.append(f"{path.relative_to(root)}: ambiguous resource texticon {token}")
+    for token, frames in used.items():
+        name = token if token.startswith("GFX_") else f"GFX_{token}"
+        definitions = bindings.get(name, [])
+        variants = {binding for _, binding in definitions}
+        if len(variants) > 1:
+            issues.append(f"{name}: conflicting active sprite bindings {definitions}")
+        for _, count in variants:
+            if count < 1 or any(frame < 1 or frame > count for frame in frames):
+                issues.append(f"{name}: text requests frames {sorted(frames)} from {count}")
+    for token, expected in EQUIPMENT_TEXTICONS.items():
+        name = f"GFX_{token}"
+        definitions = bindings.get(name, [])
+        if not definitions or any(binding != expected for _, binding in definitions):
+            issues.append(f"{name}: expected equipment binding {expected}")
+            continue
+        relative, frames = expected
+        texture = root / relative
+        if not texture.is_file():
+            texture = base_game / relative
+        if not texture.is_file():
+            issues.append(f"{name}: texture is missing: {relative}")
+            continue
+        with Image.open(texture) as image:
+            if image.width % frames or image.height > 22 or image.width // frames > 33:
+                issues.append(f"{name}: invalid texticon frame dimensions {image.size}/{frames}")
+            if image.convert("RGBA").getextrema()[3] != (0, 255):
+                issues.append(f"{name}: texticon must contain transparent and opaque pixels")
+    return issues
+
 
 VANILLA_TOPBAR_BUTTONS = {
     "GFX_topbar_decisionview_button": (
@@ -138,7 +228,7 @@ def _require_image_size(
 
 
 def validate(root: Path = ROOT) -> list[str]:
-    issues: list[str] = []
+    issues: list[str] = validate_texticons(root)
     resources = _read(root, "common/resources/00_resources.txt")
     synchronized_tokens = _read(
         root, "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt"

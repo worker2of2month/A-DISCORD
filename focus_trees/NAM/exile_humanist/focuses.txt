@@ -2164,7 +2164,16 @@ focus_tree = {
 		completion_reward = {
 			add_stability = 0.05
 			add_political_power = 50
-			add_research_slot = 1
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_hum_union_accepted_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
 			custom_effect_tooltip = NAM_hum_union_accepted_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_consolidation value = 15 }
@@ -2577,7 +2586,7 @@ focus_tree = {
 		icon = GFX_focus_RUS_scientists_at_headquarters
 		x = 12
 		y = 18
-		cost = 4
+		cost = 9
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		prerequisite = { focus = NAM_hum_water_compact }
 		available = {

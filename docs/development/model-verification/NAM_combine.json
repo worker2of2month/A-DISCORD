@@ -1,0 +1,100 @@
+{
+  "models": {
+    "foundations": {
+      "vertices": 22614,
+      "triangles": 9142,
+      "materials": 1,
+      "bounds": [
+        [
+          -63.0,
+          63.0
+        ],
+        [
+          -41.0,
+          41.0
+        ],
+        [
+          -14.0,
+          39.6
+        ]
+      ]
+    },
+    "assembly": {
+      "vertices": 41985,
+      "triangles": 17100,
+      "materials": 1,
+      "bounds": [
+        [
+          -63.0,
+          63.0
+        ],
+        [
+          -41.0,
+          41.0
+        ],
+        [
+          -14.0,
+          39.6
+        ]
+      ]
+    },
+    "complete": {
+      "vertices": 39112,
+      "triangles": 16700,
+      "materials": 1,
+      "bounds": [
+        [
+          -63.0,
+          63.0
+        ],
+        [
+          -41.0,
+          41.0
+        ],
+        [
+          -14.0,
+          44.0
+        ]
+      ]
+    },
+    "reserve": {
+      "vertices": 8294,
+      "triangles": 3326,
+      "materials": 1,
+      "bounds": [
+        [
+          -26.0,
+          26.0
+        ],
+        [
+          -18.0,
+          18.0
+        ],
+        [
+          -1.2,
+          25.0
+        ]
+      ]
+    }
+  },
+  "native_reimport": true,
+  "hoi4_runtime_verified": false,
+  "files": {
+    "gfx/models/buildings/NAM_combine/ADISCORD_NAM_combine_diffuse.dds": "1e3f3f497141a2b057237ab65c2acb3efc5c827863a1bd6d7032df40a178853a",
+    "gfx/models/buildings/NAM_combine/ADISCORD_NAM_combine_normal.dds": "a5829b2be1939d68849cfde42294e29b1ec882e8daead7c7476b6b78163dd970",
+    "gfx/models/buildings/NAM_combine/ADISCORD_NAM_combine_specular.dds": "18a72eac52890e2378a2574df71ae3c27dae66e702928c86edc8a19905014f8d",
+    "gfx/models/buildings/NAM_combine/ADISCORD_NAM_combine_foundations.mesh": "9669504e052efb5b98d97197cc2b91385b00a73655250ca83d7bef8c86b3684a",
+    "gfx/models/buildings/NAM_combine/ADISCORD_NAM_combine_assembly.mesh": "2ec70af48e689d9155b8f6fcf81e3c563db27d534f50e0a590ee99e0ceb576d5",
+    "gfx/models/buildings/NAM_combine/ADISCORD_NAM_combine_complete.mesh": "b74322cbc608ff76f27a1314f9ee39fc8c52f60f4f36e89eddea4be4c9e611a0",
+    "gfx/models/buildings/NAM_combine/ADISCORD_NAM_combine_reserve.mesh": "5d2f400aae0182d27c102d8f0fb3b3b11d3c109ded68f75bf94d9e37f09b9456",
+    "tools/assets/source/buildings/NAM/combine/foundations.blend": "51085b88339e07c7d932cfced522bd20bb8aed57af16cab7d30e37b0fb75c97b",
+    "tools/assets/source/buildings/NAM/combine/assembly.blend": "d2f68e8ea04332ae85fe39b817d6ac7906deb5beef11fd97a31ed01dc82ab689",
+    "tools/assets/source/buildings/NAM/combine/complete.blend": "dd3755c8a7275b99e2d1498c216f056fea2f6e2fdc01c0e76d4071f3c4ef5540",
+    "tools/assets/source/buildings/NAM/combine/reserve.blend": "b3cd34d8ca81988b9d445a9affb799c19a17b1c43b2d10de61bea242a5731e5a"
+  },
+  "input_sha256": {
+    "tools/builders/build_adiscord_nam_combine.py": "06ce193cbcce4510f1fcbdda9fc2a03143a045df0cae59050758c9175a3d618a",
+    "tools/builders/build_adiscord_factory_models.py": "989d2424402c558fb99c0bc2ce6d6a497b67b41a49bc2b02d60758208ffc6016",
+    "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a"
+  }
+}

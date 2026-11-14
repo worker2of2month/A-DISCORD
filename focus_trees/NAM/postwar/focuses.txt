@@ -417,7 +417,7 @@ focus_tree = {
 	focus = {
 		id = NAM_national_university
 		relative_position_id = NAM_civil_repair
-		x = -2
+		x = 0
 		y = 3
 		icon = GFX_focus_RUS_scientists_at_headquarters
 		cost = 4
@@ -433,7 +433,22 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_research_slot = 1
+			add_tech_bonus = {
+				name = NAM_national_university
+				bonus = 1
+				uses = 1
+				category = electronics
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_national_university_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.05 }
+				NAM_refresh_administration = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1317,7 +1332,8 @@ focus_tree = {
 					hours = 1
 				}
 			}
-			add_fuel = 6000
+			unlock_decision_tooltip = NAM_export_office_expand
+			custom_effect_tooltip = NAM_export_office_expand_unlock_tt
 			custom_effect_tooltip = NAM_oil_ministry_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
@@ -1429,11 +1445,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_pw_export_shipment
-			custom_effect_tooltip = NAM_pw_export_shipment_unlock_tt
+			custom_effect_tooltip = NAM_export_office_consortium_tt
 			custom_effect_tooltip = NAM_export_consortium_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_oil_bonus_units value = 2 }
+				add_to_variable = { var = NAM_export_office_capacity_bonus value = 2 }
 				NAM_oil_refresh = yes
 			}
 			custom_effect_tooltip = NAM_grp_export_consortium_tt
@@ -1528,18 +1544,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			hidden_effect = { set_variable = { var = NAM_exchange_receipts value = 0 } }
-			if = {
-				limit = {
-					hidden_trigger = {
-						NOT = {
-							has_completed_focus = NAM_export_quays
-							has_completed_focus = NAM_customs_clearinghouse
-						}
-					}
-				}
-				unlock_decision_tooltip = NAM_export_fuel
-				custom_effect_tooltip = NAM_export_fuel_unlock_tt
+			custom_effect_tooltip = NAM_export_office_exchange_tt
+			hidden_effect = {
+				set_variable = { var = NAM_exchange_receipts value = 0 }
+				add_to_variable = { var = NAM_export_office_capacity_bonus value = 1 }
+				NAM_export_office_refresh_all = yes
 			}
 			unlock_decision_tooltip = NAM_exchange_redeem
 			custom_effect_tooltip = NAM_exchange_redeem_unlock_tt
@@ -1938,6 +1947,10 @@ focus_tree = {
 				NAM_groups_refresh = yes
 			}
 			NAM_apply_ending_oil_union = yes
+			unlock_decision_tooltip = NAM_combine_frame
+			custom_effect_tooltip = NAM_combine_frame_unlock_tt
+			unlock_decision_tooltip = NAM_combine_plant
+			custom_effect_tooltip = NAM_combine_plant_unlock_tt
 			hidden_effect = {
 				set_variable = { var = NAM_prog_ending value = 4 }
 				country_event = { id = ADISCORD_nam_groups.11 hours = 1 }
@@ -2713,10 +2726,7 @@ focus_tree = {
 		icon = GFX_focus_RUS_bunker_power_school
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = {
-			focus = NAM_civil_dividend
-			focus = NAM_armed_peace
-		}
+		prerequisite = { focus = NAM_national_university }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_svetlogorsk_dam_authorised_tt
@@ -2902,7 +2912,7 @@ focus_tree = {
 			NAM_prewar_service_mandate = yes
 			has_completed_focus = NAM_unified_standards
 		}
-		cost = 5
+		cost = 9
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_unified_standards
@@ -4161,7 +4171,22 @@ focus_tree = {
 				uses = 2
 				category = electronics
 			}
-			add_research_slot = 1
+			add_tech_bonus = {
+				name = NAM_engineering_collegium_industry
+				bonus = 0.75
+				uses = 1
+				category = industry
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_engineering_collegium_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -4426,13 +4451,15 @@ focus_tree = {
 				limit = {
 					hidden_trigger = {
 						NOT = {
-							has_completed_focus = NAM_export_quays
+							has_completed_focus = NAM_oil_ministry
+							has_completed_focus = NAM_freight_brokerage
+							has_completed_focus = NAM_defeat_oil_peace
 							has_completed_focus = NAM_oil_exchange
 						}
 					}
 				}
-				unlock_decision_tooltip = NAM_export_fuel
-				custom_effect_tooltip = NAM_export_fuel_unlock_tt
+				unlock_decision_tooltip = NAM_export_office_expand
+				custom_effect_tooltip = NAM_export_office_expand_unlock_tt
 			}
 			custom_effect_tooltip = NAM_bond_stamp_tt
 			hidden_effect = {
@@ -4636,7 +4663,22 @@ focus_tree = {
 				uses = 2
 				category = electronics
 			}
-			add_research_slot = 1
+			add_tech_bonus = {
+				name = NAM_port_polytechnic_naval
+				bonus = 1
+				uses = 1
+				category = naval_equipment
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_port_polytechnic_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.02 }
+				NAM_refresh_administration = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -4848,7 +4890,17 @@ focus_tree = {
 				uses = 2
 				category = electronics
 			}
-			add_research_slot = 1
+			add_stability = 0.02
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_district_scholarships_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -5224,7 +5276,8 @@ focus_tree = {
 					hours = 1
 				}
 			}
-			unlock_decision_tooltip = NAM_border_reconstruction
+			unlock_decision_tooltip = NAM_border_reconstruction_eflor
+			unlock_decision_tooltip = NAM_border_reconstruction_azhar
 			custom_effect_tooltip = NAM_border_reconstruction_unlock_tt
 		}
 		ai_will_do = { base = 5 }
@@ -5331,7 +5384,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_border_incorporation
+			unlock_decision_tooltip = NAM_border_incorporation_eflor
+			unlock_decision_tooltip = NAM_border_incorporation_azhar
 			custom_effect_tooltip = NAM_border_incorporation_unlock_tt
 		}
 		ai_will_do = { base = 5 }
@@ -6322,7 +6376,19 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 4000
+			add_manpower = 8000
+			add_political_power = 30
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_employment_offices_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.03 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.03 }
+				NAM_refresh_administration = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -7729,7 +7795,28 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 4000
+			add_manpower = 12000
+			688 = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_returnee_registration_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.05 }
+				NAM_refresh_administration = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -9033,7 +9120,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 4000
+			add_manpower = 8000
+			add_stability = 0.03
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_district_hospitals_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
+				NAM_refresh_administration = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -10732,10 +10830,21 @@ focus_tree = {
 				}
 			}
 			custom_effect_tooltip = NAM_return_freight_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_export_office_price_bonus value = 0.075 }
+				NAM_export_office_refresh_all = yes
+			}
 			if = {
-				limit = { NOT = { has_completed_focus = NAM_export_consortium } }
-				unlock_decision_tooltip = NAM_pw_export_shipment
-				custom_effect_tooltip = NAM_pw_export_shipment_unlock_tt
+				limit = {
+					NOT = {
+						has_completed_focus = NAM_oil_ministry
+						has_completed_focus = NAM_oil_exchange
+						has_completed_focus = NAM_customs_clearinghouse
+						has_completed_focus = NAM_defeat_oil_peace
+					}
+				}
+				unlock_decision_tooltip = NAM_export_office_expand
+				custom_effect_tooltip = NAM_export_office_expand_unlock_tt
 			}
 			add_equipment_to_stockpile = {
 				type = convoy

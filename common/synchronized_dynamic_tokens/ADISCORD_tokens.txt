@@ -183,3 +183,5 @@ SHL_cons_ultimatum
 SHL_cons_toll_term
 SHL_cons_councils
 SHL_house_demand
+NAM_combine_frame_process
+NAM_combine_plant_process

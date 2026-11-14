@@ -165,7 +165,7 @@ characters = {
 	}
 	DRV_Council_of_Free_Valleys = {
 		name = DRV_Council_of_Free_Valleys
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } }
+		portraits = { civilian = { large = GFX_portrait_DRV_Council_of_Free_Valleys } }
 		country_leader = {
 			ideology = anarchism_ideology
 			expire = "2200.1.1.1"

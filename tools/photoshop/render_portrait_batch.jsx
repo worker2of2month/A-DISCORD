@@ -1,5 +1,6 @@
 /* Render transparent character PNGs through an open portrait template.
- * Set ADISCORD_PORTRAIT_JOBS to [{id, source, output}] before evaluating.
+ * Set ADISCORD_PORTRAIT_JOBS to [{id, source, output, fit}] before evaluating.
+ * Optional fit="contain" preserves source proportions inside the game canvas.
  * The working template is an in-memory snapshot; source documents stay open.
  */
 (function () {
@@ -62,7 +63,14 @@
                     }
                 }
                 source = app.open(new File(job.source));
-                source.resizeImage(UnitValue(156, "px"), UnitValue(210, "px"), null, ResampleMethod.BICUBICSHARPER);
+                if (job.fit === "contain") {
+                    var scale = Math.min(156 / source.width.as("px"), 210 / source.height.as("px"));
+                    source.resizeImage(UnitValue(Math.round(source.width.as("px") * scale), "px"),
+                        UnitValue(Math.round(source.height.as("px") * scale), "px"), null, ResampleMethod.BICUBICSHARPER);
+                    source.resizeCanvas(UnitValue(156, "px"), UnitValue(210, "px"), AnchorPosition.BOTTOMCENTER);
+                } else {
+                    source.resizeImage(UnitValue(156, "px"), UnitValue(210, "px"), null, ResampleMethod.BICUBICSHARPER);
+                }
                 var imported = source.activeLayer.duplicate(work, ElementPlacement.PLACEATBEGINNING);
                 source.close(SaveOptions.DONOTSAVECHANGES);
                 source = null;

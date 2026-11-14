@@ -758,8 +758,8 @@ focus_tree = {
 			add_stability = 0.05
 			add_political_power = 60
 			add_fuel = 5000
-			unlock_decision_tooltip = NAM_pw_export_shipment
-			custom_effect_tooltip = NAM_pw_export_shipment_unlock_tt
+			unlock_decision_tooltip = NAM_export_office_expand
+			custom_effect_tooltip = NAM_export_office_expand_unlock_tt
 			custom_effect_tooltip = NAM_defeat_oil_peace_tt
 			hidden_effect = { clr_country_flag = ADISCORD_south_offensive_order }
 		}
@@ -815,7 +815,7 @@ focus_tree = {
 		icon = GFX_focus_NAM_independence_day
 		x = 12
 		y = 7
-		cost = 6
+		cost = 9
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }
 		prerequisite = {
 			focus = NAM_defeat_war_of_return

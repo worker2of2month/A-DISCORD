@@ -33,6 +33,10 @@ SEA_POSITIONED_TYPES = {"floating_harbor"}
 # a single model: truncation places it in 145, rounding in 70.
 BORDER_DAM_STATES = (28, 53)
 BORDER_DAM_ANCHOR = ("3749.00", "11.10", "945.86", "4.09")
+# Scripted construction needs anchors before the buildings exist in history.
+# The two banks share one model at the 3127/12668 river crossing.
+NAM_DAM_PROVINCES = {688: 3127, 67: 12668}
+NAM_DAM_ANCHOR = ("3648.86", "11.00", "617.00", "2.36")
 PORT_ANCHOR_TYPES = {
     "coastal_bunker",
     "dockyard",
@@ -360,7 +364,9 @@ def synchronize_buildings(
 
 
 def is_border_dam(fields: list[str]) -> bool:
-    return fields[1] == "dam_spawn" and int(fields[0]) in BORDER_DAM_STATES
+    return fields[1] == "dam_spawn" and (
+        int(fields[0]) in BORDER_DAM_STATES or int(fields[0]) in NAM_DAM_PROVINCES
+    )
 
 
 def load_dam_province_by_state(root: Path = ROOT) -> dict[int, int]:
@@ -371,6 +377,9 @@ def load_dam_province_by_state(root: Path = ROOT) -> dict[int, int]:
         dam_match = re.search(r"\b(\d+)\s*=\s*\{[^{}]*\bdam\s*=", source)
         if state_match and dam_match:
             dam_provinces[int(state_match.group(1))] = int(dam_match.group(1))
+        if state_match and int(state_match.group(1)) in NAM_DAM_PROVINCES:
+            state_id = int(state_match.group(1))
+            dam_provinces[state_id] = NAM_DAM_PROVINCES[state_id]
     return dam_provinces
 
 
@@ -387,6 +396,15 @@ def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int
     colors = load_province_by_color(root)
     result = list(lines)
     changed = []
+    existing = {
+        int(fields[0])
+        for line in lines
+        if (fields := line.split(";"))[1] == "dam_spawn"
+    }
+    for state in NAM_DAM_PROVINCES:
+        if state in dam_provinces and state not in existing:
+            result.append(";".join((str(state), "dam_spawn", *NAM_DAM_ANCHOR, "0")))
+            changed.append(len(result))
     with (
         Image.open(root / "map/provinces.bmp") as provinces,
         Image.open(root / "map/heightmap.bmp") as heights,
@@ -394,13 +412,14 @@ def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int
         def province_at(px: int, pz: int) -> int | None:
             return colors.get(provinces.getpixel((px, provinces.height - 1 - pz)))
 
-        for index, line in enumerate(lines):
+        for index, line in enumerate(result):
             fields = line.split(";")
             if fields[1] != "dam_spawn":
                 continue
             if is_border_dam(fields):
-                if tuple(fields[2:6]) != BORDER_DAM_ANCHOR:
-                    fields[2:6] = BORDER_DAM_ANCHOR
+                anchor = NAM_DAM_ANCHOR if int(fields[0]) in NAM_DAM_PROVINCES else BORDER_DAM_ANCHOR
+                if tuple(fields[2:6]) != anchor:
+                    fields[2:6] = anchor
                     result[index] = ";".join(fields)
                     changed.append(index + 1)
                 continue
@@ -512,6 +531,25 @@ def permanent_landmark_clearance(lines: list[str]) -> list[str]:
                         fields[2:5] = [dx, dy, dz]
                         line = ";".join(fields)
                         break
+        result.append(line)
+    return nam_export_office_clearance(result)
+
+
+def nam_export_office_clearance(lines: list[str]) -> list[str]:
+    """Reserve persistent office yards without changing building counts or ports."""
+    manifest = json.loads((ROOT / "tools/data/nam_export_office_sites.json").read_text(encoding="utf-8"))
+    moves = {
+        (entry["state"], entry["type"], *entry["from"]): entry["to"]
+        for entry in manifest["relocations"]
+    }
+    result = []
+    for line in lines:
+        fields = line.split(";")
+        if len(fields) == 7 and fields[0].isdigit():
+            key = (int(fields[0]), fields[1], float(fields[2]), float(fields[4]))
+            if key in moves:
+                fields[2:5] = [f"{value:.2f}" for value in moves[key]]
+                line = ";".join(fields)
         result.append(line)
     return result
 
@@ -766,7 +804,7 @@ def validate(root: Path = ROOT) -> list[str]:
     )
     _planned_dams, dam_changes = dam_province_plan(root, lines)
     issues.extend(
-        f"map/buildings.txt:{line}: dam_spawn lies outside its dam province"
+        f"map/buildings.txt:{line}: dam_spawn is missing or outside its dam anchor"
         for line in dam_changes
     )
     if bezhaysk_castle_clearance(lines) != lines:

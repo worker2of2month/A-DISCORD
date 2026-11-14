@@ -529,6 +529,29 @@ NAM_permanent_lines_authorized = {
 	}
 }
 
+# COUNTRY owner of a state bordering a Svetlogorye district; ROOT is NAM. A
+# permanent line faces a real threat: an enemy at war, the resource-war
+# claimants while they exist, or Shahrabad's side once the south crisis opens.
+NAM_line_threat = {
+	OR = {
+		has_war_with = ROOT
+		tag = EFL
+		tag = AZH
+		AND = {
+			OR = {
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_final_active = yes
+			}
+			OR = {
+				tag = SHL
+				is_subject_of = SHL
+				is_in_faction_with = SHL
+				ADISCORD_south_on_shl_side = yes
+			}
+		}
+	}
+}
+
 # COUNTRY NAM.
 NAM_line_slot_free = {
 	check_variable = { var = NAM_line_slots value = NAM_lines_in_progress compare = greater_than }
@@ -739,7 +762,12 @@ NAM_grid_has_power = {
 		688 = {
 			is_owned_by = NAM
 			is_controlled_by = NAM
-			has_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower }
+			dam > 0
+		}
+		67 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			dam > 0
 		}
 	}
 }
@@ -798,6 +826,59 @@ NAM_project_state_ready = {
 	is_owned_by = NAM
 	is_controlled_by = NAM
 	NOT = { has_state_flag = NAM_project_in_progress }
+}
+
+# STATE. An oilfield where the next refinery order may start.
+NAM_refinery_site_ready = {
+	OR = {
+		state = 67
+		state = 688
+		state = 689
+		state = 690
+		state = 719
+	}
+	NOT = { has_state_flag = NAM_refinery_built }
+	NAM_project_state_ready = yes
+}
+
+# STATE. Only the refinery order holds a 300 project escrow.
+NAM_refinery_receipt = {
+	has_state_flag = NAM_project_in_progress
+	check_variable = { var = NAM_project_deposit value = 300 compare = equals }
+}
+
+NAM_refinery_order_lost = {
+	NAM_refinery_receipt = yes
+	OR = {
+		NOT = { is_owned_by = NAM }
+		NOT = { is_controlled_by = NAM }
+	}
+}
+
+NAM_refinery_site_unbuilt = {
+	is_owned_by = NAM
+	NOT = { has_state_flag = NAM_refinery_built }
+}
+
+# COUNTRY NAM. Fixed oilfields keep the checks off the world state list.
+NAM_refinery_site_available = {
+	OR = {
+		67 = { NAM_refinery_site_ready = yes }
+		688 = { NAM_refinery_site_ready = yes }
+		689 = { NAM_refinery_site_ready = yes }
+		690 = { NAM_refinery_site_ready = yes }
+		719 = { NAM_refinery_site_ready = yes }
+	}
+}
+
+NAM_refinery_site_remaining = {
+	OR = {
+		67 = { NAM_refinery_site_unbuilt = yes }
+		688 = { NAM_refinery_site_unbuilt = yes }
+		689 = { NAM_refinery_site_unbuilt = yes }
+		690 = { NAM_refinery_site_unbuilt = yes }
+		719 = { NAM_refinery_site_unbuilt = yes }
+	}
 }
 
 # COUNTRY VAL or GLP. Holds the steel concession of the Middle Island.
@@ -894,13 +975,6 @@ NAM_rus_active_defender = {
 	}
 }
 
-NAM_exchange_sale_authorized = {
-	OR = {
-		has_completed_focus = NAM_export_quays
-		has_completed_focus = NAM_oil_exchange
-		has_completed_focus = NAM_customs_clearinghouse
-	}
-}
 
 # STATE. Both assembly cities can receive chassis overland.
 NAM_chassis_works_site = {
@@ -2654,25 +2728,6 @@ NAM_pw_district_cooperative_ready = {
 	check_variable = { var = NAM_grp_dist_support value = 50 compare = greater_than_or_equals }
 }
 
-NAM_pw_export_shipment_unlocked = {
-	OR = {
-		has_completed_focus = NAM_export_consortium
-		has_completed_focus = NAM_freight_brokerage
-		has_completed_focus = NAM_defeat_oil_peace
-	}
-}
-
-NAM_pw_export_shipment_ready = {
-	OR = {
-		NAM_pw_operable = yes
-		AND = {
-			NAM_independent_programmes_operable = yes
-			has_global_flag = ADISCORD_nam_resource_war_compromise
-			has_completed_focus = NAM_defeat_oil_peace
-		}
-	}
-}
-
 # COUNTRY recipient. Aid spends only the sender's stocks.
 NAM_pw_charter_recipient = {
 	exists = yes
@@ -2909,7 +2964,12 @@ NAM_hydroelectric_site = {
 	is_owned_by = NAM
 	is_controlled_by = NAM
 	NAM = { NAM_pw_operable = yes }
-	NOT = { has_dynamic_modifier = { modifier = NAM_svetlogorsk_hydropower } }
+	NOT = { dam > 0 }
+	67 = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+		NOT = { dam > 0 }
+	}
 	free_building_slots = { building = industrial_complex size > 1 include_locked = yes }
 }
 
@@ -3206,6 +3266,135 @@ NAM_border_acquisitions_held = {
 	}
 }
 
+# STATE. The treaty sites form two parts: the former Eflor and Azhar districts.
+NAM_border_eflor_district = {
+	OR = {
+		state = 701
+		state = 720
+		state = 721
+		state = 723
+	}
+}
+
+NAM_border_azhar_district = {
+	OR = {
+		state = 722
+		state = 727
+	}
+}
+
+NAM_border_unintegrated = {
+	is_owned_by = NAM
+	NOT = { is_core_of = NAM }
+}
+
+NAM_border_reconstruction_ready = {
+	NAM_border_integration_site = yes
+	NAM_project_state_ready = yes
+}
+
+# STATE. Reconstruction goes first where the citizenship thresholds are unmet.
+NAM_border_reconstruction_priority = {
+	NAM_border_reconstruction_ready = yes
+	OR = {
+		compliance < 80
+		resistance > 20
+	}
+}
+
+NAM_border_incorporation_ready = {
+	NAM_border_citizenship_ready = yes
+	NAM_project_state_ready = yes
+}
+
+# STATE. The escrow of each programme; prices differ, so receipts never collide.
+NAM_border_reconstruction_receipt = {
+	has_state_flag = NAM_project_in_progress
+	check_variable = { var = NAM_project_deposit value = 400 compare = equals }
+	check_variable = { var = NAM_project_pp_deposit value = 35 compare = equals }
+}
+
+NAM_border_incorporation_receipt = {
+	has_state_flag = NAM_project_in_progress
+	check_variable = { var = NAM_project_deposit value = 500 compare = equals }
+	check_variable = { var = NAM_project_pp_deposit value = 75 compare = equals }
+}
+
+NAM_border_reconstruction_lost = {
+	NAM_border_reconstruction_receipt = yes
+	NAM_border_integration_site = no
+}
+
+NAM_border_incorporation_lost = {
+	NAM_border_incorporation_receipt = yes
+	NAM_border_citizenship_ready = no
+}
+
+# COUNTRY NAM. One part of the borderland, read from its fixed treaty sites.
+NAM_border_eflor_unintegrated = {
+	OR = {
+		701 = { NAM_border_unintegrated = yes }
+		720 = { NAM_border_unintegrated = yes }
+		721 = { NAM_border_unintegrated = yes }
+		723 = { NAM_border_unintegrated = yes }
+	}
+}
+
+NAM_border_eflor_reconstruction_open = {
+	OR = {
+		701 = { NAM_border_reconstruction_ready = yes }
+		720 = { NAM_border_reconstruction_ready = yes }
+		721 = { NAM_border_reconstruction_ready = yes }
+		723 = { NAM_border_reconstruction_ready = yes }
+	}
+}
+
+NAM_border_eflor_reconstruction_priority = {
+	OR = {
+		701 = { NAM_border_reconstruction_priority = yes }
+		720 = { NAM_border_reconstruction_priority = yes }
+		721 = { NAM_border_reconstruction_priority = yes }
+		723 = { NAM_border_reconstruction_priority = yes }
+	}
+}
+
+NAM_border_eflor_incorporation_open = {
+	OR = {
+		701 = { NAM_border_incorporation_ready = yes }
+		720 = { NAM_border_incorporation_ready = yes }
+		721 = { NAM_border_incorporation_ready = yes }
+		723 = { NAM_border_incorporation_ready = yes }
+	}
+}
+
+NAM_border_azhar_unintegrated = {
+	OR = {
+		722 = { NAM_border_unintegrated = yes }
+		727 = { NAM_border_unintegrated = yes }
+	}
+}
+
+NAM_border_azhar_reconstruction_open = {
+	OR = {
+		722 = { NAM_border_reconstruction_ready = yes }
+		727 = { NAM_border_reconstruction_ready = yes }
+	}
+}
+
+NAM_border_azhar_reconstruction_priority = {
+	OR = {
+		722 = { NAM_border_reconstruction_priority = yes }
+		727 = { NAM_border_reconstruction_priority = yes }
+	}
+}
+
+NAM_border_azhar_incorporation_open = {
+	OR = {
+		722 = { NAM_border_incorporation_ready = yes }
+		727 = { NAM_border_incorporation_ready = yes }
+	}
+}
+
 # ----- Nationalisation of held regions -----
 
 # COUNTRY NAM. One focus per tree the country can end in: the victorious
@@ -3228,18 +3417,12 @@ NAM_nationalisation_country_ready = {
 
 # STATE: decision target. Nationalisation follows the directly held national
 # frontier, so every new national region opens its own neighbours. The overseas
-# districts border no national land. After the victorious settlement the six
-# treaty districts keep their own incorporation programme.
+# districts border no national land. The six treaty districts may take this
+# slower, cheaper route as well as their paid incorporation programme.
 NAM_nationalisation_state_valid = {
 	is_owned_by = NAM
 	is_controlled_by = NAM
 	NOT = { is_core_of = NAM }
-	NOT = {
-		AND = {
-			NAM_border_integration_region = yes
-			has_global_flag = ADISCORD_nam_resource_war_nam_victory
-		}
-	}
 	any_neighbor_state = {
 		is_owned_by = NAM
 		is_controlled_by = NAM
@@ -3895,4 +4078,93 @@ NAM_war_programmes_operable = {
 	NAM_independent_programmes_operable = yes
 	NAM_war_campaign_active = yes
 	has_war = yes
+}
+
+# COUNTRY. Existing construction may settle only while the original route controls its site.
+NAM_combine_operable = {
+	NAM_country_operable = yes
+	is_subject = no
+	has_completed_focus = NAM_charter_ending_oil_union
+	723 = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+	}
+}
+
+NAM_combine_affordable = {
+	NOT = { has_political_power < 75 }
+	check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals }
+}
+
+NAM_combine_can_begin = {
+	NAM_combine_operable = yes
+	NAM_project_slot_free = yes
+	723 = { NAM_project_state_ready = yes }
+}
+
+# STATE. Native building caps are rechecked at delivery as well as before payment.
+NAM_combine_capacity = {
+	industrial_complex < 19
+	synthetic_refinery < 3
+}
+
+NAM_combine_support_open = {
+	NAM_combine_operable = yes
+	723 = { has_state_flag = NAM_combine_underway }
+	NOT = { has_variable = NAM_combine_support_cash }
+	OR = {
+		AND = {
+			has_active_mission = NAM_combine_frame_process
+			check_variable = { days_mission_timeout@NAM_combine_frame_process > 120 }
+		}
+		AND = {
+			has_active_mission = NAM_combine_plant_process
+			check_variable = { days_mission_timeout@NAM_combine_plant_process > 120 }
+		}
+	}
+}
+
+NAM_combine_support_current = {
+	NAM_combine_operable = yes
+	has_variable = NAM_combine_support_cash
+	723 = { has_state_flag = NAM_combine_underway }
+	OR = {
+		AND = {
+			check_variable = { var = NAM_combine_support_phase value = 1 compare = equals }
+			723 = { check_variable = { var = NAM_combine_stage value = 1 compare = equals } }
+			has_active_mission = NAM_combine_frame_process
+		}
+		AND = {
+			check_variable = { var = NAM_combine_support_phase value = 2 compare = equals }
+			723 = { check_variable = { var = NAM_combine_stage value = 2 compare = equals } }
+			has_active_mission = NAM_combine_plant_process
+		}
+	}
+}
+
+# ----- Regional export offices -----
+NAM_export_office_unlocked = {
+	OR = {
+		has_completed_focus = NAM_freight_brokerage
+		has_completed_focus = NAM_defeat_oil_peace
+		has_completed_focus = NAM_customs_clearinghouse
+		has_completed_focus = NAM_oil_exchange
+		has_completed_focus = NAM_oil_ministry
+	}
+}
+
+# STATE. The institution survives occupation and changes of government.
+NAM_export_office_build_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	has_variable = NAM_field_capacity
+	NOT = { has_state_flag = NAM_wells_scorched }
+	check_variable = { NAM_export_office_level < 5 }
+}
+
+NAM_export_office_operating_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { has_state_flag = NAM_export_office_paused }
+	NOT = { has_state_flag = NAM_wells_scorched }
 }

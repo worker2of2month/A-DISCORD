@@ -1568,6 +1568,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.02",
                     "fuel_gain_factor = 0.012",
+                    "production_lack_of_resource_penalty_factor = -0.02",
                 ),
             ),
             (
@@ -1579,6 +1580,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.021",
                     "fuel_gain_factor = 0.012",
+                    "factory_energy_consumption = -0.03",
                 ),
             ),
             (
@@ -1590,6 +1592,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.021",
                     "fuel_gain_factor = 0.013",
+                    "production_speed_synthetic_refinery_factor = 0.05",
                 ),
             ),
             (
@@ -1601,6 +1604,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.022",
                     "fuel_gain_factor = 0.013",
+                    "production_lack_of_resource_penalty_factor = -0.02",
                 ),
             ),
             (
@@ -1612,6 +1616,8 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.023",
                     "fuel_gain_factor = 0.013",
+                    "max_fuel_factor = 0.10",
+                    "production_speed_infrastructure_factor = 0.05",
                 ),
             ),
             (
@@ -1623,6 +1629,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.023",
                     "fuel_gain_factor = 0.014",
+                    "production_speed_infrastructure_factor = 0.05",
                 ),
             ),
             (
@@ -1634,6 +1641,7 @@ BRANCHES = (
                 (
                     "production_lack_of_resource_penalty_factor = -0.024",
                     "industry_repair_factor = 0.014",
+                    "factory_energy_consumption = -0.02",
                 ),
             ),
             (
@@ -1645,6 +1653,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.031",
                     "production_lack_of_resource_penalty_factor = -0.007",
+                    "factory_energy_consumption = -0.02",
                 ),
             ),
             (
@@ -1656,6 +1665,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.026",
                     "fuel_gain_factor = 0.015",
+                    "production_speed_synthetic_refinery_factor = 0.05",
                 ),
             ),
             (
@@ -1666,6 +1676,7 @@ BRANCHES = (
                 2167,
                 (
                     "local_resources_factor = 0.04",
+                    "production_speed_infrastructure_factor = 0.05",
                 ),
             ),
             (
@@ -1677,6 +1688,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.028",
                     "fuel_gain_factor = 0.016",
+                    "production_lack_of_resource_penalty_factor = -0.02",
                 ),
             ),
             (
@@ -1688,6 +1700,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.036",
                     "production_lack_of_resource_penalty_factor = -0.008",
+                    "production_speed_infrastructure_factor = 0.05",
                 ),
             ),
             (
@@ -1699,6 +1712,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.017",
                     "fuel_gain_factor = 0.029",
+                    "production_speed_synthetic_refinery_factor = 0.05",
                 ),
             ),
             (
@@ -1710,6 +1724,7 @@ BRANCHES = (
                 (
                     "production_lack_of_resource_penalty_factor = -0.03",
                     "fuel_gain_factor = 0.03",
+                    "max_fuel_factor = 0.10",
                 ),
             ),
             (
@@ -1721,6 +1736,7 @@ BRANCHES = (
                 (
                     "local_resources_factor = 0.031",
                     "fuel_gain_factor = 0.018",
+                    "production_lack_of_resource_penalty_factor = -0.02",
                 ),
             ),
             (
@@ -1733,6 +1749,7 @@ BRANCHES = (
                     "local_resources_factor = 0.046",
                     "fuel_gain_factor = 0.026",
                     "production_lack_of_resource_penalty_factor = -0.026",
+                    "factory_energy_consumption = -0.03",
                 ),
             ),
         ),

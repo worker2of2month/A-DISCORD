@@ -138,10 +138,23 @@ NAM_public_campaigns = {
 	allowed = { tag = NAM }
 	visible = {
 		OR = {
-			has_completed_focus = NAM_inventory
-			has_completed_focus = NAM_pw_civil_communications
+			AND = {
+				OR = {
+					has_completed_focus = NAM_inventory
+					has_completed_focus = NAM_pw_civil_communications
+				}
+				NAM_independent_programmes_operable = yes
+			}
+			# The war tree brings its own campaigns on every route.
+			AND = {
+				OR = {
+					has_completed_focus = NAM_sw_rear_of_svetlogorye
+					has_completed_focus = NAM_sw_drive_to_khazar
+				}
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
 		}
-		NAM_independent_programmes_operable = yes
 	}
 	visible_when_empty = yes
 	priority = 20

@@ -4675,7 +4675,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "ruling_party = technocracy",
         "character = PWR_Alexey_Lange",
         "ideology = technocracy_ideology",
-        "portrait = GFX_Portrait_Forul_Generic_4",
+        "portrait = GFX_portrait_PWR_Alexey_Lange",
     ):
         if token not in pwr_appointment:
             issues.append(f"Rimat technocratic appointment is missing {token}")

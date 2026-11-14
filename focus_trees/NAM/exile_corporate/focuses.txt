@@ -133,7 +133,7 @@ focus_tree = {
 		icon = GFX_focus_VAL_State_Contract
 		x = 6
 		y = 2
-		cost = 4
+		cost = 9
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = {
 			focus = NAM_board_humanist_facade
@@ -149,9 +149,9 @@ focus_tree = {
 			custom_effect_tooltip = NAM_corp_board_arbitration_unlock_tt
 			add_stability = 0.05
 			add_political_power = 30
-			# The humanist union may already have opened this slot.
+			# The humanist route's university may already have opened this slot.
 			if = {
-				limit = { NOT = { has_completed_focus = NAM_hum_union_accepted } }
+				limit = { NOT = { has_completed_focus = NAM_hum_union_university } }
 				add_research_slot = 1
 			}
 		}

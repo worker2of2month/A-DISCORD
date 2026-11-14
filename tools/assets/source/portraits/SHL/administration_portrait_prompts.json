@@ -1,0 +1,57 @@
+{
+  "generator": "imagegen built-in",
+  "template": "tools/assets/source/portrait.psd",
+  "renderer": "tools/photoshop/render_portrait_batch.jsx",
+  "canvas": [
+    156,
+    210
+  ],
+  "portraits": [
+    {
+      "id": "SFD_Farhad_Mehr",
+      "name": "Фархад Мехр",
+      "prompt": "Use case: stylized-concept. Create one fictional country leader portrait for a Hearts of Iron IV total conversion, matching a sober painted strategy-game portrait. Vertical 3:4 chest-up composition, centered large readable head, shoulders cut by bottom edge, slight three-quarter turn toward viewer's right. Realistic digitally oil-painted facial modeling with restrained brushwork, subtle fine horizontal engraved texture, muted dark lavender-gray studio backdrop and gentle vignette, warm top-left key light, dark industrial early-to-mid 20th century civilian clothing. Finished archival political portrait, no border, no lettering, no flags, no watermark, no modern photo gloss, no weapons, no real person likeness. Leave a small margin above hair. Single person only. A fictional male irrigation engineer and governor, age 61, long lean face, tan skin, receding silver hair combed back, close neat gray beard and mustache, round thin wire spectacles, thoughtful firm expression, charcoal high-collared work tunic with a muted olive waistcoat. Weathered scholarly hydraulic administrator, distinctive narrow face.",
+      "edit_prompt": "Preserve identity, pose and clothing; remove background to true alpha and remove baked-in screen/canvas texture for native portrait.psd compositing.",
+      "source_file": "exec-932498fa-1578-463f-a090-bb2a5fe68946.png",
+      "runtime_path": "gfx/leaders/SFD/portrait_SFD_Farhad_Mehr.png",
+      "runtime_sha256": "b96c59543c93315c7378a99050840a265da0617bc7fd835fd71d8143418c08b1"
+    },
+    {
+      "id": "SCD_Nadir_Vezran",
+      "name": "Надир Везран",
+      "prompt": "Use case: stylized-concept. Create one fictional country leader portrait for a Hearts of Iron IV total conversion, matching a sober painted strategy-game portrait. Vertical 3:4 chest-up composition, centered large readable head, shoulders cut by bottom edge, slight three-quarter turn toward viewer's right. Realistic digitally oil-painted facial modeling with restrained brushwork, subtle fine horizontal engraved texture, muted dark lavender-gray studio backdrop and gentle vignette, warm top-left key light, dark industrial early-to-mid 20th century civilian clothing. Finished archival political portrait, no border, no lettering, no flags, no watermark, no modern photo gloss, no weapons, no real person likeness. Leave a small margin above hair. Single person only. A fictional male railway superintendent and governor, age 43, broad square face, medium tan skin, very short black hair with a slight widow's peak, clean shaven, heavy eyebrows, tired intense eyes, no spectacles. Dark brown railway administrative uniform jacket, open notched collar over cream shirt, no insignia or medals. Practical severe stocky transport organizer.",
+      "edit_prompt": "Preserve identity, pose and clothing; remove background to true alpha and remove baked-in screen/canvas texture for native portrait.psd compositing.",
+      "source_file": "exec-e2837845-8a49-47fe-989a-d3a8c0c7ee44.png",
+      "runtime_path": "gfx/leaders/SCD/portrait_SCD_Nadir_Vezran.png",
+      "runtime_sha256": "e2515529d087ff6f3e1ff400f5140b5df95c1cff32d0c1da2c67cbc01277c120"
+    },
+    {
+      "id": "SMD_Laleh_Sorani",
+      "name": "Лале Сорани",
+      "prompt": "Use case: stylized-concept. Create one fictional country leader portrait for a Hearts of Iron IV total conversion, matching a sober painted strategy-game portrait. Vertical 3:4 chest-up composition, centered large readable head, shoulders cut by bottom edge, slight three-quarter turn toward viewer's right. Realistic digitally oil-painted facial modeling with restrained brushwork, subtle fine horizontal engraved texture, muted dark lavender-gray studio backdrop and gentle vignette, warm top-left key light, dark industrial early-to-mid 20th century civilian clothing. Finished archival political portrait, no border, no lettering, no flags, no watermark, no modern photo gloss, no weapons, no real person likeness. Leave a small margin above hair. Single person only. A fictional female port commissioner and governor, age 48, medium brown skin, oval face, dark wavy hair in a low pinned bun with a silver streak near her left temple, clearly distinct sharp cheekbones and calm penetrating eyes, no glasses, no hat. Dark navy double-breasted civilian coat with broad lapels, high pale gray blouse, small plain brass pin. Authoritative maritime administrator.",
+      "edit_prompt": "Preserve identity, pose and clothing; remove background to true alpha and remove baked-in screen/canvas texture for native portrait.psd compositing.",
+      "source_file": "exec-84f2cc71-e34b-4cf1-bc88-b621f6829fb0.png",
+      "runtime_path": "gfx/leaders/SMD/portrait_SMD_Laleh_Sorani.png",
+      "runtime_sha256": "54e3e7100caf14476bf0137c92af1038d0cf874da0e2eae04544d3d2a0931f84"
+    },
+    {
+      "id": "SOD_Bahram_Kord",
+      "name": "Бахрам Корд",
+      "prompt": "Use case: stylized-concept. Create one fictional country leader portrait for a Hearts of Iron IV total conversion, matching a sober painted strategy-game portrait. Vertical 3:4 chest-up composition, centered large readable head, shoulders cut by bottom edge, slight three-quarter turn toward viewer's right. Realistic digitally oil-painted facial modeling with restrained brushwork, subtle fine horizontal engraved texture, muted dark lavender-gray studio backdrop and gentle vignette, warm top-left key light, dark industrial early-to-mid 20th century civilian clothing. Finished archival political portrait, no border, no lettering, no flags, no watermark, no modern photo gloss, no weapons, no real person likeness. Leave a small margin above hair. Single person only. A fictional male oilfield industrial governor, age 56, large heavy face, warm brown skin, bald crown with close gray hair at sides, thick dark-gray mustache without beard, powerful jaw and weathered creases, skeptical reserved expression. Dark charcoal leather work coat over a black high collar, no helmet, no medals. Visually imposing veteran oilfield superintendent.",
+      "edit_prompt": "Preserve identity, pose and clothing; remove background to true alpha and remove baked-in screen/canvas texture for native portrait.psd compositing.",
+      "source_file": "exec-8a18798b-6b83-43bb-a3b6-ec2b57861ba6.png",
+      "runtime_path": "gfx/leaders/SOD/portrait_SOD_Bahram_Kord.png",
+      "runtime_sha256": "8de63efd3c73ed9bb7cba515fd14e1431d0fb71499cdcb5466260a3a0f2bc12d"
+    },
+    {
+      "id": "SDA_Samira_Radan",
+      "name": "Самира Радан",
+      "prompt": "Use case: stylized-concept. Create one fictional country leader portrait for a Hearts of Iron IV total conversion, matching a sober painted strategy-game portrait. Vertical 3:4 chest-up composition, centered large readable head, shoulders cut by bottom edge, slight three-quarter turn toward viewer's right. Realistic digitally oil-painted facial modeling with restrained brushwork, subtle fine horizontal engraved texture, muted dark lavender-gray studio backdrop and gentle vignette, warm top-left key light, dark industrial early-to-mid 20th century civilian clothing. Finished archival political portrait, no border, no lettering, no flags, no watermark, no modern photo gloss, no weapons, no real person likeness. Leave a small margin above hair. Single person only. A fictional female caravan-corridor administrator and governor, age 38, warm olive complexion, slender angular face, shoulder-length straight black hair tucked behind ears, expressive slightly arched brows, steady determined gaze, no spectacles. Dark muted burgundy-brown tailored jacket and sand-colored narrow scarf tucked inside collar. Capable dry-country logistics negotiator, distinctive younger face.",
+      "edit_prompt": "Preserve identity, pose and clothing; remove background to true alpha and remove baked-in screen/canvas texture for native portrait.psd compositing.",
+      "source_file": "exec-beb3f0c4-a9c2-466e-bf51-398f3b2bc171.png",
+      "runtime_path": "gfx/leaders/SDA/portrait_SDA_Samira_Radan.png",
+      "runtime_sha256": "8d3530958b412ac32f163e7d63fd091e51801e0fa1be3f3b39194a781b7fa5bb"
+    }
+  ],
+  "template_sha256": "b3e90d7f944497f9de055684bcfcda9c721f9511b7957e0a103c045dc86e2360"
+}

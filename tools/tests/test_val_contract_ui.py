@@ -2690,12 +2690,12 @@ class ValAnnualMarketTests(unittest.TestCase):
             "ADISCORD_economy_weekly_income = VAL_contract_market_weekly_income",
             contract_state,
         )
-        incomes = {"CIN": 5, "OSF": 8, "APH": 2, "COF": 10, "TFF": 12, "YPR": 15}
+        incomes = {"CIN": 2, "OSF": 3, "APH": 1, "COF": 3, "TFF": 4, "YPR": 5}
         for tag, amount in incomes.items():
             self.assertNotIn("VAL_market_" + tag + " = {", ideas)
-        self.assertEqual(incomes["APH"], 2)
+        self.assertEqual(incomes["APH"], 1)
         self.assertTrue(
-            all(incomes["APH"] < v <= 15 for k, v in incomes.items() if k != "APH")
+            all(incomes["APH"] < v <= 5 for k, v in incomes.items() if k != "APH")
         )
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         income_total = named_block(effects, "VAL_recalculate_market_contract_income")
@@ -2733,7 +2733,7 @@ class ValAnnualMarketTests(unittest.TestCase):
             initializer,
         )
         self.assertIn(
-            "clamp_variable = { var = VAL_contract_market_weekly_income min = 0 max = 52 }",
+            "clamp_variable = { var = VAL_contract_market_weekly_income min = 0 max = 18 }",
             initializer,
         )
         self.assertIn("VAL_refresh_market_contract_modifier = yes", initializer)

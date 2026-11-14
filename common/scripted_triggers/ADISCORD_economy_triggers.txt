@@ -418,28 +418,6 @@ ADISCORD_economy_research_spending_mode_4 = {
 }
 ADISCORD_economy_research_spending_mode_5 = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 5 compare = greater_than_or_equals } }
 
-ADISCORD_economy_can_invest_reserves = {
-	has_tech = ADISCORD_tech_hardened_computers
-	check_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_investment_price compare = greater_than_or_equals }
-	check_variable = { var = ADISCORD_economy_recent_investment value = 1 compare = less_than }
-	OR = {
-		ADISCORD_economy_model_allows_market_expansion = yes
-		ADISCORD_economy_model_allows_state_planning = yes
-		ADISCORD_economy_model_allows_technocratic_programs = yes
-		ADISCORD_economy_model_allows_oligarchic_deals = yes
-	}
-}
-
-ADISCORD_economy_can_expand_public_capital = {
-	ADISCORD_economy_can_invest_reserves = yes
-	check_variable = { var = ADISCORD_economy_public_investment_stock value = 10 compare = less_than }
-}
-
-ADISCORD_economy_can_use_civilian_stimulus = {
-	ADISCORD_economy_can_invest_reserves = yes
-	NOT = { has_idea = ADISCORD_economy_civilian_investment }
-}
-
 ADISCORD_economy_can_take_debt = {
 	OR = {
 		NOT = { ADISCORD_economy_model_is_fragmented = yes }
@@ -505,10 +483,11 @@ ADISCORD_economy_can_stabilize_macro = {
 
 # A write-off is a half-year event: the monthly loan lock alone would let a
 # country erase almost all principal within one year.
-# Ordinary repayment needs the full current package, twenty weeks of revenue.
+# Repayment requires the displayed instalment, capped by the outstanding debt.
 ADISCORD_economy_can_repay_debt = {
-	ADISCORD_economy_has_debt = yes
-	check_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_repay_offer_cash compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_debt value = 0 compare = greater_than }
+	check_variable = { var = ADISCORD_economy_repay_cash_temp value = 0 compare = greater_than }
+	check_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_repay_cash_temp compare = greater_than_or_equals }
 }
 
 ADISCORD_economy_can_restructure_debt = {
@@ -524,26 +503,12 @@ ADISCORD_economy_can_restructure_debt = {
 	}
 }
 
-ADISCORD_economy_can_early_repay_debt = {
-	has_tech = ADISCORD_tech_hardened_computers
-	ADISCORD_economy_has_treasury_100 = yes
-	check_variable = { var = ADISCORD_economy_debt value = 100 compare = greater_than_or_equals }
-}
-
 ADISCORD_economy_can_use_war_taxes = {
 	has_war = yes
 	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
 	ADISCORD_economy_model_allows_emergency_extraction = yes
 	ADISCORD_economy_has_treasury_room_40 = yes
 	NOT = { has_idea = ADISCORD_economy_war_taxes }
-}
-
-ADISCORD_economy_can_use_military_investment = {
-	has_tech = ADISCORD_tech_postwar_weapon_standardization
-	check_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_military_investment_price compare = greater_than_or_equals }
-	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
-	ADISCORD_economy_model_allows_mobilization_economy = yes
-	NOT = { has_idea = ADISCORD_economy_military_investment }
 }
 
 ADISCORD_economy_has_development_progress_ready = {

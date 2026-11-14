@@ -73,10 +73,25 @@ focus_tree = {
 
 	# The generals' hand or the districts' voice decides who speaks for the war.
 
+	# Carried across the war-tree swap; hidden by allow_branch.
+	shared_focus = NAM_inventory
+	shared_focus = NAM_recognition
+	shared_focus = NAM_south_heritage
+	shared_focus = NAM_defeat_count_losses
+	shared_focus = NAM_hum_free_zones
+	shared_focus = NAM_hum_veter_government
+	shared_focus = NAM_hum_citizen_army
+	shared_focus = NAM_rad_pillar_junta
+	shared_focus = NAM_exile_general_staff
+	shared_focus = NAM_exile_sea_raiders
+	shared_focus = NAM_hum_board_of_governors
+	shared_focus = NAM_hum_company_guard
+	shared_focus = NAM_board_company_capital
 }
 
 shared_focus = {
 		id = NAM_south_war_council
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 21
 		y = 0
@@ -117,6 +132,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_conscription_of_the_south
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_manpower
 		x = 6
 		y = 1
@@ -160,6 +176,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_defence_in_depth
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_defence
 		x = 4
 		y = 2
@@ -204,6 +221,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_mobile_reserve
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_army_motorized
 		x = 8
 		y = 2
@@ -252,6 +270,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_field_fortresses
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 2
 		y = 3
@@ -301,6 +320,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_district_garrisons
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_home_defense
 		x = 5
 		y = 3
@@ -348,6 +368,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fuel_columns
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_truck
 		x = 8
 		y = 3
@@ -399,6 +420,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_rapid_response
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_motor_cycle
 		x = 10
 		y = 3
@@ -441,6 +463,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_staff_of_the_line
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_military_mission
 		x = 6
 		y = 4
@@ -487,6 +510,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_oil_blitz
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_tank_assault
 		x = 4
 		y = 5
@@ -535,6 +559,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_attrition_wall
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_army_artillery
 		x = 8
 		y = 5
@@ -582,6 +607,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_armoured_spearheads
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_army_tanks2
 		x = 3
 		y = 6
@@ -630,6 +656,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_forward_fuel_dumps
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_stockpile_fuel
 		x = 5
 		y = 6
@@ -681,6 +708,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_counter_battery
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_army_artillery2
 		x = 8
 		y = 6
@@ -723,6 +751,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_trench_lines
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_mountain_fortification
 		x = 10
 		y = 6
@@ -771,6 +800,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_counteroffensive
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_NAM_basin_is_ours
 		x = 6
 		y = 7
@@ -812,6 +842,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_oil_tap
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_NAM_well_register
 		x = 16
 		y = 1
@@ -846,6 +877,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_allied_fuel_office
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_NAM_well_register
 		x = 14
 		y = 2
@@ -881,6 +913,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_convoy_hunters
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_VAL_Logistics_Command
 		x = 18
 		y = 2
@@ -921,6 +954,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_refinery_dispersal
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_oil_refinery
 		x = 16
 		y = 3
@@ -991,6 +1025,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fuel_for_the_front
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_stockpile_fuel
 		x = 14
 		y = 4
@@ -1036,6 +1071,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_war_export_tariff
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_trade
 		x = 18
 		y = 4
@@ -1083,6 +1119,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_field_pipelines
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_supply_line
 		x = 13
 		y = 5
@@ -1142,6 +1179,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_tanker_trains
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_railroad
 		x = 15
 		y = 5
@@ -1187,6 +1225,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_oil_exchange_credit
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_stockpile_currency
 		x = 19
 		y = 5
@@ -1234,6 +1273,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fuel_arsenal
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_construct_military
 		x = 16
 		y = 6
@@ -1300,6 +1340,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_charter_of_the_north
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_alliance
 		x = 27
 		y = 1
@@ -1354,6 +1395,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_protectorate_offers
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 25
 		y = 2
@@ -1406,6 +1448,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_punitive_columns
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_provoke_border_clashes
 		x = 29
 		y = 2
@@ -1451,6 +1494,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fuel_guarantees
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_positive_trade_relations
 		x = 24
 		y = 3
@@ -1512,6 +1556,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_desert_garrisons
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_fortify_city
 		x = 26
 		y = 3
@@ -1556,6 +1601,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_burned_wells
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_sabotage
 		x = 29
 		y = 3
@@ -1608,6 +1654,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_hostage_councils
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_political_pressure
 		x = 31
 		y = 3
@@ -1651,6 +1698,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_northern_envoys
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_conference
 		x = 27
 		y = 4
@@ -1701,6 +1749,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_restitution_ties
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_improve_relations
 		x = 25
 		y = 5
@@ -1761,6 +1810,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_league_of_the_north
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_major_alliance
 		x = 29
 		y = 5
@@ -1820,6 +1870,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_rear_of_svetlogorye
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_workers
 		x = 37
 		y = 1
@@ -1845,6 +1896,8 @@ shared_focus = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_sw_rear_relief
 			custom_effect_tooltip = NAM_sw_rear_relief_unlock_tt
+			unlock_decision_tooltip = NAM_campaign_the_line_holds
+			custom_effect_tooltip = NAM_campaign_the_line_holds_unlock_tt
 			add_stability = 0.05
 			custom_effect_tooltip = NAM_sw_rear_of_svetlogorye_war_tt
 			hidden_effect = {
@@ -1859,6 +1912,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_district_compact_at_war
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_public_meetings
 		x = 35
 		y = 2
@@ -1903,6 +1957,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_emergency_powers
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_military_dictatorship
 		x = 39
 		y = 2
@@ -1949,6 +2004,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_district_relief
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_welfare
 		x = 34
 		y = 3
@@ -1999,6 +2055,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_uprising_sweeps
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_national_security
 		x = 37
 		y = 3
@@ -2050,6 +2107,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_namestnik_courts
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_court
 		x = 40
 		y = 3
@@ -2095,6 +2153,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_war_bread
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_agricultural_subsidies
 		x = 35
 		y = 4
@@ -2141,6 +2200,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_home_militia
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_focus_generic_home_defense
 		x = 39
 		y = 4
@@ -2189,6 +2249,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_drive_to_khazar
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_occupy_start_war
 		x = 6
 		y = 8
@@ -2219,6 +2280,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_campaign_furnaces_will_fall
+			custom_effect_tooltip = NAM_campaign_furnaces_will_fall_unlock_tt
 			add_command_power = 40
 			add_war_support = 0.05
 			effect_tooltip = {
@@ -2239,6 +2302,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fall_of_the_furnaces
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_demand_territory
 		x = 11
 		y = 9
@@ -2290,6 +2354,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_last_line_of_the_belt
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_fortify_city
 		x = 21
 		y = 7
@@ -2345,6 +2410,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_victory_order
+		allow_branch = { has_focus_tree = NAM_south_war_focus }
 		icon = GFX_goal_generic_national_unity
 		x = 16
 		y = 10
@@ -2399,7 +2465,7 @@ shared_focus = {
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_service_state
 		}
 		available = {
@@ -2442,7 +2508,7 @@ shared_focus = {
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_service_state
 		}
 		prerequisite = {
@@ -2493,7 +2559,7 @@ shared_focus = {
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_service_state
 		}
 		prerequisite = {
@@ -2538,7 +2604,7 @@ shared_focus = {
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_service_state
 		}
 		prerequisite = {
@@ -2583,7 +2649,7 @@ shared_focus = {
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_service_state
 		}
 		prerequisite = {
@@ -2634,7 +2700,7 @@ shared_focus = {
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_federal_charter
 		}
 		available = {
@@ -2676,7 +2742,7 @@ shared_focus = {
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_federal_charter
 		}
 		prerequisite = {
@@ -2716,7 +2782,7 @@ shared_focus = {
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_federal_charter
 		}
 		prerequisite = {
@@ -2752,7 +2818,7 @@ shared_focus = {
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_federal_charter
 		}
 		prerequisite = {
@@ -2801,7 +2867,7 @@ shared_focus = {
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_STABILITY }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_federal_charter
 		}
 		prerequisite = {
@@ -2852,7 +2918,7 @@ shared_focus = {
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_pragmatic_compact
 		}
 		available = {
@@ -2898,7 +2964,7 @@ shared_focus = {
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_pragmatic_compact
 		}
 		prerequisite = {
@@ -2946,7 +3012,7 @@ shared_focus = {
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_pragmatic_compact
 		}
 		prerequisite = {
@@ -3003,7 +3069,7 @@ shared_focus = {
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_pragmatic_compact
 		}
 		prerequisite = {
@@ -3047,7 +3113,7 @@ shared_focus = {
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			has_completed_focus = NAM_pragmatic_compact
 		}
 		prerequisite = {
@@ -3098,7 +3164,7 @@ shared_focus = {
 		y = 0
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			NOT = {
 				OR = {
 					has_completed_focus = NAM_service_state
@@ -3147,7 +3213,7 @@ shared_focus = {
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			NOT = {
 				OR = {
 					has_completed_focus = NAM_service_state
@@ -3202,7 +3268,7 @@ shared_focus = {
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			NOT = {
 				OR = {
 					has_completed_focus = NAM_service_state
@@ -3257,7 +3323,7 @@ shared_focus = {
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			NOT = {
 				OR = {
 					has_completed_focus = NAM_service_state
@@ -3304,7 +3370,7 @@ shared_focus = {
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
-		allow_branch = {
+		allow_branch = { has_focus_tree = NAM_south_war_focus
 			NOT = {
 				OR = {
 					has_completed_focus = NAM_service_state

@@ -97,4 +97,9 @@ spriteTypes = {
 		name = "GFX_portrait_VLD_Irma_Vald"
 		texturefile = "gfx/leaders/VLD/portrait_VLD_Irma_Vald.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_DRV_Council_of_Free_Valleys"
+		texturefile = "gfx/leaders/DRV/portrait_DRV_Council_of_Free_Valleys.png"
+	}
 }

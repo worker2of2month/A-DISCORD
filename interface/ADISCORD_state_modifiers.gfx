@@ -238,4 +238,30 @@ spriteTypes = {
 		name = "GFX_modifiers_ADISCORD_coast_irrigation"
 		texturefile = "gfx/interface/state_modifiers/adiscord/coast_irrigation.png"
 	}
+
+	spriteType = {
+		name = "GFX_modifiers_NAM_export_office_1"
+		texturefile = "gfx/interface/state_modifiers/adiscord/nam_export_office_1.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_NAM_export_office_2"
+		texturefile = "gfx/interface/state_modifiers/adiscord/nam_export_office_2.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_NAM_export_office_3"
+		texturefile = "gfx/interface/state_modifiers/adiscord/nam_export_office_3.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_NAM_export_office_4"
+		texturefile = "gfx/interface/state_modifiers/adiscord/nam_export_office_4.png"
+	}
+
+	spriteType = {
+		name = "GFX_modifiers_NAM_export_office_5"
+		texturefile = "gfx/interface/state_modifiers/adiscord/nam_export_office_5.png"
+	}
+
 }

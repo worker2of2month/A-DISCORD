@@ -7,3 +7,13 @@ SHL = "countries/SHL.txt"
 GLP = "countries/GLP.txt"
 AZH = "countries/AZH.txt"
 WEF = "countries/WEF.txt"
+
+SFD = "countries/SFD.txt"
+
+SCD = "countries/SCD.txt"
+
+SMD = "countries/SMD.txt"
+
+SOD = "countries/SOD.txt"
+
+SDA = "countries/SDA.txt"

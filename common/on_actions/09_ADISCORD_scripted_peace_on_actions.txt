@@ -2248,6 +2248,15 @@ on_actions = {
 				# END nam:on_peace
 				# BEGIN shahrabad:on_peace
 				SHL = { SHL_close_external_kyz_war = yes }
+				if = {
+					limit = {
+						OR = {
+							ROOT = { tag = SHL }
+							FROM = { tag = SHL }
+						}
+					}
+					SHL = { SHL_queue_furnace_administrations = yes }
+				}
 				# END shahrabad:on_peace
 				# BEGIN south_final:on_peace
 				ADISCORD_south_final_close_external = yes
@@ -2628,6 +2637,7 @@ on_actions = {
 				if = { limit = { FROM = { tag = NAM } } VAL = { VAL_check_nam_concession = yes } }
 				# END kefreyt:on_annex
 				# BEGIN shahrabad:on_annex
+				ROOT = { SHL_queue_furnace_administrations = yes }
 				SHL = { SHL_close_external_kyz_war = yes }
 				if = {
 					limit = { FROM = { tag = SHL } }

@@ -28,4 +28,14 @@ spriteTypes = {
 		name = "GFX_portrait_LMN_Vera_Lemann"
 		texturefile = "gfx/leaders/LMN/portrait_LMN_Vera_Lemann.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_RIN_Northern_Court_Regency"
+		texturefile = "gfx/leaders/RIN/portrait_RIN_Northern_Court_Regency.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RLY_Relay_Assembly_17"
+		texturefile = "gfx/leaders/RLY/portrait_RLY_Relay_Assembly_17.png"
+	}
 }

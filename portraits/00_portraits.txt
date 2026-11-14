@@ -196,13 +196,1224 @@ EBA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Ge
 DVA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
 SRA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
 ZTA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
-SLA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
-RZA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
-MLR = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
-ERT = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
-IRT = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
-SCA = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
-EXZ = { army = { male = { "GFX_Portrait_WRK_Generic_land_1" "GFX_Portrait_WRK_Generic_land_2" "GFX_Portrait_WRK_Generic_land_3" } } }
+SLA = {
+	male = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+	female = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+
+	army = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	navy = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	operative = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	political = {
+		humanism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		utilitarism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		chauvinism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		pragmatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		anarchism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		technocracy = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		etatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		hedonism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+	}
+}
+RZA = {
+	male = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+	female = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+
+	army = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	navy = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	operative = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	political = {
+		humanism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		utilitarism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		chauvinism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		pragmatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		anarchism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		technocracy = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		etatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		hedonism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+	}
+}
+MLR = {
+	male = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+	female = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+
+	army = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	navy = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	operative = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	political = {
+		humanism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		utilitarism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		chauvinism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		pragmatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		anarchism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		technocracy = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		etatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		hedonism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+	}
+}
+ERT = {
+	male = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+	female = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+
+	army = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	navy = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	operative = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	political = {
+		humanism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		utilitarism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		chauvinism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		pragmatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		anarchism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		technocracy = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		etatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		hedonism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+	}
+}
+IRT = {
+	male = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+	female = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+
+	army = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	navy = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	operative = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	political = {
+		humanism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		utilitarism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		chauvinism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		pragmatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		anarchism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		technocracy = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		etatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		hedonism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+	}
+}
+SCA = {
+	male = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+	female = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+
+	army = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	navy = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	operative = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	political = {
+		humanism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		utilitarism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		chauvinism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		pragmatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		anarchism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		technocracy = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		etatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		hedonism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+	}
+}
+EXZ = {
+	male = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+	female = {
+		"GFX_Portrait_EXZ_Generic_1"
+		"GFX_Portrait_EXZ_Generic_2"
+		"GFX_Portrait_EXZ_Generic_3"
+		"GFX_Portrait_EXZ_Generic_4"
+	}
+
+	army = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	navy = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	operative = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+		female = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+
+	political = {
+		humanism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		utilitarism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		chauvinism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		pragmatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		anarchism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		technocracy = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		etatism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+		hedonism = {
+			male = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+			female = {
+				"GFX_Portrait_EXZ_Generic_1"
+				"GFX_Portrait_EXZ_Generic_2"
+				"GFX_Portrait_EXZ_Generic_3"
+				"GFX_Portrait_EXZ_Generic_4"
+			}
+		}
+	}
+}
 
 NAM = {
 	army = {

@@ -1,5 +1,6 @@
 ADISCORD_south_final_war_category = {
 	icon = generic_prepare_civil_war
+	scripted_gui = ADISCORD_south_map_panel
 	allowed = {
 		OR = {
 			tag = SHL

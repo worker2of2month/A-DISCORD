@@ -94,4 +94,9 @@ spriteTypes = {
 		name = "GFX_autonomy_IVN_emergency_trusteeship_icon"
 		textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
 	}
+
+	spriteType = {
+		name = "GFX_autonomy_SHL_furnace_administration_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_SHL_furnace_administration_icon.png"
+	}
 }

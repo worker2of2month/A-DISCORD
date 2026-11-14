@@ -2973,7 +2973,7 @@ ADISCORD_vorkerland_appoint_pwr_technocrat = {
 	}
 	set_country_leader_portrait = {
 		ideology = technocracy
-		portrait = GFX_Portrait_Forul_Generic_4
+		portrait = GFX_portrait_PWR_Alexey_Lange
 	}
 	set_country_flag = ADISCORD_vorkerland_pwr_technocrat_repair_v1
 }
@@ -21421,7 +21421,7 @@ WKR_contract_begin_reconstruction = {
 		}
 		add_political_power = -40
 		add_manpower = -1500
-		set_temp_variable = { WKR_contract_cash = 100 }
+		set_temp_variable = { WKR_contract_cash = 200 }
 		WKR_contract_treasury_debit = yes
 		set_variable = { var = WKR_contract_rebuild_state value = FROM }
 	}
@@ -22691,13 +22691,13 @@ TVA_lab_begin_prototype_series = {
 			TVA_lab_order_slot_free = yes
 		}
 		add_political_power = -30
-		add_to_variable = { var = ADISCORD_economy_treasury value = -40 }
+		add_to_variable = { var = ADISCORD_economy_treasury value = -75 }
 		hidden_effect = {
-			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 75 }
 			ADISCORD_economy_mark_dirty = yes
 		}
 		set_variable = { var = TVA_lab_order_pp value = 30 }
-		set_variable = { var = TVA_lab_order_treasury value = 40 }
+		set_variable = { var = TVA_lab_order_treasury value = 75 }
 		set_variable = { var = TVA_lab_order_manpower value = 0 }
 		set_variable = { var = TVA_lab_order_kind value = 1 }
 		if = {
@@ -23759,7 +23759,7 @@ WKR_vow_begin_engineer_brigade = {
 			WKR_vow_brigade_affordable = yes
 		}
 		add_political_power = -25
-		ADISCORD_economy_spend_100 = yes
+		ADISCORD_economy_spend_300 = yes
 		set_country_flag = WKR_vow_engineer_brigade_pending
 	}
 }
@@ -23769,7 +23769,7 @@ WKR_vow_refund_engineer_brigade = {
 		limit = { has_country_flag = WKR_vow_engineer_brigade_pending }
 		clr_country_flag = WKR_vow_engineer_brigade_pending
 		add_political_power = 25
-		ADISCORD_economy_receive_100 = yes
+		ADISCORD_economy_receive_300 = yes
 	}
 }
 

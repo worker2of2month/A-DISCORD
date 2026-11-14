@@ -4226,12 +4226,11 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.countries["MZR"]["subject_of"] = "SHL"
         self.m.run("SHL_annex_integration_commune")
         self.assertEqual((self.c["SHL_unrest"], self.c["SHL_city_support"]), (15, 25))
-        self.setUp()
-        self.m.run("SHL_annex_integration_directorate")
-        self.assertNotIn("SHL_general_governorate", self.m.ideas)
-        self.m.countries["KYZ"]["subject_of"] = "SHL"
-        self.m.run("SHL_annex_integration_directorate")
-        self.assertEqual(self.m.idea_days["SHL_general_governorate"], 365)
+        # Territorial redistribution is verified separately against state ownership.
+        source = (ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt").read_text(encoding="utf-8")
+        integration = source.split("SHL_annex_integration_directorate = {", 1)[1].split("# Regency:", 1)[0]
+        self.assertIn("SHL_form_furnace_administrations = yes", integration)
+        self.assertNotIn("add_timed_idea", integration)
 
     def test_sell_stations_pays_once_and_returns_the_stations_to_an_existing_kadir(self):
         self.m.ownership.update({"234": "SHL", "242": "SHL"})
