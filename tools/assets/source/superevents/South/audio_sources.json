@@ -892,6 +892,7 @@
     "music_ducking": false,
     "music_loudness_lufs": -18,
     "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
-    "runtime_file": "sound/superevents/superevent_south_civil_service_sound.wav"
+    "runtime_file": "sound/superevents/superevent_south_civil_service_sound.wav",
+    "runtime_sha256": "6d4394761a1ef8a188c659abff4ffd5117f0ce5a184e273767bd8c28a79fc522"
   }
 }

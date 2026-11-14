@@ -393,23 +393,23 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
     def test_economy_spending_rejects_missing_or_partial_debits(self) -> None:
         path = validator.ROOT / "common/scripted_effects/ADISCORD_economy_effects.txt"
         source = validator.read_text(path)
-        for effect, amount in (
-            ("invest_reserves", 100),
-            ("civilian_investment_action", 100),
-            ("military_investment_action", 100),
+        for effect, price in (
+            ("invest_reserves", "investment_price"),
+            ("civilian_investment_action", "investment_price"),
+            ("military_investment_action", "military_investment_price"),
         ):
             key = f"ADISCORD_economy_{effect}"
             body = validator.extract_block(source, source.index(f"{key} = {{"))
-            debit = f"var = ADISCORD_economy_treasury value = -{amount}"
+            debit = f"var = ADISCORD_economy_treasury value = ADISCORD_economy_{price}"
             self.assertIn(debit, body)
-            for replacement in ("value = 0", f"value = -{amount}.5"):
-                with self.subTest(effect=effect, amount=amount, replacement=replacement):
-                    broken_debit = f"var = ADISCORD_economy_treasury {replacement}"
+            for replacement in ("0", "100", "ADISCORD_economy_weekly_income"):
+                with self.subTest(effect=effect, replacement=replacement):
+                    broken_debit = f"var = ADISCORD_economy_treasury value = {replacement}"
                     broken_body = body.replace(debit, broken_debit, 1)
                     broken = source.replace(body, broken_body, 1)
                     with patch.object(validator, "read_text", return_value=broken):
                         issues = validator.check_economy_spending()
-                    self.assertIn(f"{key} does not subtract {amount} treasury", issues)
+                    self.assertIn(f"{key} does not book its price once in ADISCORD_economy_treasury", issues)
 
     def test_stabilization_price_is_debited_from_the_income_scaled_variable(self) -> None:
         path = validator.ROOT / "common/scripted_effects/ADISCORD_economy_effects.txt"
@@ -516,21 +516,33 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
                     entry.value for entry in values.get("enable", [])
                     if entry.key == "has_tech"
                 )
-                closure = technologies.technology_prerequisite_closure(required_techs)
-                unlocked_units = {
-                    unit for tech in closure
-                    for unit in technologies.ENABLE_SUBUNITS.get(tech, ())
-                }
+                research_routes = [required_techs]
+                if any(entry.key == "ADISCORD_has_marine_training" and entry.value == "yes"
+                       for entry in values.get("enable", [])):
+                    generic = parse_clausewitz((validator.ROOT / "common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt").read_text(encoding="utf-8"))
+                    gate = next(e.value for e in generic if e.key == "ADISCORD_has_marine_training")
+                    alternatives = next(e.value for e in gate if e.key == "OR")
+                    self.assertTrue(alternatives)
+                    self.assertTrue(all(e.key == "has_tech" for e in alternatives))
+                    research_routes = [required_techs + (e.value,) for e in alternatives]
                 target_units = {
                     entry.key for group in values["target_template"]
                     for entry in group.value
                 }
-                with self.subTest(template=template.key):
-                    self.assertEqual(
-                        target_units & inactive_units - unlocked_units,
-                        set(),
-                        "AI target is available before its subunits are researched",
-                    )
+                for required in research_routes:
+                    closure = set(required)
+                    generated = tuple(t for t in required if t in technologies.TECH_POSITION_BY_ID)
+                    closure.update(technologies.technology_prerequisite_closure(generated))
+                    unlocked_units = set()
+                    for tech in closure:
+                        self.assertIn(tech, self.tech_blocks)
+                        for definition in parse_clausewitz(self.tech_blocks[tech]):
+                            for entry in definition.value:
+                                if entry.key == "enable_subunits":
+                                    unlocked_units.update(child.key for child in entry.value)
+                    with self.subTest(template=template.key, research=required):
+                        self.assertEqual(target_units & inactive_units - unlocked_units, set(),
+                                         "AI target is available before its subunits are researched")
 
     def test_missing_generated_dependency_is_reported(self) -> None:
         tech_id = "ADISCORD_tech_teleoperated_scout_carts"

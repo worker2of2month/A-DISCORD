@@ -576,6 +576,7 @@ class RecoveryRewardTests(unittest.TestCase):
             "focuses": focuses,
             "effects": effects,
             "new_world": read("common/national_focus/ADISCORD_VAL_new_world.txt"),
+            "events": read("events/ADISCORD_VAL_contract_events.txt"),
         }
         self.assertEqual(
             validate_val_preview_ideas(ideas, sources, dynamic, effects)[1], []

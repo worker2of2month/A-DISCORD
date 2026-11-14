@@ -193,8 +193,8 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
             "ADISCORD_tech_casualty_evacuation": "hq_field_hospital",
             "ADISCORD_tech_forward_supply_hubs": "hq_logistics",
             "ADISCORD_tech_vertical_assault_training": "hq_paratrooper",
-            "ADISCORD_tech_drone_recon_swarms": "hq_light_armor",
-            "ADISCORD_tech_semi_autonomous_combat_modules": "hq_medium_armor",
+            "ADISCORD_tech_restored_armored_chassis": "hq_light_armor",
+            "ADISCORD_tech_recovered_medium_chassis": "hq_medium_armor",
             "ADISCORD_tech_heavy_platform_cores": "hq_heavy_armor",
         }
         for technology, subunit in expected_unlocks.items():

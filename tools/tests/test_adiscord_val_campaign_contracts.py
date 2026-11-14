@@ -668,7 +668,7 @@ class ValLateStoryTests(unittest.TestCase):
                 current[("VAL", "ruling_leader")] = "VAL_Commanders_Council"
                 self.assertFalse(matches_conditions(gate, current, "VAL"))
 
-    def test_story_windows_are_once_only_and_close_without_gameplay_or_navigation(self):
+    def test_story_windows_and_propaganda_choice_keep_their_distinct_contracts(self):
         for number in range(149, 154):
             with self.subTest(event=number):
                 scene = self.scene(number)
@@ -676,8 +676,21 @@ class ValLateStoryTests(unittest.TestCase):
                 self.assertEqual(scalar(scene, "fire_only_once"), "yes")
                 self.assertFalse(any(entry.key == "immediate" for entry in scene))
                 options = [entry.value for entry in scene if entry.key == "option"]
-                self.assertEqual(len(options), 1)
-                self.assertEqual([entry.key for entry in options[0]], ["name"])
+                if number == 152:
+                    self.assertEqual(len(options), 3)
+                    for option, support, flag in zip(options, (None, "-0.02", "0.03"),
+                                                     (None, "VAL_legend_withdrawn", "VAL_legend_amplified")):
+                        changes = [e.value for e in option if e.key == "add_war_support"]
+                        self.assertEqual(changes, [] if support is None else [support])
+                        hidden = block(option, "hidden_effect")
+                        self.assertEqual([e.value for e in hidden if e.key == "set_country_flag"],
+                                         [] if flag is None else [flag])
+                        dispatch = block(hidden, "country_event")
+                        self.assertEqual(scalar(dispatch, "id"), "val_rework.158")
+                        self.assertEqual(scalar(dispatch, "days"), "2")
+                else:
+                    self.assertEqual(len(options), 1)
+                    self.assertEqual([entry.key for entry in options[0]], ["name"])
 
     def test_story_pages_have_complete_bounded_localisation_in_both_languages(self):
         root = Path(__file__).resolve().parents[2]
@@ -688,7 +701,8 @@ class ValLateStoryTests(unittest.TestCase):
             values = dict(re.findall(r'^\s*([^\s:#]+):\d*\s+"(.*)"\s*$', data.decode("utf-8-sig"), re.M))
             for number in range(149, 154):
                 scene = self.scene(number)
-                keys = [scalar(scene, "title"), scalar(block(scene, "option"), "name")]
+                keys = [scalar(scene, "title")]
+                keys += [scalar(entry.value, "name") for entry in scene if entry.key == "option"]
                 keys += [scalar(entry.value, "text") if isinstance(entry.value, list) else entry.value
                          for entry in scene if entry.key == "desc"]
                 for key in keys:

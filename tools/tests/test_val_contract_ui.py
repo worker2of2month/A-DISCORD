@@ -1196,10 +1196,10 @@ class TestValPropagandaRewards(unittest.TestCase):
                 f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
             )
             deadline = re.search(
-                r'(?m)^\s*VAL_quarterly_contract_deadline_desc:0\s+"([^"\r\n]*)"', text
+                r'(?m)^\s*VAL_quarterly_contract_deadline_description_rules_tt:0\s+"([^"\r\n]*)"', text
             )
             subcontract = re.search(
-                r'(?m)^\s*VAL_subcontract_quarterly_norm_desc:0\s+"([^"\r\n]*)"', text
+                r'(?m)^\s*VAL_subcontract_quarterly_norm_description_rules_tt:0\s+"([^"\r\n]*)"', text
             )
             self.assertIsNotNone(deadline, language)
             self.assertIsNotNone(subcontract, language)
@@ -1293,7 +1293,7 @@ class TestValPropagandaRewards(unittest.TestCase):
             for key in keys:
                 with self.subTest(language=language, key=key):
                     entries = re.findall(
-                        rf'(?m)^\s*{re.escape(key)}:(?:\d+)?\s+"([^"\r\n]*)"\s*$', text
+                        rf'(?m)^\s*{re.escape(key)}:(?:\d+)?\s+"((?:\\.|[^"\\\r\n])*)"\s*$', text
                     )
                     self.assertEqual(len(entries), 1, key)
                     self.assertTrue(entries[0])
@@ -3285,7 +3285,7 @@ class ValDirectContractDecisionTests(unittest.TestCase):
         self.assertNotIn("days = 1", dispatch)
         self.assertIn("country_event = { id = val_contract.364 }", dispatch)
         self.assertNotIn(
-            "id = val_contract.426", read("events/ADISCORD_VAL_contract_events.txt")
+            "id = val_contract.426", dispatch
         )
 
     def test_legacy_special_agreement_is_hidden_but_kept_for_save_compatibility(self):

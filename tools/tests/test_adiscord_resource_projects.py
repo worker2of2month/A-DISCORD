@@ -554,10 +554,10 @@ class ResourceProjectSourceContracts(unittest.TestCase):
         )
         self.assertNotIn('add_resource', read(DECISIONS))
 
-    def test_both_economic_branches_have_nine_reachable_nonoverlapping_focuses(self):
-        for country, prefix, parent in (
-            ('VAL', 'VAL_econ_', 'VAL_Industrial_Mobilization_Plan'),
-            ('STP', 'STP_pc_investment_', 'STP_pc_economy_recovery_budget'),
+    def test_economic_branches_have_reachable_nonoverlapping_focuses(self):
+        for country, prefix, parent, count in (
+            ('VAL', 'VAL_econ_', 'VAL_Industrial_Mobilization_Plan', 10),
+            ('STP', 'STP_pc_investment_', 'STP_pc_economy_recovery_budget', 9),
         ):
             source = read(FOCUS_FILES[country])
             self.assertTrue(source, FOCUS_FILES[country])
@@ -568,7 +568,7 @@ class ResourceProjectSourceContracts(unittest.TestCase):
                 for f in t.value
                 if f.key == 'focus' and str(direct(f.value, 'id')).startswith(prefix)
             ]
-            self.assertEqual(len(selected), 9)
+            self.assertEqual(len(selected), count)
             ids = {direct(f, 'id') for f in selected}
             for f in selected:
                 for n in f:
