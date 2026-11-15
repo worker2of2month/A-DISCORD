@@ -2,7 +2,7 @@
 	focus = {
 		id = NAM_veterans_return
 		relative_position_id = NAM_recognition
-		x = 15
+		x = 16
 		y = 1
 		icon = GFX_focus_NAM_oilfield_militia
 		cost = 3
@@ -133,7 +133,7 @@
 	focus = {
 		id = NAM_pw_power_reserve
 		relative_position_id = NAM_pw_air_review
-		x = 10
+		x = 5
 		y = 2
 		icon = GFX_focus_RUS_bunker_power_school
 		cost = 3
@@ -159,7 +159,7 @@
 	focus = {
 		id = NAM_pw_army_review
 		relative_position_id = NAM_veterans_return
-		x = 25
+		x = 13
 		y = 1
 		icon = GFX_focus_NAM_quiet_officer_lists
 		cost = 2
@@ -176,6 +176,8 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_campaign_furnaces_threaten_the_desert
+			custom_effect_tooltip = NAM_campaign_furnaces_threaten_the_desert_unlock_tt
 			unlock_decision_tooltip = NAM_program_reserve_centres
 			custom_effect_tooltip = NAM_program_reserve_centres_unlock_tt
 		}
@@ -185,7 +187,7 @@
 	focus = {
 		id = NAM_pw_breakthrough_army
 		relative_position_id = NAM_pw_army_review
-		x = 5
+		x = 1
 		y = 2
 		icon = GFX_focus_NAM_mobile_columns
 		cost = 3
@@ -230,7 +232,7 @@
 	focus = {
 		id = NAM_pw_mobile_army
 		relative_position_id = NAM_pw_army_review
-		x = 10
+		x = 3
 		y = 2
 		icon = GFX_focus_NAM_mobile_columns
 		cost = 3
@@ -275,7 +277,7 @@
 	focus = {
 		id = NAM_pw_reserve_centres
 		relative_position_id = NAM_pw_army_review
-		x = 15
+		x = 6
 		y = 3
 		icon = GFX_focus_NAM_concealed_reserve
 		cost = 3
@@ -311,7 +313,7 @@
 	focus = {
 		id = NAM_pw_engineer_units
 		relative_position_id = NAM_pw_army_review
-		x = 5
+		x = 1
 		y = 3
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
@@ -337,7 +339,7 @@
 	focus = {
 		id = NAM_pw_field_workshops
 		relative_position_id = NAM_pw_army_review
-		x = 7
+		x = 2
 		y = 4
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 3
@@ -372,7 +374,7 @@
 	focus = {
 		id = NAM_pw_artillery_observers
 		relative_position_id = NAM_pw_army_review
-		x = 7
+		x = 2
 		y = 1
 		icon = GFX_focus_NAM_metropolitan_depots
 		cost = 2
@@ -407,7 +409,7 @@
 	focus = {
 		id = NAM_pw_staff_exercises
 		relative_position_id = NAM_pw_army_review
-		x = 10
+		x = 3
 		y = 3
 		icon = GFX_focus_VAL_Contract_General_Staff
 		cost = 2
@@ -459,7 +461,7 @@
 	focus = {
 		id = NAM_pw_combined_arms
 		relative_position_id = NAM_pw_army_review
-		x = 5
+		x = 1
 		y = 5
 		icon = GFX_focus_NAM_metropolitan_depots
 		cost = 2
@@ -503,7 +505,7 @@
 	focus = {
 		id = NAM_pw_southern_army
 		relative_position_id = NAM_pw_army_review
-		x = 12
+		x = 4
 		y = 4
 		icon = GFX_focus_NAM_oilfield_militia
 		cost = 3
@@ -563,7 +565,7 @@
 	focus = {
 		id = NAM_pw_naval_review
 		relative_position_id = NAM_veterans_return
-		x = 19
+		x = 9
 		y = 1
 		icon = GFX_focus_NAM_active_squadron
 		cost = 2
@@ -659,7 +661,7 @@
 	focus = {
 		id = NAM_pw_strike_fleet
 		relative_position_id = NAM_pw_naval_review
-		x = 5
+		x = 2
 		y = 4
 		icon = GFX_focus_NAM_active_squadron
 		cost = 3
@@ -717,7 +719,7 @@
 	focus = {
 		id = NAM_pw_naval_workshops
 		relative_position_id = NAM_pw_naval_review
-		x = 3
+		x = 2
 		y = 3
 		icon = GFX_focus_NAM_repair_yard
 		cost = 3
@@ -753,7 +755,7 @@
 	focus = {
 		id = NAM_pw_crew_schools
 		relative_position_id = NAM_pw_naval_review
-		x = 1
+		x = 0
 		y = 6
 		icon = GFX_focus_NAM_oilfield_militia
 		cost = 2
@@ -790,7 +792,7 @@
 	focus = {
 		id = NAM_pw_naval_fuel_depots
 		relative_position_id = NAM_pw_naval_review
-		x = 6
+		x = 4
 		y = 1
 		icon = GFX_focus_NAM_well_register
 		cost = 3
@@ -816,7 +818,7 @@
 	focus = {
 		id = NAM_pw_landing_supply
 		relative_position_id = NAM_pw_naval_review
-		x = 5
+		x = 3
 		y = 2
 		icon = GFX_focus_VAL_Marine_Contract_Corps
 		cost = 3
@@ -851,7 +853,7 @@
 	focus = {
 		id = NAM_pw_naval_service
 		relative_position_id = NAM_pw_naval_review
-		x = 6
+		x = 3
 		y = 5
 		icon = GFX_focus_NAM_active_squadron
 		cost = 3
@@ -900,7 +902,7 @@
 	focus = {
 		id = NAM_pw_air_review
 		relative_position_id = NAM_veterans_return
-		x = 9
+		x = 4
 		y = 1
 		icon = GFX_focus_NAM_air_operations
 		cost = 2
@@ -935,7 +937,7 @@
 	focus = {
 		id = NAM_pw_air_defence
 		relative_position_id = NAM_pw_air_review
-		x = 5
+		x = 2
 		y = 4
 		icon = GFX_focus_NAM_air_interceptors
 		cost = 3
@@ -1013,7 +1015,7 @@
 	focus = {
 		id = NAM_pw_airfield_network
 		relative_position_id = NAM_pw_air_review
-		x = 6
+		x = 3
 		y = 1
 		icon = GFX_focus_RUS_capital_airfields
 		cost = 3
@@ -1065,7 +1067,7 @@
 	focus = {
 		id = NAM_pw_radar_posts
 		relative_position_id = NAM_pw_air_review
-		x = 8
+		x = 4
 		y = 3
 		icon = GFX_focus_RUS_air_control_network
 		cost = 3
@@ -1091,7 +1093,7 @@
 	focus = {
 		id = NAM_pw_engine_workshops
 		relative_position_id = NAM_pw_air_review
-		x = 3
+		x = 2
 		y = 5
 		icon = GFX_focus_NAM_air_ground_service
 		cost = 2
@@ -1135,7 +1137,7 @@
 	focus = {
 		id = NAM_pw_air_supply
 		relative_position_id = NAM_pw_air_review
-		x = 3
+		x = 1
 		y = 3
 		icon = GFX_focus_RUS_aviation_fuel_reserve
 		cost = 3
@@ -1162,7 +1164,7 @@
 	focus = {
 		id = NAM_pw_ground_control
 		relative_position_id = NAM_pw_air_review
-		x = 8
+		x = 4
 		y = 5
 		icon = GFX_focus_NAM_air_operations
 		cost = 2
@@ -1200,7 +1202,7 @@
 	focus = {
 		id = NAM_pw_southern_air_command
 		relative_position_id = NAM_pw_air_review
-		x = 6
+		x = 3
 		y = 6
 		icon = GFX_focus_NAM_air_operations
 		cost = 2

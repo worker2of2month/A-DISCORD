@@ -4951,7 +4951,14 @@ class NamCampaignTests(unittest.TestCase):
         for focuses in (self.focuses, self.postwar):
             grants.extend(name for name, focus in focuses.items()
                           if any(e.key == "ADISCORD_campaign_slot_grant" for e in walk(block(focus, "completion_reward"))))
-        self.assertEqual(grants, ["NAM_inventory", "NAM_pw_civil_communications"])
+        self.assertCountEqual(grants, ["NAM_inventory", "NAM_recognition", "NAM_pw_civil_communications"])
+        for inventoried in (False, True):
+            facts = self.independent_facts()
+            facts[("NAM", "has_completed_focus", "NAM_inventory")] = inventoried
+            slot = ("NAM", "variable", "ADISCORD_available_campaign_slots")
+            facts[slot] = 0
+            self.apply(block(self.postwar["NAM_recognition"], "completion_reward"), facts)
+            self.assertEqual(facts[slot], int(not inventoried))
         facts = self.independent_facts()
         facts[("NAM", "variable", "ADISCORD_available_campaign_slots")] = 1
         radio = block(block(parsed(f"common/decisions/{BASE}_decisions.txt"), "NAM_public_campaigns"), "NAM_radio_network")
@@ -4966,6 +4973,40 @@ class NamCampaignTests(unittest.TestCase):
         paid = dict(facts)
         self.apply(block(wages, "complete_effect"), facts)
         self.assertEqual(facts, paid)
+
+    def test_postwar_campaigns_follow_their_focuses_and_release_the_repair_slot(self):
+        category = block(parsed(f"common/decisions/{BASE}_decisions.txt"), "NAM_public_campaigns")
+        campaigns = {
+            "NAM_pw_civil_communications": "NAM_campaign_our_own_word",
+            "NAM_oil_ministry": "NAM_campaign_oil_is_ours",
+            "NAM_pw_municipal_repair": "NAM_campaign_rebuild_our_streets",
+            "NAM_pw_army_review": "NAM_campaign_furnaces_threaten_the_desert",
+            "NAM_federal_charter": "NAM_campaign_charter_of_districts",
+        }
+        for focus, campaign in campaigns.items():
+            previews = [name for name, body in self.postwar.items()
+                        if any(e.key == "unlock_decision_tooltip" and e.value == campaign
+                               for e in walk(block(body, "completion_reward")))]
+            self.assertEqual(previews, [focus])
+            self.assertIn(focus, [e.value for e in walk(block(block(category, campaign), "visible"))
+                                  if e.key == "has_completed_focus"])
+        repair = block(category, "NAM_campaign_rebuild_our_streets")
+        shared = {e.key: e.value for e in parsed("common/scripted_triggers/ADISCORD_shared_action_triggers.txt")}
+        with patch.dict(self.triggers, shared):
+            for terminal in ("remove_effect", "cancel_effect"):
+                facts = self.independent_facts()
+                slot = ("NAM", "variable", "ADISCORD_available_campaign_slots")
+                facts[slot] = 1
+                self.assertFalse(self.matches(block(repair, "visible"), facts))
+                facts[("NAM", "has_completed_focus", "NAM_pw_municipal_repair")] = True
+                self.assertTrue(self.matches(block(repair, "visible"), facts))
+                self.assertTrue(self.matches(block(repair, "available"), facts))
+                self.apply(block(repair, "complete_effect"), facts)
+                self.assertEqual(facts[slot], 0)
+                self.assertFalse(self.matches(block(repair, "available"), facts))
+                self.apply(block(repair, terminal), facts)
+                self.apply(block(repair, terminal), facts)
+                self.assertEqual(facts[slot], 1)
 
     def test_deep_drilling_ceiling_and_scorched_fields_block_payment(self):
         for suffix in ("deep_drilling", "emergency_service"):
@@ -6928,7 +6969,7 @@ class NamCampaignTests(unittest.TestCase):
 
         expected = {
             "main": (self.focuses, 95), "wartime": (self.wartime, 40),
-            "postwar": (self.postwar, 247), "defeated": (self.defeated, 22),
+            "postwar": (self.postwar, 257), "defeated": (self.defeated, 22),
             "south_war": (self.south_war, 68),
             "exile_radical": (self.exile_trees["exile_radical"][1], 72),
             "exile_humanist": (self.exile_trees["exile_humanist"][1], 73),
@@ -10468,6 +10509,7 @@ class NamCampaignTests(unittest.TestCase):
             ("NAM", "has_capitulated", "no"): True,
             ("NAM", "is_subject", "no"): True,
             ("NAM", "has_global_flag", BASE + "_nam_victory"): True,
+            ("NAM", "has_global_flag", "ADISCORD_south_final_resolved"): True,
             ("NAM", "has_global_flag", "ADISCORD_south_hegemon_NAM"): True,
             ("NAM", "has_government", "etatism"): True,
             ("NAM", "ruling_leader"): "NAM_Egor_Rom",
@@ -10490,6 +10532,7 @@ class NamCampaignTests(unittest.TestCase):
                 (("is_subject", "no"), False),
                 (("has_global_flag", BASE + "_nam_victory"), False),
                 (("has_global_flag", BASE + "_standoff"), True),
+                (("has_global_flag", "ADISCORD_south_final_resolved"), False),
                 (("has_global_flag", "ADISCORD_south_hegemon_NAM"), False),
                 (("has_government", "etatism"), False),
                 (("ruling_leader",), "NAM_coup_governor"),
@@ -10791,6 +10834,82 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertEqual(world.player_handoffs, [])
                 self.assertEqual(world.arrays["global.NAM_veyran_homeland"], [])
 
+    def test_southern_mandates_open_independent_choices_only_after_final_victory(self):
+        routes = (
+            (0, "south_trade_hearing", ("south_safir_line", "south_safir_charter"),
+             ("south_bayrat_lease", "south_bayrat_foundry")),
+            (0.5, "south_delegates", ("south_builders", "south_road_crews"),
+             ("south_elected_watch", "south_ward_armoury")),
+        )
+        for mandate, root, left, right in routes:
+            for name in (root, *left, *right):
+                focus = self.postwar["NAM_" + name]
+                for balance, resolved, winner in product((-0.5, 0, 0.5), (False, True), (False, True)):
+                    facts = {
+                        ("NAM", "has_variable", "NAM_prewar_balance"): True,
+                        ("NAM", "variable", "NAM_prewar_balance"): balance,
+                        ("NAM", "has_global_flag", "ADISCORD_south_final_resolved"): resolved,
+                        ("NAM", "has_global_flag", "ADISCORD_south_hegemon_NAM"): winner,
+                    }
+                    self.assertEqual(self.matches(block(focus, "allow_branch"), facts),
+                                     balance == mandate and resolved and winner, name)
+            def parents(name):
+                return [[p.value for p in group.value] for group in self.postwar["NAM_" + name]
+                        if group.key == "prerequisite"]
+            self.assertEqual(parents(root), [["NAM_south_heritage"]])
+            for (choice, ending), alternative in ((left, right[0]), (right, left[0])):
+                focus = self.postwar["NAM_" + choice]
+                self.assertEqual(parents(choice), [["NAM_" + root]])
+                self.assertEqual(parents(ending), [["NAM_" + choice]])
+                self.assertEqual([p.value for p in block(focus, "mutually_exclusive")], ["NAM_" + alternative])
+                self.assertFalse(any(e.key == "bypass" for e in focus))
+
+    def test_southern_mandate_rewards_reach_the_local_owner_and_the_merchant_fleet(self):
+        facts = self.postwar_facts()
+        facts[("NAM", "has_global_flag", "ADISCORD_south_final_resolved")] = True
+        facts[("NAM", "has_global_flag", "ADISCORD_south_hegemon_NAM")] = True
+        facts[("fixture", "market_owners")] = True
+        roads = self.decisions["NAM_fund_southern_roads"]
+        charter = self.decisions["NAM_charter_safir_freighters"]
+        self.assertEqual({e.value for e in block(roads, "targets")}, {"699", "707"})
+        for decision, ending, price in ((roads, "south_road_crews", 50), (charter, "south_safir_charter", 45)):
+            self.assertEqual(scalar(block(decision, "visible"), "has_completed_focus"), "NAM_" + ending)
+            self.assertEqual(scalar(decision, "cost"), str(price))
+            self.assertGreater(int(scalar(decision, "days_re_enable")), 0)
+        for owner, subject, control in product(("NAM", "SHL"), (False, True), (False, True)):
+            for state in ("699", "707", "730", "732"):
+                facts[(state, "owner")] = owner
+            facts[(owner, "controls_state", "PREV")] = control
+            facts[(owner, "is_subject_of", "NAM")] = subject
+            permitted = control and (owner == "NAM" or subject)
+            for name in ("south_safir_line", "south_bayrat_lease", "south_builders", "south_elected_watch"):
+                self.assertEqual(self.matches(block(self.postwar["NAM_" + name], "available"), facts), permitted, name)
+            self.assertEqual(self.matches(block(charter, "available"), facts), permitted)
+            for level in (4, 5):
+                facts[("707", "numeric", "infrastructure")] = level
+                self.assertEqual(self.matches(self.bind_field(block(roads, "available"), "707"), facts),
+                                 permitted and level < 5)
+        self.apply(block(self.postwar["NAM_south_elected_watch"], "completion_reward"), facts)
+        self.assertEqual(facts[("SHL", "equipment", "infantry_equipment")], 800)
+        self.apply(block(self.postwar["NAM_south_bayrat_lease"], "completion_reward"), facts)
+        self.assertEqual(facts[("732", "resource", "steel")], 4)
+        before = facts.get(("NAM", "equipment", "convoy"), 0)
+        self.apply(block(charter, "complete_effect"), facts)
+        self.assertEqual(facts[("NAM", "equipment", "convoy")] - before, 12)
+        self.apply(self.bind_field(block(roads, "complete_effect"), "707"), facts)
+        self.assertEqual(facts[("707", "building", "infrastructure")], 1)
+        for name, site, building, equipment, quantity in (
+            ("south_builders", "707", "industrial_complex", "motorized_equipment", 100),
+            ("south_bayrat_foundry", "732", "industrial_complex", "support_equipment", 250),
+            ("south_ward_armoury", "699", "arms_factory", "infantry_equipment", 1000),
+        ):
+            for space in (0, 1):
+                snapshot = {**facts, (site, "variable", "fixture_building_slots_" + building + "_yes"): space}
+                self.apply(block(self.postwar["NAM_" + name], "completion_reward"), snapshot)
+                self.assertEqual(snapshot.get((site, "building", building), 0), space, name)
+                stock = ("SHL", "equipment", equipment)
+                self.assertEqual(snapshot.get(stock, 0) - facts.get(stock, 0), quantity if not space else 0, name)
+
     def test_khan_branch_follows_southern_victory_and_heritage(self):
         names = ("NAM_rus_crisis_watch", "NAM_rus_fuel_for_coalition",
                  "NAM_rus_demand_share", "NAM_rus_expedition_staff")
@@ -10803,7 +10922,10 @@ class NamCampaignTests(unittest.TestCase):
             facts[("NAM", "variable", "NAM_prewar_balance")] = balance
             root_x, root_y = self.postwar_focus_position(root, facts)
             heritage_x, heritage_y = self.postwar_focus_position(heritage, facts)
-            self.assertGreater(root_x, heritage_x)
+            if balance < -0.25:
+                self.assertGreater(root_x, heritage_x)
+            else:
+                self.assertEqual(root_x, heritage_x)
             self.assertEqual(root_y, heritage_y + 1)
         for resolved, nam_won in ((False, False), (True, False), (False, True), (True, True)):
             facts = self.postwar_facts()
@@ -10820,7 +10942,11 @@ class NamCampaignTests(unittest.TestCase):
         self.assertFalse(self.matches(block(root, "available"), facts))
         outcomes = parsed("common/scripted_effects/ADISCORD_south_final_war_effects.txt")
         victory = block(outcomes, "ADISCORD_south_final_resolve_north_victory")
-        self.assertTrue(any(e.key == "mark_focus_tree_layout_dirty" for e in walk(victory)))
+        settlement = block(victory, "if")
+        refresh = next(i for i, e in enumerate(settlement) if e.key == "NAM"
+                       and any(call.key == "mark_focus_tree_layout_dirty" for call in e.value))
+        flags = {e.value for e in settlement[:refresh] if e.key == "set_global_flag"}
+        self.assertTrue({"ADISCORD_south_final_resolved", "ADISCORD_south_hegemon_NAM"} <= flags)
 
     def northern_facts(self, focus=None, recipients=("FROM",)):
         facts = self.postwar_facts()
@@ -11257,14 +11383,19 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_postwar_layout_is_visible_before_progress_and_mandate_specific(self):
         roots = ("NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return")
+        main = reachable(self.postwar, {"NAM_south_heritage"})
+        south = reachable(self.postwar, {"NAM_recognition"})
+        self.assertTrue(main.isdisjoint(south))
+        self.assertEqual(main | south, set(self.postwar))
         for balance, course, count in ((-0.5, "service_state", 156), (0, "pragmatic_compact", 125),
                                        (0.5, "federal_charter", 124)):
             facts = self.postwar_facts()
             facts[("NAM", "has_variable", "NAM_prewar_balance")] = True
             facts[("NAM", "variable", "NAM_prewar_balance")] = balance
-            for won_south in (False, True):
-                for flag in ("ADISCORD_south_final_resolved", "ADISCORD_south_hegemon_NAM"):
-                    facts[("NAM", "has_global_flag", flag)] = won_south
+            for resolved, hegemon in product((False, True), repeat=2):
+                facts[("NAM", "has_global_flag", "ADISCORD_south_final_resolved")] = resolved
+                facts[("NAM", "has_global_flag", "ADISCORD_south_hegemon_NAM")] = hegemon
+                won_south = resolved and hegemon
                 facts[("NAM", "ruling_leader")] = "NAM_Egor_Rom"
                 snapshots = []
                 for complete in (False, True):
@@ -11285,19 +11416,26 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertEqual(points["NAM_law_after_war"][0], origin_x)
                 forces_x = points["NAM_veterans_return"][0]
                 air_x, air_y = points["NAM_pw_air_review"]
-                self.assertLess(origin_x, forces_x)
+                self.assertGreaterEqual(forces_x - origin_x, 12)
                 self.assertLessEqual(abs(air_x - forces_x), 9)
                 self.assertEqual(points["NAM_pw_flight_schools"], (air_x, air_y + 1))
                 transport_x, transport_y = points["NAM_pw_transport_commission"]
                 self.assertEqual(points["NAM_pw_rail_priority"], (transport_x, transport_y + 1))
                 economic_x = points["NAM_civil_repair"][0]
+                self.assertGreaterEqual(origin_x - economic_x, 12)
                 economic_children = [x for name, (x, _) in points.items()
                                      if any(p.value == "NAM_civil_repair"
                                             for group in self.postwar[name] if group.key == "prerequisite"
                                             for p in group.value)]
                 self.assertLessEqual(abs(2 * economic_x - min(economic_children) - max(economic_children)), 1)
-                xs = [x for x, _ in points.values()]
-                self.assertLessEqual(max(xs) - min(xs), 120)
+                xs = [points[name][0] for name in main.intersection(points)]
+                self.assertLessEqual(max(xs) - min(xs), 75)
+                southern = south.intersection(points)
+                if won_south:
+                    self.assertEqual(points["NAM_south_heritage"][1], origin_y)
+                    self.assertGreaterEqual(min(points[name][0] for name in southern) - max(xs), 6)
+                else:
+                    self.assertFalse(southern)
                 for name, (x, y) in points.items():
                     for group in (e for e in self.postwar[name] if e.key == "prerequisite"):
                         for parent in (p.value for p in group.value if p.value in points):
@@ -11311,7 +11449,7 @@ class NamCampaignTests(unittest.TestCase):
                 energy_x, energy_y = points["NAM_pw_energy_commission"]
                 self.assertEqual(energy_y, points["NAM_middle_loren_wells"][1])
                 self.assertLess(energy_x, points["NAM_middle_loren_wells"][0])
-                self.assertEqual(energy_x, points["NAM_pw_oilfield_substations"][0] + 2)
+                self.assertEqual(energy_x, points["NAM_pw_oilfield_substations"][0] + 1)
                 if "NAM_pw_constitutional_committee" in points:
                     commission_x, commission_y = points["NAM_pw_constitutional_committee"]
                     cabinet_x, cabinet_y = points["NAM_pw_cabinet_statute"]
@@ -11348,9 +11486,27 @@ class NamCampaignTests(unittest.TestCase):
                         ):
                             self.assertLessEqual(points[name][1] - points[chapter][1], 3, (chapter, name))
                 ordered = sorted((y, x, name) for name, (x, y) in points.items())
+                parents = {name: {p.value for g in self.postwar[name] if g.key == "prerequisite" for p in g.value}
+                           for name in points}
                 for (y, x, name), (oy, ox, other) in zip(ordered, ordered[1:]):
                     if y == oy:
-                        self.assertGreaterEqual(ox - x, 5, (name, other))
+                        self.assertGreaterEqual(ox - x, 2, (name, other))
+                        if (parents[name] & parents[other]).difference(roots, {"NAM_recognition"}):
+                            self.assertLessEqual(ox - x, 3, (name, other))
+                for name, (x, y) in points.items():
+                    for group in self.postwar[name]:
+                        if group.key != "mutually_exclusive":
+                            continue
+                        for peer in group.value:
+                            if peer.value in points:
+                                px, py = points[peer.value]
+                                self.assertEqual(py, y, (name, peer.value))
+                                self.assertIn(abs(px - x), (2, 3), (name, peer.value))
+                if course == "pragmatic_compact":
+                    agreements_x, _ = points["NAM_prag_settlement_agreements"]
+                    protocol_x, _ = points["NAM_prag_border_protocol"]
+                    supply_x, _ = points["NAM_prag_partner_supply"]
+                    self.assertLessEqual(abs(2 * supply_x - agreements_x - protocol_x), 1)
 
     def test_neighbour_policy_is_independent_for_each_country_and_binds_later_demands(self):
         southern = {r.key: r.value for r in parsed("common/scripted_effects/ADISCORD_south_final_war_effects.txt")}

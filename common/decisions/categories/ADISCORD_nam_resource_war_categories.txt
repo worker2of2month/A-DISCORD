@@ -142,7 +142,7 @@ NAM_public_campaigns = {
 			AND = {
 				OR = {
 					has_completed_focus = NAM_inventory
-					has_completed_focus = NAM_pw_civil_communications
+					has_completed_focus = NAM_recognition
 				}
 				NAM_independent_programmes_operable = yes
 			}

@@ -11089,6 +11089,76 @@ NAM_postwar_orders = {
 
 # Postwar development programmes: land, industry, power and transport.
 NAM_postwar_programmes = {
+	NAM_charter_safir_freighters = {
+		icon = generic_naval
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_south_safir_charter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+			730 = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_south_held_partner_site_tt
+					NAM_south_held_partner_site = yes
+				}
+			}
+		}
+		cost = 45
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 12
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 4 }
+	}
+
+	NAM_fund_southern_roads = {
+		icon = generic_industry
+		allowed = { tag = NAM }
+		state_target = yes
+		targets = { 699 707 }
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		visible = { has_completed_focus = NAM_south_road_crews }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_south_held_partner_site_tt
+					NAM_south_held_partner_site = yes
+				}
+			}
+			FROM = { infrastructure < 5 }
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			FROM = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+				hidden_effect = { owner = { ADISCORD_economy_mark_dirty = yes } }
+			}
+		}
+		ai_will_do = { base = 4 }
+	}
+
 	NAM_combine_frame = {
 		icon = generic_industry
 		allowed = { tag = NAM }
@@ -17196,6 +17266,16 @@ NAM_administration = {
 			NAM_nationalisation_unlocked = yes
 		}
 		available = {
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_nationalisation_start_resistance_tt
+					resistance > 0
+				}
+				custom_trigger_tooltip = {
+					tooltip = NAM_nationalisation_thresholds_tt
+					NAM_district_integration_thresholds_met = yes
+				}
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_nationalisation_ready_tt
 				NAM_nationalisation_country_ready = yes
@@ -17218,6 +17298,10 @@ NAM_administration = {
 		fire_only_once = no
 		cancel_trigger = {
 			OR = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_nationalisation_thresholds_lost_tt
+					FROM = { NAM_district_integration_thresholds_met = no }
+				}
 				custom_trigger_tooltip = {
 					tooltip = NAM_nationalisation_ready_tt_not
 					OR = {
@@ -17255,6 +17339,7 @@ NAM_administration = {
 							FROM = {
 								NAM_nationalisation_state_valid = yes
 								NAM_nationalisation_state_free = yes
+								NAM_district_integration_thresholds_met = yes
 							}
 						}
 					}
@@ -17290,6 +17375,53 @@ NAM_administration = {
 
 # Svetlogorye public campaigns. Slots come from the shared campaign pool.
 NAM_public_campaigns = {
+	NAM_campaign_rebuild_our_streets = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_pw_municipal_repair
+			NAM_independent_programmes_operable = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+			hidden_trigger = { NOT = { has_country_flag = NAM_campaign_rebuild_our_streets_slot_held } }
+		}
+		cost = 30
+		days_remove = 45
+		days_re_enable = 60
+		modifier = { industry_repair_factor = 0.15 }
+		complete_effect = {
+			custom_effect_tooltip = NAM_campaign_start_cooldown_60_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_has_campaign_slot = yes
+						NOT = { has_country_flag = NAM_campaign_rebuild_our_streets_slot_held }
+					}
+					ADISCORD_campaign_slot_consume = yes
+					set_country_flag = NAM_campaign_rebuild_our_streets_slot_held
+				}
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_independent_programmes_operable_not_met_tt
+				NAM_independent_programmes_operable = no
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_campaign_cancel_tt
+			hidden_effect = { NAM_release_street_campaign_slot = yes }
+		}
+		remove_effect = {
+			hidden_effect = { NAM_release_street_campaign_slot = yes }
+		}
+		ai_will_do = { base = 3 }
+	}
+
 	NAM_campaign_our_own_word = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = NAM }
@@ -17386,7 +17518,7 @@ NAM_public_campaigns = {
 			NAM_independent_programmes_operable = yes
 			OR = {
 				has_completed_focus = NAM_open_ledgers
-				has_completed_focus = NAM_pw_civil_communications
+				has_completed_focus = NAM_oil_ministry
 			}
 		}
 		available = {
@@ -17546,7 +17678,7 @@ NAM_public_campaigns = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_recognition
+			has_completed_focus = NAM_pw_army_review
 			OR = {
 				ADISCORD_south_crisis_open = yes
 				ADISCORD_south_final_active = yes

@@ -365,6 +365,16 @@ news_event = {
 
 	option = {
 		name = ADISCORD_south.31.a
+		if = {
+			limit = {
+				hidden_trigger = {
+					tag = NAM
+					has_focus_tree = NAM_postwar_focus
+					NAM_won_final_southern_war = yes
+				}
+			}
+			custom_effect_tooltip = NAM_south_heritage_unlocked_tt
+		}
 	}
 }
 

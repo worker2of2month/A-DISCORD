@@ -488,7 +488,7 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
             'triggers': 'common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt',
             'receipt': 'NAM_nationalisation_pending',
             'unlocks': {
-                'NAM_law_after_war': 'focus_trees/NAM/postwar/government.txt',
+                'NAM_border_citizenship': 'focus_trees/NAM/postwar/government.txt',
                 'NAM_defeat_second_chapter': 'focus_trees/NAM/defeated/focuses.txt',
                 'NAM_hum_federal_districts': 'focus_trees/NAM/exile_humanist/focuses.txt',
                 'NAM_rad_pacification': 'focus_trees/NAM/exile_radical/focuses.txt',
@@ -504,6 +504,9 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
                 'NAM_nationalisation_free_tt',
                 'NAM_nationalisation_free_tt_not',
                 'NAM_nationalisation_slot_tt',
+                'NAM_nationalisation_start_resistance_tt',
+                'NAM_nationalisation_thresholds_tt',
+                'NAM_nationalisation_thresholds_lost_tt',
                 'NAM_nationalisation_result_tt',
                 'NAM_nationalisation_complete_tt',
             ),
@@ -536,6 +539,8 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
                 for key in ('is_owned_by', 'is_controlled_by')
             },
             ('1', 'is_core_of', country): True,
+            **{(n, 'numeric', 'compliance'): 80 for n in self.adjacency if country == 'NAM'},
+            **{(n, 'numeric', 'resistance'): 20 for n in self.adjacency if country == 'NAM'},
         }
 
     def cancelled(self, facts, country, target='2'):
@@ -712,6 +717,28 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
         f[regime] = True
         self.assertTrue(self.cancelled(f, 'NAM'))
         self.assertEqual(self.apply('remove_effect', f, 'NAM'), {'power': 50, 'cores': 0})
+
+    def test_svetlogorye_citizenship_and_occupation_thresholds(self):
+        self.use('NAM')
+        f = self.facts('NAM')
+        f['NAM', 'has_completed_focus', 'NAM_law_after_war'] = True
+        visible = self.expand(block(self.decision(), 'visible'), 'NAM')
+        self.assertFalse(matches_conditions(visible, f, 'NAM'))
+        f['NAM', 'has_completed_focus', 'NAM_border_citizenship'] = True
+        self.assertTrue(matches_conditions(visible, f, 'NAM'))
+        for compliance, resistance, may_start, may_finish in (
+            (80, 20, True, True), (80, 0.01, True, True), (100, 0, False, True),
+            (79.99, 10, False, False), (100, 20.01, False, False),
+        ):
+            with self.subTest(compliance=compliance, resistance=resistance):
+                paid = f.copy()
+                self.apply('complete_effect', paid, 'NAM')
+                local = {('2', 'numeric', 'compliance'): compliance, ('2', 'numeric', 'resistance'): resistance}
+                self.assertEqual(self.eligible({**f, **local}, 'NAM'), may_start)
+                paid.update(local)
+                self.assertEqual(self.cancelled(paid, 'NAM'), not may_finish)
+                self.assertEqual(self.apply('remove_effect', paid, 'NAM'),
+                                 {'power': 0, 'cores': 1} if may_finish else {'power': 50, 'cores': 0})
 
     def test_localisation_is_complete_and_descriptions_stay_narrative(self):
         for country, case in self.CASES.items():

@@ -356,6 +356,9 @@ NAM_postwar_plan = {
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
 		NAM_south_heritage
+		NAM_south_delegates
+		NAM_south_builders
+		NAM_south_road_crews
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition
 		NAM_rus_expedition_staff
@@ -903,6 +906,9 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
 		NAM_south_heritage
+		NAM_south_trade_hearing
+		NAM_south_safir_line
+		NAM_south_safir_charter
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition
 		NAM_rus_expedition_staff

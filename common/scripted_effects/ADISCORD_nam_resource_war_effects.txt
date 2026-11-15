@@ -14678,7 +14678,16 @@ NAM_program_southern_local_offices_settle = {
 	}
 }
 
+NAM_release_street_campaign_slot = {
+	if = {
+		limit = { has_country_flag = NAM_campaign_rebuild_our_streets_slot_held }
+		clr_country_flag = NAM_campaign_rebuild_our_streets_slot_held
+		ADISCORD_campaign_slot_release = yes
+	}
+}
+
 NAM_reset_campaign_cooldowns = {
+	remove_decision_on_cooldown = NAM_campaign_rebuild_our_streets
 	remove_decision_on_cooldown = NAM_campaign_our_own_word
 	remove_decision_on_cooldown = NAM_campaign_oil_is_ours
 	remove_decision_on_cooldown = NAM_campaign_charter_of_districts
