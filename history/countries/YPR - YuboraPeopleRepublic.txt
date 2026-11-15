@@ -9,6 +9,7 @@ oob = "YPR"
 ####### Characters
 
 recruit_character = YPR_The_Ruling_Council
+recruit_character = YPR_Secret_General
 
 ####### Basic shit
 

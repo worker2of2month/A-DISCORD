@@ -1,4 +1,23 @@
 characters = {
+	YPR_Secret_General = {
+		name = YPR_Secret_General
+		portraits = {
+			army = {
+				large = GFX_portrait_YPR_secret_general
+				small = GFX_portrait_YPR_secret_general
+			}
+		}
+		corps_commander = {
+			traits = { }
+			skill = 2
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 2
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
 	######   #######  ##     ## ##    ## ######## ########  ##    ##    ##       ########    ###    ########  ######## ########   ######
 	##    ## ##     ## ##     ## ###   ##    ##    ##     ##  ##  ##     ##       ##         ## ##   ##     ## ##       ##     ## ##    ##
 	##       ##     ## ##     ## ####  ##    ##    ##     ##   ####      ##       ##        ##   ##  ##     ## ##       ##     ## ##
