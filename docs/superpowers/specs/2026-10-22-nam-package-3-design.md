@@ -57,7 +57,7 @@ field cut from Sukhorechye (690); the Klyuchevsk protocol cedes 719, not 690.
 States 720 (Moren District), 721 (Loren Borderland) and 722 (Azhar Seaboard)
 are the border belts of EFL and AZH; together with Middle Loren City (701),
 which touches NAM only through 720, they are the victory award.
-Field capacity units: 67 = 8, 688 = 2, 689 = 4, 690 = 3, 719 = 1.
+Initial pumping capacity: 67 = 5, 688 = 1, 689 = 3, 690 = 2, 719 = 1.
 
 ## M1. Restitution deadline and finite diplomacy
 
@@ -207,18 +207,14 @@ Owner: core phase 1.
 
 Owner: core phase 2.
 
-- Field condition: state variable `NAM_field_condition` (0..100, start 80) on
-  states 67, 688, 689, 690, 719. Base capacity units: 67 = 8, 688 = 2, 689 = 4,
-  690 = 3, 719 = 1. `NAM_oil_refresh` sets `NAM_oil_throughput` (sum over NAM-controlled
-  fields of capacity x condition / 100, rounded down, plus project bonuses) and
-  `NAM_oil_committed` (contract units). Event-driven: called after every
-  contract, project, control change and condition change; never polled.
+- Oil production follows the condition and pumping capacity of fields in states
+  67, 688, 689, 690 and 719. South Harbour starts with one commercial berth.
 - Contracts: targeted decision `NAM_oil_contract_offer` on a buyer from
   EFL, AZH, VAL, STP, STS, RHM, MZR, SHL, RUS, WEF, KDR, SDR, GLP, KYZ that exists,
-  is not at war with NAM and has no contract. Needs one free unit. Human buyers
+  is not at war with NAM and has no contract. Needs one free port berth. Human buyers
   answer `ADISCORD_nam_oil.1`; AI buyers answer the same event with
   `ai_chance` by fuel stock and relation. Accepted contracts set the buyer flag
-  `NAM_oil_client` and add one committed unit. Monthly in `on_monthly_NAM`:
+  `NAM_oil_client` and occupy one berth. Monthly in `on_monthly_NAM`:
   NAM +40 treasury per contract through the economy API and
   `ADISCORD_economy_mark_dirty`; the buyer +1500 fuel. War between NAM and a
   client ends the contract and gives the client `NAM_fuel_shortage` for 90
@@ -233,10 +229,10 @@ Owner: core phase 2.
   export pillar -10.
 - Field projects (state-targeted, escrow, ownership rechecked at delivery,
   refund on loss): `NAM_project_repair_wells` (+30 condition, 45 days),
-  `NAM_project_refinery` (+1 unit and fuel output in the state, 90 days),
-  `NAM_project_pipeline` (690 -> 700, +1 unit, needs both states, 120 days),
-  `NAM_project_sea_terminal` (state 700, +1 unit usable only by overseas
-  buyers VAL, STP, STS, RUS, 90 days). One project per state at a time; two in parallel.
+  `NAM_project_refinery` (+1 pumping capacity and a refinery in the state, 90 days),
+  `NAM_project_pipeline` (690 -> 700, +1 pumping capacity, needs both states, 120 days),
+  `NAM_project_sea_terminal` (state 700, one berth reserved for non-neighbouring
+  buyers after Overseas Buyers, 90 days). One project per state at a time; two in parallel.
 - Island programmes in `NAM_national_programmes`: steel levy (monthly treasury,
   -15% local resource extraction on 228, 230, 231 during its 180-day term),
   convoy service (eight convoys and +15% island extraction for 180 days),
@@ -605,8 +601,8 @@ call their clamp or refresh in `hidden_effect` and show the exact delta.
 | `NAM_seal_discipline` + `NAM_seal_discipline_clamp = yes` | core 1 | War discipline 0..100 |
 | `NAM_line_slots` (base 2) | core 1 | Parallel defence-line preparations |
 | `NAM_order_cap` (base 4, max 6) | core 1 | Mobilisation orders allowed |
-| `NAM_rw_tribute` country flag with days | core 1 | Tribute deliveries to EFL and AZH; core 2 counts it as two committed units |
-| `NAM_oil_bonus_units` + `NAM_oil_refresh = yes` | core 2 | Extra throughput units |
+| `NAM_rw_tribute` country flag with days | core 1 | Treaty deliveries to EFL and AZH are independent of commercial berths |
+| `NAM_port_general_slots` + `NAM_port_refresh_capacity = yes` | core 2 | Additional commercial berths |
 | `NAM_project_slots` (base 1, max 2) | core 2 | Parallel field projects |
 | `NAM_underground` + `NAM_underground_clamp = yes` | core 3 | Weber underground 0..100 |
 | `add_power_balance_value = { id = NAM_ladder_bop value = <x> }` | core 3 | Ladder balance, negative toward vertical |

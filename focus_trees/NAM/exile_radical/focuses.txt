@@ -378,6 +378,7 @@ focus_tree = {
 					}
 					custom_effect_tooltip = NAM_exile_strike_reopens_tt
 				}
+				else = { custom_effect_tooltip = NAM_exile_klyuchevsk_strike_preview_tt }
 			}
 			if = {
 				limit = {
@@ -506,7 +507,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_coastal_batteries
-		icon = GFX_focus_NAM_imperial_gendarmes
+		icon = GFX_focus_NAM_coastal_battalions
 		x = 8
 		y = 3
 		cost = 5
@@ -558,6 +559,25 @@ focus_tree = {
 						instant_build = yes
 					}
 				}
+			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = {
+							228 = {
+								is_owned_by = NAM
+								is_controlled_by = NAM
+							}
+						}
+						NOT = {
+							231 = {
+								is_owned_by = NAM
+								is_controlled_by = NAM
+							}
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_exile_coastal_batteries_preview_tt
 			}
 		}
 		ai_will_do = {
@@ -613,6 +633,25 @@ focus_tree = {
 					}
 				}
 			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = {
+							231 = {
+								is_owned_by = NAM
+								is_controlled_by = NAM
+							}
+						}
+						NOT = {
+							capital_scope = {
+								is_owned_by = NAM
+								is_controlled_by = NAM
+							}
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_exile_island_foundry_preview_tt
+			}
 		}
 		ai_will_do = {
 			base = 15
@@ -621,7 +660,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_prison_shipyards
-		icon = GFX_focus_NAM_harbour_service
+		icon = GFX_focus_NAM_naval_construction
 		x = 10
 		y = 4
 		cost = 6
@@ -1053,6 +1092,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_grp_rad_penal_mines_tt
 			if = {
 				limit = { hidden_trigger = { NAM_rad_mining_site_available = yes } }
 				if = {
@@ -1082,11 +1122,14 @@ focus_tree = {
 					}
 				}
 				add_stability = -0.02
-				custom_effect_tooltip = NAM_grp_rad_penal_mines_tt
 				hidden_effect = {
 					add_to_variable = { var = NAM_grp_dist_support value = -3 }
 					NAM_groups_refresh = yes
 				}
+			}
+			else = {
+				custom_effect_tooltip = NAM_rad_penal_mines_preview_tt
+				effect_tooltip = { add_stability = -0.02 }
 			}
 		}
 		ai_will_do = {
@@ -1817,7 +1860,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_raider_squadron
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_active_squadron
 		x = 31
 		y = 3
 		cost = 5
@@ -1865,7 +1908,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_wolfpacks
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_active_squadron
 		x = 33
 		y = 3
 		cost = 5
@@ -1913,7 +1956,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_corsair_admiralty
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_naval_staff
 		x = 30
 		y = 5
 		cost = 6
@@ -2111,12 +2154,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_fuel = 4000
-			custom_effect_tooltip = NAM_rad_oil_seizure_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
-				NAM_oil_refresh = yes
-			}
+			add_fuel = 15000
 		}
 		ai_will_do = {
 			base = 20
@@ -2482,6 +2520,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_rad_sardan_levies_tt
+			custom_effect_tooltip = NAM_grp_rad_sardan_levies_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -2492,9 +2532,7 @@ focus_tree = {
 						}
 					}
 				}
-				custom_effect_tooltip = NAM_rad_sardan_levies_tt
 				add_stability = -0.03
-				custom_effect_tooltip = NAM_grp_rad_sardan_levies_tt
 				hidden_effect = {
 					for_each_scope_loop = {
 						array = NAM_conquered_states
@@ -2508,6 +2546,7 @@ focus_tree = {
 					NAM_groups_refresh = yes
 				}
 			}
+			else = { effect_tooltip = { add_stability = -0.03 } }
 		}
 		ai_will_do = {
 			base = 15
@@ -2745,6 +2784,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_grp_rad_rakhma_wells_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -2759,10 +2799,20 @@ focus_tree = {
 						amount = 3
 					}
 				}
-				custom_effect_tooltip = NAM_grp_rad_rakhma_wells_tt
 				hidden_effect = {
 					add_to_variable = { var = NAM_grp_oil_support value = 4 }
 					NAM_groups_refresh = yes
+				}
+			}
+			else = {
+				effect_tooltip = {
+					add_fuel = 5000
+					255 = {
+						add_resource = {
+							type = oil
+							amount = 3
+						}
+					}
 				}
 			}
 		}

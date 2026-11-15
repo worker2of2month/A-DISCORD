@@ -128,6 +128,14 @@ on_actions = {
 				}
 				NAM = {
 					NAM_groups_initialize = yes
+					if = {
+						limit = {
+							has_idea = civilian_economy
+							NOT = { has_country_flag = NAM_depot_concessions_settled }
+							NOT = { has_idea = NAM_private_tank_farms }
+						}
+						add_ideas = NAM_private_tank_farms
+					}
 				}
 				every_country = {
 					limit = {

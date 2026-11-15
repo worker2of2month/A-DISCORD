@@ -82,6 +82,7 @@ REQUIRED_FAMILIES = {
     "nam_basin_map",
     "nam_piracy_map",
     "nam_naval_models",
+    "southern_marines",
     "nam_oilfields",
     "nam_focus_icons",
     "factory_models",

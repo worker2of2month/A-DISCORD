@@ -3915,18 +3915,22 @@ class PreparationAccounting(unittest.TestCase):
                         self.assertIn(V + "preserve_wartime_faction", script.scopes[host].flags)
 
     def test_only_a_winning_partner_that_remained_an_ally_gets_independence(self):
-        for winner, flag in enumerate(("worker_won", "vlad_won", "dorian_won"), 1):
-            for allied in (False, True):
-                for promised in (1, 2, 3):
+        routes = (("WKR", 1, False), ("WKR", 1, True), ("VAD", 2, False), ("TVA", 3, False))
+        for winner, patron, executive in routes:
+            for allied, promised in product((False, True), (1, 2, 3)):
+                with self.subTest(winner=winner, executive=executive, allied=allied, promised=promised):
                     script = Script()
-                    script.globals = {V + flag}
-                    script.scopes["WRK"].faction = "WRK"
+                    script.event_targets[V + "nation"] = winner
+                    script.scopes[winner].faction = winner
+                    if executive:
+                        script.scopes[winner].flags.add(V + "worker_utilitarian_outcome")
                     district = script.scopes["EYR"]
                     district.flags.add(P + "treaty_signed")
                     district.variables[P + "treaty_patron"] = promised
-                    district.faction = "WRK" if allied else None
-                    script.effect(P + "settle_treaties")
-                    self.assertEqual(P + "independence_guaranteed" in district.flags, allied and winner == promised)
+                    district.faction = winner if allied else None
+                    script.effect(P + "settle_treaties", winner)
+                    self.assertEqual(P + "independence_guaranteed" in district.flags,
+                                     allied and patron == promised and not executive)
 
     def test_zshat_treaty_does_not_grant_postwar_independence(self):
         for winner, flag in enumerate(("worker_won", "vlad_won", "dorian_won"), 1):

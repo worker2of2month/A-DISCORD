@@ -442,6 +442,17 @@ class SouthFinalWarContractTests(unittest.TestCase):
 
     def test_campaign_focuses_bypass_exactly_their_targets(self):
         offers = ("ADISCORD_south_demand_submission", "ADISCORD_south_demand_annexation", "ADISCORD_south_offer_alliance")
+        target_gate = "ADISCORD_south_campaign_target_valid"
+
+        def closes_when_war_starts(conditions):
+            return any(
+                inner.key == "has_global_flag" and inner.value == "ADISCORD_south_final_started"
+                for entry in flatten(conditions)
+                if entry.key == "NOT"
+                for inner in flatten(entry.value)
+            )
+
+        self.assertTrue(closes_when_war_starts(definitions(TRIGGERS)[target_gate]))
         checked = 0
         for path in (
             *SHL_TREES,
@@ -454,13 +465,16 @@ class SouthFinalWarContractTests(unittest.TestCase):
                 if not targets:
                     continue
                 checked += 1
-                bypass = next(e.value for e in focus if e.key == "bypass")
+                bypass = block(focus, "bypass")
                 # A bypass may list extra story conditions (partner flag, war
                 # started) inside OR; every demand target must still appear.
-                bypass_scopes = {e.key for e in flatten(bypass) if isinstance(e.value, list)}
-                self.assertTrue(targets <= bypass_scopes, (identifier, targets, bypass_scopes))
-                available = repr(next(e.value for e in focus if e.key == "available"))
-                self.assertIn("ADISCORD_south_final_started", available, identifier)
+                bypass_scopes = {e.key for e in flatten(bypass) if e.key in REGIONAL}
+                self.assertEqual(targets, bypass_scopes, identifier)
+                available = block(focus, "available")
+                if not closes_when_war_starts(available):
+                    gated = {e.key for e in flatten(available) if e.key in REGIONAL and
+                             any(c.key == target_gate and c.value == "yes" for c in flatten(e.value))}
+                    self.assertEqual(gated, targets, identifier)
         self.assertGreaterEqual(checked, 16)
 
     def test_answers_always_clear_the_pending_offer(self):
@@ -688,6 +702,24 @@ class SouthLifecycleTests(unittest.TestCase):
 
     def trigger_matches(self, name, scope="SHL"):
         return self.matches(self.triggers[name], scope)
+
+    def test_nam_can_recognise_an_allied_neighbour_without_bypassing_its_ultimatum(self):
+        focuses = focus_blocks(ROOT / "focus_trees/NAM/postwar/focuses.txt")
+        self.event_root = "NAM"
+        self.flag("ADISCORD_nam_resource_war_nam_victory")
+        for neighbour, tag in (("eflor", "EFL"), ("azhar", "AZH")):
+            accord = focuses[f"NAM_{neighbour}_accord"]
+            ultimatum = focuses[f"NAM_{neighbour}_ultimatum"]
+            for status in ("independent", "ally", "subject", "annexed"):
+                with self.subTest(neighbour=neighbour, status=status):
+                    self.facts[(tag, "exists", "yes")] = status != "annexed"
+                    self.facts[(tag, "exists", "no")] = status == "annexed"
+                    self.facts[(tag, "is_subject", "no")] = status != "subject"
+                    self.facts[(tag, "is_subject_of", "NAM")] = status == "subject"
+                    self.facts[(tag, "is_in_faction_with", "NAM")] = status in ("ally", "subject")
+                    self.assertEqual(self.matches(block(accord, "available"), "NAM"), status in ("independent", "ally"))
+                    self.assertEqual(self.matches(block(ultimatum, "available"), "NAM"), status == "independent")
+                    self.assertEqual(self.matches(block(ultimatum, "bypass"), "NAM"), status in ("subject", "annexed"))
 
     def test_map_distinguishes_leaders_from_allies_and_northern_successors(self):
         self.facts[("KDR", "exists", "yes")] = True

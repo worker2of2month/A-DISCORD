@@ -1,0 +1,14 @@
+# Native state modifier values use the same state scope as the oil deduction.
+NAM_export_office_rated_capacity = {
+	color_type = neutral
+	value_type = number
+	precision = 0
+	category = state
+}
+
+NAM_export_office_projected_revenue = {
+	color_type = good
+	value_type = number
+	precision = 1
+	category = state
+}

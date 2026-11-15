@@ -1169,7 +1169,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_vertical
-		icon = GFX_focus_NAM_open_ledgers
+		icon = GFX_focus_NAM_vertical
 		x = 3
 		y = 9
 		cost = 4
@@ -1224,7 +1224,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_districts
-		icon = GFX_focus_NAM_open_ledgers
+		icon = GFX_focus_NAM_districts
 		x = 5
 		y = 9
 		cost = 4
@@ -1451,7 +1451,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_seal_courts
-		icon = GFX_focus_RUS_district_courts
+		icon = GFX_focus_NAM_seal_courts
 		x = 8
 		y = 12
 		cost = 4
@@ -1573,8 +1573,11 @@ focus_tree = {
 				amount = 10
 				producer = NAM
 			}
-			unlock_decision_tooltip = NAM_oil_contract_offer
-			custom_effect_tooltip = NAM_oil_contract_offer_unlock_tt
+			custom_effect_tooltip = NAM_port_extra_slot_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_port_general_slots value = 1 }
+				NAM_port_refresh_capacity = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1959,11 +1962,6 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_stability = 0.03
-			custom_effect_tooltip = NAM_mine_councils_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
-				NAM_oil_refresh = yes
-			}
 			if = {
 				limit = { hidden_trigger = { has_country_flag = NAM_weber_amnesty } }
 				effect_tooltip = { add_manpower = 2000 }
@@ -2060,7 +2058,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_export_quays
-		icon = GFX_focus_NAM_wrk_trade_house
+		icon = GFX_focus_NAM_export_quays
 		x = 28
 		y = 9
 		cost = 4
@@ -2075,6 +2073,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_port_extra_slot_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_port_general_slots value = 1 }
+				NAM_port_refresh_capacity = yes
+			}
 			unlock_decision_tooltip = NAM_econ_export_dispatch
 			custom_effect_tooltip = NAM_econ_export_dispatch_unlock_tt
 			effect_tooltip = {
@@ -2120,8 +2123,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_oil_contract_offer
-			custom_effect_tooltip = NAM_oil_contract_offer_unlock_tt
+			custom_effect_tooltip = NAM_port_extra_slot_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_port_general_slots value = 1 }
+				NAM_port_refresh_capacity = yes
+			}
 			add_political_power = 55
 		}
 		ai_will_do = {
@@ -2131,7 +2137,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_domestic_refining
-		icon = GFX_focus_NAM_well_register
+		icon = GFX_focus_NAM_domestic_refining
 		x = 32
 		y = 9
 		cost = 4
@@ -2202,7 +2208,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_overseas_buyers
-		icon = GFX_focus_NAM_wrk_trade_house
+		icon = GFX_focus_NAM_overseas_buyers
 		x = 27
 		y = 10
 		cost = 4
@@ -2216,6 +2222,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_port_overseas_tt
 			unlock_decision_tooltip = NAM_project_sea_terminal
 			custom_effect_tooltip = NAM_project_sea_terminal_unlock_tt
 		}
@@ -2257,7 +2264,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_refinery_programme
-		icon = GFX_focus_NAM_well_register
+		icon = GFX_focus_NAM_refinery_programme
 		x = 33
 		y = 10
 		cost = 3
@@ -2279,7 +2286,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_machine_shops
-		icon = GFX_focus_RUS_precision_lathes
+		icon = GFX_focus_NAM_machine_shops
 		x = 31
 		y = 10
 		cost = 3
@@ -2363,11 +2370,6 @@ focus_tree = {
 			custom_effect_tooltip = NAM_project_chromium_unlock_tt
 			unlock_decision_tooltip = NAM_econ_deep_drilling
 			custom_effect_tooltip = NAM_econ_deep_drilling_unlock_tt
-			custom_effect_tooltip = NAM_deep_wells_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_oil_bonus_units value = 1 }
-				NAM_oil_refresh = yes
-			}
 			add_fuel = 3000
 		}
 		ai_will_do = {
@@ -2441,7 +2443,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_civilian_combine
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
+		icon = GFX_focus_NAM_civilian_combine
 		x = 30
 		y = 11
 		cost = 4
@@ -2476,7 +2478,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_basin_roads
-		icon = GFX_focus_VAL_Logistics_Command
+		icon = GFX_focus_NAM_basin_roads
 		x = 29
 		y = 12
 		cost = 3
@@ -2567,10 +2569,10 @@ focus_tree = {
 
 	focus = {
 		id = NAM_technical_college
-		icon = GFX_focus_RUS_scientists_at_headquarters
+		icon = GFX_focus_NAM_technical_college
 		x = 31
 		y = 12
-		cost = 9
+		cost = 5
 		search_filters = { FOCUS_FILTER_RESEARCH }
 		prerequisite = { focus = NAM_civilian_combine }
 		available = {
@@ -2650,6 +2652,7 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = { var = NAM_gar_max_dig_in value = 1 }
+				add_to_variable = { var = NAM_gar_army_defence value = 0.02 }
 				add_to_variable = { var = NAM_gar_supply_consumption value = -0.04 }
 				add_to_variable = { var = NAM_gar_army_speed value = -0.03 }
 				NAM_refresh_garrison = yes
@@ -2740,6 +2743,7 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = { var = NAM_gar_army_speed value = 0.05 }
+				add_to_variable = { var = NAM_gar_army_attack value = 0.02 }
 				add_to_variable = { var = NAM_gar_planning_speed value = 0.1 }
 				add_to_variable = { var = NAM_gar_supply_consumption value = 0.03 }
 				NAM_refresh_garrison = yes
@@ -3052,7 +3056,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_flight_school
-		icon = GFX_focus_RUS_flight_school
+		icon = GFX_focus_NAM_flight_school
 		x = 60
 		y = 8
 		cost = 2
@@ -3093,7 +3097,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_air_ground_service
-		icon = GFX_focus_RUS_aircraft_workshops
+		icon = GFX_focus_NAM_air_ground_service
 		x = 58
 		y = 9
 		cost = 1
@@ -3132,7 +3136,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_air_interceptors
-		icon = GFX_focus_RUS_fighter_cover
+		icon = GFX_focus_NAM_air_interceptors
 		x = 60
 		y = 9
 		cost = 2
@@ -3171,7 +3175,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_air_support
-		icon = GFX_focus_RUS_air_ground_coordination
+		icon = GFX_focus_NAM_air_support
 		x = 62
 		y = 9
 		cost = 2
@@ -3210,7 +3214,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_air_operations
-		icon = GFX_focus_RUS_air_control_network
+		icon = GFX_focus_NAM_air_operations
 		x = 60
 		y = 10
 		cost = 2
@@ -3307,7 +3311,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_repair_yard
-		icon = GFX_focus_generic_refit_civilian_ships
+		icon = GFX_focus_NAM_repair_yard
 		x = 50
 		y = 9
 		cost = 3
@@ -3361,7 +3365,7 @@ focus_tree = {
 	# each one keeps its own ship order there.
 	focus = {
 		id = NAM_escort_school
-		icon = GFX_goal_generic_navy_anti_submarine
+		icon = GFX_focus_NAM_escort_school
 		x = 49
 		y = 10
 		cost = 2
@@ -3399,7 +3403,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_active_squadron
-		icon = GFX_goal_generic_navy_submarine
+		icon = GFX_focus_NAM_active_squadron
 		x = 51
 		y = 10
 		cost = 2
@@ -3438,7 +3442,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_naval_construction
-		icon = GFX_goal_generic_construct_naval_dockyard
+		icon = GFX_focus_NAM_naval_construction
 		x = 50
 		y = 11
 		cost = 3
@@ -3509,7 +3513,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_coastal_battalions
-		icon = GFX_focus_generic_destroyer
+		icon = GFX_focus_NAM_coastal_battalions
 		x = 50
 		y = 12
 		cost = 3
@@ -3573,7 +3577,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_island_accounts
-		icon = GFX_focus_NAM_second_ledger
+		icon = GFX_focus_NAM_island_accounts
 		x = 56
 		y = 9
 		cost = 2
@@ -3611,7 +3615,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_island_levy_office
-		icon = GFX_focus_NAM_oilfield_militia
+		icon = GFX_focus_NAM_island_levy_office
 		x = 55
 		y = 10
 		cost = 3
@@ -3644,7 +3648,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_island_concession
-		icon = GFX_focus_NAM_wrk_trade_house
+		icon = GFX_focus_NAM_island_concession
 		x = 57
 		y = 10
 		cost = 3
@@ -3697,7 +3701,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_basin_reconnaissance
-		icon = GFX_focus_NAM_underground_reports
+		icon = GFX_focus_NAM_basin_reconnaissance
 		x = 53
 		y = 9
 		cost = 2
@@ -3735,7 +3739,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_naval_staff
-		icon = GFX_goal_generic_navy_doctrines_tactics
+		icon = GFX_focus_NAM_naval_staff
 		x = 53
 		y = 10
 		cost = 2
@@ -3782,7 +3786,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_basin_minefields
-		icon = GFX_focus_generic_mine_warfare
+		icon = GFX_focus_NAM_basin_minefields
 		x = 53
 		y = 11
 		cost = 3
@@ -3819,7 +3823,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_restitution_desk
-		icon = GFX_focus_RUS_trained_administrators
+		icon = GFX_focus_NAM_restitution_desk
 		x = 25
 		y = 8
 		cost = 2
@@ -3871,7 +3875,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_court_azhar
-		icon = GFX_focus_RUS_district_courts
+		icon = GFX_focus_NAM_court_azhar
 		x = 24
 		y = 9
 		cost = 4
@@ -3880,10 +3884,8 @@ focus_tree = {
 		mutually_exclusive = { focus = NAM_fuel_leverage }
 		bypass = {
 			custom_trigger_tooltip = {
-				tooltip = NAM_focus_azhar_delay_closed_tt
+				tooltip = NAM_focus_preparation_closed_tt
 				OR = {
-					has_country_flag = NAM_rw_time_bought
-					has_country_flag = NAM_rw_first_strike
 					has_global_flag = ADISCORD_nam_resource_war_started
 					has_global_flag = ADISCORD_nam_resource_war_resolved
 					AND = {
@@ -3909,7 +3911,8 @@ focus_tree = {
 				has_capitulated = no
 				NOT = { has_war_with = NAM }
 			}
-			hidden_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_focus_azhar_delay_available_tt
 				NOT = { has_country_flag = NAM_rw_time_bought }
 				NOT = { has_country_flag = NAM_rw_first_strike }
 			}
@@ -3917,21 +3920,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			if = {
-				limit = {
-					hidden_trigger = {
+			custom_effect_tooltip = NAM_court_azhar_delivery_tt
+			custom_effect_tooltip = NAM_grp_court_azhar_tt
+			hidden_effect = {
+				if = {
+					limit = {
 						NAM_rw_can_buy_time = yes
 						NOT = { has_fuel < 60000 }
 					}
-				}
-				add_fuel = -60000
-				AZH = {
-					add_fuel = 60000
-				}
-				hidden_effect = { set_country_flag = NAM_rw_time_bought }
-				add_days_mission_timeout = { mission = NAM_resource_war_deadline days = 75 }
-				custom_effect_tooltip = NAM_grp_court_azhar_tt
-				hidden_effect = {
+					add_fuel = -60000
+					AZH = { add_fuel = 60000 }
+					set_country_flag = NAM_rw_time_bought
+					add_days_mission_timeout = { mission = NAM_resource_war_deadline days = 75 }
 					add_to_variable = { var = NAM_grp_trade_support value = 3 }
 					NAM_groups_refresh = yes
 				}
@@ -3944,7 +3944,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_fuel_leverage
-		icon = GFX_focus_NAM_well_register
+		icon = GFX_focus_NAM_fuel_leverage
 		x = 26
 		y = 9
 		cost = 4
@@ -3988,7 +3988,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_general_staff_plan
-		icon = GFX_focus_VAL_Contract_General_Staff
+		icon = GFX_focus_NAM_general_staff_plan
 		x = 25
 		y = 10
 		cost = 5

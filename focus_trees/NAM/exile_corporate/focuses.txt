@@ -162,7 +162,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_board_island_concessions
-		icon = GFX_focus_NAM_wrk_trade_house
+		icon = GFX_focus_NAM_island_concession
 		x = 1
 		y = 3
 		cost = 4
@@ -324,6 +324,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_eflor_oil_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -332,7 +333,6 @@ focus_tree = {
 						NAM_board_eflor_terminal = yes
 					}
 				}
-				custom_effect_tooltip = NAM_board_eflor_oil_tt
 				hidden_effect = {
 					EFL = {
 						set_variable = { NAM_corp_district_owner = 1 }
@@ -377,6 +377,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_eflor_steel_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -385,7 +386,6 @@ focus_tree = {
 						EFL = { NAM_board_factory_site = yes }
 					}
 				}
-				custom_effect_tooltip = NAM_board_eflor_steel_tt
 				hidden_effect = {
 					EFL = {
 						set_variable = { NAM_corp_district_owner = 2 }
@@ -436,6 +436,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_azhar_shipping_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -448,7 +449,6 @@ focus_tree = {
 					amount = 20
 					producer = NAM
 				}
-				custom_effect_tooltip = NAM_board_azhar_shipping_tt
 				hidden_effect = {
 					AZH = {
 						set_variable = { NAM_corp_district_owner = 3 }
@@ -456,6 +456,15 @@ focus_tree = {
 					}
 					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
 					NAM_corp_capital_add = yes
+				}
+			}
+			else = {
+				effect_tooltip = {
+					add_equipment_to_stockpile = {
+						type = convoy
+						amount = 20
+						producer = NAM
+					}
 				}
 			}
 		}
@@ -488,6 +497,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_azhar_bank_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -495,7 +505,6 @@ focus_tree = {
 						AZH = { NAM_board_title_available = yes }
 					}
 				}
-				custom_effect_tooltip = NAM_board_azhar_bank_tt
 				hidden_effect = {
 					AZH = {
 						set_variable = { NAM_corp_district_owner = 6 }
@@ -645,6 +654,15 @@ focus_tree = {
 					NAM_revenge_readiness_clamp = yes
 				}
 			}
+			else_if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = NAM_hum_marine_contracts
+						NOT = { check_variable = { NAM_marine_order_cap < 3 } }
+					}
+				}
+				custom_effect_tooltip = NAM_board_landing_contracts_full_tt
+			}
 		}
 		ai_will_do = {
 			base = 25
@@ -653,7 +671,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_board_private_navy
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_escort_school
 		x = 16
 		y = 1
 		cost = 4
@@ -709,6 +727,7 @@ focus_tree = {
 					custom_effect_tooltip = NAM_island_convoy_service_unlock_tt
 				}
 			}
+			else = { custom_effect_tooltip = NAM_board_private_navy_preview_tt }
 		}
 		ai_will_do = {
 			base = 15
@@ -737,6 +756,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_mercenary_regiment_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -747,7 +767,6 @@ focus_tree = {
 						}
 					}
 				}
-				custom_effect_tooltip = NAM_board_mercenary_regiment_tt
 				hidden_effect = {
 					division_template = {
 						name = "Контрактный пехотный полк"
@@ -943,7 +962,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_board_company_docks
-		icon = GFX_focus_NAM_harbour_service
+		icon = GFX_focus_NAM_naval_construction
 		x = 3
 		y = 1
 		cost = 6
@@ -1419,6 +1438,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_sardan_arsenal_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -1436,11 +1456,24 @@ focus_tree = {
 					amount = 80
 					producer = NAM
 				}
-				custom_effect_tooltip = NAM_board_sardan_arsenal_tt
 				hidden_effect = {
 					SDR = {
 						set_variable = { NAM_corp_district_owner = 4 }
 						NAM_corp_district_apply = yes
+					}
+				}
+			}
+			else = {
+				effect_tooltip = {
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = 3000
+						producer = NAM
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = 80
+						producer = NAM
 					}
 				}
 			}
@@ -1485,6 +1518,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_sardan_artel_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -1493,7 +1527,6 @@ focus_tree = {
 					}
 				}
 				add_manpower = 8000
-				custom_effect_tooltip = NAM_board_sardan_artel_tt
 				hidden_effect = {
 					SDR = {
 						set_variable = { NAM_corp_district_owner = 5 }
@@ -1501,6 +1534,7 @@ focus_tree = {
 					}
 				}
 			}
+			else = { effect_tooltip = { add_manpower = 8000 } }
 		}
 		ai_will_do = {
 			base = 8
@@ -1542,6 +1576,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_rakhma_oil_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -1549,7 +1584,6 @@ focus_tree = {
 						RHM = { NAM_board_title_available = yes }
 					}
 				}
-				custom_effect_tooltip = NAM_board_rakhma_oil_tt
 				hidden_effect = {
 					add_to_variable = { var = NAM_open_fuel_reserve value = 30000 }
 					NAM_open_fuel_release = yes
@@ -1606,6 +1640,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_rakhma_steel_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -1627,7 +1662,6 @@ focus_tree = {
 						}
 					}
 				}
-				custom_effect_tooltip = NAM_board_rakhma_steel_tt
 				hidden_effect = {
 					RHM = {
 						set_variable = { NAM_corp_district_owner = 2 }
@@ -1637,6 +1671,7 @@ focus_tree = {
 					NAM_corp_capital_add = yes
 				}
 			}
+			else = { custom_effect_tooltip = NAM_board_rakhma_steel_factory_tt }
 		}
 		ai_will_do = {
 			base = 8
@@ -1678,6 +1713,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_kadir_shipping_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -1691,12 +1727,21 @@ focus_tree = {
 					producer = NAM
 				}
 				navy_experience = 10
-				custom_effect_tooltip = NAM_board_kadir_shipping_tt
 				hidden_effect = {
 					KDR = {
 						set_variable = { NAM_corp_district_owner = 3 }
 						NAM_corp_district_apply = yes
 					}
+				}
+			}
+			else = {
+				effect_tooltip = {
+					add_equipment_to_stockpile = {
+						type = convoy
+						amount = 20
+						producer = NAM
+					}
+					navy_experience = 10
 				}
 			}
 		}
@@ -1740,6 +1785,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_board_kadir_bank_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -1747,7 +1793,6 @@ focus_tree = {
 						KDR = { NAM_board_title_available = yes }
 					}
 				}
-				custom_effect_tooltip = NAM_board_kadir_bank_tt
 				hidden_effect = {
 					KDR = {
 						set_variable = { NAM_corp_district_owner = 6 }

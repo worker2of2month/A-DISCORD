@@ -175,6 +175,150 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	ADISCORD_nam_debug_tree_main = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_tree_wartime = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_resource_war_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_resource_war_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_tree_postwar = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_postwar_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_postwar_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_tree_defeated = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_defeated_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_defeated_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_tree_exile_radical = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_exile_radical_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_exile_radical_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_tree_exile_humanist = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_exile_humanist_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_exile_humanist_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_tree_exile_corporate = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_exile_corporate_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_exile_corporate_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_tree_south_war = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_south_war_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_south_war_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	ADISCORD_nam_debug_start_resource_war = {
 		allowed = {
 			OR = {

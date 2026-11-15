@@ -407,6 +407,27 @@ NAM_rw_coalition_land_only = {
 	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
 }
 
+NAM_rw_coalition_prepare_landing = {
+	allowed = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+	}
+	enable = { NAM_rw_coalition_landing_planned = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = invade
+		id = NAM
+		value = 100
+	}
+	ai_strategy = {
+		type = invasion_unit_request
+		tag = NAM
+		value = 50
+	}
+}
+
 NAM_rw_coalition_naval_invasion = {
 	allowed = {
 		OR = {
@@ -416,15 +437,21 @@ NAM_rw_coalition_naval_invasion = {
 	}
 	enable = { NAM_rw_coalition_landing_ready = yes }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = invade id = NAM value = 100 }
+	ai_strategy = {
+		type = front_control
+		tag = NAM
+		ratio = 0.01
+		priority = 1500
+		ordertype = invasion
+		execute_order = yes
+	}
 	ai_strategy = { type = front_unit_request tag = NAM value = -70 }
-	ai_strategy = { type = invasion_unit_request tag = NAM value = 50 }
 	ai_strategy = { type = naval_invasion_support_priority id = 38 value = 200 }
 }
 
 NAM_rw_efl_landing_reserve = {
 	allowed = { tag = EFL }
-	enable = { NAM_rw_coalition_landing_ready = yes }
+	enable = { NAM_rw_coalition_landing_planned = yes }
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = put_unit_buffers
@@ -437,7 +464,7 @@ NAM_rw_efl_landing_reserve = {
 
 NAM_rw_azh_landing_reserve = {
 	allowed = { tag = AZH }
-	enable = { NAM_rw_coalition_landing_ready = yes }
+	enable = { NAM_rw_coalition_landing_planned = yes }
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = put_unit_buffers

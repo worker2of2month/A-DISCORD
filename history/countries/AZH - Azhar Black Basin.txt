@@ -4,6 +4,8 @@ ADISCORD_grant_technology_profile_fragment_low_tech = yes
 ADISCORD_grant_technology_profile_naval = yes
 ADISCORD_grant_technology_profile_naval_taskforce = yes
 
+NAM_rw_grant_coalition_marine_training = yes
+
 oob = "AZH"
 
 recruit_character = AZH_NAM_governor

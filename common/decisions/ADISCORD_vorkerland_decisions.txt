@@ -7806,7 +7806,7 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		custom_cost_trigger = {
 			NOT = { has_political_power < 35 }
 			NOT = {
-				has_equipment = { infantry_equipment < 1500 }
+				has_equipment = { infantry_equipment < 13500 }
 			}
 		}
 		days_re_enable = 30

@@ -7,3 +7,15 @@ ADISCORD_INF_01 = {
 
 	fallback_name = "%d Infantry Brigade"
 }
+
+ADISCORD_MAR_01 = {
+	name = "Морская пехота"
+	can_use = {
+		OR = {
+			original_tag = EFL
+			original_tag = AZH
+		}
+	}
+	division_types = { ADISCORD_marine_infantry }
+	fallback_name = "%d-я бригада морской пехоты"
+}

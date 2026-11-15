@@ -173,6 +173,14 @@ NAM_rom_take_service_etatism = {
 	}
 }
 
+NAM_end_depot_concessions = {
+	set_country_flag = NAM_depot_concessions_settled
+	if = {
+		limit = { has_idea = NAM_private_tank_farms }
+		remove_ideas = NAM_private_tank_farms
+	}
+}
+
 ADISCORD_nam_resource_war_schedule = {
 	if = {
 		limit = {
@@ -200,6 +208,13 @@ ADISCORD_nam_resource_war_schedule = {
 	# The same collapse edge proclaims independence and creates the ladder,
 	# whether or not the neighbours can open the restitution campaign.
 	NAM = { NAM_ladder_declare_independence = yes }
+}
+
+NAM_rw_grant_coalition_marine_training = {
+	set_technology = {
+		ADISCORD_tech_southern_marine_corps = 1
+		popup = no
+	}
 }
 
 # COUNTRY EFL/AZH. The own-country callback is independent of NAM's focus tree.
@@ -1848,7 +1863,7 @@ ADISCORD_nam_debug_add_tension = {
 	}
 }
 
-# Exercises the repair projects and the throughput refresh.
+# Field condition feeds the extraction calculation.
 ADISCORD_nam_debug_damage_fields = {
 	67 = {
 		set_temp_variable = { var = NAM_field_damage_amount value = 40 }
@@ -2184,7 +2199,12 @@ NAM_groups_initialize = {
 		set_country_flag = NAM_groups_initialized
 		set_variable = { var = NAM_hidden_fuel value = 0 }
 		set_variable = { var = NAM_open_fuel_reserve value = 0 }
-		set_variable = { var = NAM_navy_repair_speed value = 0 }
+		set_variable = { var = NAM_gar_army_speed value = -0.10 }
+		set_variable = { var = NAM_gar_supply_consumption value = 0.08 }
+		set_variable = { var = NAM_gar_army_defence value = -0.04 }
+		set_variable = { var = NAM_gar_army_attack value = -0.04 }
+		set_variable = { var = NAM_gar_max_dig_in value = -2 }
+		set_variable = { var = NAM_navy_repair_speed value = -0.25 }
 		set_variable = { var = NAM_navy_landing_speed value = 0 }
 		set_variable = { var = NAM_navy_organisation value = 0 }
 		set_variable = { var = NAM_navy_dockyard_output value = 0 }
@@ -2193,15 +2213,18 @@ NAM_groups_initialize = {
 		set_variable = { var = NAM_navy_sub_detection value = 0 }
 		set_variable = { var = NAM_navy_convoy_raiding value = 0 }
 		set_variable = { var = NAM_navy_sub_attack value = 0 }
-		set_variable = { var = NAM_navy_coordination value = 0 }
+		set_variable = { var = NAM_navy_coordination value = -0.15 }
 		set_variable = { var = NAM_navy_positioning value = 0 }
 		set_variable = { var = NAM_navy_mine_planting value = 0 }
 		set_variable = { var = NAM_navy_mine_damage value = 0 }
 		set_variable = { var = NAM_navy_mine_sweeping value = 0 }
-		set_variable = { var = NAM_air_accidents value = 0 }
-		set_variable = { var = NAM_air_mission_efficiency value = 0 }
+		set_variable = { var = NAM_air_accidents value = 0.20 }
+		set_variable = { var = NAM_air_mission_efficiency value = -0.15 }
 		set_variable = { var = NAM_air_intercept_efficiency value = 0 }
 		set_variable = { var = NAM_air_cas_efficiency value = 0 }
+		NAM_refresh_garrison = yes
+		NAM_refresh_navy = yes
+		NAM_refresh_air = yes
 		set_variable = { var = NAM_grp_nam_support value = 55 }
 		set_variable = { var = NAM_grp_nam_influence value = 30 }
 		set_variable = { var = NAM_grp_oil_support value = 40 }
@@ -2860,10 +2883,6 @@ NAM_wrk_concession_refund = {
 # ends with it. Running decisions settle through their own cancel triggers.
 NAM_colony_close = {
 	set_country_flag = NAM_center_vanished
-	# Independence creates the services; later tree changes keep their values.
-	NAM_refresh_garrison = yes
-	NAM_refresh_navy = yes
-	NAM_refresh_air = yes
 	if = {
 		limit = { has_country_flag = NAM_wrk_concession_active }
 		clr_country_flag = NAM_wrk_concession_active
@@ -3033,8 +3052,7 @@ NAM_rw_close_preparation = {
 # ----- Tribute -----
 # COUNTRY NAM. A 365-day fuel tribute to Eflor and Azhar after the Klyuchevsk
 # protocol or the compromise peace.
-# Clearing the flag and calling NAM_oil_refresh ends the tribute completely:
-# deliveries read the flag and the refresh releases its two committed units.
+# Deliveries follow the treaty flag independently of commercial berths.
 NAM_rw_start_tribute = {
 	EFL = { NAM_oil_lift_embargo = yes }
 	AZH = { NAM_oil_lift_embargo = yes }
@@ -3732,14 +3750,11 @@ NAM_hold_field_reward = {
 }
 
 # ----- Oil monopoly -----
-# The field states 67, 688, 689, 690 and 719 hold NAM_field_capacity (base units)
-# and NAM_field_condition (0-100). NAM_oil_refresh derives throughput,
-# committed and free units from them. Every writer of an input calls the
-# refresh: contracts, projects, control changes, condition changes and
-# tribute. Nothing polls it.
+# Fields determine physical oil production. South Harbour handles standing fuel contracts.
 
 # COUNTRY NAM. One-time setup from NAM_groups_initialize.
 NAM_oil_initialize = {
+	set_variable = { var = NAM_port_general_slots value = 1 }
 	set_variable = { var = NAM_export_office_price_bonus value = 0 }
 	set_variable = { var = NAM_export_office_capacity_bonus value = 0 }
 	set_variable = { var = NAM_export_office_unpaid value = 0 }
@@ -3912,9 +3927,26 @@ NAM_captured_fields_refresh = {
 	}
 }
 
-# COUNTRY NAM. Throughput counts only fields Svetlogorye controls. Overseas
-# contracts use the South Harbour terminal unit first; land buyers and
-# tribute can never use it.
+NAM_port_refresh_capacity = {
+	set_variable = { var = NAM_port_contract_capacity value = 0 }
+	set_variable = { var = NAM_oil_terminal_units value = 0 }
+	if = {
+		limit = { NAM_oil_trade_authorized = yes }
+		set_variable = { var = NAM_port_contract_capacity value = NAM_port_general_slots }
+		if = {
+			limit = { 700 = { has_state_flag = NAM_sea_terminal_built } }
+			set_variable = { var = NAM_oil_terminal_units value = 1 }
+			add_to_variable = { var = NAM_port_contract_capacity value = 1 }
+		}
+	}
+	set_variable = { var = NAM_oil_contracts value = 0 }
+	set_variable = { var = NAM_oil_overseas_committed value = 0 }
+	NAM_oil_count_clients = yes
+	set_variable = { var = NAM_port_free_berths value = NAM_port_contract_capacity }
+	subtract_from_variable = { var = NAM_port_free_berths value = NAM_oil_contracts }
+	clamp_variable = { var = NAM_port_free_berths min = 0 max = NAM_port_contract_capacity }
+}
+
 NAM_oil_refresh = {
 	if = {
 		limit = { NAM_fuel_embargo_source = no }
@@ -3922,57 +3954,15 @@ NAM_oil_refresh = {
 		AZH = { NAM_oil_lift_embargo = yes }
 		SHL = { NAM_oil_lift_embargo = yes }
 	}
-	set_variable = { var = NAM_oil_throughput value = NAM_oil_bonus_units }
-	set_variable = { var = NAM_oil_terminal_units value = 0 }
 	67 = { NAM_field_update_units = yes }
 	688 = { NAM_field_update_units = yes }
 	689 = { NAM_field_update_units = yes }
 	690 = { NAM_field_update_units = yes }
 	719 = { NAM_field_update_units = yes }
-	if = {
-		limit = {
-			700 = {
-				has_state_flag = NAM_sea_terminal_built
-				is_controlled_by = NAM
-			}
-		}
-		add_to_variable = { var = NAM_oil_throughput value = 1 }
-		set_variable = { var = NAM_oil_terminal_units value = 1 }
-	}
-	set_variable = { var = NAM_oil_contracts value = 0 }
-	set_variable = { var = NAM_oil_overseas_committed value = 0 }
-	NAM_oil_count_clients = yes
-	set_variable = { var = NAM_oil_committed value = NAM_oil_contracts }
-	if = {
-		limit = { has_variable = NAM_loren_cargo_quote }
-		add_to_variable = { var = NAM_oil_committed value = 1 }
-	}
-	set_variable = { var = NAM_oil_tribute_counted value = 0 }
-	if = {
-		limit = { has_country_flag = NAM_rw_tribute }
-		add_to_variable = { var = NAM_oil_committed value = 2 }
-		set_variable = { var = NAM_oil_tribute_counted value = 1 }
-	}
-	set_variable = { var = NAM_oil_free_units value = NAM_oil_throughput }
-	subtract_from_variable = { var = NAM_oil_free_units value = NAM_oil_committed }
-	set_temp_variable = { var = NAM_oil_overflow value = NAM_oil_overseas_committed }
-	subtract_from_temp_variable = { var = NAM_oil_overflow value = NAM_oil_terminal_units }
-	clamp_temp_variable = {
-		var = NAM_oil_overflow
-		min = 0
-		max = 100
-	}
-	set_variable = { var = NAM_oil_free_land_units value = NAM_oil_throughput }
-	subtract_from_variable = { var = NAM_oil_free_land_units value = NAM_oil_terminal_units }
-	subtract_from_variable = { var = NAM_oil_free_land_units value = NAM_oil_committed }
-	add_to_variable = { var = NAM_oil_free_land_units value = NAM_oil_overseas_committed }
-	subtract_from_variable = { var = NAM_oil_free_land_units value = NAM_oil_overflow }
-
+	NAM_port_refresh_capacity = yes
 	NAM_captured_fields_refresh = yes
 }
 
-# STATE field. Units = capacity x condition / 100, rounded down, plus the
-# refinery and pipeline built here; zero during fires or foreign control.
 NAM_field_update_units = {
 	NAM_scorched_field_refresh = yes
 	NAM_guarded_field_refresh = yes
@@ -3987,6 +3977,30 @@ NAM_field_update_units = {
 		}
 		if = {
 			limit = { has_state_flag = NAM_grid_mobile_generator }
+			add_to_temp_variable = { var = NAM_pumping_capacity value = 1 }
+		}
+	}
+	if = {
+		limit = {
+			is_controlled_by = NAM
+			NOT = { has_state_flag = NAM_wells_scorched }
+		}
+		if = {
+			limit = { has_state_flag = NAM_refinery_built }
+			add_to_temp_variable = { var = NAM_pumping_capacity value = 1 }
+		}
+		if = {
+			limit = {
+				has_state_flag = NAM_pipeline_built
+				700 = { is_controlled_by = NAM }
+			}
+			add_to_temp_variable = { var = NAM_pumping_capacity value = 1 }
+		}
+		if = {
+			limit = {
+				has_state_flag = NAM_loren_lease
+				is_owned_by = NAM
+			}
 			add_to_temp_variable = { var = NAM_pumping_capacity value = 1 }
 		}
 	}
@@ -4006,43 +4020,6 @@ NAM_field_update_units = {
 		set_variable = { var = NAM_field_applied_oil value = NAM_field_oil }
 	}
 
-	set_variable = { var = NAM_field_units value = 0 }
-	if = {
-		limit = {
-			is_controlled_by = NAM
-			NOT = { has_state_flag = NAM_wells_scorched }
-		}
-		set_variable = { var = NAM_field_units value = NAM_pumping_capacity }
-		multiply_variable = { var = NAM_field_units value = NAM_field_condition }
-		divide_variable = { var = NAM_field_units value = 100 }
-		# The quotient has at most two decimals, so this rounds down.
-		subtract_from_variable = { var = NAM_field_units value = 0.499 }
-		round_variable = NAM_field_units
-		clamp_variable = {
-			var = NAM_field_units
-			min = 0
-			max = 20
-		}
-		if = {
-			limit = {
-				has_state_flag = NAM_loren_lease
-				NAM_loren_working_field = yes
-			}
-			add_to_variable = { var = NAM_field_units value = 1 }
-		}
-		if = {
-			limit = { has_state_flag = NAM_refinery_built }
-			add_to_variable = { var = NAM_field_units value = 1 }
-		}
-		if = {
-			limit = {
-				has_state_flag = NAM_pipeline_built
-				700 = { is_controlled_by = NAM }
-			}
-			add_to_variable = { var = NAM_field_units value = 1 }
-		}
-	}
-	NAM = { add_to_variable = { var = NAM_oil_throughput value = PREV.NAM_field_units } }
 	NAM_export_office_refresh = yes
 }
 
@@ -4071,17 +4048,16 @@ NAM_grid_recall_generator = {
 	}
 }
 
-# COUNTRY NAM. The quote reserves one land route. No fuel or capital is moved until delivery.
+# COUNTRY NAM. The quote keeps the order open at its agreed price until settlement.
 NAM_loren_close_cargo = {
 	if = {
 		limit = { has_variable = NAM_loren_cargo_quote }
 		clear_variable = NAM_loren_cargo_quote
-		NAM_oil_refresh = yes
 	}
 }
 
 # STATE field. Input: temp NAM_field_damage_amount set in this state scope.
-# Fires, raids and sabotage lower the condition; throughput follows at once.
+# Fires, raids and sabotage lower the condition; production follows at once.
 NAM_field_apply_damage = {
 	if = {
 		limit = { has_variable = NAM_field_condition }
@@ -4152,17 +4128,14 @@ NAM_field_apply_repair = {
 }
 
 # ----- Fuel contracts -----
-# A contract is the buyer flag NAM_oil_client and one committed unit. Each
-# month the buyer receives 1500 fuel from Svetlogorye's stock and Svetlogorye
-# earns 40 treasury; a month without the fuel in stock delivers and pays
-# nothing. Every list below names the same fixed buyers.
+# Each signed buyer occupies one berth. Only a delivered shipment earns revenue.
 
 # COUNTRY buyer (decision FROM). The buyer answers in ADISCORD_nam_oil.1.
 NAM_oil_offer_contract = {
 	if = {
 		limit = {
 			NAM_oil_buyer_eligible = yes
-			NAM = { NAM_country_operable = yes }
+			NAM_port_berth_free_for_buyer = yes
 		}
 		ADISCORD_release_non_participating_minor_optimization = yes
 		set_country_flag = {
@@ -4183,13 +4156,11 @@ NAM_oil_sign_contract = {
 			NOT = { has_country_flag = NAM_oil_client }
 		}
 		clr_country_flag = NAM_oil_offer_pending
-		NAM = { NAM_oil_refresh = yes }
+		NAM = { NAM_port_refresh_capacity = yes }
 		if = {
 			limit = {
-				NAM_oil_unit_free_for_buyer = yes
-				NOT = { has_war_with = NAM }
-				NOT = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
-				NAM = { NAM_country_operable = yes }
+				NAM_oil_buyer_eligible = yes
+				NAM_port_berth_free_for_buyer = yes
 			}
 			ADISCORD_release_non_participating_minor_optimization = yes
 			set_country_flag = NAM_oil_client
@@ -4201,7 +4172,7 @@ NAM_oil_sign_contract = {
 				add_to_variable = { var = NAM_grp_oil_support value = 5 }
 				add_to_variable = { var = NAM_grp_trade_support value = 5 }
 				NAM_groups_refresh = yes
-				NAM_oil_refresh = yes
+				NAM_port_refresh_capacity = yes
 			}
 		}
 		else = {
@@ -4241,7 +4212,7 @@ NAM_oil_end_contract = {
 		NAM = {
 			add_to_variable = { var = NAM_grp_trade_support value = -3 }
 			NAM_groups_refresh = yes
-			NAM_oil_refresh = yes
+			NAM_port_refresh_capacity = yes
 		}
 	}
 }
@@ -4288,11 +4259,11 @@ NAM_oil_validate_clients = {
 	if = {
 		limit = { has_country_flag = NAM_oil_clients_changed }
 		clr_country_flag = NAM_oil_clients_changed
-		NAM_oil_refresh = yes
+		NAM_port_refresh_capacity = yes
 	}
 }
 
-# COUNTRY buyer. Adds its contract to NAM's committed units.
+# COUNTRY buyer. Counts the signed buyer and its current route.
 NAM_oil_count_client = {
 	if = {
 		limit = { has_country_flag = NAM_oil_client }
@@ -4381,7 +4352,22 @@ NAM_oil_settle_client = {
 		limit = {
 			has_country_flag = NAM_oil_client
 			NAM = { NOT = { has_fuel < 15000 } }
+			OR = {
+				NAM = { check_variable = { var = NAM_port_month_general value = 0 compare = greater_than } }
+				AND = {
+					NAM_oil_overseas_buyer = yes
+					NAM = { check_variable = { var = NAM_port_month_sea value = 0 compare = greater_than } }
+				}
+			}
 		}
+		if = {
+			limit = {
+				NAM_oil_overseas_buyer = yes
+				NAM = { check_variable = { var = NAM_port_month_sea value = 0 compare = greater_than } }
+			}
+			NAM = { subtract_from_temp_variable = { var = NAM_port_month_sea value = 1 } }
+		}
+		else = { NAM = { subtract_from_temp_variable = { var = NAM_port_month_general value = 1 } } }
 		add_fuel = 15000
 		NAM = {
 			add_fuel = -15000
@@ -4402,6 +4388,13 @@ NAM_oil_settle_client = {
 
 # COUNTRY NAM. Revenue of all deliveries enters the treasury in one transaction.
 NAM_oil_settle_clients = {
+	set_temp_variable = { var = NAM_port_month_general value = 0 }
+	set_temp_variable = { var = NAM_port_month_sea value = 0 }
+	if = {
+		limit = { NAM_oil_trade_authorized = yes }
+		set_temp_variable = { var = NAM_port_month_general value = NAM_port_general_slots }
+		set_temp_variable = { var = NAM_port_month_sea value = NAM_oil_terminal_units }
+	}
 	set_temp_variable = { var = NAM_oil_month_revenue value = 0 }
 	EFL = { NAM_oil_settle_client = yes }
 	AZH = { NAM_oil_settle_client = yes }
@@ -4424,7 +4417,7 @@ NAM_oil_settle_clients = {
 	}
 }
 
-# COUNTRY NAM. on_monthly_NAM: contracts, tribute expiry, the island levy,
+# COUNTRY NAM. on_monthly_NAM: contracts, the island levy,
 # the steel concession and the crisis-coalition offer. Fixed tags only.
 NAM_oil_monthly = {
 	NAM_export_office_monthly = yes
@@ -4433,14 +4426,6 @@ NAM_oil_monthly = {
 	if = {
 		limit = { check_variable = { NAM_bond_balance > 0 } }
 		NAM_pay_municipal_instalment = yes
-	}
-	# A tribute flag expires without an event; release its units once.
-	if = {
-		limit = {
-			check_variable = { var = NAM_oil_tribute_counted value = 1 compare = equals }
-			NOT = { has_country_flag = NAM_rw_tribute }
-		}
-		NAM_oil_refresh = yes
 	}
 	NAM_island_levy_monthly = yes
 	VAL = { NAM_steel_concession_validate = yes }
@@ -8502,15 +8487,21 @@ NAM_board_sync_eflor_quota = {
 		if = {
 			limit = { NOT = { has_country_flag = NAM_board_eflor_exporting } }
 			set_country_flag = NAM_board_eflor_exporting
-			add_to_variable = { var = NAM_oil_bonus_units value = 1 }
-			NAM_oil_refresh = yes
+			701 = {
+				add_resource = { type = oil amount = 10 }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+				controller = { ADISCORD_economy_mark_dirty = yes }
+			}
 		}
 	}
 	else_if = {
 		limit = { has_country_flag = NAM_board_eflor_exporting }
 		clr_country_flag = NAM_board_eflor_exporting
-		subtract_from_variable = { var = NAM_oil_bonus_units value = 1 }
-		NAM_oil_refresh = yes
+		701 = {
+			add_resource = { type = oil amount = -10 }
+			owner = { ADISCORD_economy_mark_dirty = yes }
+			controller = { ADISCORD_economy_mark_dirty = yes }
+		}
 	}
 }
 
@@ -10435,7 +10426,7 @@ NAM_workers_inspection_visit = {
 	}
 }
 
-# COUNTRY NAM. Refresh the shared export capacity once after the crews return.
+# COUNTRY NAM. Refresh oil production once after the crews return.
 NAM_workers_inspection_dispatch = {
 	set_temp_variable = { var = NAM_inspection_repaired value = 0 }
 	67 = { NAM_workers_inspection_visit = yes }
@@ -15098,6 +15089,8 @@ NAM_export_office_initialize = {
 	set_variable = { var = NAM_export_office_rate value = 0.3 }
 	set_variable = { var = NAM_export_office_level value = 0 }
 	set_variable = { var = NAM_export_office_cost value = 200 }
+	set_variable = { var = NAM_export_office_capacity value = 0 }
+	set_variable = { var = NAM_export_office_month_estimate value = 0 }
 	set_variable = { var = NAM_export_office_oil value = 0 }
 	set_variable = { var = NAM_export_office_oil_delta value = 0 }
 	set_variable = { var = NAM_export_office_last_day value = global.num_days }
@@ -15122,6 +15115,8 @@ NAM_export_office_refresh = {
 		NAM_export_office_accrue = yes
 		set_variable = { var = NAM_export_office_rate value = 0.3 }
 		add_to_variable = { var = NAM_export_office_rate value = NAM.NAM_export_office_price_bonus }
+		set_temp_variable = { var = NAM_export_office_previous_capacity value = NAM_export_office_capacity }
+		set_temp_variable = { var = NAM_export_office_previous_estimate value = NAM_export_office_month_estimate }
 		set_variable = { var = NAM_export_office_capacity value = 4 }
 		add_to_variable = { var = NAM_export_office_capacity value = NAM.NAM_export_office_capacity_bonus }
 		multiply_variable = { var = NAM_export_office_capacity value = NAM_export_office_level }
@@ -15131,6 +15126,9 @@ NAM_export_office_refresh = {
 			set_temp_variable = { var = NAM_export_office_next value = NAM_export_office_capacity }
 			clamp_temp_variable = { var = NAM_export_office_next min = 0 max = NAM_field_oil }
 		}
+		set_variable = { var = NAM_export_office_month_estimate value = NAM_export_office_next }
+		multiply_variable = { var = NAM_export_office_month_estimate value = NAM_export_office_rate }
+		multiply_variable = { var = NAM_export_office_month_estimate value = 30 }
 		if = {
 			limit = {
 				NOT = { check_variable = { var = NAM_export_office_oil value = NAM_export_office_next compare = equals } }
@@ -15142,9 +15140,15 @@ NAM_export_office_refresh = {
 			NAM = { ADISCORD_economy_mark_dirty = yes }
 			owner = { ADISCORD_economy_mark_dirty = yes }
 		}
-		set_variable = { var = NAM_export_office_month_estimate value = NAM_export_office_oil }
-		multiply_variable = { var = NAM_export_office_month_estimate value = NAM_export_office_rate }
-		multiply_variable = { var = NAM_export_office_month_estimate value = 30 }
+		else_if = {
+			limit = {
+				OR = {
+					NOT = { check_variable = { var = NAM_export_office_capacity value = NAM_export_office_previous_capacity compare = equals } }
+					NOT = { check_variable = { var = NAM_export_office_month_estimate value = NAM_export_office_previous_estimate compare = equals } }
+				}
+			}
+			force_update_dynamic_modifier = yes
+		}
 	}
 }
 

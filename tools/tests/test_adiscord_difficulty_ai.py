@@ -55,8 +55,10 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             if path.name not in ("default.txt", "ADISCORD_difficulty_ai.txt"):
                 for name in re.findall(r"(?m)^(\w+)\s*=\s*\{", source):
                     block = named_block(source, name)
+                    # Land execution modes and manual pokes do not apply to invasion orders.
                     controls = [part for part in named_blocks(block, "ai_strategy")
-                                if re.search(r"type\s*=\s*front_control\b", part)]
+                                if re.search(r"type\s*=\s*front_control\b", part)
+                                and not re.search(r"ordertype\s*=\s*invasion\b", part)]
                     if controls:
                         cls.campaigns[name] = parse("\n".join(
                             [named_block(block, "allowed"), named_block(block, "enable")] + controls))

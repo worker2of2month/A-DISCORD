@@ -117,7 +117,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_conscription_of_the_south
-		icon = GFX_focus_generic_manpower
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 6
 		y = 1
 		cost = 2
@@ -160,7 +160,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_defence_in_depth
-		icon = GFX_goal_generic_defence
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 4
 		y = 2
 		cost = 2
@@ -204,7 +204,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_mobile_reserve
-		icon = GFX_goal_generic_army_motorized
+		icon = GFX_focus_NAM_mobile_columns
 		x = 8
 		y = 2
 		cost = 2
@@ -293,6 +293,25 @@ shared_focus = {
 					add_building_construction = { type = bunker level = 2 instant_build = yes province = 16721 }
 				}
 			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = {
+							67 = {
+								is_owned_by = NAM
+								is_controlled_by = NAM
+							}
+						}
+						NOT = {
+							688 = {
+								is_owned_by = NAM
+								is_controlled_by = NAM
+							}
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_south_field_fortresses_preview_tt
+			}
 		}
 		ai_will_do = {
 			base = 150
@@ -301,7 +320,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_district_garrisons
-		icon = GFX_focus_generic_home_defense
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 5
 		y = 3
 		cost = 2
@@ -348,7 +367,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fuel_columns
-		icon = GFX_focus_generic_truck
+		icon = GFX_focus_VAL_Morns_Supply_Trains
 		x = 8
 		y = 3
 		cost = 2
@@ -399,7 +418,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_rapid_response
-		icon = GFX_focus_generic_motor_cycle
+		icon = GFX_focus_NAM_mobile_columns
 		x = 10
 		y = 3
 		cost = 2
@@ -441,7 +460,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_staff_of_the_line
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 6
 		y = 4
 		cost = 2
@@ -487,7 +506,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_oil_blitz
-		icon = GFX_focus_generic_tank_assault
+		icon = GFX_focus_NAM_mobile_columns
 		x = 4
 		y = 5
 		cost = 2
@@ -535,7 +554,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_attrition_wall
-		icon = GFX_goal_generic_army_artillery
+		icon = GFX_focus_VAL_Gromovs_Assault_Tables
 		x = 8
 		y = 5
 		cost = 2
@@ -582,7 +601,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_armoured_spearheads
-		icon = GFX_focus_generic_army_tanks2
+		icon = GFX_focus_VAL_Armored_Contract_Companies
 		x = 3
 		y = 6
 		cost = 2
@@ -630,7 +649,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_forward_fuel_dumps
-		icon = GFX_focus_generic_stockpile_fuel
+		icon = GFX_focus_NAM_concealed_reserve
 		x = 5
 		y = 6
 		cost = 2
@@ -681,7 +700,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_counter_battery
-		icon = GFX_goal_generic_army_artillery2
+		icon = GFX_focus_VAL_Ballistics_Schools
 		x = 8
 		y = 6
 		cost = 2
@@ -723,7 +742,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_trench_lines
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_RUS_field_sappers
 		x = 10
 		y = 6
 		cost = 2
@@ -881,7 +900,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_convoy_hunters
-		icon = GFX_focus_VAL_Logistics_Command
+		icon = GFX_focus_NAM_active_squadron
 		x = 18
 		y = 2
 		cost = 2
@@ -921,7 +940,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_refinery_dispersal
-		icon = GFX_goal_generic_oil_refinery
+		icon = GFX_focus_NAM_well_register
 		x = 16
 		y = 3
 		cost = 3
@@ -991,7 +1010,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fuel_for_the_front
-		icon = GFX_focus_generic_stockpile_fuel
+		icon = GFX_focus_NAM_metropolitan_quota
 		x = 14
 		y = 4
 		cost = 2
@@ -1036,7 +1055,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_war_export_tariff
-		icon = GFX_goal_generic_trade
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 18
 		y = 4
 		cost = 2
@@ -1083,7 +1102,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_field_pipelines
-		icon = GFX_focus_generic_supply_line
+		icon = GFX_focus_NAM_pipeline_patrols
 		x = 13
 		y = 5
 		cost = 2
@@ -1142,7 +1161,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_tanker_trains
-		icon = GFX_focus_generic_railroad
+		icon = GFX_focus_NAM_well_register
 		x = 15
 		y = 5
 		cost = 2
@@ -1187,7 +1206,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_oil_exchange_credit
-		icon = GFX_focus_generic_stockpile_currency
+		icon = GFX_focus_NAM_second_ledger
 		x = 19
 		y = 5
 		cost = 2
@@ -1234,7 +1253,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fuel_arsenal
-		icon = GFX_goal_generic_construct_military
+		icon = GFX_focus_NAM_metropolitan_depots
 		x = 16
 		y = 6
 		cost = 3
@@ -1300,7 +1319,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_charter_of_the_north
-		icon = GFX_goal_generic_alliance
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 27
 		y = 1
 		cost = 2
@@ -1354,7 +1373,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_protectorate_offers
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_NAM_wrk_trade_house
 		x = 25
 		y = 2
 		cost = 2
@@ -1406,7 +1425,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_punitive_columns
-		icon = GFX_focus_generic_provoke_border_clashes
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 29
 		y = 2
 		cost = 2
@@ -1451,7 +1470,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fuel_guarantees
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 24
 		y = 3
 		cost = 2
@@ -1512,7 +1531,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_desert_garrisons
-		icon = GFX_goal_generic_fortify_city
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 26
 		y = 3
 		cost = 2
@@ -1556,7 +1575,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_burned_wells
-		icon = GFX_focus_generic_sabotage
+		icon = GFX_focus_NAM_sand_runs_out
 		x = 29
 		y = 3
 		cost = 2
@@ -1608,7 +1627,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_hostage_councils
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 31
 		y = 3
 		cost = 2
@@ -1651,7 +1670,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_northern_envoys
-		icon = GFX_focus_generic_conference
+		icon = GFX_focus_NAM_neutral_basin
 		x = 27
 		y = 4
 		cost = 2
@@ -1701,7 +1720,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_restitution_ties
-		icon = GFX_goal_generic_improve_relations
+		icon = GFX_focus_NAM_commissioner_plan
 		x = 25
 		y = 5
 		cost = 2
@@ -1761,7 +1780,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_league_of_the_north
-		icon = GFX_goal_generic_major_alliance
+		icon = GFX_focus_NAM_districts
 		x = 29
 		y = 5
 		cost = 3
@@ -1820,7 +1839,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_rear_of_svetlogorye
-		icon = GFX_focus_generic_workers
+		icon = GFX_focus_NAM_civilian_combine
 		x = 37
 		y = 1
 		cost = 2
@@ -1861,7 +1880,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_district_compact_at_war
-		icon = GFX_focus_generic_public_meetings
+		icon = GFX_focus_NAM_districts
 		x = 35
 		y = 2
 		cost = 2
@@ -1905,7 +1924,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_emergency_powers
-		icon = GFX_focus_generic_military_dictatorship
+		icon = GFX_focus_NAM_vertical
 		x = 39
 		y = 2
 		cost = 2
@@ -1951,7 +1970,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_district_relief
-		icon = GFX_focus_generic_welfare
+		icon = GFX_focus_RUS_roadside_clinics
 		x = 34
 		y = 3
 		cost = 2
@@ -2001,7 +2020,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_uprising_sweeps
-		icon = GFX_focus_generic_national_security
+		icon = GFX_focus_NAM_underground_reports
 		x = 37
 		y = 3
 		cost = 2
@@ -2052,7 +2071,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_namestnik_courts
-		icon = GFX_focus_generic_court
+		icon = GFX_focus_NAM_seal_courts
 		x = 40
 		y = 3
 		cost = 2
@@ -2097,7 +2116,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_war_bread
-		icon = GFX_focus_generic_agricultural_subsidies
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 35
 		y = 4
 		cost = 2
@@ -2143,7 +2162,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_home_militia
-		icon = GFX_focus_generic_home_defense
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 39
 		y = 4
 		cost = 2
@@ -2191,7 +2210,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_drive_to_khazar
-		icon = GFX_goal_generic_occupy_start_war
+		icon = GFX_focus_NAM_mobile_columns
 		x = 6
 		y = 8
 		cost = 3
@@ -2243,7 +2262,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_fall_of_the_furnaces
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_VAL_Factories_Like_Cathedrals
 		x = 11
 		y = 9
 		cost = 3
@@ -2294,7 +2313,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_last_line_of_the_belt
-		icon = GFX_goal_generic_fortify_city
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 21
 		y = 7
 		cost = 2
@@ -2349,7 +2368,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_victory_order
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_NAM_recognition
 		x = 16
 		y = 10
 		cost = 3
@@ -2398,7 +2417,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_s_occupation_namestniks
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_RUS_military_governors
 		x = 46
 		y = 0
 		cost = 2
@@ -2441,7 +2460,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_s_furnace_inspection
-		icon = GFX_focus_generic_industrial_experts
+		icon = GFX_focus_VAL_Ministry_Auditors
 		x = 44
 		y = 1
 		cost = 2
@@ -2492,7 +2511,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_s_namestnik_levies
-		icon = GFX_focus_generic_manpower
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 48
 		y = 1
 		cost = 2
@@ -2537,7 +2556,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_s_iron_ladder
-		icon = GFX_focus_generic_military_dictatorship
+		icon = GFX_focus_NAM_vertical
 		x = 44
 		y = 2
 		cost = 2
@@ -2582,7 +2601,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_s_victory_office
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_NAM_recognition
 		x = 46
 		y = 3
 		cost = 3
@@ -2633,7 +2652,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_f_charter_reserve
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_NAM_quiet_officer_lists
 		x = 46
 		y = 0
 		cost = 2
@@ -2675,7 +2694,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_f_district_volunteers
-		icon = GFX_focus_generic_diverse_army
+		icon = GFX_focus_NAM_oilfield_militia
 		x = 44
 		y = 1
 		cost = 2
@@ -2715,7 +2734,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_f_charter_staff
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 48
 		y = 1
 		cost = 2
@@ -2751,7 +2770,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_f_shared_arsenal
-		icon = GFX_goal_generic_small_arms
+		icon = GFX_focus_NAM_metropolitan_depots
 		x = 44
 		y = 2
 		cost = 2
@@ -2800,7 +2819,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_f_charter_at_war
-		icon = GFX_focus_generic_public_meetings
+		icon = GFX_focus_NAM_districts
 		x = 46
 		y = 3
 		cost = 3
@@ -2851,7 +2870,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_p_logistics_contracts
-		icon = GFX_focus_generic_truck
+		icon = GFX_focus_VAL_Logistics_Command
 		x = 46
 		y = 0
 		cost = 2
@@ -2897,7 +2916,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_p_exchange_war_loans
-		icon = GFX_focus_generic_concessions
+		icon = GFX_focus_NAM_second_ledger
 		x = 44
 		y = 1
 		cost = 2
@@ -2945,7 +2964,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_p_contract_rail
-		icon = GFX_focus_generic_railroad
+		icon = GFX_focus_RUS_imperial_railways
 		x = 48
 		y = 1
 		cost = 2
@@ -3002,7 +3021,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_p_insured_convoys
-		icon = GFX_focus_generic_merchant_fleet
+		icon = GFX_focus_NAM_escort_school
 		x = 44
 		y = 2
 		cost = 2
@@ -3046,7 +3065,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_p_war_dividends
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_NAM_civilian_combine
 		x = 46
 		y = 3
 		cost = 3
@@ -3097,7 +3116,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_n_defence_council
-		icon = GFX_focus_generic_conference
+		icon = GFX_focus_NAM_districts
 		x = 46
 		y = 0
 		cost = 2
@@ -3146,7 +3165,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_n_generals_hand
-		icon = GFX_focus_generic_army_attack
+		icon = GFX_focus_VAL_Contract_General_Staff
 		x = 44
 		y = 1
 		cost = 2
@@ -3201,7 +3220,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_n_districts_voice
-		icon = GFX_focus_generic_vote
+		icon = GFX_focus_NAM_open_ledgers
 		x = 48
 		y = 1
 		cost = 2
@@ -3256,7 +3275,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_n_emergency_budget
-		icon = GFX_focus_generic_stockpile_currency
+		icon = GFX_focus_NAM_second_ledger
 		x = 46
 		y = 2
 		cost = 2
@@ -3303,7 +3322,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_sw_n_defence_of_the_line
-		icon = GFX_goal_generic_defence
+		icon = GFX_focus_NAM_imperial_gendarmes
 		x = 46
 		y = 3
 		cost = 2

@@ -424,6 +424,33 @@ class VorkerlandUnificationScopeTests(unittest.TestCase):
         for tag in ("RIV", "YOR"):
             self.assert_district_player_follows_the_nation(tag)
 
+    def test_eyrmi_handoff_annexation_and_verification_follow_bagleys_victory(self) -> None:
+        phase = parse_clausewitz(event_block(self.events, "ADISCORD_vorkerland_phase.7"))
+        handoff = parsed_block(phase, "immediate")
+        absorb = self.effect("ADISCORD_vorkerland_absorb_treaty_districts_after_reunification")
+        verified = self.expanded(self.parsed_triggers["ADISCORD_vorkerland_reunification_verified"])
+        for executive, signed, present in product((False, True), repeat=3):
+            with self.subTest(executive=executive, signed=signed, present=present):
+                facts = {
+                    **self.verified_facts("WKR"),
+                    ("WKR", "has_country_flag", "ADISCORD_vorkerland_worker_utilitarian_outcome"): executive,
+                    ("WKR", "country_exists", "EYR"): present,
+                    ("WKR", "is_ai", "yes"): True,
+                    ("EYR", "exists", "yes"): present,
+                    ("EYR", "is_ai", "no"): True,
+                    ("EYR", "has_country_flag", "ADISCORD_vorkerland_prep_treaty_signed"): signed,
+                }
+                annex = executive and present
+                actions = [e for _, e in selected_effects(handoff, facts, "WKR")]
+                self.assertEqual([e.value for e in actions if e.key == "change_tag_from"], ["EYR"] if annex else [])
+                if annex:
+                    self.assertEqual([e.key for e in actions], ["country_event", "change_tag_from"])
+                    self.assertEqual(scalar(actions[0].value, "id"), "ADISCORD_vorkerland_phase.7")
+                calls = [scope for scope, e in selected_effects(absorb, facts, "WKR")
+                         if e.key == "ADISCORD_vorkerland_absorb_treaty_district"]
+                self.assertEqual(calls, ["EYR"] if annex else [])
+                self.assertEqual(matches_conditions(verified, facts, "WKR"), not annex)
+
     def test_treaty_district_absorption_clears_treaty_and_skips_absent_country(self) -> None:
         effects = {e.key: e.value for e in parse_clausewitz(self.effects)}
         district = effects["ADISCORD_vorkerland_absorb_treaty_district"]

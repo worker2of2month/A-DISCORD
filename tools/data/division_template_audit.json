@@ -998,6 +998,76 @@
       }
     },
     {
+      "key": "oob_azh_marine_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/AZH.txt",
+        "owner": "AZH"
+      },
+      "technical_name": "Black Basin Marine Brigade",
+      "display_name": "Black Basin Marine Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 59.214285714285715,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 288.0,
+          "infantry_equipment": 5670.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_azh_marine_brigade"
+      }
+    },
+    {
       "key": "oob_bbv_border_levy",
       "source": {
         "kind": "oob",
@@ -3207,6 +3277,76 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_efl_capital_guard"
+      }
+    },
+    {
+      "key": "oob_efl_marine_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/EFL.txt",
+        "owner": "EFL"
+      },
+      "technical_name": "Loren Marine Brigade",
+      "display_name": "Loren Marine Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 59.214285714285715,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 288.0,
+          "infantry_equipment": 5670.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_efl_marine_brigade"
       }
     },
     {
@@ -14969,6 +15109,16 @@
       "count": 2
     },
     {
+      "key": "azh_starting_marines",
+      "path": "history/units/AZH.txt",
+      "kind": "oob",
+      "technical_name": "Black Basin Marine Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
       "key": "bbv_oob_feudal_retinue_xp_0_21_eq_0_28",
       "path": "history/units/BBV.txt",
       "kind": "oob",
@@ -15205,6 +15355,16 @@
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.4,
       "count": 2
+    },
+    {
+      "key": "efl_starting_marines",
+      "path": "history/units/EFL.txt",
+      "kind": "oob",
+      "technical_name": "Loren Marine Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
+      "count": 1
     },
     {
       "key": "egc_vorkerland_collapse_oob_egc_collapse_militia_xp_0_1_eq_0_7",

@@ -90,6 +90,7 @@ NAM_national_programmes = {
 	allowed = { tag = NAM }
 	visible = {
 		OR = {
+			NAM_oil_trade_authorized = yes
 			has_active_mission = NAM_agreement_deadline
 			has_active_mission = NAM_agreement_crisis
 			has_active_mission = NAM_incident_countdown
@@ -180,19 +181,6 @@ NAM_underground = {
 	}
 	visible_when_empty = yes
 	priority = 20
-}
-
-NAM_treasury = {
-	icon = generic_industry
-	allowed = { tag = NAM }
-	visible = {
-		OR = {
-			has_completed_focus = NAM_one_budget
-			has_completed_focus = NAM_crisis_office
-		}
-	}
-	visible_when_empty = yes
-	priority = 19
 }
 
 NAM_coalition_logistics = {

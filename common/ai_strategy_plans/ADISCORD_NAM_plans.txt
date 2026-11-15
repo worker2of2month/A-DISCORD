@@ -381,7 +381,6 @@ NAM_postwar_plan = {
 		NAM_pw_machine_repair
 		NAM_pw_testing_facilities
 		NAM_pw_industrial_sites
-		NAM_pw_production_cycle
 		NAM_pw_rail_workshops
 		NAM_pw_southern_corridor
 		NAM_pw_district_hospitals
@@ -543,7 +542,6 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_machine_repair
 		NAM_pw_testing_facilities
 		NAM_pw_industrial_sites
-		NAM_pw_production_cycle
 		NAM_pw_rail_workshops
 		NAM_pw_southern_corridor
 		NAM_pw_district_hospitals
@@ -930,7 +928,6 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_machine_repair
 		NAM_pw_testing_facilities
 		NAM_pw_industrial_sites
-		NAM_pw_production_cycle
 		NAM_pw_rail_workshops
 		NAM_pw_southern_corridor
 		NAM_pw_district_hospitals

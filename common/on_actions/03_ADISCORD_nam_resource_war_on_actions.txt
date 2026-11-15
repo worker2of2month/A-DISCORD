@@ -1,4 +1,17 @@
 on_actions = {
+	on_daily_NAM = {
+		effect = {
+			if = {
+				limit = { has_idea = NAM_private_tank_farms }
+				if = {
+					limit = { has_fuel < 2000 }
+					set_fuel = 0
+				}
+				else = { add_fuel = -2000 }
+			}
+		}
+	}
+
 	on_puppet = {
 		effect = {
 			NAM_sync_neighbor_governor = yes
@@ -103,7 +116,7 @@ on_actions = {
 				}
 				FROM.FROM = { clr_state_flag = NAM_line_prepared }
 			}
-			# Oil throughput counts controlled fields, the pipeline end and the
+			# Extraction depends on the fields and pipeline end. Contract berths use the
 			# sea terminal; the island steel concession needs Svetlogorsk control.
 			if = {
 				limit = {

@@ -2,6 +2,7 @@
   "schema": 1,
   "apply_sequence": [
     "nam_naval_models",
+    "southern_marines",
     "state_history",
     "outer_states",
     "northern_countries",
@@ -265,6 +266,40 @@
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Owns NAM marine and headquarters marked sections, their native exports, and NAM aircraft rows and exports. Other specialist and headquarters sections and other aircraft families remain unchanged. Blender and io_pdx_mesh are needed for rebuilding."
+    },
+    {
+      "id": "southern_marines",
+      "owner_module": "tools.builders.build_adiscord_southern_marines",
+      "source_inputs": [
+        "tools/builders/build_adiscord_southern_marines.py",
+        "tools/assets/source/build_headquarters.py",
+        "tools/assets/source/build_northern_infantry.py",
+        "gfx/models/units/ADISCORD_regulars/ARB_field*",
+        "gfx/entities/ADISCORD_specialists.gfx",
+        "gfx/entities/zzz_ADISCORD_specialists.asset"
+      ],
+      "output_globs": [
+        "gfx/models/units/ADISCORD_regulars/southern_marine*",
+        "gfx/entities/ADISCORD_southern_marines.gfx",
+        "gfx/entities/zzzz_ADISCORD_southern_marines.asset",
+        "gfx/interface/equipmentdesigner/graphic_db/ADISCORD_southern_marines.txt",
+        "docs/development/model-verification/southern_marines.json"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_southern_marines"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_southern_marines",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
     },
     {
       "id": "azhar_palace",

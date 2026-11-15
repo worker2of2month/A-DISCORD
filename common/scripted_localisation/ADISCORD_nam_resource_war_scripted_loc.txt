@@ -1595,7 +1595,7 @@ defined_text = {
 	}
 	text = {
 		trigger = { NAM = { NAM_bw_can_pay_line = no } }
-		localization_key = NAM_bw_reason_resources
+		localization_key = NAM_bw_reason_line_funds
 	}
 	text = {
 		localization_key = NAM_bw_reason_ready
@@ -1714,7 +1714,12 @@ defined_text = {
 	text = { localization_key = NAM_bw_empty }
 }
 
-# STATE field. Condition and the units NAM_oil_refresh last derived from it.
+defined_text = {
+	name = NAMBasinFieldCapacity
+	text = { localization_key = NAM_bw_field_capacity_detail }
+}
+
+# Physical extraction can continue after the field stops supplying NAM.
 defined_text = {
 	name = NAMBasinOutput
 	text = {
@@ -1887,7 +1892,7 @@ defined_text = {
 	}
 }
 
-# Oil exports. Tribute holds two committed units.
+# The export report also shows non-commercial deliveries.
 defined_text = {
 	name = NAMBasinTribute
 	text = {

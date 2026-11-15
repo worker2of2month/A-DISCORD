@@ -10,7 +10,7 @@ from tools.lib.adiscord_starting_navies import (
     STARTING_NAVIES, with_naval_history, with_starting_navy,
 )
 from tools.tests.test_build_adiscord_focus_trees import semantic
-from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar, walk
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.validators.validate_adiscord_economy_ai import (
     generic_role_contract_issues,
@@ -217,13 +217,83 @@ class NavalProgrammeTests(unittest.TestCase):
         for tag, ratio, state in (("EFL", "0.14", "723"), ("AZH", "0.20", "692")):
             policy = block(policies, "NAM_rw_" + tag.lower() + "_landing_reserve")
             self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
-            self.assertEqual(scalar(block(policy, "enable"), "NAM_rw_coalition_landing_ready"), "yes")
+            self.assertEqual(scalar(block(policy, "enable"), "NAM_rw_coalition_landing_planned"), "yes")
             reserve = block(policy, "ai_strategy")
             self.assertEqual(scalar(reserve, "type"), "put_unit_buffers")
             self.assertEqual(scalar(reserve, "ratio"), ratio)
             self.assertEqual([e.value for e in block(reserve, "states")], [state])
             self.assertEqual(scalar(reserve, "subtract_invasions_from_need"), "yes")
             self.assertEqual(scalar(reserve, "subtract_fronts_from_need"), "no")
+
+    def test_coalition_starts_with_a_supplied_marine_brigade_in_each_fleet_port(self):
+        role = block(entries("common/ai_templates/ADISCORD_land_templates.txt"), "ADISCORD_marine_templates")
+        target = block(block(role, "ADISCORD_marine_brigade"), "target_template")
+        tech = "ADISCORD_tech_southern_marine_corps"
+        training = "NAM_rw_grant_coalition_marine_training"
+        effects = entries("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
+        self.assertEqual(scalar(block(block(effects, training), "set_technology"), tech), "1")
+        technologies = block(entries("common/technologies/ADISCORD_nam_resource_war_technologies.txt"), "technologies")
+        unlock = block(block(technologies, tech), "enable_subunits")
+        self.assertEqual([item.value for item in unlock], ["ADISCORD_marine_infantry"])
+        self.assertEqual(scalar(role, "role"), "marines")
+        for tag in ("EFL", "AZH"):
+            with self.subTest(tag=tag):
+                self.assertIn(tag, [item.value for item in block(role, "available_for")])
+                country = entries(next((ROOT / "history/countries").glob(f"{tag} - *.txt")))
+                keys = [item.key for item in country]
+                self.assertLess(keys.index(training), keys.index("oob"))
+                roster = entries(f"history/units/{scalar(country, 'oob')}.txt")
+                template, = (item.value for item in roster if item.key == "division_template"
+                             and any(unit.key == "ADISCORD_marine_infantry" for unit in block(item.value, "regiments")))
+                for section in ("regiments", "support"):
+                    self.assertEqual(Counter(unit.key for unit in block(template, section)),
+                                     {unit.key: int(unit.value) for unit in block(target, section)})
+                units = block(roster, "units")
+                division, = (item.value for item in units if item.key == "division"
+                             and scalar(item.value, "division_template") == scalar(template, "name"))
+                self.assertEqual(float(scalar(division, "start_equipment_factor")), 1)
+                self.assertEqual(scalar(division, "location"), scalar(block(units, "fleet"), "naval_base"))
+                pool = block(entries("gfx/interface/equipmentdesigner/graphic_db/ADISCORD_southern_marines.txt"), tag)
+                models = block(block(block(pool, "infantry_equipment"), "pool"), "models")
+                self.assertEqual([item.value for item in models], [scalar(template, "override_model")])
+
+    def test_coalition_invasion_execution_requires_the_wartime_policy(self):
+        policies = entries("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt")
+        planning = block(policies, "NAM_rw_coalition_prepare_landing")
+        execution = block(policies, "NAM_rw_coalition_naval_invasion")
+        self.assertEqual(scalar(block(planning, "enable"), "NAM_rw_coalition_landing_planned"), "yes")
+        self.assertEqual(scalar(block(execution, "enable"), "NAM_rw_coalition_landing_ready"), "yes")
+        for policy in (planning, execution):
+            self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+        invade, = (row.value for row in planning if row.key == "ai_strategy" and scalar(row.value, "type") == "invade")
+        self.assertEqual(scalar(invade, "id"), "NAM")
+        self.assertGreater(int(scalar(invade, "value")), 0)
+        execute, = (row.value for row in execution if row.key == "ai_strategy"
+                    and scalar(row.value, "type") == "front_control")
+        self.assertEqual(scalar(execute, "tag"), "NAM")
+        self.assertEqual(scalar(execute, "ordertype"), "invasion")
+        self.assertEqual(scalar(execute, "execute_order"), "yes")
+        triggers = entries("common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt")
+        plan_gate = block(triggers, "NAM_rw_coalition_landing_planned")
+        sail_gate = block(triggers, "NAM_rw_coalition_landing_ready")
+        for tag in ("EFL", "AZH"):
+            for preparing, active, enemy, allied, supplied, expected_plan, expected_sail in (
+                (True, False, False, False, True, True, False),
+                (True, False, False, True, True, False, False),
+                (False, True, True, False, True, True, True),
+                (False, True, True, False, False, False, False),
+                (False, True, False, False, True, False, False),
+                (False, False, False, False, True, False, False),
+            ):
+                facts = {
+                    (tag, "ADISCORD_nam_resource_war_preparation", "yes"): preparing,
+                    (tag, "ADISCORD_nam_resource_war_active", "yes"): active,
+                    (tag, "NAM_rw_coalition_can_embark", "yes"): supplied,
+                    (tag, "has_war_with", "NAM"): enemy,
+                    (tag, "is_in_faction_with", "NAM"): allied,
+                }
+                self.assertEqual(matches_conditions(plan_gate, facts, tag), expected_plan)
+                self.assertEqual(matches_conditions(sail_gate, facts, tag), expected_sail)
 
     def test_generic_naval_categories_require_port_and_cleanup(self):
         for category in ("capital_ship", "screen_ship", "submarine"):

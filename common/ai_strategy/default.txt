@@ -894,13 +894,25 @@ ADISCORD_regional_navy_research = {
 }
 
 ADISCORD_marine_recruitment = {
-	allowed = { ADISCORD_is_regional_naval_power = yes }
+	allowed = {
+		OR = {
+			ADISCORD_is_regional_naval_power = yes
+			original_tag = EFL
+			original_tag = AZH
+		}
+	}
 	enable = {
 		is_ai = yes
 		has_capitulated = no
 		ADISCORD_has_operational_naval_base = yes
 		ADISCORD_has_marine_training = yes
-		num_divisions > 11
+		OR = {
+			num_divisions > 11
+			AND = {
+				original_tag = AZH
+				num_divisions > 9
+			}
+		}
 		NOT = { has_manpower < 6300 }
 		NOT = { has_equipment = { infantry_equipment < 5670 } }
 		NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 288 } }

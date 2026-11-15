@@ -634,19 +634,14 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_defeat_oil_union_tt
 			hidden_effect = {
-				add_to_variable = { var = NAM_oil_bonus_units value = 2 }
-				NAM_oil_refresh = yes
+				add_to_variable = { var = NAM_port_general_slots value = 1 }
+				NAM_port_refresh_capacity = yes
 			}
 			custom_effect_tooltip = NAM_receive_250_tt
 			hidden_effect = { NAM_receive_250 = yes }
 			add_political_power = 50
-			if = {
-				limit = { NOT = { has_completed_focus = NAM_contract_bureau } }
-				unlock_decision_tooltip = NAM_oil_contract_offer
-				custom_effect_tooltip = NAM_oil_contract_offer_unlock_tt
-			}
+			custom_effect_tooltip = NAM_port_extra_slot_tt
 		}
 		ai_will_do = {
 			base = 10

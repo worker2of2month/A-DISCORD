@@ -190,7 +190,6 @@ DECISION_FOCUS_GATES = {
     "NAM_order_coastal_battalion": "NAM_reserve_rolls",
     "NAM_prepare_line": "NAM_line_survey",
     "NAM_scorch_wells": "NAM_scorched_wells",
-    "NAM_oil_contract_offer": "NAM_contract_bureau",
     "NAM_fuel_embargo": "NAM_fuel_leverage",
     "NAM_project_repair_wells": "NAM_field_repair_crews",
     "NAM_project_refinery": "NAM_refinery_programme",
@@ -215,7 +214,7 @@ def check_oil_monopoly(
     events: str,
     hostilities: str,
 ) -> None:
-    """Oil throughput, contracts, embargo, field projects and the islands."""
+    """Oil production, contracts, embargo, field projects and the islands."""
     initialize = named_block(effects, "NAM_oil_initialize")
     for state_id, capacity in FIELD_CAPACITY.items():
         state_block = named_block(initialize, str(state_id))
@@ -230,18 +229,19 @@ def check_oil_monopoly(
         and "var = NAM_project_slots value = 1" in groups_init,
         "the single startup entry must seed the oil system and one project slot",
     )
+    port = named_block(effects, "NAM_port_refresh_capacity")
     refresh = named_block(effects, "NAM_oil_refresh")
     check(
         all(f"{state_id} = {{ NAM_field_update_units = yes }}" in refresh for state_id in FIELD_CAPACITY)
-        and "NAM_oil_count_clients = yes" in refresh
-        and "has_country_flag = NAM_rw_tribute" in refresh
+        and "NAM_oil_count_clients = yes" in port
+        and "NAM_port_refresh_capacity = yes" in refresh
         and "NAM_rw_azh_treaty" not in effects
-        and "NAM_sea_terminal_built" in refresh,
-        "NAM_oil_refresh must count fields, the terminal, contracts and tribute; the Azhar treaty is retired",
+        and "NAM_sea_terminal_built" in port,
+        "NAM_oil_refresh must count fields, the terminal and contracts; the Azhar treaty is retired",
     )
     check(
         "is_controlled_by = NAM" in named_block(effects, "NAM_field_update_units"),
-        "throughput must count only fields Svetlogorye controls",
+        "field equipment must check control before increasing extraction",
     )
     oil_effects = [
         named_block(effects, name)
@@ -278,15 +278,15 @@ def check_oil_monopoly(
     offer_targets = set(re.findall(r"[A-Z]{3}", named_block(offer, "targets")))
     check(offer_targets == OIL_BUYERS, f"contract targets drifted: {sorted(offer_targets)}")
     check(
-        "NAM_oil_unit_free_for_buyer = yes" in offer
+        "NAM_port_berth_free_for_buyer = yes" in offer
         and "NAM_oil_offer_contract = yes" in offer,
         "a contract offer needs a free unit and the buyer's consent event",
     )
     sign = named_block(effects, "NAM_oil_sign_contract")
     check(
-        "NAM_oil_unit_free_for_buyer = yes" in sign
+        "NAM_port_berth_free_for_buyer = yes" in sign
         and "set_country_flag = NAM_oil_client" in sign
-        and "NAM_oil_refresh = yes" in sign
+        and "NAM_port_refresh_capacity = yes" in sign
         and "ADISCORD_nam_oil.2" in sign,
         "signature must recheck capacity, set the client flag, refresh and inform Svetlogorye",
     )
@@ -354,12 +354,12 @@ def check_oil_monopoly(
     )
     check(
         "NAM_oil_refresh = yes" in named_block(on_actions, "on_state_control_changed"),
-        "control changes must refresh oil throughput",
+        "control changes must refresh oil production and port berths",
     )
     check(
         "NAM_oil_refresh = yes" in named_block(decisions, "NAM_scorch_wells")
         and "modifier = NAM_scorched_wells_modifier" in named_block(decisions, "NAM_scorch_wells"),
-        "scorched wells must refresh throughput and use the renamed state modifier",
+        "scorched wells must refresh production and use the renamed state modifier",
     )
     slot = named_block(triggers, "NAM_project_slot_free")
     check(
@@ -2279,8 +2279,10 @@ def main() -> int:
         and "custom_cost_text = NAM_cost_line" in line_decision
         and "cost = 0" in line_decision
         and "days_remove = 35" in line_decision
-        and "NOT = { has_political_power < 30 }" in line_decision
-        and "value = 100 compare = greater_than_or_equals" in line_decision
+        and "political_power" not in line_decision
+        and "var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals" in line_decision
+        and "var = NAM_treasury_amount value = 100" in line_decision
+        and "NAM_spend_treasury = yes" in line_decision
         and "NAM_line_slot_free = yes" in line_decision
         and "has_decision" not in line_decision,
         "NAM_prepare_line lacks its exact price, slot or state-flag escrow contract",
@@ -2931,8 +2933,8 @@ def main() -> int:
 
     starting_armies = {
         "NAM": ("history/units/NAM.txt", [176, 6099, 8058], 3),
-        "EFL": ("history/units/EFL.txt", [259, 8057, 6495, 6331], 4),
-        "AZH": ("history/units/AZH.txt", [367, 493, 8234], 3),
+        "EFL": ("history/units/EFL.txt", [259, 8057, 6495, 6331, 6495], 5),
+        "AZH": ("history/units/AZH.txt", [367, 493, 8234, 493], 4),
     }
     for tag, (
         relative,
@@ -2948,7 +2950,7 @@ def main() -> int:
         ]
         check(
             units.count("division = {") == expected_divisions,
-            f"{tag} must begin with {expected_divisions} deliberately weak divisions",
+            f"{tag} must begin with {expected_divisions} divisions",
         )
         check(
             locations == expected_locations,
@@ -3296,10 +3298,11 @@ def main() -> int:
         "ADISCORD_nam_debug_resolve_uprising_victory" not in loc,
         "obsolete uprising-victory debug localisation remains",
     )
-    check(
-        loc.count("§RDEBUG:§!") == 13,
-        "all thirteen debug entry points need the red DEBUG prefix",
-    )
+    for key in re.findall(r"(?m)^\t(ADISCORD_nam_debug_\w+) = \{", debug_decisions):
+        check(
+            re.search(rf'(?m)^ {key}:\d* "§RDEBUG:§! ', loc) is not None,
+            f"{key} needs the red DEBUG prefix",
+        )
     for weber_key in (
         "ADISCORD_nam_resource_war.2.d",
         "ADISCORD_nam_resource_news.5.d",

@@ -19,7 +19,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_conscription_rolls
 		icon = GFX_focus_NAM_oilfield_militia
-		x = 8
+		x = 10
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER }
@@ -60,6 +60,7 @@ focus_tree = {
 				limit = { has_idea = all_adults_serve }
 				add_ideas = scraping_the_barrel
 			}
+			else = { custom_effect_tooltip = NAM_war_conscription_rolls_preview_tt }
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -67,7 +68,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_short_training
 		icon = GFX_focus_NAM_oilfield_militia
-		x = 9
+		x = 12
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER }
@@ -95,7 +96,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_veteran_cadres
 		icon = GFX_focus_NAM_metropolitan_instructors
-		x = 11
+		x = 14
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
@@ -123,7 +124,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_replacement_school
 		icon = GFX_focus_NAM_metropolitan_instructors
-		x = 10
+		x = 13
 		y = 4
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -145,14 +146,25 @@ focus_tree = {
 			army_experience = 15
 			unlock_decision_tooltip = NAM_war_frontline_instructors
 			custom_effect_tooltip = NAM_war_frontline_instructors_unlock_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_war_replacement_school_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_attack value = 0.01 }
+				add_to_variable = { var = NAM_gar_army_defence value = 0.01 }
+				NAM_refresh_garrison = yes
+			}
 		}
 		ai_will_do = { base = 70 }
 	}
 
 	focus = {
 		id = NAM_war_harbour_workshops
-		icon = GFX_focus_VAL_Marine_Contract_Corps
-		x = 16
+		icon = GFX_focus_NAM_repair_yard
+		x = 23
 		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -209,7 +221,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_replacement_aircraft
 		icon = GFX_focus_RUS_aircraft_workshops
-		x = 20
+		x = 28
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP }
@@ -242,8 +254,8 @@ focus_tree = {
 
 	focus = {
 		id = NAM_alarm
-		icon = GFX_focus_NAM_basin_is_ours
-		x = 12
+		icon = GFX_focus_NAM_alarm
+		x = 16
 		y = 0
 		cost = 1
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -270,7 +282,7 @@ focus_tree = {
 	focus = {
 		id = NAM_hold_basin
 		icon = GFX_focus_NAM_imperial_gendarmes
-		x = 6
+		x = 7
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -310,8 +322,8 @@ focus_tree = {
 
 	focus = {
 		id = NAM_relief_columns
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
-		x = 10
+		icon = GFX_focus_NAM_relief_columns
+		x = 13
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -343,7 +355,7 @@ focus_tree = {
 	focus = {
 		id = NAM_discipline_of_seals
 		icon = GFX_focus_NAM_rom_address
-		x = 6
+		x = 7
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
@@ -376,7 +388,7 @@ focus_tree = {
 	focus = {
 		id = NAM_counterstroke
 		icon = GFX_focus_NAM_basin_is_ours
-		x = 8
+		x = 10
 		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -412,7 +424,7 @@ focus_tree = {
 	focus = {
 		id = NAM_volunteer_levies
 		icon = GFX_focus_NAM_oilfield_militia
-		x = 10
+		x = 13
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER }
@@ -443,7 +455,7 @@ focus_tree = {
 	focus = {
 		id = NAM_scorched_wells
 		icon = GFX_focus_NAM_sand_runs_out
-		x = 12
+		x = 17
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ARMY_XP }
@@ -472,7 +484,7 @@ focus_tree = {
 	focus = {
 		id = NAM_wells_under_guard
 		icon = GFX_focus_NAM_imperial_gendarmes
-		x = 14
+		x = 19
 		y = 1
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_STABILITY }
@@ -529,7 +541,7 @@ focus_tree = {
 	focus = {
 		id = NAM_last_reserve
 		icon = GFX_focus_NAM_concealed_reserve
-		x = 13
+		x = 18
 		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -568,7 +580,7 @@ focus_tree = {
 	focus = {
 		id = NAM_district_volunteers
 		icon = GFX_focus_NAM_oilfield_militia
-		x = 12
+		x = 17
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
@@ -604,7 +616,7 @@ focus_tree = {
 	focus = {
 		id = NAM_martial_seals
 		icon = GFX_focus_NAM_basin_is_ours
-		x = 14
+		x = 19
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_WAR_SUPPORT }
@@ -640,7 +652,7 @@ focus_tree = {
 	focus = {
 		id = NAM_oil_score
 		icon = GFX_focus_NAM_well_register
-		x = 13
+		x = 18
 		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_INDUSTRY }
@@ -725,6 +737,16 @@ focus_tree = {
 				idea = NAM_war_depot_network_idea
 				days = 180
 			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_war_depot_network_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_supply_consumption value = -0.02 }
+				NAM_refresh_garrison = yes
+			}
 		}
 		ai_will_do = { base = 70 }
 	}
@@ -754,6 +776,16 @@ focus_tree = {
 			add_timed_idea = {
 				idea = NAM_war_mobile_workshops_idea
 				days = 180
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_war_mobile_workshops_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_speed value = 0.02 }
+				NAM_refresh_garrison = yes
 			}
 		}
 		ai_will_do = { base = 70 }
@@ -855,8 +887,8 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_naval_staff
-		icon = GFX_focus_VAL_Contract_General_Staff
-		x = 16
+		icon = GFX_focus_NAM_naval_staff
+		x = 23
 		y = 1
 		cost = 1
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
@@ -886,8 +918,8 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_convoy_escort
-		icon = GFX_focus_VAL_Marine_Contract_Corps
-		x = 15
+		icon = GFX_focus_NAM_escort_school
+		x = 22
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
@@ -916,8 +948,8 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_coastal_batteries
-		icon = GFX_focus_NAM_imperial_gendarmes
-		x = 17
+		icon = GFX_focus_NAM_coastal_battalions
+		x = 24
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
@@ -958,7 +990,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_field_airfields
 		icon = GFX_focus_RUS_capital_airfields
-		x = 20
+		x = 28
 		y = 1
 		cost = 1
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
@@ -992,8 +1024,8 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_interceptor_control
-		icon = GFX_focus_RUS_fighter_cover
-		x = 19
+		icon = GFX_focus_NAM_air_interceptors
+		x = 27
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
@@ -1022,8 +1054,8 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_air_ground_liaison
-		icon = GFX_focus_RUS_air_ground_coordination
-		x = 21
+		icon = GFX_focus_NAM_air_support
+		x = 29
 		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
@@ -1188,7 +1220,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_fuel_barter
 		icon = GFX_focus_NAM_well_register
-		x = 13
+		x = 18
 		y = 5
 		cost = 1
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -1216,7 +1248,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_fuel_discipline
 		icon = GFX_focus_VAL_Morns_Supply_Trains
-		x = 12
+		x = 17
 		y = 6
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -1247,7 +1279,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_extraction_surge
 		icon = GFX_focus_NAM_well_register
-		x = 14
+		x = 19
 		y = 6
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -1277,8 +1309,8 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_naval_repair_service
-		icon = GFX_focus_VAL_Marine_Contract_Corps
-		x = 16
+		icon = GFX_focus_NAM_repair_yard
+		x = 23
 		y = 4
 		cost = 1
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
@@ -1314,8 +1346,8 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_air_maintenance
-		icon = GFX_focus_RUS_aircraft_workshops
-		x = 20
+		icon = GFX_focus_NAM_air_ground_service
+		x = 28
 		y = 4
 		cost = 1
 		search_filters = { FOCUS_FILTER_AIR_XP }
@@ -1344,7 +1376,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_counterbattery
 		icon = GFX_focus_RUS_artillery_tables
-		x = 6
+		x = 7
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_RESEARCH }

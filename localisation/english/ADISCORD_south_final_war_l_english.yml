@@ -163,6 +163,7 @@
  ADISCORD_south_strain_crisis:0 "Cost of the war: §R[?ADISCORD_south_war_strain|0]§!/100 - §Rthe home front is giving way.§!"
  ADISCORD_south_war_strain_dynamic:0 "Cost of the War"
  ADISCORD_south_district_order:0 "Order: Take [FROM.GetName]"
+ ADISCORD_south_district_order_result_tt:0 "If our side takes [FROM.GetName] within §Y70§! £time_texticon, we gain §G+75§! £political_power_texticon and §G+5%§! £war_support_modifiericons_texticon. The cost of the war falls by §G8§!. If time runs out, the cost rises by §R4§! and the failed order penalty applies."
  ADISCORD_south_district_order_desc:0 "Staff officers spread the district map across the table and draw arrows to its stations and crossroads. The order will go to the troops with a date that no one may move."
  ADISCORD_south_cost_district_order:0 "§Y50§! £political_power_texticon §Y25§! £command_power_texticon"
  ADISCORD_south_cost_district_order_blocked:0 "§R50§! £political_power_texticon §R25§! £command_power_texticon"

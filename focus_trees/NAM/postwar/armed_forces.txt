@@ -2,7 +2,7 @@
 	focus = {
 		id = NAM_veterans_return
 		relative_position_id = NAM_recognition
-		x = 3
+		x = 15
 		y = 1
 		icon = GFX_focus_NAM_oilfield_militia
 		cost = 3
@@ -34,9 +34,9 @@
 	focus = {
 		id = NAM_svetlogorsk_shipyards
 		relative_position_id = NAM_pw_naval_review
-		x = -1
+		x = 1
 		y = 1
-		icon = GFX_focus_NAM_harbour_service
+		icon = GFX_focus_NAM_naval_construction
 		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -133,7 +133,7 @@
 	focus = {
 		id = NAM_pw_power_reserve
 		relative_position_id = NAM_pw_air_review
-		x = 6
+		x = 10
 		y = 2
 		icon = GFX_focus_RUS_bunker_power_school
 		cost = 3
@@ -159,7 +159,7 @@
 	focus = {
 		id = NAM_pw_army_review
 		relative_position_id = NAM_veterans_return
-		x = 15
+		x = 25
 		y = 1
 		icon = GFX_focus_NAM_quiet_officer_lists
 		cost = 2
@@ -185,7 +185,7 @@
 	focus = {
 		id = NAM_pw_breakthrough_army
 		relative_position_id = NAM_pw_army_review
-		x = 3
+		x = 5
 		y = 2
 		icon = GFX_focus_NAM_mobile_columns
 		cost = 3
@@ -230,7 +230,7 @@
 	focus = {
 		id = NAM_pw_mobile_army
 		relative_position_id = NAM_pw_army_review
-		x = 0
+		x = 10
 		y = 2
 		icon = GFX_focus_NAM_mobile_columns
 		cost = 3
@@ -275,7 +275,7 @@
 	focus = {
 		id = NAM_pw_reserve_centres
 		relative_position_id = NAM_pw_army_review
-		x = 3
+		x = 15
 		y = 3
 		icon = GFX_focus_NAM_concealed_reserve
 		cost = 3
@@ -294,6 +294,16 @@
 		continue_if_invalid = no
 		completion_reward = {
 			custom_effect_tooltip = NAM_pw_reserve_network_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_reserve_centres_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_supply_consumption value = -0.16 }
+				NAM_refresh_garrison = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -301,7 +311,7 @@
 	focus = {
 		id = NAM_pw_engineer_units
 		relative_position_id = NAM_pw_army_review
-		x = 9
+		x = 5
 		y = 3
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
@@ -327,7 +337,7 @@
 	focus = {
 		id = NAM_pw_field_workshops
 		relative_position_id = NAM_pw_army_review
-		x = 10
+		x = 7
 		y = 4
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 3
@@ -362,7 +372,7 @@
 	focus = {
 		id = NAM_pw_artillery_observers
 		relative_position_id = NAM_pw_army_review
-		x = 2
+		x = 7
 		y = 1
 		icon = GFX_focus_NAM_metropolitan_depots
 		cost = 2
@@ -397,7 +407,7 @@
 	focus = {
 		id = NAM_pw_staff_exercises
 		relative_position_id = NAM_pw_army_review
-		x = 6
+		x = 10
 		y = 3
 		icon = GFX_focus_VAL_Contract_General_Staff
 		cost = 2
@@ -431,6 +441,17 @@
 				custom_effect_tooltip = NAM_mil_mobile_surge_unlock_tt
 			}
 			custom_effect_tooltip = NAM_pw_staff_operations_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_staff_exercises_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_speed value = 0.17 }
+				add_to_variable = { var = NAM_gar_army_attack value = 0.06 }
+				NAM_refresh_garrison = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -438,7 +459,7 @@
 	focus = {
 		id = NAM_pw_combined_arms
 		relative_position_id = NAM_pw_army_review
-		x = 9
+		x = 5
 		y = 5
 		icon = GFX_focus_NAM_metropolitan_depots
 		cost = 2
@@ -471,6 +492,10 @@
 				}
 				custom_effect_tooltip = NAM_pw_combined_carriers_tt
 			}
+			else_if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_pw_engineer_units } } }
+				custom_effect_tooltip = NAM_pw_combined_arms_preview_tt
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -478,7 +503,7 @@
 	focus = {
 		id = NAM_pw_southern_army
 		relative_position_id = NAM_pw_army_review
-		x = 6
+		x = 12
 		y = 4
 		icon = GFX_focus_NAM_oilfield_militia
 		cost = 3
@@ -522,8 +547,9 @@
 			hidden_effect = {
 				add_to_variable = {
 					var = NAM_gar_army_defence
-					value = 0.04
+					value = 0.06
 				}
+				add_to_variable = { var = NAM_gar_max_dig_in value = 3 }
 				add_to_variable = {
 					var = NAM_gar_army_org
 					value = 0.03
@@ -537,9 +563,9 @@
 	focus = {
 		id = NAM_pw_naval_review
 		relative_position_id = NAM_veterans_return
-		x = 12
+		x = 19
 		y = 1
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_active_squadron
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -575,9 +601,9 @@
 	focus = {
 		id = NAM_pw_escort_fleet
 		relative_position_id = NAM_pw_naval_review
-		x = 1
+		x = 0
 		y = 4
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_escort_school
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -633,9 +659,9 @@
 	focus = {
 		id = NAM_pw_strike_fleet
 		relative_position_id = NAM_pw_naval_review
-		x = 4
+		x = 5
 		y = 4
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_active_squadron
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -691,9 +717,9 @@
 	focus = {
 		id = NAM_pw_naval_workshops
 		relative_position_id = NAM_pw_naval_review
-		x = 1
+		x = 3
 		y = 3
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
+		icon = GFX_focus_NAM_repair_yard
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -710,6 +736,16 @@
 		completion_reward = {
 			unlock_decision_tooltip = NAM_program_naval_workshops
 			custom_effect_tooltip = NAM_program_naval_workshops_unlock_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_navy_dummy_idea
+					add_idea = NAM_navy_repair_yard_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_navy_repair_speed value = 0.15 }
+				NAM_refresh_navy = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -717,8 +753,8 @@
 	focus = {
 		id = NAM_pw_crew_schools
 		relative_position_id = NAM_pw_naval_review
-		x = 3
-		y = 5
+		x = 1
+		y = 6
 		icon = GFX_focus_NAM_oilfield_militia
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
@@ -754,7 +790,7 @@
 	focus = {
 		id = NAM_pw_naval_fuel_depots
 		relative_position_id = NAM_pw_naval_review
-		x = 2
+		x = 6
 		y = 1
 		icon = GFX_focus_NAM_well_register
 		cost = 3
@@ -780,7 +816,7 @@
 	focus = {
 		id = NAM_pw_landing_supply
 		relative_position_id = NAM_pw_naval_review
-		x = 0
+		x = 5
 		y = 2
 		icon = GFX_focus_VAL_Marine_Contract_Corps
 		cost = 3
@@ -815,9 +851,9 @@
 	focus = {
 		id = NAM_pw_naval_service
 		relative_position_id = NAM_pw_naval_review
-		x = 0
+		x = 6
 		y = 5
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_active_squadron
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -854,6 +890,7 @@
 					var = NAM_navy_repair_speed
 					value = 0.15
 				}
+				add_to_variable = { var = NAM_navy_coordination value = 0.20 }
 				NAM_refresh_navy = yes
 			}
 		}
@@ -863,9 +900,9 @@
 	focus = {
 		id = NAM_pw_air_review
 		relative_position_id = NAM_veterans_return
-		x = 18
+		x = 9
 		y = 1
-		icon = GFX_focus_RUS_scientists_at_headquarters
+		icon = GFX_focus_NAM_air_operations
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -898,9 +935,9 @@
 	focus = {
 		id = NAM_pw_air_defence
 		relative_position_id = NAM_pw_air_review
-		x = 16
-		y = 3
-		icon = GFX_focus_RUS_fighter_cover
+		x = 5
+		y = 4
+		icon = GFX_focus_NAM_air_interceptors
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -937,9 +974,9 @@
 	focus = {
 		id = NAM_pw_frontline_air
 		relative_position_id = NAM_pw_air_review
-		x = 13
-		y = 3
-		icon = GFX_focus_RUS_air_ground_coordination
+		x = 0
+		y = 4
+		icon = GFX_focus_NAM_air_support
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -976,8 +1013,8 @@
 	focus = {
 		id = NAM_pw_airfield_network
 		relative_position_id = NAM_pw_air_review
-		x = 13
-		y = 2
+		x = 6
+		y = 1
 		icon = GFX_focus_RUS_capital_airfields
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
@@ -1002,9 +1039,9 @@
 	focus = {
 		id = NAM_pw_flight_schools
 		relative_position_id = NAM_pw_air_review
-		x = 16
-		y = 2
-		icon = GFX_focus_RUS_flight_school
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_flight_school
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1028,8 +1065,8 @@
 	focus = {
 		id = NAM_pw_radar_posts
 		relative_position_id = NAM_pw_air_review
-		x = 9
-		y = 2
+		x = 8
+		y = 3
 		icon = GFX_focus_RUS_air_control_network
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
@@ -1054,9 +1091,9 @@
 	focus = {
 		id = NAM_pw_engine_workshops
 		relative_position_id = NAM_pw_air_review
-		x = 13
-		y = 4
-		icon = GFX_focus_RUS_aircraft_workshops
+		x = 3
+		y = 5
+		icon = GFX_focus_NAM_air_ground_service
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1098,8 +1135,8 @@
 	focus = {
 		id = NAM_pw_air_supply
 		relative_position_id = NAM_pw_air_review
-		x = 17
-		y = 4
+		x = 3
+		y = 3
 		icon = GFX_focus_RUS_aviation_fuel_reserve
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
@@ -1125,9 +1162,9 @@
 	focus = {
 		id = NAM_pw_ground_control
 		relative_position_id = NAM_pw_air_review
-		x = 10
-		y = 3
-		icon = GFX_focus_RUS_air_control_network
+		x = 8
+		y = 5
+		icon = GFX_focus_NAM_air_operations
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1163,9 +1200,9 @@
 	focus = {
 		id = NAM_pw_southern_air_command
 		relative_position_id = NAM_pw_air_review
-		x = 12
-		y = 5
-		icon = GFX_focus_RUS_scientists_at_headquarters
+		x = 6
+		y = 6
+		icon = GFX_focus_NAM_air_operations
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1186,6 +1223,17 @@
 		continue_if_invalid = no
 		completion_reward = {
 			custom_effect_tooltip = NAM_pw_air_batches_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_air_dummy_idea
+					add_idea = NAM_pw_southern_air_command_air_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_air_accidents value = -0.25 }
+				add_to_variable = { var = NAM_air_mission_efficiency value = 0.18 }
+				NAM_refresh_air = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}

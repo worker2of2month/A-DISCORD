@@ -43,6 +43,7 @@ ADISCORD_south_final_war_category = {
 		}
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_district_order_result_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -253,6 +254,7 @@ ADISCORD_south_final_war_category = {
 		days_re_enable = 90
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_expedition_request_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -261,7 +263,6 @@ ADISCORD_south_final_war_category = {
 						check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
 					}
 				}
-				custom_effect_tooltip = ADISCORD_south_expedition_request_tt
 				hidden_effect = {
 					ADISCORD_south_pay_expedition = yes
 					set_country_flag = ADISCORD_south_expedition_pending
@@ -341,6 +342,7 @@ ADISCORD_south_final_war_category = {
 		days_re_enable = 120
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_defector_request_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -349,7 +351,6 @@ ADISCORD_south_final_war_category = {
 					}
 				}
 				add_political_power = -80
-				custom_effect_tooltip = ADISCORD_south_defector_request_tt
 				hidden_effect = {
 					set_country_flag = ADISCORD_south_defector_pending
 					FROM = { country_event = { id = ADISCORD_south.63 hours = 6 } }

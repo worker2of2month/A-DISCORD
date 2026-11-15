@@ -185,11 +185,9 @@ reward when all eligible lines were already built before the resource war.
 
 ## Task 12: Compact compromise routes and usable trade
 
-- [x] Merge joint fields into the oil union: two throughput units, the existing
-  250 treasury settlement and 50 political power for a first contract. Replace
-  its support-counter padding with conditional access to the existing fuel
-  contract programme, independent of the optional prewar bureau. Preserve the
-  combined narrative and update every permission consumer.
+- [x] Merge joint fields into the oil union. The treaty adds one berth, 250
+  treasury and 50 political power. Port contracts are available from campaign
+  start, including on a route that skipped the prewar bureau.
 - [x] Merge underground return into officer cadres. Compromise already grants
   the lost-field claims; preserve the officers' material rewards and war support,
   remove the redundant claim focus and reconnect the actual war declaration.

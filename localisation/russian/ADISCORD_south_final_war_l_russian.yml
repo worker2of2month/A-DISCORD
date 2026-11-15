@@ -163,6 +163,7 @@
  ADISCORD_south_strain_crisis:0 "Цена войны: §R[?ADISCORD_south_war_strain|0]§!/100 - §Rтыл не выдерживает.§!"
  ADISCORD_south_war_strain_dynamic:0 "Цена войны"
  ADISCORD_south_district_order:0 "Приказ: взять [FROM.GetName]"
+ ADISCORD_south_district_order_result_tt:0 "Если наша сторона возьмёт [FROM.GetName] за §Y70§! £time_texticon, мы получим §G+75§! £political_power_texticon и §G+5%§! £war_support_modifiericons_texticon. Цена войны снизится на §G8§!. Если срок истечёт, цена войны вырастет на §R4§! и начнёт действовать штраф за сорванный приказ."
  ADISCORD_south_district_order_desc:0 "Штабные офицеры раскладывают на столе карту района и чертят стрелки к его станциям и перекрёсткам. Приказ уйдёт в войска с датой, которую уже никто не вправе перенести."
  ADISCORD_south_cost_district_order:0 "§Y50§! £political_power_texticon §Y25§! £command_power_texticon"
  ADISCORD_south_cost_district_order_blocked:0 "§R50§! £political_power_texticon §R25§! £command_power_texticon"

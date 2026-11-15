@@ -82,6 +82,31 @@ ideas = {
 	}
 
 	country = {
+		NAM_private_tank_farms = {
+			picture = generic_stockpile_fuel
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				max_fuel_factor = -0.15
+				custom_modifier_tooltip = NAM_private_tank_farms_draw_tt
+			}
+		}
+
+		NAM_state_fuel_reserve = {
+			picture = generic_fuel_reserves
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				max_fuel_factor = 0.15
+				fuel_gain_factor = 0.10
+			}
+		}
+
 		# Keeps the starting disarmed_nation law: every other mobilization law
 		# checks this spirit. Removed by NAM_mobilisation_office or NAM_declare_mobilisation.
 		NAM_metropolitan_garrison_charter = {
@@ -1016,6 +1041,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				max_dig_in = 1
+				army_defence_factor = 0.02
 				supply_consumption_factor = -0.04
 				army_speed_factor = -0.03
 			}
@@ -1027,6 +1053,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				army_speed_factor = 0.05
+				army_attack_factor = 0.02
 				planning_speed = 0.1
 				supply_consumption_factor = 0.03
 			}
@@ -2148,6 +2175,34 @@ ideas = {
 			}
 		}
 
+		NAM_war_replacement_school_garrison_preview = {
+			name = NAM_garrison_dynamic
+			picture = GFX_idea_generic_fortify_the_borders
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.01
+				army_defence_factor = 0.01
+			}
+		}
+
+		NAM_war_depot_network_garrison_preview = {
+			name = NAM_garrison_dynamic
+			picture = GFX_idea_generic_fortify_the_borders
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.02
+			}
+		}
+
+		NAM_war_mobile_workshops_garrison_preview = {
+			name = NAM_garrison_dynamic
+			picture = GFX_idea_generic_fortify_the_borders
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.02
+			}
+		}
+
 		NAM_war_short_training_idea = {
 			picture = GFX_idea_NAM_national_spirit
 			allowed = { original_tag = NAM }
@@ -2224,7 +2279,7 @@ ideas = {
 				}
 			}
 			modifier = {
-				supply_consumption_factor = -0.1
+				supply_consumption_factor = -0.01
 				army_org_regain = 0.08
 			}
 		}
@@ -2252,7 +2307,7 @@ ideas = {
 			}
 			modifier = {
 				attrition = -0.15
-				army_speed_factor = 0.05
+				army_speed_factor = 0.02
 			}
 		}
 
@@ -2901,6 +2956,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.025
+				production_factory_efficiency_gain_factor = 0.05
 			}
 		}
 
@@ -2913,21 +2969,12 @@ ideas = {
 			}
 		}
 
-		NAM_pw_components_administration_preview = {
+		NAM_pw_chemical_works_administration_preview = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_national_spirit
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.04
-			}
-		}
-
-		NAM_pw_production_cycle_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
-			allowed = { always = no }
-			modifier = {
-				production_factory_efficiency_gain_factor = 0.05
 			}
 		}
 
@@ -2969,12 +3016,42 @@ ideas = {
 			}
 		}
 
+		NAM_pw_reserve_centres_garrison_preview = {
+			name = NAM_garrison_dynamic
+			picture = GFX_idea_generic_fortify_the_borders
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.16
+			}
+		}
+
+		NAM_pw_staff_exercises_garrison_preview = {
+			name = NAM_garrison_dynamic
+			picture = GFX_idea_generic_fortify_the_borders
+			allowed = { always = no }
+			modifier = {
+				army_speed_factor = 0.17
+				army_attack_factor = 0.06
+			}
+		}
+
+		NAM_pw_southern_air_command_air_preview = {
+			name = NAM_air_dynamic
+			picture = GFX_idea_generic_air_bonus
+			allowed = { always = no }
+			modifier = {
+				air_accidents_factor = -0.25
+				air_mission_efficiency = 0.18
+			}
+		}
+
 		NAM_pw_southern_army_garrison_preview = {
 			name = NAM_garrison_dynamic
 			picture = GFX_idea_generic_fortify_the_borders
 			allowed = { always = no }
 			modifier = {
-				army_defence_factor = 0.04
+				army_defence_factor = 0.06
+				max_dig_in = 3
 				army_org_factor = 0.03
 			}
 		}
@@ -2986,6 +3063,7 @@ ideas = {
 			modifier = {
 				amphibious_invasion = 0.08
 				repair_speed_factor = 0.15
+				naval_coordination = 0.20
 			}
 		}
 

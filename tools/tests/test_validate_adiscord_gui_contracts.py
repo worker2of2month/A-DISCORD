@@ -2957,6 +2957,25 @@ class TopbarTradeConstructionGuiContractTests(unittest.TestCase):
         for name in ('auto_import_priority_shortage_sub', 'auto_import_priority_shortage_add'):
             self.assert_gui_node(nodes, 'buttonType', name, ('auto_import_priority_entry',))
 
+    def test_auto_import_controls_clear_the_resource_filters(self):
+        gui = (ROOT / 'interface/countrytradeview.gui').read_text(encoding='utf-8-sig')
+        filter_top = _gui_position(gui_node_body(gui, 'filters'))[1]
+        header = gui_node_body(gui, 'trade_header')
+        header_bottom = _gui_position(header)[1] + _gui_size(header)[1]
+        # Icon widgets inherit the hit area of one texture frame.
+        sprite_heights = {
+            'auto_import_checkbox': 32,
+            'auto_import_budget_bg': 27,
+            'auto_import_priority_open_button': 31,
+        }
+        for name in (*sprite_heights, 'auto_import_budget_txt', 'auto_import_label', 'auto_import_slider'):
+            with self.subTest(name=name):
+                body = gui_node_body(gui, name)
+                top = _gui_position(body)[1]
+                height = sprite_heights[name] if name in sprite_heights else _gui_size(body)[1]
+                self.assertGreaterEqual(top, header_bottom)
+                self.assertLessEqual(top + height, filter_top)
+
     def test_construction_repair_controls_cover_every_native_entry(self):
         gui = (ROOT / 'interface/countryconstructionsview.gui').read_text(encoding='utf-8-sig')
         nodes = named_gui_nodes(gui)

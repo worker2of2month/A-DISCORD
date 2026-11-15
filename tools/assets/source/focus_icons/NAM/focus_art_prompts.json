@@ -1909,6 +1909,204 @@
   },
   "focus_compositions": [
     {
+      "focus_id": "NAM_machine_shops",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_machine_shops",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_machine_shops.png"
+    },
+    {
+      "focus_id": "NAM_technical_college",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_technical_college",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_technical_college.png"
+    },
+    {
+      "focus_id": "NAM_basin_roads",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_basin_roads",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_basin_roads.png"
+    },
+    {
+      "focus_id": "NAM_refinery_programme",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_refinery_programme",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_refinery_programme.png"
+    },
+    {
+      "focus_id": "NAM_domestic_refining",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_domestic_refining",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_domestic_refining.png"
+    },
+    {
+      "focus_id": "NAM_export_quays",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_export_quays",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_export_quays.png"
+    },
+    {
+      "focus_id": "NAM_overseas_buyers",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_overseas_buyers",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_overseas_buyers.png"
+    },
+    {
+      "focus_id": "NAM_restitution_desk",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_restitution_desk",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_restitution_desk.png"
+    },
+    {
+      "focus_id": "NAM_fuel_leverage",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_fuel_leverage",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_fuel_leverage.png"
+    },
+    {
+      "focus_id": "NAM_court_azhar",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_court_azhar",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_court_azhar.png"
+    },
+    {
+      "focus_id": "NAM_general_staff_plan",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_general_staff_plan",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_general_staff_plan.png"
+    },
+    {
+      "focus_id": "NAM_flight_school",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_flight_school",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_flight_school.png"
+    },
+    {
+      "focus_id": "NAM_air_interceptors",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_air_interceptors",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_air_interceptors.png"
+    },
+    {
+      "focus_id": "NAM_air_ground_service",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_air_ground_service",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_air_ground_service.png"
+    },
+    {
+      "focus_id": "NAM_air_operations",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_air_operations",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_air_operations.png"
+    },
+    {
+      "focus_id": "NAM_air_support",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_air_support",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_air_support.png"
+    },
+    {
+      "focus_id": "NAM_coastal_battalions",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_coastal_battalions",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_coastal_battalions.png"
+    },
+    {
+      "focus_id": "NAM_escort_school",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_escort_school",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_escort_school.png"
+    },
+    {
+      "focus_id": "NAM_repair_yard",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_repair_yard",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_repair_yard.png"
+    },
+    {
+      "focus_id": "NAM_basin_reconnaissance",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_basin_reconnaissance",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_basin_reconnaissance.png"
+    },
+    {
+      "focus_id": "NAM_island_accounts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_island_accounts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_island_accounts.png"
+    },
+    {
+      "focus_id": "NAM_island_levy_office",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_island_levy_office",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_island_levy_office.png"
+    },
+    {
+      "focus_id": "NAM_island_concession",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_island_concession",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_island_concession.png"
+    },
+    {
+      "focus_id": "NAM_naval_staff",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_naval_staff",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_naval_staff.png"
+    },
+    {
+      "focus_id": "NAM_naval_construction",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_naval_construction",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_naval_construction.png"
+    },
+    {
+      "focus_id": "NAM_basin_minefields",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_basin_minefields",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_basin_minefields.png"
+    },
+    {
+      "focus_id": "NAM_active_squadron",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_active_squadron",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_active_squadron.png"
+    },
+    {
+      "focus_id": "NAM_relief_columns",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_relief_columns",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_relief_columns.png"
+    },
+    {
+      "focus_id": "NAM_alarm",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_alarm",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_alarm.png"
+    },
+    {
+      "focus_id": "NAM_seal_courts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_seal_courts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_seal_courts.png"
+    },
+    {
+      "focus_id": "NAM_districts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_districts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_districts.png"
+    },
+    {
+      "focus_id": "NAM_vertical",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_vertical",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_vertical.png"
+    },
+    {
+      "focus_id": "NAM_civilian_combine",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_civilian_combine",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_civilian_combine.png"
+    },
+    {
       "focus_id": "NAM_cache_hunters",
       "export_runtime": false,
       "sprite": "GFX_focus_NAM_cache_hunters",
@@ -2605,6 +2803,494 @@
         "C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/tools/assets/source/focus_icons/NAM/desert_rocky_backdrop.png"
       ],
       "generated_preview": "C:\\Users\\Admin\\.codex\\generated_images\\01a1843b-bf11-7792-aa58-8379310415d6\\exec-be2860c1-201f-45ce-b58c-77e876c56077.png"
+    },
+    {
+      "focus_id": "NAM_naval_staff",
+      "file": "nam_naval_staff_naval_composition.png",
+      "prompt": "Make a finished independent transparent focus icon composition for NAM. Use all three supplied subject reference images, preserving each design. Naval Staff. Put the chart plotter with bright parchment large in the right foreground, the signal flags waving up left behind it, and a smaller distant dark freighter in the gap at upper right. Overlap them like a hand-built dramatic photographic cutout. Industrial, dark umber shadows, honey-amber edges, physically natural materials. A strong broad triangular cutout with readable silhouettes at 150px. Entire group visible inside a landscape 3:2 canvas, small transparent margins. No text, no frame, no rectangular background, no extra items. Transparent alpha around the whole irregular silhouette.",
+      "source_assets": [
+        "naval_staff_plotter.png",
+        "naval_staff_signal_flags.png",
+        "return_cargo_freighter.png"
+      ],
+      "export_runtime": false
+    },
+    {
+      "focus_id": "NAM_basin_minefields",
+      "file": "nam_basin_minefields_naval_composition.png",
+      "prompt": "Make a finished independent transparent focus icon composition for NAM. Use all three supplied subject reference images, preserving each design. Minefields of the Basin. A solitary minesweeper steams through a marked channel at dusk. The red warning buoy rises large in the right foreground; the hull overlaps it from left rear, rising mast distinct further left in the silhouette; make both strong shapes. A slim torn-edged sliver of glinting waves ties the bottom of the two together. The red buoy is the focus. Industrial, dark umber shadows, honey-amber edges, physically natural materials. A strong broad triangular cutout with readable silhouettes at 150px. Entire group visible inside a landscape 3:2 canvas, small transparent margins. No text, no frame, no rectangular background, no extra items. Transparent alpha around the whole irregular silhouette.",
+      "source_assets": [
+        "basin_minefields_minesweeper.png",
+        "basin_minefields_channel_buoy.png",
+        "return_cargo_harbour_water.png"
+      ],
+      "export_runtime": false
+    },
+    {
+      "file": "nam_repair_yard_propeller_composition.png",
+      "focus_id": "NAM_repair_yard",
+      "prompt": "Create a finished historical grand NAM focus cutout, 'Our own repair quay'. The first image's giant four-lobed bronze propeller with dark slings is the dominant subject, occupying about 65 percent of the height and center-left. Its metal blades glow with reflected honey-amber light and stand distinctly against transparency. The second reference shows the worn dark freighter being repaired: use an oblique portion of the riveted hull looming in the right back, with a tiny mechanic carefully guiding the hanging propeller by hand at lower right for scale. A crane jib rising from the hull reaches over it, hanging it by one short taut cable. Incredibly clear shape: the four sweeping blades and jewel-like center read from across the focus tree. Historic industrial photo-collage cutout, actual transparency around irregular silhouette, no badges or lettering, no rectangular background, no shipyard panoramas; fit entire group including crane with clear margins, compact 3:2 crop. No paperwork. Use the last icon as a palette/style reference only.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_court_azhar_flag_composition.png",
+      "focus_id": "NAM_court_azhar",
+      "source_assets": [
+        "nam_court_azhar_composition.png",
+        "court_azhar_national_flag.png"
+      ],
+      "export_runtime": false,
+      "composition": "Azhar flag behind the original negotiation scene, with its roundel above the handshake."
+    },
+    {
+      "file": "nam_restitution_desk_monumental_composition.png",
+      "focus_id": "NAM_restitution_desk",
+      "export_runtime": false,
+      "canvas": [
+        1560,
+        1170
+      ],
+      "layers": [
+        {
+          "file": "golden_sun.png",
+          "rect": [
+            52,
+            310,
+            580,
+            580
+          ]
+        },
+        {
+          "file": "restitution_archive_portico.png",
+          "rect": [
+            6,
+            376,
+            1070,
+            714
+          ]
+        },
+        {
+          "file": "restitution_imperial_charter.png",
+          "rect": [
+            640,
+            8,
+            900,
+            1060
+          ]
+        },
+        {
+          "file": "reserve_low_fog.png",
+          "rect": [
+            4,
+            970,
+            1530,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "file": "nam_export_quays_economic_revised.png",
+      "focus_id": "NAM_export_quays",
+      "generator": "Built-in image_gen",
+      "source_assets": [
+        "export_quays_loading_arm.png",
+        "return_cargo_freighter.png",
+        "one_budget_open_treasury_box.png",
+        "golden_sun.png"
+      ],
+      "prompt": "One final transparent NAM Hearts of Iron IV focus collage, 'Oil pays for the state'. Use precisely these three reference subjects. Dominant foreground: monumental open iron treasury cashbox seen low and slightly from above so you see the ivory banknote bundles and coin rolls. Its dark open lid creates a great sloping plane with gold rim. The near corner projects to the viewer like the prow on the style reference. It occupies the LEFT foreground and two-thirds of the composition. In the distance at right a small working oil dock: an articulated oil loading arm arcs cleanly above the stern of a much smaller cargo ship, a metaphor for the export revenue filling the treasury. Make the distant vessel visibly subordinate so the icon first reads as a treasure chest of public money. Maintain worn black metal, bronze and gold light, real ivory paper, saturated amber sunset reflections. Deliberate icon silhouette with clear gaps, all objects completely in frame. Transparent alpha around the objects, no solid background, frame, text, extra props, people or labels. Landscape 3:2 with the tightly grouped masses readable at 150px. Reference 4 is visual style only.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_domestic_refining_economic_revised.png",
+      "focus_id": "NAM_domestic_refining",
+      "generator": "Built-in image_gen",
+      "source_assets": [
+        "domestic_refining_fractionation_tower.png",
+        "industrial_factories.png",
+        "reserve_oil_valve.png"
+      ],
+      "prompt": "Make a NEW composition for this NAM national focus, borrowing the physical subject design from the reference but applying the specific camera, mood and silhouette described below. Monumental vintage industrial photomontage cutout for a dark HOI4 tree. Strong three-dimensional masses readable at 150px, dark steel and sparse directional amber edge light, natural colors. Three-quarter landscape 3:2. Absolutely no sun/moon/disc, painted sky, heavy glow, titles, words, generic badge or frame. Actual transparent exterior, full group inside image. A great cast-iron oil supply elbow in the LEFT foreground curves inward to a home refinery; the pipe has a large oxidized red handwheel seen obliquely, with pipes leading to a squat factory and a tall fractionating tower on the RIGHT. Low near-ground view. Emphasize oil flowing into the local workshops, three solid forms. Cold overcast light on the pipe and muted warm window slits in factory. No sunshine, no glowing sky and no workers.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_overseas_buyers_economic_revised.png",
+      "focus_id": "NAM_overseas_buyers",
+      "generator": "Built-in image_gen",
+      "source_assets": [
+        "overseas_buyers_ocean_tanker.png",
+        "return_cargo_harbour_water.png",
+        "export_quays_loading_arm.png"
+      ],
+      "prompt": "Make a NEW composition for this NAM national focus, borrowing the physical subject design from the reference but applying the specific camera, mood and silhouette described below. Monumental vintage industrial photomontage cutout for a dark HOI4 tree. Strong three-dimensional masses readable at 150px, dark steel and sparse directional amber edge light, natural colors. Three-quarter landscape 3:2. Absolutely no sun/moon/disc, painted sky, heavy glow, titles, words, generic badge or frame. Actual transparent exterior, full group inside image. A loaded ocean oil tanker is approaching broadside in three-quarter view. Its immense black bow facing left and rust-red waterline dominate, the deckhouse silhouette stacked high at right, a small shore-loading arm recedes behind. Ship's warm running lights reflected in a thin dark TEAL sea. Sea fog along the foot, cloudy night, no orange sky. Tightly cropped group on transparency with space around the hull; ship and water entirely visible.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_insured_cargoes_economic_revised.png",
+      "focus_id": "NAM_insured_cargoes",
+      "generator": "Built-in image_gen",
+      "source_assets": [
+        "insured_cargoes_spare_parts_crate.png",
+        "return_cargo_freighter.png",
+        "eternal_port_suspended_cargo.png"
+      ],
+      "prompt": "Make a NEW composition for this NAM national focus, borrowing the physical subject design from the reference but applying the specific camera, mood and silhouette described below. Monumental vintage industrial photomontage cutout for a dark HOI4 tree. Strong three-dimensional masses readable at 150px, dark steel and sparse directional amber edge light, natural colors. Three-quarter landscape 3:2. Absolutely no sun/moon/disc, painted sky, heavy glow, titles, words, generic badge or frame. Actual transparent exterior, full group inside image. A returning steamer has delivered machined spares. An enormous open slatted freight crate suspended diagonally on twin coarse slings occupies the entire front RIGHT: thick steel pump flanges are unmistakably visible in it. Left rear, the much smaller homebound ship's bridge and crane connect the load to its origin. The monumental near corner of the box, the two straps and oversized circular parts are the bold silhouette. Misty cool morning; pale silver on the steel, ochre wood. Restrained highlights from dock work lamps, absolutely no sun disc and no people.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_machine_shops_economic_revised.png",
+      "focus_id": "NAM_machine_shops",
+      "generator": "Built-in image_gen",
+      "source_assets": [
+        "machine_shops_metal_lathe.png",
+        "industrial_factories.png",
+        "engineer_depots_tool_rack.png",
+        "machine_shops_machined_bushing.png"
+      ],
+      "prompt": "New finished photographic cutout for a Hearts of Iron IV industrial NAM national focus, dramatic close low perspective, limited charcoal shadows and warm bronze material highlights with natural secondary colors. Designed as a high-contrast irregular icon with all main forms fully in frame. Literal transparent exterior and generous alpha around silhouette. No sun, disk, sky glow, halo, words, logos, captions or frame. Landscape 3:2. Dominant macro of a bright newly machined pump bushing gripped in the three jaws of a vintage dark iron lathe, projecting towards the viewer in the LOWER RIGHT. Diagonal polished spiral of cut steel catches a tiny amber work lamp. Handwheel and bed recede left into deep green workshop shadows, operator's hand just at control if needed. Strong silver-vs-charcoal contrast, attached chips; the empty central bore should be visible at 150 px. Tight triangular silhouette, no rectangular room.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_refinery_programme_economic_revised.png",
+      "focus_id": "NAM_refinery_programme",
+      "generator": "Built-in image_gen",
+      "source_assets": [
+        "refinery_programme_blueprint_roll.png",
+        "domestic_refining_fractionation_tower.png",
+        "technical_college_engineer.png"
+      ],
+      "prompt": "New finished photographic cutout for a Hearts of Iron IV industrial NAM national focus, dramatic close low perspective, limited charcoal shadows and warm bronze material highlights with natural secondary colors. Designed as a high-contrast irregular icon with all main forms fully in frame. Literal transparent exterior and generous alpha around silhouette. No sun, disk, sky glow, halo, words, logos, captions or frame. Landscape 3:2. Folded Prussian-blue refinery construction plans in the near left foreground come to life as a skyline of real bright silver fractionating towers rising BEHIND the page at right, geometrically aligned with the white elevation sketch. A strong diagonal paper fold leads from drawing to steel. Cool ivory on silver towers, muted blue paper and only a few warm brass work lamps. Hero is the PAPER becoming the tower, no people or hands.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_civilian_combine_economic_revised.png",
+      "focus_id": "NAM_civilian_combine",
+      "generator": "Built-in image_gen",
+      "source_assets": [
+        "civilian_combine_workers_housing.png",
+        "oil_derricks.png",
+        "civilian_combine_shift_workers.png"
+      ],
+      "prompt": "Make a NEW composition for this NAM national focus, borrowing the physical subject design from the reference but applying the specific camera, mood and silhouette described below. Monumental vintage industrial photomontage cutout for a dark HOI4 tree. Strong three-dimensional masses readable at 150px, dark steel and sparse directional amber edge light, natural colors. Three-quarter landscape 3:2. Absolutely no sun/moon/disc, painted sky, heavy glow, titles, words, generic badge or frame. Actual transparent exterior, full group inside image. No sun disk. Town at shift change. Monumental dark red brick residential corner looming on the LEFT, balconies and clotheslines recede toward a low courtyard workshop on the RIGHT where broad open doors spill a bright rectangle of amber light onto wet paving. One oil derrick half seen behind the roof, a few warm windows, everything else cool blue-black. Keep transparent open sky, no floor panel, organically taper edges. The lit workshop doorway is the narrative focal point.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_basin_roads_economic_revised.png",
+      "focus_id": "NAM_basin_roads",
+      "generator": "Built-in image_gen",
+      "source_assets": [
+        "basin_roads_road_roller.png",
+        "desert_rocky_backdrop.png",
+        "motor_pool_military_truck.png"
+      ],
+      "prompt": "New finished photographic cutout for a Hearts of Iron IV industrial NAM national focus, dramatic close low perspective, limited charcoal shadows and warm bronze material highlights with natural secondary colors. Designed as a high-contrast irregular icon with all main forms fully in frame. Literal transparent exterior and generous alpha around silhouette. No sun, disk, sky glow, halo, words, logos, captions or frame. Landscape 3:2. An immense worn steel road roller drum presses pale aggregate into a diagonal raised road curving from the LEFT LOWER foreground into a gorge at the far RIGHT; the roller seen low, moving outward, with rocky desert walls in the rear and a tiny civilian supply truck already using the paved stretch. Charcoal steel, ochre dust rolling out at the base, cool pale daylight with only a warm paint accent on the roller.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_technical_college_economic_revised.png",
+      "focus_id": "NAM_technical_college",
+      "generator": "Built-in image_gen",
+      "source_assets": [
+        "technical_college_engineer.png",
+        "refinery_programme_blueprint_roll.png",
+        "machine_shops_metal_lathe.png",
+        "technical_college_bearing_inspection.png"
+      ],
+      "prompt": "New finished photographic cutout for a Hearts of Iron IV industrial NAM national focus, dramatic close low perspective, limited charcoal shadows and warm bronze material highlights with natural secondary colors. Designed as a high-contrast irregular icon with all main forms fully in frame. Literal transparent exterior and generous alpha around silhouette. No sun, disk, sky glow, halo, words, logos, captions or frame. Landscape 3:2. Honor the young NAM engineer portrait reference precisely. Young engineer lifts a circular pump bearing to his eye for inspection. Engineer and bearing are the dominant foreground silhouette, a small dark teal lathe skims the lower right behind him, folded off-white instruction sheet lies unused on the lathe bed. Portrait filling frame, industrial naturalism. An offscreen workshop light glints on bearing and lights his cheek, keeping the hole clear. No visible light source or blueprint backdrop.",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_insured_cargoes_from_the_hold.png",
+      "focus_id": "NAM_insured_cargoes",
+      "source_assets": [
+        "insured_cargoes_hold_opening.png",
+        "insured_cargoes_home_quay_lights.png",
+        "insured_cargoes_hold_return_parts.png"
+      ],
+      "prompt": "View from the hold towards the port. Draw on 1536×1024 canvas, in back-to-front order using x,y,width,height: [[\"port\",170,300,1340,550],[\"hatch\",0,0,1536,1024],[\"parts\",-4,693,787,318]]",
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_contract_bureau_composition.png",
+      "focus_id": "NAM_contract_bureau",
+      "title": "Контрактное бюро",
+      "source_assets": [
+        "contract_bureau_typewriter.png",
+        "independence_state_seal.png",
+        "emergency_writ_sealed_dispatch.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: Typewriter in use, a state fuel contract emerging from the carriage, the official's seal poised nearby. Mix black typewriter body, pale folded form, silver key edges and a small burgundy wax accent.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_field_repair_crews_composition.png",
+      "focus_id": "NAM_field_repair_crews",
+      "title": "Ремонтные бригады промыслов",
+      "source_assets": [
+        "field_repair_crews_mechanic.png",
+        "reserve_oil_valve.png",
+        "quiet_wells_pumpjack.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: Mechanic on his knee turns a worn valve at the base of a pumpjack. Show gloved hands, wheel and profile of mechanism in one tight horizontal silhouette.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_deep_wells_composition.png",
+      "focus_id": "NAM_deep_wells",
+      "title": "Глубокие скважины",
+      "source_assets": [
+        "deep_wells_drill_bit.png",
+        "oil_derricks.png",
+        "technical_college_engineer.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: One massive three-cone bit suspended point down above the well collar, a driller inspecting the teeth, derrick uprights behind him. Make the dark toothed shape immediately legible.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_fuel_depots_composition.png",
+      "focus_id": "NAM_fuel_depots",
+      "title": "Хранилища гавани",
+      "source_assets": [
+        "fuel_depots_tank_farm.png",
+        "return_cargo_stone_quay.png",
+        "reserve_oil_valve.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: A stepped cluster of round storage tanks at the harbour, a short stretch of stone quay, large shut-off wheel in foreground. Distinctive overlapping circles and dome roofs, subdued steel-blue reflections on tank walls.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_second_drilling_crew_composition.png",
+      "focus_id": "NAM_second_drilling_crew",
+      "title": "Вторая буровая партия",
+      "source_assets": [
+        "second_drilling_crew_derrick_truck.png",
+        "desert_dune_backdrop.png",
+        "field_repair_crews_mechanic.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: A derrick truck arrives across low sand. Young mechanic steps down from cab carrying tools and an older driller signals the parking spot. Broad truck and folded mast are the main silhouette.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_count_garrisons_composition.png",
+      "focus_id": "NAM_count_garrisons",
+      "title": "Гарнизон на бумаге и на дороге",
+      "source_assets": [
+        "count_garrisons_rollcall_sergeant.png",
+        "quiet_lists_personnel_register.png",
+        "field_gendarmes_checkpoint_guard.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: A roll-call sergeant with a large roster weighs the long paper list against the single sentry visible at a dusty road post. Use the physical contrast in scale without a split screen.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_field_guards_composition.png",
+      "focus_id": "NAM_field_guards",
+      "title": "Армия опорных пунктов",
+      "source_assets": [
+        "field_guards_machinegun_bunker.png",
+        "desert_rocky_backdrop.png",
+        "oil_derricks.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: Quiet low sandbagged guard post beneath a distant pumpjack and ridge, its sentry watching a track. Concrete slit and sunlit watchful eyes form the focus; depict an ordinary watch scene.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_mobilisation_office_composition.png",
+      "focus_id": "NAM_mobilisation_office",
+      "title": "Мобилизационное управление",
+      "source_assets": [
+        "mobilisation_office_recruiting_officer.png",
+        "quiet_lists_personnel_register.png",
+        "reserve_rolls_reservist_identity_cards.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: Recruiting officer sorts reservist identity cards against the open muster register; the next recruit at the edge of the desk. Cards and hand in sharp front focus, face half-lit.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_engineer_depots_composition.png",
+      "focus_id": "NAM_engineer_depots",
+      "title": "Инструмент перед винтовкой",
+      "source_assets": [
+        "engineer_depots_tool_rack.png",
+        "depots_rifle_crate.png",
+        "line_engineers_sapper.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: An engineer draws a full-size shovel from the waiting tool rack; the closed weapons crate sits low behind the tools. Rake light separates the outlines of shovel, picks and timber.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_line_survey_composition.png",
+      "focus_id": "NAM_line_survey",
+      "title": "Съёмка рубежей",
+      "source_assets": [
+        "line_survey_theodolite.png",
+        "desert_rocky_backdrop.png",
+        "scene_field_surveyor.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: A surveyor peers through a brass theodolite across low sandstone ridges. Long horizontal sight line, the tripod and the surveyor form one readable form, field notebook tucked in his hand.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_motor_pool_composition.png",
+      "focus_id": "NAM_motor_pool",
+      "title": "Общий автомобильный парк",
+      "source_assets": [
+        "motor_pool_military_truck.png",
+        "desert_dune_backdrop.png",
+        "field_repair_crews_mechanic.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: One heavy motor-pool truck under a mechanic's inspection, two smaller truck cabs behind following the same perspective. Dusty amber horizon, open engine panel gives the leading truck character.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_line_engineers_composition.png",
+      "focus_id": "NAM_line_engineers",
+      "title": "Инженеры рубежей",
+      "source_assets": [
+        "line_engineers_sapper.png",
+        "field_guards_machinegun_bunker.png",
+        "general_staff_plan_map_board.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: Field engineer compares handwritten notes on a folded district map to a weathered concrete outpost. Natural terrain visible as a small contour under the boots, engineer and marked map are foreground.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_reserve_rolls_composition.png",
+      "focus_id": "NAM_reserve_rolls",
+      "title": "Списки резерва",
+      "source_assets": [
+        "reserve_rolls_reservist_identity_cards.png",
+        "quiet_lists_personnel_register.png",
+        "mobilisation_office_recruiting_officer.png"
+      ],
+      "prompt": "Make an overhead tabletop close-up icon on transparent background. No faces or portraits of live people. The HERO is a big diagonal FAN of four old individual reservist identity cards, each with a tiny sepia photo. A worn thumb turns the leading card. The cards are being filed between two large alphabetic tabs of an open olive-green personnel binder, with a brass registration clip. There is no full recruiter's body. The third reference is only for the uniform shown in the tiny ID photos. Fill a wide 1.75:1 silhouette with the large silver clip, fanned yellowed cards and dark binder. Clean true alpha. Recognizable immediately at 140 px, restrained warm NAM side lighting and tactile paper. No backdrop, landscape, captions, borders or extra objects.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_quartermaster_composition.png",
+      "focus_id": "NAM_quartermaster",
+      "title": "Склад знает свой фронт",
+      "source_assets": [
+        "quartermaster_supply_officer.png",
+        "depots_rifle_crate.png",
+        "motor_pool_military_truck.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: Quartermaster signs for a sealed shipment at a loading bay. Officer's face and one large timber equipment chest in foreground; a lorry behind them gives the goods a destination.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_port_arsenal_composition.png",
+      "focus_id": "NAM_port_arsenal",
+      "title": "Арсенал Южнобережья",
+      "source_assets": [
+        "port_arsenal_workshop.png",
+        "return_cargo_stone_quay.png",
+        "repair_yard_drydock_crane.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: A long port arsenal workshop opens directly onto a stone quay. Cargo crane above the open doors, fresh metal equipment in crates at the wharf edge; clear roofline and crane hook, no ship required.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_officer_courses_composition.png",
+      "focus_id": "NAM_officer_courses",
+      "title": "Офицерские курсы",
+      "source_assets": [
+        "officer_courses_tactical_board.png",
+        "instructors_senior_officer.png",
+        "general_staff_plan_map_board.png"
+      ],
+      "prompt": "One finished wide transparent national focus icon for NAM, an industrial desert oil governorate in Hearts of Iron IV. Three source images are references for the subjects, appearance and faction identity. Create a narrative photographic cutout composition in a 1.75:1 landscape silhouette. Worn natural materials, restrained ochre and amber side light, charcoal shadows, cloth and skin in natural colors. THREE main overlapping masses readable at 140 px; keep the whole silhouette on the canvas with small clear margins. Do not add extra faces, military paraphernalia, slogans, captions, plaques, flags, borders, medallions, opaque background or global haze. Preserve silhouettes, uniforms, faces and models from references. Vary height and depth to make an organic shape, with transparent areas around the objects. The specific scene: A senior instructor demonstrates a terrain problem to a junior officer at the staff board, using a pointer and a little tabletop contour model. Focus on the gesture, faces and recognizable chalkboard.",
+      "generator": "Built-in image_gen",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_klyuchevsk_pipeline_route.png",
+      "focus_id": "NAM_klyuchevsk_pipeline",
+      "title": "Трасса Ключевского нефтепровода",
+      "canvas": [
+        1600,
+        910
+      ],
+      "source_assets": [
+        "desert_rocky_backdrop.png",
+        "klyuchevsk_pipeline_winding_route.png",
+        "line_survey_theodolite.png"
+      ],
+      "destination_rectangles_xywh": [
+        [
+          15,
+          110,
+          1570,
+          640
+        ],
+        [
+          65,
+          245,
+          1410,
+          635
+        ],
+        [
+          8,
+          337,
+          335,
+          495
+        ]
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_mobilisation_office_public_notice.png",
+      "focus_id": "NAM_mobilisation_office",
+      "title": "Мобилизационное управление",
+      "canvas": [
+        1560,
+        965
+      ],
+      "source_assets": [
+        "mobilisation_office_notice_loudspeaker.png",
+        "mobilisation_office_recruiting_officer.png",
+        "quiet_lists_personnel_register.png"
+      ],
+      "destination_rectangles_xywh": [
+        [
+          275,
+          20,
+          1265,
+          843
+        ],
+        [
+          12,
+          115,
+          740,
+          810
+        ],
+        [
+          850,
+          645,
+          475,
+          315
+        ]
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
     }
   ],
   "native_export": {
@@ -2933,6 +3619,126 @@
       "style_references": [
         "tools/assets/source/focus_icons/NAM/sand_colossal_hourglass.png"
       ]
+    },
+    {
+      "file": "naval_staff_plotter.png",
+      "focus": "NAM_naval_staff",
+      "generator": "Built-in image_gen",
+      "prompt": "Production art, a single hand-graded photographic cutout layer for a grand Hearts of Iron IV NAM national focus icon. Use the attached Eternal Port icon for bronze/charcoal palette, bold silhouette and amber material highlights only. Create a SINGLE isolated movable focal object for the mod's Naval Staff focus. One monumental antique naval chart plotter, a period drafting machine with twin curved brass graduated arms, one dark vertical brass pivot and a big compass rose inset in a carved dark sloping chart table. Heavy chunky silhouette like a ship's bridge instrument. A single ivory nautical coastal chart clipped to the table, oblique three-quarter view, three simple plotted routes and small amber pinheads as graphic accents. No legible writing or numbers, no person, no backdrop. Near-black wood and bronze with selective amber sunset lighting picking out the silhouette and a bright ivory chart. The complete plotting table assembly as ONE cutout, front corner facing viewer, keep chart detail simple and deliberate at 150px, don't make it a tiny tabletop still life. Transparent exterior, tight but complete silhouette, small clear margins, no badge, vignette, borders, text or baked background.",
+      "style_references": [
+        "GFX_focus_NAM_harbour_service.png"
+      ]
+    },
+    {
+      "file": "naval_staff_signal_flags.png",
+      "focus": "NAM_naval_staff",
+      "generator": "Built-in image_gen",
+      "prompt": "One isolated vertical ship signal halyard, slight diagonal, flying three DIFFERENT square nautical signal flags from the same rope at a port command station. Large overlapping heavy weathered cloth blowing LEFT in the wind, top ivory and dark blue diagonal pattern, middle ochre and black checks, lower rust red and ivory split. Visually strong dark folds and amber side light. Entire silhouette visible with alpha gaps between flags. A narrow irregular vertical motif designed to stand behind a chart plotter. Only the signal flags and their rope. Depict as a clean isolated photographic asset for a NAM national focus. Match the provided reference's warm amber rim lighting, charcoal shadows, rich dimensional texture and readability at 150px. Clear PNG transparency, no enclosing scene, no sky, no floor, text or border.",
+      "style_references": [
+        "GFX_focus_NAM_harbour_service.png"
+      ]
+    },
+    {
+      "file": "basin_minefields_minesweeper.png",
+      "focus": "NAM_basin_minefields",
+      "generator": "Built-in image_gen",
+      "prompt": "Production art, a single hand-graded photographic cutout layer for a grand Hearts of Iron IV NAM national focus icon. Use the attached Eternal Port icon for bronze/charcoal palette, bold silhouette and amber material highlights only. Create a SINGLE isolated subject asset for the 'Minefields of the Basin' national focus: a rugged vintage naval minesweeper ship at sea, depicted only as a handsome historic vessel in naval art. Heroic clean three-quarter bow at LEFT facing the viewer, with a small distinctive wheelhouse, one swept-back mast and aft work deck receding right. Massive chipped charcoal steel bow, muted muted red bootstripe, restrained honey-amber port lights and strong warm right-hand rim lighting. No ensigns, no legible letters, no schematic, no armament detail. Cut at waterline with a slim white bow wave. The ONE ship alone: no sea background, no sun, no objects beside it. Full silhouette visible. Transparent exterior, tight but complete silhouette, small clear margins, no badge, vignette, borders, text or baked background.",
+      "style_references": [
+        "GFX_focus_NAM_harbour_service.png"
+      ]
+    },
+    {
+      "file": "basin_minefields_channel_buoy.png",
+      "focus": "NAM_basin_minefields",
+      "generator": "Built-in image_gen",
+      "prompt": "Single weathered late-industrial red navigation light buoy marking a maritime channel. Monumental bold red bell-shaped floating base with dark salt-worn sides, open steel tripod tower and one amber lantern near its crown. Tilts slightly as a wave passes, small foam fringe touching base. Three-quarter view. A recognizably civilian sea mark in the foreground for the transparent focus icon Minefields of the Basin. Only this buoy, no sea area, no other ships or objects. Depict as a clean isolated photographic asset for a NAM national focus. Match the provided reference's warm amber rim lighting, charcoal shadows, rich dimensional texture and readability at 150px. Clear PNG transparency, no enclosing scene, no sky, no floor, text or border.",
+      "style_references": [
+        "GFX_focus_NAM_harbour_service.png"
+      ]
+    },
+    {
+      "file": "repair_yard_suspended_propeller.png",
+      "focus": "NAM_repair_yard",
+      "prompt": "One isolated shipyard asset for the fictional NAM Hearts of Iron IV focus 'Our own repair quay'. A single immense worn four-bladed BRONZE SHIP PROPELLER suspended vertically from a short pair of dark lifting slings gathered to one hook overhead. View almost straight onto its face, slight side perspective just enough to see the depth of the hub and the pitch of four sculptural blades. The blades have massive, asymmetrically swept teardrop silhouettes and generous open gaps. Dark tarnished bronze with selective golden worn edges and warm amber grazing light from left. Visible scale and weight, a striking emblem of ship repair. Close crop while keeping entire object in view, ragged material edges, transparent exterior and holes. The attached image guides overall lighting only. No workers, water, sea, ship, tools, frame, text, scenery, inset panel or lettering. No stylized wheel or decorative gear.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "flight_school_svetlogorsk_cadet.png",
+      "focus": "NAM_flight_school",
+      "generator": "Built-in image_gen",
+      "prompt": "Extract and faithfully reconstruct the single bareheaded young flight cadet in the supplied finished Svetlogorsk NAM flight-school image as one independent waist-up transparent PNG paper cutout for that collage. Keep face, short brown curls, upward gaze to viewer right, natural skin tones, brown olive flight jacket, harness, right forearm resting horizontally and golden rim from back left. Reconstruct occluded sleeves and torso behind foreground helmet so the cadet alone can be layered. Broad natural waist-up silhouette. Transparent all around. No helmet, goggles, box, aircraft, hangar, ground, scenery, lettering, cast ground shadow, background glow or other objects. Preserve original photograph-like lighting, proportions and the specific individual.",
+      "style_references": [
+        "nam_flight_school_air_composition.png"
+      ]
+    },
+    {
+      "file": "court_azhar_national_flag.png",
+      "focus": "NAM_court_azhar",
+      "generator": "Built-in image_gen",
+      "prompt": "Turn the attached actual flag artwork into ONE isolated cloth flag prop for a small Hearts of Iron IV diplomacy icon. Trace the national design of the reference exactly: flat dark oxblood field, central roundel composed of concentric gold, near-black and red rings with the tiny golden toothed ring in its dark center. Four thin diagonal black-and-red rays and paired fine dark axial lines run from the roundel across the field. Respect number/order/relative widths, positions and colors. One horizontal broad rectangular flag seen face-on, stretched gently between upper corners, with just two soft shallow folds around edges. The central emblem must remain easily recognizable. Subtle woven texture, golden sidelight like the NAM icons. Slightly wavy lower hem, clean silhouette on real transparent alpha. No pole, finials, fringe, lettering, extra heraldry, vignette or environment. Keep flag fully within the canvas.",
+      "style_references": [
+        "gfx/flags/AZH.tga"
+      ]
+    },
+    {
+      "file": "restitution_imperial_charter.png",
+      "focus": "NAM_restitution_desk",
+      "prompt": "One independent movable layer for the focus icon The Restitution Desk, image 1 is a style and thumbnail massing reference only (do not depict any ship). Image 2 suggests period paper and the red seals only. Depict a single partly UNFURLED monumental imperial land treaty of the fictional Vorkerland era, visually as tall as a great standing stone. Extreme low-angle closeup of an ivory vellum sheet rising and arching slightly backwards from one low rolled foot, like a tall broad sail, turned slightly clockwise to show a dark right side and gilt edges. Most of the FRONT face visible, freely torn organic silhouette. A HUGE tactile rounded dark-crimson wax seal embossed with a simple sunburst occupies a full third of the front sheet, attached to the face by two short oxblood ribbons. One bold faded cartographic coastline impression; no readable letters or modern type. Age-darkened margin, warm luminous rim from LEFT. Parchment tawny in the shadows, honey and ivory highlights. Massive foreground object, isolated, no ground shadow, no table, no other books, no stamp tool, no building or sun, no background. Complete silhouette, portrait-oriented compact broad shape, not a heap of papers. Actual PNG alpha.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "restitution_archive_portico.png",
+      "focus": "NAM_restitution_desk",
+      "prompt": "One independent BACKGROUND architectural layer for the national focus 'The Restitution Desk'. Attached reference only for the monumental NAM industrial chiaroscuro and gold rim light. The imperial public archives portico: long receding row of four monolithic black basalt piers and deep rectangular bronze doorways, a staircase climbing into the main arch. Interwar austere civic architecture. A SINGLE monumental cutout emerging from near black shadow, one extremely small fully visible silhouette of a lone archivist at the stair foot to show its overwhelming scale. Low angle looking up; leftmost pier medium height, right pier tallest; asymmetrical broken skyline. Drawable at only 70px width: four large shapes, blunt sharp silhouettes, warm copper edges from low sunset on the left, very restrained warm light in doorways. Show no letters, flags, paper, seals, desks, no sun, no sky, no smoke or ground plane. Alpha cutout of architecture with its steps only. Landscape composition, keep whole structure inside image with margins.",
+      "generator": "Built-in image_gen"
+    },
+    {
+      "file": "technical_college_bearing_inspection.png",
+      "focus": "NAM_technical_college",
+      "generator": "Built-in image_gen",
+      "prompt": "Create a single standalone transparent PNG subject layer for the monumental industrial NAM focus 'The engineer above the manual'. Preserve the young engineer's recognisable portrait, hair, work jacket and natural amber side light from reference 1. Close waist-up portrait, facing LEFT in three-quarter, eyes focused. With fingers and thumb of one raised hand he holds up a single large dark steel machined pump bearing to check it against a light just off camera. The circle of light through the hollow bearing is as visually important as his eye. A little separation between bearing and face makes the gesture legible at icon size. He has brushed the oil off the steel rim with a rag; only a touch of soiled rag in lower hand. Readable anatomy, dramatic low angle, warm ivory edges on steel, deep work-jacket shadow. Hand, ring and head entirely in frame. Freely cut silhouette, torso narrowing at the lower edge. Subject only no scene, no blue sheet, no drafting tools, no lettering. The second image is the palette/graphic contrast reference only."
+    },
+    {
+      "file": "machine_shops_machined_bushing.png",
+      "focus": "NAM_machine_shops",
+      "generator": "Built-in image_gen",
+      "prompt": "A single finished industrial steel pump bushing for use as a movable foreground layer in the same game icon series. Standalone short hollow machined cylinder, heavy flanged rim, viewed obliquely looking into the bore. Three-quarter macro view, scored silver circular face with clear central through-hole, turned concentric lines, tiny curl of clean swarf at base. One small warm work lamp reflection, charcoal shadows. No lamp, no tool, no machine, no scene, no diagrams. Transparent exterior and transparent through the bore wherever appropriate."
+    },
+    {
+      "file": "civilian_combine_shift_workers.png",
+      "focus": "NAM_civilian_combine",
+      "generator": "Built-in image_gen",
+      "prompt": "Isolate the foreground small group of workmen walking away toward the repair yard with their lunch pails from the supplied scene. Separate freely movable PNG layer with clear transparency between legs and all around. Keep the workmen, clothing, backs, warm edge light and orderly stagger; remove every building, ground, sky and other objects. Whole figures visible, shoe soles complete. No text."
+    },
+    {
+      "file": "insured_cargoes_hold_opening.png",
+      "focus": "NAM_insured_cargoes",
+      "generator": "Built-in image_gen",
+      "prompt": "For a painterly photographic montage used as a small Hearts of Iron IV NAM focus icon. Interwar oil basin harbor, blue petrol shadows, tarnished metal and honey-amber work lights, worn material, strong silhouette. NO sun, moon, printed words, signs, medallions, caption or rectangular panel. One separate movable cutout with genuine transparent PNG exterior AND negative spaces. Keep all outer edges inside transparent padding. Create the FOREGROUND interior structure ONLY as if standing INSIDE a dark sea freighter's cargo hold, looking slightly upwards and forward through its large open rounded-rectangular steel side loading hatch. The opening is cut into the hull, through its walls you see nothing at all: the aperture MUST be a very large completely transparent hole, about 70 percent of the icon. In a staggered organic horseshoe silhouette a very dark oil-black riveted girder arcs OVER the top of this hole and turns down into a vertical bulkhead on the LEFT; right-hand vertical rib is short and partly lost; a narrow ledge of irregular deck planks and track recedes along the bottom LEFT as a sill, not a continuous picture frame. Roof seen from below, subtle warm edge on the lip from a port light beyond, and one modest dim bulb under the far left beam. It must feel like a section of a real ship cut away in darkness. No exterior ship, porthole wheel, vault door, freestanding portal, industrial bay doors, furniture, harbor, horizon, sky, water, crates or cargo. Wide 3:2 silhouette, asymmetric torn edges, dramatic strongly foreshortened steel beams, broad opening to place independent artwork BEHIND it."
+    },
+    {
+      "file": "insured_cargoes_home_quay_lights.png",
+      "focus": "NAM_insured_cargoes",
+      "generator": "Built-in image_gen",
+      "prompt": "For a painterly photographic montage used as a small Hearts of Iron IV NAM focus icon. Interwar oil basin harbor, blue petrol shadows, tarnished metal and honey-amber work lights, worn material, strong silhouette. NO sun, moon, printed words, signs, medallions, caption or rectangular panel. One separate movable cutout with genuine transparent PNG exterior AND negative spaces. Keep all outer edges inside transparent padding. The DISTANT HOME PORT ONLY for a scene viewed through a larger dark ship's opening. One familiar lamplit stone quay, with a squat brick warehouse whose tall OPEN double doors spill clear pale golden light down three wet steps, a slender angular dock crane left of the doors and a short square harbour beacon at the other end. Occasional lit windows and one jade-green guidance light. Warm inviting glow and three mist-softened broader roof shapes, early night. Low viewpoint across the water, the port forms a slim long horizontal cluster approximately 3:1. Narrow torn strip of very dark teal harbor water directly beneath with LONG broken vertical bands of amber reflection from the dock lights. Outer irregular silhouette on true transparent alpha; gaps between crane and buildings and above rooflines are also transparent. Fully visible. No surrounding frame or hull, no vessels, loaded cargo, people, sun, circular halos or large expanse of sky. The open lighted doors are the brightest single shape, big enough for a 150px icon."
+    },
+    {
+      "file": "insured_cargoes_hold_return_parts.png",
+      "focus": "NAM_insured_cargoes",
+      "generator": "Built-in image_gen",
+      "prompt": "Cut out ONLY the two dark blue steel drums on their individual wooden wedges and the rusty pump impeller half covered with burlap from the supplied image. Completely remove every pixel of all structures behind and below those objects. This is a transparent isolated still-life prop for a collage: cylinders, wedge blocks, impeller and its loose fabric against absolutely empty alpha. The alpha immediately ABOVE every object must be transparent. Crisp natural object silhouette. There is no view through a window, wall, floor, skyline or reflected room; only return the three objects. Same restrained warm line along edges, ample clear margin, keep the complete objects visible."
+    },
+    {
+      "file": "klyuchevsk_pipeline_winding_route.png",
+      "focus": "NAM_klyuchevsk_pipeline",
+      "generator": "Built-in image_gen",
+      "prompt": "Create a single isolated asset for a monumental 1930s industrial photomontage national focus icon for the fictional NAM oil basin. One unbroken dark oxidized steel oil pipeline viewed from above at an oblique angle, coming in wide at lower left and winding in a strong S bend from left across the middle, then meandering away to a tiny vanishing point at upper right. Heavy bolted collars and a few spaced low stone supports. A few amber skim highlights, black petrol and rust-red lowlights, painterly photographic modelling, bold legible shape suitable for a 150px strategy icon. The emphasis is on the ROUTE and its distance. Long landscape silhouette, no graphic map or drawn lines. Pipe ONLY on genuine TRANSPARENT background, including the space between the loops: no landscape, sand, dirt footprint, ground plate, sky, vignette, sun, halo, signage, labels, captions or text. Deliver a transparent PNG cutout with breathing room; keep entire pipe and all supports within the frame."
+    },
+    {
+      "file": "mobilisation_office_notice_loudspeaker.png",
+      "focus": "NAM_mobilisation_office",
+      "generator": "Built-in image_gen",
+      "prompt": "Transparent PNG single isolated cutout. A 1930s mobilisation bureau public address fixture, large dented antique dark green enamel trumpet loudspeaker with a warm brass lip, bolted on a post in front of a broad weathered wooden public notice board showing a few large bone-white posted mobilization sheets with dark lines and a burgundy stamp. One powerful shape, the horn points diagonally up to the right and breaks the top silhouette. Frontal view, monumental documentary photomontage in Hearts of Iron IV national focus art style, hard amber rim from left, naturally colored material and ivory sheets, crisp contour, strong readable contrast in a 150px thumbnail. Authentic vintage object rather than fantasy. Just the posting board with the horn attached to its right upper corner, the post ends below. No people, sky, terrain, border, ornamental base, sun, words, legible text, flags, seals floating in space. All around object is transparent, widescreen 3:2 image, all edges visible."
     }
   ],
   "composition_direction": "Grandiose political and industrial imagery with dominant large figures or symbols, dramatic scale and strong graphic accents. Individual assets should support a monumental photographic collage. Preserve natural materials and avoid small inventory-item presentation.",
@@ -3152,7 +3958,7 @@
     },
     {
       "focus": "NAM_independence_day",
-      "title": "Своя печать",
+      "title": "Над нами лишь небо",
       "assets": [
         "independence_state_seal.png",
         "independence_declaration.png"

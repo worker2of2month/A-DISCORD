@@ -21,7 +21,8 @@
       "prompt": null,
       "runtime_path": "gfx/leaders/EXZ/default/portrait_EXZ_Generic_1.png",
       "sprite": "GFX_Portrait_EXZ_Generic_1",
-      "runtime_sha256": "09fd759f1fa9426c52d72f09fd41d95617102eb5440c4cf5af49637e9c2776f0"
+      "fit": "cover_top",
+      "runtime_sha256": "5e5897e379a787d65215c1839a6c8546685a1bcae4fa0590ec9fa89ba348d685"
     },
     {
       "id": "EXZ_Generic_2",

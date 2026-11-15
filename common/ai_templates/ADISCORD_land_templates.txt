@@ -733,7 +733,7 @@ ADISCORD_army_hq_templates = {
 }
 
 ADISCORD_marine_templates = {
-	available_for = { STP STS VAL NOD }
+	available_for = { STP STS VAL NOD EFL AZH }
 	role = marines
 	upgrade_prio = { base = 3 }
 	ADISCORD_marine_brigade = {

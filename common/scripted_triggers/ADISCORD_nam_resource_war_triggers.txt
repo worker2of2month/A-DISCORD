@@ -1,3 +1,28 @@
+NAM_economy_law_change_available = {
+	if = {
+		limit = { tag = NAM }
+		custom_trigger_tooltip = {
+			tooltip = NAM_economy_law_unlocked_tt
+			NAM_resource_war_economy_locked = no
+		}
+	}
+}
+
+NAM_depot_settlement_open = {
+	has_global_flag = ADISCORD_nam_resource_war_resolved
+	NOT = { has_country_flag = NAM_depot_concessions_settled }
+}
+
+NAM_resource_war_economy_locked = {
+	tag = NAM
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+	OR = {
+		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+		has_global_flag = ADISCORD_nam_resource_war_scheduled
+		has_global_flag = ADISCORD_nam_resource_war_started
+	}
+}
+
 ADISCORD_nam_resource_war_ready = {
 	has_global_flag = ADISCORD_fresh_campaign_contract_v1
 	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -604,15 +629,11 @@ NAM_admin_programme_operable = {
 }
 
 # ----- Oil monopoly -----
-# COUNTRY NAM. The compromise route can reopen trade without the prewar bureau.
+# COUNTRY NAM. Commercial contracts use South Harbour from campaign start.
 NAM_oil_trade_authorized = {
-	OR = {
-		has_completed_focus = NAM_rus_crisis_watch
-		has_completed_focus = NAM_supports_export_houses
-		has_completed_focus = NAM_contract_bureau
-		has_completed_focus = NAM_defeat_oil_union
-		has_completed_focus = NAM_normalisation
-	}
+	NAM_country_operable = yes
+	owns_state = 700
+	controls_state = 700
 }
 
 # COUNTRY. The fixed list of states that may buy Svetlogorye's oil.
@@ -637,18 +658,17 @@ NAM_oil_buyer_tag = {
 
 # COUNTRY. Buyers reached by sea; only they may use the South Harbour terminal unit.
 NAM_oil_overseas_buyer = {
-	OR = {
-		tag = VAL
-		tag = STP
-		tag = STS
-		tag = RUS
-	}
+	NOT = { is_neighbor_of = NAM }
 }
 
 # COUNTRY buyer. A new contract may be offered to it.
 NAM_oil_buyer_eligible = {
 	NOT = { has_country_flag = NAM_oil_offer_declined }
 	NAM_oil_buyer_tag = yes
+	OR = {
+		is_neighbor_of = NAM
+		NAM = { has_completed_focus = NAM_overseas_buyers }
+	}
 	exists = yes
 	has_capitulated = no
 	NOT = { has_war_with = NAM }
@@ -657,19 +677,20 @@ NAM_oil_buyer_eligible = {
 	NOT = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
 }
 
-# COUNTRY buyer. Svetlogorye has a free throughput unit this buyer may use.
-NAM_oil_unit_free_for_buyer = {
+# COUNTRY buyer. A neighbour cannot use the berth reserved for overseas buyers.
+NAM_port_berth_free_for_buyer = {
+	NAM = {
+		NAM_oil_trade_authorized = yes
+		check_variable = { var = NAM_oil_contracts value = NAM_port_contract_capacity compare = less_than }
+	}
 	OR = {
-		AND = {
-			NAM_oil_overseas_buyer = yes
-			NAM = { check_variable = { var = NAM_oil_free_units value = 1 compare = greater_than_or_equals } }
-		}
-		NAM = { check_variable = { var = NAM_oil_free_land_units value = 1 compare = greater_than_or_equals } }
+		NAM_oil_overseas_buyer = yes
+		NAM = { check_variable = { var = NAM_oil_contracts value = NAM_port_general_slots compare = less_than } }
+		NAM = { check_variable = { var = NAM_oil_overseas_committed value = 0 compare = greater_than } }
 	}
 }
 
-# COUNTRY NAM. Export pressure requires control of a source in the basin;
-# permanent throughput bonuses alone cannot sustain it from the islands.
+# COUNTRY NAM. Export pressure requires control of a source in the basin.
 NAM_fuel_embargo_source = {
 	exists = yes
 	OR = {
@@ -1903,7 +1924,7 @@ NAM_board_held_site = {
 	is_controlled_by = NAM
 }
 
-# STATE 67. Ten units of physical oil correspond to one working unit of throughput.
+# STATE 67. The concession needs operating wells to accept a new order.
 NAM_loren_working_field = {
 	NAM_board_held_site = yes
 	NOT = { has_state_flag = NAM_wells_scorched }
@@ -1940,10 +1961,17 @@ NAM_loren_cargo_can_clear = {
 
 NAM_loren_loading_route = {
 	OR = {
-		check_variable = { var = NAM_oil_free_land_units value = 0 compare = greater_than_or_equals }
+		NAM_loren_lease_operable = yes
 		AND = {
-			67 = { has_state_flag = NAM_board_guard_post }
-			check_variable = { var = NAM_oil_free_land_units value = -1 compare = greater_than_or_equals }
+			NAM_board_operable = yes
+			has_variable = NAM_loren_cargo_quote
+			67 = {
+				NAM_board_held_site = yes
+				has_state_flag = NAM_loren_lease
+				has_state_flag = NAM_board_guard_post
+				NOT = { has_state_flag = NAM_wells_scorched }
+				check_variable = { var = NAM_field_oil value = 0 compare = greater_than }
+			}
 		}
 	}
 }
@@ -2259,7 +2287,6 @@ NAM_bw_can_pay_refinery = {
 }
 
 NAM_bw_can_pay_line = {
-	NOT = { has_political_power < 30 }
 	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 }
 
@@ -2876,10 +2903,28 @@ NAM_garrison_families_entitled = {
 }
 
 NAM_rw_coalition_landing_ready = {
-	is_ai = yes
-	has_capitulated = no
 	ADISCORD_nam_resource_war_active = yes
 	has_war_with = NAM
+	NAM_rw_coalition_can_embark = yes
+}
+
+NAM_rw_coalition_landing_planned = {
+	NAM_rw_coalition_can_embark = yes
+	OR = {
+		AND = {
+			ADISCORD_nam_resource_war_preparation = yes
+			NOT = { is_in_faction_with = NAM }
+		}
+		AND = {
+			ADISCORD_nam_resource_war_active = yes
+			has_war_with = NAM
+		}
+	}
+}
+
+NAM_rw_coalition_can_embark = {
+	is_ai = yes
+	has_capitulated = no
 	NAM = { has_capitulated = no }
 	has_tech = ADISCORD_tech_restored_dockyards
 	has_navy_size = { size > 39 type = convoy }

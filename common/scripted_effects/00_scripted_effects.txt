@@ -393,7 +393,10 @@ upgrade_economy_law = {
 		limit = {
 			has_idea = civilian_economy
 		}
-		add_ideas = low_economic_mobilisation
+		if = {
+			limit = { NAM_resource_war_economy_locked = no }
+			add_ideas = low_economic_mobilisation
+		}
 	}
 	else_if = {
 		limit = {

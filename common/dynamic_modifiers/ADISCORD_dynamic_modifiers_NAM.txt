@@ -48,6 +48,7 @@ NAM_garrison_dynamic = {
 	army_speed_factor = NAM_gar_army_speed
 	planning_speed = NAM_gar_planning_speed
 	army_org_factor = NAM_gar_army_org
+	army_attack_factor = NAM_gar_army_attack
 	army_defence_factor = NAM_gar_army_defence
 	conscription = NAM_gar_conscription
 }
@@ -628,28 +629,38 @@ NAM_export_office_1 = {
 	icon = GFX_modifiers_NAM_export_office_1
 	enable = { always = yes }
 	state_resource_oil = NAM_export_office_oil_delta
+	NAM_export_office_rated_capacity = NAM_export_office_capacity
+	NAM_export_office_projected_revenue = NAM_export_office_month_estimate
 }
 
 NAM_export_office_2 = {
 	icon = GFX_modifiers_NAM_export_office_2
 	enable = { always = yes }
 	state_resource_oil = NAM_export_office_oil_delta
+	NAM_export_office_rated_capacity = NAM_export_office_capacity
+	NAM_export_office_projected_revenue = NAM_export_office_month_estimate
 }
 
 NAM_export_office_3 = {
 	icon = GFX_modifiers_NAM_export_office_3
 	enable = { always = yes }
 	state_resource_oil = NAM_export_office_oil_delta
+	NAM_export_office_rated_capacity = NAM_export_office_capacity
+	NAM_export_office_projected_revenue = NAM_export_office_month_estimate
 }
 
 NAM_export_office_4 = {
 	icon = GFX_modifiers_NAM_export_office_4
 	enable = { always = yes }
 	state_resource_oil = NAM_export_office_oil_delta
+	NAM_export_office_rated_capacity = NAM_export_office_capacity
+	NAM_export_office_projected_revenue = NAM_export_office_month_estimate
 }
 
 NAM_export_office_5 = {
 	icon = GFX_modifiers_NAM_export_office_5
 	enable = { always = yes }
 	state_resource_oil = NAM_export_office_oil_delta
+	NAM_export_office_rated_capacity = NAM_export_office_capacity
+	NAM_export_office_projected_revenue = NAM_export_office_month_estimate
 }

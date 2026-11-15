@@ -4984,6 +4984,7 @@ ADISCORD_economy_ai_war_mobilisation_step = {
 		limit = {
 			is_ai = yes
 			has_war = yes
+			NAM_resource_war_economy_locked = no
 			OR = {
 				NOT = {
 					OR = {

@@ -1,5 +1,170 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_machine_shops"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_machine_shops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_technical_college"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_technical_college.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_basin_roads"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_basin_roads.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_refinery_programme"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_refinery_programme.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_domestic_refining"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_domestic_refining.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_export_quays"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_export_quays.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_overseas_buyers"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_overseas_buyers.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_restitution_desk"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_restitution_desk.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_fuel_leverage"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_fuel_leverage.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_court_azhar"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_court_azhar.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_general_staff_plan"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_general_staff_plan.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_flight_school"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_flight_school.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_air_interceptors"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_air_interceptors.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_air_ground_service"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_air_ground_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_air_operations"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_air_operations.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_air_support"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_air_support.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_coastal_battalions"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_coastal_battalions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_escort_school"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_escort_school.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_repair_yard"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_repair_yard.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_basin_reconnaissance"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_basin_reconnaissance.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_island_accounts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_island_accounts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_island_levy_office"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_island_levy_office.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_island_concession"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_island_concession.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_naval_staff"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_naval_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_naval_construction"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_naval_construction.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_basin_minefields"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_basin_minefields.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_active_squadron"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_active_squadron.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_relief_columns"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_relief_columns.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_alarm"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_alarm.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_seal_courts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_seal_courts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_districts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_districts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_vertical"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_vertical.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_civilian_combine"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_civilian_combine.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_cache_hunters"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_cache_hunters.png"
 	}

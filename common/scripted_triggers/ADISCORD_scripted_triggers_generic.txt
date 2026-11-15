@@ -375,5 +375,6 @@ ADISCORD_has_marine_training = {
 		has_tech = ADISCORD_tech_kefreyt_marine_corps
 		has_tech = ADISCORD_tech_nodrul_marine_corps
 		has_tech = ADISCORD_tech_svetlogorsk_marine_corps
+		has_tech = ADISCORD_tech_southern_marine_corps
 	}
 }

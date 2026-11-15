@@ -400,7 +400,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_island_chancellery
-		icon = GFX_focus_RUS_trained_administrators
+		icon = GFX_focus_NAM_island_accounts
 		x = 15
 		y = 1
 		cost = 5
@@ -548,6 +548,15 @@ focus_tree = {
 					state = 231
 				}
 			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { owns_state = 230 }
+						NOT = { owns_state = 231 }
+					}
+				}
+				custom_effect_tooltip = NAM_exile_island_steel_preview_tt
+			}
 		}
 		ai_will_do = {
 			base = 15
@@ -556,7 +565,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_overseas_districts
-		icon = GFX_focus_NAM_open_ledgers
+		icon = GFX_focus_NAM_island_accounts
 		x = 20
 		y = 4
 		cost = 6
@@ -593,7 +602,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_coast_guard
-		icon = GFX_focus_NAM_oilfield_militia
+		icon = GFX_focus_NAM_escort_school
 		x = 18
 		y = 5
 		cost = 5
@@ -793,7 +802,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_harbour_concession
-		icon = GFX_focus_NAM_harbour_service
+		icon = GFX_focus_NAM_island_concession
 		x = 6
 		y = 4
 		cost = 6
@@ -925,7 +934,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_free_port_shipyards
-		icon = GFX_focus_NAM_harbour_service
+		icon = GFX_focus_NAM_naval_construction
 		x = 7
 		y = 5
 		cost = 6
@@ -1908,7 +1917,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_harbour_rebuilding
-		icon = GFX_focus_NAM_harbour_service
+		icon = GFX_focus_NAM_repair_yard
 		x = 27
 		y = 10
 		cost = 4

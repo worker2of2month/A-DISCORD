@@ -671,6 +671,10 @@ defined_text = {
 defined_text = {
 	name = GetVorkerlandCoalitionSettlement
 	text = {
+		trigger = { tag = EYR }
+		localization_key = ADISCORD_vorkerland_eyr_settlement_tt
+	}
+	text = {
 		trigger = { tag = EGC }
 		localization_key = ADISCORD_vorkerland_egc_settlement_tt
 	}

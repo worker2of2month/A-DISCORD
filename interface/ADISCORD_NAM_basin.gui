@@ -721,12 +721,52 @@ guiTypes = {
 				pdx_tooltip = "NAM_bw_export_detail"
 			}
 			instantTextBoxType = {
-				name = "NAM_bw_summary_compact"
+				name = "NAM_bw_export_labels"
 				position = { x = 12 y = 34 }
+				text = "NAM_bw_export_labels"
+				font = "hoi_16mbs"
+				maxWidth = 188
+				maxHeight = 36
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_export_detail"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_summary_compact"
+				position = { x = 212 y = 34 }
 				text = "NAM_bw_summary_compact"
 				font = "hoi_16mbs"
+				maxWidth = 212
+				maxHeight = 36
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_export_detail"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_island_title"
+				position = { x = 12 y = 76 }
+				text = "NAM_bw_island_title"
+				font = "hoi_18mbs"
 				maxWidth = 412
-				maxHeight = 124
+				maxHeight = 22
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_export_detail"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_island_labels"
+				position = { x = 12 y = 101 }
+				text = "NAM_bw_island_labels"
+				font = "hoi_16mbs"
+				maxWidth = 188
+				maxHeight = 55
+				fixedsize = yes
+				pdx_tooltip = "NAM_bw_export_detail"
+			}
+			instantTextBoxType = {
+				name = "NAM_bw_island_values"
+				position = { x = 212 y = 101 }
+				text = "NAM_bw_island_values"
+				font = "hoi_16mbs"
+				maxWidth = 212
+				maxHeight = 55
 				fixedsize = yes
 				pdx_tooltip = "NAM_bw_export_detail"
 			}

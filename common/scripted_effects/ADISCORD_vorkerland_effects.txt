@@ -9674,6 +9674,8 @@ ADISCORD_vorkerland_release_losing_claimant_subjects = {
 }
 
 ADISCORD_vorkerland_prepare_claimants_for_formation = {
+	# Treaty eligibility depends on the wartime coalition, before it is dissolved.
+	ADISCORD_vorkerland_prep_settle_treaties = yes
 	ADISCORD_vorkerland_disengage_regional_allies_before_formation = yes
 	# Detach Oitfort from every temporary civil-war relation before a claimant is
 	# consumed. WTD remains a real wartime participant, but every route absorbs
@@ -9806,10 +9808,15 @@ ADISCORD_vorkerland_absorb_egc_after_reunification = {
 	}
 }
 
-# COUNTRY the unified country: Riven and Yorsk keep their governments only during the civil war.
-# Their treaty with a claimant does not survive reunification on any route;
-# phase.7 hands a human RIV/YOR player to the unified country before this effect.
+# Phase.7 handles player handoff before the victor absorbs these districts.
 ADISCORD_vorkerland_absorb_treaty_districts_after_reunification = {
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+			country_exists = EYR
+		}
+		EYR = { ADISCORD_vorkerland_absorb_treaty_district = yes }
+	}
 	if = {
 		limit = { country_exists = RIV }
 		RIV = { ADISCORD_vorkerland_absorb_treaty_district = yes }
@@ -9821,7 +9828,7 @@ ADISCORD_vorkerland_absorb_treaty_districts_after_reunification = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-# COUNTRY RIV/YOR, called only by the reunification absorption above.
+# COUNTRY district being absorbed by the unified country.
 ADISCORD_vorkerland_absorb_treaty_district = {
 	if = {
 		limit = { is_subject = yes }
@@ -9968,6 +9975,11 @@ ADISCORD_vorkerland_scrub_precollapse_crisis = {
 ADISCORD_vorkerland_unify_under_wkr = {
 	clear_global_event_target = ADISCORD_vorkerland_nation
 	save_global_event_target_as = ADISCORD_vorkerland_nation
+	if = {
+		limit = { WKR_executive_course = yes }
+		set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+	}
+	else = { clr_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
 	if = { limit = { country_exists = VAD } VAD = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
 	if = { limit = { country_exists = TVA } TVA = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
 	every_other_country = {
@@ -10009,11 +10021,6 @@ ADISCORD_vorkerland_unify_under_wkr = {
 		# Decisions and settlements still read the pre-collapse focus record.
 		copy_completed_from = WRK
 	}
-	if = {
-		limit = { WKR_executive_course = yes }
-		set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
-	}
-	else = { clr_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
 	ADISCORD_vorkerland_adopt_retired_roster = yes
 	clr_country_flag = ADISCORD_vorkerland_route_worker
 	clr_country_flag = ADISCORD_vorkerland_route_joint
@@ -10541,7 +10548,6 @@ ADISCORD_vorkerland_finalize_reunification = {
 			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
 			ADISCORD_west_seed_leans = yes
 		}
-		ADISCORD_vorkerland_prep_settle_treaties = yes
 		set_global_flag = ADISCORD_vorkerland_central_war_finished
 		set_global_flag = ADISCORD_vorkerland_collapse_finished
 		ADISCORD_vorkerland_reconcile_campaign_state = yes
@@ -15871,7 +15877,10 @@ ADISCORD_vorkerland_prep_settle_treaties = {
 							value = 1
 							compare = equals
 						}
-						has_global_flag = ADISCORD_vorkerland_worker_won
+						event_target:ADISCORD_vorkerland_nation = {
+							tag = WKR
+							NOT = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+						}
 					}
 					AND = {
 						check_variable = {
@@ -15879,7 +15888,7 @@ ADISCORD_vorkerland_prep_settle_treaties = {
 							value = 2
 							compare = equals
 						}
-						has_global_flag = ADISCORD_vorkerland_vlad_won
+						event_target:ADISCORD_vorkerland_nation = { tag = VAD }
 					}
 					AND = {
 						check_variable = {
@@ -15887,7 +15896,7 @@ ADISCORD_vorkerland_prep_settle_treaties = {
 							value = 3
 							compare = equals
 						}
-						has_global_flag = ADISCORD_vorkerland_dorian_won
+						event_target:ADISCORD_vorkerland_nation = { tag = TVA }
 					}
 				}
 			}

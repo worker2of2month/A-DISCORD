@@ -242,6 +242,31 @@ def replace_generated(path: Path, content: str, indent: str) -> bytes:
     return updated.encode("utf-8")
 
 
+def summary_widgets() -> str:
+    rows = (
+        ("summary_title", 12, 8, 412, 22, "hoi_18mbs"),
+        ("export_labels", 12, 34, 188, 36, "hoi_16mbs"),
+        ("summary_compact", 212, 34, 212, 36, "hoi_16mbs"),
+        ("island_title", 12, 76, 412, 22, "hoi_18mbs"),
+        ("island_labels", 12, 101, 188, 55, "hoi_16mbs"),
+        ("island_values", 212, 101, 212, 55, "hoi_16mbs"),
+    )
+    widgets = []
+    for key, x, y, width, height, font in rows:
+        name = f"NAM_bw_{key}"
+        widgets.append(f'''\t\t\tinstantTextBoxType = {{
+\t\t\t\tname = "{name}"
+\t\t\t\tposition = {{ x = {x} y = {y} }}
+\t\t\t\ttext = "{name}"
+\t\t\t\tfont = "{font}"
+\t\t\t\tmaxWidth = {width}
+\t\t\t\tmaxHeight = {height}
+\t\t\t\tfixedsize = yes
+\t\t\t\tpdx_tooltip = "NAM_bw_export_detail"
+\t\t\t}}''')
+    return "\n".join(widgets)
+
+
 def district_cards(source: bytes) -> bytes:
     """Keep the basin cards informational; operations use native map decisions."""
     lines = [
@@ -283,6 +308,11 @@ def district_cards(source: bytes) -> bytes:
                   r'\t\tsize = \{ width = 460 height = )\d+', r'\g<1>682', text)
     text = re.sub(r'(name = "NAM_bw_summary"\n\t\t\tposition = \{ x = 12 y = )\d+',
                   r'\g<1>510', text)
+    summary_pattern = (r'\t\t\tinstantTextBoxType = \{\n\t\t\t\tname = "NAM_bw_summary_title".*?'
+                       r'(?=\n\t\t\}\n\t\})')
+    text, count = re.subn(summary_pattern, lambda _: summary_widgets(), text, flags=re.S)
+    if count != 1:
+        raise ValueError("Expected one export and islands summary")
     text = text.replace(
         "# Map selection changes presentation only; actions dispatch the original targeted decisions.",
         "# Map selection changes presentation only; operations use native map decisions.")
