@@ -6293,6 +6293,51 @@ NAM_rw_clear_punishment = {
 	}
 }
 
+# COUNTRY defeated signatory. The pending submission retains the peace terms
+# while the engine updates the target's faction membership.
+NAM_begin_border_protocol = {
+	if = {
+		limit = {
+			NAM_border_protocol_ready = yes
+			ADISCORD_south_offer_target_open = yes
+			NOT = { has_variable = ADISCORD_south_offer_kind }
+		}
+		ADISCORD_release_non_participating_minor_optimization = yes
+		ADISCORD_south_leave_previous_alliance = yes
+		set_country_flag = { flag = ADISCORD_south_submits_to_NAM value = 2 }
+		country_event = { id = ADISCORD_south.41 days = 1 }
+	}
+}
+
+# COUNTRY signatory, after the faction exit. The transferred district remains
+# occupied territory until its citizenship is settled through the border tree.
+NAM_apply_border_protocol = {
+	if = {
+		limit = { tag = EFL }
+		723 = { NAM_rw_award_border_state = yes }
+	}
+	else_if = {
+		limit = { tag = AZH }
+		727 = { NAM_rw_award_border_state = yes }
+	}
+	remove_ideas = NAM_reparations_to_svetlogorye
+	NAM = {
+		puppet = {
+			target = PREV
+			end_wars = no
+			end_civil_wars = no
+		}
+		set_autonomy = {
+			target = PREV
+			autonomy_state = autonomy_shadow_state
+			freedom_level = 0.40
+			end_wars = no
+			end_civil_wars = no
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
 # ----- War of return -----
 # The defeat tree's revenge. After the compromise peace it is one war against
 # the current owners of the lost fields and the South Harbour (67, 688, 689,

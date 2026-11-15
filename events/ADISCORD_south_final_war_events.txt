@@ -507,6 +507,15 @@ country_event = {
 			limit = {
 				hidden_trigger = {
 					check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+					is_faction_leader = yes
+				}
+			}
+			custom_effect_tooltip = ADISCORD_south_offer_alliance_dissolve_tt
+		}
+		else_if = {
+			limit = {
+				hidden_trigger = {
+					check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
 					is_in_faction = yes
 				}
 			}

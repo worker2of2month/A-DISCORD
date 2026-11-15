@@ -298,8 +298,9 @@ NAM_postwar_plan = {
 	ai_national_focuses = {
 		NAM_recognition
 		NAM_law_after_war
-		NAM_foreign_office
 		NAM_federal_charter
+		NAM_south_fenn_guarantee
+		NAM_foreign_office
 		NAM_public_utilities
 		NAM_civic_audit
 		NAM_district_council
@@ -323,7 +324,6 @@ NAM_postwar_plan = {
 		NAM_charter_ending_federation
 		NAM_veterans_return
 		NAM_south_oil_for_water
-		NAM_south_fenn_guarantee
 		NAM_svetlogorye
 		NAM_pw_transport_commission
 		NAM_pw_army_review
@@ -421,8 +421,9 @@ NAM_postwar_vertical_plan = {
 	ai_national_focuses = {
 		NAM_recognition
 		NAM_law_after_war
-		NAM_foreign_office
 		NAM_service_state
+		NAM_south_black_basin
+		NAM_foreign_office
 		NAM_state_plan
 		NAM_unified_standards
 		NAM_seal_registry
@@ -446,7 +447,6 @@ NAM_postwar_vertical_plan = {
 		NAM_svetlogorsk_dam
 		NAM_ladder_ending_service
 		NAM_veterans_return
-		NAM_south_black_basin
 		NAM_south_desert_offices
 		NAM_svetlogorye
 		NAM_pw_transport_commission
@@ -848,8 +848,9 @@ NAM_postwar_pragmatic_plan = {
 	ai_national_focuses = {
 		NAM_recognition
 		NAM_law_after_war
-		NAM_foreign_office
 		NAM_pragmatic_compact
+		NAM_prag_settlement_agreements
+		NAM_foreign_office
 		NAM_commercial_courts
 		NAM_export_clearing
 		NAM_contract_register
@@ -857,7 +858,6 @@ NAM_postwar_pragmatic_plan = {
 		NAM_warehouse_receipts
 		NAM_insured_caravans
 		NAM_commercial_reserve
-		NAM_prag_settlement_agreements
 		NAM_prag_partner_supply
 		NAM_balanced_accounts
 		NAM_civil_repair

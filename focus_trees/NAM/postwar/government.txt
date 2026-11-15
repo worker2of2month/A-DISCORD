@@ -433,48 +433,55 @@
 
 	focus = {
 		id = NAM_south_black_basin
-		relative_position_id = NAM_law_after_war
-		x = 5
-		y = 17
+		relative_position_id = NAM_service_state
+		x = 0
+		y = 1
 		icon = GFX_focus_NAM_basin_is_ours
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		cost = 4
+		cost = 2
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_ladder_of_seals }
+		prerequisite = { focus = NAM_service_state }
 		bypass = {
-			AZH = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_neighbour_settlement_closed_tt
-					OR = {
-						ADISCORD_south_campaign_target_settled = yes
-						NAM_neighbour_sovereignty_recognised = yes
-					}
-				}
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_settlement_closed_tt
+				EFL = { NAM_neighbour_settlement_closed = yes }
+				AZH = { NAM_neighbour_settlement_closed = yes }
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
 				tooltip = ADISCORD_south_story_ready_tt
 				ADISCORD_south_nam_story_clear = yes
 			}
-			has_capitulated = no
+			has_war = no
 			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
+				tooltip = NAM_neighbour_offer_open_tt
+				OR = {
+					EFL = { NAM_neighbour_offer_open = yes }
+					AZH = { NAM_neighbour_offer_open = yes }
+				}
 			}
-			is_subject = no
-			has_completed_focus = NAM_service_state
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_talks_free_tt
+				EFL = { NAM_neighbour_negotiations_free = yes }
+				AZH = { NAM_neighbour_negotiations_free = yes }
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_south_final_not_started_tt
 				NOT = { has_global_flag = ADISCORD_south_final_started }
+				NOT = { has_global_flag = ADISCORD_south_final_resolved }
 			}
-			has_war = no
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			custom_effect_tooltip = NAM_south_black_basin_tt
 			hidden_effect = {
+				EFL = { ADISCORD_south_demand_submission = yes }
 				AZH = { ADISCORD_south_demand_submission = yes }
 			}
 		}
@@ -486,13 +493,13 @@
 	focus = {
 		id = NAM_south_desert_offices
 		relative_position_id = NAM_law_after_war
-		x = -3
-		y = 18
+		x = -2
+		y = 16
 		icon = GFX_focus_NAM_basin_is_ours
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_south_black_basin }
+		prerequisite = { focus = NAM_ladder_of_seals }
 		bypass = {
 			KDR = {
 				custom_trigger_tooltip = {
@@ -500,17 +507,9 @@
 					ADISCORD_south_campaign_target_settled = yes
 				}
 			}
-			EFL = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_neighbour_settlement_closed_tt
-					OR = {
-						ADISCORD_south_campaign_target_settled = yes
-						NAM_neighbour_sovereignty_recognised = yes
-					}
-				}
-			}
 		}
 		available = {
+			has_completed_focus = NAM_south_black_basin
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_south_story_ready_tt
 				ADISCORD_south_nam_story_clear = yes
@@ -534,7 +533,6 @@
 			custom_effect_tooltip = NAM_south_desert_offices_tt
 			hidden_effect = {
 				KDR = { ADISCORD_south_demand_submission = yes }
-				EFL = { ADISCORD_south_demand_submission = yes }
 			}
 		}
 		ai_will_do = {
@@ -1073,14 +1071,9 @@
 					ADISCORD_south_campaign_target_settled = yes
 				}
 			}
-			AZH = {
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
-					ADISCORD_south_campaign_target_settled = yes
-				}
-			}
 		}
 		available = {
+			has_completed_focus = NAM_south_fenn_guarantee
 			custom_trigger_tooltip = {
 				tooltip = ADISCORD_south_story_ready_tt
 				ADISCORD_south_nam_story_clear = yes
@@ -1105,7 +1098,6 @@
 				WEF = { ADISCORD_south_offer_alliance = yes }
 				RHM = { ADISCORD_south_offer_alliance = yes }
 				SDR = { ADISCORD_south_offer_alliance = yes }
-				AZH = { ADISCORD_south_offer_alliance = yes }
 			}
 		}
 		ai_will_do = {
@@ -1115,49 +1107,70 @@
 
 	focus = {
 		id = NAM_south_fenn_guarantee
-		relative_position_id = NAM_law_after_war
-		x = -10
-		y = 12
+		relative_position_id = NAM_federal_charter
+		x = 0
+		y = 1
 		icon = GFX_focus_NAM_commissioner_plan
 		allow_branch = { NAM_prewar_district_mandate = yes }
-		cost = 4
-		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_south_oil_for_water }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_federal_charter }
 		bypass = {
-			EFL = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_neighbour_settlement_closed_tt
-					OR = {
-						ADISCORD_south_campaign_target_settled = yes
-						NAM_neighbour_sovereignty_recognised = yes
-					}
-				}
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_settlement_closed_tt
+				EFL = { NAM_neighbour_settlement_closed = yes }
+				AZH = { NAM_neighbour_settlement_closed = yes }
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
 				tooltip = ADISCORD_south_story_ready_tt
 				ADISCORD_south_nam_story_clear = yes
 			}
-			has_capitulated = no
+			has_war = no
 			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
+				tooltip = NAM_neighbour_talks_free_tt
+				EFL = { NAM_neighbour_negotiations_free = yes }
+				AZH = { NAM_neighbour_negotiations_free = yes }
 			}
-			is_subject = no
-			has_completed_focus = NAM_federal_charter
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_alliance_open_tt
+				OR = {
+					EFL = { NAM_neighbour_federal_invitation_open = yes }
+					AZH = { NAM_neighbour_federal_invitation_open = yes }
+				}
+			}
+			OR = {
+				is_in_faction = no
+				is_faction_leader = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_south_final_not_started_tt
 				NOT = { has_global_flag = ADISCORD_south_final_started }
+				NOT = { has_global_flag = ADISCORD_south_final_resolved }
 			}
-			has_war = no
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			custom_effect_tooltip = NAM_south_fenn_guarantee_tt
 			hidden_effect = {
-				EFL = { ADISCORD_south_demand_submission = yes }
+				EFL = {
+					if = {
+						limit = { NAM_neighbour_federal_invitation_open = yes }
+						ADISCORD_south_offer_alliance = yes
+					}
+				}
+				AZH = {
+					if = {
+						limit = { NAM_neighbour_federal_invitation_open = yes }
+						ADISCORD_south_offer_alliance = yes
+					}
+				}
 			}
 		}
 		ai_will_do = {
@@ -1175,7 +1188,7 @@
 		cost = 6
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_svetlogorye }
-		prerequisite = { focus = NAM_south_fenn_guarantee }
+		prerequisite = { focus = NAM_south_oil_for_water }
 		bypass = {
 			OR = {
 				custom_trigger_tooltip = {
@@ -2018,34 +2031,20 @@
 
 	focus = {
 		id = NAM_prag_settlement_agreements
-		relative_position_id = NAM_law_after_war
-		x = -16
-		y = 9
+		relative_position_id = NAM_pragmatic_compact
+		x = 0
+		y = 1
 		icon = GFX_focus_NAM_commissioner_plan
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
-		cost = 4
+		mutually_exclusive = { focus = NAM_prag_border_protocol }
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		prerequisite = {
-			focus = NAM_contract_register
-		}
+		prerequisite = { focus = NAM_pragmatic_compact }
 		bypass = {
-			EFL = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_neighbour_settlement_closed_tt
-					OR = {
-						ADISCORD_south_campaign_target_settled = yes
-						NAM_neighbour_sovereignty_recognised = yes
-					}
-				}
-			}
-			AZH = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_neighbour_settlement_closed_tt
-					OR = {
-						ADISCORD_south_campaign_target_settled = yes
-						NAM_neighbour_sovereignty_recognised = yes
-					}
-				}
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_settlement_closed_tt
+				EFL = { NAM_neighbour_settlement_closed = yes }
+				AZH = { NAM_neighbour_settlement_closed = yes }
 			}
 		}
 		available = {
@@ -2057,9 +2056,23 @@
 				tooltip = ADISCORD_south_story_ready_tt
 				ADISCORD_south_nam_story_clear = yes
 			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_offer_open_tt
+				OR = {
+					EFL = { NAM_neighbour_offer_open = yes }
+					AZH = { NAM_neighbour_offer_open = yes }
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_talks_free_tt
+				EFL = { NAM_neighbour_negotiations_free = yes }
+				AZH = { NAM_neighbour_negotiations_free = yes }
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_south_final_not_started_tt
 				NOT = { has_global_flag = ADISCORD_south_final_started }
+				NOT = { has_global_flag = ADISCORD_south_final_resolved }
 			}
 		}
 		cancel_if_invalid = yes
@@ -2075,18 +2088,68 @@
 	}
 
 	focus = {
+		id = NAM_prag_border_protocol
+		relative_position_id = NAM_pragmatic_compact
+		x = 6
+		y = 1
+		icon = GFX_focus_NAM_seal_courts
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_pragmatic_compact }
+		mutually_exclusive = { focus = NAM_prag_settlement_agreements }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_border_protocol_available_tt
+				OR = {
+					EFL = { NAM_border_protocol_ready = yes }
+					AZH = { NAM_border_protocol_ready = yes }
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_talks_free_tt
+				EFL = { NAM_neighbour_negotiations_free = yes }
+				AZH = { NAM_neighbour_negotiations_free = yes }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { EFL = { NAM_border_protocol_ready = yes } } }
+				custom_effect_tooltip = NAM_border_protocol_eflor_tt
+			}
+			if = {
+				limit = { hidden_trigger = { AZH = { NAM_border_protocol_ready = yes } } }
+				custom_effect_tooltip = NAM_border_protocol_azhar_tt
+			}
+			hidden_effect = {
+				EFL = { NAM_begin_border_protocol = yes }
+				AZH = { NAM_begin_border_protocol = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
 		id = NAM_prag_partner_supply
 		relative_position_id = NAM_law_after_war
-		x = -11
+		x = -12
 		y = 10
 		icon = GFX_focus_VAL_Logistics_Command
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		prerequisite = {
-			focus = NAM_prag_settlement_agreements
-		}
+		prerequisite = { focus = NAM_contract_register }
 		available = {
+			OR = {
+				has_completed_focus = NAM_prag_settlement_agreements
+				has_completed_focus = NAM_prag_border_protocol
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
@@ -4959,10 +5022,9 @@
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		prerequisite = {
-			focus = NAM_south_black_basin
-		}
+		prerequisite = { focus = NAM_ladder_of_seals }
 		available = {
+			has_completed_focus = NAM_south_black_basin
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
@@ -4984,16 +5046,15 @@
 	focus = {
 		id = NAM_pw_southern_intelligence
 		relative_position_id = NAM_law_after_war
-		x = 7
+		x = 13
 		y = 19
 		icon = GFX_focus_NAM_underground_reports
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		prerequisite = {
-			focus = NAM_south_black_basin
-		}
+		prerequisite = { focus = NAM_ladder_of_seals }
 		available = {
+			has_completed_focus = NAM_south_black_basin
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
@@ -5026,16 +5087,15 @@
 	focus = {
 		id = NAM_pw_southern_civil_service
 		relative_position_id = NAM_law_after_war
-		x = 9
+		x = 14
 		y = 18
 		icon = GFX_focus_RUS_trained_administrators
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		allow_branch = { NAM_prewar_service_mandate = yes }
-		prerequisite = {
-			focus = NAM_south_black_basin
-		}
+		prerequisite = { focus = NAM_ladder_of_seals }
 		available = {
+			has_completed_focus = NAM_south_black_basin
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
@@ -6214,7 +6274,6 @@
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_foreign_office }
-		mutually_exclusive = { focus = NAM_eflor_ultimatum }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
@@ -6254,50 +6313,6 @@
 	}
 
 	focus = {
-		id = NAM_eflor_ultimatum
-		relative_position_id = NAM_foreign_office
-		x = 5
-		y = 3
-		icon = GFX_focus_NAM_quiet_officer_lists
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_foreign_office }
-		mutually_exclusive = { focus = NAM_eflor_accord }
-		bypass = {
-			EFL = {
-				OR = {
-					exists = no
-					is_subject_of = ROOT
-				}
-			}
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			has_war = no
-			custom_trigger_tooltip = {
-				tooltip = ADISCORD_south_story_ready_tt
-				ADISCORD_south_nam_story_clear = yes
-			}
-			EFL = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_neighbour_ultimatum_open_tt
-					ADISCORD_south_campaign_target_valid = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = NAM_eflor_ultimatum_tt
-			hidden_effect = { EFL = { ADISCORD_south_demand_submission = yes } }
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
 		id = NAM_azhar_accord
 		relative_position_id = NAM_foreign_office
 		x = 15
@@ -6306,7 +6321,6 @@
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_foreign_office }
-		mutually_exclusive = { focus = NAM_azhar_ultimatum }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
@@ -6341,50 +6355,6 @@
 					modifier = improve_relation
 				}
 			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_azhar_ultimatum
-		relative_position_id = NAM_foreign_office
-		x = 7
-		y = 2
-		icon = GFX_focus_NAM_quiet_officer_lists
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_foreign_office }
-		mutually_exclusive = { focus = NAM_azhar_accord }
-		bypass = {
-			AZH = {
-				OR = {
-					exists = no
-					is_subject_of = ROOT
-				}
-			}
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			has_war = no
-			custom_trigger_tooltip = {
-				tooltip = ADISCORD_south_story_ready_tt
-				ADISCORD_south_nam_story_clear = yes
-			}
-			AZH = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_neighbour_ultimatum_open_tt
-					ADISCORD_south_campaign_target_valid = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = NAM_azhar_ultimatum_tt
-			hidden_effect = { AZH = { ADISCORD_south_demand_submission = yes } }
 		}
 		ai_will_do = { base = 5 }
 	}

@@ -1451,6 +1451,10 @@ ADISCORD_south_offer_alliance = {
 			OR = {
 				is_in_faction = no
 				ADISCORD_south_alliance_switch_possible = yes
+				AND = {
+					ROOT = { tag = NAM }
+					NAM_eflor_can_replace_restitution_alliance = yes
+				}
 			}
 		}
 		ADISCORD_release_non_participating_minor_optimization = yes
@@ -1474,6 +1478,10 @@ ADISCORD_south_accept_offer = {
 					OR = {
 						is_in_faction = no
 						ADISCORD_south_alliance_switch_possible = yes
+						AND = {
+							FROM = { tag = NAM }
+							NAM_eflor_can_replace_restitution_alliance = yes
+						}
 					}
 					FROM = {
 						OR = {
@@ -1482,12 +1490,7 @@ ADISCORD_south_accept_offer = {
 						}
 					}
 				}
-				# leave_faction applies at once, so the follower joins the
-				# champion in the same tick, as in the resource-war alliance setup.
-				if = {
-					limit = { is_in_faction = yes }
-					leave_faction = yes
-				}
+				ADISCORD_south_leave_previous_alliance = yes
 				FROM = {
 					ADISCORD_south_ensure_campaign_faction = yes
 					add_to_faction = PREV
@@ -1501,17 +1504,7 @@ ADISCORD_south_accept_offer = {
 		}
 		else = {
 			# Subjugation waits one day after the faction exit for the native faction cache.
-			if = {
-				limit = {
-					is_in_faction = yes
-					is_faction_leader = yes
-				}
-				dismantle_faction = yes
-			}
-			else_if = {
-				limit = { is_in_faction = yes }
-				leave_faction = yes
-			}
+			ADISCORD_south_leave_previous_alliance = yes
 			if = {
 				limit = { FROM = { tag = SHL } }
 				set_country_flag = ADISCORD_south_submits_to_SHL
@@ -1580,9 +1573,30 @@ ADISCORD_south_defend_refusing_partner = {
 	}
 }
 
+ADISCORD_south_leave_previous_alliance = {
+	if = {
+		limit = { is_faction_leader = yes }
+		dismantle_faction = yes
+	}
+	else_if = {
+		limit = { is_in_faction = yes }
+		leave_faction = yes
+	}
+}
+
 # COUNTRY target, one day after accepting submission.
 ADISCORD_south_finalize_submission = {
 	if = {
+		limit = { has_country_flag = { flag = ADISCORD_south_submits_to_NAM value > 1 } }
+		if = {
+			limit = {
+				ADISCORD_south_submission_to_nam_valid = yes
+				NAM_border_protocol_ready = yes
+			}
+			NAM_apply_border_protocol = yes
+		}
+	}
+	else_if = {
 		limit = {
 			ADISCORD_south_nam_story_clear = yes
 			ADISCORD_south_submission_to_shl_valid = yes

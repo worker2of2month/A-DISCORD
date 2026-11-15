@@ -3314,6 +3314,62 @@ NAM_neighbour_sovereignty_recognised = {
 	}
 }
 
+# COUNTRY neighbour. A recognised border or an existing settlement closes this offer.
+NAM_neighbour_settlement_closed = {
+	OR = {
+		exists = no
+		is_subject = yes
+		is_in_faction_with = NAM
+		NAM_neighbour_sovereignty_recognised = yes
+	}
+}
+
+NAM_neighbour_negotiations_free = {
+	OR = {
+		NAM_neighbour_settlement_closed = yes
+		AND = {
+			NOT = { has_variable = ADISCORD_south_offer_kind }
+			NOT = { has_country_flag = ADISCORD_south_submits_to_SHL }
+			NOT = { has_country_flag = ADISCORD_south_submits_to_NAM }
+		}
+	}
+}
+
+NAM_neighbour_offer_open = {
+	ADISCORD_south_campaign_target_valid = yes
+	NAM_neighbour_sovereignty_recognised = no
+}
+
+# COUNTRY defeated signatory. Recheck the award before the next-day handover.
+NAM_border_protocol_ready = {
+	exists = yes
+	has_war = no
+	has_capitulated = no
+	NAM_neighbour_settlement_closed = no
+	has_idea = NAM_reparations_to_svetlogorye
+	check_variable = { var = num_owned_states value = 1 compare = greater_than }
+	NAM = {
+		NAM_pw_operable = yes
+		NAM_independence_recognised = yes
+		has_completed_focus = NAM_pragmatic_compact
+		has_war = no
+	}
+	NOT = { has_global_flag = ADISCORD_south_final_started }
+	NOT = { has_global_flag = ADISCORD_south_final_resolved }
+	OR = {
+		AND = {
+			tag = EFL
+			owns_state = 723
+			controls_state = 723
+		}
+		AND = {
+			tag = AZH
+			owns_state = 727
+			controls_state = 727
+		}
+	}
+}
+
 NAM_border_acquisitions_held = {
 	OR = {
 		owns_state = 701

@@ -260,6 +260,10 @@ def matches_conditions(items, facts, scope="STP"):
         ) and isinstance(entry.value, list):
             flag = scalar(entry.value, "flag")
             comparison = [child.value for child in entry.value if not child.key]
+            if len(comparison) == 3 and comparison[0] == "value":
+                return facts.get((scope, entry.key, flag), False) and compare(
+                    facts.get((scope, "flag_value", flag), 1), comparison[1], int(comparison[2])
+                )
             if len(comparison) != 3 or comparison[:2] != ["days", ">"]:
                 raise AssertionError(f"Unsupported flag-age comparison: {comparison}")
             return facts.get((scope, entry.key, flag), False) and facts.get(

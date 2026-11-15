@@ -2612,6 +2612,11 @@ defined_text = {
 }
 
 defined_text = {
+	name = NAMGetPrewarMandateRules
+	text = { localization_key = NAM_prewar_mandate_rules_tt }
+}
+
+defined_text = {
 	name = NAMGetPrewarMandateRecord
 	text = {
 		trigger = { has_variable = NAM_prewar_balance }

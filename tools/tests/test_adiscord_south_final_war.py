@@ -461,7 +461,8 @@ class SouthFinalWarContractTests(unittest.TestCase):
         ):
             for identifier, focus in focus_blocks(path).items():
                 reward = next(e.value for e in focus if e.key == "completion_reward")
-                targets = {e.key for e in flatten(reward) if isinstance(e.value, list) and any(i.key in offers for i in e.value)}
+                targets = {e.key for e in flatten(reward) if e.key in REGIONAL and isinstance(e.value, list)
+                           and any(i.key in offers for i in flatten(e.value))}
                 if not targets:
                     continue
                 checked += 1
@@ -703,23 +704,21 @@ class SouthLifecycleTests(unittest.TestCase):
     def trigger_matches(self, name, scope="SHL"):
         return self.matches(self.triggers[name], scope)
 
-    def test_nam_can_recognise_an_allied_neighbour_without_bypassing_its_ultimatum(self):
+    def test_nam_can_recognise_an_allied_neighbour_and_skip_its_settlement(self):
         focuses = focus_blocks(ROOT / "focus_trees/NAM/postwar/focuses.txt")
         self.event_root = "NAM"
         self.flag("ADISCORD_nam_resource_war_nam_victory")
         for neighbour, tag in (("eflor", "EFL"), ("azhar", "AZH")):
             accord = focuses[f"NAM_{neighbour}_accord"]
-            ultimatum = focuses[f"NAM_{neighbour}_ultimatum"]
             for status in ("independent", "ally", "subject", "annexed"):
                 with self.subTest(neighbour=neighbour, status=status):
                     self.facts[(tag, "exists", "yes")] = status != "annexed"
                     self.facts[(tag, "exists", "no")] = status == "annexed"
                     self.facts[(tag, "is_subject", "no")] = status != "subject"
-                    self.facts[(tag, "is_subject_of", "NAM")] = status == "subject"
+                    self.facts[(tag, "is_subject", "yes")] = status == "subject"
                     self.facts[(tag, "is_in_faction_with", "NAM")] = status in ("ally", "subject")
                     self.assertEqual(self.matches(block(accord, "available"), "NAM"), status in ("independent", "ally"))
-                    self.assertEqual(self.matches(block(ultimatum, "available"), "NAM"), status == "independent")
-                    self.assertEqual(self.matches(block(ultimatum, "bypass"), "NAM"), status in ("subject", "annexed"))
+                    self.assertEqual(self.trigger_matches("NAM_neighbour_settlement_closed", tag), status != "independent")
 
     def test_map_distinguishes_leaders_from_allies_and_northern_successors(self):
         self.facts[("KDR", "exists", "yes")] = True
@@ -959,7 +958,7 @@ class SouthLifecycleTests(unittest.TestCase):
 
     def test_every_rom_course_waits_for_its_diplomatic_preparation(self):
         for capstone, foreign in (("NAM_ladder_of_seals", "NAM_south_desert_offices"),
-                                  ("NAM_common_fuel_market", "NAM_south_fenn_guarantee"),
+                                  ("NAM_common_fuel_market", "NAM_south_oil_for_water"),
                                   ("NAM_balanced_accounts", "NAM_prag_partner_supply")):
             for key in list(self.facts):
                 if key[0] == "NAM" and key[1] == "has_completed_focus":
@@ -974,7 +973,7 @@ class SouthLifecycleTests(unittest.TestCase):
     def test_focus_routes_and_successors_have_reachable_alternatives(self):
         self.facts[("NAM", "has_completed_focus", "NAM_ladder_of_seals")] = False
         self.facts[("NAM", "has_completed_focus", "NAM_common_fuel_market")] = True
-        self.facts[("NAM", "has_completed_focus", "NAM_south_fenn_guarantee")] = True
+        self.facts[("NAM", "has_completed_focus", "NAM_south_oil_for_water")] = True
         self.assertTrue(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"))
         for key in list(self.facts):
             if key[0] == "NAM" and key[1] == "has_completed_focus":
@@ -1416,7 +1415,10 @@ class SouthLifecycleTests(unittest.TestCase):
     def test_submission_finalizer_uses_the_same_current_contract_guard(self):
         finalizer = self.effects["ADISCORD_south_finalize_submission"]
         branches = [e.value for e in finalizer if e.key in ("if", "else_if")]
-        for branch, sender in zip(branches, ("SHL", "NAM")):
+        self.assertIn("NAM_border_protocol_ready", repr(branches[0]))
+        self.assertIn("NAM_apply_border_protocol", repr(branches[0]))
+        self.assertEqual(len(branches), 3)
+        for branch, sender in zip(branches[1:], ("SHL", "NAM")):
             self.assertIn("ADISCORD_south_submission_to_" + sender.lower() + "_valid", repr(block(branch, "limit")))
 
 

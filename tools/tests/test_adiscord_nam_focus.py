@@ -6928,7 +6928,7 @@ class NamCampaignTests(unittest.TestCase):
 
         expected = {
             "main": (self.focuses, 95), "wartime": (self.wartime, 40),
-            "postwar": (self.postwar, 248), "defeated": (self.defeated, 22),
+            "postwar": (self.postwar, 247), "defeated": (self.defeated, 22),
             "south_war": (self.south_war, 68),
             "exile_radical": (self.exile_trees["exile_radical"][1], 72),
             "exile_humanist": (self.exile_trees["exile_humanist"][1], 73),
@@ -11257,8 +11257,8 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_postwar_layout_is_visible_before_progress_and_mandate_specific(self):
         roots = ("NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return")
-        for balance, course, count in ((-0.5, "service_state", 158), (0, "pragmatic_compact", 126),
-                                       (0.5, "federal_charter", 126)):
+        for balance, course, count in ((-0.5, "service_state", 156), (0, "pragmatic_compact", 125),
+                                       (0.5, "federal_charter", 124)):
             facts = self.postwar_facts()
             facts[("NAM", "has_variable", "NAM_prewar_balance")] = True
             facts[("NAM", "variable", "NAM_prewar_balance")] = balance
@@ -11337,7 +11337,7 @@ class NamCampaignTests(unittest.TestCase):
                                      {"NAM_recognition"})
                 for other in ("service_state", "pragmatic_compact", "federal_charter"):
                     self.assertEqual("NAM_" + other in points, other == course)
-                for name in ("foreign_office", "eflor_accord", "eflor_ultimatum", "azhar_accord", "azhar_ultimatum",
+                for name in ("foreign_office", "eflor_accord", "azhar_accord",
                              "border_administration", "border_security", "border_compacts", "border_citizenship"):
                     self.assertIn("NAM_" + name, points)
                 for chapter in ("NAM_pw_air_review", "NAM_pw_naval_review", "NAM_pw_transport_commission",
@@ -11356,17 +11356,12 @@ class NamCampaignTests(unittest.TestCase):
         southern = {r.key: r.value for r in parsed("common/scripted_effects/ADISCORD_south_final_war_effects.txt")}
         recognition = self.triggers["NAM_neighbour_sovereignty_recognised"]
         for side, tag, other in (("eflor", "EFL", "AZH"), ("azhar", "AZH", "EFL")):
-            accord, demand = ("NAM_" + side + suffix for suffix in ("_accord", "_ultimatum"))
-            for name, alternative in ((accord, demand), (demand, accord)):
-                focus = self.postwar[name]
-                self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "NAM_foreign_office")
-                self.assertEqual(scalar(block(focus, "mutually_exclusive"), "focus"), alternative)
+            accord = "NAM_" + side + "_accord"
+            self.assertEqual(scalar(block(self.postwar[accord], "prerequisite"), "focus"), "NAM_foreign_office")
             treaty = block(self.postwar[accord], "completion_reward")
             self.assertEqual(scalar(treaty, "give_guarantee"), tag)
             self.assertIn("NAM_reparations_to_svetlogorye", [e.value for e in walk(block(treaty, tag))
                                                              if e.key == "remove_ideas"])
-            ultimatum = block(block(self.postwar[demand], "completion_reward"), "hidden_effect")
-            self.assertEqual(scalar(block(ultimatum, tag), "ADISCORD_south_demand_submission"), "yes")
             for recipient in (tag, other):
                 facts = {("NAM", "has_completed_focus", accord): True, (recipient, "tag", recipient): True}
                 self.assertEqual(self.matches(recognition, facts, recipient), recipient == tag)
@@ -11375,6 +11370,67 @@ class NamCampaignTests(unittest.TestCase):
             self.assertIn("NAM_neighbour_sovereignty_recognised", [e.key for e in walk(guard)], action)
         self.assertEqual(scalar(block(self.postwar["NAM_border_administration"], "prerequisite"), "focus"),
                          "NAM_foreign_office")
+
+    def test_neighbour_missions_open_after_each_course_and_address_the_two_principals(self):
+        for name, course, offer in (
+            ("NAM_south_black_basin", "NAM_service_state", "ADISCORD_south_demand_submission"),
+            ("NAM_south_fenn_guarantee", "NAM_federal_charter", "ADISCORD_south_offer_alliance"),
+            ("NAM_prag_settlement_agreements", "NAM_pragmatic_compact", "ADISCORD_south_offer_economic_contract"),
+        ):
+            focus = self.postwar[name]
+            self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), course)
+            self.assertEqual(scalar(focus, "cost"), "2")
+            delivery = block(block(focus, "completion_reward"), "hidden_effect")
+            self.assertEqual([e.key for e in delivery], ["EFL", "AZH"])
+            for tag in ("EFL", "AZH"):
+                self.assertIn(offer, [e.key for e in walk(block(delivery, tag))])
+        kadir = block(block(self.postwar["NAM_south_desert_offices"], "completion_reward"), "hidden_effect")
+        self.assertEqual([e.key for e in kadir], ["KDR"])
+
+    def test_southern_followups_require_domestic_reform_and_first_neighbour_mission(self):
+        for name, reform, mission in (
+            ("NAM_south_desert_offices", "NAM_ladder_of_seals", "NAM_south_black_basin"),
+            ("NAM_south_oil_for_water", "NAM_common_fuel_market", "NAM_south_fenn_guarantee"),
+        ):
+            focus = self.postwar[name]
+            self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), reform)
+            facts = self.postwar_facts()
+            facts[("NAM", "ADISCORD_south_nam_story_clear", "yes")] = True
+            for completed in (False, True):
+                facts[("NAM", "has_completed_focus", mission)] = completed
+                self.assertEqual(self.matches(block(focus, "available"), facts), completed, name)
+
+    def test_pragmatic_protocol_checks_the_actual_signatory_before_awarding_its_land(self):
+        treaty = self.triggers["NAM_border_protocol_ready"]
+        for tag, state in (("EFL", "723"), ("AZH", "727")):
+            facts = self.postwar_facts()
+            facts.update({
+                ("NAM", "has_country_flag", "NAM_treaty_independence_recognised"): True,
+                ("NAM", "has_war", "no"): True,
+                (tag, "exists", "yes"): True,
+                (tag, "has_capitulated", "no"): True,
+                (tag, "has_war", "no"): True,
+                (tag, "tag", tag): True,
+                (tag, "has_idea", "NAM_reparations_to_svetlogorye"): True,
+                (tag, "variable", "num_owned_states"): 2,
+                (tag, "owns_state", state): True,
+                (tag, "controls_state", state): True,
+                ("NAM", "has_completed_focus", "NAM_eflor_accord"): False,
+                ("NAM", "has_completed_focus", "NAM_azhar_accord"): False,
+            })
+            self.assertTrue(self.matches(treaty, facts, tag), tag)
+            for key, value in (
+                ((tag, "owns_state", state), False), ((tag, "controls_state", state), False),
+                ((tag, "variable", "num_owned_states"), 1), ((tag, "is_subject", "yes"), True),
+                ((tag, "has_idea", "NAM_reparations_to_svetlogorye"), False),
+                (("NAM", "has_country_flag", "NAM_treaty_independence_recognised"), False),
+                (("NAM", "has_completed_focus", "NAM_" + ("eflor" if tag == "EFL" else "azhar") + "_accord"), True),
+            ):
+                self.assertFalse(self.matches(treaty, {**facts, key: value}, tag), key)
+            delivery = self.effects["NAM_apply_border_protocol"]
+            branch = next(e.value for e in delivery if e.key in ("if", "else_if") and scalar(block(e.value, "limit"), "tag") == tag)
+            self.assertEqual(scalar(block(branch, state), "NAM_rw_award_border_state"), "yes")
+            self.assertEqual(scalar(block(block(delivery, "NAM"), "set_autonomy"), "autonomy_state"), "autonomy_shadow_state")
 
     def test_postwar_three_branches_and_compact_prerequisites(self):
         roots = {"NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return"}
@@ -11932,7 +11988,7 @@ class NamCampaignTests(unittest.TestCase):
                   "NAM_export_consortium" if export else "NAM_state_refineries",
                   "NAM_oil_exchange", "NAM_national_university"]
         route += (["NAM_south_black_basin", "NAM_south_desert_offices"] if vertical else
-                  ["NAM_south_oil_for_water", "NAM_south_fenn_guarantee"])
+                  ["NAM_south_fenn_guarantee", "NAM_south_oil_for_water"])
         route.append("NAM_svetlogorye")
         route += ["NAM_pw_transport_commission", "NAM_pw_road_priority", "NAM_pw_logistics_depots",
                   "NAM_pw_army_review", "NAM_pw_breakthrough_army", "NAM_pw_staff_exercises",
@@ -11956,6 +12012,10 @@ class NamCampaignTests(unittest.TestCase):
         facts[("NAM", "equipment", "infantry_equipment")] = 3000
         facts[("NAM", "equipment", "support_equipment")] = 200
         facts[("NAM", "variable", "NAM_grp_dist_support")] = 40
+        facts[("NAM", "is_in_faction", "no")] = True
+        for tag in ("EFL", "AZH"):
+            facts[(tag, "ADISCORD_south_campaign_target_valid", "yes")] = True
+            facts[(tag, "NAM_neighbour_federal_invitation_open", "yes")] = True
         accounting = {name: body for name, body in self.effects.items()
                       if name in ("NAM_add_treasury", "NAM_spend_treasury", "NAM_receive_250", "NAM_project_begin", "NAM_project_close")
                       or name.startswith("NAM_export_office_")
@@ -12018,7 +12078,7 @@ class NamCampaignTests(unittest.TestCase):
             self.assertTrue(self.matches(readiness, facts), (vertical, armed, export))
             self.assertEqual(focus_days["NAM_seal_registry" if vertical else "NAM_district_council"], 70)
             self.assertEqual(finished["NAM_district_audit" if vertical else "NAM_pw_district_congress"], 84)
-            self.assertEqual(day, 665)
+            self.assertEqual(day, 651)
             for channel in ("civil", "military"):
                 self.assertFalse(facts[("NAM", "has_country_flag", f"NAM_pw_{channel}_busy")])
             offensive = self.postwar["NAM_south_seal_over_furnaces" if vertical else "NAM_south_oil_charter"]
@@ -12034,7 +12094,7 @@ class NamCampaignTests(unittest.TestCase):
             for prerequisite in (e.value for e in offensive if e.key == "prerequisite"):
                 self.assertTrue(any(facts.get(("NAM", "has_completed_focus", e.value)) for e in prerequisite))
             offensive_days = int(scalar(offensive, "cost")) * 7
-            self.assertEqual(day + offensive_days, 707)
+            self.assertEqual(day + offensive_days, 693)
             warning = block(block(parsed(f"common/decisions/{BASE}_decisions.txt"), "ADISCORD_south_final_war_category"), "ADISCORD_south_preparation")
             self.assertLessEqual(offensive_days, int(scalar(warning, "days_mission_timeout")))
         self.assertEqual(scalar(block(triggers, "ADISCORD_south_final_war_enabled"), "always"), "yes")
@@ -14785,6 +14845,45 @@ class NamBasinGuiTests(unittest.TestCase):
             for key in ("NAM_bw_card_700_body", "NAM_bw_map_700_tt", "NAM_bw_summary_compact", "NAM_bw_export_detail"):
                 with self.subTest(language=language, key=key):
                     self.assertEqual(values[key].count("[?NAM_port_free_berths|0]"), 1)
+
+    def test_basin_map_text_resolves_every_scripted_variant(self):
+        gui = block(parsed("interface/ADISCORD_NAM_basin.gui"), "guiTypes")
+        window = next(e.value for e in gui if scalar(e.value, "name") == scalar(self.panel, "window_name"))
+        labels = {e.value for e in walk(window) if e.key in ("text", "pdx_tooltip")}
+        labels.update(("NAM_national_programmes", "NAM_national_programmes_desc"))
+        variants = {
+            scalar(entry.value, "name"): [scalar(option.value, "localization_key")
+                                          for option in entry.value if option.key == "text"]
+            for entry in parsed(f"common/scripted_localisation/{BASE}_scripted_loc.txt")
+            if entry.key == "defined_text"
+        }
+        for language in ("russian", "english"):
+            lines = read(f"localisation/{language}/{BASE}_l_{language}.yml").splitlines()
+            values = dict(match.groups() for line in lines if (match := ENTRY.fullmatch(line)))
+            checked = set()
+
+            def check_text(string, path):
+                self.assertNotIn("$", string, (language, path))
+                for token in re.findall(r"\[([^\]]+)\]", string):
+                    function = token.rsplit(".", 1)[-1]
+                    if token.startswith("?") or function == "GetName":
+                        continue
+                    self.assertIn(function, variants, (language, path))
+                    for key in variants[function]:
+                        check_key(key, path + (function,))
+
+            def check_key(key, path):
+                self.assertNotIn(key, path, (language, path))
+                if key not in checked:
+                    self.assertIn(key, values, (language, path))
+                    check_text(values[key], path + (key,))
+                    checked.add(key)
+
+            for label in sorted(labels):
+                if "[" in label:
+                    check_text(label, (label,))
+                else:
+                    check_key(label, ())
 
     def test_each_selection_shows_one_district_card(self):
         states = (67, 688, 689, 690, 719, 700)

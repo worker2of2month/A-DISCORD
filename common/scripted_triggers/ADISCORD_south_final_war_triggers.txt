@@ -200,7 +200,7 @@ ADISCORD_south_nam_focus_ready = {
 				}
 				AND = {
 					has_completed_focus = NAM_common_fuel_market
-					has_completed_focus = NAM_south_fenn_guarantee
+					has_completed_focus = NAM_south_oil_for_water
 				}
 				AND = {
 					has_completed_focus = NAM_balanced_accounts
@@ -615,6 +615,7 @@ ADISCORD_south_offer_terms_valid = {
 			OR = {
 				is_in_faction = no
 				ADISCORD_south_alliance_switch_possible = yes
+				NAM_eflor_can_replace_restitution_alliance = yes
 			}
 		}
 	}
@@ -686,6 +687,29 @@ ADISCORD_south_alliance_switch_possible = {
 	is_in_faction = yes
 	is_faction_leader = no
 	faction_leader = { ADISCORD_south_regional_country = yes }
+}
+
+# Only Eflor may wind up the bilateral restitution alliance for the federal charter.
+NAM_eflor_can_replace_restitution_alliance = {
+	tag = EFL
+	is_faction_leader = yes
+	NAM = { has_completed_focus = NAM_federal_charter }
+	NOT = {
+		any_allied_country = {
+			is_in_faction_with = EFL
+			NOT = { tag = AZH }
+		}
+	}
+}
+
+NAM_neighbour_federal_invitation_open = {
+	ADISCORD_south_campaign_target_valid = yes
+	NAM_neighbour_sovereignty_recognised = no
+	OR = {
+		is_in_faction = no
+		ADISCORD_south_alliance_switch_possible = yes
+		NAM_eflor_can_replace_restitution_alliance = yes
+	}
 }
 
 # COUNTRY target. Nothing is left to win from it for the champion in ROOT.
