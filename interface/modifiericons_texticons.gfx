@@ -562,7 +562,7 @@ spriteTypes = {
 	# engine resolves these by exact subunit key in division and tooltip text.
 	spriteType = {
 		name = "GFX_unit_ADISCORD_militia_icon_small"
-		texturefile = "gfx/texticons/unit_infantry_icon_small.dds"
+		texturefile = "gfx/texticons/ADISCORD_militia_icon_small.dds"
 		legacy_lazy_load = no
 		noOfFrames = 2
 	}
@@ -583,14 +583,14 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_unit_ADISCORD_line_artillery_icon_small"
-		texturefile = "gfx/texticons/unit_artillery_icon_small.dds"
+		texturefile = "gfx/texticons/ADISCORD_line_artillery_icon_small.dds"
 		legacy_lazy_load = no
 		noOfFrames = 2
 	}
 
 	spriteType = {
 		name = "GFX_unit_ADISCORD_recon_platform_icon_small"
-		texturefile = "gfx/texticons/unit_recon_icon_small.dds"
+		texturefile = "gfx/texticons/support_armored_recon.dds"
 		legacy_lazy_load = no
 		noOfFrames = 2
 	}
@@ -618,7 +618,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_unit_ADISCORD_recovery_platform_icon_small"
-		texturefile = "gfx/texticons/support_maintenance_small.dds"
+		texturefile = "gfx/texticons/ADISCORD_recovery_platform_icon_small.dds"
 		legacy_lazy_load = no
 		noOfFrames = 2
 	}

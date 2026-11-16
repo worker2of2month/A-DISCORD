@@ -368,6 +368,7 @@
         "ADISCORD_tech_hardened_computers",
         "ADISCORD_tech_phase_synchronized_substations",
         "ADISCORD_tech_smart_recoil_compensators",
+        "ADISCORD_tech_combat_engineering_sections",
         "ADISCORD_tech_standardized_field_tool_chests",
         "ADISCORD_tech_electrohydraulic_gun_laying",
         "ADISCORD_tech_electric_turret_drives",
@@ -711,7 +712,7 @@
         "infrastructure_levels": 18,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 3,
+        "oob_divisions": 4,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -1862,7 +1863,7 @@
         "infrastructure_levels": 32,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 4,
+        "oob_divisions": 5,
         "starting_doctrines": []
       },
       "technologies_2160": [

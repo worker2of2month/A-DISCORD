@@ -482,31 +482,6 @@ def build():
     verify(pdx)
 
 
-def icon_bytes(size, white=False):
-    from PIL import Image, ImageDraw
-
-    width, height = size
-    mask = Image.new("L", (304, 168))
-    draw = ImageDraw.Draw(mask)
-    draw.ellipse((20, 36, 274, 110), fill=255)
-    draw.polygon(((226, 42), (277, 10), (277, 66)), fill=255)
-    draw.polygon(((225, 98), (280, 120), (270, 85)), fill=255)
-    draw.rectangle((79, 104, 224, 117), fill=255)
-    draw.rectangle((78, 123, 218, 136), fill=255)
-    draw.rectangle((100, 112, 110, 128), fill=255)
-    draw.rectangle((191, 112, 201, 128), fill=255)
-    draw.line((45, 126, 95, 126), fill=255, width=8)
-    draw.line((206, 126, 251, 126), fill=255, width=8)
-    mask = mask.resize((width, height), Image.Resampling.LANCZOS)
-    atlas = Image.new("RGBA", (width * 2, height))
-    for frame, color in enumerate(((240, 240, 230), (255, 216, 112)) if white else
-                                  ((24, 30, 33), (246, 235, 196))):
-        icon = Image.new("RGBA", (width, height), color)
-        icon.putalpha(mask)
-        atlas.paste(icon, (frame * width, 0))
-    return dds_bytes(atlas)
-
-
 def decode_audio(filename, expected_hash):
     import numpy as np
 
@@ -704,13 +679,12 @@ def package_files():
         entity.extend(["entity = {", f'\tname = "{alias}"', f'\tclone = "{NAME}_entity"', "}", ""])
     files[Path(f"gfx/entities/{NAME}.asset")] = "\n".join(entity).encode("utf-8")
     sprites = [header.rstrip(), "spriteTypes = {"]
-    for suffix, folder, size, white in (
-        ("medium", "gfx/interface/counters/divisions_large", (76, 42), False),
-        ("medium_white", "gfx/interface/counters/divisions_small", (30, 12), True),
-        ("small", "gfx/texticons", (30, 12), True),
+    for suffix, folder in (
+        ("medium", "gfx/interface/counters/divisions_large"),
+        ("medium_white", "gfx/interface/counters/divisions_small"),
+        ("small", "gfx/texticons"),
     ):
         path = Path(folder) / f"{NAME}_icon.dds"
-        files[path] = icon_bytes(size, white)
         sprites.extend(["\tspriteType = {", f'\t\tname = "GFX_unit_{NAME}_icon_{suffix}"',
                         f'\t\ttexturefile = "{path.as_posix()}"', "\t\tnoOfFrames = 2", "\t}", ""])
     for key in (f"{NAME}_equipment", f"{NAME}_equipment_1"):

@@ -911,10 +911,27 @@ class NewWorldRouteTests(unittest.TestCase):
         destructive = {"clear_variable", "clr_country_flag", "remove_decision", "remove_mission"}
         self.assertFalse([e.key for e in walk(transition) if e.key in destructive])
 
+    def test_player_opens_the_chapter_with_the_last_campaign_focus(self):
+        # The proclamation no longer replaces the campaign tree by itself.
+        adopt = block(entries(EFFECTS), "VAL_adopt_commonwealth")
+        self.assertNotIn("val_rework.124", [scalar(e.value, "id") for e in walk(adopt) if e.key == "country_event"])
+        transition = block(entries(EFFECTS), "VAL_nw_open_chapter")
+        self.assertEqual(scalar(block(block(transition, "if"), "limit"), "has_completed_focus"), "VAL_Peace_Without_Orders")
+        main = block(entries("focus_trees/VAL/main/focuses.txt"), "focus_tree")
+        focuses = {scalar(e.value, "id"): e.value for e in main if e.key == "focus"}
+        final = focuses["VAL_Peace_Without_Orders"]
+        groups = [{p.value for p in e.value} for e in final if e.key == "prerequisite"]
+        self.assertEqual(groups, [{"VAL_Reopen_Trade_Routes", "VAL_Settle_Industrial_Debts"}])
+        self.assertEqual(scalar(block(final, "available"), "has_war"), "no")
+        sent = [scalar(e.value, "id") for e in walk(block(final, "completion_reward")) if e.key == "country_event"]
+        self.assertEqual(sent, ["val_rework.124"])
+        # It is the lowest focus of the campaign tree.
+        self.assertEqual(int(scalar(final, "y")), max(int(scalar(f, "y")) for f in focuses.values()))
+
     def test_new_tree_is_registered_complete_and_has_no_unreachable_prerequisites(self):
         self.assertEqual(SOURCES.get("VAL/new_world/focuses.txt"), "ADISCORD_VAL_new_world.txt")
         focuses = tree_focuses()
-        self.assertEqual(len(focuses), 88)
+        self.assertEqual(len(focuses), 89)
         reachable = set()
         for _ in range(len(focuses)):
             for name, focus in focuses.items():
@@ -931,7 +948,7 @@ class NewWorldRouteTests(unittest.TestCase):
         self.assertEqual(reachable, set(focuses))
         # Regime lanes never share a cell, so any set of visible branches stays readable.
         places = {(scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}
-        self.assertEqual(len(places), 88)
+        self.assertEqual(len(places), 89)
 
     def test_every_branch_has_a_symmetric_exclusive_pair(self):
         focuses = tree_focuses()

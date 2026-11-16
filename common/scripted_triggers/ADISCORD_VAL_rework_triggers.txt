@@ -26,6 +26,105 @@ VAL_final_crisis_preparing = {
 	check_variable = { var = VAL_final_crisis_phase value = 1 compare = equals }
 }
 
+# COUNTRY VAL. The northern operation is prepared until the final war begins.
+# The crisis phase is unset (0) before its weekly initialisation.
+VAL_nod_op_can_prepare = {
+	tag = VAL
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_war_with = NOD }
+	NOT = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = greater_than_or_equals } }
+	NOD = {
+		exists = yes
+		has_capitulated = no
+		NOT = { is_subject_of = VAL }
+	}
+}
+
+# COUNTRY VAL. Preparation focuses are skipped once the war has begun or Nodrul is gone.
+VAL_nod_op_moment_passed = {
+	OR = {
+		check_variable = { var = VAL_final_crisis_phase value = 2 compare = greater_than_or_equals }
+		NOT = { country_exists = NOD }
+		NOD = { is_subject_of = VAL }
+	}
+}
+
+# COUNTRY VAL. The Bezhaysk operation is prepared until VAL_Bezhaysk_Operation
+# declares the war.
+VAL_bjk_op_can_prepare = {
+	tag = VAL
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_country_flag = VAL_bjk_op_launched }
+	NOT = { has_country_flag = ADISCORD_bezhaysk_campaign_active }
+	BJK = {
+		exists = yes
+		has_capitulated = no
+		NOT = { is_subject_of = VAL }
+		NOT = { has_war_with = VAL }
+	}
+}
+
+VAL_bjk_op_moment_passed = {
+	OR = {
+		has_country_flag = VAL_bjk_op_launched
+		has_country_flag = ADISCORD_bezhaysk_campaign_active
+		NOT = { country_exists = BJK }
+		BJK = { is_subject_of = VAL }
+	}
+}
+
+# COUNTRY VAL. The operation against the Northern coalition is prepared until
+# VAL_Break_The_Northern_Coalition declares the war.
+VAL_nc_op_can_prepare = {
+	tag = VAL
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_country_flag = VAL_nc_op_launched }
+	NOT = { has_country_flag = VAL_northern_coalition_campaign_active }
+	VAL_northern_coalition_resolved = no
+}
+
+VAL_nc_op_moment_passed = {
+	OR = {
+		has_country_flag = VAL_nc_op_launched
+		has_country_flag = VAL_northern_coalition_campaign_active
+		VAL_northern_coalition_resolved = yes
+	}
+}
+
+# COUNTRY VAL. The Stelander operation is prepared while a Stelander power can
+# still receive the ultimatum or refuse it, and before the campaign begins.
+VAL_stl_op_can_prepare = {
+	tag = VAL
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_country_flag = VAL_stl_op_launched }
+	NOT = { has_country_flag = VAL_stelander_equal_alliance }
+	OR = {
+		STP = { VAL_stelander_ultimatum_target = yes }
+		STS = { VAL_stelander_ultimatum_target = yes }
+	}
+}
+
+# COUNTRY VAL. A war that began without the operation also closes its moment.
+VAL_stl_op_moment_passed = {
+	OR = {
+		has_country_flag = VAL_stl_op_launched
+		has_country_flag = VAL_stelander_defeated
+		has_country_flag = VAL_stelander_equal_alliance
+		has_war_with = STP
+		has_war_with = STS
+		# Before the union wars end neither power is a target yet; that is not a passed moment.
+		AND = {
+			has_global_flag = STP_cw_union_wars_finished
+			NOT = { STP = { VAL_stelander_ultimatum_target = yes } }
+			NOT = { STS = { VAL_stelander_ultimatum_target = yes } }
+		}
+	}
+}
+
 # COUNTRY defender. Coalition membership follows the scripted war entry.
 # NOD can leave VAL's faction at launch when released from STP's dependency.
 VAL_ai_final_campaign_defender = {
@@ -422,6 +521,41 @@ VAL_frontier_controlled = {
 }
 
 # VAL: deliver the bounded eastern claim before another victor annexes ERT.
+# COUNTRY capitulating; FROM is the native victor. A subject or faction ally of
+# a frontier guarantor that has already capitulated and waits for the campaign
+# to close. The generic fallback would annex it together with the guarantor.
+VAL_frontier_guarantor_auxiliary_defeat = {
+	NOT = {
+		tag = NOD
+		tag = STP
+	}
+	has_war_with = VAL
+	OR = {
+		NOD = {
+			has_country_flag = VAL_frontier_guarantor
+			has_capitulated = yes
+			has_war_with = VAL
+			OR = {
+				is_in_faction_with = PREV
+				PREV = { is_subject_of = NOD }
+			}
+		}
+		STP = {
+			has_country_flag = VAL_frontier_guarantor
+			has_capitulated = yes
+			has_war_with = VAL
+			OR = {
+				is_in_faction_with = PREV
+				PREV = { is_subject_of = STP }
+			}
+		}
+	}
+	OR = {
+		FROM = { OR = { tag = VAL is_subject_of = VAL } }
+		capital_scope = { VAL_frontier_controlled = yes }
+	}
+}
+
 VAL_frontier_eastern_claim_ready = {
 	exists = yes
 	has_capitulated = no
@@ -1343,6 +1477,29 @@ VAL_final_current_receipt = {
 	}
 }
 
+# COUNTRY ally. The engine ends a minor subject's war together with its
+# capitulated overlord without a separate callback. Both settlements make peace
+# with such subjects; Stelander's also installs its Nodrul administration.
+# A major subject still has to be defeated on its own.
+VAL_final_falls_with_reserved_overlord = {
+	is_subject = yes
+	is_major = no
+	NOT = {
+		tag = STP
+		tag = STS
+	}
+	OVERLORD = {
+		OR = {
+			tag = STS
+			tag = NOD
+		}
+		OR = {
+			VAL_final_current_receipt = yes
+			VAL_final_defeat_reserved = yes
+		}
+	}
+}
+
 VAL_final_faction_ally_still_fighting = {
 	OR = {
 		any_other_country = {
@@ -1359,6 +1516,7 @@ VAL_final_faction_ally_still_fighting = {
 					AND = { tag = ROOT has_country_flag = VAL_coalition_capitulation_current }
 					VAL_final_current_receipt = yes
 					VAL_final_defeat_reserved = yes
+					VAL_final_falls_with_reserved_overlord = yes
 				}
 			}
 		}
@@ -1374,6 +1532,7 @@ VAL_final_faction_ally_still_fighting = {
 						OR = {
 							VAL_final_current_receipt = yes
 							VAL_final_defeat_reserved = yes
+							VAL_final_falls_with_reserved_overlord = yes
 						}
 					}
 				}
@@ -1386,6 +1545,7 @@ VAL_final_faction_ally_still_fighting = {
 						OR = {
 							VAL_final_current_receipt = yes
 							VAL_final_defeat_reserved = yes
+							VAL_final_falls_with_reserved_overlord = yes
 						}
 					}
 				}
@@ -1403,6 +1563,7 @@ VAL_final_faction_ally_still_fighting = {
 						OR = {
 							VAL_final_current_receipt = yes
 							VAL_final_defeat_reserved = yes
+							VAL_final_falls_with_reserved_overlord = yes
 						}
 					}
 				}
@@ -1415,6 +1576,7 @@ VAL_final_faction_ally_still_fighting = {
 						OR = {
 							VAL_final_current_receipt = yes
 							VAL_final_defeat_reserved = yes
+							VAL_final_falls_with_reserved_overlord = yes
 						}
 					}
 				}
@@ -1432,6 +1594,7 @@ VAL_final_faction_ally_still_fighting = {
 						OR = {
 							VAL_final_current_receipt = yes
 							VAL_final_defeat_reserved = yes
+							VAL_final_falls_with_reserved_overlord = yes
 						}
 					}
 				}
@@ -1444,6 +1607,7 @@ VAL_final_faction_ally_still_fighting = {
 						OR = {
 							VAL_final_current_receipt = yes
 							VAL_final_defeat_reserved = yes
+							VAL_final_falls_with_reserved_overlord = yes
 						}
 					}
 				}
@@ -3528,6 +3692,20 @@ VAL_east_contestable = {
 VAL_east_contest_active = {
 	has_global_flag = VAL_east_contest_started
 	NOT = { has_global_flag = VAL_east_contest_closed }
+}
+
+# GLOBAL. The contest is running or can still begin, so the eastern focuses keep
+# their contest rewards; otherwise they pay out in Kefreyt's own currency.
+VAL_east_contest_ahead = {
+	OR = {
+		VAL_east_contest_active = yes
+		AND = {
+			NOT = { has_global_flag = VAL_east_contest_started }
+			NOT = { has_global_flag = VAL_east_final_started }
+			NOT = { has_global_flag = VAL_east_final_resolved }
+			VAL_east_rival_exists = yes
+		}
+	}
 }
 
 # COUNTRY VAL.

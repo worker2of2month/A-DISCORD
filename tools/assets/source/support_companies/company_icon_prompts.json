@@ -1,0 +1,52 @@
+{
+  "description": "Division-designer icons for A-Discord support companies. Frame 1 of each 152x42 texture is the generated silhouette; frame 2 (NATO symbol), the 60x12 on-map and texticon variants are drawn by the asset builder from the same palette.",
+  "output": {
+    "canvas": "1536x1024 PNG, transparent background",
+    "save_as": "tools/assets/source/support_companies/<file>"
+  },
+  "style": "Use the approved drone reconnaissance sprite (drone_recon_company.png, viewed in a 76x42 game slot) as the drawing reference for this Darkest Hour-style division-designer set. Draw a compact side-view equipment silhouette by hand as a small strategy-game inventory sprite. Match the drone's sturdy proportions, slightly elevated view where needed, solid muted branch-colour midtone, clustered dark under-edges and short, narrow patches of light on the upper faces. Let gaps between parts define the shape. Simplify secondary objects enough to read beside the drone at the same size. Draw with the detail budget of a roughly 52x30-pixel sprite and enlarge that artwork for the source PNG. Use a tight contact shadow only. Center one complete group on a transparent 1536x1024 canvas with about 10 percent clear margin on each side. No background tile, glow, thick bevels, glossy gradients, oversized highlights, outline badge, NATO frame, text or insignia. Rugged 22nd-century equipment.",
+  "icons": [
+    {
+      "unit": "ADISCORD_assault_sapper_company",
+      "file": "assault_sapper_company.png",
+      "colour": "deep engineer red #b02a24",
+      "prompt": "SUBJECT: a heavy breaching sledgehammer lying diagonally across a boxy satchel demolition charge with a short coiled fuse, the hammer head on the right. Reads as foot assault engineers who blow through walls. No vehicle, no shovel."
+    },
+    {
+      "unit": "ADISCORD_armored_engineer_company",
+      "file": "armored_engineer_company.png",
+      "colour": "deep engineer red #b02a24",
+      "prompt": "SUBJECT: a low tracked armored engineering vehicle in side view with a large dozer blade at the front and a short folded crane arm on top. Wedge-shaped armored hull, no turret gun, wide tracks."
+    },
+    {
+      "unit": "ADISCORD_drone_recon_company",
+      "file": "drone_recon_company.png",
+      "colour": "reconnaissance yellow #c9b33a",
+      "prompt": "SUBJECT: one large four-rotor reconnaissance drone seen slightly from the side, with a camera gimbal hanging under its body, and a small handheld ground control tablet with an antenna at its lower left. The drone dominates; rotor discs are solid ovals, not thin lines."
+    },
+    {
+      "unit": "ADISCORD_ew_company",
+      "file": "ew_company.png",
+      "colour": "signals orange #d9733a",
+      "prompt": "SUBJECT: a portable electronic-warfare jammer: a squat rugged equipment case on short legs with a tall thick antenna mast topped by a flat panel emitter, three broad curved signal arcs radiating to the right, and a small broken drone silhouette falling below the arcs. Thick arcs, no thin lines."
+    },
+    {
+      "unit": "ADISCORD_decontamination_company",
+      "file": "decontamination_company.png",
+      "colour": "hazard green #7a9a3a",
+      "prompt": "SUBJECT: a wheeled decontamination unit: a squat cylindrical tank on a small two-wheel trailer with a thick spray lance and hose, a gas mask with two round filters resting against the tank. No radiation symbol, no text."
+    },
+    {
+      "unit": "ADISCORD_desert_support_company",
+      "file": "desert_support_company.png",
+      "colour": "desert ochre #b08a3a",
+      "prompt": "SUBJECT: a rugged desert water truck in side view with a cylindrical water tank on its bed, oversized sand tyres, and three square jerrycans stacked beside its front wheel. Simple blocky shapes."
+    },
+    {
+      "unit": "ADISCORD_loitering_munition_company",
+      "file": "loitering_munition_company.png",
+      "colour": "fire-support red #c0392b",
+      "prompt": "SUBJECT: a box-shaped multi-tube launcher on a low tripod tilted upward, launching one winged loitering munition with an X-shaped tail that flies up to the upper right of the canvas. The launcher and the munition are both large and clearly separated."
+    }
+  ]
+}

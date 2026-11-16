@@ -260,11 +260,14 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                             for key in ("visible", "available", "custom_cost_trigger")
                         )
                         self.assertEqual(selectable, expected)
+                        # The result preview stays outside the guarded settlement
+                        # and changes nothing, so it is not a stale-click effect.
                         effects = [
                             e
                             for _, e in selected_effects(
                                 block(decision, "complete_effect"), facts, "VAL"
                             )
+                            if e.key != "custom_effect_tooltip"
                         ]
                         if not expected:
                             self.assertEqual(effects, [])
@@ -373,11 +376,19 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                     )
                     if currency:
                         self.assertIn(f"{price}§! £{currency}_texticon", values[0])
+                # Descriptions are narrative; the recruited amount belongs in the
+                # result preview and the cooldown is shown natively.
                 description = re.search(
                     r'^ ' + ident + r'_desc:\d* "([^"\n]*)"$', source, re.M
                 ).group(1)
-                self.assertIn(str(manpower), description)
-                self.assertIn(str(cooldown), description)
+                self.assertNotIn(str(manpower), description)
+                self.assertNotIn(str(cooldown), description)
+                complete = named_block(named_block(self.decisions, ident), "complete_effect")
+                preview = complete.split("if = {", 1)[0]
+                if f"effect_tooltip = {{ add_manpower = {manpower} }}" not in preview:
+                    key = re.search(r"custom_effect_tooltip = (\w+)", preview).group(1)
+                    text = re.search(r'^ ' + key + r':\d* "([^"\n]*)"$', source, re.M).group(1)
+                    self.assertIn(f"{manpower}§!", text)
 
     def test_val_manpower_focus_filter_is_registered_and_applied(self) -> None:
         filter_id = "FOCUS_FILTER_VAL_MANPOWER"

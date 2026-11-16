@@ -7182,6 +7182,10 @@ ADISCORD_vorkerland_tva_administration = {
 		custom_cost_trigger = { TVA_frontline_cadre_affordable = yes }
 		fire_only_once = yes
 		complete_effect = {
+			effect_tooltip = {
+				custom_effect_tooltip = TVA_frontline_cadre_result_tt
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_reserve_cadre_spent days = 70 }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -7189,11 +7193,11 @@ ADISCORD_vorkerland_tva_administration = {
 						TVA_frontline_cadre_affordable = yes
 					}
 				}
-				add_political_power = -40
-				add_command_power = -20
-				custom_effect_tooltip = TVA_frontline_cadre_result_tt
-				add_timed_idea = { idea = ADISCORD_vorkerland_tva_reserve_cadre_spent days = 70 }
 				hidden_effect = {
+					add_political_power = -40
+					add_command_power = -20
+					custom_effect_tooltip = TVA_frontline_cadre_result_tt
+					add_timed_idea = { idea = ADISCORD_vorkerland_tva_reserve_cadre_spent days = 70 }
 					subtract_from_variable = { var = TVA_cadre_reserve value = 30 }
 					TVA_refresh_administration = yes
 				}
@@ -7217,6 +7221,10 @@ ADISCORD_vorkerland_tva_administration = {
 		custom_cost_trigger = { TVA_protected_core_affordable = yes }
 		fire_only_once = yes
 		complete_effect = {
+			effect_tooltip = {
+				custom_effect_tooltip = TVA_protected_core_result_tt
+				add_timed_idea = { idea = ADISCORD_vorkerland_tva_technical_core_sealed days = 70 }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -7224,11 +7232,11 @@ ADISCORD_vorkerland_tva_administration = {
 						TVA_protected_core_affordable = yes
 					}
 				}
-				add_political_power = -35
-				add_equipment_to_stockpile = { type = support_equipment amount = -100 }
-				custom_effect_tooltip = TVA_protected_core_result_tt
-				add_timed_idea = { idea = ADISCORD_vorkerland_tva_technical_core_sealed days = 70 }
 				hidden_effect = {
+					add_political_power = -35
+					add_equipment_to_stockpile = { type = support_equipment amount = -100 }
+					custom_effect_tooltip = TVA_protected_core_result_tt
+					add_timed_idea = { idea = ADISCORD_vorkerland_tva_technical_core_sealed days = 70 }
 					subtract_from_variable = { var = TVA_cadre_reserve value = 30 }
 					set_variable = { var = TVA_protected_cadre value = 30 }
 					TVA_refresh_administration = yes

@@ -1413,32 +1413,32 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_battlefield_medical_drones_medium"
-		textureFile = "gfx/interface/technologies/night_vision.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_medical_drone.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_trauma_registry_networks_medium"
-		textureFile = "gfx/interface/technologies/night_vision.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_casualty_monitor.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_smart_tourniquet_systems_medium"
-		textureFile = "gfx/interface/technologies/night_vision.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_medical.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_forward_surgical_cells_medium"
-		textureFile = "gfx/interface/technologies/night_vision.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_medical.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_nanofiber_wound_dressings_medium"
-		textureFile = "gfx/interface/technologies/night_vision.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_medical.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_distributed_combat_medicine_medium"
-		textureFile = "gfx/interface/technologies/night_vision.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_medical.dds"
 	}
 
 	SpriteType = {
@@ -3735,11 +3735,11 @@ spriteTypes = {
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_recon_target_handoffs_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/recon3.dds"
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_persistent_recon_patrols_medium"
-		textureFile = "gfx/interface/technologies/recon.dds"
+		textureFile = "gfx/interface/technologies/recon4.dds"
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_field_signal_sections_medium"
@@ -3751,7 +3751,7 @@ spriteTypes = {
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_mobile_signal_relays_medium"
-		textureFile = "gfx/interface/technologies/tech_signal_company.dds"
+		textureFile = "gfx/interface/technologies/tech_signal_company3.dds"
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_integrated_field_dispatch_medium"
@@ -3946,4 +3946,52 @@ spriteTypes = {
 	}
 
 	# END ADISCORD country APC cards
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_fortification_engineering_medium"
+		textureFile = "gfx/interface/technologies/engineers3.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_armored_engineer_vehicles_medium"
+		textureFile = "gfx/interface/technologies/engineers4.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_field_ew_company_medium"
+		textureFile = "gfx/interface/technologies/tech_signal_company2.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_spectrum_dominance_medium"
+		textureFile = "gfx/interface/technologies/tech_signal_company4.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_drone_recon_company_medium"
+		textureFile = "gfx/interface/technologies/recon2.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_persistent_surveillance_medium"
+		textureFile = "gfx/interface/technologies/radio.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_environment_support_companies_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_protection_respirator.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_sealed_decontamination_kits_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_protection_respirator.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_desert_water_columns_medium"
+		textureFile = "gfx/interface/technologies/tech_logistics_company2.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_environment_field_kits_medium"
+		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_environment_endurance_doctrine_medium"
+		textureFile = "gfx/interface/technologies/engineers2.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_environment_assault_doctrine_medium"
+		textureFile = "gfx/interface/technologies/recon2.dds"
+	}
 }

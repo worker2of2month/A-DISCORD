@@ -6283,7 +6283,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
                 yield items[index : index + count]
                 index += count
 
-        def check(items, current):
+        def check(items, current, previous=None):
             result = []
             for group in groups(items):
                 entry = group[0]
@@ -6291,28 +6291,30 @@ class ValFrontierCampaignTests(unittest.TestCase):
                 if not k:
                     ok = matches_conditions(group, facts, current)
                 elif k in ("AND", "hidden_trigger"):
-                    ok = check(v, current)
+                    ok = check(v, current, previous)
                 elif k in ("OR", "NOT"):
-                    any_true = any(check(g, current) for g in groups(v))
+                    any_true = any(check(g, current, previous) for g in groups(v))
                     ok = any_true if k == "OR" else not any_true
                 elif k == "any_owned_state":
                     ok = any(
-                        check(v, str(state))
+                        check(v, str(state), current)
                         for state in facts.get((current, "owned_states"), ())
                     )
                 elif k.startswith("event_target:"):
                     target = facts.get(("event_target", k.split(":", 1)[1]))
-                    ok = target is not None and check(v, target)
+                    ok = target is not None and check(v, target, current)
                 elif k == "capital_scope":
                     ok = (current, "capital") in facts and check(
-                        v, facts[(current, "capital")]
+                        v, facts[(current, "capital")], current
                     )
                 elif k in ("controller", "owner"):
-                    ok = (current, k) in facts and check(v, facts[(current, k)])
+                    ok = (current, k) in facts and check(v, facts[(current, k)], current)
                 elif isinstance(v, list) and re.fullmatch(r"[A-Z]{3}|[0-9]+|ROOT", k):
-                    ok = check(v, scope if k == "ROOT" else k)
+                    ok = check(v, scope if k == "ROOT" else k, current)
+                elif k == "PREV" and isinstance(v, list):
+                    ok = previous is not None and check(v, previous, current)
                 elif k in triggers:
-                    ok = check(triggers[k], current) == (v == "yes")
+                    ok = check(triggers[k], current, previous) == (v == "yes")
                 else:
                     ok = matches_conditions([entry], facts, current)
                 result.append(ok)

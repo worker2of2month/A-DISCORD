@@ -535,7 +535,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 4070 height = 1490 min = { width = 100%% height = 100%% } }
+				size = { width = 6890 height = 1490 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_stripes" }
 				iconType = {
@@ -636,7 +636,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_combat_engineering_2162"
-					position = { x = 388 y = 154 }
+					position = { x = 808 y = 154 }
 					font = "hoi_18b"
 					text = "2162"
 					maxWidth = 56
@@ -645,10 +645,20 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_support_folder_year_combat_engineering_2169"
-					position = { x = 388 y = 294 }
+					name = "ADISCORD_support_folder_year_combat_engineering_2166"
+					position = { x = 808 y = 294 }
 					font = "hoi_18b"
-					text = "2169"
+					text = "2166"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_support_folder_year_combat_engineering_2167"
+					position = { x = 808 y = 434 }
+					font = "hoi_18b"
+					text = "2167"
 					maxWidth = 56
 					maxHeight = 22
 					format = left
@@ -656,7 +666,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_combat_engineering_2175"
-					position = { x = 388 y = 434 }
+					position = { x = 808 y = 574 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -666,7 +676,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_combat_medicine_2158"
-					position = { x = 688 y = 154 }
+					position = { x = 1528 y = 154 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 56
@@ -676,7 +686,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_combat_medicine_2161"
-					position = { x = 688 y = 294 }
+					position = { x = 1528 y = 294 }
 					font = "hoi_18b"
 					text = "2161"
 					maxWidth = 56
@@ -686,7 +696,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_combat_medicine_2162"
-					position = { x = 688 y = 434 }
+					position = { x = 1528 y = 434 }
 					font = "hoi_18b"
 					text = "2162"
 					maxWidth = 56
@@ -696,7 +706,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_combat_medicine_2167"
-					position = { x = 688 y = 574 }
+					position = { x = 1528 y = 574 }
 					font = "hoi_18b"
 					text = "2167"
 					maxWidth = 56
@@ -706,7 +716,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_combat_medicine_2169"
-					position = { x = 688 y = 714 }
+					position = { x = 1528 y = 714 }
 					font = "hoi_18b"
 					text = "2169"
 					maxWidth = 56
@@ -716,7 +726,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_combat_medicine_2172"
-					position = { x = 688 y = 854 }
+					position = { x = 1528 y = 854 }
 					font = "hoi_18b"
 					text = "2172"
 					maxWidth = 56
@@ -726,7 +736,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_combat_medicine_2175"
-					position = { x = 688 y = 994 }
+					position = { x = 1528 y = 994 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -736,7 +746,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_logistics_2150"
-					position = { x = 988 y = 154 }
+					position = { x = 2248 y = 154 }
 					font = "hoi_18b"
 					text = "2150"
 					maxWidth = 56
@@ -746,7 +756,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_logistics_2155"
-					position = { x = 988 y = 294 }
+					position = { x = 2248 y = 294 }
 					font = "hoi_18b"
 					text = "2155"
 					maxWidth = 56
@@ -756,7 +766,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_logistics_2158"
-					position = { x = 988 y = 434 }
+					position = { x = 2248 y = 434 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 56
@@ -766,7 +776,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_logistics_2161"
-					position = { x = 988 y = 574 }
+					position = { x = 2248 y = 574 }
 					font = "hoi_18b"
 					text = "2161"
 					maxWidth = 56
@@ -776,7 +786,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_logistics_2166"
-					position = { x = 988 y = 714 }
+					position = { x = 2248 y = 714 }
 					font = "hoi_18b"
 					text = "2166"
 					maxWidth = 56
@@ -786,7 +796,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_logistics_2167"
-					position = { x = 988 y = 854 }
+					position = { x = 2248 y = 854 }
 					font = "hoi_18b"
 					text = "2167"
 					maxWidth = 56
@@ -796,7 +806,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_logistics_2170"
-					position = { x = 988 y = 994 }
+					position = { x = 2248 y = 994 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 56
@@ -806,7 +816,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_logistics_2175"
-					position = { x = 988 y = 1134 }
+					position = { x = 2248 y = 1134 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -816,7 +826,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_logistics_2180"
-					position = { x = 988 y = 1274 }
+					position = { x = 2248 y = 1274 }
 					font = "hoi_18b"
 					text = "2180"
 					maxWidth = 56
@@ -826,7 +836,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_field_signals_2160"
-					position = { x = 1288 y = 154 }
+					position = { x = 2548 y = 154 }
 					font = "hoi_18b"
 					text = "2160"
 					maxWidth = 56
@@ -836,7 +846,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_field_signals_2163"
-					position = { x = 1288 y = 294 }
+					position = { x = 2548 y = 294 }
 					font = "hoi_18b"
 					text = "2163"
 					maxWidth = 56
@@ -845,10 +855,20 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_support_folder_year_field_signals_2167"
-					position = { x = 1288 y = 434 }
+					name = "ADISCORD_support_folder_year_field_signals_2165"
+					position = { x = 2548 y = 434 }
 					font = "hoi_18b"
-					text = "2167"
+					text = "2165"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_support_folder_year_field_signals_2169"
+					position = { x = 2548 y = 574 }
+					font = "hoi_18b"
+					text = "2169"
 					maxWidth = 56
 					maxHeight = 22
 					format = left
@@ -856,7 +876,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_field_signals_2172"
-					position = { x = 1288 y = 574 }
+					position = { x = 2548 y = 714 }
 					font = "hoi_18b"
 					text = "2172"
 					maxWidth = 56
@@ -866,7 +886,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_field_reconnaissance_2158"
-					position = { x = 1588 y = 154 }
+					position = { x = 3268 y = 154 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 56
@@ -876,7 +896,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_field_reconnaissance_2162"
-					position = { x = 1588 y = 294 }
+					position = { x = 3268 y = 294 }
 					font = "hoi_18b"
 					text = "2162"
 					maxWidth = 56
@@ -885,8 +905,18 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
+					name = "ADISCORD_support_folder_year_field_reconnaissance_2163"
+					position = { x = 3268 y = 434 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_field_reconnaissance_2166"
-					position = { x = 1588 y = 434 }
+					position = { x = 3268 y = 574 }
 					font = "hoi_18b"
 					text = "2166"
 					maxWidth = 56
@@ -896,7 +926,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_field_reconnaissance_2170"
-					position = { x = 1588 y = 574 }
+					position = { x = 3268 y = 714 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 56
@@ -905,8 +935,48 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
+					name = "ADISCORD_support_folder_year_field_environment_2160"
+					position = { x = 3988 y = 154 }
+					font = "hoi_18b"
+					text = "2160"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_support_folder_year_field_environment_2163"
+					position = { x = 3988 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_support_folder_year_field_environment_2166"
+					position = { x = 3988 y = 434 }
+					font = "hoi_18b"
+					text = "2166"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_support_folder_year_field_environment_2169"
+					position = { x = 3988 y = 574 }
+					font = "hoi_18b"
+					text = "2169"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_reserve_training_2158"
-					position = { x = 1888 y = 154 }
+					position = { x = 4708 y = 154 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 56
@@ -916,7 +986,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_reserve_training_2160"
-					position = { x = 1888 y = 294 }
+					position = { x = 4708 y = 294 }
 					font = "hoi_18b"
 					text = "2160"
 					maxWidth = 56
@@ -926,7 +996,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_reserve_training_2163"
-					position = { x = 1888 y = 434 }
+					position = { x = 4708 y = 434 }
 					font = "hoi_18b"
 					text = "2163"
 					maxWidth = 56
@@ -936,7 +1006,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_reserve_training_2167"
-					position = { x = 1888 y = 574 }
+					position = { x = 4708 y = 574 }
 					font = "hoi_18b"
 					text = "2167"
 					maxWidth = 56
@@ -946,7 +1016,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_garrison_security_2160"
-					position = { x = 2608 y = 154 }
+					position = { x = 5428 y = 154 }
 					font = "hoi_18b"
 					text = "2160"
 					maxWidth = 56
@@ -956,7 +1026,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_garrison_security_2164"
-					position = { x = 2608 y = 294 }
+					position = { x = 5428 y = 294 }
 					font = "hoi_18b"
 					text = "2164"
 					maxWidth = 56
@@ -966,7 +1036,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_garrison_security_2168"
-					position = { x = 2608 y = 434 }
+					position = { x = 5428 y = 434 }
 					font = "hoi_18b"
 					text = "2168"
 					maxWidth = 56
@@ -976,7 +1046,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_officer_training_2162"
-					position = { x = 2908 y = 154 }
+					position = { x = 5728 y = 154 }
 					font = "hoi_18b"
 					text = "2162"
 					maxWidth = 56
@@ -986,7 +1056,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_officer_training_2164"
-					position = { x = 2908 y = 294 }
+					position = { x = 5728 y = 294 }
 					font = "hoi_18b"
 					text = "2164"
 					maxWidth = 56
@@ -996,7 +1066,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_officer_training_2165"
-					position = { x = 2908 y = 434 }
+					position = { x = 5728 y = 434 }
 					font = "hoi_18b"
 					text = "2165"
 					maxWidth = 56
@@ -1006,7 +1076,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_officer_training_2167"
-					position = { x = 2908 y = 574 }
+					position = { x = 5728 y = 574 }
 					font = "hoi_18b"
 					text = "2167"
 					maxWidth = 56
@@ -1016,7 +1086,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_officer_training_2169"
-					position = { x = 2908 y = 714 }
+					position = { x = 5728 y = 714 }
 					font = "hoi_18b"
 					text = "2169"
 					maxWidth = 56
@@ -1026,7 +1096,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_officer_training_2171"
-					position = { x = 2908 y = 854 }
+					position = { x = 5728 y = 854 }
 					font = "hoi_18b"
 					text = "2171"
 					maxWidth = 56
@@ -1036,7 +1106,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_officer_training_2173"
-					position = { x = 2908 y = 994 }
+					position = { x = 5728 y = 994 }
 					font = "hoi_18b"
 					text = "2173"
 					maxWidth = 56
@@ -1046,7 +1116,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_officer_training_2175"
-					position = { x = 2908 y = 1134 }
+					position = { x = 5728 y = 1134 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -1056,7 +1126,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_rail_2150"
-					position = { x = 3628 y = 154 }
+					position = { x = 6448 y = 154 }
 					font = "hoi_18b"
 					text = "2150"
 					maxWidth = 56
@@ -1066,7 +1136,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_rail_2155"
-					position = { x = 3628 y = 294 }
+					position = { x = 6448 y = 294 }
 					font = "hoi_18b"
 					text = "2155"
 					maxWidth = 56
@@ -1076,7 +1146,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_rail_2158"
-					position = { x = 3628 y = 434 }
+					position = { x = 6448 y = 434 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 56
@@ -1086,7 +1156,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_rail_2166"
-					position = { x = 3628 y = 574 }
+					position = { x = 6448 y = 574 }
 					font = "hoi_18b"
 					text = "2166"
 					maxWidth = 56
@@ -1096,7 +1166,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_rail_2170"
-					position = { x = 3628 y = 714 }
+					position = { x = 6448 y = 714 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 56
@@ -1106,7 +1176,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_support_folder_year_rail_2173"
-					position = { x = 3628 y = 854 }
+					position = { x = 6448 y = 854 }
 					font = "hoi_18b"
 					text = "2173"
 					maxWidth = 56
@@ -1120,7 +1190,7 @@ guiTypes = {
 				position = { x = 150 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_FIELD_SUPPORT"
-				maxWidth = 210
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
@@ -1128,47 +1198,47 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_field_workshop_tools_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 210 height = 1260 }
+				size = { width = 630 height = 1260 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_combat_engineering"
-				position = { x = 450 y = 76 }
+				position = { x = 870 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_COMBAT_ENGINEERING"
-				maxWidth = 210
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_battle_damage_survey_teams_tree"
-				position = { x = 450 y = 130 }
-				size = { width = 210 height = 420 }
+				position = { x = 870 y = 130 }
+				size = { width = 630 height = 560 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_combat_medicine"
-				position = { x = 750 y = 76 }
+				position = { x = 1590 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_COMBAT_MEDICINE"
-				maxWidth = 210
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_casualty_evacuation_tree"
-				position = { x = 750 y = 130 }
-				size = { width = 210 height = 980 }
+				position = { x = 1590 y = 130 }
+				size = { width = 630 height = 980 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_logistics"
-				position = { x = 1050 y = 76 }
+				position = { x = 2310 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_LOGISTICS"
 				maxWidth = 210
@@ -1178,48 +1248,65 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_pack_transport_tree"
-				position = { x = 1050 y = 130 }
+				position = { x = 2310 y = 130 }
 				size = { width = 210 height = 1260 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_field_signals"
-				position = { x = 1350 y = 76 }
+				position = { x = 2610 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_FIELD_SIGNALS"
-				maxWidth = 210
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_field_signal_sections_tree"
-				position = { x = 1350 y = 130 }
-				size = { width = 210 height = 560 }
+				position = { x = 2610 y = 130 }
+				size = { width = 630 height = 700 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_field_reconnaissance"
-				position = { x = 1650 y = 76 }
+				position = { x = 3330 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_FIELD_RECONNAISSANCE"
-				maxWidth = 210
+				maxWidth = 630
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_foot_recon_sections_tree"
-				position = { x = 1650 y = 130 }
-				size = { width = 210 height = 560 }
+				position = { x = 3330 y = 130 }
+				size = { width = 630 height = 700 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_field_environment"
+				position = { x = 4050 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_FIELD_ENVIRONMENT"
+				maxWidth = 630
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_environment_support_companies_tree"
+				position = { x = 4050 y = 130 }
+				size = { width = 630 height = 560 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_reserve_training"
-				position = { x = 1950 y = 76 }
+				position = { x = 4770 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RESERVE_TRAINING"
 				maxWidth = 630
@@ -1229,14 +1316,14 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_reserve_cadre_training_tree"
-				position = { x = 1950 y = 130 }
+				position = { x = 4770 y = 130 }
 				size = { width = 630 height = 560 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_garrison_security"
-				position = { x = 2670 y = 76 }
+				position = { x = 5490 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_GARRISON_SECURITY"
 				maxWidth = 210
@@ -1246,14 +1333,14 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_garrison_police_sections_tree"
-				position = { x = 2670 y = 130 }
+				position = { x = 5490 y = 130 }
 				size = { width = 210 height = 420 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_officer_training"
-				position = { x = 2970 y = 76 }
+				position = { x = 5790 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_OFFICER_TRAINING"
 				maxWidth = 630
@@ -1263,14 +1350,14 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_reconstituted_staff_academies_tree"
-				position = { x = 2970 y = 130 }
+				position = { x = 5790 y = 130 }
 				size = { width = 630 height = 1120 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_rail"
-				position = { x = 3690 y = 76 }
+				position = { x = 6510 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RAIL"
 				maxWidth = 210
@@ -1280,7 +1367,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_restored_rail_stock_tree"
-				position = { x = 3690 y = 130 }
+				position = { x = 6510 y = 130 }
 				size = { width = 210 height = 840 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"

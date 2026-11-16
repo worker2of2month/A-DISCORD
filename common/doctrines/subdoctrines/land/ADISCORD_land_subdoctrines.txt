@@ -35,7 +35,14 @@ ADISCORD_doctrine_mass_recruitment_bureaus = {
 		}
 		ADISCORD_doctrine_total_restoration_front = {
 			mastery = 60
-			category_all_infantry = { max_organisation = 2 }
+			category_all_infantry = { max_organisation = 1 }
+			field_hospital = {
+				battalion_mult = {
+					category = category_all_infantry
+					max_strength = 0.1
+					add = yes
+				}
+			}
 		}
 		ADISCORD_doctrine_people_and_scrap = {
 			mastery = 70
@@ -82,8 +89,13 @@ ADISCORD_doctrine_assault_detachments = {
 		}
 		ADISCORD_doctrine_assault_detachments_shock_reserves = {
 			mastery = 60
-			land_reinforce_rate = 0.01
 			ADISCORD_assault_infantry = { soft_attack = 0.05 }
+			ADISCORD_assault_sapper_company = {
+				battalion_mult = {
+					category = category_all_infantry
+					breakthrough = 0.03
+				}
+			}
 		}
 		ADISCORD_doctrine_assault_detachments_continuous_assault = {
 			mastery = 70
@@ -122,7 +134,12 @@ ADISCORD_doctrine_mobile_line_groups = {
 		}
 		ADISCORD_doctrine_mobile_line_groups_mobile_reserves = {
 			mastery = 40
-			land_reinforce_rate = 0.01
+			logistics_company = {
+				battalion_mult = {
+					category = category_vehicle_infantry
+					supply_consumption = -0.05
+				}
+			}
 		}
 		ADISCORD_doctrine_mobile_line_groups_route_control = {
 			mastery = 50
@@ -222,7 +239,12 @@ ADISCORD_doctrine_platform_battlegroups = {
 		ADISCORD_doctrine_drone_screened_advance = {
 			mastery = 50
 			category_all_armor = { defense = 0.04 }
-			coordination_bonus = 0.01
+			ADISCORD_recon_platform = {
+				battalion_mult = {
+					category = category_tanks
+					breakthrough = 0.03
+				}
+			}
 		}
 		ADISCORD_doctrine_autonomous_repair_cycles = {
 			mastery = 60
@@ -304,6 +326,10 @@ ADISCORD_doctrine_infantry_tank_integration = {
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 1.5 has_tech = ADISCORD_tech_combat_engineering_sections }
+		modifier = {
+			factor = 1.5
+			has_template_containing_unit = ADISCORD_armored_engineer_company
+		}
 	}
 	category_all_armor = { defense = 0.03 }
 	category_all_infantry = { breakthrough = 0.02 }
@@ -323,7 +349,12 @@ ADISCORD_doctrine_infantry_tank_integration = {
 		}
 		ADISCORD_doctrine_infantry_tank_integration_combined_reserves = {
 			mastery = 60
-			land_reinforce_rate = 0.01
+			ADISCORD_armored_engineer_company = {
+				battalion_mult = {
+					category = category_all_infantry
+					breakthrough = 0.04
+				}
+			}
 		}
 		ADISCORD_doctrine_infantry_tank_integration_integrated_battlegroup = {
 			mastery = 70
@@ -358,7 +389,13 @@ ADISCORD_doctrine_autonomous_armored_screen = {
 	rewards = {
 		ADISCORD_doctrine_autonomous_armored_screen_crewless_scouts = {
 			mastery = 30
-			category_recon = { recon = 0.75 }
+			category_recon = { recon = 0.5 }
+			ADISCORD_drone_recon_company = {
+				battalion_mult = {
+					category = category_tanks
+					soft_attack = 0.03
+				}
+			}
 		}
 		ADISCORD_doctrine_autonomous_armored_screen_machine_pickets = {
 			mastery = 40
@@ -418,7 +455,8 @@ ADISCORD_doctrine_mesh_battlefield_command = {
 		}
 		ADISCORD_doctrine_distributed_command_cells = {
 			mastery = 60
-			land_reinforce_rate = 0.01
+			signal_company = { initiative = 0.03 }
+			ADISCORD_ew_company = { initiative = 0.03 air_attack = 0.10 }
 		}
 		ADISCORD_doctrine_algorithmic_campaigning = {
 			mastery = 70
@@ -456,7 +494,12 @@ ADISCORD_doctrine_mission_command = {
 		}
 		ADISCORD_doctrine_mission_command_local_initiative = {
 			mastery = 40
-			land_reinforce_rate = 0.01
+			signal_company = {
+				battalion_mult = {
+					category = category_all_infantry
+					defense = 0.03
+				}
+			}
 		}
 		ADISCORD_doctrine_mission_command_reserve_authority = {
 			mastery = 50
@@ -469,7 +512,7 @@ ADISCORD_doctrine_mission_command = {
 		ADISCORD_doctrine_mission_command_adaptive_command = {
 			mastery = 70
 			planning_speed = 0.05
-			land_reinforce_rate = 0.015
+			category_all_infantry = { max_organisation = 2 }
 			coordination_bonus = 0.02
 		}
 	}
@@ -503,7 +546,18 @@ ADISCORD_doctrine_deep_operations = {
 		}
 		ADISCORD_doctrine_deep_operations_follow_on_echelons = {
 			mastery = 40
-			land_reinforce_rate = 0.01
+			recon = {
+				battalion_mult = {
+					category = category_all_infantry
+					soft_attack = 0.03
+				}
+			}
+			ADISCORD_drone_recon_company = {
+				battalion_mult = {
+					category = category_all_infantry
+					soft_attack = 0.03
+				}
+			}
 		}
 		ADISCORD_doctrine_deep_operations_rear_disruption = {
 			mastery = 50
@@ -600,12 +654,24 @@ ADISCORD_doctrine_fortress_state_command = {
 		}
 		ADISCORD_doctrine_radiation_zone_operations = {
 			mastery = 50
-			attrition = -0.02
+			attrition = -0.01
+			ADISCORD_decontamination_company = {
+				battalion_mult = {
+					category = category_all_infantry
+					max_organisation = 2
+					add = yes
+				}
+			}
 		}
 		ADISCORD_doctrine_counteroffensive_reserves = {
 			mastery = 60
-			land_reinforce_rate = 0.01
 			category_all_infantry = { breakthrough = 0.03 }
+			military_police = {
+				battalion_mult = {
+					category = category_all_infantry
+					defense = 0.02
+				}
+			}
 		}
 		ADISCORD_doctrine_national_redoubt_protocols = {
 			mastery = 70
@@ -633,29 +699,42 @@ ADISCORD_doctrine_artillery_support_network = {
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 1.8 has_tech = ADISCORD_tech_drone_spotted_batteries }
+		modifier = {
+			factor = 1.5
+			has_template_containing_unit = ADISCORD_line_artillery
+		}
 	}
 	category_line_artillery = { soft_attack = 0.04 }
 	planning_speed = 0.015
 	rewards = {
 		ADISCORD_doctrine_artillery_support_network_forward_observers = {
 			mastery = 30
-			category_recon = { recon = 0.5 }
+			category_recon = { recon = 0.25 }
+			ADISCORD_drone_recon_company = {
+				battalion_mult = {
+					category = category_artillery
+					soft_attack = 0.03
+				}
+			}
 		}
 		ADISCORD_doctrine_artillery_support_network_distributed_batteries = {
 			mastery = 40
-			category_line_artillery = { defense = 0.03 }
+			category_artillery = { defense = 0.03 }
 		}
 		ADISCORD_doctrine_artillery_support_network_rapid_fireplans = {
 			mastery = 50
-			planning_speed = 0.03
+			planning_speed = 0.02
+			ADISCORD_regimental_fire_support = { soft_attack = 0.04 }
 		}
 		ADISCORD_doctrine_artillery_support_network_precision_barrages = {
 			mastery = 60
-			category_line_artillery = { soft_attack = 0.05 }
+			category_line_artillery = { soft_attack = 0.04 }
+			artillery = { soft_attack = 0.04 }
+			ADISCORD_loitering_munition_company = { soft_attack = 0.06 hard_attack = 0.06 }
 		}
 		ADISCORD_doctrine_artillery_support_network_artillery_web = {
 			mastery = 70
-			category_line_artillery = { soft_attack = 0.06 breakthrough = 0.04 }
+			category_artillery = { soft_attack = 0.06 breakthrough = 0.04 }
 			coordination_bonus = 0.015
 		}
 	}
@@ -679,6 +758,13 @@ ADISCORD_doctrine_combat_engineer_groups = {
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 2 has_tech = ADISCORD_tech_assault_breaching_packages }
+		modifier = {
+			factor = 1.5
+			OR = {
+				has_template_containing_unit = ADISCORD_assault_sapper_company
+				has_template_containing_unit = ADISCORD_armored_engineer_company
+			}
+		}
 	}
 	engineer = { breakthrough = 0.04 defense = 0.03 }
 	industry_repair_factor = 0.02
@@ -689,7 +775,13 @@ ADISCORD_doctrine_combat_engineer_groups = {
 		}
 		ADISCORD_doctrine_combat_engineer_groups_breaching_teams = {
 			mastery = 40
-			engineer = { breakthrough = 0.04 }
+			engineer = { breakthrough = 0.02 }
+			ADISCORD_assault_sapper_company = {
+				battalion_mult = {
+					category = category_all_infantry
+					breakthrough = 0.04
+				}
+			}
 		}
 		ADISCORD_doctrine_combat_engineer_groups_mobile_bridges = {
 			mastery = 50
@@ -697,12 +789,24 @@ ADISCORD_doctrine_combat_engineer_groups = {
 		}
 		ADISCORD_doctrine_combat_engineer_groups_robotic_clearance = {
 			mastery = 60
-			engineer = { defense = 0.04 breakthrough = 0.04 }
+			engineer = {
+				battalion_mult = {
+					category = category_all_infantry
+					defense = 0.03
+				}
+			}
+			ADISCORD_armored_engineer_company = {
+				battalion_mult = {
+					category = category_all_armor
+					breakthrough = 0.03
+				}
+			}
 		}
 		ADISCORD_doctrine_combat_engineer_groups_engineer_command = {
 			mastery = 70
 			engineer = { defense = 0.06 breakthrough = 0.06 }
-			category_support_battalions = { max_organisation = 2 }
+			ADISCORD_assault_sapper_company = { breakthrough = 0.08 }
+			ADISCORD_armored_engineer_company = { defense = 0.06 breakthrough = 0.06 }
 		}
 	}
 }
@@ -725,13 +829,25 @@ ADISCORD_doctrine_resilient_logistics_command = {
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 1.7 has_tech = ADISCORD_tech_hardened_logistics_nodes }
+		modifier = {
+			factor = 1.5
+			OR = {
+				has_template_containing_unit = logistics_company
+				has_template_containing_unit = ADISCORD_recovery_platform
+			}
+		}
 	}
 	supply_consumption_factor = -0.015
 	category_support_battalions = { defense = 0.02 }
 	rewards = {
 		ADISCORD_doctrine_resilient_logistics_command_route_audits = {
 			mastery = 30
-			supply_consumption_factor = -0.01
+			logistics_company = {
+				battalion_mult = {
+					category = category_all_infantry
+					supply_consumption = -0.04
+				}
+			}
 		}
 		ADISCORD_doctrine_resilient_logistics_command_forward_pools = {
 			mastery = 40
@@ -739,7 +855,14 @@ ADISCORD_doctrine_resilient_logistics_command = {
 		}
 		ADISCORD_doctrine_resilient_logistics_command_repair_columns = {
 			mastery = 50
-			industry_repair_factor = 0.02
+			industry_repair_factor = 0.01
+			ADISCORD_recovery_platform = {
+				battalion_mult = {
+					category = category_all_armor
+					max_strength = 0.15
+					add = yes
+				}
+			}
 		}
 		ADISCORD_doctrine_resilient_logistics_command_depot_dispersion = {
 			mastery = 60
@@ -748,7 +871,7 @@ ADISCORD_doctrine_resilient_logistics_command = {
 		ADISCORD_doctrine_resilient_logistics_command_resilient_theater = {
 			mastery = 70
 			supply_consumption_factor = -0.025
-			land_reinforce_rate = 0.01
+			field_hospital = { casualty_trickleback = 0.05 }
 			category_support_battalions = { default_morale = 0.03 }
 		}
 	}

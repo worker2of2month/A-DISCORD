@@ -42,7 +42,6 @@ bookmarks = {
 		}
 
 		"NAM" = {
-			minor = yes
 			history = "NAM_BOOKMARK_DESC"
 			ideology = etatism
 			ideas = {

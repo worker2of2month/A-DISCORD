@@ -3173,6 +3173,10 @@ STP_military_operations = {
 		fire_only_once = no
 		days_re_enable = 45
 		complete_effect = {
+			effect_tooltip = {
+				add_manpower = 5000
+				army_experience = 15
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -3180,9 +3184,11 @@ STP_military_operations = {
 						STP_cw_can_spend_1200 = yes
 					}
 				}
-				hidden_effect = { STP_cw_spend_1200 = yes }
-				add_manpower = 5000
-				army_experience = 15
+				hidden_effect = {
+					STP_cw_spend_1200 = yes
+					add_manpower = 5000
+					army_experience = 15
+				}
 			}
 		}
 		ai_will_do = {
@@ -3211,6 +3217,9 @@ STP_military_operations = {
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = STP }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -3218,8 +3227,10 @@ STP_military_operations = {
 						STP_cw_can_spend_1200 = yes
 					}
 				}
-				hidden_effect = { STP_cw_spend_1200 = yes }
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = STP }
+				hidden_effect = {
+					STP_cw_spend_1200 = yes
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = STP }
+				}
 			}
 		}
 		ai_will_do = {
@@ -3249,6 +3260,11 @@ STP_military_operations = {
 		fire_only_once = no
 		days_re_enable = 60
 		complete_effect = {
+			effect_tooltip = {
+				add_stability = 0.02
+				add_war_support = 0.04
+				custom_effect_tooltip = STP_pv_strain_minus_6_tt
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -3256,11 +3272,11 @@ STP_military_operations = {
 						STP_cw_can_spend_2400 = yes
 					}
 				}
-				hidden_effect = { STP_cw_spend_2400 = yes }
-				add_stability = 0.02
-				add_war_support = 0.04
-				custom_effect_tooltip = STP_pv_strain_minus_6_tt
 				hidden_effect = {
+					STP_cw_spend_2400 = yes
+					add_stability = 0.02
+					add_war_support = 0.04
+					custom_effect_tooltip = STP_pv_strain_minus_6_tt
 					set_temp_variable = { var = STP_pv_strain_change value = -6 }
 					STP_pv_change_strain = yes
 				}
@@ -4460,6 +4476,9 @@ STP_military_operations = {
 		days_re_enable = 42
 		fire_only_once = no
 		complete_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -4472,8 +4491,8 @@ STP_military_operations = {
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
 					ADISCORD_economy_mark_dirty = yes
+					add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 }
 				}
-				add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 }
 			}
 		}
 		ai_will_do = {
@@ -4507,6 +4526,9 @@ STP_military_operations = {
 		days_re_enable = 42
 		fire_only_once = no
 		complete_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 24 }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -4519,8 +4541,8 @@ STP_military_operations = {
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
 					ADISCORD_economy_mark_dirty = yes
+					add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 24 }
 				}
-				add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 24 }
 			}
 		}
 		ai_will_do = {
@@ -4554,6 +4576,9 @@ STP_military_operations = {
 		days_re_enable = 42
 		fire_only_once = no
 		complete_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -4566,8 +4591,8 @@ STP_military_operations = {
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
 					ADISCORD_economy_mark_dirty = yes
+					add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
 				}
-				add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
 			}
 		}
 		ai_will_do = {
@@ -4601,6 +4626,11 @@ STP_military_operations = {
 		days_re_enable = 42
 		fire_only_once = no
 		complete_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = artillery_equipment amount = 120 }
+				add_equipment_to_stockpile = { type = anti_air_equipment amount = 60 }
+				add_equipment_to_stockpile = { type = motorized_equipment amount = 150 }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -4613,10 +4643,10 @@ STP_military_operations = {
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1200 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1200 }
 					ADISCORD_economy_mark_dirty = yes
+					add_equipment_to_stockpile = { type = artillery_equipment amount = 120 }
+					add_equipment_to_stockpile = { type = anti_air_equipment amount = 60 }
+					add_equipment_to_stockpile = { type = motorized_equipment amount = 150 }
 				}
-				add_equipment_to_stockpile = { type = artillery_equipment amount = 120 }
-				add_equipment_to_stockpile = { type = anti_air_equipment amount = 60 }
-				add_equipment_to_stockpile = { type = motorized_equipment amount = 150 }
 			}
 		}
 		ai_will_do = {
@@ -4650,6 +4680,15 @@ STP_military_operations = {
 		days_re_enable = 42
 		fire_only_once = no
 		complete_effect = {
+			effect_tooltip = {
+				if = {
+					limit = { has_completed_focus = STP_pm_factory_air_cover }
+					add_timed_idea = { idea = STP_pm_interception_order days = 21 }
+				}
+				else = {
+					add_timed_idea = { idea = STP_pm_ground_support_order days = 21 }
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -4660,13 +4699,15 @@ STP_military_operations = {
 						NOT = { has_idea = STP_pm_ground_support_order }
 					}
 				}
-				hidden_effect = { add_command_power = -25 }
-				if = {
-					limit = { has_completed_focus = STP_pm_factory_air_cover }
-					add_timed_idea = { idea = STP_pm_interception_order days = 21 }
-				}
-				else = {
-					add_timed_idea = { idea = STP_pm_ground_support_order days = 21 }
+				hidden_effect = {
+					add_command_power = -25
+					if = {
+						limit = { has_completed_focus = STP_pm_factory_air_cover }
+						add_timed_idea = { idea = STP_pm_interception_order days = 21 }
+					}
+					else = {
+						add_timed_idea = { idea = STP_pm_ground_support_order days = 21 }
+					}
 				}
 			}
 		}
@@ -5525,10 +5566,17 @@ STP_military_operations = {
 		fire_only_once = yes
 
 		complete_effect = {
+			effect_tooltip = {
+				add_tech_bonus = { name = STP_pw_party_return_specialists bonus = 0.5 uses = 2 category = industry }
+			}
 			if = {
 				limit = { hidden_trigger = { STP_pw_can_reconstruct = yes has_completed_focus = STP_pw_party_open_settlement  check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } } }
-				hidden_effect = { subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 } add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 } ADISCORD_economy_mark_dirty = yes }
-				add_tech_bonus = { name = STP_pw_party_return_specialists bonus = 0.5 uses = 2 category = industry }
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+					ADISCORD_economy_mark_dirty = yes
+					add_tech_bonus = { name = STP_pw_party_return_specialists bonus = 0.5 uses = 2 category = industry }
+				}
 			}
 		}
 		ai_will_do = { base = 8 }
@@ -5592,6 +5640,11 @@ STP_military_operations = {
 		fire_only_once = no
 		days_re_enable = 120
 		complete_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 16000 producer = ROOT }
+				add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
+				add_equipment_to_stockpile = { type = artillery_equipment amount = 100 producer = ROOT }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -5605,10 +5658,14 @@ STP_military_operations = {
 						}
 					}
 				}
-				hidden_effect = { subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 } add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 } ADISCORD_economy_mark_dirty = yes }
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 16000 producer = ROOT }
-				add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
-				add_equipment_to_stockpile = { type = artillery_equipment amount = 100 producer = ROOT }
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
+					ADISCORD_economy_mark_dirty = yes
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 16000 producer = ROOT }
+					add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
+					add_equipment_to_stockpile = { type = artillery_equipment amount = 100 producer = ROOT }
+				}
 			}
 		}
 		ai_will_do = { base = 8 }
@@ -7913,6 +7970,9 @@ hidden_effect = { STP_cw_poll_nod_intervention = yes }
 		cost = 0
 		fire_only_once = yes
 		complete_effect = {
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_pc_border_watch days = 120 }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -7922,7 +7982,9 @@ hidden_effect = { STP_cw_poll_nod_intervention = yes }
 						NOT = { has_idea = STP_pc_border_watch }
 					}
 				}
-				add_timed_idea = { idea = STP_pc_border_watch days = 120 }
+				hidden_effect = {
+					add_timed_idea = { idea = STP_pc_border_watch days = 120 }
+				}
 			}
 		}
 		ai_will_do = { base = 100 }
@@ -7940,6 +8002,9 @@ hidden_effect = { STP_cw_poll_nod_intervention = yes }
 		cost = 0
 		fire_only_once = yes
 		complete_effect = {
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_pc_nod_watch days = 120 }
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -7949,7 +8014,9 @@ hidden_effect = { STP_cw_poll_nod_intervention = yes }
 						NOT = { has_idea = STP_pc_nod_watch }
 					}
 				}
-				add_timed_idea = { idea = STP_pc_nod_watch days = 120 }
+				hidden_effect = {
+					add_timed_idea = { idea = STP_pc_nod_watch days = 120 }
+				}
 			}
 		}
 		ai_will_do = { base = 100 }
@@ -8476,7 +8543,14 @@ hidden_effect = { if = { limit = {
 		allowed = { tag = STP }
 		visible = { check_variable = { var = STP_ps_nod_receipt_stage value = 1 compare = equals } }
 		cost = 0
-		complete_effect = { hidden_effect = { STP_ps_refund_nod = yes remove_mission = STP_ps_nod_dispatch remove_mission = STP_ps_nod_route_wait } }
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_cancel_nod_tt
+			hidden_effect = {
+				STP_ps_refund_nod = yes
+				remove_mission = STP_ps_nod_dispatch
+				remove_mission = STP_ps_nod_route_wait
+			}
+		}
 		ai_will_do = { base = 0 }
 	}
 	STP_ps_nod_route_wait = {
@@ -24190,6 +24264,41 @@ STP_ch_chapters = {
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
+			effect_tooltip = {
+				if = {
+					limit = {
+						has_completed_focus = STP_pe_houses_commission
+					}
+					custom_effect_tooltip = STP_pe_treasury_1000_tt
+					hidden_effect = {
+						ADISCORD_economy_initialize_country = yes
+						add_to_variable = {
+							var = ADISCORD_economy_treasury
+							value = 1000
+						}
+						add_to_variable = {
+							var = ADISCORD_economy_current_month_action_income
+							value = 1000
+						}
+						ADISCORD_economy_mark_dirty = yes
+					}
+				}
+				else = {
+					custom_effect_tooltip = STP_pe_treasury_750_tt
+					hidden_effect = {
+						ADISCORD_economy_initialize_country = yes
+						add_to_variable = {
+							var = ADISCORD_economy_treasury
+							value = 750
+						}
+						add_to_variable = {
+							var = ADISCORD_economy_current_month_action_income
+							value = 750
+						}
+						ADISCORD_economy_mark_dirty = yes
+					}
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -24217,13 +24326,11 @@ STP_ch_chapters = {
 						value = 450
 					}
 					ADISCORD_economy_mark_dirty = yes
-				}
-				if = {
-					limit = {
-						has_completed_focus = STP_pe_houses_commission
-					}
-					custom_effect_tooltip = STP_pe_treasury_1000_tt
-					hidden_effect = {
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_houses_commission
+						}
+						custom_effect_tooltip = STP_pe_treasury_1000_tt
 						ADISCORD_economy_initialize_country = yes
 						add_to_variable = {
 							var = ADISCORD_economy_treasury
@@ -24235,10 +24342,8 @@ STP_ch_chapters = {
 						}
 						ADISCORD_economy_mark_dirty = yes
 					}
-				}
-				else = {
-					custom_effect_tooltip = STP_pe_treasury_750_tt
-					hidden_effect = {
+					else = {
+						custom_effect_tooltip = STP_pe_treasury_750_tt
 						ADISCORD_economy_initialize_country = yes
 						add_to_variable = {
 							var = ADISCORD_economy_treasury
@@ -24290,6 +24395,23 @@ STP_ch_chapters = {
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
+			effect_tooltip = {
+				if = {
+					limit = {
+						has_completed_focus = STP_pe_festival_commission
+					}
+					add_timed_idea = {
+						idea = STP_pe_festival_services_idea
+						days = 60
+					}
+				}
+				else = {
+					add_timed_idea = {
+						idea = STP_pe_festival_services_idea
+						days = 30
+					}
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -24317,20 +24439,20 @@ STP_ch_chapters = {
 						value = 450
 					}
 					ADISCORD_economy_mark_dirty = yes
-				}
-				if = {
-					limit = {
-						has_completed_focus = STP_pe_festival_commission
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_festival_commission
+						}
+						add_timed_idea = {
+							idea = STP_pe_festival_services_idea
+							days = 60
+						}
 					}
-					add_timed_idea = {
-						idea = STP_pe_festival_services_idea
-						days = 60
-					}
-				}
-				else = {
-					add_timed_idea = {
-						idea = STP_pe_festival_services_idea
-						days = 30
+					else = {
+						add_timed_idea = {
+							idea = STP_pe_festival_services_idea
+							days = 30
+						}
 					}
 				}
 			}
@@ -24372,34 +24494,7 @@ STP_ch_chapters = {
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
-						STP_party_leader_3 = yes
-						has_capitulated = no
-						has_completed_focus = STP_pe_staff_next_day
-						NOT = {
-							has_political_power < 35
-						}
-						check_variable = {
-							var = ADISCORD_economy_treasury
-							value = 450
-							compare = greater_than_or_equals
-						}
-					}
-				}
-				hidden_effect = {
-					add_political_power = -35
-					subtract_from_variable = {
-						var = ADISCORD_economy_treasury
-						value = 450
-					}
-					add_to_variable = {
-						var = ADISCORD_economy_current_month_action_costs
-						value = 450
-					}
-					ADISCORD_economy_mark_dirty = yes
-				}
+			effect_tooltip = {
 				if = {
 					limit = {
 						has_completed_focus = STP_pe_staff_commission
@@ -24428,6 +24523,64 @@ STP_ch_chapters = {
 						producer = ROOT
 					}
 					army_experience = 10
+				}
+			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						STP_party_leader_3 = yes
+						has_capitulated = no
+						has_completed_focus = STP_pe_staff_next_day
+						NOT = {
+							has_political_power < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				hidden_effect = {
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_staff_commission
+						}
+						add_equipment_to_stockpile = {
+							type = ADISCORD_infantry_equipment_2156
+							amount = 8100
+							producer = ROOT
+						}
+						add_equipment_to_stockpile = {
+							type = support_equipment_1
+							amount = 60
+							producer = ROOT
+						}
+						army_experience = 15
+					}
+					else = {
+						add_equipment_to_stockpile = {
+							type = ADISCORD_infantry_equipment_2156
+							amount = 4050
+							producer = ROOT
+						}
+						add_equipment_to_stockpile = {
+							type = support_equipment_1
+							amount = 30
+							producer = ROOT
+						}
+						army_experience = 10
+					}
 				}
 			}
 		}
@@ -24468,6 +24621,35 @@ STP_ch_chapters = {
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
+			effect_tooltip = {
+				if = {
+					limit = {
+						has_completed_focus = STP_pe_trade_commission
+					}
+					add_equipment_to_stockpile = {
+						type = ADISCORD_infantry_equipment_2156
+						amount = 12150
+						producer = ROOT
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment_1
+						amount = 90
+						producer = ROOT
+					}
+				}
+				else = {
+					add_equipment_to_stockpile = {
+						type = ADISCORD_infantry_equipment_2156
+						amount = 8100
+						producer = ROOT
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment_1
+						amount = 60
+						producer = ROOT
+					}
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -24495,32 +24677,32 @@ STP_ch_chapters = {
 						value = 450
 					}
 					ADISCORD_economy_mark_dirty = yes
-				}
-				if = {
-					limit = {
-						has_completed_focus = STP_pe_trade_commission
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_trade_commission
+						}
+						add_equipment_to_stockpile = {
+							type = ADISCORD_infantry_equipment_2156
+							amount = 12150
+							producer = ROOT
+						}
+						add_equipment_to_stockpile = {
+							type = support_equipment_1
+							amount = 90
+							producer = ROOT
+						}
 					}
-					add_equipment_to_stockpile = {
-						type = ADISCORD_infantry_equipment_2156
-						amount = 12150
-						producer = ROOT
-					}
-					add_equipment_to_stockpile = {
-						type = support_equipment_1
-						amount = 90
-						producer = ROOT
-					}
-				}
-				else = {
-					add_equipment_to_stockpile = {
-						type = ADISCORD_infantry_equipment_2156
-						amount = 8100
-						producer = ROOT
-					}
-					add_equipment_to_stockpile = {
-						type = support_equipment_1
-						amount = 60
-						producer = ROOT
+					else = {
+						add_equipment_to_stockpile = {
+							type = ADISCORD_infantry_equipment_2156
+							amount = 8100
+							producer = ROOT
+						}
+						add_equipment_to_stockpile = {
+							type = support_equipment_1
+							amount = 60
+							producer = ROOT
+						}
 					}
 				}
 			}
@@ -24562,6 +24744,19 @@ STP_ch_chapters = {
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
+			effect_tooltip = {
+				if = {
+					limit = {
+						has_completed_focus = STP_pe_security_commission
+					}
+					add_manpower = 1500
+					add_stability = 0.02
+				}
+				else = {
+					add_manpower = 750
+					add_stability = 0.01
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -24589,17 +24784,17 @@ STP_ch_chapters = {
 						value = 450
 					}
 					ADISCORD_economy_mark_dirty = yes
-				}
-				if = {
-					limit = {
-						has_completed_focus = STP_pe_security_commission
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_security_commission
+						}
+						add_manpower = 1500
+						add_stability = 0.02
 					}
-					add_manpower = 1500
-					add_stability = 0.02
-				}
-				else = {
-					add_manpower = 750
-					add_stability = 0.01
+					else = {
+						add_manpower = 750
+						add_stability = 0.01
+					}
 				}
 			}
 		}
@@ -24640,6 +24835,23 @@ STP_ch_chapters = {
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
+			effect_tooltip = {
+				if = {
+					limit = {
+						has_completed_focus = STP_pe_regent_commission
+					}
+					add_timed_idea = {
+						idea = STP_pe_regent_cadres_idea
+						days = 60
+					}
+				}
+				else = {
+					add_timed_idea = {
+						idea = STP_pe_regent_cadres_idea
+						days = 30
+					}
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -24667,20 +24879,20 @@ STP_ch_chapters = {
 						value = 450
 					}
 					ADISCORD_economy_mark_dirty = yes
-				}
-				if = {
-					limit = {
-						has_completed_focus = STP_pe_regent_commission
+					if = {
+						limit = {
+							has_completed_focus = STP_pe_regent_commission
+						}
+						add_timed_idea = {
+							idea = STP_pe_regent_cadres_idea
+							days = 60
+						}
 					}
-					add_timed_idea = {
-						idea = STP_pe_regent_cadres_idea
-						days = 60
-					}
-				}
-				else = {
-					add_timed_idea = {
-						idea = STP_pe_regent_cadres_idea
-						days = 30
+					else = {
+						add_timed_idea = {
+							idea = STP_pe_regent_cadres_idea
+							days = 30
+						}
 					}
 				}
 			}
@@ -24715,6 +24927,9 @@ STP_pw_programme = {
 		fire_only_once = no
 		days_re_enable = 90
 		complete_effect = {
+			effect_tooltip = {
+				custom_effect_tooltip = STP_pw_civic_district_staff_result_tt
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -24731,8 +24946,8 @@ STP_pw_programme = {
 						value = 25
 					}
 					ADISCORD_economy_mark_dirty = yes
+					custom_effect_tooltip = STP_pw_civic_district_staff_result_tt
 				}
-				custom_effect_tooltip = STP_pw_civic_district_staff_result_tt
 			}
 		}
 		ai_will_do = {
@@ -24774,6 +24989,10 @@ STP_pw_programme = {
 		fire_only_once = no
 		days_re_enable = 90
 		complete_effect = {
+			effect_tooltip = {
+				custom_effect_tooltip = STP_pw_civic_district_clinics_result_tt
+				add_stability = 0.03
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -24803,9 +25022,9 @@ STP_pw_programme = {
 						value = 20
 					}
 					ADISCORD_economy_mark_dirty = yes
+					custom_effect_tooltip = STP_pw_civic_district_clinics_result_tt
+					add_stability = 0.03
 				}
-				custom_effect_tooltip = STP_pw_civic_district_clinics_result_tt
-				add_stability = 0.03
 			}
 		}
 		ai_will_do = {
@@ -24857,6 +25076,16 @@ STP_pw_programme = {
 		fire_only_once = no
 		days_re_enable = 180
 		complete_effect = {
+			effect_tooltip = {
+				custom_effect_tooltip = STP_pw_civic_research_grants_result_tt
+				add_tech_bonus = {
+					name = STP_pw_civic_research_grants
+					bonus = 0.5
+					uses = 1
+					category = industry
+					category = electronics
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -24886,14 +25115,14 @@ STP_pw_programme = {
 						value = 20
 					}
 					ADISCORD_economy_mark_dirty = yes
-				}
-				custom_effect_tooltip = STP_pw_civic_research_grants_result_tt
-				add_tech_bonus = {
-					name = STP_pw_civic_research_grants
-					bonus = 0.5
-					uses = 1
-					category = industry
-					category = electronics
+					custom_effect_tooltip = STP_pw_civic_research_grants_result_tt
+					add_tech_bonus = {
+						name = STP_pw_civic_research_grants
+						bonus = 0.5
+						uses = 1
+						category = industry
+						category = electronics
+					}
 				}
 			}
 		}
@@ -24946,6 +25175,9 @@ STP_pw_programme = {
 		fire_only_once = no
 		days_re_enable = 90
 		complete_effect = {
+			effect_tooltip = {
+				army_experience = 25
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -24971,8 +25203,8 @@ STP_pw_programme = {
 						value = 360
 					}
 					ADISCORD_economy_mark_dirty = yes
+					army_experience = 25
 				}
-				army_experience = 25
 			}
 		}
 		ai_will_do = {
@@ -25039,6 +25271,15 @@ STP_pw_programme = {
 		fire_only_once = no
 		days_re_enable = 180
 		complete_effect = {
+			effect_tooltip = {
+				FROM = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -25064,12 +25305,12 @@ STP_pw_programme = {
 						value = 900
 					}
 					ADISCORD_economy_mark_dirty = yes
-				}
-				FROM = {
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
+					FROM = {
+						add_building_construction = {
+							type = infrastructure
+							level = 1
+							instant_build = yes
+						}
 					}
 				}
 			}
@@ -25138,6 +25379,15 @@ STP_pw_programme = {
 		fire_only_once = no
 		days_re_enable = 180
 		complete_effect = {
+			effect_tooltip = {
+				FROM = {
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -25163,12 +25413,12 @@ STP_pw_programme = {
 						value = 1800
 					}
 					ADISCORD_economy_mark_dirty = yes
-				}
-				FROM = {
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
+					FROM = {
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+							instant_build = yes
+						}
 					}
 				}
 			}

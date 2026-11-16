@@ -2247,7 +2247,8 @@ NAM_war_of_return_can_start = {
 
 # Any scope. Every owner of a lost field has fallen; the callback ROOT counts
 # through its reserved receipt before the native flag updates. A liberated
-# participant blocks the settlement again.
+# participant blocks the settlement again. A minor subject leaves the war with
+# its fallen overlord and never receives its own capitulation callback.
 NAM_wor_all_defeated = {
 	all_of_scopes = {
 		array = global.NAM_wor_participants
@@ -2257,6 +2258,20 @@ NAM_wor_all_defeated = {
 			AND = {
 				tag = ROOT
 				has_country_flag = NAM_wor_capitulation_reserved
+			}
+			AND = {
+				is_subject = yes
+				is_major = no
+				OVERLORD = {
+					has_country_flag = NAM_wor_participant
+					OR = {
+						has_capitulated = yes
+						AND = {
+							tag = ROOT
+							has_country_flag = NAM_wor_capitulation_reserved
+						}
+					}
+				}
 			}
 		}
 	}

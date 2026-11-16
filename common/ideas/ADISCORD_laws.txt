@@ -532,6 +532,13 @@ ideas = {
 			cost = 150
 			removal_cost = -1
 
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_contract_brigades_locked_tt
+					NOT = { has_idea = VAL_contract_service }
+				}
+			}
+
 			modifier = {
 				conscription = 0.01
 				army_org_factor = -0.03
@@ -549,6 +556,13 @@ ideas = {
 			cost = 150
 			removal_cost = -1
 			default = yes
+
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_contract_brigades_locked_tt
+					NOT = { has_idea = VAL_contract_service }
+				}
+			}
 
 			modifier = {
 				army_org_factor = 0.03
@@ -592,6 +606,10 @@ ideas = {
 			removal_cost = -1
 
 			available = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_contract_brigades_locked_tt
+					NOT = { has_idea = VAL_contract_service }
+				}
 				has_war_support > 0.25
 			}
 
@@ -621,6 +639,10 @@ ideas = {
 			removal_cost = -1
 
 			available = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_contract_brigades_locked_tt
+					NOT = { has_idea = VAL_contract_service }
+				}
 				OR = {
 					has_war = yes
 					has_war_support > 0.50
@@ -654,6 +676,13 @@ ideas = {
 			picture = ADISCORD_military_organization_territorial_reserves
 			cost = 150
 			removal_cost = -1
+
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_contract_brigades_locked_tt
+					NOT = { has_idea = VAL_contract_service }
+				}
+			}
 
 			modifier = {
 				army_core_defence_factor = 0.1

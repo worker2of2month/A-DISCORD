@@ -1,5 +1,20 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_bookmark_hold_the_basin"
+		texturefile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_hold_the_basin.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_bookmark_ladder_or_charter"
+		texturefile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_ladder_or_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_bookmark_seal_over_furnaces"
+		texturefile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_seal_over_furnaces.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_machine_shops"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_machine_shops.png"
 	}

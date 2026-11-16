@@ -13273,8 +13273,12 @@ class NamCampaignTests(unittest.TestCase):
             if i == 1:
                 self.assertEqual(scalar(block(tech, "dependencies"), keys[0][2]), "1")
                 self.assertIn("field_hospital", [e.value for e in block(tech, "enable_subunits")])
-            if i in (1, 2):
-                self.assertEqual(scalar(block(tech, "path"), "leads_to_tech"), keys[i + 1][2])
+            if i == 1:
+                # Evacuation opens both medical schools, so the last two stages are siblings.
+                self.assertEqual(
+                    {path.value for path in walk(tech) if path.key == "leads_to_tech"},
+                    {keys[2][2], keys[3][2]},
+                )
         for known in (0, 1, 3, 4):
             facts = self.postwar_facts()
             focus_key = ("NAM", "has_completed_focus", "NAM_regional_university")
@@ -14369,6 +14373,20 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertEqual((lost[fuel], lost[cash]), before)
                 self.assertFalse(lost[("NAM", "has_variable", "NAM_loren_cargo_quote")])
 
+
+    def test_minor_subject_of_a_fallen_participant_counts_as_defeated(self):
+        # The engine ends such a subject's war with its overlord without a
+        # capitulation callback; the participant settlement still covers it.
+        defeated = block(block(self.triggers["NAM_wor_all_defeated"], "all_of_scopes"), "OR")
+        subject = [entry.value for entry in defeated if entry.key == "AND"
+                   and ("is_subject", "yes") in [(item.key, item.value) for item in entry.value]]
+        self.assertEqual(len(subject), 1)
+        clause = [(item.key, item.value) for item in subject[0]]
+        self.assertIn(("is_major", "no"), clause)
+        overlord = block(subject[0], "OVERLORD")
+        self.assertIn(("has_country_flag", "NAM_wor_participant"), [(item.key, item.value) for item in overlord])
+        fallen = [(item.key, item.value) for item in block(overlord, "OR")]
+        self.assertIn(("has_capitulated", "yes"), fallen)
 
 class NamPillarsTests(unittest.TestCase):
     """Pillars of power: five weighted groups, programme progress and endings."""

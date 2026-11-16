@@ -170,6 +170,60 @@ class DoctrineContractTests(unittest.TestCase):
             with self.subTest(source=source_name):
                 self.assertFalse(missing, missing)
 
+    def test_support_track_is_earned_by_companies_and_batteries(self) -> None:
+        track = next(
+            t for t in doctrines.TRACKS if t.key == "ADISCORD_land_fortress_state"
+        )
+        self.assertEqual(
+            set(track.mastery_values),
+            {"category_support_battalions", "category_line_artillery", "category_artillery"},
+        )
+        armor = next(
+            t for t in doctrines.TRACKS if t.key == "ADISCORD_land_platform_centric"
+        )
+        self.assertLess(track.multiplier, armor.multiplier)
+
+    def test_land_schools_tie_rewards_to_their_companies(self) -> None:
+        companies = {
+            "engineer", "ADISCORD_assault_sapper_company", "ADISCORD_armored_engineer_company",
+            "recon", "ADISCORD_drone_recon_company", "ADISCORD_recon_platform",
+            "signal_company", "ADISCORD_ew_company", "logistics_company",
+            "ADISCORD_recovery_platform", "field_hospital", "military_police",
+            "ADISCORD_decontamination_company", "ADISCORD_loitering_munition_company",
+        }
+        land_main = {t.key for t in doctrines.TRACKS[:4]}
+        reinforce = 0
+        for school in doctrines.SCHOOLS:
+            if school.track not in land_main:
+                continue
+            stages = doctrines.REWARD_PROFILES[school.profile]
+            reinforce += sum(
+                "land_reinforce_rate" in effect for stage in stages for effect in stage[3]
+            )
+            for slug, _ru, _en, effects in stages:
+                for effect in effects:
+                    for entry in parse_clausewitz(effect):
+                        children = entry.value if isinstance(entry.value, list) else []
+                        if any(item.key == "battalion_mult" for item in children):
+                            self.assertIn(entry.key, companies, f"{school.key} {slug}")
+            if school.track == "ADISCORD_land_fortress_state":
+                tied = sum(
+                    any(
+                        entry.key in companies - {"engineer"}
+                        or "battalion_mult" in effect
+                        for entry in parse_clausewitz(effect)
+                    )
+                    for stage in stages for effect in stage[3]
+                )
+                with self.subTest(school=school.key):
+                    self.assertGreaterEqual(tied, 1)
+                    self.assertTrue(
+                        any("has_template_containing_unit" in rule for rule in school.ai)
+                        or school.key == "ADISCORD_doctrine_fortress_state_command"
+                    )
+        # Reinforcement remains the identity of mass mobilization and militia only.
+        self.assertEqual(reinforce, 2)
+
     def test_every_combat_aircraft_type_can_earn_mastery(self) -> None:
         air_types = set()
         source = (validator.ROOT / "common/units/ADISCORD_air_units.txt").read_text(encoding="utf-8")

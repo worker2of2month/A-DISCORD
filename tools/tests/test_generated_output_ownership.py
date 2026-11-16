@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from collections import Counter
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -15,12 +16,14 @@ from unittest.mock import patch
 
 from PIL import Image
 
+from tools.builders import build_adiscord_battalion_icons as battalion_icons
 from tools.builders import build_adiscord_party_texticons as party_texticons
 from tools.builders import build_adiscord_deployment_ui_assets as deployment_ui_assets
 from tools.builders import (
     build_adiscord_intelligence_ui_assets as intelligence_ui_assets,
 )
 from tools.builders import build_adiscord_stp_regions_map as stp_regions_map
+from tools.builders import build_adiscord_support_company_icons as support_company_icons
 from tools.builders import build_adiscord_technology_ui_assets as technology_ui_assets
 from tools.builders import build_adiscord_val_operations_map as val_operations_map
 from tools.builders.build_adiscord_diplomacy_ui_assets import (
@@ -41,6 +44,7 @@ from tools.lib.generated_outputs import (
 ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_FAMILIES = {
     "ambient_audio",
+    "battalion_icons",
     "azhar_palace",
     "isaiah_clock_tower",
     "coastal_geography",
@@ -83,6 +87,7 @@ REQUIRED_FAMILIES = {
     "nam_piracy_map",
     "nam_naval_models",
     "southern_marines",
+    "support_company_icons",
     "nam_oilfields",
     "nam_focus_icons",
     "factory_models",
@@ -140,6 +145,111 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             <= set(self.entries["vorkerland_flags"]["source_inputs"]),
             "copied joint-government flags depend on all three base WRK TGA inputs",
         )
+
+    def test_support_company_textures_and_sprite_bindings_match_their_sources(self) -> None:
+        expected = support_company_icons.outputs()
+        designer = ROOT / support_company_icons.LARGE
+        cross_box = (8, 3, 21, 18)
+        with Image.open(designer / "support_unit_field_hospital_icon.dds") as hospital:
+            cross = hospital.crop(cross_box)
+            self.assertEqual(cross.getpixel((14 - cross_box[0], 9 - cross_box[1])), (141, 175, 255, 255))
+        registered = {
+            path
+            for pattern in self.entries["support_company_icons"]["output_globs"]
+            for path in ROOT.glob(pattern)
+        }
+        self.assertEqual(set(expected), registered)
+        for path, content in expected.items():
+            with self.subTest(path=path.relative_to(ROOT)):
+                self.assertEqual(path.read_bytes(), content)
+                if path.parent == designer:
+                    with Image.open(path) as strip:
+                        self.assertEqual(strip.crop(cross_box).tobytes(), cross.tobytes())
+                        self.assertIsNone(strip.getchannel("A").crop((21, 3, 23, 18)).getbbox())
+
+    def test_battalion_counter_dimensions_and_ownership(self) -> None:
+        expected = battalion_icons.outputs()
+        owned = self.entries["battalion_icons"]["output_globs"]
+        self.assertEqual({ROOT / path for path in owned}, set(expected))
+        sizes = ((152, 42), (60, 12), (60, 12), (25, 12))
+        for unit in battalion_icons.BATTALIONS:
+            for path, size in zip(unit.paths(), sizes, strict=True):
+                with self.subTest(unit=unit.unit, path=path):
+                    self.assertEqual((ROOT / path).read_bytes(), expected[ROOT / path])
+                    with Image.open(ROOT / path) as image:
+                        self.assertEqual(image.size, size)
+                        self.assertEqual(image.getchannel("A").getextrema(), (0, 255))
+                        if path.parent == battalion_icons.MAP or battalion_icons.MAP in path.parents:
+                            red, green, blue, _ = image.split()
+                            self.assertEqual(red.tobytes(), green.tobytes())
+                            self.assertEqual(red.tobytes(), blue.tobytes())
+
+    def test_designer_group_and_taran_aliases_load_the_same_art(self) -> None:
+        large = ROOT / battalion_icons.LARGE
+        self.assertEqual((large / "unit_art_icon.dds").read_bytes(),
+                         (large / "ADISCORD_line_artillery_icon.dds").read_bytes())
+        self.assertNotEqual((large / "unit_art_icon.dds").read_bytes(),
+                            (large / "support_unit_art_icon.dds").read_bytes())
+        for folder, filename in (
+            (battalion_icons.LARGE, "STP_taran_icon.dds"),
+            (battalion_icons.MAP, "STP_taran_icon.dds"),
+            (battalion_icons.TEXT, "STP_taran_icon_small.dds"),
+        ):
+            with self.subTest(folder=folder):
+                self.assertEqual((ROOT / folder / filename).read_bytes(),
+                                 (ROOT / folder / "battalions" / filename).read_bytes())
+
+    def test_every_land_unit_and_regiment_group_resolves_to_mod_art(self) -> None:
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_strategic_resources_ui import BASE_GAME
+
+        game = Path(os.environ.get("HOI4_GAME_DIR", BASE_GAME))
+        if not (game / "interface/subuniticons.gfx").is_file():
+            self.skipTest("Set HOI4_GAME_DIR to verify inherited sprite declarations")
+
+        variants = {}
+        groups = set()
+        for path in (ROOT / "common/units").glob("*.txt"):
+            for block in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if block.key != "sub_units":
+                    continue
+                for unit in block.value:
+                    fields = {field.key: field.value for field in unit.value}
+                    if "group" not in fields and unit.key != "railway_gun":
+                        continue
+                    groups.update(field.value for field in fields.get("allowed_battalion_groups", []))
+                    if fields.get("group") not in (None, "support"):
+                        groups.add(fields["group"])
+                    for suffix in ("medium", "medium_white", "small"):
+                        variants[f"GFX_unit_{unit.key}_icon_{suffix}"] = 2
+                    variants[f"GFX_nato_unit_{unit.key}_icon_small"] = 1
+        self.assertIn("GFX_unit_infantry_icon_medium", variants)
+        for group in groups:
+            variants[f"GFX_group_{group}_icon"] = 2
+
+        declarations = {}
+        pattern = re.compile(r'\bspriteType\s*=\s*\{\s*name\s*=\s*"([^"]+)"([^{}]*)\}', re.I)
+        native = game / "interface"
+        local = ROOT / "interface"
+        for directory in (native, local, local / "replace"):
+            for path in sorted(directory.glob("*.gfx")):
+                for match in pattern.finditer(path.read_text(encoding="utf-8-sig", errors="replace")):
+                    if match[1] in variants:
+                        declarations[match[1]] = match[2]
+        owned = set(battalion_icons.outputs()) | set(support_company_icons.outputs())
+        for name, frames in variants.items():
+            with self.subTest(sprite=name):
+                self.assertTrue(name in declarations, f"Missing sprite {name}")
+                body = declarations[name]
+                texture = re.search(r'\btexturefile\s*=\s*"([^"]+)"', body, re.I)
+                frame_count = re.search(r'\bnoofframes\s*=\s*(\d+)', body, re.I)
+                self.assertIsNotNone(texture)
+                self.assertEqual(int(frame_count[1]) if frame_count else 1, frames)
+                path = ROOT / texture[1]
+                self.assertIn(path, owned)
+                original = game / texture[1]
+                if original.is_file():
+                    self.assertNotEqual(path.read_bytes(), original.read_bytes())
 
     def test_stp_ideology_exports_do_not_require_a_temporary_preview(self) -> None:
         from tools.builders import build_adiscord_stp_party_ideologies as ideologies

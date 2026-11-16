@@ -435,14 +435,14 @@ APPLIED_PROGRAMMES = (
 
 APPLIED_EFFECTS = {
     "trauma_registry_networks": (
-        'field_hospital = { casualty_trickleback = 0.03 experience_loss_factor = -0.02 }',
+        "field_hospital = { experience_loss_factor = -0.06 }",
     ),
     "rapid_casualty_corridors": (
         "field_hospital = { casualty_trickleback = 0.05 supply_consumption = -0.02 }",
         "land_reinforce_rate = 0.005",
     ),
     "forward_surgical_cells": (
-        'field_hospital = { experience_loss_factor = -0.04 casualty_trickleback = 0.03 }',
+        "field_hospital = { casualty_trickleback = 0.07 }",
     ),
     "predictive_blood_logistics": (
         "field_hospital = { supply_consumption = -0.04 casualty_trickleback = 0.04 }",
@@ -461,15 +461,16 @@ APPLIED_EFFECTS = {
         "attrition = -0.01",
     ),
     "distributed_combat_medicine": (
-        'field_hospital = { casualty_trickleback = 0.08 experience_loss_factor = -0.05 supply_consumption = -0.04 }',
+        "field_hospital = { casualty_trickleback = 0.04 experience_loss_factor = -0.04 max_strength = 0.5 supply_consumption = -0.04 }",
+        "army_morale_factor = 0.03",
     ),
     "battle_damage_survey_teams": (
-        'engineer = { entrenchment = 0.5 defense = 0.03 }',
-        'ADISCORD_regimental_pioneers = { entrenchment = 0.15 defense = 0.02 }',
+        "engineer = { entrenchment = 0.5 river = { movement = 0.10 } forest = { movement = 0.05 } }",
+        "ADISCORD_regimental_pioneers = { entrenchment = 0.15 }",
     ),
     "assault_breaching_packages": (
-        "engineer = { breakthrough = 0.05 soft_attack = 0.03 }",
-        "planning_speed = 0.02",
+        "engineer = { breakthrough = 0.05 }",
+        "ADISCORD_regimental_pioneers = { breakthrough = 0.03 soft_attack = 0.02 }",
     ),
     "mobile_restoration_columns": (
         "maintenance_company = { equipment_capture_factor = 0.02 }",
@@ -495,8 +496,8 @@ APPLIED_EFFECTS = {
         "industry_repair_factor = 0.05",
     ),
     "integrated_engineer_command": (
-        'engineer = { breakthrough = 0.10 defense = 0.08 }',
-        'ADISCORD_regimental_pioneers = { breakthrough = 0.05 defense = 0.04 }',
+        "engineer = { breakthrough = 0.05 defense = 0.05 }",
+        "ADISCORD_regimental_pioneers = { breakthrough = 0.03 defense = 0.03 }",
     ),
     "spectrum_threat_libraries": (
         "encryption_factor = 0.02",

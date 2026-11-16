@@ -85,9 +85,10 @@ ideas = {
 			name = VAL_peace_order
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.15
+				political_power_gain = 0.10
 				war_support_factor = 0.10
 				ADISCORD_economy_military_industry_income_factor = 0.10
+				consumer_goods_factor = 0.05
 			}
 		}
 
@@ -98,6 +99,8 @@ ideas = {
 				stability_factor = 0.10
 				ADISCORD_economy_admin_expense_factor = -0.10
 				industrial_capacity_factory = 0.05
+				command_power_gain_mult = -0.15
+				army_org_factor = -0.03
 			}
 		}
 
@@ -108,6 +111,8 @@ ideas = {
 				army_org_factor = 0.05
 				command_power_gain_mult = 0.20
 				planning_speed = 0.10
+				political_power_gain = -0.10
+				stability_factor = -0.05
 			}
 		}
 
@@ -118,6 +123,7 @@ ideas = {
 				army_attack_factor = 0.10
 				war_support_factor = 0.15
 				stability_factor = -0.10
+				industrial_capacity_factory = -0.05
 			}
 		}
 
@@ -154,6 +160,7 @@ ideas = {
 			modifier = {
 				army_attack_factor = 0.05
 				command_power_gain_mult = 0.10
+				political_power_gain = -0.05
 			}
 		}
 
@@ -190,7 +197,10 @@ ideas = {
 		VAL_cabinet_apparatus_delta = {
 			name = VAL_peace_order
 			allowed = { always = no }
-			modifier = { political_power_gain = 0.10 }
+			modifier = {
+				political_power_gain = 0.10
+				stability_factor = -0.03
+			}
 		}
 
 		VAL_cabinet_bread_delta = {
@@ -226,6 +236,7 @@ ideas = {
 			modifier = {
 				planning_speed = 0.10
 				command_power_gain_mult = 0.10
+				political_power_gain = -0.05
 			}
 		}
 
@@ -280,6 +291,46 @@ ideas = {
 			modifier = { army_attack_factor = 0.03 }
 		}
 
+		# The general strike of the reckoning: lines stand still for four months.
+		VAL_peace_general_strike = {
+			picture = VAL_harvest_of_ash
+			allowed = { tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				industrial_capacity_factory = -0.15
+				consumer_goods_factor = 0.05
+				stability_factor = -0.05
+			}
+		}
+
+		# Kefreyt while the companies' mutiny lasts; the weekly check removes it.
+		VAL_peace_mutiny_loyalists = {
+			picture = VAL_contract_state
+			allowed = { tag = VAL }
+			removal_cost = -1
+			modifier = {
+				army_morale_factor = 0.10
+				war_support_factor = 0.10
+				political_power_gain = -0.15
+				stability_factor = -0.10
+			}
+		}
+
+		# The mutineers' country shares VAL's original tag.
+		VAL_mutiny_company_shares = {
+			picture = VAL_mercenary_state
+			allowed = { original_tag = VAL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.05
+				attrition = 0.10
+				political_power_gain = -0.25
+			}
+		}
+
 		VAL_nw_guarded_caravans = {
 			picture = VAL_contract_state
 			allowed = { tag = VAL }
@@ -306,6 +357,65 @@ ideas = {
 				ADISCORD_recon_platform_archetype = { instant = yes build_cost_ic = -0.10 reliability = 0.05 }
 				ADISCORD_combat_platform_archetype = { instant = yes build_cost_ic = -0.10 reliability = 0.05 }
 				ADISCORD_heavy_platform_archetype = { instant = yes build_cost_ic = -0.10 reliability = 0.05 }
+			}
+		}
+
+		# Target of a prepared invasion for 45 days after Kefreyt's completed feint.
+		VAL_op_caught_off_guard = {
+			picture = GFX_idea_tur_disorganised_armed_forces
+			allowed = { OR = { original_tag = NOD original_tag = STP original_tag = STS original_tag = YPR original_tag = COF original_tag = TFF original_tag = BJK } }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = -0.10
+				army_org_regain = -0.10
+			}
+		}
+
+		# Every Northern coalition member for 180 days from Kefreyt's declaration.
+		VAL_nc_coalition_resolve = {
+			picture = GFX_idea_generic_fortify_the_borders
+			allowed = { OR = { original_tag = YPR original_tag = COF original_tag = TFF } }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.15
+				army_org_regain = 0.10
+				max_dig_in = 2
+			}
+		}
+
+		# BJK for 240 days from Kefreyt's declaration; VAL_bjk_reinforce_city adds
+		# the second spirit only on veteran and elite difficulty.
+		VAL_bjk_fortress_city = {
+			picture = GFX_idea_generic_fortify_the_borders
+			allowed = { original_tag = BJK }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.20
+				army_org_regain = 0.15
+				max_dig_in = 3
+			}
+		}
+
+		VAL_bjk_last_bastion = {
+			picture = GFX_idea_generic_fortify_the_borders
+			allowed = { original_tag = BJK }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.15
+				army_attack_factor = 0.10
+				army_morale_factor = 0.10
+				max_dig_in = 2
+			}
+		}
+
+		# Target of the uprising plan for 90 days when the war opens.
+		VAL_op_target_unrest = {
+			picture = GFX_idea_generic_disjointed_gov
+			allowed = { OR = { original_tag = STP original_tag = STS original_tag = BJK } }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.10
+				war_support_factor = -0.10
 			}
 		}
 
@@ -1528,7 +1638,7 @@ ideas = {
 			level = 6
 			available = { original_tag = VAL }
 			modifier = {
-				conscription = 0.0125
+				conscription = 0.04
 				army_org_regain = 0.10
 				attrition = -0.10
 				planning_speed = 0.10

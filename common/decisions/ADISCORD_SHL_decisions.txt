@@ -2046,6 +2046,18 @@ SHL_quarters_and_borders = {
 		}
 		days_re_enable = 45
 		complete_effect = {
+			effect_tooltip = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 13500
+					producer = SHL
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 40
+					producer = SHL
+				}
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -2056,16 +2068,16 @@ SHL_quarters_and_borders = {
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 120 }
 					ADISCORD_economy_mark_dirty = yes
-				}
-				add_equipment_to_stockpile = {
-					type = infantry_equipment
-					amount = 13500
-					producer = SHL
-				}
-				add_equipment_to_stockpile = {
-					type = support_equipment
-					amount = 40
-					producer = SHL
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = 13500
+						producer = SHL
+					}
+					add_equipment_to_stockpile = {
+						type = support_equipment
+						amount = 40
+						producer = SHL
+					}
 				}
 			}
 		}
@@ -4860,6 +4872,9 @@ ADISCORD_south_final_war_category = {
 		days_re_enable = 35
 		fire_only_once = no
 		complete_effect = {
+			effect_tooltip = {
+				add_fuel = 5000
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -4870,8 +4885,8 @@ ADISCORD_south_final_war_category = {
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
 					ADISCORD_economy_mark_dirty = yes
+					add_fuel = 5000
 				}
-				add_fuel = 5000
 			}
 		}
 		ai_will_do = {
@@ -4899,14 +4914,17 @@ ADISCORD_south_final_war_category = {
 		days_re_enable = 56
 		fire_only_once = no
 		complete_effect = {
+			effect_tooltip = {
+				custom_effect_tooltip = SHL_sw_quarter_relief_tt
+			}
 			if = {
 				limit = {
 					hidden_trigger = {
 						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 					}
 				}
-				custom_effect_tooltip = SHL_sw_quarter_relief_tt
 				hidden_effect = {
+					custom_effect_tooltip = SHL_sw_quarter_relief_tt
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 					ADISCORD_economy_mark_dirty = yes

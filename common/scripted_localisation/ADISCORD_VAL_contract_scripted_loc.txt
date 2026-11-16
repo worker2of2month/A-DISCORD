@@ -226,6 +226,14 @@ defined_text = {
 	text = { trigger = { check_variable = { var = VAL_final_crisis_phase value = 4 compare = equals } } localization_key = VAL_FINAL_PHASE_CLOSED }
 	text = { localization_key = VAL_FINAL_PHASE_WAITING }
 }
+# Opening bonus paid by VAL_op_pay_offensive to the last launched invasion.
+defined_text = {
+	name = VALGetOpTier
+	text = { trigger = { check_variable = { var = VAL_op_last_tier value = 3 compare = equals } } localization_key = VAL_OP_TIER_FULL }
+	text = { trigger = { check_variable = { var = VAL_op_last_tier value = 2 compare = equals } } localization_key = VAL_OP_TIER_HIGH }
+	text = { trigger = { check_variable = { var = VAL_op_last_tier value = 1 compare = equals } } localization_key = VAL_OP_TIER_BASE }
+	text = { localization_key = VAL_OP_TIER_NONE }
+}
 defined_text = {
 	name = VALGetFinalSupply
 	text = { trigger = { check_variable = { var = VAL_final_supply_bonus value = 0 compare = less_than } } localization_key = VAL_FINAL_PREPARATION_READY }

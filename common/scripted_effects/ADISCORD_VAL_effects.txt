@@ -487,12 +487,13 @@ VAL_nw_salvage_archives_finish = {
 
 # --- new_world_contracts ---
 # The event's immediate block also runs when its reading window is left open.
-# The commonwealth opens the chapter and its reckoning in the same call.
+# The final campaign focus opens the chapter and its reckoning in the same call.
 VAL_nw_open_chapter = {
 	if = {
 		limit = {
 			VAL_nw_operational = yes
 			has_country_flag = VAL_commonwealth_proclaimed
+			has_completed_focus = VAL_Peace_Without_Orders
 			NOT = { has_focus_tree = VAL_new_world_focus }
 		}
 		load_focus_tree = { tree = VAL_new_world_focus keep_completed = yes }
@@ -1304,6 +1305,25 @@ VAL_peace_refresh = {
 	multiply_variable = { var = VAL_peace_military_income value = 0.05 }
 	add_to_variable = { var = VAL_peace_military_income value = -0.25 }
 	set_variable = { var = VAL_peace_pp_gain value = -0.15 }
+	# A wartime army without orders: idle divisions cost consumer goods. The
+	# monthly strike update refreshes the tier; settled veterans halve it.
+	set_variable = { var = VAL_peace_idle_army value = 0 }
+	if = {
+		limit = { has_army_size = { size > 47 } }
+		set_variable = { var = VAL_peace_idle_army value = 0.06 }
+	}
+	else_if = {
+		limit = { has_army_size = { size > 35 } }
+		set_variable = { var = VAL_peace_idle_army value = 0.04 }
+	}
+	else_if = {
+		limit = { has_army_size = { size > 23 } }
+		set_variable = { var = VAL_peace_idle_army value = 0.02 }
+	}
+	if = {
+		limit = { has_completed_focus = VAL_peace_land_for_service }
+		multiply_variable = { var = VAL_peace_idle_army value = 0.5 }
+	}
 	if = {
 		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_peace_crisis } } }
 		add_dynamic_modifier = { modifier = VAL_peace_crisis }
@@ -1507,11 +1527,58 @@ VAL_peace_close_crisis = {
 	clear_variable = VAL_peace_stability
 	clear_variable = VAL_peace_military_income
 	clear_variable = VAL_peace_pp_gain
+	clear_variable = VAL_peace_idle_army
 	clear_variable = VAL_peace_shares_granted
 	clear_variable = VAL_peace_lines_converted
+	VAL_peace_settle_open_bills = yes
 	VAL_peace_complete_recovery = yes
 	mark_focus_tree_layout_dirty = yes
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY VAL. A reckoning that opens before the Night of Registers bypasses the
+# unfinished trunk. Their crisis effects lapse with the crisis; their lasting
+# rewards are paid here, before the engine marks those focuses complete.
+VAL_peace_settle_open_bills = {
+	if = {
+		limit = { NOT = { has_completed_focus = VAL_peace_silent_lines } }
+		ADISCORD_economy_receive_100 = yes
+	}
+	if = {
+		limit = { NOT = { has_completed_focus = VAL_peace_captains_bill } }
+		add_command_power = 25
+	}
+	if = {
+		limit = {
+			NOT = { has_completed_focus = VAL_peace_registry_audit }
+			NOT = { has_completed_focus = VAL_peace_share_ledger }
+		}
+		army_experience = 15
+	}
+	if = {
+		limit = { NOT = { has_completed_focus = VAL_peace_loyal_battalions } }
+		add_manpower = 4000
+		army_experience = 15
+	}
+	if = {
+		limit = { NOT = { has_completed_focus = VAL_peace_kilnet } }
+		add_manpower = 2500
+	}
+	if = {
+		limit = {
+			NOT = { has_completed_focus = VAL_peace_water_convoys }
+			NOT = { has_completed_focus = VAL_peace_gate_garrison }
+		}
+		random_owned_controlled_state = {
+			limit = { infrastructure < 5 }
+			prioritize = { 48 }
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
 }
 
 # COUNTRY VAL. The end of the reckoning completes the recovery: payroll
@@ -1537,9 +1604,10 @@ VAL_peace_order_update = {
 # closes the crisis and installs the new government.
 VAL_peace_adopt_throne = {
 	set_variable = { var = VAL_peace_regime value = 1 }
-	add_to_variable = { var = VAL_peace_order_pp value = 0.15 }
+	add_to_variable = { var = VAL_peace_order_pp value = 0.10 }
 	add_to_variable = { var = VAL_peace_order_war_support value = 0.10 }
 	add_to_variable = { var = VAL_peace_order_military_income value = 0.10 }
+	add_to_variable = { var = VAL_peace_order_consumer_goods value = 0.05 }
 	VAL_peace_order_update = yes
 	country_event = { id = val_peace.41 }
 }
@@ -1549,6 +1617,8 @@ VAL_peace_adopt_cabinet = {
 	add_to_variable = { var = VAL_peace_order_stability value = 0.10 }
 	add_to_variable = { var = VAL_peace_order_admin_expense value = -0.10 }
 	add_to_variable = { var = VAL_peace_order_factory_output value = 0.05 }
+	add_to_variable = { var = VAL_peace_order_command_gain value = -0.15 }
+	add_to_variable = { var = VAL_peace_order_army_org value = -0.03 }
 	VAL_peace_order_update = yes
 	country_event = { id = val_peace.41 }
 }
@@ -1558,6 +1628,8 @@ VAL_peace_adopt_charter = {
 	add_to_variable = { var = VAL_peace_order_army_org value = 0.05 }
 	add_to_variable = { var = VAL_peace_order_command_gain value = 0.20 }
 	add_to_variable = { var = VAL_peace_order_planning value = 0.10 }
+	add_to_variable = { var = VAL_peace_order_pp value = -0.10 }
+	add_to_variable = { var = VAL_peace_order_stability value = -0.05 }
 	VAL_peace_order_update = yes
 	country_event = { id = val_peace.41 }
 }
@@ -1567,8 +1639,82 @@ VAL_peace_adopt_captains = {
 	add_to_variable = { var = VAL_peace_order_attack value = 0.10 }
 	add_to_variable = { var = VAL_peace_order_war_support value = 0.15 }
 	add_to_variable = { var = VAL_peace_order_stability value = -0.10 }
+	add_to_variable = { var = VAL_peace_order_factory_output value = -0.05 }
 	VAL_peace_order_update = yes
 	country_event = { id = val_peace.41 }
+}
+
+# COUNTRY VAL. The answer to the captains' coup that refuses it: the native split
+# gives the companies part of the army and their garrison states. Their country
+# shares VAL's original tag, so it is cached once by its government.
+VAL_peace_mutiny_begin = {
+	if = {
+		limit = {
+			VAL_peace_crisis_active = yes
+			NOT = { has_country_flag = VAL_peace_mutiny_active }
+		}
+		set_country_flag = VAL_peace_mutiny_active
+		if = {
+			limit = { has_completed_focus = VAL_peace_loyal_battalions }
+			start_civil_war = {
+				ideology = chauvinism
+				size = 0.25
+				army_ratio = 0.20
+				navy_ratio = 0.20
+				air_ratio = 0.20
+			}
+		}
+		else = {
+			start_civil_war = {
+				ideology = chauvinism
+				size = 0.35
+				army_ratio = 0.35
+				navy_ratio = 0.30
+				air_ratio = 0.30
+			}
+		}
+		random_other_country = {
+			limit = {
+				original_tag = VAL
+				has_government = chauvinism
+				NOT = { has_country_flag = VAL_peace_mutineers }
+			}
+			save_global_event_target_as = VAL_peace_mutineers
+			set_country_flag = VAL_peace_mutineers
+			set_cosmetic_tag = VAL_free_companies
+			add_ideas = VAL_mutiny_company_shares
+		}
+		add_ideas = VAL_peace_mutiny_loyalists
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL, weekly while the mutiny lasts. The engine annexes the defeated
+# side of a civil war, so a vanished mutineer country means Kefreyt has won.
+VAL_peace_mutiny_weekly = {
+	if = {
+		limit = {
+			has_country_flag = VAL_peace_mutiny_active
+			NOT = { event_target:VAL_peace_mutineers = { exists = yes } }
+		}
+		clr_country_flag = VAL_peace_mutiny_active
+		clear_global_event_target = VAL_peace_mutineers
+		if = {
+			limit = { has_idea = VAL_peace_mutiny_loyalists }
+			remove_ideas = VAL_peace_mutiny_loyalists
+		}
+		if = {
+			limit = { VAL_peace_crisis_active = yes }
+			# The captains' claim dies with their army; the reckoning is held again
+			# without them and the balance starts from the registry's control.
+			set_country_flag = VAL_peace_plot_exposed
+			set_power_balance = { id = VAL_peace_balance set_value = -0.40 }
+			set_variable = { var = VAL_peace_arrears value = 0 }
+			clr_country_flag = VAL_peace_reckoning_sent
+		}
+		ADISCORD_economy_mark_dirty = yes
+		country_event = { id = val_peace.111 }
+	}
 }
 
 # COUNTRY VAL. Government change for the chosen regime. The Council retired
@@ -7091,6 +7237,25 @@ VAL_frontier_close = {
 	# Keep campaign majors until all campaign war relations have ended.
 	NOD = { if = { limit = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } white_peace = VAL } }
 	STP = { if = { limit = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } white_peace = VAL } }
+	# Their subjects may hold a reserved defeat and must not stay in an empty war.
+	NOD = {
+		if = {
+			limit = { has_country_flag = VAL_frontier_guarantor }
+			every_subject_country = {
+				limit = { has_war_with = VAL }
+				VAL = { white_peace = PREV }
+			}
+		}
+	}
+	STP = {
+		if = {
+			limit = { has_country_flag = VAL_frontier_guarantor }
+			every_subject_country = {
+				limit = { has_war_with = VAL }
+				VAL = { white_peace = PREV }
+			}
+		}
+	}
 	if = { limit = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } has_war_with = CIN } white_peace = CIN }
 	if = { limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } has_war_with = OSF } white_peace = OSF }
 	if = { limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } has_war_with = APH } white_peace = APH }
@@ -8897,6 +9062,7 @@ VAL_begin_joint_nod_shabrat_campaign = {
 				single_target_only = yes
 			}
 			VAL_call_subjects_to_wars = yes
+			VAL_nod_op_apply_launch = yes
 		}
 		else_if = {
 			limit = { NOT = { has_war_with = NOD } }
@@ -8904,6 +9070,7 @@ VAL_begin_joint_nod_shabrat_campaign = {
 			# the campaign playable by falling back to Kefreyt's ordinary separate war.
 			declare_war_on = { target = NOD type = annex_everything }
 			VAL_call_subjects_to_wars = yes
+			VAL_nod_op_apply_launch = yes
 		}
 	}
 }
@@ -9144,6 +9311,15 @@ VAL_install_stelander_administration = {
 		if = {
 			limit = { tag = STS }
 			VAL = { VAL_restore_stelander_conquered_administrations = yes }
+			# A minor subject left the war with its capitulated overlord and never
+			# receives its own defeat callback.
+			every_subject_country = {
+				limit = {
+					has_war_with = VAL
+					is_major = no
+				}
+				VAL = { white_peace = PREV }
+			}
 		}
 		if = {
 			limit = { OR = { NOT = { is_subject_of = VAL } NOT = { has_autonomy_state = autonomy_VAL_contract_administration } } }
@@ -9228,6 +9404,16 @@ VAL_restore_stelander_conquered_administrations = {
 		limit = { PREV = { tag = STS } STS = { exists = yes } }
 		if = {
 			limit = { STS = { exists = yes } NOD = { exists = yes is_subject_of = STS } }
+			# The deferred contract-administration handoff needs Nodrul free of
+			# its Stelander overlord.
+			STS = {
+				set_autonomy = {
+					target = NOD
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
 			NOD = { VAL_install_nodrul_administration = yes }
 		}
 
@@ -9844,6 +10030,7 @@ VAL_begin_northern_coalition_campaign = {
 		}
 		declare_war_on = { target = YPR type = annex_everything }
 		VAL_join_northern_coalition_war = yes
+		VAL_nc_reinforce_coalition = yes
 		# Declaration and invitations may each enqueue their native relations.
 		# Keep the campaign reserved across both diplomatic ticks.
 		country_event = { id = val_rework.132 hours = 1 }
@@ -11097,7 +11284,6 @@ VAL_adopt_commonwealth = {
 		}
 		VAL_sync_solgalov_portrait = yes
 		VAL_grant_contract_warlord = yes
-		country_event = { id = val_rework.124 days = 1 }
 	}
 	VAL_party_representatives_commonwealth = yes
 }
@@ -11262,6 +11448,7 @@ VAL_deliver_nam_concession = {
 		set_country_flag = VAL_nam_concession_active
 		clr_country_flag = VAL_nam_concession_offer_pending
 		ADISCORD_economy_mark_dirty = yes
+		country_event = { id = val_contract.379 }
 	}
 }
 
@@ -11376,6 +11563,7 @@ VAL_release_nam_aid_fee = {
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
 		ADISCORD_economy_mark_dirty = yes
 		clear_variable = VAL_nam_aid_fee_escrow
+		country_event = { id = val_contract.379 }
 	}
 }
 
@@ -11558,6 +11746,7 @@ VAL_final_crisis_join_war = {
 			limit = { NOT = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals } } }
 			set_variable = { var = VAL_final_crisis_phase value = 2 }
 		}
+		VAL_nod_op_apply_launch = yes
 		NOD = {
 			if = {
 				limit = { NOT = { has_country_flag = VAL_final_war_member } }
@@ -11716,6 +11905,7 @@ VAL_final_crisis_close = {
 	}
 	if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } remove_dynamic_modifier = { modifier = VAL_final_war_preparation } }
 	VAL_final_refund_supply_order = yes
+	VAL_nod_op_close = yes
 
 	NOD = {
 		clr_country_flag = VAL_final_war_member
@@ -11873,6 +12063,425 @@ VAL_final_crisis_weekly = {
 		clamp_variable = { var = VAL_final_escalation min = 0 max = 100 }
 		if = { limit = { check_variable = { var = VAL_final_escalation value = 100 compare = greater_than_or_equals } } VAL_final_crisis_launch = yes }
 	}
+}
+
+# --- northern_operation_effects ---
+# Readiness of the northern operation (0-100). Callers set the temporary input
+# VAL_nod_op_gain. Crossing 40 once lets Nodrul notice the preparation.
+VAL_nod_op_add_readiness = {
+	if = {
+		limit = { VAL_nod_op_can_prepare = yes }
+		add_to_variable = { var = VAL_nod_op_readiness value = VAL_nod_op_gain }
+		clamp_variable = { var = VAL_nod_op_readiness min = 0 max = 100 }
+		if = {
+			limit = {
+				NOT = { has_country_flag = VAL_nod_op_noticed }
+				check_variable = { var = VAL_nod_op_readiness value = 40 compare = greater_than_or_equals }
+			}
+			set_country_flag = VAL_nod_op_noticed
+			country_event = { id = val_rework.205 days = 1 }
+		}
+	}
+}
+
+# COUNTRY VAL. Shared opening bonus of a prepared invasion. Temporary inputs:
+# VAL_op_in_readiness (0-100) and VAL_op_in_profile (1 assault, 2 landing,
+# 3 forest war, 4 uprising). Below 50 readiness the plan gives nothing; 75 and
+# 100 scale it by 1.5 and 2. VAL_op_last_tier (0-3) records the result for the
+# report event.
+VAL_op_pay_offensive = {
+	set_temp_variable = { var = VAL_op_scale value = 0 }
+	set_variable = { var = VAL_op_last_tier value = 0 }
+	if = {
+		limit = { check_variable = { var = VAL_op_in_readiness value = 100 compare = greater_than_or_equals } }
+		set_temp_variable = { var = VAL_op_scale value = 2 }
+		set_variable = { var = VAL_op_last_tier value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_op_in_readiness value = 75 compare = greater_than_or_equals } }
+		set_temp_variable = { var = VAL_op_scale value = 1.5 }
+		set_variable = { var = VAL_op_last_tier value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_op_in_readiness value = 50 compare = greater_than_or_equals } }
+		set_temp_variable = { var = VAL_op_scale value = 1 }
+		set_variable = { var = VAL_op_last_tier value = 1 }
+	}
+	set_variable = { var = VAL_op_attack value = 0 }
+	set_variable = { var = VAL_op_breakthrough value = 0 }
+	set_variable = { var = VAL_op_armor_attack value = 0 }
+	set_variable = { var = VAL_op_invasion_speed value = 0 }
+	set_variable = { var = VAL_op_amphibious value = 0 }
+	set_variable = { var = VAL_op_attrition value = 0 }
+	set_variable = { var = VAL_op_org value = 0 }
+	set_variable = { var = VAL_op_planning value = 0 }
+	set_variable = { var = VAL_op_morale value = 0 }
+	if = {
+		limit = { check_variable = { var = VAL_op_scale value = 0 compare = greater_than } }
+		set_variable = { var = VAL_op_attack value = 0.05 }
+		if = {
+			limit = { check_variable = { var = VAL_op_in_profile value = 1 compare = equals } }
+			set_variable = { var = VAL_op_breakthrough value = 0.10 }
+			set_variable = { var = VAL_op_armor_attack value = 0.05 }
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_op_in_profile value = 2 compare = equals } }
+			set_variable = { var = VAL_op_invasion_speed value = 0.25 }
+			set_variable = { var = VAL_op_amphibious value = 0.10 }
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_op_in_profile value = 3 compare = equals } }
+			set_variable = { var = VAL_op_attrition value = -0.10 }
+			set_variable = { var = VAL_op_org value = 0.05 }
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_op_in_profile value = 4 compare = equals } }
+			set_variable = { var = VAL_op_planning value = 0.10 }
+			set_variable = { var = VAL_op_morale value = 0.05 }
+		}
+		multiply_variable = { var = VAL_op_attack value = VAL_op_scale }
+		multiply_variable = { var = VAL_op_breakthrough value = VAL_op_scale }
+		multiply_variable = { var = VAL_op_armor_attack value = VAL_op_scale }
+		multiply_variable = { var = VAL_op_invasion_speed value = VAL_op_scale }
+		multiply_variable = { var = VAL_op_amphibious value = VAL_op_scale }
+		multiply_variable = { var = VAL_op_attrition value = VAL_op_scale }
+		multiply_variable = { var = VAL_op_org value = VAL_op_scale }
+		multiply_variable = { var = VAL_op_planning value = VAL_op_scale }
+		multiply_variable = { var = VAL_op_morale value = VAL_op_scale }
+		add_dynamic_modifier = { modifier = VAL_operation_offensive days = 180 }
+	}
+}
+
+# COUNTRY VAL. Ends the shared opening bonus with the operation's war.
+VAL_op_clear_offensive = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_operation_offensive } }
+		remove_dynamic_modifier = { modifier = VAL_operation_offensive }
+	}
+	clear_variable = VAL_op_attack
+	clear_variable = VAL_op_breakthrough
+	clear_variable = VAL_op_armor_attack
+	clear_variable = VAL_op_invasion_speed
+	clear_variable = VAL_op_amphibious
+	clear_variable = VAL_op_attrition
+	clear_variable = VAL_op_org
+	clear_variable = VAL_op_planning
+	clear_variable = VAL_op_morale
+}
+
+# COUNTRY VAL. Pays the northern operation once, after the war with NOD exists.
+VAL_nod_op_apply_launch = {
+	if = {
+		limit = {
+			has_completed_focus = VAL_nod_op_staff
+			has_war_with = NOD
+			NOT = { has_country_flag = VAL_nod_op_launched }
+		}
+		set_country_flag = VAL_nod_op_launched
+		set_temp_variable = { var = VAL_op_in_readiness value = VAL_nod_op_readiness }
+		set_temp_variable = { var = VAL_op_in_profile value = VAL_nod_op_axis }
+		VAL_op_pay_offensive = yes
+		if = {
+			limit = { has_country_flag = VAL_nod_op_deception_ready }
+			NOD = { add_timed_idea = { idea = VAL_op_caught_off_guard days = 45 } }
+		}
+		country_event = { id = val_rework.206 hours = 1 }
+	}
+}
+
+# COUNTRY VAL. Roads reach every controlled state on Nodrul's border; without
+# such a state the capital receives the work.
+VAL_nod_op_build_border_roads = {
+	if = {
+		limit = {
+			any_owned_state = {
+				is_controlled_by = ROOT
+				any_neighbor_state = { is_owned_by = NOD }
+			}
+		}
+		every_owned_state = {
+			limit = {
+				is_controlled_by = ROOT
+				any_neighbor_state = { is_owned_by = NOD }
+				infrastructure < 5
+			}
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+	else = {
+		capital_scope = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+VAL_nod_op_refund_roads = {
+	if = {
+		limit = { has_variable = VAL_nod_op_roads_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_nod_op_roads_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_nod_op_roads_deposit }
+		clear_variable = VAL_nod_op_roads_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL. Every terminal outcome of the final crisis ends the operation.
+VAL_nod_op_close = {
+	VAL_nod_op_refund_roads = yes
+	if = {
+		limit = { has_country_flag = VAL_nod_op_launched }
+		VAL_op_clear_offensive = yes
+	}
+	clr_country_flag = VAL_nod_op_deception_ready
+	clr_country_flag = VAL_nod_op_noticed
+	clr_country_flag = VAL_nod_op_launched
+	clear_variable = VAL_nod_op_readiness
+	clear_variable = VAL_nod_op_axis
+}
+
+# --- stelander_operation_effects ---
+# Readiness of the Stelander campaign (0-100); input VAL_stl_op_gain.
+# Crossing 40 once lets the Stelander embassies notice the preparation.
+VAL_stl_op_add_readiness = {
+	if = {
+		limit = { VAL_stl_op_can_prepare = yes }
+		add_to_variable = { var = VAL_stl_op_readiness value = VAL_stl_op_gain }
+		clamp_variable = { var = VAL_stl_op_readiness min = 0 max = 100 }
+		if = {
+			limit = {
+				NOT = { has_country_flag = VAL_stl_op_noticed }
+				check_variable = { var = VAL_stl_op_readiness value = 40 compare = greater_than_or_equals }
+			}
+			set_country_flag = VAL_stl_op_noticed
+			country_event = { id = val_rework.207 days = 1 }
+		}
+	}
+}
+
+# COUNTRY VAL with the Stelander power in FROM, from the campaign decision once
+# the war exists. The preparation is spent; only the report keeps its tier.
+VAL_stl_op_apply_launch = {
+	if = {
+		limit = {
+			has_completed_focus = VAL_stl_op_staff
+			has_war_with = FROM
+			NOT = { has_country_flag = VAL_stl_op_launched }
+		}
+		set_country_flag = VAL_stl_op_launched
+		set_temp_variable = { var = VAL_op_in_readiness value = VAL_stl_op_readiness }
+		set_temp_variable = { var = VAL_op_in_profile value = VAL_stl_op_profile }
+		VAL_op_pay_offensive = yes
+		FROM = {
+			if = {
+				limit = { ROOT = { has_country_flag = VAL_stl_op_deception_ready } }
+				add_timed_idea = { idea = VAL_op_caught_off_guard days = 45 }
+			}
+			if = {
+				limit = {
+					ROOT = {
+						check_variable = { var = VAL_stl_op_profile value = 4 compare = equals }
+						check_variable = { var = VAL_op_last_tier value = 0 compare = greater_than }
+					}
+				}
+				add_timed_idea = { idea = VAL_op_target_unrest days = 90 }
+			}
+		}
+		clr_country_flag = VAL_stl_op_deception_ready
+		clr_country_flag = VAL_stl_op_noticed
+		clear_variable = VAL_stl_op_readiness
+		clear_variable = VAL_stl_op_profile
+		country_event = { id = val_rework.208 hours = 1 }
+	}
+}
+
+# --- northern_coalition_operation_effects ---
+# Readiness of the campaign against YPR, COF and TFF (0-100); input VAL_nc_op_gain.
+VAL_nc_op_add_readiness = {
+	if = {
+		limit = { VAL_nc_op_can_prepare = yes }
+		add_to_variable = { var = VAL_nc_op_readiness value = VAL_nc_op_gain }
+		clamp_variable = { var = VAL_nc_op_readiness min = 0 max = 100 }
+		if = {
+			limit = {
+				NOT = { has_country_flag = VAL_nc_op_noticed }
+				check_variable = { var = VAL_nc_op_readiness value = 40 compare = greater_than_or_equals }
+			}
+			set_country_flag = VAL_nc_op_noticed
+			country_event = { id = val_rework.210 days = 1 }
+		}
+	}
+}
+
+# COUNTRY VAL. Called by VAL_Break_The_Northern_Coalition after the declaration.
+VAL_nc_op_apply_launch = {
+	if = {
+		limit = {
+			has_completed_focus = VAL_nc_op_staff
+			has_war_with = YPR
+			NOT = { has_country_flag = VAL_nc_op_launched }
+		}
+		set_country_flag = VAL_nc_op_launched
+		set_temp_variable = { var = VAL_op_in_readiness value = VAL_nc_op_readiness }
+		set_temp_variable = { var = VAL_op_in_profile value = VAL_nc_op_profile }
+		VAL_op_pay_offensive = yes
+		if = {
+			limit = { has_country_flag = VAL_nc_op_deception_ready }
+			YPR = { add_timed_idea = { idea = VAL_op_caught_off_guard days = 45 } }
+		}
+		clr_country_flag = VAL_nc_op_deception_ready
+		clr_country_flag = VAL_nc_op_noticed
+		clear_variable = VAL_nc_op_readiness
+		clear_variable = VAL_nc_op_profile
+		country_event = { id = val_rework.211 hours = 1 }
+	}
+}
+
+# COUNTRY VAL. Members registered by VAL_begin_northern_coalition_campaign
+# receive reserves and a defensive spirit for the opening of the war.
+VAL_nc_reinforce_coalition = {
+	YPR = {
+		if = {
+			limit = { exists = yes has_country_flag = VAL_northern_coalition_campaign_member }
+			VAL_nc_reinforce_member = yes
+		}
+	}
+	COF = {
+		if = {
+			limit = { exists = yes has_country_flag = VAL_northern_coalition_campaign_member }
+			VAL_nc_reinforce_member = yes
+		}
+	}
+	TFF = {
+		if = {
+			limit = { exists = yes has_country_flag = VAL_northern_coalition_campaign_member }
+			VAL_nc_reinforce_member = yes
+		}
+	}
+}
+
+# --- bezhaysk_operation_effects ---
+# Readiness of the Bezhaysk operation (0-100); input VAL_bjk_op_gain.
+VAL_bjk_op_add_readiness = {
+	if = {
+		limit = { VAL_bjk_op_can_prepare = yes }
+		add_to_variable = { var = VAL_bjk_op_readiness value = VAL_bjk_op_gain }
+		clamp_variable = { var = VAL_bjk_op_readiness min = 0 max = 100 }
+		if = {
+			limit = {
+				NOT = { has_country_flag = VAL_bjk_op_noticed }
+				check_variable = { var = VAL_bjk_op_readiness value = 40 compare = greater_than_or_equals }
+			}
+			set_country_flag = VAL_bjk_op_noticed
+			country_event = { id = val_rework.213 days = 1 }
+		}
+	}
+}
+
+# COUNTRY VAL. Called by VAL_Bezhaysk_Operation after the declaration.
+VAL_bjk_op_apply_launch = {
+	if = {
+		limit = {
+			has_completed_focus = VAL_bjk_op_staff
+			has_war_with = BJK
+			NOT = { has_country_flag = VAL_bjk_op_launched }
+		}
+		set_country_flag = VAL_bjk_op_launched
+		set_temp_variable = { var = VAL_op_in_readiness value = VAL_bjk_op_readiness }
+		set_temp_variable = { var = VAL_op_in_profile value = VAL_bjk_op_profile }
+		VAL_op_pay_offensive = yes
+		BJK = {
+			if = {
+				limit = { ROOT = { has_country_flag = VAL_bjk_op_deception_ready } }
+				add_timed_idea = { idea = VAL_op_caught_off_guard days = 45 }
+			}
+			if = {
+				limit = {
+					ROOT = {
+						check_variable = { var = VAL_bjk_op_profile value = 4 compare = equals }
+						check_variable = { var = VAL_op_last_tier value = 0 compare = greater_than }
+					}
+				}
+				add_timed_idea = { idea = VAL_op_target_unrest days = 90 }
+			}
+		}
+		clr_country_flag = VAL_bjk_op_deception_ready
+		clr_country_flag = VAL_bjk_op_noticed
+		clear_variable = VAL_bjk_op_readiness
+		clear_variable = VAL_bjk_op_profile
+		country_event = { id = val_rework.214 hours = 1 }
+	}
+}
+
+# COUNTRY VAL. Bezhaysk turns into a fortress when Kefreyt declares the war;
+# veteran and elite difficulty add reserves, a second spirit and bunker levels.
+VAL_bjk_reinforce_city = {
+	BJK = {
+		if = {
+			limit = {
+				exists = yes
+				has_war_with = VAL
+			}
+			add_manpower = 15000
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 200 }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 60 }
+			add_timed_idea = { idea = VAL_bjk_fortress_city days = 240 }
+			every_owned_state = {
+				add_building_construction = {
+					type = bunker
+					level = 2
+					province = { all_provinces = yes }
+					instant_build = yes
+				}
+			}
+			if = {
+				limit = { difficulty > 2 }
+				add_manpower = 15000
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
+				add_equipment_to_stockpile = { type = artillery_equipment amount = 60 }
+				add_timed_idea = { idea = VAL_bjk_last_bastion days = 240 }
+				every_owned_state = {
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = { all_provinces = yes }
+						instant_build = yes
+					}
+				}
+			}
+			if = {
+				limit = { difficulty > 3 }
+				add_manpower = 20000
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 15000 }
+				add_equipment_to_stockpile = { type = support_equipment amount = 200 }
+				add_equipment_to_stockpile = { type = artillery_equipment amount = 80 }
+				every_owned_state = {
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = { all_provinces = yes }
+						instant_build = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY coalition member.
+VAL_nc_reinforce_member = {
+	add_manpower = 8000
+	add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 }
+	add_equipment_to_stockpile = { type = support_equipment amount = 100 }
+	add_timed_idea = { idea = VAL_nc_coalition_resolve days = 180 }
 }
 
 
@@ -12431,6 +13040,7 @@ VAL_settle_resource_aid = {
 			EFL = { give_resource_rights = { receiver = VAL state = 230 } ADISCORD_economy_mark_dirty = yes }
 			set_country_flag = VAL_efl_concession_active
 			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = val_contract.379 }
 		}
 		else_if = {
 			limit = {

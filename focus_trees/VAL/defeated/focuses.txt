@@ -161,7 +161,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_defeat_No_Second_Expedition }
 		prerequisite = { focus = VAL_defeat_Bring_The_Captains_Home }
 		completion_reward = {
-			ADISCORD_economy_receive_15 = yes
+			custom_effect_tooltip = VAL_peace_treasury_15_tt
+			hidden_effect = { ADISCORD_economy_receive_15 = yes }
 			VAL_invest_civilian_industry = yes
 			add_stability = 0.05
 			add_political_power = 100
@@ -383,7 +384,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			VAL_invest_civilian_industry = yes
-			ADISCORD_economy_receive_15 = yes
+			custom_effect_tooltip = VAL_peace_treasury_15_tt
+			hidden_effect = { ADISCORD_economy_receive_15 = yes }
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -475,7 +477,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			VAL_reform_mercenary_payroll = yes
-			ADISCORD_economy_receive_15 = yes
+			custom_effect_tooltip = VAL_peace_treasury_15_tt
+			hidden_effect = { ADISCORD_economy_receive_15 = yes }
 			add_political_power = 75
 			add_stability = 0.05
 			country_event = { id = val_council.35 }

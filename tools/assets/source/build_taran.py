@@ -40,9 +40,6 @@ NATIVE_FILES += [f"{NAME}_{channel}.dds" for channel in ("diffuse", "normal", "s
 UI_FILES = {
     "STP_taran_equipment.dds": "gfx/interface/technologies/STP_taran_equipment.dds",
     "STP_taran_project.dds": "gfx/interface/technologies/STP_taran_project.dds",
-    "STP_taran_icon_large.dds": "gfx/interface/counters/divisions_large/STP_taran_icon.dds",
-    "STP_taran_icon_small.dds": "gfx/interface/counters/divisions_small/STP_taran_icon.dds",
-    "STP_taran_texticon.dds": "gfx/texticons/STP_taran_icon_small.dds",
 }
 
 
@@ -462,7 +459,7 @@ def render():
 
 
 def icons():
-    from PIL import Image, ImageEnhance, ImageOps
+    from PIL import Image, ImageOps
     from tools.assets.source.build_shl_palace import dds_bytes
 
     portrait = Image.open(STAGE / f"{NAME}_portrait.png").convert("RGBA")
@@ -477,15 +474,6 @@ def icons():
     equipment = fit((176, 112))
     project = fit((128, 128), 5)
     images = {"STP_taran_equipment.dds": equipment, "STP_taran_project.dds": project}
-    for filename, width, height in (("STP_taran_icon_large.dds", 76, 42),
-                                    ("STP_taran_icon_small.dds", 30, 12),
-                                    ("STP_taran_texticon.dds", 30, 12)):
-        frame = fit((width, height), 1)
-        second = ImageEnhance.Brightness(frame).enhance(1.24)
-        strip = Image.new("RGBA", (width * 2, height))
-        strip.alpha_composite(frame, (0, 0))
-        strip.alpha_composite(second, (width, 0))
-        images[filename] = strip
     for filename, image in images.items():
         write_changed(STAGE / filename, dds_bytes(image))
     report_path = STAGE / f"{NAME}_verification.json"

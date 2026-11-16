@@ -322,6 +322,212 @@ ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = {
 	}
 }
 
+# COUNTRY defeated TVA before its absorption. Ostfort and Tehlar are authored
+# Worx protectorates; folding them first keeps an overlord annex from freeing
+# them as one-state postwar shells. A protectorate still subject to TVA left
+# the war with it and never receives its own capitulation callback.
+ADISCORD_vorkerland_fold_worx_protectorates = {
+	if = {
+		limit = {
+			tag = TVA
+			WTD = {
+				exists = yes
+				OR = {
+					has_capitulated = yes
+					is_subject_of = TVA
+				}
+				has_country_flag = ADISCORD_vorkerland_worx_aligned_technocrats
+			}
+		}
+		TVA = {
+			if = { limit = { has_war_with = WTD } white_peace = WTD }
+			WTD = {
+				if = {
+					limit = {
+						has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+					}
+					clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+					RUS_crisis_release_other_major = yes
+					clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+				}
+			}
+			annex_country = { target = WTD transfer_troops = no }
+		}
+	}
+	if = {
+		limit = {
+			tag = TVA
+			TGD = {
+				exists = yes
+				OR = {
+					has_capitulated = yes
+					is_subject_of = TVA
+				}
+				has_country_flag = ADISCORD_vorkerland_joined_worx_directorate
+			}
+		}
+		TVA = {
+			if = { limit = { has_war_with = TGD } white_peace = TGD }
+			TGD = {
+				if = {
+					limit = {
+						has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+					}
+					clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+					RUS_crisis_release_other_major = yes
+					clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+				}
+			}
+			annex_country = { target = TGD transfer_troops = no }
+		}
+	}
+}
+
+# COUNTRY absorbed by the central war; FROM is the native victor. The router
+# may credit a claimant, one of its subjects or a fixed auxiliary; the land
+# always reaches that side's living claimant.
+ADISCORD_vorkerland_absorb_into_central_victor = {
+	save_event_target_as = ADISCORD_vorkerland_absorbed_country
+	FROM = {
+		if = {
+			limit = {
+				ADISCORD_vorkerland_is_main_claimant = yes
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+			}
+			if = { limit = { has_war_with = event_target:ADISCORD_vorkerland_absorbed_country } white_peace = event_target:ADISCORD_vorkerland_absorbed_country }
+			event_target:ADISCORD_vorkerland_absorbed_country = {
+				if = {
+					limit = {
+						has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+					}
+					clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+					RUS_crisis_release_other_major = yes
+					clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+				}
+			}
+			annex_country = { target = event_target:ADISCORD_vorkerland_absorbed_country transfer_troops = yes }
+		}
+		else_if = {
+			limit = { ADISCORD_vorkerland_has_live_claimant_leader = yes }
+			faction_leader = {
+				if = { limit = { has_war_with = event_target:ADISCORD_vorkerland_absorbed_country } white_peace = event_target:ADISCORD_vorkerland_absorbed_country }
+				event_target:ADISCORD_vorkerland_absorbed_country = {
+					if = {
+						limit = {
+							has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						}
+						clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						RUS_crisis_release_other_major = yes
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+					}
+				}
+				annex_country = { target = event_target:ADISCORD_vorkerland_absorbed_country transfer_troops = yes }
+			}
+		}
+		else_if = {
+			limit = {
+				is_subject = yes
+				NOT = { has_capitulated = yes }
+				OVERLORD = {
+					exists = yes
+					ADISCORD_vorkerland_is_main_claimant = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+				}
+			}
+			OVERLORD = {
+				if = { limit = { has_war_with = event_target:ADISCORD_vorkerland_absorbed_country } white_peace = event_target:ADISCORD_vorkerland_absorbed_country }
+				event_target:ADISCORD_vorkerland_absorbed_country = {
+					if = {
+						limit = {
+							has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						}
+						clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						RUS_crisis_release_other_major = yes
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+					}
+				}
+				annex_country = { target = event_target:ADISCORD_vorkerland_absorbed_country transfer_troops = yes }
+			}
+		}
+		else_if = {
+			limit = { tag = WTD TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			TVA = {
+				if = { limit = { has_war_with = event_target:ADISCORD_vorkerland_absorbed_country } white_peace = event_target:ADISCORD_vorkerland_absorbed_country }
+				event_target:ADISCORD_vorkerland_absorbed_country = {
+					if = {
+						limit = {
+							has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						}
+						clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						RUS_crisis_release_other_major = yes
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+					}
+				}
+				annex_country = { target = event_target:ADISCORD_vorkerland_absorbed_country transfer_troops = yes }
+			}
+		}
+		else_if = {
+			limit = { tag = VLA WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			WKR = {
+				if = { limit = { has_war_with = event_target:ADISCORD_vorkerland_absorbed_country } white_peace = event_target:ADISCORD_vorkerland_absorbed_country }
+				event_target:ADISCORD_vorkerland_absorbed_country = {
+					if = {
+						limit = {
+							has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						}
+						clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						RUS_crisis_release_other_major = yes
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+					}
+				}
+				annex_country = { target = event_target:ADISCORD_vorkerland_absorbed_country transfer_troops = yes }
+			}
+		}
+		else_if = {
+			limit = { tag = SOL VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			VAD = {
+				if = { limit = { has_war_with = event_target:ADISCORD_vorkerland_absorbed_country } white_peace = event_target:ADISCORD_vorkerland_absorbed_country }
+				event_target:ADISCORD_vorkerland_absorbed_country = {
+					if = {
+						limit = {
+							has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						}
+						clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						RUS_crisis_release_other_major = yes
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+					}
+				}
+				annex_country = { target = event_target:ADISCORD_vorkerland_absorbed_country transfer_troops = yes }
+			}
+		}
+		else_if = {
+			limit = {
+				tag = event_target:ADISCORD_vorkerland_nation
+				exists = yes
+				is_subject = no
+				NOT = { has_capitulated = yes }
+				has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+				has_global_flag = ADISCORD_vorkerland_reunification_verified
+			}
+			if = { limit = { has_war_with = event_target:ADISCORD_vorkerland_absorbed_country } white_peace = event_target:ADISCORD_vorkerland_absorbed_country }
+			event_target:ADISCORD_vorkerland_absorbed_country = {
+				if = {
+					limit = {
+						has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+					}
+					clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+					RUS_crisis_release_other_major = yes
+					clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+				}
+			}
+			annex_country = { target = event_target:ADISCORD_vorkerland_absorbed_country transfer_troops = yes }
+		}
+	}
+}
+
 # Run in the central winner's country scope. ROOT remains the capitulated
 # country from on_capitulation. Temporary claimants are reserved for phase.6;
 # minor tags are marked for the delayed post-peace-cache finalizer.

@@ -18,6 +18,7 @@ CHAPTER_ROOTS = {
     "VAL_Contracts_Outlive_Kings",
     "VAL_frontier_conference",
     "VAL_Return_Southern_Tsaygen",
+    "VAL_bjk_op_staff",
     "VAL_Bezhaysk_Operation",
     "VAL_Marine_Contract_Corps",
     "VAL_Shield_Special_Forces",
@@ -27,6 +28,7 @@ CHAPTER_ROOTS = {
     "VAL_Reopen_Trade_Routes",
     "VAL_Settle_Industrial_Debts",
     "VAL_Veterans_Of_The_Campaign",
+    "VAL_Peace_Without_Orders",
 }
 REVEAL_MILESTONES = {
     "VAL_Inventory_The_Empty_Yards",
@@ -705,6 +707,357 @@ class KefreytAIExpansionPriorityTests(unittest.TestCase):
             if e.key == "focus" and scalar(e.value, "id") == "VAL_Balchansk_Charter"
         )
         self.assertEqual(self.weight(charter, "ai_will_do", {}), 0)
+
+
+class KefreytNorthernOperationTests(unittest.TestCase):
+    AXES = (
+        "VAL_nod_op_axis_breakthrough",
+        "VAL_nod_op_axis_landing",
+        "VAL_nod_op_axis_forest",
+    )
+    PREPARATION = {
+        "VAL_nod_op_staff_games": 10,
+        "VAL_nod_op_border_roads": 10,
+        "VAL_nod_op_armour_reserve": 15,
+        "VAL_nod_op_landing_drills": 15,
+        "VAL_nod_op_forest_guides": 15,
+        "VAL_nod_op_deception": 5,
+        "VAL_final_reconnaissance": 15,
+        "VAL_final_stockpile_supplies": 15,
+        "VAL_final_register_reserves": 10,
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.focuses = read(FOCUS_PATH)
+        cls.decisions = read(ROOT / "common/decisions/ADISCORD_VAL_decisions.txt")
+        cls.effects = read(ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt")
+        cls.triggers = read(ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        cls.modifiers = read(ROOT / "common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt")
+        cls.events = read(ROOT / "events/ADISCORD_VAL_contract_events.txt")
+        cls.ru_loc = read(RU_LOC_PATH)
+        cls.en_loc = read(EN_LOC_PATH)
+
+    def test_staff_opens_one_exclusive_plan_that_leads_to_the_strike(self) -> None:
+        staff = focus_block(self.focuses, "VAL_nod_op_staff")
+        self.assertIn("prerequisite = { focus = VAL_Northern_Settlement }", staff)
+        for axis in self.AXES:
+            body = focus_block(self.focuses, axis)
+            self.assertIn("prerequisite = { focus = VAL_nod_op_staff }", body)
+            exclusive = set(re.findall(r"focus = (\w+)", named_block(body, "mutually_exclusive")))
+            self.assertEqual(exclusive, set(self.AXES) - {axis}, axis)
+        final = focus_block(self.focuses, "VAL_nod_op_final_plan")
+        self.assertRegex(
+            final,
+            r"prerequisite = \{\s*focus = VAL_nod_op_axis_breakthrough\s*"
+            r"focus = VAL_nod_op_axis_landing\s*focus = VAL_nod_op_axis_forest\s*\}",
+        )
+        self.assertIn("var = VAL_nod_op_readiness value = 50", final)
+        for focus_id in ("VAL_nod_op_staff", "VAL_nod_op_final_plan", *self.AXES):
+            self.assertIn("bypass = { VAL_nod_op_moment_passed = yes }", focus_block(self.focuses, focus_id))
+        for value, axis in enumerate(self.AXES, start=1):
+            self.assertIn(f"set_variable = {{ var = VAL_nod_op_axis value = {value} }}", focus_block(self.focuses, axis))
+
+    def test_every_preparation_step_adds_its_shown_readiness_once(self) -> None:
+        for decision_id, gain in self.PREPARATION.items():
+            body = named_block(self.decisions, decision_id)
+            self.assertEqual(body.count("VAL_nod_op_add_readiness = yes"), 1, decision_id)
+            self.assertIn(f"var = VAL_nod_op_gain value = {gain} }}", body, decision_id)
+            self.assertIn(f"custom_effect_tooltip = VAL_nod_op_readiness_{gain}_tt", body, decision_id)
+            if decision_id.startswith("VAL_nod_op_"):
+                self.assertIn("cancel_effect", body, decision_id)
+                self.assertIn("fire_only_once = yes", body, decision_id)
+
+        helper = named_block(self.effects, "VAL_nod_op_add_readiness")
+        self.assertIn("VAL_nod_op_can_prepare = yes", helper)
+        self.assertIn("clamp_variable = { var = VAL_nod_op_readiness min = 0 max = 100 }", helper)
+        self.assertIn("set_country_flag = VAL_nod_op_noticed", helper)
+        self.assertIn("id = val_rework.205", helper)
+
+    def test_roads_deposit_is_paid_once_and_refunded_on_every_exit(self) -> None:
+        roads = named_block(self.decisions, "VAL_nod_op_border_roads")
+        self.assertIn("NOT = { has_variable = VAL_nod_op_roads_deposit }", roads)
+        self.assertEqual(roads.count("ADISCORD_economy_spend_300 = yes"), 1)
+        self.assertIn("VAL_nod_op_refund_roads = yes", named_block(roads, "cancel_effect"))
+        self.assertIn("clear_variable = VAL_nod_op_roads_deposit", named_block(roads, "remove_effect"))
+        self.assertIn("VAL_nod_op_refund_roads = yes", named_block(self.effects, "VAL_nod_op_close"))
+
+    def test_launch_pays_one_scaled_plan_bonus_from_every_war_entry(self) -> None:
+        pay = named_block(self.effects, "VAL_op_pay_offensive")
+        for threshold, scale, tier in (("100", "2", "3"), ("75", "1.5", "2"), ("50", "1", "1")):
+            self.assertRegex(
+                pay,
+                rf"var = VAL_op_in_readiness value = {re.escape(threshold)} compare = greater_than_or_equals \}} \}}\s*"
+                rf"set_temp_variable = \{{ var = VAL_op_scale value = {re.escape(scale)} \}}\s*"
+                rf"set_variable = \{{ var = VAL_op_last_tier value = {tier} \}}",
+            )
+        self.assertIn("add_dynamic_modifier = { modifier = VAL_operation_offensive days = 180 }", pay)
+        modifier = named_block(self.modifiers, "VAL_operation_offensive")
+        self.assertIn("remove_trigger = { has_war = no }", modifier)
+        variables = re.findall(r"=\s*(VAL_op_\w+)", modifier)
+        self.assertGreaterEqual(len(variables), 9)
+        clear = named_block(self.effects, "VAL_op_clear_offensive")
+        for variable in variables:
+            self.assertIn(f"multiply_variable = {{ var = {variable} value = VAL_op_scale }}", pay)
+            self.assertIn(f"clear_variable = {variable}", clear)
+
+        launch = named_block(self.effects, "VAL_nod_op_apply_launch")
+        self.assertIn("NOT = { has_country_flag = VAL_nod_op_launched }", launch)
+        self.assertIn("has_war_with = NOD", launch)
+        self.assertIn("set_temp_variable = { var = VAL_op_in_readiness value = VAL_nod_op_readiness }", launch)
+        self.assertIn("set_temp_variable = { var = VAL_op_in_profile value = VAL_nod_op_axis }", launch)
+        self.assertIn("VAL_op_pay_offensive = yes", launch)
+        self.assertIn("VAL_nod_op_apply_launch = yes", named_block(self.effects, "VAL_final_crisis_join_war"))
+        joint = named_block(self.effects, "VAL_begin_joint_nod_shabrat_campaign")
+        self.assertEqual(joint.count("VAL_nod_op_apply_launch = yes"), 2)
+
+        close = named_block(self.effects, "VAL_nod_op_close")
+        self.assertIn("VAL_op_clear_offensive = yes", close)
+        self.assertIn("VAL_nod_op_close = yes", named_block(self.effects, "VAL_final_crisis_close"))
+
+    def test_manual_campaign_needs_first_threshold_once_the_staff_exists(self) -> None:
+        campaign = named_block(self.decisions, "VAL_campaign_against_nod")
+        gate = named_block(campaign, "available")
+        self.assertIn("NOT = { has_completed_focus = VAL_nod_op_staff }", gate)
+        self.assertIn("var = VAL_nod_op_readiness value = 30", gate)
+
+    def test_noticed_event_offers_time_or_power_and_texts_exist(self) -> None:
+        source = self.events
+        start = source.index("id = val_rework.205")
+        block = brace_block(source, source.rfind("country_event = {", 0, start))
+        options = block.split("option = {")[1:]
+        self.assertEqual(len(options), 2)
+        self.assertIn("var = VAL_final_escalation value = 15", options[0])
+        self.assertIn("add_political_power = -35", options[1])
+        self.assertIn("NOT = { has_political_power < 35 }", options[1])
+        keys = set(re.findall(r"\b((?:VAL_nod_op|VAL_stl_op|VAL_op)_\w+_tt)\b", self.effects + self.decisions + self.focuses + self.events))
+        keys |= {f"val_rework.{number}.{part}" for number in (205, 206, 207, 208) for part in ("t", "d", "a")}
+        keys |= {f"{name}_desc" for name in ("VAL_nod_op_staff", "VAL_nod_op_final_plan", *self.AXES, *[d for d in self.PREPARATION if d.startswith("VAL_nod_op_")])}
+        keys |= {f"VAL_OP_TIER_{tier}" for tier in ("FULL", "HIGH", "BASE", "NONE")}
+        keys |= {"VAL_operation_offensive", "VAL_op_caught_off_guard", "VAL_op_target_unrest"}
+        for loc in (self.ru_loc, self.en_loc):
+            for key in sorted(keys):
+                self.assertRegex(loc, rf'(?m)^ {re.escape(key)}:\d* "', key)
+
+
+class KefreytStelanderOperationTests(unittest.TestCase):
+    AXES = {
+        "VAL_stl_op_axis_assault": 1,
+        "VAL_stl_op_axis_landing": 2,
+        "VAL_stl_op_axis_uprising": 4,
+    }
+    PREPARATION = {
+        "VAL_stl_op_survey": 15,
+        "VAL_stl_op_rifle_reserve": 15,
+        "VAL_stl_op_mountain_batteries": 15,
+        "VAL_stl_op_fada_transports": 15,
+        "VAL_stl_op_fund_opposition": 15,
+        "VAL_stl_op_false_talks": 5,
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.focuses = read(FOCUS_PATH)
+        cls.decisions = read(ROOT / "common/decisions/ADISCORD_VAL_decisions.txt")
+        cls.effects = read(ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt")
+        cls.triggers = read(ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        cls.ru_loc = read(RU_LOC_PATH)
+        cls.en_loc = read(EN_LOC_PATH)
+
+    def test_staff_follows_the_ultimatum_and_opens_one_plan(self) -> None:
+        staff = focus_block(self.focuses, "VAL_stl_op_staff")
+        self.assertIn("prerequisite = { focus = VAL_Stelander_Ultimatum }", staff)
+        for axis, profile in self.AXES.items():
+            body = focus_block(self.focuses, axis)
+            self.assertIn("prerequisite = { focus = VAL_stl_op_staff }", body)
+            exclusive = set(re.findall(r"focus = (\w+)", named_block(body, "mutually_exclusive")))
+            self.assertEqual(exclusive, set(self.AXES) - {axis}, axis)
+            self.assertIn(f"set_variable = {{ var = VAL_stl_op_profile value = {profile} }}", body)
+            self.assertIn("bypass = { VAL_stl_op_moment_passed = yes }", body)
+        moment = named_block(self.triggers, "VAL_stl_op_moment_passed")
+        self.assertIn("has_global_flag = STP_cw_union_wars_finished", moment)
+
+    def test_preparation_adds_shown_readiness_once_and_refunds(self) -> None:
+        for decision_id, gain in self.PREPARATION.items():
+            body = named_block(self.decisions, decision_id)
+            self.assertEqual(body.count("VAL_stl_op_add_readiness = yes"), 1, decision_id)
+            self.assertIn(f"var = VAL_stl_op_gain value = {gain} }}", body, decision_id)
+            self.assertIn(f"custom_effect_tooltip = VAL_stl_op_readiness_{gain}_tt", body, decision_id)
+            self.assertIn("cancel_effect", body, decision_id)
+            self.assertIn("fire_only_once = yes", body, decision_id)
+        talks = named_block(self.decisions, "VAL_stl_op_false_talks")
+        self.assertIn("var = VAL_stl_op_readiness value = 50", talks)
+
+    def test_campaign_spends_the_operation_once_war_exists(self) -> None:
+        campaign = named_block(self.decisions, "VAL_campaign_against_stelander")
+        self.assertIn("VAL_stl_op_apply_launch = yes", named_block(campaign, "remove_effect"))
+        gate = named_block(campaign, "available")
+        self.assertIn("var = VAL_stl_op_readiness value = 30", gate)
+        self.assertIn("FROM = { has_war_with = ROOT }", gate)
+
+        launch = named_block(self.effects, "VAL_stl_op_apply_launch")
+        self.assertIn("has_war_with = FROM", launch)
+        self.assertIn("set_country_flag = VAL_stl_op_launched", launch)
+        self.assertIn("set_temp_variable = { var = VAL_op_in_profile value = VAL_stl_op_profile }", launch)
+        self.assertIn("VAL_op_pay_offensive = yes", launch)
+        self.assertIn("idea = VAL_op_target_unrest days = 90", launch)
+        self.assertIn("var = VAL_op_last_tier value = 0 compare = greater_than", launch)
+        self.assertIn("clear_variable = VAL_stl_op_readiness", launch)
+        for loc in (self.ru_loc, self.en_loc):
+            self.assertIn("$VAL_stl_op_staff$", re.search(
+                r'(?m)^ VAL_focus_progression_VAL_Stelander_Ultimatum_tt:\d* "([^"]+)"', loc).group(1))
+
+
+class KefreytNorthernCoalitionOperationTests(unittest.TestCase):
+    PROFILE_DECISIONS = {
+        "VAL_nc_op_assault_guns": 1,
+        "VAL_nc_op_coastal_transports": 2,
+        "VAL_nc_op_forest_rangers": 3,
+    }
+    PREPARATION = {
+        "VAL_nc_op_survey": 15,
+        "VAL_nc_op_depots": 15,
+        "VAL_nc_op_winter_kit": 15,
+        "VAL_nc_op_assault_guns": 15,
+        "VAL_nc_op_coastal_transports": 15,
+        "VAL_nc_op_forest_rangers": 15,
+        "VAL_nc_op_feint": 10,
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.focuses = read(FOCUS_PATH)
+        cls.decisions = read(ROOT / "common/decisions/ADISCORD_VAL_decisions.txt")
+        cls.effects = read(ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt")
+        cls.events = read(ROOT / "events/ADISCORD_VAL_contract_events.txt")
+        cls.ideas = read(ROOT / "common/ideas/ADISCORD_VAL_rework_ideas.txt")
+
+    def test_war_focus_waits_for_the_staff_and_spends_the_operation(self) -> None:
+        staff = focus_block(self.focuses, "VAL_nc_op_staff")
+        self.assertIn("prerequisite = { focus = VAL_Northern_Settlement }", staff)
+        self.assertIn("id = val_rework.209", staff)
+        war = focus_block(self.focuses, "VAL_Break_The_Northern_Coalition")
+        self.assertIn("prerequisite = { focus = VAL_nc_op_staff }", war)
+        self.assertIn("var = VAL_nc_op_readiness value = 30", war)
+        reward = named_block(war, "completion_reward")
+        self.assertLess(
+            reward.index("VAL_begin_northern_coalition_campaign = yes"),
+            reward.index("VAL_nc_op_apply_launch = yes"),
+        )
+        launch = named_block(self.effects, "VAL_nc_op_apply_launch")
+        self.assertIn("has_war_with = YPR", launch)
+        self.assertIn("VAL_op_pay_offensive = yes", launch)
+        self.assertIn("clear_variable = VAL_nc_op_profile", launch)
+
+    def test_plan_event_sets_one_profile_and_opens_its_order(self) -> None:
+        start = self.events.index("id = val_rework.209")
+        block = brace_block(self.events, self.events.rfind("country_event = {", 0, start))
+        options = block.split("option = {")[1:]
+        self.assertEqual(len(options), 3)
+        profiles = {}
+        for option in options:
+            profile = int(re.search(r"var = VAL_nc_op_profile value = (\d)", option).group(1))
+            decision = re.search(r"unlock_decision_tooltip = (\w+)", option).group(1)
+            profiles[decision] = profile
+        self.assertEqual(profiles, self.PROFILE_DECISIONS)
+        for decision_id, profile in self.PROFILE_DECISIONS.items():
+            self.assertIn(
+                f"var = VAL_nc_op_profile value = {profile} compare = equals",
+                named_block(self.decisions, decision_id),
+            )
+
+    def test_preparation_adds_shown_readiness_once_and_refunds(self) -> None:
+        for decision_id, gain in self.PREPARATION.items():
+            body = named_block(self.decisions, decision_id)
+            self.assertEqual(body.count("VAL_nc_op_add_readiness = yes"), 1, decision_id)
+            self.assertIn(f"var = VAL_nc_op_gain value = {gain} }}", body, decision_id)
+            self.assertIn(f"custom_effect_tooltip = VAL_nc_op_readiness_{gain}_tt", body, decision_id)
+            self.assertIn("cancel_effect", body, decision_id)
+            self.assertIn("fire_only_once = yes", body, decision_id)
+
+    def test_coalition_is_reinforced_at_the_declaration(self) -> None:
+        start = named_block(self.effects, "VAL_begin_northern_coalition_campaign")
+        self.assertLess(start.index("VAL_join_northern_coalition_war = yes"), start.index("VAL_nc_reinforce_coalition = yes"))
+        reinforce = named_block(self.effects, "VAL_nc_reinforce_coalition")
+        for tag in ("YPR", "COF", "TFF"):
+            self.assertIn(f"{tag} = {{", reinforce)
+        self.assertEqual(reinforce.count("VAL_nc_reinforce_member = yes"), 3)
+        self.assertNotIn("every_country", reinforce)
+        member = named_block(self.effects, "VAL_nc_reinforce_member")
+        self.assertIn("add_manpower = 8000", member)
+        self.assertIn("idea = VAL_nc_coalition_resolve days = 180", member)
+        idea = named_block(self.ideas, "VAL_nc_coalition_resolve")
+        self.assertIn("army_defence_factor = 0.15", idea)
+
+
+class KefreytBezhayskOperationTests(unittest.TestCase):
+    PROFILE_DECISIONS = {
+        "VAL_bjk_op_storm_groups": 1,
+        "VAL_bjk_op_blockade": 3,
+        "VAL_bjk_op_council_contacts": 4,
+    }
+    PREPARATION = {
+        "VAL_bjk_op_survey": 15,
+        "VAL_bjk_op_siege_train": 15,
+        "VAL_bjk_op_depots": 15,
+        "VAL_bjk_op_storm_groups": 15,
+        "VAL_bjk_op_blockade": 15,
+        "VAL_bjk_op_council_contacts": 15,
+        "VAL_bjk_op_feint": 10,
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.focuses = read(FOCUS_PATH)
+        cls.decisions = read(ROOT / "common/decisions/ADISCORD_VAL_decisions.txt")
+        cls.effects = read(ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt")
+        cls.events = read(ROOT / "events/ADISCORD_VAL_contract_events.txt")
+        cls.ideas = read(ROOT / "common/ideas/ADISCORD_VAL_rework_ideas.txt")
+
+    def test_war_focus_waits_for_the_staff_and_spends_the_operation(self) -> None:
+        staff = focus_block(self.focuses, "VAL_bjk_op_staff")
+        self.assertIn("prerequisite = { focus = VAL_Contracts_Outlive_Kings }", staff)
+        self.assertIn("id = val_rework.212", staff)
+        war = focus_block(self.focuses, "VAL_Bezhaysk_Operation")
+        self.assertIn("prerequisite = { focus = VAL_bjk_op_staff }", war)
+        self.assertIn("var = VAL_bjk_op_readiness value = 30", war)
+        reward = named_block(war, "completion_reward")
+        declaration = reward.index("declare_war_on = { target = BJK")
+        self.assertLess(declaration, reward.index("VAL_bjk_reinforce_city = yes"))
+        self.assertLess(declaration, reward.index("VAL_bjk_op_apply_launch = yes"))
+        launch = named_block(self.effects, "VAL_bjk_op_apply_launch")
+        self.assertIn("has_war_with = BJK", launch)
+        self.assertIn("VAL_op_pay_offensive = yes", launch)
+
+    def test_plan_event_sets_one_profile_and_opens_its_order(self) -> None:
+        start = self.events.index("id = val_rework.212")
+        block = brace_block(self.events, self.events.rfind("country_event = {", 0, start))
+        profiles = {}
+        for option in block.split("option = {")[1:]:
+            profile = int(re.search(r"var = VAL_bjk_op_profile value = (\d)", option).group(1))
+            decision = re.search(r"unlock_decision_tooltip = (\w+)", option).group(1)
+            profiles[decision] = profile
+        self.assertEqual(profiles, self.PROFILE_DECISIONS)
+        for decision_id, gain in self.PREPARATION.items():
+            body = named_block(self.decisions, decision_id)
+            self.assertEqual(body.count("VAL_bjk_op_add_readiness = yes"), 1, decision_id)
+            self.assertIn(f"var = VAL_bjk_op_gain value = {gain} }}", body, decision_id)
+            self.assertIn("cancel_effect", body, decision_id)
+
+    def test_city_reinforcement_grows_with_difficulty(self) -> None:
+        reinforce = named_block(self.effects, "VAL_bjk_reinforce_city")
+        base, veteran = reinforce.split("difficulty > 2", 1)
+        veteran, elite = veteran.split("difficulty > 3", 1)
+        self.assertIn("idea = VAL_bjk_fortress_city days = 240", base)
+        self.assertIn("level = 2", base)
+        self.assertIn("idea = VAL_bjk_last_bastion days = 240", veteran)
+        for tier in (base, veteran, elite):
+            self.assertIn("add_manpower", tier)
+            self.assertIn("type = infantry_equipment", tier)
+        for tier in (veteran, elite):
+            self.assertIn("type = bunker", tier)
+        self.assertIn("allowed = { original_tag = BJK }", named_block(self.ideas, "VAL_bjk_fortress_city"))
+        self.assertIn("allowed = { original_tag = BJK }", named_block(self.ideas, "VAL_bjk_last_bastion"))
 
 
 if __name__ == "__main__":

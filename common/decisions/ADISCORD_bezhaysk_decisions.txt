@@ -17,6 +17,19 @@ ADISCORD_bezhaysk_postwar_operations = {
 				is_subject = no
 				NOT = { is_in_faction_with = NOD }
 			}
+			# A subject provides the front; neutral transit countries do not.
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_bezhaysk_forest_border_tt
+				COF = {
+					any_neighbor_country = {
+						has_capitulated = no
+						OR = {
+							tag = ROOT
+							is_subject_of = ROOT
+						}
+					}
+				}
+			}
 		}
 		cost = 50
 		complete_effect = {

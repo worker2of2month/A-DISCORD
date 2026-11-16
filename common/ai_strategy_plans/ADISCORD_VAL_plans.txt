@@ -115,6 +115,7 @@ VAL_new_world_plan = {
 		VAL_peace_captains_bill
 		VAL_peace_water_convoys
 		VAL_peace_registry_audit
+		VAL_peace_loyal_battalions
 		VAL_peace_tishin_list
 		VAL_peace_kilnet
 		VAL_peace_two_bills

@@ -1045,9 +1045,10 @@ class EquipmentPictureTests(unittest.TestCase):
         )
         sprites = read("interface/ADISCORD_subuniticons.gfx")
         texticons = read("interface/modifiericons_texticons.gfx")
+        zeppelin_sprites = read("interface/ADISCORD_zeppelin.gfx")
         sprite_blocks = {
             name: block
-            for source in (sprites, texticons)
+            for source in (sprites, texticons, zeppelin_sprites)
             for block, name in re.findall(
                 r'spriteType\s*=\s*\{([^{}]*?name\s*=\s*"([^"]+)"[^{}]*?)\}',
                 source,

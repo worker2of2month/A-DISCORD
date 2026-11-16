@@ -415,6 +415,48 @@ ADISCORD_assault_templates = {
 				ADISCORD_line_artillery = 3
 			}
 		}
+		replace_at_match = 0.98
+		replace_with = ADISCORD_breach_shock_group
+	}
+
+	# The shock group after the assault engineering school: assault sappers
+	# replace defensive engineers for city and fortification attacks.
+	ADISCORD_breach_shock_group = {
+		custom_icon = 4
+		enable = {
+			has_tech = ADISCORD_tech_assault_infantry_formations
+			has_tech = ADISCORD_tech_forward_supply_hubs
+			has_tech = ADISCORD_tech_frequency_hopping_field_sets
+			has_tech = ADISCORD_tech_casualty_evacuation
+			has_tech = ADISCORD_tech_assault_breaching_packages
+			num_of_military_factories > 13
+			ADISCORD_economy_ai_can_fund_advanced_forces = yes
+			has_equipment = { ADISCORD_squad_weapons_equipment > 2200 }
+			has_equipment = { support_equipment > 1600 }
+			has_equipment = { artillery_equipment > 1000 }
+		}
+		reinforce_prio = 2
+		upgrade_prio = { base = 7 }
+		can_upgrade_in_field = {
+			NOT = { ADISCORD_economy_ai_is_crisis = yes }
+			has_equipment = { ADISCORD_squad_weapons_equipment > 2600 }
+			has_equipment = { support_equipment > 2000 }
+			has_equipment = { artillery_equipment > 1300 }
+		}
+		target_template = {
+			support = {
+				ADISCORD_assault_sapper_company = 1
+				artillery = 1
+				logistics_company = 1
+				signal_company = 1
+				field_hospital = 1
+			}
+			regiments = {
+				infantry = 4
+				ADISCORD_assault_infantry = 4
+				ADISCORD_line_artillery = 3
+			}
+		}
 	}
 
 	ADISCORD_mechanized_brigade = {
@@ -679,6 +721,47 @@ ADISCORD_tank_templates = {
 		target_template = {
 			support = {
 				engineer = 1
+				ADISCORD_recon_platform = 1
+				ADISCORD_recovery_platform = 1
+				logistics_company = 1
+				signal_company = 1
+			}
+			regiments = { ADISCORD_mechanized_infantry = 7 ADISCORD_combat_platform = 6 }
+		}
+		replace_at_match = 0.98
+		replace_with = ADISCORD_engineered_armoured_division
+	}
+
+	# The armoured division once armored engineers exist: they escort the
+	# platforms and raise the defence of every armored battalion.
+	ADISCORD_engineered_armoured_division = {
+		custom_icon = 86
+		enable = {
+			has_tech = ADISCORD_tech_armored_carrier_program
+			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+			has_tech = ADISCORD_tech_drone_recon_swarms
+			has_tech = ADISCORD_tech_remote_repair_sections
+			has_tech = ADISCORD_tech_frequency_hopping_field_sets
+			has_tech = ADISCORD_tech_forward_supply_hubs
+			has_tech = ADISCORD_tech_armored_engineer_vehicles
+			num_of_military_factories > 17
+			ADISCORD_economy_ai_is_healthy = yes
+			has_equipment = { ADISCORD_combat_platform_archetype > 600 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 600 }
+			has_equipment = { ADISCORD_recovery_platform_archetype > 24 }
+			has_equipment = { support_equipment > 800 }
+		}
+		reinforce_prio = 2
+		upgrade_prio = { base = 9 }
+		can_upgrade_in_field = {
+			ADISCORD_economy_ai_is_healthy = yes
+			has_equipment = { ADISCORD_combat_platform_archetype > 800 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 760 }
+			has_equipment = { ADISCORD_recovery_platform_archetype > 40 }
+		}
+		target_template = {
+			support = {
+				ADISCORD_armored_engineer_company = 1
 				ADISCORD_recon_platform = 1
 				ADISCORD_recovery_platform = 1
 				logistics_company = 1

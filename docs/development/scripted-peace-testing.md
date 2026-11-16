@@ -74,6 +74,14 @@ Kefreyt's frontier uses its real selected-target war for all invitations. Native
 the requesting effect. One hidden, target-bound event confirms entry after an
 hour; it is not a repeating world poll. Failed declarations close the campaign.
 A requested ally is not removed from the campaign by a second same-tick check.
+A subject or faction ally of a capitulated NOD or STP guarantor (for example
+AIN) reserves its own defeat until the campaign closes; the close makes peace
+with the guarantors' remaining subjects. Test NOD, then AIN, before the tribes.
+
+In Kefreyt's eastern final war every side holder other than a champion stays
+occupied until a champion's defeat settles the east. Roster republics join
+outside any faction, so without this reservation the generic fallback would
+annex a capitulated republic at once.
 
 The eastern ERT campaign still awards only state 168 to VAL when its existing
 conditions authorize the award. RUS's separate victory can annex the rest of ERT.
@@ -195,6 +203,15 @@ generic annexation cannot take it together with the capitulated members. Its
 callback runs the shared finalizer; Nodrul's settlement then makes peace with its
 remaining non-Stelander subjects before the partition. Test the order NOD, STP,
 then YPR with VAL and with TFF credited for Yubora.
+A minor subject of a capitulating STS or NOD does not block that member's
+settlement: the engine opens the native conference for both on the same tick and
+never sends the subject its own capitulation callback. Stelander's settlement
+frees its Nodrul administration and installs Kefreyt's; both settlements make
+peace with their remaining minor subjects. A major subject still has to
+capitulate itself. Test the
+Council war with STS after its civil-war victory and NOD as its provisional
+administration: capitulating STS must install both administrations without a
+peace conference.
 
 After NOD's northern victory, VAL can negotiate with an independent TFF before
 the final operation. NOD's settlement creates four contiguous administrations:
@@ -249,6 +266,8 @@ must block settlement again even when its transient receipt had not expired. Bez
 participants and capital awards are captured before the first technical peace.
 NAM and SHL reserve major status only when their campaign added it, and native
 peace, annexation and subjugation clean up an externally interrupted campaign.
+A minor subject of a fallen war-of-return participant counts as defeated: the
+engine ends its war with the overlord, and the participant settlement covers it.
 The southern final war also reserves major status for both champions only for
 that campaign. A champion's capitulation settles every participant; other
 defeated participants stay occupied until that settlement. Native peace,
@@ -264,6 +283,16 @@ scores nothing. A tie at the deadline keeps the war going and re-checks every
 90 days; only a war that already ended outside the settlement with both
 champions sovereign closes without a hegemon. A war between the champions that
 began outside the campaign is taken over by it rather than blocking its start.
+
+In the Vorkerland central war a defeated claimant whose ally or subject still
+fights stays reserved as a shell. The defeat of its last such partner is also
+reserved: both go to the living claimant of the victor's side through
+`ADISCORD_vorkerland_absorb_into_central_victor`, after the usual distribution
+among co-belligerents and the Worx protectorate fold. Test TVA, then WTD, with
+WKR and with VLA credited for the second defeat. A minor subject of the defeated
+claimant falls with it and never keeps the shell alive; a Worx protectorate
+still subject to TVA is folded without its own capitulation. Test TVA's defeat
+with WTD as its puppet and no other partner: no peace conference may follow.
 
 Also test both NOD/Stelander defeat orders, a surviving northern cobelligerent,
 TFF joining NOD's northern war after YPR has capitulated, and failed TFF entry.

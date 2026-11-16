@@ -86,17 +86,19 @@ TRACKS = (
     ),
     Track(
         "ADISCORD_land_fortress_state",
-        "Огневая поддержка и устойчивость",
-        "Fire Support and Resilience",
+        "Боевое обеспечение и огневая поддержка",
+        "Combat Support and Fire Support",
         "GFX_sup_firepower_bg",
         "GFX_doctrine_milestone_artillery_land",
         "GFX_doctrine_decor_land",
-        0.8,
+        # Companies and batteries are a small share of a division's manpower;
+        # the native combat-support track keeps the same 0.8 ratio to armor.
+        5.0,
         "categories",
         (
-            "category_all_infantry",
             "category_support_battalions",
             "category_line_artillery",
+            "category_artillery",
         ),
     ),
     Track(
@@ -205,6 +207,18 @@ def scoped(scope: str, *effects: str) -> str:
     return f"{scope} = {{\n{body}\n}}"
 
 
+def company_mult(company: str, category: str, *stats: str) -> str:
+    """Pay a bonus to the division's battalions only while the company is present."""
+    return scoped(company, scoped("battalion_mult", f"category = {category}", *stats))
+
+
+def template_weight(*companies: str) -> str:
+    """AI prefers a school that pays companies already fielded in its templates."""
+    checks = [f"has_template_containing_unit = {company}" for company in companies]
+    condition = checks[0] if len(checks) == 1 else scoped("OR", *checks)
+    return scoped("modifier", "factor = 1.5", condition)
+
+
 REWARD_PROFILES = {
     "mass": (
         reward(
@@ -227,9 +241,12 @@ REWARD_PROFILES = {
         ),
         reward(
             "distributed_training",
-            "Распределённая подготовка",
-            "Distributed Training",
-            "category_all_infantry = { max_organisation = 2 }",
+            "Полевые госпитали при бюро",
+            "Bureau Field Hospitals",
+            "category_all_infantry = { max_organisation = 1 }",
+            company_mult(
+                "field_hospital", "category_all_infantry", "max_strength = 0.1", "add = yes"
+            ),
         ),
         reward(
             "restoration_front",
@@ -260,10 +277,12 @@ REWARD_PROFILES = {
         ),
         reward(
             "shock_reserves",
-            "Ударные резервы",
-            "Assault Reserves",
-            "land_reinforce_rate = 0.01",
+            "Сапёры в штурмовых группах",
+            "Sappers in Assault Groups",
             "ADISCORD_assault_infantry = { soft_attack = 0.05 }",
+            company_mult(
+                "ADISCORD_assault_sapper_company", "category_all_infantry", "breakthrough = 0.03"
+            ),
         ),
         reward(
             "continuous_assault",
@@ -282,9 +301,11 @@ REWARD_PROFILES = {
         ),
         reward(
             "mobile_reserves",
-            "Мобильные резервы",
-            "Mobile Reserves",
-            "land_reinforce_rate = 0.01",
+            "Подвоз для мотопехоты",
+            "Motor-infantry Resupply",
+            company_mult(
+                "logistics_company", "category_vehicle_infantry", "supply_consumption = -0.05"
+            ),
         ),
         reward(
             "route_control",
@@ -359,7 +380,7 @@ REWARD_PROFILES = {
             "Дроновое прикрытие наступления",
             "Drone-screened Advance",
             "category_all_armor = { defense = 0.04 }",
-            "coordination_bonus = 0.01",
+            company_mult("ADISCORD_recon_platform", "category_tanks", "breakthrough = 0.03"),
         ),
         reward(
             "repair_cycles",
@@ -396,9 +417,11 @@ REWARD_PROFILES = {
         ),
         reward(
             "combined_reserves",
-            "Общевойсковые резервы",
-            "Combined-arms Reserves",
-            "land_reinforce_rate = 0.01",
+            "Инженерные машины в боевой группе",
+            "Engineer Vehicles in the Battlegroup",
+            company_mult(
+                "ADISCORD_armored_engineer_company", "category_all_infantry", "breakthrough = 0.04"
+            ),
         ),
         reward(
             "integrated_battlegroup",
@@ -479,7 +502,8 @@ REWARD_PROFILES = {
             "crewless_scouts",
             "Безэкипажная разведка",
             "Crewless Scouts",
-            "category_recon = { recon = 0.75 }",
+            "category_recon = { recon = 0.5 }",
+            company_mult("ADISCORD_drone_recon_company", "category_tanks", "soft_attack = 0.03"),
         ),
         reward(
             "machine_pickets",
@@ -530,9 +554,10 @@ REWARD_PROFILES = {
         ),
         reward(
             "command_cells",
-            "Распределённые командные ячейки",
-            "Distributed Command Cells",
-            "land_reinforce_rate = 0.01",
+            "Защищённые командные сети",
+            "Protected Command Networks",
+            "signal_company = { initiative = 0.03 }",
+            "ADISCORD_ew_company = { initiative = 0.03 air_attack = 0.10 }",
         ),
         reward(
             "algorithmic_campaign",
@@ -553,7 +578,7 @@ REWARD_PROFILES = {
             "local_initiative",
             "Локальная инициатива",
             "Local Initiative",
-            "land_reinforce_rate = 0.01",
+            company_mult("signal_company", "category_all_infantry", "defense = 0.03"),
         ),
         reward(
             "reserve_authority",
@@ -572,7 +597,7 @@ REWARD_PROFILES = {
             "Адаптивное командование",
             "Adaptive Command",
             "planning_speed = 0.05",
-            "land_reinforce_rate = 0.015",
+            "category_all_infantry = { max_organisation = 2 }",
             "coordination_bonus = 0.02",
         ),
     ),
@@ -585,9 +610,10 @@ REWARD_PROFILES = {
         ),
         reward(
             "follow_on_echelons",
-            "Эшелоны развития успеха",
-            "Follow-on Echelons",
-            "land_reinforce_rate = 0.01",
+            "Разведка для эшелонов развития",
+            "Reconnaissance for Follow-on Echelons",
+            company_mult("recon", "category_all_infantry", "soft_attack = 0.03"),
+            company_mult("ADISCORD_drone_recon_company", "category_all_infantry", "soft_attack = 0.03"),
         ),
         reward(
             "rear_disruption",
@@ -660,14 +686,20 @@ REWARD_PROFILES = {
             "contaminated_zones",
             "Действия в заражённых зонах",
             "Contaminated-zone Operations",
-            "attrition = -0.02",
+            "attrition = -0.01",
+            company_mult(
+                "ADISCORD_decontamination_company",
+                "category_all_infantry",
+                "max_organisation = 2",
+                "add = yes",
+            ),
         ),
         reward(
             "counterattack_reserve",
             "Резерв контратаки",
             "Counterattack Reserve",
-            "land_reinforce_rate = 0.01",
             "category_all_infantry = { breakthrough = 0.03 }",
+            company_mult("military_police", "category_all_infantry", "defense = 0.02"),
         ),
         reward(
             "national_redoubt",
@@ -680,33 +712,39 @@ REWARD_PROFILES = {
     "artillery": (
         reward(
             "forward_observers",
-            "Передовые наблюдатели",
-            "Forward Observers",
-            "category_recon = { recon = 0.5 }",
+            "Дроны-корректировщики",
+            "Spotter Drones",
+            "category_recon = { recon = 0.25 }",
+            company_mult(
+                "ADISCORD_drone_recon_company", "category_artillery", "soft_attack = 0.03"
+            ),
         ),
         reward(
             "distributed_batteries",
             "Распределённые батареи",
             "Distributed Batteries",
-            "category_line_artillery = { defense = 0.03 }",
+            "category_artillery = { defense = 0.03 }",
         ),
         reward(
             "rapid_fireplans",
-            "Быстрые огневые планы",
-            "Rapid Fireplans",
-            "planning_speed = 0.03",
+            "Огонь полковых групп",
+            "Regimental Fire Groups",
+            "planning_speed = 0.02",
+            "ADISCORD_regimental_fire_support = { soft_attack = 0.04 }",
         ),
         reward(
             "precision_barrages",
             "Точные огневые налёты",
             "Precision Barrages",
-            "category_line_artillery = { soft_attack = 0.05 }",
+            "category_line_artillery = { soft_attack = 0.04 }",
+            "artillery = { soft_attack = 0.04 }",
+            "ADISCORD_loitering_munition_company = { soft_attack = 0.06 hard_attack = 0.06 }",
         ),
         reward(
             "artillery_web",
             "Сеть артиллерийской поддержки",
             "Artillery Support Web",
-            "category_line_artillery = { soft_attack = 0.06 breakthrough = 0.04 }",
+            "category_artillery = { soft_attack = 0.06 breakthrough = 0.04 }",
             "coordination_bonus = 0.015",
         ),
     ),
@@ -721,7 +759,10 @@ REWARD_PROFILES = {
             "breaching_teams",
             "Штурмовые группы разграждения",
             "Assault Breaching Teams",
-            "engineer = { breakthrough = 0.04 }",
+            "engineer = { breakthrough = 0.02 }",
+            company_mult(
+                "ADISCORD_assault_sapper_company", "category_all_infantry", "breakthrough = 0.04"
+            ),
         ),
         reward(
             "mobile_bridges",
@@ -731,24 +772,30 @@ REWARD_PROFILES = {
         ),
         reward(
             "robotic_clearance",
-            "Роботизированное разминирование",
-            "Robotic Clearance",
-            "engineer = { defense = 0.04 breakthrough = 0.04 }",
+            "Инженерное прикрытие частей",
+            "Engineer Cover for the Line",
+            company_mult("engineer", "category_all_infantry", "defense = 0.03"),
+            company_mult(
+                "ADISCORD_armored_engineer_company", "category_all_armor", "breakthrough = 0.03"
+            ),
         ),
         reward(
             "engineer_command",
             "Единое инженерное командование",
             "Engineer Command",
             "engineer = { defense = 0.06 breakthrough = 0.06 }",
-            "category_support_battalions = { max_organisation = 2 }",
+            "ADISCORD_assault_sapper_company = { breakthrough = 0.08 }",
+            "ADISCORD_armored_engineer_company = { defense = 0.06 breakthrough = 0.06 }",
         ),
     ),
     "logistics": (
         reward(
             "route_audits",
-            "Аудит маршрутов",
-            "Route Audits",
-            "supply_consumption_factor = -0.01",
+            "Подвоз по графику",
+            "Scheduled Resupply",
+            company_mult(
+                "logistics_company", "category_all_infantry", "supply_consumption = -0.04"
+            ),
         ),
         reward(
             "forward_pools",
@@ -760,7 +807,13 @@ REWARD_PROFILES = {
             "repair_columns",
             "Ремонтные колонны",
             "Repair Columns",
-            "industry_repair_factor = 0.02",
+            "industry_repair_factor = 0.01",
+            company_mult(
+                "ADISCORD_recovery_platform",
+                "category_all_armor",
+                "max_strength = 0.15",
+                "add = yes",
+            ),
         ),
         reward(
             "depot_dispersion",
@@ -773,7 +826,7 @@ REWARD_PROFILES = {
             "Устойчивый тыл театра",
             "Resilient Theater Logistics",
             "supply_consumption_factor = -0.025",
-            "land_reinforce_rate = 0.01",
+            "field_hospital = { casualty_trickleback = 0.05 }",
             "category_support_battalions = { default_morale = 0.03 }",
         ),
     ),
@@ -1834,6 +1887,7 @@ SCHOOLS = (
         "armor_integration",
         (
             "modifier = { factor = 1.5 has_tech = ADISCORD_tech_combat_engineering_sections }",
+            template_weight("ADISCORD_armored_engineer_company"),
         ),
     ),
     School(
@@ -1961,6 +2015,7 @@ SCHOOLS = (
         "artillery",
         (
             "modifier = { factor = 1.8 has_tech = ADISCORD_tech_drone_spotted_batteries }",
+            template_weight("ADISCORD_line_artillery"),
         ),
     ),
     School(
@@ -1980,6 +2035,9 @@ SCHOOLS = (
         "engineer",
         (
             "modifier = { factor = 2 has_tech = ADISCORD_tech_assault_breaching_packages }",
+            template_weight(
+                "ADISCORD_assault_sapper_company", "ADISCORD_armored_engineer_company"
+            ),
         ),
     ),
     School(
@@ -1999,6 +2057,7 @@ SCHOOLS = (
         "logistics",
         (
             "modifier = { factor = 1.7 has_tech = ADISCORD_tech_hardened_logistics_nodes }",
+            template_weight("logistics_company", "ADISCORD_recovery_platform"),
         ),
     ),
     # Air: competing schools share the same combat-mastery tracks.
@@ -2514,7 +2573,8 @@ GRANDS = (
                 "category_all_infantry = { default_morale = 0.05 }",
             ),
             (
-                "supply_consumption_factor = -0.04",
+                "supply_consumption_factor = -0.02",
+                "field_hospital = { casualty_trickleback = 0.05 }",
                 "category_support_battalions = { max_organisation = 3 }",
             ),
         ),
@@ -2598,7 +2658,13 @@ GRANDS = (
             ("ADISCORD_recon_platform = { recon = 1 }", "org_loss_when_moving = -0.05"),
             (
                 "ADISCORD_mechanized_infantry = { supply_consumption = -0.06 }",
-                "ADISCORD_combat_platform = { reliability = 0.06 }",
+                company_mult(
+                    "logistics_company",
+                    "category_vehicle_infantry",
+                    "max_organisation = 2",
+                    "add = yes",
+                ),
+                "recon = { recon = 0.5 }",
             ),
         ),
     },
@@ -2629,7 +2695,14 @@ GRANDS = (
             ),
             ("ADISCORD_heavy_platform = { soft_attack = 0.10 breakthrough = 0.08 }",),
             ("ADISCORD_recon_platform = { recon = 1.5 }", "coordination_bonus = 0.03"),
-            ("ADISCORD_line_artillery = { soft_attack = 0.10 }", "max_planning = 0.05"),
+            (
+                "category_artillery = { soft_attack = 0.08 }",
+                company_mult(
+                    "ADISCORD_drone_recon_company", "category_artillery", "soft_attack = 0.04"
+                ),
+                "ADISCORD_ew_company = { air_attack = 0.20 }",
+                "max_planning = 0.03",
+            ),
         ),
     },
     {
@@ -2665,7 +2738,14 @@ GRANDS = (
                 "land_reinforce_rate = 0.02",
                 "ADISCORD_territorial = { supply_consumption = -0.08 }",
             ),
-            ("engineer = { defense = 0.10 }", "max_dig_in = 2"),
+            (
+                "engineer = { defense = 0.10 }",
+                "military_police = { suppression = 0.5 }",
+                company_mult(
+                    "ADISCORD_decontamination_company", "category_all_infantry", "defense = 0.03"
+                ),
+                "max_dig_in = 2",
+            ),
         ),
     },
     {

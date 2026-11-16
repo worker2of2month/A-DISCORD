@@ -416,6 +416,68 @@ class SupportServicesTests(unittest.TestCase):
         self.assertIn("same_support_type = recon", self.unit("recon"))
         self.assertIn("same_support_type = recon", self.unit("ADISCORD_recon_platform"))
 
+    def test_new_support_companies_share_a_family_slot_and_have_one_unlock(self):
+        cases = {
+            "ADISCORD_assault_sapper_company": ("engineer", "assault_breaching_packages"),
+            "ADISCORD_armored_engineer_company": ("engineer", "armored_engineer_vehicles"),
+            "ADISCORD_drone_recon_company": ("recon", "drone_recon_company"),
+            "ADISCORD_ew_company": ("signal_company", "field_ew_company"),
+            "ADISCORD_decontamination_company": (
+                "ADISCORD_environment_company",
+                "environment_support_companies",
+            ),
+            "ADISCORD_desert_support_company": (
+                "ADISCORD_environment_company",
+                "environment_support_companies",
+            ),
+            "ADISCORD_loitering_munition_company": (None, "assisted_projectiles"),
+        }
+        sprites = (ROOT / "interface/ADISCORD_subuniticons.gfx").read_text(encoding="utf-8")
+        russian = generator.technology_localisation_path(ROOT, "russian").read_text(
+            encoding="utf-8-sig"
+        )
+        for unit, (family, tech_key) in cases.items():
+            with self.subTest(unit=unit):
+                block = self.unit(unit)
+                self.assertIn("active = no", block)
+                self.assertIn("group = support", block)
+                self.assertIn("support_equipment = ", block)
+                if family:
+                    self.assertIn(f"same_support_type = {family}", block)
+                unlocks = [
+                    tech
+                    for tech, units in generator.ENABLE_SUBUNITS.items()
+                    if unit in units
+                ]
+                self.assertEqual(unlocks, ["ADISCORD_tech_" + tech_key])
+                for suffix in ("_icon_medium", "_icon_medium_white", "_icon_small"):
+                    self.assertIn(f'"GFX_unit_{unit}{suffix}"', sprites)
+                self.assertRegex(russian, rf"(?m)^ {unit}:0 \"")
+                self.assertRegex(russian, rf"(?m)^ {unit}_desc:0 \"")
+
+    def test_company_schools_are_exclusive_and_only_the_environment_stance_is_final(self):
+        expected = {
+            "combat_engineering": (("fortification_engineering", "assault_breaching_packages"), "temporary"),
+            "field_reconnaissance": (("recon_target_handoffs", "persistent_surveillance"), "temporary"),
+            "field_signals": (("mobile_signal_relays", "spectrum_dominance"), "temporary"),
+            "field_environment": (
+                ("environment_endurance_doctrine", "environment_assault_doctrine"),
+                "permanent",
+            ),
+        }
+        for branch_key, (keys, kind) in expected.items():
+            with self.subTest(branch=branch_key):
+                branch = generator.BRANCH_BY_KEY[branch_key]
+                (group,) = generator.XOR_INDEX_GROUPS_BY_BRANCH[branch_key]
+                self.assertEqual(tuple(branch.techs[index].key for index in group), keys)
+                self.assertEqual(generator.XOR_KIND_BY_BRANCH[branch_key], kind)
+        # Spectrum dominance is the EW school and needs the EW company first.
+        signals = generator.BRANCH_BY_KEY["field_signals"]
+        index = {tech.key: i for i, tech in enumerate(signals.techs)}
+        graph = generator.BRANCH_GRAPHS["field_signals"]
+        self.assertIn(index["spectrum_dominance"], graph.successors[index["field_ew_company"]])
+        self.assertNotIn(index["spectrum_dominance"], graph.successors[index["redundant_field_lines"]])
+
     def test_reserve_routes_are_independent_and_do_not_buff_regular_infantry(self):
         branch = generator.BRANCH_BY_KEY["reserve_training"]
         graph = generator.BRANCH_GRAPHS[branch.key]
@@ -428,10 +490,38 @@ class SupportServicesTests(unittest.TestCase):
             self.assertNotIn("XOR =", rendered)
 
     def test_service_upgrades_benefit_equipped_companies(self):
-        for branch_key, prefix in (("combat_medicine", "field_hospital ="), ("field_reconnaissance", "recon ="), ("field_signals", "signal_company ="), ("garrison_security", "military_police =")):
+        # Company research reaches a company of its own family. Country
+        # modifiers are limited to the named role bonus of each line.
+        families = {
+            "combat_medicine": (("field_hospital =",), {"army_morale_factor"}),
+            "field_reconnaissance": (
+                (
+                    "recon =",
+                    "category_recon =",
+                    "ADISCORD_drone_recon_company =",
+                    "ADISCORD_recon_platform =",
+                ),
+                set(),
+            ),
+            "field_signals": (
+                ("signal_company =", "ADISCORD_ew_company ="),
+                {"max_planning", "cas_damage_reduction"},
+            ),
+            "garrison_security": (("military_police =",), set()),
+            "field_environment": (
+                ("ADISCORD_decontamination_company =", "ADISCORD_desert_support_company ="),
+                set(),
+            ),
+        }
+        for branch_key, (prefixes, country) in families.items():
             branch = generator.BRANCH_BY_KEY[branch_key]
             for index in range(len(branch.techs)):
-                self.assertTrue(all(effect.startswith(prefix) for effect in generator.effects_for(branch, index)))
+                for effect in generator.effects_for(branch, index):
+                    with self.subTest(branch=branch_key, effect=effect):
+                        self.assertTrue(
+                            effect.startswith(prefixes)
+                            or effect.split(" =")[0] in country
+                        )
         for key in ("route_optimization_ai", "closed_loop_field_supply", "zero_loss_logistics"):
             branch, index = generator.TECH_POSITION_BY_ID["ADISCORD_tech_" + key]
             self.assertTrue(all(effect.startswith("logistics_company =") for effect in generator.effects_for(branch, index)))
@@ -2272,6 +2362,10 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 "computing": "temporary",
                 "power": "temporary",
                 "counter_drone_warfare": "temporary",
+                "combat_engineering": "temporary",
+                "field_reconnaissance": "temporary",
+                "field_signals": "temporary",
+                "field_environment": "permanent",
             },
         )
         _, blocks = validator.collect_technologies()
@@ -3351,6 +3445,8 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
                 "movement": -0.25,
             },
             "ADISCORD_regimental_pioneers": {"attack": 0.03},
+            "ADISCORD_assault_sapper_company": {"attack": 0.10},
+            "ADISCORD_loitering_munition_company": {"attack": 0.03},
         }
         for terrain in ("urban", "vorkernsberg"):
             affected = {}
@@ -3383,6 +3479,8 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
                 "STP_taran": {"attack": 0.20, "movement": -0.10},
                 "ADISCORD_heavy_platform": {"attack": -0.25, "defence": -0.10, "movement": -0.15},
                 "ADISCORD_regimental_pioneers": {"attack": 0.03},
+                "ADISCORD_assault_sapper_company": {"attack": 0.10},
+                "ADISCORD_desert_support_company": {"attack": 0.05, "defence": 0.05, "movement": 0.10},
             },
             "hill_city": {
                 "ADISCORD_urban_breacher": {"attack": 0.65, "defence": 0.65, "movement": -0.05},
@@ -3398,6 +3496,7 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
                 "STP_taran": {"attack": 0.10, "movement": -0.30},
                 "ADISCORD_heavy_platform": {"attack": -0.40, "defence": -0.15, "movement": -0.35},
                 "ADISCORD_regimental_pioneers": {"attack": 0.05},
+                "ADISCORD_assault_sapper_company": {"attack": 0.12},
             },
         }
         for terrain, table in expected.items():

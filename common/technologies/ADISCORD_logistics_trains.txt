@@ -36,6 +36,10 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_combat_engineering_sections
 			research_cost_coeff = 1
 		}
+		path = {
+			leads_to_tech = ADISCORD_tech_standardized_field_tool_chests
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2155
 		folder = {
@@ -66,7 +70,7 @@ technologies = {
 			defense = 0.02
 		}
 		path = {
-			leads_to_tech = ADISCORD_tech_standardized_field_tool_chests
+			leads_to_tech = ADISCORD_tech_drone_delivered_repair_spares
 			research_cost_coeff = 1
 		}
 		enable_subunits = { hq_engineer }
@@ -74,7 +78,7 @@ technologies = {
 		start_year = 2158
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 4 }
+			position = { x = -3 y = 4 }
 		}
 		ai_will_do = {
 			factor = 43.875
@@ -95,7 +99,7 @@ technologies = {
 			reliability_factor = 0.02
 		}
 		path = {
-			leads_to_tech = ADISCORD_tech_drone_delivered_repair_spares
+			leads_to_tech = ADISCORD_tech_remote_repair_teams
 			research_cost_coeff = 1
 		}
 		enable_subunits = { maintenance_company hq_maintenance }
@@ -103,7 +107,7 @@ technologies = {
 		start_year = 2160
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 6 }
+			position = { x = 3 y = 6 }
 		}
 		ai_will_do = {
 			factor = 43.875
@@ -120,11 +124,11 @@ technologies = {
 	}
 
 	ADISCORD_tech_drone_delivered_repair_spares = {
-		maintenance_company = {
-			reliability_factor = 0.03
+		category_support_battalions = {
+			max_organisation = 2
 		}
 		path = {
-			leads_to_tech = ADISCORD_tech_remote_repair_teams
+			leads_to_tech = ADISCORD_tech_predictive_parts_prepositioning
 			research_cost_coeff = 1
 		}
 		enable_equipments = { ADISCORD_support_equipment_2170 }
@@ -150,8 +154,10 @@ technologies = {
 
 	ADISCORD_tech_remote_repair_teams = {
 		maintenance_company = {
-			equipment_capture_factor = 0.03
+			reliability_factor = 0.04
+			equipment_capture_factor = 0.02
 		}
+		truck_attrition_factor = -0.05
 		path = {
 			leads_to_tech = ADISCORD_tech_autonomous_recovery
 			research_cost_coeff = 1
@@ -160,7 +166,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 10 }
+			position = { x = 3 y = 10 }
 		}
 		ai_will_do = {
 			factor = 26
@@ -178,18 +184,18 @@ technologies = {
 
 	ADISCORD_tech_autonomous_recovery = {
 		maintenance_company = {
+			reliability_factor = 0.04
 			equipment_capture_factor = 0.04
-			reliability_factor = 0.02
 		}
-		path = {
-			leads_to_tech = ADISCORD_tech_predictive_parts_prepositioning
-			research_cost_coeff = 1
+		ADISCORD_recovery_platform = {
+			reliability_factor = 0.03
+			equipment_capture_factor = 0.03
 		}
 		research_cost = 1.525
 		start_year = 2170
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 12 }
+			position = { x = 3 y = 12 }
 		}
 		ai_will_do = {
 			factor = 26
@@ -206,9 +212,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_predictive_parts_prepositioning = {
-		maintenance_company = {
-			reliability_factor = 0.03
-			supply_consumption = -0.05
+		category_support_battalions = {
+			supply_consumption = -0.03
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_self_sustaining_support
@@ -236,9 +241,9 @@ technologies = {
 	}
 
 	ADISCORD_tech_self_sustaining_support = {
-		maintenance_company = {
-			reliability_factor = 0.04
-			equipment_capture_factor = 0.03
+		category_support_battalions = {
+			max_organisation = 3
+			reliability = 0.02
 		}
 		enable_equipments = { ADISCORD_support_equipment_2200 }
 		research_cost = 2.55
@@ -264,18 +269,30 @@ technologies = {
 	ADISCORD_tech_battle_damage_survey_teams = {
 		engineer = {
 			entrenchment = 0.5
-			defense = 0.03
+			river = {
+				movement = 0.10
+			}
+			forest = {
+				movement = 0.05
+			}
 		}
 		ADISCORD_regimental_pioneers = {
 			entrenchment = 0.15
-			defense = 0.02
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_fortification_engineering
+			research_cost_coeff = 1
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_assault_breaching_packages
 			research_cost_coeff = 1
 		}
+		path = {
+			leads_to_tech = ADISCORD_tech_armored_engineer_vehicles
+			research_cost_coeff = 1
+		}
 		dependencies = {
-			ADISCORD_tech_standardized_field_tool_chests = 1
+			ADISCORD_tech_combat_engineering_sections = 1
 		}
 		research_cost = 1.305
 		start_year = 2162
@@ -297,25 +314,27 @@ technologies = {
 		categories = { support_tech }
 	}
 
-	ADISCORD_tech_assault_breaching_packages = {
+	ADISCORD_tech_fortification_engineering = {
 		engineer = {
-			breakthrough = 0.05
-			soft_attack = 0.03
+			entrenchment = 1
+			defense = 0.05
 		}
 		ADISCORD_regimental_pioneers = {
-			breakthrough = 0.03
-			soft_attack = 0.02
+			entrenchment = 0.25
 		}
-		planning_speed = 0.02
+		dig_in_speed_factor = 0.05
 		path = {
 			leads_to_tech = ADISCORD_tech_integrated_engineer_command
 			research_cost_coeff = 1
 		}
-		research_cost = 1.498
-		start_year = 2169
+		XOR = {
+			ADISCORD_tech_assault_breaching_packages
+		}
+		research_cost = 1.75
+		start_year = 2166
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 2 }
+			position = { x = -3 y = 2 }
 		}
 		ai_will_do = {
 			factor = 26
@@ -331,20 +350,97 @@ technologies = {
 		categories = { support_tech }
 	}
 
-	ADISCORD_tech_integrated_engineer_command = {
+	ADISCORD_tech_assault_breaching_packages = {
 		engineer = {
-			breakthrough = 0.10
-			defense = 0.08
+			breakthrough = 0.05
 		}
 		ADISCORD_regimental_pioneers = {
+			breakthrough = 0.03
+			soft_attack = 0.02
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_integrated_engineer_command
+			research_cost_coeff = 1
+		}
+		XOR = {
+			ADISCORD_tech_fortification_engineering
+		}
+		enable_subunits = { ADISCORD_assault_sapper_company }
+		research_cost = 2.05
+		start_year = 2166
+		folder = {
+			name = support_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 35.1
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_armored_engineer_vehicles = {
+		ADISCORD_armored_engineer_company = {
 			breakthrough = 0.05
-			defense = 0.04
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_integrated_engineer_command
+			research_cost_coeff = 1
+		}
+		dependencies = {
+			ADISCORD_tech_battle_damage_survey_teams = 1
+			ADISCORD_tech_armored_carrier_program = 1
+		}
+		enable_subunits = { ADISCORD_armored_engineer_company }
+		research_cost = 2.4
+		start_year = 2167
+		folder = {
+			name = support_folder
+			position = { x = 3 y = 4 }
+		}
+		ai_will_do = {
+			factor = 35.1
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_integrated_engineer_command = {
+		engineer = {
+			breakthrough = 0.05
+			defense = 0.05
+		}
+		ADISCORD_assault_sapper_company = {
+			breakthrough = 0.05
+			defense = 0.05
+		}
+		ADISCORD_armored_engineer_company = {
+			breakthrough = 0.05
+			defense = 0.05
+		}
+		ADISCORD_regimental_pioneers = {
+			breakthrough = 0.03
+			defense = 0.03
 		}
 		research_cost = 1.663
 		start_year = 2175
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 4 }
+			position = { x = 0 y = 6 }
 		}
 		ai_will_do = {
 			factor = 26
@@ -367,6 +463,10 @@ technologies = {
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_battlefield_medical_drones
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_trauma_registry_networks
 			research_cost_coeff = 1
 		}
 		dependencies = {
@@ -395,18 +495,17 @@ technologies = {
 
 	ADISCORD_tech_battlefield_medical_drones = {
 		field_hospital = {
-			casualty_trickleback = 0.045
-			experience_loss_factor = -0.027
+			casualty_trickleback = 0.07
 		}
 		path = {
-			leads_to_tech = ADISCORD_tech_trauma_registry_networks
+			leads_to_tech = ADISCORD_tech_smart_tourniquet_systems
 			research_cost_coeff = 1
 		}
 		research_cost = 1.228
 		start_year = 2161
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 2 }
+			position = { x = -3 y = 2 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -424,18 +523,17 @@ technologies = {
 
 	ADISCORD_tech_trauma_registry_networks = {
 		field_hospital = {
-			casualty_trickleback = 0.03
-			experience_loss_factor = -0.02
+			experience_loss_factor = -0.06
 		}
 		path = {
-			leads_to_tech = ADISCORD_tech_smart_tourniquet_systems
+			leads_to_tech = ADISCORD_tech_nanofiber_wound_dressings
 			research_cost_coeff = 1
 		}
 		research_cost = 1.255
 		start_year = 2162
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 4 }
+			position = { x = 3 y = 4 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -453,8 +551,8 @@ technologies = {
 
 	ADISCORD_tech_smart_tourniquet_systems = {
 		field_hospital = {
-			casualty_trickleback = 0.03
-			experience_loss_factor = -0.05
+			casualty_trickleback = 0.05
+			max_organisation = 3
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_forward_surgical_cells
@@ -464,7 +562,7 @@ technologies = {
 		start_year = 2167
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 6 }
+			position = { x = -3 y = 6 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -482,18 +580,17 @@ technologies = {
 
 	ADISCORD_tech_forward_surgical_cells = {
 		field_hospital = {
-			experience_loss_factor = -0.04
-			casualty_trickleback = 0.03
+			casualty_trickleback = 0.07
 		}
 		path = {
-			leads_to_tech = ADISCORD_tech_nanofiber_wound_dressings
+			leads_to_tech = ADISCORD_tech_distributed_combat_medicine
 			research_cost_coeff = 1
 		}
 		research_cost = 1.448
 		start_year = 2169
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 8 }
+			position = { x = -3 y = 8 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -511,8 +608,7 @@ technologies = {
 
 	ADISCORD_tech_nanofiber_wound_dressings = {
 		field_hospital = {
-			casualty_trickleback = 0.059
-			experience_loss_factor = -0.033
+			experience_loss_factor = -0.07
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_distributed_combat_medicine
@@ -522,7 +618,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 10 }
+			position = { x = 3 y = 10 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -540,11 +636,17 @@ technologies = {
 
 	ADISCORD_tech_distributed_combat_medicine = {
 		field_hospital = {
-			casualty_trickleback = 0.08
-			experience_loss_factor = -0.05
+			casualty_trickleback = 0.04
+			experience_loss_factor = -0.04
+			max_strength = 0.5
 			supply_consumption = -0.04
 		}
-		research_cost = 1.613
+		army_morale_factor = 0.03
+		dependencies = {
+			ADISCORD_tech_forward_surgical_cells = 1
+			ADISCORD_tech_nanofiber_wound_dressings = 1
+		}
+		research_cost = 2.4
 		start_year = 2175
 		folder = {
 			name = support_folder
@@ -850,8 +952,12 @@ technologies = {
 
 	ADISCORD_tech_redundant_field_lines = {
 		signal_company = {
-			initiative = 0.04
+			initiative = 0.05
 			max_organisation = 2
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_field_ew_company
+			research_cost_coeff = 1
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_mobile_signal_relays
@@ -877,19 +983,89 @@ technologies = {
 		categories = { support_tech }
 	}
 
+	ADISCORD_tech_field_ew_company = {
+		ADISCORD_ew_company = {
+			air_attack = 0.05
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_spectrum_dominance
+			research_cost_coeff = 1
+		}
+		dependencies = {
+			ADISCORD_tech_redundant_field_lines = 1
+			ADISCORD_tech_spectrum_threat_libraries = 1
+		}
+		enable_subunits = { ADISCORD_ew_company }
+		research_cost = 2.4
+		start_year = 2165
+		folder = {
+			name = support_folder
+			position = { x = 3 y = 4 }
+		}
+		ai_will_do = {
+			factor = 35.1
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
 	ADISCORD_tech_mobile_signal_relays = {
 		signal_company = {
-			initiative = 0.05
+			initiative = 0.06
 		}
+		max_planning = 0.03
 		path = {
 			leads_to_tech = ADISCORD_tech_integrated_field_dispatch
 			research_cost_coeff = 1
 		}
-		research_cost = 1.442
-		start_year = 2167
+		XOR = {
+			ADISCORD_tech_spectrum_dominance
+		}
+		research_cost = 1.75
+		start_year = 2169
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 4 }
+			position = { x = -3 y = 6 }
+		}
+		ai_will_do = {
+			factor = 26
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_spectrum_dominance = {
+		ADISCORD_ew_company = {
+			air_attack = 0.15
+			initiative = 0.03
+		}
+		cas_damage_reduction = 0.03
+		path = {
+			leads_to_tech = ADISCORD_tech_integrated_field_dispatch
+			research_cost_coeff = 1
+		}
+		XOR = {
+			ADISCORD_tech_mobile_signal_relays
+		}
+		research_cost = 1.75
+		start_year = 2169
+		folder = {
+			name = support_folder
+			position = { x = 3 y = 6 }
 		}
 		ai_will_do = {
 			factor = 26
@@ -907,14 +1083,18 @@ technologies = {
 
 	ADISCORD_tech_integrated_field_dispatch = {
 		signal_company = {
-			initiative = 0.06
+			max_organisation = 3
+			default_morale = 0.05
+		}
+		ADISCORD_ew_company = {
+			max_organisation = 3
 			default_morale = 0.05
 		}
 		research_cost = 1.58
 		start_year = 2172
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 6 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 26
@@ -963,11 +1143,20 @@ technologies = {
 	}
 
 	ADISCORD_tech_patrol_observation_posts = {
-		recon = {
-			recon = 0.5
+		category_recon = {
+			recon = 0.25
+			max_organisation = 3
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_drone_recon_company
+			research_cost_coeff = 1
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_recon_target_handoffs
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_persistent_surveillance
 			research_cost_coeff = 1
 		}
 		research_cost = 1.305
@@ -990,13 +1179,249 @@ technologies = {
 		categories = { support_tech }
 	}
 
+	ADISCORD_tech_drone_recon_company = {
+		ADISCORD_drone_recon_company = {
+			recon = 0.25
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_persistent_surveillance
+			research_cost_coeff = 1
+		}
+		dependencies = {
+			ADISCORD_tech_patrol_observation_posts = 1
+			ADISCORD_tech_drone_recon_swarms = 1
+		}
+		enable_subunits = { ADISCORD_drone_recon_company }
+		research_cost = 2.4
+		start_year = 2163
+		folder = {
+			name = support_folder
+			position = { x = 3 y = 4 }
+		}
+		ai_will_do = {
+			factor = 35.1
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
 	ADISCORD_tech_recon_target_handoffs = {
-		recon = {
-			recon = 0.5
-			initiative = 0.02
+		category_recon = {
+			soft_attack = 0.10
+			defense = 0.10
+		}
+		ADISCORD_recon_platform = {
+			breakthrough = 0.05
 		}
 		path = {
 			leads_to_tech = ADISCORD_tech_persistent_recon_patrols
+			research_cost_coeff = 1
+		}
+		XOR = {
+			ADISCORD_tech_persistent_surveillance
+		}
+		research_cost = 1.75
+		start_year = 2166
+		folder = {
+			name = support_folder
+			position = { x = -3 y = 6 }
+		}
+		ai_will_do = {
+			factor = 26
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_persistent_surveillance = {
+		category_recon = {
+			recon = 0.5
+			max_organisation = 2
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_persistent_recon_patrols
+			research_cost_coeff = 1
+		}
+		XOR = {
+			ADISCORD_tech_recon_target_handoffs
+		}
+		research_cost = 1.75
+		start_year = 2166
+		folder = {
+			name = support_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 26
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_persistent_recon_patrols = {
+		category_recon = {
+			supply_consumption = -0.05
+			max_organisation = 3
+		}
+		research_cost = 1.525
+		start_year = 2170
+		folder = {
+			name = support_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = {
+			factor = 26
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_environment_support_companies = {
+		ADISCORD_decontamination_company = {
+			max_organisation = 2
+		}
+		ADISCORD_desert_support_company = {
+			max_organisation = 2
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_sealed_decontamination_kits
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_desert_water_columns
+			research_cost_coeff = 1
+		}
+		dependencies = {
+			ADISCORD_tech_field_workshop_tools = 1
+		}
+		enable_subunits = { ADISCORD_decontamination_company ADISCORD_desert_support_company }
+		research_cost = 2.05
+		start_year = 2160
+		folder = {
+			name = support_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 43.875
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_sealed_decontamination_kits = {
+		ADISCORD_decontamination_company = {
+			contaminated = {
+				movement = 0.05
+			}
+			reactor_zone = {
+				movement = 0.05
+			}
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_environment_field_kits
+			research_cost_coeff = 1
+		}
+		research_cost = 1.333
+		start_year = 2163
+		folder = {
+			name = support_folder
+			position = { x = -3 y = 2 }
+		}
+		ai_will_do = {
+			factor = 26
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_desert_water_columns = {
+		ADISCORD_desert_support_company = {
+			desert = {
+				movement = 0.05
+			}
+			desert_city = {
+				movement = 0.05
+			}
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_environment_field_kits
+			research_cost_coeff = 1
+		}
+		research_cost = 1.333
+		start_year = 2163
+		folder = {
+			name = support_folder
+			position = { x = 3 y = 2 }
+		}
+		ai_will_do = {
+			factor = 26
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_environment_field_kits = {
+		ADISCORD_decontamination_company = {
+			max_organisation = 3
+		}
+		ADISCORD_desert_support_company = {
+			max_organisation = 3
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_environment_endurance_doctrine
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_environment_assault_doctrine
 			research_cost_coeff = 1
 		}
 		research_cost = 1.415
@@ -1019,16 +1444,75 @@ technologies = {
 		categories = { support_tech }
 	}
 
-	ADISCORD_tech_persistent_recon_patrols = {
-		recon = {
-			recon = 0.5
-			supply_consumption = -0.05
+	ADISCORD_tech_environment_endurance_doctrine = {
+		ADISCORD_decontamination_company = {
+			entrenchment = 0.5
+			contaminated = {
+				defence = 0.05
+			}
+			reactor_zone = {
+				defence = 0.05
+			}
 		}
-		research_cost = 1.525
-		start_year = 2170
+		ADISCORD_desert_support_company = {
+			entrenchment = 0.5
+			desert = {
+				defence = 0.05
+			}
+			desert_city = {
+				defence = 0.05
+			}
+		}
+		XOR = {
+			ADISCORD_tech_environment_assault_doctrine
+		}
+		research_cost = 1.75
+		start_year = 2169
 		folder = {
 			name = support_folder
-			position = { x = 0 y = 6 }
+			position = { x = -3 y = 6 }
+		}
+		ai_will_do = {
+			factor = 26
+			modifier = {
+				factor = 1.25
+				has_war = yes
+			}
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { support_tech }
+	}
+
+	ADISCORD_tech_environment_assault_doctrine = {
+		ADISCORD_decontamination_company = {
+			breakthrough = 0.10
+			contaminated = {
+				attack = 0.05
+			}
+			reactor_zone = {
+				attack = 0.05
+			}
+		}
+		ADISCORD_desert_support_company = {
+			breakthrough = 0.10
+			desert = {
+				attack = 0.05
+			}
+			desert_city = {
+				attack = 0.05
+			}
+		}
+		XOR = {
+			ADISCORD_tech_environment_endurance_doctrine
+		}
+		research_cost = 1.75
+		start_year = 2169
+		folder = {
+			name = support_folder
+			position = { x = 3 y = 6 }
 		}
 		ai_will_do = {
 			factor = 26

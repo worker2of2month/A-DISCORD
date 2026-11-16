@@ -91,198 +91,45 @@ on_actions = {
 							has_capitulated = yes
 						}
 					}
-
-					# Ostfort and Tehlar are authored Worx protectorates. If TVA loses,
-					# fold them into the defeated directorate before its victor annexes it;
-					# otherwise an overlord annex can free them as one-state postwar shells.
-					if = {
-						limit = {
-							ROOT = { tag = TVA }
-							WTD = {
-								exists = yes
-								has_capitulated = yes
-								has_country_flag = ADISCORD_vorkerland_worx_aligned_technocrats
-							}
-						}
-						TVA = {
-							if = { limit = { has_war_with = WTD } white_peace = WTD }
-							WTD = {
-								if = {
-									limit = {
-										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-									}
-									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-									RUS_crisis_release_other_major = yes
-									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
-								}
-							}
-							annex_country = { target = WTD transfer_troops = no }
-						}
+					ROOT = {
+						ADISCORD_vorkerland_fold_worx_protectorates = yes
+						ADISCORD_vorkerland_absorb_into_central_victor = yes
 					}
-					if = {
-						limit = {
-							ROOT = { tag = TVA }
-							TGD = {
-								exists = yes
-								has_capitulated = yes
-								has_country_flag = ADISCORD_vorkerland_joined_worx_directorate
-							}
-						}
-						TVA = {
-							if = { limit = { has_war_with = TGD } white_peace = TGD }
-							TGD = {
-								if = {
-									limit = {
-										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-									}
-									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-									RUS_crisis_release_other_major = yes
-									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
-								}
-							}
-							annex_country = { target = TGD transfer_troops = no }
-						}
+				}
+				# The central router reserved the last ally of a defeated claimant.
+				# The released shell and that ally reach the same living claimant.
+				if = {
+					limit = {
+						ROOT = { has_country_flag = ADISCORD_vorkerland_shell_release_current }
 					}
-
-					# The feature router may credit the capitulation to the claimant itself,
-					# one of its subjects, or the three fixed auxiliary tags below. Mirror
-					# that normalization here so the land always reaches the living claimant.
-					FROM = {
+					ROOT = { clr_country_flag = ADISCORD_vorkerland_shell_release_current }
+					WKR = {
 						if = {
-							limit = {
-								ADISCORD_vorkerland_is_main_claimant = yes
-								exists = yes
-								is_subject = no
-								NOT = { has_capitulated = yes }
-							}
-							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-							ROOT = {
-								if = {
-									limit = {
-										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-									}
-									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-									RUS_crisis_release_other_major = yes
-									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
-								}
-							}
-							annex_country = { target = ROOT transfer_troops = yes }
+							limit = { ADISCORD_vorkerland_shell_released_by_root = yes }
+							ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = yes
+							ADISCORD_vorkerland_absorb_into_central_victor = yes
 						}
-						else_if = {
-							limit = { ADISCORD_vorkerland_has_live_claimant_leader = yes }
-							faction_leader = {
-								if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-								ROOT = {
-									if = {
-										limit = {
-											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										}
-										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										RUS_crisis_release_other_major = yes
-										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
-									}
-								}
-								annex_country = { target = ROOT transfer_troops = yes }
-							}
+					}
+					VAD = {
+						if = {
+							limit = { ADISCORD_vorkerland_shell_released_by_root = yes }
+							ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = yes
+							ADISCORD_vorkerland_absorb_into_central_victor = yes
 						}
-						else_if = {
-							limit = {
-								is_subject = yes
-								NOT = { has_capitulated = yes }
-								OVERLORD = {
-									exists = yes
-									ADISCORD_vorkerland_is_main_claimant = yes
-									is_subject = no
-									NOT = { has_capitulated = yes }
-								}
-							}
-							OVERLORD = {
-								if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-								ROOT = {
-									if = {
-										limit = {
-											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										}
-										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										RUS_crisis_release_other_major = yes
-										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
-									}
-								}
-								annex_country = { target = ROOT transfer_troops = yes }
-							}
+					}
+					TVA = {
+						if = {
+							limit = { ADISCORD_vorkerland_shell_released_by_root = yes }
+							ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = yes
+							ADISCORD_vorkerland_fold_worx_protectorates = yes
+							ADISCORD_vorkerland_absorb_into_central_victor = yes
 						}
-						else_if = {
-							limit = { tag = WTD TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
-							TVA = {
-								if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-								ROOT = {
-									if = {
-										limit = {
-											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										}
-										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										RUS_crisis_release_other_major = yes
-										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
-									}
-								}
-								annex_country = { target = ROOT transfer_troops = yes }
-							}
-						}
-						else_if = {
-							limit = { tag = VLA WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
-							WKR = {
-								if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-								ROOT = {
-									if = {
-										limit = {
-											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										}
-										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										RUS_crisis_release_other_major = yes
-										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
-									}
-								}
-								annex_country = { target = ROOT transfer_troops = yes }
-							}
-						}
-						else_if = {
-							limit = { tag = SOL VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
-							VAD = {
-								if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-								ROOT = {
-									if = {
-										limit = {
-											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										}
-										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-										RUS_crisis_release_other_major = yes
-										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
-									}
-								}
-								annex_country = { target = ROOT transfer_troops = yes }
-							}
-						}
-						else_if = {
-							limit = {
-								tag = event_target:ADISCORD_vorkerland_nation
-								exists = yes
-								is_subject = no
-								NOT = { has_capitulated = yes }
-								has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-								has_global_flag = ADISCORD_vorkerland_reunification_verified
-							}
-							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-							ROOT = {
-								if = {
-									limit = {
-										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-									}
-									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
-									RUS_crisis_release_other_major = yes
-									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
-								}
-							}
-							annex_country = { target = ROOT transfer_troops = yes }
+					}
+					# A folded Worx protectorate no longer exists.
+					ROOT = {
+						if = {
+							limit = { exists = yes }
+							ADISCORD_vorkerland_absorb_into_central_victor = yes
 						}
 					}
 				}

@@ -77,7 +77,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_bookmark_hold_the_basin
-		icon = GFX_goal_generic_occupy_states_ongoing_war
+		icon = GFX_focus_NAM_bookmark_hold_the_basin
 		x = -5
 		y = 1
 		cost = 5
@@ -87,7 +87,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_bookmark_ladder_or_charter
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_NAM_bookmark_ladder_or_charter
 		x = -5
 		y = 1
 		cost = 5
@@ -97,7 +97,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_bookmark_seal_over_furnaces
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_NAM_bookmark_seal_over_furnaces
 		x = -5
 		y = 1
 		cost = 5

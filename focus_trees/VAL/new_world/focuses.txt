@@ -299,11 +299,11 @@ focus_tree = {
 			VAL_peace_regime_cabinet = yes
 		}
 		completion_reward = {
+			# The cabinet opens its own slots, so the factories never depend on a free site.
 			random_owned_controlled_state = {
-				limit = {
-					free_building_slots = { building = industrial_complex size > 1 include_locked = no }
-				}
+				limit = { is_core_of = ROOT }
 				prioritize = { 48 }
+				add_extra_state_shared_building_slots = 2
 				add_building_construction = {
 					type = industrial_complex
 					level = 2
@@ -579,6 +579,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = { var = VAL_peace_order_attack value = 0.05 }
 				add_to_variable = { var = VAL_peace_order_command_gain value = 0.10 }
+				add_to_variable = { var = VAL_peace_order_pp value = -0.05 }
 				VAL_peace_order_update = yes
 			}
 			country_event = { id = val_peace.57 }
@@ -764,11 +765,11 @@ focus_tree = {
 			focus = VAL_throne_crown_register
 		}
 		completion_reward = {
+			# Own slots keep the crown order's site in Depoitodron free.
 			random_owned_controlled_state = {
-				limit = {
-					free_building_slots = { building = arms_factory size > 1 include_locked = no }
-				}
+				limit = { is_core_of = ROOT }
 				prioritize = { 48 }
+				add_extra_state_shared_building_slots = 2
 				add_building_construction = {
 					type = arms_factory
 					level = 2
@@ -867,6 +868,7 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = { var = VAL_peace_order_pp value = 0.10 }
+				add_to_variable = { var = VAL_peace_order_stability value = -0.03 }
 				VAL_peace_order_update = yes
 			}
 			country_event = { id = val_peace.62 }
@@ -892,10 +894,9 @@ focus_tree = {
 		}
 		completion_reward = {
 			random_owned_controlled_state = {
-				limit = {
-					free_building_slots = { building = industrial_complex size > 0 include_locked = no }
-				}
+				limit = { is_core_of = ROOT }
 				prioritize = { 48 }
+				add_extra_state_shared_building_slots = 1
 				add_building_construction = {
 					type = industrial_complex
 					level = 1
@@ -983,6 +984,44 @@ focus_tree = {
 					limit = { infrastructure < 5 }
 					add_building_construction = {
 						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			# The zone usually belongs to the republics; the clearing crews then
+			# rebuild Kefreyt's own border districts instead.
+			if = {
+				limit = {
+					NOT = {
+						any_owned_state = {
+							is_controlled_by = ROOT
+							OR = {
+								state = 168
+								state = 169
+								state = 176
+								state = 177
+								state = 187
+								state = 188
+								state = 189
+								state = 192
+							}
+						}
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						is_core_of = ROOT
+						NOT = { state = 48 }
+					}
+					add_extra_state_shared_building_slots = 2
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+					add_building_construction = {
+						type = industrial_complex
 						level = 1
 						instant_build = yes
 					}
@@ -1193,6 +1232,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = { var = VAL_peace_order_planning value = 0.10 }
 				add_to_variable = { var = VAL_peace_order_command_gain value = 0.10 }
+				add_to_variable = { var = VAL_peace_order_pp value = -0.05 }
 				VAL_peace_order_update = yes
 			}
 			country_event = { id = val_peace.68 }
@@ -1717,16 +1757,28 @@ focus_tree = {
 		mutually_exclusive = {
 			focus = VAL_east_krutov_network
 		}
-		bypass = {
-			has_global_flag = VAL_east_final_resolved
-		}
 		completion_reward = {
 			add_political_power = 50
-			custom_effect_tooltip = VAL_east_trade_missions_tt
-			unlock_decision_tooltip = VAL_east_contest_share
-			hidden_effect = {
-				set_temp_variable = { var = VAL_east_lean_delta value = 5 }
-				VAL_east_contest_shift_all = yes
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_east_contest_ahead_tt
+						VAL_east_contest_ahead = yes
+					}
+				}
+				custom_effect_tooltip = VAL_east_trade_missions_tt
+				unlock_decision_tooltip = VAL_east_contest_share
+				hidden_effect = {
+					set_temp_variable = { var = VAL_east_lean_delta value = 5 }
+					VAL_east_contest_shift_all = yes
+				}
+			}
+			else = {
+				custom_effect_tooltip = VAL_peace_treasury_150_tt
+				hidden_effect = {
+					ADISCORD_economy_receive_100 = yes
+					ADISCORD_economy_receive_50 = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -1747,16 +1799,25 @@ focus_tree = {
 		mutually_exclusive = {
 			focus = VAL_east_trade_missions
 		}
-		bypass = {
-			has_global_flag = VAL_east_final_resolved
-		}
 		completion_reward = {
 			add_command_power = 25
-			custom_effect_tooltip = VAL_east_krutov_network_tt
-			unlock_decision_tooltip = VAL_east_contest_expose_agents
-			hidden_effect = {
-				set_temp_variable = { var = VAL_east_lean_delta value = 5 }
-				VAL_east_contest_shift_rival_members = yes
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_east_contest_ahead_tt
+						VAL_east_contest_ahead = yes
+					}
+				}
+				custom_effect_tooltip = VAL_east_krutov_network_tt
+				unlock_decision_tooltip = VAL_east_contest_expose_agents
+				hidden_effect = {
+					set_temp_variable = { var = VAL_east_lean_delta value = 5 }
+					VAL_east_contest_shift_rival_members = yes
+				}
+			}
+			else = {
+				add_political_power = 50
+				add_stability = 0.03
 			}
 		}
 		ai_will_do = {
@@ -1775,13 +1836,32 @@ focus_tree = {
 			focus = VAL_east_trade_missions
 			focus = VAL_east_krutov_network
 		}
-		bypass = {
-			has_global_flag = VAL_east_final_resolved
-		}
 		completion_reward = {
 			army_experience = 25
 			add_command_power = 30
-			unlock_decision_tooltip = VAL_east_contest_instructors
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_east_contest_ahead_tt
+						VAL_east_contest_ahead = yes
+					}
+				}
+				unlock_decision_tooltip = VAL_east_contest_instructors
+			}
+			else = {
+				random_owned_controlled_state = {
+					limit = {
+						is_core_of = ROOT
+						infrastructure < 5
+					}
+					prioritize = { 168 169 }
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 		}
 		ai_will_do = {
 			base = 10
@@ -1801,16 +1881,24 @@ focus_tree = {
 		mutually_exclusive = {
 			focus = VAL_east_arsenal
 		}
-		bypass = {
-			has_global_flag = VAL_east_final_resolved
-		}
 		completion_reward = {
 			add_war_support = 0.03
 			add_political_power = 50
-			custom_effect_tooltip = VAL_east_shards_tt
-			hidden_effect = {
-				set_temp_variable = { var = VAL_east_lean_delta value = 15 }
-				VAL_east_contest_shift_partners = yes
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = VAL_east_contest_ahead_tt
+						VAL_east_contest_ahead = yes
+					}
+				}
+				custom_effect_tooltip = VAL_east_shards_tt
+				hidden_effect = {
+					set_temp_variable = { var = VAL_east_lean_delta value = 15 }
+					VAL_east_contest_shift_partners = yes
+				}
+			}
+			else = {
+				add_manpower = 4000
 			}
 		}
 		ai_will_do = {
@@ -1830,9 +1918,6 @@ focus_tree = {
 		}
 		mutually_exclusive = {
 			focus = VAL_east_shards
-		}
-		bypass = {
-			has_global_flag = VAL_east_final_resolved
 		}
 		completion_reward = {
 			add_equipment_to_stockpile = {
@@ -1920,18 +2005,11 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_peace_strike_minus_8_tt
+			# The belt states usually belong to the zone republics; the convoys then
+			# start from Kefreyt's own districts.
 			random_owned_controlled_state = {
-				limit = {
-					OR = {
-						state = 176
-						state = 177
-						state = 187
-						state = 188
-						state = 189
-						state = 192
-					}
-					infrastructure < 5
-				}
+				limit = { infrastructure < 5 }
+				prioritize = { 176 177 187 188 189 192 }
 				add_building_construction = {
 					type = infrastructure
 					level = 1
@@ -2079,6 +2157,32 @@ focus_tree = {
 	}
 
 	focus = {
+		id = VAL_peace_loyal_battalions
+		icon = GFX_focus_VAL_Reserve_Battalions
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
+		x = 34
+		y = 3
+		cost = 3
+		prerequisite = {
+			focus = VAL_peace_registry_audit
+			focus = VAL_peace_share_ledger
+		}
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
+		completion_reward = {
+			add_power_balance_value = { id = VAL_peace_balance value = -0.05 }
+			add_manpower = 4000
+			army_experience = 15
+			custom_effect_tooltip = VAL_peace_loyal_battalions_tt
+			country_event = { id = val_peace.112 }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
 		id = VAL_peace_kilnet
 		icon = GFX_focus_VAL_Captains_Cannot_Veto
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_EXPANSION }
@@ -2209,10 +2313,21 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 10
 			if = {
-				limit = { RUS = { exists = yes } }
+				limit = {
+					RUS = {
+						exists = yes
+						is_subject = no
+						NOT = { check_variable = { var = RUS_crisis_phase value = 3 compare = greater_than_or_equals } }
+					}
+				}
 				unlock_decision_tooltip = VAL_nw_challenge_khan
 				unlock_decision_tooltip = VAL_nw_expanded_arsenals
 				unlock_decision_tooltip = VAL_nw_expanded_reserve
+			}
+			else = {
+				# The order arrives after the Khan's war: the reserves it named stay home.
+				add_manpower = 5000
+				add_command_power = 25
 			}
 		}
 		ai_will_do = {

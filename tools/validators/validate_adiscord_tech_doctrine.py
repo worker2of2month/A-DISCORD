@@ -2063,7 +2063,35 @@ def check_new_support_and_platform_units() -> list[str]:
             "support_equipment": 15,
         },
         "maintenance_company": {"infantry_equipment": 270, "support_equipment": 25},
-        "recon": {"infantry_equipment": 180, "support_equipment": 10},
+        "recon": {"infantry_equipment": 135, "support_equipment": 10},
+        "ADISCORD_assault_sapper_company": {
+            "infantry_equipment": 315,
+            "ADISCORD_squad_weapons_equipment": 12,
+            "support_equipment": 30,
+        },
+        "ADISCORD_armored_engineer_company": {
+            "infantry_equipment": 270,
+            "ADISCORD_armored_carrier_archetype": 12,
+            "support_equipment": 25,
+        },
+        "ADISCORD_drone_recon_company": {"infantry_equipment": 108, "support_equipment": 30},
+        "ADISCORD_ew_company": {
+            "infantry_equipment": 135,
+            "anti_air_equipment": 6,
+            "support_equipment": 30,
+        },
+        "ADISCORD_decontamination_company": {"infantry_equipment": 180, "support_equipment": 35},
+        "ADISCORD_desert_support_company": {
+            "infantry_equipment": 180,
+            "motorized_equipment": 10,
+            "support_equipment": 25,
+        },
+        "ADISCORD_loitering_munition_company": {
+            "infantry_equipment": 135,
+            "artillery_equipment": 6,
+            "anti_tank_equipment": 4,
+            "support_equipment": 20,
+        },
         "military_police": {"infantry_equipment": 360, "support_equipment": 10},
         "logistics_company": {"infantry_equipment": 270, "support_equipment": 25},
         "signal_company": {"infantry_equipment": 225, "support_equipment": 25},
@@ -3594,6 +3622,8 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
             # line must not require unrelated maintenance, radar or fuel work.
             expected_leaves = {
                 "reserve_training": 2,
+                # Equipment generations and maintenance are separate outcomes.
+                "field_support": 2,
                 "fighter": 2,
                 "air_support": 2,
                 "strategic_air": 2,

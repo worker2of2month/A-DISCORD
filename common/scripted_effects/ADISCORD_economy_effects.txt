@@ -3472,7 +3472,9 @@ ADISCORD_economy_mark_sources_dirty = {
 # Content calls this after an idea, dynamic modifier or variable behind an
 # economy modifier changes. The weekly ledger cannot read modifier@, so the
 # change reaches it through the next-day policy refresh shared with laws; the
-# pending flag limits that refresh to one hidden event per country.
+# pending flag limits that refresh to one hidden event per country. Visible
+# rewards call this too, so the dispatcher stays out of their native tooltip,
+# where an untitled event would read as an empty "event will happen" line.
 ADISCORD_economy_mark_dirty = {
 	ADISCORD_economy_mark_sources_dirty = yes
 	if = {
@@ -3481,7 +3483,7 @@ ADISCORD_economy_mark_dirty = {
 			NOT = { has_country_flag = ADISCORD_economy_law_refresh_pending }
 		}
 		set_country_flag = { flag = ADISCORD_economy_law_refresh_pending days = 2 }
-		country_event = { id = ADISCORD_economy.5 days = 1 }
+		hidden_effect = { country_event = { id = ADISCORD_economy.5 days = 1 } }
 	}
 }
 

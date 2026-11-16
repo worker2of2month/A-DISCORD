@@ -288,6 +288,9 @@ class FinalSettlementFixture:
                 return (scope in self.installed or scope in self.subjects) == (value == "yes")
             if key == "is_subject_of":
                 return self.subjects.get(scope) == value
+            if key == "OVERLORD":
+                overlord = self.subjects.get(scope)
+                return overlord is not None and self.matches(value, overlord)
             if key == "is_major":
                 return (scope in self.majors) == (value == "yes")
             if key == "is_in_faction_with":
@@ -380,8 +383,16 @@ class AuxiliaryDefeatFixture(FinalSettlementFixture):
                 matched = self.matches(value, target)
                 self.previous = previous
             elif key == "capital_scope":
-                controller = next(item.value for item in value if item.key == "controller")
-                matched = self.matches(controller, self.capital_controllers[scope])
+                holder = self.capital_controllers[scope]
+                matched = True
+                for item in value:
+                    if item.key == "controller":
+                        matched = matched and self.matches(item.value, holder)
+                    elif item.key == "VAL_frontier_controlled":
+                        held = holder == "VAL" or self.subjects.get(holder) == "VAL"
+                        matched = matched and held == (item.value == "yes")
+                    else:
+                        raise AssertionError(f"Unmodelled capital predicate: {item.key}")
             else:
                 matched = super().matches([entry], scope)
             if not matched:
@@ -562,6 +573,37 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         fixture.immediate_callback()
         self.assertNotIn("VAL_final_capitulation_immediate", fixture.flags["YPR"])
 
+    def test_frontier_guarantor_subject_defeat_is_reserved(self):
+        router = ON_ACTIONS.read_text(encoding="utf-8")
+        router = router.split("# BEGIN kefreyt:on_capitulation_immediate", 1)[1]
+        router = router.split("# END kefreyt:on_capitulation_immediate", 1)[0]
+        self.assertIn("VAL_frontier_guarantor_auxiliary_defeat = yes", router)
+        trigger = AuxiliaryDefeatFixture().triggers["VAL_frontier_guarantor_auxiliary_defeat"]
+        cases = (
+            ("VAL", True, True),
+            ("BJK", True, False),
+            ("VAL", False, False),
+        )
+        for victor, guarantor, expected in cases:
+            with self.subTest(victor=victor, guarantor=guarantor):
+                fixture = AuxiliaryDefeatFixture(victor)
+                fixture.root = "AIN"
+                fixture.members.add("AIN")
+                fixture.subjects["AIN"] = "NOD"
+                fixture.capital_controllers["AIN"] = victor
+                for tag in ("STP", "NOD"):
+                    fixture.flags[tag].clear()
+                if guarantor:
+                    fixture.flags["NOD"].add("VAL_frontier_guarantor")
+                self.assertEqual(fixture.matches(trigger, "AIN"), expected)
+
+    def test_frontier_close_releases_guarantor_subjects(self):
+        close = named_block(self.source, "VAL_frontier_close")
+        start = close.index("NOD = { if = { limit = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } white_peace = VAL } }")
+        release = close.index("every_subject_country = {", start)
+        self.assertLess(release, close.index("clr_country_flag = VAL_frontier_guarantor"))
+        self.assertEqual(close.count("VAL = { white_peace = PREV }"), 2)
+
     def test_nodrul_settlement_releases_its_reserved_subjects_from_the_war(self):
         install = named_block(self.source, "VAL_install_nodrul_administration")
         release = install.index("every_subject_country = {")
@@ -603,6 +645,46 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
                     fixture.majors.add("AIN")
                 fixture.late_callback()
                 self.assertEqual(fixture.installed, [])
+
+    def test_stelander_settles_with_its_fighting_minor_nodrul_subject(self):
+        # The engine opens the conference for both as soon as Stelander falls.
+        for callback in ("immediate", "late"):
+            with self.subTest(callback=callback):
+                fixture = FinalSettlementFixture("STS", "STS")
+                fixture.members.add("NOD")
+                fixture.majors.discard("NOD")
+                fixture.subjects["NOD"] = "STS"
+                if callback == "immediate":
+                    fixture.execute(fixture.effects["VAL_finalize_reserved_settlements"], "VAL")
+                else:
+                    fixture.late_callback()
+                self.assertEqual(fixture.installed, ["STS"])
+
+    def test_fighting_subject_still_blocks_without_its_overlord_defeat(self):
+        for major, overlord_pending in ((True, True), (False, False)):
+            with self.subTest(major=major, overlord_pending=overlord_pending):
+                fixture = FinalSettlementFixture("STP", "STP")
+                fixture.members.update(("STS", "NOD"))
+                fixture.subjects["NOD"] = "STS"
+                if not major:
+                    fixture.majors.discard("NOD")
+                if overlord_pending:
+                    fixture.flags["STS"].add("VAL_final_defeat_pending")
+                    fixture.capitulated.add("STS")
+                else:
+                    fixture.neutral.add("STS")
+                fixture.late_callback()
+                self.assertEqual(fixture.installed, [])
+
+    def test_stelander_frees_nodrul_before_its_administration_handoff(self):
+        effects = EFFECTS.read_text(encoding="utf-8")
+        restore = " ".join(named_block(effects, "VAL_restore_stelander_conquered_administrations").split())
+        release = "STS = { set_autonomy = { target = NOD autonomy_state = autonomy_free"
+        self.assertLess(restore.index(release), restore.index("NOD = { VAL_install_nodrul_administration = yes }"))
+        install = " ".join(named_block(effects, "VAL_install_stelander_administration").split())
+        peace = ("every_subject_country = { limit = { has_war_with = VAL is_major = no } "
+                 "VAL = { white_peace = PREV } }")
+        self.assertLess(install.index("VAL_restore_stelander_conquered_administrations = yes"), install.index(peace))
 
     def test_nodrul_colony_exception_does_not_ignore_liberated_stelander(self):
         fixture = FinalSettlementFixture("STP", "NOD")

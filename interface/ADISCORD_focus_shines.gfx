@@ -1,5 +1,62 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_bookmark_hold_the_basin_shine"
+		texturefile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_hold_the_basin.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_hold_the_basin.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_bookmark_ladder_or_charter_shine"
+		texturefile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_ladder_or_charter.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_ladder_or_charter.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_bookmark_seal_over_furnaces_shine"
+		texturefile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_seal_over_furnaces.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_seal_over_furnaces.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_machine_shops_shine"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_machine_shops.png"
 		effectFile = "gfx/FX/buttonstate.lua"

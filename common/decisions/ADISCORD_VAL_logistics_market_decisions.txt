@@ -642,7 +642,10 @@ VAL_population_markets = {
 		}
 		days_re_enable = 120
 		fire_only_once = no
+		# The settlement below repeats the price check; the decision tooltip cannot
+		# show an effect behind a hidden limit, so the result is previewed here.
 		complete_effect = {
+			effect_tooltip = { add_manpower = 5000 }
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -659,8 +662,8 @@ VAL_population_markets = {
 						NOT = { has_political_power < 50 }
 					}
 				}
-				add_manpower = 5000
 				hidden_effect = {
+					add_manpower = 5000
 					add_political_power = -50
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
@@ -708,6 +711,7 @@ VAL_population_markets = {
 		days_re_enable = 180
 		fire_only_once = no
 		complete_effect = {
+			effect_tooltip = { add_manpower = 6000 }
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -724,8 +728,8 @@ VAL_population_markets = {
 						NOT = { command_power < 25 }
 					}
 				}
-				add_manpower = 6000
 				hidden_effect = {
+					add_manpower = 6000
 					add_command_power = -25
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1500 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1500 }
@@ -777,6 +781,7 @@ VAL_population_markets = {
 		cancel_if_not_visible = no
 		fire_only_once = no
 		complete_effect = {
+			custom_effect_tooltip = VAL_national_recruitment_pending_tt
 			if = {
 				limit = {
 					hidden_trigger = {
@@ -792,7 +797,6 @@ VAL_population_markets = {
 						}
 					}
 				}
-				custom_effect_tooltip = VAL_national_recruitment_pending_tt
 				hidden_effect = {
 					add_to_variable = { var = VAL_local_volunteer_pool value = -2 }
 					set_variable = { var = VAL_national_recruitment_deposit value = 3000 }

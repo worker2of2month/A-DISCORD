@@ -325,6 +325,9 @@ class GenericPeaceFixture:
                 self.flags[current].discard(value)
             elif key == "set_major":
                 pass
+            elif key in ("add_manpower", "add_equipment_to_stockpile", "add_timed_idea"):
+                # Reserves and spirits do not change wars, factions or ownership.
+                pass
             elif key == "log":
                 self.log.append(value)
             else:

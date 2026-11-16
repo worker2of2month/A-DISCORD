@@ -142,7 +142,7 @@ class VorkerlandFocusInterfaceInheritanceTests(unittest.TestCase):
             source,
         )
         self.assertIn(
-            'texturefile = "gfx/texticons/unit_mechanized_icon_small.dds"',
+            'texturefile = "gfx/texticons/ADISCORD_mechanized_infantry_icon_small.dds"',
             source,
         )
 

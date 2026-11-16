@@ -21,6 +21,7 @@ VAL_peace_crisis = {
 	ADISCORD_economy_military_industry_income_factor = VAL_peace_military_income
 	political_power_gain = VAL_peace_pp_gain
 	stability_factor = VAL_peace_stability
+	consumer_goods_factor = VAL_peace_idle_army
 }
 
 # COUNTRY VAL. The regime chosen at the reckoning sets only its own variables.
@@ -179,6 +180,23 @@ VAL_final_war_preparation = {
 	supply_consumption_factor = VAL_final_supply_bonus
 	planning_speed = VAL_final_planning_bonus
 	conscription = VAL_final_reserve_share
+}
+
+# VAL for 180 days from the start of a prepared invasion. VAL_op_pay_offensive
+# sets the values from the chosen plan profile and the readiness reached.
+VAL_operation_offensive = {
+	enable = { original_tag = VAL }
+	remove_trigger = { has_war = no }
+	icon = GFX_idea_ADISCORD_law_military_general_staff
+	army_attack_factor = VAL_op_attack
+	breakthrough_factor = VAL_op_breakthrough
+	army_armor_attack_factor = VAL_op_armor_attack
+	naval_invasion_prep_speed = VAL_op_invasion_speed
+	amphibious_invasion = VAL_op_amphibious
+	attrition = VAL_op_attrition
+	army_org_factor = VAL_op_org
+	planning_speed = VAL_op_planning
+	army_morale_factor = VAL_op_morale
 }
 
 # --- commanders_council ---

@@ -183,6 +183,8 @@ class ValCampaignContractsTests(unittest.TestCase):
         launch = block(entries(EFFECTS), "VAL_begin_northern_coalition_campaign")
         facts = {
             ("VAL", "has_completed_focus", "VAL_Northern_Settlement"): True,
+            # The prepared operation clears the readiness threshold of the war focus.
+            ("VAL", "variable", "VAL_nc_op_readiness"): 30,
         }
         for country in ("VAL", "YPR", "COF", "TFF", "NOD"):
             for condition, value in (

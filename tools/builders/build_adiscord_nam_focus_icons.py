@@ -18,6 +18,12 @@ MANIFEST = SOURCE / "focus_art_prompts.json"
 OUTPUT = Path("gfx/interface/goals/NAM")
 CANVAS = (150, 150)
 CONTENT = (140, 134)
+BOOKMARK_SIZE = (94, 76)
+BOOKMARK_ART = {
+    "hold_the_basin": "oilfield_militia",
+    "ladder_or_charter": "vertical",
+    "seal_over_furnaces": "general_staff_plan",
+}
 
 
 def expected_outputs() -> dict[Path, bytes]:
@@ -66,6 +72,15 @@ def expected_outputs() -> dict[Path, bytes]:
             stream = io.BytesIO()
             canvas.save(stream, format="PNG", optimize=True)
             outputs[ROOT / output] = stream.getvalue()
+    for bookmark, focus in BOOKMARK_ART.items():
+        with Image.open(ROOT / OUTPUT / f"GFX_focus_NAM_{focus}.png") as icon:
+            art = icon.crop(icon.getchannel("A").getbbox())
+            art.thumbnail(BOOKMARK_SIZE, Image.Resampling.LANCZOS)
+            canvas = Image.new("RGBA", BOOKMARK_SIZE)
+            canvas.alpha_composite(art, ((canvas.width - art.width) // 2, (canvas.height - art.height) // 2))
+            stream = io.BytesIO()
+            canvas.save(stream, format="PNG", optimize=True)
+            outputs[ROOT / OUTPUT / "bookmark" / f"GFX_focus_NAM_bookmark_{bookmark}.png"] = stream.getvalue()
     return outputs
 
 

@@ -141,7 +141,8 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Price_Of_Loyalty_tt
 			add_power_balance_value = { id = VAL_command_balance value = 0.1 }
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			hidden_effect = { ADISCORD_economy_receive_100 = yes }
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_captain_retainers_delta } }
 			hidden_effect = {
@@ -309,7 +310,8 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Brokered_Steel_tt
-			ADISCORD_economy_receive_15 = yes
+			custom_effect_tooltip = VAL_peace_treasury_15_tt
+			hidden_effect = { ADISCORD_economy_receive_15 = yes }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_broad_resource_delta } }
 			hidden_effect = {
 				set_country_flag = VAL_broad_resource_network
@@ -344,7 +346,8 @@ focus_tree = {
 			}
 			else_if = {
 				limit = { has_completed_focus = VAL_Brokered_Steel }
-				ADISCORD_economy_receive_15 = yes
+				custom_effect_tooltip = VAL_peace_treasury_15_tt
+				hidden_effect = { ADISCORD_economy_receive_15 = yes }
 			}
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_supply_contracts_delta } }
 			hidden_effect = {
@@ -453,7 +456,8 @@ focus_tree = {
 			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
-			ADISCORD_economy_receive_15 = yes
+			custom_effect_tooltip = VAL_peace_treasury_15_tt
+			hidden_effect = { ADISCORD_economy_receive_15 = yes }
 			army_experience = 10
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_hire_out_war_delta } }
 			country_event = { id = val_rework.11 }
@@ -706,7 +710,8 @@ focus_tree = {
 			}
 			else_if = {
 				limit = { has_country_flag = VAL_ash_rear_mobilization }
-				ADISCORD_economy_receive_100 = yes
+				custom_effect_tooltip = VAL_peace_treasury_100_tt
+				hidden_effect = { ADISCORD_economy_receive_100 = yes }
 			}
 			hidden_effect = {
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
@@ -1898,7 +1903,8 @@ focus_tree = {
 			VAL_advance_economic_recovery = yes
 			add_political_power = 75
 			country_event = { id = val_rework.10 }
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			hidden_effect = { ADISCORD_economy_receive_100 = yes }
 		}
 		ai_will_do = { base = 60 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
@@ -1969,7 +1975,8 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Central_Payment_Office_tt
 			VAL_apply_contract_administration_2 = yes
-			ADISCORD_economy_receive_15 = yes
+			custom_effect_tooltip = VAL_peace_treasury_15_tt
+			hidden_effect = { ADISCORD_economy_receive_15 = yes }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 3 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
@@ -2227,7 +2234,8 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Munitions_Board }
 		completion_reward = {
-			ADISCORD_economy_receive_15 = yes
+			custom_effect_tooltip = VAL_peace_treasury_15_tt
+			hidden_effect = { ADISCORD_economy_receive_15 = yes }
 			add_political_power = 35
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_export_clearing_delta } }
 			hidden_effect = {
@@ -2994,7 +3002,8 @@ focus_tree = {
 			if = {
 				limit = { has_country_flag = VAL_cw_arms_contract_fulfilled }
 				VAL_invest_arsenal_industry = yes
-				ADISCORD_economy_receive_15 = yes
+				custom_effect_tooltip = VAL_peace_treasury_15_tt
+				hidden_effect = { ADISCORD_economy_receive_15 = yes }
 			}
 			else_if = {
 				limit = { VAL_occidia_secured = yes }
@@ -3291,7 +3300,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_ideas = VAL_reclamation_land_register_idea
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			hidden_effect = { ADISCORD_economy_receive_100 = yes }
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -3754,7 +3764,8 @@ focus_tree = {
 			custom_effect_tooltip = VAL_cannibal_war_route_tt
 			if = {
 				limit = { has_completed_focus = VAL_frontier_commissioners }
-				ADISCORD_economy_receive_15 = yes
+				custom_effect_tooltip = VAL_peace_treasury_15_tt
+				hidden_effect = { ADISCORD_economy_receive_15 = yes }
 			}
 			else_if = {
 				limit = { has_completed_focus = VAL_frontier_provincial_offices }
@@ -3867,12 +3878,54 @@ focus_tree = {
 		ai_will_do = { base = 8 }
 	}
 
+	# --- Northern coalition operation staff ---
+	# The staff prepares VAL_nc_op_readiness; the plan is chosen in val_rework.209.
+	# VAL_Break_The_Northern_Coalition below declares the war and spends it.
+	focus = {
+		id = VAL_nc_op_staff
+		icon = GFX_focus_VAL_Contract_General_Staff
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 28
+		y = 16
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 3
+		prerequisite = { focus = VAL_Northern_Settlement }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nc_op_can_prepare_tt
+				VAL_nc_op_can_prepare = yes
+			}
+		}
+		bypass = { VAL_nc_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_focus_progression_VAL_nc_op_staff_tt
+			custom_effect_tooltip = VAL_nc_op_readiness_15_tt
+			custom_effect_tooltip = VAL_nc_op_plan_choice_tt
+			unlock_decision_tooltip = VAL_nc_op_survey
+			unlock_decision_tooltip = VAL_nc_op_depots
+			unlock_decision_tooltip = VAL_nc_op_winter_kit
+			add_command_power = 15
+			army_experience = 10
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nc_op_gain value = 15 }
+				VAL_nc_op_add_readiness = yes
+				country_event = { id = val_rework.209 days = 1 }
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
 	focus = {
 		id = VAL_Break_The_Northern_Coalition
 		icon = GFX_focus_VAL_Frontier_Assault
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
-		x = 30
-		y = 16
+		x = 28
+		y = 17
 		offset = {
 			x = 12
 			y = 0
@@ -3880,20 +3933,236 @@ focus_tree = {
 		}
 		cost = 5
 		prerequisite = { focus = VAL_Northern_Settlement }
+		prerequisite = { focus = VAL_nc_op_staff }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_northern_coalition_available_tt
 				VAL_can_attack_northern_coalition = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nc_op_readiness_30_needed_tt
+				OR = {
+					has_country_flag = VAL_nc_op_launched
+					check_variable = { var = VAL_nc_op_readiness value = 30 compare = greater_than_or_equals }
+				}
 			}
 		}
 		bypass = { VAL_northern_coalition_resolved = yes }
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_northern_coalition_war_tt
-			hidden_effect = { VAL_begin_northern_coalition_campaign = yes }
+			custom_effect_tooltip = VAL_nc_op_launch_bonus_tt
+			hidden_effect = {
+				VAL_begin_northern_coalition_campaign = yes
+				VAL_nc_op_apply_launch = yes
+			}
 		}
 		ai_will_do = { base = 30 }
 	}
+
+	# --- Northern operation staff ---
+	# Readiness (VAL_nod_op_readiness, 0-100) is prepared before the final war.
+	# The escalation clock still starts the war; readiness only sets the opening
+	# bonus that VAL_nod_op_apply_launch pays once the war with NOD begins.
+	focus = {
+		id = VAL_nod_op_staff
+		icon = GFX_focus_VAL_Contract_General_Staff
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 32
+		y = 16
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 3
+		prerequisite = { focus = VAL_Northern_Settlement }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nod_op_can_prepare_tt
+				VAL_nod_op_can_prepare = yes
+			}
+		}
+		bypass = { VAL_nod_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_focus_progression_VAL_nod_op_staff_tt
+			custom_effect_tooltip = VAL_nod_op_readiness_10_tt
+			unlock_decision_tooltip = VAL_nod_op_staff_games
+			unlock_decision_tooltip = VAL_nod_op_border_roads
+			add_command_power = 15
+			army_experience = 10
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nod_op_gain value = 10 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	# Exactly one plan decides which arms the opening bonus strengthens.
+	focus = {
+		id = VAL_nod_op_axis_breakthrough
+		icon = GFX_focus_VAL_Frontier_Assault
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 30
+		y = 17
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 4
+		prerequisite = { focus = VAL_nod_op_staff }
+		mutually_exclusive = { focus = VAL_nod_op_axis_landing focus = VAL_nod_op_axis_forest }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nod_op_can_prepare_tt
+				VAL_nod_op_can_prepare = yes
+			}
+		}
+		bypass = { VAL_nod_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_focus_progression_VAL_nod_op_axis_breakthrough_tt
+			custom_effect_tooltip = VAL_nod_op_axis_breakthrough_tt
+			custom_effect_tooltip = VAL_nod_op_readiness_10_tt
+			unlock_decision_tooltip = VAL_nod_op_armour_reserve
+			army_experience = 15
+			add_tech_bonus = { name = VAL_nod_op_axis_breakthrough bonus = 0.5 uses = 1 category = armor }
+			hidden_effect = {
+				set_variable = { var = VAL_nod_op_axis value = 1 }
+				set_temp_variable = { var = VAL_nod_op_gain value = 10 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_nod_op_axis_landing
+		icon = GFX_focus_VAL_Marine_Contract_Corps
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 32
+		y = 17
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 4
+		prerequisite = { focus = VAL_nod_op_staff }
+		mutually_exclusive = { focus = VAL_nod_op_axis_breakthrough focus = VAL_nod_op_axis_forest }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nod_op_can_prepare_tt
+				VAL_nod_op_can_prepare = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		bypass = { VAL_nod_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_focus_progression_VAL_nod_op_axis_landing_tt
+			custom_effect_tooltip = VAL_nod_op_axis_landing_tt
+			custom_effect_tooltip = VAL_nod_op_readiness_10_tt
+			unlock_decision_tooltip = VAL_nod_op_landing_drills
+			navy_experience = 20
+			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
+			hidden_effect = {
+				set_variable = { var = VAL_nod_op_axis value = 2 }
+				set_temp_variable = { var = VAL_nod_op_gain value = 10 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				ADISCORD_has_operational_naval_base = no
+			}
+		}
+	}
+
+	focus = {
+		id = VAL_nod_op_axis_forest
+		icon = GFX_focus_VAL_Border_Survey_Corps
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 34
+		y = 17
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 4
+		prerequisite = { focus = VAL_nod_op_staff }
+		mutually_exclusive = { focus = VAL_nod_op_axis_breakthrough focus = VAL_nod_op_axis_landing }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nod_op_can_prepare_tt
+				VAL_nod_op_can_prepare = yes
+			}
+		}
+		bypass = { VAL_nod_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_focus_progression_VAL_nod_op_axis_forest_tt
+			custom_effect_tooltip = VAL_nod_op_axis_forest_tt
+			custom_effect_tooltip = VAL_nod_op_readiness_10_tt
+			unlock_decision_tooltip = VAL_nod_op_forest_guides
+			army_experience = 15
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = VAL }
+			hidden_effect = {
+				set_variable = { var = VAL_nod_op_axis value = 3 }
+				set_temp_variable = { var = VAL_nod_op_gain value = 10 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 7 }
+	}
+
+	focus = {
+		id = VAL_nod_op_final_plan
+		icon = GFX_focus_VAL_Krutovs_Eyes
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 32
+		y = 18
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 3
+		prerequisite = { focus = VAL_nod_op_axis_breakthrough focus = VAL_nod_op_axis_landing focus = VAL_nod_op_axis_forest }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nod_op_can_prepare_tt
+				VAL_nod_op_can_prepare = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nod_op_readiness_50_needed_tt
+				check_variable = { var = VAL_nod_op_readiness value = 50 compare = greater_than_or_equals }
+			}
+		}
+		bypass = { VAL_nod_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_nod_op_readiness_10_tt
+			unlock_decision_tooltip = VAL_nod_op_deception
+			add_command_power = 20
+			add_war_support = 0.03
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nod_op_gain value = 10 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
 	focus = {
 		id = VAL_Stelander_Ultimatum
 		icon = GFX_focus_ADISCORD_All_In
@@ -3914,6 +4183,166 @@ focus_tree = {
 			unlock_decision_tooltip = VAL_campaign_against_stelander
 		}
 		ai_will_do = { base = 20 modifier = { factor = 5 has_global_flag = STP_cw_union_wars_finished } }
+	}
+
+	# --- Stelander operation staff ---
+	# Readiness (VAL_stl_op_readiness) is spent by VAL_campaign_against_stelander;
+	# the plan profile feeds the shared VAL_op_pay_offensive.
+	focus = {
+		id = VAL_stl_op_staff
+		icon = GFX_focus_VAL_Contract_General_Staff
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 42
+		y = 16
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 3
+		prerequisite = { focus = VAL_Stelander_Ultimatum }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_stl_op_can_prepare_tt
+				VAL_stl_op_can_prepare = yes
+			}
+		}
+		bypass = { VAL_stl_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_focus_progression_VAL_stl_op_staff_tt
+			custom_effect_tooltip = VAL_stl_op_readiness_10_tt
+			unlock_decision_tooltip = VAL_stl_op_survey
+			unlock_decision_tooltip = VAL_stl_op_rifle_reserve
+			add_command_power = 15
+			add_political_power = 40
+			hidden_effect = {
+				set_temp_variable = { var = VAL_stl_op_gain value = 10 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	focus = {
+		id = VAL_stl_op_axis_assault
+		icon = GFX_focus_VAL_Seize_The_Northern_Passes
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 40
+		y = 18
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 4
+		prerequisite = { focus = VAL_stl_op_staff }
+		mutually_exclusive = { focus = VAL_stl_op_axis_landing focus = VAL_stl_op_axis_uprising }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_stl_op_can_prepare_tt
+				VAL_stl_op_can_prepare = yes
+			}
+		}
+		bypass = { VAL_stl_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_stl_op_axis_assault_tt
+			custom_effect_tooltip = VAL_stl_op_readiness_10_tt
+			unlock_decision_tooltip = VAL_stl_op_mountain_batteries
+			army_experience = 20
+			add_tech_bonus = { name = VAL_stl_op_axis_assault bonus = 0.5 uses = 1 category = artillery }
+			hidden_effect = {
+				set_variable = { var = VAL_stl_op_profile value = 1 }
+				set_temp_variable = { var = VAL_stl_op_gain value = 10 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_stl_op_axis_landing
+		icon = GFX_focus_VAL_Marine_Contract_Corps
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		x = 42
+		y = 18
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 4
+		prerequisite = { focus = VAL_stl_op_staff }
+		mutually_exclusive = { focus = VAL_stl_op_axis_assault focus = VAL_stl_op_axis_uprising }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_stl_op_can_prepare_tt
+				VAL_stl_op_can_prepare = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		bypass = { VAL_stl_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_stl_op_axis_landing_tt
+			custom_effect_tooltip = VAL_stl_op_readiness_10_tt
+			unlock_decision_tooltip = VAL_stl_op_fada_transports
+			navy_experience = 20
+			add_tech_bonus = { name = VAL_stl_op_axis_landing bonus = 0.5 uses = 1 category = naval_equipment }
+			hidden_effect = {
+				set_variable = { var = VAL_stl_op_profile value = 2 }
+				set_temp_variable = { var = VAL_stl_op_gain value = 10 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				ADISCORD_has_operational_naval_base = no
+			}
+		}
+	}
+
+	focus = {
+		id = VAL_stl_op_axis_uprising
+		icon = GFX_focus_VAL_Krutovs_Eyes
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_DECISIONS }
+		x = 44
+		y = 18
+		offset = {
+			x = 12
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 4
+		prerequisite = { focus = VAL_stl_op_staff }
+		mutually_exclusive = { focus = VAL_stl_op_axis_assault focus = VAL_stl_op_axis_landing }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_stl_op_can_prepare_tt
+				VAL_stl_op_can_prepare = yes
+			}
+		}
+		bypass = { VAL_stl_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_stl_op_axis_uprising_tt
+			custom_effect_tooltip = VAL_stl_op_readiness_10_tt
+			unlock_decision_tooltip = VAL_stl_op_fund_opposition
+			add_political_power = 50
+			add_command_power = 10
+			hidden_effect = {
+				set_variable = { var = VAL_stl_op_profile value = 4 }
+				set_temp_variable = { var = VAL_stl_op_gain value = 10 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 7 }
 	}
 
 	focus = {
@@ -3988,7 +4417,8 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Cross_Border_Contracts_tt
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			hidden_effect = { ADISCORD_economy_receive_100 = yes }
 			add_stability = 0.03
 			custom_effect_tooltip = VAL_cross_border_contracts_tt
 			hidden_effect = {
@@ -4127,7 +4557,8 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Returning_Buyers_tt
 			VAL_restore_arsenal_reputation = yes
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			hidden_effect = { ADISCORD_economy_receive_100 = yes }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 30 }
@@ -4153,7 +4584,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			VAL_advance_economic_recovery = yes
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = VAL_peace_treasury_100_tt
+			hidden_effect = { ADISCORD_economy_receive_100 = yes }
 			random_owned_controlled_state = {
 				limit = {
 					is_core_of = ROOT
@@ -4235,6 +4667,43 @@ focus_tree = {
 			country_event = { id = val_rework.160 }
 		}
 		ai_will_do = { base = 30 }
+	}
+
+	# The player chooses when the campaign tree ends: loading the postwar tree
+	# removes the remaining wartime focuses, so it waits for peace and the commonwealth.
+	focus = {
+		id = VAL_Peace_Without_Orders
+		dynamic = yes
+		allow_branch = {
+			OR = {
+				has_completed_focus = VAL_Campaign_Secured
+				has_completed_focus = VAL_Returning_Buyers
+			}
+		}
+		icon = GFX_focus_VAL_Return_To_World_Market
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_RECOVERY }
+		x = 22
+		y = 18
+		cost = 2
+		prerequisite = { focus = VAL_Reopen_Trade_Routes focus = VAL_Settle_Industrial_Debts }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_peace_without_orders_commonwealth_tt
+				has_country_flag = VAL_commonwealth_proclaimed
+			}
+			has_war = no
+			is_subject = no
+		}
+		completion_reward = {
+			custom_effect_tooltip = VAL_next_chapter_tt
+			if = {
+				limit = { has_idea = VAL_regional_settlement }
+				remove_ideas = VAL_regional_settlement
+			}
+			custom_effect_tooltip = VAL_peace_without_orders_crisis_tt
+			hidden_effect = { country_event = { id = val_rework.124 } }
+		}
+		ai_will_do = { base = 200 }
 	}
 
 	# --- Advanced-material economic development ---
@@ -4526,6 +4995,52 @@ focus_tree = {
 		}
 	}
 
+	# --- Bezhaysk operation staff ---
+	# The staff prepares VAL_bjk_op_readiness; the plan is chosen in val_rework.212.
+	# VAL_Bezhaysk_Operation below declares the war and spends it.
+	focus = {
+		id = VAL_bjk_op_staff
+		dynamic = yes
+		allow_branch = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+		}
+		icon = GFX_focus_VAL_Contract_General_Staff
+		x = 42
+		y = 10
+		offset = {
+			x = 26
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 3
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_bjk_op_can_prepare_tt
+				VAL_bjk_op_can_prepare = yes
+			}
+		}
+		bypass = { VAL_bjk_op_moment_passed = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_focus_progression_VAL_bjk_op_staff_tt
+			custom_effect_tooltip = VAL_bjk_op_readiness_15_tt
+			custom_effect_tooltip = VAL_bjk_op_plan_choice_tt
+			unlock_decision_tooltip = VAL_bjk_op_survey
+			unlock_decision_tooltip = VAL_bjk_op_siege_train
+			unlock_decision_tooltip = VAL_bjk_op_depots
+			add_command_power = 15
+			army_experience = 10
+			hidden_effect = {
+				set_temp_variable = { var = VAL_bjk_op_gain value = 15 }
+				VAL_bjk_op_add_readiness = yes
+				country_event = { id = val_rework.212 days = 1 }
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
 	focus = {
 		id = VAL_Bezhaysk_Operation
 		dynamic = yes
@@ -4543,7 +5058,14 @@ focus_tree = {
 		cost = 5
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
-		available = { custom_trigger_tooltip = { tooltip = VAL_bezhaysk_operation_available_tt VAL_can_attack_bezhaysk = yes } }
+		prerequisite = { focus = VAL_bjk_op_staff }
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_bezhaysk_operation_available_tt VAL_can_attack_bezhaysk = yes }
+			custom_trigger_tooltip = {
+				tooltip = VAL_bjk_op_readiness_30_needed_tt
+				check_variable = { var = VAL_bjk_op_readiness value = 30 compare = greater_than_or_equals }
+			}
+		}
 		# Bezhaysk can already be settled by the authored northern campaign.
 		bypass = {
 			OR = {
@@ -4554,6 +5076,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_declares_war_bezhaysk_tt
+			custom_effect_tooltip = VAL_bjk_op_launch_bonus_tt
 			# Availability is continuously checked by cancel_if_invalid. Rechecking the
 			# full gate on the completion tick could silently consume the focus without war.
 			declare_war_on = { target = BJK type = annex_everything }
@@ -4561,6 +5084,8 @@ focus_tree = {
 				set_country_flag = ADISCORD_bezhaysk_campaign_active
 				ADISCORD_bezhaysk_join_val_campaign = yes
 				VAL_call_subjects_to_wars = yes
+				VAL_bjk_reinforce_city = yes
+				VAL_bjk_op_apply_launch = yes
 			}
 		}
 		ai_will_do = { base = 5 }

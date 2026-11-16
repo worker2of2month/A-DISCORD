@@ -2354,6 +2354,7 @@
  STP_ps_expedition_nod_desc: "Staff specialists will meet the Nodrul commanders. They must agree on communications, supply and joint conferences."
  STP_ps_exile: "Party Representation in Nodrul"
  STP_ps_cancel_nod: "Cancel Northern Package Preparation"
+ STP_ps_cancel_nod_tt:0 "Preparation of the northern package stops. The receipt is refunded in full: money to the treasury, the arms package's weapons to the stockpile."
  STP_ps_nod_dispatch: "Preparing the Northern Package"
  STP_ps_nod_delivery: "Northern Package in Transit"
  STP_ps_agreement_title: "A Protocol with Stelander"

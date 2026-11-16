@@ -36,7 +36,8 @@ ADISCORD_doctrine_restoration_general_staff = {
 			category_all_infantry = { default_morale = 0.05 }
 		}
 		{
-			supply_consumption_factor = -0.04
+			supply_consumption_factor = -0.02
+			field_hospital = { casualty_trickleback = 0.05 }
 			category_support_battalions = { max_organisation = 3 }
 		}
 	}
@@ -154,7 +155,14 @@ ADISCORD_doctrine_raiding_columns = {
 		}
 		{
 			ADISCORD_mechanized_infantry = { supply_consumption = -0.06 }
-			ADISCORD_combat_platform = { reliability = 0.06 }
+			logistics_company = {
+				battalion_mult = {
+					category = category_vehicle_infantry
+					max_organisation = 2
+					add = yes
+				}
+			}
+			recon = { recon = 0.5 }
 		}
 	}
 }
@@ -196,8 +204,15 @@ ADISCORD_doctrine_remote_engagement = {
 			coordination_bonus = 0.03
 		}
 		{
-			ADISCORD_line_artillery = { soft_attack = 0.10 }
-			max_planning = 0.05
+			category_artillery = { soft_attack = 0.08 }
+			ADISCORD_drone_recon_company = {
+				battalion_mult = {
+					category = category_artillery
+					soft_attack = 0.04
+				}
+			}
+			ADISCORD_ew_company = { air_attack = 0.20 }
+			max_planning = 0.03
 		}
 	}
 }
@@ -241,6 +256,13 @@ ADISCORD_doctrine_autonomous_strongpoints = {
 		}
 		{
 			engineer = { defense = 0.10 }
+			military_police = { suppression = 0.5 }
+			ADISCORD_decontamination_company = {
+				battalion_mult = {
+					category = category_all_infantry
+					defense = 0.03
+				}
+			}
 			max_dig_in = 2
 		}
 	}

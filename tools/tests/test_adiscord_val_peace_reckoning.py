@@ -122,6 +122,14 @@ class ReckoningWorld(ContractWorld):
             elif row.key == "free_building_slots":
                 if self.data[scope].get("free_slots", 0) <= 0:
                     return False
+            elif row.key == "has_idea":
+                if row.value not in self.data[scope].get("ideas", set()):
+                    return False
+            elif row.key == "has_army_size":
+                op, threshold = row.value[1].value, float(row.value[2].value)
+                current = self.data[scope].get("divisions", 0)
+                if not (current < threshold if op == "<" else current > threshold):
+                    return False
             elif isinstance(row.value, list) and self.is_scope(row.key):
                 if not self.enter(row.value, scope, self.resolve(row.key, scope), self.matches):
                     return False
@@ -294,6 +302,98 @@ class ReckoningMechanicsTests(unittest.TestCase):
         self.assertAlmostEqual(values["VAL_peace_military_income"], 0.0)
         self.assertIn("VAL_peace_crisis", world.data["VAL"]["modifiers"])
 
+    def test_idle_army_costs_consumer_goods_by_tier_and_settled_veterans_halve_it(self):
+        modifier = block(entries("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
+                         "VAL_peace_crisis")
+        self.assertEqual(scalar(modifier, "consumer_goods_factor"), "VAL_peace_idle_army")
+        world = ReckoningWorld().crisis(strike=20)
+        values = world.data["VAL"]["vars"]
+        for divisions, expected in ((10, 0), (24, 0.02), (36, 0.04), (48, 0.06)):
+            with self.subTest(divisions=divisions):
+                world.data["VAL"]["divisions"] = divisions
+                world.run("VAL_peace_refresh")
+                self.assertAlmostEqual(values["VAL_peace_idle_army"], expected)
+        world.data["VAL"]["focuses"].add("VAL_peace_land_for_service")
+        world.run("VAL_peace_refresh")
+        self.assertAlmostEqual(values["VAL_peace_idle_army"], 0.03)
+        teardown = {e.key: e.value for e in entries(EFFECTS)}["VAL_peace_close_crisis"]
+        self.assertIn("VAL_peace_idle_army", [e.value for e in teardown if e.key == "clear_variable"])
+
+    def test_refused_coup_becomes_a_mutiny_whose_defeat_reopens_the_reckoning(self):
+        effects = {e.key: e.value for e in entries(EFFECTS)}
+        begin = effects["VAL_peace_mutiny_begin"]
+        splits = [e.value for e in walk(begin) if e.key == "start_civil_war"]
+        self.assertEqual(sorted(scalar(s, "army_ratio") for s in splits), ["0.20", "0.35"])
+        loyal = block(block(begin, "if"), "if")
+        self.assertEqual(scalar(block(loyal, "limit"), "has_completed_focus"), "VAL_peace_loyal_battalions")
+        self.assertEqual(scalar(block(loyal, "start_civil_war"), "army_ratio"), "0.20")
+        cached = [e.value for e in walk(begin) if e.key == "random_other_country"][0]
+        self.assertEqual(scalar(cached, "save_global_event_target_as"), "VAL_peace_mutineers")
+        hook = block(entries("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"), "on_actions")
+        weekly = block(block(hook, "on_weekly_VAL"), "effect")
+        self.assertEqual(scalar(weekly, "VAL_peace_mutiny_weekly"), "yes")
+
+        world = ReckoningWorld().crisis(strike=60, balance=0.95)
+        country = world.data["VAL"]
+        country["flags"] = {"VAL_peace_mutiny_active", "VAL_peace_reckoning_sent"}
+        country["vars"]["VAL_peace_arrears"] = 4
+        resolution = block(effects["VAL_peace_mutiny_weekly"], "if")
+        world.execute([e for e in resolution if e.key != "limit"])
+        self.assertIn("VAL_peace_plot_exposed", country["flags"])
+        self.assertNotIn("VAL_peace_mutiny_active", country["flags"])
+        self.assertNotIn("VAL_peace_reckoning_sent", country["flags"])
+        self.assertAlmostEqual(country["bop"]["VAL_peace_balance"], -0.40)
+        self.assertEqual(country["vars"]["VAL_peace_arrears"], 0)
+        self.assertIn(("VAL", "val_peace.111"), world.events)
+        self.assertFalse(world.matches(world.triggers["VAL_peace_captains_forced"]))
+        option = block(country_event("val_peace.111"), "option")
+        self.assertEqual(scalar(block(block(option, "if"), "hidden_effect"), "VAL_peace_open_reckoning"), "yes")
+
+    def test_early_reckoning_pays_the_lasting_rewards_of_skipped_trunk_focuses(self):
+        effects = {e.key: e.value for e in entries(EFFECTS)}
+        teardown = [e.key for e in effects["VAL_peace_close_crisis"]]
+        self.assertLess(teardown.index("VAL_peace_settle_open_bills"), teardown.index("VAL_peace_complete_recovery"))
+        settled = set()
+        for row in effects["VAL_peace_settle_open_bills"]:
+            self.assertEqual(row.key, "if")
+            limit = block(row.value, "limit")
+            settled |= {scalar(e.value, "has_completed_focus") for e in limit if e.key == "NOT"}
+            self.assertTrue([e for e in row.value if e.key != "limit"])
+        focuses = tree_focuses()
+        lasting = {"VAL_peace_silent_lines", "VAL_peace_captains_bill", "VAL_peace_registry_audit",
+                   "VAL_peace_share_ledger", "VAL_peace_loyal_battalions", "VAL_peace_kilnet",
+                   "VAL_peace_water_convoys", "VAL_peace_gate_garrison"}
+        self.assertEqual(settled, lasting)
+        for name in lasting - {"VAL_peace_silent_lines"}:
+            self.assertEqual(scalar(block(focuses[name], "bypass"), "VAL_peace_regime_chosen"), "yes", name)
+        options = [e.value for e in country_event("val_peace.40") if e.key == "option"]
+        shown = [o for o in options if "VAL_peace_open_bills_tt" in
+                 [e.value for e in walk(o) if e.key == "custom_effect_tooltip"]]
+        self.assertEqual(len(shown), 4)
+
+    def test_eastern_lane_pays_out_when_no_contest_is_coming(self):
+        focuses = tree_focuses()
+        for name in ("VAL_east_trade_missions", "VAL_east_krutov_network", "VAL_east_border_posts",
+                     "VAL_east_shards", "VAL_east_arsenal"):
+            with self.subTest(focus=name):
+                self.assertFalse([e for e in focuses[name] if e.key == "bypass"])
+        for name in ("VAL_east_trade_missions", "VAL_east_krutov_network", "VAL_east_border_posts",
+                     "VAL_east_shards"):
+            with self.subTest(focus=name):
+                reward = block(focuses[name], "completion_reward")
+                branch = block(reward, "if")
+                gate = block(block(branch, "limit"), "custom_trigger_tooltip")
+                self.assertEqual(scalar(gate, "VAL_east_contest_ahead"), "yes")
+                self.assertTrue(block(reward, "else"))
+        self.assertEqual(scalar(block(focuses["VAL_east_final"], "bypass"), "has_global_flag"),
+                         "VAL_east_final_resolved")
+        world = ReckoningWorld()
+        ahead = world.triggers["VAL_east_contest_ahead"]
+        world.global_flags = {"VAL_east_contest_started"}
+        self.assertTrue(world.matches(ahead, "VAL"))
+        world.global_flags = {"VAL_east_contest_started", "VAL_east_contest_closed"}
+        self.assertFalse(world.matches(ahead, "VAL"))
+
     def test_monthly_strike_slows_with_the_answer_and_restored_works(self):
         for focus, works, expected in (
             (None, 0, 26), ("VAL_peace_workers_charter", 0, 22), ("VAL_peace_land_for_service", 0, 23),
@@ -360,7 +460,8 @@ class ReckoningMechanicsTests(unittest.TestCase):
     def test_the_reckoning_always_offers_an_answer_and_the_coup_is_exclusive(self):
         options = [e.value for e in country_event("val_peace.40") if e.key == "option"]
         answers = {scalar(option, "name"): block(option, "trigger") for option in options}
-        self.assertEqual(set(answers), {"val_peace.40.a", "val_peace.40.b", "val_peace.40.c", "val_peace.40.e"})
+        self.assertEqual(set(answers), {"val_peace.40.a", "val_peace.40.b", "val_peace.40.c",
+                                        "val_peace.40.e", "val_peace.40.f"})
         balances = [round(-1 + 0.05 * step, 2) for step in range(41)]
         world = ReckoningWorld()
         country = world.data["VAL"]
@@ -384,9 +485,9 @@ class ReckoningMechanicsTests(unittest.TestCase):
             with self.subTest(balance=balance, strike=strike, answer=answer, truth=truth, told=told, file=file):
                 self.assertTrue(available)
                 if forced:
-                    self.assertEqual(available, {"val_peace.40.e"})
+                    self.assertEqual(available, {"val_peace.40.e", "val_peace.40.f"})
                 else:
-                    self.assertNotIn("val_peace.40.e", available)
+                    self.assertFalse(available & {"val_peace.40.e", "val_peace.40.f"})
 
     def test_the_balance_extremes_send_the_coup_or_expose_the_plot(self):
         balance = block(entries("common/bop/VAL.txt"), "VAL_peace_balance")
@@ -436,7 +537,7 @@ class ReckoningMechanicsTests(unittest.TestCase):
 
     def test_closing_the_crisis_removes_only_crisis_state_and_completes_recovery(self):
         world = ReckoningWorld().crisis(strike=60, balance=0.3)
-        world.intercept = {"VAL_peace_complete_recovery"}
+        world.intercept = {"VAL_peace_complete_recovery", "VAL_peace_settle_open_bills"}
         world.data["VAL"]["modifiers"].update({"VAL_peace_crisis", "VAL_peace_order"})
         world.data["VAL"]["missions"].add("VAL_peace_reckoning")
         world.run("VAL_peace_close_crisis")
@@ -444,7 +545,7 @@ class ReckoningMechanicsTests(unittest.TestCase):
         self.assertNotIn("VAL_peace_balance", country["bop"])
         self.assertEqual(country["modifiers"], {"VAL_peace_order"})
         self.assertFalse({k for k in country["vars"] if k.startswith("VAL_peace_") and not k.startswith("VAL_peace_order")})
-        self.assertEqual(world.calls, [("VAL", "VAL_peace_complete_recovery")])
+        self.assertEqual(world.calls, [("VAL", "VAL_peace_settle_open_bills"), ("VAL", "VAL_peace_complete_recovery")])
         complete = [e.key for e in block(entries(EFFECTS), "VAL_peace_complete_recovery")]
         self.assertLess(complete.index("set_country_flag"), complete.index("VAL_advance_economic_recovery"))
 
@@ -532,6 +633,18 @@ class EastFinalWarTests(unittest.TestCase):
         for hook in ("on_peace", "on_annex", "on_puppet"):
             section = text[text.index(f"# BEGIN east_final:{hook}"):text.index(f"# END east_final:{hook}")]
             self.assertIn("VAL_east_final_close_external = yes", section)
+
+    def test_republic_defeat_waits_for_the_champion_settlement(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        text = (ROOT / PEACE).read_text(encoding="utf-8")
+        capitulation = text[text.index("# BEGIN east_final:on_capitulation"):text.index("# END east_final:on_capitulation")]
+        router = next(e.value for e in parse_clausewitz(capitulation) if e.key == "if")
+        branches = [e for e in router if e.key in ("if", "else_if", "else")]
+        self.assertEqual([e.key for e in branches], ["if", "else_if", "else_if", "else"])
+        self.assertEqual(branches[-1].value[0].key, "set_global_flag")
+        self.assertEqual(branches[-1].value[0].value, "skip_default_capitulation")
+        self.assertEqual(len(branches[-1].value), 1)
 
     def test_every_terminal_path_closes_campaign_state(self):
         effects = {e.key: e.value for e in entries(EFFECTS)}

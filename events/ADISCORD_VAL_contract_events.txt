@@ -2891,6 +2891,44 @@ country_event = {
 	option = { name = val_contract.378.a }
 }
 
+# VAL: the resource-war aid reward has been paid. The caller applies the reward
+# before dispatch; the concession flags tell the island rights from the NAM fee.
+country_event = {
+	id = val_contract.379
+	title = val_contract.379.t
+	desc = {
+		text = val_contract.379.d_nam_concession
+		trigger = { has_country_flag = VAL_nam_concession_active }
+	}
+	desc = {
+		text = val_contract.379.d_efl_concession
+		trigger = { has_country_flag = VAL_efl_concession_active }
+	}
+	desc = {
+		text = val_contract.379.d_nam_fee
+		trigger = {
+			NOT = { has_country_flag = VAL_nam_concession_active }
+			NOT = { has_country_flag = VAL_efl_concession_active }
+		}
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_contract.379.a
+		if = {
+			limit = { hidden_trigger = { has_country_flag = VAL_nam_concession_active } }
+			custom_effect_tooltip = VAL_nam_concession_received_tt
+		}
+		else_if = {
+			limit = { hidden_trigger = { has_country_flag = VAL_efl_concession_active } }
+			custom_effect_tooltip = VAL_efl_concession_received_tt
+		}
+		else = {
+			custom_effect_tooltip = VAL_nam_aid_fee_received_tt
+		}
+	}
+}
+
 country_event = {
 	id = val_contract.401
 	title = VAL_order_offer_title
@@ -4145,6 +4183,325 @@ country_event = {
 	option = { name = val_rework.198.a }
 }
 
+# COUNTRY VAL. Readiness of the northern operation has reached 40 once.
+# Hurrying spends time on the escalation clock; concealment spends power.
+country_event = {
+	id = val_rework.205
+	title = val_rework.205.t
+	desc = val_rework.205.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { VAL_nod_op_can_prepare = yes }
+	option = {
+		name = val_rework.205.a
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = VAL_nod_op_escalation_15_tt
+		custom_effect_tooltip = VAL_nod_op_readiness_5_tt
+		hidden_effect = {
+			if = {
+				limit = { has_variable = VAL_final_escalation }
+				add_to_variable = { var = VAL_final_escalation value = 15 }
+				clamp_variable = { var = VAL_final_escalation min = 0 max = 100 }
+			}
+			set_temp_variable = { var = VAL_nod_op_gain value = 5 }
+			VAL_nod_op_add_readiness = yes
+		}
+	}
+	option = {
+		name = val_rework.205.b
+		trigger = {
+			NOT = { has_political_power < 35 }
+			NOT = { command_power < 10 }
+		}
+		ai_chance = { base = 50 }
+		add_political_power = -35
+		add_command_power = -10
+	}
+}
+
+# COUNTRY VAL. Reports the opening bonus paid by VAL_nod_op_apply_launch.
+country_event = {
+	id = val_rework.206
+	title = val_rework.206.t
+	desc = val_rework.206.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = val_rework.206.a
+		custom_effect_tooltip = VAL_op_launch_tier_tt
+	}
+}
+
+# COUNTRY VAL. Readiness of the Stelander operation has reached 40 once.
+# Open pressure raises readiness and the target's resolve; denial costs power.
+country_event = {
+	id = val_rework.207
+	title = val_rework.207.t
+	desc = val_rework.207.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { VAL_stl_op_can_prepare = yes }
+	option = {
+		name = val_rework.207.a
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = VAL_stl_op_readiness_5_tt
+		custom_effect_tooltip = VAL_stl_op_target_resolve_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_stl_op_gain value = 5 }
+			VAL_stl_op_add_readiness = yes
+			STP = {
+				if = {
+					limit = { VAL_stelander_ultimatum_target = yes }
+					add_war_support = 0.05
+				}
+			}
+			STS = {
+				if = {
+					limit = { VAL_stelander_ultimatum_target = yes }
+					add_war_support = 0.05
+				}
+			}
+		}
+	}
+	option = {
+		name = val_rework.207.b
+		trigger = {
+			NOT = { has_political_power < 35 }
+			NOT = { command_power < 10 }
+		}
+		ai_chance = { base = 50 }
+		add_political_power = -35
+		add_command_power = -10
+	}
+}
+
+# COUNTRY VAL. Reports the opening bonus of the Stelander campaign.
+country_event = {
+	id = val_rework.208
+	title = val_rework.208.t
+	desc = val_rework.208.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = val_rework.208.a
+		custom_effect_tooltip = VAL_op_launch_tier_tt
+	}
+}
+
+# COUNTRY VAL. The coalition plan is chosen once by the staff focus; each option
+# sets the profile read by VAL_nc_op_apply_launch and opens its own order.
+country_event = {
+	id = val_rework.209
+	title = val_rework.209.t
+	desc = val_rework.209.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		VAL_nc_op_can_prepare = yes
+		NOT = { has_variable = VAL_nc_op_profile }
+	}
+	option = {
+		name = val_rework.209.a
+		ai_chance = { base = 40 }
+		custom_effect_tooltip = VAL_nc_op_plan_assault_tt
+		custom_effect_tooltip = VAL_nc_op_readiness_10_tt
+		unlock_decision_tooltip = VAL_nc_op_assault_guns
+		hidden_effect = {
+			set_variable = { var = VAL_nc_op_profile value = 1 }
+			set_temp_variable = { var = VAL_nc_op_gain value = 10 }
+			VAL_nc_op_add_readiness = yes
+		}
+	}
+	option = {
+		name = val_rework.209.b
+		ai_chance = { base = 40 }
+		custom_effect_tooltip = VAL_nc_op_plan_forest_tt
+		custom_effect_tooltip = VAL_nc_op_readiness_10_tt
+		unlock_decision_tooltip = VAL_nc_op_forest_rangers
+		hidden_effect = {
+			set_variable = { var = VAL_nc_op_profile value = 3 }
+			set_temp_variable = { var = VAL_nc_op_gain value = 10 }
+			VAL_nc_op_add_readiness = yes
+		}
+	}
+	option = {
+		name = val_rework.209.c
+		trigger = { ADISCORD_has_operational_naval_base = yes }
+		ai_chance = { base = 20 }
+		custom_effect_tooltip = VAL_nc_op_plan_landing_tt
+		custom_effect_tooltip = VAL_nc_op_readiness_10_tt
+		unlock_decision_tooltip = VAL_nc_op_coastal_transports
+		hidden_effect = {
+			set_variable = { var = VAL_nc_op_profile value = 2 }
+			set_temp_variable = { var = VAL_nc_op_gain value = 10 }
+			VAL_nc_op_add_readiness = yes
+		}
+	}
+}
+
+# COUNTRY VAL. Readiness against the coalition has reached 40 once.
+country_event = {
+	id = val_rework.210
+	title = val_rework.210.t
+	desc = val_rework.210.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { VAL_nc_op_can_prepare = yes }
+	option = {
+		name = val_rework.210.a
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = VAL_nc_op_readiness_5_tt
+		custom_effect_tooltip = VAL_nc_op_coalition_resolve_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_nc_op_gain value = 5 }
+			VAL_nc_op_add_readiness = yes
+			YPR = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = 0.05
+				}
+			}
+			COF = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = 0.05
+				}
+			}
+			TFF = {
+				if = {
+					limit = {
+						exists = yes
+						is_subject = no
+					}
+					add_war_support = 0.05
+				}
+			}
+		}
+	}
+	option = {
+		name = val_rework.210.b
+		trigger = {
+			NOT = { has_political_power < 35 }
+			NOT = { command_power < 10 }
+		}
+		ai_chance = { base = 50 }
+		add_political_power = -35
+		add_command_power = -10
+	}
+}
+
+# COUNTRY VAL. Reports the opening bonus of the coalition campaign.
+country_event = {
+	id = val_rework.211
+	title = val_rework.211.t
+	desc = val_rework.211.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = val_rework.211.a
+		custom_effect_tooltip = VAL_op_launch_tier_tt
+	}
+}
+
+# COUNTRY VAL. The Bezhaysk plan is chosen once by the staff focus; each option
+# sets the profile read by VAL_bjk_op_apply_launch and opens its own order.
+country_event = {
+	id = val_rework.212
+	title = val_rework.212.t
+	desc = val_rework.212.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		VAL_bjk_op_can_prepare = yes
+		NOT = { has_variable = VAL_bjk_op_profile }
+	}
+	option = {
+		name = val_rework.212.a
+		ai_chance = { base = 40 }
+		custom_effect_tooltip = VAL_bjk_op_plan_assault_tt
+		custom_effect_tooltip = VAL_bjk_op_readiness_10_tt
+		unlock_decision_tooltip = VAL_bjk_op_storm_groups
+		hidden_effect = {
+			set_variable = { var = VAL_bjk_op_profile value = 1 }
+			set_temp_variable = { var = VAL_bjk_op_gain value = 10 }
+			VAL_bjk_op_add_readiness = yes
+		}
+	}
+	option = {
+		name = val_rework.212.b
+		ai_chance = { base = 40 }
+		custom_effect_tooltip = VAL_bjk_op_plan_siege_tt
+		custom_effect_tooltip = VAL_bjk_op_readiness_10_tt
+		unlock_decision_tooltip = VAL_bjk_op_blockade
+		hidden_effect = {
+			set_variable = { var = VAL_bjk_op_profile value = 3 }
+			set_temp_variable = { var = VAL_bjk_op_gain value = 10 }
+			VAL_bjk_op_add_readiness = yes
+		}
+	}
+	option = {
+		name = val_rework.212.c
+		ai_chance = { base = 20 }
+		custom_effect_tooltip = VAL_bjk_op_plan_treason_tt
+		custom_effect_tooltip = VAL_bjk_op_readiness_10_tt
+		unlock_decision_tooltip = VAL_bjk_op_council_contacts
+		hidden_effect = {
+			set_variable = { var = VAL_bjk_op_profile value = 4 }
+			set_temp_variable = { var = VAL_bjk_op_gain value = 10 }
+			VAL_bjk_op_add_readiness = yes
+		}
+	}
+}
+
+# COUNTRY VAL. Readiness against Bezhaysk has reached 40 once.
+country_event = {
+	id = val_rework.213
+	title = val_rework.213.t
+	desc = val_rework.213.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { VAL_bjk_op_can_prepare = yes }
+	option = {
+		name = val_rework.213.a
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = VAL_bjk_op_readiness_5_tt
+		custom_effect_tooltip = VAL_bjk_op_city_resolve_tt
+		hidden_effect = {
+			set_temp_variable = { var = VAL_bjk_op_gain value = 5 }
+			VAL_bjk_op_add_readiness = yes
+			BJK = {
+				if = {
+					limit = { exists = yes }
+					add_war_support = 0.05
+				}
+			}
+		}
+	}
+	option = {
+		name = val_rework.213.b
+		trigger = {
+			NOT = { has_political_power < 35 }
+			NOT = { command_power < 10 }
+		}
+		ai_chance = { base = 50 }
+		add_political_power = -35
+		add_command_power = -10
+	}
+}
+
+# COUNTRY VAL. Reports the opening bonus of the Bezhaysk operation.
+country_event = {
+	id = val_rework.214
+	title = val_rework.214.t
+	desc = val_rework.214.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = val_rework.214.a
+		custom_effect_tooltip = VAL_op_launch_tier_tt
+	}
+}
+
 # COUNTRY VAL; FROM is the republic that has just left its alliance.
 country_event = {
 	id = val_rework.184
@@ -5370,6 +5727,7 @@ country_event = {
 	trigger = { VAL_peace_crisis_active = yes }
 	option = {
 		name = val_peace.23.a
+		add_timed_idea = { idea = VAL_peace_general_strike days = 120 }
 		custom_effect_tooltip = VAL_peace_general_strike_tt
 		hidden_effect = { VAL_peace_open_reckoning = yes }
 	}
@@ -5395,6 +5753,7 @@ country_event = {
 	option = {
 		name = val_peace.24.b
 		ai_chance = { base = 40 }
+		add_manpower = 4000
 		add_stability = -0.03
 		add_power_balance_value = { id = VAL_peace_balance value = 0.05 }
 		custom_effect_tooltip = VAL_peace_strike_plus_10_tt
@@ -5601,6 +5960,10 @@ country_event = {
 			custom_effect_tooltip = VAL_peace_throne_solgalov_tt
 		}
 		custom_effect_tooltip = VAL_peace_recovery_tt
+		if = {
+			limit = { NOT = { has_completed_focus = VAL_peace_night_of_registers } }
+			custom_effect_tooltip = VAL_peace_open_bills_tt
+		}
 		hidden_effect = { VAL_peace_adopt_throne = yes }
 	}
 	option = {
@@ -5619,6 +5982,10 @@ country_event = {
 			custom_effect_tooltip = VAL_peace_cabinet_solgalov_tt
 		}
 		custom_effect_tooltip = VAL_peace_recovery_tt
+		if = {
+			limit = { NOT = { has_completed_focus = VAL_peace_night_of_registers } }
+			custom_effect_tooltip = VAL_peace_open_bills_tt
+		}
 		hidden_effect = { VAL_peace_adopt_cabinet = yes }
 	}
 	option = {
@@ -5637,16 +6004,40 @@ country_event = {
 			custom_effect_tooltip = VAL_peace_charter_solgalov_tt
 		}
 		custom_effect_tooltip = VAL_peace_recovery_tt
+		if = {
+			limit = { NOT = { has_completed_focus = VAL_peace_night_of_registers } }
+			custom_effect_tooltip = VAL_peace_open_bills_tt
+		}
 		hidden_effect = { VAL_peace_adopt_charter = yes }
 	}
 	option = {
 		name = val_peace.40.e
 		trigger = { VAL_peace_captains_forced = yes }
-		ai_chance = { base = 100 }
+		ai_chance = { base = 90 }
 		effect_tooltip = { add_ideas = VAL_peace_captains_delta }
 		custom_effect_tooltip = VAL_peace_captains_coup_tt
 		custom_effect_tooltip = VAL_peace_recovery_tt
+		if = {
+			limit = { NOT = { has_completed_focus = VAL_peace_night_of_registers } }
+			custom_effect_tooltip = VAL_peace_open_bills_tt
+		}
 		hidden_effect = { VAL_peace_adopt_captains = yes }
+	}
+	# Refusing the coup turns it into a civil war; the reckoning waits for its end.
+	option = {
+		name = val_peace.40.f
+		trigger = { VAL_peace_captains_forced = yes }
+		ai_chance = { base = 10 }
+		if = {
+			limit = { has_completed_focus = VAL_peace_loyal_battalions }
+			custom_effect_tooltip = VAL_peace_mutiny_loyal_split_tt
+		}
+		else = {
+			custom_effect_tooltip = VAL_peace_mutiny_split_tt
+		}
+		effect_tooltip = { add_ideas = VAL_peace_mutiny_loyalists }
+		custom_effect_tooltip = VAL_peace_mutiny_outcome_tt
+		hidden_effect = { VAL_peace_mutiny_begin = yes }
 	}
 }
 
@@ -6149,6 +6540,39 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { tag = VAL }
 	option = { name = val_peace.88.a }
+}
+
+# COUNTRY VAL. The mutineers' country is gone; VAL_peace_mutiny_weekly has
+# already exposed the plot, so the reckoning reopens without the captains.
+country_event = {
+	id = val_peace.111
+	title = val_peace.111.t
+	desc = val_peace.111.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_peace.111.a
+		army_experience = 25
+		add_command_power = 50
+		add_war_support = -0.05
+		if = {
+			limit = { VAL_peace_crisis_active = yes }
+			custom_effect_tooltip = VAL_peace_mutiny_crushed_tt
+			hidden_effect = { VAL_peace_open_reckoning = yes }
+		}
+	}
+}
+
+# COUNTRY VAL. Flavour for the focus that prepares the loyal battalions.
+country_event = {
+	id = val_peace.112
+	title = val_peace.112.t
+	desc = val_peace.112.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = { name = val_peace.112.a }
 }
 
 # --- east_contest ---

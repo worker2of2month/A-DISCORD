@@ -3984,7 +3984,7 @@ BRANCHES = (
                 "ADISCORD_equipment_medical_drone",
                 2161,
                 (
-                    "field_hospital = { casualty_trickleback = 0.045 experience_loss_factor = -0.027 }",
+                    "field_hospital = { casualty_trickleback = 0.07 }",
                 ),
             ),
             (
@@ -3994,7 +3994,7 @@ BRANCHES = (
                 "ADISCORD_equipment_casualty_monitor",
                 2162,
                 (
-                    'field_hospital = { casualty_trickleback = 0.03 experience_loss_factor = -0.02 }',
+                    "field_hospital = { experience_loss_factor = -0.06 }",
                 ),
             ),
             (
@@ -4004,7 +4004,7 @@ BRANCHES = (
                 "ADISCORD_equipment_medical",
                 2167,
                 (
-                    'field_hospital = { casualty_trickleback = 0.03 experience_loss_factor = -0.05 }',
+                    "field_hospital = { casualty_trickleback = 0.05 max_organisation = 3 }",
                 ),
             ),
             (
@@ -4014,7 +4014,7 @@ BRANCHES = (
                 "ADISCORD_equipment_medical",
                 2169,
                 (
-                    'field_hospital = { experience_loss_factor = -0.04 casualty_trickleback = 0.03 }',
+                    "field_hospital = { casualty_trickleback = 0.07 }",
                 ),
             ),
             (
@@ -4024,7 +4024,7 @@ BRANCHES = (
                 "ADISCORD_equipment_medical",
                 2172,
                 (
-                    "field_hospital = { casualty_trickleback = 0.059 experience_loss_factor = -0.033 }",
+                    "field_hospital = { experience_loss_factor = -0.07 }",
                 ),
             ),
             (
@@ -4034,7 +4034,8 @@ BRANCHES = (
                 "ADISCORD_equipment_medical",
                 2175,
                 (
-                    'field_hospital = { casualty_trickleback = 0.08 experience_loss_factor = -0.05 supply_consumption = -0.04 }',
+                    "field_hospital = { casualty_trickleback = 0.04 experience_loss_factor = -0.04 max_strength = 0.5 supply_consumption = -0.04 }",
+                    "army_morale_factor = 0.03",
                 ),
             ),
         ),
@@ -4095,7 +4096,7 @@ BRANCHES = (
                 "support_equipment_1",
                 2165,
                 (
-                    'maintenance_company = { reliability_factor = 0.03 }',
+                    "category_support_battalions = { max_organisation = 2 }",
                 ),
             ),
             (
@@ -4105,7 +4106,8 @@ BRANCHES = (
                 "basic_construction",
                 2166,
                 (
-                    'maintenance_company = { equipment_capture_factor = 0.03 }',
+                    "maintenance_company = { reliability_factor = 0.04 equipment_capture_factor = 0.02 }",
+                    "truck_attrition_factor = -0.05",
                 ),
             ),
             (
@@ -4115,7 +4117,8 @@ BRANCHES = (
                 "improved_construction",
                 2170,
                 (
-                    'maintenance_company = { equipment_capture_factor = 0.04 reliability_factor = 0.02 }',
+                    "maintenance_company = { reliability_factor = 0.04 equipment_capture_factor = 0.04 }",
+                    "ADISCORD_recovery_platform = { reliability_factor = 0.03 equipment_capture_factor = 0.03 }",
                 ),
             ),
             (
@@ -4125,7 +4128,7 @@ BRANCHES = (
                 "support_equipment_1",
                 2173,
                 (
-                    'maintenance_company = { reliability_factor = 0.03 supply_consumption = -0.05 }',
+                    "category_support_battalions = { supply_consumption = -0.03 }",
                 ),
             ),
             (
@@ -4135,7 +4138,7 @@ BRANCHES = (
                 "support_equipment_1",
                 2180,
                 (
-                    'maintenance_company = { reliability_factor = 0.04 equipment_capture_factor = 0.03 }',
+                    "category_support_battalions = { max_organisation = 3 reliability = 0.02 }",
                 ),
             ),
         ),
@@ -4331,20 +4334,41 @@ BRANCHES = (
                 "basic_machine_tools",
                 2162,
                 (
-                    'engineer = { entrenchment = 0.5 defense = 0.03 }',
-                    'ADISCORD_regimental_pioneers = { entrenchment = 0.15 defense = 0.02 }',
+                    "engineer = { entrenchment = 0.5 river = { movement = 0.10 } forest = { movement = 0.05 } }",
+                    "ADISCORD_regimental_pioneers = { entrenchment = 0.15 }",
+                ),
+            ),
+            (
+                "fortification_engineering",
+                "Школа фортификации",
+                "Fortification Engineering",
+                "tech_engineers3",
+                2166,
+                (
+                    "engineer = { entrenchment = 1 defense = 0.05 }",
+                    "ADISCORD_regimental_pioneers = { entrenchment = 0.25 }",
+                    "dig_in_speed_factor = 0.05",
                 ),
             ),
             (
                 "assault_breaching_packages",
-                "Штурмовые комплекты разграждения",
-                "Assault Breaching Packages",
+                "Школа штурма",
+                "Assault Engineering",
                 "basic_construction",
-                2169,
+                2166,
                 (
-                    "engineer = { breakthrough = 0.05 soft_attack = 0.03 }",
+                    "engineer = { breakthrough = 0.05 }",
                     "ADISCORD_regimental_pioneers = { breakthrough = 0.03 soft_attack = 0.02 }",
-                    "planning_speed = 0.02",
+                ),
+            ),
+            (
+                "armored_engineer_vehicles",
+                "Инженерные машины разграждения",
+                "Armored Engineering Vehicles",
+                "tech_engineers4",
+                2167,
+                (
+                    "ADISCORD_armored_engineer_company = { breakthrough = 0.05 }",
                 ),
             ),
             (
@@ -4354,8 +4378,10 @@ BRANCHES = (
                 "improved_machine_tools",
                 2175,
                 (
-                    'engineer = { breakthrough = 0.10 defense = 0.08 }',
-                    'ADISCORD_regimental_pioneers = { breakthrough = 0.05 defense = 0.04 }',
+                    "engineer = { breakthrough = 0.05 defense = 0.05 }",
+                    "ADISCORD_assault_sapper_company = { breakthrough = 0.05 defense = 0.05 }",
+                    "ADISCORD_armored_engineer_company = { breakthrough = 0.05 defense = 0.05 }",
+                    "ADISCORD_regimental_pioneers = { breakthrough = 0.03 defense = 0.03 }",
                 ),
             ),
         ),
@@ -6585,27 +6611,48 @@ SUPPORT_SERVICE_BRANCHES = (
                 "tech_recon",
                 2162,
                 (
-                    "recon = { recon = 0.5 }",
+                    "category_recon = { recon = 0.25 max_organisation = 3 }",
+                ),
+            ),
+            (
+                "drone_recon_company",
+                "Рота разведывательных БПЛА",
+                "Reconnaissance Drone Company",
+                "tech_recon2",
+                2163,
+                (
+                    "ADISCORD_drone_recon_company = { recon = 0.25 }",
                 ),
             ),
             (
                 "recon_target_handoffs",
-                "Передача разведданных",
-                "Reconnaissance Reporting",
+                "Разведка боем",
+                "Reconnaissance in Force",
+                "tech_recon3",
+                2166,
+                (
+                    "category_recon = { soft_attack = 0.10 defense = 0.10 }",
+                    "ADISCORD_recon_platform = { breakthrough = 0.05 }",
+                ),
+            ),
+            (
+                "persistent_surveillance",
+                "Постоянное наблюдение",
+                "Persistent Surveillance",
                 "radio",
                 2166,
                 (
-                    "recon = { recon = 0.5 initiative = 0.02 }",
+                    "category_recon = { recon = 0.5 max_organisation = 2 }",
                 ),
             ),
             (
                 "persistent_recon_patrols",
                 "Сменные разведывательные группы",
                 "Rotating Reconnaissance Teams",
-                "tech_recon",
+                "tech_recon4",
                 2170,
                 (
-                    "recon = { recon = 0.5 supply_consumption = -0.05 }",
+                    "category_recon = { supply_consumption = -0.05 max_organisation = 3 }",
                 ),
             ),
         ),
@@ -6635,17 +6682,39 @@ SUPPORT_SERVICE_BRANCHES = (
                 "radio",
                 2163,
                 (
-                    "signal_company = { initiative = 0.04 max_organisation = 2 }",
+                    "signal_company = { initiative = 0.05 max_organisation = 2 }",
+                ),
+            ),
+            (
+                "field_ew_company",
+                "Рота радиоэлектронной борьбы",
+                "Electronic Warfare Company",
+                "tech_signal_company2",
+                2165,
+                (
+                    "ADISCORD_ew_company = { air_attack = 0.05 }",
                 ),
             ),
             (
                 "mobile_signal_relays",
-                "Подвижные узлы связи",
-                "Mobile Signal Relays",
-                "tech_signal_company",
-                2167,
+                "Устойчивые сети",
+                "Resilient Networks",
+                "tech_signal_company3",
+                2169,
                 (
-                    "signal_company = { initiative = 0.05 }",
+                    "signal_company = { initiative = 0.06 }",
+                    "max_planning = 0.03",
+                ),
+            ),
+            (
+                "spectrum_dominance",
+                "Господство в эфире",
+                "Spectrum Dominance",
+                "tech_signal_company4",
+                2169,
+                (
+                    "ADISCORD_ew_company = { air_attack = 0.15 initiative = 0.03 }",
+                    "cas_damage_reduction = 0.03",
                 ),
             ),
             (
@@ -6655,7 +6724,8 @@ SUPPORT_SERVICE_BRANCHES = (
                 "tech_signal_company",
                 2172,
                 (
-                    "signal_company = { initiative = 0.06 default_morale = 0.05 }",
+                    "signal_company = { max_organisation = 3 default_morale = 0.05 }",
+                    "ADISCORD_ew_company = { max_organisation = 3 default_morale = 0.05 }",
                 ),
             ),
         ),
@@ -6700,13 +6770,87 @@ SUPPORT_SERVICE_BRANCHES = (
             ),
         ),
     ),
+    research_branch(
+        "field_environment",
+        "ADISCORD_logistics_trains.txt",
+        ("support_folder",),
+        "Обеспечение в особой среде",
+        "Hostile Environment Support",
+        "support",
+        (
+            (
+                "environment_support_companies",
+                "Роты обеспечения особой среды",
+                "Hostile Environment Companies",
+                "ADISCORD_equipment_protection_respirator",
+                2160,
+                (
+                    "ADISCORD_decontamination_company = { max_organisation = 2 }",
+                    "ADISCORD_desert_support_company = { max_organisation = 2 }",
+                ),
+            ),
+            (
+                "sealed_decontamination_kits",
+                "Герметичные комплекты дезактивации",
+                "Sealed Decontamination Kits",
+                "ADISCORD_equipment_protection_respirator",
+                2163,
+                (
+                    "ADISCORD_decontamination_company = { contaminated = { movement = 0.05 } reactor_zone = { movement = 0.05 } }",
+                ),
+            ),
+            (
+                "desert_water_columns",
+                "Пустынные водные колонны",
+                "Desert Water Columns",
+                "tech_logistics_company2",
+                2163,
+                (
+                    "ADISCORD_desert_support_company = { desert = { movement = 0.05 } desert_city = { movement = 0.05 } }",
+                ),
+            ),
+            (
+                "environment_field_kits",
+                "Полевые комплекты защиты от среды",
+                "Environmental Field Kits",
+                "tech_support",
+                2166,
+                (
+                    "ADISCORD_decontamination_company = { max_organisation = 3 }",
+                    "ADISCORD_desert_support_company = { max_organisation = 3 }",
+                ),
+            ),
+            (
+                "environment_endurance_doctrine",
+                "Выносливость в особой среде",
+                "Environmental Endurance",
+                "tech_engineers2",
+                2169,
+                (
+                    "ADISCORD_decontamination_company = { entrenchment = 0.5 contaminated = { defence = 0.05 } reactor_zone = { defence = 0.05 } }",
+                    "ADISCORD_desert_support_company = { entrenchment = 0.5 desert = { defence = 0.05 } desert_city = { defence = 0.05 } }",
+                ),
+            ),
+            (
+                "environment_assault_doctrine",
+                "Натиск в особой среде",
+                "Environmental Assault",
+                "tech_recon2",
+                2169,
+                (
+                    "ADISCORD_decontamination_company = { breakthrough = 0.10 contaminated = { attack = 0.05 } reactor_zone = { attack = 0.05 } }",
+                    "ADISCORD_desert_support_company = { breakthrough = 0.10 desert = { attack = 0.05 } desert_city = { attack = 0.05 } }",
+                ),
+            ),
+        ),
+    ),
 )
 BRANCHES += SUPPORT_SERVICE_BRANCHES
 
 SUPPORT_BRANCH_ORDER = (
     "field_support", "combat_engineering", "combat_medicine", "logistics",
-    "field_signals", "field_reconnaissance", "reserve_training",
-    "garrison_security", "officer_training", "rail",
+    "field_signals", "field_reconnaissance", "field_environment",
+    "reserve_training", "garrison_security", "officer_training", "rail",
 )
 _support_branches = {branch.key: branch for branch in BRANCHES if "support_folder" in branch.folders}
 _ordered_support = iter(_support_branches[key] for key in SUPPORT_BRANCH_ORDER)
@@ -6721,6 +6865,7 @@ SIDE_PROGRAMME_KEYS = frozenset(
         'air_mobility',
         'combat_engineering',
         'counter_drone_warfare',
+        'field_environment',
         'railway_artillery',
         'riverine_warfare',
         'unmanned_ground_systems',
@@ -6839,8 +6984,18 @@ XOR_KIND_BY_BRANCH = {
     "computing": "temporary",
     "power": "temporary",
     "counter_drone_warfare": "temporary",
+    # Engineer, reconnaissance and signal schools rejoin at the integrated
+    # late technology; the environment stance remains the branch outcome.
+    "combat_engineering": "temporary",
+    "field_reconnaissance": "temporary",
+    "field_signals": "temporary",
+    "field_environment": "permanent",
 }
 XOR_INDEX_GROUPS_BY_BRANCH = {
+    "combat_engineering": ((1, 2),),
+    "field_reconnaissance": ((3, 4),),
+    "field_signals": ((3, 4),),
+    "field_environment": ((4, 5),),
     "production": (
         (
             6,
@@ -7549,10 +7704,49 @@ def naval_programme_graph(branch: Branch) -> BranchGraph:
     return make_graph(tuple(lanes), edges, tuple(mandatory))
 
 
+# Support company lines: an unlock, its own upgrade lanes and, where the
+# company family has a national school, one permanent stance pair.
+SUPPORT_COMPANY_GRAPHS = {
+    # Equipment generations follow the engineer sections on the central lane;
+    # maintenance and recovery form a separate right-hand programme.
+    "field_support": (
+        (1, 1, 0, 2, 1, 2, 2, 1, 1),
+        [(0, 1), (1, 2), (1, 3), (2, 4), (3, 5), (5, 6), (4, 7), (7, 8)],
+    ),
+    # Either engineering school or the armored engineers lead to the integrated
+    # command; armored engineers also need the armored carrier programme.
+    "combat_engineering": (
+        (1, 0, 1, 2, 1),
+        [(0, 1), (0, 2), (0, 3), (1, 4), (2, 4), (3, 4)],
+    ),
+    "field_reconnaissance": (
+        (1, 1, 2, 0, 1, 1),
+        [(0, 1), (1, 2), (1, 3), (1, 4), (2, 4), (3, 5), (4, 5)],
+    ),
+    # Spectrum dominance is the electronic-warfare school and therefore needs
+    # the EW company; resilient networks follow the ordinary signal line.
+    "field_signals": (
+        (1, 1, 2, 0, 2, 1),
+        [(0, 1), (1, 2), (1, 3), (2, 4), (3, 5), (4, 5)],
+    ),
+    "combat_medicine": (
+        (1, 0, 2, 0, 0, 2, 1),
+        [(0, 1), (0, 2), (1, 3), (3, 4), (2, 5), (4, 6), (5, 6)],
+        (6,),
+    ),
+    "field_environment": (
+        (1, 0, 2, 1, 0, 2),
+        [(0, 1), (0, 2), (1, 3), (2, 3), (3, 4), (3, 5)],
+    ),
+}
+
+
 def graph_for_branch(branch: Branch) -> BranchGraph:
     count = len(branch.techs)
     if branch.key == "reserve_training":
         graph = make_graph((1, 0, 2, 0, 2, 0, 2), [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6)])
+    elif branch.key in SUPPORT_COMPANY_GRAPHS:
+        graph = make_graph(*SUPPORT_COMPANY_GRAPHS[branch.key])
     elif branch.key in NAVAL_HULL_BRANCH_KEYS:
         graph = naval_programme_graph(branch)
     elif branch.key in PROGRAMME_ROUTES:
@@ -7827,7 +8021,15 @@ EXTRA_TECH_DEPENDENCIES = {
         'ADISCORD_tech_field_workshop_tools', 'ADISCORD_tech_field_radio_networks',
     ),
     "ADISCORD_tech_battle_damage_survey_teams": (
-        'ADISCORD_tech_standardized_field_tool_chests',
+        'ADISCORD_tech_combat_engineering_sections',
+    ),
+    "ADISCORD_tech_armored_engineer_vehicles": (
+        'ADISCORD_tech_armored_carrier_program',
+    ),
+    "ADISCORD_tech_drone_recon_company": ('ADISCORD_tech_drone_recon_swarms',),
+    "ADISCORD_tech_field_ew_company": ('ADISCORD_tech_spectrum_threat_libraries',),
+    "ADISCORD_tech_environment_support_companies": (
+        'ADISCORD_tech_field_workshop_tools',
     ),
     "ADISCORD_tech_spectrum_threat_libraries": (
         'ADISCORD_tech_frequency_hopping_field_sets',
@@ -8060,6 +8262,7 @@ STARTING_TECH_PROFILE_SEEDS = {
         "ADISCORD_tech_hardened_computers",
         "ADISCORD_tech_phase_synchronized_substations",
         "ADISCORD_tech_smart_recoil_compensators",
+        "ADISCORD_tech_combat_engineering_sections",
         "ADISCORD_tech_standardized_field_tool_chests",
         "ADISCORD_tech_electrohydraulic_gun_laying",
         "ADISCORD_tech_electric_turret_drives",
@@ -8288,6 +8491,15 @@ ENABLE_SUBUNITS = {
     "ADISCORD_tech_foot_recon_sections": ("recon", "hq_recon"),
     "ADISCORD_tech_garrison_police_sections": ("military_police", "hq_military_police"),
     "ADISCORD_tech_field_signal_sections": ("signal_company", "hq_signal"),
+    "ADISCORD_tech_assault_breaching_packages": ("ADISCORD_assault_sapper_company",),
+    "ADISCORD_tech_armored_engineer_vehicles": ("ADISCORD_armored_engineer_company",),
+    "ADISCORD_tech_drone_recon_company": ("ADISCORD_drone_recon_company",),
+    "ADISCORD_tech_field_ew_company": ("ADISCORD_ew_company",),
+    "ADISCORD_tech_environment_support_companies": (
+        "ADISCORD_decontamination_company",
+        "ADISCORD_desert_support_company",
+    ),
+    "ADISCORD_tech_assisted_projectiles": ("ADISCORD_loitering_munition_company",),
     "ADISCORD_tech_radiation_patrols": ("ADISCORD_hazard_infantry",),
     "ADISCORD_tech_kefreyt_shield_special_forces": ("ADISCORD_urban_breacher",),
     "ADISCORD_tech_belt_fed_recovery": ("ADISCORD_regimental_fire_support",),
@@ -9141,12 +9353,20 @@ SUPPORT_BRANCH_DESCRIPTIONS = {
         "Local reserve training improves the specified militia or territorial battalions. Both lines develop independently; regular infantry retains its offensive advantage",
     ),
     "field_reconnaissance": (
-        "Пешая разведка поддерживает дивизии без бронемашин и топлива. Улучшения действуют на пешую разведывательную роту, которую нужно добавить в шаблон и снабдить оснащением",
-        "Foot reconnaissance supports divisions without armored vehicles or fuel. Upgrades apply to foot reconnaissance companies, which must be included in a template and equipped",
+        "Войсковая разведка открывает пешую разведроту и роту разведывательных БПЛА; бронеразведка открывается в танковом дереве. В дивизии может быть только одна разведывательная рота. Разведка боем и постоянное наблюдение - постоянный выбор национальной школы",
+        "Field reconnaissance opens foot reconnaissance and reconnaissance drone companies; armored reconnaissance comes from the armor tree. A division can field only one reconnaissance company. Reconnaissance in force and persistent surveillance are a permanent national school choice",
     ),
     "field_signals": (
-        "Подготовка связистов и организация полевых сетей улучшают роту связи в составе дивизии. Производство радиокомпонентов и общая электроника исследуются отдельно",
-        "Signal training and field network organization improve a division's signal company. Radio components and general electronics are researched separately",
+        "Полевая связь открывает роту связи и роту радиоэлектронной борьбы; в дивизии может быть только одна из них. Устойчивые сети развивают связь и планирование, господство в эфире - защиту от авиации и дронов. Выбор постоянный",
+        "Field signals open the signal company and the electronic warfare company; a division can field only one of them. Resilient networks improve signals and planning, spectrum dominance protection from aircraft and drones. The choice is permanent",
+    ),
+    "combat_engineering": (
+        "Инженерное обеспечение развивает сапёрные роты. Школа фортификации усиливает оборонительных сапёров, школа штурма открывает штурмовую сапёрную роту; выбор постоянный. Инженерно-танковая рота требует программы бронетранспортёров. В дивизии может быть только одна инженерная рота",
+        "Combat engineering develops engineer companies. Fortification engineering strengthens defensive engineers, while assault engineering opens the assault sapper company; the choice is permanent. Armored engineers require the armored carrier programme. A division can field only one engineer company",
+    ),
+    "field_environment": (
+        "Роты особой среды улучшают всю дивизию в заражённой местности или в пустыне. В дивизии может быть только одна такая рота. Выносливость и натиск - постоянный выбор для обеих рот",
+        "Hostile environment companies improve the whole division in contaminated terrain or desert. A division can field only one such company. Endurance and assault are a permanent choice for both companies",
     ),
     "garrison_security": (
         "Военная полиция повышает подавление сопротивления в гарнизонном шаблоне. Исследование не размещает части автоматически: роту нужно включить в шаблон и обеспечить людьми и снаряжением",
@@ -11693,8 +11913,8 @@ INFANTRY_FAMILY_LOCALISATION = {
     ),
     "recon": ("Пешая разведывательная рота", "Foot Reconnaissance Company"),
     "recon_desc": (
-        "Пешие дозоры и наблюдатели: 200 человек, 180 единиц личного оружия и 10 комплектов обеспечения. Дают разведку без танков и топлива. Занимают ту же ячейку специализации, что и рота бронеразведки; совместить обе в одной дивизии нельзя.",
-        "Foot patrols and observers: 200 personnel, 180 personal weapons and 10 support kits. Provide reconnaissance without tanks or fuel. Share the reconnaissance support type with armored scouts; a division cannot use both.",
+        "Пешие дозоры и наблюдатели: 150 человек, 135 единиц личного оружия и 10 комплектов обеспечения. Самая дешёвая разведка без машин и топлива. Занимает ту же ячейку специализации, что и рота разведывательных БПЛА и рота бронеразведки; в дивизии может быть только одна из них.",
+        "Foot patrols and observers: 150 personnel, 135 personal weapons and 10 support kits. The cheapest reconnaissance, without vehicles or fuel. Shares the reconnaissance support type with drone and armored reconnaissance companies; a division can field only one of them.",
     ),
     "military_police": ("Рота военной полиции", "Military Police Company"),
     "military_police_desc": (
@@ -11986,6 +12206,52 @@ REGIMENTAL_SUPPORT_LOCALISATION = {
 }
 
 
+# Divisional support companies owned by the support research lines. Each
+# description names the role, the price and the shared support type.
+SUPPORT_COMPANY_LOCALISATION = {
+    "ADISCORD_assault_sapper_company": ("Штурмовая сапёрная рота", "Assault Sapper Company"),
+    "ADISCORD_assault_sapper_company_desc": (
+        "350 человек, 315 единиц личного оружия, 12 единиц группового оружия и 30 комплектов обеспечения. Усиливает атаку всей дивизии в городах, на реках и против укреплений, но хуже окапывается и не даёт оборонительных бонусов в лесу. Занимает инженерную ячейку: в дивизии может быть только одна инженерная рота.",
+        "350 personnel, 315 personal weapons, 12 crew-served weapons and 30 support kits. Improves the whole division's attack in cities, on rivers and against fortifications, but entrenches less and gives no forest defence. Uses the engineer support type: a division can field only one engineer company.",
+    ),
+    "ADISCORD_armored_engineer_company": ("Инженерно-танковая рота", "Armored Engineer Company"),
+    "ADISCORD_armored_engineer_company_desc": (
+        "300 человек, 12 бронетранспортёров, 270 единиц личного оружия и 25 комплектов обеспечения. Сопровождает бронетехнику, повышает оборону танковых батальонов дивизии и прорыв, ускоряет переправы. Ограничивает скорость дивизии своими машинами и не десантируется. Занимает инженерную ячейку.",
+        "300 personnel, 12 armored carriers, 270 personal weapons and 25 support kits. Escorts armor, improves the defence of the division's tank battalions and its breakthrough, and speeds river crossings. Its vehicles limit division speed and it cannot be air-dropped. Uses the engineer support type.",
+    ),
+    "ADISCORD_drone_recon_company": ("Рота разведывательных БПЛА", "Reconnaissance Drone Company"),
+    "ADISCORD_drone_recon_company_desc": (
+        "120 операторов, 108 единиц личного оружия и 30 комплектов обеспечения с дронами. Лучшая разведка среди разведывательных рот; корректирует огонь артиллерии дивизии. Почти не участвует в бою и дорога в снаряжении. Занимает разведывательную ячейку.",
+        "120 operators, 108 personal weapons and 30 support kits carrying drones. The best reconnaissance of any recon company; corrects the division's artillery fire. Barely fights and is expensive to equip. Uses the reconnaissance support type.",
+    ),
+    "ADISCORD_recon_platform": ("Рота бронеразведки", "Armored Recon Company"),
+    "ADISCORD_recon_platform_desc": (
+        "Малые бронированные машины и носители дронов для разведки маршрутов и поля боя. Разведка слабее, чем у роты БПЛА, но рота сама ведёт бой и ускоряет дивизию на открытой местности. Занимает разведывательную ячейку.",
+        "Small armored vehicles and drone carriers for route and battlefield reconnaissance. Less reconnaissance than a drone company, but the company fights and speeds the division on open ground. Uses the reconnaissance support type.",
+    ),
+    "ADISCORD_ew_company": ("Рота радиоэлектронной борьбы", "Electronic Warfare Company"),
+    "ADISCORD_ew_company_desc": (
+        "150 человек, 6 зенитных установок, 135 единиц личного оружия и 30 комплектов обеспечения со средствами подавления. Глушит дроны и наведение авиации, повышая защиту дивизии с воздуха, и немного улучшает инициативу. Слабее роты ПВО против авиации и роты связи в управлении. Занимает ячейку связи.",
+        "150 personnel, 6 anti-air mounts, 135 personal weapons and 30 support kits with jamming equipment. Jams drones and aircraft guidance to protect the division from the air and slightly improves initiative. Weaker than an anti-air company against aircraft and than a signal company in command. Uses the signal support type.",
+    ),
+    "ADISCORD_decontamination_company": ("Рота радиационной защиты", "Decontamination Company"),
+    "ADISCORD_decontamination_company_desc": (
+        "200 человек, 180 единиц личного оружия и 35 комплектов дезактивации и защиты. Повышает атаку, оборону и скорость всей дивизии на заражённой местности и у разрушенных реакторов. Вне такой местности почти бесполезна. Занимает ячейку особой среды.",
+        "200 personnel, 180 personal weapons and 35 decontamination and protection kits. Improves the whole division's attack, defence and speed in contaminated terrain and around ruined reactors. Of little use elsewhere. Uses the hostile environment support type.",
+    ),
+    "ADISCORD_desert_support_company": ("Рота пустынного обеспечения", "Desert Support Company"),
+    "ADISCORD_desert_support_company_desc": (
+        "200 человек, 10 грузовиков, 180 единиц личного оружия и 25 комплектов обеспечения. Подвозит воду и запчасти, повышая атаку, оборону и скорость всей дивизии в пустыне и пустынных городах. Её грузовики не расходуют топливо. Занимает ячейку особой среды.",
+        "200 personnel, 10 trucks, 180 personal weapons and 25 support kits. Delivers water and spares, improving the whole division's attack, defence and speed in desert and desert cities. Its trucks use no fuel. Uses the hostile environment support type.",
+    ),
+    "ADISCORD_loitering_munition_company": ("Батарея барражирующих боеприпасов", "Loitering Munition Battery"),
+    "ADISCORD_loitering_munition_company_desc": (
+        "150 человек, 6 пусковых установок, 4 противотанковых комплекса и 20 комплектов обеспечения. Поражает пехоту и технику, точнее ствольной батареи в лесу, горах и городе. Слабее батареи поддержки против пехоты и роты ПТО против брони, расходует больше снабжения.",
+        "150 personnel, 6 launchers, 4 anti-tank systems and 20 support kits. Engages infantry and vehicles and is more precise than a gun battery in forests, mountains and cities. Weaker than a support battery against infantry and an anti-tank company against armor, and uses more supply.",
+    ),
+}
+
+
 NAVAL_AIR_EQUIPMENT_LOCALISATION.update(AIRCRAFT_TYPE_LOCALISATION)
 
 AIR_BRANCH_DESCRIPTIONS = {
@@ -12182,6 +12448,7 @@ def generated_localisation(language: str) -> list[str]:
             AIR_ROLE_LOCALISATION,
             NAVAL_AIR_UNIT_LOCALISATION,
             REGIMENTAL_SUPPORT_LOCALISATION,
+            SUPPORT_COMPANY_LOCALISATION,
             ARMOR_UNIT_LOCALISATION,
         )
         for key, names in mapping.items()
@@ -12317,6 +12584,7 @@ def write_localisation() -> None:
                 or key in AIR_ROLE_LOCALISATION
                 or key in NAVAL_AIR_UNIT_LOCALISATION
                 or key in REGIMENTAL_SUPPORT_LOCALISATION
+                or key in SUPPORT_COMPANY_LOCALISATION
                 or key in ARMOR_UNIT_LOCALISATION
                 or key in generated_equipment_keys
             ):
@@ -12855,6 +13123,7 @@ def support_technology_outputs() -> dict[Path, bytes]:
         for unit in ("ADISCORD_militia", "ADISCORD_territorial", "recon", "military_police")
         for suffix in (unit, f"{unit}_desc")
     }
+    keys.update(SUPPORT_COMPANY_LOCALISATION)
     outputs = selected_land_technology_outputs("ADISCORD_logistics_trains.txt", keys)
     gui_path = ROOT / "interface/countrytechtreeview.gui"
     gui = replace_named_gui_block(

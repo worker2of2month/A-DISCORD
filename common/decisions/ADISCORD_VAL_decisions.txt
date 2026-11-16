@@ -534,6 +534,11 @@ VAL_military_operations = {
 				add_intel = { target = NOD army_intel = 20 }
 				hidden_effect = { set_variable = { var = VAL_final_planning_bonus value = 0.15 } if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } force_update_dynamic_modifier = yes } }
 				custom_effect_tooltip = VAL_final_reconnaissance_ready_tt
+				custom_effect_tooltip = VAL_nod_op_readiness_15_tt
+				hidden_effect = {
+					set_temp_variable = { var = VAL_nod_op_gain value = 15 }
+					VAL_nod_op_add_readiness = yes
+				}
 			}
 			else = { add_political_power = 75 }
 		}
@@ -572,6 +577,11 @@ VAL_military_operations = {
 					}
 				}
 				custom_effect_tooltip = VAL_final_supply_ready_tt
+				custom_effect_tooltip = VAL_nod_op_readiness_15_tt
+				hidden_effect = {
+					set_temp_variable = { var = VAL_nod_op_gain value = 15 }
+					VAL_nod_op_add_readiness = yes
+				}
 			}
 			else = { VAL_final_refund_supply_order = yes }
 		}
@@ -596,10 +606,779 @@ VAL_military_operations = {
 			if = {
 				limit = { has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } OR = { has_idea = volunteer_only has_idea = disarmed_nation } }
 				add_ideas = limited_conscription
+				custom_effect_tooltip = VAL_nod_op_readiness_10_tt
+				hidden_effect = {
+					set_temp_variable = { var = VAL_nod_op_gain value = 10 }
+					VAL_nod_op_add_readiness = yes
+				}
 			}
 			else = { add_political_power = 150 }
 		}
 		ai_will_do = { base = 20 }
+	}
+
+	# --- Northern operation preparation ---
+	# Each order adds readiness once; cancellation returns the price.
+	VAL_nod_op_staff_games = {
+		icon = ADISCORD_operations
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_nod_op_staff
+			VAL_nod_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 0
+		custom_cost_text = VAL_nod_op_staff_games_cost
+		custom_cost_trigger = { NOT = { command_power < 25 } }
+		fire_only_once = yes
+		days_remove = 30
+		complete_effect = {
+			hidden_effect = { add_command_power = -25 }
+		}
+		cancel_trigger = { hidden_trigger = { VAL_nod_op_can_prepare = no } }
+		cancel_effect = { add_command_power = 25 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nod_op_readiness_10_tt
+			army_experience = 15
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nod_op_gain value = 10 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nod_op_border_roads = {
+		icon = ADISCORD_construction
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_nod_op_staff
+			VAL_nod_op_can_prepare = yes
+		}
+		available = {
+			has_war = no
+			NOT = { has_variable = VAL_nod_op_roads_deposit }
+		}
+		cost = 0
+		custom_cost_text = VAL_nod_op_cost_300
+		custom_cost_trigger = { ADISCORD_economy_can_spend_300 = yes }
+		fire_only_once = yes
+		days_remove = 45
+		complete_effect = {
+			hidden_effect = {
+				ADISCORD_economy_spend_300 = yes
+				set_variable = { var = VAL_nod_op_roads_deposit value = 300 }
+			}
+		}
+		cancel_trigger = { hidden_trigger = { VAL_nod_op_can_prepare = no } }
+		cancel_effect = {
+			custom_effect_tooltip = VAL_nod_op_roads_refund_tt
+			hidden_effect = { VAL_nod_op_refund_roads = yes }
+		}
+		remove_effect = {
+			custom_effect_tooltip = VAL_nod_op_roads_result_tt
+			custom_effect_tooltip = VAL_nod_op_readiness_10_tt
+			hidden_effect = {
+				clear_variable = VAL_nod_op_roads_deposit
+				VAL_nod_op_build_border_roads = yes
+				set_temp_variable = { var = VAL_nod_op_gain value = 10 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	VAL_nod_op_armour_reserve = {
+		icon = ADISCORD_mobilization
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_nod_op_axis_breakthrough
+			VAL_nod_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_nod_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nod_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = ADISCORD_light_combat_platform_2163 amount = 30 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nod_op_gain value = 15 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nod_op_landing_drills = {
+		icon = ADISCORD_logistics
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_nod_op_axis_landing
+			VAL_nod_op_can_prepare = yes
+		}
+		available = {
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_nod_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nod_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
+			navy_experience = 15
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nod_op_gain value = 15 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nod_op_forest_guides = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_nod_op_axis_forest
+			VAL_nod_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_nod_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nod_op_readiness_15_tt
+			add_manpower = 2000
+			army_experience = 10
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nod_op_gain value = 15 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nod_op_deception = {
+		icon = ADISCORD_covert_operation
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_nod_op_final_plan
+			VAL_nod_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 30
+		cancel_trigger = { hidden_trigger = { VAL_nod_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nod_op_readiness_5_tt
+			custom_effect_tooltip = VAL_nod_op_deception_ready_tt
+			effect_tooltip = {
+				NOD = { add_timed_idea = { idea = VAL_op_caught_off_guard days = 45 } }
+			}
+			hidden_effect = {
+				set_country_flag = VAL_nod_op_deception_ready
+				set_temp_variable = { var = VAL_nod_op_gain value = 5 }
+				VAL_nod_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	# --- Stelander operation preparation ---
+	# The campaign decision against STP or STS spends this readiness.
+	VAL_stl_op_survey = {
+		icon = ADISCORD_inspection
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_stl_op_staff
+			VAL_stl_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 30
+		cancel_trigger = { hidden_trigger = { VAL_stl_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_stl_op_readiness_15_tt
+			if = {
+				limit = { STP = { exists = yes } }
+				add_intel = { target = STP army_intel = 15 }
+			}
+			if = {
+				limit = { STS = { exists = yes } }
+				add_intel = { target = STS army_intel = 15 }
+			}
+			hidden_effect = {
+				set_temp_variable = { var = VAL_stl_op_gain value = 15 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_stl_op_rifle_reserve = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_stl_op_staff
+			VAL_stl_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 75
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_stl_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 75 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_stl_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 15000 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_stl_op_gain value = 15 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_stl_op_mountain_batteries = {
+		icon = ADISCORD_mobilization
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_stl_op_axis_assault
+			VAL_stl_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_stl_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_stl_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_stl_op_gain value = 15 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_stl_op_fada_transports = {
+		icon = ADISCORD_logistics
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_stl_op_axis_landing
+			VAL_stl_op_can_prepare = yes
+		}
+		available = {
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_stl_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_stl_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
+			navy_experience = 15
+			hidden_effect = {
+				set_temp_variable = { var = VAL_stl_op_gain value = 15 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_stl_op_fund_opposition = {
+		icon = ADISCORD_covert_operation
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_stl_op_axis_uprising
+			VAL_stl_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 75
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_stl_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 75 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_stl_op_readiness_15_tt
+			if = {
+				limit = { STP = { exists = yes } }
+				add_intel = { target = STP civilian_intel = 20 }
+			}
+			if = {
+				limit = { STS = { exists = yes } }
+				add_intel = { target = STS civilian_intel = 20 }
+			}
+			hidden_effect = {
+				set_temp_variable = { var = VAL_stl_op_gain value = 15 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_stl_op_false_talks = {
+		icon = ADISCORD_negotiations
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			OR = {
+				has_completed_focus = VAL_stl_op_axis_assault
+				has_completed_focus = VAL_stl_op_axis_landing
+				has_completed_focus = VAL_stl_op_axis_uprising
+			}
+			VAL_stl_op_can_prepare = yes
+		}
+		available = {
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_stl_op_readiness_50_needed_tt
+				check_variable = { var = VAL_stl_op_readiness value = 50 compare = greater_than_or_equals }
+			}
+		}
+		cost = 50
+		fire_only_once = yes
+		days_remove = 30
+		cancel_trigger = { hidden_trigger = { VAL_stl_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_stl_op_readiness_5_tt
+			custom_effect_tooltip = VAL_stl_op_deception_ready_tt
+			effect_tooltip = {
+				if = {
+					limit = { STP = { VAL_stelander_ultimatum_target = yes } }
+					STP = { add_timed_idea = { idea = VAL_op_caught_off_guard days = 45 } }
+				}
+				else = {
+					STS = { add_timed_idea = { idea = VAL_op_caught_off_guard days = 45 } }
+				}
+			}
+			hidden_effect = {
+				set_country_flag = VAL_stl_op_deception_ready
+				set_temp_variable = { var = VAL_stl_op_gain value = 5 }
+				VAL_stl_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	# --- Northern coalition operation preparation ---
+	# VAL_Break_The_Northern_Coalition spends this readiness when it declares the war.
+	VAL_nc_op_survey = {
+		icon = ADISCORD_inspection
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_nc_op_staff
+			VAL_nc_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 30
+		cancel_trigger = { hidden_trigger = { VAL_nc_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nc_op_readiness_15_tt
+			if = {
+				limit = { YPR = { exists = yes } }
+				add_intel = { target = YPR army_intel = 15 }
+			}
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nc_op_gain value = 15 }
+				VAL_nc_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nc_op_depots = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_nc_op_staff
+			VAL_nc_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 75
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_nc_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 75 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nc_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nc_op_gain value = 15 }
+				VAL_nc_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nc_op_winter_kit = {
+		icon = ADISCORD_logistics
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_nc_op_staff
+			VAL_nc_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 35
+		cancel_trigger = { hidden_trigger = { VAL_nc_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nc_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nc_op_gain value = 15 }
+				VAL_nc_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nc_op_assault_guns = {
+		icon = ADISCORD_mobilization
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			check_variable = { var = VAL_nc_op_profile value = 1 compare = equals }
+			VAL_nc_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_nc_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nc_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 40 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nc_op_gain value = 15 }
+				VAL_nc_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nc_op_coastal_transports = {
+		icon = ADISCORD_logistics
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			check_variable = { var = VAL_nc_op_profile value = 2 compare = equals }
+			VAL_nc_op_can_prepare = yes
+		}
+		available = {
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_nc_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nc_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
+			navy_experience = 15
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nc_op_gain value = 15 }
+				VAL_nc_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nc_op_forest_rangers = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			check_variable = { var = VAL_nc_op_profile value = 3 compare = equals }
+			VAL_nc_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_nc_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nc_op_readiness_15_tt
+			add_manpower = 2000
+			army_experience = 15
+			hidden_effect = {
+				set_temp_variable = { var = VAL_nc_op_gain value = 15 }
+				VAL_nc_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nc_op_feint = {
+		icon = ADISCORD_covert_operation
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_variable = VAL_nc_op_profile
+			VAL_nc_op_can_prepare = yes
+		}
+		available = {
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_nc_op_readiness_50_needed_tt
+				check_variable = { var = VAL_nc_op_readiness value = 50 compare = greater_than_or_equals }
+			}
+		}
+		cost = 50
+		fire_only_once = yes
+		days_remove = 30
+		cancel_trigger = { hidden_trigger = { VAL_nc_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nc_op_readiness_10_tt
+			custom_effect_tooltip = VAL_nc_op_deception_ready_tt
+			effect_tooltip = {
+				YPR = { add_timed_idea = { idea = VAL_op_caught_off_guard days = 45 } }
+			}
+			hidden_effect = {
+				set_country_flag = VAL_nc_op_deception_ready
+				set_temp_variable = { var = VAL_nc_op_gain value = 10 }
+				VAL_nc_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	# --- Bezhaysk operation preparation ---
+	# VAL_Bezhaysk_Operation spends this readiness when it declares the war.
+	VAL_bjk_op_survey = {
+		icon = ADISCORD_inspection
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_bjk_op_staff
+			VAL_bjk_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 30
+		cancel_trigger = { hidden_trigger = { VAL_bjk_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_bjk_op_readiness_15_tt
+			add_intel = { target = BJK army_intel = 20 }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_bjk_op_gain value = 15 }
+				VAL_bjk_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_bjk_op_siege_train = {
+		icon = ADISCORD_mobilization
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_bjk_op_staff
+			VAL_bjk_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 75
+		fire_only_once = yes
+		days_remove = 45
+		cancel_trigger = { hidden_trigger = { VAL_bjk_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 75 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_bjk_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 80 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_bjk_op_gain value = 15 }
+				VAL_bjk_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_bjk_op_depots = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_completed_focus = VAL_bjk_op_staff
+			VAL_bjk_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 35
+		cancel_trigger = { hidden_trigger = { VAL_bjk_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_bjk_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_bjk_op_gain value = 15 }
+				VAL_bjk_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_bjk_op_storm_groups = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			check_variable = { var = VAL_bjk_op_profile value = 1 compare = equals }
+			VAL_bjk_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_bjk_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_bjk_op_readiness_15_tt
+			army_experience = 20
+			add_command_power = 10
+			hidden_effect = {
+				set_temp_variable = { var = VAL_bjk_op_gain value = 15 }
+				VAL_bjk_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_bjk_op_blockade = {
+		icon = ADISCORD_logistics
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			check_variable = { var = VAL_bjk_op_profile value = 3 compare = equals }
+			VAL_bjk_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 50
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_bjk_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_bjk_op_readiness_15_tt
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_bjk_op_gain value = 15 }
+				VAL_bjk_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_bjk_op_council_contacts = {
+		icon = ADISCORD_covert_operation
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			check_variable = { var = VAL_bjk_op_profile value = 4 compare = equals }
+			VAL_bjk_op_can_prepare = yes
+		}
+		available = { has_war = no }
+		cost = 75
+		fire_only_once = yes
+		days_remove = 40
+		cancel_trigger = { hidden_trigger = { VAL_bjk_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 75 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_bjk_op_readiness_15_tt
+			add_intel = { target = BJK civilian_intel = 25 }
+			hidden_effect = {
+				set_temp_variable = { var = VAL_bjk_op_gain value = 15 }
+				VAL_bjk_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_bjk_op_feint = {
+		icon = ADISCORD_negotiations
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = {
+			has_variable = VAL_bjk_op_profile
+			VAL_bjk_op_can_prepare = yes
+		}
+		available = {
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_bjk_op_readiness_50_needed_tt
+				check_variable = { var = VAL_bjk_op_readiness value = 50 compare = greater_than_or_equals }
+			}
+		}
+		cost = 50
+		fire_only_once = yes
+		days_remove = 30
+		cancel_trigger = { hidden_trigger = { VAL_bjk_op_can_prepare = no } }
+		cancel_effect = { add_political_power = 50 }
+		remove_effect = {
+			custom_effect_tooltip = VAL_bjk_op_readiness_10_tt
+			custom_effect_tooltip = VAL_bjk_op_deception_ready_tt
+			effect_tooltip = {
+				BJK = { add_timed_idea = { idea = VAL_op_caught_off_guard days = 45 } }
+			}
+			hidden_effect = {
+				set_country_flag = VAL_bjk_op_deception_ready
+				set_temp_variable = { var = VAL_bjk_op_gain value = 10 }
+				VAL_bjk_op_add_readiness = yes
+			}
+		}
+		ai_will_do = { base = 8 }
 	}
 
 	VAL_nod_ultimatum = {
@@ -1186,6 +1965,14 @@ VAL_military_operations = {
 			}
 			VAL_can_launch_final_campaign = yes
 			NOT = { has_country_flag = VAL_campaign_mobilizing }
+			# A started operation staff must reach the first readiness threshold.
+			custom_trigger_tooltip = {
+				tooltip = VAL_nod_op_readiness_30_needed_tt
+				OR = {
+					NOT = { has_completed_focus = VAL_nod_op_staff }
+					check_variable = { var = VAL_nod_op_readiness value = 30 compare = greater_than_or_equals }
+				}
+			}
 		}
 		cost = 60 days_remove = 30 days_re_enable = 90
 		complete_effect = {
@@ -1327,6 +2114,19 @@ VAL_military_operations = {
 				is_subject = no
 				NOT = { is_in_faction_with = VAL }
 			}
+			# A subject administration provides the front; neutral transit countries do not.
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_bezhaysk_forest_border_tt
+				COF = {
+					any_neighbor_country = {
+						has_capitulated = no
+						OR = {
+							tag = ROOT
+							is_subject_of = ROOT
+						}
+					}
+				}
+			}
 		}
 		cost = 50
 		complete_effect = {
@@ -1343,7 +2143,21 @@ VAL_military_operations = {
 		targets = { STP STS }
 		target_trigger = { FROM = { exists = yes } }
 		visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no } }
-		available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { OR = { has_country_flag = VAL_stelander_refused has_war_with = ROOT } } }
+		available = {
+			VAL_can_launch_final_campaign = yes
+			NOT = { has_country_flag = VAL_campaign_mobilizing }
+			FROM = { OR = { has_country_flag = VAL_stelander_refused has_war_with = ROOT } }
+			# A started operation staff must reach the first readiness threshold.
+			custom_trigger_tooltip = {
+				tooltip = VAL_stl_op_readiness_30_needed_tt
+				OR = {
+					NOT = { has_completed_focus = VAL_stl_op_staff }
+					has_country_flag = VAL_stl_op_launched
+					FROM = { has_war_with = ROOT }
+					check_variable = { var = VAL_stl_op_readiness value = 30 compare = greater_than_or_equals }
+				}
+			}
+		}
 		cost = 60 days_remove = 30 days_re_enable = 90
 		complete_effect = {
 			custom_effect_tooltip = VAL_campaign_against_stelander_description_rules_tt
@@ -1393,6 +2207,7 @@ VAL_military_operations = {
 					declare_war_on = { target = FROM type = annex_everything }
 					hidden_effect = { VAL_call_subjects_to_wars = yes }
 				}
+				hidden_effect = { VAL_stl_op_apply_launch = yes }
 			}
 			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
 		}
@@ -2574,7 +3389,7 @@ VAL_frontier = {
 		complete_effect = {
 			custom_effect_tooltip = VAL_proclaim_commonwealth_description_rules_tt
 			custom_effect_tooltip = VAL_commonwealth_proclaimed_tt
-			custom_effect_tooltip = VAL_next_chapter_tt
+			custom_effect_tooltip = VAL_commonwealth_chapter_focus_tt
 			hidden_effect = {
 				VAL_adopt_commonwealth = yes
 				if = {

@@ -44,11 +44,11 @@ ADISCORD_land_fortress_state = {
 	icon = "GFX_doctrine_milestone_artillery_land"
 	icon_frame = "GFX_doctrine_decor_land"
 	mastery = {
-		multiplier = 0.8
+		multiplier = 5
 		categories = {
-			category_all_infantry
 			category_support_battalions
 			category_line_artillery
+			category_artillery
 		}
 	}
 }

@@ -189,6 +189,7 @@ technologies = {
 			research_cost_coeff = 1
 		}
 		enable_equipments = { ADISCORD_artillery_equipment_2170 }
+		enable_subunits = { ADISCORD_loitering_munition_company }
 		research_cost = 2.05
 		start_year = 2166
 		folder = {

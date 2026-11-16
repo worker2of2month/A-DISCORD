@@ -861,6 +861,14 @@
       "status": "active"
     },
     {
+      "id": "val_contract.379",
+      "namespace": "val_contract",
+      "number": 379,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_cw.204",
       "namespace": "ADISCORD_STP_cw",
       "number": 204,
@@ -9397,6 +9405,86 @@
       "status": "active"
     },
     {
+      "id": "val_rework.205",
+      "namespace": "val_rework",
+      "number": 205,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.206",
+      "namespace": "val_rework",
+      "number": 206,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.207",
+      "namespace": "val_rework",
+      "number": 207,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.208",
+      "namespace": "val_rework",
+      "number": 208,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.209",
+      "namespace": "val_rework",
+      "number": 209,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.210",
+      "namespace": "val_rework",
+      "number": 210,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.211",
+      "namespace": "val_rework",
+      "number": 211,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.212",
+      "namespace": "val_rework",
+      "number": 212,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.213",
+      "namespace": "val_rework",
+      "number": 213,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.214",
+      "namespace": "val_rework",
+      "number": 214,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
       "id": "val_council.30",
       "namespace": "val_council",
       "number": 30,
@@ -9984,6 +10072,22 @@
       "id": "val_peace.101",
       "namespace": "val_peace",
       "number": 101,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.111",
+      "namespace": "val_peace",
+      "number": 111,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.112",
+      "namespace": "val_peace",
+      "number": 112,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_peace",
       "status": "active"

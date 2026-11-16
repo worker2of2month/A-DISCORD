@@ -520,6 +520,8 @@ on_actions = {
 								}
 							}
 
+							VAL_frontier_guarantor_auxiliary_defeat = yes
+
 							AND = {
 								tag = VAL
 								capital_scope = {
@@ -1243,44 +1245,7 @@ on_actions = {
 							}
 						}
 						ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
-						FROM = {
-							OR = {
-								ADISCORD_vorkerland_has_live_claimant_leader = yes
-								AND = {
-									ADISCORD_vorkerland_is_main_claimant = yes
-									NOT = { has_capitulated = yes }
-								}
-								AND = {
-									is_subject = yes
-									NOT = { has_capitulated = yes }
-									OVERLORD = {
-										exists = yes
-										ADISCORD_vorkerland_is_main_claimant = yes
-										NOT = { has_capitulated = yes }
-									}
-								}
-								AND = {
-									tag = WTD
-									has_war_together_with = TVA
-									TVA = { exists = yes NOT = { has_capitulated = yes } }
-								}
-								AND = {
-									tag = VLA
-									has_war_together_with = WKR
-									WKR = { exists = yes NOT = { has_capitulated = yes } }
-								}
-								AND = {
-									tag = SOL
-									has_war_together_with = VAD
-									VAD = { exists = yes NOT = { has_capitulated = yes } }
-								}
-								AND = {
-									tag = event_target:ADISCORD_vorkerland_nation
-									has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-									has_global_flag = ADISCORD_vorkerland_reunification_verified
-								}
-							}
-						}
+						FROM = { ADISCORD_vorkerland_central_claimant_victor = yes }
 					}
 					set_global_flag = skip_default_capitulation
 					# Keep occupation gains inside the central claimant graph before the
@@ -1319,6 +1284,22 @@ on_actions = {
 							}
 							else = { ADISCORD_vorkerland_settle_central_capitulation = yes }
 						}
+					}
+				}
+				# An ally or subject can outlast its defeated claimant. Its own defeat
+				# releases that reserved shell; the generic fallback would hand both to
+				# the native victor and skip the distribution among co-belligerents.
+				else_if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+						ROOT = { ADISCORD_vorkerland_releases_claimant_shell = yes }
+						FROM = { ADISCORD_vorkerland_central_claimant_victor = yes }
+					}
+					set_global_flag = skip_default_capitulation
+					ROOT = {
+						ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = yes
+						set_country_flag = { flag = ADISCORD_vorkerland_shell_release_current value = 1 days = 1 }
 					}
 				}
 				# Dirty-zone neighbours use the generic fallback only when RUS is
@@ -1991,6 +1972,11 @@ on_actions = {
 						}
 						set_global_flag = skip_default_capitulation
 						VAL_east_resolve_val_victory = yes
+					}
+					# A republic outside both factions has no generic veto; it stays
+					# occupied until a champion's defeat settles the whole east.
+					else = {
+						set_global_flag = skip_default_capitulation
 					}
 				}
 				# END east_final:on_capitulation
