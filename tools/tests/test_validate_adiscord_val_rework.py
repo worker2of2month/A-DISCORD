@@ -8796,9 +8796,10 @@ class ValExpandedCampaignTests(unittest.TestCase):
             self.scalar(e.value, "id"): e.value for e in tree if e.key == "focus"
         }
         focus = focuses["VAL_Bezhaysk_Operation"]
+        # The chapter milestone and the operation staff are both required.
         self.assertEqual(
-            self.scalar(self.getblock(focus, "prerequisite"), "focus"),
-            "VAL_Contracts_Outlive_Kings",
+            {self.scalar(e.value, "focus") for e in focus if e.key == "prerequisite"},
+            {"VAL_Contracts_Outlive_Kings", "VAL_bjk_op_staff"},
         )
         self.assertEqual(self.scalar(focus, "cancel_if_invalid"), "yes")
         reward = self.getblock(focus, "completion_reward")
