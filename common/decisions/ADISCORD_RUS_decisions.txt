@@ -213,6 +213,17 @@ RUS_last_empire_crisis = {
 				factor = 0
 				VAL_nw_special_zone_permitted = no
 			}
+			# A sanitary-gate puppet joins its overlord's faction at once. While
+			# Kefreyt's postwar tree runs, an AI holder leaves the republics to the
+			# eastern contest instead of absorbing all of them on the first days.
+			modifier = {
+				factor = 0
+				NOT = { tag = VAL }
+				VAL = {
+					VAL_nw_operational = yes
+					has_focus_tree = VAL_new_world_focus
+				}
+			}
 		}
 	}
 }

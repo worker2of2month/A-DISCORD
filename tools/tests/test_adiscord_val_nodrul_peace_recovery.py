@@ -352,6 +352,57 @@ class FinalSettlementFixture:
         self.root = previous_root
 
 
+class AuxiliaryDefeatFixture(FinalSettlementFixture):
+    """A Nodrul subject capitulates after the bloc's members were reserved."""
+
+    def __init__(self, victor="VAL"):
+        super().__init__("STP", "NOD")
+        self.flags["NOD"].discard("VAL_final_capitulation_immediate")
+        self.flags["NOD"].discard("VAL_coalition_capitulation_current")
+        self.capitulated.update({"NOD", "YPR"})
+        self.members.add("YPR")
+        self.subjects["YPR"] = "NOD"
+        self.root = "YPR"
+        self.victor = victor
+        self.capital_controllers = {"YPR": victor}
+
+    def matches(self, entries, scope):
+        for entry in entries:
+            key, value = entry.key, entry.value
+            if key in self.tags or key in ("ROOT", "FROM", "PREV"):
+                target = {
+                    "ROOT": self.root,
+                    "FROM": self.victor,
+                    "PREV": self.previous,
+                }.get(key, key)
+                previous = self.previous
+                self.previous = scope
+                matched = self.matches(value, target)
+                self.previous = previous
+            elif key == "capital_scope":
+                controller = next(item.value for item in value if item.key == "controller")
+                matched = self.matches(controller, self.capital_controllers[scope])
+            else:
+                matched = super().matches([entry], scope)
+            if not matched:
+                return False
+        return True
+
+    def execute(self, entries, scope):
+        for entry in entries:
+            if entry.key == "set_country_flag" and isinstance(entry.value, list):
+                self.flags[scope].add(scalar(entry.value, "flag"))
+            else:
+                super().execute([entry], scope)
+
+    def immediate_callback(self):
+        text = ON_ACTIONS.read_text(encoding="utf-8")
+        section = text.split("# BEGIN kefreyt:on_capitulation_immediate\n", 1)[1]
+        section = section.split("# END kefreyt:on_capitulation_immediate", 1)[0]
+        router = [entry for entry in parse_clausewitz(section) if entry.key == "ROOT"]
+        self.execute(router[-1].value, self.root)
+
+
 def named_block(text: str, name: str) -> str:
     marker = f"{name} = {{"
     start = text.index(marker)
@@ -473,6 +524,53 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         fixture.flags["YPR"].add("VAL_coalition_capitulation_current")
         fixture.late_callback()
         self.assertCountEqual(fixture.installed, ("STP", "NOD"))
+
+    def test_last_bloc_subject_defeat_settles_without_generic_annexation(self):
+        for victor in ("VAL", "TFF"):
+            with self.subTest(victor=victor):
+                fixture = AuxiliaryDefeatFixture(victor)
+                if victor == "TFF":
+                    fixture.flags["VAL"].add("VAL_nod_frontier_agreement")
+                    fixture.triggers["VAL_frontier_partner_available"] = []
+                fixture.immediate_callback()
+                self.assertCountEqual(fixture.installed, ("STP", "NOD"))
+                self.assertIn("VAL_final_capitulation_immediate", fixture.flags["YPR"])
+                fixture.late_callback()
+                self.assertTrue(fixture.reserved)
+                self.assertNotIn("VAL_final_capitulation_immediate", fixture.flags["YPR"])
+
+    def test_bloc_subject_defeat_waits_for_a_fighting_member(self):
+        fixture = AuxiliaryDefeatFixture()
+        fixture.members.add("STS")
+        fixture.immediate_callback()
+        self.assertEqual(fixture.installed, [])
+        fixture.late_callback()
+        self.assertTrue(fixture.reserved)
+        self.assertIn("VAL_final_defeat_pending", fixture.flags["STP"])
+        self.assertIn("VAL_final_defeat_pending", fixture.flags["NOD"])
+
+    def test_third_party_victory_over_bloc_subject_is_not_reserved(self):
+        fixture = AuxiliaryDefeatFixture("BJK")
+        fixture.immediate_callback()
+        self.assertEqual(fixture.installed, [])
+        self.assertNotIn("VAL_final_capitulation_immediate", fixture.flags["YPR"])
+
+    def test_bloc_subject_needs_a_reserved_patron(self):
+        fixture = AuxiliaryDefeatFixture()
+        for tag in ("STP", "NOD"):
+            fixture.flags[tag].discard("VAL_final_defeat_pending")
+        fixture.immediate_callback()
+        self.assertNotIn("VAL_final_capitulation_immediate", fixture.flags["YPR"])
+
+    def test_nodrul_settlement_releases_its_reserved_subjects_from_the_war(self):
+        install = named_block(self.source, "VAL_install_nodrul_administration")
+        release = install.index("every_subject_country = {")
+        self.assertLess(install.index("VAL_end_administration_wars = yes"), release)
+        self.assertLess(release, install.index("VAL_partition_nodrul_settlement = yes"))
+        block = named_block(install[release:], "every_subject_country")
+        for excluded in ("tag = STP", "tag = STS", "has_country_flag = VAL_final_defeat_pending"):
+            self.assertIn(excluded, block)
+        self.assertIn("VAL = { white_peace = PREV }", block)
 
     def test_neutral_faction_ally_does_not_block(self):
         fixture = FinalSettlementFixture("STP", "NOD")

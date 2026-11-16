@@ -2705,8 +2705,12 @@
  STP_cw_fada_defeat_tt: "§RThe government can no longer continue the war. The party is defeated.§!"
  STP_cw_fada_timeout_tt: "§YThe mission renews if the civil war continues. The countdown does not decide the war.§!"
  STP_pc_council_revanche_title: "Kefreyt Returns to the Passes"
- STP_pc_council_revanche_desc: "The Council of Commanders, installed after Kefreyt’s defeat, has rejected the peace settlement. Rebuilt columns are crossing Stelander’s border again. This is no remnant of Solgalov’s expedition: the Council has deliberately chosen a war of revenge.\n\nShabrat has ruled out another limited peace. Should the Council lose, Kefreyt will be annexed in full. A Kefreyt victory, on the other hand, will install a subordinate administration in Stelander."
+ STP_pc_council_revanche_desc: "Eduard Korsch's revanchists, who replaced the Council of Commanders after Kefreyt's defeat, have rejected the peace settlement. Rebuilt columns are crossing Stelander’s border again. This is no remnant of Solgalov’s expedition: they have deliberately chosen a war of revenge.\n\nShabrat has ruled out another limited peace. Should Korsch lose, Kefreyt will be annexed in full. A Kefreyt victory, on the other hand, will install a subordinate administration in Stelander."
  STP_pc_council_revanche_response: "This time, we finish it."
+ STP_pw_party_council_revanche_title: "Kefreyt Tears Up the Treaty"
+ STP_pw_party_council_revanche_desc: "In the morning Kefreyt's troops removed the Party's posts at the stations and outside the ministries, and by noon Eduard Korsch's government declared the protectorate treaty void. The commissars who had checked the factory books only yesterday were escorted to the border under guard.\n\nKefreyt's columns are marching on the passes again. At the Party's staff they reread the reports on the depots they found and realise they did not find nearly all of them."
+ STP_pw_party_council_revanche_response: "We have beaten Kefreyt before. We will beat it again."
+ STP_pw_party_council_revanche_stakes_tt: "§RKefreyt's defeat:§! Kefreyt will be annexed in full.\n§RThe Party's defeat:§! the Party's Stelander becomes a subordinate contract administration of Kefreyt."
 
  STP_pw_regional_citizenship: "Common Citizenship"
  STP_pw_regional_citizenship_desc: "Victory changes borders, not civil administration. A common citizenship register will support the gradual integration of annexed neighbouring regions into the country."
@@ -2841,8 +2845,10 @@
  STP_pw_party_joint_staff_delta: "Joint staff bureau"
  STP_pw_party_domestic_staff_delta: "Domestic appointments"
 
+ STP_external_affairs: "Stelander Foreign Affairs"
+ STP_external_affairs_desc: "Shipments across the northern border and intelligence from Kefreyt.\n[STPGetPartyForeignReport]"
  STP_military_operations: "Military Operations"
- STP_military_operations_desc: "Campaigns, allied aid and recovery. Unit formation consumes reserves; decisions list prices and durations. Map colours show state controllers.\n[STPGetPartySurvival][STPGetRecoveryReport][STPGetKefreytArmyCommitment][STPGetCoalitionReport][STPGetWarStrainReport][STPGetStalledWarReport][STPGetPartyForeignReport]"
+ STP_military_operations_desc: "Campaigns, allied aid and recovery. Unit formation consumes reserves; decisions list prices and durations. Map colours show state controllers.\n[STPGetPartySurvival][STPGetRecoveryReport][STPGetKefreytArmyCommitment][STPGetCoalitionReport][STPGetWarStrainReport][STPGetStalledWarReport]"
  STP_operations_map_tt: "Stelander, Kefreyt, Nodrul, Bezhaysk, the Cult of the Children of the Forest, Yubora, the Free Frontier and the southern lands. Each state uses its current controller's national colour. Borders are highlighted in territory under our control; yellow hatching marks divided control."
 
  STP_pw_party_revolution_capital: "The New Capital of the Revolution"

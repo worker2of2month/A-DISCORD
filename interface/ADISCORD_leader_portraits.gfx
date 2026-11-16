@@ -486,6 +486,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_portrait_VAL_Eduard_Korsch"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Eduard_Korsch.png"
+	}
+
+	spriteType = {
 		name = "GFX_portrait_VAL_Arkadi_Lemm"
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Arkadi_Lemm.png"
 	}

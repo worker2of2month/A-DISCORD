@@ -532,8 +532,12 @@ class PartyRouteContracts(unittest.TestCase):
             ),
         ):
             focus = self.focus[focus_id]
+            # The Kefreyt campaign opens from the army branch, before the
+            # settled-state reforms; Bezhaysk waits for the external mandate.
             self.assertIn(
-                "STP_pw_party_external_mandate",
+                "STP_pw_party_external_mandate"
+                if target == "BJK"
+                else "STP_pw_party_border_staff",
                 [e.value for p in children(focus, "prerequisite") for e in p],
             )
             reward = one(focus, "completion_reward")
@@ -559,9 +563,11 @@ class PartyRouteContracts(unittest.TestCase):
             for e in p
             if e.key == "focus"
         }
-        self.assertEqual(
-            prerequisites,
-            {"STP_pw_party_bezhaysk_campaign", "STP_pw_party_kefreyt_campaign"},
+        # The early Kefreyt campaign is not drawn into the final order; its
+        # result is still required through STP_pw_party_external_order_resolved.
+        self.assertEqual(prerequisites, {"STP_pw_party_bezhaysk_campaign"})
+        self.assertIn(
+            "STP_pw_party_external_order_resolved", str(one(final, "available"))
         )
         triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
         self.assertIn("STP_pw_party_can_attack_bezhaysk = {", triggers)

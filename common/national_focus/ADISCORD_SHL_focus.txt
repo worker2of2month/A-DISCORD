@@ -46,10 +46,6 @@ focus_tree = {
 # в главном дереве как shared_focus; военные фокусы курса стоят в дереве
 # войны за Юг (focus_trees/SHL/south_war).
 
-	# Салима Дарзи пока имеет только роль советника; роль главы коммуны
-	# добавляется в common/characters/SHL.txt, после чего сюда возвращается
-	# promote_character. До этого фокус описывает дежурный совет без смены лидера.
-
 	# Та же передача печей городам, но без разовой уступки кварталам: очередь
 	# плавок между печами даёт постоянный прирост эффективности.
 
@@ -2016,11 +2012,12 @@ shared_focus = {
 				}
 			}
 			custom_effect_tooltip = SHL_k_standing_council_tt
-			promote_character = {
-				character = SHL_Salima_Darzi
-				ideology = anarchism_ideology
-			}
 			hidden_effect = {
+				if = {
+					limit = { has_country_leader = { character = SHL_Salima_Darzi ruling_only = yes } }
+					remove_country_leader_trait = SHL_voice_of_the_shifts
+					add_country_leader_trait = SHL_duty_masters
+				}
 				add_to_variable = { var = SHL_pow_political_power_gain value = 0.10 }
 				SHL_refresh_conclave_power = yes
 			}

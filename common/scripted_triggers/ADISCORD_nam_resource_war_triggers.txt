@@ -3133,6 +3133,25 @@ NAM_prewar_pragmatic_mandate = {
 	NOT = { check_variable = { NAM_prewar_balance > 0.25 } }
 }
 
+# COUNTRY NAM. AI weights only. Above +0.10 the compromise course stops paying
+# the districts, so one more step cannot carry it past the pragmatic mandate.
+NAM_ai_compromise_ladder_full = {
+	check_variable = { NAM_ai_prewar_course = 3 }
+	has_power_balance = { id = NAM_ladder_bop }
+	power_balance_value = { id = NAM_ladder_bop value > 0.10 }
+}
+
+# COUNTRY NAM. AI weights only. The compromise course recalls the seals once
+# the ladder drifts more than 0.15 from the centre in either direction.
+NAM_ai_compromise_ladder_drifted = {
+	check_variable = { NAM_ai_prewar_course = 3 }
+	has_power_balance = { id = NAM_ladder_bop }
+	OR = {
+		power_balance_value = { id = NAM_ladder_bop value > 0.15 }
+		power_balance_value = { id = NAM_ladder_bop value < -0.15 }
+	}
+}
+
 NAM_pw_industrial_schedule_ready = {
 	NAM_pw_operable = yes
 }

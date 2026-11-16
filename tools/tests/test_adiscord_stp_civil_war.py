@@ -2350,7 +2350,7 @@ class CivilWarContracts(unittest.TestCase):
         supply = ast_block(
             ast_block(
                 entries("common/decisions/ADISCORD_STP_decisions.txt"),
-                "STP_military_operations",
+                "STP_external_affairs",
             ),
             "STP_cw_supply_the_north",
         )
@@ -6221,7 +6221,7 @@ class NorthernCampaignContracts(unittest.TestCase):
 
         category = ast_block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_military_operations",
+            "STP_external_affairs",
         )
         supply = ast_block(category, "STP_cw_supply_the_north")
         self.assertEqual(scalar(supply, "cost"), "0")

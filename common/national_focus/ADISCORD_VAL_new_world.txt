@@ -2348,6 +2348,8 @@ focus_tree = {
 		cancel_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = VAL_operation_return_southern_tsaygen
+			army_experience = 10
+			add_war_support = 0.03
 		}
 		ai_will_do = {
 			base = 10
@@ -2377,6 +2379,8 @@ focus_tree = {
 		cancel_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = VAL_operation_cross_perimeter
+			add_command_power = 15
+			army_experience = 10
 		}
 		ai_will_do = {
 			base = 8
@@ -2394,6 +2398,12 @@ focus_tree = {
 		cost = 2
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_survey
+			add_tech_bonus = {
+				name = VAL_nw_perimeter
+				bonus = 0.5
+				uses = 1
+				category = construction_tech
+			}
 		}
 		ai_will_do = {
 			base = 10
@@ -2418,6 +2428,11 @@ focus_tree = {
 		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_restore_works
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 5000
+				producer = VAL
+			}
 		}
 		ai_will_do = {
 			base = 10
@@ -2521,6 +2536,12 @@ focus_tree = {
 		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_salvage_archives
+			add_tech_bonus = {
+				name = VAL_nw_archives
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
 		}
 		ai_will_do = {
 			base = 10

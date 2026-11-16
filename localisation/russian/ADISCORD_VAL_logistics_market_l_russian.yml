@@ -190,8 +190,8 @@
 
  VAL_launch_national_recruitment: "Общий контрактный набор"
  VAL_launch_national_recruitment_desc:0 "Вербовочные комиссии отправятся в города и округа. Казначеям, врачам и офицерам предстоит работать за одним столом."
- VAL_launch_national_recruitment_cost:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon\nиз местного резерва"
- VAL_launch_national_recruitment_cost_blocked:0 "§R3000§! £ADISCORD_economy_treasury_texticon + §R20000§! £population_texticon\nиз местного резерва"
+ VAL_launch_national_recruitment_cost:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon"
+ VAL_launch_national_recruitment_cost_blocked:0 "§R3000§! £ADISCORD_economy_treasury_texticon + §R20000§! £population_texticon"
  VAL_launch_national_recruitment_cost_tooltip:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon из местного резерва"
  VAL_national_recruitment_pending_tt:0 "§Y20000§! £population_texticon из местного резерва проходят подготовку в течение §Y60 дней§!."
  VAL_national_recruitment_refund_tt:0 "Кефрейт получает обратно оплаченные §Y3000§! £ADISCORD_economy_treasury_texticon и §Y2§! единицы местного резерва."

@@ -204,6 +204,7 @@ class ScriptMachine:
         self.previous_scope = "SHL"
         # Ruling character and the trees loaded by course ratification.
         self.leader = "SHL_Jalil_Nur"
+        self.portraits = {}
         self.loaded_trees = []
         self.cosmetic_tags = []
         # Neighbour countries and simple engine facts used by the crisis layer.
@@ -532,6 +533,8 @@ class ScriptMachine:
                 building = scalar(e.value, "type")
                 assert self.state_buildings[(scope, building)] > 0, "Cannot damage an absent building"
                 self.calls.append((e.key, scope))
+            elif e.key == "set_portraits":
+                self.portraits[scalar(e.value, "character")] = scalar(block(e.value, "civilian"), "large")
             elif e.key == "promote_character":
                 self.leader = scalar(e.value, "character")
                 self.calls.append((e.key, scope))
@@ -3604,6 +3607,52 @@ class CourseTreeStructureTests(unittest.TestCase):
         self.setUp()
         self.m.run("SHL_commit_regency_course")
         self.assertEqual(self.m.leader, "SHL_Darius_Safir")
+
+    def test_route_portraits_follow_ratification_and_military_victory(self):
+        victory = "ADISCORD_south_hegemon_SHL"
+        safir = "SHL_Darius_Safir"
+        characters = parse_clausewitz((ROOT / "common/characters/SHL.txt").read_text(encoding="utf-8"))
+        definitions = block(characters, "characters")
+        starting = {}
+        arbin = "SHL_Mariam_Arbin"
+        darzi = "SHL_Salima_Darzi"
+        for character in ("SHL_Jalil_Nur", safir, arbin, darzi):
+            portraits = block(block(definitions, character), "portraits")
+            starting[character] = scalar(block(portraits, "civilian"), "large")
+        for commit, leader, normal, won in [
+            ("SHL_commit_house_course", "SHL_Jalil_Nur", "GFX_portrait_SHL_Jalil_Nur_tenth_house", "GFX_portrait_SHL_Jalil_Nur_victory"),
+            ("SHL_commit_state_course", "SHL_Jalil_Nur", "GFX_portrait_SHL_Jalil_Nur_directorate", "GFX_portrait_SHL_Jalil_Nur_victory"),
+            ("SHL_commit_regency_course", safir, "GFX_portrait_SHL_Darius_Safir_regent", "GFX_portrait_SHL_Darius_Safir"),
+            ("SHL_commit_city_course", arbin, "GFX_portrait_SHL_Mariam_Arbin", "GFX_portrait_SHL_Mariam_Arbin_victory"),
+            ("SHL_commit_commune_course", darzi, "GFX_portrait_SHL_Salima_Darzi", "GFX_portrait_SHL_Salima_Darzi_victory"),
+        ]:
+            with self.subTest(course=commit):
+                self.setUp()
+                self.m.portraits.update(starting)
+                self.m.run(commit)
+                self.assertEqual(self.m.portraits[leader], normal)
+                self.m.global_flags.add(victory)
+                self.m.run("SHL_update_ruler_portrait")
+                self.assertEqual(self.m.portraits[leader], won)
+                for other in starting.keys() - {leader}:
+                    self.assertEqual(self.m.portraits[other], starting[other])
+                self.setUp()
+                self.m.portraits.update(starting)
+                self.m.global_flags.add(victory)
+                self.m.run(commit)
+                self.assertEqual(self.m.portraits[leader], won)
+                self.setUp()
+                self.m.portraits.update(starting)
+                self.m.global_flags.update((victory, "ADISCORD_south_unopposed"))
+                self.m.run(commit)
+                self.assertEqual(self.m.portraits[leader], normal)
+        self.setUp()
+        self.m.run("SHL_commit_commune_course")
+        self.assertEqual(self.m.leader, "SHL_Salima_Darzi")
+        self.m.global_flags.add(victory)
+        self.m.run("SHL_update_ruler_portrait")
+        self.assertNotIn("SHL_Jalil_Nur", self.m.portraits)
+        self.assertNotIn(safir, self.m.portraits)
 
     def test_cosmetic_tags_exist_with_three_flag_sizes(self):
         cosmetic = {e.key: e.value for e in parse_clausewitz((ROOT / "common/countries/cosmetic.txt").read_text(encoding="utf-8-sig"))}

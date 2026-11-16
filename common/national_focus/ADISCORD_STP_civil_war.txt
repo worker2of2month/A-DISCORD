@@ -3505,10 +3505,12 @@ focus_tree = {
 	focus = {
 		id = STP_pw_party_kefreyt_campaign
 		icon = GFX_focus_STP_ph_pen_of_staff
-		x = 2
-		y = 15
+		x = 14
+		y = 8
 		cost = 4
-		prerequisite = { focus = STP_pw_party_external_mandate }
+		# The army branch opens the campaign before the settled-state reforms, so
+		# Kefreyt's later revanche can still meet the Party's northern march.
+		prerequisite = { focus = STP_pw_party_border_staff }
 		allow_branch = {
 			has_country_flag = STP_cw_postwar
 			tag = STP
@@ -3545,7 +3547,6 @@ focus_tree = {
 		y = 16
 		cost = 4
 		prerequisite = { focus = STP_pw_party_bezhaysk_campaign }
-		prerequisite = { focus = STP_pw_party_kefreyt_campaign }
 		allow_branch = {
 			has_country_flag = STP_cw_postwar
 			tag = STP

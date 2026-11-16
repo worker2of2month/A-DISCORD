@@ -5,7 +5,7 @@ SHL_apply_starting_economy = {
 	set_variable = { var = ADISCORD_economy_inflation value = 5 }
 	set_variable = { var = ADISCORD_economy_deficit_pressure value = 0 }
 	set_variable = { var = ADISCORD_economy_fiscal_stress value = 8 }
-	set_variable = { var = ADISCORD_economy_price_shock value = 0 }
+	set_variable = { var = ADISCORD_economy_price_shock value = 6 }
 	ADISCORD_economy_sync_starting_accounting = yes
 }
 
@@ -1418,6 +1418,7 @@ SHL_commit_house_course = {
 		custom_effect_tooltip = SHL_rename_house_tt
 		hidden_effect = {
 			set_cosmetic_tag = SHL_conclave_of_ten
+			SHL_update_ruler_portrait = yes
 			SHL_announce_course_news = yes
 		}
 	}
@@ -1528,6 +1529,7 @@ SHL_commit_city_course = {
 		custom_effect_tooltip = SHL_rename_city_tt
 		hidden_effect = {
 			set_cosmetic_tag = SHL_southern_compact
+			SHL_update_ruler_portrait = yes
 			SHL_announce_course_news = yes
 		}
 	}
@@ -1631,6 +1633,7 @@ SHL_commit_state_course = {
 		custom_effect_tooltip = SHL_rename_state_tt
 		hidden_effect = {
 			set_cosmetic_tag = SHL_iron_directorate
+			SHL_update_ruler_portrait = yes
 			SHL_queue_furnace_administrations = yes
 			SHL_announce_course_news = yes
 		}
@@ -2084,6 +2087,7 @@ SHL_commit_regency_course = {
 		custom_effect_tooltip = SHL_rename_regency_tt
 		hidden_effect = {
 			set_cosmetic_tag = SHL_hereditary_republic
+			SHL_update_ruler_portrait = yes
 			SHL_announce_course_news = yes
 		}
 		# One native tree: the entry focus opens the course section even when the
@@ -2116,7 +2120,7 @@ SHL_commit_commune_course = {
 			popularity = 0.35
 		}
 		promote_character = {
-			character = SHL_Shift_Councils
+			character = SHL_Salima_Darzi
 			ideology = anarchism_ideology
 		}
 		SHL_retire_nur = yes
@@ -2139,6 +2143,7 @@ SHL_commit_commune_course = {
 		custom_effect_tooltip = SHL_rename_commune_tt
 		hidden_effect = {
 			set_cosmetic_tag = SHL_commune_of_fire
+			SHL_update_ruler_portrait = yes
 			SHL_announce_course_news = yes
 		}
 		# One native tree: the entry focus opens the course section even when the
@@ -7566,6 +7571,70 @@ SHL_announce_first_war = {
 # COUNTRY SHL. Keizan's march on the Zarkhan district has been repelled.
 SHL_announce_keizan_repelled = {
 	news_event = { id = ADISCORD_SHL_news.8 hours = 6 }
+}
+
+# Ratification and accession can follow the military settlement.
+SHL_update_ruler_portrait = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			NOT = { has_global_flag = ADISCORD_south_unopposed }
+		}
+		if = {
+			limit = { has_country_leader = { character = SHL_Jalil_Nur ruling_only = yes } }
+			set_portraits = {
+				character = SHL_Jalil_Nur
+				civilian = { large = GFX_portrait_SHL_Jalil_Nur_victory }
+			}
+		}
+		else_if = {
+			limit = { has_country_leader = { character = SHL_Darius_Safir ruling_only = yes } }
+			set_portraits = {
+				character = SHL_Darius_Safir
+				civilian = {
+					large = GFX_portrait_SHL_Darius_Safir
+					small = GFX_portrait_SHL_Darius_Safir_small
+				}
+			}
+		}
+		else_if = {
+			limit = { has_country_leader = { character = SHL_Mariam_Arbin ruling_only = yes } }
+			set_portraits = {
+				character = SHL_Mariam_Arbin
+				civilian = {
+					large = GFX_portrait_SHL_Mariam_Arbin_victory
+					small = GFX_portrait_SHL_Mariam_Arbin_small
+				}
+			}
+		}
+		else_if = {
+			limit = { has_country_leader = { character = SHL_Salima_Darzi ruling_only = yes } }
+			set_portraits = {
+				character = SHL_Salima_Darzi
+				civilian = {
+					large = GFX_portrait_SHL_Salima_Darzi_victory
+					small = GFX_portrait_SHL_Salima_Darzi_small
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { has_country_leader = { character = SHL_Jalil_Nur ruling_only = yes } }
+		if = {
+			limit = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+			set_portraits = {
+				character = SHL_Jalil_Nur
+				civilian = { large = GFX_portrait_SHL_Jalil_Nur_tenth_house }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+			set_portraits = {
+				character = SHL_Jalil_Nur
+				civilian = { large = GFX_portrait_SHL_Jalil_Nur_directorate }
+			}
+		}
+	}
 }
 
 # COUNTRY SHL. The Crown of the South, announced to the whole region.

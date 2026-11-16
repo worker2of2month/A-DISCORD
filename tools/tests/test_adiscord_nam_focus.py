@@ -7509,14 +7509,24 @@ class NamCampaignTests(unittest.TestCase):
                 self.apply(block(decision, "complete_effect"), facts)
                 self.assertNotIn(("NAM", "equipment", equipment), facts)
 
-    def test_service_modifier_fields_and_icons_are_attested_in_the_engine(self):
+    def test_service_modifiers_use_native_fields_and_registered_service_icons(self):
+        from PIL import Image
+
         vocabulary = json.loads(read("tools/data/adiscord_modifier_fields.json"))
         definitions = parsed("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_NAM.txt")
+        sprites = block(parsed("interface/ADISCORD_ideas.gfx"), "spriteTypes")
         for name in ("NAM_garrison_dynamic", "NAM_navy_dynamic", "NAM_air_dynamic"):
-            for entry in block(definitions, name):
-                if entry.key == "icon":
-                    self.assertIn(entry.value, vocabulary["sprites"])
-                elif entry.key != "enable":
+            modifier = block(definitions, name)
+            icon_name = scalar(modifier, "icon")
+            self.assertEqual(icon_name, f"GFX_idea_{name}")
+            paths = [scalar(sprite.value, "texturefile") for sprite in sprites
+                     if sprite.key == "spriteType" and scalar(sprite.value, "name") == icon_name]
+            self.assertEqual(len(paths), 1, icon_name)
+            with Image.open(ROOT / paths[0]) as icon:
+                self.assertEqual(icon.size, (68, 68))
+                self.assertEqual(icon.mode, "RGBA")
+            for entry in modifier:
+                if entry.key not in ("icon", "enable"):
                     self.assertIn(entry.key, vocabulary["country"], (name, entry.key))
 
     def test_every_policy_combination_reaches_the_branch_finals(self):
@@ -11866,6 +11876,107 @@ class NamCampaignTests(unittest.TestCase):
                     for entry in self.postwar[focus_id]:
                         if entry.key == "mutually_exclusive":
                             self.assertFalse({e.value for e in entry.value}.intersection(ids), name)
+
+    PREWAR_COURSE_PLANS = {1: ("NAM_prewar_plan", "NAM_prewar_district_mandate"),
+                           2: ("NAM_prewar_vertical_plan", "NAM_prewar_service_mandate"),
+                           3: ("NAM_prewar_compromise_plan", "NAM_prewar_pragmatic_mandate")}
+
+    def ladder_shift(self, body):
+        return sum((Decimal(scalar(e.value, "value")) for e in walk(body) if e.key == "add_power_balance_value"
+                    and scalar(e.value, "id") == "NAM_ladder_bop"), Decimal(0))
+
+    def declaration_answer(self, course):
+        """The answer with the highest AI weight before either ladder course is taken."""
+        facts = {("NAM", "has_completed_focus", "NAM_vertical"): False,
+                 ("NAM", "has_completed_focus", "NAM_districts"): False,
+                 ("NAM", "has_variable", "NAM_ai_prewar_course"): True,
+                 ("NAM", "variable", "NAM_ai_prewar_course"): course}
+        weights = []
+        for option in (e.value for e in self.events["ADISCORD_nam_groups.12"] if e.key == "option"):
+            if not any(e.key == "add_power_balance_value" for e in option):
+                continue
+            chance = block(option, "ai_chance")
+            weight = Decimal(scalar(chance, "base"))
+            for modifier in (e.value for e in chance if e.key == "modifier"):
+                if self.matches([e for e in modifier if e.key != "factor"], facts):
+                    weight *= Decimal(scalar(modifier, "factor"))
+            weights.append((weight, self.ladder_shift(option)))
+        self.assertEqual(len(weights), 2)
+        self.assertEqual(sorted(weight for weight, _ in weights)[0], 0, course)
+        return max(weights)[1]
+
+    def test_prewar_ai_draws_one_ladder_course_and_reaches_its_mandate(self):
+        draw = next(e.value for e in walk(self.effects["NAM_groups_initialize"]) if e.key == "random_list")
+        drawn = {int(scalar(block(branch.value, "set_variable"), "value")): int(branch.key) for branch in draw}
+        self.assertEqual(set(drawn), set(self.PREWAR_COURSE_PLANS))
+        self.assertTrue(all(weight > 0 for weight in drawn.values()))
+        self.assertIn(("clear_variable", "NAM_ai_prewar_course"),
+                      [(e.key, e.value) for e in self.effects["NAM_freeze_prewar_mandate"]])
+        plans = parsed("common/ai_strategy_plans/ADISCORD_NAM_plans.txt")
+        lean = [Decimal(scalar(e.value, "value")) for e in walk(self.focuses["NAM_sand_runs_out"])
+                if e.key == "set_variable" and scalar(e.value, "var") == "NAM_colony_ladder_lean"]
+        self.assertEqual(lean, [Decimal("-0.10"), Decimal("0.10")])
+        for course in (None, *self.PREWAR_COURSE_PLANS):
+            facts = {("NAM", "tag", "NAM"): True, ("NAM", "is_ai", "yes"): True,
+                     ("NAM", "has_focus_tree", "NAM_focus"): True,
+                     ("NAM", "has_variable", "NAM_ai_prewar_course"): course is not None,
+                     ("NAM", "variable", "NAM_ai_prewar_course"): course or 0}
+            active = self.PREWAR_COURSE_PLANS[course or 1][0]
+            for name, _ in self.PREWAR_COURSE_PLANS.values():
+                plan = block(plans, name)
+                self.assertEqual(self.matches(block(plan, "enable"), facts), name == active, (course, name))
+                self.assertEqual(self.matches(block(plan, "abort"), facts), name != active, (course, name))
+        for course, (name, mandate) in self.PREWAR_COURSE_PLANS.items():
+            with self.subTest(course=course):
+                queue = [e.value for e in block(block(plans, name), "ai_national_focuses")]
+                self.assertEqual(len(queue), len(set(queue)))
+                completed = set()
+                for focus in queue:
+                    body = self.focuses[focus]
+                    for requirement in (e.value for e in body if e.key == "prerequisite"):
+                        self.assertTrue(any(e.value in completed for e in requirement), (name, focus))
+                    for exclusion in (e.value for e in body if e.key == "mutually_exclusive"):
+                        self.assertFalse(any(e.value in completed for e in exclusion), (name, focus))
+                    completed.add(focus)
+                fork = ({"NAM_vertical", "NAM_districts"} & completed).pop()
+                follow_up = ({"NAM_emergency_writ", "NAM_district_guarantees"} & completed).pop()
+                balance = (lean[0] if "NAM_commissioner_plan" in completed else lean[1]) \
+                    + self.declaration_answer(course) + self.ladder_shift(self.focuses[fork]) \
+                    + self.ladder_shift(self.focuses[follow_up])
+                facts = {("NAM", "has_variable", "NAM_prewar_balance"): True,
+                         ("NAM", "variable", "NAM_prewar_balance"): float(balance)}
+                self.assertTrue(self.matches(self.triggers[mandate], facts), (course, balance))
+                if course == 3:
+                    # One more district step at the guard still stays pragmatic.
+                    self.assertLessEqual(balance, Decimal("0.10"))
+
+    def test_prewar_ai_compromise_keeps_ladder_decisions_inside_its_mandate(self):
+        guarded = {"NAM_admin_voluntary_enrolment": ("NAM_ai_compromise_ladder_full", "0"),
+                   "NAM_admin_district_guard_contract": ("NAM_ai_compromise_ladder_full", "0"),
+                   "NAM_admin_pay_local_arrears": ("NAM_ai_compromise_ladder_full", "0"),
+                   "NAM_admin_svetlogorsk_cooperative": ("NAM_ai_compromise_ladder_full", "0"),
+                   "NAM_favour_dist": ("NAM_ai_compromise_ladder_full", "0"),
+                   "NAM_admin_seal_appeal": ("NAM_ai_compromise_ladder_drifted", "4")}
+        decisions = {decision.key: decision.value for category in parsed(f"common/decisions/{BASE}_decisions.txt")
+                     if isinstance(category.value, list) for decision in category.value}
+        for name, (trigger, factor) in guarded.items():
+            modifiers = [e.value for e in block(decisions[name], "ai_will_do") if e.key == "modifier"]
+            self.assertIn([("factor", factor), (trigger, "yes")], [[(e.key, e.value) for e in m] for m in modifiers], name)
+            if trigger.endswith("_full"):
+                # NAM_favour_dist shifts through NAM_ladder_shift with a temporary step.
+                shift = self.ladder_shift(decisions[name]) or max(
+                    Decimal(scalar(e.value, "value")) for e in walk(decisions[name])
+                    if e.key == "set_temp_variable" and scalar(e.value, "var") == "NAM_ladder_shift")
+                self.assertTrue(Decimal(0) < shift <= Decimal("0.10"), name)
+        for course, balance, full, drifted in ((3, 0.10, False, False), (3, 0.11, True, False),
+                                               (3, 0.16, True, True), (3, -0.16, False, True),
+                                               (1, 0.6, False, False), (2, -0.6, False, False)):
+            facts = self.mandate_facts(balance)
+            facts[("NAM", "has_variable", "NAM_ai_prewar_course")] = True
+            facts[("NAM", "variable", "NAM_ai_prewar_course")] = course
+            self.assertEqual(self.matches(self.triggers["NAM_ai_compromise_ladder_full"], facts), full, (course, balance))
+            self.assertEqual(self.matches(self.triggers["NAM_ai_compromise_ladder_drifted"], facts), drifted,
+                             (course, balance))
 
 
     EXPANDED_POSTWAR_PROGRAMMES = {

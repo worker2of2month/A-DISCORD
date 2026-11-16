@@ -1,6 +1,7 @@
 # COUNTRY NAM. The native balance is sampled once before wartime rewards or losses.
 # The stored value determines the mandate even if the live ladder later moves.
 NAM_freeze_prewar_mandate = {
+	clear_variable = NAM_ai_prewar_course
 	if = {
 		limit = { NOT = { has_variable = NAM_prewar_balance } }
 		set_variable = { var = NAM_prewar_balance value = 0 }
@@ -2243,6 +2244,14 @@ NAM_groups_initialize = {
 		set_variable = { var = NAM_project_slots value = 1 }
 		NAM_oil_initialize = yes
 		NAM_crisis_draw = yes
+		# The AI's prewar ladder course for this campaign: 1 districts, 2 vertical,
+		# 3 compromise. Its strategy plans, the declaration answer and the ladder
+		# decisions read it; NAM_freeze_prewar_mandate clears it at the first shot.
+		random_list = {
+			40 = { set_variable = { var = NAM_ai_prewar_course value = 1 } }
+			35 = { set_variable = { var = NAM_ai_prewar_course value = 2 } }
+			25 = { set_variable = { var = NAM_ai_prewar_course value = 3 } }
+		}
 		# Weber's network works from the first day of the colony; focuses may
 		# already have changed it, so only a missing value is seeded.
 		if = {

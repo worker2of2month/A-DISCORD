@@ -1458,6 +1458,48 @@ VAL_final_settlement_ready = {
 	NOT = { VAL_final_faction_ally_still_fighting = yes }
 }
 
+# COUNTRY capitulating; FROM is the native victor. A subject or faction ally of
+# a final-war member that is already awaiting settlement, such as Nodrul's Yubora,
+# Ainholm or island subject. Its land follows the bloc's settlement.
+VAL_final_bloc_auxiliary_defeat = {
+	NOT = {
+		tag = STP
+		tag = STS
+		tag = NOD
+	}
+	has_war_with = VAL
+	VAL = { exists = yes has_capitulated = no is_subject = no }
+	OR = {
+		NOD = {
+			has_country_flag = VAL_final_defeat_pending
+			OR = {
+				is_in_faction_with = PREV
+				PREV = { is_subject_of = NOD }
+			}
+		}
+		STP = {
+			has_country_flag = VAL_final_defeat_pending
+			OR = {
+				is_in_faction_with = PREV
+				PREV = { is_subject_of = STP }
+			}
+		}
+		STS = {
+			has_country_flag = VAL_final_defeat_pending
+			OR = {
+				is_in_faction_with = PREV
+				PREV = { is_subject_of = STS }
+			}
+		}
+	}
+	OR = {
+		FROM = { VAL_final_campaign_ally = yes }
+		capital_scope = {
+			controller = { VAL_final_campaign_ally = yes }
+		}
+	}
+}
+
 VAL_is_contract_administration = {
 	OR = {
 		AND = {
@@ -1722,7 +1764,24 @@ VAL_ardent_network_active = {
 }
 
 VAL_nod_limited_offer = {
-	VAL = { has_country_flag = { flag = VAL_nod_frontier_offer_pending value > 1 } }
+	VAL = {
+		has_country_flag = { flag = VAL_nod_frontier_offer_pending value > 1 }
+		has_country_flag = { flag = VAL_nod_frontier_offer_pending value < 3 }
+	}
+}
+
+VAL_nod_original_offer_current = {
+	VAL_nod_frontier_offer_current = yes
+	VAL = {
+		has_country_flag = VAL_nod_frontier_offer_pending
+		has_country_flag = { flag = VAL_nod_frontier_offer_pending value < 3 }
+	}
+}
+
+VAL_nod_counteroffer_payable = {
+	VAL_nod_frontier_offer_current = yes
+	has_country_flag = { flag = VAL_nod_frontier_offer_pending value > 2 }
+	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
 }
 
 VAL_nod_limited_agreement = {
@@ -2522,25 +2581,65 @@ VAL_nw_has_contract_administration = {
 	}
 }
 
-# COUNTRY VAL: the first defeat stays recorded so inherited campaigns stay closed.
-VAL_council_can_prepare_revanche = {
+# COUNTRY VAL: the Party's postwar campaign left the defeated Council in office
+# as its protectorate. The Party's victory flag outlives the later break, so the
+# party-only focuses stay visible after Kefreyt leaves the subject relation.
+VAL_council_party_route = {
 	tag = VAL
 	has_country_flag = VAL_stelander_defeated
-	has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
-	NOT = { is_subject = yes }
-	NOT = { has_capitulated = yes }
-	STS = {
+	STP = {
 		exists = yes
-		STP_pc_founder_rules = yes
-		NOT = { has_capitulated = yes }
-		NOT = { is_subject = yes }
-		NOT = { is_in_faction_with = VAL }
+		has_country_flag = STP_pw_party_kefreyt_victory
 	}
 }
 
+VAL_council_party_protectorate = {
+	VAL_council_party_route = yes
+	is_subject_of = STP
+	STP = {
+		has_capitulated = no
+		is_subject = no
+	}
+}
+
+# COUNTRY VAL: the post-defeat government. The revanchist coup replaces the
+# Council with Korsch's chauvinists; recovery and revanche continue under him.
+VAL_council_defeat_government = {
+	OR = {
+		has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
+		has_country_leader = { character = VAL_Eduard_Korsch ruling_only = yes }
+	}
+}
+
+# COUNTRY VAL: the first defeat stays recorded so inherited campaigns stay closed.
+# Shabrat's victory leaves an independent Council; the Party's leaves a protectorate.
+VAL_council_can_prepare_revanche = {
+	tag = VAL
+	has_country_flag = VAL_stelander_defeated
+	OR = {
+		has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
+		has_country_leader = { character = VAL_Eduard_Korsch ruling_only = yes }
+	}
+	NOT = { has_capitulated = yes }
+	OR = {
+		AND = {
+			NOT = { is_subject = yes }
+			STS = {
+				exists = yes
+				STP_pc_founder_rules = yes
+				NOT = { has_capitulated = yes }
+				NOT = { is_subject = yes }
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		VAL_council_party_protectorate = yes
+	}
+}
+
+# The protectorate may still fight beside the Party in its northern march; the
+# break makes a separate peace with those governments before the declaration.
 VAL_council_can_launch_revanche = {
 	VAL_council_can_prepare_revanche = yes
-	NOT = { has_war = yes }
 	NOT = { has_country_flag = VAL_council_revanche_active }
 	has_completed_focus = VAL_defeat_Revise_The_Settlement
 	has_completed_focus = VAL_defeat_Refit_For_Return
@@ -2548,14 +2647,34 @@ VAL_council_can_launch_revanche = {
 	has_completed_focus = VAL_defeat_Mountain_Exercises
 	has_completed_focus = VAL_defeat_Frontline_Arsenals
 	has_completed_focus = VAL_defeat_Supply_For_The_Return
+	OR = {
+		AND = {
+			VAL_council_party_protectorate = no
+			NOT = { has_war = yes }
+		}
+		AND = {
+			VAL_council_party_protectorate = yes
+			has_completed_focus = VAL_defeat_Double_Ledgers
+			has_completed_focus = VAL_defeat_Wait_For_The_March
+			NOT = { has_war_with = STP }
+			NOT = {
+				any_enemy_country = {
+					NOT = { STP_pw_party_northern_march_target = yes }
+				}
+			}
+		}
+	}
 }
 
 # COUNTRY VAL: domestic recovery does not depend on the foreign leader surviving.
 VAL_council_in_office = {
 	tag = VAL
 	has_country_flag = VAL_stelander_defeated
-	has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
-	is_subject = no
+	VAL_council_defeat_government = yes
+	OR = {
+		is_subject = no
+		VAL_council_party_protectorate = yes
+	}
 	has_capitulated = no
 }
 
@@ -2881,6 +3000,27 @@ VAL_wasteland_invasion_available = {
 	ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }
 	169 = { is_owned_by = ERT is_controlled_by = ERT }
 	NOT = { has_war_with = ERT }
+}
+
+# COUNTRY ERT. The perimeter lease must still be possible when ERT answers and
+# when Kefreyt pays. Unlike the war route, ERT's alliance does not block a sale.
+VAL_irem_lease_target_valid = {
+	has_global_flag = ADISCORD_vorkerland_dirty_opened
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_war_with = VAL }
+	169 = {
+		is_owned_by = ERT
+		is_controlled_by = ERT
+	}
+}
+
+# COUNTRY VAL. Exact boundaries for the whole lease price.
+VAL_irem_lease_affordable = {
+	NOT = { has_political_power < 50 }
+	check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals }
+	NOT = { has_equipment = { infantry_equipment < 6000 } }
 }
 
 VAL_wasteland_charter_available = {
@@ -4303,7 +4443,7 @@ VAL_ai_scripted_war_bonus_active = {
 	}
 }
 
-# COUNTRY VAL. The party government has taken its external mandate and can
+# COUNTRY VAL. The party government has formed its border staff and can
 # still open the Kefreyt operation; this precedes the campaign warning event.
 VAL_ai_party_campaign_threat = {
 	has_capitulated = no
@@ -4311,10 +4451,19 @@ VAL_ai_party_campaign_threat = {
 	STP = {
 		exists = yes
 		has_capitulated = no
-		has_completed_focus = STP_pw_party_external_mandate
+		has_completed_focus = STP_pw_party_border_staff
 		NOT = { has_war_with = VAL }
 		NOT = { is_in_faction_with = VAL }
 		NOT = { has_country_flag = STP_pw_party_kefreyt_subject_pending }
 		NOT = { has_country_flag = STP_pw_party_kefreyt_victory }
 	}
+}
+
+# COUNTRY VAL: the scheduled revanchist coup still has a Council to replace.
+VAL_council_revanchist_coup_current = {
+	tag = VAL
+	has_country_flag = VAL_stelander_defeated
+	has_completed_focus = VAL_defeat_Revise_The_Settlement
+	has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
+	has_capitulated = no
 }

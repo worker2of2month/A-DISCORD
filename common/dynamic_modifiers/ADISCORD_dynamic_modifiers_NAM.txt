@@ -1,6 +1,6 @@
 # Svetlogorye focus aggregates. Country variables hold the accumulated values.
 NAM_wrk_concession_income = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_idea_NAM_wrk_concession_income
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_wrk_concession_income_active_tt
@@ -23,7 +23,7 @@ NAM_wrk_concession_income = {
 }
 
 NAM_administration_dynamic = {
-	icon = GFX_idea_NAM_national_spirit
+	icon = GFX_idea_NAM_administration_dynamic
 	enable = { tag = NAM }
 	political_power_gain = NAM_adm_political_power_gain
 	stability_factor = NAM_adm_stability_factor
@@ -41,7 +41,7 @@ NAM_administration_dynamic = {
 }
 
 NAM_garrison_dynamic = {
-	icon = GFX_idea_generic_fortify_the_borders
+	icon = GFX_idea_NAM_garrison_dynamic
 	enable = { tag = NAM }
 	max_dig_in = NAM_gar_max_dig_in
 	supply_consumption_factor = NAM_gar_supply_consumption
@@ -54,7 +54,7 @@ NAM_garrison_dynamic = {
 }
 
 NAM_navy_dynamic = {
-	icon = GFX_idea_generic_coastal_navy
+	icon = GFX_idea_NAM_navy_dynamic
 	enable = { tag = NAM }
 	convoy_escort_efficiency = NAM_gar_convoy_escort
 	navy_org_factor = NAM_navy_organisation
@@ -74,7 +74,7 @@ NAM_navy_dynamic = {
 }
 
 NAM_air_dynamic = {
-	icon = GFX_idea_generic_air_bonus
+	icon = GFX_idea_NAM_air_dynamic
 	enable = { tag = NAM }
 	air_accidents_factor = NAM_air_accidents
 	air_mission_efficiency = NAM_air_mission_efficiency
@@ -84,7 +84,7 @@ NAM_air_dynamic = {
 
 # Pillars of power. NAM_groups_refresh derives every field from group support.
 NAM_loyalty_dynamic = {
-	icon = GFX_idea_NAM_national_spirit
+	icon = GFX_idea_NAM_loyalty_dynamic
 	enable = { tag = NAM }
 	political_power_gain = NAM_loy_political_power_gain
 	stability_factor = NAM_loy_stability_factor
@@ -97,7 +97,7 @@ NAM_loyalty_dynamic = {
 
 # Seal discipline. NAM_seal_discipline_clamp derives the value from 0-100 discipline.
 NAM_seal_discipline_dynamic = {
-	icon = GFX_idea_generic_fortify_the_borders
+	icon = GFX_idea_NAM_seal_discipline_dynamic
 	enable = { tag = NAM }
 	army_org_factor = NAM_seal_org_factor
 }
@@ -192,7 +192,7 @@ NAM_island_steel_levy_modifier = {
 # COUNTRY NAM in exile. The coalition's squadrons close the island harbours
 # for 90 days after Svetlogorsk piracy has become notorious.
 NAM_pirate_blockade = {
-	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
+	icon = GFX_idea_NAM_pirate_blockade
 	enable = { always = yes }
 	fuel_gain_factor = -0.25
 	ADISCORD_economy_trade_income_factor = -0.15
@@ -202,7 +202,7 @@ NAM_pirate_blockade = {
 # COUNTRY NAM under Veter's humanists. Corporate influence bands and the tax
 # holidays of the free zones; NAM_corp_refresh writes every field.
 NAM_corp_dynamic = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_idea_NAM_corp_dynamic
 	enable = { tag = NAM }
 	research_speed_factor = NAM_corp_mod_research
 	production_factory_efficiency_gain_factor = NAM_corp_mod_efficiency
@@ -213,7 +213,7 @@ NAM_corp_dynamic = {
 }
 
 NAM_board_industrial_policy = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_idea_NAM_board_industrial_policy
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_board_governing_tt
@@ -297,7 +297,7 @@ NAM_corporate_board_state = {
 # COUNTRY NAM after the exile war. NAM_consolidation_clamp derives both fields
 # from the 0-100 hold on the returned south.
 NAM_consolidation_dynamic = {
-	icon = GFX_idea_generic_fortify_the_borders
+	icon = GFX_idea_NAM_consolidation_dynamic
 	enable = { tag = NAM }
 	stability_factor = NAM_cons_mod_stability
 	compliance_gain = NAM_cons_mod_compliance
@@ -457,7 +457,7 @@ NAM_south_convoy_blockade = {
 
 # Temporary operational tempo; payment is made before installation.
 NAM_mil_mobile_operation = {
-	icon = GFX_idea_generic_fortify_the_borders
+	icon = GFX_idea_NAM_mil_mobile_operation
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_mil_mobile_operation_active_tt
@@ -510,7 +510,7 @@ NAM_mil_forward_depot = {
 }
 
 NAM_captured_wells_shock = {
-	icon = GFX_modifiers_sabotaged_resource
+	icon = GFX_idea_NAM_captured_wells_shock
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_current_war_tt
@@ -590,7 +590,7 @@ NAM_south_coast_irrigation = {
 # is on: a repelled campaign keeps them for the next war over the same
 # completed tree, and NAM_sw_close_war clears them once the South is settled.
 NAM_south_war_dynamic = {
-	icon = GFX_idea_generic_war_preparation
+	icon = GFX_idea_NAM_south_war_dynamic
 	enable = {
 		tag = NAM
 		ADISCORD_south_final_active = yes

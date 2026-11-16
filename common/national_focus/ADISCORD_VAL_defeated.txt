@@ -185,8 +185,14 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_war_support = 0.1
-			custom_effect_tooltip = VAL_council_revanche_stakes_tt
+			if = {
+				limit = { VAL_council_party_protectorate = yes }
+				custom_effect_tooltip = VAL_council_party_revanche_stakes_tt
+			}
+			else = { custom_effect_tooltip = VAL_council_revanche_stakes_tt }
+			custom_effect_tooltip = VAL_council_revanchist_coup_tt
 			country_event = { id = val_council.33 }
+			hidden_effect = { country_event = { id = val_council.42 days = 90 } }
 		}
 		ai_will_do = { base = 6 }
 	}
@@ -221,10 +227,55 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_launch_available_tt VAL_council_can_launch_revanche = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			custom_effect_tooltip = VAL_council_revanche_war_tt
+			if = {
+				limit = { VAL_council_party_protectorate = yes }
+				custom_effect_tooltip = VAL_council_party_revanche_war_tt
+			}
+			else = { custom_effect_tooltip = VAL_council_revanche_war_tt }
 			hidden_effect = { VAL_council_begin_revanche = yes }
 		}
 		ai_will_do = { base = 25 }
+	}
+
+	# Party protectorate only: the Council hides its preparation from the
+	# commissars and times the break to the Party's northern march.
+	focus = {
+		id = VAL_defeat_Double_Ledgers
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
+		icon = GFX_focus_VAL_Salvage_Every_Barrel
+		x = 10
+		y = 6
+		cost = 4
+		allow_branch = { VAL_council_party_route = yes }
+		prerequisite = { focus = VAL_defeat_Revise_The_Settlement }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = VAL_council_hidden_depot
+			custom_effect_tooltip = VAL_council_hidden_depot_unlock_summary_tt
+			army_experience = 15
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	focus = {
+		id = VAL_defeat_Wait_For_The_March
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY }
+		icon = GFX_focus_VAL_Krutovs_Eyes
+		x = 10
+		y = 8
+		cost = 4
+		allow_branch = { VAL_council_party_route = yes }
+		prerequisite = { focus = VAL_defeat_Double_Ledgers }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_command_power = 20
+			army_experience = 15
+			custom_effect_tooltip = VAL_council_march_window_condition_tt
+			effect_tooltip = { add_timed_idea = { idea = VAL_council_march_window days = 120 } }
+		}
+		ai_will_do = { base = 15 }
 	}
 
 	focus = {

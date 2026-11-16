@@ -189,6 +189,12 @@ causes itself. `[VAL_PEACE]` records native entry, accepted defeat, liberation a
 administration installation in ordinary release logs.
 An unfinished frontier offer does not
 reserve a separate NOD defeat once VAL has no active war with the frontier targets.
+A subject or faction ally of a member that already awaits settlement (YPR, AIN,
+SLI under NOD) reserves its own defeat against VAL or an accepted ally, so the
+generic annexation cannot take it together with the capitulated members. Its
+callback runs the shared finalizer; Nodrul's settlement then makes peace with its
+remaining non-Stelander subjects before the partition. Test the order NOD, STP,
+then YPR with VAL and with TFF credited for Yubora.
 
 After NOD's northern victory, VAL can negotiate with an independent TFF before
 the final operation. NOD's settlement creates four contiguous administrations:

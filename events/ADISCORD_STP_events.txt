@@ -3061,6 +3061,19 @@ country_event = {
 	option = { name = STP_pc_council_revanche_response }
 }
 
+# The Party's Kefreyt protectorate breaks away and opens its revanche war.
+country_event = {
+	id = ADISCORD_STP_pc.120
+	title = STP_pw_party_council_revanche_title
+	desc = STP_pw_party_council_revanche_desc
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = STP_pw_party_council_revanche_response
+		custom_effect_tooltip = STP_pw_party_council_revanche_stakes_tt
+	}
+}
+
 # A single deferred read after a peace, annexation or territorial callback.
 country_event = {
 	id = ADISCORD_STP_cw.206

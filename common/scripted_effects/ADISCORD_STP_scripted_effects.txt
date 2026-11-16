@@ -531,8 +531,6 @@ STP_cw_open_preparation = {
 		if = {
 			limit = { NOT = { has_country_flag = STP_battle_for_stelander_active } }
 			STP_initialize_battle_for_stelander = yes
-			# Northern operations are available before the civil-war split.
-			VAL_operations_map_refresh_cache = yes
 		}
 		STP_cw_init_apparatus_loyalty = yes
 	}
@@ -11486,10 +11484,11 @@ STP_cw_resolve_fada_capture = {
 	}
 }
 
-# STS: the council's second defeat ends independence, not merely the expedition.
+# STS or the Party's STP: the council's second defeat ends independence, not
+# merely the expedition. The Party's protectorate loses it after breaking away.
 STP_pc_annex_defeated_council = {
 	if = {
-		limit = { tag = STS VAL = { exists = yes has_country_flag = VAL_council_revanche_active } }
+		limit = { OR = { tag = STS tag = STP } VAL = { exists = yes has_country_flag = VAL_council_revanche_active } }
 		VAL = { clr_country_flag = VAL_council_revanche_active }
 		if = { limit = { has_war_with = VAL } white_peace = VAL }
 		annex_country = { target = VAL transfer_troops = no }
@@ -12331,7 +12330,10 @@ STP_pw_party_finalize_kefreyt_subject = {
 				end_civil_wars = no
 			}
 			set_country_flag = STP_pw_party_kefreyt_victory
+			# The victory flag precedes the transition: the defeated tree reads it
+			# to show the protectorate's own revanche branch on load.
 			VAL = {
+				VAL_enter_stelander_defeat = yes
 				STP_pw_party_restore_subject_control = yes
 				STP_pw_party_sync_revolution_subject = yes
 			}

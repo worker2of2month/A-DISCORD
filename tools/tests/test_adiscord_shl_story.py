@@ -111,7 +111,7 @@ class ShahrabadStoryTests(unittest.TestCase):
         # Name stems: Russian prose declines the names.
         expected = {
             "SHL_cabinet_story_house": ("Джалил", "Нур", "Амин", "Рашад"),
-            "SHL_cabinet_story_city": ("Мариам Арбин",),
+            "SHL_cabinet_story_city": ("Мехран Арбин",),
             "SHL_cabinet_story_state": ("Джалил", "Нур", "Рауф", "Дарбан"),
             "SHL_cabinet_story_regent": ("Дари", "Сафир"),
             "SHL_cabinet_story_commune": ("Салим", "Дарзи"),

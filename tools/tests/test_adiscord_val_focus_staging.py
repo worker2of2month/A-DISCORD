@@ -414,6 +414,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_Bezhaysk_Operation": "VAL_Contracts_Outlive_Kings",
             "VAL_Return_Southern_Tsaygen": "VAL_Contracts_Outlive_Kings",
             "VAL_frontier_return_irem": "VAL_Return_Southern_Tsaygen",
+            "VAL_frontier_lease_irem": "VAL_Return_Southern_Tsaygen",
             "VAL_Stelander_Ultimatum": "VAL_frontier_treaty_offices",
             "VAL_Equal_Powers_Pact": "VAL_Stelander_Ultimatum",
             "VAL_Campaign_Secured": "VAL_Northern_Settlement",
@@ -425,7 +426,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_Settle_Industrial_Debts": "VAL_Industrial_Mobilization_Plan",
             "VAL_Veterans_Of_The_Campaign": "VAL_Campaign_Secured",
             "VAL_Southern_Expansion": "VAL_Wasteland_Charter",
-            "VAL_Eastern_Expansion": "VAL_Southern_Expansion",
+            "VAL_Eastern_Expansion": "VAL_Wasteland_Charter",
         }
         for focus_id, milestone in expected.items():
             body = focus_block(self.focuses, focus_id)
@@ -444,6 +445,32 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertIn(
             "prerequisite = { focus = VAL_Foreign_Broker_Licences }", southern
         )
+
+    def test_branch_courses_are_exclusive_pairs_that_rejoin(self) -> None:
+        pairs = {
+            ("VAL_Army_Arsenal_Orders", "VAL_Strategic_Arms_Exports"): None,
+            ("VAL_Serial_Armor_Production", "VAL_Tank_Crew_School"): "VAL_Armored_Contract_Companies",
+            ("VAL_Assault_From_The_Sea", "VAL_Beachhead_Logistics"): "VAL_Contract_Landing_Craft",
+            ("VAL_Expedition_Cruisers", "VAL_Expedition_Landing_Staff"): None,
+            ("VAL_econ_export_finance", "VAL_econ_war_economy"): "VAL_econ_integrated_economy",
+            ("VAL_frontier_return_irem", "VAL_frontier_lease_irem"): "VAL_Wasteland_Charter",
+        }
+        for (left, right), merge in pairs.items():
+            self.assertIn(
+                f"mutually_exclusive = {{ focus = {right} }}", focus_block(self.focuses, left)
+            )
+            self.assertIn(
+                f"mutually_exclusive = {{ focus = {left} }}", focus_block(self.focuses, right)
+            )
+            if merge:
+                self.assertRegex(
+                    focus_block(self.focuses, merge),
+                    rf"prerequisite = \{{\s*focus = {left}\s*focus = {right}\s*\}}",
+                )
+
+        arms = focus_block(self.focuses, "VAL_Strategic_Arms_Exports")
+        self.assertIn("prerequisite = { focus = VAL_Bulk_Arms_Contracts }", arms)
+        self.assertNotIn("prerequisite = { focus = VAL_Army_Arsenal_Orders }", arms)
 
     def test_only_world_roots_chapter_roots_and_government_branches_are_dynamic(self) -> None:
         ids = focus_ids(self.focuses)

@@ -282,12 +282,16 @@ def starting_snapshots():
     )["countries"]
     startup = parse_file(ROOT / "common/on_actions/00_ADISCORD_on_actions.txt")
     development_overrides = {}
-    for node, _ in walk(startup):
-        if node.key not in ("STP", "VAL", "NOD", "event_target:ADISCORD_vorkerland_nation"):
+    for node, _ in walk(scalar(scalar(startup, "on_actions"), "on_startup")):
+        if node.key not in profiles and node.key != "event_target:ADISCORD_vorkerland_nation":
             continue
         if not isinstance(node.value, list):
             continue
-        calls = [n.key for n in node.value if n.key.startswith("ADISCORD_set_") and "development_" in n.key]
+        calls = [
+            n.key for n in node.value
+            if (n.key.startswith("ADISCORD_set_") and "development_" in n.key)
+            or n.key == "ADISCORD_update_total_country_development"
+        ]
         if calls:
             development_overrides["WRK" if node.key.startswith("event_target:") else node.key] = calls
     results = []

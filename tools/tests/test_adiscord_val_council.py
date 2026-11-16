@@ -430,6 +430,24 @@ class CommandConsolidationTests(unittest.TestCase):
 
 
 class CouncilTransactionsTests(unittest.TestCase):
+    def test_industrial_policy_closes_unpaid_quarter_and_its_supply_mandate(self):
+        world = CouncilWorld()
+        world.val["focuses"].update(("VAL_Quarterly_Contract_Norm", PREFIX + "takes_command"))
+        deadline = "VAL_quarterly_contract_deadline"
+        world.decisions[deadline] = block(block(entries(DECISIONS), "VAL_contract_management"), deadline)
+        world.run("VAL_start_quarterly_contract_norm")
+        self.assertTrue(world.choose("mandate_supply_ordinary"))
+        world.run("VAL_end_quarterly_contract_norm")
+        world.val["focuses"].add("VAL_Industrial_Mobilization_Plan")
+        world.run("VAL_resolve_quarterly_contract_norm")
+        world.run("VAL_start_quarterly_contract_norm")
+        self.assertNotIn(deadline, world.val["missions"])
+        self.assertNotIn(PREFIX + "mandate_approval", world.val["missions"])
+        self.assertNotIn(PREFIX + "mandate_kind", world.val["vars"])
+        self.assertNotIn("VAL_quarterly_contract_active", world.val["flags"])
+        self.assertNotIn("VAL_quarterly_contract_failures", world.val["vars"])
+        self.assertFalse(world.events)
+
     def test_loan_default_repayment_and_duplicate_click_conserve_money(self):
         world = CouncilWorld()
         world.val["vars"]["ADISCORD_economy_treasury"] = 0
@@ -1236,9 +1254,16 @@ class CouncilRepresentationTests(unittest.TestCase):
 
     def test_root_keeps_defence_and_supply_while_war_plan_opens_offensives(self):
         world = CouncilWorld()
-        unlocks = {row.value for row in block(self.root, "completion_reward") if row.key == "unlock_decision_tooltip"}
+        reward = block(self.root, "completion_reward")
+        unlocks = {row.value for row in walk(reward) if row.key == "unlock_decision_tooltip"}
         expected = {PREFIX + "mandate_" + kind + "_ordinary" for kind in ("defence", "supply")}
         self.assertTrue(expected <= unlocks)
+        supply = PREFIX + "mandate_supply_ordinary"
+        condition = next(block(row.value, "limit") for row in reward
+                         if row.key == "if" and scalar(row.value, "unlock_decision_tooltip") == supply)
+        self.assertTrue(world.matches(condition))
+        world.val["focuses"].add("VAL_Industrial_Mobilization_Plan")
+        self.assertFalse(world.matches(condition))
         offensive = PREFIX + "mandate_offensive_ordinary"
         self.assertNotIn(offensive, unlocks)
         plan = next(row.value for row in block(entries(FOCUSES), "focus_tree")

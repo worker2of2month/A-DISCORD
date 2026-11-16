@@ -277,6 +277,14 @@ class GenericPeaceFixture:
                         self.execute(
                             [x for x in value if x.key != "limit"], stack + [tag]
                         )
+            elif key == "every_subject_country":
+                for tag in self.countries:
+                    if self.subjects.get(tag) == current and self.matches(
+                        block(value, "limit"), stack + [tag]
+                    ):
+                        self.execute(
+                            [x for x in value if x.key != "limit"], stack + [tag]
+                        )
             elif key == "every_owned_state":
                 for state in list(self.owners):
                     if self.owners[state] == current:

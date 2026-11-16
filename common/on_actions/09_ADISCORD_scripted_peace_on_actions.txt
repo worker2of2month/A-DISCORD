@@ -737,6 +737,14 @@ on_actions = {
 						set_country_flag = { flag = VAL_final_capitulation_immediate value = 1 days = 1 }
 						VAL = { VAL_finalize_reserved_settlements = yes }
 					}
+					# The generic fallback would annex this subject or ally together with
+					# every capitulated member awaiting the bloc's settlement.
+					else_if = {
+						limit = { VAL_final_bloc_auxiliary_defeat = yes }
+						log = "[VAL_PEACE] Reserved coalition auxiliary defeat: ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+						set_country_flag = { flag = VAL_final_capitulation_immediate value = 1 days = 1 }
+						VAL = { VAL_finalize_reserved_settlements = yes }
+					}
 				}
 
 				# END kefreyt:on_capitulation_immediate
@@ -754,9 +762,29 @@ on_actions = {
 						ADISCORD_TFF_become_nod_subject = yes
 					}
 				}
+				# A Council that broke the Party's protectorate stakes its independence:
+				# this branch precedes the ordinary treaty, which would restore it.
+				if = {
+					limit = {
+						ROOT = {
+							tag = VAL
+							has_war_with = STP
+							has_country_flag = VAL_council_revanche_active
+						}
+						STP = {
+							exists = yes
+							has_capitulated = no
+						}
+						FROM = { OR = { tag = STP is_subject_of = STP } }
+					}
+					set_global_flag = skip_default_capitulation
+					ROOT = { set_country_flag = { flag = STP_pw_party_kefreyt_capitulation_reserved value = 1 days = 2 } }
+					STP = { STP_pc_annex_defeated_council = yes }
+					clr_global_flag = skip_default_capitulation
+				}
 				# The Party's postwar treaty also covers a defeated Kefreyt invasion.
 				# The live war and native victor identify the settlement's recipient.
-				if = {
+				else_if = {
 					limit = {
 						ROOT = {
 							tag = VAL
@@ -775,6 +803,27 @@ on_actions = {
 					set_global_flag = skip_default_capitulation
 					ROOT = { set_country_flag = { flag = STP_pw_party_kefreyt_capitulation_reserved value = 1 days = 2 } }
 					STP = { STP_pw_party_settle_kefreyt_victory = yes }
+					clr_global_flag = skip_default_capitulation
+				}
+				# The Council's revanche against the Party wins: the Party's Stelander
+				# becomes Kefreyt's administration and its northern march ends with it.
+				if = {
+					limit = {
+						ROOT = {
+							tag = STP
+							has_war_with = VAL
+						}
+						VAL = {
+							exists = yes
+							has_capitulated = no
+							is_subject = no
+							has_country_flag = VAL_council_revanche_active
+						}
+						FROM = { OR = { tag = VAL is_subject_of = VAL } }
+					}
+					set_global_flag = skip_default_capitulation
+					ROOT = { set_country_flag = { flag = STP_pw_party_kefreyt_capitulation_reserved value = 1 days = 2 } }
+					VAL = { VAL_council_settle_party_revanche_victory = yes }
 					clr_global_flag = skip_default_capitulation
 				}
 				# Party final northern campaign: each defeated government becomes a

@@ -81,8 +81,8 @@ class KefreytMarineBranchTests(unittest.TestCase):
     def test_root_focus_unlocks_template_and_one_initial_division(self) -> None:
         root = self.focuses["VAL_Marine_Contract_Corps"]
         self.assertEqual(
-            scalar(parsed_block(root, "prerequisite"), "focus"),
-            "VAL_Contracts_Outlive_Kings",
+            [entry.value for entry in parsed_block(root, "prerequisite")],
+            ["VAL_Shield_Special_Forces"],
         )
         self.assertEqual(
             scalar(parsed_block(root, "completion_reward"), "VAL_raise_marine_contract_corps"),
@@ -107,6 +107,14 @@ class KefreytMarineBranchTests(unittest.TestCase):
                 scalar(parsed_block(body, "prerequisite"), "focus"),
                 "VAL_Marine_Contract_Corps",
             )
+        self.assertEqual(
+            scalar(parsed_block(assault, "mutually_exclusive"), "focus"),
+            "VAL_Beachhead_Logistics",
+        )
+        self.assertEqual(
+            scalar(parsed_block(logistics, "mutually_exclusive"), "focus"),
+            "VAL_Assault_From_The_Sea",
+        )
         self.assertEqual(
             {entry.value for entry in parsed_block(landing, "prerequisite")},
             {"VAL_Assault_From_The_Sea", "VAL_Beachhead_Logistics"},

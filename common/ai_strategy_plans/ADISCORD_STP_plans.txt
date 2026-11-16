@@ -662,6 +662,7 @@ STP_party_reconstruction_plan = {
 		STP_pw_party_supply_service
 		STP_pw_party_fortress_corps
 		STP_pw_party_border_staff
+		STP_pw_party_kefreyt_campaign
 		STP_pw_party_southern_defence
 		STP_pw_party_mechanized_guard
 
@@ -682,7 +683,6 @@ STP_party_reconstruction_plan = {
 		STP_pw_party_settled_state
 		STP_pw_party_external_mandate
 		STP_pw_party_bezhaysk_campaign
-		STP_pw_party_kefreyt_campaign
 		STP_pw_party_regional_order
 		STP_pw_party_northern_march
 		STP_pw_party_great_stelander

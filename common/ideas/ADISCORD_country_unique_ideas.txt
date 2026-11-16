@@ -26,7 +26,7 @@ ideas = {
 		}
 
 		NAM_national_spirit = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_viceroy_system
 
 			allowed = {
 				always = no

@@ -144,6 +144,7 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             "VAL_Return_Southern_Tsaygen",
             "VAL_Bezhaysk_Operation",
             "VAL_frontier_return_irem",
+            "VAL_frontier_lease_irem",
             "VAL_Wasteland_Charter",
             "VAL_Southern_Expansion",
             "VAL_Eastern_Expansion",

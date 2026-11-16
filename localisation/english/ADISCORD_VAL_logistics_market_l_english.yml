@@ -190,8 +190,8 @@
 
  VAL_launch_national_recruitment: "Nationwide Contract Recruitment"
  VAL_launch_national_recruitment_desc:0 "Recruiting commissions will travel to the towns and districts. Treasurers, doctors and officers must work at the same table."
- VAL_launch_national_recruitment_cost:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon from the local reserve"
- VAL_launch_national_recruitment_cost_blocked:0 "§R3000§! £ADISCORD_economy_treasury_texticon + §R20000§! £population_texticon from the local reserve"
+ VAL_launch_national_recruitment_cost:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon"
+ VAL_launch_national_recruitment_cost_blocked:0 "§R3000§! £ADISCORD_economy_treasury_texticon + §R20000§! £population_texticon"
  VAL_launch_national_recruitment_cost_tooltip:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon from the local reserve"
  VAL_national_recruitment_pending_tt:0 "§Y20000§! £population_texticon from the local reserve enter §Y60 days§! of training."
  VAL_national_recruitment_refund_tt:0 "Kefreyt recovers the paid §Y3000§! £ADISCORD_economy_treasury_texticon and §Y2§! local reserve units."

@@ -305,6 +305,382 @@ spriteTypes = {
 		name = "GFX_idea_NAM_national_spirit"
 		texturefile = "gfx/interface/ideas/NAM/idea_NAM_national_spirit.png"
 	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_viceroy_system"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_viceroy_system.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_private_tank_farms"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_private_tank_farms.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_state_fuel_reserve"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_state_fuel_reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_metropolitan_garrison_charter"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_metropolitan_garrison_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_ADISCORD_nam_extraction_defence_corps"
+		texturefile = "gfx/interface/ideas/NAM/idea_ADISCORD_nam_extraction_defence_corps.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_ADISCORD_nam_first_strike_corps"
+		texturefile = "gfx/interface/ideas/NAM/idea_ADISCORD_nam_first_strike_corps.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_ADISCORD_nam_treaty_independence"
+		texturefile = "gfx/interface/ideas/NAM/idea_ADISCORD_nam_treaty_independence.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_wartime_entrenchment"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_wartime_entrenchment.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_counterstroke_staff"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_counterstroke_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_rebel_depot_maps"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_rebel_depot_maps.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_wage_arrears"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_wage_arrears.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_housing_programme"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_housing_programme.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_south_war_council_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_south_war_council_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_south_counteroffensive_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_south_counteroffensive_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_favour_nam_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_favour_nam_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_favour_oil_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_favour_oil_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_favour_dist_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_favour_dist_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_favour_garr_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_favour_garr_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_favour_trade_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_favour_trade_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_seal_junta"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_seal_junta.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_spirit_iron_ladder"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_spirit_iron_ladder.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_spirit_service_republic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_spirit_service_republic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_spirit_federation"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_spirit_federation.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_spirit_oil_union"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_spirit_oil_union.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_spirit_prag_republic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_spirit_prag_republic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_spirit_prag_directorate"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_spirit_prag_directorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_exile_pillar_junta"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_exile_pillar_junta.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_exile_free_islands"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_exile_free_islands.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_ruined_economy"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_ruined_economy.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_army_of_shame"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_army_of_shame.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_bond_payments"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_bond_payments.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_pw_industrial_schedule_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_pw_industrial_schedule_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_pw_regional_contracts_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_pw_regional_contracts_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_pw_public_utilities_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_pw_public_utilities_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_pw_municipal_services_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_pw_municipal_services_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_pw_import_machine_tools_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_pw_import_machine_tools_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_pw_contract_arbitration_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_pw_contract_arbitration_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_fuel_discipline_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_fuel_discipline_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_extraction_surge_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_extraction_surge_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_short_training_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_short_training_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_veteran_cadres_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_veteran_cadres_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_depot_network_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_depot_network_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_mobile_workshops_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_mobile_workshops_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_factory_shifts_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_factory_shifts_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_convoy_escort_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_convoy_escort_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_interceptor_control_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_interceptor_control_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_air_ground_liaison_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_air_ground_liaison_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_war_joint_operations_idea"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_war_joint_operations_idea.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_nam_reward"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_nam_reward.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_oil_reward"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_oil_reward.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_dist_reward"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_dist_reward.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_garr_reward"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_garr_reward.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_trade_reward"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_trade_reward.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_ADISCORD_south_nam_emergency_writs"
+		texturefile = "gfx/interface/ideas/NAM/idea_ADISCORD_south_nam_emergency_writs.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_ADISCORD_south_nam_charter_levies"
+		texturefile = "gfx/interface/ideas/NAM/idea_ADISCORD_south_nam_charter_levies.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_ADISCORD_south_nam_contract_logistics"
+		texturefile = "gfx/interface/ideas/NAM/idea_ADISCORD_south_nam_contract_logistics.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_wrk_concession_income"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_wrk_concession_income.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_administration_dynamic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_administration_dynamic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_garrison_dynamic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_garrison_dynamic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_navy_dynamic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_navy_dynamic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_air_dynamic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_air_dynamic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_loyalty_dynamic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_loyalty_dynamic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_seal_discipline_dynamic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_seal_discipline_dynamic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_pirate_blockade"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_pirate_blockade.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_corp_dynamic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_corp_dynamic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_industrial_policy"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_industrial_policy.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_consolidation_dynamic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_consolidation_dynamic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_mil_mobile_operation"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_mil_mobile_operation.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_captured_wells_shock"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_captured_wells_shock.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_south_war_dynamic"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_south_war_dynamic.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_nam_failure"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_nam_failure.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_oil_failure"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_oil_failure.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_dist_failure"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_dist_failure.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_garr_failure"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_garr_failure.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_agreement_trade_failure"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_agreement_trade_failure.png"
+	}
+
 	spriteType = {
 		name = "GFX_idea_DAN_national_spirit"
 		texturefile = "gfx/interface/ideas/DAN/idea_DAN_national_spirit.png"

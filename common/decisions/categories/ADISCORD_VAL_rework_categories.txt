@@ -235,3 +235,13 @@ VAL_council_balance_category = {
 		has_power_balance = { id = VAL_council_balance }
 	}
 }
+
+# The Party's protectorate after the defeat; closes with the break.
+VAL_council_protectorate_category = {
+	priority = 955
+	allowed = { tag = VAL }
+	visible = {
+		has_completed_focus = VAL_defeat_Double_Ledgers
+		VAL_council_party_protectorate = yes
+	}
+}

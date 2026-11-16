@@ -5,7 +5,6 @@ oob = "SHL"
 
 recruit_character = SHL_Jalil_Nur
 recruit_character = SHL_Darius_Safir
-recruit_character = SHL_Shift_Councils
 
 # Heads of the nine houses: their advisor seats follow the state of each
 # house's main furnace. Course heads are recruited dormant; the ratified

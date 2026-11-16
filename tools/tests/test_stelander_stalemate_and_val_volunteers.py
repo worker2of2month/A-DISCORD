@@ -93,10 +93,10 @@ class StelanderStalemateRegressionTests(unittest.TestCase):
                     weekly.count("STP_cw_ai_war_replacements_tick = yes"), 1
                 )
 
-    def test_ai_kefreyt_prepares_from_the_party_external_mandate(self):
+    def test_ai_kefreyt_prepares_from_the_party_border_staff(self):
         triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
         threat = block(triggers, "VAL_ai_party_campaign_threat")
-        self.assertIn("has_completed_focus = STP_pw_party_external_mandate", threat)
+        self.assertIn("has_completed_focus = STP_pw_party_border_staff", threat)
         self.assertIn("NOT = { has_war_with = VAL }", threat)
         self.assertIn("NOT = { is_in_faction_with = VAL }", threat)
         for flag in (
@@ -107,8 +107,8 @@ class StelanderStalemateRegressionTests(unittest.TestCase):
         focuses = read("common/national_focus/ADISCORD_STP_civil_war.txt")
         campaign = focuses.index("id = STP_pw_party_kefreyt_campaign")
         self.assertIn(
-            "prerequisite = { focus = STP_pw_party_external_mandate }",
-            focuses[campaign : campaign + 300],
+            "prerequisite = { focus = STP_pw_party_border_staff }",
+            focuses[campaign : campaign + 400],
         )
 
         strategies = read("common/ai_strategy/VAL.txt")

@@ -108,5 +108,7 @@
  VAL_Artem_Rask_qol_party_label_long: "\nЛидер: $VAL_Artem_Rask$"
  VAL_Boris_Gromov_qol_party_label: " (Громов)"
  VAL_Boris_Gromov_qol_party_label_long: "\nЛидер: $VAL_Boris_Gromov$"
+ VAL_Eduard_Korsch_qol_party_label: " (Корш)"
+ VAL_Eduard_Korsch_qol_party_label_long: "\nЛидер: $VAL_Eduard_Korsch$"
  VAL_Renata_Morn_qol_party_label: " (Морн)"
  VAL_Renata_Morn_qol_party_label_long: "\nЛидер: $VAL_Renata_Morn$"

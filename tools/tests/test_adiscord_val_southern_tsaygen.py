@@ -367,5 +367,80 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
             self.assertNotIn("declare_war_on", focus_block(focuses, focus_id))
 
 
+class PerimeterLeaseTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.focuses = read("focus_trees/VAL/main/focuses.txt")
+        cls.decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        cls.effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        cls.triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        cls.events = read("events/ADISCORD_VAL_contract_events.txt")
+
+    def test_war_and_lease_are_exclusive_and_meet_at_the_charter(self) -> None:
+        war = focus_block(self.focuses, "VAL_frontier_return_irem")
+        lease = focus_block(self.focuses, "VAL_frontier_lease_irem")
+        self.assertIn("mutually_exclusive = { focus = VAL_frontier_lease_irem }", war)
+        self.assertIn("mutually_exclusive = { focus = VAL_frontier_return_irem }", lease)
+        for body in (war, lease):
+            self.assertIn("prerequisite = { focus = VAL_Return_Southern_Tsaygen }", body)
+            self.assertIn("bypass = { owns_state = 169 }", body)
+        self.assertIn("unlock_decision_tooltip = VAL_frontier_offer_irem_lease", lease)
+        self.assertNotIn("declare_war_on", lease)
+
+        charter = focus_block(self.focuses, "VAL_Wasteland_Charter")
+        self.assertIn(
+            "prerequisite = { focus = VAL_frontier_return_irem focus = VAL_frontier_lease_irem }",
+            charter,
+        )
+        for focus_id in ("VAL_Southern_Expansion", "VAL_Eastern_Expansion"):
+            self.assertIn(
+                "prerequisite = { focus = VAL_Wasteland_Charter }",
+                focus_block(self.focuses, focus_id),
+            )
+
+    def test_alliance_blocks_the_war_but_not_the_lease(self) -> None:
+        war_gate = named_block(self.triggers, "VAL_wasteland_invasion_available")
+        lease_gate = named_block(self.triggers, "VAL_irem_lease_target_valid")
+        self.assertIn("is_in_faction = no", war_gate)
+        self.assertNotIn("is_in_faction", lease_gate)
+        self.assertIn("is_subject = no", lease_gate)
+
+    def test_offer_debits_nothing_until_ert_accepts_once(self) -> None:
+        decision = named_block(self.decisions, "VAL_frontier_offer_irem_lease")
+        self.assertIn("cost = 0", decision)
+        self.assertIn("custom_cost_trigger = { VAL_irem_lease_affordable = yes }", decision)
+        self.assertIn("VAL_offer_irem_lease = yes", decision)
+
+        offer = named_block(self.effects, "VAL_offer_irem_lease")
+        self.assertNotIn("add_political_power", offer)
+        self.assertNotIn("ADISCORD_economy_treasury", offer)
+        self.assertIn("flag = VAL_irem_lease_offer_pending days = 15", offer)
+
+        accept = named_block(self.effects, "VAL_accept_irem_lease")
+        self.assertEqual(accept.count("add_political_power = -50"), 1)
+        self.assertEqual(
+            accept.count("subtract_from_variable = { var = ADISCORD_economy_treasury value = 750 }"), 1
+        )
+        self.assertEqual(accept.count("amount = 6000"), 1)
+        self.assertEqual(accept.count("transfer_state = 169"), 1)
+        self.assertIn("clr_country_flag = VAL_irem_lease_offer_pending", accept)
+        self.assertIn("VAL_irem_lease_affordable = yes", accept)
+        self.assertIn("VAL_irem_lease_target_valid = yes", accept)
+
+        affordable = named_block(self.triggers, "VAL_irem_lease_affordable")
+        self.assertIn("NOT = { has_political_power < 50 }", affordable)
+        self.assertIn("NOT = { has_equipment = { infantry_equipment < 6000 } }", affordable)
+        self.assertIn("value = 750 compare = greater_than_or_equals", affordable)
+
+    def test_unattended_offer_is_refused(self) -> None:
+        offer = event_block(self.events, "val_rework.196")
+        self.assertIn("timeout_days = 14", offer)
+        first, second = offer.split("option = {")[1:3]
+        self.assertIn("VAL_decline_irem_lease = yes", first)
+        self.assertIn("VAL_accept_irem_lease = yes", second)
+        for event_id in ("val_rework.197", "val_rework.198"):
+            event_block(self.events, event_id)
+
+
 if __name__ == "__main__":
     unittest.main()

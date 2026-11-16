@@ -1110,7 +1110,7 @@
     },
     {
       "id": "SHL_Mariam_Arbin",
-      "name": "Мариам Арбин",
+      "name": "Мехран Арбин",
       "file": "common/characters/SHL.txt",
       "line": 316,
       "refs": [
@@ -1126,17 +1126,17 @@
         ]
       ],
       "country": "Шахрабад",
-      "description": "Дочь Хосрова Арбина начинала с водяных ведомостей отцовской печи и ушла в городские собрания. Она ведёт самостоятельные города и требует, чтобы расходы Конклава объясняли тем, кто оплачивает их своими сменами.",
+      "description": "Сын Хосрова Арбина начинал с водяных ведомостей отцовской печи и ушёл в городские собрания. Он ведёт самостоятельные города и требует, чтобы расходы Конклава объясняли тем, кто оплачивает их своими сменами.",
       "runtime_path": "gfx/leaders/SHL/portrait_SHL_Mariam_Arbin.png",
       "sprite": "GFX_portrait_SHL_Mariam_Arbin",
-      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Mariam_Arbin_small.png",
-      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Mariam Arbin: preserve the miniature's young adult woman's oval olive face, long dark hair swept aside and braided, dark eyes, defined eyebrows, teal-green blouse or jacket and sober gaze. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
-      "source_file": "exec-a481d74e-9634-48df-84f1-fe869777effd.png",
-      "runtime_sha256": "56b60d0e193e0a3bfee335ba2c98a6be9dcfb56b6bef2abd1fdd248e7cf8e3c0"
+      "identity_reference": null,
+      "prompt": "Vertical 26:35 transparent-background cutout bust portrait asset for A-Discord, intended for 156x210 pixels. Gritty hand-retouched, colorized archival portrait, carefully observed individual human features, soft directional light with readable eyes, matte muted desert-industrial colors. Full head with 3 percent headroom, generous face scale, shoulders continue into both lower corners and crop off at chest. No written text, frame, scanlines or scenery. Mehran Arbin, son of a furnace-house owner who sided with the independent towns. A single Persian man about forty, wavy thick black hair that falls forward, distinctive long slim face, clean shaven, alert kind dark eyes. Seen left three-quarter, in conversation at a municipal water hearing. Modest petrol-blue civic jacket over a light linen shirt with open collar, glimpse of the corner of a well-used blue water register below. The expression of someone used to answering awkward questions in public.",
+      "source_file": "exec-e486ead1-d481-4cbf-9b91-6e43957ae9bb.png",
+      "runtime_sha256": "783ae4366fac1ed18ecb2c1fcf4adb6bb2ff3177833e37df65b82e320faabeaf"
     },
     {
       "id": "SHL_Salima_Darzi",
-      "name": "Салима Дарзи",
+      "name": "Салим Дарзи",
       "file": "common/characters/SHL.txt",
       "line": 349,
       "refs": [
@@ -1152,13 +1152,13 @@
         ]
       ],
       "country": "Шахрабад",
-      "description": "Дежурный мастер из Шарима, подписывающая решения советов смен. Салима знает тяжёлые смены по собственному журналу и не верит, что печать Конклава может превратить вчерашний труд в подарок.",
+      "description": "Дежурный мастер из Шарима, подписывающий решения советов смен. Салим знает тяжёлые смены по собственному журналу и не верит, что печать Конклава может превратить вчерашний труд в подарок.",
       "runtime_path": "gfx/leaders/SHL/portrait_SHL_Salima_Darzi.png",
       "sprite": "GFX_portrait_SHL_Salima_Darzi",
-      "identity_reference": "gfx/interface/ideas/SHL/portrait_SHL_Salima_Darzi_small.png",
-      "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Salima Darzi: preserve the miniature's middle-aged woman's broad angular weathered face, short dark hair, heavy eyebrows, firm lips, dark work jacket and grey open shirt. Reference image 1 is the established identity: keep exactly that face, hair, facial hair, age and clothing colors. Remove its tilted card frame and background. Reference image 2 is rendering style only, not identity.",
-      "source_file": "exec-cdabcb63-8d19-41cc-83a1-b3bb747589e6.png",
-      "runtime_sha256": "1c2df047590efaedd90a2f1658ecb82260ffc5d7468274281cfd9ae269ef3e6c"
+      "identity_reference": null,
+      "prompt": "Vertical 26:35 transparent-background cutout bust portrait asset for A-Discord, intended for 156x210 pixels. Gritty hand-retouched, colorized archival portrait, carefully observed individual human features, soft directional light with readable eyes, matte muted desert-industrial colors. Full head with 3 percent headroom, generous face scale, shoulders continue into both lower corners and crop off at chest. No written text, frame, scanlines or scenery. Salim Darzi, the duty foreman appointed to chair the permanent furnace government. ONE man only. Forty-five, compact intense Persian man, bald with a dark full moustache, strong cheekbones, old healed nick in one brow. Handsome is not the object. Nearly frontal, direct steady eye contact, mouth closed. Slate blue mechanic's jacket with broad cream shirt collar and folded faded claret scarf tucked at throat, pencil behind one ear. One sliver of a ledger in the lower corner, no headgear, no hands. Dignity and administrative resolve.",
+      "source_file": "exec-2f1b2ca9-cd47-4d9e-8269-69f88785fe6c.png",
+      "runtime_sha256": "48066daca6da68652d49345a2bb96c7c88432bd3fe57bc5cfbc9a35cca5268a2"
     },
     {
       "id": "SHL_Amin_Rashad",
@@ -1263,6 +1263,72 @@
       "prompt": "Use case: stylized-concept. Create ONE finished isolated character cutout for a Hearts of Iron IV A-Discord portrait template. The final game canvas is 156x210, vertical ratio 26:35. Realistic hand-retouched photographic political/military portrait, sharp modeled side lighting from upper left, deeply sculpted face with natural age texture, restrained muted colors and crisp silhouette. Head and upper chest, shoulders reaching both bottom corners, head fully visible, small 4-6 percent margin above hair; natural anatomy; subject fills the frame. Genuine transparent alpha background, including around hair and shoulders. NO background color, NO scenery, NO card frame, NO border, NO writing, NO badges or logos, NO extra people. Very important: NO CRT lines, NO horizontal scanlines, NO screen texture or color filter baked into the subject: the real Photoshop template will apply these afterward. Clean realistic painted-photographic source portrait, not cartoon or glossy 3D. Style reference is only for face rendering, lighting and crop; ignore all its existing screen texture. Subject: Viktor Bran, male 57, senior army specialist of Kefreit. Stocky square face, broad nose, thick greying dark hair combed back, close trimmed salt-grey beard. Plain charcoal service jacket, dark open collar, no medals. Three-quarter right, seasoned steady expression. The input image is style and framing reference only, not this person's identity. Do not reuse the woman's face. Create this distinct male character. Context from existing lore (not text to print): Кефрейт",
       "source_file": "exec-5b73d3ce-7aa3-4e3d-8de5-b1d36b860f9d.png",
       "runtime_sha256": "79d95687553f621d03b320c60892dda42a30adb5811dbaa826b996a97c97e4ba"
+    },
+    {
+      "id": "SHL_Jalil_Nur_directorate",
+      "name": "Джалиль Нур",
+      "country": "Шахрабад",
+      "identity_reference": "gfx/leaders/SHL/portrait_SHL_Jalil_Nur.png",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Jalil_Nur_directorate.png",
+      "sprite": "GFX_portrait_SHL_Jalil_Nur_directorate",
+      "prompt": "Produce a new 26:35 vertical, single finished transparent subject cutout for a 156x210 Hearts of Iron IV character portrait. Source image is the identity reference: match age, ethnic features and facial anatomy. Fresh portrait sitting with a different costume, head angle and expression according to the brief. Keep the eyes and head fully legible even at thumbnail scale. Realistic retouched, hand-toned archival portrait, sober industrial Persian-influenced society, textured imperfect skin and quietly specific clothes. Leave 3-5% headroom, single full-bleed bust extending beyond bottom edge left and right, no drawn borders, titles, text, scan lines, or background; the game template adds its own backdrop and finish. The Iron Directorate. SAME recognizable elderly Jalil Nur, same lean cheekbones, eyes, narrow straight nose and clipped grey beard as the reference. Direct almost frontal level gaze, bare head revealing thinning silver hair, commanding, taut mouth. Practical graphite engineer-director's jacket with stiff high stand collar and plain black closures over an iron-grey shirt. One small enamel furnace-red tab on collar. Strong cool side lighting. No turban, decorative gold, or military costume.",
+      "source_file": "exec-c4474751-ba04-4ad9-b2bd-75bd08c17644.png",
+      "runtime_sha256": "81356fa80f7be1c9b04f7e9008d46e72c8465bbdc682667ae113a6db309060d4"
+    },
+    {
+      "id": "SHL_Jalil_Nur_victory",
+      "name": "Джалиль Нур",
+      "country": "Шахрабад",
+      "identity_reference": "gfx/leaders/SHL/portrait_SHL_Jalil_Nur.png",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Jalil_Nur_victory.png",
+      "sprite": "GFX_portrait_SHL_Jalil_Nur_victory",
+      "prompt": "Produce a new 26:35 vertical, single finished transparent subject cutout for a 156x210 Hearts of Iron IV character portrait. Source image is the identity reference: match age, ethnic features and facial anatomy. Fresh portrait sitting with a different costume, head angle and expression according to the brief. Keep the eyes and head fully legible even at thumbnail scale. Realistic retouched, hand-toned archival portrait, sober industrial Persian-influenced society, textured imperfect skin and quietly specific clothes. Leave 3-5% headroom, single full-bleed bust extending beyond bottom edge left and right, no drawn borders, titles, text, scan lines, or background; the game template adds its own backdrop and finish. The Tenth House. Jalil is the elderly negotiator with the angular brow, grey close beard and lined eyes from the reference. Turned to the viewer's left and listening with a restrained half-smile. Wear a rich oxblood house mantle with a narrow band of deliberately worn antique gold brocade, a small square brass clasp, and a ceremonial indigo and copper wrapped headcloth. It should feel like a well-used garment passed down from a poorer house. No crown, weapons or epaulettes.",
+      "source_file": "exec-6f727581-5454-4340-a038-ea4c23e813b0.png",
+      "runtime_sha256": "dca8f8aa53554000f08311758d5fd015afde5f030cd0423f9ab9164aafce2539"
+    },
+    {
+      "id": "SHL_Darius_Safir_regent",
+      "name": "Дарий Сафир",
+      "country": "Шахрабад",
+      "identity_reference": "gfx/leaders/SHL/portrait_SHL_Darius_Safir.png",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Darius_Safir_regent.png",
+      "sprite": "GFX_portrait_SHL_Darius_Safir_regent",
+      "prompt": "Keep the face, pose, embroidered coat, sash and clasp of the supplied Darius Safir regent portrait. Remove the carved chair entirely and preserve transparent alpha behind his shoulder.",
+      "source_file": "exec-ffba030f-27a4-495e-9586-91eb060af3c3.png",
+      "runtime_sha256": "f6ac88e0b15775e8c2c701d367bb040f753731633a0bfcaa30eef4c6ea157a52"
+    },
+    {
+      "id": "SHL_Jalil_Nur_tenth_house",
+      "name": "Джалиль Нур",
+      "country": "Шахрабад",
+      "identity_reference": "gfx/leaders/SHL/portrait_SHL_Jalil_Nur_directorate.png",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Jalil_Nur_tenth_house.png",
+      "sprite": "GFX_portrait_SHL_Jalil_Nur_tenth_house",
+      "prompt": "Use supplied portrait for identity of Jalil Nur. Create a separate portrait of EXACTLY the same elderly man with his thinning softly swept back silver hair, close grey beard, long nose, expressive dark eyes, lines in brow. Tenth House leader during negotiations, before victory: composed and listening, head turned three quarters toward viewer's right, warmly lit. Civilian sleeveless camel wool waistcoat over a pale ivory collarless shirt and a folded dark teal shawl on one shoulder, simple bronze fastening. Bareheaded. Vertical 26:35 composition; head and shoulders fill frame, small headroom. Anatomically convincing, hand-retouched archival political portrait. One man only, transparent alpha cutout all around head and upper body. No chair, no furniture, no crown, no turban, no medals, no text, no CRT lines or backdrop; those are applied by the game's Photoshop template.",
+      "source_file": "exec-eb5e54c3-8b63-4408-978e-4f283c370062.png",
+      "runtime_sha256": "d13d976a6f5853e052ec9c967bf5ff6ed0ae114527a161a4b63506a06ab277ef"
+    },
+    {
+      "id": "SHL_Mariam_Arbin_victory",
+      "name": "Мехран Арбин",
+      "country": "Шахрабад",
+      "identity_reference": "gfx/leaders/SHL/portrait_SHL_Mariam_Arbin.png",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Mariam_Arbin_victory.png",
+      "sprite": "GFX_portrait_SHL_Mariam_Arbin_victory",
+      "prompt": "Single transparent cutout, vertical portrait ratio 26:35 for a Hearts of Iron IV 156x210 template. Use the supplied man as exact identity reference, same age, skin tone, nose, brow, distinctive face. Portrait taken on a different day after victory over the South. Full head, 4 percent headroom, upper chest to bottom edge and both shoulders continue into bottom corners. Fine matte period color photographic retouching, natural skin, candid expression; strong readable face in a thumbnail. No desk, chair, lettering, scanlines, scene, book, hands or other people. Mehran Arbin of the Open Conclave. Preserve his slim long clean-shaven face, elegant nose and thick wavy black hair with looser forelock. Standing to receive elected delegates; turn him to viewer's right, eyes looking directly at someone nearby, small unforced closed-mouth smile. His best civilian suit in light warm stone linen, a contrasting deep ink-blue waistcoat, white shirt and slim muted dark teal tie; small single turquoise enamel pin. Relaxed daylight, unpretentious civic dignity. Leave him bareheaded.",
+      "source_file": "exec-3812deb5-4943-437e-82d9-6eabc35f88e6.png",
+      "runtime_sha256": "d4acc810de1d685c8d4dfe114b25e1a74336b352ec07e0006e9c61650122b394"
+    },
+    {
+      "id": "SHL_Salima_Darzi_victory",
+      "name": "Салим Дарзи",
+      "country": "Шахрабад",
+      "identity_reference": "gfx/leaders/SHL/portrait_SHL_Salima_Darzi.png",
+      "runtime_path": "gfx/leaders/SHL/portrait_SHL_Salima_Darzi_victory.png",
+      "sprite": "GFX_portrait_SHL_Salima_Darzi_victory",
+      "prompt": "Single transparent cutout, vertical portrait ratio 26:35 for a Hearts of Iron IV 156x210 template. Use the supplied man as exact identity reference, same age, skin tone, nose, brow, distinctive face. Portrait taken on a different day after victory over the South. Full head, 4 percent headroom, upper chest to bottom edge and both shoulders continue into bottom corners. Fine matte period color photographic retouching, natural skin, candid expression; strong readable face in a thumbnail. No desk, chair, lettering, scanlines, scene, book, hands or other people. Salim Darzi of the Furnace Commune. Same bald broad-headed man, heavy dark moustache, distinctive eyebrow nick, deep-set eyes. Turn head and chest in a left three-quarter pose with an understated, satisfied, tired half-smile. Clean, substantial charcoal wool worker's tunic with stand collar, brushed steel buttons. A single strip of deep madder-red fabric pinned like a plain rosette on the chest, placed high enough to read; the only sign of the ceremony. Warm light on the left temple, dark restrained values in the tunic, real weave; a furnace foreman at his first postwar shift assembly. Bare head, no pencil, no neckerchief, no military insignia.",
+      "source_file": "exec-df5125f3-a67f-4571-a2b2-11675a20d012.png",
+      "runtime_sha256": "214ba909ace2518ca9fcff977f0d29550a25344e18cd04ad627c2e621d9c34c2"
     }
   ],
   "template_snapshot": "Native Photoshop export from portrait.psd; adjustment layers, CRT overlay, background and subject shadow retained.",

@@ -83,7 +83,7 @@ ideas = {
 
 	country = {
 		NAM_private_tank_farms = {
-			picture = generic_stockpile_fuel
+			picture = GFX_idea_NAM_private_tank_farms
 			allowed = { tag = NAM }
 			removal_cost = -1
 			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
@@ -95,7 +95,7 @@ ideas = {
 		}
 
 		NAM_state_fuel_reserve = {
-			picture = generic_fuel_reserves
+			picture = GFX_idea_NAM_state_fuel_reserve
 			allowed = { tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -110,7 +110,7 @@ ideas = {
 		# Keeps the starting disarmed_nation law: every other mobilization law
 		# checks this spirit. Removed by NAM_mobilisation_office or NAM_declare_mobilisation.
 		NAM_metropolitan_garrison_charter = {
-			picture = generic_army_problems
+			picture = GFX_idea_NAM_metropolitan_garrison_charter
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -127,7 +127,7 @@ ideas = {
 		}
 
 		ADISCORD_nam_extraction_defence_corps = {
-			picture = generic_fortify_the_borders
+			picture = GFX_idea_ADISCORD_nam_extraction_defence_corps
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -146,7 +146,7 @@ ideas = {
 
 		# Half-strength corps after a first strike: the army left its prepared positions.
 		ADISCORD_nam_first_strike_corps = {
-			picture = generic_fortify_the_borders
+			picture = GFX_idea_ADISCORD_nam_first_strike_corps
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -200,7 +200,7 @@ ideas = {
 		}
 
 		ADISCORD_nam_treaty_independence = {
-			picture = generic_constitutional_guarantees
+			picture = GFX_idea_ADISCORD_nam_treaty_independence
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -213,7 +213,7 @@ ideas = {
 		}
 
 		NAM_wartime_entrenchment = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_wartime_entrenchment
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -239,7 +239,7 @@ ideas = {
 		}
 
 		NAM_counterstroke_staff = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_counterstroke_staff
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -266,7 +266,7 @@ ideas = {
 		}
 
 		NAM_rebel_depot_maps = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_rebel_depot_maps
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -289,7 +289,7 @@ ideas = {
 		}
 
 		NAM_wage_arrears = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_wage_arrears
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -310,7 +310,7 @@ ideas = {
 		}
 
 		NAM_housing_programme = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_housing_programme
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -330,7 +330,7 @@ ideas = {
 		}
 
 		NAM_south_war_council_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_south_war_council_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -357,7 +357,7 @@ ideas = {
 		}
 
 		NAM_south_counteroffensive_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_south_counteroffensive_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -386,14 +386,14 @@ ideas = {
 		# Display-only pair for the war-for-the-South aggregate; never installed.
 		NAM_south_war_dummy_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = { }
 		}
 
 		NAM_sw_conscription_of_the_south_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				conscription_factor = 0.1
@@ -402,7 +402,7 @@ ideas = {
 
 		NAM_sw_defence_in_depth_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.05
@@ -412,7 +412,7 @@ ideas = {
 
 		NAM_sw_mobile_reserve_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_fuel_consumption_factor = -0.1
@@ -421,7 +421,7 @@ ideas = {
 
 		NAM_sw_district_garrisons_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_org_factor = 0.03
@@ -430,7 +430,7 @@ ideas = {
 
 		NAM_sw_fuel_columns_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.05
@@ -439,7 +439,7 @@ ideas = {
 
 		NAM_sw_rapid_response_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				breakthrough_factor = 0.04
@@ -448,7 +448,7 @@ ideas = {
 
 		NAM_sw_staff_of_the_line_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_attack_factor = 0.03
@@ -457,7 +457,7 @@ ideas = {
 
 		NAM_sw_oil_blitz_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				breakthrough_factor = 0.05
@@ -467,7 +467,7 @@ ideas = {
 
 		NAM_sw_attrition_wall_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.05
@@ -476,7 +476,7 @@ ideas = {
 
 		NAM_sw_armoured_spearheads_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_attack_factor = 0.03
@@ -485,7 +485,7 @@ ideas = {
 
 		NAM_sw_forward_fuel_dumps_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.03
@@ -494,7 +494,7 @@ ideas = {
 
 		NAM_sw_trench_lines_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				max_dig_in = 2
@@ -504,7 +504,7 @@ ideas = {
 
 		NAM_sw_refinery_dispersal_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				fuel_gain_factor = 0.05
@@ -513,7 +513,7 @@ ideas = {
 
 		NAM_sw_fuel_for_the_front_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_fuel_consumption_factor = -0.05
@@ -522,7 +522,7 @@ ideas = {
 
 		NAM_sw_war_export_tariff_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				consumer_goods_factor = -0.03
@@ -531,7 +531,7 @@ ideas = {
 
 		NAM_sw_field_pipelines_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.05
@@ -540,7 +540,7 @@ ideas = {
 
 		NAM_sw_fuel_arsenal_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_speed_arms_factory_factor = 0.05
@@ -549,7 +549,7 @@ ideas = {
 
 		NAM_sw_charter_of_the_north_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				war_support_factor = 0.03
@@ -558,7 +558,7 @@ ideas = {
 
 		NAM_sw_protectorate_offers_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				compliance_gain = 0.05
@@ -567,7 +567,7 @@ ideas = {
 
 		NAM_sw_punitive_columns_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				resistance_growth = -0.1
@@ -576,7 +576,7 @@ ideas = {
 
 		NAM_sw_fuel_guarantees_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.02
@@ -585,7 +585,7 @@ ideas = {
 
 		NAM_sw_burned_wells_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_attack_factor = 0.03
@@ -594,7 +594,7 @@ ideas = {
 
 		NAM_sw_hostage_councils_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				compliance_gain = 0.05
@@ -604,7 +604,7 @@ ideas = {
 
 		NAM_sw_northern_envoys_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.03
@@ -613,7 +613,7 @@ ideas = {
 
 		NAM_sw_league_of_the_north_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				war_support_factor = 0.03
@@ -622,7 +622,7 @@ ideas = {
 
 		NAM_sw_district_compact_at_war_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				consumer_goods_factor = 0.03
@@ -631,7 +631,7 @@ ideas = {
 
 		NAM_sw_emergency_powers_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = -0.05
@@ -640,7 +640,7 @@ ideas = {
 
 		NAM_sw_district_relief_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.03
@@ -649,7 +649,7 @@ ideas = {
 
 		NAM_sw_uprising_sweeps_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				resistance_growth = -0.05
@@ -658,7 +658,7 @@ ideas = {
 
 		NAM_sw_namestnik_courts_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				compliance_gain = 0.05
@@ -667,7 +667,7 @@ ideas = {
 
 		NAM_sw_war_bread_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.02
@@ -676,7 +676,7 @@ ideas = {
 
 		NAM_sw_home_militia_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.03
@@ -685,7 +685,7 @@ ideas = {
 
 		NAM_sw_drive_to_khazar_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_attack_factor = 0.05
@@ -694,7 +694,7 @@ ideas = {
 
 		NAM_sw_last_line_of_the_belt_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.1
@@ -703,7 +703,7 @@ ideas = {
 
 		NAM_sw_victory_order_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				war_support_factor = 0.05
@@ -712,7 +712,7 @@ ideas = {
 
 		NAM_sw_s_occupation_namestniks_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				compliance_gain = 0.1
@@ -722,7 +722,7 @@ ideas = {
 
 		NAM_sw_s_furnace_inspection_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.03
@@ -731,7 +731,7 @@ ideas = {
 
 		NAM_sw_s_namestnik_levies_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				conscription_factor = 0.05
@@ -740,7 +740,7 @@ ideas = {
 
 		NAM_sw_s_iron_ladder_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_org_factor = 0.05
@@ -749,7 +749,7 @@ ideas = {
 
 		NAM_sw_s_victory_office_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				war_support_factor = 0.03
@@ -758,7 +758,7 @@ ideas = {
 
 		NAM_sw_f_charter_reserve_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				land_reinforce_rate = 0.03
@@ -767,7 +767,7 @@ ideas = {
 
 		NAM_sw_f_charter_at_war_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.03
@@ -776,7 +776,7 @@ ideas = {
 
 		NAM_sw_p_logistics_contracts_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.05
@@ -785,7 +785,7 @@ ideas = {
 
 		NAM_sw_p_exchange_war_loans_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.03
@@ -794,7 +794,7 @@ ideas = {
 
 		NAM_sw_p_war_dividends_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.05
@@ -803,7 +803,7 @@ ideas = {
 
 		NAM_sw_n_defence_council_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.03
@@ -812,7 +812,7 @@ ideas = {
 
 		NAM_sw_n_generals_hand_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_attack_factor = 0.05
@@ -821,7 +821,7 @@ ideas = {
 
 		NAM_sw_n_districts_voice_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.05
@@ -830,7 +830,7 @@ ideas = {
 
 		NAM_sw_n_defence_of_the_line_idea = {
 			name = NAM_south_war_dynamic
-			picture = GFX_idea_generic_war_preparation
+			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.05
@@ -841,35 +841,35 @@ ideas = {
 		# focus delta. They are never installed; country variables are authoritative.
 		NAM_administration_dummy_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = { }
 		}
 
 		NAM_garrison_dummy_idea = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = { }
 		}
 
 		NAM_navy_dummy_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = { }
 		}
 
 		NAM_air_dummy_idea = {
 			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
+			picture = GFX_idea_NAM_air_dynamic
 			allowed = { always = no }
 			modifier = { }
 		}
 
 		NAM_navy_harbour_service_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_dockyard = 0.05
@@ -878,7 +878,7 @@ ideas = {
 
 		NAM_navy_repair_yard_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				repair_speed_factor = 0.15
@@ -887,7 +887,7 @@ ideas = {
 
 		NAM_navy_active_squadron_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				navy_org_factor = 0.10
@@ -898,7 +898,7 @@ ideas = {
 
 		NAM_navy_construction_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_dockyard = 0.10
@@ -907,7 +907,7 @@ ideas = {
 
 		NAM_navy_basin_reconnaissance_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				spotting_chance = 0.10
@@ -916,7 +916,7 @@ ideas = {
 
 		NAM_navy_staff_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				naval_coordination = 0.10
@@ -926,7 +926,7 @@ ideas = {
 
 		NAM_navy_minefields_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				mines_planting_by_fleets_factor = 0.25
@@ -937,7 +937,7 @@ ideas = {
 
 		NAM_air_ground_service_idea = {
 			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
+			picture = GFX_idea_NAM_air_dynamic
 			allowed = { always = no }
 			modifier = {
 				air_accidents_factor = -0.10
@@ -946,7 +946,7 @@ ideas = {
 
 		NAM_air_interceptors_idea = {
 			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
+			picture = GFX_idea_NAM_air_dynamic
 			allowed = { always = no }
 			modifier = {
 				air_intercept_efficiency = 0.10
@@ -955,7 +955,7 @@ ideas = {
 
 		NAM_air_support_idea = {
 			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
+			picture = GFX_idea_NAM_air_dynamic
 			allowed = { always = no }
 			modifier = {
 				air_cas_efficiency = 0.10
@@ -964,7 +964,7 @@ ideas = {
 
 		NAM_air_operations_idea = {
 			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
+			picture = GFX_idea_NAM_air_dynamic
 			allowed = { always = no }
 			modifier = {
 				air_mission_efficiency = 0.05
@@ -973,7 +973,7 @@ ideas = {
 
 		NAM_adm_open_ledgers_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.02
@@ -982,7 +982,7 @@ ideas = {
 
 		NAM_adm_vertical_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.15
@@ -996,7 +996,7 @@ ideas = {
 
 		NAM_adm_districts_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.06
@@ -1009,7 +1009,7 @@ ideas = {
 
 		NAM_adm_district_guarantees_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.03
@@ -1018,7 +1018,7 @@ ideas = {
 
 		NAM_adm_export_quays_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.05
@@ -1027,7 +1027,7 @@ ideas = {
 
 		NAM_adm_domestic_refining_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				fuel_gain_factor = 0.05
@@ -1037,7 +1037,7 @@ ideas = {
 
 		NAM_gar_field_guards_idea = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				max_dig_in = 1
@@ -1049,7 +1049,7 @@ ideas = {
 
 		NAM_gar_mobile_columns_idea = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_speed_factor = 0.05
@@ -1061,7 +1061,7 @@ ideas = {
 
 		NAM_gar_escort_school_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				convoy_escort_efficiency = 0.15
@@ -1072,7 +1072,7 @@ ideas = {
 
 		NAM_adm_service_state_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.03
@@ -1085,7 +1085,7 @@ ideas = {
 
 		NAM_adm_federal_charter_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.04
@@ -1097,7 +1097,7 @@ ideas = {
 
 		NAM_adm_law_after_war_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.05
@@ -1106,7 +1106,7 @@ ideas = {
 
 		NAM_adm_civil_dividend_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_speed_industrial_complex_factor = 0.08
@@ -1117,7 +1117,7 @@ ideas = {
 
 		NAM_adm_hum_union_accepted_slot_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.03
@@ -1126,7 +1126,7 @@ ideas = {
 
 		NAM_adm_tax_rolls_slot_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.03
@@ -1135,7 +1135,7 @@ ideas = {
 
 		NAM_adm_national_university_slot_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.05
@@ -1144,7 +1144,7 @@ ideas = {
 
 		NAM_adm_engineering_collegium_slot_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.03
@@ -1153,7 +1153,7 @@ ideas = {
 
 		NAM_adm_port_polytechnic_slot_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.02
@@ -1162,7 +1162,7 @@ ideas = {
 
 		NAM_adm_district_scholarships_slot_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.03
@@ -1171,7 +1171,7 @@ ideas = {
 
 		NAM_adm_pw_returnee_registration_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.02
@@ -1181,7 +1181,7 @@ ideas = {
 
 		NAM_adm_pw_employment_offices_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_tax_collection_factor = 0.03
@@ -1191,7 +1191,7 @@ ideas = {
 
 		NAM_adm_pw_district_hospitals_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.02
@@ -1200,7 +1200,7 @@ ideas = {
 
 		NAM_adm_armed_peace_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.05
@@ -1210,7 +1210,7 @@ ideas = {
 
 		NAM_adm_svetlogorye_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.05
@@ -1219,7 +1219,7 @@ ideas = {
 
 		NAM_adm_seal_registry_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.1
@@ -1229,7 +1229,7 @@ ideas = {
 
 		NAM_gar_namestnik_garrisons_idea = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.05
@@ -1240,7 +1240,7 @@ ideas = {
 
 		NAM_adm_oil_quotas_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				fuel_gain_factor = 0.1
@@ -1250,7 +1250,7 @@ ideas = {
 
 		NAM_adm_ladder_of_seals_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.05
@@ -1262,7 +1262,7 @@ ideas = {
 
 		NAM_adm_district_council_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.04
@@ -1272,7 +1272,7 @@ ideas = {
 
 		NAM_adm_oil_fund_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.05
@@ -1282,7 +1282,7 @@ ideas = {
 
 		NAM_gar_district_militia_idea = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.04
@@ -1292,7 +1292,7 @@ ideas = {
 
 		NAM_adm_common_fuel_market_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.05
@@ -1303,7 +1303,7 @@ ideas = {
 
 		NAM_adm_south_heritage_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				compliance_gain = 0.05
@@ -1313,7 +1313,7 @@ ideas = {
 
 		NAM_adm_supports_balance_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.05
@@ -1322,7 +1322,7 @@ ideas = {
 
 		NAM_gar_ladder_ending_iron_idea = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.03
@@ -1332,7 +1332,7 @@ ideas = {
 
 		NAM_adm_ladder_ending_iron_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.1
@@ -1342,7 +1342,7 @@ ideas = {
 
 		NAM_adm_ladder_ending_service_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.08
@@ -1352,7 +1352,7 @@ ideas = {
 
 		NAM_adm_charter_ending_federation_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.08
@@ -1362,7 +1362,7 @@ ideas = {
 
 		NAM_adm_charter_ending_oil_union_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				fuel_gain_factor = 0.15
@@ -1373,7 +1373,7 @@ ideas = {
 
 		# ----- Pillar favours: 120 days each, bought with 15 support -----
 		NAM_favour_nam_idea = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_favour_nam_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1395,7 +1395,7 @@ ideas = {
 		}
 
 		NAM_favour_oil_idea = {
-			picture = generic_stockpile_fuel
+			picture = GFX_idea_NAM_favour_oil_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1417,7 +1417,7 @@ ideas = {
 		}
 
 		NAM_favour_dist_idea = {
-			picture = generic_build_infrastructure
+			picture = GFX_idea_NAM_favour_dist_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1439,7 +1439,7 @@ ideas = {
 		}
 
 		NAM_favour_garr_idea = {
-			picture = generic_reserve_divisions
+			picture = GFX_idea_NAM_favour_garr_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1461,7 +1461,7 @@ ideas = {
 		}
 
 		NAM_favour_trade_idea = {
-			picture = generic_foreign_capital
+			picture = GFX_idea_NAM_favour_trade_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1484,7 +1484,7 @@ ideas = {
 
 		# A rival seized the seals. The new order buys obedience with fear.
 		NAM_seal_junta = {
-			picture = generic_spy_coup
+			picture = GFX_idea_NAM_seal_junta
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1508,7 +1508,7 @@ ideas = {
 
 		# ----- Endings of the ladder and the charter -----
 		NAM_spirit_iron_ladder = {
-			picture = generic_secret_police
+			picture = GFX_idea_NAM_spirit_iron_ladder
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1532,7 +1532,7 @@ ideas = {
 		}
 
 		NAM_spirit_service_republic = {
-			picture = generic_central_management
+			picture = GFX_idea_NAM_spirit_service_republic
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1555,7 +1555,7 @@ ideas = {
 		}
 
 		NAM_spirit_federation = {
-			picture = generic_local_self_management
+			picture = GFX_idea_NAM_spirit_federation
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1578,7 +1578,7 @@ ideas = {
 		}
 
 		NAM_spirit_oil_union = {
-			picture = generic_fuel_reserves
+			picture = GFX_idea_NAM_spirit_oil_union
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1601,7 +1601,7 @@ ideas = {
 		}
 
 		NAM_spirit_prag_republic = {
-			picture = generic_constitutional_guarantees
+			picture = GFX_idea_NAM_spirit_prag_republic
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1624,7 +1624,7 @@ ideas = {
 		}
 
 		NAM_spirit_prag_directorate = {
-			picture = generic_production_bonus
+			picture = GFX_idea_NAM_spirit_prag_directorate
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1649,7 +1649,7 @@ ideas = {
 		# ----- Exile revolution -----
 		# The pillars' junta: the exile lives for the return and from the sea.
 		NAM_exile_pillar_junta = {
-			picture = generic_war_preparation
+			picture = GFX_idea_NAM_exile_pillar_junta
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1673,7 +1673,7 @@ ideas = {
 
 		# Veter's humanists: an open government of the free islands.
 		NAM_exile_free_islands = {
-			picture = generic_local_self_management
+			picture = GFX_idea_NAM_exile_free_islands
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1697,7 +1697,7 @@ ideas = {
 		# ----- Punishment of the defeated restitution coalition -----
 		# Timed ideas on EFL and AZH after a Svetlogorsk victory.
 		NAM_ruined_economy = {
-			picture = generic_economic_crisis
+			picture = GFX_idea_NAM_ruined_economy
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			on_add = {
@@ -1720,7 +1720,7 @@ ideas = {
 		}
 
 		NAM_army_of_shame = {
-			picture = generic_army_problems
+			picture = GFX_idea_NAM_army_of_shame
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			on_add = {
@@ -1743,7 +1743,7 @@ ideas = {
 		}
 
 		NAM_bond_payments = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_bond_payments
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1764,7 +1764,7 @@ ideas = {
 
 		NAM_adm_one_budget_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.02
@@ -1773,7 +1773,7 @@ ideas = {
 
 		NAM_adm_machine_shops_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.02
@@ -1782,7 +1782,7 @@ ideas = {
 
 		NAM_adm_well_register_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				fuel_gain_factor = 0.05
@@ -1791,7 +1791,7 @@ ideas = {
 
 		NAM_adm_crisis_office_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.02
@@ -1799,7 +1799,7 @@ ideas = {
 		}
 
 		NAM_pw_industrial_schedule_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_pw_industrial_schedule_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1820,7 +1820,7 @@ ideas = {
 		}
 
 		NAM_pw_regional_contracts_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_pw_regional_contracts_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1841,7 +1841,7 @@ ideas = {
 		}
 
 		NAM_pw_public_utilities_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_pw_public_utilities_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1862,7 +1862,7 @@ ideas = {
 		}
 
 		NAM_pw_municipal_services_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_pw_municipal_services_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1884,7 +1884,7 @@ ideas = {
 		}
 
 		NAM_pw_import_machine_tools_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_pw_import_machine_tools_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1905,7 +1905,7 @@ ideas = {
 		}
 
 		NAM_pw_contract_arbitration_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_pw_contract_arbitration_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -1927,7 +1927,7 @@ ideas = {
 
 		NAM_adm_civic_audit_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.08
@@ -1937,7 +1937,7 @@ ideas = {
 
 		NAM_prag_convoy_insurance_idea = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				convoy_escort_efficiency = 0.15
@@ -1947,7 +1947,7 @@ ideas = {
 
 		NAM_adm_prag_ending_republic_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.1
@@ -1957,7 +1957,7 @@ ideas = {
 
 		NAM_adm_prag_ending_directorate_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.15
@@ -1968,7 +1968,7 @@ ideas = {
 
 		NAM_adm_civil_service_exam_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.06
@@ -1978,7 +1978,7 @@ ideas = {
 
 		NAM_adm_appointed_prefects_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.15
@@ -1988,7 +1988,7 @@ ideas = {
 
 		NAM_adm_building_code_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_speed_industrial_complex_factor = 0.12
@@ -1997,7 +1997,7 @@ ideas = {
 
 		NAM_adm_distribution_board_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.1
@@ -2006,7 +2006,7 @@ ideas = {
 
 		NAM_adm_district_inspectorate_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_tax_collection_factor = 0.08
@@ -2016,7 +2016,7 @@ ideas = {
 
 		NAM_adm_reconstruction_statute_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.05
@@ -2025,7 +2025,7 @@ ideas = {
 
 		NAM_adm_domestic_designs_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.035
@@ -2034,7 +2034,7 @@ ideas = {
 
 		NAM_adm_customs_clearinghouse_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.08
@@ -2044,7 +2044,7 @@ ideas = {
 
 		NAM_adm_repair_depots_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.08
@@ -2054,7 +2054,7 @@ ideas = {
 
 		NAM_adm_municipal_bonds_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_speed_industrial_complex_factor = 0.1
@@ -2064,7 +2064,7 @@ ideas = {
 
 		NAM_adm_commercial_commonwealth_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.1
@@ -2074,7 +2074,7 @@ ideas = {
 
 		NAM_adm_municipal_land_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_speed_industrial_complex_factor = 0.12
@@ -2083,7 +2083,7 @@ ideas = {
 
 		NAM_adm_tenant_councils_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.05
@@ -2093,7 +2093,7 @@ ideas = {
 
 		NAM_adm_workers_inspection_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.08
@@ -2102,7 +2102,7 @@ ideas = {
 
 		NAM_adm_regional_university_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.03
@@ -2111,7 +2111,7 @@ ideas = {
 
 		NAM_adm_common_citizenship_idea = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_tax_collection_factor = 0.08
@@ -2120,7 +2120,7 @@ ideas = {
 		}
 
 		NAM_war_fuel_discipline_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_fuel_discipline_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2148,7 +2148,7 @@ ideas = {
 		}
 
 		NAM_war_extraction_surge_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_extraction_surge_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2177,7 +2177,7 @@ ideas = {
 
 		NAM_war_replacement_school_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_attack_factor = 0.01
@@ -2187,7 +2187,7 @@ ideas = {
 
 		NAM_war_depot_network_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.02
@@ -2196,7 +2196,7 @@ ideas = {
 
 		NAM_war_mobile_workshops_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_speed_factor = 0.02
@@ -2204,7 +2204,7 @@ ideas = {
 		}
 
 		NAM_war_short_training_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_short_training_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2231,7 +2231,7 @@ ideas = {
 		}
 
 		NAM_war_veteran_cadres_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_veteran_cadres_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2258,7 +2258,7 @@ ideas = {
 		}
 
 		NAM_war_depot_network_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_depot_network_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2285,7 +2285,7 @@ ideas = {
 		}
 
 		NAM_war_mobile_workshops_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_mobile_workshops_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2312,7 +2312,7 @@ ideas = {
 		}
 
 		NAM_war_factory_shifts_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_factory_shifts_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2340,7 +2340,7 @@ ideas = {
 		}
 
 		NAM_war_convoy_escort_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_convoy_escort_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2367,7 +2367,7 @@ ideas = {
 		}
 
 		NAM_war_interceptor_control_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_interceptor_control_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2393,7 +2393,7 @@ ideas = {
 		}
 
 		NAM_war_air_ground_liaison_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_air_ground_liaison_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2419,7 +2419,7 @@ ideas = {
 		}
 
 		NAM_war_joint_operations_idea = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_war_joint_operations_idea
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2481,7 +2481,7 @@ ideas = {
 		}
 
 		NAM_agreement_nam_reward = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_nam_reward
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2502,7 +2502,7 @@ ideas = {
 		}
 
 		NAM_agreement_nam_failure = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_nam_failure
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2522,7 +2522,7 @@ ideas = {
 		}
 
 		NAM_agreement_oil_reward = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_oil_reward
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2543,7 +2543,7 @@ ideas = {
 		}
 
 		NAM_agreement_oil_failure = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_oil_failure
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2564,7 +2564,7 @@ ideas = {
 		}
 
 		NAM_agreement_dist_reward = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_dist_reward
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2585,7 +2585,7 @@ ideas = {
 		}
 
 		NAM_agreement_dist_failure = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_dist_failure
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2605,7 +2605,7 @@ ideas = {
 		}
 
 		NAM_agreement_garr_reward = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_garr_reward
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2626,7 +2626,7 @@ ideas = {
 		}
 
 		NAM_agreement_garr_failure = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_garr_failure
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2646,7 +2646,7 @@ ideas = {
 		}
 
 		NAM_agreement_trade_reward = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_trade_reward
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2667,7 +2667,7 @@ ideas = {
 		}
 
 		NAM_agreement_trade_failure = {
-			picture = generic_political_support
+			picture = GFX_idea_NAM_agreement_trade_failure
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1
@@ -2688,7 +2688,7 @@ ideas = {
 
 		NAM_pw_constitutional_committee_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.1
@@ -2698,7 +2698,7 @@ ideas = {
 
 		NAM_pw_civil_payroll_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = 0.02
@@ -2708,7 +2708,7 @@ ideas = {
 
 		NAM_pw_public_procurement_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.05
@@ -2717,7 +2717,7 @@ ideas = {
 
 		NAM_pw_central_treasury_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_tax_collection_factor = 0.05
@@ -2727,7 +2727,7 @@ ideas = {
 
 		NAM_pw_public_supply_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.04
@@ -2736,7 +2736,7 @@ ideas = {
 
 		NAM_pw_industrial_credit_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_speed_industrial_complex_factor = 0.06
@@ -2746,7 +2746,7 @@ ideas = {
 
 		NAM_pw_export_guarantees_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.08
@@ -2756,7 +2756,7 @@ ideas = {
 
 		NAM_pw_insurance_fund_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.06
@@ -2766,7 +2766,7 @@ ideas = {
 
 		NAM_pw_family_pensions_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.04
@@ -2776,7 +2776,7 @@ ideas = {
 
 		NAM_pw_military_governors_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				resistance_growth = -0.08
@@ -2786,7 +2786,7 @@ ideas = {
 
 		NAM_pw_civil_police_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				resistance_growth = -0.04
@@ -2797,7 +2797,7 @@ ideas = {
 
 		NAM_pw_officer_appointments_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				planning_speed = 0.05
@@ -2806,7 +2806,7 @@ ideas = {
 
 		NAM_pw_strategic_guard_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.04
@@ -2815,7 +2815,7 @@ ideas = {
 
 		NAM_pw_defence_accounts_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.04
@@ -2824,7 +2824,7 @@ ideas = {
 
 		NAM_pw_southern_intelligence_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				planning_speed = 0.08
@@ -2833,7 +2833,7 @@ ideas = {
 
 		NAM_pw_southern_civil_service_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				compliance_gain = 0.04
@@ -2842,7 +2842,7 @@ ideas = {
 
 		NAM_pw_southern_supply_plan_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.05
@@ -2851,7 +2851,7 @@ ideas = {
 
 		NAM_pw_postwar_commission_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				political_power_gain = 0.05
@@ -2860,7 +2860,7 @@ ideas = {
 
 		NAM_pw_southern_schools_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.025
@@ -2869,7 +2869,7 @@ ideas = {
 
 		NAM_pw_unified_budget_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_tax_collection_factor = 0.04
@@ -2878,7 +2878,7 @@ ideas = {
 
 		NAM_pw_southern_industrial_repair_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.05
@@ -2887,7 +2887,7 @@ ideas = {
 
 		NAM_pw_civil_administration_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				compliance_gain = 0.04
@@ -2897,7 +2897,7 @@ ideas = {
 
 		NAM_pw_permanent_institutions_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = -0.03
@@ -2907,7 +2907,7 @@ ideas = {
 
 		NAM_pw_oil_equipment_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.04
@@ -2916,7 +2916,7 @@ ideas = {
 
 		NAM_pw_power_grid_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_speed_industrial_complex_factor = 0.04
@@ -2925,7 +2925,7 @@ ideas = {
 
 		NAM_pw_water_intakes_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				stability_factor = 0.03
@@ -2934,7 +2934,7 @@ ideas = {
 
 		NAM_pw_grid_dispatch_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.03
@@ -2943,7 +2943,7 @@ ideas = {
 
 		NAM_pw_toolmaking_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.05
@@ -2952,7 +2952,7 @@ ideas = {
 
 		NAM_pw_testing_facilities_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.025
@@ -2962,7 +2962,7 @@ ideas = {
 
 		NAM_pw_industrial_sites_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_speed_industrial_complex_factor = 0.04
@@ -2971,7 +2971,7 @@ ideas = {
 
 		NAM_pw_chemical_works_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.04
@@ -2980,7 +2980,7 @@ ideas = {
 
 		NAM_pw_transport_maintenance_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.07
@@ -2989,7 +2989,7 @@ ideas = {
 
 		NAM_pw_school_network_administration_preview = {
 			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.02
@@ -2998,7 +2998,7 @@ ideas = {
 
 		NAM_pw_breakthrough_army_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_org_factor = 0.04
@@ -3008,7 +3008,7 @@ ideas = {
 
 		NAM_pw_mobile_army_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_speed_factor = 0.06
@@ -3018,7 +3018,7 @@ ideas = {
 
 		NAM_pw_reserve_centres_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.16
@@ -3027,7 +3027,7 @@ ideas = {
 
 		NAM_pw_staff_exercises_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_speed_factor = 0.17
@@ -3037,7 +3037,7 @@ ideas = {
 
 		NAM_pw_southern_air_command_air_preview = {
 			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
+			picture = GFX_idea_NAM_air_dynamic
 			allowed = { always = no }
 			modifier = {
 				air_accidents_factor = -0.25
@@ -3047,7 +3047,7 @@ ideas = {
 
 		NAM_pw_southern_army_garrison_preview = {
 			name = NAM_garrison_dynamic
-			picture = GFX_idea_generic_fortify_the_borders
+			picture = GFX_idea_NAM_garrison_dynamic
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.06
@@ -3058,7 +3058,7 @@ ideas = {
 
 		NAM_pw_naval_service_navy_preview = {
 			name = NAM_navy_dynamic
-			picture = GFX_idea_generic_coastal_navy
+			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
 			modifier = {
 				amphibious_invasion = 0.08
@@ -3069,7 +3069,7 @@ ideas = {
 
 		NAM_pw_ground_control_air_preview = {
 			name = NAM_air_dynamic
-			picture = GFX_idea_generic_air_bonus
+			picture = GFX_idea_NAM_air_dynamic
 			allowed = { always = no }
 			modifier = {
 				air_mission_efficiency = 0.08

@@ -15,6 +15,36 @@ spriteTypes = {
 		name = "GFX_portrait_SHL_Jalil_Nur"
 		texturefile = "gfx/leaders/SHL/portrait_SHL_Jalil_Nur.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Jalil_Nur_directorate"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Jalil_Nur_directorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Jalil_Nur_tenth_house"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Jalil_Nur_tenth_house.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Darius_Safir_regent"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Darius_Safir_regent.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Jalil_Nur_victory"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Jalil_Nur_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Mariam_Arbin_victory"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Mariam_Arbin_victory.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Salima_Darzi_victory"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Salima_Darzi_victory.png"
+	}
 	spriteType = {
 		name = "GFX_portrait_GLP_Miran_Veyr"
 		texturefile = "gfx/leaders/GLP/portrait_GLP_Miran_Veyr.png"

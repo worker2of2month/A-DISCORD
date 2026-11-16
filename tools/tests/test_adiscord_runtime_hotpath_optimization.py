@@ -161,7 +161,7 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
             }
             expected = (tag == "STS" and postwar) or (
                 tag == "STP"
-                and (preparation or (party and (postwar or (started and participant))))
+                and party and (postwar or (started and participant))
             )
             self.assertEqual(
                 matches_conditions(gate, facts, tag),
@@ -181,9 +181,19 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
                 matches_conditions(allowed, {}, tag),
                 tag in ("STP", "STS", "SRP", "NOD"),
             )
-        self.assertIn(
-            "STP_operations_map_available = yes", named_block(category, "visible")
-        )
+        category_gate = block(block(parse_clausewitz(category), "STP_military_operations"), "visible")
+        for tag in ("STP", "STS", "SRP", "NOD"):
+            for started, postwar, northern_war in product((False, True), repeat=3):
+                facts = {
+                    (tag, "has_global_flag", "STP_cw_started"): started,
+                    (tag, "has_country_flag", "STP_cw_postwar"): postwar,
+                    ("NOD", "has_country_flag", "NOD_cw_intervention_approved"): northern_war,
+                    (tag, "has_country_flag", "STP_cw_participant"): True,
+                }
+                self.assertEqual(
+                    matches_conditions(category_gate, facts, tag),
+                    started or postwar or (tag == "NOD" and northern_war),
+                )
         panel = named_block(
             read("common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt"),
             "ADISCORD_STP_operations_panel",
@@ -194,10 +204,7 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
 
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         preparation = named_block(effects, "STP_cw_open_preparation")
-        self.assertGreater(
-            preparation.index("VAL_operations_map_refresh_cache = yes"),
-            preparation.index("STP_initialize_battle_for_stelander = yes"),
-        )
+        self.assertNotIn("VAL_operations_map_refresh_cache", preparation)
         start = named_block(effects, "STP_cw_begin_hostilities")
         self.assertGreater(
             start.index("VAL_operations_map_refresh_cache = yes"),

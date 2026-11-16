@@ -1139,6 +1139,67 @@ VAL_nw_decline_tsaygen_sale = {
 	}
 }
 
+# COUNTRY VAL. The main-tree perimeter lease: nothing is debited until ERT answers.
+VAL_offer_irem_lease = {
+	if = {
+		limit = {
+			VAL_irem_lease_affordable = yes
+			NOT = { has_country_flag = VAL_irem_lease_offer_cooldown }
+			ERT = {
+				VAL_irem_lease_target_valid = yes
+				NOT = { has_country_flag = VAL_irem_lease_offer_pending }
+			}
+		}
+		set_country_flag = { flag = VAL_irem_lease_offer_cooldown days = 90 }
+		ERT = {
+			set_country_flag = { flag = VAL_irem_lease_offer_pending days = 15 }
+			country_event = { id = val_rework.196 }
+		}
+	}
+}
+
+# COUNTRY ERT. Rifles, money and the district change hands in one settlement;
+# both parties are rechecked because the offer may wait up to two weeks.
+VAL_accept_irem_lease = {
+	if = {
+		limit = {
+			has_country_flag = VAL_irem_lease_offer_pending
+			VAL_irem_lease_target_valid = yes
+			VAL = {
+				has_completed_focus = VAL_frontier_lease_irem
+				VAL_irem_lease_affordable = yes
+			}
+		}
+		clr_country_flag = VAL_irem_lease_offer_pending
+		add_to_variable = { var = ADISCORD_economy_treasury value = 750 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 750 }
+		ADISCORD_economy_mark_dirty = yes
+		VAL = {
+			add_political_power = -50
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 750 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 750 }
+			send_equipment = {
+				equipment = infantry_equipment
+				amount = 6000
+				target = ERT
+			}
+			transfer_state = 169
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = val_rework.197 }
+		}
+		169 = { set_state_controller_to = VAL }
+	}
+	else = { VAL_decline_irem_lease = yes }
+}
+
+VAL_decline_irem_lease = {
+	if = {
+		limit = { has_country_flag = VAL_irem_lease_offer_pending }
+		clr_country_flag = VAL_irem_lease_offer_pending
+		VAL = { country_event = { id = val_rework.198 } }
+	}
+}
+
 # COUNTRY VAL with the republic in FROM. One campaign at a time holds the deposit.
 VAL_nw_detach_begin = {
 	if = {
@@ -6100,11 +6161,14 @@ VAL_raise_marine_contract_corps = {
 }
 
 VAL_start_quarterly_contract_norm = {
-	set_country_flag = VAL_quarterly_contract_active
-	clr_country_flag = VAL_quarterly_contract_paid
-	clr_country_flag = VAL_ai_emergency_quartermaster_used
-	set_variable = { var = VAL_quarterly_contract_months_elapsed value = 0 }
-	activate_mission = VAL_quarterly_contract_deadline
+	if = {
+		limit = { NOT = { has_completed_focus = VAL_Industrial_Mobilization_Plan } }
+		set_country_flag = VAL_quarterly_contract_active
+		clr_country_flag = VAL_quarterly_contract_paid
+		clr_country_flag = VAL_ai_emergency_quartermaster_used
+		set_variable = { var = VAL_quarterly_contract_months_elapsed value = 0 }
+		activate_mission = VAL_quarterly_contract_deadline
+	}
 }
 
 # COUNTRY: caller sets positive temp VAL_contract_rifle_cost.
@@ -6258,7 +6322,6 @@ VAL_complete_quarterly_contract_norm = {
 	clr_country_flag = VAL_quarterly_contract_paid
 	clamp_variable = { var = VAL_contract_reputation_level min = 0 max = 3 }
 	VAL_refresh_contract_reputation = yes
-	country_event = { id = val_rework.1 days = 1 }
 	if = {
 		limit = { has_power_balance = { id = VAL_command_balance } }
 		add_power_balance_value = { id = VAL_command_balance value = 0.05 }
@@ -6272,7 +6335,6 @@ VAL_fail_quarterly_contract_norm = {
 	clamp_variable = { var = VAL_contract_reputation_level min = 0 max = 3 }
 	add_to_variable = { var = VAL_quarterly_contract_failures value = 1 }
 	VAL_refresh_contract_reputation = yes
-	country_event = { id = val_rework.1 days = 1 }
 	country_event = { id = val_rework.167 }
 	VAL_council_record_failure = yes
 	if = {
@@ -6289,6 +6351,37 @@ VAL_resolve_quarterly_contract_norm = {
 			VAL_complete_quarterly_contract_norm = yes
 		}
 		else = { VAL_fail_quarterly_contract_norm = yes }
+		country_event = { id = val_rework.1 days = 1 }
+	}
+}
+
+VAL_end_quarterly_contract_norm = {
+	custom_effect_tooltip = VAL_end_quarterly_contract_norm_tt
+	if = {
+		limit = {
+			check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals }
+			has_variable = VAL_council_mandate_deposit
+			NOT = { has_country_flag = VAL_council_supply_fulfilled }
+		}
+		custom_effect_tooltip = VAL_end_quarterly_mandate_deposit_tt
+	}
+	hidden_effect = {
+		if = {
+			limit = { has_country_flag = VAL_quarterly_contract_paid }
+			VAL_complete_quarterly_contract_norm = yes
+		}
+		else = { clr_country_flag = VAL_quarterly_contract_active }
+		remove_mission = VAL_quarterly_contract_deadline
+		clear_variable = VAL_quarterly_contract_months_elapsed
+		clr_country_flag = VAL_ai_emergency_quartermaster_used
+		if = {
+			limit = { check_variable = { var = VAL_council_mandate_kind value = 3 compare = equals } }
+			if = {
+				limit = { has_country_flag = VAL_council_supply_fulfilled }
+				VAL_council_mandate_success = yes
+			}
+			else = { VAL_council_withdraw_mandate = yes }
+		}
 	}
 }
 
@@ -8275,7 +8368,7 @@ VAL_enter_stelander_defeat = {
 		VAL_council_offer_identity = yes
 		mark_focus_tree_layout_dirty = yes
 		ADISCORD_economy_mark_dirty = yes
-		log = "[VAL] Shabrat defeat transition: Solgalov removed, commanders council installed"
+		log = "[VAL] Stelander defeat transition: Solgalov removed, commanders council installed"
 	}
 }
 
@@ -9929,6 +10022,19 @@ VAL_install_nodrul_administration = {
 		VAL_settle_nodrul_bezhaysk_war = yes
 		VAL_settle_frontier_partner_war = yes
 		VAL_end_administration_wars = yes
+		# A subject whose own capitulation was reserved for this settlement leaves
+		# the war with Nodrul. Stelander keeps its separate administration route.
+		every_subject_country = {
+			limit = {
+				has_war_with = VAL
+				NOT = {
+					tag = STP
+					tag = STS
+					has_country_flag = VAL_final_defeat_pending
+				}
+			}
+			VAL = { white_peace = PREV }
+		}
 		VAL = { VAL_partition_nodrul_settlement = yes }
 
 		# Nodrul starts as the leader of the old Consortium. A faction leader
@@ -10600,7 +10706,23 @@ VAL_open_nod_frontier_offer = {
 
 VAL_accept_nod_frontier_offer = {
 	if = {
-		limit = { VAL_nod_frontier_offer_current = yes has_country_flag = VAL_nod_frontier_offer_pending }
+		limit = {
+			OR = {
+				VAL_nod_original_offer_current = yes
+				VAL_nod_counteroffer_payable = yes
+			}
+		}
+		if = {
+			limit = { has_country_flag = { flag = VAL_nod_frontier_offer_pending value > 2 } }
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+			ADISCORD_economy_mark_dirty = yes
+			TFF = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
 		if = {
 			limit = { VAL_nod_limited_offer = yes }
 			set_country_flag = { flag = VAL_nod_frontier_agreement value = 2 }
@@ -11792,7 +11914,10 @@ VAL_frontier_withdraw_and_defer = {
 
 VAL_council_begin_revanche = {
 	if = {
-		limit = { VAL_council_can_launch_revanche = yes }
+		limit = {
+			VAL_council_can_launch_revanche = yes
+			VAL_council_party_protectorate = no
+		}
 		set_country_flag = VAL_council_revanche_active
 		declare_war_on = { target = STS type = annex_everything }
 		hidden_effect = { VAL_call_subjects_to_wars = yes }
@@ -11802,12 +11927,153 @@ VAL_council_begin_revanche = {
 		}
 		else = { clr_country_flag = VAL_council_revanche_active }
 	}
+	else_if = {
+		limit = { VAL_council_can_launch_revanche = yes }
+		VAL_council_break_party_protectorate = yes
+	}
+}
+
+# COUNTRY VAL, from val_council.42 after the revanche choice. Korsch's National
+# party replaces the Council on both routes; the defeat triggers accept him.
+VAL_council_revanchist_coup = {
+	if = {
+		limit = { VAL_council_revanchist_coup_current = yes }
+		add_country_leader_role = {
+			character = VAL_Eduard_Korsch
+			promote_leader = yes
+			country_leader = {
+				ideology = chauvinism_ideology
+				expire = "2200.1.1.1"
+			}
+		}
+		set_politics = { ruling_party = chauvinism elections_allowed = no }
+		add_popularity = { ideology = chauvinism popularity = 0.25 }
+		add_war_support = 0.10
+		add_stability = -0.05
+		news_event = { id = val_council.43 days = 1 }
+		mark_focus_tree_layout_dirty = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL. The protectorate test must be read before the release: afterwards
+# Kefreyt is independent and only the active flag marks the war as the revanche.
+# A protectorate called into the northern march leaves it by separate peace.
+VAL_council_break_party_protectorate = {
+	set_country_flag = VAL_council_revanche_active
+	if = {
+		limit = { STP = { has_country_flag = STP_pw_party_northern_march_active } }
+		add_timed_idea = { idea = VAL_council_march_window days = 120 }
+	}
+	if = {
+		limit = { is_in_faction_with = STP }
+		leave_faction = yes
+	}
+	STP = {
+		set_autonomy = {
+			target = VAL
+			autonomy_state = autonomy_free
+			end_wars = no
+			end_civil_wars = no
+		}
+	}
+	every_enemy_country = {
+		limit = { STP_pw_party_northern_march_target = yes }
+		white_peace = VAL
+	}
+	VAL_council_deliver_hidden_depots = yes
+	declare_war_on = { target = STP type = annex_everything }
+	hidden_effect = { VAL_call_subjects_to_wars = yes }
+	if = {
+		limit = { has_war_with = STP }
+		STP = { country_event = { id = ADISCORD_STP_pc.120 } }
+	}
+	else = {
+		clr_country_flag = VAL_council_revanche_active
+		log = "[VAL] Party protectorate released without a revanche war"
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY VAL. One hidden depot of the Party protectorate.
+VAL_council_add_depot_equipment = {
+	add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = VAL }
+	add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = VAL }
+	add_equipment_to_stockpile = { type = support_equipment amount = 80 producer = VAL }
+}
+
+# COUNTRY VAL. Depots open at the break; the count is the only receipt.
+VAL_council_deliver_hidden_depots = {
+	if = {
+		limit = { check_variable = { var = VAL_council_hidden_depots value = 1 compare = greater_than_or_equals } }
+		VAL_council_add_depot_equipment = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_council_hidden_depots value = 2 compare = greater_than_or_equals } }
+		VAL_council_add_depot_equipment = yes
+	}
+	if = {
+		limit = { check_variable = { var = VAL_council_hidden_depots value = 3 compare = greater_than_or_equals } }
+		VAL_council_add_depot_equipment = yes
+	}
+	clear_variable = VAL_council_hidden_depots
+}
+
+# COUNTRY VAL, decision removal. A depot finished after the break, or after the
+# protectorate ended otherwise, opens at once. The commissars search only while
+# the Party has no war of its own.
+VAL_council_finish_hidden_depot = {
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = VAL_council_revanche_active
+				VAL_council_party_protectorate = no
+			}
+		}
+		VAL_council_add_depot_equipment = yes
+	}
+	else_if = {
+		limit = { STP = { has_war = no } }
+		random_list = {
+			70 = { add_to_variable = { var = VAL_council_hidden_depots value = 1 } }
+			30 = {
+				set_country_flag = { flag = VAL_council_depot_search value = 1 days = 60 }
+				country_event = { id = val_council.41 }
+			}
+		}
+	}
+	else = { add_to_variable = { var = VAL_council_hidden_depots value = 1 } }
+}
+
+# COUNTRY VAL, after the Party's capitulation in the revanche war. A northern
+# march still in progress ends as the Party's defeat before the administration.
+VAL_council_settle_party_revanche_victory = {
+	if = {
+		limit = {
+			has_country_flag = VAL_council_revanche_active
+			STP = { exists = yes }
+		}
+		clr_country_flag = VAL_council_revanche_active
+		STP = {
+			STP_pw_party_settle_northern_march_defeat = yes
+			if = { limit = { has_war_with = VAL } white_peace = VAL }
+			VAL_install_stelander_administration = yes
+		}
+		add_stability = 0.05
+		add_war_support = 0.05
+		add_political_power = 100
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 
 # COUNTRY VAL: a separately arranged peace must not mark an unrelated later war.
 VAL_council_reconcile_revanche = {
 	if = {
-		limit = { has_country_flag = VAL_council_revanche_active NOT = { has_war_with = STS } }
+		limit = {
+			has_country_flag = VAL_council_revanche_active
+			NOT = { has_war_with = STS }
+			NOT = { has_war_with = STP }
+		}
 		clr_country_flag = VAL_council_revanche_active
 	}
 }

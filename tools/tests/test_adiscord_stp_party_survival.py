@@ -902,7 +902,7 @@ class PartySurvivalContracts(unittest.TestCase):
         }
         self.assertTrue(domestic <= {e.key for e in categories['STP_party_factions']})
         self.assertTrue(
-            foreign <= {e.key for e in categories['STP_military_operations']}
+            foreign <= {e.key for e in categories['STP_external_affairs']}
         )
         self.assertFalse((domestic | foreign) & elections)
         council = {e.key for e in categories['STP_military_operations']}
@@ -1506,7 +1506,7 @@ class PartyUsabilityContracts(unittest.TestCase):
         cleanup = self.effects['STP_ps_close_defence']
         self.assertIn('STP_ps_command_planning', children(cleanup, 'clear_variable'))
 
-    def test_foreign_operations_share_the_military_category(self):
+    def test_cross_border_programmes_and_postwar_defence_are_separate(self):
         names = [
             'STP_ps_fund_nod',
             'STP_ps_arm_nod',
@@ -1523,6 +1523,10 @@ class PartyUsabilityContracts(unittest.TestCase):
             'STP_ps_val_intercept_work',
             'STP_ps_val_pressure',
             'STP_ps_val_pressure_work',
+        ]
+        for name in names:
+            self.assertEqual(self.owners[name], 'STP_external_affairs', name)
+        names = [
             'STP_pw_party_nod_invasion_countdown',
             'STP_pw_party_nod_emergency_mobilization',
             'STP_pw_party_nod_fortify_border',
@@ -1555,24 +1559,10 @@ class PartyUsabilityContracts(unittest.TestCase):
                 },
             )
         )
-        external = one(self.categories['STP_military_operations'], 'visible')
-        self.assertTrue(
-            matches_conditions(
-                external,
-                {
-                    ('STP', 'tag', 'STP'): True,
-                    ('STP', 'has_country_flag', 'STP_sided_with_the_party_flag'): True,
-                    ('STP', 'STP_cw_preparation_open', 'yes'): True,
-                    ('STP', 'STP_ps_supply_program_unlocked', 'yes'): True,
-                    ('VAL', 'exists', 'yes'): True,
-                },
-            )
-        )
-        self.assertTrue(
-            matches_conditions(
-                external, {('STP', 'has_variable', 'STP_ps_nod_receipt_type'): True}
-            )
-        )
+        external = self.categories['STP_external_affairs']
+        self.assertTrue(matches_conditions(one(external, 'allowed'), {}, 'STP'))
+        self.assertNotIn('visible', [entry.key for entry in external])
+        self.assertNotIn('visible_when_empty', [entry.key for entry in external])
         self.assertEqual(
             one(self.categories['STP_military_operations'], 'visible_when_empty'), 'yes'
         )
@@ -1656,9 +1646,9 @@ class PartyUsabilityContracts(unittest.TestCase):
                 'STPGetCoalitionReport',
                 'STPGetWarStrainReport',
                 'STPGetStalledWarReport',
-                'STPGetPartyForeignReport',
             ):
                 self.assertIn(f'[{report}]', values['STP_military_operations_desc'])
+            self.assertIn('[STPGetPartyForeignReport]', values['STP_external_affairs_desc'])
             self.assertIn(
                 '[STPGetPartyPreparationReport]', values['STP_party_factions_desc']
             )

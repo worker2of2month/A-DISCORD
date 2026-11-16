@@ -314,6 +314,40 @@ VAL_military_operations = {
 		ai_will_do = { base = 30 }
 	}
 
+	# The lease route buys the same district. ERT answers before any payment;
+	# its pending flag, not has_decision, blocks a second offer.
+	VAL_frontier_offer_irem_lease = {
+		icon = ADISCORD_deal
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_frontier_lease_irem
+			NOT = { owns_state = 169 }
+			169 = { is_owned_by = ERT }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_irem_lease_target_tt
+				ERT = { VAL_irem_lease_target_valid = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_offer_idle_tt
+				ERT = { NOT = { has_country_flag = VAL_irem_lease_offer_pending } }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_irem_lease_offer_ready_tt
+				NOT = { has_country_flag = VAL_irem_lease_offer_cooldown }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_frontier_offer_irem_lease_cost
+		custom_cost_trigger = { VAL_irem_lease_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_frontier_offer_irem_lease_tt
+			hidden_effect = { VAL_offer_irem_lease = yes }
+		}
+		ai_will_do = { base = 30 }
+	}
+
 	# ERT may keep fighting SCA after losing 169, so the limited war cannot wait
 	# for its capitulation.
 	VAL_operation_secure_perimeter = {
@@ -773,8 +807,11 @@ VAL_military_operations = {
 			custom_trigger_tooltip = { tooltip = VAL_nod_frontier_no_pending_tt NOT = { has_country_flag = VAL_nod_frontier_offer_pending has_country_flag = VAL_campaign_mobilizing } }
 		}
 		cost = 0
-		days_re_enable = 30
-		complete_effect = { country_event = { id = val_contract.380 } }
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = VAL_yubora_single_negotiation_tt
+			hidden_effect = { country_event = { id = val_contract.380 } }
+		}
 		ai_will_do = { base = 20 }
 	}
 
@@ -8552,6 +8589,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
+			NOT = { has_completed_focus = VAL_Industrial_Mobilization_Plan }
 			has_completed_focus = VAL_council_takes_command
 			NOT = {
 				has_completed_focus = VAL_council_equal_votes
@@ -8644,6 +8682,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
+			NOT = { has_completed_focus = VAL_Industrial_Mobilization_Plan }
 			has_completed_focus = VAL_council_takes_command
 			has_completed_focus = VAL_council_equal_votes
 		}
@@ -8731,6 +8770,7 @@ VAL_council_government_category = {
 			tag = VAL
 		}
 		visible = {
+			NOT = { has_completed_focus = VAL_Industrial_Mobilization_Plan }
 			has_completed_focus = VAL_council_takes_command
 			has_completed_focus = VAL_council_large_companies
 		}
@@ -10073,6 +10113,44 @@ VAL_council_balance_category = {
 		}
 		ai_will_do = {
 			base = 1
+		}
+	}
+}
+
+# Party protectorate: depots laid under the commissars open at the break.
+VAL_council_protectorate_category = {
+
+	VAL_council_hidden_depot = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_defeat_Double_Ledgers
+			VAL_council_party_protectorate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_hidden_depot_slots_tt
+				NOT = { check_variable = { var = VAL_council_hidden_depots value = 3 compare = greater_than_or_equals } }
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_council_depot_search_tt
+				NOT = { has_country_flag = VAL_council_depot_search }
+			}
+			NOT = { has_war_with = STP }
+		}
+		cost = 40
+		fire_only_once = no
+		days_remove = 45
+		complete_effect = {
+			custom_effect_tooltip = VAL_council_hidden_depot_effect_tt
+		}
+		remove_effect = {
+			custom_effect_tooltip = VAL_council_hidden_depot_result_tt
+			hidden_effect = { VAL_council_finish_hidden_depot = yes }
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 3 STP = { has_war = yes } }
 		}
 	}
 }

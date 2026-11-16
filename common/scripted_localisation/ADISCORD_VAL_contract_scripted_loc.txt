@@ -263,12 +263,14 @@ defined_text = {
 
 defined_text = {
 	name = GetVALNationalPartyLeader
+	text = { trigger = { tag = VAL has_character = VAL_Eduard_Korsch has_country_leader = { character = VAL_Eduard_Korsch ruling_only = no } } localization_key = VAL_Eduard_Korsch_qol_party_label }
 	text = { trigger = { tag = VAL has_character = VAL_Boris_Gromov has_country_leader = { character = VAL_Boris_Gromov ruling_only = no } } localization_key = VAL_Boris_Gromov_qol_party_label }
 	text = { localization_key = ADISCORD_qol_no_party_leader }
 }
 
 defined_text = {
 	name = GetVALNationalPartyLeaderLong
+	text = { trigger = { tag = VAL has_character = VAL_Eduard_Korsch has_country_leader = { character = VAL_Eduard_Korsch ruling_only = no } } localization_key = VAL_Eduard_Korsch_qol_party_label_long }
 	text = { trigger = { tag = VAL has_character = VAL_Boris_Gromov has_country_leader = { character = VAL_Boris_Gromov ruling_only = no } } localization_key = VAL_Boris_Gromov_qol_party_label_long }
 	text = { localization_key = ADISCORD_qol_no_party_leader }
 }

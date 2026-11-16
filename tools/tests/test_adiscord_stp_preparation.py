@@ -7580,7 +7580,7 @@ class StelanderPreparationTests(unittest.TestCase):
     ):
         decisions = block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"),
-            "STP_military_operations",
+            "STP_external_affairs",
         )
         supply = block(decisions, "STP_cw_supply_the_north")
         self.assertEqual(scalar(supply, "days_remove"), "21")

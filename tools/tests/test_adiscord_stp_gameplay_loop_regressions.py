@@ -77,7 +77,7 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
         cls.decisions = entries("common/decisions/ADISCORD_STP_decisions.txt")
         cls.battle = block(cls.decisions, "STP_battle_for_stelander")
         cls.council = block(cls.decisions, "STP_military_operations")
-        cls.external = block(cls.decisions, "STP_military_operations")
+        cls.external = block(cls.decisions, "STP_external_affairs")
         cls.tokens = TOKENS.read_text(encoding="utf-8-sig")
         cls.loc = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(
             encoding="utf-8-sig"

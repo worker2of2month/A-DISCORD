@@ -50,9 +50,6 @@
 		ai_will_do = { base = 5 }
 	}
 
-	# Салима Дарзи пока имеет только роль советника; роль главы коммуны
-	# добавляется в common/characters/SHL.txt, после чего сюда возвращается
-	# promote_character. До этого фокус описывает дежурный совет без смены лидера.
 	focus = {
 		id = SHL_k_standing_council
 		icon = GFX_focus_generic_freedom_council
@@ -79,11 +76,12 @@
 				}
 			}
 			custom_effect_tooltip = SHL_k_standing_council_tt
-			promote_character = {
-				character = SHL_Salima_Darzi
-				ideology = anarchism_ideology
-			}
 			hidden_effect = {
+				if = {
+					limit = { has_country_leader = { character = SHL_Salima_Darzi ruling_only = yes } }
+					remove_country_leader_trait = SHL_voice_of_the_shifts
+					add_country_leader_trait = SHL_duty_masters
+				}
 				add_to_variable = { var = SHL_pow_political_power_gain value = 0.10 }
 				SHL_refresh_conclave_power = yes
 			}

@@ -1,6 +1,11 @@
-# Svetlogorye takes the district course before the resource war, keeps the
-# coalition talking and prepares positional defence of the fields.
-# The district compact and refinery start early enough to mature before attack.
+# Before the resource war Svetlogorye keeps the coalition talking and prepares
+# positional defence of the fields; the compact and refinery start early enough
+# to mature before the attack. NAM_groups_initialize draws NAM_ai_prewar_course
+# once per campaign, so exactly one of the three ladder courses below is enabled
+# and the mandate frozen at the first shot follows it:
+# 1 districts (the fallback when no draw exists), 2 namestnik vertical,
+# 3 compromise. The compromise leans to the vertical in the colony and at the
+# declaration, then takes the district course: about +0.10 on the ladder.
 NAM_prewar_plan = {
 	name = "NAM district course"
 	desc = ""
@@ -9,11 +14,15 @@ NAM_prewar_plan = {
 		tag = NAM
 		is_ai = yes
 		has_focus_tree = NAM_focus
+		NOT = { check_variable = { NAM_ai_prewar_course = 2 } }
+		NOT = { check_variable = { NAM_ai_prewar_course = 3 } }
 	}
 	abort = {
 		OR = {
 			NOT = { tag = NAM }
 			NOT = { has_focus_tree = NAM_focus }
+			check_variable = { NAM_ai_prewar_course = 2 }
+			check_variable = { NAM_ai_prewar_course = 3 }
 		}
 	}
 	ai_national_focuses = {
@@ -51,6 +60,205 @@ NAM_prewar_plan = {
 		NAM_one_budget
 		NAM_neutral_basin
 		NAM_supports_oil_compact
+		NAM_garrison_assembly
+		NAM_pillar_arbitration
+		NAM_restitution_desk
+		NAM_court_azhar
+		NAM_seal_courts
+		NAM_machine_shops
+		NAM_civilian_combine
+		NAM_technical_college
+		NAM_flight_school
+		NAM_air_ground_service
+		NAM_air_interceptors
+		NAM_air_operations
+		NAM_quartermaster
+		NAM_port_arsenal
+		NAM_officer_courses
+		NAM_harbour_service
+		NAM_repair_yard
+		NAM_escort_school
+		NAM_naval_construction
+		NAM_basin_reconnaissance
+		NAM_naval_staff
+		NAM_basin_minefields
+		NAM_provisional_statute
+		NAM_rom_address
+		NAM_reserve_rolls
+		NAM_contract_bureau
+		NAM_underground_reports
+		NAM_weber_channel
+		NAM_mine_councils
+		NAM_general_staff_plan
+		NAM_field_repair_crews
+		NAM_klyuchevsk_pipeline
+		NAM_deep_wells
+		NAM_fuel_depots
+		NAM_second_drilling_crew
+		NAM_coastal_battalions
+		NAM_island_accounts
+		NAM_island_levy_office
+		NAM_crisis_office
+		NAM_field_firefighters
+		NAM_basin_roads
+	}
+	weight = { factor = 20 }
+}
+
+# The commissioner's colony, the vertical and its emergency writ, cache hunts
+# against Weber's network and the chancellery purge.
+NAM_prewar_vertical_plan = {
+	name = "NAM namestnik vertical"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_focus
+		check_variable = { NAM_ai_prewar_course = 2 }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_focus }
+			NOT = { check_variable = { NAM_ai_prewar_course = 2 } }
+		}
+	}
+	ai_national_focuses = {
+		NAM_inventory
+		NAM_centre_hourglass
+		NAM_commissioner_plan
+		NAM_metropolitan_instructors
+		NAM_sand_runs_out
+		NAM_last_centre_register
+		NAM_metropolitan_quota
+		NAM_deliver_the_quota
+		NAM_wrk_trade_house
+		NAM_wrk_return_cargo
+		NAM_metropolitan_depots
+		NAM_colonial_watch
+		NAM_imperial_gendarmes
+		NAM_pipeline_patrols
+		NAM_print_shop_raid
+		NAM_colony_order
+		NAM_letters_to_the_centre
+		NAM_independence_day
+		NAM_count_garrisons
+		NAM_mobilisation_office
+		NAM_open_ledgers
+		NAM_vertical
+		NAM_well_register
+		NAM_domestic_refining
+		NAM_refinery_programme
+		NAM_emergency_writ
+		NAM_field_guards
+		NAM_engineer_depots
+		NAM_line_survey
+		NAM_line_engineers
+		NAM_tax_rolls
+		NAM_one_budget
+		NAM_neutral_basin
+		NAM_supports_oil_compact
+		NAM_garrison_assembly
+		NAM_pillar_arbitration
+		NAM_restitution_desk
+		NAM_court_azhar
+		NAM_seal_courts
+		NAM_machine_shops
+		NAM_civilian_combine
+		NAM_technical_college
+		NAM_flight_school
+		NAM_air_ground_service
+		NAM_air_interceptors
+		NAM_air_operations
+		NAM_quartermaster
+		NAM_port_arsenal
+		NAM_officer_courses
+		NAM_harbour_service
+		NAM_repair_yard
+		NAM_escort_school
+		NAM_naval_construction
+		NAM_basin_reconnaissance
+		NAM_naval_staff
+		NAM_basin_minefields
+		NAM_provisional_statute
+		NAM_rom_address
+		NAM_reserve_rolls
+		NAM_contract_bureau
+		NAM_underground_reports
+		NAM_cache_hunters
+		NAM_field_gendarmes
+		NAM_general_staff_plan
+		NAM_field_repair_crews
+		NAM_klyuchevsk_pipeline
+		NAM_deep_wells
+		NAM_fuel_depots
+		NAM_second_drilling_crew
+		NAM_coastal_battalions
+		NAM_island_accounts
+		NAM_island_levy_office
+		NAM_crisis_office
+		NAM_chancellery_purge
+		NAM_basin_roads
+	}
+	weight = { factor = 20 }
+}
+
+# The commissioner's colony and the district course; the export houses are
+# the pillar it courts. Event ADISCORD_nam_groups.12 and the ladder decisions
+# keep the balance inside the pragmatic mandate.
+NAM_prewar_compromise_plan = {
+	name = "NAM ladder compromise"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_focus
+		check_variable = { NAM_ai_prewar_course = 3 }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_focus }
+			NOT = { check_variable = { NAM_ai_prewar_course = 3 } }
+		}
+	}
+	ai_national_focuses = {
+		NAM_inventory
+		NAM_centre_hourglass
+		NAM_commissioner_plan
+		NAM_metropolitan_instructors
+		NAM_sand_runs_out
+		NAM_last_centre_register
+		NAM_metropolitan_quota
+		NAM_concealed_reserve
+		NAM_wrk_trade_house
+		NAM_wrk_return_cargo
+		NAM_metropolitan_depots
+		NAM_colonial_watch
+		NAM_oilfield_militia
+		NAM_pipeline_patrols
+		NAM_print_shop_raid
+		NAM_colony_order
+		NAM_letters_to_the_centre
+		NAM_independence_day
+		NAM_count_garrisons
+		NAM_mobilisation_office
+		NAM_open_ledgers
+		NAM_districts
+		NAM_well_register
+		NAM_domestic_refining
+		NAM_refinery_programme
+		NAM_district_guarantees
+		NAM_field_guards
+		NAM_engineer_depots
+		NAM_line_survey
+		NAM_line_engineers
+		NAM_tax_rolls
+		NAM_one_budget
+		NAM_neutral_basin
+		NAM_supports_export_houses
 		NAM_garrison_assembly
 		NAM_pillar_arbitration
 		NAM_restitution_desk

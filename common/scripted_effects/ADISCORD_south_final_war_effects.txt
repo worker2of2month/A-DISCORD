@@ -776,6 +776,7 @@ ADISCORD_south_final_resolve_shl_victory = {
 		ADISCORD_south_mark_losers = yes
 		ADISCORD_south_close_campaign_state = yes
 		SHL = {
+			SHL_update_ruler_portrait = yes
 			ADISCORD_south_show_shahrabad_victory = yes
 			country_event = { id = ADISCORD_south.30 days = 1 }
 			news_event = { id = ADISCORD_south.31 hours = 2 }

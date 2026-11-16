@@ -453,6 +453,14 @@
       "status": "active"
     },
     {
+      "id": "val_contract.392",
+      "namespace": "val_contract",
+      "number": 392,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.40",
       "namespace": "ADISCORD_STP_pc",
       "number": 40,
@@ -8445,6 +8453,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_STP_pc.120",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 120,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "ADISCORD_STP_pc",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_vorkerland_postwar.20",
       "namespace": "ADISCORD_vorkerland_postwar",
       "number": 20,
@@ -9357,6 +9373,30 @@
       "status": "active"
     },
     {
+      "id": "val_rework.196",
+      "namespace": "val_rework",
+      "number": 196,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.197",
+      "namespace": "val_rework",
+      "number": 197,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.198",
+      "namespace": "val_rework",
+      "number": 198,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
       "id": "val_council.30",
       "namespace": "val_council",
       "number": 30,
@@ -9408,6 +9448,30 @@
       "id": "val_council.36",
       "namespace": "val_council",
       "number": 36,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.41",
+      "namespace": "val_council",
+      "number": 41,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.42",
+      "namespace": "val_council",
+      "number": 42,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_council",
+      "status": "active"
+    },
+    {
+      "id": "val_council.43",
+      "namespace": "val_council",
+      "number": 43,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_council",
       "status": "active"

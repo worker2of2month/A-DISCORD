@@ -74,7 +74,7 @@ ideas = {
 
 		# Svetlogorye: the namestnik ladder or the oil charter.
 		ADISCORD_south_nam_emergency_writs = {
-			picture = generic_fortify_the_borders
+			picture = GFX_idea_ADISCORD_south_nam_emergency_writs
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -86,7 +86,7 @@ ideas = {
 		}
 
 		ADISCORD_south_nam_charter_levies = {
-			picture = generic_constitutional_guarantees
+			picture = GFX_idea_ADISCORD_south_nam_charter_levies
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -109,7 +109,7 @@ ideas = {
 		}
 
 		ADISCORD_south_nam_contract_logistics = {
-			picture = GFX_idea_NAM_national_spirit
+			picture = GFX_idea_ADISCORD_south_nam_contract_logistics
 			allowed = { original_tag = NAM }
 			allowed_civil_war = { always = no }
 			removal_cost = -1

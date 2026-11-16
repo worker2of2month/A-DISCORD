@@ -441,6 +441,12 @@ class TFFFreedomNegotiationTests(unittest.TestCase):
                 self.facts[target, "is_subject_of", "TFF"] = tag == "TFF"
             elif e.key in ("set_temp_variable", "set_variable"):
                 self.facts[tag, "variable", scalar(e.value, "var")] = float(scalar(e.value, "value"))
+            elif e.key in ("add_to_variable", "subtract_from_variable"):
+                key = (tag, "variable", scalar(e.value, "var"))
+                amount = float(scalar(e.value, "value"))
+                if e.key == "subtract_from_variable":
+                    amount = -amount
+                self.facts[key] = self.facts.get(key, 0) + amount
             elif e.key == "country_event":
                 self.outputs.append((tag, "event", scalar(e.value, "id")))
             elif e.key in (
@@ -526,6 +532,68 @@ class TFFFreedomNegotiationTests(unittest.TestCase):
                 )
             )
             self.assertEqual(self.outputs, [])
+
+    def test_yubora_negotiation_is_once_per_campaign_and_timeouts_end_each_round(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+
+        decisions = entries("common/decisions/ADISCORD_VAL_decisions.txt")
+        decision = block(block(decisions, "VAL_military_operations"), "VAL_negotiate_yubora")
+        self.assertEqual(scalar(decision, "fire_only_once"), "yes")
+        self.assertNotIn("days_re_enable", [entry.key for entry in decision])
+        for event, days, answer in (
+            ("val_contract.380", "21", "val_contract.380.cancel"),
+            ("val_contract.350", "35", "val_contract.350.refuse"),
+            ("val_contract.392", "21", "val_contract.392.refuse"),
+        ):
+            self.assertEqual(scalar(self.events[event], "timeout_days"), days)
+            first = next(e.value for e in self.events[event] if e.key == "option")
+            self.assertEqual(scalar(first, "name"), answer)
+
+    def test_refusal_of_either_quote_demands_both_administrations_and_one_advance(self):
+        treasury = ("VAL", "variable", "ADISCORD_economy_treasury")
+        frontier = ("TFF", "variable", "ADISCORD_economy_treasury")
+        for tier in (1, 2):
+            self.setUp()
+            self.flag("VAL", "VAL_nod_frontier_offer_pending", tier)
+            self.facts[treasury] = 150
+            self.facts[frontier] = 20
+            refuse = self.option("val_contract.350", "val_contract.350.refuse")
+            self.execute(refuse, "TFF")
+            self.execute(refuse, "TFF")
+            self.execute(self.option("val_contract.350", "val_contract.350.accept"), "TFF")
+            self.assertEqual(self.outputs, [("VAL", "event", "val_contract.392")])
+            self.assertEqual(self.facts["VAL", "variable", "flag_value_VAL_nod_frontier_offer_pending"], 3)
+            self.assertEqual((self.facts[treasury], self.facts[frontier]), (150, 20))
+            accept = self.option("val_contract.392", "val_contract.392.accept")
+            self.execute(accept)
+            self.assertEqual(self.facts["VAL", "variable", "flag_value_VAL_nod_frontier_agreement"], 1)
+            self.assertEqual((self.facts[treasury], self.facts[frontier]), (0, 170))
+            self.assertEqual(self.facts["VAL", "variable", "ADISCORD_economy_current_month_action_costs"], 150)
+            self.assertEqual(self.facts["TFF", "variable", "ADISCORD_economy_current_month_action_income"], 150)
+            self.assertIn(("VAL", "VAL_call_frontier_partner", "yes"), self.outputs)
+            self.outputs.clear()
+            self.facts[treasury] = 150
+            self.execute(accept)
+            self.assertEqual((self.facts[treasury], self.facts[frontier]), (150, 170))
+            self.assertEqual(self.outputs, [])
+
+    def test_declined_unaffordable_or_obsolete_counteroffer_cannot_charge(self):
+        treasury = ("VAL", "variable", "ADISCORD_economy_treasury")
+        for balance, at_war in ((149.99, False), (150, True)):
+            self.setUp()
+            self.flag("VAL", "VAL_nod_frontier_offer_pending", 3)
+            self.facts[treasury] = balance
+            self.facts["TFF", "has_war_with", "VAL"] = at_war
+            accept = self.option("val_contract.392", "val_contract.392.accept")
+            self.execute(accept)
+            self.assertEqual(self.outputs, [])
+            self.execute(self.option("val_contract.392", "val_contract.392.refuse"))
+            self.assertFalse(self.facts["VAL", "has_country_flag", "VAL_nod_frontier_offer_pending"])
+            self.assertEqual(self.facts[treasury], balance)
+            self.facts[treasury] = 200
+            self.facts["TFF", "has_war_with", "VAL"] = False
+            self.execute(accept)
+            self.assertEqual(self.facts[treasury], 200)
 
     def test_current_quote_is_selected_at_military_negotiations_and_cannot_be_overwritten(self):
         for choice, tier in (("compromise", 1), ("firm", 2)):

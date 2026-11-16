@@ -1,7 +1,4 @@
 characters = {
-	# Conclave of the Nine Furnaces. Jalil Nur is the starting mediator; the
-	# hidden courses promote Darius Safir or the Shift Councils instead of
-	# recruiting them, so their leader roles stay dormant until then.
 	SHL_Jalil_Nur = {
 		name = SHL_Jalil_Nur
 		portraits = { civilian = { large = GFX_portrait_SHL_Jalil_Nur } }
@@ -21,7 +18,7 @@ characters = {
 		name = SHL_Darius_Safir
 		portraits = {
 			civilian = {
-				large = GFX_portrait_SHL_Darius_Safir
+				large = GFX_portrait_SHL_Darius_Safir_regent
 				small = GFX_portrait_SHL_Darius_Safir_small
 			}
 		}
@@ -51,18 +48,6 @@ characters = {
 			}
 			traits = { ADISCORD_qol_chancellor }
 			ai_will_do = { factor = 1 }
-		}
-	}
-
-	SHL_Shift_Councils = {
-		name = SHL_Shift_Councils
-		portraits = { civilian = { large = GFX_portrait_SHL_Shift_Councils } }
-		country_leader = {
-			ideology = anarchism_ideology
-			expire = "2200.1.1.1"
-			id = -1
-			desc = SHL_Shift_Councils_desc
-			traits = { SHL_voice_of_the_shifts }
 		}
 	}
 
@@ -311,7 +296,7 @@ characters = {
 	# Heads of the ratified courses. Their head-of-state ideas in
 	# ADISCORD_ministers_all_countries.txt remain the cabinet seats of their
 	# courses; these advisor roles are closed while that idea is installed.
-	# Mariam Arbin also carries the pragmatist leader role of the city course,
+	# Mehran Arbin also carries the pragmatist leader role of the city course,
 	# which the course commit promotes.
 	SHL_Mariam_Arbin = {
 		name = SHL_Mariam_Arbin
@@ -359,7 +344,7 @@ characters = {
 			ideology = anarchism_ideology
 			expire = "2200.1.1.1"
 			id = -1
-			traits = { SHL_duty_masters }
+			traits = { SHL_voice_of_the_shifts }
 		}
 		advisor = {
 			slot = political_advisor_minister_of_health

@@ -3244,6 +3244,11 @@ country_event = {
 				factor = 0.2
 				has_completed_focus = NAM_districts
 			}
+			# The vertical and the compromise course both answer for the namestniks.
+			modifier = {
+				factor = 0
+				check_variable = { NAM_ai_prewar_course = 1 }
+			}
 		}
 	}
 	option = {
@@ -3268,6 +3273,13 @@ country_event = {
 			modifier = {
 				factor = 0.2
 				has_completed_focus = NAM_vertical
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					check_variable = { NAM_ai_prewar_course = 2 }
+					check_variable = { NAM_ai_prewar_course = 3 }
+				}
 			}
 		}
 	}

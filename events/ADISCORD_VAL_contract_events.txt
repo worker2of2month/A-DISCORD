@@ -1816,7 +1816,7 @@ country_event = {
 	is_triggered_only = yes
 	timeout_days = 21
 	option = {
-		name = val_contract.family.cancel
+		name = val_contract.380.cancel
 		ai_chance = { base = 0 }
 	}
 	option = {
@@ -2035,27 +2035,83 @@ country_event = {
 	timeout_days = 35
 	option = {
 		name = val_contract.350.refuse
+		trigger = { VAL_nod_original_offer_current = yes }
 		ai_chance = { base = 20 modifier = { factor = 4 VAL_nod_limited_offer = yes } }
+		custom_effect_tooltip = VAL_yubora_counteroffer_tt
 		hidden_effect = {
 			if = {
-				limit = { VAL = { has_country_flag = VAL_nod_frontier_offer_pending NOT = { has_country_flag = VAL_nod_frontier_agreement } } }
+				limit = { VAL_nod_original_offer_current = yes }
 				VAL = {
-					clr_country_flag = VAL_nod_frontier_offer_pending
-					country_event = { id = val_contract.351 }
+					set_country_flag = { flag = VAL_nod_frontier_offer_pending value = 3 days = 22 }
+					country_event = { id = val_contract.392 }
 				}
 			}
 		}
 	}
 	option = {
 		name = val_contract.350.accept
-		trigger = { VAL_nod_frontier_offer_current = yes VAL = { has_country_flag = VAL_nod_frontier_offer_pending } }
+		trigger = { VAL_nod_original_offer_current = yes }
 		ai_chance = {
 			base = 80
 			modifier = { factor = 0.25 VAL_nod_limited_offer = yes }
 		}
 		if = { limit = { hidden_trigger = { VAL_nod_limited_offer = yes } } custom_effect_tooltip = VAL_nod_frontier_limited_terms_tt }
 		else = { custom_effect_tooltip = VAL_nod_frontier_terms_tt }
-		hidden_effect = { VAL = { VAL_accept_nod_frontier_offer = yes } }
+		hidden_effect = {
+			if = {
+				limit = { VAL_nod_original_offer_current = yes }
+				VAL = { VAL_accept_nod_frontier_offer = yes }
+			}
+		}
+	}
+	option = {
+		name = val_contract.352.obsolete
+		trigger = { VAL_nod_original_offer_current = no }
+		hidden_effect = {
+			VAL = {
+				if = {
+					limit = { has_country_flag = { flag = VAL_nod_frontier_offer_pending value < 3 } }
+					clr_country_flag = VAL_nod_frontier_offer_pending
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = val_contract.392
+	title = val_contract.392.t
+	desc = val_contract.392.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 21
+	option = {
+		name = val_contract.392.refuse
+		ai_chance = { base = 40 }
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = { flag = VAL_nod_frontier_offer_pending value > 2 } }
+				clr_country_flag = VAL_nod_frontier_offer_pending
+				if = {
+					limit = { VAL_nod_frontier_offer_current = yes }
+					TFF = { country_event = { id = val_contract.351 } }
+				}
+			}
+		}
+	}
+	option = {
+		name = val_contract.392.accept
+		trigger = { VAL_nod_counteroffer_payable = yes }
+		ai_chance = { base = 60 }
+		custom_effect_tooltip = VAL_yubora_advance_tt
+		custom_effect_tooltip = VAL_nod_frontier_terms_tt
+		hidden_effect = {
+			if = {
+				limit = { VAL_nod_counteroffer_payable = yes }
+				VAL_accept_nod_frontier_offer = yes
+				TFF = { country_event = { id = val_contract.351 } }
+			}
+		}
 	}
 }
 
@@ -2064,7 +2120,21 @@ country_event = {
 	title = val_contract.351.t
 	desc = { trigger = { has_country_flag = VAL_nod_frontier_agreement VAL_nod_limited_agreement = no } text = val_contract.351.accepted }
 	desc = { trigger = { VAL_nod_limited_agreement = yes } text = val_contract.351.limited }
-	desc = { trigger = { NOT = { has_country_flag = VAL_nod_frontier_agreement } } text = val_contract.351.refused }
+	desc = { trigger = { tag = VAL NOT = { has_country_flag = VAL_nod_frontier_agreement } } text = val_contract.351.refused }
+	desc = {
+		trigger = {
+			tag = TFF
+			VAL = { has_country_flag = VAL_nod_frontier_agreement }
+		}
+		text = val_contract.351.advance_paid
+	}
+	desc = {
+		trigger = {
+			tag = TFF
+			VAL = { NOT = { has_country_flag = VAL_nod_frontier_agreement } }
+		}
+		text = val_contract.351.advance_refused
+	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_contract.351.a }
@@ -4020,6 +4090,61 @@ country_event = {
 	option = { name = val_rework.183.a }
 }
 
+# COUNTRY ERT. The perimeter lease from the main tree; the refusal comes first,
+# so an unattended offer keeps the district and debits nothing.
+country_event = {
+	id = val_rework.196
+	title = val_rework.196.t
+	desc = val_rework.196.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_country_flag = VAL_irem_lease_offer_pending }
+	timeout_days = 14
+	option = {
+		name = val_rework.196.a
+		ai_chance = { base = 30 }
+		hidden_effect = { VAL_decline_irem_lease = yes }
+	}
+	option = {
+		name = val_rework.196.b
+		trigger = {
+			VAL_irem_lease_target_valid = yes
+			VAL = { VAL_irem_lease_affordable = yes }
+		}
+		ai_chance = {
+			base = 70
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.5
+				has_stability < 0.4
+			}
+		}
+		custom_effect_tooltip = VAL_irem_lease_receive_tt
+		hidden_effect = { VAL_accept_irem_lease = yes }
+	}
+}
+
+country_event = {
+	id = val_rework.197
+	title = val_rework.197.t
+	desc = val_rework.197.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.197.a }
+}
+
+country_event = {
+	id = val_rework.198
+	title = val_rework.198.t
+	desc = val_rework.198.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.198.a }
+}
+
 # COUNTRY VAL; FROM is the republic that has just left its alliance.
 country_event = {
 	id = val_rework.184
@@ -4842,7 +4967,14 @@ country_event = {
 		text = val_council.35.velsky
 	}
 	desc = {
-		trigger = { NOT = { has_country_leader = { character = VAL_Mikhail_Velsky ruling_only = yes } } }
+		trigger = { has_country_leader = { character = VAL_Eduard_Korsch ruling_only = yes } }
+		text = val_council.35.korsch
+	}
+	desc = {
+		trigger = {
+			NOT = { has_country_leader = { character = VAL_Mikhail_Velsky ruling_only = yes } }
+			NOT = { has_country_leader = { character = VAL_Eduard_Korsch ruling_only = yes } }
+		}
 		text = val_council.35.d
 	}
 	picture = GFX_event_adiscord_parliament_chamber
@@ -4877,6 +5009,52 @@ country_event = {
 			set_temp_variable = { var = VAL_council_loyalists_delta value = -5 }
 			VAL_council_change_loyalists = yes
 		}
+	}
+}
+
+# Party protectorate: a peacetime commissar inspection found a hidden depot.
+# The decision has already been paid; the search flag blocks the next depot.
+country_event = {
+	id = val_council.41
+	title = val_council.41.t
+	desc = val_council.41.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = { tag = VAL }
+	option = {
+		name = val_council.41.a
+		add_stability = -0.03
+	}
+}
+
+# Scheduled by the revanche choice. The coup runs in immediate so an
+# unattended event still installs the new government.
+country_event = {
+	id = val_council.42
+	title = val_council.42.t
+	desc = val_council.42.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { VAL_council_revanchist_coup_current = yes }
+	immediate = { VAL_council_revanchist_coup = yes }
+	option = { name = val_council.42.a }
+}
+
+# World news about the revanchist coup, one day after it.
+news_event = {
+	id = val_council.43
+	title = val_council.43.t
+	desc = val_council.43.d
+	picture = GFX_news_event_adiscord_kefreyt_address
+	major = yes
+	is_triggered_only = yes
+	option = {
+		name = val_council.43.a
+		trigger = { tag = VAL }
+	}
+	option = {
+		name = val_council.43.b
+		trigger = { NOT = { tag = VAL } }
 	}
 }
 

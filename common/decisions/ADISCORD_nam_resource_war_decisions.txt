@@ -4668,7 +4668,13 @@ NAM_mobilisation = {
 				}
 			}
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				NAM_ai_compromise_ladder_full = yes
+			}
+		}
 	}
 
 	NAM_admin_district_guard_contract = {
@@ -4791,7 +4797,13 @@ NAM_mobilisation = {
 				}
 			}
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				NAM_ai_compromise_ladder_full = yes
+			}
+		}
 	}
 
 	NAM_ind_defence_supply = {
@@ -16909,7 +16921,13 @@ NAM_administration = {
 				}
 			}
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				NAM_ai_compromise_ladder_full = yes
+			}
+		}
 	}
 
 	NAM_admin_svetlogorsk_cooperative = {
@@ -17050,7 +17068,13 @@ NAM_administration = {
 				}
 			}
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				NAM_ai_compromise_ladder_full = yes
+			}
+		}
 	}
 
 	NAM_admin_seal_appeal = {
@@ -17124,7 +17148,13 @@ NAM_administration = {
 				}
 			}
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 4
+				NAM_ai_compromise_ladder_drifted = yes
+			}
+		}
 	}
 
 	# Sovereign institutions and the independent army. Each order retains its own payment receipt.
@@ -18123,6 +18153,10 @@ NAM_supports = {
 		}
 		ai_will_do = {
 			base = 15
+			modifier = {
+				factor = 0
+				NAM_ai_compromise_ladder_full = yes
+			}
 		}
 	}
 

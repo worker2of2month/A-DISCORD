@@ -66,6 +66,10 @@ ADISCORD_economy_apply_country_starting_profile = {
 		limit = { tag = SHL }
 		SHL_apply_starting_economy = yes
 	}
+	else_if = {
+		limit = { tag = NAM }
+		ADISCORD_economy_apply_nam_starting_profile = yes
+	}
 }
 
 ADISCORD_economy_apply_val_starting_profile = {
@@ -145,6 +149,16 @@ ADISCORD_economy_apply_srp_starting_profile = {
 	set_variable = { var = ADISCORD_economy_deficit_pressure value = 22 }
 	set_variable = { var = ADISCORD_economy_fiscal_stress value = 36 }
 	set_variable = { var = ADISCORD_economy_price_shock value = 18 }
+	ADISCORD_economy_sync_starting_accounting = yes
+}
+
+ADISCORD_economy_apply_nam_starting_profile = {
+	set_variable = { var = ADISCORD_economy_treasury value = 300 }
+	set_variable = { var = ADISCORD_economy_debt value = 160 }
+	set_variable = { var = ADISCORD_economy_inflation value = 8 }
+	set_variable = { var = ADISCORD_economy_deficit_pressure value = 8 }
+	set_variable = { var = ADISCORD_economy_fiscal_stress value = 18 }
+	set_variable = { var = ADISCORD_economy_price_shock value = 6 }
 	ADISCORD_economy_sync_starting_accounting = yes
 }
 

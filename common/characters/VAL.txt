@@ -57,6 +57,17 @@ characters = {
 		}
 	}
 
+	# Registered without a role; the revanchist coup that replaces the
+	# defeated Council gives him the chauvinist leader role.
+	VAL_Eduard_Korsch = {
+		name = VAL_Eduard_Korsch
+		portraits = {
+			civilian = {
+				large = GFX_portrait_VAL_Eduard_Korsch
+			}
+		}
+	}
+
 	VAL_Kirill_Voron = {
 		name = VAL_Kirill_Voron
 		portraits = {

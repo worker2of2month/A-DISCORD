@@ -70,6 +70,9 @@ focus_tree = {
 	### ARMY: COMPANIES BECOME AN ARMY
 	#############################################
 
+	# Own serial works and bought hulls are exclusive armour courses; both lead
+	# to the long-term armour contracts.
+
 	#############################################
 	### WORLD-REACTIVE FILES
 	#############################################
@@ -96,6 +99,9 @@ focus_tree = {
 
 	# Large orders retain the shared export capacity and require buyer consent.
 
+	# The export course is exclusive: the market and partner tiers read only the
+	# chosen focus, and the abstract sale falls back to the largest unlocked lot.
+
 	#############################################
 	### ALL THREE BRANCHES ENTER ONE LEDGER
 	#############################################
@@ -107,12 +113,21 @@ focus_tree = {
 
 	# Northern expansion. Logistics, administration and claims have independent columns.
 
+	# The perimeter is taken either by a war for 169 or by a paid lease from ERT;
+	# both routes meet at the charter, which only needs Kefreyt to hold 169.
+
+	# Both campaigns branch from the charter; the eastern belt still waits for the
+	# southern result or for ERT to leave the board.
+
 	# Reputation is restored by completed contracts and verified production;
 	# the final industrial settlement requires the actual campaign outcome.
 
 	# --- Advanced-material economic development ---
 
 	# Any one won campaign opens the fourth slot, so every exclusive war route keeps it.
+
+	# Defence orders end in one financing course: foreign credit or a domestic
+	# arsenal economy. Either course reaches the integrated economy.
 
 	# --- Shield special forces ---
 
@@ -1313,9 +1328,12 @@ shared_focus = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Quarterly_Contract_Norm_tt
-			custom_effect_tooltip = VAL_quarterly_contract_cycle_tt
-			unlock_decision_tooltip = VAL_pay_quarterly_contract_norm
-			unlock_decision_tooltip = VAL_subcontract_quarterly_norm
+			if = {
+				limit = { NOT = { has_completed_focus = VAL_Industrial_Mobilization_Plan } }
+				custom_effect_tooltip = VAL_quarterly_contract_cycle_tt
+				unlock_decision_tooltip = VAL_pay_quarterly_contract_norm
+				unlock_decision_tooltip = VAL_subcontract_quarterly_norm
+			}
 			if = {
 				limit = { NOT = { has_variable = VAL_contract_reputation_level } }
 				set_variable = { var = VAL_contract_reputation_level value = 3 }
@@ -1634,6 +1652,7 @@ shared_focus = {
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			add_tech_bonus = { name = VAL_Armored_Design_Bureau bonus = 0.5 uses = 2 category = armor }
+			army_experience = 15
 		}
 	}
 
@@ -1650,9 +1669,21 @@ shared_focus = {
 		}
 		cost = 4
 		prerequisite = { focus = VAL_Armored_Design_Bureau }
-		ai_will_do = { base = 2 }
+		mutually_exclusive = { focus = VAL_Tank_Crew_School }
+		ai_will_do = { base = 3 }
 		completion_reward = {
 			add_ideas = VAL_armor_serial_production
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = { building = arms_factory size > 0 include_locked = no }
+				}
+				prioritize = { 48 }
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
 		}
 	}
 
@@ -1667,10 +1698,12 @@ shared_focus = {
 			y = 0
 			trigger = { VAL_council_governs = yes }
 		}
-		cost = 3
+		cost = 4
 		prerequisite = { focus = VAL_Armored_Design_Bureau }
+		mutually_exclusive = { focus = VAL_Serial_Armor_Production }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_equipment_to_stockpile = { type = ADISCORD_light_combat_platform_2163 amount = 40 producer = VAL }
 			army_experience = 30
 			add_tech_bonus = { name = VAL_Tank_Crew_School bonus = 0.5 uses = 1 category = armor }
 		}
@@ -1688,11 +1721,16 @@ shared_focus = {
 			trigger = { VAL_council_governs = yes }
 		}
 		cost = 5
-		prerequisite = { focus = VAL_Serial_Armor_Production }
-		prerequisite = { focus = VAL_Tank_Crew_School }
+		prerequisite = { focus = VAL_Serial_Armor_Production focus = VAL_Tank_Crew_School }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			swap_ideas = { remove_idea = VAL_armor_serial_production add_idea = VAL_armor_contract_production }
+			if = {
+				limit = { has_idea = VAL_armor_serial_production }
+				swap_ideas = { remove_idea = VAL_armor_serial_production add_idea = VAL_armor_contract_production }
+			}
+			else = {
+				add_ideas = VAL_armor_contract_production
+			}
 			army_experience = 15
 		}
 	}
@@ -2385,6 +2423,7 @@ shared_focus = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Industrial_Mobilization_Plan_tt
+			VAL_end_quarterly_contract_norm = yes
 			VAL_reform_mercenary_payroll = yes
 			custom_effect_tooltip = VAL_qol_industry_company_tt
 
@@ -2665,7 +2704,9 @@ shared_focus = {
 		cost = 3
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
 		completion_reward = {
+			custom_effect_tooltip = VAL_focus_progression_VAL_Bulk_Arms_Contracts_tt
 			custom_effect_tooltip = VAL_abstract_arms_upgrade_50k_tt
+			VAL_invest_arsenal_industry = yes
 		}
 		ai_will_do = { base = 4 modifier = { factor = 0.2 has_equipment = { infantry_equipment < 50000 } } }
 	}
@@ -2674,7 +2715,7 @@ shared_focus = {
 		id = VAL_Army_Arsenal_Orders
 		icon = GFX_focus_VAL_Reclamation_Workshops
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 40
+		x = 38
 		y = 9
 		offset = {
 			x = 26
@@ -2683,27 +2724,46 @@ shared_focus = {
 		}
 		cost = 3
 		prerequisite = { focus = VAL_Bulk_Arms_Contracts }
+		mutually_exclusive = { focus = VAL_Strategic_Arms_Exports }
 		completion_reward = {
 			custom_effect_tooltip = VAL_abstract_arms_upgrade_100k_tt
+			custom_effect_tooltip = VAL_focus_authority_10_tt
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 15000 producer = VAL }
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 10 }
+				VAL_change_contract_authority = yes
+			}
 		}
-		ai_will_do = { base = 4 modifier = { factor = 0.2 has_equipment = { infantry_equipment < 100000 } } }
+		ai_will_do = {
+			base = 4
+			modifier = { factor = 0.2 has_equipment = { infantry_equipment < 100000 } }
+			modifier = { factor = 2 has_war = yes }
+		}
 	}
 
 shared_focus = {
 		id = VAL_Strategic_Arms_Exports
 		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
-		x = 40
-		y = 10
+		x = 42
+		y = 9
 		offset = {
 			x = 26
 			y = 0
 			trigger = { VAL_council_governs = yes }
 		}
 		cost = 5
-		prerequisite = { focus = VAL_Army_Arsenal_Orders }
+		prerequisite = { focus = VAL_Bulk_Arms_Contracts }
+		mutually_exclusive = { focus = VAL_Army_Arsenal_Orders }
 		completion_reward = {
 			custom_effect_tooltip = VAL_abstract_arms_upgrade_200k_tt
+			custom_effect_tooltip = VAL_focus_authority_minus_10_tt
+			custom_effect_tooltip = VAL_strategic_exports_advance_tt
+			hidden_effect = {
+				ADISCORD_economy_receive_300 = yes
+				set_temp_variable = { var = ADISCORD_VAL_effect_value value = -10 }
+				VAL_change_contract_authority = yes
+			}
 		}
 		ai_will_do = { base = 4 modifier = { factor = 0.2 has_equipment = { infantry_equipment < 200000 } } }
 	}
@@ -3137,6 +3197,7 @@ shared_focus = {
 		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_roads
+			VAL_invest_civilian_industry = yes
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -3180,6 +3241,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_water
+			add_manpower = 1500
+			add_stability = 0.02
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -3237,6 +3300,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_settlement
+			add_manpower = 3000
+			add_war_support = 0.02
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -3264,7 +3329,10 @@ shared_focus = {
 			}
 		}
 		cancel_if_invalid = yes
-		completion_reward = { add_ideas = VAL_reclamation_land_register_idea }
+		completion_reward = {
+			add_ideas = VAL_reclamation_land_register_idea
+			ADISCORD_economy_receive_100 = yes
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -3278,6 +3346,17 @@ shared_focus = {
 		prerequisite = { focus = VAL_reclamation_land_register }
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_industry
+			random_owned_controlled_state = {
+				limit = {
+					check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+					free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3537,7 +3616,7 @@ shared_focus = {
 		id = VAL_frontier_return_irem
 		icon = GFX_focus_VAL_Frontier_Assault
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
-		x = 46
+		x = 44
 		y = 12
 		offset = {
 			x = 26
@@ -3546,6 +3625,7 @@ shared_focus = {
 		}
 		cost = 5
 		prerequisite = { focus = VAL_Return_Southern_Tsaygen }
+		mutually_exclusive = { focus = VAL_frontier_lease_irem }
 		available = {
 			owns_state = 168
 			VAL_wasteland_invasion_available = yes
@@ -3555,8 +3635,47 @@ shared_focus = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_frontier_return_irem_tt
 			unlock_decision_tooltip = VAL_operation_cross_perimeter
+			add_command_power = 15
+			army_experience = 15
+			add_war_support = 0.03
 		}
 		ai_will_do = { base = 8 }
+	}
+
+shared_focus = {
+		id = VAL_frontier_lease_irem
+		icon = GFX_focus_VAL_Trading_Partners
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
+		x = 48
+		y = 12
+		offset = {
+			x = 26
+			y = 0
+			trigger = { VAL_council_governs = yes }
+		}
+		cost = 4
+		prerequisite = { focus = VAL_Return_Southern_Tsaygen }
+		mutually_exclusive = { focus = VAL_frontier_return_irem }
+		available = {
+			owns_state = 168
+			custom_trigger_tooltip = {
+				tooltip = VAL_irem_lease_target_tt
+				ERT = { VAL_irem_lease_target_valid = yes }
+			}
+		}
+		bypass = { owns_state = 169 }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_focus_progression_VAL_frontier_lease_irem_tt
+			unlock_decision_tooltip = VAL_frontier_offer_irem_lease
+			custom_effect_tooltip = VAL_frontier_lease_irem_summary_tt
+			add_political_power = 50
+			add_stability = 0.03
+		}
+		ai_will_do = {
+			base = 6
+			modifier = { factor = 2 has_war = yes }
+		}
 	}
 
 shared_focus = {
@@ -3571,7 +3690,7 @@ shared_focus = {
 			trigger = { VAL_council_governs = yes }
 		}
 		cost = 5
-		prerequisite = { focus = VAL_frontier_return_irem }
+		prerequisite = { focus = VAL_frontier_return_irem focus = VAL_frontier_lease_irem }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_wasteland_charter_available_tt
@@ -3583,7 +3702,10 @@ shared_focus = {
 		bypass = { VAL_wasteland_administration_ready = yes }
 		cancel_if_invalid = yes
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_progression_VAL_Wasteland_Charter_tt custom_effect_tooltip = VAL_wasteland_charter_tt hidden_effect = { VAL_form_wasteland_administration = yes } }
+			custom_effect_tooltip = VAL_focus_progression_VAL_Wasteland_Charter_tt
+			custom_effect_tooltip = VAL_wasteland_charter_tt
+			hidden_effect = { VAL_form_wasteland_administration = yes }
+		}
 		ai_will_do = { base = 20 }
 	}
 
@@ -3591,7 +3713,7 @@ shared_focus = {
 		id = VAL_Southern_Expansion
 		icon = GFX_focus_VAL_Reclamation_Return_Home
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
-		x = 46
+		x = 44
 		y = 14
 		offset = {
 			x = 26
@@ -3614,8 +3736,9 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_progression_VAL_Southern_Expansion_tt
 			unlock_decision_tooltip = VAL_operation_expand_southern_bridgehead
+			army_experience = 15
+			add_command_power = 15
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -3624,15 +3747,15 @@ shared_focus = {
 		id = VAL_Eastern_Expansion
 		icon = GFX_focus_VAL_Reclamation_Return_Home
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
-		x = 46
-		y = 15
+		x = 48
+		y = 14
 		offset = {
 			x = 26
 			y = 0
 			trigger = { VAL_council_governs = yes }
 		}
 		cost = 5
-		prerequisite = { focus = VAL_Southern_Expansion }
+		prerequisite = { focus = VAL_Wasteland_Charter }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_eastern_expansion_available_tt
@@ -4009,7 +4132,11 @@ shared_focus = {
 		cost = 3
 		prerequisite = { focus = VAL_Audit_Lost_Contracts }
 		prerequisite = { focus = VAL_Export_Rifles_Not_Promises }
-		completion_reward = { VAL_restore_arsenal_reputation = yes add_political_power = 25 add_stability = 0.01 }
+		completion_reward = {
+			VAL_restore_arsenal_reputation = yes
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
+			add_stability = 0.02
+		}
 		ai_will_do = { base = 30 }
 	}
 
@@ -4022,7 +4149,10 @@ shared_focus = {
 		cost = 3
 		prerequisite = { focus = VAL_Audit_Lost_Contracts }
 		prerequisite = { focus = VAL_Ballistics_Schools focus = VAL_Brokered_Steel }
-		completion_reward = { VAL_restore_arsenal_reputation = yes add_tech_bonus = { name = VAL_quality_trials_bonus bonus = 0.5 uses = 1 category = infantry_weapons } }
+		completion_reward = {
+			VAL_restore_arsenal_reputation = yes
+			add_tech_bonus = { name = VAL_quality_trials_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
+		}
 		ai_will_do = { base = 30 }
 	}
 
@@ -4064,7 +4194,21 @@ shared_focus = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			VAL_advance_economic_recovery = yes ADISCORD_economy_receive_100 = yes add_stability = 0.01 }
+			VAL_advance_economic_recovery = yes
+			ADISCORD_economy_receive_100 = yes
+			random_owned_controlled_state = {
+				limit = {
+					is_core_of = ROOT
+					infrastructure < 5
+				}
+				prioritize = { 48 }
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
 		ai_will_do = { base = 30 }
 	}
 
@@ -4087,7 +4231,10 @@ shared_focus = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			VAL_advance_economic_recovery = yes add_political_power = 35 add_stability = 0.02 }
+			VAL_advance_economic_recovery = yes
+			VAL_invest_civilian_industry = yes
+			add_stability = 0.02
+		}
 		ai_will_do = { base = 30 }
 	}
 
@@ -4221,6 +4368,12 @@ shared_focus = {
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_economy_automated_industry
+			add_tech_bonus = {
+				name = VAL_econ_automation
+				bonus = 0.5
+				uses = 1
+				category = construction_tech
+			}
 		}
 	}
 
@@ -4239,6 +4392,7 @@ shared_focus = {
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_economy_logistics_contract
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 250 producer = VAL }
 		}
 	}
 
@@ -4257,6 +4411,12 @@ shared_focus = {
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_economy_national_computing
+			add_tech_bonus = {
+				name = VAL_econ_computing
+				bonus = 0.5
+				uses = 1
+				category = computing_tech
+			}
 		}
 	}
 
@@ -4319,7 +4479,7 @@ shared_focus = {
 shared_focus = {
 		id = VAL_econ_export_finance
 		icon = GFX_focus_VAL_Central_Payment_Office
-		x = 14
+		x = 12
 		y = 13
 		cost = 5
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY }
@@ -4328,11 +4488,47 @@ shared_focus = {
 			has_capitulated = no
 		}
 		prerequisite = { focus = VAL_econ_defense_orders }
+		mutually_exclusive = { focus = VAL_econ_war_economy }
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			add_ideas = ADISCORD_economy_export_finance
+			custom_effect_tooltip = VAL_econ_export_finance_credit_tt
 			hidden_effect = {
+				ADISCORD_economy_receive_300 = yes
 				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
+
+shared_focus = {
+		id = VAL_econ_war_economy
+		icon = GFX_focus_VAL_Three_Shift_Arsenals
+		x = 16
+		y = 13
+		cost = 5
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_ARMY }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		prerequisite = { focus = VAL_econ_defense_orders }
+		mutually_exclusive = { focus = VAL_econ_export_finance }
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 2 has_war = yes }
+		}
+		completion_reward = {
+			VAL_invest_arsenal_industry = yes
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = { building = arms_factory size > 1 include_locked = no }
+				}
+				prioritize = { 48 }
+				add_building_construction = {
+					type = arms_factory
+					level = 2
+					instant_build = yes
+				}
 			}
 		}
 	}
@@ -4344,10 +4540,16 @@ shared_focus = {
 		y = 14
 		cost = 5
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
-		available = { is_subject = no has_capitulated = no
-			custom_trigger_tooltip = { tooltip = ADISCORD_economy_capital_project_completed_tt ADISCORD_economy_has_completed_capital_project = yes } }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_capital_project_completed_tt
+				ADISCORD_economy_has_completed_capital_project = yes
+			}
+		}
 		prerequisite = { focus = VAL_econ_computing }
-		prerequisite = { focus = VAL_econ_export_finance }
+		prerequisite = { focus = VAL_econ_export_finance focus = VAL_econ_war_economy }
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			VAL_reform_mercenary_payroll = yes
@@ -4562,7 +4764,7 @@ shared_focus = {
 			trigger = { VAL_council_governs = yes }
 		}
 		cost = 4
-		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
+		prerequisite = { focus = VAL_Shield_Special_Forces }
 		completion_reward = {
 			VAL_raise_marine_contract_corps = yes
 			army_experience = 15
@@ -4584,6 +4786,7 @@ shared_focus = {
 		}
 		cost = 3
 		prerequisite = { focus = VAL_Marine_Contract_Corps }
+		mutually_exclusive = { focus = VAL_Beachhead_Logistics }
 		completion_reward = {
 			add_ideas = VAL_marine_sea_assault
 			army_experience = 10
@@ -4604,11 +4807,12 @@ shared_focus = {
 		}
 		cost = 3
 		prerequisite = { focus = VAL_Marine_Contract_Corps }
+		mutually_exclusive = { focus = VAL_Assault_From_The_Sea }
 		completion_reward = {
 			add_ideas = VAL_marine_beachhead_logistics
 			add_command_power = 10
 		}
-		ai_will_do = { base = 6 }
+		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {
@@ -4845,6 +5049,8 @@ shared_focus = {
 		}
 		cost = 4
 		prerequisite = { focus = VAL_Expedition_Escorts }
+		# The escorts lead either to a cruiser squadron or to a landing staff.
+		mutually_exclusive = { focus = VAL_Expedition_Cruisers }
 		available = {
 			OR = {
 				has_completed_focus = VAL_Contract_Landing_Craft
@@ -4870,7 +5076,9 @@ shared_focus = {
 				ADISCORD_tech_amphibious_staff_sections = 1
 				popup = no
 			}
+			add_equipment_to_stockpile = { type = convoy_1 amount = 30 }
 			army_experience = 20
+			navy_experience = 15
 		}
 	}
 
@@ -4894,6 +5102,7 @@ shared_focus = {
 		}
 		cost = 10
 		prerequisite = { focus = VAL_Expedition_Escorts }
+		mutually_exclusive = { focus = VAL_Expedition_Landing_Staff }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -4968,7 +5177,10 @@ shared_focus = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_council_entry_tt
 			unlock_decision_tooltip = VAL_council_mandate_defence_ordinary
-			unlock_decision_tooltip = VAL_council_mandate_supply_ordinary
+			if = {
+				limit = { NOT = { has_completed_focus = VAL_Industrial_Mobilization_Plan } }
+				unlock_decision_tooltip = VAL_council_mandate_supply_ordinary
+			}
 			hidden_effect = {
 				VAL_council_initialize_seats = yes
 				VAL_refresh_contract_modifier = yes
@@ -5693,7 +5905,10 @@ shared_focus = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
 			unlock_decision_tooltip = VAL_council_reserve_rifles
 			unlock_decision_tooltip = VAL_council_release_reserve
-			unlock_decision_tooltip = VAL_council_reserve_quarter
+			if = {
+				limit = { NOT = { has_completed_focus = VAL_Industrial_Mobilization_Plan } }
+				unlock_decision_tooltip = VAL_council_reserve_quarter
+			}
 			hidden_effect = {
 				VAL_refresh_contract_modifier = yes
 			}
@@ -6105,7 +6320,10 @@ shared_focus = {
 			unlock_decision_tooltip = VAL_council_merchant_guarantee
 			unlock_decision_tooltip = VAL_council_withdraw_merchant_guarantee
 			unlock_decision_tooltip = VAL_council_buy_installment
-			unlock_decision_tooltip = VAL_council_consortium_norm
+			if = {
+				limit = { NOT = { has_completed_focus = VAL_Industrial_Mobilization_Plan } }
+				unlock_decision_tooltip = VAL_council_consortium_norm
+			}
 			hidden_effect = {
 				VAL_refresh_contract_modifier = yes
 			}

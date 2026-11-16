@@ -216,14 +216,15 @@ class ValStelanderDefeatTests(unittest.TestCase):
 
         triggers = entries("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
         gate = block(triggers, "VAL_council_can_prepare_revanche")
-        for defeated, council, shabrat, subject, target_exists in product(
-            (False, True), repeat=5
+        for (defeated, shabrat, subject, target_exists), leader in product(
+            product((False, True), repeat=4),
+            ("VAL_Commanders_Council", "VAL_Eduard_Korsch", "VAL_Valera_Solgalov"),
         ):
+            # The revanchist coup replaces the Council; both govern the revanche.
+            council = leader != "VAL_Valera_Solgalov"
             facts = {
                 ("VAL", "has_country_flag", "VAL_stelander_defeated"): defeated,
-                ("VAL", "ruling_leader"): (
-                    "VAL_Commanders_Council" if council else "VAL_Valera_Solgalov"
-                ),
+                ("VAL", "ruling_leader"): leader,
                 ("VAL", "is_subject", "yes"): subject,
                 ("VAL", "has_capitulated", "yes"): False,
                 ("STS", "exists", "yes"): target_exists,
@@ -372,6 +373,212 @@ class ValStelanderDefeatTests(unittest.TestCase):
         self.assertIn("recruit_character = VAL_Commanders_Council", history)
         self.assertIn('VAL_Commanders_Council: "Совет командиров"', ru)
         self.assertIn('VAL_Commanders_Council: "Council of Commanders"', en)
+
+
+class ValPartyProtectorateRevancheTests(unittest.TestCase):
+    """The Party's postwar victory leaves a Council protectorate with its own revanche."""
+
+    def named(self, path, name):
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
+        return named_block(read(path), name)
+
+    def test_party_victory_enters_the_council_defeat_after_the_victory_flag(self):
+        body = self.named(
+            "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+            "STP_pw_party_finalize_kefreyt_subject",
+        )
+        self.assertLess(body.index("puppet = {"), body.index("VAL_enter_stelander_defeat = yes"))
+        self.assertLess(
+            body.index("set_country_flag = STP_pw_party_kefreyt_victory"),
+            body.index("VAL_enter_stelander_defeat = yes"),
+        )
+
+    def test_protectorate_opens_the_council_tree_and_revanche_gates(self):
+        path = "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
+        route = self.named(path, "VAL_council_party_route")
+        self.assertIn("has_country_flag = STP_pw_party_kefreyt_victory", route)
+        protectorate = self.named(path, "VAL_council_party_protectorate")
+        self.assertIn("is_subject_of = STP", protectorate)
+        self.assertIn(
+            "VAL_council_party_protectorate = yes",
+            self.named(path, "VAL_council_can_prepare_revanche"),
+        )
+        self.assertIn(
+            "VAL_council_party_protectorate = yes",
+            self.named(path, "VAL_council_in_office"),
+        )
+        launch = self.named(path, "VAL_council_can_launch_revanche")
+        for token in (
+            "has_completed_focus = VAL_defeat_Double_Ledgers",
+            "has_completed_focus = VAL_defeat_Wait_For_The_March",
+            "NOT = { has_war_with = STP }",
+            "STP_pw_party_northern_march_target = yes",
+        ):
+            self.assertIn(token, launch)
+
+    def test_party_only_focuses_follow_the_revanche_choice(self):
+        tree = read("focus_trees/VAL/defeated/focuses.txt")
+        for focus_id, parent in (
+            ("VAL_defeat_Double_Ledgers", "VAL_defeat_Revise_The_Settlement"),
+            ("VAL_defeat_Wait_For_The_March", "VAL_defeat_Double_Ledgers"),
+        ):
+            with self.subTest(focus=focus_id):
+                start = tree.index(f"id = {focus_id}")
+                body = tree[start : tree.index("ai_will_do", start)]
+                self.assertIn("allow_branch = { VAL_council_party_route = yes }", body)
+                self.assertIn(f"prerequisite = {{ focus = {parent} }}", body)
+        start = tree.index("id = VAL_defeat_Double_Ledgers")
+        self.assertIn(
+            "unlock_decision_tooltip = VAL_council_hidden_depot",
+            tree[start : tree.index("ai_will_do", start)],
+        )
+
+    def test_break_releases_kefreyt_before_declaring_on_the_party(self):
+        body = self.named(
+            "common/scripted_effects/ADISCORD_VAL_effects.txt",
+            "VAL_council_break_party_protectorate",
+        )
+        ordered = [
+            "set_country_flag = VAL_council_revanche_active",
+            "autonomy_state = autonomy_free",
+            "white_peace = VAL",
+            "VAL_council_deliver_hidden_depots = yes",
+            "declare_war_on = { target = STP type = annex_everything }",
+            "country_event = { id = ADISCORD_STP_pc.120 }",
+        ]
+        positions = [body.index(token) for token in ordered]
+        self.assertEqual(positions, sorted(positions))
+        begin = self.named(
+            "common/scripted_effects/ADISCORD_VAL_effects.txt",
+            "VAL_council_begin_revanche",
+        )
+        self.assertLess(
+            begin.index("declare_war_on = { target = STS"),
+            begin.index("VAL_council_break_party_protectorate = yes"),
+        )
+
+    def test_revanche_war_has_symmetric_terminal_settlements(self):
+        hooks = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        annex = hooks.index("STP = { STP_pc_annex_defeated_council = yes }")
+        treaty = hooks.index("STP = { STP_pw_party_settle_kefreyt_victory = yes }")
+        victory = hooks.index("VAL = { VAL_council_settle_party_revanche_victory = yes }")
+        march = hooks.index("STP = { STP_pw_party_settle_northern_march_defeat = yes }")
+        self.assertLess(annex, treaty)
+        self.assertLess(treaty, victory)
+        self.assertLess(victory, march)
+        self.assertIn(
+            "OR = { tag = STS tag = STP }",
+            self.named(
+                "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+                "STP_pc_annex_defeated_council",
+            ),
+        )
+        settle = self.named(
+            "common/scripted_effects/ADISCORD_VAL_effects.txt",
+            "VAL_council_settle_party_revanche_victory",
+        )
+        self.assertIn("VAL_install_stelander_administration = yes", settle)
+        self.assertIn("clr_country_flag = VAL_council_revanche_active", settle)
+        reconcile = self.named(
+            "common/scripted_effects/ADISCORD_VAL_effects.txt",
+            "VAL_council_reconcile_revanche",
+        )
+        self.assertIn("NOT = { has_war_with = STP }", reconcile)
+
+    def test_revanche_choice_schedules_the_chauvinist_coup_and_world_news(self):
+        tree = read("focus_trees/VAL/defeated/focuses.txt")
+        start = tree.index("id = VAL_defeat_Revise_The_Settlement")
+        body = tree[start : tree.index("ai_will_do", start)]
+        self.assertIn("country_event = { id = val_council.42 days = 90 }", body)
+        self.assertIn("custom_effect_tooltip = VAL_council_revanchist_coup_tt", body)
+        coup = self.named(
+            "common/scripted_effects/ADISCORD_VAL_effects.txt",
+            "VAL_council_revanchist_coup",
+        )
+        for token in (
+            "VAL_council_revanchist_coup_current = yes",
+            "character = VAL_Eduard_Korsch",
+            "promote_leader = yes",
+            "ideology = chauvinism_ideology",
+            "ruling_party = chauvinism",
+            "news_event = { id = val_council.43 days = 1 }",
+        ):
+            self.assertIn(token, coup)
+        events = read("events/ADISCORD_VAL_contract_events.txt")
+        country = events[events.index("id = val_council.42") :]
+        self.assertIn("immediate = { VAL_council_revanchist_coup = yes }", country[:600])
+        news = events[events.index("id = val_council.43") :]
+        self.assertIn("major = yes", news[:300])
+        triggers = "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
+        for name in ("VAL_council_can_prepare_revanche", "VAL_council_defeat_government"):
+            self.assertIn("character = VAL_Eduard_Korsch", self.named(triggers, name))
+        self.assertIn("VAL_council_defeat_government = yes", self.named(triggers, "VAL_council_in_office"))
+        characters = read("common/characters/VAL.txt")
+        korsch = characters[characters.index("VAL_Eduard_Korsch = {") :][:400]
+        self.assertIn("large = GFX_portrait_VAL_Eduard_Korsch", korsch)
+        self.assertNotIn("country_leader", korsch[: korsch.index("\n\t}")])
+        self.assertIn(
+            "recruit_character = VAL_Eduard_Korsch",
+            read("history/countries/VAL - ValeraLand.txt"),
+        )
+        self.assertIn(
+            'texturefile = "gfx/leaders/VAL/portrait_VAL_Eduard_Korsch.png"',
+            read("interface/ADISCORD_leader_portraits.gfx"),
+        )
+        self.assertTrue((ROOT / "gfx/leaders/VAL/portrait_VAL_Eduard_Korsch.png").is_file())
+
+    def test_party_campaign_opens_from_the_army_branch(self):
+        tree = read("focus_trees/STP/postwar/party/focuses.txt")
+        start = tree.index("id = STP_pw_party_kefreyt_campaign")
+        body = tree[start : tree.index("completion_reward", start)]
+        self.assertIn("prerequisite = { focus = STP_pw_party_border_staff }", body)
+        self.assertNotIn("STP_pw_party_external_mandate", body)
+
+    def test_new_text_and_event_ids_exist(self):
+        import json
+        import re
+
+        keys = {
+            "ADISCORD_VAL_decisions": (
+                "VAL_defeat_Double_Ledgers",
+                "VAL_defeat_Double_Ledgers_desc",
+                "VAL_defeat_Wait_For_The_March",
+                "VAL_defeat_Wait_For_The_March_desc",
+                "VAL_council_protectorate_category",
+                "VAL_council_hidden_depot",
+                "VAL_council_hidden_depot_desc",
+                "VAL_council_hidden_depot_effect_tt",
+                "VAL_council_march_window",
+                "VAL_council_party_revanche_stakes_tt",
+                "VAL_council_party_revanche_war_tt",
+                "val_council.41.d",
+                "VAL_council_revanchist_coup_tt",
+                "val_council.42.d",
+                "val_council.43.d",
+            ),
+            "nsb_characters": ("VAL_Eduard_Korsch",),
+            "ADISCORD_STP": (
+                "STP_pw_party_council_revanche_title",
+                "STP_pw_party_council_revanche_desc",
+                "STP_pw_party_council_revanche_stakes_tt",
+            ),
+        }
+        for stem, names in keys.items():
+            for lang in ("russian", "english"):
+                text = read(f"localisation/{lang}/{stem}_l_{lang}.yml")
+                for key in names:
+                    with self.subTest(lang=lang, key=key):
+                        self.assertEqual(
+                            len(re.findall(r"^\s+" + re.escape(key) + r":\d* \"", text, re.M)),
+                            1,
+                        )
+        registry = json.loads(read("tools/data/adiscord_event_ids.json"))
+        registered = {entry["id"] for entry in registry["events"]}
+        self.assertTrue(
+            {"val_council.41", "val_council.42", "val_council.43", "ADISCORD_STP_pc.120"}
+            <= registered
+        )
 
 
 if __name__ == "__main__":
