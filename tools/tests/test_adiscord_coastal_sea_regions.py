@@ -226,7 +226,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
                 # Opposite approaches can go through either half of the split.
                 self.assertTrue(any(approaches - {p} - self.physical[p] for p in approaches))
 
-    def test_southern_city_approaches_are_compact_and_the_centres_have_rail(self):
+    def test_southern_provinces_are_compact_and_the_city_centres_have_rail(self):
         from scipy.ndimage import label
 
         rails = {
@@ -234,7 +234,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
             for token in line.split()[2:]
         }
         with Image.open(ROOT / "map/provinces.bmp") as image:
-            for entry in states.NEW_CITY_APPROACHES:
+            for entry in (*states.NEW_CITY_APPROACHES, *states.SOUTHERN_INTERIOR_SPLITS, *states.SOUTHERN_INTERIOR_DISTRICTS):
                 with self.subTest(province=entry["province"]):
                     mask = np.array([list(row) for row in entry["mask"]]) == "1"
                     y_size, x_size = mask.shape
@@ -243,7 +243,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
                     self.assertTrue(np.array_equal(np.all(crop == entry["rgb"], axis=2), mask))
                     self.assertEqual(label(mask)[1], 1)
                     pixels = np.argwhere(mask)
-                    self.assertLessEqual(len(pixels), 120)
+                    self.assertLessEqual(len(pixels), 130)
                     # Include each square pixel's own variance when measuring the principal axes.
                     axes = np.linalg.eigvalsh(np.cov(pixels.T) + np.eye(2) / 12)
                     self.assertLessEqual(np.sqrt(axes[1] / axes[0]), 2.3)

@@ -10169,7 +10169,7 @@ SHL_announce_crown_of_the_south = {
 # Metal contracts of the Golden Gates. Buyers are the six fixed tags of the
 # SHL_metal_contract_offer decision, so no settlement scans the world. The
 # buyer carries SHL_metal_client and SHL_metal_arrears; Shahrabad counts
-# SHL_metal_clients. The 28-day cycle moves 60 per paid contract (75 with the
+# SHL_metal_clients. The 28-day cycle moves 40 per paid contract (55 with the
 # metal brokers); war between the parties or two unpaid cycles end it.
 # ---------------------------------------------------------------------------
 
@@ -10306,9 +10306,9 @@ SHL_metal_end_contract = {
 	}
 }
 
-# COUNTRY client, called from the SHL cycle. A paid cycle moves 60 from the
+# COUNTRY client, called from the SHL cycle. A paid cycle moves 40 from the
 # buyer's treasury to Shahrabad's and books both monthly ledgers; the metal
-# brokers add 15 of their own to each paid contract (75 in all). An unpaid
+# brokers add 15 of their own to each paid contract (55 in all). An unpaid
 # cycle earns no premium and is tolerated once.
 SHL_metal_settle_client = {
 	if = {
@@ -10323,15 +10323,15 @@ SHL_metal_settle_client = {
 			SHL_metal_end_contract = yes
 		}
 		else_if = {
-			limit = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
-			subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 }
+			limit = { check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals } }
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
 			set_variable = { var = SHL_metal_arrears value = 0 }
 			ADISCORD_economy_mark_dirty = yes
 			SHL = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 60 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 60 }
-				add_to_variable = { var = SHL_last_cycle_income value = 60 }
+				add_to_variable = { var = ADISCORD_economy_treasury value = 40 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 40 }
+				add_to_variable = { var = SHL_last_cycle_income value = 40 }
 				if = {
 					limit = { has_completed_focus = SHL_metal_brokers }
 					add_to_variable = { var = ADISCORD_economy_treasury value = 15 }

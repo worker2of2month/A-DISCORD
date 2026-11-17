@@ -343,12 +343,11 @@ ADISCORD_south_district_objectives = {
 	}
 }
 
-# The last 120 days before the crisis deadline: both champions move to the
-# border before the deadline war, whatever their focus readiness.
+# Border assignments follow the current northern leader on either route to war.
 ADISCORD_south_deadline_shl_border_nam = {
 	allowed = { tag = SHL }
 	enable = {
-		ADISCORD_south_deadline_ai_window = yes
+		ADISCORD_south_ai_border_preparation = yes
 		NAM = { ADISCORD_south_declarer_valid = yes }
 	}
 	abort_when_not_enabled = yes
@@ -358,7 +357,7 @@ ADISCORD_south_deadline_shl_border_nam = {
 ADISCORD_south_deadline_shl_border_efl = {
 	allowed = { tag = SHL }
 	enable = {
-		ADISCORD_south_deadline_ai_window = yes
+		ADISCORD_south_ai_border_preparation = yes
 		EFL = { ADISCORD_south_declarer_valid = yes }
 	}
 	abort_when_not_enabled = yes
@@ -368,7 +367,7 @@ ADISCORD_south_deadline_shl_border_efl = {
 ADISCORD_south_deadline_shl_border_azh = {
 	allowed = { tag = SHL }
 	enable = {
-		ADISCORD_south_deadline_ai_window = yes
+		ADISCORD_south_ai_border_preparation = yes
 		AZH = { ADISCORD_south_declarer_valid = yes }
 	}
 	abort_when_not_enabled = yes
@@ -377,38 +376,116 @@ ADISCORD_south_deadline_shl_border_azh = {
 
 ADISCORD_south_deadline_nam_border_shl = {
 	allowed = { tag = NAM }
-	enable = {
-		ADISCORD_south_deadline_ai_window = yes
-		ADISCORD_south_declarer_valid = yes
-		SHL = { ADISCORD_south_champion_viable = yes }
-	}
+	enable = { ADISCORD_south_ai_border_preparation = yes }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
 }
 
 ADISCORD_south_deadline_efl_border_shl = {
 	allowed = { tag = EFL }
-	enable = {
-		ADISCORD_south_deadline_ai_window = yes
-		ADISCORD_south_declarer_valid = yes
-		SHL = { ADISCORD_south_champion_viable = yes }
-	}
+	enable = { ADISCORD_south_ai_border_preparation = yes }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
 }
 
 ADISCORD_south_deadline_azh_border_shl = {
 	allowed = { tag = AZH }
-	enable = {
-		ADISCORD_south_deadline_ai_window = yes
-		ADISCORD_south_declarer_valid = yes
-		SHL = { ADISCORD_south_champion_viable = yes }
-	}
+	enable = { ADISCORD_south_ai_border_preparation = yes }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
 }
 
-# Respect the campaign switch while the southern final war is disabled.
+# The desert countries choose sides at war entry. Until a direct border exists,
+# each champion can stage a reserve on its own supply route.
+ADISCORD_south_shl_staging_reserve = {
+	allowed = { tag = SHL }
+	enable = {
+		difficulty > 2
+		ADISCORD_south_ai_border_preparation = yes
+		707 = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+			supply_node > 0
+		}
+		NOT = { any_neighbor_country = { ADISCORD_south_declarer_valid = yes } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		states = { 707 }
+		ratio = 0.15
+		subtract_fronts_from_need = yes
+		subtract_invasions_from_need = yes
+	}
+}
+
+ADISCORD_south_nam_staging_reserve = {
+	allowed = { tag = NAM }
+	enable = {
+		difficulty > 2
+		ADISCORD_south_ai_border_preparation = yes
+		689 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			supply_node > 0
+		}
+		NOT = { is_neighbor_of = SHL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		states = { 689 }
+		ratio = 0.15
+		subtract_fronts_from_need = yes
+		subtract_invasions_from_need = yes
+	}
+}
+
+ADISCORD_south_efl_staging_reserve = {
+	allowed = { tag = EFL }
+	enable = {
+		difficulty > 2
+		ADISCORD_south_ai_border_preparation = yes
+		68 = {
+			is_owned_by = EFL
+			is_controlled_by = EFL
+			supply_node > 0
+		}
+		NOT = { is_neighbor_of = SHL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		states = { 68 }
+		ratio = 0.15
+		subtract_fronts_from_need = yes
+		subtract_invasions_from_need = yes
+	}
+}
+
+ADISCORD_south_azh_staging_reserve = {
+	allowed = { tag = AZH }
+	enable = {
+		difficulty > 2
+		ADISCORD_south_ai_border_preparation = yes
+		692 = {
+			is_owned_by = AZH
+			is_controlled_by = AZH
+			supply_node > 0
+		}
+		NOT = { is_neighbor_of = SHL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		states = { 692 }
+		ratio = 0.15
+		subtract_fronts_from_need = yes
+		subtract_invasions_from_need = yes
+	}
+}
+
+# Production follows the selected champion through preparation and hostilities.
 ADISCORD_difficulty_south_campaign_supply = {
 	allowed = {
 		OR = {

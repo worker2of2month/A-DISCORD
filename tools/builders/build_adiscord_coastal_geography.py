@@ -20,7 +20,7 @@ from scipy.ndimage import distance_transform_edt, find_objects, gaussian_filter
 from tools.builders.build_adiscord_ivn_geography import native_river_bmp, normal_from_height
 from tools.builders.build_adiscord_new_states import (
     NEW_CITY_APPROACHES, SOUTHERN_CITIES, SOUTHERN_CITY_APPROACHES,
-    SOUTHERN_CITY_POINTS, SOUTHERN_RURAL_SPLITS, southern_city_rail_route,
+    SOUTHERN_CITY_POINTS, SOUTHERN_INTERIOR_DISTRICTS, SOUTHERN_RURAL_SPLITS, southern_city_rail_route,
 )
 from tools.lib.city_terrains import CITY_TERRAINS, NATIONAL_CITY_TERRAIN
 from tools.lib.coastal_clearance import (
@@ -107,8 +107,8 @@ RURAL_SECTORS = tuple(
     {**sector, "parent": city["parent"], "parent_terrain": city["parent_terrain"], "terrain": city["parent_terrain"]}
     for city in SOUTHERN_CITIES for sector in city.get("sectors", ())
 )
-SOUTHERN_GEOMETRY = (*SOUTHERN_CITIES, *RURAL_SECTORS, *SOUTHERN_RURAL_SPLITS, *NEW_CITY_APPROACHES)
-RURAL_SPLIT_PARENTS = {entry["province"]: entry["parent"] for entry in SOUTHERN_RURAL_SPLITS}
+SOUTHERN_GEOMETRY = (*SOUTHERN_CITIES, *RURAL_SECTORS, *SOUTHERN_RURAL_SPLITS, *NEW_CITY_APPROACHES, *SOUTHERN_INTERIOR_DISTRICTS)
+RURAL_SPLIT_PARENTS = {entry["province"]: entry["parent"] for entry in (*SOUTHERN_RURAL_SPLITS, *SOUTHERN_INTERIOR_DISTRICTS)}
 # Resolve province corners, short contacts and frontage loops without changing state membership.
 # Coordinates use the top-left raster origin.
 PROVINCE_PIXEL_REPAIRS = {

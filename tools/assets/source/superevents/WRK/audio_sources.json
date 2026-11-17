@@ -386,6 +386,25 @@
     "runtime_sha256": "a17702556eafe248a5287c17939745b83125d910520d84eef2b12a04557c53e5",
     "mix": "Pen and paper, distant whistle, passing wheels, then escaping steam. The brass chorale plays alone from 22.1 seconds. Fixed music gain -3.5 dB, with a 4.5-second entry and a 6.5-second fade on the decay."
   },
+  "superevent_west_imperial_victory_sound": {
+    "music": {
+      "artist": "In The Nursery",
+      "title": "Compulsion",
+      "album": "Counterpoint",
+      "source_page": "https://inthenursery.bandcamp.com/track/compulsion-2",
+      "file": "in_the_nursery_compulsion_excerpt.flac",
+      "excerpt_seconds": [0, 56],
+      "sha256": "80d51d6d7a6a0194053bf00008e28379cb6b00c28c956a9b487092240df2616a",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_west_imperial_victory_sound.wav",
+    "runtime_sha256": "79bb2b460ccc573ce3c0a08c560cb93591b22a2c11bbc83206b36aa72799f088"
+  },
   "superevent_west_worker_sound": {
     "music": {
       "artist": "Maserati",

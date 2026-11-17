@@ -906,14 +906,14 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (67, 688, 689, 690, 700, 719)),
-            145,
+            165,
         )
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726)),
-            162,
+            174,
         )
         self.assertEqual(
-            sum(sum(expected[state].values()) for state in (69, 692, 722, 727, 728, 729)), 139
+            sum(sum(expected[state].values()) for state in (69, 692, 722, 727, 728, 729)), 191
         )
 
         localisation = (

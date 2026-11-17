@@ -4,7 +4,7 @@ state={
 	name="STATE_723"
 	provinces={
 		1287 3113 3695 5979 6000 6495 6870 7302 7621 8724 11219 16937
-		17048
+		17048 17251
 	}
 	manpower = 1335000
 	buildings_max_level_factor = 1.000

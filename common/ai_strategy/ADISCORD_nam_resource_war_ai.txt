@@ -436,6 +436,7 @@ ADISCORD_difficulty_nam_resource_logistics = {
 	}
 	enable = {
 		ADISCORD_difficulty_ai_advanced = yes
+		ADISCORD_ai_rifle_replacement_emergency = no
 		has_tech = ADISCORD_tech_restored_truck_fleets
 		OR = {
 			AND = {

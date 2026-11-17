@@ -3021,6 +3021,10 @@ NAM_rw_coalition_can_embark = {
 	has_navy_size = { size > 0 unit = ADISCORD_coastal_patrol_vessel }
 	NOT = { has_fuel < 1000 }
 	OR = {
+		difficulty < 3
+		ADISCORD_ai_field_army_can_attack = yes
+	}
+	OR = {
 		AND = {
 			tag = EFL
 			num_divisions > 14

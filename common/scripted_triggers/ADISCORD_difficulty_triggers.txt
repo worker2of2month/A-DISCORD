@@ -9,11 +9,28 @@ ADISCORD_difficulty_ai_eligible = {
 	NOT = { has_global_flag = RUS_crisis_world_ended }
 }
 
-# Reuse the bounded neighbor check that consumes live scripted preparation priorities.
+# A scheduled restitution war or a southern border order can span neutral
+# territory or sea. Its participants can build reserves before a front exists.
 ADISCORD_difficulty_ai_military_context = {
 	ADISCORD_difficulty_ai_eligible = yes
 	OR = {
 		has_war = yes
+		AND = {
+			difficulty > 2
+			OR = {
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = SHL
+			}
+			OR = {
+				AND = {
+					NOT = { tag = SHL }
+					ADISCORD_nam_resource_war_preparation = yes
+				}
+				ADISCORD_south_ai_border_preparation = yes
+			}
+		}
 		ADISCORD_ai_has_adjacent_war_preparation = yes
 	}
 }

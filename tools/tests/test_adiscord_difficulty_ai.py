@@ -143,6 +143,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             "ADISCORD_south_crisis_open": False,
             "ADISCORD_south_final_can_start": False,
             "ADISCORD_south_preparing_country": False,
+            "ADISCORD_south_ai_border_preparation": False,
             "convoys": 30,
         }
         context.update(changes)
@@ -340,12 +341,27 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         context = self.context("NAM", has_war=False, wars=set(), ADISCORD_nam_resource_war_preparation=True)
         name = PREFIX + "nam_resource_logistics"
         self.assertTrue(self.enabled(name, context))
+        self.assertFalse(self.enabled(name, dict(context, ADISCORD_ai_rifle_replacement_emergency=True)))
         context["ADISCORD_nam_resource_war_preparation"] = False
         self.assertFalse(self.enabled(name, context))
         context.update(has_war=True, wars={"EFL"}, NAM_war_of_return_active=True)
         self.assertTrue(self.enabled(name, context))
         context["wars"] = {"RUS"}
         self.assertFalse(self.enabled(name, context))
+
+    def test_southern_campaigns_can_prepare_without_an_adjacent_enemy(self):
+        for level in range(5):
+            for tag in ("EFL", "AZH", "NAM", "SHL", "SLF", "RHM"):
+                actor = self.context(tag, level, has_war=False, wars=set())
+                for signal, eligible in (("ADISCORD_nam_resource_war_preparation", tag in ("NAM", "EFL", "AZH")),
+                                         ("ADISCORD_south_ai_border_preparation", tag in ("NAM", "EFL", "AZH", "SHL"))):
+                    ready = dict(actor, **{signal: True})
+                    expected = {3: 15, 4: 30}.get(level, 0) if eligible else 0
+                    with self.subTest(level=level, tag=tag, signal=signal):
+                        self.assertEqual(self.total(ready, "ai_wanted_divisions_factor"), expected)
+                        self.assertEqual(self.total(dict(ready, has_manpower=11999), "ai_wanted_divisions_factor"), 0)
+                        self.assertEqual(self.total(dict(ready, is_ai=False), "ai_wanted_divisions_factor"), 0)
+                        self.assertEqual(self.total(actor, "ai_wanted_divisions_factor"), 0)
 
     def test_disabled_south_cannot_acquire_war_preparation(self):
         context = self.context("SHL", wars={"NAM"}, ADISCORD_south_crisis_open=True, ADISCORD_south_final_active=True)

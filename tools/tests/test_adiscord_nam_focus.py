@@ -938,6 +938,11 @@ class NamCampaignTests(unittest.TestCase):
             }
             ready = self.expand(self.triggers["NAM_rw_coalition_landing_ready"])
             self.assertTrue(matches_conditions(ready, facts, tag))
+            for difficulty in range(5):
+                for supplied in (False, True):
+                    army = {**facts, (tag, "numeric", "difficulty"): difficulty,
+                            (tag, "ADISCORD_ai_field_army_can_attack", "yes"): supplied}
+                    self.assertEqual(matches_conditions(ready, army, tag), difficulty < 3 or supplied)
             for key, value in (
                 ((tag, "has_war_with", "NAM"), False),
                 ((tag, "has_global_flag", BASE + "_resolved"), True),
@@ -949,6 +954,30 @@ class NamCampaignTests(unittest.TestCase):
                 ((tag, "variable", "fixture_navy_ADISCORD_coastal_patrol_vessel"), 0),
             ):
                 self.assertFalse(matches_conditions(ready, {**facts, key: value}, tag), (tag, key))
+
+    def test_transport_contract_orders_one_convoy_batch_ahead_of_a_feasible_landing(self):
+        category = block(parsed(f"common/decisions/{BASE}_decisions.txt"), "NAM_coalition_logistics")
+        decision = block(category, "NAM_coalition_transport_contract")
+        stop = block(block(decision, "ai_will_do"), "modifier")
+        self.assertEqual(scalar(stop, "factor"), "0")
+        demand = self.expand(block(stop, "NOT"))
+        for tag, state, port, divisions in (("EFL", "723", "6495", 15), ("AZH", "692", "493", 10)):
+            facts = {(tag, "equipment", "train_equipment"): 15, (tag, "equipment", "motorized_equipment"): 100,
+                     (tag, "numeric", "has_fuel"): 20000, (tag, "is_ai", "yes"): True,
+                     (tag, "has_capitulated", "no"): True, ("NAM", "has_capitulated", "no"): True,
+                     (tag, "has_tech", "ADISCORD_tech_restored_dockyards"): True,
+                     (tag, "ADISCORD_ai_field_army_can_attack", "yes"): True,
+                     (tag, "variable", "fixture_navy_ADISCORD_coastal_patrol_vessel"): 1,
+                     (tag, "numeric", "num_divisions"): divisions, (tag, "controls_province", port): True,
+                     (state, "is_owned_by", tag): True, (state, "numeric", "naval_base"): 1,
+                     (tag, "has_global_flag", BASE + "_started"): True}
+            for level, convoys, plan, expected in (
+                (2, 40, True, False), (3, 40, True, True), (4, 59, True, True),
+                (4, 60, True, False), (4, 59, False, False), (2, 39, False, True),
+            ):
+                facts.update({(tag, "numeric", "difficulty"): level, (tag, "variable", "fixture_navy_convoy"): convoys,
+                              (tag, "has_war_with", "NAM"): plan})
+                self.assertEqual(matches_conditions(demand, facts, tag), expected)
 
     def crisis_facts(self, number):
         facts = self.economy_facts()

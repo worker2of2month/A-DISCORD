@@ -40,6 +40,7 @@ SOUTHERN_GEOGRAPHY = json.loads((ROOT / "tools/data/adiscord_southern_cities.jso
 SOUTHERN_CITIES = SOUTHERN_GEOGRAPHY["cities"]
 SOUTHERN_CITY_APPROACHES = SOUTHERN_GEOGRAPHY["city_approaches"]
 NEW_CITY_APPROACHES = tuple(entry for entry in SOUTHERN_CITY_APPROACHES if "rgb" in entry)
+SOUTHERN_INTERIOR_DISTRICTS = SOUTHERN_GEOGRAPHY["interior_districts"]
 SOUTHERN_INTERIOR_SPLITS = SOUTHERN_GEOGRAPHY["interior_splits"]
 SOUTHERN_RURAL_SPLITS = (*SOUTHERN_GEOGRAPHY["rural_splits"], *SOUTHERN_INTERIOR_SPLITS)
 
@@ -66,7 +67,7 @@ def southern_city_rail_route(route: tuple[int, ...]) -> tuple[int, ...]:
 def with_rural_splits(provinces: Iterable[int]) -> tuple[int, ...]:
     """Keep the two halves together when a parent province enters a state manifest."""
     members = set(provinces)
-    children = {split["province"] for split in (*SOUTHERN_RURAL_SPLITS, *NEW_CITY_APPROACHES) if split["parent"] in members}
+    children = {split["province"] for split in (*SOUTHERN_RURAL_SPLITS, *NEW_CITY_APPROACHES, *SOUTHERN_INTERIOR_DISTRICTS) if split["parent"] in members}
     return tuple(sorted(members | children))
 
 

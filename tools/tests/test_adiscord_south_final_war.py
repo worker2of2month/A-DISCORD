@@ -1195,6 +1195,19 @@ class SouthLifecycleTests(unittest.TestCase):
         self.execute("ADISCORD_south_dispatch_prepared_war")
         self.assertEqual(self.start_scopes, ["SHL"], "An invalid northern order must not block the southern attack")
 
+    def test_prewar_production_needs_a_viable_opponent_on_both_sides(self):
+        gate = "ADISCORD_south_preparing_country"
+        self.open_preparation()
+        self.assertTrue(self.trigger_matches(gate, "SHL"))
+        self.facts[("SHL", "has_capitulated", "no")] = False
+        self.assertFalse(self.trigger_matches(gate, "NAM"))
+        self.facts[("SHL", "has_capitulated", "no")] = True
+        for tag in ("NAM", "EFL", "AZH"):
+            self.assertTrue(self.trigger_matches(gate, tag))
+            self.facts[(tag, "is_subject", "no")] = False
+            self.assertFalse(self.trigger_matches(gate, tag))
+        self.assertFalse(self.trigger_matches(gate, "SHL"))
+
     def test_northern_successors_wait_for_minimum_preparation_and_every_shl_milestone(self):
         self.facts[("NAM", "exists", "yes")] = False
         self.execute("ADISCORD_south_begin_preparation")
@@ -2007,19 +2020,79 @@ class SouthLifecycleTests(unittest.TestCase):
                 strategy = strategies[name]
                 self.assertEqual(scalar(block(strategy, "allowed"), "tag"), actor)
                 self.assertEqual(scalar(strategy, "abort_when_not_enabled"), "yes")
-                self.assertIn(("ADISCORD_south_deadline_ai_window", "yes"), [(e.key, e.value) for e in block(strategy, "enable")])
+                self.assertIn(("ADISCORD_south_ai_border_preparation", "yes"), [(e.key, e.value) for e in block(strategy, "enable")])
                 order = block(strategy, "ai_strategy")
                 self.assertEqual((scalar(order, "type"), scalar(order, "id")), ("prepare_for_war", target))
         self.execute("ADISCORD_south_begin_preparation")
+        self.facts[("NAM", "is_ai", "yes")] = True
         for level in (0, 6):
             self.variable("ADISCORD_south_crisis_pull", level)
             for age, before, expected in ((60, 121, False), (60, 120, True), (59, 120, False), (60, -30, True)):
                 with self.subTest(level=level, age=age, before=before):
                     self.flag("ADISCORD_south_preparation_started", age=age)
                     self.set_date(script_date(day_number(DEADLINES[level]) - before))
-                    self.assertEqual(self.trigger_matches("ADISCORD_south_deadline_ai_window", "NAM"), expected)
+                    self.assertEqual(self.trigger_matches("ADISCORD_south_ai_border_preparation", "NAM"), expected)
         self.flag("ADISCORD_south_final_started")
-        self.assertFalse(self.trigger_matches("ADISCORD_south_deadline_ai_window", "NAM"))
+        self.assertFalse(self.trigger_matches("ADISCORD_south_ai_border_preparation", "NAM"))
+
+    def test_focus_route_stages_both_current_champions_before_the_calendar_window(self):
+        gate = "ADISCORD_south_ai_border_preparation"
+        self.open_preparation(age=60)
+        self.set_date("2165.1.1")
+        for tag in CANDIDATES:
+            self.facts[(tag, "is_ai", "yes")] = True
+        for level in range(5):
+            for tag in CANDIDATES:
+                self.facts[(tag, "numeric", "difficulty")] = level
+                self.assertEqual(self.trigger_matches(gate, tag), level > 2 and tag in ("NAM", "SHL"))
+        self.facts[("SHL", "has_completed_focus", "SHL_conclave_army")] = False
+        self.assertFalse(self.trigger_matches(gate, "NAM"))
+        self.flag("ADISCORD_south_crisis_warned")
+        self.facts[("SHL", "numeric", "difficulty")] = 2
+        self.assertTrue(self.trigger_matches(gate, "SHL"))
+        self.facts[("NAM", "has_war", "no")] = False
+        self.assertFalse(self.trigger_matches(gate, "SHL"))
+        self.facts[("NAM", "is_subject", "no")] = False
+        self.assertTrue(self.trigger_matches(gate, "EFL"))
+        self.assertFalse(self.trigger_matches(gate, "AZH"))
+        self.facts[("EFL", "is_subject", "no")] = False
+        self.assertTrue(self.trigger_matches(gate, "AZH"))
+        self.facts[("AZH", "is_ai", "yes")] = False
+        self.assertFalse(self.trigger_matches(gate, "AZH"))
+        self.flag("ADISCORD_south_final_resolved")
+        self.assertFalse(self.trigger_matches(gate, "SHL"))
+
+    def test_staging_reserves_use_home_supply_nodes_and_release_existing_assignments(self):
+        policies = definitions(ROOT / "common/ai_strategy/ADISCORD_south_final_war_ai.txt")
+        hubs = {line.split()[1] for line in (ROOT / "map/supply_nodes.txt").read_text().splitlines() if line.strip()}
+        for tag, site in (("SHL", "707"), ("NAM", "689"), ("EFL", "68"), ("AZH", "692")):
+            policy = policies[f"ADISCORD_south_{tag.lower()}_staging_reserve"]
+            self.assertEqual(scalar(block(policy, "allowed"), "tag"), tag)
+            self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+            enable = block(policy, "enable")
+            self.assertEqual(scalar(enable, "ADISCORD_south_ai_border_preparation"), "yes")
+            self.assertEqual([e.value for e in enable if not e.key], ["difficulty", ">", "2"])
+            guard = block(enable, "NOT")
+            if tag == "SHL":
+                self.assertEqual(scalar(block(guard, "any_neighbor_country"), "ADISCORD_south_declarer_valid"), "yes")
+            else:
+                self.assertEqual(scalar(guard, "is_neighbor_of"), "SHL")
+            conditions = block(enable, site)
+            facts = {(site, "numeric", "supply_node"): 1, (site, "is_owned_by", tag): True,
+                     (site, "is_controlled_by", tag): True}
+            self.assertTrue(matches_conditions(conditions, facts, site))
+            for key in facts:
+                self.assertFalse(matches_conditions(conditions, {**facts, key: 0}, site))
+            path, = (ROOT / "history/states").glob(f"{site}-*.txt")
+            state = definitions(path)["state"]
+            self.assertEqual(scalar(block(state, "history"), "owner"), tag)
+            self.assertTrue(hubs.intersection(e.value for e in block(state, "provinces")))
+            reserve = block(policy, "ai_strategy")
+            self.assertEqual(scalar(reserve, "type"), "put_unit_buffers")
+            self.assertEqual([e.value for e in block(reserve, "states")], [site])
+            self.assertEqual(float(scalar(reserve, "ratio")), 0.15)
+            self.assertEqual(scalar(reserve, "subtract_fronts_from_need"), "yes")
+            self.assertEqual(scalar(reserve, "subtract_invasions_from_need"), "yes")
 
 DECISIONS = ROOT / "common/decisions/ADISCORD_south_final_war_decisions.txt"
 SCRIPTED_LOC = ROOT / "common/scripted_localisation/ADISCORD_south_final_war_scripted_loc.txt"

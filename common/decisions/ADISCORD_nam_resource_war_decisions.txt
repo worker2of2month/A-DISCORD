@@ -22368,6 +22368,11 @@ NAM_coalition_logistics = {
 						has_equipment = { motorized_equipment < 100 }
 						has_navy_size = { size < 40 type = convoy }
 						has_fuel < 20000
+						AND = {
+							difficulty > 2
+							has_navy_size = { size < 60 type = convoy }
+							NAM_rw_coalition_landing_planned = yes
+						}
 					}
 				}
 			}

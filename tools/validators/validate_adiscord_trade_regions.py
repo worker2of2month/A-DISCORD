@@ -62,7 +62,7 @@ def expected_province_counts(root: Path, plan: TradeRegionPlan, issues: list[str
     """Add authored southern subdivisions to the approved counts of the remaining land."""
     geography = json.loads((root / "tools/data/adiscord_southern_cities.json").read_bytes())
     counts = Counter(BASE_PROVINCE_COUNTS)
-    for group in ("cities", "rural_splits", "interior_splits", "city_approaches"):
+    for group in ("cities", "rural_splits", "interior_splits", "city_approaches", "interior_districts"):
         for entry in geography[group]:
             # Approaches with no new RGB reshape a province already counted in the map.
             if group == "city_approaches" and "rgb" not in entry:

@@ -338,14 +338,25 @@ ADISCORD_south_deadline_watch_daily = {
 	ADISCORD_south_deadline_date_near = yes
 }
 
-# GLOBAL. The last 120 days before the effective deadline of a running preparation.
-ADISCORD_south_deadline_ai_window = {
+# COUNTRY. A focus warning can precede the calendar window. On higher
+# difficulties the two ready armies can stage before the warning is issued.
+ADISCORD_south_ai_border_preparation = {
+	is_ai = yes
 	ADISCORD_south_crisis_open = yes
 	has_global_flag = {
 		flag = ADISCORD_south_preparation_started
 		days > 59
 	}
-	ADISCORD_south_deadline_date_in_ai_window = yes
+	OR = {
+		has_global_flag = ADISCORD_south_crisis_warned
+		ADISCORD_south_deadline_date_in_ai_window = yes
+		AND = {
+			difficulty > 2
+			ADISCORD_south_both_focus_ready = yes
+		}
+	}
+	ADISCORD_south_declarer_valid = yes
+	ADISCORD_south_participants_ready = yes
 }
 
 # GLOBAL. The passed crisis deadline replaces mutual focus readiness and the
@@ -439,8 +450,12 @@ ADISCORD_south_both_focus_ready = {
 ADISCORD_south_preparing_country = {
 	ADISCORD_south_crisis_open = yes
 	has_global_flag = ADISCORD_south_preparation_started
-	ADISCORD_south_champion_viable = yes
 	ADISCORD_south_declarer_valid = yes
+	SHL = { ADISCORD_south_champion_viable = yes }
+	OR = {
+		NOT = { tag = SHL }
+		ADISCORD_south_north_candidate_exists = yes
+	}
 }
 
 # GLOBAL. The crisis clock runs between the resource war and the final campaign.
