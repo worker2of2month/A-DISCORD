@@ -941,8 +941,11 @@ class NamCampaignTests(unittest.TestCase):
             for difficulty in range(5):
                 for supplied in (False, True):
                     army = {**facts, (tag, "numeric", "difficulty"): difficulty,
+                            (tag, "ADISCORD_ai_supply_transport_shortage", "no"): True,
                             (tag, "ADISCORD_ai_field_army_can_attack", "yes"): supplied}
                     self.assertEqual(matches_conditions(ready, army, tag), difficulty < 3 or supplied)
+                    army[(tag, "ADISCORD_ai_supply_transport_shortage", "no")] = False
+                    self.assertEqual(matches_conditions(ready, army, tag), difficulty < 3)
             for key, value in (
                 ((tag, "has_war_with", "NAM"), False),
                 ((tag, "has_global_flag", BASE + "_resolved"), True),
@@ -967,6 +970,7 @@ class NamCampaignTests(unittest.TestCase):
                      (tag, "has_capitulated", "no"): True, ("NAM", "has_capitulated", "no"): True,
                      (tag, "has_tech", "ADISCORD_tech_restored_dockyards"): True,
                      (tag, "ADISCORD_ai_field_army_can_attack", "yes"): True,
+                     (tag, "ADISCORD_ai_supply_transport_shortage", "no"): True,
                      (tag, "variable", "fixture_navy_ADISCORD_coastal_patrol_vessel"): 1,
                      (tag, "numeric", "num_divisions"): divisions, (tag, "controls_province", port): True,
                      (state, "is_owned_by", tag): True, (state, "numeric", "naval_base"): 1,
@@ -978,6 +982,12 @@ class NamCampaignTests(unittest.TestCase):
                 facts.update({(tag, "numeric", "difficulty"): level, (tag, "variable", "fixture_navy_convoy"): convoys,
                               (tag, "has_war_with", "NAM"): plan})
                 self.assertEqual(matches_conditions(demand, facts, tag), expected)
+            facts.update({(tag, "variable", "fixture_navy_convoy"): 80, (tag, "numeric", "difficulty"): 3,
+                          (tag, "ADISCORD_ai_supply_transport_shortage", "yes"): True,
+                          (tag, "ADISCORD_ai_supply_transport_shortage", "no"): False})
+            for at_war in (False, True):
+                facts[(tag, "has_war_with", "NAM")] = at_war
+                self.assertEqual(matches_conditions(demand, facts, tag), at_war)
 
     def crisis_facts(self, number):
         facts = self.economy_facts()
@@ -11607,10 +11617,9 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertGreaterEqual(min(points[name][0] for name in main.intersection(points) - oil) - oil_right, 4)
                 southern = south.intersection(points)
                 if won_south:
-                    last_main_row = max(points[name][1] for name in main.intersection(points))
-                    south_x, south_y = points["NAM_south_heritage"]
-                    self.assertEqual(south_x, origin_x)
-                    self.assertIn(south_y - last_main_row, (2, 3))
+                    south_y = points["NAM_south_heritage"][1]
+                    self.assertEqual(south_y, origin_y)
+                    self.assertGreaterEqual(min(points[name][0] for name in southern) - max(xs), 6)
                     self.assertEqual(min(points[name][1] for name in southern), south_y)
                 else:
                     self.assertFalse(southern)
@@ -11620,8 +11629,7 @@ class NamCampaignTests(unittest.TestCase):
                             px, py = points[parent]
                             limit = 30 if parent in roots else 40
                             self.assertLessEqual(abs(x - px), limit, (parent, name))
-                            if parent in roots:
-                                self.assertLessEqual(y - py, 9, (parent, name))
+                            self.assertLessEqual(y - py, 9, (parent, name))
                 navy_y = points["NAM_pw_naval_review"][1]
                 army_y = points["NAM_pw_army_review"][1]
                 self.assertEqual(points["NAM_oil_ministry"][1], air_y)
@@ -11645,10 +11653,17 @@ class NamCampaignTests(unittest.TestCase):
                     garrison_x, garrison_y = points["NAM_namestnik_garrisons"]
                     self.assertEqual(points["NAM_pw_military_governors"], (garrison_x, garrison_y + 2))
                     inspection_x, inspection_y = points["NAM_district_inspectorate"]
+                    reform_y = points["NAM_seal_registry"][1]
                     for parent in ("NAM_civil_service_exam", "NAM_appointed_prefects"):
                         parent_x, parent_y = points[parent]
+                        self.assertIn(parent_y - reform_y, range(1, 4))
                         self.assertLessEqual(inspection_y - parent_y, 4)
                         self.assertLessEqual(abs(inspection_x - parent_x), 8)
+                    register_x, register_y = points["NAM_pw_mobilisation_register"]
+                    police_x, police_y = points["NAM_pw_civil_police"]
+                    command_x, command_y = points["NAM_pw_military_governors"]
+                    self.assertEqual((police_y + 1, command_y + 1), (register_y, register_y))
+                    self.assertLessEqual(abs(2 * register_x - police_x - command_x), 1)
                 self.assertEqual("NAM_south_heritage" in points, won_south)
                 if not won_south:
                     self.assertEqual(len(points), count)

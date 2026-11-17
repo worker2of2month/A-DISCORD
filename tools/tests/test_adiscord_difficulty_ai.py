@@ -76,11 +76,15 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             "nam_resource_war": ("NAM_rw_contested_field_objective", "NAM_field_state",
                                  "NAM_rw_field_taken_by_coalition", "NAM_rw_state_held_by_coalition"),
             "south_final_war": ("ADISCORD_south_enemy_front_state", "ADISCORD_south_on_north_side",
-                               "ADISCORD_south_on_shl_side", "ADISCORD_south_war_champion"),
+                               "ADISCORD_south_on_shl_side", "ADISCORD_south_war_champion",
+                               "ADISCORD_south_enemy_front_country", "ADISCORD_south_successor_leads_front"),
         }.items():
             source = (ROOT / f"common/scripted_triggers/ADISCORD_{family}_triggers.txt").read_text(encoding="utf-8")
             for name in names:
                 cls.triggers[name] = parse(named_block(source, name))[0][2]
+        source = (ROOT / "common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt").read_text(encoding="utf-8")
+        for name in ("ADISCORD_ai_supply_transport_shortage", "ADISCORD_ai_supply_trains_short", "ADISCORD_ai_supply_trucks_short"):
+            cls.triggers[name] = parse(named_block(source, name))[0][2]
 
     def country(self, reference):
         """Return the tag a country reference names, following the country target."""
@@ -101,6 +105,8 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             "num_of_supply_nodes": 1,
             "num_divisions": 16,
             "equipment": {"infantry_equipment": 6000, "motorized_equipment": 60},
+            "supply_vehicles": {"train": (0, 0), "truck": (0, 0)},
+            "temp": {},
             "has_tech": {
                 "ADISCORD_tech_restored_truck_fleets",
                 "ADISCORD_tech_improvised_air_defense",
@@ -140,6 +146,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
             "ADISCORD_west_crisis_open": False,
             "ADISCORD_south_final_war_enabled": False,
             "ADISCORD_south_final_active": False,
+            "ADISCORD_south_fights_north_leader": False,
             "ADISCORD_south_crisis_open": False,
             "ADISCORD_south_final_can_start": False,
             "ADISCORD_south_preparing_country": False,
@@ -214,11 +221,20 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                           "greater_than_or_equals": ">=", "less_than_or_equals": "<="}[fields["compare"]]
                 else:
                     name, op, operand = value[0]
-                actual = context["variables"].get(name, context.get(name, 0))
-                expected = context["variables"].get(operand)
+                actual = context["temp"].get(name, context["variables"].get(name, context.get(name, 0)))
+                expected = context["temp"].get(operand, context["variables"].get(operand))
                 if expected is None:
                     expected = float(operand)
                 return OPS[op](actual, expected)
+            if key == "get_supply_vehicles_temp":
+                fields = {name: val for name, _, val in value}
+                stock, demand = context["supply_vehicles"][fields["type"]]
+                context["temp"][fields["var"]] = demand if fields.get("need") == "yes" else stock
+                return True
+            if key == "multiply_temp_variable":
+                (name, _, factor), = value
+                context["temp"][name] *= float(factor)
+                return True
             if key == "has_navy_size":
                 fields = {name: val for name, _, val in value}
                 self.assertEqual(fields["type"], "convoy")
@@ -552,19 +568,21 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         state["controller"] = "STP"
         self.assertFalse(any(self.evaluate(s["state_trigger"], state) for s in targets))
 
-    def objective_weight(self, filename, name, actor, enemy, state, **scopes):
+    def objective_weight(self, filename, name, actor, enemy, state, kind="force_concentration_target_weight", **scopes):
         source = (ROOT / "common/ai_strategy" / filename).read_text(encoding="utf-8")
         policy = parse(named_block(source, name))[0][2]
         self.assertIn(("abort_when_not_enabled", "=", "yes"), policy)
         for key, _, body in policy:
             if key in ("allowed", "enable") and not self.evaluate(body, actor):
                 return 0
-        enemy = dict(enemy, scopes={"FROM.FROM": actor})
+        enemy = dict(enemy, scopes={"FROM": actor, "FROM.FROM": actor})
         state = dict(state, scopes={"FROM": enemy, "FROM.FROM": actor, **scopes})
         weights = [dict((key, value) for key, _, value in body)
                    for kind, _, body in policy if kind == "ai_strategy"]
-        return sum(int(rule["value"]) for rule in weights if rule["type"] == "force_concentration_target_weight"
-                   and self.evaluate(rule["state_trigger"], state))
+        return sum(int(rule["value"]) for rule in weights if rule["type"] == kind
+                   and rule.get("tag", enemy["tag"]) == enemy["tag"]
+                   and self.evaluate(rule.get("country_trigger", []), enemy)
+                   and self.evaluate(rule.get("state_trigger", []), state))
 
     def test_svetlogorye_weights_follow_oil_ownership_and_the_current_enemy(self):
         filename = "ADISCORD_nam_resource_war_ai.txt"
@@ -607,6 +625,22 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         self.assertEqual(self.objective_weight("default.txt", "ADISCORD_active_enemy_front_concentration",
                                                actor, enemy, state), 0)
 
+    def test_coalition_land_requests_survive_embarkation_and_ease_during_shortages(self):
+        source = "ADISCORD_nam_resource_war_ai.txt"
+        for tag in ("EFL", "AZH"):
+            actor = self.context(tag, wars={"NAM"}, ADISCORD_nam_resource_war_active=True)
+            enemy = self.context("NAM", wars={tag})
+            state = self.context(state=67, owner="NAM", controller="NAM")
+            for landing, stock, expected in ((True, 5, 85), (False, 5, 185), (False, 4, 50)):
+                actor["NAM_rw_coalition_landing_ready"] = landing
+                actor["supply_vehicles"]["train"] = (stock, 10)
+                total = sum(self.objective_weight(file, name, actor, enemy, state, kind="front_unit_request")
+                            for file, name in (("default.txt", "ADISCORD_active_enemy_front_concentration"),
+                                               (source, "NAM_rw_coalition_naval_invasion"),
+                                               (source, "NAM_rw_coalition_land_only"),
+                                               (source, "NAM_rw_oilfield_objectives")))
+                self.assertEqual(total, expected)
+
     def test_border_belt_follows_azhar_armistice(self):
         actor = self.context("NAM", wars={"EFL", "AZH"}, ADISCORD_nam_resource_war_active=True)
         enemy = self.context("EFL", wars={"NAM"})
@@ -647,18 +681,76 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                 actor["ADISCORD_south_final_active"] = False
                 self.assertEqual(weight(), 0)
 
+    def test_southern_fronts_follow_members_defections_and_actual_supply(self):
+        profiles = ["ADISCORD_south_coalition_front", "ADISCORD_south_successor_front"]
+        for tag, side, successor in (("SHL", 1, False), ("NAM", 2, False), ("EFL", 2, True),
+                                     ("AZH", 2, True), ("KDR", 1, False), ("MZR", 2, False), ("SLF", 1, False)):
+            actor = self.context(tag, wars={"RHM"}, ADISCORD_south_final_active=True,
+                                 variables={"ADISCORD_south_side": side}, is_subject=tag == "MZR",
+                                 has_country_flag={"ADISCORD_south_north_leader"} if successor else set())
+            enemy = self.context("RHM", wars={tag}, variables={"ADISCORD_south_side": 3 - side})
+            for level in range(5):
+                actor["difficulty"] = level
+                for ratio in (0.79, 0.8, 1.3):
+                    enemy["army_ratios"][tag] = ratio
+                    for stock in (4, 5):
+                        actor["supply_vehicles"]["train"] = (stock, 10)
+                        orders = self.campaign_orders(profiles, actor, enemy)
+                        self.assertEqual(len(orders), 1 if level < 3 else 2)
+                        request = sum(self.objective_weight("ADISCORD_south_final_war_ai.txt", profile,
+                                                            actor, enemy, {}, kind="front_unit_request")
+                                      for profile in profiles)
+                        self.assertEqual(request, (100 if successor else 60) if level < 3 or stock >= 5 else 0)
+                        winner = orders[-1]
+                        push = level >= 3 and stock == 5 and ratio < 0.8
+                        expected = "careful" if successor else ("balanced" if level < 3 else "rush_weak")
+                        if level >= 3 and not push:
+                            self.assertNotIn("execute_order", winner)
+                            self.assertEqual((winner["execution_type"], winner["manual_attack"]), ("careful", "no"))
+                        else:
+                            self.assertEqual(winner["execution_type"], expected)
+                            self.assertEqual(winner["execute_order"], "yes")
+            enemy["variables"]["ADISCORD_south_side"] = side
+            self.assertFalse(self.campaign_orders(profiles, actor, enemy))
+            enemy["variables"].clear()
+            self.assertFalse(self.campaign_orders(profiles, actor, enemy))
+            enemy["variables"]["ADISCORD_south_side"] = 3 - side
+            actor["ADISCORD_south_final_active"] = False
+            self.assertFalse(self.campaign_orders(profiles, actor, enemy))
+
+    def test_transport_replacement_weights_follow_each_network_and_its_war(self):
+        for tag, opponent in (("EFL", "NAM"), ("AZH", "NAM"), ("NAM", "SLF"), ("SDR", "SHL")):
+            south = tag == "SDR"
+            actor = self.context(tag, 4, wars={opponent}, ADISCORD_south_final_active=south,
+                                 ADISCORD_nam_resource_war_active=not south,
+                                 variables={"ADISCORD_south_side": 2} if south else {})
+            actor["has_tech"].add("ADISCORD_tech_restored_rail_stock")
+            for vehicle, other in (("train", "truck"), ("truck", "train")):
+                name = PREFIX + f"southern_{vehicle}_replacements"
+                for stock, need, expected in ((0, 0, False), (0, 1, True), (5, 11, True), (6, 11, False), (5, 10, False)):
+                    actor["supply_vehicles"] = {vehicle: (stock, need), other: (0, 0)}
+                    self.assertEqual(self.enabled(name, actor), expected)
+                    self.assertFalse(self.enabled(PREFIX + f"southern_{other}_replacements", actor))
+                actor["supply_vehicles"][vehicle] = (0, 20)
+                for changes in (dict(difficulty=2), dict(ADISCORD_ai_rifle_replacement_emergency=True),
+                                dict(wars={"RUS"}),
+                                dict(ADISCORD_south_final_active=False, ADISCORD_nam_resource_war_active=False)):
+                    self.assertFalse(self.enabled(name, dict(actor, **changes)))
+
     def test_district_order_requires_equipped_army_on_hard_levels(self):
         path = ROOT / "common/decisions/ADISCORD_south_final_war_decisions.txt"
         order = named_block(path.read_text(encoding="utf-8"), "ADISCORD_south_district_order")
         weights = parse(named_block(order, "ai_will_do"))[0][2]
         gate, = [body for key, _, body in weights if key == "modifier"
-                 and any(name == "ADISCORD_ai_field_army_can_attack" for name, _, _ in body)]
+                 and any(name == "ADISCORD_difficulty_southern_offensive_ready" for name, _, _ in body)]
         self.assertIn(("factor", "=", "0"), gate)
         conditions = [node for node in gate if node[0] != "factor"]
         for difficulty in range(5):
             for ready in (True, False):
                 actor = self.context("SHL", difficulty, ADISCORD_ai_field_army_can_attack=ready)
                 self.assertEqual(self.evaluate(conditions, actor), difficulty >= 3 and not ready)
+                actor["supply_vehicles"]["truck"] = (4, 10)
+                self.assertEqual(self.evaluate(conditions, actor), difficulty >= 3)
 
     def test_all_campaign_orders_outrank_abyss_fallback(self):
         controls = [s for s in self.strategies(self.context(difficulty=4)) if s["type"] == "front_control"]
@@ -689,7 +781,7 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         orders = []
         for name in names:
             profile = self.campaigns[name]
-            if not self.evaluate(child(profile, "allowed"), actor):
+            if any(not self.evaluate(body, actor) for key, _, body in profile if key == "allowed"):
                 continue
             if not self.evaluate(child(profile, "enable"), actor):
                 continue
@@ -723,19 +815,23 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                 self.assertEqual(len(controls), 2 if name == "ADISCORD_west_wrk_hold_ivn" else 1, name)
                 continue
             adapted += 1
-            self.assertEqual(len(controls), 2 if base["execution_type"] == "careful" else 3, name)
             target_key = "state_trigger" if "state_trigger" in base else "country_trigger"
+            southern = controls[1][target_key][-1][0].startswith("ADISCORD_difficulty_southern_enemy_")
+            self.assertEqual(len(controls), 2 if base["execution_type"] == "careful" and not southern else 3, name)
             original_target = base.get(target_key, [("tag", "=", base.get("tag"))])
             for variant in controls[1:]:
                 target = variant[target_key]
                 self.assertEqual(target[:-1], original_target, name)
-                self.assertRegex(target[-1][0], r"^ADISCORD_difficulty_(enemy|state)_(allows_push|requires_caution|outmatches)$")
+                self.assertRegex(target[-1][0], r"^ADISCORD_difficulty_(southern_enemy|enemy|state)_(allows_push|requires_caution|outmatches)$")
                 self.assertEqual(target[-1][1:], ("=", "yes"))
                 offset = 2 if name.startswith("ADISCORD_vorkerland_auxiliary_of_") else 1
                 self.assertEqual(int(variant["priority"]), int(base["priority"]) + offset, name)
                 self.assertEqual(variant["ratio"], base["ratio"], name)
                 self.assertEqual(variant["ordertype"], base["ordertype"], name)
-                self.assertEqual(variant["execute_order"], base["execute_order"], name)
+                if southern and target[-1][0].endswith("requires_caution"):
+                    self.assertNotIn("execute_order", variant, name)
+                else:
+                    self.assertEqual(variant["execute_order"], base["execute_order"], name)
         self.assertGreaterEqual(adapted, 163)
 
     def test_peer_claimant_fronts_stay_balanced_through_shortages(self):
@@ -765,12 +861,13 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
         enemy["army_ratios"]["WKR"] = 2
         self.assertEqual(self.campaign_orders([name], actor, enemy)[-1]["execution_type"], "balanced")
 
-    def test_nam_scenario_changes_tactics_only_on_abyss(self):
+    def test_eflor_attacks_weak_opponents_only_with_a_ready_army_on_hard_levels(self):
         name = "ADISCORD_nam_resource_war_eflor_offensive"
         for difficulty, ratio, ready, expected in (
-            (3, 0.5, True, "rush"), (3, 2, False, "rush"),
+            (2, 0.5, True, "rush"), (2, 2, False, "rush"),
+            (3, 0.5, True, "rush_weak"), (3, 2, False, "careful"),
             (4, 0.5, True, "rush_weak"), (4, 2, True, "careful"),
-            (4, 0.5, False, "rush"), (4, 1, False, "careful"), (4, 1, True, "rush"),
+            (4, 0.5, False, "careful"), (4, 1, False, "careful"), (4, 1, True, "careful"),
         ):
             actor = self.context("EFL", difficulty, wars={"NAM"}, ADISCORD_nam_resource_war_active=True,
                                  ADISCORD_ai_field_army_can_attack=ready)
@@ -921,14 +1018,17 @@ class DifficultyAIBehaviorTests(unittest.TestCase):
                     peer = name in PEER_CAUTION_PROFILES
                     caution = ratio > 1.25 or (not peer and not ready and ratio >= 0.8)
                     push = ready and ratio < 0.8
-                    if difficulty < 4 or not (caution or push):
+                    southern = target[-1][0].startswith("ADISCORD_difficulty_southern_enemy_")
+                    if southern:
+                        caution = not push
+                    if difficulty < (3 if southern else 4) or not (caution or push):
                         self.assertIs(winner, base)
                     elif caution:
                         self.assertEqual((winner["execution_type"], winner["manual_attack"]), ("careful", "no"))
                     else:
                         expected = "careful" if base["execution_type"] == "careful" else "rush_weak"
                         self.assertEqual((winner["execution_type"], winner["manual_attack"]), (expected, "yes"))
-        self.assertEqual(checked, 187)
+        self.assertEqual(checked, 182)
 
 
 if __name__ == "__main__":

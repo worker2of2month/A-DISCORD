@@ -386,13 +386,13 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
     def test_svetlogorsk_is_a_compact_internal_nam_state(self) -> None:
         svetlogorsk = NAM_SVETLOGORSK_STATE_ID
-        self.assertEqual(self.states[svetlogorsk], NAM_SVETLOGORSK_PROVINCES)
+        self.assertEqual(self.states[svetlogorsk], set(builder.with_country_districts(NAM_SVETLOGORSK_PROVINCES)))
         residual = NAM_RESIDUAL_CITY_STATE_ID
-        self.assertEqual(self.states[residual], NAM_RESIDUAL_CITY_PROVINCES)
+        self.assertEqual(self.states[residual], set(builder.with_country_districts(NAM_RESIDUAL_CITY_PROVINCES)))
         dryriver = NAM_DRYRIVER_STATE_ID
         self.assertEqual(self.states[dryriver], set(builder.NAM_DRYRIVER_PROVINCES))
         east_dryriver = NAM_EAST_DRYRIVER_STATE_ID
-        self.assertEqual(self.states[east_dryriver], NAM_EAST_DRYRIVER_PROVINCES)
+        self.assertEqual(self.states[east_dryriver], set(builder.with_country_districts(NAM_EAST_DRYRIVER_PROVINCES)))
         self.assertEqual(
             self.states[67]
             | self.states[svetlogorsk]
@@ -400,7 +400,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             | self.states[dryriver]
             | self.states[east_dryriver]
             | self.states[700],
-            NAM_ORIGINAL_MAINLAND_PROVINCES | NAM_SOUTHERN_SPLIT_PROVINCES | {16716, 16721, 16892},
+            set(builder.with_country_districts(NAM_ORIGINAL_MAINLAND_PROVINCES | NAM_SOUTHERN_SPLIT_PROVINCES | {16716, 16721, 16892})),
         )
         nam_parts = (
             self.states[67],

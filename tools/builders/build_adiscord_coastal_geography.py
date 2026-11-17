@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from bisect import bisect_right
 from collections import defaultdict, deque
 from io import BytesIO
 from math import atan2
@@ -19,7 +20,7 @@ from scipy.ndimage import distance_transform_edt, find_objects, gaussian_filter
 
 from tools.builders.build_adiscord_ivn_geography import native_river_bmp, normal_from_height
 from tools.builders.build_adiscord_new_states import (
-    NEW_CITY_APPROACHES, SOUTHERN_CITIES, SOUTHERN_CITY_APPROACHES,
+    COUNTRY_DISTRICTS, DISTRICT_CHILDREN, NEW_CITY_APPROACHES, SOUTHERN_CITIES, SOUTHERN_CITY_APPROACHES,
     SOUTHERN_CITY_POINTS, SOUTHERN_INTERIOR_DISTRICTS, SOUTHERN_RURAL_SPLITS, southern_city_rail_route,
 )
 from tools.lib.city_terrains import CITY_TERRAINS, NATIONAL_CITY_TERRAIN
@@ -108,6 +109,7 @@ RURAL_SECTORS = tuple(
     for city in SOUTHERN_CITIES for sector in city.get("sectors", ())
 )
 SOUTHERN_GEOMETRY = (*SOUTHERN_CITIES, *RURAL_SECTORS, *SOUTHERN_RURAL_SPLITS, *NEW_CITY_APPROACHES, *SOUTHERN_INTERIOR_DISTRICTS)
+COUNTRY_DISTRICT_IDS = set(DISTRICT_CHILDREN) | {entry["province"] for entry in COUNTRY_DISTRICTS}
 RURAL_SPLIT_PARENTS = {entry["province"]: entry["parent"] for entry in (*SOUTHERN_RURAL_SPLITS, *SOUTHERN_INTERIOR_DISTRICTS)}
 # Resolve province corners, short contacts and frontage loops without changing state membership.
 # Coordinates use the top-left raster origin.
@@ -536,12 +538,12 @@ def complete_native_anchors(
     grid: np.ndarray,
     heights: np.ndarray,
     neighbours: list[int],
+    box: tuple[slice, slice],
 ) -> dict[int, list[str]]:
     """Keep valid rows of a native slot set and add the slots its borders now need."""
-    top, bottom = np.nonzero((grid == province).any(axis=1))[0][[0, -1]]
-    left, right = np.nonzero((grid == province).any(axis=0))[0][[0, -1]]
-    origin_y, origin_x = max(top - 1, 0), max(left - 1, 0)
-    window = grid[origin_y:bottom + 2, origin_x:right + 2]
+    origin_y = max(box[0].start - 1, 0)
+    origin_x = max(box[1].start - 1, 0)
+    window = grid[origin_y:box[0].stop + 1, origin_x:box[1].stop + 1]
     inside = window == province
     points = np.argwhere(inside) + (origin_y, origin_x)
     map_height = heights.shape[0]
@@ -610,6 +612,7 @@ def unit_anchors(
     for row in rows:
         slots[int(row[0])][int(row[1])] = row
     touched = set(NUDGE_SPLIT_PARENTS) | NUDGE_SPLIT_DONORS | PROVINCE_REPAIR_PROVINCES | HAND_PAINTED_PROVINCES
+    touched.update(COUNTRY_DISTRICT_IDS)
     touched.update(APPROACH_PROVINCES)
     touched.update(RURAL_SPLIT_PARENTS)
     touched.update(RURAL_SPLIT_PARENTS.values())
@@ -627,6 +630,7 @@ def unit_anchors(
         if slots[province] and not any(anchor_inside(province, row) for row in slots[province].values())
     }
     rebuilt = {}
+    boxes = find_objects(grid)
     for province in sorted(scope):
         kind = kinds.get(province)
         if kind not in ("land", "sea"):
@@ -635,12 +639,12 @@ def unit_anchors(
             continue
         existing = {} if province in relocated else slots[province]
         rebuilt[province] = complete_native_anchors(
-            province, kind, existing, grid, heights, sorted(neighbours[province])
+            province, kind, existing, grid, heights, sorted(neighbours[province]), boxes[province - 1]
         )
 
     def normalise(row: list[str]) -> list[str]:
         province = int(row[0])
-        if province in DISPLACED_PROVINCES or province in ANCHOR_REFERENCES:
+        if province in DISPLACED_PROVINCES or province in ANCHOR_REFERENCES or province in COUNTRY_DISTRICT_IDS:
             x = float(row[2])
             y = map_height - 1 - float(row[4])
             # Half-pixel anchors must resolve to the province under both
@@ -658,11 +662,24 @@ def unit_anchors(
     for row in rows:
         if int(row[0]) not in rebuilt:
             blocks[int(row[1])].append(normalise(row))
+    additions = defaultdict(list)
     for province, anchors in rebuilt.items():
         for slot, row in anchors.items():
-            block = blocks[slot]
-            index = next((i for i, other in enumerate(block) if int(other[0]) > province), len(block))
-            block.insert(index, normalise(list(row)))
+            additions[slot].append((province, normalise(list(row))))
+    for slot, rows_to_add in additions.items():
+        block = blocks[slot]
+        # Nudge preserves a few out-of-order rows. Insert before the first
+        # larger ID without disturbing their original order.
+        prefix = np.maximum.accumulate([int(row[0]) for row in block]).tolist() if block else []
+        merged = []
+        start = 0
+        for province, row in rows_to_add:
+            index = bisect_right(prefix, province)
+            merged.extend(block[start:index])
+            merged.append(row)
+            start = index
+        merged.extend(block[start:])
+        blocks[slot] = merged
     newline = "\r\n" if b"\r\n" in original else "\n"
     ordered = [";".join(row) for slot in sorted(blocks) for row in blocks[slot]]
     return (newline.join(ordered) + newline).encode("utf-8")
@@ -740,6 +757,38 @@ def repair_surface_references(grid: np.ndarray) -> dict[tuple[int, int], tuple[i
     return references
 
 
+def province_border_count(grid: np.ndarray) -> int:
+    """Count distinct contact curves, including coastlines and the horizontal seam."""
+    from scipy.sparse import coo_matrix
+    from scipy.sparse.csgraph import connected_components
+
+    width = grid.shape[1]
+    starts = []
+    ends = []
+    for vertical in (False, True):
+        if vertical:
+            first, second = grid, np.roll(grid, 1, axis=1)
+        else:
+            first, second = grid[:-1], grid[1:]
+        y, x = np.nonzero(first != second)
+        low = np.minimum(first[y, x], second[y, x]).astype(np.int64)
+        high = np.maximum(first[y, x], second[y, x]).astype(np.int64)
+        # Give vertices of each unordered pair a separate namespace. Two
+        # disjoint contacts between the same provinces then count separately.
+        pair = ((low << 16) | high) << 32
+        vertex = (y if vertical else y + 1) * width
+        starts.append(pair | (vertex + x))
+        ends.append(pair | (vertex + width + x if vertical else vertex + (x + 1) % width))
+    nodes, inverse = np.unique(np.concatenate([*starts, *ends]), return_inverse=True)
+    first, second = np.split(inverse, 2)
+    graph = coo_matrix((np.ones(len(first), dtype=np.uint8), (first, second)), shape=(len(nodes), len(nodes)))
+    count = connected_components(graph, directed=False, return_labels=False)
+    # At a diagonal pixel contact distinct curves can touch at one vertex.
+    # Counting every extra pair of arms is conservative at these junctions.
+    degrees = np.bincount(inverse, minlength=len(nodes))
+    return int(count + np.maximum(degrees - 2, 0).sum())
+
+
 def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = None) -> dict[Path, bytes]:
     def read(path: Path) -> bytes:
         if source_overrides and path in source_overrides:
@@ -751,7 +800,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     definition_bytes = definition_path.read_bytes()
     definition_lines = definition_bytes.decode("utf-8-sig").splitlines()
     entries_by_id = {int(line.split(";")[0]): index for index, line in enumerate(definition_lines)}
-    for entry in SOUTHERN_GEOMETRY:
+    for entry in (*SOUTHERN_GEOMETRY, *COUNTRY_DISTRICTS):
         parent_index = entries_by_id[entry["parent"]]
         fields = definition_lines[parent_index].split(";")
         if "parent_terrain" in entry:
@@ -777,6 +826,20 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
                 sea_colors.append((red << 16) | (green << 8) | blue)
     with Image.open(root / "map/provinces.bmp") as source:
         provinces = np.array(source.convert("RGB"))
+    # Surface and city masks belong to the original geography. Restore district
+    # pixels locally before painting that layer, then apply rural boundaries last.
+    previous = province_grid(provinces, {e["province"]: definitions[e["province"]] for e in COUNTRY_DISTRICTS})
+    restore = previous != 0
+    colours = np.zeros((max(definitions) + 1, 3), dtype=np.uint8)
+    for entry in COUNTRY_DISTRICTS:
+        colours[entry["province"]] = definitions[entry["parent"]]
+    provinces[restore] = colours[previous[restore]]
+    country_masks = []
+    for entry in COUNTRY_DISTRICTS:
+        x, y = entry["origin"]
+        mask = np.array([list(row) for row in entry["mask"]]) == "1"
+        window = np.s_[y:y + mask.shape[0], x:x + mask.shape[1]]
+        country_masks.append((entry, mask, window))
     for entry in (*SOUTHERN_GEOMETRY, *(area for area in SOUTHERN_CITY_APPROACHES if "rgb" not in area)):
         left, top = entry["origin"]
         for y, row in enumerate(entry["mask"], top):
@@ -812,6 +875,22 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     with Image.open(root / "map/heightmap.bmp") as source:
         mountain_heightmap = mountain_heights(mountains, np.array(source))
     outputs = {}
+    surface_grid = grid
+    grid = surface_grid.copy()
+    for entry, mask, window in country_masks:
+        if not np.all(grid[window][mask] == entry["parent"]):
+            raise ValueError(f"rural district {entry['province']}: parent footprint changed")
+        grid[window][mask] = entry["province"]
+        provinces[window][mask] = definitions[entry["province"]]
+    border_count = province_border_count(grid)
+    if border_count > 65_536:
+        raise ValueError(f"province borders exceed the display limit: {border_count:,} / 65,536")
+    boxes = find_objects(grid)
+    for province in COUNTRY_DISTRICT_IDS:
+        box = boxes[province - 1]
+        if box is None:
+            raise ValueError(f"province {province}: empty rural district")
+        points[province] = np.argwhere(grid[box] == province) + (box[0].start, box[1].start)
     original_provinces = (root / "map/provinces.bmp").read_bytes()
     with Image.open(BytesIO(original_provinces)) as source:
         if np.array_equal(np.asarray(source), provinces):
@@ -897,7 +976,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
                     pixels[cities & ~shore] = 13
                     pixels[cities & shore] = URBAN_FALLBACK_PALETTE
                     for province, kind in relief_terrain.items():
-                        province_mask = grid == province
+                        province_mask = surface_grid == province
                         pixels[province_mask] = {"desert": 3, "hills": 2, "mountain": 18}[kind]
                         if kind == "mountain":
                             pixels[province_mask & (mountain_heightmap >= 180)] = 11
@@ -944,7 +1023,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         (root / stack_path).read_bytes(), points, heights, grid, kinds
     )
     railways = Path("map/railways.txt")
-    outputs[railways] = railway_plan((root / railways).read_bytes(), provinces, definitions)
+    outputs[railways] = railway_plan(read(railways), provinces, definitions)
     return outputs
 
 

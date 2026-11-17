@@ -1,64 +1,27 @@
-# War for the South: champions commit their armies against each other.
-
-ADISCORD_south_shl_front_nam = {
-	allowed = { tag = SHL }
+# Regional members open the land routes between the champions after choosing sides.
+ADISCORD_south_coalition_front = {
 	enable = {
+		is_ai = yes
+		has_war = yes
+		has_capitulated = no
 		ADISCORD_south_final_active = yes
-		NAM = { has_country_flag = ADISCORD_south_north_leader }
-		has_war_with = NAM
+		has_variable = ADISCORD_south_side
+		ADISCORD_south_successor_leads_front = no
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
 	ai_strategy = {
-		type = front_control
-		tag = NAM
-		ratio = 0.01
-		priority = 1500
-		ordertype = front
-		execution_type = rush
-		execute_order = yes
-		manual_attack = yes
+		type = front_unit_request
+		country_trigger = {
+			ADISCORD_south_enemy_front_country = yes
+			FROM = { ADISCORD_difficulty_southern_can_concentrate = yes }
+		}
+		value = 60
 	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
-			tag = NAM
-			ADISCORD_difficulty_enemy_requires_caution = yes
+			ADISCORD_south_enemy_front_country = yes
 		}
-		ratio = 0.01
-		priority = 1501
-		ordertype = front
-		execution_type = careful
-		execute_order = yes
-		manual_attack = no
-	}
-	ai_strategy = {
-		type = front_control
-		country_trigger = {
-			tag = NAM
-			ADISCORD_difficulty_enemy_allows_push = yes
-		}
-		ratio = 0.01
-		priority = 1501
-		ordertype = front
-		execution_type = rush_weak
-		execute_order = yes
-		manual_attack = yes
-	}
-}
-
-ADISCORD_south_nam_front_shl = {
-	allowed = { tag = NAM }
-	enable = {
-		ADISCORD_south_final_active = yes
-		has_country_flag = ADISCORD_south_north_leader
-		has_war_with = SHL
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
-	ai_strategy = {
-		type = front_control
-		tag = SHL
 		ratio = 0.01
 		priority = 1500
 		ordertype = front
@@ -69,21 +32,20 @@ ADISCORD_south_nam_front_shl = {
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
-			tag = SHL
-			ADISCORD_difficulty_enemy_requires_caution = yes
+			ADISCORD_south_enemy_front_country = yes
+			ADISCORD_difficulty_southern_enemy_requires_caution = yes
 		}
 		ratio = 0.01
 		priority = 1501
 		ordertype = front
 		execution_type = careful
-		execute_order = yes
 		manual_attack = no
 	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
-			tag = SHL
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_south_enemy_front_country = yes
+			ADISCORD_difficulty_southern_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
@@ -94,65 +56,29 @@ ADISCORD_south_nam_front_shl = {
 	}
 }
 
-ADISCORD_south_shl_front_efl = {
-	allowed = { tag = SHL }
+ADISCORD_south_successor_front = {
 	enable = {
+		is_ai = yes
+		has_war = yes
+		has_capitulated = no
 		ADISCORD_south_final_active = yes
-		EFL = { has_country_flag = ADISCORD_south_north_leader }
-		has_war_with = EFL
+		has_variable = ADISCORD_south_side
+		ADISCORD_south_successor_leads_front = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = EFL value = 100 }
 	ai_strategy = {
-		type = front_control
-		tag = EFL
-		ratio = 0.01
-		priority = 1500
-		ordertype = front
-		execution_type = rush
-		execute_order = yes
-		manual_attack = yes
+		type = front_unit_request
+		country_trigger = {
+			ADISCORD_south_enemy_front_country = yes
+			FROM = { ADISCORD_difficulty_southern_can_concentrate = yes }
+		}
+		value = 100
 	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
-			tag = EFL
-			ADISCORD_difficulty_enemy_requires_caution = yes
+			ADISCORD_south_enemy_front_country = yes
 		}
-		ratio = 0.01
-		priority = 1501
-		ordertype = front
-		execution_type = careful
-		execute_order = yes
-		manual_attack = no
-	}
-	ai_strategy = {
-		type = front_control
-		country_trigger = {
-			tag = EFL
-			ADISCORD_difficulty_enemy_allows_push = yes
-		}
-		ratio = 0.01
-		priority = 1501
-		ordertype = front
-		execution_type = rush_weak
-		execute_order = yes
-		manual_attack = yes
-	}
-}
-
-ADISCORD_south_efl_front_shl = {
-	allowed = { tag = EFL }
-	enable = {
-		ADISCORD_south_final_active = yes
-		has_country_flag = ADISCORD_south_north_leader
-		has_war_with = SHL
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
-	ai_strategy = {
-		type = front_control
-		tag = SHL
 		ratio = 0.01
 		priority = 1500
 		ordertype = front
@@ -163,141 +89,25 @@ ADISCORD_south_efl_front_shl = {
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
-			tag = SHL
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_south_enemy_front_country = yes
+			ADISCORD_difficulty_southern_enemy_requires_caution = yes
 		}
 		ratio = 0.01
 		priority = 1501
 		ordertype = front
 		execution_type = careful
-		execute_order = yes
-		manual_attack = yes
-	}
-}
-
-ADISCORD_south_shl_front_azh = {
-	allowed = { tag = SHL }
-	enable = {
-		ADISCORD_south_final_active = yes
-		AZH = { has_country_flag = ADISCORD_south_north_leader }
-		has_war_with = AZH
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = AZH value = 100 }
-	ai_strategy = {
-		type = front_control
-		tag = AZH
-		ratio = 0.01
-		priority = 1500
-		ordertype = front
-		execution_type = rush
-		execute_order = yes
-		manual_attack = yes
-	}
-	ai_strategy = {
-		type = front_control
-		country_trigger = {
-			tag = AZH
-			ADISCORD_difficulty_enemy_requires_caution = yes
-		}
-		ratio = 0.01
-		priority = 1501
-		ordertype = front
-		execution_type = careful
-		execute_order = yes
 		manual_attack = no
 	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
-			tag = AZH
-			ADISCORD_difficulty_enemy_allows_push = yes
-		}
-		ratio = 0.01
-		priority = 1501
-		ordertype = front
-		execution_type = rush_weak
-		execute_order = yes
-		manual_attack = yes
-	}
-}
-
-ADISCORD_south_azh_front_shl = {
-	allowed = { tag = AZH }
-	enable = {
-		ADISCORD_south_final_active = yes
-		has_country_flag = ADISCORD_south_north_leader
-		has_war_with = SHL
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
-	ai_strategy = {
-		type = front_control
-		tag = SHL
-		ratio = 0.01
-		priority = 1500
-		ordertype = front
-		execution_type = careful
-		execute_order = yes
-		manual_attack = no
-	}
-	ai_strategy = {
-		type = front_control
-		country_trigger = {
-			tag = SHL
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_south_enemy_front_country = yes
+			ADISCORD_difficulty_southern_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
 		ordertype = front
 		execution_type = careful
-		execute_order = yes
-		manual_attack = yes
-	}
-}
-
-# The Svetlogorsk uprising pushes from the inside of the oil belt.
-ADISCORD_south_uprising_front = {
-	allowed = { tag = SLF }
-	enable = {
-		ADISCORD_south_final_active = yes
-		has_war_with = NAM
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = {
-		type = front_control
-		tag = NAM
-		ratio = 0.01
-		priority = 1500
-		ordertype = front
-		execution_type = rush
-		execute_order = yes
-		manual_attack = yes
-	}
-	ai_strategy = {
-		type = front_control
-		country_trigger = {
-			tag = NAM
-			ADISCORD_difficulty_enemy_requires_caution = yes
-		}
-		ratio = 0.01
-		priority = 1501
-		ordertype = front
-		execution_type = careful
-		execute_order = yes
-		manual_attack = no
-	}
-	ai_strategy = {
-		type = front_control
-		country_trigger = {
-			tag = NAM
-			ADISCORD_difficulty_enemy_allows_push = yes
-		}
-		ratio = 0.01
-		priority = 1501
-		ordertype = front
-		execution_type = rush_weak
 		execute_order = yes
 		manual_attack = yes
 	}

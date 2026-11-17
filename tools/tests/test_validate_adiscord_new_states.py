@@ -412,10 +412,10 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
             73: ((16703, 1),),
             144: ((16694, 1),),
             145: ((16691, 3),),
-            194: ((16697, 3),),
             199: ((16690, 3), (16696, 1), (16704, 1)),
         }
         self.assertEqual(builder.SETTLEMENT_CLUSTER_VICTORY_POINTS, expected)
+        self.assertIn((16697, 3), VORKERLAND_THEATRE_VICTORY_POINTS[325])
         self.assertEqual(builder.SETTLEMENT_CLUSTER_CENTRES, {329: (16524, 1)})
         localisation = (
             builder.ROOT / "localisation/russian/victory_points_l_russian.yml"
@@ -892,9 +892,9 @@ class DamirTransferTests(unittest.TestCase):
         self.assertIn("owner = EFL", source)
         self.assertIn("add_core_of = EFL", source)
         self.assertNotIn("KDR", source)
-        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16722\s+15\s*\}")
-        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16743\s+1\s*\}")
-        self.assertEqual(builder.REGIONAL_SETTLEMENTS[240], ((16743, 1, "Нижний Дамир"), (3483, 2, "Эсман")))
+        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16722\s+25\s*\}")
+        self.assertRegex(source, r"victory_points\s*=\s*\{\s*16743\s+10\s*\}")
+        self.assertEqual(builder.REGIONAL_SETTLEMENTS[240], ((16743, 10, "Нижний Дамир"), (3483, 2, "Эсман")))
         for path, expected in builder.state_metadata_plan({240}).items():
             self.assertEqual(path.read_bytes(), expected, str(path))
 

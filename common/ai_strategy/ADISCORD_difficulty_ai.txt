@@ -1,3 +1,34 @@
+# Both southern campaigns use the network's vehicle demand to direct replacement production.
+ADISCORD_difficulty_southern_train_replacements = {
+	enable = {
+		ADISCORD_difficulty_southern_wartime_supply = yes
+		has_tech = ADISCORD_tech_restored_rail_stock
+		ADISCORD_ai_supply_trains_short = yes
+		ADISCORD_ai_rifle_replacement_emergency = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = train_equipment
+		value = 35
+	}
+}
+
+ADISCORD_difficulty_southern_truck_replacements = {
+	enable = {
+		ADISCORD_difficulty_southern_wartime_supply = yes
+		has_tech = ADISCORD_tech_restored_truck_fleets
+		ADISCORD_ai_supply_trucks_short = yes
+		ADISCORD_ai_rifle_replacement_emergency = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = motorized_equipment
+		value = 35
+	}
+}
+
 # Native additive priorities. Difficulty 2 retains the campaign's baseline policies.
 # Country-specific front orders retain precedence over the tactical fallback.
 ADISCORD_difficulty_respite_recruitment = {

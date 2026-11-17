@@ -65,7 +65,7 @@ ADISCORD_south_final_war_category = {
 			modifier = {
 				factor = 0
 				difficulty > 2
-				ADISCORD_ai_field_army_can_attack = no
+				ADISCORD_difficulty_southern_offensive_ready = no
 			}
 			modifier = {
 				factor = 0

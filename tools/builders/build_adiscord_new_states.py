@@ -45,6 +45,22 @@ SOUTHERN_INTERIOR_SPLITS = SOUTHERN_GEOGRAPHY["interior_splits"]
 SOUTHERN_RURAL_SPLITS = (*SOUTHERN_GEOGRAPHY["rural_splits"], *SOUTHERN_INTERIOR_SPLITS)
 
 
+COUNTRY_DISTRICTS = SOUTHERN_GEOGRAPHY["country_districts"]
+COUNTRY_RAILWAYS = SOUTHERN_GEOGRAPHY["country_railways"]
+COUNTRY_RAIL_ROUTES = {
+    tuple(original): tuple(route) for original, route in COUNTRY_RAILWAYS["routes"]
+}
+DISTRICT_CHILDREN: dict[int, list[int]] = {}
+for district in COUNTRY_DISTRICTS:
+    DISTRICT_CHILDREN.setdefault(district["parent"], []).append(district["province"])
+
+
+def with_country_districts(provinces: Iterable[int]) -> tuple[int, ...]:
+    members = set(provinces)
+    children = {child for province in members for child in DISTRICT_CHILDREN.get(province, ())}
+    return tuple(sorted(members | children))
+
+
 CITY_RAILWAYS = SOUTHERN_GEOGRAPHY["city_railways"]
 CITY_RAIL_PASSAGES = {}
 for passage in CITY_RAILWAYS["passages"]:
@@ -61,21 +77,22 @@ def southern_city_rail_route(route: tuple[int, ...]) -> tuple[int, ...]:
     for first, second in zip(route, route[1:]):
         result.extend(CITY_RAIL_PASSAGES.get((first, second), ()))
         result.append(second)
-    return tuple(result)
+    approach_route = tuple(result)
+    return COUNTRY_RAIL_ROUTES.get(approach_route, approach_route)
 
 
 def with_rural_splits(provinces: Iterable[int]) -> tuple[int, ...]:
     """Keep the two halves together when a parent province enters a state manifest."""
     members = set(provinces)
     children = {split["province"] for split in (*SOUTHERN_RURAL_SPLITS, *NEW_CITY_APPROACHES, *SOUTHERN_INTERIOR_DISTRICTS) if split["parent"] in members}
-    return tuple(sorted(members | children))
+    return with_country_districts(members | children)
 
 
 NAM_SVETLOGORSK_STATE_ID = 688
-NAM_SVETLOGORSK_PROVINCES = (
+NAM_SVETLOGORSK_PROVINCES = with_country_districts((
     689, 1710, 3127, 4025, 8635, 9211, 10967, 16721,
     16864, 16865, 16866, 16867, 16869, 16870, 16875,
-)
+))
 NAM_RESIDUAL_CITY_STATE_ID = 689
 NAM_RESIDUAL_CITY_PROVINCES = with_rural_splits((176, 2038, 2231, 2299, 7618, 7639, 8358, 16873, 16874, 16878))
 NAM_DRYRIVER_STATE_ID = 690
@@ -109,12 +126,12 @@ NAM_MAINLAND_AFTER_CITY_SPLIT_PROVINCES = tuple(
         - set(NAM_RESIDUAL_CITY_PROVINCES)
     )
 )
-NAM_RESOURCE_BASIN_PROVINCES = (
+NAM_RESOURCE_BASIN_PROVINCES = with_country_districts((
     334, 4287, 4912, 6099, 7324, 8351, 8445, 8888, 9116, 10909, 11069, 11696, 11942, 12668,
     16879, 16880, 16890,
-)
-NAM_ORIGINAL_DRYRIVER_PROVINCES = (461, 1015, 2935, 4321, 6961, 8058, 9016, 9641, 11926, 12480, 12982, 16885, 16887)
-NAM_EAST_DRYRIVER_PROVINCES = (461, 6961)
+))
+NAM_ORIGINAL_DRYRIVER_PROVINCES = with_country_districts((461, 1015, 2935, 4321, 6961, 8058, 9016, 9641, 11926, 12480, 12982, 16885, 16887))
+NAM_EAST_DRYRIVER_PROVINCES = with_country_districts((461, 6961))
 NAM_DRYRIVER_PROVINCES = tuple(
     sorted(set(NAM_ORIGINAL_DRYRIVER_PROVINCES) - set(NAM_EAST_DRYRIVER_PROVINCES))
 )
@@ -162,11 +179,11 @@ AZH_ORIGINAL_PROVINCES = tuple(sorted((*AZH_ORIGINAL_CORE_PROVINCES, *AZH_BLACK_
 # that border, so a NAM victory can take a belt of land without gutting EFL or
 # AZH. Moren also keeps the Middle Loren city adjacent to NAM territory.
 EFL_MOREN_STATE_ID = 720
-EFL_MOREN_PROVINCES = (8057, 9390, 9609, 9694, 10113)
+EFL_MOREN_PROVINCES = with_country_districts((8057, 9390, 9609, 9694, 10113))
 EFL_LOREN_BORDERLAND_STATE_ID = 721
-EFL_LOREN_BORDERLAND_PROVINCES = (2627, 7456, 7908, 10167)
+EFL_LOREN_BORDERLAND_PROVINCES = with_country_districts((2627, 7456, 7908, 10167))
 AZH_SEABOARD_STATE_ID = 722
-AZH_SEABOARD_PROVINCES = (2338, 2443, 8958)
+AZH_SEABOARD_PROVINCES = with_country_districts((2338, 2443, 8958))
 EFL_MIDDLE_LOREN_PROVINCES = tuple(
     sorted(set(EFL_ORIGINAL_MIDDLE_LOREN_PROVINCES) - set(EFL_MOREN_PROVINCES))
 )
@@ -200,26 +217,26 @@ SHL_SPLIT_FILENAMES = {
     SHL_BAYRAT_MINES_STATE_ID: "732-Bayrat-Mines.txt",
     SHL_VEYRAN_BORDER_STATE_ID: "733-Veyran-Border.txt",
 }
-SHL_ORIGINAL_SAFIR_PROVINCES = (
+SHL_ORIGINAL_SAFIR_PROVINCES = with_country_districts((
     834, 960, 2675, 3234, 4883, 5433, 5497, 5929, 6008, 6082, 6137, 7739,
     8034, 8976, 9095, 10490, 12352, 16707, 16708, 16738, 16790, 16791, 16792,
-)
-SHL_SAFIR_COAST_PROVINCES = (3234, 5433, 6008, 8034, 9095, 16707, 16708)
-SHL_ORIGINAL_LORAN_PROVINCES = (
+))
+SHL_SAFIR_COAST_PROVINCES = with_country_districts((3234, 5433, 6008, 8034, 9095, 16707, 16708))
+SHL_ORIGINAL_LORAN_PROVINCES = with_country_districts((
     1149, 2030, 2412, 2869, 3416, 4995, 9568, 9742, 9976, 10107, 10927, 11295,
     12500, 16794, 16795,
-)
-SHL_LORAN_SANDS_PROVINCES = (2030, 3416, 9568, 9976, 11295)
-SHL_ORIGINAL_BAYRAT_PROVINCES = (
+))
+SHL_LORAN_SANDS_PROVINCES = with_country_districts((2030, 3416, 9568, 9976, 11295))
+SHL_ORIGINAL_BAYRAT_PROVINCES = with_country_districts((
     946, 2056, 2694, 4247, 4537, 5042, 5634, 5805, 6737, 7825, 8197, 9890,
     11773, 12681,
-)
-SHL_BAYRAT_MINES_PROVINCES = (2694, 4247, 4537, 5042, 9890)
+))
+SHL_BAYRAT_MINES_PROVINCES = with_country_districts((2694, 4247, 4537, 5042, 9890))
 SHL_ORIGINAL_VEYRAN_PROVINCES = with_rural_splits((
     931, 1114, 2242, 4301, 4495, 5801, 6126, 7994, 8582, 10148, 10937, 11938,
     12321, 16898,
 ))
-SHL_VEYRAN_BORDER_PROVINCES = (2242, 4301, 4495, 5801, 6126)
+SHL_VEYRAN_BORDER_PROVINCES = with_country_districts((2242, 4301, 4495, 5801, 6126))
 # parent -> (child, original parent provinces, provinces carved for the child)
 SHL_SPLIT_FAMILIES = {
     288: (SHL_SAFIR_COAST_STATE_ID, SHL_ORIGINAL_SAFIR_PROVINCES, SHL_SAFIR_COAST_PROVINCES),
@@ -350,6 +367,11 @@ SOUTHERN_CAPITAL_DISTRICTS = {
     283: (706, 75000, 37000, (1534, 1555, 4186, 4804, 5921, 6571, 6685, 9184, 9302, 10206, 10920, 10998, 12033)),
     294: (707, 85000, 43000, (2407, 3042, 3284, 4949, 6218, 7306, 8216, 9056, 9294, 9508, 9600, 10264, 12903, 16793, 16899)),
     300: (708, 79000, 39000, (1169, 3222, 4782, 5595, 6011, 7073, 8056, 9672, 9950, 11478, 12043, 12583)),
+}
+
+SOUTHERN_CAPITAL_DISTRICTS = {
+    capital: (district, city_pop, rural_pop, with_country_districts(provinces))
+    for capital, (district, city_pop, rural_pop, provinces) in SOUTHERN_CAPITAL_DISTRICTS.items()
 }
 
 # Province membership is shared by metadata and bounded regeneration.
@@ -643,7 +665,6 @@ SETTLEMENT_CLUSTER_VICTORY_POINTS = {
     73: ((16703, 1),),
     144: ((16694, 1),),
     145: ((16691, 3),),
-    194: ((16697, 3),),
     199: ((16690, 3), (16696, 1), (16704, 1)),
 }
 
@@ -652,7 +673,6 @@ SETTLEMENT_CLUSTER_VICTORY_POINT_NAMES = {
     16691: "Тихоречье",
     16694: "Южная Долина",
     16696: "Каменный Лог",
-    16697: "Междуречье",
     16703: "Тихий Брод",
     16704: "Сухой Ключ",
 }
@@ -3168,7 +3188,7 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
         if existing and existing != (path,):
             raise RuntimeError(f"state {state_id}: ID occupied by another state")
         points = COASTAL_CITY_POINTS[state_id]
-        provinces = " ".join(str(province) for province, _value in points)
+        provinces = " ".join(map(str, with_country_districts(province for province, _value in points)))
         lines = [
             "# Generated by tools/build_adiscord_new_states.py",
             "state = {",
@@ -3358,6 +3378,39 @@ def update_val_resources(apply_changes: bool = False) -> int:
     return int(bool(changed) and not apply_changes)
 
 
+def update_country_districts(apply: bool) -> int:
+    """Regenerate affected province lists without changing other state history."""
+    changed = []
+    by_state: dict[int, set[int]] = {}
+    for district in COUNTRY_DISTRICTS:
+        by_state.setdefault(district["state"], set()).add(district["parent"])
+    for state, parents in sorted(by_state.items()):
+        path = state_path(state)
+        source = path.read_bytes()
+        text = source.decode("utf-8")
+        members = state_file_provinces(path)
+        if not parents <= members:
+            raise ValueError(f"state {state}: missing district parents {parents - members}")
+        expanded = with_country_districts(members)
+        normalized = text.replace("\r\n", "\n")
+        formatted = replace_state_provinces(normalized, expanded)
+        if state == 284 or state in {district for district, *_ in SOUTHERN_CAPITAL_DISTRICTS.values()}:
+            opening, closing = named_block(normalized, "provinces")
+            row = " ".join(map(str, expanded))
+            formatted = normalized[:opening + 1] + f"\n\t\t{row}\n\t" + normalized[closing:]
+        elif set(expanded) == members:
+            continue
+        if b"\r\n" in source:
+            formatted = formatted.replace("\n", "\r\n")
+        if formatted.encode("utf-8") != source:
+            changed.append((path, formatted.encode("utf-8")))
+    for path, data in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.name}")
+        if apply:
+            path.write_bytes(data)
+    return int(bool(changed) and not apply)
+
+
 def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
     """Restore generated metadata without changing Nudge province membership."""
     outputs = {}
@@ -3512,7 +3565,11 @@ def main() -> int:
     actions.add_argument("--apply-regional-settlements", action="store_true")
     actions.add_argument("--check-state-metadata", action="append", type=int, metavar="STATE_ID")
     actions.add_argument("--apply-state-metadata", action="append", type=int, metavar="STATE_ID")
+    actions.add_argument("--check-country-districts", action="store_true")
+    actions.add_argument("--apply-country-districts", action="store_true")
     args = parser.parse_args()
+    if args.check_country_districts or args.apply_country_districts:
+        return update_country_districts(args.apply_country_districts)
     if args.english_localisation:
         from tools.lib.localisation import sync_builder_english_localisation
 

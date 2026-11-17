@@ -11366,13 +11366,14 @@ def country_uniform_gfx_entries() -> str:
             f'\t\ttextureFile = "gfx/interface/technologies/ADISCORD_STS_weapon_{family}.dds"\n'
             "\t}\n"
         )
-        for key in (tech, *ENABLE_EQUIPMENT[tech]):
-            entries.append(
-                "\tSpriteType = {\n"
-                f'\t\tname = "GFX_RUS_{key}_medium"\n'
-                f'\t\ttextureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_{family}.dds"\n'
-                "\t}\n"
-            )
+        for tag in ("RUS", "NAM"):
+            for key in (tech, *ENABLE_EQUIPMENT[tech]):
+                entries.append(
+                    "\tSpriteType = {\n"
+                    f'\t\tname = "GFX_{tag}_{key}_medium"\n'
+                    f'\t\ttextureFile = "gfx/interface/technologies/ADISCORD_{tag}_weapon_{family}.dds"\n'
+                    "\t}\n"
+                )
     entries.append(UNIFORM_CARDS_END)
     return "".join(entries)
 
@@ -11381,7 +11382,7 @@ def with_country_uniform_gfx(text: str) -> str:
     if UNIFORM_CARDS_BEGIN in text:
         start = text.index(UNIFORM_CARDS_BEGIN)
         end = text.index(UNIFORM_CARDS_END, start) + len(UNIFORM_CARDS_END)
-        text = text[:start] + text[end:]
+        return text[:start] + country_uniform_gfx_entries() + text[end:]
     last_brace = text.rfind("}")
     return text[:last_brace] + country_uniform_gfx_entries() + text[last_brace:]
 

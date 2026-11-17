@@ -937,6 +937,10 @@ SHL_conclave = {
 		}
 		available = {
 			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_cold_before_rising_tt
+				NOT = { has_variable = SHL_cold_rising }
+			}
 			FROM = {
 				SHL_furnace_site_controlled = yes
 				check_variable = { var = SHL_furnace_running value = 1 compare = equals }

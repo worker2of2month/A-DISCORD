@@ -57,6 +57,76 @@ ADISCORD_difficulty_ai_offensive_ready = {
 	ADISCORD_ai_field_army_can_attack = yes
 }
 
+# Southern campaign orders also cover subjects fighting for a champion.
+ADISCORD_difficulty_southern_front = {
+	difficulty > 2
+	is_ai = yes
+	has_capitulated = no
+	has_war = yes
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+}
+
+ADISCORD_difficulty_southern_offensive_ready = {
+	ADISCORD_difficulty_ai_offensive_ready = yes
+	ADISCORD_ai_supply_transport_shortage = no
+}
+
+# The native front still requests defenders when the campaign cannot supply extra divisions.
+ADISCORD_difficulty_southern_can_concentrate = {
+	OR = {
+		difficulty < 3
+		ADISCORD_ai_supply_transport_shortage = no
+	}
+}
+
+ADISCORD_difficulty_southern_wartime_supply = {
+	ADISCORD_difficulty_southern_front = yes
+	OR = {
+		AND = {
+			has_variable = ADISCORD_south_side
+			ADISCORD_south_final_active = yes
+			OR = {
+				has_war_with = SHL
+				ADISCORD_south_fights_north_leader = yes
+			}
+		}
+		AND = {
+			ADISCORD_nam_resource_war_active = yes
+			OR = {
+				AND = {
+					tag = NAM
+					OR = {
+						has_war_with = EFL
+						has_war_with = AZH
+						has_war_with = SLF
+					}
+				}
+				AND = {
+					OR = {
+						tag = EFL
+						tag = AZH
+						tag = SLF
+					}
+					has_war_with = NAM
+				}
+			}
+		}
+	}
+}
+
+ADISCORD_difficulty_southern_enemy_allows_push = {
+	has_war_with = FROM
+	FROM = { ADISCORD_difficulty_southern_front = yes }
+	fighting_army_strength_ratio = { tag = FROM ratio < 0.8 }
+	FROM = { ADISCORD_difficulty_southern_offensive_ready = yes }
+}
+
+ADISCORD_difficulty_southern_enemy_requires_caution = {
+	has_war_with = FROM
+	FROM = { ADISCORD_difficulty_southern_front = yes }
+	NOT = { ADISCORD_difficulty_southern_enemy_allows_push = yes }
+}
+
 # Enemy scope in a front country_trigger; FROM is the allocating country.
 # Campaign variants stay inside the original allowed/enable block just above
 # its base priority. Mandatory holds and phase-specific caution retain precedence.

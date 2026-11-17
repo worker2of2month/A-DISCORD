@@ -1532,6 +1532,51 @@ class SealChapterTests(unittest.TestCase):
                 self.m.execute(self.peace["on_peace"], "SHL")
                 self.assertEqual(self.c["SHL_cold_rising"], result)
 
+    def test_release_before_the_pour_keeps_the_whole_cash(self):
+        self.open("autonomy_puppet")
+        self.m.set_overlord(None)
+        treasury = self.c["ADISCORD_economy_treasury"]
+        self.m.run("SHL_produce_period")
+        # Six formerly leased furnaces now export at 60 like the other three.
+        self.assertEqual(self.leased(), set())
+        self.assertAlmostEqual(self.m.variables["NAM"]["ADISCORD_economy_treasury"], 0)
+        self.assertAlmostEqual(self.c["ADISCORD_economy_treasury"] - treasury, 9 * 60)
+
+    def test_coin_discount_applies_inside_its_own_reward(self):
+        self.open()
+        reward = block(furnaces.focus_definition("SHL_redeem_by_coin"), "completion_reward")
+        self.assertNotIn("SHL_redeem_by_coin", self.m.focuses)
+        self.m.execute(block(reward, "hidden_effect"), "SHL")
+        self.assertAlmostEqual(self.c["SHL_seal_buyback_price"], 420 * 0.8)
+        self.assertAlmostEqual(self.c["SHL_seal_ai_reserve"], 420 * 0.8 + 200)
+
+    def test_decided_rising_closes_the_spirit_and_the_cooled_shifts(self):
+        self.rise()
+        self.capitulate("SHL", "NAM")
+        self.assertEqual(self.c["SHL_cold_rising"], 3)
+        self.assertEqual(self.leased(), SEAL_TERMS["autonomy_NAM_namestnik_office"][0])
+        self.m.run("SHL_refresh_cold_spirit")
+        self.assertNotIn("SHL_cold_fire_dynamic", self.m.dynamic)
+        self.m.run("SHL_cold_mark_shifts")
+        self.assertFalse(any("SHL_seal_cold_shift" in self.m.flags[str(s)] for s in range(287, 296)))
+        # Before the rising both still work.
+        self.open()
+        self.m.run("SHL_refresh_cold_spirit")
+        self.assertIn("SHL_cold_fire_dynamic", self.m.dynamic)
+        self.m.run("SHL_cold_mark_shifts")
+        self.assertTrue(all("SHL_seal_cold_shift" in self.m.flags[s] for s in self.leased()))
+
+    def test_martyrs_spare_exactly_forty_of_every_hundred_raids(self):
+        roll = block(block(self.m.effects["SHL_cold_roll_raid"], "if"), "random_list")
+        raid = next(e.value for e in roll if e.key == "15")
+        factors = [scalar(e.value, "factor") for e in raid if e.key == "modifier"]
+        self.assertNotIn("0.6", factors)
+        martyrs = block(raid, "if")
+        self.assertEqual(scalar(block(martyrs, "limit"), "has_completed_focus"), "SHL_cold_raid_martyrs")
+        spared = block(martyrs, "random_list")
+        self.assertEqual([(e.key, [c.key for c in e.value]) for e in spared], [("40", []), ("60", ["country_event"])])
+        self.assertEqual([c.key for c in block(raid, "else")], ["country_event"])
+
     def test_freed_underground_reaches_the_ending_without_a_war(self):
         self.open()
         self.c.update({"SHL_underground_heat": 40.0, "SHL_cold_cache_rifles": 300.0})

@@ -10,7 +10,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from tools.builders import build_adiscord_strategic_regions as map_regions
-from tools.builders.build_adiscord_new_states import CITY_RAILWAYS, southern_city_rail_route
+from tools.builders.build_adiscord_new_states import CITY_RAILWAYS, COUNTRY_RAILWAYS, southern_city_rail_route
 from tools.lib.paths import repository_root
 from tools.lib.vorkerland_collapse_manifest import (
     DIRTY_GROUPS,
@@ -164,6 +164,7 @@ KHAN_CAMPAIGN_RAIL_UPGRADES = (
     (2, (2741, 7650, 2743, 12231, 8535, 6669, 10977, 8259, 9031, 11334)),
     (2, (2741, 5194, 6220, 6652, 10726, 8655, 11688, 10888, 5210)),
 )
+KHAN_CAMPAIGN_RAIL_UPGRADES = tuple((level, southern_city_rail_route(route)) for level, route in KHAN_CAMPAIGN_RAIL_UPGRADES)
 # Level-1 feeders join every dirty-zone state that had no railway, or lay far
 # from one, to the nearest existing line. Each route stays inside zone states
 # and runs between adjacent provinces from the junction to the state's VP.
@@ -433,6 +434,13 @@ SOUTH_SUPPLY_RAILS = {
 for tag, feeders in CITY_RAILWAYS["feeders"].items():
     SOUTH_SUPPLY_RAILS[tag] = (*SOUTH_SUPPLY_RAILS.get(tag, ()), *((1, tuple(route)) for route in feeders))
 
+for tag, feeders in COUNTRY_RAILWAYS["feeders"].items():
+    SOUTH_SUPPLY_RAILS[tag] = (*SOUTH_SUPPLY_RAILS.get(tag, ()), *((1, tuple(route)) for route in feeders))
+
+for network in (COALITION_SUPPLY_RAILS, SOUTH_SUPPLY_RAILS):
+    for tag, routes in network.items():
+        network[tag] = tuple((level, southern_city_rail_route(route)) for level, route in routes)
+
 SOUTH_SUPPLY_HUB_STATES = {
     16910: 250,
     3805: 265,
@@ -490,6 +498,7 @@ SOUTH_SUPPLY_HUB_STATES = {
     16716: 700,
     6495: 723,
 }
+SOUTH_SUPPLY_HUB_STATES.update({int(province): state for province, state in COUNTRY_RAILWAYS["hubs"].items()})
 # Coastal NAM states are supplied through their ports; the two GLP states
 # have no land route to the GLP network.
 SOUTH_DETACHED_STATES = frozenset({225, 226, 227, 228, 229, 230, 231, 304, 305})
@@ -538,6 +547,7 @@ def update_source(source: str) -> str:
     """Update owned rail records without rewriting equivalent Nudge records."""
     managed = [
         render_managed_line(),
+        *(render_rail_line(level, route) for level, route in COUNTRY_RAILWAYS["branches"]),
         *(render_supply_connection(tag) for tag in STARTING_SUPPLY_RAILS),
         render_khan_connection(),
         *(

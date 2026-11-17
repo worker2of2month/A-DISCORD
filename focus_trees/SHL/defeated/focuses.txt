@@ -21,7 +21,6 @@
 			add_stability = 0.05
 			custom_effect_tooltip = SHL_k_cauldron_plus_now_tt
 			hidden_effect = { SHL_repair_worst_site = yes }
-			custom_effect_tooltip = SHL_seal_terms_tt
 		}
 		ai_will_do = { base = 50 }
 	}
@@ -294,9 +293,12 @@
 					add_idea = SHL_rdm_by_coin_idea
 				}
 			}
-			# The discounted price is read from this focus when the terms refresh.
+			# The focus does not count as completed inside its own reward, so the
+			# temporary marker applies the discount to this refresh; later refreshes
+			# read the completed focus.
 			hidden_effect = {
 				SHL_receive_250 = yes
+				set_temp_variable = { var = SHL_seal_coin_discount_now value = 1 }
 				SHL_seal_refresh_terms = yes
 				add_to_variable = { var = SHL_rdm_consumer_goods value = -0.03 }
 				SHL_refresh_redeem_spirit = yes
@@ -533,6 +535,8 @@
 	}
 
 	# ----- Cold fire: cells, caches, allies and the rising -----
+	# Once SHL_cold_rising holds a result, the preparation focuses are bypassed:
+	# their spirit, caches and cooled shifts have no consumer after the rising.
 
 	focus = {
 		id = SHL_cold_ash_cells
@@ -546,6 +550,9 @@
 		}
 		available = {
 			SHL_country_operable = yes
+		}
+		bypass = {
+			has_variable = SHL_cold_rising
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -582,6 +589,9 @@
 		}
 		available = {
 			SHL_country_operable = yes
+		}
+		bypass = {
+			has_variable = SHL_cold_rising
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -623,6 +633,9 @@
 		available = {
 			SHL_country_operable = yes
 		}
+		bypass = {
+			has_variable = SHL_cold_rising
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_cold_hidden_cache
@@ -660,6 +673,9 @@
 		available = {
 			SHL_country_operable = yes
 		}
+		bypass = {
+			has_variable = SHL_cold_rising
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 25
@@ -693,6 +709,9 @@
 		}
 		available = {
 			SHL_country_operable = yes
+		}
+		bypass = {
+			has_variable = SHL_cold_rising
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -731,6 +750,9 @@
 		available = {
 			SHL_country_operable = yes
 		}
+		bypass = {
+			has_variable = SHL_cold_rising
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 25
@@ -763,6 +785,9 @@
 		}
 		available = {
 			SHL_country_operable = yes
+		}
+		bypass = {
+			has_variable = SHL_cold_rising
 		}
 		cancel_if_invalid = yes
 		completion_reward = {

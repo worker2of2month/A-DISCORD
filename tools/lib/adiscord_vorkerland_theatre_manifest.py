@@ -52,7 +52,7 @@ VORKERLAND_THEATRE_VICTORY_POINTS: dict[int, tuple[tuple[int, int], ...]] = {
     320: ((12099, 3),),
     323: ((16590, 3),),
     324: ((12192, 5),),
-    325: ((4569, 3),),
+    325: ((4569, 3), (16697, 3)),
     327: ((16641, 5),),
 }
 
@@ -85,6 +85,7 @@ VORKERLAND_THEATRE_VP_NAME_OVERRIDES: dict[int, str] = {
     16592: "Грейн",
     16593: "Затерн",
     16693: "Верхнеречье",
+    16697: "Междуречье",
     16701: "Подгорск",
     16702: "Западный Орвин",
 }
@@ -120,7 +121,7 @@ VORKERLAND_THEATRE_PACKAGE_TOTALS: dict[str, int] = {
     "WKR": 62,
     "VAD": 66,
     "TVA": 77,
-    "EYR": 40,
+    "EYR": 43,
     "EGC": 22,
     "RIV": 23,
     "REV": 8,

@@ -237,6 +237,8 @@ focus_tree = {
 	# ----- Furnaces of the lease: petitions, guarantors and the redeemed charter -----
 
 	# ----- Cold fire: cells, caches, allies and the rising -----
+	# Once SHL_cold_rising holds a result, the preparation focuses are bypassed:
+	# their spirit, caches and cooled shifts have no consumer after the rising.
 
 	# The rising itself is the reward; its result is decided by capitulation in
 	# the scripted peace handlers, and the ending focuses read that result. A
@@ -1196,7 +1198,10 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
-			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			custom_trigger_tooltip = {
+				tooltip = SHL_crests_not_abolished_tt
+				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1233,7 +1238,9 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1257,7 +1264,10 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_no_course_ratified_tt
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1320,7 +1330,9 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1344,7 +1356,10 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_no_course_ratified_tt
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1407,7 +1422,9 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1430,7 +1447,10 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_no_course_ratified_tt
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2242,7 +2262,9 @@ shared_focus = {
 					}
 				}
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2296,7 +2318,9 @@ shared_focus = {
 					}
 				}
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2340,7 +2364,9 @@ shared_focus = {
 					range = SHL_balance_equilibrium
 				}
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2375,14 +2401,18 @@ shared_focus = {
 				tooltip = SHL_regency_entry_tt
 				SHL_can_back_crests = yes
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_regency_course_tt
+			# The marker keeps the commit from completing this focus inside its own reward.
 			hidden_effect = {
 				if = {
 					limit = { SHL_can_back_crests = yes }
+					set_temp_variable = { var = SHL_commit_from_entry value = 1 }
 					SHL_commit_regency_course = yes
 				}
 			}
@@ -2413,14 +2443,18 @@ shared_focus = {
 				tooltip = SHL_commune_entry_tt
 				SHL_can_back_shift_councils = yes
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_commune_course_tt
+			# The marker keeps the commit from completing this focus inside its own reward.
 			hidden_effect = {
 				if = {
 					limit = { SHL_can_back_shift_councils = yes }
+					set_temp_variable = { var = SHL_commit_from_entry value = 1 }
 					SHL_commit_commune_course = yes
 				}
 			}
@@ -8665,7 +8699,6 @@ shared_focus = {
 			add_stability = 0.05
 			custom_effect_tooltip = SHL_k_cauldron_plus_now_tt
 			hidden_effect = { SHL_repair_worst_site = yes }
-			custom_effect_tooltip = SHL_seal_terms_tt
 		}
 		ai_will_do = { base = 50 }
 	}
@@ -8934,9 +8967,12 @@ shared_focus = {
 					add_idea = SHL_rdm_by_coin_idea
 				}
 			}
-			# The discounted price is read from this focus when the terms refresh.
+			# The focus does not count as completed inside its own reward, so the
+			# temporary marker applies the discount to this refresh; later refreshes
+			# read the completed focus.
 			hidden_effect = {
 				SHL_receive_250 = yes
+				set_temp_variable = { var = SHL_seal_coin_discount_now value = 1 }
 				SHL_seal_refresh_terms = yes
 				add_to_variable = { var = SHL_rdm_consumer_goods value = -0.03 }
 				SHL_refresh_redeem_spirit = yes
@@ -9185,6 +9221,9 @@ shared_focus = {
 		available = {
 			SHL_country_operable = yes
 		}
+		bypass = {
+			has_variable = SHL_cold_rising
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_cold_forge
@@ -9220,6 +9259,9 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
+		}
+		bypass = {
+			has_variable = SHL_cold_rising
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -9261,6 +9303,9 @@ shared_focus = {
 		available = {
 			SHL_country_operable = yes
 		}
+		bypass = {
+			has_variable = SHL_cold_rising
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = SHL_cold_hidden_cache
@@ -9298,6 +9343,9 @@ shared_focus = {
 		available = {
 			SHL_country_operable = yes
 		}
+		bypass = {
+			has_variable = SHL_cold_rising
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 25
@@ -9331,6 +9379,9 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
+		}
+		bypass = {
+			has_variable = SHL_cold_rising
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -9369,6 +9420,9 @@ shared_focus = {
 		available = {
 			SHL_country_operable = yes
 		}
+		bypass = {
+			has_variable = SHL_cold_rising
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 25
@@ -9401,6 +9455,9 @@ shared_focus = {
 		}
 		available = {
 			SHL_country_operable = yes
+		}
+		bypass = {
+			has_variable = SHL_cold_rising
 		}
 		cancel_if_invalid = yes
 		completion_reward = {

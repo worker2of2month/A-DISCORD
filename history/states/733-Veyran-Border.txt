@@ -16,7 +16,7 @@ state = {
 		}
 	}
 	provinces = {
-		2242 4301 4495 5801 6126
+		2242 4301 4495 5801 6126 17861
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

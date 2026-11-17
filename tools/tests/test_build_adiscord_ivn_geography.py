@@ -4,7 +4,6 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 import hashlib
 from io import BytesIO
-from math import floor, sqrt
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Iterator
@@ -24,35 +23,6 @@ HEIGHT_OUTSIDE_ISLAND_SHA256 = (
 NORMAL_OUTSIDE_FEATHER_SHA256 = (
     "B9CF488C86A509053DAC06F6813AD82401DC5C7A789AD30F08E7B5328FC3D4D7"
 )
-
-
-def island_height_slopes(
-    pixels: bytes | bytearray,
-    width: int,
-    height: int,
-    island_mask: bytearray,
-) -> dict[int, int]:
-    slopes: dict[int, int] = {}
-    for index, included in enumerate(island_mask):
-        if not included:
-            continue
-        x = index % width
-        y = index // width
-        neighbours = (
-            index - 1 if x else None,
-            index + 1 if x + 1 < width else None,
-            index - width if y else None,
-            index + width if y + 1 < height else None,
-        )
-        slopes[index] = max(
-            (
-                abs(pixels[index] - pixels[neighbour])
-                for neighbour in neighbours
-                if neighbour is not None and island_mask[neighbour]
-            ),
-            default=0,
-        )
-    return slopes
 
 
 @dataclass(frozen=True)
@@ -212,10 +182,12 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(distances[1 * 5 + 1], 0)
 
     def test_scalar_fields_are_bounded_and_repeatable(self) -> None:
-        first = builder.island_height_value(0.52, 0.45, 8)
-        self.assertEqual(first, builder.island_height_value(0.52, 0.45, 8))
-        self.assertGreaterEqual(first, 97)
-        self.assertLess(first, 180)
+        ys, xs = np.mgrid[100:140, 2600:2650].astype(float)
+        first = builder.lattice_noise(xs, ys, 7.0, 41)
+        np.testing.assert_array_equal(first, builder.lattice_noise(xs, ys, 7.0, 41))
+        self.assertGreaterEqual(float(first.min()), 0.0)
+        self.assertLessEqual(float(first.max()), 1.0)
+        self.assertGreater(float(first.std()), 0.05)
         self.assertEqual(
             builder.stable_unit_hash(41, 73, 19), builder.stable_unit_hash(41, 73, 19)
         )
@@ -258,16 +230,13 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         heightmap = Image.new("L", (width, height))
         heightmap.putdata(heights)
         north = bytearray([1] * (width * height))
-        island = bytearray([1] * (width * height))
-        island[marsh] = 0
-        state_by_pixel = [128] * (width * height)
+        state_by_pixel = [127] * (width * height)
         state_by_pixel[marsh] = 164
 
         rendered = builder.render_northern_terrain(
             source,
             heightmap,
             north,
-            island,
             state_by_pixel,
             {},
         )
@@ -276,7 +245,25 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(pixels[urban], 13)
         self.assertEqual(pixels[marsh], 9)
         self.assertIn(17, pixels)
-        self.assertEqual(pixels.count(4), 9)
+        self.assertEqual(pixels.count(4), 8)
+
+    def test_render_northern_terrain_leaves_island_forests_to_the_province_table(
+        self,
+    ) -> None:
+        width = height = 6
+        source = Image.new("P", (width, height), 0)
+        source.putpalette(
+            [value for index in range(256) for value in (index, index, index)]
+        )
+        heightmap = Image.new("L", (width, height), 110)
+        rendered = builder.render_northern_terrain(
+            source,
+            heightmap,
+            bytearray([1] * (width * height)),
+            [128] * (width * height),
+            {},
+        )
+        self.assertNotIn(builder.FOREST_PALETTE, rendered.get_flattened_data())
 
     def test_generated_mountains_have_connected_hill_shoulders_and_no_interior_plain_edge(
         self,
@@ -296,8 +283,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             source,
             heightmap,
             north,
-            bytearray(north),
-            [128] * (width * height),
+            [127] * (width * height),
             {},
         )
         pixels = list(rendered.get_flattened_data())
@@ -327,39 +313,6 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 connected.add(neighbour)
                 frontier.append(neighbour)
         self.assertEqual(connected, shoulders)
-
-    def test_compact_footprint_is_deterministic_connected_and_organic(self) -> None:
-        width = 15
-        province = list(range(width * 10))
-        first = builder.compact_footprint(province, width, 4242)
-        second = builder.compact_footprint(province, width, 4242)
-        self.assertEqual(first, second)
-        self.assertTrue(first <= set(province))
-        self.assertGreaterEqual(len(first), builder.MIN_URBAN_PIXELS)
-        self.assertLessEqual(len(first), floor(len(province) * builder.MAX_URBAN_SHARE))
-
-        connected = {next(iter(first))}
-        frontier = list(connected)
-        while frontier:
-            index = frontier.pop()
-            x = index % width
-            neighbours = {
-                index - 1 if x else -1,
-                index + 1 if x + 1 < width else -1,
-                index - width,
-                index + width,
-            }
-            for neighbour in neighbours & first - connected:
-                connected.add(neighbour)
-                frontier.append(neighbour)
-        self.assertEqual(connected, first)
-
-        xs = [index % width for index in first]
-        ys = [index // width for index in first]
-        bounding_area = (max(xs) - min(xs) + 1) * (max(ys) - min(ys) + 1)
-        self.assertNotEqual(len(first), bounding_area)
-        maximum_run = floor(round(sqrt(len(first))) / 2)
-        self.assertLessEqual(builder.straight_boundary_run(first, width), maximum_run)
 
     def test_tree_cell_sampling_uses_full_rectangles_strict_majority_and_priority(
         self,
@@ -413,56 +366,47 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(list(rendered.get_flattened_data()), [6, 2, 0, 0])
         self.assertEqual(rendered.getpalette(), tree_source.getpalette())
 
-    def test_render_heightmap_changes_only_island_mask(self) -> None:
-        source = Image.new("L", (5, 5), 110)
-        mask = bytearray(25)
-        mask[2 * 5 + 2] = 1
-        rendered = builder.render_heightmap(source, mask, (2, 2, 2, 2))
-        changed = [
-            index
-            for index, (before, after) in enumerate(
-                zip(source.get_flattened_data(), rendered.get_flattened_data())
-            )
-            if before != after
-        ]
-        self.assertEqual(changed, [12])
+    def test_render_island_heights_follow_declared_terrain(self) -> None:
+        heights = np.full((30, 40), 89, np.uint8)
+        terrain = np.full(heights.shape, -1, np.int8)
+        types = list(builder.ISLAND_RELIEF)
+        terrain[5:25, 5:20] = types.index("plains")
+        terrain[5:25, 20:35] = types.index("hills")
+        rivers = np.full(heights.shape, builder.RIVER_LAND_PALETTE, np.uint8)
+        bbox = (5, 5, 34, 24)
+        rendered = builder.render_island_heights(heights, terrain, bbox, rivers)
+        np.testing.assert_array_equal(
+            rendered, builder.render_island_heights(heights, terrain, bbox, rivers)
+        )
+        land = terrain >= 0
+        np.testing.assert_array_equal(rendered[~land], heights[~land])
+        self.assertGreaterEqual(int(rendered[land].min()), builder.HEIGHT_MIN)
+        plains_level, plains_relief = builder.ISLAND_RELIEF["plains"]
+        plains = rendered[5:25, 5:20]
+        hills = rendered[5:25, 20:35]
+        # The lowland stays level up to its border with the upland.
+        self.assertLessEqual(int(plains.max()), round(plains_level + plains_relief + 1))
+        self.assertGreater(float(hills[4:-4, 4:-4].mean()), float(plains.mean()) + 15)
+        self.assertGreater(
+            float(hills[4:-4, 4:-4].std()), float(plains[4:-4, 4:-4].std())
+        )
+
+    def test_render_island_heights_cut_a_valley_along_rivers(self) -> None:
+        heights = np.full((30, 30), 89, np.uint8)
+        hills = list(builder.ISLAND_RELIEF).index("hills")
+        terrain = np.full(heights.shape, -1, np.int8)
+        terrain[3:27, 3:27] = hills
+        rivers = np.full(heights.shape, builder.RIVER_LAND_PALETTE, np.uint8)
+        bbox = (3, 3, 26, 26)
+        dry = builder.render_island_heights(heights, terrain, bbox, rivers)
+        rivers[3:27, 15] = 3
+        wet = builder.render_island_heights(heights, terrain, bbox, rivers)
+        self.assertLess(float(wet[8:22, 15].mean()), float(dry[8:22, 15].mean()) - 8)
+        self.assertGreaterEqual(int(wet[8:22, 15].min()), builder.HEIGHT_MIN)
 
     def test_height_slope_does_not_wrap_rows(self) -> None:
         pixels = [0, 0, 0, 200, 0, 0]
         self.assertEqual(builder.height_slope(pixels, 3, 2, 2), 0)
-
-    def test_island_slope_gate_ignores_coastline_to_water(self) -> None:
-        mask = bytearray(
-            [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                1,
-                1,
-                1,
-                0,
-                0,
-                1,
-                1,
-                1,
-                0,
-                0,
-                1,
-                1,
-                1,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-            ]
-        )
-        pixels = bytearray(100 if included else 0 for included in mask)
-        self.assertEqual(set(island_height_slopes(pixels, 5, 5, mask).values()), {0})
 
     def test_normal_channels_follow_existing_orientation(self) -> None:
         flat = Image.new("L", (6, 6), 120)
@@ -504,8 +448,6 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_generated_forest_and_tree_coverage_meets_exact_contract(self) -> None:
         metrics = builder.expected().metrics
-        self.assertGreaterEqual(metrics.island_forest_share, 0.25)
-        self.assertLessEqual(metrics.island_forest_share, 0.30)
         self.assertEqual(metrics.mountain_provinces_without_foothills, ())
         occupancy = metrics.tree_occupancy
         self.assertGreaterEqual(occupancy["forest"], 0.50)
@@ -548,8 +490,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         ]
         self.assertGreaterEqual(min(island_values), 97)
         self.assertLess(max(island_values), 180)
-        self.assertGreaterEqual(len(set(island_values)), 45)
-        self.assertGreaterEqual(sum(value >= 145 for value in island_values), 250)
+        self.assertGreaterEqual(len(set(island_values)), 35)
         changed_height_outside_island = sum(
             before != after
             for index, (before, after) in enumerate(
@@ -597,64 +538,35 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         )
         self.assertEqual(changed_normal_outside_feathered_mask, 0)
 
-    def test_generated_height_has_downstream_terrain_eligibility(self) -> None:
+    def test_island_relief_follows_declared_terrain(self) -> None:
         outputs = builder.expected()
-        _lines, _newline, _bom, definition_colors, _declared = (
-            builder.definition_contract()
-        )
-        with Image.open(builder.PROVINCES_PATH) as provinces_source:
-            masks = builder.landscape_masks(provinces_source, definition_colors)
-        height_bytes = outputs.heightmap.tobytes()
-        island_indices = [
-            index for index, included in enumerate(masks.island) if included
+        _lines, _newline, _bom, colours, _declared = builder.definition_contract()
+        with Image.open(builder.PROVINCES_PATH) as provinces:
+            packed = builder.packed_rgb(np.asarray(provinces.convert("RGB")))
+        heights = np.asarray(outputs.heightmap).astype(int)
+        means: dict[str, list[float]] = {}
+        for province_id, terrain_type in builder.ISLAND_PROVINCE_TERRAIN.items():
+            mask = builder.province_mask(packed, colours, frozenset({province_id}))
+            values = heights[mask]
+            means.setdefault(terrain_type, []).append(float(values.mean()))
+            with self.subTest(province=province_id, terrain=terrain_type):
+                self.assertGreaterEqual(int(values.min()), builder.HEIGHT_MIN)
+                if terrain_type in builder.ISLAND_UPLAND_TYPES:
+                    self.assertGreaterEqual(float(values.std()), 5.0)
+                else:
+                    self.assertLessEqual(int(values.max()), 115)
+                    self.assertLessEqual(float(values.std()), 4.5)
+        lowland = [
+            value
+            for terrain_type, values in means.items()
+            if terrain_type not in builder.ISLAND_UPLAND_TYPES
+            for value in values
         ]
-        island_values = [height_bytes[index] for index in island_indices]
-        slopes = list(
-            island_height_slopes(
-                height_bytes,
-                outputs.heightmap.width,
-                outputs.heightmap.height,
-                masks.island,
-            ).values()
+        self.assertGreater(min(means["hills"]), max(lowland) + 5)
+        self.assertGreater(
+            sum(means["forest"]) / len(means["forest"]),
+            sum(means["plains"]) / len(means["plains"]),
         )
-        self.assertGreaterEqual(max(slopes), 12)
-        self.assertGreaterEqual(sum(slope >= 8 for slope in slopes), 250)
-        self.assertGreaterEqual(sum(slope >= 12 for slope in slopes), 40)
-        self.assertGreaterEqual(sum(value >= 158 for value in island_values), 150)
-        self.assertLess(max(island_values), 180)
-
-    def test_steep_height_cells_form_coherent_ridge_shoulders(self) -> None:
-        outputs = builder.expected()
-        _lines, _newline, _bom, definition_colors, _declared = (
-            builder.definition_contract()
-        )
-        with Image.open(builder.PROVINCES_PATH) as provinces_source:
-            masks = builder.landscape_masks(provinces_source, definition_colors)
-        height_bytes = outputs.heightmap.tobytes()
-        width = outputs.heightmap.width
-        height = outputs.heightmap.height
-        slopes = island_height_slopes(height_bytes, width, height, masks.island)
-        steep = {index for index, slope in slopes.items() if slope >= 12}
-        shoulders = {index for index, slope in slopes.items() if slope >= 8}
-        self.assertGreaterEqual(len(steep), 40)
-        for index in steep:
-            x = index % width
-            y = index // width
-            neighbours = {
-                (y + dy) * width + x + dx
-                for dy in (-1, 0, 1)
-                for dx in (-1, 0, 1)
-                if (
-                    (dx or dy)
-                    and 0 <= x + dx < width
-                    and 0 <= y + dy < height
-                    and masks.island[(y + dy) * width + x + dx]
-                )
-            }
-            self.assertTrue(
-                neighbours & shoulders,
-                f"steep height pixel {index} is an isolated spike",
-            )
 
     def test_generated_maps_preserve_stable_outside_scope_streams(self) -> None:
         _lines, _newline, _bom, definition_colors, _declared = (
@@ -736,24 +648,45 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 self.assertEqual(list(current.get_flattened_data()), [42] * 4)
             self.assertFalse(target.with_suffix(".bmp.tmp").exists())
 
-    def test_every_settlement_has_a_bounded_connected_urban_footprint(self) -> None:
+    def test_every_settlement_is_urban_in_its_entirety(self) -> None:
         outputs = builder.expected()
         self.assertEqual(set(outputs.footprints), set(builder.SETTLEMENT_PROVINCES))
+        self.assertLessEqual(
+            builder.ISLAND_URBAN_PROVINCES, builder.SETTLEMENT_PROVINCES
+        )
         for province_id, footprint in outputs.footprints.items():
             with self.subTest(province=province_id):
                 self.assertEqual(outputs.desired[province_id], "urban")
-                if province_id in builder.CITY_PROVINCES:
-                    # A city province is urban in its entirety.
-                    self.assertEqual(
-                        len(footprint), sum(outputs.counts[province_id].values())
-                    )
-                    continue
-                self.assertGreaterEqual(len(footprint), builder.MIN_URBAN_PIXELS)
-                self.assertLessEqual(
-                    len(footprint),
-                    sum(outputs.counts[province_id].values()) * builder.MAX_URBAN_SHARE,
+                self.assertEqual(
+                    len(footprint), sum(outputs.counts[province_id].values())
                 )
-                self.assertEqual(outputs.desired[province_id], "urban")
+
+    def test_island_provinces_are_painted_in_their_declared_terrain(self) -> None:
+        outputs = builder.expected()
+        _lines, _newline, _bom, colours, declared = builder.definition_contract()
+        self.assertEqual(
+            set(builder.ISLAND_PROVINCE_TERRAIN),
+            builder.province_ids_for_states(builder.ISLAND_HEIGHT_STATE_IDS),
+        )
+        with Image.open(builder.PROVINCES_PATH) as provinces:
+            province_rgb = np.asarray(provinces.convert("RGB"))
+        packed = builder.packed_rgb(province_rgb)
+        water = clearance.water_mask(
+            province_rgb, clearance.water_colours(builder.DEFINITION_PATH)
+        )
+        shore = clearance.urban_blocked(water, province_rgb, builder.DEFINITION_PATH)
+        terrain = np.asarray(outputs.terrain)
+        for province_id, terrain_type in builder.ISLAND_PROVINCE_TERRAIN.items():
+            with self.subTest(province=province_id):
+                self.assertEqual(outputs.desired[province_id], terrain_type)
+                self.assertEqual(declared[province_id], terrain_type)
+                mask = builder.province_mask(packed, colours, frozenset({province_id}))
+                expected = np.full(
+                    mask.shape, builder.ISLAND_TERRAIN_PALETTES[terrain_type], np.uint8
+                )
+                if terrain_type == "urban":
+                    expected[shore] = clearance.URBAN_FALLBACK_PALETTE
+                np.testing.assert_array_equal(terrain[mask], expected[mask])
 
     def test_mainland_provinces_are_painted_in_one_terrain(self) -> None:
         outputs = builder.expected()

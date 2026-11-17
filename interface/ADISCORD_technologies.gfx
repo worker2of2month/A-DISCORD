@@ -3365,6 +3365,14 @@ spriteTypes = {
 		textureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_01_reclaimed_arsenal.dds"
 	}
 	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_postwar_weapon_standardization_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_01_reclaimed_arsenal.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_infantry_equipment_0_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_01_reclaimed_arsenal.dds"
+	}
+	SpriteType = {
 		name = "GFX_STS_ADISCORD_tech_refurbished_receivers_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_STS_weapon_02_recovered_service_rifle.dds"
 	}
@@ -3375,6 +3383,14 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_RUS_ADISCORD_infantry_equipment_2156_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_02_recovered_service_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_refurbished_receivers_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_02_recovered_service_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_infantry_equipment_2156_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_02_recovered_service_rifle.dds"
 	}
 	SpriteType = {
 		name = "GFX_STS_ADISCORD_tech_sealed_receiver_assemblies_medium"
@@ -3389,6 +3405,14 @@ spriteTypes = {
 		textureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_03_standardized_battle_rifle.dds"
 	}
 	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_sealed_receiver_assemblies_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_infantry_equipment_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
 		name = "GFX_STS_ADISCORD_tech_smart_recoil_compensators_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_STS_weapon_03_standardized_battle_rifle.dds"
 	}
@@ -3399,6 +3423,14 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_RUS_ADISCORD_infantry_equipment_2168_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_smart_recoil_compensators_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_infantry_equipment_2168_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
 	}
 	SpriteType = {
 		name = "GFX_STS_ADISCORD_tech_smart_optics_medium"
@@ -3413,6 +3445,14 @@ spriteTypes = {
 		textureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_03_standardized_battle_rifle.dds"
 	}
 	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_smart_optics_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_infantry_equipment_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
 		name = "GFX_STS_ADISCORD_tech_modular_rifle_kits_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_STS_weapon_03_standardized_battle_rifle.dds"
 	}
@@ -3423,6 +3463,14 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_RUS_ADISCORD_infantry_equipment_2178_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_modular_rifle_kits_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_infantry_equipment_2178_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
 	}
 	SpriteType = {
 		name = "GFX_STS_ADISCORD_tech_programmable_ammunition_medium"
@@ -3437,6 +3485,14 @@ spriteTypes = {
 		textureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_03_standardized_battle_rifle.dds"
 	}
 	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_programmable_ammunition_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_infantry_equipment_2183_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
 		name = "GFX_STS_ADISCORD_tech_coil_assisted_service_rifles_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_STS_weapon_03_standardized_battle_rifle.dds"
 	}
@@ -3449,6 +3505,14 @@ spriteTypes = {
 		textureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_03_standardized_battle_rifle.dds"
 	}
 	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_coil_assisted_service_rifles_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_infantry_equipment_2193_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
 		name = "GFX_STS_ADISCORD_tech_networked_service_rifles_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_STS_weapon_03_standardized_battle_rifle.dds"
 	}
@@ -3459,6 +3523,14 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_RUS_ADISCORD_infantry_equipment_2200_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_RUS_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_networked_service_rifles_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_infantry_equipment_2200_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_NAM_weapon_03_standardized_battle_rifle.dds"
 	}
 	# END ADISCORD country uniform cards
 	SpriteType = {

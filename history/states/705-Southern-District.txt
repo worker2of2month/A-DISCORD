@@ -13,7 +13,7 @@ state = {
 		buildings = { infrastructure = 2 }
 	}
 	provinces = {
-		2249 2303 4397 5458 6904 9006 9830 11177 11348
+		2249 2303 4397 5458 6904 9006 9830 11177 11348 17509 18170 18536
 	}
 	buildings_max_level_factor = 1.000
 }

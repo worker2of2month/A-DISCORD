@@ -12,13 +12,13 @@ from collections import Counter, deque
 from dataclasses import dataclass
 from io import BytesIO
 from itertools import zip_longest
-from math import cos, exp, floor, pi, sin, sqrt
+from math import cos, pi, sin
 from pathlib import Path
 from typing import Sequence
 
 import numpy as np
 from PIL import Image
-from scipy.ndimage import distance_transform_edt
+from scipy.ndimage import distance_transform_edt, gaussian_filter
 
 from tools.builders.build_adiscord_terrain_snow import (
     CITIES_PATH,
@@ -80,11 +80,44 @@ NORTHERN_LANDSCAPE_STATE_IDS = frozenset(
 )
 PROVINCE_MANIFEST_PATH = ROOT / "tools/data/adiscord_ivn_provinces.json"
 PROVINCE_MANIFEST = json.loads(PROVINCE_MANIFEST_PATH.read_text(encoding="utf-8"))
-# Every IVN city victory point is a whole urban province; rural settlement
-# markers stay ordinary provinces, and the island administration keeps
-# compact urban footprints inside rural provinces.
+# Declared terrain of every island-administration province. The island is
+# painted and raised province by province from this table, so its texture,
+# relief and definition.csv terrain agree.
+ISLAND_PROVINCE_TERRAIN = {
+    **dict.fromkeys((579, 6905, 11841, 16661, 16680), "urban"),
+    **dict.fromkeys((1191, 6928, 7678, 16679, 16688, 16700), "hills"),
+    **dict.fromkeys(
+        (2991, 4334, 5448, 7125, 8423, 12189, 16662, 16685, 16695), "forest"
+    ),
+    **dict.fromkeys(
+        (
+            1744,
+            2219,
+            2553,
+            8048,
+            9072,
+            10730,
+            16659,
+            16660,
+            16663,
+            16664,
+            16681,
+            16683,
+            16686,
+            16692,
+        ),
+        "plains",
+    ),
+}
+# Every IVN city victory point and every urban island province is urban in
+# its entirety; rural settlement markers stay ordinary provinces.
 CITY_PROVINCES = frozenset(int(city) for city in PROVINCE_MANIFEST["cities"].values())
-SETTLEMENT_PROVINCES = frozenset({579, 6905, 11841}) | CITY_PROVINCES
+ISLAND_URBAN_PROVINCES = frozenset(
+    province_id
+    for province_id, terrain_type in ISLAND_PROVINCE_TERRAIN.items()
+    if terrain_type == "urban"
+)
+SETTLEMENT_PROVINCES = CITY_PROVINCES | ISLAND_URBAN_PROVINCES
 # Mainland relief of the Itoran civil-war theatre. Heights are a pure function
 # of position, coast and the unchanged foreign border, so repeated passes
 # converge. The detached western islands keep their authored relief.
@@ -171,6 +204,21 @@ UNIFORM_TERRAIN_PALETTES = {
     "mountain": 20,
     "marsh": 9,
 }
+ISLAND_TERRAIN_PALETTES = {**UNIFORM_TERRAIN_PALETTES, "urban": 13}
+# Island relief by declared terrain: (base height, relief amplitude). Uplands
+# use ridged noise and rise inside their own provinces; lowlands stay level
+# up to their border.
+ISLAND_RELIEF = {
+    "plains": (104.0, 3.0),
+    "urban": (105.0, 1.5),
+    "forest": (108.0, 4.5),
+    "hills": (130.0, 11.0),
+}
+ISLAND_UPLAND_TYPES = frozenset({"hills"})
+ISLAND_BLEND_SIGMA = 2.5
+ISLAND_COAST_RAMP = 4.0
+ISLAND_RIVER_RADIUS = 2.5
+ISLAND_RIVER_DEPTH = 0.45
 TERRAIN_PRIORITY = (
     "urban",
     "mountain",
@@ -189,9 +237,6 @@ MARSH_PALETTE = 9
 URBAN_PALETTE = 13
 HILLS_PALETTE = 17
 MOUNTAIN_PALETTE = 20
-MIN_URBAN_PIXELS = 24
-URBAN_SHARE = 0.12
-MAX_URBAN_SHARE = 0.65
 HEIGHT_MIN = 97
 HEIGHT_MAX = 175
 NORMAL_CENTER = 127
@@ -215,7 +260,6 @@ class TreeCellSample:
 
 @dataclass(frozen=True)
 class CoverageMetrics:
-    island_forest_share: float
     tree_occupancy: dict[str, float]
     forbidden_tree_cells: int
     terrain_changes_outside_scope: int
@@ -384,54 +428,94 @@ def stable_unit_hash(x: int, y: int, salt: int) -> float:
     return ((value ^ (value >> 16)) & 0xFFFFFFFF) / 0xFFFFFFFF
 
 
-def island_height_value(u: float, v: float, coast_distance: int) -> int:
-    coast = min(1.0, coast_distance / 11.0)
-    ridge_x = 0.50 + 0.12 * sin((v - 0.12) * pi * 1.35)
-    ridge = exp(-(((u - ridge_x) / 0.17) ** 2))
-    ridge_spine = exp(-(((u - ridge_x) / 0.026) ** 2))
-    north_lobe = exp(-(((u - 0.43) / 0.25) ** 2 + ((v - 0.27) / 0.19) ** 2))
-    south_lobe = exp(-(((u - 0.57) / 0.24) ** 2 + ((v - 0.73) / 0.22) ** 2))
-    valley = exp(-(((u - 0.67) / 0.13) ** 2 + ((v - 0.52) / 0.26) ** 2))
-    texture = 0.5 + 0.25 * sin(7.0 * u + 4.0 * v) + 0.25 * cos(5.0 * u - 6.0 * v)
-    raw = 97.0 + coast * (
-        12.0
-        + 43.0 * ridge
-        + 60.0 * ridge_spine
-        + 13.0 * north_lobe
-        + 10.0 * south_lobe
-        - 8.0 * valley
-        + 6.0 * texture
+def lattice_noise(xs: np.ndarray, ys: np.ndarray, cell: float, salt: int) -> np.ndarray:
+    """Return smooth 0..1 value noise anchored to absolute map coordinates."""
+    gx = xs / cell
+    gy = ys / cell
+    x0 = np.floor(gx).astype(int)
+    y0 = np.floor(gy).astype(int)
+    sx = gx - x0
+    sy = gy - y0
+    sx = sx * sx * (3.0 - 2.0 * sx)
+    sy = sy * sy * (3.0 - 2.0 * sy)
+    left = int(x0.min())
+    top = int(y0.min())
+    lattice = np.array(
+        [
+            [stable_unit_hash(x, y, salt) for x in range(left, int(x0.max()) + 2)]
+            for y in range(top, int(y0.max()) + 2)
+        ]
     )
-    return max(HEIGHT_MIN, min(HEIGHT_MAX, round(raw)))
+    column = x0 - left
+    row = y0 - top
+    upper = lattice[row, column] * (1.0 - sx) + lattice[row, column + 1] * sx
+    lower = lattice[row + 1, column] * (1.0 - sx) + lattice[row + 1, column + 1] * sx
+    return upper * (1.0 - sy) + lower * sy
 
 
-def render_heightmap(
-    source: Image.Image,
-    island_mask: bytearray,
+def render_island_heights(
+    heights: np.ndarray,
+    terrain: np.ndarray,
     bbox: tuple[int, int, int, int],
-) -> Image.Image:
-    if source.mode != "L":
-        raise ValueError("heightmap source must use mode L")
-    width, height = source.size
-    if len(island_mask) != width * height:
-        raise ValueError("island mask dimensions do not match heightmap")
-    min_x, min_y, max_x, max_y = bbox
-    if not (0 <= min_x <= max_x < width and 0 <= min_y <= max_y < height):
-        raise ValueError("island bounding box lies outside heightmap")
+    rivers: np.ndarray,
+) -> np.ndarray:
+    """Raise the island administration from the declared terrain of each province.
 
-    x_span = max(1, max_x - min_x)
-    y_span = max(1, max_y - min_y)
-    distances = distance_from_edge(island_mask, width, height)
-    pixels = bytearray(source.tobytes())
-    for index, included in enumerate(island_mask):
-        if not included:
-            continue
-        x = index % width
-        y = index // width
-        u = (x - min_x) / x_span
-        v = (y - min_y) / y_span
-        pixels[index] = island_height_value(u, v, distances[index])
-    return Image.frombytes("L", source.size, bytes(pixels))
+    `terrain` holds an index into ISLAND_RELIEF for island pixels and -1
+    elsewhere. Heights depend only on position, that table, the coast and the
+    authored river course, so repeated passes converge. Pixels outside the
+    island keep their heights.
+    """
+    if terrain.shape != heights.shape or rivers.shape != heights.shape:
+        raise ValueError("island relief inputs must match heightmap dimensions")
+    min_x, min_y, max_x, max_y = bbox
+    if not (0 <= min_x <= max_x < heights.shape[1] and 0 <= min_y <= max_y < heights.shape[0]):
+        raise ValueError("island bounding box lies outside heightmap")
+    margin = int(ISLAND_BLEND_SIGMA * 4) + 2
+    crop = (
+        slice(max(0, min_y - margin), min(heights.shape[0], max_y + margin + 1)),
+        slice(max(0, min_x - margin), min(heights.shape[1], max_x + margin + 1)),
+    )
+    types = terrain[crop]
+    land = types >= 0
+    base = np.zeros(types.shape)
+    amplitude = np.zeros(types.shape)
+    upland = np.zeros(types.shape)
+    for index, (terrain_type, (level, relief)) in enumerate(ISLAND_RELIEF.items()):
+        inside = types == index
+        base[inside] = level
+        amplitude[inside] = relief
+        upland[inside] = terrain_type in ISLAND_UPLAND_TYPES
+
+    weight = np.maximum(gaussian_filter(land.astype(float), ISLAND_BLEND_SIGMA), 1e-6)
+
+    def blend(field: np.ndarray) -> np.ndarray:
+        return gaussian_filter(field * land, ISLAND_BLEND_SIGMA) / weight
+
+    # Uplands climb from their own border; a lowland never takes height
+    # from the upland next to it.
+    level = np.where(upland > 0, blend(base), np.minimum(blend(base), base + 1.0))
+    relief = blend(amplitude)
+    ridged_share = blend(upland)
+    gy, gx = np.mgrid[crop].astype(float)
+    smooth = 0.65 * lattice_noise(gx, gy, 9.0, 31) + 0.35 * lattice_noise(gx, gy, 4.0, 37)
+    ridged = 0.7 * (1.0 - np.abs(2.0 * lattice_noise(gx, gy, 7.0, 41) - 1.0))
+    ridged += 0.3 * lattice_noise(gx, gy, 3.0, 43)
+    detail = (1.0 - ridged_share) * smooth + ridged_share * ridged
+    height = level + relief * (2.0 * detail - 1.0)
+
+    river = (rivers[crop] < RIVER_SEA_PALETTE) & land
+    if river.any():
+        valley = np.exp(-((distance_transform_edt(~river) / ISLAND_RIVER_RADIUS) ** 2))
+        height -= valley * ISLAND_RIVER_DEPTH * np.maximum(0.0, height - (HEIGHT_MIN + 3))
+    ramp = np.clip(distance_transform_edt(land) / ISLAND_COAST_RAMP, 0.0, 1.0)
+    ramp = ramp * ramp * (3.0 - 2.0 * ramp)
+    height = HEIGHT_MIN + ramp * (height - HEIGHT_MIN)
+
+    values = np.clip(np.rint(height), HEIGHT_MIN, HEIGHT_MAX).astype(np.uint8)
+    result = heights.copy()
+    result[crop] = np.where(land, values, heights[crop])
+    return result
 
 
 def height_slope(
@@ -604,108 +688,6 @@ def pixel_neighbours(index: int, width: int, pixel_count: int) -> tuple[int, ...
     return tuple(neighbours)
 
 
-def straight_boundary_run(selected: set[int], width: int) -> int:
-    if not selected:
-        return 0
-    pixel_count = (max(selected) // width + 1) * width
-    maximum = 0
-    rows: dict[int, set[int]] = {}
-    columns: dict[int, set[int]] = {}
-    for index in selected:
-        x = index % width
-        y = index // width
-        if index - width not in selected:
-            rows.setdefault(y * 2, set()).add(x)
-        if index + width not in selected:
-            rows.setdefault(y * 2 + 1, set()).add(x)
-        if not x or index - 1 not in selected:
-            columns.setdefault(x * 2, set()).add(y)
-        if x + 1 == width or index + 1 >= pixel_count or index + 1 not in selected:
-            columns.setdefault(x * 2 + 1, set()).add(y)
-    for values in (*rows.values(), *columns.values()):
-        run = 0
-        previous: int | None = None
-        for value in sorted(values):
-            run = run + 1 if previous is not None and value == previous + 1 else 1
-            maximum = max(maximum, run)
-            previous = value
-    return maximum
-
-
-def compact_footprint(indices: list[int], width: int, province_id: int = 0) -> set[int]:
-    if not indices:
-        raise RuntimeError("cannot build an urban footprint for an empty province")
-    maximum = int(len(indices) * MAX_URBAN_SHARE)
-    if maximum < MIN_URBAN_PIXELS:
-        raise RuntimeError(
-            f"province has only {len(indices)} pixels; cannot preserve 35% biome"
-        )
-    target = min(max(MIN_URBAN_PIXELS, round(len(indices) * URBAN_SHARE)), maximum)
-    province = set(indices)
-    mean_x = sum(index % width for index in indices) / len(indices)
-    mean_y = sum(index // width for index in indices) / len(indices)
-    anchor = min(
-        indices,
-        key=lambda index: (
-            (index % width - mean_x) ** 2 + (index // width - mean_y) ** 2,
-            stable_unit_hash(index % width, index // width, province_id),
-            index,
-        ),
-    )
-    selected = {anchor}
-    pixel_count = (max(indices) // width + 1) * width
-    frontier: list[tuple[float, int]] = []
-    queued: set[int] = set()
-
-    def add_frontier(index: int) -> None:
-        for neighbour in pixel_neighbours(index, width, pixel_count):
-            if (
-                neighbour not in province
-                or neighbour in selected
-                or neighbour in queued
-            ):
-                continue
-            x = neighbour % width
-            y = neighbour // width
-            priority = (x - mean_x) ** 2 + (y - mean_y) ** 2
-            priority += 0.35 * stable_unit_hash(x, y, province_id)
-            heapq.heappush(frontier, (priority, neighbour))
-            queued.add(neighbour)
-
-    add_frontier(anchor)
-    maximum_run = floor(round(sqrt(target)) / 2)
-    while frontier and len(selected) < target:
-        deferred: list[tuple[float, int]] = []
-        chosen: tuple[float, int] | None = None
-        while frontier:
-            candidate = heapq.heappop(frontier)
-            queued.discard(candidate[1])
-            index = candidate[1]
-            if index in selected or not any(
-                neighbour in selected
-                for neighbour in pixel_neighbours(index, width, pixel_count)
-            ):
-                continue
-            if straight_boundary_run(selected | {index}, width) <= maximum_run:
-                chosen = candidate
-                break
-            deferred.append(candidate)
-        if chosen is None and deferred:
-            chosen = deferred.pop(0)
-        for candidate in deferred:
-            heapq.heappush(frontier, candidate)
-            queued.add(candidate[1])
-        if chosen is None:
-            break
-        selected.add(chosen[1])
-        add_frontier(chosen[1])
-    if len(selected) < target:
-        raise RuntimeError(
-            "province urban footprint cannot reach its target as one connected component"
-        )
-    return selected
-
-
 def masked_height_slope(
     pixels: bytes | bytearray,
     mask: bytearray,
@@ -754,7 +736,6 @@ def render_northern_terrain(
     source: Image.Image,
     heightmap: Image.Image,
     north_mask: bytearray,
-    island_mask: bytearray,
     state_by_pixel: Sequence[int],
     footprints: dict[int, set[int]],
 ) -> Image.Image:
@@ -764,7 +745,7 @@ def render_northern_terrain(
         raise ValueError("heightmap must use mode L and match terrain dimensions")
     width, height = source.size
     pixel_count = width * height
-    if not (len(north_mask) == len(island_mask) == len(state_by_pixel) == pixel_count):
+    if not (len(north_mask) == len(state_by_pixel) == pixel_count):
         raise ValueError("northern terrain masks do not match terrain dimensions")
 
     original = bytearray(source.get_flattened_data())
@@ -864,9 +845,12 @@ def render_northern_terrain(
             and not (0 <= coast_distances[index] < 2)
         ):
             forest_candidates.setdefault(state_id, []).append(index)
+    # The moisture field spans the whole northern landscape, island included,
+    # but the island takes its forests from its province table.
     for state_id, state_indices in state_land.items():
-        quota_share = 0.275 if state_id in ISLAND_HEIGHT_STATE_IDS else 0.225
-        quota = round(len(state_indices) * quota_share)
+        if state_id in ISLAND_HEIGHT_STATE_IDS:
+            continue
+        quota = round(len(state_indices) * 0.225)
         candidates = forest_candidates.get(state_id, [])
         if len(candidates) < quota:
             raise RuntimeError(
@@ -1176,6 +1160,38 @@ def ellipse_mask(
     return result
 
 
+def paint_provinces(
+    pixels: np.ndarray,
+    scope: np.ndarray,
+    province_ids: np.ndarray,
+    city_pixels: np.ndarray,
+    palettes: dict[int, int],
+    shore: np.ndarray,
+) -> None:
+    """Paint each listed province inside `scope` in its one palette, in place.
+
+    Water and city-model pixels keep their palette, and urban paint stops at
+    the shoreline clearance band so city meshes stay out of the sea.
+    """
+    ys, xs = np.nonzero(scope)
+    window = (
+        slice(int(ys.min()), int(ys.max()) + 1),
+        slice(int(xs.min()), int(xs.max()) + 1),
+    )
+    view = pixels[window]
+    ids = province_ids[window]
+    paintable = (
+        scope[window]
+        & ~np.isin(view, list(WATER_PALETTES))
+        & ~np.isin(city_pixels[window], list(CITY_PALETTE_INDICES))
+    )
+    for province_id, palette_index in sorted(palettes.items()):
+        target = paintable & (ids == province_id)
+        view[target] = palette_index
+        if palette_index == URBAN_PALETTE:
+            view[target & shore[window]] = URBAN_FALLBACK_PALETTE
+
+
 def province_terrain_type(counts: Counter[str]) -> str:
     """Choose the single terrain of a mainland province from its relief."""
     total = sum(counts.values())
@@ -1390,9 +1406,16 @@ def route_rivers(
 
 
 def relief_unit_anchors(
-    original: bytes, provinces: frozenset[int], heights: np.ndarray
+    original: bytes,
+    provinces: frozenset[int],
+    heights: np.ndarray,
+    water: np.ndarray,
 ) -> bytes:
-    """Rest every unit anchor of a relief province on the generated surface."""
+    """Rest every land unit anchor of a generated-relief province on its surface.
+
+    Anchors over water keep their recorded height: the heightmap there is the
+    seabed, not the sea surface naval models float on.
+    """
     text = original.decode("utf-8")
     newline = "\r\n" if "\r\n" in text else "\n"
     map_height = heights.shape[0]
@@ -1402,8 +1425,9 @@ def relief_unit_anchors(
         if len(row) >= 5 and row[0].isdigit() and int(row[0]) in provinces:
             x = round(float(row[2]))
             y = map_height - 1 - round(float(row[4]))
-            row[3] = f"{heights[y, x] / 10:.2f}"
-            line = ";".join(row)
+            if not water[y, x]:
+                row[3] = f"{heights[y, x] / 10:.2f}"
+                line = ";".join(row)
         result.append(line)
     return (newline.join(result) + newline).encode("utf-8")
 
@@ -2157,23 +2181,40 @@ def _build_expected() -> GeographyOutputs:
         packed, province_colors, relief_province_ids(MARCH_RELIEF_STATE_IDS)
     )
     authored_rivers = province_mask(packed, province_colors, AUTHORED_RIVER_PROVINCES)
+    island_provinces = province_ids_for_states(ISLAND_HEIGHT_STATE_IDS)
+    if island_provinces != ISLAND_PROVINCE_TERRAIN.keys():
+        raise RuntimeError(
+            "ISLAND_PROVINCE_TERRAIN must list exactly the island provinces: "
+            f"missing {sorted(island_provinces - ISLAND_PROVINCE_TERRAIN.keys())}, "
+            f"extra {sorted(ISLAND_PROVINCE_TERRAIN.keys() - island_provinces)}"
+        )
+    unknown_types = sorted(set(ISLAND_PROVINCE_TERRAIN.values()) - ISLAND_RELIEF.keys())
+    if unknown_types:
+        raise RuntimeError(f"island terrain types without relief: {unknown_types}")
+    island_terrain = np.full(relief.shape, -1, np.int8)
+    for index, terrain_type in enumerate(ISLAND_RELIEF):
+        type_provinces = frozenset(
+            province_id
+            for province_id, declared_type in ISLAND_PROVINCE_TERRAIN.items()
+            if declared_type == terrain_type
+        )
+        if type_provinces:
+            island_terrain[province_mask(packed, province_colors, type_provinces)] = index
 
+    with Image.open(BytesIO(RIVERS_PATH.read_bytes())) as river_source:
+        island_rivers = np.asarray(river_source)
     with Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as height_source:
         if height_source.mode != "L" or height_source.size != terrain_original.size:
             raise RuntimeError(
                 "heightmap.bmp must use mode L and match provinces.bmp dimensions"
             )
-        heightmap = render_heightmap(height_source, masks.island, masks.island_bbox)
-    relief_heights, fen = render_relief_heights(np.asarray(heightmap), relief, water)
-    heightmap = Image.fromarray(relief_heights)
-    normal_scope = bytearray(
-        (
-            np.frombuffer(bytes(masks.island), dtype=np.uint8).reshape(relief.shape).astype(bool)
-            | relief
+        island_heights = render_island_heights(
+            np.asarray(height_source), island_terrain, masks.island_bbox, island_rivers
         )
-        .astype(np.uint8)
-        .tobytes()
-    )
+    relief_heights, fen = render_relief_heights(island_heights, relief, water)
+    heightmap = Image.fromarray(relief_heights)
+    island = np.frombuffer(bytes(masks.island), dtype=np.uint8).reshape(relief.shape) > 0
+    normal_scope = bytearray((island | relief).astype(np.uint8).tobytes())
     with Image.open(BytesIO(WORLD_NORMAL_PATH.read_bytes())) as normal_source:
         if normal_source.mode != "RGB":
             raise RuntimeError("world_normal.bmp must use mode RGB")
@@ -2200,49 +2241,14 @@ def _build_expected() -> GeographyOutputs:
         terrain_type: len(TERRAIN_PRIORITY) - rank
         for rank, terrain_type in enumerate(TERRAIN_PRIORITY)
     }
-    # City meshes must not spill into the sea: settlements grow only from
-    # pixels outside the shared shoreline clearance band.
+    # A settlement is urban in its entirety; the shoreline clearance below
+    # keeps its city meshes out of the sea.
     footprints = {
-        province_id: (
-            set(indices)
-            if province_id in CITY_PROVINCES
-            else compact_footprint(
-                [index for index in indices if not shore_blocked[index]],
-                terrain_original.width,
-                province_id,
-            )
-        )
-        for province_id, indices in settlement_indices.items()
-    }
-    old_urban = {
-        province_id: {
-            index for index in indices if terrain_pixels[index] == URBAN_PALETTE
-        }
-        for province_id, indices in settlement_indices.items()
+        province_id: set(indices) for province_id, indices in settlement_indices.items()
     }
     working_pixels = bytearray(terrain_pixels)
-    for province_id, indices in settlement_indices.items():
-        nonurban = Counter(
-            terrain_pixels[index]
-            for index in indices
-            if terrain_pixels[index] != URBAN_PALETTE
-            and palette.get(terrain_pixels[index]) not in WATER_TYPES
-        )
-        base = (
-            max(
-                nonurban,
-                key=lambda value: (
-                    nonurban[value],
-                    priority.get(palette.get(value, ""), 0),
-                    -value,
-                ),
-            )
-            if nonurban
-            else PLAINS_PALETTE
-        )
-        for index in old_urban[province_id]:
-            working_pixels[index] = base
-        for index in footprints[province_id]:
+    for footprint in footprints.values():
+        for index in footprint:
             working_pixels[index] = URBAN_PALETTE
     # On the IVN mainland only city provinces are urban. Former settlement
     # footprints left in rural provinces return to the province's own biome.
@@ -2276,7 +2282,6 @@ def _build_expected() -> GeographyOutputs:
         working,
         heightmap,
         masks.north,
-        masks.island,
         masks.state_by_pixel,
         footprints,
     )
@@ -2303,6 +2308,23 @@ def _build_expected() -> GeographyOutputs:
         ):
             generated_pixels[index] = URBAN_FALLBACK_PALETTE
             shore_cleared.add(index)
+    painted = np.frombuffer(bytes(generated_pixels), dtype=np.uint8).reshape(relief.shape).copy()
+    province_ids = np.frombuffer(province_by_pixel, dtype=np.uint16).reshape(relief.shape)
+    city_array = np.frombuffer(city_pixels, dtype=np.uint8).reshape(relief.shape)
+    shore_array = shore_blocked.reshape(relief.shape)
+    # Every island province is painted in its declared terrain.
+    paint_provinces(
+        painted,
+        island,
+        province_ids,
+        city_array,
+        {
+            province_id: ISLAND_TERRAIN_PALETTES[terrain_type]
+            for province_id, terrain_type in ISLAND_PROVINCE_TERRAIN.items()
+        },
+        shore_array,
+    )
+    generated_pixels = bytearray(painted.tobytes())
     terrain.putdata(generated_pixels)
 
     counts = {province_id: Counter() for province_id in province_colors}
@@ -2314,12 +2336,13 @@ def _build_expected() -> GeographyOutputs:
             raise RuntimeError(
                 f"province {province_id}: unknown graphical terrain palette {generated_pixels[index]}"
             )
-        # The shoreline band is cosmetic clearance: in a province already
-        # declared urban, its cleared pixels still count as city.
+        # The shoreline band is cosmetic clearance: in a province declared
+        # urban, its cleared pixels still count as city.
         if (
             shore_blocked[index]
             and generated_pixels[index] == URBAN_FALLBACK_PALETTE
-            and declared.get(province_id) == "urban"
+            and ISLAND_PROVINCE_TERRAIN.get(province_id, declared.get(province_id))
+            == "urban"
         ):
             terrain_type = "urban"
         if terrain_type not in WATER_TYPES:
@@ -2338,26 +2361,24 @@ def _build_expected() -> GeographyOutputs:
         )
     for province_id in SETTLEMENT_PROVINCES:
         desired[province_id] = "urban"
+    desired.update(ISLAND_PROVINCE_TERRAIN)
 
     # Every IVN mainland province is painted in its one terrain type, so the
     # map reads province by province and matches the declared terrain.
     relief_ids = relief_province_ids(RELIEF_STATE_IDS) - SETTLEMENT_PROVINCES
-    ys, xs = np.nonzero(relief)
-    window = (
-        slice(int(ys.min()), int(ys.max()) + 1),
-        slice(int(xs.min()), int(xs.max()) + 1),
-    )
-    painted = np.frombuffer(bytes(generated_pixels), dtype=np.uint8).reshape(relief.shape).copy()
-    province_ids = np.frombuffer(province_by_pixel, dtype=np.uint16).reshape(relief.shape)[window]
-    city_mask = np.isin(
-        np.frombuffer(city_pixels, dtype=np.uint8).reshape(relief.shape)[window],
-        list(CITY_PALETTE_INDICES),
-    )
-    paintable = relief[window] & ~np.isin(painted[window], list(WATER_PALETTES)) & ~city_mask
-    for province_id in sorted(relief_ids):
+    for province_id in relief_ids:
         desired[province_id] = province_terrain_type(counts[province_id])
-        target = paintable & (province_ids == province_id)
-        painted[window][target] = UNIFORM_TERRAIN_PALETTES[desired[province_id]]
+    paint_provinces(
+        painted,
+        relief,
+        province_ids,
+        city_array,
+        {
+            province_id: UNIFORM_TERRAIN_PALETTES[desired[province_id]]
+            for province_id in relief_ids
+        },
+        shore_array,
+    )
     generated_pixels = bytearray(painted.tobytes())
     terrain.putdata(generated_pixels)
 
@@ -2383,31 +2404,15 @@ def _build_expected() -> GeographyOutputs:
         if trees.getpalette() != tree_palette:
             raise RuntimeError("trees.bmp palette changed during generation")
 
-    state_forest_counts: dict[int, list[int]] = {
-        state_id: [0, 0] for state_id in NORTHERN_LANDSCAPE_STATE_IDS
-    }
     mountain_pixels = 0
     hill_pixels = 0
     for index, state_id in enumerate(masks.state_by_pixel):
         if not state_id:
             continue
-        terrain_type = palette[generated_pixels[index]]
-        if terrain_type in WATER_TYPES or terrain_type == "urban":
-            continue
-        state_forest_counts[state_id][1] += 1
-        if terrain_type == "forest":
-            state_forest_counts[state_id][0] += 1
         if generated_pixels[index] == MOUNTAIN_PALETTE:
             mountain_pixels += 1
         elif generated_pixels[index] == HILLS_PALETTE:
             hill_pixels += 1
-    island_forest = sum(
-        state_forest_counts[state_id][0] for state_id in ISLAND_HEIGHT_STATE_IDS
-    )
-    island_land = sum(
-        state_forest_counts[state_id][1] for state_id in ISLAND_HEIGHT_STATE_IDS
-    )
-    island_forest_share = island_forest / island_land
     tree_occupancy = {
         terrain_type: (
             tree_counts.get(terrain_type, (0, 0))[1]
@@ -2477,11 +2482,10 @@ def _build_expected() -> GeographyOutputs:
         province_id = province_by_pixel[index]
         if (
             province_id not in SETTLEMENT_PROVINCES
-            or index not in old_urban[province_id] | footprints[province_id]
+            or index not in footprints[province_id]
         ):
             outside_terrain_changes += 1
     metrics = CoverageMetrics(
-        island_forest_share=island_forest_share,
         tree_occupancy=tree_occupancy,
         forbidden_tree_cells=forbidden_trees,
         terrain_changes_outside_scope=outside_terrain_changes,
@@ -2526,8 +2530,9 @@ def _build_expected() -> GeographyOutputs:
         rivers=rivers,
         unitstacks=relief_unit_anchors(
             UNITSTACKS_PATH.read_bytes(),
-            relief_province_ids(RELIEF_STATE_IDS),
+            relief_province_ids(RELIEF_STATE_IDS) | island_provinces,
             relief_heights,
+            water,
         ),
         river_issues=river_issues(river_pixels, river_paths, packed, water),
         desired=desired,
@@ -2567,10 +2572,6 @@ def expected() -> GeographyOutputs:
 def coverage_issues(outputs: GeographyOutputs) -> list[str]:
     metrics = outputs.metrics
     issues: list[str] = []
-    if not 0.25 <= metrics.island_forest_share <= 0.30:
-        issues.append(
-            f"island forest share {metrics.island_forest_share:.4f} is outside 0.25..0.30"
-        )
     for province_id in metrics.mountain_provinces_without_foothills:
         issues.append(f"mountain province {province_id} has no hills or mountain neighbour")
     occupancy = metrics.tree_occupancy
@@ -2675,7 +2676,7 @@ def validate(outputs: GeographyOutputs | None = None) -> list[str]:
         issues.append(f"map/rivers.bmp: {differences} IVN river pixels drifted")
     issues.extend(f"map/rivers.bmp: {issue}" for issue in outputs.river_issues)
     if UNITSTACKS_PATH.read_bytes() != outputs.unitstacks:
-        issues.append("map/unitstacks.txt: IVN relief unit heights drifted")
+        issues.append("map/unitstacks.txt: IVN/IIA relief unit heights drifted")
     current_definition = DEFINITION_PATH.read_bytes().decode("utf-8-sig").splitlines()
     expected_definition = outputs.definition.decode("utf-8-sig").splitlines()
     definition_differences = sum(
@@ -2686,28 +2687,9 @@ def validate(outputs: GeographyOutputs | None = None) -> list[str]:
         issues.append(
             f"map/definition.csv: {definition_differences} IVN/IIA declared terrain rows drifted"
         )
-    for province_id, footprint in outputs.footprints.items():
-        if province_id in CITY_PROVINCES:
-            if outputs.desired[province_id] != "urban":
-                issues.append(f"city province {province_id} is not declared urban")
-            continue
-        if len(footprint) < MIN_URBAN_PIXELS:
-            issues.append(
-                f"province {province_id}: urban footprint has only {len(footprint)} pixels"
-            )
-        total = sum(outputs.counts[province_id].values())
-        if len(footprint) > total * MAX_URBAN_SHARE:
-            issues.append(
-                f"province {province_id}: urban footprint erases too much biome"
-            )
+    for province_id in sorted(outputs.footprints):
         if outputs.desired[province_id] != "urban":
-            issues.append(f"province {province_id}: settlement is not declared urban")
-        maximum_run = floor(round(sqrt(len(footprint))) / 2)
-        actual_run = straight_boundary_run(footprint, outputs.terrain.width)
-        if actual_run > maximum_run:
-            issues.append(
-                f"province {province_id}: urban boundary run {actual_run} exceeds {maximum_run}"
-            )
+            issues.append(f"settlement province {province_id} is not declared urban")
     issues.extend(coverage_issues(outputs))
     return issues
 

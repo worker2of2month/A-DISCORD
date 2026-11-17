@@ -20,8 +20,8 @@ URBAN_CLEARANCE_PIXELS = 2.0
 # within this distance of sea or lake.
 TREE_CLEARANCE_PIXELS = 2.0
 URBAN_FALLBACK_PALETTE = 0
-# Settlement provinces too small to host a compact urban footprint behind the
-# band keep their whole dry area eligible (9327: 46 pixels, 12 inland).
+# Settlement provinces too small to keep a usable urban area behind the band
+# keep their whole dry area eligible (9327: 46 pixels, 12 inland).
 URBAN_CLEARANCE_EXEMPT_PROVINCES = frozenset({9327})
 
 _CACHE: dict[tuple, np.ndarray] = {}

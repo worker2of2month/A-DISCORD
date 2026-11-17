@@ -22370,6 +22370,12 @@ NAM_coalition_logistics = {
 						has_fuel < 20000
 						AND = {
 							difficulty > 2
+							ADISCORD_nam_resource_war_active = yes
+							has_war_with = NAM
+							ADISCORD_ai_supply_transport_shortage = yes
+						}
+						AND = {
+							difficulty > 2
 							has_navy_size = { size < 60 type = convoy }
 							NAM_rw_coalition_landing_planned = yes
 						}

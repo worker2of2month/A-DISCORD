@@ -276,6 +276,45 @@ ADISCORD_ai_field_army_can_attack = {
 	}
 }
 
+# Country logistics figures include the current needs of the supply network.
+# A network with no demand for that vehicle cannot be short of it.
+ADISCORD_ai_supply_trains_short = {
+	get_supply_vehicles_temp = {
+		type = train
+		need = yes
+		var = ADISCORD_ai_supply_required
+	}
+	check_variable = { ADISCORD_ai_supply_required > 0 }
+	multiply_temp_variable = { ADISCORD_ai_supply_required = 0.5 }
+	get_supply_vehicles_temp = {
+		type = train
+		var = ADISCORD_ai_supply_available
+	}
+	check_variable = { ADISCORD_ai_supply_available < ADISCORD_ai_supply_required }
+}
+
+ADISCORD_ai_supply_trucks_short = {
+	get_supply_vehicles_temp = {
+		type = truck
+		need = yes
+		var = ADISCORD_ai_supply_required
+	}
+	check_variable = { ADISCORD_ai_supply_required > 0 }
+	multiply_temp_variable = { ADISCORD_ai_supply_required = 0.5 }
+	get_supply_vehicles_temp = {
+		type = truck
+		var = ADISCORD_ai_supply_available
+	}
+	check_variable = { ADISCORD_ai_supply_available < ADISCORD_ai_supply_required }
+}
+
+ADISCORD_ai_supply_transport_shortage = {
+	OR = {
+		ADISCORD_ai_supply_trains_short = yes
+		ADISCORD_ai_supply_trucks_short = yes
+	}
+}
+
 # Field upgrades compete with replacement deliveries and the recruitment queue.
 ADISCORD_ai_can_refit_field_army = {
 	ADISCORD_ai_army_replacement_pressure_cleared = yes

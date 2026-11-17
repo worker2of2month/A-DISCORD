@@ -3870,6 +3870,35 @@ class CourseTreeStructureTests(unittest.TestCase):
                 self.assertEqual(len(hidden), 1)
                 self.assertEqual(guard[guard.index(hidden[0]) - 1].value, f"SHL_rename_{suffix}_tt")
 
+    def test_entry_focus_reward_commits_without_completing_itself(self):
+        # The focus is not completed inside its own reward; its marker keeps
+        # the commit from completing it again.
+        for entry, suffix in (("SHL_regency_of_crests", "regency"), ("SHL_commune_of_shift_councils", "commune")):
+            with self.subTest(focus=entry):
+                self.setUp()
+                reward = block(focus_definition(entry), "completion_reward")
+                branch = block(block(reward, "hidden_effect"), "if")
+                body = [e for e in branch if e.key != "limit"]
+                self.assertEqual([e.key for e in body], ["set_temp_variable", f"SHL_commit_{suffix}_course"])
+                self.assertEqual(scalar(body[0].value, "var"), "SHL_commit_from_entry")
+                self.m.execute(body, "SHL")
+                self.assertEqual(self.m.variables["SHL"]["SHL_political_course"], COURSE_TREES[suffix])
+                self.assertNotIn(entry, self.m.focuses)
+
+    def test_course_leader_house_is_spared_even_below_the_penalty(self):
+        for suffix, leader in (("city", "287"), ("state", "294")):
+            with self.subTest(course=suffix):
+                self.setUp()
+                for state in range(287, 296):
+                    self.m.variables[str(state)]["SHL_house_loyalty"] = 50.0
+                self.m.variables[leader]["SHL_house_loyalty"] = 5.0
+                self.m.run(f"SHL_commit_{suffix}_course")
+                self.assertEqual(self.m.variables[leader]["SHL_house_loyalty"], 5.0)
+                self.assertNotIn("SHL_loyalty_spared", self.m.flags[leader])
+                penalty = 15 if suffix == "city" else 20
+                others = {self.m.variables[str(s)]["SHL_house_loyalty"] for s in range(287, 296) if str(s) != leader}
+                self.assertEqual(others, {50.0 - penalty})
+
     def test_state_course_moves_nur_to_an_etatist_role_only_while_he_rules(self):
         self.m.run("SHL_commit_state_course")
         self.assertEqual(self.m.leader, "SHL_Jalil_Nur")
@@ -4313,14 +4342,14 @@ DEFEAT_ENDINGS = {"SHL_redeem_charter", "SHL_cold_fire_without_masters", "SHL_co
 # Effects, unlocks and tooltips each reward must carry; the scripts behind
 # the SHL_seal_*/SHL_cold_* names belong to the defeat-chapter effects.
 DEFEAT_REWARDS = {
-    "SHL_seal_conclave": {"add_political_power", "add_stability", "SHL_repair_worst_site", "SHL_seal_terms_tt"},
+    "SHL_seal_conclave": {"add_political_power", "add_stability", "SHL_repair_worst_site"},
     "SHL_seal_count_the_cold": {"add_political_power", "SHL_seal_stock_free_sites", "SHL_unrest"},
     "SHL_seal_houses_in_mourning": {"add_manpower", "army_experience", "ADISCORD_SHL.201"},
     "SHL_redeem_furnaces_of_the_lease": {"add_political_power", "SHL_receive_250"},
     "SHL_cold_fire": {"add_command_power", "army_experience", "SHL_underground_heat", "SHL_cold_heat_opened_tt"},
     "SHL_redeem_lease_ledger": {"SHL_seal_buy_back_furnace", "add_political_power"},
     "SHL_redeem_namestnik_audience": {"add_political_power", "SHL_ensure_levy_template", "SHL_create_levy"},
-    "SHL_redeem_by_coin": {"SHL_receive_250", "SHL_seal_refresh_terms", "SHL_seal_coin_price_tt"},
+    "SHL_redeem_by_coin": {"SHL_receive_250", "SHL_seal_coin_discount_now", "SHL_seal_refresh_terms", "SHL_seal_coin_price_tt"},
     "SHL_redeem_by_service": {"SHL_seal_redeem_by_service", "SHL_repair_worst_site"},
     "SHL_redeem_quiet_quarters": {"add_building_construction", "SHL_unrest"},
     "SHL_redeem_guarantor_houses": {"SHL_seal_house_bond", "SHL_change_all_loyalty"},
@@ -4433,6 +4462,22 @@ class DefeatChapterTests(unittest.TestCase):
                 self.assertFalse(done & lease and done & cold)
                 route = lease if done & lease else cold
                 self.assertEqual(route - blocked - done, set())
+
+    def test_cold_preparation_is_bypassed_once_the_rising_is_decided(self):
+        # A focus taken after either result would re-attach the closed spirit
+        # or cool a lease restored by the crushed rising.
+        preparation = {
+            "SHL_cold_ash_cells", "SHL_cold_quarter_couriers", "SHL_cold_hidden_armouries",
+            "SHL_cold_letters_to_the_sands", "SHL_cold_shifts", "SHL_cold_desert_drill",
+            "SHL_cold_raid_martyrs",
+        }
+        for identifier, focus in self.focuses.items():
+            with self.subTest(focus=identifier):
+                bypass = [(e.key, e.value) for e in block(focus, "bypass")]
+                if identifier in preparation:
+                    self.assertEqual(bypass, [("has_variable", "SHL_cold_rising")])
+                elif identifier != "SHL_cold_night_of_fire":
+                    self.assertEqual(bypass, [])
 
     def test_no_straight_chain_is_longer_than_two(self):
         longest = straight_chains(self.focuses)[0]
@@ -5390,28 +5435,50 @@ class ExternalContractTests(unittest.TestCase):
         self.assertEqual(self.m.scheduled[-1], "ADISCORD_SHL.132")
         self.assertEqual(self.c["SHL_metal_clients"], 1)
 
-    def test_cycle_settlement_moves_forty_each_way_and_marks_both_economies_dirty(self):
+    def test_cycle_settlement_moves_annual_payment_each_way_and_marks_both_economies_dirty(self):
         settle = self.effects["SHL_metal_settle_clients"]
         self.assertEqual([e.key for e in settle], list(self.BUYERS))
         self.assertNotIn("every_country", repr(settle))
         self.sign("VAL")
         before = self.dirty_calls()
         self.m.run("SHL_produce_period")
-        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 460)
-        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_current_month_action_costs"], 40)
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1580)
+        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 480)
+        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_current_month_action_costs"], 20)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1560)
         # The ledger books the whole cycle, contract payment included.
-        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 580)
-        self.assertEqual(self.c["SHL_last_cycle_income"], 580)
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 560)
+        self.assertEqual(self.c["SHL_last_cycle_income"], 560)
         self.assertEqual(self.dirty_calls() - before, 2)
         self.assertIn("SHL_metal_client", self.m.flags["VAL"])
         self.assertEqual(self.m.variables["VAL"]["SHL_metal_arrears"], 0)
         # A buyer without a contract is never touched.
         self.assertEqual(self.m.variables["STP"]["ADISCORD_economy_treasury"], 500)
 
+    def test_each_buyer_pays_its_own_contract_rate(self):
+        self.sign("VAL")
+        self.m.flags["STP"].add("SHL_metal_offer_pending")
+        self.m.run("SHL_metal_sign_contract_two_years", scope="STP")
+        self.m.focuses.add("SHL_metal_brokers")
+        buyer = self.m.variables["STP"]
+        buyer["ADISCORD_economy_treasury"] = 14.99
+        self.m.run("SHL_metal_settle_clients")
+        self.assertEqual(buyer["SHL_metal_arrears"], 1)
+        self.assertEqual(buyer["ADISCORD_economy_treasury"], 14.99)
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 35)
+
+        buyer["ADISCORD_economy_treasury"] = 15
+        self.m.run("SHL_metal_settle_clients")
+        self.assertEqual(buyer["SHL_metal_arrears"], 0)
+        self.assertEqual(buyer["ADISCORD_economy_treasury"], 0)
+        self.assertEqual(buyer["ADISCORD_economy_current_month_action_costs"], 15)
+        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_current_month_action_costs"], 40)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1100)
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 100)
+        self.assertEqual(self.c["SHL_last_cycle_income"], 100)
+
     def test_brokers_premium_only_on_paid_cycles(self):
-        # The buyer pays 40 either way and the brokers add 15 from their own margin.
-        for brokers, treasury, received in ((False, 500, 40), (True, 500, 55), (True, 39.99, 0)):
+        # The buyer pays 20 either way and the brokers add 15 from their own margin.
+        for brokers, treasury, received in ((False, 500, 20), (True, 500, 35), (True, 19.99, 0)):
             with self.subTest(brokers=brokers, treasury=treasury):
                 self.setUp()
                 if brokers:
@@ -5419,7 +5486,7 @@ class ExternalContractTests(unittest.TestCase):
                 self.sign("VAL")
                 self.m.variables["VAL"]["ADISCORD_economy_treasury"] = treasury
                 self.m.run("SHL_produce_period")
-                paid = 40 if received else 0
+                paid = 20 if received else 0
                 self.assertAlmostEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], treasury - paid)
                 self.assertEqual(self.c["ADISCORD_economy_treasury"], 1540 + received)
                 self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 540 + received)
@@ -5432,14 +5499,14 @@ class ExternalContractTests(unittest.TestCase):
 
     def test_two_unpaid_cycles_or_a_war_end_the_contract_and_remove_the_modifier(self):
         self.sign("VAL")
-        self.m.variables["VAL"]["ADISCORD_economy_treasury"] = 39.99
+        self.m.variables["VAL"]["ADISCORD_economy_treasury"] = 19.99
         self.m.run("SHL_produce_period")
         self.assertEqual(self.m.variables["VAL"]["SHL_metal_arrears"], 1)
         self.assertIn("SHL_metal_client", self.m.flags["VAL"])
-        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 39.99)
+        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 19.99)
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 1540)
         # One paid cycle clears the arrears again.
-        self.m.variables["VAL"]["ADISCORD_economy_treasury"] = 40
+        self.m.variables["VAL"]["ADISCORD_economy_treasury"] = 20
         self.m.run("SHL_produce_period")
         self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 0)
         self.assertEqual(self.m.variables["VAL"]["SHL_metal_arrears"], 0)
@@ -5520,6 +5587,7 @@ class ExternalContractTests(unittest.TestCase):
                 self.assertEqual(self.c["SHL_metal_clients"], 1)
                 self.m.execute(block(mission, "timeout_effect"), "VAL")
                 self.assertNotIn("SHL_metal_client", self.m.flags["VAL"])
+                self.assertNotIn("SHL_metal_cycle_price", self.m.variables["VAL"])
                 self.assertNotIn("SHL_metal_supply", self.m.dynamic)
                 self.assertNotIn(mission_id, self.m.missions)
                 self.assertEqual(self.c["SHL_metal_clients"], 0)

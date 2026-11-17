@@ -23,7 +23,6 @@ try:
         OUTER_STATE_MARKER,
         ALL_SEA_REGIONS,
         DEDICATED_SEA_PROVINCES,
-        MAP_HEIGHT,
         REGIONS,
         REMAINDER_STATE_MARKER,
         SEA_CLIMATES,
@@ -33,6 +32,7 @@ try:
         load_province_adjacency,
         load_province_definitions,
         load_province_positions,
+        climate_sample_latitudes,
         region_latitude,
         weather_period,
     )
@@ -46,7 +46,6 @@ except ModuleNotFoundError:
         OUTER_STATE_MARKER,
         ALL_SEA_REGIONS,
         DEDICATED_SEA_PROVINCES,
-        MAP_HEIGHT,
         REGIONS,
         REMAINDER_STATE_MARKER,
         SEA_CLIMATES,
@@ -56,6 +55,7 @@ except ModuleNotFoundError:
         load_province_adjacency,
         load_province_definitions,
         load_province_positions,
+        climate_sample_latitudes,
         region_latitude,
         weather_period,
     )
@@ -551,11 +551,9 @@ def main() -> int:
     climate_latitudes: dict[str, list[float]] = {}
     for region in REGIONS:
         for state_id in region.states:
-            for province_id in states.get(state_id, set()):
-                if province_id in province_positions:
-                    climate_latitudes.setdefault(region.climate, []).append(
-                        MAP_HEIGHT - province_positions[province_id][2]
-                    )
+            climate_latitudes.setdefault(region.climate, []).extend(
+                climate_sample_latitudes(states.get(state_id, set()), province_positions)
+            )
     for climate, latitudes in sorted(climate_latitudes.items()):
         reference_y = CLIMATE_REFERENCE_Y.get(climate)
         if reference_y is None:

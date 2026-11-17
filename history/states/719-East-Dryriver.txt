@@ -6,7 +6,7 @@ state={
 		oil = 8
 	}
 	provinces={
-		461 6961
+		461 6961 17299 18171 18172 18173
 	}
 	manpower = 300000
 	buildings_max_level_factor = 1.000

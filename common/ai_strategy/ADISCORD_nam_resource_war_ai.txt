@@ -7,20 +7,19 @@ ADISCORD_nam_resource_war_eflor_offensive = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_enemy_requires_caution = yes
+			ADISCORD_difficulty_southern_enemy_requires_caution = yes
 		}
 		ratio = 0.01
 		priority = 1501
 		ordertype = front
 		execution_type = careful
-		execute_order = yes
 		manual_attack = no
 	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_difficulty_southern_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
@@ -40,20 +39,19 @@ ADISCORD_nam_resource_war_azhar_offensive = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_enemy_requires_caution = yes
+			ADISCORD_difficulty_southern_enemy_requires_caution = yes
 		}
 		ratio = 0.01
 		priority = 1501
 		ordertype = front
 		execution_type = careful
-		execute_order = yes
 		manual_attack = no
 	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_difficulty_southern_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
@@ -68,13 +66,32 @@ ADISCORD_nam_resource_war_nam_eflor_front = {
 	allowed = { tag = NAM }
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = EFL }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = EFL value = 100 }
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			tag = EFL
+			FROM = { ADISCORD_difficulty_southern_can_concentrate = yes }
+		}
+		value = 100
+	}
 	ai_strategy = { type = front_control tag = EFL ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = EFL
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_difficulty_southern_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = EFL
+			ADISCORD_difficulty_southern_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
@@ -89,13 +106,32 @@ ADISCORD_nam_resource_war_nam_azhar_front = {
 	allowed = { tag = NAM }
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = AZH }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = AZH value = 100 }
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			tag = AZH
+			FROM = { ADISCORD_difficulty_southern_can_concentrate = yes }
+		}
+		value = 100
+	}
 	ai_strategy = { type = front_control tag = AZH ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = AZH
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_difficulty_southern_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = AZH
+			ADISCORD_difficulty_southern_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
@@ -110,13 +146,32 @@ ADISCORD_nam_resource_war_nam_rebel_front = {
 	allowed = { tag = NAM }
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = SLF }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = SLF value = 100 }
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			tag = SLF
+			FROM = { ADISCORD_difficulty_southern_can_concentrate = yes }
+		}
+		value = 100
+	}
 	ai_strategy = { type = front_control tag = SLF ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = SLF
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_difficulty_southern_enemy_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = SLF
+			ADISCORD_difficulty_southern_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
@@ -131,26 +186,32 @@ ADISCORD_nam_resource_war_rebel_offensive = {
 	allowed = { tag = SLF }
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			tag = NAM
+			FROM = { ADISCORD_difficulty_southern_can_concentrate = yes }
+		}
+		value = 100
+	}
 	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_enemy_requires_caution = yes
+			ADISCORD_difficulty_southern_enemy_requires_caution = yes
 		}
 		ratio = 0.01
 		priority = 1501
 		ordertype = front
 		execution_type = careful
-		execute_order = yes
 		manual_attack = no
 	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_difficulty_southern_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
@@ -187,6 +248,14 @@ NAM_rw_oilfield_objectives = {
 		}
 	}
 	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		state_trigger = {
+			NAM_rw_contested_field_objective = yes
+			FROM.FROM = { ADISCORD_difficulty_southern_can_concentrate = yes }
+		}
+		value = 35
+	}
 	ai_strategy = {
 		type = force_concentration_target_weight
 		state_trigger = {
@@ -470,8 +539,8 @@ ADISCORD_difficulty_nam_resource_logistics = {
 	}
 }
 
-# Generic active-front demand contributes +50. This correction leaves -20
-# while an embarkation reserve exists, and restores +150 when it cannot sail.
+# The ordinary +50 land request also applies when the marines can embark.
+# When the landing closes, the coalition commits the reserve to the land front.
 NAM_rw_coalition_land_only = {
 	allowed = {
 		OR = {
@@ -484,6 +553,7 @@ NAM_rw_coalition_land_only = {
 		ADISCORD_nam_resource_war_active = yes
 		has_war_with = NAM
 		NAM_rw_coalition_landing_ready = no
+		ADISCORD_difficulty_southern_can_concentrate = yes
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
@@ -527,7 +597,6 @@ NAM_rw_coalition_naval_invasion = {
 		ordertype = invasion
 		execute_order = yes
 	}
-	ai_strategy = { type = front_unit_request tag = NAM value = -70 }
 	ai_strategy = { type = naval_invasion_support_priority id = 38 value = 200 }
 }
 

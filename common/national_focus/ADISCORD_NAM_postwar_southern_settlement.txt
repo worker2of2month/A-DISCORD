@@ -3,8 +3,8 @@
 
 shared_focus = {
 		id = NAM_south_heritage
-		x = 66
-		y = 29
+		x = 129
+		y = 0
 		icon = GFX_focus_NAM_independence_day
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }

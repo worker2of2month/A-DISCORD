@@ -135,8 +135,9 @@ scripted_gui = {
 				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 				has_completed_focus = SHL_house_ledgers
 			}
-			# The same house, price and situation checks as the favour decision.
-			SHL_house_favour_button_click_enabled = { SHL_selected_favour_available = yes }
+			# Only inputs that raise SHL_gui_dirty; the click rechecks the price and
+			# the cooldown, and the hover text reports them live.
+			SHL_house_favour_button_click_enabled = { SHL_selected_favour_house_ready = yes }
 		}
 		effects = {
 			SHL_convoy_ore_button_click = { SHL_dispatch_ore = yes }

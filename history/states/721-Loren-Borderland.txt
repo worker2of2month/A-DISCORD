@@ -6,7 +6,7 @@ state={
 		aluminium = 10
 	}
 	provinces={
-		2627 7456 7908 10167
+		2627 7456 7908 10167 18217 18218 18282 18283 18561 18562 18563
 	}
 	manpower = 615000
 	buildings_max_level_factor = 1.000

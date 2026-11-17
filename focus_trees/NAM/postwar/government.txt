@@ -75,7 +75,7 @@
 		id = NAM_service_state
 		relative_position_id = NAM_law_after_war
 		x = 1
-		y = 9
+		y = 7
 		icon = GFX_focus_RUS_trained_administrators
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -275,7 +275,7 @@
 		id = NAM_ladder_of_seals
 		relative_position_id = NAM_law_after_war
 		x = 1
-		y = 18
+		y = 17
 		icon = GFX_focus_NAM_quiet_officer_lists
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
@@ -438,7 +438,7 @@
 		id = NAM_south_black_basin
 		relative_position_id = NAM_service_state
 		x = 0
-		y = 2
+		y = 4
 		icon = GFX_focus_NAM_basin_is_ours
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -497,7 +497,7 @@
 		id = NAM_south_desert_offices
 		relative_position_id = NAM_law_after_war
 		x = -2
-		y = 24
+		y = 22
 		icon = GFX_focus_NAM_basin_is_ours
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
@@ -692,7 +692,7 @@
 		id = NAM_federal_charter
 		relative_position_id = NAM_law_after_war
 		x = 3
-		y = 9
+		y = 7
 		icon = GFX_focus_VAL_State_Contract
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -753,7 +753,7 @@
 		id = NAM_district_council
 		relative_position_id = NAM_law_after_war
 		x = -3
-		y = 14
+		y = 11
 		icon = GFX_focus_NAM_open_ledgers
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -798,7 +798,7 @@
 		id = NAM_oil_fund
 		relative_position_id = NAM_law_after_war
 		x = -3
-		y = 15
+		y = 12
 		icon = GFX_focus_NAM_second_ledger
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -850,7 +850,7 @@
 		id = NAM_district_militia
 		relative_position_id = NAM_law_after_war
 		x = -8
-		y = 15
+		y = 12
 		icon = GFX_focus_NAM_oilfield_militia
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -896,7 +896,7 @@
 		id = NAM_common_fuel_market
 		relative_position_id = NAM_law_after_war
 		x = -5
-		y = 17
+		y = 13
 		icon = GFX_focus_NAM_well_register
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -939,7 +939,7 @@
 		id = NAM_charter_ending_federation
 		relative_position_id = NAM_law_after_war
 		x = -11
-		y = 18
+		y = 14
 		icon = GFX_focus_VAL_State_Contract
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -991,7 +991,7 @@
 		id = NAM_charter_ending_oil_union
 		relative_position_id = NAM_law_after_war
 		x = -8
-		y = 18
+		y = 14
 		icon = GFX_focus_VAL_State_Contract
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -1049,7 +1049,7 @@
 		id = NAM_south_oil_for_water
 		relative_position_id = NAM_law_after_war
 		x = -3
-		y = 18
+		y = 14
 		icon = GFX_focus_RUS_bunker_utilities
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -1185,7 +1185,7 @@
 		id = NAM_south_oil_charter
 		relative_position_id = NAM_law_after_war
 		x = -12
-		y = 21
+		y = 15
 		icon = GFX_focus_VAL_State_Contract
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 6
@@ -1333,7 +1333,7 @@
 		id = NAM_state_logistics_grid
 		relative_position_id = NAM_law_after_war
 		x = 9
-		y = 14
+		y = 13
 		icon = GFX_focus_VAL_Logistics_Command
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -1372,7 +1372,7 @@
 		id = NAM_state_project_bureaus
 		relative_position_id = NAM_law_after_war
 		x = 10
-		y = 15
+		y = 14
 		icon = GFX_focus_RUS_engineers_collegium
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 9
@@ -1398,7 +1398,7 @@
 		id = NAM_public_utilities
 		relative_position_id = NAM_law_after_war
 		x = -2
-		y = 12
+		y = 10
 		icon = GFX_focus_NAM_open_ledgers
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -1426,7 +1426,7 @@
 		id = NAM_municipal_services
 		relative_position_id = NAM_law_after_war
 		x = 1
-		y = 12
+		y = 10
 		icon = GFX_focus_NAM_open_ledgers
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -1454,7 +1454,7 @@
 		id = NAM_civic_audit
 		relative_position_id = NAM_law_after_war
 		x = 4
-		y = 14
+		y = 11
 		icon = GFX_focus_NAM_rom_address
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -1493,7 +1493,7 @@
 		id = NAM_district_workshops
 		relative_position_id = NAM_law_after_war
 		x = 0
-		y = 15
+		y = 12
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -1600,7 +1600,7 @@
 		id = NAM_pragmatic_compact
 		relative_position_id = NAM_law_after_war
 		x = 3
-		y = 9
+		y = 7
 		icon = GFX_focus_NAM_commissioner_plan
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -1634,7 +1634,7 @@
 		id = NAM_commercial_courts
 		relative_position_id = NAM_law_after_war
 		x = -2
-		y = 11
+		y = 9
 		icon = GFX_focus_RUS_district_courts
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -1663,7 +1663,7 @@
 		id = NAM_export_clearing
 		relative_position_id = NAM_law_after_war
 		x = -6
-		y = 12
+		y = 10
 		icon = GFX_focus_NAM_wrk_trade_house
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -1691,7 +1691,7 @@
 		id = NAM_machine_tool_contracts
 		relative_position_id = NAM_law_after_war
 		x = -2
-		y = 12
+		y = 10
 		icon = GFX_focus_RUS_precision_lathes
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -1719,7 +1719,7 @@
 		id = NAM_contract_register
 		relative_position_id = NAM_law_after_war
 		x = -8
-		y = 14
+		y = 11
 		icon = GFX_focus_NAM_last_centre_register
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -1757,7 +1757,7 @@
 		id = NAM_port_agreement
 		relative_position_id = NAM_law_after_war
 		x = 1
-		y = 12
+		y = 11
 		icon = GFX_focus_NAM_harbour_service
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -1842,7 +1842,7 @@
 		id = NAM_insured_caravans
 		relative_position_id = NAM_law_after_war
 		x = 3
-		y = 17
+		y = 13
 		icon = GFX_focus_VAL_Logistics_Command
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -1875,7 +1875,7 @@
 		id = NAM_commercial_reserve
 		relative_position_id = NAM_law_after_war
 		x = -8
-		y = 15
+		y = 12
 		icon = GFX_focus_NAM_concealed_reserve
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -1908,7 +1908,7 @@
 		id = NAM_balanced_accounts
 		relative_position_id = NAM_law_after_war
 		x = -6
-		y = 18
+		y = 14
 		icon = GFX_focus_NAM_second_ledger
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
@@ -2139,7 +2139,7 @@
 		id = NAM_prag_partner_supply
 		relative_position_id = NAM_law_after_war
 		x = -9
-		y = 17
+		y = 13
 		icon = GFX_focus_VAL_Logistics_Command
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
@@ -2182,7 +2182,7 @@
 		id = NAM_prag_south_guarantees
 		relative_position_id = NAM_law_after_war
 		x = -12
-		y = 19
+		y = 15
 		icon = GFX_focus_NAM_commissioner_plan
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 6
@@ -2227,8 +2227,8 @@
 	focus = {
 		id = NAM_civil_service_exam
 		relative_position_id = NAM_law_after_war
-		x = 21
-		y = 17
+		x = 19
+		y = 14
 		icon = GFX_focus_RUS_trained_administrators
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -2272,7 +2272,7 @@
 		id = NAM_appointed_prefects
 		relative_position_id = NAM_law_after_war
 		x = 16
-		y = 17
+		y = 14
 		icon = GFX_focus_RUS_trained_administrators
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -2316,7 +2316,7 @@
 		id = NAM_building_code
 		relative_position_id = NAM_law_after_war
 		x = 13
-		y = 17
+		y = 15
 		icon = GFX_focus_RUS_engineers_collegium
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -2356,7 +2356,7 @@
 		id = NAM_distribution_board
 		relative_position_id = NAM_law_after_war
 		x = 10
-		y = 17
+		y = 15
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -2396,7 +2396,7 @@
 		id = NAM_works_commission
 		relative_position_id = NAM_law_after_war
 		x = 12
-		y = 18
+		y = 16
 		icon = GFX_focus_NAM_open_ledgers
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -2440,7 +2440,7 @@
 		id = NAM_development_bank
 		relative_position_id = NAM_law_after_war
 		x = 19
-		y = 19
+		y = 17
 		icon = GFX_focus_NAM_second_ledger
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -2471,7 +2471,7 @@
 		id = NAM_basin_reservoirs
 		relative_position_id = NAM_law_after_war
 		x = 15
-		y = 23
+		y = 21
 		icon = GFX_focus_RUS_bunker_utilities
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -2525,7 +2525,7 @@
 		id = NAM_engineering_collegium
 		relative_position_id = NAM_law_after_war
 		x = 12
-		y = 23
+		y = 21
 		icon = GFX_focus_RUS_engineers_collegium
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -2576,7 +2576,7 @@
 		id = NAM_district_inspectorate
 		relative_position_id = NAM_law_after_war
 		x = 21
-		y = 21
+		y = 18
 		icon = GFX_focus_NAM_rom_address
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -2625,7 +2625,7 @@
 		id = NAM_reconstruction_statute
 		relative_position_id = NAM_law_after_war
 		x = 16
-		y = 24
+		y = 23
 		icon = GFX_focus_VAL_State_Contract
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
@@ -2699,7 +2699,7 @@
 		id = NAM_foreign_patents
 		relative_position_id = NAM_law_after_war
 		x = -5
-		y = 15
+		y = 12
 		icon = GFX_focus_NAM_commissioner_plan
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -2740,7 +2740,7 @@
 		id = NAM_domestic_designs
 		relative_position_id = NAM_law_after_war
 		x = 0
-		y = 15
+		y = 12
 		icon = GFX_focus_RUS_scientists_at_headquarters
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -2782,7 +2782,7 @@
 		id = NAM_customs_clearinghouse
 		relative_position_id = NAM_law_after_war
 		x = 0
-		y = 17
+		y = 13
 		icon = GFX_focus_NAM_rom_address
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -2839,7 +2839,7 @@
 		id = NAM_freight_exchange
 		relative_position_id = NAM_law_after_war
 		x = 4
-		y = 19
+		y = 18
 		icon = GFX_focus_VAL_Logistics_Command
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -3038,7 +3038,7 @@
 		id = NAM_municipal_bonds
 		relative_position_id = NAM_law_after_war
 		x = 0
-		y = 19
+		y = 18
 		icon = GFX_focus_NAM_second_ledger
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -3372,7 +3372,7 @@
 		id = NAM_public_credit
 		relative_position_id = NAM_law_after_war
 		x = 0
-		y = 17
+		y = 13
 		icon = GFX_focus_NAM_open_ledgers
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -3758,7 +3758,7 @@
 		id = NAM_pw_administrative_courts
 		relative_position_id = NAM_law_after_war
 		x = 6
-		y = 15
+		y = 14
 		icon = GFX_focus_RUS_district_courts
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -3831,7 +3831,7 @@
 		id = NAM_pw_central_treasury
 		relative_position_id = NAM_law_after_war
 		x = 3
-		y = 17
+		y = 16
 		icon = GFX_focus_NAM_second_ledger
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -4627,7 +4627,7 @@
 		id = NAM_pw_mobilisation_register
 		relative_position_id = NAM_law_after_war
 		x = -3
-		y = 21
+		y = 15
 		icon = GFX_focus_NAM_quiet_officer_lists
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -4741,8 +4741,8 @@
 	focus = {
 		id = NAM_pw_strategic_guard
 		relative_position_id = NAM_law_after_war
-		x = -6
-		y = 22
+		x = -3
+		y = 16
 		icon = GFX_focus_NAM_oilfield_militia
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -4826,7 +4826,7 @@
 		id = NAM_pw_survey_corps
 		relative_position_id = NAM_law_after_war
 		x = 6
-		y = 17
+		y = 16
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -4871,7 +4871,7 @@
 		id = NAM_pw_state_warehouses
 		relative_position_id = NAM_law_after_war
 		x = 15
-		y = 18
+		y = 16
 		icon = GFX_focus_NAM_concealed_reserve
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -4904,7 +4904,7 @@
 		id = NAM_pw_standard_projects
 		relative_position_id = NAM_law_after_war
 		x = 9
-		y = 18
+		y = 17
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -4947,7 +4947,7 @@
 		id = NAM_pw_local_design_offices
 		relative_position_id = NAM_law_after_war
 		x = 4
-		y = 18
+		y = 17
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -5344,7 +5344,7 @@
 		id = NAM_pw_regional_reconstruction
 		relative_position_id = NAM_law_after_war
 		x = 0
-		y = 7
+		y = 6
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -6291,7 +6291,7 @@
 		id = NAM_border_administration
 		relative_position_id = NAM_foreign_office
 		x = 0
-		y = 5
+		y = 4
 		icon = GFX_focus_RUS_trained_administrators
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
@@ -6323,7 +6323,7 @@
 		id = NAM_border_security
 		relative_position_id = NAM_border_administration
 		x = 5
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_quiet_officer_lists
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
@@ -6370,7 +6370,7 @@
 		id = NAM_border_compacts
 		relative_position_id = NAM_border_administration
 		x = 8
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_commissioner_plan
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }

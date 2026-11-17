@@ -190,6 +190,8 @@ SHL_produce_period = {
 		SHL_roll_exchange_price = yes
 	}
 	else = { set_variable = { var = SHL_exchange_price value = 60 } }
+	# A lease without an overlord ends before the pour, so no share leaves the cash.
+	SHL_seal_release_without_overlord = yes
 	287 = { SHL_produce_site = yes }
 	288 = { SHL_produce_site = yes }
 	289 = { SHL_produce_site = yes }
@@ -1588,12 +1590,10 @@ SHL_commit_city_course = {
 		ADISCORD_legalise_party = yes
 		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_course_stability value = 0.03 }
-		set_variable = { var = SHL_loyalty_delta value = -15 }
-		SHL_change_all_loyalty = yes
-		# Arbin is the house of the city course's leader.
+		# Arbin is the house of the city course's leader and keeps its loyalty.
 		set_variable = { var = SHL_loyalty_site value = 287 }
-		set_variable = { var = SHL_loyalty_delta value = 15 }
-		SHL_change_site_loyalty = yes
+		set_variable = { var = SHL_loyalty_delta value = -15 }
+		SHL_change_other_houses_loyalty = yes
 		set_temp_variable = { var = SHL_balance_shift value = 0.15 }
 		SHL_balance_shift = yes
 		SHL_clamp_tensions = yes
@@ -1683,12 +1683,10 @@ SHL_commit_state_course = {
 		set_variable = { var = SHL_political_course value = 3 }
 		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_pp_gain value = 0.10 }
-		set_variable = { var = SHL_loyalty_delta value = -20 }
-		SHL_change_all_loyalty = yes
-		# Darban's dispatcher runs the directorate.
+		# Darban's dispatcher runs the directorate; his house keeps its loyalty.
 		set_variable = { var = SHL_loyalty_site value = 294 }
-		set_variable = { var = SHL_loyalty_delta value = 20 }
-		SHL_change_site_loyalty = yes
+		set_variable = { var = SHL_loyalty_delta value = -20 }
+		SHL_change_other_houses_loyalty = yes
 		SHL_clamp_tensions = yes
 		287 = {
 			if = {
@@ -2041,6 +2039,40 @@ SHL_change_site_loyalty = {
 	clear_variable = SHL_loyalty_site
 	clear_variable = SHL_loyalty_delta
 	SHL_refresh_house_pressure = yes
+}
+
+# COUNTRY SHL. Inputs: SHL_loyalty_site (287-295), the house the change
+# spares, and SHL_loyalty_delta for every other house on owned land. The
+# spared house is never touched, so clamping cannot change its loyalty.
+SHL_change_other_houses_loyalty = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_loyalty_site value = 287 compare = greater_than_or_equals }
+			check_variable = { var = SHL_loyalty_site value = 295 compare = less_than_or_equals }
+		}
+		var:SHL_loyalty_site = { set_state_flag = SHL_loyalty_spared }
+	}
+	287 = { SHL_change_unspared_house_loyalty = yes }
+	288 = { SHL_change_unspared_house_loyalty = yes }
+	289 = { SHL_change_unspared_house_loyalty = yes }
+	290 = { SHL_change_unspared_house_loyalty = yes }
+	291 = { SHL_change_unspared_house_loyalty = yes }
+	292 = { SHL_change_unspared_house_loyalty = yes }
+	293 = { SHL_change_unspared_house_loyalty = yes }
+	294 = { SHL_change_unspared_house_loyalty = yes }
+	295 = { SHL_change_unspared_house_loyalty = yes }
+	clear_variable = SHL_loyalty_site
+	clear_variable = SHL_loyalty_delta
+	SHL_refresh_house_pressure = yes
+}
+
+# STATE. The spared house only loses its transient marker.
+SHL_change_unspared_house_loyalty = {
+	if = {
+		limit = { has_state_flag = SHL_loyalty_spared }
+		clr_state_flag = SHL_loyalty_spared
+	}
+	else = { SHL_change_owned_house_loyalty = yes }
 }
 
 # COUNTRY SHL. Input: SHL_loyalty_delta for the three houses of the qanat border.
@@ -3044,8 +3076,13 @@ SHL_commit_regency_course = {
 		# One native tree: the entry focus opens the course section even when the
 		# course was committed by the crisis event or the backing decision. The
 		# course value is already set, so the entry reward cannot commit again.
+		# The entry focus does not count as completed inside its own reward, so
+		# its temporary marker keeps that reward from completing it a second time.
 		if = {
-			limit = { NOT = { has_completed_focus = SHL_regency_of_crests } }
+			limit = {
+				NOT = { has_completed_focus = SHL_regency_of_crests }
+				NOT = { check_variable = { var = SHL_commit_from_entry value = 1 compare = equals } }
+			}
 			complete_national_focus = SHL_regency_of_crests
 		}
 	}
@@ -3102,8 +3139,13 @@ SHL_commit_commune_course = {
 		# One native tree: the entry focus opens the course section even when the
 		# course was committed by the crisis event or the backing decision. The
 		# course value is already set, so the entry reward cannot commit again.
+		# The entry focus does not count as completed inside its own reward, so
+		# its temporary marker keeps that reward from completing it a second time.
 		if = {
-			limit = { NOT = { has_completed_focus = SHL_commune_of_shift_councils } }
+			limit = {
+				NOT = { has_completed_focus = SHL_commune_of_shift_councils }
+				NOT = { check_variable = { var = SHL_commit_from_entry value = 1 compare = equals } }
+			}
 			complete_national_focus = SHL_commune_of_shift_councils
 		}
 	}
@@ -10169,8 +10211,7 @@ SHL_announce_crown_of_the_south = {
 # Metal contracts of the Golden Gates. Buyers are the six fixed tags of the
 # SHL_metal_contract_offer decision, so no settlement scans the world. The
 # buyer carries SHL_metal_client and SHL_metal_arrears; Shahrabad counts
-# SHL_metal_clients. The 28-day cycle moves 40 per paid contract (55 with the
-# metal brokers); war between the parties or two unpaid cycles end it.
+# SHL_metal_clients. Each buyer pays its agreed rate on the Conclave's cycle.
 # ---------------------------------------------------------------------------
 
 # COUNTRY buyer, ROOT of ADISCORD_SHL.130. Both sides are rechecked at the answer.
@@ -10227,6 +10268,7 @@ SHL_metal_sign_contract = {
 		SHL_metal_establish_contract = yes
 		if = {
 			limit = { has_country_flag = SHL_metal_client }
+			set_variable = { var = SHL_metal_cycle_price value = 20 }
 			activate_mission = SHL_metal_contract_year
 		}
 	}
@@ -10242,6 +10284,7 @@ SHL_metal_sign_contract_two_years = {
 		SHL_metal_establish_contract = yes
 		if = {
 			limit = { has_country_flag = SHL_metal_client }
+			set_variable = { var = SHL_metal_cycle_price value = 15 }
 			activate_mission = SHL_metal_contract_two_years
 		}
 	}
@@ -10274,6 +10317,7 @@ SHL_metal_drop_client = {
 		limit = { has_country_flag = SHL_metal_client }
 		clr_country_flag = SHL_metal_client
 		clear_variable = SHL_metal_arrears
+		clear_variable = SHL_metal_cycle_price
 		clear_variable = SHL_metal_efficiency_growth
 		clear_variable = SHL_metal_efficiency_cap
 		clear_variable = SHL_metal_resource_penalty
@@ -10306,10 +10350,7 @@ SHL_metal_end_contract = {
 	}
 }
 
-# COUNTRY client, called from the SHL cycle. A paid cycle moves 40 from the
-# buyer's treasury to Shahrabad's and books both monthly ledgers; the metal
-# brokers add 15 of their own to each paid contract (55 in all). An unpaid
-# cycle earns no premium and is tolerated once.
+# COUNTRY client. The brokers' premium is credited only after the buyer pays.
 SHL_metal_settle_client = {
 	if = {
 		limit = { has_country_flag = SHL_metal_client }
@@ -10323,15 +10364,15 @@ SHL_metal_settle_client = {
 			SHL_metal_end_contract = yes
 		}
 		else_if = {
-			limit = { check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals } }
-			subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
+			limit = { check_variable = { var = ADISCORD_economy_treasury value = SHL_metal_cycle_price compare = greater_than_or_equals } }
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_metal_cycle_price }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_metal_cycle_price }
 			set_variable = { var = SHL_metal_arrears value = 0 }
 			ADISCORD_economy_mark_dirty = yes
 			SHL = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 40 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 40 }
-				add_to_variable = { var = SHL_last_cycle_income value = 40 }
+				add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_metal_cycle_price }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_metal_cycle_price }
+				add_to_variable = { var = SHL_last_cycle_income value = PREV.SHL_metal_cycle_price }
 				if = {
 					limit = { has_completed_focus = SHL_metal_brokers }
 					add_to_variable = { var = ADISCORD_economy_treasury value = 15 }
@@ -11997,8 +12038,15 @@ SHL_seal_refresh_terms = {
 		set_variable = { var = SHL_seal_lease_share value = 0.65 }
 		set_variable = { var = SHL_seal_buyback_price value = 360 }
 	}
+	# SHL_redeem_by_coin sets the temporary marker for the refresh in its own
+	# reward, where the focus is not yet completed.
 	if = {
-		limit = { has_completed_focus = SHL_redeem_by_coin }
+		limit = {
+			OR = {
+				has_completed_focus = SHL_redeem_by_coin
+				check_variable = { var = SHL_seal_coin_discount_now value = 1 compare = equals }
+			}
+		}
 		multiply_variable = { var = SHL_seal_buyback_price value = 0.8 }
 	}
 	# The AI keeps 200 of its treasury after a buy-back.
@@ -12077,7 +12125,8 @@ SHL_seal_settle_lease_tenth = {
 
 # Input SHL_seal_lease_due. Furnace cash is the only channel from Shahrabad's
 # treasury to Svetlogorye's; the autonomy transfers move factories, trade and
-# manpower. Without the overlord the due is simply withheld.
+# manpower. SHL_produce_period releases the lease of a country without the
+# overlord before the pour, so the clear below only drops a zero or stray due.
 SHL_seal_pay_namestnik = {
 	if = {
 		limit = {
@@ -12171,23 +12220,29 @@ SHL_seal_release_all_leases = {
 	SHL_seal_refresh_terms = yes
 }
 
-# Once per furnace cycle, at the end of SHL_produce_period. Independence through
-# Svetlogorye's own decision, its disappearance or a new overlord releases the
-# lease; the rising releases it itself.
+# Independence through Svetlogorye's own decision, its disappearance or a new
+# overlord releases the lease; the rising releases it itself. Called before the
+# furnaces pour in SHL_produce_period and again in SHL_seal_cycle.
+SHL_seal_release_without_overlord = {
+	if = {
+		limit = {
+			has_country_flag = SHL_seal_chapter_open
+			NOT = { is_subject_of = NAM }
+			NOT = { check_variable = { var = SHL_cold_rising value = 1 compare = equals } }
+			OR = {
+				check_variable = { var = SHL_seal_leased_count value = 0 compare = greater_than }
+				has_variable = SHL_seal_petition_site
+			}
+		}
+		SHL_seal_release_all_leases = yes
+	}
+}
+
+# Once per furnace cycle, at the end of SHL_produce_period.
 SHL_seal_cycle = {
 	if = {
 		limit = { has_country_flag = SHL_seal_chapter_open }
-		if = {
-			limit = {
-				NOT = { is_subject_of = NAM }
-				NOT = { check_variable = { var = SHL_cold_rising value = 1 compare = equals } }
-				OR = {
-					check_variable = { var = SHL_seal_leased_count value = 0 compare = greater_than }
-					has_variable = SHL_seal_petition_site
-				}
-			}
-			SHL_seal_release_all_leases = yes
-		}
+		SHL_seal_release_without_overlord = yes
 		# Freed before its rising, the underground reaches its goal without a
 		# war: the result of a won rising, with the cached rifles delivered.
 		if = {
@@ -12304,13 +12359,19 @@ SHL_refresh_redeem_spirit = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+# The spirit lives only until the rising is decided: SHL_cold_close_rising
+# removes it at every result, and a Cold Fire focus completed later must not
+# attach it again.
 SHL_refresh_cold_spirit = {
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = SHL_cold_fire_dynamic } } }
-		add_dynamic_modifier = { modifier = SHL_cold_fire_dynamic }
+		limit = { NOT = { has_variable = SHL_cold_rising } }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = SHL_cold_fire_dynamic } } }
+			add_dynamic_modifier = { modifier = SHL_cold_fire_dynamic }
+		}
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
 	}
-	force_update_dynamic_modifier = yes
-	ADISCORD_economy_mark_dirty = yes
 }
 
 # ----- Petitions to the namestnik -----
@@ -12533,9 +12594,12 @@ SHL_cold_grow_heat = {
 	SHL_cold_add_heat = yes
 }
 
-# About 15% per cycle from 30 heat, 25% from 50 and 35% from 70; Svetlogorye's
-# military rule raises it, its local offices and the martyrs focus lower it.
-# ADISCORD_SHL.203 sets the 84-day cooldown in its immediate block.
+# The modifiers scale only the raid weight against a fixed 85: about 15% per
+# cycle from 30 heat, 23% from 50 and 29% from 70 under an ordinary overlord.
+# Svetlogorye's military rule raises it and its local offices lower it. The
+# martyrs focus spares 40 of every 100 raids in a second roll, so its -40% is
+# exact at every heat. ADISCORD_SHL.203 sets the 84-day cooldown in its
+# immediate block.
 SHL_cold_roll_raid = {
 	if = {
 		limit = {
@@ -12561,11 +12625,16 @@ SHL_cold_roll_raid = {
 					factor = 0.7
 					SHL_seal_overlord_conciliatory = yes
 				}
-				modifier = {
-					factor = 0.6
-					has_completed_focus = SHL_cold_raid_martyrs
+				if = {
+					limit = { has_completed_focus = SHL_cold_raid_martyrs }
+					random_list = {
+						40 = { }
+						60 = { country_event = { id = ADISCORD_SHL.203 hours = 6 } }
+					}
 				}
-				country_event = { id = ADISCORD_SHL.203 hours = 6 }
+				else = {
+					country_event = { id = ADISCORD_SHL.203 hours = 6 }
+				}
 			}
 		}
 	}
@@ -12599,17 +12668,22 @@ SHL_cold_mark_shift_site = {
 }
 
 # The next pour of every lit leased furnace Shahrabad controls goes to the caches.
+# Once the rising is decided the caches have no consumer, so the leases that a
+# crushed rising restores are never cooled.
 SHL_cold_mark_shifts = {
-	287 = { SHL_cold_mark_shift_site = yes }
-	288 = { SHL_cold_mark_shift_site = yes }
-	289 = { SHL_cold_mark_shift_site = yes }
-	290 = { SHL_cold_mark_shift_site = yes }
-	291 = { SHL_cold_mark_shift_site = yes }
-	292 = { SHL_cold_mark_shift_site = yes }
-	293 = { SHL_cold_mark_shift_site = yes }
-	294 = { SHL_cold_mark_shift_site = yes }
-	295 = { SHL_cold_mark_shift_site = yes }
-	SHL_refresh_furnaces = yes
+	if = {
+		limit = { NOT = { has_variable = SHL_cold_rising } }
+		287 = { SHL_cold_mark_shift_site = yes }
+		288 = { SHL_cold_mark_shift_site = yes }
+		289 = { SHL_cold_mark_shift_site = yes }
+		290 = { SHL_cold_mark_shift_site = yes }
+		291 = { SHL_cold_mark_shift_site = yes }
+		292 = { SHL_cold_mark_shift_site = yes }
+		293 = { SHL_cold_mark_shift_site = yes }
+		294 = { SHL_cold_mark_shift_site = yes }
+		295 = { SHL_cold_mark_shift_site = yes }
+		SHL_refresh_furnaces = yes
+	}
 }
 
 # FROM is the selected leased furnace (SHL_cold_forge).
@@ -12758,8 +12832,10 @@ SHL_cold_raise_cell = {
 	}
 }
 
-# The reward of SHL_cold_night_of_fire. Svetlogorye's other wars end before the
+# The reward of SHL_cold_night_of_fire. Shahrabad's own wars end before the
 # marker is set, so their peace callbacks cannot settle the rising.
+# Svetlogorye's other wars may continue; SHL_cold_close_external ignores their
+# peace while Shahrabad is still at war with Svetlogorye.
 SHL_cold_raise_rising = {
 	if = {
 		limit = { SHL_cold_rising_ready = yes }

@@ -603,12 +603,14 @@ class SouthFinalWarContractTests(unittest.TestCase):
         for name in ("NAM_emergency_arsenal", "NAM_counterinsurgency", "NAM_relief_batch"):
             self.assertIn("NAM_wartime_programmes_open", repr(block(national[name], "available")))
 
-    def test_ai_commits_every_champion_pair(self):
-        source = (ROOT / "common/ai_strategy/ADISCORD_south_final_war_ai.txt").read_text(encoding="utf-8")
-        for leader in ("NAM", "EFL", "AZH"):
-            self.assertIn(f"ADISCORD_south_shl_front_{leader.lower()} = {{", source)
-            self.assertIn(f"ADISCORD_south_{leader.lower()}_front_shl = {{", source)
-        for name, entries in definitions(ROOT / "common/ai_strategy/ADISCORD_south_final_war_ai.txt").items():
+    def test_front_requests_follow_the_current_opposing_side(self):
+        policies = definitions(ROOT / "common/ai_strategy/ADISCORD_south_final_war_ai.txt")
+        for name in ("ADISCORD_south_coalition_front", "ADISCORD_south_successor_front"):
+            request, = (entry.value for entry in policies[name] if entry.key == "ai_strategy"
+                        and scalar(entry.value, "type") == "front_unit_request")
+            self.assertEqual(scalar(block(request, "country_trigger"), "ADISCORD_south_enemy_front_country"), "yes")
+            self.assertGreater(int(scalar(request, "value")), 0)
+        for name, entries in policies.items():
             self.assertEqual(scalar(entries, "abort_when_not_enabled"), "yes", name)
 
     def test_debug_commands_and_decisions_share_guarded_handlers(self):

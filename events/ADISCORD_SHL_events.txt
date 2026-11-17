@@ -3358,7 +3358,8 @@ news_event = {
 # goes to Svetlogorye with a petition, whose answer the petition decision
 # settles when it ends; 203 is a raid rolled by SHL_cold_roll_raid; 204 brings
 # Shahrabad's letter to a southern neighbour. Shahrabad is the only sender, so
-# 202 and 204 address it by tag. The first option is the unattended answer.
+# 202 and 204 address it by tag. The first available option is the unattended
+# answer; 201.b needs no price, so it remains when 201.a is unaffordable.
 # ---------------------------------------------------------------------------
 
 country_event = {
@@ -3387,6 +3388,9 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.201.a
+		trigger = {
+			NOT = { has_political_power < 40 }
+		}
 		add_political_power = -40
 		add_stability = 0.03
 		custom_effect_tooltip = SHL_seal_houses_sheltered_tt

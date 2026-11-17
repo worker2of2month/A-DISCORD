@@ -971,7 +971,10 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
-			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			custom_trigger_tooltip = {
+				tooltip = SHL_crests_not_abolished_tt
+				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1012,7 +1015,9 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1036,7 +1041,10 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_no_course_ratified_tt
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1099,7 +1107,9 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1123,7 +1133,10 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_no_course_ratified_tt
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1186,7 +1199,9 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -1209,7 +1224,10 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_no_course_ratified_tt
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2036,7 +2054,9 @@ focus_tree = {
 					}
 				}
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2090,7 +2110,9 @@ focus_tree = {
 					}
 				}
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2134,7 +2156,9 @@ focus_tree = {
 					range = SHL_balance_equilibrium
 				}
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2172,14 +2196,18 @@ focus_tree = {
 				tooltip = SHL_regency_entry_tt
 				SHL_can_back_crests = yes
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_regency_course_tt
+			# The marker keeps the commit from completing this focus inside its own reward.
 			hidden_effect = {
 				if = {
 					limit = { SHL_can_back_crests = yes }
+					set_temp_variable = { var = SHL_commit_from_entry value = 1 }
 					SHL_commit_regency_course = yes
 				}
 			}
@@ -2210,14 +2238,18 @@ focus_tree = {
 				tooltip = SHL_commune_entry_tt
 				SHL_can_back_shift_councils = yes
 			}
-			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			hidden_trigger = {
+				check_variable = { var = SHL_political_course value = 0 compare = equals }
+			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_commune_course_tt
+			# The marker keeps the commit from completing this focus inside its own reward.
 			hidden_effect = {
 				if = {
 					limit = { SHL_can_back_shift_councils = yes }
+					set_temp_variable = { var = SHL_commit_from_entry value = 1 }
 					SHL_commit_commune_course = yes
 				}
 			}

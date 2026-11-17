@@ -741,8 +741,17 @@ class HouseLoyaltyTests(unittest.TestCase):
         branches = [e.value for e in walk_values(activate) if e.key == "if" and block(e.value, "limit")
                     and any(c.key == "activate_targeted_decision" for c in e.value)]
         self.assertEqual(len(branches), 9)
-        selected = next(e.value for e in self.trigger_entries if e.key == "SHL_selected_favour_available")
+        # The cached button reads only inputs that raise SHL_gui_dirty: the
+        # house and the situation, never the price or the cooldown's age.
+        triggers = {e.key: e.value for e in self.trigger_entries}
+        selected = triggers["SHL_selected_favour_house_ready"]
+        self.assertEqual([(e.key, e.value) for e in selected if e.key != "OR"],
+                         [("SHL_house_favours_open", "yes"), ("SHL_selected_favour_open", "yes")])
         selected_branches = block(selected, "OR")
+        self.assertEqual([(e.key, e.value) for e in triggers["SHL_favour_ready"]][0], ("SHL_favour_house_willing", "yes"))
+        willing = repr(triggers["SHL_favour_house_willing"])
+        for live in ("SHL_favour_given", "has_political_power", "ADISCORD_economy_treasury"):
+            self.assertNotIn(live, willing)
         for index, (house, (state, *_)) in enumerate(FAVOURS.items(), 1):
             with self.subTest(house=house):
                 body = decisions[f"SHL_favour_{house}"]
@@ -766,14 +775,15 @@ class HouseLoyaltyTests(unittest.TestCase):
                     return found
 
                 self.assertEqual(parts(block(branches[index - 1], "limit")), expected)
-                self.assertEqual(parts(selected_branches[index - 1].value), expected)
+                self.assertEqual(parts(selected_branches[index - 1].value),
+                                 {f"check_variable:{index}", f"{state}:SHL_favour_house_willing"})
                 target = block(branches[index - 1], "activate_targeted_decision")
                 self.assertEqual((scalar(target, "target"), scalar(target, "decision")), (state, f"SHL_favour_{house}"))
                 grant = next(e.value for e in self.effect_entries if e.key == f"SHL_grant_favour_{house}")
                 guard = parts(block(grant[0].value, "limit"))
                 self.assertEqual(guard, expected - {f"check_variable:{index}"} | {"SHL_house_favours_open"})
         gui = read(ROOT / "common/scripted_guis/ADISCORD_SHL_scripted_gui.txt")
-        self.assertIn("SHL_house_favour_button_click_enabled = { SHL_selected_favour_available = yes }", gui)
+        self.assertIn("SHL_house_favour_button_click_enabled = { SHL_selected_favour_house_ready = yes }", gui)
         self.assertIn("SHL_house_favour_button_click = { SHL_activate_selected_favour = yes }", gui)
         window = read(ROOT / "interface/ADISCORD_SHL.gui")
         for name in ("SHL_panel_house_loyalty", "SHL_house_favour_button"):

@@ -25,6 +25,13 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class ProvinceCornerTests(unittest.TestCase):
+    def test_border_budget_counts_separate_contacts_and_the_world_seam(self):
+        stripes = np.array([[1, 2, 1, 2], [1, 2, 1, 2]], dtype=np.uint16)
+        self.assertEqual(geography.province_border_count(stripes), 4)
+        islands = np.ones((5, 7), dtype=np.uint16)
+        islands[2, (1, 4)] = 2
+        self.assertEqual(geography.province_border_count(islands), 2)
+
     def test_ishait_front_has_distinct_northern_and_southern_approaches(self):
         definitions = {
             int(fields[0]): tuple(map(int, fields[1:4]))
@@ -174,6 +181,32 @@ class CoastalSeaRegionTests(unittest.TestCase):
         cls.navigable = builder.load_province_adjacency(cls.types, colors)
         cls.positions = builder.load_province_positions()
         cls.sea = {p for p, kind in cls.types.items() if kind == "sea"}
+
+    def test_country_districts_are_compact_and_inherit_their_parents_region(self):
+        from scipy.ndimage import find_objects, label
+
+        definitions = {
+            int(row[0]): tuple(map(int, row[1:4]))
+            for line in (ROOT / "map/definition.csv").read_text().splitlines()
+            if len(row := line.split(";")) >= 8
+        }
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            grid = geography.province_grid(np.asarray(image), definitions)
+        boxes = find_objects(grid)
+        memberships = builder.load_states()
+        regions = {p: rid for rid, data in self.regions.items() for p in data["provinces"]}
+        for district in states.COUNTRY_DISTRICTS:
+            parent, child = district["parent"], district["province"]
+            self.assertTrue({parent, child} <= memberships[district["state"]])
+            self.assertEqual(regions[child], regions[parent])
+        for province in geography.COUNTRY_DISTRICT_IDS:
+            with self.subTest(province=province):
+                mask = grid[boxes[province - 1]] == province
+                self.assertEqual(label(mask)[1], 1)
+                self.assertGreaterEqual(mask.sum(), 9)
+                self.assertLessEqual(mask.sum(), 153)
+                axes = np.linalg.eigvalsh(np.cov(np.argwhere(mask).T) + np.eye(2) / 12)
+                self.assertLessEqual(np.sqrt(axes[1] / axes[0]), 2.3)
 
     def test_southern_rural_splits_create_connected_manoeuvre_routes(self):
         from scipy.ndimage import find_objects, label
@@ -476,24 +509,25 @@ class CoastalSeaRegionTests(unittest.TestCase):
                     x = round(float(row[2]))
                     y = rgb.shape[0] - 1 - round(float(row[4]))
                     self.assertTrue(painted[y, x], f"anchor {row[1]} outside {province}")
-        self.assertEqual(states.SOUTHERN_CAPITAL_DISTRICTS[294][3][-1], 16899)
+        self.assertIn(16899, states.SOUTHERN_CAPITAL_DISTRICTS[294][3])
         for state_id, residents in states.SHL_POPULATION.items():
             source = states.state_path(state_id).read_text(encoding="utf-8-sig")
             self.assertEqual(int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1]), residents)
 
     def test_svetlogorye_massif_is_on_the_mainland_with_snowy_peaks(self) -> None:
+        massif = set(states.with_country_districts(geography.RELIEF_PROVINCES))
         memberships = builder.load_states()
         # After the NAM state split Svetlogorsk (688) holds Vysokoye 1710 and
         # the residual coast (689) holds 2231.
         massif_states = (67, 688, 689, 690, 719)
         self.assertTrue(
-            geography.RELIEF_PROVINCES
+            massif
             <= set().union(*(memberships[state] for state in massif_states))
         )
         self.assertEqual(
             len(
                 builder.connected_components(
-                    set(geography.RELIEF_PROVINCES), self.physical
+                    set(massif), self.physical
                 )
             ),
             1,
@@ -512,7 +546,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
             elevation = np.array(heights)
             terrain_pixels = np.array(terrain)
             masks = []
-            for province in geography.RELIEF_PROVINCES:
+            for province in massif:
                 fields = definitions[province]
                 self.assertEqual(fields[4], "land")
                 mask = np.all(rgb == tuple(map(int, fields[1:4])), axis=2)
@@ -533,7 +567,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
             self.assertGreaterEqual(int(elevation[mask].min()), 97)
             self.assertEqual(set(np.unique(terrain_pixels[mask])), {2, 3, 11, 16, 18})
             kinds = [
-                definitions[province][6] for province in geography.RELIEF_PROVINCES
+                definitions[province][6] for province in massif
             ]
             self.assertGreaterEqual(kinds.count("mountain"), 4)
             self.assertGreaterEqual(kinds.count("hills"), 4)
@@ -555,14 +589,14 @@ class CoastalSeaRegionTests(unittest.TestCase):
             # the relief is recomputed over the whole surface mask.
             surface = np.logical_or.reduce([
                 np.all(rgb == tuple(map(int, definitions[province][1:4])), axis=2)
-                for province in geography.RELIEF_SURFACE_PROVINCES
+                for province in states.with_country_districts(geography.RELIEF_SURFACE_PROVINCES)
             ])
             self.assertTrue(
                 np.array_equal(geography.mountain_heights(surface, elevation), elevation)
             )
             for line in (ROOT / "map/unitstacks.txt").read_text().splitlines():
                 fields = line.split(";")
-                if int(fields[0]) in geography.RELIEF_PROVINCES:
+                if int(fields[0]) in massif:
                     x = round(float(fields[2]))
                     y = heights.height - 1 - round(float(fields[4]))
                     self.assertAlmostEqual(float(fields[3]), elevation[y, x] / 10)

@@ -1877,15 +1877,27 @@ def sea_minimum_snow_level(climate: str, month: int) -> float:
     return 0.0
 
 
+# Weather envelopes use one geographic sample per original province. Splitting
+# a tactical district must not increase the weight of its latitude.
+DISTRICT_PARENT = {
+    entry["province"]: entry["parent"]
+    for entry in json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_bytes())["country_districts"]
+}
+
+
+def climate_sample_latitudes(provinces: set[int], positions: dict[int, tuple[float, float, float]]) -> list[float]:
+    samples: dict[int, list[float]] = {}
+    for province in sorted(provinces & positions.keys()):
+        parent = DISTRICT_PARENT.get(province, province)
+        samples.setdefault(parent, []).append(MAP_HEIGHT - positions[province][2])
+    return [sum(group) / len(group) for group in samples.values()]
+
+
 def region_latitude(
     provinces: set[int], positions: dict[int, tuple[float, float, float]]
 ) -> float | None:
-    """Mean map y of a region's unit stacks, or None without positions."""
-    values = [
-        MAP_HEIGHT - positions[province_id][2]
-        for province_id in sorted(provinces)
-        if province_id in positions
-    ]
+    """Mean map y of a region's geographic samples, or None without positions."""
+    values = climate_sample_latitudes(provinces, positions)
     if not values:
         return None
     return sum(values) / len(values)

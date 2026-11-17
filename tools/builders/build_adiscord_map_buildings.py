@@ -308,12 +308,18 @@ def mountain_building_heights(
 ) -> tuple[list[str], list[int]]:
     from tools.builders.build_adiscord_coastal_geography import RELIEF_SURFACE_PROVINCES
     from tools.builders.build_adiscord_ivn_geography import (
+        ISLAND_PROVINCE_TERRAIN,
         RELIEF_STATE_IDS,
         relief_province_ids,
     )
 
-    # Both generated reliefs rewrite heights, so their models follow the surface.
-    surface_provinces = RELIEF_SURFACE_PROVINCES | relief_province_ids(RELIEF_STATE_IDS)
+    # The coastal, IVN mainland and island reliefs are generated, so their
+    # models follow the surface.
+    surface_provinces = (
+        RELIEF_SURFACE_PROVINCES
+        | relief_province_ids(RELIEF_STATE_IDS)
+        | frozenset(ISLAND_PROVINCE_TERRAIN)
+    )
     province_by_color = load_province_by_color(root)
     result = list(lines)
     changed = []
