@@ -167,6 +167,18 @@ soundeffect = {
 }
 
 soundeffect = {
+	name = superevent_vorkerland_singularity_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_vorkerland_singularity_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
 	name = superevent_stelander_great_sound_e
 	loop = no
 	sounds = {
@@ -626,7 +638,7 @@ soundeffect = {
 	name = superevent_west_anton_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_vorkerland_utilitarian_victory_sound
+		sound = superevent_west_anton_sound
 	}
 	is3d = no
 	max_audible = 1

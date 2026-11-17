@@ -55,6 +55,9 @@
  superevent_south_war_title: "Война за Юг"
  superevent_south_war_quote: "Война есть лишь продолжение политики другими средствами.\n\n- Карл фон Клаузевиц, \"О войне\", I, 1"
  superevent_south_war_comment: "Пустыня снова стала фронтом."
+ superevent_vorkerland_singularity_title: "Сингулярность"
+ superevent_vorkerland_singularity_quote: "Не мы ли сами создаём своих преемников в господстве над землёй?\n\n- Сэмюэл Батлер, \"Едгин\", XXII"
+ superevent_vorkerland_singularity_comment: "Контур больше не советует."
 
   superevent_stelander_great_title: "Провозглашён Великий Стеландер!"
   superevent_stelander_great_quote: "$superevent_stelander_party_victory_quote$"

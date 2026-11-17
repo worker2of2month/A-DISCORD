@@ -309,6 +309,10 @@ country_event = {
 		if = {
 			limit = { tag = IMD }
 			effect_tooltip = { FROM = { add_ideas = IVN_cw_military_guarantees } }
+			if = {
+				limit = { FROM = { NOT = { has_government = etatism } } }
+				custom_effect_tooltip = IVN_cw_military_cabinet_seat_tt
+			}
 		}
 		if = {
 			limit = { tag = IFC }

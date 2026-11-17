@@ -58,6 +58,10 @@ defined_text = {
 		localization_key = superevent_south_war_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_vorkerland_singularity }
+		localization_key = superevent_vorkerland_singularity_quote
+	}
+	text = {
 		trigger = { has_global_flag = superevent_stelander_great }
 		localization_key = superevent_stelander_great_quote
 	}
@@ -374,6 +378,10 @@ defined_text = {
 		localization_key = superevent_south_war_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_vorkerland_singularity }
+		localization_key = superevent_vorkerland_singularity_title
+	}
+	text = {
 		trigger = { has_global_flag = superevent_stelander_great }
 		localization_key = superevent_stelander_great_title
 	}
@@ -665,6 +673,10 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_south_war }
 		localization_key = superevent_south_war_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_vorkerland_singularity }
+		localization_key = superevent_vorkerland_singularity_comment
 	}
 	text = {
 		trigger = { has_global_flag = superevent_stelander_great }

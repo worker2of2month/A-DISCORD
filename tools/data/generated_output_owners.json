@@ -462,9 +462,27 @@
       "owner_module": "tools.builders.build_adiscord_startup_ui_assets",
       "source_inputs": [
         "tools/builders/build_adiscord_startup_ui_assets.py",
-        "gfx/interface/superevents/NAM/superevent_resource_war.png"
+        "tools/lib/campaign_selection.py",
+        "tools/data/campaign_selection.gui.in",
+        "tools/data/campaign_selection.json",
+        "common/bookmarks/the_gathering_storm.txt",
+        "map/definition.csv",
+        "map/provinces.bmp",
+        "gfx/interface/country_selection_bg.dds",
+        "gfx/interface/select_date_bg.dds",
+        "gfx/interface/startup/stp.png",
+        "gfx/interface/startup/val.png",
+        "gfx/interface/startup/nam.png",
+        "gfx/interface/startup/rus.png",
+        "gfx/interface/superevents/NAM/superevent_resource_war.png",
+        "gfx/interface/startup/posters/*.png",
+        "gfx/interface/startup/banners/*.png",
+        "gfx/flags/medium/*.tga",
+        "gfx/interface/ideologies/*_group.*",
+        "gfx/texticons/adiscord/parties/**/*.png"
       ],
       "output_globs": [
+        "interface/ADISCORD_campaign_selection.gui",
         "interface/ADISCORD_startup_menu.gfx",
         "gfx/interface/startup/background.png",
         "gfx/interface/startup/tab.png",
@@ -3048,7 +3066,10 @@
         "gfx/flags/**/WRK_vorkerland_world_empire.tga",
         "gfx/flags/**/WRK_veyran_empire.tga",
         "gfx/flags/**/WRK_western_eastern_union.tga",
-        "gfx/flags/**/WRK_forul_technical_union.tga"
+        "gfx/flags/**/WRK_forul_technical_union.tga",
+        "gfx/flags/**/WRK_republican_union.tga",
+        "gfx/flags/**/*_west_victory*.tga",
+        "gfx/flags/**/*_west_*mandate.tga"
       ],
       "source_inputs": [
         "gfx/flags/VAD.tga",
@@ -3073,7 +3094,23 @@
         "tools/assets/source/vorkerland_flags/WRK_vorkerland_world_empire.png",
         "gfx/flags/WRK_vorkerland_emergency.tga",
         "gfx/flags/medium/WRK_vorkerland_emergency.tga",
-        "gfx/flags/small/WRK_vorkerland_emergency.tga"
+        "gfx/flags/small/WRK_vorkerland_emergency.tga",
+        "gfx/flags/IAM.tga",
+        "gfx/flags/IFC.tga",
+        "gfx/flags/IIA.tga",
+        "gfx/flags/IMD.tga",
+        "gfx/flags/IVC.tga",
+        "gfx/flags/IVN.tga",
+        "gfx/flags/IVN_chauvinism.tga",
+        "gfx/flags/IVN_etatism.tga",
+        "gfx/flags/IVN_unified_legion.tga",
+        "gfx/flags/PSD.tga",
+        "gfx/flags/PWR.tga",
+        "gfx/flags/VAD_vorkerland_restoration.tga",
+        "gfx/flags/WIT.tga",
+        "gfx/flags/WPA.tga",
+        "gfx/flags/WPS.tga",
+        "gfx/flags/ZAO.tga"
       ],
       "check_command": [
         "{python}",
@@ -3428,10 +3465,12 @@
         "sound/superevents/superevent_south_free_islands_sound.wav",
         "sound/superevents/superevent_val_council_proclamation_sound.wav",
         "sound/superevents/superevent_south_war_sound.wav",
+        "sound/superevents/superevent_vorkerland_singularity_sound.wav",
         "sound/superevents/superevent_south_houses_sound.wav",
         "sound/superevents/superevent_south_cities_sound.wav",
         "sound/superevents/superevent_south_nur_victory_sound.wav",
         "sound/superevents/superevent_west_dorian_sound.wav",
+        "sound/superevents/superevent_west_anton_sound.wav",
         "sound/superevents/superevent_south_safir_victory_sound.wav",
         "sound/superevents/superevent_south_commune_victory_sound.wav",
         "sound/superevents/superevent_south_rom_iron_victory_sound.wav",
@@ -3530,7 +3569,8 @@
         "gfx/interface/superevents/VAL/superevent_val_council_proclamation.png",
         "gfx/interface/superevents/WRK/superevent_west_veyran.png",
         "gfx/interface/superevents/South/superevent_south_war.png",
-        "gfx/interface/superevents/South/superevent_south_oil_union.png"
+        "gfx/interface/superevents/South/superevent_south_oil_union.png",
+        "gfx/interface/superevents/WRK/superevent_vorkerland_singularity.png"
       ],
       "check_command": [
         "{python}",

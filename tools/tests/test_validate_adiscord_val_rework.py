@@ -2624,22 +2624,50 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.assertNotIn("VAL_contract_industry", self.modifiers)
         self.assertAlmostEqual(self.variables["VAL_industrial_output"], expected_output)
 
-    def test_stage_nine_stays_in_collapse_until_final_recovery_receipt(self):
+    def test_ninth_programme_ends_the_collapse_without_the_final_receipt(self):
         self.facts[
             ("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")
         ] = True
         self.variables.update(
-            VAL_economic_recovery_steps=9, VAL_arsenal_reputation_stage=4
+            VAL_economic_recovery_steps=8, VAL_arsenal_reputation_stage=4
         )
         self.run_effect("VAL_refresh_industrial_economy")
         self.assertIn("VAL_economic_collapse", self.modifiers)
         self.assertNotIn("VAL_economic_miracle", self.modifiers)
+        self.variables["VAL_economic_recovery_steps"] = 9
+        self.run_effect("VAL_refresh_industrial_economy")
+        self.assertIn("VAL_economic_miracle", self.modifiers)
+        self.assertNotIn("VAL_economic_collapse", self.modifiers)
         self.facts[("VAL", "has_country_flag", "VAL_economic_recovery_completed")] = (
             True
         )
         self.run_effect("VAL_refresh_industrial_economy")
         self.assertIn("VAL_economic_miracle", self.modifiers)
         self.assertNotIn("VAL_economic_collapse", self.modifiers)
+
+    def test_first_bonus_renames_the_crisis_to_supply_recovery(self):
+        self.facts[
+            ("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")
+        ] = True
+        self.variables.update(
+            VAL_economic_recovery_steps=8, VAL_arsenal_reputation_stage=4
+        )
+        self.run_effect("VAL_refresh_industrial_economy")
+        self.assertIn("VAL_economic_collapse", self.modifiers)
+        # Stage eight leaves construction at -0.01 and output at -0.03.
+        for investment, amount, field, value in (
+            ("VAL_civilian_investment", 0.06, "VAL_industrial_construction", 0.05),
+            ("VAL_arsenal_investment", 0.10, "VAL_industrial_output", 0.07),
+        ):
+            self.variables[investment] = amount
+            self.run_effect("VAL_refresh_industrial_economy")
+            self.assertAlmostEqual(self.variables[field], value)
+            self.assertIn("VAL_economic_supply_recovery", self.modifiers)
+            self.assertNotIn("VAL_economic_collapse", self.modifiers)
+        self.variables["VAL_economic_recovery_steps"] = 9
+        self.run_effect("VAL_refresh_industrial_economy")
+        self.assertIn("VAL_economic_miracle", self.modifiers)
+        self.assertNotIn("VAL_economic_supply_recovery", self.modifiers)
 
     def test_peacetime_reconciliation_does_not_invent_a_supply_crisis(self):
         self.run_effect("VAL_reconcile_supply_crisis")
@@ -2783,7 +2811,7 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.run_effect("VAL_handle_vorkerland_war_outbreak")
         self.assertEqual(set(self.removed_rights), {"33", "38", "202"})
         self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 0)
-        self.assertAlmostEqual(self.variables["VAL_arsenal_trade"], -0.20)
+        self.assertAlmostEqual(self.variables["VAL_arsenal_trade"], -0.15)
         for stage in range(1, 6):
             self.run_effect("VAL_restore_arsenal_reputation")
             snapshot = dict(self.variables)
@@ -2793,8 +2821,8 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
             self.assertEqual(
                 self.variables["VAL_arsenal_quality"], 0.10 if stage == 5 else 0
             )
-        self.assertAlmostEqual(self.variables["VAL_arsenal_trade"], 0.05)
-        self.assertAlmostEqual(self.variables["VAL_arsenal_credit"], 0.025)
+        self.assertAlmostEqual(self.variables["VAL_arsenal_trade"], 0.10)
+        self.assertAlmostEqual(self.variables["VAL_arsenal_credit"], 0.05)
 
     def test_final_recovery_and_veterans_require_actual_victory(self):
         text = read_focus_source(FOCUSES_PATH, encoding="utf-8-sig")
@@ -7824,6 +7852,25 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertNotIn(
             "168", [e.key for e in self.triggers["VAL_supply_base_secured"]]
         )
+        # The Balchansk charter keeps Occidia with the chartered administration.
+        chartered = {k: v for k, v in facts.items() if k[0] not in ("43", "44", "88")}
+        for state in ("43", "44", "88"):
+            for key in ("is_owned_by", "is_controlled_by"):
+                chartered[state, key, "OCA"] = True
+        chartered["OCA", "exists", "yes"] = True
+        chartered["OCA", "is_subject_of", "VAL"] = True
+        self.assertTrue(self.match("VAL_supply_base_secured", chartered))
+        independent = dict(chartered)
+        independent["OCA", "is_subject_of", "VAL"] = False
+        self.assertFalse(self.match("VAL_supply_base_secured", independent))
+
+    def test_nodrul_campaign_focus_is_skipped_once_nodrul_is_subdued(self):
+        text = read_focus_source(FOCUSES_PATH, encoding="utf-8-sig")
+        start = text.index("id = VAL_Northern_Settlement")
+        body = text[start:text.index("\n\tfocus = {", start)]
+        bypass = re.search(r"bypass = \{(.*?)\n\t\t\}", body, re.S)
+        self.assertIsNotNone(bypass)
+        self.assertIn("VAL_nod_op_moment_passed = yes", bypass.group(1))
 
     def test_disappearing_nod_does_not_credit_third_party_conquest(self):
         facts = {("NOD", "exists", "no"): True}

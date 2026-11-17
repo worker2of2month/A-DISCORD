@@ -69,6 +69,11 @@ sound = {
 }
 
 sound = {
+	name = "superevent_vorkerland_singularity_sound"
+	file = "superevents/superevent_vorkerland_singularity_sound.wav"
+}
+
+sound = {
 	name = "superevent_stelander_great_sound"
 	file = "superevents/superevent_stelander_great_sound.wav"
 }
@@ -195,6 +200,11 @@ sound = {
 }
 
 # Sophia, Herbstwerk; music and sound-effect credits in WRK/audio_sources.json.
+sound = {
+	name = "superevent_west_anton_sound"
+	file = "superevents/superevent_west_anton_sound.wav"
+}
+
 sound = {
 	name = "superevent_west_dorian_sound"
 	file = "superevents/superevent_west_dorian_sound.wav"

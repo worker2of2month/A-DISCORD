@@ -1141,6 +1141,13 @@ RUS_black_army_dominant = {
 	power_balance_value = { id = RUS_state_balance value > 0.599 }
 }
 
+# Any lean toward the scientists gives them the succession after the Khan
+# accepts the ultimatum; a level balance leaves the bunker guard with the army.
+RUS_crisis_ultimatum_heir_scientists = {
+	has_power_balance = { id = RUS_state_balance }
+	power_balance_value = { id = RUS_state_balance value < 0 }
+}
+
 # AI RUS. A coup course chosen by RUS_ai_choose_coup_course is still running.
 RUS_ai_coup_course_active = {
 	OR = {
@@ -2303,9 +2310,10 @@ RUS_sci_branch_operational = {
 	RUS_regime_governing = yes
 }
 
-# RUS. A zone republic RUS absorbed can be chartered again while RUS still
-# owns its capital. The capitals are the collapse manifest's fixed anchors.
-RUS_sci_factory_republic_eligible = {
+# RUS. A zone republic RUS absorbed can be restored while RUS still owns its
+# capital: chartered by the council or lost in the breakup after the Khan.
+# The capitals are the collapse manifest's fixed anchors.
+RUS_zone_republic_restorable = {
 	OR = {
 		AND = {
 			has_country_flag = ADISCORD_vorkerland_rus_sla_absorbed

@@ -77,6 +77,11 @@ spriteTypes = {
 		textureFile = "gfx/interface/superevents/South/superevent_south_war.png"
 	}
 
+	spriteType = {
+		name = "GFX_superevent_vorkerland_singularity"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_singularity.png"
+	}
+
 
 	spriteType = {
 		name = "GFX_superevent_stelander_great"

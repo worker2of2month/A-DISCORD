@@ -242,6 +242,7 @@ on_actions = {
 	}
 	on_puppet = {
 		effect = {
+			ADISCORD_west_check_mandate_patron = yes
 			if = {
 				limit = {
 					RUS = { has_country_flag = RUS_bunker_initialized }
@@ -276,6 +277,7 @@ on_actions = {
 	}
 	on_release_as_puppet = {
 		effect = {
+			ADISCORD_west_check_mandate_patron = yes
 			ADISCORD_vorkerland_reconcile_coalition_obligation = yes
 			if = {
 				limit = { ADISCORD_vorkerland_release_requires_interception = yes }
@@ -292,6 +294,7 @@ on_actions = {
 	}
 	on_release_as_free = {
 		effect = {
+			ADISCORD_west_check_mandate_patron = yes
 			if = {
 				limit = {
 					tag = RUS
@@ -568,8 +571,13 @@ on_actions = {
 		}
 	}
 
+	on_liberate = {
+		effect = { ADISCORD_west_check_mandate_patron = yes }
+	}
+
 	on_subject_free = {
 		effect = {
+			ADISCORD_west_check_mandate_patron = yes
 			if = {
 				limit = {
 					tag = RUS

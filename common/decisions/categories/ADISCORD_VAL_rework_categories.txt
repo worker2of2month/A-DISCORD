@@ -50,14 +50,18 @@ VAL_east_contest_category = {
 	visible_when_empty = yes
 }
 
-# The delivery of a paid foreign order outlives the reckoning that sent it.
+# The delivery of a paid foreign order outlives the reckoning that sent it. A
+# side order paid on the main tree uses the same deposit without opening this list.
 VAL_peace_payroll_category = {
 	priority = 955
 	allowed = { tag = VAL }
 	visible = {
 		OR = {
 			VAL_peace_crisis_active = yes
-			has_variable = VAL_peace_order_deposit
+			AND = {
+				has_variable = VAL_peace_order_deposit
+				has_focus_tree = VAL_new_world_focus
+			}
 		}
 	}
 	visible_when_empty = yes
@@ -85,6 +89,10 @@ VAL_contract_management = {
 			has_completed_focus = VAL_Ministry_Of_Contract_Memory
 			has_completed_focus = VAL_Quarterly_Contract_Norm
 			VAL_contract_obligations_decisions_visible = yes
+			AND = {
+				has_variable = VAL_order_portfolio
+				has_focus_tree = VAL_focus
+			}
 		}
 	}
 	visible_when_empty = yes

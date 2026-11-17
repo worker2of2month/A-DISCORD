@@ -101,22 +101,24 @@ VAL_new_world_plan = {
 			VAL_nw_operational = no
 		}
 	}
-	# The Khan focus comes first: its warning may already be running. Then one
-	# alternative of each exclusive choice: water convoys, the register audit and
+	# The Khan focus comes first: its warning may already be running. The AI pays
+	# the companies' bill: it is the only front with the loyal battalions that soften
+	# a mutiny. Then one alternative of each exclusive choice: the register audit and
 	# the workers' charter; the regime roots and the eastern question follow, so the
 	# contest for the republics starts early; every regime branch is listed because
-	# only the regime chosen at the reckoning can be taken; trade missions, Greitz
-	# passes, concessions, accord, foundries, arsenal.
+	# only the regime chosen at the reckoning can be taken. The eastern arsenal and
+	# the last war follow the regime lanes, so the contest deadline is not spent on
+	# side branches. The shared economy and reclamation branches come after them,
+	# with export finance and field surgeons as their alternatives. The other
+	# choices are trade missions, Greitz passes, concessions, accord, foundries and
+	# arsenal.
 	ai_national_focuses = {
 		VAL_nw_price
 		VAL_nw_khan
 		VAL_peace_silent_lines
-		VAL_peace_ash_shifts
 		VAL_peace_captains_bill
-		VAL_peace_water_convoys
 		VAL_peace_registry_audit
 		VAL_peace_loyal_battalions
-		VAL_peace_tishin_list
 		VAL_peace_kilnet
 		VAL_peace_two_bills
 		VAL_peace_workers_charter
@@ -162,6 +164,28 @@ VAL_new_world_plan = {
 		VAL_captains_company_markets
 		VAL_captains_greitz_passes
 		VAL_captains_last_buyer
+		VAL_east_arsenal
+		VAL_east_final
+		VAL_econ_development_fund
+		VAL_econ_precision_industry
+		VAL_econ_special_metallurgy
+		VAL_econ_automation
+		VAL_econ_logistics
+		VAL_econ_computing
+		VAL_econ_defense_orders
+		VAL_econ_export_finance
+		VAL_econ_integrated_economy
+		VAL_econ_captured_laboratories
+		VAL_reclamation_survey
+		VAL_reclamation_road_crews
+		VAL_reclamation_clean_water
+		VAL_The_Harvest_Of_Ash
+		VAL_Field_Surgeons
+		VAL_Dead_Villages_Still_Count
+		VAL_reclamation_workshops
+		VAL_reclamation_return_home
+		VAL_reclamation_land_register
+		VAL_reclamation_industrial_sites
 		VAL_nw_perimeter
 		VAL_nw_council
 		VAL_nw_register
@@ -174,8 +198,6 @@ VAL_new_world_plan = {
 		VAL_nw_archives
 		VAL_nw_alloys
 		VAL_nw_generation
-		VAL_east_arsenal
-		VAL_east_final
 		VAL_nw_steel_peace
 	}
 	weight = { factor = 100 }

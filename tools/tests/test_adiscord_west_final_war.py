@@ -179,6 +179,86 @@ class WestFinalWarContractTests(unittest.TestCase):
         self.assertNotIn("add_to_war", source)
         self.assertTrue(source.strip().endswith("country_event = { id = ADISCORD_west.12 hours = 1 }"))
 
+    def test_itoran_victory_preserves_the_government_under_its_new_flag(self):
+        selector = parse_clausewitz(body(EFFECTS, "ADISCORD_west_adopt_itoran_banner"))
+        for government in ("IVN", "IVN_cw_committee", "IVN_unified_legion", "IVN_unified_directory",
+                           "IVN_unified_communes", "IVN_unified_marches"):
+            facts = {("IVN", "has_cosmetic_tag", government): True}
+            tags = [row.value for _, row in selected_effects(selector, facts, "IVN") if row.key == "set_cosmetic_tag"]
+            self.assertEqual(tags, [government + "_west_victory"])
+        outcome = parse_clausewitz(body(EFFECTS, "ADISCORD_west_final_resolve_ivn_victory"))
+        self.assertEqual(scalar(block(block(outcome, "if"), "IVN"), "ADISCORD_west_adopt_itoran_banner"), "yes")
+
+    def test_mandates_only_follow_actual_treaty_puppeting(self):
+        settle = parse_clausewitz(body(EFFECTS, "ADISCORD_west_settle_member"))
+        for pending, terms, subject, expected in (
+            (False, 2, False, False), (False, 2, True, False),
+            (True, 1, False, False), (True, 2, False, False), (True, 2, True, True),
+        ):
+            facts = {
+                ("ROM", "exists", "yes"): True,
+                ("ROM", "has_country_flag", "ADISCORD_west_settlement_pending"): pending,
+                ("ROM", "variable", "global.ADISCORD_west_terms"): terms,
+                ("ROM", "is_subject_of", "ROOT"): subject,
+            }
+            effects = [entry.key for _, entry in selected_effects(settle, facts, "ROM")]
+            self.assertEqual(effects.count("ADISCORD_west_update_mandate_banner"), int(expected))
+
+    def test_mandate_banners_and_liberation_match_each_government(self):
+        from tools.builders.build_adiscord_vorkerland_original_flags import WEST_MANDATE_FLAGS
+
+        router = parse_clausewitz(body(EFFECTS, "ADISCORD_west_update_mandate_banner"))
+        templates = {
+            key: body(EFFECTS, key) for key in (
+                "ADISCORD_west_base_mandate", "ADISCORD_west_named_mandate", "ADISCORD_west_regional_mandate"
+            )
+        }
+        covered = set()
+        for call in flatten(router):
+            if call.key not in templates:
+                continue
+            args = {e.key: e.value for e in call.value}
+            template = templates[call.key]
+            for key, value in args.items():
+                template = template.replace(f"${key}$", value)
+            effect = parse_clausewitz(template)
+            for patron in ("WRK", "IVN"):
+                banner = args["BANNER"] if "BANNER" in args else args[f"{patron}_BANNER"]
+                covered.add(banner)
+                old = args.get("IDENTITY", "original")
+                for install, identity, wanted in ((True, old, banner), (False, banner, old), (False, "later", None)):
+                    facts = {
+                        ("PWR", "has_country_flag", "ADISCORD_west_treaty_mandate"): install,
+                        ("PWR", "has_global_flag", "ADISCORD_west_hegemon_WRK"): patron == "WRK",
+                        ("PWR", "has_cosmetic_tag", identity): True,
+                    }
+                    writes = [
+                        "original" if row.key == "drop_cosmetic_tag" else row.value
+                        for _, row in selected_effects(effect, facts, "PWR")
+                        if row.key in ("set_cosmetic_tag", "drop_cosmetic_tag")
+                    ]
+                    self.assertEqual(writes, [] if wanted is None else [wanted], (call.key, banner, identity))
+        self.assertEqual(covered, set(WEST_MANDATE_FLAGS) | {"IVN_unified_legion_west_mandate"})
+
+    def test_eternal_imperium_keeps_its_flag_under_both_settlements(self):
+        for directory in ("", "medium", "small"):
+            flags = ROOT / "gfx/flags" / directory
+            original = (flags / "IVN_unified_legion.tga").read_bytes()
+            for outcome in ("west_victory", "west_mandate"):
+                self.assertEqual((flags / f"IVN_unified_legion_{outcome}.tga").read_bytes(), original)
+
+    def test_bagli_has_a_dedicated_western_victory_recording(self):
+        from tools.builders.build_adiscord_superevent_music import WEST_POLICY_TRACKS
+
+        sample = "superevent_west_anton_sound"
+        sounds = ROOT / "sound/superevents_effects.asset"
+        definitions = parse_clausewitz(sounds.read_text(encoding="utf-8"))
+        bound = [scalar(block(e.value, "sounds"), "sound") for e in definitions
+                 if e.key == "soundeffect" and scalar(e.value, "name") == sample + "_e"]
+        self.assertEqual(bound, [sample])
+        self.assertIn(sample, WEST_POLICY_TRACKS)
+        self.assertTrue((ROOT / f"sound/superevents/{sample}.wav").is_file())
+
     def test_entry_joins_exact_war_even_with_existing_enemy_relation(self):
         source = body(EFFECTS, "ADISCORD_west_complete_side_entry")
         self.assertNotIn("has_war_with", source)

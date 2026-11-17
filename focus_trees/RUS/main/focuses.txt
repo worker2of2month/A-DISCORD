@@ -1428,7 +1428,11 @@ focus_tree = {
 		prerequisite = { focus = RUS_imperial_arsenals }
 		prerequisite = { focus = RUS_western_supply_lines }
 		prerequisite = { focus = RUS_aimaq_reserve }
-		allow_branch = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		# A faction that succeeds the proclaimed Khan takes these cells.
+		allow_branch = {
+			has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			RUS_coup_regime = no
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -1516,7 +1520,11 @@ focus_tree = {
 		y = 18
 		cost = 3
 		prerequisite = { focus = RUS_imperial_general_staff }
-		allow_branch = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		# A faction that succeeds the proclaimed Khan takes these cells.
+		allow_branch = {
+			has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			RUS_coup_regime = no
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -1673,7 +1681,11 @@ focus_tree = {
 		y = 18
 		cost = 3
 		prerequisite = { focus = RUS_imperial_general_staff }
-		allow_branch = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		# A faction that succeeds the proclaimed Khan takes these cells.
+		allow_branch = {
+			has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			RUS_coup_regime = no
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -4875,6 +4887,14 @@ focus_tree = {
 		}
 		completion_reward = {
 			effect_tooltip = { add_ideas = RUS_council_mandate }
+			if = {
+				limit = { RUS_khan_governing = yes }
+				custom_effect_tooltip = RUS_scientists_council_coalition_tt
+				hidden_effect = {
+					set_temp_variable = { ADISCORD_party = token:technocracy }
+					ADISCORD_admit_coalition_party = yes
+				}
+			}
 			hidden_effect = {
 				set_variable = { var = RUS_government_mandate_political_power value = 0.1 }
 				set_variable = { var = RUS_government_mandate_mobilization value = -0.05 }
@@ -5002,6 +5022,14 @@ focus_tree = {
 		}
 		completion_reward = {
 			effect_tooltip = { add_ideas = RUS_chancery_mandate }
+			if = {
+				limit = { RUS_khan_governing = yes }
+				custom_effect_tooltip = RUS_black_army_oath_coalition_tt
+				hidden_effect = {
+					set_temp_variable = { ADISCORD_party = token:chauvinism }
+					ADISCORD_admit_coalition_party = yes
+				}
+			}
 			hidden_effect = {
 				set_variable = { var = RUS_government_mandate_political_power value = 0.2 }
 				set_variable = { var = RUS_government_mandate_mobilization value = 0.1 }

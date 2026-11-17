@@ -8272,6 +8272,7 @@ NAM_corp_monthly = {
 # the government, but the chairman of the boards rules; every owned island is
 # governed by a corporate board.
 NAM_corp_takeover = {
+	ADISCORD_end_party_coalition = yes
 	set_country_flag = NAM_corp_takeover
 	clr_country_flag = NAM_corp_takeover_pending
 	clr_country_flag = NAM_corp_event_pending
@@ -8284,6 +8285,13 @@ NAM_corp_takeover = {
 		ruling_party = hedonism
 		elections_allowed = no
 	}
+	set_party_name = {
+		ideology = hedonism
+		name = NAM_hum_board_of_governors
+		long_name = NAM_hum_board_of_governors
+	}
+	set_temp_variable = { ADISCORD_party = token:humanism }
+	ADISCORD_admit_coalition_party = yes
 	add_country_leader_role = {
 		character = NAM_Mark_Olshansky
 		promote_leader = yes

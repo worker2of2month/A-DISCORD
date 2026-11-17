@@ -1,4 +1,19 @@
 spriteTypes = {
+	spriteType = {
+		name = "GFX_ADISCORD_party_banned"
+		texturefile = "gfx/interface/party_status_system/party_status_banned.png"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_party_member"
+		texturefile = "gfx/interface/party_status_system/party_status_coalition_member.png"
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_party_leader"
+		texturefile = "gfx/interface/party_status_system/party_status_coalition_leader.png"
+	}
+
 	corneredTileSpriteType = {
 		name = "GFX_ADISCORD_politics_header_button"
 		texturefile = "gfx/interface/tiled_plain_bg_adiscord.png"

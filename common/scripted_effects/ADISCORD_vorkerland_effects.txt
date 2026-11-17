@@ -3891,6 +3891,7 @@ ADISCORD_vorkerland_sync_independence_cosmetic = {
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_collapse_started
+			NOT = { has_country_flag = ADISCORD_west_treaty_mandate }
 			OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }
 		}
 		if = {
@@ -4028,9 +4029,25 @@ VAD_appoint_collegial_staff = {
 	}
 	if = {
 		limit = { has_completed_focus = WRK_joint_ratify_staff_constitution }
-		set_cosmetic_tag = VAD_vorkerland_staff_republic
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_west_hegemon_WRK
+				tag = event_target:ADISCORD_vorkerland_nation
+			}
+			set_cosmetic_tag = VAD_vorkerland_staff_republic_west_victory
+		}
+		else = { set_cosmetic_tag = VAD_vorkerland_staff_republic }
 	}
-	else = { set_cosmetic_tag = VAD_vorkerland_collegial_staff }
+	else = {
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_west_hegemon_WRK
+				tag = event_target:ADISCORD_vorkerland_nation
+			}
+			set_cosmetic_tag = VAD_vorkerland_collegial_staff_west_victory
+		}
+		else = { set_cosmetic_tag = VAD_vorkerland_collegial_staff }
+	}
 	set_party_name = {
 		ideology = pragmatism
 		name = VAD_staff_party
@@ -4132,6 +4149,8 @@ ADISCORD_vorkerland_form_joint_government = {
 		VAD = {
 			set_cosmetic_tag = WRK_vorkerland_joint_government
 			ADISCORD_vorkerland_appoint_joint_council = yes
+			set_temp_variable = { ADISCORD_party = token:anarchism }
+			ADISCORD_admit_coalition_party = yes
 			mark_focus_tree_layout_dirty = yes
 			country_event = { id = ADISCORD_vorkerland_collapse.62 days = 1 }
 			news_event = { id = ADISCORD_vorkerland_story.44 hours = 1 }
@@ -4546,6 +4565,10 @@ ADISCORD_superevent_enqueue = {
 						check_variable = { ADISCORD_superevent_request = 76 }
 						has_global_flag = superevent_south_war
 					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 77 }
+						has_global_flag = superevent_vorkerland_singularity
+					}
 					AND = { check_variable = { ADISCORD_superevent_request = 13 } has_global_flag = superevent_stelander_great }
 					AND = {
 						check_variable = { ADISCORD_superevent_request = 15 }
@@ -4805,6 +4828,7 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_val_commonwealth
 					has_global_flag = superevent_val_council_proclamation
 					has_global_flag = superevent_south_war
+					has_global_flag = superevent_vorkerland_singularity
 					has_global_flag = superevent_stelander_great
 					has_global_flag = superevent_rus_restoration
 					has_global_flag = superevent_rus_black_banner
@@ -4917,6 +4941,10 @@ ADISCORD_superevent_dispatch_next = {
 		else_if = {
 			limit = { check_variable = { ADISCORD_superevent_next = 76 } }
 			set_global_flag = superevent_south_war
+		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 77 } }
+			set_global_flag = superevent_vorkerland_singularity
 		}
 		else_if = {
 			limit = { check_variable = { ADISCORD_superevent_next = 13 } }
@@ -5226,6 +5254,7 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_val_commonwealth
 	clr_global_flag = superevent_val_council_proclamation
 	clr_global_flag = superevent_south_war
+	clr_global_flag = superevent_vorkerland_singularity
 	clr_global_flag = superevent_stelander_great
 	clr_global_flag = superevent_rus_restoration
 	clr_global_flag = superevent_rus_black_banner
@@ -5253,6 +5282,8 @@ ADISCORD_vorkerland_play_superevent_sound = {
 				has_global_flag = superevent_val_commonwealth
 				has_global_flag = superevent_stelander_great
 				has_global_flag = superevent_nam_veyran_proclamation
+				has_global_flag = superevent_west_anton
+				has_global_flag = superevent_vorkerland_singularity
 			}
 		}
 		play_song = "two_minutes_of_silence"
@@ -10162,6 +10193,8 @@ ADISCORD_vorkerland_settle_unification_under_vad = {
 		limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 		set_cosmetic_tag = WRK_vorkerland_joint_government
 		ADISCORD_vorkerland_appoint_joint_council = yes
+		set_temp_variable = { ADISCORD_party = token:anarchism }
+		ADISCORD_admit_coalition_party = yes
 	}
 	else_if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_collegial_staff_formed }
@@ -12451,6 +12484,7 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_val_commonwealth days > 6 }
 					has_global_flag = { flag = superevent_val_council_proclamation days > 6 }
 					has_global_flag = { flag = superevent_south_war days > 6 }
+					has_global_flag = { flag = superevent_vorkerland_singularity days > 6 }
 					has_global_flag = { flag = superevent_stelander_great days > 6 }
 					has_global_flag = { flag = superevent_rus_restoration days > 6 }
 					has_global_flag = { flag = superevent_rus_black_banner days > 6 }
@@ -12538,6 +12572,10 @@ ADISCORD_superevent_observer_tick = {
 			if = {
 				limit = { has_global_flag = { flag = superevent_south_war days > 6 } }
 				clr_global_flag = superevent_south_war
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_vorkerland_singularity days > 6 } }
+				clr_global_flag = superevent_vorkerland_singularity
 			}
 			if = { limit = { has_global_flag = { flag = superevent_stelander_great days > 6 } } clr_global_flag = superevent_stelander_great }
 			if = {
@@ -12779,7 +12817,14 @@ ADISCORD_vorkerland_establish_world_empire = {
 	if = {
 		limit = { ADISCORD_vorkerland_world_empire_can_form = yes }
 		set_country_flag = ADISCORD_vorkerland_joint_succession_settled
-		set_cosmetic_tag = WRK_vorkerland_world_empire
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_west_hegemon_WRK
+				tag = event_target:ADISCORD_vorkerland_nation
+			}
+			set_cosmetic_tag = WRK_vorkerland_world_empire_west_victory
+		}
+		else = { set_cosmetic_tag = WRK_vorkerland_world_empire }
 		retire_character = WRK_VAD_Joint_Council
 		if = {
 			limit = { has_character = WRK_Vlad_Petrichev }
@@ -12830,6 +12875,7 @@ ADISCORD_vorkerland_establish_world_empire = {
 # Both founders enter here once, after their cabinet and ruler are settled.
 # Queue the proclamation in WRK scope before its news reaches individual countries.
 ADISCORD_vorkerland_initialize_world_empire = {
+	ADISCORD_end_party_coalition = yes
 	set_variable = { var = WRK_empire_attack value = 0 }
 	set_variable = { var = WRK_empire_defence value = 0 }
 	set_variable = { var = WRK_empire_org value = 0 }
@@ -12856,7 +12902,14 @@ ADISCORD_vorkerland_initialize_world_empire = {
 ADISCORD_vorkerland_establish_petrichev_empire = {
 	if = {
 		limit = { ADISCORD_vorkerland_petrichev_empire_can_form = yes }
-		set_cosmetic_tag = WRK_vorkerland_world_empire
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_west_hegemon_WRK
+				tag = event_target:ADISCORD_vorkerland_nation
+			}
+			set_cosmetic_tag = WRK_vorkerland_world_empire_west_victory
+		}
+		else = { set_cosmetic_tag = WRK_vorkerland_world_empire }
 		ADISCORD_vorkerland_initialize_world_empire = yes
 		news_event = { id = ADISCORD_vorkerland_postwar.5 hours = 1 }
 	}
@@ -13003,8 +13056,33 @@ ADISCORD_vorkerland_rename_after_itora = {
 		}
 	}
 	if = {
+		limit = { has_cosmetic_tag = WRK_vorkerland_joint_government }
+		set_cosmetic_tag = WRK_vorkerland_joint_government_west_victory
+	}
+	else_if = {
+		limit = { has_cosmetic_tag = VAD_vorkerland_restoration }
+		set_cosmetic_tag = VAD_vorkerland_restoration_west_victory
+	}
+	else_if = {
+		limit = { has_cosmetic_tag = VAD_vorkerland_collegial_staff }
+		set_cosmetic_tag = VAD_vorkerland_collegial_staff_west_victory
+	}
+	else_if = {
+		limit = { has_cosmetic_tag = VAD_vorkerland_staff_republic }
+		set_cosmetic_tag = VAD_vorkerland_staff_republic_west_victory
+	}
+	else_if = {
+		limit = { has_cosmetic_tag = WRK_vorkerland_world_empire }
+		set_cosmetic_tag = WRK_vorkerland_world_empire_west_victory
+	}
+	if = {
 		limit = { ADISCORD_vorkerland_world_empire_active = no }
 		if = {
+			limit = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes } }
+			set_cosmetic_tag = WRK_republican_union
+			news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }
+		}
+		else_if = {
 			limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
 			set_cosmetic_tag = WRK_western_eastern_union
 			news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }
@@ -17923,7 +18001,14 @@ VAD_ratify_staff_constitution = {
 		set_variable = { var = VAD_staff_stability value = 0.05 }
 		set_variable = { var = VAD_staff_command value = 0.10 }
 		VAD_apply_collegial_mandate = yes
-		set_cosmetic_tag = VAD_vorkerland_staff_republic
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_west_hegemon_WRK
+				tag = event_target:ADISCORD_vorkerland_nation
+			}
+			set_cosmetic_tag = VAD_vorkerland_staff_republic_west_victory
+		}
+		else = { set_cosmetic_tag = VAD_vorkerland_staff_republic }
 		news_event = { id = ADISCORD_vorkerland_story.49 }
 	}
 	VAD_party_representatives_republic = yes
@@ -18929,7 +19014,11 @@ WRK_party_representatives_technocracy = {
 	if = {
 		limit = {
 			tag = event_target:ADISCORD_vorkerland_nation
-			has_cosmetic_tag = WRK_vorkerland_technocracy
+			OR = {
+				has_cosmetic_tag = WRK_vorkerland_technocracy
+				has_cosmetic_tag = WRK_vorkerland_technocracy_west_mandate
+				has_cosmetic_tag = WRK_forul_technical_union
+			}
 		}
 		hidden_effect = {
 			if = {
@@ -18990,7 +19079,11 @@ WRK_party_representatives_joint_government = {
 	if = {
 		limit = {
 			tag = event_target:ADISCORD_vorkerland_nation
-			has_cosmetic_tag = WRK_vorkerland_joint_government
+			OR = {
+				has_cosmetic_tag = WRK_vorkerland_joint_government
+				has_cosmetic_tag = WRK_vorkerland_joint_government_west_victory
+				has_cosmetic_tag = WRK_vorkerland_joint_government_west_mandate
+			}
 		}
 		hidden_effect = {
 			if = {
@@ -19051,7 +19144,11 @@ WRK_party_representatives_world_empire = {
 	if = {
 		limit = {
 			tag = event_target:ADISCORD_vorkerland_nation
-			has_cosmetic_tag = WRK_vorkerland_world_empire
+			OR = {
+				has_cosmetic_tag = WRK_vorkerland_world_empire
+				has_cosmetic_tag = WRK_vorkerland_world_empire_west_victory
+				has_cosmetic_tag = WRK_vorkerland_world_empire_west_mandate
+			}
 		}
 		hidden_effect = {
 			if = {
@@ -19112,7 +19209,11 @@ WKR_party_representatives_chairman = {
 	if = {
 		limit = {
 			tag = WKR
-			has_cosmetic_tag = WRK_vorkerland_emergency
+			OR = {
+				has_cosmetic_tag = WRK_vorkerland_emergency
+				has_cosmetic_tag = WRK_vorkerland_emergency_west_mandate
+				has_cosmetic_tag = WRK_western_eastern_union
+			}
 		}
 		hidden_effect = {
 			if = {
@@ -19193,7 +19294,11 @@ WKR_party_representatives_executive = {
 	if = {
 		limit = {
 			tag = WKR
-			has_cosmetic_tag = WRK_vorkerland_utilitarian_republic
+			OR = {
+				has_cosmetic_tag = WRK_vorkerland_utilitarian_republic
+				has_cosmetic_tag = WRK_vorkerland_utilitarian_republic_west_mandate
+				has_cosmetic_tag = WRK_republican_union
+			}
 		}
 		hidden_effect = {
 			if = {
@@ -19274,7 +19379,11 @@ VAD_party_representatives_staff = {
 	if = {
 		limit = {
 			tag = VAD
-			has_cosmetic_tag = VAD_vorkerland_collegial_staff
+			OR = {
+				has_cosmetic_tag = VAD_vorkerland_collegial_staff
+				has_cosmetic_tag = VAD_vorkerland_collegial_staff_west_victory
+				has_cosmetic_tag = VAD_vorkerland_collegial_staff_west_mandate
+			}
 		}
 		hidden_effect = {
 			if = {
@@ -19355,7 +19464,11 @@ VAD_party_representatives_republic = {
 	if = {
 		limit = {
 			tag = VAD
-			has_cosmetic_tag = VAD_vorkerland_staff_republic
+			OR = {
+				has_cosmetic_tag = VAD_vorkerland_staff_republic
+				has_cosmetic_tag = VAD_vorkerland_staff_republic_west_victory
+				has_cosmetic_tag = VAD_vorkerland_staff_republic_west_mandate
+			}
 		}
 		hidden_effect = {
 			if = {

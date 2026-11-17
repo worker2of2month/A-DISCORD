@@ -602,7 +602,7 @@ IVN_start_marches_revolt = {
 			IMD = { add_manpower = -10000 }
 		}
 		if = {
-			limit = { has_completed_focus = IVN_parliament_ban_the_union }
+			limit = { is_in_array = { ADISCORD_banned_parties = token:chauvinism } }
 			IVC = { add_manpower = -5000 }
 		}
 		else_if = {
@@ -912,7 +912,11 @@ IVN_cw_transfer_reserves = {
 	}
 	if = {
 		limit = { has_idea = IVN_cw_military_guarantees }
-		event_target:IVN_cw_recipient = { add_ideas = IVN_cw_military_guarantees }
+		event_target:IVN_cw_recipient = {
+			add_ideas = IVN_cw_military_guarantees
+			set_temp_variable = { ADISCORD_party = token:etatism }
+			ADISCORD_admit_coalition_party = yes
+		}
 		remove_ideas = IVN_cw_military_guarantees
 	}
 	if = {
@@ -1090,7 +1094,27 @@ IVN_cw_finish = {
 				}
 			}
 			IVN_cw_clear_participant = yes
+			# The victor governs under IVN's tag. Its cabinet and laws replace
+			# those of the defeated capital, even when both shared an ideology.
 			IVN = {
+				ADISCORD_end_party_coalition = yes
+				clear_array = ADISCORD_banned_parties
+				add_to_variable = { ADISCORD_party_markers_revision = 1 }
+			}
+			for_each_loop = {
+				array = ADISCORD_banned_parties
+				value = ADISCORD_party
+				add_to_array = { IVN.ADISCORD_banned_parties = ADISCORD_party }
+			}
+			for_each_loop = {
+				array = ADISCORD_cabinet_parties
+				value = ADISCORD_party
+				add_to_array = { IVN.ADISCORD_cabinet_parties = ADISCORD_party }
+			}
+			IVN = {
+				set_temp_variable = { ADISCORD_party = current_party_ideology_group }
+				ADISCORD_legalise_party = yes
+				ADISCORD_refresh_party_coalition = yes
 				annex_country = { target = event_target:IVN_cw_victor transfer_troops = yes }
 				set_capital = { state = 25 }
 				IVN_resolve_marches_revolt = yes

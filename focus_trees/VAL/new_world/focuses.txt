@@ -8,9 +8,14 @@ focus_tree = {
 		y = 555555
 	}
 
+	# Campaign-tree branches that outlive the switch; their offsets place them at
+	# x 38-42, 52-60 and 62-70 beside this tree's own columns.
 	shared_focus = VAL_Naval_Contract_Office
+	shared_focus = VAL_econ_development_fund
+	shared_focus = VAL_reclamation_survey
 
-	# Reckoning: the trunk joins both bills and ends with the chosen regime.
+	# Reckoning: the trunk pays one bill, chosen at its roots, and ends with the
+	# chosen regime. The neglected front escalates until its settle decision is paid.
 
 	focus = {
 		id = VAL_nw_price
@@ -51,6 +56,11 @@ focus_tree = {
 		prerequisite = {
 			focus = VAL_nw_price
 		}
+		# Once the regime is chosen, VAL_peace_settle_open_bills pays for an untaken focus
+		# and the bypass keeps it from paying a second time.
+		bypass = {
+			VAL_peace_regime_chosen = yes
+		}
 		completion_reward = {
 			VAL_advance_economic_recovery = yes
 			custom_effect_tooltip = VAL_peace_treasury_100_tt
@@ -67,7 +77,7 @@ focus_tree = {
 	focus = {
 		id = VAL_peace_two_bills
 		icon = GFX_focus_VAL_Central_Payment_Office
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_DECISIONS }
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 26
 		y = 4
 		cost = 3
@@ -76,15 +86,13 @@ focus_tree = {
 		}
 		prerequisite = {
 			focus = VAL_peace_tishin_list
-		}
-		prerequisite = {
 			focus = VAL_peace_kilnet
 		}
 		bypass = {
 			VAL_peace_regime_chosen = yes
 		}
 		completion_reward = {
-			unlock_decision_tooltip = VAL_peace_foreign_order
+			VAL_peace_reward_two_bills = yes
 			country_event = { id = val_peace.25 }
 		}
 		ai_will_do = {
@@ -218,6 +226,7 @@ focus_tree = {
 			VAL_peace_regime_chosen = yes
 		}
 		completion_reward = {
+			VAL_peace_reward_archive = yes
 			country_event = { id = val_peace.30 }
 		}
 		ai_will_do = {
@@ -592,7 +601,7 @@ focus_tree = {
 	focus = {
 		id = VAL_throne_arsenal_monopoly
 		icon = GFX_focus_VAL_Factories_Like_Cathedrals
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
@@ -610,13 +619,8 @@ focus_tree = {
 				uses = 2
 				category = infantry_weapons
 			}
-			effect_tooltip = {
-				add_ideas = VAL_throne_monopoly_delta
-			}
-			hidden_effect = {
-				add_to_variable = { var = VAL_peace_order_military_income value = 0.10 }
-				VAL_peace_order_update = yes
-			}
+			unlock_decision_tooltip = VAL_throne_crown_acceptance
+			custom_effect_tooltip = VAL_throne_crown_acceptance_unlock_tt
 		}
 		ai_will_do = {
 			base = 10
@@ -626,7 +630,7 @@ focus_tree = {
 	focus = {
 		id = VAL_throne_memorial
 		icon = GFX_focus_VAL_Ministry_Of_Contract_Memory
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
 		allow_branch = {
 			VAL_peace_regime_throne = yes
 		}
@@ -646,14 +650,9 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = VAL_throne_memorial_delta
-			}
-			hidden_effect = {
-				add_to_variable = { var = VAL_peace_order_war_support value = 0.05 }
-				add_to_variable = { var = VAL_peace_order_pp value = 0.05 }
-				VAL_peace_order_update = yes
-			}
+			add_war_support = 0.05
+			unlock_decision_tooltip = VAL_throne_memorial_combine
+			custom_effect_tooltip = VAL_throne_memorial_combine_unlock_tt
 			country_event = { id = val_peace.58 }
 		}
 		ai_will_do = {
@@ -1037,7 +1036,7 @@ focus_tree = {
 	focus = {
 		id = VAL_cabinet_not_for_sale
 		icon = GFX_focus_VAL_Field_Surgeons
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
@@ -1049,14 +1048,9 @@ focus_tree = {
 			focus = VAL_cabinet_zone_clearing
 		}
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = VAL_cabinet_not_for_sale_delta
-			}
-			hidden_effect = {
-				add_to_variable = { var = VAL_peace_order_stability value = 0.05 }
-				add_to_variable = { var = VAL_peace_order_consumer_goods value = -0.05 }
-				VAL_peace_order_update = yes
-			}
+			add_stability = 0.05
+			unlock_decision_tooltip = VAL_cabinet_settlement_services
+			custom_effect_tooltip = VAL_cabinet_settlement_services_unlock_tt
 			country_event = { id = val_peace.65 }
 		}
 		ai_will_do = {
@@ -1093,7 +1087,7 @@ focus_tree = {
 	focus = {
 		id = VAL_cabinet_reconstruction_loans
 		icon = GFX_focus_VAL_Brokered_Steel
-		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
 		allow_branch = {
 			VAL_peace_regime_cabinet = yes
 		}
@@ -1105,14 +1099,11 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_peace_treasury_300_tt
-			effect_tooltip = {
-				add_ideas = VAL_cabinet_loans_delta
-			}
 			hidden_effect = {
 				ADISCORD_economy_receive_300 = yes
-				add_to_variable = { var = VAL_peace_order_consumer_goods value = -0.05 }
-				VAL_peace_order_update = yes
 			}
+			unlock_decision_tooltip = VAL_cabinet_settlement_loans
+			custom_effect_tooltip = VAL_cabinet_settlement_loans_unlock_tt
 		}
 		ai_will_do = {
 			base = 10
@@ -1304,7 +1295,7 @@ focus_tree = {
 	focus = {
 		id = VAL_charter_silence
 		icon = GFX_focus_VAL_Reserve_Accounting
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
@@ -1318,13 +1309,9 @@ focus_tree = {
 			focus = VAL_charter_tribunal
 		}
 		completion_reward = {
-			effect_tooltip = {
-				add_ideas = VAL_charter_silence_delta
-			}
-			hidden_effect = {
-				add_to_variable = { var = VAL_peace_order_army_org value = 0.03 }
-				VAL_peace_order_update = yes
-			}
+			army_experience = 30
+			unlock_decision_tooltip = VAL_charter_recall_garrisons
+			custom_effect_tooltip = VAL_charter_recall_garrisons_unlock_tt
 			country_event = { id = val_peace.70 }
 		}
 		ai_will_do = {
@@ -1444,7 +1431,7 @@ focus_tree = {
 	focus = {
 		id = VAL_charter_veteran_reserve
 		icon = GFX_focus_VAL_Reserve_Battalions
-		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER FOCUS_FILTER_VAL_DECISIONS }
 		allow_branch = {
 			VAL_peace_regime_charter = yes
 		}
@@ -1456,13 +1443,8 @@ focus_tree = {
 		}
 		completion_reward = {
 			add_manpower = 8000
-			effect_tooltip = {
-				add_ideas = VAL_charter_veterans_delta
-			}
-			hidden_effect = {
-				add_to_variable = { var = VAL_peace_order_conscription value = 0.03 }
-				VAL_peace_order_update = yes
-			}
+			unlock_decision_tooltip = VAL_charter_frontier_posts
+			custom_effect_tooltip = VAL_charter_frontier_posts_unlock_tt
 		}
 		ai_will_do = {
 			base = 10
@@ -1616,7 +1598,7 @@ focus_tree = {
 	focus = {
 		id = VAL_captains_officers_assembly
 		icon = GFX_focus_VAL_Count_The_Captains
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_MANPOWER FOCUS_FILTER_VAL_DECISIONS }
 		allow_branch = {
 			VAL_peace_regime_captains = yes
 		}
@@ -1628,13 +1610,9 @@ focus_tree = {
 		}
 		completion_reward = {
 			add_political_power = 50
-			effect_tooltip = {
-				add_ideas = VAL_captains_assembly_delta
-			}
-			hidden_effect = {
-				add_to_variable = { var = VAL_peace_order_stability value = 0.05 }
-				VAL_peace_order_update = yes
-			}
+			add_stability = 0.05
+			unlock_decision_tooltip = VAL_captains_company_exchange
+			custom_effect_tooltip = VAL_captains_company_exchange_unlock_tt
 		}
 		ai_will_do = {
 			base = 10
@@ -1962,7 +1940,8 @@ focus_tree = {
 		}
 	}
 
-	# Shifts: the strike in the contaminated works.
+	# Shifts: the strike in the contaminated works. Its root excludes the companies'
+	# root; the unpaid companies' debt grows until VAL_peace_settle_companies.
 
 	focus = {
 		id = VAL_peace_ash_shifts
@@ -1974,16 +1953,24 @@ focus_tree = {
 		prerequisite = {
 			focus = VAL_nw_price
 		}
+		mutually_exclusive = {
+			focus = VAL_peace_captains_bill
+		}
 		bypass = {
 			VAL_peace_regime_chosen = yes
 		}
 		completion_reward = {
 			VAL_advance_economic_recovery = yes
 			unlock_decision_tooltip = VAL_peace_medical_exit
+			custom_effect_tooltip = VAL_peace_companies_unpaid_tt
+			unlock_decision_tooltip = VAL_peace_settle_companies
 			country_event = { id = val_peace.20 }
+			hidden_effect = {
+				country_event = { id = val_peace.14 }
+			}
 		}
 		ai_will_do = {
-			base = 10
+			base = 5
 		}
 	}
 
@@ -2072,6 +2059,7 @@ focus_tree = {
 			VAL_peace_regime_chosen = yes
 		}
 		completion_reward = {
+			VAL_peace_reward_tishin_list = yes
 			country_event = { id = val_peace.24 }
 		}
 		ai_will_do = {
@@ -2079,7 +2067,9 @@ focus_tree = {
 		}
 	}
 
-	# Companies: the captains' bill.
+	# Companies: the captains' bill. Its root excludes the shifts' root; the idle
+	# lines raise the strike until VAL_peace_settle_shifts. The AI takes this front,
+	# the only one with the mutiny-softening loyal battalions.
 
 	focus = {
 		id = VAL_peace_captains_bill
@@ -2091,13 +2081,21 @@ focus_tree = {
 		prerequisite = {
 			focus = VAL_nw_price
 		}
+		mutually_exclusive = {
+			focus = VAL_peace_ash_shifts
+		}
 		bypass = {
 			VAL_peace_regime_chosen = yes
 		}
 		completion_reward = {
 			add_command_power = 25
 			unlock_decision_tooltip = VAL_peace_krutov_inspection
+			custom_effect_tooltip = VAL_peace_shifts_unmanned_tt
+			unlock_decision_tooltip = VAL_peace_settle_shifts
 			country_event = { id = val_peace.10 }
+			hidden_effect = {
+				country_event = { id = val_peace.15 }
+			}
 		}
 		ai_will_do = {
 			base = 10
@@ -2197,6 +2195,7 @@ focus_tree = {
 			VAL_peace_regime_chosen = yes
 		}
 		completion_reward = {
+			VAL_peace_reward_kilnet = yes
 			country_event = { id = val_peace.11 }
 		}
 		ai_will_do = {
@@ -2510,11 +2509,9 @@ focus_tree = {
 		cost = 2
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_survey
-			add_tech_bonus = {
-				name = VAL_nw_perimeter
-				bonus = 0.5
-				uses = 1
-				category = construction_tech
+			custom_effect_tooltip = VAL_peace_treasury_300_tt
+			hidden_effect = {
+				ADISCORD_economy_receive_300 = yes
 			}
 		}
 		ai_will_do = {
@@ -2566,11 +2563,10 @@ focus_tree = {
 		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_expand_foundry
-			add_tech_bonus = {
-				name = VAL_nw_foundries
-				bonus = 0.5
-				uses = 1
-				category = infantry_weapons
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 150
+				producer = VAL
 			}
 		}
 		ai_will_do = {
@@ -2593,11 +2589,10 @@ focus_tree = {
 		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nw_rebuild_roads
-			add_tech_bonus = {
-				name = VAL_nw_dispatch
-				bonus = 0.5
-				uses = 1
-				category = industry
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 300
+				producer = VAL
 			}
 		}
 		ai_will_do = {
@@ -2715,12 +2710,9 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_tech_bonus = {
-				name = VAL_nw_generation
-				bonus = 0.75
-				uses = 2
-				category = infantry_weapons
-			}
+			add_stability = 0.05
+			unlock_decision_tooltip = VAL_nw_power_block
+			custom_effect_tooltip = VAL_nw_power_block_unlock_tt
 		}
 		ai_will_do = {
 			base = 10

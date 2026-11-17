@@ -317,7 +317,7 @@ characters = {
 		}
 	}
 
-	# Coup leaders. RUS_coup_execute recruits and promotes one of them.
+	# Coup leaders. RUS_coup_install_regime recruits and promotes one of them.
 	RUS_Gleb_Korneev = {
 		name = RUS_Gleb_Korneev
 		portraits = {

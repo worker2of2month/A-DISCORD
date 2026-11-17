@@ -5,6 +5,8 @@ from pathlib import Path
 import re
 import unittest
 
+from PIL import Image
+
 from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions, walk
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.validators.validate_adiscord_english_localisation import ENTRY
@@ -112,6 +114,216 @@ class PartyRepresentationTests(unittest.TestCase):
                         with self.subTest(language=language, key=key):
                             self.assertEqual(len(entries.get(key, [])), 1)
                             self.assertTrue(entries[key][0][1].strip())
+
+    def test_status_roster_covers_the_live_ideologies_and_uses_the_same_badge_and_text_predicates(self):
+        loc = parsed(ROOT / "common/scripted_localisation/ADISCORD_ideologies.txt")
+        resolvers = {scalar(entry.value, "name"): entry.value for entry in loc}
+        party_names = resolvers["GetADiscordRosterParty"]
+        for group in self.groups:
+            self.assertTrue(any(
+                row.key == "text" and scalar(row.value, "localization_key") == f"country_culture|{group}_party"
+                for row in party_names
+            ), group)
+            for entries in self.localisation.values():
+                self.assertEqual(entries[f"{group}_party"][0][1], f"${group}$")
+
+        scripts = block(parsed(ROOT / "common/scripted_guis/CountryView_ScriptedGui.txt"), "scripted_gui")
+        gui = block(scripts, "ADISCORD_party_markers_gui")
+        grid = block(block(gui, "dynamic_lists"), "ADISCORD_party_marker_grid")
+        self.assertEqual(scalar(grid, "array"), "global.ideology_groups")
+        self.assertEqual(scalar(grid, "value"), "ADISCORD_party")
+        self.assertNotIn("effects", {entry.key for entry in gui})
+        self.assertNotIn("visible", {entry.key for entry in gui})
+        self.assertEqual(scalar(gui, "parent_window_name"), "ADISCORD_party_marker_anchor")
+        rows = resolvers["GetADiscordPartyStatus"]
+        for status in ("leader", "member", "banned"):
+            status_name = f"ADISCORD_party_{status}"
+            row = next(entry.value for entry in rows if entry.key == "text"
+                       and scalar(entry.value, "localization_key") == status_name)
+            text_conditions = block(row, "trigger")
+            badge_conditions = block(block(gui, "triggers"), f"party_{status}_visible")
+            self.assertEqual([(e.key, e.value) for e in text_conditions],
+                             [(e.key, e.value) for e in badge_conditions])
+
+    def test_party_hover_and_badges_align_with_the_native_colour_legend(self):
+        def widget(entries, kind, name):
+            result, = (e.value for e in entries if e.key == kind and scalar(e.value, "name") == name)
+            return result
+
+        native = block(parsed(ROOT / "interface/countrypoliticsview.gui"), "guiTypes")
+        politics = widget(native, "containerWindowType", "countrypoliticsview")
+        legend = widget(politics, "containerWindowType", "chart_explanation")
+        native_grid = widget(legend, "gridBoxType", "parties_grid")
+        anchor = widget(legend, "containerWindowType", "ADISCORD_party_marker_anchor")
+        self.assertEqual([e.value for e in block(anchor, "position")], ["0", "0"])
+        native_row = widget(native, "containerWindowType", "political_party_info_entry")
+        fill = widget(native_row, "iconType", "color_block")
+
+        view = block(parsed(ROOT / "interface/ADISCORD_CountryView.gui"), "guiTypes")
+        controller = block(block(parsed(ROOT / "common/scripted_guis/CountryView_ScriptedGui.txt"),
+                                 "scripted_gui"), "ADISCORD_party_markers_gui")
+        overlay = widget(view, "containerWindowType", scalar(controller, "window_name"))
+        grid = widget(overlay, "gridBoxType", "ADISCORD_party_marker_grid")
+        binding = block(block(controller, "dynamic_lists"), "ADISCORD_party_marker_grid")
+        row = widget(view, "containerWindowType", scalar(binding, "entry_container"))
+        pitch = int(scalar(block(native_grid, "slotsize"), "height"))
+        self.assertEqual(int(scalar(block(grid, "slotsize"), "height")), pitch)
+        self.assertEqual(int(scalar(block(grid, "size"), "height")), pitch * len(self.groups))
+        hit = widget(row, "buttonType", "party_hover")
+        icon_sizes = {}
+        for status in ("member", "leader"):
+            path = ROOT / "gfx/interface/party_status_system" / f"party_status_coalition_{status}.png"
+            with Image.open(path) as image:
+                self.assertEqual(image.size, (16, 16))
+                self.assertEqual(image.mode, "RGBA")
+                self.assertGreater(image.getchannel("A").histogram()[0], image.width * image.height // 5)
+                icon_sizes[status] = image.size
+        for axis in ("x", "y"):
+            fill_start = int(scalar(block(native_grid, "position"), axis)) + int(scalar(block(fill, "position"), axis))
+            hit_start = int(scalar(block(hit, "position"), axis))
+            self.assertLessEqual(hit_start, fill_start)
+            self.assertGreaterEqual(hit_start + int(scalar(block(hit, "size"), axis)), fill_start + 13)
+            for status in ("banned", "member", "leader"):
+                badge = widget(row, "iconType", f"party_{status}")
+                badge_start = int(scalar(block(badge, "position"), axis))
+                if status == "banned":
+                    self.assertEqual(badge_start, fill_start)
+                else:
+                    extent = icon_sizes[status][0 if axis == "x" else 1]
+                    self.assertEqual(badge_start + extent // 2, fill_start + 13 // 2)
+                    self.assertGreaterEqual(badge_start, hit_start)
+                    self.assertLessEqual(badge_start + extent, hit_start + int(scalar(block(hit, "size"), axis)))
+                    self.assertNotIn("scale", {entry.key for entry in badge})
+                self.assertEqual(scalar(badge, "alwaystransparent"), "yes")
+        self.assertEqual(scalar(hit, "pdx_tooltip"), "ADISCORD_party_marker_tt")
+        self.assertFalse(any(e.key == "name" and e.value in {
+            "ADISCORD_parties_launcher", "ADISCORD_parties_window", "ADISCORD_parties_toggle",
+        } for e in walk(view) if isinstance(e.value, str)))
+        for entries in self.localisation.values():
+            self.assertEqual(entries["ADISCORD_party_marker_tt"][0][1], "[GetADiscordPartyHover]")
+            self.assertTrue(entries["ADISCORD_party_banned_hover"][0][1].startswith("§R$ADISCORD_party_banned$§!"))
+            self.assertIn("[GetADiscordRosterParty]", entries["ADISCORD_party_banned_hover"][0][1])
+
+    def test_roster_changes_invalidate_the_badges_but_weekly_support_updates_do_not(self):
+        gui = block(block(parsed(ROOT / "common/scripted_guis/CountryView_ScriptedGui.txt"), "scripted_gui"),
+                    "ADISCORD_party_markers_gui")
+        revision = scalar(gui, "dirty")
+        effects = parsed(ROOT / "common/scripted_effects/ADISCORD_party_status_effects.txt")
+
+        def invalidates(body):
+            return any(row.key == "add_to_variable" and any(item.key == revision for item in row.value)
+                       for row in walk(body))
+
+        for action in ("end_party_coalition", "admit_coalition_party", "remove_coalition_party",
+                       "ban_party", "legalise_party"):
+            self.assertTrue(invalidates(block(effects, "ADISCORD_" + action)), action)
+        self.assertFalse(invalidates(block(effects, "ADISCORD_refresh_party_coalition")))
+        hooks = block(parsed(ROOT / "common/on_actions/00_ADISCORD_on_actions.txt"), "on_actions")
+        self.assertTrue(invalidates(block(hooks, "on_government_change")))
+        itora = parsed(ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt")
+        self.assertTrue(invalidates(block(itora, "IVN_cw_finish")))
+
+    def test_itoran_revolt_reads_the_current_ban_before_distributing_recruits(self):
+        effects = parsed(ROOT / "common/scripted_effects/ADISCORD_IVN_scripted_effects.txt")
+        revolt = block(block(effects, "IVN_start_marches_revolt"), "if")
+        deductions = [entry.value for entry in revolt if entry.key == "if"
+                      and any(e.key == "add_manpower" and e.value == "-5000" for e in walk(entry.value))]
+        self.assertEqual(len(deductions), 1)
+        ban = block(block(deductions[0], "limit"), "is_in_array")
+        self.assertEqual(scalar(ban, "ADISCORD_banned_parties"), "token:chauvinism")
+        self.assertEqual(scalar(block(deductions[0], "IVC"), "add_manpower"), "-5000")
+
+    def test_story_cabinets_apply_changes_to_the_country_receiving_the_seats(self):
+        def party_actions(body):
+            actions = []
+            for i, entry in enumerate(body):
+                if entry.key in {"ADISCORD_admit_coalition_party", "ADISCORD_remove_coalition_party"}:
+                    self.assertEqual(body[i - 1].key, "set_temp_variable")
+                    actions.append((entry.key, scalar(body[i - 1].value, "ADISCORD_party")))
+                elif isinstance(entry.value, list):
+                    actions.extend(party_actions(entry.value))
+            return actions
+
+        def rewards(tree, focus_id):
+            entries = parsed(ROOT / "common/national_focus" / tree)
+            focuses = [row.value for row in entries if row.key == "shared_focus" and isinstance(row.value, list)]
+            focuses.extend(row.value for row in block(entries, "focus_tree") if row.key == "focus")
+            focus, = (body for body in focuses if scalar(body, "id") == focus_id)
+            return block(focus, "completion_reward")
+
+        admit = "ADISCORD_admit_coalition_party"
+        remove = "ADISCORD_remove_coalition_party"
+        directory = ROOT / "common/scripted_effects"
+        takeover = block(parsed(directory / "ADISCORD_nam_resource_war_effects.txt"), "NAM_corp_takeover")
+        keys = [entry.key for entry in takeover]
+        self.assertLess(keys.index("ADISCORD_end_party_coalition"), keys.index("set_politics"))
+        self.assertLess(keys.index("set_politics"), keys.index(admit))
+        self.assertEqual(party_actions(takeover), [(admit, "token:humanism")])
+        corporate = "ADISCORD_NAM_exile_corporate.txt"
+        for tree, focus_id, expected in [
+            ("ADISCORD_NAM_exile_humanist.txt", "NAM_hum_salvation_cabinet", [(admit, "token:etatism")]),
+            (corporate, "NAM_board_humanist_facade", []),
+            (corporate, "NAM_board_purge_ministers", [(remove, "token:humanism")]),
+            ("ADISCORD_SHL_focus.txt", "SHL_council_of_cities", [(admit, "token:hedonism")]),
+            ("ADISCORD_national_focus_RUS.txt", "RUS_scientists_council", [(admit, "token:technocracy")]),
+            ("ADISCORD_national_focus_RUS.txt", "RUS_black_army_oath", [(admit, "token:chauvinism")]),
+            ("ADISCORD_Vorkerland_wkr.txt", "WKR_siege_republic_of_front_soviets", [(admit, "token:anarchism")]),
+        ]:
+            with self.subTest(focus=focus_id):
+                reward = rewards(tree, focus_id)
+                self.assertEqual(party_actions(reward), expected)
+                if focus_id in ("RUS_scientists_council", "RUS_black_army_oath"):
+                    grant, = (e.value for e in reward if e.key == "if" and party_actions(e.value))
+                    self.assertEqual(scalar(block(grant, "limit"), "RUS_khan_governing"), "yes")
+                self.assertFalse(any(row.key == "ADISCORD_ban_party" for row in walk(reward)))
+
+        vorkerland = parsed(directory / "ADISCORD_vorkerland_effects.txt")
+        formed = block(block(block(vorkerland, "ADISCORD_vorkerland_form_joint_government"), "if"), "VAD")
+        self.assertEqual(party_actions(formed), [(admit, "token:anarchism")])
+        reunified = block(vorkerland, "ADISCORD_vorkerland_settle_unification_under_vad")
+        self.assertEqual(party_actions(reunified), [(admit, "token:anarchism")])
+        empire = block(vorkerland, "ADISCORD_vorkerland_initialize_world_empire")
+        self.assertEqual(scalar(empire, "ADISCORD_end_party_coalition"), "yes")
+        monopoly = rewards("ADISCORD_Vorkerland_world_empire.txt", "WRK_empire_state_union")
+        bans = block(block(monopoly, "hidden_effect"), "for_each_loop")
+        self.assertEqual(scalar(bans, "array"), "global.ideology_groups")
+        self.assertEqual(scalar(bans, "value"), "ADISCORD_party")
+        self.assertEqual(scalar(bans, "ADISCORD_ban_party"), "yes")
+
+        transfers = block(parsed(directory / "ADISCORD_IVN_scripted_effects.txt"), "IVN_cw_transfer_reserves")
+        for entry in transfers:
+            if entry.key != "if":
+                continue
+            guarantees = [row.value for row in block(entry.value, "limit") if row.key == "has_idea"]
+            if guarantees:
+                recipient = block(entry.value, "event_target:IVN_cw_recipient")
+                expected = [(admit, "token:etatism")] if "IVN_cw_military_guarantees" in guarantees else []
+                self.assertEqual(party_actions(recipient), expected)
+        self.assertEqual(party_actions(transfers), [(admit, "token:etatism")])
+
+    def test_steland_cabinet_is_updated_on_appointments_and_government_handoffs(self):
+        update = "STP_ch_update_cabinet_parties"
+        effects = parsed(ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        regency = block(block(effects, update), "if")
+        self.assertEqual(scalar(block(regency, "limit"), "has_country_flag"), "STP_ch_protectorate_leader")
+        self.assertEqual(scalar(regency, "ADISCORD_end_party_coalition"), "yes")
+        for candidate in range(1, 7):
+            leader = block(effects, f"STP_ch_leader_{candidate}")
+            keys = [entry.key for entry in leader]
+            self.assertLess(keys.index("set_politics"), keys.index(update))
+        events = parsed(ROOT / "events/ADISCORD_STP_events.txt")
+        cabinet, = (entry.value for entry in events if entry.key == "country_event"
+                    and scalar(entry.value, "id") == "ADISCORD_STP_pc.23")
+        for option in (entry.value for entry in cabinet if entry.key == "option"):
+            name = scalar(option, "name")
+            with self.subTest(option=name):
+                self.assertEqual(any(row.key == update for row in walk(option)),
+                                 name.endswith((".apparatus", ".delegates")))
+        decisions = parsed(ROOT / "common/decisions/ADISCORD_STP_decisions.txt")
+        for name in ("security_ministry_1", "security_ministry_2", "economy_ministry_1", "economy_ministry_2"):
+            decision, = (row.value for row in walk(decisions) if row.key == f"STP_ch_appoint_{name}")
+            actions = list(walk(block(decision, "complete_effect")))
+            self.assertEqual(any(row.key == update for row in actions), name != "economy_ministry_2")
 
     def test_initial_support_sums_to_one_hundred_without_unanimous_rule(self):
         for tag, history in self.histories.items():

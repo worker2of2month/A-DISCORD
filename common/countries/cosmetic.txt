@@ -472,3 +472,260 @@ KDR_NAM_corp_6 = {
 	color = rgb { 52 88 96 }
 	color_ui = rgb { 92 134 144 }
 }
+
+# National colours of the signatories to the western settlement.
+
+IVN_cw_committee_west_victory = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IVN_unified_legion_west_victory = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IVN_unified_directory_west_victory = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IVN_unified_communes_west_victory = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IVN_unified_marches_west_victory = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+WRK_vorkerland_joint_government_west_victory = {
+	color = rgb { 58 57 63 }
+	color_ui = rgb { 214 180 102 }
+}
+
+VAD_vorkerland_restoration_west_victory = {
+	color = rgb { 19 45 105 }
+	color_ui = rgb { 65 112 210 }
+}
+
+VAD_vorkerland_collegial_staff_west_victory = {
+	color = rgb { 90 90 90 }
+	color_ui = rgb { 90 90 90 }
+}
+
+VAD_vorkerland_staff_republic_west_victory = {
+	color = rgb { 90 90 90 }
+	color_ui = rgb { 90 90 90 }
+}
+
+WRK_vorkerland_world_empire_west_victory = {
+	color = rgb { 64 8 12 }
+	color_ui = rgb { 64 8 12 }
+}
+
+IVN_west_victory = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IVN_cw_committee_west_mandate = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IVN_unified_legion_west_mandate = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IVN_unified_directory_west_mandate = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IVN_unified_communes_west_mandate = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IVN_unified_marches_west_mandate = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+WRK_vorkerland_joint_government_west_mandate = {
+	color = rgb { 58 57 63 }
+	color_ui = rgb { 214 180 102 }
+}
+
+VAD_vorkerland_restoration_west_mandate = {
+	color = rgb { 19 45 105 }
+	color_ui = rgb { 65 112 210 }
+}
+
+VAD_vorkerland_collegial_staff_west_mandate = {
+	color = rgb { 90 90 90 }
+	color_ui = rgb { 90 90 90 }
+}
+
+VAD_vorkerland_staff_republic_west_mandate = {
+	color = rgb { 90 90 90 }
+	color_ui = rgb { 90 90 90 }
+}
+
+WRK_vorkerland_world_empire_west_mandate = {
+	color = rgb { 64 8 12 }
+	color_ui = rgb { 64 8 12 }
+}
+
+WRK_vorkerland_emergency_west_mandate = {
+	color = rgb { 72 61 57 }
+	color_ui = rgb { 196 93 52 }
+}
+
+WRK_vorkerland_utilitarian_republic_west_mandate = {
+	color = rgb { 45 43 40 }
+	color_ui = rgb { 207 91 25 }
+}
+
+WRK_vorkerland_technocracy_west_mandate = {
+	color = rgb { 52 118 124 }
+	color_ui = rgb { 52 118 124 }
+}
+
+IVN_west_mandate = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+WRK_west_mandate = {
+	color = rgb { 140 68 18 }
+	color_ui = rgb { 140 68 18 }
+}
+
+WIT_west_IVN_mandate = {
+	color = rgb { 83 154 122 }
+	color_ui = rgb { 83 154 122 }
+}
+
+WIT_west_WRK_mandate = {
+	color = rgb { 83 154 122 }
+	color_ui = rgb { 83 154 122 }
+}
+
+IIA_west_IVN_mandate = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IIA_west_WRK_mandate = {
+	color = rgb { 171 170 127 }
+	color_ui = rgb { 171 170 127 }
+}
+
+IBA_west_IVN_mandate = {
+	color = rgb { 76 91 111 }
+	color_ui = rgb { 76 91 111 }
+}
+
+IBA_west_WRK_mandate = {
+	color = rgb { 76 91 111 }
+	color_ui = rgb { 76 91 111 }
+}
+
+IBL_west_IVN_mandate = {
+	color = rgb { 67 82 103 }
+	color_ui = rgb { 67 82 103 }
+}
+
+IBL_west_WRK_mandate = {
+	color = rgb { 67 82 103 }
+	color_ui = rgb { 67 82 103 }
+}
+
+PWR_west_IVN_mandate = {
+	color = rgb { 85 81 92 }
+	color_ui = rgb { 85 81 92 }
+}
+
+PWR_west_WRK_mandate = {
+	color = rgb { 85 81 92 }
+	color_ui = rgb { 85 81 92 }
+}
+
+PSD_west_IVN_mandate = {
+	color = rgb { 112 97 122 }
+	color_ui = rgb { 112 97 122 }
+}
+
+PSD_west_WRK_mandate = {
+	color = rgb { 112 97 122 }
+	color_ui = rgb { 112 97 122 }
+}
+
+ZAO_west_IVN_mandate = {
+	color = rgb { 60 87 117 }
+	color_ui = rgb { 60 87 117 }
+}
+
+ZAO_west_WRK_mandate = {
+	color = rgb { 60 87 117 }
+	color_ui = rgb { 60 87 117 }
+}
+
+WPA_west_IVN_mandate = {
+	color = rgb { 78 111 146 }
+	color_ui = rgb { 78 111 146 }
+}
+
+WPA_west_WRK_mandate = {
+	color = rgb { 78 111 146 }
+	color_ui = rgb { 78 111 146 }
+}
+
+WPS_west_IVN_mandate = {
+	color = rgb { 38 63 91 }
+	color_ui = rgb { 38 63 91 }
+}
+
+WPS_west_WRK_mandate = {
+	color = rgb { 38 63 91 }
+	color_ui = rgb { 38 63 91 }
+}
+
+ROM_west_IVN_mandate = {
+	color = rgb { 121 80 104 }
+	color_ui = rgb { 121 80 104 }
+}
+
+ROM_west_WRK_mandate = {
+	color = rgb { 121 80 104 }
+	color_ui = rgb { 121 80 104 }
+}
+
+TRU_west_IVN_mandate = {
+	color = rgb { 114 37 37 }
+	color_ui = rgb { 114 37 37 }
+}
+
+TRU_west_WRK_mandate = {
+	color = rgb { 114 37 37 }
+	color_ui = rgb { 114 37 37 }
+}
+
+PWR_rimat_republic_west_IVN_mandate = {
+	color = rgb { 55 92 109 }
+	color_ui = rgb { 194 126 84 }
+}
+
+PWR_rimat_republic_west_WRK_mandate = {
+	color = rgb { 55 92 109 }
+	color_ui = rgb { 194 126 84 }
+}
+
+WRK_republican_union = {
+	color = rgb { 150 40 32 }
+	color_ui = rgb { 214 96 72 }
+}

@@ -2783,7 +2783,9 @@ class RusCrisisContracts(unittest.TestCase):
                 for option in options[1:]:
                     self.assertEqual(self.scalar(self.block(option, "ai_chance"), "base"), "0")
                 chosen = next(option for option in options if self.scalar(option, "name") == disconnect)
-                self.assertEqual([row.key for row in self.block(chosen, "hidden_effect")], ["RUS_crisis_disconnect_channel"])
+                # Accepting the envoy's terms also costs the Khan his life.
+                expected = ["RUS_crisis_disconnect_channel"] + (["RUS_crisis_ultimatum_succession"] if number == 41 else [])
+                self.assertEqual([row.key for row in self.block(chosen, "hidden_effect")], expected)
         begin = self.block(self.entries("common/scripted_effects/ADISCORD_RUS_scripted_effects.txt"), "RUS_crisis_begin")
         scheduled = {
             self.scalar(row.value, "id"): row.value

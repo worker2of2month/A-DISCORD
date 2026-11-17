@@ -5100,6 +5100,10 @@ news_event = {
 		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_veyran_empire } }
 	}
 	title = {
+		text = ADISCORD_vorkerland_postwar.61.t_bagli
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_republican_union } }
+	}
+	title = {
 		text = ADISCORD_vorkerland_postwar.61.t_worker
 		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_western_eastern_union } }
 	}
@@ -5110,6 +5114,10 @@ news_event = {
 	desc = {
 		text = ADISCORD_vorkerland_postwar.61.d_empire
 		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_veyran_empire } }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_postwar.61.d_bagli
+		trigger = { event_target:ADISCORD_vorkerland_nation = { has_cosmetic_tag = WRK_republican_union } }
 	}
 	desc = {
 		text = ADISCORD_vorkerland_postwar.61.d_worker

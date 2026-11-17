@@ -1,0 +1,87 @@
+# Country scope. Callers supply an ideology group token in the temporary
+# ADISCORD_party variable. The cabinet array includes its ruling party.
+ADISCORD_end_party_coalition = {
+	if = {
+		limit = { check_variable = { ADISCORD_cabinet_parties^num > 0 } }
+		clear_array = ADISCORD_cabinet_parties
+		add_to_variable = { ADISCORD_party_markers_revision = 1 }
+	}
+	clear_variable = ADISCORD_coalition_daily_power
+	if = {
+		limit = { has_dynamic_modifier = { modifier = ADISCORD_coalition_support } }
+		remove_dynamic_modifier = { modifier = ADISCORD_coalition_support }
+	}
+}
+
+ADISCORD_refresh_party_coalition = {
+	if = {
+		limit = {
+			check_variable = { ADISCORD_cabinet_parties^num > 1 }
+			is_in_array = { ADISCORD_cabinet_parties = current_party_ideology_group }
+		}
+		set_variable = { ADISCORD_coalition_daily_power = 0 }
+		for_each_loop = {
+			array = ADISCORD_cabinet_parties
+			value = ADISCORD_cabinet_party
+			if = {
+				limit = { NOT = { has_government = var:ADISCORD_cabinet_party } }
+				add_to_variable = { ADISCORD_coalition_daily_power = party_popularity@var:ADISCORD_cabinet_party }
+			}
+		}
+		multiply_variable = { ADISCORD_coalition_daily_power = 0.5 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = ADISCORD_coalition_support } } }
+			add_dynamic_modifier = { modifier = ADISCORD_coalition_support }
+		}
+	}
+	else = { ADISCORD_end_party_coalition = yes }
+}
+
+ADISCORD_admit_coalition_party = {
+	if = {
+		limit = {
+			is_in_array = { global.ideology_groups = ADISCORD_party }
+			NOT = { has_government = var:ADISCORD_party }
+			NOT = { is_in_array = { ADISCORD_banned_parties = ADISCORD_party } }
+			NOT = { is_in_array = { ADISCORD_cabinet_parties = ADISCORD_party } }
+		}
+		if = {
+			limit = { NOT = { is_in_array = { ADISCORD_cabinet_parties = current_party_ideology_group } } }
+			clear_array = ADISCORD_cabinet_parties
+			add_to_array = { ADISCORD_cabinet_parties = current_party_ideology_group }
+		}
+		add_to_array = { ADISCORD_cabinet_parties = ADISCORD_party }
+		add_to_variable = { ADISCORD_party_markers_revision = 1 }
+		ADISCORD_refresh_party_coalition = yes
+	}
+}
+
+ADISCORD_remove_coalition_party = {
+	if = {
+		limit = { is_in_array = { ADISCORD_cabinet_parties = ADISCORD_party } }
+		remove_from_array = { ADISCORD_cabinet_parties = ADISCORD_party }
+		add_to_variable = { ADISCORD_party_markers_revision = 1 }
+		ADISCORD_refresh_party_coalition = yes
+	}
+}
+
+ADISCORD_ban_party = {
+	if = {
+		limit = {
+			is_in_array = { global.ideology_groups = ADISCORD_party }
+			NOT = { has_government = var:ADISCORD_party }
+			NOT = { is_in_array = { ADISCORD_banned_parties = ADISCORD_party } }
+		}
+		ADISCORD_remove_coalition_party = yes
+		add_to_array = { ADISCORD_banned_parties = ADISCORD_party }
+		add_to_variable = { ADISCORD_party_markers_revision = 1 }
+	}
+}
+
+ADISCORD_legalise_party = {
+	if = {
+		limit = { is_in_array = { ADISCORD_banned_parties = ADISCORD_party } }
+		remove_from_array = { ADISCORD_banned_parties = ADISCORD_party }
+		add_to_variable = { ADISCORD_party_markers_revision = 1 }
+	}
+}

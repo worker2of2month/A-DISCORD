@@ -549,7 +549,7 @@
  IVN_parliament_emergency_statute_desc:0 "Parliament writes the rules for war in advance: who declares martial law, who lifts it and how long it may last."
  IVN_parliament_ban_the_union:0 "Ban the Patriotic Union"
  IVN_parliament_ban_the_union_desc:0 "The Itoran Patriotic Union is outlawed. Its clubs are closed and its papers confiscated, and its leaders leave for Vedrina, to the regiments that listen to them."
- IVN_parliament_ban_the_union_tt:0 "If the marches rise, the §YItoran Liberation Legion§! receives §Y5000§! £manpower_texticon fewer."
+ IVN_parliament_ban_the_union_tt:0 "The §YItoran Patriotic Union§! will be outlawed. If the marches rise, the §YItoran Liberation Legion§! receives §Y5000§! £manpower_texticon fewer."
  IVN_trust_northern_minus_5_tt:0 "Trust of the northern marches [92.GetName], [95.GetName], [96.GetName] and [97.GetName]: §R-5§!"
  IVN_parliament_tolerate_the_union:0 "Tolerate the Patriotic Union"
  IVN_parliament_tolerate_the_union_desc:0 "The Union remains in parliament and on the streets. As long as its speakers curse the capital from the rostrum rather than the barricades, the Committee is willing to listen."
@@ -1451,3 +1451,8 @@
  IVN_oeconomia_solis_nigri_desc:0 "Economy of the Black Sun. Military workshops, shipyards and civilian enterprises are linked by imperial contracts. Rebuilding the country becomes a duty of state."
  IVN_reserve_call_up_description_rules_tt:0 "In six weeks the army receives trained replacements."
  IVN_rc_reserve_musters_description_rules_tt:0 "The reservists of the marches leave their fields and workshops and return to barracks for two months. Old soldiers remember their service, and the young learn from them."
+
+ IVN_parliament_coalition_pragmatists_status_tt: "§YRoar of Freedom§! and the §YItora Stabilisation Party§! form a governing coalition. The junior partner's support provides daily political power."
+ IVN_parliament_coalition_etatists_status_tt: "§YRoar of Freedom§! and the §YItora Emergency Committee§! form a governing coalition. The junior partner's support provides daily political power."
+ IVN_parliament_partners_legal_tt: "Both parties can operate legally."
+ IVN_cw_military_cabinet_seat_tt: "The Military Staff of the Marches takes the etatist seat in the coalition government of [FROM.GetName]."

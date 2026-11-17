@@ -775,6 +775,7 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
             encoding='utf-8-sig'
         )
         main_nodes = named_gui_nodes(main)
+        setup += (ROOT / 'interface/ADISCORD_campaign_selection.gui').read_text(encoding='utf-8')
         setup_nodes = named_gui_nodes(setup)
         # HOI4 resolves these by type as well as name; arbitrary hidden widgets
         # still produce "Could not find" errors during frontend initialization.
@@ -2797,6 +2798,365 @@ class StartupGuideContractTests(unittest.TestCase):
 
 
 class CampaignSetupSkinTests(unittest.TestCase):
+    def test_single_start_keeps_the_original_folio_and_one_visible_native_date(self):
+        from PIL import Image, ImageChops
+
+        bookmarks = []
+        for path in sorted((ROOT / 'common/bookmarks').glob('*.txt')):
+            ast = economy_validator.parse_clausewitz(path.read_text(encoding='utf-8'))
+            bookmarks.extend(entry.value for entry in _unique_direct_block(ast, 'bookmarks')
+                             if entry.key == 'bookmark')
+        self.assertEqual(len(bookmarks), 2)
+        for bookmark in bookmarks:
+            self.assertEqual(_direct_scalar(bookmark, 'date'), '2160.1.1.12')
+            self.assertEqual(_direct_scalar(bookmark, 'picture'), 'GFX_select_date_1936')
+        self.assertEqual([_direct_scalar(b, 'default') for b in bookmarks], ['yes', 'no'])
+        self.assertFalse(any(re.fullmatch(r'[A-Z]{3}|---', e.key) for e in bookmarks[1]))
+
+        gui = (ROOT / 'interface/frontendgamesetupview.gui').read_text(encoding='utf-8')
+        window = gui_node_body(gui, 'gamesetup_scenario_window')
+        viewport = gui_node_body(window, 'bookmarks')
+        cell = gui_node_body(gui, 'bookmark_entry')
+        grid = gui_node_body(viewport, 'bookmarks_grid')
+        stride = int(re.search(r'slotsize\s*=\s*\{\s*width\s*=\s*(\d+)', grid)[1])
+        self.assertIn('clipping = yes', viewport)
+        self.assertLessEqual(_gui_size(cell)[0], _gui_size(viewport)[0])
+        self.assertGreaterEqual(stride, _gui_size(viewport)[0])
+        self.assertIn('scrollbarType = ADISCORD_campaign_text_slider', gui_node_body(window, 'bookmark_desc'))
+        with Image.open(ROOT / 'gfx/interface/select_date_bg.dds') as original:
+            with Image.open(ROOT / 'gfx/interface/startup/setup_chronicle.png') as folio:
+                self.assertEqual(folio.size, original.size)
+                self.assertEqual(_gui_size(window), original.size)
+                image_area = (0, 0, original.width, 270)
+                delta = ImageChops.difference(original.crop(image_area).convert('RGB'),
+                                              folio.crop(image_area).convert('RGB'))
+                self.assertIsNone(delta.getbbox())
+        for name, shortcut in (('back_button', 'ESCAPE'), ('select_button', 'RETURN')):
+            self.assertIn(f'shortcut = "{shortcut}"', gui_node_body(window, name))
+
+    def test_posters_and_route_hitboxes_share_the_native_scrolling_grid(self):
+        from hashlib import sha256
+        from PIL import Image
+        from tools.lib.campaign_selection import (
+            ATLAS, BADGE, CARD, GALLERY_GUI, PRINT, SHEET_CAPACITY, STRIDE, campaign_roster, sheet_name,
+        )
+
+        roster = campaign_roster()
+        gui = GALLERY_GUI.read_text(encoding='utf-8')
+        native = (ROOT / 'interface/frontendgamesetupview.gui').read_text(encoding='utf-8')
+        for name in ('gamesetup_interesting_countries_window', 'country_entry'):
+            self.assertNotIn(f'name = "{name}"', native)
+        row = gui_node_body(gui, 'countries')
+        grid = gui_node_body(row, 'countries_grid')
+        self.assertIn('horizontalScrollbar = "ADISCORD_campaign_gallery_slider"', row)
+        self.assertIn('clipping = yes', row)
+        self.assertIn('drag_scroll = { middle }', row)
+        self.assertIn(f'max_slots_horizontal = {len(roster)}', grid)
+        self.assertEqual(_gui_size(grid), (STRIDE * len(roster), CARD[1]))
+        self.assertEqual(_gui_size(gui_node_body(gui, 'country_entry')), CARD)
+        sprites = (ROOT / 'interface/ADISCORD_startup_menu.gfx').read_text(encoding='utf-8')
+        languages = []
+        for lang in ('russian', 'english'):
+            files = [ROOT / f'localisation/{lang}/{stem}_l_{lang}.yml' for stem in ('bookmarks', 'ADISCORD_STP')]
+            self.assertTrue(all(path.read_bytes().startswith(b'\xef\xbb\xbf') for path in files))
+            languages.append('\n'.join(path.read_text(encoding='utf-8-sig') for path in files))
+        frames = []
+        paintings = set()
+        gx, gy = _gui_position(grid)
+        for index, (tag, spec) in enumerate(roster.items()):
+            code = 'atlas' if tag == ATLAS else tag.lower()
+            left = gx + index * STRIDE
+            poster = gui_node_body(row, f'poster_{code}')
+            self.assertEqual(_gui_position(poster), (left + 4, gy + 4))
+            self.assertIn('alwaystransparent = yes', poster)
+            if tag == ATLAS:
+                continue
+            self.assertIn('scale = 0.5', poster)
+            binding = gui_node_body(sprites, f'GFX_ADISCORD_setup_poster_{code}')
+            self.assertIn(f'texturefile = "{spec["image"]}"', binding)
+            with Image.open(ROOT / spec['image']) as painting:
+                self.assertEqual(painting.size, tuple(2 * k for k in PRINT))
+                paintings.add(sha256(painting.convert('RGB').tobytes()).digest())
+            boxes = []
+            for route in spec['routes']:
+                name = f"{tag}_bookmark_route_{route['key']}"
+                widget = gui_node_body(row, name)
+                self.assertIn(f'pdx_tooltip = {name}_tt', widget)
+                self.assertNotIn('alwaystransparent = yes', widget)
+                x, y = _gui_position(widget)
+                self.assertTrue(left <= x <= left + CARD[0] - BADGE[0])
+                self.assertTrue(gy <= y <= 202 - BADGE[1])
+                self.assertTrue(all(abs(x - ox) >= BADGE[0] or abs(y - oy) >= BADGE[1] for ox, oy in boxes))
+                boxes.append((x, y))
+                frame = int(re.search(r'\bframe\s*=\s*(\d+)', widget)[1])
+                self.assertIn(f'GFX_ADISCORD_setup_{sheet_name(len(frames))}"', widget)
+                frames.append(frame)
+                sprite = f'GFX_{name}_banner'
+                binding = gui_node_body(sprites, sprite)
+                self.assertIn(f'texturefile = "{route["banner"]}"', binding)
+                self.assertIn('legacy_lazy_load = no', binding)
+                with Image.open(ROOT / route['banner']) as banner:
+                    self.assertEqual(banner.size, (300, 127), name)
+                for text in languages:
+                    teaser = localisation_value(text, name + '_tt')
+                    self.assertRegex(teaser, r'^§Y[^§\n]+§!\\n\S.+$')
+                    # The pregame tooltip does not expand nested localisation.
+                    self.assertNotIn('$', teaser, name)
+                    self.assertEqual(re.findall(r'£(\w+)', teaser), [sprite])
+                    self.assertRegex(teaser, rf'(?:\\n){{5}}£{sprite}(?:\\n ){{7,}}$')
+            if spec.get('in_development'):
+                sash = gui_node_body(row, f'development_sash_{tag}')
+                self.assertEqual(_gui_position(sash), (left + 80, 225))
+                self.assertIn('alwaystransparent = yes', sash)
+        self.assertEqual(frames, [i % SHEET_CAPACITY + 1 for i in range(len(frames))])
+        self.assertEqual(len(paintings), len(roster) - 1)
+        for offset in range(0, len(frames), SHEET_CAPACITY):
+            with Image.open(ROOT / f'gfx/interface/startup/setup_{sheet_name(offset)}.png') as sheet:
+                self.assertEqual(sheet.size, (min(len(frames) - offset, SHEET_CAPACITY) * BADGE[0], BADGE[1]))
+        for role in ('country_card', 'bookmark_mount'):
+            self.assertIn('transparencecheck = no', gui_node_body(sprites, f'GFX_ADISCORD_setup_{role}'))
+
+    def test_khan_imperial_flag_opens_a_teaser_with_its_full_banner_at_the_foot(self):
+        from PIL import Image
+        from tools.lib.campaign_selection import BADGE, GALLERY_GUI, campaign_roster, route_texture
+
+        route = campaign_roster()['RUS']['routes'][0]
+        self.assertEqual((route['key'], route['flag']), ('khan', 'RUS_last_empire'))
+        name = 'RUS_bookmark_route_khan'
+        widget = gui_node_body(GALLERY_GUI.read_text(encoding='utf-8'), name)
+        self.assertIn(f'pdx_tooltip = {name}_tt', widget)
+        gfx = (ROOT / 'interface/ADISCORD_startup_menu.gfx').read_text(encoding='utf-8')
+        parse = economy_validator.parse_clausewitz
+        icon = parse(widget)
+        atlas = parse(gui_node_body(gfx, _direct_scalar(icon, 'spriteType')))
+        left = (int(_direct_scalar(icon, 'frame')) - 1) * BADGE[0]
+        with Image.open(ROOT / _direct_scalar(atlas, 'texturefile')) as sheet:
+            badge = sheet.crop((left, 0, left + BADGE[0], BADGE[1]))
+            self.assertEqual(badge.tobytes(), route_texture({'flag': 'RUS_last_empire'}).tobytes())
+        for language in ('russian', 'english'):
+            directory = ROOT / 'localisation' / language
+            bookmarks = (directory / f'bookmarks_l_{language}.yml').read_text(encoding='utf-8-sig')
+            tooltip = localisation_value(bookmarks, name + '_tt')
+            self.assertRegex(tooltip, r'\\n§R\\".+?\\"§!\\n')
+
+    def test_gallery_and_politics_show_full_size_spirits_and_bookmarks_exclude_laws(self):
+        from tools.lib.campaign_selection import ATLAS, BOOKMARK, GALLERY_GUI, campaign_roster
+
+        parse = economy_validator.parse_clausewitz
+        native = (ROOT / 'interface/frontendgamesetupview.gui').read_text(encoding='utf-8')
+        for kind in ('idea', 'modifier'):
+            entry = gui_node_body(native, f'spirit_{kind}_entry')
+            icon = parse(gui_node_body(entry, 'icon'))
+            self.assertEqual(float(_direct_scalar(icon, 'scale') or 1), 1)
+
+        gallery = GALLERY_GUI.read_text(encoding='utf-8')
+        spirit = gui_node_body(gallery, 'spirit')
+        row = gui_node_body(spirit, 'ideas')
+        for parent in (spirit, row):
+            self.assertEqual(float(_direct_scalar(parse(parent), 'scale') or 1), 1)
+        grid = parse(gui_node_body(row, 'ideas_grid'))
+        step = int(_direct_scalar(_unique_direct_block(grid, 'slotsize'), 'width'))
+        count = int(_direct_scalar(grid, 'max_slots_horizontal'))
+        self.assertEqual(count, 4)
+        self.assertGreaterEqual(step, 68)
+        self.assertLessEqual(count * step, _gui_size(row)[0])
+
+        national_spirits = set()
+        for path in (ROOT / 'common/ideas').glob('*.txt'):
+            for group in parse(path.read_text(encoding='utf-8-sig')):
+                if group.key == 'ideas' and isinstance(group.value, list):
+                    national_spirits.update(item.key for category in group.value if category.key == 'country'
+                                            for item in category.value if isinstance(item.value, list))
+        bookmarks = _unique_direct_block(parse(BOOKMARK.read_text(encoding='utf-8')), 'bookmarks')
+        start = _unique_direct_block(bookmarks, 'bookmark')
+        for tag in campaign_roster():
+            if tag == ATLAS:
+                continue
+            country = _unique_direct_block(start, tag)
+            shown = [item.value for item in _unique_direct_block(country, 'ideas')]
+            with self.subTest(country=tag):
+                self.assertTrue(1 <= len(shown) <= count)
+                self.assertEqual(len(shown), len(set(shown)))
+                self.assertLessEqual(set(shown), national_spirits)
+
+    def test_promotion_and_roster_growth_keep_the_same_posters_routes_and_grid(self):
+        from copy import deepcopy
+        from tools.lib.campaign_selection import GALLERY_GUI, STRIDE, campaign_roster, gallery_gui
+
+        original = campaign_roster()
+        disk = GALLERY_GUI.read_text(encoding='utf-8')
+        self.assertEqual(gallery_gui(original), disk)
+        live_marks = set(re.findall(r'name = "development_sash_([A-Z]+)"', disk))
+        self.assertEqual(live_marks, {tag for tag, spec in original.items() if spec.get('in_development')})
+        for tag in ('IVN', 'MON', 'WRK'):
+            original[tag]['in_development'] = True
+        baseline = gallery_gui(original)
+        planned = {tag for tag, spec in original.items() if spec.get('in_development')}
+        for promoted in ({'MON'}, planned):
+            roster = deepcopy(original)
+            for tag in promoted:
+                roster[tag]['in_development'] = False
+            gui = gallery_gui(roster)
+            self.assertEqual(set(re.findall(r'name = "development_sash_([A-Z]+)"', gui)), planned - promoted)
+            for version in (baseline, gui):
+                row = gui_node_body(version, 'countries')
+                self.assertEqual(_gui_size(gui_node_body(row, 'countries_grid')), (len(roster) * STRIDE, 304))
+            for tag in promoted:
+                self.assertEqual(gui_node_body(baseline, 'poster_' + tag.lower()), gui_node_body(gui, 'poster_' + tag.lower()))
+                for route in roster[tag]['routes']:
+                    key = f"{tag}_bookmark_route_{route['key']}"
+                    self.assertEqual(gui_node_body(baseline, key), gui_node_body(gui, key))
+        expanded = deepcopy(original)
+        atlas = expanded.pop('---')
+        expanded['NEW'] = deepcopy(original['VAL'])
+        expanded['---'] = atlas
+        row = gui_node_body(gallery_gui(expanded), 'countries')
+        self.assertIn(f'max_slots_horizontal = {len(expanded)}', gui_node_body(row, 'countries_grid'))
+        self.assertEqual(_gui_position(gui_node_body(row, 'poster_atlas'))[0],
+                         _gui_position(gui_node_body(row, 'poster_new'))[0] + STRIDE)
+        self.assertTrue(gui_node_body(row, 'NEW_bookmark_route_korsch'))
+
+    def test_side_ornaments_leave_the_outer_frame_visible_at_different_widths(self):
+        from PIL import Image
+        from tools.lib.campaign_selection import GALLERY_GUI
+
+        gui = GALLERY_GUI.read_text(encoding='utf-8')
+        window = gui_node_body(gui, 'gamesetup_interesting_countries_window')
+        window_size = _unique_direct_block(economy_validator.parse_clausewitz(window), 'size')
+        window_max = _unique_direct_block(window_size, 'max')
+        full_width = int(_direct_scalar(window_size, 'width'))
+        cap_percent = int(_direct_scalar(window_max, 'width').rstrip('%'))
+        ornaments = gui_node_body(gui_node_body(window, 'gallery_case'), 'dossier_ornaments')
+        layer = economy_validator.parse_clausewitz(ornaments)
+        for field in ('orientation', 'origo'):
+            self.assertEqual(_direct_scalar(layer, field), 'center_up')
+        self.assertEqual(_direct_scalar(layer, 'clipping'), 'yes')
+        self.assertEqual(_direct_scalar(layer, 'alwaystransparent'), 'yes')
+        clip_surface = _unique_direct_block(layer, 'background')
+        self.assertEqual(_direct_scalar(clip_surface, 'quadTextureSprite'), 'GFX_tiled_window_transparent')
+        layer_size = _unique_direct_block(layer, 'size')
+        percent = int(_direct_scalar(layer_size, 'width').rstrip('%'))
+        height = int(_direct_scalar(layer_size, 'height'))
+        self.assertEqual(_gui_position(ornaments), (0, _gui_position(gui_node_body(window, 'history_inlay'))[1]))
+
+        wings = []
+        for side in ('left', 'right'):
+            icon = gui_node_body(ornaments, side + '_inlay')
+            self.assertIn(f'GFX_ADISCORD_setup_gallery_{side}_wing', icon)
+            with Image.open(ROOT / f'gfx/interface/startup/setup_gallery_{side}_wing.png') as wing:
+                wings.append((_gui_position(icon), wing.getchannel('A')))
+        self.assertEqual(wings[0][0][0] + wings[0][1].width, -wings[1][0][0])
+        for screen in (1280, 1366, 1537, 1600, 1920, 2560):
+            with self.subTest(screen=screen):
+                width = min(full_width, screen * cap_percent // 100)
+                view_width = width * percent // 100
+                ink = Image.new('L', (view_width, height))
+                for (x, y), alpha in wings:
+                    ink.paste(alpha, (view_width // 2 + x, y))
+                coverage = Image.new('L', (width, height))
+                coverage.paste(ink, (width // 2 - view_width // 2, 0))
+                if screen == 1280:
+                    self.assertIsNone(coverage.getbbox())
+                    continue
+                left, _, right, _ = coverage.getbbox()
+                self.assertGreaterEqual(min(left, width - right), 12)
+                self.assertLessEqual(abs(left - (width - right)), 1)
+                if width == full_width:
+                    self.assertEqual((left, width - right), (20, 20))
+
+    def test_history_focus_sizes_and_equal_navigation_survive_a_narrow_viewport(self):
+        from PIL import Image
+        from tools.lib.campaign_selection import CARD, GALLERY_GUI, STRIDE, campaign_roster
+
+        gui = GALLERY_GUI.read_text(encoding='utf-8')
+        native = (ROOT / 'interface/frontendgamesetupview.gui').read_text(encoding='utf-8')
+        root = gui_node_body(gui, 'gamesetup_interesting_countries_window')
+        row = gui_node_body(root, 'countries')
+        history = gui_node_body(root, 'history')
+        self.assertNotIn('orientation', history)
+        self.assertIn('scrollbarType = ADISCORD_campaign_text_slider', history)
+        self.assertIn('origo = center_left', root)
+        self.assertIn('clipping = no', root.split('containerWindowType')[0])
+        self.assertIn('origo = center_up', row)
+        row_ast = economy_validator.parse_clausewitz(row)
+        viewport_height = int(_direct_scalar(_unique_direct_block(row_ast, 'size'), 'height'))
+        self.assertGreaterEqual(viewport_height - 24, _gui_position(gui_node_body(row, 'countries_grid'))[1] + CARD[1])
+        hx, hy = _gui_position(history)
+        bx, by = _gui_position(gui_node_body(root, 'history_inlay'))
+        with Image.open(ROOT / 'gfx/interface/startup/setup_dossier_history.png') as panel:
+            self.assertLess(hx + 414 + 22, bx + panel.width)
+            self.assertTrue(by < hy < hy + 241 < by + panel.height)
+        slots = len(campaign_roster())
+        gx, _ = _gui_position(gui_node_body(row, 'countries_grid'))
+        for screen in (1280, 1366, 1920, 2560):
+            width = min(1672, screen * 98 // 100)
+            origin = screen // 2 + _gui_position(root)[0]
+            gallery_x = origin + _gui_position(row)[0] - width // 2
+            self.assertTrue(0 <= gallery_x <= screen - width)
+            self.assertTrue(gallery_x <= origin + hx < origin + hx + 436 <= gallery_x + width)
+            offset = max(0, gx + slots * STRIDE - width)
+            if screen == 1280:
+                self.assertGreater(offset, 0)
+            x = gx + (slots - 1) * STRIDE - offset
+            self.assertTrue(0 <= x < x + CARD[0] <= width)
+        back = gui_node_body(root, 'back_button')
+        select = gui_node_body(root, 'select_button')
+        with Image.open(ROOT / 'gfx/interface/startup/setup_return.png') as b:
+            with Image.open(ROOT / 'gfx/interface/startup/setup_advance.png') as s:
+                self.assertEqual(b.size, s.size)
+                self.assertEqual(_gui_position(back)[1], _gui_position(select)[1])
+                self.assertLess(_gui_position(back)[0] + b.width, _gui_position(select)[0])
+        self.assertIn('scale = 1.12', gui_node_body(native, 'focus_entry'))
+        self.assertEqual(_gui_size(gui_node_body(root, 'focus_grid')), (360, 90))
+        self.assertIn('ADISCORD_BOOKMARK_FOCUSES', gui_node_body(gui_node_body(root, 'focus'), 'focus_caption'))
+
+    def test_campaign_scrollbars_bind_their_art_to_the_native_controls(self):
+        from PIL import Image
+        from tools.lib.campaign_selection import GALLERY_GUI
+
+        parse = economy_validator.parse_clausewitz
+        core = (ROOT / 'interface/core.gui').read_text(encoding='utf-8-sig')
+        gallery = GALLERY_GUI.read_text(encoding='utf-8')
+        sprites = (ROOT / 'interface/ADISCORD_startup_menu.gfx').read_text(encoding='utf-8')
+        used = set()
+
+        def check_asset(button, role, expected_size):
+            name = _direct_scalar(button, 'quadTextureSprite')
+            self.assertEqual(name, 'GFX_ADISCORD_setup_scroll_' + role)
+            definition = parse(gui_node_body(sprites, name))
+            with Image.open(ROOT / _direct_scalar(definition, 'texturefile')) as texture:
+                self.assertEqual(texture.size, expected_size)
+                self.assertIsNotNone(texture.getchannel('A').getbbox())
+            if expected_size == (16, 16):
+                self.assertEqual(_direct_scalar(definition, 'transparencecheck'), 'no')
+            else:
+                border = _unique_direct_block(definition, 'borderSize')
+                for key, extent in zip(('x', 'y'), expected_size):
+                    self.assertLess(2 * int(_direct_scalar(border, key)), extent)
+            used.add(name)
+
+        text = gui_node_body(gallery, 'ADISCORD_campaign_text_slider')
+        core_text = gui_node_body(core, 'standardtext_slider')
+        strip = parse(gui_node_body(gallery, 'ADISCORD_campaign_gallery_slider'))
+        core_strip = parse(gui_node_body(core, 'bottom_horizontal_slider'))
+        for current, native in ((parse(text), parse(core_text)), (strip, core_strip)):
+            for key in ('horizontal', 'minValue', 'maxValue', 'stepSize', 'startValue'):
+                self.assertEqual(_direct_scalar(current, key), _direct_scalar(native, key))
+        for role, binding in (('slider', 'thumb_vertical'), ('track', 'track_vertical'),
+                              ('leftbutton', 'down'), ('rightbutton', 'up')):
+            child = _direct_scalar(parse(text), role)
+            self.assertEqual(child, _direct_scalar(parse(core_text), role))
+            body = gui_node_body(text, child)
+            self.assertEqual(_gui_position(body), _gui_position(gui_node_body(core_text, child)))
+            check_asset(parse(body), binding, (12, 12) if role == 'track' else (16, 16))
+        for part, binding, dims in (('background', 'bed', (36, 18)), ('slider', 'thumb_horizontal', (16, 16)),
+                                    ('track', 'track_horizontal', (12, 12)), ('decreaseButton', 'left', (16, 16)),
+                                    ('increaseButton', 'right', (16, 16))):
+            button = _unique_direct_block(strip, part)
+            check_asset(button, binding, dims)
+            self.assertEqual(_direct_scalar(button, 'name'), _direct_scalar(_unique_direct_block(core_strip, part), 'name'))
+        self.assertEqual(len(used), 9)
+
     def test_header_preserves_native_controls_and_responsive_groups(self):
         from PIL import Image
 

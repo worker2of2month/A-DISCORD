@@ -4371,6 +4371,11 @@ focus_tree = {
 		mutually_exclusive = { focus = IVN_parliament_coalition_etatists }
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_parliament_partners_legal_tt
+				NOT = { is_in_array = { ADISCORD_banned_parties = token:humanism } }
+				NOT = { is_in_array = { ADISCORD_banned_parties = token:pragmatism } }
+			}
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
@@ -4379,6 +4384,13 @@ focus_tree = {
 			add_popularity = {
 				ideology = pragmatism
 				popularity = 0.05
+			}
+			custom_effect_tooltip = IVN_parliament_coalition_pragmatists_status_tt
+			hidden_effect = {
+				set_temp_variable = { ADISCORD_party = token:humanism }
+				ADISCORD_admit_coalition_party = yes
+				set_temp_variable = { ADISCORD_party = token:pragmatism }
+				ADISCORD_admit_coalition_party = yes
 			}
 			add_power_balance_value = {
 				id = IVN_command_bop
@@ -4411,6 +4423,11 @@ focus_tree = {
 		mutually_exclusive = { focus = IVN_parliament_coalition_pragmatists }
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = IVN_parliament_partners_legal_tt
+				NOT = { is_in_array = { ADISCORD_banned_parties = token:humanism } }
+				NOT = { is_in_array = { ADISCORD_banned_parties = token:etatism } }
+			}
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
@@ -4419,6 +4436,13 @@ focus_tree = {
 			add_popularity = {
 				ideology = etatism
 				popularity = 0.05
+			}
+			custom_effect_tooltip = IVN_parliament_coalition_etatists_status_tt
+			hidden_effect = {
+				set_temp_variable = { ADISCORD_party = token:humanism }
+				ADISCORD_admit_coalition_party = yes
+				set_temp_variable = { ADISCORD_party = token:etatism }
+				ADISCORD_admit_coalition_party = yes
 			}
 			add_power_balance_value = {
 				id = IVN_command_bop
@@ -4588,6 +4612,7 @@ focus_tree = {
 		mutually_exclusive = { focus = IVN_parliament_tolerate_the_union }
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		available = {
+			NOT = { has_government = chauvinism }
 			has_capitulated = no
 		}
 		cancel_if_invalid = yes
@@ -4601,6 +4626,8 @@ focus_tree = {
 			}
 			custom_effect_tooltip = IVN_trust_northern_minus_5_tt
 			hidden_effect = {
+				set_temp_variable = { ADISCORD_party = token:chauvinism }
+				ADISCORD_ban_party = yes
 				set_temp_variable = { var = IVN_trust_delta value = -5 }
 				IVN_northern_marches_trust_change = yes
 			}
@@ -4636,6 +4663,8 @@ focus_tree = {
 			}
 			custom_effect_tooltip = IVN_trust_northern_5_tt
 			hidden_effect = {
+				set_temp_variable = { ADISCORD_party = token:chauvinism }
+				ADISCORD_legalise_party = yes
 				set_temp_variable = { var = IVN_trust_delta value = 5 }
 				IVN_northern_marches_trust_change = yes
 			}

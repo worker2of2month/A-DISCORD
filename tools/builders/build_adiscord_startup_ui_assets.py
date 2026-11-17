@@ -9,6 +9,9 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 from tools.lib.adiscord_ui_surfaces import apply_or_check
+from tools.lib.campaign_selection import (
+    ATLAS, BANNER, GALLERY_GUI, PRINT, campaign_roster, gallery_art, gallery_gui,
+)
 from tools.lib.paths import repository_root
 
 
@@ -31,6 +34,8 @@ PORTRAIT_CROPS = {
 # others are finished author art. The NAM portrait carries the CRT layer applied
 # after its crop, and a rebuild would strip it.
 PORTRAITS = ('stp', 'val', 'rus', 'shl', 'nam')
+
+BRASS_LIGHT = (230, 202, 144)
 
 
 def frame(size: tuple[int, int], button: bool = False) -> Image.Image:
@@ -72,11 +77,62 @@ def setup_surface(size: tuple[int, int], accent=(177, 151, 103), selected=False)
     return image
 
 
-def setup_outputs() -> tuple[dict[Path, bytes], list[str]]:
+def brass_plate(size: tuple[int, int], selected: bool = False) -> Image.Image:
+    """Stepped brass inlay around a recessed, dark enamel face."""
+    width, height = size
+    plate = Image.new('RGBA', size)
+    draw = ImageDraw.Draw(plate)
+    for inset, cut, face, edge in (
+        (0, 8, (24, 18, 17), (64, 44, 32)),
+        (2, 7, (32, 24, 24), BRASS_LIGHT if selected else (155, 114, 66)),
+        (5, 5, (44, 31, 28) if selected else (30, 24, 25), (90, 66, 48)),
+    ):
+        left = top = inset
+        right, bottom = width - 1 - inset, height - 1 - inset
+        outline = [(left + cut, top), (right - cut, top), (right, top + cut),
+                   (right, bottom - cut), (right - cut, bottom), (left + cut, bottom),
+                   (left, bottom - cut), (left, top + cut)]
+        draw.polygon(outline, fill=face, outline=edge)
+    return plate
+
+
+def country_illustration(tag: str) -> Image.Image:
+    if tag in PORTRAIT_CROPS:
+        path, viewport = PORTRAIT_CROPS[tag]
+        with Image.open(ROOT / path) as source:
+            return source.convert('RGB').crop(viewport).resize(PORTRAIT, Image.Resampling.LANCZOS)
+    with Image.open(OUTPUT / f'{tag}.png') as source:
+        return source.convert('RGB')
+
+
+
+
+def selection_art(add, roster) -> None:
+    with Image.open(ROOT / 'gfx/interface/select_date_bg.dds') as source:
+        chronicle = source.convert('RGBA')
+    # The original folio already contains its illustration, cartouche and date ribbon.
+    # Tint only the graph paper to keep white body text legible at its native size.
+    chronicle.alpha_composite(Image.new('RGBA', (548, 345), (22, 16, 18, 210)), (16, 307))
+    draw = ImageDraw.Draw(chronicle)
+    draw.line((32, 356, 546, 356), fill=(144, 105, 62))
+    draw.line((32, 594, 546, 594), fill=(112, 83, 54))
+    add('chronicle', chronicle)
+    # The native entry sits on the date ribbon in front of the already painted illustration.
+    add('bookmark_mount', Image.new('RGBA', (1104, 34)), 2,
+        effect='buttonstate_nodowneffect', rectangular_hitbox=True)
+
+    gallery_art(add, roster, brass_plate)
+
+    for name in ('return', 'advance'):
+        button = brass_plate((178, 36), selected=name == 'advance')
+        add(name, button, kind='textSpriteType', effect='buttonstate')
+
+
+def setup_outputs(roster=None) -> tuple[dict[Path, bytes], list[str]]:
     outputs = {}
     definitions = []
 
-    def add(role, image, frames=1, kind='spriteType', effect=None):
+    def add(role, image, frames=1, kind='spriteType', effect=None, rectangular_hitbox=False, border=14):
         stream = BytesIO()
         image.save(stream, 'PNG')
         outputs[OUTPUT / f'setup_{role}.png'] = stream.getvalue()
@@ -88,7 +144,7 @@ def setup_outputs() -> tuple[dict[Path, bytes], list[str]]:
         if kind == 'corneredTileSpriteType':
             definitions.extend([
                 f'\t\tsize = {{ x = {image.width} y = {image.height} }}',
-                '\t\tborderSize = { x = 14 y = 14 }',
+                f'\t\tborderSize = {{ x = {border} y = {border} }}',
                 '\t\ttilingCenter = yes',
             ])
         else:
@@ -103,6 +159,9 @@ def setup_outputs() -> tuple[dict[Path, bytes], list[str]]:
             ])
         if effect:
             definitions.append(f'\t\teffectFile = "gfx/FX/{effect}.lua"')
+        if rectangular_hitbox:
+            # The artwork beneath these native buttons remains visible through their face.
+            definitions.append('\t\ttransparencecheck = no')
         definitions.append('\t}')
 
     panel = setup_surface((598, 330))
@@ -209,6 +268,38 @@ def setup_outputs() -> tuple[dict[Path, bytes], list[str]]:
             ImageDraw.Draw(tile).line((8, 15, 14, 21, 26, 8), fill=(208, 183, 132), width=3)
         checkbox.paste(tile, (34 if selected else 0, 0))
     add('checkbox', checkbox, 2)
+
+    if roster is None:
+        roster = campaign_roster()
+    selection_art(add, roster)
+    for tag, spec in roster.items():
+        if tag == ATLAS:
+            continue
+        path = ROOT / spec['image']
+        with Image.open(path) as painting:
+            export_size = (PRINT[0] * 2, PRINT[1] * 2)
+            if painting.size != export_size:
+                raise ValueError(f'{path}: country poster must be {export_size}, got {painting.size}')
+        definitions.extend([
+            '\tspriteType = {',
+            f'\t\tname = "GFX_ADISCORD_setup_poster_{tag.lower()}"',
+            f'\t\ttexturefile = "{spec["image"]}"',
+            '\t}',
+        ])
+        for route in spec['routes']:
+            banner = route.get('banner')
+            if banner:
+                with Image.open(ROOT / banner) as artwork:
+                    if artwork.size != BANNER:
+                        raise ValueError(f'{banner}: route banner must be {BANNER}, got {artwork.size}')
+                    artwork.verify()
+                definitions.extend([
+                    '\tspriteType = {',
+                    f'\t\tname = "GFX_{tag}_bookmark_route_{route["key"]}_banner"',
+                    f'\t\ttexturefile = "{banner}"',
+                    '\t\tlegacy_lazy_load = no',
+                    '\t}',
+                ])
     return outputs, definitions
 
 
@@ -234,13 +325,14 @@ def expected_outputs(include_portraits: bool = True) -> dict[Path, bytes]:
         if role != 'background':
             definitions.append('\t\teffectFile = "gfx/FX/buttonstate.lua"')
         definitions.append('\t}')
-    setup_images, setup_definitions = setup_outputs()
+    roster = campaign_roster()
+    outputs[GALLERY_GUI] = gallery_gui(roster).encode('utf-8')
+    setup_images, setup_definitions = setup_outputs(roster)
     outputs.update(setup_images)
     definitions.extend(setup_definitions)
     if include_portraits:
-        for tag, (source, box) in PORTRAIT_CROPS.items():
-            with Image.open(ROOT / source) as image:
-                portrait = image.convert('RGB').crop(box).resize(PORTRAIT, Image.LANCZOS)
+        for tag in PORTRAIT_CROPS:
+            portrait = country_illustration(tag)
             stream = BytesIO()
             portrait.save(stream, 'PNG')
             outputs[OUTPUT / f'{tag}.png'] = stream.getvalue()
@@ -268,7 +360,7 @@ def main() -> int:
     parser.add_argument(
         '--skin-only',
         action='store_true',
-        help='Build frames and sprite definitions without reading or changing country artwork.',
+        help='Build interface surfaces and sprite definitions without rewriting country illustrations.',
     )
     args = parser.parse_args()
     outputs = expected_outputs(include_portraits=not args.skin_only)

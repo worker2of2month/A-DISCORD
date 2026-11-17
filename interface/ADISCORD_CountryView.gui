@@ -1,5 +1,49 @@
 guiTypes = {
 	containerWindowType = {
+		name = "ADISCORD_party_markers"
+		size = { width = 30 height = 160 }
+		gridBoxType = {
+			name = "ADISCORD_party_marker_grid"
+			position = { x = 0 y = 0 }
+			size = { width = 30 height = 160 }
+			slotsize = { width = 30 height = 20 }
+			max_slots_horizontal = 1
+			format = "UPPER_LEFT"
+		}
+	}
+
+	containerWindowType = {
+		name = "ADISCORD_party_marker_row"
+		size = { width = 30 height = 20 }
+		buttonType = {
+			name = "party_hover"
+			position = { x = 10 y = 2 }
+			size = { x = 20 y = 18 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			pdx_tooltip = "ADISCORD_party_marker_tt"
+		}
+		iconType = {
+			name = "party_banned"
+			position = { x = 14 y = 6 }
+			spriteType = "GFX_ADISCORD_party_banned"
+			scale = 0.60
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "party_member"
+			position = { x = 12 y = 4 }
+			spriteType = "GFX_ADISCORD_party_member"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "party_leader"
+			position = { x = 12 y = 4 }
+			spriteType = "GFX_ADISCORD_party_leader"
+			alwaystransparent = yes
+		}
+	}
+
+	containerWindowType = {
 		name = "CountryIdeology"
 
 		containerWindowType = {

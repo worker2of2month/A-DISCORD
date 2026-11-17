@@ -170,7 +170,11 @@ class StelanderStalemateRegressionTests(unittest.TestCase):
         self.assertIn("tag = VAL", event)
         self.assertIn("STP_pw_party_kefreyt_warning_expired = no", event)
         self.assertIn(
-            "immediate = { add_ideas = STP_pw_party_kefreyt_defence_ready }", event
+            "immediate = { hidden_effect = { add_ideas = STP_pw_party_kefreyt_defence_ready } }",
+            event,
+        )
+        self.assertIn(
+            "effect_tooltip = { add_ideas = STP_pw_party_kefreyt_defence_ready }", event
         )
 
         expired = block(

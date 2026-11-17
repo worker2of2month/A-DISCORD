@@ -161,7 +161,13 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 100
 			effect_tooltip = { add_ideas = WRK_empire_delta_state_union }
+			custom_effect_tooltip = WRK_empire_state_union_parties_tt
 			hidden_effect = {
+				for_each_loop = {
+					array = global.ideology_groups
+					value = ADISCORD_party
+					ADISCORD_ban_party = yes
+				}
 				add_to_variable = { var = WRK_empire_stability value = 0.05 }
 				ADISCORD_vorkerland_empire_refresh_court = yes
 			}

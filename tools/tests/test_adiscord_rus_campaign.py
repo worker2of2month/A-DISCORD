@@ -4159,7 +4159,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_public_story_events_have_no_mandatory_choice_settlement(self):
         events = [e.value for e in parse(f"events/{BASE}_events.txt") if e.key == "country_event" and scalar(e.value, "id").startswith("ADISCORD_rus_campaign.")]
-        self.assertEqual(len(events), 66)
+        self.assertEqual(len(events), 67)
         registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
         for event in events:
             name = scalar(event, "id")
@@ -5003,7 +5003,7 @@ class RusCampaignTests(unittest.TestCase):
             self.assertFalse(any(entry.key == "RUS_political_course_chosen" for entry in walk(rows)))
         self.assertFalse(any(entry.value == "chauvinism" for entry in walk(proclaim) if isinstance(entry.value, str)))
         self.assertEqual({entry.value for entry in walk(proclaim) if entry.key == "set_cosmetic_tag"}, {"RUS_last_empire"})
-        coup = self.effects["RUS_coup_execute"]
+        coup = self.effects["RUS_coup_install_regime"]
         self.assertEqual({entry.value for entry in walk(coup) if entry.key == "set_cosmetic_tag"}, {"RUS_black_banner_empire", "RUS_restoration_state"})
         self.assertIn("ADISCORD_vorkerland_show_last_empire_superevent", [entry.key for entry in walk(coup)])
         superevent = self.effects["ADISCORD_vorkerland_show_last_empire_superevent"]
@@ -6165,8 +6165,11 @@ class RusCoupTests(unittest.TestCase):
         self.assertIn("remove_mission", [row.key for row in walk(first)])
 
     def test_coup_replaces_the_ruler_and_clears_the_khan_systems(self):
-        body = block(self.effects["RUS_coup_execute"], "if")
-        self.assertEqual(scalar(block(body, "limit"), "RUS_coup_window_open"), "yes")
+        window = block(self.effects["RUS_coup_execute"], "if")
+        self.assertEqual(scalar(block(window, "limit"), "RUS_coup_window_open"), "yes")
+        self.assertEqual([row.key for row in window if row.key != "limit"], ["RUS_coup_install_regime"])
+        body = block(self.effects["RUS_coup_install_regime"], "if")
+        self.assertEqual(scalar(block(body, "limit"), "RUS_khan_governing"), "yes")
         rows = list(walk(body))
         keys = [row.key for row in rows]
         self.assertIn("RUS_retire_current_ruler", keys)
@@ -6189,6 +6192,160 @@ class RusCoupTests(unittest.TestCase):
             self.assertIn(tag, cosmetic)
             for folder in ("", "medium/", "small/"):
                 self.assertTrue((ROOT / f"gfx/flags/{folder}{tag}.tga").is_file(), folder + tag)
+
+    def test_khan_accepting_the_ultimatum_dies_and_the_balance_names_his_heir(self):
+        envoy = self.events["ADISCORD_rus_crisis.41"]
+        options = [row.value for row in envoy if row.key == "option"]
+        accept = next(option for option in options if scalar(option, "name") == "ADISCORD_rus_crisis.41.b")
+        self.assertEqual([row.key for row in block(accept, "hidden_effect")],
+                         ["RUS_crisis_disconnect_channel", "RUS_crisis_ultimatum_succession"])
+        preview = block(accept, "if")
+        self.assertEqual(scalar(block(preview, "limit"), "RUS_crisis_ultimatum_heir_scientists"), "yes")
+        self.assertEqual(scalar(preview, "custom_effect_tooltip"), "RUS_crisis_ultimatum_scientists_tt")
+        self.assertEqual(scalar(block(accept, "else"), "custom_effect_tooltip"), "RUS_crisis_ultimatum_black_army_tt")
+        succession = block(self.effects["RUS_crisis_ultimatum_succession"], "if")
+        limit = block(succession, "limit")
+        self.assertEqual(scalar(limit, "RUS_khan_governing"), "yes")
+        self.assertEqual({row.value for row in limit if row.key == "has_country_flag"},
+                         {"ADISCORD_vorkerland_rus_last_empire_proclaimed", "RUS_crisis_channel_disconnected"})
+        keys = [row.key for row in succession]
+        self.assertLess(keys.index("set_temp_variable"), keys.index("RUS_coup_install_regime"))
+        self.assertEqual(scalar(block(succession, "set_temp_variable"), "value"), "2")
+        heir = block(succession, "if")
+        self.assertEqual(scalar(block(heir, "limit"), "RUS_crisis_ultimatum_heir_scientists"), "yes")
+        self.assertEqual(scalar(block(heir, "set_temp_variable"), "value"), "1")
+        self.assertLessEqual({"RUS_army_morale", "RUS_morale_casualties_seen_k"},
+                             {row.value for row in succession if row.key == "clear_variable"})
+        # A level balance leaves the bunker guard, and the power, with the Black Army.
+        if not hasattr(RusCampaignTests, "effects"):
+            RusCampaignTests.setUpClass()
+        world = BunkerWorld(RusCampaignTests)
+        world.bop_id = "RUS_state_balance"
+        for value, scientists in ((-0.6, True), (-0.01, True), (0.0, False), (0.3, False)):
+            world.bop = value
+            self.assertEqual(world.matches(self.triggers["RUS_crisis_ultimatum_heir_scientists"]), scientists, value)
+        world.bop_id = None
+        self.assertFalse(world.matches(self.triggers["RUS_crisis_ultimatum_heir_scientists"]))
+        for language in self.loc:
+            for name in ("RUS_crisis_ultimatum_scientists_tt", "RUS_crisis_ultimatum_black_army_tt", "RUS_coup_ultimatum_channel_closed_tt"):
+                self.assertIn(name, self.loc[language], (language, name))
+
+    def test_succession_texts_follow_the_cut_channel(self):
+        marker = "RUS_crisis_channel_disconnected"
+        for number, scoped in ((47, False), (48, True)):
+            event = self.events[f"ADISCORD_rus_campaign.{number}"]
+            for field in ("title", "desc"):
+                variants = [row.value for row in event if row.key == field and isinstance(row.value, list)]
+                if not variants:
+                    continue
+                seen = set()
+                for variant in variants:
+                    condition = block(variant, "trigger")
+                    if scoped:
+                        condition = block(condition, "RUS")
+                    regime = next(row.key for row in condition if row.key in ("RUS_scientists_regime", "RUS_black_army_regime"))
+                    cut = any(row.key == "has_country_flag" and row.value == marker for row in condition)
+                    kept = any(row.key == "NOT" and scalar(row.value, "has_country_flag") == marker for row in condition)
+                    self.assertNotEqual(cut, kept, (number, field, scalar(variant, "text")))
+                    seen.add((regime, cut))
+                    text = scalar(variant, "text")
+                    self.assertEqual(".ultimatum." in text, cut, text)
+                    for language in self.loc:
+                        self.assertIn(text, self.loc[language], (language, text))
+                self.assertEqual(len(seen), 4, (number, field))
+        answers = set()
+        for option in (row.value for row in self.events["ADISCORD_rus_campaign.47"] if row.key == "option"):
+            condition = block(option, "trigger")
+            regime = next(row.key for row in condition if row.key in ("RUS_scientists_regime", "RUS_black_army_regime"))
+            cut = any(row.key == "has_country_flag" and row.value == marker for row in condition)
+            tooltips = [row.value for row in option if row.key == "custom_effect_tooltip"]
+            self.assertEqual(tooltips[0], "RUS_coup_ultimatum_channel_closed_tt" if cut else "RUS_coup_channel_closed_tt")
+            answers.add((regime, cut))
+        self.assertEqual(len(answers), 4)
+
+    def test_breakup_releases_one_absorbed_republic_per_countdown(self):
+        succession = [row.key for row in block(self.effects["RUS_crisis_ultimatum_succession"], "if")]
+        self.assertLess(succession.index("RUS_coup_install_regime"), succession.index("RUS_breakup_begin"))
+        begin = block(self.effects["RUS_breakup_begin"], "if")
+        self.assertEqual(scalar(block(begin, "limit"), "RUS_zone_republic_restorable"), "yes")
+        self.assertEqual(scalar(block(begin, "set_variable"), "var"), "RUS_breakup_holds")
+        self.assertEqual(scalar(begin, "activate_mission"), "RUS_breakup_countdown")
+        # Each release branch is one member of the queue trigger, in reverse manifest order.
+        queue = [
+            (scalar(member, "has_country_flag"), scalar(block(member, "NOT"), "country_exists"),
+             next(row.key for row in member if row.key.isdigit()))
+            for member in (row.value for row in block(self.triggers["RUS_zone_republic_restorable"], "OR"))
+        ]
+        release = self.effects["RUS_breakup_release_next"]
+        branches = [row.value for row in release if row.key in ("if", "else_if") and any(item.key == "release" for item in row.value)]
+        self.assertEqual(len(branches), 6)
+        order = []
+        for branch in branches:
+            limit = block(branch, "limit")
+            tag = scalar(branch, "release")
+            order.append((scalar(limit, "has_country_flag"), scalar(block(limit, "NOT"), "country_exists"),
+                          next(row.key for row in limit if row.key.isdigit())))
+            self.assertEqual(order[-1][1], tag)
+            self.assertEqual([row.key for row in block(branch, tag)], ["RUS_breakup_prepare_republic"])
+        self.assertEqual(order, list(reversed(queue)))
+        self.assertEqual([tag for _, tag, _ in order], ["SCA", "IRT", "ERT", "MLR", "RZA", "SLA"])
+        tail = [row.value for row in release if row.key == "if"][-1]
+        self.assertEqual(scalar(block(tail, "limit"), "RUS_zone_republic_restorable"), "yes")
+        self.assertEqual((scalar(block(tail, "country_event"), "id"), scalar(block(tail, "country_event"), "days")),
+                         ("ADISCORD_rus_crisis.44", "1"))
+        self.assertEqual(scalar(block(release, "else"), "clear_variable"), "RUS_breakup_holds")
+        self.assertIn("ADISCORD_economy_mark_dirty", [row.key for row in release])
+        prepare = [row.key for row in self.effects["RUS_breakup_prepare_republic"]]
+        self.assertLessEqual({"ADISCORD_release_non_participating_minor_optimization", "ADISCORD_economy_initialize_country"}, set(prepare))
+        self.assertLess(prepare.index("save_event_target_as"), prepare.index("RUS"))
+        self.assertEqual(scalar(self.effects["RUS_breakup_prepare_republic"], "save_event_target_as"), "RUS_breakup_republic")
+        for language in self.loc:
+            self.assertIn("[RUS_breakup_republic.GetNameDef]", self.loc[language]["ADISCORD_rus_campaign.67.d"])
+        notice = block(self.effects["RUS_breakup_prepare_republic"], "RUS")
+        self.assertEqual(scalar(block(notice, "country_event"), "id"), "ADISCORD_rus_campaign.67")
+
+    def test_breakup_countdown_and_holds_keep_the_queue_running(self):
+        mission = self.decisions["RUS_breakup_countdown"]
+        self.assertEqual(scalar(mission, "days_mission_timeout"), "60")
+        self.assertEqual(scalar(block(block(mission, "available"), "hidden_trigger"), "always"), "no")
+        self.assertEqual(scalar(block(mission, "activation"), "always"), "no")
+        tokens = read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").split()
+        self.assertEqual(tokens.count("RUS_breakup_countdown"), 1)
+        self.assertEqual([row.key for row in block(block(mission, "timeout_effect"), "hidden_effect")], ["RUS_breakup_release_next"])
+        ends = {"RUS_regime_governing", "RUS_zone_republic_restorable"}
+        self.assertLessEqual(ends, {row.key for row in walk(block(mission, "cancel_trigger"))})
+        # A hold removes the mission; only the real end conditions clear the counter.
+        cleanup = block(block(mission, "cancel_effect"), "if")
+        self.assertLessEqual(ends, {row.key for row in walk(block(cleanup, "limit"))})
+        self.assertEqual(scalar(cleanup, "clear_variable"), "RUS_breakup_holds")
+        hold = self.decisions["RUS_breakup_hold"]
+        self.assertEqual(scalar(block(hold, "visible"), "has_active_mission"), "RUS_breakup_countdown")
+        self.assertEqual(scalar(hold, "cost"), "75")
+        caps = [row.value for row in walk(block(hold, "available")) if row.key == "check_variable"]
+        self.assertEqual([(scalar(cap, "var"), scalar(cap, "value"), scalar(cap, "compare")) for cap in caps],
+                         [("RUS_breakup_holds", "3", "less_than")])
+        payload = block(block(hold, "complete_effect"), "hidden_effect")
+        self.assertEqual([row.key for row in payload], ["add_to_variable", "remove_mission", "country_event"])
+        self.assertEqual(scalar(block(payload, "country_event"), "id"), "ADISCORD_rus_crisis.44")
+        dispatcher = self.events["ADISCORD_rus_crisis.44"]
+        self.assertEqual(scalar(dispatcher, "hidden"), "yes")
+        gate = block(dispatcher, "trigger")
+        self.assertEqual(scalar(gate, "has_variable"), "RUS_breakup_holds")
+        self.assertEqual(scalar(block(gate, "NOT"), "has_active_mission"), "RUS_breakup_countdown")
+        self.assertEqual(scalar(block(dispatcher, "immediate"), "activate_mission"), "RUS_breakup_countdown")
+        for language in self.loc:
+            for name in ("RUS_breakup_countdown", "RUS_breakup_countdown_desc", "RUS_breakup_countdown_tt",
+                         "RUS_breakup_hold", "RUS_breakup_hold_desc", "RUS_breakup_hold_tt", "RUS_breakup_hold_left_tt",
+                         "ADISCORD_rus_campaign.67.t", "ADISCORD_rus_campaign.67.d", "ADISCORD_rus_campaign.67.a"):
+                self.assertIn(name, self.loc[language], (language, name))
+
+    def test_khan_imperial_roots_yield_their_cells_to_a_successor(self):
+        # The imperial block shows after the proclamation; a faction that succeeds
+        # the proclaimed Khan must not see it on top of its own branch.
+        for name in self.KHAN_FOCUSES:
+            allow = [row.value for row in self.focuses[name] if row.key == "allow_branch"]
+            if allow and any(row.value == "ADISCORD_vorkerland_rus_last_empire_proclaimed" for row in walk(allow[0])):
+                self.assertEqual(scalar(allow[0], "RUS_coup_regime"), "no", name)
 
     def test_coup_branches_replace_the_chancery_in_its_cells(self):
         chancery = block(self.focuses["RUS_seat_the_khan_chancery"], "allow_branch")
@@ -6307,7 +6464,7 @@ class RusCoupTests(unittest.TestCase):
         self.assertFalse(options[0].value)
         begin = [row.key for row in block(self.effects["RUS_suspicion_begin"], "if")]
         self.assertLess(begin.index("RUS_ai_choose_coup_course"), begin.index("RUS_coup_plot_check"))
-        cleared = [row.value for row in walk(self.effects["RUS_coup_execute"]) if row.key == "clr_country_flag"]
+        cleared = [row.value for row in walk(self.effects["RUS_coup_install_regime"]) if row.key == "clr_country_flag"]
         self.assertLessEqual({"RUS_ai_scientists_course", "RUS_ai_black_army_course"}, set(cleared))
         self.assertEqual(scalar(self.triggers["RUS_ai_proclamation_pending"], "RUS_ai_coup_course_active"), "no")
         proclaim = block(self.decisions["RUS_proclaim_the_last_empire"], "ai_will_do")

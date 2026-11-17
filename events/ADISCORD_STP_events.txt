@@ -2337,8 +2337,13 @@ country_event = {
 	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	trigger = { OR = { tag = VAL tag = NOD } STS = { exists = yes } }
-	immediate = { add_ideas = STP_pc_campaign_defence_ready }
-	option = { name = ADISCORD_STP_pc.20.a }
+	# The reserved plan is granted on arrival so the war-start handler finds it
+	# while the window is still open; the answer shows what it gives.
+	immediate = { hidden_effect = { add_ideas = STP_pc_campaign_defence_ready } }
+	option = {
+		name = ADISCORD_STP_pc.20.a
+		effect_tooltip = { add_ideas = STP_pc_campaign_defence_ready }
+	}
 }
 country_event = {
 	id = ADISCORD_STP_pc.112
@@ -2351,7 +2356,9 @@ country_event = {
 		NOT = { has_war_with = STP }
 		STP_pw_party_kefreyt_warning_expired = no
 	}
-	immediate = { add_ideas = STP_pw_party_kefreyt_defence_ready }
+	# Granted on arrival: the warning guard and the war-start handler read the idea
+	# while the window is still open; the answer shows what it gives.
+	immediate = { hidden_effect = { add_ideas = STP_pw_party_kefreyt_defence_ready } }
 	option = {
 		name = ADISCORD_STP_pc.112.a
 		effect_tooltip = { add_ideas = STP_pw_party_kefreyt_defence_ready }
@@ -2460,6 +2467,7 @@ country_event = {
 			}
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_cabinet value = 1 }
+				STP_ch_update_cabinet_parties = yes
 
 				set_temp_variable = { var = STP_pf_selected value = 1 }
 				STP_pf_shift = yes
@@ -2530,6 +2538,7 @@ country_event = {
 			}
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_cabinet value = 3 }
+				STP_ch_update_cabinet_parties = yes
 
 				set_temp_variable = { var = STP_pf_selected value = 7 }
 				STP_pf_shift = yes

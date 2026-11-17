@@ -1747,7 +1747,8 @@ country_event = {
 }
 
 # RUS. The coalition's envoy arrives during the preparation. Disconnecting
-# the weapon channel then closes the crisis before the intervention starts.
+# the weapon channel closes the crisis before the intervention starts, and the
+# Khan does not survive the surrender: the balance installs his successor.
 country_event = {
 	id = ADISCORD_rus_crisis.41
 	title = ADISCORD_rus_crisis.41.t
@@ -1769,7 +1770,17 @@ country_event = {
 		name = ADISCORD_rus_crisis.41.b
 		ai_chance = { base = 0 }
 		custom_effect_tooltip = RUS_crisis_disconnect_preparation_tt
-		hidden_effect = { RUS_crisis_disconnect_channel = yes }
+		if = {
+			limit = { RUS_crisis_ultimatum_heir_scientists = yes }
+			custom_effect_tooltip = RUS_crisis_ultimatum_scientists_tt
+		}
+		else = {
+			custom_effect_tooltip = RUS_crisis_ultimatum_black_army_tt
+		}
+		hidden_effect = {
+			RUS_crisis_disconnect_channel = yes
+			RUS_crisis_ultimatum_succession = yes
+		}
 	}
 }
 
@@ -1851,6 +1862,21 @@ country_event = {
 	option = { name = ADISCORD_rus_crisis.43.a }
 }
 
+# RUS. Restarts the breakup countdown after its timeout or a hold; a mission is
+# not reactivated from its own timeout_effect.
+country_event = {
+	id = ADISCORD_rus_crisis.44
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		RUS_regime_governing = yes
+		has_variable = RUS_breakup_holds
+		RUS_zone_republic_restorable = yes
+		NOT = { has_active_mission = RUS_breakup_countdown }
+	}
+	immediate = { activate_mission = RUS_breakup_countdown }
+}
+
 # RUS. A faction reached dominance inside the coup window; its plot mission
 # is already running when this warning opens.
 country_event = {
@@ -1880,53 +1906,147 @@ country_event = {
 	}
 }
 
-# RUS. Shown after RUS_coup_execute has installed the new government.
+# RUS. Shown after RUS_coup_install_regime has installed the new government.
+# The disconnected channel marks the succession after the coalition's ultimatum:
+# the plot coup can only happen before the proclamation, when no channel was cut.
 country_event = {
 	id = ADISCORD_rus_campaign.47
 	title = {
-		trigger = { RUS_scientists_regime = yes }
+		trigger = {
+			RUS_scientists_regime = yes
+			NOT = { has_country_flag = RUS_crisis_channel_disconnected }
+		}
 		text = ADISCORD_rus_campaign.47.scientists.t
 	}
 	title = {
-		trigger = { RUS_black_army_regime = yes }
+		trigger = {
+			RUS_black_army_regime = yes
+			NOT = { has_country_flag = RUS_crisis_channel_disconnected }
+		}
 		text = ADISCORD_rus_campaign.47.army.t
 	}
+	title = {
+		trigger = {
+			RUS_scientists_regime = yes
+			has_country_flag = RUS_crisis_channel_disconnected
+		}
+		text = ADISCORD_rus_campaign.47.scientists.ultimatum.t
+	}
+	title = {
+		trigger = {
+			RUS_black_army_regime = yes
+			has_country_flag = RUS_crisis_channel_disconnected
+		}
+		text = ADISCORD_rus_campaign.47.army.ultimatum.t
+	}
 	desc = {
-		trigger = { RUS_scientists_regime = yes }
+		trigger = {
+			RUS_scientists_regime = yes
+			NOT = { has_country_flag = RUS_crisis_channel_disconnected }
+		}
 		text = ADISCORD_rus_campaign.47.scientists.d
 	}
 	desc = {
-		trigger = { RUS_black_army_regime = yes }
+		trigger = {
+			RUS_black_army_regime = yes
+			NOT = { has_country_flag = RUS_crisis_channel_disconnected }
+		}
 		text = ADISCORD_rus_campaign.47.army.d
+	}
+	desc = {
+		trigger = {
+			RUS_scientists_regime = yes
+			has_country_flag = RUS_crisis_channel_disconnected
+		}
+		text = ADISCORD_rus_campaign.47.scientists.ultimatum.d
+	}
+	desc = {
+		trigger = {
+			RUS_black_army_regime = yes
+			has_country_flag = RUS_crisis_channel_disconnected
+		}
+		text = ADISCORD_rus_campaign.47.army.ultimatum.d
 	}
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	trigger = { RUS_coup_regime = yes }
 	option = {
-		trigger = { RUS_scientists_regime = yes }
+		trigger = {
+			RUS_scientists_regime = yes
+			NOT = { has_country_flag = RUS_crisis_channel_disconnected }
+		}
 		name = ADISCORD_rus_campaign.47.scientists.a
 		custom_effect_tooltip = RUS_coup_channel_closed_tt
 		custom_effect_tooltip = RUS_coup_scientists_branch_tt
 	}
 	option = {
-		trigger = { RUS_black_army_regime = yes }
+		trigger = {
+			RUS_black_army_regime = yes
+			NOT = { has_country_flag = RUS_crisis_channel_disconnected }
+		}
 		name = ADISCORD_rus_campaign.47.army.a
 		custom_effect_tooltip = RUS_coup_channel_closed_tt
 		custom_effect_tooltip = RUS_coup_black_army_branch_tt
 	}
+	option = {
+		trigger = {
+			RUS_scientists_regime = yes
+			has_country_flag = RUS_crisis_channel_disconnected
+		}
+		name = ADISCORD_rus_campaign.47.scientists.a
+		custom_effect_tooltip = RUS_coup_ultimatum_channel_closed_tt
+		custom_effect_tooltip = RUS_coup_scientists_branch_tt
+	}
+	option = {
+		trigger = {
+			RUS_black_army_regime = yes
+			has_country_flag = RUS_crisis_channel_disconnected
+		}
+		name = ADISCORD_rus_campaign.47.army.a
+		custom_effect_tooltip = RUS_coup_ultimatum_channel_closed_tt
+		custom_effect_tooltip = RUS_coup_black_army_branch_tt
+	}
 }
 
-# Human players outside RUS, sent once by RUS_coup_execute.
+# Human players outside RUS, sent once by RUS_coup_install_regime.
 country_event = {
 	id = ADISCORD_rus_campaign.48
 	title = ADISCORD_rus_campaign.48.t
 	desc = {
-		trigger = { RUS = { RUS_scientists_regime = yes } }
+		trigger = {
+			RUS = {
+				RUS_scientists_regime = yes
+				NOT = { has_country_flag = RUS_crisis_channel_disconnected }
+			}
+		}
 		text = ADISCORD_rus_campaign.48.scientists.d
 	}
 	desc = {
-		trigger = { RUS = { RUS_black_army_regime = yes } }
+		trigger = {
+			RUS = {
+				RUS_black_army_regime = yes
+				NOT = { has_country_flag = RUS_crisis_channel_disconnected }
+			}
+		}
 		text = ADISCORD_rus_campaign.48.army.d
+	}
+	desc = {
+		trigger = {
+			RUS = {
+				RUS_scientists_regime = yes
+				has_country_flag = RUS_crisis_channel_disconnected
+			}
+		}
+		text = ADISCORD_rus_campaign.48.scientists.ultimatum.d
+	}
+	desc = {
+		trigger = {
+			RUS = {
+				RUS_black_army_regime = yes
+				has_country_flag = RUS_crisis_channel_disconnected
+			}
+		}
+		text = ADISCORD_rus_campaign.48.army.ultimatum.d
 	}
 	picture = GFX_event_adiscord_field_switchboard
 	is_triggered_only = yes
@@ -2128,4 +2248,15 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { tag = RUS }
 	option = { name = ADISCORD_rus_campaign.66.a }
+}
+
+# RUS. event_target:RUS_breakup_republic is the republic just released.
+country_event = {
+	id = ADISCORD_rus_campaign.67
+	title = ADISCORD_rus_campaign.67.t
+	desc = ADISCORD_rus_campaign.67.d
+	picture = GFX_event_adiscord_field_switchboard
+	is_triggered_only = yes
+	trigger = { tag = RUS }
+	option = { name = ADISCORD_rus_campaign.67.a }
 }

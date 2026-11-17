@@ -159,6 +159,19 @@
       "prompt": "Widescreen 16:9 photorealistic alternate-history industrial event illustration. Gigantic oil refinery and integrated heavy factory extending to the horizon, seen from a workers' access walkway before sunrise. Colossal brick-and-steel factory hall with amber windows, coherent distillation towers, straight pipe racks, cylindrical tanks and chimneys. Cold blue-gray dawn, layered steam, desaturated steel and rust, fine archival color-film grain. Three tiny workers seen from behind in worn mid-century work coats and caps provide scale. Calm industrial power built and run by ordinary workers. Plausible machinery, readable silhouettes, dark quiet lower fifth for the quote. No lettering, flags, logos, border, UI or baked-in CRT; apply the supplied PSD separately.",
       "source_sha256": "7759929c9a60af99bdc24f03c52d157e5abd07439fbc45a2b52a98736957d4b1",
       "runtime_sha256": "acf4bf0f3544164266f18611a36eaacf947c3e10d519b437206027f4198330dc"
+    },
+    "superevent_vorkerland_singularity": {
+      "runtime_file": "gfx/interface/superevents/WRK/superevent_vorkerland_singularity.png",
+      "title": "Preamplifier at the National Ignition Facility",
+      "author": "Damien Jemison, Lawrence Livermore National Laboratory",
+      "date": "2012-08-02",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Preamplifier_at_the_National_Ignition_Facility.jpg",
+      "source_url": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Preamplifier_at_the_National_Ignition_Facility.jpg",
+      "license": "Creative Commons Attribution-ShareAlike 3.0 Unported",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "adaptation": "Centre-cropped to the super-event viewport and passed once through the supplied CRT and colour stack. The exported PNG is shared under the same licence.",
+      "source_sha256": "e239273d48400f4fc613ba69ae3ec0a742c9930ae71eb6611ddfd0e144fc6883",
+      "runtime_sha256": "785233734c0a9155fae83e91a336a7ad73f5b5a18dc71f494eb4dfde788e8658"
     }
   },
   "retained": {
@@ -542,8 +555,9 @@
     "superevent_west_anton": {
       "texture": "gfx/interface/superevents/WRK/superevent_west_anton.png",
       "effect": "superevent_west_anton_sound_e",
-      "sample": "superevent_vorkerland_utilitarian_victory_sound",
-      "audio_file": "superevents/superevent_vorkerland_utilitarian_victory_sound.wav"
+      "sample": "superevent_west_anton_sound",
+      "audio_file": "superevents/superevent_west_anton_sound.wav",
+      "theme_note": "Jóhann Jóhannsson - The Cause of Labour Is the Hope of the World (The Miners' Hymns, 2011). A pen, a distant whistle, wheels and escaping steam give way to the full brass chorale."
     },
     "superevent_west_shield": {
       "texture": "gfx/interface/superevents/IVN/superevent_west_shield.png",
@@ -678,6 +692,13 @@
       "sample": "superevent_south_war_sound",
       "audio_file": "superevents/superevent_south_war_sound.wav",
       "theme_note": "Phragments - New Kings, with armour engines, distant gunfire and radio static. Shared opening of the southern war against Shahrabad; music remains unducked."
+    },
+    "superevent_vorkerland_singularity": {
+      "texture": "gfx/interface/superevents/WRK/superevent_vorkerland_singularity.png",
+      "effect": "superevent_vorkerland_singularity_sound_e",
+      "sample": "superevent_vorkerland_singularity_sound",
+      "audio_file": "superevents/superevent_vorkerland_singularity_sound.wav",
+      "theme_note": "Chris Zabriskie - Made Me Smart, Told Me the Sky Wasn't Blue (CC BY 4.0). A narrow console speaker opens into stereo as the bass returns. Two relay clicks and the control-room hum give way to the music alone."
     }
   }
 }

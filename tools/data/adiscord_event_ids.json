@@ -7021,6 +7021,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_rus_crisis.44",
+      "namespace": "ADISCORD_rus_crisis",
+      "number": 44,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_last_empire_crisis",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_superevent.11",
       "namespace": "ADISCORD_superevent",
       "number": 11,
@@ -8973,6 +8981,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_rus_campaign.67",
+      "namespace": "ADISCORD_rus_campaign",
+      "number": 67,
+      "owner": "events/ADISCORD_RUS_events.txt",
+      "subsystem": "rus_campaign",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_vorkerland_claimant.5",
       "namespace": "ADISCORD_vorkerland_claimant",
       "number": 5,
@@ -9485,6 +9501,78 @@
       "status": "active"
     },
     {
+      "id": "val_rework.215",
+      "namespace": "val_rework",
+      "number": 215,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.216",
+      "namespace": "val_rework",
+      "number": 216,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.217",
+      "namespace": "val_rework",
+      "number": 217,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.218",
+      "namespace": "val_rework",
+      "number": 218,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.219",
+      "namespace": "val_rework",
+      "number": 219,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.220",
+      "namespace": "val_rework",
+      "number": 220,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.221",
+      "namespace": "val_rework",
+      "number": 221,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.222",
+      "namespace": "val_rework",
+      "number": 222,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.223",
+      "namespace": "val_rework",
+      "number": 223,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
       "id": "val_council.30",
       "namespace": "val_council",
       "number": 30,
@@ -9600,6 +9688,22 @@
       "id": "val_peace.13",
       "namespace": "val_peace",
       "number": 13,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.14",
+      "namespace": "val_peace",
+      "number": 14,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_peace",
+      "status": "active"
+    },
+    {
+      "id": "val_peace.15",
+      "namespace": "val_peace",
+      "number": 15,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_peace",
       "status": "active"
@@ -13648,6 +13752,14 @@
       "id": "ADISCORD_superevent.74",
       "namespace": "ADISCORD_superevent",
       "number": 74,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.75",
+      "namespace": "ADISCORD_superevent",
+      "number": 75,
       "owner": "events/ADISCORD_superevents.txt",
       "subsystem": "superevents",
       "status": "active"

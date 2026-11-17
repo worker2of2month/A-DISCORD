@@ -17,6 +17,9 @@
     "butler": {
       "url": "https://prisonfreepress.org/docs/War_is_a_Racket_(S_Butler_1935).pdf"
     },
+    "butler_erewhon": {
+      "url": "https://en.wikisource.org/wiki/Erewhon;_or_Over_the_Range_(1872)/Chapter_22"
+    },
     "cicero_law": {
       "url": "https://www.thelatinlibrary.com/cicero/leg3.shtml"
     },
@@ -396,6 +399,13 @@
       "source_passage": "WAR IS A MERE CONTINUATION OF POLICY BY OTHER MEANS",
       "russian": "Война есть лишь продолжение политики другими средствами.\n\n- Карл фон Клаузевиц, \"О войне\", I, 1",
       "english": "War is a mere continuation of policy by other means.\n\n- Carl von Clausewitz, \"On War\", I.1"
+    },
+    "superevent_vorkerland_singularity_quote": {
+      "source": "butler_erewhon",
+      "location": "Erewhon (1872), chapter XXII, The Machines, continued",
+      "source_passage": "Are we not ourselves creating our successors in the supremacy of the earth?",
+      "russian": "Не мы ли сами создаём своих преемников в господстве над землёй?\n\n- Сэмюэл Батлер, \"Едгин\", XXII",
+      "english": "Are we not ourselves creating our successors in the supremacy of the earth?\n\n- Samuel Butler, \"Erewhon\", XXII"
     },
     "superevent_stelander_empire_quote": {
       "source": "schopenhauer",

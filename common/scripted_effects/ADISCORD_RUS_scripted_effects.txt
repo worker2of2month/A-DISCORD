@@ -973,6 +973,7 @@ RUS_crisis_prepare_restored_fragment = {
 RUS_retire_current_ruler = {
 	if = {
 		limit = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
+		ADISCORD_end_party_coalition = yes
 		retire_character = RUS_Mark_Rustan
 	}
 }
@@ -1695,11 +1696,132 @@ RUS_ai_choose_coup_course = {
 }
 
 # RUS. Input: temp RUS_coup_side, 1 for the scientists and 2 for the Black Army.
-# Rustan is retired for good, so every Khan-only trigger, including the crisis
-# start, stays false for the rest of the campaign without another marker.
 RUS_coup_execute = {
 	if = {
 		limit = { RUS_coup_window_open = yes }
+		RUS_coup_install_regime = yes
+	}
+}
+
+# RUS. The Khan accepted the coalition's ultimatum and is killed the same night.
+# Runs after RUS_crisis_disconnect_channel in the preparation phase, so the
+# crisis is already closed. The balance at that moment chooses the heir.
+RUS_crisis_ultimatum_succession = {
+	if = {
+		limit = {
+			RUS_khan_governing = yes
+			has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			has_country_flag = RUS_crisis_channel_disconnected
+		}
+		set_temp_variable = { var = RUS_coup_side value = 2 }
+		if = {
+			limit = { RUS_crisis_ultimatum_heir_scientists = yes }
+			set_temp_variable = { var = RUS_coup_side value = 1 }
+		}
+		# Army morale is the Khan's oath; RUS_morale_active ends with his rule.
+		clear_variable = RUS_army_morale
+		clear_variable = RUS_morale_casualties_seen_k
+		RUS_coup_install_regime = yes
+		RUS_breakup_begin = yes
+	}
+}
+
+# --- rus_empire_breakup ---
+# RUS. After the Khan's surrender the zone republics he absorbed leave one at a
+# time. RUS_zone_republic_restorable is the queue, so a republic chartered by
+# the council or lost in a war leaves it as well. RUS_breakup_holds counts the
+# holds and exists only while the breakup runs.
+RUS_breakup_begin = {
+	if = {
+		limit = { RUS_zone_republic_restorable = yes }
+		set_variable = { var = RUS_breakup_holds value = 0 }
+		activate_mission = RUS_breakup_countdown
+	}
+}
+
+# RUS. Timeout of RUS_breakup_countdown, in the reverse order of the manifest.
+# A mission is not reactivated from its own timeout; the dispatcher does it.
+RUS_breakup_release_next = {
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_sca_absorbed
+			NOT = { country_exists = SCA }
+			173 = { is_owned_by = RUS }
+		}
+		release = SCA
+		SCA = { RUS_breakup_prepare_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_irt_absorbed
+			NOT = { country_exists = IRT }
+			181 = { is_owned_by = RUS }
+		}
+		release = IRT
+		IRT = { RUS_breakup_prepare_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_ert_absorbed
+			NOT = { country_exists = ERT }
+			169 = { is_owned_by = RUS }
+		}
+		release = ERT
+		ERT = { RUS_breakup_prepare_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_mlr_absorbed
+			NOT = { country_exists = MLR }
+			152 = { is_owned_by = RUS }
+		}
+		release = MLR
+		MLR = { RUS_breakup_prepare_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_rza_absorbed
+			NOT = { country_exists = RZA }
+			177 = { is_owned_by = RUS }
+		}
+		release = RZA
+		RZA = { RUS_breakup_prepare_republic = yes }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_rus_sla_absorbed
+			NOT = { country_exists = SLA }
+			49 = { is_owned_by = RUS }
+		}
+		release = SLA
+		SLA = { RUS_breakup_prepare_republic = yes }
+	}
+	ADISCORD_economy_mark_dirty = yes
+	if = {
+		limit = { RUS_zone_republic_restorable = yes }
+		country_event = { id = ADISCORD_rus_crisis.44 days = 1 }
+	}
+	else = {
+		clear_variable = RUS_breakup_holds
+	}
+}
+
+# COUNTRY released republic. The notice names it through the event target.
+RUS_breakup_prepare_republic = {
+	ADISCORD_release_non_participating_minor_optimization = yes
+	ADISCORD_economy_initialize_country = yes
+	ADISCORD_economy_mark_dirty = yes
+	save_event_target_as = RUS_breakup_republic
+	RUS = { country_event = { id = ADISCORD_rus_campaign.67 } }
+}
+
+# RUS. Input: temp RUS_coup_side. Shared by the plot coup and the succession
+# after the ultimatum; callers check their own window.
+# Rustan is retired for good, so every Khan-only trigger, including the crisis
+# start, stays false for the rest of the campaign without another marker.
+RUS_coup_install_regime = {
+	if = {
+		limit = { RUS_khan_governing = yes }
 		RUS_retire_current_ruler = yes
 		if = {
 			limit = { check_variable = { var = RUS_coup_side value = 1 compare = equals } }

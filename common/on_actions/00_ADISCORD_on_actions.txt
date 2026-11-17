@@ -310,8 +310,26 @@ on_actions = {
 			}
 		}
 	}
+	on_government_change = {
+		effect = {
+			add_to_variable = { ADISCORD_party_markers_revision = 1 }
+			if = {
+				limit = { is_in_array = { ADISCORD_banned_parties = current_party_ideology_group } }
+				remove_from_array = { ADISCORD_banned_parties = current_party_ideology_group }
+			}
+			if = {
+				limit = { check_variable = { ADISCORD_cabinet_parties^num > 0 } }
+				ADISCORD_refresh_party_coalition = yes
+			}
+		}
+	}
+
 	on_weekly = {
 		effect = {
+			if = {
+				limit = { check_variable = { ADISCORD_cabinet_parties^num > 1 } }
+				ADISCORD_refresh_party_coalition = yes
+			}
 			# Country-scoped cash settlement. Forecast inputs are cached country
 			# variables; no country or state iteration is allowed in this pulse.
 			if = {

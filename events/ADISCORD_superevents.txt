@@ -965,3 +965,16 @@ country_event = {
 		ADISCORD_superevent_enqueue = yes
 	}
 }
+
+# superevent_vorkerland_singularity
+# Presentation only: no campaign hook calls it yet.
+country_event = {
+	id = ADISCORD_superevent.75
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 77 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}

@@ -14958,6 +14958,7 @@ STP_ch_clear = {
 		}
 		# Cancellation callbacks must no longer see an active chapter.
 		clear_variable = STP_ch_phase
+		ADISCORD_end_party_coalition = yes
 		clear_variable = STP_ch_resume_phase
 		clr_country_flag = STP_ch_refresh_pending
 		STP_ch_train_army_refund = yes
@@ -15103,11 +15104,59 @@ STP_ch_select_ai_nominee = {
 	}
 }
 
+# Only a bloc holding a cabinet seat can stay on as junior partner after a leadership change.
+STP_ch_update_cabinet_parties = {
+	if = {
+		limit = { has_country_flag = STP_ch_protectorate_leader }
+		ADISCORD_end_party_coalition = yes
+	}
+	else_if = {
+		limit = { has_government = etatism }
+		set_temp_variable = { ADISCORD_party = token:hedonism }
+		if = {
+			limit = {
+				OR = {
+					check_variable = { var = STP_pw_party_cabinet value = 1 compare = equals }
+					check_variable = { var = STP_pw_party_cabinet value = 3 compare = equals }
+					check_variable = { var = STP_ch_economy_ministry value = 1 compare = equals }
+				}
+			}
+			ADISCORD_admit_coalition_party = yes
+		}
+		else = { ADISCORD_remove_coalition_party = yes }
+	}
+	else_if = {
+		limit = { has_government = hedonism }
+		set_temp_variable = { ADISCORD_party = token:etatism }
+		if = {
+			limit = { has_variable = STP_ch_security_ministry }
+			if = {
+				limit = { check_variable = { var = STP_ch_security_ministry value = 1 compare = equals } }
+				set_party_name = {
+					ideology = etatism
+					name = STP_ch_leader_3
+					long_name = STP_ch_leader_3
+				}
+			}
+			else = {
+				set_party_name = {
+					ideology = etatism
+					name = STP_pf_security_name
+					long_name = STP_pf_security_name
+				}
+			}
+			ADISCORD_admit_coalition_party = yes
+		}
+		else = { ADISCORD_remove_coalition_party = yes }
+	}
+}
+
 STP_ch_leader_1 = {
 	set_politics = {
 		ruling_party = hedonism
 		elections_allowed = no
 	}
+	STP_ch_update_cabinet_parties = yes
 	# The High Houses' civil-war victory gives their presidium a named chairman.
 	if = {
 		limit = { check_variable = { var = STP_pv_mandate value = 1 compare = equals } }
@@ -15151,6 +15200,7 @@ STP_ch_leader_2 = {
 		ruling_party = hedonism
 		elections_allowed = no
 	}
+	STP_ch_update_cabinet_parties = yes
 	if = {
 		limit = { has_character = STP_rufus_hedersett }
 		if = {
@@ -15244,6 +15294,7 @@ STP_ch_leader_3 = {
 		ruling_party = etatism
 		elections_allowed = no
 	}
+	STP_ch_update_cabinet_parties = yes
 	set_party_name = {
 		ideology = etatism
 		name = STP_ch_leader_3
@@ -15299,6 +15350,7 @@ STP_ch_leader_4 = {
 		ruling_party = hedonism
 		elections_allowed = no
 	}
+	STP_ch_update_cabinet_parties = yes
 	if = {
 		limit = { NOT = { has_country_leader = { character = STP_Pavel_Lanskoy } } }
 		add_country_leader_role = {
@@ -15352,6 +15404,7 @@ STP_ch_leader_5 = {
 		ruling_party = etatism
 		elections_allowed = no
 	}
+	STP_ch_update_cabinet_parties = yes
 	set_party_name = {
 		ideology = etatism
 		name = STP_pf_security_name
@@ -15410,6 +15463,7 @@ STP_ch_leader_6 = {
 		ruling_party = hedonism
 		elections_allowed = no
 	}
+	STP_ch_update_cabinet_parties = yes
 	if = {
 		limit = { NOT = { has_country_leader = { character = STP_Edgar_Renner } } }
 		add_country_leader_role = {

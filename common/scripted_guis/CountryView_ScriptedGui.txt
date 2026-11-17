@@ -1,4 +1,24 @@
 scripted_gui = {
+	ADISCORD_party_markers_gui = {
+		context_type = player_context
+		parent_window_name = "ADISCORD_party_marker_anchor"
+		window_name = "ADISCORD_party_markers"
+		dirty = ADISCORD_party_markers_revision
+		ai_enabled = { always = no }
+		dynamic_lists = {
+			ADISCORD_party_marker_grid = {
+				array = global.ideology_groups
+				value = ADISCORD_party
+				entry_container = ADISCORD_party_marker_row
+			}
+		}
+		triggers = {
+			party_banned_visible = { ADISCORD_party_is_banned = yes }
+			party_member_visible = { ADISCORD_party_is_coalition_member = yes }
+			party_leader_visible = { ADISCORD_party_is_coalition_leader = yes }
+		}
+	}
+
 	CountryIdeologyScript = { ##Party name
 		context_type = player_context
 		parent_window_token = politics_tab

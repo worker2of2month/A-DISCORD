@@ -7,6 +7,7 @@ from pathlib import Path
 from tools.tests.test_adiscord_stp_preparation import (
     block as parsed_block,
     entries,
+    matches_conditions,
     scalar,
 )
 
@@ -180,6 +181,12 @@ class KefreytFocusClarityTests(unittest.TestCase):
 
     def test_expansion_focuses_unlock_the_orders_that_declare_war(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        triggers = entries("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        new_world = read("focus_trees/VAL/new_world/focuses.txt")
+        shared_routes = {
+            "VAL_Return_Southern_Tsaygen": ("VAL_tsaygen_campaign_opened", "VAL_nw_tsaygen_strike"),
+            "VAL_frontier_return_irem": ("VAL_perimeter_campaign_opened", "VAL_nw_beyond_perimeter"),
+        }
         cases = (
             (
                 "VAL_Return_Southern_Tsaygen",
@@ -212,7 +219,18 @@ class KefreytFocusClarityTests(unittest.TestCase):
                 self.assertNotIn("declare_war_on", body)
                 self.assertIn(f"unlock_decision_tooltip = {decision_id}", body)
                 decision = block(self.decisions, decision_id)
-                self.assertIn(f"has_completed_focus = {focus_id}", decision)
+                visible = block(decision, "visible")
+                if focus_id in shared_routes:
+                    gate, alternate = shared_routes[focus_id]
+                    self.assertIn(f"{gate} = yes", visible)
+                    self.assertIn(f"unlock_decision_tooltip = {decision_id}", focus(new_world, alternate))
+                    conditions = parsed_block(triggers, gate)
+                    self.assertFalse(matches_conditions(conditions, {}, scope="VAL"))
+                    for completed in (focus_id, alternate):
+                        facts = {("VAL", "has_completed_focus", completed): True}
+                        self.assertTrue(matches_conditions(conditions, facts, scope="VAL"), completed)
+                else:
+                    self.assertIn(f"has_completed_focus = {focus_id}", visible)
                 reward = block(decision, "complete_effect")
                 self.assertIn(f"custom_effect_tooltip = {tooltip}", reward)
                 if focus_id == "VAL_Return_Southern_Tsaygen":

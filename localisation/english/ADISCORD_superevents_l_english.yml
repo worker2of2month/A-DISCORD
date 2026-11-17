@@ -55,6 +55,9 @@
  superevent_south_war_title: "War for the South"
  superevent_south_war_quote: "War is a mere continuation of policy by other means.\n\n- Carl von Clausewitz, \"On War\", I.1"
  superevent_south_war_comment: "The desert is a battlefield once more."
+ superevent_vorkerland_singularity_title: "Singularity"
+ superevent_vorkerland_singularity_quote: "Are we not ourselves creating our successors in the supremacy of the earth?\n\n- Samuel Butler, \"Erewhon\", XXII"
+ superevent_vorkerland_singularity_comment: "The circuit no longer advises."
 
   superevent_stelander_great_title: "Great Stelander Proclaimed!"
   superevent_stelander_great_quote: "$superevent_stelander_party_victory_quote$"

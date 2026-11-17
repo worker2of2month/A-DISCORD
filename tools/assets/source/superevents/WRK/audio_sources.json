@@ -50,6 +50,82 @@
       "license": "Mixkit Sound Effects Free License",
       "duration_seconds": 5.095533,
       "sha256": "5cbe7879664fb3ab9526f467251536688713c9b20cd9eae50e6d9dcd4c664157"
+    },
+    "sfx_key_in_lock.flac": {
+      "file": "sfx_key_in_lock.flac",
+      "title": "Door key in door lock",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/doors/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2842/2842-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "license_url": "https://mixkit.co/license/#sfxFree",
+      "duration_seconds": 2.51771,
+      "sha256": "66988278351068a3d24224f28e85d4e547ee365031c40cb37df947fdb594da6c"
+    },
+    "sfx_low_electric_hum.flac": {
+      "file": "sfx_low_electric_hum.flac",
+      "title": "Low electricity humming",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/electricity/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2132/2132-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "license_url": "https://mixkit.co/license/#sfxFree",
+      "duration_seconds": 19.2,
+      "sha256": "caeb7a6c46f41efe93a619646c303b6fa33fa9eda3b18540e8cca11a00a10bf8"
+    },
+    "sfx_console_switch.flac": {
+      "file": "sfx_console_switch.flac",
+      "title": "On or off light switch tap",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/click/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2585/2585-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "license_url": "https://mixkit.co/license/#sfxFree",
+      "duration_seconds": 1.105714,
+      "sha256": "9f5472da523aab2c4b272762487a2a2001f132b212e1c310c409ce12c4b33e96"
+    },
+    "sfx_electric_shockwave.flac": {
+      "file": "sfx_electric_shockwave.flac",
+      "title": "Heavy electric shockwave impact",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/electricity/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2599/2599-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "license_url": "https://mixkit.co/license/#sfxFree",
+      "duration_seconds": 6.649002,
+      "impact_seconds": 3.6,
+      "sha256": "0d4ba041674ee320f6f42ad2e68e65ff8515bd560dfdf42f1096ad8127509af0"
+    },
+    "sfx_machine_deep_hum.flac": {
+      "file": "sfx_machine_deep_hum.flac",
+      "title": "Sci fi machine deep hum",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/sci-fi/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2137/2137-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "license_url": "https://mixkit.co/license/#sfxFree",
+      "duration_seconds": 40.0,
+      "sha256": "bf6c6d993b24614a1a27b41fed241951a793ce375fa8ec0ac30e74bbeb0ac435"
+    },
+    "sfx_static_crackles.flac": {
+      "file": "sfx_static_crackles.flac",
+      "title": "Static electric crackles",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/electricity/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1455/1455-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "license_url": "https://mixkit.co/license/#sfxFree",
+      "duration_seconds": 1.904263,
+      "sha256": "4c8b7e78035d2ed84e71df63b24fb709f650b942a20e561a21050e4717e95100"
+    },
+    "sfx_monitor_beep.flac": {
+      "file": "sfx_monitor_beep.flac",
+      "title": "Heart monitor tone",
+      "artist": "A-Discord",
+      "generator": "ffmpeg -f lavfi -i \"aevalsrc=0.42*(sin(2*PI*987.77*t)+0.22*sin(2*PI*1975.53*t))*lt(t\\,0.11)*min(1\\,t/0.004)*exp(-7*t):s=44100:d=1.2\" -ac 2 -c:a flac",
+      "note": "One 110 ms B5 tone per 1.2-second period; the mix loops the file for a steady monitor rhythm.",
+      "duration_seconds": 1.2,
+      "sha256": "9a86389a6f84867f6af274ce6a7b6f9b345a64c759fdb73814d47ac8ac5189ec"
     }
   },
   "superevent_west_world_empire_sound": {
@@ -222,5 +298,160 @@
     "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
     "runtime_file": "sound/superevents/superevent_west_dorian_sound.wav",
     "runtime_sha256": "1833ee46491cc68368bedb0655f3fcc3e5abedbfd457a786121476882c9773b3"
+  },
+  "superevent_west_anton_sound": {
+    "music": {
+      "artist": "Jóhann Jóhannsson",
+      "title": "The Cause of Labour Is the Hope of the World",
+      "album": "The Miners' Hymns",
+      "year": 2011,
+      "publisher": "Mute Song",
+      "source_page": "https://johannjohannsson.bandcamp.com/track/the-cause-of-labour-is-the-hope-of-the-world",
+      "source_format": "Bandcamp MP3 128 kbps",
+      "source_sha256": "bdcb8a5684c96f848a05c4043c087f082c6940e1f80ac914289709e8fb416ae9",
+      "rights": "All rights reserved.",
+      "file": "johannsson_the_cause_of_labour_excerpt.flac",
+      "sha256": "5ee77ba4a9e6e710670821c82bb4d07c3f0130d1c9ed8a241e18d7ceec1ea3f3",
+      "excerpt_seconds": [
+        [
+          268.5,
+          300.5
+        ],
+        [
+          342.05,
+          409
+        ]
+      ],
+      "edit": "Apply -3 dB before PCM conversion. Join the two passages with a 0.75-second quarter-sine crossfade."
+    },
+    "effects": [
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 0.12,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.86,
+        "fade": 0.025,
+        "peak_limit": 0.16,
+        "spatial_filter": "highpass=f=150,stereotools=balance_out=-0.18"
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 0.95,
+        "offset": 9.2,
+        "duration": 3.4,
+        "gain": 6.5,
+        "fade": 0.12,
+        "peak_limit": 0.16,
+        "spatial_filter": "highpass=f=190,stereotools=balance_out=-0.12"
+      },
+      {
+        "source": "WRK/sfx_distant_train_horn.flac",
+        "start": 4.1,
+        "offset": 0,
+        "duration": 4.7,
+        "gain": 0.29,
+        "fade": 0.7,
+        "peak_limit": 0.16,
+        "spatial_filter": "highpass=f=170,lowpass=f=1950,stereotools=balance_out=0.24"
+      },
+      {
+        "source": "WRK/sfx_steam_train_passing.flac",
+        "start": 6.8,
+        "offset": 0,
+        "duration": 15.1,
+        "gain": 1.15,
+        "fade": 1.45,
+        "peak_limit": 0.29,
+        "spatial_filter": "highpass=f=68,lowpass=f=4700"
+      },
+      {
+        "source": "WRK/sfx_steam_release.flac",
+        "start": 20.45,
+        "offset": 0,
+        "duration": 1.65,
+        "gain": 0.32,
+        "fade": 0.2,
+        "peak_limit": 0.16,
+        "spatial_filter": "highpass=f=210,lowpass=f=3500,stereotools=balance_out=-0.18"
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json"
+    ],
+    "duration_seconds": 98.2,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_west_anton_sound.wav",
+    "runtime_sha256": "a17702556eafe248a5287c17939745b83125d910520d84eef2b12a04557c53e5",
+    "mix": "Pen and paper, distant whistle, passing wheels, then escaping steam. The brass chorale plays alone from 22.1 seconds. Fixed music gain -3.5 dB, with a 4.5-second entry and a 6.5-second fade on the decay."
+  },
+  "superevent_vorkerland_singularity_sound": {
+    "music": {
+      "artist": "Chris Zabriskie",
+      "title": "Made Me Smart, Told Me the Sky Wasn't Blue",
+      "album": "I Want You to Think About Me",
+      "year": 2026,
+      "track": 3,
+      "source_page": "https://chriszabriskie.com/iwyttam/",
+      "source_audio": "https://audio.chriszabriskie.com/iwyttam/iwyttam-03.m4a",
+      "source_sha256": "765eaa47d632c3bdc037d3ecd311629522e9c6351b3c5d76d334151ba619eca0",
+      "license": "Creative Commons Attribution 4.0 International",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "permission_page": "https://chriszabriskie.com/use/",
+      "credit": "Made Me Smart, Told Me the Sky Wasn't Blue by Chris Zabriskie, 2026. Source: https://chriszabriskie.com/iwyttam/. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/.",
+      "file": "chris_zabriskie_made_me_smart_excerpt.flac",
+      "excerpt_seconds": [
+        [
+          225,
+          262.45
+        ],
+        [
+          329.1,
+          395.95
+        ]
+      ],
+      "sha256": "a77dd030341a0cb0cb2b69a58b493d5743a3ec075768898fbf6e25d03f8469da",
+      "adaptation": "Resample to 44.1 kHz, lower 2 dB, then splice two passages with a 0.65-second quarter-sine crossfade. Play the opening in a narrow band, open to stereo at 11-18 seconds and fade the last five seconds."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "WRK/sfx_console_switch.flac",
+        "start": 0.18,
+        "offset": 0,
+        "duration": 1.1,
+        "gain": 0.68,
+        "fade": 0.015,
+        "peak_limit": 0.16,
+        "spatial_filter": "highpass=f=140,lowpass=f=5100,stereotools=balance_out=-0.18"
+      },
+      {
+        "source": "WRK/sfx_machine_deep_hum.flac",
+        "start": 0,
+        "offset": 2,
+        "duration": 15.2,
+        "gain": 0.13,
+        "fade": 2.5,
+        "peak_limit": 0.16,
+        "spatial_filter": "highpass=f=46,lowpass=f=360"
+      },
+      {
+        "source": "WRK/sfx_console_switch.flac",
+        "start": 11.1,
+        "offset": 0,
+        "duration": 1.1,
+        "gain": 0.32,
+        "fade": 0.025,
+        "peak_limit": 0.16,
+        "spatial_filter": "highpass=f=320,lowpass=f=2400,stereotools=balance_out=0.43"
+      }
+    ],
+    "duration_seconds": 103.65,
+    "music_ducking": false,
+    "runtime_file": "sound/superevents/superevent_vorkerland_singularity_sound.wav",
+    "runtime_sha256": "5e9916639b282da886fd61c2a9da8b9c30370c54f868f0504d43eb62f58b68fb",
+    "mix": "Near console switch, distant relay and low machine room tone. The first 18 seconds cross from a console speaker into stereo. The music plays alone through the coda.",
+    "mix_loudness_lufs": -18.7
   }
 }

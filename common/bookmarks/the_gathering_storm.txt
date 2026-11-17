@@ -6,8 +6,9 @@ bookmarks = {
 		picture = "GFX_select_date_1936"
 		default_country = "STP"
 		default = yes
+		sort_unplayed_first = no
 
-		"STP"={
+		"STP" = {
 			history = "STP_BOOKMARK_DESC"
 			ideology = hedonism
 			ideas = {
@@ -15,7 +16,6 @@ bookmarks = {
 				STP_hidden_slaves_trade
 				STP_legalize
 				STP_worldwide_famous_tourist_destination
-				ADISCORD_economic_system_oligarchic_clan
 			}
 			focuses = {
 				STP_bookmark_support_shabrat
@@ -24,15 +24,13 @@ bookmarks = {
 			}
 		}
 
-		"VAL"={
+		"VAL" = {
 			history = "VAL_BOOKMARK_DESC"
 			ideology = etatism
 			ideas = {
 				VAL_harvest_of_ash
 				VAL_big_buyers
 				VAL_mercenary_state
-				ADISCORD_industrial_policy_military_prioritization
-				ADISCORD_economic_system_state_coordinated
 			}
 			focuses = {
 				VAL_bookmark_the_weaponry_baron
@@ -46,6 +44,8 @@ bookmarks = {
 			ideology = etatism
 			ideas = {
 				NAM_national_spirit
+				NAM_metropolitan_garrison_charter
+				NAM_private_tank_farms
 			}
 			focuses = {
 				NAM_bookmark_hold_the_basin
@@ -55,7 +55,6 @@ bookmarks = {
 		}
 
 		"SHL" = {
-			minor = yes
 			history = "SHL_BOOKMARK_DESC"
 			ideology = hedonism
 			ideas = {
@@ -63,7 +62,6 @@ bookmarks = {
 				SHL_hereditary_seats
 				SHL_divided_guard
 				SHL_external_freight
-				SHL_unregistered_quarters
 			}
 			focuses = {
 				SHL_bookmark_continuous_fire
@@ -87,9 +85,52 @@ bookmarks = {
 			}
 		}
 
+		"IVN" = {
+			history = "IVN_BOOKMARK_DESC"
+			ideology = humanism
+			ideas = {
+				IVN_national_spirit
+			}
+			focuses = {
+				IVN_humanist_shield
+				IVN_emergency_order
+				IVN_revanche_of_the_marches
+			}
+		}
+
+		"MON" = {
+			history = "MON_BOOKMARK_DESC"
+			ideology = chauvinism
+			ideas = {
+				MON_throne_of_fifteen_crowns
+				MON_imperial_general_staff
+				MON_arsenal_belt
+				MON_hierarchy_of_peoples
+			}
+		}
+
+		"WRK" = {
+			history = "WRK_BOOKMARK_DESC"
+			ideology = pragmatism
+			ideas = {
+				WRK_ashes_of_the_crown
+				WRK_hourglass_of_discord
+				WRK_constitution_of_the_republic
+				WRK_birthplace_of_the_first_revolution
+			}
+			focuses = {
+				WRK_inspect_the_unity_tower
+				WRK_district_treasuries
+				WRK_factory_committee_councils
+			}
+		}
+
+		"---" = {
+			history = "OTHER_GATHERING_STORM_DESC"
+		}
+
 		effect = {
-			randomize_weather = 22345 # <- Obligatory in every bookmark !
-			#123 = { rain_light = yes }
+			randomize_weather = 22345
 		}
 	}
 }

@@ -54,6 +54,8 @@ VAL_nod_op_moment_passed = {
 # declares the war.
 VAL_bjk_op_can_prepare = {
 	tag = VAL
+	# The launch is a campaign-tree focus; the postwar chapter writes the preparation off.
+	has_focus_tree = VAL_focus
 	has_capitulated = no
 	is_subject = no
 	NOT = { has_country_flag = VAL_bjk_op_launched }
@@ -75,10 +77,58 @@ VAL_bjk_op_moment_passed = {
 	}
 }
 
+# COUNTRY VAL. The southern bridgehead operation is prepared until
+# VAL_operation_expand_southern_bridgehead declares the war on ERT.
+VAL_ert_op_can_prepare = {
+	tag = VAL
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_country_flag = VAL_ert_op_launched }
+	ERT = {
+		exists = yes
+		has_capitulated = no
+		NOT = { is_subject_of = VAL }
+		NOT = { has_war_with = VAL }
+	}
+}
+
+VAL_ert_op_moment_passed = {
+	OR = {
+		has_country_flag = VAL_ert_op_launched
+		NOT = { country_exists = ERT }
+		ERT = { is_subject_of = VAL }
+	}
+}
+
+# COUNTRY VAL. The eastern belt operation is prepared until
+# VAL_operation_eastern_security_belt declares the war on IRT.
+VAL_irt_op_can_prepare = {
+	tag = VAL
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_country_flag = VAL_irt_op_launched }
+	IRT = {
+		exists = yes
+		has_capitulated = no
+		NOT = { is_subject_of = VAL }
+		NOT = { has_war_with = VAL }
+	}
+}
+
+VAL_irt_op_moment_passed = {
+	OR = {
+		has_country_flag = VAL_irt_op_launched
+		NOT = { country_exists = IRT }
+		IRT = { is_subject_of = VAL }
+	}
+}
+
 # COUNTRY VAL. The operation against the Northern coalition is prepared until
 # VAL_Break_The_Northern_Coalition declares the war.
 VAL_nc_op_can_prepare = {
 	tag = VAL
+	# The launch is a campaign-tree focus; the postwar chapter writes the preparation off.
+	has_focus_tree = VAL_focus
 	has_capitulated = no
 	is_subject = no
 	NOT = { has_country_flag = VAL_nc_op_launched }
@@ -1197,12 +1247,28 @@ VAL_northern_resource_belt_owned = {
 	61 = { is_owned_by = VAL is_controlled_by = VAL }
 }
 
+# Occidia counts after either answer of the exclusive pair: annexed by Kefreyt,
+# or held by the chartered Balchansk administration. Unlike VAL_occidia_secured
+# this does not need peace, so the base can be taken during the northern war.
 VAL_supply_base_secured = {
 	VAL_cannibal_sphere_secured = yes
 	VAL_northern_resource_belt_owned = yes
-	43 = { is_owned_by = VAL is_controlled_by = VAL }
-	44 = { is_owned_by = VAL is_controlled_by = VAL }
-	88 = { is_owned_by = VAL is_controlled_by = VAL }
+	OR = {
+		AND = {
+			43 = { is_owned_by = VAL is_controlled_by = VAL }
+			44 = { is_owned_by = VAL is_controlled_by = VAL }
+			88 = { is_owned_by = VAL is_controlled_by = VAL }
+		}
+		AND = {
+			OCA = {
+				exists = yes
+				is_subject_of = VAL
+			}
+			43 = { is_owned_by = OCA is_controlled_by = OCA }
+			44 = { is_owned_by = OCA is_controlled_by = OCA }
+			88 = { is_owned_by = OCA is_controlled_by = OCA }
+		}
+	}
 }
 
 VAL_nod_dominated = {
@@ -2602,6 +2668,22 @@ VAL_nw_roads_need_rebuilding = {
 	infrastructure < 5
 }
 
+# STATE. The block is built once per site; afterwards only a lost line can be
+# replaced, on one of the slots the block brought with it.
+VAL_nw_power_block_needed = {
+	OR = {
+		NOT = { has_state_flag = VAL_nw_power_block_built }
+		AND = {
+			industrial_complex < 3
+			free_building_slots = {
+				building = industrial_complex
+				size > 0
+				include_locked = no
+			}
+		}
+	}
+}
+
 VAL_nw_two_restored_works = {
 	count_triggers = {
 		amount = 2
@@ -3435,6 +3517,70 @@ VAL_partner_arsenal_funds_ready = { check_variable = { var = ADISCORD_economy_tr
 
 VAL_partner_strategic_funds_ready = { check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals } }
 
+# --- order_portfolio ---
+# COUNTRY VAL. The chapter may open on the old tree. Apart from a war, every
+# blocker after the proclamation expires on its own: a side order lands in
+# 30 days, the command consolidation and the Stelander offer time out, the NAM
+# resource war resolves, and a started entry focus delays the chapter at most
+# 60 days after the empty-portfolio notice. The notice itself ignores the
+# entry focus, so its 60-day limit starts even when the focus was begun earlier.
+VAL_order_portfolio_notice_ready = {
+	tag = VAL
+	VAL_nw_operational = yes
+	has_focus_tree = VAL_focus
+	has_country_flag = VAL_commonwealth_proclaimed
+	has_war = no
+	NOT = { has_variable = VAL_peace_order_deposit }
+	NOT = { has_variable = VAL_command_consolidation_kind }
+	NOT = { has_country_flag = VAL_stelander_alliance_offer_pending }
+	ADISCORD_nam_resource_war_active = no
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_scheduled }
+}
+
+VAL_order_portfolio_entry_ready = {
+	VAL_order_portfolio_notice_ready = yes
+	OR = {
+		NOT = { focus_progress = { focus = VAL_Peace_Without_Orders progress > 0 } }
+		has_country_flag = { flag = VAL_order_portfolio_notice days > 60 }
+	}
+}
+
+# COUNTRY VAL. The empty portfolio opens the chapter without the entry focus.
+VAL_order_portfolio_auto_entry_due = {
+	has_variable = VAL_order_portfolio
+	check_variable = { var = VAL_order_portfolio value = 0 compare = equals }
+	has_country_flag = VAL_order_portfolio_notice
+	VAL_order_portfolio_entry_ready = yes
+}
+
+# COUNTRY VAL. A started preparation that VAL_order_portfolio_settle_operations
+# writes off at the switch. ERT and IRT keep their launch decisions after it.
+VAL_order_portfolio_has_lost_operations = {
+	OR = {
+		AND = {
+			check_variable = { var = VAL_nod_op_readiness value = 0 compare = greater_than }
+			VAL_nod_op_moment_passed = no
+		}
+		AND = {
+			check_variable = { var = VAL_bjk_op_readiness value = 0 compare = greater_than }
+			VAL_bjk_op_moment_passed = no
+		}
+		AND = {
+			check_variable = { var = VAL_nc_op_readiness value = 0 compare = greater_than }
+			VAL_nc_op_moment_passed = no
+		}
+		AND = {
+			check_variable = { var = VAL_stl_op_readiness value = 0 compare = greater_than }
+			VAL_stl_op_moment_passed = no
+		}
+	}
+}
+
+# COUNTRY VAL. Five foreign buyers per campaign, before and during the reckoning.
+VAL_side_order_available = {
+	check_variable = { var = VAL_side_order_buyers value = 5 compare = less_than }
+}
+
 # --- peace_reckoning ---
 # COUNTRY VAL. The postwar balance exists exactly while the reckoning is open.
 VAL_peace_crisis_active = {
@@ -3513,6 +3659,15 @@ VAL_peace_order_payable = {
 	NOT = { has_equipment = { infantry_equipment < 5400 } }
 }
 
+VAL_peace_settle_companies_payable = {
+	NOT = { has_political_power < 40 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+}
+
+VAL_peace_settle_shifts_payable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+}
+
 # COUNTRY VAL. Kefreyt's own Stelander administration bears the settlers' land.
 VAL_peace_has_stelander_administration = {
 	OR = {
@@ -3524,6 +3679,25 @@ VAL_peace_has_stelander_administration = {
 			exists = yes
 			is_subject_of = VAL
 		}
+	}
+}
+
+# STATE. A Kefreyt core region whose settlements still lack roads and water.
+VAL_cabinet_settlement_site = {
+	is_core_of = VAL
+	is_owned_by = VAL
+	is_controlled_by = VAL
+	infrastructure < 5
+}
+
+# STATE. A Kefreyt core region on a foreign border, where the charter's veterans
+# man the posts that the republics' garrisons once held.
+VAL_charter_frontier_post_site = {
+	is_core_of = VAL
+	is_owned_by = VAL
+	is_controlled_by = VAL
+	any_neighbor_state = {
+		NOT = { is_owned_by = VAL }
 	}
 }
 

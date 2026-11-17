@@ -214,6 +214,10 @@ class CouncilWorld(ContractWorld):
                 country[self.balance_field(value)] = None
             elif key == "set_cosmetic_tag":
                 country["cosmetic"] = value
+            elif key == "set_character_name":
+                character = scalar(value, "character")
+                assert character in country["characters"], character
+                country.setdefault("character_names", {})[character] = scalar(value, "name")
             elif key == "drop_cosmetic_tag":
                 country["cosmetic"] = None
             elif key == "add_field_marshal_role":
@@ -1683,7 +1687,7 @@ class CouncilStoryTests(unittest.TestCase):
             world.data[tag].update(subject="VAL", exists=True)
         for identity, suffix in ((2, "republic"), (3, "districts")):
             world.val["vars"][PREFIX + "identity"] = identity
-            world.run(PREFIX + "tint_administrations")
+            world.run(PREFIX + "apply_identity")
             self.assertEqual(world.data["OCA"]["cosmetic"], "OCA_VAL_" + suffix)
             self.assertEqual(world.data["NKA"]["cosmetic"], "NKA_VAL_" + suffix)
         world.val["vars"][PREFIX + "identity"] = 1
@@ -1703,12 +1707,6 @@ class CouncilStoryTests(unittest.TestCase):
                 self.assertIn(name + " = {", cosmetic)
                 for folder in ("gfx/flags", "gfx/flags/medium", "gfx/flags/small"):
                     self.assertTrue((ROOT / folder / (name + ".tga")).exists(), (folder, name))
-        apply = self.effects_body("VAL_council_apply_identity")
-        self.assertEqual(apply[-1].key, PREFIX + "tint_administrations")
-
-    @staticmethod
-    def effects_body(name):
-        return next(e.value for e in entries(EFFECTS) if e.key == name)
 
     def test_balance_extremes_open_council_crises(self):
         rows = entries("common/bop/VAL.txt")
@@ -1746,6 +1744,11 @@ class CouncilIdentityTests(unittest.TestCase):
                 expected = deepcopy(before)
                 expected["vars"][PREFIX + "identity"] = index + 1
                 expected["cosmetic"] = tag
+                expected["character_names"] = {
+                    f"VAL_party_representative_{ideology}":
+                        f"VAL_party_representatives_{tag.removeprefix('VAL_')}_{ideology}"
+                    for ideology in ("humanism", "utilitarism", "chauvinism", "anarchism", "technocracy")
+                }
                 self.assertEqual(world.val, expected)
                 self.assertEqual(self.visible_options(world), self.options[3:])
                 for repeated in range(3):
@@ -1809,7 +1812,8 @@ class CouncilIdentityTests(unittest.TestCase):
         # Exercise proclamation after its separately tested territorial gate succeeds.
         body = block(template.effects["VAL_adopt_commonwealth"], "if")
         payload = [e for e in body if e.key not in
-                   ("limit", "VAL_sync_solgalov_portrait", "VAL_grant_contract_warlord")]
+                   ("limit", "VAL_sync_solgalov_portrait", "VAL_grant_contract_warlord",
+                    "VAL_order_portfolio_open")]
         for index, tag in enumerate(self.TAGS):
             world = deepcopy(template)
             self.choose(world, index)

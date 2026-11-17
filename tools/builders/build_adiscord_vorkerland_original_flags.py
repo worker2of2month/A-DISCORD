@@ -303,6 +303,19 @@ def confederal_district(kind: str) -> Image.Image:
     return image
 
 
+def veyran_crown(source: Image.Image) -> Image.Image:
+    image = Image.new("RGB", CANVAS, "#791e26")
+    draw = ImageDraw.Draw(image)
+    draw.rectangle((0, 169, 655, 247), fill="#dcb257")
+    draw.rectangle((175, 0, 253, 415), fill="#dcb257")
+    draw.ellipse((97, 91, 331, 325), fill="#761c23", outline="#dcb257", width=13)
+    eagle = source.convert("RGB").crop((20, 9, 63, 42)).resize((190, 146), Image.Resampling.LANCZOS)
+    mask = Image.new("L", eagle.size)
+    ImageDraw.Draw(mask).ellipse((0, 0, 189, 145), fill=255)
+    image.paste(eagle, (119, 135), mask)
+    return image
+
+
 BUILDERS = {
     "EGC": lambda: confederal_district("garrison"),
     "RIV": lambda: confederal_district("river"),
@@ -342,13 +355,256 @@ ARTWORK_FLAGS = {
     "RUS_black_banner_empire": SOURCE_ROOT / "RUS_black_banner_empire.png",
 }
 
+# Each postwar design uses the canonical arms of its government.
+WEST_VICTORY_FLAGS = {
+    "IVN_cw_committee_west_victory": "IVC",
+    "IVN_unified_directory_west_victory": "IMD",
+    "IVN_unified_communes_west_victory": "IFC",
+    "IVN_unified_marches_west_victory": "IAM",
+    "WRK_vorkerland_joint_government_west_victory": "WRK_vorkerland_joint_government",
+    "VAD_vorkerland_restoration_west_victory": "VAD_vorkerland_restoration",
+    "VAD_vorkerland_collegial_staff_west_victory": "VAD",
+    "VAD_vorkerland_staff_republic_west_victory": "VAD_vorkerland_restoration",
+    "WRK_vorkerland_world_empire_west_victory": "WRK_vorkerland_world_empire",
+    "IVN_west_victory": "IVN",
+    "IVN_west_victory_chauvinism": "IVN_chauvinism",
+    "IVN_west_victory_etatism": "IVN_etatism",
+    "WRK_western_eastern_union": "WRK_vorkerland_emergency",
+    "WRK_republican_union": "WRK_vorkerland_utilitarian_republic",
+    "WRK_forul_technical_union": "WRK_technocracy",
+    "WRK_veyran_empire": "WRK_vorkerland_world_empire",
+}
+
+WEST_MANDATE_FLAGS = {
+    "IVN_cw_committee_west_mandate": ("IVC", "WRK"),
+    "IVN_unified_directory_west_mandate": ("IMD", "WRK"),
+    "IVN_unified_communes_west_mandate": ("IFC", "WRK"),
+    "IVN_unified_marches_west_mandate": ("IAM", "WRK"),
+    "WRK_vorkerland_joint_government_west_mandate": ("WRK_vorkerland_joint_government", "IVN"),
+    "VAD_vorkerland_restoration_west_mandate": ("VAD_vorkerland_restoration", "IVN"),
+    "VAD_vorkerland_collegial_staff_west_mandate": ("VAD", "IVN"),
+    "VAD_vorkerland_staff_republic_west_mandate": ("VAD_vorkerland_restoration", "IVN"),
+    "WRK_vorkerland_world_empire_west_mandate": ("WRK_vorkerland_world_empire", "IVN"),
+    "WRK_vorkerland_emergency_west_mandate": ("WRK_vorkerland_emergency", "IVN"),
+    "WRK_vorkerland_utilitarian_republic_west_mandate": ("WRK_vorkerland_utilitarian_republic", "IVN"),
+    "WRK_vorkerland_technocracy_west_mandate": ("WRK_technocracy", "IVN"),
+    "WRK_west_mandate": ("WRK", "IVN"),
+    "IVN_west_mandate": ("IVN", "WRK"),
+}
+for republic in ("WIT", "IIA", "IBA", "IBL", "PWR", "PSD", "ZAO", "WPA", "WPS", "ROM", "TRU", "PWR_rimat_republic"):
+    for patron in ("IVN", "WRK"):
+        WEST_MANDATE_FLAGS[f"{republic}_west_{patron}_mandate"] = (republic, patron)
+
+
+def laurel(draw: ImageDraw.ImageDraw, cx: int, cy: int, radius: int, gold: str,
+           sweep: int = 101) -> None:
+    for side in (-1, 1):
+        branch = []
+        for angle in range(8, sweep + 1, 3):
+            a = math.radians(angle)
+            branch.append((cx + side * radius * math.sin(a), cy + radius * math.cos(a)))
+        draw.line(branch, fill=gold, width=7)
+        for angle in range(16, sweep, 13):
+            a = math.radians(angle)
+            x = cx + side * radius * math.sin(a)
+            y = cy + radius * math.cos(a)
+            for tilt in (-0.62, 0.68):
+                dx, dy = side * math.cos(a - tilt), -math.sin(a - tilt)
+                draw.polygon(((x, y), (x + 16*dx - 7*dy, y + 16*dy + 7*dx),
+                              (x + 35*dx, y + 35*dy),
+                              (x + 19*dx + 7*dy, y + 19*dy - 7*dx)), fill=gold)
+
+
+def union_standard() -> Image.Image:
+    black, orange, ink, gold, ivory = "#141619", "#b9561c", "#192a30", "#e3af55", "#f8e6b4"
+    cloth = Image.new("RGB", CANVAS, black)
+    draw = ImageDraw.Draw(cloth)
+    for edge in (0, 656):
+        draw.polygon(((edge, 10), (328, 201), (edge, 406)), fill=orange)
+        draw.polygon(((edge, 91), (328, 201), (edge, 325)), fill=black)
+    for y in (19, 389):
+        draw.rectangle((0, y, 655, y+7), fill=gold)
+    # A stepped wing on either side carries the wheel across the full standard.
+    for side in (-1, 1):
+        for left, right, y in ((86, 285, 135), (89, 252, 176), (90, 213, 217)):
+            wing = ((left, y+26), (right, y-9), (right-26, y+22), (left, y+55))
+            draw.polygon([(328+side*x, h) for x, h in wing], fill=gold)
+            draw.line([(328+side*x, h) for x, h in wing[:2]], fill=ivory, width=6)
+    draw.ellipse((222, 85, 434, 297), fill=ink, outline=ivory, width=9)
+    # Fit the entire original cog and its three-way junction inside the new arms.
+    with Image.open(SUPPLIED_FLAGS["WRK_vorkerland_utilitarian_republic"]) as source:
+        wheel = ImageOps.fit(source.convert("RGB"), CANVAS).crop((218, 98, 438, 318))
+    wheel = wheel.resize((196, 196), Image.Resampling.LANCZOS)
+    mask = Image.new("L", wheel.size)
+    ImageDraw.Draw(mask).ellipse((0, 0, 195, 195), fill=255)
+    cloth.paste(wheel, (230, 93), mask)
+    laurel(draw, 328, 209, 132, gold, sweep=63)
+    draw.polygon(points(328, 60, 24, 9, 4), fill=ivory)
+    draw.polygon(((301, 344), (328, 332), (355, 344), (328, 358)), fill=ivory)
+    return cloth
+
+
+# Charge boxes are in the 82 x 52 national masters. They preserve each local
+# device's proportions when mounted on a roundel or a lozenge.
+MANDATE_HERALDRY = {
+    # field, ground, secondary tincture, charge box, centre x, charge diameter
+    "IVN": ("pall", "#115346", "#ede1b9", (21, 0, 65, 50), 358, 255),
+    "IVC": ("pile", "#8c2038", "#202934", (39, 0, 79, 51), 328, 248),
+    "IMD": ("wings", "#124b42", "#dbc58e", (20, 0, 64, 52), 328, 256),
+    "IFC": ("quarters", "#216454", "#e9dbb1", (21, 0, 65, 50), 328, 244),
+    "IAM": ("saltire", "#79253c", "#ded0ad", (14, 0, 68, 52), 328, 250),
+    "IIA": ("waves", "#103e50", "#448078", (24, 2, 58, 49), 328, 232),
+    "IBA": ("eclipse", "#182a4c", "#ccb077", (25, 9, 57, 42), 260, 232),
+    "IBL": ("pile", "#344838", "#ac8745", (22, 6, 60, 46), 328, 240),
+    "PWR": ("sunrise", "#aa3032", "#e4a43e", (23, 6, 59, 46), 328, 226),
+    "PWR_rimat_republic": ("wings", "#632639", "#deca95", (25, 7, 57, 46), 328, 236),
+    "PSD": ("pall", "#534358", "#d8c9bb", (14, 10, 45, 42), 365, 220),
+    "ZAO": ("sunrise", "#813930", "#c67836", (24, 9, 58, 43), 268, 225),
+    "ROM": ("saltire", "#173c58", "#ac383f", (23, 8, 60, 43), 328, 244),
+    "TRU": ("quarters", "#583868", "#de943f", (5, 10, 37, 42), 328, 238),
+}
+
+
+def mandate_field(draw: ImageDraw.ImageDraw, kind: str, base: str, accent: str, cx: int) -> None:
+    gold = "#e9c578"
+    if kind == "pall":
+        for color, width in ((gold, 83), (accent, 57)):
+            for edge in ((0, -5), (0, 421), (656, 208)):
+                draw.line((cx, 208, *edge), fill=color, width=width)
+    elif kind == "pile":
+        for span, color in ((310, gold), (286, accent)):
+            draw.polygon(((cx-span, 0), (cx+span, 0), (cx, 405)), fill=color)
+    elif kind == "eclipse":
+        draw.polygon(((0, 330), (500, 0), (656, 0), (656, 85), (156, 416), (0, 416)), fill=accent)
+        for x in (85, 115, 520, 550):
+            draw.line((x-230, 416, x+395, 0), fill=gold, width=9)
+    elif kind == "wings":
+        for edge, side in ((0, 1), (656, -1)):
+            for y, length in ((73, 289), (142, 243), (211, 198)):
+                draw.polygon(((edge, y), (edge+side*length, y+79),
+                              (edge+side*length, y+116), (edge, y+30)), fill=accent)
+    elif kind == "quarters":
+        draw.rectangle((0, 0, cx, 207), fill=accent)
+        draw.rectangle((cx, 208, 655, 415), fill=accent)
+        for x, y in ((cx//2, 103), ((cx+656)//2, 313)):
+            draw.polygon(points(x, y, 38, 12, 4), fill=base)
+    elif kind == "saltire":
+        for color, width in ((gold, 62), (accent, 41)):
+            draw.line((-15, -10, 671, 426), fill=color, width=width)
+            draw.line((-15, 426, 671, -10), fill=color, width=width)
+    elif kind == "waves":
+        for y in (300, 354):
+            line = [(x, y+11*math.sin(x*math.pi/84)) for x in range(0, 661, 4)]
+            draw.line(line, fill=accent if y == 300 else gold, width=18)
+        draw.polygon(((0, 0), (656, 0), (cx, 148)), fill=accent)
+    elif kind == "sunrise":
+        for angle in range(0, 181, 18):
+            ray = [(cx, 268)]
+            for end in (angle-4, angle+4):
+                a = math.radians(end)
+                ray.append((cx+750*math.cos(a), 268-750*math.sin(a)))
+            draw.polygon(ray, fill=accent)
+        draw.rectangle((0, 267, 655, 290), fill=gold)
+
+
+def western_subject_standard(source: Image.Image, source_id: str) -> Image.Image:
+    gold, ivory = "#e9c578", "#f6e6c0"
+    if source_id in ("WIT", "WPA", "WPS"):
+        # These countries identify themselves by bands and geometric charges.
+        fields = {"WIT": ("#192e4b", "#ac3644"), "WPA": ("#29485c", "#8eafb9"),
+                  "WPS": ("#233b53", "#c89648")}
+        base, accent = fields[source_id]
+        cloth = Image.new("RGB", CANVAS, base)
+        d = ImageDraw.Draw(cloth)
+        if source_id == "WIT":
+            d.rectangle((0, 0, 656, 180), fill=ivory)
+            d.rectangle((0, 180, 656, 274), fill=accent)
+            # The city gate interrupts the original white, red and blue tricolour.
+            d.rectangle((202, 140, 454, 302), fill=gold)
+            for x in (202, 252, 303, 354, 405):
+                d.rectangle((x, 100, x+48-12, 142), fill=gold)
+            d.pieslice((274, 173, 382, 297), 180, 360, fill=base)
+            d.rectangle((274, 235, 382, 303), fill=base)
+            d.line((84, 302, 572, 302), fill=gold, width=9)
+        elif source_id == "WPA":
+            d.rectangle((0, 170, 655, 246), fill=ivory)
+            for x, color in ((169, gold), (319, accent)):
+                d.polygon(((x+100, 28), (x+175, 28), (x+46, 208), (x+175, 388),
+                           (x+100, 388), (x-32, 208)), fill=base, outline=base, width=14)
+                d.polygon(((x+104, 46), (x+149, 46), (x+27, 208), (x+149, 370),
+                           (x+104, 370), (x-14, 208)), fill=color)
+            d.polygon(points(118, 208, 41, 13, 4), fill=base)
+        else:
+            for color, width in ((ivory, 158), (accent, 131)):
+                d.line((33, 443, 623, -27), fill=color, width=width)
+            for x,y in ((186, 318), (328, 208), (470, 98)):
+                d.polygon(((x-34,y-23),(x+10,y-38),(x+34,y+23),(x-10,y+38)), fill=base)
+            for x,y in ((100, 90), (556, 326)):
+                d.polygon(points(x, y, 32, 11, 4), fill=gold)
+        return cloth
+
+    kind, base, accent, box, cx, size = MANDATE_HERALDRY[source_id]
+    cloth = Image.new("RGB", CANVAS, base)
+    d = ImageDraw.Draw(cloth)
+    mandate_field(d, kind, base, accent, cx)
+    cy = 196 if kind == "waves" else 208
+    r = size//2
+    # Mask at the edge of the national field, leaving the heraldic charge intact.
+    national = source.convert("RGB")
+    badge = ImageOps.pad(national.crop(box), (size, size), method=Image.Resampling.LANCZOS,
+                         color=national.getpixel((box[0], box[1])))
+    mask = Image.new("L", badge.size)
+    cut = ImageDraw.Draw(mask)
+    last = size - 1
+    if source_id in ("IVC", "IMD", "IBL", "IAM"):
+        cut.polygon(((0, 0), (last, 0), (last, r), (int(size*.85), int(size*.78)),
+                     (r, last), (int(size*.15), int(size*.78)), (0, r)), fill=255)
+    elif source_id in ("TRU", "ROM"):
+        cut.polygon(((r, 0), (last, r), (r, last), (0, r)), fill=255)
+    else:
+        cut.ellipse((0, 0, last, last), fill=255)
+    border = mask.resize((size+20, size+20), Image.Resampling.LANCZOS)
+    cloth.paste(gold, (cx-r-10, cy-r-10), border)
+    cloth.paste(badge, (cx-r, cy-r), mask)
+    if kind in ("pile", "wings", "eclipse"):
+        laurel(d, cx, cy+5, r+19, gold)
+    return cloth
+
+
+def western_banner(source: Image.Image, flag_id: str, patron: str | None = None) -> Image.Image:
+    if flag_id == "WRK_veyran_empire":
+        return veyran_crown(source)
+    if flag_id == "WRK_republican_union":
+        return union_standard()
+    if patron == "WRK":
+        return western_subject_standard(source, WEST_MANDATE_FLAGS[flag_id][0])
+    cloth = source.convert("RGB").resize(CANVAS, Image.Resampling.LANCZOS)
+    draw = ImageDraw.Draw(cloth)
+    if patron:
+        # A broad hoist carries the patron's device. The national arms stay on the fly.
+        field, metal = "#174a41", "#edc168"
+        cloth.paste(cloth.resize((464, 416), Image.Resampling.LANCZOS), (192, 0))
+        draw.rectangle((0, 0, 184, 415), fill=field)
+        draw.rectangle((180, 0, 203, 415), fill=metal)
+        draw.polygon(((38, 134), (146, 134), (146, 218), (92, 278), (38, 218)), fill=metal)
+        draw.polygon(((60, 156), (124, 156), (124, 208), (92, 244), (60, 208)), fill=field)
+    else:
+        # The paired gold bands and star of victory leave the national arms on the hoist.
+        field = cloth.resize((571, 320), Image.Resampling.LANCZOS)
+        ink, metal = "#202936", "#efd18a"
+        draw.rectangle((0, 0, 655, 415), fill=metal)
+        cloth.paste(field, (0, 48))
+        draw.polygon(((490, 0), (656, 0), (656, 416), (490, 416), (571, 208)), fill=ink)
+        draw.line(((491, 0), (572, 208), (491, 416)), fill=metal, width=17)
+        draw.polygon(points(614, 208, 34, 14, 4), fill=metal)
+    return cloth
+
+
 COPIED_FLAG_TRIPLETS = {
     "EYR": "VAD",
     "WRK_vorkerland_joint_government": "WRK",
-    # Names taken after the western victory keep the banner of their route.
-    "WRK_veyran_empire": "WRK_vorkerland_world_empire",
-    "WRK_western_eastern_union": "WRK_vorkerland_emergency",
-    "WRK_forul_technical_union": "WRK_technocracy",
+    "IVN_unified_legion_west_victory": "IVN_unified_legion",
+    "IVN_unified_legion_west_mandate": "IVN_unified_legion",
 }
 
 
@@ -397,6 +653,8 @@ def expected_outputs(tags: set[str] | None = None) -> dict[Path, Image.Image]:
         | set(SUPPLIED_RUNTIME_FLAGS)
         | set(ARTWORK_FLAGS)
         | set(COPIED_FLAG_TRIPLETS)
+        | set(WEST_VICTORY_FLAGS)
+        | set(WEST_MANDATE_FLAGS)
     )
     if tags is not None and tags - known:
         raise ValueError(f"Unknown flag IDs: {sorted(tags - known)}")
@@ -427,6 +685,23 @@ def expected_outputs(tags: set[str] | None = None) -> dict[Path, Image.Image]:
         for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
             with Image.open(directory / f"{source_flag_id}.tga") as source:
                 outputs[directory / f"{target_flag_id}.tga"] = source.convert("RGBA")
+
+    def national_flag(source_id: str) -> Image.Image:
+        path = FLAG_ROOT / f"{source_id}.tga"
+        if path in outputs:
+            return outputs[path]
+        if source_id in known:
+            # A scoped export still reads the canonical inputs of an owned national flag.
+            return expected_outputs({source_id})[path]
+        with Image.open(path) as source:
+            return source.convert("RGB")
+
+    for flag_id, source_id in WEST_VICTORY_FLAGS.items():
+        if tags is None or flag_id in tags:
+            add_triplet(outputs, flag_id, western_banner(national_flag(source_id), flag_id))
+    for flag_id, (source_id, patron) in WEST_MANDATE_FLAGS.items():
+        if tags is None or flag_id in tags:
+            add_triplet(outputs, flag_id, western_banner(national_flag(source_id), flag_id, patron))
     return outputs
 
 

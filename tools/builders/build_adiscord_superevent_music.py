@@ -40,8 +40,10 @@ STP_FESTIVAL_TRACK = "superevent_stelander_party_victory_festival_sound"
 STP_HOUSES_TRACK = "superevent_stelander_party_victory_houses_sound"
 
 WEST_POLICY_TRACKS = {
+    "superevent_west_anton_sound": "johannsson_the_cause_of_labour_excerpt.flac",
     "superevent_west_dorian_sound": "../South/sophia_herbstwerk_excerpt.flac",
     "superevent_west_world_empire_sound": "arcana_opening_of_the_wound_excerpt.flac",
+    "superevent_vorkerland_singularity_sound": "chris_zabriskie_made_me_smart_excerpt.flac",
 }
 
 SOUTH_POLICY_TRACKS = {
@@ -72,6 +74,7 @@ class PolicyCue:
     gain: float
     fade: float = 0.4
     peak_limit: float = 0.16
+    spatial_filter: str = ""
 
 
 STP_POLICY_CUES = {
@@ -133,6 +136,18 @@ STP_POLICY_CUES = {
 
 
 WEST_POLICY_CUES = {
+    "superevent_west_anton_sound": (
+        PolicyCue("STP/sfx_paper_slide.flac", 0.12, 0, 1.09, 0.86, 0.025,
+                  spatial_filter="highpass=f=150,stereotools=balance_out=-0.18"),
+        PolicyCue("STP/sfx_pen_writing.flac", 0.95, 9.2, 3.4, 6.5, 0.12,
+                  spatial_filter="highpass=f=190,stereotools=balance_out=-0.12"),
+        PolicyCue("WRK/sfx_distant_train_horn.flac", 4.1, 0, 4.7, 0.29, 0.7,
+                  spatial_filter="highpass=f=170,lowpass=f=1950,stereotools=balance_out=0.24"),
+        PolicyCue("WRK/sfx_steam_train_passing.flac", 6.8, 0, 15.1, 1.15, 1.45, 0.29,
+                  spatial_filter="highpass=f=68,lowpass=f=4700"),
+        PolicyCue("WRK/sfx_steam_release.flac", 20.45, 0, 1.65, 0.32, 0.20,
+                  spatial_filter="highpass=f=210,lowpass=f=3500,stereotools=balance_out=-0.18"),
+    ),
     "superevent_west_dorian_sound": (
         PolicyCue("South/sfx_factory_machine.flac", 2, 15, 49, 0.14, 4.0),
         PolicyCue("IVN/committee_marching.mp3", 5, 0, 11, 0.45, 1.5),
@@ -149,6 +164,14 @@ WEST_POLICY_CUES = {
         PolicyCue("WRK/sfx_train_departure.flac", 11, 15, 26, 0.18, 3.0),
         PolicyCue("WRK/sfx_steam_train_passing.flac", 35, 0, 15.15, 0.12, 3.0),
         PolicyCue("WRK/sfx_distant_train_horn.flac", 47, 0, 5.09, 0.1, 1.0),
+    ),
+    "superevent_vorkerland_singularity_sound": (
+        PolicyCue("WRK/sfx_console_switch.flac", 0.18, 0, 1.1, 0.68, 0.015,
+                  spatial_filter="highpass=f=140,lowpass=f=5100,stereotools=balance_out=-0.18"),
+        PolicyCue("WRK/sfx_machine_deep_hum.flac", 0, 2, 15.2, 0.13, 2.5,
+                  spatial_filter="highpass=f=46,lowpass=f=360"),
+        PolicyCue("WRK/sfx_console_switch.flac", 11.1, 0, 1.1, 0.32, 0.025,
+                  spatial_filter="highpass=f=320,lowpass=f=2400,stereotools=balance_out=0.43"),
     ),
 }
 
@@ -300,6 +323,24 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
             return
         target = output / f"{name}.{'wav' if wav else 'ogg'}"
         codec = ["-c:a", "pcm_s16le", "-ac", "2"] if wav else ["-c:a", "libvorbis", "-q:a", "6"]
+        credit = []
+        if name == "superevent_west_anton_sound":
+            # The runtime WAV travels separately from the development source manifest.
+            credit = [
+                "-metadata", "artist=Jóhann Jóhannsson",
+                "-metadata", "title=The Cause of Labour Is the Hope of the World (Anton Bagli victory mix)",
+                "-metadata", "album=The Miners' Hymns",
+                "-metadata", "comment=Music published by Mute Song. Train and signing effects mixed for A-Discord.",
+            ]
+        elif name == "superevent_vorkerland_singularity_sound":
+            # CC BY 4.0 requires the credit to travel with the distributed recording.
+            credit = [
+                "-metadata", "artist=Chris Zabriskie",
+                "-metadata", "title=Made Me Smart, Told Me the Sky Wasn't Blue (Singularity mix)",
+                "-metadata", "album=I Want You to Think About Me",
+                "-metadata", "copyright=2026 Chris Zabriskie | CC BY 4.0 | https://creativecommons.org/licenses/by/4.0/",
+                "-metadata", "comment=Source: https://chriszabriskie.com/iwyttam/ | Edited excerpts with console filtering and Mixkit effects for A-Discord.",
+            ]
         subprocess.run(
             [
                 "ffmpeg",
@@ -317,6 +358,7 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
                 "-ar",
                 "44100",
                 *codec,
+                *credit,
                 str(target),
             ],
             check=True,
@@ -632,9 +674,25 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
                     "if(lt(t,33.5),0.562341+0.437659*(t-32.7)/0.8,1))))':eval=frame,"
                 )
             # Quantize the music before adding speech and sound effects.
+            music_filter = "loudnorm=I=-18:TP=-2:LRA=11,afade=t=in:d=1,afade=t=out:st=51:d=5,"
+            length_filter = ",apad=whole_len=2469600,atrim=end_sample=2469600"
+            if name == "superevent_west_anton_sound":
+                # Keep the brass crescendo intact. The edited recording sets the mix length.
+                music_filter = "volume=-3.5dB,afade=t=in:d=4.5,afade=t=out:st=91.7:d=6.5,"
+                length_filter = ""
+            elif name == "superevent_vorkerland_singularity_sound":
+                # Both paths share a clock so the stereo field opens on the return of the bass.
+                music_filter = (
+                    "asplit=2[desk][stereo];"
+                    "[desk]atrim=end=18,pan=mono|c0=0.5*c0+0.5*c1,highpass=f=230,lowpass=f=2350,"
+                    "pan=stereo|c0=c0|c1=c0,afade=t=in:d=1.8,afade=t=out:st=11:d=7[narrow];"
+                    "[stereo]afade=t=in:st=11:d=7[wide];"
+                    "[narrow][wide]amix=inputs=2:duration=longest:normalize=0,"
+                    "asetpts=N/SR/TB,volume=1dB,afade=t=out:st=98.65:d=5,"
+                )
+                length_filter = ""
             filters = [
-                "[0:a]loudnorm=I=-18:TP=-2:LRA=11,afade=t=in:d=1,"
-                "afade=t=out:st=51:d=5,"
+                "[0:a]" + music_filter
                 + music_gain
                 + "aformat=sample_fmts=s16:sample_rates=44100:channel_layouts=stereo[music]"
             ]
@@ -645,10 +703,12 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
                     str(root / "tools/assets/source/superevents" / cue.source),
                 ])
                 label = f"cue{index}"
+                spatial_filter = f"{cue.spatial_filter}," if cue.spatial_filter else ""
                 filters.append(
                     f"[{index}:a]aresample=44100,aformat=channel_layouts=stereo,"
                     f"atrim=start={cue.offset}:duration={cue.duration},asetpts=PTS-STARTPTS,"
-                    f"volume={cue.gain},alimiter=limit={cue.peak_limit}:level=false:latency=true,"
+                    f"{spatial_filter}volume={cue.gain},"
+                    f"alimiter=limit={cue.peak_limit}:level=false:latency=true,"
                     f"afade=t=in:d={cue.fade},"
                     f"afade=t=out:st={cue.duration - cue.fade}:d={cue.fade},"
                     f"adelay={round(cue.start * 1000)}:all=1[{label}]"
@@ -658,11 +718,11 @@ def build(root: Path, output: Path, *, silence_only: bool = False, track: str | 
             filters.append(
                 "".join(layers)
                 + f"amix=inputs={len(layers)}:duration=first:normalize=0,"
-                + "asetpts=N/SR/TB,apad=whole_len=2469600,atrim=end_sample=2469600[out]"
+                + f"asetpts=N/SR/TB{length_filter}[out]"
             )
             encode(
                 name, inputs,
-                ["-filter_complex", ";".join(filters), "-map", "[out]", "-t", "56"],
+                ["-filter_complex", ";".join(filters), "-map", "[out]"],
                 wav=True,
             )
 

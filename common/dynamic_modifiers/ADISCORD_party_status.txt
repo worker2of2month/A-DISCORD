@@ -1,0 +1,3 @@
+ADISCORD_coalition_support = {
+	political_power_gain = ADISCORD_coalition_daily_power
+}

@@ -890,13 +890,33 @@ class KefreytStelanderOperationTests(unittest.TestCase):
 
     def test_campaign_spends_the_operation_once_war_exists(self) -> None:
         campaign = named_block(self.decisions, "VAL_campaign_against_stelander")
-        self.assertIn("VAL_stl_op_apply_launch = yes", named_block(campaign, "remove_effect"))
+        remove = named_block(campaign, "remove_effect")
+        self.assertLess(
+            remove.index("FROM = { save_event_target_as = VAL_stl_op_target }"),
+            remove.index("VAL_stl_op_apply_launch = yes"),
+        )
         gate = named_block(campaign, "available")
         self.assertIn("var = VAL_stl_op_readiness value = 30", gate)
-        self.assertIn("FROM = { has_war_with = ROOT }", gate)
+        self.assertNotIn("has_war_with = ROOT", gate)
+        # The order is hidden during the war instead of repeating every 90 days;
+        # a mobilisation interrupted by the target's declaration still settles.
+        self.assertIn("NOT = { has_war_with = ROOT }", named_block(campaign, "visible"))
+        self.assertIn("cancel_if_not_visible = no", campaign)
+
+        on_actions = read(ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
+        relation = named_block(on_actions, "on_war_relation_added")
+        self.assertEqual(relation.count("VAL_stl_op_apply_launch = yes"), 2)
+        self.assertIn("FROM = { save_event_target_as = VAL_stl_op_target }", relation)
+        self.assertIn("ROOT = { save_event_target_as = VAL_stl_op_target }", relation)
+        self.assertIn("set_country_flag = VAL_stl_op_counterstrike", relation)
+        events = read(ROOT / "events/ADISCORD_VAL_contract_events.txt")
+        report = events[events.index("id = val_rework.208\n"):]
+        report = report[:report.index("\n}\n")]
+        self.assertIn("text = val_rework.208.counter", report)
+        self.assertIn("clr_country_flag = VAL_stl_op_counterstrike", report)
 
         launch = named_block(self.effects, "VAL_stl_op_apply_launch")
-        self.assertIn("has_war_with = FROM", launch)
+        self.assertIn("has_war_with = event_target:VAL_stl_op_target", launch)
         self.assertIn("set_country_flag = VAL_stl_op_launched", launch)
         self.assertIn("set_temp_variable = { var = VAL_op_in_profile value = VAL_stl_op_profile }", launch)
         self.assertIn("VAL_op_pay_offensive = yes", launch)
@@ -1058,6 +1078,122 @@ class KefreytBezhayskOperationTests(unittest.TestCase):
             self.assertIn("type = bunker", tier)
         self.assertIn("allowed = { original_tag = BJK }", named_block(self.ideas, "VAL_bjk_fortress_city"))
         self.assertIn("allowed = { original_tag = BJK }", named_block(self.ideas, "VAL_bjk_last_bastion"))
+
+
+class KefreytSouthernOperationTests(unittest.TestCase):
+    # tag: (target, expansion focus, war order, plan event, report event,
+    #       profile decisions, preparation gains)
+    OPERATIONS = {
+        "ert": (
+            "ERT", "VAL_Southern_Expansion", "VAL_operation_expand_southern_bridgehead", 215, 217,
+            {"VAL_ert_op_motor_columns": 1, "VAL_ert_op_hazard_kits": 3, "VAL_ert_op_garrison_bribes": 4},
+            {
+                "VAL_ert_op_route_survey": 15,
+                "VAL_ert_op_bridgehead_depots": 15,
+                "VAL_ert_op_administration_guides": 15,
+                "VAL_ert_op_motor_columns": 15,
+                "VAL_ert_op_hazard_kits": 15,
+                "VAL_ert_op_garrison_bribes": 15,
+                "VAL_ert_op_feint": 10,
+            },
+        ),
+        "irt": (
+            "IRT", "VAL_Eastern_Expansion", "VAL_operation_eastern_security_belt", 218, 220,
+            {"VAL_irt_op_rail_raid": 1, "VAL_irt_op_outposts": 3, "VAL_irt_op_envoys": 4},
+            {
+                "VAL_irt_op_recon": 15,
+                "VAL_irt_op_rail_depots": 15,
+                "VAL_irt_op_staff_exercises": 15,
+                "VAL_irt_op_rail_raid": 15,
+                "VAL_irt_op_outposts": 15,
+                "VAL_irt_op_envoys": 15,
+                "VAL_irt_op_feint": 10,
+            },
+        ),
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.focuses = read(FOCUS_PATH)
+        cls.decisions = read(ROOT / "common/decisions/ADISCORD_VAL_decisions.txt")
+        cls.effects = read(ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt")
+        cls.events = read(ROOT / "events/ADISCORD_VAL_contract_events.txt")
+        cls.ideas = read(ROOT / "common/ideas/ADISCORD_VAL_rework_ideas.txt")
+
+    def event_block(self, number: int) -> str:
+        start = self.events.index(f"id = val_rework.{number}\n")
+        return brace_block(self.events, self.events.rfind("country_event = {", 0, start))
+
+    def test_war_orders_wait_for_a_started_staff_and_spend_the_operation(self) -> None:
+        for tag, (target, parent, order, plan, report, _, _) in self.OPERATIONS.items():
+            with self.subTest(tag=tag):
+                staff = focus_block(self.focuses, f"VAL_{tag}_op_staff")
+                self.assertIn(f"prerequisite = {{ focus = {parent} }}", staff)
+                self.assertIn(f"id = val_rework.{plan}", staff)
+                self.assertIn(f"bypass = {{ VAL_{tag}_op_moment_passed = yes }}", staff)
+                decision = named_block(self.decisions, order)
+                gate = named_block(decision, "available")
+                self.assertIn(f"NOT = {{ has_completed_focus = VAL_{tag}_op_staff }}", gate)
+                self.assertIn(f"var = VAL_{tag}_op_readiness value = 30", gate)
+                effect = named_block(decision, "complete_effect")
+                declaration = effect.index(f"declare_war_on = {{ target = {target}")
+                self.assertLess(declaration, effect.index(f"{target} = {{ VAL_south_reinforce_defender = yes }}"))
+                self.assertLess(declaration, effect.index(f"VAL_{tag}_op_apply_launch = yes"))
+                launch = named_block(self.effects, f"VAL_{tag}_op_apply_launch")
+                self.assertIn(f"has_war_with = {target}", launch)
+                self.assertIn(f"NOT = {{ has_country_flag = VAL_{tag}_op_launched }}", launch)
+                self.assertIn("VAL_op_pay_offensive = yes", launch)
+                self.assertIn(f"id = val_rework.{report}", launch)
+
+    def test_plan_events_set_one_profile_and_open_their_order(self) -> None:
+        for tag, (_, _, _, plan, _, profile_decisions, preparation) in self.OPERATIONS.items():
+            with self.subTest(tag=tag):
+                profiles = {}
+                for option in self.event_block(plan).split("option = {")[1:]:
+                    profile = int(re.search(rf"var = VAL_{tag}_op_profile value = (\d)", option).group(1))
+                    decision = re.search(r"unlock_decision_tooltip = (\w+)", option).group(1)
+                    profiles[decision] = profile
+                self.assertEqual(profiles, profile_decisions)
+                for decision_id, gain in preparation.items():
+                    body = named_block(self.decisions, decision_id)
+                    self.assertEqual(body.count(f"VAL_{tag}_op_add_readiness = yes"), 1, decision_id)
+                    self.assertIn(f"var = VAL_{tag}_op_gain value = {gain} }}", body, decision_id)
+                    self.assertIn(f"cancel_trigger = {{ hidden_trigger = {{ VAL_{tag}_op_can_prepare = no }} }}", body, decision_id)
+                    self.assertIn("cancel_effect", body, decision_id)
+
+    def test_full_preparation_reaches_full_readiness(self) -> None:
+        for tag, (_, _, _, _, _, profile_decisions, preparation) in self.OPERATIONS.items():
+            with self.subTest(tag=tag):
+                common = sum(gain for decision, gain in preparation.items() if decision not in profile_decisions)
+                # Staff focus 15, plan 10, one profile order 15 and the noticed event 5.
+                self.assertEqual(15 + 10 + common + 15 + 5, 100)
+
+    def test_defenders_mobilise_once_and_grow_with_difficulty(self) -> None:
+        reinforce = named_block(self.effects, "VAL_south_reinforce_defender")
+        self.assertIn("NOT = { has_country_flag = VAL_south_defence_mobilised }", reinforce)
+        self.assertIn("has_war_with = ROOT", reinforce)
+        base, veteran = reinforce.split("difficulty > 2", 1)
+        veteran, elite = veteran.split("difficulty > 3", 1)
+        self.assertIn("idea = VAL_south_zone_defence days = 180", base)
+        self.assertIn("idea = VAL_south_zone_militia days = 180", veteran)
+        for tier in (base, veteran, elite):
+            self.assertIn("add_manpower", tier)
+            self.assertIn("type = infantry_equipment", tier)
+            self.assertIn("VAL_south_raise_detachments = yes", tier)
+        self.assertNotIn("type = bunker", base)
+        for tier in (veteran, elite):
+            self.assertIn("type = bunker", tier)
+        raise_units = named_block(self.effects, "VAL_south_raise_detachments")
+        self.assertIn('has_template = "CBRN Protection Detachment"', raise_units)
+        for idea in ("VAL_south_zone_defence", "VAL_south_zone_militia"):
+            self.assertIn(
+                "allowed = { OR = { original_tag = ERT original_tag = IRT } }",
+                named_block(self.ideas, idea),
+            )
+        for idea in ("VAL_op_caught_off_guard", "VAL_op_target_unrest"):
+            allowed = named_block(named_block(self.ideas, idea), "allowed")
+            self.assertIn("original_tag = ERT", allowed)
+            self.assertIn("original_tag = IRT", allowed)
 
 
 if __name__ == "__main__":

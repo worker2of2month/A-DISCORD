@@ -212,6 +212,11 @@ capitulate itself. Test the
 Council war with STS after its civil-war victory and NOD as its provisional
 administration: capitulating STS must install both administrations without a
 peace conference.
+Stelander's defeat also ends its northern hegemony war: YPR and TFF make white
+peace with STS and its subjects before the administrations are installed, so
+Kefreyt does not adopt that war through them. Test the Council war after STS
+has started the northern final war: after STS capitulates, Kefreyt and its
+subjects must not be at war with YPR or TFF.
 
 After NOD's northern victory, VAL can negotiate with an independent TFF before
 the final operation. NOD's settlement creates four contiguous administrations:

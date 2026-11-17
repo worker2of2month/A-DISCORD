@@ -468,7 +468,7 @@
  SHL_veyr_partner_available_tt: "Veyr exists, is not at war with Shahrabad and is not considering another offer"
  SHL_veyr_partnership_tt: "Veyr receives a trade union offer. If it accepts, the duty is lifted."
  SHL_golden_gate_offer_tt: "Veyr receives an invitation to the Golden Gate Union."
- SHL_council_of_cities_tt: "Quarter unrest: §G-20§!. Civic support: §G+10§!."
+ SHL_council_of_cities_tt: "Quarter unrest: §G-20§!. Civic support: §G+10§!.\nThe Conclave of Nine Furnaces joins the Southern Compact's governing coalition."
  SHL_kyz_brotherhood_available_tt: "Keyzan exists, is not at war with Shahrabad and is not considering another offer"
  SHL_kyz_brotherhood_offer_tt: "Keyzan receives a qanat brotherhood offer. If it accepts, the water dispute ends without a quota."
  SHL_workers_brigades_tt: "The cities field §Y2§! furnace guard divisions in Shahrabad. Quarter unrest: §G-5§!."

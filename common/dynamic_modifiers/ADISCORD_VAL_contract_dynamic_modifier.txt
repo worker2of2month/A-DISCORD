@@ -13,6 +13,16 @@ VAL_nw_industrial_network = {
 	command_power_gain_mult = VAL_nw_command_gain
 }
 
+# COUNTRY VAL. The order portfolio between the proclamation and the reckoning;
+# VAL_order_portfolio_refresh owns every value.
+VAL_order_portfolio = {
+	enable = { tag = VAL }
+	icon = GFX_idea_VAL_contract_state
+	stability_factor = VAL_order_portfolio_stability
+	ADISCORD_economy_weekly_income = VAL_order_portfolio_income
+	industrial_capacity_factory = VAL_order_portfolio_output
+}
+
 # COUNTRY VAL. The postwar reckoning; VAL_peace_refresh owns every value.
 VAL_peace_crisis = {
 	enable = { tag = VAL }
@@ -145,6 +155,19 @@ VAL_contract_industry = {
 }
 
 VAL_economic_collapse = {
+	enable = { original_tag = VAL }
+	icon = GFX_idea_VAL_worldwide_famous_weponry
+	industrial_capacity_factory = VAL_industrial_output
+	production_speed_buildings_factor = VAL_industrial_construction
+	production_factory_efficiency_gain_factor = VAL_industrial_efficiency
+	ADISCORD_economy_trade_income_factor = VAL_industrial_trade
+	ADISCORD_economy_military_industry_income_factor = VAL_industrial_income
+	consumer_goods_factor = VAL_industrial_consumer
+}
+
+# The same crisis values after the first of them becomes a bonus; the
+# collapse keeps only penalties. VAL_refresh_industrial_economy picks the stage.
+VAL_economic_supply_recovery = {
 	enable = { original_tag = VAL }
 	icon = GFX_idea_VAL_worldwide_famous_weponry
 	industrial_capacity_factory = VAL_industrial_output

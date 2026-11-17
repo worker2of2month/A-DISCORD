@@ -6,7 +6,9 @@ import re
 import unittest
 
 from tools.builders.build_adiscord_focus_trees import SOURCES
+from tools.lib.focus_sources import read_focus_source
 from tools.tests.test_adiscord_stp_preparation import block, entries, scalar, walk
+from tools.validators.validate_adiscord_val_rework import focus_layout_coordinates, named_blocks
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -14,6 +16,7 @@ EFFECTS = "common/scripted_effects/ADISCORD_VAL_effects.txt"
 TRIGGERS = "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
 DECISIONS = "common/decisions/ADISCORD_VAL_decisions.txt"
 TREE = "focus_trees/VAL/new_world/focuses.txt"
+MAIN_TREE = "focus_trees/VAL/main/focuses.txt"
 EVENTS = "events/ADISCORD_VAL_contract_events.txt"
 IDEAS = "common/ideas/ADISCORD_VAL_rework_ideas.txt"
 PARTNERS = ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "TMR", "VEL", "RLY")
@@ -25,6 +28,30 @@ def country_event(event_id):
 
 def tree_focuses():
     return {scalar(e.value, "id"): e.value for e in block(entries(TREE), "focus_tree") if e.key == "focus"}
+
+
+def prerequisite_groups(focus):
+    return [{p.value for p in e.value} for e in focus if e.key == "prerequisite"]
+
+
+def shared_branch_focuses():
+    """Campaign-tree focuses the new tree lists through shared_focus, with all their descendants."""
+    roots = [e.value for e in block(entries(TREE), "focus_tree") if e.key == "shared_focus"]
+    campaign = {scalar(e.value, "id"): e.value for e in block(entries(MAIN_TREE), "focus_tree") if e.key == "focus"}
+    shared = set(roots)
+    grown = True
+    while grown:
+        grown = False
+        for name, focus in campaign.items():
+            if name not in shared and any(group & shared for group in prerequisite_groups(focus)):
+                shared.add(name)
+                grown = True
+    return {name: campaign[name] for name in shared}
+
+
+def prerequisites_met(focus, completed, known):
+    # A prerequisite outside the loaded tree was completed in the campaign tree; keep_completed carries it.
+    return all(any(p in completed or p not in known for p in group) for group in prerequisite_groups(focus))
 
 
 class ContractWorld:
@@ -56,6 +83,7 @@ class ContractWorld:
         self.targets = {}
         self.events = []
         self.dirty = set()
+        self.global_flags = set()
 
     def scope(self, key, current):
         if key == "FROM":
@@ -144,6 +172,8 @@ class ContractWorld:
                 result.append(value in country["wars"])
             elif key == "has_war":
                 result.append(bool(country["wars"]) == (value == "yes"))
+            elif key == "has_global_flag":
+                result.append(value in self.global_flags)
             elif key == "is_in_faction_with":
                 other = self.data[self.scope(value, scope)]["faction"]
                 result.append(country["faction"] is not None and country["faction"] == other)
@@ -166,7 +196,7 @@ class ContractWorld:
                 result.append(country["owner"] == value)
             elif key == "is_controlled_by":
                 result.append(country["controller"] == value)
-            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "NAM", "FROM", "owner", "controller") + PARTNERS):
+            elif isinstance(value, list) and (key.isdigit() or key in ("VAL", "RUS", "NAM", "STP", "STS", "FROM", "owner", "controller") + PARTNERS):
                 result.append(self.matches(value, self.scope(key, scope)))
             else:
                 raise AssertionError(("unsupported condition", scope, key, value))
@@ -559,6 +589,31 @@ class NewWorldAccountingTests(unittest.TestCase):
                 if decision.key in ("VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations"):
                     self.assertFalse(world.matches(block(decision.value, "visible")))
 
+    def test_shabrat_offers_close_with_the_civil_war(self):
+        visible = [
+            block(decision.value, "visible")
+            for category in entries(DECISIONS)
+            if isinstance(category.value, list)
+            for decision in category.value
+            if decision.key in ("VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations")
+        ]
+        self.assertEqual(len(visible), 2)
+        world = ContractWorld()
+        world.data["VAL"]["flags"].add("VAL_cw_trade_course")
+        world.data["STP"]["wars"].add("STS")
+        world.data["STS"]["wars"].add("STP")
+        for gate in visible:
+            self.assertTrue(world.matches(gate))
+        # The course flag survives the war; the offers must not.
+        world.global_flags.add("STP_cw_union_wars_finished")
+        for gate in visible:
+            self.assertFalse(world.matches(gate))
+        world.global_flags.clear()
+        world.data["STP"]["wars"].clear()
+        world.data["STS"]["wars"].clear()
+        for gate in visible:
+            self.assertFalse(world.matches(gate))
+
     def test_recognition_preserves_refusal_after_the_offer_cooldown_expires(self):
         world = ContractWorld()
         world.data["VAL"]["rifles"] = {"VAL": 5400}
@@ -884,19 +939,30 @@ class NewWorldRouteTests(unittest.TestCase):
         plan = next(e.value for e in plans if e.key == "VAL_new_world_plan")
         self.assertIn("VAL_new_world_focus", [e.value for e in walk(block(plan, "enable")) if e.key == "has_focus_tree"])
         self.assertIn("VAL_new_world_focus", [e.value for e in walk(block(plan, "abort")) if e.key == "has_focus_tree"])
-        focuses = tree_focuses()
+        shared = shared_branch_focuses()
+        focuses = {**tree_focuses(), **shared}
         order = [e.value for e in block(plan, "ai_national_focuses")]
         self.assertLessEqual(set(order), set(focuses))
         self.assertIn("VAL_nw_steel_peace", order)
+        # The shared economy and reclamation branches are planned in the new tree.
+        self.assertTrue({"VAL_econ_development_fund", "VAL_reclamation_survey"} <= set(order))
+        self.assertIn("VAL_econ_export_finance", order)
+        # The AI pays the companies' bill, the only front that softens a mutiny.
+        self.assertIn("VAL_peace_captains_bill", order)
+        self.assertNotIn("VAL_peace_ash_shifts", order)
         completed = set()
         for name in order:
-            prerequisites = [e.value for e in focuses[name] if e.key == "prerequisite"]
-            self.assertTrue(all(any(p.value in completed for p in group) for group in prerequisites), name)
+            self.assertTrue(prerequisites_met(focuses[name], completed, focuses), name)
             completed.add(name)
+        # The plan either names one alternative of a choice or never reaches that choice.
         for name, focus in focuses.items():
             for exclusive in (e.value for e in focus if e.key == "mutually_exclusive"):
                 group = {name} | {e.value for e in exclusive if e.key == "focus"}
-                self.assertEqual(len(group & completed), 1, group)
+                chosen = group & completed
+                self.assertLessEqual(len(chosen), 1, group)
+                if not chosen:
+                    open_rivals = [rival for rival in group if prerequisites_met(focuses[rival], completed, focuses)]
+                    self.assertFalse(open_rivals, group)
 
     def test_transition_preserves_completed_unlocks_and_runs_without_event_answer(self):
         events = entries("events/ADISCORD_VAL_contract_events.txt")
@@ -916,17 +982,46 @@ class NewWorldRouteTests(unittest.TestCase):
         adopt = block(entries(EFFECTS), "VAL_adopt_commonwealth")
         self.assertNotIn("val_rework.124", [scalar(e.value, "id") for e in walk(adopt) if e.key == "country_event"])
         transition = block(entries(EFFECTS), "VAL_nw_open_chapter")
-        self.assertEqual(scalar(block(block(transition, "if"), "limit"), "has_completed_focus"), "VAL_Peace_Without_Orders")
+        # The scheduled focus or an empty order portfolio opens the chapter.
+        entry = block(block(block(transition, "if"), "limit"), "OR")
+        self.assertEqual(scalar(entry, "has_completed_focus"), "VAL_Peace_Without_Orders")
+        self.assertEqual(scalar(entry, "VAL_order_portfolio_auto_entry_due"), "yes")
+        opened = [e.key for e in block(transition, "if") if e.key != "limit"]
+        self.assertLess(opened.index("set_temp_variable"), opened.index("load_focus_tree"))
+        self.assertLess(opened.index("load_focus_tree"), opened.index("VAL_peace_begin"))
         main = block(entries("focus_trees/VAL/main/focuses.txt"), "focus_tree")
         focuses = {scalar(e.value, "id"): e.value for e in main if e.key == "focus"}
         final = focuses["VAL_Peace_Without_Orders"]
         groups = [{p.value for p in e.value} for e in final if e.key == "prerequisite"]
         self.assertEqual(groups, [{"VAL_Reopen_Trade_Routes", "VAL_Settle_Industrial_Debts"}])
         self.assertEqual(scalar(block(final, "available"), "has_war"), "no")
-        sent = [scalar(e.value, "id") for e in walk(block(final, "completion_reward")) if e.key == "country_event"]
+        reward = block(final, "completion_reward")
+        sent = [scalar(e.value, "id") for e in walk(reward) if e.key == "country_event"]
         self.assertEqual(sent, ["val_rework.124"])
+        self.assertFalse([e for e in walk(reward) if e.key == "remove_ideas"])
         # It is the lowest focus of the campaign tree.
         self.assertEqual(int(scalar(final, "y")), max(int(scalar(f, "y")) for f in focuses.values()))
+
+    def test_campaign_secured_pays_its_own_reward_and_the_regional_settlement_is_gone(self):
+        main = block(entries(MAIN_TREE), "focus_tree")
+        focus = next(e.value for e in main if e.key == "focus" and scalar(e.value, "id") == "VAL_Campaign_Secured")
+        reward = block(focus, "completion_reward")
+        self.assertFalse([e for e in walk(reward) if e.key in ("add_ideas", "remove_ideas")])
+        world = ContractWorld()
+        world.execute(reward)
+        values = world.data["VAL"]["vars"]
+        self.assertEqual(values["ADISCORD_economy_treasury"], 2300)
+        self.assertEqual(values["ADISCORD_economy_current_month_action_income"], 300)
+        self.assertEqual(world.data["VAL"]["rifles"]["VAL"], 5000 + 10800)
+        tooltips = [e.value for e in reward if e.key == "custom_effect_tooltip"]
+        self.assertIn("VAL_peace_treasury_300_tt", tooltips)
+        # No loaded file may still name the removed idea.
+        pattern = re.compile(r"\bVAL_regional_settlement\b")
+        for folder in ("common", "events", "history", "interface", "localisation", "focus_trees"):
+            for path in (ROOT / folder).rglob("*"):
+                if path.suffix in (".txt", ".yml", ".gui", ".gfx") and path.is_file():
+                    with self.subTest(path=path.relative_to(ROOT).as_posix()):
+                        self.assertIsNone(pattern.search(path.read_text(encoding="utf-8-sig", errors="replace")))
 
     def test_new_tree_is_registered_complete_and_has_no_unreachable_prerequisites(self):
         self.assertEqual(SOURCES.get("VAL/new_world/focuses.txt"), "ADISCORD_VAL_new_world.txt")
@@ -950,6 +1045,26 @@ class NewWorldRouteTests(unittest.TestCase):
         places = {(scalar(f, "x"), scalar(f, "y")) for f in focuses.values()}
         self.assertEqual(len(places), 89)
 
+    def test_shared_branches_keep_their_own_cells_in_the_new_tree(self):
+        roots = [e.value for e in block(entries(TREE), "focus_tree") if e.key == "shared_focus"]
+        self.assertEqual(roots, ["VAL_Naval_Contract_Office", "VAL_econ_development_fund", "VAL_reclamation_survey"])
+        shared = shared_branch_focuses()
+        self.assertEqual(len(shared), 27)
+        # Both roots follow campaign focuses that are always complete before the proclamation.
+        outside = {p for focus in shared.values() for group in prerequisite_groups(focus) for p in group} - set(shared)
+        self.assertEqual(outside, {"VAL_Industrial_Mobilization_Plan", "VAL_Factories_Like_Cathedrals"})
+        own_sources = named_blocks(read_focus_source(ROOT / "common/national_focus" / SOURCES["VAL/new_world/focuses.txt"]), "focus")
+        campaign_sources = named_blocks(read_focus_source(ROOT / "common/national_focus" / SOURCES["VAL/main/focuses.txt"]), "focus")
+        for council in (False, True):
+            with self.subTest(council=council):
+                own = focus_layout_coordinates(own_sources, council, "VAL_new_world_focus")
+                campaign = focus_layout_coordinates(campaign_sources, council, "VAL_new_world_focus")
+                self.assertEqual(len(own), 89)
+                self.assertLessEqual(set(shared), set(campaign))
+                cells = list(own.values()) + [campaign[name] for name in shared]
+                self.assertEqual(len(cells), len(set(cells)))
+                self.assertTrue(all(x >= 0 and y >= 0 for x, y in cells))
+
     def test_every_branch_has_a_symmetric_exclusive_pair(self):
         focuses = tree_focuses()
         pairs = set()
@@ -965,6 +1080,7 @@ class NewWorldRouteTests(unittest.TestCase):
             frozenset(("VAL_nw_register", "VAL_nw_charters")),
             frozenset(("VAL_nw_bloc_accord", "VAL_nw_bloc_confront")),
             frozenset(("VAL_nw_foundries", "VAL_nw_dispatch")),
+            frozenset(("VAL_peace_ash_shifts", "VAL_peace_captains_bill")),
             frozenset(("VAL_peace_water_convoys", "VAL_peace_gate_garrison")),
             frozenset(("VAL_peace_registry_audit", "VAL_peace_share_ledger")),
             frozenset(("VAL_peace_land_for_service", "VAL_peace_workers_charter", "VAL_peace_shift_law")),

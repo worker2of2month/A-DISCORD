@@ -125,6 +125,7 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.72",
     "ADISCORD_superevent.73",
     "ADISCORD_superevent.74",
+    "ADISCORD_superevent.75",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -207,6 +208,11 @@ PRESENTATIONS = (
         76,
         "superevent_south_war",
         "superevent_south_war_sound_e",
+    ),
+    SupereventPresentation(
+        77,
+        "superevent_vorkerland_singularity",
+        "superevent_vorkerland_singularity_sound_e",
     ),
     SupereventPresentation(
         13,

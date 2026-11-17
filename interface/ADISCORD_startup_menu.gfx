@@ -171,6 +171,374 @@ spriteTypes = {
 		noOfFrames = 2
 	}
 	spriteType = {
+		name = "GFX_ADISCORD_setup_chronicle"
+		texturefile = "gfx/interface/startup/setup_chronicle.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_bookmark_mount"
+		texturefile = "gfx/interface/startup/setup_bookmark_mount.png"
+		noOfFrames = 2
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+		transparencecheck = no
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_setup_scroll_track_vertical"
+		texturefile = "gfx/interface/startup/setup_scroll_track_vertical.png"
+		size = { x = 12 y = 12 }
+		borderSize = { x = 4 y = 4 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_setup_scroll_track_horizontal"
+		texturefile = "gfx/interface/startup/setup_scroll_track_horizontal.png"
+		size = { x = 12 y = 12 }
+		borderSize = { x = 4 y = 4 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_setup_scroll_bed"
+		texturefile = "gfx/interface/startup/setup_scroll_bed.png"
+		size = { x = 36 y = 18 }
+		borderSize = { x = 5 y = 5 }
+		tilingCenter = yes
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_scroll_up"
+		texturefile = "gfx/interface/startup/setup_scroll_up.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+		transparencecheck = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_scroll_down"
+		texturefile = "gfx/interface/startup/setup_scroll_down.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+		transparencecheck = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_scroll_left"
+		texturefile = "gfx/interface/startup/setup_scroll_left.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+		transparencecheck = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_scroll_right"
+		texturefile = "gfx/interface/startup/setup_scroll_right.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+		transparencecheck = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_scroll_thumb_vertical"
+		texturefile = "gfx/interface/startup/setup_scroll_thumb_vertical.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+		transparencecheck = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_scroll_thumb_horizontal"
+		texturefile = "gfx/interface/startup/setup_scroll_thumb_horizontal.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+		transparencecheck = no
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_setup_gallery_case"
+		texturefile = "gfx/interface/startup/setup_gallery_case.png"
+		size = { x = 48 y = 48 }
+		borderSize = { x = 14 y = 14 }
+		tilingCenter = yes
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_country_gallery"
+		texturefile = "gfx/interface/startup/setup_country_gallery.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_dossier_history"
+		texturefile = "gfx/interface/startup/setup_dossier_history.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_gallery_left_wing"
+		texturefile = "gfx/interface/startup/setup_gallery_left_wing.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_gallery_right_wing"
+		texturefile = "gfx/interface/startup/setup_gallery_right_wing.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_dossier_portrait"
+		texturefile = "gfx/interface/startup/setup_dossier_portrait.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_country_card"
+		texturefile = "gfx/interface/startup/setup_country_card.png"
+		noOfFrames = 2
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+		transparencecheck = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_poster_atlas"
+		texturefile = "gfx/interface/startup/setup_poster_atlas.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_atlas_compass"
+		texturefile = "gfx/interface/startup/setup_atlas_compass.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_atlas_plate"
+		texturefile = "gfx/interface/startup/setup_atlas_plate.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_development_plate"
+		texturefile = "gfx/interface/startup/setup_development_plate.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_development_sash"
+		texturefile = "gfx/interface/startup/setup_development_sash.png"
+		noOfFrames = 1
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_route_flags"
+		texturefile = "gfx/interface/startup/setup_route_flags.png"
+		noOfFrames = 36
+	}
+	textSpriteType = {
+		name = "GFX_ADISCORD_setup_return"
+		texturefile = "gfx/interface/startup/setup_return.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	textSpriteType = {
+		name = "GFX_ADISCORD_setup_advance"
+		texturefile = "gfx/interface/startup/setup_advance.png"
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_poster_stp"
+		texturefile = "gfx/interface/startup/posters/stp.png"
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_charter_banner"
+		texturefile = "gfx/interface/startup/banners/STP_free_at_last.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_hegemony_banner"
+		texturefile = "gfx/interface/startup/banners/STP_hegemony.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_imperial_union_banner"
+		texturefile = "gfx/interface/startup/banners/STP_empire.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_directory_banner"
+		texturefile = "gfx/interface/startup/banners/STP_directory.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_crowe_banner"
+		texturefile = "gfx/interface/startup/banners/STP_crowe.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_hedersett_banner"
+		texturefile = "gfx/interface/startup/banners/STP_hedonism.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_veil_banner"
+		texturefile = "gfx/interface/startup/banners/STP_veil.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_lanskoy_banner"
+		texturefile = "gfx/interface/startup/banners/STP_lanskoy.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_corvina_banner"
+		texturefile = "gfx/interface/startup/banners/STP_corvina.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_bookmark_route_renner_banner"
+		texturefile = "gfx/interface/startup/banners/STP_renner.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_poster_val"
+		texturefile = "gfx/interface/startup/posters/val.png"
+	}
+	spriteType = {
+		name = "GFX_VAL_bookmark_route_solgalov_banner"
+		texturefile = "gfx/interface/startup/banners/VAL_solgalov.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_VAL_bookmark_route_captains_banner"
+		texturefile = "gfx/interface/startup/banners/VAL_captains.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_VAL_bookmark_route_settlement_banner"
+		texturefile = "gfx/interface/startup/banners/VAL_settlement.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_VAL_bookmark_route_korsch_banner"
+		texturefile = "gfx/interface/startup/banners/VAL_korsch.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_poster_nam"
+		texturefile = "gfx/interface/startup/posters/nam.png"
+	}
+	spriteType = {
+		name = "GFX_NAM_bookmark_route_governors_banner"
+		texturefile = "gfx/interface/startup/banners/NAM_governors.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_NAM_bookmark_route_districts_banner"
+		texturefile = "gfx/interface/startup/banners/NAM_districts.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_NAM_bookmark_route_contracts_banner"
+		texturefile = "gfx/interface/startup/banners/NAM_contracts.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_NAM_bookmark_route_exile_banner"
+		texturefile = "gfx/interface/startup/banners/NAM_exile.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_poster_shl"
+		texturefile = "gfx/interface/startup/posters/shl.png"
+	}
+	spriteType = {
+		name = "GFX_SHL_bookmark_route_ten_banner"
+		texturefile = "gfx/interface/startup/banners/SHL_ten.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_SHL_bookmark_route_cities_banner"
+		texturefile = "gfx/interface/startup/banners/SHL_cities.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_SHL_bookmark_route_nur_banner"
+		texturefile = "gfx/interface/startup/banners/SHL_nur.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_SHL_bookmark_route_regency_banner"
+		texturefile = "gfx/interface/startup/banners/SHL_regency.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_SHL_bookmark_route_commune_banner"
+		texturefile = "gfx/interface/startup/banners/SHL_commune.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_poster_rus"
+		texturefile = "gfx/interface/startup/posters/rus.png"
+	}
+	spriteType = {
+		name = "GFX_RUS_bookmark_route_khan_banner"
+		texturefile = "gfx/interface/startup/banners/RUS_khan.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_RUS_bookmark_route_scientists_banner"
+		texturefile = "gfx/interface/startup/banners/RUS_scientists.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_RUS_bookmark_route_guard_banner"
+		texturefile = "gfx/interface/startup/banners/RUS_guard.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_poster_ivn"
+		texturefile = "gfx/interface/startup/posters/ivn.png"
+	}
+	spriteType = {
+		name = "GFX_IVN_bookmark_route_committee_banner"
+		texturefile = "gfx/interface/startup/banners/IVN_committee.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_IVN_bookmark_route_legion_banner"
+		texturefile = "gfx/interface/startup/banners/IVN_imperium.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_IVN_bookmark_route_directorate_banner"
+		texturefile = "gfx/interface/startup/banners/IVN_directorate.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_IVN_bookmark_route_communes_banner"
+		texturefile = "gfx/interface/startup/banners/IVN_communes.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_IVN_bookmark_route_marches_banner"
+		texturefile = "gfx/interface/startup/banners/IVN_marches.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_poster_mon"
+		texturefile = "gfx/interface/startup/posters/mon.png"
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_poster_wrk"
+		texturefile = "gfx/interface/startup/posters/wrk.png"
+	}
+	spriteType = {
+		name = "GFX_WRK_bookmark_route_worker_banner"
+		texturefile = "gfx/interface/startup/banners/WRK_worker.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_WRK_bookmark_route_staff_banner"
+		texturefile = "gfx/interface/startup/banners/WRK_staff.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_WRK_bookmark_route_technicians_banner"
+		texturefile = "gfx/interface/startup/banners/WRK_technocracy.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_WRK_bookmark_route_joint_banner"
+		texturefile = "gfx/interface/startup/banners/WRK_joint.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_WRK_bookmark_route_bagley_banner"
+		texturefile = "gfx/interface/startup/banners/WRK_bagley.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
 		name = "GFX_ADISCORD_startup_stp"
 		texturefile = "gfx/interface/startup/stp.png"
 	}

@@ -1,0 +1,16 @@
+# The frontend skips the scenario window with only one bookmark. This entry
+# follows the campaign in load order, outside the clipped single-card grid.
+bookmarks = {
+	bookmark = {
+		name = "ADISCORD_BOOKMARK_MENU_ENTRY"
+		desc = "GATHERING_STORM_DESC"
+		date = 2160.1.1.12
+		picture = "GFX_select_date_1936"
+		default_country = "STP"
+		default = no
+
+		effect = {
+			randomize_weather = 22345
+		}
+	}
+}

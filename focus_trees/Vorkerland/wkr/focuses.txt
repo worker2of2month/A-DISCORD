@@ -3841,7 +3841,10 @@ focus_tree = {
 					add_idea = WKR_srm_w1_soviet_republic_delta_idea
 				}
 			}
+			custom_effect_tooltip = WKR_siege_republic_of_front_soviets_coalition_tt
 			hidden_effect = {
+				set_temp_variable = { ADISCORD_party = token:anarchism }
+				ADISCORD_admit_coalition_party = yes
 				add_to_variable = { var = WKR_srm_stability_factor value = 0.05 }
 				add_to_variable = { var = WKR_srm_industrial_capacity_factory value = 0.04 }
 				add_to_variable = { var = WKR_srm_conscription value = 0.005 }

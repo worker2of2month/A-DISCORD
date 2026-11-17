@@ -283,6 +283,12 @@ guiTypes = {
 				slotsize = { width = 230 height = 20 }
 				format = "UPPER_LEFT"
 			}
+			# The overlay shares the native legend's origin, margin and row spacing.
+			containerWindowType = {
+				name = "ADISCORD_party_marker_anchor"
+				position = { x = 0 y = 0 }
+				size = { width = 30 height = 160 }
+			}
 		}
 
 		containerWindowType = {

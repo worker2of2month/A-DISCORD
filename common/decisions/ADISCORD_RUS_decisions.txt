@@ -226,6 +226,76 @@ RUS_last_empire_crisis = {
 			}
 		}
 	}
+
+	# RUS. The breakup after the Khan's surrender; RUS_breakup_begin starts it.
+	# cancel_effect rechecks the end conditions, so removing the mission for a
+	# hold never ends the breakup.
+	RUS_breakup_countdown = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		activation = { always = no }
+		visible = { tag = RUS }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 60
+		cancel_trigger = {
+			OR = {
+				RUS_regime_governing = no
+				RUS_zone_republic_restorable = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = {
+					OR = {
+						RUS_regime_governing = no
+						RUS_zone_republic_restorable = no
+					}
+				}
+				clear_variable = RUS_breakup_holds
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = RUS_breakup_countdown_tt
+			hidden_effect = { RUS_breakup_release_next = yes }
+		}
+	}
+
+	# RUS. A hold restarts the countdown in full, three times per breakup.
+	RUS_breakup_hold = {
+		icon = ADISCORD_recruitment
+		allowed = { tag = RUS }
+		visible = { has_active_mission = RUS_breakup_countdown }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_regime_governing_tt
+				RUS_regime_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_breakup_hold_left_tt
+				check_variable = { var = RUS_breakup_holds value = 3 compare = less_than }
+			}
+		}
+		cost = 75
+		fire_only_once = no
+		complete_effect = {
+			add_stability = -0.03
+			custom_effect_tooltip = RUS_breakup_hold_tt
+			hidden_effect = {
+				add_to_variable = { var = RUS_breakup_holds value = 1 }
+				remove_mission = RUS_breakup_countdown
+				country_event = { id = ADISCORD_rus_crisis.44 days = 1 }
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
+	}
 }
 
 # --- rus_last_empire_decisions ---
@@ -5401,7 +5471,7 @@ RUS_reactor_council_category = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_sci_factory_republic_eligible_tt
-				RUS_sci_factory_republic_eligible = yes
+				RUS_zone_republic_restorable = yes
 			}
 		}
 		cost = 50
@@ -5409,7 +5479,7 @@ RUS_reactor_council_category = {
 		days_re_enable = 60
 		complete_effect = {
 			if = {
-				limit = { RUS_sci_factory_republic_eligible = yes }
+				limit = { RUS_zone_republic_restorable = yes }
 				custom_effect_tooltip = RUS_sci_charter_factory_republic_tt
 				effect_tooltip = { add_ideas = RUS_sci_factory_republic_delta }
 				hidden_effect = { RUS_sci_charter_next_republic = yes }

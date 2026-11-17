@@ -21,6 +21,8 @@ EVENTS = "events/ADISCORD_VAL_contract_events.txt"
 TREE = "focus_trees/VAL/new_world/focuses.txt"
 PEACE = "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
 RUS_TRIGGERS = "common/scripted_triggers/ADISCORD_RUS_scripted_triggers.txt"
+NAM_WAR_TRIGGERS = "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt"
+MAIN_TREE = "focus_trees/VAL/main/focuses.txt"
 REPUBLICS = ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "TMR", "VEL", "RLY")
 REGIMES = {
     1: "VAL_peace_throne",
@@ -45,7 +47,8 @@ class ReckoningWorld(ContractWorld):
         # Parsing the effect files dominates the cost; the parsed views are immutable.
         if ReckoningWorld._parsed is None:
             super().__init__()
-            self.triggers.update({e.key: e.value for e in entries(RUS_TRIGGERS)})
+            for path in (RUS_TRIGGERS, NAM_WAR_TRIGGERS):
+                self.triggers.update({e.key: e.value for e in entries(path)})
             ReckoningWorld._parsed = (self.effects, self.triggers, self.data.default_factory)
         else:
             self.effects, self.triggers, factory = ReckoningWorld._parsed
@@ -100,6 +103,17 @@ class ReckoningWorld(ContractWorld):
         "less_than": lambda a, b: a < b,
         "less_than_or_equals": lambda a, b: a <= b,
     }
+    SIGNS = {"<": lambda a, b: a < b, ">": lambda a, b: a > b}
+
+    @staticmethod
+    def comparison(rows):
+        """The `days > 60` style rows of a native trigger block: operator and threshold."""
+        bare = [row.value for row in rows if not row.key]
+        return bare[1], float(bare[2])
+
+    def measured(self, rows, current):
+        op, threshold = self.comparison(rows)
+        return self.SIGNS[op](current, threshold)
 
     def matches(self, rows, scope="VAL"):
         plain = []
@@ -129,6 +143,21 @@ class ReckoningWorld(ContractWorld):
                 op, threshold = row.value[1].value, float(row.value[2].value)
                 current = self.data[scope].get("divisions", 0)
                 if not (current < threshold if op == "<" else current > threshold):
+                    return False
+            elif row.key == "has_focus_tree":
+                if self.data[scope].get("tree") != row.value:
+                    return False
+            elif row.key == "focus_progress":
+                progress = self.data[scope].get("progress", {}).get(scalar(row.value, "focus"), 0)
+                if not self.measured(row.value, progress):
+                    return False
+            elif row.key == "has_country_flag" and isinstance(row.value, list):
+                flag = scalar(row.value, "flag")
+                country = self.data[scope]
+                if flag not in country["flags"] or not self.measured(row.value, country["flag_days"].get(flag, 0)):
+                    return False
+            elif row.key == "has_country_leader":
+                if self.data[scope].get("character") != scalar(row.value, "character"):
                     return False
             elif isinstance(row.value, list) and self.is_scope(row.key):
                 if not self.enter(row.value, scope, self.resolve(row.key, scope), self.matches):
@@ -242,6 +271,13 @@ class ReckoningWorld(ContractWorld):
                 self.events.append(("news", scalar(value, "id")))
             elif key == "remove_dynamic_modifier":
                 country["modifiers"].discard(scalar(value, "modifier"))
+            elif key in ("add_ideas", "remove_ideas"):
+                ideas = country.setdefault("ideas", set())
+                names = [value] if isinstance(value, str) else [e.value for e in value]
+                if key == "add_ideas":
+                    ideas.update(names)
+                else:
+                    ideas.difference_update(names)
             elif key in ("mark_focus_tree_layout_dirty",):
                 pass
             else:
@@ -265,6 +301,50 @@ def tree_focuses():
 def exclusive_rivals(focus):
     return {e.value for group in (e.value for e in focus if e.key == "mutually_exclusive")
             for e in group if e.key == "focus"}
+
+
+def portfolio_world():
+    """Kefreyt at peace on the campaign tree, right after the proclamation opened its orders."""
+    world = ReckoningWorld()
+    country = world.data["VAL"]
+    country["tree"] = "VAL_focus"
+    country["flags"].add("VAL_commonwealth_proclaimed")
+    world.run("VAL_order_portfolio_open")
+    return world
+
+
+def pass_months(world, count):
+    for _ in range(count):
+        world.run("VAL_order_portfolio_monthly")
+        age_flags(world, 30)
+
+
+def age_flags(world, days):
+    ages = world.data["VAL"]["flag_days"]
+    for flag in ages:
+        ages[flag] += days
+
+
+def portfolio_events(world):
+    return [event for _, event in world.events if event.startswith("val_rework.22")]
+
+
+def main_focus(name):
+    return next(e.value for e in block(entries(MAIN_TREE), "focus_tree")
+                if e.key == "focus" and scalar(e.value, "id") == name)
+
+
+def shown_tail_tooltip(world, rows):
+    """The tail-price tooltip an entry reward or answer shows for the current state."""
+    for row in rows:
+        if row.key not in ("if", "else_if"):
+            continue
+        tooltips = [e.value for e in row.value if e.key == "custom_effect_tooltip"]
+        if not any(t.startswith("VAL_peace_tails_strike_") for t in tooltips):
+            continue
+        if world.matches(block(row.value, "limit")):
+            return tooltips[0]
+    return None
 
 
 class ReckoningMechanicsTests(unittest.TestCase):
@@ -301,6 +381,34 @@ class ReckoningMechanicsTests(unittest.TestCase):
         self.assertEqual(values["VAL_peace_orders"], 5)
         self.assertAlmostEqual(values["VAL_peace_military_income"], 0.0)
         self.assertIn("VAL_peace_crisis", world.data["VAL"]["modifiers"])
+
+    def test_political_and_military_income_penalties_ramp_in_by_crisis_month(self):
+        # A missing month counter means the full penalty.
+        for months, orders, pp_gain, military in (
+            (0, 0, -0.05, -0.09), (1, 0, -0.10, -0.17), (2, 0, -0.15, -0.25), (7, 0, -0.15, -0.25),
+            (None, 0, -0.15, -0.25), (0, 2, -0.05, 0.0), (1, 2, -0.10, -0.07), (2, 3, -0.15, -0.10),
+            (2, 5, -0.15, 0.0),
+        ):
+            with self.subTest(months=months, orders=orders):
+                world = ReckoningWorld().crisis(strike=0)
+                values = world.data["VAL"]["vars"]
+                values["VAL_peace_orders"] = orders
+                if months is not None:
+                    values["VAL_peace_months"] = months
+                world.run("VAL_peace_refresh")
+                self.assertAlmostEqual(values["VAL_peace_pp_gain"], pp_gain)
+                self.assertAlmostEqual(values["VAL_peace_military_income"], military)
+
+    def test_crisis_months_count_up_and_close_with_the_crisis(self):
+        world = ReckoningWorld().crisis(strike=0)
+        values = world.data["VAL"]["vars"]
+        values["VAL_peace_months"] = 0
+        world.run("VAL_peace_monthly")
+        world.run("VAL_peace_monthly")
+        self.assertEqual(values["VAL_peace_months"], 2)
+        self.assertAlmostEqual(values["VAL_peace_pp_gain"], -0.15)
+        teardown = block(entries(EFFECTS), "VAL_peace_close_crisis")
+        self.assertIn("VAL_peace_months", [e.value for e in teardown if e.key == "clear_variable"])
 
     def test_idle_army_costs_consumer_goods_by_tier_and_settled_veterans_halve_it(self):
         modifier = block(entries("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
@@ -362,14 +470,74 @@ class ReckoningMechanicsTests(unittest.TestCase):
         focuses = tree_focuses()
         lasting = {"VAL_peace_silent_lines", "VAL_peace_captains_bill", "VAL_peace_registry_audit",
                    "VAL_peace_share_ledger", "VAL_peace_loyal_battalions", "VAL_peace_kilnet",
-                   "VAL_peace_water_convoys", "VAL_peace_gate_garrison"}
+                   "VAL_peace_water_convoys", "VAL_peace_gate_garrison", "VAL_peace_tishin_list",
+                   "VAL_peace_archive", "VAL_peace_two_bills"}
         self.assertEqual(settled, lasting)
-        for name in lasting - {"VAL_peace_silent_lines"}:
+        for name in lasting:
             self.assertEqual(scalar(block(focuses[name], "bypass"), "VAL_peace_regime_chosen"), "yes", name)
+        # A bypassed focus and the settlement pay the same lasting reward.
+        for name in ("tishin_list", "kilnet", "archive", "two_bills"):
+            reward = block(focuses["VAL_peace_" + name], "completion_reward")
+            self.assertEqual(scalar(reward, "VAL_peace_reward_" + name), "yes", name)
         options = [e.value for e in country_event("val_peace.40") if e.key == "option"]
         shown = [o for o in options if "VAL_peace_open_bills_tt" in
                  [e.value for e in walk(o) if e.key == "custom_effect_tooltip"]]
         self.assertEqual(len(shown), 4)
+
+    def test_open_bills_pay_only_the_front_chosen_at_the_roots(self):
+        paid_keys = {
+            "ADISCORD_economy_receive_100": "silent_lines",
+            "random_owned_controlled_state": "water",
+            "VAL_peace_reward_tishin_list": "tishin_list",
+            "VAL_peace_reward_kilnet": "kilnet",
+            "VAL_peace_reward_archive": "archive",
+            "VAL_peace_reward_two_bills": "two_bills",
+        }
+        shared_tail = {"VAL_peace_archive", "VAL_peace_two_bills"}
+        # A reckoning before either root is owed the shifts front.
+        for completed, paid, manpower, experience in (
+            (set(), {"silent_lines", "water", "tishin_list", "archive", "two_bills"}, 0, 0),
+            ({"VAL_peace_silent_lines", "VAL_peace_ash_shifts", "VAL_peace_water_convoys"},
+             {"tishin_list", "archive", "two_bills"}, 0, 0),
+            ({"VAL_peace_silent_lines", "VAL_peace_ash_shifts", "VAL_peace_gate_garrison",
+              "VAL_peace_tishin_list"} | shared_tail, set(), 0, 0),
+            ({"VAL_peace_silent_lines", "VAL_peace_captains_bill"}, {"kilnet", "archive", "two_bills"}, 4000, 30),
+            ({"VAL_peace_captains_bill", "VAL_peace_share_ledger"}, {"silent_lines", "kilnet", "archive", "two_bills"},
+             4000, 15),
+            ({"VAL_peace_silent_lines", "VAL_peace_captains_bill", "VAL_peace_registry_audit",
+              "VAL_peace_loyal_battalions", "VAL_peace_kilnet"} | shared_tail, set(), 0, 0),
+        ):
+            with self.subTest(completed=sorted(completed)):
+                world = ReckoningWorld()
+                world.intercept = set(paid_keys)
+                country = world.data["VAL"]
+                country["focuses"] = set(completed)
+                world.run("VAL_peace_settle_open_bills")
+                self.assertEqual({paid_keys[key] for _, key in world.calls}, paid)
+                self.assertEqual(len(world.calls), len(paid))
+                self.assertEqual(country["manpower"], manpower)
+                self.assertEqual(country["army_experience"], experience)
+
+    def test_lasting_trunk_rewards_pay_their_material_results(self):
+        world = ReckoningWorld()
+        country = world.data["VAL"]
+        world.run("VAL_peace_reward_kilnet")
+        self.assertEqual((country["manpower"], country["army_experience"]), (6000, 15))
+        world.run("VAL_peace_reward_archive")
+        self.assertEqual(country["research_bonuses"], ["VAL_peace_archive"])
+        self.assertEqual(country["pp"], 1050)
+        archive = block(block(entries(EFFECTS), "VAL_peace_reward_archive"), "add_tech_bonus")
+        self.assertEqual((scalar(archive, "bonus"), scalar(archive, "uses"), scalar(archive, "category")),
+                         ("0.75", "1", "industry"))
+        world.run("VAL_peace_reward_two_bills")
+        self.assertEqual(country["vars"]["ADISCORD_economy_treasury"], 2300)
+        self.assertEqual(country["vars"]["ADISCORD_economy_current_month_action_income"], 300)
+        tishin = block(entries(EFFECTS), "VAL_peace_reward_tishin_list")
+        state = block(tishin, "random_owned_controlled_state")
+        self.assertEqual([e.value for e in block(state, "prioritize")], ["48"])
+        self.assertEqual(scalar(block(state, "add_building_construction"), "type"), "industrial_complex")
+        relief = block(tishin, "if")
+        self.assertEqual(scalar(block(relief, "limit"), "VAL_peace_crisis_active"), "yes")
 
     def test_eastern_lane_pays_out_when_no_contest_is_coming(self):
         focuses = tree_focuses()
@@ -456,6 +624,82 @@ class ReckoningMechanicsTests(unittest.TestCase):
         self.assertEqual(values["ADISCORD_economy_treasury"], 200)
         self.assertEqual(values["VAL_peace_orders"], 0)
         self.assertNotIn("VAL_peace_order_deposit", values)
+        # The buyer counts for the campaign whenever the shipment lands.
+        self.assertEqual(values["VAL_side_order_buyers"], 1)
+
+    def test_a_delivery_during_the_reckoning_counts_as_a_crisis_order(self):
+        world = ReckoningWorld().crisis(strike=30, balance=0.2)
+        values = world.data["VAL"]["vars"]
+        world.data["VAL"]["rifles"] = {"VAL": 5400}
+        values["VAL_arsenal_reputation_stage"] = 2
+        world.run("VAL_peace_begin_foreign_order")
+        world.run("VAL_peace_deliver_foreign_order")
+        self.assertEqual(values["VAL_peace_orders"], 1)
+        self.assertEqual(values["VAL_peace_strike"], 25)
+        self.assertAlmostEqual(world.data["VAL"]["bop"]["VAL_peace_balance"], 0.17)
+        self.assertEqual(values["VAL_arsenal_reputation_stage"], 3)
+        self.assertEqual(values["ADISCORD_economy_treasury"], 2200)
+        self.assertNotIn("VAL_order_portfolio", values)
+
+    def test_side_orders_stop_at_five_buyers_per_campaign(self):
+        world = ReckoningWorld()
+        values = world.data["VAL"]["vars"]
+        world.data["VAL"]["rifles"] = {"VAL": 54000}
+        values["VAL_side_order_buyers"] = 4
+        world.run("VAL_peace_begin_foreign_order")
+        world.run("VAL_peace_deliver_foreign_order")
+        self.assertEqual(values["VAL_side_order_buyers"], 5)
+        self.assertFalse(world.matches(world.triggers["VAL_side_order_available"]))
+        world.run("VAL_peace_begin_foreign_order")
+        self.assertNotIn("VAL_peace_order_deposit", values)
+        self.assertEqual(world.data["VAL"]["rifles"]["VAL"], 48600)
+        # Both order decisions read the same campaign cap.
+        decisions = {e.key: e.value for category in entries(DECISIONS) if isinstance(category.value, list)
+                     for e in category.value if isinstance(e.value, list)}
+        for name in ("VAL_side_order", "VAL_peace_foreign_order"):
+            with self.subTest(decision=name):
+                self.assertIn("VAL_side_order_available", [e.key for e in walk(block(decisions[name], "available"))])
+
+    def test_side_orders_extend_the_portfolio_twice_at_most(self):
+        world = portfolio_world()
+        values = world.data["VAL"]["vars"]
+        values["VAL_order_portfolio"] = 3
+        world.data["VAL"]["rifles"] = {"VAL": 54000}
+        for portfolio, extended in ((4, 1), (5, 2), (5, 2)):
+            world.run("VAL_peace_begin_foreign_order")
+            world.run("VAL_peace_deliver_foreign_order")
+            self.assertEqual((values["VAL_order_portfolio"], values["VAL_order_portfolio_extended"]),
+                             (portfolio, extended))
+        self.assertEqual(values["VAL_side_order_buyers"], 3)
+        self.assertAlmostEqual(values["VAL_order_portfolio_income"], 7.5)
+        # A full portfolio is not extended and keeps the remaining extension.
+        full = portfolio_world()
+        full.data["VAL"]["rifles"] = {"VAL": 5400}
+        full.run("VAL_peace_begin_foreign_order")
+        full.run("VAL_peace_deliver_foreign_order")
+        self.assertEqual((full.data["VAL"]["vars"]["VAL_order_portfolio"],
+                          full.data["VAL"]["vars"]["VAL_order_portfolio_extended"]), (6, 0))
+
+    def test_side_order_decision_follows_the_cost_contract(self):
+        decision = block(block(entries(DECISIONS), "VAL_contract_management"), "VAL_side_order")
+        visible = {e.key: e.value for e in block(decision, "visible")}
+        self.assertEqual(visible, {"has_variable": "VAL_order_portfolio", "has_focus_tree": "VAL_focus"})
+        self.assertEqual(scalar(decision, "cost"), "0")
+        self.assertEqual(scalar(decision, "days_remove"), "30")
+        self.assertEqual(scalar(block(decision, "custom_cost_trigger"), "VAL_peace_order_payable"), "yes")
+        self.assertEqual(scalar(block(decision, "ai_will_do"), "base"), "0")
+        available = [e.key for e in walk(block(decision, "available"))]
+        for condition in ("VAL_nw_operational", "VAL_side_order_available", "has_variable", "has_country_flag"):
+            self.assertIn(condition, available)
+        self.assertEqual(scalar(block(block(decision, "complete_effect"), "hidden_effect"),
+                                "VAL_peace_begin_foreign_order"), "yes")
+        self.assertEqual(scalar(block(block(decision, "remove_effect"), "hidden_effect"),
+                                "VAL_peace_deliver_foreign_order"), "yes")
+        categories = entries("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+        branches = [e.value for e in walk(block(block(categories, "VAL_contract_management"), "visible"))
+                    if e.key == "AND"]
+        self.assertIn({"has_variable": "VAL_order_portfolio", "has_focus_tree": "VAL_focus"},
+                      [{e.key: e.value for e in branch} for branch in branches])
 
     def test_the_reckoning_always_offers_an_answer_and_the_coup_is_exclusive(self):
         options = [e.value for e in country_event("val_peace.40") if e.key == "option"]
@@ -550,8 +794,397 @@ class ReckoningMechanicsTests(unittest.TestCase):
         self.assertLess(complete.index("set_country_flag"), complete.index("VAL_advance_economic_recovery"))
 
 
+class OrderPortfolioTests(unittest.TestCase):
+    def test_proclamation_opens_six_months_once_on_the_campaign_tree(self):
+        world = portfolio_world()
+        values = world.data["VAL"]["vars"]
+        self.assertEqual({name: values[name] for name in (
+            "VAL_order_portfolio", "VAL_order_portfolio_idle", "VAL_order_portfolio_frozen",
+            "VAL_order_portfolio_extended")}, {
+            "VAL_order_portfolio": 6, "VAL_order_portfolio_idle": 0, "VAL_order_portfolio_frozen": 0,
+            "VAL_order_portfolio_extended": 0})
+        self.assertAlmostEqual(values["VAL_order_portfolio_stability"], 0.06)
+        self.assertAlmostEqual(values["VAL_order_portfolio_income"], 9)
+        self.assertAlmostEqual(values["VAL_order_portfolio_output"], 0)
+        self.assertEqual(values["VAL_order_portfolio_payout"], 300)
+        self.assertIn("VAL_order_portfolio", world.data["VAL"]["modifiers"])
+        self.assertIn("VAL", world.dirty)
+        values["VAL_order_portfolio"] = 2
+        world.run("VAL_order_portfolio_open")
+        self.assertEqual(values["VAL_order_portfolio"], 2)
+        for field, value in (("tree", "VAL_new_world_focus"), ("subject", "STP")):
+            with self.subTest(field=field):
+                other = ReckoningWorld()
+                other.data["VAL"].update(tree="VAL_focus")
+                other.data["VAL"][field] = value
+                other.run("VAL_order_portfolio_open")
+                self.assertNotIn("VAL_order_portfolio", other.data["VAL"]["vars"])
+        adopt = [e.key for e in block(block(entries(EFFECTS), "VAL_adopt_commonwealth"), "if")]
+        self.assertEqual(adopt.index("VAL_order_portfolio_open"), adopt.index("set_country_flag") + 1)
+        calls = [e for e in walk(entries(EFFECTS)) if e.key == "VAL_order_portfolio_open" and e.value == "yes"]
+        self.assertEqual(len(calls), 1)
+        modifier = block(entries("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
+                         "VAL_order_portfolio")
+        self.assertEqual(scalar(block(modifier, "enable"), "tag"), "VAL")
+        self.assertEqual({e.key: e.value for e in modifier if e.key not in ("enable", "icon")}, {
+            "stability_factor": "VAL_order_portfolio_stability",
+            "ADISCORD_economy_weekly_income": "VAL_order_portfolio_income",
+            "industrial_capacity_factory": "VAL_order_portfolio_output",
+        })
+
+    def test_peace_melts_the_orders_in_six_months_then_the_lines_idle(self):
+        world = portfolio_world()
+        values = world.data["VAL"]["vars"]
+        history = []
+        for _ in range(9):
+            pass_months(world, 1)
+            history.append((values["VAL_order_portfolio"], values["VAL_order_portfolio_idle"]))
+        # Idle lines stop at the notice, so val_rework.222 shows the applied strike.
+        self.assertEqual(history, [(5, 0), (4, 0), (3, 0), (2, 0), (1, 5), (0, 10), (0, 10), (0, 10), (0, 10)])
+        self.assertAlmostEqual(values["VAL_order_portfolio_output"], -0.04)
+        self.assertAlmostEqual(values["VAL_order_portfolio_income"], 0)
+        self.assertEqual(values["VAL_order_portfolio_frozen"], 0)
+        # One idle warning, one visible notice and one delayed entry check per campaign.
+        self.assertEqual(portfolio_events(world), ["val_rework.221", "val_rework.222", "val_rework.223"])
+        self.assertIn("VAL_order_portfolio_notice", world.data["VAL"]["flags"])
+
+    def test_a_war_freezes_the_orders_for_six_months_at_most(self):
+        world = portfolio_world()
+        values = world.data["VAL"]["vars"]
+        world.data["VAL"]["wars"] = {"STP"}
+        pass_months(world, 6)
+        self.assertEqual((values["VAL_order_portfolio"], values["VAL_order_portfolio_frozen"]), (6, 6))
+        pass_months(world, 1)
+        self.assertEqual((values["VAL_order_portfolio"], values["VAL_order_portfolio_frozen"]), (5, 6))
+        values["VAL_order_portfolio"] = 1
+        pass_months(world, 3)
+        # Lines idle only in peace, and the notice waits for the peace.
+        self.assertEqual((values["VAL_order_portfolio"], values["VAL_order_portfolio_idle"]), (0, 0))
+        self.assertEqual(portfolio_events(world), [])
+        world.data["VAL"]["wars"] = set()
+        pass_months(world, 1)
+        self.assertEqual(values["VAL_order_portfolio_idle"], 5)
+        self.assertEqual(portfolio_events(world), ["val_rework.221", "val_rework.222", "val_rework.223"])
+
+    def test_the_notice_waits_for_the_entry_conditions(self):
+        world = portfolio_world()
+        values = world.data["VAL"]["vars"]
+        values["VAL_order_portfolio"] = 0
+        for blocker in ("VAL_peace_order_deposit", "VAL_command_consolidation_kind"):
+            with self.subTest(blocker=blocker):
+                values[blocker] = 1
+                pass_months(world, 1)
+                self.assertNotIn("VAL_order_portfolio_notice", world.data["VAL"]["flags"])
+                del values[blocker]
+        world.global_flags.add("ADISCORD_nam_resource_war_scheduled")
+        pass_months(world, 1)
+        self.assertNotIn("VAL_order_portfolio_notice", world.data["VAL"]["flags"])
+        world.global_flags.clear()
+        pass_months(world, 1)
+        self.assertIn("VAL_order_portfolio_notice", world.data["VAL"]["flags"])
+        # The monthly hook never runs on another tree.
+        moved = portfolio_world()
+        moved.data["VAL"]["tree"] = "VAL_new_world_focus"
+        pass_months(moved, 2)
+        self.assertEqual(moved.data["VAL"]["vars"]["VAL_order_portfolio"], 6)
+
+    def test_a_started_entry_focus_delays_the_automatic_entry_sixty_days_at_most(self):
+        world = portfolio_world()
+        country = world.data["VAL"]
+        country["vars"]["VAL_order_portfolio"] = 0
+        pass_months(world, 1)
+        due = world.triggers["VAL_order_portfolio_auto_entry_due"]
+        self.assertTrue(world.matches(due))
+        country["progress"] = {"VAL_Peace_Without_Orders": 0.5}
+        country["flag_days"]["VAL_order_portfolio_notice"] = 60
+        self.assertFalse(world.matches(due))
+        country["flag_days"]["VAL_order_portfolio_notice"] = 61
+        self.assertTrue(world.matches(due))
+        country["wars"] = {"STP"}
+        self.assertFalse(world.matches(due))
+        # The hidden entry check opens the chapter or re-checks weekly while the notice stands.
+        immediate = block(country_event("val_rework.223"), "immediate")
+        world.events.clear()
+        world.execute(immediate)
+        self.assertEqual(world.events, [("VAL", "val_rework.223")])
+        country["wars"] = set()
+        world.events.clear()
+        world.execute(immediate)
+        self.assertEqual(world.events, [("VAL", "val_rework.124")])
+        country["flags"].discard("VAL_order_portfolio_notice")
+        country["wars"] = {"STP"}
+        world.events.clear()
+        world.execute(immediate)
+        self.assertEqual(world.events, [])
+
+    def test_a_focus_started_before_the_empty_portfolio_still_gets_the_notice(self):
+        world = portfolio_world()
+        country = world.data["VAL"]
+        country["vars"]["VAL_order_portfolio"] = 1
+        country["progress"] = {"VAL_Peace_Without_Orders": 0.5}
+        pass_months(world, 1)
+        # The notice starts the sixty-day limit; the entry itself still waits for it.
+        self.assertIn("VAL_order_portfolio_notice", country["flags"])
+        self.assertIn("val_rework.222", portfolio_events(world))
+        self.assertFalse(world.matches(world.triggers["VAL_order_portfolio_auto_entry_due"]))
+
+    def test_the_scheduled_entry_pays_the_months_still_on_order(self):
+        world = portfolio_world()
+        values = world.data["VAL"]["vars"]
+        values["VAL_order_portfolio"] = 4
+        world.run("VAL_order_portfolio_refresh")
+        reward = block(main_focus("VAL_Peace_Without_Orders"), "completion_reward")
+        payout = block(reward, "hidden_effect")
+        # The chapter event clears the portfolio, so the payout comes first.
+        self.assertLess([e.key for e in payout].index("if"), [e.key for e in payout].index("country_event"))
+        world.execute(payout)
+        self.assertEqual(values["ADISCORD_economy_treasury"], 2200)
+        self.assertEqual(values["ADISCORD_economy_current_month_action_income"], 200)
+        self.assertEqual(world.events, [("VAL", "val_rework.124")])
+        self.assertIn("VAL", world.dirty)
+
+    def test_entry_previews_name_the_tails_the_write_off_charges(self):
+        answer = block(country_event("val_rework.222"), "option")
+        reward = block(main_focus("VAL_Peace_Without_Orders"), "completion_reward")
+        for metal, reputation in product((False, True), (None, 0, 1, 2, 3)):
+            world = ReckoningWorld()
+            country = world.data["VAL"]
+            if metal:
+                country["ideas"] = {"VAL_vorkerland_metal_shortage"}
+            if reputation is not None:
+                country["vars"]["VAL_contract_reputation_level"] = reputation
+            expected = {0: None, 1: "VAL_peace_tails_strike_1_tt", 2: "VAL_peace_tails_strike_2_tt"}
+            shown = {name: shown_tail_tooltip(world, rows) for name, rows in (("answer", answer), ("focus", reward))}
+            world.run("VAL_peace_write_off_tails")
+            tails = int(world.temps["VAL_peace_tails_written_off"])
+            with self.subTest(metal=metal, reputation=reputation):
+                self.assertEqual(shown, dict.fromkeys(shown, expected[tails]))
+        for rows in (answer, reward):
+            previews = [e.value for e in rows if e.key == "effect_tooltip"]
+            self.assertIn([("VAL_peace_write_off_tails", "yes")], [[(e.key, e.value) for e in p] for p in previews])
+
+    def test_write_off_removes_the_metal_famine_and_restores_contract_reputation(self):
+        world = ReckoningWorld()
+        country = world.data["VAL"]
+        country["ideas"] = {"VAL_vorkerland_metal_shortage", "VAL_contract_reputation_1"}
+        country["vars"]["VAL_contract_reputation_level"] = 1
+        world.run("VAL_peace_write_off_tails")
+        self.assertEqual(world.temps["VAL_peace_tails_written_off"], 2)
+        self.assertEqual(country["ideas"], {"VAL_contract_reputation_2"})
+        self.assertEqual(country["vars"]["VAL_contract_reputation_level"], 2)
+        # A country that never had a reputation is charged no reputation tail.
+        clean = ReckoningWorld()
+        clean.run("VAL_peace_write_off_tails")
+        self.assertEqual(clean.temps["VAL_peace_tails_written_off"], 0)
+        self.assertNotIn("VAL_contract_reputation_level", clean.data["VAL"]["vars"])
+        # The metal famine is not reinstated once the next chapter is loaded.
+        for tree, expected in (("VAL_focus", {"VAL_vorkerland_metal_shortage"}), ("VAL_new_world_focus", set())):
+            with self.subTest(tree=tree):
+                again = ReckoningWorld()
+                again.data["VAL"]["tree"] = tree
+                again.run("VAL_assert_vorkerland_metal_shortage")
+                self.assertEqual(again.data["VAL"].get("ideas", set()), expected)
+
+
+class PeaceEntryTests(unittest.TestCase):
+    @staticmethod
+    def enter(voluntary, council=False, idle=0, metal=False, reputation=None, buyers=None):
+        world = portfolio_world()
+        country = world.data["VAL"]
+        values = country["vars"]
+        values["VAL_order_portfolio_idle"] = idle
+        values["VAL_order_portfolio"] = 0
+        country["flags"].add("VAL_order_portfolio_notice")
+        if council:
+            country["flags"].add("VAL_council_in_power")
+            country["character"] = "VAL_Commanders_Council"
+        if metal:
+            country["ideas"] = {"VAL_vorkerland_metal_shortage"}
+        if reputation is not None:
+            values["VAL_contract_reputation_level"] = reputation
+        if buyers is not None:
+            values["VAL_side_order_buyers"] = buyers
+        country["tree"] = "VAL_new_world_focus"
+        world.temps["VAL_peace_entry_voluntary"] = 1 if voluntary else 0
+        world.intercept = {"VAL_order_portfolio_settle_operations"}
+        world.run("VAL_peace_begin")
+        return world
+
+    def test_start_values_follow_the_entry_kind_and_the_council(self):
+        for voluntary, council, idle, metal, reputation, strike, arrears, balance in (
+            (True, False, 0, False, None, 10, 0, 0.0),
+            (True, True, 0, False, None, 10, 0, 0.15),
+            (False, False, 0, False, None, 25, 1, 0.05),
+            (False, True, 0, False, None, 25, 0, 0.15),
+            (True, False, 5, True, None, 25, 0, 0.0),
+            (True, False, 10, True, 1, 40, 0, 0.0),
+            (False, False, 10, True, None, 45, 1, 0.05),
+            # The cap keeps the first strike threshold from firing on the first day.
+            (False, True, 20, True, 0, 49, 0, 0.15),
+        ):
+            with self.subTest(voluntary=voluntary, council=council, idle=idle, metal=metal, reputation=reputation):
+                world = self.enter(voluntary, council, idle, metal, reputation)
+                country = world.data["VAL"]
+                self.assertEqual(country["vars"]["VAL_peace_strike"], strike)
+                self.assertEqual(country["vars"]["VAL_peace_arrears"], arrears)
+                self.assertAlmostEqual(country["bop"]["VAL_peace_balance"], balance)
+                self.assertEqual(country["vars"]["VAL_peace_months"], 0)
+                self.assertIn("VAL_peace_reckoning", country["missions"])
+                self.assertNotIn(("VAL", "val_peace.21"), world.events)
+
+    def test_entry_closes_the_portfolio_and_seeds_orders_from_the_buyers(self):
+        for buyers, orders in ((None, 0), (3, 3), (5, 5), (7, 5)):
+            with self.subTest(buyers=buyers):
+                world = self.enter(True, buyers=buyers)
+                country = world.data["VAL"]
+                self.assertEqual(country["vars"]["VAL_peace_orders"], orders)
+                self.assertFalse([name for name in country["vars"] if name.startswith("VAL_order_portfolio")])
+                self.assertNotIn("VAL_order_portfolio", country["modifiers"])
+                self.assertNotIn("VAL_order_portfolio_notice", country["flags"])
+                self.assertEqual(country["vars"].get("VAL_side_order_buyers"), buyers)
+                self.assertEqual(world.calls, [("VAL", "VAL_order_portfolio_settle_operations")])
+        body = [e.key for e in block(block(entries(EFFECTS), "VAL_peace_begin"), "if") if e.key != "limit"]
+        self.assertLess(body.index("VAL_peace_write_off_tails"), body.index("VAL_order_portfolio_settle_operations"))
+        self.assertLess(body.index("VAL_order_portfolio_settle_operations"), body.index("VAL_order_portfolio_close"))
+        self.assertLess(body.index("VAL_order_portfolio_close"), body.index("set_variable"))
+        # Both closing paths of the campaign tree end the portfolio.
+        defeat = [e.key for e in walk(block(entries(EFFECTS), "VAL_enter_stelander_defeat"))]
+        self.assertIn("VAL_order_portfolio_close", defeat)
+
+    def test_a_second_entry_keeps_the_running_reckoning(self):
+        world = self.enter(False, idle=20)
+        values = world.data["VAL"]["vars"]
+        values["VAL_peace_strike"] = 70
+        world.temps["VAL_peace_entry_voluntary"] = 1
+        world.run("VAL_peace_begin")
+        self.assertEqual(values["VAL_peace_strike"], 70)
+        self.assertEqual(values["VAL_peace_arrears"], 1)
+
+
+class ReckoningFrontTests(unittest.TestCase):
+    def test_the_neglected_front_escalates_until_it_is_settled(self):
+        for root, settled_flag, strike, arrears in (
+            ("VAL_peace_captains_bill", "VAL_peace_shifts_settled", 29, 1),
+            ("VAL_peace_ash_shifts", "VAL_peace_companies_settled", 26, 2),
+        ):
+            for settled in (False, True):
+                with self.subTest(root=root, settled=settled):
+                    world = ReckoningWorld().crisis(strike=20)
+                    country = world.data["VAL"]
+                    country["focuses"].add(root)
+                    if settled:
+                        country["flags"].add(settled_flag)
+                    world.run("VAL_peace_monthly")
+                    expected = (26, 1) if settled else (strike, arrears)
+                    self.assertEqual((country["vars"]["VAL_peace_strike"], country["vars"]["VAL_peace_arrears"]),
+                                     expected)
+
+    def test_settling_the_companies_pays_once_and_clears_the_debt(self):
+        world = ReckoningWorld().crisis(strike=40, balance=0.3)
+        country = world.data["VAL"]
+        values = country["vars"]
+        values["ADISCORD_economy_treasury"] = 249.5
+        country["pp"] = 40
+        world.run("VAL_peace_settle_companies_start")
+        self.assertEqual((values["ADISCORD_economy_treasury"], country["pp"]), (249.5, 40))
+        values["ADISCORD_economy_treasury"] = 500
+        values["VAL_peace_arrears"] = 3
+        world.run("VAL_peace_settle_companies_start")
+        world.run("VAL_peace_settle_companies_start")
+        self.assertEqual((values["ADISCORD_economy_treasury"], country["pp"]), (250, 0))
+        self.assertEqual(values["ADISCORD_economy_current_month_action_costs"], 250)
+        world.run("VAL_peace_settle_companies_finish")
+        world.run("VAL_peace_settle_companies_refund")
+        self.assertEqual(values["VAL_peace_arrears"], 0)
+        self.assertAlmostEqual(country["bop"]["VAL_peace_balance"], 0.2)
+        self.assertIn("VAL_peace_companies_settled", country["flags"])
+        self.assertNotIn("VAL_peace_settle_companies_paid", country["flags"])
+        self.assertEqual((values["ADISCORD_economy_treasury"], country["pp"]), (250, 0))
+
+    def test_settling_the_shifts_pays_once_and_lowers_the_strike(self):
+        world = ReckoningWorld().crisis(strike=45)
+        country = world.data["VAL"]
+        values = country["vars"]
+        values["ADISCORD_economy_treasury"] = 200
+        world.run("VAL_peace_settle_shifts_start")
+        world.run("VAL_peace_settle_shifts_start")
+        self.assertEqual(values["ADISCORD_economy_treasury"], 0)
+        world.run("VAL_peace_settle_shifts_finish")
+        self.assertEqual(values["VAL_peace_strike"], 25)
+        self.assertIn("VAL_peace_shifts_settled", country["flags"])
+        world.run("VAL_peace_settle_shifts_refund")
+        self.assertEqual(values["ADISCORD_economy_treasury"], 0)
+
+    def test_a_settlement_that_outlives_the_reckoning_is_refunded_exactly_once(self):
+        for front, price_pp, price_treasury in (("companies", 40, 250), ("shifts", 0, 200)):
+            for ending in ("cancel", "finish"):
+                with self.subTest(front=front, ending=ending):
+                    world = ReckoningWorld().crisis(strike=40)
+                    country = world.data["VAL"]
+                    values = country["vars"]
+                    world.run(f"VAL_peace_settle_{front}_start")
+                    self.assertEqual((values["ADISCORD_economy_treasury"], country["pp"]),
+                                     (2000 - price_treasury, 1000 - price_pp))
+                    del country["bop"]["VAL_peace_balance"]
+                    world.run(f"VAL_peace_settle_{front}_{'refund' if ending == 'cancel' else 'finish'}")
+                    world.run(f"VAL_peace_settle_{front}_refund")
+                    world.run(f"VAL_peace_settle_{front}_finish")
+                    self.assertEqual((values["ADISCORD_economy_treasury"], country["pp"]), (2000, 1000))
+                    self.assertEqual(values["ADISCORD_economy_current_month_action_income"], price_treasury)
+                    self.assertNotIn(f"VAL_peace_{front}_settled", country["flags"])
+
+    def test_settle_decisions_follow_the_cost_and_lifecycle_contract(self):
+        category = block(entries(DECISIONS), "VAL_peace_payroll_category")
+        for front, other_root in (("companies", "VAL_peace_ash_shifts"), ("shifts", "VAL_peace_captains_bill")):
+            with self.subTest(front=front):
+                decision = block(category, f"VAL_peace_settle_{front}")
+                self.assertEqual({e.key: e.value for e in block(decision, "visible")},
+                                 {"has_completed_focus": other_root, "VAL_peace_crisis_active": "yes"})
+                self.assertEqual(scalar(decision, "cost"), "0")
+                self.assertEqual(scalar(decision, "fire_only_once"), "yes")
+                self.assertEqual(scalar(decision, "days_remove"), "45")
+                self.assertEqual(scalar(block(decision, "custom_cost_trigger"), f"VAL_peace_settle_{front}_payable"),
+                                 "yes")
+                self.assertEqual(scalar(block(block(decision, "cancel_trigger"), "hidden_trigger"),
+                                        "VAL_peace_crisis_active"), "no")
+                for field, effect in (("complete_effect", "start"), ("remove_effect", "finish"),
+                                      ("cancel_effect", "refund")):
+                    calls = [e.key for e in walk(block(decision, field)) if e.key.startswith("VAL_peace_settle_")]
+                    self.assertEqual(calls, [f"VAL_peace_settle_{front}_{effect}"], field)
+                self.assertGreater(float(scalar(block(decision, "ai_will_do"), "base")), 0)
+
+    def test_closing_the_crisis_clears_the_settled_fronts(self):
+        world = ReckoningWorld().crisis()
+        world.intercept = {"VAL_peace_complete_recovery", "VAL_peace_settle_open_bills"}
+        country = world.data["VAL"]
+        country["flags"].update({"VAL_peace_companies_settled", "VAL_peace_shifts_settled"})
+        country["vars"]["VAL_peace_months"] = 4
+        world.run("VAL_peace_close_crisis")
+        self.assertFalse({"VAL_peace_companies_settled", "VAL_peace_shifts_settled"} & country["flags"])
+        self.assertNotIn("VAL_peace_months", country["vars"])
+
+    def test_completed_recovery_reaches_the_last_step_once(self):
+        for disrupted, steps, expected in ((True, 3, 9), (True, None, 9), (True, 8, 9), (True, 9, 9), (False, 3, 3)):
+            with self.subTest(disrupted=disrupted, steps=steps):
+                world = ReckoningWorld()
+                world.intercept = {"VAL_reform_mercenary_payroll", "VAL_restore_arsenal_reputation",
+                                   "VAL_refresh_industrial_economy"}
+                country = world.data["VAL"]
+                if disrupted:
+                    country["flags"].add("VAL_vorkerland_contracts_disrupted")
+                if steps is not None:
+                    country["vars"]["VAL_economic_recovery_steps"] = steps
+                world.run("VAL_peace_complete_recovery")
+                self.assertEqual(country["vars"].get("VAL_economic_recovery_steps"), expected)
+                self.assertIn("VAL_economic_recovery_completed", country["flags"])
+                advances = [key for _, key in world.calls if key == "VAL_refresh_industrial_economy"]
+                self.assertEqual(len(advances), 1 if disrupted and steps != 9 else 0)
+        complete = [e.key for e in block(entries(EFFECTS), "VAL_peace_complete_recovery")]
+        self.assertEqual(complete.count("VAL_advance_economic_recovery"), 1)
+
+
 class EastFinalWarTests(unittest.TestCase):
-    RESOLUTIONS = {"VAL_east_resolve_val_victory", "VAL_east_resolve_rival_victory", "VAL_east_resolve_without_hegemon"}
+    RESOLUTIONS ={"VAL_east_resolve_val_victory", "VAL_east_resolve_rival_victory", "VAL_east_resolve_without_hegemon"}
 
     def war(self, rival_kind):
         world = ReckoningWorld()
@@ -1275,13 +1908,41 @@ class ReckoningTreeTests(unittest.TestCase):
                         self.assertIn(unlock, decisions)
                         visible = {e.value for e in walk(block(decisions[unlock], "visible")) if isinstance(e.value, str)}
                         self.assertIn(name, visible)
-        crisis = ("VAL_peace_two_bills", "VAL_peace_land_for_service", "VAL_peace_workers_charter",
+        crisis = ("VAL_peace_silent_lines", "VAL_peace_two_bills", "VAL_peace_land_for_service", "VAL_peace_workers_charter",
                   "VAL_peace_shift_law", "VAL_peace_archive", "VAL_peace_night_of_registers",
                   "VAL_peace_ash_shifts", "VAL_peace_water_convoys", "VAL_peace_gate_garrison",
                   "VAL_peace_tishin_list", "VAL_peace_captains_bill", "VAL_peace_registry_audit",
                   "VAL_peace_share_ledger", "VAL_peace_kilnet")
         for name in crisis:
             self.assertEqual(scalar(block(focuses[name], "bypass"), "VAL_peace_regime_chosen"), "yes", name)
+
+    def test_the_trunk_pays_one_bill_chosen_at_its_roots(self):
+        focuses = tree_focuses()
+        shifts, companies = focuses["VAL_peace_ash_shifts"], focuses["VAL_peace_captains_bill"]
+        self.assertEqual(exclusive_rivals(shifts), {"VAL_peace_captains_bill"})
+        self.assertEqual(exclusive_rivals(companies), {"VAL_peace_ash_shifts"})
+        self.assertEqual((scalar(shifts, "y"), scalar(companies, "y")), ("1", "1"))
+        groups = [{p.value for p in e.value} for e in focuses["VAL_peace_two_bills"] if e.key == "prerequisite"]
+        self.assertEqual(groups, [{"VAL_peace_silent_lines"}, {"VAL_peace_tishin_list", "VAL_peace_kilnet"}])
+        for root, event, decision in ((shifts, "val_peace.14", "VAL_peace_settle_companies"),
+                                      (companies, "val_peace.15", "VAL_peace_settle_shifts")):
+            reward = block(root, "completion_reward")
+            self.assertIn(event, [scalar(e.value, "id") for e in walk(reward) if e.key == "country_event"])
+            self.assertIn(decision, [e.value for e in walk(reward) if e.key == "unlock_decision_tooltip"])
+        # One playthrough of the trunk to the night of registers, focus after focus.
+        tail = ["VAL_peace_silent_lines", "VAL_peace_two_bills", "VAL_peace_workers_charter",
+                "VAL_peace_archive", "VAL_peace_night_of_registers"]
+        for route, weeks in (
+            (["VAL_nw_price", "VAL_peace_ash_shifts", "VAL_peace_water_convoys", "VAL_peace_tishin_list"] + tail, 26),
+            (["VAL_nw_price", "VAL_peace_captains_bill", "VAL_peace_registry_audit", "VAL_peace_kilnet"] + tail, 25),
+        ):
+            with self.subTest(root=route[1]):
+                done = set()
+                for name in route:
+                    groups = [{p.value for p in e.value} for e in focuses[name] if e.key == "prerequisite"]
+                    self.assertTrue(all(group & done for group in groups), name)
+                    done.add(name)
+                self.assertEqual(sum(int(scalar(focuses[name], "cost")) for name in route), weeks)
 
     def test_events_are_registered_localised_and_fit_the_text_buffer(self):
         text = (ROOT / EVENTS).read_text(encoding="utf-8")

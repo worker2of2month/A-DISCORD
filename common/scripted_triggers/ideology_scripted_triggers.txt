@@ -58,3 +58,17 @@ is_enemy_ideology = {
 		}
 	}
 }
+
+ADISCORD_party_is_banned = {
+	is_in_array = { ADISCORD_banned_parties = ADISCORD_party }
+}
+
+ADISCORD_party_is_coalition_member = {
+	is_in_array = { ADISCORD_cabinet_parties = ADISCORD_party }
+	NOT = { has_government = var:ADISCORD_party }
+}
+
+ADISCORD_party_is_coalition_leader = {
+	is_in_array = { ADISCORD_cabinet_parties = ADISCORD_party }
+	has_government = var:ADISCORD_party
+}

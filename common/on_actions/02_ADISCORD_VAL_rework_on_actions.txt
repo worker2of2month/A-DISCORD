@@ -137,6 +137,35 @@ on_actions = {
 					VAL_call_stelander_partner_to_wars = yes
 				}
 			}
+			# ROOT attacks FROM. A war between Kefreyt and a Stelander power spends
+			# the prepared operation once, whichever side declared it; the campaign
+			# decision is hidden during that war.
+			if = {
+				limit = {
+					ROOT = { tag = VAL }
+					FROM = { OR = { tag = STP tag = STS } }
+				}
+				FROM = { save_event_target_as = VAL_stl_op_target }
+				VAL = { VAL_stl_op_apply_launch = yes }
+			}
+			else_if = {
+				limit = {
+					FROM = { tag = VAL }
+					ROOT = { OR = { tag = STP tag = STS } }
+				}
+				ROOT = { save_event_target_as = VAL_stl_op_target }
+				VAL = {
+					if = {
+						limit = {
+							has_completed_focus = VAL_stl_op_staff
+							NOT = { has_country_flag = VAL_stl_op_launched }
+						}
+						# Read and cleared by the report event val_rework.208.
+						set_country_flag = VAL_stl_op_counterstrike
+					}
+					VAL_stl_op_apply_launch = yes
+				}
+			}
 		}
 	}
 
@@ -165,6 +194,8 @@ on_actions = {
 	on_monthly_VAL = {
 		effect = {
 			VAL_nw_reconcile_partners = yes
+			# Campaign-tree orders only; VAL_peace_begin closes the portfolio.
+			VAL_order_portfolio_monthly = yes
 			VAL_peace_monthly = yes
 			# Fixed nine-republic roster; no world scan.
 			VAL_east_contest_monthly = yes

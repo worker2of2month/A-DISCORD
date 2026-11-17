@@ -686,6 +686,21 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
                  "VAL = { white_peace = PREV } }")
         self.assertLess(install.index("VAL_restore_stelander_conquered_administrations = yes"), install.index(peace))
 
+    def test_stelander_defeat_closes_its_northern_hegemony_war_first(self):
+        # Kefreyt adopts its subjects' wars; the inherited war has no settlement.
+        effects = EFFECTS.read_text(encoding="utf-8")
+        install = " ".join(named_block(effects, "VAL_install_stelander_administration").split())
+        close = ("if = { limit = { has_country_flag = STP_heg_northern_final_started } "
+                 "YPR = { VAL_close_stelander_northern_war = yes } "
+                 "TFF = { VAL_close_stelander_northern_war = yes } }")
+        self.assertLess(install.index(close), install.index("VAL_restore_stelander_conquered_administrations = yes"))
+        self.assertLess(install.index(close), install.index("set_autonomy = { target = PREV"))
+        war = " ".join(named_block(effects, "VAL_close_stelander_northern_war").split())
+        self.assertIn(
+            "every_enemy_country = { limit = { OR = { tag = STS is_subject_of = STS } } white_peace = PREV }",
+            war,
+        )
+
     def test_nodrul_colony_exception_does_not_ignore_liberated_stelander(self):
         fixture = FinalSettlementFixture("STP", "NOD")
         fixture.members.add("AIN")

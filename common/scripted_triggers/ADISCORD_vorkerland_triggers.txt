@@ -2955,7 +2955,11 @@ ADISCORD_vorkerland_petrichev_empire_can_form = {
 	has_country_flag = ADISCORD_vorkerland_route_joint
 	NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 	has_completed_focus = WRK_joint_restore_unity_tower
-	has_cosmetic_tag = VAD_vorkerland_restoration
+	OR = {
+		has_cosmetic_tag = VAD_vorkerland_restoration
+		has_cosmetic_tag = VAD_vorkerland_restoration_west_victory
+		has_cosmetic_tag = VAD_vorkerland_restoration_west_mandate
+	}
 	has_country_leader = {
 		character = WRK_Vlad_Petrichev
 		ruling_only = yes
@@ -2978,7 +2982,11 @@ ADISCORD_vorkerland_world_empire_can_form = {
 	has_global_flag = ADISCORD_vorkerland_collapse_finished
 	has_global_flag = ADISCORD_vorkerland_joint_government_formed
 	has_country_flag = ADISCORD_vorkerland_route_joint
-	has_cosmetic_tag = WRK_vorkerland_joint_government
+	OR = {
+		has_cosmetic_tag = WRK_vorkerland_joint_government
+		has_cosmetic_tag = WRK_vorkerland_joint_government_west_victory
+		has_cosmetic_tag = WRK_vorkerland_joint_government_west_mandate
+	}
 	has_character = WRK_Nikita_Worcker
 	has_country_leader = {
 		character = WRK_VAD_Joint_Council
@@ -2991,6 +2999,8 @@ ADISCORD_vorkerland_world_empire_active = {
 	tag = event_target:ADISCORD_vorkerland_nation
 	OR = {
 		has_cosmetic_tag = WRK_vorkerland_world_empire
+		has_cosmetic_tag = WRK_vorkerland_world_empire_west_victory
+		has_cosmetic_tag = WRK_vorkerland_world_empire_west_mandate
 		has_cosmetic_tag = WRK_veyran_empire
 	}
 }

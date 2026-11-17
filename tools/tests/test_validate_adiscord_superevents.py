@@ -1393,6 +1393,7 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_val_commonwealth",
                 "superevent_val_council_proclamation",
                 "superevent_south_war",
+                "superevent_vorkerland_singularity",
                 "superevent_stelander_great",
                 "superevent_rus_black_banner",
                 "superevent_rus_restoration",

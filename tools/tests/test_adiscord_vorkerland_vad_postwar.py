@@ -922,6 +922,7 @@ class WorldEmpireTests(unittest.TestCase):
     RENAMES = {
         "WRK_veyran_empire": "WRK_vorkerland_world_empire",
         "WRK_western_eastern_union": "WRK_vorkerland_emergency",
+        "WRK_republican_union": "WRK_vorkerland_utilitarian_republic",
         "WRK_forul_technical_union": "WRK_technocracy",
     }
 
@@ -1008,7 +1009,10 @@ class WorldEmpireTests(unittest.TestCase):
         change = named_block(self.effects, "ADISCORD_vorkerland_establish_world_empire")
         payload = block(block(parse_clausewitz(change), "ADISCORD_vorkerland_establish_world_empire"), "if")
         self.assertEqual(scalar(block(payload, "limit"), "ADISCORD_vorkerland_world_empire_can_form"), "yes")
-        self.assertEqual(scalar(payload, "set_cosmetic_tag"), "WRK_vorkerland_world_empire")
+        for secured, banner in ((False, "WRK_vorkerland_world_empire"), (True, "WRK_vorkerland_world_empire_west_victory")):
+            facts = {("event_target", NATION_TARGET): "VAD", ("VAD", "has_global_flag", "ADISCORD_west_hegemon_WRK"): secured}
+            changes = [row.value for _, row in selected_effects(payload, facts, "VAD") if row.key == "set_cosmetic_tag"]
+            self.assertEqual(changes, [banner])
         self.assertEqual(scalar(block(payload, "set_politics"), "ruling_party"), "etatism")
         role = block(payload, "add_country_leader_role")
         self.assertEqual(scalar(role, "character"), "WRK_Nikita_Worcker")
@@ -1400,9 +1404,23 @@ class WorldEmpireTests(unittest.TestCase):
                     if entry.key == "set_cosmetic_tag"
                 ]
                 self.assertEqual(len(changes), int(not empire), (route, empire))
+        for government in ("WRK_vorkerland_joint_government", "VAD_vorkerland_restoration",
+                           "VAD_vorkerland_collegial_staff", "VAD_vorkerland_staff_republic",
+                           "WRK_vorkerland_world_empire"):
+            facts = {("VAD", "has_cosmetic_tag", government): True}
+            tags = [row.value for _, row in selected_effects(identity, facts, "VAD") if row.key == "set_cosmetic_tag"]
+            self.assertEqual(tags, [government + "_west_victory"])
+        worker = {
+            ("WKR", "ADISCORD_vorkerland_world_empire_active", "no"): True,
+            ("WKR", "has_country_flag", "ADISCORD_vorkerland_route_worker"): True,
+        }
+        for leader, expected in (("WRK_Anton_Bagley", "WRK_republican_union"), ("WRK_Nikita_Worcker", "WRK_western_eastern_union")):
+            facts = {**worker, ("WKR", "ruling_leader"): leader}
+            tags = [row.value for _, row in selected_effects(identity, facts, "WKR") if row.key == "set_cosmetic_tag"]
+            self.assertEqual(tags, [expected])
         self.assertRegex(rename, r"has_country_flag = ADISCORD_vorkerland_route_worker \}\s*set_cosmetic_tag = WRK_western_eastern_union")
         self.assertRegex(rename, r"has_country_flag = ADISCORD_vorkerland_route_utilitarian \}\s*set_cosmetic_tag = WRK_forul_technical_union")
-        self.assertEqual(rename.count("news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }"), 2)
+        self.assertEqual(rename.count("news_event = { id = ADISCORD_vorkerland_postwar.61 hours = 6 }"), 3)
         west = read("common/scripted_effects/ADISCORD_west_final_war_effects.txt")
         unopposed = named_block(west, "ADISCORD_west_crisis_month")
         self.assertRegex(unopposed, r"set_global_flag = ADISCORD_west_hegemon_WRK(?:.|\n)*?ADISCORD_vorkerland_rename_after_itora = yes")
@@ -1416,7 +1434,8 @@ class WorldEmpireTests(unittest.TestCase):
         active = block(triggers, "ADISCORD_vorkerland_world_empire_active")
         nation = JOINT_UNIFIER
         unified = {("event_target", NATION_TARGET): nation}
-        for cosmetic in ("WRK_vorkerland_world_empire", "WRK_veyran_empire"):
+        for cosmetic in ("WRK_vorkerland_world_empire", "WRK_vorkerland_world_empire_west_victory",
+                         "WRK_vorkerland_world_empire_west_mandate", "WRK_veyran_empire"):
             title = {**unified, (nation, "has_cosmetic_tag", cosmetic): True}
             self.assertTrue(matches_conditions(active, title, nation))
             # A title alone does not make a wartime claimant the empire.
@@ -1429,11 +1448,12 @@ class WorldEmpireTests(unittest.TestCase):
             self.assertTrue(named_block(cosmetic, tag), tag)
             self.assertIn(f"{NATION} = {{ has_cosmetic_tag = {tag} }}", str(read("events/ADISCORD_vorkerland_events.txt")))
         self.assertEqual(scalar(news, "major"), "yes")
-        self.assertEqual(len([e for e in news if e.key == "title"]), 3)
-        self.assertEqual(len([e for e in news if e.key == "desc"]), 3)
+        self.assertEqual(len([e for e in news if e.key == "title"]), 4)
+        self.assertEqual(len([e for e in news if e.key == "desc"]), 4)
 
     def test_localisation_flags_and_registered_events(self):
-        from tools.builders.build_adiscord_vorkerland_original_flags import COPIED_FLAG_TRIPLETS, expected_outputs, validate_outputs
+        from tools.builders.build_adiscord_vorkerland_original_flags import FLAG_ROOT, expected_outputs, validate_outputs
+        from PIL import Image
         tooltip_keys = set(re.findall(r"custom_effect_tooltip = (WRK_empire_\w+)", self.source))
         delta_keys = set(re.findall(r"add_ideas = (WRK_empire_delta_\w+)", self.source)) | {"WRK_empire_delta_generals_seats"}
         other_keys = {
@@ -1451,7 +1471,7 @@ class WorldEmpireTests(unittest.TestCase):
             "ADISCORD_vorkerland_postwar.60.b", "ADISCORD_vorkerland_postwar.60.c",
             "ADISCORD_vorkerland_postwar.61.a",
         }
-        for route in ("empire", "worker", "technical"):
+        for route in ("empire", "worker", "bagli", "technical"):
             other_keys |= {f"ADISCORD_vorkerland_postwar.61.t_{route}", f"ADISCORD_vorkerland_postwar.61.d_{route}"}
         for language in ("russian", "english"):
             path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
@@ -1463,6 +1483,7 @@ class WorldEmpireTests(unittest.TestCase):
             self.assertNotRegex(text, r"^ WRK_empire_(state_above_all|army_oath|imperial_building_offices):", )
             for key in ("ADISCORD_vorkerland_postwar.5.d", "ADISCORD_vorkerland_postwar.60.d",
                         "ADISCORD_vorkerland_postwar.61.d_empire", "ADISCORD_vorkerland_postwar.61.d_worker",
+                        "ADISCORD_vorkerland_postwar.61.d_bagli",
                         "ADISCORD_vorkerland_postwar.61.d_technical"):
                 news = re.findall(rf'^ {re.escape(key)}:0 "([^"\r\n]*)"$', text, re.M)
                 self.assertEqual(len(news), 1, key)
@@ -1475,9 +1496,11 @@ class WorldEmpireTests(unittest.TestCase):
                 for suffix in ("", "_DEF", "_ADJ"):
                     self.assertEqual(len(re.findall(rf'^ {tag}{suffix}:0? ?"[^"\r\n]+"$', countries, re.M)), 1, (language, tag, suffix))
         for tag, source in self.RENAMES.items():
-            self.assertEqual(COPIED_FLAG_TRIPLETS[tag], source)
+            for size in ("", "medium", "small"):
+                with Image.open(FLAG_ROOT / size / f"{tag}.tga") as new, Image.open(FLAG_ROOT / size / f"{source}.tga") as old:
+                    self.assertNotEqual(new.convert("RGB").tobytes(), old.convert("RGB").tobytes(), (tag, size))
         outputs = expected_outputs({"WRK_vorkerland_world_empire", *self.RENAMES})
-        self.assertEqual(len(outputs), 12)
+        self.assertEqual(len(outputs), 3 * (1 + len(self.RENAMES)))
         self.assertEqual(validate_outputs(outputs), [])
         registry = read("tools/data/adiscord_event_ids.json")
         for event_id in ("ADISCORD_vorkerland_postwar.60", "ADISCORD_vorkerland_postwar.61"):

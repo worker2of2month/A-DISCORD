@@ -1,0 +1,80 @@
+{
+  "STP": {
+    "image": "gfx/interface/startup/posters/stp.png",
+    "routes": [
+      {"key": "charter", "flag": "STS_stelander_union", "banner": "gfx/interface/startup/banners/STP_free_at_last.png"},
+      {"key": "hegemony", "flag": "STS_hegemony", "banner": "gfx/interface/startup/banners/STP_hegemony.png"},
+      {"key": "imperial_union", "flag": "STP_empire", "banner": "gfx/interface/startup/banners/STP_empire.png"},
+      {"key": "directory", "flag": "STS", "banner": "gfx/interface/startup/banners/STP_directory.png"},
+      {"key": "crowe", "emblem": "gfx/interface/ideologies/aristocratic_hedonism_group.png", "banner": "gfx/interface/startup/banners/STP_crowe.png"},
+      {"key": "hedersett", "emblem": "gfx/interface/ideologies/radical_hedonism_group.png", "banner": "gfx/interface/startup/banners/STP_hedonism.png"},
+      {"key": "veil", "emblem": "gfx/interface/ideologies/steland_military_etatism_group.png", "banner": "gfx/interface/startup/banners/STP_veil.png"},
+      {"key": "lanskoy", "emblem": "gfx/interface/ideologies/commercial_hedonism_group.png", "banner": "gfx/interface/startup/banners/STP_lanskoy.png"},
+      {"key": "corvina", "emblem": "gfx/interface/ideologies/steland_security_etatism_group.png", "banner": "gfx/interface/startup/banners/STP_corvina.png"},
+      {"key": "renner", "emblem": "gfx/interface/ideologies/patronal_hedonism_group.png", "banner": "gfx/interface/startup/banners/STP_renner.png"}
+    ]
+  },
+  "VAL": {
+    "image": "gfx/interface/startup/posters/val.png",
+    "routes": [
+      {"key": "solgalov", "flag": "VAL", "banner": "gfx/interface/startup/banners/VAL_solgalov.png"},
+      {"key": "captains", "flag": "VAL_united_military_districts", "banner": "gfx/interface/startup/banners/VAL_captains.png"},
+      {"key": "settlement", "flag": "VAL_commonwealth", "banner": "gfx/interface/startup/banners/VAL_settlement.png"},
+      {"key": "korsch", "emblem": "gfx/texticons/adiscord/parties/generic/chauvinism/chauvinism_national_front_party.png", "banner": "gfx/interface/startup/banners/VAL_korsch.png"}
+    ]
+  },
+  "NAM": {
+    "image": "gfx/interface/startup/posters/nam.png",
+    "routes": [
+      {"key": "governors", "flag": "NAM_iron_ladder", "banner": "gfx/interface/startup/banners/NAM_governors.png"},
+      {"key": "districts", "flag": "NAM_service_republic", "banner": "gfx/interface/startup/banners/NAM_districts.png"},
+      {"key": "contracts", "flag": "NAM_prag_republic", "banner": "gfx/interface/startup/banners/NAM_contracts.png"},
+      {"key": "exile", "flag": "NAM", "banner": "gfx/interface/startup/banners/NAM_exile.png"}
+    ]
+  },
+  "SHL": {
+    "image": "gfx/interface/startup/posters/shl.png",
+    "routes": [
+      {"key": "ten", "flag": "SHL_conclave_of_ten", "banner": "gfx/interface/startup/banners/SHL_ten.png"},
+      {"key": "cities", "flag": "SHL_southern_compact", "banner": "gfx/interface/startup/banners/SHL_cities.png"},
+      {"key": "nur", "flag": "SHL_iron_directorate", "banner": "gfx/interface/startup/banners/SHL_nur.png"},
+      {"key": "regency", "flag": "SHL_hereditary_republic", "banner": "gfx/interface/startup/banners/SHL_regency.png"},
+      {"key": "commune", "flag": "SHL_commune_of_fire", "banner": "gfx/interface/startup/banners/SHL_commune.png"}
+    ]
+  },
+  "RUS": {
+    "image": "gfx/interface/startup/posters/rus.png",
+    "routes": [
+      {"key": "khan", "flag": "RUS_last_empire", "banner": "gfx/interface/startup/banners/RUS_khan.png"},
+      {"key": "scientists", "flag": "RUS_restoration_state", "banner": "gfx/interface/startup/banners/RUS_scientists.png"},
+      {"key": "guard", "flag": "RUS_black_banner_empire", "banner": "gfx/interface/startup/banners/RUS_guard.png"}
+    ]
+  },
+  "IVN": {
+    "in_development": true,
+    "image": "gfx/interface/startup/posters/ivn.png",
+    "routes": [
+      {"key": "committee", "flag": "IVN_etatism", "badge": "gfx/texticons/adiscord/parties/IVN/IVN_emergency_committee_party.png", "banner": "gfx/interface/startup/banners/IVN_committee.png"},
+      {"key": "legion", "flag": "IVN_unified_legion", "banner": "gfx/interface/startup/banners/IVN_imperium.png"},
+      {"key": "directorate", "flag": "IMD", "banner": "gfx/interface/startup/banners/IVN_directorate.png"},
+      {"key": "communes", "flag": "IFC", "banner": "gfx/interface/startup/banners/IVN_communes.png"},
+      {"key": "marches", "flag": "IAM", "banner": "gfx/interface/startup/banners/IVN_marches.png"}
+    ]
+  },
+  "MON": {
+    "in_development": true,
+    "image": "gfx/interface/startup/posters/mon.png",
+    "routes": []
+  },
+  "WRK": {
+    "in_development": true,
+    "image": "gfx/interface/startup/posters/wrk.png",
+    "routes": [
+      {"key": "worker", "flag": "WRK_vorkerland_emergency", "banner": "gfx/interface/startup/banners/WRK_worker.png"},
+      {"key": "staff", "flag": "VAD_vorkerland_restoration", "banner": "gfx/interface/startup/banners/WRK_staff.png"},
+      {"key": "technicians", "flag": "WRK_technocracy", "banner": "gfx/interface/startup/banners/WRK_technocracy.png"},
+      {"key": "joint", "flag": "WRK_vorkerland_joint_government", "banner": "gfx/interface/startup/banners/WRK_joint.png"},
+      {"key": "bagley", "flag": "WRK_vorkerland_utilitarian_republic", "banner": "gfx/interface/startup/banners/WRK_bagley.png"}
+    ]
+  }
+}

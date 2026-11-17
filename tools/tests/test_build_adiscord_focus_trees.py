@@ -180,10 +180,13 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
         self.assertEqual(len(new_ids), len(set(new_ids)))
         self.assertTrue(set(new_ids).isdisjoint(self.old_focuses))
         self.assertEqual({key: counts[key] for key in new_ids}, dict.fromkeys(new_ids, 1))
+        # The fleet, economy and reclamation branches carry over into the next chapter.
+        references = [row.value for row in new_tree if row.key == "shared_focus"]
         self.assertEqual(
-            [row.value for row in new_tree if row.key == "shared_focus"],
-            ["VAL_Naval_Contract_Office"],
+            references,
+            ["VAL_Naval_Contract_Office", "VAL_econ_development_fund", "VAL_reclamation_survey"],
         )
+        self.assertTrue(set(references) <= self.shared_focuses.keys())
         self.assertFalse(any(row.key == "shared_focus" for row in new_native))
 
     def test_tooling_authored_view_is_explicitly_separate_from_native_bytes(self):

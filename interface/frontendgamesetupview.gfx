@@ -322,6 +322,15 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_unplayed_content_notification"
-		texturefile = "gfx/interface/unsafe_savegame_icon.dds"
+		texturefile = "gfx/interface/unplayed_content_notification.dds"
+	}
+
+	bitmapfont = {
+		name = "ADISCORD_bookmark_display"
+		fontfiles = {
+			"gfx/fonts/hoi_26mbs"
+			"gfx/fonts/hoi_26mbs_cryllic"
+		}
+		color = 0xfff1dbad
 	}
 }

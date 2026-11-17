@@ -17,6 +17,19 @@ PERSONAL_FOCUSES = {
         "Loyal_Captains_Honours", "Krutovs_Eyes",
     )
 }
+ECONOMY_FOCUSES = {
+    "VAL_econ_" + name for name in (
+        "development_fund", "precision_industry", "special_metallurgy", "automation",
+        "logistics", "computing", "captured_laboratories", "defense_orders",
+        "export_finance", "war_economy", "integrated_economy",
+    )
+}
+RECLAMATION_FOCUSES = {
+    "VAL_reclamation_survey", "VAL_reclamation_road_crews", "VAL_reclamation_clean_water",
+    "VAL_reclamation_workshops", "VAL_reclamation_return_home", "VAL_reclamation_land_register",
+    "VAL_reclamation_industrial_sites", "VAL_The_Harvest_Of_Ash", "VAL_Field_Surgeons",
+    "VAL_Bread_From_Barracks", "VAL_Dead_Villages_Still_Count",
+}
 
 
 def read(relative: str) -> str:
@@ -164,6 +177,25 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             self.assertEqual(fleet["VAL_Expedition_Escorts"], (40, 2))
             self.assertEqual(fleet["VAL_Expedition_Cruisers"], (38, 3))
             self.assertEqual(fleet["VAL_Expedition_Landing_Staff"], (42, 3))
+
+    def test_shared_economy_and_reclamation_move_beside_the_next_chapter(self) -> None:
+        blocks = named_blocks(self.focuses, "focus")
+        for council in (False, True):
+            campaign = focus_layout_coordinates(blocks, council)
+            chapter = focus_layout_coordinates(blocks, council, "VAL_new_world_focus")
+            for names, shift, columns in (
+                (ECONOMY_FOCUSES, (44, -9), range(52, 61)),
+                (RECLAMATION_FOCUSES, (62, -2), range(62, 71)),
+            ):
+                for name in names:
+                    with self.subTest(council=council, focus=name):
+                        x, y = campaign[name]
+                        # Only the next chapter moves these branches; the campaign tree keeps them.
+                        self.assertEqual(chapter[name], (x + shift[0], y + shift[1]))
+                        self.assertIn(chapter[name][0], columns)
+                        self.assertIn(chapter[name][1], range(0, 6))
+            self.assertEqual(chapter["VAL_econ_development_fund"][1], 0)
+            self.assertEqual(chapter["VAL_reclamation_survey"][1], 0)
 
     def test_existing_campaign_gates_are_preserved(self) -> None:
         conference = focus_block(self.focuses, "VAL_frontier_conference")
