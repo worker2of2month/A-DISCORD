@@ -3,8 +3,7 @@
 
 shared_focus = {
 		id = NAM_civil_repair
-		relative_position_id = NAM_recognition
-		x = -19
+		x = 18
 		y = 1
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 4
@@ -732,9 +731,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_pw_fuel_reservoirs
-		relative_position_id = NAM_pw_transport_commission
-		x = 7
-		y = 1
+		relative_position_id = NAM_civil_repair
+		x = 0
+		y = 5
 		icon = GFX_focus_RUS_bunker_utilities
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }

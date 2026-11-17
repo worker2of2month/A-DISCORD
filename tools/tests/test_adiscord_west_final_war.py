@@ -207,38 +207,43 @@ class WestFinalWarContractTests(unittest.TestCase):
     def test_mandate_banners_and_liberation_match_each_government(self):
         from tools.builders.build_adiscord_vorkerland_original_flags import WEST_MANDATE_FLAGS
 
-        router = parse_clausewitz(body(EFFECTS, "ADISCORD_west_update_mandate_banner"))
-        templates = {
-            key: body(EFFECTS, key) for key in (
-                "ADISCORD_west_base_mandate", "ADISCORD_west_named_mandate", "ADISCORD_west_regional_mandate"
-            )
+        router = parse_clausewitz(nation_as_tag(body(EFFECTS, "ADISCORD_west_update_mandate_banner")))
+        banners = set(WEST_MANDATE_FLAGS) | {"IVN_unified_legion_west_mandate"}
+        installed = {
+            row.value for row in flatten(router)
+            if row.key == "set_cosmetic_tag" and row.value.endswith("_mandate")
         }
-        covered = set()
-        for call in flatten(router):
-            if call.key not in templates:
-                continue
-            args = {e.key: e.value for e in call.value}
-            template = templates[call.key]
-            for key, value in args.items():
-                template = template.replace(f"${key}$", value)
-            effect = parse_clausewitz(template)
-            for patron in ("WRK", "IVN"):
-                banner = args["BANNER"] if "BANNER" in args else args[f"{patron}_BANNER"]
-                covered.add(banner)
-                old = args.get("IDENTITY", "original")
-                for install, identity, wanted in ((True, old, banner), (False, banner, old), (False, "later", None)):
+        self.assertEqual(installed, banners)
+        for banner in sorted(banners):
+            government, terms = banner.split("_west_")
+            tag = government.split("_")[0]
+            if tag == "VAD":
+                tag = "WRK"
+            original = government if "_" in government else "original"
+            wrk_patron = terms.startswith("WRK_") or tag == "IVN"
+            cases = [
+                (True, original, wrk_patron, banner),
+                (True, banner, wrk_patron, banner),
+                (False, banner, wrk_patron, original),
+                (False, banner, not wrk_patron, original),
+                (False, "unrelated_government", wrk_patron, None),
+            ]
+            if terms in ("WRK_mandate", "IVN_mandate"):
+                other = "IVN" if wrk_patron else "WRK"
+                cases.append((True, banner, not wrk_patron, f"{government}_west_{other}_mandate"))
+            for active, identity, wrk, wanted in cases:
+                with self.subTest(banner=banner, active=active, identity=identity, wrk=wrk):
                     facts = {
-                        ("PWR", "has_country_flag", "ADISCORD_west_treaty_mandate"): install,
-                        ("PWR", "has_global_flag", "ADISCORD_west_hegemon_WRK"): patron == "WRK",
-                        ("PWR", "has_cosmetic_tag", identity): True,
+                        (tag, "has_country_flag", "ADISCORD_west_treaty_mandate"): active,
+                        (tag, "has_global_flag", "ADISCORD_west_hegemon_WRK"): wrk,
+                        (tag, "has_cosmetic_tag", identity): True,
                     }
                     writes = [
                         "original" if row.key == "drop_cosmetic_tag" else row.value
-                        for _, row in selected_effects(effect, facts, "PWR")
+                        for _, row in selected_effects(router, facts, tag)
                         if row.key in ("set_cosmetic_tag", "drop_cosmetic_tag")
                     ]
-                    self.assertEqual(writes, [] if wanted is None else [wanted], (call.key, banner, identity))
-        self.assertEqual(covered, set(WEST_MANDATE_FLAGS) | {"IVN_unified_legion_west_mandate"})
+                    self.assertEqual(writes, [] if wanted is None else [wanted])
 
     def test_eternal_imperium_keeps_its_flag_under_both_settlements(self):
         for directory in ("", "medium", "small"):

@@ -2028,7 +2028,7 @@ ADISCORD_south_ensure_expedition_template = {
 					x = 1
 					y = 1
 				}
-				artillery = {
+				ADISCORD_line_artillery = {
 					x = 2
 					y = 0
 				}

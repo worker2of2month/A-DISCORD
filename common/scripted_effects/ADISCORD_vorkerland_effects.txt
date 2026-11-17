@@ -16889,6 +16889,26 @@ TVA_initialize_administration = {
 	}
 }
 
+TVA_seat_independent_artels = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				tag = TVA
+				has_government = technocracy
+				is_subject = no
+				has_capitulated = no
+				NOT = { is_in_array = { ADISCORD_cabinet_parties = token:anarchism } }
+				NOT = { is_in_array = { ADISCORD_banned_parties = token:anarchism } }
+			}
+		}
+		custom_effect_tooltip = TVA_independent_artels_coalition_tt
+		hidden_effect = {
+			set_temp_variable = { ADISCORD_party = token:anarchism }
+			ADISCORD_admit_coalition_party = yes
+		}
+	}
+}
+
 TVA_refresh_administration = {
 	clamp_variable = { var = TVA_network_load min = 0 max = 100 }
 	clamp_variable = { var = TVA_cadre_reserve min = 0 max = 100 }

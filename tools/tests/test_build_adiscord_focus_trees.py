@@ -66,6 +66,16 @@ def source_focus_ids(relative):
 
 
 class NamChapterAssemblyTests(unittest.TestCase):
+    def test_postwar_position_anchors_are_loaded_before_their_dependants(self):
+        defined = set()
+        for filename in sorted(NAM_POSTWAR_BRANCHES.values()):
+            for row in parse_clausewitz(read_native_focus_source(OUTPUT_ROOT / filename)):
+                name = one(row.value, "id")
+                for field in row.value:
+                    if field.key == "relative_position_id":
+                        self.assertIn(field.value, defined, (filename, name))
+                defined.add(name)
+
     def test_the_loaded_nam_tree_reaches_only_its_own_focuses(self):
         children = {}
         definitions = set()

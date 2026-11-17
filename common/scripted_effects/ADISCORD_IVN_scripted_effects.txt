@@ -510,7 +510,7 @@ IVN_cw_raise_initial_garrison = {
 		}
 	}
 	add_manpower = 3000
-	add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 2700 producer = ROOT }
+	add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2156 amount = 2700 producer = ROOT }
 	add_manpower = -3000
 	add_equipment_to_stockpile = { type = infantry_equipment amount = -2700 }
 	capital_scope = {
@@ -1382,7 +1382,7 @@ IVN_cw_close_programmes = {
 		}
 		event_target:IVN_cw_closing_country = {
 			add_political_power = 35
-			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 1800 producer = ROOT }
+			add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2156 amount = 1800 producer = ROOT }
 		}
 		clr_state_flag = IVN_march_work
 		clear_variable = IVN_paid_IVN_cb_partisan_supply
@@ -1417,7 +1417,7 @@ IVN_cw_close_programmes = {
 		}
 		event_target:IVN_cw_closing_country = {
 			add_political_power = 30
-			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 1800 producer = ROOT }
+			add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2156 amount = 1800 producer = ROOT }
 		}
 		clear_variable = IVN_paid_IVN_wl_corridor_garrison
 	}

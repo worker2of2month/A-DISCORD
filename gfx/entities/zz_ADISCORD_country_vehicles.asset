@@ -7367,12 +7367,20 @@ entity = { clone = "ADISCORD_WRK_cas_entity" name = "ROM_ADISCORD_vtol_airframe_
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "ROM_ADISCORD_drone_airframe_2183_entity" }
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "ROM_ADISCORD_attack_airframe_2170_entity" }
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "ROM_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "ROM_light_plane_entity" }
+entity = {
+	clone = "ADISCORD_WRK_early_fighter_entity"
+	name = "ROM_light_plane_entity"
+	version = 1
+}
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "ROM_light_plane_0_entity" }
 entity = { clone = "ADISCORD_WRK_fighter_entity" name = "ROM_light_plane_1_entity" }
 entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "ROM_light_plane_2_entity" }
 entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "ROM_light_plane_3_entity" }
-entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "ROM_medium_plane_entity" }
+entity = {
+	clone = "ADISCORD_WRK_early_cas_entity"
+	name = "ROM_medium_plane_entity"
+	version = 1
+}
 entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "ROM_medium_plane_0_entity" }
 entity = { clone = "ADISCORD_WRK_cas_entity" name = "ROM_medium_plane_1_entity" }
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "ROM_medium_plane_2_entity" }

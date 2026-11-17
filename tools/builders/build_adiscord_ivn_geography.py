@@ -163,6 +163,7 @@ RIVER_SHORE_CLEARANCE = 3.0
 RIVER_SOURCE_PALETTE = 0
 RIVER_SEA_PALETTE = 254
 RIVER_LAND_PALETTE = 255
+RIVER_BMP_HEADER_SIZE = 54
 UNIFORM_TERRAIN_PALETTES = {
     "plains": 0,
     "forest": 4,
@@ -2657,7 +2658,11 @@ def validate(outputs: GeographyOutputs | None = None) -> list[str]:
         )
     if differences:
         issues.append(f"map/trees.bmp: {differences} northern tree cells drifted")
-    with Image.open(BytesIO(RIVERS_PATH.read_bytes())) as current:
+    river_data = RIVERS_PATH.read_bytes()
+    river_header = river_data[:RIVER_BMP_HEADER_SIZE]
+    if river_header != native_river_bmp(river_header):
+        issues.append("map/rivers.bmp: the full palette must use implicit BMP colour counts")
+    with Image.open(BytesIO(river_data)) as current:
         if current.getpalette() != outputs.rivers.getpalette():
             issues.append("map/rivers.bmp: palette bytes drifted")
         differences = sum(
@@ -2707,11 +2712,29 @@ def validate(outputs: GeographyOutputs | None = None) -> list[str]:
     return issues
 
 
+def native_river_bmp(data: bytes) -> bytes:
+    """Use the river loader's implicit 256-colour table in a BMP or its header."""
+    if (
+        len(data) < RIVER_BMP_HEADER_SIZE
+        or data[:2] != b"BM"
+        or int.from_bytes(data[28:30], "little") != 8
+        or int.from_bytes(data[10:14], "little") < RIVER_BMP_HEADER_SIZE + 256 * 4
+    ):
+        raise ValueError("rivers.bmp requires an 8-bit bitmap with a full palette")
+    if data[46:54] == bytes(8):
+        return data
+    return data[:46] + bytes(8) + data[54:]
+
+
 def atomic_save_bmp(image: Image.Image, path: Path) -> None:
     temporary = path.with_suffix(".bmp.tmp")
     try:
         image.save(temporary, format="BMP")
         with temporary.open("r+b") as generated:
+            if path == RIVERS_PATH:
+                header = native_river_bmp(generated.read(RIVER_BMP_HEADER_SIZE))
+                generated.seek(0)
+                generated.write(header)
             generated.flush()
             os.fsync(generated.fileno())
         os.replace(temporary, path)

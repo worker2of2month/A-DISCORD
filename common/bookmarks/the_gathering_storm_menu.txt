@@ -9,6 +9,11 @@ bookmarks = {
 		default_country = "STP"
 		default = no
 
+		"STP" = {
+			history = "STP_BOOKMARK_DESC"
+			ideology = hedonism
+		}
+
 		effect = {
 			randomize_weather = 22345
 		}

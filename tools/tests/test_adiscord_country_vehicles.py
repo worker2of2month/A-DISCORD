@@ -279,9 +279,19 @@ class SharedAircraftTests(unittest.TestCase):
         return {
             name: parent
             for parent, name in re.findall(
-                r'entity\s*=\s*\{\s*clone\s*=\s*"([^"]+)"\s*name\s*=\s*"([^"]+)"\s*\}', text
+                r'entity\s*=\s*\{\s*clone\s*=\s*"([^"]+)"\s*name\s*=\s*"([^"]+)"'
+                r'(?:\s+version\s*=\s*\d+)?\s*\}', text
             )
         }
+
+    def test_romel_tierless_aircraft_override_the_integrated_models(self):
+        text = (ROOT / "gfx/entities/zz_ADISCORD_country_vehicles.asset").read_text()
+        routes = self.routes()
+        for sprite, role in (("light_plane", "fighter"), ("medium_plane", "cas")):
+            name = f"ROM_{sprite}_entity"
+            with self.subTest(name=name):
+                self.assertEqual(routes[name], f"ADISCORD_WRK_early_{role}_entity")
+                self.assertRegex(text, rf'name\s*=\s*"{name}"\s+version\s*=\s*1\s*\}}')
 
     def test_default_and_regional_families_cover_all_visual_levels(self):
         routes = self.routes()

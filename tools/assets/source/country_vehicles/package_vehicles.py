@@ -214,6 +214,15 @@ def country_families():
 
 
 def alias(parent, name):
+    # Death or Dishonor registers the tierless ROM aircraft at version zero.
+    if name in ("ROM_light_plane_entity", "ROM_medium_plane_entity"):
+        return (
+            'entity = {\n'
+            f'\tclone = "{parent}"\n'
+            f'\tname = "{name}"\n'
+            '\tversion = 1\n'
+            '}\n'
+        )
     return f'entity = {{ clone = "{parent}" name = "{name}" }}\n'
 
 

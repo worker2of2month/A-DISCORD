@@ -14,6 +14,8 @@ recruit_character = RUS_Pavel_Zorin
 recruit_character = RUS_Mikhail_Rakitin
 recruit_character = RUS_Viktor_Belov
 recruit_character = RUS_Aleksei_Tumanov
+recruit_character = RUS_Gleb_Korneev
+recruit_character = RUS_Tagir_Mansurov
 
 ####### Basic shit
 

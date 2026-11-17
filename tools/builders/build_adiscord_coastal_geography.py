@@ -17,7 +17,7 @@ import numpy as np
 from PIL import Image
 from scipy.ndimage import distance_transform_edt, gaussian_filter
 
-from tools.builders.build_adiscord_ivn_geography import normal_from_height
+from tools.builders.build_adiscord_ivn_geography import native_river_bmp, normal_from_height
 from tools.builders.build_adiscord_new_states import SOUTHERN_CITIES, SOUTHERN_CITY_POINTS
 from tools.lib.city_terrains import CITY_TERRAINS, NATIONAL_CITY_TERRAIN
 from tools.lib.coastal_clearance import (
@@ -831,7 +831,8 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
                         if kind == "mountain":
                             pixels[province_mask & (mountain_heightmap >= 180)] = 11
                             pixels[province_mask & (mountain_heightmap >= 205)] = 16
-            outputs[path] = bmp_bytes(source, pixels, b"" if converted else original)
+            encoded = bmp_bytes(source, pixels, b"" if converted else original)
+            outputs[path] = native_river_bmp(encoded) if name == "rivers" else encoded
     normal_path = Path("map/world_normal.bmp")
     original = (root / normal_path).read_bytes()
     with Image.open(BytesIO(original)) as source:

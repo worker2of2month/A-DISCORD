@@ -53,14 +53,23 @@ focus_tree = {
 
 	# SHL_cauldron_repair читает эффект общего котла при расчёте обязательства.
 
-	# Скважины остаются решением SHL_artesian_wells с его сроком; фокус лишь
-	# обнуляет цену. Спор о воде закрывается один раз, поэтому цена действует
-	# на единственное бурение.
+	# Пока спор о кяризах открыт, скважины остаются решением SHL_artesian_wells
+	# с его сроком; фокус лишь обнуляет цену единственного бурения. Закрытый
+	# или невозможный спор не открывает решение: тогда бригады готовят смены
+	# трёх печей у кяризов, и SHL_furnace_training постоянно снижает их износ.
+	# Ещё не начавшийся спор с Кейзаном ждёт своего открытия. Обучение смен
+	# расходует бесплатное бурение (SHL_free_well_used), и спор, открытый
+	# позже, не даёт второго результата.
 
 	# ----- Консолидация Юга: советы за рубежом -----
 
 	# Готовит подполье раньше большой поставки: переданные винтовки и связь
 	# с Вебером читает ADISCORD_south_raise_oil_uprising через SHL_weber_contact.
+
+	# Цена равна поставке подполью в ADISCORD_south_raise_oil_uprising: резерв
+	# одного корпуса, посильный при стартовом запасе и своей линии винтовок.
+	# Без Светлогорья поднимать некого, а начавшаяся или законченная война
+	# закрывает поставку; обход открывает финал курса в обоих случаях.
 
 	# ----- Война за Юг: нефтяное восстание -----
 
@@ -162,7 +171,9 @@ focus_tree = {
 	# ----- Консолидация Юга: престол и гербы -----
 
 	# Брак с Кадиром: союзнику - конвои, отказавшему престолу - повторное предложение.
-	# Обход читается в скоупе цели: престол исчез, воюет с нами или война за Юг уже идёт.
+	# Обход читается в скоупе цели: престол исчез, воюет с нами, война за Юг уже
+	# идёт или закончилась. Отложенный сюжет Светлогорья задерживает только ответ
+	# престола внутри ADISCORD_south_offer_alliance, а не сам фокус.
 
 	# Дух обещанных ленов ставится до войны; ADISCORD_south_add_path_spirit не
 	# дублирует его, ADISCORD_south_remove_path_spirit снимает на любом исходе.
@@ -436,6 +447,10 @@ shared_focus = {
 				remove_ideas = SHL_external_freight
 			}
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 5 producer = SHL }
+			if = {
+				limit = { hidden_trigger = { has_country_flag = SHL_transport_dispute } }
+				custom_effect_tooltip = SHL_own_transport_dispute_tt
+			}
 			hidden_effect = { clr_country_flag = SHL_transport_dispute }
 			699 = {
 				if = {
@@ -591,6 +606,10 @@ shared_focus = {
 		completion_reward = {
 			unlock_decision_tooltip = SHL_planned_supply
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 5 producer = SHL }
+			if = {
+				limit = { hidden_trigger = { has_country_flag = SHL_supplier_premium } }
+				custom_effect_tooltip = SHL_houses_railway_premium_tt
+			}
 			hidden_effect = { clr_country_flag = SHL_supplier_premium }
 			288 = {
 				if = {
@@ -640,6 +659,10 @@ shared_focus = {
 		completion_reward = {
 			ADISCORD_reform_cultural_development = yes
 			unlock_decision_tooltip = SHL_training_furnace
+			if = {
+				limit = { hidden_trigger = { has_country_flag = SHL_master_dispute } }
+				custom_effect_tooltip = SHL_school_of_masters_dispute_tt
+			}
 			hidden_effect = { clr_country_flag = SHL_master_dispute }
 			hidden_effect = { country_event = { id = ADISCORD_shl_life.2 hours = 6 } }
 		}
@@ -820,17 +843,24 @@ shared_focus = {
 			SHL_country_operable = yes
 		}
 		cancel_if_invalid = yes
+		# A full district receives the slot its smelter quarter needs.
 		completion_reward = {
 			288 = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = {
-							building = industrial_complex
-							size = 1
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = industrial_complex
 						level = 1
@@ -842,12 +872,18 @@ shared_focus = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = {
-							building = industrial_complex
-							size = 1
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = industrial_complex
 						level = 1
@@ -1426,17 +1462,24 @@ shared_focus = {
 			SHL_country_operable = yes
 		}
 		cancel_if_invalid = yes
+		# A full city receives the slot its evacuated arsenal needs.
 		completion_reward = {
 			699 = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = {
-							building = arms_factory
-							size = 1
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = arms_factory
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = arms_factory
 						level = 1
@@ -1448,12 +1491,18 @@ shared_focus = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = {
-							building = arms_factory
-							size = 1
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = arms_factory
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = arms_factory
 						level = 1
@@ -2533,14 +2582,51 @@ shared_focus = {
 			SHL_country_operable = yes
 			custom_trigger_tooltip = {
 				tooltip = SHL_k_workers_wells_available_tt
-				has_completed_focus = SHL_water_question
-				check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+				OR = {
+					AND = {
+						has_completed_focus = SHL_water_question
+						check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+					}
+					check_variable = { var = SHL_water_crisis value = 2 compare = greater_than_or_equals }
+					AND = {
+						check_variable = { var = SHL_water_crisis value = 0 compare = equals }
+						SHL_qanat_counterpart = no
+					}
+				}
 			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = SHL_artesian_wells
-			custom_effect_tooltip = SHL_k_workers_wells_tt
+			if = {
+				limit = { check_variable = { var = SHL_water_crisis value = 1 compare = equals } }
+				unlock_decision_tooltip = SHL_artesian_wells
+				custom_effect_tooltip = SHL_k_workers_wells_tt
+			}
+			else = {
+				custom_effect_tooltip = SHL_k_workers_wells_settled_tt
+				hidden_effect = {
+					set_country_flag = SHL_free_well_used
+					287 = {
+						if = {
+							limit = { is_owned_by = SHL }
+							SHL_train_site = yes
+						}
+					}
+					288 = {
+						if = {
+							limit = { is_owned_by = SHL }
+							SHL_train_site = yes
+						}
+					}
+					289 = {
+						if = {
+							limit = { is_owned_by = SHL }
+							SHL_train_site = yes
+						}
+					}
+					SHL_refresh_furnaces = yes
+				}
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -2586,12 +2672,18 @@ shared_focus = {
 			focus = SHL_commune_of_fire
 		}
 		bypass = {
-			MZR = { ADISCORD_south_campaign_target_settled = yes }
-			GLP = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					MZR = { ADISCORD_south_campaign_target_settled = yes }
+					GLP = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2617,6 +2709,7 @@ shared_focus = {
 		bypass = {
 			OR = {
 				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
 				AND = {
 					MZR = { ADISCORD_south_campaign_target_settled = yes }
 					GLP = { ADISCORD_south_campaign_target_settled = yes }
@@ -2626,6 +2719,7 @@ shared_focus = {
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			NOT = { has_active_mission = SHL_cons_councils }
 		}
 		cancel_if_invalid = yes
@@ -2647,11 +2741,16 @@ shared_focus = {
 			focus = SHL_south_oil_underground
 		}
 		bypass = {
-			has_global_flag = ADISCORD_south_final_started
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+				NOT = { NAM = { exists = yes } }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			NOT = { has_equipment = { infantry_equipment < 1500 } }
 			NAM = { exists = yes }
 		}
@@ -2681,17 +2780,25 @@ shared_focus = {
 		prerequisite = {
 			focus = SHL_south_councils_abroad
 		}
+		bypass = {
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+				NOT = { NAM = { exists = yes } }
+			}
+		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
-			NOT = { has_equipment = { infantry_equipment < 27000 } }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
+			NOT = { has_equipment = { infantry_equipment < 9000 } }
 			NAM = { exists = yes }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = -27000
+				amount = -9000
 			}
 			custom_effect_tooltip = SHL_south_oil_underground_tt
 			hidden_effect = { set_country_flag = ADISCORD_south_underground_armed }
@@ -2710,11 +2817,15 @@ shared_focus = {
 			focus = SHL_k_councils_term
 		}
 		bypass = {
-			has_global_flag = ADISCORD_south_final_started
+			OR = {
+				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2848,37 +2959,38 @@ shared_focus = {
 			}
 		}
 		cancel_if_invalid = yes
+		# Хазар принадлежит Шахрабаду по условию фокуса; занятому городу
+		# коммуна добавляет недостающие места, поэтому обе фабрики строятся всегда.
 		completion_reward = {
 			699 = {
 				if = {
 					limit = {
-						is_owned_by = SHL
-						free_building_slots = {
-							building = industrial_complex
-							size = 2
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 1
+								include_locked = no
+							}
 						}
 					}
-					add_building_construction = {
-						type = industrial_complex
-						level = 2
-						instant_build = yes
-					}
+					add_extra_state_shared_building_slots = 1
 				}
-				else_if = {
+				if = {
 					limit = {
-						is_owned_by = SHL
-						free_building_slots = {
-							building = industrial_complex
-							size = 1
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 2
+								include_locked = no
+							}
 						}
 					}
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
-					}
+					add_extra_state_shared_building_slots = 1
+				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+					instant_build = yes
 				}
 			}
 		}
@@ -3759,9 +3871,13 @@ shared_focus = {
 		prerequisite = {
 			focus = SHL_conclave_of_ten
 		}
+		bypass = {
+			has_global_flag = ADISCORD_south_final_resolved
+		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 		}
 		cancel_if_invalid = yes
@@ -3799,12 +3915,18 @@ shared_focus = {
 			focus = SHL_south_debt_network
 		}
 		bypass = {
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -3827,12 +3949,18 @@ shared_focus = {
 			focus = SHL_south_debt_network
 		}
 		bypass = {
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -3857,11 +3985,15 @@ shared_focus = {
 			focus = SHL_south_trade_protectorates
 		}
 		bypass = {
-			KDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				KDR = { ADISCORD_south_campaign_target_settled = yes }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -3891,6 +4023,7 @@ shared_focus = {
 				NOT = { has_country_flag = SHL_veyr_partner }
 				GLP = { ADISCORD_south_campaign_target_settled = yes }
 				has_war_with = GLP
+				has_global_flag = ADISCORD_south_final_resolved
 			}
 		}
 		available = {
@@ -3904,6 +4037,7 @@ shared_focus = {
 				}
 			}
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -4054,25 +4188,43 @@ shared_focus = {
 			}
 		}
 		cancel_if_invalid = yes
+		# Хазар удерживается по условию фокуса; биржа выкупает недостающие места
+		# под обе фабрики, а сборы с южных сделок идут в цикл печей.
 		completion_reward = {
-			if = {
-				limit = {
-					699 = {
-						is_owned_by = SHL
-						is_controlled_by = SHL
-						free_building_slots = {
-							building = industrial_complex
-							size > 1
-							include_locked = no
+			699 = {
+				if = {
+					limit = {
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
 				}
-				699 = {
-					add_building_construction = {
-						type = industrial_complex
-						level = 2
+				if = {
+					limit = {
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 2
+								include_locked = no
+							}
+						}
 					}
+					add_extra_state_shared_building_slots = 1
 				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+				}
+			}
+			custom_effect_tooltip = SHL_cycle_income_plus_12_tt
+			hidden_effect = {
+				set_temp_variable = { var = SHL_income_delta value = 12 }
+				SHL_add_cycle_income = yes
 			}
 		}
 		ai_will_do = { base = 50 }
@@ -4517,6 +4669,8 @@ shared_focus = {
 		completion_reward = {
 			unlock_decision_tooltip = SHL_council_election
 			custom_effect_tooltip = SHL_c_regular_elections_tt
+			# Первые выборы начинаются здесь; каждый подсчёт назначает следующие.
+			hidden_effect = { SHL_start_council_election = yes }
 			add_political_power = 50
 			add_stability = 0.05
 		}
@@ -4794,11 +4948,24 @@ shared_focus = {
 			SHL_country_operable = yes
 		}
 		cancel_if_invalid = yes
+		# Охлаждение печей и цистерны кварталов не зависят от решения о скважинах;
+		# скидка на него показана, только пока спор о кяризах держит решение открытым.
 		completion_reward = {
-			custom_effect_tooltip = SHL_c_water_works_tt
+			add_stability = 0.05
+			custom_effect_tooltip = SHL_repair_without_extinction_tt
+			custom_effect_tooltip = SHL_c_water_works_quarters_tt
+			if = {
+				limit = {
+					has_completed_focus = SHL_water_question
+					check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+				}
+				custom_effect_tooltip = SHL_c_water_works_tt
+			}
 			hidden_effect = {
-				subtract_from_variable = { var = SHL_unrest value = 5 }
+				subtract_from_variable = { var = SHL_unrest value = 10 }
+				add_to_variable = { var = SHL_city_support value = 10 }
 				SHL_clamp_tensions = yes
+				SHL_overhaul_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -4821,13 +4988,27 @@ shared_focus = {
 			SHL_country_operable = yes
 		}
 		cancel_if_invalid = yes
+		# Морской доход и суда не зависят от решения о гавани; скидка на него
+		# показана, только пока пошлина Вейра держит решение открытым.
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = convoy_1
-				amount = 10
+				amount = 20
 				producer = SHL
 			}
-			custom_effect_tooltip = SHL_c_harbour_works_tt
+			custom_effect_tooltip = SHL_cycle_income_plus_10_tt
+			if = {
+				limit = {
+					has_completed_focus = SHL_veyr_duties
+					check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+				}
+				custom_effect_tooltip = SHL_c_harbour_works_tt
+			}
+			hidden_effect = {
+				set_temp_variable = { var = SHL_income_delta value = 10 }
+				SHL_add_cycle_income = yes
+				SHL_refresh_programme_prices = yes
+			}
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -4889,13 +5070,19 @@ shared_focus = {
 			focus = SHL_southern_compact
 		}
 		bypass = {
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
-			MZR = { ADISCORD_south_campaign_target_settled = yes }
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+					MZR = { ADISCORD_south_campaign_target_settled = yes }
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -4919,9 +5106,13 @@ shared_focus = {
 		prerequisite = {
 			focus = SHL_south_wells_charters
 		}
+		bypass = {
+			has_global_flag = ADISCORD_south_final_resolved
+		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			NOT = { has_manpower < 6000 }
 			699 = {
 				is_owned_by = SHL
@@ -4948,11 +5139,15 @@ shared_focus = {
 			focus = SHL_south_compact_staff
 		}
 		bypass = {
-			KDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				KDR = { ADISCORD_south_campaign_target_settled = yes }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -4976,13 +5171,19 @@ shared_focus = {
 			focus = SHL_south_wells_charters
 		}
 		bypass = {
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
-			MZR = { ADISCORD_south_campaign_target_settled = yes }
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+					MZR = { ADISCORD_south_campaign_target_settled = yes }
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -5044,17 +5245,21 @@ shared_focus = {
 		}
 		bypass = {
 			OR = {
-				NOT = { MZR = { exists = yes } }
-				is_in_faction_with = MZR
-				has_war_with = MZR
-				MZR = { ADISCORD_south_campaign_target_settled = yes }
+				NOT = { KYZ = { exists = yes } }
+				is_in_faction_with = KYZ
+				has_war_with = KYZ
+				KYZ = { is_subject = yes }
+				KYZ = { ADISCORD_south_campaign_target_settled = yes }
+				has_global_flag = ADISCORD_south_final_resolved
 			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
-			MZR = {
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
+			KYZ = {
 				exists = yes
+				is_subject = no
 				is_in_faction = no
 				NOT = { has_war_with = SHL }
 			}
@@ -5320,8 +5525,12 @@ shared_focus = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = { building = arms_factory size = 1 include_locked = no }
+						NOT = { free_building_slots = { building = arms_factory size = 1 include_locked = no } }
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = arms_factory
 						level = 1
@@ -5741,8 +5950,12 @@ shared_focus = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = { building = arms_factory size = 1 include_locked = no }
+						NOT = { free_building_slots = { building = arms_factory size = 1 include_locked = no } }
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = arms_factory
 						level = 1
@@ -5786,8 +5999,12 @@ shared_focus = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = { building = industrial_complex size = 1 include_locked = no }
+						NOT = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = industrial_complex
 						level = 1
@@ -5977,8 +6194,12 @@ shared_focus = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = { building = fuel_silo size = 1 include_locked = no }
+						NOT = { free_building_slots = { building = fuel_silo size = 1 include_locked = no } }
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = fuel_silo
 						level = 1
@@ -6129,12 +6350,18 @@ shared_focus = {
 			focus = SHL_iron_shahrabad
 		}
 		bypass = {
-			KYZ = { ADISCORD_south_campaign_target_settled = yes }
-			GLP = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					KYZ = { ADISCORD_south_campaign_target_settled = yes }
+					GLP = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -6159,11 +6386,15 @@ shared_focus = {
 			focus = SHL_south_water_and_sea
 		}
 		bypass = {
-			MZR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				MZR = { ADISCORD_south_campaign_target_settled = yes }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -6187,12 +6418,18 @@ shared_focus = {
 			focus = SHL_south_last_ration
 		}
 		bypass = {
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -6217,12 +6454,18 @@ shared_focus = {
 			focus = SHL_south_water_and_sea
 		}
 		bypass = {
-			KYZ = { ADISCORD_south_campaign_target_settled = yes }
-			GLP = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					KYZ = { ADISCORD_south_campaign_target_settled = yes }
+					GLP = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -7251,11 +7494,15 @@ shared_focus = {
 			focus = SHL_r_regency_charter
 		}
 		bypass = {
-			KDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				KDR = { ADISCORD_south_campaign_target_settled = yes }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -7278,12 +7525,18 @@ shared_focus = {
 			focus = SHL_south_throne_and_crests
 		}
 		bypass = {
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -7313,16 +7566,14 @@ shared_focus = {
 					exists = no
 					has_war_with = SHL
 					has_global_flag = ADISCORD_south_final_started
+					has_global_flag = ADISCORD_south_final_resolved
 				}
 			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
-			custom_trigger_tooltip = {
-				tooltip = ADISCORD_south_story_ready_tt
-				ADISCORD_south_nam_story_clear = yes
-			}
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			KDR = {
 				exists = yes
 				NOT = { has_war_with = SHL }
@@ -7365,6 +7616,7 @@ shared_focus = {
 		bypass = {
 			OR = {
 				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
 				AND = {
 					SDR = { ADISCORD_south_campaign_target_settled = yes }
 					RHM = { ADISCORD_south_campaign_target_settled = yes }
@@ -7374,6 +7626,7 @@ shared_focus = {
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -7397,11 +7650,15 @@ shared_focus = {
 			focus = SHL_south_toll_debtors
 		}
 		bypass = {
-			GLP = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				GLP = { ADISCORD_south_campaign_target_settled = yes }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -7428,11 +7685,13 @@ shared_focus = {
 			OR = {
 				has_idea = ADISCORD_south_shl_promised_fiefs
 				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
 			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {

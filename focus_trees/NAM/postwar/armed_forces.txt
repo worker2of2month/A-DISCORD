@@ -1,8 +1,7 @@
 # @section armed_forces
 	focus = {
 		id = NAM_veterans_return
-		relative_position_id = NAM_recognition
-		x = 16
+		x = 53
 		y = 1
 		icon = GFX_focus_NAM_oilfield_militia
 		cost = 3
@@ -33,9 +32,9 @@
 
 	focus = {
 		id = NAM_svetlogorsk_shipyards
-		relative_position_id = NAM_pw_naval_review
-		x = 1
-		y = 1
+		relative_position_id = NAM_veterans_return
+		x = 10
+		y = 2
 		icon = GFX_focus_NAM_naval_construction
 		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
@@ -132,9 +131,9 @@
 
 	focus = {
 		id = NAM_pw_power_reserve
-		relative_position_id = NAM_pw_air_review
-		x = 5
-		y = 2
+		relative_position_id = NAM_veterans_return
+		x = 9
+		y = 3
 		icon = GFX_focus_RUS_bunker_power_school
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }

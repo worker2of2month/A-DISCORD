@@ -2811,7 +2811,9 @@ class CampaignSetupSkinTests(unittest.TestCase):
             self.assertEqual(_direct_scalar(bookmark, 'date'), '2160.1.1.12')
             self.assertEqual(_direct_scalar(bookmark, 'picture'), 'GFX_select_date_1936')
         self.assertEqual([_direct_scalar(b, 'default') for b in bookmarks], ['yes', 'no'])
-        self.assertFalse(any(re.fullmatch(r'[A-Z]{3}|---', e.key) for e in bookmarks[1]))
+        for bookmark in bookmarks:
+            default_tag = _direct_scalar(bookmark, 'default_country')
+            self.assertTrue(_unique_direct_block(bookmark, default_tag))
 
         gui = (ROOT / 'interface/frontendgamesetupview.gui').read_text(encoding='utf-8')
         window = gui_node_body(gui, 'gamesetup_scenario_window')
@@ -2903,7 +2905,7 @@ class CampaignSetupSkinTests(unittest.TestCase):
                     self.assertRegex(title, r'^§Y[^§\\\n]+$')
                     self.assertEqual(separator, '§!')
                     gap = r'\n' * 6
-                    banner_line = gap + r'\£' + sprite + gap
+                    banner_line = gap + '£' + sprite + gap
                     self.assertTrue(content.startswith(banner_line), name)
                     self.assertRegex(content[len(banner_line):], r'^§[RO]\\"[^§]+\\"§!\\n§g- [^§]+§!\\n\\n\S')
                     self.assertFalse(teaser.rstrip().endswith(r'\n'), name)
@@ -2953,7 +2955,9 @@ class CampaignSetupSkinTests(unittest.TestCase):
         info = gui_node_body(gallery, 'info')
         spirit = gui_node_body(gallery, 'spirit')
         value = gui_node_body(info, 'government')
-        self.assertIn('ADISCORD_BOOKMARK_SUBIDEOLOGY', gui_node_body(info, 'government_label'))
+        label = gui_node_body(info, 'government_label')
+        self.assertEqual(_direct_scalar(parse(label), 'text'), 'GOVERNMENT')
+        self.assertEqual(_gui_position(label)[1], _gui_position(value)[1])
         self.assertNotIn('text =', value)
         px, py = _gui_position(gui_node_body(gallery, 'minor_country_leader'))
         ix, iy = _gui_position(info)
@@ -2962,8 +2966,17 @@ class CampaignSetupSkinTests(unittest.TestCase):
         vx, vy = _gui_position(value)
         self.assertGreaterEqual(min(ix + vx, sx + ex), px + 93)
         self.assertLessEqual(sx + ex + 75, ix + _gui_size(info)[0])
-        self.assertLessEqual(sy + ey + 75, iy + vy)
-        self.assertLess(iy + vy, py + 126)
+        self.assertLess(iy + vy + 18, py)
+        self.assertGreaterEqual(sy + ey, iy + vy + 18)
+        for file_name, window, height in (
+            ('frontendgamesetupview.gui', 'gamesetup_country_details', 20),
+            ('menubar.gui', 'endgame_dialog', 18),
+        ):
+            source = (ROOT / 'interface' / file_name).read_text(encoding='utf-8-sig')
+            details = gui_node_body(gui_node_body(source, window), 'info')
+            field = parse(gui_node_body(details, 'government'))
+            self.assertEqual(_direct_scalar(field, 'fixedsize'), 'yes')
+            self.assertEqual(int(_direct_scalar(field, 'maxHeight')), height)
         self.assertLessEqual(ix + vx + int(_direct_scalar(parse(value), 'maxWidth')), 325)
 
         start = _unique_direct_block(_unique_direct_block(parse(BOOKMARK.read_text()), 'bookmarks'), 'bookmark')
@@ -2984,9 +2997,14 @@ class CampaignSetupSkinTests(unittest.TestCase):
                     group = _direct_scalar(_unique_direct_block(start, tag), 'ideology')
                     subtype = spec['subideology']
                     profile = localisation_value(loc, f'{tag}_{group}_party_desc')
-                    self.assertEqual(re.findall(r'\$(\w+)\$', profile), [subtype, group + '_desc'])
-                    self.assertNotIn(r'\n', profile)
-                    self.assertIn('2160', profile)
+                    lines = profile.split(r'\n')
+                    self.assertEqual(lines[0], f'${group}_desc$')
+                    self.assertEqual(lines[-1], f'§Y${subtype}$§!')
+                    self.assertFalse(any(lines[1:-1]))
+                    subtype_y = iy + vy + 18 * (len(lines) - 1)
+                    self.assertGreaterEqual(subtype_y, sy + ey + 75)
+                    self.assertLessEqual(subtype_y + 36, py + 126)
+                    self.assertLessEqual(subtype_y + 36, iy + vy + int(_direct_scalar(parse(value), 'maxHeight')))
                     for key in (subtype, group + '_desc', f'{tag}_{group}_party'):
                         self.assertTrue(localisation_value(loc, key))
                     art = group + '_group' if subtype == group + '_ideology' else subtype
@@ -3088,7 +3106,8 @@ class CampaignSetupSkinTests(unittest.TestCase):
         for field in ('orientation', 'origo'):
             self.assertEqual(_direct_scalar(layer, field), 'center_up')
         self.assertEqual(_direct_scalar(layer, 'clipping'), 'yes')
-        self.assertEqual(_direct_scalar(layer, 'alwaystransparent'), 'yes')
+        for container in (layer, economy_validator.parse_clausewitz(gui_node_body(window, 'gallery_case'))):
+            self.assertFalse(_direct_scalar(container, 'alwaystransparent'))
         clip_surface = _unique_direct_block(layer, 'background')
         self.assertEqual(_direct_scalar(clip_surface, 'quadTextureSprite'), 'GFX_tiled_window_transparent')
         layer_size = _unique_direct_block(layer, 'size')

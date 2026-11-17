@@ -1829,13 +1829,13 @@ RUS_coup_install_regime = {
 				ruling_party = technocracy
 				elections_allowed = no
 			}
-			if = {
-				limit = { NOT = { has_character = RUS_Gleb_Korneev } }
-				recruit_character = RUS_Gleb_Korneev
-			}
-			promote_character = {
+			add_country_leader_role = {
 				character = RUS_Gleb_Korneev
-				ideology = technocracy_ideology
+				promote_leader = yes
+				country_leader = {
+					ideology = technocracy_ideology
+					expire = "2200.1.1.1"
+				}
 			}
 			set_cosmetic_tag = RUS_restoration_state
 		}
@@ -1844,13 +1844,13 @@ RUS_coup_install_regime = {
 				ruling_party = chauvinism
 				elections_allowed = no
 			}
-			if = {
-				limit = { NOT = { has_character = RUS_Tagir_Mansurov } }
-				recruit_character = RUS_Tagir_Mansurov
-			}
-			promote_character = {
+			add_country_leader_role = {
 				character = RUS_Tagir_Mansurov
-				ideology = chauvinism_ideology
+				promote_leader = yes
+				country_leader = {
+					ideology = chauvinism_ideology
+					expire = "2200.1.1.1"
+				}
 			}
 			set_cosmetic_tag = RUS_black_banner_empire
 		}

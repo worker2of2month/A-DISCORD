@@ -2244,15 +2244,7 @@ shared_focus = {
 			custom_effect_tooltip = SHL_r_hire_armies_tt
 			hidden_effect = {
 				SHL_ensure_levy_template = yes
-				699 = {
-					if = {
-						limit = {
-							is_owned_by = SHL
-							is_controlled_by = SHL
-						}
-						SHL_create_levy = yes
-					}
-				}
+				SHL_raise_reward_levy = yes
 			}
 		}
 		ai_will_do = { base = 150 }

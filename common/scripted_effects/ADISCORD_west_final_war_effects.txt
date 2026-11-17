@@ -855,213 +855,434 @@ ADISCORD_west_settle_member = {
 }
 
 # A named government's mandate tag also records which identity to restore at liberation.
-ADISCORD_west_named_mandate = {
-	if = {
-		limit = {
-			OR = {
-				has_cosmetic_tag = $IDENTITY$
-				has_cosmetic_tag = $BANNER$
-			}
-		}
-		if = {
-			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
-			set_cosmetic_tag = $BANNER$
-		}
-		else = { set_cosmetic_tag = $IDENTITY$ }
-		set_temp_variable = { ADISCORD_west_named_banner = 1 }
-	}
-}
-
-ADISCORD_west_base_mandate = {
-	if = {
-		limit = { has_country_flag = ADISCORD_west_treaty_mandate }
-		set_cosmetic_tag = $BANNER$
-	}
-	else_if = {
-		limit = { has_cosmetic_tag = $BANNER$ }
-		drop_cosmetic_tag = yes
-	}
-}
-
-ADISCORD_west_regional_mandate = {
-	if = {
-		limit = { has_country_flag = ADISCORD_west_treaty_mandate }
-		if = {
-			limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
-			set_cosmetic_tag = $WRK_BANNER$
-		}
-		else = { set_cosmetic_tag = $IVN_BANNER$ }
-	}
-	else_if = {
-		limit = {
-			OR = {
-				has_cosmetic_tag = $WRK_BANNER$
-				has_cosmetic_tag = $IVN_BANNER$
-			}
-		}
-		drop_cosmetic_tag = yes
-	}
-}
-
 ADISCORD_west_update_mandate_banner = {
-	set_temp_variable = { ADISCORD_west_named_banner = 0 }
 	if = {
 		limit = { tag = IVN }
-		ADISCORD_west_named_mandate = {
-			IDENTITY = IVN_cw_committee
-			BANNER = IVN_cw_committee_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = IVN_unified_legion
-			BANNER = IVN_unified_legion_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = IVN_unified_directory
-			BANNER = IVN_unified_directory_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = IVN_unified_communes
-			BANNER = IVN_unified_communes_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = IVN_unified_marches
-			BANNER = IVN_unified_marches_west_mandate
-		}
 		if = {
-			limit = { check_variable = { ADISCORD_west_named_banner = 0 } }
-			ADISCORD_west_base_mandate = { BANNER = IVN_west_mandate }
+			limit = {
+				OR = {
+					has_cosmetic_tag = IVN_cw_committee
+					has_cosmetic_tag = IVN_cw_committee_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = IVN_cw_committee_west_mandate
+			}
+			else = { set_cosmetic_tag = IVN_cw_committee }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = IVN_unified_legion
+					has_cosmetic_tag = IVN_unified_legion_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = IVN_unified_legion_west_mandate
+			}
+			else = { set_cosmetic_tag = IVN_unified_legion }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = IVN_unified_directory
+					has_cosmetic_tag = IVN_unified_directory_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = IVN_unified_directory_west_mandate
+			}
+			else = { set_cosmetic_tag = IVN_unified_directory }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = IVN_unified_communes
+					has_cosmetic_tag = IVN_unified_communes_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = IVN_unified_communes_west_mandate
+			}
+			else = { set_cosmetic_tag = IVN_unified_communes }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = IVN_unified_marches
+					has_cosmetic_tag = IVN_unified_marches_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = IVN_unified_marches_west_mandate
+			}
+			else = { set_cosmetic_tag = IVN_unified_marches }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			set_cosmetic_tag = IVN_west_mandate
+		}
+		else_if = {
+			limit = { has_cosmetic_tag = IVN_west_mandate }
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = event_target:ADISCORD_vorkerland_nation }
-		ADISCORD_west_named_mandate = {
-			IDENTITY = WRK_vorkerland_joint_government
-			BANNER = WRK_vorkerland_joint_government_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = VAD_vorkerland_restoration
-			BANNER = VAD_vorkerland_restoration_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = VAD_vorkerland_collegial_staff
-			BANNER = VAD_vorkerland_collegial_staff_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = VAD_vorkerland_staff_republic
-			BANNER = VAD_vorkerland_staff_republic_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = WRK_vorkerland_world_empire
-			BANNER = WRK_vorkerland_world_empire_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = WRK_vorkerland_emergency
-			BANNER = WRK_vorkerland_emergency_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = WRK_vorkerland_utilitarian_republic
-			BANNER = WRK_vorkerland_utilitarian_republic_west_mandate
-		}
-		ADISCORD_west_named_mandate = {
-			IDENTITY = WRK_vorkerland_technocracy
-			BANNER = WRK_vorkerland_technocracy_west_mandate
-		}
 		if = {
-			limit = { check_variable = { ADISCORD_west_named_banner = 0 } }
-			ADISCORD_west_base_mandate = { BANNER = WRK_west_mandate }
+			limit = {
+				OR = {
+					has_cosmetic_tag = WRK_vorkerland_joint_government
+					has_cosmetic_tag = WRK_vorkerland_joint_government_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = WRK_vorkerland_joint_government_west_mandate
+			}
+			else = { set_cosmetic_tag = WRK_vorkerland_joint_government }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = VAD_vorkerland_restoration
+					has_cosmetic_tag = VAD_vorkerland_restoration_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = VAD_vorkerland_restoration_west_mandate
+			}
+			else = { set_cosmetic_tag = VAD_vorkerland_restoration }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = VAD_vorkerland_collegial_staff
+					has_cosmetic_tag = VAD_vorkerland_collegial_staff_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = VAD_vorkerland_collegial_staff_west_mandate
+			}
+			else = { set_cosmetic_tag = VAD_vorkerland_collegial_staff }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = VAD_vorkerland_staff_republic
+					has_cosmetic_tag = VAD_vorkerland_staff_republic_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = VAD_vorkerland_staff_republic_west_mandate
+			}
+			else = { set_cosmetic_tag = VAD_vorkerland_staff_republic }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = WRK_vorkerland_world_empire
+					has_cosmetic_tag = WRK_vorkerland_world_empire_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = WRK_vorkerland_world_empire_west_mandate
+			}
+			else = { set_cosmetic_tag = WRK_vorkerland_world_empire }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = WRK_vorkerland_emergency
+					has_cosmetic_tag = WRK_vorkerland_emergency_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = WRK_vorkerland_emergency_west_mandate
+			}
+			else = { set_cosmetic_tag = WRK_vorkerland_emergency }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = WRK_vorkerland_utilitarian_republic
+					has_cosmetic_tag = WRK_vorkerland_utilitarian_republic_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = WRK_vorkerland_utilitarian_republic_west_mandate
+			}
+			else = { set_cosmetic_tag = WRK_vorkerland_utilitarian_republic }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = WRK_vorkerland_technocracy
+					has_cosmetic_tag = WRK_vorkerland_technocracy_west_mandate
+				}
+			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				set_cosmetic_tag = WRK_vorkerland_technocracy_west_mandate
+			}
+			else = { set_cosmetic_tag = WRK_vorkerland_technocracy }
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			set_cosmetic_tag = WRK_west_mandate
+		}
+		else_if = {
+			limit = { has_cosmetic_tag = WRK_west_mandate }
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = WIT }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = WIT_west_WRK_mandate
-			IVN_BANNER = WIT_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = WIT_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = WIT_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = WIT_west_WRK_mandate
+					has_cosmetic_tag = WIT_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = IIA }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = IIA_west_WRK_mandate
-			IVN_BANNER = IIA_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = IIA_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = IIA_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = IIA_west_WRK_mandate
+					has_cosmetic_tag = IIA_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = IBA }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = IBA_west_WRK_mandate
-			IVN_BANNER = IBA_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = IBA_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = IBA_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = IBA_west_WRK_mandate
+					has_cosmetic_tag = IBA_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = IBL }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = IBL_west_WRK_mandate
-			IVN_BANNER = IBL_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = IBL_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = IBL_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = IBL_west_WRK_mandate
+					has_cosmetic_tag = IBL_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = PWR }
 		if = {
-			limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
-			ADISCORD_west_named_mandate = {
-				IDENTITY = PWR_rimat_republic
-				BANNER = PWR_rimat_republic_west_WRK_mandate
+			limit = {
+				OR = {
+					has_cosmetic_tag = PWR_rimat_republic
+					has_cosmetic_tag = PWR_rimat_republic_west_WRK_mandate
+					has_cosmetic_tag = PWR_rimat_republic_west_IVN_mandate
+				}
 			}
+			if = {
+				limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+				if = {
+					limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+					set_cosmetic_tag = PWR_rimat_republic_west_WRK_mandate
+				}
+				else = { set_cosmetic_tag = PWR_rimat_republic_west_IVN_mandate }
+			}
+			else = { set_cosmetic_tag = PWR_rimat_republic }
 		}
-		else = {
-			ADISCORD_west_named_mandate = {
-				IDENTITY = PWR_rimat_republic
-				BANNER = PWR_rimat_republic_west_IVN_mandate
+		else_if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = PWR_west_WRK_mandate
 			}
+			else = { set_cosmetic_tag = PWR_west_IVN_mandate }
 		}
-		if = {
-			limit = { check_variable = { ADISCORD_west_named_banner = 0 } }
-			ADISCORD_west_regional_mandate = {
-				WRK_BANNER = PWR_west_WRK_mandate
-				IVN_BANNER = PWR_west_IVN_mandate
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = PWR_west_WRK_mandate
+					has_cosmetic_tag = PWR_west_IVN_mandate
+				}
 			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = PSD }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = PSD_west_WRK_mandate
-			IVN_BANNER = PSD_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = PSD_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = PSD_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = PSD_west_WRK_mandate
+					has_cosmetic_tag = PSD_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = ZAO }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = ZAO_west_WRK_mandate
-			IVN_BANNER = ZAO_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = ZAO_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = ZAO_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = ZAO_west_WRK_mandate
+					has_cosmetic_tag = ZAO_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = WPA }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = WPA_west_WRK_mandate
-			IVN_BANNER = WPA_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = WPA_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = WPA_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = WPA_west_WRK_mandate
+					has_cosmetic_tag = WPA_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = WPS }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = WPS_west_WRK_mandate
-			IVN_BANNER = WPS_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = WPS_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = WPS_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = WPS_west_WRK_mandate
+					has_cosmetic_tag = WPS_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = ROM }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = ROM_west_WRK_mandate
-			IVN_BANNER = ROM_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = ROM_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = ROM_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = ROM_west_WRK_mandate
+					has_cosmetic_tag = ROM_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 	else_if = {
 		limit = { tag = TRU }
-		ADISCORD_west_regional_mandate = {
-			WRK_BANNER = TRU_west_WRK_mandate
-			IVN_BANNER = TRU_west_IVN_mandate
+		if = {
+			limit = { has_country_flag = ADISCORD_west_treaty_mandate }
+			if = {
+				limit = { has_global_flag = ADISCORD_west_hegemon_WRK }
+				set_cosmetic_tag = TRU_west_WRK_mandate
+			}
+			else = { set_cosmetic_tag = TRU_west_IVN_mandate }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_cosmetic_tag = TRU_west_WRK_mandate
+					has_cosmetic_tag = TRU_west_IVN_mandate
+				}
+			}
+			drop_cosmetic_tag = yes
 		}
 	}
 }

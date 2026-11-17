@@ -278,6 +278,18 @@ class PartyRepresentationTests(unittest.TestCase):
                 self.assertFalse(any(row.key == "ADISCORD_ban_party" for row in walk(reward)))
 
         vorkerland = parsed(directory / "ADISCORD_vorkerland_effects.txt")
+        artels = "TVA_seat_independent_artels"
+        self.assertEqual(party_actions(block(vorkerland, artels)), [(admit, "token:anarchism")])
+        charter = rewards("ADISCORD_Vorkerland_tva.txt", "TVA_protocol_collegium_charter")
+        self.assertEqual(scalar(charter, artels), "yes")
+        events = parsed(ROOT / "events/ADISCORD_vorkerland_events.txt")
+        mandate_id = "ADISCORD_vorkerland_directorate_cw.5"
+        mandate, = (row.value for row in events if row.key == "country_event"
+                    and scalar(row.value, "id") == mandate_id)
+        seats = {scalar(option.value, "name"): any(entry.key == artels for entry in option.value)
+                 for option in mandate if option.key == "option"}
+        self.assertEqual(seats, {mandate_id + ".a": True, mandate_id + ".b": False, mandate_id + ".c": True})
+
         formed = block(block(block(vorkerland, "ADISCORD_vorkerland_form_joint_government"), "if"), "VAD")
         self.assertEqual(party_actions(formed), [(admit, "token:anarchism")])
         reunified = block(vorkerland, "ADISCORD_vorkerland_settle_unification_under_vad")

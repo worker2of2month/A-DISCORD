@@ -17,6 +17,22 @@ SOURCE = ROOT / "tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds"
 
 
 class CoastalColourmapTests(unittest.TestCase):
+    def test_river_bmp_uses_implicit_colour_counts_and_preserves_every_index(self) -> None:
+        with Image.open(ROOT / "map/rivers.bmp") as source:
+            river = source.crop((0, 0, 16, 16))
+        river.putdata(range(256))
+        encoded = BytesIO()
+        river.save(encoded, format="BMP")
+        original = encoded.getvalue()
+        result = geography.native_river_bmp(original)
+        self.assertEqual(result[:46], original[:46])
+        self.assertEqual(result[46:54], bytes(8))
+        self.assertEqual(result[54:], original[54:])
+        self.assertEqual(geography.native_river_bmp(result), result)
+        with Image.open(BytesIO(result)) as decoded:
+            self.assertEqual(decoded.getpalette(), river.getpalette())
+            self.assertEqual(decoded.tobytes(), bytes(range(256)))
+
     def test_runtime_preserves_base_except_island_blocks(self) -> None:
         definitions = {
             int(fields[0]): tuple(map(int, fields[1:4]))

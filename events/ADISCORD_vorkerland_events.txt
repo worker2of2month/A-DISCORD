@@ -8641,6 +8641,7 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_directorate_cw.5.a
+		TVA_seat_independent_artels = yes
 		ai_chance = { base = 40 }
 		add_power_balance_value = { id = TVA_bop value = 0.08 }
 		add_stability = 0.02
@@ -8656,6 +8657,7 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_directorate_cw.5.c
+		TVA_seat_independent_artels = yes
 		ai_chance = { base = 30 }
 		army_experience = 10
 		custom_effect_tooltip = TVA_protocol_legitimacy_plus2_tt

@@ -6173,8 +6173,15 @@ class RusCoupTests(unittest.TestCase):
         rows = list(walk(body))
         keys = [row.key for row in rows]
         self.assertIn("RUS_retire_current_ruler", keys)
-        promoted = {scalar(row.value, "character"): scalar(row.value, "ideology") for row in rows if row.key == "promote_character"}
+        roles = [row.value for row in rows if row.key == "add_country_leader_role"]
+        self.assertTrue(all(scalar(role, "promote_leader") == "yes" for role in roles))
+        promoted = {scalar(role, "character"): scalar(block(role, "country_leader"), "ideology") for role in roles}
         self.assertEqual(promoted, {"RUS_Gleb_Korneev": "technocracy_ideology", "RUS_Tagir_Mansurov": "chauvinism_ideology"})
+        self.assertNotIn("recruit_character", keys)
+        history = parse("history/countries/RUS - RusniaLand.txt")
+        recruited = [row.value for row in history if row.key == "recruit_character"]
+        for successor in promoted:
+            self.assertEqual(recruited.count(successor), 1)
         self.assertEqual({row.value for row in rows if row.key == "set_cosmetic_tag"}, {"RUS_restoration_state", "RUS_black_banner_empire"})
         guarded = [row.value for row in body if row.key == "if" and any(item.key == "remove_power_balance" for item in row.value)]
         self.assertEqual(scalar(block(block(guarded[0], "limit"), "has_power_balance"), "id"), "RUS_state_balance")
@@ -6185,8 +6192,8 @@ class RusCoupTests(unittest.TestCase):
         self.assertLessEqual({"RUS_suspicion", "RUS_suspicion_warning", "RUS_black_army_support", "RUS_scientists_support"}, cleared)
         self.assertIn("mark_focus_tree_layout_dirty", keys)
         characters = {row.key: row.value for row in block(parse("common/characters/RUS.txt"), "characters")}
-        for name, ideology in promoted.items():
-            self.assertEqual(scalar(block(characters[name], "country_leader"), "ideology"), ideology)
+        for name in promoted:
+            self.assertNotIn("country_leader", [row.key for row in characters[name]])
         cosmetic = {row.key for row in parse("common/countries/cosmetic.txt")}
         for tag in ("RUS_restoration_state", "RUS_black_banner_empire"):
             self.assertIn(tag, cosmetic)

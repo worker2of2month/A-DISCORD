@@ -575,7 +575,6 @@
  MODIFIER_AUTONOMY_GAIN_LL_TO_SUBJECT_FACTOR:0 "£autonomy_texticon  Прирост свободы от поставок ленд-лиза из метрополии"
  MODIFIER_AUTONOMY_GAIN_WARSCORE:0 "£autonomy_texticon  Прирост свободы от итога войны"
  MODIFIER_AUTONOMY_GAIN_WARSCORE_FACTOR:0 "£autonomy_texticon  Прирост свободы от итога войны"
- MODIFIER_RESEARCH_SHARING_PER_COUNTRY_BONUS:0 "Бонус за обмен технологиями"
  MODIFIER_RESEARCH_SHARING_PER_COUNTRY_BONUS_FACTOR:0 "Бонус за обмен технологиями"
  MODIFIER_CAN_MASTER_BUILD_FOR_US:0 "Метрополия может вести строительство на территории субъекта"
  MODIFIER_AUTONOMY_SUBJECT_GAIN:0 "£autonomy_texticon  Влияние метрополии"
