@@ -793,7 +793,7 @@ guiTypes = {
 
 		iconType = {
 			name = "minor_country_leader"
-			position = { x = 28 y = 438 }
+			position = { x = 28 y = 464 }
 			spriteType = "GFX_leader_unknown"
 			scale = 0.6
 			alwaystransparent = yes
@@ -801,7 +801,7 @@ guiTypes = {
 
 		iconType = {
 			name = "minor_portrait_overlay"
-			position = { x = 24 y = 433 }
+			position = { x = 24 y = 459 }
 			spriteType = "GFX_ADISCORD_setup_dossier_portrait"
 			alwaystransparent = yes
 		}
@@ -814,10 +814,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "leader_label"
-				position = { x = 4 y = 149 }
+				position = { x = 4 y = 176 }
 				font = "hoi_16mbs"
 				text = "LEADER"
-				maxWidth = 153
+				maxWidth = 110
 				maxHeight = 18
 				format = left
 				fixedsize = yes
@@ -826,10 +826,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "leader"
-				position = { x = 4 y = 166 }
+				position = { x = 115 y = 176 }
 				font = "hoi_18"
-				maxWidth = 153
-				maxHeight = 24
+				maxWidth = 178
+				maxHeight = 22
 				format = left
 				fixedsize = yes
 				alwaystransparent = yes
@@ -860,11 +860,11 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "government_label"
-				position = { x = 194 y = 19 }
+				position = { x = 4 y = 0 }
 				font = "hoi_16mbs"
-				text = "ADISCORD_BOOKMARK_SUBIDEOLOGY"
-				maxWidth = 107
-				maxHeight = 20
+				text = "GOVERNMENT"
+				maxWidth = 112
+				maxHeight = 18
 				format = left
 				fixedsize = yes
 				alwaystransparent = yes
@@ -872,21 +872,21 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "government"
-				position = { x = 116 y = 76 }
+				position = { x = 114 y = 0 }
 				font = "hoi_18"
-				maxWidth = 176
-				maxHeight = 64
-				format = left
+				maxWidth = 178
+				maxHeight = 141
+				format = centre
 				fixedsize = yes
 				alwaystransparent = yes
 			}
 
 			instantTextBoxType = {
 				name = "elections_label"
-				position = { x = 165 y = 149 }
+				position = { x = 4 y = 199 }
 				font = "hoi_16mbs"
 				text = "ELECTIONS"
-				maxWidth = 130
+				maxWidth = 110
 				maxHeight = 18
 				format = left
 				fixedsize = yes
@@ -895,10 +895,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "elections"
-				position = { x = 165 y = 166 }
+				position = { x = 115 y = 199 }
 				font = "hoi_18"
-				maxWidth = 130
-				maxHeight = 24
+				maxWidth = 178
+				maxHeight = 22
 				format = left
 				fixedsize = yes
 				alwaystransparent = yes
@@ -906,10 +906,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "party_label"
-				position = { x = 4 y = 193 }
+				position = { x = 4 y = 222 }
 				font = "hoi_16mbs"
 				text = "RULING_PARTY"
-				maxWidth = 286
+				maxWidth = 110
 				maxHeight = 18
 				format = left
 				fixedsize = yes
@@ -918,10 +918,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "party"
-				position = { x = 4 y = 212 }
+				position = { x = 115 y = 222 }
 				font = "hoi_18"
-				maxWidth = 286
-				maxHeight = 39
+				maxWidth = 178
+				maxHeight = 32
 				format = left
 				fixedsize = yes
 				alwaystransparent = yes
@@ -962,7 +962,7 @@ guiTypes = {
 			iconType = {
 				name = "pol_faction_icon"
 				# The selection handler looks up this portrait-side emblem inside spirit.
-				position = { x = 0 y = 9 }
+				position = { x = 55 y = 35 }
 				spriteType = "GFX_pol_factions_strip"
 				frame = 1
 				scale = 0.22

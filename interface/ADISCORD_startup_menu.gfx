@@ -246,12 +246,6 @@ spriteTypes = {
 		transparencecheck = no
 	}
 	spriteType = {
-		name = "GFX_ADISCORD_setup_year_2160"
-		texturefile = "gfx/interface/startup/setup_year_2160.png"
-		noOfFrames = 1
-		legacy_lazy_load = no
-	}
-	spriteType = {
 		name = "GFX_ADISCORD_setup_ideology_appanage_revanchism"
 		texturefile = "gfx/interface/startup/setup_ideology_appanage_revanchism.png"
 		noOfFrames = 1

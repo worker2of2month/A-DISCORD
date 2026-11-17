@@ -7,7 +7,7 @@ import json
 import re
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageOps
 
 from tools.lib.paths import repository_root
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -285,12 +285,6 @@ def atlas_print():
 
 def gallery_art(add, roster, plate):
     campaign_scroll_art(add)
-    # This date shares one native text line with long political names in the campaign summary.
-    year = Image.new('RGBA', (20, 12))
-    ink = ImageDraw.Draw(year)
-    ink.text((0, -1), '2160', fill=LIGHT, font=ImageFont.load_default(size=9))
-    ink.line((0, 10, 19, 10), fill=GOLD)
-    add('year_2160', year, eager=True)
     ideology_gfx = ROOT / 'interface/ADISCORD_ideology.gfx'
     sprites = {}
     for entry in parse_clausewitz(ideology_gfx.read_text(encoding='utf-8-sig'))[0].value:
@@ -329,7 +323,8 @@ def gallery_art(add, roster, plate):
     left = dossier_panel((318, 315), plate)
     middle = dossier_panel((423, 315), plate)
     ink = ImageDraw.Draw(left)
-    ink.line((16, 194, 301, 194), fill=(94, 69, 53))
+    for y in (77, 222):
+        ink.line((16, y, 301, y), fill=(94, 69, 53))
     ink = ImageDraw.Draw(middle)
     for y in (147, 266):
         ink.line((17, y, 405, y), fill=(94, 69, 53))
