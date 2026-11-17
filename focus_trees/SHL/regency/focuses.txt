@@ -693,11 +693,15 @@
 			focus = SHL_r_regency_charter
 		}
 		bypass = {
-			KDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				KDR = { ADISCORD_south_campaign_target_settled = yes }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -720,12 +724,18 @@
 			focus = SHL_south_throne_and_crests
 		}
 		bypass = {
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -740,7 +750,9 @@
 	}
 
 	# Брак с Кадиром: союзнику - конвои, отказавшему престолу - повторное предложение.
-	# Обход читается в скоупе цели: престол исчез, воюет с нами или война за Юг уже идёт.
+	# Обход читается в скоупе цели: престол исчез, воюет с нами, война за Юг уже
+	# идёт или закончилась. Отложенный сюжет Светлогорья задерживает только ответ
+	# престола внутри ADISCORD_south_offer_alliance, а не сам фокус.
 	focus = {
 		id = SHL_r_kadir_marriage
 		icon = GFX_goal_generic_improve_relations
@@ -757,16 +769,14 @@
 					exists = no
 					has_war_with = SHL
 					has_global_flag = ADISCORD_south_final_started
+					has_global_flag = ADISCORD_south_final_resolved
 				}
 			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
-			custom_trigger_tooltip = {
-				tooltip = ADISCORD_south_story_ready_tt
-				ADISCORD_south_nam_story_clear = yes
-			}
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			KDR = {
 				exists = yes
 				NOT = { has_war_with = SHL }
@@ -809,6 +819,7 @@
 		bypass = {
 			OR = {
 				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
 				AND = {
 					SDR = { ADISCORD_south_campaign_target_settled = yes }
 					RHM = { ADISCORD_south_campaign_target_settled = yes }
@@ -818,6 +829,7 @@
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -841,11 +853,15 @@
 			focus = SHL_south_toll_debtors
 		}
 		bypass = {
-			GLP = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				GLP = { ADISCORD_south_campaign_target_settled = yes }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -874,11 +890,13 @@
 			OR = {
 				has_idea = ADISCORD_south_shl_promised_fiefs
 				has_global_flag = ADISCORD_south_final_started
+				has_global_flag = ADISCORD_south_final_resolved
 			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {

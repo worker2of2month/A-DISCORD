@@ -2292,8 +2292,11 @@ SHL_ensure_levy_template = {
 	}
 }
 
-# STATE scope, owner PREV. create_unit fills the division itself: every caller
-# debits its manpower and equipment price before this helper runs.
+# STATE scope, owner PREV. create_unit fills the division itself and draws
+# nothing from the pools. Paid callers (guard order, regent guard, hired guard,
+# campaign aid) require Khazar and debit their price before this helper runs;
+# delayed orders refund the receipt when Khazar is lost before delivery. Focus
+# rewards and course settlements grant the levy as the reward and debit nothing.
 SHL_create_levy = {
 	create_unit = {
 		division = "division_template = \"Furnace Levy\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
@@ -2360,33 +2363,38 @@ SHL_finish_guard_order = {
 	}
 }
 
-# Levies paid by a course instead of the treasury: the houses, the city
-# brigades or the private guards supply the recruits and their rifles.
-SHL_raise_paid_levies_2 = {
-	SHL_ensure_levy_template = yes
-	699 = {
-		if = {
-			limit = {
+# COUNTRY SHL. Levies supplied by a course: the houses, the city brigades or
+# the private guards bring the recruits and their rifles, so a focus reward
+# debits nothing. Campaign aid debits its manpower first and requires 699.
+# Khazar (699) is the depot; while it is lost, another owned and controlled
+# core state receives the levy, so the reward is not silently dropped.
+SHL_raise_reward_levy = {
+	if = {
+		limit = {
+			699 = {
 				is_owned_by = SHL
 				is_controlled_by = SHL
 			}
-			SHL_create_levy = yes
+		}
+		699 = { SHL_create_levy = yes }
+	}
+	else = {
+		random_owned_controlled_state = {
+			limit = { is_core_of = SHL }
 			SHL_create_levy = yes
 		}
 	}
 }
 
+SHL_raise_paid_levies_2 = {
+	SHL_ensure_levy_template = yes
+	SHL_raise_reward_levy = yes
+	SHL_raise_reward_levy = yes
+}
+
 SHL_raise_paid_levies_3 = {
 	SHL_raise_paid_levies_2 = yes
-	699 = {
-		if = {
-			limit = {
-				is_owned_by = SHL
-				is_controlled_by = SHL
-			}
-			SHL_create_levy = yes
-		}
-	}
+	SHL_raise_reward_levy = yes
 }
 
 # ----- Qanat crisis and water war (KYZ) -----
@@ -6012,7 +6020,8 @@ SHL_refresh_programme_prices = {
 		subtract_from_variable = { var = SHL_wells_price value = 50 }
 	}
 	clamp_variable = { var = SHL_wells_price min = 0 max = 250 }
-	# The workers' wells are drilled once for free; the flag is set at payment.
+	# The workers' wells are drilled once for free. The flag is set at payment,
+	# or by the focus when it trained the qanat furnaces instead.
 	if = {
 		limit = {
 			has_completed_focus = SHL_k_workers_wells
@@ -6222,12 +6231,16 @@ SHL_grant_house_credit = {
 
 # ----- Consolidation missions -----
 # Started by the course focuses; the mission goal is the settled target.
+# A term is not opened once the final war has started or the South is settled:
+# its target and timeout demand are void after either point.
 
 SHL_start_cons_debt_term = {
 	if = {
 		limit = {
 			SHL_country_operable = yes
 			NOT = { has_active_mission = SHL_cons_debt_term }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
 		}
 		activate_mission = SHL_cons_debt_term
 	}
@@ -6238,6 +6251,8 @@ SHL_start_cons_charter_round = {
 		limit = {
 			SHL_country_operable = yes
 			NOT = { has_active_mission = SHL_cons_charter_round }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
 		}
 		activate_mission = SHL_cons_charter_round
 	}
@@ -6248,6 +6263,8 @@ SHL_start_cons_ultimatum = {
 		limit = {
 			SHL_country_operable = yes
 			NOT = { has_active_mission = SHL_cons_ultimatum }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
 		}
 		activate_mission = SHL_cons_ultimatum
 	}
@@ -6258,6 +6275,8 @@ SHL_start_cons_toll_term = {
 		limit = {
 			SHL_country_operable = yes
 			NOT = { has_active_mission = SHL_cons_toll_term }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
 		}
 		activate_mission = SHL_cons_toll_term
 	}
@@ -6268,6 +6287,8 @@ SHL_start_cons_councils = {
 		limit = {
 			SHL_country_operable = yes
 			NOT = { has_active_mission = SHL_cons_councils }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
 		}
 		activate_mission = SHL_cons_councils
 	}
@@ -7307,8 +7328,9 @@ SHL_house_demand_timeout = {
 }
 
 # ----- Neighbour revanche -----
-# Scheduled 365 days after a won limited war. Neighbour codes: 1 KYZ, 2 GLP,
-# 3 MZR. Only land still held by Shahrabad is claimed.
+# Scheduled 365 days after a won limited war against KYZ or GLP; Mazar fights
+# only as Keizan's partner and cedes nothing. Neighbour codes: 1 KYZ, 2 GLP.
+# Only land still held by Shahrabad is claimed.
 
 SHL_resolve_revanche = {
 	set_variable = { var = SHL_revanche_neighbour value = 0 }
@@ -7321,11 +7343,6 @@ SHL_resolve_revanche = {
 		limit = { SHL_revanche_glp_ready = yes }
 		set_variable = { var = SHL_revanche_neighbour value = 2 }
 		clr_country_flag = SHL_revanche_due_GLP
-	}
-	else_if = {
-		limit = { SHL_revanche_mzr_ready = yes }
-		set_variable = { var = SHL_revanche_neighbour value = 3 }
-		clr_country_flag = SHL_revanche_due_MZR
 	}
 	SHL_revanche_claims = yes
 }
@@ -7345,13 +7362,6 @@ SHL_revanche_claim_glp = {
 	}
 }
 
-SHL_revanche_claim_mzr = {
-	if = {
-		limit = { SHL_direct_or_administration_land = yes }
-		add_claim_by = MZR
-	}
-}
-
 SHL_revanche_claims = {
 	if = {
 		limit = { check_variable = { var = SHL_revanche_neighbour value = 1 compare = equals } }
@@ -7366,11 +7376,6 @@ SHL_revanche_claims = {
 		298 = { SHL_revanche_claim_glp = yes }
 		299 = { SHL_revanche_claim_glp = yes }
 		708 = { SHL_revanche_claim_glp = yes }
-	}
-	else_if = {
-		limit = { check_variable = { var = SHL_revanche_neighbour value = 3 compare = equals } }
-		269 = { SHL_revanche_claim_mzr = yes }
-		268 = { SHL_revanche_claim_mzr = yes }
 	}
 }
 
@@ -7388,11 +7393,6 @@ SHL_revanche_drop_claims = {
 		298 = { remove_claim_by = GLP }
 		299 = { remove_claim_by = GLP }
 		708 = { remove_claim_by = GLP }
-	}
-	else_if = {
-		limit = { check_variable = { var = SHL_revanche_neighbour value = 3 compare = equals } }
-		269 = { remove_claim_by = MZR }
-		268 = { remove_claim_by = MZR }
 	}
 }
 

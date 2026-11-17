@@ -1579,11 +1579,7 @@ defined_text = {
 		localization_key = SHL_revanche_kyz
 	}
 	text = {
-		trigger = { check_variable = { var = SHL_revanche_neighbour value = 2 compare = equals } }
 		localization_key = SHL_revanche_glp
-	}
-	text = {
-		localization_key = SHL_revanche_mzr
 	}
 }
 

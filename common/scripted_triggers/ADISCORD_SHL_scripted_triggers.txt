@@ -85,6 +85,154 @@ SHL_selected_target = {
 	}
 }
 
+# COUNTRY SHL, AI shift policy only. Reads the per-site mirrors written by
+# SHL_refresh_furnaces (SHL_status_N 1 = lit and held, SHL_wear_N) and the
+# tenth furnace's own counters, so no state is scanned. Three lit furnaces at
+# 60 wear or more call for careful smelting.
+SHL_ai_furnaces_worn = {
+	count_triggers = {
+		amount = 3
+		AND = {
+			check_variable = { var = SHL_status_1 value = 1 compare = equals }
+			check_variable = { var = SHL_wear_1 value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_status_2 value = 1 compare = equals }
+			check_variable = { var = SHL_wear_2 value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_status_3 value = 1 compare = equals }
+			check_variable = { var = SHL_wear_3 value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_status_4 value = 1 compare = equals }
+			check_variable = { var = SHL_wear_4 value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_status_5 value = 1 compare = equals }
+			check_variable = { var = SHL_wear_5 value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_status_6 value = 1 compare = equals }
+			check_variable = { var = SHL_wear_6 value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_status_7 value = 1 compare = equals }
+			check_variable = { var = SHL_wear_7 value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_status_8 value = 1 compare = equals }
+			check_variable = { var = SHL_wear_8 value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_status_9 value = 1 compare = equals }
+			check_variable = { var = SHL_wear_9 value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_tenth_running value = 1 compare = equals }
+			check_variable = { var = SHL_tenth_wear value = 60 compare = greater_than_or_equals }
+		}
+	}
+}
+
+# Careful smelting ends only when at most one lit furnace stays at 40 wear or
+# more; the gap to the 60 threshold keeps the AI from switching every week.
+SHL_ai_furnaces_rested = {
+	NOT = {
+		count_triggers = {
+			amount = 2
+			AND = {
+				check_variable = { var = SHL_status_1 value = 1 compare = equals }
+				check_variable = { var = SHL_wear_1 value = 40 compare = greater_than_or_equals }
+			}
+			AND = {
+				check_variable = { var = SHL_status_2 value = 1 compare = equals }
+				check_variable = { var = SHL_wear_2 value = 40 compare = greater_than_or_equals }
+			}
+			AND = {
+				check_variable = { var = SHL_status_3 value = 1 compare = equals }
+				check_variable = { var = SHL_wear_3 value = 40 compare = greater_than_or_equals }
+			}
+			AND = {
+				check_variable = { var = SHL_status_4 value = 1 compare = equals }
+				check_variable = { var = SHL_wear_4 value = 40 compare = greater_than_or_equals }
+			}
+			AND = {
+				check_variable = { var = SHL_status_5 value = 1 compare = equals }
+				check_variable = { var = SHL_wear_5 value = 40 compare = greater_than_or_equals }
+			}
+			AND = {
+				check_variable = { var = SHL_status_6 value = 1 compare = equals }
+				check_variable = { var = SHL_wear_6 value = 40 compare = greater_than_or_equals }
+			}
+			AND = {
+				check_variable = { var = SHL_status_7 value = 1 compare = equals }
+				check_variable = { var = SHL_wear_7 value = 40 compare = greater_than_or_equals }
+			}
+			AND = {
+				check_variable = { var = SHL_status_8 value = 1 compare = equals }
+				check_variable = { var = SHL_wear_8 value = 40 compare = greater_than_or_equals }
+			}
+			AND = {
+				check_variable = { var = SHL_status_9 value = 1 compare = equals }
+				check_variable = { var = SHL_wear_9 value = 40 compare = greater_than_or_equals }
+			}
+			AND = {
+				check_variable = { var = SHL_tenth_running value = 1 compare = equals }
+				check_variable = { var = SHL_tenth_wear value = 40 compare = greater_than_or_equals }
+			}
+		}
+	}
+}
+
+# Overtime doubles the packets each lit furnace burns, so it needs a reserve
+# for the planned supply and is never chosen on worn furnaces. It serves a war,
+# a paid arsenal obligation or a pending guard order.
+SHL_ai_shift_overtime_wanted = {
+	SHL_ai_furnaces_worn = no
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	OR = {
+		has_war = yes
+		has_variable = SHL_guard_deposit
+		check_variable = { var = SHL_obligation_kind value = 3 compare = equals }
+	}
+}
+
+# Careful smelting rests worn furnaces or spends a comfortable treasury on
+# longer furnace life instead of income.
+SHL_ai_shift_careful_wanted = {
+	OR = {
+		SHL_ai_furnaces_worn = yes
+		AND = {
+			SHL_ai_shift_overtime_wanted = no
+			check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+		}
+	}
+}
+
+# Overtime that is no longer wanted ends at once, through careful smelting when
+# that is wanted and unlocked. Careful smelting is left only on rested furnaces
+# once the treasury falls below 900.
+SHL_ai_shift_ordinary_wanted = {
+	SHL_ai_shift_overtime_wanted = no
+	OR = {
+		AND = {
+			check_variable = { var = SHL_shift_policy value = 1 compare = equals }
+			NOT = {
+				AND = {
+					has_completed_focus = SHL_careful_smelting
+					SHL_ai_shift_careful_wanted = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_shift_policy value = 2 compare = equals }
+			SHL_ai_furnaces_rested = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = less_than }
+		}
+	}
+}
+
 # ---------------------------------------------------------------------------
 # Quarters, crests and borders. Country scope SHL unless noted.
 # ---------------------------------------------------------------------------
@@ -993,23 +1141,10 @@ SHL_revanche_glp_ready = {
 	}
 }
 
-SHL_revanche_mzr_ready = {
-	has_country_flag = {
-		flag = SHL_revanche_due_MZR
-		days > 364
-	}
-	MZR = { SHL_revanche_neighbour_open = yes }
-	OR = {
-		269 = { SHL_direct_or_administration_land = yes }
-		268 = { SHL_direct_or_administration_land = yes }
-	}
-}
-
 SHL_revanche_ready = {
 	OR = {
 		SHL_revanche_kyz_ready = yes
 		SHL_revanche_glp_ready = yes
-		SHL_revanche_mzr_ready = yes
 	}
 }
 

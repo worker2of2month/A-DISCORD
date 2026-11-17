@@ -137,7 +137,7 @@ ADISCORD_south_final_war_category = {
 
 	# Judged only at timeout; the furnace cycle opens the next period.
 	ADISCORD_south_hold_districts = {
-		icon = generic_fortify_the_borders
+		icon = generic_fortification
 		allowed = {
 			OR = {
 				tag = SHL

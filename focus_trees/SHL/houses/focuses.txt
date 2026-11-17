@@ -751,9 +751,13 @@
 		prerequisite = {
 			focus = SHL_conclave_of_ten
 		}
+		bypass = {
+			has_global_flag = ADISCORD_south_final_resolved
+		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 		}
 		cancel_if_invalid = yes
@@ -791,12 +795,18 @@
 			focus = SHL_south_debt_network
 		}
 		bypass = {
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -819,12 +829,18 @@
 			focus = SHL_south_debt_network
 		}
 		bypass = {
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -849,11 +865,15 @@
 			focus = SHL_south_trade_protectorates
 		}
 		bypass = {
-			KDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				KDR = { ADISCORD_south_campaign_target_settled = yes }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -884,6 +904,7 @@
 				NOT = { has_country_flag = SHL_veyr_partner }
 				GLP = { ADISCORD_south_campaign_target_settled = yes }
 				has_war_with = GLP
+				has_global_flag = ADISCORD_south_final_resolved
 			}
 		}
 		available = {
@@ -897,6 +918,7 @@
 				}
 			}
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -1054,25 +1076,43 @@
 			}
 		}
 		cancel_if_invalid = yes
+		# Хазар удерживается по условию фокуса; биржа выкупает недостающие места
+		# под обе фабрики, а сборы с южных сделок идут в цикл печей.
 		completion_reward = {
-			if = {
-				limit = {
-					699 = {
-						is_owned_by = SHL
-						is_controlled_by = SHL
-						free_building_slots = {
-							building = industrial_complex
-							size > 1
-							include_locked = no
+			699 = {
+				if = {
+					limit = {
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
 				}
-				699 = {
-					add_building_construction = {
-						type = industrial_complex
-						level = 2
+				if = {
+					limit = {
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 2
+								include_locked = no
+							}
+						}
 					}
+					add_extra_state_shared_building_slots = 1
 				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+				}
+			}
+			custom_effect_tooltip = SHL_cycle_income_plus_12_tt
+			hidden_effect = {
+				set_temp_variable = { var = SHL_income_delta value = 12 }
+				SHL_add_cycle_income = yes
 			}
 		}
 		ai_will_do = { base = 50 }

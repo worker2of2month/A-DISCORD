@@ -465,6 +465,8 @@
         "tools/lib/campaign_selection.py",
         "tools/data/campaign_selection.gui.in",
         "tools/data/campaign_selection.json",
+        "interface/ADISCORD_ideology.gfx",
+        "gfx/interface/ideologies/vorkerism_pre_civil_war.png",
         "common/bookmarks/the_gathering_storm.txt",
         "map/definition.csv",
         "map/provinces.bmp",

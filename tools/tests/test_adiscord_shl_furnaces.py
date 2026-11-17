@@ -5218,7 +5218,7 @@ class ConclaveLeversTests(unittest.TestCase):
                 raw = fragment.read_bytes()
                 self.assertFalse(raw.startswith(b"\xef\xbb\xbf"), "fragments carry no BOM")
                 text += raw.decode("utf-8")
-            defined = dict(re.findall(r"^ ([\w.]+): \"(.*)\"$", text, re.M))
+            defined = dict(re.findall(r"^ ([\w.]+):\d* \"(.*)\"$", text, re.M))
             self.assertEqual(sorted(keys - set(defined)), [], language)
             for key in keys:
                 self.assertNotRegex(defined[key], "[\u2013\u2014\u00ab\u00bb]", key)

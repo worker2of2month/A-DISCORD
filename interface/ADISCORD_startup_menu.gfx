@@ -245,6 +245,60 @@ spriteTypes = {
 		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
 		transparencecheck = no
 	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_year_2160"
+		texturefile = "gfx/interface/startup/setup_year_2160.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_ideology_appanage_revanchism"
+		texturefile = "gfx/interface/startup/setup_ideology_appanage_revanchism.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_ideology_aristocratic_hedonism"
+		texturefile = "gfx/interface/startup/setup_ideology_aristocratic_hedonism.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_ideology_chauvinism_ideology"
+		texturefile = "gfx/interface/startup/setup_ideology_chauvinism_ideology.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_ideology_contractual_etatism"
+		texturefile = "gfx/interface/startup/setup_ideology_contractual_etatism.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_ideology_etatism_ideology"
+		texturefile = "gfx/interface/startup/setup_ideology_etatism_ideology.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_ideology_humanism_ideology"
+		texturefile = "gfx/interface/startup/setup_ideology_humanism_ideology.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_ideology_industrial_aristocratism"
+		texturefile = "gfx/interface/startup/setup_ideology_industrial_aristocratism.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_ADISCORD_setup_ideology_vorkerism"
+		texturefile = "gfx/interface/startup/setup_ideology_vorkerism.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
 	corneredTileSpriteType = {
 		name = "GFX_ADISCORD_setup_gallery_case"
 		texturefile = "gfx/interface/startup/setup_gallery_case.png"

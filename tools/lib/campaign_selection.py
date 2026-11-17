@@ -7,7 +7,7 @@ import json
 import re
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 from tools.lib.paths import repository_root
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -285,6 +285,27 @@ def atlas_print():
 
 def gallery_art(add, roster, plate):
     campaign_scroll_art(add)
+    # This date shares one native text line with long political names in the campaign summary.
+    year = Image.new('RGBA', (20, 12))
+    ink = ImageDraw.Draw(year)
+    ink.text((0, -1), '2160', fill=LIGHT, font=ImageFont.load_default(size=9))
+    ink.line((0, 10, 19, 10), fill=GOLD)
+    add('year_2160', year, eager=True)
+    ideology_gfx = ROOT / 'interface/ADISCORD_ideology.gfx'
+    sprites = {}
+    for entry in parse_clausewitz(ideology_gfx.read_text(encoding='utf-8-sig'))[0].value:
+        fields = {part.key: part.value for part in entry.value}
+        sprites[fields['name']] = fields['texturefile']
+    for subtype in sorted({spec['subideology'] for tag, spec in roster.items() if tag != ATLAS}):
+        # Basic leader types use their group's emblem in the political view.
+        sprite_id = subtype.removesuffix('_ideology') + '_group' if subtype.endswith('_ideology') else subtype
+        with Image.open(ROOT / sprites['GFX_ideology_' + sprite_id]) as source:
+            art = source.convert('RGBA')
+            art = art.crop(art.getchannel('A').getbbox())
+            art = ImageOps.contain(art, (37, 32), Image.Resampling.LANCZOS)
+        mount = plate((49, 42))
+        mount.alpha_composite(art, ((mount.width - art.width) // 2, (mount.height - art.height) // 2))
+        add('ideology_' + subtype, mount, eager=True)
     with Image.open(ROOT / 'gfx/interface/country_selection_bg.dds') as source:
         architecture = source.convert('RGBA')
     case = Image.new('RGBA', (48, 48), (27, 23, 26, 255))

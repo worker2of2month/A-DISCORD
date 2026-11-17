@@ -202,6 +202,14 @@ def boolean_calls(items):
     return [e.key for e in walk(items) if e.value == "yes" and not isinstance(e.value, list)]
 
 
+def without_leading_tooltips(items):
+    """Drop the explanatory custom_effect_tooltip lines that open a debug effect block."""
+    index = 0
+    while index < len(items) and items[index].key == "custom_effect_tooltip":
+        index += 1
+    return items[index:]
+
+
 class ShahrabadDebugDecisionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -322,13 +330,14 @@ class ShahrabadDebugDecisionTests(unittest.TestCase):
         outer = next(e for e in run_cycle if e.key == "if")
         inner = next(e for e in outer.value if e.key == "if")
         expected = [e.key for e in inner.value if e.key != "limit"]
-        actual = [e.key for e in block(self.decisions["ADISCORD_shl_debug_advance_cycle"], "complete_effect")]
+        effect = block(self.decisions["ADISCORD_shl_debug_advance_cycle"], "complete_effect")
+        actual = [e.key for e in without_leading_tooltips(effect)]
         self.assertEqual(actual, expected)
         self.assertNotIn("SHL_cycle_pending", str([e.value for e in walk(self.decisions["ADISCORD_shl_debug_advance_cycle"])]))
 
     def test_house_demand_shortcut_reaches_the_demand_threshold(self):
         body = self.decisions["ADISCORD_shl_debug_house_demand"]
-        effect = block(body, "complete_effect")
+        effect = without_leading_tooltips(block(body, "complete_effect"))
         forced = next(scalar(e.value, "value") for e in effect if e.key == "set_variable" and scalar(e.value, "var") == "SHL_demand_cycle")
         threshold = re.search(r"var = SHL_demand_cycle value = (\d+) compare = greater_than_or_equals", self.shl_effects_text).group(1)
         self.assertGreaterEqual(int(forced) + 1, int(threshold))

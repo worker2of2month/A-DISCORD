@@ -330,6 +330,8 @@
 		completion_reward = {
 			unlock_decision_tooltip = SHL_council_election
 			custom_effect_tooltip = SHL_c_regular_elections_tt
+			# Первые выборы начинаются здесь; каждый подсчёт назначает следующие.
+			hidden_effect = { SHL_start_council_election = yes }
 			add_political_power = 50
 			add_stability = 0.05
 		}
@@ -610,11 +612,24 @@
 			SHL_country_operable = yes
 		}
 		cancel_if_invalid = yes
+		# Охлаждение печей и цистерны кварталов не зависят от решения о скважинах;
+		# скидка на него показана, только пока спор о кяризах держит решение открытым.
 		completion_reward = {
-			custom_effect_tooltip = SHL_c_water_works_tt
+			add_stability = 0.05
+			custom_effect_tooltip = SHL_repair_without_extinction_tt
+			custom_effect_tooltip = SHL_c_water_works_quarters_tt
+			if = {
+				limit = {
+					has_completed_focus = SHL_water_question
+					check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+				}
+				custom_effect_tooltip = SHL_c_water_works_tt
+			}
 			hidden_effect = {
-				subtract_from_variable = { var = SHL_unrest value = 5 }
+				subtract_from_variable = { var = SHL_unrest value = 10 }
+				add_to_variable = { var = SHL_city_support value = 10 }
 				SHL_clamp_tensions = yes
+				SHL_overhaul_furnaces = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -637,13 +652,27 @@
 			SHL_country_operable = yes
 		}
 		cancel_if_invalid = yes
+		# Морской доход и суда не зависят от решения о гавани; скидка на него
+		# показана, только пока пошлина Вейра держит решение открытым.
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = convoy_1
-				amount = 10
+				amount = 20
 				producer = SHL
 			}
-			custom_effect_tooltip = SHL_c_harbour_works_tt
+			custom_effect_tooltip = SHL_cycle_income_plus_10_tt
+			if = {
+				limit = {
+					has_completed_focus = SHL_veyr_duties
+					check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+				}
+				custom_effect_tooltip = SHL_c_harbour_works_tt
+			}
+			hidden_effect = {
+				set_temp_variable = { var = SHL_income_delta value = 10 }
+				SHL_add_cycle_income = yes
+				SHL_refresh_programme_prices = yes
+			}
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -707,13 +736,19 @@
 			focus = SHL_southern_compact
 		}
 		bypass = {
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
-			MZR = { ADISCORD_south_campaign_target_settled = yes }
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+					MZR = { ADISCORD_south_campaign_target_settled = yes }
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -737,9 +772,13 @@
 		prerequisite = {
 			focus = SHL_south_wells_charters
 		}
+		bypass = {
+			has_global_flag = ADISCORD_south_final_resolved
+		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			NOT = { has_manpower < 6000 }
 			699 = {
 				is_owned_by = SHL
@@ -766,11 +805,15 @@
 			focus = SHL_south_compact_staff
 		}
 		bypass = {
-			KDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				KDR = { ADISCORD_south_campaign_target_settled = yes }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
 		}
 		cancel_if_invalid = yes
@@ -797,13 +840,19 @@
 			focus = SHL_south_wells_charters
 		}
 		bypass = {
-			RHM = { ADISCORD_south_campaign_target_settled = yes }
-			MZR = { ADISCORD_south_campaign_target_settled = yes }
-			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			OR = {
+				has_global_flag = ADISCORD_south_final_resolved
+				AND = {
+					RHM = { ADISCORD_south_campaign_target_settled = yes }
+					MZR = { ADISCORD_south_campaign_target_settled = yes }
+					SDR = { ADISCORD_south_campaign_target_settled = yes }
+				}
+			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -865,17 +914,21 @@
 		}
 		bypass = {
 			OR = {
-				NOT = { MZR = { exists = yes } }
-				is_in_faction_with = MZR
-				has_war_with = MZR
-				MZR = { ADISCORD_south_campaign_target_settled = yes }
+				NOT = { KYZ = { exists = yes } }
+				is_in_faction_with = KYZ
+				has_war_with = KYZ
+				KYZ = { is_subject = yes }
+				KYZ = { ADISCORD_south_campaign_target_settled = yes }
+				has_global_flag = ADISCORD_south_final_resolved
 			}
 		}
 		available = {
 			SHL_country_operable = yes
 			NOT = { has_global_flag = ADISCORD_south_final_started }
-			MZR = {
+			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
+			KYZ = {
 				exists = yes
+				is_subject = no
 				is_in_faction = no
 				NOT = { has_war_with = SHL }
 			}

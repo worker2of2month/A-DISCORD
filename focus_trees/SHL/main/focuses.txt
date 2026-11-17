@@ -271,6 +271,10 @@ focus_tree = {
 				remove_ideas = SHL_external_freight
 			}
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 5 producer = SHL }
+			if = {
+				limit = { hidden_trigger = { has_country_flag = SHL_transport_dispute } }
+				custom_effect_tooltip = SHL_own_transport_dispute_tt
+			}
 			hidden_effect = { clr_country_flag = SHL_transport_dispute }
 			699 = {
 				if = {
@@ -428,6 +432,10 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = SHL_planned_supply
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 5 producer = SHL }
+			if = {
+				limit = { hidden_trigger = { has_country_flag = SHL_supplier_premium } }
+				custom_effect_tooltip = SHL_houses_railway_premium_tt
+			}
 			hidden_effect = { clr_country_flag = SHL_supplier_premium }
 			288 = {
 				if = {
@@ -477,6 +485,10 @@ focus_tree = {
 		completion_reward = {
 			ADISCORD_reform_cultural_development = yes
 			unlock_decision_tooltip = SHL_training_furnace
+			if = {
+				limit = { hidden_trigger = { has_country_flag = SHL_master_dispute } }
+				custom_effect_tooltip = SHL_school_of_masters_dispute_tt
+			}
 			hidden_effect = { clr_country_flag = SHL_master_dispute }
 			hidden_effect = { country_event = { id = ADISCORD_shl_life.2 hours = 6 } }
 		}
@@ -657,17 +669,24 @@ focus_tree = {
 			SHL_country_operable = yes
 		}
 		cancel_if_invalid = yes
+		# A full district receives the slot its smelter quarter needs.
 		completion_reward = {
 			288 = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = {
-							building = industrial_complex
-							size = 1
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = industrial_complex
 						level = 1
@@ -679,12 +698,18 @@ focus_tree = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = {
-							building = industrial_complex
-							size = 1
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = industrial_complex
 						level = 1
@@ -1269,17 +1294,24 @@ focus_tree = {
 			SHL_country_operable = yes
 		}
 		cancel_if_invalid = yes
+		# A full city receives the slot its evacuated arsenal needs.
 		completion_reward = {
 			699 = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = {
-							building = arms_factory
-							size = 1
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = arms_factory
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = arms_factory
 						level = 1
@@ -1291,12 +1323,18 @@ focus_tree = {
 				if = {
 					limit = {
 						is_owned_by = SHL
-						free_building_slots = {
-							building = arms_factory
-							size = 1
-							include_locked = no
+						NOT = {
+							free_building_slots = {
+								building = arms_factory
+								size = 1
+								include_locked = no
+							}
 						}
 					}
+					add_extra_state_shared_building_slots = 1
+				}
+				if = {
+					limit = { is_owned_by = SHL }
 					add_building_construction = {
 						type = arms_factory
 						level = 1

@@ -809,14 +809,15 @@ guiTypes = {
 		containerWindowType = {
 			name = "info"
 			position = { x = 22 y = 434 }
-			size = { width = 296 height = 238 }
+			size = { width = 296 height = 254 }
+			clipping = yes
 
 			instantTextBoxType = {
 				name = "leader_label"
-				position = { x = 119 y = 0 }
+				position = { x = 4 y = 149 }
 				font = "hoi_16mbs"
 				text = "LEADER"
-				maxWidth = 176
+				maxWidth = 153
 				maxHeight = 18
 				format = left
 				fixedsize = yes
@@ -825,10 +826,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "leader"
-				position = { x = 119 y = 17 }
+				position = { x = 4 y = 166 }
 				font = "hoi_18"
-				maxWidth = 176
-				maxHeight = 26
+				maxWidth = 153
+				maxHeight = 24
 				format = left
 				fixedsize = yes
 				alwaystransparent = yes
@@ -836,7 +837,7 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "ideology_label"
-				position = { x = 119 y = 45 }
+				position = { x = -230 y = 49 }
 				font = "hoi_16mbs"
 				text = "IDEOLOGY"
 				maxWidth = 176
@@ -848,7 +849,7 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "ideology"
-				position = { x = 119 y = 62 }
+				position = { x = -230 y = 62 }
 				font = "hoi_18"
 				maxWidth = 176
 				maxHeight = 26
@@ -859,11 +860,11 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "government_label"
-				position = { x = 119 y = 90 }
+				position = { x = 194 y = 19 }
 				font = "hoi_16mbs"
-				text = "GOVERNMENT"
-				maxWidth = 176
-				maxHeight = 18
+				text = "ADISCORD_BOOKMARK_SUBIDEOLOGY"
+				maxWidth = 107
+				maxHeight = 20
 				format = left
 				fixedsize = yes
 				alwaystransparent = yes
@@ -871,10 +872,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "government"
-				position = { x = 119 y = 107 }
+				position = { x = 116 y = 76 }
 				font = "hoi_18"
 				maxWidth = 176
-				maxHeight = 29
+				maxHeight = 64
 				format = left
 				fixedsize = yes
 				alwaystransparent = yes
@@ -882,10 +883,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "elections_label"
-				position = { x = 4 y = 152 }
+				position = { x = 165 y = 149 }
 				font = "hoi_16mbs"
 				text = "ELECTIONS"
-				maxWidth = 95
+				maxWidth = 130
 				maxHeight = 18
 				format = left
 				fixedsize = yes
@@ -894,10 +895,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "elections"
-				position = { x = 4 y = 169 }
+				position = { x = 165 y = 166 }
 				font = "hoi_18"
-				maxWidth = 95
-				maxHeight = 50
+				maxWidth = 130
+				maxHeight = 24
 				format = left
 				fixedsize = yes
 				alwaystransparent = yes
@@ -905,10 +906,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "party_label"
-				position = { x = 116 y = 152 }
+				position = { x = 4 y = 193 }
 				font = "hoi_16mbs"
 				text = "RULING_PARTY"
-				maxWidth = 180
+				maxWidth = 286
 				maxHeight = 18
 				format = left
 				fixedsize = yes
@@ -917,10 +918,10 @@ guiTypes = {
 
 			instantTextBoxType = {
 				name = "party"
-				position = { x = 116 y = 169 }
+				position = { x = 4 y = 212 }
 				font = "hoi_18"
-				maxWidth = 180
-				maxHeight = 63
+				maxWidth = 286
+				maxHeight = 39
 				format = left
 				fixedsize = yes
 				alwaystransparent = yes
@@ -941,13 +942,13 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "spirit"
-			position = { x = 346 y = 426 }
-			size = { width = 393 height = 221 }
-			clipping = no
+			position = { x = 132 y = 426 }
+			size = { width = 607 height = 221 }
+			clipping = yes
 
 			instantTextBoxType = {
 				name = "spirits_caption"
-				position = { x = 4 y = 0 }
+				position = { x = 218 y = 0 }
 				font = "hoi_16mbs"
 				text = "ADISCORD_BOOKMARK_SPIRITS"
 				maxWidth = 381
@@ -960,8 +961,8 @@ guiTypes = {
 
 			iconType = {
 				name = "pol_faction_icon"
-				# The engine binds this icon under spirit. It sits beside the ideology in the dossier.
-				position = { x = -92 y = 52 }
+				# The selection handler looks up this portrait-side emblem inside spirit.
+				position = { x = 0 y = 9 }
 				spriteType = "GFX_pol_factions_strip"
 				frame = 1
 				scale = 0.22
@@ -970,7 +971,7 @@ guiTypes = {
 
 			containerWindowType = {
 				name = "ideas"
-				position = { x = 37 y = 20 }
+				position = { x = 251 y = 20 }
 				size = { width = 344 height = 68 }
 
 				gridBoxType = {
@@ -986,7 +987,7 @@ guiTypes = {
 
 			containerWindowType = {
 				name = "focus"
-				position = { x = 16 y = 104 }
+				position = { x = 230 y = 104 }
 				size = { width = 360 height = 111 }
 
 				instantTextBoxType = {

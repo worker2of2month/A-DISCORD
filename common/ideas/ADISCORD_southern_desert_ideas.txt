@@ -169,7 +169,7 @@ ideas = {
 			}
 		}
 		SHL_broken_conclave = {
-			picture = generic_political_pressure
+			picture = generic_disjointed_gov
 			allowed = { original_tag = SHL }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -210,7 +210,7 @@ ideas = {
 			}
 		}
 		SHL_victory_over_ration = {
-			picture = generic_national_unity
+			picture = generic_victors_of_ww1
 			allowed = { original_tag = SHL }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -275,7 +275,7 @@ ideas = {
 			}
 		}
 		SHL_crown_of_trade_spirit = {
-			picture = generic_national_unity
+			picture = ADISCORD_trade_policy_export_focus
 			allowed = { original_tag = SHL }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -297,7 +297,7 @@ ideas = {
 			}
 		}
 		SHL_treaty_of_the_south_spirit = {
-			picture = generic_national_unity
+			picture = generic_conference
 			allowed = { original_tag = SHL }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -330,7 +330,7 @@ ideas = {
 			}
 		}
 		SHL_crown_of_crests_spirit = {
-			picture = generic_national_unity
+			picture = generic_commission
 			allowed = { original_tag = SHL }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
@@ -352,7 +352,7 @@ ideas = {
 			}
 		}
 		SHL_fire_of_the_south_spirit = {
-			picture = generic_national_unity
+			picture = generic_syndicalism
 			allowed = { original_tag = SHL }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1

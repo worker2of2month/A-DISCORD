@@ -132,7 +132,7 @@ def setup_outputs(roster=None) -> tuple[dict[Path, bytes], list[str]]:
     outputs = {}
     definitions = []
 
-    def add(role, image, frames=1, kind='spriteType', effect=None, rectangular_hitbox=False, border=14):
+    def add(role, image, frames=1, kind='spriteType', effect=None, rectangular_hitbox=False, border=14, eager=False):
         stream = BytesIO()
         image.save(stream, 'PNG')
         outputs[OUTPUT / f'setup_{role}.png'] = stream.getvalue()
@@ -159,6 +159,8 @@ def setup_outputs(roster=None) -> tuple[dict[Path, bytes], list[str]]:
             ])
         if effect:
             definitions.append(f'\t\teffectFile = "gfx/FX/{effect}.lua"')
+        if eager:
+            definitions.append('\t\tlegacy_lazy_load = no')
         if rectangular_hitbox:
             # The artwork beneath these native buttons remains visible through their face.
             definitions.append('\t\ttransparencecheck = no')

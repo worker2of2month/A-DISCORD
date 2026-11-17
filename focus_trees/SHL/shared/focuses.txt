@@ -99,22 +99,25 @@ shared_focus = {
 		}
 	}
 	cancel_if_invalid = yes
+	# The coast is held by the focus condition; a full coast receives the slot.
 	completion_reward = {
 		730 = {
 			if = {
 				limit = {
-					is_owned_by = SHL
-					free_building_slots = {
-						building = industrial_complex
-						size = 1
-						include_locked = no
+					NOT = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = no
+						}
 					}
 				}
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = no
-				}
+				add_extra_state_shared_building_slots = 1
+			}
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = no
 			}
 		}
 		custom_effect_tooltip = SHL_cycle_income_plus_10_tt
@@ -425,27 +428,27 @@ shared_focus = {
 		}
 	}
 	cancel_if_invalid = yes
+	# The mines are held by the focus condition; a full district receives the slot.
 	completion_reward = {
 		732 = {
 			if = {
 				limit = {
-					is_owned_by = SHL
-					free_building_slots = {
-						building = industrial_complex
-						size = 1
-						include_locked = no
+					NOT = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = no
+						}
 					}
 				}
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = no
-				}
+				add_extra_state_shared_building_slots = 1
 			}
-			if = {
-				limit = { is_owned_by = SHL }
-				add_manpower = 6000
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = no
 			}
+			add_manpower = 6000
 		}
 	}
 	ai_will_do = { base = 3 }
@@ -930,15 +933,25 @@ shared_focus = {
 		}
 	}
 	cancel_if_invalid = yes
+	# Khazar is held by the focus condition; a full city receives the slot.
 	completion_reward = {
 		699 = {
 			if = {
-				limit = { is_owned_by = SHL }
-				add_building_construction = {
-					type = fuel_silo
-					level = 1
-					instant_build = no
+				limit = {
+					NOT = {
+						free_building_slots = {
+							building = fuel_silo
+							size = 1
+							include_locked = no
+						}
+					}
 				}
+				add_extra_state_shared_building_slots = 1
+			}
+			add_building_construction = {
+				type = fuel_silo
+				level = 1
+				instant_build = no
 			}
 		}
 		custom_effect_tooltip = SHL_reserve_discount_tt
@@ -994,22 +1007,25 @@ shared_focus = {
 		}
 	}
 	cancel_if_invalid = yes
+	# Khazar is held by the focus condition; a full city receives the slot.
 	completion_reward = {
 		699 = {
 			if = {
 				limit = {
-					is_owned_by = SHL
-					free_building_slots = {
-						building = synthetic_refinery
-						size = 1
-						include_locked = no
+					NOT = {
+						free_building_slots = {
+							building = synthetic_refinery
+							size = 1
+							include_locked = no
+						}
 					}
 				}
-				add_building_construction = {
-					type = synthetic_refinery
-					level = 1
-					instant_build = no
-				}
+				add_extra_state_shared_building_slots = 1
+			}
+			add_building_construction = {
+				type = synthetic_refinery
+				level = 1
+				instant_build = no
 			}
 		}
 		custom_effect_tooltip = SHL_distillery_fuel_tt

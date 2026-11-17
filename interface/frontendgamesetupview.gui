@@ -737,20 +737,20 @@ guiTypes = {
 			instantTextBoxType = {
 				name = "government_label"
 				position = { x = 6 y = 51 }
-				font = "hoi_20bs"
+				font = "hoi_18"
 				borderSize = {x = 0 y = 0}
 				text = "GOVERNMENT"
-				maxWidth = 340
+				maxWidth = 100
 				format = left
 			}
 
 			instantTextBoxType = {
 				name = "government"
-				position = { x = 72 y = 51 }
+				position = { x = 104 y = 51 }
 				textureFile = ""
-				font = "hoi_20bs"
+				font = "hoi_18"
 				borderSize = {x = 0 y = 0}
-				maxWidth = 340
+				maxWidth = 331
 				format = right
 			}
 

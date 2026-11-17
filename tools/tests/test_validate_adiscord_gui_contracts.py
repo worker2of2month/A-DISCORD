@@ -2899,11 +2899,17 @@ class CampaignSetupSkinTests(unittest.TestCase):
                     self.assertEqual(banner.size, (300, 127), name)
                 for text in languages:
                     teaser = localisation_value(text, name + '_tt')
-                    self.assertRegex(teaser, r'^§Y[^§\n]+§!\\n\S.+$')
+                    title, separator, content = teaser.partition('§!')
+                    self.assertRegex(title, r'^§Y[^§\\\n]+$')
+                    self.assertEqual(separator, '§!')
+                    gap = r'\n' * 6
+                    banner_line = gap + r'\£' + sprite + gap
+                    self.assertTrue(content.startswith(banner_line), name)
+                    self.assertRegex(content[len(banner_line):], r'^§[RO]\\"[^§]+\\"§!\\n§g- [^§]+§!\\n\\n\S')
+                    self.assertFalse(teaser.rstrip().endswith(r'\n'), name)
                     # The pregame tooltip does not expand nested localisation.
                     self.assertNotIn('$', teaser, name)
                     self.assertEqual(re.findall(r'£(\w+)', teaser), [sprite])
-                    self.assertRegex(teaser, rf'(?:\\n){{5}}£{sprite}(?:\\n ){{7,}}$')
             if spec.get('in_development'):
                 sash = gui_node_body(row, f'development_sash_{tag}')
                 self.assertEqual(_gui_position(sash), (left + 80, 225))
@@ -2916,7 +2922,7 @@ class CampaignSetupSkinTests(unittest.TestCase):
         for role in ('country_card', 'bookmark_mount'):
             self.assertIn('transparencecheck = no', gui_node_body(sprites, f'GFX_ADISCORD_setup_{role}'))
 
-    def test_khan_imperial_flag_opens_a_teaser_with_its_full_banner_at_the_foot(self):
+    def test_khan_imperial_flag_opens_the_last_empire_teaser(self):
         from PIL import Image
         from tools.lib.campaign_selection import BADGE, GALLERY_GUI, campaign_roster, route_texture
 
@@ -2938,6 +2944,57 @@ class CampaignSetupSkinTests(unittest.TestCase):
             bookmarks = (directory / f'bookmarks_l_{language}.yml').read_text(encoding='utf-8-sig')
             tooltip = localisation_value(bookmarks, name + '_tt')
             self.assertRegex(tooltip, r'\\n§R\\".+?\\"§!\\n')
+
+    def test_selected_country_profile_is_beside_the_portrait_in_both_languages(self):
+        from tools.lib.campaign_selection import ATLAS, BOOKMARK, GALLERY_GUI, campaign_roster
+
+        parse = economy_validator.parse_clausewitz
+        gallery = GALLERY_GUI.read_text(encoding='utf-8')
+        info = gui_node_body(gallery, 'info')
+        spirit = gui_node_body(gallery, 'spirit')
+        value = gui_node_body(info, 'government')
+        self.assertIn('ADISCORD_BOOKMARK_SUBIDEOLOGY', gui_node_body(info, 'government_label'))
+        self.assertNotIn('text =', value)
+        px, py = _gui_position(gui_node_body(gallery, 'minor_country_leader'))
+        ix, iy = _gui_position(info)
+        sx, sy = _gui_position(spirit)
+        ex, ey = _gui_position(gui_node_body(spirit, 'pol_faction_icon'))
+        vx, vy = _gui_position(value)
+        self.assertGreaterEqual(min(ix + vx, sx + ex), px + 93)
+        self.assertLessEqual(sx + ex + 75, ix + _gui_size(info)[0])
+        self.assertLessEqual(sy + ey + 75, iy + vy)
+        self.assertLess(iy + vy, py + 126)
+        self.assertLessEqual(ix + vx + int(_direct_scalar(parse(value), 'maxWidth')), 325)
+
+        start = _unique_direct_block(_unique_direct_block(parse(BOOKMARK.read_text()), 'bookmarks'), 'bookmark')
+        icons = (ROOT / 'interface/ADISCORD_ideology.gfx').read_text(encoding='utf-8-sig')
+        for lang in ('russian', 'english'):
+            directory = ROOT / 'localisation' / lang
+            strings = []
+            for stem in ('bookmarks', 'ADISCORD_STP', 'parties', 'ADISCORD_SHL'):
+                data = (directory / f'{stem}_l_{lang}.yml').read_bytes()
+                if lang == 'russian':
+                    self.assertTrue(data.startswith(b'\xef\xbb\xbf'))
+                strings.append(data.decode('utf-8-sig'))
+            loc = '\n'.join(strings)
+            for tag, spec in campaign_roster().items():
+                if tag == ATLAS:
+                    continue
+                with self.subTest(language=lang, tag=tag):
+                    group = _direct_scalar(_unique_direct_block(start, tag), 'ideology')
+                    subtype = spec['subideology']
+                    profile = localisation_value(loc, f'{tag}_{group}_party_desc')
+                    self.assertEqual(re.findall(r'\$(\w+)\$', profile), [subtype, group + '_desc'])
+                    self.assertNotIn(r'\n', profile)
+                    self.assertIn('2160', profile)
+                    for key in (subtype, group + '_desc', f'{tag}_{group}_party'):
+                        self.assertTrue(localisation_value(loc, key))
+                    art = group + '_group' if subtype == group + '_ideology' else subtype
+                    binding = parse(gui_node_body(icons, 'GFX_ideology_' + art))
+                    self.assertTrue((ROOT / _direct_scalar(binding, 'texturefile')).is_file())
+                    history = localisation_value(loc, tag + '_BOOKMARK_DESC')
+                    self.assertTrue(history[0].isalpha())
+                    self.assertNotIn('GFX_ADISCORD_setup_ideology_', history)
 
     def test_gallery_and_politics_show_full_size_spirits_and_bookmarks_exclude_laws(self):
         from tools.lib.campaign_selection import ATLAS, BOOKMARK, GALLERY_GUI, campaign_roster
