@@ -3039,7 +3039,7 @@ country_event = {
 	id = ADISCORD_nam_resource_war.112
 	hidden = yes
 	is_triggered_only = yes
-	trigger = { has_variable = NAM_corp_district_owner }
+	trigger = { NAM_subject_identity_participant = yes }
 	immediate = { NAM_board_sync_district_status = yes }
 }
 

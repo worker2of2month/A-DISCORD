@@ -648,7 +648,9 @@ ADISCORD_scenario_debug_category = {
 
 	# SHL shortcuts call the production course, balance and cycle effects. The
 	# ratification entries skip the main-tree prerequisites and the BOP range of
-	# the real finals; the commit effects keep their own course guards.
+	# the real finals; the commit effects keep their own course guards. The
+	# commit focus is completed afterwards so the course section root unlocks;
+	# its reward then finds the course already set and commits nothing again.
 	ADISCORD_shl_debug_fund_treasury = {
 		allowed = { tag = SHL }
 		cost = 0
@@ -703,6 +705,10 @@ ADISCORD_scenario_debug_category = {
 				ADISCORD_economy_mark_dirty = yes
 			}
 			SHL_commit_house_course = yes
+			if = {
+				limit = { NOT = { has_completed_focus = SHL_admit_tenth_house } }
+				complete_national_focus = SHL_admit_tenth_house
+			}
 		}
 		ai_will_do = { factor = 0 }
 	}
@@ -723,6 +729,10 @@ ADISCORD_scenario_debug_category = {
 				ADISCORD_economy_mark_dirty = yes
 			}
 			SHL_commit_city_course = yes
+			if = {
+				limit = { NOT = { has_completed_focus = SHL_rights_without_fire } }
+				complete_national_focus = SHL_rights_without_fire
+			}
 		}
 		ai_will_do = { factor = 0 }
 	}
@@ -743,6 +753,10 @@ ADISCORD_scenario_debug_category = {
 				ADISCORD_economy_mark_dirty = yes
 			}
 			SHL_commit_state_course = yes
+			if = {
+				limit = { NOT = { has_completed_focus = SHL_state_furnaces } }
+				complete_national_focus = SHL_state_furnaces
+			}
 		}
 		ai_will_do = { factor = 0 }
 	}
@@ -797,6 +811,30 @@ ADISCORD_scenario_debug_category = {
 			custom_effect_tooltip = ADISCORD_shl_debug_house_demand_description_rules_tt
 			set_variable = { var = SHL_demand_cycle value = 4 }
 			SHL_house_demand_tick = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	# Furnaces 1-9 map to the house districts 287-295; the tenth has no house.
+	ADISCORD_shl_debug_house_walkout = {
+		allowed = { tag = SHL }
+		visible = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_selected_furnace value = 1 compare = greater_than_or_equals }
+			check_variable = { var = SHL_selected_furnace value = 9 compare = less_than_or_equals }
+		}
+		available = {
+			NOT = { has_active_mission = SHL_house_walkout }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_shl_debug_house_walkout_description_rules_tt
+			set_variable = { var = SHL_loyalty_site value = SHL_selected_furnace }
+			add_to_variable = { var = SHL_loyalty_site value = 286 }
+			set_variable = { var = SHL_loyalty_delta value = -70 }
+			SHL_change_site_loyalty = yes
+			SHL_house_walkout_tick = yes
 		}
 		ai_will_do = { factor = 0 }
 	}

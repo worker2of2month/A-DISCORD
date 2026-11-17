@@ -1,23 +1,28 @@
 state = {
 	id = 174
 	name = "STATE_174"
-	manpower = 285000
+	manpower = 570000
 	state_category = town
+	resources = {
+		tungsten = 4
+	}
 	history = {
 		owner = WEF
 		add_core_of = WEF
 		add_core_of = EFL
+		victory_points = { 5869 2 }
+		victory_points = { 5261 2 }
+		victory_points = { 8479 2 }
 		buildings = {
 			infrastructure = 2
 			industrial_complex = 2
 			arms_factory = 1
 			air_base = 1
 		}
-		victory_points = { 5869 2 }
 	}
 	provinces = {
 		158 191 3367 4013 4792 5261 5869 6266 6325 7243 8134 8479
-		8972 10636 10727 11140
+		8972 10636 10727 11140 16950 16960
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.0

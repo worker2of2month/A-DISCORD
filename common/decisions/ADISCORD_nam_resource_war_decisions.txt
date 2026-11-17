@@ -10960,7 +10960,7 @@ NAM_postwar_orders = {
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		on_map_mode = map_and_decisions_view
 		visible = {
-			has_completed_focus = NAM_pw_provincial_records
+			has_completed_focus = NAM_pw_cadastre
 			FROM = {
 				is_owned_by = NAM
 				NOT = { has_dynamic_modifier = { modifier = NAM_border_autonomous_district } }
@@ -10983,7 +10983,7 @@ NAM_postwar_orders = {
 				if = {
 					limit = {
 						hidden_trigger = {
-							NAM = { has_completed_focus = NAM_pw_provincial_records }
+							NAM = { has_completed_focus = NAM_pw_cadastre }
 							NAM_pw_central_civil_district = yes
 							NOT = { has_dynamic_modifier = { modifier = NAM_pw_district_title_books } }
 						}

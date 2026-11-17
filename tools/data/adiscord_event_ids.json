@@ -5,6 +5,14 @@
   ],
   "events": [
     {
+      "id": "ADISCORD_mon_court.1",
+      "namespace": "ADISCORD_mon_court",
+      "number": 1,
+      "owner": "events/ADISCORD_MON_events.txt",
+      "subsystem": "mon_imperial_cabinet",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_resource_war.118",
       "namespace": "ADISCORD_nam_resource_war",
       "number": 118,
@@ -6261,6 +6269,30 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_south.4",
+      "namespace": "ADISCORD_south",
+      "number": 4,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.5",
+      "namespace": "ADISCORD_south",
+      "number": 5,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.6",
+      "namespace": "ADISCORD_south",
+      "number": 6,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_south.10",
       "namespace": "ADISCORD_south",
       "number": 10,
@@ -6344,6 +6376,22 @@
       "id": "ADISCORD_south.46",
       "namespace": "ADISCORD_south",
       "number": 46,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.47",
+      "namespace": "ADISCORD_south",
+      "number": 47,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.48",
+      "namespace": "ADISCORD_south",
+      "number": 48,
       "owner": "events/ADISCORD_south_final_war_events.txt",
       "subsystem": "south_final_war",
       "status": "active"
@@ -9077,6 +9125,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_SHL.141",
+      "namespace": "ADISCORD_SHL",
+      "number": 141,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_house_demand",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_SHL.150",
       "namespace": "ADISCORD_SHL",
       "number": 150,
@@ -9130,6 +9186,126 @@
       "number": 9,
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.160",
+      "namespace": "ADISCORD_SHL",
+      "number": 160,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.161",
+      "namespace": "ADISCORD_SHL",
+      "number": 161,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.162",
+      "namespace": "ADISCORD_SHL",
+      "number": 162,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.163",
+      "namespace": "ADISCORD_SHL",
+      "number": 163,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_neighbour_revanche",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.164",
+      "namespace": "ADISCORD_SHL",
+      "number": 164,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_neighbour_revanche",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.165",
+      "namespace": "ADISCORD_SHL",
+      "number": 165,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_neighbour_revanche",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.166",
+      "namespace": "ADISCORD_SHL",
+      "number": 166,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_neighbour_revanche",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.167",
+      "namespace": "ADISCORD_SHL",
+      "number": 167,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.10",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 10,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL_news.11",
+      "namespace": "ADISCORD_SHL_news",
+      "number": 11,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_news",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.200",
+      "namespace": "ADISCORD_SHL",
+      "number": 200,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_defeat_chapter",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.201",
+      "namespace": "ADISCORD_SHL",
+      "number": 201,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_defeat_chapter",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.202",
+      "namespace": "ADISCORD_SHL",
+      "number": 202,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_defeat_chapter",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.203",
+      "namespace": "ADISCORD_SHL",
+      "number": 203,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_defeat_chapter",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.204",
+      "namespace": "ADISCORD_SHL",
+      "number": 204,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_defeat_chapter",
       "status": "active"
     },
     {
@@ -9562,6 +9738,14 @@
       "number": 222,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.275",
+      "namespace": "val_rework",
+      "number": 275,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract_government",
       "status": "active"
     },
     {

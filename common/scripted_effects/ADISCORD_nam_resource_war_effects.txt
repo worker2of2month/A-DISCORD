@@ -2198,6 +2198,11 @@ NAM_groups_initialize = {
 	if = {
 		limit = { NOT = { has_country_flag = NAM_groups_initialized } }
 		set_country_flag = NAM_groups_initialized
+		EFL = { NAM_board_sync_district_status = yes }
+		AZH = { NAM_board_sync_district_status = yes }
+		RHM = { NAM_board_sync_district_status = yes }
+		SDR = { NAM_board_sync_district_status = yes }
+		KDR = { NAM_board_sync_district_status = yes }
 		set_variable = { var = NAM_hidden_fuel value = 0 }
 		set_variable = { var = NAM_open_fuel_reserve value = 0 }
 		set_variable = { var = NAM_gar_army_speed value = -0.10 }
@@ -5949,6 +5954,8 @@ NAM_deliver_amnesty_recruits = {
 # dissolves, Weber serves Svetlogorye and the uprising can no longer happen.
 NAM_weber_amnesty = {
 	set_country_flag = NAM_weber_amnesty
+	set_temp_variable = { ADISCORD_party = token:humanism }
+	ADISCORD_legalise_party = yes
 	NAM_underground_clamp = yes
 	NAM_activate_weber_commander = yes
 	add_to_variable = { var = NAM_grp_dist_support value = 10 }
@@ -6024,7 +6031,10 @@ NAM_apply_ending_iron = {
 		hidden_effect = { NAM_rom_take_etatism = yes }
 	}
 	custom_effect_tooltip = NAM_ending_iron_name_tt
-	hidden_effect = { set_cosmetic_tag = NAM_iron_ladder }
+	hidden_effect = {
+		set_cosmetic_tag = NAM_iron_ladder
+		NAM_refresh_subject_identities = yes
+	}
 	add_ideas = NAM_spirit_iron_ladder
 	custom_effect_tooltip = NAM_ending_iron_ladder_tt
 	hidden_effect = {
@@ -6067,7 +6077,10 @@ NAM_apply_ending_service = {
 		hidden_effect = { NAM_rom_take_service_etatism = yes }
 	}
 	custom_effect_tooltip = NAM_ending_service_name_tt
-	hidden_effect = { set_cosmetic_tag = NAM_service_republic }
+	hidden_effect = {
+		set_cosmetic_tag = NAM_service_republic
+		NAM_refresh_subject_identities = yes
+	}
 	add_ideas = NAM_spirit_service_republic
 	custom_effect_tooltip = NAM_ending_service_ladder_tt
 	hidden_effect = {
@@ -6130,7 +6143,10 @@ NAM_apply_ending_federation = {
 		}
 	}
 	custom_effect_tooltip = NAM_ending_federation_name_tt
-	hidden_effect = { set_cosmetic_tag = NAM_federation }
+	hidden_effect = {
+		set_cosmetic_tag = NAM_federation
+		NAM_refresh_subject_identities = yes
+	}
 	add_ideas = NAM_spirit_federation
 	custom_effect_tooltip = NAM_ending_federation_ladder_tt
 	hidden_effect = {
@@ -6179,7 +6195,10 @@ NAM_apply_ending_oil_union = {
 		}
 	}
 	custom_effect_tooltip = NAM_ending_oil_union_name_tt
-	hidden_effect = { set_cosmetic_tag = NAM_oil_union }
+	hidden_effect = {
+		set_cosmetic_tag = NAM_oil_union
+		NAM_refresh_subject_identities = yes
+	}
 	add_ideas = NAM_spirit_oil_union
 	custom_effect_tooltip = NAM_ending_oil_union_ladder_tt
 	hidden_effect = {
@@ -6210,7 +6229,10 @@ NAM_apply_ending_prag_republic = {
 		hidden_effect = { NAM_rom_take_pragmatism = yes }
 	}
 	custom_effect_tooltip = NAM_ending_prag_republic_name_tt
-	hidden_effect = { set_cosmetic_tag = NAM_prag_republic }
+	hidden_effect = {
+		set_cosmetic_tag = NAM_prag_republic
+		NAM_refresh_subject_identities = yes
+	}
 	add_ideas = NAM_spirit_prag_republic
 	custom_effect_tooltip = NAM_pragmatic_ending_tt
 }
@@ -6231,7 +6253,10 @@ NAM_apply_ending_prag_directorate = {
 		hidden_effect = { NAM_rom_take_pragmatism = yes }
 	}
 	custom_effect_tooltip = NAM_ending_prag_directorate_name_tt
-	hidden_effect = { set_cosmetic_tag = NAM_prag_directorate }
+	hidden_effect = {
+		set_cosmetic_tag = NAM_prag_directorate
+		NAM_refresh_subject_identities = yes
+	}
 	add_ideas = NAM_spirit_prag_directorate
 	custom_effect_tooltip = NAM_pragmatic_ending_tt
 }
@@ -7171,27 +7196,294 @@ NAM_hum_sign_southern_mandate = {
 	}
 }
 
-# COUNTRY federal district. Its name in Svetlogorye's colour.
+# COUNTRY subject. The current constitution of NAM supplies the title;
+# a temporary selector does not change autonomy or grant a federal charter.
 NAM_federal_district_set_name = {
+	NAM_resolve_subject_name_style = yes
 	if = {
 		limit = { tag = EFL }
-		set_cosmetic_tag = EFL_NAM_federal_district
+		if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 1 compare = equals } }
+			set_cosmetic_tag = EFL_NAM_subject_military_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 2 compare = equals } }
+			set_cosmetic_tag = EFL_NAM_subject_service_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 3 compare = equals } }
+			set_cosmetic_tag = EFL_NAM_federal_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 4 compare = equals } }
+			set_cosmetic_tag = EFL_NAM_subject_concession
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 5 compare = equals } }
+			set_cosmetic_tag = EFL_NAM_subject_treaty_republic
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 6 compare = equals } }
+			set_cosmetic_tag = EFL_NAM_subject_directorate
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 7 compare = equals } }
+			set_cosmetic_tag = EFL_NAM_subject_imperial_governorate
+		}
+		else = { set_cosmetic_tag = EFL_NAM_subject_governorate }
 	}
 	else_if = {
 		limit = { tag = AZH }
-		set_cosmetic_tag = AZH_NAM_federal_district
+		if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 1 compare = equals } }
+			set_cosmetic_tag = AZH_NAM_subject_military_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 2 compare = equals } }
+			set_cosmetic_tag = AZH_NAM_subject_service_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 3 compare = equals } }
+			set_cosmetic_tag = AZH_NAM_federal_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 4 compare = equals } }
+			set_cosmetic_tag = AZH_NAM_subject_concession
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 5 compare = equals } }
+			set_cosmetic_tag = AZH_NAM_subject_treaty_republic
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 6 compare = equals } }
+			set_cosmetic_tag = AZH_NAM_subject_directorate
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 7 compare = equals } }
+			set_cosmetic_tag = AZH_NAM_subject_imperial_governorate
+		}
+		else = { set_cosmetic_tag = AZH_NAM_subject_governorate }
 	}
 	else_if = {
 		limit = { tag = RHM }
-		set_cosmetic_tag = RHM_NAM_federal_district
+		if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 1 compare = equals } }
+			set_cosmetic_tag = RHM_NAM_subject_military_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 2 compare = equals } }
+			set_cosmetic_tag = RHM_NAM_subject_service_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 3 compare = equals } }
+			set_cosmetic_tag = RHM_NAM_federal_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 4 compare = equals } }
+			set_cosmetic_tag = RHM_NAM_subject_concession
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 5 compare = equals } }
+			set_cosmetic_tag = RHM_NAM_subject_treaty_republic
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 6 compare = equals } }
+			set_cosmetic_tag = RHM_NAM_subject_directorate
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 7 compare = equals } }
+			set_cosmetic_tag = RHM_NAM_subject_imperial_governorate
+		}
+		else = { set_cosmetic_tag = RHM_NAM_subject_governorate }
 	}
 	else_if = {
 		limit = { tag = SDR }
-		set_cosmetic_tag = SDR_NAM_federal_district
+		if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 1 compare = equals } }
+			set_cosmetic_tag = SDR_NAM_subject_military_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 2 compare = equals } }
+			set_cosmetic_tag = SDR_NAM_subject_service_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 3 compare = equals } }
+			set_cosmetic_tag = SDR_NAM_federal_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 4 compare = equals } }
+			set_cosmetic_tag = SDR_NAM_subject_concession
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 5 compare = equals } }
+			set_cosmetic_tag = SDR_NAM_subject_treaty_republic
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 6 compare = equals } }
+			set_cosmetic_tag = SDR_NAM_subject_directorate
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 7 compare = equals } }
+			set_cosmetic_tag = SDR_NAM_subject_imperial_governorate
+		}
+		else = { set_cosmetic_tag = SDR_NAM_subject_governorate }
 	}
 	else_if = {
 		limit = { tag = KDR }
-		set_cosmetic_tag = KDR_NAM_federal_district
+		if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 1 compare = equals } }
+			set_cosmetic_tag = KDR_NAM_subject_military_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 2 compare = equals } }
+			set_cosmetic_tag = KDR_NAM_subject_service_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 3 compare = equals } }
+			set_cosmetic_tag = KDR_NAM_federal_district
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 4 compare = equals } }
+			set_cosmetic_tag = KDR_NAM_subject_concession
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 5 compare = equals } }
+			set_cosmetic_tag = KDR_NAM_subject_treaty_republic
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 6 compare = equals } }
+			set_cosmetic_tag = KDR_NAM_subject_directorate
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_subject_name_style value = 7 compare = equals } }
+			set_cosmetic_tag = KDR_NAM_subject_imperial_governorate
+		}
+		else = { set_cosmetic_tag = KDR_NAM_subject_governorate }
+	}
+}
+
+# COUNTRY subject. Final constitutions take precedence over an earlier exile route.
+NAM_resolve_subject_name_style = {
+	set_temp_variable = { var = NAM_subject_name_style value = 0 }
+	if = {
+		limit = {
+			NAM = {
+				has_cosmetic_tag = NAM_veyran_union
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 7 }
+	}
+	else_if = {
+		limit = {
+			NAM = {
+				OR = {
+					has_cosmetic_tag = NAM_corporate_state
+					has_country_flag = NAM_corp_takeover
+				}
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 4 }
+	}
+	else_if = {
+		limit = {
+			NAM = {
+				OR = {
+					has_cosmetic_tag = NAM_iron_ladder
+					has_cosmetic_tag = NAM_svetlogorye_derzhava
+				}
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 1 }
+	}
+	else_if = {
+		limit = {
+			NAM = {
+				has_cosmetic_tag = NAM_service_republic
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 2 }
+	}
+	else_if = {
+		limit = {
+			NAM = {
+				has_cosmetic_tag = NAM_federation
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 3 }
+	}
+	else_if = {
+		limit = {
+			NAM = {
+				has_cosmetic_tag = NAM_oil_union
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 4 }
+	}
+	else_if = {
+		limit = {
+			NAM = {
+				has_cosmetic_tag = NAM_prag_republic
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 5 }
+	}
+	else_if = {
+		limit = {
+			NAM = {
+				has_cosmetic_tag = NAM_prag_directorate
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 6 }
+	}
+	else_if = {
+		limit = {
+			NAM = {
+				has_country_flag = NAM_exile_radical
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 1 }
+	}
+	else_if = {
+		limit = {
+			NAM = {
+				has_country_flag = NAM_exile_humanist
+			}
+		}
+		set_temp_variable = { var = NAM_subject_name_style value = 3 }
+	}
+}
+
+# COUNTRY NAM. Refresh only the five authored subjects after a regime change.
+NAM_refresh_subject_identities = {
+	EFL = {
+		if = {
+			limit = { is_subject_of = NAM }
+			NAM_board_sync_district_status = yes
+		}
+	}
+	AZH = {
+		if = {
+			limit = { is_subject_of = NAM }
+			NAM_board_sync_district_status = yes
+		}
+	}
+	RHM = {
+		if = {
+			limit = { is_subject_of = NAM }
+			NAM_board_sync_district_status = yes
+		}
+	}
+	SDR = {
+		if = {
+			limit = { is_subject_of = NAM }
+			NAM_board_sync_district_status = yes
+		}
+	}
+	KDR = {
+		if = {
+			limit = { is_subject_of = NAM }
+			NAM_board_sync_district_status = yes
+		}
 	}
 }
 
@@ -7783,6 +8075,7 @@ NAM_exile_choose_radical = {
 	ADISCORD_economy_mark_dirty = yes
 	log = "[ADISCORD][NAM][EXILE] The pillars overthrow the namestnik."
 	NAM_party_representatives_exile_radical = yes
+	NAM_refresh_subject_identities = yes
 }
 
 # COUNTRY NAM. Yaroslav Weber's humanists take power and open the islands to
@@ -7814,6 +8107,7 @@ NAM_exile_choose_humanist = {
 	ADISCORD_economy_mark_dirty = yes
 	log = "[ADISCORD][NAM][EXILE] Veter's humanists overthrow the namestnik."
 	NAM_party_representatives_exile_humanist = yes
+	NAM_refresh_subject_identities = yes
 }
 
 # COUNTRY NAM. Both political routes use the dormant startup character.
@@ -8303,6 +8597,7 @@ NAM_corp_takeover = {
 		}
 	}
 	set_cosmetic_tag = NAM_corporate_state
+	NAM_refresh_subject_identities = yes
 	every_owned_state = {
 		limit = {
 			NAM_rw_island_state = yes
@@ -8349,11 +8644,11 @@ NAM_board_subject_change = {
 		limit = {
 			OR = {
 				tag = NAM
-				has_variable = NAM_corp_district_owner
+				NAM_subject_identity_participant = yes
 			}
 		}
 		if = {
-			limit = { has_variable = NAM_corp_district_owner }
+			limit = { NAM_subject_identity_participant = yes }
 			country_event = { id = ADISCORD_nam_resource_war.112 hours = 1 }
 		}
 		NAM = { NAM_board_queue_recount = yes }
@@ -8361,7 +8656,8 @@ NAM_board_subject_change = {
 }
 
 # Diplomatic callbacks can fire before the native overlord has changed.
-# Only corporate flags belonging to this register may be removed on liberation.
+# Subject identity does not grant a federal charter or its economic benefits.
+# Liberation removes only NAM's own cosmetics, preserving other countries' titles.
 NAM_board_sync_district_status = {
 	if = {
 		limit = {
@@ -8378,7 +8674,16 @@ NAM_board_sync_district_status = {
 		NAM_corp_district_set_name = yes
 	}
 	else_if = {
-		limit = { NAM_board_has_charter_cosmetic = yes }
+		limit = { is_subject_of = NAM }
+		NAM_federal_district_set_name = yes
+	}
+	else_if = {
+		limit = {
+			OR = {
+				NAM_board_has_charter_cosmetic = yes
+				NAM_has_federal_district_cosmetic = yes
+			}
+		}
 		drop_cosmetic_tag = yes
 	}
 	force_update_dynamic_modifier = yes
@@ -14867,6 +15172,7 @@ NAM_veyran_settle_victory = {
 		}
 		set_capital = { state = 32 }
 		set_cosmetic_tag = NAM_veyran_union
+		NAM_refresh_subject_identities = yes
 		for_each_scope_loop = {
 			array = global.NAM_veyran_homeland
 			add_core_of = SNG
@@ -14911,6 +15217,7 @@ NAM_veyran_settle_defeat = {
 		if = {
 			limit = { exists = yes }
 			set_cosmetic_tag = NAM_svetlogorye_derzhava
+			NAM_refresh_subject_identities = yes
 			country_event = { id = ADISCORD_nam_resource_war.409 hours = 1 }
 		}
 	}

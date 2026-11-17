@@ -415,12 +415,13 @@ SEA_REGION_GRID = (
 
 
 BASE_REGIONS = (
-    # Region 2 now only catches unassigned inland-water/non-state provinces.
-    # The former catch-all state 23 is rebuilt as one connected climate shell.
-    Region(2, "inland-waters", "Внутренние воды", "warm_maritime", ()),
     Region(3, "polar-islands", "Полярные острова", "polar", (47,)),
     Region(4, "western-archipelago", "Западный архипелаг", "cool_maritime", (77,)),
     Region(5, "far-west", "Дальний запад", "cool_maritime", (78,)),
+    # Central-continent theatres stay within roughly 40-150 provinces so one
+    # weather roll, air zone and AI front does not span several countries or
+    # elevation belts. A theatre keeps the ID of the part holding its toponym;
+    # free land IDs are 2 and the range after the dedicated sea regions.
     Region(
         6,
         "northern-march",
@@ -433,100 +434,106 @@ BASE_REGIONS = (
         "ivan-plains",
         "Иванские равнины",
         "cool_continental",
-        (25, 92, 95, 97, 98, 126, 135, 139, 140, 141, 142, 143, 695, 696, 697, 698, 713, 714, 716, 717),
+        (25, 695, 697, 698, 713, 714, 716, 717),
+    ),
+    Region(
+        247,
+        "borean-uplands",
+        "Борейское ополье",
+        "cool_continental",
+        (92, 95, 97, 98, 126, 135, 139, 140, 141, 142, 143, 696),
     ),
     Region(
         8,
         "western-lowlands",
         "Западные равнины",
         "temperate_continental",
-        (26, 71, 90, 91, 93, 94, 96, 99, 100, 101, 103, 194, 202, 328),
+        (26, 71, 90, 91, 93, 94, 103, 194, 202, 328),
     ),
+    Region(248, "lakora-coast", "Лакорское побережье", "temperate_wet", (96, 99, 100, 101)),
     Region(
         9,
         "vych-country",
         "Вычский край",
         "warm_semiarid",
-        (75, 102, 106, 107, 108, 109, 110, 111, 121, 122, 123, 124, 201, 307, 324, 325),
+        (75, 102, 106, 107, 108, 109, 111, 121, 122, 123, 201),
+    ),
+    Region(
+        249,
+        "eirmi-ridge",
+        "Эйрмийская гряда",
+        "temperate_highland",
+        (110, 124, 307, 324, 325),
     ),
     Region(
         10,
         "upper-watershed",
         "Верхний водораздел",
         "cool_highland",
-        (
-            72,
-            73,
-            133,
-            134,
-            136,
-            137,
-            138,
-            144,
-            145,
-            146,
-            147,
-            148,
-            149,
-            150,
-            151,
-            195,
-            196,
-            319,
-            321,
-            322,
-        ),
+        (134, 146, 147, 148, 149, 150, 151),
+    ),
+    Region(
+        250,
+        "dolnian-passes",
+        "Дольнские перевалы",
+        "cool_highland",
+        (72, 133, 136, 137, 138, 195, 196, 322),
+    ),
+    Region(
+        251,
+        "frealor-marshes",
+        "Фреалорские топи",
+        "temperate_wet",
+        (73, 144, 145, 319, 321),
     ),
     Region(
         11,
         "zlatoriver",
         "Златоречье",
         "temperate_wet",
-        (80, 82, 157, 158, 159, 161, 162, 163, 199, 315, 316, 317, 318),
+        (80, 199, 315, 316, 317, 318),
     ),
+    Region(
+        252,
+        "screen-plains",
+        "Заслонные равнины",
+        "temperate_continental",
+        (157, 158, 159, 161, 162, 163),
+    ),
+    # State 82 has no land border with the rest of Zlatoriver; it joins the
+    # Vorkernsberg theatre it physically borders.
     Region(
         12,
         "vorkernsberg",
         "Воркенсберг",
         "temperate_continental",
-        (
-            27,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37,
-            38,
-            39,
-            40,
-            79,
-            81,
-            104,
-            105,
-            306,
-            308,
-            309,
-            320,
-            323,
-            327,
-        ),
+        (27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 82, 320, 323),
     ),
+    Region(
+        253,
+        "riven-highlands",
+        "Ривенское нагорье",
+        "temperate_highland",
+        (79, 81, 306, 308, 309, 327),
+    ),
+    # States 104 and 105 border only the southern arc, so they leave
+    # Vorkernsberg for the theatres they touch.
     Region(
         13,
         "southern-dry-arc",
         "Южная сухая дуга",
-        "hot_arid",
-        (52, 74, 76, 113, 114, 197, 198, 310, 311, 312, 313, 314, 326),
+        "warm_semiarid",
+        (52, 74, 105, 113, 114, 197, 311, 312, 313, 314, 326),
     ),
+    Region(254, "solarino-basin", "Котловина Солярино", "warm_semiarid", (76, 104, 198, 310)),
     Region(
-        14, "reing-heights", "Рейнгские высоты", "hot_highland", (112, 115, 116, 117)
+        14, "reing-heights", "Рейнгские высоты", "arid_highland", (112, 115, 116, 117)
     ),
     Region(
         15,
         "northeastern-forests",
         "Северо-восточные леса",
-        "cool_maritime",
+        "boreal_wet",
         (13, 14, 17, 18, 19, 20, 21, 22, 83, 84, 85, 86, 87, 118, 119, 120, 303),
     ),
     Region(
@@ -534,7 +541,14 @@ BASE_REGIONS = (
         "eastern-riverlands",
         "Восточное междуречье",
         "temperate_wet",
-        (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 28, 29, 30, 31, 41, 53, 709, 718),
+        (1, 2, 3, 4, 5, 6, 7, 9, 28, 29, 31, 41, 53, 709, 718),
+    ),
+    Region(
+        255,
+        "nodrul-woodlands",
+        "Нодрулское лесоречье",
+        "boreal_wet",
+        (8, 10, 11, 12, 15, 16, 30),
     ),
     Region(
         17,
@@ -555,31 +569,22 @@ BASE_REGIONS = (
         "grey-belt",
         "Серая полоса",
         "arid_highland",
-        (
-            49,
-            50,
-            51,
-            66,
-            125,
-            176,
-            180,
-            181,
-            191,
-            192,
-            193,
-            233,
-            329,
-            330,
-            710,
-            711,
-            712,
-        ),
+        (49, 50, 51, 66, 233, 329, 710, 711, 712),
     ),
+    Region(
+        256,
+        "northern-reactor-zone",
+        "Северная реакторная зона",
+        "arid_highland",
+        (125, 176, 180, 181, 191, 192, 193, 330),
+    ),
+    # The contaminated zones are mid-latitude wasteland: dry and dusty, but
+    # with the cold winters of the lands around them.
     Region(
         20,
         "irem-wastes",
         "Иримская пустошь",
-        "arid",
+        "arid_highland",
         (
             177,
             178,
@@ -603,29 +608,46 @@ BASE_REGIONS = (
         21,
         "western-reactor-zone",
         "Западная реакторная зона",
-        "arid",
+        "arid_highland",
         (152, 153, 154, 155, 156, 160, 223, 224),
     ),
     Region(
         22,
         "loren-corridor",
         "Лоренский коридор",
-        "arid",
+        "arid_highland",
         (167, 169, 170, 171, 172, 173, 203, 204, 205, 211, 216, 217),
     ),
     Region(
         23,
         "southern-reactor-zone",
         "Южная реакторная зона",
-        "hot_arid",
+        "arid_highland",
         (165, 166, 209, 210, 212, 213, 214, 215, 218, 219, 222),
     ),
     Region(
         24,
+        "svetlogorye-coast",
+        "Светлогорское побережье",
+        "hot_arid",
+        (67, 688, 689, 690, 700, 719),
+    ),
+    Region(
+        257, "upper-loren", "Верхнелоренское нагорье", "arid_highland", (68, 174, 175, 724)
+    ),
+    Region(
+        258,
         "mardar-lowlands",
         "Мардарская низина",
         "hot_arid",
-        (67, 68, 69, 70, 174, 175, 688, 689, 690, 691, 692, 700, 701, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 729),
+        (70, 691, 701, 720, 721, 723, 725, 726),
+    ),
+    Region(
+        259,
+        "azhar-shore",
+        "Ажарский берег",
+        "hot_arid",
+        (69, 692, 722, 727, 728, 729),
     ),
     Region(
         25,
@@ -639,17 +661,51 @@ BASE_REGIONS = (
         "kadir-coast",
         "Кадирское побережье",
         "hot_arid",
-        (*range(234, 265), 702, 703, 704),
+        (234, 235, 236, 237, 238, 239, 241, 242, 244, 245, 246, 247, 702),
     ),
     Region(
-        41, "mazar-oases", "Мазарские оазисы", "hot_arid", (*range(265, 287), 705, 706)
+        260,
+        "rahma-coast",
+        "Рахмское побережье",
+        "hot_arid",
+        (248, 249, 252, 253, 254, 255, 256, 257, 258, 703),
+    ),
+    Region(
+        261,
+        "sardan-highlands",
+        "Сарданское нагорье",
+        "hot_highland",
+        (240, 243, 250, 251, 259, 260, 261, 262, 263, 704),
+    ),
+    Region(
+        41,
+        "mazar-oases",
+        "Мазарские оазисы",
+        "arid",
+        (265, 266, 267, 268, 269, 270, 271, 272, 274, 275, 705),
+    ),
+    Region(
+        262,
+        "keizan-uplands",
+        "Кейзанские предгорья",
+        "arid",
+        (*range(276, 287), 706),
     ),
     Region(
         42,
         "shahrabad-saltlands",
         "Шахрабадские солончаки",
         "hot_highland",
-        (*range(287, 303), 304, 305, 699, 707, 708, 730, 731, 732, 733),
+        (*range(287, 297), 699, 707, 730, 731, 732, 733),
+    ),
+    # Veir (GLP) keeps its coast, islands and the two border states 264 and
+    # 273 in one theatre.
+    Region(
+        2,
+        "veir-coast",
+        "Вейрское побережье",
+        "arid",
+        (264, 273, *range(297, 303), 304, 305, 708),
     ),
 )
 
@@ -1312,145 +1368,148 @@ TEMPERATURES = {
         (-17, -5),
         (-26, -10),
     ),
+    # Land envelopes below follow vanilla's winter shape: a deep minimum with
+    # a maximum near or above zero. A narrow range around +2 degrees, such as
+    # -4..8, leaves ground snow to melt within days of every snowfall.
     "cool_maritime": (
-        (-12, 3),
-        (-11, 4),
-        (-7, 8),
-        (-1, 14),
+        (-14, 3),
+        (-13, 4),
+        (-9, 7),
+        (-2, 13),
         (4, 19),
         (9, 23),
         (12, 26),
         (11, 25),
         (7, 20),
-        (2, 14),
-        (-4, 8),
-        (-9, 4),
+        (1, 14),
+        (-6, 8),
+        (-11, 4),
     ),
     "boreal_wet": (
-        (-16, -2),
-        (-14, 0),
-        (-8, 7),
+        (-17, 1),
+        (-15, 2),
+        (-9, 7),
         (-1, 14),
         (5, 20),
         (10, 25),
         (13, 28),
         (12, 27),
         (7, 21),
-        (1, 13),
+        (0, 13),
         (-6, 6),
-        (-13, 0),
+        (-13, 2),
     ),
     "cool_continental": (
-        (-18, -3),
-        (-16, 0),
-        (-9, 7),
-        (-1, 15),
-        (5, 21),
+        (-24, -2),
+        (-22, 0),
+        (-15, 5),
+        (-5, 13),
+        (4, 21),
         (10, 27),
         (13, 30),
         (11, 28),
-        (6, 22),
-        (-1, 14),
-        (-8, 6),
-        (-15, 0),
+        (5, 21),
+        (-4, 12),
+        (-12, 4),
+        (-20, 0),
     ),
     "temperate_continental": (
-        (-4, 8),
-        (-3, 9),
-        (0, 13),
-        (4, 19),
-        (8, 24),
-        (13, 29),
+        (-13, 6),
+        (-12, 7),
+        (-6, 12),
+        (-1, 17),
+        (6, 23),
+        (12, 28),
         (16, 32),
         (14, 30),
-        (9, 25),
-        (3, 18),
-        (0, 11),
-        (-3, 8),
+        (8, 25),
+        (1, 17),
+        (-5, 11),
+        (-10, 7),
     ),
     "temperate_wet": (
-        (-1, 9),
-        (0, 10),
-        (2, 14),
-        (6, 19),
-        (10, 24),
+        (-8, 9),
+        (-7, 10),
+        (-3, 13),
+        (3, 18),
+        (9, 23),
         (14, 28),
         (17, 31),
         (16, 30),
-        (12, 26),
-        (7, 20),
-        (2, 13),
-        (0, 9),
+        (11, 26),
+        (5, 20),
+        (-3, 12),
+        (-6, 9),
     ),
     "cool_highland": (
-        (-18, -2),
-        (-16, 0),
-        (-10, 6),
-        (-4, 12),
+        (-22, -1),
+        (-20, 1),
+        (-14, 5),
+        (-6, 11),
         (1, 17),
         (6, 22),
         (9, 25),
         (8, 23),
-        (3, 18),
-        (-3, 11),
-        (-9, 5),
-        (-15, 0),
+        (2, 18),
+        (-5, 10),
+        (-12, 4),
+        (-19, 0),
     ),
     "temperate_highland": (
-        (-7, 5),
-        (-6, 6),
-        (-2, 11),
-        (2, 16),
-        (6, 21),
-        (10, 25),
+        (-15, 3),
+        (-14, 4),
+        (-9, 9),
+        (-3, 14),
+        (4, 20),
+        (9, 25),
         (13, 28),
         (12, 27),
-        (8, 22),
-        (3, 16),
-        (-2, 10),
-        (-6, 6),
+        (7, 22),
+        (0, 15),
+        (-7, 8),
+        (-13, 4),
     ),
     "warm_semiarid": (
-        (1, 16),
-        (3, 19),
-        (7, 23),
+        (-3, 16),
+        (-1, 18),
+        (5, 22),
         (11, 28),
         (15, 33),
         (19, 37),
         (22, 40),
         (21, 39),
         (17, 34),
-        (11, 28),
-        (6, 22),
-        (2, 18),
+        (10, 27),
+        (3, 21),
+        (-2, 17),
     ),
     "arid_highland": (
-        (-5, 12),
-        (-3, 15),
-        (2, 20),
-        (7, 25),
-        (12, 30),
-        (16, 34),
+        (-12, 9),
+        (-10, 12),
+        (-4, 17),
+        (2, 22),
+        (10, 29),
+        (15, 34),
         (19, 37),
         (18, 36),
-        (13, 31),
-        (7, 25),
-        (1, 18),
-        (-3, 13),
+        (12, 31),
+        (3, 23),
+        (-4, 15),
+        (-10, 10),
     ),
     "arid": (
-        (2, 18),
-        (4, 21),
-        (9, 27),
-        (14, 33),
-        (19, 38),
+        (-4, 16),
+        (-2, 19),
+        (4, 25),
+        (12, 32),
+        (18, 38),
         (23, 42),
         (26, 45),
         (25, 44),
-        (20, 39),
-        (14, 32),
-        (8, 25),
-        (3, 19),
+        (19, 39),
+        (12, 31),
+        (3, 22),
+        (-3, 17),
     ),
     "hot_arid": (
         (7, 23),
@@ -1467,18 +1526,18 @@ TEMPERATURES = {
         (8, 24),
     ),
     "hot_highland": (
-        (2, 17),
-        (4, 19),
-        (8, 23),
-        (12, 27),
+        (-3, 15),
+        (-1, 17),
+        (4, 21),
+        (10, 26),
         (16, 31),
         (20, 35),
         (22, 37),
         (21, 36),
         (17, 32),
-        (12, 27),
-        (7, 22),
-        (3, 18),
+        (11, 26),
+        (3, 20),
+        (-2, 16),
     ),
     "tropical_maritime": (
         (18, 30),
@@ -1510,11 +1569,122 @@ TEMPERATURES = {
     ),
 }
 
+SEA_CLIMATES = frozenset(
+    {
+        "polar_ocean",
+        "subpolar_ocean",
+        "temperate_ocean",
+        "warm_ocean",
+        "tropical_ocean",
+        "current_ice",
+        "current_north",
+        "current_rapids",
+        "current_south",
+        "current_fog",
+    }
+)
 
-def phenomenon(
+# Map y (pixels from the top) at which each land envelope above applies: the
+# mean latitude of the provinces using it. One climate spans up to 500 px of
+# latitude, so a region further north gets a colder winter than its
+# southern neighbour with the same climate. The polar belt is excluded
+# because it must never thaw.
+CLIMATE_REFERENCE_Y = {
+    "subarctic_maritime": 455,
+    "subarctic_continental": 545,
+    "cold_highland": 415,
+    "cool_maritime": 785,
+    "boreal_wet": 970,
+    "cool_continental": 795,
+    "cool_highland": 955,
+    "temperate_continental": 1205,
+    "temperate_wet": 1185,
+    "temperate_highland": 960,
+    "warm_semiarid": 1570,
+    "arid_highland": 1215,
+    "arid": 1185,
+    "hot_arid": 1445,
+    "hot_highland": 1190,
+    "tropical_maritime": 1765,
+    "warm_maritime": 1655,
+}
+# Degrees per map pixel in January and July, interpolated by season; about
+# 0.8 and 0.35 degrees Celsius per degree of latitude, as in vanilla Europe.
+LATITUDE_GRADIENT_JANUARY = 0.032
+LATITUDE_GRADIENT_JULY = 0.014
+# Bounds how far a region's envelope may drift from its climate's
+# calibrated one; it does not order different climates against each other.
+MAX_LATITUDE_SHIFT = 8.0
+
+# Snow weight in a month whose whole temperature envelope is at or below the
+# snowfall ceiling of weather.txt (+1 degree). Drier climates convert less of
+# their winter into snow; tropical coasts never get it.
+SNOW_CAPACITY = {
+    "polar": 0.60,
+    "subarctic_maritime": 0.55,
+    "subarctic_continental": 0.55,
+    "cold_highland": 0.60,
+    "cool_maritime": 0.45,
+    "boreal_wet": 0.55,
+    "cool_continental": 0.55,
+    "cool_highland": 0.55,
+    "temperate_continental": 0.45,
+    "temperate_wet": 0.40,
+    "temperate_highland": 0.50,
+    "warm_semiarid": 0.20,
+    "arid_highland": 0.35,
+    "arid": 0.12,
+    "hot_arid": 0.08,
+    "hot_highland": 0.15,
+    "tropical_maritime": 0.0,
+    "warm_maritime": 0.15,
+}
+# Share of snowfall that arrives as blizzards once the minimum reaches -14.
+BLIZZARD_SHARE = {
+    "polar": 0.50,
+    "subarctic_maritime": 0.40,
+    "subarctic_continental": 0.45,
+    "cold_highland": 0.45,
+    "cool_maritime": 0.20,
+    "boreal_wet": 0.25,
+    "cool_continental": 0.30,
+    "cool_highland": 0.35,
+    "temperate_continental": 0.15,
+    "temperate_wet": 0.08,
+    "temperate_highland": 0.25,
+    "warm_semiarid": 0.10,
+    "arid_highland": 0.25,
+    "arid": 0.10,
+    "hot_arid": 0.10,
+    "hot_highland": 0.15,
+    "tropical_maritime": 0.0,
+    "warm_maritime": 0.0,
+}
+# weather.txt: snow falls only at or below +1 degree.
+SNOWFALL_CEILING = 1.0
+# Precipitation that falls as snow is taken out of the rain weights.
+RAIN_TO_SNOW_SHARE = 0.8
+
+
+@dataclass(frozen=True)
+class WeatherPeriod:
+    low: float
+    high: float
+    no_phenomenon: float
+    rain_light: float
+    rain_heavy: float
+    snow: float
+    blizzard: float
+    arctic_water: float
+    mud: float
+    sandstorm: float
+    min_snow_level: float
+
+
+def sea_phenomenon(
     climate: str, month: int
 ) -> tuple[float, float, float, float, float, float, float]:
-    """Return independent weather weights plus mud and sandstorm intensity.
+    """Return sea weather weights plus mud and sandstorm intensity.
 
     Clausewitz does not treat these values as one normalized probability
     distribution.  In particular, vanilla commonly combines a clear-weather
@@ -1524,7 +1694,6 @@ def phenomenon(
     """
     winter = month in (11, 0, 1)
     shoulder = month in (2, 3, 9, 10)
-    summer = month in (5, 6, 7)
 
     if climate == "polar_ocean":
         return (
@@ -1583,101 +1752,107 @@ def phenomenon(
         # Clausewitz has no fog state: a little drizzle stands in for it under
         # the storms.
         return (0.05, 0.15, 1.00, 0.0, 0.0, 0.0, 0.0)
+    raise ValueError(f"unknown sea climate profile: {climate}")
+
+
+def land_phenomenon(
+    climate: str, month: int
+) -> tuple[float, float, float, float, float]:
+    """Return clear, light rain, heavy rain, mud and sandstorm for land.
+
+    Snow and blizzards are derived from the temperature envelope in
+    ``weather_period``; these rain weights describe the precipitation before
+    the cold share of it turns into snow.
+    """
+    winter = month in (11, 0, 1)
+    shoulder = month in (2, 3, 9, 10)
+    summer = month in (5, 6, 7)
+
     if climate == "polar":
         if winter:
-            return (0.32, 0.05, 0.01, 0.55, 0.30, 0.35, 0.0)
+            return (0.32, 0.05, 0.01, 0.35, 0.0)
         if shoulder:
-            return (0.36, 0.03, 0.0, 0.50, 0.22, 0.20, 0.0)
-        return (0.42, 0.05, 0.0, 0.40, 0.12, 0.10, 0.0)
+            return (0.36, 0.03, 0.0, 0.20, 0.0)
+        return (0.42, 0.05, 0.0, 0.10, 0.0)
     if climate == "subarctic_maritime":
         if winter:
-            return (0.36, 0.20, 0.08, 0.45, 0.18, 0.60, 0.0)
+            return (0.36, 0.20, 0.08, 0.60, 0.0)
         if shoulder:
-            return (0.35, 0.45, 0.18, 0.18, 0.05, 1.00, 0.0)
-        return (0.42, 0.45, 0.18, 0.03, 0.0, 0.70, 0.0)
+            return (0.35, 0.45, 0.18, 1.00, 0.0)
+        return (0.42, 0.45, 0.18, 0.70, 0.0)
     if climate == "subarctic_continental":
         if winter:
-            return (0.42, 0.08, 0.02, 0.50, 0.22, 0.45, 0.0)
+            return (0.42, 0.08, 0.02, 0.45, 0.0)
         if shoulder:
-            return (0.45, 0.25, 0.08, 0.25, 0.06, 1.10, 0.0)
-        return (0.54, 0.35, 0.12, 0.03, 0.0, 0.70, 0.0)
+            return (0.45, 0.25, 0.08, 1.10, 0.0)
+        return (0.54, 0.35, 0.12, 0.70, 0.0)
     if climate == "cold_highland":
         if winter:
-            return (0.34, 0.10, 0.03, 0.55, 0.25, 0.40, 0.0)
+            return (0.34, 0.10, 0.03, 0.40, 0.0)
         if shoulder:
-            return (0.39, 0.28, 0.10, 0.30, 0.08, 0.90, 0.0)
-        return (0.48, 0.35, 0.12, 0.10, 0.02, 0.55, 0.0)
+            return (0.39, 0.28, 0.10, 0.90, 0.0)
+        return (0.48, 0.35, 0.12, 0.55, 0.0)
     if climate == "cool_maritime":
         if winter:
-            return (0.40, 0.75, 0.18, 0.24, 0.05, 0.55, 0.0)
+            return (0.40, 0.75, 0.18, 0.55, 0.0)
         if shoulder:
-            return (0.36, 0.85, 0.22, 0.08, 0.02, 0.90, 0.0)
-        return (0.43, 0.75, 0.20, 0.0, 0.0, 0.65, 0.0)
+            return (0.36, 0.85, 0.22, 0.90, 0.0)
+        return (0.43, 0.75, 0.20, 0.65, 0.0)
     if climate == "boreal_wet":
         if winter:
-            return (0.38, 0.30, 0.10, 0.32, 0.08, 0.70, 0.0)
+            return (0.38, 0.30, 0.10, 0.70, 0.0)
         if shoulder:
-            return (0.34, 0.50, 0.20, 0.15, 0.03, 1.20, 0.0)
-        return (0.40, 0.55, 0.25, 0.0, 0.0, 0.90, 0.0)
+            return (0.34, 0.50, 0.20, 1.20, 0.0)
+        return (0.40, 0.55, 0.25, 0.90, 0.0)
     if climate in ("cool_continental", "cool_highland"):
         if winter:
-            return (0.42, 0.12, 0.04, 0.34, 0.10, 0.65, 0.0)
+            return (0.42, 0.12, 0.04, 0.65, 0.0)
         if shoulder:
-            return (0.43, 0.35, 0.12, 0.12, 0.03, 1.15, 0.0)
-        return (0.51, 0.40, 0.15, 0.0, 0.0, 0.75, 0.0)
+            return (0.43, 0.35, 0.12, 1.15, 0.0)
+        return (0.51, 0.40, 0.15, 0.75, 0.0)
     if climate in ("temperate_continental", "temperate_highland"):
         if winter:
-            return (0.52, 0.18, 0.06, 0.14, 0.02, 0.60, 0.0)
+            return (0.52, 0.18, 0.06, 0.60, 0.0)
         if shoulder:
-            return (0.46, 0.40, 0.14, 0.03, 0.0, 1.10, 0.0)
-        return (0.50, 0.45, 0.18, 0.0, 0.0, 0.80, 0.0)
+            return (0.46, 0.40, 0.14, 1.10, 0.0)
+        return (0.50, 0.45, 0.18, 0.80, 0.0)
     if climate == "temperate_wet":
         if winter:
-            return (0.42, 0.45, 0.16, 0.08, 0.01, 0.75, 0.0)
+            return (0.42, 0.45, 0.16, 0.75, 0.0)
         if shoulder:
-            return (0.35, 0.65, 0.28, 0.01, 0.0, 1.25, 0.0)
-        return (0.38, 0.60, 0.30, 0.0, 0.0, 1.00, 0.0)
+            return (0.35, 0.65, 0.28, 1.25, 0.0)
+        return (0.38, 0.60, 0.30, 1.00, 0.0)
     if climate == "warm_semiarid":
         return (
             0.64,
             0.12,
             0.04,
-            0.03 if winter else 0.0,
-            0.0,
             0.35 if shoulder else 0.12,
             0.25 if summer else 0.15,
         )
     if climate in ("arid", "arid_highland", "hot_arid"):
-        rain_light = 0.04 if winter or shoulder else 0.02
-        rain_heavy = 0.01 if winter or shoulder else 0.0
-        snow = 0.12 if climate == "arid_highland" and winter else 0.0
-        sand = 0.40 if summer else 0.25
         return (
             0.67,
-            rain_light,
-            rain_heavy,
-            snow,
-            0.02 if snow else 0.0,
+            0.04 if winter or shoulder else 0.02,
+            0.01 if winter or shoulder else 0.0,
             0.12 if shoulder else 0.04,
-            sand,
+            0.40 if summer else 0.25,
         )
     if climate == "hot_highland":
         return (
             0.55,
             0.22,
             0.08,
-            0.02 if winter else 0.0,
-            0.0,
             0.50 if shoulder else 0.25,
             0.15 if summer else 0.08,
         )
     if climate == "tropical_maritime":
         if month in (4, 5, 6, 7, 8):
-            return (0.28, 0.45, 0.50, 0.0, 0.0, 1.25, 0.0)
-        return (0.47, 0.35, 0.25, 0.0, 0.0, 0.75, 0.0)
+            return (0.28, 0.45, 0.50, 1.25, 0.0)
+        return (0.47, 0.35, 0.25, 0.75, 0.0)
     if climate == "warm_maritime":
-        return (0.42, 0.60, 0.25, 0.0, 0.0, 0.90 if shoulder else 0.60, 0.0)
-    raise ValueError(f"unknown climate profile: {climate}")
+        return (0.42, 0.60, 0.25, 0.90 if shoulder else 0.60, 0.0)
+    raise ValueError(f"unknown land climate profile: {climate}")
 
 
 def arctic_water(climate: str, month: int) -> float:
@@ -1692,33 +1867,114 @@ def arctic_water(climate: str, month: int) -> float:
     return 0.0
 
 
-def minimum_snow_level(climate: str, month: int) -> float:
-    """Use vanilla-scale floors; startup accumulation is handled globally.
-
-    This value is not a deterministic initial snow layer.  Raising it above
-    vanilla's usual 0.1-0.3 range only distorts weather after a snowy state has
-    already been selected, while leaving the initial region-shaped gaps intact.
-    The polar belt keeps the full floor in every month as permanent snow cover.
-    """
+def sea_minimum_snow_level(climate: str, month: int) -> float:
     winter = month in (11, 0, 1)
     shoulder = month in (2, 3, 9, 10)
     if climate in ("polar_ocean", "current_ice"):
         return 0.20 if winter else 0.10 if shoulder else 0.0
-    if climate == "polar":
-        return 0.30
     if climate == "subpolar_ocean":
         return 0.10 if winter else 0.03 if shoulder else 0.0
-    if climate in ("subarctic_maritime", "subarctic_continental"):
-        return 0.20 if winter else 0.10 if shoulder else 0.0
-    if climate == "cold_highland":
-        return 0.30 if winter else 0.15 if shoulder else 0.0
-    if climate in ("cool_maritime", "boreal_wet", "cool_continental", "cool_highland"):
-        return 0.10 if winter else 0.0
-    if climate == "temperate_highland":
-        return 0.10 if winter else 0.0
-    if climate == "arid_highland":
-        return 0.05 if winter else 0.0
     return 0.0
+
+
+def region_latitude(
+    provinces: set[int], positions: dict[int, tuple[float, float, float]]
+) -> float | None:
+    """Mean map y of a region's unit stacks, or None without positions."""
+    values = [
+        MAP_HEIGHT - positions[province_id][2]
+        for province_id in sorted(provinces)
+        if province_id in positions
+    ]
+    if not values:
+        return None
+    return sum(values) / len(values)
+
+
+def latitude_shift(climate: str, month: int, latitude_y: float | None) -> int:
+    """Whole degrees added to a land envelope for the region's latitude."""
+    reference_y = CLIMATE_REFERENCE_Y.get(climate)
+    if latitude_y is None or reference_y is None:
+        return 0
+    january_weight = (1.0 + math.cos(2.0 * math.pi * month / 12.0)) / 2.0
+    gradient = LATITUDE_GRADIENT_JULY + (
+        LATITUDE_GRADIENT_JANUARY - LATITUDE_GRADIENT_JULY
+    ) * january_weight
+    shift = (latitude_y - reference_y) * gradient
+    return round(max(-MAX_LATITUDE_SHIFT, min(MAX_LATITUDE_SHIFT, shift)))
+
+
+def freezing_share(low: float, high: float) -> float:
+    """Share of a temperature envelope at or below the snowfall ceiling."""
+    if high <= SNOWFALL_CEILING:
+        return 1.0
+    if low >= SNOWFALL_CEILING:
+        return 0.0
+    return (SNOWFALL_CEILING - low) / (high - low)
+
+
+def land_minimum_snow_level(climate: str, high: float) -> float:
+    """Vanilla-scale floor where the month's maximum keeps snow from melting.
+
+    This value is not a deterministic initial snow layer.  Vanilla uses
+    0.05-0.1 only in months whose maximum stays around +5 degrees or below;
+    the polar belt keeps 0.3 all year as permanent snow cover.
+    """
+    if climate == "polar":
+        return 0.30
+    if high <= 0.0:
+        return 0.20
+    if high <= 4.0:
+        return 0.10
+    return 0.0
+
+
+def weather_period(
+    climate: str, month: int, latitude_y: float | None = None
+) -> WeatherPeriod:
+    if climate in SEA_CLIMATES:
+        low, high = TEMPERATURES[climate][month]
+        clear, light, heavy, snow, blizzard, mud, sandstorm = sea_phenomenon(
+            climate, month
+        )
+        return WeatherPeriod(
+            float(low),
+            float(high),
+            clear,
+            light,
+            heavy,
+            snow,
+            blizzard,
+            arctic_water(climate, month),
+            mud,
+            sandstorm,
+            sea_minimum_snow_level(climate, month),
+        )
+
+    shift = latitude_shift(climate, month, latitude_y)
+    base_low, base_high = TEMPERATURES[climate][month]
+    low = float(base_low + shift)
+    high = float(base_high + shift)
+    clear, light, heavy, mud, sandstorm = land_phenomenon(climate, month)
+    share = freezing_share(low, high)
+    snow = round(SNOW_CAPACITY[climate] * share**0.75, 2)
+    # Blizzards need a deep frost: none above -4, the full share at -14.
+    frost = max(0.0, min(1.0, (-4.0 - low) / 10.0))
+    blizzard = round(snow * BLIZZARD_SHARE[climate] * frost, 2)
+    rain_factor = 1.0 - RAIN_TO_SNOW_SHARE * share
+    return WeatherPeriod(
+        low,
+        high,
+        clear,
+        round(light * rain_factor, 2),
+        round(heavy * rain_factor, 2),
+        snow,
+        blizzard,
+        0.0,
+        mud,
+        sandstorm,
+        land_minimum_snow_level(climate, high),
+    )
 
 
 def load_states() -> dict[int, set[int]]:
@@ -2354,25 +2610,24 @@ def format_provinces(provinces: set[int]) -> str:
     return "\n".join(lines)
 
 
-def format_weather(climate: str) -> str:
+def format_weather(climate: str, latitude_y: float | None = None) -> str:
     lines = ["\tweather={"]
     for month, date_range in enumerate(MONTH_RANGES):
-        low, high = TEMPERATURES[climate][month]
-        clear, light, heavy, snow, blizzard, mud, sandstorm = phenomenon(climate, month)
+        period = weather_period(climate, month, latitude_y)
         lines.extend(
             (
                 "\t\tperiod={",
                 f"\t\t\tbetween={{ {date_range} }}",
-                f"\t\t\ttemperature={{ {low:.1f} {high:.1f} }}",
-                f"\t\t\tno_phenomenon={clear:.2f}",
-                f"\t\t\train_light={light:.2f}",
-                f"\t\t\train_heavy={heavy:.2f}",
-                f"\t\t\tsnow={snow:.2f}",
-                f"\t\t\tblizzard={blizzard:.2f}",
-                f"\t\t\tarctic_water={arctic_water(climate, month):.2f}",
-                f"\t\t\tmud={mud:.2f}",
-                f"\t\t\tsandstorm={sandstorm:.2f}",
-                f"\t\t\tmin_snow_level={minimum_snow_level(climate, month):.2f}",
+                f"\t\t\ttemperature={{ {period.low:.1f} {period.high:.1f} }}",
+                f"\t\t\tno_phenomenon={period.no_phenomenon:.2f}",
+                f"\t\t\train_light={period.rain_light:.2f}",
+                f"\t\t\train_heavy={period.rain_heavy:.2f}",
+                f"\t\t\tsnow={period.snow:.2f}",
+                f"\t\t\tblizzard={period.blizzard:.2f}",
+                f"\t\t\tarctic_water={period.arctic_water:.2f}",
+                f"\t\t\tmud={period.mud:.2f}",
+                f"\t\t\tsandstorm={period.sandstorm:.2f}",
+                f"\t\t\tmin_snow_level={period.min_snow_level:.2f}",
                 "\t\t}",
             )
         )
@@ -2571,11 +2826,31 @@ def build(*, western_only: bool = False) -> None:
     land_region_by_province: dict[int, int] = {}
     for region in REGIONS:
         provinces = set().union(*(states[state_id] for state_id in region.states))
-        if region.region_id == 2:
-            provinces |= non_sea - state_provinces
         region_provinces[region.region_id] = provinces
         for province_id in provinces:
             land_region_by_province[province_id] = region.region_id
+
+    # Lake provinces outside states join the land region they border most, so
+    # they share its climate; temperature smoothing would otherwise carry a
+    # foreign climate onto the snow of their shores.
+    for component in connected_components(non_sea - state_provinces, adjacency):
+        neighbouring_land = Counter(
+            land_region_by_province[neighbour]
+            for province_id in component
+            for neighbour in adjacency[province_id]
+            if neighbour in land_region_by_province
+        )
+        if not neighbouring_land:
+            raise ValueError(
+                f"non-state land component {sorted(component)} has no neighbouring land region"
+            )
+        region_id = min(
+            neighbouring_land,
+            key=lambda candidate: (-neighbouring_land[candidate], candidate),
+        )
+        region_provinces[region_id].update(component)
+        for province_id in component:
+            land_region_by_province[province_id] = region_id
 
     # Inland lakes must belong to their surrounding land region. Combining them
     # with the ocean makes Clausewitz report a fractioned naval strategic region.
@@ -2634,7 +2909,7 @@ def build(*, western_only: bool = False) -> None:
             "\tprovinces={\n"
             f"{format_provinces(provinces)}\n"
             "\t}\n"
-            f"{format_weather(region.climate)}\n"
+            f"{format_weather(region.climate, region_latitude(provinces, province_positions))}\n"
             "}\n"
         )
         path = REGION_DIR / f"{region.region_id}-{region.slug}.txt"

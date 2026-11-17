@@ -3,53 +3,48 @@ strategic_region={
 	id=19
 	name="STRATEGICREGION_19"
 	provinces={
-		192 205 375 399 603 766 774 813 841 874 1034 1093 1132 1161 1222 1316 1342 1399 1414 1417 1430 1440 1466 1481
-		1613 1740 1774 1805 1879 1910 2033 2106 2144 2226 2287 2298 2395 2399 2416 2434 2522 2533 2534 2558 2601 2672 2714 2748
-		2751 2772 2781 2825 2964 2974 3088 3100 3126 3305 3327 3347 3474 3507 3542 3551 3684 3783 3801 3956 3974 4026 4034 4051
-		4064 4068 4282 4324 4329 4336 4405 4411 4486 4508 4527 4530 4749 4861 4870 4944 5020 5029 5032 5044 5085 5112 5165 5185
-		5195 5200 5228 5383 5407 5411 5507 5591 5637 5657 5727 5744 5770 5815 5894 6036 6050 6058 6066 6237 6273 6280 6317 6342
-		6387 6434 6530 6687 6777 6789 6794 6868 6950 6994 7026 7065 7181 7256 7336 7367 7445 7448 7452 7602 7666 7763 7781 7844
-		7854 8112 8133 8150 8167 8198 8263 8332 8367 8389 8472 8664 8670 8755 8985 9001 9032 9067 9239 9260 9263 9285 9346 9439
-		9571 9626 9738 9796 9860 9880 9924 9957 9961 10066 10209 10315 10321 10417 10446 10514 10515 10530 10563 10579 10590 10616 10617 10625
-		10785 10852 11010 11053 11091 11230 11256 11357 11368 11386 11398 11419 11425 11464 11526 11700 11733 11741 11751 11761 11805 11812 11829 11840
-		11912 11937 11950 12167 12219 12315 12324 12460 12467 12514 12550 12555 12579 12634 12635 12762 12766 12774 12836 12933 16300 16309 16311 16312
-		16324 16325 16508 16512 16518 16523 16524 16531 16538 16544 16545 16546 16630 16632 16636 16639
+		205 375 399 603 766 813 1034 1093 1132 1222 1316 1342 1430 1481 1613 1740 1774 1879 1910 2033 2106 2298 2434 2533
+		2534 2558 2672 2751 3088 3126 3305 3347 3474 3542 3551 3684 3783 3801 3974 4026 4034 4405 4411 4486 4508 4530 4861 4870
+		4944 5032 5112 5407 5507 5657 5727 5770 5894 6036 6050 6058 6237 6280 6317 6342 6434 6687 6777 6794 6994 7181 7367 7448
+		7452 7602 7666 7781 8112 8167 8198 8332 8472 8755 8985 9001 9067 9263 9346 9571 9626 9796 9860 9880 9924 10066 10315 10417
+		10446 10563 10590 10616 10625 10785 11010 11091 11256 11357 11368 11386 11419 11464 11526 11700 11741 11751 11761 11812 11829 11840 11950 12219
+		12315 12324 12460 12467 12555 12579 12634 12762 12766 12836 12933 16512 16523 16524 16531 16538 16544 16545 16546 16630 16632 16639
 	}
 	weather={
 		period={
 			between={ 0.0 30.0 }
-			temperature={ -5.0 12.0 }
+			temperature={ -16.0 5.0 }
 			no_phenomenon=0.67
-			rain_light=0.04
-			rain_heavy=0.01
-			snow=0.12
-			blizzard=0.02
+			rain_light=0.01
+			rain_heavy=0.00
+			snow=0.30
+			blizzard=0.07
 			arctic_water=0.00
 			mud=0.04
 			sandstorm=0.25
-			min_snow_level=0.05
+			min_snow_level=0.00
 		}
 		period={
 			between={ 0.1 27.1 }
-			temperature={ -3.0 15.0 }
+			temperature={ -14.0 8.0 }
 			no_phenomenon=0.67
-			rain_light=0.04
-			rain_heavy=0.01
-			snow=0.12
-			blizzard=0.02
+			rain_light=0.02
+			rain_heavy=0.00
+			snow=0.26
+			blizzard=0.07
 			arctic_water=0.00
 			mud=0.04
 			sandstorm=0.25
-			min_snow_level=0.05
+			min_snow_level=0.00
 		}
 		period={
 			between={ 0.2 30.2 }
-			temperature={ 2.0 20.0 }
+			temperature={ -8.0 13.0 }
 			no_phenomenon=0.67
-			rain_light=0.04
+			rain_light=0.03
 			rain_heavy=0.01
-			snow=0.00
-			blizzard=0.00
+			snow=0.19
+			blizzard=0.02
 			arctic_water=0.00
 			mud=0.12
 			sandstorm=0.25
@@ -57,11 +52,11 @@ strategic_region={
 		}
 		period={
 			between={ 0.3 29.3 }
-			temperature={ 7.0 25.0 }
+			temperature={ -1.0 19.0 }
 			no_phenomenon=0.67
 			rain_light=0.04
 			rain_heavy=0.01
-			snow=0.00
+			snow=0.06
 			blizzard=0.00
 			arctic_water=0.00
 			mud=0.12
@@ -70,7 +65,7 @@ strategic_region={
 		}
 		period={
 			between={ 0.4 30.4 }
-			temperature={ 12.0 30.0 }
+			temperature={ 7.0 26.0 }
 			no_phenomenon=0.67
 			rain_light=0.02
 			rain_heavy=0.00
@@ -83,7 +78,7 @@ strategic_region={
 		}
 		period={
 			between={ 0.5 29.5 }
-			temperature={ 16.0 34.0 }
+			temperature={ 13.0 32.0 }
 			no_phenomenon=0.67
 			rain_light=0.02
 			rain_heavy=0.00
@@ -96,7 +91,7 @@ strategic_region={
 		}
 		period={
 			between={ 0.6 30.6 }
-			temperature={ 19.0 37.0 }
+			temperature={ 17.0 35.0 }
 			no_phenomenon=0.67
 			rain_light=0.02
 			rain_heavy=0.00
@@ -109,7 +104,7 @@ strategic_region={
 		}
 		period={
 			between={ 0.7 30.7 }
-			temperature={ 18.0 36.0 }
+			temperature={ 16.0 34.0 }
 			no_phenomenon=0.67
 			rain_light=0.02
 			rain_heavy=0.00
@@ -122,7 +117,7 @@ strategic_region={
 		}
 		period={
 			between={ 0.8 29.8 }
-			temperature={ 13.0 31.0 }
+			temperature={ 9.0 28.0 }
 			no_phenomenon=0.67
 			rain_light=0.02
 			rain_heavy=0.00
@@ -135,11 +130,11 @@ strategic_region={
 		}
 		period={
 			between={ 0.9 30.9 }
-			temperature={ 7.0 25.0 }
+			temperature={ 0.0 20.0 }
 			no_phenomenon=0.67
 			rain_light=0.04
 			rain_heavy=0.01
-			snow=0.00
+			snow=0.04
 			blizzard=0.00
 			arctic_water=0.00
 			mud=0.12
@@ -148,12 +143,12 @@ strategic_region={
 		}
 		period={
 			between={ 0.10 29.10 }
-			temperature={ 1.0 18.0 }
+			temperature={ -8.0 11.0 }
 			no_phenomenon=0.67
-			rain_light=0.04
+			rain_light=0.02
 			rain_heavy=0.01
-			snow=0.00
-			blizzard=0.00
+			snow=0.20
+			blizzard=0.02
 			arctic_water=0.00
 			mud=0.12
 			sandstorm=0.25
@@ -161,16 +156,16 @@ strategic_region={
 		}
 		period={
 			between={ 0.11 30.11 }
-			temperature={ -3.0 13.0 }
+			temperature={ -14.0 6.0 }
 			no_phenomenon=0.67
-			rain_light=0.04
-			rain_heavy=0.01
-			snow=0.12
-			blizzard=0.02
+			rain_light=0.02
+			rain_heavy=0.00
+			snow=0.28
+			blizzard=0.07
 			arctic_water=0.00
 			mud=0.04
 			sandstorm=0.25
-			min_snow_level=0.05
+			min_snow_level=0.00
 		}
 	}
 }

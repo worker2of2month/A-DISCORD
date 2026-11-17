@@ -8,4 +8,44 @@ division_template = {
 }
 units = {
 	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 443 division_template = "Well Wardens" start_experience_factor = 0.10 start_equipment_factor = 0.45 }
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 2
+		}
+		location = 16724
+		division_template = "Well Wardens"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 3
+		}
+		location = 16725
+		division_template = "Well Wardens"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 4
+		}
+		location = 16911
+		division_template = "Well Wardens"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 5
+		}
+		location = 16912
+		division_template = "Well Wardens"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
 }

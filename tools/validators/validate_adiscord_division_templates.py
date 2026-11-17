@@ -44,7 +44,7 @@ def starting_template_role(name: str) -> str:
     lowered = name.lower()
     if lowered == "conclave line brigade":
         return "line"
-    if lowered == "khazar guard":
+    if lowered in {"khazar guard", "itoran emergency brigade"}:
         return "security"
     if "fake intel" in lowered:
         return "deception"

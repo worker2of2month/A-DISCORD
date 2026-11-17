@@ -476,6 +476,15 @@ ADISCORD_active_enemy_front_concentration = {
 		}
 		value = 50
 	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			supply_node > 0
+			is_controlled_by = FROM
+			FROM = { has_war_with = FROM.FROM }
+		}
+		value = 20
+	}
 }
 
 # Give ordinary wars an executable balanced plan. Country-specific campaigns
@@ -723,14 +732,19 @@ ADISCORD_leave_ally_frontlines = {
 	ai_strategy = { type = dont_defend_ally_borders id = RVN value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = RZA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SCA value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SCD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SDA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SDR value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SFD value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SFR value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SHL value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SKN value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SLA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SLF value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SLI value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SMD value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SNG value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SOD value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SOL value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SRA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SRP value = 100 }

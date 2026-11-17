@@ -283,9 +283,18 @@ class IvanlandOverhaulContractTests(unittest.TestCase):
         for state in ("200", "201"):
             self.assertEqual(scalar(block(complete, state), "set_state_controller_to"), "IIA")
 
-    def test_integrated_validator_accepts_reviewed_city_split_hash(self) -> None:
-        self.assertTrue(hasattr(validator, "province_geometry_issue"))
-        self.assertIsNone(validator.province_geometry_issue())
+    def test_geometry_detects_island_borders_but_allows_foreign_edits(self) -> None:
+        colors = {579: (10, 20, 30), 6905: (30, 20, 10)}
+        image = Image.new("RGB", (4, 1))
+        image.putpixel((0, 0), colors[579])
+        image.putpixel((1, 0), colors[6905])
+        reference = validator.province_geometry_digest(image, colors)
+        image.putpixel((2, 0), (1, 2, 3))
+        self.assertEqual(validator.province_geometry_digest(image, colors), reference)
+        for position, replacement in ((0, colors[6905]), (1, (1, 2, 3)), (3, colors[579])):
+            changed = image.copy()
+            changed.putpixel((position, 0), replacement)
+            self.assertNotEqual(validator.province_geometry_digest(changed, colors), reference)
 
     def test_integrated_validator_passes(self) -> None:
         self.assertEqual(validator.collect_issues(), [])

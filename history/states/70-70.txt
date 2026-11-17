@@ -3,15 +3,15 @@ state={
 	id=70
 	name="STATE_70"
 	resources = {
-		aluminium = 11
+		aluminium = 17
 	}
 	provinces={
 		627 910 1198 1200 1444 2042 2577 2986 3872 3986 4067 4478
 		4674 4708 5926 5934 6061 6409 6414 6419 6514 6521 6650 6847
 		6970 7032 7567 8618 8951 9041 9308 9402 9411 9787 10068 10387
-		10422 10438 10809 11035 12366 12419 12974 16900 16901
+		10422 10438 10809 11035 12366 12419 12974 16900 16901 17011 17012 17014
 	}
-	manpower = 1880000
+	manpower = 2820000
 	buildings_max_level_factor = 1.000
 	state_category = town
 	local_supplies = 2.0
@@ -22,6 +22,9 @@ state={
 		victory_points = { 1198 10 }
 		victory_points = { 16900 10 }
 		victory_points = { 16901 10 }
+		victory_points = { 9411 2 }
+		victory_points = { 10422 2 }
+		victory_points = { 7567 2 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1

@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+from collections.abc import Iterable
 from pathlib import Path
 
 from tools.builders.build_adiscord_map_buildings import (
@@ -35,13 +36,47 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 STATE_DIR = ROOT / "history" / "states"
 
+SOUTHERN_GEOGRAPHY = json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_text(encoding="utf-8"))
+SOUTHERN_CITIES = SOUTHERN_GEOGRAPHY["cities"]
+SOUTHERN_CITY_APPROACHES = SOUTHERN_GEOGRAPHY["city_approaches"]
+NEW_CITY_APPROACHES = tuple(entry for entry in SOUTHERN_CITY_APPROACHES if "rgb" in entry)
+SOUTHERN_INTERIOR_SPLITS = SOUTHERN_GEOGRAPHY["interior_splits"]
+SOUTHERN_RURAL_SPLITS = (*SOUTHERN_GEOGRAPHY["rural_splits"], *SOUTHERN_INTERIOR_SPLITS)
+
+
+CITY_RAILWAYS = SOUTHERN_GEOGRAPHY["city_railways"]
+CITY_RAIL_PASSAGES = {}
+for passage in CITY_RAILWAYS["passages"]:
+    a, *via, b = passage
+    CITY_RAIL_PASSAGES[a, b] = tuple(via)
+    CITY_RAIL_PASSAGES[b, a] = tuple(reversed(via))
+
+
+def southern_city_rail_route(route: tuple[int, ...]) -> tuple[int, ...]:
+    """Keep each existing endpoint and railway level when threading a city approach."""
+    if not route:
+        return route
+    result = [route[0]]
+    for first, second in zip(route, route[1:]):
+        result.extend(CITY_RAIL_PASSAGES.get((first, second), ()))
+        result.append(second)
+    return tuple(result)
+
+
+def with_rural_splits(provinces: Iterable[int]) -> tuple[int, ...]:
+    """Keep the two halves together when a parent province enters a state manifest."""
+    members = set(provinces)
+    children = {split["province"] for split in (*SOUTHERN_RURAL_SPLITS, *NEW_CITY_APPROACHES) if split["parent"] in members}
+    return tuple(sorted(members | children))
+
+
 NAM_SVETLOGORSK_STATE_ID = 688
 NAM_SVETLOGORSK_PROVINCES = (
     689, 1710, 3127, 4025, 8635, 9211, 10967, 16721,
     16864, 16865, 16866, 16867, 16869, 16870, 16875,
 )
 NAM_RESIDUAL_CITY_STATE_ID = 689
-NAM_RESIDUAL_CITY_PROVINCES = (176, 2038, 2231, 2299, 7618, 7639, 8358, 16873, 16874, 16878)
+NAM_RESIDUAL_CITY_PROVINCES = with_rural_splits((176, 2038, 2231, 2299, 7618, 7639, 8358, 16873, 16874, 16878))
 NAM_DRYRIVER_STATE_ID = 690
 EFL_MIDDLE_LOREN_STATE_ID = 691
 AZH_BLACK_COAST_STATE_ID = 692
@@ -49,20 +84,20 @@ AZH_BLACK_COAST_STATE_ID = 692
 # it without cutting the NAM mainland in half.
 NAM_EAST_DRYRIVER_STATE_ID = 719
 NAM_MAINLAND_STATE_RESOURCES = {
-    67: {"oil": 40, "chromium": 6},
-    NAM_SVETLOGORSK_STATE_ID: {"oil": 8, "chromium": 1},
-    NAM_RESIDUAL_CITY_STATE_ID: {"oil": 24, "chromium": 5},
-    NAM_DRYRIVER_STATE_ID: {"oil": 16, "chromium": 3},
+    67: {"oil": 40, "chromium": 9},
+    NAM_SVETLOGORSK_STATE_ID: {"oil": 8, "chromium": 2},
+    NAM_RESIDUAL_CITY_STATE_ID: {"oil": 24, "chromium": 8},
+    NAM_DRYRIVER_STATE_ID: {"oil": 16, "chromium": 5},
     NAM_EAST_DRYRIVER_STATE_ID: {"oil": 8},
 }
-NAM_ORIGINAL_MAINLAND_PROVINCES = (
+NAM_ORIGINAL_MAINLAND_PROVINCES = with_rural_splits((
     176, 334, 461, 689, 1015, 1710, 2038, 2231, 2299, 2935,
     3127, 4025, 4287, 4321, 4912, 6099, 6961, 7324, 7618, 7639,
     8058, 8351, 8358, 8445, 8635, 8888, 9016, 9116, 9211, 9641,
     10909, 10967, 11069, 11696, 11926, 11942, 12480, 12668, 12982,
     16864, 16865, 16866, 16867, 16869, 16870, 16873, 16874, 16875, 16878,
     16879, 16880, 16881, 16884, 16885, 16887, 16890,
-)
+))
 NAM_PRE_CITY_MAINLAND_PROVINCES = tuple(
     sorted(set(NAM_ORIGINAL_MAINLAND_PROVINCES) - set(NAM_SVETLOGORSK_PROVINCES))
 )
@@ -82,34 +117,34 @@ NAM_EAST_DRYRIVER_PROVINCES = (461, 6961)
 NAM_DRYRIVER_PROVINCES = tuple(
     sorted(set(NAM_ORIGINAL_DRYRIVER_PROVINCES) - set(NAM_EAST_DRYRIVER_PROVINCES))
 )
-EFL_UPPER_LOREN_PROVINCES = (
+EFL_UPPER_LOREN_PROVINCES = with_rural_splits((
     259, 324, 865, 1658, 1950, 2254, 2734, 2822, 3089, 3226,
     3977, 4014, 4096, 4175, 4237, 4339, 4717, 5651, 5766, 6150,
     6438, 7139, 7199, 7750, 7859, 8087, 8425, 9637, 9731, 10258,
     10759, 10806, 10866, 10932, 11744, 12109, 12135,
-)
-EFL_ORIGINAL_MIDDLE_LOREN_PROVINCES = (
+))
+EFL_ORIGINAL_MIDDLE_LOREN_PROVINCES = with_rural_splits((
     786, 797, 1411, 2473, 3046, 3176, 3730, 3833, 3916, 4060,
     4424, 5260, 5579, 6331, 7502, 8057, 8194, 8904, 9390, 9609,
-    9694, 10113, 10454, 10722, 11083, 11652, 12131, 12218, 12306, 12830,
-)
-AZH_ORIGINAL_CORE_PROVINCES = (
+    9694, 10113, 10454, 10722, 11083, 11652, 12131, 12218, 12306, 12830, 16928,
+))
+AZH_ORIGINAL_CORE_PROVINCES = with_rural_splits((
     367, 643, 687, 729, 826, 1568, 2338, 2411, 2443, 4380, 5156,
     5288, 5305, 5483, 5555, 5594, 5683, 6184, 6505, 6577, 7079,
     7193, 7413, 7637, 7692, 7737, 8234, 8452, 8758, 8821, 8836,
     8958, 8990, 8997, 9013, 9119, 9633, 9798, 9909, 10077, 12458,
     12482, 12601, 12837, 12937, 13019, 16868, 16871, 16872, 16877, 16882,
     16883, 16886, 16888, 16889, 16891, 16893, 16894,
-)
-AZH_BLACK_COAST_PROVINCES = (
+))
+AZH_BLACK_COAST_PROVINCES = with_rural_splits((
     493, 601, 1360, 2264, 2362, 2802, 2804, 3464, 4089, 4678,
     5039, 5527, 5837, 6193, 6768, 7033, 7777, 8114, 8441, 8829,
-    9264, 9375, 9758, 10489, 10626, 11445, 11630, 11734, 12498,
-)
+    9264, 9375, 9758, 10489, 10626, 11445, 11630, 11734, 12498, 16929,
+))
 # Lower Loren also holds three hand-painted urban provinces around Fenn:
 # 1198 (recycled from the former Zarkhan hinterland), 16900 and 16901.
 LOWER_LOREN_PAINTED_PROVINCES = frozenset({1198, 16900, 16901})
-EFL_ORIGINAL_LOWER_LOREN_PROVINCES = (
+EFL_ORIGINAL_LOWER_LOREN_PROVINCES = with_rural_splits((
     627, 910, 1198, 1200, 1287, 1444, 1982, 2042, 2167, 2577, 2627,
     2986, 3113, 3695, 3872, 3986, 4067, 4478, 4674, 4708, 5249,
     5926, 5934, 5979, 6000, 6051, 6061, 6409, 6414, 6419, 6495,
@@ -118,7 +153,7 @@ EFL_ORIGINAL_LOWER_LOREN_PROVINCES = (
     9308, 9402, 9411, 9787, 10068, 10167, 10387, 10422, 10438, 10809,
     10847, 11035, 11219, 11763, 12366, 12419, 12425, 12576, 12577, 12974,
     16900, 16901,
-)
+))
 EFL_ORIGINAL_UPPER_LOREN_PROVINCES = tuple(sorted((*EFL_UPPER_LOREN_PROVINCES, *EFL_ORIGINAL_MIDDLE_LOREN_PROVINCES)))
 AZH_ORIGINAL_PROVINCES = tuple(sorted((*AZH_ORIGINAL_CORE_PROVINCES, *AZH_BLACK_COAST_PROVINCES)))
 
@@ -179,10 +214,10 @@ SHL_ORIGINAL_BAYRAT_PROVINCES = (
     11773, 12681,
 )
 SHL_BAYRAT_MINES_PROVINCES = (2694, 4247, 4537, 5042, 9890)
-SHL_ORIGINAL_VEYRAN_PROVINCES = (
+SHL_ORIGINAL_VEYRAN_PROVINCES = with_rural_splits((
     931, 1114, 2242, 4301, 4495, 5801, 6126, 7994, 8582, 10148, 10937, 11938,
     12321, 16898,
-)
+))
 SHL_VEYRAN_BORDER_PROVINCES = (2242, 4301, 4495, 5801, 6126)
 # parent -> (child, original parent provinces, provinces carved for the child)
 SHL_SPLIT_FAMILIES = {
@@ -193,24 +228,24 @@ SHL_SPLIT_FAMILIES = {
 }
 SHL_STATES = (287, 288, 289, 290, 291, 292, 293, 294, 295, 296, *sorted(SHL_SPLIT_FILENAMES))
 # Residents are conserved across every split: the twelve original states and
-# the four hinterlands still sum to 20,000,000.
+# the four hinterlands still sum to 30,000,000.
 SHL_POPULATION = {
-    287: 1_800_000,
-    288: 1_500_000,
-    289: 700_000,
-    290: 800_000,
-    291: 1_000_000,
-    292: 800_000,
-    293: 1_000_000,
-    294: 2_200_000,
-    295: 900_000,
-    296: 1_300_000,
-    699: 4_000_000,
-    707: 1_500_000,
-    SHL_SAFIR_COAST_STATE_ID: 900_000,
-    SHL_LORAN_SANDS_STATE_ID: 400_000,
-    SHL_BAYRAT_MINES_STATE_ID: 600_000,
-    SHL_VEYRAN_BORDER_STATE_ID: 600_000,
+    287: 2_700_000,
+    288: 2_250_000,
+    289: 1_050_000,
+    290: 1_200_000,
+    291: 1_500_000,
+    292: 1_200_000,
+    293: 1_500_000,
+    294: 3_300_000,
+    295: 1_350_000,
+    296: 1_950_000,
+    699: 6_000_000,
+    707: 2_250_000,
+    SHL_SAFIR_COAST_STATE_ID: 1_350_000,
+    SHL_LORAN_SANDS_STATE_ID: 600_000,
+    SHL_BAYRAT_MINES_STATE_ID: 900_000,
+    SHL_VEYRAN_BORDER_STATE_ID: 900_000,
 }
 # The Nine Furnaces are the south's industrial core: the capital and the
 # furnace towns carry the factories, the rural districts keep free slots for
@@ -228,15 +263,15 @@ SHL_INDUSTRY = {
 # that drives the war for the South. The Bayrat mines sit in the hills the
 # split carves off, so the hinterland takes half the steel and all chromium.
 SHL_RESOURCES = {
-    287: {"steel": 4},
-    289: {"tungsten": 3},
-    291: {"steel": 4},
-    292: {"steel": 2},
-    293: {"aluminium": 3},
-    295: {"chromium": 1},
-    296: {"tungsten": 2},
-    SHL_BAYRAT_MINES_STATE_ID: {"steel": 4, "chromium": 3},
-    SHL_VEYRAN_BORDER_STATE_ID: {"chromium": 1},
+    287: {"steel": 8},
+    289: {"tungsten": 6},
+    291: {"steel": 8},
+    292: {"steel": 4},
+    293: {"aluminium": 6},
+    295: {"chromium": 2},
+    296: {"tungsten": 4},
+    SHL_BAYRAT_MINES_STATE_ID: {"steel": 8, "chromium": 6},
+    SHL_VEYRAN_BORDER_STATE_ID: {"chromium": 2},
 }
 GLP_STATES = (264, 273, 297, 298, 299, 300, 301, 302, 304, 305)
 
@@ -303,7 +338,6 @@ MINOR_VPS = {
 }
 
 # Capital state IDs remain stable for country history and scripted references.
-SOUTHERN_CITIES = json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_text(encoding="utf-8"))["cities"]
 SOUTHERN_CITY_POINTS = {entry["state"]: (entry["province"], entry["value"]) for entry in SOUTHERN_CITIES}
 for centres in (CAPITALS, SECONDARY_CENTRES, MINOR_VPS):
     centres.update({state: point for state, point in SOUTHERN_CITY_POINTS.items() if state in centres})
@@ -374,7 +408,7 @@ NAM_COALITION_REGIONS = {
         "parent": 691, "owner": "EFL",
         "filename": "726-Interfluve.txt", "name": "Междуречье",
         "provinces": (
-            1411, 3046, 3176, 3916, 4424, 5260, 6331, 7502, 10454, 11652,
+            1411, 3046, 3176, 3916, 4424, 5260, 6331, 7502, 10454, 11652, 16928,
         ),
     },
     69: {
@@ -415,37 +449,47 @@ NAM_COALITION_REGIONS = {
         "filename": "729-Eastern-Uplands.txt", "name": "Восточные увалы",
         "provinces": (
             601, 2362, 2804, 4678, 5527, 6193, 6768, 7777, 8114, 8441,
-            9264, 9375, 11445, 11630, 11734,
+            9264, 9375, 11445, 11630, 11734, 16929,
         ),
     },
 }
 
-# Sparse deposits give every southern country something to extract and trade
-# without turning the desert into a self-sufficient industrial heartland.
+for region in NAM_COALITION_REGIONS.values():
+    region["provinces"] = with_rural_splits(region["provinces"])
+
+
+# Each desert league exports a primary deposit and a smaller inland seam.
 STATE_RESOURCES = {
-    69: {"oil": 1, "chromium": 1},
-    175: {"steel": 2, "aluminium": 2},
-    236: {"steel": 3, "oil": 1},
-    255: {"aluminium": 3, "oil": 1},
-    263: {"tungsten": 2, "steel": 2},
-    269: {"oil": 3, "chromium": 1},
-    285: {"tungsten": 2, "aluminium": 2},
-    299: {"aluminium": 3, "chromium": 1},
+    69: {"oil": 3, "chromium": 3},
+    175: {"steel": 6, "aluminium": 6},
+    236: {"steel": 9, "oil": 3},
+    255: {"aluminium": 9, "oil": 3},
+    263: {"tungsten": 6, "steel": 6},
+    269: {"oil": 9, "chromium": 3},
+    285: {"tungsten": 6, "aluminium": 6},
+    299: {"aluminium": 9, "chromium": 3},
+    174: {"tungsten": 4},
+    239: {"tungsten": 4},
+    256: {"chromium": 4},
+    261: {"aluminium": 4},
+    271: {"steel": 4},
+    281: {"chromium": 4},
+    302: {"steel": 4},
     **SHL_RESOURCES,
 }
 NAM_COALITION_FRONT_RESOURCES = {
-    68: {"steel": 2, "aluminium": 10},
-    69: {"oil": 1, "chromium": 1},
-    70: {"aluminium": 11},
-    691: {"tungsten": 1, "aluminium": 10},
-    692: {"oil": 1},
+    68: {"steel": 3, "aluminium": 15},
+    69: {"oil": 3, "chromium": 3},
+    70: {"aluminium": 17},
+    691: {"tungsten": 2, "aluminium": 15},
+    692: {"oil": 3},
     723: {},
-    724: {"aluminium": 11},
-    725: {"steel": 1, "aluminium": 10},
-    726: {"tungsten": 1},
-    727: {"oil": 1},
+    724: {"aluminium": 17},
+    725: {"steel": 2, "aluminium": 15},
+    726: {"tungsten": 2},
+    727: {"oil": 3},
     728: {},
-    729: {"chromium": 1, "tungsten": 1},
+    729: {"chromium": 3, "tungsten": 3},
 }
 
 # The central Vorkerland theatre used to have only one steel-bearing state,
@@ -511,11 +555,11 @@ STELANDER_REGIONAL_RESOURCES = {
 # Small deposits beside the oil basin: the Svetlogorye interior and the
 # Eflorian states that face it in the resource war.
 SVETLOGORYE_RESOURCES = {
-    225: {"aluminium": 3},
-    226: {"rubber": 2},
-    227: {"tungsten": 3},
-    228: {"steel": 4},
-    229: {"chromium": 2},
+    225: {"aluminium": 12},
+    226: {"rubber": 8},
+    227: {"tungsten": 12},
+    228: {"steel": 16},
+    229: {"chromium": 8},
 }
 NAM_NEIGHBOUR_RESOURCES = {
     sid: deposits for sid, deposits in NAM_COALITION_FRONT_RESOURCES.items() if deposits
@@ -632,8 +676,11 @@ REGIONAL_SETTLEMENTS = {
     63: ((5606, 1, "Милхам"),),
     64: ((16465, 1, "Килнет"),),
     65: ((6440, 1, "Хебтава"),),
-    # Rimat corridor between Vorkerland and Itora: every successor capital and
-    # every state on the two approaches is a war objective.
+    67: ((334, 2, "Вахтовый"), (8445, 1, "Каменный Ключ")),
+    68: ((7750, 2, "Оллен"), (324, 2, "Верхний Мельн"), (12135, 1, "Ровель")),
+    69: ((8758, 2, "Хадаш"), (5288, 1, "Айн-Джар"), (1568, 1, "Месран")),
+    70: ((9411, 2, "Вестен"), (10422, 2, "Тальвик"), (7567, 2, "Ольмар")),
+    # Every state on the approaches to the Rimat corridor has a war objective.
     71: ((12241, 1, "Старый Тракт"),),
     88: ((16429, 1, "Шахтёрская пристань"),),
     90: ((5135, 2, "Норвейн"),),
@@ -644,13 +691,13 @@ REGIONAL_SETTLEMENTS = {
     115: ((1524, 1, "Рейнгский перевал"),),
     116: ((3344, 1, "Нижний Рейнг"),),
     117: ((12455, 2, "Ливен"),),
-    174: ((5869, 2, "Феннский перевал"),),
-    175: ((10006, 1, "Марен"),),
+    174: ((5869, 2, "Феннский перевал"), (5261, 2, "Бринн"), (8479, 2, "Феннская застава")),
+    175: ((10006, 1, "Марен"), (3444, 2, "Линден")),
     194: ((2339, 2, "Восточная станция"),),
     195: ((8032, 2, "Норвен"),),
     196: ((7129, 2, "Центральная станция"),),
     218: ((7047, 2, "Западный Рейнг"),),
-    225: ((11393, 2, "Южноостровск"), (11606, 1, "Дальний мыс")),
+    225: ((11393, 2, "Южноостровск"), (11606, 1, "Дальний мыс"), (3350, 2, "Дозорный")),
     226: ((4396, 1, "Малая гавань"), (8537, 1, "Чаечий")),
     227: (
         (2478, 1, "Восточная пристань"),
@@ -658,46 +705,91 @@ REGIONAL_SETTLEMENTS = {
         (6322, 1, "Тихая бухта"),
         (9192, 1, "Рыбачий"),
     ),
-    228: ((6893, 3, "Большой остров"), (6145, 1, "Дальний рейд"), (8682, 1, "Малый рейд")),
-    229: ((3731, 1, "Северная пристань"),),
-    230: ((2742, 1, "Западная пристань"),),
-    231: ((13018, 2, "Среднеостровск"), (12732, 1, "Западный мыс")),
-    235: ((3924, 1, "Караль"),),
-    239: ((4349, 1, "Белис"),),
-    240: ((16743, 1, "Нижний Дамир"),),
-    246: ((7497, 1, "Керим"),),
-    251: ((12517, 1, "Маран"),),
-    252: ((11429, 1, "Тазир"),),
-    255: ((2184, 1, "Дейра"),),
-    258: ((3614, 1, "Хамад"),),
-    259: ((6554, 1, "Асхар"),),
-    263: ((8946, 1, "Кесрат"),),
-    264: ((2327, 1, "Наран"),),
-    269: ((2806, 1, "Ресан"),),
-    274: ((7486, 1, "Туран"),),
-    279: ((5549, 1, "Ридан"),),
-    282: ((7947, 1, "Мейрук"),),
-    285: ((6233, 1, "Нарван"),),
+    228: ((6893, 3, "Большой остров"), (6145, 1, "Дальний рейд"), (8682, 1, "Малый рейд"), (6816, 2, "Угольщики"), (3243, 1, "Сосновка")),
+    229: ((3731, 1, "Северная пристань"), (7373, 2, "Морянка")),
+    230: ((2742, 1, "Западная пристань"), (12376, 2, "Ключевой")),
+    231: ((13018, 2, "Среднеостровск"), (12732, 1, "Западный мыс"), (432, 2, "Песчанка")),
+    234: ((11045, 2, "Мадран"),),
+    235: ((3924, 1, "Караль"), (11410, 2, "Халис"), (8590, 1, "Караль-дех")),
+    236: ((2811, 2, "Тарим-кала"),),
+    237: ((1459, 2, "Сайрат"), (8209, 1, "Зефар")),
+    238: ((1377, 2, "Эль-Хат"),),
+    239: ((4349, 1, "Белис"), (2813, 2, "Белисский колодец"), (9861, 1, "Наджар")),
+    240: ((16743, 10, "Нижний Дамир"), (3483, 2, "Эсман")),
+    242: ((824, 2, "Турай"),),
+    243: ((6204, 2, "Мейранский торг"), (1760, 1, "Шадир")),
+    244: ((5505, 2, "Салехан"), (1011, 1, "Абу-Рин")),
+    245: ((9194, 2, "Эрван"),),
+    246: ((7497, 1, "Керим"), (11862, 2, "Халдун"), (4449, 1, "Керим-дар")),
+    247: ((9105, 2, "Хабир"),),
+    248: ((11977, 2, "Рас-Арсан"), (4507, 2, "Сахиль")),
+    249: ((2286, 2, "Басиран-дех"),),
+    250: ((2661, 2, "Назири"),),
+    251: ((12517, 1, "Маран"), (10350, 2, "Марван"), (12261, 1, "Бир-Кеш")),
+    252: ((11429, 1, "Тазир"), (5629, 2, "Тазир-кала")),
+    254: ((10853, 2, "Дахран"),),
+    255: ((2184, 1, "Дейра"), (10846, 2, "Ар-Рамиз"), (10580, 1, "Айлем")),
+    256: ((919, 2, "Шайбан"),),
+    257: ((1246, 2, "Тильма"),),
+    258: ((3614, 1, "Хамад"), (567, 2, "Хамадский колодец"), (2545, 1, "Захит")),
+    259: ((6554, 1, "Асхар"), (4889, 2, "Карасай"), (9896, 1, "Хади")),
+    261: ((5220, 2, "Тирен-кала"),),
+    262: ((577, 2, "Махсар"),),
+    263: ((8946, 1, "Кесрат"), (6415, 2, "Кесратский брод"), (10706, 1, "Нувайр")),
+    264: ((2327, 1, "Наран"), (3590, 2, "Сарван"), (1382, 1, "Латир")),
+    265: ((2244, 2, "Азер-дашт"), (3805, 1, "Хазим")),
+    266: ((8384, 2, "Садран"),),
+    267: ((8571, 2, "Бир-Барак"), (5100, 1, "Хаджиран")),
+    268: ((6747, 2, "Кашим"),),
+    269: ((2806, 1, "Ресан"), (5581, 2, "Расин"), (12320, 1, "Мустар")),
+    270: ((1366, 2, "Харет-дех"), (1571, 1, "Салман")),
+    271: ((10686, 2, "Джебир"),),
+    272: ((1299, 2, "Мирак"),),
+    273: ((454, 2, "Сехванский торг"), (12471, 1, "Саир"), (10627, 1, "Вардеш")),
+    274: ((7486, 1, "Туран"), (8119, 2, "Ар-Туран")),
+    276: ((8319, 2, "Айрен-дех"), (3932, 1, "Кумеш")),
+    277: ((2739, 2, "Каванский базар"), (5822, 2, "Шерик")),
+    278: ((2979, 2, "Айн-Нейзар"), (2331, 1, "Фаруд")),
+    279: ((5549, 1, "Ридан"), (1259, 2, "Риданский кяриз"), (7101, 1, "Шамрин")),
+    280: ((2195, 2, "Мехран"),),
+    281: ((3544, 2, "Белар"),),
+    282: ((7947, 1, "Мейрук"), (3767, 2, "Таршик")),
+    285: ((6233, 1, "Нарван"), (6445, 2, "Нарван-дех"), (2319, 1, "Хирак")),
+    286: ((7108, 2, "Ормис-кала"), (12742, 1, "Сурхан")),
     # Shahrabad: every district has a named town; districts of eleven or more
     # provinces also carry a second settlement. Furnace cities keep their VPs.
     # House towns carved as urban provinces (adiscord_southern_cities.json)
     # carry the town's VP instead of their rural parent province.
-    287: ((4182, 1, "Арбин"), (1693, 1, "Арбин-дашт")),
-    288: ((960, 1, "Сафирабад"),),
-    289: ((1149, 1, "Лоран-кала"),),
-    290: ((16895, 3, "Нуран"),),
-    291: ((7825, 1, "Байрат"),),
-    292: ((16896, 2, "Кердан"), (5350, 1, "Верхний Кердан")),
-    293: ((16897, 2, "Шарим"), (1285, 1, "Нижний Шарим")),
-    295: ((16898, 2, "Вейран"),),
-    296: ((10949, 1, "Салик"), (1846, 1, "Салик-бандар")),
-    297: ((3415, 1, "Норан"),),
-    299: ((10975, 1, "Кассен"),),
-    305: ((10842, 1, "Лерис"),),
+    287: ((4182, 1, "Арбин"), (1693, 1, "Арбин-дашт"), (7837, 2, "Гончарный ряд")),
+    288: ((960, 1, "Сафирабад"), (10490, 2, "Кызылдаш"), (8976, 1, "Ташир")),
+    289: ((1149, 1, "Лоран-кала"), (4995, 2, "Шахрин"), (2412, 1, "Эмран")),
+    290: ((16895, 15, "Нуран"), (7968, 2, "Медный двор")),
+    291: ((7825, 1, "Байрат"), (946, 2, "Талабад"), (5634, 1, "Караташ")),
+    292: ((16896, 15, "Кердан"), (5350, 1, "Верхний Кердан"), (7276, 2, "Дербаш")),
+    293: ((16897, 15, "Шарим"), (1285, 1, "Нижний Шарим"), (7003, 2, "Варджан")),
+    295: ((16898, 15, "Вейран"), (12321, 2, "Малый Вейран")),
+    296: ((10949, 1, "Салик"), (1846, 1, "Салик-бандар"), (1900, 2, "Тальдар")),
+    297: ((3415, 1, "Норан"), (4207, 2, "Норанские склады"), (12976, 1, "Ильмар")),
+    298: ((10144, 2, "Сирхан"),),
+    299: ((10975, 1, "Кассен"), (10918, 2, "Бир-Кассен")),
+    301: ((1263, 2, "Элмарские солеварни"), (3140, 1, "Мелас"), (7708, 1, "Сейрин")),
+    302: ((4350, 2, "Доринский торг"),),
+    304: ((2265, 2, "Актар"),),
+    305: ((10842, 1, "Лерис"), (6879, 2, "Верхний Лерис")),
     322: ((2304, 1, "Восточный Пост"),),
     328: ((9492, 1, "Пустырь"),),
-    703: ((443, 1, "Рахма-дех"),),
-    707: ((16899, 3, "Зархан"), (9294, 1, "Зархан-кала")),
+    688: ((9211, 2, "Старая Штольня"), (10967, 1, "Горный Посад")),
+    689: ((8358, 2, "Вересковый"),),
+    690: ((1015, 2, "Буровая"),),
+    691: ((797, 2, "Мельник"), (3730, 1, "Лоренский Яр")),
+    692: ((10626, 2, "Хамрия"), (10489, 1, "Бир-Азрак")),
+    702: ((5262, 2, "Кадир-сарай"), (4093, 1, "Сакрар")),
+    703: ((443, 10, "Рахма-дех"), (11092, 2, "Бир-Рахма"), (5957, 1, "Мединас")),
+    704: ((9817, 2, "Сарданский двор"), (3967, 1, "Ташран")),
+    705: ((9006, 2, "Бир-Мазар"), (6904, 1, "Аршам")),
+    706: ((1534, 2, "Келиш"), (12033, 2, "Айн-Кейзан")),
+    707: ((16899, 15, "Зархан"), (9294, 1, "Зархан-кала"), (12903, 2, "Фируз"), (6218, 1, "Медные Ворота")),
+    708: ((12583, 2, "Вейрский торг"), (5595, 1, "Армел")),
     709: (
         (16807, 1, "Островная гавань"),
         (16804, 1, "Малый Стеланд"),
@@ -707,11 +799,29 @@ REGIONAL_SETTLEMENTS = {
         (16709, 1, "Порт Мисстаны"),
         (16712, 1, "Порт Каван"),
     ),
-    SHL_SAFIR_COAST_STATE_ID: ((3234, 2, "Сафир-бандар"),),
-    SHL_LORAN_SANDS_STATE_ID: ((11295, 1, "Лоран-дех"),),
-    SHL_BAYRAT_MINES_STATE_ID: ((9890, 1, "Байрат-кан"),),
-    SHL_VEYRAN_BORDER_STATE_ID: ((6126, 1, "Вейран-кала"),),
+    SHL_SAFIR_COAST_STATE_ID: ((3234, 2, "Сафир-бандар"), (5433, 2, "Рыбный торг")),
+    SHL_LORAN_SANDS_STATE_ID: ((11295, 1, "Лоран-дех"), (3416, 2, "Лоранский караул")),
+    SHL_BAYRAT_MINES_STATE_ID: ((9890, 1, "Байрат-кан"), (4537, 2, "Рудный двор")),
+    SHL_VEYRAN_BORDER_STATE_ID: ((6126, 1, "Вейран-кала"), (4495, 2, "Рас-Вейран")),
+    720: ((9390, 2, "Крутояр"),),
+    721: ((10167, 2, "Граничный"),),
+    722: ((8958, 2, "Харбаш"),),
+    723: ((3695, 2, "Астен"), (5979, 1, "Ренский торг")),
+    724: ((12425, 2, "Каменка"), (8738, 1, "Верхний Клин")),
+    725: ((3089, 2, "Плесово"), (1950, 1, "Заречный")),
+    726: ((11652, 2, "Ясеневый"),),
+    727: ((2411, 2, "Бир-Нафт"), (8997, 1, "Шарин")),
+    728: ((12601, 2, "Хамир"),),
+    729: ((2804, 2, "Шадран"),),
 }
+
+for town in SOUTHERN_CITIES:
+    if town.get("regional_town"):
+        state_id = town["state"]
+        REGIONAL_SETTLEMENTS[state_id] = (
+            *REGIONAL_SETTLEMENTS.get(state_id, ()),
+            (town["province"], town["value"], town["name"]),
+        )
 
 # Explicit profiles replace the old pseudo-random 24-72k population formula
 # around the densely populated Vorkernsberg conurbation.
@@ -775,19 +885,19 @@ PWR_PRE_COLLAPSE_DMZ_STATES = frozenset()
 # Svetlogorye is the populous oil state of the South. Every NAM state profile,
 # the South Harbour capital and the coastal residual read these values.
 NAM_POPULATION = {
-    67: 2_400_000,
-    225: 1_200_000,
-    226: 700_000,
-    227: 900_000,
-    228: 1_600_000,
-    229: 600_000,
-    230: 500_000,
-    231: 800_000,
-    NAM_SVETLOGORSK_STATE_ID: 1_200_000,
-    NAM_RESIDUAL_CITY_STATE_ID: 300_000,
-    NAM_DRYRIVER_STATE_ID: 800_000,
-    NAM_EAST_DRYRIVER_STATE_ID: 200_000,
-    700: 1_000_000,
+    67: 3_600_000,
+    225: 1_800_000,
+    226: 1_050_000,
+    227: 1_350_000,
+    228: 2_400_000,
+    229: 900_000,
+    230: 750_000,
+    231: 1_200_000,
+    NAM_SVETLOGORSK_STATE_ID: 1_800_000,
+    NAM_RESIDUAL_CITY_STATE_ID: 450_000,
+    NAM_DRYRIVER_STATE_ID: 1_200_000,
+    NAM_EAST_DRYRIVER_STATE_ID: 300_000,
+    700: 1_500_000,
 }
 # NAM can lose the whole mainland and continue the war from its overseas
 # districts, so each island state starts with one port for naval supply and
@@ -821,22 +931,22 @@ NAM_STATE_PROFILES = {
 
 # Population follows the regional settlement weights; factories and deposits stay fixed.
 NAM_COALITION_POPULATION = {
-    68: 3_860_000,
-    69: 4_650_000,
-    70: 1_880_000,
-    691: 940_000,
-    692: 3_100_000,
-    701: 940_000,
-    720: 410_000,
-    721: 410_000,
-    722: 580_000,
-    723: 890_000,
-    724: 470_000,
-    725: 1_570_000,
-    726: 630_000,
-    727: 1_350_000,
-    728: 770_000,
-    729: 1_550_000,
+    68: 5_790_000,
+    69: 6_975_000,
+    70: 2_820_000,
+    691: 1_410_000,
+    692: 4_650_000,
+    701: 1_410_000,
+    720: 615_000,
+    721: 615_000,
+    722: 870_000,
+    723: 1_335_000,
+    724: 705_000,
+    725: 2_355_000,
+    726: 945_000,
+    727: 2_025_000,
+    728: 1_155_000,
+    729: 2_325_000,
 }
 
 NAM_COALITION_FRONT_PROFILES = {
@@ -1220,8 +1330,8 @@ NAM_LEGACY_VICTORY_POINTS = {
     67: ((6099, 10), (16890, 15)),
     68: ((6150, 10),),
     69: (
-        (16893, 25), (16883, 5), (16886, 5), (16889, 5), (16894, 5),
-        (16888, 5),
+        (16893, 25), (16883, 10), (16886, 10), (16889, 10), (16894, 10),
+        (16888, 10),
     ),
     70: ((2986, 15), (1198, 10), (16900, 10), (16901, 10)),
     723: ((6495, 10),),
@@ -1229,7 +1339,7 @@ NAM_LEGACY_VICTORY_POINTS = {
     725: ((259, 10),),
     726: ((6331, 5),),
     727: ((8234, 10),),
-    728: ((16882, 5), (16891, 5)),
+    728: ((16882, 10), (16891, 10)),
     729: ((6193, 5),),
     NAM_SVETLOGORSK_STATE_ID: ((16721, 25), (1710, 5)),
     NAM_RESIDUAL_CITY_STATE_ID: ((7618, 5),),
@@ -1238,11 +1348,17 @@ NAM_LEGACY_VICTORY_POINTS = {
     EFL_MIDDLE_LOREN_STATE_ID: ((8194, 10),),
     EFL_MOREN_STATE_ID: ((8057, 5),),
     EFL_LOREN_BORDERLAND_STATE_ID: ((7908, 5),),
-    AZH_BLACK_COAST_STATE_ID: ((493, 25), (5039, 5), (4089, 10)),
+    AZH_BLACK_COAST_STATE_ID: ((493, 25), (5039, 5), (4089, 15)),
     AZH_SEABOARD_STATE_ID: ((2443, 5),),
-    700: ((16716, 20), (16881, 5), (16884, 5), (16892, 5)),
+    700: ((16716, 20), (16881, 10), (16884, 10), (16892, 15)),
     701: ((16717, 25),),
 }
+
+for state_id, points in NAM_LEGACY_VICTORY_POINTS.items():
+    NAM_LEGACY_VICTORY_POINTS[state_id] = (
+        *points,
+        *((province, value) for province, value, _ in REGIONAL_SETTLEMENTS.get(state_id, ())),
+    )
 
 AFRELA_VICTORY_POINT_NAMES = {
     4218: "Афрела",
@@ -1528,10 +1644,10 @@ GENERATED_STATE_NAMES = {
 }
 
 COASTAL_CITY_POINTS = {
-    699: ((16713, 5), (16714, 1), (16715, 1), (16718, 1), (16719, 1)),
+    699: ((16713, 25), (16714, 10), (16715, 10), (16718, 10), (16719, 10)),
     700: NAM_LEGACY_VICTORY_POINTS[700],
     701: NAM_LEGACY_VICTORY_POINTS[701],
-    284: ((16720, 3),),
+    284: ((16720, 15),),
     688: NAM_LEGACY_VICTORY_POINTS[NAM_SVETLOGORSK_STATE_ID],
 }
 COASTAL_CITY_NAMES = {
@@ -1622,7 +1738,7 @@ def state_path(state_id: int) -> Path:
 
 # The desert leagues keep their relative sizes against Shahrabad and NAM, but
 # each must be able to raise a field army without scraping the barrel.
-SOUTHERN_LEAGUE_POPULATION_FACTOR = 3
+SOUTHERN_LEAGUE_POPULATION_FACTOR = 6
 SOUTHERN_LEAGUES = frozenset({"RHM", "SDR", "GLP", "KDR", "MZR", "KYZ", "WEF"})
 
 
@@ -1637,6 +1753,8 @@ def population(state_id: int, owner: str) -> int:
 
 
 def base_population(state_id: int, owner: str) -> int:
+    if state_id == 240:
+        return 97_500
     if state_id in SHL_POPULATION:
         return SHL_POPULATION[state_id]
     if state_id in SOUTHERN_CAPITAL_DISTRICTS:
@@ -1745,7 +1863,7 @@ def render_state(
         provinces = [int(value) for value in re.findall(r"\d+", province_match.group(1))]
     else:
         provinces = list(manifest)
-    provinces = sorted(set(provinces) | set(EXTRA_PROVINCES_BY_STATE.get(state_id, ())))
+    provinces = list(with_rural_splits(set(provinces) | set(EXTRA_PROVINCES_BY_STATE.get(state_id, ()))))
     if state_id in SOUTHERN_CITY_POINTS:
         provinces = sorted(set(provinces) | {SOUTHERN_CITY_POINTS[state_id][0]})
     if not provinces:
@@ -1772,6 +1890,9 @@ def render_state(
                 raise RuntimeError(
                     f"state {state_id}: theatre VP {province} is outside the state"
                 )
+            history.append(f"\t\tvictory_points = {{ {province} {value} }}")
+    elif state_id == 284:
+        for province, value in COASTAL_CITY_POINTS[state_id]:
             history.append(f"\t\tvictory_points = {{ {province} {value} }}")
     elif state_id in centres:
         province, value = centres[state_id]
@@ -2199,7 +2320,13 @@ def coalition_region_plan() -> dict[Path, bytes]:
         outputs[path] = coalition_region_source(sid).encode("utf-8")
     for parent, provinces in originals.items():
         # Hand-painted provinces count as present before their first regeneration.
-        if current[parent] - set(provinces) or set(provinces) - current[parent] - LOWER_LOREN_PAINTED_PROVINCES:
+        new_towns = {
+            town["province"] for town in SOUTHERN_CITIES
+            if town["state"] in NAM_COALITION_REGIONS
+            and NAM_COALITION_REGIONS[town["state"]]["parent"] == parent
+        }
+        present = set(with_rural_splits(current[parent]))
+        if present - set(provinces) or set(provinces) - present - LOWER_LOREN_PAINTED_PROVINCES - new_towns:
             raise RuntimeError(f"state {parent}: coalition territory drifted")
     for sid in (701, 720, 721, 722):
         path = state_path(sid)
@@ -2772,7 +2899,8 @@ def southern_settlement_plan() -> dict[Path, bytes]:
     """Keep capital references stable and conserve their rural population."""
     outputs = {}
     districts = {district for district, *_rest in SOUTHERN_CAPITAL_DISTRICTS.values()}
-    for state_id in sorted((set(SOUTHERN_CITY_POINTS) | {243, 250, 264, 295, 296}) - districts):
+    owned_cities = SOUTHERN_CITY_POINTS.keys() & STARTING_OWNERS.keys()
+    for state_id in sorted((owned_cities | {243, 250, 264, 295, 296}) - districts):
         outputs[state_path(state_id)] = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
     for capital in SOUTHERN_CAPITAL_DISTRICTS:
         outputs[southern_district_path(capital)] = render_southern_district(capital).encode("utf-8")
@@ -2855,7 +2983,7 @@ def shahrabad_split_plan() -> dict[Path, bytes]:
         if not set(carved) < set(original):
             raise RuntimeError(f"state {parent}: child provinces must be a proper subset")
         remainder = tuple(sorted(set(original) - set(carved)))
-        current = state_file_provinces(state_path(parent))
+        current = frozenset(with_rural_splits(state_file_provinces(state_path(parent))))
         if parent in SOUTHERN_CITY_POINTS:
             # The city province counts as present before the geography pass paints it.
             current |= {SOUTHERN_CITY_POINTS[parent][0]}
@@ -2938,6 +3066,7 @@ def svetlogorye_homeland_plan() -> dict[Path, bytes]:
     """Own NAM population, overseas ports and the small deposits around the oil basin."""
     outputs = {}
     deposits = {
+        **NAM_MAINLAND_STATE_RESOURCES,
         **SVETLOGORYE_RESOURCES,
         **NAM_NEIGHBOUR_RESOURCES,
         AZH_BLACK_COAST_STATE_ID: NAM_COALITION_FRONT_RESOURCES[AZH_BLACK_COAST_STATE_ID],
@@ -2956,6 +3085,9 @@ def svetlogorye_homeland_plan() -> dict[Path, bytes]:
             source = set_scalar(source, "manpower", str(NAM_POPULATION[state_id]))
         if state_id in deposits:
             source = ensure_state_resources(source, deposits[state_id])
+        if state_id in NAM_OVERSEAS_PORTS and state_id in SOUTHERN_CITY_POINTS:
+            provinces = set(with_rural_splits(state_file_provinces(path))) | {SOUTHERN_CITY_POINTS[state_id][0]}
+            source = replace_state_provinces(source, tuple(sorted(provinces)))
         if state_id in NAM_OVERSEAS_PORTS:
             province, level = NAM_OVERSEAS_PORTS[state_id]
             province_open, province_close = named_block(source, "provinces")
@@ -2995,6 +3127,8 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
     for state_id in (284, 290, 688, 689, 691):
         path = state_path(state_id)
         source = path.read_text(encoding="utf-8-sig")
+        if state_id == 284:
+            source = set_scalar(source, "manpower", str(population(state_id, "KYZ")))
         if state_id in (284, 688):
             province = 16720 if state_id == 284 else 16721
             match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
@@ -3006,11 +3140,11 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
                 source = source[:match.start(1)] + "\n\t\t" + " ".join(map(str, provinces)) + "\n\t" + source[match.end(1):]
             source = replace_history_victory_points(source, COASTAL_CITY_POINTS[state_id])
         if state_id in residuals:
-            original, population, supplies = residuals[state_id]
+            original, residents, supplies = residuals[state_id]
             current = int(re.search(r"\bmanpower\s*=\s*(\d+)", source).group(1))
-            if state_id not in SHL_POPULATION and current not in (original, population):
-                raise RuntimeError(f"state {state_id}: population changed outside the city split")
-            source = re.sub(r"\bmanpower\s*=\s*\d+", f"manpower = {population}", source)
+            if state_id not in SHL_POPULATION and current not in (original, residents):
+                raise RuntimeError(f"state {state_id}: residents changed outside the city split")
+            source = re.sub(r"\bmanpower\s*=\s*\d+", f"manpower = {residents}", source)
             source = re.sub(r"\blocal_supplies\s*=\s*[\d.]+", f"local_supplies = {supplies:.1f}", source)
             source = re.sub(r"\bstate_category\s*=\s*\w+", "state_category = rural", source)
             if state_id in (689, 691):
@@ -3027,7 +3161,7 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
         700: ("700-South-Harbour.txt", "NAM", NAM_POPULATION[700], 3, 2.5, 1, 2),
         701: ("701-Middle-Loren-City.txt", "EFL", NAM_COALITION_POPULATION[701], 3, 2.0, 1, 0),
     }
-    for state_id, (filename, owner, population, infrastructure, supplies, civilian, military) in profiles.items():
+    for state_id, (filename, owner, residents, infrastructure, supplies, civilian, military) in profiles.items():
         path = STATE_DIR / filename
         existing = tuple(STATE_DIR.glob(f"{state_id}-*.txt"))
         if existing and existing != (path,):
@@ -3039,7 +3173,7 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
             "state = {",
             f"\tid = {state_id}",
             f'\tname = "STATE_{state_id}"',
-            f"\tmanpower = {population}",
+            f"\tmanpower = {residents}",
             "\tstate_category = city",
             f"\tlocal_supplies = {supplies:.1f}",
             "\tprovinces = {",
@@ -3089,9 +3223,9 @@ def update_coastal_city_states(apply: bool) -> int:
 def regional_settlement_plan() -> dict[Path, bytes]:
     """Own only the listed VP entries and their names in existing state files."""
     definitions = {
-        int(row[0]): row[4]
+        int(row[0]): (row[4], row[6])
         for line in (ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines()
-        if len(row := line.split(";")) > 4 and row[0].isdigit()
+        if len(row := line.split(";")) > 6 and row[0].isdigit()
     }
     outputs = {}
     localisation_path = ROOT / "localisation/russian/victory_points_l_russian.yml"
@@ -3103,9 +3237,12 @@ def regional_settlement_plan() -> dict[Path, bytes]:
         province_open, province_close = named_block(source, "provinces")
         provinces = set(map(int, re.findall(r"\d+", source[province_open:province_close])))
         for province, value, name in settlements:
-            if province in seen or province not in provinces or definitions.get(province) != "land":
+            if province in seen or province not in provinces or definitions.get(province, ("", ""))[0] != "land":
                 raise RuntimeError(f"state {state_id}: duplicate or invalid regional VP {province}")
-            if not 1 <= value <= 3:
+            if definitions[province][1] in CITY_TERRAINS:
+                if value < 10:
+                    raise RuntimeError(f"urban VP {province}: expected at least 10 points")
+            elif not 1 <= value <= 3:
                 raise RuntimeError(f"regional VP {province}: expected a minor settlement value")
             seen.add(province)
             localisation = replace_localisation_value(localisation, f"VICTORY_POINTS_{province}", name)
@@ -3139,8 +3276,11 @@ def apply() -> None:
     split_ivanland_overhaul_states()
     update_shahrabad_split(True)
     for state_id, owner in sorted(STARTING_OWNERS.items()):
+        if state_id in NAM_COALITION_REGIONS:
+            continue
         state_path(state_id).write_text(render_state(state_id, owner), encoding="utf-8", newline="\n")
     apply_legacy_state_profiles()
+    update_svetlogorye_homeland(True)
     update_coastal_city_states(True)
     update_southern_settlements(True)
     update_stelander_islands(True)
@@ -3244,10 +3384,12 @@ def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
             ).encode("utf-8")
         elif state_id in districts:
             result = southern_settlement_plan()[path]
+        elif state_id in NAM_OVERSEAS_PORTS:
+            result = svetlogorye_homeland_plan()[path]
         elif state_id in NAM_MAINLAND_STATE_RESOURCES:
             province_buildings = ((689, "naval_base", 2),) if state_id == 688 else ()
             result = render_resource_war_state(
-                state_id, path.name, provinces, "NAM", NAM_STATE_PROFILES[state_id],
+                state_id, path.name, with_rural_splits(provinces), "NAM", NAM_STATE_PROFILES[state_id],
                 NAM_MAINLAND_STATE_RESOURCES[state_id], NAM_LEGACY_VICTORY_POINTS[state_id],
                 province_buildings,
             ).encode("utf-8")
@@ -3267,7 +3409,7 @@ def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
         rendered = result.decode("utf-8")
         opening, closing = named_block(rendered, "provinces")
         planned = tuple(map(int, re.findall(r"\d+", rendered[opening:closing])))
-        if set(planned) != set(provinces):
+        if set(planned) != set(with_rural_splits(provinces)):
             raise RuntimeError(f"state {state_id}: metadata generation would change province membership")
         outputs[path] = result
     return outputs

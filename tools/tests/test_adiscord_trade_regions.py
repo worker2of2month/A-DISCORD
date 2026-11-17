@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import codecs
+from dataclasses import replace
 import json
 import unittest
 from pathlib import Path
@@ -14,7 +15,7 @@ from tools.builders.build_adiscord_trade_regions import (
     validate as validate_builder,
 )
 from tools.validators.validate_adiscord_trade_regions import (
-    EXPECTED_PROVINCE_COUNTS,
+    expected_province_counts,
     EXPECTED_STATE_COUNTS,
     GEOGRAPHIC_STATE_ANCHORS,
     validate as validate_trade_regions,
@@ -44,8 +45,15 @@ class ADiscordTradeRegionTests(unittest.TestCase):
 
     def test_approved_geography_covers_every_real_land_province(self) -> None:
         self.assertEqual(dict(self.plan.state_counts), EXPECTED_STATE_COUNTS)
-        self.assertEqual(dict(self.plan.province_counts), EXPECTED_PROVINCE_COUNTS)
-        self.assertEqual(sum(self.plan.province_counts.values()), 13_625)
+        issues = []
+        self.assertEqual(self.plan.province_counts, expected_province_counts(ROOT, self.plan, issues))
+        self.assertEqual(issues, [])
+        land = {
+            int(row[0])
+            for line in (ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines()
+            if (row := line.split(";"))[4] == "land" and row[0] != "0"
+        }
+        self.assertEqual(set(self.plan.province_continents), land)
         self.assertEqual(set(self.plan.province_continents.values()), set(range(1, 8)))
 
     def test_mixed_strategic_regions_are_explicitly_resolved_by_state(self) -> None:
@@ -66,6 +74,16 @@ class ADiscordTradeRegionTests(unittest.TestCase):
         self.assertEqual(
             states_in_mixed_regions, states_in_mixed_regions & explicit_states
         )
+
+    def test_equal_totals_cannot_hide_swapped_southern_subdivisions(self) -> None:
+        continents = dict(self.plan.province_continents)
+        desert_region, eastern_region = continents[16930], continents[16937]
+        self.assertNotEqual(desert_region, eastern_region)
+        continents[16930], continents[16937] = eastern_region, desert_region
+        issues = []
+        expected_province_counts(ROOT, replace(self.plan, province_continents=continents), issues)
+        for province in (16930, 16937):
+            self.assertTrue(any(f"province {province}:" in issue for issue in issues), province)
 
     def test_geographic_anchors_do_not_follow_current_country_ownership(self) -> None:
         for state_id, (region_id, continent_id) in GEOGRAPHIC_STATE_ANCHORS.items():

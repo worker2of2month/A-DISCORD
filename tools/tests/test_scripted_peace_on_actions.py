@@ -154,6 +154,12 @@ class ScriptedPeaceOwnershipTests(unittest.TestCase):
             self.assertEqual(scalar(block(gate, 'NOT'), 'has_global_flag'), 'RUS_crisis_world_ended')
 
 
+SHL_BOOKKEEPING_EFFECTS = (
+    "clear_variable",
+    "clr_state_flag",
+)
+
+
 class GenericPeaceFixture:
     """Execute the generic branch against explicit diplomacy/ownership facts.
 
@@ -247,6 +253,9 @@ class GenericPeaceFixture:
                 return self.subjects.get(current) == self.resolve(value, stack)
             if key == "ADISCORD_vorkerland_is_main_claimant":
                 return False
+            # Peace fixtures start no front missions.
+            if key == "has_active_mission":
+                return False
             raise AssertionError("Unsupported generic condition: " + key)
 
         return all(one(e) for e in rows)
@@ -327,6 +336,9 @@ class GenericPeaceFixture:
                 pass
             elif key in ("add_manpower", "add_equipment_to_stockpile", "add_timed_idea"):
                 # Reserves and spirits do not change wars, factions or ownership.
+                pass
+            elif key in SHL_BOOKKEEPING_EFFECTS:
+                # Border-treaty flags and variables change no war, faction or owner.
                 pass
             elif key == "log":
                 self.log.append(value)

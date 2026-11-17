@@ -386,6 +386,25 @@
     "runtime_sha256": "a17702556eafe248a5287c17939745b83125d910520d84eef2b12a04557c53e5",
     "mix": "Pen and paper, distant whistle, passing wheels, then escaping steam. The brass chorale plays alone from 22.1 seconds. Fixed music gain -3.5 dB, with a 4.5-second entry and a 6.5-second fade on the decay."
   },
+  "superevent_west_worker_sound": {
+    "music": {
+      "artist": "Maserati",
+      "title": "Show Me the Season",
+      "album": "Inventions for the New Season - Anniversary Edition",
+      "source_page": "https://maserati.bandcamp.com/track/show-me-the-season",
+      "file": "maserati_show_me_the_season_excerpt.flac",
+      "excerpt_seconds": [0, 56],
+      "sha256": "0dfa6d42e538e3df9f31b762b654f11bbfbf0adfc65339726ece97d8f2f862ef",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_west_worker_sound.wav",
+    "runtime_sha256": "cecce5caf9a98477c0c7deec2d1f9dd561078ecf9cd2fb74e5f03bac12f34400"
+  },
   "superevent_vorkerland_singularity_sound": {
     "music": {
       "artist": "Chris Zabriskie",

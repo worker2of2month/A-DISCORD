@@ -1534,9 +1534,12 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "cost = 25",
             "days_remove = 21",
             "fire_only_once = yes",
-            "remove_effect = { ADISCORD_vorkerland_raise_emergency_levies = yes }",
         ):
             self.assertIn(token, decision)
+        self.assertEqual(
+            collapse_validator.direct_statements(named_block(decision, "remove_effect"), "ADISCORD_vorkerland_raise_emergency_levies"),
+            ["yes"],
+        )
         on_actions = read_country_on_actions(
             "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
             'vorkerland_collapse',
@@ -1549,7 +1552,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("set_research_slots = 5", history)
 
         oob = read("history/units/IVN.txt")
-        units = named_block(oob, "units")
+        units = "\n".join(named_blocks(named_block(oob, "units"), "division"))
         self.assertEqual(units.count("division = {"), 16)
         self.assertEqual(units.count('division_template = "Capital Guard"'), 2)
         self.assertEqual(units.count('division_template = "Line Infantry Brigade"'), 10)
@@ -3272,7 +3275,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "DVA_Severin_Mark": "GFX_portrait_DVA_Severin_Mark",
             "EGC_Ruslan_Pike": "GFX_portrait_EGC_Ruslan_Pike",
             "WPS_Karim_Dol": "GFX_portrait_WPS_Karim_Dol",
-            "PWR_Alexey_Lange": "GFX_Portrait_Forul_Generic_4",
+            "PWR_Alexey_Lange": "GFX_portrait_PWR_Alexey_Lange",
             "SRA_Helio_Marr": "GFX_portrait_SRA_Helio_Marr",
             "ZTA_Viktor_Holt": "GFX_portrait_ZTA_Viktor_Holt",
             "RIV_Mikhail_Arsenyev": "GFX_portrait_RIV_Mikhail_Arsenyev",
@@ -4518,9 +4521,9 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn(
             "ADISCORD_vorkerland_ivanland_intervention_failure = yes", cancel_effect
         )
-        self.assertIn(
-            "timeout_effect = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }",
-            mission,
+        self.assertEqual(
+            collapse_validator.direct_statements(named_block(mission, "timeout_effect"), "ADISCORD_vorkerland_ivanland_intervention_failure"),
+            ["yes"],
         )
         effects = source_section(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
@@ -5689,7 +5692,7 @@ class UnificationUnderWinnerTests(unittest.TestCase):
             ),
             (
                 "nation target rebound after a nested effect read it",
-                self.rebinding + first_loser_release,
+                self.rebinding,
                 first_loser_release + self.rebinding,
                 "must first rebind the Vorkerland nation target to WKR",
             ),

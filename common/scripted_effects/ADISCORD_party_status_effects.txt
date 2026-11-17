@@ -4,7 +4,6 @@ ADISCORD_end_party_coalition = {
 	if = {
 		limit = { check_variable = { ADISCORD_cabinet_parties^num > 0 } }
 		clear_array = ADISCORD_cabinet_parties
-		add_to_variable = { ADISCORD_party_markers_revision = 1 }
 	}
 	clear_variable = ADISCORD_coalition_daily_power
 	if = {
@@ -51,7 +50,6 @@ ADISCORD_admit_coalition_party = {
 			add_to_array = { ADISCORD_cabinet_parties = current_party_ideology_group }
 		}
 		add_to_array = { ADISCORD_cabinet_parties = ADISCORD_party }
-		add_to_variable = { ADISCORD_party_markers_revision = 1 }
 		ADISCORD_refresh_party_coalition = yes
 	}
 }
@@ -60,7 +58,6 @@ ADISCORD_remove_coalition_party = {
 	if = {
 		limit = { is_in_array = { ADISCORD_cabinet_parties = ADISCORD_party } }
 		remove_from_array = { ADISCORD_cabinet_parties = ADISCORD_party }
-		add_to_variable = { ADISCORD_party_markers_revision = 1 }
 		ADISCORD_refresh_party_coalition = yes
 	}
 }
@@ -74,7 +71,6 @@ ADISCORD_ban_party = {
 		}
 		ADISCORD_remove_coalition_party = yes
 		add_to_array = { ADISCORD_banned_parties = ADISCORD_party }
-		add_to_variable = { ADISCORD_party_markers_revision = 1 }
 	}
 }
 
@@ -82,6 +78,5 @@ ADISCORD_legalise_party = {
 	if = {
 		limit = { is_in_array = { ADISCORD_banned_parties = ADISCORD_party } }
 		remove_from_array = { ADISCORD_banned_parties = ADISCORD_party }
-		add_to_variable = { ADISCORD_party_markers_revision = 1 }
 	}
 }

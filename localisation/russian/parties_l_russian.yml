@@ -646,6 +646,14 @@
  ARS_utilitarism_party: "£GFX_generic_utilitarism_planning_party_texticon Национальная палата"
  VLD_pragmatism_party: "£GFX_generic_pragmatism_administrative_coalition_party_texticon Совет южных общин"
  MON_chauvinism_party: "£GFX_generic_chauvinism_traditional_order_party_texticon Имперский престол Аркенов"
+ MON_hedonism_party: "£GFX_generic_hedonism_aristocratic_houses_party_texticon Палата корон"
+ MON_hedonism_party_long: "$MON_hedonism_party$"
+ MON_etatism_party: "£GFX_generic_etatism_state_party_party_texticon Партия имперского Генерального штаба"
+ MON_etatism_party_long: "$MON_etatism_party$"
+ MON_pragmatism_party: "£GFX_generic_pragmatism_administrative_coalition_party_texticon Лига городских хартий"
+ MON_pragmatism_party_long: "$MON_pragmatism_party$"
+ MON_humanism_party: "£GFX_generic_humanism_civic_party_texticon Союз равного гражданства"
+ MON_humanism_party_long: "$MON_humanism_party$"
  # END CONSOLIDATED: ADISCORD_northern_countries_l_russian
  # BEGIN CONSOLIDATED: ADISCORD_southern_desert_l_russian
  KDR_chauvinism_party: "£GFX_generic_chauvinism_traditional_order_party_texticon Солнечный престол"

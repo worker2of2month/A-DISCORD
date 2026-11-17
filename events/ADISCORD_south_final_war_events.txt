@@ -126,6 +126,51 @@ news_event = {
 	}
 }
 
+# The passed crisis deadline dispatches the war. A participant still at war
+# defers the start to the furnace cycle.
+country_event = {
+	id = ADISCORD_south.4
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_south_dispatch_prepared_war = yes
+	}
+}
+
+# SHL. One step of the bounded deadline watch; see ADISCORD_south_watch_deadline.
+country_event = {
+	id = ADISCORD_south.5
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_south_deadline_watch_step = yes
+	}
+}
+
+# Shahrabad and the northern candidate learn the latest date of the war when
+# preparation opens.
+country_event = {
+	id = ADISCORD_south.6
+	title = ADISCORD_south.6.t
+	desc = ADISCORD_south.6.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = {
+		ADISCORD_south_crisis_open = yes
+		has_global_flag = ADISCORD_south_preparation_started
+	}
+
+	option = {
+		name = ADISCORD_south.6.a
+		custom_effect_tooltip = ADISCORD_south_deadline_rules_tt
+		effect_tooltip = {
+			add_timed_idea = { idea = ADISCORD_south_unprepared_war days = 180 }
+		}
+	}
+}
+
 # A regional state without a champion's subject or faction tie chooses its side.
 # There is no neutral answer: the desert states are the only land routes.
 country_event = {
@@ -512,6 +557,7 @@ country_event = {
 		trigger = {
 			ADISCORD_south_nam_story_clear = yes
 			ADISCORD_south_offer_answer_valid = yes
+			ADISCORD_south_offer_war_clear = yes
 		}
 		if = {
 			limit = {
@@ -614,6 +660,7 @@ country_event = {
 		trigger = {
 			ADISCORD_south_nam_story_clear = yes
 			ADISCORD_south_offer_answer_valid = yes
+			ADISCORD_south_offer_war_clear = yes
 		}
 		if = {
 			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } } }
@@ -622,6 +669,19 @@ country_event = {
 		else_if = {
 			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } } }
 			custom_effect_tooltip = ADISCORD_south_offer_contract_refuse_tt
+		}
+		else_if = {
+			limit = {
+				hidden_trigger = {
+					check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
+					is_in_faction = yes
+				}
+			}
+			custom_effect_tooltip = ADISCORD_south_offer_submit_refuse_faction_tt
+		}
+		else_if = {
+			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals } } }
+			custom_effect_tooltip = ADISCORD_south_offer_submit_refuse_tt
 		}
 		else_if = {
 			limit = { hidden_trigger = { is_in_faction = yes } }
@@ -651,6 +711,7 @@ country_event = {
 			OR = {
 				ADISCORD_south_nam_story_clear = no
 				ADISCORD_south_offer_answer_valid = no
+				ADISCORD_south_offer_war_clear = no
 			}
 		}
 		hidden_effect = {
@@ -782,13 +843,85 @@ country_event = {
 				}
 			}
 			if = {
-				limit = { ADISCORD_south_nam_story_clear = yes }
+				limit = {
+					ADISCORD_south_nam_story_clear = yes
+					event_target:ADISCORD_south_offer_target = { ADISCORD_south_offer_war_clear = yes }
+				}
 				event_target:ADISCORD_south_offer_target = { country_event = { id = ADISCORD_south.40 hours = 1 } }
 			}
 			else = { country_event = { id = ADISCORD_south.46 days = 28 } }
 		}
 		else = {
 			event_target:ADISCORD_south_offer_target = { clear_variable = ADISCORD_south_offer_kind }
+		}
+	}
+}
+
+# Submission imposed after a lost refusal war (ADISCORD_south_submit_refusal_member).
+# The native capitulated status and the faction exit may take days to clear;
+# the receipt's age bounds the daily retries. Every ending returns occupied land.
+country_event = {
+	id = ADISCORD_south.47
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { ADISCORD_south_submission_pending_valid = yes }
+			if = {
+				limit = { ADISCORD_south_nam_story_clear = yes }
+				ADISCORD_south_finalize_submission = yes
+				ADISCORD_south_restore_peacetime_control = yes
+			}
+			else = { country_event = { id = ADISCORD_south.47 days = 28 } }
+		}
+		else_if = {
+			limit = {
+				exists = yes
+				OR = {
+					has_country_flag = {
+						flag = ADISCORD_south_submits_to_SHL
+						days < 7
+					}
+					has_country_flag = {
+						flag = ADISCORD_south_submits_to_NAM
+						days < 7
+					}
+				}
+			}
+			country_event = { id = ADISCORD_south.47 days = 1 }
+		}
+		else = {
+			clr_country_flag = ADISCORD_south_submits_to_SHL
+			clr_country_flag = ADISCORD_south_submits_to_NAM
+			ADISCORD_south_restore_peacetime_control = yes
+		}
+	}
+}
+
+# A held refusal-side member whose last fighting partner left the war without
+# capitulating (ADISCORD_south_recheck_held_refusals). ROOT is the held member.
+country_event = {
+	id = ADISCORD_south.48
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_capitulated = yes
+				ADISCORD_south_refusal_side_SHL = yes
+				ADISCORD_south_refusal_side_fallen_SHL = yes
+			}
+			SHL = { ADISCORD_south_impose_refused_terms = yes }
+		}
+		else_if = {
+			limit = {
+				has_capitulated = yes
+				ADISCORD_south_refusal_side_NAM = yes
+				ADISCORD_south_refusal_side_fallen_NAM = yes
+			}
+			NAM = { ADISCORD_south_impose_refused_terms = yes }
 		}
 	}
 }

@@ -1,19 +1,21 @@
 state = {
 	id = 265
 	name = "STATE_265"
-	manpower = 124605
+	manpower = 249210
 	state_category = rural
 	history = {
 		owner = MZR
 		add_core_of = MZR
-		victory_points = { 16728 1 }
+		victory_points = { 16728 15 }
+		victory_points = { 2244 2 }
+		victory_points = { 3805 1 }
 		buildings = {
 			infrastructure = 2
 		}
 	}
 	provinces = {
 		1989 2244 2599 3465 3528 3667 3805 4831 5562 5719 7371 8214
-		8334 9900 16728 16760 16761 16762
+		8334 9900 16728 16760 16761 16762 16947 16962 17028 17057 17058
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

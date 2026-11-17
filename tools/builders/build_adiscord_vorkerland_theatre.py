@@ -10,6 +10,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from tools.builders import build_adiscord_strategic_regions as map_regions
+from tools.builders.build_adiscord_new_states import CITY_RAILWAYS, southern_city_rail_route
 from tools.lib.paths import repository_root
 from tools.lib.vorkerland_collapse_manifest import (
     DIRTY_GROUPS,
@@ -32,11 +33,11 @@ STARTING_SUPPLY_RAILS = {
 # Capital, forward depot and embarkation port remain connected inside each country.
 COALITION_SUPPLY_RAILS = {
     "EFL": (
-        (2, (16717, 8904, 12830, 786, 5934, 10809, 1200, 6514, 6847, 1444, 9402, 10422)),
+        (2, (16717, 8904, 12830, 786, 5934, 10809, 1200, 6514, 6847, 16900, 1444, 9402, 10422)),
         (2, (10422, 6970, 11035, 9041, 6870, 5979, 6000, 6495)),
     ),
     "AZH": (
-        (2, (16893, 16886, 7737, 729, 367, 5555, 6577)),
+        (2, (16893, 16894, 16886, 16889, 7737, 729, 16888, 367, 5555, 6577)),
         (2, (7737, 9798, 10626, 9758, 8829, 1360, 5039, 3464, 493)),
     ),
 }
@@ -387,7 +388,7 @@ SOUTH_CAPITAL_PROVINCES = {
 }
 SOUTH_SUPPLY_RAILS = {
     "NAM": (
-        (1, (16716, 16881, 2038)),
+        (1, (16716, 16892, 16881, 2038)),
         (1, (16890, 12668, 3127, 10967)),
     ),
     "SDR": (
@@ -403,14 +404,14 @@ SOUTH_SUPPLY_RAILS = {
     ),
     "KDR": (
         (1, (12825, 3134, 3139)),
-        (1, (7497, 4198, 263, 11862, 7201, 1300, 2632, 4863, 5711)),
-        (1, (4349, 3079, 5739, 939, 7201)),
+        (1, (7497, 4198, 263, 11862, 17099, 7201, 1300, 2632, 4863, 5711)),
+        (1, (4349, 3079, 5739, 939, 17098, 17096, 7201)),
         (1, (1377, 2785, 10861, 3142, 1459, 10241, 864)),
     ),
     "GLP": (
         (1, (12583, 9672)),
         (1, (16731, 3643, 10952, 8580, 2073, 4350, 7708)),
-        (1, (3415, 12369, 2342, 5473, 6512, 5595, 7073, 16796)),
+        (1, (3415, 12369, 2342, 5473, 17140, 6512, 5595, 7073, 16796)),
     ),
     "SHL": (
         (1, (16899, 16794, 10927, 1149, 9742, 2412, 4995)),
@@ -424,12 +425,17 @@ SOUTH_SUPPLY_RAILS = {
         (1, (16729, 261, 8120, 1299, 6153, 5293, 3504, 12452)),
     ),
     "KYZ": (
-        (1, (5549, 7101, 3544, 2947, 3767, 10998, 5921, 16785, 16736)),
+        (1, (5549, 7101, 3544, 2947, 17198, 3767, 10998, 5921, 16785, 16736)),
         (1, (12033, 10206, 5921)),
         (1, (16737, 16788, 3306, 1020, 7108, 2319, 2779, 12033)),
     ),
 }
+for tag, feeders in CITY_RAILWAYS["feeders"].items():
+    SOUTH_SUPPLY_RAILS[tag] = (*SOUTH_SUPPLY_RAILS.get(tag, ()), *((1, tuple(route)) for route in feeders))
+
 SOUTH_SUPPLY_HUB_STATES = {
+    16910: 250,
+    3805: 265,
     16890: 67,
     5869: 174,
     12825: 236,
@@ -555,6 +561,11 @@ def update_source(source: str) -> str:
         if line.strip() in RETIRED_MARKERS:
             continue
         route = _rail_route(line)
+        if route:
+            adjusted = southern_city_rail_route(route)
+            if adjusted != route:
+                line = render_rail_line(int(line.split()[0]), adjusted)
+                route = adjusted
         if route not in managed_routes:
             lines.append(line)
             continue

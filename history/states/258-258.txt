@@ -1,19 +1,21 @@
 state = {
 	id = 258
 	name = "STATE_258"
-	manpower = 63306
+	manpower = 126612
 	state_category = wasteland
 	history = {
 		owner = RHM
 		add_core_of = RHM
+		victory_points = { 3614 1 }
+		victory_points = { 567 2 }
+		victory_points = { 2545 1 }
 		buildings = {
 			infrastructure = 2
 		}
-		victory_points = { 3614 1 }
 	}
 	provinces = {
 		567 1601 2162 2545 2882 2892 3614 4759 5648 5703 7118 7882
-		10164 10445
+		10164 10445 16956 16973 17021 17032
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

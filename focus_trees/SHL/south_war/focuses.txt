@@ -1514,7 +1514,8 @@ focus_tree = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
 				ADISCORD_economy_mark_dirty = yes
-				add_to_variable = { var = SHL_house_pressure value = 10 }
+				set_variable = { var = SHL_loyalty_delta value = -10 }
+				SHL_change_all_loyalty = yes
 				SHL_clamp_tensions = yes
 			}
 		}
@@ -1546,7 +1547,8 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = { var = SHL_unrest value = -10 }
-				add_to_variable = { var = SHL_house_pressure value = -5 }
+				set_variable = { var = SHL_loyalty_delta value = 5 }
+				SHL_change_all_loyalty = yes
 				SHL_clamp_tensions = yes
 				add_to_variable = { var = SHL_sw_political_power value = 0.1 }
 				SHL_refresh_south_war = yes
@@ -1917,7 +1919,8 @@ focus_tree = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
 				ADISCORD_economy_mark_dirty = yes
-				add_to_variable = { var = SHL_house_pressure value = -10 }
+				set_variable = { var = SHL_loyalty_delta value = 10 }
+				SHL_change_all_loyalty = yes
 				SHL_clamp_tensions = yes
 				add_to_variable = { var = SHL_sw_war_support value = 0.03 }
 				SHL_refresh_south_war = yes
@@ -2287,7 +2290,8 @@ focus_tree = {
 			army_experience = 15
 			custom_effect_tooltip = SHL_r_noble_retinues_war_tt
 			hidden_effect = {
-				add_to_variable = { var = SHL_house_pressure value = -10 }
+				set_variable = { var = SHL_loyalty_delta value = 10 }
+				SHL_change_all_loyalty = yes
 				SHL_clamp_tensions = yes
 				SHL_raise_paid_levies_3 = yes
 			}
@@ -2487,7 +2491,8 @@ focus_tree = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
 				ADISCORD_economy_mark_dirty = yes
-				add_to_variable = { var = SHL_house_pressure value = -10 }
+				set_variable = { var = SHL_loyalty_delta value = 10 }
+				SHL_change_all_loyalty = yes
 				SHL_clamp_tensions = yes
 				set_temp_variable = { var = SHL_balance_shift value = -0.10 }
 				SHL_balance_shift = yes
@@ -2527,7 +2532,8 @@ focus_tree = {
 				}
 			}
 			hidden_effect = {
-				add_to_variable = { var = SHL_house_pressure value = 10 }
+				set_variable = { var = SHL_loyalty_delta value = -10 }
+				SHL_change_all_loyalty = yes
 				SHL_clamp_tensions = yes
 				add_to_variable = { var = SHL_sw_arms_speed value = 0.05 }
 				SHL_refresh_south_war = yes

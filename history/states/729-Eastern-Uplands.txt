@@ -3,14 +3,14 @@ state={
 	id=729
 	name="STATE_729"
 	resources = {
-		chromium = 1
-		tungsten = 1
+		chromium = 3
+		tungsten = 3
 	}
 	provinces={
 		601 2362 2804 4678 5527 6193 6768 7777 8114 8441 9264 9375
-		11445 11630 11734
+		11445 11630 11734 16929 16933 16978 17020 17042 17157 17158 17159 17160
 	}
-	manpower = 1550000
+	manpower = 2325000
 	buildings_max_level_factor = 1.000
 	state_category = rural
 	local_supplies = 1.0
@@ -18,6 +18,8 @@ state={
 		owner = AZH
 		add_core_of = AZH
 		victory_points = { 6193 5 }
+		victory_points = { 2804 2 }
+		victory_points = { 16929 15 }
 		buildings = {
 			infrastructure = 3
 		}

@@ -15,13 +15,17 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
-from scipy.ndimage import distance_transform_edt, gaussian_filter
+from scipy.ndimage import distance_transform_edt, find_objects, gaussian_filter
 
 from tools.builders.build_adiscord_ivn_geography import native_river_bmp, normal_from_height
-from tools.builders.build_adiscord_new_states import SOUTHERN_CITIES, SOUTHERN_CITY_POINTS
+from tools.builders.build_adiscord_new_states import (
+    NEW_CITY_APPROACHES, SOUTHERN_CITIES, SOUTHERN_CITY_APPROACHES,
+    SOUTHERN_CITY_POINTS, SOUTHERN_RURAL_SPLITS, southern_city_rail_route,
+)
 from tools.lib.city_terrains import CITY_TERRAINS, NATIONAL_CITY_TERRAIN
 from tools.lib.coastal_clearance import (
     URBAN_FALLBACK_PALETTE,
+    province_colours,
     tree_cells_blocked,
     urban_blocked,
     water_colours,
@@ -51,7 +55,9 @@ ANCHOR_REFERENCES = {**SPLIT_PARENTS, 16709: 65, 16710: 65, 16712: 6261}
 ANCHOR_REFERENCES.update({province: 65 for province in MANDATE_ISLANDS})
 DISPLACED_PROVINCES = frozenset({6008, 7739, 11627})
 CITIES = frozenset(range(16713, 16722)) | frozenset(province for province, _value in SOUTHERN_CITY_POINTS.values())
-ARAB_CITIES = frozenset({16713, 16714, 16715, 16718, 16719, 16720}) | frozenset(entry["province"] for entry in SOUTHERN_CITIES)
+ARAB_CITIES = frozenset({16713, 16714, 16715, 16718, 16719, 16720}) | frozenset(
+    entry["province"] for entry in SOUTHERN_CITIES if entry["state"] not in {175, 228, 726}
+)
 # Urban growth authored in Nudge: expanded southern cities and their new
 # districts receive city rasters without becoming manifest cities. The
 # hand-painted parents and rural sectors of the southern cities Damir, Arsan,
@@ -72,8 +78,16 @@ ARAB_URBAN_GROWTH = frozenset({
 ARAB_HILL_CITIES = frozenset({
     16713, 16714, 16715, 16718, 16719, 16727, 16728,
     16729, 16733, 16739, 16897, 16899,
-})
-ARAB_FARMLAND_CITIES = frozenset({7903, 16734, 16735, 16737, 16738, 16787, 16788, 16789})
+}) | frozenset(
+    entry["province"] for entry in SOUTHERN_CITIES
+    if entry.get("regional_town") and entry["province"] in ARAB_CITIES
+    and entry["parent_terrain"] in {"hills", "mountain"}
+)
+ARAB_FARMLAND_CITIES = frozenset({7903, 16734, 16735, 16737, 16738, 16787, 16788, 16789}) | frozenset(
+    entry["province"] for entry in SOUTHERN_CITIES
+    if entry.get("regional_town") and entry["province"] in ARAB_CITIES
+    and entry["parent_terrain"] in {"plains", "forest"}
+)
 ARAB_CITY_TERRAIN = {
     province: "hill_city" if province in ARAB_HILL_CITIES
     else "urban" if province in ARAB_FARMLAND_CITIES
@@ -93,7 +107,8 @@ RURAL_SECTORS = tuple(
     {**sector, "parent": city["parent"], "parent_terrain": city["parent_terrain"], "terrain": city["parent_terrain"]}
     for city in SOUTHERN_CITIES for sector in city.get("sectors", ())
 )
-SOUTHERN_GEOMETRY = (*SOUTHERN_CITIES, *RURAL_SECTORS)
+SOUTHERN_GEOMETRY = (*SOUTHERN_CITIES, *RURAL_SECTORS, *SOUTHERN_RURAL_SPLITS, *NEW_CITY_APPROACHES)
+RURAL_SPLIT_PARENTS = {entry["province"]: entry["parent"] for entry in SOUTHERN_RURAL_SPLITS}
 # Resolve province corners, short contacts and frontage loops without changing state membership.
 # Coordinates use the top-left raster origin.
 PROVINCE_PIXEL_REPAIRS = {
@@ -307,6 +322,10 @@ NUDGE_SPLIT_PARENTS = {
     16894: 4380,
 }
 ANCHOR_REFERENCES.update(NUDGE_SPLIT_PARENTS)
+APPROACH_PROVINCES = {entry[key] for entry in SOUTHERN_CITY_APPROACHES for key in ("province", "parent", "city")}
+ANCHOR_REFERENCES.update(RURAL_SPLIT_PARENTS)
+DISPLACED_PROVINCES |= APPROACH_PROVINCES
+DISPLACED_PROVINCES |= frozenset(RURAL_SPLIT_PARENTS.values())
 # Every province whose pixels the southern Nudge pass moved, splits excluded.
 NUDGE_SPLIT_DONORS = frozenset({
     461, 729, 971, 1015, 2231, 2374, 2411, 3127, 3584, 3706, 4025, 4089,
@@ -434,6 +453,50 @@ compression block avoids repeated lossy recompression of its untouched pixels.
     return bytes(result)
 
 
+def build_colourmap(
+    base: bytes, islands: np.ndarray, water: np.ndarray, terrain: bytes, cities: bytes,
+) -> bytes:
+    """Use the built-up fraction of each 2x2 map cell as its night light mask."""
+    colourmap = patch_colourmap(base, islands)
+    with Image.open(BytesIO(terrain)) as ground, Image.open(BytesIO(cities)) as buildings:
+        for raster in (ground, buildings):
+            if raster.mode != "P" or raster.size != islands.shape[::-1]:
+                raise ValueError("city lights require indexed terrain and city rasters matching provinces.bmp")
+        # Indices 2 and 15 mark settlements. Index 1 covers the city map background.
+        footprint = ((np.asarray(ground) == 13) | np.isin(np.asarray(buildings), (2, 15))) & ~water
+    height, width = islands.shape[0] // 2, islands.shape[1] // 2
+    coverage = footprint.reshape(height, 2, width, 2).sum(axis=(1, 3), dtype=np.uint8)
+    # BC3 endpoints 64 and 224 give the palette 64, 224, 96, 128, 160,
+    # 192, 0, 255. All five possible coverage levels have an exact entry.
+    selectors = np.array([6, 0, 3, 5, 7], dtype=np.uint8)[coverage]
+    tiles = selectors.reshape(height // 4, 4, width // 4, 4)
+    tiles = tiles.transpose(0, 2, 1, 3).reshape(-1, 16)
+    packed = np.zeros(len(tiles), dtype=np.uint64)
+    for pixel in range(16):
+        packed |= tiles[:, pixel].astype(np.uint64) << (3 * pixel)
+
+    # Only the first eight bytes of each block carry alpha. Keep the
+    # compressed daylight colours, including island tints, byte for byte.
+    result = bytearray(colourmap)
+    blocks = np.frombuffer(result, dtype=np.uint8, offset=128).reshape(-1, 16)
+    blocks[:, :2] = (64, 224)
+    blocks[:, 2:8] = packed.astype("<u8", copy=False).view(np.uint8).reshape(-1, 8)[:, :6]
+    return bytes(result)
+
+
+def current_colourmap_plan(root: Path = ROOT) -> dict[Path, bytes]:
+    definition = (root / "map/definition.csv").read_bytes()
+    with Image.open(root / "map/provinces.bmp") as source:
+        provinces = np.asarray(source.convert("RGB"))
+    islands = water_mask(provinces, province_colours(definition, ISLANDS))
+    water = water_mask(provinces, water_colours(definition))
+    colourmap = build_colourmap(
+        (root / COLOURMAP_SOURCE).read_bytes(), islands, water,
+        (root / "map/terrain.bmp").read_bytes(), (root / "map/cities.bmp").read_bytes(),
+    )
+    return {COLOURMAP: colourmap}
+
+
 def closest_pixel(points: np.ndarray, x: float, y: float) -> tuple[int, int]:
     distances = (points[:, 1] - x) ** 2 + (points[:, 0] - y) ** 2
     row, column = points[int(np.argmin(distances))]
@@ -525,7 +588,7 @@ def complete_native_anchors(
 
 def unit_anchors(
     original: bytes,
-    masks: dict[int, np.ndarray],
+    points: dict[int, np.ndarray],
     heights: np.ndarray,
     grid: np.ndarray,
     kinds: dict[int, str],
@@ -547,17 +610,20 @@ def unit_anchors(
     for row in rows:
         slots[int(row[0])][int(row[1])] = row
     touched = set(NUDGE_SPLIT_PARENTS) | NUDGE_SPLIT_DONORS | PROVINCE_REPAIR_PROVINCES | HAND_PAINTED_PROVINCES
+    touched.update(APPROACH_PROVINCES)
+    touched.update(RURAL_SPLIT_PARENTS)
+    touched.update(RURAL_SPLIT_PARENTS.values())
     # A city carved without rural sectors has no anchors yet: it receives a
     # native set, and its parent (a neighbour here) gains the new border slots.
-    touched |= {province for province in masks if province not in slots}
+    touched |= {province for province in points if province not in slots}
     scope = touched | {neighbour for province in touched for neighbour in neighbours[province]}
     map_height = heights.shape[0]
 
     def anchor_inside(province: int, row: list[str]) -> bool:
-        return bool(masks[province][map_height - 1 - round(float(row[4])), round(float(row[2]))])
+        return grid[map_height - 1 - round(float(row[4])), round(float(row[2]))] == province
 
     relocated = {
-        province for province in touched & set(masks)
+        province for province in touched & points.keys()
         if slots[province] and not any(anchor_inside(province, row) for row in slots[province].values())
     }
     rebuilt = {}
@@ -571,7 +637,6 @@ def unit_anchors(
         rebuilt[province] = complete_native_anchors(
             province, kind, existing, grid, heights, sorted(neighbours[province])
         )
-    points = {province: np.argwhere(mask) for province, mask in masks.items()}
 
     def normalise(row: list[str]) -> list[str]:
         province = int(row[0])
@@ -580,7 +645,7 @@ def unit_anchors(
             y = map_height - 1 - float(row[4])
             # Half-pixel anchors must resolve to the province under both
             # truncation and rounding.
-            if not (masks[province][round(y), round(x)] and masks[province][int(y), int(x)]):
+            if grid[round(y), round(x)] != province or grid[int(y), int(x)] != province:
                 x, y = closest_pixel(points[province], x, y)
                 row[2:5] = [f"{x:.2f}", f"{heights[y, x] / 10:.2f}", f"{map_height - 1 - y:.2f}"]
         if province in RELIEF_PROVINCES:
@@ -631,7 +696,7 @@ def railway_plan(original: bytes, provinces: np.ndarray, definitions: dict[int, 
         if len(fields) < 3:
             result.append(line)
             continue
-        route = fields[2:]
+        route = southern_city_rail_route(tuple(fields[2:]))
         repaired = [route[0]]
         for first, second in zip(route, route[1:]):
             if not ({first, second} & groups.keys()) or second in adjacency[first]:
@@ -650,7 +715,7 @@ def railway_plan(original: bytes, provinces: np.ndarray, definitions: dict[int, 
                     queue.append([*path, neighbour])
             else:
                 raise ValueError(f"railway {first}-{second}: no route through the southern sectors")
-        if repaired == route:
+        if repaired == fields[2:]:
             result.append(line)
         else:
             ending = "\r\n" if line.endswith("\r\n") else "\n" if line.endswith("\n") else ""
@@ -658,12 +723,12 @@ def railway_plan(original: bytes, provinces: np.ndarray, definitions: dict[int, 
     return "".join(result).encode("utf-8")
 
 
-def repair_surface_references(masks: dict[int, np.ndarray]) -> dict[tuple[int, int], tuple[int, int]]:
+def repair_surface_references(grid: np.ndarray) -> dict[tuple[int, int], tuple[int, int]]:
     """Sample unchanged recipient pixels so border repairs preserve local surface styles."""
     references = {}
     recipients = {replacement for _original, replacement in PROVINCE_PIXEL_REPAIRS.values()}
     for province in sorted(recipients - RELIEF_SURFACE_PROVINCES):
-        mask = masks[province].copy()
+        mask = grid == province
         for x, y in PROVINCE_PIXEL_REPAIRS:
             mask[y, x] = False
         points = np.argwhere(mask)
@@ -689,14 +754,17 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     for entry in SOUTHERN_GEOMETRY:
         parent_index = entries_by_id[entry["parent"]]
         fields = definition_lines[parent_index].split(";")
-        fields[6] = entry["parent_terrain"]
+        if "parent_terrain" in entry:
+            fields[6] = entry["parent_terrain"]
+        elif fields[6] != entry["terrain"]:
+            raise ValueError(f"rural province {entry['province']}: parent terrain differs from the split")
         definition_lines[parent_index] = ";".join(fields)
         province = entry["province"]
         if province not in entries_by_id:
             if province != max(entries_by_id) + 1:
                 raise ValueError(f"province {province}: non-contiguous southern city ID")
             entries_by_id[province] = len(definition_lines)
-            definition_lines.append(";".join(map(str, (province, *entry["rgb"], "land", "false", entry.get("terrain", "urban"), 3))))
+            definition_lines.append(";".join(map(str, (province, *entry["rgb"], "land", "false", entry.get("terrain", "urban"), fields[7]))))
         elif tuple(map(int, definition_lines[entries_by_id[province]].split(";")[1:4])) != tuple(entry["rgb"]):
             raise ValueError(f"province {province}: city ID is occupied by another color")
     sea_colors = []
@@ -709,35 +777,38 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
                 sea_colors.append((red << 16) | (green << 8) | blue)
     with Image.open(root / "map/provinces.bmp") as source:
         provinces = np.array(source.convert("RGB"))
-    for entry in SOUTHERN_GEOMETRY:
+    for entry in (*SOUTHERN_GEOMETRY, *(area for area in SOUTHERN_CITY_APPROACHES if "rgb" not in area)):
         left, top = entry["origin"]
         for y, row in enumerate(entry["mask"], top):
             for x, selected_pixel in enumerate(row, left):
                 if selected_pixel != "1":
                     continue
-                permitted = {definitions[entry["parent"]], tuple(entry["rgb"])}
+                permitted = {definitions[entry["parent"]], definitions[entry["province"]]}
                 if (x, y) in PROVINCE_PIXEL_REPAIRS:
                     permitted.add(definitions[PROVINCE_PIXEL_REPAIRS[x, y][1]])
                 if tuple(provinces[y, x]) not in permitted:
                     raise ValueError(f"southern city {entry['province']}: geometry changed at {x}, {y}")
-                provinces[y, x] = entry["rgb"]
+                provinces[y, x] = definitions[entry["province"]]
     for (x, y), (original, replacement) in PROVINCE_PIXEL_REPAIRS.items():
         if tuple(provinces[y, x]) not in (definitions[original], definitions[replacement]):
             raise ValueError(f"province repair source changed at {x}, {y}")
         provinces[y, x] = definitions[replacement]
     selected = set(ANCHOR_REFERENCES) | DISPLACED_PROVINCES | CITIES | URBAN_GROWTH | RELIEF_SURFACE_PROVINCES
-    masks = {
-        province: np.all(provinces == definitions[province], axis=2)
-        for province in selected
-    }
-    for province, mask in masks.items():
-        if not mask.any():
+    grid = province_grid(provinces, definitions)
+    # Keep local pixel coordinates for anchor placement. A full world mask for each
+    # rural subdivision would scale memory with both map area and province count.
+    boxes = find_objects(grid)
+    points = {}
+    for province in selected:
+        box = boxes[province - 1] if province <= len(boxes) else None
+        if box is None:
             raise ValueError(f"province {province}: empty coastal geometry")
-    surface_references = repair_surface_references(masks)
-    islands = np.logical_or.reduce([masks[province] for province in ISLANDS])
-    cities = np.logical_or.reduce([masks[province] for province in CITIES | URBAN_GROWTH])
-    arab_cities = np.logical_or.reduce([masks[province] for province in ARAB_CITIES | ARAB_URBAN_GROWTH])
-    mountains = np.logical_or.reduce([masks[province] for province in RELIEF_SURFACE_PROVINCES])
+        points[province] = np.argwhere(grid[box] == province) + (box[0].start, box[1].start)
+    surface_references = repair_surface_references(grid)
+    islands = np.isin(grid, list(ISLANDS))
+    cities = np.isin(grid, list(CITIES | URBAN_GROWTH))
+    arab_cities = np.isin(grid, list(ARAB_CITIES | ARAB_URBAN_GROWTH))
+    mountains = np.isin(grid, list(RELIEF_SURFACE_PROVINCES))
     with Image.open(root / "map/heightmap.bmp") as source:
         mountain_heightmap = mountain_heights(mountains, np.array(source))
     outputs = {}
@@ -753,7 +824,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     sea = np.isin((packed[:, :, 0] << 16) | (packed[:, :, 1] << 8) | packed[:, :, 2], sea_colors)
     # Coast the Nudge pass gave to the sea keeps no land relief above the
     # local sea floor.
-    flooded = sea & np.logical_or.reduce([masks[province] for province in NUDGE_SPLIT_DONORS])
+    flooded = sea & np.isin(grid, list(NUDGE_SPLIT_DONORS))
     # Shared shoreline clearance: no city meshes or trees at the waterline.
     definition_text = "\n".join(definition_lines).encode("utf-8")
     water = water_mask(provinces, water_colours(definition_text))
@@ -761,9 +832,9 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     relief_terrain = {}
     for index, line in enumerate(definition_lines):
         fields = line.split(";")
-        if int(fields[0]) not in masks:
+        if int(fields[0]) not in points:
             continue
-        ys, xs = np.where(masks[int(fields[0])])
+        ys, xs = points[int(fields[0])].T
         coastal = any(sea[ys + dy, xs + dx].any() for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
         fields[5] = "true" if coastal else "false"
         if int(fields[0]) in ARAB_CITY_TERRAIN:
@@ -826,7 +897,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
                     pixels[cities & ~shore] = 13
                     pixels[cities & shore] = URBAN_FALLBACK_PALETTE
                     for province, kind in relief_terrain.items():
-                        province_mask = masks[province]
+                        province_mask = grid == province
                         pixels[province_mask] = {"desert": 3, "hills": 2, "mountain": 18}[kind]
                         if kind == "mountain":
                             pixels[province_mask & (mountain_heightmap >= 180)] = 11
@@ -843,9 +914,10 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             encoded = BytesIO()
             normal.save(encoded, format="BMP")
             outputs[normal_path] = encoded.getvalue()
-    # Full compression blocks are safe under island water, but city blocks
-    # extend onto visible rural ground. Preserve the authored mainland tint.
-    outputs[COLOURMAP] = patch_colourmap(read(COLOURMAP_SOURCE), islands)
+    outputs[COLOURMAP] = build_colourmap(
+        read(COLOURMAP_SOURCE), islands, water,
+        outputs[Path("map/terrain.bmp")], outputs[Path("map/cities.bmp")],
+    )
     tree_path = Path("map/trees.bmp")
     original = read(tree_path)
     with Image.open(BytesIO(original)) as source:
@@ -869,7 +941,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     stack_path = Path("map/unitstacks.txt")
     kinds = {int(line.split(";")[0]): line.split(";")[4] for line in definition_lines}
     outputs[stack_path] = unit_anchors(
-        (root / stack_path).read_bytes(), masks, heights, province_grid(provinces, definitions), kinds
+        (root / stack_path).read_bytes(), points, heights, grid, kinds
     )
     railways = Path("map/railways.txt")
     outputs[railways] = railway_plan((root / railways).read_bytes(), provinces, definitions)
@@ -881,20 +953,23 @@ def main() -> int:
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--apply", action="store_true")
     mode.add_argument("--check", action="store_true")
+    parser.add_argument("--colourmap-only", action="store_true", help="rebuild the DDS from the current map rasters")
     args = parser.parse_args()
-    outputs = build_plan()
+    plan = current_colourmap_plan if args.colourmap_only else build_plan
+    outputs = plan()
     changed = [path for path, data in outputs.items() if (ROOT / path).read_bytes() != data]
     for path in changed:
         print(f"{'WRITE' if args.apply else 'STALE'} {path.as_posix()}")
         if args.apply:
             (ROOT / path).write_bytes(outputs[path])
     if args.apply:
-        repeated = build_plan()
+        repeated = plan()
         if any((ROOT / path).read_bytes() != data for path, data in repeated.items()):
             raise RuntimeError("coastal geography is not idempotent")
     elif changed:
         return 1
-    print("Coastal geography is current; repeated generation preserves output bytes.")
+    subject = "Colourmap" if args.colourmap_only else "Coastal geography"
+    print(f"{subject} is current.")
     return 0
 
 

@@ -4,13 +4,13 @@ state={
 	name="STATE_67"
 	resources = {
 		oil = 40
-		chromium = 6
+		chromium = 9
 	}
 	provinces={
 		334 4287 4912 6099 7324 8351 8445 8888 9116 10909 11069 11696
 		11942 12668 16879 16880 16890
 	}
-	manpower = 2400000
+	manpower = 3600000
 	buildings_max_level_factor = 1.000
 	state_category = large_city
 	local_supplies = 5.0
@@ -19,6 +19,8 @@ state={
 		add_core_of = NAM
 		victory_points = { 6099 10 }
 		victory_points = { 16890 15 }
+		victory_points = { 334 2 }
+		victory_points = { 8445 1 }
 		buildings = {
 			infrastructure = 4
 			industrial_complex = 2

@@ -3,13 +3,13 @@ state={
 	id=724
 	name="STATE_724"
 	resources = {
-		aluminium = 11
+		aluminium = 17
 	}
 	provinces={
 		1982 2167 5249 6051 6796 7220 7688 8738 10847 11763 12425 12576
-		12577
+		12577 16977 17049
 	}
-	manpower = 470000
+	manpower = 705000
 	buildings_max_level_factor = 1.000
 	state_category = rural
 	local_supplies = 0.5
@@ -17,6 +17,8 @@ state={
 		owner = EFL
 		add_core_of = EFL
 		victory_points = { 6796 5 }
+		victory_points = { 12425 2 }
+		victory_points = { 8738 1 }
 		buildings = {
 			infrastructure = 3
 		}

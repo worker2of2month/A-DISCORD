@@ -2234,6 +2234,7 @@ VAL_peace_mutiny_weekly = {
 # Solgalov, so its throne passes to Osten as regent.
 VAL_peace_install_regime = {
 	VAL_peace_close_crisis = yes
+	ADISCORD_end_party_coalition = yes
 	if = {
 		limit = { VAL_peace_regime_throne = yes }
 		if = {
@@ -2252,6 +2253,8 @@ VAL_peace_install_regime = {
 			limit = { VAL_council_governs = yes }
 			promote_character = { character = VAL_Mikhail_Velsky ideology = contractual_etatism }
 		}
+		set_temp_variable = { ADISCORD_party = token:pragmatism }
+		ADISCORD_admit_coalition_party = yes
 	}
 	else_if = {
 		limit = { VAL_peace_regime_charter = yes }
@@ -9358,6 +9361,7 @@ VAL_enter_stelander_defeat = {
 		}
 		VAL_cancel_command_consolidation = yes
 		set_country_flag = VAL_stelander_defeated
+		ADISCORD_end_party_coalition = yes
 		VAL_order_portfolio_close = yes
 		VAL_close_northern_coalition_campaign = yes
 		if = { limit = { has_power_balance = { id = VAL_command_balance } } remove_power_balance = { id = VAL_command_balance } }
@@ -13647,6 +13651,7 @@ VAL_council_begin_revanche = {
 VAL_council_revanchist_coup = {
 	if = {
 		limit = { VAL_council_revanchist_coup_current = yes }
+		ADISCORD_end_party_coalition = yes
 		add_country_leader_role = {
 			character = VAL_Eduard_Korsch
 			promote_leader = yes
@@ -16053,6 +16058,7 @@ VAL_council_take_power = {
 		}
 		VAL_cancel_command_consolidation = yes
 		clr_country_flag = VAL_command_conspiracy_exposed
+		ADISCORD_end_party_coalition = yes
 		set_country_flag = VAL_council_in_power
 		VAL_council_initialize_seats = yes
 		remove_mission = VAL_council_ultimatum

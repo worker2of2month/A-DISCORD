@@ -149,6 +149,13 @@ defined_text = {
 	text = {
 		trigger = {
 			ADISCORD_south_crisis_open = yes
+			has_global_flag = ADISCORD_south_crisis_deadline_passed
+		}
+		localization_key = ADISCORD_south_status_deadline
+	}
+	text = {
+		trigger = {
+			ADISCORD_south_crisis_open = yes
 			has_global_flag = ADISCORD_south_preparation_started
 			NOT = { has_global_flag = ADISCORD_south_crisis_warned }
 		}
@@ -175,6 +182,38 @@ defined_text = {
 	}
 	text = {
 		localization_key = ADISCORD_south_status_closed
+	}
+}
+
+# GLOBAL. The current crisis deadline; ADISCORD_south_deadline_reached uses the same levels.
+defined_text = {
+	name = ADISCORDSouthDeadlineDate
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 6 compare = greater_than_or_equals } }
+		localization_key = ADISCORD_south_deadline_date_6
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals } }
+		localization_key = ADISCORD_south_deadline_date_5
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals } }
+		localization_key = ADISCORD_south_deadline_date_4
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals } }
+		localization_key = ADISCORD_south_deadline_date_3
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals } }
+		localization_key = ADISCORD_south_deadline_date_2
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals } }
+		localization_key = ADISCORD_south_deadline_date_1
+	}
+	text = {
+		localization_key = ADISCORD_south_deadline_date_0
 	}
 }
 

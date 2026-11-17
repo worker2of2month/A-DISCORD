@@ -4,10 +4,10 @@
 # winner's path: 0 ordinary puppet, 1 house concession for the defeated leader,
 # 2 compact charter, 3 namestnik office, 4 oil charter, 5 economic contract.
 
-# ----- Crisis clock -----
+# ----- Crisis deadline -----
 
 # GLOBAL. Open once at the actual peace/return settlement, or at the first
-# eligible furnace cycle. Repeated calls preserve the original deadline.
+# eligible furnace cycle. Repeated calls preserve the original preparation age.
 ADISCORD_south_begin_preparation = {
 	if = {
 		limit = {
@@ -16,6 +16,146 @@ ADISCORD_south_begin_preparation = {
 		}
 		set_global_flag = ADISCORD_south_preparation_started
 		ADISCORD_south_wake_regional_countries = yes
+		# Settlement events call this from visible options.
+		hidden_effect = {
+			ADISCORD_south_watch_deadline = yes
+			SHL = { ADISCORD_south_announce_deadline = yes }
+			NAM = { ADISCORD_south_announce_deadline = yes }
+			EFL = { ADISCORD_south_announce_deadline = yes }
+			AZH = { ADISCORD_south_announce_deadline = yes }
+		}
+	}
+}
+
+# COUNTRY. Shahrabad and the current northern candidate learn the deadline date.
+ADISCORD_south_announce_deadline = {
+	if = {
+		limit = {
+			ADISCORD_south_champion_viable = yes
+			ADISCORD_south_declarer_valid = yes
+		}
+		country_event = { id = ADISCORD_south.6 hours = 6 }
+	}
+}
+
+# Shahrabad's victories bring the deadline date closer in 15-day units, at
+# most six per campaign, counted from the start of the game.
+ADISCORD_south_pull_clock_campaign = {
+	ADISCORD_south_pull_clock_unit = yes
+	ADISCORD_south_pull_clock_unit = yes
+	ADISCORD_south_pull_clock_unit = yes
+}
+
+ADISCORD_south_pull_clock_war = {
+	ADISCORD_south_pull_clock_unit = yes
+	ADISCORD_south_pull_clock_unit = yes
+}
+
+# GLOBAL. Each unit is checked against the date it would move, so a deadline
+# closer than 136 days stays where it is. The counter is never cleared: a
+# repelled campaign keeps the date it already reached.
+ADISCORD_south_pull_clock_unit = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
+			NOT = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 6 compare = greater_than_or_equals } }
+			ADISCORD_south_deadline_can_pull = yes
+		}
+		add_to_variable = { var = global.ADISCORD_south_crisis_pull value = 1 }
+	}
+}
+
+# GLOBAL, from hidden contexts. Starts the deadline watch unless one is
+# already pending. Shahrabad's furnace cycle runs every 28 days and skips the
+# crisis while Shahrabad is capitulated, so it cannot hit a calendar date.
+# The watch is one hidden SHL event that reschedules itself: every 28 days
+# while the deadline is further away, daily in its last 31 days. A step reads
+# the date, three flags and one global variable, iterates no countries or
+# states, and the chain ends when the deadline fires or the preparation
+# closes. Each step refreshes the watch flag; a flag older than the 28-day
+# step marks a chain lost with its country, which a later call may replace.
+# Only the chain clears the flag, so a pending callback is never duplicated.
+ADISCORD_south_watch_deadline = {
+	if = {
+		limit = {
+			ADISCORD_south_crisis_open = yes
+			has_global_flag = ADISCORD_south_preparation_started
+			NOT = { has_global_flag = ADISCORD_south_crisis_deadline_passed }
+			OR = {
+				NOT = { has_global_flag = ADISCORD_south_deadline_watch }
+				has_global_flag = {
+					flag = ADISCORD_south_deadline_watch
+					days > 29
+				}
+			}
+			SHL = { exists = yes }
+		}
+		clr_global_flag = ADISCORD_south_deadline_watch
+		set_global_flag = ADISCORD_south_deadline_watch
+		SHL = { country_event = { id = ADISCORD_south.5 days = 1 } }
+	}
+}
+
+# COUNTRY SHL, from the watch event. One step of the bounded chain.
+ADISCORD_south_deadline_watch_step = {
+	clr_global_flag = ADISCORD_south_deadline_watch
+	if = {
+		limit = { ADISCORD_south_deadline_due = yes }
+		ADISCORD_south_check_deadline = yes
+	}
+	else_if = {
+		limit = {
+			ADISCORD_south_crisis_open = yes
+			has_global_flag = ADISCORD_south_preparation_started
+			NOT = { has_global_flag = ADISCORD_south_crisis_deadline_passed }
+		}
+		set_global_flag = ADISCORD_south_deadline_watch
+		if = {
+			limit = { ADISCORD_south_deadline_watch_daily = yes }
+			country_event = { id = ADISCORD_south.5 days = 1 }
+		}
+		else = {
+			country_event = { id = ADISCORD_south.5 days = 28 }
+		}
+	}
+}
+
+# GLOBAL, from hidden events only. Marks the passed deadline once; the war is
+# dispatched an hour later by a hidden SHL event. The furnace cycle calls this
+# too, so a deadline met on its tick starts the war in the same cycle.
+ADISCORD_south_check_deadline = {
+	if = {
+		limit = { ADISCORD_south_deadline_due = yes }
+		set_global_flag = ADISCORD_south_crisis_deadline_passed
+		SHL = { country_event = { id = ADISCORD_south.4 hours = 1 } }
+	}
+}
+
+# GLOBAL. Readiness is judged at the actual start of a deadline war.
+ADISCORD_south_mark_unprepared = {
+	SHL = {
+		if = {
+			limit = {
+				ADISCORD_south_champion_viable = yes
+				ADISCORD_south_shl_focus_ready = no
+			}
+			add_timed_idea = { idea = ADISCORD_south_unprepared_war days = 180 }
+		}
+	}
+	NAM = { ADISCORD_south_mark_unprepared_north = yes }
+	EFL = { ADISCORD_south_mark_unprepared_north = yes }
+	AZH = { ADISCORD_south_mark_unprepared_north = yes }
+}
+
+# COUNTRY. Only the candidate that leads the north can be penalised.
+ADISCORD_south_mark_unprepared_north = {
+	if = {
+		limit = {
+			ADISCORD_south_declarer_valid = yes
+			ADISCORD_south_north_focus_ready = no
+		}
+		add_timed_idea = { idea = ADISCORD_south_unprepared_war days = 180 }
 	}
 }
 
@@ -32,6 +172,7 @@ ADISCORD_south_show_preparation = {
 ADISCORD_south_suspend_preparation = {
 	clr_global_flag = ADISCORD_south_preparation_started
 	clr_global_flag = ADISCORD_south_crisis_warned
+	clr_global_flag = ADISCORD_south_crisis_deadline_passed
 	NAM = { ADISCORD_south_clear_preparation = yes }
 	SHL = { ADISCORD_south_clear_preparation = yes }
 	EFL = { ADISCORD_south_clear_preparation = yes }
@@ -55,9 +196,12 @@ ADISCORD_south_prepare_offensive = {
 	}
 }
 
-# COUNTRY SHL. Called once per 28-day furnace cycle, the only periodic driver.
+# COUNTRY SHL. Called once per 28-day furnace cycle, the periodic driver of
+# the crisis; the deadline watch only marks the calendar date.
 ADISCORD_south_crisis_cycle = {
 	ADISCORD_south_begin_preparation = yes
+	ADISCORD_south_check_deadline = yes
+	ADISCORD_south_watch_deadline = yes
 	if = {
 		limit = {
 			ADISCORD_south_crisis_open = yes
@@ -79,6 +223,7 @@ ADISCORD_south_crisis_cycle = {
 		if = {
 			limit = {
 				NOT = { has_global_flag = ADISCORD_south_crisis_warned }
+				NOT = { has_global_flag = ADISCORD_south_crisis_deadline_passed }
 				ADISCORD_south_preparation_can_finish = yes
 			}
 			set_global_flag = ADISCORD_south_crisis_warned
@@ -109,7 +254,8 @@ ADISCORD_south_crisis_cycle = {
 }
 
 # COUNTRY SHL. Orders take effect after the warning; an unordered automatic
-# attack waits one additional furnace cycle.
+# attack waits one additional furnace cycle, or starts at once after the
+# crisis deadline.
 ADISCORD_south_dispatch_prepared_war = {
 	if = {
 		limit = { ADISCORD_south_final_can_start = yes }
@@ -129,9 +275,12 @@ ADISCORD_south_dispatch_prepared_war = {
 		}
 		else_if = {
 			limit = {
-				has_global_flag = {
-					flag = ADISCORD_south_crisis_warned
-					days > 83
+				OR = {
+					has_global_flag = {
+						flag = ADISCORD_south_crisis_warned
+						days > 83
+					}
+					has_global_flag = ADISCORD_south_crisis_deadline_passed
 				}
 			}
 			SHL = { ADISCORD_south_final_war_start = yes }
@@ -161,7 +310,7 @@ ADISCORD_south_select_north_leader = {
 }
 
 # COUNTRY declarer: SHL, or the country selected as the northern leader. The
-# crisis clock calls this in SHL scope.
+# deadline dispatch calls this in SHL scope.
 ADISCORD_south_final_war_start = {
 	if = {
 		limit = {
@@ -181,6 +330,11 @@ ADISCORD_south_begin_hostilities = {
 			ADISCORD_south_declarer_valid = yes
 		}
 		set_global_flag = ADISCORD_south_final_started
+		# Read before suspension clears the deadline marker.
+		if = {
+			limit = { has_global_flag = ADISCORD_south_crisis_deadline_passed }
+			ADISCORD_south_mark_unprepared = yes
+		}
 		ADISCORD_south_suspend_preparation = yes
 		ADISCORD_south_select_north_leader = yes
 		if = {
@@ -649,6 +803,7 @@ ADISCORD_south_remove_path_spirit = {
 	remove_ideas = ADISCORD_south_nam_charter_levies
 	remove_ideas = ADISCORD_south_nam_contract_logistics
 	remove_ideas = ADISCORD_south_restitution_line
+	remove_ideas = ADISCORD_south_unprepared_war
 	ADISCORD_economy_mark_dirty = yes
 }
 
@@ -1282,6 +1437,9 @@ ADISCORD_south_apply_settlement = {
 	SMD = { ADISCORD_south_settle_member = yes }
 	SOD = { ADISCORD_south_settle_member = yes }
 	SDA = { ADISCORD_south_settle_member = yes }
+	# A Shahrabad subjugated by Svetlogorye opens its defeat chapter; the
+	# effect guards itself on every other result.
+	SHL = { SHL_seal_open_chapter = yes }
 	# The Svetlogorsk uprising never survives as a country.
 	if = {
 		limit = { SLF = { exists = yes } }
@@ -1471,6 +1629,7 @@ ADISCORD_south_accept_offer = {
 		limit = {
 			ADISCORD_south_nam_story_clear = yes
 			ADISCORD_south_offer_answer_valid = yes
+			ADISCORD_south_offer_war_clear = yes
 		}
 		if = {
 			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
@@ -1520,9 +1679,9 @@ ADISCORD_south_accept_offer = {
 }
 
 # COUNTRY target (event ROOT); FROM is the champion. A refusing faction member
-# is defended by its regional partners in the same war. The default
-# capitulation handler settles it both ways: it waits for the last capitulating
-# faction member, then the victor annexes every defeated participant.
+# is defended by its regional partners in the same war. The refusal record
+# (ADISCORD_south_refused_<champion>: 1 = submission, 2 = annexation) is set
+# before the declaration and drives ADISCORD_south_refusal_capitulation.
 ADISCORD_south_refuse_offer = {
 	if = {
 		limit = {
@@ -1532,8 +1691,26 @@ ADISCORD_south_refuse_offer = {
 				check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
 			}
 			ADISCORD_south_offer_answer_valid = yes
+			ADISCORD_south_offer_war_clear = yes
 		}
-		set_country_flag = ADISCORD_south_campaign_target
+		if = {
+			limit = {
+				FROM = { tag = SHL }
+				check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
+			}
+			set_country_flag = { flag = ADISCORD_south_refused_SHL value = 1 }
+		}
+		else_if = {
+			limit = { FROM = { tag = SHL } }
+			set_country_flag = { flag = ADISCORD_south_refused_SHL value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals } }
+			set_country_flag = { flag = ADISCORD_south_refused_NAM value = 1 }
+		}
+		else = {
+			set_country_flag = { flag = ADISCORD_south_refused_NAM value = 2 }
+		}
 		FROM = { declare_war_on = { target = PREV type = annex_everything } }
 		if = {
 			limit = { is_in_faction = yes }
@@ -1670,6 +1847,10 @@ ADISCORD_south_finalize_submission = {
 			}
 		}
 	}
+	if = {
+		limit = { NAM_subject_identity_participant = yes }
+		NAM_board_sync_district_status = yes
+	}
 	clr_country_flag = ADISCORD_south_submits_to_SHL
 	clr_country_flag = ADISCORD_south_submits_to_NAM
 	ADISCORD_economy_mark_dirty = yes
@@ -1695,20 +1876,280 @@ ADISCORD_south_ensure_campaign_faction = {
 	}
 }
 
-# GLOBAL. Called from on_annex: ROOT annexes FROM. A refusing target counts once
-# when its own champion annexes it.
+# GLOBAL. Called from on_annex: ROOT annexes FROM. A released tag must not
+# inherit the refusal of the annexed state, and a partner annexed out of a
+# refusal war releases the members held for it.
 ADISCORD_south_note_campaign_annexation = {
+	FROM = {
+		clr_country_flag = ADISCORD_south_refused_SHL
+		clr_country_flag = ADISCORD_south_refused_NAM
+	}
+	ADISCORD_south_recheck_held_refusals = yes
+}
+
+# ----- Refused consolidation offers -----
+# A refusal war belongs to the champion that sent the offer. When the refusing
+# side falls, a member that refused annexation is annexed by the champion and
+# every other member submits on the champion's current terms: peace and the
+# faction exit come on the capitulation tick, the subjugation one day later
+# through ADISCORD_south_finalize_submission (ADISCORD_south.47). A defeated
+# champion makes white peace with the whole refusing side.
+
+# GLOBAL, from on_capitulation; ROOT capitulated, FROM is the victor. A refusing
+# member that falls before its partners stays occupied until the last one.
+ADISCORD_south_refusal_capitulation = {
 	if = {
 		limit = {
-			FROM = { has_country_flag = ADISCORD_south_campaign_target }
-			ROOT = {
+			ROOT = { ADISCORD_south_refusal_side_SHL = yes }
+			FROM = {
 				OR = {
 					tag = SHL
-					tag = NAM
+					is_in_faction_with = SHL
+					is_subject_of = SHL
 				}
 			}
 		}
-		FROM = { clr_country_flag = ADISCORD_south_campaign_target }
+		set_global_flag = skip_default_capitulation
+		if = {
+			limit = { ROOT = { ADISCORD_south_refusal_side_fallen_SHL = yes } }
+			SHL = { ADISCORD_south_impose_refused_terms = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			ROOT = { ADISCORD_south_refusal_side_NAM = yes }
+			FROM = {
+				OR = {
+					tag = NAM
+					is_in_faction_with = NAM
+					is_subject_of = NAM
+				}
+			}
+		}
+		set_global_flag = skip_default_capitulation
+		if = {
+			limit = { ROOT = { ADISCORD_south_refusal_side_fallen_NAM = yes } }
+			NAM = { ADISCORD_south_impose_refused_terms = yes }
+		}
+	}
+	else_if = {
+		limit = {
+			ROOT = { tag = SHL }
+			FROM = { ADISCORD_south_refusal_side_SHL = yes }
+		}
+		set_global_flag = skip_default_capitulation
+		SHL = { ADISCORD_south_end_refusal_war = yes }
+	}
+	else_if = {
+		limit = {
+			ROOT = { tag = NAM }
+			FROM = { ADISCORD_south_refusal_side_NAM = yes }
+		}
+		set_global_flag = skip_default_capitulation
+		NAM = { ADISCORD_south_end_refusal_war = yes }
+	}
+}
+
+# COUNTRY champion; ROOT is the last capitulated member of the refusing side.
+# Members are recorded before the first peace: white peace runs on_peace, which
+# clears refusal records, and may end the war of later members.
+ADISCORD_south_impose_refused_terms = {
+	save_event_target_as = ADISCORD_south_refusal_champion
+	clear_temp_array = ADISCORD_south_refusal_members
+	clear_temp_array = ADISCORD_south_refusal_annexed
+	every_enemy_country = {
+		limit = {
+			OR = {
+				tag = ROOT
+				is_in_faction_with = ROOT
+				is_subject_of = ROOT
+				ROOT = { is_subject_of = PREV }
+			}
+		}
+		add_to_temp_array = { array = ADISCORD_south_refusal_members value = THIS }
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						PREV = { tag = SHL }
+						has_country_flag = { flag = ADISCORD_south_refused_SHL value > 1 }
+					}
+					AND = {
+						PREV = { tag = NAM }
+						has_country_flag = { flag = ADISCORD_south_refused_NAM value > 1 }
+					}
+				}
+			}
+			add_to_temp_array = { array = ADISCORD_south_refusal_annexed value = THIS }
+		}
+	}
+	for_each_scope_loop = {
+		array = ADISCORD_south_refusal_annexed
+		ADISCORD_south_clear_refusal_records = yes
+		event_target:ADISCORD_south_refusal_champion = {
+			if = {
+				limit = { has_war_with = PREV }
+				white_peace = PREV
+			}
+			annex_country = {
+				target = PREV
+				transfer_troops = no
+			}
+		}
+	}
+	for_each_scope_loop = {
+		array = ADISCORD_south_refusal_members
+		if = {
+			limit = { exists = yes }
+			ADISCORD_south_submit_refusal_member = yes
+		}
+	}
+	clear_temp_array = ADISCORD_south_refusal_members
+	clear_temp_array = ADISCORD_south_refusal_annexed
+}
+
+# COUNTRY defeated member. The receipt flag is the ordinary pending submission;
+# a subject of another defeated member leaves that overlord first.
+ADISCORD_south_submit_refusal_member = {
+	every_enemy_country = {
+		limit = { ADISCORD_south_on_refusal_champion_side = yes }
+		white_peace = PREV
+	}
+	if = {
+		limit = {
+			is_subject = yes
+			overlord = { is_in_array = { array = ADISCORD_south_refusal_members value = THIS } }
+		}
+		overlord = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_free
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+	}
+	ADISCORD_south_leave_previous_alliance = yes
+	ADISCORD_south_clear_refusal_records = yes
+	if = {
+		limit = { event_target:ADISCORD_south_refusal_champion = { tag = SHL } }
+		set_country_flag = ADISCORD_south_submits_to_SHL
+	}
+	else = {
+		set_country_flag = ADISCORD_south_submits_to_NAM
+	}
+	country_event = { id = ADISCORD_south.47 days = 1 }
+}
+
+# COUNTRY capitulated champion; FROM belongs to the refusing side. The refusal
+# stands and neither side takes territory.
+ADISCORD_south_end_refusal_war = {
+	save_event_target_as = ADISCORD_south_refusal_champion
+	clear_temp_array = ADISCORD_south_refusal_members
+	every_enemy_country = {
+		limit = {
+			OR = {
+				AND = {
+					PREV = { tag = SHL }
+					ADISCORD_south_refusal_side_SHL = yes
+				}
+				AND = {
+					PREV = { tag = NAM }
+					ADISCORD_south_refusal_side_NAM = yes
+				}
+			}
+		}
+		add_to_temp_array = { array = ADISCORD_south_refusal_members value = THIS }
+	}
+	for_each_scope_loop = {
+		array = ADISCORD_south_refusal_members
+		every_enemy_country = {
+			limit = { ADISCORD_south_on_refusal_champion_side = yes }
+			white_peace = PREV
+		}
+		ADISCORD_south_clear_refusal_records = yes
+	}
+	clear_temp_array = ADISCORD_south_refusal_members
+}
+
+# GLOBAL, from on_peace. A refusal record ends with the war it started.
+ADISCORD_south_close_refusal_wars = {
+	ROOT = { ADISCORD_south_clear_stale_refusal = yes }
+	FROM = { ADISCORD_south_clear_stale_refusal = yes }
+	ADISCORD_south_recheck_held_refusals = yes
+}
+
+# COUNTRY.
+ADISCORD_south_clear_stale_refusal = {
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_south_refused_SHL
+			NOT = { has_war_with = SHL }
+		}
+		clr_country_flag = ADISCORD_south_refused_SHL
+	}
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_south_refused_NAM
+			NOT = { has_war_with = NAM }
+		}
+		clr_country_flag = ADISCORD_south_refused_NAM
+	}
+}
+
+# COUNTRY. Only the record of the champion settling this war is cleared.
+ADISCORD_south_clear_refusal_records = {
+	if = {
+		limit = { event_target:ADISCORD_south_refusal_champion = { tag = SHL } }
+		clr_country_flag = ADISCORD_south_refused_SHL
+	}
+	else = {
+		clr_country_flag = ADISCORD_south_refused_NAM
+	}
+}
+
+# COUNTRY event ROOT after its submission settles or lapses. A refusal war
+# made peace while other members still fought can leave the land occupied by
+# countries that are no longer at war with its owner; they hand it back.
+ADISCORD_south_restore_peacetime_control = {
+	if = {
+		limit = { exists = yes }
+		every_owned_state = {
+			limit = {
+				NOT = { is_controlled_by = ROOT }
+				controller = { NOT = { has_war_with = ROOT } }
+			}
+			set_state_controller_to = ROOT
+		}
+	}
+}
+
+# GLOBAL, from on_peace, on_annex and on_puppet. A member held occupied while
+# a partner fought on is settled when that partner leaves the war without
+# capitulating; the day's delay lets faction and subject state settle.
+ADISCORD_south_recheck_held_refusals = {
+	EFL = { ADISCORD_south_recheck_held_refusal = yes }
+	AZH = { ADISCORD_south_recheck_held_refusal = yes }
+	WEF = { ADISCORD_south_recheck_held_refusal = yes }
+	KDR = { ADISCORD_south_recheck_held_refusal = yes }
+	RHM = { ADISCORD_south_recheck_held_refusal = yes }
+	SDR = { ADISCORD_south_recheck_held_refusal = yes }
+	MZR = { ADISCORD_south_recheck_held_refusal = yes }
+	KYZ = { ADISCORD_south_recheck_held_refusal = yes }
+	GLP = { ADISCORD_south_recheck_held_refusal = yes }
+}
+
+ADISCORD_south_recheck_held_refusal = {
+	if = {
+		limit = {
+			exists = yes
+			has_capitulated = yes
+			OR = {
+				has_country_flag = ADISCORD_south_refused_SHL
+				has_country_flag = ADISCORD_south_refused_NAM
+			}
+		}
+		country_event = { id = ADISCORD_south.48 days = 1 }
 	}
 }
 
@@ -2043,21 +2484,6 @@ ADISCORD_south_ensure_expedition_template = {
 	}
 }
 
-# COUNTRY champion. Temp ADISCORD_south_expedition_size: 3 after the desert
-# was bought (SHL) or offered protection (NAM), otherwise 2.
-ADISCORD_south_expedition_size = {
-	set_temp_variable = { var = ADISCORD_south_expedition_size value = 2 }
-	if = {
-		limit = {
-			OR = {
-				has_completed_focus = SHL_sw_buy_the_sands
-				has_completed_focus = NAM_sw_protectorate_offers
-			}
-		}
-		set_temp_variable = { var = ADISCORD_south_expedition_size value = 3 }
-	}
-}
-
 # COUNTRY champion. Price of a request, debited when it is sent.
 ADISCORD_south_pay_expedition = {
 	add_political_power = -50
@@ -2091,7 +2517,6 @@ ADISCORD_south_settle_expedition = {
 		limit = { ADISCORD_south_expedition_possible = yes }
 		FROM = {
 			clr_country_flag = ADISCORD_south_expedition_pending
-			ADISCORD_south_expedition_size = yes
 			ADISCORD_south_ensure_expedition_template = yes
 		}
 		add_manpower = -6000
@@ -2106,7 +2531,7 @@ ADISCORD_south_settle_expedition = {
 			}
 		}
 		if = {
-			limit = { check_variable = { var = ADISCORD_south_expedition_size value = 3 compare = equals } }
+			limit = { FROM = { ADISCORD_south_large_expedition = yes } }
 			add_manpower = -3000
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
@@ -2131,7 +2556,7 @@ ADISCORD_south_settle_expedition = {
 # reinforces the rest.
 ADISCORD_south_create_expedition_division = {
 	create_unit = {
-		division = "division_template = \"Desert Expedition\" start_experience_factor = 0.2 start_equipment_factor = 0.12 start_manpower_factor = 0.65"
+		division = "division_template = \"Desert Expedition\" start_experience_factor = 0.2 start_equipment_factor = 0.11575 start_manpower_factor = 0.625"
 		owner = PREV
 		allow_spawning_on_enemy_provs = no
 	}

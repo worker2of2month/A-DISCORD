@@ -175,6 +175,89 @@ class CoastalSeaRegionTests(unittest.TestCase):
         cls.positions = builder.load_province_positions()
         cls.sea = {p for p, kind in cls.types.items() if kind == "sea"}
 
+    def test_southern_rural_splits_create_connected_manoeuvre_routes(self):
+        from scipy.ndimage import find_objects, label
+
+        rows = {
+            int(fields[0]): fields
+            for line in (ROOT / "map/definition.csv").read_text().splitlines()
+            if len(fields := line.split(";")) >= 8
+        }
+        colours = {p: tuple(map(int, row[1:4])) for p, row in rows.items()}
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            grid = geography.province_grid(np.asarray(image), colours)
+        boxes = find_objects(grid)
+        region_by_province = {
+            p: region for region, data in self.regions.items() for p in data["provinces"]
+        }
+        for split in states.SOUTHERN_RURAL_SPLITS:
+            parent, child = split["parent"], split["province"]
+            with self.subTest(parent=parent, province=child):
+                source = states.state_path(split["state"]).read_text(encoding="utf-8")
+                members = set(map(int, re.search(r"\bprovinces\s*=\s*\{([^}]*)", source)[1].split()))
+                self.assertTrue({parent, child} <= members)
+                self.assertNotRegex(source, rf"victory_points\s*=\s*\{{\s*{child}\s")
+                self.assertEqual(region_by_province[parent], region_by_province[child])
+                self.assertEqual(rows[child][4:8], ["land", "false", split["terrain"], rows[parent][7]])
+                self.assertEqual(rows[parent][6], split["terrain"])
+                self.assertNotIn(split["terrain"], city_terrains.CITY_TERRAINS)
+                for province in (parent, child):
+                    self.assertEqual(label(grid[boxes[province - 1]] == province)[1], 1)
+                neighbours = {p for p in self.physical[child] if self.types[p] == "land"}
+                self.assertIn(parent, neighbours)
+                self.assertGreaterEqual(len(neighbours - {parent}), 3)
+                self.assertTrue(neighbours & self.physical[parent])
+
+    def test_interior_splits_offer_two_domestic_routes_between_approaches(self):
+        owners = {}
+        for state_id, members in builder.load_states().items():
+            source = states.state_path(state_id).read_text(encoding="utf-8-sig")
+            owner = re.search(r"\bowner\s*=\s*(\w+)", source)
+            if owner:
+                owners.update(dict.fromkeys(members, owner[1]))
+
+        for split in states.SOUTHERN_INTERIOR_SPLITS:
+            parent, child = split["parent"], split["province"]
+            with self.subTest(parent=parent, child=child):
+                nearby = self.physical[parent] | self.physical[child]
+                land = {p for p in nearby if self.types[p] == "land"}
+                self.assertEqual({owners[p] for p in land}, {owners[parent]})
+                approaches = self.physical[parent] & self.physical[child] & land
+                # Opposite approaches can go through either half of the split.
+                self.assertTrue(any(approaches - {p} - self.physical[p] for p in approaches))
+
+    def test_southern_city_approaches_are_compact_and_the_centres_have_rail(self):
+        from scipy.ndimage import label
+
+        rails = {
+            int(token) for line in (ROOT / "map/railways.txt").read_text().splitlines()
+            for token in line.split()[2:]
+        }
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            for entry in states.NEW_CITY_APPROACHES:
+                with self.subTest(province=entry["province"]):
+                    mask = np.array([list(row) for row in entry["mask"]]) == "1"
+                    y_size, x_size = mask.shape
+                    x, y = entry["origin"]
+                    crop = np.asarray(image.crop((x, y, x + x_size, y + y_size)))
+                    self.assertTrue(np.array_equal(np.all(crop == entry["rgb"], axis=2), mask))
+                    self.assertEqual(label(mask)[1], 1)
+                    pixels = np.argwhere(mask)
+                    self.assertLessEqual(len(pixels), 120)
+                    # Include each square pixel's own variance when measuring the principal axes.
+                    axes = np.linalg.eigvalsh(np.cov(pixels.T) + np.eye(2) / 12)
+                    self.assertLessEqual(np.sqrt(axes[1] / axes[0]), 2.3)
+        centres = {entry["city"]: entry["state"] for entry in states.SOUTHERN_CITY_APPROACHES}
+        centres.update({entry["province"]: entry["state"] for entry in states.SOUTHERN_CITIES})
+        for city, state in centres.items():
+            with self.subTest(city=city):
+                self.assertIn(city, rails)
+                self.assertGreaterEqual(sum(self.types[p] == "land" for p in self.physical[city]), 3)
+                source = states.state_path(state).read_text(encoding="utf-8")
+                value = re.search(rf"victory_points\s*=\s*\{{\s*{city}\s+(\d+)", source)
+                self.assertIsNotNone(value)
+                self.assertGreaterEqual(int(value[1]), 15)
+
     def assert_region(self, region_id: int, provinces: set[int]) -> None:
         self.assertIn(
             region_id, set(self.regions), "local naval region was not generated"
@@ -278,34 +361,23 @@ class CoastalSeaRegionTests(unittest.TestCase):
             count = color_counts[tuple(entry["rgb"])]
             self.assertGreaterEqual(count, 9)
             self.assertLessEqual(count, 40)
-            self.assertIn(entry["parent"], self.physical[entry["province"]])
-            sectors = {
-                entry["parent"],
-                *(sector["province"] for sector in entry.get("sectors", ())),
-            }
-            if "sectors" in entry:
-                self.assertGreaterEqual(len(self.physical[entry["province"]] & sectors), 3)
-            else:
-                # A town carved without sectors lies wholly inside its parent
-                # unless it grew into the parent's remnant.
-                self.assertEqual(
-                    self.physical[entry["province"]],
-                    self.HOUSE_TOWN_NEIGHBOURS.get(entry["province"], {entry["parent"]}),
-                )
+            if entry.get("regional_town"):
+                path = states.state_path(entry["state"])
+                self.assertIn(entry["province"], states.state_file_provinces(path))
+                point = f"victory_points = {{ {entry['province']} {entry['value']} }}"
+                self.assertEqual(path.read_text(encoding="utf-8").count(point), 1)
+            approaches = {q for q in self.physical[entry["province"]] if self.types[q] == "land"}
+            self.assertGreaterEqual(len(approaches), 3, entry["name"])
             counts[entry["province"]] = count
-        self.assertEqual(len(counts), 25)
+        self.assertEqual(len(counts), 53)
 
     SHL_HOUSE_TOWNS = {
-        16895: (290, 11806, 3, "Нуран"),
-        16896: (292, 6582, 2, "Кердан"),
-        16897: (293, 330, 2, "Шарим"),
-        16898: (295, 8582, 2, "Вейран"),
-        16899: (707, 2407, 3, "Зархан"),
+        16895: (290, 11806, 15, "Нуран"),
+        16896: (292, 6582, 15, "Кердан"),
+        16897: (293, 330, 15, "Шарим"),
+        16898: (295, 8582, 15, "Вейран"),
+        16899: (707, 2407, 15, "Зархан"),
     }
-    # Zarkhan absorbed the whole remnant of its former rural parent, so it
-    # borders the Devyatipechye cluster besides its mountain parent 2407.
-    HOUSE_TOWN_NEIGHBOURS = {16899: {2407, 16739, 16793, 16794}}
-
     @staticmethod
     def definition_terrain() -> dict[int, str]:
         terrain = {}
@@ -377,9 +449,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
                     definitions[province][4:8],
                     ["land", "false", geography.ARAB_CITY_TERRAIN[province], "3"],
                 )
-                # The painted blob is exactly the authored mask; the parent keeps
-                # one connected body and is the town's only neighbour unless the
-                # town grew into its parent's remnant.
+                # The city keeps its authored footprint where the rural approaches meet.
                 painted = np.all(rgb == tuple(entry["rgb"]), axis=2)
                 expected = np.zeros_like(painted)
                 left, top = entry["origin"]
@@ -389,9 +459,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
                 self.assertTrue(np.array_equal(painted, expected))
                 parent_colour = tuple(map(int, definitions[parent][1:4]))
                 self.assertEqual(label(np.all(rgb == parent_colour, axis=2))[1], 1)
-                self.assertEqual(
-                    self.physical[province], self.HOUSE_TOWN_NEIGHBOURS.get(province, {parent})
-                )
+                self.assertGreaterEqual(len(self.physical[province]), 3)
                 self.assertIn(province, memberships[state_id])
                 self.assertIn(parent, memberships[state_id])
                 self.assertIn(province, set(self.regions[42]["provinces"]))
@@ -518,16 +586,16 @@ class CoastalSeaRegionTests(unittest.TestCase):
                     )
 
     def test_southern_capital_districts_conserve_population_and_industry(self) -> None:
-        # League populations include the threefold army-support balance in
+        # League populations include the sixfold army-support balance in
         # both city and countryside; Shahrabad has its own population profile.
         expected_populations = {
-            241: (270_000, 135_000),
-            253: (210_000, 105_000),
-            260: (144_000, 72_000),
-            275: (291_000, 144_000),
-            283: (225_000, 111_000),
-            294: (2_200_000, 1_500_000),
-            300: (237_000, 117_000),
+            241: (540_000, 270_000),
+            253: (420_000, 210_000),
+            260: (288_000, 144_000),
+            275: (582_000, 288_000),
+            283: (450_000, 222_000),
+            294: (3_300_000, 2_250_000),
+            300: (474_000, 234_000),
         }
         memberships = builder.load_states()
         for capital, (
@@ -591,7 +659,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
         for members, population in (
             ((290, 699), states.SHL_POPULATION[290] + states.SHL_POPULATION[699]),
             ((689, 700), states.NAM_POPULATION[689] + states.NAM_POPULATION[700]),
-            ((691, 701, 726), 2510000),
+            ((691, 701, 726), 3765000),
         ):
             sources = [states.state_path(state).read_text() for state in members]
             self.assertEqual(
@@ -662,7 +730,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
                 int(re.search(r"\bmanpower\s*=\s*(\d+)", states.state_path(state).read_text())[1])
                 for state in states.SHL_POPULATION
             ),
-            20_000_000,
+            30_000_000,
         )
 
     def test_stelander_approaches_are_a_compact_connected_region(self) -> None:

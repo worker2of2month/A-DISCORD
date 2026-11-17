@@ -1,0 +1,673 @@
+# Limited wars of Shahrabad with Keizan and Veyr. Each war is decided by
+# holding objective districts for 14 days, so every side pushes on the same
+# objectives: the attacker on the enemy's, the defender on its own lost ones.
+# The state triggers name the objective districts held by the opposing side.
+
+ADISCORD_SHL_limited_front_kyz = {
+	allowed = { tag = SHL }
+	enable = {
+		check_variable = { var = SHL_war_kyz value = 1 compare = greater_than_or_equals }
+		has_war_with = KYZ
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = KYZ value = 60 }
+	ai_strategy = { type = conquer id = KYZ value = 100 }
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 280
+				state = 284
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+			}
+			FROM = {
+				OR = {
+					tag = KYZ
+					has_country_flag = SHL_kyz_war_partner
+				}
+			}
+		}
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 280
+				state = 284
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+			}
+			FROM = {
+				OR = {
+					tag = KYZ
+					has_country_flag = SHL_kyz_war_partner
+				}
+			}
+			ADISCORD_difficulty_state_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 280
+				state = 284
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+			}
+			FROM = {
+				OR = {
+					tag = KYZ
+					has_country_flag = SHL_kyz_war_partner
+				}
+			}
+			ADISCORD_difficulty_state_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+ADISCORD_SHL_limited_front_glp = {
+	allowed = { tag = SHL }
+	enable = {
+		check_variable = { var = SHL_war_glp value = 1 compare = equals }
+		has_war_with = GLP
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = GLP value = 60 }
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 297
+				state = 299
+				state = 708
+				state = 296
+				state = 733
+				state = 293
+				state = 295
+			}
+			FROM = { tag = GLP }
+		}
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 297
+				state = 299
+				state = 708
+				state = 296
+				state = 733
+				state = 293
+				state = 295
+			}
+			FROM = { tag = GLP }
+			ADISCORD_difficulty_state_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 297
+				state = 299
+				state = 708
+				state = 296
+				state = 733
+				state = 293
+				state = 295
+			}
+			FROM = { tag = GLP }
+			ADISCORD_difficulty_state_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+ADISCORD_KYZ_limited_front_shl = {
+	allowed = { tag = KYZ }
+	enable = {
+		SHL = { check_variable = { var = SHL_war_kyz value = 1 compare = greater_than_or_equals } }
+		has_war_with = SHL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+				state = 280
+				state = 284
+			}
+			FROM = { tag = SHL }
+		}
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+				state = 280
+				state = 284
+			}
+			FROM = { tag = SHL }
+			ADISCORD_difficulty_state_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+				state = 280
+				state = 284
+			}
+			FROM = { tag = SHL }
+			ADISCORD_difficulty_state_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+ADISCORD_GLP_limited_front_shl = {
+	allowed = { tag = GLP }
+	enable = {
+		SHL = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+		has_war_with = SHL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 296
+				state = 733
+				state = 293
+				state = 295
+				state = 297
+				state = 299
+			}
+			FROM = { tag = SHL }
+		}
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 296
+				state = 733
+				state = 293
+				state = 295
+				state = 297
+				state = 299
+			}
+			FROM = { tag = SHL }
+			ADISCORD_difficulty_state_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 296
+				state = 733
+				state = 293
+				state = 295
+				state = 297
+				state = 299
+			}
+			FROM = { tag = SHL }
+			ADISCORD_difficulty_state_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+# Mazar or Veyr under Keizan's border pact presses on Zarkhan and the qanat
+# furnaces, the districts that decide the ration war for Keizan.
+ADISCORD_SHL_kyz_partner_front = {
+	allowed = {
+		OR = {
+			tag = MZR
+			tag = GLP
+		}
+	}
+	enable = {
+		has_country_flag = SHL_kyz_war_partner
+		SHL = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
+		has_war_with = SHL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+			}
+			FROM = { tag = SHL }
+		}
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+			}
+			FROM = { tag = SHL }
+			ADISCORD_difficulty_state_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+			}
+			FROM = { tag = SHL }
+			ADISCORD_difficulty_state_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+# Preparation for an announced limited war, on both sides of the border.
+ADISCORD_SHL_prepare_against_KYZ = {
+	allowed = { tag = SHL }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = KYZ }
+		KYZ = { exists = yes }
+		OR = {
+			check_variable = { var = SHL_keizan_state value = 5 compare = equals }
+			has_country_flag = SHL_kyz_mobilizing
+			AND = {
+				SHL_qanat_dispute_open = yes
+				NOT = { has_country_flag = SHL_neutral_to_KYZ }
+				OR = {
+					has_completed_focus = SHL_qanat_guard
+					has_completed_focus = SHL_right_to_water
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = KYZ value = 100 }
+}
+
+ADISCORD_KYZ_prepare_against_SHL = {
+	allowed = { tag = KYZ }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = SHL }
+		SHL = {
+			exists = yes
+			OR = {
+				check_variable = { var = SHL_keizan_state value = 5 compare = equals }
+				has_country_flag = SHL_kyz_mobilizing
+				AND = {
+					SHL_qanat_dispute_open = yes
+					NOT = { has_country_flag = SHL_neutral_to_KYZ }
+					OR = {
+						has_completed_focus = SHL_qanat_guard
+						has_completed_focus = SHL_right_to_water
+					}
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
+}
+
+# The war of the rising against Svetlogorye (SHL_cold_rising = 1) is decided
+# by a principal's capitulation, so both principals fight for Khazar and the
+# furnace districts; neither side can wait out a deadline.
+ADISCORD_SHL_cold_rising_front = {
+	allowed = { tag = SHL }
+	enable = {
+		check_variable = { var = SHL_cold_rising value = 1 compare = equals }
+		has_war_with = NAM
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 699
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+			FROM = {
+				OR = {
+					tag = NAM
+					is_subject_of = NAM
+				}
+			}
+		}
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 699
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+			FROM = {
+				OR = {
+					tag = NAM
+					is_subject_of = NAM
+				}
+			}
+			ADISCORD_difficulty_state_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 699
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+			FROM = {
+				OR = {
+					tag = NAM
+					is_subject_of = NAM
+				}
+			}
+			ADISCORD_difficulty_state_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+ADISCORD_NAM_cold_rising_front = {
+	allowed = { tag = NAM }
+	enable = {
+		SHL = { check_variable = { var = SHL_cold_rising value = 1 compare = equals } }
+		has_war_with = SHL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SHL value = 60 }
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 699
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+			FROM = { tag = SHL }
+		}
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = yes
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 699
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+			FROM = { tag = SHL }
+			ADISCORD_difficulty_state_requires_caution = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			OR = {
+				state = 699
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+			FROM = { tag = SHL }
+			ADISCORD_difficulty_state_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1501
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+# A Cold Fire Shahrabad prepares once the underground is close to rising.
+ADISCORD_SHL_cold_prepare_rising = {
+	allowed = { tag = SHL }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		is_subject_of = NAM
+		has_completed_focus = SHL_cold_fire
+		check_variable = { var = SHL_underground_heat value = 60 compare = greater_than_or_equals }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NAM value = 100 }
+}
+
+ADISCORD_SHL_prepare_against_GLP = {
+	allowed = { tag = SHL }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = GLP }
+		GLP = { exists = yes }
+		SHL_veyr_dispute_open = yes
+		NOT = { has_country_flag = SHL_neutral_to_GLP }
+		OR = {
+			has_completed_focus = SHL_veyr_ultimatum
+			has_completed_focus = SHL_key_to_sea
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = GLP value = 100 }
+}
+
+ADISCORD_GLP_prepare_against_SHL = {
+	allowed = { tag = GLP }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = SHL }
+		SHL = {
+			exists = yes
+			SHL_veyr_dispute_open = yes
+			NOT = { has_country_flag = SHL_neutral_to_GLP }
+			OR = {
+				has_completed_focus = SHL_veyr_ultimatum
+				has_completed_focus = SHL_key_to_sea
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
+}

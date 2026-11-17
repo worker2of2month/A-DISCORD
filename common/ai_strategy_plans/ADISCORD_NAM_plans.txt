@@ -522,6 +522,7 @@ NAM_postwar_plan = {
 		NAM_normalisation
 		NAM_oil_ministry
 		NAM_export_consortium
+		NAM_pw_oil_laboratories
 		NAM_middle_loren_wells
 		NAM_reclaim_230
 		NAM_oil_exchange
@@ -572,7 +573,6 @@ NAM_postwar_plan = {
 		NAM_rus_expedition_staff
 		NAM_pw_municipal_repair
 		NAM_pw_returnee_registration
-		NAM_pw_oil_laboratories
 		NAM_pw_oil_equipment
 		NAM_pw_refinery_engineering
 		NAM_pw_fuel_reservoirs
@@ -648,6 +648,7 @@ NAM_postwar_vertical_plan = {
 		NAM_normalisation
 		NAM_oil_ministry
 		NAM_state_refineries
+		NAM_pw_oil_laboratories
 		NAM_middle_loren_wells
 		NAM_reclaim_230
 		NAM_oil_exchange
@@ -695,7 +696,6 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_cabinet_statute
 		NAM_pw_cadastre
 		NAM_pw_civil_payroll
-		NAM_pw_provincial_records
 		NAM_pw_administrative_courts
 		NAM_pw_public_procurement
 		NAM_pw_central_treasury
@@ -720,7 +720,6 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_standard_projects
 		NAM_pw_southern_budget
 		NAM_pw_southern_intelligence
-		NAM_pw_southern_civil_service
 		NAM_pw_southern_military_rule
 		NAM_pw_southern_supply_plan
 		NAM_pw_southern_reserve
@@ -733,7 +732,6 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_permanent_institutions
 		NAM_pw_municipal_repair
 		NAM_pw_returnee_registration
-		NAM_pw_oil_laboratories
 		NAM_pw_oil_equipment
 		NAM_pw_refinery_engineering
 		NAM_pw_fuel_reservoirs

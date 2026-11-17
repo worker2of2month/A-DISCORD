@@ -169,10 +169,191 @@ ADISCORD_south_nam_story_clear = {
 	NOT = { NAM = { NAM_south_story_pending = yes } }
 }
 
-# GLOBAL. The campaign calendar is shared by automatic and focus declarations.
+# GLOBAL. Mutual readiness may open the warning after a minimum preparation;
+# the crisis deadline owns the latest start.
 ADISCORD_south_preparation_elapsed = {
-	has_global_flag = ADISCORD_south_preparation_started
-	date > 2164.12.31
+	has_global_flag = {
+		flag = ADISCORD_south_preparation_started
+		days > 179
+	}
+}
+
+# ----- Crisis deadline -----
+# The war starts no later than 1 March 2166. Each unit of
+# global.ADISCORD_south_crisis_pull (0-6) moves that date 15 days earlier:
+# 2166.3.1, 2166.2.14, 2166.1.30, 2166.1.15, 2165.12.31, 2165.12.16, 2165.12.1.
+# The calendar has no leap years. NOT = { date < D } holds on D and later but
+# never on the previous day, unlike date > D, which can miss the first hours
+# of D. The offset dates below are precomputed from the same levels.
+
+# GLOBAL. The current deadline date has come.
+ADISCORD_south_deadline_reached = {
+	OR = {
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = less_than }
+			NOT = { date < 2166.3.1 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals }
+			NOT = { date < 2166.2.14 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals }
+			NOT = { date < 2166.1.30 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals }
+			NOT = { date < 2166.1.15 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals }
+			NOT = { date < 2165.12.31 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals }
+			NOT = { date < 2165.12.16 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 6 compare = greater_than_or_equals }
+			NOT = { date < 2165.12.1 }
+		}
+	}
+}
+
+# GLOBAL. At most 31 days remain before the current deadline date.
+ADISCORD_south_deadline_date_near = {
+	OR = {
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = less_than }
+			NOT = { date < 2166.1.29 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals }
+			NOT = { date < 2166.1.14 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals }
+			NOT = { date < 2165.12.30 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals }
+			NOT = { date < 2165.12.15 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals }
+			NOT = { date < 2165.11.30 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals }
+			NOT = { date < 2165.11.15 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 6 compare = greater_than_or_equals }
+			NOT = { date < 2165.10.31 }
+		}
+	}
+}
+
+# GLOBAL. At most 120 days remain before the current deadline date.
+ADISCORD_south_deadline_date_in_ai_window = {
+	OR = {
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = less_than }
+			NOT = { date < 2165.11.1 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals }
+			NOT = { date < 2165.10.17 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals }
+			NOT = { date < 2165.10.2 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals }
+			NOT = { date < 2165.9.17 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals }
+			NOT = { date < 2165.9.2 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals }
+			NOT = { date < 2165.8.18 }
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 6 compare = greater_than_or_equals }
+			NOT = { date < 2165.8.3 }
+		}
+	}
+}
+
+# GLOBAL. More than 135 days remain before the current deadline date, so one
+# 15-day pull still leaves the 42-day declaration focus and the 56-day warning.
+ADISCORD_south_deadline_can_pull = {
+	OR = {
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = less_than }
+			date < 2165.10.17
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals }
+			date < 2165.10.2
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals }
+			date < 2165.9.17
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals }
+			date < 2165.9.2
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals }
+			date < 2165.8.18
+		}
+		AND = {
+			check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals }
+			date < 2165.8.3
+		}
+	}
+}
+
+# GLOBAL. The deadline applies only after the minimum preparation, so a
+# preparation opened late still receives 180 days.
+ADISCORD_south_deadline_due = {
+	ADISCORD_south_crisis_open = yes
+	ADISCORD_south_preparation_elapsed = yes
+	ADISCORD_south_deadline_reached = yes
+	NOT = { has_global_flag = ADISCORD_south_crisis_deadline_passed }
+}
+
+# GLOBAL. The deadline watch switches to daily checks for its last 31 days:
+# both the calendar date and the 180-day preparation minimum are that close.
+ADISCORD_south_deadline_watch_daily = {
+	has_global_flag = {
+		flag = ADISCORD_south_preparation_started
+		days > 148
+	}
+	ADISCORD_south_deadline_date_near = yes
+}
+
+# GLOBAL. The last 120 days before the effective deadline of a running preparation.
+ADISCORD_south_deadline_ai_window = {
+	ADISCORD_south_crisis_open = yes
+	has_global_flag = {
+		flag = ADISCORD_south_preparation_started
+		days > 59
+	}
+	ADISCORD_south_deadline_date_in_ai_window = yes
+}
+
+# GLOBAL. The passed crisis deadline replaces mutual focus readiness and the
+# warning; lifecycle and both champions at peace still apply.
+ADISCORD_south_deadline_can_start = {
+	ADISCORD_south_crisis_open = yes
+	has_global_flag = ADISCORD_south_crisis_deadline_passed
+	ADISCORD_south_participants_ready = yes
 }
 
 # COUNTRY NAM. Each route has attainable preparation milestones before its war focus.
@@ -341,12 +522,20 @@ ADISCORD_south_final_can_start = {
 		tooltip = ADISCORD_south_offensive_policy_tt
 		ADISCORD_south_offensive_policy_allowed = yes
 	}
-	ADISCORD_south_preparation_can_finish = yes
-	custom_trigger_tooltip = {
-		tooltip = ADISCORD_south_warning_elapsed_tt
-		has_global_flag = {
-			flag = ADISCORD_south_crisis_warned
-			days > 55
+	OR = {
+		AND = {
+			ADISCORD_south_preparation_can_finish = yes
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_warning_elapsed_tt
+				has_global_flag = {
+					flag = ADISCORD_south_crisis_warned
+					days > 55
+				}
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = ADISCORD_south_deadline_passed_tt
+			ADISCORD_south_deadline_can_start = yes
 		}
 	}
 }
@@ -517,6 +706,22 @@ ADISCORD_south_state_held_by_north_side = {
 	controller = { ADISCORD_south_on_north_side = yes }
 }
 
+# STATE in a front target. Defections change the controller's side in place.
+ADISCORD_south_enemy_front_state = {
+	is_controlled_by = FROM
+	FROM = { has_war_with = FROM.FROM }
+	OR = {
+		AND = {
+			FROM.FROM = { ADISCORD_south_on_shl_side = yes }
+			FROM = { ADISCORD_south_on_north_side = yes }
+		}
+		AND = {
+			FROM.FROM = { ADISCORD_south_on_north_side = yes }
+			FROM = { ADISCORD_south_on_shl_side = yes }
+		}
+	}
+}
+
 # COUNTRY. The leader of one side of the current campaign.
 ADISCORD_south_war_champion = {
 	OR = {
@@ -654,6 +859,7 @@ ADISCORD_south_submission_to_shl_valid = {
 	has_capitulated = no
 	SHL = { ADISCORD_south_champion_viable = yes }
 	NOT = { has_war_with = SHL }
+	NOT = { has_war_with = NAM }
 	OR = {
 		is_in_faction = no
 		is_in_faction_with = SHL
@@ -667,6 +873,7 @@ ADISCORD_south_submission_to_nam_valid = {
 	has_capitulated = no
 	NAM = { ADISCORD_south_champion_viable = yes }
 	NOT = { has_war_with = NAM }
+	NOT = { has_war_with = SHL }
 	OR = {
 		is_in_faction = no
 		is_in_faction_with = NAM
@@ -677,6 +884,127 @@ ADISCORD_south_submission_pending_valid = {
 	OR = {
 		ADISCORD_south_submission_to_shl_valid = yes
 		ADISCORD_south_submission_to_nam_valid = yes
+	}
+}
+
+# COUNTRY offer recipient. A submission or annexation demand waits while its
+# target fights either champion, so one country never carries two refusal wars
+# and a war already under way decides its fate first.
+ADISCORD_south_offer_war_clear = {
+	OR = {
+		check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = greater_than }
+		AND = {
+			NOT = { has_war_with = SHL }
+			NOT = { has_war_with = NAM }
+		}
+	}
+}
+
+# COUNTRY. Fights the champion over an offer that it, a faction partner or its
+# overlord refused (ADISCORD_south_refused_<champion>).
+ADISCORD_south_refusal_side_SHL = {
+	has_war_with = SHL
+	OR = {
+		has_country_flag = ADISCORD_south_refused_SHL
+		any_allied_country = {
+			has_war_with = SHL
+			has_country_flag = ADISCORD_south_refused_SHL
+		}
+		AND = {
+			is_subject = yes
+			overlord = {
+				has_war_with = SHL
+				has_country_flag = ADISCORD_south_refused_SHL
+			}
+		}
+	}
+}
+
+ADISCORD_south_refusal_side_NAM = {
+	has_war_with = NAM
+	OR = {
+		has_country_flag = ADISCORD_south_refused_NAM
+		any_allied_country = {
+			has_war_with = NAM
+			has_country_flag = ADISCORD_south_refused_NAM
+		}
+		AND = {
+			is_subject = yes
+			overlord = {
+				has_war_with = NAM
+				has_country_flag = ADISCORD_south_refused_NAM
+			}
+		}
+	}
+}
+
+# COUNTRY capitulated refusal-side member. No overlord, faction partner or major
+# subject still fights the champion, so this capitulation ends the refusing
+# side. A minor subject falls with its overlord without its own callback.
+ADISCORD_south_refusal_side_fallen_SHL = {
+	NOT = {
+		AND = {
+			is_subject = yes
+			overlord = {
+				has_capitulated = no
+				has_war_with = SHL
+			}
+		}
+	}
+	NOT = {
+		any_subject_country = {
+			is_major = yes
+			has_capitulated = no
+			has_war_with = SHL
+		}
+	}
+	NOT = {
+		AND = {
+			is_in_faction = yes
+			any_other_country = {
+				is_in_faction_with = PREV
+				has_capitulated = no
+				has_war_with = SHL
+			}
+		}
+	}
+}
+
+ADISCORD_south_refusal_side_fallen_NAM = {
+	NOT = {
+		AND = {
+			is_subject = yes
+			overlord = {
+				has_capitulated = no
+				has_war_with = NAM
+			}
+		}
+	}
+	NOT = {
+		any_subject_country = {
+			is_major = yes
+			has_capitulated = no
+			has_war_with = NAM
+		}
+	}
+	NOT = {
+		AND = {
+			is_in_faction = yes
+			any_other_country = {
+				is_in_faction_with = PREV
+				has_capitulated = no
+				has_war_with = NAM
+			}
+		}
+	}
+}
+
+# COUNTRY. The champion, its faction partners and its subjects.
+ADISCORD_south_on_refusal_champion_side = {
+	OR = {
+		tag = event_target:ADISCORD_south_refusal_champion
+		is_in_faction_with = event_target:ADISCORD_south_refusal_champion
+		is_subject_of = event_target:ADISCORD_south_refusal_champion
 	}
 }
 
@@ -728,6 +1056,13 @@ ADISCORD_south_debug_start_ready = {
 	NAM = { ADISCORD_south_champion_viable = yes }
 }
 
+ADISCORD_south_large_expedition = {
+	OR = {
+		has_completed_focus = SHL_sw_buy_the_sands
+		has_completed_focus = NAM_sw_protectorate_offers
+	}
+}
+
 # COUNTRY ally (event ROOT); FROM is the champion with the request in escrow.
 # The ally gives 3000 men and 500 rifles for each division it sends.
 ADISCORD_south_expedition_possible = {
@@ -748,8 +1083,15 @@ ADISCORD_south_expedition_possible = {
 			FROM = { ADISCORD_south_on_north_side = yes }
 		}
 	}
-	NOT = { has_manpower < 9000 }
-	NOT = { has_equipment = { infantry_equipment < 1500 } }
+	NOT = { has_manpower < 6000 }
+	NOT = { has_equipment = { infantry_equipment < 1000 } }
+	OR = {
+		FROM = { ADISCORD_south_large_expedition = no }
+		AND = {
+			NOT = { has_manpower < 9000 }
+			NOT = { has_equipment = { infantry_equipment < 1500 } }
+		}
+	}
 }
 
 # COUNTRY target (event ROOT); FROM is the champion with the offer in escrow.

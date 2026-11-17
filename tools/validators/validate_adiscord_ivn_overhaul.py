@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import re
+import struct
 from pathlib import Path
+
+import numpy as np
+from PIL import Image
 
 from tools.builders import build_adiscord_island_administration_icon as icon_builder
 from tools.builders import build_adiscord_ivn_geography as geography_builder
@@ -14,17 +18,25 @@ from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
-EXPECTED_PROVINCE_SHA256 = (
-    "93B448A04AAA9A1B30B4240D11710A1E897F13219FD98239E7D1D1A674D0B27B"
-)
+EXPECTED_IVN_GEOMETRY_SHA256 = "99684acc78748d1fb9ee8a86536adbedfb4299db9de313de9280e604208c7459"
+
+
+def province_geometry_digest(image: Image.Image, colors: dict[int, tuple[int, int, int]]) -> str:
+    """Preserve coordinates and province IDs; mask pixels outside IVN and IIA."""
+    lookup = np.zeros(1 << 24, dtype="<u2")
+    for province, (red, green, blue) in colors.items():
+        lookup[(red << 16) | (green << 8) | blue] = province
+    labels = lookup[geography_builder.packed_rgb(np.asarray(image.convert("RGB")))]
+    digest = hashlib.sha256(struct.pack("<II", *image.size))
+    digest.update(labels)
+    return digest.hexdigest()
 
 
 def province_geometry_issue() -> str | None:
-    province_hash = (
-        hashlib.sha256((ROOT / "map/provinces.bmp").read_bytes()).hexdigest().upper()
-    )
-    if province_hash != EXPECTED_PROVINCE_SHA256:
-        return "map/provinces.bmp: reviewed IVN province geometry drifted"
+    _, _, _, colors, _ = geography_builder.definition_contract()
+    with Image.open(ROOT / "map/provinces.bmp") as image:
+        if province_geometry_digest(image, colors) != EXPECTED_IVN_GEOMETRY_SHA256:
+            return "map/provinces.bmp: reviewed IVN/IIA province geometry drifted"
     return None
 
 

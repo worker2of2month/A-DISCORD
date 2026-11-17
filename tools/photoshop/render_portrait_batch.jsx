@@ -2,6 +2,9 @@
  * Set ADISCORD_PORTRAIT_JOBS to [{id, source, output, fit}] before evaluating.
  * Optional fit="contain" preserves source proportions inside the game canvas.
  * fit="cover_top" fills the canvas and retains the headroom at the top.
+ * Set template_layer_effects=false to omit the placeholder's layer style.
+ * clean_cutout_edges removes faint alpha islands before the layer casts its shadow.
+ * fit_scale multiplies the cover/contain scale for portraits with a tighter crop.
  * The working template is an in-memory snapshot; source documents stay open.
  */
 (function () {
@@ -57,7 +60,7 @@
                     }
                 }
                 if (!placeholder) throw new Error("Missing visible portrait layer.");
-                var effects = layerEffects(placeholder);
+                var effects = job.template_layer_effects === false ? null : layerEffects(placeholder);
                 for (var hideIndex = group.artLayers.length - 1; hideIndex >= 0; hideIndex--) {
                     if (group.artLayers[hideIndex].kind === LayerKind.NORMAL) {
                         group.artLayers[hideIndex].remove();
@@ -67,13 +70,27 @@
                 if (job.fit === "contain" || job.fit === "cover_top") {
                     var cover = job.fit === "cover_top";
                     var fitScale = cover ? Math.max : Math.min;
-                    var scale = fitScale(156 / source.width.as("px"), 210 / source.height.as("px"));
+                    var scale = (job.fit_scale || 1) * fitScale(156 / source.width.as("px"), 210 / source.height.as("px"));
                     source.resizeImage(UnitValue(Math.round(source.width.as("px") * scale), "px"),
                         UnitValue(Math.round(source.height.as("px") * scale), "px"), null, ResampleMethod.BICUBICSHARPER);
                     source.resizeCanvas(UnitValue(156, "px"), UnitValue(210, "px"),
                         cover ? AnchorPosition.TOPCENTER : AnchorPosition.BOTTOMCENTER);
                 } else {
                     source.resizeImage(UnitValue(156, "px"), UnitValue(210, "px"), null, ResampleMethod.BICUBICSHARPER);
+                }
+                if (job.clean_cutout_edges) {
+                    var selectionRef = new ActionReference();
+                    selectionRef.putProperty(charIDToTypeID("Chnl"), charIDToTypeID("fsel"));
+                    var alphaRef = new ActionReference();
+                    alphaRef.putEnumerated(charIDToTypeID("Chnl"), charIDToTypeID("Chnl"), charIDToTypeID("Trsp"));
+                    var loadAlpha = new ActionDescriptor();
+                    loadAlpha.putReference(charIDToTypeID("null"), selectionRef);
+                    loadAlpha.putReference(charIDToTypeID("T   "), alphaRef);
+                    executeAction(charIDToTypeID("setd"), loadAlpha, DialogModes.NO);
+                    source.selection.expand(3);
+                    source.selection.invert();
+                    source.selection.clear();
+                    source.selection.deselect();
                 }
                 var imported = source.activeLayer.duplicate(work, ElementPlacement.PLACEATBEGINNING);
                 source.close(SaveOptions.DONOTSAVECHANGES);

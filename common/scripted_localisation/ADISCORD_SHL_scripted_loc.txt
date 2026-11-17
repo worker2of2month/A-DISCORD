@@ -1,4 +1,128 @@
 defined_text = {
+	name = SHLGetSurveyTitle
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 1 compare = equals } }
+		localization_key = SHL_furnace_1_label
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 2 compare = equals } }
+		localization_key = SHL_furnace_2_label
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 3 compare = equals } }
+		localization_key = SHL_furnace_3_label
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 4 compare = equals } }
+		localization_key = SHL_furnace_4_label
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 5 compare = equals } }
+		localization_key = SHL_furnace_5_label
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 6 compare = equals } }
+		localization_key = SHL_furnace_6_label
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 7 compare = equals } }
+		localization_key = SHL_furnace_7_label
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 8 compare = equals } }
+		localization_key = SHL_furnace_8_label
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 9 compare = equals } }
+		localization_key = SHL_furnace_9_label
+	}
+	text = { localization_key = SHL_furnace_10_label }
+}
+
+defined_text = {
+	name = SHLGetSurveyStatus
+	text = {
+		trigger = { check_variable = { var = SHL_selected_status value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_status value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = { localization_key = SHL_status_cold }
+}
+
+defined_text = {
+	name = SHLGetSurveyOwner
+	text = {
+		trigger = { check_variable = { var = SHL_selected_owner value = 0 compare = equals } }
+		localization_key = SHL_survey_house
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_owner value = 1 compare = equals } }
+		localization_key = SHL_survey_city
+	}
+	text = { localization_key = SHL_survey_state }
+}
+
+defined_text = {
+	name = SHLGetConvoyStatus
+	text = {
+		trigger = { check_variable = { var = SHL_convoy_dispatch value = 1 compare = equals } }
+		localization_key = SHL_convoy_sent_ore
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_convoy_dispatch value = 2 compare = equals } }
+		localization_key = SHL_convoy_sent_masons
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_convoy_dispatch value = 3 compare = equals } }
+		localization_key = SHL_convoy_sent_sale
+	}
+	text = { localization_key = SHL_convoy_free }
+}
+
+defined_text = {
+	name = SHLGetPourResult
+	text = {
+		trigger = { check_variable = { var = SHL_selected_delivery_block value = 1 compare = equals } }
+		localization_key = SHL_delivery_stopped
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_delivery_block value = 2 compare = equals } }
+		localization_key = SHL_delivery_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_delivery_block value = 3 compare = equals } }
+		localization_key = SHL_delivery_shortage
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_delivery_block value = 4 compare = equals } }
+		localization_key = SHL_delivery_order
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_recipient value = 1 compare = equals } }
+		localization_key = SHL_pour_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_recipient value = 2 compare = equals } }
+		localization_key = SHL_pour_quarters
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_selected_recipient value = 3 compare = equals }
+			check_variable = { var = SHL_selected_furnace value = 10 compare = equals }
+		}
+		localization_key = SHL_pour_crests
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_recipient value = 3 compare = equals } }
+		localization_key = SHL_pour_loyalty
+	}
+	text = { localization_key = SHL_pour_cash }
+}
+
+defined_text = {
 	name = SHLGetForecast
 	text = {
 		trigger = { check_variable = { var = SHL_selected_status value = 1 compare = equals } }
@@ -434,6 +558,54 @@ defined_text = {
 	}
 }
 
+# The remaining war indemnity, as the buyout price.
+defined_text = {
+	name = SHLGetIndemnityPrice
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = SHL_indemnity_due compare = greater_than_or_equals } }
+		localization_key = SHL_price_indemnity
+	}
+	text = {
+		localization_key = SHL_price_indemnity_red
+	}
+}
+
+# Standing obligations of the border treaties after a limited war.
+defined_text = {
+	name = SHLGetBorderTreaty
+	text = {
+		trigger = { has_variable = SHL_indemnity_due }
+		localization_key = SHL_border_treaty_indemnity
+	}
+	text = {
+		trigger = {
+			OR = {
+				has_country_flag = SHL_neutral_to_KYZ
+				has_country_flag = SHL_neutral_to_GLP
+			}
+		}
+		localization_key = SHL_border_treaty_neutral
+	}
+	text = {
+		trigger = {
+			OR = {
+				287 = { SHL_ceded_state_held_abroad = yes }
+				288 = { SHL_ceded_state_held_abroad = yes }
+				289 = { SHL_ceded_state_held_abroad = yes }
+				293 = { SHL_ceded_state_held_abroad = yes }
+				295 = { SHL_ceded_state_held_abroad = yes }
+				296 = { SHL_ceded_state_held_abroad = yes }
+				707 = { SHL_ceded_state_held_abroad = yes }
+				733 = { SHL_ceded_state_held_abroad = yes }
+			}
+		}
+		localization_key = SHL_border_treaty_ceded
+	}
+	text = {
+		localization_key = SHL_border_treaty_none
+	}
+}
+
 defined_text = {
 	name = SHLGetPacket1
 	text = {
@@ -537,6 +709,20 @@ defined_text = {
 defined_text = {
 	name = SHLGetWaterStatus
 	text = {
+		trigger = {
+			check_variable = { var = SHL_war_kyz value = 1 compare = equals }
+			has_active_mission = SHL_kyz_front_hold
+		}
+		localization_key = SHL_status_kyz_front_hold
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_war_kyz value = 1 compare = equals }
+			has_active_mission = SHL_kyz_front_lost
+		}
+		localization_key = SHL_status_kyz_front_lost
+	}
+	text = {
 		trigger = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
 		localization_key = SHL_status_water_war
 	}
@@ -567,6 +753,20 @@ defined_text = {
 
 defined_text = {
 	name = SHLGetVeyrStatus
+	text = {
+		trigger = {
+			check_variable = { var = SHL_war_glp value = 1 compare = equals }
+			has_active_mission = SHL_glp_front_hold
+		}
+		localization_key = SHL_status_glp_front_hold
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_war_glp value = 1 compare = equals }
+			has_active_mission = SHL_glp_front_lost
+		}
+		localization_key = SHL_status_glp_front_lost
+	}
 	text = {
 		trigger = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
 		localization_key = SHL_status_veyr_war
@@ -652,6 +852,20 @@ defined_text = {
 
 defined_text = {
 	name = SHLGetKeizanStatus
+	text = {
+		trigger = {
+			check_variable = { var = SHL_war_kyz value = 2 compare = equals }
+			has_active_mission = SHL_kyz_front_hold
+		}
+		localization_key = SHL_status_kyz_front_hold
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_war_kyz value = 2 compare = equals }
+			has_active_mission = SHL_kyz_front_lost
+		}
+		localization_key = SHL_status_kyz_front_lost
+	}
 	text = {
 		trigger = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
 		localization_key = SHL_status_keizan_war
@@ -1034,6 +1248,10 @@ defined_text = {
 defined_text = {
 	name = SHLGetRecipient1
 	text = {
+		trigger = { check_variable = { var = SHL_recipient_1 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
+	text = {
 		trigger = {
 			has_variable = SHL_obligation_kind
 			check_variable = { var = SHL_obligation_site value = 287 compare = equals }
@@ -1064,6 +1282,10 @@ defined_text = {
 
 defined_text = {
 	name = SHLGetRecipient2
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_2 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
 	text = {
 		trigger = {
 			has_variable = SHL_obligation_kind
@@ -1096,6 +1318,10 @@ defined_text = {
 defined_text = {
 	name = SHLGetRecipient3
 	text = {
+		trigger = { check_variable = { var = SHL_recipient_3 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
+	text = {
 		trigger = {
 			has_variable = SHL_obligation_kind
 			check_variable = { var = SHL_obligation_site value = 289 compare = equals }
@@ -1126,6 +1352,10 @@ defined_text = {
 
 defined_text = {
 	name = SHLGetRecipient4
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_4 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
 	text = {
 		trigger = {
 			has_variable = SHL_obligation_kind
@@ -1158,6 +1388,10 @@ defined_text = {
 defined_text = {
 	name = SHLGetRecipient5
 	text = {
+		trigger = { check_variable = { var = SHL_recipient_5 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
+	text = {
 		trigger = {
 			has_variable = SHL_obligation_kind
 			check_variable = { var = SHL_obligation_site value = 291 compare = equals }
@@ -1188,6 +1422,10 @@ defined_text = {
 
 defined_text = {
 	name = SHLGetRecipient6
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_6 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
 	text = {
 		trigger = {
 			has_variable = SHL_obligation_kind
@@ -1220,6 +1458,10 @@ defined_text = {
 defined_text = {
 	name = SHLGetRecipient7
 	text = {
+		trigger = { check_variable = { var = SHL_recipient_7 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
+	text = {
 		trigger = {
 			has_variable = SHL_obligation_kind
 			check_variable = { var = SHL_obligation_site value = 293 compare = equals }
@@ -1251,6 +1493,10 @@ defined_text = {
 defined_text = {
 	name = SHLGetRecipient8
 	text = {
+		trigger = { check_variable = { var = SHL_recipient_8 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
+	text = {
 		trigger = {
 			has_variable = SHL_obligation_kind
 			check_variable = { var = SHL_obligation_site value = 294 compare = equals }
@@ -1281,6 +1527,10 @@ defined_text = {
 
 defined_text = {
 	name = SHLGetRecipient9
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_9 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
 	text = {
 		trigger = {
 			has_variable = SHL_obligation_kind
@@ -1583,8 +1833,24 @@ defined_text = {
 	}
 }
 
+# The neighbour holding the ceded district of ADISCORD_SHL.163 (1 KYZ, 2 GLP).
+defined_text = {
+	name = SHLGetReturnNeighbour
+	text = {
+		trigger = { check_variable = { var = SHL_return_neighbour value = 1 compare = equals } }
+		localization_key = SHL_revanche_kyz
+	}
+	text = {
+		localization_key = SHL_revanche_glp
+	}
+}
+
 defined_text = {
 	name = SHLGetRecipient10
+	text = {
+		trigger = { check_variable = { var = SHL_recipient_10 value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
 	text = {
 		trigger = { check_variable = { var = SHL_delivery_block_10 value = 4 compare = equals } }
 		localization_key = SHL_recipient_order
@@ -1613,6 +1879,10 @@ defined_text = {
 
 defined_text = {
 	name = SHLGetRecipientSelected
+	text = {
+		trigger = { check_variable = { var = SHL_selected_recipient value = 4 compare = equals } }
+		localization_key = SHL_recipient_lease
+	}
 	text = {
 		trigger = { check_variable = { var = SHL_selected_order value = 1 compare = equals } }
 		localization_key = SHL_recipient_order
@@ -1658,4 +1928,211 @@ defined_text = {
 		localization_key = SHL_delivery_order
 	}
 	text = { localization_key = SHL_delivery_ready }
+}
+
+# ----- House loyalty on the furnace card -----
+# The selected card mirrors SHL_selected_loyalty and the state flags of
+# SHL_selected_state; the tenth furnace has no house of its own.
+
+defined_text = {
+	name = SHLGetSelectedHouseLoyalty
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 10 compare = equals } }
+		localization_key = SHL_loyalty_line_tenth
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		localization_key = SHL_loyalty_line_abolished
+	}
+	text = { localization_key = SHL_loyalty_line }
+}
+
+defined_text = {
+	name = SHLGetSelectedLoyaltyStatus
+	text = {
+		trigger = { var:SHL_selected_state = { has_state_flag = SHL_house_opposed } }
+		localization_key = SHL_loyalty_status_opposed
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_walkout_site value = SHL_selected_state compare = equals } }
+		localization_key = SHL_loyalty_status_walkout
+	}
+	text = {
+		trigger = { var:SHL_selected_state = { NOT = { is_owned_by = SHL } } }
+		localization_key = SHL_loyalty_status_lost
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_loyalty value = 40 compare = less_than } }
+		localization_key = SHL_loyalty_status_restless
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_loyalty value = 60 compare = less_than } }
+		localization_key = SHL_loyalty_status_wary
+	}
+	text = { localization_key = SHL_loyalty_status_loyal }
+}
+
+# Next production of the selected card: a house's loyalty change, or the
+# national crest delivery of the tenth furnace.
+defined_text = {
+	name = SHLGetLoyaltyForecast
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 10 compare = equals } }
+		localization_key = SHL_forecast_crests
+	}
+	text = { localization_key = SHL_forecast_house_loyalty }
+}
+
+defined_text = {
+	name = SHLGetSelectedFavour
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 1 compare = equals } }
+		localization_key = SHL_favour_arbin_gui
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 2 compare = equals } }
+		localization_key = SHL_favour_safir_gui
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 3 compare = equals } }
+		localization_key = SHL_favour_loran_gui
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 4 compare = equals } }
+		localization_key = SHL_favour_nur_gui
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 5 compare = equals } }
+		localization_key = SHL_favour_bayrat_gui
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 6 compare = equals } }
+		localization_key = SHL_favour_kerdan_gui
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 7 compare = equals } }
+		localization_key = SHL_favour_sharim_gui
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_furnace value = 8 compare = equals } }
+		localization_key = SHL_favour_darban_gui
+	}
+	text = { localization_key = SHL_favour_veyran_gui }
+}
+
+# The first failing part of the favour, in the order of SHL_favour_ready,
+# the price and the situation.
+defined_text = {
+	name = SHLGetSelectedFavourStatus
+	text = {
+		trigger = { NOT = { has_completed_focus = SHL_house_ledgers } }
+		localization_key = SHL_favour_status_focus
+	}
+	text = {
+		trigger = { var:SHL_selected_state = { has_state_flag = SHL_house_opposed } }
+		localization_key = SHL_favour_status_opposed
+	}
+	text = {
+		trigger = {
+			var:SHL_selected_state = {
+				OR = {
+					NOT = { SHL_obligation_site_ready = yes }
+					NOT = { SHL_house_seated = yes }
+				}
+			}
+		}
+		localization_key = SHL_favour_status_cold
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_loyalty value = 60 compare = less_than } }
+		localization_key = SHL_favour_status_loyalty
+	}
+	text = {
+		trigger = { var:SHL_selected_state = { NOT = { SHL_favour_ready = yes } } }
+		localization_key = SHL_favour_status_cooldown
+	}
+	text = {
+		trigger = { NOT = { SHL_selected_favour_price = yes } }
+		localization_key = SHL_favour_status_price
+	}
+	text = {
+		trigger = { NOT = { SHL_selected_favour_open = yes } }
+		localization_key = SHL_favour_status_situation
+	}
+	text = { localization_key = SHL_favour_status_ready }
+}
+
+defined_text = {
+	name = SHLGetWalkoutHouse
+	text = {
+		trigger = { check_variable = { var = SHL_walkout_site value = 287 compare = equals } }
+		localization_key = SHL_demand_house_287
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_walkout_site value = 288 compare = equals } }
+		localization_key = SHL_demand_house_288
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_walkout_site value = 289 compare = equals } }
+		localization_key = SHL_demand_house_289
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_walkout_site value = 290 compare = equals } }
+		localization_key = SHL_demand_house_290
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_walkout_site value = 291 compare = equals } }
+		localization_key = SHL_demand_house_291
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_walkout_site value = 292 compare = equals } }
+		localization_key = SHL_demand_house_292
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_walkout_site value = 293 compare = equals } }
+		localization_key = SHL_demand_house_293
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_walkout_site value = 294 compare = equals } }
+		localization_key = SHL_demand_house_294
+	}
+	text = { localization_key = SHL_demand_house_295 }
+}
+
+# ----- Under the namestnik's seal -----
+
+# ADISCORD_SHL.200: the terms the namestnik's seal brings, by autonomy state.
+defined_text = {
+	name = SHLGetSealTermsStory
+	text = {
+		trigger = { has_autonomy_state = autonomy_NAM_economic_contract }
+		localization_key = SHL_seal_story_contract
+	}
+	text = {
+		trigger = { has_autonomy_state = autonomy_NAM_oil_charter }
+		localization_key = SHL_seal_story_charter
+	}
+	text = {
+		trigger = { has_autonomy_state = autonomy_puppet }
+		localization_key = SHL_seal_story_puppet
+	}
+	text = { localization_key = SHL_seal_story_namestnik }
+}
+
+# Title of ADISCORD_SHL_news.11, read in the reader's scope.
+defined_text = {
+	name = SHLGetSealNewsTitle
+	text = {
+		trigger = { SHL = { check_variable = { var = SHL_cold_rising value = 1 compare = equals } } }
+		localization_key = SHL_seal_news_title_rising
+	}
+	text = {
+		trigger = { SHL = { check_variable = { var = SHL_cold_rising value = 2 compare = equals } } }
+		localization_key = SHL_seal_news_title_free
+	}
+	text = {
+		trigger = { SHL = { check_variable = { var = SHL_cold_rising value = 3 compare = equals } } }
+		localization_key = SHL_seal_news_title_crushed
+	}
+	text = { localization_key = SHL_seal_news_title_redeemed }
 }

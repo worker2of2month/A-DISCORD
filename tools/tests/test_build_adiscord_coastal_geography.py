@@ -1,4 +1,4 @@
-"""Colourmap generation preserves authored ground outside new islands."""
+"""Check daylight terrain colours and the night light mask on the runtime map."""
 
 from __future__ import annotations
 
@@ -10,6 +10,7 @@ import numpy as np
 from PIL import Image
 
 from tools.builders import build_adiscord_coastal_geography as geography
+from tools.lib.coastal_clearance import water_colours, water_mask
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -33,7 +34,7 @@ class CoastalColourmapTests(unittest.TestCase):
             self.assertEqual(decoded.getpalette(), river.getpalette())
             self.assertEqual(decoded.tobytes(), bytes(range(256)))
 
-    def test_runtime_preserves_base_except_island_blocks(self) -> None:
+    def test_runtime_preserves_daylight_and_lights_dry_settlements(self) -> None:
         definitions = {
             int(fields[0]): tuple(map(int, fields[1:4]))
             for line in (ROOT / "map/definition.csv").read_text().splitlines()
@@ -48,11 +49,19 @@ class CoastalColourmapTests(unittest.TestCase):
         actual = (ROOT / geography.COLOURMAP).read_bytes()
         self.assertEqual(actual[:128], expected[:128])
         self.assertEqual(len(actual), len(expected))
-        differing_blocks = sum(
-            actual[offset:offset + 16] != expected[offset:offset + 16]
-            for offset in range(128, len(actual), 16)
-        )
-        self.assertEqual(differing_blocks, 0)
+        blocks = np.frombuffer(actual, dtype=np.uint8, offset=128).reshape(-1, 16)
+        base_blocks = np.frombuffer(expected, dtype=np.uint8, offset=128).reshape(-1, 16)
+        np.testing.assert_array_equal(blocks[:, 8:], base_blocks[:, 8:])
+
+        with Image.open(ROOT / "map/terrain.bmp") as terrain, Image.open(ROOT / "map/cities.bmp") as cities:
+            built_up = (np.asarray(terrain) == 13) | np.isin(np.asarray(cities), (2, 15))
+        water = water_mask(provinces, water_colours(ROOT / "map/definition.csv"))
+        with Image.open(BytesIO(actual)) as texture:
+            alpha = np.asarray(texture.getchannel("A"))
+        height, width = alpha.shape
+        coverage = (built_up & ~water).reshape(height, 2, width, 2).sum(axis=(1, 3))
+        self.assertGreater(np.count_nonzero(coverage == 4), 0)
+        np.testing.assert_array_equal(alpha, np.minimum(coverage * 64, 255))
 
     def test_island_patch_preserves_other_compressed_blocks(self) -> None:
         encoded = BytesIO()

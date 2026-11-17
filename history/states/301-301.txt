@@ -1,12 +1,15 @@
 state = {
 	id = 301
 	name = "STATE_301"
-	manpower = 195000
+	manpower = 390000
 	state_category = town
 	history = {
 		owner = GLP
 		add_core_of = GLP
-		victory_points = { 16741 3 }
+		victory_points = { 16741 15 }
+		victory_points = { 1263 2 }
+		victory_points = { 3140 1 }
+		victory_points = { 7708 1 }
 		buildings = {
 			infrastructure = 2
 			industrial_complex = 1
@@ -15,7 +18,7 @@ state = {
 	provinces = {
 		251 256 818 1263 1308 1649 2572 3018 3140 4492 4588 4652
 		5048 5600 6072 7606 7708 8622 9467 9536 9999 10703 12485 16741
-		16799 16800 16801
+		16799 16800 16801 16987 17000 17002 17030
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

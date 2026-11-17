@@ -1,5 +1,10 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_SHL_law_of_continuous_fire"
+		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_law_of_continuous_fire.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_bookmark_hold_the_basin"
 		texturefile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_hold_the_basin.png"
 	}

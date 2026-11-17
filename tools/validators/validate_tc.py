@@ -27,6 +27,7 @@ from tools.validators.validate_adiscord_event_ids import (
     validate as validate_adiscord_event_ids,
 )
 from tools.validators.validate_adiscord_english_localisation import ENTRY as LOCALISATION_ENTRY
+from tools.validators.validate_adiscord_english_localisation import TOKENS as LOCALISATION_MARKUP
 from tools.validators.validate_adiscord_superevents import (
     collect_issues as validate_adiscord_superevents,
 )
@@ -943,29 +944,51 @@ def check_vanilla_filename_leftovers(tags, limit):
     return issues[:limit], len(issues)
 
 
-def scan_vanilla_leftovers(tags, ideology_groups, limit):
+UNIT_ABBREVIATION = re.compile(r'\babbreviation\s*=\s*"(?:[^"\\]|\\.)*"')
+LOC_FORMATTING = re.compile(r"§[A-Za-z!]|\\n")
+
+
+def localisation_vanilla_tokens(entry, token_re, vanilla_tags):
+    key, value = entry.groups()
+    yield from token_re.findall(key)
+    if key.startswith("custom_diff_strong_"):
+        country = key.removeprefix("custom_diff_strong_").upper()
+        if country in vanilla_tags:
+            yield country
+
+    # Ideology IDs are meaningful in keys and engine substitutions. The same
+    # words can also describe a diplomatic stance or appear in quoted speech.
+    value = LOC_FORMATTING.sub(" ", value)
+    for markup in LOCALISATION_MARKUP.finditer(value):
+        yield from token_re.findall(markup.group())
+    prose = LOCALISATION_MARKUP.sub(" ", value)
+    yield from (token for token in token_re.findall(prose) if token in vanilla_tags)
+
+
+def scan_vanilla_leftovers(tags, ideologies, limit):
     token_hits = Counter()
     examples = defaultdict(list)
-    own_tags = set(tags)
-    own_ideologies = set(ideology_groups)
-    vanilla_tags = VANILLA_TAGS - own_tags
-    vanilla_ideologies = VANILLA_IDEOLOGIES - own_ideologies
-    token_re = re.compile(r"\b([A-Z][A-Z0-9]{2,3}|[A-Za-z_][A-Za-z0-9_]*)\b")
+    vanilla_tags = VANILLA_TAGS - set(tags)
+    vanilla_ideologies = VANILLA_IDEOLOGIES - set(ideologies)
+    candidates = vanilla_tags | vanilla_ideologies
+    if not candidates:
+        return token_hits, examples
+    token_re = re.compile(r"\b(?:" + "|".join(sorted(candidates)) + r")(?=\b|_(?:DEF|ADJ)\b)")
     for path in iter_files(*GAME_DIRS):
-        if "tools/" in rel(path):
-            continue
+        in_localisation = path.suffix.lower() == ".yml"
+        in_units = path.is_relative_to(ROOT / "common/units") and path.suffix.lower() == ".txt"
         text = strip_comments(read_text(path))
         for lineno, line in enumerate(text.splitlines(), 1):
-            for token in token_re.findall(line):
-                if token in vanilla_tags or token in vanilla_ideologies:
-                    key = (
-                        f"tag:{token}" if token in vanilla_tags else f"ideology:{token}"
-                    )
-                    token_hits[key] += 1
-                    if len(examples[key]) < limit:
-                        examples[key].append(
-                            f"{rel(path)}:{lineno}: {line.strip()[:160]}"
-                        )
+            if in_localisation and (entry := LOCALISATION_ENTRY.fullmatch(line)):
+                tokens = localisation_vanilla_tokens(entry, token_re, vanilla_tags)
+            else:
+                source = UNIT_ABBREVIATION.sub(" ", line) if in_units else line
+                tokens = token_re.findall(source)
+            for token in tokens:
+                key = f"tag:{token}" if token in vanilla_tags else f"ideology:{token}"
+                token_hits[key] += 1
+                if len(examples[key]) < limit:
+                    examples[key].append(f"{rel(path)}:{lineno}: {line.strip()[:160]}")
     return token_hits, examples
 
 
@@ -1445,7 +1468,7 @@ def main():
     print_section("NCNS factions and campaign slots", ncns_issues, ncns_total)
 
     token_hits, examples = scan_vanilla_leftovers(
-        tags, ideology_groups, min(args.limit, 8)
+        tags, ideology_groups | ideology_types, min(args.limit, 8)
     )
     print(
         f"\n== Vanilla leftovers: {sum(token_hits.values())} hits in {len(token_hits)} tokens =="

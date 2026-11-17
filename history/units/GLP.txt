@@ -8,4 +8,44 @@ division_template = {
 }
 units = {
 	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 492 division_template = "Prismatic Guard" start_experience_factor = 0.15 start_equipment_factor = 0.50 }
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 2
+		}
+		location = 16731
+		division_template = "Prismatic Guard"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 3
+		}
+		location = 16741
+		division_template = "Prismatic Guard"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 4
+		}
+		location = 16925
+		division_template = "Prismatic Guard"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 5
+		}
+		location = 16926
+		division_template = "Prismatic Guard"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
 }

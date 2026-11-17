@@ -8,7 +8,7 @@ state={
 	provinces={
 		2627 7456 7908 10167
 	}
-	manpower = 410000
+	manpower = 615000
 	buildings_max_level_factor = 1.000
 	state_category = rural
 	local_supplies = 0.5
@@ -16,6 +16,7 @@ state={
 		owner = EFL
 		add_core_of = EFL
 		victory_points = { 7908 5 }
+		victory_points = { 10167 2 }
 		buildings = {
 			infrastructure = 3
 		}

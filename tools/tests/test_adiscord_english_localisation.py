@@ -137,6 +137,20 @@ class EnglishLocalisationTests(unittest.TestCase):
             )
         )
 
+    def test_country_name_capitalisation_keeps_scope_form_and_count(self):
+        self.write(self.root, 'russian', 'KEY: "[FROM.GetNameDefCap] присылает отряд."')
+        for translated, expected_mismatch in (
+            ("A contingent arrives from [FROM.GetNameDef].", False),
+            ("A contingent arrives from [ROOT.GetNameDef].", True),
+            ("A contingent arrives from [FROM.GetName].", True),
+            ("A contingent arrives.", True),
+            ("[FROM.GetNameDef] sends troops from [FROM.GetNameDef].", True),
+        ):
+            with self.subTest(translated=translated):
+                self.write(self.root, 'english', f'KEY: "{translated}"')
+                issues = audit(self.root, self.game)['issues']
+                self.assertEqual(any('token mismatch' in issue for issue in issues), expected_mismatch)
+
     def test_empty_translation_is_not_coverage(self):
         self.write(self.root, 'russian', 'KEY: "Абилия"')
         self.write(self.root, 'english', 'KEY: ""')
@@ -298,9 +312,8 @@ class EnglishCatalogueCompletenessTests(unittest.TestCase):
         self.assertEqual(sorted(empty), [])
 
     def test_authored_catalogues_preserve_dynamic_tokens(self):
-        from collections import Counter
         from tools.validators.validate_adiscord_english_localisation import (
-            TOKENS,
+            dynamic_tokens,
             read_entries,
         )
 
@@ -312,9 +325,7 @@ class EnglishCatalogueCompletenessTests(unittest.TestCase):
             source = russian[key]
             if not Path(source['file']).name.startswith('ADISCORD_'):
                 continue
-            if Counter(TOKENS.findall(source['value'])) != Counter(
-                TOKENS.findall(english[key]['value'])
-            ):
+            if dynamic_tokens(source['value']) != dynamic_tokens(english[key]['value']):
                 differences.append(key)
         self.assertEqual(differences, [])
 

@@ -152,6 +152,24 @@ NAM_rw_field_taken_by_coalition = {
 	NAM_rw_state_held_by_coalition = yes
 }
 
+# STATE in a front target. FROM is the front opponent and FROM.FROM the planner.
+NAM_rw_contested_field_objective = {
+	NAM_field_state = yes
+	is_owned_by = NAM
+	is_controlled_by = FROM
+	FROM = {
+		has_war_with = FROM.FROM
+		OR = {
+			tag = NAM
+			tag = SLF
+			tag = EFL
+			tag = AZH
+			is_subject_of = EFL
+			is_subject_of = AZH
+		}
+	}
+}
+
 # Any scope. Every border belt of the principals is in Svetlogorsk hands:
 # Eflor's 720, 721 and 701 and, while Azhar fights, its seaboard 722. Every
 # field Svetlogorye still owns is under its control.
@@ -2067,6 +2085,62 @@ NAM_board_minister_6 = {
 	has_idea = NAM_board_bank_nominee
 }
 
+NAM_subject_identity_participant = {
+	OR = {
+		tag = EFL
+		tag = AZH
+		tag = RHM
+		tag = SDR
+		tag = KDR
+		has_variable = NAM_corp_district_owner
+	}
+}
+
+NAM_has_federal_district_cosmetic = {
+	OR = {
+		has_cosmetic_tag = EFL_NAM_subject_governorate
+		has_cosmetic_tag = EFL_NAM_subject_military_district
+		has_cosmetic_tag = EFL_NAM_subject_service_district
+		has_cosmetic_tag = EFL_NAM_subject_concession
+		has_cosmetic_tag = EFL_NAM_subject_treaty_republic
+		has_cosmetic_tag = EFL_NAM_subject_directorate
+		has_cosmetic_tag = EFL_NAM_subject_imperial_governorate
+		has_cosmetic_tag = AZH_NAM_subject_governorate
+		has_cosmetic_tag = AZH_NAM_subject_military_district
+		has_cosmetic_tag = AZH_NAM_subject_service_district
+		has_cosmetic_tag = AZH_NAM_subject_concession
+		has_cosmetic_tag = AZH_NAM_subject_treaty_republic
+		has_cosmetic_tag = AZH_NAM_subject_directorate
+		has_cosmetic_tag = AZH_NAM_subject_imperial_governorate
+		has_cosmetic_tag = RHM_NAM_subject_governorate
+		has_cosmetic_tag = RHM_NAM_subject_military_district
+		has_cosmetic_tag = RHM_NAM_subject_service_district
+		has_cosmetic_tag = RHM_NAM_subject_concession
+		has_cosmetic_tag = RHM_NAM_subject_treaty_republic
+		has_cosmetic_tag = RHM_NAM_subject_directorate
+		has_cosmetic_tag = RHM_NAM_subject_imperial_governorate
+		has_cosmetic_tag = SDR_NAM_subject_governorate
+		has_cosmetic_tag = SDR_NAM_subject_military_district
+		has_cosmetic_tag = SDR_NAM_subject_service_district
+		has_cosmetic_tag = SDR_NAM_subject_concession
+		has_cosmetic_tag = SDR_NAM_subject_treaty_republic
+		has_cosmetic_tag = SDR_NAM_subject_directorate
+		has_cosmetic_tag = SDR_NAM_subject_imperial_governorate
+		has_cosmetic_tag = KDR_NAM_subject_governorate
+		has_cosmetic_tag = KDR_NAM_subject_military_district
+		has_cosmetic_tag = KDR_NAM_subject_service_district
+		has_cosmetic_tag = KDR_NAM_subject_concession
+		has_cosmetic_tag = KDR_NAM_subject_treaty_republic
+		has_cosmetic_tag = KDR_NAM_subject_directorate
+		has_cosmetic_tag = KDR_NAM_subject_imperial_governorate
+		has_cosmetic_tag = EFL_NAM_federal_district
+		has_cosmetic_tag = AZH_NAM_federal_district
+		has_cosmetic_tag = RHM_NAM_federal_district
+		has_cosmetic_tag = SDR_NAM_federal_district
+		has_cosmetic_tag = KDR_NAM_federal_district
+	}
+}
+
 NAM_board_has_charter_cosmetic = {
 	OR = {
 		has_cosmetic_tag = EFL_NAM_corp_1
@@ -2940,6 +3014,7 @@ NAM_rw_coalition_landing_planned = {
 NAM_rw_coalition_can_embark = {
 	is_ai = yes
 	has_capitulated = no
+	surrender_progress < 0.25
 	NAM = { has_capitulated = no }
 	has_tech = ADISCORD_tech_restored_dockyards
 	has_navy_size = { size > 39 type = convoy }

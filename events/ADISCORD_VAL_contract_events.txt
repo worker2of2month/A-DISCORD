@@ -300,6 +300,29 @@ country_event = {
 # BEGIN CONSOLIDATED: ADISCORD_VAL_rework_events.txt
 add_namespace = val_rework
 
+country_event = {
+	id = val_rework.275
+	title = val_rework.275.t
+	desc = val_rework.275.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { VAL_morn_cabinet_offer_current = yes }
+	option = {
+		name = val_rework.275.seat
+		trigger = { VAL_morn_cabinet_offer_current = yes }
+		ai_chance = { base = 60 }
+		custom_effect_tooltip = VAL_reform_party_cabinet_tt
+		hidden_effect = {
+			set_temp_variable = { ADISCORD_party = token:pragmatism }
+			ADISCORD_admit_coalition_party = yes
+		}
+	}
+	option = {
+		name = val_rework.275.trains
+		ai_chance = { base = 40 }
+	}
+}
+
 # Focus completion must be recorded before allow_branch is evaluated again.
 country_event = {
 	id = val_rework.123
@@ -5698,7 +5721,20 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { VAL_council_revanchist_coup_current = yes }
 	immediate = { VAL_council_revanchist_coup = yes }
-	option = { name = val_council.42.a }
+	option = {
+		name = val_council.42.a
+		ai_chance = { base = 70 }
+	}
+	option = {
+		name = val_council.42.close
+		trigger = { has_country_leader = { character = VAL_Eduard_Korsch ruling_only = yes } }
+		ai_chance = { base = 30 }
+		custom_effect_tooltip = VAL_korsch_ban_state_party_tt
+		hidden_effect = {
+			set_temp_variable = { ADISCORD_party = token:etatism }
+			ADISCORD_ban_party = yes
+		}
+	}
 }
 
 # World news about the revanchist coup, one day after it.
@@ -6336,6 +6372,7 @@ country_event = {
 			}
 			custom_effect_tooltip = VAL_peace_recovery_complete_tt
 		}
+		custom_effect_tooltip = VAL_reform_party_cabinet_tt
 		hidden_effect = { VAL_peace_adopt_cabinet = yes }
 	}
 	option = {

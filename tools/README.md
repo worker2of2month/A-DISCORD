@@ -188,11 +188,12 @@ runtime files or third-party reference material: `decisions.psd`,
 
 `tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds` is the authored
 land-colour base for `tools.builders.build_adiscord_coastal_geography`.
-The builder adds only the island land tint to this source. City surfaces use
-the terrain atlas and city masks; do not paint flat city blocks into the
-colourmap, because DXT5 blocks extend beyond the urban footprint. Edit the
-source rather than the runtime DDS. Run the builder with `--check` before
-`--apply`, then repeat `--check` to verify stable output. The base retains
+The builder adds the island land tint to the RGB channels. It generates the
+night light mask in the DXT5 alpha channel from dry urban terrain (index 13)
+and settlement pixels (city indices 2 and 15). Brightness follows the built-up
+fraction of each 2x2 map cell. Edit the source rasters to change the footprint.
+Use `--colourmap-only` to rebuild the texture from the current map rasters.
+Run with `--check` before `--apply`, then repeat `--check` to verify stable output. The base retains
 SHA256 `ff8d76680ef6600e146ca72dc0007643e31bca4fd05c01c686be1a408ee83da6`.
 
 The same geography builder owns the bounded province-pixel repairs and their

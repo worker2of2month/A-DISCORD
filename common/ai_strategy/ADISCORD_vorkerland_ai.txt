@@ -4054,7 +4054,8 @@ ADISCORD_vorkerland_wkr_air_denial_program = {
 
 # Air employment must not disappear when a claimant drops below the factory
 # threshold used by the production programme. Regions 12 and 9 cover the
-# central and eastern collapse fronts; this wartime-only score deliberately
+# central and eastern collapse fronts, 253, 249, 254 and 13 their Riven,
+# Eirmi, Solarino and Firnov flanks; this wartime-only score deliberately
 # dominates the ordinary front score so the deployed wings are assigned there.
 ADISCORD_vorkerland_active_air_operations = {
 	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
@@ -4068,6 +4069,10 @@ ADISCORD_vorkerland_active_air_operations = {
 
 	ai_strategy = { type = strategic_air_importance id = 12 value = 100000 }
 	ai_strategy = { type = strategic_air_importance id = 9 value = 100000 }
+	ai_strategy = { type = strategic_air_importance id = 253 value = 100000 }
+	ai_strategy = { type = strategic_air_importance id = 249 value = 100000 }
+	ai_strategy = { type = strategic_air_importance id = 254 value = 100000 }
+	ai_strategy = { type = strategic_air_importance id = 13 value = 100000 }
 }
 
 # --- rom_tru_ai ---

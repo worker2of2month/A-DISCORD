@@ -19,6 +19,92 @@ SHL_country_operable = {
 	has_capitulated = no
 }
 
+# A dispatch uses the actual stores at both ends. Site X shares district 294
+# with VIII but has its own stock, works and service contract in country scope.
+SHL_convoy_origin_open = {
+	SHL_furnace_site_idle = yes
+	check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+	NOT = { SHL_obligation_here = yes }
+	NOT = { has_state_flag = SHL_quota_site }
+}
+
+SHL_convoy_available = {
+	SHL_country_operable = yes
+	NOT = { has_variable = SHL_convoy_dispatch }
+	OR = {
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = less_than }
+			var:SHL_selected_state = {
+				SHL_furnace_site_idle = yes
+				check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = equals }
+			check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
+			check_variable = { var = SHL_tenth_running value = 1 compare = equals }
+			SHL_project_idle = yes
+		}
+	}
+}
+
+SHL_can_dispatch_ore = {
+	SHL_convoy_available = yes
+	NOT = { check_variable = { var = SHL_selected_furnace value = 5 compare = equals } }
+	291 = {
+		SHL_convoy_origin_open = yes
+		check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
+	}
+	OR = {
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = less_than }
+			var:SHL_selected_state = { check_variable = { var = SHL_furnace_stock value = 2 compare = less_than_or_equals } }
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = equals }
+			check_variable = { var = SHL_tenth_stock value = 2 compare = less_than_or_equals }
+		}
+	}
+}
+
+SHL_can_dispatch_masons = {
+	SHL_convoy_available = yes
+	has_completed_focus = SHL_repair_without_extinction
+	NOT = { check_variable = { var = SHL_selected_furnace value = 8 compare = equals } }
+	294 = {
+		SHL_convoy_origin_open = yes
+		check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
+	}
+	OR = {
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = less_than }
+			var:SHL_selected_state = { check_variable = { var = SHL_furnace_wear value = 15 compare = greater_than_or_equals } }
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = equals }
+			check_variable = { var = SHL_tenth_wear value = 15 compare = greater_than_or_equals }
+		}
+	}
+}
+
+SHL_can_dispatch_sale = {
+	SHL_convoy_available = yes
+	289 = { SHL_convoy_origin_open = yes }
+	OR = {
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = less_than }
+			var:SHL_selected_state = {
+				SHL_convoy_origin_open = yes
+				check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = equals }
+			check_variable = { var = SHL_tenth_stock value = 1 compare = greater_than_or_equals }
+		}
+	}
+}
+
 SHL_project_idle = {
 	SHL_country_operable = yes
 	NOT = { has_variable = SHL_project_deposit }
@@ -246,6 +332,14 @@ SHL_site_on_qanat_border = {
 	}
 }
 
+# STATE scope: the two furnaces facing the Veyr ports.
+SHL_site_on_veyr_border = {
+	OR = {
+		state = 293
+		state = 295
+	}
+}
+
 SHL_accident_ready = {
 	NOT = { has_country_flag = SHL_accident_pending }
 	check_variable = { var = SHL_cycle_number value = SHL_accident_ready_cycle compare = greater_than_or_equals }
@@ -331,30 +425,55 @@ SHL_can_seize_qanats = {
 	SHL_country_operable = yes
 	has_war = no
 	NOT = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
-	check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+	SHL_qanat_dispute_open = yes
 	OR = {
 		has_completed_focus = SHL_qanat_guard
 		has_completed_focus = SHL_right_to_water
 	}
 	SHL_qanat_counterpart = yes
+	NOT = { has_country_flag = SHL_neutral_to_KYZ }
 	KYZ = { has_war = no }
+}
+
+# COUNTRY SHL. A refused redemption of ceded districts reopens the water war.
+# A war lost to Keizan on objectives (SHL_border_truce_KYZ, one year) pauses
+# the dispute, so the loser cannot redeclare at once to suspend the terms.
+SHL_qanat_dispute_open = {
+	OR = {
+		check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+		has_country_flag = SHL_redemption_refused_KYZ
+	}
+	NOT = { has_country_flag = SHL_border_truce_KYZ }
 }
 
 SHL_can_strike_veyr = {
 	SHL_country_operable = yes
 	has_war = no
-	check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+	SHL_veyr_dispute_open = yes
 	OR = {
 		has_completed_focus = SHL_veyr_ultimatum
 		has_completed_focus = SHL_key_to_sea
 	}
 	SHL_glp_counterpart = yes
+	NOT = { has_country_flag = SHL_neutral_to_GLP }
 	GLP = { has_war = no }
 }
 
+# COUNTRY SHL. A refused redemption of ceded districts reopens the port war;
+# a port war lost on objectives pauses it for a year (SHL_border_truce_GLP).
+SHL_veyr_dispute_open = {
+	OR = {
+		check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+		has_country_flag = SHL_redemption_refused_GLP
+	}
+	NOT = { has_country_flag = SHL_border_truce_GLP }
+}
+
 # COUNTRY SHL. The demand needs a head well left in Keizan's hands and no
-# running qanat war; the brotherhood closes the dispute for good.
+# running qanat war; the brotherhood closes the dispute for good and a
+# neutrality treaty after a lost war pauses it.
 SHL_keizan_can_threaten = {
+	NOT = { has_country_flag = SHL_neutral_to_KYZ }
 	707 = { is_owned_by = SHL }
 	KYZ = {
 		exists = yes
@@ -452,6 +571,7 @@ SHL_obligation_idle = {
 SHL_obligation_site_ready = {
 	SHL_furnace_site_controlled = yes
 	check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+	NOT = { SHL_seal_site_leased = yes }
 }
 
 SHL_export_access = {
@@ -953,6 +1073,438 @@ SHL_cistern_coalition_control = {
 	}
 }
 
+# ----- Limited-war fronts -----
+# A limited war is decided by holding objectives for 14 days. The attacker
+# needs the enemy's objectives and must have lost none of its own, so neither
+# side meets its goal at the declaration and the two predicates of one war
+# never hold together. Writes use state-scope control checks only.
+
+# COUNTRY SHL. Either limited war with a neighbour is being fought.
+SHL_limited_war_active = {
+	OR = {
+		check_variable = { var = SHL_war_kyz value = 1 compare = greater_than_or_equals }
+		check_variable = { var = SHL_war_glp value = 1 compare = equals }
+	}
+}
+
+# STATE. Districts whose control decides a limited war; on_state_control_changed
+# filters on this list before it queues a front check.
+SHL_limited_war_objective_state = {
+	OR = {
+		state = 280
+		state = 284
+		state = 285
+		state = 286
+		state = 287
+		state = 288
+		state = 289
+		state = 707
+		state = 293
+		state = 295
+		state = 296
+		state = 297
+		state = 299
+		state = 708
+		state = 733
+	}
+}
+
+# STATE. Keizan or a border-pact partner that fights Shahrabad holds the district.
+SHL_kyz_coalition_control = {
+	OR = {
+		is_controlled_by = KYZ
+		AND = {
+			is_controlled_by = MZR
+			MZR = {
+				has_country_flag = SHL_kyz_war_partner
+				has_war_with = SHL
+			}
+		}
+		AND = {
+			is_controlled_by = GLP
+			GLP = {
+				has_country_flag = SHL_kyz_war_partner
+				has_war_with = SHL
+			}
+		}
+	}
+}
+
+# STATE. A Shahrabad district held by Keizan's side.
+SHL_held_by_kyz_side = {
+	is_owned_by = SHL
+	SHL_kyz_coalition_control = yes
+}
+
+# STATE. A Shahrabad district held by Veyr.
+SHL_held_by_glp = {
+	is_owned_by = SHL
+	is_controlled_by = GLP
+}
+
+# COUNTRY SHL. Keizan's side holds a furnace of the qanat border.
+SHL_kyz_holds_a_furnace = {
+	OR = {
+		287 = { SHL_held_by_kyz_side = yes }
+		288 = { SHL_held_by_kyz_side = yes }
+		289 = { SHL_held_by_kyz_side = yes }
+	}
+}
+
+# COUNTRY SHL. Veyr holds a district of the port border.
+SHL_glp_holds_a_district = {
+	OR = {
+		296 = { SHL_held_by_glp = yes }
+		733 = { SHL_held_by_glp = yes }
+		293 = { SHL_held_by_glp = yes }
+		295 = { SHL_held_by_glp = yes }
+	}
+}
+
+# COUNTRY SHL. The qanat war is fought over Keizan's land in two slots: head
+# well 280 with the lower qanat 285, head well 284 with 286. A slot whose head
+# well Keizan owns is taken with that well; a head well Shahrabad already owns
+# (a grade-1 armistice, a won ration war) passes the slot to its lower qanat,
+# and a slot without Keizan land is settled. A repeat war therefore never
+# starts with the goal met on Shahrabad's own land.
+SHL_kyz_qanat_slots_taken = {
+	OR = {
+		280 = { is_owned_by = KYZ }
+		285 = { SHL_cistern_coalition_control = yes }
+		NOT = { 285 = { is_owned_by = KYZ } }
+	}
+	OR = {
+		284 = { is_owned_by = KYZ }
+		286 = { SHL_cistern_coalition_control = yes }
+		NOT = { 286 = { is_owned_by = KYZ } }
+	}
+}
+
+# COUNTRY SHL. Shahrabad's side holds one of Keizan's qanat objectives.
+SHL_kyz_qanat_objective_held = {
+	OR = {
+		280 = {
+			is_owned_by = KYZ
+			SHL_cistern_coalition_control = yes
+		}
+		284 = {
+			is_owned_by = KYZ
+			SHL_cistern_coalition_control = yes
+		}
+		AND = {
+			NOT = { 280 = { is_owned_by = KYZ } }
+			285 = {
+				is_owned_by = KYZ
+				SHL_cistern_coalition_control = yes
+			}
+		}
+		AND = {
+			NOT = { 284 = { is_owned_by = KYZ } }
+			286 = {
+				is_owned_by = KYZ
+				SHL_cistern_coalition_control = yes
+			}
+		}
+	}
+}
+
+# COUNTRY SHL. Qanat war: both head wells and the qanat slots. Ration war: both
+# head wells and the Zarkhan district (SHL_kyz_objectives_held).
+SHL_kyz_front_ours = {
+	has_war_with = KYZ
+	OR = {
+		AND = {
+			check_variable = { var = SHL_war_kyz value = 1 compare = equals }
+			280 = { SHL_cistern_coalition_control = yes }
+			284 = { SHL_cistern_coalition_control = yes }
+			SHL_kyz_qanat_slots_taken = yes
+		}
+		SHL_kyz_objectives_held = yes
+	}
+	NOT = { SHL_kyz_holds_a_furnace = yes }
+}
+
+# COUNTRY SHL. Keizan's side holds a qanat furnace. In the qanat war Shahrabad's
+# side holds none of Keizan's qanat objectives; in the ration war it holds
+# neither head well and Keizan's side also holds Zarkhan.
+SHL_kyz_front_theirs = {
+	has_war_with = KYZ
+	SHL_kyz_holds_a_furnace = yes
+	OR = {
+		AND = {
+			check_variable = { var = SHL_war_kyz value = 1 compare = equals }
+			NOT = { SHL_kyz_qanat_objective_held = yes }
+		}
+		AND = {
+			check_variable = { var = SHL_war_kyz value = 2 compare = greater_than_or_equals }
+			NOT = { 280 = { SHL_cistern_coalition_control = yes } }
+			NOT = { 284 = { SHL_cistern_coalition_control = yes } }
+			707 = { SHL_held_by_kyz_side = yes }
+		}
+	}
+}
+
+# COUNTRY SHL. Both Veyr ports, and the southern district under the sea goal.
+SHL_glp_front_ours = {
+	has_war_with = GLP
+	check_variable = { var = SHL_war_glp value = 1 compare = equals }
+	297 = { is_controlled_by = SHL }
+	299 = { is_controlled_by = SHL }
+	OR = {
+		NOT = { has_country_flag = SHL_war_glp_sea_goal }
+		708 = { is_controlled_by = SHL }
+	}
+	NOT = { SHL_glp_holds_a_district = yes }
+}
+
+SHL_glp_front_theirs = {
+	has_war_with = GLP
+	check_variable = { var = SHL_war_glp value = 1 compare = equals }
+	SHL_glp_holds_a_district = yes
+	NOT = { 297 = { is_controlled_by = SHL } }
+	NOT = { 299 = { is_controlled_by = SHL } }
+}
+
+# STATE. A Shahrabad district recorded by the armistice snapshot for cession.
+SHL_armistice_cession_here = {
+	has_state_flag = SHL_armistice_held
+	is_owned_by = SHL
+}
+
+# COUNTRY SHL. The victor's alternative answers of ADISCORD_SHL.57 and .66.
+SHL_can_return_wells = {
+	KYZ = { exists = yes }
+	280 = { is_owned_by = SHL }
+	284 = { is_owned_by = SHL }
+}
+
+SHL_can_open_harbour_union = {
+	GLP = { exists = yes }
+	297 = { is_owned_by = SHL }
+	299 = { is_owned_by = SHL }
+}
+
+# STATE furnace site. Field batteries are cast only on the border of a running
+# limited war.
+SHL_front_battery_site = {
+	OR = {
+		AND = {
+			SHL_site_on_qanat_border = yes
+			SHL = {
+				check_variable = { var = SHL_war_kyz value = 1 compare = greater_than_or_equals }
+				has_war_with = KYZ
+			}
+		}
+		AND = {
+			SHL_site_on_veyr_border = yes
+			SHL = {
+				check_variable = { var = SHL_war_glp value = 1 compare = equals }
+				has_war_with = GLP
+			}
+		}
+	}
+}
+
+# COUNTRY SHL. Every dispute with the neighbours is settled and no ceded
+# district is contested, so the border-war preparation has no use left.
+SHL_limited_disputes_over = {
+	has_war = no
+	check_variable = { var = SHL_war_kyz value = 0 compare = equals }
+	check_variable = { var = SHL_war_glp value = 0 compare = equals }
+	check_variable = { var = SHL_water_crisis value = 2 compare = greater_than_or_equals }
+	check_variable = { var = SHL_veyr_crisis value = 2 compare = greater_than_or_equals }
+	check_variable = { var = SHL_keizan_state value = 3 compare = equals }
+	NOT = { has_country_flag = SHL_redemption_refused_KYZ }
+	NOT = { has_country_flag = SHL_redemption_refused_GLP }
+}
+
+# ----- Terms, indemnity and the return of ceded districts -----
+
+# COUNTRY SHL. A district recorded for the winner's terms is still Shahrabad's.
+SHL_terms_land_available = {
+	OR = {
+		287 = { SHL_terms_candidate_here = yes }
+		288 = { SHL_terms_candidate_here = yes }
+		289 = { SHL_terms_candidate_here = yes }
+		293 = { SHL_terms_candidate_here = yes }
+		295 = { SHL_terms_candidate_here = yes }
+		296 = { SHL_terms_candidate_here = yes }
+		707 = { SHL_terms_candidate_here = yes }
+		733 = { SHL_terms_candidate_here = yes }
+	}
+}
+
+SHL_terms_candidate_here = {
+	has_state_flag = SHL_terms_candidate
+	is_owned_by = SHL
+}
+
+# COUNTRY SHL. Indemnity codes: 1 KYZ, 2 GLP. A vanished or subject recipient
+# ends the debt.
+SHL_indemnity_recipient_valid = {
+	OR = {
+		AND = {
+			check_variable = { var = SHL_indemnity_recipient value = 1 compare = equals }
+			KYZ = {
+				exists = yes
+				is_subject = no
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_indemnity_recipient value = 2 compare = equals }
+			GLP = {
+				exists = yes
+				is_subject = no
+			}
+		}
+	}
+}
+
+# COUNTRY SHL. Payments pause while the recipient fights Shahrabad.
+SHL_indemnity_recipient_at_peace = {
+	NOT = {
+		AND = {
+			check_variable = { var = SHL_indemnity_recipient value = 1 compare = equals }
+			has_war_with = KYZ
+		}
+	}
+	NOT = {
+		AND = {
+			check_variable = { var = SHL_indemnity_recipient value = 2 compare = equals }
+			has_war_with = GLP
+		}
+	}
+}
+
+SHL_indemnity_buyout_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = SHL_indemnity_due compare = greater_than_or_equals }
+	NOT = { has_political_power < 25 }
+}
+
+# STATE. A ceded district that Shahrabad has not yet recovered.
+SHL_ceded_state_held_abroad = {
+	has_state_flag = SHL_ceded_state
+	NOT = { is_owned_by = SHL }
+}
+
+# STATE. A ceded district that has waited the full year (half a year with the
+# border settlement office) in the hands of the neighbour that took it.
+SHL_ceded_state_due = {
+	has_state_flag = SHL_ceded_state
+	OR = {
+		has_state_flag = {
+			flag = SHL_ceded_state
+			days > 364
+		}
+		AND = {
+			SHL = { has_completed_focus = SHL_border_settlement_office }
+			has_state_flag = {
+				flag = SHL_ceded_state
+				days > 179
+			}
+		}
+	}
+}
+
+SHL_ceded_due_from_kyz = {
+	is_owned_by = KYZ
+	SHL_ceded_state_due = yes
+}
+
+SHL_ceded_due_from_glp = {
+	is_owned_by = GLP
+	SHL_ceded_state_due = yes
+}
+
+# COUNTRY SHL. A neighbour at peace holds a district that is due for a return
+# offer, unless it already refused a redemption.
+SHL_return_offer_kyz_ready = {
+	NOT = { has_country_flag = SHL_redemption_refused_KYZ }
+	NOT = { has_war_with = KYZ }
+	KYZ = {
+		exists = yes
+		is_subject = no
+	}
+	OR = {
+		287 = { SHL_ceded_due_from_kyz = yes }
+		288 = { SHL_ceded_due_from_kyz = yes }
+		289 = { SHL_ceded_due_from_kyz = yes }
+		707 = { SHL_ceded_due_from_kyz = yes }
+	}
+}
+
+SHL_return_offer_glp_ready = {
+	NOT = { has_country_flag = SHL_redemption_refused_GLP }
+	NOT = { has_war_with = GLP }
+	GLP = {
+		exists = yes
+		is_subject = no
+	}
+	OR = {
+		293 = { SHL_ceded_due_from_glp = yes }
+		295 = { SHL_ceded_due_from_glp = yes }
+		296 = { SHL_ceded_due_from_glp = yes }
+		733 = { SHL_ceded_due_from_glp = yes }
+	}
+}
+
+SHL_return_offer_ready = {
+	SHL_country_operable = yes
+	NOT = { has_variable = SHL_redemption_deposit }
+	OR = {
+		SHL_return_offer_kyz_ready = yes
+		SHL_return_offer_glp_ready = yes
+	}
+}
+
+# STATE. A ceded district still owned by the neighbour that took it.
+SHL_ceded_held_by_kyz = {
+	has_state_flag = SHL_ceded_state
+	is_owned_by = KYZ
+}
+
+SHL_ceded_held_by_glp = {
+	has_state_flag = SHL_ceded_state
+	is_owned_by = GLP
+}
+
+# COUNTRY SHL. The neighbour of the pending redemption (SHL_return_neighbour:
+# 1 KYZ, 2 GLP) still owns a ceded district, so the deposit buys a delivery.
+SHL_redemption_deliverable = {
+	OR = {
+		AND = {
+			check_variable = { var = SHL_return_neighbour value = 1 compare = equals }
+			OR = {
+				287 = { SHL_ceded_held_by_kyz = yes }
+				288 = { SHL_ceded_held_by_kyz = yes }
+				289 = { SHL_ceded_held_by_kyz = yes }
+				707 = { SHL_ceded_held_by_kyz = yes }
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_return_neighbour value = 2 compare = equals }
+			OR = {
+				293 = { SHL_ceded_held_by_glp = yes }
+				295 = { SHL_ceded_held_by_glp = yes }
+				296 = { SHL_ceded_held_by_glp = yes }
+				733 = { SHL_ceded_held_by_glp = yes }
+			}
+		}
+	}
+}
+
+# COUNTRY SHL. The redemption price is 250, 200 with the settlement office.
+SHL_redemption_affordable = {
+	NOT = { has_political_power < 25 }
+	OR = {
+		check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		AND = {
+			has_completed_focus = SHL_border_settlement_office
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+	}
+}
+
 SHL_has_delivery_majority = {
 	NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 	check_variable = { var = SHL_crest_support value = 0 compare = greater_than }
@@ -968,6 +1520,7 @@ SHL_can_assign_delivery = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
 				NOT = { has_state_flag = SHL_quota_site }
+				NOT = { SHL_seal_site_leased = yes }
 			}
 		}
 		AND = {
@@ -976,6 +1529,7 @@ SHL_can_assign_delivery = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
 				NOT = { has_state_flag = SHL_quota_site }
+				NOT = { SHL_seal_site_leased = yes }
 			}
 		}
 		AND = {
@@ -984,6 +1538,7 @@ SHL_can_assign_delivery = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
 				NOT = { has_state_flag = SHL_quota_site }
+				NOT = { SHL_seal_site_leased = yes }
 			}
 		}
 		AND = {
@@ -992,6 +1547,7 @@ SHL_can_assign_delivery = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
 				NOT = { has_state_flag = SHL_quota_site }
+				NOT = { SHL_seal_site_leased = yes }
 			}
 		}
 		AND = {
@@ -1000,6 +1556,7 @@ SHL_can_assign_delivery = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
 				NOT = { has_state_flag = SHL_quota_site }
+				NOT = { SHL_seal_site_leased = yes }
 			}
 		}
 		AND = {
@@ -1008,6 +1565,7 @@ SHL_can_assign_delivery = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
 				NOT = { has_state_flag = SHL_quota_site }
+				NOT = { SHL_seal_site_leased = yes }
 			}
 		}
 		AND = {
@@ -1016,6 +1574,7 @@ SHL_can_assign_delivery = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
 				NOT = { has_state_flag = SHL_quota_site }
+				NOT = { SHL_seal_site_leased = yes }
 			}
 		}
 		AND = {
@@ -1024,6 +1583,7 @@ SHL_can_assign_delivery = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
 				NOT = { has_state_flag = SHL_quota_site }
+				NOT = { SHL_seal_site_leased = yes }
 			}
 		}
 		AND = {
@@ -1032,12 +1592,16 @@ SHL_can_assign_delivery = {
 				SHL_furnace_site_controlled = yes
 				NOT = { SHL_obligation_here = yes }
 				NOT = { has_state_flag = SHL_quota_site }
+				NOT = { SHL_seal_site_leased = yes }
 			}
 		}
 		AND = {
 			check_variable = { var = SHL_selected_furnace value = 10 compare = equals }
 			check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
-			294 = { SHL_furnace_site_controlled = yes }
+			294 = {
+				SHL_furnace_site_controlled = yes
+				NOT = { SHL_seal_site_leased = yes }
+			}
 		}
 	}
 }
@@ -1241,6 +1805,7 @@ SHL_war_order_site_open = {
 	check_variable = { var = SHL_furnace_running value = 1 compare = equals }
 	NOT = { has_state_flag = SHL_quota_site }
 	NOT = { SHL_obligation_here = yes }
+	NOT = { SHL_seal_site_leased = yes }
 }
 
 # STATE furnace site. A dispatch donor keeps at least one packet after giving one.
@@ -1416,4 +1981,738 @@ SHL_direct_or_administration_land = {
 			SDA = { is_subject_of = SHL }
 		}
 	}
+}
+
+# ----- House loyalty -----
+# SHL_house_loyalty (0-100) on the nine furnace states belongs to the house of
+# that district; SHL_refresh_house_pressure derives the national pressure from
+# it. Each house favour is a decision on its own district with a 168-day
+# cooldown kept as the age of SHL_favour_given.
+
+# STATE. The house holds its own furnace on Shahrabad's land.
+SHL_house_seated = {
+	is_owned_by = SHL
+	check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+}
+
+# STATE. A lit, seated house outside opposition casts a loyal vote at 55.
+SHL_house_loyal_vote = {
+	SHL_obligation_site_ready = yes
+	SHL_house_seated = yes
+	NOT = { has_state_flag = SHL_house_opposed }
+	check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+}
+
+# STATE. A house below 40 that still sits in the hall can walk out.
+SHL_house_restless = {
+	SHL_obligation_site_ready = yes
+	SHL_house_seated = yes
+	NOT = { has_state_flag = SHL_house_opposed }
+	has_variable = SHL_house_loyalty
+	check_variable = { var = SHL_house_loyalty value = 40 compare = less_than }
+}
+
+# STATE. The largest favour costs 20 loyalty, so a favour granted at 60 never
+# drops the house below the walkout threshold of 40 by itself.
+SHL_favour_ready = {
+	SHL_obligation_site_ready = yes
+	SHL_house_seated = yes
+	NOT = { has_state_flag = SHL_house_opposed }
+	check_variable = { var = SHL_house_loyalty value = 60 compare = greater_than_or_equals }
+	OR = {
+		NOT = { has_state_flag = SHL_favour_given }
+		has_state_flag = {
+			flag = SHL_favour_given
+			days > 167
+		}
+	}
+}
+
+# COUNTRY. The ledgers are open and the crests still exist.
+SHL_house_favours_open = {
+	SHL_country_operable = yes
+	has_completed_focus = SHL_house_ledgers
+	NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+}
+
+SHL_favour_arbin_price = {
+	check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
+}
+
+SHL_favour_safir_price = {
+	NOT = { has_political_power < 25 }
+}
+
+SHL_favour_loran_price = {
+	NOT = { has_political_power < 20 }
+}
+
+SHL_favour_nur_price = {
+	NOT = { has_political_power < 30 }
+}
+
+SHL_favour_bayrat_price = {
+	check_variable = { var = ADISCORD_economy_treasury value = 30 compare = greater_than_or_equals }
+}
+
+SHL_favour_kerdan_price = {
+	check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
+}
+
+SHL_favour_sharim_price = {
+	check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals }
+}
+
+SHL_favour_darban_price = {
+	check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
+}
+
+SHL_favour_veyran_price = {
+	check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals }
+}
+
+# COUNTRY. The qanat masters need a lit furnace on the qanat border.
+SHL_favour_arbin_open = {
+	OR = {
+		287 = { SHL_obligation_site_ready = yes }
+		288 = { SHL_obligation_site_ready = yes }
+		289 = { SHL_obligation_site_ready = yes }
+	}
+}
+
+# COUNTRY. A lit furnace sells abroad when the fair is held.
+SHL_any_export_furnace = {
+	OR = {
+		287 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+		}
+		288 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+		}
+		289 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+		}
+		290 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+		}
+		291 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+		}
+		292 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+		}
+		293 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+		}
+		294 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+		}
+		295 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_recipient value = 0 compare = equals }
+		}
+	}
+}
+
+SHL_favour_loran_open = {
+	SHL_any_export_furnace = yes
+}
+
+# COUNTRY. Nur mediates for another house of owned land below 80.
+SHL_favour_nur_open = {
+	OR = {
+		287 = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+			check_variable = { var = SHL_house_loyalty value = 80 compare = less_than }
+		}
+		288 = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+			check_variable = { var = SHL_house_loyalty value = 80 compare = less_than }
+		}
+		289 = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+			check_variable = { var = SHL_house_loyalty value = 80 compare = less_than }
+		}
+		291 = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+			check_variable = { var = SHL_house_loyalty value = 80 compare = less_than }
+		}
+		292 = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+			check_variable = { var = SHL_house_loyalty value = 80 compare = less_than }
+		}
+		293 = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+			check_variable = { var = SHL_house_loyalty value = 80 compare = less_than }
+		}
+		294 = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+			check_variable = { var = SHL_house_loyalty value = 80 compare = less_than }
+		}
+		295 = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+			check_variable = { var = SHL_house_loyalty value = 80 compare = less_than }
+		}
+	}
+}
+
+SHL_favour_bayrat_open = {
+	OR = {
+		287 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_stock value = 3 compare = less_than }
+		}
+		288 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_stock value = 3 compare = less_than }
+		}
+		289 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_stock value = 3 compare = less_than }
+		}
+		290 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_stock value = 3 compare = less_than }
+		}
+		291 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_stock value = 3 compare = less_than }
+		}
+		292 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_stock value = 3 compare = less_than }
+		}
+		293 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_stock value = 3 compare = less_than }
+		}
+		294 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_stock value = 3 compare = less_than }
+		}
+		295 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_stock value = 3 compare = less_than }
+		}
+	}
+}
+
+# COUNTRY. Kerdan pays the Veyr duty only while it is charged and unpaid.
+SHL_favour_kerdan_open = {
+	check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+	292 = { NOT = { has_variable = SHL_duty_paid_cycles } }
+}
+
+SHL_favour_sharim_open = {
+	OR = {
+		287 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_training value = 2 compare = less_than }
+		}
+		288 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_training value = 2 compare = less_than }
+		}
+		289 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_training value = 2 compare = less_than }
+		}
+		290 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_training value = 2 compare = less_than }
+		}
+		291 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_training value = 2 compare = less_than }
+		}
+		292 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_training value = 2 compare = less_than }
+		}
+		293 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_training value = 2 compare = less_than }
+		}
+		294 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_training value = 2 compare = less_than }
+		}
+		295 = {
+			SHL_obligation_site_ready = yes
+			check_variable = { var = SHL_furnace_training value = 2 compare = less_than }
+		}
+	}
+}
+
+SHL_favour_safir_open = {
+	always = yes
+}
+
+SHL_favour_darban_open = {
+	always = yes
+}
+
+SHL_favour_veyran_open = {
+	always = yes
+}
+
+# COUNTRY. The favour of the selected furnace card: the GUI button and
+# SHL_activate_selected_favour read the same three parts as the decision.
+SHL_selected_favour_price = {
+	OR = {
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 1 compare = equals }
+			SHL_favour_arbin_price = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 2 compare = equals }
+			SHL_favour_safir_price = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 3 compare = equals }
+			SHL_favour_loran_price = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 4 compare = equals }
+			SHL_favour_nur_price = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 5 compare = equals }
+			SHL_favour_bayrat_price = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 6 compare = equals }
+			SHL_favour_kerdan_price = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 7 compare = equals }
+			SHL_favour_sharim_price = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 8 compare = equals }
+			SHL_favour_darban_price = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 9 compare = equals }
+			SHL_favour_veyran_price = yes
+		}
+	}
+}
+
+SHL_selected_favour_open = {
+	OR = {
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 1 compare = equals }
+			SHL_favour_arbin_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 2 compare = equals }
+			SHL_favour_safir_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 3 compare = equals }
+			SHL_favour_loran_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 4 compare = equals }
+			SHL_favour_nur_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 5 compare = equals }
+			SHL_favour_bayrat_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 6 compare = equals }
+			SHL_favour_kerdan_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 7 compare = equals }
+			SHL_favour_sharim_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 8 compare = equals }
+			SHL_favour_darban_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 9 compare = equals }
+			SHL_favour_veyran_open = yes
+		}
+	}
+}
+
+SHL_selected_favour_available = {
+	SHL_house_favours_open = yes
+	OR = {
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 1 compare = equals }
+			287 = { SHL_favour_ready = yes }
+			SHL_favour_arbin_price = yes
+			SHL_favour_arbin_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 2 compare = equals }
+			288 = { SHL_favour_ready = yes }
+			SHL_favour_safir_price = yes
+			SHL_favour_safir_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 3 compare = equals }
+			289 = { SHL_favour_ready = yes }
+			SHL_favour_loran_price = yes
+			SHL_favour_loran_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 4 compare = equals }
+			290 = { SHL_favour_ready = yes }
+			SHL_favour_nur_price = yes
+			SHL_favour_nur_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 5 compare = equals }
+			291 = { SHL_favour_ready = yes }
+			SHL_favour_bayrat_price = yes
+			SHL_favour_bayrat_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 6 compare = equals }
+			292 = { SHL_favour_ready = yes }
+			SHL_favour_kerdan_price = yes
+			SHL_favour_kerdan_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 7 compare = equals }
+			293 = { SHL_favour_ready = yes }
+			SHL_favour_sharim_price = yes
+			SHL_favour_sharim_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 8 compare = equals }
+			294 = { SHL_favour_ready = yes }
+			SHL_favour_darban_price = yes
+			SHL_favour_darban_open = yes
+		}
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 9 compare = equals }
+			295 = { SHL_favour_ready = yes }
+			SHL_favour_veyran_price = yes
+			SHL_favour_veyran_open = yes
+		}
+	}
+}
+
+# COUNTRY. Mission goal of SHL_house_walkout: the house came back to 55 or no
+# longer holds its furnace on Shahrabad's land.
+SHL_walkout_house_settled = {
+	OR = {
+		check_variable = { var = SHL_walkout_site value = 0 compare = less_than_or_equals }
+		AND = {
+			check_variable = { var = SHL_walkout_site value = 287 compare = equals }
+			287 = {
+				OR = {
+					NOT = { SHL_house_seated = yes }
+					check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_walkout_site value = 288 compare = equals }
+			288 = {
+				OR = {
+					NOT = { SHL_house_seated = yes }
+					check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_walkout_site value = 289 compare = equals }
+			289 = {
+				OR = {
+					NOT = { SHL_house_seated = yes }
+					check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_walkout_site value = 290 compare = equals }
+			290 = {
+				OR = {
+					NOT = { SHL_house_seated = yes }
+					check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_walkout_site value = 291 compare = equals }
+			291 = {
+				OR = {
+					NOT = { SHL_house_seated = yes }
+					check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_walkout_site value = 292 compare = equals }
+			292 = {
+				OR = {
+					NOT = { SHL_house_seated = yes }
+					check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_walkout_site value = 293 compare = equals }
+			293 = {
+				OR = {
+					NOT = { SHL_house_seated = yes }
+					check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_walkout_site value = 294 compare = equals }
+			294 = {
+				OR = {
+					NOT = { SHL_house_seated = yes }
+					check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = SHL_walkout_site value = 295 compare = equals }
+			295 = {
+				OR = {
+					NOT = { SHL_house_seated = yes }
+					check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+				}
+			}
+		}
+	}
+}
+
+# ----- Under the namestnik's seal (defeat chapter) -----
+# Opened by SHL_seal_open_chapter after a Svetlogorye victory in the South. The
+# lease terms follow the native autonomy state; only the two triggers below
+# read Svetlogorye's postwar focuses.
+
+# STATE furnace site. Recipient 4 is the namestnik's lease and its only marker.
+SHL_seal_site_leased = {
+	check_variable = { var = SHL_furnace_recipient value = 4 compare = equals }
+}
+
+# STATE furnace site named by the open petition (SHL_seal_petition_site).
+SHL_seal_petition_here = {
+	OR = {
+		AND = {
+			state = 287
+			SHL = { check_variable = { var = SHL_seal_petition_site value = 287 compare = equals } }
+		}
+		AND = {
+			state = 288
+			SHL = { check_variable = { var = SHL_seal_petition_site value = 288 compare = equals } }
+		}
+		AND = {
+			state = 289
+			SHL = { check_variable = { var = SHL_seal_petition_site value = 289 compare = equals } }
+		}
+		AND = {
+			state = 290
+			SHL = { check_variable = { var = SHL_seal_petition_site value = 290 compare = equals } }
+		}
+		AND = {
+			state = 291
+			SHL = { check_variable = { var = SHL_seal_petition_site value = 291 compare = equals } }
+		}
+		AND = {
+			state = 292
+			SHL = { check_variable = { var = SHL_seal_petition_site value = 292 compare = equals } }
+		}
+		AND = {
+			state = 293
+			SHL = { check_variable = { var = SHL_seal_petition_site value = 293 compare = equals } }
+		}
+		AND = {
+			state = 294
+			SHL = { check_variable = { var = SHL_seal_petition_site value = 294 compare = equals } }
+		}
+		AND = {
+			state = 295
+			SHL = { check_variable = { var = SHL_seal_petition_site value = 295 compare = equals } }
+		}
+	}
+}
+
+# COUNTRY SHL. The petition escrow occupies the namestnik's office for every
+# furnace until its settlement or refund clears it.
+SHL_seal_petition_free = {
+	NOT = { has_variable = SHL_seal_petition_site }
+}
+
+# COUNTRY SHL. Price of a buy-back petition (SHL_seal_refresh_terms).
+SHL_seal_buyback_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = SHL_seal_buyback_price compare = greater_than_or_equals }
+	NOT = { has_political_power < 25 }
+}
+
+SHL_seal_service_affordable = {
+	NOT = { has_political_power < 25 }
+}
+
+# COUNTRY SHL; FROM is the furnace of a new petition. Rechecked at payment.
+SHL_seal_petition_possible = {
+	SHL_country_operable = yes
+	is_subject_of = NAM
+	SHL_seal_petition_free = yes
+	FROM = {
+		SHL_seal_site_leased = yes
+		SHL_furnace_site_controlled = yes
+		NOT = { has_state_flag = SHL_seal_petition_refused }
+		NOT = { has_variable = SHL_seal_service_cycles }
+	}
+}
+
+# COUNTRY. Svetlogorye's postwar course in the South.
+SHL_seal_overlord_hardline = {
+	NAM = { has_completed_focus = NAM_pw_southern_military_rule }
+}
+
+SHL_seal_overlord_conciliatory = {
+	NAM = { has_completed_focus = NAM_pw_southern_local_offices }
+}
+
+# STATE furnace site. A lit leased furnace whose next pour can still be cooled.
+SHL_cold_shift_site_open = {
+	SHL_seal_site_leased = yes
+	SHL_furnace_site_controlled = yes
+	check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+	NOT = { has_state_flag = SHL_seal_cold_shift }
+}
+
+# COUNTRY SHL. Conditions of the rising, rechecked when it is raised.
+SHL_cold_rising_ready = {
+	SHL_country_operable = yes
+	is_subject_of = NAM
+	NOT = { has_variable = SHL_cold_rising }
+	check_variable = { var = SHL_underground_heat value = 80 compare = greater_than_or_equals }
+	699 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+	NOT = { has_variable = SHL_cold_cache_deposit }
+}
+
+# COUNTRY neighbour that can still receive a letter or a courier.
+SHL_cold_pledge_candidate = {
+	exists = yes
+	is_subject = no
+	NOT = { has_country_flag = SHL_cold_pledged }
+	NOT = { has_country_flag = SHL_cold_pledge_pending }
+	NOT = { is_in_faction_with = NAM }
+	NOT = { has_war_with = NAM }
+	NOT = { has_war_with = SHL }
+}
+
+# COUNTRY neighbour whose promise of rifles still holds when Shahrabad rises.
+SHL_cold_pledge_valid = {
+	has_country_flag = SHL_cold_pledged
+	exists = yes
+	is_subject = no
+	NOT = { is_in_faction_with = NAM }
+	NOT = { has_war_with = NAM }
+}
+
+# COUNTRY. Sides of the war of the rising (SHL_cold_rising = 1).
+SHL_cold_on_rising_side = {
+	OR = {
+		tag = SHL
+		AND = {
+			has_country_flag = SHL_cold_pledged
+			has_war_with = NAM
+		}
+	}
+}
+
+SHL_cold_on_nam_side = {
+	OR = {
+		tag = NAM
+		AND = {
+			has_war_with = SHL
+			OR = {
+				is_subject_of = NAM
+				is_in_faction_with = NAM
+			}
+		}
+	}
+}
+
+# COUNTRY SHL. Khazar is held by the rising when a third party ends the war.
+SHL_cold_capital_held_by_rising = {
+	699 = {
+		OR = {
+			is_controlled_by = SHL
+			AND = {
+				is_controlled_by = EFL
+				EFL = { has_country_flag = SHL_cold_pledged }
+			}
+			AND = {
+				is_controlled_by = AZH
+				AZH = { has_country_flag = SHL_cold_pledged }
+			}
+			AND = {
+				is_controlled_by = KYZ
+				KYZ = { has_country_flag = SHL_cold_pledged }
+			}
+			AND = {
+				is_controlled_by = GLP
+				GLP = { has_country_flag = SHL_cold_pledged }
+			}
+			AND = {
+				is_controlled_by = MZR
+				MZR = { has_country_flag = SHL_cold_pledged }
+			}
+		}
+	}
+}
+
+SHL_road_station_secured = {
+	OR = {
+		AND = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+		AND = {
+			is_owned_by = KDR
+			is_controlled_by = KDR
+		}
+	}
+}
+
+SHL_road_station_saleable = {
+	SHL_road_station_secured = yes
+	OR = {
+		is_owned_by = SHL
+		is_claimed_by = SHL
+	}
+}
+
+SHL_can_sell_road_stations = {
+	SHL_country_operable = yes
+	KDR = { exists = yes }
+	234 = { SHL_road_station_saleable = yes }
+	242 = { SHL_road_station_saleable = yes }
 }

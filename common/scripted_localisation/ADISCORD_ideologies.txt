@@ -255,100 +255,338 @@ defined_text = {
 	text = { localization_key = "[ROOT.GetTag]_hedonism_party" }
 }
 
-# The ruling party may have a scenario-specific name. Other rows use the
-# country's party localisation and fall back to the ideology for unnamed parties.
+# Cabinet names follow story appointments; other names use country culture.
 defined_text = {
-	name = GetADiscordRosterParty
+	name = GetADiscordPartyNameHumanism
 	text = {
-		trigger = { has_government = var:ADISCORD_party }
+		trigger = { has_government = humanism }
 		localization_key = "[GetRulingParty]"
 	}
-	text = {
-		trigger = {
-			check_variable = { ADISCORD_party = token:etatism }
-			has_idea = IVN_cw_military_guarantees
-			ADISCORD_party_is_coalition_member = yes
-		}
-		localization_key = IMD_etatism_party
-	}
-	text = {
-		trigger = {
-			check_variable = { ADISCORD_party = token:etatism }
-			tag = STP
-			check_variable = { var = STP_ch_security_ministry value = 1 compare = equals }
-			ADISCORD_party_is_coalition_member = yes
-		}
-		localization_key = STP_ch_leader_3
-	}
-	text = {
-		trigger = {
-			check_variable = { ADISCORD_party = token:etatism }
-			tag = STP
-			check_variable = { var = STP_ch_security_ministry value = 2 compare = equals }
-			ADISCORD_party_is_coalition_member = yes
-		}
-		localization_key = STP_pf_security_name
-	}
-	text = {
-		trigger = { check_variable = { ADISCORD_party = token:humanism } }
-		localization_key = "country_culture|humanism_party"
-	}
-	text = {
-		trigger = { check_variable = { ADISCORD_party = token:utilitarism } }
-		localization_key = "country_culture|utilitarism_party"
-	}
-	text = {
-		trigger = { check_variable = { ADISCORD_party = token:chauvinism } }
-		localization_key = "country_culture|chauvinism_party"
-	}
-	text = {
-		trigger = { check_variable = { ADISCORD_party = token:pragmatism } }
-		localization_key = "country_culture|pragmatism_party"
-	}
-	text = {
-		trigger = { check_variable = { ADISCORD_party = token:anarchism } }
-		localization_key = "country_culture|anarchism_party"
-	}
-	text = {
-		trigger = { check_variable = { ADISCORD_party = token:technocracy } }
-		localization_key = "country_culture|technocracy_party"
-	}
-	text = {
-		trigger = { check_variable = { ADISCORD_party = token:etatism } }
-		localization_key = "country_culture|etatism_party"
-	}
-	text = {
-		trigger = { check_variable = { ADISCORD_party = token:hedonism } }
-		localization_key = "country_culture|hedonism_party"
-	}
+	text = { localization_key = "country_culture|humanism_party" }
 }
 
 defined_text = {
-	name = GetADiscordPartyStatus
+	name = GetADiscordPartyStatusHumanism
 	text = {
-		trigger = { ADISCORD_party_is_banned = yes }
+		trigger = { ADISCORD_party_humanism_banned = yes }
 		localization_key = ADISCORD_party_banned
 	}
 	text = {
-		trigger = { ADISCORD_party_is_coalition_leader = yes }
+		trigger = { ADISCORD_party_humanism_leader = yes }
 		localization_key = ADISCORD_party_leader
 	}
 	text = {
-		trigger = { ADISCORD_party_is_coalition_member = yes }
+		trigger = { ADISCORD_party_humanism_member = yes }
 		localization_key = ADISCORD_party_member
 	}
 	text = {
-		trigger = { has_government = var:ADISCORD_party }
+		trigger = { has_government = humanism }
 		localization_key = ADISCORD_party_ruling
 	}
 	text = { localization_key = ADISCORD_party_opposition }
 }
 
 defined_text = {
-	name = GetADiscordPartyHover
+	name = GetADiscordPartyHoverHumanism
 	text = {
-		trigger = { ADISCORD_party_is_banned = yes }
-		localization_key = ADISCORD_party_banned_hover
+		trigger = { ADISCORD_party_humanism_banned = yes }
+		localization_key = ADISCORD_party_humanism_banned_hover
 	}
-	text = { localization_key = ADISCORD_party_details }
+	text = { localization_key = ADISCORD_party_humanism_details }
+}
+
+defined_text = {
+	name = GetADiscordPartyNameUtilitarism
+	text = {
+		trigger = { has_government = utilitarism }
+		localization_key = "[GetRulingParty]"
+	}
+	text = { localization_key = "country_culture|utilitarism_party" }
+}
+
+defined_text = {
+	name = GetADiscordPartyStatusUtilitarism
+	text = {
+		trigger = { ADISCORD_party_utilitarism_banned = yes }
+		localization_key = ADISCORD_party_banned
+	}
+	text = {
+		trigger = { ADISCORD_party_utilitarism_leader = yes }
+		localization_key = ADISCORD_party_leader
+	}
+	text = {
+		trigger = { ADISCORD_party_utilitarism_member = yes }
+		localization_key = ADISCORD_party_member
+	}
+	text = {
+		trigger = { has_government = utilitarism }
+		localization_key = ADISCORD_party_ruling
+	}
+	text = { localization_key = ADISCORD_party_opposition }
+}
+
+defined_text = {
+	name = GetADiscordPartyHoverUtilitarism
+	text = {
+		trigger = { ADISCORD_party_utilitarism_banned = yes }
+		localization_key = ADISCORD_party_utilitarism_banned_hover
+	}
+	text = { localization_key = ADISCORD_party_utilitarism_details }
+}
+
+defined_text = {
+	name = GetADiscordPartyNameChauvinism
+	text = {
+		trigger = { has_government = chauvinism }
+		localization_key = "[GetRulingParty]"
+	}
+	text = { localization_key = "country_culture|chauvinism_party" }
+}
+
+defined_text = {
+	name = GetADiscordPartyStatusChauvinism
+	text = {
+		trigger = { ADISCORD_party_chauvinism_banned = yes }
+		localization_key = ADISCORD_party_banned
+	}
+	text = {
+		trigger = { ADISCORD_party_chauvinism_leader = yes }
+		localization_key = ADISCORD_party_leader
+	}
+	text = {
+		trigger = { ADISCORD_party_chauvinism_member = yes }
+		localization_key = ADISCORD_party_member
+	}
+	text = {
+		trigger = { has_government = chauvinism }
+		localization_key = ADISCORD_party_ruling
+	}
+	text = { localization_key = ADISCORD_party_opposition }
+}
+
+defined_text = {
+	name = GetADiscordPartyHoverChauvinism
+	text = {
+		trigger = { ADISCORD_party_chauvinism_banned = yes }
+		localization_key = ADISCORD_party_chauvinism_banned_hover
+	}
+	text = { localization_key = ADISCORD_party_chauvinism_details }
+}
+
+defined_text = {
+	name = GetADiscordPartyNamePragmatism
+	text = {
+		trigger = { has_government = pragmatism }
+		localization_key = "[GetRulingParty]"
+	}
+	text = { localization_key = "country_culture|pragmatism_party" }
+}
+
+defined_text = {
+	name = GetADiscordPartyStatusPragmatism
+	text = {
+		trigger = { ADISCORD_party_pragmatism_banned = yes }
+		localization_key = ADISCORD_party_banned
+	}
+	text = {
+		trigger = { ADISCORD_party_pragmatism_leader = yes }
+		localization_key = ADISCORD_party_leader
+	}
+	text = {
+		trigger = { ADISCORD_party_pragmatism_member = yes }
+		localization_key = ADISCORD_party_member
+	}
+	text = {
+		trigger = { has_government = pragmatism }
+		localization_key = ADISCORD_party_ruling
+	}
+	text = { localization_key = ADISCORD_party_opposition }
+}
+
+defined_text = {
+	name = GetADiscordPartyHoverPragmatism
+	text = {
+		trigger = { ADISCORD_party_pragmatism_banned = yes }
+		localization_key = ADISCORD_party_pragmatism_banned_hover
+	}
+	text = { localization_key = ADISCORD_party_pragmatism_details }
+}
+
+defined_text = {
+	name = GetADiscordPartyNameAnarchism
+	text = {
+		trigger = { has_government = anarchism }
+		localization_key = "[GetRulingParty]"
+	}
+	text = { localization_key = "country_culture|anarchism_party" }
+}
+
+defined_text = {
+	name = GetADiscordPartyStatusAnarchism
+	text = {
+		trigger = { ADISCORD_party_anarchism_banned = yes }
+		localization_key = ADISCORD_party_banned
+	}
+	text = {
+		trigger = { ADISCORD_party_anarchism_leader = yes }
+		localization_key = ADISCORD_party_leader
+	}
+	text = {
+		trigger = { ADISCORD_party_anarchism_member = yes }
+		localization_key = ADISCORD_party_member
+	}
+	text = {
+		trigger = { has_government = anarchism }
+		localization_key = ADISCORD_party_ruling
+	}
+	text = { localization_key = ADISCORD_party_opposition }
+}
+
+defined_text = {
+	name = GetADiscordPartyHoverAnarchism
+	text = {
+		trigger = { ADISCORD_party_anarchism_banned = yes }
+		localization_key = ADISCORD_party_anarchism_banned_hover
+	}
+	text = { localization_key = ADISCORD_party_anarchism_details }
+}
+
+defined_text = {
+	name = GetADiscordPartyNameTechnocracy
+	text = {
+		trigger = { has_government = technocracy }
+		localization_key = "[GetRulingParty]"
+	}
+	text = { localization_key = "country_culture|technocracy_party" }
+}
+
+defined_text = {
+	name = GetADiscordPartyStatusTechnocracy
+	text = {
+		trigger = { ADISCORD_party_technocracy_banned = yes }
+		localization_key = ADISCORD_party_banned
+	}
+	text = {
+		trigger = { ADISCORD_party_technocracy_leader = yes }
+		localization_key = ADISCORD_party_leader
+	}
+	text = {
+		trigger = { ADISCORD_party_technocracy_member = yes }
+		localization_key = ADISCORD_party_member
+	}
+	text = {
+		trigger = { has_government = technocracy }
+		localization_key = ADISCORD_party_ruling
+	}
+	text = { localization_key = ADISCORD_party_opposition }
+}
+
+defined_text = {
+	name = GetADiscordPartyHoverTechnocracy
+	text = {
+		trigger = { ADISCORD_party_technocracy_banned = yes }
+		localization_key = ADISCORD_party_technocracy_banned_hover
+	}
+	text = { localization_key = ADISCORD_party_technocracy_details }
+}
+
+defined_text = {
+	name = GetADiscordPartyNameEtatism
+	text = {
+		trigger = { has_government = etatism }
+		localization_key = "[GetRulingParty]"
+	}
+	text = {
+		trigger = {
+			has_idea = IVN_cw_military_guarantees
+			ADISCORD_party_etatism_member = yes
+		}
+		localization_key = IMD_etatism_party
+	}
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = { var = STP_ch_security_ministry value = 1 compare = equals }
+			ADISCORD_party_etatism_member = yes
+		}
+		localization_key = STP_ch_leader_3
+	}
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = { var = STP_ch_security_ministry value = 2 compare = equals }
+			ADISCORD_party_etatism_member = yes
+		}
+		localization_key = STP_pf_security_name
+	}
+	text = { localization_key = "country_culture|etatism_party" }
+}
+
+defined_text = {
+	name = GetADiscordPartyStatusEtatism
+	text = {
+		trigger = { ADISCORD_party_etatism_banned = yes }
+		localization_key = ADISCORD_party_banned
+	}
+	text = {
+		trigger = { ADISCORD_party_etatism_leader = yes }
+		localization_key = ADISCORD_party_leader
+	}
+	text = {
+		trigger = { ADISCORD_party_etatism_member = yes }
+		localization_key = ADISCORD_party_member
+	}
+	text = {
+		trigger = { has_government = etatism }
+		localization_key = ADISCORD_party_ruling
+	}
+	text = { localization_key = ADISCORD_party_opposition }
+}
+
+defined_text = {
+	name = GetADiscordPartyHoverEtatism
+	text = {
+		trigger = { ADISCORD_party_etatism_banned = yes }
+		localization_key = ADISCORD_party_etatism_banned_hover
+	}
+	text = { localization_key = ADISCORD_party_etatism_details }
+}
+
+defined_text = {
+	name = GetADiscordPartyNameHedonism
+	text = {
+		trigger = { has_government = hedonism }
+		localization_key = "[GetRulingParty]"
+	}
+	text = { localization_key = "country_culture|hedonism_party" }
+}
+
+defined_text = {
+	name = GetADiscordPartyStatusHedonism
+	text = {
+		trigger = { ADISCORD_party_hedonism_banned = yes }
+		localization_key = ADISCORD_party_banned
+	}
+	text = {
+		trigger = { ADISCORD_party_hedonism_leader = yes }
+		localization_key = ADISCORD_party_leader
+	}
+	text = {
+		trigger = { ADISCORD_party_hedonism_member = yes }
+		localization_key = ADISCORD_party_member
+	}
+	text = {
+		trigger = { has_government = hedonism }
+		localization_key = ADISCORD_party_ruling
+	}
+	text = { localization_key = ADISCORD_party_opposition }
+}
+
+defined_text = {
+	name = GetADiscordPartyHoverHedonism
+	text = {
+		trigger = { ADISCORD_party_hedonism_banned = yes }
+		localization_key = ADISCORD_party_hedonism_banned_hover
+	}
+	text = { localization_key = ADISCORD_party_hedonism_details }
 }

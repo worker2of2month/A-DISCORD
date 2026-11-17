@@ -385,8 +385,8 @@ def validate_states() -> None:
             check(amount == expected, f"SHL: expected {expected} furnace deposits, found {amount}")
             continue
         check(
-            4 <= amount <= 6,
-            f"{tag}: expected a modest 4-6 starting resources, found {amount}",
+            amount == (18 if tag == "AZH" else 16),
+            f"{tag}: unexpected combined desert deposits, found {amount}",
         )
 
     for state_id, owner in sorted(LEGACY_OWNER_GAPS.items()):
@@ -943,8 +943,8 @@ def validate_countries() -> None:
         ),
         "RHM": ("GFX_portrait_RHM_Faris_Rahma", "RHM/portrait_RHM_Faris_Rahma.png"),
         "SDR": ("GFX_portrait_SDR_Hamid_Sahr", "SDR/portrait_SDR_Hamid_Sahr.png"),
-        "MZR": ("GFX_Portrait_Forul_Generic_7", None),
-        "KYZ": ("GFX_Portrait_Forul_Generic_3", None),
+        "MZR": ("GFX_portrait_MZR_Ration_Assembly", "MZR/portrait_MZR_Ration_Assembly.png"),
+        "KYZ": ("GFX_portrait_KYZ_Qanat_Assembly", "KYZ/portrait_KYZ_Qanat_Assembly.png"),
         "SHL": ("GFX_portrait_SHL_Jalil_Nur", "SHL/portrait_SHL_Jalil_Nur.png"),
         "GLP": ("GFX_portrait_GLP_Miran_Veyr", "GLP/portrait_GLP_Miran_Veyr.png"),
         "AZH": ("GFX_portrait_AZH_Samir_Azhar", "AZH/portrait_AZH_Samir_Azhar.png"),
@@ -991,12 +991,12 @@ def validate_countries() -> None:
         )
         portrait, portrait_file = portrait_profiles[tag]
         check(
-            f"large = {portrait}" in leader_block,
+            bool(re.search(rf'\bcivilian\s*=\s*\{{[^{{}}]*\blarge\s*=\s*{re.escape(portrait)}\b', leader_block)),
             f"{tag}: leader uses the wrong portrait",
         )
         if portrait_file:
             portrait_pattern = (
-                rf'name\s*=\s*"{re.escape(portrait)}"[\s\S]{{0,160}}?'
+                rf'name\s*=\s*"{re.escape(portrait)}"[^{{}}]*?'
                 rf'texturefile\s*=\s*"gfx/leaders/{re.escape(portrait_file)}"'
             )
             check(

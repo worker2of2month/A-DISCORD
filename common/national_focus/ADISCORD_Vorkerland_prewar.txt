@@ -795,6 +795,11 @@ shared_focus = {
 			add_stability = 0.02
 			ADISCORD_vorkerland_camp_committees_add_5 = yes
 			custom_effect_tooltip = WRK_committee_bagley_executive_heir_tt
+			custom_effect_tooltip = WRK_bagley_cabinet_tt
+			hidden_effect = {
+				set_temp_variable = { ADISCORD_party = token:utilitarism }
+				ADISCORD_admit_coalition_party = yes
+			}
 		}
 		ai_will_do = { base = 4 }
 	}

@@ -175,11 +175,13 @@ SHL_run_cycle = {
 }
 
 SHL_produce_period = {
+	clear_variable = SHL_convoy_dispatch
 	SHL_refresh_delivery_terms = yes
 	SHL_ai_allocate_deliveries = yes
 	SHL_reconcile_obligation = yes
 	clear_variable = SHL_tenth_crest_delivered
 	set_variable = { var = SHL_last_cycle_income value = 0 }
+	set_variable = { var = SHL_seal_cycle_lease value = 0 }
 	set_variable = { var = SHL_cycle_idle_sites value = 0 }
 	add_to_variable = { var = SHL_cycle_number value = 1 }
 	# The metal exchange quotes one price per cycle; the cartel keeps 60.
@@ -269,6 +271,19 @@ SHL_produce_period = {
 		}
 		clamp_variable = { var = SHL_tenth_wear min = 0 max = 100 }
 	}
+	# Kerdan's paid Veyr duty covers this production of all ten furnaces; the
+	# second countdown ends the exemption before the next cycle is priced.
+	if = {
+		limit = { 292 = { check_variable = { var = SHL_duty_paid_cycles value = 0 compare = greater_than } } }
+		292 = {
+			subtract_from_variable = { var = SHL_duty_paid_cycles value = 1 }
+			if = {
+				limit = { check_variable = { var = SHL_duty_paid_cycles value = 0 compare = less_than_or_equals } }
+				clear_variable = SHL_duty_paid_cycles
+			}
+		}
+		SHL_refresh_income_deduction = yes
+	}
 	# Deliver relief after all nine sites, so recipient order cannot grant a free cycle.
 	if = {
 		limit = { check_variable = { var = SHL_obligation_progress value = 2 compare = greater_than_or_equals } }
@@ -287,8 +302,13 @@ SHL_produce_period = {
 		limit = { check_variable = { var = SHL_metal_clients value = 0 compare = greater_than } }
 		SHL_metal_settle_clients = yes
 	}
-	# District and treaty income of the second-row focuses: once per cycle, in
-	# country scope, never through the nine site scopes above. May be negative.
+	# A war indemnity is paid from the furnaces lit in this cycle.
+	if = {
+		limit = { has_variable = SHL_indemnity_due }
+		SHL_pay_indemnity = yes
+	}
+	# District, treaty and retainer income of the second-row focuses: once per
+	# cycle, in country scope, never through the nine site scopes above. May be negative.
 	add_to_variable = { var = ADISCORD_economy_treasury value = SHL_cycle_bonus_income }
 	if = {
 		limit = { check_variable = { var = SHL_cycle_bonus_income value = 0 compare = greater_than_or_equals } }
@@ -298,18 +318,23 @@ SHL_produce_period = {
 		subtract_from_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_cycle_bonus_income }
 	}
 	add_to_variable = { var = SHL_last_cycle_income value = SHL_cycle_bonus_income }
+	# The defeat chapter settles its terms, loan and underground after the furnaces.
+	SHL_seal_cycle = yes
 }
 
 SHL_produce_site = {
-	clear_variable = SHL_crest_delivered
 	if = {
 		limit = {
 			SHL_furnace_site_controlled = yes
 			check_variable = { var = SHL_furnace_running value = 1 compare = equals }
 		}
-		# A mobilisation quota overrides any recipient chosen in the meantime.
+		# A mobilisation quota overrides any recipient chosen in the meantime,
+		# but never the namestnik's lease.
 		if = {
-			limit = { has_state_flag = SHL_quota_site }
+			limit = {
+				has_state_flag = SHL_quota_site
+				NOT = { SHL_seal_site_leased = yes }
+			}
 			set_variable = { var = SHL_furnace_recipient value = 1 }
 		}
 		set_variable = { var = SHL_period_cost value = 1 }
@@ -392,6 +417,8 @@ SHL_produce_site = {
 		else = {
 			add_to_variable = { var = SHL_furnace_shortages value = 1 }
 			add_to_variable = { var = SHL_furnace_wear value = 12 }
+			SHL = { set_variable = { var = SHL_loyalty_delta value = -3 } }
+			SHL_house_furnace_penalty = yes
 			SHL = {
 				add_to_variable = { var = SHL_cycle_idle_sites value = 1 }
 				if = {
@@ -402,6 +429,11 @@ SHL_produce_site = {
 			}
 		}
 		clamp_variable = { var = SHL_furnace_wear min = 0 max = 100 }
+		if = {
+			limit = { check_variable = { var = SHL_furnace_wear value = 60 compare = greater_than_or_equals } }
+			SHL = { set_variable = { var = SHL_loyalty_delta value = -3 } }
+			SHL_house_furnace_penalty = yes
+		}
 		if = {
 			limit = {
 				check_variable = { var = SHL_furnace_wear value = 90 compare = greater_than_or_equals }
@@ -423,6 +455,15 @@ SHL_produce_site = {
 			}
 			SHL_extinguish_site = yes
 		}
+	}
+	else_if = {
+		# An occupied district of Shahrabad costs its house every cycle.
+		limit = {
+			is_owned_by = SHL
+			NOT = { is_controlled_by = SHL }
+		}
+		SHL = { set_variable = { var = SHL_loyalty_delta value = -5 } }
+		SHL_apply_house_loyalty = yes
 	}
 	# A one-cycle war order releases its arsenal quota and restores the chosen recipient.
 	if = {
@@ -448,7 +489,11 @@ SHL_extinguish_site = {
 		if = {
 			limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
 			set_variable = { var = SHL_furnace_owner value = 1 }
-			SHL = { add_to_variable = { var = SHL_city_support value = 5 } }
+			SHL = {
+				add_to_variable = { var = SHL_city_support value = 5 }
+				set_variable = { var = SHL_loyalty_delta value = -10 }
+			}
+			SHL_apply_house_loyalty = yes
 		}
 		SHL = {
 			add_to_variable = { var = SHL_unrest value = 5 }
@@ -694,7 +739,10 @@ SHL_refresh_furnaces = {
 					set_variable = { var = SHL_status_1 value = 1 }
 				}
 				if = {
-					limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+					limit = {
+						check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+						NOT = { has_state_flag = SHL_house_opposed }
+					}
 					SHL = { add_to_variable = { var = SHL_house_votes value = 1 } }
 				}
 			}
@@ -718,7 +766,10 @@ SHL_refresh_furnaces = {
 					set_variable = { var = SHL_status_2 value = 1 }
 				}
 				if = {
-					limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+					limit = {
+						check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+						NOT = { has_state_flag = SHL_house_opposed }
+					}
 					SHL = { add_to_variable = { var = SHL_house_votes value = 1 } }
 				}
 			}
@@ -742,7 +793,10 @@ SHL_refresh_furnaces = {
 					set_variable = { var = SHL_status_3 value = 1 }
 				}
 				if = {
-					limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+					limit = {
+						check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+						NOT = { has_state_flag = SHL_house_opposed }
+					}
 					SHL = { add_to_variable = { var = SHL_house_votes value = 1 } }
 				}
 			}
@@ -766,7 +820,10 @@ SHL_refresh_furnaces = {
 					set_variable = { var = SHL_status_4 value = 1 }
 				}
 				if = {
-					limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+					limit = {
+						check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+						NOT = { has_state_flag = SHL_house_opposed }
+					}
 					SHL = { add_to_variable = { var = SHL_house_votes value = 1 } }
 				}
 			}
@@ -790,7 +847,10 @@ SHL_refresh_furnaces = {
 					set_variable = { var = SHL_status_5 value = 1 }
 				}
 				if = {
-					limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+					limit = {
+						check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+						NOT = { has_state_flag = SHL_house_opposed }
+					}
 					SHL = { add_to_variable = { var = SHL_house_votes value = 1 } }
 				}
 			}
@@ -814,7 +874,10 @@ SHL_refresh_furnaces = {
 					set_variable = { var = SHL_status_6 value = 1 }
 				}
 				if = {
-					limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+					limit = {
+						check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+						NOT = { has_state_flag = SHL_house_opposed }
+					}
 					SHL = { add_to_variable = { var = SHL_house_votes value = 1 } }
 				}
 			}
@@ -838,7 +901,10 @@ SHL_refresh_furnaces = {
 					set_variable = { var = SHL_status_7 value = 1 }
 				}
 				if = {
-					limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+					limit = {
+						check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+						NOT = { has_state_flag = SHL_house_opposed }
+					}
 					SHL = { add_to_variable = { var = SHL_house_votes value = 1 } }
 				}
 			}
@@ -862,7 +928,10 @@ SHL_refresh_furnaces = {
 					set_variable = { var = SHL_status_8 value = 1 }
 				}
 				if = {
-					limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+					limit = {
+						check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+						NOT = { has_state_flag = SHL_house_opposed }
+					}
 					SHL = { add_to_variable = { var = SHL_house_votes value = 1 } }
 				}
 			}
@@ -886,7 +955,10 @@ SHL_refresh_furnaces = {
 					set_variable = { var = SHL_status_9 value = 1 }
 				}
 				if = {
-					limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+					limit = {
+						check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+						NOT = { has_state_flag = SHL_house_opposed }
+					}
 					SHL = { add_to_variable = { var = SHL_house_votes value = 1 } }
 				}
 			}
@@ -928,6 +1000,7 @@ SHL_refresh_furnaces = {
 	}
 	SHL_refresh_income_deduction = yes
 	SHL_refresh_delivery_terms = yes
+	SHL_refresh_house_pressure = yes
 	SHL_refresh_delivery_support = yes
 	SHL_refresh_selected_furnace = yes
 	if = {
@@ -1400,7 +1473,63 @@ SHL_refresh_selected_furnace = {
 		}
 		set_variable = { var = SHL_selected_order value = 1 }
 	}
-	clear_variable = SHL_selected_state
+	if = {
+		limit = { check_variable = { var = SHL_selected_furnace value = 10 compare = equals } }
+		set_variable = { var = SHL_selected_state value = 294 }
+	}
+	SHL_refresh_selected_loyalty = yes
+}
+
+SHL_dispatch_ore = {
+	if = {
+		limit = { SHL_can_dispatch_ore = yes }
+		291 = { subtract_from_variable = { var = SHL_furnace_stock value = 1 } }
+		if = {
+			limit = { check_variable = { var = SHL_selected_furnace value = 10 compare = equals } }
+			add_to_variable = { var = SHL_tenth_stock value = 1 }
+		}
+		else = {
+			var:SHL_selected_state = { add_to_variable = { var = SHL_furnace_stock value = 1 } }
+		}
+		set_variable = { var = SHL_convoy_dispatch value = 1 }
+		SHL_refresh_furnaces = yes
+	}
+}
+
+SHL_dispatch_masons = {
+	if = {
+		limit = { SHL_can_dispatch_masons = yes }
+		294 = { subtract_from_variable = { var = SHL_furnace_stock value = 1 } }
+		if = {
+			limit = { check_variable = { var = SHL_selected_furnace value = 10 compare = equals } }
+			subtract_from_variable = { var = SHL_tenth_wear value = 15 }
+		}
+		else = {
+			var:SHL_selected_state = { subtract_from_variable = { var = SHL_furnace_wear value = 15 } }
+		}
+		set_variable = { var = SHL_convoy_dispatch value = 2 }
+		SHL_refresh_furnaces = yes
+	}
+}
+
+SHL_dispatch_sale = {
+	if = {
+		limit = { SHL_can_dispatch_sale = yes }
+		if = {
+			limit = { check_variable = { var = SHL_selected_furnace value = 10 compare = equals } }
+			subtract_from_variable = { var = SHL_tenth_stock value = 1 }
+		}
+		else = {
+			var:SHL_selected_state = { subtract_from_variable = { var = SHL_furnace_stock value = 1 } }
+		}
+		add_to_variable = { var = ADISCORD_economy_treasury value = 40 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 40 }
+		set_variable = { var = SHL_loyalty_delta value = -3 }
+		SHL_change_all_loyalty = yes
+		SHL_clamp_tensions = yes
+		set_variable = { var = SHL_convoy_dispatch value = 3 }
+		SHL_refresh_furnaces = yes
+	}
 }
 
 SHL_commit_house_course = {
@@ -1410,7 +1539,8 @@ SHL_commit_house_course = {
 		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_treasury_capacity_bonus value = 0.10 }
 		add_to_variable = { var = SHL_unrest value = 10 }
-		subtract_from_variable = { var = SHL_house_pressure value = 15 }
+		set_variable = { var = SHL_loyalty_delta value = 15 }
+		SHL_change_all_loyalty = yes
 		set_temp_variable = { var = SHL_balance_shift value = -0.15 }
 		SHL_balance_shift = yes
 		SHL_clamp_tensions = yes
@@ -1420,6 +1550,8 @@ SHL_commit_house_course = {
 			set_cosmetic_tag = SHL_conclave_of_ten
 			SHL_update_ruler_portrait = yes
 			SHL_announce_course_news = yes
+			# Course sections and war-tree course branches read SHL_political_course in allow_branch.
+			mark_focus_tree_layout_dirty = yes
 		}
 	}
 	SHL_party_representatives_house = yes
@@ -1452,9 +1584,16 @@ SHL_commit_city_course = {
 	if = {
 		limit = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
 		set_variable = { var = SHL_political_course value = 2 }
+		set_temp_variable = { ADISCORD_party = token:anarchism }
+		ADISCORD_legalise_party = yes
 		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_course_stability value = 0.03 }
-		add_to_variable = { var = SHL_house_pressure value = 15 }
+		set_variable = { var = SHL_loyalty_delta value = -15 }
+		SHL_change_all_loyalty = yes
+		# Arbin is the house of the city course's leader.
+		set_variable = { var = SHL_loyalty_site value = 287 }
+		set_variable = { var = SHL_loyalty_delta value = 15 }
+		SHL_change_site_loyalty = yes
 		set_temp_variable = { var = SHL_balance_shift value = 0.15 }
 		SHL_balance_shift = yes
 		SHL_clamp_tensions = yes
@@ -1531,6 +1670,8 @@ SHL_commit_city_course = {
 			set_cosmetic_tag = SHL_southern_compact
 			SHL_update_ruler_portrait = yes
 			SHL_announce_course_news = yes
+			# Course sections and war-tree course branches read SHL_political_course in allow_branch.
+			mark_focus_tree_layout_dirty = yes
 		}
 	}
 	SHL_party_representatives_city = yes
@@ -1542,7 +1683,12 @@ SHL_commit_state_course = {
 		set_variable = { var = SHL_political_course value = 3 }
 		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_pp_gain value = 0.10 }
-		add_to_variable = { var = SHL_house_pressure value = 20 }
+		set_variable = { var = SHL_loyalty_delta value = -20 }
+		SHL_change_all_loyalty = yes
+		# Darban's dispatcher runs the directorate.
+		set_variable = { var = SHL_loyalty_site value = 294 }
+		set_variable = { var = SHL_loyalty_delta value = 20 }
+		SHL_change_site_loyalty = yes
 		SHL_clamp_tensions = yes
 		287 = {
 			if = {
@@ -1636,6 +1782,8 @@ SHL_commit_state_course = {
 			SHL_update_ruler_portrait = yes
 			SHL_queue_furnace_administrations = yes
 			SHL_announce_course_news = yes
+			# Course sections and war-tree course branches read SHL_political_course in allow_branch.
+			mark_focus_tree_layout_dirty = yes
 		}
 	}
 	SHL_party_representatives_state = yes
@@ -1658,6 +1806,16 @@ SHL_abort_annexed_operations = {
 	clear_variable = SHL_regent_guard_deposit
 	clear_variable = SHL_shift_school_deposit
 	clear_variable = SHL_brotherly_donor
+	SHL_clear_indemnity = yes
+	SHL_clear_terms_candidates = yes
+	clear_variable = SHL_terms_war
+	clr_country_flag = SHL_terms_pending
+	clear_variable = SHL_redemption_deposit
+	clear_variable = SHL_redemption_pp
+	clr_country_flag = SHL_redemption_pending
+	clear_variable = SHL_return_neighbour
+	SHL_cancel_house_walkout = yes
+	292 = { clear_variable = SHL_duty_paid_cycles }
 	287 = {
 		clear_variable = SHL_operation_deposit
 		clear_variable = SHL_operation_pp
@@ -1713,7 +1871,6 @@ SHL_abort_annexed_operations = {
 
 SHL_initialize_tensions = {
 	set_variable = { var = SHL_unrest value = 25 }
-	set_variable = { var = SHL_house_pressure value = 20 }
 	set_variable = { var = SHL_strike_ready_cycle value = 0 }
 	set_variable = { var = SHL_conspiracy_ready_cycle value = 0 }
 	set_variable = { var = SHL_accident_ready_cycle value = 0 }
@@ -1725,11 +1882,21 @@ SHL_initialize_tensions = {
 	set_variable = { var = SHL_war_kyz value = 0 }
 	set_variable = { var = SHL_war_glp value = 0 }
 	set_variable = { var = SHL_income_deduction value = 0 }
+	# The starting loyalties average 80, a pressure of 20.
+	287 = { set_variable = { var = SHL_house_loyalty value = 72 } }
+	288 = { set_variable = { var = SHL_house_loyalty value = 90 } }
+	289 = { set_variable = { var = SHL_house_loyalty value = 88 } }
+	290 = { set_variable = { var = SHL_house_loyalty value = 95 } }
+	291 = { set_variable = { var = SHL_house_loyalty value = 82 } }
+	292 = { set_variable = { var = SHL_house_loyalty value = 75 } }
+	293 = { set_variable = { var = SHL_house_loyalty value = 68 } }
+	294 = { set_variable = { var = SHL_house_loyalty value = 85 } }
+	295 = { set_variable = { var = SHL_house_loyalty value = 65 } }
+	SHL_refresh_house_pressure = yes
 }
 
 SHL_clamp_tensions = {
 	clamp_variable = { var = SHL_unrest min = 0 max = 100 }
-	clamp_variable = { var = SHL_house_pressure min = 0 max = 100 }
 	clamp_variable = { var = SHL_city_support min = 0 max = 100 }
 	add_to_variable = { var = SHL_gui_dirty value = 1 }
 }
@@ -1799,7 +1966,10 @@ SHL_balance_shift = {
 SHL_refresh_income_deduction = {
 	set_variable = { var = SHL_income_deduction value = 0 }
 	if = {
-		limit = { check_variable = { var = SHL_veyr_crisis value = 1 compare = equals } }
+		limit = {
+			check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+			NOT = { 292 = { check_variable = { var = SHL_duty_paid_cycles value = 0 compare = greater_than } } }
+		}
 		add_to_variable = { var = SHL_income_deduction value = 5 }
 	}
 	if = {
@@ -1812,8 +1982,767 @@ SHL_refresh_income_deduction = {
 	}
 }
 
-# Runs once after each settled production period.
+# ----- House loyalty -----
+# SHL_house_loyalty (0-100) on the nine furnace states is the loyalty of the
+# house of that district. Only SHL_initialize_tensions and
+# SHL_change_house_loyalty write it. SHL_house_pressure is 100 minus the mean
+# loyalty of the houses on owned land and has one writer,
+# SHL_refresh_house_pressure: a change applied to every owned house moves the
+# pressure by exactly the opposite amount, up to clamping at 0 and 100. A lost
+# district keeps its stored loyalty outside the mean until it is regained.
+
+# STATE. Input: SHL.SHL_loyalty_delta. Only initialised houses change.
+SHL_change_house_loyalty = {
+	if = {
+		limit = { has_variable = SHL_house_loyalty }
+		add_to_variable = { var = SHL_house_loyalty value = SHL.SHL_loyalty_delta }
+		clamp_variable = { var = SHL_house_loyalty min = 0 max = 100 }
+	}
+}
+
+SHL_change_owned_house_loyalty = {
+	if = {
+		limit = { is_owned_by = SHL }
+		SHL_change_house_loyalty = yes
+	}
+}
+
+# STATE. Consumes SHL.SHL_loyalty_delta for this house; the caller's furnace
+# refresh updates the pressure once after its loop.
+SHL_apply_house_loyalty = {
+	SHL_change_owned_house_loyalty = yes
+	SHL = { clear_variable = SHL_loyalty_delta }
+}
+
+# COUNTRY SHL. Input: SHL_loyalty_delta for every house on owned land.
+SHL_change_all_loyalty = {
+	287 = { SHL_change_owned_house_loyalty = yes }
+	288 = { SHL_change_owned_house_loyalty = yes }
+	289 = { SHL_change_owned_house_loyalty = yes }
+	290 = { SHL_change_owned_house_loyalty = yes }
+	291 = { SHL_change_owned_house_loyalty = yes }
+	292 = { SHL_change_owned_house_loyalty = yes }
+	293 = { SHL_change_owned_house_loyalty = yes }
+	294 = { SHL_change_owned_house_loyalty = yes }
+	295 = { SHL_change_owned_house_loyalty = yes }
+	clear_variable = SHL_loyalty_delta
+	SHL_refresh_house_pressure = yes
+}
+
+# COUNTRY SHL. Inputs: SHL_loyalty_site (287-295) and SHL_loyalty_delta.
+SHL_change_site_loyalty = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_loyalty_site value = 287 compare = greater_than_or_equals }
+			check_variable = { var = SHL_loyalty_site value = 295 compare = less_than_or_equals }
+		}
+		var:SHL_loyalty_site = { SHL_change_owned_house_loyalty = yes }
+	}
+	clear_variable = SHL_loyalty_site
+	clear_variable = SHL_loyalty_delta
+	SHL_refresh_house_pressure = yes
+}
+
+# COUNTRY SHL. Input: SHL_loyalty_delta for the three houses of the qanat border.
+SHL_change_qanat_houses_loyalty = {
+	287 = { SHL_change_owned_house_loyalty = yes }
+	288 = { SHL_change_owned_house_loyalty = yes }
+	289 = { SHL_change_owned_house_loyalty = yes }
+	clear_variable = SHL_loyalty_delta
+	SHL_refresh_house_pressure = yes
+}
+
+# COUNTRY SHL. Input: SHL_loyalty_delta for Kerdan's sea road and Veyran's guards.
+SHL_change_port_houses_loyalty = {
+	292 = { SHL_change_owned_house_loyalty = yes }
+	295 = { SHL_change_owned_house_loyalty = yes }
+	clear_variable = SHL_loyalty_delta
+	SHL_refresh_house_pressure = yes
+}
+
+# COUNTRY SHL. Input: SHL_loyalty_delta for the house of the flagged accident
+# site; ADISCORD_SHL.40 calls it before SHL_resolve_accident clears the flag.
+SHL_change_accident_loyalty = {
+	287 = { SHL_change_accident_site_loyalty = yes }
+	288 = { SHL_change_accident_site_loyalty = yes }
+	289 = { SHL_change_accident_site_loyalty = yes }
+	290 = { SHL_change_accident_site_loyalty = yes }
+	291 = { SHL_change_accident_site_loyalty = yes }
+	292 = { SHL_change_accident_site_loyalty = yes }
+	293 = { SHL_change_accident_site_loyalty = yes }
+	294 = { SHL_change_accident_site_loyalty = yes }
+	295 = { SHL_change_accident_site_loyalty = yes }
+	clear_variable = SHL_loyalty_delta
+	SHL_refresh_house_pressure = yes
+}
+
+SHL_change_accident_site_loyalty = {
+	if = {
+		limit = { has_state_flag = SHL_accident_site }
+		SHL_change_owned_house_loyalty = yes
+	}
+}
+
+# COUNTRY SHL. The only writer of SHL_house_pressure. The commune has no crests
+# and an empty hall has no pressure.
+SHL_refresh_house_pressure = {
+	set_variable = { var = SHL_loyalty_sum value = 0 }
+	set_variable = { var = SHL_loyalty_houses value = 0 }
+	287 = { SHL_count_house_loyalty = yes }
+	288 = { SHL_count_house_loyalty = yes }
+	289 = { SHL_count_house_loyalty = yes }
+	290 = { SHL_count_house_loyalty = yes }
+	291 = { SHL_count_house_loyalty = yes }
+	292 = { SHL_count_house_loyalty = yes }
+	293 = { SHL_count_house_loyalty = yes }
+	294 = { SHL_count_house_loyalty = yes }
+	295 = { SHL_count_house_loyalty = yes }
+	set_variable = { var = SHL_house_pressure value = 0 }
+	if = {
+		limit = {
+			check_variable = { var = SHL_loyalty_houses value = 0 compare = greater_than }
+			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		}
+		set_variable = { var = SHL_house_pressure value = SHL_loyalty_sum }
+		divide_variable = { var = SHL_house_pressure value = SHL_loyalty_houses }
+		multiply_variable = { var = SHL_house_pressure value = -1 }
+		add_to_variable = { var = SHL_house_pressure value = 100 }
+	}
+	clear_variable = SHL_loyalty_sum
+	SHL_refresh_selected_loyalty = yes
+	add_to_variable = { var = SHL_gui_dirty value = 1 }
+}
+
+# STATE scope; PREV is SHL.
+SHL_count_house_loyalty = {
+	if = {
+		limit = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+		}
+		SHL = {
+			add_to_variable = { var = SHL_loyalty_sum value = PREV.SHL_house_loyalty }
+			add_to_variable = { var = SHL_loyalty_houses value = 1 }
+		}
+	}
+}
+
+# COUNTRY SHL. GUI mirror of the selected card; the tenth furnace has no house.
+SHL_refresh_selected_loyalty = {
+	set_variable = { var = SHL_selected_loyalty value = 0 }
+	if = {
+		limit = {
+			check_variable = { var = SHL_selected_furnace value = 9 compare = less_than_or_equals }
+			check_variable = { var = SHL_selected_state value = 287 compare = greater_than_or_equals }
+			check_variable = { var = SHL_selected_state value = 295 compare = less_than_or_equals }
+		}
+		var:SHL_selected_state = {
+			PREV = { set_variable = { var = SHL_selected_loyalty value = PREV.SHL_house_loyalty } }
+		}
+	}
+}
+
+# COUNTRY SHL. Inputs SHL_rate_recipient and SHL_rate_owner of a producing
+# site; output SHL_rate_loyalty for its house. Production and the forecast
+# read the same rule, so the preview equals the applied change. A crest
+# delivery compensates the house even after its furnace changed owner.
+SHL_site_loyalty_rate = {
+	set_variable = { var = SHL_rate_loyalty value = 0 }
+	if = {
+		limit = {
+			check_variable = { var = SHL_rate_recipient value = 3 compare = equals }
+			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		}
+		set_variable = { var = SHL_rate_loyalty value = SHL_delivery_loyalty }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_rate_owner value = 0 compare = equals } }
+		if = {
+			limit = { check_variable = { var = SHL_rate_recipient value = 0 compare = equals } }
+			add_to_variable = { var = SHL_rate_loyalty value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_rate_recipient value = 1 compare = equals } }
+			subtract_from_variable = { var = SHL_rate_loyalty value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_rate_recipient value = 2 compare = equals } }
+			subtract_from_variable = { var = SHL_rate_loyalty value = 2 }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_shift_policy value = 1 compare = equals } }
+			subtract_from_variable = { var = SHL_rate_loyalty value = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_shift_policy value = 2 compare = equals } }
+			add_to_variable = { var = SHL_rate_loyalty value = 1 }
+		}
+	}
+}
+
+SHL_clear_loyalty_rate = {
+	clear_variable = SHL_rate_recipient
+	clear_variable = SHL_rate_owner
+	clear_variable = SHL_rate_loyalty
+}
+
+# STATE scope; PREV is SHL. The site's own delivery, after its stock was used.
+SHL_apply_site_loyalty_rate = {
+	SHL = {
+		set_variable = { var = SHL_rate_recipient value = PREV.SHL_furnace_recipient }
+		set_variable = { var = SHL_rate_owner value = PREV.SHL_furnace_owner }
+		SHL_site_loyalty_rate = yes
+		set_variable = { var = SHL_loyalty_delta value = SHL_rate_loyalty }
+		SHL_clear_loyalty_rate = yes
+	}
+	SHL_apply_house_loyalty = yes
+}
+
+# STATE scope; PREV is SHL. Fixed production penalties of a house-held furnace.
+SHL_house_furnace_penalty = {
+	if = {
+		limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
+		SHL_apply_house_loyalty = yes
+	}
+	SHL = { clear_variable = SHL_loyalty_delta }
+}
+
+# ----- The walkout of a house -----
+# SHL_walkout_site (0 or 287-295) is the only pending marker. The cycle tick
+# sets it and fires ADISCORD_SHL.141, which starts the 56-day mission
+# SHL_house_walkout or buys the house back. Every terminal path resets it.
+
+# COUNTRY SHL. The lowest loyalty below 40 among lit, seated houses outside opposition.
+SHL_pick_restless_house = {
+	set_variable = { var = SHL_pick_site value = 0 }
+	set_variable = { var = SHL_pick_loyalty value = 40 }
+	287 = { SHL_consider_restless_house = yes }
+	288 = { SHL_consider_restless_house = yes }
+	289 = { SHL_consider_restless_house = yes }
+	290 = { SHL_consider_restless_house = yes }
+	291 = { SHL_consider_restless_house = yes }
+	292 = { SHL_consider_restless_house = yes }
+	293 = { SHL_consider_restless_house = yes }
+	294 = { SHL_consider_restless_house = yes }
+	295 = { SHL_consider_restless_house = yes }
+	set_variable = { var = SHL_walkout_site value = SHL_pick_site }
+	clear_variable = SHL_pick_site
+	clear_variable = SHL_pick_loyalty
+}
+
+# STATE scope; PREV is SHL.
+SHL_consider_restless_house = {
+	if = {
+		limit = {
+			SHL_house_restless = yes
+			check_variable = { var = SHL_house_loyalty value = SHL.SHL_pick_loyalty compare = less_than }
+		}
+		SHL = { set_variable = { var = SHL_pick_loyalty value = PREV.SHL_house_loyalty } }
+		SHL_record_pick_site = yes
+	}
+}
+
+# COUNTRY SHL. Output SHL_loyalty_site: the least loyal house below 80 on owned
+# land other than Nur's own.
+SHL_pick_mediation_house = {
+	set_variable = { var = SHL_pick_site value = 0 }
+	set_variable = { var = SHL_pick_loyalty value = 80 }
+	287 = { SHL_consider_mediation_house = yes }
+	288 = { SHL_consider_mediation_house = yes }
+	289 = { SHL_consider_mediation_house = yes }
+	291 = { SHL_consider_mediation_house = yes }
+	292 = { SHL_consider_mediation_house = yes }
+	293 = { SHL_consider_mediation_house = yes }
+	294 = { SHL_consider_mediation_house = yes }
+	295 = { SHL_consider_mediation_house = yes }
+	set_variable = { var = SHL_loyalty_site value = SHL_pick_site }
+	clear_variable = SHL_pick_site
+	clear_variable = SHL_pick_loyalty
+}
+
+# STATE scope; PREV is SHL.
+SHL_consider_mediation_house = {
+	if = {
+		limit = {
+			is_owned_by = SHL
+			has_variable = SHL_house_loyalty
+			check_variable = { var = SHL_house_loyalty value = SHL.SHL_pick_loyalty compare = less_than }
+		}
+		SHL = { set_variable = { var = SHL_pick_loyalty value = PREV.SHL_house_loyalty } }
+		SHL_record_pick_site = yes
+	}
+}
+
+# COUNTRY SHL, from SHL_update_tensions. One walkout at a time.
+SHL_house_walkout_tick = {
+	if = {
+		limit = {
+			SHL_country_operable = yes
+			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			NOT = { has_active_mission = SHL_house_walkout }
+			check_variable = { var = SHL_walkout_site value = 0 compare = less_than_or_equals }
+		}
+		SHL_pick_restless_house = yes
+		if = {
+			limit = { check_variable = { var = SHL_walkout_site value = 0 compare = greater_than } }
+			country_event = { id = ADISCORD_SHL.141 }
+		}
+	}
+}
+
+# COUNTRY SHL. A house that walked out or lost a demand returns early once its
+# loyalty reaches 55; a quarter's opposition is left to its own 180 days.
+SHL_house_return_tick = {
+	set_variable = { var = SHL_houses_returned value = 0 }
+	287 = { SHL_house_return_site = yes }
+	288 = { SHL_house_return_site = yes }
+	289 = { SHL_house_return_site = yes }
+	290 = { SHL_house_return_site = yes }
+	291 = { SHL_house_return_site = yes }
+	292 = { SHL_house_return_site = yes }
+	293 = { SHL_house_return_site = yes }
+	294 = { SHL_house_return_site = yes }
+	295 = { SHL_house_return_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_houses_returned value = 0 compare = greater_than } }
+		SHL_refresh_furnaces = yes
+	}
+	clear_variable = SHL_houses_returned
+}
+
+# STATE scope; PREV is SHL.
+SHL_house_return_site = {
+	if = {
+		limit = {
+			SHL_house_seated = yes
+			has_state_flag = SHL_house_opposed
+			check_variable = { var = SHL_house_loyalty value = 55 compare = greater_than_or_equals }
+		}
+		clr_state_flag = SHL_house_opposed
+		SHL = {
+			add_to_variable = { var = SHL_houses_returned value = 1 }
+			set_temp_variable = { var = SHL_balance_shift value = -0.05 }
+			SHL_balance_shift = yes
+		}
+	}
+}
+
+# ADISCORD_SHL.141.a, also the unattended answer.
+SHL_start_house_walkout = {
+	if = {
+		limit = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_walkout_site value = 0 compare = greater_than }
+			NOT = { has_active_mission = SHL_house_walkout }
+		}
+		activate_mission = SHL_house_walkout
+	}
+	else_if = {
+		limit = { NOT = { has_active_mission = SHL_house_walkout } }
+		SHL_close_house_walkout = yes
+	}
+}
+
+# ADISCORD_SHL.141.b: 100 treasury and 25 PP, rechecked at the answer; a
+# shortfall starts the mission instead of charging part of the price.
+SHL_house_walkout_buyback = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_walkout_site value = 0 compare = greater_than }
+			NOT = { has_active_mission = SHL_house_walkout }
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			NOT = { has_political_power < 25 }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		add_political_power = -25
+		set_variable = { var = SHL_loyalty_site value = SHL_walkout_site }
+		set_variable = { var = SHL_loyalty_delta value = 20 }
+		SHL_change_site_loyalty = yes
+		SHL_close_house_walkout = yes
+		ADISCORD_economy_mark_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+	else = { SHL_start_house_walkout = yes }
+}
+
+SHL_close_house_walkout = {
+	set_variable = { var = SHL_walkout_site value = 0 }
+	add_to_variable = { var = SHL_gui_dirty value = 1 }
+}
+
+# Mission success: a house that still holds its furnace gains 5 more.
+SHL_house_walkout_settled = {
+	if = {
+		limit = { check_variable = { var = SHL_walkout_site value = 0 compare = greater_than } }
+		set_variable = { var = SHL_loyalty_delta value = 5 }
+		var:SHL_walkout_site = {
+			if = {
+				limit = { SHL_house_seated = yes }
+				SHL_change_house_loyalty = yes
+			}
+		}
+		clear_variable = SHL_loyalty_delta
+	}
+	SHL_close_house_walkout = yes
+	SHL_refresh_house_pressure = yes
+}
+
+# Mission timeout: the house leaves the hall for 180 days.
+SHL_house_walkout_timeout = {
+	if = {
+		limit = { check_variable = { var = SHL_walkout_site value = 0 compare = greater_than } }
+		var:SHL_walkout_site = {
+			if = {
+				limit = { SHL_house_seated = yes }
+				SHL_mark_site_opposed = yes
+			}
+		}
+		set_temp_variable = { var = SHL_balance_shift value = 0.05 }
+		SHL_balance_shift = yes
+	}
+	SHL_close_house_walkout = yes
+	SHL_refresh_furnaces = yes
+}
+
+# Commune and annexation: no house is left to return.
+SHL_cancel_house_walkout = {
+	if = {
+		limit = { has_active_mission = SHL_house_walkout }
+		remove_mission = SHL_house_walkout
+	}
+	SHL_close_house_walkout = yes
+}
+
+# ----- House favours -----
+# Each favour is an instant decision on its house's own district. The furnace
+# card button activates it through activate_targeted_decision, which skips the
+# decision's conditions and cost, so every grant rechecks the house, the price
+# and the situation and debits each currency once.
+
+# STATE, the granting house. Input SHL.SHL_loyalty_delta, the negative price.
+SHL_spend_house_favour = {
+	SHL_apply_house_loyalty = yes
+	clr_state_flag = SHL_favour_given
+	set_state_flag = SHL_favour_given
+}
+
+# STATE. Applies SHL_site_wear_delta and SHL_site_stock_delta to a lit furnace.
+SHL_change_lit_site = {
+	if = {
+		limit = { SHL_obligation_site_ready = yes }
+		SHL_apply_site_change = yes
+	}
+}
+
+# Arbin: the qanat masters reline every lit furnace of the qanat border.
+SHL_grant_favour_arbin = {
+	if = {
+		limit = {
+			SHL_house_favours_open = yes
+			287 = { SHL_favour_ready = yes }
+			SHL_favour_arbin_price = yes
+			SHL_favour_arbin_open = yes
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
+		set_variable = { var = SHL_loyalty_delta value = -15 }
+		287 = { SHL_spend_house_favour = yes }
+		set_variable = { var = SHL_site_wear_delta value = -10 }
+		if = {
+			limit = { check_variable = { var = SHL_water_crisis value = 1 compare = equals } }
+			set_variable = { var = SHL_site_wear_delta value = -15 }
+		}
+		set_variable = { var = SHL_site_stock_delta value = 0 }
+		287 = { SHL_change_lit_site = yes }
+		288 = { SHL_change_lit_site = yes }
+		289 = { SHL_change_lit_site = yes }
+		clear_variable = SHL_site_wear_delta
+		clear_variable = SHL_site_stock_delta
+		ADISCORD_economy_mark_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# Safir: the purse of the Conclave lends against the house's name.
+SHL_grant_favour_safir = {
+	if = {
+		limit = {
+			SHL_house_favours_open = yes
+			288 = { SHL_favour_ready = yes }
+			SHL_favour_safir_price = yes
+			SHL_favour_safir_open = yes
+		}
+		add_political_power = -25
+		set_variable = { var = SHL_loyalty_delta value = -20 }
+		288 = { SHL_spend_house_favour = yes }
+		add_to_variable = { var = ADISCORD_economy_treasury value = 120 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 120 }
+		ADISCORD_economy_mark_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# Loran: the Golden Gate holds a fair for every lit furnace selling abroad.
+SHL_grant_favour_loran = {
+	if = {
+		limit = {
+			SHL_house_favours_open = yes
+			289 = { SHL_favour_ready = yes }
+			SHL_favour_loran_price = yes
+			SHL_favour_loran_open = yes
+		}
+		add_political_power = -20
+		set_variable = { var = SHL_loyalty_delta value = -15 }
+		289 = { SHL_spend_house_favour = yes }
+		287 = { SHL_fair_site = yes }
+		288 = { SHL_fair_site = yes }
+		289 = { SHL_fair_site = yes }
+		290 = { SHL_fair_site = yes }
+		291 = { SHL_fair_site = yes }
+		292 = { SHL_fair_site = yes }
+		293 = { SHL_fair_site = yes }
+		294 = { SHL_fair_site = yes }
+		295 = { SHL_fair_site = yes }
+		ADISCORD_economy_mark_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# Nur: the mediators bring back the walking-out house or, when no house has
+# left the hall, the least loyal other house of owned land.
+SHL_grant_favour_nur = {
+	if = {
+		limit = {
+			SHL_house_favours_open = yes
+			290 = { SHL_favour_ready = yes }
+			SHL_favour_nur_price = yes
+			SHL_favour_nur_open = yes
+		}
+		add_political_power = -30
+		set_variable = { var = SHL_loyalty_delta value = -10 }
+		290 = { SHL_spend_house_favour = yes }
+		if = {
+			limit = { check_variable = { var = SHL_walkout_site value = 0 compare = greater_than } }
+			set_variable = { var = SHL_loyalty_site value = SHL_walkout_site }
+		}
+		else = { SHL_pick_mediation_house = yes }
+		set_variable = { var = SHL_loyalty_delta value = 20 }
+		SHL_change_site_loyalty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# Bayrat: three ore packets, each to the lit furnace with the smallest stock.
+SHL_grant_favour_bayrat = {
+	if = {
+		limit = {
+			SHL_house_favours_open = yes
+			291 = { SHL_favour_ready = yes }
+			SHL_favour_bayrat_price = yes
+			SHL_favour_bayrat_open = yes
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 30 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 30 }
+		set_variable = { var = SHL_loyalty_delta value = -15 }
+		291 = { SHL_spend_house_favour = yes }
+		set_variable = { var = SHL_pick_owner value = 9 }
+		SHL_stock_lowest_site = yes
+		SHL_stock_lowest_site = yes
+		SHL_stock_lowest_site = yes
+		SHL_clear_pick = yes
+		ADISCORD_economy_mark_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# Kerdan: the sea-road house pays the Veyr duty for the next two productions;
+# SHL_produce_period counts them down after the tenth furnace has produced.
+SHL_grant_favour_kerdan = {
+	if = {
+		limit = {
+			SHL_house_favours_open = yes
+			292 = { SHL_favour_ready = yes }
+			SHL_favour_kerdan_price = yes
+			SHL_favour_kerdan_open = yes
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
+		set_variable = { var = SHL_loyalty_delta value = -15 }
+		292 = { SHL_spend_house_favour = yes }
+		292 = { set_variable = { var = SHL_duty_paid_cycles value = 2 } }
+		ADISCORD_economy_mark_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# Sharim: the heavy shifts train the most worn lit furnace below full training.
+SHL_grant_favour_sharim = {
+	if = {
+		limit = {
+			SHL_house_favours_open = yes
+			293 = { SHL_favour_ready = yes }
+			SHL_favour_sharim_price = yes
+			SHL_favour_sharim_open = yes
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 50 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 50 }
+		set_variable = { var = SHL_loyalty_delta value = -15 }
+		293 = { SHL_spend_house_favour = yes }
+		set_variable = { var = SHL_pick_owner value = 9 }
+		set_variable = { var = SHL_pick_training_below value = 2 }
+		set_variable = { var = SHL_pick_skip_opposed value = 0 }
+		set_variable = { var = SHL_pick_by_stock value = 0 }
+		SHL_pick_worst_site = yes
+		SHL_train_pick_site = yes
+		SHL_clear_pick = yes
+		subtract_from_variable = { var = SHL_unrest value = 5 }
+		SHL_clamp_tensions = yes
+		ADISCORD_economy_mark_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# Darban: the engineers repair the most worn lit furnace.
+SHL_grant_favour_darban = {
+	if = {
+		limit = {
+			SHL_house_favours_open = yes
+			294 = { SHL_favour_ready = yes }
+			SHL_favour_darban_price = yes
+			SHL_favour_darban_open = yes
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
+		set_variable = { var = SHL_loyalty_delta value = -15 }
+		294 = { SHL_spend_house_favour = yes }
+		ADISCORD_economy_mark_dirty = yes
+		SHL_repair_worst_site = yes
+	}
+}
+
+# Veyran: the border guards muster one levy at their own district; a levy
+# never lands on occupied ground.
+SHL_grant_favour_veyran = {
+	if = {
+		limit = {
+			SHL_house_favours_open = yes
+			295 = { SHL_favour_ready = yes }
+			SHL_favour_veyran_price = yes
+			SHL_favour_veyran_open = yes
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 }
+		set_variable = { var = SHL_loyalty_delta value = -20 }
+		295 = { SHL_spend_house_favour = yes }
+		SHL_ensure_levy_template = yes
+		if = {
+			limit = {
+				295 = {
+					is_owned_by = SHL
+					is_controlled_by = SHL
+				}
+			}
+			295 = { SHL_create_levy = yes }
+		}
+		else = { SHL_raise_reward_levy = yes }
+		ADISCORD_economy_mark_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# COUNTRY SHL. Furnace card button; each branch repeats its decision's checks.
+SHL_activate_selected_favour = {
+	if = {
+		limit = { SHL_house_favours_open = yes }
+		if = {
+			limit = {
+				check_variable = { var = SHL_selected_furnace value = 1 compare = equals }
+				287 = { SHL_favour_ready = yes }
+				SHL_favour_arbin_price = yes
+				SHL_favour_arbin_open = yes
+			}
+			activate_targeted_decision = { target = 287 decision = SHL_favour_arbin }
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_selected_furnace value = 2 compare = equals }
+				288 = { SHL_favour_ready = yes }
+				SHL_favour_safir_price = yes
+				SHL_favour_safir_open = yes
+			}
+			activate_targeted_decision = { target = 288 decision = SHL_favour_safir }
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_selected_furnace value = 3 compare = equals }
+				289 = { SHL_favour_ready = yes }
+				SHL_favour_loran_price = yes
+				SHL_favour_loran_open = yes
+			}
+			activate_targeted_decision = { target = 289 decision = SHL_favour_loran }
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_selected_furnace value = 4 compare = equals }
+				290 = { SHL_favour_ready = yes }
+				SHL_favour_nur_price = yes
+				SHL_favour_nur_open = yes
+			}
+			activate_targeted_decision = { target = 290 decision = SHL_favour_nur }
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_selected_furnace value = 5 compare = equals }
+				291 = { SHL_favour_ready = yes }
+				SHL_favour_bayrat_price = yes
+				SHL_favour_bayrat_open = yes
+			}
+			activate_targeted_decision = { target = 291 decision = SHL_favour_bayrat }
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_selected_furnace value = 6 compare = equals }
+				292 = { SHL_favour_ready = yes }
+				SHL_favour_kerdan_price = yes
+				SHL_favour_kerdan_open = yes
+			}
+			activate_targeted_decision = { target = 292 decision = SHL_favour_kerdan }
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_selected_furnace value = 7 compare = equals }
+				293 = { SHL_favour_ready = yes }
+				SHL_favour_sharim_price = yes
+				SHL_favour_sharim_open = yes
+			}
+			activate_targeted_decision = { target = 293 decision = SHL_favour_sharim }
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_selected_furnace value = 8 compare = equals }
+				294 = { SHL_favour_ready = yes }
+				SHL_favour_darban_price = yes
+				SHL_favour_darban_open = yes
+			}
+			activate_targeted_decision = { target = 294 decision = SHL_favour_darban }
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_selected_furnace value = 9 compare = equals }
+				295 = { SHL_favour_ready = yes }
+				SHL_favour_veyran_price = yes
+				SHL_favour_veyran_open = yes
+			}
+			activate_targeted_decision = { target = 295 decision = SHL_favour_veyran }
+		}
+	}
+}
+
+# Runs once after each settled production period. The country rules move
+# every house on owned land by one summed SHL_loyalty_delta.
 SHL_update_tensions = {
+	set_variable = { var = SHL_loyalty_delta value = 0 }
 	if = {
 		limit = { has_idea = SHL_unregistered_quarters }
 		add_to_variable = { var = SHL_unrest value = 5 }
@@ -1825,7 +2754,7 @@ SHL_update_tensions = {
 			check_variable = { var = SHL_political_course value = 5 compare = less_than }
 			NOT = { has_completed_focus = SHL_k_no_crests }
 		}
-		add_to_variable = { var = SHL_house_pressure value = 5 }
+		subtract_from_variable = { var = SHL_loyalty_delta value = 5 }
 	}
 	if = {
 		limit = {
@@ -1855,21 +2784,21 @@ SHL_update_tensions = {
 	}
 	if = {
 		limit = { SHL_house_mandate_current = yes }
-		subtract_from_variable = { var = SHL_house_pressure value = 2 }
+		add_to_variable = { var = SHL_loyalty_delta value = 2 }
 	}
 	else_if = {
 		limit = { SHL_city_mandate_current = yes }
 		subtract_from_variable = { var = SHL_unrest value = 2 }
-		add_to_variable = { var = SHL_house_pressure value = 3 }
+		subtract_from_variable = { var = SHL_loyalty_delta value = 3 }
 	}
 	else_if = {
 		limit = { SHL_directorate_mandate_current = yes }
-		add_to_variable = { var = SHL_house_pressure value = 3 }
+		subtract_from_variable = { var = SHL_loyalty_delta value = 3 }
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
 		add_to_variable = { var = SHL_unrest value = 3 }
-		subtract_from_variable = { var = SHL_house_pressure value = 2 }
+		add_to_variable = { var = SHL_loyalty_delta value = 2 }
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
@@ -1877,7 +2806,7 @@ SHL_update_tensions = {
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_house_votes value = 7 compare = less_than } }
-		add_to_variable = { var = SHL_house_pressure value = 2 }
+		subtract_from_variable = { var = SHL_loyalty_delta value = 2 }
 	}
 	# Before ratification a conclave short of seven house votes lets the quarters
 	# gain every cycle; a ratified course no longer counts hereditary votes.
@@ -1889,18 +2818,21 @@ SHL_update_tensions = {
 		set_temp_variable = { var = SHL_balance_shift value = 0.02 }
 		SHL_balance_shift = yes
 	}
+	SHL_change_all_loyalty = yes
 	SHL_ai_steer_ratification = yes
-	# A commune without crests keeps the pressure scale at zero.
-	if = {
-		limit = { has_completed_focus = SHL_k_no_crests }
-		set_variable = { var = SHL_house_pressure value = 0 }
-	}
+	SHL_house_return_tick = yes
+	SHL_house_walkout_tick = yes
 	SHL_house_demand_tick = yes
 	SHL_clamp_tensions = yes
 }
 
 SHL_check_crises = {
 	SHL_close_lost_keizan_threat = yes
+	SHL_expire_border_offers = yes
+	if = {
+		limit = { SHL_return_offer_ready = yes }
+		country_event = { id = ADISCORD_SHL.163 }
+	}
 	if = {
 		limit = { SHL_strike_ready = yes }
 		set_country_flag = SHL_strike_active
@@ -1956,7 +2888,8 @@ SHL_strike_concede = {
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
 		subtract_from_variable = { var = SHL_unrest value = 35 }
-		add_to_variable = { var = SHL_house_pressure value = 10 }
+		set_variable = { var = SHL_loyalty_delta value = -10 }
+		SHL_change_all_loyalty = yes
 		add_to_variable = { var = SHL_city_support value = 5 }
 		SHL_end_strike = yes
 	}
@@ -1985,7 +2918,8 @@ SHL_declare_martial_law = {
 		remove_mission = SHL_strike_mission
 	}
 	set_variable = { var = SHL_unrest value = 30 }
-	subtract_from_variable = { var = SHL_house_pressure value = 10 }
+	set_variable = { var = SHL_loyalty_delta value = 10 }
+	SHL_change_all_loyalty = yes
 	set_variable = { var = SHL_suppressions value = 0 }
 	SHL_end_strike = yes
 }
@@ -2002,7 +2936,8 @@ SHL_end_conspiracy = {
 SHL_conspiracy_guarantees = {
 	if = {
 		limit = { has_country_flag = SHL_conspiracy_active }
-		subtract_from_variable = { var = SHL_house_pressure value = 25 }
+		set_variable = { var = SHL_loyalty_delta value = 25 }
+		SHL_change_all_loyalty = yes
 		add_to_variable = { var = SHL_unrest value = 10 }
 		subtract_from_variable = { var = SHL_city_support value = 5 }
 		SHL_end_conspiracy = yes
@@ -2016,8 +2951,10 @@ SHL_conspiracy_arrests = {
 			has_country_flag = SHL_conspiracy_active
 			SHL_can_arrest_crests = yes
 		}
-		subtract_from_variable = { var = SHL_house_pressure value = 30 }
+		set_variable = { var = SHL_loyalty_delta value = 30 }
+		SHL_change_all_loyalty = yes
 		subtract_from_variable = { var = SHL_unrest value = 5 }
+		# The two signatory houses lose their furnaces and pay for the ultimatum.
 		290 = {
 			if = {
 				limit = {
@@ -2025,6 +2962,8 @@ SHL_conspiracy_arrests = {
 					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
 				}
 				set_variable = { var = SHL_furnace_owner value = 2 }
+				SHL = { set_variable = { var = SHL_loyalty_delta value = -40 } }
+				SHL_apply_house_loyalty = yes
 			}
 		}
 		295 = {
@@ -2034,6 +2973,8 @@ SHL_conspiracy_arrests = {
 					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
 				}
 				set_variable = { var = SHL_furnace_owner value = 2 }
+				SHL = { set_variable = { var = SHL_loyalty_delta value = -40 } }
+				SHL_apply_house_loyalty = yes
 			}
 		}
 		SHL_end_conspiracy = yes
@@ -2046,7 +2987,10 @@ SHL_resist_crests = {
 		limit = { has_active_mission = SHL_conspiracy_mission }
 		remove_mission = SHL_conspiracy_mission
 	}
-	set_variable = { var = SHL_house_pressure value = 40 }
+	# Every house moves by the same amount, so the pressure settles at 40.
+	set_variable = { var = SHL_loyalty_delta value = SHL_house_pressure }
+	subtract_from_variable = { var = SHL_loyalty_delta value = 40 }
+	SHL_change_all_loyalty = yes
 	SHL_end_conspiracy = yes
 }
 
@@ -2074,7 +3018,12 @@ SHL_commit_regency_course = {
 			ideology = industrial_aristocratism
 		}
 		SHL_retire_nur = yes
-		subtract_from_variable = { var = SHL_house_pressure value = 30 }
+		set_variable = { var = SHL_loyalty_delta value = 30 }
+		SHL_change_all_loyalty = yes
+		# Safir's regent leads the hereditary republic.
+		set_variable = { var = SHL_loyalty_site value = 288 }
+		set_variable = { var = SHL_loyalty_delta value = 10 }
+		SHL_change_site_loyalty = yes
 		add_to_variable = { var = SHL_unrest value = 15 }
 		set_temp_variable = { var = SHL_balance_shift value = -0.30 }
 		SHL_balance_shift = yes
@@ -2090,6 +3039,8 @@ SHL_commit_regency_course = {
 			SHL_update_ruler_portrait = yes
 			SHL_announce_course_news = yes
 		}
+		# Course sections and war-tree course branches read SHL_political_course in allow_branch.
+		mark_focus_tree_layout_dirty = yes
 		# One native tree: the entry focus opens the course section even when the
 		# course was committed by the crisis event or the backing decision. The
 		# course value is already set, so the entry reward cannot commit again.
@@ -2125,7 +3076,6 @@ SHL_commit_commune_course = {
 		}
 		SHL_retire_nur = yes
 		subtract_from_variable = { var = SHL_unrest value = 30 }
-		set_variable = { var = SHL_house_pressure value = 0 }
 		set_variable = { var = SHL_suppressions value = 0 }
 		set_temp_variable = { var = SHL_balance_shift value = 0.30 }
 		SHL_balance_shift = yes
@@ -2138,6 +3088,7 @@ SHL_commit_commune_course = {
 			remove_mission = SHL_conspiracy_mission
 		}
 		clr_country_flag = SHL_conspiracy_active
+		SHL_cancel_house_walkout = yes
 		SHL_reassign_commune_crests = yes
 		SHL_end_strike = yes
 		custom_effect_tooltip = SHL_rename_commune_tt
@@ -2146,6 +3097,8 @@ SHL_commit_commune_course = {
 			SHL_update_ruler_portrait = yes
 			SHL_announce_course_news = yes
 		}
+		# Course sections and war-tree course branches read SHL_political_course in allow_branch.
+		mark_focus_tree_layout_dirty = yes
 		# One native tree: the entry focus opens the course section even when the
 		# course was committed by the crisis event or the backing decision. The
 		# course value is already set, so the entry reward cannot commit again.
@@ -2191,7 +3144,8 @@ SHL_restore_house_privileges = {
 	293 = { SHL_assign_site_owner_house = yes }
 	294 = { SHL_assign_site_owner_house = yes }
 	295 = { SHL_assign_site_owner_house = yes }
-	subtract_from_variable = { var = SHL_house_pressure value = 20 }
+	set_variable = { var = SHL_loyalty_delta value = 20 }
+	SHL_change_all_loyalty = yes
 	add_to_variable = { var = SHL_unrest value = 10 }
 	SHL_clamp_tensions = yes
 	SHL_refresh_furnaces = yes
@@ -2548,6 +3502,7 @@ SHL_start_qanat_war = {
 		284 = { SHL_raise_qanat_guard = yes }
 		286 = { SHL_raise_qanat_guard = yes }
 		set_variable = { var = SHL_war_kyz value = 1 }
+		clr_country_flag = SHL_redemption_refused_KYZ
 		SHL_announce_first_war = yes
 		set_country_flag = SHL_war_kyz_clock
 		SHL_use_campaign_reserve = yes
@@ -2561,14 +3516,16 @@ SHL_start_qanat_war = {
 }
 
 SHL_close_qanat_war = {
+	# Close the dispatcher guard before white peace can invoke on_peace.
+	set_variable = { var = SHL_war_kyz value = 0 }
 	if = {
 		limit = { has_war_with = KYZ }
 		white_peace = KYZ
 	}
-	set_variable = { var = SHL_war_kyz value = 0 }
 	clr_country_flag = SHL_war_kyz_clock
 	# Permanent trace of a finished war; defeat and armistice leave no other marker.
 	set_country_flag = SHL_qanat_war_closed
+	SHL_front_clear_kyz = yes
 	SHL_clean_campaign = yes
 }
 
@@ -2581,6 +3538,9 @@ SHL_take_state_from_kyz = {
 	}
 }
 
+# The three victory reports (ADISCORD_SHL.57, .66 and .73) pull the War for
+# the South deadline in every answer, so the date their tooltip shows is still
+# the one before the pull.
 SHL_qanat_war_victory = {
 	if = {
 		limit = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
@@ -2589,11 +3549,14 @@ SHL_qanat_war_victory = {
 		284 = { SHL_take_state_from_kyz = yes }
 		285 = { SHL_take_state_from_kyz = yes }
 		286 = { SHL_take_state_from_kyz = yes }
+		SHL_recover_ceded_from_kyz_all = yes
 		set_variable = { var = SHL_water_crisis value = 4 }
 		set_variable = { var = SHL_water_quota value = 0 }
 		add_timed_idea = { idea = SHL_captured_qanats days = 365 }
 		set_country_flag = SHL_revanche_due_KYZ
 		country_event = { id = ADISCORD_SHL.76 days = 365 }
+		set_variable = { var = SHL_loyalty_delta value = 10 }
+		SHL_change_qanat_houses_loyalty = yes
 		SHL_refresh_furnaces = yes
 		country_event = { id = ADISCORD_SHL.57 }
 	}
@@ -2606,22 +3569,48 @@ SHL_qanat_war_defeat = {
 		if = {
 			limit = { 287 = { is_owned_by = SHL } }
 			KYZ = { transfer_state = 287 }
-			287 = { set_state_controller_to = KYZ }
+			287 = {
+				set_state_controller_to = KYZ
+				set_state_flag = SHL_ceded_state
+			}
 		}
 		if = {
 			limit = { check_variable = { var = SHL_water_crisis value = 1 compare = equals } }
 			set_variable = { var = SHL_water_crisis value = 2 }
 		}
 		set_variable = { var = SHL_water_quota value = 1 }
+		set_variable = { var = SHL_loyalty_delta value = -10 }
+		SHL_change_qanat_houses_loyalty = yes
 		SHL_refresh_furnaces = yes
 		country_event = { id = ADISCORD_SHL.58 }
 	}
 }
 
+# ADISCORD_SHL.56 records the grade in its immediate block. Grade 1 keeps the
+# Keizan districts Shahrabad holds, grade 3 cedes the recorded furnace, grade 2
+# (or no record) is the status quo.
 SHL_qanat_war_armistice = {
 	if = {
 		limit = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+		set_country_flag = SHL_armistice_settling
 		SHL_close_qanat_war = yes
+		if = {
+			limit = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+			280 = { SHL_armistice_take_from_kyz = yes }
+			284 = { SHL_armistice_take_from_kyz = yes }
+			285 = { SHL_armistice_take_from_kyz = yes }
+			286 = { SHL_armistice_take_from_kyz = yes }
+			set_country_flag = SHL_revanche_due_KYZ
+			country_event = { id = ADISCORD_SHL.76 days = 365 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+			287 = { SHL_armistice_cede_to_kyz = yes }
+			288 = { SHL_armistice_cede_to_kyz = yes }
+			289 = { SHL_armistice_cede_to_kyz = yes }
+		}
+		clr_country_flag = SHL_armistice_settling
+		SHL_clear_armistice_kyz = yes
 		SHL_refresh_furnaces = yes
 	}
 }
@@ -2766,6 +3755,7 @@ SHL_start_glp_war = {
 		298 = { SHL_glp_raise_prismatic_guard = yes }
 		708 = { SHL_glp_raise_prismatic_guard = yes }
 		set_variable = { var = SHL_war_glp value = 1 }
+		clr_country_flag = SHL_redemption_refused_GLP
 		SHL_announce_first_war = yes
 		set_country_flag = SHL_war_glp_clock
 		SHL_use_campaign_reserve = yes
@@ -2791,14 +3781,16 @@ SHL_start_glp_war = {
 }
 
 SHL_close_glp_war = {
+	# Close the dispatcher guard before white peace can invoke on_peace.
+	set_variable = { var = SHL_war_glp value = 0 }
 	if = {
 		limit = { has_war_with = GLP }
 		white_peace = GLP
 	}
-	set_variable = { var = SHL_war_glp value = 0 }
 	clr_country_flag = SHL_war_glp_clock
 	# Permanent trace of a finished war; defeat and armistice leave no other marker.
 	set_country_flag = SHL_glp_war_closed
+	SHL_front_clear_glp = yes
 	SHL_clean_campaign = yes
 }
 
@@ -2823,9 +3815,12 @@ SHL_glp_war_victory = {
 			708 = { SHL_take_state_from_glp = yes }
 		}
 		clr_country_flag = SHL_war_glp_sea_goal
+		SHL_recover_ceded_from_glp_all = yes
 		set_variable = { var = SHL_veyr_crisis value = 4 }
 		set_country_flag = SHL_revanche_due_GLP
 		country_event = { id = ADISCORD_SHL.76 days = 365 }
+		set_variable = { var = SHL_loyalty_delta value = 10 }
+		SHL_change_port_houses_loyalty = yes
 		SHL_refresh_furnaces = yes
 		country_event = { id = ADISCORD_SHL.66 }
 	}
@@ -2839,19 +3834,45 @@ SHL_glp_war_defeat = {
 		if = {
 			limit = { 296 = { is_owned_by = SHL } }
 			GLP = { transfer_state = 296 }
-			296 = { set_state_controller_to = GLP }
+			296 = {
+				set_state_controller_to = GLP
+				set_state_flag = SHL_ceded_state
+			}
 		}
 		add_timed_idea = { idea = SHL_veyr_bondage days = 365 }
+		set_variable = { var = SHL_loyalty_delta value = -10 }
+		SHL_change_port_houses_loyalty = yes
 		SHL_refresh_furnaces = yes
 		country_event = { id = ADISCORD_SHL.67 }
 	}
 }
 
+# ADISCORD_SHL.65 records the grade in its immediate block; see
+# SHL_qanat_war_armistice for the three grades.
 SHL_glp_war_armistice = {
 	if = {
 		limit = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+		set_country_flag = SHL_armistice_settling
 		SHL_close_glp_war = yes
+		if = {
+			limit = { check_variable = { var = SHL_glp_armistice_grade value = 1 compare = equals } }
+			297 = { SHL_armistice_take_from_glp = yes }
+			299 = { SHL_armistice_take_from_glp = yes }
+			298 = { SHL_armistice_take_from_glp = yes }
+			708 = { SHL_armistice_take_from_glp = yes }
+			set_country_flag = SHL_revanche_due_GLP
+			country_event = { id = ADISCORD_SHL.76 days = 365 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_glp_armistice_grade value = 3 compare = equals } }
+			296 = { SHL_armistice_cede_to_glp = yes }
+			733 = { SHL_armistice_cede_to_glp = yes }
+			293 = { SHL_armistice_cede_to_glp = yes }
+			295 = { SHL_armistice_cede_to_glp = yes }
+		}
 		clr_country_flag = SHL_war_glp_sea_goal
+		clr_country_flag = SHL_armistice_settling
+		SHL_clear_armistice_glp = yes
 		SHL_refresh_furnaces = yes
 	}
 }
@@ -3286,6 +4307,7 @@ SHL_close_kyz_war = {
 	set_variable = { var = SHL_keizan_state value = 3 }
 	clr_country_flag = SHL_ration_war_clock
 	clr_country_flag = SHL_kyz_offensive
+	SHL_front_clear_kyz = yes
 	SHL_clean_campaign = yes
 	SHL = { SHL_release_kyz_principal = yes }
 	KYZ = { SHL_release_kyz_principal = yes }
@@ -3326,16 +4348,19 @@ SHL_release_kyz_principal = {
 }
 
 SHL_kyz_war_victory = {
-	SHL_announce_keizan_repelled = yes
 	if = {
 		limit = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
+		SHL_announce_keizan_repelled = yes
 		SHL_close_kyz_war = yes
 		set_variable = { var = SHL_kyz_outcome value = 1 }
 		280 = { SHL_take_state_from_kyz = yes }
 		284 = { SHL_take_state_from_kyz = yes }
+		SHL_recover_ceded_from_kyz_all = yes
 		add_timed_idea = { idea = SHL_victory_over_ration days = 365 }
 		set_country_flag = SHL_revanche_due_KYZ
 		country_event = { id = ADISCORD_SHL.76 days = 365 }
+		set_variable = { var = SHL_loyalty_delta value = 5 }
+		SHL_change_all_loyalty = yes
 		SHL_refresh_furnaces = yes
 		country_event = { id = ADISCORD_SHL.73 }
 	}
@@ -3355,19 +4380,1325 @@ SHL_kyz_war_defeat = {
 			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_keizan_requisition }
 		}
 		add_timed_idea = { idea = SHL_keizan_ration days = 540 }
+		set_variable = { var = SHL_loyalty_delta value = -5 }
+		SHL_change_all_loyalty = yes
 		SHL_refresh_furnaces = yes
 		country_event = { id = ADISCORD_SHL.74 }
 	}
 }
 
+# ADISCORD_SHL.72 records the grade in its immediate block; see
+# SHL_qanat_war_armistice for the three grades. The news of a repelled march
+# needs Zarkhan to remain Shahrabad's.
 SHL_kyz_war_armistice = {
-	SHL_announce_keizan_repelled = yes
 	if = {
 		limit = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
+		set_country_flag = SHL_armistice_settling
 		SHL_close_kyz_war = yes
 		set_variable = { var = SHL_kyz_outcome value = 5 }
+		if = {
+			limit = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+			280 = { SHL_armistice_take_from_kyz = yes }
+			284 = { SHL_armistice_take_from_kyz = yes }
+			set_country_flag = SHL_revanche_due_KYZ
+			country_event = { id = ADISCORD_SHL.76 days = 365 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+			if = {
+				limit = {
+					OR = {
+						707 = { SHL_armistice_cession_here = yes }
+						287 = { SHL_armistice_cession_here = yes }
+						288 = { SHL_armistice_cession_here = yes }
+						289 = { SHL_armistice_cession_here = yes }
+					}
+				}
+				set_variable = { var = SHL_kyz_outcome value = 4 }
+			}
+			707 = { SHL_armistice_cede_to_kyz = yes }
+			287 = { SHL_armistice_cede_to_kyz = yes }
+			288 = { SHL_armistice_cede_to_kyz = yes }
+			289 = { SHL_armistice_cede_to_kyz = yes }
+		}
+		if = {
+			limit = { 707 = { is_owned_by = SHL } }
+			SHL_announce_keizan_repelled = yes
+		}
+		clr_country_flag = SHL_armistice_settling
+		SHL_clear_armistice_kyz = yes
 		SHL_refresh_furnaces = yes
 	}
+}
+
+# ----- Limited-war fronts, terms and indemnity -----
+# Country scope SHL unless a comment says otherwise. The front predicates are
+# scripted triggers; on_state_control_changed queues one check per day, and
+# that check alone starts or stops the four hold missions. SHL_terms_war codes:
+# 1 qanat war and 2 ration war (Keizan wins), 3 port war (Veyr wins).
+
+# Batches every control change of one day into a single next-day check.
+SHL_queue_front_check = {
+	if = {
+		limit = {
+			SHL_limited_war_active = yes
+			NOT = { has_country_flag = SHL_front_check_pending }
+		}
+		set_country_flag = {
+			flag = SHL_front_check_pending
+			value = 1
+			days = 2
+		}
+		country_event = { id = ADISCORD_SHL.160 days = 1 }
+	}
+}
+
+# ADISCORD_SHL.160. A hold mission runs only while its side meets its goal.
+SHL_front_check = {
+	clr_country_flag = SHL_front_check_pending
+	if = {
+		limit = {
+			SHL_kyz_front_ours = yes
+			NOT = { has_active_mission = SHL_kyz_front_hold }
+		}
+		activate_mission = SHL_kyz_front_hold
+	}
+	else_if = {
+		limit = {
+			SHL_kyz_front_ours = no
+			has_active_mission = SHL_kyz_front_hold
+		}
+		remove_mission = SHL_kyz_front_hold
+	}
+	if = {
+		limit = {
+			SHL_kyz_front_theirs = yes
+			NOT = { has_active_mission = SHL_kyz_front_lost }
+		}
+		activate_mission = SHL_kyz_front_lost
+	}
+	else_if = {
+		limit = {
+			SHL_kyz_front_theirs = no
+			has_active_mission = SHL_kyz_front_lost
+		}
+		remove_mission = SHL_kyz_front_lost
+	}
+	if = {
+		limit = {
+			SHL_glp_front_ours = yes
+			NOT = { has_active_mission = SHL_glp_front_hold }
+		}
+		activate_mission = SHL_glp_front_hold
+	}
+	else_if = {
+		limit = {
+			SHL_glp_front_ours = no
+			has_active_mission = SHL_glp_front_hold
+		}
+		remove_mission = SHL_glp_front_hold
+	}
+	if = {
+		limit = {
+			SHL_glp_front_theirs = yes
+			NOT = { has_active_mission = SHL_glp_front_lost }
+		}
+		activate_mission = SHL_glp_front_lost
+	}
+	else_if = {
+		limit = {
+			SHL_glp_front_theirs = no
+			has_active_mission = SHL_glp_front_lost
+		}
+		remove_mission = SHL_glp_front_lost
+	}
+}
+
+# Mission timeouts. The goal is checked again, so a front lost on the last
+# day settles nothing.
+SHL_resolve_kyz_hold = {
+	if = {
+		limit = { SHL_kyz_front_ours = yes }
+		if = {
+			limit = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+			SHL_qanat_war_victory = yes
+		}
+		else = { SHL_kyz_war_victory = yes }
+	}
+}
+
+SHL_resolve_kyz_loss = {
+	if = {
+		limit = { SHL_kyz_front_theirs = yes }
+		if = {
+			limit = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+			SHL_qanat_war_lost = yes
+		}
+		else = { SHL_kyz_war_lost = yes }
+	}
+}
+
+SHL_resolve_glp_hold = {
+	if = {
+		limit = { SHL_glp_front_ours = yes }
+		SHL_glp_war_victory = yes
+	}
+}
+
+SHL_resolve_glp_loss = {
+	if = {
+		limit = { SHL_glp_front_theirs = yes }
+		SHL_glp_war_lost = yes
+	}
+}
+
+# Every close of a Keizan war. The armistice reads its own snapshot after the
+# close, so it keeps the flags until it has transferred the districts.
+SHL_front_clear_kyz = {
+	if = {
+		limit = { has_active_mission = SHL_kyz_front_hold }
+		remove_mission = SHL_kyz_front_hold
+	}
+	if = {
+		limit = { has_active_mission = SHL_kyz_front_lost }
+		remove_mission = SHL_kyz_front_lost
+	}
+	if = {
+		limit = { NOT = { has_country_flag = SHL_armistice_settling } }
+		SHL_clear_armistice_kyz = yes
+	}
+}
+
+SHL_front_clear_glp = {
+	if = {
+		limit = { has_active_mission = SHL_glp_front_hold }
+		remove_mission = SHL_glp_front_hold
+	}
+	if = {
+		limit = { has_active_mission = SHL_glp_front_lost }
+		remove_mission = SHL_glp_front_lost
+	}
+	if = {
+		limit = { NOT = { has_country_flag = SHL_armistice_settling } }
+		SHL_clear_armistice_glp = yes
+	}
+}
+
+SHL_clear_armistice_kyz = {
+	280 = { clr_state_flag = SHL_armistice_held }
+	284 = { clr_state_flag = SHL_armistice_held }
+	285 = { clr_state_flag = SHL_armistice_held }
+	286 = { clr_state_flag = SHL_armistice_held }
+	287 = { clr_state_flag = SHL_armistice_held }
+	288 = { clr_state_flag = SHL_armistice_held }
+	289 = { clr_state_flag = SHL_armistice_held }
+	707 = { clr_state_flag = SHL_armistice_held }
+	clear_variable = SHL_kyz_armistice_grade
+}
+
+SHL_clear_armistice_glp = {
+	297 = { clr_state_flag = SHL_armistice_held }
+	298 = { clr_state_flag = SHL_armistice_held }
+	299 = { clr_state_flag = SHL_armistice_held }
+	708 = { clr_state_flag = SHL_armistice_held }
+	293 = { clr_state_flag = SHL_armistice_held }
+	295 = { clr_state_flag = SHL_armistice_held }
+	296 = { clr_state_flag = SHL_armistice_held }
+	733 = { clr_state_flag = SHL_armistice_held }
+	clear_variable = SHL_glp_armistice_grade
+}
+
+# ADISCORD_SHL.56 and .72 immediate. Counts the objectives each side holds and
+# records what an armistice would transfer: every Keizan district Shahrabad's
+# side holds, Zarkhan when Keizan's side holds it, and at most one furnace
+# (287 > 289 > 288), none behind the furnace garrisons. Grades: 1 Shahrabad
+# ahead, 2 even, 3 Keizan ahead.
+SHL_snapshot_kyz_front = {
+	SHL_clear_armistice_kyz = yes
+	set_variable = { var = SHL_front_ours value = 0 }
+	set_variable = { var = SHL_front_theirs value = 0 }
+	280 = { SHL_snapshot_kyz_district = yes }
+	284 = { SHL_snapshot_kyz_district = yes }
+	if = {
+		limit = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+		285 = { SHL_snapshot_kyz_district = yes }
+		286 = { SHL_snapshot_kyz_district = yes }
+	}
+	if = {
+		limit = {
+			check_variable = { var = SHL_war_kyz value = 2 compare = equals }
+			707 = { SHL_held_by_kyz_side = yes }
+		}
+		add_to_variable = { var = SHL_front_theirs value = 1 }
+		707 = { set_state_flag = SHL_armistice_held }
+	}
+	if = {
+		limit = { 287 = { SHL_held_by_kyz_side = yes } }
+		add_to_variable = { var = SHL_front_theirs value = 1 }
+	}
+	if = {
+		limit = { 288 = { SHL_held_by_kyz_side = yes } }
+		add_to_variable = { var = SHL_front_theirs value = 1 }
+	}
+	if = {
+		limit = { 289 = { SHL_held_by_kyz_side = yes } }
+		add_to_variable = { var = SHL_front_theirs value = 1 }
+	}
+	if = {
+		limit = { NOT = { has_completed_focus = SHL_furnace_garrisons } }
+		if = {
+			limit = { 287 = { SHL_held_by_kyz_side = yes } }
+			287 = { set_state_flag = SHL_armistice_held }
+		}
+		else_if = {
+			limit = { 289 = { SHL_held_by_kyz_side = yes } }
+			289 = { set_state_flag = SHL_armistice_held }
+		}
+		else_if = {
+			limit = { 288 = { SHL_held_by_kyz_side = yes } }
+			288 = { set_state_flag = SHL_armistice_held }
+		}
+	}
+	set_variable = { var = SHL_kyz_armistice_grade value = 2 }
+	if = {
+		limit = { check_variable = { var = SHL_front_ours value = SHL_front_theirs compare = greater_than } }
+		set_variable = { var = SHL_kyz_armistice_grade value = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_front_theirs value = SHL_front_ours compare = greater_than } }
+		set_variable = { var = SHL_kyz_armistice_grade value = 3 }
+	}
+	clear_variable = SHL_front_ours
+	clear_variable = SHL_front_theirs
+}
+
+# STATE Keizan district held by Shahrabad's side.
+SHL_snapshot_kyz_district = {
+	if = {
+		limit = {
+			is_owned_by = KYZ
+			SHL_cistern_coalition_control = yes
+		}
+		set_state_flag = SHL_armistice_held
+		SHL = { add_to_variable = { var = SHL_front_ours value = 1 } }
+	}
+}
+
+# ADISCORD_SHL.65 immediate: the ports (298 and 708 only under the sea goal)
+# against Salik, the Veyran border and at most one furnace (295 > 293).
+SHL_snapshot_glp_front = {
+	SHL_clear_armistice_glp = yes
+	set_variable = { var = SHL_front_ours value = 0 }
+	set_variable = { var = SHL_front_theirs value = 0 }
+	297 = { SHL_snapshot_glp_district = yes }
+	299 = { SHL_snapshot_glp_district = yes }
+	if = {
+		limit = { has_country_flag = SHL_war_glp_sea_goal }
+		298 = { SHL_snapshot_glp_district = yes }
+		708 = { SHL_snapshot_glp_district = yes }
+	}
+	if = {
+		limit = { 296 = { SHL_held_by_glp = yes } }
+		add_to_variable = { var = SHL_front_theirs value = 1 }
+		296 = { set_state_flag = SHL_armistice_held }
+	}
+	if = {
+		limit = { 733 = { SHL_held_by_glp = yes } }
+		add_to_variable = { var = SHL_front_theirs value = 1 }
+		733 = { set_state_flag = SHL_armistice_held }
+	}
+	if = {
+		limit = { 293 = { SHL_held_by_glp = yes } }
+		add_to_variable = { var = SHL_front_theirs value = 1 }
+	}
+	if = {
+		limit = { 295 = { SHL_held_by_glp = yes } }
+		add_to_variable = { var = SHL_front_theirs value = 1 }
+	}
+	if = {
+		limit = { NOT = { has_completed_focus = SHL_furnace_garrisons } }
+		if = {
+			limit = { 295 = { SHL_held_by_glp = yes } }
+			295 = { set_state_flag = SHL_armistice_held }
+		}
+		else_if = {
+			limit = { 293 = { SHL_held_by_glp = yes } }
+			293 = { set_state_flag = SHL_armistice_held }
+		}
+	}
+	set_variable = { var = SHL_glp_armistice_grade value = 2 }
+	if = {
+		limit = { check_variable = { var = SHL_front_ours value = SHL_front_theirs compare = greater_than } }
+		set_variable = { var = SHL_glp_armistice_grade value = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_front_theirs value = SHL_front_ours compare = greater_than } }
+		set_variable = { var = SHL_glp_armistice_grade value = 3 }
+	}
+	clear_variable = SHL_front_ours
+	clear_variable = SHL_front_theirs
+}
+
+# STATE Veyr district held by Shahrabad.
+SHL_snapshot_glp_district = {
+	if = {
+		limit = {
+			is_owned_by = GLP
+			is_controlled_by = SHL
+		}
+		set_state_flag = SHL_armistice_held
+		SHL = { add_to_variable = { var = SHL_front_ours value = 1 } }
+	}
+}
+
+# STATE helpers of the armistice; the transfer effects recheck ownership.
+SHL_armistice_take_from_kyz = {
+	if = {
+		limit = { has_state_flag = SHL_armistice_held }
+		SHL_take_state_from_kyz = yes
+	}
+}
+
+SHL_armistice_take_from_glp = {
+	if = {
+		limit = { has_state_flag = SHL_armistice_held }
+		SHL_take_state_from_glp = yes
+	}
+}
+
+SHL_armistice_cede_to_kyz = {
+	if = {
+		limit = { has_state_flag = SHL_armistice_held }
+		SHL_cede_state_to_kyz = yes
+	}
+}
+
+SHL_armistice_cede_to_glp = {
+	if = {
+		limit = { has_state_flag = SHL_armistice_held }
+		SHL_cede_state_to_glp = yes
+	}
+}
+
+# STATE. Plain transfer of a Shahrabad district to the neighbour.
+SHL_hand_state_to_kyz = {
+	if = {
+		limit = {
+			is_owned_by = SHL
+			KYZ = { exists = yes }
+		}
+		KYZ = { transfer_state = PREV }
+		set_state_controller_to = KYZ
+	}
+}
+
+SHL_hand_state_to_glp = {
+	if = {
+		limit = {
+			is_owned_by = SHL
+			GLP = { exists = yes }
+		}
+		GLP = { transfer_state = PREV }
+		set_state_controller_to = GLP
+	}
+}
+
+# STATE. A cession after a lost war carries the dated flag that the return
+# offer of SHL_check_crises and a later victory read.
+SHL_cede_state_to_kyz = {
+	if = {
+		limit = {
+			is_owned_by = SHL
+			KYZ = { exists = yes }
+		}
+		SHL_hand_state_to_kyz = yes
+		set_state_flag = SHL_ceded_state
+	}
+}
+
+SHL_cede_state_to_glp = {
+	if = {
+		limit = {
+			is_owned_by = SHL
+			GLP = { exists = yes }
+		}
+		SHL_hand_state_to_glp = yes
+		set_state_flag = SHL_ceded_state
+	}
+}
+
+# STATE. A ceded district returns from the neighbour that holds it.
+SHL_recover_ceded_from_kyz = {
+	if = {
+		limit = {
+			has_state_flag = SHL_ceded_state
+			is_owned_by = KYZ
+		}
+		SHL = { transfer_state = PREV }
+		set_state_controller_to = SHL
+		clr_state_flag = SHL_ceded_state
+	}
+}
+
+SHL_recover_ceded_from_glp = {
+	if = {
+		limit = {
+			has_state_flag = SHL_ceded_state
+			is_owned_by = GLP
+		}
+		SHL = { transfer_state = PREV }
+		set_state_controller_to = SHL
+		clr_state_flag = SHL_ceded_state
+	}
+}
+
+SHL_recover_ceded_from_kyz_all = {
+	287 = { SHL_recover_ceded_from_kyz = yes }
+	288 = { SHL_recover_ceded_from_kyz = yes }
+	289 = { SHL_recover_ceded_from_kyz = yes }
+	707 = { SHL_recover_ceded_from_kyz = yes }
+}
+
+SHL_recover_ceded_from_glp_all = {
+	293 = { SHL_recover_ceded_from_glp = yes }
+	295 = { SHL_recover_ceded_from_glp = yes }
+	296 = { SHL_recover_ceded_from_glp = yes }
+	733 = { SHL_recover_ceded_from_glp = yes }
+}
+
+# The price of a lost limited war, paid on every route to terms.
+SHL_defeat_fallout = {
+	set_variable = { var = SHL_loyalty_delta value = -15 }
+	SHL_change_all_loyalty = yes
+	add_to_variable = { var = SHL_unrest value = 5 }
+	SHL_clamp_tensions = yes
+	set_temp_variable = { var = SHL_balance_shift value = -0.10 }
+	SHL_balance_shift = yes
+	add_war_support = -0.05
+}
+
+# Timeout of SHL_kyz_front_lost or SHL_glp_front_lost. The candidates are
+# recorded while the winner still holds them; one set of terms is pending at a
+# time, and a second loss inside its window ends as the status quo. The year of
+# border truce keeps the dispute decisions closed whatever terms the winner
+# picks, so a new declaration cannot suspend the tithe.
+SHL_qanat_war_lost = {
+	if = {
+		limit = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+		if = {
+			limit = { NOT = { has_variable = SHL_terms_war } }
+			SHL_record_kyz_terms_candidates = yes
+			set_variable = { var = SHL_terms_war value = 1 }
+			set_country_flag = {
+				flag = SHL_terms_pending
+				value = 1
+				days = 40
+			}
+		}
+		set_variable = { var = SHL_loyalty_delta value = -10 }
+		SHL_change_qanat_houses_loyalty = yes
+		SHL_close_qanat_war = yes
+		set_country_flag = {
+			flag = SHL_border_truce_KYZ
+			value = 1
+			days = 365
+		}
+		SHL_defeat_fallout = yes
+		SHL_refresh_furnaces = yes
+		if = {
+			limit = { check_variable = { var = SHL_terms_war value = 1 compare = equals } }
+			KYZ = { country_event = { id = ADISCORD_SHL.161 } }
+		}
+	}
+}
+
+SHL_kyz_war_lost = {
+	if = {
+		limit = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
+		if = {
+			limit = { NOT = { has_variable = SHL_terms_war } }
+			SHL_record_kyz_terms_candidates = yes
+			set_variable = { var = SHL_terms_war value = 2 }
+			set_country_flag = {
+				flag = SHL_terms_pending
+				value = 1
+				days = 40
+			}
+		}
+		SHL_close_kyz_war = yes
+		set_country_flag = {
+			flag = SHL_border_truce_KYZ
+			value = 1
+			days = 365
+		}
+		set_variable = { var = SHL_kyz_outcome value = 4 }
+		set_variable = { var = SHL_loyalty_delta value = -5 }
+		SHL_change_all_loyalty = yes
+		SHL_defeat_fallout = yes
+		SHL_refresh_furnaces = yes
+		if = {
+			limit = { check_variable = { var = SHL_terms_war value = 2 compare = equals } }
+			KYZ = { country_event = { id = ADISCORD_SHL.161 } }
+		}
+	}
+}
+
+SHL_glp_war_lost = {
+	if = {
+		limit = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+		if = {
+			limit = { NOT = { has_variable = SHL_terms_war } }
+			SHL_record_glp_terms_candidates = yes
+			set_variable = { var = SHL_terms_war value = 3 }
+			set_country_flag = {
+				flag = SHL_terms_pending
+				value = 1
+				days = 40
+			}
+		}
+		set_variable = { var = SHL_loyalty_delta value = -10 }
+		SHL_change_port_houses_loyalty = yes
+		SHL_close_glp_war = yes
+		set_country_flag = {
+			flag = SHL_border_truce_GLP
+			value = 1
+			days = 365
+		}
+		clr_country_flag = SHL_war_glp_sea_goal
+		SHL_defeat_fallout = yes
+		SHL_refresh_furnaces = yes
+		if = {
+			limit = { check_variable = { var = SHL_terms_war value = 3 compare = equals } }
+			GLP = { country_event = { id = ADISCORD_SHL.161 } }
+		}
+	}
+}
+
+# Zarkhan in the ration war and at most one qanat furnace (287 > 289 > 288);
+# the furnace garrisons keep every furnace out of the terms.
+SHL_record_kyz_terms_candidates = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_war_kyz value = 2 compare = equals }
+			707 = { SHL_held_by_kyz_side = yes }
+		}
+		707 = { set_state_flag = SHL_terms_candidate }
+	}
+	if = {
+		limit = { NOT = { has_completed_focus = SHL_furnace_garrisons } }
+		if = {
+			limit = { 287 = { SHL_held_by_kyz_side = yes } }
+			287 = { set_state_flag = SHL_terms_candidate }
+		}
+		else_if = {
+			limit = { 289 = { SHL_held_by_kyz_side = yes } }
+			289 = { set_state_flag = SHL_terms_candidate }
+		}
+		else_if = {
+			limit = { 288 = { SHL_held_by_kyz_side = yes } }
+			288 = { set_state_flag = SHL_terms_candidate }
+		}
+	}
+}
+
+# Salik and the Veyran border when held, and at most one furnace (295 > 293).
+SHL_record_glp_terms_candidates = {
+	if = {
+		limit = { 296 = { SHL_held_by_glp = yes } }
+		296 = { set_state_flag = SHL_terms_candidate }
+	}
+	if = {
+		limit = { 733 = { SHL_held_by_glp = yes } }
+		733 = { set_state_flag = SHL_terms_candidate }
+	}
+	if = {
+		limit = { NOT = { has_completed_focus = SHL_furnace_garrisons } }
+		if = {
+			limit = { 295 = { SHL_held_by_glp = yes } }
+			295 = { set_state_flag = SHL_terms_candidate }
+		}
+		else_if = {
+			limit = { 293 = { SHL_held_by_glp = yes } }
+			293 = { set_state_flag = SHL_terms_candidate }
+		}
+	}
+}
+
+SHL_clear_terms_candidates = {
+	287 = { clr_state_flag = SHL_terms_candidate }
+	288 = { clr_state_flag = SHL_terms_candidate }
+	289 = { clr_state_flag = SHL_terms_candidate }
+	293 = { clr_state_flag = SHL_terms_candidate }
+	295 = { clr_state_flag = SHL_terms_candidate }
+	296 = { clr_state_flag = SHL_terms_candidate }
+	707 = { clr_state_flag = SHL_terms_candidate }
+	733 = { clr_state_flag = SHL_terms_candidate }
+}
+
+# STATE helpers of the district terms.
+SHL_cede_candidate_to_kyz = {
+	if = {
+		limit = { has_state_flag = SHL_terms_candidate }
+		SHL_cede_state_to_kyz = yes
+	}
+}
+
+SHL_cede_candidate_to_glp = {
+	if = {
+		limit = { has_state_flag = SHL_terms_candidate }
+		SHL_cede_state_to_glp = yes
+	}
+}
+
+# ADISCORD_SHL.161 answers, run in SHL scope with the winner as ROOT. The
+# pending SHL_terms_war is the receipt: each answer settles it once.
+SHL_terms_tithe = {
+	if = {
+		limit = {
+			has_variable = SHL_terms_war
+			NOT = { has_variable = SHL_indemnity_due }
+		}
+		set_variable = { var = SHL_indemnity_due value = 240 }
+		set_variable = { var = SHL_indemnity_recipient value = 1 }
+		if = {
+			limit = { check_variable = { var = SHL_terms_war value = 2 compare = equals } }
+			set_variable = { var = SHL_indemnity_due value = 320 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_terms_war value = 3 compare = equals } }
+			set_variable = { var = SHL_indemnity_recipient value = 2 }
+		}
+		set_variable = { var = SHL_last_terms value = 1 }
+		SHL_terms_finish = yes
+	}
+}
+
+SHL_terms_land = {
+	if = {
+		limit = { has_variable = SHL_terms_war }
+		if = {
+			limit = { check_variable = { var = SHL_terms_war value = 3 compare = equals } }
+			296 = { SHL_cede_candidate_to_glp = yes }
+			733 = { SHL_cede_candidate_to_glp = yes }
+			293 = { SHL_cede_candidate_to_glp = yes }
+			295 = { SHL_cede_candidate_to_glp = yes }
+		}
+		else = {
+			707 = { SHL_cede_candidate_to_kyz = yes }
+			287 = { SHL_cede_candidate_to_kyz = yes }
+			288 = { SHL_cede_candidate_to_kyz = yes }
+			289 = { SHL_cede_candidate_to_kyz = yes }
+		}
+		set_variable = { var = SHL_last_terms value = 2 }
+		SHL_terms_finish = yes
+	}
+}
+
+# The treaty binds both sides for two years and adds the war's economic rider.
+SHL_terms_treaty = {
+	if = {
+		limit = { has_variable = SHL_terms_war }
+		if = {
+			limit = { check_variable = { var = SHL_terms_war value = 3 compare = equals } }
+			set_country_flag = {
+				flag = SHL_neutral_to_GLP
+				value = 1
+				days = 730
+			}
+			add_timed_idea = { idea = SHL_veyr_bondage days = 365 }
+		}
+		else = {
+			set_country_flag = {
+				flag = SHL_neutral_to_KYZ
+				value = 1
+				days = 730
+			}
+			if = {
+				limit = { check_variable = { var = SHL_terms_war value = 1 compare = equals } }
+				set_variable = { var = SHL_water_quota value = 1 }
+				if = {
+					limit = { check_variable = { var = SHL_water_crisis value = 1 compare = equals } }
+					set_variable = { var = SHL_water_crisis value = 2 }
+				}
+			}
+			else = { add_timed_idea = { idea = SHL_keizan_ration days = 540 } }
+		}
+		set_variable = { var = SHL_last_terms value = 3 }
+		SHL_terms_finish = yes
+	}
+}
+
+# Fires the report to Shahrabad and the regional news with the winner in FROM.
+SHL_terms_finish = {
+	SHL_clear_terms_candidates = yes
+	clr_country_flag = SHL_terms_pending
+	clear_variable = SHL_terms_war
+	SHL_refresh_furnaces = yes
+	country_event = { id = ADISCORD_SHL.162 }
+	news_event = { id = ADISCORD_SHL_news.10 hours = 6 }
+}
+
+# Per cycle. Unanswered terms die with their 40-day flag; a redemption offer
+# that its neighbour never answered is refunded in full. A ceded district that
+# came back by another route (annexation, a later peace) drops its old claim, so
+# a future loss of it never inherits an aged return offer.
+SHL_expire_border_offers = {
+	if = {
+		limit = {
+			has_variable = SHL_terms_war
+			NOT = { has_country_flag = SHL_terms_pending }
+		}
+		SHL_clear_terms_candidates = yes
+		clear_variable = SHL_terms_war
+	}
+	if = {
+		limit = {
+			has_variable = SHL_redemption_deposit
+			NOT = { has_country_flag = SHL_redemption_pending }
+		}
+		SHL_refund_redemption = yes
+	}
+	287 = { SHL_drop_returned_cession = yes }
+	288 = { SHL_drop_returned_cession = yes }
+	289 = { SHL_drop_returned_cession = yes }
+	293 = { SHL_drop_returned_cession = yes }
+	295 = { SHL_drop_returned_cession = yes }
+	296 = { SHL_drop_returned_cession = yes }
+	707 = { SHL_drop_returned_cession = yes }
+	733 = { SHL_drop_returned_cession = yes }
+}
+
+# STATE. See SHL_expire_border_offers.
+SHL_drop_returned_cession = {
+	if = {
+		limit = {
+			has_state_flag = SHL_ceded_state
+			is_owned_by = SHL
+		}
+		clr_state_flag = SHL_ceded_state
+	}
+}
+
+# Inside SHL_produce_period. Every held lit furnace of the cycle pays 8 of the
+# debt, never more than remains; the debt waits while the recipient fights
+# Shahrabad and ends with a vanished or subject recipient. Codes: 1 KYZ, 2 GLP.
+SHL_pay_indemnity = {
+	if = {
+		limit = { SHL_indemnity_recipient_valid = no }
+		SHL_clear_indemnity = yes
+	}
+	else_if = {
+		limit = { SHL_indemnity_recipient_at_peace = yes }
+		set_variable = { var = SHL_indemnity_payment value = 0 }
+		if = {
+			limit = {
+				287 = {
+					SHL_furnace_site_controlled = yes
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+				}
+			}
+			add_to_variable = { var = SHL_indemnity_payment value = 8 }
+		}
+		if = {
+			limit = {
+				288 = {
+					SHL_furnace_site_controlled = yes
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+				}
+			}
+			add_to_variable = { var = SHL_indemnity_payment value = 8 }
+		}
+		if = {
+			limit = {
+				289 = {
+					SHL_furnace_site_controlled = yes
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+				}
+			}
+			add_to_variable = { var = SHL_indemnity_payment value = 8 }
+		}
+		if = {
+			limit = {
+				290 = {
+					SHL_furnace_site_controlled = yes
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+				}
+			}
+			add_to_variable = { var = SHL_indemnity_payment value = 8 }
+		}
+		if = {
+			limit = {
+				291 = {
+					SHL_furnace_site_controlled = yes
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+				}
+			}
+			add_to_variable = { var = SHL_indemnity_payment value = 8 }
+		}
+		if = {
+			limit = {
+				292 = {
+					SHL_furnace_site_controlled = yes
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+				}
+			}
+			add_to_variable = { var = SHL_indemnity_payment value = 8 }
+		}
+		if = {
+			limit = {
+				293 = {
+					SHL_furnace_site_controlled = yes
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+				}
+			}
+			add_to_variable = { var = SHL_indemnity_payment value = 8 }
+		}
+		if = {
+			limit = {
+				294 = {
+					SHL_furnace_site_controlled = yes
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+				}
+			}
+			add_to_variable = { var = SHL_indemnity_payment value = 8 }
+		}
+		if = {
+			limit = {
+				295 = {
+					SHL_furnace_site_controlled = yes
+					check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+				}
+			}
+			add_to_variable = { var = SHL_indemnity_payment value = 8 }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_indemnity_payment value = SHL_indemnity_due compare = greater_than } }
+			set_variable = { var = SHL_indemnity_payment value = SHL_indemnity_due }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_indemnity_payment }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_indemnity_payment }
+		subtract_from_variable = { var = SHL_last_cycle_income value = SHL_indemnity_payment }
+		if = {
+			limit = { check_variable = { var = SHL_indemnity_recipient value = 1 compare = equals } }
+			KYZ = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_indemnity_payment }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_indemnity_payment }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = {
+			GLP = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_indemnity_payment }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_indemnity_payment }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		subtract_from_variable = { var = SHL_indemnity_due value = SHL_indemnity_payment }
+		clear_variable = SHL_indemnity_payment
+		if = {
+			limit = { NOT = { has_completed_focus = SHL_border_settlement_office } }
+			set_variable = { var = SHL_loyalty_delta value = -2 }
+			SHL_change_all_loyalty = yes
+			SHL_clamp_tensions = yes
+		}
+		if = {
+			limit = { check_variable = { var = SHL_indemnity_due value = 0 compare = less_than_or_equals } }
+			SHL_clear_indemnity = yes
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_clear_indemnity = {
+	clear_variable = SHL_indemnity_due
+	clear_variable = SHL_indemnity_recipient
+}
+
+# SHL_settle_indemnity: the remaining debt and 25 political power, once.
+SHL_buy_out_indemnity = {
+	if = {
+		limit = {
+			has_variable = SHL_indemnity_due
+			SHL_indemnity_recipient_valid = yes
+			SHL_indemnity_recipient_at_peace = yes
+			SHL_indemnity_buyout_affordable = yes
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_indemnity_due }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_indemnity_due }
+		add_political_power = -25
+		if = {
+			limit = { check_variable = { var = SHL_indemnity_recipient value = 1 compare = equals } }
+			KYZ = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_indemnity_due }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_indemnity_due }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		else = {
+			GLP = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_indemnity_due }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_indemnity_due }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		SHL_clear_indemnity = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# ----- Return of ceded districts -----
+# SHL_check_crises offers ADISCORD_SHL.163 once a ceded district has waited its
+# year (half a year with the border settlement office). The redemption is an
+# escrow: SHL_redemption_deposit and SHL_redemption_pp until the neighbour
+# answers ADISCORD_SHL.164 or its 40-day pending flag lapses. Codes: 1 KYZ, 2 GLP.
+
+# ADISCORD_SHL.163 immediate. Keizan is answered first when both are due.
+SHL_pick_return_neighbour = {
+	set_variable = { var = SHL_return_neighbour value = 2 }
+	if = {
+		limit = { SHL_return_offer_kyz_ready = yes }
+		set_variable = { var = SHL_return_neighbour value = 1 }
+	}
+}
+
+# ADISCORD_SHL.163 answer: the Conclave accepts the border of that neighbour.
+SHL_accept_ceded_border = {
+	if = {
+		limit = { check_variable = { var = SHL_return_neighbour value = 1 compare = equals } }
+		287 = { SHL_drop_ceded_claim_kyz = yes }
+		288 = { SHL_drop_ceded_claim_kyz = yes }
+		289 = { SHL_drop_ceded_claim_kyz = yes }
+		707 = { SHL_drop_ceded_claim_kyz = yes }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_return_neighbour value = 2 compare = equals } }
+		293 = { SHL_drop_ceded_claim_glp = yes }
+		295 = { SHL_drop_ceded_claim_glp = yes }
+		296 = { SHL_drop_ceded_claim_glp = yes }
+		733 = { SHL_drop_ceded_claim_glp = yes }
+	}
+	clear_variable = SHL_return_neighbour
+	set_variable = { var = SHL_loyalty_delta value = 5 }
+	SHL_change_all_loyalty = yes
+	SHL_clamp_tensions = yes
+}
+
+# STATE helpers: only the answering neighbour's districts are released.
+SHL_drop_ceded_claim_kyz = {
+	if = {
+		limit = { is_owned_by = KYZ }
+		clr_state_flag = SHL_ceded_state
+	}
+}
+
+SHL_drop_ceded_claim_glp = {
+	if = {
+		limit = { is_owned_by = GLP }
+		clr_state_flag = SHL_ceded_state
+	}
+}
+
+# ADISCORD_SHL.163 answer. Payment is held until the neighbour's own choice.
+SHL_offer_redemption = {
+	if = {
+		limit = {
+			NOT = { has_variable = SHL_redemption_deposit }
+			check_variable = { var = SHL_return_neighbour value = 0 compare = greater_than }
+			SHL_redemption_affordable = yes
+		}
+		set_variable = { var = SHL_redemption_deposit value = 250 }
+		if = {
+			limit = { has_completed_focus = SHL_border_settlement_office }
+			set_variable = { var = SHL_redemption_deposit value = 200 }
+		}
+		set_variable = { var = SHL_redemption_pp value = 25 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_redemption_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_redemption_deposit }
+		add_political_power = -25
+		ADISCORD_economy_mark_dirty = yes
+		set_country_flag = {
+			flag = SHL_redemption_pending
+			value = 1
+			days = 40
+		}
+		if = {
+			limit = { check_variable = { var = SHL_return_neighbour value = 1 compare = equals } }
+			KYZ = { country_event = { id = ADISCORD_SHL.164 } }
+		}
+		else = {
+			GLP = { country_event = { id = ADISCORD_SHL.164 } }
+		}
+	}
+}
+
+# ADISCORD_SHL.164 acceptance, called in SHL scope. The deposit and the
+# districts change hands together and only once. A neighbour that no longer
+# owns any ceded district by the time it answers receives nothing; the escrow
+# returns to Shahrabad in full.
+SHL_complete_redemption = {
+	if = {
+		limit = {
+			has_variable = SHL_redemption_deposit
+			has_country_flag = SHL_redemption_pending
+			SHL_country_operable = yes
+			SHL_redemption_deliverable = no
+		}
+		SHL_refund_redemption = yes
+	}
+	else_if = {
+		limit = {
+			has_variable = SHL_redemption_deposit
+			has_country_flag = SHL_redemption_pending
+			SHL_country_operable = yes
+		}
+		if = {
+			limit = { check_variable = { var = SHL_return_neighbour value = 1 compare = equals } }
+			KYZ = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_redemption_deposit }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_redemption_deposit }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			SHL_recover_ceded_from_kyz_all = yes
+		}
+		else = {
+			GLP = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_redemption_deposit }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_redemption_deposit }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			SHL_recover_ceded_from_glp_all = yes
+		}
+		clear_variable = SHL_redemption_deposit
+		clear_variable = SHL_redemption_pp
+		clr_country_flag = SHL_redemption_pending
+		clear_variable = SHL_return_neighbour
+		SHL_refresh_furnaces = yes
+		country_event = { id = ADISCORD_SHL.165 }
+	}
+}
+
+# ADISCORD_SHL.164 refusal, called in SHL scope: a full refund, and the
+# refusal reopens the limited war against that neighbour.
+SHL_refuse_redemption = {
+	if = {
+		limit = { has_variable = SHL_redemption_deposit }
+		if = {
+			limit = { check_variable = { var = SHL_return_neighbour value = 1 compare = equals } }
+			set_country_flag = SHL_redemption_refused_KYZ
+		}
+		else = { set_country_flag = SHL_redemption_refused_GLP }
+		SHL_refund_redemption = yes
+		country_event = { id = ADISCORD_SHL.166 }
+	}
+}
+
+SHL_refund_redemption = {
+	if = {
+		limit = { has_variable = SHL_redemption_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_redemption_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_redemption_deposit }
+		add_political_power = SHL_redemption_pp
+		ADISCORD_economy_mark_dirty = yes
+		clear_variable = SHL_redemption_deposit
+		clear_variable = SHL_redemption_pp
+		clr_country_flag = SHL_redemption_pending
+		clear_variable = SHL_return_neighbour
+	}
+}
+
+# ----- Answers of the victor (ADISCORD_SHL.57.b and .66.b) -----
+
+# The head wells and the districts behind them go back to the communities in
+# exchange for a lasting peace.
+SHL_return_wells_to_communities = {
+	if = {
+		limit = { SHL_can_return_wells = yes }
+		280 = { SHL_hand_state_to_kyz = yes }
+		284 = { SHL_hand_state_to_kyz = yes }
+		285 = { SHL_hand_state_to_kyz = yes }
+		286 = { SHL_hand_state_to_kyz = yes }
+		set_variable = { var = SHL_water_crisis value = 5 }
+		set_country_flag = {
+			flag = SHL_neutral_to_KYZ
+			value = 1
+			days = 730
+		}
+		clr_country_flag = SHL_revanche_due_KYZ
+		if = {
+			limit = { has_idea = SHL_captured_qanats }
+			remove_ideas = SHL_captured_qanats
+		}
+		set_variable = { var = SHL_loyalty_delta value = 10 }
+		SHL_change_all_loyalty = yes
+		SHL_clamp_tensions = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# The ports return to Veyr under a harbour union instead of an occupation.
+SHL_open_harbour_union = {
+	if = {
+		limit = { SHL_can_open_harbour_union = yes }
+		297 = { SHL_hand_state_to_glp = yes }
+		299 = { SHL_hand_state_to_glp = yes }
+		298 = { SHL_hand_state_to_glp = yes }
+		708 = { SHL_hand_state_to_glp = yes }
+		set_country_flag = SHL_veyr_partner
+		GLP = { SHL_reconcile_kyz_grievance = yes }
+		set_variable = { var = SHL_veyr_crisis value = 2 }
+		clr_country_flag = SHL_revanche_due_GLP
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# ----- Field batteries of the border furnaces (operation 13) -----
+# The battery holds the site's operation slot for 14 days: the paid escrow is
+# the site's SHL_operation_deposit, refunded by SHL_cancel_operation when the
+# district is lost.
+
+SHL_begin_front_battery = {
+	if = {
+		limit = {
+			FROM = {
+				SHL_furnace_site_idle = yes
+				SHL_front_battery_site = yes
+				check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			NOT = { has_political_power < 20 }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		add_political_power = -20
+		FROM = {
+			set_variable = { var = SHL_operation value = 13 }
+			set_variable = { var = SHL_operation_deposit value = 100 }
+			set_variable = { var = SHL_operation_pp value = 20 }
+		}
+		SHL_refresh_furnaces = yes
+	}
+}
+
+SHL_finish_front_battery = {
+	if = {
+		limit = { FROM = { check_variable = { var = SHL_operation value = 13 compare = equals } } }
+		if = {
+			limit = { FROM = { SHL_furnace_site_controlled = yes } }
+			FROM = {
+				add_to_variable = { var = SHL_furnace_wear value = 10 }
+				clamp_variable = { var = SHL_furnace_wear min = 0 max = 100 }
+				clear_variable = SHL_operation_deposit
+				clear_variable = SHL_operation_pp
+				clear_variable = SHL_operation
+			}
+			if = {
+				limit = { has_completed_focus = SHL_siege_founders }
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = 48
+					producer = SHL
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = 36
+					producer = SHL
+				}
+			}
+			if = {
+				limit = { FROM = { SHL_front_battery_site = yes } }
+				SHL_front_battery_strike = yes
+			}
+		}
+		else = { SHL_cancel_operation = yes }
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# FROM is the battery site. Explicit neighbour lists keep the strike on the
+# districts that border it.
+SHL_front_battery_strike = {
+	if = {
+		limit = { FROM = { state = 287 } }
+		280 = { SHL_front_battery_hit_kyz = yes }
+		286 = { SHL_front_battery_hit_kyz = yes }
+	}
+	else_if = {
+		limit = { FROM = { state = 288 } }
+		280 = { SHL_front_battery_hit_kyz = yes }
+	}
+	else_if = {
+		limit = { FROM = { state = 289 } }
+		284 = { SHL_front_battery_hit_kyz = yes }
+		285 = { SHL_front_battery_hit_kyz = yes }
+		286 = { SHL_front_battery_hit_kyz = yes }
+	}
+	else_if = {
+		limit = { FROM = { state = 293 } }
+		297 = { SHL_front_battery_hit_glp = yes }
+	}
+	else_if = {
+		limit = { FROM = { state = 295 } }
+		298 = { SHL_front_battery_hit_glp = yes }
+		299 = { SHL_front_battery_hit_glp = yes }
+		708 = { SHL_front_battery_hit_glp = yes }
+	}
+}
+
+# STATE. Only land the enemy owns and holds is shelled; siege founders also
+# hit its arms works.
+SHL_front_battery_hit_kyz = {
+	if = {
+		limit = {
+			is_owned_by = KYZ
+			is_controlled_by = KYZ
+			SHL = { has_war_with = KYZ }
+		}
+		SHL_front_battery_hit = yes
+	}
+}
+
+SHL_front_battery_hit_glp = {
+	if = {
+		limit = {
+			is_owned_by = GLP
+			is_controlled_by = GLP
+			SHL = { has_war_with = GLP }
+		}
+		SHL_front_battery_hit = yes
+	}
+}
+
+SHL_front_battery_hit = {
+	if = {
+		limit = { infrastructure > 0 }
+		damage_building = {
+			type = infrastructure
+			damage = 1
+		}
+	}
+	if = {
+		limit = {
+			SHL = { has_completed_focus = SHL_siege_founders }
+			arms_factory > 0
+		}
+		damage_building = {
+			type = arms_factory
+			damage = 1
+		}
+	}
+}
+
+# COUNTRY SHL. Border-war focuses add to the SHL_bw_* variables; the modifier
+# acts only while a limited war is fought.
+SHL_refresh_border_war = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = SHL_border_war_dynamic } } }
+		add_dynamic_modifier = { modifier = SHL_border_war_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
 }
 
 # ----- Alliances -----
@@ -3981,7 +6312,10 @@ SHL_complete_obligation = {
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 120 }
 		}
 		clear_variable = SHL_obligation_liability
-		subtract_from_variable = { var = SHL_house_pressure value = 5 }
+		# The export house earned the contract.
+		set_variable = { var = SHL_loyalty_site value = SHL_obligation_site }
+		set_variable = { var = SHL_loyalty_delta value = 15 }
+		SHL_change_site_loyalty = yes
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_obligation_kind value = 2 compare = equals } }
@@ -4130,9 +6464,10 @@ SHL_foreclose_pledge = {
 					set_variable = { var = SHL_furnace_owner value = 1 }
 					SHL = {
 						SHL_clear_obligation = yes
-						add_to_variable = { var = SHL_house_pressure value = 15 }
+						set_variable = { var = SHL_loyalty_delta value = -30 }
 						subtract_from_variable = { var = SHL_unrest value = 8 }
 					}
+					SHL_apply_house_loyalty = yes
 				}
 			}
 		}
@@ -4144,9 +6479,10 @@ SHL_foreclose_pledge = {
 					set_variable = { var = SHL_furnace_owner value = 1 }
 					SHL = {
 						SHL_clear_obligation = yes
-						add_to_variable = { var = SHL_house_pressure value = 15 }
+						set_variable = { var = SHL_loyalty_delta value = -30 }
 						subtract_from_variable = { var = SHL_unrest value = 8 }
 					}
+					SHL_apply_house_loyalty = yes
 				}
 			}
 		}
@@ -4158,9 +6494,10 @@ SHL_foreclose_pledge = {
 					set_variable = { var = SHL_furnace_owner value = 1 }
 					SHL = {
 						SHL_clear_obligation = yes
-						add_to_variable = { var = SHL_house_pressure value = 15 }
+						set_variable = { var = SHL_loyalty_delta value = -30 }
 						subtract_from_variable = { var = SHL_unrest value = 8 }
 					}
+					SHL_apply_house_loyalty = yes
 				}
 			}
 		}
@@ -4172,9 +6509,10 @@ SHL_foreclose_pledge = {
 					set_variable = { var = SHL_furnace_owner value = 1 }
 					SHL = {
 						SHL_clear_obligation = yes
-						add_to_variable = { var = SHL_house_pressure value = 15 }
+						set_variable = { var = SHL_loyalty_delta value = -30 }
 						subtract_from_variable = { var = SHL_unrest value = 8 }
 					}
+					SHL_apply_house_loyalty = yes
 				}
 			}
 		}
@@ -4186,9 +6524,10 @@ SHL_foreclose_pledge = {
 					set_variable = { var = SHL_furnace_owner value = 1 }
 					SHL = {
 						SHL_clear_obligation = yes
-						add_to_variable = { var = SHL_house_pressure value = 15 }
+						set_variable = { var = SHL_loyalty_delta value = -30 }
 						subtract_from_variable = { var = SHL_unrest value = 8 }
 					}
+					SHL_apply_house_loyalty = yes
 				}
 			}
 		}
@@ -4200,9 +6539,10 @@ SHL_foreclose_pledge = {
 					set_variable = { var = SHL_furnace_owner value = 1 }
 					SHL = {
 						SHL_clear_obligation = yes
-						add_to_variable = { var = SHL_house_pressure value = 15 }
+						set_variable = { var = SHL_loyalty_delta value = -30 }
 						subtract_from_variable = { var = SHL_unrest value = 8 }
 					}
+					SHL_apply_house_loyalty = yes
 				}
 			}
 		}
@@ -4214,9 +6554,10 @@ SHL_foreclose_pledge = {
 					set_variable = { var = SHL_furnace_owner value = 1 }
 					SHL = {
 						SHL_clear_obligation = yes
-						add_to_variable = { var = SHL_house_pressure value = 15 }
+						set_variable = { var = SHL_loyalty_delta value = -30 }
 						subtract_from_variable = { var = SHL_unrest value = 8 }
 					}
+					SHL_apply_house_loyalty = yes
 				}
 			}
 		}
@@ -4228,9 +6569,10 @@ SHL_foreclose_pledge = {
 					set_variable = { var = SHL_furnace_owner value = 1 }
 					SHL = {
 						SHL_clear_obligation = yes
-						add_to_variable = { var = SHL_house_pressure value = 15 }
+						set_variable = { var = SHL_loyalty_delta value = -30 }
 						subtract_from_variable = { var = SHL_unrest value = 8 }
 					}
+					SHL_apply_house_loyalty = yes
 				}
 			}
 		}
@@ -4242,9 +6584,10 @@ SHL_foreclose_pledge = {
 					set_variable = { var = SHL_furnace_owner value = 1 }
 					SHL = {
 						SHL_clear_obligation = yes
-						add_to_variable = { var = SHL_house_pressure value = 15 }
+						set_variable = { var = SHL_loyalty_delta value = -30 }
 						subtract_from_variable = { var = SHL_unrest value = 8 }
 					}
+					SHL_apply_house_loyalty = yes
 				}
 			}
 		}
@@ -4358,6 +6701,45 @@ SHL_close_external_kyz_war = {
 		set_variable = { var = SHL_war_kyz value = 0 }
 		SHL_close_kyz_war = yes
 		set_variable = { var = SHL_kyz_outcome value = 5 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_war_kyz value = 1 compare = equals }
+			OR = {
+				exists = no
+				is_subject = yes
+				KYZ = {
+					OR = {
+						exists = no
+						is_subject = yes
+					}
+				}
+				NOT = { has_war_with = KYZ }
+			}
+		}
+		SHL_close_qanat_war = yes
+	}
+}
+
+# The port war's counterpart of SHL_close_external_kyz_war: the status quo.
+SHL_close_external_glp_war = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_war_glp value = 1 compare = equals }
+			OR = {
+				exists = no
+				is_subject = yes
+				GLP = {
+					OR = {
+						exists = no
+						is_subject = yes
+					}
+				}
+				NOT = { has_war_with = GLP }
+			}
+		}
+		SHL_close_glp_war = yes
+		clr_country_flag = SHL_war_glp_sea_goal
 	}
 }
 
@@ -4811,9 +7193,10 @@ SHL_deliver_southern_programme = {
 			clamp_variable = { var = SHL_furnace_wear min = 0 max = 100 }
 			SHL = { add_ideas = SHL_restored_house_guard }
 			SHL = {
-				subtract_from_variable = { var = SHL_house_pressure value = 15 }
+				set_variable = { var = SHL_loyalty_delta value = 30 }
 				add_to_variable = { var = SHL_unrest value = 10 }
 			}
+			SHL_apply_house_loyalty = yes
 		}
 		else_if = {
 			limit = { SHL = { check_variable = { var = SHL_south_course value = 5 compare = equals } } }
@@ -4965,7 +7348,8 @@ SHL_recognise_quarter_registers = {
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 80 }
 		remove_ideas = SHL_unregistered_quarters
 		add_to_variable = { var = SHL_city_support value = 8 }
-		add_to_variable = { var = SHL_house_pressure value = 5 }
+		set_variable = { var = SHL_loyalty_delta value = -5 }
+		SHL_change_all_loyalty = yes
 		set_temp_variable = { var = SHL_balance_shift value = 0.05 }
 		SHL_balance_shift = yes
 		SHL_clamp_tensions = yes
@@ -5297,39 +7681,58 @@ SHL_refresh_delivery_terms = {
 		divide_variable = { var = SHL_delivery_quarters value = 2 }
 		divide_variable = { var = SHL_delivery_crest value = 2 }
 	}
+	# A crest delivery from one district goes to its own house at three times
+	# the national figure.
+	set_variable = { var = SHL_delivery_loyalty value = SHL_delivery_crest }
+	multiply_variable = { var = SHL_delivery_loyalty value = 3 }
 }
 
 # STATE scope; called after consuming stock, only if no paid order owns the heat.
 SHL_deliver_site_heat = {
 	SHL = { set_variable = { var = SHL_delivery_recipient value = PREV.SHL_furnace_recipient } }
 	SHL = { SHL_deliver_heat = yes }
+	SHL_apply_site_loyalty_rate = yes
+	# A leased furnace keeps only the remainder of its cash; SHL_deliver_heat
+	# has no goods for recipient 4.
 	if = {
+		limit = { SHL_seal_site_leased = yes }
+		SHL_seal_settle_lease_site = yes
+	}
+	else_if = {
 		limit = { check_variable = { var = SHL_furnace_recipient value = 0 compare = greater_than } }
 		set_variable = { var = SHL_period_cash value = 0 }
 	}
-	if = {
-		limit = {
-			check_variable = { var = SHL_furnace_recipient value = 3 compare = equals }
-			check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-			SHL = { NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } } }
-		}
-		set_variable = { var = SHL_crest_delivered value = 1 }
-	}
 }
 
+# The tenth furnace shares district 294 and its lease; it has no marker of its own.
 SHL_deliver_tenth_heat = {
-	set_variable = { var = SHL_delivery_recipient value = SHL_tenth_recipient }
-	SHL_deliver_heat = yes
 	if = {
-		limit = { check_variable = { var = SHL_tenth_recipient value = 0 compare = greater_than } }
-		set_variable = { var = SHL_tenth_period_income value = 0 }
+		limit = { 294 = { SHL_seal_site_leased = yes } }
+		SHL_seal_settle_lease_tenth = yes
 	}
-	if = {
-		limit = {
-			check_variable = { var = SHL_tenth_recipient value = 3 compare = equals }
-			check_variable = { var = SHL_political_course value = 1 compare = equals }
+	else = {
+		set_variable = { var = SHL_delivery_recipient value = SHL_tenth_recipient }
+		SHL_deliver_heat = yes
+		if = {
+			limit = { check_variable = { var = SHL_tenth_recipient value = 0 compare = greater_than } }
+			set_variable = { var = SHL_tenth_period_income value = 0 }
 		}
-		set_variable = { var = SHL_tenth_crest_delivered value = 1 }
+		if = {
+			limit = {
+				check_variable = { var = SHL_tenth_recipient value = 3 compare = equals }
+				check_variable = { var = SHL_political_course value = 1 compare = equals }
+			}
+			set_variable = { var = SHL_tenth_crest_delivered value = 1 }
+		}
+		# The tenth furnace has no house of its own: its crest goes to all of them.
+		if = {
+			limit = {
+				check_variable = { var = SHL_tenth_recipient value = 3 compare = equals }
+				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			}
+			set_variable = { var = SHL_loyalty_delta value = SHL_delivery_crest }
+			SHL_change_all_loyalty = yes
+		}
 	}
 }
 
@@ -5347,104 +7750,63 @@ SHL_deliver_heat = {
 		limit = { check_variable = { var = SHL_delivery_recipient value = 2 compare = equals } }
 		subtract_from_variable = { var = SHL_unrest value = SHL_delivery_quarters }
 	}
-	else_if = {
-		limit = {
-			check_variable = { var = SHL_delivery_recipient value = 3 compare = equals }
-			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
-		}
-		subtract_from_variable = { var = SHL_house_pressure value = SHL_delivery_crest }
-	}
 }
 
+# Loyal votes: seated lit houses outside opposition at loyalty 55 or more,
+# and the tenth house after its crest delivery in the house course.
 SHL_refresh_delivery_support = {
 	set_variable = { var = SHL_crest_support value = 0 }
 	287 = {
 		if = {
-			limit = {
-				SHL_obligation_site_ready = yes
-				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-				check_variable = { var = SHL_crest_delivered value = 1 compare = equals }
-			}
+			limit = { SHL_house_loyal_vote = yes }
 			SHL = { add_to_variable = { var = SHL_crest_support value = 1 } }
 		}
 	}
 	288 = {
 		if = {
-			limit = {
-				SHL_obligation_site_ready = yes
-				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-				check_variable = { var = SHL_crest_delivered value = 1 compare = equals }
-			}
+			limit = { SHL_house_loyal_vote = yes }
 			SHL = { add_to_variable = { var = SHL_crest_support value = 1 } }
 		}
 	}
 	289 = {
 		if = {
-			limit = {
-				SHL_obligation_site_ready = yes
-				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-				check_variable = { var = SHL_crest_delivered value = 1 compare = equals }
-			}
+			limit = { SHL_house_loyal_vote = yes }
 			SHL = { add_to_variable = { var = SHL_crest_support value = 1 } }
 		}
 	}
 	290 = {
 		if = {
-			limit = {
-				SHL_obligation_site_ready = yes
-				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-				check_variable = { var = SHL_crest_delivered value = 1 compare = equals }
-			}
+			limit = { SHL_house_loyal_vote = yes }
 			SHL = { add_to_variable = { var = SHL_crest_support value = 1 } }
 		}
 	}
 	291 = {
 		if = {
-			limit = {
-				SHL_obligation_site_ready = yes
-				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-				check_variable = { var = SHL_crest_delivered value = 1 compare = equals }
-			}
+			limit = { SHL_house_loyal_vote = yes }
 			SHL = { add_to_variable = { var = SHL_crest_support value = 1 } }
 		}
 	}
 	292 = {
 		if = {
-			limit = {
-				SHL_obligation_site_ready = yes
-				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-				check_variable = { var = SHL_crest_delivered value = 1 compare = equals }
-			}
+			limit = { SHL_house_loyal_vote = yes }
 			SHL = { add_to_variable = { var = SHL_crest_support value = 1 } }
 		}
 	}
 	293 = {
 		if = {
-			limit = {
-				SHL_obligation_site_ready = yes
-				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-				check_variable = { var = SHL_crest_delivered value = 1 compare = equals }
-			}
+			limit = { SHL_house_loyal_vote = yes }
 			SHL = { add_to_variable = { var = SHL_crest_support value = 1 } }
 		}
 	}
 	294 = {
 		if = {
-			limit = {
-				SHL_obligation_site_ready = yes
-				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-				check_variable = { var = SHL_crest_delivered value = 1 compare = equals }
-			}
+			limit = { SHL_house_loyal_vote = yes }
 			SHL = { add_to_variable = { var = SHL_crest_support value = 1 } }
 		}
 	}
 	295 = {
 		if = {
-			limit = {
-				SHL_obligation_site_ready = yes
-				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
-				check_variable = { var = SHL_crest_delivered value = 1 compare = equals }
-			}
+			limit = { SHL_house_loyal_vote = yes }
 			SHL = { add_to_variable = { var = SHL_crest_support value = 1 } }
 		}
 	}
@@ -5540,12 +7902,23 @@ SHL_ai_allocate_deliveries = {
 				limit = { check_variable = { var = SHL_unrest value = 35 compare = greater_than_or_equals } }
 				set_variable = { var = SHL_ai_quarters_left value = 1 }
 			}
+			# One crest for a restless hall or a walkout, two when both press.
 			if = {
 				limit = {
-					check_variable = { var = SHL_house_pressure value = 35 compare = greater_than_or_equals }
 					NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+					OR = {
+						check_variable = { var = SHL_house_pressure value = 35 compare = greater_than_or_equals }
+						check_variable = { var = SHL_walkout_site value = 0 compare = greater_than }
+					}
 				}
 				set_variable = { var = SHL_ai_crests_left value = 1 }
+				if = {
+					limit = {
+						check_variable = { var = SHL_house_pressure value = 35 compare = greater_than_or_equals }
+						check_variable = { var = SHL_walkout_site value = 0 compare = greater_than }
+					}
+					set_variable = { var = SHL_ai_crests_left value = 2 }
+				}
 			}
 			if = {
 				limit = { has_war = yes }
@@ -5578,7 +7951,10 @@ SHL_ai_allocate_site = {
 			SHL = { subtract_from_variable = { var = SHL_ai_quarters_left value = 1 } }
 		}
 		else_if = {
-			limit = { SHL = { check_variable = { var = SHL_ai_crests_left value = 0 compare = greater_than } } }
+			limit = {
+				SHL = { check_variable = { var = SHL_ai_crests_left value = 0 compare = greater_than } }
+				check_variable = { var = SHL_house_loyalty value = 55 compare = less_than }
+			}
 			set_variable = { var = SHL_furnace_recipient value = 3 }
 			SHL = { subtract_from_variable = { var = SHL_ai_crests_left value = 1 } }
 		}
@@ -5669,6 +8045,7 @@ SHL_refresh_delivery_forecast = {
 	set_variable = { var = SHL_preview_rifles value = 0 }
 	set_variable = { var = SHL_preview_quarters value = 0 }
 	set_variable = { var = SHL_preview_crests value = 0 }
+	set_variable = { var = SHL_preview_loyalty_sum value = 0 }
 	set_variable = { var = SHL_preview_cost value = 1 }
 	set_variable = { var = SHL_preview_cash value = 60 }
 	if = {
@@ -5686,6 +8063,7 @@ SHL_refresh_delivery_forecast = {
 		SHL = {
 			set_variable = { var = SHL_preview_recipient value = PREV.SHL_furnace_recipient }
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_preview_status value = SHL_status_1 }
 			set_variable = { var = SHL_preview_site value = 287 }
 			SHL_preview_delivery = yes
@@ -5701,6 +8079,7 @@ SHL_refresh_delivery_forecast = {
 		SHL = {
 			set_variable = { var = SHL_preview_recipient value = PREV.SHL_furnace_recipient }
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_preview_status value = SHL_status_2 }
 			set_variable = { var = SHL_preview_site value = 288 }
 			SHL_preview_delivery = yes
@@ -5716,6 +8095,7 @@ SHL_refresh_delivery_forecast = {
 		SHL = {
 			set_variable = { var = SHL_preview_recipient value = PREV.SHL_furnace_recipient }
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_preview_status value = SHL_status_3 }
 			set_variable = { var = SHL_preview_site value = 289 }
 			SHL_preview_delivery = yes
@@ -5731,6 +8111,7 @@ SHL_refresh_delivery_forecast = {
 		SHL = {
 			set_variable = { var = SHL_preview_recipient value = PREV.SHL_furnace_recipient }
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_preview_status value = SHL_status_4 }
 			set_variable = { var = SHL_preview_site value = 290 }
 			SHL_preview_delivery = yes
@@ -5746,6 +8127,7 @@ SHL_refresh_delivery_forecast = {
 		SHL = {
 			set_variable = { var = SHL_preview_recipient value = PREV.SHL_furnace_recipient }
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_preview_status value = SHL_status_5 }
 			set_variable = { var = SHL_preview_site value = 291 }
 			SHL_preview_delivery = yes
@@ -5761,6 +8143,7 @@ SHL_refresh_delivery_forecast = {
 		SHL = {
 			set_variable = { var = SHL_preview_recipient value = PREV.SHL_furnace_recipient }
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_preview_status value = SHL_status_6 }
 			set_variable = { var = SHL_preview_site value = 292 }
 			SHL_preview_delivery = yes
@@ -5776,6 +8159,7 @@ SHL_refresh_delivery_forecast = {
 		SHL = {
 			set_variable = { var = SHL_preview_recipient value = PREV.SHL_furnace_recipient }
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_preview_status value = SHL_status_7 }
 			set_variable = { var = SHL_preview_site value = 293 }
 			SHL_preview_delivery = yes
@@ -5791,6 +8175,7 @@ SHL_refresh_delivery_forecast = {
 		SHL = {
 			set_variable = { var = SHL_preview_recipient value = PREV.SHL_furnace_recipient }
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_preview_status value = SHL_status_8 }
 			set_variable = { var = SHL_preview_site value = 294 }
 			SHL_preview_delivery = yes
@@ -5806,6 +8191,7 @@ SHL_refresh_delivery_forecast = {
 		SHL = {
 			set_variable = { var = SHL_preview_recipient value = PREV.SHL_furnace_recipient }
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_preview_status value = SHL_status_9 }
 			set_variable = { var = SHL_preview_site value = 295 }
 			SHL_preview_delivery = yes
@@ -5818,6 +8204,10 @@ SHL_refresh_delivery_forecast = {
 		}
 	}
 	set_variable = { var = SHL_preview_recipient value = SHL_tenth_recipient }
+	if = {
+		limit = { 294 = { SHL_seal_site_leased = yes } }
+		set_variable = { var = SHL_preview_recipient value = 4 }
+	}
 	set_variable = { var = SHL_preview_stock value = SHL_tenth_stock }
 	set_variable = { var = SHL_preview_site value = 0 }
 	set_variable = { var = SHL_preview_status value = 0 }
@@ -5836,6 +8226,18 @@ SHL_refresh_delivery_forecast = {
 	set_variable = { var = SHL_delivery_rifles_10 value = SHL_preview_site_rifles }
 	set_variable = { var = SHL_delivery_quarters_10 value = SHL_preview_site_quarters }
 	set_variable = { var = SHL_delivery_crests_10 value = SHL_preview_site_crests }
+	# The totals line shows the expected change of the pressure: the mean of the
+	# site changes over the counted houses plus the tenth furnace's crest.
+	if = {
+		limit = {
+			check_variable = { var = SHL_loyalty_houses value = 0 compare = greater_than }
+			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		}
+		divide_variable = { var = SHL_preview_loyalty_sum value = SHL_loyalty_houses }
+		add_to_variable = { var = SHL_preview_crests value = SHL_preview_loyalty_sum }
+	}
+	clear_variable = SHL_preview_loyalty_sum
+	clear_variable = SHL_preview_owner
 }
 
 SHL_preview_delivery = {
@@ -5867,7 +8269,7 @@ SHL_preview_delivery = {
 				set_variable = { var = SHL_preview_packets value = 2 }
 			}
 			set_variable = { var = SHL_preview_price value = SHL_preview_packets }
-			multiply_variable = { var = SHL_preview_price value = 25 }
+			multiply_variable = { var = SHL_preview_price value = SHL_packet_price }
 			if = {
 				limit = { check_variable = { var = SHL_preview_budget value = SHL_preview_price compare = greater_than_or_equals } }
 				subtract_from_variable = { var = SHL_preview_budget value = SHL_preview_price }
@@ -5907,6 +8309,31 @@ SHL_preview_delivery = {
 			limit = { check_variable = { var = SHL_preview_recipient value = 0 compare = equals } }
 			set_variable = { var = SHL_preview_site_cash value = SHL_preview_cash }
 		}
+		# The lease keeps the remainder after the namestnik's share; a furnace
+		# serving its redemption keeps nothing (SHL_seal_settle_lease_site).
+		else_if = {
+			limit = { check_variable = { var = SHL_preview_recipient value = 4 compare = equals } }
+			set_variable = { var = SHL_preview_site_cash value = SHL_preview_cash }
+			set_variable = { var = SHL_preview_lease_due value = SHL_preview_cash }
+			multiply_variable = { var = SHL_preview_lease_due value = SHL_seal_lease_share }
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							check_variable = { var = SHL_preview_site value = 0 compare = equals }
+							294 = { has_variable = SHL_seal_service_cycles }
+						}
+						AND = {
+							check_variable = { var = SHL_preview_site value = 0 compare = greater_than }
+							var:SHL_preview_site = { has_variable = SHL_seal_service_cycles }
+						}
+					}
+				}
+				set_variable = { var = SHL_preview_lease_due value = SHL_preview_cash }
+			}
+			subtract_from_variable = { var = SHL_preview_site_cash value = SHL_preview_lease_due }
+			clear_variable = SHL_preview_lease_due
+		}
 		else_if = {
 			limit = { check_variable = { var = SHL_preview_recipient value = 1 compare = equals } }
 			set_variable = { var = SHL_preview_site_rifles value = SHL_delivery_rifles }
@@ -5918,6 +8345,7 @@ SHL_preview_delivery = {
 		else_if = {
 			limit = {
 				check_variable = { var = SHL_preview_recipient value = 3 compare = equals }
+				check_variable = { var = SHL_preview_site value = 0 compare = equals }
 				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 			}
 			set_variable = { var = SHL_preview_site_crests value = SHL_delivery_crest }
@@ -5926,7 +8354,41 @@ SHL_preview_delivery = {
 		add_to_variable = { var = SHL_preview_budget value = SHL_preview_site_cash }
 		add_to_variable = { var = SHL_preview_rifles value = SHL_preview_site_rifles }
 		add_to_variable = { var = SHL_preview_quarters value = SHL_preview_site_quarters }
-		add_to_variable = { var = SHL_preview_crests value = SHL_preview_site_crests }
+		# A furnace site shows its house's loyalty change, the tenth its crest.
+		if = {
+			limit = {
+				check_variable = { var = SHL_preview_block value = 0 compare = equals }
+				check_variable = { var = SHL_preview_site value = 0 compare = greater_than }
+			}
+			set_variable = { var = SHL_rate_recipient value = SHL_preview_recipient }
+			set_variable = { var = SHL_rate_owner value = SHL_preview_owner }
+			SHL_site_loyalty_rate = yes
+			set_variable = { var = SHL_preview_site_crests value = SHL_rate_loyalty }
+			add_to_variable = { var = SHL_preview_loyalty_sum value = SHL_rate_loyalty }
+			SHL_clear_loyalty_rate = yes
+		}
+		else = { add_to_variable = { var = SHL_preview_crests value = SHL_preview_site_crests } }
+	}
+	# The certain penalties of SHL_produce_site: an idle house furnace and an
+	# occupied district of Shahrabad.
+	if = {
+		limit = { check_variable = { var = SHL_preview_site value = 0 compare = greater_than } }
+		if = {
+			limit = {
+				check_variable = { var = SHL_preview_block value = 3 compare = equals }
+				check_variable = { var = SHL_preview_owner value = 0 compare = equals }
+			}
+			set_variable = { var = SHL_preview_site_crests value = -3 }
+			subtract_from_variable = { var = SHL_preview_loyalty_sum value = 3 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = SHL_preview_block value = 2 compare = equals }
+				var:SHL_preview_site = { is_owned_by = SHL }
+			}
+			set_variable = { var = SHL_preview_site_crests value = -5 }
+			subtract_from_variable = { var = SHL_preview_loyalty_sum value = 5 }
+		}
 	}
 }
 
@@ -5997,11 +8459,26 @@ SHL_reassign_commune_crests = {
 # the same quote again at delivery.
 # ---------------------------------------------------------------------------
 
+# A focus does not count as completed inside its own completion_reward. A
+# reward that changes a quote derived from has_completed_focus queues this
+# refresh (ADISCORD_SHL.167) for the next hour, after the focus is recorded.
+SHL_queue_focus_refresh = {
+	country_event = {
+		id = ADISCORD_SHL.167
+		hours = 1
+	}
+}
+
 # Programme prices are derived from completed course focuses on every refresh,
 # so a focus reward never writes them. Consumers read the variables at payment
 # and refund the recorded deposit.
 SHL_refresh_programme_prices = {
 	set_variable = { var = SHL_guard_discount value = 0 }
+	# The course discount replaces the contract discount instead of adding to it.
+	if = {
+		limit = { has_completed_focus = SHL_desert_guard_contracts }
+		set_variable = { var = SHL_guard_discount value = 0.2 }
+	}
 	if = {
 		limit = { has_completed_focus = SHL_h_conclave_mercenaries }
 		set_variable = { var = SHL_guard_discount value = 0.25 }
@@ -6092,8 +8569,9 @@ SHL_refresh_reserve_price = {
 # so a change made mid-cycle applies at the next purchase: the cycle re-reads
 # the quote through SHL_refresh_delivery_terms before the planned supply, and
 # SHL_begin_supply re-reads it before the debit. Shahrabad's own discounts
-# (smugglers, distillery, fuel treaty) come off that quote; the treaty is
-# suspended by the embargo or a war with Svetlogorye. Floor 10.
+# (smugglers, distillery, Bayrat ore while 291 is held, fuel treaty) come off
+# that quote; the treaty is suspended by the embargo or a war with Svetlogorye.
+# Floor 10.
 SHL_refresh_packet_price = {
 	set_variable = { var = SHL_packet_price value = 25 }
 	if = {
@@ -6110,6 +8588,16 @@ SHL_refresh_packet_price = {
 	}
 	if = {
 		limit = { has_completed_focus = SHL_own_distillery }
+		subtract_from_variable = { var = SHL_packet_price value = 5 }
+	}
+	if = {
+		limit = {
+			has_completed_focus = SHL_baryat_mines
+			291 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+		}
 		subtract_from_variable = { var = SHL_packet_price value = 5 }
 	}
 	if = {
@@ -6296,6 +8784,7 @@ SHL_start_cons_councils = {
 
 SHL_cons_campaign_won = {
 	add_political_power = 25
+	ADISCORD_south_pull_clock_campaign = yes
 }
 
 # ----- Council elections (cities) -----
@@ -6529,7 +9018,9 @@ SHL_lease_state_furnace = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
 			add_to_variable = { var = SHL_lease_count value = 1 }
+			set_variable = { var = SHL_loyalty_delta value = 10 }
 		}
+		SHL_apply_house_loyalty = yes
 	}
 }
 
@@ -6577,7 +9068,8 @@ SHL_sell_crest_concessions = {
 		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = 300 }
 		add_to_variable = { var = ADISCORD_economy_debt value = 500 }
 		ADISCORD_economy_reprice_debt = yes
-		subtract_from_variable = { var = SHL_house_pressure value = 5 }
+		set_variable = { var = SHL_loyalty_delta value = 5 }
+		SHL_change_all_loyalty = yes
 		SHL_clamp_tensions = yes
 		ADISCORD_economy_mark_dirty = yes
 		if = {
@@ -6663,10 +9155,13 @@ SHL_tribunal_foreclose = {
 			}
 		}
 		add_political_power = -40
-		FROM = { set_variable = { var = SHL_furnace_owner value = 1 } }
+		FROM = {
+			set_variable = { var = SHL_furnace_owner value = 1 }
+			SHL = { set_variable = { var = SHL_loyalty_delta value = -30 } }
+			SHL_apply_house_loyalty = yes
+		}
 		SHL_clear_obligation = yes
 		add_to_variable = { var = SHL_unrest value = 8 }
-		add_to_variable = { var = SHL_house_pressure value = 15 }
 		SHL_clamp_tensions = yes
 		SHL_refresh_furnaces = yes
 	}
@@ -7148,27 +9643,22 @@ SHL_finish_strike_support = {
 
 SHL_sell_road_stations = {
 	if = {
-		limit = {
-			SHL_country_operable = yes
-			234 = {
-				is_owned_by = SHL
-				is_controlled_by = SHL
-			}
-			242 = {
-				is_owned_by = SHL
-				is_controlled_by = SHL
-			}
-			KDR = { exists = yes }
-		}
+		limit = { SHL_can_sell_road_stations = yes }
 		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
 		ADISCORD_economy_mark_dirty = yes
-		KDR = {
-			transfer_state = 234
-			transfer_state = 242
+		if = {
+			limit = { 234 = { is_owned_by = SHL } }
+			KDR = { transfer_state = 234 }
+			234 = { set_state_controller_to = KDR }
 		}
-		234 = { set_state_controller_to = KDR }
-		242 = { set_state_controller_to = KDR }
+		if = {
+			limit = { 242 = { is_owned_by = SHL } }
+			KDR = { transfer_state = 242 }
+			242 = { set_state_controller_to = KDR }
+		}
+		234 = { remove_claim_by = SHL }
+		242 = { remove_claim_by = SHL }
 	}
 }
 
@@ -7223,8 +9713,25 @@ SHL_house_demand_pay = {
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
 		ADISCORD_economy_mark_dirty = yes
+		set_variable = { var = SHL_demand_loyalty value = 10 }
+		SHL_change_demand_house_loyalty = yes
 		SHL_close_house_demand = yes
 	}
+}
+
+# COUNTRY SHL. Input SHL_demand_loyalty for the demanding house; a quarter's
+# demand in the city and commune courses moves no house.
+SHL_change_demand_house_loyalty = {
+	if = {
+		limit = {
+			NOT = { SHL_quarter_demand_course = yes }
+			check_variable = { var = SHL_demand_site value = 0 compare = greater_than }
+		}
+		set_variable = { var = SHL_loyalty_site value = SHL_demand_site }
+		set_variable = { var = SHL_loyalty_delta value = SHL_demand_loyalty }
+		SHL_change_site_loyalty = yes
+	}
+	clear_variable = SHL_demand_loyalty
 }
 
 SHL_house_demand_yield = {
@@ -7237,6 +9744,8 @@ SHL_house_demand_yield = {
 		set_temp_variable = { var = SHL_balance_shift value = -0.05 }
 		SHL_balance_shift = yes
 	}
+	set_variable = { var = SHL_demand_loyalty value = 5 }
+	SHL_change_demand_house_loyalty = yes
 	SHL_close_house_demand = yes
 }
 
@@ -7246,7 +9755,12 @@ SHL_house_demand_refuse = {
 		limit = { SHL_quarter_demand_course = yes }
 		add_to_variable = { var = SHL_unrest value = 10 }
 	}
-	else = { add_to_variable = { var = SHL_house_pressure value = 15 } }
+	else = {
+		set_variable = { var = SHL_demand_loyalty value = -25 }
+		SHL_change_demand_house_loyalty = yes
+		set_variable = { var = SHL_loyalty_delta value = -5 }
+		SHL_change_all_loyalty = yes
+	}
 	SHL_clamp_tensions = yes
 	clr_country_flag = SHL_demand_pending
 	SHL_start_house_demand = yes
@@ -7267,7 +9781,8 @@ SHL_house_demand_settled = {
 		limit = { SHL_quarter_demand_course = yes }
 		subtract_from_variable = { var = SHL_unrest value = 5 }
 	}
-	else = { subtract_from_variable = { var = SHL_house_pressure value = 5 } }
+	set_variable = { var = SHL_demand_loyalty value = 15 }
+	SHL_change_demand_house_loyalty = yes
 	SHL_clamp_tensions = yes
 	SHL_close_house_demand = yes
 }
@@ -7322,7 +9837,8 @@ SHL_house_demand_timeout = {
 		limit = { SHL_quarter_demand_course = yes }
 		add_to_variable = { var = SHL_unrest value = 10 }
 	}
-	else = { add_to_variable = { var = SHL_house_pressure value = 10 } }
+	set_variable = { var = SHL_demand_loyalty value = -15 }
+	SHL_change_demand_house_loyalty = yes
 	SHL_clamp_tensions = yes
 	SHL_close_house_demand = yes
 }
@@ -7396,19 +9912,26 @@ SHL_revanche_drop_claims = {
 	}
 }
 
-# The revision buys the claim back for 150.
+# The revision buys the claim back for 150, or 90 through the border
+# settlement office.
 SHL_revanche_revision = {
+	set_variable = { var = SHL_revanche_price value = 150 }
+	if = {
+		limit = { has_completed_focus = SHL_border_settlement_office }
+		set_variable = { var = SHL_revanche_price value = 90 }
+	}
 	if = {
 		limit = {
 			check_variable = { var = SHL_revanche_neighbour value = 0 compare = greater_than }
-			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_revanche_price compare = greater_than_or_equals }
 		}
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_revanche_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_revanche_price }
 		ADISCORD_economy_mark_dirty = yes
 		SHL_revanche_drop_claims = yes
 		set_variable = { var = SHL_revanche_neighbour value = 0 }
 	}
+	clear_variable = SHL_revanche_price
 }
 
 SHL_revanche_refuse = {
@@ -7646,8 +10169,8 @@ SHL_announce_crown_of_the_south = {
 # Metal contracts of the Golden Gates. Buyers are the six fixed tags of the
 # SHL_metal_contract_offer decision, so no settlement scans the world. The
 # buyer carries SHL_metal_client and SHL_metal_arrears; Shahrabad counts
-# SHL_metal_clients. The 28-day cycle moves 60 per paid contract; war between
-# the parties or two unpaid cycles end it.
+# SHL_metal_clients. The 28-day cycle moves 60 per paid contract (75 with the
+# metal brokers); war between the parties or two unpaid cycles end it.
 # ---------------------------------------------------------------------------
 
 # COUNTRY buyer, ROOT of ADISCORD_SHL.130. Both sides are rechecked at the answer.
@@ -7784,8 +10307,9 @@ SHL_metal_end_contract = {
 }
 
 # COUNTRY client, called from the SHL cycle. A paid cycle moves 60 from the
-# buyer's treasury to Shahrabad's and books both monthly ledgers; an unpaid
-# cycle is tolerated once.
+# buyer's treasury to Shahrabad's and books both monthly ledgers; the metal
+# brokers add 15 of their own to each paid contract (75 in all). An unpaid
+# cycle earns no premium and is tolerated once.
 SHL_metal_settle_client = {
 	if = {
 		limit = { has_country_flag = SHL_metal_client }
@@ -7808,6 +10332,12 @@ SHL_metal_settle_client = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 60 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 60 }
 				add_to_variable = { var = SHL_last_cycle_income value = 60 }
+				if = {
+					limit = { has_completed_focus = SHL_metal_brokers }
+					add_to_variable = { var = ADISCORD_economy_treasury value = 15 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 15 }
+					add_to_variable = { var = SHL_last_cycle_income value = 15 }
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
@@ -8058,7 +10588,8 @@ SHL_convene_conclave_effect = {
 	293 = { SHL_convene_site = yes }
 	294 = { SHL_convene_site = yes }
 	295 = { SHL_convene_site = yes }
-	subtract_from_variable = { var = SHL_house_pressure value = 5 }
+	set_variable = { var = SHL_loyalty_delta value = 5 }
+	SHL_change_all_loyalty = yes
 	SHL_clamp_tensions = yes
 	SHL_refresh_furnaces = yes
 }
@@ -8098,8 +10629,10 @@ SHL_finish_audit = {
 				clear_variable = SHL_operation_deposit
 				clear_variable = SHL_operation_pp
 				clear_variable = SHL_operation
+				# The audited house resents the counting chamber.
+				SHL = { set_variable = { var = SHL_loyalty_delta value = -15 } }
+				SHL_apply_house_loyalty = yes
 			}
-			add_to_variable = { var = SHL_house_pressure value = 5 }
 			SHL_clamp_tensions = yes
 			SHL_refresh_furnaces = yes
 		}
@@ -8191,7 +10724,8 @@ SHL_finish_crest_patronage = {
 	SHL_end_measure = yes
 	set_temp_variable = { var = SHL_balance_shift value = -0.05 }
 	SHL_balance_shift = yes
-	subtract_from_variable = { var = SHL_house_pressure value = 5 }
+	set_variable = { var = SHL_loyalty_delta value = 5 }
+	SHL_change_all_loyalty = yes
 	SHL_clamp_tensions = yes
 }
 
@@ -8240,7 +10774,8 @@ SHL_finish_open_books = {
 
 SHL_finish_directorate_decree = {
 	SHL_end_measure = yes
-	subtract_from_variable = { var = SHL_house_pressure value = 5 }
+	set_variable = { var = SHL_loyalty_delta value = 5 }
+	SHL_change_all_loyalty = yes
 	add_to_variable = { var = SHL_unrest value = 3 }
 	SHL_clamp_tensions = yes
 	set_variable = { var = SHL_pick_owner value = 2 }
@@ -8267,7 +10802,8 @@ SHL_finish_crest_court = {
 
 SHL_finish_fief_grant = {
 	SHL_end_measure = yes
-	subtract_from_variable = { var = SHL_house_pressure value = 10 }
+	set_variable = { var = SHL_loyalty_delta value = 10 }
+	SHL_change_all_loyalty = yes
 	set_temp_variable = { var = SHL_balance_shift value = -0.03 }
 	SHL_balance_shift = yes
 	SHL_clamp_tensions = yes
@@ -9358,5 +11894,1133 @@ SHL_form_furnace_administrations = {
 			SDA = { SHL_finish_furnace_administration = yes }
 		}
 		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Under the namestnik's seal: the chapter after a Svetlogorye victory in the
+# South. Country scope SHL unless a comment says otherwise.
+# SHL_seal_chapter_open is the lifecycle marker and is never cleared. A leased
+# furnace carries recipient 4; the terms are read from the native autonomy
+# state, never stored. SHL_cold_rising is 1 during the war of the rising, 2
+# after its victory and 3 after its defeat. All recurring work runs from
+# SHL_produce_period through SHL_seal_cycle.
+# ---------------------------------------------------------------------------
+
+# ----- Opening and terms -----
+
+# Called once from the southern settlement after the puppet and its autonomy
+# exist. A capitulated subject can keep its land under the victor's control,
+# so control of Shahrabad's own states is restored before the lease starts.
+SHL_seal_open_chapter = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_south_hegemon_NAM
+			has_country_flag = SHL_furnaces_initialized
+			is_subject_of = NAM
+			NOT = { has_country_flag = SHL_seal_chapter_open }
+		}
+		set_country_flag = SHL_seal_chapter_open
+		every_owned_state = {
+			limit = { NOT = { is_controlled_by = SHL } }
+			set_state_controller_to = SHL
+		}
+		SHL_seal_lease_by_terms = yes
+		SHL_seal_refresh_terms = yes
+		SHL_refresh_furnaces = yes
+		ADISCORD_economy_mark_dirty = yes
+		NAM = { ADISCORD_economy_mark_dirty = yes }
+		mark_focus_tree_layout_dirty = yes
+		country_event = { id = ADISCORD_SHL.200 days = 2 }
+	}
+}
+
+# Leases the districts named by the autonomy terms in a fixed order: Safir,
+# Bayrat and Sharim under every term, Arbin from the oil charter, Nur and
+# Veyran from the plain puppet, the rest under the namestnik's office.
+SHL_seal_lease_by_terms = {
+	288 = { SHL_seal_lease_site = yes }
+	291 = { SHL_seal_lease_site = yes }
+	293 = { SHL_seal_lease_site = yes }
+	if = {
+		limit = { NOT = { has_autonomy_state = autonomy_NAM_economic_contract } }
+		287 = { SHL_seal_lease_site = yes }
+		if = {
+			limit = { NOT = { has_autonomy_state = autonomy_NAM_oil_charter } }
+			290 = { SHL_seal_lease_site = yes }
+			295 = { SHL_seal_lease_site = yes }
+			if = {
+				limit = { NOT = { has_autonomy_state = autonomy_puppet } }
+				289 = { SHL_seal_lease_site = yes }
+				292 = { SHL_seal_lease_site = yes }
+				294 = { SHL_seal_lease_site = yes }
+			}
+		}
+	}
+}
+
+# STATE furnace site. The house keeps the furnace and its vote; only the output
+# changes hands. Orders and quotas that claimed the furnace are settled first.
+SHL_seal_lease_site = {
+	if = {
+		limit = {
+			is_owned_by = SHL
+			has_variable = SHL_furnace_recipient
+			NOT = { SHL_seal_site_leased = yes }
+		}
+		if = {
+			limit = { SHL_obligation_here = yes }
+			SHL = { SHL_cancel_obligation = yes }
+		}
+		clr_state_flag = SHL_quota_site
+		clear_variable = SHL_war_orders_prev_recipient
+		set_variable = { var = SHL_furnace_recipient value = 4 }
+	}
+}
+
+# Share, buy-back price and the number of leased furnaces of the current terms.
+SHL_seal_refresh_terms = {
+	set_variable = { var = SHL_seal_lease_share value = 0.80 }
+	set_variable = { var = SHL_seal_buyback_price value = 420 }
+	if = {
+		limit = { has_autonomy_state = autonomy_NAM_economic_contract }
+		set_variable = { var = SHL_seal_lease_share value = 0.40 }
+		set_variable = { var = SHL_seal_buyback_price value = 240 }
+	}
+	else_if = {
+		limit = { has_autonomy_state = autonomy_NAM_oil_charter }
+		set_variable = { var = SHL_seal_lease_share value = 0.50 }
+		set_variable = { var = SHL_seal_buyback_price value = 300 }
+	}
+	else_if = {
+		limit = { has_autonomy_state = autonomy_puppet }
+		set_variable = { var = SHL_seal_lease_share value = 0.65 }
+		set_variable = { var = SHL_seal_buyback_price value = 360 }
+	}
+	if = {
+		limit = { has_completed_focus = SHL_redeem_by_coin }
+		multiply_variable = { var = SHL_seal_buyback_price value = 0.8 }
+	}
+	# The AI keeps 200 of its treasury after a buy-back.
+	set_variable = { var = SHL_seal_ai_reserve value = SHL_seal_buyback_price }
+	add_to_variable = { var = SHL_seal_ai_reserve value = 200 }
+	set_variable = { var = SHL_seal_leased_count value = 0 }
+	287 = { SHL_seal_count_leased_site = yes }
+	288 = { SHL_seal_count_leased_site = yes }
+	289 = { SHL_seal_count_leased_site = yes }
+	290 = { SHL_seal_count_leased_site = yes }
+	291 = { SHL_seal_count_leased_site = yes }
+	292 = { SHL_seal_count_leased_site = yes }
+	293 = { SHL_seal_count_leased_site = yes }
+	294 = { SHL_seal_count_leased_site = yes }
+	295 = { SHL_seal_count_leased_site = yes }
+	add_to_variable = { var = SHL_gui_dirty value = 1 }
+}
+
+# STATE furnace site; PREV is SHL.
+SHL_seal_count_leased_site = {
+	if = {
+		limit = { SHL_seal_site_leased = yes }
+		SHL = { add_to_variable = { var = SHL_seal_leased_count value = 1 } }
+	}
+}
+
+# ----- The lease in the furnace cycle -----
+
+# STATE furnace site; called only from SHL_deliver_site_heat after the stock
+# was used. The namestnik's share leaves SHL_period_cash before
+# SHL_collect_site_income books the remainder. A furnace serving its
+# redemption pays its whole output and counts down one producing cycle.
+SHL_seal_settle_lease_site = {
+	set_variable = { var = SHL_seal_lease_due value = SHL_period_cash }
+	if = {
+		limit = { NOT = { has_variable = SHL_seal_service_cycles } }
+		multiply_variable = { var = SHL_seal_lease_due value = SHL.SHL_seal_lease_share }
+	}
+	subtract_from_variable = { var = SHL_period_cash value = SHL_seal_lease_due }
+	if = {
+		limit = { has_state_flag = SHL_seal_cold_shift }
+		# The cooled pour goes to the caches; the namestnik receives nothing.
+		clr_state_flag = SHL_seal_cold_shift
+		add_to_variable = { var = SHL_furnace_wear value = 6 }
+		SHL = { add_to_variable = { var = SHL_cold_cache_rifles value = 300 } }
+	}
+	else = {
+		SHL = {
+			set_variable = { var = SHL_seal_lease_due value = PREV.SHL_seal_lease_due }
+			SHL_seal_pay_namestnik = yes
+		}
+		if = {
+			limit = { has_variable = SHL_seal_service_cycles }
+			subtract_from_variable = { var = SHL_seal_service_cycles value = 1 }
+			if = {
+				limit = { check_variable = { var = SHL_seal_service_cycles value = 0 compare = less_than_or_equals } }
+				SHL_seal_redeem_site = yes
+				SHL = { SHL_seal_after_redemption = yes }
+			}
+		}
+	}
+	clear_variable = SHL_seal_lease_due
+}
+
+# The tenth furnace follows the lease of district 294; its income pays the same
+# share, or all of it while furnace VIII serves its redemption.
+SHL_seal_settle_lease_tenth = {
+	set_variable = { var = SHL_seal_lease_due value = SHL_tenth_period_income }
+	if = {
+		limit = { 294 = { NOT = { has_variable = SHL_seal_service_cycles } } }
+		multiply_variable = { var = SHL_seal_lease_due value = SHL_seal_lease_share }
+	}
+	subtract_from_variable = { var = SHL_tenth_period_income value = SHL_seal_lease_due }
+	SHL_seal_pay_namestnik = yes
+}
+
+# Input SHL_seal_lease_due. Furnace cash is the only channel from Shahrabad's
+# treasury to Svetlogorye's; the autonomy transfers move factories, trade and
+# manpower. Without the overlord the due is simply withheld.
+SHL_seal_pay_namestnik = {
+	if = {
+		limit = {
+			is_subject_of = NAM
+			check_variable = { var = SHL_seal_lease_due value = 0 compare = greater_than }
+		}
+		add_to_variable = { var = SHL_seal_cycle_lease value = SHL_seal_lease_due }
+		NAM = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_seal_lease_due }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_seal_lease_due }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	clear_variable = SHL_seal_lease_due
+}
+
+# STATE furnace site. The furnace returns to export; the player reassigns it.
+SHL_seal_redeem_site = {
+	if = {
+		limit = { SHL_seal_site_leased = yes }
+		set_variable = { var = SHL_furnace_recipient value = 0 }
+	}
+	clear_variable = SHL_seal_service_cycles
+	clr_state_flag = SHL_seal_cold_shift
+}
+
+# The last redeemed furnace closes the lease and eases the autonomy one step.
+SHL_seal_after_redemption = {
+	SHL_seal_refresh_terms = yes
+	if = {
+		limit = {
+			check_variable = { var = SHL_seal_leased_count value = 0 compare = less_than_or_equals }
+			is_subject_of = NAM
+		}
+		SHL_seal_close_lease = yes
+		SHL_seal_refresh_terms = yes
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+SHL_seal_close_lease = {
+	if = {
+		limit = { has_autonomy_state = autonomy_NAM_economic_contract }
+		NAM = { end_puppet = SHL }
+		if = {
+			limit = { is_in_faction_with = NAM }
+			leave_faction = yes
+		}
+	}
+	else_if = {
+		limit = { has_autonomy_state = autonomy_NAM_oil_charter }
+		NAM = {
+			set_autonomy = {
+				target = SHL
+				autonomy_state = autonomy_NAM_economic_contract
+				freedom_level = 0.60
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+	}
+	else = {
+		NAM = {
+			set_autonomy = {
+				target = SHL
+				autonomy_state = autonomy_NAM_oil_charter
+				freedom_level = 0.40
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+	}
+	ADISCORD_economy_mark_dirty = yes
+	NAM = { ADISCORD_economy_mark_dirty = yes }
+	mark_focus_tree_layout_dirty = yes
+}
+
+# Every lease ends when Shahrabad leaves Svetlogorye's rule; an open petition
+# is refunded once.
+SHL_seal_release_all_leases = {
+	287 = { SHL_seal_redeem_site = yes }
+	288 = { SHL_seal_redeem_site = yes }
+	289 = { SHL_seal_redeem_site = yes }
+	290 = { SHL_seal_redeem_site = yes }
+	291 = { SHL_seal_redeem_site = yes }
+	292 = { SHL_seal_redeem_site = yes }
+	293 = { SHL_seal_redeem_site = yes }
+	294 = { SHL_seal_redeem_site = yes }
+	295 = { SHL_seal_redeem_site = yes }
+	SHL_seal_refund_petition = yes
+	SHL_seal_refresh_terms = yes
+}
+
+# Once per furnace cycle, at the end of SHL_produce_period. Independence through
+# Svetlogorye's own decision, its disappearance or a new overlord releases the
+# lease; the rising releases it itself.
+SHL_seal_cycle = {
+	if = {
+		limit = { has_country_flag = SHL_seal_chapter_open }
+		if = {
+			limit = {
+				NOT = { is_subject_of = NAM }
+				NOT = { check_variable = { var = SHL_cold_rising value = 1 compare = equals } }
+				OR = {
+					check_variable = { var = SHL_seal_leased_count value = 0 compare = greater_than }
+					has_variable = SHL_seal_petition_site
+				}
+			}
+			SHL_seal_release_all_leases = yes
+		}
+		# Freed before its rising, the underground reaches its goal without a
+		# war: the result of a won rising, with the cached rifles delivered.
+		if = {
+			limit = {
+				NOT = { is_subject_of = NAM }
+				has_variable = SHL_underground_heat
+				NOT = { has_variable = SHL_cold_rising }
+			}
+			set_variable = { var = SHL_cold_rising value = 2 }
+			if = {
+				limit = { check_variable = { var = SHL_cold_cache_rifles value = 0 compare = greater_than } }
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = SHL_cold_cache_rifles
+					producer = SHL
+				}
+			}
+			SHL_cold_clear_pledges = yes
+			SHL_cold_close_rising = yes
+		}
+		SHL_seal_refresh_terms = yes
+		# The guarantor houses' loan: 25 for each of twelve cycles.
+		if = {
+			limit = { check_variable = { var = SHL_seal_bond_cycles value = 0 compare = greater_than } }
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 25 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 25 }
+			subtract_from_variable = { var = SHL_last_cycle_income value = 25 }
+			subtract_from_variable = { var = SHL_seal_bond_cycles value = 1 }
+			if = {
+				limit = { check_variable = { var = SHL_seal_bond_cycles value = 0 compare = less_than_or_equals } }
+				clear_variable = SHL_seal_bond_cycles
+			}
+		}
+		if = {
+			limit = {
+				has_variable = SHL_underground_heat
+				NOT = { has_variable = SHL_cold_rising }
+				is_subject_of = NAM
+			}
+			SHL_cold_grow_heat = yes
+			SHL_cold_roll_raid = yes
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_cold_rising value = 1 compare = equals }
+				NAM = { exists = no }
+			}
+			SHL_cold_rising_victory = yes
+		}
+	}
+}
+
+# ----- Focus results of the lease route -----
+
+# STATE furnace site; PREV is SHL.
+SHL_seal_stock_free_site = {
+	if = {
+		limit = {
+			SHL_furnace_site_controlled = yes
+			check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+			NOT = { SHL_seal_site_leased = yes }
+		}
+		add_to_variable = { var = SHL_furnace_stock value = 1 }
+		clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+	}
+}
+
+# One packet for every lit furnace Shahrabad controls outside the lease. The
+# caller refreshes the furnaces.
+SHL_seal_stock_free_sites = {
+	287 = { SHL_seal_stock_free_site = yes }
+	288 = { SHL_seal_stock_free_site = yes }
+	289 = { SHL_seal_stock_free_site = yes }
+	290 = { SHL_seal_stock_free_site = yes }
+	291 = { SHL_seal_stock_free_site = yes }
+	292 = { SHL_seal_stock_free_site = yes }
+	293 = { SHL_seal_stock_free_site = yes }
+	294 = { SHL_seal_stock_free_site = yes }
+	295 = { SHL_seal_stock_free_site = yes }
+}
+
+# STATE furnace site.
+SHL_seal_maintain_leased_site = {
+	if = {
+		limit = { SHL_seal_site_leased = yes }
+		add_to_variable = { var = SHL_furnace_wear value = -20 }
+		clamp_variable = { var = SHL_furnace_wear min = 0 max = 100 }
+		add_to_variable = { var = SHL_furnace_stock value = 1 }
+		clamp_variable = { var = SHL_furnace_stock min = 0 max = 3 }
+	}
+}
+
+# The namestnik's engineers repair every leased furnace. The caller refreshes
+# the furnaces.
+SHL_seal_maintain_leased_sites = {
+	287 = { SHL_seal_maintain_leased_site = yes }
+	288 = { SHL_seal_maintain_leased_site = yes }
+	289 = { SHL_seal_maintain_leased_site = yes }
+	290 = { SHL_seal_maintain_leased_site = yes }
+	291 = { SHL_seal_maintain_leased_site = yes }
+	292 = { SHL_seal_maintain_leased_site = yes }
+	293 = { SHL_seal_maintain_leased_site = yes }
+	294 = { SHL_seal_maintain_leased_site = yes }
+	295 = { SHL_seal_maintain_leased_site = yes }
+}
+
+# Attach the route spirit on first use, then recalculate it.
+SHL_refresh_redeem_spirit = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = SHL_redeem_lease_dynamic } } }
+		add_dynamic_modifier = { modifier = SHL_redeem_lease_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+SHL_refresh_cold_spirit = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = SHL_cold_fire_dynamic } } }
+		add_dynamic_modifier = { modifier = SHL_cold_fire_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# ----- Petitions to the namestnik -----
+# One country escrow serves both forms: SHL_seal_petition_site names the
+# furnace, _deposit holds the buy-back price (0 for service) and _kind is 1
+# for coin or 2 for service; the 25 political power of the petition is fixed.
+# ADISCORD_SHL.202 writes _answer (1 consent, 2 refusal). The decision's
+# remove_effect settles it, its cancel_effect and the release of the lease
+# refund it; each path clears the whole escrow.
+
+# STATE furnace site.
+SHL_seal_record_petition_site = {
+	if = {
+		limit = { state = 287 }
+		SHL = { set_variable = { var = SHL_seal_petition_site value = 287 } }
+	}
+	if = {
+		limit = { state = 288 }
+		SHL = { set_variable = { var = SHL_seal_petition_site value = 288 } }
+	}
+	if = {
+		limit = { state = 289 }
+		SHL = { set_variable = { var = SHL_seal_petition_site value = 289 } }
+	}
+	if = {
+		limit = { state = 290 }
+		SHL = { set_variable = { var = SHL_seal_petition_site value = 290 } }
+	}
+	if = {
+		limit = { state = 291 }
+		SHL = { set_variable = { var = SHL_seal_petition_site value = 291 } }
+	}
+	if = {
+		limit = { state = 292 }
+		SHL = { set_variable = { var = SHL_seal_petition_site value = 292 } }
+	}
+	if = {
+		limit = { state = 293 }
+		SHL = { set_variable = { var = SHL_seal_petition_site value = 293 } }
+	}
+	if = {
+		limit = { state = 294 }
+		SHL = { set_variable = { var = SHL_seal_petition_site value = 294 } }
+	}
+	if = {
+		limit = { state = 295 }
+		SHL = { set_variable = { var = SHL_seal_petition_site value = 295 } }
+	}
+}
+
+# FROM is the selected leased furnace; the price is re-read before the debit.
+SHL_seal_begin_buy_back = {
+	SHL_seal_refresh_terms = yes
+	if = {
+		limit = {
+			SHL_seal_petition_possible = yes
+			SHL_seal_buyback_affordable = yes
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_seal_buyback_price }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_seal_buyback_price }
+		set_variable = { var = SHL_seal_petition_deposit value = SHL_seal_buyback_price }
+		set_variable = { var = SHL_seal_petition_kind value = 1 }
+		SHL_seal_open_petition = yes
+	}
+}
+
+SHL_seal_begin_service = {
+	if = {
+		limit = {
+			SHL_seal_petition_possible = yes
+			SHL_seal_service_affordable = yes
+		}
+		set_variable = { var = SHL_seal_petition_deposit value = 0 }
+		set_variable = { var = SHL_seal_petition_kind value = 2 }
+		SHL_seal_open_petition = yes
+	}
+}
+
+SHL_seal_open_petition = {
+	add_political_power = -25
+	clear_variable = SHL_seal_petition_answer
+	FROM = { SHL_seal_record_petition_site = yes }
+	ADISCORD_economy_mark_dirty = yes
+	add_to_variable = { var = SHL_gui_dirty value = 1 }
+	NAM = { country_event = { id = ADISCORD_SHL.202 hours = 6 } }
+}
+
+# FROM is the petitioned furnace. Consent transfers the deposit and the furnace
+# in one step (coin) or starts four producing cycles of full service.
+SHL_seal_settle_petition = {
+	if = {
+		limit = {
+			has_variable = SHL_seal_petition_site
+			FROM = { SHL_seal_petition_here = yes }
+		}
+		if = {
+			limit = {
+				check_variable = { var = SHL_seal_petition_answer value = 1 compare = equals }
+				is_subject_of = NAM
+				FROM = {
+					is_owned_by = SHL
+					SHL_seal_site_leased = yes
+				}
+			}
+			if = {
+				limit = { check_variable = { var = SHL_seal_petition_kind value = 1 compare = equals } }
+				NAM = {
+					add_to_variable = { var = ADISCORD_economy_treasury value = PREV.SHL_seal_petition_deposit }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.SHL_seal_petition_deposit }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				SHL_seal_clear_petition = yes
+				FROM = { SHL_seal_redeem_site = yes }
+				SHL_seal_after_redemption = yes
+			}
+			else = {
+				FROM = { set_variable = { var = SHL_seal_service_cycles value = 4 } }
+				SHL_seal_clear_petition = yes
+			}
+			SHL_refresh_furnaces = yes
+		}
+		else = {
+			if = {
+				limit = { check_variable = { var = SHL_seal_petition_answer value = 2 compare = equals } }
+				FROM = {
+					set_state_flag = {
+						flag = SHL_seal_petition_refused
+						value = 1
+						days = 180
+					}
+				}
+			}
+			SHL_seal_refund_petition = yes
+		}
+	}
+}
+
+# FROM is the petitioned furnace (cancel_effect of the petition decisions).
+SHL_seal_cancel_petition = {
+	if = {
+		limit = { FROM = { SHL_seal_petition_here = yes } }
+		SHL_seal_refund_petition = yes
+	}
+}
+
+SHL_seal_refund_petition = {
+	if = {
+		limit = { has_variable = SHL_seal_petition_site }
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_seal_petition_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_seal_petition_deposit }
+		add_political_power = 25
+		SHL_seal_clear_petition = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_seal_clear_petition = {
+	clear_variable = SHL_seal_petition_site
+	clear_variable = SHL_seal_petition_deposit
+	clear_variable = SHL_seal_petition_kind
+	clear_variable = SHL_seal_petition_answer
+	add_to_variable = { var = SHL_gui_dirty value = 1 }
+}
+
+# The guarantor houses lend 250 at once; SHL_seal_cycle collects 25 for twelve cycles.
+SHL_seal_take_bond = {
+	if = {
+		limit = { NOT = { has_variable = SHL_seal_bond_cycles } }
+		add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+		set_variable = { var = SHL_seal_bond_cycles value = 12 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# ----- Cold Fire: the underground meter -----
+# SHL_underground_heat (0-100) exists from the Cold Fire focus until the
+# rising ends. Every writer goes through SHL_cold_add_heat.
+
+# Input: temp SHL_cold_heat_delta.
+SHL_cold_add_heat = {
+	if = {
+		limit = { has_variable = SHL_underground_heat }
+		add_to_variable = { var = SHL_underground_heat value = SHL_cold_heat_delta }
+		clamp_variable = { var = SHL_underground_heat min = 0 max = 100 }
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+# 2 to 7 per furnace cycle: base 2, one each for the cells and the couriers,
+# two under the namestnik's office (one as a plain puppet) and one when the
+# quarters are restless.
+SHL_cold_grow_heat = {
+	set_variable = { var = SHL_cold_growth value = 2 }
+	if = {
+		limit = { has_completed_focus = SHL_cold_ash_cells }
+		add_to_variable = { var = SHL_cold_growth value = 1 }
+	}
+	if = {
+		limit = { has_completed_focus = SHL_cold_quarter_couriers }
+		add_to_variable = { var = SHL_cold_growth value = 1 }
+	}
+	if = {
+		limit = { has_autonomy_state = autonomy_puppet }
+		add_to_variable = { var = SHL_cold_growth value = 1 }
+	}
+	else_if = {
+		limit = {
+			NOT = { has_autonomy_state = autonomy_NAM_oil_charter }
+			NOT = { has_autonomy_state = autonomy_NAM_economic_contract }
+		}
+		add_to_variable = { var = SHL_cold_growth value = 2 }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_unrest value = 50 compare = greater_than_or_equals } }
+		add_to_variable = { var = SHL_cold_growth value = 1 }
+	}
+	set_temp_variable = { var = SHL_cold_heat_delta value = SHL_cold_growth }
+	clear_variable = SHL_cold_growth
+	SHL_cold_add_heat = yes
+}
+
+# About 15% per cycle from 30 heat, 25% from 50 and 35% from 70; Svetlogorye's
+# military rule raises it, its local offices and the martyrs focus lower it.
+# ADISCORD_SHL.203 sets the 84-day cooldown in its immediate block.
+SHL_cold_roll_raid = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_underground_heat value = 30 compare = greater_than_or_equals }
+			NOT = { has_country_flag = SHL_cold_raid_cooldown }
+		}
+		random_list = {
+			85 = { }
+			15 = {
+				modifier = {
+					factor = 1.67
+					check_variable = { var = SHL_underground_heat value = 50 compare = greater_than_or_equals }
+				}
+				modifier = {
+					factor = 1.4
+					check_variable = { var = SHL_underground_heat value = 70 compare = greater_than_or_equals }
+				}
+				modifier = {
+					factor = 1.4
+					SHL_seal_overlord_hardline = yes
+				}
+				modifier = {
+					factor = 0.7
+					SHL_seal_overlord_conciliatory = yes
+				}
+				modifier = {
+					factor = 0.6
+					has_completed_focus = SHL_cold_raid_martyrs
+				}
+				country_event = { id = ADISCORD_SHL.203 hours = 6 }
+			}
+		}
+	}
+}
+
+# ADISCORD_SHL.203.a: the caches are handed over.
+SHL_cold_raid_surrender = {
+	add_to_variable = { var = SHL_cold_cache_cells value = -1 }
+	clamp_variable = { var = SHL_cold_cache_cells min = 0 max = 6 }
+	multiply_variable = { var = SHL_cold_cache_rifles value = 0.5 }
+	set_temp_variable = { var = SHL_cold_heat_delta value = -10 }
+	SHL_cold_add_heat = yes
+}
+
+# ADISCORD_SHL.203.b: the cells go deeper.
+SHL_cold_raid_go_deeper = {
+	set_temp_variable = { var = SHL_cold_heat_delta value = -20 }
+	SHL_cold_add_heat = yes
+	add_to_variable = { var = SHL_unrest value = 10 }
+	SHL_clamp_tensions = yes
+}
+
+# ----- Cold Fire: cells, caches and allies -----
+
+# STATE furnace site.
+SHL_cold_mark_shift_site = {
+	if = {
+		limit = { SHL_cold_shift_site_open = yes }
+		set_state_flag = SHL_seal_cold_shift
+	}
+}
+
+# The next pour of every lit leased furnace Shahrabad controls goes to the caches.
+SHL_cold_mark_shifts = {
+	287 = { SHL_cold_mark_shift_site = yes }
+	288 = { SHL_cold_mark_shift_site = yes }
+	289 = { SHL_cold_mark_shift_site = yes }
+	290 = { SHL_cold_mark_shift_site = yes }
+	291 = { SHL_cold_mark_shift_site = yes }
+	292 = { SHL_cold_mark_shift_site = yes }
+	293 = { SHL_cold_mark_shift_site = yes }
+	294 = { SHL_cold_mark_shift_site = yes }
+	295 = { SHL_cold_mark_shift_site = yes }
+	SHL_refresh_furnaces = yes
+}
+
+# FROM is the selected leased furnace (SHL_cold_forge).
+SHL_cold_begin_forge = {
+	if = {
+		limit = {
+			NOT = { has_variable = SHL_cold_rising }
+			FROM = { SHL_cold_shift_site_open = yes }
+		}
+		FROM = { set_state_flag = SHL_seal_cold_shift }
+		set_temp_variable = { var = SHL_cold_heat_delta value = 4 }
+		SHL_cold_add_heat = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# A hidden cache holds its price in SHL_cold_cache_deposit until it is dug.
+SHL_cold_begin_cache = {
+	if = {
+		limit = {
+			NOT = { has_variable = SHL_cold_cache_deposit }
+			NOT = { has_variable = SHL_cold_rising }
+			check_variable = { var = SHL_cold_cache_cells value = 6 compare = less_than }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+			NOT = { has_political_power < 30 }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+		add_political_power = -30
+		set_variable = { var = SHL_cold_cache_deposit value = 150 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_cold_finish_cache = {
+	if = {
+		limit = { has_variable = SHL_cold_cache_deposit }
+		clear_variable = SHL_cold_cache_deposit
+		add_to_variable = { var = SHL_cold_cache_cells value = 1 }
+		set_temp_variable = { var = SHL_cold_heat_delta value = 2 }
+		SHL_cold_add_heat = yes
+	}
+}
+
+SHL_cold_cancel_cache = {
+	if = {
+		limit = { has_variable = SHL_cold_cache_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_cold_cache_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_cold_cache_deposit }
+		add_political_power = 30
+		clear_variable = SHL_cold_cache_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# The letters go to every independent neighbour outside Svetlogorye's alliance.
+SHL_cold_send_pledges = {
+	EFL = { SHL_cold_send_pledge = yes }
+	AZH = { SHL_cold_send_pledge = yes }
+	KYZ = { SHL_cold_send_pledge = yes }
+	GLP = { SHL_cold_send_pledge = yes }
+	MZR = { SHL_cold_send_pledge = yes }
+}
+
+# COUNTRY neighbour; Shahrabad is the sender of ADISCORD_SHL.204.
+SHL_cold_send_pledge = {
+	if = {
+		limit = { SHL_cold_pledge_candidate = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_country_flag = {
+			flag = SHL_cold_pledge_pending
+			value = 1
+			days = 30
+		}
+		country_event = { id = ADISCORD_SHL.204 hours = 6 }
+	}
+}
+
+# ----- Cold Fire: the rising -----
+# SHL_cold_rising = 1 opens the war; the principals hold major status until
+# either result, so an allied capitulation cannot end it. Only a principal's
+# capitulation decides it (09_ADISCORD_scripted_peace_on_actions.txt); a war
+# ended by a third party is decided by the controller of Khazar.
+
+# COUNTRY principal of the war of the rising.
+SHL_cold_reserve_principal = {
+	if = {
+		limit = {
+			exists = yes
+			OR = {
+				is_major = no
+				has_country_flag = RUS_crisis_added_major
+				RUS_crisis_other_major_required = yes
+			}
+		}
+		set_country_flag = SHL_cold_added_major
+		set_major = yes
+	}
+}
+
+SHL_cold_release_principal = {
+	if = {
+		limit = { has_country_flag = SHL_cold_added_major }
+		clr_country_flag = SHL_cold_added_major
+		RUS_crisis_release_other_major = yes
+	}
+}
+
+# COUNTRY neighbour that promised rifles and can still keep its word.
+SHL_cold_join_rising = {
+	if = {
+		limit = { SHL_cold_pledge_valid = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		if = {
+			limit = {
+				is_in_faction = no
+				SHL = { has_country_flag = SHL_cold_faction }
+			}
+			SHL = { add_to_faction = PREV }
+		}
+		add_to_war = {
+			targeted_alliance = SHL
+			enemy = NAM
+			hostility_reason = asked_to_join
+		}
+	}
+	else = {
+		clr_country_flag = SHL_cold_pledged
+	}
+}
+
+# A cell becomes a levy in Khazar for 3000 real recruits; without them its
+# rifles go to the arsenal.
+SHL_cold_raise_cell = {
+	if = {
+		limit = { NOT = { has_manpower < 3000 } }
+		add_manpower = -3000
+		699 = { SHL_create_levy = yes }
+	}
+	else = {
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 2700
+			producer = SHL
+		}
+	}
+}
+
+# The reward of SHL_cold_night_of_fire. Svetlogorye's other wars end before the
+# marker is set, so their peace callbacks cannot settle the rising.
+SHL_cold_raise_rising = {
+	if = {
+		limit = { SHL_cold_rising_ready = yes }
+		every_enemy_country = { white_peace = PREV }
+		set_variable = { var = SHL_cold_rising value = 1 }
+		NAM = { end_puppet = SHL }
+		if = {
+			limit = { is_in_faction = yes }
+			if = {
+				limit = { is_faction_leader = yes }
+				dismantle_faction = yes
+			}
+			else = { leave_faction = yes }
+		}
+		SHL_seal_release_all_leases = yes
+		SHL_cold_reserve_principal = yes
+		NAM = { SHL_cold_reserve_principal = yes }
+		SHL_ensure_levy_template = yes
+		if = {
+			limit = { check_variable = { var = SHL_cold_cache_cells value = 1 compare = greater_than_or_equals } }
+			SHL_cold_raise_cell = yes
+		}
+		if = {
+			limit = { check_variable = { var = SHL_cold_cache_cells value = 2 compare = greater_than_or_equals } }
+			SHL_cold_raise_cell = yes
+		}
+		if = {
+			limit = { check_variable = { var = SHL_cold_cache_cells value = 3 compare = greater_than_or_equals } }
+			SHL_cold_raise_cell = yes
+		}
+		if = {
+			limit = { check_variable = { var = SHL_cold_cache_cells value = 4 compare = greater_than_or_equals } }
+			SHL_cold_raise_cell = yes
+		}
+		if = {
+			limit = { check_variable = { var = SHL_cold_cache_cells value = 5 compare = greater_than_or_equals } }
+			SHL_cold_raise_cell = yes
+		}
+		if = {
+			limit = { check_variable = { var = SHL_cold_cache_cells value = 6 compare = greater_than_or_equals } }
+			SHL_cold_raise_cell = yes
+		}
+		if = {
+			limit = { check_variable = { var = SHL_cold_cache_rifles value = 0 compare = greater_than } }
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = SHL_cold_cache_rifles
+				producer = SHL
+			}
+		}
+		clear_variable = SHL_cold_cache_cells
+		clear_variable = SHL_cold_cache_rifles
+		if = {
+			limit = {
+				is_in_faction = no
+				OR = {
+					EFL = {
+						SHL_cold_pledge_valid = yes
+						is_in_faction = no
+					}
+					AZH = {
+						SHL_cold_pledge_valid = yes
+						is_in_faction = no
+					}
+					KYZ = {
+						SHL_cold_pledge_valid = yes
+						is_in_faction = no
+					}
+					GLP = {
+						SHL_cold_pledge_valid = yes
+						is_in_faction = no
+					}
+					MZR = {
+						SHL_cold_pledge_valid = yes
+						is_in_faction = no
+					}
+				}
+			}
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = SHL_cold_fire_faction
+			}
+			set_country_flag = SHL_cold_faction
+		}
+		declare_war_on = {
+			target = NAM
+			type = independence_wargoal
+		}
+		EFL = { SHL_cold_join_rising = yes }
+		AZH = { SHL_cold_join_rising = yes }
+		KYZ = { SHL_cold_join_rising = yes }
+		GLP = { SHL_cold_join_rising = yes }
+		MZR = { SHL_cold_join_rising = yes }
+		news_event = { id = ADISCORD_SHL_news.11 hours = 6 }
+		ADISCORD_economy_mark_dirty = yes
+		NAM = { ADISCORD_economy_mark_dirty = yes }
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# COUNTRY member of the rising: peace with Svetlogorye and its side, once.
+SHL_cold_end_member_wars = {
+	if = {
+		limit = {
+			exists = yes
+			OR = {
+				tag = SHL
+				has_country_flag = SHL_cold_pledged
+			}
+		}
+		every_enemy_country = {
+			limit = {
+				OR = {
+					tag = NAM
+					is_subject_of = NAM
+					is_in_faction_with = NAM
+				}
+			}
+			white_peace = PREV
+		}
+	}
+	clr_country_flag = SHL_cold_pledged
+	clr_country_flag = SHL_cold_pledge_pending
+}
+
+SHL_cold_end_rising_wars = {
+	SHL = { SHL_cold_end_member_wars = yes }
+	EFL = { SHL_cold_end_member_wars = yes }
+	AZH = { SHL_cold_end_member_wars = yes }
+	KYZ = { SHL_cold_end_member_wars = yes }
+	GLP = { SHL_cold_end_member_wars = yes }
+	MZR = { SHL_cold_end_member_wars = yes }
+}
+
+# Shared cleanup of both results: the coalition of this campaign, the
+# principals' major status, the route spirit and the underground.
+SHL_cold_close_rising = {
+	if = {
+		limit = { has_country_flag = SHL_cold_faction }
+		clr_country_flag = SHL_cold_faction
+		if = {
+			limit = { is_faction_leader = yes }
+			dismantle_faction = yes
+		}
+	}
+	SHL_cold_release_principal = yes
+	NAM = { SHL_cold_release_principal = yes }
+	if = {
+		limit = { has_dynamic_modifier = { modifier = SHL_cold_fire_dynamic } }
+		remove_dynamic_modifier = { modifier = SHL_cold_fire_dynamic }
+	}
+	clear_variable = SHL_cld_stability
+	clear_variable = SHL_cld_war_support
+	clear_variable = SHL_cld_org
+	clear_variable = SHL_cld_conscription
+	clear_variable = SHL_cld_defence
+	clear_variable = SHL_cld_attack
+	clear_variable = SHL_cld_dig_in
+	clear_variable = SHL_underground_heat
+	clear_variable = SHL_cold_cache_cells
+	clear_variable = SHL_cold_cache_rifles
+	ADISCORD_economy_mark_dirty = yes
+	NAM = { ADISCORD_economy_mark_dirty = yes }
+	mark_focus_tree_layout_dirty = yes
+}
+
+# Svetlogorye fell or vanished: Shahrabad stays independent with its furnaces.
+SHL_cold_rising_victory = {
+	if = {
+		limit = { check_variable = { var = SHL_cold_rising value = 1 compare = equals } }
+		set_variable = { var = SHL_cold_rising value = 2 }
+		SHL_cold_end_rising_wars = yes
+		SHL_cold_close_rising = yes
+		news_event = { id = ADISCORD_SHL_news.11 hours = 6 }
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# Shahrabad fell: the namestnik's office returns with all nine furnaces leased.
+SHL_cold_rising_crushed = {
+	if = {
+		limit = { check_variable = { var = SHL_cold_rising value = 1 compare = equals } }
+		set_variable = { var = SHL_cold_rising value = 3 }
+		SHL_cold_end_rising_wars = yes
+		SHL_cold_close_rising = yes
+		if = {
+			limit = { NAM = { exists = yes } }
+			NAM = {
+				puppet = {
+					target = SHL
+					end_wars = no
+					end_civil_wars = no
+				}
+				set_autonomy = {
+					target = SHL
+					autonomy_state = autonomy_NAM_namestnik_office
+					freedom_level = 0.05
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			every_owned_state = {
+				limit = { NOT = { is_controlled_by = SHL } }
+				set_state_controller_to = SHL
+			}
+			SHL_seal_lease_by_terms = yes
+			SHL_seal_refresh_terms = yes
+		}
+		add_timed_idea = {
+			idea = SHL_cold_ashes_idea
+			days = 730
+		}
+		news_event = { id = ADISCORD_SHL_news.11 hours = 6 }
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# From shahrabad:on_peace. A war of the rising closed by another script is
+# decided by the controller of Khazar at that moment.
+SHL_cold_close_external = {
+	if = {
+		limit = {
+			exists = yes
+			check_variable = { var = SHL_cold_rising value = 1 compare = equals }
+			NOT = { has_war_with = NAM }
+		}
+		if = {
+			limit = { SHL_cold_capital_held_by_rising = yes }
+			SHL_cold_rising_victory = yes
+		}
+		else = { SHL_cold_rising_crushed = yes }
+	}
+}
+
+# From shahrabad:on_annex when Shahrabad itself is annexed during the rising.
+SHL_cold_close_annexed = {
+	NAM = { SHL_cold_release_principal = yes }
+	SHL = { SHL_cold_release_principal = yes }
+	SHL_cold_clear_pledges = yes
+}
+
+# The neighbours' promises lapse once the rising can no longer be fought.
+SHL_cold_clear_pledges = {
+	EFL = {
+		clr_country_flag = SHL_cold_pledged
+		clr_country_flag = SHL_cold_pledge_pending
+	}
+	AZH = {
+		clr_country_flag = SHL_cold_pledged
+		clr_country_flag = SHL_cold_pledge_pending
+	}
+	KYZ = {
+		clr_country_flag = SHL_cold_pledged
+		clr_country_flag = SHL_cold_pledge_pending
+	}
+	GLP = {
+		clr_country_flag = SHL_cold_pledged
+		clr_country_flag = SHL_cold_pledge_pending
+	}
+	MZR = {
+		clr_country_flag = SHL_cold_pledged
+		clr_country_flag = SHL_cold_pledge_pending
 	}
 }

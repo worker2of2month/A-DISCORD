@@ -1,0 +1,939 @@
+# @section defeated
+# Under the namestnik's seal: the chapter after a Svetlogorye victory. Section of
+# the single SHL_focus tree (x 75-93, y 0-7). SHL_seal_open_chapter sets
+# SHL_seal_chapter_open once, after the southern settlement has made Shahrabad a
+# NAM subject; the root's allow_branch reads that flag. The lease terms are read
+# from the native autonomy state, never stored per focus.
+	focus = {
+		id = SHL_seal_conclave
+		icon = GFX_focus_generic_surrender
+		x = 84
+		y = 0
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_seal_chapter_open }
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 75
+			add_stability = 0.05
+			custom_effect_tooltip = SHL_k_cauldron_plus_now_tt
+			hidden_effect = { SHL_repair_worst_site = yes }
+			custom_effect_tooltip = SHL_seal_terms_tt
+		}
+		ai_will_do = { base = 50 }
+	}
+
+	focus = {
+		id = SHL_seal_count_the_cold
+		icon = GFX_focus_generic_commission
+		x = 82
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_seal_conclave
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 40
+			custom_effect_tooltip = SHL_seal_stock_free_sites_tt
+			custom_effect_tooltip = SHL_seal_unrest_down_tt
+			hidden_effect = {
+				SHL_seal_stock_free_sites = yes
+				add_to_variable = { var = SHL_unrest value = -10 }
+				SHL_clamp_tensions = yes
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = SHL_seal_houses_in_mourning
+		icon = GFX_focus_generic_soldier_salute
+		x = 86
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_seal_conclave
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 6000
+			army_experience = 10
+			country_event = { id = ADISCORD_SHL.201 hours = 6 }
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	# ----- Route choice: redeem the furnaces from the lease or prepare the rising -----
+
+	focus = {
+		id = SHL_redeem_furnaces_of_the_lease
+		icon = GFX_focus_generic_concessions
+		x = 79
+		y = 2
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_seal_count_the_cold
+		}
+		prerequisite = {
+			focus = SHL_seal_houses_in_mourning
+		}
+		mutually_exclusive = {
+			focus = SHL_cold_fire
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = SHL_receive_250_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_redeem_dummy_idea
+					add_idea = SHL_rdm_furnaces_of_the_lease_idea
+				}
+			}
+			hidden_effect = {
+				SHL_receive_250 = yes
+				add_to_variable = { var = SHL_rdm_stability value = 0.08 }
+				add_to_variable = { var = SHL_rdm_pp value = 0.10 }
+				add_to_variable = { var = SHL_rdm_war_support value = -0.15 }
+				add_to_variable = { var = SHL_rdm_consumer_goods value = 0.03 }
+				SHL_refresh_redeem_spirit = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				OR = {
+					has_autonomy_state = autonomy_NAM_economic_contract
+					has_autonomy_state = autonomy_NAM_oil_charter
+				}
+			}
+			modifier = {
+				factor = 0.3
+				has_autonomy_state = autonomy_NAM_namestnik_office
+			}
+		}
+	}
+
+	focus = {
+		id = SHL_cold_fire
+		icon = GFX_focus_generic_conspiracy
+		x = 89
+		y = 2
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_seal_count_the_cold
+		}
+		prerequisite = {
+			focus = SHL_seal_houses_in_mourning
+		}
+		mutually_exclusive = {
+			focus = SHL_redeem_furnaces_of_the_lease
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_command_power = 20
+			army_experience = 15
+			custom_effect_tooltip = SHL_cold_heat_opened_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_cold_dummy_idea
+					add_idea = SHL_cld_fire_idea
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = { NOT = { has_variable = SHL_underground_heat } }
+					set_variable = { var = SHL_underground_heat value = 10 }
+				}
+				add_to_variable = { var = SHL_cld_stability value = -0.05 }
+				add_to_variable = { var = SHL_cld_war_support value = 0.10 }
+				SHL_refresh_cold_spirit = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				OR = {
+					has_autonomy_state = autonomy_NAM_namestnik_office
+					has_autonomy_state = autonomy_puppet
+				}
+			}
+			modifier = {
+				factor = 0.3
+				has_autonomy_state = autonomy_NAM_economic_contract
+			}
+			modifier = {
+				factor = 2
+				NAM = { has_war = yes }
+			}
+		}
+	}
+
+	# ----- Furnaces of the lease: petitions, guarantors and the redeemed charter -----
+
+	focus = {
+		id = SHL_redeem_lease_ledger
+		icon = GFX_focus_generic_currency_reforms
+		x = 77
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_redeem_furnaces_of_the_lease
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_seal_buy_back_furnace
+			custom_effect_tooltip = SHL_seal_buy_back_unlock_tt
+			add_political_power = 35
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_redeem_dummy_idea
+					add_idea = SHL_rdm_lease_ledger_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_rdm_efficiency value = 0.05 }
+				SHL_refresh_redeem_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_redeem_namestnik_audience
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 81
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_redeem_furnaces_of_the_lease
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 40
+			custom_effect_tooltip = SHL_redeem_namestnik_audience_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_redeem_dummy_idea
+					add_idea = SHL_rdm_namestnik_audience_idea
+				}
+			}
+			# The guard is the namestnik's gift: a reward levy debits nothing.
+			hidden_effect = {
+				if = {
+					limit = {
+						699 = {
+							is_owned_by = SHL
+							is_controlled_by = SHL
+						}
+					}
+					SHL_ensure_levy_template = yes
+					699 = { SHL_create_levy = yes }
+				}
+				add_to_variable = { var = SHL_rdm_trade value = 0.10 }
+				SHL_refresh_redeem_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_redeem_by_coin
+		icon = GFX_focus_generic_stockpile_currency
+		x = 75
+		y = 4
+		cost = 4
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_redeem_lease_ledger
+		}
+		mutually_exclusive = {
+			focus = SHL_redeem_by_service
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_seal_coin_price_tt
+			custom_effect_tooltip = SHL_receive_250_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_redeem_dummy_idea
+					add_idea = SHL_rdm_by_coin_idea
+				}
+			}
+			# The discounted price is read from this focus when the terms refresh.
+			hidden_effect = {
+				SHL_receive_250 = yes
+				SHL_seal_refresh_terms = yes
+				add_to_variable = { var = SHL_rdm_consumer_goods value = -0.03 }
+				SHL_refresh_redeem_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_redeem_by_service
+		icon = GFX_focus_generic_steel_mill
+		x = 79
+		y = 4
+		cost = 4
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_redeem_lease_ledger
+			focus = SHL_redeem_namestnik_audience
+		}
+		mutually_exclusive = {
+			focus = SHL_redeem_by_coin
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_seal_redeem_by_service
+			custom_effect_tooltip = SHL_seal_service_unlock_tt
+			custom_effect_tooltip = SHL_k_cauldron_plus_now_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_redeem_dummy_idea
+					add_idea = SHL_rdm_by_service_idea
+				}
+			}
+			hidden_effect = {
+				SHL_repair_worst_site = yes
+				add_to_variable = { var = SHL_rdm_max_efficiency value = 0.05 }
+				SHL_refresh_redeem_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_redeem_quiet_quarters
+		icon = GFX_focus_generic_low_cost_housing
+		x = 83
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = SHL_redeem_namestnik_audience
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					if = {
+						limit = {
+							NOT = {
+								free_building_slots = {
+									building = industrial_complex
+									size = 1
+									include_locked = no
+								}
+							}
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+			custom_effect_tooltip = SHL_redeem_quiet_quarters_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_redeem_dummy_idea
+					add_idea = SHL_rdm_quiet_quarters_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -15 }
+				SHL_clamp_tensions = yes
+				add_to_variable = { var = SHL_rdm_stability value = 0.04 }
+				SHL_refresh_redeem_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_redeem_guarantor_houses
+		icon = GFX_focus_generic_treaty
+		x = 77
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_redeem_by_coin
+			focus = SHL_redeem_by_service
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_seal_house_bond
+			custom_effect_tooltip = SHL_seal_bond_unlock_tt
+			custom_effect_tooltip = SHL_redeem_guarantor_houses_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_redeem_dummy_idea
+					add_idea = SHL_rdm_guarantor_houses_idea
+				}
+			}
+			hidden_effect = {
+				set_variable = { var = SHL_loyalty_delta value = 15 }
+				SHL_change_all_loyalty = yes
+				add_to_variable = { var = SHL_rdm_pp value = 0.05 }
+				SHL_refresh_redeem_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_redeem_supervised_repairs
+		icon = GFX_goal_generic_construction2
+		x = 81
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_redeem_by_service
+			focus = SHL_redeem_quiet_quarters
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
+			}
+			custom_effect_tooltip = SHL_seal_maintain_leased_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_redeem_dummy_idea
+					add_idea = SHL_rdm_supervised_repairs_idea
+				}
+			}
+			hidden_effect = {
+				SHL_seal_maintain_leased_sites = yes
+				SHL_refresh_furnaces = yes
+				add_to_variable = { var = SHL_rdm_construction value = 0.05 }
+				SHL_refresh_redeem_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_redeem_charter
+		icon = GFX_focus_generic_phoenix
+		x = 79
+		y = 6
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_redeem_guarantor_houses
+		}
+		prerequisite = {
+			focus = SHL_redeem_supervised_repairs
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_seal_all_redeemed_tt
+				check_variable = { var = SHL_seal_leased_count value = 0 compare = less_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_ideas = SHL_redeemed_conclave
+			add_political_power = 100
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					if = {
+						limit = {
+							NOT = {
+								free_building_slots = {
+									building = industrial_complex
+									size = 1
+									include_locked = no
+								}
+							}
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_redeem_dummy_idea
+					add_idea = SHL_rdm_charter_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_rdm_war_support value = 0.15 }
+				SHL_refresh_redeem_spirit = yes
+				news_event = { id = ADISCORD_SHL_news.11 hours = 6 }
+			}
+		}
+		ai_will_do = { base = 50 }
+	}
+
+	# ----- Cold fire: cells, caches, allies and the rising -----
+
+	focus = {
+		id = SHL_cold_ash_cells
+		icon = GFX_focus_generic_whispers
+		x = 87
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_cold_fire
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_cold_forge
+			custom_effect_tooltip = SHL_cold_forge_unlock_tt
+			custom_effect_tooltip = SHL_cold_heat_5_tt
+			custom_effect_tooltip = SHL_cold_growth_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_cold_dummy_idea
+					add_idea = SHL_cld_ash_cells_idea
+				}
+			}
+			# The faster growth is read from this focus by the furnace cycle.
+			hidden_effect = {
+				set_temp_variable = { var = SHL_cold_heat_delta value = 5 }
+				SHL_cold_add_heat = yes
+				add_to_variable = { var = SHL_cld_org value = 0.03 }
+				SHL_refresh_cold_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_cold_quarter_couriers
+		icon = GFX_focus_generic_infiltration
+		x = 91
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_cold_fire
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 30
+			custom_effect_tooltip = SHL_cold_heat_5_tt
+			custom_effect_tooltip = SHL_cold_growth_tt
+			custom_effect_tooltip = SHL_seal_unrest_down_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_cold_dummy_idea
+					add_idea = SHL_cld_quarter_couriers_idea
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = SHL_cold_heat_delta value = 5 }
+				SHL_cold_add_heat = yes
+				add_to_variable = { var = SHL_unrest value = -10 }
+				SHL_clamp_tensions = yes
+				add_to_variable = { var = SHL_cld_conscription value = 0.03 }
+				SHL_refresh_cold_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_cold_hidden_armouries
+		icon = GFX_goal_generic_small_arms
+		x = 85
+		y = 4
+		cost = 4
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_cold_ash_cells
+		}
+		mutually_exclusive = {
+			focus = SHL_cold_letters_to_the_sands
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_cold_hidden_cache
+			custom_effect_tooltip = SHL_cold_free_cell_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_cold_dummy_idea
+					add_idea = SHL_cld_hidden_armouries_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_cold_cache_cells value = 1 }
+				add_to_variable = { var = SHL_cold_cache_rifles value = 1500 }
+				add_to_variable = { var = SHL_cld_defence value = 0.05 }
+				SHL_refresh_cold_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_cold_letters_to_the_sands
+		icon = GFX_goal_generic_intelligence_exchange
+		x = 89
+		y = 4
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_cold_ash_cells
+			focus = SHL_cold_quarter_couriers
+		}
+		mutually_exclusive = {
+			focus = SHL_cold_hidden_armouries
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 25
+			custom_effect_tooltip = SHL_cold_pledges_sent_tt
+			unlock_decision_tooltip = SHL_cold_courier_to_sands
+			custom_effect_tooltip = SHL_cold_courier_unlock_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_cold_dummy_idea
+					add_idea = SHL_cld_letters_to_the_sands_idea
+				}
+			}
+			hidden_effect = {
+				SHL_cold_send_pledges = yes
+				add_to_variable = { var = SHL_cld_war_support value = 0.05 }
+				SHL_refresh_cold_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_cold_shifts
+		icon = GFX_focus_generic_sabotage
+		x = 93
+		y = 4
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_cold_quarter_couriers
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_cold_shifts_tt
+			custom_effect_tooltip = SHL_cold_heat_10_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_cold_dummy_idea
+					add_idea = SHL_cld_shifts_idea
+				}
+			}
+			hidden_effect = {
+				SHL_cold_mark_shifts = yes
+				set_temp_variable = { var = SHL_cold_heat_delta value = 10 }
+				SHL_cold_add_heat = yes
+				add_to_variable = { var = SHL_unrest value = 5 }
+				SHL_clamp_tensions = yes
+				add_to_variable = { var = SHL_cld_attack value = 0.03 }
+				SHL_refresh_cold_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_cold_desert_drill
+		icon = GFX_focus_generic_desert_training
+		x = 87
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_cold_hidden_armouries
+			focus = SHL_cold_letters_to_the_sands
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 25
+			custom_effect_tooltip = SHL_cold_desert_drill_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_cold_dummy_idea
+					add_idea = SHL_cld_desert_drill_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_cold_cache_cells value = 1 }
+				add_to_variable = { var = SHL_cld_dig_in value = 2 }
+				SHL_refresh_cold_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_cold_raid_martyrs
+		icon = GFX_focus_generic_forest_brothers
+		x = 91
+		y = 5
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = SHL_cold_letters_to_the_sands
+			focus = SHL_cold_shifts
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 30
+			custom_effect_tooltip = SHL_cold_heat_8_tt
+			custom_effect_tooltip = SHL_cold_raid_guard_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_cold_dummy_idea
+					add_idea = SHL_cld_raid_martyrs_idea
+				}
+			}
+			# The lower raid chance is read from this focus by the raid roll.
+			hidden_effect = {
+				set_temp_variable = { var = SHL_cold_heat_delta value = 8 }
+				SHL_cold_add_heat = yes
+				add_to_variable = { var = SHL_cld_stability value = 0.03 }
+				SHL_refresh_cold_spirit = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	# The rising itself is the reward; its result is decided by capitulation in
+	# the scripted peace handlers, and the ending focuses read that result. A
+	# release before the rising records the same won result in SHL_seal_cycle, so
+	# the bypass keeps the self-management ending reachable.
+	focus = {
+		id = SHL_cold_night_of_fire
+		icon = GFX_focus_generic_workers_and_farmers_rise
+		x = 89
+		y = 6
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = SHL_cold_desert_drill
+		}
+		prerequisite = {
+			focus = SHL_cold_raid_martyrs
+		}
+		available = {
+			SHL_country_operable = yes
+			is_subject_of = NAM
+			custom_trigger_tooltip = {
+				tooltip = SHL_cold_heat_readout_tt
+				check_variable = { var = SHL_underground_heat value = 80 compare = greater_than_or_equals }
+			}
+			custom_trigger_tooltip = {
+				tooltip = SHL_cold_capital_held_tt
+				699 = {
+					is_owned_by = SHL
+					is_controlled_by = SHL
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = SHL_cold_cache_free_tt
+				NOT = { has_variable = SHL_cold_cache_deposit }
+			}
+		}
+		bypass = {
+			check_variable = { var = SHL_cold_rising value = 2 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_cold_rising_tt
+			hidden_effect = { SHL_cold_raise_rising = yes }
+		}
+		ai_will_do = {
+			base = 50
+			modifier = {
+				factor = 0.2
+				check_variable = { var = SHL_cold_cache_cells value = 2 compare = less_than }
+				NOT = {
+					OR = {
+						EFL = { has_country_flag = SHL_cold_pledged }
+						AZH = { has_country_flag = SHL_cold_pledged }
+						KYZ = { has_country_flag = SHL_cold_pledged }
+						GLP = { has_country_flag = SHL_cold_pledged }
+						MZR = { has_country_flag = SHL_cold_pledged }
+					}
+				}
+				NAM = { has_war = no }
+			}
+			modifier = {
+				factor = 3
+				NAM = { has_war = yes }
+			}
+		}
+	}
+
+	focus = {
+		id = SHL_cold_fire_without_masters
+		icon = GFX_focus_generic_self_management
+		x = 87
+		y = 7
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_cold_night_of_fire
+		}
+		mutually_exclusive = {
+			focus = SHL_cold_embers_under_seal
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_cold_rising_won_tt
+				check_variable = { var = SHL_cold_rising value = 2 compare = equals }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_ideas = SHL_cold_fire_without_masters_idea
+			add_political_power = 100
+			add_stability = 0.05
+			699 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						is_controlled_by = SHL
+					}
+					if = {
+						limit = {
+							NOT = {
+								free_building_slots = {
+									building = industrial_complex
+									size = 1
+									include_locked = no
+								}
+							}
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 50 }
+	}
+
+	focus = {
+		id = SHL_cold_embers_under_seal
+		icon = GFX_focus_generic_subjugation
+		x = 91
+		y = 7
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_cold_night_of_fire
+		}
+		mutually_exclusive = {
+			focus = SHL_cold_fire_without_masters
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_cold_rising_crushed_tt
+				check_variable = { var = SHL_cold_rising value = 3 compare = equals }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_seal_buy_back_furnace
+			custom_effect_tooltip = SHL_seal_buy_back_unlock_tt
+			add_political_power = 75
+			add_manpower = 5000
+			custom_effect_tooltip = SHL_seal_unrest_down_tt
+			hidden_effect = {
+				add_to_variable = { var = SHL_unrest value = -10 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = { base = 50 }
+	}

@@ -1,6 +1,9 @@
 """Focused static contract for the scripted NAM resource war."""
 
 from __future__ import annotations
+from tools.builders.build_adiscord_new_states import (
+    NAM_COALITION_FRONT_RESOURCES, NAM_LEGACY_VICTORY_POINTS, NAM_MAINLAND_STATE_RESOURCES,
+)
 from tools.lib.on_actions import read_country_on_actions
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
@@ -166,6 +169,27 @@ def owner_of_state(state_id: int) -> str | None:
     return match.group(1) if match else None
 
 
+def check_state_deposits(state_id: int, source: str, expected: dict[str, int]) -> None:
+    try:
+        states = [row.value for row in parse_clausewitz(source) if row.key == "state"]
+    except ValueError as error:
+        check(False, f"state {state_id}: cannot read deposits: {error}")
+        return
+    if len(states) != 1 or not isinstance(states[0], list):
+        check(False, f"state {state_id}: expected one state definition")
+        return
+    blocks = [row.value for row in states[0] if row.key == "resources"]
+    if len(blocks) > 1 or (blocks and not isinstance(blocks[0], list)):
+        check(False, f"state {state_id}: invalid resources block")
+        return
+    entries = blocks[0] if blocks else []
+    actual = {row.key: row.value for row in entries}
+    check(
+        len(actual) == len(entries) and actual == {key: str(value) for key, value in expected.items()},
+        f"state {state_id}: expected resource deposits {expected}, found {[(row.key, row.value) for row in entries]}",
+    )
+
+
 OIL_BUYERS = {
     "EFL", "AZH", "VAL", "STP", "STS", "RHM", "MZR",
     "SHL", "RUS", "WEF", "KDR", "SDR", "GLP", "KYZ",
@@ -222,6 +246,12 @@ def check_oil_monopoly(
             f"var = NAM_field_capacity value = {capacity}" in state_block
             and "var = NAM_field_condition value = 80" in state_block,
             f"field {state_id} must start with capacity {capacity} and condition 80",
+        )
+        oil = NAM_MAINLAND_STATE_RESOURCES.get(state_id, {}).get("oil")
+        check(
+            oil is not None
+            and has_script_fragment(state_block, f"set_variable = {{ var = NAM_field_applied_oil value = {oil} }}"),
+            f"field {state_id}: initial applied oil must match the map deposit of {oil}",
         )
     groups_init = named_block(effects, "NAM_groups_initialize")
     check(
@@ -2932,9 +2962,9 @@ def main() -> int:
     )
 
     starting_armies = {
-        "NAM": ("history/units/NAM.txt", [176, 6099, 8058], 3),
-        "EFL": ("history/units/EFL.txt", [259, 8057, 6495, 6331, 6495], 5),
-        "AZH": ("history/units/AZH.txt", [367, 493, 8234, 493], 4),
+        "NAM": ("history/units/NAM.txt", [176, 6099, 8058, 16716, 6893, 9016], 6),
+        "EFL": ("history/units/EFL.txt", [259, 8057, 6495, 6331, 6495, 6150, 2986, 16722, 16928], 9),
+        "AZH": ("history/units/AZH.txt", [367, 493, 8234, 493, 16893, 4089, 6193, 16929], 8),
     }
     for tag, (
         relative,
@@ -3028,34 +3058,13 @@ def main() -> int:
         owner_of_state(69) == "AZH" and owner_of_state(692) == "AZH",
         "AZH is not NAM's actual eastern neighbour",
     )
-    expected_resources = {
-        67: {"oil": 40, "chromium": 6},
-        688: {"oil": 8, "chromium": 1},
-        689: {"oil": 24, "chromium": 5},
-        690: {"oil": 16, "chromium": 3},
-        719: {"oil": 8},
-    }
-    for state_id, resources in expected_resources.items():
-        state = state_source(state_id)
-        for resource, amount in resources.items():
-            check(
-                re.search(rf"(?m)^\s*{resource}\s*=\s*{amount}\s*$", state) is not None,
-                f"state {state_id} must contain {amount} {resource}",
-            )
+    for state_id, deposits in (NAM_MAINLAND_STATE_RESOURCES | NAM_COALITION_FRONT_RESOURCES).items():
+        check_state_deposits(state_id, state_source(state_id), deposits)
     check(
-        sum(resources["oil"] for resources in expected_resources.values()) == 96
-        and sum(resources.get("chromium", 0) for resources in expected_resources.values())
-        == 15,
+        sum(resources.get("oil", 0) for resources in NAM_MAINLAND_STATE_RESOURCES.values()) == 96
+        and sum(resources.get("chromium", 0) for resources in NAM_MAINLAND_STATE_RESOURCES.values()) == 24,
         "NAM initial mainland oil or chromium differs from the development baseline",
     )
-    azh_resources = {69: {"oil": 1, "chromium": 1}, 692: {"oil": 1}, 727: {"oil": 1}, 729: {"chromium": 1, "tungsten": 1}}
-    for state_id, resources in azh_resources.items():
-        state = state_source(state_id)
-        for resource, amount in resources.items():
-            check(
-                re.search(rf"(?m)^\s*{resource}\s*=\s*{amount}\s*$", state) is not None,
-                f"state {state_id} must contain {amount} {resource}",
-            )
     check(
         re.search(r"(?m)^\s*arms_factory\s*=\s*1\s*$", state_source(67)) is not None
         and re.search(r"(?m)^\s*arms_factory\s*=", state_source(688)) is None,
@@ -3146,28 +3155,7 @@ def main() -> int:
     )
 
     expected_victory_points = {
-        67: {6099: 10, 16890: 15},
-        68: {6150: 10},
-        69: {16893: 25, 16883: 5, 16886: 5, 16889: 5, 16894: 5, 16888: 5},
-        70: {2986: 15, 1198: 10, 16900: 10, 16901: 10},
-        723: {6495: 10},
-        724: {6796: 5},
-        725: {259: 10},
-        726: {6331: 5},
-        727: {8234: 10},
-        728: {16882: 5, 16891: 5},
-        729: {6193: 5},
-        688: {16721: 25, 1710: 5},
-        689: {7618: 5},
-        690: {8058: 5, 9016: 5, 16885: 15, 16887: 10},
-        719: {6961: 5},
-        691: {8194: 10},
-        720: {8057: 5},
-        721: {7908: 5},
-        692: {493: 25, 5039: 5, 4089: 10},
-        722: {2443: 5},
-        700: {16716: 20, 16881: 5, 16884: 5, 16892: 5},
-        701: {16717: 25},
+        state: dict(points) for state, points in NAM_LEGACY_VICTORY_POINTS.items()
     }
     for state_id, points in expected_victory_points.items():
         state = state_source(state_id)
@@ -3183,17 +3171,17 @@ def main() -> int:
         )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (67, 688, 689, 690, 700, 719))
-        == 135,
-        "NAM mainland VP total must be 135",
+        == 165,
+        "NAM mainland VP total must be 165",
     )
     check(
         sum(sum(expected_victory_points[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726))
-        == 130,
-        "EFL mainland VP total must be 130",
+        == 174,
+        "EFL mainland VP total must be 174",
     )
     check(
-        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722, 727, 728, 729)) == 120,
-        "AZH mainland VP total must be 120",
+        sum(sum(expected_victory_points[state].values()) for state in (69, 692, 722, 727, 728, 729)) == 191,
+        "AZH mainland VP total must be 191",
     )
 
     localisation = (

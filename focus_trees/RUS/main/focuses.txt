@@ -4892,6 +4892,7 @@ focus_tree = {
 				custom_effect_tooltip = RUS_scientists_council_coalition_tt
 				hidden_effect = {
 					set_temp_variable = { ADISCORD_party = token:technocracy }
+					ADISCORD_legalise_party = yes
 					ADISCORD_admit_coalition_party = yes
 				}
 			}
@@ -5027,6 +5028,7 @@ focus_tree = {
 				custom_effect_tooltip = RUS_black_army_oath_coalition_tt
 				hidden_effect = {
 					set_temp_variable = { ADISCORD_party = token:chauvinism }
+					ADISCORD_legalise_party = yes
 					ADISCORD_admit_coalition_party = yes
 				}
 			}

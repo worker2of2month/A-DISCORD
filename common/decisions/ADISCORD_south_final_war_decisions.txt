@@ -64,6 +64,11 @@ ADISCORD_south_final_war_category = {
 			base = 4
 			modifier = {
 				factor = 0
+				difficulty > 2
+				ADISCORD_ai_field_army_can_attack = no
+			}
+			modifier = {
+				factor = 0
 				has_political_power < 100
 			}
 			modifier = {

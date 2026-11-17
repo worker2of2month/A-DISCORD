@@ -31,7 +31,7 @@ def pack_rgb(rgb: np.ndarray) -> np.ndarray:
     return values[..., 0] * 65536 + values[..., 1] * 256 + values[..., 2]
 
 
-def read_geography() -> tuple[np.ndarray, dict[int, set[int]], set[int]]:
+def read_geography(states: tuple[int, ...] = STATES) -> tuple[np.ndarray, dict[int, set[int]], set[int]]:
     province_colours = {}
     land_colours = set()
     with (ROOT / "map/definition.csv").open(encoding="utf-8-sig") as source:
@@ -43,7 +43,7 @@ def read_geography() -> tuple[np.ndarray, dict[int, set[int]], set[int]]:
             if row[4] == "land":
                 land_colours.add(colour)
     state_colours = {}
-    for state in STATES:
+    for state in states:
         paths = sorted((ROOT / "history/states").glob(f"{state}-*.txt"))
         if len(paths) != 1:
             raise ValueError(f"Expected one state history for {state}")

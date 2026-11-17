@@ -32,6 +32,14 @@ on_actions = {
 					}
 				}
 			}
+			# Objective districts of a limited war queue one front check for the next day.
+			if = {
+				limit = {
+					FROM.FROM = { SHL_limited_war_objective_state = yes }
+					SHL = { SHL_limited_war_active = yes }
+				}
+				SHL = { SHL_queue_front_check = yes }
+			}
 		}
 	}
 }

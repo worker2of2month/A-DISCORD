@@ -8442,6 +8442,7 @@ ADISCORD_vorkerland_ensure_claimant_home_cores = {
 }
 
 ADISCORD_vorkerland_begin_collapse = {
+	ADISCORD_end_party_coalition = yes
 	EYR = { load_focus_tree = { tree = generic_focus keep_completed = yes } }
 	EGC = { load_focus_tree = { tree = generic_focus keep_completed = yes } }
 	RIV = { load_focus_tree = { tree = generic_focus keep_completed = yes } }

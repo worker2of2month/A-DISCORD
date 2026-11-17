@@ -33,6 +33,13 @@ set_politics = {
 	elections_allowed = yes
 }
 
+add_to_array = { ADISCORD_banned_parties = token:humanism }
+add_to_array = { ADISCORD_banned_parties = token:utilitarism }
+add_to_array = { ADISCORD_banned_parties = token:pragmatism }
+add_to_array = { ADISCORD_banned_parties = token:anarchism }
+add_to_array = { ADISCORD_banned_parties = token:technocracy }
+add_to_array = { ADISCORD_banned_parties = token:etatism }
+
 set_popularities = {
 	humanism = 2
 	utilitarism = 1

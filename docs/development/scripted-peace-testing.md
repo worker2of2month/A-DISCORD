@@ -278,6 +278,18 @@ that campaign. A champion's capitulation settles every participant; other
 defeated participants stay occupied until that settlement. Native peace,
 annexation or subjugation outside it resolves the campaign by control of the
 key districts, and the Restitution Alliance only repels it.
+A war over a refused consolidation offer is settled in the same section, after
+the final-war branch and only when no earlier section reserved the
+capitulation. The refusal record `ADISCORD_south_refused_<champion>` (1 =
+submission, 2 = annexation) is written before the declaration. Once the whole
+refusing side has capitulated to the champion's side, the member that refused
+annexation is annexed by the champion; every other member makes peace, leaves
+its faction and becomes the champion's subject one day later through the
+ordinary `ADISCORD_south_finalize_submission` (`ADISCORD_south.47` retries for
+up to a week while capitulation and faction state clear, then restores
+control). A member that falls before its partners stays occupied. A
+capitulated champion makes white peace with the whole refusing side; neither
+side is annexed. Native peace clears a record whose war has ended.
 The western final war follows the same contract for unified Vorkerland and IVN. Its
 `west_final` sections run after `south_final`; a champion's capitulation
 settles every participant, and the deadline or an external end resolves it

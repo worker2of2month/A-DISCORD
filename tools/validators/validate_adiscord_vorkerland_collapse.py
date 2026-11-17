@@ -20,6 +20,7 @@ try:
     from tools.validators._vorkerland_release_contract import (
         VORKERLAND_NATION,
         base_front_controls,
+        direct_named_blocks,
         direct_statements,
         validate_adaptive_fronts,
         validate_release_hook_normal_branches,
@@ -29,6 +30,7 @@ except ModuleNotFoundError:
     from _vorkerland_release_contract import (
         VORKERLAND_NATION,
         base_front_controls,
+        direct_named_blocks,
         direct_statements,
         validate_adaptive_fronts,
         validate_release_hook_normal_branches,
@@ -522,6 +524,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         root, "common/characters/ADISCORD_vorkerland_collapse_characters.txt", issues
     )
     portraits = read(root, "interface/ADISCORD_leader_portraits.gfx", issues)
+    portraits += read(root, "interface/ADISCORD_vorkerland_collapse_portraits.gfx", issues)
     random_portraits = read(root, "interface/_random_portraits.gfx", issues)
     for tag in TAGS:
         if f'{tag} = "countries/{tag}.txt"' not in tags:
@@ -542,7 +545,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "DVA_Severin_Mark": "GFX_portrait_DVA_Severin_Mark",
         "EGC_Ruslan_Pike": "GFX_portrait_EGC_Ruslan_Pike",
         "WPS_Karim_Dol": "GFX_portrait_WPS_Karim_Dol",
-        "PWR_Alexey_Lange": "GFX_Portrait_Forul_Generic_4",
+        "PWR_Alexey_Lange": "GFX_portrait_PWR_Alexey_Lange",
         "SRA_Helio_Marr": "GFX_portrait_SRA_Helio_Marr",
         "ZTA_Viktor_Holt": "GFX_portrait_ZTA_Viktor_Holt",
         "RIV_Mikhail_Arsenyev": "GFX_portrait_RIV_Mikhail_Arsenyev",
@@ -871,21 +874,19 @@ def validate_countries(root: Path, issues: list[str]) -> None:
                 f"survivor joint government incorrectly borrows Vlad's imperial identity: {token}"
             )
 
-    vad_formation = named_block(phase_effects, "ADISCORD_vorkerland_unify_under_vad")
-    vad_formation += named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_vad")
-    joint_identity = re.search(
-        r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
-        r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government\s*"
-        r"ADISCORD_vorkerland_appoint_joint_council\s*=\s*yes\s*\}",
-        vad_formation,
-    )
-    if joint_identity is None:
+    settlement = named_block(phase_effects, "ADISCORD_vorkerland_settle_unification_under_vad")
+    council_branches = [
+        branch for branch in direct_named_blocks(settlement, "if")
+        if "WRK_vorkerland_joint_government" in direct_statements(branch, "set_cosmetic_tag")
+        and direct_statements(branch, "ADISCORD_vorkerland_appoint_joint_council") == ["yes"]
+    ]
+    if len(council_branches) != 1:
         issues.append(
             "VAD reunification does not appoint the joint council behind a dedicated identity gate"
         )
     else:
-        limit = joint_identity.group("limit")
-        if "ADISCORD_vorkerland_joint_government_formed" not in limit:
+        limit = named_block(council_branches[0], "limit")
+        if "ADISCORD_vorkerland_joint_government_formed" not in direct_statements(limit, "has_global_flag"):
             issues.append(
                 "VAD reunification does not key joint identity on the rare council flag"
             )
@@ -2772,10 +2773,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in ivn_cancel_effect:
             issues.append(f"Ivanland mission cancel routing is missing {token}")
-    if (
-        "timeout_effect = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }"
-        not in ivn
-    ):
+    ivn_timeout = named_block(ivn, "timeout_effect")
+    if direct_statements(ivn_timeout, "ADISCORD_vorkerland_ivanland_intervention_failure") != ["yes"]:
         issues.append("Ivanland mission timeout does not resolve as failure")
     intervention_activation = named_block(
         effects, "ADISCORD_vorkerland_activate_ivanland_intervention_mission"
@@ -4466,17 +4465,20 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "cost = 25",
         "days_remove = 21",
         "fire_only_once = yes",
-        "remove_effect = { ADISCORD_vorkerland_raise_emergency_levies = yes }",
     ):
         if token not in levy_decision:
             issues.append(f"bounded emergency-levy decision is missing {token}")
+    levy_completion = named_block(levy_decision, "remove_effect")
+    if direct_statements(levy_completion, "ADISCORD_vorkerland_raise_emergency_levies") != ["yes"]:
+        issues.append("bounded emergency-levy decision must raise levies on completion")
     if "ADISCORD_vorkerland_raise_emergency_levies" in on_actions:
         issues.append(
             "emergency levies must be decision-driven, not polled by on_actions"
         )
 
     ivn_oob = read(root, "history/units/IVN.txt", issues)
-    ivn_units = named_block(ivn_oob, "units")
+    ivn_divisions = direct_named_blocks(named_block(ivn_oob, "units"), "division")
+    ivn_units = "\n".join(ivn_divisions)
     if (
         "set_major = yes" not in ivn_history
         or "set_research_slots = 5" not in ivn_history
@@ -4500,9 +4502,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "IVN field formations must start at 70 percent equipment or better"
         )
     ivn_locations = [
-        int(value) for value in re.findall(r"location\s*=\s*(\d+)", ivn_units)
+        direct_statements(division, "location") for division in ivn_divisions
     ]
-    if ivn_locations != [
+    deployment = [
         16568,
         9327,
         16823,
@@ -4519,7 +4521,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         16821,
         16815,
         16824,
-    ]:
+    ]
+    if ivn_locations != [[str(province)] for province in deployment]:
         issues.append(
             "IVN field formations do not match the post-island-administration deployment"
         )

@@ -3694,12 +3694,15 @@ country_event = {
 						value = 2
 					}
 				}
+				set_temp_variable = { ADISCORD_party = token:etatism }
+				ADISCORD_admit_coalition_party = yes
 				WRK_intrigue_initialize = yes
 				country_event = { id = ADISCORD_vorkerland_preparation.63 days = 30 }
 				mark_focus_tree_layout_dirty = yes
 			}
 		}
 		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_army_tt
+		custom_effect_tooltip = WRK_staff_cabinet_tt
 		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_tt
 	}
 	option = {
@@ -3721,12 +3724,15 @@ country_event = {
 						value = 3
 					}
 				}
+				set_temp_variable = { ADISCORD_party = token:technocracy }
+				ADISCORD_admit_coalition_party = yes
 				WRK_cells_initialize = yes
 				country_event = { id = ADISCORD_vorkerland_preparation.63 days = 30 }
 				mark_focus_tree_layout_dirty = yes
 			}
 		}
 		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_technical_tt
+		custom_effect_tooltip = WRK_engineers_cabinet_tt
 		custom_effect_tooltip = ADISCORD_vorkerland_prep_patron_tt
 	}
 }

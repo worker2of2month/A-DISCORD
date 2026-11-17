@@ -13051,7 +13051,7 @@
           "y": 1
         },
         {
-          "type": "artillery",
+          "type": "ADISCORD_line_artillery",
           "x": 2,
           "y": 0
         }
@@ -13064,15 +13064,15 @@
         }
       ],
       "computed": {
-        "organization": 40.5,
-        "manpower": 4600,
+        "organization": 41.333333333333336,
+        "manpower": 4800,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 32,
-          "artillery_equipment": 12,
-          "infantry_equipment": 4140,
+          "artillery_equipment": 24,
+          "infantry_equipment": 4320,
           "support_equipment": 30
         },
-        "supply": 0.42
+        "supply": 0.5
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
@@ -15109,6 +15109,16 @@
       "count": 2
     },
     {
+      "key": "azh_oob_basin_levy_xp_0_15_eq_0_5",
+      "path": "history/units/AZH.txt",
+      "kind": "oob",
+      "technical_name": "Basin Levy",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.5,
+      "count": 4
+    },
+    {
       "key": "azh_starting_marines",
       "path": "history/units/AZH.txt",
       "kind": "oob",
@@ -15347,6 +15357,16 @@
       "count": 2
     },
     {
+      "key": "efl_oob_line_infantry_brigade_xp_0_15_eq_0_57",
+      "path": "history/units/EFL.txt",
+      "kind": "oob",
+      "technical_name": "Line Infantry Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.57,
+      "count": 2
+    },
+    {
       "key": "efl_oob_local_security_detachment_xp_0_1_eq_0_4",
       "path": "history/units/EFL.txt",
       "kind": "oob",
@@ -15354,6 +15374,16 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.4,
+      "count": 2
+    },
+    {
+      "key": "efl_oob_local_security_detachment_xp_0_15_eq_0_57",
+      "path": "history/units/EFL.txt",
+      "kind": "oob",
+      "technical_name": "Local Security Detachment",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.57,
       "count": 2
     },
     {
@@ -15449,6 +15479,16 @@
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.5,
       "count": 1
+    },
+    {
+      "key": "glp_oob_prismatic_guard_xp_0_15_eq_0_6",
+      "path": "history/units/GLP.txt",
+      "kind": "oob",
+      "technical_name": "Prismatic Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.6,
+      "count": 4
     },
     {
       "key": "hon_oob_northern_line_brigade_xp_0_15_eq_0_72",
@@ -15633,6 +15673,16 @@
       "count": 1
     },
     {
+      "key": "kdr_oob_caravan_guard_xp_0_15_eq_0_6",
+      "path": "history/units/KDR.txt",
+      "kind": "oob",
+      "technical_name": "Caravan Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.6,
+      "count": 4
+    },
+    {
       "key": "khv_oob_northern_line_brigade_xp_0_15_eq_0_72",
       "path": "history/units/KHV.txt",
       "kind": "oob",
@@ -15677,6 +15727,16 @@
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.5,
       "count": 1
+    },
+    {
+      "key": "kyz_oob_qanat_guard_xp_0_15_eq_0_6",
+      "path": "history/units/KYZ.txt",
+      "kind": "oob",
+      "technical_name": "Qanat Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.6,
+      "count": 4
     },
     {
       "key": "lmn_oob_frontier_brigade_xp_0_15_eq_0_72",
@@ -15757,6 +15817,16 @@
       "count": 1
     },
     {
+      "key": "mzr_oob_cistern_watch_xp_0_15_eq_0_6",
+      "path": "history/units/MZR.txt",
+      "kind": "oob",
+      "technical_name": "Cistern Watch",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.6,
+      "count": 4
+    },
+    {
       "key": "nam_oob_line_infantry_brigade_xp_0_15_eq_0_29",
       "path": "history/units/NAM.txt",
       "kind": "oob",
@@ -15767,6 +15837,16 @@
       "count": 1
     },
     {
+      "key": "nam_oob_line_infantry_brigade_xp_0_15_eq_0_44",
+      "path": "history/units/NAM.txt",
+      "kind": "oob",
+      "technical_name": "Line Infantry Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.44,
+      "count": 2
+    },
+    {
       "key": "nam_oob_local_security_detachment_xp_0_1_eq_0_38",
       "path": "history/units/NAM.txt",
       "kind": "oob",
@@ -15775,6 +15855,16 @@
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.38,
       "count": 2
+    },
+    {
+      "key": "nam_oob_local_security_detachment_xp_0_15_eq_0_44",
+      "path": "history/units/NAM.txt",
+      "kind": "oob",
+      "technical_name": "Local Security Detachment",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.44,
+      "count": 1
     },
     {
       "key": "nam_resource_war_oob_mobilisation_guard_xp_0_45_eq_0_9",
@@ -16043,6 +16133,16 @@
       "count": 1
     },
     {
+      "key": "rhm_oob_well_wardens_xp_0_15_eq_0_6",
+      "path": "history/units/RHM.txt",
+      "kind": "oob",
+      "technical_name": "Well Wardens",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.6,
+      "count": 4
+    },
+    {
       "key": "rin_oob_palatine_line_division_xp_0_25_eq_0_86",
       "path": "history/units/RIN.txt",
       "kind": "oob",
@@ -16151,6 +16251,16 @@
       "count": 1
     },
     {
+      "key": "sdr_oob_dry_river_patrol_xp_0_15_eq_0_6",
+      "path": "history/units/SDR.txt",
+      "kind": "oob",
+      "technical_name": "Dry River Patrol",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.6,
+      "count": 4
+    },
+    {
       "key": "shl_oob_furnace_guard_xp_0_1_eq_0_45",
       "path": "history/units/SHL.txt",
       "kind": "oob",
@@ -16171,6 +16281,16 @@
       "count": 1
     },
     {
+      "key": "shl_oob_furnace_guard_xp_0_15_eq_0_6",
+      "path": "history/units/SHL.txt",
+      "kind": "oob",
+      "technical_name": "Furnace Guard",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.6,
+      "count": 3
+    },
+    {
       "key": "shl_oob_khazar_guard_xp_0_25_eq_0_7",
       "path": "history/units/SHL.txt",
       "kind": "oob",
@@ -16188,7 +16308,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.6,
-      "count": 1
+      "count": 4
     },
     {
       "key": "shl_oob_conclave_line_brigade_xp_0_1_eq_0_55",
@@ -16615,6 +16735,16 @@
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.5,
       "count": 1
+    },
+    {
+      "key": "wef_oob_frontier_watch_xp_0_15_eq_0_6",
+      "path": "history/units/WEF.txt",
+      "kind": "oob",
+      "technical_name": "Frontier Watch",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.6,
+      "count": 2
     },
     {
       "key": "wit_oob_capital_guard_xp_0_26_eq_0_4",
@@ -17045,13 +17175,23 @@
       "count": 1
     },
     {
+      "key": "val_south_defender_detachments",
+      "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "CBRN Protection Detachment",
+      "legacy_names": [],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1.0,
+      "count": 2
+    },
+    {
       "key": "south_desert_expedition_delivery",
       "path": "common/scripted_effects/ADISCORD_south_final_war_effects.txt",
       "kind": "create_unit",
       "technical_name": "Desert Expedition",
       "legacy_names": [],
       "start_experience_factor": 0.2,
-      "start_equipment_factor": 0.12,
+      "start_equipment_factor": 0.11575,
       "count": 1
     },
     {

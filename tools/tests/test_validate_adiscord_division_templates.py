@@ -19,6 +19,7 @@ from tools.validators.validate_adiscord_division_templates import (
 class StartingTemplateCounterTests(unittest.TestCase):
     def test_role_pictures_stay_distinct(self) -> None:
         self.assertEqual(starting_template_counter("Police division"), 80)
+        self.assertEqual(starting_template_counter("Itoran Emergency Brigade"), 80)
         self.assertEqual(starting_template_counter("Regular army"), 3)
         self.assertEqual(starting_template_counter("Capital Guard"), 78)
         self.assertEqual(starting_template_counter("Kefreyt Line Brigade"), 78)

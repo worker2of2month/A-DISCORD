@@ -59,16 +59,114 @@ is_enemy_ideology = {
 	}
 }
 
-ADISCORD_party_is_banned = {
-	is_in_array = { ADISCORD_banned_parties = ADISCORD_party }
+ADISCORD_party_humanism_banned = {
+	is_in_array = { ADISCORD_banned_parties = token:humanism }
 }
 
-ADISCORD_party_is_coalition_member = {
-	is_in_array = { ADISCORD_cabinet_parties = ADISCORD_party }
-	NOT = { has_government = var:ADISCORD_party }
+ADISCORD_party_humanism_member = {
+	is_in_array = { ADISCORD_cabinet_parties = token:humanism }
+	NOT = { has_government = humanism }
 }
 
-ADISCORD_party_is_coalition_leader = {
-	is_in_array = { ADISCORD_cabinet_parties = ADISCORD_party }
-	has_government = var:ADISCORD_party
+ADISCORD_party_humanism_leader = {
+	is_in_array = { ADISCORD_cabinet_parties = token:humanism }
+	has_government = humanism
+}
+
+ADISCORD_party_utilitarism_banned = {
+	is_in_array = { ADISCORD_banned_parties = token:utilitarism }
+}
+
+ADISCORD_party_utilitarism_member = {
+	is_in_array = { ADISCORD_cabinet_parties = token:utilitarism }
+	NOT = { has_government = utilitarism }
+}
+
+ADISCORD_party_utilitarism_leader = {
+	is_in_array = { ADISCORD_cabinet_parties = token:utilitarism }
+	has_government = utilitarism
+}
+
+ADISCORD_party_chauvinism_banned = {
+	is_in_array = { ADISCORD_banned_parties = token:chauvinism }
+}
+
+ADISCORD_party_chauvinism_member = {
+	is_in_array = { ADISCORD_cabinet_parties = token:chauvinism }
+	NOT = { has_government = chauvinism }
+}
+
+ADISCORD_party_chauvinism_leader = {
+	is_in_array = { ADISCORD_cabinet_parties = token:chauvinism }
+	has_government = chauvinism
+}
+
+ADISCORD_party_pragmatism_banned = {
+	is_in_array = { ADISCORD_banned_parties = token:pragmatism }
+}
+
+ADISCORD_party_pragmatism_member = {
+	is_in_array = { ADISCORD_cabinet_parties = token:pragmatism }
+	NOT = { has_government = pragmatism }
+}
+
+ADISCORD_party_pragmatism_leader = {
+	is_in_array = { ADISCORD_cabinet_parties = token:pragmatism }
+	has_government = pragmatism
+}
+
+ADISCORD_party_anarchism_banned = {
+	is_in_array = { ADISCORD_banned_parties = token:anarchism }
+}
+
+ADISCORD_party_anarchism_member = {
+	is_in_array = { ADISCORD_cabinet_parties = token:anarchism }
+	NOT = { has_government = anarchism }
+}
+
+ADISCORD_party_anarchism_leader = {
+	is_in_array = { ADISCORD_cabinet_parties = token:anarchism }
+	has_government = anarchism
+}
+
+ADISCORD_party_technocracy_banned = {
+	is_in_array = { ADISCORD_banned_parties = token:technocracy }
+}
+
+ADISCORD_party_technocracy_member = {
+	is_in_array = { ADISCORD_cabinet_parties = token:technocracy }
+	NOT = { has_government = technocracy }
+}
+
+ADISCORD_party_technocracy_leader = {
+	is_in_array = { ADISCORD_cabinet_parties = token:technocracy }
+	has_government = technocracy
+}
+
+ADISCORD_party_etatism_banned = {
+	is_in_array = { ADISCORD_banned_parties = token:etatism }
+}
+
+ADISCORD_party_etatism_member = {
+	is_in_array = { ADISCORD_cabinet_parties = token:etatism }
+	NOT = { has_government = etatism }
+}
+
+ADISCORD_party_etatism_leader = {
+	is_in_array = { ADISCORD_cabinet_parties = token:etatism }
+	has_government = etatism
+}
+
+ADISCORD_party_hedonism_banned = {
+	is_in_array = { ADISCORD_banned_parties = token:hedonism }
+}
+
+ADISCORD_party_hedonism_member = {
+	is_in_array = { ADISCORD_cabinet_parties = token:hedonism }
+	NOT = { has_government = hedonism }
+}
+
+ADISCORD_party_hedonism_leader = {
+	is_in_array = { ADISCORD_cabinet_parties = token:hedonism }
+	has_government = hedonism
 }

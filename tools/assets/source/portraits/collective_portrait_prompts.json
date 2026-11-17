@@ -46,7 +46,8 @@
       "sprite": "GFX_portrait_RLY_Relay_Assembly_17",
       "runtime_path": "gfx/leaders/RLY/portrait_RLY_Relay_Assembly_17.png",
       "source_file": "exec-2384d3f0-0144-4ae6-b9e2-4bff12762204.png",
-      "runtime_sha256": "d8fcb91b8d59707a05a84ae467bcdc8b7d99a2c008c3494811facde7bb101e8d"
+      "template_layer_effects": false,
+      "runtime_sha256": "6b9ee8939b5e496c14be01b8921b0914a168e2dc61c1ca33f8c7d19f37899821"
     },
     {
       "id": "DRV_Council_of_Free_Valleys",
@@ -67,13 +68,15 @@
       "sprite": "GFX_portrait_DRV_Council_of_Free_Valleys",
       "runtime_path": "gfx/leaders/DRV/portrait_DRV_Council_of_Free_Valleys.png",
       "source_file": "exec-6550dd04-cf8e-4b79-8dca-f3edd12a2486.png",
+      "fit": "cover_top",
+      "template_layer_effects": false,
       "discarded_variants": [
         {
           "source_file": "exec-ebd645e0-0c7e-4804-b1a1-ef8170f761b8.png",
           "reason": "Replaced to vary group pose and interaction."
         }
       ],
-      "runtime_sha256": "3600f289b3cbbe892b68f51935880c47aea1ea58ec41bb0c652e6f338622afac"
+      "runtime_sha256": "152007a7375ed014f98fd15509b4b3877829711c9853bde3a975245d90f8aa66"
     },
     {
       "id": "MZR_Ration_Assembly",
@@ -100,7 +103,8 @@
           "reason": "Replaced to vary group pose and interaction."
         }
       ],
-      "runtime_sha256": "6b4b3ac09a3b8aeb264020304b7b5e7fb8c988bd51cf8d73fe15e8fa1b4590fa"
+      "template_layer_effects": false,
+      "runtime_sha256": "10bc37d353035e1a44316c88cedded0aed37f181cb4025a1e97bd1a1a63dccf5"
     },
     {
       "id": "KYZ_Qanat_Assembly",
@@ -121,7 +125,8 @@
       "sprite": "GFX_portrait_KYZ_Qanat_Assembly",
       "runtime_path": "gfx/leaders/KYZ/portrait_KYZ_Qanat_Assembly.png",
       "source_file": "exec-7bfe682d-0541-479f-844f-016b8ff2f9f2.png",
-      "runtime_sha256": "bb48c50853d52c7812801eb89faba1a0a0264c50299736399f0942b56d0ff1fd"
+      "template_layer_effects": false,
+      "runtime_sha256": "47b91f1ec0deadf870c40082a58699ca6a8556421beb936990eb66ace16fe728"
     },
     {
       "id": "SFD_administrative_board",
@@ -142,7 +147,8 @@
       "sprite": "GFX_portrait_SFD_administrative_board",
       "runtime_path": "gfx/leaders/SFD/portrait_SFD_administrative_board.png",
       "source_file": "exec-fd909d43-940b-44c5-82cb-fbccc48f0751.png",
-      "runtime_sha256": "bc93396b7cb0774497d28c853a1e1a634b64164bd4f1cf46da1031ab7b6eb8e6"
+      "template_layer_effects": false,
+      "runtime_sha256": "fe5d817f9b1783f08af55bf7e018776a4da52dc9a1c677219898c409bd0d9c3d"
     },
     {
       "id": "SCD_administrative_board",
@@ -163,7 +169,8 @@
       "sprite": "GFX_portrait_SCD_administrative_board",
       "runtime_path": "gfx/leaders/SCD/portrait_SCD_administrative_board.png",
       "source_file": "exec-401c1ba8-22ee-496e-8488-f8f07f95d28c.png",
-      "runtime_sha256": "349377bc786d1abc829cc9d3c33e511e6f8548f1de53b23c9bd5f1e6ba52642d"
+      "template_layer_effects": false,
+      "runtime_sha256": "45b4237684b22c2dabadfbef31569f5e13d1939513b8d027096004fc085e8514"
     },
     {
       "id": "SMD_administrative_board",
@@ -205,7 +212,8 @@
       "sprite": "GFX_portrait_SOD_administrative_board",
       "runtime_path": "gfx/leaders/SOD/portrait_SOD_administrative_board.png",
       "source_file": "exec-30e4887f-624a-46bb-96d9-6ed2edd1c6cc.png",
-      "runtime_sha256": "ac4a2f79365902ff7ce66d4bd1c4bf13996bda8f99fdc31c4d9d19160f68c536"
+      "template_layer_effects": false,
+      "runtime_sha256": "b90fc47fb546d43f137965912c8f6793d6f2f3699e709d7a657e90de0e8dd8a9"
     },
     {
       "id": "WKR_Emergency_Coordination_Committee",
@@ -226,7 +234,8 @@
       "sprite": "GFX_portrait_WKR_Emergency_Coordination_Committee",
       "runtime_path": "gfx/leaders/WKR/portrait_WKR_Emergency_Coordination_Committee.png",
       "source_file": "exec-f1dd9049-7ca4-4a6d-9012-b9f4a21f3d87.png",
-      "runtime_sha256": "775edb841941313ea547bc5a453c58fc5e8b39662bc6273277c1a6752f624bce"
+      "template_layer_effects": false,
+      "runtime_sha256": "7e01b9323883e361aa0a29584d8ddc5ea07655991100199378bee860f070fb84"
     },
     {
       "id": "WTD_Central_Engineering_Council",
@@ -247,7 +256,8 @@
       "sprite": "GFX_portrait_WTD_Central_Engineering_Council",
       "runtime_path": "gfx/leaders/WTD/portrait_WTD_Central_Engineering_Council.png",
       "source_file": "exec-b9bd6bd3-c6e6-44a4-88e2-cb022dbb3377.png",
-      "runtime_sha256": "1d71c8231e85d48b42540660ab7dce353b5a08725f681ead73ef7aee6f2a9b98"
+      "template_layer_effects": false,
+      "runtime_sha256": "247f68c32fef2987013846c89da2046955aae974261a6d3e62b371dff1e7e5ca"
     },
     {
       "id": "IVN_Commune_Council",
@@ -268,7 +278,8 @@
       "sprite": "GFX_portrait_IVN_Commune_Council",
       "runtime_path": "gfx/leaders/IVN/portrait_IVN_Commune_Council.png",
       "source_file": "exec-5f788bb3-a262-4265-a134-7acb307ce6f4.png",
-      "runtime_sha256": "cbbcfb27d3f3da82448cca4c843d3410e5c0fa6d74a95eb5926153128e82cd44",
+      "template_layer_effects": false,
+      "runtime_sha256": "aa6c0a4d06617ff62804bbe9d098f8a4cc893c51a73b4a9d47c4c5ba228c68e0",
       "render_fit": "cover_top"
     },
     {
@@ -290,7 +301,8 @@
       "sprite": "GFX_portrait_IVN_Marches_Council",
       "runtime_path": "gfx/leaders/IVN/portrait_IVN_Marches_Council.png",
       "source_file": "exec-0f0af8cf-af97-4ffa-b7a8-73c7149b0e52.png",
-      "runtime_sha256": "e293db088b0b3f9ae098b4fb27df461e41480fc4f3de6c910f9e57567fb17070",
+      "template_layer_effects": false,
+      "runtime_sha256": "9b8df13c57f79747bbc359227db64ff8beca35f1c3ee9a9076587085886c42b6",
       "render_fit": "cover_top"
     },
     {
@@ -312,7 +324,8 @@
       "sprite": "GFX_portrait_SHL_Shift_Councils",
       "runtime_path": "gfx/leaders/SHL/portrait_SHL_Shift_Councils.png",
       "source_file": "exec-37e81d65-5e36-4afa-8b4c-b187c0650970.png",
-      "runtime_sha256": "e4d01ea69a801cd55f39ce8652b30495c71337563ea944af1d96a8b3afd99496"
+      "template_layer_effects": false,
+      "runtime_sha256": "87239e101e950c460f15fcad3af9bee3ae8c13a3da0258d0f3697fcd02156829"
     },
     {
       "id": "SLI_Island_Council",
@@ -333,7 +346,8 @@
       "sprite": "GFX_portrait_SLI_Island_Council",
       "runtime_path": "gfx/leaders/SLI/portrait_SLI_Island_Council.png",
       "source_file": "exec-7fed6450-816c-4b36-9031-b5e315159bae.png",
-      "runtime_sha256": "98420b337ecce20f7031863c2b85ea9324305f7567d6536708bcabb3abc110ff"
+      "template_layer_effects": false,
+      "runtime_sha256": "61baa3577d802e7b8d5538c218ce7db1c6e291351ea6cd09f9aded93671a6ca0"
     },
     {
       "id": "CIN_VAL_commission",
@@ -354,7 +368,8 @@
       "sprite": "GFX_portrait_CIN_VAL_commission",
       "runtime_path": "gfx/leaders/CIN/portrait_CIN_VAL_commission.png",
       "source_file": "exec-c6215748-36be-4af7-8734-80995e45c791.png",
-      "runtime_sha256": "0f996eebd049cc091aea0e2c3a3ff2aaf27dbdc69d5c75d6c99b654dfa9becee"
+      "template_layer_effects": false,
+      "runtime_sha256": "a437fff56b9fb9db2e0ad90b21af8a4caf4bbd6006cce5bd7de9464031231ab1"
     },
     {
       "id": "OSF_VAL_commission",
@@ -375,7 +390,8 @@
       "sprite": "GFX_portrait_OSF_VAL_commission",
       "runtime_path": "gfx/leaders/OSF/portrait_OSF_VAL_commission.png",
       "source_file": "exec-87691555-b220-4982-bcb4-94c77619f024.png",
-      "runtime_sha256": "a90fd91e57f4666a7183dec455d92af18a5b09937c98ed9b0b2b848c0a2214d0"
+      "template_layer_effects": false,
+      "runtime_sha256": "65bdbf04297ddc943d56e46683359f6ecf9f1b190876ed7b483ea6f5520aa543"
     },
     {
       "id": "APH_VAL_commission",
@@ -396,7 +412,8 @@
       "sprite": "GFX_portrait_APH_VAL_commission",
       "runtime_path": "gfx/leaders/APH/portrait_APH_VAL_commission.png",
       "source_file": "exec-6aa522d1-7541-4469-8265-9f8c224b3387.png",
-      "runtime_sha256": "34791cd887ef1df774e1f56bf1a48c3bb55763c2113c97de508b931747c26a86"
+      "template_layer_effects": false,
+      "runtime_sha256": "24013e226d0a79ae1f8b8ca3445b6af929ca076252242cc36cab451a5f0dba60"
     },
     {
       "id": "VAL_party_administration",
@@ -459,7 +476,8 @@
       "sprite": "GFX_portrait_ECA_Contract_Council",
       "runtime_path": "gfx/leaders/ECA/portrait_ECA_Contract_Council.png",
       "source_file": "exec-785da04b-6114-4d05-bd87-cebd978b2381.png",
-      "runtime_sha256": "b479123d1b11006ae565f932b00e55d484e4fd8e344fa7a4c377500f78077b70"
+      "template_layer_effects": false,
+      "runtime_sha256": "87bc540da01030c470706b1b870ef923056450ca54036c48310a8fdb3d4bea97"
     },
     {
       "id": "DCA_Contract_Council",
@@ -480,7 +498,8 @@
       "sprite": "GFX_portrait_DCA_Contract_Council",
       "runtime_path": "gfx/leaders/DCA/portrait_DCA_Contract_Council.png",
       "source_file": "exec-47a63fae-ad92-44de-b348-72521cd1afd4.png",
-      "runtime_sha256": "26541f9c8ab8373d5b3fe9d371359c3a4445caf833e266eaf6dc37d8c69efde8"
+      "template_layer_effects": false,
+      "runtime_sha256": "e4e304c9823b1941691330e90be6032850907f81f1141e580bc719e481512387"
     },
     {
       "id": "YPR_Contract_Council",
@@ -501,7 +520,8 @@
       "sprite": "GFX_portrait_YPR_Contract_Council",
       "runtime_path": "gfx/leaders/YPR/portrait_YPR_Contract_Council.png",
       "source_file": "exec-1f046ce9-64b9-4b4f-8f91-1f198ecf257c.png",
-      "runtime_sha256": "75c67b240505e8a6d1feb27c92c98424c527cf8b07a036810b3c886364bc6a41"
+      "template_layer_effects": false,
+      "runtime_sha256": "b6558361aaa38630c207cf301ca37acbf84d92d236bae385403ba7cb3eac738b"
     },
     {
       "id": "WCA_Contract_Council",
@@ -543,7 +563,8 @@
       "runtime_path": "gfx/leaders/SDA/portrait_SDA_administrative_board.png",
       "prompt": "Create one realistic painted-photographic collective portrait for a fictional strategy game. EXACTLY THREE ADULT members of the Dry Riverbed Directorate, a desert civil administration under Shahrabad. Candid inspection briefing, NOT a formal posed row. Distinctive arrangement: all three STANDING closely, a mature dark-haired woman in a dusty olive civil-service tunic at LEFT facing three-quarter right and gesturing with her open palm toward the others; a short stocky elderly Central Asian man with a close silver beard and sand-colored work jacket at CENTER holding a closed blue ledger against his chest; a tall lean clean-shaven Central Asian man about 40 at RIGHT in a dark brown engineer's jacket looks down at the woman while resting one hand on a rolled survey plan. No table. Three large clear separated faces, heads at naturally unequal heights, restrained serious conversation. Waist-up vertical 26:35 group, preserve all heads and shoulders with only 4 percent headroom, to remain readable at 156x210. Clothing modest and practical, distinct people and natural anatomy. True transparent alpha behind the group. The supplied individual portrait is ONLY a style reference for realistic facial texture, subdued earthy palette and modeled side light. Do not copy his identity. No CRT lines, no background or scenery, no flags, readable writing, emblems, borders. Photoshop will add the background and screen texture.",
       "source_file": "exec-79f519e6-131a-4c37-86d4-6fc208bedc05.png",
-      "runtime_sha256": "e0205eca70da5add688b1f9f2aafca8efb2214e5c097a91eb1b2acc889804167"
+      "template_layer_effects": false,
+      "runtime_sha256": "58dc6907f10bc930f7f9a050c505c012c65baee503e3d8bb592832fe6b45f4bb"
     }
   ],
   "template_sha256": "b3e90d7f944497f9de055684bcfcda9c721f9511b7957e0a103c045dc86e2360",

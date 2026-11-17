@@ -103,6 +103,13 @@ class BunkerWorld:
         self.cores = set()
         self.claims = set()
         self.ideology = "etatism"
+        self.arrays = {
+            "global.ideology_groups": campaign.ideology_groups,
+            "ADISCORD_banned_parties": [],
+            "ADISCORD_cabinet_parties": [],
+        }
+        self.party_popularities = campaign.party_popularities
+        self.government_change = campaign.government_change
         self.bop_id = None
         self.bop = 0.0
         self.army_experience = 0.0
@@ -132,6 +139,7 @@ class BunkerWorld:
             state: {"owner": "RUS", "controller": "RUS", "category": "wasteland", "infrastructure": 1, "flags": set()}
             for state in ("329", "330", "292", "296")
         }
+        self.execute(campaign.starting_party_setup)
         self.run("RUS_campaign_initialize")
 
     def matches_state(self, rows, state):
@@ -207,6 +215,16 @@ class BunkerWorld:
         assert scalar(rows, "instant_build") == "yes", rows
 
     def value(self, token):
+        if token.startswith("token:"):
+            return token.removeprefix("token:")
+        if token == "current_party_ideology_group":
+            return self.ideology
+        if token.startswith("var:"):
+            return self.value(token.removeprefix("var:"))
+        if token.startswith("party_popularity@"):
+            return self.party_popularities.get(self.value(token.split("@", 1)[1]), 0)
+        if token.endswith("^num"):
+            return len(self.arrays[token.removesuffix("^num")])
         if token == "amount_research_slots":
             return self.research_slots
         try:
@@ -252,7 +270,16 @@ class BunkerWorld:
             elif key == "custom_trigger_tooltip":
                 result = self.matches([child for child in value if child.key != "tooltip"])
             elif key == "check_variable":
-                result = self.compare(self.value(scalar(value, "var")), scalar(value, "compare"), self.value(scalar(value, "value")))
+                if value[0].key:
+                    left, operator, right = (scalar(value, field) for field in ("var", "compare", "value"))
+                else:
+                    left, operator, right = (row.value for row in value)
+                result = self.compare(self.value(left), operator, self.value(right))
+            elif key == "is_in_array":
+                binding, = value
+                result = self.value(binding.value) in self.arrays[binding.key]
+            elif key == "has_government":
+                result = self.ideology == (self.value(value) if value.startswith("var:") else value)
             elif key == "has_equipment":
                 equipment, operator, amount = [child.value for child in value]
                 result = self.compare(self.equipment.get(equipment, 0), operator, self.value(amount))
@@ -349,6 +376,21 @@ class BunkerWorld:
                     self.execute([child for child in value if child.key != "limit"])
             elif key == "hidden_effect":
                 self.execute(value)
+            elif key == "for_each_loop":
+                body = [row for row in value if row.key not in ("array", "value")]
+                for item in list(self.arrays[scalar(value, "array")]):
+                    self.temporary[scalar(value, "value")] = item
+                    self.execute(body)
+            elif key in ("add_to_array", "remove_from_array"):
+                binding, = value
+                array = self.arrays[binding.key]
+                item = self.value(binding.value)
+                if key == "add_to_array":
+                    array.append(item)
+                else:
+                    array.remove(item)
+            elif key == "clear_array":
+                self.arrays[value].clear()
             elif key == "66":
                 self.execute(value)
             elif key == "FROM":
@@ -406,8 +448,12 @@ class BunkerWorld:
                 continue
             elif key in ("set_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "divide_variable", "set_temp_variable", "add_to_temp_variable", "subtract_from_temp_variable", "multiply_temp_variable", "divide_temp_variable"):
                 target = self.temporary if "temp" in key else self.variables
-                name = scalar(value, "var")
-                amount = self.value(scalar(value, "value"))
+                if len(value) == 1:
+                    binding, = value
+                    name, amount = binding.key, self.value(binding.value)
+                else:
+                    name = scalar(value, "var")
+                    amount = self.value(scalar(value, "value"))
                 if key.startswith("set_"):
                     target[name] = amount
                 elif key.startswith("add_"):
@@ -453,7 +499,10 @@ class BunkerWorld:
                 assert character in self.characters, character
                 self.advisors[scalar(role, "slot")] = value
             elif key == "set_politics":
+                previous = self.ideology
                 self.ideology = scalar(value, "ruling_party")
+                if self.ideology != previous:
+                    self.execute(self.government_change)
             elif key == "set_power_balance":
                 self.bop_id = scalar(value, "id")
                 self.bop = self.value(scalar(value, "set_value"))
@@ -559,8 +608,15 @@ class RusCampaignTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.effects = {}
-        for source in ("ADISCORD_vorkerland_effects", "ADISCORD_RUS_scripted_effects"):
+        for source in ("ADISCORD_vorkerland_effects", "ADISCORD_RUS_scripted_effects", "ADISCORD_party_status_effects"):
             cls.effects.update({e.key: e.value for e in parse(f"common/scripted_effects/{source}.txt")})
+        cls.ideology_groups = [row.key for row in block(parse("common/ideologies/00_ideologies.txt"), "ideologies")]
+        history = parse("history/countries/RUS - RusniaLand.txt")
+        cls.party_popularities = {row.key: float(row.value) / 100 for row in block(history, "set_popularities")}
+        hooks = block(parse("common/on_actions/00_ADISCORD_on_actions.txt"), "on_actions")
+        cls.government_change = block(block(hooks, "on_government_change"), "effect")
+        cls.starting_party_setup = [row for row in history if row.key == "add_to_array"
+                                   and any(x.key == "ADISCORD_banned_parties" for x in row.value)]
         cls.effects.update({e.key: e.value for e in parse("common/scripted_effects/ADISCORD_society_development_effects.txt")})
         development_effects = {
             "ADISCORD_calculate_science_development_gain",
@@ -598,7 +654,7 @@ class RusCampaignTests(unittest.TestCase):
         cls.projects = [name for name, rows in cls.decisions.items() if name != "RUS_bunker_energy_sale" and any(e.key == "days_remove" for e in rows)]
         cls.loc = dict(re.findall(r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"(.*)"\s*$', read(f"localisation/russian/{BASE}_l_russian.yml"), re.M))
         cls.initial_characters = {
-            row.value for row in parse("history/countries/RUS - RusniaLand.txt")
+            row.value for row in history
             if row.key == "recruit_character"
         }
         cls.advisor_roles = {
@@ -846,9 +902,11 @@ class RusCampaignTests(unittest.TestCase):
             ("RUS_bunker_sealed_throne", "guard", "RUS_bunker_open_city",
              "RUS_sealed_throne_policy", "RUS_bunker_power_bonus"),
         ):
-            for course in ("RUS_scientists_council", "RUS_black_army_oath"):
+            for course, partner in (("RUS_scientists_council", "technocracy"), ("RUS_black_army_oath", "chauvinism")):
                 with self.subTest(purpose=purpose, course=course):
                     world = BunkerWorld(self, fresh=True)
+                    initial_bans = set(self.ideology_groups) - {"etatism", "anarchism"}
+                    self.assertCountEqual(world.arrays["ADISCORD_banned_parties"], initial_bans)
                     world.begin("RUS_bunker_excavate")
                     receipt = {key: value for key, value in world.variables.items()
                                if key.startswith("RUS_bunker_escrow_")
@@ -865,6 +923,8 @@ class RusCampaignTests(unittest.TestCase):
                         for key, value in receipt.items():
                             self.assertEqual(world.variables[key], value, (name, key))
                     self.assertEqual(elapsed, 84)
+                    self.assertCountEqual(world.arrays["ADISCORD_banned_parties"], initial_bans - {partner})
+                    self.assertCountEqual(world.arrays["ADISCORD_cabinet_parties"], ["etatism", partner])
                     self.assertEqual(world.value(variable), 1)
                     self.assertFalse(self.opening_focus_ready(world, opposite))
                     self.assertTrue(self.opening_focus_ready(world, "RUS_bunker_airlocks"))

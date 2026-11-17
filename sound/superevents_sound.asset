@@ -171,6 +171,46 @@ sound = {
 	file = "superevents/superevent_south_regency_sound.wav"
 }
 
+sound = {
+	name = "superevent_south_conclave_sound"
+	file = "superevents/superevent_south_conclave_sound.wav"
+}
+
+sound = {
+	name = "superevent_south_service_sound"
+	file = "superevents/superevent_south_service_sound.wav"
+}
+
+sound = {
+	name = "superevent_south_charter_sound"
+	file = "superevents/superevent_south_charter_sound.wav"
+}
+
+sound = {
+	name = "superevent_south_contracts_sound"
+	file = "superevents/superevent_south_contracts_sound.wav"
+}
+
+sound = {
+	name = "superevent_south_rump_sound"
+	file = "superevents/superevent_south_rump_sound.wav"
+}
+
+sound = {
+	name = "superevent_south_revenge_sound"
+	file = "superevents/superevent_south_revenge_sound.wav"
+}
+
+sound = {
+	name = "superevent_south_boards_sound"
+	file = "superevents/superevent_south_boards_sound.wav"
+}
+
+sound = {
+	name = "superevent_south_contract_republic_sound"
+	file = "superevents/superevent_south_contract_republic_sound.wav"
+}
+
 # Sophie Hutchings, By Night, 60-116 s; harbor homecoming mix.
 # https://sophiehutchings.bandcamp.com/track/by-night
 sound = {
@@ -192,6 +232,11 @@ sound = {
 	file = "superevents/superevent_west_petrichev_sound.wav"
 }
 
+sound = {
+	name = "superevent_west_imperial_victory_sound"
+	file = "superevents/superevent_west_imperial_victory_sound.wav"
+}
+
 # Musopen, 0-30 s.
 # https://archive.org/download/MusopenCollectionAsFlac/Brahms_SymphonyNo.4inEMinor/JohannesBrahms-SymphonyNo.4InEMinorOp.98-04-AllegroEnergicoEPassionato.mp3
 sound = {
@@ -203,6 +248,11 @@ sound = {
 sound = {
 	name = "superevent_west_anton_sound"
 	file = "superevents/superevent_west_anton_sound.wav"
+}
+
+sound = {
+	name = "superevent_west_worker_sound"
+	file = "superevents/superevent_west_worker_sound.wav"
 }
 
 sound = {
@@ -245,11 +295,16 @@ sound = {
 	file = "superevents/superevent_south_iron_sound.wav"
 }
 
-# Kevin MacLeod, Division, 26-54 s; excerpt, fades and loudness adjustment. CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
-# https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1700027
+# Ikebe Shakedown - Hard Steppin', 0:00-0:56.
+# https://coleminerecords.bandcamp.com/track/hard-steppin
 sound = {
 	name = "superevent_south_directorate_sound"
 	file = "superevents/superevent_south_directorate_sound.wav"
+}
+
+sound = {
+	name = "superevent_south_nam_sound"
+	file = "superevents/superevent_south_nam_sound.wav"
 }
 
 sound = {

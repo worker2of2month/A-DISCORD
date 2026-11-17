@@ -1,5 +1,5 @@
 picture="thumbnail.gif"
-version="1.19.2"
+version="1.19.3"
 tags={
 	"National Focuses"
 	"Ideologies"

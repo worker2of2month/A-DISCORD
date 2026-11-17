@@ -729,3 +729,179 @@ WRK_republican_union = {
 	color = rgb { 150 40 32 }
 	color_ui = rgb { 214 96 72 }
 }
+
+# Regime titles retain the federal district heraldry and map colours.
+EFL_NAM_subject_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+EFL_NAM_subject_military_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+EFL_NAM_subject_service_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+EFL_NAM_subject_concession = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+EFL_NAM_subject_treaty_republic = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+EFL_NAM_subject_directorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+EFL_NAM_subject_imperial_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+AZH_NAM_subject_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+AZH_NAM_subject_military_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+AZH_NAM_subject_service_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+AZH_NAM_subject_concession = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+AZH_NAM_subject_treaty_republic = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+AZH_NAM_subject_directorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+AZH_NAM_subject_imperial_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+RHM_NAM_subject_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+RHM_NAM_subject_military_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+RHM_NAM_subject_service_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+RHM_NAM_subject_concession = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+RHM_NAM_subject_treaty_republic = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+RHM_NAM_subject_directorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+RHM_NAM_subject_imperial_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+SDR_NAM_subject_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+SDR_NAM_subject_military_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+SDR_NAM_subject_service_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+SDR_NAM_subject_concession = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+SDR_NAM_subject_treaty_republic = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+SDR_NAM_subject_directorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+SDR_NAM_subject_imperial_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+KDR_NAM_subject_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+KDR_NAM_subject_military_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+KDR_NAM_subject_service_district = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+KDR_NAM_subject_concession = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+KDR_NAM_subject_treaty_republic = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+KDR_NAM_subject_directorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}
+
+KDR_NAM_subject_imperial_governorate = {
+	color = rgb { 59 43 109 }
+	color_ui = rgb { 104 86 168 }
+}

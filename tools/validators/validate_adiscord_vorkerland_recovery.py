@@ -432,10 +432,17 @@ def validate_wkr_semantics() -> list[str]:
         )
     else:
         default_block = default_blocks[0]
-        if "GFX_Portrait_Forul_Generic_3" not in default_block:
+        portrait = f"GFX_portrait_{WKR_DEFAULT_LEADER}"
+        texture = f"gfx/leaders/WKR/portrait_{WKR_DEFAULT_LEADER}.png"
+        if not re.search(rf'\bcivilian\s*=\s*\{{[^{{}}]*\blarge\s*=\s*{portrait}\b', default_block):
             issues.append(
-                f"{WKR_DEFAULT_LEADER} must use an existing generic Forul portrait"
+                f"{WKR_DEFAULT_LEADER} must use its committee portrait"
             )
+        sprites = _load(Path("interface/ADISCORD_vorkerland_collapse_portraits.gfx"), issues)
+        if not re.search(rf'name\s*=\s*"{portrait}"[^{{}}]*texturefile\s*=\s*"{re.escape(texture)}"', sprites):
+            issues.append(f"{portrait} must use the committee texture {texture}")
+        if not (ROOT / texture).is_file():
+            issues.append(f"missing committee portrait texture {texture}")
         if "ideology = neo_vorkerism" not in default_block:
             issues.append(f"{WKR_DEFAULT_LEADER} must retain the neo-vorkerist role used by the chairman's legacy course")
 

@@ -1,12 +1,110 @@
 spriteTypes = {
 	spriteType = {
-		name = "GFX_SHL_furnace_button"
-		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_button.dds"
-		noOfFrames = 2
+		name = "GFX_SHL_districts"
+		texturefile = "gfx/interface/SHL_conclave/districts.png"
+		noOfFrames = 10
 	}
+
 	spriteType = {
-		name = "GFX_SHL_furnace_emblem"
-		texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds"
+		name = "GFX_SHL_board"
+		texturefile = "gfx/interface/SHL_conclave/board.png"
+		noOfFrames = 1
+	}
+
+	spriteType = {
+		name = "GFX_SHL_foundries"
+		texturefile = "gfx/interface/SHL_conclave/foundries.png"
+	}
+
+	spriteType = {
+		name = "GFX_SHL_survey"
+		texturefile = "gfx/interface/SHL_conclave/survey.png"
+	}
+
+	spriteType = {
+		name = "GFX_SHL_seal"
+		texturefile = "gfx/interface/SHL_conclave/seal.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+
+	spriteType = {
+		name = "GFX_SHL_alert"
+		texturefile = "gfx/interface/SHL_conclave/alert.png"
+	}
+
+	spriteType = {
+		name = "GFX_SHL_selected"
+		texturefile = "gfx/interface/SHL_conclave/selected.png"
+	}
+
+	spriteType = {
+		name = "GFX_SHL_allocation"
+		texturefile = "gfx/interface/SHL_conclave/allocation.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+
+	spriteType = {
+		name = "GFX_SHL_dispatch"
+		texturefile = "gfx/interface/SHL_conclave/dispatch.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
+
+	spriteType = {
+		name = "GFX_decision_category_SHL_conclave"
+		texturefile = "gfx/interface/SHL_conclave/crest_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_decision_SHL_ore_cart"
+		texturefile = "gfx/interface/SHL_conclave/ore_cart.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_SHL_brickwork"
+		texturefile = "gfx/interface/SHL_conclave/brickwork.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_SHL_brazier"
+		texturefile = "gfx/interface/SHL_conclave/brazier.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_SHL_crucible"
+		texturefile = "gfx/interface/SHL_conclave/crucible.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_SHL_pour"
+		texturefile = "gfx/interface/SHL_conclave/pour.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_SHL_banked_heat"
+		texturefile = "gfx/interface/SHL_conclave/banked_heat.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_SHL_signet"
+		texturefile = "gfx/interface/SHL_conclave/signet.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_SHL_manual"
+		texturefile = "gfx/interface/SHL_conclave/manual.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_SHL_closed_furnace"
+		texturefile = "gfx/interface/SHL_conclave/closed_furnace.png"
+		legacy_lazy_load = no
 	}
 }
-

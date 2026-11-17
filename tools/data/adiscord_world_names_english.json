@@ -1739,8 +1739,8 @@
           "english": "Northwestern Polar Ocean"
         },
         "STRATEGICREGION_2": {
-          "russian": "Внутренние воды",
-          "english": "Inner Waters"
+          "russian": "Вейрское побережье",
+          "english": "Veir Coast"
         },
         "STRATEGICREGION_3": {
           "russian": "Полярные острова",
@@ -1827,8 +1827,8 @@
           "english": "Southern Reactor Zone"
         },
         "STRATEGICREGION_24": {
-          "russian": "Мардарская низина",
-          "english": "Mardar Lowlands"
+          "russian": "Светлогорское побережье",
+          "english": "Svetlogorye Coast"
         },
         "STRATEGICREGION_25": {
           "russian": "Южные острова",
@@ -2717,6 +2717,70 @@
         "STRATEGICREGION_246": {
           "russian": "Дальний Южный океан",
           "english": "Far Southern Ocean"
+        },
+        "STRATEGICREGION_247": {
+          "russian": "Борейское ополье",
+          "english": "Borean Uplands"
+        },
+        "STRATEGICREGION_248": {
+          "russian": "Лакорское побережье",
+          "english": "Lakora Coast"
+        },
+        "STRATEGICREGION_249": {
+          "russian": "Эйрмийская гряда",
+          "english": "Eirmi Ridge"
+        },
+        "STRATEGICREGION_250": {
+          "russian": "Дольнские перевалы",
+          "english": "Dolnian Passes"
+        },
+        "STRATEGICREGION_251": {
+          "russian": "Фреалорские топи",
+          "english": "Frealor Marshes"
+        },
+        "STRATEGICREGION_252": {
+          "russian": "Заслонные равнины",
+          "english": "Screen Plains"
+        },
+        "STRATEGICREGION_253": {
+          "russian": "Ривенское нагорье",
+          "english": "Riven Highlands"
+        },
+        "STRATEGICREGION_254": {
+          "russian": "Котловина Солярино",
+          "english": "Solarino Basin"
+        },
+        "STRATEGICREGION_255": {
+          "russian": "Нодрулское лесоречье",
+          "english": "Nodrul Woodlands"
+        },
+        "STRATEGICREGION_256": {
+          "russian": "Северная реакторная зона",
+          "english": "Northern Reactor Zone"
+        },
+        "STRATEGICREGION_257": {
+          "russian": "Верхнелоренское нагорье",
+          "english": "Upper Loren Highlands"
+        },
+        "STRATEGICREGION_258": {
+          "russian": "Мардарская низина",
+          "english": "Mardar Lowlands"
+        },
+        "STRATEGICREGION_259": {
+          "russian": "Ажарский берег",
+          "english": "Azhar Shore"
+        },
+        "STRATEGICREGION_260": {
+          "russian": "Рахмское побережье",
+          "english": "Rahma Coast"
+        },
+        "STRATEGICREGION_261": {
+          "russian": "Сарданское нагорье",
+          "english": "Sardan Highlands"
+        },
+        "STRATEGICREGION_262": {
+          "russian": "Кейзанские предгорья",
+          "english": "Keizan Uplands"
         }
       }
     }
@@ -3735,6 +3799,734 @@
         "VICTORY_POINTS_3503": {
           "russian": "Взморье",
           "english": "Vzmorye"
+        },
+        "VICTORY_POINTS_324": {
+          "russian": "Верхний Мельн",
+          "english": "Upper Meln"
+        },
+        "VICTORY_POINTS_432": {
+          "russian": "Песчанка",
+          "english": "Peschanka"
+        },
+        "VICTORY_POINTS_454": {
+          "russian": "Сехванский торг",
+          "english": "Sehvan Market"
+        },
+        "VICTORY_POINTS_567": {
+          "russian": "Хамадский колодец",
+          "english": "Hamad Well"
+        },
+        "VICTORY_POINTS_577": {
+          "russian": "Махсар",
+          "english": "Makhsar"
+        },
+        "VICTORY_POINTS_797": {
+          "russian": "Мельник",
+          "english": "Melnik"
+        },
+        "VICTORY_POINTS_824": {
+          "russian": "Турай",
+          "english": "Turay"
+        },
+        "VICTORY_POINTS_919": {
+          "russian": "Шайбан",
+          "english": "Shayban"
+        },
+        "VICTORY_POINTS_946": {
+          "russian": "Талабад",
+          "english": "Talabad"
+        },
+        "VICTORY_POINTS_1011": {
+          "russian": "Абу-Рин",
+          "english": "Abu-Rin"
+        },
+        "VICTORY_POINTS_1246": {
+          "russian": "Тильма",
+          "english": "Tilma"
+        },
+        "VICTORY_POINTS_1259": {
+          "russian": "Риданский кяриз",
+          "english": "Ridan Qanat"
+        },
+        "VICTORY_POINTS_1263": {
+          "russian": "Элмарские солеварни",
+          "english": "Elmar Saltworks"
+        },
+        "VICTORY_POINTS_1299": {
+          "russian": "Мирак",
+          "english": "Mirak"
+        },
+        "VICTORY_POINTS_1366": {
+          "russian": "Харет-дех",
+          "english": "Kharet-dekh"
+        },
+        "VICTORY_POINTS_1377": {
+          "russian": "Эль-Хат",
+          "english": "El-Khat"
+        },
+        "VICTORY_POINTS_1382": {
+          "russian": "Латир",
+          "english": "Latir"
+        },
+        "VICTORY_POINTS_1459": {
+          "russian": "Сайрат",
+          "english": "Sayrat"
+        },
+        "VICTORY_POINTS_1534": {
+          "russian": "Келиш",
+          "english": "Kelish"
+        },
+        "VICTORY_POINTS_1568": {
+          "russian": "Месран",
+          "english": "Mesran"
+        },
+        "VICTORY_POINTS_1571": {
+          "russian": "Салман",
+          "english": "Salman"
+        },
+        "VICTORY_POINTS_1760": {
+          "russian": "Шадир",
+          "english": "Shadir"
+        },
+        "VICTORY_POINTS_1900": {
+          "russian": "Тальдар",
+          "english": "Taldar"
+        },
+        "VICTORY_POINTS_1950": {
+          "russian": "Заречный",
+          "english": "Zarechnyy"
+        },
+        "VICTORY_POINTS_2195": {
+          "russian": "Мехран",
+          "english": "Mekhran"
+        },
+        "VICTORY_POINTS_2244": {
+          "russian": "Азер-дашт",
+          "english": "Azer-dasht"
+        },
+        "VICTORY_POINTS_2265": {
+          "russian": "Актар",
+          "english": "Aktar"
+        },
+        "VICTORY_POINTS_2286": {
+          "russian": "Басиран-дех",
+          "english": "Basiran-dekh"
+        },
+        "VICTORY_POINTS_8358": {
+          "russian": "Вересковый",
+          "english": "Heatherfield"
+        },
+        "VICTORY_POINTS_2319": {
+          "russian": "Хирак",
+          "english": "Khirak"
+        },
+        "VICTORY_POINTS_2331": {
+          "russian": "Фаруд",
+          "english": "Farud"
+        },
+        "VICTORY_POINTS_2411": {
+          "russian": "Бир-Нафт",
+          "english": "Bir-Naft"
+        },
+        "VICTORY_POINTS_2412": {
+          "russian": "Эмран",
+          "english": "Emran"
+        },
+        "VICTORY_POINTS_2545": {
+          "russian": "Захит",
+          "english": "Zakhit"
+        },
+        "VICTORY_POINTS_2661": {
+          "russian": "Назири",
+          "english": "Naziri"
+        },
+        "VICTORY_POINTS_2739": {
+          "russian": "Каванский базар",
+          "english": "Kavan Bazaar"
+        },
+        "VICTORY_POINTS_2804": {
+          "russian": "Шадран",
+          "english": "Shadran"
+        },
+        "VICTORY_POINTS_2811": {
+          "russian": "Тарим-кала",
+          "english": "Tarim-kala"
+        },
+        "VICTORY_POINTS_2813": {
+          "russian": "Белисский колодец",
+          "english": "Belis Well"
+        },
+        "VICTORY_POINTS_2979": {
+          "russian": "Айн-Нейзар",
+          "english": "Ayn-Neyzar"
+        },
+        "VICTORY_POINTS_3089": {
+          "russian": "Плесово",
+          "english": "Plesovo"
+        },
+        "VICTORY_POINTS_3140": {
+          "russian": "Мелас",
+          "english": "Melas"
+        },
+        "VICTORY_POINTS_3243": {
+          "russian": "Сосновка",
+          "english": "Sosnovka"
+        },
+        "VICTORY_POINTS_3350": {
+          "russian": "Дозорный",
+          "english": "Lookout"
+        },
+        "VICTORY_POINTS_3416": {
+          "russian": "Лоранский караул",
+          "english": "Loran Watch"
+        },
+        "VICTORY_POINTS_3444": {
+          "russian": "Линден",
+          "english": "Linden"
+        },
+        "VICTORY_POINTS_3483": {
+          "russian": "Эсман",
+          "english": "Esman"
+        },
+        "VICTORY_POINTS_3544": {
+          "russian": "Белар",
+          "english": "Belar"
+        },
+        "VICTORY_POINTS_3590": {
+          "russian": "Сарван",
+          "english": "Sarvan"
+        },
+        "VICTORY_POINTS_3695": {
+          "russian": "Астен",
+          "english": "Asten"
+        },
+        "VICTORY_POINTS_3730": {
+          "russian": "Лоренский Яр",
+          "english": "Loren Bluff"
+        },
+        "VICTORY_POINTS_3767": {
+          "russian": "Таршик",
+          "english": "Tarshik"
+        },
+        "VICTORY_POINTS_3805": {
+          "russian": "Хазим",
+          "english": "Khazim"
+        },
+        "VICTORY_POINTS_3932": {
+          "russian": "Кумеш",
+          "english": "Kumesh"
+        },
+        "VICTORY_POINTS_3967": {
+          "russian": "Ташран",
+          "english": "Tashran"
+        },
+        "VICTORY_POINTS_4093": {
+          "russian": "Сакрар",
+          "english": "Sakrar"
+        },
+        "VICTORY_POINTS_4207": {
+          "russian": "Норанские склады",
+          "english": "Noran Warehouses"
+        },
+        "VICTORY_POINTS_4350": {
+          "russian": "Доринский торг",
+          "english": "Dorin Market"
+        },
+        "VICTORY_POINTS_4449": {
+          "russian": "Керим-дар",
+          "english": "Kerim-dar"
+        },
+        "VICTORY_POINTS_4495": {
+          "russian": "Рас-Вейран",
+          "english": "Ras-Veyran"
+        },
+        "VICTORY_POINTS_4507": {
+          "russian": "Сахиль",
+          "english": "Sakhil"
+        },
+        "VICTORY_POINTS_4537": {
+          "russian": "Рудный двор",
+          "english": "Ore Yard"
+        },
+        "VICTORY_POINTS_4889": {
+          "russian": "Карасай",
+          "english": "Karasay"
+        },
+        "VICTORY_POINTS_334": {
+          "russian": "Вахтовый",
+          "english": "Vakhtovy"
+        },
+        "VICTORY_POINTS_4995": {
+          "russian": "Шахрин",
+          "english": "Shakhrin"
+        },
+        "VICTORY_POINTS_5100": {
+          "russian": "Хаджиран",
+          "english": "Khadzhiran"
+        },
+        "VICTORY_POINTS_5220": {
+          "russian": "Тирен-кала",
+          "english": "Tiren-kala"
+        },
+        "VICTORY_POINTS_5261": {
+          "russian": "Бринн",
+          "english": "Brinn"
+        },
+        "VICTORY_POINTS_5262": {
+          "russian": "Кадир-сарай",
+          "english": "Kadir-saray"
+        },
+        "VICTORY_POINTS_5288": {
+          "russian": "Айн-Джар",
+          "english": "Ayn-Dzhar"
+        },
+        "VICTORY_POINTS_5433": {
+          "russian": "Рыбный торг",
+          "english": "Fish Market"
+        },
+        "VICTORY_POINTS_5505": {
+          "russian": "Салехан",
+          "english": "Salekhan"
+        },
+        "VICTORY_POINTS_5581": {
+          "russian": "Расин",
+          "english": "Rasin"
+        },
+        "VICTORY_POINTS_5595": {
+          "russian": "Армел",
+          "english": "Armel"
+        },
+        "VICTORY_POINTS_5629": {
+          "russian": "Тазир-кала",
+          "english": "Tazir-kala"
+        },
+        "VICTORY_POINTS_5634": {
+          "russian": "Караташ",
+          "english": "Karatash"
+        },
+        "VICTORY_POINTS_5822": {
+          "russian": "Шерик",
+          "english": "Sherik"
+        },
+        "VICTORY_POINTS_5957": {
+          "russian": "Мединас",
+          "english": "Medinas"
+        },
+        "VICTORY_POINTS_5979": {
+          "russian": "Ренский торг",
+          "english": "Ren Market"
+        },
+        "VICTORY_POINTS_6204": {
+          "russian": "Мейранский торг",
+          "english": "Meyran Market"
+        },
+        "VICTORY_POINTS_6218": {
+          "russian": "Медные Ворота",
+          "english": "Copper Gates"
+        },
+        "VICTORY_POINTS_6415": {
+          "russian": "Кесратский брод",
+          "english": "Kesrat Ford"
+        },
+        "VICTORY_POINTS_6445": {
+          "russian": "Нарван-дех",
+          "english": "Narvan-dekh"
+        },
+        "VICTORY_POINTS_6747": {
+          "russian": "Кашим",
+          "english": "Kashim"
+        },
+        "VICTORY_POINTS_6816": {
+          "russian": "Угольщики",
+          "english": "Colliers"
+        },
+        "VICTORY_POINTS_6879": {
+          "russian": "Верхний Лерис",
+          "english": "Upper Leris"
+        },
+        "VICTORY_POINTS_6904": {
+          "russian": "Аршам",
+          "english": "Arsham"
+        },
+        "VICTORY_POINTS_7003": {
+          "russian": "Варджан",
+          "english": "Vardzhan"
+        },
+        "VICTORY_POINTS_7101": {
+          "russian": "Шамрин",
+          "english": "Shamrin"
+        },
+        "VICTORY_POINTS_7108": {
+          "russian": "Ормис-кала",
+          "english": "Ormis-kala"
+        },
+        "VICTORY_POINTS_7276": {
+          "russian": "Дербаш",
+          "english": "Derbash"
+        },
+        "VICTORY_POINTS_7373": {
+          "russian": "Морянка",
+          "english": "Moryanka"
+        },
+        "VICTORY_POINTS_7567": {
+          "russian": "Ольмар",
+          "english": "Olmar"
+        },
+        "VICTORY_POINTS_7708": {
+          "russian": "Сейрин",
+          "english": "Seyrin"
+        },
+        "VICTORY_POINTS_7750": {
+          "russian": "Оллен",
+          "english": "Ollen"
+        },
+        "VICTORY_POINTS_7837": {
+          "russian": "Гончарный ряд",
+          "english": "Potters' Row"
+        },
+        "VICTORY_POINTS_7968": {
+          "russian": "Медный двор",
+          "english": "Copper Yard"
+        },
+        "VICTORY_POINTS_8119": {
+          "russian": "Ар-Туран",
+          "english": "Ar-Turan"
+        },
+        "VICTORY_POINTS_8209": {
+          "russian": "Зефар",
+          "english": "Zefar"
+        },
+        "VICTORY_POINTS_8319": {
+          "russian": "Айрен-дех",
+          "english": "Ayren-dekh"
+        },
+        "VICTORY_POINTS_8384": {
+          "russian": "Садран",
+          "english": "Sadran"
+        },
+        "VICTORY_POINTS_8445": {
+          "russian": "Каменный Ключ",
+          "english": "Stone Spring"
+        },
+        "VICTORY_POINTS_8479": {
+          "russian": "Феннская застава",
+          "english": "Fenn Outpost"
+        },
+        "VICTORY_POINTS_8571": {
+          "russian": "Бир-Барак",
+          "english": "Bir-Barak"
+        },
+        "VICTORY_POINTS_8590": {
+          "russian": "Караль-дех",
+          "english": "Karal-dekh"
+        },
+        "VICTORY_POINTS_8738": {
+          "russian": "Верхний Клин",
+          "english": "Upper Klin"
+        },
+        "VICTORY_POINTS_8758": {
+          "russian": "Хадаш",
+          "english": "Khadash"
+        },
+        "VICTORY_POINTS_8958": {
+          "russian": "Харбаш",
+          "english": "Kharbash"
+        },
+        "VICTORY_POINTS_8976": {
+          "russian": "Ташир",
+          "english": "Tashir"
+        },
+        "VICTORY_POINTS_8997": {
+          "russian": "Шарин",
+          "english": "Sharin"
+        },
+        "VICTORY_POINTS_9006": {
+          "russian": "Бир-Мазар",
+          "english": "Bir-Mazar"
+        },
+        "VICTORY_POINTS_9105": {
+          "russian": "Хабир",
+          "english": "Khabir"
+        },
+        "VICTORY_POINTS_9194": {
+          "russian": "Эрван",
+          "english": "Ervan"
+        },
+        "VICTORY_POINTS_9211": {
+          "russian": "Старая Штольня",
+          "english": "Old Adit"
+        },
+        "VICTORY_POINTS_9390": {
+          "russian": "Крутояр",
+          "english": "Krutoyar"
+        },
+        "VICTORY_POINTS_9411": {
+          "russian": "Вестен",
+          "english": "Vesten"
+        },
+        "VICTORY_POINTS_1015": {
+          "russian": "Буровая",
+          "english": "Drillers' Camp"
+        },
+        "VICTORY_POINTS_9817": {
+          "russian": "Сарданский двор",
+          "english": "Sardan Court"
+        },
+        "VICTORY_POINTS_9861": {
+          "russian": "Наджар",
+          "english": "Nadzhar"
+        },
+        "VICTORY_POINTS_9896": {
+          "russian": "Хади",
+          "english": "Khadi"
+        },
+        "VICTORY_POINTS_10144": {
+          "russian": "Сирхан",
+          "english": "Sirkhan"
+        },
+        "VICTORY_POINTS_10167": {
+          "russian": "Граничный",
+          "english": "Border Post"
+        },
+        "VICTORY_POINTS_10350": {
+          "russian": "Марван",
+          "english": "Marvan"
+        },
+        "VICTORY_POINTS_10422": {
+          "russian": "Тальвик",
+          "english": "Talvik"
+        },
+        "VICTORY_POINTS_10489": {
+          "russian": "Бир-Азрак",
+          "english": "Bir-Azrak"
+        },
+        "VICTORY_POINTS_10490": {
+          "russian": "Кызылдаш",
+          "english": "Kyzyldash"
+        },
+        "VICTORY_POINTS_10580": {
+          "russian": "Айлем",
+          "english": "Aylem"
+        },
+        "VICTORY_POINTS_10626": {
+          "russian": "Хамрия",
+          "english": "Khamriya"
+        },
+        "VICTORY_POINTS_10627": {
+          "russian": "Вардеш",
+          "english": "Vardesh"
+        },
+        "VICTORY_POINTS_10686": {
+          "russian": "Джебир",
+          "english": "Dzhebir"
+        },
+        "VICTORY_POINTS_10706": {
+          "russian": "Нувайр",
+          "english": "Nuvayr"
+        },
+        "VICTORY_POINTS_10846": {
+          "russian": "Ар-Рамиз",
+          "english": "Ar-Ramiz"
+        },
+        "VICTORY_POINTS_10853": {
+          "russian": "Дахран",
+          "english": "Dakhran"
+        },
+        "VICTORY_POINTS_10918": {
+          "russian": "Бир-Кассен",
+          "english": "Bir-Kassen"
+        },
+        "VICTORY_POINTS_10967": {
+          "russian": "Горный Посад",
+          "english": "Gorny Posad"
+        },
+        "VICTORY_POINTS_11045": {
+          "russian": "Мадран",
+          "english": "Madran"
+        },
+        "VICTORY_POINTS_11092": {
+          "russian": "Бир-Рахма",
+          "english": "Bir-Rakhma"
+        },
+        "VICTORY_POINTS_11410": {
+          "russian": "Халис",
+          "english": "Khalis"
+        },
+        "VICTORY_POINTS_11652": {
+          "russian": "Ясеневый",
+          "english": "Yasenevyy"
+        },
+        "VICTORY_POINTS_11862": {
+          "russian": "Халдун",
+          "english": "Khaldun"
+        },
+        "VICTORY_POINTS_11977": {
+          "russian": "Рас-Арсан",
+          "english": "Ras-Arsan"
+        },
+        "VICTORY_POINTS_12033": {
+          "russian": "Айн-Кейзан",
+          "english": "Ayn-Keyzan"
+        },
+        "VICTORY_POINTS_12135": {
+          "russian": "Ровель",
+          "english": "Rovel"
+        },
+        "VICTORY_POINTS_12261": {
+          "russian": "Бир-Кеш",
+          "english": "Bir-Kesh"
+        },
+        "VICTORY_POINTS_12320": {
+          "russian": "Мустар",
+          "english": "Mustar"
+        },
+        "VICTORY_POINTS_12321": {
+          "russian": "Малый Вейран",
+          "english": "Little Veyran"
+        },
+        "VICTORY_POINTS_12376": {
+          "russian": "Ключевой",
+          "english": "Klyuchevoy"
+        },
+        "VICTORY_POINTS_12425": {
+          "russian": "Каменка",
+          "english": "Kamenka"
+        },
+        "VICTORY_POINTS_12471": {
+          "russian": "Саир",
+          "english": "Sair"
+        },
+        "VICTORY_POINTS_12583": {
+          "russian": "Вейрский торг",
+          "english": "Veyr Market"
+        },
+        "VICTORY_POINTS_12601": {
+          "russian": "Хамир",
+          "english": "Khamir"
+        },
+        "VICTORY_POINTS_12742": {
+          "russian": "Сурхан",
+          "english": "Surkhan"
+        },
+        "VICTORY_POINTS_12903": {
+          "russian": "Фируз",
+          "english": "Firuz"
+        },
+        "VICTORY_POINTS_12976": {
+          "russian": "Ильмар",
+          "english": "Ilmar"
+        },
+        "VICTORY_POINTS_16902": {
+          "russian": "Мостовая Слобода",
+          "english": "Bridge End"
+        },
+        "VICTORY_POINTS_16903": {
+          "russian": "Смоляной Посад",
+          "english": "Tar Works"
+        },
+        "VICTORY_POINTS_16904": {
+          "russian": "Дар-Нарет",
+          "english": "Dar Naret"
+        },
+        "VICTORY_POINTS_16905": {
+          "russian": "Барид",
+          "english": "Barid"
+        },
+        "VICTORY_POINTS_16906": {
+          "russian": "Каср-Ордан",
+          "english": "Qasr Ordan"
+        },
+        "VICTORY_POINTS_16907": {
+          "russian": "Бир-Рават",
+          "english": "Bir Ravat"
+        },
+        "VICTORY_POINTS_16908": {
+          "russian": "Айн-Сафра",
+          "english": "Ayn Safra"
+        },
+        "VICTORY_POINTS_16909": {
+          "russian": "Таласский торг",
+          "english": "Talas Market"
+        },
+        "VICTORY_POINTS_16910": {
+          "russian": "Касим",
+          "english": "Qasim"
+        },
+        "VICTORY_POINTS_16911": {
+          "russian": "Хаврат",
+          "english": "Havrat"
+        },
+        "VICTORY_POINTS_16912": {
+          "russian": "Сук-Рамаль",
+          "english": "Suq Ramal"
+        },
+        "VICTORY_POINTS_16913": {
+          "russian": "Бир-Сехир",
+          "english": "Bir Sehir"
+        },
+        "VICTORY_POINTS_16914": {
+          "russian": "Тиренский брод",
+          "english": "Tiren Ford"
+        },
+        "VICTORY_POINTS_16915": {
+          "russian": "Дар-Лахар",
+          "english": "Dar Lahar"
+        },
+        "VICTORY_POINTS_16916": {
+          "russian": "Ремарский базар",
+          "english": "Remar Bazaar"
+        },
+        "VICTORY_POINTS_16917": {
+          "russian": "Айн-Далир",
+          "english": "Ayn Dalir"
+        },
+        "VICTORY_POINTS_16918": {
+          "russian": "Замир",
+          "english": "Zamir"
+        },
+        "VICTORY_POINTS_16919": {
+          "russian": "Имарская чаша",
+          "english": "Imar Basin"
+        },
+        "VICTORY_POINTS_16920": {
+          "russian": "Севирабад",
+          "english": "Sevirabad"
+        },
+        "VICTORY_POINTS_16921": {
+          "russian": "Ардак-кяриз",
+          "english": "Ardak Qanat"
+        },
+        "VICTORY_POINTS_16922": {
+          "russian": "Мейрукский торг",
+          "english": "Meyruk Market"
+        },
+        "VICTORY_POINTS_16923": {
+          "russian": "Арбинская литейная",
+          "english": "Arbin Foundry"
+        },
+        "VICTORY_POINTS_16924": {
+          "russian": "Саликский торг",
+          "english": "Salik Market"
+        },
+        "VICTORY_POINTS_16925": {
+          "russian": "Тирван",
+          "english": "Tirvan"
+        },
+        "VICTORY_POINTS_16926": {
+          "russian": "Дар-Дорин",
+          "english": "Dar Dorin"
+        },
+        "VICTORY_POINTS_16927": {
+          "russian": "Тарвский двор",
+          "english": "Tarva Court"
+        },
+        "VICTORY_POINTS_16928": {
+          "russian": "Ивовый Торг",
+          "english": "Willow Market"
+        },
+        "VICTORY_POINTS_16929": {
+          "russian": "Каср-Хадид",
+          "english": "Qasr Hadid"
         }
       }
     }

@@ -206,6 +206,7 @@ class Script:
         self.scopes = defaultdict(Scope)
         self.globals = {V + "phase_prewar"}
         self.calls = []
+        self.temporary_tokens = {}
         # Non-aggression pacts signed in this run, as resolved pairs of tags.
         self.pacts = set()
         self.random_index = 0
@@ -461,7 +462,11 @@ class Script:
                 data = fields(value)
                 name = data.get("var", next(iter(data)))
                 before = state.variables.get(name, 0)
-                amount = self.number(data.get("value", data.get(name, "0")), current, previous)
+                operand = data.get("value", data.get(name, "0"))
+                if key == "set_temp_variable" and operand.startswith("token:"):
+                    self.temporary_tokens[name] = operand
+                    continue
+                amount = self.number(operand, current, previous)
                 if key in ("set_variable", "set_temp_variable"):
                     state.variables[name] = amount
                 elif key in ("clamp_variable", "clamp_temp_variable"):
@@ -612,6 +617,7 @@ class Script:
                          "set_country_leader_portrait", "set_portraits", "load_focus_tree", "news_event",
                          "mark_focus_tree_layout_dirty", "set_party_name", "set_popularities",
                          "force_update_dynamic_modifier", "ADISCORD_economy_mark_dirty",
+                         "ADISCORD_end_party_coalition",
                          V + "story_report_variant_declaration",
                          V + "ensure_emergency_militia_template", V + "add_legitimacy", V + "join_coalition_of_FROM"):
                 self.calls.append((key, current, value))
@@ -621,6 +627,8 @@ class Script:
                         self.pacts.add(pair)
                     else:
                         self.pacts.discard(pair)
+            elif key == "ADISCORD_admit_coalition_party":
+                self.calls.append((key, current, self.temporary_tokens["ADISCORD_party"]))
             else:
                 raise AssertionError(f"Unsupported effect: {key} {value}")
 
@@ -6197,12 +6205,15 @@ class UnifiedPrewarTreeTests(unittest.TestCase):
     def test_last_order_names_the_apparatus_once_and_redraws_the_tree(self):
         options = [fields(value) for key, _, value in EVENTS[V + "preparation.1"] if key == "option"]
         self.assertEqual(len(options), 3)
+        cabinet_seats = {1: [], 2: [("WRK", "token:etatism")], 3: [("WRK", "token:technocracy")]}
         for index, value in enumerate(PATRON_VALUES.values()):
             with self.subTest(patron=value):
                 script = Script()
                 del script.scopes["WRK"].variables[P + "patron"]
                 script.run(options[index]["hidden_effect"])
                 self.assertEqual(script.scopes["WRK"].variables[P + "patron"], value)
+                seats = [(scope, token) for key, scope, token in script.calls if key == "ADISCORD_admit_coalition_party"]
+                self.assertEqual(seats, cabinet_seats[value])
                 self.assertEqual(script.scopes["40"].variables[P + "patron"], value)
                 refresh = [(key, current) for key, current, _ in script.calls if key == "mark_focus_tree_layout_dirty"]
                 self.assertEqual(refresh, [("mark_focus_tree_layout_dirty", "WRK")])

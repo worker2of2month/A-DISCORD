@@ -36,6 +36,14 @@ set_politics = {
 	last_election = "2137.12.01"
 	elections_allowed = no
 }
+
+add_to_array = { ADISCORD_banned_parties = token:humanism }
+add_to_array = { ADISCORD_banned_parties = token:utilitarism }
+add_to_array = { ADISCORD_banned_parties = token:chauvinism }
+add_to_array = { ADISCORD_banned_parties = token:anarchism }
+add_to_array = { ADISCORD_banned_parties = token:technocracy }
+add_to_array = { ADISCORD_banned_parties = token:hedonism }
+
 set_popularities = {
 	etatism = 56
 	chauvinism = 19

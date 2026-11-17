@@ -2,14 +2,17 @@ state={
 	id=228
 	name="STATE_228"
 	provinces={
-		180 947 1559 3024 3243 3351 3884 6145 6231 6649 6816 6893 8682 10993 11043 11422
+		180 947 1559 3024 3243 3351 3884 6145 6231 6649 6816 6893
+		8682 10993 11043 11422 16903 17161 17162 17163 17164 17165 17166 17167
+		17168 17169 17170 17171 17172 17173 17174 17175 17176 17177 17178 17179
+		17180 17181
 	}
-	manpower = 1600000
+	manpower = 2400000
 	buildings_max_level_factor = 1.000
 	state_category = town
 	local_supplies = 3.5
 	resources = {
-		steel = 4
+		steel = 16
 	}
 	history = {
 		owner = NAM
@@ -23,5 +26,8 @@ state={
 		victory_points = { 6893 3 }
 		victory_points = { 6145 1 }
 		victory_points = { 8682 1 }
+		victory_points = { 6816 2 }
+		victory_points = { 3243 1 }
+		victory_points = { 16903 15 }
 	}
 }

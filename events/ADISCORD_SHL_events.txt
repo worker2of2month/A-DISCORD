@@ -461,7 +461,8 @@ country_event = {
 		custom_effect_tooltip = SHL_accident_masters_tt
 		hidden_effect = {
 			add_to_variable = { var = SHL_unrest value = 15 }
-			subtract_from_variable = { var = SHL_house_pressure value = 5 }
+			set_variable = { var = SHL_loyalty_delta value = 15 }
+			SHL_change_accident_loyalty = yes
 			SHL_resolve_accident = yes
 		}
 		ai_chance = { base = 20 }
@@ -471,7 +472,8 @@ country_event = {
 		custom_effect_tooltip = SHL_accident_site_tt
 		custom_effect_tooltip = SHL_accident_house_tt
 		hidden_effect = {
-			add_to_variable = { var = SHL_house_pressure value = 10 }
+			set_variable = { var = SHL_loyalty_delta value = -30 }
+			SHL_change_accident_loyalty = yes
 			add_to_variable = { var = SHL_city_support value = 5 }
 			subtract_from_variable = { var = SHL_unrest value = 10 }
 			SHL_resolve_accident = yes
@@ -487,7 +489,8 @@ country_event = {
 		hidden_effect = {
 			set_country_flag = SHL_accident_commission
 			subtract_from_variable = { var = SHL_unrest value = 5 }
-			add_to_variable = { var = SHL_house_pressure value = 5 }
+			set_variable = { var = SHL_loyalty_delta value = -15 }
+			SHL_change_accident_loyalty = yes
 			SHL_resolve_accident = yes
 		}
 		ai_chance = { base = 30 }
@@ -599,11 +602,26 @@ country_event = {
 	}
 }
 
-# One-shot timeout; the clock age rejects a callback from an earlier war.
+# One-shot timeout; the clock age rejects a callback from an earlier war. The
+# immediate snapshot grades the front, and exactly one answer matches the grade.
 country_event = {
 	id = ADISCORD_SHL.56
 	title = ADISCORD_SHL.56.t
-	desc = ADISCORD_SHL.56.d
+	desc = {
+		trigger = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+		text = ADISCORD_SHL.56.d_edge
+	}
+	desc = {
+		trigger = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+		text = ADISCORD_SHL.56.d_enemy
+	}
+	desc = {
+		trigger = {
+			NOT = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+			NOT = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+		}
+		text = ADISCORD_SHL.56.d
+	}
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	trigger = {
@@ -614,9 +632,28 @@ country_event = {
 			days > 268
 		}
 	}
+	immediate = {
+		hidden_effect = { SHL_snapshot_kyz_front = yes }
+	}
 	option = {
 		name = ADISCORD_SHL.56.a
+		trigger = {
+			NOT = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+			NOT = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+		}
 		custom_effect_tooltip = SHL_armistice_tt
+		hidden_effect = { SHL_qanat_war_armistice = yes }
+	}
+	option = {
+		name = ADISCORD_SHL.56.b
+		trigger = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+		custom_effect_tooltip = SHL_armistice_edge_tt
+		hidden_effect = { SHL_qanat_war_armistice = yes }
+	}
+	option = {
+		name = ADISCORD_SHL.56.c
+		trigger = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+		custom_effect_tooltip = SHL_armistice_enemy_edge_tt
 		hidden_effect = { SHL_qanat_war_armistice = yes }
 	}
 }
@@ -630,6 +667,30 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.57.a
+		custom_effect_tooltip = ADISCORD_south_clock_pull_war_tt
+		hidden_effect = { ADISCORD_south_pull_clock_war = yes }
+		ai_chance = { base = 70 }
+	}
+	option = {
+		name = ADISCORD_SHL.57.b
+		trigger = { SHL_can_return_wells = yes }
+		custom_effect_tooltip = ADISCORD_south_clock_pull_war_tt
+		add_political_power = 50
+		custom_effect_tooltip = SHL_return_wells_tt
+		hidden_effect = {
+			ADISCORD_south_pull_clock_war = yes
+			SHL_return_wells_to_communities = yes
+		}
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 3
+				OR = {
+					check_variable = { var = SHL_political_course value = 2 compare = equals }
+					check_variable = { var = SHL_political_course value = 5 compare = equals }
+				}
+			}
+		}
 	}
 }
 
@@ -726,7 +787,21 @@ country_event = {
 country_event = {
 	id = ADISCORD_SHL.65
 	title = ADISCORD_SHL.65.t
-	desc = ADISCORD_SHL.65.d
+	desc = {
+		trigger = { check_variable = { var = SHL_glp_armistice_grade value = 1 compare = equals } }
+		text = ADISCORD_SHL.65.d_edge
+	}
+	desc = {
+		trigger = { check_variable = { var = SHL_glp_armistice_grade value = 3 compare = equals } }
+		text = ADISCORD_SHL.65.d_enemy
+	}
+	desc = {
+		trigger = {
+			NOT = { check_variable = { var = SHL_glp_armistice_grade value = 1 compare = equals } }
+			NOT = { check_variable = { var = SHL_glp_armistice_grade value = 3 compare = equals } }
+		}
+		text = ADISCORD_SHL.65.d
+	}
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	trigger = {
@@ -737,9 +812,28 @@ country_event = {
 			days > 268
 		}
 	}
+	immediate = {
+		hidden_effect = { SHL_snapshot_glp_front = yes }
+	}
 	option = {
 		name = ADISCORD_SHL.65.a
+		trigger = {
+			NOT = { check_variable = { var = SHL_glp_armistice_grade value = 1 compare = equals } }
+			NOT = { check_variable = { var = SHL_glp_armistice_grade value = 3 compare = equals } }
+		}
 		custom_effect_tooltip = SHL_armistice_tt
+		hidden_effect = { SHL_glp_war_armistice = yes }
+	}
+	option = {
+		name = ADISCORD_SHL.65.b
+		trigger = { check_variable = { var = SHL_glp_armistice_grade value = 1 compare = equals } }
+		custom_effect_tooltip = SHL_armistice_edge_tt
+		hidden_effect = { SHL_glp_war_armistice = yes }
+	}
+	option = {
+		name = ADISCORD_SHL.65.c
+		trigger = { check_variable = { var = SHL_glp_armistice_grade value = 3 compare = equals } }
+		custom_effect_tooltip = SHL_armistice_enemy_edge_tt
 		hidden_effect = { SHL_glp_war_armistice = yes }
 	}
 }
@@ -753,6 +847,26 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.66.a
+		custom_effect_tooltip = ADISCORD_south_clock_pull_war_tt
+		hidden_effect = { ADISCORD_south_pull_clock_war = yes }
+		ai_chance = { base = 70 }
+	}
+	option = {
+		name = ADISCORD_SHL.66.b
+		trigger = { SHL_can_open_harbour_union = yes }
+		custom_effect_tooltip = ADISCORD_south_clock_pull_war_tt
+		custom_effect_tooltip = SHL_harbour_union_tt
+		hidden_effect = {
+			ADISCORD_south_pull_clock_war = yes
+			SHL_open_harbour_union = yes
+		}
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 3
+				check_variable = { var = SHL_political_course value = 1 compare = equals }
+			}
+		}
 	}
 }
 
@@ -824,7 +938,21 @@ country_event = {
 country_event = {
 	id = ADISCORD_SHL.72
 	title = ADISCORD_SHL.72.t
-	desc = ADISCORD_SHL.72.d
+	desc = {
+		trigger = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+		text = ADISCORD_SHL.72.d_edge
+	}
+	desc = {
+		trigger = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+		text = ADISCORD_SHL.72.d_enemy
+	}
+	desc = {
+		trigger = {
+			NOT = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+			NOT = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+		}
+		text = ADISCORD_SHL.72.d
+	}
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	trigger = {
@@ -835,9 +963,28 @@ country_event = {
 			days > 298
 		}
 	}
+	immediate = {
+		hidden_effect = { SHL_snapshot_kyz_front = yes }
+	}
 	option = {
 		name = ADISCORD_SHL.72.a
+		trigger = {
+			NOT = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+			NOT = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+		}
 		custom_effect_tooltip = SHL_armistice_tt
+		hidden_effect = { SHL_kyz_war_armistice = yes }
+	}
+	option = {
+		name = ADISCORD_SHL.72.b
+		trigger = { check_variable = { var = SHL_kyz_armistice_grade value = 1 compare = equals } }
+		custom_effect_tooltip = SHL_armistice_edge_tt
+		hidden_effect = { SHL_kyz_war_armistice = yes }
+	}
+	option = {
+		name = ADISCORD_SHL.72.c
+		trigger = { check_variable = { var = SHL_kyz_armistice_grade value = 3 compare = equals } }
+		custom_effect_tooltip = SHL_armistice_enemy_edge_tt
 		hidden_effect = { SHL_kyz_war_armistice = yes }
 	}
 }
@@ -851,6 +998,8 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.73.a
+		custom_effect_tooltip = ADISCORD_south_clock_pull_war_tt
+		hidden_effect = { ADISCORD_south_pull_clock_war = yes }
 	}
 	option = {
 		name = ADISCORD_SHL.73.b
@@ -861,15 +1010,23 @@ country_event = {
 				SHL_regent_mandate_current = yes
 			}
 		}
+		custom_effect_tooltip = ADISCORD_south_clock_pull_war_tt
 		custom_effect_tooltip = SHL_cistern_concession_tt
-		hidden_effect = { SHL_take_cistern_concession = yes }
+		hidden_effect = {
+			ADISCORD_south_pull_clock_war = yes
+			SHL_take_cistern_concession = yes
+		}
 		ai_chance = { base = 70 }
 	}
 	option = {
 		name = ADISCORD_SHL.73.c
 		trigger = { SHL_can_offer_cistern_charter = yes }
+		custom_effect_tooltip = ADISCORD_south_clock_pull_war_tt
 		custom_effect_tooltip = SHL_cistern_charter_tt
-		hidden_effect = { SHL_request_cistern_charter = yes }
+		hidden_effect = {
+			ADISCORD_south_pull_clock_war = yes
+			SHL_request_cistern_charter = yes
+		}
 		ai_chance = { factor = 90 }
 	}
 }
@@ -1263,7 +1420,8 @@ country_event = {
 		custom_effect_tooltip = SHL_cabinet_public_minutes_tt
 		hidden_effect = {
 			add_to_variable = { var = SHL_city_support value = 5 }
-			add_to_variable = { var = SHL_house_pressure value = 5 }
+			set_variable = { var = SHL_loyalty_delta value = -5 }
+			SHL_change_all_loyalty = yes
 			SHL_clamp_tensions = yes
 		}
 	}
@@ -1377,9 +1535,50 @@ country_event = {
 	}
 }
 
+# The empty chair. Fired by SHL_house_walkout_tick when a lit, seated house
+# falls below 40 loyalty; SHL_walkout_site holds its district. The first
+# option is the unattended answer and starts the 56-day mission
+# SHL_house_walkout; the second buys the house back at once.
+country_event = {
+	id = ADISCORD_SHL.141
+	title = ADISCORD_SHL.141.t
+	desc = ADISCORD_SHL.141.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		check_variable = { var = SHL_walkout_site value = 0 compare = greater_than }
+		NOT = { has_active_mission = SHL_house_walkout }
+	}
+	option = {
+		name = ADISCORD_SHL.141.a
+		custom_effect_tooltip = SHL_house_walkout_start_tt
+		hidden_effect = { SHL_start_house_walkout = yes }
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_SHL.141.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			NOT = { has_political_power < 25 }
+		}
+		effect_tooltip = { add_political_power = -25 }
+		custom_effect_tooltip = SHL_house_walkout_buyback_tt
+		hidden_effect = { SHL_house_walkout_buyback = yes }
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 250 compare = less_than }
+			}
+		}
+	}
+}
+
 # ---------------------------------------------------------------------------
 # Neighbour revanche. Scheduled 365 days after a won limited war by the
-# *_war_victory effects. SHL_resolve_revanche picks the neighbour whose due
+# *_war_victory effects and by an armistice that left Shahrabad ahead.
+# SHL_resolve_revanche picks the neighbour whose due
 # flag has aged and lays its claim on the ceded land; the revision buys the
 # claim back. The first option is the unattended answer.
 # ---------------------------------------------------------------------------
@@ -1407,9 +1606,21 @@ country_event = {
 	option = {
 		name = ADISCORD_SHL.76.a
 		trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+			OR = {
+				check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+				AND = {
+					has_completed_focus = SHL_border_settlement_office
+					check_variable = { var = ADISCORD_economy_treasury value = 90 compare = greater_than_or_equals }
+				}
+			}
 		}
-		custom_effect_tooltip = SHL_revanche_revision_tt
+		if = {
+			limit = { has_completed_focus = SHL_border_settlement_office }
+			custom_effect_tooltip = SHL_revanche_revision_office_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_revanche_revision_tt
+		}
 		hidden_effect = { SHL_revanche_revision = yes }
 		ai_chance = {
 			base = 50
@@ -1419,6 +1630,268 @@ country_event = {
 			}
 		}
 	}
+}
+
+# ---------------------------------------------------------------------------
+# Limited-war fronts and terms. 160 is the hidden front check queued by
+# on_state_control_changed; 161 goes to the winner of a lost limited war (FROM
+# is Shahrabad) and its first available option is the unattended answer; 162
+# reports the terms to Shahrabad with the winner in FROM.
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.160
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		SHL_country_operable = yes
+	}
+	immediate = { SHL_front_check = yes }
+}
+
+country_event = {
+	id = ADISCORD_SHL.161
+	title = ADISCORD_SHL.161.t
+	desc = ADISCORD_SHL.161.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			AND = {
+				tag = KYZ
+				SHL = { check_variable = { var = SHL_terms_war value = 3 compare = less_than } }
+			}
+			AND = {
+				tag = GLP
+				SHL = { check_variable = { var = SHL_terms_war value = 3 compare = equals } }
+			}
+		}
+		SHL = { has_country_flag = SHL_terms_pending }
+	}
+	option = {
+		name = ADISCORD_SHL.161.a
+		trigger = { SHL = { NOT = { has_variable = SHL_indemnity_due } } }
+		if = {
+			limit = { SHL = { check_variable = { var = SHL_terms_war value = 1 compare = equals } } }
+			custom_effect_tooltip = SHL_terms_tithe_qanat_tt
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_terms_war value = 2 compare = equals } } }
+			custom_effect_tooltip = SHL_terms_tithe_ration_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_terms_tithe_veyr_tt
+		}
+		hidden_effect = { SHL = { SHL_terms_tithe = yes } }
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_SHL.161.b
+		trigger = { SHL = { SHL_terms_land_available = yes } }
+		if = {
+			limit = { SHL = { check_variable = { var = SHL_terms_war value = 1 compare = equals } } }
+			custom_effect_tooltip = SHL_terms_land_qanat_tt
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_terms_war value = 2 compare = equals } } }
+			custom_effect_tooltip = SHL_terms_land_ration_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_terms_land_veyr_tt
+		}
+		hidden_effect = { SHL = { SHL_terms_land = yes } }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 2
+				OR = {
+					707 = { has_state_flag = SHL_terms_candidate }
+					296 = { has_state_flag = SHL_terms_candidate }
+				}
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.161.c
+		if = {
+			limit = { SHL = { check_variable = { var = SHL_terms_war value = 1 compare = equals } } }
+			custom_effect_tooltip = SHL_terms_treaty_qanat_tt
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_terms_war value = 2 compare = equals } } }
+			custom_effect_tooltip = SHL_terms_treaty_ration_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_terms_treaty_veyr_tt
+		}
+		hidden_effect = { SHL = { SHL_terms_treaty = yes } }
+		ai_chance = {
+			base = 20
+			modifier = {
+				factor = 2
+				num_divisions < 6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.162
+	title = ADISCORD_SHL.162.t
+	desc = {
+		trigger = { check_variable = { var = SHL_last_terms value = 1 compare = equals } }
+		text = ADISCORD_SHL.162.d_tithe
+	}
+	desc = {
+		trigger = { check_variable = { var = SHL_last_terms value = 2 compare = equals } }
+		text = ADISCORD_SHL.162.d_land
+	}
+	desc = {
+		trigger = { check_variable = { var = SHL_last_terms value = 3 compare = equals } }
+		text = ADISCORD_SHL.162.d_treaty
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.162.a
+		if = {
+			limit = { check_variable = { var = SHL_last_terms value = 1 compare = equals } }
+			custom_effect_tooltip = SHL_terms_report_tithe_tt
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_last_terms value = 2 compare = equals } }
+			custom_effect_tooltip = SHL_terms_report_land_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_terms_report_treaty_tt
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Return of ceded districts. SHL_check_crises offers 163 once a ceded district
+# has waited its year; 164 goes to the neighbour holding it (FROM is
+# Shahrabad) and 165-166 return to Shahrabad with the neighbour in FROM. The
+# first option of 163 and 164 is the unattended answer.
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.163
+	title = ADISCORD_SHL.163.t
+	desc = ADISCORD_SHL.163.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		SHL_return_offer_ready = yes
+	}
+	immediate = {
+		hidden_effect = { SHL_pick_return_neighbour = yes }
+	}
+	option = {
+		name = ADISCORD_SHL.163.a
+		add_political_power = 25
+		custom_effect_tooltip = SHL_return_accept_tt
+		hidden_effect = { SHL_accept_ceded_border = yes }
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_SHL.163.b
+		trigger = { SHL_redemption_affordable = yes }
+		if = {
+			limit = { has_completed_focus = SHL_border_settlement_office }
+			custom_effect_tooltip = SHL_redemption_offer_office_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_redemption_offer_tt
+		}
+		hidden_effect = { SHL_offer_redemption = yes }
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 40
+				check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.164
+	title = ADISCORD_SHL.164.t
+	desc = ADISCORD_SHL.164.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			AND = {
+				tag = KYZ
+				SHL = { check_variable = { var = SHL_return_neighbour value = 1 compare = equals } }
+			}
+			AND = {
+				tag = GLP
+				SHL = { check_variable = { var = SHL_return_neighbour value = 2 compare = equals } }
+			}
+		}
+		SHL = { has_country_flag = SHL_redemption_pending }
+	}
+	option = {
+		name = ADISCORD_SHL.164.a
+		trigger = { NOT = { has_war_with = SHL } }
+		custom_effect_tooltip = SHL_redemption_accept_tt
+		hidden_effect = { SHL = { SHL_complete_redemption = yes } }
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.164.b
+		custom_effect_tooltip = SHL_redemption_refuse_tt
+		hidden_effect = { SHL = { SHL_refuse_redemption = yes } }
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.165
+	title = ADISCORD_SHL.165.t
+	desc = ADISCORD_SHL.165.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = { name = ADISCORD_SHL.165.a }
+}
+
+country_event = {
+	id = ADISCORD_SHL.166
+	title = ADISCORD_SHL.166.t
+	desc = ADISCORD_SHL.166.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.166.a
+		custom_effect_tooltip = SHL_redemption_refused_tt
+	}
+}
+
+# Hidden refresh queued by SHL_queue_focus_refresh one hour after a focus whose
+# own completion changes a derived quote (guard hire, raw-material packet).
+country_event = {
+	id = ADISCORD_SHL.167
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_country_flag = SHL_furnaces_initialized
+	}
+	immediate = { SHL_refresh_furnaces = yes }
 }
 
 # ---------------------------------------------------------------------------
@@ -1753,7 +2226,8 @@ country_event = {
 		add_stability = -0.02
 		hidden_effect = {
 			add_to_variable = { var = SHL_unrest value = 10 }
-			subtract_from_variable = { var = SHL_house_pressure value = 3 }
+			set_variable = { var = SHL_loyalty_delta value = 3 }
+			SHL_change_all_loyalty = yes
 			SHL_clamp_tensions = yes
 			clr_country_flag = SHL_crisis_open
 		}
@@ -1800,7 +2274,8 @@ country_event = {
 		name = ADISCORD_shl_crisis.4.b
 		custom_effect_tooltip = SHL_crisis_4_b_tt
 		hidden_effect = {
-			add_to_variable = { var = SHL_house_pressure value = 8 }
+			set_variable = { var = SHL_loyalty_delta value = -8 }
+			SHL_change_all_loyalty = yes
 			subtract_from_variable = { var = SHL_unrest value = 5 }
 			SHL_clamp_tensions = yes
 			clr_country_flag = SHL_crisis_open
@@ -2081,7 +2556,8 @@ country_event = {
 
 # News sent to neighbours and the North. Ratification (.1-.5) is fired by the
 # matching SHL_commit_*_course effect; .6 by the first limited-war start,
-# .7 by the Crown of the South settlement, .8 when the Mazar march is repelled.
+# .7 by the Crown of the South settlement, .8 when the Mazar march is repelled,
+# .10 by the terms of a limited war that Shahrabad lost.
 add_namespace = ADISCORD_SHL_news
 
 news_event = {
@@ -2427,8 +2903,9 @@ country_event = {
 		add_political_power = -15
 		custom_effect_tooltip = SHL_life_22_b_tt
 		hidden_effect = {
-			subtract_from_variable = { var = SHL_house_pressure value = 2 }
-			SHL_clamp_tensions = yes
+			set_variable = { var = SHL_loyalty_site value = 289 }
+			set_variable = { var = SHL_loyalty_delta value = 6 }
+			SHL_change_site_loyalty = yes
 		}
 	}
 }
@@ -2546,8 +3023,9 @@ country_event = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 30 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 30 }
 				ADISCORD_economy_mark_dirty = yes
-				subtract_from_variable = { var = SHL_house_pressure value = 2 }
-				SHL_clamp_tensions = yes
+				set_variable = { var = SHL_loyalty_site value = 295 }
+				set_variable = { var = SHL_loyalty_delta value = 6 }
+				SHL_change_site_loyalty = yes
 			}
 		}
 	}
@@ -2825,6 +3303,289 @@ news_event = {
 
 	option = {
 		name = ADISCORD_SHL_news.9.a
+	}
+}
+
+# Terms of a limited war lost by Shahrabad (SHL_terms_finish); FROM is the winner.
+news_event = {
+	id = ADISCORD_SHL_news.10
+	title = ADISCORD_SHL_news.10.t
+	desc = ADISCORD_SHL_news.10.d
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.10.a
+	}
+}
+
+# The defeat chapter for the neighbours: the rising (SHL_cold_rising 1), its
+# victory (2) or defeat (3), and the redeemed charter of the lease route.
+news_event = {
+	id = ADISCORD_SHL_news.11
+	title = ADISCORD_SHL_news.11.t
+	desc = {
+		trigger = { SHL = { check_variable = { var = SHL_cold_rising value = 1 compare = equals } } }
+		text = ADISCORD_SHL_news.11.d_rising
+	}
+	desc = {
+		trigger = { SHL = { check_variable = { var = SHL_cold_rising value = 2 compare = equals } } }
+		text = ADISCORD_SHL_news.11.d_free
+	}
+	desc = {
+		trigger = { SHL = { check_variable = { var = SHL_cold_rising value = 3 compare = equals } } }
+		text = ADISCORD_SHL_news.11.d_crushed
+	}
+	desc = {
+		trigger = { SHL = { NOT = { has_variable = SHL_cold_rising } } }
+		text = ADISCORD_SHL_news.11.d_redeemed
+	}
+	picture = GFX_news_event_adiscord_imperial_proclamation
+	major = yes
+	show_major = { SHL_southern_news_reader = yes }
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_SHL_news.11.a
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Under the namestnik's seal (200-204). 200 opens the defeat chapter two days
+# after the southern settlement; 201 follows SHL_seal_houses_in_mourning; 202
+# goes to Svetlogorye with a petition, whose answer the petition decision
+# settles when it ends; 203 is a raid rolled by SHL_cold_roll_raid; 204 brings
+# Shahrabad's letter to a southern neighbour. Shahrabad is the only sender, so
+# 202 and 204 address it by tag. The first option is the unattended answer.
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.200
+	title = ADISCORD_SHL.200.t
+	desc = ADISCORD_SHL.200.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_country_flag = SHL_seal_chapter_open
+	}
+	option = {
+		name = ADISCORD_SHL.200.a
+		custom_effect_tooltip = SHL_seal_terms_tt
+		add_political_power = 25
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.201
+	title = ADISCORD_SHL.201.t
+	desc = ADISCORD_SHL.201.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.201.a
+		add_political_power = -40
+		add_stability = 0.03
+		custom_effect_tooltip = SHL_seal_houses_sheltered_tt
+		hidden_effect = {
+			set_variable = { var = SHL_loyalty_delta value = 20 }
+			SHL_change_all_loyalty = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2
+				check_variable = { var = SHL_house_pressure value = 50 compare = greater_than_or_equals }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.201.b
+		custom_effect_tooltip = SHL_seal_houses_pay_tt
+		hidden_effect = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+			ADISCORD_economy_mark_dirty = yes
+			set_variable = { var = SHL_loyalty_delta value = -15 }
+			SHL_change_all_loyalty = yes
+			add_to_variable = { var = SHL_city_support value = 10 }
+			SHL_clamp_tensions = yes
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 2
+				OR = {
+					check_variable = { var = SHL_political_course value = 2 compare = equals }
+					check_variable = { var = SHL_political_course value = 5 compare = equals }
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.202
+	title = ADISCORD_SHL.202.t
+	desc = ADISCORD_SHL.202.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 7
+	trigger = {
+		tag = NAM
+		SHL = {
+			has_variable = SHL_seal_petition_site
+			is_subject_of = NAM
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.202.a
+		if = {
+			limit = { SHL = { check_variable = { var = SHL_seal_petition_kind value = 1 compare = equals } } }
+			custom_effect_tooltip = SHL_seal_consent_coin_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_seal_consent_service_tt
+		}
+		if = {
+			limit = { SHL = { check_variable = { var = SHL_seal_leased_count value = 1 compare = less_than_or_equals } } }
+			if = {
+				limit = { SHL = { has_autonomy_state = autonomy_NAM_economic_contract } }
+				custom_effect_tooltip = SHL_seal_lease_closes_contract_tt
+			}
+			else_if = {
+				limit = { SHL = { has_autonomy_state = autonomy_NAM_oil_charter } }
+				custom_effect_tooltip = SHL_seal_lease_closes_charter_tt
+			}
+			else = {
+				custom_effect_tooltip = SHL_seal_lease_closes_namestnik_tt
+			}
+		}
+		hidden_effect = {
+			SHL = { set_variable = { var = SHL_seal_petition_answer value = 1 } }
+		}
+		ai_chance = {
+			base = 70
+			modifier = {
+				factor = 0.3
+				SHL_seal_overlord_hardline = yes
+			}
+			modifier = {
+				factor = 1.5
+				SHL_seal_overlord_conciliatory = yes
+			}
+			modifier = {
+				factor = 1.5
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.202.b
+		custom_effect_tooltip = SHL_seal_refuse_tt
+		hidden_effect = {
+			SHL = { set_variable = { var = SHL_seal_petition_answer value = 2 } }
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.203
+	title = ADISCORD_SHL.203.t
+	desc = ADISCORD_SHL.203.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_variable = SHL_underground_heat
+		NOT = { has_variable = SHL_cold_rising }
+	}
+	immediate = {
+		hidden_effect = {
+			set_country_flag = {
+				flag = SHL_cold_raid_cooldown
+				value = 1
+				days = 84
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.203.a
+		custom_effect_tooltip = SHL_cold_raid_surrender_tt
+		hidden_effect = { SHL_cold_raid_surrender = yes }
+		ai_chance = {
+			base = 60
+			modifier = {
+				factor = 0
+				check_variable = { var = SHL_cold_cache_cells value = 1 compare = less_than }
+				check_variable = { var = SHL_cold_cache_rifles value = 0 compare = less_than_or_equals }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.203.b
+		add_stability = -0.03
+		custom_effect_tooltip = SHL_cold_raid_deeper_tt
+		hidden_effect = { SHL_cold_raid_go_deeper = yes }
+		ai_chance = { base = 40 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.204
+	title = ADISCORD_SHL.204.t
+	desc = ADISCORD_SHL.204.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = SHL_cold_pledge_pending
+		SHL = { has_variable = SHL_underground_heat }
+	}
+	option = {
+		name = ADISCORD_SHL.204.a
+		hidden_effect = { clr_country_flag = SHL_cold_pledge_pending }
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_SHL.204.b
+		custom_effect_tooltip = SHL_cold_pledge_given_tt
+		hidden_effect = {
+			clr_country_flag = SHL_cold_pledge_pending
+			set_country_flag = SHL_cold_pledged
+			SHL = {
+				set_temp_variable = { var = SHL_cold_heat_delta value = 5 }
+				SHL_cold_add_heat = yes
+			}
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				factor = 3
+				has_opinion = {
+					target = NAM
+					value < 0
+				}
+			}
+			modifier = {
+				factor = 1.5
+				SHL = { check_variable = { var = SHL_underground_heat value = 60 compare = greater_than_or_equals } }
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					is_subject = yes
+					is_in_faction_with = NAM
+				}
+			}
+		}
 	}
 }
 

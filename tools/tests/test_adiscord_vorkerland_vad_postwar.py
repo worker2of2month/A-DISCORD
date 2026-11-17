@@ -8,6 +8,7 @@ from copy import deepcopy
 from dataclasses import replace
 from pathlib import Path
 from tools.lib.focus_sources import read_focus_source
+from tools.validators._vorkerland_release_contract import direct_block_sequence, direct_statements
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     POSTWAR_EXPANSION_CHOICES,
@@ -250,27 +251,26 @@ class VadPostwarContractTests(unittest.TestCase):
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             "phase_effects",
         )
-        formation = named_block(source, "ADISCORD_vorkerland_unify_under_vad")
-        formation += named_block(source, "ADISCORD_vorkerland_settle_unification_under_vad")
-        identity = re.search(
-            r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
-            r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government\s*"
-            r"ADISCORD_vorkerland_appoint_joint_council\s*=\s*yes\s*\}"
-            r"\s*else_if\s*=\s*\{\s*limit\s*=\s*\{\s*has_global_flag\s*=\s*ADISCORD_vorkerland_collegial_staff_formed\s*\}\s*VAD_appoint_collegial_staff\s*=\s*yes\s*\}"
-            r"\s*else\s*=\s*\{(?P<else>.*?portrait\s*=\s*GFX_portrait_WRK_Vlad_Petrichev)\s",
-            formation,
-        )
-        self.assertIsNotNone(identity)
-        self.assertIn(
-            "ADISCORD_vorkerland_joint_government_formed", identity.group("limit")
-        )
-        self.assertNotIn(
-            "ADISCORD_vorkerland_worker_rescued_by_vlad", identity.group("limit")
-        )
-        self.assertIn(
-            "set_cosmetic_tag = VAD_vorkerland_restoration", identity.group("else")
-        )
-        self.assertIn("character = WRK_Vlad_Petrichev", identity.group("else"))
+        settlement = named_block(source, "ADISCORD_vorkerland_settle_unification_under_vad")
+        formation = named_block(source, "ADISCORD_vorkerland_unify_under_vad") + settlement
+        branches = direct_block_sequence(settlement)
+        council_indexes = [
+            index for index, (_, branch, _, _) in enumerate(branches)
+            if direct_statements(branch, "ADISCORD_vorkerland_appoint_joint_council") == ["yes"]
+        ]
+        self.assertEqual(len(council_indexes), 1)
+        index = council_indexes[0]
+        routes = branches[index:index + 3]
+        self.assertEqual([kind for kind, *_ in routes], ["if", "else_if", "else"])
+        council, staff, empire = [branch for _, branch, _, _ in routes]
+        self.assertEqual(direct_statements(named_block(council, "limit"), "has_global_flag"), ["ADISCORD_vorkerland_joint_government_formed"])
+        self.assertNotIn("ADISCORD_vorkerland_worker_rescued_by_vlad", named_block(council, "limit"))
+        self.assertEqual(direct_statements(council, "set_cosmetic_tag"), ["WRK_vorkerland_joint_government"])
+        self.assertEqual(direct_statements(named_block(staff, "limit"), "has_global_flag"), ["ADISCORD_vorkerland_collegial_staff_formed"])
+        self.assertEqual(direct_statements(staff, "VAD_appoint_collegial_staff"), ["yes"])
+        self.assertEqual(direct_statements(empire, "set_cosmetic_tag"), ["VAD_vorkerland_restoration"])
+        self.assertIn("character = WRK_Vlad_Petrichev", named_block(empire, "promote_character"))
+        self.assertIn("portrait = GFX_portrait_WRK_Vlad_Petrichev", named_block(empire, "set_country_leader_portrait"))
         self.assertIn("civilian = { large = GFX_portrait_WRK_Vlad_Petrichev }", formation)
         self.assertNotIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", formation)
         # VAD keeps its tag, so the rulers of both outcomes stay where the
@@ -1479,7 +1479,7 @@ class WorldEmpireTests(unittest.TestCase):
             text = path.read_text(encoding="utf-8-sig")
             for key in set(self.focuses) | {key + "_desc" for key in self.focuses} | tooltip_keys | delta_keys | other_keys:
                 with self.subTest(language=language, key=key):
-                    self.assertEqual(len(re.findall(rf'^ {re.escape(key)}:0 "[^"\r\n]*"$', text, re.M)), 1)
+                    self.assertEqual(len(re.findall(rf'^ {re.escape(key)}:\d* "(?:\\.|[^"\\\r\n])*"$', text, re.M)), 1)
             self.assertNotRegex(text, r"^ WRK_empire_(state_above_all|army_oath|imperial_building_offices):", )
             for key in ("ADISCORD_vorkerland_postwar.5.d", "ADISCORD_vorkerland_postwar.60.d",
                         "ADISCORD_vorkerland_postwar.61.d_empire", "ADISCORD_vorkerland_postwar.61.d_worker",

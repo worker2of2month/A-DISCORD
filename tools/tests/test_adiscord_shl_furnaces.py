@@ -5,11 +5,13 @@ import re
 from collections import defaultdict
 from copy import deepcopy
 from functools import lru_cache
+from itertools import product
 from pathlib import Path
 
+from tools.builders import build_adiscord_focus_trees as focus_builder
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT =Path(__file__).resolve().parents[2]
 NEIGHBOURS = ("KYZ", "GLP", "MZR")
 # Regional countries that SHL scripts address directly (consolidation targets,
 # satellites and the northern leader).
@@ -45,7 +47,7 @@ def decision_definition(identifier):
 
 FOCUS_TREE_SOURCES = {
     name: ROOT / f"focus_trees/SHL/{name}/focuses.txt"
-    for name in ("main", "houses", "cities", "directorate", "regency", "commune")
+    for name in ("main", "houses", "cities", "directorate", "regency", "commune", "defeated")
 }
 SHARED_FOCUS_SOURCE = ROOT / "focus_trees/SHL/shared/focuses.txt"
 WAR_TREE_SOURCE = ROOT / "focus_trees/SHL/south_war/focuses.txt"
@@ -76,6 +78,60 @@ COURSE_COMMITS = {
     "regency": ("regency", "SHL_hereditary_republic"),
     "commune": ("commune", "SHL_commune_of_fire"),
 }
+# Exclusive pairs of the main trunk and the prerequisite block where each pair rejoins.
+MAIN_PAIRS = (
+    ("SHL_baryat_mines", "SHL_metal_brokers"),
+    ("SHL_quarter_listening", "SHL_heralds_table"),
+    ("SHL_mobilise_furnaces", "SHL_desert_guard_contracts"),
+)
+MAIN_REJOINS = {
+    "SHL_smelter_quarters": {"SHL_ore_prospecting", "SHL_metal_brokers"},
+    "SHL_incident_office": {"SHL_shift_arbitration", "SHL_counting_chamber"},
+    "SHL_conclave_army": {"SHL_mobilise_furnaces", "SHL_desert_guard_contracts"},
+}
+# Limited border wars: one battery focus, an exclusive pair and its merge.
+BORDER_WAR_LAYOUT = {
+    "SHL_border_foundries": (33, 6),
+    "SHL_siege_founders": (32, 8),
+    "SHL_furnace_garrisons": (34, 8),
+    "SHL_border_settlement_office": (33, 10),
+}
+
+
+def prerequisite_blocks(focus):
+    """One set of alternatives per prerequisite block (blocks are ANDed)."""
+    return [{e.value for e in b.value} for b in focus if b.key == "prerequisite"]
+
+
+def omitted_closure(focuses, queue, omitted):
+    """Extend omitted with every focus reachable only through an omitted one."""
+    omitted = set(omitted)
+    changed = True
+    while changed:
+        changed = False
+        for name, focus in focuses.items():
+            if name in omitted or name in queue:
+                continue
+            blocks = prerequisite_blocks(focus)
+            if blocks and any(options <= omitted for options in blocks):
+                omitted.add(name)
+                changed = True
+    return omitted
+
+
+def reachable_focuses(focuses, blocked):
+    """Focuses completable when the blocked ones are never taken."""
+    done = set()
+    changed = True
+    while changed:
+        changed = False
+        for name, focus in focuses.items():
+            if name in done or name in blocked:
+                continue
+            if all(options & done for options in prerequisite_blocks(focus)):
+                done.add(name)
+                changed = True
+    return done
 
 
 @lru_cache(maxsize=None)
@@ -113,6 +169,69 @@ def shared_focuses():
     }
 
 
+# Every campaign state the course gates distinguish: course 0-5, before and after the South.
+COURSE_STATES = tuple(product(range(6), (False, True)))
+HEGEMON_FLAG = "ADISCORD_south_hegemon_SHL"
+
+
+def gate_holds(items, course, hegemon, completed):
+    """Evaluate an authored SHL allow_branch; completed=None satisfies every focus check."""
+    for entry in items:
+        key, value = entry.key, entry.value
+        if key == "OR":
+            result = any(gate_holds([item], course, hegemon, completed) for item in value)
+        elif key == "NOT":
+            result = not any(gate_holds([item], course, hegemon, completed) for item in value)
+        elif key == "check_variable":
+            assert (scalar(value, "var"), scalar(value, "compare")) == ("SHL_political_course", "equals"), value
+            result = course == int(scalar(value, "value"))
+        elif key == "has_global_flag":
+            result = hegemon and value == HEGEMON_FLAG
+        elif key == "has_completed_focus":
+            result = completed is None or value in completed
+        elif key == "has_country_flag":
+            # The defeat chapter may open on any course; draw it in every state.
+            result = True
+        else:
+            raise AssertionError("Unsupported allow_branch condition: " + key)
+        if not result:
+            return False
+    return True
+
+
+def visible_focuses(course, hegemon=False, completed=None):
+    """id -> body of the SHL_focus entries drawn in one campaign state.
+
+    An own allow_branch decides its focus; an ungated focus is drawn while one
+    of its prerequisites is drawn, as the native tree inherits a hidden branch.
+    """
+    focuses = whole_tree_focuses()
+    drawn = {}
+
+    def is_drawn(identifier):
+        if identifier not in drawn:
+            drawn[identifier] = False
+            focus = focuses[identifier]
+            gate = block(focus, "allow_branch")
+            parents = set().union(*prerequisite_blocks(focus)) if prerequisite_blocks(focus) else set()
+            if gate:
+                drawn[identifier] = gate_holds(gate, course, hegemon, completed)
+            else:
+                drawn[identifier] = not parents or any(is_drawn(parent) for parent in parents)
+        return drawn[identifier]
+
+    return {identifier: focus for identifier, focus in focuses.items() if is_drawn(identifier)}
+
+
+def assert_free_cells(test, focuses, label):
+    """Drawn focuses never share a cell and keep one free column between row neighbours."""
+    cells = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in focuses.values()]
+    test.assertEqual(len(cells), len(set(cells)), label)
+    for row in {y for _, y in cells}:
+        columns = sorted(x for x, y in cells if y == row)
+        test.assertTrue(all(b - a >= 2 for a, b in zip(columns, columns[1:])), (label, row, columns))
+
+
 @lru_cache(maxsize=None)
 def war_tree_focuses():
     """id -> body of the focuses of the separate war-for-the-South tree."""
@@ -148,6 +267,13 @@ def shared_definitions(relative_path, names):
     return {name: definitions[name] for name in names}
 
 
+def seat_houses(machine, loyalty):
+    """Give every house one loyalty, so the derived pressure reads 100 - loyalty."""
+    for state in range(287, 296):
+        machine.variables[str(state)]["SHL_house_loyalty"] = float(loyalty)
+    machine.run("SHL_refresh_house_pressure")
+
+
 def balance_ranges(identifier):
     """Range id -> (min, max) of one balance of power, root and side ranges alike."""
     balance = block(parse_clausewitz(BOP_PATH.read_text(encoding="utf-8")), identifier)
@@ -176,12 +302,18 @@ class ScriptMachine:
             "common/scripted_effects/ADISCORD_society_development_effects.txt",
             ("ADISCORD_reform_social_system_development", "ADISCORD_initialize_society_development_variables"),
         ))
+        # Booked treasury receipts used by focus rewards and the brokers' premium.
+        self.effects.update(shared_definitions(
+            "common/scripted_effects/ADISCORD_shared_action_effects.txt",
+            ("ADISCORD_economy_receive_15", "ADISCORD_economy_receive_100"),
+        ))
         self.variables = defaultdict(dict)
         self.flags = defaultdict(set)
         self.global_flags = {"ADISCORD_fresh_campaign_contract_v1"}
         self.flag_days = defaultdict(dict)
         self.control = {str(i): "SHL" for i in range(287, 296)}
         self.ownership = dict(self.control)
+        self.claims = defaultdict(set)
         self.control["294"] = "SHL"
         self.focuses = set()
         self.factories = 0
@@ -331,6 +463,9 @@ class ScriptMachine:
                 return scalar(e.value, "character") == self.leader
             if e.key == "has_template":
                 return e.value.strip('"') in self.calls
+            if e.key.startswith("var:"):
+                state = str(int(self.value(e.key[4:], scope)))
+                return state in self.ownership and self.condition_scope(e.value, state, scope, target)
             if e.key == "FROM":
                 return self.condition_scope(e.value, target, scope, target)
             if e.key.isdigit():
@@ -339,6 +474,8 @@ class ScriptMachine:
                 expected = "SHL" if e.value == "ROOT" else e.value
                 owners = self.ownership if e.key == "is_owned_by" else self.control
                 return owners.get(scope) == expected
+            if e.key == "is_claimed_by":
+                return e.value in self.claims[scope]
             if e.key == "has_completed_focus":
                 return e.value in self.focuses
             if e.key == "is_major":
@@ -450,6 +587,11 @@ class ScriptMachine:
             elif e.key in ("ROOT", "SHL"):
                 country = self.root_scope if e.key == "ROOT" else "SHL"
                 self.switch_scope(e.value, country, scope, target)
+            elif e.key.startswith("var:"):
+                state = str(int(self.value(e.key[4:], scope)))
+                if state not in self.ownership:
+                    raise AssertionError("Unknown dispatch state: " + state)
+                self.switch_scope(e.value, state, scope, target)
             elif e.key == "PREV":
                 self.switch_scope(e.value, self.previous_scope, scope, target)
             elif e.key in REGIONAL:
@@ -463,6 +605,10 @@ class ScriptMachine:
                 self.countries.setdefault(annexed, {})["exists"] = False
                 self.calls.append(("annex_country", scope, annexed))
             elif e.key in ("add_claim_by", "remove_claim_by"):
+                if e.key == "add_claim_by":
+                    self.claims[scope].add(e.value)
+                else:
+                    self.claims[scope].discard(e.value)
                 self.calls.append((e.key, scope, e.value))
             elif e.key == "declare_war_on":
                 self.wars.add(frozenset((scope, scalar(e.value, "target"))))
@@ -544,6 +690,10 @@ class ScriptMachine:
                 self.calls.append((e.key, scope))
             elif e.key == "SHL_Jalil_Nur":
                 self.switch_scope(e.value, scope, scope, target)
+            elif e.key == "set_temp_variable" and any(item.key == "ADISCORD_party" for item in e.value):
+                self.party_token = scalar(e.value, "ADISCORD_party")
+            elif e.key == "ADISCORD_legalise_party":
+                self.calls.append((e.key, scope, self.party_token))
             elif e.key == "add_country_leader_role":
                 if scalar(e.value, "promote_leader") == "yes":
                     self.leader = scalar(e.value, "character")
@@ -559,6 +709,7 @@ class ScriptMachine:
                 "mark_focus_tree_layout_dirty", "force_update_dynamic_modifier", "add_war_support",
                 "ADISCORD_release_non_participating_minor_optimization",
                 "ADISCORD_south_crisis_add_campaign", "ADISCORD_south_crisis_cycle",
+                "ADISCORD_south_pull_clock_war", "ADISCORD_south_pull_clock_campaign",
                 "SHL_crisis_draw",
                 "ADISCORD_south_offer_alliance", "ADISCORD_south_demand_annexation",
                 "ADISCORD_south_demand_submission", "save_event_target_as",
@@ -631,9 +782,9 @@ class ScriptMachine:
             elif e.key in ("country_event", "news_event"):
                 self.scheduled.append(scalar(e.value, "id"))
                 self.event_days[scalar(e.value, "id")] = int(scalar(e.value, "days", "0"))
-            elif e.key in ("ADISCORD_economy_mark_dirty", "ADISCORD_economy_reprice_debt"):
+            elif e.key in ("ADISCORD_economy_mark_dirty", "ADISCORD_economy_reprice_debt", "ADISCORD_economy_initialize_country"):
                 self.calls.append(e.key)
-            elif e.key in ("custom_effect_tooltip", "add_to_array", "log", "air_experience", "set_character_name"):
+            elif e.key in ("custom_effect_tooltip", "unlock_decision_tooltip", "add_to_array", "log", "air_experience", "set_character_name"):
                 self.calls.append(e.key)
             else:
                 raise AssertionError("Unsupported effect: " + e.key)
@@ -659,6 +810,34 @@ class FurnaceAccountingTests(unittest.TestCase):
 
     def test_source_exists(self):
         self.assertTrue(EFFECT_PATH.exists(), "SHL implementation is absent")
+
+    def test_all_ten_seals_are_separate_click_targets_inside_the_survey(self):
+        from PIL import Image
+
+        gui = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8"))
+        panel = block(block(gui, "guiTypes"), "containerWindowType")
+        widgets = {scalar(entry.value, "name").strip('"'): entry.value for entry in panel
+                   if entry.key in ("buttonType", "iconType")}
+        sprites = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gfx").read_text(encoding="utf-8"))
+        textures = {scalar(entry.value, "name"): scalar(entry.value, "texturefile").strip('"')
+                    for entry in block(sprites, "spriteTypes")}
+
+        def bounds(widget):
+            position = block(widget, "position")
+            x, y = int(scalar(position, "x")), int(scalar(position, "y"))
+            with Image.open(ROOT / textures[scalar(widget, "quadTextureSprite")]) as texture:
+                return x, y, x + texture.width, y + texture.height
+
+        left, top, right, bottom = bounds(widgets["SHL_survey_map"])
+        earlier = []
+        for number, numeral in enumerate("I II III IV V VI VII VIII IX X".split(), 1):
+            seal = widgets[f"SHL_furnace_{number}_button"]
+            self.assertEqual(scalar(seal, "buttonText").strip('"'), numeral)
+            x, y, end_x, end_y = bounds(seal)
+            self.assertTrue(left <= x < end_x <= right and top <= y < end_y <= bottom, numeral)
+            for x1, y1, x2, y2 in earlier:
+                self.assertTrue(end_x <= x1 or end_y <= y1 or x2 <= x or y2 <= y, numeral)
+            earlier.append((x, y, end_x, end_y))
 
     def test_treasury_receipt_pays_250_and_refreshes_the_budget(self):
         machine = self.machine
@@ -734,7 +913,13 @@ class FurnaceAccountingTests(unittest.TestCase):
         source = (ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8")
         self.assertNotIn("default_option", source)
         defaults = {20: "b", 21: "b", 30: "b", 31: "b", 40: "b", 70: "b",
-                    75: "b", 112: "b", 120: "c", 121: "b"}
+                    75: "b", 112: "b", 120: "c", 121: "b", 141: "a",
+                    200: "a", 201: "a", 202: "a", 203: "a", 204: "a"}
+        self.assertTrue(set(range(200, 205)) <= {
+            int(scalar(entry.value, "id").rsplit(".", 1)[1])
+            for entry in parse_clausewitz(source)
+            if entry.key == "country_event" and scalar(entry.value, "id").startswith("ADISCORD_SHL.")
+        })
         for entry in parse_clausewitz(source):
             if entry.key != "country_event":
                 continue
@@ -781,6 +966,64 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.run("SHL_finish_repair", target="287")
         self.assertEqual(m.variables["287"]["SHL_furnace_wear"], 0)
         self.assertEqual(m.variables["288"]["SHL_furnace_wear"], 20)
+
+    def test_convoy_moves_one_pack_and_only_production_releases_the_trip(self):
+        m = self.machine
+        seat_houses(m, 80)
+        m.variables["SHL"]["SHL_selected_furnace"] = 1
+        m.run("SHL_refresh_furnaces")
+        m.run("SHL_dispatch_ore")
+        self.assertEqual(m.variables["291"]["SHL_furnace_stock"], 1)
+        self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 3)
+        m.variables["SHL"]["SHL_selected_furnace"] = 2
+        m.run("SHL_refresh_selected_furnace")
+        m.run("SHL_dispatch_sale")
+        self.assertEqual(m.variables["288"]["SHL_furnace_stock"], 2)
+        m.run("SHL_produce_period")
+        m.run("SHL_refresh_house_pressure")
+        treasury = m.variables["SHL"]["ADISCORD_economy_treasury"]
+        pressure = m.variables["SHL"].get("SHL_house_pressure", 0)
+        revenue = m.variables["SHL"]["ADISCORD_economy_current_month_action_income"]
+        m.run("SHL_dispatch_sale")
+        self.assertEqual(m.variables["288"]["SHL_furnace_stock"], 0)
+        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], treasury + 40)
+        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_current_month_action_income"], revenue + 40)
+        self.assertEqual(m.variables["SHL"]["SHL_house_pressure"], pressure + 3)
+
+    def test_convoy_rechecks_stores_commitments_and_control_at_dispatch(self):
+        m = self.machine
+        m.variables["SHL"]["SHL_selected_furnace"] = 1
+        m.run("SHL_refresh_furnaces")
+        m.variables["287"]["SHL_furnace_stock"] = 3
+        m.run("SHL_dispatch_ore")
+        m.variables["287"]["SHL_furnace_stock"] = 1
+        m.variables["291"]["SHL_operation_deposit"] = 25
+        m.run("SHL_dispatch_ore")
+        del m.variables["291"]["SHL_operation_deposit"]
+        m.control["287"] = "KYZ"
+        m.run("SHL_dispatch_ore")
+        self.assertNotIn("SHL_convoy_dispatch", m.variables["SHL"])
+        self.assertEqual(m.variables["291"]["SHL_furnace_stock"], 2)
+        self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 1)
+        m.control["287"] = "SHL"
+        m.variables["SHL"].update({"SHL_obligation_kind": 1, "SHL_obligation_site": 287})
+        m.run("SHL_dispatch_sale")
+        self.assertNotIn("SHL_convoy_dispatch", m.variables["SHL"])
+        self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 1)
+
+    def test_darban_masons_service_tenth_works_without_changing_the_eighth(self):
+        m = self.machine
+        m.variables["SHL"].update({"SHL_selected_furnace": 10, "SHL_tenth_wear": 35,
+                                   "SHL_tenth_running": 1, "SHL_project_stage": 4})
+        m.run("SHL_refresh_furnaces")
+        m.run("SHL_dispatch_masons")
+        self.assertEqual(m.variables["SHL"]["SHL_tenth_wear"], 35)
+        m.focuses.add("SHL_repair_without_extinction")
+        m.run("SHL_dispatch_masons")
+        self.assertEqual(m.variables["294"]["SHL_furnace_stock"], 1)
+        self.assertEqual(m.variables["294"]["SHL_furnace_wear"], 20)
+        self.assertEqual(m.variables["SHL"]["SHL_tenth_wear"], 20)
+        self.assertIn("SHL_convoy_dispatch", m.variables["SHL"])
 
     def test_state_course_preserves_ownership_and_governance_when_refreshing(self):
         m = self.machine
@@ -880,6 +1123,7 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.ownership["288"] = "AZH"
         m.run("SHL_commit_city_course")
         m.run("SHL_commit_state_course")
+        self.assertEqual(m.calls.count(("ADISCORD_legalise_party", "SHL", "token:anarchism")), 1)
         self.assertEqual(m.variables["SHL"]["SHL_political_course"], 2)
         self.assertEqual(m.variables["287"]["SHL_furnace_owner"], 1)
         self.assertEqual(m.variables["288"]["SHL_furnace_owner"], 0)
@@ -914,20 +1158,24 @@ class FurnaceAccountingTests(unittest.TestCase):
         for name in FOCUS_TREE_SOURCES:
             ids.extend(tree_focuses(name))
         ids.extend(shared)
-        # Preparation, five course sections and the shared layer form one native
-        # tree; the war-for-the-South tree is separate.
-        self.assertGreaterEqual(len(ids), 270)
+        # Preparation, five course sections, the defeat chapter and the shared
+        # layer form one native tree; the war-for-the-South tree is separate.
+        self.assertGreaterEqual(len(ids), 300)
         self.assertEqual(len(set(ids)), len(ids))
         focuses = whole_tree_focuses()
         roots = sorted(identifier for identifier, focus in shared.items() if not block(focus, "prerequisite"))
         references = [e.value for e in focus_tree("main") if e.key == "shared_focus"]
         self.assertEqual(sorted(references), roots)
         main_source = FOCUS_TREE_SOURCES["main"].read_text(encoding="utf-8")
-        for name in COURSE_TREES:
+        for name in (*COURSE_TREES, "defeated"):
             self.assertIn(f"# @include SHL/{name}/focuses.txt#{name}\n", main_source)
             self.assertTrue(FOCUS_TREE_SOURCES[name].read_text(encoding="utf-8").startswith(f"# @section {name}\n"), name)
-        cells = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in focuses.values()]
-        self.assertEqual(len(cells), len(set(cells)))
+        # The five course sections share their cells under the commit row: each
+        # campaign state draws one of them, so cells are unique per state.
+        for course, hegemon in COURSE_STATES:
+            drawn = visible_focuses(course, hegemon)
+            cells = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in drawn.values()]
+            self.assertEqual(len(cells), len(set(cells)), (course, hegemon))
         for focus in focuses.values():
             for prerequisite in [e.value for e in focus if e.key == "prerequisite"]:
                 for item in prerequisite:
@@ -1431,10 +1679,23 @@ class ObligationAccountingTests(unittest.TestCase):
     def test_early_platforms_precede_capital_ratification(self):
         for focus in ("SHL_new_house", "SHL_open_conclave", "SHL_nur_directorate"):
             self.assertEqual(scalar(block(focus_definition(focus), "prerequisite"), "focus"), "SHL_conclave_rules")
-        for focus in ("SHL_admit_tenth_house", "SHL_rights_without_fire", "SHL_state_furnaces"):
-            prerequisites = [scalar(e.value, "focus") for e in focus_definition(focus) if e.key == "prerequisite"]
-            self.assertIn("SHL_workers_charter", prerequisites)
-            self.assertEqual(len(prerequisites), 2)
+        # The commits hang from one drawn start; the platform step is a native condition.
+        for focus, platform in (
+            ("SHL_admit_tenth_house", "SHL_house_compromise"),
+            ("SHL_rights_without_fire", "SHL_city_charters"),
+            ("SHL_state_furnaces", "SHL_common_dispatch"),
+        ):
+            definition = focus_definition(focus)
+            self.assertEqual(prerequisite_blocks(definition), [{"SHL_workers_charter"}], focus)
+            self.assertIn(("has_completed_focus", platform), [(e.key, e.value) for e in block(definition, "available")], focus)
+        # Each platform root forks into its second step and its war mandate.
+        for root, second, mandate in (
+            ("SHL_new_house", "SHL_house_compromise", "SHL_house_war_mandate"),
+            ("SHL_open_conclave", "SHL_city_charters", "SHL_city_war_mandate"),
+            ("SHL_nur_directorate", "SHL_common_dispatch", "SHL_directorate_war_mandate"),
+        ):
+            self.assertEqual(prerequisite_blocks(focus_definition(second)), [{root}], second)
+            self.assertEqual(prerequisite_blocks(focus_definition(mandate)), [{root}], mandate)
         self.c["SHL_political_course"] = 3
         self.assertTrue(self.m.matches(self.m.triggers["SHL_arsenal_access"], "SHL"))
 
@@ -2333,9 +2594,9 @@ class SouthernCampaignTests(unittest.TestCase):
         self.m.wars.discard(frozenset(("MZR", "KYZ")))
         self.assertFalse(self.m.matches(trigger, "SHL"))
         self.m.control.update({"280": "SHL", "707": "SHL"})
-        decision = decision_definition("SHL_secure_cistern_corridor")
-        self.assertEqual(scalar(decision, "days_remove"), "14")
-        self.m.execute(block(decision, "remove_effect"), "SHL")
+        self.m.run("SHL_front_check")
+        self.assertIn("SHL_kyz_front_hold", self.m.missions)
+        self.m.execute(block(decision_definition("SHL_kyz_front_hold"), "timeout_effect"), "SHL")
         self.assertEqual(self.m.ownership["280"], "SHL")
         self.assertEqual(self.country()["SHL_kyz_outcome"], 1)
         self.assertFalse(self.m.wars)
@@ -2344,9 +2605,9 @@ class SouthernCampaignTests(unittest.TestCase):
         self.country()["SHL_keizan_state"] = 5
         self.m.run("SHL_start_kyz_war")
         self.m.control["280"] = "SHL"
-        decision = decision_definition("SHL_secure_cistern_corridor")
-        self.assertTrue(self.m.matches(block(decision, "cancel_trigger"), "SHL"))
-        self.m.execute(block(decision, "remove_effect"), "SHL")
+        self.m.run("SHL_front_check")
+        self.assertNotIn("SHL_kyz_front_hold", self.m.missions)
+        self.m.execute(block(decision_definition("SHL_kyz_front_hold"), "timeout_effect"), "SHL")
         self.assertEqual(self.m.ownership["280"], "KYZ")
         self.assertNotIn("SHL_kyz_outcome", self.country())
 
@@ -2859,7 +3120,8 @@ class EarlyCampaignTests(unittest.TestCase):
         self.assertEqual((self.country()["SHL_unrest"], self.country()["SHL_house_pressure"]), before)
         self.country().update({"SHL_project_stage": 0, "SHL_political_course": 5})
         self.m.run("SHL_update_tensions")
-        self.assertEqual(self.country()["SHL_house_pressure"], before[1])
+        # The commune has no crests: the derived pressure reads zero.
+        self.assertEqual(self.country()["SHL_house_pressure"], 0)
 
     def test_careful_shift_reduces_unrest_despite_unregistered_quarters(self):
         self.m.ideas.add("SHL_unregistered_quarters")
@@ -2882,10 +3144,12 @@ class EarlyCampaignTests(unittest.TestCase):
                 self.assertEqual(self.m.variables["287"]["SHL_furnace_owner"], 0)
 
     def test_ratification_applies_one_course_drift_and_preserves_the_selected_platform(self):
+        # Houses at 100 absorb part of the house course's gain; the city and
+        # the directorate keep Arbin (+15) and Darban (+20) on their side.
         for focus, effect, expected in (
-            ("SHL_new_house", "SHL_commit_house_course", 11),
-            ("SHL_open_conclave", "SHL_commit_city_course", 46),
-            ("SHL_nur_directorate", "SHL_commit_state_course", 51),
+            ("SHL_new_house", "SHL_commit_house_course", 12),
+            ("SHL_open_conclave", "SHL_commit_city_course", 46 - 15 / 9),
+            ("SHL_nur_directorate", "SHL_commit_state_course", 51 - 20 / 9),
         ):
             with self.subTest(focus=focus):
                 self.setUp()
@@ -2893,7 +3157,7 @@ class EarlyCampaignTests(unittest.TestCase):
                 self.m.run("SHL_update_tensions")
                 self.m.run(effect)
                 self.m.run("SHL_update_tensions")
-                self.assertEqual(self.country()["SHL_house_pressure"], expected)
+                self.assertAlmostEqual(self.country()["SHL_house_pressure"], expected)
 
     def test_crisis_choices_are_available_immediately_and_settle_paid_orders_once(self):
         for kind, crisis, decision, event_id, course in (
@@ -3038,7 +3302,8 @@ class EarlyCampaignTests(unittest.TestCase):
 class DeliveryAccountingTests(unittest.TestCase):
     def setUp(self):
         ObligationAccountingTests.setUp(self)
-        self.c.update({"SHL_unrest": 50, "SHL_house_pressure": 50})
+        self.c["SHL_unrest"] = 50
+        seat_houses(self.m, 50)
 
     def assign(self, site, recipient):
         self.c.update({"SHL_selected_furnace": site, "SHL_assignment": recipient})
@@ -3075,7 +3340,10 @@ class DeliveryAccountingTests(unittest.TestCase):
                         quarters = (6, 9, 3) if course in (2, 5) else (4, 6, 2)
                         crests = (6, 9, 3) if course in (1, 4) else (4, 6, 2)
                         self.assertEqual(self.c["SHL_unrest"], 50 - (quarters[shift] if effective == 2 else 0))
-                        self.assertEqual(self.c["SHL_house_pressure"], 50 - (crests[shift] if effective == 3 else 0))
+                        # The site's house: three times the crest figure, export +1,
+                        # arsenal -1, quarters -2, overtime -2, careful +1.
+                        rate = (1, -1, -2, 3 * crests[shift])[effective] + (0, -2, 1)[shift]
+                        self.assertEqual(self.m.variables["287"]["SHL_house_loyalty"], 50 + rate)
                         self.assertEqual(self.m.variables["287"]["SHL_furnace_stock"], 2 - (2 if shift == 1 else 1))
 
     def test_stopped_occupied_lost_and_unsupplied_sites_deliver_nothing(self):
@@ -3096,7 +3364,9 @@ class DeliveryAccountingTests(unittest.TestCase):
                     self.m.run("SHL_refresh_furnaces")
                     self.assertEqual(self.m.equipment[("SHL", "infantry_equipment")], 0)
                     self.assertEqual(self.c["SHL_unrest"], 50)
-                    self.assertEqual(self.c["SHL_house_pressure"], 50)
+                    # A cold or lost furnace keeps its house; occupation costs 5, idleness 3.
+                    self.assertEqual(self.m.variables["287"]["SHL_house_loyalty"],
+                                     {"stopped": 50, "occupied": 45, "lost": 50, "stock": 47}[failure])
                     self.assertEqual(self.c["SHL_crest_support"], 0)
 
     def test_tenth_assignment_is_independent_of_eighth_furnace(self):
@@ -3110,12 +3380,14 @@ class DeliveryAccountingTests(unittest.TestCase):
         self.assertEqual(self.c["SHL_unrest"], 46)
         self.assertEqual(self.c["SHL_last_cycle_income"], 480)
 
-    def test_support_expires_without_production_and_cannot_restore_ownership(self):
+    def test_loyal_votes_follow_house_loyalty_and_cannot_restore_ownership(self):
         self.c["SHL_shift_policy"] = 1
         for site in range(1, 6):
             self.assign(site, 3)
         self.m.run("SHL_produce_period")
         self.m.run("SHL_refresh_furnaces")
+        # 18 crest loyalty minus 2 for overtime lifts five houses to 66.
+        self.assertEqual(self.m.variables["287"]["SHL_house_loyalty"], 66)
         self.assertEqual(self.c["SHL_crest_support"], 5)
         self.assertTrue(self.m.matches(self.m.triggers["SHL_has_delivery_majority"], "SHL"))
         self.m.variables["287"]["SHL_furnace_owner"] = 2
@@ -3123,9 +3395,12 @@ class DeliveryAccountingTests(unittest.TestCase):
         self.assertEqual(self.c["SHL_crest_support"], 4)
         self.assertEqual(self.c["SHL_house_votes"], 8)
         self.assertFalse(self.m.matches(self.m.triggers["SHL_has_delivery_majority"], "SHL"))
+        # Loyalty outlasts the cycle; a house without its furnace gets no vote back.
+        for site in range(2, 6):
+            self.assign(site, 0)
         self.m.run("SHL_produce_period")
         self.m.run("SHL_refresh_furnaces")
-        self.assertEqual(self.c["SHL_crest_support"], 0)
+        self.assertEqual(self.c["SHL_crest_support"], 4)
         self.assertEqual(self.m.variables["287"]["SHL_furnace_owner"], 2)
 
     def test_order_locks_assignment_and_has_no_duplicate_ordinary_delivery(self):
@@ -3203,10 +3478,12 @@ class DeliveryAccountingTests(unittest.TestCase):
                     self.assertEqual(self.m.variables[str(state)], before[str(state)])
                 self.assertEqual(self.c["ADISCORD_economy_treasury"], 75)
                 self.m.run("SHL_produce_period")
+                self.m.run("SHL_refresh_house_pressure")
                 actual = (self.c["ADISCORD_economy_treasury"] - 75,
                           self.m.equipment[("SHL", "infantry_equipment")],
                           50 - self.c["SHL_unrest"], 50 - self.c["SHL_house_pressure"])
-                self.assertEqual(actual, forecast)
+                self.assertEqual(actual[:3], forecast[:3])
+                self.assertAlmostEqual(actual[3], forecast[3])
                 self.assertEqual(self.c["SHL_selected_period_income"], self.c["SHL_selected_delivery_cash"])
 
     def test_save_load_preserves_assignments_and_discounted_receipt(self):
@@ -3268,7 +3545,9 @@ class DeliveryAccountingTests(unittest.TestCase):
         self.assign(1, 3)
         self.m.run("SHL_produce_period")
         self.m.run("SHL_refresh_furnaces")
-        self.assertEqual(self.c["SHL_house_pressure"], 46)
+        # The compensated house gains 12 and the eight export houses 1 each.
+        self.assertEqual(self.m.variables["287"]["SHL_house_loyalty"], 62)
+        self.assertAlmostEqual(self.c["SHL_house_pressure"], 50 - 20 / 9)
         self.assertEqual(self.c["SHL_crest_support"], 0)
         self.assertEqual(self.m.variables["287"]["SHL_furnace_owner"], 1)
         self.m.run("SHL_commit_commune_course")
@@ -3285,7 +3564,7 @@ class DeliveryAccountingTests(unittest.TestCase):
                 self.setUp()
                 if supported:
                     for site in range(1, 6):
-                        self.assign(site, 3)
+                        self.m.variables[str(286 + site)]["SHL_house_loyalty"] = 55.0
                 self.m.run("SHL_produce_period")
                 self.m.run("SHL_refresh_furnaces")
                 self.m.flags["SHL"].add("SHL_conspiracy_active")
@@ -3505,12 +3784,12 @@ class ConclaveBalanceTests(unittest.TestCase):
                 self.assertAlmostEqual(self.balance(), expected)
 
     def test_ratification_finals_require_their_balance_range(self):
-        for focus, tooltip, ranges, passing, failing in (
-            ("SHL_admit_tenth_house", "SHL_ratify_needs_crests_tt",
+        for focus, platform, tooltip, ranges, passing, failing in (
+            ("SHL_admit_tenth_house", "SHL_house_compromise", "SHL_ratify_needs_crests_tt",
              {"SHL_balance_crests_influence", "SHL_balance_crests_dominance"}, (-0.60, -0.30), (0.0, 0.30)),
-            ("SHL_rights_without_fire", "SHL_ratify_needs_quarters_tt",
+            ("SHL_rights_without_fire", "SHL_city_charters", "SHL_ratify_needs_quarters_tt",
              {"SHL_balance_quarters_influence", "SHL_balance_quarters_dominance"}, (0.30, 0.60), (0.0, -0.30)),
-            ("SHL_state_furnaces", "SHL_ratify_needs_equilibrium_tt",
+            ("SHL_state_furnaces", "SHL_common_dispatch", "SHL_ratify_needs_equilibrium_tt",
              {"SHL_balance_equilibrium"}, (0.0, 0.05), (-0.30, 0.30)),
         ):
             with self.subTest(focus=focus):
@@ -3519,6 +3798,11 @@ class ConclaveBalanceTests(unittest.TestCase):
                 found = {scalar(e.value, "range") for e in walk_entries(gate) if e.key == "is_power_balance_in_range"}
                 self.assertEqual(found, ranges)
                 self.country()["SHL_city_support"] = 40
+                # The platform step is a condition, not a drawn parent.
+                self.m.focuses.discard(platform)
+                self.m.power_balance[BALANCE] = passing[0]
+                self.assertFalse(self.m.matches(available, "SHL"), platform)
+                self.m.focuses.add(platform)
                 for value in passing:
                     self.m.power_balance[BALANCE] = value
                     self.assertTrue(self.m.matches(available, "SHL"), value)
@@ -3689,22 +3973,34 @@ class CourseTreeStructureTests(unittest.TestCase):
             self.assertEqual(scalar(shared[identifier], "y"), "0", identifier)
             self.assertGreaterEqual(int(scalar(shared[identifier], "x")), 33, identifier)
 
-    def test_course_focuses_keep_operability_without_redundant_course_gates(self):
+    def test_course_focuses_keep_operability_and_cancel_after_a_course_switch(self):
         main = tree_focuses("main")
         commits = set(COURSE_COMMIT_FOCUSES.values())
         for commit in commits:
             exclusive = {e.value for e in block(main[commit], "mutually_exclusive")}
             self.assertEqual(exclusive, commits - {commit}, commit)
         for name, course in COURSE_TREES.items():
+            own_course = ("SHL_political_course", str(course), "equals")
             with self.subTest(tree=name):
                 roots = []
                 for identifier, focus in tree_focuses(name).items():
                     available = block(focus, "available")
                     self.assertIn(("SHL_country_operable", "yes"), [(e.key, e.value) for e in available], identifier)
-                    self.assertFalse(any(
-                        e.key == "check_variable" and scalar(e.value, "var") == "SHL_political_course"
+                    # The only course check is hidden: with cancel_if_invalid it
+                    # cancels a focus in progress when a crisis switches the course.
+                    checks = [
+                        (scalar(e.value, "var"), scalar(e.value, "value"), scalar(e.value, "compare"))
                         for e in walk_entries(available)
-                    ), identifier)
+                        if e.key == "check_variable" and scalar(e.value, "var") == "SHL_political_course"
+                    ]
+                    self.assertEqual(checks, [own_course], identifier)
+                    hidden = [
+                        e.value for e in available
+                        if e.key == "hidden_trigger" and [c.key for c in e.value] == ["check_variable"]
+                        and scalar(block(e.value, "check_variable"), "var") == "SHL_political_course"
+                    ]
+                    self.assertEqual(len(hidden), 1, identifier)
+                    self.assertEqual(scalar(focus, "cancel_if_invalid"), "yes", identifier)
                     self.assertNotIn("SHL_regency_path", repr(focus), identifier)
                     self.assertNotIn("SHL_commune_path", repr(focus), identifier)
                     parents = [
@@ -3730,6 +4026,184 @@ class CourseTreeStructureTests(unittest.TestCase):
             for identifier in tree_focuses(name):
                 self.assertIn(f"\t\tid = {identifier}\n", native)
 
+    def test_course_sections_open_only_for_the_ratified_course(self):
+        main = tree_focuses("main")
+        for commit in COURSE_COMMIT_FOCUSES.values():
+            self.assertEqual(prerequisite_blocks(main[commit]), [{"SHL_workers_charter"}], commit)
+        for suffix in COURSE_COMMITS:
+            guard = block(self.m.effects[f"SHL_commit_{suffix}_course"], "if")
+            self.assertIn("mark_focus_tree_layout_dirty", [e.key for e in walk_entries(guard)], suffix)
+        sections = {name: set(tree_focuses(name)) for name in COURSE_TREES}
+        epilogues = {
+            name: {
+                identifier for identifier, focus in tree_focuses(name).items()
+                if ("has_global_flag", HEGEMON_FLAG) in [(e.key, e.value) for e in block(focus, "allow_branch")]
+            }
+            for name in COURSE_TREES
+        }
+        platforms = {"SHL_new_house": 1, "SHL_open_conclave": 2, "SHL_nur_directorate": 3}
+        for course, hegemon in COURSE_STATES:
+            with self.subTest(course=course, hegemon=hegemon):
+                drawn = set(visible_focuses(course, hegemon, completed=set()))
+                shown = [name for name, focuses in sections.items() if focuses & drawn]
+                expected = [name for name, value in COURSE_TREES.items() if value == course]
+                self.assertEqual(shown, expected)
+                for name in shown:
+                    self.assertEqual(sections[name] - drawn, set() if hegemon else epilogues[name])
+                self.assertEqual("SHL_south_crown_of_the_south" in drawn, hegemon)
+                # A commit stays drawn while its course is current or still reachable.
+                for tree, commit in COURSE_COMMIT_FOCUSES.items():
+                    if tree == "regency":
+                        reachable = course != 5
+                    elif tree == "commune":
+                        reachable = course != 4
+                    else:
+                        reachable = course in (0, COURSE_TREES[tree])
+                    self.assertEqual(commit in drawn, reachable, commit)
+                # Unchosen platform chains hide after ratification; a taken one stays.
+                for root, value in platforms.items():
+                    self.assertEqual(root in drawn, course in (0, value), root)
+                    self.assertIn(root, visible_focuses(course, hegemon, completed={root}))
+
+    def test_main_trunk_branches_offer_exclusive_choices_that_rejoin(self):
+        main = tree_focuses("main")
+        for first, second in MAIN_PAIRS:
+            with self.subTest(pair=first):
+                self.assertEqual({e.value for e in block(main[first], "mutually_exclusive")}, {second})
+                self.assertEqual({e.value for e in block(main[second], "mutually_exclusive")}, {first})
+        for rejoin, options in MAIN_REJOINS.items():
+            self.assertEqual(prerequisite_blocks(main[rejoin]), [options], rejoin)
+        # The tenth-furnace trunk forms two diamonds instead of one straight line.
+        self.assertEqual(prerequisite_blocks(main["SHL_right_to_land"]),
+                         [{"SHL_common_industrial_account"}, {"SHL_engineer_society"}])
+        self.assertEqual(prerequisite_blocks(main["SHL_tenth_voice"]),
+                         [{"SHL_build_tenth_complex"}, {"SHL_first_pour_focus"}])
+        self.assertEqual(prerequisite_blocks(main["SHL_cannon_foundries"]),
+                         [{"SHL_furnace_arsenals"}, {"SHL_industrial_evacuation"}])
+
+    def test_south_readiness_survives_every_main_choice(self):
+        triggers = {e.key: e.value for e in parse_clausewitz(SOUTH_TRIGGER_PATH.read_text(encoding="utf-8"))}
+        readiness = triggers["ADISCORD_south_shl_focus_ready"]
+        self.assertEqual([e.key for e in readiness], ["has_completed_focus"] * 3)
+        ready = {e.value for e in readiness}
+        self.assertEqual(ready, {"SHL_conclave_rules", "SHL_metal_market", "SHL_conclave_army"})
+        main = tree_focuses("main")
+        for choice in product((0, 1), repeat=len(MAIN_PAIRS)):
+            blocked = {pair[1 - side] for pair, side in zip(MAIN_PAIRS, choice)}
+            with self.subTest(blocked=sorted(blocked)):
+                self.assertEqual(ready - reachable_focuses(main, blocked), set())
+
+    def test_main_section_has_no_straight_chains_longer_than_two(self):
+        main = tree_focuses("main")
+        children = defaultdict(list)
+        single_parent = {}
+        for identifier, focus in main.items():
+            groups = prerequisite_blocks(focus)
+            for group in groups:
+                for parent in group:
+                    children[parent].append(identifier)
+            if len(groups) == 1 and len(groups[0]) == 1:
+                single_parent[identifier] = next(iter(groups[0]))
+        for identifier in main:
+            chain = [identifier]
+            while (
+                chain[-1] in single_parent
+                and single_parent[chain[-1]] in main
+                and children[single_parent[chain[-1]]] == [chain[-1]]
+            ):
+                chain.append(single_parent[chain[-1]])
+            with self.subTest(focus=identifier):
+                self.assertLessEqual(len(chain), 2, " < ".join(chain))
+        # Horizontal neighbours drawn together keep one free column in every course state.
+        for course, hegemon in COURSE_STATES:
+            assert_free_cells(self, visible_focuses(course, hegemon), (course, hegemon))
+
+    def test_neighbour_questions_are_bypassed_once_settled(self):
+        main = tree_focuses("main")
+        disputes = (
+            (("SHL_water_question", "SHL_qanat_guard"), "SHL_water_crisis", "SHL_kyz_brotherhood"),
+            (("SHL_veyr_duties", "SHL_veyr_ultimatum"), "SHL_veyr_crisis", "SHL_veyr_partner"),
+        )
+        for index, (focuses, variable, flag) in enumerate(disputes):
+            _, other_variable, other_flag = disputes[1 - index]
+            for identifier in focuses:
+                bypass = block(main[identifier], "bypass")
+                self.assertTrue(bypass, identifier)
+                for value in range(6):
+                    with self.subTest(focus=identifier, value=value):
+                        self.setUp()
+                        self.m.variables["SHL"][variable] = value
+                        self.assertEqual(self.m.matches(bypass, "SHL"), value >= 2)
+                self.setUp()
+                self.m.flags["SHL"].add(flag)
+                self.assertTrue(self.m.matches(bypass, "SHL"), identifier)
+                # Settling the other neighbour does not close this question.
+                self.setUp()
+                self.m.variables["SHL"][other_variable] = 5
+                self.m.flags["SHL"].add(other_flag)
+                self.assertFalse(self.m.matches(bypass, "SHL"), identifier)
+        self.assertEqual(prerequisite_blocks(main["SHL_southern_horizon"]),
+                         [{"SHL_peace_has_a_price"}, {"SHL_qanat_guard", "SHL_veyr_ultimatum"}])
+
+    def test_border_war_focus_layout_and_previews(self):
+        main = tree_focuses("main")
+        for identifier, cell in BORDER_WAR_LAYOUT.items():
+            focus = main[identifier]
+            self.assertEqual((int(scalar(focus, "x")), int(scalar(focus, "y"))), cell, identifier)
+            self.assertIn(("SHL_country_operable", "yes"), [(e.key, e.value) for e in block(focus, "available")], identifier)
+        self.assertEqual(prerequisite_blocks(main["SHL_border_foundries"]),
+                         [{"SHL_qanat_guard", "SHL_veyr_ultimatum", "SHL_no_more_rations"}])
+        for first, second in (("SHL_siege_founders", "SHL_furnace_garrisons"), ("SHL_furnace_garrisons", "SHL_siege_founders")):
+            self.assertEqual({e.value for e in block(main[first], "mutually_exclusive")}, {second})
+            self.assertEqual(prerequisite_blocks(main[first]), [{"SHL_border_foundries"}])
+        self.assertEqual(prerequisite_blocks(main["SHL_border_settlement_office"]),
+                         [{"SHL_siege_founders", "SHL_furnace_garrisons"}])
+        for identifier in ("SHL_border_foundries", "SHL_siege_founders", "SHL_furnace_garrisons"):
+            self.assertEqual([(e.key, e.value) for e in block(main[identifier], "bypass")],
+                             [("SHL_limited_disputes_over", "yes")], identifier)
+        self.assertFalse(block(main["SHL_border_settlement_office"], "bypass"))
+        reward = block(main["SHL_border_foundries"], "completion_reward")
+        self.assertIn(("unlock_decision_tooltip", "SHL_front_battery"), [(e.key, e.value) for e in reward])
+        self.assertEqual(scalar(block(decision_definition("SHL_front_battery"), "visible"), "has_completed_focus"),
+                         "SHL_border_foundries")
+        # Each dummy preview shows exactly the SHL_bw_* deltas its reward adds.
+        ideas = {}
+        source = (ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt").read_text(encoding="utf-8-sig")
+        for category in block(parse_clausewitz(source), "ideas"):
+            ideas.update({e.key: e.value for e in category.value if isinstance(e.value, list)})
+        modifier_of = {
+            "SHL_bw_army_attack": "army_attack_factor", "SHL_bw_breakthrough": "breakthrough_factor",
+            "SHL_bw_army_defence": "army_defence_factor", "SHL_bw_max_dig_in": "max_dig_in",
+        }
+        for identifier, idea in (("SHL_siege_founders", "SHL_bw_siege_founders_idea"),
+                                 ("SHL_furnace_garrisons", "SHL_bw_furnace_garrisons_idea")):
+            with self.subTest(focus=identifier):
+                reward = block(main[identifier], "completion_reward")
+                swap = scalar(block(block(reward, "effect_tooltip"), "swap_ideas"), "add_idea")
+                self.assertEqual(swap, idea)
+                deltas = {
+                    modifier_of[scalar(e.value, "var")]: float(scalar(e.value, "value"))
+                    for e in walk_entries(reward) if e.key == "add_to_variable"
+                }
+                preview = {e.key: float(e.value) for e in block(ideas[idea], "modifier")}
+                self.assertEqual(preview, deltas)
+                self.assertIn(("SHL_refresh_border_war", "yes"), [(e.key, e.value) for e in walk_entries(reward)])
+
+    def test_house_ledgers_is_a_census_leaf_that_opens_the_favours(self):
+        focus = tree_focuses("main")["SHL_house_ledgers"]
+        # Row 2 holds the heralds' table at x 9 and the reserve at x 13.
+        self.assertEqual((int(scalar(focus, "x")), int(scalar(focus, "y"))), (11, 2))
+        self.assertEqual(prerequisite_blocks(focus), [{"SHL_census_of_nine"}])
+        self.assertFalse(block(focus, "mutually_exclusive"))
+        reward = [(e.key, e.value) for e in walk_entries(block(focus, "completion_reward"))]
+        self.assertIn(("custom_effect_tooltip", "SHL_house_ledgers_tt"), reward)
+        self.assertIn(("SHL_change_all_loyalty", "yes"), reward)
+        children = [name for name, other in whole_tree_focuses().items()
+                    if any("SHL_house_ledgers" in group for group in prerequisite_blocks(other))]
+        self.assertEqual(children, [])
+        plans = {e.key: e.value for e in parse_clausewitz((ROOT / "common/ai_strategy_plans/ADISCORD_SHL_plans.txt").read_text(encoding="utf-8"))}
+        self.assertIn("SHL_house_ledgers", [e.value for e in block(plans["SHL_furnaces_plan"], "ai_national_focuses")])
+
     def test_ai_plans_name_existing_focuses_and_one_alternative_per_exclusive_pair(self):
         definitions = all_focus_definitions()
         exclusive = {
@@ -3741,7 +4215,7 @@ class CourseTreeStructureTests(unittest.TestCase):
         self.assertEqual(sorted(plans), sorted([
             "SHL_furnaces_plan", "SHL_prepare_houses_plan", "SHL_prepare_cities_plan", "SHL_prepare_directorate_plan",
             "SHL_houses_plan", "SHL_cities_plan", "SHL_directorate_plan", "SHL_regency_plan", "SHL_commune_plan",
-            "SHL_south_war_plan",
+            "SHL_south_war_plan", "SHL_seal_lease_plan", "SHL_seal_cold_fire_plan",
         ]))
         for name, plan in plans.items():
             with self.subTest(plan=name):
@@ -3769,19 +4243,24 @@ class CourseTreeStructureTests(unittest.TestCase):
             # and every focus reachable only through an omitted one.
             omitted = {f"SHL_{tree}_prog_ending_a", f"SHL_{tree}_prog_ending_b"}
             omitted |= {name for name in focuses if exclusive.get(name, set()) & queue}
-            changed = True
-            while changed:
-                changed = False
-                for name, focus in focuses.items():
-                    if name in omitted or name in queue:
-                        continue
-                    blocks = [{e.value for e in b.value} for b in focus if b.key == "prerequisite"]
-                    if blocks and any(options <= omitted for options in blocks):
-                        omitted.add(name)
-                        changed = True
+            omitted = omitted_closure(focuses, queue, omitted)
             self.assertEqual(set(focuses) - queue - omitted, set(), tree)
             self.assertTrue(set(SOUTHERN_SHARED) <= queue, tree)
             self.assertFalse(set(war_tree_focuses()) & queue, tree)
+        # The industrial programme covers the main section except what the
+        # preparation plans queue (preliminary courses, mandates, ratification),
+        # the hidden course entries and the closure of the unchosen alternatives.
+        main = tree_focuses("main")
+        programme = {e.value for e in block(plans["SHL_furnaces_plan"], "ai_national_focuses")}
+        preparation = set()
+        for tree in ("houses", "cities", "directorate"):
+            preparation |= {e.value for e in block(plans[f"SHL_prepare_{tree}_plan"], "ai_national_focuses")}
+        self.assertFalse(programme & preparation)
+        omitted = preparation | set(COURSE_COMMIT_FOCUSES.values())
+        omitted |= {name for name in main if exclusive.get(name, set()) & programme}
+        omitted = omitted_closure(main, programme, omitted)
+        self.assertEqual(set(main) - programme - omitted, set())
+        self.assertNotIn("SHL_metal_brokers", programme)
         war_queue = {e.value for e in block(plans["SHL_south_war_plan"], "ai_national_focuses")}
         self.assertTrue(set(SOUTHERN_WAR_FRONT) <= war_queue)
         self.assertEqual(war_queue - set(war_tree_focuses()), set())
@@ -3795,6 +4274,275 @@ class CourseTreeStructureTests(unittest.TestCase):
             self.assertEqual(found, ranges, tree)
             self.assertTrue(found <= set(balance_ranges(BALANCE)), tree)
         self.assertNotIn("SHL_political_course value = 0", repr(plans["SHL_houses_plan"]))
+
+
+# Defeat chapter "Under the namestnik's seal": cell and prerequisite blocks of
+# each focus (blocks are ANDed, the alternatives inside a block are ORed).
+DEFEAT_LAYOUT = {
+    "SHL_seal_conclave": ((84, 0), []),
+    "SHL_seal_count_the_cold": ((82, 1), [{"SHL_seal_conclave"}]),
+    "SHL_seal_houses_in_mourning": ((86, 1), [{"SHL_seal_conclave"}]),
+    "SHL_redeem_furnaces_of_the_lease": ((79, 2), [{"SHL_seal_count_the_cold"}, {"SHL_seal_houses_in_mourning"}]),
+    "SHL_cold_fire": ((89, 2), [{"SHL_seal_count_the_cold"}, {"SHL_seal_houses_in_mourning"}]),
+    "SHL_redeem_lease_ledger": ((77, 3), [{"SHL_redeem_furnaces_of_the_lease"}]),
+    "SHL_redeem_namestnik_audience": ((81, 3), [{"SHL_redeem_furnaces_of_the_lease"}]),
+    "SHL_redeem_by_coin": ((75, 4), [{"SHL_redeem_lease_ledger"}]),
+    "SHL_redeem_by_service": ((79, 4), [{"SHL_redeem_lease_ledger", "SHL_redeem_namestnik_audience"}]),
+    "SHL_redeem_quiet_quarters": ((83, 4), [{"SHL_redeem_namestnik_audience"}]),
+    "SHL_redeem_guarantor_houses": ((77, 5), [{"SHL_redeem_by_coin", "SHL_redeem_by_service"}]),
+    "SHL_redeem_supervised_repairs": ((81, 5), [{"SHL_redeem_by_service", "SHL_redeem_quiet_quarters"}]),
+    "SHL_redeem_charter": ((79, 6), [{"SHL_redeem_guarantor_houses"}, {"SHL_redeem_supervised_repairs"}]),
+    "SHL_cold_ash_cells": ((87, 3), [{"SHL_cold_fire"}]),
+    "SHL_cold_quarter_couriers": ((91, 3), [{"SHL_cold_fire"}]),
+    "SHL_cold_hidden_armouries": ((85, 4), [{"SHL_cold_ash_cells"}]),
+    "SHL_cold_letters_to_the_sands": ((89, 4), [{"SHL_cold_ash_cells", "SHL_cold_quarter_couriers"}]),
+    "SHL_cold_shifts": ((93, 4), [{"SHL_cold_quarter_couriers"}]),
+    "SHL_cold_desert_drill": ((87, 5), [{"SHL_cold_hidden_armouries", "SHL_cold_letters_to_the_sands"}]),
+    "SHL_cold_raid_martyrs": ((91, 5), [{"SHL_cold_letters_to_the_sands", "SHL_cold_shifts"}]),
+    "SHL_cold_night_of_fire": ((89, 6), [{"SHL_cold_desert_drill"}, {"SHL_cold_raid_martyrs"}]),
+    "SHL_cold_fire_without_masters": ((87, 7), [{"SHL_cold_night_of_fire"}]),
+    "SHL_cold_embers_under_seal": ((91, 7), [{"SHL_cold_night_of_fire"}]),
+}
+DEFEAT_PAIRS = (
+    ("SHL_redeem_furnaces_of_the_lease", "SHL_cold_fire"),
+    ("SHL_redeem_by_coin", "SHL_redeem_by_service"),
+    ("SHL_cold_hidden_armouries", "SHL_cold_letters_to_the_sands"),
+    ("SHL_cold_fire_without_masters", "SHL_cold_embers_under_seal"),
+)
+DEFEAT_ENDINGS = {"SHL_redeem_charter", "SHL_cold_fire_without_masters", "SHL_cold_embers_under_seal"}
+# Effects, unlocks and tooltips each reward must carry; the scripts behind
+# the SHL_seal_*/SHL_cold_* names belong to the defeat-chapter effects.
+DEFEAT_REWARDS = {
+    "SHL_seal_conclave": {"add_political_power", "add_stability", "SHL_repair_worst_site", "SHL_seal_terms_tt"},
+    "SHL_seal_count_the_cold": {"add_political_power", "SHL_seal_stock_free_sites", "SHL_unrest"},
+    "SHL_seal_houses_in_mourning": {"add_manpower", "army_experience", "ADISCORD_SHL.201"},
+    "SHL_redeem_furnaces_of_the_lease": {"add_political_power", "SHL_receive_250"},
+    "SHL_cold_fire": {"add_command_power", "army_experience", "SHL_underground_heat", "SHL_cold_heat_opened_tt"},
+    "SHL_redeem_lease_ledger": {"SHL_seal_buy_back_furnace", "add_political_power"},
+    "SHL_redeem_namestnik_audience": {"add_political_power", "SHL_ensure_levy_template", "SHL_create_levy"},
+    "SHL_redeem_by_coin": {"SHL_receive_250", "SHL_seal_refresh_terms", "SHL_seal_coin_price_tt"},
+    "SHL_redeem_by_service": {"SHL_seal_redeem_by_service", "SHL_repair_worst_site"},
+    "SHL_redeem_quiet_quarters": {"add_building_construction", "SHL_unrest"},
+    "SHL_redeem_guarantor_houses": {"SHL_seal_house_bond", "SHL_change_all_loyalty"},
+    "SHL_redeem_supervised_repairs": {"add_building_construction", "SHL_seal_maintain_leased_sites"},
+    "SHL_redeem_charter": {"SHL_redeemed_conclave", "add_political_power", "add_building_construction", "ADISCORD_SHL_news.11"},
+    "SHL_cold_ash_cells": {"SHL_cold_forge", "SHL_cold_add_heat"},
+    "SHL_cold_quarter_couriers": {"add_political_power", "SHL_cold_add_heat", "SHL_unrest"},
+    "SHL_cold_hidden_armouries": {"SHL_cold_hidden_cache", "SHL_cold_cache_cells", "SHL_cold_cache_rifles"},
+    "SHL_cold_letters_to_the_sands": {"SHL_cold_send_pledges", "SHL_cold_courier_to_sands", "add_political_power"},
+    "SHL_cold_shifts": {"SHL_cold_mark_shifts", "SHL_cold_add_heat"},
+    "SHL_cold_desert_drill": {"army_experience", "SHL_cold_cache_cells"},
+    "SHL_cold_raid_martyrs": {"add_political_power", "SHL_cold_add_heat", "SHL_cold_raid_guard_tt"},
+    "SHL_cold_night_of_fire": {"SHL_cold_raise_rising", "SHL_cold_rising_tt"},
+    "SHL_cold_fire_without_masters": {"SHL_cold_fire_without_masters_idea", "add_political_power", "add_building_construction"},
+    "SHL_cold_embers_under_seal": {"SHL_seal_buy_back_furnace", "add_political_power", "add_manpower"},
+}
+# Aggregate variable -> modifier of the two route spirits.
+DEFEAT_MODIFIERS = {
+    "SHL_rdm_stability": "stability_factor", "SHL_rdm_pp": "political_power_gain",
+    "SHL_rdm_war_support": "war_support_factor", "SHL_rdm_consumer_goods": "consumer_goods_factor",
+    "SHL_rdm_efficiency": "production_factory_efficiency_gain_factor", "SHL_rdm_trade": "trade_opinion_factor",
+    "SHL_rdm_max_efficiency": "production_factory_max_efficiency_factor",
+    "SHL_rdm_construction": "production_speed_buildings_factor",
+    "SHL_cld_stability": "stability_factor", "SHL_cld_war_support": "war_support_factor",
+    "SHL_cld_org": "army_org_factor", "SHL_cld_conscription": "conscription_factor",
+    "SHL_cld_defence": "army_defence_factor", "SHL_cld_attack": "army_attack_factor",
+    "SHL_cld_dig_in": "max_dig_in",
+}
+
+
+def defeat_preview_idea(identifier):
+    """Preview idea of a defeat-chapter focus: the route prefix shortened, plus _idea."""
+    for prefix, short in (("SHL_redeem_", "SHL_rdm_"), ("SHL_cold_", "SHL_cld_")):
+        if identifier.startswith(prefix):
+            return short + identifier[len(prefix):] + "_idea"
+    return None
+
+
+def straight_chains(focuses):
+    """Chains of focuses whose single parent has no other child, longest first."""
+    children = defaultdict(list)
+    single_parent = {}
+    for identifier, focus in focuses.items():
+        groups = prerequisite_blocks(focus)
+        for group in groups:
+            for parent in group:
+                children[parent].append(identifier)
+        if len(groups) == 1 and len(groups[0]) == 1:
+            single_parent[identifier] = next(iter(groups[0]))
+    chains = []
+    for identifier in focuses:
+        chain = [identifier]
+        while (
+            chain[-1] in single_parent
+            and single_parent[chain[-1]] in focuses
+            and children[single_parent[chain[-1]]] == [chain[-1]]
+        ):
+            chain.append(single_parent[chain[-1]])
+        chains.append(chain)
+    return sorted(chains, key=len, reverse=True)
+
+
+class DefeatChapterTests(unittest.TestCase):
+    """The defeat chapter section of SHL_focus: layout, routes, gating and rewards."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.focuses = tree_focuses("defeated")
+
+    def test_layout_and_prerequisites_match_the_chapter_grid(self):
+        self.assertEqual(set(self.focuses), set(DEFEAT_LAYOUT))
+        for identifier, (cell, parents) in DEFEAT_LAYOUT.items():
+            with self.subTest(focus=identifier):
+                focus = self.focuses[identifier]
+                self.assertEqual((int(scalar(focus, "x")), int(scalar(focus, "y"))), cell)
+                self.assertEqual(prerequisite_blocks(focus), parents)
+        # The chapter keeps to its own block and never shares a row neighbour
+        # with another section.
+        others = {
+            (int(scalar(f, "x")), int(scalar(f, "y")))
+            for identifier, f in whole_tree_focuses().items() if identifier not in self.focuses
+        }
+        for (x, y), _ in DEFEAT_LAYOUT.values():
+            self.assertTrue(75 <= x <= 93 and 0 <= y <= 7, (x, y))
+            self.assertFalse({(x - 1, y), (x, y), (x + 1, y)} & others, (x, y))
+        cells = [cell for cell, _ in DEFEAT_LAYOUT.values()]
+        for row in {y for _, y in cells}:
+            columns = sorted(x for x, y in cells if y == row)
+            self.assertTrue(all(b - a >= 2 for a, b in zip(columns, columns[1:])), (row, columns))
+
+    def test_exclusive_pairs_each_lead_to_an_ending(self):
+        exclusive = {
+            identifier: {e.value for e in block(focus, "mutually_exclusive")}
+            for identifier, focus in self.focuses.items()
+        }
+        expected = defaultdict(set)
+        for first, second in DEFEAT_PAIRS:
+            expected[first].add(second)
+            expected[second].add(first)
+        for identifier in self.focuses:
+            self.assertEqual(exclusive[identifier], expected.get(identifier, set()), identifier)
+        lease = {name for name in self.focuses if name.startswith("SHL_redeem_")}
+        cold = {name for name in self.focuses if name.startswith("SHL_cold_")}
+        for choice in product((0, 1), repeat=len(DEFEAT_PAIRS)):
+            blocked = {pair[1 - side] for pair, side in zip(DEFEAT_PAIRS, choice)}
+            with self.subTest(blocked=sorted(blocked)):
+                done = reachable_focuses(self.focuses, blocked)
+                self.assertTrue(done & DEFEAT_ENDINGS)
+                # Each route reaches its ending without the other route.
+                self.assertFalse(done & lease and done & cold)
+                route = lease if done & lease else cold
+                self.assertEqual(route - blocked - done, set())
+
+    def test_no_straight_chain_is_longer_than_two(self):
+        longest = straight_chains(self.focuses)[0]
+        self.assertLessEqual(len(longest), 2, " < ".join(longest))
+
+    def test_only_the_root_is_gated_and_the_swap_carries_it(self):
+        for identifier, focus in self.focuses.items():
+            with self.subTest(focus=identifier):
+                gate = [(e.key, e.value) for e in block(focus, "allow_branch")]
+                if identifier == "SHL_seal_conclave":
+                    self.assertEqual(gate, [("has_country_flag", "SHL_seal_chapter_open")])
+                else:
+                    self.assertEqual(gate, [])
+                available = [(e.key, e.value) for e in block(focus, "available")]
+                self.assertIn(("SHL_country_operable", "yes"), available)
+                self.assertEqual(scalar(focus, "cancel_if_invalid"), "yes")
+                self.assertTrue(scalar(focus, "icon", "").startswith(("GFX_focus_", "GFX_goal_")))
+        names = ("SHL/main/focuses.txt", "SHL/shared/focuses.txt", "SHL/south_war/focuses.txt")
+        sources = {name: focus_builder.render_source(name) for name in names}
+        self.assertIn("\t\tid = SHL_cold_embers_under_seal\n", sources["SHL/main/focuses.txt"])
+        carried, clauses = focus_builder.swap_plan(sources)
+        self.assertIn("SHL_seal_conclave", carried["SHL/south_war/focuses.txt"])
+        self.assertEqual(clauses["SHL_seal_conclave"], "NOT = { has_focus_tree = SHL_south_war_focus }")
+        clause = focus_builder.source_clauses(sources, clauses)["SHL/main/focuses.txt"]
+        hidden = focus_builder.hide_carried_roots(sources["SHL/main/focuses.txt"], clause)
+        self.assertIn(
+            "allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_country_flag = SHL_seal_chapter_open }",
+            hidden,
+        )
+
+    def test_every_reward_carries_its_effects(self):
+        self.assertEqual(set(DEFEAT_REWARDS), set(self.focuses))
+        for identifier, tokens in DEFEAT_REWARDS.items():
+            with self.subTest(focus=identifier):
+                reward = block(self.focuses[identifier], "completion_reward")
+                found = set()
+                for entry in walk_entries(reward):
+                    found.add(entry.key)
+                    if isinstance(entry.value, str):
+                        found.add(entry.value)
+                self.assertEqual(tokens - found, set())
+        # Endings read the result of the rising, the lease ending the last buy-back.
+        for identifier, (variable, value) in {
+            "SHL_cold_fire_without_masters": ("SHL_cold_rising", "2"),
+            "SHL_cold_embers_under_seal": ("SHL_cold_rising", "3"),
+            "SHL_redeem_charter": ("SHL_seal_leased_count", "0"),
+        }.items():
+            checks = [
+                (scalar(e.value, "var"), scalar(e.value, "value"))
+                for e in walk_entries(block(self.focuses[identifier], "available")) if e.key == "check_variable"
+            ]
+            self.assertEqual(checks, [(variable, value)], identifier)
+
+    def test_aggregate_previews_name_the_route_spirit(self):
+        for identifier, focus in self.focuses.items():
+            reward = block(focus, "completion_reward")
+            deltas = [scalar(e.value, "var") for e in walk_entries(reward) if e.key == "add_to_variable"]
+            deltas = [name for name in deltas if name in DEFEAT_MODIFIERS]
+            swaps = [e.value for e in walk_entries(reward) if e.key == "swap_ideas"]
+            with self.subTest(focus=identifier):
+                self.assertNotIn("add_dynamic_modifier", repr(reward))
+                if not deltas:
+                    self.assertEqual(swaps, [])
+                    continue
+                route = "rdm" if deltas[0].startswith("SHL_rdm_") else "cld"
+                self.assertTrue(all(name.startswith(f"SHL_{route}_") for name in deltas))
+                dummy = "SHL_redeem_dummy_idea" if route == "rdm" else "SHL_cold_dummy_idea"
+                refresh = "SHL_refresh_redeem_spirit" if route == "rdm" else "SHL_refresh_cold_spirit"
+                self.assertEqual(len(swaps), 1)
+                self.assertEqual(scalar(swaps[0], "remove_idea"), dummy)
+                self.assertEqual(scalar(swaps[0], "add_idea"), defeat_preview_idea(identifier))
+                self.assertIn((refresh, "yes"), [(e.key, e.value) for e in walk_entries(reward)])
+
+    def test_previews_equal_applied_deltas(self):
+        ideas = {}
+        source = (ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt").read_text(encoding="utf-8-sig")
+        for category in block(parse_clausewitz(source), "ideas"):
+            ideas.update({e.key: e.value for e in category.value if isinstance(e.value, list)})
+        for identifier, focus in self.focuses.items():
+            reward = block(focus, "completion_reward")
+            deltas = {
+                DEFEAT_MODIFIERS[scalar(e.value, "var")]: float(scalar(e.value, "value"))
+                for e in walk_entries(reward)
+                if e.key == "add_to_variable" and scalar(e.value, "var") in DEFEAT_MODIFIERS
+            }
+            if not deltas:
+                continue
+            with self.subTest(focus=identifier):
+                preview = defeat_preview_idea(identifier)
+                self.assertTrue(preview in ideas, preview)
+                applied = {e.key: float(e.value) for e in block(ideas[preview], "modifier")}
+                self.assertEqual(applied, deltas)
+
+    def test_ai_plans_take_one_route_each(self):
+        plans = {e.key: e.value for e in parse_clausewitz((ROOT / "common/ai_strategy_plans/ADISCORD_SHL_plans.txt").read_text(encoding="utf-8"))}
+        lease = [e.value for e in block(plans["SHL_seal_lease_plan"], "ai_national_focuses")]
+        cold = [e.value for e in block(plans["SHL_seal_cold_fire_plan"], "ai_national_focuses")]
+        trunk = ["SHL_seal_conclave", "SHL_seal_count_the_cold", "SHL_seal_houses_in_mourning"]
+        self.assertEqual(lease[:3], trunk)
+        self.assertEqual(cold[:3], trunk)
+        self.assertTrue(all(name.startswith("SHL_redeem_") for name in lease[3:]))
+        self.assertTrue(all(name.startswith("SHL_cold_") for name in cold[3:]))
+        self.assertEqual(lease[-1], "SHL_redeem_charter")
+        self.assertEqual(cold[-1], "SHL_cold_fire_without_masters")
+        for queue in (lease, cold):
+            self.assertEqual(set(queue) - reachable_focuses(self.focuses, set(self.focuses) - set(queue)), set())
+        for name in ("SHL_seal_lease_plan", "SHL_seal_cold_fire_plan"):
+            enable = [(e.key, e.value) for e in block(plans[name], "enable")]
+            self.assertIn(("has_country_flag", "SHL_seal_chapter_open"), enable, name)
+            self.assertEqual(scalar(block(plans[name], "weight"), "factor"), "40", name)
 
 
 class CourseProgrammeTests(unittest.TestCase):
@@ -3874,6 +4622,15 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.focuses.update({"SHL_c_civic_orders_plus", "SHL_d_arsenal_orders_plus", "SHL_r_pledge_plus"})
         self.m.run("SHL_refresh_furnaces")
         self.assertEqual((self.c["SHL_civic_price"], self.c["SHL_arsenal_price"], self.c["SHL_pledge_price"]), (60, 90, 150))
+        # The desert guard contracts quote 240; the houses' course discount
+        # replaces that discount instead of stacking with it.
+        for focuses, price in (({"SHL_desert_guard_contracts"}, 240),
+                               ({"SHL_desert_guard_contracts", "SHL_h_conclave_mercenaries"}, 225)):
+            with self.subTest(guard=sorted(focuses)):
+                self.setUp()
+                self.m.focuses.update(focuses)
+                self.m.run("SHL_refresh_furnaces")
+                self.assertEqual(self.c["SHL_guard_price"], price)
 
     def test_guard_hire_reads_the_discounted_quote_and_lifts_the_interval_only_in_the_south_war(self):
         self.m.focuses.add("SHL_h_conclave_mercenaries")
@@ -3895,6 +4652,25 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.run("SHL_hire_guard")
         self.assertNotIn("SHL_guard_hired", self.m.flags["SHL"])
         self.assertEqual(scalar(decision, "days_re_enable"), "1")
+        self.setUp()
+        self.m.focuses.add("SHL_desert_guard_contracts")
+        self.m.run("SHL_refresh_furnaces")
+        for balance, allowed in ((239.99, False), (240, True)):
+            self.c["ADISCORD_economy_treasury"] = balance
+            self.assertEqual(self.m.matches(block(decision, "custom_cost_trigger"), "SHL"), allowed, balance)
+
+    def test_desert_guard_reward_raises_two_levies_and_books_retainer(self):
+        reward = block(focus_definition("SHL_desert_guard_contracts"), "completion_reward")
+        self.assertIn(("unlock_decision_tooltip", "SHL_hire_desert_guard"), [(e.key, e.value) for e in reward])
+        self.assertEqual([e.value for e in reward if e.key == "custom_effect_tooltip"],
+                         ["SHL_desert_guard_contracts_tt", "SHL_cycle_income_minus_10_tt"])
+        divisions = self.m.divisions
+        income = self.c["SHL_cycle_bonus_income"]
+        self.m.focuses.add("SHL_desert_guard_contracts")
+        self.m.execute([e for e in reward if e.key == "hidden_effect"], "SHL")
+        self.assertEqual(self.m.divisions, divisions + 2)
+        self.assertEqual(self.c["SHL_cycle_bonus_income"], income - 10)
+        self.assertEqual(self.c["SHL_guard_price"], 240)
 
     def test_paid_programmes_check_the_exact_boundary_and_debit_once(self):
         for name, (begin, _, price, power, manpower, target, owner, receipt) in self.PAID.items():
@@ -4157,7 +4933,9 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.run("SHL_pick_demand_site")
         self.m.flags["SHL"].add("SHL_demand_pending")
         self.m.run("SHL_house_demand_refuse")
-        self.assertEqual(self.c["SHL_house_pressure"], 35)
+        # Bayrat -25, every house -5.
+        self.assertEqual(self.m.variables["291"]["SHL_house_loyalty"], 82 - 30)
+        self.assertAlmostEqual(self.c["SHL_house_pressure"], 25 + 25 / 9)
         self.assertIn("SHL_house_demand", self.m.missions)
         self.assertNotIn("SHL_demand_pending", self.m.flags["SHL"])
         goal = block(self.decision("SHL_house_demand"), "available")
@@ -4167,7 +4945,8 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.variables["291"]["SHL_furnace_wear"] = 85
         self.m.execute(block(self.decision("SHL_house_demand"), "timeout_effect"), "SHL")
         self.assertIn("SHL_house_opposed", self.m.flags["291"])
-        self.assertEqual(self.c["SHL_house_pressure"], 45)
+        self.assertEqual(self.m.variables["291"]["SHL_house_loyalty"], 82 - 45)
+        self.assertAlmostEqual(self.c["SHL_house_pressure"], 25 + 40 / 9)
         self.assertEqual(self.c["SHL_demand_site"], 0)
         timeout = next(e for e in walk_entries(self.m.effects["SHL_mark_site_opposed"]) if e.key == "set_state_flag")
         self.assertEqual(scalar(timeout.value, "days"), "180")
@@ -4209,7 +4988,7 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.run("SHL_update_tensions")
         self.assertEqual(self.c["SHL_house_pressure"], 25)
         self.m.focuses.add("SHL_k_no_crests")
-        self.c["SHL_house_pressure"] = 0
+        self.c["SHL_political_course"] = 5
         self.m.run("SHL_update_tensions")
         self.m.run("SHL_update_tensions")
         self.assertEqual(self.c["SHL_house_pressure"], 0)
@@ -4282,13 +5061,36 @@ class CourseProgrammeTests(unittest.TestCase):
         self.assertNotIn("add_timed_idea", integration)
 
     def test_sell_stations_pays_once_and_returns_the_stations_to_an_existing_kadir(self):
-        self.m.ownership.update({"234": "SHL", "242": "SHL"})
-        self.m.control.update({"234": "SHL", "242": "SHL"})
-        self.m.run("SHL_sell_road_stations")
-        self.m.run("SHL_sell_road_stations")
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1150)
-        self.assertEqual((self.m.ownership["234"], self.m.control["242"]), ("KDR", "KDR"))
-        self.assertEqual(scalar(self.decision("SHL_sell_stations"), "fire_only_once"), "yes")
+        decision = self.decision("SHL_sell_stations")
+        self.assertEqual(scalar(decision, "fire_only_once"), "yes")
+        available = block(decision, "available")
+        reward = block(focus_definition("SHL_h_road_stations"), "completion_reward")
+        stations = ("234", "242")
+        for owners in product(("KDR", "SHL"), repeat=2):
+            with self.subTest(owners=owners):
+                self.setUp()
+                self.m.ownership.update(zip(stations, owners))
+                self.m.control.update(zip(stations, owners))
+                self.m.execute(reward, "SHL")
+                self.assertEqual(self.m.infrastructure, 2 if owners == ("SHL", "SHL") else 0)
+                self.assertTrue(self.m.matches(available, "SHL"))
+                self.m.control["234"] = "EFL"
+                self.assertFalse(self.m.matches(available, "SHL"))
+                self.m.run("SHL_sell_road_stations")
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], 1000)
+                self.m.control["234"] = owners[0]
+                self.m.countries["KDR"]["exists"] = False
+                self.assertFalse(self.m.matches(available, "SHL"))
+                self.m.run("SHL_sell_road_stations")
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], 1000)
+                self.m.countries["KDR"]["exists"] = True
+                self.m.execute(block(decision, "complete_effect"), "SHL")
+                self.assertFalse(self.m.matches(available, "SHL"))
+                self.m.run("SHL_sell_road_stations")
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], 1150)
+                for state in stations:
+                    self.assertEqual((self.m.ownership[state], self.m.control[state]), ("KDR", "KDR"))
+                    self.assertNotIn("SHL", self.m.claims[state])
 
     def test_concession_sales_keep_their_interval_outside_the_south_war(self):
         self.m.run("SHL_sell_crest_concessions")
@@ -4413,6 +5215,21 @@ class ExternalContractTests(unittest.TestCase):
         self.assertEqual(scalar(decision, "custom_cost_text"), "SHL_cost_packet")
         self.assertIn("SHL_packet_price", repr(block(decision, "custom_cost_trigger")))
         self.assertIn("SHL_packet_price", repr(block(decision, "available")))
+        # Bayrat ore takes 5 off every quote while Bayrat (291) is held.
+        for marker, price in ((None, 20), ("NAM_oil_client", 15), ("NAM_fuel_embargo_modifier", 30)):
+            with self.subTest(mines=marker):
+                self.setUp()
+                self.m.focuses.add("SHL_baryat_mines")
+                self.price_marker(marker)
+                self.m.run("SHL_refresh_furnaces")
+                self.assertEqual(self.c["SHL_packet_price"], price)
+        for lost in ("ownership", "control"):
+            with self.subTest(lost=lost):
+                self.setUp()
+                self.m.focuses.add("SHL_baryat_mines")
+                getattr(self.m, lost)["291"] = "KYZ"
+                self.m.run("SHL_refresh_furnaces")
+                self.assertEqual(self.c["SHL_packet_price"], 25)
 
     def test_supply_debits_the_current_price_exactly_once_at_the_boundary(self):
         decision = decision_definition("SHL_supply_furnace")
@@ -4592,6 +5409,27 @@ class ExternalContractTests(unittest.TestCase):
         # A buyer without a contract is never touched.
         self.assertEqual(self.m.variables["STP"]["ADISCORD_economy_treasury"], 500)
 
+    def test_brokers_premium_only_on_paid_cycles(self):
+        # The buyer pays 60 either way; the brokers add 15 from their own margin.
+        for brokers, treasury, received in ((False, 500, 60), (True, 500, 75), (True, 59.99, 0)):
+            with self.subTest(brokers=brokers, treasury=treasury):
+                self.setUp()
+                if brokers:
+                    self.m.focuses.add("SHL_metal_brokers")
+                self.sign("VAL")
+                self.m.variables["VAL"]["ADISCORD_economy_treasury"] = treasury
+                self.m.run("SHL_produce_period")
+                paid = 60 if received else 0
+                self.assertAlmostEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], treasury - paid)
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], 1540 + received)
+                self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 540 + received)
+                self.assertEqual(self.c["SHL_last_cycle_income"], 540 + received)
+        reward = block(focus_definition("SHL_metal_brokers"), "completion_reward")
+        before = self.c["SHL_metal_max_clients"]
+        self.m.execute([e for e in reward if e.key == "hidden_effect"], "SHL")
+        self.assertEqual(self.c["SHL_metal_max_clients"], before + 1)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1540 + 100)
+
     def test_two_unpaid_cycles_or_a_war_end_the_contract_and_remove_the_modifier(self):
         self.sign("VAL")
         self.m.variables["VAL"]["ADISCORD_economy_treasury"] = 59.99
@@ -4762,7 +5600,6 @@ class ConclaveLeversTests(unittest.TestCase):
         self.c["SHL_shift_policy"] = 0.0
         self.c["SHL_political_course"] = 0.0
         self.c["SHL_unrest"] = 30.0
-        self.c["SHL_house_pressure"] = 30.0
         self.c["SHL_city_support"] = 20.0
         self.c["SHL_reserve_stock"] = 2.0
         for state in self.STATES:
@@ -4777,6 +5614,7 @@ class ConclaveLeversTests(unittest.TestCase):
             })
         self.m.flags["SHL"].add("SHL_furnaces_initialized")
         self.m.power_balance[BALANCE] = 0.0
+        seat_houses(self.m, 70)
 
     def available(self, identifier, target=None):
         return self.m.matches(block(decision_definition(identifier), "available"), "SHL", target)
@@ -4936,7 +5774,9 @@ class ConclaveLeversTests(unittest.TestCase):
         m.run("SHL_finish_audit", target="287")
         self.assertEqual(m.variables["287"]["SHL_furnace_wear"], 40)
         self.assertEqual(m.variables["287"]["SHL_furnace_shortages"], 0)
-        self.assertEqual(self.c["SHL_house_pressure"], 35)
+        # The audited house alone pays 15.
+        self.assertEqual(m.variables["287"]["SHL_house_loyalty"], 55)
+        self.assertAlmostEqual(self.c["SHL_house_pressure"], 30 + 15 / 9)
         self.assertEqual(m.values["political_power"], 200, "the native 30 PP is the only price")
         m.run("SHL_begin_audit", target="288")
         m.control["288"] = "AZH"

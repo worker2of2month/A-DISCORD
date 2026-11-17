@@ -62,6 +62,325 @@
       "license": "CC0 1.0",
       "sha256": "e786d2632e15008eadf82be0b98de01aa02bc55199aea1728af274502788500a",
       "changes": "Public preview converted to stereo 44100 Hz FLAC. Runtime excerpt, gain and fades are specified in the cue list."
+    },
+    "sfx_downtown_square.flac": {
+      "title": "City downtown crowd ambience",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/crowd/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/361/361-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 60.0,
+      "sha256": "d73d50dde8702b122128a2de135a5d2766bf47c8c697d4056f72d0a4f2e90ab7",
+      "file": "sfx_downtown_square.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event. First 60 seconds retained."
+    },
+    "sfx_wooden_door_closing.flac": {
+      "title": "Creaky closing wood door",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/wood/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/189/189-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 2.404331,
+      "sha256": "6613ad96d7c880cf25021e42a6335ef091acfd6a9079eb8b0030ab871b4012d9",
+      "file": "sfx_wooden_door_closing.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_wooden_chair_squeak.flac": {
+      "title": "Chair seat wood squeak",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/chair/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1016/1016-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 0.654127,
+      "sha256": "7056c0672210664f1db16f662f006d6189fec8d680fde1c6377a365d803b5cf1",
+      "file": "sfx_wooden_chair_squeak.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_loose_coins.flac": {
+      "title": "Clinking coins",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/coins/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1993/1993-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.045964,
+      "sha256": "a8e3fdff044f41f1c95618f88117d2194e4d7c849990d3ff55c790465580c18e",
+      "file": "sfx_loose_coins.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_corridor_footsteps.flac": {
+      "title": "Footsteps in a tunnel loop",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/footsteps/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/543/543-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 8.15127,
+      "sha256": "6b1f48d81d3846c925c2960f71e5e7a1268f151d8ed1db6f91a40c2b18cb5347",
+      "file": "sfx_corridor_footsteps.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_governor_telephone.flac": {
+      "title": "Old telephone ring",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/telephone/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1357/1357-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 8.673719,
+      "sha256": "b83c96fd919c0e390e4be00e2fb14673ed48589474c9558b1f373e7fcdee3d13",
+      "file": "sfx_governor_telephone.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_carriage_return.flac": {
+      "title": "Typewriter classic return",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/typewriter/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1381/1381-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.699025,
+      "sha256": "9b552ec732b7e82973b86aaf98d838df0a36d216e23332767109d93b8ac15175",
+      "file": "sfx_carriage_return.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_assembly_foyer.flac": {
+      "title": "Hotel lobby crowd ambience and footsteps",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/footsteps/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/365/365-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 16.510454,
+      "sha256": "984c0f9e018a6b65a17e84f770b829097a0c29ee3e1313daed1089eff2aa3a14",
+      "file": "sfx_assembly_foyer.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_charter_pages.flac": {
+      "title": "Stiff paper book paging",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/paper/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1103/1103-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 5.617392,
+      "sha256": "f2dbadbe49ec969ea323b274aca1a3186179a3f50f9f7be81ccccd953bb8ec3b",
+      "file": "sfx_charter_pages.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_delegate_applause.flac": {
+      "title": "Small group light applause",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/applause/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/517/517-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 5.094943,
+      "sha256": "0d48615e09e4940911e427081fe16fc45d06a0c60d39f0861b5bc673955e0417",
+      "file": "sfx_delegate_applause.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_case_latch.flac": {
+      "title": "Gear fast lock tap",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/metal/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2857/2857-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.150454,
+      "sha256": "af32948ab073f2fa4de613f3ff54bd22ea65333b64bfe58396cb5f3559d1f176",
+      "file": "sfx_case_latch.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_passing_boat.flac": {
+      "title": "Light ship engine flutter whosh by",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/boat/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/3078/3078-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 7.001882,
+      "sha256": "2907a12bb672c6df0fdb04645f76ff906315405741e30ba3b965747571598b4d",
+      "file": "sfx_passing_boat.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_hull_creak.flac": {
+      "title": "Ship hull creak",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/boat/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/3076/3076-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 7.890045,
+      "sha256": "fd085b315b13738337e2f94d5cbdba1ca40592991f008998c248e61c80a1a97b",
+      "file": "sfx_hull_creak.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_shipyard.flac": {
+      "title": "Inside the old boat shipyard ambience",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/boat/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/3074/3074-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 21.525964,
+      "sha256": "379970ec871cb0c80713089d22f7ec6116a63203e5a2ccfd51ca8ac4946a2f0b",
+      "file": "sfx_shipyard.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_gravel_steps.flac": {
+      "title": "Crunchy road fast walking loop",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/footsteps/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1274/1274-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 23.223923,
+      "sha256": "3190c02108db259a1d8eb2889b98c21084ba417ab7ee0beafb30b1fccabb1862",
+      "file": "sfx_gravel_steps.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_tracked_gear_shift.flac": {
+      "title": "Metal tank gear shift",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/engine/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2757/2757-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.307188,
+      "sha256": "39e109e2a5d0f48d5571e33655ffad47ccf23549eba7e31cfbee0494a15bfc37",
+      "file": "sfx_tracked_gear_shift.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_passing_truck.flac": {
+      "title": "Truck in highway passing by",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/truck/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1627/1627-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 19.096576,
+      "sha256": "775055f7841a31fb125a9e805ba966f5c66ecca213132bb7340d2f734cee206b",
+      "file": "sfx_passing_truck.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_catalogue_pages.flac": {
+      "title": "Pages of paper moving",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/paper/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2386/2386-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.463923,
+      "sha256": "24b4073ca2982261e3b9a9f8cdf9dbde485e2e22ac66e5f2bc6f367282ce0921",
+      "file": "sfx_catalogue_pages.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_auction_hammer.flac": {
+      "title": "Hammer hit on wood",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/hammer/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/830/830-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 0.497392,
+      "sha256": "f9a22dbb7a1b3890aeae33b323251a35cf48054c39e9557cfcec437a4b10fb87",
+      "file": "sfx_auction_hammer.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_shop_keys.flac": {
+      "title": "Locking a shop door with keys",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/keys/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/202/202-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 4.023923,
+      "sha256": "ba085ed4c13ec19c417121611e5d755679bfc09d2465545427e9a942e1c050db",
+      "file": "sfx_shop_keys.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_press_gathering.flac": {
+      "title": "Reporters crowd and camera flashes",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/camera/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/432/432-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 16.170862,
+      "sha256": "a7665183e797c0e714d43a2a37a06c65baddc67b92d4c496f04ce4f2f62b0d58",
+      "file": "sfx_press_gathering.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_newspaper_page.flac": {
+      "title": "Turning the newspaper big page",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/newspaper/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1097/1097-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 9.43127,
+      "sha256": "96d98d23e3d32665aa0353eb507c6d603aa169e17d5ebcdfdd4bcd0ab2eaa5d0",
+      "file": "sfx_newspaper_page.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_conference_applause.flac": {
+      "title": "Conference audience clapping strongly",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/applause/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/476/476-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 8.621474,
+      "sha256": "d13f2b88cc5728b83de5359bb42bb7fe26b963b3f9a67ebf783d2700bde3453b",
+      "file": "sfx_conference_applause.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_warehouse_door.flac": {
+      "title": "Industrial metal sliding door",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/metal/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/200/200-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 2.534943,
+      "sha256": "502aa984c9975e19dcaf5a8f53c52475a72ccd18c341784bcb5b3e2641c3e788",
+      "file": "sfx_warehouse_door.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_reversing_truck.flac": {
+      "title": "Truck reversing beeps loop",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/truck/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/1077/1077-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.934127,
+      "sha256": "b3ee52a62479365eab8114590d7081424804cc6f3f5946c117056c0fb8da669a",
+      "file": "sfx_reversing_truck.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_timber_drop.flac": {
+      "title": "Small wood plank pile drop",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/wood/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/3141/3141-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.725147,
+      "sha256": "0b88d2c52976182ec9c851c9db0ed75771d2809fa7b1182242dda057b1b042cb",
+      "file": "sfx_timber_drop.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_radio_burst.flac": {
+      "title": "Radio static fx",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/radio/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/2561/2561-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 1.333311,
+      "sha256": "fdf402734d03a12b27d935c937e4694961f609a42bc6799d3421ffab7346aea0",
+      "file": "sfx_radio_burst.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_town_bell.flac": {
+      "title": "Clock tower or cathedral bell",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/bell/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/587/587-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 28.892494,
+      "sha256": "cb4a9f7e999d30e84797ee3766906e7062392f41dfc0b608386fbee898a258cb",
+      "file": "sfx_town_bell.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
+    },
+    "sfx_victory_crowd.flac": {
+      "title": "Huge crowd cheering victory",
+      "artist": "Mixkit",
+      "source_page": "https://mixkit.co/free-sound-effects/cheering/",
+      "source_audio": "https://assets.mixkit.co/active_storage/sfx/462/462-preview.mp3",
+      "license": "Mixkit Sound Effects Free License",
+      "duration_seconds": 10.084331,
+      "sha256": "ade554d1d79ea292c0294587d7eb38057ddf5633c09cec7bf214ddcf168b08d9",
+      "file": "sfx_victory_crowd.flac",
+      "changes": "Public preview converted to stereo 44100 Hz FLAC. Timeline, source offsets, gain and fades are listed per event."
     }
   },
   "superevent_south_free_islands_sound": {
@@ -1073,5 +1392,678 @@
     "mix": "Additive mixing without master normalization or compression. Each cue has its own peak ceiling.",
     "runtime_file": "sound/superevents/superevent_south_oil_union_sound.wav",
     "runtime_sha256": "86abfc56bc7201354e512e4c229dfa7b69f6ef8c83a8703bedefafbb90823c08"
+  },
+  "superevent_south_conclave_sound": {
+    "music": {
+      "artist": "Mohammad Reza Mortazavi",
+      "title": "Sudden Inspiration",
+      "album": "Ritme Jaavdanegi",
+      "source_page": "https://mohammadmortazavi.bandcamp.com/track/sudden-inspiration",
+      "file": "mohammad_reza_mortazavi_sudden_inspiration_excerpt.flac",
+      "excerpt_seconds": [
+        0,
+        56
+      ],
+      "sha256": "168e2304fdbfc97d0be5acae66c65f2bbe111a9b533883910df2b7f17c3c5593",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_downtown_square.flac",
+        "start": 2,
+        "offset": 2,
+        "duration": 10,
+        "gain": 0.96,
+        "fade": 0.22,
+        "peak_limit": 0.19,
+        "spatial_filter": "lowpass=f=2900"
+      },
+      {
+        "source": "South/sfx_wooden_door_closing.flac",
+        "start": 10.25,
+        "offset": 0,
+        "duration": 2.34,
+        "gain": 0.77,
+        "fade": 0.012,
+        "peak_limit": 0.38
+      },
+      {
+        "source": "South/sfx_wooden_chair_squeak.flac",
+        "start": 18,
+        "offset": 0.005,
+        "duration": 0.52,
+        "gain": 1.7,
+        "fade": 0.006,
+        "peak_limit": 0.3,
+        "spatial_filter": "stereotools=balance_out=-0.21"
+      },
+      {
+        "source": "South/sfx_wooden_chair_squeak.flac",
+        "start": 21.15,
+        "offset": 0,
+        "duration": 0.43,
+        "gain": 1.2,
+        "fade": 0.006,
+        "peak_limit": 0.25,
+        "spatial_filter": "stereotools=balance_out=0.26"
+      },
+      {
+        "source": "South/sfx_loose_coins.flac",
+        "start": 36.8,
+        "offset": 0,
+        "duration": 0.84,
+        "gain": 5.2,
+        "fade": 0.008,
+        "peak_limit": 0.31
+      },
+      {
+        "source": "South/sfx_loose_coins.flac",
+        "start": 38.35,
+        "offset": 0.18,
+        "duration": 0.58,
+        "gain": 4.1,
+        "fade": 0.008,
+        "peak_limit": 0.26
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_conclave_sound.wav",
+    "runtime_sha256": "4c6cccaf16a739a9efd85d939c6378df7bdd9ccaaa42959e4131f8006ed6595e"
+  },
+  "superevent_south_service_sound": {
+    "music": {
+      "artist": "Grails",
+      "title": "Reincarnation Blues",
+      "album": "Doomsdayer's Holiday",
+      "source_page": "https://grails.bandcamp.com/track/reincarnation-blues",
+      "file": "grails_reincarnation_blues_excerpt.flac",
+      "excerpt_seconds": [
+        0,
+        56
+      ],
+      "sha256": "157a711fff14677ef4ee14dcb31930d4388e2007d65508688f67efd09ea80f78",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_corridor_footsteps.flac",
+        "start": 2,
+        "offset": 0,
+        "duration": 7.8,
+        "gain": 3.7,
+        "fade": 0.25,
+        "peak_limit": 0.32
+      },
+      {
+        "source": "South/sfx_governor_telephone.flac",
+        "start": 13.8,
+        "offset": 0.05,
+        "duration": 3.45,
+        "gain": 0.85,
+        "fade": 0.08,
+        "peak_limit": 0.26,
+        "spatial_filter": "highpass=f=260"
+      },
+      {
+        "source": "South/sfx_carriage_return.flac",
+        "start": 29,
+        "offset": 0.04,
+        "duration": 1.52,
+        "gain": 2.1,
+        "fade": 0.015,
+        "peak_limit": 0.31
+      },
+      {
+        "source": "South/sfx_carriage_return.flac",
+        "start": 38.6,
+        "offset": 0.37,
+        "duration": 1.12,
+        "gain": 1.6,
+        "fade": 0.012,
+        "peak_limit": 0.28
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_service_sound.wav",
+    "runtime_sha256": "41b0a2fa3f170a4ef0548947d242cdaa632a1e35e4a6ed011885c668086bc8ea"
+  },
+  "superevent_south_charter_sound": {
+    "music": {
+      "artist": "London Symphony Orchestra, Leon Botstein",
+      "title": "Symphony No. 1, Op. 7: III. Finale. Scherzo e coda. Prestissimo",
+      "album": "Popov: Symphony No. 1 / Shostakovich: Theme and Variations",
+      "source_page": "https://classical-music-online.net/archive/?file_id=111790",
+      "file": "popov_symphony_1_botstein_finale_excerpt.flac",
+      "excerpt_seconds": [
+        2428,
+        2484
+      ],
+      "sha256": "f86d468327dc1ceaec536f1dd6d1513bbf8282057102a8d7a7a15f968766f251",
+      "rights": "Copyrighted recording.",
+      "composer": "Gavriil Popov",
+      "selection_reference": "https://youtu.be/3eiluMp6drE?t=2428"
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_assembly_foyer.flac",
+        "start": 1.5,
+        "offset": 1.4,
+        "duration": 7.5,
+        "gain": 0.6,
+        "fade": 0.8,
+        "peak_limit": 0.22,
+        "spatial_filter": "lowpass=f=3400"
+      },
+      {
+        "source": "South/sfx_charter_pages.flac",
+        "start": 12.2,
+        "offset": 0.4,
+        "duration": 2.8,
+        "gain": 1.35,
+        "fade": 0.035,
+        "peak_limit": 0.32
+      },
+      {
+        "source": "South/sfx_delegate_applause.flac",
+        "start": 26.3,
+        "offset": 0.45,
+        "duration": 4.48,
+        "gain": 2.7,
+        "fade": 0.16,
+        "peak_limit": 0.3
+      },
+      {
+        "source": "South/sfx_charter_pages.flac",
+        "start": 39,
+        "offset": 3.9,
+        "duration": 1.35,
+        "gain": 1.6,
+        "fade": 0.025,
+        "peak_limit": 0.32
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_charter_sound.wav",
+    "runtime_sha256": "35b6a53ae57756a81b10c888ba76d8629aaee2aeedf4ff4277ad8e53b89c61fe"
+  },
+  "superevent_south_contracts_sound": {
+    "music": {
+      "artist": "Calibro 35",
+      "title": "Eurocrime!",
+      "album": "Ritornano Quelli Di... (Deluxe Edition)",
+      "source_page": "https://calibro35rk.bandcamp.com/track/eurocrime-2",
+      "file": "calibro_35_eurocrime_excerpt.flac",
+      "excerpt_seconds": [
+        0,
+        56
+      ],
+      "sha256": "263e80bf8177e9f627d4cb9a3923c12703a5af74041acb26313e56591c1baddb",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 1.2,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.8,
+        "fade": 0.025,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 3.4,
+        "offset": 9.2,
+        "duration": 3.5,
+        "gain": 6.5,
+        "fade": 0.12,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_case_latch.flac",
+        "start": 11.1,
+        "offset": 0,
+        "duration": 0.29,
+        "gain": 1.35,
+        "fade": 0.003,
+        "peak_limit": 0.3
+      },
+      {
+        "source": "STP/sfx_paper_slide.flac",
+        "start": 25,
+        "offset": 0,
+        "duration": 1.09,
+        "gain": 0.64,
+        "fade": 0.025,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "STP/sfx_pen_writing.flac",
+        "start": 27,
+        "offset": 2,
+        "duration": 3,
+        "gain": 6.0,
+        "fade": 0.12,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_contract_stamp.flac",
+        "start": 32,
+        "offset": 0,
+        "duration": 1.59,
+        "gain": 0.85,
+        "fade": 0.02,
+        "peak_limit": 0.16
+      },
+      {
+        "source": "South/sfx_case_latch.flac",
+        "start": 34.95,
+        "offset": 0,
+        "duration": 0.32,
+        "gain": 1.75,
+        "fade": 0.003,
+        "peak_limit": 0.33
+      }
+    ],
+    "shared_source_metadata": [
+      "../STP/audio_sources.json"
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_contracts_sound.wav",
+    "runtime_sha256": "2b2644bb1e55caa0d72ea206556fe7f110f95efbec9cd2da583b6f3a8a8ef5ab"
+  },
+  "superevent_south_rump_sound": {
+    "music": {
+      "artist": "And So I Watch You From Afar",
+      "title": "Set Guitars to Kill",
+      "album": "And So I Watch You From Afar",
+      "source_page": "https://asiwyfa.bandcamp.com/track/set-guitars-to-kill",
+      "file": "asiwyfa_set_guitars_to_kill_excerpt.flac",
+      "excerpt_seconds": [
+        0,
+        56
+      ],
+      "sha256": "701554b76426dca0e9f5bbf10d205e5141908d0308afd1ea087b1cd42ba10a97",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_passing_boat.flac",
+        "start": 1.5,
+        "offset": 0,
+        "duration": 3.5,
+        "gain": 1.65,
+        "fade": 0.14,
+        "peak_limit": 0.29
+      },
+      {
+        "source": "South/sfx_hull_creak.flac",
+        "start": 9.5,
+        "offset": 0.3,
+        "duration": 5.9,
+        "gain": 0.48,
+        "fade": 0.45,
+        "peak_limit": 0.29
+      },
+      {
+        "source": "South/sfx_shipyard.flac",
+        "start": 25.2,
+        "offset": 0.7,
+        "duration": 7.1,
+        "gain": 0.64,
+        "fade": 0.55,
+        "peak_limit": 0.27
+      },
+      {
+        "source": "South/sfx_shipyard.flac",
+        "start": 39.1,
+        "offset": 10,
+        "duration": 5.3,
+        "gain": 0.62,
+        "fade": 0.48,
+        "peak_limit": 0.27
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_rump_sound.wav",
+    "runtime_sha256": "a247a3bca95539d07585e7b1e8c3268810881ee755bb15213085429d17b382d4"
+  },
+  "superevent_south_revenge_sound": {
+    "music": {
+      "artist": "Toundra",
+      "title": "Strelka",
+      "album": "IV",
+      "source_page": "https://insideoutmusic.bandcamp.com/track/strelka",
+      "file": "toundra_strelka_excerpt.flac",
+      "excerpt_seconds": [
+        240,
+        296
+      ],
+      "sha256": "b86a3929db3483ed57e42229c52838636b55bf7f1fb2da1ca060230e6f7c367c",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_gravel_steps.flac",
+        "start": 1,
+        "offset": 1,
+        "duration": 7.5,
+        "gain": 0.75,
+        "fade": 0.22,
+        "peak_limit": 0.28
+      },
+      {
+        "source": "South/sfx_tracked_gear_shift.flac",
+        "start": 12.45,
+        "offset": 0,
+        "duration": 1,
+        "gain": 0.9,
+        "fade": 0.009,
+        "peak_limit": 0.32
+      },
+      {
+        "source": "South/sfx_passing_truck.flac",
+        "start": 17,
+        "offset": 3.1,
+        "duration": 13.1,
+        "gain": 0.6,
+        "fade": 0.6,
+        "peak_limit": 0.33
+      },
+      {
+        "source": "South/sfx_gravel_steps.flac",
+        "start": 40.3,
+        "offset": 11,
+        "duration": 5.9,
+        "gain": 0.74,
+        "fade": 0.38,
+        "peak_limit": 0.27
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_revenge_sound.wav",
+    "runtime_sha256": "178192a46c6e69966e9b8ee6c2544258e8394baaa656ed975e40de31762865c3"
+  },
+  "superevent_south_boards_sound": {
+    "music": {
+      "artist": "Schwefelgelb",
+      "title": "Es zieht mich",
+      "album": "Dahinter Das Gesicht",
+      "source_page": "https://schwefelgelb.bandcamp.com/track/es-zieht-mich",
+      "file": "schwefelgelb_es_zieht_mich_excerpt.flac",
+      "excerpt_seconds": [
+        180,
+        236
+      ],
+      "sha256": "16f676add70d1720f895151172b398465ae8db27a75641f550387decc41cb04e",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_catalogue_pages.flac",
+        "start": 2,
+        "offset": 0,
+        "duration": 1.43,
+        "gain": 6.2,
+        "fade": 0.015,
+        "peak_limit": 0.26
+      },
+      {
+        "source": "South/sfx_auction_hammer.flac",
+        "start": 10.1,
+        "offset": 0,
+        "duration": 0.4,
+        "gain": 1.35,
+        "fade": 0.002,
+        "peak_limit": 0.4
+      },
+      {
+        "source": "South/sfx_auction_hammer.flac",
+        "start": 16.2,
+        "offset": 0,
+        "duration": 0.39,
+        "gain": 1.54,
+        "fade": 0.002,
+        "peak_limit": 0.42
+      },
+      {
+        "source": "South/sfx_auction_hammer.flac",
+        "start": 28.1,
+        "offset": 0,
+        "duration": 0.4,
+        "gain": 1.8,
+        "fade": 0.002,
+        "peak_limit": 0.46
+      },
+      {
+        "source": "South/sfx_shop_keys.flac",
+        "start": 38.3,
+        "offset": 0.02,
+        "duration": 3.83,
+        "gain": 3.7,
+        "fade": 0.03,
+        "peak_limit": 0.3
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_boards_sound.wav",
+    "runtime_sha256": "9266803af7ccbbbaf47e04d03bdac01e0aec3d30ff993b6471ddd201ef891c8f"
+  },
+  "superevent_south_contract_republic_sound": {
+    "music": {
+      "artist": "LITE",
+      "title": "Bond",
+      "album": "Installation",
+      "source_page": "https://liteband.bandcamp.com/track/bond",
+      "file": "lite_bond_excerpt.flac",
+      "excerpt_seconds": [
+        0,
+        56
+      ],
+      "sha256": "a75153c2f295748c8f9d41f92bbb03c2b01f15fa1cc100b79b466d812f05335c",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_press_gathering.flac",
+        "start": 2.4,
+        "offset": 0.5,
+        "duration": 6.9,
+        "gain": 0.47,
+        "fade": 0.48,
+        "peak_limit": 0.22
+      },
+      {
+        "source": "South/sfx_newspaper_page.flac",
+        "start": 12,
+        "offset": 0.06,
+        "duration": 3.82,
+        "gain": 2.1,
+        "fade": 0.035,
+        "peak_limit": 0.32
+      },
+      {
+        "source": "South/sfx_conference_applause.flac",
+        "start": 26.2,
+        "offset": 0.23,
+        "duration": 7.65,
+        "gain": 0.85,
+        "fade": 0.44,
+        "peak_limit": 0.33
+      },
+      {
+        "source": "South/sfx_newspaper_page.flac",
+        "start": 43.4,
+        "offset": 7.52,
+        "duration": 1.56,
+        "gain": 2.0,
+        "fade": 0.055,
+        "peak_limit": 0.29
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_contract_republic_sound.wav",
+    "runtime_sha256": "ce717f0f307816b2650cd6922ebdf72cbb2856c919bca098ae3a061e888b178d"
+  },
+  "superevent_south_directorate_sound": {
+    "music": {
+      "artist": "Ikebe Shakedown",
+      "title": "Hard Steppin'",
+      "album": "Colemine & Karma Chief Starter Pack",
+      "source_page": "https://coleminerecords.bandcamp.com/track/hard-steppin",
+      "file": "ikebe_shakedown_hard_steppin_excerpt.flac",
+      "excerpt_seconds": [
+        0,
+        56
+      ],
+      "sha256": "39a2ca806ea94a382248ca40dd6793f6d3e41332a3b233be1a5a8c744b68e025",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_warehouse_door.flac",
+        "start": 1,
+        "offset": 0.03,
+        "duration": 2.38,
+        "gain": 0.89,
+        "fade": 0.05,
+        "peak_limit": 0.31
+      },
+      {
+        "source": "South/sfx_reversing_truck.flac",
+        "start": 9.4,
+        "offset": 0,
+        "duration": 1.92,
+        "gain": 0.22,
+        "fade": 0.06,
+        "peak_limit": 0.23
+      },
+      {
+        "source": "South/sfx_reversing_truck.flac",
+        "start": 11.4,
+        "offset": 0,
+        "duration": 1.92,
+        "gain": 0.18,
+        "fade": 0.06,
+        "peak_limit": 0.22
+      },
+      {
+        "source": "South/sfx_timber_drop.flac",
+        "start": 19.25,
+        "offset": 0,
+        "duration": 1.05,
+        "gain": 1.0,
+        "fade": 0.007,
+        "peak_limit": 0.36
+      },
+      {
+        "source": "South/sfx_timber_drop.flac",
+        "start": 32.6,
+        "offset": 0.04,
+        "duration": 0.95,
+        "gain": 0.8,
+        "fade": 0.008,
+        "peak_limit": 0.32
+      },
+      {
+        "source": "South/sfx_warehouse_door.flac",
+        "start": 41.3,
+        "offset": 0.1,
+        "duration": 2.22,
+        "gain": 0.72,
+        "fade": 0.07,
+        "peak_limit": 0.28
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_directorate_sound.wav",
+    "runtime_sha256": "1b862a190920ee12d7d853cb52649fd7cda6b20bf653f08dc4a0d4f314b770b6"
+  },
+  "superevent_south_nam_sound": {
+    "music": {
+      "artist": "Public Service Broadcasting",
+      "title": "Go! [Instrumental]",
+      "album": "The Race For Space [Instrumentals]",
+      "source_page": "https://publicservicebroadcasting.bandcamp.com/track/go-instrumental",
+      "file": "public_service_broadcasting_go_instrumental_excerpt.flac",
+      "excerpt_seconds": [
+        0,
+        56
+      ],
+      "sha256": "71bd750e8db68ec378b6046280294775fe236cd4a0354bf456ab36790d385f6d",
+      "rights": "Copyrighted recording."
+    },
+    "voice": null,
+    "effects": [
+      {
+        "source": "South/sfx_radio_burst.flac",
+        "start": 1.4,
+        "offset": 0,
+        "duration": 1.02,
+        "gain": 1.05,
+        "fade": 0.03,
+        "peak_limit": 0.28
+      },
+      {
+        "source": "South/sfx_radio_burst.flac",
+        "start": 8.6,
+        "offset": 0.45,
+        "duration": 0.51,
+        "gain": 0.73,
+        "fade": 0.02,
+        "peak_limit": 0.23
+      },
+      {
+        "source": "South/sfx_town_bell.flac",
+        "start": 16.45,
+        "offset": 0.03,
+        "duration": 7.5,
+        "gain": 0.33,
+        "fade": 0.25,
+        "peak_limit": 0.33,
+        "spatial_filter": "highpass=f=140"
+      },
+      {
+        "source": "South/sfx_victory_crowd.flac",
+        "start": 31,
+        "offset": 0.2,
+        "duration": 7.9,
+        "gain": 0.45,
+        "fade": 0.48,
+        "peak_limit": 0.34
+      }
+    ],
+    "duration_seconds": 56,
+    "music_ducking": false,
+    "music_loudness_lufs": -18,
+    "runtime_file": "sound/superevents/superevent_south_nam_sound.wav",
+    "runtime_sha256": "59e2060b8ba6e06be08224242d2f4bc4c6dce066027057ba5c3c3f4a5379edff"
   }
 }

@@ -161,6 +161,87 @@ ADISCORD_nam_resource_war_rebel_offensive = {
 	}
 }
 
+# Only NAM-owned fields count for the coalition treaty, including after the
+# Klyuchevsk protocol. A rebel-controlled field is a target only for its enemy.
+NAM_rw_oilfield_objectives = {
+	allowed = {
+		OR = {
+			tag = NAM
+			tag = EFL
+			tag = AZH
+		}
+	}
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_nam_resource_war_active = yes
+		OR = {
+			has_war_with = NAM
+			AND = {
+				tag = NAM
+				OR = {
+					has_war_with = EFL
+					has_war_with = AZH
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			NAM_rw_contested_field_objective = yes
+		}
+		value = 80
+	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			FROM.FROM = { difficulty > 2 }
+			NAM_rw_contested_field_objective = yes
+			OR = {
+				state = 67
+				AND = {
+					FROM.FROM = { NOT = { tag = NAM } }
+					67 = { NAM_rw_field_taken_by_coalition = yes }
+				}
+			}
+		}
+		value = 120
+	}
+}
+
+NAM_rw_border_objectives = {
+	allowed = { tag = NAM }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_nam_resource_war_active = yes
+		OR = {
+			has_war_with = EFL
+			has_war_with = AZH
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			is_controlled_by = FROM
+			FROM = { has_war_with = NAM }
+			OR = {
+				state = 720
+				state = 721
+				state = 701
+				AND = {
+					state = 722
+					NAM = { has_war_with = AZH }
+				}
+			}
+		}
+		value = 55
+	}
+}
+
 # Only two southern states have both a material upside and a political system
 # capable of authorising expeditionary formations.
 ADISCORD_nam_resource_war_rahma_volunteers = {

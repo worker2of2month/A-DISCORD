@@ -577,12 +577,12 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             "equipment_variant_production_factor id = ADISCORD_fighter_archetype",
             wkr_air,
         )
-        self.assertIn(
-            "type = strategic_air_importance id = 12 value = 100000", operations
-        )
-        self.assertIn(
-            "type = strategic_air_importance id = 9 value = 100000", operations
-        )
+        for region_id in (12, 9, 253, 249, 254, 13):
+            with self.subTest(region=region_id):
+                self.assertIn(
+                    f"type = strategic_air_importance id = {region_id} value = 100000",
+                    operations,
+                )
         self.assertIn("has_war = yes", operations)
         self.assertNotIn("num_of_military_factories", operations)
         self.assertNotIn("has_tech", operations)

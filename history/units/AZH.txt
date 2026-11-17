@@ -38,6 +38,46 @@ units = {
 		start_experience_factor = 0.30
 		start_equipment_factor = 1.0
 	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 5
+		}
+		location = 16893
+		division_template = "Basin Levy"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.50
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 6
+		}
+		location = 4089
+		division_template = "Basin Levy"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.50
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 7
+		}
+		location = 6193
+		division_template = "Basin Levy"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.50
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 8
+		}
+		location = 16929
+		division_template = "Basin Levy"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.50
+	}
 	fleet = {
 		name = "Флот Чёрного бассейна"
 		naval_base = 493

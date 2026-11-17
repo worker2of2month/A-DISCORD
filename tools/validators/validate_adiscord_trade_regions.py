@@ -11,15 +11,16 @@ from pathlib import Path
 from tools.builders.build_adiscord_trade_regions import (
     DEFINITION_RELATIVE,
     ROOT,
+    TradeRegionPlan,
     build_plan,
 )
 
 
 EXPECTED_STATE_COUNTS = {1: 67, 2: 65, 3: 91, 4: 8, 5: 100, 6: 42, 7: 360}
-EXPECTED_PROVINCE_COUNTS = {
+BASE_PROVINCE_COUNTS = {
     1: 626,
     2: 752,
-    3: 1029,
+    3: 944,
     4: 45,
     5: 1135,
     6: 485,
@@ -32,36 +33,59 @@ GEOGRAPHIC_STATE_ANCHORS = {
     66: (19, 2),  # Rus enclave lies in the Grey Belt / Exclusion Zone.
     78: (5, 7),  # The Danian expedition is in the far-west Outer Lands.
     120: (15, 1),  # ORV ownership does not move the Ainholm mandate eastward.
-    141: (7, 6),  # Doln's western state remains in Western Forul.
+    141: (247, 6),  # Doln's western state remains in Western Forul.
     156: (21, 2),
     160: (21, 2),
     218: (23, 1),  # BTL enclave is an explicit Eastern Forul boundary override.
     223: (21, 2),
     690: (24, 5),  # NAM's split resource district remains in Vorkerland.
-    691: (24, 1),  # EFL's split district remains in Eastern Forul.
-    692: (24, 3),  # AZH's split coast remains in the Southern Deserts.
+    691: (258, 1),  # EFL's split district remains in Eastern Forul.
+    692: (259, 3),  # AZH's split coast remains in the Southern Deserts.
     699: (42, 3),
     730: (42, 3),  # Shahrabad hinterlands stay in the Southern Deserts with their furnaces.
     731: (42, 3),
     732: (42, 3),
     733: (42, 3),
     700: (24, 5),
-    701: (24, 1),
+    701: (258, 1),
     719: (24, 5),  # The Azhar border strip stays in Vorkerland when ceded.
-    720: (24, 1),  # Border belts follow their parents' geography, not a victor.
-    721: (24, 1),
-    722: (24, 3),
+    720: (258, 1),  # Border belts follow their parents' geography, not a victor.
+    721: (258, 1),
+    722: (259, 3),
     709: (16, 1),  # Island sovereignty does not change Eastern Forul geography.
     718: (16, 1),  # The southern Misstana island joins its port in Eastern Forul.
     461: (67, 2),  # Deliberately realigned Exclusion Zone fringe.
 }
 
 
+def expected_province_counts(root: Path, plan: TradeRegionPlan, issues: list[str]) -> Counter[int]:
+    """Add authored southern subdivisions to the approved counts of the remaining land."""
+    geography = json.loads((root / "tools/data/adiscord_southern_cities.json").read_bytes())
+    counts = Counter(BASE_PROVINCE_COUNTS)
+    for group in ("cities", "rural_splits", "interior_splits", "city_approaches"):
+        for entry in geography[group]:
+            # Approaches with no new RGB reshape a province already counted in the map.
+            if group == "city_approaches" and "rgb" not in entry:
+                continue
+            parent, state = entry["parent"], entry["state"]
+            continent = plan.state_continents.get(state)
+            if continent is None or continent != plan.province_continents.get(parent):
+                issues.append(f"province {parent}: trade region differs from subdivision state {state}")
+                continue
+            for part in (entry, *entry.get("sectors", ())):
+                province = part["province"]
+                counts[continent] += 1
+                if plan.province_continents.get(province) != continent:
+                    issues.append(f"province {province}: must inherit trade region {continent} from {parent}")
+    return counts
+
+
 def validate(root: Path = ROOT) -> list[str]:
     issues: list[str] = []
     try:
         plan = build_plan(root)
-    except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as exc:
+        expected_counts = expected_province_counts(root, plan, issues)
+    except (OSError, RuntimeError, ValueError, KeyError, TypeError) as exc:
         return [f"trade-region source model: {exc}"]
 
     definition_path = root / DEFINITION_RELATIVE
@@ -75,10 +99,10 @@ def validate(root: Path = ROOT) -> list[str]:
             "trade-region state geography drifted: "
             f"expected {EXPECTED_STATE_COUNTS}, found {dict(plan.state_counts)}"
         )
-    if dict(plan.province_counts) != EXPECTED_PROVINCE_COUNTS:
+    if plan.province_counts != expected_counts:
         issues.append(
             "trade-region province geography drifted: "
-            f"expected {EXPECTED_PROVINCE_COUNTS}, found {dict(plan.province_counts)}"
+            f"expected {dict(expected_counts)}, found {dict(plan.province_counts)}"
         )
 
     for state_id, (
@@ -128,7 +152,7 @@ def validate(root: Path = ROOT) -> list[str]:
     except (OSError, UnicodeError, ValueError) as exc:
         issues.append(f"{DEFINITION_RELATIVE.as_posix()}: cannot validate rows: {exc}")
 
-    if dict(current_counts) != EXPECTED_PROVINCE_COUNTS:
+    if current_counts != expected_counts:
         issues.append(
             "map/definition.csv: current continent counts differ from the approved geography: "
             f"{dict(current_counts)}"

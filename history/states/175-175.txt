@@ -1,23 +1,26 @@
 state = {
 	id = 175
 	name = "STATE_175"
-	manpower = 195825
+	manpower = 391650
 	state_category = rural
 	resources = {
-		steel = 2
-		aluminium = 2
+		steel = 6
+		aluminium = 6
 	}
 	history = {
 		owner = WEF
 		add_core_of = WEF
 		add_core_of = EFL
+		victory_points = { 10006 1 }
+		victory_points = { 3444 2 }
+		victory_points = { 16902 15 }
 		buildings = {
 			infrastructure = 2
 		}
-		victory_points = { 10006 1 }
 	}
 	provinces = {
-		1046 3444 4468 5994 6579 7589 8491 10006 10513 12654 16323
+		1046 3444 4468 5994 6579 7589 8491 10006 10513 12654 16323 16902
+		16967 17041 17076 17077 17078 17079 17080
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

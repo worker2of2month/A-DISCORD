@@ -1,19 +1,25 @@
 # @section houses
-# Курс 1: Десятый дом (Конклав десяти). Секция главного дерева SHL_focus: корень SHL_golden_gate_cartel следует за
-# SHL_admit_tenth_house; координаты абсолютные, блок курса стоит под стволом
-# (x 16-31, y 15-23). Корона Юга подключена
-# в главном дереве как shared_focus; военные фокусы курса стоят в дереве
-# войны за Юг (focus_trees/SHL/south_war).
+# Курс 1: Десятый дом (Конклав десяти). Секция главного дерева SHL_focus: корень SHL_golden_gate_cartel
+# следует за SHL_admit_tenth_house и стоит прямо под ним (x 8-23, y 14-22).
+# Пять курсов занимают одни и те же клетки под рядом ратификации, поэтому
+# корень и эпилог скрыты allow_branch по SHL_political_course, а потомки
+# наследуют скрытие. После смены курса прежняя секция исчезает; фокус,
+# который ещё изучается, отменяет hidden_trigger в available вместе с
+# cancel_if_invalid. Эпилог стоит в общем блоке под короной Юга
+# SHL_south_crown_of_the_south (x 33-35, y 19-22); военные фокусы курса
+# стоят в дереве войны за Юг (focus_trees/SHL/south_war).
 	focus = {
 		id = SHL_golden_gate_cartel
 		icon = GFX_goal_generic_positive_trade_relations
-		x = 19
-		y = 15
+		x = 11
+		y = 14
 		prerequisite = { focus = SHL_admit_tenth_house }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -31,8 +37,8 @@
 	focus = {
 		id = SHL_h_cartel_price
 		icon = GFX_focus_generic_price_controls
-		x = 16
-		y = 16
+		x = 8
+		y = 15
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -43,6 +49,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -69,8 +76,8 @@
 	focus = {
 		id = SHL_h_metal_exchange
 		icon = GFX_focus_generic_industry_investment
-		x = 18
-		y = 16
+		x = 10
+		y = 15
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -81,6 +88,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -96,8 +104,8 @@
 	focus = {
 		id = SHL_house_guards
 		icon = GFX_focus_generic_commonwealth_build_infantry
-		x = 20
-		y = 16
+		x = 12
+		y = 15
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -105,13 +113,15 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_house_guards_tt
 			hidden_effect = {
 				SHL_raise_paid_levies_2 = yes
-				subtract_from_variable = { var = SHL_house_pressure value = 15 }
+				set_variable = { var = SHL_loyalty_delta value = 15 }
+				SHL_change_all_loyalty = yes
 				SHL_clamp_tensions = yes
 			}
 		}
@@ -121,8 +131,8 @@
 	focus = {
 		id = SHL_veyr_partnership
 		icon = GFX_focus_generic_treaty
-		x = 22
-		y = 16
+		x = 14
+		y = 15
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -136,6 +146,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			custom_trigger_tooltip = {
 				tooltip = SHL_veyr_partner_available_tt
 				GLP = {
@@ -162,8 +173,8 @@
 	focus = {
 		id = SHL_h_guild_schools
 		icon = GFX_focus_generic_university_1
-		x = 17
-		y = 17
+		x = 9
+		y = 16
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
 		prerequisite = {
@@ -172,6 +183,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -199,8 +211,8 @@
 	focus = {
 		id = SHL_h_house_guards_charter
 		icon = GFX_goal_generic_allies_build_infantry
-		x = 19
-		y = 17
+		x = 11
+		y = 16
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -211,6 +223,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			699 = {
 				is_owned_by = SHL
 				is_controlled_by = SHL
@@ -221,7 +234,8 @@
 			custom_effect_tooltip = SHL_h_house_guards_charter_tt
 			hidden_effect = {
 				SHL_raise_paid_levies_2 = yes
-				subtract_from_variable = { var = SHL_house_pressure value = 10 }
+				set_variable = { var = SHL_loyalty_delta value = 10 }
+				SHL_change_all_loyalty = yes
 				SHL_clamp_tensions = yes
 			}
 		}
@@ -231,8 +245,8 @@
 	focus = {
 		id = SHL_h_conclave_mercenaries
 		icon = GFX_focus_generic_military_mission
-		x = 21
-		y = 17
+		x = 13
+		y = 16
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -243,6 +257,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -255,8 +270,8 @@
 	focus = {
 		id = SHL_h_golden_gate_festival
 		icon = GFX_focus_generic_happy_cheer
-		x = 17
-		y = 18
+		x = 9
+		y = 17
 		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY }
 		prerequisite = {
@@ -264,6 +279,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -276,8 +292,8 @@
 	focus = {
 		id = SHL_h_heralds_court
 		icon = GFX_focus_generic_sympathetic_judges
-		x = 20
-		y = 18
+		x = 12
+		y = 17
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -286,6 +302,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -301,8 +318,8 @@
 	focus = {
 		id = SHL_conclave_of_ten
 		icon = GFX_focus_ADISCORD_industrial_development
-		x = 22
-		y = 18
+		x = 14
+		y = 17
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -317,6 +334,7 @@
 				check_variable = { var = SHL_running_count value = 6 compare = greater_than_or_equals }
 			}
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -352,8 +370,8 @@
 	focus = {
 		id = SHL_h_council_of_ten
 		icon = GFX_focus_generic_vote
-		x = 19
-		y = 19
+		x = 11
+		y = 18
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -364,6 +382,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -384,8 +403,8 @@
 	focus = {
 		id = SHL_houses_prog_ending_a
 		icon = GFX_focus_generic_monarchy_1
-		x = 21
-		y = 19
+		x = 13
+		y = 18
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = SHL_conclave_of_ten }
@@ -394,6 +413,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -422,8 +442,8 @@
 	focus = {
 		id = SHL_houses_prog_ending_b
 		icon = GFX_goal_generic_major_alliance
-		x = 23
-		y = 19
+		x = 15
+		y = 18
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = SHL_conclave_of_ten }
@@ -432,6 +452,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -459,8 +480,8 @@
 	focus = {
 		id = SHL_h_tenth_house_seat
 		icon = GFX_focus_generic_monarchy_2
-		x = 19
-		y = 20
+		x = 11
+		y = 19
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -468,6 +489,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -477,14 +499,14 @@
 	}
 
 	# ----- Хозяйство: конторы Золотых ворот -----
-	# Отдельный корень в колонках 13-15: программы с ценой и сроком через
+	# Отдельный корень в колонках 21-23: программы с ценой и сроком через
 	# unlock_decision_tooltip и одна пара выбора (дорога к морю или к кяризам).
 
 	focus = {
 		id = SHL_h_export_houses
 		icon = GFX_focus_generic_industrialists
-		x = 30
-		y = 16
+		x = 22
+		y = 15
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -492,6 +514,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -509,8 +532,8 @@
 	focus = {
 		id = SHL_h_rail_to_sea
 		icon = GFX_focus_generic_railroad
-		x = 29
-		y = 17
+		x = 21
+		y = 16
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -521,6 +544,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			292 = {
 				is_owned_by = SHL
 				is_controlled_by = SHL
@@ -565,8 +589,8 @@
 	focus = {
 		id = SHL_h_rail_to_qanats
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 31
-		y = 17
+		x = 23
+		y = 16
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -577,6 +601,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			287 = {
 				is_owned_by = SHL
 				is_controlled_by = SHL
@@ -621,8 +646,8 @@
 	focus = {
 		id = SHL_h_cargo_insurance
 		icon = GFX_focus_generic_merchant_fleet
-		x = 29
-		y = 18
+		x = 21
+		y = 17
 		cost = 3
 		search_filters = { FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -631,6 +656,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -643,8 +669,8 @@
 	focus = {
 		id = SHL_h_house_credit
 		icon = GFX_focus_generic_money_for_equipment
-		x = 31
-		y = 18
+		x = 23
+		y = 17
 		cost = 3
 		search_filters = { FOCUS_FILTER_INTERNATIONAL_TRADE FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -653,6 +679,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -665,8 +692,8 @@
 	focus = {
 		id = SHL_h_veyr_harbour_share
 		icon = GFX_goal_generic_construct_naval_dockyard
-		x = 29
-		y = 19
+		x = 21
+		y = 18
 		cost = 4
 		search_filters = { FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -674,6 +701,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			custom_trigger_tooltip = {
 				tooltip = SHL_h_veyr_harbour_share_available_tt
 				has_country_flag = SHL_veyr_partner
@@ -713,8 +741,8 @@
 	focus = {
 		id = SHL_h_bank_of_houses
 		icon = GFX_focus_generic_currency_reforms
-		x = 30
-		y = 20
+		x = 22
+		y = 19
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -725,6 +753,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -744,8 +773,8 @@
 	focus = {
 		id = SHL_south_debt_network
 		icon = GFX_goal_generic_trade
-		x = 22
-		y = 20
+		x = 14
+		y = 19
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -756,6 +785,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
 			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
@@ -787,8 +817,8 @@
 	focus = {
 		id = SHL_h_debt_term
 		icon = GFX_focus_generic_stockpile_currency
-		x = 20
-		y = 21
+		x = 12
+		y = 20
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -805,6 +835,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
 			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 		}
@@ -821,8 +852,8 @@
 	focus = {
 		id = SHL_south_trade_protectorates
 		icon = GFX_goal_generic_dangerous_deal
-		x = 22
-		y = 21
+		x = 14
+		y = 20
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -839,6 +870,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
 			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
@@ -857,8 +889,8 @@
 	focus = {
 		id = SHL_south_great_road
 		icon = GFX_focus_generic_improve_roads
-		x = 22
-		y = 22
+		x = 14
+		y = 21
 		cost = 4
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -872,6 +904,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			NOT = { has_global_flag = ADISCORD_south_final_started }
 			hidden_trigger = { NOT = { has_global_flag = ADISCORD_south_final_resolved } }
 			has_war = no
@@ -892,8 +925,8 @@
 	focus = {
 		id = SHL_h_kerdan_trading_house
 		icon = GFX_goal_generic_improve_relations
-		x = 24
-		y = 22
+		x = 16
+		y = 21
 		cost = 3
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -909,6 +942,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			custom_trigger_tooltip = {
 				tooltip = SHL_h_veyr_harbour_share_available_tt
 				has_country_flag = SHL_veyr_partner
@@ -934,8 +968,8 @@
 	focus = {
 		id = SHL_h_road_stations
 		icon = GFX_focus_generic_supply_line
-		x = 20
-		y = 23
+		x = 12
+		y = 22
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 		prerequisite = {
@@ -943,10 +977,13 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			custom_trigger_tooltip = {
 				tooltip = SHL_h_road_stations_available_tt
 				KDR = { ADISCORD_south_campaign_target_settled = yes }
 			}
+			234 = { SHL_road_station_secured = yes }
+			242 = { SHL_road_station_secured = yes }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -981,6 +1018,23 @@
 				}
 			}
 			else = {
+				hidden_effect = {
+					234 = {
+						if = {
+							limit = { is_owned_by = KDR }
+							add_claim_by = SHL
+						}
+					}
+					242 = {
+						if = {
+							limit = { is_owned_by = KDR }
+							add_claim_by = SHL
+						}
+					}
+				}
+			}
+			if = {
+				limit = { KDR = { exists = yes } }
 				unlock_decision_tooltip = SHL_sell_stations
 				custom_effect_tooltip = SHL_h_road_stations_tt
 			}
@@ -993,8 +1047,8 @@
 	focus = {
 		id = SHL_south_oil_for_furnaces
 		icon = GFX_goal_generic_forceful_treaty
-		x = 22
-		y = 23
+		x = 14
+		y = 22
 		cost = 5
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = {
@@ -1008,6 +1062,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			has_war = no
 			custom_trigger_tooltip = {
 				tooltip = SHL_south_final_ready_tt
@@ -1024,22 +1079,26 @@
 	}
 
 	# ----- После войны: концессия и корона торговли -----
-	# Видна только гегемону Юга; корона Юга - общий фокус SHL_south_crown_of_the_south
-	# в колонке 10, секция стоит под ней в строках 5-8.
+	# Эпилог стоит в общем блоке под короной Юга SHL_south_crown_of_the_south
+	# и виден только гегемону Юга на курсе десятого дома.
 
 	focus = {
 		id = SHL_h_concession_of_svetlogorye
 		icon = GFX_focus_generic_concessions
-		x = 26
-		y = 20
+		x = 34
+		y = 19
 		cost = 3
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
 		prerequisite = {
 			focus = SHL_south_crown_of_the_south
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			has_global_flag = ADISCORD_south_hegemon_SHL
 		}
 		cancel_if_invalid = yes
@@ -1056,11 +1115,14 @@
 	focus = {
 		id = SHL_h_southern_exchange
 		icon = GFX_goal_generic_construct_civ_factory
-		x = 25
-		y = 21
+		x = 33
+		y = 20
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
 		prerequisite = {
 			focus = SHL_h_concession_of_svetlogorye
 		}
@@ -1069,6 +1131,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			has_global_flag = ADISCORD_south_hegemon_SHL
 			699 = {
 				is_owned_by = SHL
@@ -1121,11 +1184,14 @@
 	focus = {
 		id = SHL_h_southern_bank
 		icon = GFX_focus_generic_economic_recovery
-		x = 27
-		y = 21
+		x = 35
+		y = 20
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
 		prerequisite = {
 			focus = SHL_h_concession_of_svetlogorye
 		}
@@ -1134,6 +1200,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			has_global_flag = ADISCORD_south_hegemon_SHL
 		}
 		cancel_if_invalid = yes
@@ -1153,17 +1220,21 @@
 	focus = {
 		id = SHL_h_crown_of_trade
 		icon = GFX_goal_generic_national_unity
-		x = 26
-		y = 22
+		x = 34
+		y = 21
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
 		prerequisite = {
 			focus = SHL_h_southern_exchange
 			focus = SHL_h_southern_bank
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			has_global_flag = ADISCORD_south_hegemon_SHL
 		}
 		cancel_if_invalid = yes
@@ -1176,16 +1247,20 @@
 	focus = {
 		id = SHL_h_ten_crests_forever
 		icon = GFX_focus_generic_monarchist_sentiment
-		x = 25
-		y = 23
+		x = 33
+		y = 22
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
 		prerequisite = {
 			focus = SHL_h_crown_of_trade
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			has_global_flag = ADISCORD_south_hegemon_SHL
 		}
 		cancel_if_invalid = yes
@@ -1205,11 +1280,14 @@
 	focus = {
 		id = SHL_h_veyr_junior_partner
 		icon = GFX_focus_generic_diplomatic_treaty
-		x = 27
-		y = 23
+		x = 35
+		y = 22
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
+		allow_branch = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
 		prerequisite = {
 			focus = SHL_h_crown_of_trade
 		}
@@ -1218,6 +1296,7 @@
 		}
 		available = {
 			SHL_country_operable = yes
+			hidden_trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
 			has_global_flag = ADISCORD_south_hegemon_SHL
 			GLP = { is_subject_of = SHL }
 		}

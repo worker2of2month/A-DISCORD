@@ -104,7 +104,7 @@
 Консолидация (существующие `SHL_south_debt_network` -> `SHL_south_trade_protectorates` -> `SHL_south_great_road` -> `SHL_south_oil_for_furnaces`):
 - `SHL_h_debt_term` (2) после debt_network: запускает `SHL_cons_debt_term`.
 - `SHL_h_kerdan_trading_house` (3): GLP предложение подчинения без войны при `SHL_veyr_partner`; иначе bypass.
-- `SHL_h_road_stations` (3) после great_road: при победе над KDR +1 инфраструктура 234/240 или продажа станций за 150 казны (решение `SHL_sell_stations` - в контракт добавить как нац. решение, 1 раз).
+- `SHL_h_road_stations` (3) после great_road. Если Шахрабад владеет Наретом (234) и Раватом (242) и контролирует их, обе станции получают по уровню инфраструктуры до предела 5. Решение `SHL_sell_stations` позволяет один раз уступить Кадиру права на обе станции за 150 казны и вернуть ему участки Шахрабада.
 - Убрать `ADISCORD_south_nam_story_clear` из `available` всех трёх цепных фокусов; оставить на `SHL_south_oil_for_furnaces`.
 
 Война (общий фронт + финал `SHL_south_oil_for_furnaces`):

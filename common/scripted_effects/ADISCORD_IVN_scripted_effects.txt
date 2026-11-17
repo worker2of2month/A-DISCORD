@@ -1099,7 +1099,6 @@ IVN_cw_finish = {
 			IVN = {
 				ADISCORD_end_party_coalition = yes
 				clear_array = ADISCORD_banned_parties
-				add_to_variable = { ADISCORD_party_markers_revision = 1 }
 			}
 			for_each_loop = {
 				array = ADISCORD_banned_parties

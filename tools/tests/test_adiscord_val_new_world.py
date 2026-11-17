@@ -219,6 +219,8 @@ class ContractWorld:
                 taken |= active
             elif key == "ADISCORD_economy_mark_dirty":
                 self.dirty.add(scope)
+            elif key == "ADISCORD_end_party_coalition":
+                country["modifiers"].discard("ADISCORD_coalition_support")
             elif key.startswith("ADISCORD_economy_receive_") and key[len("ADISCORD_economy_receive_"):].isdigit():
                 # Shared fixed-amount treasury receipt from ADISCORD_shared_action_effects.txt.
                 amount = int(key[len("ADISCORD_economy_receive_"):])

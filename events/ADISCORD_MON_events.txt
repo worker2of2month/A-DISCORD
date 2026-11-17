@@ -1,0 +1,41 @@
+add_namespace = ADISCORD_mon_court
+
+country_event = {
+	id = ADISCORD_mon_court.1
+	title = ADISCORD_mon_court.1.t
+	desc = ADISCORD_mon_court.1.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = MON
+		has_country_leader = { character = MON_Marius_II_Arken ruling_only = yes }
+	}
+	option = {
+		name = ADISCORD_mon_court.1.houses
+		trigger = { has_country_leader = { character = MON_Marius_II_Arken ruling_only = yes } }
+		ai_chance = { base = 45 }
+		custom_effect_tooltip = MON_houses_cabinet_tt
+		hidden_effect = {
+			set_temp_variable = { ADISCORD_party = token:hedonism }
+			ADISCORD_admit_coalition_party = yes
+		}
+	}
+	option = {
+		name = ADISCORD_mon_court.1.staff
+		trigger = { has_country_leader = { character = MON_Marius_II_Arken ruling_only = yes } }
+		ai_chance = { base = 40 }
+		custom_effect_tooltip = MON_staff_cabinet_tt
+		hidden_effect = {
+			set_temp_variable = { ADISCORD_party = token:etatism }
+			ADISCORD_admit_coalition_party = yes
+			set_temp_variable = { ADISCORD_party = token:pragmatism }
+			ADISCORD_ban_party = yes
+		}
+		add_stability = -0.03
+	}
+	option = {
+		name = ADISCORD_mon_court.1.throne
+		ai_chance = { base = 15 }
+	}
+}

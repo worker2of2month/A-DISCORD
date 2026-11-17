@@ -16,7 +16,7 @@ SHL_metal_contracts = {
 }
 
 SHL_conclave = {
-	icon = generic_industry
+	icon = SHL_conclave
 	allowed = { tag = SHL }
 	visible = { has_country_flag = SHL_furnaces_initialized }
 	visible_when_empty = yes
@@ -46,6 +46,7 @@ SHL_public_campaigns = {
 	visible = {
 		OR = {
 			has_completed_focus = SHL_quarter_listening
+			has_completed_focus = SHL_heralds_table
 			has_completed_focus = SHL_r_safir_cabinet
 			has_completed_focus = SHL_c_mariam_cabinet
 		}
@@ -61,6 +62,14 @@ SHL_measures = {
 	visible = { check_variable = { var = SHL_political_course value = 0 compare = greater_than } }
 	visible_when_empty = yes
 	priority = 21
+}
+
+# Defeat chapter: the guarantor houses' loan and the Cold Fire underground.
+SHL_under_seal = {
+	icon = generic_political_actions
+	allowed = { tag = SHL }
+	visible = { has_country_flag = SHL_seal_chapter_open }
+	priority = 24
 }
 
 SHL_treasury = {

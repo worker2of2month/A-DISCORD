@@ -1,4 +1,11 @@
 ﻿l_english:
+ ADISCORD_mon_court.1.t: "The Council of Fifteen Crowns"
+ ADISCORD_mon_court.1.d: "Two timetables for the same railway lie on Marius II's desk. One sends grain to market. The other sends shells to the southern arsenals. Both bear the imperial seal.\n\nThe Chamber of Crowns asks for a seat on the council of ministers. Its delegates will answer to the throne for deliveries from their estates. The General Staff wants a seat as well, on one condition. The League of Town Charters must close. Its councils have refused to give up their freight wagons to the army. The treasurer waits outside the door. By morning he needs a single timetable."
+ ADISCORD_mon_court.1.houses: "Let the Chamber answer for the provinces."
+ ADISCORD_mon_court.1.staff: "Put the staff in charge of supply and close the League."
+ ADISCORD_mon_court.1.throne: "The throne will settle the timetables."
+ MON_houses_cabinet_tt: "The Chamber of Crowns will join the Arken government."
+ MON_staff_cabinet_tt: "The Imperial General Staff will join the Arken government. The League of Town Charters will be banned."
  ADISCORD_rin_crisis.1.t: "Two Oaths Demand an Answer"
  ADISCORD_rin_crisis.1.d: "The war in Vorkerland has torn apart the trade agreements that sustained the south, while persuading Montera to demand that the northern oath be honoured. The nobles of the Palatine Court are already raising the crown's banners; Rina's city councils reply that no foreign throne can override their charters. Alaric IV must choose, or admit that the united palatinate no longer exists."
  ADISCORD_rin_crisis.1.a: "The charters will outlast the crown."

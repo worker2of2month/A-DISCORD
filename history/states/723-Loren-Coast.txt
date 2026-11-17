@@ -3,9 +3,10 @@ state={
 	id=723
 	name="STATE_723"
 	provinces={
-		1287 3113 3695 5979 6000 6495 6870 7302 7621 8724 11219
+		1287 3113 3695 5979 6000 6495 6870 7302 7621 8724 11219 16937
+		17048
 	}
-	manpower = 890000
+	manpower = 1335000
 	buildings_max_level_factor = 1.000
 	state_category = town
 	local_supplies = 1.0
@@ -13,6 +14,8 @@ state={
 		owner = EFL
 		add_core_of = EFL
 		victory_points = { 6495 10 }
+		victory_points = { 3695 2 }
+		victory_points = { 5979 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1

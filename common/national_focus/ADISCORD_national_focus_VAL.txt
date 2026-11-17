@@ -720,6 +720,10 @@ shared_focus = {
 		ai_will_do = { base = 1 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			activate_advisor = VAL_Morn_theorist
+			if = {
+				limit = { VAL_morn_cabinet_offer_current = yes }
+				country_event = { id = val_rework.275 }
+			}
 			custom_effect_tooltip = VAL_focus_progression_VAL_Morns_Supply_Trains_tt
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			add_equipment_to_stockpile = { type = support_equipment amount = 400 producer = VAL }

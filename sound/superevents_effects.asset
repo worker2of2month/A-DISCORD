@@ -470,7 +470,7 @@ soundeffect = {
 	name = superevent_south_conclave_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_regency_sound
+		sound = superevent_south_conclave_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -482,7 +482,7 @@ soundeffect = {
 	name = superevent_south_service_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_iron_sound
+		sound = superevent_south_service_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -494,7 +494,7 @@ soundeffect = {
 	name = superevent_south_charter_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_regency_sound
+		sound = superevent_south_charter_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -506,7 +506,7 @@ soundeffect = {
 	name = superevent_south_contracts_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_directorate_sound
+		sound = superevent_south_contracts_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -518,7 +518,7 @@ soundeffect = {
 	name = superevent_south_rump_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_regency_sound
+		sound = superevent_south_rump_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -530,7 +530,7 @@ soundeffect = {
 	name = superevent_south_revenge_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_iron_sound
+		sound = superevent_south_revenge_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -566,7 +566,7 @@ soundeffect = {
 	name = superevent_south_boards_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_directorate_sound
+		sound = superevent_south_boards_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -590,7 +590,7 @@ soundeffect = {
 	name = superevent_west_worker_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_vorkerland_worker_victory_sound
+		sound = superevent_west_worker_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -602,7 +602,7 @@ soundeffect = {
 	name = superevent_west_petrichev_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_west_petrichev_sound
+		sound = superevent_west_imperial_victory_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -758,7 +758,7 @@ soundeffect = {
 	name = superevent_south_contract_republic_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_directorate_sound
+		sound = superevent_south_contract_republic_sound
 	}
 	is3d = no
 	max_audible = 1
@@ -782,7 +782,7 @@ soundeffect = {
 	name = superevent_south_nam_sound_e
 	loop = no
 	sounds = {
-		sound = superevent_south_iron_sound
+		sound = superevent_south_nam_sound
 	}
 	is3d = no
 	max_audible = 1

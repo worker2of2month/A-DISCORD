@@ -68,3 +68,46 @@ SHL_south_war_dynamic = {
 	resistance_growth = SHL_sw_resistance
 	compliance_gain = SHL_sw_compliance
 }
+
+# Limited wars with Keizan and Veyr. The border-war focuses add to the SHL_bw_*
+# variables once; the modifier acts only while one of those wars is fought.
+SHL_border_war_dynamic = {
+	icon = GFX_idea_generic_war_preparation
+	enable = {
+		tag = SHL
+		SHL_limited_war_active = yes
+	}
+	army_attack_factor = SHL_bw_army_attack
+	breakthrough_factor = SHL_bw_breakthrough
+	army_defence_factor = SHL_bw_army_defence
+	max_dig_in = SHL_bw_max_dig_in
+}
+
+# Defeat chapter, lease route. The SHL_rdm_* variables only accumulate; the
+# spirit stays after the redeemed charter.
+SHL_redeem_lease_dynamic = {
+	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	enable = { tag = SHL }
+	stability_factor = SHL_rdm_stability
+	political_power_gain = SHL_rdm_pp
+	war_support_factor = SHL_rdm_war_support
+	consumer_goods_factor = SHL_rdm_consumer_goods
+	production_factory_efficiency_gain_factor = SHL_rdm_efficiency
+	trade_opinion_factor = SHL_rdm_trade
+	production_factory_max_efficiency_factor = SHL_rdm_max_efficiency
+	production_speed_buildings_factor = SHL_rdm_construction
+}
+
+# Defeat chapter, Cold Fire route. Both results of the rising remove it and
+# clear the SHL_cld_* variables (SHL_cold_close_rising).
+SHL_cold_fire_dynamic = {
+	icon = GFX_idea_generic_war_preparation
+	enable = { tag = SHL }
+	stability_factor = SHL_cld_stability
+	war_support_factor = SHL_cld_war_support
+	army_org_factor = SHL_cld_org
+	conscription_factor = SHL_cld_conscription
+	army_defence_factor = SHL_cld_defence
+	army_attack_factor = SHL_cld_attack
+	max_dig_in = SHL_cld_dig_in
+}

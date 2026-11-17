@@ -46,7 +46,7 @@ characters = {
 					NOT = { has_state_flag = SHL_house_opposed }
 				}
 			}
-			traits = { ADISCORD_qol_chancellor }
+			traits = { SHL_house_safir_purse }
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -81,7 +81,7 @@ characters = {
 					NOT = { has_state_flag = SHL_house_opposed }
 				}
 			}
-			traits = { ADISCORD_qol_construction }
+			traits = { SHL_house_arbin_qanat_masters }
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -110,7 +110,7 @@ characters = {
 					NOT = { has_state_flag = SHL_house_opposed }
 				}
 			}
-			traits = { minister_trait_foreign_trade }
+			traits = { SHL_house_loran_golden_gate }
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -139,7 +139,7 @@ characters = {
 					NOT = { has_state_flag = SHL_house_opposed }
 				}
 			}
-			traits = { ADISCORD_qol_registrar }
+			traits = { SHL_house_nur_mediators }
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -168,7 +168,7 @@ characters = {
 					NOT = { has_state_flag = SHL_house_opposed }
 				}
 			}
-			traits = { ADISCORD_qol_industrial_planner }
+			traits = { SHL_house_bayrat_ore_lords }
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -197,7 +197,7 @@ characters = {
 					NOT = { has_state_flag = SHL_house_opposed }
 				}
 			}
-			traits = { ADISCORD_qol_quartermaster }
+			traits = { SHL_house_kerdan_sea_road }
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -226,7 +226,7 @@ characters = {
 					NOT = { has_state_flag = SHL_house_opposed }
 				}
 			}
-			traits = { ADISCORD_qol_medical }
+			traits = { SHL_house_sharim_heavy_shifts }
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -259,7 +259,7 @@ characters = {
 					NOT = { has_state_flag = SHL_house_opposed }
 				}
 			}
-			traits = { ADISCORD_qol_education }
+			traits = { SHL_house_darban_engineers }
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -288,7 +288,7 @@ characters = {
 					NOT = { has_state_flag = SHL_house_opposed }
 				}
 			}
-			traits = { ADISCORD_qol_security }
+			traits = { SHL_house_veyran_guards }
 			ai_will_do = { factor = 1 }
 		}
 	}

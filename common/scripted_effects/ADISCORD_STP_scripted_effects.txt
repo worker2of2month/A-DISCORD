@@ -15145,6 +15145,7 @@ STP_ch_update_cabinet_parties = {
 					long_name = STP_pf_security_name
 				}
 			}
+			ADISCORD_legalise_party = yes
 			ADISCORD_admit_coalition_party = yes
 		}
 		else = { ADISCORD_remove_coalition_party = yes }

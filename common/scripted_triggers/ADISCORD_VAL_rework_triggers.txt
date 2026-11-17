@@ -3588,6 +3588,14 @@ VAL_peace_crisis_active = {
 	has_power_balance = { id = VAL_peace_balance }
 }
 
+VAL_morn_cabinet_offer_current = {
+	tag = VAL
+	has_government = etatism
+	has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
+	has_character = VAL_Renata_Morn
+	VAL_peace_regime_chosen = no
+}
+
 VAL_peace_regime_chosen = {
 	has_variable = VAL_peace_regime
 }

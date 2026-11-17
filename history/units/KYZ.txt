@@ -8,4 +8,44 @@ division_template = {
 }
 units = {
 	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 1349 division_template = "Qanat Guard" start_experience_factor = 0.15 start_equipment_factor = 0.50 }
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 2
+		}
+		location = 16733
+		division_template = "Qanat Guard"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 3
+		}
+		location = 16735
+		division_template = "Qanat Guard"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 4
+		}
+		location = 16920
+		division_template = "Qanat Guard"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 5
+		}
+		location = 16921
+		division_template = "Qanat Guard"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.60
+	}
 }

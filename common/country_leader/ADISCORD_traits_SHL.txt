@@ -25,4 +25,67 @@ leader_traits = {
 		war_support_factor = 0.05
 		production_speed_arms_factory_factor = 0.05
 	}
+
+	# Advisor trait of Khosrow Arbin: his house keeps the qanats and roads.
+	SHL_house_arbin_qanat_masters = {
+		random = no
+		production_speed_infrastructure_factor = 0.06
+		production_speed_industrial_complex_factor = 0.03
+	}
+
+	# Advisor trait of Darius Safir: the purse that pays for the Conclave.
+	SHL_house_safir_purse = {
+		random = no
+		political_power_gain = 0.08
+		consumer_goods_factor = -0.02
+	}
+
+	# Advisor trait of Golshan Loran: the Golden Gate trade house.
+	SHL_house_loran_golden_gate = {
+		random = no
+		trade_opinion_factor = 0.20
+		improve_relations_maintain_cost_factor = -0.10
+	}
+
+	# Advisor trait of Kamran Nur: Jalil's own house of mediators.
+	SHL_house_nur_mediators = {
+		random = no
+		stability_factor = 0.02
+		drift_defence_factor = 0.10
+	}
+
+	# Advisor trait of Tahmuras Bayrat: the ore lords of the mines.
+	SHL_house_bayrat_ore_lords = {
+		random = no
+		industrial_capacity_factory = 0.03
+		production_speed_industrial_complex_factor = 0.03
+	}
+
+	# Advisor trait of Fereydun Kerdan: the sea road to Veyr.
+	SHL_house_kerdan_sea_road = {
+		random = no
+		supply_consumption_factor = -0.03
+		production_speed_infrastructure_factor = 0.04
+	}
+
+	# Advisor trait of Shirin Sharim: the heavy shifts of furnace VII.
+	SHL_house_sharim_heavy_shifts = {
+		random = no
+		production_factory_efficiency_gain_factor = 0.04
+		monthly_population = 0.02
+	}
+
+	# Advisor trait of Rauf Darban: the engineers of Devyatipechye.
+	SHL_house_darban_engineers = {
+		random = no
+		research_speed_factor = 0.02
+		production_speed_industrial_complex_factor = 0.03
+	}
+
+	# Advisor trait of Behruz Veyran: the guards of the Veyr border.
+	SHL_house_veyran_guards = {
+		random = no
+		drift_defence_factor = 0.10
+		army_org_factor = 0.02
+	}
 }

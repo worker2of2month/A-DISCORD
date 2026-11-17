@@ -799,6 +799,34 @@ ideas = {
 			}
 		}
 
+		# Display-only pairs for the limited-war aggregate; never installed.
+		SHL_border_war_dummy_idea = {
+			name = SHL_border_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		SHL_bw_siege_founders_idea = {
+			name = SHL_border_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.05
+				breakthrough_factor = 0.05
+			}
+		}
+
+		SHL_bw_furnace_garrisons_idea = {
+			name = SHL_border_war_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.08
+				max_dig_in = 2
+			}
+		}
+
 		# Display-only pair for the Conclave power aggregate; never installed.
 		SHL_conclave_power_dummy_idea = {
 			name = SHL_conclave_power_dynamic
@@ -1368,6 +1396,225 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.02
+			}
+		}
+
+		# Defeat chapter deltas. Display-only pairs of the two route spirits
+		# (SHL_redeem_lease_dynamic, SHL_cold_fire_dynamic); never installed.
+		SHL_redeem_dummy_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		SHL_rdm_furnaces_of_the_lease_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.08
+				political_power_gain = 0.10
+				war_support_factor = -0.15
+				consumer_goods_factor = 0.03
+			}
+		}
+
+		SHL_rdm_lease_ledger_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		SHL_rdm_namestnik_audience_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = {
+				trade_opinion_factor = 0.10
+			}
+		}
+
+		SHL_rdm_by_coin_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		SHL_rdm_by_service_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		SHL_rdm_quiet_quarters_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+			}
+		}
+
+		SHL_rdm_guarantor_houses_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_rdm_supervised_repairs_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		SHL_rdm_charter_idea = {
+			name = SHL_redeem_lease_dynamic
+			picture = GFX_idea_ADISCORD_trade_policy_export_focus
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.15
+			}
+		}
+
+		SHL_cold_dummy_idea = {
+			name = SHL_cold_fire_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		SHL_cld_fire_idea = {
+			name = SHL_cold_fire_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = -0.05
+				war_support_factor = 0.10
+			}
+		}
+
+		SHL_cld_ash_cells_idea = {
+			name = SHL_cold_fire_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		SHL_cld_quarter_couriers_idea = {
+			name = SHL_cold_fire_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				conscription_factor = 0.03
+			}
+		}
+
+		SHL_cld_hidden_armouries_idea = {
+			name = SHL_cold_fire_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+			}
+		}
+
+		SHL_cld_letters_to_the_sands_idea = {
+			name = SHL_cold_fire_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		SHL_cld_shifts_idea = {
+			name = SHL_cold_fire_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		SHL_cld_desert_drill_idea = {
+			name = SHL_cold_fire_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				max_dig_in = 2
+			}
+		}
+
+		SHL_cld_raid_martyrs_idea = {
+			name = SHL_cold_fire_dynamic
+			picture = GFX_idea_generic_war_preparation
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		# Endings of the defeat chapter.
+		SHL_redeemed_conclave = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = 0.10
+				political_power_gain = 0.15
+				production_factory_max_efficiency_factor = 0.05
+				consumer_goods_factor = -0.03
+			}
+		}
+
+		SHL_cold_fire_without_masters_idea = {
+			picture = generic_victors_of_ww1
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = 0.10
+				war_support_factor = 0.05
+				political_power_gain = 0.10
+				production_factory_max_efficiency_factor = 0.05
+				army_org_factor = 0.03
+			}
+		}
+
+		# Timed by SHL_cold_rising_crushed.
+		SHL_cold_ashes_idea = {
+			picture = generic_oppression
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = -0.10
+				war_support_factor = -0.15
+				political_power_gain = -0.10
+				production_factory_max_efficiency_factor = -0.05
 			}
 		}
 	}

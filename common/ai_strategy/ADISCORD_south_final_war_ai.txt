@@ -303,6 +303,111 @@ ADISCORD_south_uprising_front = {
 	}
 }
 
+# Every participant can attack or recover a recorded district. Champions
+# concentrate on their paid order until settlement releases the state slot.
+ADISCORD_south_district_objectives = {
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war = yes
+		ADISCORD_south_final_active = yes
+		has_variable = ADISCORD_south_side
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			has_variable = ADISCORD_south_initial_side
+			ADISCORD_south_enemy_front_state = yes
+		}
+		value = 65
+	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			FROM.FROM = { has_variable = ADISCORD_south_order_state }
+			state = var:FROM.FROM.ADISCORD_south_order_state
+			ADISCORD_south_enemy_front_state = yes
+		}
+		value = 140
+	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			is_capital = yes
+			FROM.FROM = { difficulty > 2 }
+			owner = { ADISCORD_south_war_champion = yes }
+			ADISCORD_south_enemy_front_state = yes
+		}
+		value = 100
+	}
+}
+
+# The last 120 days before the crisis deadline: both champions move to the
+# border before the deadline war, whatever their focus readiness.
+ADISCORD_south_deadline_shl_border_nam = {
+	allowed = { tag = SHL }
+	enable = {
+		ADISCORD_south_deadline_ai_window = yes
+		NAM = { ADISCORD_south_declarer_valid = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NAM value = 100 }
+}
+
+ADISCORD_south_deadline_shl_border_efl = {
+	allowed = { tag = SHL }
+	enable = {
+		ADISCORD_south_deadline_ai_window = yes
+		EFL = { ADISCORD_south_declarer_valid = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = EFL value = 100 }
+}
+
+ADISCORD_south_deadline_shl_border_azh = {
+	allowed = { tag = SHL }
+	enable = {
+		ADISCORD_south_deadline_ai_window = yes
+		AZH = { ADISCORD_south_declarer_valid = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = AZH value = 100 }
+}
+
+ADISCORD_south_deadline_nam_border_shl = {
+	allowed = { tag = NAM }
+	enable = {
+		ADISCORD_south_deadline_ai_window = yes
+		ADISCORD_south_declarer_valid = yes
+		SHL = { ADISCORD_south_champion_viable = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
+}
+
+ADISCORD_south_deadline_efl_border_shl = {
+	allowed = { tag = EFL }
+	enable = {
+		ADISCORD_south_deadline_ai_window = yes
+		ADISCORD_south_declarer_valid = yes
+		SHL = { ADISCORD_south_champion_viable = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
+}
+
+ADISCORD_south_deadline_azh_border_shl = {
+	allowed = { tag = AZH }
+	enable = {
+		ADISCORD_south_deadline_ai_window = yes
+		ADISCORD_south_declarer_valid = yes
+		SHL = { ADISCORD_south_champion_viable = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
+}
+
 # Respect the campaign switch while the southern final war is disabled.
 ADISCORD_difficulty_south_campaign_supply = {
 	allowed = {

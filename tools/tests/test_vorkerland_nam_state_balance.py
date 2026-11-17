@@ -29,13 +29,13 @@ NAM_SVETLOGORSK_PROVINCES = {
     16864, 16865, 16866, 16867, 16869, 16870, 16875,
 }
 NAM_RESIDUAL_CITY_STATE_ID = 689
-NAM_RESIDUAL_CITY_PROVINCES = {176, 2038, 2231, 2299, 7618, 7639, 8358, 16873, 16874, 16878}
+NAM_RESIDUAL_CITY_PROVINCES = {176, 2038, 2231, 2299, 7618, 7639, 8358, 16873, 16874, 16878, 16983, 17025}
 NAM_DRYRIVER_STATE_ID = 690
 NAM_EAST_DRYRIVER_STATE_ID = 719
 NAM_EAST_DRYRIVER_PROVINCES = {461, 6961}
 NAM_SOUTHERN_SPLIT_PROVINCES = {
     16864, 16865, 16866, 16867, 16869, 16870, 16873, 16874, 16875, 16878,
-    16879, 16880, 16881, 16884, 16885, 16887, 16890,
+    16879, 16880, 16881, 16884, 16885, 16887, 16890, 16983, 17025,
 }
 EFL_MIDDLE_LOREN_STATE_ID = 691
 AZH_BLACK_COAST_STATE_ID = 692
@@ -227,11 +227,11 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
     def test_coalition_regions_preserve_territory_industry_and_population_targets(self):
         families = {
-            68: ((68, 725), builder.EFL_UPPER_LOREN_PROVINCES, 5430000, 2, 1, 0),
-            70: ((70, 723, 724), builder.EFL_LOWER_LOREN_PROVINCES, 3240000, 2, 1, 1),
-            691: ((691, 726), builder.EFL_MIDDLE_LOREN_PROVINCES, 1570000, 0, 0, 0),
-            69: ((69, 727, 728), builder.AZH_CORE_PROVINCES, 6770000, 2, 2, 0),
-            692: ((692, 729), builder.AZH_BLACK_COAST_PROVINCES, 4650000, 1, 0, 1),
+            68: ((68, 725), builder.EFL_UPPER_LOREN_PROVINCES, 8145000, 2, 1, 0),
+            70: ((70, 723, 724), builder.EFL_LOWER_LOREN_PROVINCES, 4860000, 2, 1, 1),
+            691: ((691, 726), builder.EFL_MIDDLE_LOREN_PROVINCES, 2355000, 0, 0, 0),
+            69: ((69, 727, 728), builder.AZH_CORE_PROVINCES, 10155000, 2, 2, 0),
+            692: ((692, 729), builder.AZH_BLACK_COAST_PROVINCES, 6975000, 1, 0, 1),
         }
         for parent, (members, original, population, civilian, military, dockyards) in families.items():
             self.assertTrue(set(members) <= self.states.keys(), (parent, members))
@@ -259,12 +259,12 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         from collections import Counter
 
         for members, expected in (
-            ((68, 725), {"steel": 3, "aluminium": 20}),
-            ((69, 727, 728), {"oil": 2, "chromium": 1}),
-            ((70, 723, 724), {"aluminium": 22}),
-            ((691, 726), {"tungsten": 2, "aluminium": 10}),
+            ((68, 725), {"steel": 5, "aluminium": 30}),
+            ((69, 727, 728), {"oil": 6, "chromium": 3}),
+            ((70, 723, 724), {"aluminium": 34}),
+            ((691, 726), {"tungsten": 4, "aluminium": 15}),
             ((721,), {"aluminium": 10}),
-            ((692, 729), {"oil": 1, "chromium": 1, "tungsten": 1}),
+            ((692, 729), {"oil": 3, "chromium": 3, "tungsten": 3}),
         ):
             actual = Counter()
             for sid in members:
@@ -527,7 +527,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             self.assertEqual(int(scalar(source, "manpower")), population[state_id], state_id)
         self.assertEqual(
             population[NAM_DRYRIVER_STATE_ID] + population[NAM_EAST_DRYRIVER_STATE_ID],
-            1_000_000,
+            1_500_000,
         )
         for building, expected in {
             "industrial_complex": 5,
@@ -569,7 +569,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 resources.get("chromium", 0)
                 for resources in builder.NAM_MAINLAND_STATE_RESOURCES.values()
             ),
-            15,
+            24,
         )
         self.assertNotRegex(east_dryriver, r"(?m)^\s*chromium\s*=")
         self.assertEqual(building_level(named_block(harbour, "16716"), "naval_base"), 8)
@@ -869,14 +869,14 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         expected = {
             67: {6099: 10, 16890: 15},
             68: {6150: 10},
-            69: {16893: 25, 16883: 5, 16886: 5, 16889: 5, 16894: 5, 16888: 5},
+            69: {16893: 25, 16883: 10, 16886: 10, 16889: 10, 16894: 10, 16888: 10},
             70: {2986: 15, 1198: 10, 16900: 10, 16901: 10},
             723: {6495: 10},
             724: {6796: 5},
             725: {259: 10},
             726: {6331: 5},
             727: {8234: 10},
-            728: {16882: 5, 16891: 5},
+            728: {16882: 10, 16891: 10},
             729: {6193: 5},
             688: {16721: 25, 1710: 5},
             689: {7618: 5},
@@ -885,19 +885,16 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             691: {8194: 10},
             720: {8057: 5},
             721: {7908: 5},
-            692: {493: 25, 5039: 5, 4089: 10},
+            692: {493: 25, 5039: 5, 4089: 15},
             722: {2443: 5},
-            700: {16716: 20, 16881: 5, 16884: 5, 16892: 5},
+            700: {16716: 20, 16881: 10, 16884: 10, 16892: 15},
             701: {16717: 25},
         }
-        self.assertEqual(
-            {
-                state_id: dict(points)
-                for state_id, points in builder.NAM_LEGACY_VICTORY_POINTS.items()
-            },
-            expected,
-        )
         for state_id, points in expected.items():
+            for province, value, _name in builder.REGIONAL_SETTLEMENTS.get(state_id, ()):
+                self.assertNotIn(province, points)
+                points[province] = value
+            self.assertEqual(dict(builder.NAM_LEGACY_VICTORY_POINTS[state_id]), points)
             source = state_source(state_id)
             for province_id, value in points.items():
                 with self.subTest(state=state_id, province=province_id):
@@ -909,14 +906,14 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (67, 688, 689, 690, 700, 719)),
-            135,
+            145,
         )
         self.assertEqual(
             sum(sum(expected[state].values()) for state in (68, 70, 691, 701, 720, 721, 723, 724, 725, 726)),
-            130,
+            162,
         )
         self.assertEqual(
-            sum(sum(expected[state].values()) for state in (69, 692, 722, 727, 728, 729)), 120
+            sum(sum(expected[state].values()) for state in (69, 692, 722, 727, 728, 729)), 139
         )
 
         localisation = (

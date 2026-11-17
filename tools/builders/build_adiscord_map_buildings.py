@@ -28,15 +28,16 @@ PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
 DEFINITION_PATH = ROOT / "map" / "definition.csv"
 STATE_DIR = ROOT / "history" / "states"
 SEA_POSITIONED_TYPES = {"floating_harbor"}
-# The dams of provinces 145 and 70 form one river crossing beside a permanent
-# landmark. Both rows share one anchor on the province border so the map shows
-# a single model: truncation places it in 145, rounding in 70.
-BORDER_DAM_STATES = (28, 53)
-BORDER_DAM_ANCHOR = ("3749.00", "11.10", "945.86", "4.09")
+# Each state needs a spawn on its own side of the pixel boundary. Keep the
+# two models at each crossing within a few hundredths of a map unit.
+BORDER_DAM_ANCHORS = {
+    28: ("3749.00", "11.10", "945.99", "4.09"),
+    53: ("3749.00", "11.10", "946.00", "4.09"),
+    688: ("3648.49", "11.00", "617.00", "2.36"),
+    67: ("3648.51", "11.00", "616.99", "2.36"),
+}
 # Scripted construction needs anchors before the buildings exist in history.
-# The two banks share one model at the 3127/12668 river crossing.
 NAM_DAM_PROVINCES = {688: 3127, 67: 12668}
-NAM_DAM_ANCHOR = ("3648.86", "11.00", "617.00", "2.36")
 PORT_ANCHOR_TYPES = {
     "coastal_bunker",
     "dockyard",
@@ -250,8 +251,8 @@ def load_province_by_color(root: Path = ROOT) -> dict[tuple[int, int, int], int]
     return province_by_color
 
 
-def _pixel_coordinate(value: str, maximum: int) -> int:
-    coordinate = round(float(value))
+def _pixel_coordinate(value: str, maximum: int, *, truncate: bool = False) -> int:
+    coordinate = int(float(value)) if truncate else round(float(value))
     if not 0 <= coordinate < maximum:
         raise ValueError(f"map coordinate {value} is outside 0..{maximum - 1}")
     return coordinate
@@ -275,8 +276,11 @@ def audit_buildings(root: Path = ROOT) -> tuple[list[str], list[BuildingMismatch
             building_type = fields[1]
             if building_type in SEA_POSITIONED_TYPES:
                 continue
-            x = _pixel_coordinate(fields[2], image.width)
-            z = _pixel_coordinate(fields[4], image.height)
+            # The native dam ownership check truncates world coordinates before
+            # flipping Z to the bitmap row.
+            dam = building_type == "dam_spawn"
+            x = _pixel_coordinate(fields[2], image.width, truncate=dam)
+            z = _pixel_coordinate(fields[4], image.height, truncate=dam)
             province = province_by_color.get(image.getpixel((x, image.height - 1 - z)))
             actual_state = (
                 state_by_province.get(province) if province is not None else None
@@ -286,7 +290,7 @@ def audit_buildings(root: Path = ROOT) -> tuple[list[str], list[BuildingMismatch
                     f"map/buildings.txt:{line_number}: {building_type} is not positioned in a state province"
                 )
             recorded_state = int(fields[0])
-            if recorded_state != actual_state and not is_border_dam(fields):
+            if recorded_state != actual_state:
                 mismatches.append(
                     BuildingMismatch(
                         line=line_number,
@@ -364,9 +368,7 @@ def synchronize_buildings(
 
 
 def is_border_dam(fields: list[str]) -> bool:
-    return fields[1] == "dam_spawn" and (
-        int(fields[0]) in BORDER_DAM_STATES or int(fields[0]) in NAM_DAM_PROVINCES
-    )
+    return fields[1] == "dam_spawn" and int(fields[0]) in BORDER_DAM_ANCHORS
 
 
 def load_dam_province_by_state(root: Path = ROOT) -> dict[int, int]:
@@ -389,8 +391,7 @@ def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int
     ``dam_spawn`` is province-scoped: an anchor in a neighbouring province of
     the same state leaves the dam without a model. A stray anchor moves to the
     nearest integer pixel of the dam province, so truncation and rounding agree.
-    Border dams instead keep the shared ``BORDER_DAM_ANCHOR``; two separate
-    anchors in their own provinces render as two offset models.
+    Paired border anchors straddle the native pixel edge at the crossing.
     """
     dam_provinces = load_dam_province_by_state(root)
     colors = load_province_by_color(root)
@@ -403,7 +404,7 @@ def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int
     }
     for state in NAM_DAM_PROVINCES:
         if state in dam_provinces and state not in existing:
-            result.append(";".join((str(state), "dam_spawn", *NAM_DAM_ANCHOR, "0")))
+            result.append(";".join((str(state), "dam_spawn", *BORDER_DAM_ANCHORS[state], "0")))
             changed.append(len(result))
     with (
         Image.open(root / "map/provinces.bmp") as provinces,
@@ -416,15 +417,18 @@ def dam_province_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int
             fields = line.split(";")
             if fields[1] != "dam_spawn":
                 continue
-            if is_border_dam(fields):
-                anchor = NAM_DAM_ANCHOR if int(fields[0]) in NAM_DAM_PROVINCES else BORDER_DAM_ANCHOR
+            state = int(fields[0])
+            province_id = dam_provinces.get(state)
+            if province_id is None:
+                continue
+            if state in BORDER_DAM_ANCHORS:
+                anchor = BORDER_DAM_ANCHORS[state]
+                if province_at(int(float(anchor[0])), int(float(anchor[2]))) != province_id:
+                    raise ValueError(f"state {state}: dam anchor is outside province {province_id}")
                 if tuple(fields[2:6]) != anchor:
                     fields[2:6] = anchor
                     result[index] = ";".join(fields)
                     changed.append(index + 1)
-                continue
-            province_id = dam_provinces.get(int(fields[0]))
-            if province_id is None:
                 continue
             x, z = float(fields[2]), float(fields[4])
             if all(

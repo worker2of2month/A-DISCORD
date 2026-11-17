@@ -456,48 +456,48 @@
     "superevent_south_conclave": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_conclave.png",
       "effect": "superevent_south_conclave_sound_e",
-      "sample": "superevent_south_regency_sound",
-      "audio_file": "superevents/superevent_south_regency_sound.wav",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "sample": "superevent_south_conclave_sound",
+      "audio_file": "superevents/superevent_south_conclave_sound.wav",
+      "theme_note": "Mohammad Reza Mortazavi - Sudden Inspiration. Street voices fall away at the closing door, followed by chairs and coins."
     },
     "superevent_south_service": {
       "texture": "gfx/interface/superevents/NAM/superevent_south_iron.png",
       "effect": "superevent_south_service_sound_e",
-      "sample": "superevent_south_iron_sound",
-      "audio_file": "superevents/superevent_south_iron_sound.wav",
+      "sample": "superevent_south_service_sound",
+      "audio_file": "superevents/superevent_south_service_sound.wav",
       "scene_note": "Appointment of a civilian governor is shared with the administrative iron-rule ending.",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "theme_note": "Grails - Reincarnation Blues. Corridor footsteps, a telephone and a typewriter carriage in the governor's office."
     },
     "superevent_south_charter": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_conclave.png",
       "effect": "superevent_south_charter_sound_e",
-      "sample": "superevent_south_regency_sound",
-      "audio_file": "superevents/superevent_south_regency_sound.wav",
+      "sample": "superevent_south_charter_sound",
+      "audio_file": "superevents/superevent_south_charter_sound.wav",
       "scene_note": "A council deliberation serves both constitutional and corporate representative government.",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "theme_note": "London Symphony Orchestra, Leon Botstein - Symphony No. 1, Op. 7: III. Finale. Scherzo e coda. Prestissimo. Delegates gather, turn the charter pages and applaud."
     },
     "superevent_south_contracts": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_houses.png",
       "effect": "superevent_south_contracts_sound_e",
-      "sample": "superevent_south_directorate_sound",
-      "audio_file": "superevents/superevent_south_directorate_sound.wav",
+      "sample": "superevent_south_contracts_sound",
+      "audio_file": "superevents/superevent_south_contracts_sound.wav",
       "scene_note": "Oil cargo inspection is shared with the oil-house commercial settlement.",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "theme_note": "Calibro 35 - Eurocrime! Two signatures, a contract stamp and the snap of a case latch."
     },
     "superevent_south_rump": {
       "texture": "gfx/interface/superevents/South/superevent_south_rump.png",
       "effect": "superevent_south_rump_sound_e",
-      "sample": "superevent_south_regency_sound",
-      "audio_file": "superevents/superevent_south_regency_sound.wav",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "sample": "superevent_south_rump_sound",
+      "audio_file": "superevents/superevent_south_rump_sound.wav",
+      "theme_note": "And So I Watch You From Afar - Set Guitars to Kill. A passing boat, hull creaks and a working shipyard."
     },
     "superevent_south_revenge": {
       "texture": "gfx/interface/superevents/NAM/superevent_south_nam.png",
       "effect": "superevent_south_revenge_sound_e",
-      "sample": "superevent_south_iron_sound",
-      "audio_file": "superevents/superevent_south_iron_sound.wav",
+      "sample": "superevent_south_revenge_sound",
+      "audio_file": "superevents/superevent_south_revenge_sound.wav",
       "scene_note": "The restored tanker road is shared with southern reintegration under NAM.",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "theme_note": "Toundra - Strelka, 4:00-4:56. Boots on gravel, a gear change and a passing truck."
     },
     "superevent_south_radical": {
       "texture": "gfx/interface/superevents/South/superevent_south_radical.png",
@@ -516,9 +516,9 @@
     "superevent_south_boards": {
       "texture": "gfx/interface/superevents/NAM/superevent_south_boards.png",
       "effect": "superevent_south_boards_sound_e",
-      "sample": "superevent_south_directorate_sound",
-      "audio_file": "superevents/superevent_south_directorate_sound.wav",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "sample": "superevent_south_boards_sound",
+      "audio_file": "superevents/superevent_south_boards_sound.wav",
+      "theme_note": "Schwefelgelb - Es zieht mich, 3:00-3:56. Catalogue pages, three auction hammer strikes and a shop door locked with keys."
     },
     "superevent_south_restitution": {
       "texture": "gfx/interface/superevents/South/superevent_south_restitution.png",
@@ -530,14 +530,16 @@
     "superevent_west_worker": {
       "texture": "gfx/interface/superevents/WRK/superevent_west_worker.png",
       "effect": "superevent_west_worker_sound_e",
-      "sample": "superevent_vorkerland_worker_victory_sound",
-      "audio_file": "superevents/superevent_vorkerland_worker_victory_sound.wav"
+      "sample": "superevent_west_worker_sound",
+      "audio_file": "superevents/superevent_west_worker_sound.wav",
+      "theme_note": "Maserati - Show Me the Season, 0:00-0:56."
     },
     "superevent_west_petrichev": {
       "texture": "gfx/interface/superevents/WRK/superevent_west_petrichev.png",
       "effect": "superevent_west_petrichev_sound_e",
-      "sample": "superevent_west_petrichev_sound",
-      "audio_file": "superevents/superevent_west_petrichev_sound.wav"
+      "sample": "superevent_west_imperial_victory_sound",
+      "audio_file": "superevents/superevent_west_imperial_victory_sound.wav",
+      "theme_note": "In The Nursery - Compulsion (Counterpoint), 0:00-0:56."
     },
     "superevent_west_veyran": {
       "texture": "gfx/interface/superevents/WRK/superevent_west_veyran.png",
@@ -622,23 +624,24 @@
     "superevent_south_contract_republic": {
       "texture": "gfx/interface/superevents/SHL/superevent_south_cities.png",
       "effect": "superevent_south_contract_republic_sound_e",
-      "sample": "superevent_south_directorate_sound",
-      "audio_file": "superevents/superevent_south_directorate_sound.wav",
+      "sample": "superevent_south_contract_republic_sound",
+      "audio_file": "superevents/superevent_south_contract_republic_sound.wav",
       "scene_note": "Municipal delegates signing agreements also represent the contract republic.",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "theme_note": "LITE - Bond, 0:00-0:56. Press gathering, rustling newspaper and conference applause."
     },
     "superevent_south_directorate": {
       "texture": "gfx/interface/superevents/South/superevent_south_directorate.png",
       "effect": "superevent_south_directorate_sound_e",
       "sample": "superevent_south_directorate_sound",
-      "audio_file": "superevents/superevent_south_directorate_sound.wav"
+      "audio_file": "superevents/superevent_south_directorate_sound.wav",
+      "theme_note": "Ikebe Shakedown - Hard Steppin', 0:00-0:56. Warehouse doors, reversing signals and timber unloading."
     },
     "superevent_south_nam": {
       "texture": "gfx/interface/superevents/NAM/superevent_south_nam.png",
       "effect": "superevent_south_nam_sound_e",
-      "sample": "superevent_south_iron_sound",
-      "audio_file": "superevents/superevent_south_iron_sound.wav",
-      "theme_note": "Shared southern political-family theme; the presentation has its own narrative and scene binding."
+      "sample": "superevent_south_nam_sound",
+      "audio_file": "superevents/superevent_south_nam_sound.wav",
+      "theme_note": "Public Service Broadcasting - Go! [Instrumental], 0:00-0:56. Radio static, a town bell and a victory crowd."
     },
     "superevent_west_council": {
       "texture": "gfx/interface/superevents/WRK/superevent_west_council.png",

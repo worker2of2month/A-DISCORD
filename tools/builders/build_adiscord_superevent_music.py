@@ -40,6 +40,8 @@ STP_FESTIVAL_TRACK = "superevent_stelander_party_victory_festival_sound"
 STP_HOUSES_TRACK = "superevent_stelander_party_victory_houses_sound"
 
 WEST_POLICY_TRACKS = {
+    "superevent_west_imperial_victory_sound": "in_the_nursery_compulsion_excerpt.flac",
+    "superevent_west_worker_sound": "maserati_show_me_the_season_excerpt.flac",
     "superevent_west_anton_sound": "johannsson_the_cause_of_labour_excerpt.flac",
     "superevent_west_dorian_sound": "../South/sophia_herbstwerk_excerpt.flac",
     "superevent_west_world_empire_sound": "arcana_opening_of_the_wound_excerpt.flac",
@@ -47,6 +49,16 @@ WEST_POLICY_TRACKS = {
 }
 
 SOUTH_POLICY_TRACKS = {
+    "superevent_south_conclave_sound": "mohammad_reza_mortazavi_sudden_inspiration_excerpt.flac",
+    "superevent_south_service_sound": "grails_reincarnation_blues_excerpt.flac",
+    "superevent_south_charter_sound": "popov_symphony_1_botstein_finale_excerpt.flac",
+    "superevent_south_contracts_sound": "calibro_35_eurocrime_excerpt.flac",
+    "superevent_south_rump_sound": "asiwyfa_set_guitars_to_kill_excerpt.flac",
+    "superevent_south_revenge_sound": "toundra_strelka_excerpt.flac",
+    "superevent_south_boards_sound": "schwefelgelb_es_zieht_mich_excerpt.flac",
+    "superevent_south_contract_republic_sound": "lite_bond_excerpt.flac",
+    "superevent_south_directorate_sound": "ikebe_shakedown_hard_steppin_excerpt.flac",
+    "superevent_south_nam_sound": "public_service_broadcasting_go_instrumental_excerpt.flac",
     "superevent_south_oil_union_sound": "northaunt_until_dawn_do_us_part_excerpt.flac",
     "superevent_south_federation_sound": "slow_meadow_crown_of_amber_canopy_excerpt.flac",
     "superevent_south_civil_service_sound": "in_the_nursery_artisans_of_civilisation_excerpt.flac",
@@ -136,6 +148,8 @@ STP_POLICY_CUES = {
 
 
 WEST_POLICY_CUES = {
+    "superevent_west_imperial_victory_sound": (),
+    "superevent_west_worker_sound": (),
     "superevent_west_anton_sound": (
         PolicyCue("STP/sfx_paper_slide.flac", 0.12, 0, 1.09, 0.86, 0.025,
                   spatial_filter="highpass=f=150,stereotools=balance_out=-0.18"),
@@ -177,6 +191,80 @@ WEST_POLICY_CUES = {
 
 
 SOUTH_POLICY_CUES = {
+    "superevent_south_conclave_sound": (
+        PolicyCue("South/sfx_downtown_square.flac", 2, 2, 10, 0.96, 0.22, 0.19,
+                  spatial_filter="lowpass=f=2900"),
+        PolicyCue("South/sfx_wooden_door_closing.flac", 10.25, 0, 2.34, 0.77, 0.012, 0.38),
+        PolicyCue("South/sfx_wooden_chair_squeak.flac", 18, 0.005, 0.52, 1.7, 0.006, 0.3,
+                  spatial_filter="stereotools=balance_out=-0.21"),
+        PolicyCue("South/sfx_wooden_chair_squeak.flac", 21.15, 0, 0.43, 1.2, 0.006, 0.25,
+                  spatial_filter="stereotools=balance_out=0.26"),
+        PolicyCue("South/sfx_loose_coins.flac", 36.8, 0, 0.84, 5.2, 0.008, 0.31),
+        PolicyCue("South/sfx_loose_coins.flac", 38.35, 0.18, 0.58, 4.1, 0.008, 0.26),
+    ),
+    "superevent_south_service_sound": (
+        PolicyCue("South/sfx_corridor_footsteps.flac", 2, 0, 7.8, 3.7, 0.25, 0.32),
+        PolicyCue("South/sfx_governor_telephone.flac", 13.8, 0.05, 3.45, 0.85, 0.08, 0.26,
+                  spatial_filter="highpass=f=260"),
+        PolicyCue("South/sfx_carriage_return.flac", 29, 0.04, 1.52, 2.1, 0.015, 0.31),
+        PolicyCue("South/sfx_carriage_return.flac", 38.6, 0.37, 1.12, 1.6, 0.012, 0.28),
+    ),
+    "superevent_south_charter_sound": (
+        PolicyCue("South/sfx_assembly_foyer.flac", 1.5, 1.4, 7.5, 0.6, 0.8, 0.22,
+                  spatial_filter="lowpass=f=3400"),
+        PolicyCue("South/sfx_charter_pages.flac", 12.2, 0.4, 2.8, 1.35, 0.035, 0.32),
+        PolicyCue("South/sfx_delegate_applause.flac", 26.3, 0.45, 4.48, 2.7, 0.16, 0.3),
+        PolicyCue("South/sfx_charter_pages.flac", 39, 3.9, 1.35, 1.6, 0.025, 0.32),
+    ),
+    "superevent_south_contracts_sound": (
+        PolicyCue("STP/sfx_paper_slide.flac", 1.2, 0, 1.09, 0.8, 0.025),
+        PolicyCue("STP/sfx_pen_writing.flac", 3.4, 9.2, 3.5, 6.5, 0.12),
+        PolicyCue("South/sfx_case_latch.flac", 11.1, 0, 0.29, 1.35, 0.003, 0.3),
+        PolicyCue("STP/sfx_paper_slide.flac", 25, 0, 1.09, 0.64, 0.025),
+        PolicyCue("STP/sfx_pen_writing.flac", 27, 2, 3, 6.0, 0.12),
+        PolicyCue("South/sfx_contract_stamp.flac", 32, 0, 1.59, 0.85, 0.02),
+        PolicyCue("South/sfx_case_latch.flac", 34.95, 0, 0.32, 1.75, 0.003, 0.33),
+    ),
+    "superevent_south_rump_sound": (
+        PolicyCue("South/sfx_passing_boat.flac", 1.5, 0, 3.5, 1.65, 0.14, 0.29),
+        PolicyCue("South/sfx_hull_creak.flac", 9.5, 0.3, 5.9, 0.48, 0.45, 0.29),
+        PolicyCue("South/sfx_shipyard.flac", 25.2, 0.7, 7.1, 0.64, 0.55, 0.27),
+        PolicyCue("South/sfx_shipyard.flac", 39.1, 10, 5.3, 0.62, 0.48, 0.27),
+    ),
+    "superevent_south_revenge_sound": (
+        PolicyCue("South/sfx_gravel_steps.flac", 1, 1, 7.5, 0.75, 0.22, 0.28),
+        PolicyCue("South/sfx_tracked_gear_shift.flac", 12.45, 0, 1, 0.9, 0.009, 0.32),
+        PolicyCue("South/sfx_passing_truck.flac", 17, 3.1, 13.1, 0.6, 0.6, 0.33),
+        PolicyCue("South/sfx_gravel_steps.flac", 40.3, 11, 5.9, 0.74, 0.38, 0.27),
+    ),
+    "superevent_south_boards_sound": (
+        PolicyCue("South/sfx_catalogue_pages.flac", 2, 0, 1.43, 6.2, 0.015, 0.26),
+        PolicyCue("South/sfx_auction_hammer.flac", 10.1, 0, 0.4, 1.35, 0.002, 0.4),
+        PolicyCue("South/sfx_auction_hammer.flac", 16.2, 0, 0.39, 1.54, 0.002, 0.42),
+        PolicyCue("South/sfx_auction_hammer.flac", 28.1, 0, 0.4, 1.8, 0.002, 0.46),
+        PolicyCue("South/sfx_shop_keys.flac", 38.3, 0.02, 3.83, 3.7, 0.03, 0.3),
+    ),
+    "superevent_south_contract_republic_sound": (
+        PolicyCue("South/sfx_press_gathering.flac", 2.4, 0.5, 6.9, 0.47, 0.48, 0.22),
+        PolicyCue("South/sfx_newspaper_page.flac", 12, 0.06, 3.82, 2.1, 0.035, 0.32),
+        PolicyCue("South/sfx_conference_applause.flac", 26.2, 0.23, 7.65, 0.85, 0.44, 0.33),
+        PolicyCue("South/sfx_newspaper_page.flac", 43.4, 7.52, 1.56, 2.0, 0.055, 0.29),
+    ),
+    "superevent_south_directorate_sound": (
+        PolicyCue("South/sfx_warehouse_door.flac", 1, 0.03, 2.38, 0.89, 0.05, 0.31),
+        PolicyCue("South/sfx_reversing_truck.flac", 9.4, 0, 1.92, 0.22, 0.06, 0.23),
+        PolicyCue("South/sfx_reversing_truck.flac", 11.4, 0, 1.92, 0.18, 0.06, 0.22),
+        PolicyCue("South/sfx_timber_drop.flac", 19.25, 0, 1.05, 1.0, 0.007, 0.36),
+        PolicyCue("South/sfx_timber_drop.flac", 32.6, 0.04, 0.95, 0.8, 0.008, 0.32),
+        PolicyCue("South/sfx_warehouse_door.flac", 41.3, 0.1, 2.22, 0.72, 0.07, 0.28),
+    ),
+    "superevent_south_nam_sound": (
+        PolicyCue("South/sfx_radio_burst.flac", 1.4, 0, 1.02, 1.05, 0.03, 0.28),
+        PolicyCue("South/sfx_radio_burst.flac", 8.6, 0.45, 0.51, 0.73, 0.02, 0.23),
+        PolicyCue("South/sfx_town_bell.flac", 16.45, 0.03, 7.5, 0.33, 0.25, 0.33,
+                  spatial_filter="highpass=f=140"),
+        PolicyCue("South/sfx_victory_crowd.flac", 31, 0.2, 7.9, 0.45, 0.48, 0.34),
+    ),
     "superevent_south_oil_union_sound": (
         PolicyCue("South/sfx_factory_machine.flac", 0, 8, 56, 0.16, 4.0),
         PolicyCue("South/sfx_industrial_water_pump.flac", 8, 2, 10, 0.22, 2.0, 0.08),

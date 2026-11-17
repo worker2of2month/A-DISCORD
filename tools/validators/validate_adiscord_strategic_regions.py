@@ -15,41 +15,49 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 
 try:
     from tools.builders.build_adiscord_strategic_regions import (
+        BASE_REGIONS,
+        CLIMATE_REFERENCE_Y,
         MONTH_RANGES,
         OUTER_CLIMATE_BELTS,
         OUTER_REGION_SPECS,
         OUTER_STATE_MARKER,
         ALL_SEA_REGIONS,
         DEDICATED_SEA_PROVINCES,
+        MAP_HEIGHT,
         REGIONS,
         REMAINDER_STATE_MARKER,
+        SEA_CLIMATES,
         TEMPERATURES,
-        arctic_water,
         build_state_adjacency,
         connected_components,
-        phenomenon,
         load_province_adjacency,
         load_province_definitions,
-        minimum_snow_level,
+        load_province_positions,
+        region_latitude,
+        weather_period,
     )
 except ModuleNotFoundError:
     from builders.build_adiscord_strategic_regions import (
+        BASE_REGIONS,
+        CLIMATE_REFERENCE_Y,
         MONTH_RANGES,
         OUTER_CLIMATE_BELTS,
         OUTER_REGION_SPECS,
         OUTER_STATE_MARKER,
         ALL_SEA_REGIONS,
         DEDICATED_SEA_PROVINCES,
+        MAP_HEIGHT,
         REGIONS,
         REMAINDER_STATE_MARKER,
+        SEA_CLIMATES,
         TEMPERATURES,
-        arctic_water,
         build_state_adjacency,
         connected_components,
-        phenomenon,
         load_province_adjacency,
         load_province_definitions,
-        minimum_snow_level,
+        load_province_positions,
+        region_latitude,
+        weather_period,
     )
 
 
@@ -63,16 +71,9 @@ PHENOMENA = (
     "sandstorm",
 )
 WEATHER_VALUES = PHENOMENA + ("arctic_water", "mud", "min_snow_level")
-EXPECTED_INIT_RUN_PASSES = 720
-PHENOMENON_INDICES = {
-    "no_phenomenon": 0,
-    "rain_light": 1,
-    "rain_heavy": 2,
-    "snow": 3,
-    "blizzard": 4,
-    "mud": 5,
-    "sandstorm": 6,
-}
+# About 20 pre-start weather updates per region at regions_per_update = 7.
+EXPECTED_INIT_RUN_PASSES = 770
+REFERENCE_LATITUDE_TOLERANCE = 15.0
 
 
 def extract_block(text: str, key: str, start: int = 0) -> tuple[str, int]:
@@ -165,7 +166,11 @@ def parse_regions(errors: list[str]) -> dict[int, dict[str, object]]:
 
 
 def validate_weather(
-    region_id: int, climate: str, text: str, errors: list[str]
+    region_id: int,
+    climate: str,
+    latitude_y: float | None,
+    text: str,
+    errors: list[str],
 ) -> None:
     try:
         weather, _ = extract_block(text, "weather")
@@ -188,6 +193,7 @@ def validate_weather(
         return
 
     for month, period in enumerate(periods):
+        expected_period = weather_period(climate, month, latitude_y)
         between = re.search(r"\bbetween\s*=\s*\{\s*([^}]+?)\s*\}", period)
         temperature = re.search(
             r"\btemperature\s*=\s*\{\s*(-?[0-9.]+)\s+(-?[0-9.]+)\s*\}", period
@@ -202,8 +208,9 @@ def validate_weather(
             errors.append(
                 f"region {region_id}, month {month}: reversed temperature range"
             )
-        elif tuple(map(float, temperature.groups())) != tuple(
-            map(float, TEMPERATURES[climate][month])
+        elif tuple(map(float, temperature.groups())) != (
+            expected_period.low,
+            expected_period.high,
         ):
             errors.append(
                 f"region {region_id}, month {month}: temperature does not match {climate}"
@@ -223,13 +230,9 @@ def validate_weather(
                     f"region {region_id}, month {month}: {key}={value} is outside 0..{upper_bound:g}"
                 )
 
-        expected_row = phenomenon(climate, month)
-        expected = {
-            key: expected_row[index] for key, index in PHENOMENON_INDICES.items()
-        }
-        expected["arctic_water"] = arctic_water(climate, month)
-        expected["min_snow_level"] = minimum_snow_level(climate, month)
-        for key, expected_value in expected.items():
+        for key, expected_value in (
+            (key, getattr(expected_period, key)) for key in WEATHER_VALUES
+        ):
             if key in values and abs(values[key] - expected_value) > 0.0001:
                 errors.append(
                     f"region {region_id}, month {month}: {key}={values[key]} does not match "
@@ -237,50 +240,73 @@ def validate_weather(
                 )
 
 
+def climate_rows(climate: str, latitude_y: float | None = None) -> list[object]:
+    if latitude_y is None:
+        latitude_y = CLIMATE_REFERENCE_Y.get(climate)
+    return [weather_period(climate, month, latitude_y) for month in range(12)]
+
+
 def validate_climate_profiles(errors: list[str]) -> None:
     """Guard the gameplay-scale distinctions that normalization used to erase."""
-    profiles = {
-        climate: [phenomenon(climate, month) for month in range(12)]
-        for climate in TEMPERATURES
-    }
+    profiles = {climate: climate_rows(climate) for climate in TEMPERATURES}
     checks = (
-        (max(row[3] for row in profiles["polar"]), 0.50, "polar winter snow"),
-        (max(row[4] for row in profiles["polar"]), 0.25, "polar blizzards"),
-        (max(row[1] for row in profiles["cool_maritime"]), 0.70, "maritime rain"),
-        (max(row[5] for row in profiles["temperate_wet"]), 1.00, "wet-climate mud"),
+        (max(row.snow for row in profiles["polar"]), 0.50, "polar winter snow"),
+        (max(row.blizzard for row in profiles["polar"]), 0.25, "polar blizzards"),
         (
-            max(row[2] for row in profiles["tropical_maritime"]),
+            max(row.rain_light for row in profiles["cool_maritime"]),
+            0.70,
+            "maritime rain",
+        ),
+        (max(row.mud for row in profiles["temperate_wet"]), 1.00, "wet-climate mud"),
+        (
+            max(row.rain_heavy for row in profiles["tropical_maritime"]),
             0.45,
             "tropical downpours",
         ),
-        (max(row[6] for row in profiles["hot_arid"]), 0.35, "desert sandstorms"),
+        (max(row.sandstorm for row in profiles["hot_arid"]), 0.35, "desert sandstorms"),
+        # Vanilla Central Europe: snow 0.25-0.4 in January. A weaker temperate
+        # winter melts between snowfalls and leaves no lasting cover.
+        (profiles["temperate_continental"][0].snow, 0.25, "temperate winter snow"),
+        (profiles["cool_continental"][0].snow, 0.45, "continental winter snow"),
     )
     for actual, minimum, label in checks:
         if actual < minimum:
             errors.append(
                 f"climate profiles: {label} is too weak ({actual} < {minimum})"
             )
-    if max(sum(row[:5]) + row[6] for rows in profiles.values() for row in rows) <= 1.0:
+    if (
+        max(
+            row.no_phenomenon + row.rain_light + row.rain_heavy + row.snow
+            + row.blizzard + row.sandstorm
+            for rows in profiles.values()
+            for row in rows
+        )
+        <= 1.0
+    ):
         errors.append(
             "climate profiles: phenomenon weights were incorrectly normalized to a total of 1"
         )
-    if (
-        max(
-            minimum_snow_level(climate, month)
-            for climate in TEMPERATURES
-            for month in range(12)
-        )
-        > 0.30
-    ):
+    if max(row.min_snow_level for rows in profiles.values() for row in rows) > 0.30:
         errors.append(
             "climate profiles: min_snow_level exceeds the vanilla-scale maximum of 0.30"
         )
-    if max(phenomenon("temperate_continental", month)[3] for month in range(12)) > 0.18:
-        errors.append(
-            "climate profiles: temperate continental snow reaches too far south"
-        )
-    if max(phenomenon("temperate_wet", month)[3] for month in range(12)) > 0.10:
-        errors.append("climate profiles: temperate wet snow reaches too far south")
+    if any(row.high > 0.0 for row in profiles["polar"]):
+        errors.append("climate profiles: the polar belt thaws above 0 degrees")
+    for climate in ("temperate_continental", "temperate_wet", "temperate_highland"):
+        if any(profiles[climate][month].snow > 0.0 for month in (5, 6, 7)):
+            errors.append(f"climate profiles: {climate} snows in summer")
+    for climate in ("tropical_maritime", "hot_arid", "warm_maritime"):
+        if any(row.snow > 0.0 for row in profiles[climate]):
+            errors.append(f"climate profiles: {climate} snows at its own latitude")
+    for climate, reference_y in CLIMATE_REFERENCE_Y.items():
+        if climate in SEA_CLIMATES:
+            continue
+        north = climate_rows(climate, reference_y - 200.0)
+        south = climate_rows(climate, reference_y + 200.0)
+        if north[0].high >= profiles[climate][0].high or north[0].snow < south[0].snow:
+            errors.append(
+                f"climate profiles: {climate} winter does not cool towards the north"
+            )
 
 
 def validate_global_weather_settings(errors: list[str]) -> None:
@@ -490,8 +516,9 @@ def main() -> int:
     profile_belts: dict[str, set[int]] = {}
     for climate_key, (_slug, _name, profile) in OUTER_REGION_SPECS.items():
         profile_belts.setdefault(profile, set()).add(OUTER_CLIMATE_BELTS[climate_key])
+    base_region_ids = {region.region_id for region in BASE_REGIONS}
     for region in REGIONS:
-        if region.region_id < 43:
+        if region.region_id in base_region_ids:
             continue
         components = connected_components(set(region.states), state_adjacency)
         if len(components) != 1:
@@ -513,21 +540,65 @@ def main() -> int:
                 f"generated land region {region.region_id}: profile {region.climate} does not match belt {next(iter(belts))}"
             )
 
-    for climate_key, (_slug, _name, profile) in OUTER_REGION_SPECS.items():
-        if not climate_key.startswith("world_"):
+    province_positions = load_province_positions()
+    latitude_by_region = {
+        region_id: region_latitude(set(data["provinces"]), province_positions)
+        for region_id, data in regions.items()
+        if region_id not in sea_region_ids
+    }
+    # Each land envelope is calibrated at the mean latitude of its provinces;
+    # a stale reference warms or cools every region of that climate.
+    climate_latitudes: dict[str, list[float]] = {}
+    for region in REGIONS:
+        for state_id in region.states:
+            for province_id in states.get(state_id, set()):
+                if province_id in province_positions:
+                    climate_latitudes.setdefault(region.climate, []).append(
+                        MAP_HEIGHT - province_positions[province_id][2]
+                    )
+    for climate, latitudes in sorted(climate_latitudes.items()):
+        reference_y = CLIMATE_REFERENCE_Y.get(climate)
+        if reference_y is None:
             continue
-        belt = OUTER_CLIMATE_BELTS[climate_key]
-        max_snow = max(phenomenon(profile, month)[3] for month in range(12))
-        max_blizzard = max(phenomenon(profile, month)[4] for month in range(12))
+        mean_y = sum(latitudes) / len(latitudes)
+        if abs(mean_y - reference_y) > REFERENCE_LATITUDE_TOLERANCE:
+            errors.append(
+                f"climate {climate}: reference latitude {reference_y} differs from "
+                f"its provinces' mean {mean_y:.0f}"
+            )
+    for region in REGIONS:
+        if region.region_id in base_region_ids:
+            continue
+        belts = {
+            OUTER_CLIMATE_BELTS[generated_climate_keys[state_id]]
+            for state_id in region.states
+            if state_id in generated_climate_keys
+        }
+        if len(belts) != 1:
+            continue
+        belt = next(iter(belts))
+        rows = [
+            weather_period(
+                region.climate, month, latitude_by_region.get(region.region_id)
+            )
+            for month in range(12)
+        ]
+        max_snow = max(row.snow for row in rows)
+        max_blizzard = max(row.blizzard for row in rows)
         if belt == 5 and (max_snow > 0.0 or max_blizzard > 0.0):
             errors.append(
-                f"{climate_key}: tropical belt must not generate snow or blizzards"
+                f"generated land region {region.region_id}: tropical belt must not "
+                "generate snow or blizzards"
             )
-        elif belt == 4 and (max_snow > 0.03 or max_blizzard > 0.0):
-            errors.append(f"{climate_key}: warm belt has excessive winter weather")
+        elif belt == 4 and (max_snow > 0.10 or max_blizzard > 0.02):
+            errors.append(
+                f"generated land region {region.region_id}: warm belt has excessive "
+                "winter weather"
+            )
         elif belt <= 1 and max_snow < 0.25:
             errors.append(
-                f"{climate_key}: polar/subarctic belt has too little winter snow"
+                f"generated land region {region.region_id}: polar/subarctic belt has "
+                "too little winter snow"
             )
 
     checked_state_edges: set[tuple[int, int]] = set()
@@ -557,7 +628,13 @@ def main() -> int:
         if climate is None:
             errors.append(f"region {region_id}: no climate profile in manifest")
             continue
-        validate_weather(region_id, climate, str(data["text"]), errors)
+        validate_weather(
+            region_id,
+            climate,
+            latitude_by_region.get(region_id),
+            str(data["text"]),
+            errors,
+        )
 
     localisation_path = (
         ROOT / "localisation" / "replace" / "strategic_region_names_l_russian.yml"

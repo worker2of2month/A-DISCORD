@@ -369,6 +369,7 @@ class GenericWartimeFrontTests(unittest.TestCase):
             "NSupply.AI_FRONT_DIVISIONS_PER_SUPPLY_POINT": (0.5, 1.0),
             "NAI.CONSTRUCTION_PRIO_SUPPLY_BUILDING": (1.6, 4.0),
             "NAI.ENTRENCHMENT_WEIGHT": (2.0, 6.0),
+            "NAI.AIFC_TARGET_IGNORE_VP_THRESHOLD": (4.0, 6.0),
             "NAI.MAX_MICRO_ATTACKS_PER_ORDER": (3.0, 8.0),
             "NAI.PLAN_ACTIVATION_PLAYER_WEIGHT_FACTOR": (1.0, 50.0),
             "NMilitary.PLAN_MIN_AUTOMATED_EMPTY_POCKET_SIZE": (2.0, 30.0),
@@ -560,7 +561,7 @@ class FrontAllocationLifecycleTests(unittest.TestCase):
                 if entry.key != "ai_strategy":
                     continue
                 fields = {child.key: child.value for child in entry.value}
-                if self.evaluate(fields["country_trigger"], target, actor):
+                if fields["type"] == "front_unit_request" and self.evaluate(fields["country_trigger"], target, actor):
                     total += int(fields["value"])
         return total
 

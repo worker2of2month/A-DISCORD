@@ -11,7 +11,7 @@ strategic_region={
 	weather={
 		period={
 			between={ 0.0 30.0 }
-			temperature={ 8.0 21.0 }
+			temperature={ 7.0 20.0 }
 			no_phenomenon=0.42
 			rain_light=0.60
 			rain_heavy=0.25
@@ -24,7 +24,7 @@ strategic_region={
 		}
 		period={
 			between={ 0.1 27.1 }
-			temperature={ 9.0 22.0 }
+			temperature={ 8.0 21.0 }
 			no_phenomenon=0.42
 			rain_light=0.60
 			rain_heavy=0.25
@@ -37,7 +37,7 @@ strategic_region={
 		}
 		period={
 			between={ 0.2 30.2 }
-			temperature={ 12.0 25.0 }
+			temperature={ 11.0 24.0 }
 			no_phenomenon=0.42
 			rain_light=0.60
 			rain_heavy=0.25
@@ -141,7 +141,7 @@ strategic_region={
 		}
 		period={
 			between={ 0.10 29.10 }
-			temperature={ 12.0 25.0 }
+			temperature={ 11.0 24.0 }
 			no_phenomenon=0.42
 			rain_light=0.60
 			rain_heavy=0.25
@@ -154,7 +154,7 @@ strategic_region={
 		}
 		period={
 			between={ 0.11 30.11 }
-			temperature={ 9.0 22.0 }
+			temperature={ 8.0 21.0 }
 			no_phenomenon=0.42
 			rain_light=0.60
 			rain_heavy=0.25

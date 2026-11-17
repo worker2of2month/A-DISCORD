@@ -24,6 +24,15 @@ def comparable(value: str) -> str:
     return value.translate(str.maketrans({'\u2014': '-', '\u2013': '-', '−': '-'}))
 
 
+def dynamic_tokens(value: str) -> Counter[str]:
+    """Sentence position can change the capitalisation of the same country name."""
+    return Counter(
+        token.removesuffix('.GetNameDefCap]') + '.GetNameDef]'
+        if token.startswith('[') and token.endswith('.GetNameDefCap]') else token
+        for token in TOKENS.findall(value)
+    )
+
+
 def read_entries(root: Path, language: str) -> tuple[dict, list[str]]:
     entries = {}
     issues = []
@@ -85,8 +94,8 @@ def audit(root: Path, game_root: Path) -> dict:
             issues.append(
                 f'{translated["file"]}:{translated["line"]}: {key}: non-ASCII dash in English'
             )
-        source_tokens = Counter(TOKENS.findall(entry['value']))
-        target_tokens = Counter(TOKENS.findall(translated['value']))
+        source_tokens = dynamic_tokens(entry['value'])
+        target_tokens = dynamic_tokens(translated['value'])
         # Native languages sometimes use different static aliases or formatting.
         native_pair = (
             key in vanilla_ru

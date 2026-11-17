@@ -21,6 +21,7 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
     VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
 )
 from tools.validators import validate_adiscord_new_states as validator
+from tools.tests.test_adiscord_shl_furnaces import block, focus_definition, shared_definitions, walk_entries
 
 
 EXPECTED_DIRTY_REPUBLIC_POPULATION = {
@@ -122,7 +123,7 @@ class ReactorResourceTests(unittest.TestCase):
 
 
 class ShahrabadPopulationTests(unittest.TestCase):
-    def test_all_starting_states_sum_to_twenty_million_and_plan_is_current(self):
+    def test_all_starting_states_sum_to_thirty_million_and_plan_is_current(self):
         actual = {}
         for path in (builder.ROOT / "history/states").glob("*.txt"):
             source = path.read_text(encoding="utf-8-sig")
@@ -130,8 +131,8 @@ class ShahrabadPopulationTests(unittest.TestCase):
                 state_id = int(re.search(r"\bid\s*=\s*(\d+)", source)[1])
                 actual[state_id] = int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1])
         self.assertEqual(actual, builder.SHL_POPULATION)
-        self.assertEqual(sum(actual.values()), 20_000_000)
-        self.assertEqual(actual[699], 4_000_000)
+        self.assertEqual(sum(actual.values()), 30_000_000)
+        self.assertEqual(actual[699], 6_000_000)
         for path, expected in builder.shahrabad_population_plan().items():
             self.assertEqual(path.read_bytes(), expected)
 
@@ -152,12 +153,12 @@ class ShahrabadPopulationTests(unittest.TestCase):
 class ShahrabadSplitTests(unittest.TestCase):
     """The four hinterland states conserve their parents' people, deposits and borders."""
 
-    ORIGINAL_POPULATION = {288: 2_400_000, 289: 1_100_000, 291: 1_600_000, 295: 1_500_000}
+    ORIGINAL_POPULATION = {288: 3_600_000, 289: 1_650_000, 291: 2_400_000, 295: 2_250_000}
     ORIGINAL_RESOURCES = {
         288: {},
-        289: {"tungsten": 3},
-        291: {"steel": 8, "chromium": 3},
-        295: {"chromium": 2},
+        289: {"tungsten": 6},
+        291: {"steel": 16, "chromium": 6},
+        295: {"chromium": 4},
     }
     ORIGINAL_CIVILIAN = {288: 2, 289: 0, 291: 1, 295: 0}
     # Furnace cities (and their painted sectors) that the scripts address through
@@ -199,8 +200,8 @@ class ShahrabadSplitTests(unittest.TestCase):
             self.assertEqual(civilian, self.ORIGINAL_CIVILIAN[parent])
             self.assertEqual(builder.SHL_INDUSTRY.get(child, {}).get("arms_factory", 0), 0)
             self.assertEqual(builder.category(child), "rural")
-        self.assertEqual(sum(builder.SHL_POPULATION.values()), 20_000_000)
-        self.assertEqual(sum(sum(deposit.values()) for deposit in builder.SHL_RESOURCES.values()), 27)
+        self.assertEqual(sum(builder.SHL_POPULATION.values()), 30_000_000)
+        self.assertEqual(sum(sum(deposit.values()) for deposit in builder.SHL_RESOURCES.values()), 54)
 
     def test_every_shahrabad_state_has_a_named_town_and_the_plan_is_current(self):
         definitions = {
@@ -884,11 +885,6 @@ class MazarBorderTests(unittest.TestCase):
 
 
 class DamirTransferTests(unittest.TestCase):
-    SHL_ROAD_SOURCES = (
-        *MazarBorderTests.SHL_SCRIPTS,
-        "focus_trees/SHL/houses/focuses.txt",
-    )
-
     def test_damir_starts_as_an_eflor_town_with_both_settlements(self) -> None:
         self.assertEqual(builder.STARTING_OWNERS[240], "EFL")
         self.assertNotIn(240, builder.KDR_STATES)
@@ -898,21 +894,23 @@ class DamirTransferTests(unittest.TestCase):
         self.assertNotIn("KDR", source)
         self.assertRegex(source, r"victory_points\s*=\s*\{\s*16722\s+15\s*\}")
         self.assertRegex(source, r"victory_points\s*=\s*\{\s*16743\s+1\s*\}")
-        self.assertEqual(builder.REGIONAL_SETTLEMENTS[240], ((16743, 1, "Нижний Дамир"),))
+        self.assertEqual(builder.REGIONAL_SETTLEMENTS[240], ((16743, 1, "Нижний Дамир"), (3483, 2, "Эсман")))
         for path, expected in builder.state_metadata_plan({240}).items():
             self.assertEqual(path.read_bytes(), expected, str(path))
 
     def test_kadir_road_stations_are_naret_and_ravat(self) -> None:
-        for relative in self.SHL_ROAD_SOURCES:
-            source = (builder.ROOT / relative).read_text(encoding="utf-8")
-            self.assertEqual(re.findall(r"(?<![\d.])240(?![\d.])", source), [], relative)
-        effects = (builder.ROOT / self.SHL_ROAD_SOURCES[0]).read_text(encoding="utf-8")
-        sale = effects.split("SHL_sell_road_stations = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertIn("transfer_state = 234", sale)
-        self.assertIn("transfer_state = 242", sale)
-        focuses = (builder.ROOT / self.SHL_ROAD_SOURCES[-1]).read_text(encoding="utf-8")
-        self.assertIn("234 = { add_claim_by = SHL }", focuses)
-        self.assertIn("242 = { add_claim_by = SHL }", focuses)
+        stations = {"234", "242"}
+        for focus, effect in (("SHL_south_great_road", "add_claim_by"),
+                              ("SHL_h_road_stations", "add_building_construction")):
+            reward = block(focus_definition(focus), "completion_reward")
+            targets = {
+                entry.key for entry in walk_entries(reward)
+                if entry.key.isdigit() and any(child.key == effect for child in entry.value)
+            }
+            self.assertEqual(targets, stations, focus)
+        name = "SHL_sell_road_stations"
+        sale = shared_definitions("common/scripted_effects/ADISCORD_SHL_scripted_effects.txt", (name,))[name]
+        self.assertCountEqual([entry.value for entry in walk_entries(sale) if entry.key == "transfer_state"], stations)
 
 
 if __name__ == "__main__":
