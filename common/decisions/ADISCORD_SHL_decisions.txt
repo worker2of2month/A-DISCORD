@@ -87,6 +87,7 @@ SHL_conclave = {
 	SHL_planned_supply = {
 		icon = SHL_ore_cart
 		visible = {
+			is_ai = yes
 			has_completed_focus = SHL_law_of_continuous_fire
 			check_variable = { var = SHL_regular_supply value = 0 compare = equals }
 		}
@@ -110,6 +111,7 @@ SHL_conclave = {
 	SHL_stop_planned_supply = {
 		icon = SHL_ore_cart
 		visible = {
+			is_ai = yes
 			has_completed_focus = SHL_law_of_continuous_fire
 			check_variable = { var = SHL_regular_supply value = 1 compare = equals }
 		}

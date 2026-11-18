@@ -107,32 +107,32 @@ characters = {
 	}
 	SLA_Starolesye_District_Board = {
 		name = SLA_Starolesye_District_Board
-		portraits = { civilian = { large = GFX_Portrait_EXZ_Generic_1 } }
+		portraits = { civilian = { large = GFX_portrait_SLA_Starolesye_District_Board } }
 		country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 }
 	}
 	RZA_Reactor_Technical_Directorate = {
 		name = RZA_Reactor_Technical_Directorate
-		portraits = { civilian = { large = GFX_Portrait_EXZ_Generic_4 } }
+		portraits = { civilian = { large = GFX_portrait_RZA_Reactor_Technical_Directorate } }
 		country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 }
 	}
 	MLR_Lowland_Interim_Rada = {
 		name = MLR_Lowland_Interim_Rada
-		portraits = { civilian = { large = GFX_Portrait_EXZ_Generic_3 } }
+		portraits = { civilian = { large = GFX_portrait_MLR_Lowland_Interim_Rada } }
 		country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 }
 	}
 	ERT_Eastern_Restoration_Administration = {
 		name = ERT_Eastern_Restoration_Administration
-		portraits = { civilian = { large = GFX_Portrait_EXZ_Generic_2 } }
+		portraits = { civilian = { large = GFX_portrait_ERT_Eastern_Restoration_Administration } }
 		country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 }
 	}
 	IRT_Interior_Republican_Council = {
 		name = IRT_Interior_Republican_Council
-		portraits = { civilian = { large = GFX_Portrait_EXZ_Generic_3 } }
+		portraits = { civilian = { large = GFX_portrait_IRT_Interior_Republican_Council } }
 		country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 }
 	}
 	SCA_Southern_Corridor_Administration = {
 		name = SCA_Southern_Corridor_Administration
-		portraits = { civilian = { large = GFX_Portrait_EXZ_Generic_1 } }
+		portraits = { civilian = { large = GFX_portrait_SCA_Southern_Corridor_Administration } }
 		country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 }
 	}
 	TGD_Ted_Cuttle = {

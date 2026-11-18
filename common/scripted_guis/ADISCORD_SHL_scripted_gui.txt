@@ -7,17 +7,6 @@ scripted_gui = {
 			tag = SHL
 			SHL_caravan_has_active_buyers = yes
 		}
-		# Buyer flags and mission timers can change between furnace cycles.
-		dynamic_lists = {
-			SHL_caravan_contract_grid = {
-				array = SHL_caravan_partners
-				change_scope = yes
-				country_scope_entry_container = "[SHLGetCaravanRow]"
-			}
-		}
-		properties = {
-			SHL_caravan_flag = { image = "[This.GetFlag]" }
-		}
 	}
 
 	ADISCORD_SHL_borders = {
@@ -54,6 +43,49 @@ scripted_gui = {
 		}
 		ai_enabled = { always = no }
 		triggers = {
+			SHL_supply_master_button_click_enabled = { SHL_can_toggle_auto_reserve = yes }
+			SHL_panel_selection_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_local_status_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_panel_selected_details_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_panel_stocks_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_panel_recipient_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_local_output_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_panel_house_loyalty_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_send_reserve_button_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_recipient_export_button_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_recipient_arsenal_button_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_recipient_quarters_button_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_recipient_crest_button_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_cycle_line_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_forecast_net_label_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_forecast_net_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_forecast_reserve_label_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_forecast_reserve_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_forecast_cost_label_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_forecast_cost_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_forecast_skips_visible = { check_variable = { var = SHL_supply_settings_open value = 0 compare = equals } }
+			SHL_reserve_destination_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_supply_toggle_button_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_supply_packet_quote_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_auto_reserve_button_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_auto_reserve_status_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_reserve_floor_label_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_lower_reserve_floor_button_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_reserve_floor_value_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_raise_reserve_floor_button_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_distribute_reserve_button_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_next_unfunded_button_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_forecast_packets_label_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_forecast_packets_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_forecast_rifles_label_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_forecast_rifles_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_forecast_politics_label_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_forecast_politics_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_convoy_status_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_convoy_ore_button_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_convoy_masons_button_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_convoy_sale_button_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			SHL_ledger_line_visible = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
 			SHL_supply_toggle_button_click_enabled = {
 				SHL_country_operable = yes
 				has_completed_focus = SHL_law_of_continuous_fire
@@ -62,7 +94,10 @@ scripted_gui = {
 			SHL_next_unfunded_button_click_enabled = {
 				SHL_country_operable = yes
 				check_variable = { var = SHL_next_unfunded_furnace value = 0 compare = greater_than }
-				NOT = { check_variable = { var = SHL_next_unfunded_furnace value = SHL_selected_furnace compare = equals } }
+				OR = {
+					check_variable = { var = SHL_supply_settings_open value = 1 compare = equals }
+					check_variable = { var = SHL_next_unfunded_furnace value = SHL_selected_furnace compare = not_equals }
+				}
 			}
 			SHL_send_reserve_button_click_enabled = { SHL_can_send_reserve_to_selected = yes }
 			SHL_distribute_reserve_button_click_enabled = { SHL_can_distribute_reserve = yes }
@@ -194,6 +229,7 @@ scripted_gui = {
 				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 			}
 			SHL_house_favour_button_visible = {
+				check_variable = { var = SHL_supply_settings_open value = 0 compare = equals }
 				check_variable = { var = SHL_selected_furnace value = 9 compare = less_than_or_equals }
 				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 				has_completed_focus = SHL_house_ledgers
@@ -203,6 +239,8 @@ scripted_gui = {
 			SHL_house_favour_button_click_enabled = { SHL_selected_favour_house_ready = yes }
 		}
 		effects = {
+			SHL_supply_settings_button_click = { SHL_toggle_supply_settings = yes }
+			SHL_supply_master_button_click = { SHL_toggle_supply_master = yes }
 			SHL_supply_toggle_button_click = {
 				if = {
 					limit = { check_variable = { var = SHL_regular_supply value = 1 compare = equals } }
@@ -231,6 +269,7 @@ scripted_gui = {
 			SHL_furnace_9_button_right_click = { SHL_toggle_priority_9 = yes }
 			SHL_furnace_10_button_right_click = { SHL_toggle_priority_10 = yes }
 			SHL_furnace_10_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 10 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
@@ -258,46 +297,55 @@ scripted_gui = {
 			SHL_house_favour_button_click = { SHL_activate_selected_favour = yes }
 
 			SHL_furnace_1_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 1 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 			SHL_furnace_2_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 2 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 			SHL_furnace_3_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 3 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 			SHL_furnace_4_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 4 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 			SHL_furnace_5_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 5 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 			SHL_furnace_6_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 6 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 			SHL_furnace_7_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 7 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 			SHL_furnace_8_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 8 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 			SHL_furnace_9_button_click = {
+				set_variable = { var = SHL_supply_settings_open value = 0 }
 				set_variable = { var = SHL_selected_furnace value = 9 }
 				SHL_refresh_selected_furnace = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }

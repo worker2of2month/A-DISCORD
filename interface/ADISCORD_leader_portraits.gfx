@@ -2075,4 +2075,44 @@ spriteTypes = {
 		name = "GFX_portrait_SDA_Samira_Radan"
 		texturefile = "gfx/leaders/SDA/portrait_SDA_Samira_Radan.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_SLA_Starolesye_District_Board"
+		texturefile = "gfx/leaders/SLA/portrait_SLA_Starolesye_District_Board.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RZA_Reactor_Technical_Directorate"
+		texturefile = "gfx/leaders/RZA/portrait_RZA_Reactor_Technical_Directorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_MLR_Lowland_Interim_Rada"
+		texturefile = "gfx/leaders/MLR/portrait_MLR_Lowland_Interim_Rada.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_ERT_Eastern_Restoration_Administration"
+		texturefile = "gfx/leaders/ERT/portrait_ERT_Eastern_Restoration_Administration.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_IRT_Interior_Republican_Council"
+		texturefile = "gfx/leaders/IRT/portrait_IRT_Interior_Republican_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SCA_Southern_Corridor_Administration"
+		texturefile = "gfx/leaders/SCA/portrait_SCA_Southern_Corridor_Administration.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_Provisional_Party_Council"
+		texturefile = "gfx/leaders/STP/portrait_STP_Provisional_Party_Council.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_BJK_Administrative_Council"
+		texturefile = "gfx/leaders/BJK/portrait_BJK_Administrative_Council.png"
+	}
 }

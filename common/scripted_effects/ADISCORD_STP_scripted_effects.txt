@@ -6784,7 +6784,7 @@ STP_sdir_install_bezhaysk_administration = {
 		}
 		set_country_leader_portrait = {
 			ideology = etatism
-			portrait = GFX_portrait_STP_Military_Collegium
+			portrait = GFX_portrait_BJK_Administrative_Council
 		}
 		set_cosmetic_tag = BJK_STS_administration
 		clr_country_flag = ADISCORD_bezhaysk_val_administration
@@ -10418,7 +10418,20 @@ STP_ps_settle_return = {
 				set_nationality = { character = STP_rufus_hedersett target_country = STP }
 				STP = { STP_ch_leader_2 = yes }
 			}
-			else = { STP = { create_country_leader = { name = STP_ps_return_council_name desc = STP_ps_return_council_desc ideology = aristocratic_hedonism expire = "2300.1.1" } } }
+			else = {
+				STP = {
+					create_country_leader = {
+						name = STP_ps_return_council_name
+						desc = STP_ps_return_council_desc
+						ideology = aristocratic_hedonism
+						expire = "2300.1.1"
+					}
+					set_country_leader_portrait = {
+						ideology = hedonism
+						portrait = GFX_portrait_STP_Provisional_Party_Council
+					}
+				}
+			}
 			if = { limit = { is_ai = no } country_event = { id = ADISCORD_STP_cw.203 } }
 		}
 	}

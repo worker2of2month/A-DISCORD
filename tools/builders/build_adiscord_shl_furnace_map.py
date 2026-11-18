@@ -79,14 +79,13 @@ def survey():
 
 
 def controls():
-    board = Image.new("RGB", (454, 588), (26, 33, 31))
+    board = Image.new("RGB", (454, 551), (26, 33, 31))
     draw = ImageDraw.Draw(board)
-    draw.rectangle((0, 0, 453, 587), outline=(113, 97, 71))
+    draw.rectangle((0, 0, 453, 550), outline=(113, 97, 71))
     draw.rectangle((270, 81, 449, 366), fill=(33, 40, 37), outline=(100, 90, 69))
-    for y in (137, 207, 253):
-        draw.line((278, y, 441, y), fill=(76, 79, 65))
-    for y in (430, 499, 530):
-        draw.line((7, y, 446, y), fill=(102, 93, 70))
+    draw.rectangle((1, 437, 452, 460), fill=(43, 54, 45))
+    draw.line((1, 437, 452, 437), fill=(159, 131, 83))
+    draw.line((1, 460, 452, 460), fill=(76, 79, 65))
     gauges = Image.new("RGBA", (450, 65))
     draw = ImageDraw.Draw(gauges)
     for left in (0, 225):
@@ -118,17 +117,17 @@ def controls():
 
 
 def caravan_assets():
-    """A contract row keeps each quotation aligned even when the buyer wraps."""
-    header = Image.new("RGB", (454, 51), (29, 38, 35))
+    """The receipt total sits beneath the native variable-height contract list."""
+    header = Image.new("RGB", (454, 32), (43, 54, 45))
     ink = ImageDraw.Draw(header)
-    ink.rectangle((0, 0, 453, 24), fill=(43, 54, 45))
+    ink.rectangle((350, 1, 453, 30), fill=(34, 43, 37))
     ink.line((0, 0, 453, 0), fill=(170, 139, 87))
-    ink.line((0, 50, 453, 50), fill=(117, 103, 74))
+    ink.line((0, 31, 453, 31), fill=(117, 103, 74))
+    ink.line((350, 5, 350, 26), fill=(88, 93, 73))
     row = Image.new("RGB", (454, 34), (31, 38, 35))
     rule = ImageDraw.Draw(row)
     rule.line((0, 33, 453, 33), fill=(64, 71, 60))
     for x in (205, 297, 376):
-        ink.line((x, 29, x, 47), fill=(69, 77, 65))
         rule.line((x, 3, x, 29), fill=(51, 60, 52))
 
     paper, edge, wax = (236, 211, 155), (80, 56, 40), (182, 68, 50)

@@ -284,7 +284,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = SHL_planned_supply
+			custom_effect_tooltip = SHL_furnace_supply_unlock_tt
 			unlock_decision_tooltip = SHL_road_send_rifles
 			unlock_decision_tooltip = SHL_road_send_kits
 			unlock_decision_tooltip = SHL_road_send_wholesale

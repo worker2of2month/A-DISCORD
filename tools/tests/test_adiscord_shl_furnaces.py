@@ -7,6 +7,7 @@ from copy import deepcopy
 from functools import lru_cache
 from itertools import product
 from pathlib import Path
+from unittest.mock import patch
 
 from tools.builders import build_adiscord_focus_trees as focus_builder
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -480,6 +481,8 @@ class ScriptMachine:
                 return state in self.ownership and self.condition_scope(e.value, state, scope, target)
             if e.key == "FROM":
                 return self.condition_scope(e.value, target, scope, target)
+            if e.key == "controller":
+                return self.condition_scope(e.value, self.control[scope], scope, target)
             if e.key.isdigit():
                 return self.condition_scope(e.value, e.key, scope, target)
             if e.key in ("is_owned_by", "is_controlled_by"):
@@ -494,6 +497,8 @@ class ScriptMachine:
                 return e.value in self.claims[scope]
             if e.key == "has_completed_focus":
                 return e.value in self.focuses
+            if e.key == "has_focus_tree":
+                return e.value == (self.loaded_trees[-1] if self.loaded_trees else "SHL_focus")
             if e.key == "is_major":
                 return (scope in self.majors) == (e.value == "yes")
             if e.key == "has_capitulated":
@@ -908,11 +913,16 @@ class FurnaceAccountingTests(unittest.TestCase):
         self.assertEqual(country["SHL_regular_supply"], 0)
         machine.focuses.add("SHL_law_of_continuous_fire")
         self.assertTrue(machine.matches(enabled, "SHL"))
+        self.assertFalse(machine.matches(block(start, "visible"), "SHL"))
+        self.assertFalse(machine.matches(block(stop, "visible"), "SHL"))
+        machine.ai = True
         self.assertTrue(machine.matches(block(start, "visible"), "SHL"))
         machine.execute(click, "SHL")
         self.assertEqual(country["SHL_regular_supply"], 1)
         self.assertFalse(machine.matches(block(start, "visible"), "SHL"))
         self.assertTrue(machine.matches(block(stop, "visible"), "SHL"))
+        machine.ai = False
+        self.assertFalse(machine.matches(block(stop, "visible"), "SHL"))
         machine.execute(block(start, "complete_effect"), "SHL")
         self.assertEqual(country["SHL_gui_dirty"], 1)
         machine.execute(block(stop, "complete_effect"), "SHL")
@@ -922,7 +932,8 @@ class FurnaceAccountingTests(unittest.TestCase):
         self.assertEqual(country["SHL_gui_dirty"], 4)
         self.assertEqual(country["ADISCORD_economy_treasury"], 125)
         law = block(focus_definition("SHL_law_of_continuous_fire"), "completion_reward")
-        self.assertIn("SHL_planned_supply", [e.value for e in law if e.key == "unlock_decision_tooltip"])
+        self.assertNotIn("SHL_planned_supply", [e.value for e in law if e.key == "unlock_decision_tooltip"])
+        self.assertIn("SHL_furnace_supply_unlock_tt", [e.value for e in law if e.key == "custom_effect_tooltip"])
         self.assertIn("SHL_houses_railway", repr(block(start, "ai_will_do")))
         self.assertNotIn("SHL_houses_railway", repr(block(start, "visible")))
 
@@ -954,38 +965,51 @@ class FurnaceAccountingTests(unittest.TestCase):
                 self.assertIn(f"[?{value}|0]", strings[gauge])
                 self.assertIn("60", strings[tips[gauge]])
 
-    def test_next_pour_forecast_displays_orders_cost_and_signed_net_in_separate_columns(self):
+    def test_next_pour_forecast_columns_fit_each_page_and_use_live_values_in_both_languages(self):
         from PIL import Image
 
         gui = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8"))
         panel = block(block(gui, "guiTypes"), "containerWindowType")
         fields = {scalar(row.value, "name").strip('"'): row.value for row in panel if row.key == "instantTextBoxType"}
         bounds = block(panel, "size")
-        with Image.open(ROOT / "gfx/interface/SHL_conclave/caravan_row.png") as row:
-            width, height = row.size
-        self.assertGreaterEqual(int(scalar(bounds, "width")), 3 + width)
-        self.assertGreaterEqual(int(scalar(bounds, "height")), 601 + height)
-
-        tokens = {"net": "[?SHL_preview_cycle_net|+2]", "packets": "[?SHL_preview_autobuy_packets|0]",
-                  "cost": "[?SHL_preview_autobuy_cost|0]", "rifles": "[?SHL_preview_rifles|0]"}
+        width = int(scalar(bounds, "width"))
+        height = int(scalar(bounds, "height"))
+        background = next(e.value for e in panel
+                          if e.key == "iconType" and scalar(e.value, "name").strip('"') == "SHL_board")
+        with Image.open(ROOT / "gfx/interface/SHL_conclave/board.png") as board:
+            origin = block(background, "position")
+            self.assertLessEqual(int(scalar(origin, "x")) + board.width, width)
+            self.assertLessEqual(int(scalar(origin, "y")) + board.height, height)
+        rows = (
+            (
+                ("net", "[?SHL_preview_cycle_net|"),
+                ("reserve", "[SHLGetReserveDraw]"),
+                ("cost", "[?SHL_preview_autobuy_cost|"),
+            ),
+            (
+                ("packets", "[?SHL_preview_autobuy_packets|"),
+                ("rifles", "[?SHL_preview_rifles|"),
+                ("politics", "[?SHL_preview_crests|"),
+            ),
+        )
         for lang in ("english", "russian"):
             source = (ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml").read_text(encoding="utf-8-sig")
             strings = dict(re.findall(r'^ (\w+):\d* "(.*)"$', source, re.M))
-            self.assertIn("28", strings[scalar(fields["SHL_cycle_line"], "text").strip('"')])
-            right = 0
-            for metric, token in tokens.items():
-                name = "SHL_forecast_" + metric
-                field = fields[name]
-                label = fields[name + "_label"]
-                self.assertIn(token, strings[scalar(field, "text").strip('"')])
-                self.assertIn(scalar(label, "text").strip('"'), strings)
-                position = block(field, "position")
-                x, y = int(scalar(position, "x")), int(scalar(position, "y"))
-                self.assertGreaterEqual(x, right)
-                right = x + int(scalar(field, "maxWidth"))
-                self.assertLessEqual(right, 3 + width)
-                self.assertLessEqual(int(scalar(block(label, "position"), "y")) + int(scalar(label, "maxHeight")), y)
-                self.assertLessEqual(y + int(scalar(field, "maxHeight")), int(scalar(bounds, "height")))
+            for row in rows:
+                right = 0
+                for metric, live_text in row:
+                    name = "SHL_forecast_" + metric
+                    field = fields[name]
+                    label = fields[name + "_label"]
+                    self.assertIn(live_text, strings[scalar(field, "text").strip('"')])
+                    self.assertIn(scalar(label, "text").strip('"'), strings)
+                    position = block(field, "position")
+                    x, y = int(scalar(position, "x")), int(scalar(position, "y"))
+                    self.assertGreaterEqual(x, right)
+                    right = x + int(scalar(field, "maxWidth"))
+                    self.assertLessEqual(right, width)
+                    self.assertLessEqual(int(scalar(block(label, "position"), "y")) + int(scalar(label, "maxHeight")), y)
+                    self.assertLessEqual(y + int(scalar(field, "maxHeight")), height)
 
     def test_supply_hover_resolves_funded_and_skipped_rows_in_both_languages(self):
         gui = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8"))
@@ -1073,22 +1097,26 @@ class FurnaceAccountingTests(unittest.TestCase):
             self.assertFalse(block(block(categories, "SHL_quarters_and_borders"), name))
             targets = re.search(r"targets = \{ ([A-Z ]+) \}", source.split(f"\n\t{name} = {{", 1)[1])[1].split()
             self.assertEqual(catalogue, targets)
-        guis = parse_clausewitz((ROOT / "common/scripted_guis/ADISCORD_SHL_scripted_gui.txt").read_text(encoding="utf-8"))
-        panel = block(block(guis, "scripted_gui"), "ADISCORD_SHL_caravans")
-        grid = block(block(panel, "dynamic_lists"), "SHL_caravan_contract_grid")
-        self.assertEqual(scalar(grid, "array"), "SHL_caravan_partners")
-        self.assertEqual(scalar(grid, "change_scope"), "yes")
-        self.assertEqual(scalar(grid, "country_scope_entry_container"), "[SHLGetCaravanRow]")
+        gui = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8"))
+        panel = next(e.value for e in block(gui, "guiTypes") if scalar(e.value, "name") == "ADISCORD_SHL_caravans_window")
+        total = next(e.value for e in panel if e.key == "instantTextBoxType" and scalar(e.value, "name") == "SHL_caravan_forecast_value")
         for lang in ("english", "russian"):
             path = ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml"
             strings = dict(re.findall(r'^ (\w+):\d* "(.*)"$', path.read_text(encoding="utf-8-sig"), re.M))
-            self.assertEqual(re.findall(r"\[([A-Z]+)\.SHLGetCaravanPending\]", strings["SHL_caravans_desc"]), catalogue)
+            journal = strings["SHL_caravans_desc"]
+            for getter in ("SHLGetCaravanPending", "SHLGetCaravanRow"):
+                self.assertEqual(re.findall(r"\[([A-Z]+)\." + getter + r"\]", journal), catalogue)
+            self.assertLess(journal.rindex(".SHLGetCaravanPending]"), journal.index(".SHLGetCaravanRow]"))
+            self.assertIn("[?SHL_preview_contract_income|0]", strings[scalar(total, "text")])
             self.assertIn("[SHLGetMetalOfferTitle]", strings["SHL_metal_contract_offer"])
             self.assertIn("[FROM.GetName]", strings["SHL_metal_offer_target_title"])
             self.assertNotIn("[FROM", strings["SHL_metal_offer_unlock_title"])
             self.assertIn("[FROM.GetName]", strings["SHL_metal_contract_end"])
-            self.assertIn("[This.GetName]", strings["SHL_caravan_buyer"])
-            self.assertIn("[?SHL_metal_cycle_price|0]", strings["SHL_caravan_rate"])
+            row = re.sub(r"\$(\w+)\$", lambda m: strings[m[1]], strings["SHL_caravan_contract_entry"])
+            self.assertIn("[This.GetName]", row)
+            self.assertIn("[?SHL_metal_cycle_price|0]", row)
+            self.assertIn("[SHLGetCaravanTerm]", row)
+            self.assertIn("[SHLGetCaravanArrears]", row)
             self.assertIn("[?SHL_metal_arrears|0]", strings["SHL_caravan_missed_payment"])
         tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text().splitlines()
         for mission in ("SHL_conclave_ballot", "SHL_metal_contract_year", "SHL_metal_contract_two_years"):
@@ -1105,10 +1133,10 @@ class FurnaceAccountingTests(unittest.TestCase):
 
         self.machine.flags["VAL"].add("SHL_metal_offer_pending")
         self.assertEqual(read("SHLGetCaravanPending", "VAL"), "SHL_caravan_pending")
-        self.assertEqual(read("SHLGetCaravanRow", "VAL"), "")
+        self.assertEqual(read("SHLGetCaravanRow", "VAL"), "SHL_borders_blank")
         self.machine.flags["VAL"].add("SHL_metal_client")
         self.assertEqual(read("SHLGetCaravanPending", "VAL"), "SHL_borders_blank")
-        self.assertEqual(read("SHLGetCaravanRow", "VAL"), "SHL_caravan_contract_row")
+        self.assertEqual(read("SHLGetCaravanRow", "VAL"), "SHL_caravan_contract_entry")
         self.machine.flags["VAL"].discard("SHL_metal_offer_pending")
         self.machine.variables["VAL"]["SHL_metal_arrears"] = 1
         self.assertEqual(read("SHLGetCaravanArrears", "VAL"), "SHL_caravan_missed_payment")
@@ -1116,7 +1144,7 @@ class FurnaceAccountingTests(unittest.TestCase):
         self.assertEqual(read("SHLGetCaravanArrears", "VAL"), "SHL_caravan_payments_current")
         self.machine.flags["VAL"].discard("SHL_metal_client")
         self.assertEqual(read("SHLGetCaravanPending", "VAL"), "SHL_borders_blank")
-        self.assertEqual(read("SHLGetCaravanRow", "VAL"), "")
+        self.assertEqual(read("SHLGetCaravanRow", "VAL"), "SHL_borders_blank")
 
     def test_treasury_receipt_pays_250_and_refreshes_the_budget(self):
         machine = self.machine
@@ -4169,6 +4197,145 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
         self.assertTrue(action, number)
         self.m.execute(action, "SHL")
 
+    def test_master_sets_both_policies_from_each_start_and_only_projects_the_next_pour(self):
+        master = "SHL_supply_master_button"
+        self.c.update({"SHL_regular_supply": 0, "SHL_auto_reserve": 0})
+        self.assertFalse(self.enabled(master))
+        self.click(master)
+        self.assertEqual((self.c["SHL_regular_supply"], self.c["SHL_auto_reserve"]), (0, 0))
+
+        self.prepare_bulk_orders([1, 8, 10], reserve=2, cash=45)
+        self.c.update({"SHL_reserve_floor": 1, "SHL_priority_10": 1})
+        for regular, reserve in product((0, 1), repeat=2):
+            with self.subTest(regular=regular, reserve=reserve):
+                self.c.update({"SHL_regular_supply": regular, "SHL_auto_reserve": reserve})
+                self.m.run("SHL_refresh_furnaces")
+                dirty = self.c["SHL_gui_dirty"]
+                self.assertTrue(self.enabled(master))
+                self.click(master)
+                expected = int((regular, reserve) != (1, 1))
+                self.assertEqual((self.c.get("SHL_regular_supply", 0), self.c.get("SHL_auto_reserve", 0)),
+                                 (expected, expected))
+                self.assertGreater(self.c["SHL_gui_dirty"], dirty)
+                self.assertEqual(self.c["SHL_preview_autobuy_packets"], expected)
+                self.assertEqual(self.c["SHL_preview_autobuy_cost"], 45 * expected)
+                self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {10: 1} if expected else {})
+                self.assertEqual(self.bulk_stocks(), [0] * 10)
+                self.assertEqual((self.c["ADISCORD_economy_treasury"], self.c["SHL_reserve_stock"]), (45, 2))
+                self.assertEqual((self.c["SHL_reserve_floor"], self.c["SHL_priority_10"],
+                                  self.c["SHL_selected_furnace"]), (1, 1, 8))
+
+    def test_settings_switches_visible_controls_with_no_forecast_or_supply_side_effects(self):
+        layout = (ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8")
+        windows = block(parse_clausewitz(layout), "guiTypes")
+        panel = next(e.value for e in windows if scalar(e.value, "name").strip('"') == "ADISCORD_SHL_furnaces_window")
+        widgets = {scalar(e.value, "name").strip('"') for e in panel
+                   if isinstance(e.value, list) and scalar(e.value, "name")}
+        shared = {"SHL_supply_master_button", "SHL_supply_settings_button", "SHL_survey_map",
+                  "SHL_next_alert_button", *(f"SHL_furnace_{n}_button" for n in range(1, 10))}
+        overview = {"SHL_panel_selection", "SHL_panel_stocks", "SHL_local_output", "SHL_send_reserve_button",
+                    "SHL_recipient_export_button", "SHL_recipient_arsenal_button", "SHL_recipient_quarters_button",
+                    "SHL_recipient_crest_button", "SHL_forecast_skips", "SHL_forecast_reserve"}
+        settings = {"SHL_supply_toggle_button", "SHL_supply_packet_quote", "SHL_auto_reserve_button",
+                    "SHL_raise_reserve_floor_button", "SHL_lower_reserve_floor_button",
+                    "SHL_distribute_reserve_button", "SHL_next_unfunded_button", "SHL_ledger_line",
+                    "SHL_convoy_ore_button", "SHL_convoy_masons_button", "SHL_convoy_sale_button"}
+        self.assertLessEqual(shared | overview | settings, widgets)
+        self.prepare_bulk_orders([1, 8, 10], reserve=2, cash=0)
+        for expanded in (False, True, False):
+            with self.subTest(expanded=expanded):
+                self.assertEqual(bool(self.c.get("SHL_supply_settings_open")), expanded)
+                shown = {n for n in widgets if self.m.matches(block(self.conditions, n + "_visible"), "SHL")}
+                self.assertLessEqual(shared | (settings if expanded else overview), shown)
+                self.assertFalse((overview if expanded else settings) & shown)
+                before = deepcopy(self.m.variables)
+                with patch.object(self.m, "run", wraps=self.m.run) as effects:
+                    self.click("SHL_supply_settings_button")
+                called = {call.args[0] for call in effects.call_args_list}
+                self.assertFalse({"SHL_refresh_furnaces", "SHL_refresh_delivery_forecast",
+                                  "SHL_project_furnace_deliveries"} & called)
+                self.assertGreater(self.c["SHL_gui_dirty"], before["SHL"]["SHL_gui_dirty"])
+                after = deepcopy(self.m.variables)
+                for states in (before, after):
+                    states["SHL"].pop("SHL_supply_settings_open", None)
+                    states["SHL"].pop("SHL_gui_dirty", None)
+                self.assertEqual(after, before)
+
+    def test_settings_map_priority_stays_open_and_navigation_returns_to_the_selected_card(self):
+        self.prepare_bulk_orders([1, 8, 10], reserve=1, cash=0)
+        for number in (1, 8, 10):
+            self.click("SHL_supply_settings_button")
+            selected = self.c["SHL_selected_furnace"]
+            self.toggle_priority(number)
+            self.assertEqual(self.c["SHL_selected_furnace"], selected)
+            self.assertEqual(self.c["SHL_supply_settings_open"], 1)
+            self.click(f"SHL_furnace_{number}_button")
+            self.assertEqual(self.c["SHL_selected_furnace"], number)
+            self.assertFalse(self.c.get("SHL_supply_settings_open", 0))
+        for button in ("SHL_next_alert_button", "SHL_next_unfunded_button"):
+            self.click("SHL_supply_settings_button")
+            previous = self.c["SHL_selected_furnace"]
+            self.assertTrue(self.enabled(button))
+            self.click(button)
+            self.assertNotEqual(self.c["SHL_selected_furnace"], previous)
+            self.assertFalse(self.c.get("SHL_supply_settings_open", 0))
+
+    def test_missed_pours_follow_actual_shortages_with_and_without_paid_orders(self):
+        self.prepare_bulk_orders([1, 3, 4, 8, 10], reserve=0, cash=0, shift=1)
+        self.m.control["289"] = "NAM"
+        self.m.variables["290"]["SHL_furnace_stock"] = 2
+        self.c.update({"SHL_project_stage": 3, "SHL_regular_supply": 0})
+        for regular in (0, 1):
+            self.c["SHL_regular_supply"] = regular
+            self.m.run("SHL_refresh_furnaces")
+            self.assertEqual(self.c["SHL_preview_missed_pours"], 2)
+            self.assertEqual(self.c["SHL_preview_unfunded_packets"], 4 * regular)
+            self.assertEqual([n for n in range(1, 11) if self.c.get(f"SHL_delivery_block_{n}") == 3], [1, 8])
+            produced = deepcopy(self.m)
+            produced.run("SHL_produce_period")
+            self.assertEqual([n for n, state in enumerate(range(287, 296), 1)
+                              if produced.variables[str(state)].get("SHL_furnace_shortages")], [1, 8])
+        self.c["ADISCORD_economy_treasury"] = 180
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_preview_missed_pours"], 0)
+
+    def test_overview_lists_each_missed_pour_and_shows_only_committed_reserve_in_both_languages(self):
+        self.prepare_bulk_orders(range(1, 11), reserve=2, cash=0)
+        source = ROOT / "common/scripted_localisation/ADISCORD_SHL_scripted_loc.txt"
+        selectors = {scalar(e.value, "name"): e.value for e in parse_clausewitz(source.read_text(encoding="utf-8"))}
+        numerals = "I II III IV V VI VII VIII IX X".split()
+        for lang in ("russian", "english"):
+            path = ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml"
+            strings = dict(re.findall(r'^ (\w+):\d* "(.*)"$', path.read_text(encoding="utf-8-sig"), re.M))
+
+            def render(key):
+                def select(match):
+                    options = selectors[match.group(1)]
+                    first = next(e.value for e in options if e.key == "text" and
+                                 self.m.matches(block(e.value, "trigger"), "SHL"))
+                    return render(scalar(first, "localization_key").strip('"'))
+                return re.sub(r"\[(SHLGet\w+)\]", select, strings[key])
+
+            for regular, reserve in product((0, 1), repeat=2):
+                with self.subTest(language=lang, regular=regular, reserve=reserve):
+                    self.c.update({"SHL_regular_supply": regular, "SHL_auto_reserve": reserve,
+                                   "ADISCORD_economy_treasury": 0})
+                    self.m.run("SHL_refresh_furnaces")
+                    missed = re.findall(r"\b[IVX]+\b", render("SHL_forecast_skips"))
+                    committed = bool(regular and reserve)
+                    self.assertEqual(missed, numerals[2:] if committed else numerals)
+                    reported = render("SHL_forecast_reserve")
+                    if committed:
+                        self.assertIn("[?SHL_auto_reserve_total|0]", reported)
+                        self.assertEqual(self.c["SHL_auto_reserve_total"], 2)
+                    else:
+                        self.assertIn("0 £SHL_packet_texticon", reported)
+                    self.assertIn("[?SHL_preview_autobuy_cost|0] £ADISCORD_economy_treasury_texticon",
+                                  render("SHL_forecast_cost"))
+            self.c["ADISCORD_economy_treasury"] = 450
+            self.m.run("SHL_refresh_furnaces")
+            self.assertEqual(render("SHL_forecast_skips"), strings["SHL_forecast_skips_clear"])
+
     def test_each_map_marker_toggles_its_own_priority_without_moving_stocks_or_selection(self):
         self.prepare_bulk_orders(range(1, 11), reserve=2, cash=0)
         self.m.focuses.remove("SHL_law_of_continuous_fire")
@@ -7041,12 +7208,20 @@ class CaravanJourneyTests(unittest.TestCase):
             self.arrays = defaultdict(list)
             self.wine_grants = []
             self.timer_adjustments = defaultdict(int)
+            self.buyer_missions = {}
             self.roll = 99
             self.bid_chances = []
 
         def matches(self, items, scope, target=None):
             if len(items) == 1 and items[0].key == "has_idea" and items[0].value == "SHL_cellar_wines":
                 return any(country == scope for country, _, _ in self.wine_grants)
+            if len(items) == 1 and items[0].key == "any_of_scopes":
+                fields = items[0].value
+                candidates = self.arrays[scope, scalar(fields, "array")]
+                conditions = [e for e in fields if e.key != "array"]
+                return any(self.condition_scope(conditions, buyer, scope, target) for buyer in candidates)
+            if len(items) == 1 and items[0].key == "has_active_mission" and scope != "SHL":
+                return (scope, items[0].value) in self.buyer_missions
             return super().matches(items, scope, target)
 
         def stock_count(self, scope, equipment):
@@ -7129,6 +7304,12 @@ class CaravanJourneyTests(unittest.TestCase):
         events = parse_clausewitz((ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8"))
         cls.offer = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_SHL.206")
         cls.options = {scalar(opt.value, "name").rsplit(".", 1)[-1]: opt.value for opt in cls.offer if opt.key == "option"}
+        loc = ROOT / "common/scripted_localisation/ADISCORD_SHL_scripted_loc.txt"
+        cls.selectors = {scalar(e.value, "name"): e.value for e in parse_clausewitz(loc.read_text(encoding="utf-8"))}
+        cls.strings = {}
+        for lang in ("russian", "english"):
+            path = ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml"
+            cls.strings[lang] = dict(re.findall(r'^ ([\w.]+):\d* "(.*)"$', path.read_text(encoding="utf-8-sig"), re.M))
 
     def setUp(self):
         self.m = self.Machine(self.effects, self.triggers)
@@ -7166,6 +7347,87 @@ class CaravanJourneyTests(unittest.TestCase):
 
     def answer(self, buyer, choice):
         self.m.execute(block(self.options[choice], "hidden_effect"), buyer)
+
+    def journal_text(self, key, lang, scope="SHL"):
+        if key in self.selectors:
+            first = next(e.value for e in self.selectors[key] if e.key == "text" and
+                         self.m.matches(block(e.value, "trigger"), scope))
+            key = scalar(first, "localization_key").strip('"')
+        return re.sub(r"\[(?:([A-Z]+)\.)?(SHLGet\w+)\]|\$(\w+)\$",
+                      lambda m: self.journal_text(m[2] or m[3], lang, m[1] or scope),
+                      self.strings[lang][key]).replace("[This.GetName]", scope)
+
+    def test_metal_offer_headings_and_contract_terms_follow_each_buyer_in_the_journal(self):
+        partners = [scalar(e.value, "SHL_caravan_partners") for e in self.m.effects["SHL_initialize_programmes"]
+                    if e.key == "add_to_array"]
+        self.m.arrays["SHL", "SHL_caravan_partners"] = partners
+        for lang in self.strings:
+            self.assertEqual(self.journal_text("SHLGetCaravanOfferHeading", lang), "")
+            self.assertEqual(self.journal_text("SHLGetCaravanContractHeading", lang),
+                             self.journal_text("SHL_caravan_contracts_locked", lang))
+        self.m.loaded_trees.append("SHL_south_war_focus")
+        for lang in self.strings:
+            self.assertEqual(self.journal_text("SHLGetCaravanContractHeading", lang),
+                             self.journal_text("SHL_caravan_contracts_locked_war", lang))
+        self.m.loaded_trees.clear()
+        self.m.focuses.add("SHL_metal_brokers")
+        for lang in self.strings:
+            self.assertEqual(self.journal_text("SHLGetCaravanOfferHeading", lang),
+                             self.strings[lang]["SHL_caravan_pending_empty"])
+            self.assertEqual(self.journal_text("SHLGetCaravanContractHeading", lang),
+                             self.journal_text("SHL_caravan_contracts_empty", lang))
+        self.m.flags["GLP"].add("SHL_metal_offer_pending")
+        for buyer, term in (("VAL", "year"), ("STP", "two_years")):
+            self.m.flags[buyer].add("SHL_metal_client")
+            self.m.buyer_missions[buyer, "SHL_metal_contract_" + term] = 100
+        self.m.variables["STP"]["SHL_metal_arrears"] = 1
+        for lang in self.strings:
+            journal = self.journal_text("SHL_caravans_desc", lang)
+            self.assertIn(self.strings[lang]["SHL_caravan_pending_heading"], journal)
+            active = self.journal_text("SHLGetCaravanContractHeading", lang)
+            offers, contracts = journal.split(active)
+            self.assertIn("GLP", offers)
+            self.assertNotIn("GLP", contracts)
+            self.assertNotIn("VAL", offers)
+            self.assertNotIn("STP", offers)
+            for buyer, term in (("VAL", "year"), ("STP", "two_years")):
+                row = self.journal_text("SHLGetCaravanRow", lang, buyer)
+                self.assertIn(row, contracts)
+                self.assertIn(buyer, row)
+                self.assertIn("[?SHL_metal_cycle_price|0]", row)
+                self.assertIn("days_mission_timeout@SHL_metal_contract_" + term + "|0", row)
+                self.assertEqual("[?SHL_metal_arrears|0]" in row, buyer == "STP")
+
+    def test_journal_traces_real_leg_clock_and_pending_buyer_until_return(self):
+        self.open_long_route()
+        self.supply("SHL", self.RIFLES, 10000)
+        self.dispatch()
+        for i, stop in enumerate(self.STOPS):
+            mission = "SHL_road_to_" + stop
+            self.assertIn(mission, self.m.missions)
+            for lang in self.strings:
+                journal = self.journal_text("SHLGetRoadJournal", lang)
+                self.assertEqual(re.findall(r"days_mission_timeout@(SHL_road_to_\w+)", journal), [mission])
+                pending = re.findall(r"\[(\d+)\.Controller\.GetName\]", journal)
+                self.assertEqual(pending, [self.MARKETS[i - 1][0]] if i else [])
+            if i == 1:
+                self.answer("KYZ", "a")
+                for lang in self.strings:
+                    self.assertNotIn("Controller.GetName", self.journal_text("SHLGetRoadJournal", lang))
+            self.arrive(stop)
+        self.assertIn("SHL_road_offer", self.m.flags["NAM"])
+        self.m.variables["NAM"][self.CASH] = 75
+        self.answer("NAM", "b")
+        self.assertEqual(self.m.variables["NAM"][self.CASH], 75)
+        self.assertEqual(self.m.equipment["NAM", self.RIFLES], 0)
+        self.assertEqual(self.m.equipment["SHL", self.RIFLES], 10000)
+        for lang in self.strings:
+            for key in ("SHLGetRoadJournal", "SHLGetRoadPending"):
+                report = self.journal_text(key, lang)
+                self.assertNotIn("Controller.GetName", report)
+                self.assertNotIn("days_mission_timeout@", report)
+            self.assertEqual(self.journal_text("SHLGetRoadInvitation", lang, "NAM"),
+                             self.strings[lang]["SHL_road_invitation_closed"])
 
     def test_calendar_market_controllers_and_expiry(self):
         self.open_long_route()
@@ -7308,6 +7570,13 @@ class CaravanJourneyTests(unittest.TestCase):
         for _, tag in self.MARKETS[2:5]:
             self.assertEqual(self.m.variables[tag][self.CASH], 0)
         self.assertEqual(self.c[self.CASH], 0)
+        for lang in self.strings:
+            journal = self.journal_text("SHLGetRoadJournal", lang)
+            self.assertIn("[?SHL_road_wine|0]", journal)
+            self.assertIn("[?SHL_road_cash|0]", journal)
+            self.assertNotIn("SHL_road_deposit_refund", journal)
+            for absent in ("SHL_road_kits", "SHL_road_guns", "SHL_road_trucks", "SHL_road_fuel"):
+                self.assertNotIn("[?" + absent + "|", journal)
         self.m.control["70"] = "WEF"
         self.m.variables["WEF"][self.CASH] = 80
         self.arrive("loren")
@@ -7318,9 +7587,29 @@ class CaravanJourneyTests(unittest.TestCase):
         self.arrive("home")
         self.assertEqual(self.c["SHL_road_cash"], 920)
         self.assertEqual(self.c[self.CASH], 1000)
+        self.assertEqual(self.c["SHL_road_deposit_refund"], 80)
+        for lang in self.strings:
+            settlement = self.journal_text("SHL_road_settlement_lines", lang)
+            self.assertIn(settlement, self.journal_text("SHLGetRoadJournal", lang))
+            self.assertIn(settlement, self.journal_text("ADISCORD_SHL.207.d", lang))
+            self.assertIn("[?SHL_road_cash|0]", settlement)
+            self.assertIn("[?SHL_road_deposit_refund|0]", settlement)
+            self.assertNotIn("[?SHL_road_wine|0]", settlement.split(r"\n")[0])
+            self.assertNotRegex(self.journal_text("ADISCORD_SHL.207.d", lang), r"§[YHOG]")
         self.assertEqual(self.m.equipment["SHL", modern], 70000)
         self.m.run("SHL_road_unload")
         self.assertEqual(self.c[self.CASH], 1000)
+        self.m.fuel["SHL"] = 400
+        self.dispatch()
+        self.assertNotIn("SHL_road_leg", self.c)
+        self.assertEqual(self.c["SHL_road_deposit_refund"], 80)
+        self.supply("SHL", self.RIFLES, 10000)
+        self.dispatch()
+        self.assertIn("SHL_road_leg", self.c)
+        self.assertNotIn("SHL_road_deposit_refund", self.c)
+        for lang in self.strings:
+            self.assertEqual(self.journal_text("SHLGetRoadRefund", lang), "")
+            self.assertEqual(self.journal_text("SHLGetRoadReturnReceipt", lang), "")
 
     def test_five_bulk_sales_exhaust_the_manifest(self):
         self.open_long_route()
@@ -7375,6 +7664,8 @@ class CaravanJourneyTests(unittest.TestCase):
                 if tier == 3:
                     self.m.focuses.add("SHL_northern_road")
                 self.supply("SHL", self.RIFLES, 10000)
+                for lang in self.strings:
+                    self.assertRegex(self.journal_text("SHLGetRoadPlan", lang), rf"\b{expected}\b")
                 self.dispatch()
                 self.assertEqual(self.c["SHL_road_itinerary"], tier)
                 for stop in names:
@@ -7386,6 +7677,9 @@ class CaravanJourneyTests(unittest.TestCase):
         self.supply("SHL", self.RIFLES, 10000)
         self.dispatch()
         self.m.focuses.update({"SHL_chancery_of_the_gate", "SHL_sand_patrols", "SHL_northern_road"})
+        for lang in self.strings:
+            self.assertIn(self.strings[lang]["SHL_road_name_local"], self.journal_text("SHLGetRoadJournal", lang))
+            self.assertNotIn(self.strings[lang]["SHL_road_name_long"], self.journal_text("SHLGetRoadJournal", lang))
         self.arrive("sevir")
         self.assertEqual(self.elapsed, 30)
         self.arrive("barak")
@@ -7494,6 +7788,7 @@ class CaravanJourneyTests(unittest.TestCase):
         self.assertEqual(self.c["SHL_road_home_rifles"], 50000)
         self.assertEqual(self.c["SHL_road_home_cash"], 1000)
         self.assertEqual(self.c[self.CASH], 1100)
+        self.assertEqual(self.c["SHL_road_deposit_refund"], 100)
         self.assertEqual(self.c["SHL_road_wine"], 5)
         self.assertEqual((self.m.equipment["SHL", self.RIFLES], self.m.equipment["SHL", modern]), (30000, 20000))
         self.assertFalse(self.m.arrays["SHL", "SHL_road_rifle_models"])

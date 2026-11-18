@@ -27,6 +27,7 @@ SHL_initialize_furnaces = {
 		set_variable = { var = SHL_shift_policy value = 0 }
 		set_variable = { var = SHL_regular_supply value = 0 }
 		set_variable = { var = SHL_auto_reserve value = 0 }
+		set_variable = { var = SHL_supply_settings_open value = 0 }
 		set_variable = { var = SHL_reserve_floor value = 0 }
 		set_variable = { var = SHL_selected_furnace value = 1 }
 		set_variable = { var = SHL_city_support value = 20 }
@@ -1516,9 +1517,13 @@ SHL_select_next_furnace_alert = {
 	if = {
 		limit = {
 			check_variable = { var = SHL_alert_target value = 0 compare = greater_than }
-			NOT = { check_variable = { var = SHL_selected_furnace value = SHL_alert_target compare = equals } }
+			OR = {
+				check_variable = { var = SHL_selected_furnace value = SHL_alert_target compare = not_equals }
+				check_variable = { var = SHL_supply_settings_open value = 1 compare = equals }
+			}
 		}
 		set_variable = { var = SHL_selected_furnace value = SHL_alert_target }
+		set_variable = { var = SHL_supply_settings_open value = 0 }
 		SHL_refresh_selected_furnace = yes
 		add_to_variable = { var = SHL_gui_dirty value = 1 }
 	}
@@ -1534,9 +1539,13 @@ SHL_select_next_unfunded_order = {
 		if = {
 			limit = {
 				check_variable = { var = SHL_next_unfunded_furnace value = 0 compare = greater_than }
-				check_variable = { var = SHL_next_unfunded_furnace value = SHL_selected_furnace compare = not_equals }
+				OR = {
+					check_variable = { var = SHL_next_unfunded_furnace value = SHL_selected_furnace compare = not_equals }
+					check_variable = { var = SHL_supply_settings_open value = 1 compare = equals }
+				}
 			}
 			set_variable = { var = SHL_selected_furnace value = SHL_next_unfunded_furnace }
+			set_variable = { var = SHL_supply_settings_open value = 0 }
 			SHL_refresh_selected_furnace = yes
 			add_to_variable = { var = SHL_gui_dirty value = 1 }
 		}
@@ -1690,6 +1699,41 @@ SHL_lower_reserve_floor = {
 		limit = { SHL_can_lower_reserve_floor = yes }
 		subtract_from_variable = { var = SHL_reserve_floor value = 1 }
 		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_supply_master = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = {
+				check_variable = { var = SHL_regular_supply value = 1 compare = equals }
+				check_variable = { var = SHL_auto_reserve value = 1 compare = equals }
+			}
+			set_variable = { var = SHL_regular_supply value = 0 }
+			set_variable = { var = SHL_auto_reserve value = 0 }
+		}
+		else = {
+			set_variable = { var = SHL_regular_supply value = 1 }
+			set_variable = { var = SHL_auto_reserve value = 1 }
+		}
+		SHL_refresh_selected_furnace = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_supply_settings = {
+	if = {
+		limit = {
+			tag = SHL
+			has_country_flag = SHL_furnaces_initialized
+		}
+		if = {
+			limit = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+			set_variable = { var = SHL_supply_settings_open value = 0 }
+		}
+		else = { set_variable = { var = SHL_supply_settings_open value = 1 } }
 		add_to_variable = { var = SHL_gui_dirty value = 1 }
 	}
 }
@@ -8940,6 +8984,7 @@ SHL_project_furnace_deliveries = {
 	set_variable = { var = SHL_preview_autobuy_packets value = 0 }
 	set_variable = { var = SHL_preview_autobuy_cost value = 0 }
 	set_variable = { var = SHL_preview_unfunded_packets value = 0 }
+	set_variable = { var = SHL_preview_missed_pours value = 0 }
 	set_variable = { var = SHL_next_unfunded_furnace value = 0 }
 	set_temp_variable = { var = SHL_forecast_furnace_number value = 0 }
 	set_temp_variable = { var = SHL_preview_order_work value = 0 }
@@ -9697,6 +9742,7 @@ SHL_preview_delivery = {
 		if = {
 			limit = { check_variable = { var = SHL_preview_stock value = SHL_preview_cost compare = less_than } }
 			set_variable = { var = SHL_preview_block value = 3 }
+			add_to_variable = { var = SHL_preview_missed_pours value = 1 }
 		}
 		else_if = {
 			limit = {
@@ -14682,6 +14728,7 @@ SHL_road_take_equipment = {
 }
 
 SHL_road_start = {
+	clear_variable = SHL_road_deposit_refund
 	clear_variable = SHL_road_home_cash
 	clear_variable = SHL_road_home_rifles
 	clear_variable = SHL_road_home_kits
@@ -14931,11 +14978,13 @@ SHL_road_unload = {
 			limit = { SHL = { has_variable = SHL_road_wine } }
 			SHL = { set_temp_variable = { var = SHL_road_order value = SHL_road_rifles } }
 			SHL_road_release_rifles = yes
-			SHL = { clear_array = SHL_road_rifle_models }
-			set_temp_variable = { var = SHL_road_deposit_refund value = SHL.SHL_road_wine }
-			multiply_temp_variable = { var = SHL_road_deposit_refund value = 20 }
-			add_to_variable = { var = ADISCORD_economy_treasury value = SHL_road_deposit_refund }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_road_deposit_refund }
+			SHL = {
+				clear_array = SHL_road_rifle_models
+				set_variable = { var = SHL_road_deposit_refund value = SHL_road_wine }
+				multiply_variable = { var = SHL_road_deposit_refund value = 20 }
+			}
+			add_to_variable = { var = ADISCORD_economy_treasury value = SHL.SHL_road_deposit_refund }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL.SHL_road_deposit_refund }
 		}
 		else = {
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = SHL.SHL_road_rifles producer = SHL }
@@ -14984,6 +15033,7 @@ SHL_road_settle_annexation = {
 				remove_mission = SHL_road_to_barak
 			}
 			clear_variable = SHL_road_wine
+			clear_variable = SHL_road_deposit_refund
 			clear_array = SHL_road_rifle_models
 			if = {
 				limit = { has_active_mission = SHL_road_to_maren }

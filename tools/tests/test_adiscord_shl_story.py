@@ -3,6 +3,7 @@
 import json
 import re
 import unittest
+from functools import cache
 from itertools import product
 from pathlib import Path
 
@@ -80,17 +81,23 @@ class ShahrabadStoryTests(unittest.TestCase):
 
     def test_russian_event_descriptions_stay_within_the_authoring_window(self):
         values = self.values["russian"]
+        references = re.compile(r"\$([\w.]+)\$|\[(?:[A-Z]{3}\.)?(SHLGet\w+)\]")
+
+        @cache
+        def longest_text(key):
+            def resolve(match):
+                if match[1]:
+                    return longest_text(match[1])
+                variants = (longest_text(branch) for branch in self.scripted_branches(match[2]))
+                return max(variants, key=lambda value: len(value.encode("utf-8")))
+
+            return references.sub(resolve, expand(values[key]))
+
         for event_id, event in self.events.items():
             if scalar(event, "hidden") == "yes":
                 continue
             for key in self.description_keys(event):
-                text = expand(values[key])
-                for macro in re.findall(r"\[(SHLGet\w+)\]", text):
-                    longest = max(
-                        (expand(values[branch]) for branch in self.scripted_branches(macro)),
-                        key=lambda value: len(value.encode("utf-8")),
-                    )
-                    text = text.replace(f"[{macro}]", longest)
+                text = longest_text(key)
                 self.assertGreaterEqual(len(text), 400, key)
                 self.assertLessEqual(len(text), 3000, key)
                 self.assertLess(len(text.encode("utf-8")), 5500, key)

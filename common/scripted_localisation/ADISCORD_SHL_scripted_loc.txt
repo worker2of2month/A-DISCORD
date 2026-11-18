@@ -114,19 +114,19 @@ defined_text = {
 	name = SHLGetPourResult
 	text = {
 		trigger = { check_variable = { var = SHL_selected_delivery_block value = 1 compare = equals } }
-		localization_key = SHL_delivery_stopped
+		localization_key = SHL_pour_stopped
 	}
 	text = {
 		trigger = { check_variable = { var = SHL_selected_delivery_block value = 2 compare = equals } }
-		localization_key = SHL_delivery_occupied
+		localization_key = SHL_pour_occupied
 	}
 	text = {
 		trigger = { check_variable = { var = SHL_selected_delivery_block value = 3 compare = equals } }
-		localization_key = SHL_delivery_shortage
+		localization_key = SHL_pour_shortage
 	}
 	text = {
 		trigger = { check_variable = { var = SHL_selected_delivery_block value = 4 compare = equals } }
-		localization_key = SHL_delivery_order
+		localization_key = SHL_pour_order
 	}
 	text = {
 		trigger = { check_variable = { var = SHL_selected_recipient value = 1 compare = equals } }
@@ -377,6 +377,165 @@ defined_text = {
 	text = {
 		localization_key = SHL_supply_off
 	}
+}
+
+defined_text = {
+	name = SHLGetSupplyMasterMode
+	text = {
+		trigger = { NOT = { has_completed_focus = SHL_law_of_continuous_fire } }
+		localization_key = SHL_supply_master_locked
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_regular_supply value = 1 compare = equals }
+			check_variable = { var = SHL_auto_reserve value = 1 compare = equals }
+		}
+		localization_key = SHL_supply_master_auto
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_regular_supply value = 0 compare = equals }
+			check_variable = { var = SHL_auto_reserve value = 0 compare = equals }
+		}
+		localization_key = SHL_supply_master_manual
+	}
+	text = { localization_key = SHL_supply_master_custom }
+}
+
+defined_text = {
+	name = SHLGetSupplyMasterAction
+	text = {
+		trigger = { NOT = { has_completed_focus = SHL_law_of_continuous_fire } }
+		localization_key = SHL_forecast_order_locked
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_regular_supply value = 1 compare = equals }
+			check_variable = { var = SHL_auto_reserve value = 1 compare = equals }
+		}
+		localization_key = SHL_supply_master_stop
+	}
+	text = { localization_key = SHL_supply_master_start }
+}
+
+defined_text = {
+	name = SHLGetSupplyPageAction
+	text = {
+		trigger = { check_variable = { var = SHL_supply_settings_open value = 1 compare = equals } }
+		localization_key = SHL_supply_back_label
+	}
+	text = { localization_key = SHL_supply_settings_label }
+}
+
+defined_text = {
+	name = SHLGetReserveDraw
+	text = {
+		trigger = {
+			check_variable = { var = SHL_regular_supply value = 1 compare = equals }
+			check_variable = { var = SHL_auto_reserve value = 1 compare = equals }
+		}
+		localization_key = SHL_forecast_reserve_active
+	}
+	text = { localization_key = SHL_forecast_reserve_zero }
+}
+
+defined_text = {
+	name = SHLGetMissedPourList
+	text = {
+		trigger = { check_variable = { var = SHL_preview_missed_pours value = 0 compare = equals } }
+		localization_key = SHL_forecast_skips_clear
+	}
+	text = { localization_key = SHL_forecast_skips_sites }
+}
+
+defined_text = {
+	name = SHLGetMissedPour1
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_1 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_1
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMissedPour2
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_2 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_2
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMissedPour3
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_3 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_3
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMissedPour4
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_4 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_4
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMissedPour5
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_5 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_5
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMissedPour6
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_6 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_6
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMissedPour7
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_7 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_7
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMissedPour8
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_8 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_8
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMissedPour9
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_9 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_9
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMissedPour10
+	text = {
+		trigger = { check_variable = { var = SHL_delivery_block_10 value = 3 compare = equals } }
+		localization_key = SHL_missed_pour_10
+	}
+	text = { localization_key = SHL_borders_blank }
 }
 
 defined_text = {
@@ -2834,7 +2993,7 @@ defined_text = {
 }
 
 defined_text = {
-	name = SHLGetCaravanPendingEmpty
+	name = SHLGetCaravanOfferHeading
 	text = {
 		trigger = {
 			any_of_scopes = {
@@ -2842,16 +3001,27 @@ defined_text = {
 				SHL_caravan_awaiting_reply = yes
 			}
 		}
-		localization_key = SHL_borders_blank
+		localization_key = SHL_caravan_pending_heading
 	}
-	text = { localization_key = SHL_caravan_pending_empty }
+	text = {
+		trigger = { SHL_metal_negotiations_unlocked = yes }
+		localization_key = SHL_caravan_pending_empty
+	}
+	text = { localization_key = SHL_borders_blank }
 }
 
 defined_text = {
-	name = SHLGetCaravanContractsEmpty
+	name = SHLGetCaravanContractHeading
 	text = {
 		trigger = { SHL_caravan_has_active_buyers = yes }
-		localization_key = SHL_borders_blank
+		localization_key = SHL_caravan_active_heading
+	}
+	text = {
+		trigger = {
+			has_focus_tree = SHL_south_war_focus
+			SHL_metal_negotiations_unlocked = no
+		}
+		localization_key = SHL_caravan_contracts_locked_war
 	}
 	text = {
 		trigger = { SHL_metal_negotiations_unlocked = no }
@@ -2864,9 +3034,9 @@ defined_text = {
 	name = SHLGetCaravanRow
 	text = {
 		trigger = { SHL_caravan_active_buyer = yes }
-		localization_key = "SHL_caravan_contract_row"
+		localization_key = SHL_caravan_contract_entry
 	}
-	text = { localization_key = "" }
+	text = { localization_key = SHL_borders_blank }
 }
 
 defined_text = {
@@ -3177,9 +3347,90 @@ defined_text = {
 	name = SHLGetRoadWine
 	text = {
 		trigger = {
-			has_variable = SHL_road_wine
+			check_variable = { var = SHL_road_wine value = 0 compare = greater_than }
 		}
 		localization_key = SHL_road_wine_manifest
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadCargo
+	text = {
+		trigger = { check_variable = { var = SHL_road_rifles value = 0 compare = greater_than } }
+		localization_key = SHL_road_cargo_rifles
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_road_kits value = 0 compare = greater_than } }
+		localization_key = SHL_road_cargo_kits
+	}
+	text = {
+		trigger = {
+			has_variable = SHL_road_leg
+			check_variable = { var = SHL_road_wine value = 0 compare = greater_than }
+		}
+		localization_key = SHL_borders_blank
+	}
+	text = { localization_key = SHL_road_nothing }
+}
+
+defined_text = {
+	name = SHLGetRoadProceeds
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = SHL_road_cash value = 0 compare = greater_than }
+				check_variable = { var = SHL_road_trucks value = 0 compare = greater_than }
+				check_variable = { var = SHL_road_guns value = 0 compare = greater_than }
+				check_variable = { var = SHL_road_fuel value = 0 compare = greater_than }
+			}
+		}
+		localization_key = SHL_road_proceeds_items
+	}
+	text = { localization_key = SHL_road_nothing }
+}
+
+defined_text = {
+	name = SHLGetRoadCash
+	text = {
+		trigger = { check_variable = { var = SHL_road_cash value = 0 compare = greater_than } }
+		localization_key = SHL_road_receipt_cash
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadTrucks
+	text = {
+		trigger = { check_variable = { var = SHL_road_trucks value = 0 compare = greater_than } }
+		localization_key = SHL_road_receipt_trucks
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadGuns
+	text = {
+		trigger = { check_variable = { var = SHL_road_guns value = 0 compare = greater_than } }
+		localization_key = SHL_road_receipt_guns
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadFuel
+	text = {
+		trigger = { check_variable = { var = SHL_road_fuel value = 0 compare = greater_than } }
+		localization_key = SHL_road_receipt_fuel
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadRefund
+	text = {
+		trigger = { check_variable = { var = SHL_road_deposit_refund value = 0 compare = greater_than } }
+		localization_key = SHL_road_receipt_deposit_refund
 	}
 	text = { localization_key = SHL_borders_blank }
 }
