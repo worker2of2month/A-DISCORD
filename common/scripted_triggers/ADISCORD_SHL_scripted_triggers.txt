@@ -19,6 +19,120 @@ SHL_country_operable = {
 	has_capitulated = no
 }
 
+# The clock is disarmed during settlement and after annexation.
+SHL_live_forecast_enabled = {
+	is_ai = no
+	SHL_country_operable = yes
+	has_country_flag = SHL_cycle_pending
+}
+
+SHL_forecast_inputs_changed = {
+	OR = {
+		check_variable = { var = ADISCORD_economy_treasury value = SHL_forecast_treasury compare = not_equals }
+		check_variable = { var = SHL_reserve_stock value = SHL_forecast_reserve compare = not_equals }
+		check_variable = { var = SHL_tenth_stock value = SHL_forecast_tenth_stock compare = not_equals }
+		287 = { check_variable = { var = SHL_furnace_stock value = SHL.SHL_stock_1 compare = not_equals } }
+		288 = { check_variable = { var = SHL_furnace_stock value = SHL.SHL_stock_2 compare = not_equals } }
+		289 = { check_variable = { var = SHL_furnace_stock value = SHL.SHL_stock_3 compare = not_equals } }
+		290 = { check_variable = { var = SHL_furnace_stock value = SHL.SHL_stock_4 compare = not_equals } }
+		291 = { check_variable = { var = SHL_furnace_stock value = SHL.SHL_stock_5 compare = not_equals } }
+		292 = { check_variable = { var = SHL_furnace_stock value = SHL.SHL_stock_6 compare = not_equals } }
+		293 = { check_variable = { var = SHL_furnace_stock value = SHL.SHL_stock_7 compare = not_equals } }
+		294 = { check_variable = { var = SHL_furnace_stock value = SHL.SHL_stock_8 compare = not_equals } }
+		295 = { check_variable = { var = SHL_furnace_stock value = SHL.SHL_stock_9 compare = not_equals } }
+		AND = {
+			check_variable = { var = SHL_metal_clients value = 0 compare = greater_than }
+			OR = {
+				VAL = { SHL_forecast_buyer_changed = yes }
+				STP = { SHL_forecast_buyer_changed = yes }
+				STS = { SHL_forecast_buyer_changed = yes }
+				RUS = { SHL_forecast_buyer_changed = yes }
+				GLP = { SHL_forecast_buyer_changed = yes }
+				NAM = { SHL_forecast_buyer_changed = yes }
+			}
+		}
+	}
+}
+
+# Buyer scope. The forecast price accounts for any lease proceeds payable before the contract.
+SHL_forecast_buyer_can_pay = {
+	exists = yes
+	NOT = { has_country_flag = SHL_metal_final_pour }
+	NOT = { has_war_with = SHL }
+	check_variable = { var = ADISCORD_economy_treasury value = SHL_forecast_min_treasury compare = greater_than_or_equals }
+}
+
+SHL_forecast_buyer_changed = {
+	has_country_flag = SHL_metal_client
+	OR = {
+		AND = {
+			has_variable = SHL_forecast_contract_receipt
+			SHL_forecast_buyer_can_pay = no
+		}
+		AND = {
+			NOT = { has_variable = SHL_forecast_contract_receipt }
+			SHL_forecast_buyer_can_pay = yes
+		}
+	}
+}
+
+SHL_reserve_has_packet = {
+	check_variable = { var = SHL_reserve_stock value = 1 compare = greater_than_or_equals }
+}
+
+SHL_can_toggle_auto_reserve = {
+	SHL_country_operable = yes
+	has_completed_focus = SHL_law_of_continuous_fire
+}
+
+SHL_can_distribute_reserve = {
+	SHL_country_operable = yes
+	check_variable = { var = SHL_regular_supply value = 1 compare = equals }
+	SHL_reserve_has_packet = yes
+	check_variable = { var = SHL_bulk_reserve_total value = 0 compare = greater_than }
+}
+
+# The three-packet bunker must have room for a whole packet, including between shifts.
+SHL_site_has_reserve_room = {
+	check_variable = { var = SHL_furnace_stock value = 2 compare = less_than_or_equals }
+}
+
+SHL_tenth_has_reserve_room = {
+	check_variable = { var = SHL_tenth_stock value = 2 compare = less_than_or_equals }
+}
+
+SHL_can_send_reserve_to_site = {
+	SHL_furnace_site_controlled = yes
+	SHL_site_has_reserve_room = yes
+	SHL = { SHL_reserve_has_packet = yes }
+}
+
+SHL_can_send_reserve_to_tenth = {
+	SHL_country_operable = yes
+	check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
+	294 = { SHL_furnace_site_controlled = yes }
+	SHL_tenth_has_reserve_room = yes
+	SHL_reserve_has_packet = yes
+}
+
+SHL_can_send_reserve_to_selected = {
+	OR = {
+		AND = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = equals }
+			SHL_can_send_reserve_to_tenth = yes
+		}
+		AND = {
+			has_completed_focus = SHL_census_of_nine
+			check_variable = { var = SHL_selected_furnace value = 1 compare = greater_than_or_equals }
+			check_variable = { var = SHL_selected_furnace value = 9 compare = less_than_or_equals }
+			var:SHL_selected_state = {
+				SHL_selected_target = yes
+				SHL_can_send_reserve_to_site = yes
+			}
+		}
+	}
+}
+
 # A dispatch uses the actual stores at both ends. Site X shares district 294
 # with VIII but has its own stock, works and service contract in country scope.
 SHL_convoy_origin_open = {
@@ -2601,6 +2715,16 @@ SHL_seal_site_leased = {
 }
 
 # STATE furnace site named by the open petition (SHL_seal_petition_site).
+SHL_seal_release_due = {
+	has_country_flag = SHL_seal_chapter_open
+	NOT = { is_subject_of = NAM }
+	NOT = { check_variable = { var = SHL_cold_rising value = 1 compare = equals } }
+	OR = {
+		check_variable = { var = SHL_seal_leased_count value = 0 compare = greater_than }
+		has_variable = SHL_seal_petition_site
+	}
+}
+
 SHL_seal_petition_here = {
 	OR = {
 		AND = {

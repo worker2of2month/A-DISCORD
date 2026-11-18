@@ -1,4 +1,8 @@
 on_actions = {
+	on_daily_SHL = {
+		effect = { SHL_refresh_forecast_if_changed = yes }
+	}
+
 	on_state_control_changed = {
 		effect = {
 			if = {

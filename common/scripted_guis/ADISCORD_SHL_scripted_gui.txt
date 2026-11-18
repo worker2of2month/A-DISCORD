@@ -59,6 +59,14 @@ scripted_gui = {
 				has_completed_focus = SHL_law_of_continuous_fire
 			}
 			SHL_next_alert_button_click_enabled = { SHL_has_furnace_alert = yes }
+			SHL_next_unfunded_button_click_enabled = {
+				SHL_country_operable = yes
+				check_variable = { var = SHL_next_unfunded_furnace value = 0 compare = greater_than }
+				NOT = { check_variable = { var = SHL_next_unfunded_furnace value = SHL_selected_furnace compare = equals } }
+			}
+			SHL_send_reserve_button_click_enabled = { SHL_can_send_reserve_to_selected = yes }
+			SHL_distribute_reserve_button_click_enabled = { SHL_can_distribute_reserve = yes }
+			SHL_auto_reserve_button_click_enabled = { SHL_can_toggle_auto_reserve = yes }
 			SHL_furnace_1_selected_visible = { check_variable = { var = SHL_selected_furnace value = 1 compare = equals } }
 			SHL_furnace_1_wear_visible = { SHL_furnace_1_worn = yes }
 			SHL_furnace_1_interruption_visible = { SHL_furnace_1_interrupted = yes }
@@ -124,6 +132,10 @@ scripted_gui = {
 				else = { SHL_enable_planned_supply = yes }
 			}
 			SHL_next_alert_button_click = { SHL_select_next_furnace_alert = yes }
+			SHL_next_unfunded_button_click = { SHL_select_next_unfunded_order = yes }
+			SHL_send_reserve_button_click = { SHL_send_reserve_to_selected = yes }
+			SHL_distribute_reserve_button_click = { SHL_distribute_reserve = yes }
+			SHL_auto_reserve_button_click = { SHL_toggle_auto_reserve = yes }
 			SHL_convoy_ore_button_click = { SHL_dispatch_ore = yes }
 			SHL_convoy_masons_button_click = { SHL_dispatch_masons = yes }
 			SHL_convoy_sale_button_click = { SHL_dispatch_sale = yes }

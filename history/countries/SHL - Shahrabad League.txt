@@ -78,6 +78,7 @@ recruit_character = SHL_Lina_Sabbagh
 recruit_character = SHL_Yunus_Hamdan
 recruit_character = SHL_Mazin_Barakat
 recruit_character = SHL_Rima_Khoury
+recruit_character = SHL_Samir_Rayhan
 
 # Military advisors are recruited before their starting appointments.
 recruit_character = ADISCORD_staff_SHL_Farid_Rahmani

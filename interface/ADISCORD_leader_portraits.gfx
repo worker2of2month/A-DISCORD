@@ -1608,6 +1608,19 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_portrait_SHL_Samir_Rayhan"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Samir_Rayhan.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_SHL_Samir_Rayhan_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Samir_Rayhan.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
 		name = "GFX_portrait_SHL_staff_Farid_Rahmani"
 		texturefile = "gfx/leaders/SHL/portrait_SHL_staff_Farid_Rahmani.png"
 	}

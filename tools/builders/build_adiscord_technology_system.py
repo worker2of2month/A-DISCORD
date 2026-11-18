@@ -11302,6 +11302,81 @@ APC_CARD_EQUIPMENT = (
     "ADISCORD_networked_ifv_2183",
 )
 
+TANK_CARDS_BEGIN = "\t# BEGIN ADISCORD country tank cards\n"
+TANK_CARDS_END = "\t# END ADISCORD country tank cards\n"
+TANK_CARD_EQUIPMENT = {
+    "light": (
+        "ADISCORD_recon_platform_archetype", "ADISCORD_light_combat_platform_2163",
+        "ADISCORD_recon_drone_carrier_2170",
+    ),
+    "medium": (
+        "ADISCORD_combat_platform_archetype", "ADISCORD_combat_platform_2150",
+        "ADISCORD_combat_platform_2170", "ADISCORD_combat_platform_2183",
+        "ADISCORD_combat_platform_2200",
+    ),
+    "heavy": (
+        "ADISCORD_heavy_platform_archetype", "ADISCORD_heavy_combat_platform_2158",
+        "ADISCORD_heavy_combat_platform_2183", "ADISCORD_heavy_combat_platform_2200",
+    ),
+}
+
+
+TANK_CARD_UNLOCKS = {
+    tech: kind
+    for kind, models in TANK_CARD_EQUIPMENT.items()
+    for tech, equipment in ENABLE_EQUIPMENT.items()
+    if any(model in models for model in equipment)
+}
+
+
+def tank_card_countries() -> list[str]:
+    campaigns = json.loads((ROOT / "tools/data/campaign_selection.json").read_text(encoding="utf-8"))
+    return sorted(set(campaigns) | {"STS", "SRP", "NOD"})
+
+
+def tank_card_texture(kind: str, country: str = "default") -> str:
+    return f"gfx/interface/technologies/armor/{country}/{kind}.png"
+
+
+def tank_gfx_output() -> bytes:
+    content = vehicle_card_gfx_output(TANK_CARDS_BEGIN, TANK_CARDS_END, country_tank_gfx_entries())
+    for tech, kind in TANK_CARD_UNLOCKS.items():
+        sprite = f"GFX_{tech}_medium".encode()
+        pattern = rb'(name\s*=\s*"' + re.escape(sprite) + rb'"\s+textureFile\s*=\s*")[^"]+(")'
+        texture = tank_card_texture(kind).encode()
+        content, count = re.subn(pattern, lambda m: m[1] + texture + m[2], content)
+        if count != 1:
+            raise ValueError(f"Expected one research sprite for {tech}, found {count}")
+    return content
+
+
+def country_tank_gfx_entries() -> str:
+    entries = [TANK_CARDS_BEGIN]
+    countries = tank_card_countries()
+    for kind, models in TANK_CARD_EQUIPMENT.items():
+        unlocks = [tech for tech, family in TANK_CARD_UNLOCKS.items() if family == kind]
+        for tag in ("default", *countries):
+            texture = tank_card_texture(kind, tag)
+            prefix = "" if tag == "default" else f"{tag}_"
+            # Untagged research sprites already live in the technology tree section.
+            keys = models if tag == "default" else (*models, *unlocks)
+            for key in keys:
+                entries.append(
+                    "\tSpriteType = {\n"
+                    f'\t\tname = "GFX_{prefix}{key}_medium"\n'
+                    f'\t\ttextureFile = "{texture}"\n'
+                    "\t}\n"
+                )
+    for key in ("STP_taran_equipment", "STP_taran_equipment_1"):
+        entries.append(
+            "\tSpriteType = {\n"
+            f'\t\tname = "GFX_STS_{key}_medium"\n'
+            '\t\ttextureFile = "gfx/interface/technologies/armor/STS/taran.png"\n'
+            "\t}\n"
+        )
+    entries.append(TANK_CARDS_END)
+    return "".join(entries)
+
 
 def country_apc_gfx_entries() -> str:
     keys = ["ADISCORD_armored_carrier_archetype", *APC_CARD_EQUIPMENT]
@@ -11322,20 +11397,23 @@ def country_apc_gfx_entries() -> str:
     return "".join(entries)
 
 
-def apc_gfx_output() -> bytes:
-    """Refresh APC bindings without changing supplied runtime artwork."""
+def vehicle_card_gfx_output(begin: str, end_marker: str, entries: str) -> bytes:
     path = ROOT / "interface/ADISCORD_technologies.gfx"
     original = path.read_bytes()
     text = path.read_text(encoding="utf-8")
-    if APC_CARDS_BEGIN in text:
-        start = text.index(APC_CARDS_BEGIN)
-        end = text.index(APC_CARDS_END, start) + len(APC_CARDS_END)
+    if begin in text:
+        start = text.index(begin)
+        end = text.index(end_marker, start) + len(end_marker)
     else:
         start = end = text.rfind("}")
-    text = text[:start] + country_apc_gfx_entries() + text[end:]
+    text = text[:start] + entries + text[end:]
     if b"\r\n" in original:
         text = text.replace("\n", "\r\n")
     return text.encode("utf-8")
+
+
+def apc_gfx_output() -> bytes:
+    return vehicle_card_gfx_output(APC_CARDS_BEGIN, APC_CARDS_END, country_apc_gfx_entries())
 
 
 UNIFORM_CARDS_BEGIN = "\t# BEGIN ADISCORD country uniform cards\n"
@@ -11583,6 +11661,8 @@ def write_gfx() -> None:
         for index, tech in enumerate(branch.techs):
             icon = icon_for_technology(branch, index)
             custom_texture = CUSTOM_TECH_TEXTURES.get(tech.key)
+            if tech.id in TANK_CARD_UNLOCKS:
+                custom_texture = tank_card_texture(TANK_CARD_UNLOCKS[tech.id])
             variants = [(f"GFX_{tech.id}_medium", custom_texture or icon)]
             if (
                 not custom_texture
@@ -11605,7 +11685,6 @@ def write_gfx() -> None:
                 if tech.key in {
                     "electrothermal_ignition",
                     "biometric_trigger_locks",
-                    "recovered_medium_chassis",
                 }:
                     source = ROOT / texture_file
                     target = source.with_name(source.stem + "_card.dds")
@@ -11628,7 +11707,7 @@ def write_gfx() -> None:
     content = (
         "spriteTypes = {\n" + "\n".join(entries) + technology_tree_gfx_entries()
         + country_aircraft_gfx_entries() + country_uniform_gfx_entries()
-        + country_apc_gfx_entries() + "}\n"
+        + country_apc_gfx_entries() + country_tank_gfx_entries() + "}\n"
     )
     (ROOT / "interface" / "ADISCORD_technologies.gfx").write_text(
         content, encoding="utf-8"
@@ -13041,11 +13120,13 @@ def selected_land_technology_outputs(file_name: str, extra_keys: set[str]) -> di
         for index, tech in enumerate(branch.techs):
             name = f"GFX_{tech.id}_medium"
             icon = icon_for_technology(branch, index)
+            texture = (tank_card_texture(TANK_CARD_UNLOCKS[tech.id]) if tech.id in TANK_CARD_UNLOCKS
+                       else f"gfx/interface/technologies/{icon}.dds")
             # Existing sprites differ in field spacing, but keep their other fields.
             pattern = rf'(name\s*=\s*"{re.escape(name)}"\s+textureFile\s*=\s*")[^"]+(")'
             gfx, count = re.subn(
                 pattern,
-                lambda match: match[1] + f"gfx/interface/technologies/{icon}.dds" + match[2],
+                lambda match: match[1] + texture + match[2],
                 gfx,
                 count=1,
                 flags=re.IGNORECASE,
@@ -13054,7 +13135,7 @@ def selected_land_technology_outputs(file_name: str, extra_keys: set[str]) -> di
                 sprite = (
                     "\tSpriteType = {\n"
                     f'\t\tname = "{name}"\n'
-                    f'\t\ttextureFile = "gfx/interface/technologies/{icon}.dds"\n'
+                    f'\t\ttextureFile = "{texture}"\n'
                     "\t}\n"
                 )
                 closing = gfx.rfind("}")
@@ -13250,7 +13331,29 @@ def main() -> int:
         "--apc-icons-only", action="store_true",
         help="check or apply country APC sprites without rebuilding other UI",
     )
+    parser.add_argument(
+        "--tank-icons-only", action="store_true",
+        help="check tank PNGs and refresh their research and production sprites",
+    )
     args = parser.parse_args()
+    if args.tank_icons_only:
+        if any(value for key, value in vars(args).items()
+               if key not in {"check", "apply", "tank_icons_only", "aircraft_role"}) or args.aircraft_role != "all":
+            parser.error("--tank-icons-only cannot be combined with other partial output modes")
+        for tag in ("default", *tank_card_countries()):
+            kinds = (*TANK_CARD_EQUIPMENT, "taran") if tag == "STS" else TANK_CARD_EQUIPMENT
+            for kind in kinds:
+                path = ROOT / f"gfx/interface/technologies/armor/{tag}/{kind}.png"
+                with Image.open(path) as image:
+                    if image.format != "PNG" or image.mode != "RGBA" or image.size != (176, 72):
+                        raise ValueError(f"Tank card must be a 176x72 RGBA PNG: {path}")
+        path = ROOT / "interface/ADISCORD_technologies.gfx"
+        content = tank_gfx_output()
+        changed = path.read_bytes() != content
+        if args.apply and changed:
+            path.write_bytes(content)
+        print(f"Country tank sprites {'updated' if args.apply else 'different'}: {int(changed)}")
+        return int(changed and not args.apply)
     if args.apc_icons_only:
         if any(value for key, value in vars(args).items()
                if key not in {"check", "apply", "apc_icons_only", "aircraft_role"}) or args.aircraft_role != "all":

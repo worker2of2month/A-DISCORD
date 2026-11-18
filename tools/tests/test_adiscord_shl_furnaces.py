@@ -412,6 +412,7 @@ class ScriptMachine:
                 comparison = scalar(e.value, "compare", "greater_than_or_equals")
                 return {
                     "equals": left == right,
+                    "not_equals": left != right,
                     "greater_than": left > right,
                     "greater_than_or_equals": left >= right,
                     "less_than": left < right,
@@ -519,7 +520,7 @@ class ScriptMachine:
             if e.key == "exists" or e.key == "always":
                 return e.value == "yes"
             if e.key == "is_ai":
-                return self.ai == (e.value == "yes")
+                return self.countries.get(scope, {}).get("is_ai", self.ai) == (e.value == "yes")
             if e.key == "has_power_balance":
                 return scalar(e.value, "id") in self.power_balance
             if e.key == "is_power_balance_in_range":
@@ -763,13 +764,13 @@ class ScriptMachine:
                 if identifier in self.power_balance:
                     moved = self.power_balance[identifier] + float(scalar(e.value, "value"))
                     self.power_balance[identifier] = round(max(-1.0, min(1.0, moved)), 4)
-            elif e.key in ("set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "divide_variable", "multiply_temp_variable", "subtract_from_temp_variable"):
+            elif e.key in ("set_variable", "set_temp_variable", "add_to_variable", "add_to_temp_variable", "subtract_from_variable", "multiply_variable", "divide_variable", "multiply_temp_variable", "subtract_from_temp_variable"):
                 name = scalar(e.value, "var")
                 amount = self.value(scalar(e.value, "value"), scope)
                 previous = self.variables[scope].get(name, 0.0)
                 if e.key in ("set_variable", "set_temp_variable"):
                     self.variables[scope][name] = amount
-                elif e.key == "add_to_variable":
+                elif e.key in ("add_to_variable", "add_to_temp_variable"):
                     self.variables[scope][name] = previous + amount
                 elif e.key in ("subtract_from_variable", "subtract_from_temp_variable"):
                     self.variables[scope][name] = previous - amount
@@ -777,7 +778,7 @@ class ScriptMachine:
                     self.variables[scope][name] = previous * amount
                 else:
                     self.variables[scope][name] = previous / amount
-            elif e.key == "clamp_variable":
+            elif e.key in ("clamp_variable", "clamp_temp_variable"):
                 name = scalar(e.value, "var")
                 value = self.variables[scope].get(name, 0.0)
                 minimum = self.value(scalar(e.value, "min", "-1000000"), scope)
@@ -940,7 +941,7 @@ class FurnaceAccountingTests(unittest.TestCase):
             source = path.read_text(encoding="utf-8-sig")
             strings = dict(re.findall(r'^ (\w+):\d* "(.*)"$', source, re.M))
             for widget, token in (
-                ("SHL_cycle_line", "[?SHL_preview_income|0]"),
+                ("SHL_cycle_line", "[?SHL_preview_income|+2]"),
                 ("SHL_panel_totals", "[SHLGetShift]"),
                 ("SHL_ledger_line", "[SHLGetProjectStage]"),
             ):
@@ -952,6 +953,90 @@ class FurnaceAccountingTests(unittest.TestCase):
             for gauge, value in (("SHL_quarter_gauge", "SHL_unrest"), ("SHL_crest_gauge", "SHL_house_pressure")):
                 self.assertIn(f"[?{value}|0]", strings[gauge])
                 self.assertIn("60", strings[tips[gauge]])
+
+    def test_next_pour_forecast_displays_orders_cost_and_signed_net_in_separate_columns(self):
+        from PIL import Image
+
+        gui = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8"))
+        panel = block(block(gui, "guiTypes"), "containerWindowType")
+        fields = {scalar(row.value, "name").strip('"'): row.value for row in panel if row.key == "instantTextBoxType"}
+        bounds = block(panel, "size")
+        with Image.open(ROOT / "gfx/interface/SHL_conclave/caravan_row.png") as row:
+            width, height = row.size
+        self.assertGreaterEqual(int(scalar(bounds, "width")), 3 + width)
+        self.assertGreaterEqual(int(scalar(bounds, "height")), 601 + height)
+
+        tokens = {"net": "[?SHL_preview_cycle_net|+2]", "packets": "[?SHL_preview_autobuy_packets|0]",
+                  "cost": "[?SHL_preview_autobuy_cost|0]", "rifles": "[?SHL_preview_rifles|0]"}
+        for lang in ("english", "russian"):
+            source = (ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml").read_text(encoding="utf-8-sig")
+            strings = dict(re.findall(r'^ (\w+):\d* "(.*)"$', source, re.M))
+            self.assertIn("28", strings[scalar(fields["SHL_cycle_line"], "text").strip('"')])
+            right = 0
+            for metric, token in tokens.items():
+                name = "SHL_forecast_" + metric
+                field = fields[name]
+                label = fields[name + "_label"]
+                self.assertIn(token, strings[scalar(field, "text").strip('"')])
+                self.assertIn(scalar(label, "text").strip('"'), strings)
+                position = block(field, "position")
+                x, y = int(scalar(position, "x")), int(scalar(position, "y"))
+                self.assertGreaterEqual(x, right)
+                right = x + int(scalar(field, "maxWidth"))
+                self.assertLessEqual(right, 3 + width)
+                self.assertLessEqual(int(scalar(block(label, "position"), "y")) + int(scalar(label, "maxHeight")), y)
+                self.assertLessEqual(y + int(scalar(field, "maxHeight")), int(scalar(bounds, "height")))
+
+    def test_supply_hover_resolves_funded_and_skipped_rows_in_both_languages(self):
+        gui = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8"))
+        panel = block(block(gui, "guiTypes"), "containerWindowType")
+        widgets = {scalar(e.value, "name", "").strip('"'): e.value for e in panel if isinstance(e.value, list)}
+        source = ROOT / "common/scripted_localisation/ADISCORD_SHL_scripted_loc.txt"
+        definitions = {scalar(e.value, "name"): e.value for e in parse_clausewitz(source.read_text(encoding="utf-8"))}
+
+        def selected_key(name):
+            return next(scalar(row.value, "localization_key").strip('"') for row in definitions[name]
+                        if row.key == "text" and self.machine.matches(block(row.value, "trigger"), "SHL"))
+
+        country = self.machine.variables["SHL"]
+        for lang in ("russian", "english"):
+            contents = (ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml").read_text(encoding="utf-8-sig")
+            strings = dict(re.findall(r'^ (\w+):\d* "(.*)"$', contents, re.M))
+            with self.subTest(lang=lang):
+                for name in ("SHL_supply_toggle_button", "SHL_supply_packet_quote", "SHL_forecast_packets_label",
+                             "SHL_forecast_packets", "SHL_forecast_cost_label", "SHL_forecast_cost"):
+                    hover = strings[scalar(widgets[name], "pdx_tooltip").strip('"')]
+                    self.assertIn("[SHLGetForecastOrderList]", hover)
+                    self.assertNotIn("$", hover)
+
+                self.machine.focuses.discard("SHL_law_of_continuous_fire")
+                country.update({"SHL_regular_supply": 0, "SHL_preview_autobuy_packets": 0, "SHL_preview_unfunded_packets": 0})
+                locked = strings[selected_key("SHLGetForecastOrderList")]
+                self.machine.focuses.add("SHL_law_of_continuous_fire")
+                manual = strings[selected_key("SHLGetForecastOrderList")]
+                country["SHL_regular_supply"] = 1
+                empty = strings[selected_key("SHLGetForecastOrderList")]
+                self.assertEqual(len({locked, manual, empty, ""}), 4)
+                country["SHL_preview_unfunded_packets"] = 2
+                listing = strings[selected_key("SHLGetForecastOrderList")]
+                selectors = re.findall(r"\[(SHLGetForecastOrder\d+)\]", listing)
+                self.assertEqual(selectors, [f"SHLGetForecastOrder{n}" for n in range(1, 11)])
+                for n, selector in enumerate(selectors, 1):
+                    packets = f"SHL_forecast_order_packets_{n}"
+                    shortfall = f"SHL_forecast_order_shortfall_{n}"
+                    country[packets] = 2
+                    country[shortfall] = 0
+                    paid = strings[selected_key(selector)]
+                    country[shortfall] = 0.001
+                    refused = strings[selected_key(selector)]
+                    for line in (paid, refused):
+                        self.assertTrue(line.startswith(r"\n"))
+                        self.assertIn(" ".join(strings[f"SHL_furnace_{n}_label"].split()), " ".join(line.split()))
+                        self.assertIn(f"[?{packets}|0] £SHL_packet_texticon", line)
+                    self.assertNotIn(shortfall, paid)
+                    self.assertIn(f"[?{shortfall}|3] £ADISCORD_economy_treasury_texticon", refused)
+                    country[packets] = 0
+                    self.assertEqual(strings[selected_key(selector)], "")
 
     def test_alert_navigation_matches_map_badges_and_wraps(self):
         machine = self.machine
@@ -3888,6 +3973,517 @@ class EarlyCampaignTests(unittest.TestCase):
 
 
 
+class AutomaticFurnaceForecastTests(unittest.TestCase):
+    def setUp(self):
+        FurnaceAccountingTests.setUp(self)
+        self.m = self.machine
+        self.c = self.m.variables["SHL"]
+        for state in range(287, 296):
+            self.m.variables[str(state)].update({"SHL_furnace_running": int(state == 287), "SHL_furnace_stock": 0})
+        self.c.update({"ADISCORD_economy_treasury": 44.99, "SHL_regular_supply": 1, "SHL_selected_furnace": 1})
+        self.m.run("SHL_refresh_furnaces")
+        self.m.run("SHL_schedule_cycle")
+        self.m.effects.update(shared_definitions("common/scripted_effects/ADISCORD_economy_effects.txt",
+                                                 ("ADISCORD_economy_update_gui",)))
+        # Loan and emission widgets have independent quotes and do not participate in furnace accounting.
+        self.m.effects["ADISCORD_economy_calculate_repayment_quote"] = []
+        self.m.effects["ADISCORD_economy_calculate_emission_quote"] = []
+        path = ROOT / "common/on_actions/03_ADISCORD_SHL_on_actions.txt"
+        hooks = block(parse_clausewitz(path.read_text(encoding="utf-8")), "on_actions")
+        self.daily = block(block(hooks, "on_daily_SHL"), "effect")
+        self.assertTrue(self.daily)
+
+    def assert_idle_day(self):
+        from unittest.mock import patch
+
+        dirty = self.c["SHL_gui_dirty"]
+        with patch.object(self.m, "run", wraps=self.m.run) as run:
+            self.m.execute(self.daily, "SHL")
+        self.assertEqual(self.c["SHL_gui_dirty"], dirty)
+        self.assertNotIn("SHL_refresh_delivery_forecast", [call.args[0] for call in run.call_args_list])
+
+    def test_economy_notification_updates_the_open_card_at_the_exact_price(self):
+        for balance, packets, cost, net in ((45, 1, 45, 15), (44.99, 0, 0, 0)):
+            with self.subTest(balance=balance):
+                self.c["ADISCORD_economy_treasury"] = balance
+                dirty = self.c["SHL_gui_dirty"]
+                self.m.run("ADISCORD_economy_update_gui")
+                self.assertGreater(self.c["SHL_gui_dirty"], dirty)
+                self.assertEqual((self.c["SHL_preview_autobuy_packets"], self.c["SHL_preview_autobuy_cost"],
+                                  self.c["SHL_preview_cycle_net"]), (packets, cost, net))
+                self.assertEqual(self.c["SHL_selected_furnace"], 1)
+                self.assertEqual(self.m.variables["287"]["SHL_furnace_stock"], 0)
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], balance)
+                self.assertEqual(self.c.get("ADISCORD_economy_current_month_action_costs", 0), 0)
+                self.assert_idle_day()
+
+    def test_cash_notifications_during_settlement_leave_the_completed_forecast_on_screen(self):
+        dirty = self.c["SHL_gui_dirty"]
+        self.m.flags["SHL"].remove("SHL_cycle_pending")
+        self.c["ADISCORD_economy_treasury"] = 45
+        self.m.run("ADISCORD_economy_update_gui")
+        self.assertEqual((self.c["SHL_gui_dirty"], self.c["SHL_preview_cycle_net"]), (dirty, 0))
+        self.m.run("SHL_schedule_cycle")
+        self.m.execute(self.daily, "SHL")
+        self.assertEqual(self.c["SHL_preview_cycle_net"], 15)
+
+    def test_paying_engineers_updates_the_estimate_before_time_advances(self):
+        cash = "ADISCORD_economy_treasury"
+        self.c[cash] = 100
+        self.m.focuses.add("SHL_engineer_society")
+        self.m.execute(self.daily, "SHL")
+        self.assertEqual(self.c["SHL_preview_autobuy_packets"], 1)
+        dirty = self.c["SHL_gui_dirty"]
+        decision = decision_definition("SHL_project_engineers")
+        self.m.execute(block(decision, "complete_effect"), "SHL")
+        self.assertEqual((self.c[cash], self.c["SHL_project_deposit"]), (0, 100))
+        self.assertEqual((self.c["SHL_preview_autobuy_packets"], self.c["SHL_preview_autobuy_cost"],
+                          self.c["SHL_preview_cycle_net"]), (0, 0, 0))
+        self.assertEqual(self.c["SHL_gui_dirty"], dirty + 1)
+        self.m.execute(self.daily, "SHL")
+        self.assertEqual(self.c["SHL_gui_dirty"], dirty + 1)
+
+    def test_daily_detects_an_equal_total_transfer_and_preserves_the_selected_card(self):
+        self.m.variables["287"]["SHL_furnace_stock"] = 1
+        self.m.variables["288"].update({"SHL_furnace_running": 1, "SHL_furnace_recipient": 1})
+        self.c.update({"SHL_regular_supply": 0, "SHL_selected_furnace": 2})
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_preview_cycle_net"], 60)
+        self.m.variables["287"]["SHL_furnace_stock"] = 0
+        self.m.variables["288"]["SHL_furnace_stock"] = 1
+        self.m.execute(self.daily, "SHL")
+        self.assertEqual((self.c["SHL_preview_cycle_net"], self.c["SHL_preview_rifles"]), (0, 2700))
+        self.assertEqual((self.c["SHL_stock_1"], self.c["SHL_stock_2"]), (0, 1))
+        self.assertEqual((self.c["SHL_selected_furnace"], self.c["SHL_selected_stock"]), (2, 1))
+        self.assertEqual(self.m.equipment["SHL", "infantry_equipment"], 0)
+        self.assert_idle_day()
+
+    def test_daily_observes_the_tenth_store_and_the_undistributed_reserve(self):
+        self.c.update({"SHL_project_stage": 4, "SHL_tenth_running": 1, "SHL_tenth_stock": 0, "SHL_selected_furnace": 10})
+        self.m.run("SHL_refresh_furnaces")
+        dirty = self.c["SHL_gui_dirty"]
+        self.c["SHL_reserve_stock"] = 2
+        self.m.execute(self.daily, "SHL")
+        self.assertGreater(self.c["SHL_gui_dirty"], dirty)
+        self.assertEqual((self.c["SHL_preview_cycle_net"], self.c["SHL_selected_stock"]), (0, 0))
+        self.c["SHL_tenth_stock"] = 1
+        self.m.execute(self.daily, "SHL")
+        self.assertEqual((self.c["SHL_preview_cycle_net"], self.c["SHL_selected_stock"]), (60, 1))
+        self.assertEqual((self.c["SHL_selected_furnace"], self.c["SHL_reserve_stock"]), (10, 2))
+        self.assert_idle_day()
+
+    def test_external_treasury_write_catches_up_for_an_initialized_player(self):
+        dirty = self.c["SHL_gui_dirty"]
+        self.c["ADISCORD_economy_treasury"] = 45
+        self.m.ai = True
+        self.m.execute(self.daily, "SHL")
+        self.assertEqual(self.c["SHL_gui_dirty"], dirty)
+        self.m.ai = False
+        self.m.flags["SHL"].remove("SHL_furnaces_initialized")
+        self.m.execute(self.daily, "SHL")
+        self.assertEqual(self.c["SHL_gui_dirty"], dirty)
+        self.m.flags["SHL"].add("SHL_furnaces_initialized")
+        self.m.execute(self.daily, "SHL")
+        self.assertEqual(self.c["SHL_preview_cycle_net"], 15)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 45)
+
+    def test_daily_picks_up_a_buyers_payment_capacity_without_charging_it(self):
+        for tag in ("VAL", "STP", "STS", "RUS"):
+            self.m.countries[tag] = {"exists": True, "is_ai": True}
+        self.m.flags["VAL"].add("SHL_metal_client")
+        buyer = self.m.variables["VAL"]
+        buyer.update({"SHL_metal_cycle_price": 20, "ADISCORD_economy_treasury": 19.99})
+        self.c["SHL_metal_clients"] = 1
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_preview_cycle_net"], 0)
+        for balance, receipt, from_budget in ((20, 20, True), (21, 20, True), (19.99, 0, False)):
+            buyer["ADISCORD_economy_treasury"] = balance
+            dirty = self.c["SHL_gui_dirty"]
+            if from_budget:
+                self.m.root_scope = "VAL"
+                self.m.run("ADISCORD_economy_update_gui", scope="VAL")
+                self.m.root_scope = "SHL"
+            else:
+                self.m.execute(self.daily, "SHL")
+            self.assertEqual((self.c["SHL_preview_contract_income"], self.c["SHL_preview_cycle_net"]), (receipt, receipt))
+            if balance == 21:
+                self.assertEqual(self.c["SHL_gui_dirty"], dirty)
+            self.assertEqual(buyer["ADISCORD_economy_treasury"], balance)
+            self.assertEqual(self.c["ADISCORD_economy_treasury"], 44.99)
+            self.assert_idle_day()
+
+
+class FurnaceSupplyButtonTests(unittest.TestCase):
+    def setUp(self):
+        FurnaceAccountingTests.setUp(self)
+        self.m = self.machine
+        self.c = self.m.variables["SHL"]
+        self.m.focuses.add("SHL_census_of_nine")
+        self.m.run("SHL_schedule_cycle")
+        self.c.update({"SHL_selected_furnace": 8, "SHL_project_stage": 4, "SHL_tenth_running": 1,
+                       "SHL_tenth_stock": 0, "SHL_regular_supply": 1, "SHL_reserve_stock": 1,
+                       "ADISCORD_economy_treasury": 45})
+        for state in range(287, 296):
+            self.m.variables[str(state)].update({"SHL_furnace_recipient": 1,
+                                                "SHL_furnace_stock": int(state not in (287, 289, 294))})
+        self.m.variables["288"]["SHL_furnace_wear"] = 80
+        self.m.run("SHL_refresh_furnaces")
+        source = ROOT / "common/scripted_guis/ADISCORD_SHL_scripted_gui.txt"
+        panel = block(block(parse_clausewitz(source.read_text(encoding="utf-8")), "scripted_gui"), "ADISCORD_SHL_furnaces")
+        self.buttons = block(panel, "effects")
+        self.conditions = block(panel, "triggers")
+
+    def enabled(self, name):
+        predicate = block(self.conditions, name + "_click_enabled")
+        self.assertTrue(predicate, name)
+        return self.m.matches(predicate, "SHL")
+
+    def click(self, name):
+        effect = block(self.buttons, name + "_click")
+        self.assertTrue(effect, name)
+        self.m.execute(effect, "SHL")
+
+    def prepare_bulk_orders(self, furnaces, reserve, cash, shift=0):
+        self.m.focuses.add("SHL_law_of_continuous_fire")
+        for number, state in enumerate(range(287, 296), 1):
+            self.m.variables[str(state)].update({
+                "SHL_furnace_running": int(number in furnaces),
+                "SHL_furnace_wear": 20, "SHL_furnace_stock": 0, "SHL_furnace_recipient": 1,
+            })
+        self.c.update({
+            "SHL_reserve_stock": reserve, "ADISCORD_economy_treasury": cash,
+            "SHL_shift_policy": shift, "SHL_tenth_running": int(10 in furnaces),
+            "SHL_tenth_stock": 0, "SHL_tenth_recipient": 1,
+        })
+        self.m.run("SHL_refresh_furnaces")
+
+    def bulk_plan(self):
+        return {n: self.c[f"SHL_bulk_reserve_{n}"] for n in range(1, 11) if self.c.get(f"SHL_bulk_reserve_{n}")}
+
+    def bulk_stocks(self):
+        stocks = [self.m.variables[str(state)]["SHL_furnace_stock"] for state in range(287, 296)]
+        return stocks + [self.c["SHL_tenth_stock"]]
+
+    def test_bulk_hover_lists_only_planned_recipients_and_their_packet_counts_in_both_languages(self):
+        gui = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8"))
+        panel = block(block(gui, "guiTypes"), "containerWindowType")
+        button = next(row.value for row in panel if row.key == "buttonType"
+                      and scalar(row.value, "name") == "SHL_distribute_reserve_button")
+        key = scalar(button, "pdx_tooltip").strip('"')
+        source = ROOT / "common/scripted_localisation/ADISCORD_SHL_scripted_loc.txt"
+        selectors = {scalar(entry.value, "name"): entry.value for entry in parse_clausewitz(source.read_text(encoding="utf-8"))}
+
+        for lang in ("english", "russian"):
+            source = ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml"
+            strings = dict(re.findall(r'^ (\w+):\d* "(.*)"$', source.read_text(encoding="utf-8-sig"), re.M))
+
+            def expand(name):
+                def resolve(match):
+                    if match[1]:
+                        return expand(match[1])
+                    result = next(row for row in selectors[match[2]] if row.key == "text"
+                                  and self.m.matches(block(row.value, "trigger"), "SHL"))
+                    return expand(scalar(result.value, "localization_key").strip('"'))
+                return re.sub(r"\$(\w+)\$|\[(SHLGet\w+)\]", resolve, strings[name])
+
+            self.prepare_bulk_orders(range(1, 11), reserve=12, cash=0, shift=1)
+            for state in range(287, 296):
+                self.m.variables[str(state)]["SHL_furnace_stock"] = int(state != 294)
+            self.c["SHL_tenth_stock"] = 1
+            for reserve in (12, 2):
+                with self.subTest(language=lang, reserve=reserve):
+                    self.c["SHL_reserve_stock"] = reserve
+                    self.m.run("SHL_refresh_furnaces")
+                    plan = self.bulk_plan()
+                    expected = {n: 1 + int(n == 8) for n in range(1, 11)} if reserve == 12 else {1: 1, 2: 1}
+                    self.assertEqual(plan, expected)
+                    tooltip = re.sub(r"§.", "", expand(key))
+                    lines = [" ".join(line.split()) for line in tooltip.split(r"\n")]
+                    shown = []
+                    for n in range(1, 11):
+                        label = " ".join(strings[f"SHL_furnace_{n}_label"].split())
+                        rows = [i for i, line in enumerate(lines) if label in line]
+                        if n in plan:
+                            self.assertEqual(len(rows), 1, label)
+                            self.assertIn(f"[?SHL_bulk_reserve_{n}|0] £SHL_packet_texticon", lines[rows[0]])
+                            shown.append(rows[0])
+                        else:
+                            self.assertEqual(rows, [], label)
+                    self.assertEqual(shown, sorted(shown))
+
+    def test_bulk_preview_matches_every_store_and_export_finances_the_next_order(self):
+        self.prepare_bulk_orders([1, 2, 3, 8, 10], reserve=4.75, cash=0)
+        self.m.variables["287"]["SHL_furnace_recipient"] = 0
+        for _ in range(2):
+            self.m.run("SHL_refresh_furnaces")
+            self.assertEqual(self.bulk_plan(), {1: 1, 3: 1, 8: 1, 10: 1})
+            self.assertEqual(self.c["SHL_bulk_reserve_total"], 4)
+            self.assertEqual(self.c["SHL_preview_unfunded_packets"], 5)
+            self.assertEqual(self.bulk_stocks(), [0] * 10)
+            self.assertEqual(self.c["SHL_reserve_stock"], 4.75)
+
+        button = "SHL_distribute_reserve_button"
+        self.assertTrue(self.enabled(button))
+        expected = self.bulk_plan()
+        selection = self.c["SHL_selected_furnace"]
+        self.click(button)
+        self.assertEqual(self.bulk_stocks(), [expected.get(n, 0) for n in range(1, 11)])
+        self.assertEqual((self.c["SHL_reserve_stock"], self.c["SHL_selected_furnace"]), (0.75, selection))
+        self.assertEqual(self.bulk_plan(), {})
+        self.assertFalse(self.enabled(button))
+        self.click(button)
+        cash = "ADISCORD_economy_treasury"
+        costs = "ADISCORD_economy_current_month_action_costs"
+        self.assertEqual((self.c[cash], self.c.get(costs, 0)), (0, 0))
+        self.assertEqual((self.c["SHL_preview_autobuy_packets"], self.c["SHL_preview_unfunded_packets"]), (1, 0))
+        self.m.run("SHL_produce_period")
+        self.assertEqual((self.c[cash], self.c[costs]), (15, 45))
+
+    def test_bulk_two_packet_order_uses_only_the_unaffordable_share(self):
+        button = "SHL_distribute_reserve_button"
+        for cash, reserve, purchased, unfunded in ((45, 2, 1, 0), (0, 1.75, 0, 1)):
+            with self.subTest(cash=cash, reserve=reserve):
+                self.prepare_bulk_orders([1], reserve=reserve, cash=cash, shift=1)
+                self.assertEqual(self.c["SHL_preview_unfunded_packets"], 2)
+                self.assertEqual(self.bulk_plan(), {1: 1})
+                self.assertEqual(self.c["SHL_bulk_reserve_total"], 1)
+                self.assertTrue(self.enabled(button))
+                self.click(button)
+                self.assertEqual(self.bulk_stocks(), [1] + [0] * 9)
+                self.assertEqual((self.c["SHL_reserve_stock"], self.c["ADISCORD_economy_treasury"]), (reserve - 1, cash))
+                self.assertEqual((self.c["SHL_preview_autobuy_packets"], self.c["SHL_preview_unfunded_packets"]),
+                                 (purchased, unfunded))
+                self.assertFalse(self.enabled(button))
+                self.assertEqual(self.c["SHL_bulk_reserve_total"], 0)
+
+    def test_bulk_click_rechecks_changed_treasury_reserve_stock_control_and_auto_supply(self):
+        button = "SHL_distribute_reserve_button"
+        scenarios = (
+            ("treasury", {8: 1, 10: 1}), ("reserve", {1: 1}), ("no_whole_packet", {}),
+            ("occupation", {1: 1}), ("store", {8: 1, 10: 1}), ("manual", {}),
+        )
+        for changed, distribution in scenarios:
+            with self.subTest(changed=changed):
+                self.setUp()
+                self.prepare_bulk_orders([1, 8, 10], reserve=3, cash=0)
+                self.assertEqual(self.bulk_plan(), {1: 1, 8: 1, 10: 1})
+                self.assertTrue(self.enabled(button))
+                if changed == "treasury":
+                    self.c["ADISCORD_economy_treasury"] = 45
+                elif changed == "reserve":
+                    self.c["SHL_reserve_stock"] = 1.75
+                elif changed == "no_whole_packet":
+                    self.c["SHL_reserve_stock"] = 0.999
+                elif changed == "occupation":
+                    self.m.control["294"] = "NAM"
+                elif changed == "store":
+                    self.m.variables["287"]["SHL_furnace_stock"] = 1
+                else:
+                    self.c["SHL_regular_supply"] = 0
+                before = self.bulk_stocks()
+                reserve = self.c["SHL_reserve_stock"]
+                cash = self.c["ADISCORD_economy_treasury"]
+                self.click(button)
+                self.assertEqual(self.bulk_stocks(), [stock + distribution.get(n, 0) for n, stock in enumerate(before, 1)])
+                self.assertEqual(self.c["SHL_reserve_stock"], reserve - sum(distribution.values()))
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], cash)
+                self.assertFalse(self.enabled(button))
+
+    def test_auto_reserve_toggle_waits_for_auto_supply_and_a_whole_packet(self):
+        toggle = "SHL_auto_reserve_button"
+        self.assertFalse(self.enabled(toggle))
+        self.click(toggle)
+        self.assertEqual(self.c.get("SHL_auto_reserve", 0), 0)
+        self.prepare_bulk_orders([1], reserve=0, cash=0)
+        self.m.run("SHL_disable_planned_supply")
+        self.assertTrue(self.enabled(toggle))
+        self.click(toggle)
+        self.assertEqual(self.c["SHL_auto_reserve"], 1)
+
+        self.c["SHL_reserve_stock"] = 2
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.c["SHL_reserve_stock"], 2)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_shortages"], 1)
+        self.m.run("SHL_enable_planned_supply")
+        self.assertEqual(self.bulk_plan(), {1: 1})
+        self.assertEqual(self.c["SHL_preview_unfunded_packets"], 0)
+        self.assertEqual(self.bulk_stocks(), [0] * 10)
+        self.click(toggle)
+        self.assertEqual(self.c.get("SHL_auto_reserve", 0), 0)
+        self.assertEqual(self.c["SHL_preview_unfunded_packets"], 1)
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.c["SHL_reserve_stock"], 2)
+
+    def test_auto_reserve_forecast_matches_the_pour_and_never_precharges(self):
+        toggle = "SHL_auto_reserve_button"
+        for cash, reserve, planned, buys, unfunded, stored_at_viii in (
+            (45, 4.75, {8: 1, 10: 2}, 1, 0, 0),
+            (0, 1.75, {8: 1}, 0, 3, 1),
+            (0, 0.999, {}, 0, 4, 0),
+        ):
+            with self.subTest(cash=cash, reserve=reserve):
+                self.setUp()
+                self.prepare_bulk_orders([8, 10], reserve=reserve, cash=cash, shift=1)
+                self.click(toggle)
+                for _ in range(2):
+                    self.m.run("SHL_refresh_furnaces")
+                    self.assertEqual(self.bulk_plan(), planned)
+                    self.assertEqual(self.c["SHL_bulk_reserve_total"], sum(planned.values()))
+                    self.assertEqual(self.c["SHL_preview_unfunded_packets"], unfunded)
+                    self.assertEqual(self.c["SHL_preview_autobuy_packets"], buys)
+                    self.assertEqual(self.c["SHL_preview_cycle_net"], -45 * buys)
+                    self.assertEqual((self.c["SHL_reserve_stock"], self.c["ADISCORD_economy_treasury"]), (reserve, cash))
+                    self.assertEqual(self.bulk_stocks(), [0] * 10)
+                self.m.run("SHL_produce_period")
+                self.assertAlmostEqual(self.c["SHL_reserve_stock"], reserve - sum(planned.values()))
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], cash - 45 * buys)
+                self.assertEqual(self.c.get("ADISCORD_economy_current_month_action_costs", 0), 45 * buys)
+                self.assertEqual(self.m.variables["294"]["SHL_furnace_stock"], stored_at_viii)
+                self.assertEqual(self.c["SHL_tenth_stock"], 0)
+                self.assertEqual(self.c["SHL_tenth_shortages"], int(unfunded > 0))
+
+    def test_auto_reserve_uses_the_new_exchange_quote_before_x_pours(self):
+        self.prepare_bulk_orders([1, 8, 10], reserve=1, cash=20)
+        self.m.variables["287"].update({"SHL_furnace_stock": 1, "SHL_furnace_recipient": 0})
+        self.c.update({"SHL_export_mode": 1, "SHL_exchange_price": 75})
+        self.click("SHL_auto_reserve_button")
+        self.assertEqual(self.bulk_plan(), {})
+        self.assertEqual(self.c["SHL_preview_autobuy_cost"], 90)
+        self.assertEqual(self.c["SHL_reserve_stock"], 1)
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.c["SHL_exchange_price"], 45)
+        self.assertEqual(self.c["SHL_reserve_stock"], 0)
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_costs"], 45)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 20)
+        self.assertEqual(self.m.variables["294"]["SHL_furnace_shortages"], 0)
+        self.assertEqual(self.c["SHL_tenth_shortages"], 0)
+
+    def test_auto_reserve_survives_cycles_and_honours_a_manual_transfer_before_the_pour(self):
+        self.prepare_bulk_orders([8, 10], reserve=5, cash=0)
+        self.click("SHL_auto_reserve_button")
+        manual = "SHL_distribute_reserve_button"
+        self.assertTrue(self.enabled(manual))
+        self.click(manual)
+        self.assertEqual((self.m.variables["294"]["SHL_furnace_stock"], self.c["SHL_tenth_stock"]), (1, 1))
+        self.assertEqual(self.c["SHL_reserve_stock"], 3)
+        self.assertEqual(self.bulk_plan(), {})
+        for expected_cycle, remaining, due in ((1, 3, True), (1, 3, False), (2, 1, True)):
+            if due:
+                self.m.flag_days["SHL"]["SHL_cycle_pending"] = 28
+            self.m.run("SHL_run_cycle")
+            self.assertEqual(self.c["SHL_auto_reserve"], 1)
+            self.assertEqual(self.c["SHL_cycle_number"], expected_cycle)
+            self.assertEqual(self.c["SHL_reserve_stock"], remaining)
+            self.assertEqual(self.m.variables["294"]["SHL_furnace_shortages"], 0)
+            self.assertEqual(self.c["SHL_tenth_shortages"], 0)
+            self.assertEqual(self.bulk_stocks(), [0] * 10)
+
+    def test_navigation_wraps_only_unpaid_orders_and_skips_a_resupplied_furnace(self):
+        cursor = "SHL_next_unfunded_button"
+        cash = self.c["ADISCORD_economy_treasury"]
+        stocks = [self.m.variables[str(state)]["SHL_furnace_stock"] for state in range(287, 296)]
+        for number in (10, 3, 8, 10, 3):
+            self.assertTrue(self.enabled(cursor))
+            self.click(cursor)
+            self.assertEqual(self.c["SHL_selected_furnace"], number)
+        self.assertEqual(self.c["SHL_reserve_stock"], 1)
+        self.assertEqual([self.m.variables[str(state)]["SHL_furnace_stock"] for state in range(287, 296)], stocks)
+        self.assertEqual(self.c["SHL_tenth_stock"], 0)
+        self.click("SHL_send_reserve_button")
+        self.assertEqual(self.c["SHL_preview_unfunded_packets"], 2)
+        for number in (8, 10, 8):
+            self.click(cursor)
+            self.assertEqual(self.c["SHL_selected_furnace"], number)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], cash)
+        self.click("SHL_furnace_1_button")
+        self.click("SHL_next_alert_button")
+        self.assertEqual(self.c["SHL_selected_furnace"], 2)
+
+    def test_last_unpaid_site_and_already_funded_stale_click(self):
+        cursor = "SHL_next_unfunded_button"
+        self.m.variables["289"]["SHL_furnace_stock"] = 1
+        self.m.variables["294"]["SHL_furnace_stock"] = 1
+        self.m.run("SHL_refresh_furnaces")
+        self.assertTrue(self.enabled(cursor))
+        self.click(cursor)
+        self.assertEqual(self.c["SHL_selected_furnace"], 10)
+        self.assertFalse(self.enabled(cursor))
+        self.click("SHL_furnace_1_button")
+        self.assertTrue(self.enabled(cursor))
+        self.c["ADISCORD_economy_treasury"] = 90
+        self.click(cursor)
+        self.assertEqual(self.c["SHL_selected_furnace"], 1)
+        self.assertEqual(self.c["SHL_preview_unfunded_packets"], 0)
+        self.assertFalse(self.enabled(cursor))
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 90)
+
+    def test_button_and_decisions_deliver_to_independent_viii_and_x_stores(self):
+        for number, decision_id, target in ((8, "SHL_use_reserve", "294"), (10, "SHL_supply_tenth", None)):
+            with self.subTest(furnace=number):
+                if number == 10:
+                    self.m.focuses.discard("SHL_census_of_nine")
+                self.click(f"SHL_furnace_{number}_button")
+                self.assertTrue(self.enabled("SHL_send_reserve_button"))
+                decision = decision_definition(decision_id)
+                self.assertTrue(self.m.matches(block(decision, "visible"), "SHL", target))
+                self.assertTrue(self.m.matches(block(decision, "available"), "SHL", target))
+                recipient = deepcopy(self.m)
+                # The decision acts on its accepted target even if the player changes the selection.
+                recipient.variables["SHL"]["SHL_selected_furnace"] = 1
+                recipient.run("SHL_refresh_selected_furnace")
+                recipient.execute(block(decision, "complete_effect"), "SHL", target)
+                self.click("SHL_send_reserve_button")
+                self.assertEqual(self.c["SHL_selected_furnace"], number)
+                self.assertFalse(self.enabled("SHL_send_reserve_button"))
+                self.click("SHL_send_reserve_button")
+                for machine in (recipient, self.m):
+                    country = machine.variables["SHL"]
+                    self.assertEqual(machine.variables["294"]["SHL_furnace_stock"], int(number == 8))
+                    self.assertEqual(country["SHL_tenth_stock"], int(number == 10))
+                    self.assertEqual(country["SHL_reserve_stock"], 0)
+                    self.assertEqual(country["SHL_preview_unfunded_packets"], 2)
+                    self.assertEqual(country["ADISCORD_economy_treasury"], 45)
+                # Both routes start with empty stores and a single national packet.
+                self.m.variables["294"]["SHL_furnace_stock"] = 0
+                self.c.update({"SHL_tenth_stock": 0, "SHL_reserve_stock": 1})
+                self.m.run("SHL_refresh_furnaces")
+
+    def test_reserve_dispatch_rechecks_live_capacity_control_and_focus(self):
+        button = "SHL_send_reserve_button"
+        for number in (8, 10):
+            with self.subTest(furnace=number):
+                self.click(f"SHL_furnace_{number}_button")
+                store = self.c if number == 10 else self.m.variables["294"]
+                key = "SHL_tenth_stock" if number == 10 else "SHL_furnace_stock"
+                running = "SHL_tenth_running" if number == 10 else "SHL_furnace_running"
+                store[running] = 0
+                store[key] = 2
+                self.c["SHL_reserve_stock"] = 2
+                self.assertTrue(self.enabled(button))
+                for failure in ("reserve", "capacity", "occupation", "unlock"):
+                    store[key] = 2.001 if failure == "capacity" else 2
+                    self.c["SHL_reserve_stock"] = 0.999 if failure == "reserve" else 2
+                    self.m.control["294"] = "NAM" if failure == "occupation" else "SHL"
+                    if failure == "unlock":
+                        if number == 8:
+                            self.m.focuses.discard("SHL_census_of_nine")
+                        else:
+                            self.c["SHL_project_stage"] = 3
+                    with self.subTest(blocker=failure):
+                        before = (store[key], self.c["SHL_reserve_stock"])
+                        self.assertFalse(self.enabled(button))
+                        self.click(button)
+                        self.assertEqual((store[key], self.c["SHL_reserve_stock"]), before)
+                self.m.focuses.add("SHL_census_of_nine")
+                self.c["SHL_project_stage"] = 4
+                self.assertTrue(self.enabled(button))
+                self.click(button)
+                self.assertEqual((store[key], self.c["SHL_reserve_stock"], store[running]), (3, 1, 0))
+                self.assertFalse(self.enabled(button))
+                self.click(button)
+                self.assertEqual((store[key], self.c["SHL_reserve_stock"]), (3, 1))
+
+
 class DeliveryAccountingTests(unittest.TestCase):
     def setUp(self):
         ObligationAccountingTests.setUp(self)
@@ -3897,6 +4493,140 @@ class DeliveryAccountingTests(unittest.TestCase):
     def assign(self, site, recipient):
         self.c.update({"SHL_selected_furnace": site, "SHL_assignment": recipient})
         self.m.run("SHL_assign_selected_delivery")
+
+    def assert_cycle_cash(self, expected):
+        cash = "ADISCORD_economy_treasury"
+        before = self.c[cash]
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_preview_cycle_net"], expected)
+        self.assertEqual(self.c[cash], before)
+        self.m.run("SHL_produce_period")
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c[cash] - before, expected)
+
+    def test_cycle_net_applies_each_live_contract_credit_bond_and_tithe(self):
+        cash = "ADISCORD_economy_treasury"
+        for state in range(287, 296):
+            self.m.variables[str(state)]["SHL_furnace_running"] = int(state <= 288)
+        self.m.variables["287"]["SHL_furnace_wear"] = 95
+        self.c.update({"SHL_project_stage": 4, "SHL_tenth_running": 1, "SHL_tenth_stock": 1,
+                       "SHL_credit_cycles": 1, "SHL_seal_bond_cycles": 1, "SHL_cycle_bonus_income": -11,
+                       "SHL_indemnity_due": 240, "SHL_indemnity_recipient": 1, "SHL_metal_clients": 3})
+        self.m.flags["SHL"].add("SHL_seal_chapter_open")
+        self.m.focuses.add("SHL_metal_brokers")
+        self.m.countries["KYZ"] = {"exists": True, "is_subject": False}
+        for tag in ("VAL", "STP", "STS", "RUS", "GLP", "NAM"):
+            self.m.countries.setdefault(tag, {"exists": True})
+        buyers = (("STP", 20, 20), ("RUS", 15, 15), ("VAL", 20, 19.99))
+        for buyer, rate, balance in buyers:
+            self.m.flags[buyer].add("SHL_metal_client")
+            self.m.variables[buyer].update({"SHL_metal_cycle_price": rate, cash: balance})
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_preview_contract_income"], 65)
+        self.assertEqual(self.c["SHL_preview_credit_net"], 0)
+        self.assertEqual(self.c["SHL_preview_indemnity"], 8)
+        for buyer, _, balance in buyers:
+            self.assertEqual(self.m.variables[buyer][cash], balance)
+        self.assert_cycle_cash(180 + 65 - 11 - 8)
+        self.assertEqual((self.c["SHL_credit_cycles"], self.c["SHL_indemnity_due"]), (0, 232))
+        self.assertNotIn("SHL_seal_bond_cycles", self.c)
+        self.assertEqual(self.m.variables["VAL"]["SHL_metal_arrears"], 1)
+
+    def test_cycle_net_indemnity_uses_lit_furnaces_even_when_they_earn_no_cash(self):
+        for state in range(287, 296):
+            self.m.variables[str(state)]["SHL_furnace_running"] = int(state == 287)
+        self.m.variables["287"]["SHL_furnace_recipient"] = 1
+        self.c.update({"ADISCORD_economy_treasury": 1, "SHL_indemnity_due": 6, "SHL_indemnity_recipient": 1})
+        self.m.countries["KYZ"] = {"exists": True, "is_subject": False}
+        self.assert_cycle_cash(-6)
+        self.assertNotIn("SHL_indemnity_due", self.c)
+
+    def test_cycle_net_export_closure_and_unfinished_order_lost_to_extinction(self):
+        for progress, extended, expected in ((1, False, 120), (1, True, 90), (0, False, -90)):
+            with self.subTest(progress=progress, extended=extended):
+                self.setUp()
+                ObligationAccountingTests.begin(self, 1)
+                self.c["SHL_obligation_progress"] = progress
+                if extended:
+                    self.c["SHL_obligation_extended"] = 1
+                self.m.variables["287"]["SHL_furnace_wear"] = 95
+                self.assert_cycle_cash(480 + expected)
+                self.assertNotIn("SHL_obligation_kind", self.c)
+
+    def test_cycle_net_returns_civic_escrow_only_if_the_site_cannot_use_it(self):
+        for full in (False, True):
+            with self.subTest(full=full):
+                self.setUp()
+                ObligationAccountingTests.begin(self, 2)
+                self.c["SHL_obligation_progress"] = 1
+                refund = self.c["SHL_obligation_deposit"] if full else 0
+                self.m.infrastructure = 5 if full else 2
+                self.assert_cycle_cash(480 + refund)
+                self.assertNotIn("SHL_obligation_kind", self.c)
+
+    def test_second_missed_pour_returns_partial_civic_deposit_and_retires_tithe_site(self):
+        ObligationAccountingTests.begin(self, 2)
+        self.m.variables["287"].update({"SHL_furnace_shortages": 1, "SHL_furnace_stock": 0, "SHL_furnace_wear": 20})
+        self.c.update({"SHL_indemnity_due": 240, "SHL_indemnity_recipient": 1})
+        self.m.countries["KYZ"] = {"exists": True, "is_subject": False}
+        self.assert_cycle_cash(480 + self.c["SHL_obligation_deposit"] - 8 * 8)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_running"], 0)
+        self.assertNotIn("SHL_obligation_kind", self.c)
+
+    def test_extinguished_pledge_settles_only_the_remaining_liability(self):
+        ObligationAccountingTests.begin(self, 4)
+        self.m.variables["287"]["SHL_furnace_wear"] = 95
+        remaining = self.c["SHL_obligation_liability"] - 60
+        self.assert_cycle_cash(480 - remaining)
+        self.assertNotIn("SHL_obligation_kind", self.c)
+
+    def test_completed_relief_relights_the_recipient_before_collecting_tithe(self):
+        ObligationAccountingTests.relief(self, stopped=True)
+        self.c.update({"SHL_obligation_progress": 1, "SHL_indemnity_due": 240, "SHL_indemnity_recipient": 1})
+        self.m.countries["KYZ"] = {"exists": True, "is_subject": False}
+        self.assert_cycle_cash(420 - 9 * 8)
+        self.assertEqual(self.m.variables["288"]["SHL_furnace_running"], 1)
+
+    def test_lease_receipt_can_fund_the_overlords_metal_contract_that_cycle(self):
+        cash = "ADISCORD_economy_treasury"
+        self.m.countries["SHL"] = {"exists": True, "is_subject": True, "subject_of": "NAM"}
+        for tag in ("VAL", "STP", "STS", "RUS", "GLP", "NAM"):
+            self.m.countries.setdefault(tag, {"exists": True})
+        for state in range(287, 296):
+            self.m.variables[str(state)]["SHL_furnace_running"] = int(state == 287)
+        self.m.variables["287"].update({"SHL_furnace_recipient": 4, "SHL_seal_service_cycles": 2})
+        self.m.variables["NAM"].update({cash: 0, "SHL_metal_cycle_price": 20})
+        self.m.flags["NAM"].add("SHL_metal_client")
+        self.c["SHL_metal_clients"] = 1
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_preview_contract_income"], 20)
+        self.assertEqual(self.m.variables["NAM"][cash], 0)
+        self.assert_cycle_cash(20)
+        self.assertEqual(self.m.variables["NAM"][cash], 40)
+
+    def test_metal_mission_expiry_skips_only_a_future_payment(self):
+        cash = "ADISCORD_economy_treasury"
+        for mission, rate in (("SHL_metal_contract_year", 20), ("SHL_metal_contract_two_years", 15)):
+            for days, final in ((27, True), (28, False)):
+                with self.subTest(mission=mission, days=days):
+                    self.setUp()
+                    for tag in ("VAL", "STP", "STS", "RUS", "GLP", "NAM"):
+                        self.m.countries.setdefault(tag, {"exists": True})
+                    self.c["SHL_metal_clients"] = 1
+                    self.m.focuses.add("SHL_metal_brokers")
+                    self.m.flags["RUS"].add("SHL_metal_client")
+                    self.m.missions.add(mission)
+                    self.m.variables["RUS"].update({
+                        cash: 100, "SHL_metal_cycle_price": rate, "days_mission_timeout@" + mission: days,
+                    })
+                    self.m.run("SHL_produce_period")
+                    self.m.run("SHL_refresh_furnaces")
+                    self.assertEqual(self.m.variables["RUS"][cash], 100 - rate)
+                    self.assertEqual("SHL_metal_final_pour" in self.m.flags["RUS"], final)
+                    self.assertEqual(self.c["SHL_preview_contract_income"], 0 if final else rate + 15)
+                    self.m.run("SHL_metal_close_account", scope="RUS")
+                    self.assertNotIn("SHL_metal_final_pour", self.m.flags["RUS"])
+                    self.assertEqual(self.c["SHL_preview_contract_income"], 0)
 
     def test_assignment_persists_without_paying_on_click(self):
         before = self.c["ADISCORD_economy_treasury"]
@@ -4049,6 +4779,139 @@ class DeliveryAccountingTests(unittest.TestCase):
         self.m.run("SHL_produce_period")
         self.assertNotIn("SHL_obligation_kind", self.c)
         self.assertEqual(self.m.variables["288"]["SHL_furnace_wear"], 26)
+
+    def supply_order_rows(self):
+        return [(self.c.get(f"SHL_forecast_order_packets_{number}", 0),
+                 self.c.get(f"SHL_forecast_order_shortfall_{number}", 0)) for number in range(1, 11)]
+
+    def test_supply_order_detail_uses_the_budget_at_each_furnace(self):
+        cash = "ADISCORD_economy_treasury"
+        for state in range(287, 296):
+            self.m.variables[str(state)]["SHL_furnace_running"] = int(state <= 289)
+        self.m.variables["287"]["SHL_furnace_stock"] = 0.5
+        self.m.variables["288"]["SHL_furnace_stock"] = 1.25
+        self.m.variables["289"].update({"SHL_furnace_stock": 0, "SHL_furnace_recipient": 1})
+        self.c.update({cash: 45.501, "SHL_regular_supply": 1, "SHL_shift_policy": 1,
+                       "SHL_project_stage": 4, "SHL_tenth_running": 1, "SHL_tenth_stock": 1})
+        # I cannot buy two packets. II buys one and exports, financing III's
+        # pair. III delivers to the arsenal, leaving 0.501 coins for X.
+        expected = [(2, 44.499), (1, 0), (2, 0)] + [(0, 0)] * 6 + [(1, 44.499)]
+        self.m.run("SHL_refresh_furnaces")
+        for _ in range(2):
+            self.m.run("SHL_refresh_delivery_forecast")
+            for number, (actual, wanted) in enumerate(zip(self.supply_order_rows(), expected), start=1):
+                with self.subTest(furnace=number):
+                    self.assertEqual(actual[0], wanted[0])
+                    self.assertAlmostEqual(actual[1], wanted[1])
+            self.assertEqual((self.c["SHL_preview_autobuy_packets"], self.c["SHL_preview_autobuy_cost"],
+                              self.c["SHL_preview_unfunded_packets"]), (3, 135, 3))
+            self.assertEqual((self.c[cash], self.c.get("ADISCORD_economy_current_month_action_costs", 0)), (45.501, 0))
+            self.assertEqual([self.m.variables[str(state)]["SHL_furnace_stock"] for state in range(287, 290)],
+                             [0.5, 1.25, 0])
+            self.assertEqual(self.c["SHL_tenth_stock"], 1)
+            self.assertEqual(self.m.equipment["SHL", "infantry_equipment"], 0)
+
+    def test_supply_order_detail_clears_old_rows_when_supply_or_a_store_changes(self):
+        for state in range(287, 296):
+            self.m.variables[str(state)]["SHL_furnace_stock"] = 0
+        self.m.focuses.add("SHL_law_of_continuous_fire")
+        self.c.update({"ADISCORD_economy_treasury": 44.25, "SHL_regular_supply": 1, "SHL_project_stage": 4,
+                       "SHL_tenth_running": 1, "SHL_tenth_stock": 0})
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.supply_order_rows(), [(1, 0.75)] * 10)
+        self.assertEqual(self.c["SHL_preview_unfunded_packets"], 10)
+        self.m.run("SHL_disable_planned_supply")
+        self.assertEqual(self.supply_order_rows(), [(0, 0)] * 10)
+        self.assertEqual(self.c["SHL_preview_unfunded_packets"], 0)
+        self.m.run("SHL_enable_planned_supply")
+        self.assertEqual(self.supply_order_rows(), [(1, 0.75)] * 10)
+
+        self.m.variables["287"]["SHL_furnace_stock"] = 1
+        self.m.control["288"] = "NAM"
+        self.m.variables["289"]["SHL_furnace_running"] = 0
+        self.m.control["294"] = "NAM"
+        self.m.run("SHL_refresh_furnaces")
+        # District 294 controls both VIII and X. I exports from stock and the
+        # remaining working sites can all pay for their packets.
+        self.assertEqual(self.supply_order_rows(), [(0, 0)] * 3 + [(1, 0)] * 4 + [(0, 0), (1, 0), (0, 0)])
+        self.assertEqual((self.c["SHL_preview_autobuy_packets"], self.c["SHL_preview_unfunded_packets"]), (5, 0))
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 44.25)
+
+    def test_next_pour_projects_only_affordable_packets_and_the_actual_net(self):
+        cash = "ADISCORD_economy_treasury"
+        costs = "ADISCORD_economy_current_month_action_costs"
+        keys = ("SHL_preview_autobuy_packets", "SHL_preview_autobuy_cost", "SHL_preview_cycle_net")
+        # In district order, the first furnace exports and the second serves the arsenal.
+        # The tenth exports last. Earlier sales can finance its order.
+        cases = (
+            (False, 0, 150, (0, 0, 0), (0, 0, 0)),
+            (True, 0, 0, (1, 1, 1), (0, 0, 120)),
+            (True, 0, 44.75, (0, 0, 0), (0, 0, 0)),
+            (True, 0, 45, (0, 0, 0), (2, 90, -30)),
+            (True, 0, 90, (0, 0, 0), (3, 135, -15)),
+            (True, 1, 89.75, (0.5, 1.5, 0), (1, 45, -45)),
+            (True, 1, 90, (0.5, 1.5, 2), (3, 135, 45)),
+        )
+        for enabled, shift, opening, stocks, expected in cases:
+            with self.subTest(enabled=enabled, shift=shift, opening=opening, stocks=stocks):
+                self.setUp()
+                for state in range(287, 296):
+                    self.m.variables[str(state)]["SHL_furnace_running"] = int(state < 289)
+                self.m.variables["287"]["SHL_furnace_stock"] = stocks[0]
+                self.m.variables["288"].update({"SHL_furnace_stock": stocks[1], "SHL_furnace_recipient": 1})
+                self.c.update({cash: opening, "SHL_regular_supply": int(enabled), "SHL_shift_policy": shift,
+                               "SHL_project_stage": 4, "SHL_tenth_running": 1, "SHL_tenth_stock": stocks[2]})
+                self.m.run("SHL_refresh_furnaces")
+                for _ in range(2):
+                    self.m.run("SHL_refresh_delivery_forecast")
+                    self.assertEqual(tuple(self.c[key] for key in keys), expected)
+                    self.assertEqual((self.c[cash], self.c.get(costs, 0)), (opening, 0))
+                    self.assertEqual((self.m.variables["287"]["SHL_furnace_stock"],
+                                      self.m.variables["288"]["SHL_furnace_stock"], self.c["SHL_tenth_stock"]), stocks)
+                self.m.run("SHL_produce_period")
+                self.assertEqual(self.c.get(costs, 0), expected[1])
+                self.assertEqual(self.c[cash] - opening, expected[2])
+
+    def test_lease_refund_funds_the_first_purchase_and_is_counted_only_once(self):
+        cash = "ADISCORD_economy_treasury"
+        for state in range(287, 296):
+            self.m.variables[str(state)]["SHL_furnace_running"] = int(state == 287)
+        self.m.variables["287"].update({"SHL_furnace_stock": 0, "SHL_furnace_recipient": 4})
+        self.m.flags["SHL"].add("SHL_seal_chapter_open")
+        self.c.update({cash: 0, "SHL_seal_petition_site": 287, "SHL_seal_petition_deposit": 60,
+                       "SHL_regular_supply": 1})
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_preview_autobuy_cost"], 45)
+        self.assertEqual(self.c["SHL_preview_income"], 15)
+        self.assertEqual(self.c["SHL_preview_order_income"], 60)
+        self.assert_cycle_cash(75)
+        self.assertNotIn("SHL_seal_petition_deposit", self.c)
+
+    def test_net_retains_fractional_lease_proceeds(self):
+        cash = "ADISCORD_economy_treasury"
+        for state in range(287, 296):
+            self.m.variables[str(state)]["SHL_furnace_running"] = int(state == 287)
+        self.m.variables["287"]["SHL_furnace_recipient"] = 4
+        self.m.countries["SHL"] = {"exists": True, "is_subject": True, "subject_of": "NAM"}
+        self.m.countries["NAM"] = {"exists": True}
+        self.c.update({cash: 100, "SHL_seal_lease_share": 0.65, "SHL_shift_policy": 2})
+        self.assert_cycle_cash(8.75)
+        self.assertEqual(self.m.variables["NAM"][cash], 16.25)
+
+    def test_exchange_switch_reprices_only_regular_exports_without_rolling_on_inspection(self):
+        cash = "ADISCORD_economy_treasury"
+        self.c.update({cash: 100, "SHL_project_stage": 4, "SHL_tenth_running": 1, "SHL_tenth_stock": 1})
+        self.m.run("SHL_refresh_furnaces")
+        self.m.run("SHL_commit_metal_exchange")
+        # The test engine chooses the lowest quote, 45, at each actual draw.
+        self.assertEqual(self.c["SHL_preview_cycle_net"], 9 * 45 + 60)
+        self.c["SHL_exchange_price"] = 75
+        self.m.run("SHL_refresh_selected_furnace")
+        self.assertEqual((self.c["SHL_exchange_price"], self.c["SHL_preview_cycle_net"]), (75, 9 * 75 + 60))
+        self.m.run("SHL_toggle_export_mode")
+        self.assertEqual(self.c["SHL_preview_cycle_net"], 10 * 60)
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.c[cash] - 100, 10 * 60)
 
     def test_buying_reserve_updates_the_forecast_before_the_packets_are_distributed(self):
         cash = "ADISCORD_economy_treasury"
@@ -6449,11 +7312,15 @@ class ExternalContractTests(unittest.TestCase):
         self.m.flags["SHL"].discard("NAM_oil_client")
         self.m.run("SHL_refresh_furnaces")
         self.assertEqual(self.c["SHL_packet_price"], 40)
-        # Every consumer reads the variable; no literal packet quote remains.
-        source = EFFECT_PATH.read_text(encoding="utf-8")
-        self.assertNotIn("value = 25 }", repr(self.effects["SHL_produce_site"]))
-        self.assertEqual(source.count("multiply_variable = { var = SHL_planned_price value = PREV.SHL_auto_packet_price }"), 1)
-        self.assertEqual(source.count("multiply_variable = { var = SHL_tenth_planned_price value = SHL_auto_packet_price }"), 1)
+        for caller, callee in (("SHL_produce_site", "SHL_settle_furnace_order"),
+                               ("SHL_produce_period", "SHL_settle_furnace_order"),
+                               ("SHL_settle_furnace_order", "SHL_quote_furnace_order"),
+                               ("SHL_preview_delivery", "SHL_quote_furnace_order")):
+            self.assertIn((callee, "yes"), [(entry.key, entry.value) for entry in walk_entries(self.m.effects[caller])])
+        quotes = [entry for entry in walk_entries(self.m.effects["SHL_quote_furnace_order"])
+                  if entry.key in ("multiply_variable", "multiply_temp_variable")]
+        self.assertTrue(any(scalar(quote.value, "var") == "SHL_order_price"
+                            and scalar(quote.value, "value") == "SHL_auto_packet_price" for quote in quotes))
         decision = decision_definition("SHL_supply_furnace")
         self.assertEqual(scalar(decision, "custom_cost_text"), "SHL_cost_packet")
         self.assertIn("SHL_packet_price", repr(block(decision, "custom_cost_trigger")))

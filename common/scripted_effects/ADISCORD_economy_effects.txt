@@ -3425,6 +3425,22 @@ ADISCORD_economy_update_gui = {
 		set_variable = { var = ADISCORD_economy_gui_update_var value = 0 }
 	}
 	else = { add_to_variable = { var = ADISCORD_economy_gui_update_var value = 1 } }
+	# Country payments also change what the next Shahrabad pour can buy or collect.
+	if = {
+		limit = {
+			tag = SHL
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_forecast_treasury compare = not_equals }
+		}
+		SHL_refresh_forecast_if_changed = yes
+	}
+	else_if = {
+		limit = {
+			has_country_flag = SHL_metal_client
+			SHL = { is_ai = no }
+			SHL_forecast_buyer_changed = yes
+		}
+		SHL = { SHL_refresh_forecast_if_changed = yes }
+	}
 }
 ADISCORD_economy_refresh_open_window = {
 	# Preview arithmetic belongs to the visible human UI, never to AI settlement.

@@ -33,6 +33,7 @@ country_event = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
 				clr_country_flag = SHL_master_dispute
+				SHL_refresh_forecast_if_changed = yes
 			}
 		}
 	}
@@ -175,6 +176,7 @@ country_event = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
 				clr_country_flag = SHL_transport_dispute
+				SHL_refresh_forecast_if_changed = yes
 			}
 		}
 	}
@@ -2866,8 +2868,8 @@ country_event = {
 				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 40 }
-				ADISCORD_economy_mark_dirty = yes
 				add_to_variable = { var = SHL_reserve_stock value = 1 }
+				ADISCORD_economy_mark_dirty = yes
 				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 		}

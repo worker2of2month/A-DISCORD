@@ -2,7 +2,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_SHL_furnaces_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 591 }
+		size = { width = 460 height = 722 }
 		iconType = {
 			name = "SHL_board"
 			position = { x = 3 y = 0 }
@@ -72,7 +72,7 @@ guiTypes = {
 			maxHeight = 25
 			format = center
 			fixedsize = yes
-			pdx_tooltip = "SHL_planned_supply_tt"
+			pdx_tooltip = "SHL_supply_tariff_panel_tt"
 		}
 		iconType = {
 			name = "SHL_survey_map"
@@ -527,24 +527,183 @@ guiTypes = {
 			pdx_tooltip = "SHL_convoy_sale_tt"
 		}
 		instantTextBoxType = {
-			name = "SHL_cycle_line"
-			position = { x = 10 y = 508 }
-			text = "SHL_cycle_line"
-			font = "hoi_16mbs"
-			maxWidth = 440
-			maxHeight = 27
-			fixedsize = yes
-			pdx_tooltip = "SHL_panel_delivery_totals"
-		}
-		instantTextBoxType = {
 			name = "SHL_ledger_line"
-			position = { x = 10 y = 539 }
+			position = { x = 10 y = 502 }
 			text = "SHL_ledger_line"
 			font = "hoi_16mbs"
 			maxWidth = 440
 			maxHeight = 46
 			fixedsize = yes
 			pdx_tooltip = "SHL_panel_project"
+		}
+		iconType = {
+			name = "SHL_forecast_header"
+			position = { x = 3 y = 550 }
+			quadTextureSprite = "GFX_SHL_caravan_header"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_forecast_row"
+			position = { x = 3 y = 601 }
+			quadTextureSprite = "GFX_SHL_caravan_row"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_cycle_line"
+			position = { x = 10 y = 553 }
+			text = "SHL_cycle_line"
+			font = "hoi_18mbs"
+			maxWidth = 274
+			maxHeight = 21
+			fixedsize = yes
+			pdx_tooltip = "SHL_panel_delivery_totals"
+		}
+		instantTextBoxType = {
+			name = "SHL_forecast_politics"
+			position = { x = 290 y = 554 }
+			text = "SHL_forecast_politics"
+			font = "hoi_16mbs"
+			maxWidth = 155
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "SHL_panel_delivery_totals"
+		}
+		instantTextBoxType = {
+			name = "SHL_forecast_net_label"
+			position = { x = 10 y = 580 }
+			text = "SHL_forecast_net_label"
+			font = "hoi_16mbs"
+			maxWidth = 193
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "SHL_panel_delivery_totals"
+		}
+		instantTextBoxType = {
+			name = "SHL_forecast_net"
+			position = { x = 10 y = 608 }
+			text = "SHL_forecast_net"
+			font = "hoi_16mbs"
+			maxWidth = 193
+			maxHeight = 24
+			fixedsize = yes
+			pdx_tooltip = "SHL_panel_delivery_totals"
+		}
+		instantTextBoxType = {
+			name = "SHL_forecast_packets_label"
+			position = { x = 213 y = 580 }
+			text = "SHL_forecast_packets_label"
+			font = "hoi_16mbs"
+			maxWidth = 84
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "SHL_supply_orders_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_forecast_packets"
+			position = { x = 213 y = 608 }
+			text = "SHL_forecast_packets"
+			font = "hoi_16mbs"
+			maxWidth = 84
+			maxHeight = 24
+			fixedsize = yes
+			pdx_tooltip = "SHL_supply_orders_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_forecast_cost_label"
+			position = { x = 304 y = 580 }
+			text = "SHL_forecast_cost_label"
+			font = "hoi_16mbs"
+			maxWidth = 72
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "SHL_supply_orders_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_forecast_cost"
+			position = { x = 304 y = 608 }
+			text = "SHL_forecast_cost"
+			font = "hoi_16mbs"
+			maxWidth = 72
+			maxHeight = 24
+			fixedsize = yes
+			pdx_tooltip = "SHL_supply_orders_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_forecast_rifles_label"
+			position = { x = 384 y = 580 }
+			text = "SHL_forecast_rifles_label"
+			font = "hoi_16mbs"
+			maxWidth = 67
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "SHL_panel_delivery_totals"
+		}
+		instantTextBoxType = {
+			name = "SHL_forecast_rifles"
+			position = { x = 384 y = 608 }
+			text = "SHL_forecast_rifles"
+			font = "hoi_16mbs"
+			maxWidth = 67
+			maxHeight = 24
+			fixedsize = yes
+			pdx_tooltip = "SHL_panel_delivery_totals"
+		}
+		buttonType = {
+			name = "SHL_next_unfunded_button"
+			position = { x = 8 y = 686 }
+			quadTextureSprite = "GFX_SHL_dispatch"
+			buttonText = "SHL_next_unfunded_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_next_unfunded_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_reserve_destination"
+			position = { x = 10 y = 639 }
+			text = "SHL_reserve_destination"
+			font = "hoi_16mbs"
+			maxWidth = 291
+			maxHeight = 38
+			fixedsize = yes
+			pdx_tooltip = "SHL_send_reserve_tt"
+		}
+		buttonType = {
+			name = "SHL_auto_reserve_button"
+			position = { x = 310 y = 637 }
+			quadTextureSprite = "GFX_SHL_dispatch"
+			buttonText = "SHL_auto_reserve_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_auto_reserve_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_auto_reserve_status"
+			position = { x = 310 y = 665 }
+			text = "SHL_auto_reserve_status"
+			font = "hoi_16mbs"
+			maxWidth = 142
+			maxHeight = 18
+			format = center
+			fixedsize = yes
+			pdx_tooltip = "SHL_auto_reserve_tt"
+		}
+		buttonType = {
+			name = "SHL_send_reserve_button"
+			position = { x = 159 y = 686 }
+			quadTextureSprite = "GFX_SHL_dispatch"
+			buttonText = "SHL_send_reserve_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_send_reserve_tt"
+		}
+		buttonType = {
+			name = "SHL_distribute_reserve_button"
+			position = { x = 310 y = 686 }
+			quadTextureSprite = "GFX_SHL_dispatch"
+			buttonText = "SHL_distribute_reserve_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_distribute_reserve_tt"
 		}
 	}
 	containerWindowType = {

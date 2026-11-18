@@ -379,6 +379,396 @@ defined_text = {
 	}
 }
 
+defined_text = {
+	name = SHLGetNextUnfundedNote
+	text = {
+		trigger = { SHL_country_operable = no }
+		localization_key = SHL_reserve_unavailable
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_next_unfunded_furnace value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_unfunded_none
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_next_unfunded_furnace value = SHL_selected_furnace compare = equals } }
+		localization_key = SHL_unfunded_here
+	}
+	text = { localization_key = SHL_unfunded_next }
+}
+
+defined_text = {
+	name = SHLGetReserveSendStatus
+	text = {
+		trigger = { SHL_can_send_reserve_to_selected = yes }
+		localization_key = SHL_reserve_ready
+	}
+	text = {
+		trigger = { SHL_country_operable = no }
+		localization_key = SHL_reserve_unavailable
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = SHL_selected_furnace value = 1 compare = less_than }
+				check_variable = { var = SHL_selected_furnace value = 10 compare = greater_than }
+			}
+		}
+		localization_key = SHL_reserve_choose
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = less_than }
+			NOT = { has_completed_focus = SHL_census_of_nine }
+		}
+		localization_key = SHL_reserve_requires_census
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_selected_furnace value = 10 compare = equals }
+			check_variable = { var = SHL_project_stage value = 4 compare = less_than }
+		}
+		localization_key = SHL_reserve_requires_works
+	}
+	text = {
+		trigger = { NOT = { var:SHL_selected_state = { SHL_furnace_site_controlled = yes } } }
+		localization_key = SHL_reserve_control
+	}
+	text = {
+		trigger = { SHL_reserve_has_packet = no }
+		localization_key = SHL_reserve_empty
+	}
+	text = { localization_key = SHL_reserve_no_room }
+}
+
+defined_text = {
+	name = SHLGetReserveDestination
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = SHL_selected_furnace value = 1 compare = less_than }
+				check_variable = { var = SHL_selected_furnace value = 10 compare = greater_than }
+			}
+		}
+		localization_key = SHL_reserve_no_destination
+	}
+	text = { localization_key = SHL_reserve_chosen_destination }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveStatus
+	text = {
+		trigger = { SHL_can_toggle_auto_reserve = no }
+		localization_key = SHL_auto_reserve_locked
+	}
+	text = {
+		trigger = { NOT = { check_variable = { var = SHL_auto_reserve value = 1 compare = equals } } }
+		localization_key = SHL_auto_reserve_off
+	}
+	text = {
+		trigger = { NOT = { check_variable = { var = SHL_regular_supply value = 1 compare = equals } } }
+		localization_key = SHL_auto_reserve_waiting
+	}
+	text = { localization_key = SHL_auto_reserve_on }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveContribution
+	text = {
+		trigger = {
+			check_variable = { var = SHL_auto_reserve value = 1 compare = equals }
+			check_variable = { var = SHL_bulk_reserve_total value = 0 compare = greater_than }
+		}
+		localization_key = SHL_auto_reserve_contribution
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetReserveExchangeNote
+	text = {
+		trigger = {
+			check_variable = { var = SHL_export_mode value = 1 compare = equals }
+			check_variable = { var = SHL_regular_supply value = 1 compare = equals }
+			SHL_reserve_has_packet = yes
+		}
+		localization_key = SHL_reserve_exchange_note
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReservePlan
+	text = {
+		trigger = { SHL_can_distribute_reserve = yes }
+		localization_key = SHL_bulk_reserve_plan
+	}
+	text = {
+		trigger = { SHL_country_operable = no }
+		localization_key = SHL_reserve_unavailable
+	}
+	text = {
+		trigger = { NOT = { has_completed_focus = SHL_law_of_continuous_fire } }
+		localization_key = SHL_forecast_order_locked
+	}
+	text = {
+		trigger = { NOT = { check_variable = { var = SHL_regular_supply value = 1 compare = equals } } }
+		localization_key = SHL_forecast_order_manual
+	}
+	text = {
+		trigger = { SHL_reserve_has_packet = no }
+		localization_key = SHL_reserve_empty
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_preview_unfunded_packets value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_unfunded_none
+	}
+	text = {
+		trigger = { NOT = { has_completed_focus = SHL_census_of_nine } }
+		localization_key = SHL_reserve_requires_census
+	}
+	text = { localization_key = SHL_bulk_reserve_no_destination }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow1
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_1 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_1
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow2
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_2 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_2
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow3
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_3 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_3
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow4
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_4 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_4
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow5
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_5 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_5
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow6
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_6 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_6
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow7
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_7 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_7
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow8
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_8 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_8
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow9
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_9 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_9
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBulkReserveRow10
+	text = {
+		trigger = { check_variable = { var = SHL_bulk_reserve_10 value = 0 compare = greater_than } }
+		localization_key = SHL_bulk_reserve_row_10
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetForecastOrderList
+	text = {
+		trigger = { NOT = { has_completed_focus = SHL_law_of_continuous_fire } }
+		localization_key = SHL_forecast_order_locked
+	}
+	text = {
+		trigger = { NOT = { check_variable = { var = SHL_regular_supply value = 1 compare = equals } } }
+		localization_key = SHL_forecast_order_manual
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_preview_autobuy_packets value = 0 compare = less_than_or_equals }
+			check_variable = { var = SHL_preview_unfunded_packets value = 0 compare = less_than_or_equals }
+		}
+		localization_key = SHL_forecast_order_none
+	}
+	text = { localization_key = SHL_forecast_order_list }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder1
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_1 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_1 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_1
+	}
+	text = { localization_key = SHL_forecast_order_paid_1 }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder2
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_2 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_2 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_2
+	}
+	text = { localization_key = SHL_forecast_order_paid_2 }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder3
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_3 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_3 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_3
+	}
+	text = { localization_key = SHL_forecast_order_paid_3 }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder4
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_4 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_4 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_4
+	}
+	text = { localization_key = SHL_forecast_order_paid_4 }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder5
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_5 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_5 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_5
+	}
+	text = { localization_key = SHL_forecast_order_paid_5 }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder6
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_6 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_6 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_6
+	}
+	text = { localization_key = SHL_forecast_order_paid_6 }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder7
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_7 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_7 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_7
+	}
+	text = { localization_key = SHL_forecast_order_paid_7 }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder8
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_8 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_8 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_8
+	}
+	text = { localization_key = SHL_forecast_order_paid_8 }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder9
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_9 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_9 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_9
+	}
+	text = { localization_key = SHL_forecast_order_paid_9 }
+}
+
+defined_text = {
+	name = SHLGetForecastOrder10
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_packets_10 value = 0 compare = less_than_or_equals } }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_forecast_order_shortfall_10 value = 0 compare = greater_than } }
+		localization_key = SHL_forecast_order_skipped_10
+	}
+	text = { localization_key = SHL_forecast_order_paid_10 }
+}
+
 # The packet quote (SHL_packet_price) follows Svetlogorye's oil contract or embargo.
 defined_text = {
 	name = SHLGetPacketPrice

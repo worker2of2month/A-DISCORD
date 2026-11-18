@@ -1783,7 +1783,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_restored_armored_chassis_medium"
-		textureFile = "gfx/interface/technologies/basic_light_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/light.png"
 	}
 
 	SpriteType = {
@@ -1813,12 +1813,12 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_signature_management_skins_medium"
-		textureFile = "gfx/interface/technologies/basic_light_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/light.png"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_unmanned_recon_vehicles_medium"
-		textureFile = "gfx/interface/technologies/ger_armored_car_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/armor/default/light.png"
 	}
 
 	SpriteType = {
@@ -1868,7 +1868,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_recovered_medium_chassis_medium"
-		textureFile = "gfx/interface/technologies/basic_medium_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
 	}
 
 	SpriteType = {
@@ -1888,7 +1888,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_semi_autonomous_combat_modules_medium"
-		textureFile = "gfx/interface/technologies/generic_modern_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
 	}
 
 	SpriteType = {
@@ -1908,7 +1908,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_limited_battle_ai_medium"
-		textureFile = "gfx/interface/technologies/generic_modern_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
 	}
 
 	SpriteType = {
@@ -1918,12 +1918,12 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_adaptive_suspension_control_medium"
-		textureFile = "gfx/interface/technologies/advanced_medium_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_distributed_battlegroup_medium"
-		textureFile = "gfx/interface/technologies/generic_modern_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
 	}
 
 	SpriteType = {
@@ -1938,7 +1938,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_heavy_composite_cores_medium"
-		textureFile = "gfx/interface/technologies/basic_heavy_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/heavy.png"
 	}
 
 	SpriteType = {
@@ -1948,12 +1948,12 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_heavy_platform_cores_medium"
-		textureFile = "gfx/interface/technologies/super_heavy_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/heavy.png"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_active_mass_balancing_suspension_medium"
-		textureFile = "gfx/interface/technologies/main_battle_tank.dds"
+		textureFile = "gfx/interface/technologies/armor/default/heavy.png"
 	}
 
 	SpriteType = {
@@ -1968,7 +1968,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_siege_platform_networks_medium"
-		textureFile = "gfx/interface/technologies/generic_land_cruiser_chassis.dds"
+		textureFile = "gfx/interface/technologies/armor/default/heavy.png"
 	}
 
 	SpriteType = {
@@ -4303,4 +4303,1118 @@ spriteTypes = {
 		name = "GFX_ADISCORD_tech_environment_assault_doctrine_medium"
 		textureFile = "gfx/interface/technologies/recon2.dds"
 	}
+	# BEGIN ADISCORD country tank cards
+	SpriteType = {
+		name = "GFX_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/default/light.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/default/light.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/default/light.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/light.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/light.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/light.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/light.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/light.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/light.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/light.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/light.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/light.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/light.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/light.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/light.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/light.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/light.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/light.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_recon_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/light.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_light_combat_platform_2163_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/light.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_recon_drone_carrier_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/light.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_restored_armored_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/light.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_unmanned_recon_vehicles_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/light.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_signature_management_skins_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/light.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/default/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_combat_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_combat_platform_2150_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_combat_platform_2170_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_recovered_medium_chassis_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_semi_autonomous_combat_modules_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_limited_battle_ai_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_adaptive_suspension_control_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_distributed_battlegroup_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/medium.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/default/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/default/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/default/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/default/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_IVN_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/IVN/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_MON_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/MON/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NAM_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/NAM/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_NOD_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/NOD/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_RUS_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/RUS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SHL_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/SHL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_SRP_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/SRP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/STP/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/VAL/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_heavy_platform_archetype_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_heavy_combat_platform_2158_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_heavy_combat_platform_2183_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_heavy_combat_platform_2200_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_heavy_composite_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_heavy_platform_cores_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_active_mass_balancing_suspension_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_WRK_ADISCORD_tech_siege_platform_networks_medium"
+		textureFile = "gfx/interface/technologies/armor/WRK/heavy.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_STP_taran_equipment_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/taran.png"
+	}
+	SpriteType = {
+		name = "GFX_STS_STP_taran_equipment_1_medium"
+		textureFile = "gfx/interface/technologies/armor/STS/taran.png"
+	}
+	# END ADISCORD country tank cards
 }

@@ -47,7 +47,14 @@
       "runtime_path": "gfx/leaders/RLY/portrait_RLY_Relay_Assembly_17.png",
       "source_file": "exec-2384d3f0-0144-4ae6-b9e2-4bff12762204.png",
       "template_layer_effects": false,
-      "runtime_sha256": "6b9ee8939b5e496c14be01b8921b0914a168e2dc61c1ca33f8c7d19f37899821"
+      "office_scene": {
+        "source_file": "exec-12b2f49b-66bd-41af-bfb5-40dee73b5bcb.png",
+        "flag": "gfx/flags/RLY.tga",
+        "composition": "Council at work in its office beneath the full-size national flag.",
+        "render_fit": "cover_top",
+        "template_layer_effects": false
+      },
+      "runtime_sha256": "219e325045273864b987599a454ed691c484fb4e98e11fb6bc0c46d6bbcdfe51"
     },
     {
       "id": "DRV_Council_of_Free_Valleys",
@@ -76,7 +83,14 @@
           "reason": "Replaced to vary group pose and interaction."
         }
       ],
-      "runtime_sha256": "152007a7375ed014f98fd15509b4b3877829711c9853bde3a975245d90f8aa66"
+      "office_scene": {
+        "source_file": "exec-f023e70d-3a38-4386-ba83-18a6a04c03e5.png",
+        "flag": "gfx/flags/DRV.tga",
+        "composition": "Council at work in its office beneath the full-size national flag.",
+        "render_fit": "cover_top",
+        "template_layer_effects": false
+      },
+      "runtime_sha256": "0e88b2331d18a725fb13d380dddd72f33e244c16bb1c4a504f0c555bea20c258"
     },
     {
       "id": "MZR_Ration_Assembly",
@@ -104,7 +118,14 @@
         }
       ],
       "template_layer_effects": false,
-      "runtime_sha256": "10bc37d353035e1a44316c88cedded0aed37f181cb4025a1e97bd1a1a63dccf5"
+      "office_scene": {
+        "source_file": "exec-3e199154-2136-470c-bbf9-36fc78339731.png",
+        "flag": "gfx/flags/MZR.tga",
+        "composition": "Council at work in its office beneath the full-size national flag.",
+        "render_fit": "cover_top",
+        "template_layer_effects": false
+      },
+      "runtime_sha256": "676667d3b668cf9e7f2c017dabd475591775649b5f25a494f13a98d762d2dfa7"
     },
     {
       "id": "KYZ_Qanat_Assembly",
@@ -126,7 +147,14 @@
       "runtime_path": "gfx/leaders/KYZ/portrait_KYZ_Qanat_Assembly.png",
       "source_file": "exec-7bfe682d-0541-479f-844f-016b8ff2f9f2.png",
       "template_layer_effects": false,
-      "runtime_sha256": "47b91f1ec0deadf870c40082a58699ca6a8556421beb936990eb66ace16fe728"
+      "office_scene": {
+        "source_file": "exec-f5fbd4f8-076c-4911-982f-d18bdf043713.png",
+        "flag": "gfx/flags/KYZ.tga",
+        "composition": "Council at work in its office beneath the full-size national flag.",
+        "render_fit": "cover_top",
+        "template_layer_effects": false
+      },
+      "runtime_sha256": "a68f6e2ff775119db1eae649268bad6c034d12673a6445b0948e353eb281232f"
     },
     {
       "id": "SFD_administrative_board",
@@ -325,7 +353,13 @@
       "runtime_path": "gfx/leaders/SHL/portrait_SHL_Shift_Councils.png",
       "source_file": "exec-37e81d65-5e36-4afa-8b4c-b187c0650970.png",
       "template_layer_effects": false,
-      "runtime_sha256": "87239e101e950c460f15fcad3af9bee3ae8c13a3da0258d0f3697fcd02156829"
+      "background_flag": {
+        "reference": "gfx/flags/SHL_commune_of_fire.tga",
+        "source_file": "exec-f1f8767d-4708-48ae-9032-09a4bb1f3733.png",
+        "placement": "96x61 at (-9, 0), behind the original delegates and ledger",
+        "prompt": "Reproduce the Commune of Fire flag as a straight-on matte fabric banner. Preserve the charcoal and brick-red diagonal fields, the open ivory cog and the orange flame."
+      },
+      "runtime_sha256": "b7783d1ec8584992264ae16e7bb1f07e3e645f82224962e7e4cec41219bf968d"
     },
     {
       "id": "SLI_Island_Council",
@@ -455,7 +489,14 @@
       "sprite": "GFX_portrait_OCA_Contract_Council",
       "runtime_path": "gfx/leaders/OCA/portrait_OCA_Contract_Council.png",
       "source_file": "exec-4daf8d61-8137-40d4-bfc0-f7c61c5a3748.png",
-      "runtime_sha256": "a3280de2ea0e92a88e9613dccb927c056e5f5f33854c3c9c38869a18aaf9ed79"
+      "office_scene": {
+        "source_file": "exec-d19b4327-9f0d-4791-9398-1502326d0bf2.png",
+        "flag": "gfx/flags/OCA.tga",
+        "composition": "Council at work in its office beneath the full-size national flag.",
+        "render_fit": "cover_top",
+        "template_layer_effects": false
+      },
+      "runtime_sha256": "4602f88bfe827f511dddcb852a8230a68fac07ec07b4680efbd2069ae46b95cf"
     },
     {
       "id": "ECA_Contract_Council",
@@ -499,7 +540,14 @@
       "runtime_path": "gfx/leaders/DCA/portrait_DCA_Contract_Council.png",
       "source_file": "exec-47a63fae-ad92-44de-b348-72521cd1afd4.png",
       "template_layer_effects": false,
-      "runtime_sha256": "e4e304c9823b1941691330e90be6032850907f81f1141e580bc719e481512387"
+      "office_scene": {
+        "source_file": "exec-b4405740-1153-48ad-9be7-7e48bb918e37.png",
+        "flag": "gfx/flags/DCA.tga",
+        "composition": "Council at work in its office beneath the full-size national flag.",
+        "render_fit": "cover_top",
+        "template_layer_effects": false
+      },
+      "runtime_sha256": "b0e0d9aaca04f435e67ccc8cfcbab743330b706817a7d250b0c07271b01f4683"
     },
     {
       "id": "YPR_Contract_Council",
