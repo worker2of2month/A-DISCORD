@@ -468,6 +468,45 @@ characters = {
 		}
 	}
 
+	SHL_Mazin_Barakat = {
+		name = SHL_Mazin_Barakat
+		portraits = {
+			army = {
+				large = GFX_portrait_SHL_Mazin_Barakat
+				small = GFX_portrait_SHL_Mazin_Barakat_small
+			}
+		}
+		corps_commander = {
+			traits = { cavalry_leader }
+			skill = 2
+			attack_skill = 3
+			defense_skill = 1
+			planning_skill = 1
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	SHL_Rima_Khoury = {
+		name = SHL_Rima_Khoury
+		gender = female
+		portraits = {
+			army = {
+				large = GFX_portrait_SHL_Rima_Khoury
+				small = GFX_portrait_SHL_Rima_Khoury_small
+			}
+		}
+		corps_commander = {
+			traits = { trickster }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 4
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
 	ADISCORD_staff_SHL_Farid_Rahmani = {
 		name = ADISCORD_staff_SHL_Farid_Rahmani
 		portraits = {

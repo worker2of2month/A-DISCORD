@@ -1582,6 +1582,32 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_portrait_SHL_Mazin_Barakat"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Mazin_Barakat.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_SHL_Mazin_Barakat_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Mazin_Barakat.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Rima_Khoury"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Rima_Khoury.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_SHL_Rima_Khoury_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Rima_Khoury.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
 		name = "GFX_portrait_SHL_staff_Farid_Rahmani"
 		texturefile = "gfx/leaders/SHL/portrait_SHL_staff_Farid_Rahmani.png"
 	}
