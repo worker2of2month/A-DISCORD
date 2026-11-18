@@ -997,12 +997,12 @@ class SubjectIntegrationRemovalTests(unittest.TestCase):
                     decisions.update(
                         (d.key, d.value) for d in category.value if isinstance(d.value, list)
                     )
-        for country, tree, identifier in (
-            ("NAM", "postwar", "NAM_south_heritage"),
-            ("SHL", "shared", "SHL_south_crown_of_the_south"),
+        for source, identifier in (
+            ("NAM/postwar/southern_settlement.txt", "NAM_south_heritage"),
+            ("SHL/shared/focuses.txt", "SHL_south_crown_of_the_south"),
         ):
-            with self.subTest(country=country):
-                path = ROOT / f"focus_trees/{country}/{tree}/focuses.txt"
+            with self.subTest(source=source):
+                path = ROOT / "focus_trees" / source
                 reward = block(focus_blocks(path)[identifier], "completion_reward")
                 self.assertTrue(reward)
                 # Ordinary postwar programmes may be unlocked; none of them annexes a subject.

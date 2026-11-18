@@ -172,7 +172,7 @@ shared_focus = {
 		id = NAM_svetlogorye
 		relative_position_id = NAM_civil_repair
 		x = 28
-		y = 6
+		y = 7
 		icon = GFX_focus_NAM_independence_day
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -1673,6 +1673,118 @@ shared_focus = {
 				amount = 200
 				producer = NAM
 			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+shared_focus = {
+		id = NAM_depot_inquiry
+		relative_position_id = NAM_oil_exchange
+		x = -4
+		y = 2
+		icon = GFX_focus_NAM_open_ledgers
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_oil_exchange }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_file_tt
+				NAM_depot_can_file = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_existing_case_tt
+				OR = {
+					has_country_flag = NAM_depot_case
+					has_country_flag = NAM_depot_concessions_settled
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_depot_trace_invoices
+			custom_effect_tooltip = NAM_depot_trace_invoices_unlock_tt
+			unlock_decision_tooltip = NAM_depot_supply_towns
+			custom_effect_tooltip = NAM_depot_supply_towns_unlock_tt
+			hidden_effect = { set_country_flag = { flag = NAM_depot_case value = 1 } }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+shared_focus = {
+		id = NAM_depot_revoke
+		relative_position_id = NAM_depot_inquiry
+		x = -2
+		y = 2
+		icon = GFX_focus_NAM_seal_courts
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_depot_inquiry }
+		mutually_exclusive = { focus = NAM_depot_reserve_charter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_ruling_required_tt
+				NAM_depot_settlement_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_revoked_tt
+				has_country_flag = NAM_depot_concessions_settled
+				NOT = { has_idea = NAM_state_fuel_reserve }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_terminate_depot_concessions
+			custom_effect_tooltip = NAM_terminate_depot_concessions_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+shared_focus = {
+		id = NAM_depot_reserve_charter
+		relative_position_id = NAM_depot_inquiry
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_well_register
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_depot_inquiry }
+		mutually_exclusive = { focus = NAM_depot_revoke }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_ruling_required_tt
+				NAM_depot_settlement_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_state_reserve_tt
+				has_country_flag = NAM_depot_concessions_settled
+				has_idea = NAM_state_fuel_reserve
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_establish_fuel_reserve
+			custom_effect_tooltip = NAM_establish_fuel_reserve_unlock_tt
 		}
 		ai_will_do = { base = 5 }
 	}

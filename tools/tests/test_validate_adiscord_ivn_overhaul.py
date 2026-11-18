@@ -203,13 +203,13 @@ EXPECTED_VPS = {
     100: {16817: 5},
     101: {9327: 3, 638: 1},
     127: {16816: 3, 3245: 1},
-    128: {579: 1},
+    128: {18993: 1},
     129: {1971: 1},
     130: {16822: 2},
     131: {16821: 2},
     132: {16815: 2, 4739: 1},
     164: {16824: 1},
-    693: {6905: 5, 16692: 1, 16695: 1, 16700: 1},
+    693: {18994: 5, 16692: 1, 16695: 1, 16700: 1},
     694: {11841: 3, 12189: 1},
     695: {16820: 3, 9608: 1},
     696: {16826: 3},
@@ -415,12 +415,12 @@ class IvanlandOverhaulContractTests(unittest.TestCase):
             portrait.read_bytes()[16:24], bytes.fromhex("0000009c000000d2")
         )
         self.assertEqual(len(re.findall(r"\bdivision\s*=\s*\{", oob)), 1)
-        self.assertIn("location = 579", oob)
+        self.assertIn("location = 18993", oob)
 
     def test_ivn_keeps_sixteen_divisions_outside_iia(self) -> None:
         oob = (ROOT / "history/units/IVN.txt").read_text(encoding="utf-8-sig")
         self.assertEqual(len(re.findall(r"\bdivision\s*=\s*\{", oob)), 16)
-        self.assertNotIn("location = 579", oob)
+        self.assertNotIn("location = 18993", oob)
 
     def test_split_states_have_valid_map_building_anchors(self) -> None:
         affected = {25, 128, 693, 694, 695, 696, 697, 698}

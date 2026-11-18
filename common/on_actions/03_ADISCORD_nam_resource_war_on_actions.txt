@@ -4,6 +4,14 @@ on_actions = {
 			if = {
 				limit = { has_idea = NAM_private_tank_farms }
 				if = {
+					limit = { has_country_flag = { flag = NAM_depot_case value > 1 } }
+					if = {
+						limit = { has_fuel < 1000 }
+						set_fuel = 0
+					}
+					else = { add_fuel = -1000 }
+				}
+				else_if = {
 					limit = { has_fuel < 2000 }
 					set_fuel = 0
 				}

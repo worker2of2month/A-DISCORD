@@ -2,8 +2,9 @@
 state={
 	id=128
 	name="STATE_128"
-	provinces = {
-		579 7125 8423 9072 16685
+	provinces={
+		579 7125 8423 9072 16685 18993 18995 18996 18997 19019 19020 19026
+		19027 19036 19037
 	}
 	manpower = 90000
 	buildings_max_level_factor = 1.000
@@ -12,7 +13,7 @@ state={
 	history = {
 		owner = IIA
 		add_core_of = IIA
-		victory_points = { 579 1 }
+		victory_points = { 18993 1 }
 		buildings = {
 			infrastructure = 2
 		}

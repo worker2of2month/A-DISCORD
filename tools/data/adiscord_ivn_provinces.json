@@ -2,7 +2,7 @@
   "schema": 1,
   "origin": [
     2453,
-    801
+    783
   ],
   "provinces": [
     {
@@ -543,10 +543,528 @@
         119,
         84
       ]
+    },
+    {
+      "province": 18993,
+      "parent": 579,
+      "state": 128,
+      "kind": "city",
+      "rgb": [
+        182,
+        146,
+        147
+      ]
+    },
+    {
+      "province": 18994,
+      "parent": 6905,
+      "state": 693,
+      "kind": "city",
+      "rgb": [
+        31,
+        213,
+        254
+      ]
+    },
+    {
+      "province": 18995,
+      "parent": 579,
+      "state": 128,
+      "kind": "split",
+      "rgb": [
+        158,
+        212,
+        155
+      ]
+    },
+    {
+      "province": 18996,
+      "parent": 579,
+      "state": 128,
+      "kind": "split",
+      "rgb": [
+        19,
+        210,
+        158
+      ]
+    },
+    {
+      "province": 18997,
+      "parent": 579,
+      "state": 128,
+      "kind": "split",
+      "rgb": [
+        180,
+        122,
+        249
+      ]
+    },
+    {
+      "province": 18998,
+      "parent": 1191,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        82,
+        244,
+        50
+      ]
+    },
+    {
+      "province": 18999,
+      "parent": 1191,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        94,
+        84,
+        153
+      ]
+    },
+    {
+      "province": 19000,
+      "parent": 1191,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        53,
+        87,
+        28
+      ]
+    },
+    {
+      "province": 19001,
+      "parent": 1191,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        127,
+        24,
+        209
+      ]
+    },
+    {
+      "province": 19002,
+      "parent": 1744,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        63,
+        53,
+        28
+      ]
+    },
+    {
+      "province": 19003,
+      "parent": 1744,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        22,
+        180,
+        242
+      ]
+    },
+    {
+      "province": 19004,
+      "parent": 1744,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        246,
+        25,
+        145
+      ]
+    },
+    {
+      "province": 19005,
+      "parent": 2219,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        82,
+        62,
+        22
+      ]
+    },
+    {
+      "province": 19006,
+      "parent": 2219,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        121,
+        149,
+        18
+      ]
+    },
+    {
+      "province": 19007,
+      "parent": 2991,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        191,
+        246,
+        120
+      ]
+    },
+    {
+      "province": 19008,
+      "parent": 2991,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        115,
+        248,
+        81
+      ]
+    },
+    {
+      "province": 19009,
+      "parent": 2991,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        122,
+        145,
+        49
+      ]
+    },
+    {
+      "province": 19010,
+      "parent": 2991,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        183,
+        30,
+        254
+      ]
+    },
+    {
+      "province": 19011,
+      "parent": 2991,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        218,
+        60,
+        190
+      ]
+    },
+    {
+      "province": 19012,
+      "parent": 4334,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        89,
+        125,
+        20
+      ]
+    },
+    {
+      "province": 19013,
+      "parent": 4334,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        184,
+        243,
+        81
+      ]
+    },
+    {
+      "province": 19014,
+      "parent": 6928,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        50,
+        212,
+        18
+      ]
+    },
+    {
+      "province": 19015,
+      "parent": 6928,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        51,
+        121,
+        119
+      ]
+    },
+    {
+      "province": 19016,
+      "parent": 6928,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        125,
+        83,
+        180
+      ]
+    },
+    {
+      "province": 19017,
+      "parent": 6928,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        83,
+        243,
+        220
+      ]
+    },
+    {
+      "province": 19018,
+      "parent": 6928,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        86,
+        84,
+        90
+      ]
+    },
+    {
+      "province": 19019,
+      "parent": 7125,
+      "state": 128,
+      "kind": "split",
+      "rgb": [
+        183,
+        253,
+        218
+      ]
+    },
+    {
+      "province": 19020,
+      "parent": 7125,
+      "state": 128,
+      "kind": "split",
+      "rgb": [
+        208,
+        122,
+        52
+      ]
+    },
+    {
+      "province": 19021,
+      "parent": 7678,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        144,
+        159,
+        146
+      ]
+    },
+    {
+      "province": 19022,
+      "parent": 8048,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        86,
+        243,
+        182
+      ]
+    },
+    {
+      "province": 19023,
+      "parent": 8048,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        179,
+        184,
+        179
+      ]
+    },
+    {
+      "province": 19024,
+      "parent": 8048,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        255,
+        191,
+        178
+      ]
+    },
+    {
+      "province": 19025,
+      "parent": 8048,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        120,
+        157,
+        90
+      ]
+    },
+    {
+      "province": 19026,
+      "parent": 8423,
+      "state": 128,
+      "kind": "split",
+      "rgb": [
+        94,
+        252,
+        181
+      ]
+    },
+    {
+      "province": 19027,
+      "parent": 9072,
+      "state": 128,
+      "kind": "split",
+      "rgb": [
+        151,
+        80,
+        218
+      ]
+    },
+    {
+      "province": 19028,
+      "parent": 16659,
+      "state": 694,
+      "kind": "split",
+      "rgb": [
+        243,
+        215,
+        20
+      ]
+    },
+    {
+      "province": 19029,
+      "parent": 16659,
+      "state": 694,
+      "kind": "split",
+      "rgb": [
+        86,
+        119,
+        95
+      ]
+    },
+    {
+      "province": 19030,
+      "parent": 16660,
+      "state": 694,
+      "kind": "split",
+      "rgb": [
+        19,
+        94,
+        181
+      ]
+    },
+    {
+      "province": 19031,
+      "parent": 16660,
+      "state": 694,
+      "kind": "split",
+      "rgb": [
+        210,
+        59,
+        124
+      ]
+    },
+    {
+      "province": 19032,
+      "parent": 16664,
+      "state": 694,
+      "kind": "split",
+      "rgb": [
+        208,
+        151,
+        80
+      ]
+    },
+    {
+      "province": 19033,
+      "parent": 16679,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        24,
+        17,
+        23
+      ]
+    },
+    {
+      "province": 19034,
+      "parent": 16679,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        120,
+        59,
+        88
+      ]
+    },
+    {
+      "province": 19035,
+      "parent": 16680,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        92,
+        30,
+        19
+      ]
+    },
+    {
+      "province": 19036,
+      "parent": 16685,
+      "state": 128,
+      "kind": "split",
+      "rgb": [
+        84,
+        89,
+        151
+      ]
+    },
+    {
+      "province": 19037,
+      "parent": 16685,
+      "state": 128,
+      "kind": "split",
+      "rgb": [
+        95,
+        145,
+        246
+      ]
+    },
+    {
+      "province": 19038,
+      "parent": 16688,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        57,
+        118,
+        95
+      ]
+    },
+    {
+      "province": 19039,
+      "parent": 16688,
+      "state": 693,
+      "kind": "split",
+      "rgb": [
+        126,
+        254,
+        122
+      ]
     }
   ],
   "cities": {
     "423": 16815,
+    "579": 18993,
     "595": 16816,
     "702": 16817,
     "838": 838,
@@ -564,9 +1082,11 @@
     "5203": 16825,
     "5573": 16826,
     "6350": 16827,
+    "6905": 18994,
     "9160": 16828,
     "9327": 9327,
     "11124": 16829,
+    "11841": 11841,
     "12054": 16830,
     "12076": 16831,
     "16568": 16568

@@ -891,7 +891,12 @@ ADISCORD_south_show_svetlogorye_victory = {
 		set_temp_variable = { ADISCORD_superevent_request = 47 }
 	}
 	else_if = {
-		limit = { has_focus_tree = NAM_defeated_focus }
+		limit = {
+			OR = {
+				has_focus_tree = NAM_defeated_focus
+				check_variable = { var = ADISCORD_south_prior_tree value = 3 compare = equals }
+			}
+		}
 		set_temp_variable = { ADISCORD_superevent_request = 46 }
 	}
 	else = {
@@ -950,7 +955,6 @@ ADISCORD_south_final_resolve_north_victory = {
 		set_global_flag = ADISCORD_south_final_resolved
 		ADISCORD_south_suspend_preparation = yes
 		set_global_flag = ADISCORD_south_hegemon_NAM
-		NAM = { mark_focus_tree_layout_dirty = yes }
 		set_variable = { var = global.ADISCORD_south_winner_side value = 2 }
 		set_variable = { var = global.ADISCORD_south_terms value = 2 }
 		set_variable = { var = global.ADISCORD_south_subject_type value = 0 }
@@ -968,9 +972,15 @@ ADISCORD_south_final_resolve_north_victory = {
 		}
 		ADISCORD_south_end_final_wars = yes
 		ADISCORD_south_mark_losers = yes
-		ADISCORD_south_close_campaign_state = yes
 		NAM = {
 			ADISCORD_south_show_svetlogorye_victory = yes
+			load_focus_tree = {
+				tree = NAM_south_heritage_focus
+				keep_completed = yes
+			}
+		}
+		ADISCORD_south_close_campaign_state = yes
+		NAM = {
 			country_event = { id = ADISCORD_south.30 days = 1 }
 			news_event = { id = ADISCORD_south.31 hours = 2 }
 		}

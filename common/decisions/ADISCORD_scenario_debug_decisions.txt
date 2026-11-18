@@ -229,6 +229,27 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	ADISCORD_nam_debug_tree_south_heritage = {
+		allowed = { tag = NAM }
+		visible = {
+			NAM_won_final_southern_war = yes
+			NOT = { has_focus_tree = NAM_south_heritage_focus }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_south_heritage_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	ADISCORD_nam_debug_tree_defeated = {
 		allowed = { tag = NAM }
 		visible = { NOT = { has_focus_tree = NAM_defeated_focus } }

@@ -1,7 +1,22 @@
-# @section southern_settlement
+focus_tree = {
+	id = NAM_south_heritage_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 250
+			tag = NAM
+			NAM_won_final_southern_war = yes
+		}
+	}
+	default = no
+	continuous_focus_position = {
+		x = 50
+		y = 2000
+	}
+
 	focus = {
 		id = NAM_south_heritage
-		x = 129
+		x = 12
 		y = 0
 		icon = GFX_focus_NAM_independence_day
 		cost = 3
@@ -1408,3 +1423,4 @@
 		}
 		ai_will_do = { base = 5 }
 	}
+}

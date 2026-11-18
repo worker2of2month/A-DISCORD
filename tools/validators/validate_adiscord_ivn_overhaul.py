@@ -18,7 +18,7 @@ from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
-EXPECTED_IVN_GEOMETRY_SHA256 = "99684acc78748d1fb9ee8a86536adbedfb4299db9de313de9280e604208c7459"
+EXPECTED_IVN_GEOMETRY_SHA256 = "cb6bc328cc1ba38b262139baa872c91e3c913bea4570f71132818755939a6ceb"
 
 
 def province_geometry_digest(image: Image.Image, colors: dict[int, tuple[int, int, int]]) -> str:
@@ -140,17 +140,17 @@ def collect_issues() -> list[str]:
         iia_oob = _text(ROOT / "history/units/IIA.txt")
         if (
             len(re.findall(r"\bdivision\s*=\s*\{", ivn_oob)) != 16
-            or "location = 579" in ivn_oob
+            or "location = 18993" in ivn_oob
         ):
             issues.append(
                 "history/units/IVN.txt: IVN must retain 16 divisions outside IIA"
             )
         if (
             len(re.findall(r"\bdivision\s*=\s*\{", iia_oob)) != 1
-            or "location = 579" not in iia_oob
+            or "location = 18993" not in iia_oob
         ):
             issues.append(
-                "history/units/IIA.txt: IIA must have one garrison at province 579"
+                "history/units/IIA.txt: IIA must have one garrison in Nordholm (province 18993)"
             )
 
         issues.extend(f"island asset: {item}" for item in icon_builder.drift())

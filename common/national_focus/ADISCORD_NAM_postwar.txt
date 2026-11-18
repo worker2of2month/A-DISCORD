@@ -24,6 +24,4 @@ focus_tree = {
 
 	shared_focus = NAM_recognition
 
-	shared_focus = NAM_south_heritage
-
 }

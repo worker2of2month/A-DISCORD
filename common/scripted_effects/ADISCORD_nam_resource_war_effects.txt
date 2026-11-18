@@ -175,6 +175,7 @@ NAM_rom_take_service_etatism = {
 }
 
 NAM_end_depot_concessions = {
+	clr_country_flag = NAM_depot_case
 	set_country_flag = NAM_depot_concessions_settled
 	if = {
 		limit = { has_idea = NAM_private_tank_farms }

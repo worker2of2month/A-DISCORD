@@ -414,7 +414,7 @@ news_event = {
 			limit = {
 				hidden_trigger = {
 					tag = NAM
-					has_focus_tree = NAM_postwar_focus
+					has_focus_tree = NAM_south_heritage_focus
 					NAM_won_final_southern_war = yes
 				}
 			}

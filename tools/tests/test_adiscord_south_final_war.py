@@ -662,7 +662,7 @@ class SouthFinalWarContractTests(unittest.TestCase):
             line = next(line for line in raw.splitlines() if line.startswith(" ADISCORD_south_status_war:"))
             self.assertNotIn("900", line, language)
 
-    def test_champions_swap_into_war_trees_and_back_on_every_terminal_path(self):
+    def test_champions_record_and_restore_prior_trees_when_still_in_the_war_tree(self):
         from tools.builders.build_adiscord_focus_trees import SHARED_HISTORY_SOURCES, SOURCES
         effects = definitions(EFFECTS)
         hostilities = flatten(effects["ADISCORD_south_begin_hostilities"])

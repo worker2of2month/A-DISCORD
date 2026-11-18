@@ -21,5 +21,4 @@ focus_tree = {
 # @include NAM/postwar/government.txt#government
 # @include NAM/postwar/armed_forces.txt#armed_forces
 # @include NAM/postwar/economy.txt#economy
-# @include NAM/postwar/southern_settlement.txt#southern_settlement
 }

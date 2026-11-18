@@ -680,7 +680,7 @@ guiTypes = {
 
 		iconType = {
 			name = "ADISCORD_west_map_state_693"
-			position = { x = 130 y = 67 }
+			position = { x = 130 y = 68 }
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_693"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_693_tt"

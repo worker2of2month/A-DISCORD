@@ -18,7 +18,7 @@ from typing import Sequence
 
 import numpy as np
 from PIL import Image
-from scipy.ndimage import distance_transform_edt, gaussian_filter
+from scipy.ndimage import distance_transform_edt, gaussian_filter, label
 
 from tools.builders.build_adiscord_terrain_snow import (
     CITIES_PATH,
@@ -80,17 +80,20 @@ NORTHERN_LANDSCAPE_STATE_IDS = frozenset(
 )
 PROVINCE_MANIFEST_PATH = ROOT / "tools/data/adiscord_ivn_provinces.json"
 PROVINCE_MANIFEST = json.loads(PROVINCE_MANIFEST_PATH.read_text(encoding="utf-8"))
-# Declared terrain of every island-administration province. The island is
-# painted and raised province by province from this table, so its texture,
-# relief and definition.csv terrain agree.
-ISLAND_PROVINCE_TERRAIN = {
-    **dict.fromkeys((579, 6905, 11841, 16661, 16680), "urban"),
-    **dict.fromkeys((1191, 6928, 7678, 16679, 16688, 16700), "hills"),
+# Island-administration towns that receive a compact city province. The other
+# island victory points stay rural markers.
+ISLAND_CITY_SETTLEMENTS = frozenset({579, 6905, 11841})
+# Declared terrain of the original island provinces. Rural parents of carved
+# cities and former town provinces take the biome of their surroundings.
+ISLAND_PARENT_TERRAIN = {
+    11841: "urban",
+    **dict.fromkeys((1191, 6905, 6928, 7678, 16679, 16680, 16688, 16700), "hills"),
     **dict.fromkeys(
-        (2991, 4334, 5448, 7125, 8423, 12189, 16662, 16685, 16695), "forest"
+        (2991, 4334, 5448, 7125, 8423, 12189, 16661, 16662, 16685, 16695), "forest"
     ),
     **dict.fromkeys(
         (
+            579,
             1744,
             2219,
             2553,
@@ -108,6 +111,22 @@ ISLAND_PROVINCE_TERRAIN = {
         ),
         "plains",
     ),
+}
+# Declared terrain of every island-administration province. Carved cities are
+# urban and split sectors keep their parent's terrain. The island is painted
+# and raised province by province from this table, so its texture, relief and
+# definition.csv terrain agree.
+ISLAND_PROVINCE_TERRAIN = {
+    **ISLAND_PARENT_TERRAIN,
+    **{
+        int(entry["province"]): (
+            "urban"
+            if entry["kind"] == "city"
+            else ISLAND_PARENT_TERRAIN[int(entry["parent"])]
+        )
+        for entry in PROVINCE_MANIFEST["provinces"]
+        if int(entry["parent"]) in ISLAND_PARENT_TERRAIN
+    },
 }
 # Every IVN city victory point and every urban island province is urban in
 # its entirety; rural settlement markers stay ordinary provinces.
@@ -151,8 +170,9 @@ FEN_HALF_WIDTH = 5.0
 FOREST_ZONES = ((2850, 1112, 17.0, 12.0),)
 RIVERS_PATH = ROOT / "map/rivers.bmp"
 UNITSTACKS_PATH = ROOT / "map/unitstacks.txt"
-# Reviewed province geometry of the IVN mainland: an RGBA crop whose opaque
-# pixels are stamped into provinces.bmp. PROVINCE_MANIFEST lists new provinces.
+# Reviewed province geometry of the IVN mainland and the island administration:
+# an RGBA crop whose opaque pixels are stamped into provinces.bmp.
+# PROVINCE_MANIFEST lists new provinces.
 PROVINCE_GEOMETRY_PATH = ROOT / "tools/data/adiscord_ivn_province_geometry.png"
 # A victory-point province up to this size becomes the city itself; a larger
 # one yields a compact city of CITY_PIXELS at a nearby province junction.
@@ -166,6 +186,7 @@ CITY_SITE_DISTANCE = 14
 # No donor province gives a city more than this share of its pixels.
 CITY_DONOR_SHARE = 0.35
 SPLIT_PART_PIXELS = 150
+SPLIT_MIN_PART_PIXELS = 100
 SPLIT_PIXELS = 300
 LOCKED_PROVINCE_PIXELS = 60
 # Provinces that already carried authored rivers. Their river pixels, and
@@ -207,7 +228,8 @@ UNIFORM_TERRAIN_PALETTES = {
 ISLAND_TERRAIN_PALETTES = {**UNIFORM_TERRAIN_PALETTES, "urban": 13}
 # Island relief by declared terrain: (base height, relief amplitude). Uplands
 # use ridged noise and rise inside their own provinces; lowlands stay level
-# up to their border.
+# up to their border. A town takes the level of the country around it; its
+# base height applies only to a town without rural land within reach.
 ISLAND_RELIEF = {
     "plains": (104.0, 3.0),
     "urban": (105.0, 1.5),
@@ -215,10 +237,11 @@ ISLAND_RELIEF = {
     "hills": (130.0, 11.0),
 }
 ISLAND_UPLAND_TYPES = frozenset({"hills"})
-ISLAND_BLEND_SIGMA = 2.5
-ISLAND_COAST_RAMP = 4.0
+ISLAND_BLEND_SIGMA = 1.6
+ISLAND_COAST_RAMP = 3.0
 ISLAND_RIVER_RADIUS = 2.5
 ISLAND_RIVER_DEPTH = 0.45
+ISLAND_TOWN_SIGMA = 4.0
 TERRAIN_PRIORITY = (
     "urban",
     "mountain",
@@ -453,6 +476,24 @@ def lattice_noise(xs: np.ndarray, ys: np.ndarray, cell: float, salt: int) -> np.
     return upper * (1.0 - sy) + lower * sy
 
 
+def level_towns_with_surroundings(
+    base: np.ndarray, land: np.ndarray, towns: np.ndarray
+) -> None:
+    """Set each connected town to the mean base level of the land around it.
+
+    The level is a Gaussian-weighted average of the rural base heights, so a
+    town in the hills stands on the hills instead of sinking into a pit.
+    """
+    rural = land & ~towns
+    weight = gaussian_filter(rural.astype(float), ISLAND_TOWN_SIGMA)
+    surroundings = gaussian_filter(base * rural, ISLAND_TOWN_SIGMA) / np.maximum(weight, 1e-6)
+    pieces, count = label(towns)
+    for piece in range(1, count + 1):
+        town = pieces == piece
+        if weight[town].max() > 1e-3:
+            base[town] = float(surroundings[town].mean())
+
+
 def render_island_heights(
     heights: np.ndarray,
     terrain: np.ndarray,
@@ -486,20 +527,21 @@ def render_island_heights(
         base[inside] = level
         amplitude[inside] = relief
         upland[inside] = terrain_type in ISLAND_UPLAND_TYPES
+    level_towns_with_surroundings(base, land, types == list(ISLAND_RELIEF).index("urban"))
 
     weight = np.maximum(gaussian_filter(land.astype(float), ISLAND_BLEND_SIGMA), 1e-6)
 
     def blend(field: np.ndarray) -> np.ndarray:
         return gaussian_filter(field * land, ISLAND_BLEND_SIGMA) / weight
 
-    # Uplands climb from their own border; a lowland never takes height
-    # from the upland next to it.
+    # Uplands climb from their own border; a lowland or town never takes
+    # height or roughness from the upland next to it.
     level = np.where(upland > 0, blend(base), np.minimum(blend(base), base + 1.0))
-    relief = blend(amplitude)
+    relief = np.where(upland > 0, blend(amplitude), np.minimum(blend(amplitude), amplitude))
     ridged_share = blend(upland)
     gy, gx = np.mgrid[crop].astype(float)
     smooth = 0.65 * lattice_noise(gx, gy, 9.0, 31) + 0.35 * lattice_noise(gx, gy, 4.0, 37)
-    ridged = 0.7 * (1.0 - np.abs(2.0 * lattice_noise(gx, gy, 7.0, 41) - 1.0))
+    ridged = 0.7 * (1.0 - np.abs(2.0 * lattice_noise(gx, gy, 5.0, 41) - 1.0))
     ridged += 0.3 * lattice_noise(gx, gy, 3.0, 43)
     detail = (1.0 - ridged_share) * smooth + ridged_share * ridged
     height = level + relief * (2.0 * detail - 1.0)
@@ -1511,6 +1553,10 @@ def compact_partition(region: np.ndarray, parts: int) -> np.ndarray:
     return owner
 
 
+def part_sizes(owner: np.ndarray, parts: int) -> np.ndarray:
+    return np.bincount(owner[owner >= 0], minlength=parts)
+
+
 def _relabel_fragments(labels: np.ndarray, editable: np.ndarray) -> None:
     """Merge detached pieces of every province into their main neighbour."""
     from scipy.ndimage import label as connected_components
@@ -1647,11 +1693,13 @@ def carve_junction_city(
     region: np.ndarray,
     hint: tuple[float, float],
     relocate: bool = False,
+    shore: np.ndarray | None = None,
 ) -> np.ndarray:
     """Place a city where several provinces meet, close to its old site.
 
     A relocated city may stand outside ``region``; otherwise the junction is
-    chosen inside it.
+    chosen inside it. With ``shore`` the city keeps a harbour front: its site
+    is chosen among those shore pixels when the region has any.
 
     The city takes pixels from every province it touches, so it borders at
     least CITY_MIN_NEIGHBOURS provinces instead of sitting inside one.
@@ -1678,9 +1726,17 @@ def carve_junction_city(
     gy, gx = np.mgrid[y0:y1, x0:x1]
     distance = np.hypot(gy - hint[0], gx - hint[1])
     site = window_donors if relocate else region[y0:y1, x0:x1] & window_donors
+    if shore is not None and (site & shore[y0:y1, x0:x1]).any():
+        site = site & shore[y0:y1, x0:x1]
     candidates = site & (distance <= CITY_SITE_DISTANCE)
     if not candidates.any():
         candidates = site
+    if shore is not None and not (candidates & (reach >= CITY_MIN_NEIGHBOURS)).any():
+        # A port town without a coastal junction on its own shore moves to the
+        # nearest one on the neighbouring coast.
+        coast = window_donors & shore[y0:y1, x0:x1]
+        junctions = coast & (reach >= CITY_MIN_NEIGHBOURS)
+        candidates = junctions if junctions.any() else coast
     score = np.where(
         candidates,
         np.minimum(reach, CITY_MIN_NEIGHBOURS + 1) * 10.0 - distance / 3.0,
@@ -1703,15 +1759,36 @@ def carve_junction_city(
     return city
 
 
-def plan_province_geometry() -> None:
-    """Write the reviewed IVN mainland province geometry and its manifest.
+def plan_province_geometry(state_ids: frozenset[int], settlements: frozenset[int]) -> None:
+    """Add the province geometry of ``state_ids`` to the reviewed geometry data.
 
-    Victory-point cities become whole urban provinces: small city provinces
-    are kept whole, larger ones yield a compact city and rural sectors. Giant
-    or ragged provinces are split, then every internal border is smoothed.
-    The result is stored as data so the map pass only stamps it.
+    Victory points in ``settlements`` become whole urban provinces: small
+    city provinces are kept whole, larger ones yield a compact city and a
+    rural remainder. Giant or ragged provinces are split, then every internal
+    border is smoothed; borders that carry a river keep their course. States
+    already in the stored geometry are refused, so the reviewed geometry is
+    never replanned from a map that already carries it. The result is stored
+    as data so the map pass only stamps it.
     """
     from tools.builders import build_adiscord_new_states as states
+
+    manifest = json.loads(PROVINCE_MANIFEST_PATH.read_text(encoding="utf-8"))
+    state_by_province = {
+        province: state_id
+        for state_id in state_ids
+        for province in states.IVANLAND_OVERHAUL_PROVINCES[state_id]
+    }
+    scoped = frozenset(state_by_province)
+    planned_states = {int(entry["state"]) for entry in manifest["provinces"]}
+    planned_parents = {int(parent) for parent in manifest["cities"]}
+    if planned_states & state_ids or planned_parents & scoped:
+        raise RuntimeError(
+            f"states {sorted(state_ids)} already have reviewed province geometry"
+        )
+    if not settlements <= scoped:
+        raise RuntimeError(
+            f"settlements outside the planned states: {sorted(settlements - scoped)}"
+        )
 
     rows = [
         line.split(";")
@@ -1723,16 +1800,12 @@ def plan_province_geometry() -> None:
     next_id = max(colours) + 1
     sea = {int(row[0]) for row in rows if row[4] != "land"}
 
-    state_by_province = {
-        province: state_id
-        for state_id in IVN_STATE_IDS
-        for province in states.IVANLAND_OVERHAUL_PROVINCES[state_id]
-    }
-    scoped = frozenset(state_by_province)
     with Image.open(PROVINCES_PATH) as source:
         province_rgb = np.asarray(source.convert("RGB"))
     with Image.open(TERRAIN_PATH) as source:
         terrain = np.asarray(source)
+    with Image.open(RIVERS_PATH) as source:
+        rivers = np.asarray(source)
     packed = packed_rgb(province_rgb)
     lookup = {
         (red << 16) | (green << 8) | blue: province
@@ -1749,13 +1822,12 @@ def plan_province_geometry() -> None:
         labels[keys == key] = lookup.get(int(key), 0)
     editable = np.isin(labels, list(scoped))
     water = np.isin(labels, list(sea))
+    # Both banks of a river stay with their provinces, so the river keeps
+    # running along a province border.
+    river = rivers[crop] < RIVER_SEA_PALETTE
+    river_banks = river | neighbours_of(river)
+    shore = neighbours_of(water) & ~water
 
-    victory_points = {
-        province: value
-        for state_id, points in states.IVANLAND_SETTLEMENT_VICTORY_POINTS.items()
-        if state_id in IVN_STATE_IDS
-        for province, value in points
-    }
     entries: list[dict[str, object]] = []
     cities: dict[int, int] = {}
 
@@ -1775,7 +1847,7 @@ def plan_province_geometry() -> None:
         )
         return province
 
-    for parent in sorted(victory_points):
+    for parent in sorted(settlements):
         region = labels == parent
         area = int(region.sum())
         urban = region & (terrain[crop] == URBAN_PALETTE)
@@ -1784,9 +1856,10 @@ def plan_province_geometry() -> None:
         donors = (
             np.isin(labels, list(scoped))
             & ~water
-            & ~np.isin(labels, [*cities.values(), *victory_points])
+            & ~np.isin(labels, [*cities.values(), *settlements])
         )
         donors |= region & ~water
+        donors &= ~river_banks
         if area <= CITY_WHOLE_PROVINCE_PIXELS:
             touching = labels[neighbours_of(region) & ~region & ~water]
             touching = touching[(touching > 0) & ~np.isin(touching, list(sea))]
@@ -1803,7 +1876,14 @@ def plan_province_geometry() -> None:
             _assign_to_neighbours(labels, outskirts, {parent} | sea)
             cities[parent] = parent
             continue
-        city_pixels = carve_junction_city(labels, donors, region, (hy.mean(), hx.mean()))
+        # A coastal town stays a port.
+        city_pixels = carve_junction_city(
+            labels,
+            donors,
+            region,
+            (hy.mean(), hx.mean()),
+            shore=shore if (region & shore).any() else None,
+        )
         city = new_province(parent, "city")
         labels[city_pixels] = city
         cities[parent] = city
@@ -1821,6 +1901,12 @@ def plan_province_geometry() -> None:
             continue
         parts = max(2, round(area / SPLIT_PART_PIXELS))
         owner = compact_partition(region, parts)
+        # Fewer parts replace a split that would leave a sliver.
+        while parts > 2 and part_sizes(owner, parts).min() < SPLIT_MIN_PART_PIXELS:
+            parts -= 1
+            owner = compact_partition(region, parts)
+        if part_sizes(owner, parts).min() < SPLIT_MIN_PART_PIXELS:
+            continue
         keep = int(np.bincount(owner[owner >= 0]).argmax())
         for index in range(parts):
             if index != keep:
@@ -1837,7 +1923,7 @@ def plan_province_geometry() -> None:
         if (labels == value).sum() < LOCKED_PROVINCE_PIXELS
     ]
     locked = np.isin(labels, list(set(cities.values()) | set(small)))
-    labels = smooth_province_labels(labels, editable, locked)
+    labels = smooth_province_labels(labels, editable, locked | river_banks)
     remove_four_province_corners(labels, editable & ~locked)
 
     palette = {province: colour for province, colour in colours.items()}
@@ -1847,12 +1933,35 @@ def plan_province_geometry() -> None:
         mask = editable & (labels == value)
         image[mask, :3] = palette[int(value)]
         image[mask, 3] = 255
-    Image.fromarray(image).save(PROVINCE_GEOMETRY_PATH, optimize=True)
-    manifest = {
-        "schema": 1,
-        "origin": [x0, y0],
-        "provinces": entries,
-        "cities": {str(parent): city for parent, city in sorted(cities.items())},
+
+    # The stored canvas grows to cover both the reviewed and the new geometry.
+    with Image.open(PROVINCE_GEOMETRY_PATH) as source:
+        stored = np.asarray(source.convert("RGBA"))
+    stored_x, stored_y = manifest["origin"]
+    left = min(stored_x, x0)
+    top = min(stored_y, y0)
+    right = max(stored_x + stored.shape[1], x1)
+    bottom = max(stored_y + stored.shape[0], y1)
+    canvas = np.zeros((bottom - top, right - left, 4), np.uint8)
+    canvas[
+        stored_y - top : stored_y - top + stored.shape[0],
+        stored_x - left : stored_x - left + stored.shape[1],
+    ] = stored
+    window = canvas[y0 - top : y1 - top, x0 - left : x1 - left]
+    if (window[..., 3][editable] > 0).any():
+        raise RuntimeError("new province geometry overlaps the reviewed geometry")
+    window[editable] = image[editable]
+    Image.fromarray(canvas).save(PROVINCE_GEOMETRY_PATH, optimize=True)
+    manifest["origin"] = [left, top]
+    manifest["provinces"] = [*manifest["provinces"], *entries]
+    manifest["cities"] = {
+        str(parent): city
+        for parent, city in sorted(
+            {
+                **{int(parent): city for parent, city in manifest["cities"].items()},
+                **cities,
+            }.items()
+        )
     }
     PROVINCE_MANIFEST_PATH.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -1957,7 +2066,7 @@ def _snap_anchor(mask: np.ndarray, x: float, y: float) -> tuple[int, int]:
 
 
 def expected_province_geometry() -> ProvinceGeometry:
-    """Stamp the reviewed IVN province geometry and register its provinces."""
+    """Stamp the reviewed IVN and IIA province geometry and register its provinces."""
     rows, newline, bom = _definition_rows()
     by_id = {int(row[0]): row for row in rows if row[0].isdigit()}
     entries = sorted(PROVINCE_MANIFEST["provinces"], key=lambda entry: entry["province"])
@@ -1976,7 +2085,7 @@ def expected_province_geometry() -> ProvinceGeometry:
             raise RuntimeError(f"province {province}: ID is occupied by another colour")
 
     colours = {province: tuple(map(int, row[1:4])) for province, row in by_id.items()}
-    scoped = province_ids_for_states(IVN_STATE_IDS) | {
+    scoped = province_ids_for_states(SCOPED_STATE_IDS) | {
         int(entry["province"]) for entry in entries
     }
     with Image.open(PROVINCES_PATH) as source:
@@ -2748,13 +2857,13 @@ def main() -> int:
         "--apply", action="store_true", help="write synchronized terrain outputs"
     )
     actions.add_argument(
-        "--plan-provinces",
+        "--plan-island-provinces",
         action="store_true",
-        help="replan the reviewed IVN province geometry data from the current map",
+        help="add the island-administration cities and splits to the reviewed geometry data",
     )
     args = parser.parse_args()
-    if args.plan_provinces:
-        plan_province_geometry()
+    if args.plan_island_provinces:
+        plan_province_geometry(IIA_STATE_IDS, ISLAND_CITY_SETTLEMENTS)
         print(f"Wrote {PROVINCE_GEOMETRY_PATH.name} and {PROVINCE_MANIFEST_PATH.name}.")
         return 0
     if args.apply:

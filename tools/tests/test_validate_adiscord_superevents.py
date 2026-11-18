@@ -461,7 +461,7 @@ class SupereventContractTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
-        tree = parse_clausewitz(read_focus_source(ROOT / "common/national_focus/ADISCORD_NAM_postwar.txt"))[0].value
+        tree = parse_clausewitz(read_focus_source(ROOT / "common/national_focus/ADISCORD_NAM_postwar_southern_settlement.txt"))[0].value
         focus = next(row.value for row in tree
                      if row.key == "focus" and scalar(row.value, "id") == "NAM_veyran_union_charter")
         reward = block(focus, "completion_reward")

@@ -18,6 +18,7 @@ SOURCES = {
     "NAM/main/focuses.txt": "ADISCORD_NAM_focus.txt",
     "NAM/wartime/focuses.txt": "ADISCORD_NAM_wartime.txt",
     "NAM/postwar/focuses.txt": "ADISCORD_NAM_postwar.txt",
+    "NAM/postwar/southern_settlement.txt": "ADISCORD_NAM_postwar_southern_settlement.txt",
     "NAM/defeated/focuses.txt": "ADISCORD_NAM_defeated.txt",
     "NAM/exile_radical/focuses.txt": "ADISCORD_NAM_exile_radical.txt",
     "NAM/exile_humanist/focuses.txt": "ADISCORD_NAM_exile_humanist.txt",
@@ -53,7 +54,7 @@ SOURCES = {
 NAM_POSTWAR_SOURCE = "NAM/postwar/focuses.txt"
 NAM_POSTWAR_BRANCHES = {
     f"NAM/postwar/{chapter}.txt": f"ADISCORD_NAM_postwar_{chapter}.txt"
-    for chapter in ("government", "economy", "armed_forces", "southern_settlement")
+    for chapter in ("government", "economy", "armed_forces")
 }
 INCLUDE = re.compile(r"(?m)^# @include ([\w/.-]+)#(\w+)\n")
 SECTION = re.compile(r"(?m)^# @section (\w+)\n")
@@ -70,6 +71,7 @@ SHARED_HISTORY_SOURCES = frozenset({
     "NAM/main/focuses.txt",
     "NAM/wartime/focuses.txt",
     "NAM/postwar/focuses.txt",
+    "NAM/postwar/southern_settlement.txt",
     "NAM/defeated/focuses.txt",
     "NAM/exile_humanist/focuses.txt",
     "NAM/exile_radical/focuses.txt",

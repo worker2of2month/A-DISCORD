@@ -75,7 +75,7 @@
 		id = NAM_service_state
 		relative_position_id = NAM_law_after_war
 		x = 1
-		y = 7
+		y = 8
 		icon = GFX_focus_RUS_trained_administrators
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -438,7 +438,7 @@
 		id = NAM_south_black_basin
 		relative_position_id = NAM_service_state
 		x = 0
-		y = 4
+		y = 3
 		icon = GFX_focus_NAM_basin_is_ours
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -692,7 +692,7 @@
 		id = NAM_federal_charter
 		relative_position_id = NAM_law_after_war
 		x = 3
-		y = 7
+		y = 8
 		icon = GFX_focus_VAL_State_Contract
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -1112,7 +1112,7 @@
 		id = NAM_south_fenn_guarantee
 		relative_position_id = NAM_federal_charter
 		x = 0
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_commissioner_plan
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -1600,7 +1600,7 @@
 		id = NAM_pragmatic_compact
 		relative_position_id = NAM_law_after_war
 		x = 3
-		y = 7
+		y = 8
 		icon = GFX_focus_NAM_commissioner_plan
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -2033,7 +2033,7 @@
 		id = NAM_prag_settlement_agreements
 		relative_position_id = NAM_pragmatic_compact
 		x = -14
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_commissioner_plan
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		mutually_exclusive = { focus = NAM_prag_border_protocol }
@@ -2091,7 +2091,7 @@
 		id = NAM_prag_border_protocol
 		relative_position_id = NAM_pragmatic_compact
 		x = -9
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_seal_courts
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -3371,8 +3371,8 @@
 	focus = {
 		id = NAM_public_credit
 		relative_position_id = NAM_law_after_war
-		x = 0
-		y = 13
+		x = 1
+		y = 17
 		icon = GFX_focus_NAM_open_ledgers
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4

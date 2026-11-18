@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from PIL import Image
+from tools.builders.build_adiscord_ivn_geography import IIA_STATE_IDS as ISLAND_ADMINISTRATION_STATE_IDS
 from tools.lib.paths import repository_root
 
 
@@ -1880,8 +1881,17 @@ def sea_minimum_snow_level(climate: str, month: int) -> float:
 # Weather envelopes use one geographic sample per original province. Splitting
 # a tactical district must not increase the weight of its latitude.
 DISTRICT_PARENT = {
-    entry["province"]: entry["parent"]
-    for entry in json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_bytes())["country_districts"]
+    **{
+        entry["province"]: entry["parent"]
+        for entry in json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_bytes())["country_districts"]
+    },
+    # Island-administration cities and sectors weigh as the province they were
+    # carved from. The reviewed IVN mainland districts keep their own samples.
+    **{
+        entry["province"]: entry["parent"]
+        for entry in json.loads((ROOT / "tools/data/adiscord_ivn_provinces.json").read_bytes())["provinces"]
+        if entry["state"] in ISLAND_ADMINISTRATION_STATE_IDS
+    },
 }
 
 

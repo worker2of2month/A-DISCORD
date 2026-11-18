@@ -16060,20 +16060,173 @@ NAM_basin_economy = {
 	}
 }
 
-# District administration and the sovereign institutions.
-NAM_administration = {
+NAM_depot_concessions = {
+	NAM_depot_file_case = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		visible = {
+			NAM_depot_can_file = yes
+			NOT = { has_focus_tree = NAM_postwar_focus }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = NAM_depot_file_case_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_depot_can_file = yes
+						NOT = { has_focus_tree = NAM_postwar_focus }
+						has_capitulated = no
+					}
+					set_country_flag = { flag = NAM_depot_case value = 1 }
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	NAM_depot_trace_invoices = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		visible = { NAM_depot_case_filed = yes }
+		available = { has_capitulated = no }
+		cost = 25
+		complete_effect = {
+			custom_effect_tooltip = NAM_depot_lockout_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_depot_case_filed = yes
+						has_capitulated = no
+					}
+					set_country_flag = { flag = NAM_depot_case value = 2 }
+					activate_mission = NAM_depot_public_hearing
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	NAM_depot_supply_towns = {
+		icon = oil
+		allowed = { tag = NAM }
+		visible = { NAM_depot_case_filed = yes }
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = NAM_depot_fuel_cost
+		custom_cost_trigger = { NOT = { has_fuel < 3000 } }
+		complete_effect = {
+			custom_effect_tooltip = NAM_depot_lawsuit_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_depot_case_filed = yes
+						has_capitulated = no
+						NOT = { has_fuel < 3000 }
+					}
+					add_fuel = -3000
+					set_country_flag = { flag = NAM_depot_case value = 3 }
+					activate_mission = NAM_depot_public_hearing
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	NAM_depot_hire_dispatchers = {
+		icon = ADISCORD_treasury
+		allowed = { tag = NAM }
+		visible = { NAM_depot_lockout = yes }
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = NAM_cost_t100
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+		complete_effect = {
+			custom_effect_tooltip = NAM_depot_ruling_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_depot_lockout = yes
+						has_capitulated = no
+						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+					}
+					ADISCORD_economy_spend_100 = yes
+					set_country_flag = { flag = NAM_depot_case value = 4 }
+					remove_mission = NAM_depot_public_hearing
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	NAM_depot_seek_injunction = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		visible = { NAM_depot_lawsuit = yes }
+		available = { has_capitulated = no }
+		cost = 35
+		complete_effect = {
+			custom_effect_tooltip = NAM_depot_ruling_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_depot_lawsuit = yes
+						has_capitulated = no
+					}
+					set_country_flag = { flag = NAM_depot_case value = 4 }
+					remove_mission = NAM_depot_public_hearing
+				}
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	NAM_depot_public_hearing = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = yes
+		days_mission_timeout = 21
+		timeout_effect = {
+			custom_effect_tooltip = NAM_depot_ruling_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							NAM_depot_lockout = yes
+							NAM_depot_lawsuit = yes
+						}
+					}
+					set_country_flag = { flag = NAM_depot_case value = 4 }
+				}
+			}
+		}
+	}
+
 	NAM_terminate_depot_concessions = {
 		icon = ADISCORD_treasury
 		allowed = { tag = NAM }
-		visible = { NAM_depot_settlement_open = yes }
-		available = { has_capitulated = no }
+		visible = {
+			NAM_depot_settlement_open = yes
+			NOT = { has_completed_focus = NAM_depot_reserve_charter }
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_revoke_permission_tt
+				NAM_depot_revocation_authorised = yes
+			}
+		}
 		cost = 0
 		complete_effect = {
 			custom_effect_tooltip = NAM_depot_settlement_tt
 			hidden_effect = {
 				if = {
 					limit = {
-						NAM_depot_settlement_open = yes
+						NAM_depot_revocation_authorised = yes
 						has_capitulated = no
 					}
 					NAM_end_depot_concessions = yes
@@ -16086,8 +16239,17 @@ NAM_administration = {
 	NAM_establish_fuel_reserve = {
 		icon = oil
 		allowed = { tag = NAM }
-		visible = { NAM_depot_settlement_open = yes }
-		available = { has_capitulated = no }
+		visible = {
+			NAM_depot_settlement_open = yes
+			NOT = { has_completed_focus = NAM_depot_revoke }
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_reserve_permission_tt
+				NAM_depot_reserve_authorised = yes
+			}
+		}
 		cost = 0
 		custom_cost_text = NAM_cost_t300
 		custom_cost_trigger = {
@@ -16099,7 +16261,7 @@ NAM_administration = {
 			hidden_effect = {
 				if = {
 					limit = {
-						NAM_depot_settlement_open = yes
+						NAM_depot_reserve_authorised = yes
 						has_capitulated = no
 						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
 					}
@@ -16111,7 +16273,10 @@ NAM_administration = {
 		}
 		ai_will_do = { base = 4 }
 	}
+}
 
+# District administration and the sovereign institutions.
+NAM_administration = {
 	# Treasury operations and emergency reserves.
 	NAM_oil_bonds = {
 		icon = ADISCORD_treasury

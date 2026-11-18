@@ -122,6 +122,19 @@ NAM_administration = {
 	priority = 22
 }
 
+NAM_depot_concessions = {
+	icon = generic_industry
+	allowed = { tag = NAM }
+	visible = {
+		NAM_depot_case_available = yes
+		OR = {
+			has_country_flag = NAM_depot_case
+			NOT = { has_focus_tree = NAM_postwar_focus }
+		}
+	}
+	priority = 23
+}
+
 NAM_postwar_orders = {
 	icon = generic_political_discourse
 	allowed = { tag = NAM }

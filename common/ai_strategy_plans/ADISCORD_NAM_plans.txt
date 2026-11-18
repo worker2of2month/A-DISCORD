@@ -546,6 +546,8 @@ NAM_postwar_plan = {
 		NAM_pw_logistics_depots
 		NAM_pw_freight_schedule
 		NAM_south_oil_charter
+		NAM_depot_inquiry
+		NAM_depot_revoke
 		NAM_rural_grid
 		NAM_returnee_offices
 		NAM_district_scholarships
@@ -564,13 +566,6 @@ NAM_postwar_plan = {
 		NAM_relief_reserves
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
-		NAM_south_heritage
-		NAM_south_delegates
-		NAM_south_builders
-		NAM_south_road_crews
-		NAM_rus_crisis_watch
-		NAM_rus_fuel_for_coalition
-		NAM_rus_expedition_staff
 		NAM_pw_municipal_repair
 		NAM_pw_returnee_registration
 		NAM_pw_oil_equipment
@@ -608,6 +603,37 @@ NAM_postwar_plan = {
 		NAM_pw_engine_workshops
 		NAM_pw_air_supply
 		NAM_pw_southern_air_command
+	}
+	weight = { factor = 20 }
+}
+
+NAM_south_heritage_plan = {
+	name = "NAM southern settlement - federal charter"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_south_heritage_focus
+		NAM_prewar_district_mandate = yes
+		NOT = { has_completed_focus = NAM_service_state }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_south_heritage_focus }
+			NAM_prewar_district_mandate = no
+			has_completed_focus = NAM_service_state
+		}
+	}
+	ai_national_focuses = {
+		NAM_south_heritage
+		NAM_south_delegates
+		NAM_south_builders
+		NAM_south_road_crews
+		NAM_rus_crisis_watch
+		NAM_rus_fuel_for_coalition
+		NAM_rus_expedition_staff
 	}
 	weight = { factor = 20 }
 }
@@ -673,6 +699,8 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_logistics_depots
 		NAM_pw_freight_schedule
 		NAM_south_seal_over_furnaces
+		NAM_depot_inquiry
+		NAM_depot_reserve_charter
 		NAM_civil_service_exam
 		NAM_building_code
 		NAM_works_commission
@@ -683,15 +711,6 @@ NAM_postwar_vertical_plan = {
 		NAM_reconstruction_statute
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
-		NAM_south_heritage
-		NAM_veyran_union_charter
-		NAM_veyran_embarkation_staff
-		NAM_veyran_convoy_charter
-		NAM_veyran_counterplan
-		NAM_veyran_invasion
-		NAM_rus_crisis_watch
-		NAM_rus_fuel_for_coalition
-		NAM_rus_expedition_staff
 		NAM_pw_constitutional_committee
 		NAM_pw_cabinet_statute
 		NAM_pw_cadastre
@@ -723,13 +742,6 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_southern_military_rule
 		NAM_pw_southern_supply_plan
 		NAM_pw_southern_reserve
-		NAM_pw_postwar_commission
-		NAM_pw_strategic_reserve
-		NAM_pw_war_accounts
-		NAM_pw_southern_schools
-		NAM_pw_demobilisation_board
-		NAM_pw_southern_industrial_repair
-		NAM_pw_permanent_institutions
 		NAM_pw_municipal_repair
 		NAM_pw_returnee_registration
 		NAM_pw_oil_equipment
@@ -767,6 +779,44 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_engine_workshops
 		NAM_pw_air_supply
 		NAM_pw_southern_air_command
+	}
+	weight = { factor = 20 }
+}
+
+NAM_south_heritage_vertical_plan = {
+	name = "NAM southern settlement - service state"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_south_heritage_focus
+		NAM_prewar_service_mandate = yes
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_south_heritage_focus }
+			NAM_prewar_service_mandate = no
+		}
+	}
+	ai_national_focuses = {
+		NAM_south_heritage
+		NAM_veyran_union_charter
+		NAM_veyran_embarkation_staff
+		NAM_veyran_convoy_charter
+		NAM_veyran_counterplan
+		NAM_veyran_invasion
+		NAM_rus_crisis_watch
+		NAM_rus_fuel_for_coalition
+		NAM_rus_expedition_staff
+		NAM_pw_postwar_commission
+		NAM_pw_strategic_reserve
+		NAM_pw_war_accounts
+		NAM_pw_southern_schools
+		NAM_pw_demobilisation_board
+		NAM_pw_southern_industrial_repair
+		NAM_pw_permanent_institutions
 	}
 	weight = { factor = 20 }
 }
@@ -1075,6 +1125,8 @@ NAM_postwar_pragmatic_plan = {
 		NAM_oil_ministry
 		NAM_export_consortium
 		NAM_oil_exchange
+		NAM_depot_inquiry
+		NAM_depot_revoke
 		NAM_border_administration
 		NAM_border_compacts
 		NAM_normalisation
@@ -1111,13 +1163,6 @@ NAM_postwar_pragmatic_plan = {
 		NAM_through_waybill
 		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
-		NAM_south_heritage
-		NAM_south_trade_hearing
-		NAM_south_safir_line
-		NAM_south_safir_charter
-		NAM_rus_crisis_watch
-		NAM_rus_fuel_for_coalition
-		NAM_rus_expedition_staff
 		NAM_pw_municipal_repair
 		NAM_pw_returnee_registration
 		NAM_pw_oil_laboratories
@@ -1156,6 +1201,35 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_engine_workshops
 		NAM_pw_air_supply
 		NAM_pw_southern_air_command
+	}
+	weight = { factor = 20 }
+}
+
+NAM_south_heritage_pragmatic_plan = {
+	name = "NAM southern settlement - pragmatic compact"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_south_heritage_focus
+		NAM_prewar_pragmatic_mandate = yes
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_south_heritage_focus }
+			NAM_prewar_pragmatic_mandate = no
+		}
+	}
+	ai_national_focuses = {
+		NAM_south_heritage
+		NAM_south_trade_hearing
+		NAM_south_safir_line
+		NAM_south_safir_charter
+		NAM_rus_crisis_watch
+		NAM_rus_fuel_for_coalition
+		NAM_rus_expedition_staff
 	}
 	weight = { factor = 20 }
 }

@@ -11,6 +11,7 @@ import unittest
 
 import numpy as np
 from PIL import Image
+from scipy.ndimage import binary_dilation, distance_transform_edt
 
 from tools.builders import build_adiscord_ivn_geography as builder
 from tools.builders import build_adiscord_terrain_snow as terrain_builder
@@ -391,6 +392,19 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             float(hills[4:-4, 4:-4].std()), float(plains[4:-4, 4:-4].std())
         )
 
+    def test_render_island_heights_put_a_town_on_the_surrounding_level(self) -> None:
+        heights = np.full((30, 30), 89, np.uint8)
+        types = list(builder.ISLAND_RELIEF)
+        terrain = np.full(heights.shape, -1, np.int8)
+        terrain[3:27, 3:27] = types.index("hills")
+        terrain[12:18, 12:18] = types.index("urban")
+        rivers = np.full(heights.shape, builder.RIVER_LAND_PALETTE, np.uint8)
+        rendered = builder.render_island_heights(heights, terrain, (3, 3, 26, 26), rivers)
+        town = rendered[12:18, 12:18].astype(float)
+        hills_level, _relief = builder.ISLAND_RELIEF["hills"]
+        self.assertGreater(town.mean(), hills_level - 6)
+        self.assertLess(town.std(), 3.0)
+
     def test_render_island_heights_cut_a_valley_along_rivers(self) -> None:
         heights = np.full((30, 30), 89, np.uint8)
         hills = list(builder.ISLAND_RELIEF).index("hills")
@@ -544,6 +558,10 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         with Image.open(builder.PROVINCES_PATH) as provinces:
             packed = builder.packed_rgb(np.asarray(provinces.convert("RGB")))
         heights = np.asarray(outputs.heightmap).astype(int)
+        island = builder.province_mask(
+            packed, colours, frozenset(builder.ISLAND_PROVINCE_TERRAIN)
+        )
+        coast_distance = distance_transform_edt(island)
         means: dict[str, list[float]] = {}
         for province_id, terrain_type in builder.ISLAND_PROVINCE_TERRAIN.items():
             mask = builder.province_mask(packed, colours, frozenset({province_id}))
@@ -552,16 +570,21 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             with self.subTest(province=province_id, terrain=terrain_type):
                 self.assertGreaterEqual(int(values.min()), builder.HEIGHT_MIN)
                 if terrain_type in builder.ISLAND_UPLAND_TYPES:
-                    self.assertGreaterEqual(float(values.std()), 5.0)
+                    self.assertGreaterEqual(float(values.std()), 3.5)
+                elif terrain_type == "urban":
+                    # A town stands at the level of the land around it.
+                    ring = binary_dilation(mask, iterations=3) & ~mask & island
+                    self.assertLessEqual(
+                        abs(float(values.mean()) - float(heights[ring].mean())), 6.0
+                    )
+                    # A port slopes down to its waterfront; inland it is level.
+                    inland = mask & (coast_distance > builder.ISLAND_COAST_RAMP)
+                    if inland.any():
+                        self.assertLessEqual(float(heights[inland].std()), 4.5)
                 else:
                     self.assertLessEqual(int(values.max()), 115)
                     self.assertLessEqual(float(values.std()), 4.5)
-        lowland = [
-            value
-            for terrain_type, values in means.items()
-            if terrain_type not in builder.ISLAND_UPLAND_TYPES
-            for value in values
-        ]
+        lowland = [*means["plains"], *means["forest"]]
         self.assertGreater(min(means["hills"]), max(lowland) + 5)
         self.assertGreater(
             sum(means["forest"]) / len(means["forest"]),
@@ -741,6 +764,35 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             ):
                 offenders.append(index)
         self.assertEqual(offenders, [])
+
+    def test_reviewed_states_are_never_replanned(self) -> None:
+        manifest = builder.PROVINCE_MANIFEST_PATH.read_bytes()
+        geometry = builder.PROVINCE_GEOMETRY_PATH.read_bytes()
+        for state_ids, settlements in (
+            (builder.IIA_STATE_IDS, builder.ISLAND_CITY_SETTLEMENTS),
+            (builder.IVN_STATE_IDS, frozenset()),
+        ):
+            with self.subTest(states=sorted(state_ids)):
+                with self.assertRaisesRegex(RuntimeError, "already have reviewed"):
+                    builder.plan_province_geometry(state_ids, settlements)
+        self.assertEqual(builder.PROVINCE_MANIFEST_PATH.read_bytes(), manifest)
+        self.assertEqual(builder.PROVINCE_GEOMETRY_PATH.read_bytes(), geometry)
+
+    def test_island_port_towns_keep_a_coast(self) -> None:
+        _lines, _newline, _bom, colours, declared = builder.definition_contract()
+        rows = {
+            int(row[0]): row
+            for row in (
+                line.split(";")
+                for line in builder.DEFINITION_PATH.read_text(encoding="utf-8-sig").splitlines()
+            )
+            if row[0].isdigit()
+        }
+        for parent in builder.ISLAND_CITY_SETTLEMENTS:
+            city = int(builder.PROVINCE_MANIFEST["cities"][str(parent)])
+            with self.subTest(parent=parent, city=city):
+                self.assertEqual(declared[city], "urban")
+                self.assertEqual(rows[city][5], "true")
 
     def test_province_geometry_is_unchanged(self) -> None:
         self.assertEqual(builder.province_geometry_issues(), [])

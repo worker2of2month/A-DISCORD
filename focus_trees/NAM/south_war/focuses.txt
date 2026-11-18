@@ -16,8 +16,8 @@ focus_tree = {
 	}
 
 	# Loaded by ADISCORD_south_load_war_tree while Svetlogorye leads the north in
-	# the war for the South, whichever tree it held before; every terminal path
-	# returns that tree. Permanent results go to NAM_south_war_dynamic through
+	# the war for the South. Victory loads the southern settlement tree. Other
+	# outcomes restore the previous tree. Permanent results go to NAM_south_war_dynamic through
 	# NAM_refresh_south_war. The course branches share the cells on the right and
 	# read the course focus of the postwar tree; only the current course is shown.
 
