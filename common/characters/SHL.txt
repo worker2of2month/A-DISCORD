@@ -399,7 +399,7 @@ characters = {
 				small = GFX_portrait_SHL_Nawal_Haddad_small
 			}
 		}
-		corps_commander = {
+		field_marshal = {
 			traits = { trait_engineer }
 			skill = 2
 			attack_skill = 2
@@ -476,7 +476,7 @@ characters = {
 				small = GFX_portrait_SHL_Mazin_Barakat_small
 			}
 		}
-		corps_commander = {
+		field_marshal = {
 			traits = { cavalry_leader }
 			skill = 2
 			attack_skill = 3
@@ -502,28 +502,6 @@ characters = {
 			attack_skill = 2
 			defense_skill = 2
 			planning_skill = 4
-			logistics_skill = 2
-			legacy_id = -1
-		}
-	}
-
-	SHL_Samir_Rayhan = {
-		name = SHL_Samir_Rayhan
-		portraits = {
-			civilian = {
-				large = GFX_portrait_SHL_Samir_Rayhan
-			}
-			army = {
-				large = GFX_portrait_SHL_Samir_Rayhan
-				small = GFX_portrait_SHL_Samir_Rayhan_small
-			}
-		}
-		corps_commander = {
-			traits = { commando }
-			skill = 2
-			attack_skill = 2
-			defense_skill = 1
-			planning_skill = 2
 			logistics_skill = 2
 			legacy_id = -1
 		}

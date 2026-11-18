@@ -217,6 +217,22 @@ characters = {
 		}
 	}
 
+	SHL_Samir_Rayhan = {
+		name = SHL_Samir_Rayhan
+		portraits = {
+			civilian = {
+				large = GFX_portrait_SHL_Samir_Rayhan
+			}
+		}
+		country_leader = {
+			ideology = service_etatism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SHL_Samir_Rayhan_desc
+			traits = { }
+		}
+	}
+
 	SMD_Laleh_Sorani = {
 		name = SMD_Laleh_Sorani
 		portraits = {

@@ -41,8 +41,6 @@ class FurnaceAdministrationModel:
         self.owners = {}
         self.controllers = {}
         self.subjects = {}
-        self.character_owners = {"SHL_Samir_Rayhan": "SHL"}
-        self.leaders = {"SCD": "SCD_Nadir_Vezran"}
         self.cores = set()
         self.targets = {}
         self.calls = []
@@ -79,8 +77,6 @@ class FurnaceAdministrationModel:
             return (scope in self.subjects) == (value == "yes")
         if key == "is_subject_of":
             return self.subjects.get(scope) == value
-        if key == "has_character":
-            return self.character_owners.get(value) == scope
         if key == "is_owned_by":
             return self.owners.get(scope) == value
         if key == "is_controlled_by":
@@ -117,16 +113,6 @@ class FurnaceAdministrationModel:
                 assert self.exists(previous)
                 self.subjects[previous] = scope
                 self.calls.append((key, previous, scalar(value, "autonomy_state")))
-            elif key == "set_nationality":
-                character = scalar(value, "character")
-                assert self.character_owners[character] == scope
-                self.character_owners[character] = scalar(value, "target_country")
-            elif key == "add_country_leader_role":
-                character = scalar(value, "character")
-                assert self.character_owners[character] == scope
-                assert scalar(value, "promote_leader") == "yes"
-                assert scalar(block(value, "country_leader"), "ideology") == "service_etatism"
-                self.leaders[scope] = character
             elif key in ("ADISCORD_economy_initialize_country", "ADISCORD_economy_mark_dirty", "ADISCORD_release_non_participating_minor_optimization",
                          "ADISCORD_south_bind_to_champion"):
                 self.calls.append((key, scope))
@@ -143,20 +129,18 @@ class FurnaceAdministrationModel:
 
 
 class FurnaceAdministrationTests(unittest.TestCase):
-    def test_rayhan_leaves_shahrabad_only_when_the_great_road_office_is_formed(self):
-        model = FurnaceAdministrationModel()
-        model.acquire(265)
-        model.run()
-        self.assertEqual(model.character_owners["SHL_Samir_Rayhan"], "SHL")
-        model.acquire(234)
-        model.run()
-        self.assertEqual(model.subjects["SCD"], "SHL")
-        self.assertEqual(model.character_owners["SHL_Samir_Rayhan"], "SCD")
-        self.assertEqual(model.leaders["SCD"], "SHL_Samir_Rayhan")
-        model.leaders["SCD"] = "SCD_Nadir_Vezran"
-        model.acquire(235)
-        model.run()
-        self.assertEqual(model.leaders["SCD"], "SCD_Nadir_Vezran")
+    def test_rayhan_is_recruited_only_as_great_road_governor(self):
+        character = "SHL_Samir_Rayhan"
+        countries = ROOT / "history/countries"
+        recruits = [p.name[:3] for p in countries.glob("*.txt")
+                    if re.search(rf"(?m)^recruit_character = {character}$", p.read_text(encoding="utf-8-sig"))]
+        self.assertEqual(recruits, ["SCD"])
+        characters = definitions(ROOT / "common/characters/ADISCORD_southern_desert_characters.txt")["characters"]
+        governor = block(characters, character)
+        self.assertFalse({"corps_commander", "field_marshal"} & {entry.key for entry in governor})
+        self.assertEqual(scalar(block(governor, "country_leader"), "ideology"), "service_etatism")
+        self.assertEqual(scalar(block(block(governor, "portraits"), "civilian"), "large"),
+                         "GFX_portrait_SHL_Samir_Rayhan")
 
     def test_geography_covers_the_south_once_and_crosses_old_borders(self):
         model = FurnaceAdministrationModel()

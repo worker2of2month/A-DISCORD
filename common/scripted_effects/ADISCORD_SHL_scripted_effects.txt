@@ -13319,28 +13319,6 @@ SHL_finish_furnace_administration = {
 				end_civil_wars = no
 			}
 		}
-		if = {
-			limit = {
-				tag = SCD
-				is_subject_of = SHL
-				SHL = { has_character = SHL_Samir_Rayhan }
-			}
-			SHL = {
-				set_nationality = {
-					character = SHL_Samir_Rayhan
-					target_country = SCD
-				}
-			}
-			add_country_leader_role = {
-				character = SHL_Samir_Rayhan
-				promote_leader = yes
-				country_leader = {
-					ideology = service_etatism
-					desc = SHL_Samir_Rayhan_desc
-					expire = "2200.1.1.1"
-				}
-			}
-		}
 	}
 	if = {
 		limit = { exists = yes }
