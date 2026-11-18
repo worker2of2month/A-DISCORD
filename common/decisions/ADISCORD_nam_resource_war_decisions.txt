@@ -8649,6 +8649,94 @@ NAM_national_programmes = {
 		}
 	}
 
+	NAM_agreement_amend = {
+		icon = generic_political_discourse
+		priority = 99
+		allowed = { tag = NAM }
+		visible = { NAM_agreement_amendment_open = yes }
+		available = { NAM_agreement_can_amend = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = NAM_agreement_amend_result_tt
+			if = {
+				limit = { hidden_trigger = { check_variable = { NAM_agreement_offer_b = 1 } } }
+				custom_effect_tooltip = NAM_agreement_nam_terms_tt
+			}
+			else_if = {
+				limit = { hidden_trigger = { check_variable = { NAM_agreement_offer_b = 2 } } }
+				custom_effect_tooltip = NAM_agreement_oil_terms_tt
+			}
+			else_if = {
+				limit = { hidden_trigger = { check_variable = { NAM_agreement_offer_b = 3 } } }
+				custom_effect_tooltip = NAM_agreement_dist_terms_tt
+			}
+			else_if = {
+				limit = {
+					hidden_trigger = {
+						OR = {
+							check_variable = { NAM_agreement_offer_b = 4 }
+							check_variable = { NAM_agreement_offer_b = 6 }
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_agreement_garr_terms_tt
+				unlock_decision_tooltip = NAM_agreement_roll_call
+			}
+			else_if = {
+				limit = { hidden_trigger = { check_variable = { NAM_agreement_offer_b = 5 } } }
+				custom_effect_tooltip = NAM_agreement_trade_terms_tt
+			}
+			hidden_effect = {
+				if = {
+					limit = { NAM_agreement_can_amend = yes }
+					set_variable = { var = NAM_agreement_objector value = NAM_agreement_current }
+					if = {
+						limit = {
+							check_variable = { NAM_agreement_progress > 0 }
+							OR = {
+								check_variable = { NAM_agreement_current = 2 }
+								check_variable = { NAM_agreement_current = 4 }
+								check_variable = { NAM_agreement_current = 5 }
+							}
+						}
+						set_country_flag = NAM_agreement_part_performed
+					}
+					set_temp_variable = { var = NAM_agreement_support_delta value = -8 }
+					NAM_agreement_add_support = yes
+					if = {
+						limit = { check_variable = { NAM_agreement_offer_b = 6 } }
+						set_variable = { var = NAM_agreement_current value = 4 }
+					}
+					else = { set_variable = { var = NAM_agreement_current value = NAM_agreement_offer_b } }
+					clear_variable = NAM_agreement_offer_b
+					NAM_agreement_set_goal = yes
+					country_event = { id = ADISCORD_nam_groups.23 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				OR = {
+					AND = {
+						NAM_agreement_trade_active = yes
+						NAM_agreement_trade_possible = no
+					}
+					AND = {
+						NAM_agreement_oil_active = yes
+						NAM_agreement_oil_possible = no
+					}
+					AND = {
+						NAM_agreement_dist_active = yes
+						NAM_agreement_dist_possible = no
+					}
+				}
+			}
+		}
+	}
+
 	NAM_agreement_crisis = {
 		priority = 100
 		icon = generic_political_discourse
@@ -8735,6 +8823,51 @@ NAM_national_programmes = {
 			hidden_effect = { NAM_agreement_refund = yes }
 		}
 		ai_will_do = { base = 100 }
+	}
+
+	NAM_agreement_roll_call = {
+		icon = generic_army_support
+		allowed = { tag = NAM }
+		visible = {
+			NAM_agreement_garr_active = yes
+			check_variable = { NAM_agreement_progress = 0 }
+			NOT = { has_country_flag = NAM_agreement_training_done }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_council_roll_call_ready_tt
+				NOT = { has_variable = NAM_agreement_cash_deposit }
+			}
+		}
+		fire_only_once = no
+		cost = 0
+		custom_cost_text = NAM_agreement_roll_call_cost
+		custom_cost_trigger = { NOT = { command_power < 10 } }
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_variable = NAM_agreement_offer_b
+						NOT = { has_variable = NAM_council_petition }
+					}
+				}
+				custom_effect_tooltip = NAM_council_roll_call_hearing_tt
+			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_agreement_roll_call_open = yes
+						NOT = { command_power < 10 }
+					}
+				}
+				army_experience = 5
+				hidden_effect = {
+					add_command_power = -10
+					set_variable = { var = NAM_agreement_progress value = 1 }
+				}
+			}
+		}
+		ai_will_do = { base = 50 }
 	}
 
 	NAM_agreement_training = {

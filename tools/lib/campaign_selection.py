@@ -120,12 +120,12 @@ def gallery_gui(roster):
             overlays.append(icon(name, left + x, 11 + row * 28, sheet_name(badge_index),
                                  frame=badge_index % SHEET_CAPACITY + 1, tip=f'{name}_tt'))
             badge_index += 1
-        if spec.get('in_development', False):
+        if spec.get('status'):
+            status_key = 'ADISCORD_BOOKMARK_' + spec['status'].upper()
             overlays.append(icon(f'development_sash_{tag}', left + 80, 225, 'development_sash'))
             overlays.append(icon(f'development_plate_{tag}', left + 73, 202, 'development_plate'))
             overlays.append(label(f'development_status_{tag}', left + 73, 202, 98, 20,
-                                  'ADISCORD_BOOKMARK_IN_DEVELOPMENT', 'hoi_16mbs',
-                                  'ADISCORD_BOOKMARK_IN_DEVELOPMENT_TT'))
+                                  status_key, 'hoi_16mbs', status_key + '_TT'))
     width = len(roster) * STRIDE
     window_width = min(9 * STRIDE + 16, max(1240, width + 16))
     native_grid = gui_block('gridBoxType', [

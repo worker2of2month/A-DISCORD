@@ -557,6 +557,33 @@ guiTypes = {
 			}
 
 			iconType = {
+				name = "development_sash_SHL"
+				position = { x = 640 y = 225 }
+				spriteType = "GFX_ADISCORD_setup_development_sash"
+				alwaystransparent = yes
+			}
+
+			iconType = {
+				name = "development_plate_SHL"
+				position = { x = 633 y = 202 }
+				spriteType = "GFX_ADISCORD_setup_development_plate"
+				alwaystransparent = yes
+			}
+
+			instantTextBoxType = {
+				name = "development_status_SHL"
+				position = { x = 633 y = 202 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_BOOKMARK_BETA"
+				maxWidth = 98
+				maxHeight = 20
+				format = centre
+				fixedsize = yes
+				vertical_alignment = center
+				pdx_tooltip = ADISCORD_BOOKMARK_BETA_TT
+			}
+
+			iconType = {
 				name = "RUS_bookmark_route_khan"
 				position = { x = 754 y = 11 }
 				spriteType = "GFX_ADISCORD_setup_route_flags"

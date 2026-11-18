@@ -37,6 +37,8 @@
  VAL_bookmark_route_korsch_tt: "§YEduard Korsch's Revenge§!\n\n\n\n\n\n£GFX_VAL_bookmark_route_korsch_banner\n\n\n\n\n\n§R\"Melt down our guns if you like. At every\nfactory gate you'll still find men who remember\nthe way back.\"§!\n§g- Eduard Korsch§!\n\nAn old regimental ribbon hangs from the\nfactory fence. Korsch stops beside it. On the\nother side, somebody lights a second lantern."
  ADISCORD_BOOKMARK_IN_DEVELOPMENT_TT: "This country's full campaign is in development. The small flags and emblems show its known political paths."
  ADISCORD_BOOKMARK_IN_DEVELOPMENT: "In development"
+ ADISCORD_BOOKMARK_BETA: "Beta"
+ ADISCORD_BOOKMARK_BETA_TT: "Shahrabad's campaign is available for beta testing."
  OTHER_GATHERING_STORM_DESC: "Far from Unity Tower, people keep time in other ways. In Kadir a caravan guide answers for the stretch of road from one well to the next. In Rakhma neighbours decide together how to share the water in a drought. A skipper from Veyr needs to know whether the next harbour will honour the insurance on his cargo.\n\nThese countries have their place on the map of Forul. Each will have its own reason to heed the news from Vorkerland."
  HITTING_FAN_DESC: "Yes, that is right. Your umbrella collection may come in handy today."
  VAL_etatism_party_desc: "$etatism_desc$\n\n\n\n\n\n§Y$contractual_etatism$§!"

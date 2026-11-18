@@ -1,5 +1,187 @@
 spriteTypes = {
 
+	spriteType = {
+		name = "GFX_Portrait_Southern_Deserts_canal_guard"
+		texturefile = "gfx/leaders/Southern_Deserts/portrait_canal_guard.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Southern_Deserts_canal_guard_small"
+		texturefile = "gfx/leaders/Southern_Deserts/portrait_canal_guard.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Southern_Deserts_salt_road_officer"
+		texturefile = "gfx/leaders/Southern_Deserts/portrait_salt_road_officer.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Southern_Deserts_salt_road_officer_small"
+		texturefile = "gfx/leaders/Southern_Deserts/portrait_salt_road_officer.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Tribal_Arc_river_warden"
+		texturefile = "gfx/leaders/Tribal_Arc/portrait_river_warden.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Tribal_Arc_river_warden_small"
+		texturefile = "gfx/leaders/Tribal_Arc/portrait_river_warden.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Tribal_Arc_ridge_captain"
+		texturefile = "gfx/leaders/Tribal_Arc/portrait_ridge_captain.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Tribal_Arc_ridge_captain_small"
+		texturefile = "gfx/leaders/Tribal_Arc/portrait_ridge_captain.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Forul_eastern_guards_officer"
+		texturefile = "gfx/leaders/Forul/portrait_eastern_guards_officer.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_eastern_guards_officer_small"
+		texturefile = "gfx/leaders/Forul/portrait_eastern_guards_officer.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Forul_eastern_signals_officer"
+		texturefile = "gfx/leaders/Forul/portrait_eastern_signals_officer.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_eastern_signals_officer_small"
+		texturefile = "gfx/leaders/Forul/portrait_eastern_signals_officer.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Forul_western_steppe_officer"
+		texturefile = "gfx/leaders/Forul/portrait_western_steppe_officer.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_western_steppe_officer_small"
+		texturefile = "gfx/leaders/Forul/portrait_western_steppe_officer.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Forul_western_bridge_officer"
+		texturefile = "gfx/leaders/Forul/portrait_western_bridge_officer.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_western_bridge_officer_small"
+		texturefile = "gfx/leaders/Forul/portrait_western_bridge_officer.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Outer_Lands_highland_officer"
+		texturefile = "gfx/leaders/Outer_Lands/portrait_highland_officer.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Outer_Lands_highland_officer_small"
+		texturefile = "gfx/leaders/Outer_Lands/portrait_highland_officer.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Outer_Lands_harbour_officer"
+		texturefile = "gfx/leaders/Outer_Lands/portrait_harbour_officer.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Outer_Lands_harbour_officer_small"
+		texturefile = "gfx/leaders/Outer_Lands/portrait_harbour_officer.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Southern_Deserts_caravan_officer"
+		texturefile = "gfx/leaders/Southern_Deserts/portrait_caravan_officer.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Southern_Deserts_caravan_officer_small"
+		texturefile = "gfx/leaders/Southern_Deserts/portrait_caravan_officer.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Southern_Deserts_oasis_officer"
+		texturefile = "gfx/leaders/Southern_Deserts/portrait_oasis_officer.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Southern_Deserts_oasis_officer_small"
+		texturefile = "gfx/leaders/Southern_Deserts/portrait_oasis_officer.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Tribal_Arc_hill_scout"
+		texturefile = "gfx/leaders/Tribal_Arc/portrait_hill_scout.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Tribal_Arc_hill_scout_small"
+		texturefile = "gfx/leaders/Tribal_Arc/portrait_hill_scout.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_Tribal_Arc_woodland_warden"
+		texturefile = "gfx/leaders/Tribal_Arc/portrait_woodland_warden.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Tribal_Arc_woodland_warden_small"
+		texturefile = "gfx/leaders/Tribal_Arc/portrait_woodland_warden.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	corneredTileSpriteType = {
 		name = "GFX_portrait_unknown_small"
 		texturefile = "gfx/leaders/leader_unknown.dds"
@@ -366,6 +548,58 @@ spriteTypes = {
 	corneredTileSpriteType = {
 		name = "GFX_Portrait_WRK_Generic_land_3_small"
 		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_SHL_Generic_land_1"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_generic_land_01.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_SHL_Generic_land_1_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_generic_land_01.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_SHL_Generic_land_2"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_generic_land_02.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_SHL_Generic_land_2_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_generic_land_02.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_SHL_Generic_land_3"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_generic_land_03.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_SHL_Generic_land_3_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_generic_land_03.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_SHL_Generic_land_4"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_generic_land_04.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_SHL_Generic_land_4_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_generic_land_04.png"
 		size = { x = 50 y = 67 }
 		borderSize = { x = 0 y = 0 }
 		tilingCenter = no

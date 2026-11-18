@@ -73,6 +73,11 @@ add_ideas = {
 	minister_SHL_Ramin_Farzan
 }
 
+recruit_character = SHL_Nawal_Haddad
+recruit_character = SHL_Nabil_Mansur
+recruit_character = SHL_Lina_Sabbagh
+recruit_character = SHL_Yunus_Hamdan
+
 # Military advisors are recruited before their starting appointments.
 recruit_character = ADISCORD_staff_SHL_Farid_Rahmani
 recruit_character = ADISCORD_staff_SHL_Rashid_Farrokh

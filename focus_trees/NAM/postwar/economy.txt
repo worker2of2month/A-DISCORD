@@ -1,8 +1,8 @@
 # @section economy
 	focus = {
 		id = NAM_civil_repair
-		x = 33
-		y = 2
+		x = 54
+		y = 5
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -34,8 +34,8 @@
 	focus = {
 		id = NAM_civil_dividend
 		relative_position_id = NAM_civil_repair
-		x = 22
-		y = 3
+		x = 16
+		y = 1
 		icon = GFX_focus_VAL_Bread_From_Barracks
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -86,8 +86,8 @@
 	focus = {
 		id = NAM_armed_peace
 		relative_position_id = NAM_civil_repair
-		x = 25
-		y = 3
+		x = 20
+		y = 1
 		icon = GFX_focus_NAM_commissioner_plan
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -128,8 +128,8 @@
 	focus = {
 		id = NAM_national_university
 		relative_position_id = NAM_civil_repair
-		x = 24
-		y = 4
+		x = 19
+		y = 2
 		icon = GFX_focus_RUS_scientists_at_headquarters
 		cost = 4
 		search_filters = { FOCUS_FILTER_RESEARCH }
@@ -169,8 +169,8 @@
 	focus = {
 		id = NAM_svetlogorye
 		relative_position_id = NAM_civil_repair
-		x = 28
-		y = 7
+		x = 21
+		y = 4
 		icon = GFX_focus_NAM_independence_day
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -207,8 +207,8 @@
 	focus = {
 		id = NAM_oil_ministry
 		relative_position_id = NAM_civil_repair
-		x = -25
-		y = 2
+		x = 10
+		y = 1
 		icon = GFX_focus_NAM_well_register
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -255,8 +255,8 @@
 	focus = {
 		id = NAM_middle_loren_wells
 		relative_position_id = NAM_oil_ministry
-		x = -8
-		y = 4
+		x = -5
+		y = 2
 		icon = GFX_focus_NAM_well_register
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -300,8 +300,8 @@
 	focus = {
 		id = NAM_reclaim_230
 		relative_position_id = NAM_civil_repair
-		x = -13
-		y = 3
+		x = -6
+		y = 1
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
@@ -336,7 +336,7 @@
 		id = NAM_export_consortium
 		relative_position_id = NAM_oil_ministry
 		x = 0
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_wrk_trade_house
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -370,7 +370,7 @@
 		id = NAM_state_refineries
 		relative_position_id = NAM_oil_ministry
 		x = 4
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_well_register
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -429,7 +429,7 @@
 		id = NAM_oil_exchange
 		relative_position_id = NAM_oil_ministry
 		x = 2
-		y = 4
+		y = 2
 		icon = GFX_focus_NAM_well_register
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -466,8 +466,8 @@
 	focus = {
 		id = NAM_svetlogorsk_dam
 		relative_position_id = NAM_civil_repair
-		x = 22
-		y = 5
+		x = 18
+		y = 3
 		icon = GFX_focus_RUS_bunker_power_school
 		cost = 5
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -493,8 +493,8 @@
 	focus = {
 		id = NAM_pw_municipal_repair
 		relative_position_id = NAM_civil_repair
-		x = 24
-		y = 2
+		x = -3
+		y = 1
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -521,8 +521,8 @@
 	focus = {
 		id = NAM_pw_returnee_registration
 		relative_position_id = NAM_civil_repair
-		x = 19
-		y = 2
+		x = 3
+		y = 1
 		icon = GFX_focus_RUS_trained_administrators
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -567,8 +567,8 @@
 	focus = {
 		id = NAM_pw_oil_laboratories
 		relative_position_id = NAM_oil_ministry
-		x = -5
-		y = 2
+		x = -4
+		y = 1
 		icon = GFX_focus_VAL_econ_captured_laboratories
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -644,8 +644,8 @@
 	focus = {
 		id = NAM_pw_oil_equipment
 		relative_position_id = NAM_oil_ministry
-		x = -4
-		y = 4
+		x = -3
+		y = 2
 		icon = GFX_focus_NAM_well_register
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -681,8 +681,8 @@
 	focus = {
 		id = NAM_pw_refinery_engineering
 		relative_position_id = NAM_oil_ministry
-		x = 2
-		y = 6
+		x = 4
+		y = 3
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -730,8 +730,8 @@
 	focus = {
 		id = NAM_pw_fuel_reservoirs
 		relative_position_id = NAM_civil_repair
-		x = 16
-		y = 8
+		x = -14
+		y = 2
 		icon = GFX_focus_RUS_bunker_utilities
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -756,8 +756,8 @@
 	focus = {
 		id = NAM_pw_energy_commission
 		relative_position_id = NAM_civil_repair
-		x = 4
-		y = 6
+		x = -10
+		y = 1
 		icon = GFX_focus_RUS_bunker_power_school
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -789,8 +789,8 @@
 	focus = {
 		id = NAM_pw_regional_power
 		relative_position_id = NAM_pw_energy_commission
-		x = -6
-		y = 2
+		x = 0
+		y = 1
 		icon = GFX_focus_RUS_bunker_power_school
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -817,8 +817,8 @@
 	focus = {
 		id = NAM_pw_power_grid
 		relative_position_id = NAM_pw_energy_commission
-		x = -9
-		y = 2
+		x = 2
+		y = 1
 		icon = GFX_focus_RUS_bunker_power_school
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -855,8 +855,8 @@
 	focus = {
 		id = NAM_pw_oilfield_substations
 		relative_position_id = NAM_pw_energy_commission
-		x = -1
-		y = 2
+		x = -2
+		y = 1
 		icon = GFX_focus_NAM_well_register
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -881,8 +881,8 @@
 	focus = {
 		id = NAM_pw_water_intakes
 		relative_position_id = NAM_pw_energy_commission
-		x = -6
-		y = 3
+		x = 0
+		y = 2
 		icon = GFX_focus_RUS_bunker_utilities
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -923,8 +923,8 @@
 	focus = {
 		id = NAM_pw_irrigation_works
 		relative_position_id = NAM_pw_energy_commission
-		x = -10
-		y = 3
+		x = 3
+		y = 2
 		icon = GFX_focus_RUS_bunker_utilities
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -952,8 +952,8 @@
 	focus = {
 		id = NAM_pw_reservoir_survey
 		relative_position_id = NAM_pw_energy_commission
-		x = -10
-		y = 4
+		x = 2
+		y = 3
 		icon = GFX_focus_RUS_bunker_utilities
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -993,8 +993,8 @@
 	focus = {
 		id = NAM_pw_grid_dispatch
 		relative_position_id = NAM_pw_energy_commission
-		x = -6
-		y = 4
+		x = 0
+		y = 3
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -1032,8 +1032,8 @@
 	focus = {
 		id = NAM_pw_industrial_recovery
 		relative_position_id = NAM_civil_repair
-		x = 3
-		y = 2
+		x = 0
+		y = 1
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -1079,7 +1079,7 @@
 	focus = {
 		id = NAM_pw_civil_engineering
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -11
+		x = -3
 		y = 1
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
@@ -1110,7 +1110,7 @@
 	focus = {
 		id = NAM_pw_arms_engineering
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -6
+		x = 1
 		y = 1
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
@@ -1141,7 +1141,7 @@
 	focus = {
 		id = NAM_pw_toolmaking
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -11
+		x = -1
 		y = 2
 		icon = GFX_focus_RUS_precision_lathes
 		cost = 3
@@ -1179,7 +1179,7 @@
 	focus = {
 		id = NAM_pw_machine_repair
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -14
+		x = -5
 		y = 2
 		icon = GFX_focus_RUS_precision_lathes
 		cost = 3
@@ -1205,7 +1205,7 @@
 	focus = {
 		id = NAM_pw_chemical_works
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -8
+		x = 2
 		y = 2
 		icon = GFX_focus_RUS_reactor_decontamination
 		cost = 6
@@ -1258,7 +1258,7 @@
 	focus = {
 		id = NAM_pw_testing_facilities
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -2
+		x = 3
 		y = 1
 		icon = GFX_focus_VAL_econ_captured_laboratories
 		cost = 6
@@ -1299,7 +1299,7 @@
 	focus = {
 		id = NAM_pw_industrial_sites
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -14
+		x = -4
 		y = 3
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 3
@@ -1337,8 +1337,8 @@
 	focus = {
 		id = NAM_pw_transport_commission
 		relative_position_id = NAM_civil_repair
-		x = 6
-		y = 7
+		x = -20
+		y = 1
 		icon = GFX_focus_NAM_open_ledgers
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -1397,7 +1397,7 @@
 	focus = {
 		id = NAM_pw_road_priority
 		relative_position_id = NAM_pw_transport_commission
-		x = 4
+		x = -3
 		y = 1
 		icon = GFX_focus_VAL_Logistics_Command
 		cost = 3
@@ -1426,7 +1426,7 @@
 	focus = {
 		id = NAM_pw_rail_workshops
 		relative_position_id = NAM_pw_transport_commission
-		x = -2
+		x = 0
 		y = 2
 		icon = GFX_focus_RUS_imperial_railways
 		cost = 2
@@ -1452,7 +1452,7 @@
 	focus = {
 		id = NAM_pw_river_crossings
 		relative_position_id = NAM_pw_transport_commission
-		x = 9
+		x = 3
 		y = 2
 		icon = GFX_focus_VAL_Logistics_Command
 		cost = 3
@@ -1478,7 +1478,7 @@
 	focus = {
 		id = NAM_pw_freight_depots
 		relative_position_id = NAM_pw_transport_commission
-		x = 4
+		x = -3
 		y = 3
 		icon = GFX_focus_VAL_Logistics_Command
 		cost = 3
@@ -1510,7 +1510,7 @@
 	focus = {
 		id = NAM_pw_transport_maintenance
 		relative_position_id = NAM_pw_transport_commission
-		x = 3
+		x = -2
 		y = 2
 		icon = GFX_focus_VAL_Logistics_Command
 		cost = 2
@@ -1548,7 +1548,7 @@
 	focus = {
 		id = NAM_pw_logistics_depots
 		relative_position_id = NAM_pw_transport_commission
-		x = 0
+		x = -1
 		y = 3
 		icon = GFX_focus_VAL_Logistics_Command
 		cost = 3
@@ -1580,7 +1580,7 @@
 	focus = {
 		id = NAM_pw_southern_corridor
 		relative_position_id = NAM_pw_transport_commission
-		x = 7
+		x = 4
 		y = 1
 		icon = GFX_focus_VAL_Logistics_Command
 		cost = 3
@@ -1606,7 +1606,7 @@
 	focus = {
 		id = NAM_pw_freight_schedule
 		relative_position_id = NAM_pw_transport_commission
-		x = 3
+		x = -2
 		y = 4
 		icon = GFX_focus_VAL_Logistics_Command
 		cost = 2
@@ -1678,8 +1678,8 @@
 	focus = {
 		id = NAM_depot_inquiry
 		relative_position_id = NAM_oil_exchange
-		x = -4
-		y = 2
+		x = -2
+		y = 1
 		icon = GFX_focus_NAM_open_ledgers
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
@@ -1719,7 +1719,7 @@
 		id = NAM_depot_revoke
 		relative_position_id = NAM_depot_inquiry
 		x = -2
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_seal_courts
 		cost = 1
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
@@ -1755,7 +1755,7 @@
 		id = NAM_depot_reserve_charter
 		relative_position_id = NAM_depot_inquiry
 		x = 2
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_well_register
 		cost = 1
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }

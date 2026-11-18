@@ -2652,6 +2652,121 @@ defined_text = {
 }
 
 defined_text = {
+	name = NAMGetAgreementDemand
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_agreement_objector = 1 }
+				AND = {
+					NOT = { has_variable = NAM_agreement_objector }
+					check_variable = { NAM_agreement_current = 1 }
+				}
+			}
+		}
+		localization_key = NAM_agreement_demand_nam_tt
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_agreement_objector = 2 }
+				AND = {
+					NOT = { has_variable = NAM_agreement_objector }
+					check_variable = { NAM_agreement_current = 2 }
+				}
+			}
+		}
+		localization_key = NAM_agreement_demand_oil_tt
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_agreement_objector = 3 }
+				AND = {
+					NOT = { has_variable = NAM_agreement_objector }
+					check_variable = { NAM_agreement_current = 3 }
+				}
+			}
+		}
+		localization_key = NAM_agreement_demand_dist_tt
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_agreement_objector = 4 }
+				AND = {
+					NOT = { has_variable = NAM_agreement_objector }
+					check_variable = { NAM_agreement_current = 4 }
+				}
+			}
+		}
+		localization_key = NAM_agreement_demand_garr_tt
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_agreement_objector = 5 }
+				AND = {
+					NOT = { has_variable = NAM_agreement_objector }
+					check_variable = { NAM_agreement_current = 5 }
+				}
+			}
+		}
+		localization_key = NAM_agreement_demand_trade_tt
+	}
+	text = { localization_key = NAM_agreement_none }
+}
+
+defined_text = {
+	name = NAMGetPromisedCouncilFloor
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_council_petition = 4 }
+				NAM_council_garr_hearing = yes
+			}
+		}
+		localization_key = NAM_council_floor_garr
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_council_petition = 1 }
+				NAM_council_nam_hearing = yes
+			}
+		}
+		localization_key = NAM_council_floor_nam
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_council_petition = 3 }
+				NAM_council_dist_hearing = yes
+			}
+		}
+		localization_key = NAM_council_floor_dist
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_council_petition = 2 }
+				NAM_council_oil_hearing = yes
+			}
+		}
+		localization_key = NAM_council_floor_oil
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_council_petition = 5 }
+				NAM_council_trade_hearing = yes
+			}
+		}
+		localization_key = NAM_council_floor_trade
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
 	name = NAMGetAgreementName
 	text = {
 		trigger = { check_variable = { NAM_agreement_current = 1 } }
@@ -2674,6 +2789,27 @@ defined_text = {
 		localization_key = NAM_agreement_trade_name
 	}
 	text = { localization_key = NAM_agreement_none }
+}
+
+defined_text = {
+	name = NAMGetWorkshopDelivery
+	text = {
+		trigger = {
+			check_variable = { NAM_agreement_current = 3 }
+			check_variable = { NAM_agreement_target > 0 }
+		}
+		localization_key = NAM_council_workshop_trucks_tt
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMGetCouncilAmendWindow
+	text = {
+		trigger = { check_variable = { NAM_agreement_offer_b = 6 } }
+		localization_key = NAM_council_recall_window_tt
+	}
+	text = { localization_key = NAM_agreement_standard_window_tt }
 }
 
 defined_text = {

@@ -838,6 +838,32 @@ spriteTypes = {
 		name = "GFX_portrait_NOD_Tobis_Bentlix"
 		texturefile = "gfx/leaders/NOD/portrait_NOD_Tobis_Bentlix.png"
 	}
+	spriteType = {
+		name = "GFX_portrait_NOD_Ernst_Vogel"
+		texturefile = "gfx/leaders/NOD/portrait_NOD_Ernst_Vogel.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NOD_Ernst_Vogel_small"
+		texturefile = "gfx/leaders/NOD/portrait_NOD_Ernst_Vogel.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NOD_Konrad_Hartwig"
+		texturefile = "gfx/leaders/NOD/portrait_NOD_Konrad_Hartwig.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NOD_Konrad_Hartwig_small"
+		texturefile = "gfx/leaders/NOD/portrait_NOD_Konrad_Hartwig.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	###AIN
 	spriteType = {
 		name = "GFX_portrait_AIN_Elias_Marven"
@@ -1504,6 +1530,63 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_portrait_SHL_Nawal_Haddad"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Nawal_Haddad.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_SHL_Nawal_Haddad_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Nawal_Haddad.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Nabil_Mansur"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Nabil_Mansur.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_SHL_Nabil_Mansur_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Nabil_Mansur.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Lina_Sabbagh"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Lina_Sabbagh.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_SHL_Lina_Sabbagh_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Lina_Sabbagh.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_Yunus_Hamdan"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Yunus_Hamdan.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_SHL_Yunus_Hamdan_small"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_Yunus_Hamdan.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Farid_Rahmani"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_staff_Farid_Rahmani.png"
+	}
+
+	spriteType = {
 		name = "GFX_portrait_SHL_staff_Farid_Rahmani_small"
 		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Farid_Rahmani_small.png"
 	}
@@ -1529,8 +1612,18 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_portrait_SHL_staff_Bahram_Sadri"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_staff_Bahram_Sadri.png"
+	}
+
+	spriteType = {
 		name = "GFX_portrait_SHL_staff_Bahram_Sadri_small"
 		texturefile = "gfx/interface/ideas/SHL/portrait_SHL_staff_Bahram_Sadri_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_SHL_staff_Reza_Mehrabi"
+		texturefile = "gfx/leaders/SHL/portrait_SHL_staff_Reza_Mehrabi.png"
 	}
 
 	spriteType = {

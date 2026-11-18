@@ -550,7 +550,60 @@ country_event = {
 			has_global_flag = ADISCORD_nam_resource_war_standoff
 		}
 	}
-	option = { name = ADISCORD_nam_resource_war.12.a }
+	option = {
+		name = ADISCORD_nam_resource_war.12.a
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.12.audit
+		trigger = {
+			NAM_agreement_peace = yes
+			NOT = { has_variable = NAM_council_petition }
+		}
+		custom_effect_tooltip = NAM_council_audit_agenda_tt
+		custom_effect_tooltip = NAM_council_audit_terms_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_agreement_peace = yes
+					NOT = { has_variable = NAM_council_petition }
+				}
+				set_variable = { var = NAM_council_petition value = 1 }
+			}
+		}
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 2
+				check_variable = { NAM_grp_nam_support < 40 }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.12.workshops
+		trigger = {
+			NAM_agreement_dist_possible = yes
+			NOT = { has_variable = NAM_council_petition }
+		}
+		custom_effect_tooltip = NAM_council_workshops_agenda_tt
+		custom_effect_tooltip = NAM_council_workshops_terms_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_agreement_dist_possible = yes
+					NOT = { has_variable = NAM_council_petition }
+				}
+				set_variable = { var = NAM_council_petition value = 3 }
+			}
+		}
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 2
+				check_variable = { NAM_grp_dist_support < 40 }
+			}
+		}
+	}
 }
 
 country_event = {
@@ -4792,14 +4845,163 @@ country_event = {
 country_event = {
 	id = ADISCORD_nam_groups.20
 	title = ADISCORD_nam_groups.20.t
-	desc = ADISCORD_nam_groups.20.d
+	desc = {
+		trigger = {
+			NAM_council_nam_hearing = no
+			NAM_council_dist_hearing = no
+			NAM_council_oil_hearing = no
+			NAM_council_trade_hearing = no
+			NAM_council_garr_hearing = no
+		}
+		text = ADISCORD_nam_groups.20.d
+	}
+	desc = {
+		trigger = {
+			NAM_council_garr_hearing = yes
+			NAM_agreement_garr_possible = yes
+		}
+		text = ADISCORD_nam_groups.20.garr
+	}
+	desc = {
+		trigger = {
+			NAM_council_nam_hearing = yes
+			NAM_agreement_nam_possible = yes
+		}
+		text = ADISCORD_nam_groups.20.audit
+	}
+	desc = {
+		trigger = {
+			NAM_council_dist_hearing = yes
+			NAM_agreement_dist_possible = yes
+		}
+		text = ADISCORD_nam_groups.20.workshops
+	}
+	desc = {
+		trigger = {
+			NAM_council_oil_hearing = yes
+			NAM_agreement_oil_possible = yes
+		}
+		text = ADISCORD_nam_groups.20.oil
+	}
+	desc = {
+		trigger = {
+			NAM_council_trade_hearing = yes
+			NAM_agreement_trade_possible = yes
+		}
+		text = ADISCORD_nam_groups.20.trade
+	}
+	desc = {
+		trigger = { NAM_council_hearing_lapsed = yes }
+		text = ADISCORD_nam_groups.20.lapsed
+	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { has_country_flag = NAM_agreement_offer_pending }
 	option = {
+		name = NAM_council_choose_local_reserve
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_council_garr_hearing = yes
+		}
+		custom_effect_tooltip = NAM_agreement_project_header_tt
+		custom_effect_tooltip = NAM_council_garr_terms_tt
+		unlock_decision_tooltip = NAM_agreement_roll_call
+		custom_effect_tooltip = NAM_agreement_success_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_garr_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_garr_failure days = 180 } }
+		hidden_effect = {
+			set_temp_variable = { var = NAM_council_choice value = 4 }
+			NAM_agreement_sign_offer = yes
+		}
+		ai_chance = { base = 75 }
+	}
+
+	option = {
+		name = NAM_council_choose_audit
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_council_nam_hearing = yes
+			NAM_agreement_nam_possible = yes
+		}
+		custom_effect_tooltip = NAM_agreement_project_header_tt
+		custom_effect_tooltip = NAM_council_audit_terms_tt
+		custom_effect_tooltip = NAM_agreement_success_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_nam_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_nam_failure days = 180 } }
+		hidden_effect = {
+			set_temp_variable = { var = NAM_council_choice value = 1 }
+			NAM_agreement_sign_offer = yes
+		}
+		ai_chance = { base = 75 }
+	}
+
+	option = {
+		name = NAM_council_choose_workshops
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_council_dist_hearing = yes
+			NAM_agreement_dist_possible = yes
+		}
+		custom_effect_tooltip = NAM_agreement_project_header_tt
+		custom_effect_tooltip = NAM_council_workshops_terms_tt
+		custom_effect_tooltip = NAM_agreement_success_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_dist_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_dist_failure days = 180 } }
+		hidden_effect = {
+			set_temp_variable = { var = NAM_council_choice value = 3 }
+			NAM_agreement_sign_offer = yes
+		}
+		ai_chance = { base = 75 }
+	}
+
+	option = {
+		name = NAM_council_choose_returning_oil
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_council_oil_hearing = yes
+			NAM_agreement_oil_possible = yes
+		}
+		custom_effect_tooltip = NAM_agreement_project_header_tt
+		custom_effect_tooltip = NAM_council_oil_terms_tt
+		custom_effect_tooltip = NAM_agreement_success_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_oil_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_oil_failure days = 180 } }
+		hidden_effect = {
+			set_temp_variable = { var = NAM_council_choice value = 2 }
+			NAM_agreement_sign_offer = yes
+		}
+		ai_chance = { base = 75 }
+	}
+
+	option = {
+		name = NAM_council_choose_returning_trade
+		trigger = {
+			NAM_agreement_offer_open = yes
+			NAM_council_trade_hearing = yes
+			NAM_agreement_trade_possible = yes
+		}
+		custom_effect_tooltip = NAM_agreement_project_header_tt
+		custom_effect_tooltip = NAM_council_trade_terms_tt
+		custom_effect_tooltip = NAM_agreement_success_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_trade_reward days = 365 } }
+		custom_effect_tooltip = NAM_agreement_common_terms_tt
+		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_trade_failure days = 180 } }
+		hidden_effect = {
+			set_temp_variable = { var = NAM_council_choice value = 5 }
+			NAM_agreement_sign_offer = yes
+		}
+		ai_chance = { base = 75 }
+	}
+
+	option = {
 		name = NAM_agreement_choose_nam
 		trigger = {
 			NAM_agreement_offer_open = yes
+			NAM_council_nam_hearing = no
 			NAM_agreement_nam_possible = yes
 			OR = {
 				check_variable = { NAM_agreement_offer_a = 1 }
@@ -4812,9 +5014,10 @@ country_event = {
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_nam_reward days = 365 } }
 		custom_effect_tooltip = NAM_agreement_common_terms_tt
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_nam_failure days = 180 } }
+		NAM_council_preview_rejection = yes
 		hidden_effect = {
-			set_variable = { var = NAM_agreement_current value = 1 }
-			NAM_agreement_start = yes
+			set_temp_variable = { var = NAM_council_choice value = 1 }
+			NAM_agreement_sign_offer = yes
 		}
 		ai_chance = {
 			base = 50
@@ -4828,6 +5031,7 @@ country_event = {
 		name = NAM_agreement_choose_oil
 		trigger = {
 			NAM_agreement_offer_open = yes
+			NAM_council_oil_hearing = no
 			NAM_agreement_oil_possible = yes
 			OR = {
 				check_variable = { NAM_agreement_offer_a = 2 }
@@ -4840,9 +5044,10 @@ country_event = {
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_oil_reward days = 365 } }
 		custom_effect_tooltip = NAM_agreement_common_terms_tt
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_oil_failure days = 180 } }
+		NAM_council_preview_rejection = yes
 		hidden_effect = {
-			set_variable = { var = NAM_agreement_current value = 2 }
-			NAM_agreement_start = yes
+			set_temp_variable = { var = NAM_council_choice value = 2 }
+			NAM_agreement_sign_offer = yes
 		}
 		ai_chance = {
 			base = 50
@@ -4856,6 +5061,7 @@ country_event = {
 		name = NAM_agreement_choose_dist
 		trigger = {
 			NAM_agreement_offer_open = yes
+			NAM_council_dist_hearing = no
 			NAM_agreement_dist_possible = yes
 			OR = {
 				check_variable = { NAM_agreement_offer_a = 3 }
@@ -4868,9 +5074,10 @@ country_event = {
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_dist_reward days = 365 } }
 		custom_effect_tooltip = NAM_agreement_common_terms_tt
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_dist_failure days = 180 } }
+		NAM_council_preview_rejection = yes
 		hidden_effect = {
-			set_variable = { var = NAM_agreement_current value = 3 }
-			NAM_agreement_start = yes
+			set_temp_variable = { var = NAM_council_choice value = 3 }
+			NAM_agreement_sign_offer = yes
 		}
 		ai_chance = {
 			base = 50
@@ -4884,6 +5091,7 @@ country_event = {
 		name = NAM_agreement_choose_garr
 		trigger = {
 			NAM_agreement_offer_open = yes
+			NAM_council_garr_hearing = no
 			NAM_agreement_garr_possible = yes
 			OR = {
 				check_variable = { NAM_agreement_offer_a = 4 }
@@ -4892,13 +5100,15 @@ country_event = {
 		}
 		custom_effect_tooltip = NAM_agreement_project_header_tt
 		custom_effect_tooltip = NAM_agreement_garr_terms_tt
+		unlock_decision_tooltip = NAM_agreement_roll_call
 		custom_effect_tooltip = NAM_agreement_success_tt
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_garr_reward days = 365 } }
 		custom_effect_tooltip = NAM_agreement_common_terms_tt
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_garr_failure days = 180 } }
+		NAM_council_preview_rejection = yes
 		hidden_effect = {
-			set_variable = { var = NAM_agreement_current value = 4 }
-			NAM_agreement_start = yes
+			set_temp_variable = { var = NAM_council_choice value = 4 }
+			NAM_agreement_sign_offer = yes
 		}
 		ai_chance = {
 			base = 50
@@ -4912,6 +5122,7 @@ country_event = {
 		name = NAM_agreement_choose_trade
 		trigger = {
 			NAM_agreement_offer_open = yes
+			NAM_council_trade_hearing = no
 			NAM_agreement_trade_possible = yes
 			OR = {
 				check_variable = { NAM_agreement_offer_a = 5 }
@@ -4924,9 +5135,10 @@ country_event = {
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_trade_reward days = 365 } }
 		custom_effect_tooltip = NAM_agreement_common_terms_tt
 		effect_tooltip = { add_timed_idea = { idea = NAM_agreement_trade_failure days = 180 } }
+		NAM_council_preview_rejection = yes
 		hidden_effect = {
-			set_variable = { var = NAM_agreement_current value = 5 }
-			NAM_agreement_start = yes
+			set_temp_variable = { var = NAM_council_choice value = 5 }
+			NAM_agreement_sign_offer = yes
 		}
 		ai_chance = {
 			base = 50
@@ -4940,21 +5152,40 @@ country_event = {
 	option = {
 		name = NAM_agreement_decline
 		trigger = { NAM_agreement_offer_open = yes }
-		custom_effect_tooltip = NAM_agreement_decline_tt
+		if = {
+			limit = { hidden_trigger = { NAM_council_hearing_lapsed = yes } }
+			custom_effect_tooltip = NAM_council_decline_lapsed_tt
+		}
+		else = { custom_effect_tooltip = NAM_agreement_decline_tt }
 		hidden_effect = {
-			set_variable = { var = NAM_agreement_current value = NAM_agreement_offer_a }
-			set_temp_variable = { var = NAM_agreement_support_delta value = -5 }
-			NAM_agreement_add_support = yes
-			set_variable = { var = NAM_agreement_current value = NAM_agreement_offer_b }
-			NAM_agreement_add_support = yes
-			NAM_agreement_finish = yes
+			if = {
+				limit = { NAM_agreement_offer_open = yes }
+				set_temp_variable = { var = NAM_agreement_support_delta value = -5 }
+				if = {
+					limit = { NAM_council_hearing_lapsed = no }
+					set_temp_variable = { var = NAM_agreement_support_pillar value = NAM_agreement_offer_a }
+					NAM_agreement_adjust_pillar_support = yes
+				}
+				set_temp_variable = { var = NAM_agreement_support_pillar value = NAM_agreement_offer_b }
+				NAM_agreement_adjust_pillar_support = yes
+				NAM_agreement_finish = yes
+			}
+			else_if = {
+				limit = { has_country_flag = NAM_agreement_offer_pending }
+				NAM_agreement_cancel = yes
+			}
 		}
 		ai_chance = { base = 5 }
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.close
 		trigger = { NAM_agreement_offer_open = no }
-		hidden_effect = { NAM_agreement_cancel = yes }
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = NAM_agreement_offer_pending }
+				NAM_agreement_cancel = yes
+			}
+		}
 		ai_chance = { base = 100 }
 	}
 }
@@ -4971,6 +5202,163 @@ country_event = {
 		custom_effect_tooltip = NAM_agreement_crisis_tt
 		ai_chance = { base = 100 }
 	}
+}
+
+country_event = {
+	id = ADISCORD_nam_groups.23
+	title = ADISCORD_nam_groups.23.t
+	desc = {
+		trigger = { check_variable = { NAM_agreement_objector = 1 } }
+		text = ADISCORD_nam_groups.23.nam
+	}
+	desc = {
+		trigger = { check_variable = { NAM_agreement_objector = 2 } }
+		text = ADISCORD_nam_groups.23.oil
+	}
+	desc = {
+		trigger = { check_variable = { NAM_agreement_objector = 3 } }
+		text = ADISCORD_nam_groups.23.dist
+	}
+	desc = {
+		trigger = {
+			check_variable = { NAM_agreement_objector = 4 }
+			NOT = { has_country_flag = NAM_agreement_part_performed }
+		}
+		text = ADISCORD_nam_groups.23.garr
+	}
+	desc = {
+		trigger = {
+			check_variable = { NAM_agreement_objector = 4 }
+			has_country_flag = NAM_agreement_part_performed
+		}
+		text = ADISCORD_nam_groups.23.roll_call
+	}
+	desc = {
+		trigger = { check_variable = { NAM_agreement_objector = 5 } }
+		text = ADISCORD_nam_groups.23.trade
+	}
+	desc = {
+		trigger = { NOT = { has_variable = NAM_agreement_objector } }
+		text = ADISCORD_nam_groups.23.closed
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 7
+	trigger = { NAM_agreement_objection_open = yes }
+
+	# Filing the objection is also the unattended answer. The amendment has already taken effect.
+	option = {
+		name = ADISCORD_nam_groups.23.file
+		if = {
+			limit = { hidden_trigger = { NAM_agreement_objection_open = yes } }
+			custom_effect_tooltip = NAM_agreement_objection_file_tt
+		}
+		hidden_effect = { NAM_agreement_close_objection = yes }
+		ai_chance = { base = 20 }
+	}
+
+	option = {
+		name = ADISCORD_nam_groups.23.accept
+		trigger = { NAM_agreement_demand_payable = yes }
+		custom_effect_tooltip = NAM_agreement_objection_accept_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_agreement_demand_payable = yes }
+				if = {
+					limit = { check_variable = { NAM_agreement_objector = 1 } }
+					add_political_power = -25
+				}
+				else_if = {
+					limit = { check_variable = { NAM_agreement_objector = 2 } }
+					add_fuel = -3000
+				}
+				else_if = {
+					limit = { check_variable = { NAM_agreement_objector = 3 } }
+					add_equipment_to_stockpile = { type = motorized_equipment amount = -30 }
+				}
+				else_if = {
+					limit = { check_variable = { NAM_agreement_objector = 4 } }
+					add_command_power = -15
+				}
+				else_if = {
+					limit = { check_variable = { NAM_agreement_objector = 5 } }
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_spend_treasury = yes
+				}
+				set_temp_variable = { var = NAM_agreement_support_pillar value = NAM_agreement_objector }
+				set_temp_variable = { var = NAM_agreement_support_delta value = 5 }
+				NAM_agreement_adjust_pillar_support = yes
+			}
+			NAM_agreement_close_objection = yes
+		}
+		ai_chance = { base = 45 }
+	}
+
+	option = {
+		name = ADISCORD_nam_groups.23.hearing
+		trigger = { NAM_agreement_can_promise_hearing = yes }
+		custom_effect_tooltip = NAM_agreement_objection_hearing_tt
+		if = {
+			limit = { hidden_trigger = { check_variable = { NAM_agreement_objector = 4 } } }
+			custom_effect_tooltip = NAM_council_garr_terms_tt
+		}
+		hidden_effect = {
+			if = {
+				limit = { NAM_agreement_can_promise_hearing = yes }
+				set_variable = { var = NAM_council_petition value = NAM_agreement_objector }
+				set_temp_variable = { var = NAM_agreement_support_pillar value = NAM_agreement_objector }
+				set_temp_variable = { var = NAM_agreement_support_delta value = 3 }
+				NAM_agreement_adjust_pillar_support = yes
+			}
+			NAM_agreement_close_objection = yes
+		}
+		ai_chance = { base = 65 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_groups.24
+	title = ADISCORD_nam_groups.24.t
+	desc = ADISCORD_nam_groups.24.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_groups.24.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_groups.25
+	title = ADISCORD_nam_groups.25.t
+	desc = ADISCORD_nam_groups.25.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_groups.25.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_groups.26
+	title = ADISCORD_nam_groups.26.t
+	desc = ADISCORD_nam_groups.26.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_groups.26.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_groups.27
+	title = ADISCORD_nam_groups.27.t
+	desc = ADISCORD_nam_groups.27.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_groups.27.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_groups.28
+	title = ADISCORD_nam_groups.28.t
+	desc = ADISCORD_nam_groups.28.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_groups.28.a }
 }
 
 # ----- Story scenes of the exile, defeat and postwar routes -----

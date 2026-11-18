@@ -14,7 +14,6 @@ focus_tree = {
 		y = 4200
 	}
 
-	# The three branches share a fixed opening row for every mandate.
 	# Loaded by the victory settlement. The pre-war tree is shared history, so
 	# its completed focuses remain readable through has_completed_focus.
 

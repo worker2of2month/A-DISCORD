@@ -390,12 +390,100 @@ characters = {
 	}
 
 	# SHL military leadership.
+	SHL_Nawal_Haddad = {
+		name = SHL_Nawal_Haddad
+		gender = female
+		portraits = {
+			army = {
+				large = GFX_portrait_SHL_Nawal_Haddad
+				small = GFX_portrait_SHL_Nawal_Haddad_small
+			}
+		}
+		corps_commander = {
+			traits = { trait_engineer }
+			skill = 2
+			attack_skill = 2
+			defense_skill = 1
+			planning_skill = 3
+			logistics_skill = 1
+			legacy_id = -1
+		}
+	}
+
+	SHL_Nabil_Mansur = {
+		name = SHL_Nabil_Mansur
+		portraits = {
+			army = {
+				large = GFX_portrait_SHL_Nabil_Mansur
+				small = GFX_portrait_SHL_Nabil_Mansur_small
+			}
+		}
+		corps_commander = {
+			traits = { desert_fox }
+			skill = 2
+			attack_skill = 3
+			defense_skill = 1
+			planning_skill = 1
+			logistics_skill = 2
+			legacy_id = -1
+		}
+	}
+
+	SHL_Lina_Sabbagh = {
+		name = SHL_Lina_Sabbagh
+		gender = female
+		portraits = {
+			army = {
+				large = GFX_portrait_SHL_Lina_Sabbagh
+				small = GFX_portrait_SHL_Lina_Sabbagh_small
+			}
+		}
+		corps_commander = {
+			traits = { urban_assault_specialist }
+			skill = 2
+			attack_skill = 3
+			defense_skill = 1
+			planning_skill = 2
+			logistics_skill = 1
+			legacy_id = -1
+		}
+	}
+
+	SHL_Yunus_Hamdan = {
+		name = SHL_Yunus_Hamdan
+		portraits = {
+			army = {
+				large = GFX_portrait_SHL_Yunus_Hamdan
+				small = GFX_portrait_SHL_Yunus_Hamdan_small
+			}
+		}
+		corps_commander = {
+			traits = { hill_fighter }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 3
+			planning_skill = 2
+			logistics_skill = 3
+			legacy_id = -1
+		}
+	}
+
 	ADISCORD_staff_SHL_Farid_Rahmani = {
 		name = ADISCORD_staff_SHL_Farid_Rahmani
 		portraits = {
 			army = {
+				large = GFX_portrait_SHL_staff_Farid_Rahmani
 				small = GFX_portrait_SHL_staff_Farid_Rahmani_small
 			}
+		}
+		corps_commander = {
+			traits = { inflexible_strategist }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 3
+			logistics_skill = 2
+			legacy_id = -1
 		}
 		advisor = {
 			slot = army_chief
@@ -499,8 +587,18 @@ characters = {
 		name = ADISCORD_staff_SHL_Bahram_Sadri
 		portraits = {
 			army = {
+				large = GFX_portrait_SHL_staff_Bahram_Sadri
 				small = GFX_portrait_SHL_staff_Bahram_Sadri_small
 			}
+		}
+		corps_commander = {
+			traits = { infantry_officer }
+			skill = 2
+			attack_skill = 3
+			defense_skill = 2
+			planning_skill = 1
+			logistics_skill = 1
+			legacy_id = -1
 		}
 		advisor = {
 			slot = high_command
@@ -521,8 +619,18 @@ characters = {
 		name = ADISCORD_staff_SHL_Reza_Mehrabi
 		portraits = {
 			army = {
+				large = GFX_portrait_SHL_staff_Reza_Mehrabi
 				small = GFX_portrait_SHL_staff_Reza_Mehrabi_small
 			}
+		}
+		corps_commander = {
+			traits = { organizer }
+			skill = 2
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 2
+			logistics_skill = 3
+			legacy_id = -1
 		}
 		advisor = {
 			slot = high_command

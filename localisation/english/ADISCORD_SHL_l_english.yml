@@ -625,6 +625,10 @@
  SHL_victory_over_ration: "Victory over the Ration"
  SHL_victory_over_ration_desc: "Keyzan's detachments have withdrawn behind their border, and Shahrabad has gained Sevir and Tabar."
  # Characters, traits, parties, alliances
+ SHL_Nawal_Haddad: "Nawal Haddad"
+ SHL_Nabil_Mansur: "Nabil Mansur"
+ SHL_Lina_Sabbagh: "Lina Sabbagh"
+ SHL_Yunus_Hamdan: "Yunus Hamdan"
  SHL_Darius_Safir: "Darius Safir"
  SHL_Darius_Safir_desc: "Head of House Safir and the richest of the nine crests. He calls the regency temporary, yet his first act returned every furnace to the houses."
  SHL_regent_of_the_crests: "Regent of the Crests"

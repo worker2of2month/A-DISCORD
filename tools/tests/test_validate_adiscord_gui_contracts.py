@@ -2912,7 +2912,7 @@ class CampaignSetupSkinTests(unittest.TestCase):
                     # The pregame tooltip does not expand nested localisation.
                     self.assertNotIn('$', teaser, name)
                     self.assertEqual(re.findall(r'£(\w+)', teaser), [sprite])
-            if spec.get('in_development'):
+            if spec.get('status'):
                 sash = gui_node_body(row, f'development_sash_{tag}')
                 self.assertEqual(_gui_position(sash), (left + 80, 225))
                 self.assertIn('alwaystransparent = yes', sash)
@@ -3062,15 +3062,21 @@ class CampaignSetupSkinTests(unittest.TestCase):
         disk = GALLERY_GUI.read_text(encoding='utf-8')
         self.assertEqual(gallery_gui(original), disk)
         live_marks = set(re.findall(r'name = "development_sash_([A-Z]+)"', disk))
-        self.assertEqual(live_marks, {tag for tag, spec in original.items() if spec.get('in_development')})
+        self.assertEqual(live_marks, {tag for tag, spec in original.items() if spec.get('status')})
+        self.assertEqual(original['SHL']['status'], 'beta')
+        for tag in live_marks:
+            key = 'ADISCORD_BOOKMARK_' + original[tag]['status'].upper()
+            label = gui_node_body(disk, f'development_status_{tag}')
+            self.assertIn(f'text = "{key}"', label)
+            self.assertIn(f'pdx_tooltip = {key}_TT', label)
         for tag in ('IVN', 'MON', 'WRK'):
-            original[tag]['in_development'] = True
+            original[tag]['status'] = 'in_development'
         baseline = gallery_gui(original)
-        planned = {tag for tag, spec in original.items() if spec.get('in_development')}
+        planned = {tag for tag, spec in original.items() if spec.get('status')}
         for promoted in ({'MON'}, planned):
             roster = deepcopy(original)
             for tag in promoted:
-                roster[tag]['in_development'] = False
+                del roster[tag]['status']
             gui = gallery_gui(roster)
             self.assertEqual(set(re.findall(r'name = "development_sash_([A-Z]+)"', gui)), planned - promoted)
             for version in (baseline, gui):

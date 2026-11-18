@@ -78,6 +78,8 @@ continent = {
 	name = europe #forul continent (right one)
 	army = {
 		male = {
+			"GFX_Portrait_Forul_eastern_guards_officer"
+			"GFX_Portrait_Forul_eastern_signals_officer"
 			"GFX_Portrait_Forul_Generic_2"
 			"GFX_Portrait_Forul_Generic_3"
 			"GFX_Portrait_Forul_Generic_9"
@@ -89,6 +91,92 @@ continent = {
 			"GFX_Portrait_Europe_Generic_navy_1"
 			"GFX_Portrait_Europe_Generic_navy_2"
 			"GFX_Portrait_Europe_Generic_navy_3"
+		}
+	}
+}
+
+continent = {
+	name = north_america
+	army = {
+		male = {
+			"GFX_Portrait_EXZ_Generic_1"
+			"GFX_Portrait_EXZ_Generic_2"
+			"GFX_Portrait_EXZ_Generic_3"
+			"GFX_Portrait_EXZ_Generic_4"
+		}
+	}
+}
+
+continent = {
+	name = south_america
+	army = {
+		male = {
+			"GFX_Portrait_Southern_Deserts_caravan_officer"
+			"GFX_Portrait_Southern_Deserts_oasis_officer"
+			"GFX_Portrait_Southern_Deserts_canal_guard"
+			"GFX_Portrait_Southern_Deserts_salt_road_officer"
+		}
+	}
+}
+
+continent = {
+	name = australia
+	army = {
+		male = {
+			"GFX_Portrait_Tribal_Arc_hill_scout"
+			"GFX_Portrait_Tribal_Arc_woodland_warden"
+			"GFX_Portrait_Tribal_Arc_river_warden"
+			"GFX_Portrait_Tribal_Arc_ridge_captain"
+		}
+	}
+}
+
+continent = {
+	name = africa
+	army = {
+		male = {
+			"GFX_Portrait_WRK_Generic_land_1"
+			"GFX_Portrait_WRK_Generic_land_2"
+			"GFX_Portrait_WRK_Generic_land_3"
+		}
+	}
+}
+
+continent = {
+	name = asia
+	army = {
+		male = {
+			"GFX_Portrait_Forul_western_steppe_officer"
+			"GFX_Portrait_Forul_western_bridge_officer"
+			"GFX_Portrait_Forul_Generic_2"
+			"GFX_Portrait_Forul_Generic_3"
+			"GFX_Portrait_Forul_Generic_9"
+		}
+	}
+}
+
+continent = {
+	name = middle_east
+	army = {
+		male = {
+			"GFX_Portrait_Outer_Lands_highland_officer"
+			"GFX_Portrait_Outer_Lands_harbour_officer"
+			"GFX_Portrait_Forul_Generic_3"
+			"GFX_Portrait_Forul_Generic_9"
+			"GFX_Portrait_WRK_Generic_land_2"
+		}
+	}
+}
+
+SHL = {
+	army = {
+		male = {
+			"GFX_Portrait_SHL_Generic_land_1"
+			"GFX_Portrait_SHL_Generic_land_2"
+			"GFX_Portrait_SHL_Generic_land_3"
+		}
+		female = {
+			"GFX_Portrait_SHL_Generic_land_4"
 		}
 	}
 }

@@ -2149,6 +2149,54 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_groups.23",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 23,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.24",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 24,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.25",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 25,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.26",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 26,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.27",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 27,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.28",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 28,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_groups.30",
       "namespace": "ADISCORD_nam_groups",
       "number": 30,

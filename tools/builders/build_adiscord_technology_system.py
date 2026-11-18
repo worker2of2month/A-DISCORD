@@ -11366,7 +11366,7 @@ def country_uniform_gfx_entries() -> str:
             f'\t\ttextureFile = "gfx/interface/technologies/ADISCORD_STS_weapon_{family}.dds"\n'
             "\t}\n"
         )
-        for tag in ("RUS", "NAM"):
+        for tag in ("RUS", "NAM", "SHL"):
             for key in (tech, *ENABLE_EQUIPMENT[tech]):
                 entries.append(
                     "\tSpriteType = {\n"

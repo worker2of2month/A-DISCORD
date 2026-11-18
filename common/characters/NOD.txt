@@ -151,8 +151,18 @@ characters = {
 		name = ADISCORD_staff_NOD_Ernst_Vogel
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_chief_def_western_european_2d
+				large = GFX_portrait_NOD_Ernst_Vogel
+				small = GFX_portrait_NOD_Ernst_Vogel_small
 			}
+		}
+		corps_commander = {
+			traits = { infantry_leader }
+			skill = 3
+			attack_skill = 3
+			defense_skill = 4
+			planning_skill = 2
+			logistics_skill = 1
+			legacy_id = -1
 		}
 		advisor = {
 			slot = high_command
@@ -173,8 +183,18 @@ characters = {
 		name = ADISCORD_staff_NOD_Konrad_Hartwig
 		portraits = {
 			army = {
-				small = GFX_idea_generic_army_log_western_european_2d
+				large = GFX_portrait_NOD_Konrad_Hartwig
+				small = GFX_portrait_NOD_Konrad_Hartwig_small
 			}
+		}
+		corps_commander = {
+			traits = { organizer }
+			skill = 3
+			attack_skill = 1
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 4
+			legacy_id = -1
 		}
 		advisor = {
 			slot = high_command

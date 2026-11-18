@@ -37,6 +37,7 @@
   },
   "SHL": {
     "subideology": "industrial_aristocratism",
+    "status": "beta",
     "image": "gfx/interface/startup/posters/shl.png",
     "routes": [
       {"key": "ten", "flag": "SHL_conclave_of_ten", "banner": "gfx/interface/startup/banners/SHL_ten.png"},
@@ -57,7 +58,7 @@
   },
   "IVN": {
     "subideology": "humanism_ideology",
-    "in_development": true,
+    "status": "in_development",
     "image": "gfx/interface/startup/posters/ivn.png",
     "routes": [
       {"key": "committee", "flag": "IVN_etatism", "badge": "gfx/texticons/adiscord/parties/IVN/IVN_emergency_committee_party.png", "banner": "gfx/interface/startup/banners/IVN_committee.png"},
@@ -69,13 +70,13 @@
   },
   "MON": {
     "subideology": "chauvinism_ideology",
-    "in_development": true,
+    "status": "in_development",
     "image": "gfx/interface/startup/posters/mon.png",
     "routes": []
   },
   "WRK": {
     "subideology": "vorkerism",
-    "in_development": true,
+    "status": "in_development",
     "image": "gfx/interface/startup/posters/wrk.png",
     "routes": [
       {"key": "worker", "flag": "WRK_vorkerland_emergency", "banner": "gfx/interface/startup/banners/WRK_worker.png"},

@@ -3752,6 +3752,144 @@ NAM_agreement_offer_open = {
 	NOT = { has_variable = NAM_agreement_current }
 }
 
+# Pending value 1 is an ordinary draw. Value 6 distinguishes the promised audit from that draw.
+NAM_council_nam_hearing = {
+	has_country_flag = { flag = NAM_agreement_offer_pending value > 5 }
+}
+
+NAM_council_dist_hearing = {
+	has_country_flag = { flag = NAM_agreement_offer_pending value > 2 }
+	has_country_flag = { flag = NAM_agreement_offer_pending value < 4 }
+}
+
+NAM_council_oil_hearing = {
+	has_country_flag = { flag = NAM_agreement_offer_pending value > 1 }
+	has_country_flag = { flag = NAM_agreement_offer_pending value < 3 }
+}
+
+NAM_council_trade_hearing = {
+	has_country_flag = { flag = NAM_agreement_offer_pending value > 4 }
+	has_country_flag = { flag = NAM_agreement_offer_pending value < 6 }
+}
+
+NAM_council_garr_hearing = {
+	has_country_flag = { flag = NAM_agreement_offer_pending value > 3 }
+	has_country_flag = { flag = NAM_agreement_offer_pending value < 5 }
+}
+
+NAM_council_hearing_lapsed = {
+	OR = {
+		AND = {
+			NAM_council_garr_hearing = yes
+			NAM_agreement_garr_possible = no
+		}
+		AND = {
+			NAM_council_nam_hearing = yes
+			NAM_agreement_nam_possible = no
+		}
+		AND = {
+			NAM_council_dist_hearing = yes
+			NAM_agreement_dist_possible = no
+		}
+		AND = {
+			NAM_council_oil_hearing = yes
+			NAM_agreement_oil_possible = no
+		}
+		AND = {
+			NAM_council_trade_hearing = yes
+			NAM_agreement_trade_possible = no
+		}
+	}
+}
+
+NAM_agreement_amendment_open = {
+	has_completed_focus = NAM_recognition
+	has_active_mission = NAM_agreement_deadline
+	has_variable = NAM_agreement_offer_b
+	NAM_agreement_peace = yes
+}
+
+NAM_agreement_can_amend = {
+	hidden_trigger = { NAM_agreement_amendment_open = yes }
+	custom_trigger_tooltip = {
+		tooltip = NAM_agreement_amend_time_tt
+		check_variable = { var = days_mission_timeout@NAM_agreement_deadline value = 120 compare = greater_than_or_equals }
+		OR = {
+			NOT = { check_variable = { NAM_agreement_offer_b = 6 } }
+			check_variable = { days_mission_timeout@NAM_agreement_deadline > 166 }
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = NAM_agreement_amend_work_tt
+		NOT = { has_variable = NAM_agreement_cash_deposit }
+		NAM_agreement_goal_met = no
+		NOT = {
+			AND = {
+				check_variable = { NAM_agreement_current = 3 }
+				NAM_agreement_district_order_pending = yes
+			}
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = NAM_agreement_amend_offer_tt
+		OR = {
+			check_variable = { NAM_agreement_offer_b = 1 }
+			check_variable = { NAM_agreement_offer_b = 4 }
+			check_variable = { NAM_agreement_offer_b = 6 }
+			AND = {
+				check_variable = { NAM_agreement_offer_b = 2 }
+				NAM_agreement_oil_possible = yes
+			}
+			AND = {
+				check_variable = { NAM_agreement_offer_b = 3 }
+				NAM_agreement_dist_possible = yes
+			}
+			AND = {
+				check_variable = { NAM_agreement_offer_b = 5 }
+				NAM_agreement_trade_possible = yes
+			}
+		}
+	}
+}
+
+NAM_agreement_objection_open = {
+	has_variable = NAM_agreement_objector
+	has_active_mission = NAM_agreement_deadline
+	NAM_agreement_peace = yes
+}
+
+NAM_agreement_demand_payable = {
+	NAM_agreement_objection_open = yes
+	OR = {
+		AND = {
+			check_variable = { NAM_agreement_objector = 1 }
+			NOT = { has_political_power < 25 }
+		}
+		AND = {
+			check_variable = { NAM_agreement_objector = 2 }
+			NOT = { has_fuel < 3000 }
+		}
+		AND = {
+			check_variable = { NAM_agreement_objector = 3 }
+			NOT = { has_equipment = { motorized_equipment < 30 } }
+		}
+		AND = {
+			check_variable = { NAM_agreement_objector = 4 }
+			NOT = { command_power < 15 }
+		}
+		AND = {
+			check_variable = { NAM_agreement_objector = 5 }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+	}
+}
+
+NAM_agreement_can_promise_hearing = {
+	NAM_agreement_objection_open = yes
+	has_country_flag = NAM_agreement_part_performed
+	NOT = { has_variable = NAM_council_petition }
+}
+
 NAM_agreement_district_site = {
 	is_owned_by = NAM
 	is_controlled_by = NAM
@@ -3838,7 +3976,7 @@ NAM_agreement_goal_met = {
 		AND = {
 			check_variable = { NAM_agreement_current = 1 }
 			has_country_flag = NAM_agreement_audit_done
-			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = NAM_agreement_target compare = greater_than_or_equals }
 		}
 		AND = {
 			check_variable = { NAM_agreement_current = 2 }
@@ -3853,11 +3991,17 @@ NAM_agreement_goal_met = {
 			has_country_flag = NAM_agreement_training_done
 			NOT = { has_equipment = { infantry_equipment < 1000 } }
 			NOT = { has_equipment = { support_equipment < 100 } }
-			NOT = { has_equipment = { motorized_equipment < 200 } }
+			OR = {
+				NOT = { has_equipment = { motorized_equipment < 200 } }
+				AND = {
+					check_variable = { NAM_agreement_target = 100 }
+					NOT = { has_equipment = { motorized_equipment < 100 } }
+				}
+			}
 		}
 		AND = {
 			check_variable = { NAM_agreement_current = 5 }
-			check_variable = { NAM_agreement_progress > 2 }
+			check_variable = { var = NAM_agreement_progress value = NAM_agreement_target compare = greater_than_or_equals }
 		}
 	}
 }
@@ -3923,6 +4067,13 @@ NAM_agreement_audit_ready = {
 }
 
 
+NAM_agreement_roll_call_open = {
+	NAM_agreement_garr_active = yes
+	check_variable = { NAM_agreement_progress = 0 }
+	NOT = { has_country_flag = NAM_agreement_training_done }
+	NOT = { has_variable = NAM_agreement_cash_deposit }
+}
+
 NAM_agreement_training_ready = {
 	NAM_agreement_garr_active = yes
 	NOT = { has_country_flag = NAM_agreement_training_done }
@@ -3942,11 +4093,21 @@ NAM_deep_drilling_unlocked = {
 	}
 }
 
+NAM_agreement_district_order_pending = {
+	OR = {
+		67 = { has_state_flag = NAM_agreement_building }
+		688 = { has_state_flag = NAM_agreement_building }
+		689 = { has_state_flag = NAM_agreement_building }
+		690 = { has_state_flag = NAM_agreement_building }
+		719 = { has_state_flag = NAM_agreement_building }
+		700 = { has_state_flag = NAM_agreement_building }
+	}
+}
+
 NAM_agreement_district_order_open = {
 	NAM_agreement_dist_active = yes
-	NOT = {
-		any_owned_state = { has_state_flag = NAM_agreement_building }
-	}
+	NAM_agreement_district_order_pending = no
+	check_variable = { NAM_agreement_progress = 0 }
 }
 
 NAM_program_rail_priority_site = {

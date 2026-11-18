@@ -1,3 +1,45 @@
+ADISCORD_create_regional_general = {
+	create_corps_commander = {
+		traits = { $TRAIT$ }
+		skill = 2
+		attack_skill = 1
+		defense_skill = 2
+		planning_skill = 2
+		logistics_skill = 2
+	}
+}
+
+# National name and portrait pools also apply to this first officer.
+ADISCORD_initialize_regional_general = {
+	if = {
+		limit = { capital_scope = { is_on_continent = south_america } }
+		ADISCORD_create_regional_general = { TRAIT = desert_fox }
+	}
+	else_if = {
+		limit = { capital_scope = { is_on_continent = australia } }
+		ADISCORD_create_regional_general = { TRAIT = ranger }
+	}
+	else_if = {
+		limit = { capital_scope = { is_on_continent = north_america } }
+		ADISCORD_create_regional_general = { TRAIT = commando }
+	}
+	else_if = {
+		limit = { capital_scope = { is_on_continent = africa } }
+		ADISCORD_create_regional_general = { TRAIT = urban_assault_specialist }
+	}
+	else_if = {
+		limit = { capital_scope = { is_on_continent = europe } }
+		ADISCORD_create_regional_general = { TRAIT = infantry_officer }
+	}
+	else_if = {
+		limit = { capital_scope = { is_on_continent = asia } }
+		ADISCORD_create_regional_general = { TRAIT = trait_engineer }
+	}
+	else = {
+		ADISCORD_create_regional_general = { TRAIT = organizer }
+	}
+}
+
 # COUNTRY: fill the vacant office during fresh-campaign setup, before the economy baseline.
 # Existing appointments remain authoritative; this effect is not a recurring cabinet policy.
 ADISCORD_initialize_foreign_minister = {

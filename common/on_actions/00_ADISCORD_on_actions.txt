@@ -69,6 +69,13 @@ on_actions = {
 					ADISCORD_grant_starting_technology_profile = yes
 					if = {
 						limit = {
+							has_army_size = { size > 0 }
+							NOT = { any_army_leader = { always = yes } }
+						}
+						ADISCORD_initialize_regional_general = yes
+					}
+					if = {
+						limit = {
 							OR = {
 								ADISCORD_is_playable_development_country = yes
 								tag = NAM

@@ -6145,7 +6145,7 @@ class NamCampaignTests(unittest.TestCase):
         facts[("NAM", "has_variable", "NAM_agreement_current")] = True
         facts[("NAM", "variable", "NAM_agreement_current")] = number
         facts[("NAM", "variable", "NAM_agreement_progress")] = 0
-        facts[("NAM", "variable", "NAM_agreement_target")] = 2
+        facts[("NAM", "variable", "NAM_agreement_target")] = {1: 300, 2: 2, 4: 200, 5: 3}.get(number, 0)
         facts[("NAM", "has_active_mission", "NAM_agreement_deadline")] = True
         for group in ("nam", "oil", "dist", "garr", "trade"):
             facts[("NAM", "variable", f"NAM_grp_{group}_support")] = 50
@@ -6178,6 +6178,499 @@ class NamCampaignTests(unittest.TestCase):
         self.assertEqual(scalar(mission, "days_mission_timeout"), "180")
         audit = block(programmes, "NAM_agreement_audit")
         self.assertTrue(self.matches(block(audit, "visible"), facts))
+
+    def test_opening_petition_reaches_the_next_free_council_and_rechecks_its_site(self):
+        event = self.events[BASE + ".12"]
+        options = {scalar(e.value, "name").split(".")[-1]: e.value for e in event if e.key == "option"}
+        monthly = self.effects["NAM_agreements_monthly"]
+        petition = ("NAM", "variable", "NAM_council_petition")
+        for answer, number in (("audit", 1), ("workshops", 3)):
+            facts = self.agreement_facts()
+            self.assertTrue(self.matches(block(options[answer], "trigger"), facts))
+            self.apply(block(options[answer], "hidden_effect"), facts)
+            self.assertEqual(facts[petition], number)
+            self.assertEqual(facts[("NAM", "variable", "NAM_agreement_current")], 1)
+            for blocker in (("has_variable", "NAM_agreement_current"),
+                            ("has_country_flag", "NAM_agreement_cooldown"),
+                            ("has_country_flag", "NAM_rival_event_pending"),
+                            ("has_country_flag", "NAM_agreement_offer_pending")):
+                busy = facts | {("NAM", "has_variable", "NAM_agreement_current"): False,
+                                ("NAM", *blocker): True}
+                self.apply(monthly, busy)
+                self.assertEqual(busy[petition], number)
+                self.assertNotIn(("NAM", "scheduled_event", "ADISCORD_nam_groups.20"), busy)
+            facts[("NAM", "has_variable", "NAM_agreement_current")] = False
+            for sites in (True, False):
+                session = facts.copy()
+                for state in ("67", "688", "689", "690", "719", "700"):
+                    session[(state, "is_controlled_by", "NAM")] = sites
+                selected = [entry for _, entry in selected_effects(self.expand(monthly), session, "NAM")]
+                first = [scalar(e.value, "value") for e in selected if e.key == "set_variable"
+                         and scalar(e.value, "var") == "NAM_agreement_offer_a"]
+                nominated = answer == "audit" or sites
+                self.assertEqual(first, [str(number)] if nominated else [])
+                self.assertEqual(sum(e.key == "random_list" for e in selected), 1 if nominated else 2)
+                self.assertIn("NAM_council_petition", [e.value for e in selected if e.key == "clear_variable"])
+
+    def opening_council(self, agenda):
+        opening = self.events[BASE + ".12"]
+        pledge = next(e.value for e in opening if e.key == "option" and scalar(e.value, "name").endswith("." + agenda))
+        facts = self.economy_facts() | self.agreement_facts()
+        facts[("fixture", "fuel_logistics")] = True
+        facts[("NAM", "has_variable", "NAM_agreement_current")] = False
+        facts[("NAM", "has_active_mission", "NAM_agreement_deadline")] = False
+        self.assertTrue(self.matches(block(pledge, "trigger"), facts))
+        self.apply(block(pledge, "hidden_effect"), facts)
+        self.apply(self.effects["NAM_agreements_monthly"], facts)
+        # Hold the second seat constant so each vote faces the same rival.
+        facts[("NAM", "variable", "NAM_agreement_offer_b")] = 4
+        facts[("NAM", "has_variable", "NAM_agreement_offer_b")] = True
+        return facts
+
+    def test_opening_council_honours_the_guarantee_and_delivers_the_workshop_batch(self):
+        meeting = self.events["ADISCORD_nam_groups.20"]
+        options = {scalar(e.value, "name"): e.value for e in meeting if e.key == "option"}
+        cash = ("NAM", "variable", "ADISCORD_economy_treasury")
+        trucks = ("NAM", "equipment", "motorized_equipment")
+        for agenda in ("audit", "workshops"):
+            facts = self.opening_council(agenda)
+            accept = "NAM_council_choose_" + agenda
+            visible = [name for name, opt in options.items() if self.matches(block(opt, "trigger"), facts)]
+            self.assertEqual(visible, [accept, "NAM_agreement_choose_garr", "NAM_agreement_decline"])
+            descriptions = [scalar(e.value, "text") for e in meeting if e.key == "desc"
+                            and self.matches(block(e.value, "trigger"), facts)]
+            self.assertEqual(descriptions, ["ADISCORD_nam_groups.20." + agenda])
+            self.apply(block(options[accept], "hidden_effect"), facts)
+            if agenda == "audit":
+                audit = self.decisions["NAM_agreement_audit"]
+                facts[cash] = 750
+                self.apply(block(audit, "complete_effect"), facts)
+                self.assertEqual(facts[cash], 150)
+                self.assertFalse(self.matches(self.triggers["NAM_agreement_goal_met"], facts))
+                self.apply(block(audit, "remove_effect"), facts)
+                for balance, met in ((149.99, False), (150, True)):
+                    facts[cash] = balance
+                    self.assertEqual(self.matches(self.triggers["NAM_agreement_goal_met"], facts), met)
+            else:
+                project = self.bind_field(self.decisions["NAM_agreement_district_project"], "689")
+                facts[("fixture", "previous_state")] = "689"
+                before = facts.get(trucks, 0)
+                self.apply(block(project, "complete_effect"), facts)
+                self.assertEqual(facts[cash], 9100)
+                self.assertEqual(facts.get(trucks, 0), before)
+                occupied = facts | {("689", "is_controlled_by", "NAM"): False}
+                self.apply(block(project, "remove_effect"), occupied)
+                self.assertEqual(occupied[cash], 10000)
+                self.assertEqual(occupied.get(trucks, 0), before)
+                self.apply(block(project, "remove_effect"), facts)
+                self.apply(block(project, "remove_effect"), facts)
+                self.assertEqual(facts[trucks], before + 30)
+                self.assertEqual(facts[("689", "building", "industrial_complex")], 1)
+                self.assertFalse(self.matches(block(project, "available"), facts))
+
+    def test_opening_council_publishes_dissent_or_withdraws_the_crews_only_once(self):
+        meeting = self.events["ADISCORD_nam_groups.20"]
+        options = {scalar(e.value, "name"): e.value for e in meeting if e.key == "option"}
+        rival = block(options["NAM_agreement_choose_garr"], "hidden_effect")
+        pp = ("NAM", "numeric", "has_political_power")
+        support = ("NAM", "variable", "NAM_grp_dist_support")
+        for agenda, speaker, reaction in (("audit", 1, "26"), ("workshops", 3, "27")):
+            facts = self.opening_council(agenda)
+            interrupted = facts | {("NAM", "has_war", "no"): False}
+            self.apply(block(options["ADISCORD_nam_resource_war.close"], "hidden_effect"), interrupted)
+            self.assertEqual(interrupted[("NAM", "variable", "NAM_council_petition")], speaker)
+            declined = facts.copy()
+            self.apply(block(options["NAM_agreement_decline"], "hidden_effect"), declined)
+            self.assertEqual(declined[pp], facts[pp])
+            pillar = "nam" if agenda == "audit" else "dist"
+            self.assertEqual(declined[("NAM", "variable", "NAM_grp_" + pillar + "_support")], 45)
+            ordinary = facts.copy()
+            self.apply(parse_clausewitz("clr_country_flag = NAM_agreement_offer_pending"), ordinary)
+            self.apply(self.effects["NAM_agreements_monthly"], ordinary)
+            self.assertFalse(self.matches(block(options["NAM_council_choose_" + agenda], "trigger"), ordinary))
+            self.apply(rival, ordinary)
+            self.assertEqual(ordinary[pp], facts[pp])
+            self.assertEqual(ordinary[support], facts[support])
+            self.assertEqual(ordinary[("NAM", "variable", "NAM_agreement_offer_b")], speaker)
+            if agenda == "workshops":
+                lapsed = facts.copy()
+                for state in ("67", "688", "689", "690", "719", "700"):
+                    lapsed[(state, "is_controlled_by", "NAM")] = False
+                self.assertFalse(self.matches(block(options["NAM_council_choose_workshops"], "trigger"), lapsed))
+                self.apply(rival, lapsed)
+                self.assertEqual(lapsed[support], facts[support])
+                self.assertNotIn(("NAM", "scheduled_event", "ADISCORD_nam_groups.27"), lapsed)
+            starting_pp = facts[pp]
+            self.apply(rival, facts)
+            self.apply(rival, facts)
+            self.assertEqual(facts[("NAM", "scheduled_event", "ADISCORD_nam_groups." + reaction)], 1)
+            self.assertEqual(facts[pp], starting_pp - (15 if speaker == 1 else 0))
+            self.assertEqual(facts[support], 47 if speaker == 3 else 50)
+            facts[("NAM", "has_completed_focus", "NAM_recognition")] = True
+            amend = self.decisions["NAM_agreement_amend"]
+            self.assertEqual(self.matches(block(amend, "visible"), facts), speaker == 1)
+            if agenda == "audit":
+                self.apply(block(amend, "complete_effect"), facts)
+                self.assertEqual(facts[("NAM", "variable", "NAM_agreement_target")], 300)
+
+    def test_postwar_council_can_adopt_only_the_other_signed_session_proposal(self):
+        decision = self.decisions["NAM_agreement_amend"]
+        deadline = ("NAM", "variable", "days_mission_timeout@NAM_agreement_deadline")
+        for offers in ((1, 4), (4, 1)):
+            for chosen, pillar in ((1, "nam"), (4, "garr")):
+                with self.subTest(offers=offers, chosen=chosen):
+                    facts = self.agreement_facts(chosen)
+                    facts[("NAM", "has_completed_focus", "NAM_recognition")] = True
+                    for side, value in zip(("a", "b"), offers):
+                        facts[("NAM", "variable", "NAM_agreement_offer_" + side)] = value
+                        facts[("NAM", "has_variable", "NAM_agreement_offer_" + side)] = True
+                    self.apply(self.effects["NAM_agreement_start"], facts)
+                    other = 4 if chosen == 1 else 1
+                    self.assertEqual(facts[("NAM", "variable", "NAM_agreement_offer_b")], other)
+                    self.assertEqual(facts[deadline], 180)
+                    for days, available in ((119, False), (120, True)):
+                        facts[deadline] = days
+                        self.assertEqual(self.matches(block(decision, "available"), facts), available)
+                    for change in (
+                        {("NAM", "has_variable", "NAM_agreement_cash_deposit"): True},
+                        {("NAM", "has_active_mission", "NAM_agreement_deadline"): False},
+                        {("NAM", "has_completed_focus", "NAM_recognition"): False},
+                        {("NAM", "has_war", "no"): False},
+                        {("NAM", "is_subject", "no"): False},
+                        {deadline: 119},
+                    ):
+                        blocked = facts | change
+                        self.apply(block(decision, "complete_effect"), blocked)
+                        self.assertEqual(blocked, facts | change)
+                    self.apply(block(decision, "complete_effect"), facts)
+                    self.assertEqual(facts[deadline], 120)
+                    self.assertEqual(facts[("NAM", "variable", "NAM_agreement_current")], other)
+                    self.assertEqual(facts[("NAM", "variable", "NAM_grp_" + pillar + "_support")], 42)
+                    self.assertFalse(self.matches(block(decision, "visible"), facts))
+                    settled = facts.copy()
+                    self.apply(block(decision, "complete_effect"), facts)
+                    self.assertEqual(facts, settled)
+
+    def test_amendment_respects_district_escrow_and_actual_export_deliveries(self):
+        decision = self.decisions["NAM_agreement_amend"]
+        facts = self.agreement_facts(3)
+        facts.update({
+            ("NAM", "has_completed_focus", "NAM_recognition"): True,
+            ("NAM", "variable", "days_mission_timeout@NAM_agreement_deadline"): 150,
+            ("NAM", "has_variable", "NAM_agreement_offer_b"): True,
+            ("NAM", "variable", "NAM_agreement_offer_b"): 5,
+            ("NAM", "variable", "max_fuel_k"): 150,
+            ("700", "is_owned_by", "NAM"): True,
+            ("700", "is_controlled_by", "NAM"): True,
+        })
+        self.assertTrue(self.matches(block(decision, "available"), facts))
+        for state in ("67", "688", "689", "690", "719", "700"):
+            paid = facts | {(state, "has_state_flag", "NAM_agreement_building"): True}
+            self.assertFalse(self.matches(block(decision, "available"), paid))
+        facts[("700", "is_controlled_by", "NAM")] = False
+        self.assertFalse(self.matches(block(decision, "available"), facts))
+        facts[("700", "is_controlled_by", "NAM")] = True
+        facts[("NAM", "variable", "NAM_agreement_current")] = 5
+        facts[("NAM", "variable", "NAM_agreement_offer_b")] = 1
+        self.apply(self.effects["NAM_agreement_set_goal"], facts)
+        facts[("NAM", "numeric", "has_fuel")] = 100000
+        self.apply(block(self.decisions["NAM_agreement_export"], "complete_effect"), facts)
+        self.assertEqual(facts[("NAM", "variable", "NAM_agreement_progress")], 1)
+        self.apply(block(decision, "complete_effect"), facts)
+        self.assertEqual(facts[("NAM", "variable", "NAM_agreement_progress")], 0)
+        self.assertEqual(facts[("NAM", "variable", "ADISCORD_economy_treasury")], 10300)
+        self.assertEqual(facts[("NAM", "numeric", "has_fuel")], 0)
+        self.assertTrue(self.matches(block(self.decisions["NAM_agreement_audit"], "visible"), facts))
+
+    def amended_council_facts(self, original, progress=0):
+        facts = self.agreement_facts(original)
+        facts.update({
+            ("NAM", "has_completed_focus", "NAM_recognition"): True,
+            ("NAM", "variable", "days_mission_timeout@NAM_agreement_deadline"): 150,
+            ("NAM", "has_variable", "NAM_agreement_offer_b"): True,
+            ("NAM", "variable", "NAM_agreement_offer_b"): 4 if original == 1 else 1,
+            ("NAM", "variable", "NAM_agreement_progress"): progress,
+            ("fixture", "fuel_logistics"): True,
+        })
+        self.apply(block(self.decisions["NAM_agreement_amend"], "complete_effect"), facts)
+        self.assertEqual(facts[("NAM", "scheduled_event", "ADISCORD_nam_groups.23")], 1)
+        self.assertEqual(facts[("NAM", "variable", "NAM_agreement_objector")], original)
+        return facts
+
+    def test_displaced_delegations_present_their_own_bill_and_settle_once(self):
+        event = self.events["ADISCORD_nam_groups.23"]
+        options = {scalar(e.value, "name").split(".")[-1]: e.value for e in event if e.key == "option"}
+        self.assertEqual(next(iter(options)), "file")
+        self.assertEqual(scalar(event, "timeout_days"), "7")
+        prices = (
+            ("nam", "numeric", "has_political_power", 25),
+            ("oil", "numeric", "has_fuel", 3000),
+            ("dist", "equipment", "motorized_equipment", 30),
+            ("garr", "numeric", "command_power", 15),
+            ("trade", "variable", "ADISCORD_economy_treasury", 150),
+        )
+        for original, (pillar, kind, resource, price) in enumerate(prices, 1):
+            with self.subTest(pillar=pillar):
+                facts = self.amended_council_facts(original)
+                self.assertTrue(self.matches(block(event, "trigger"), facts))
+                shown = [scalar(e.value, "text") for e in event if e.key == "desc"
+                         and self.matches(block(e.value, "trigger"), facts)]
+                self.assertEqual(shown, ["ADISCORD_nam_groups.23." + pillar])
+                stock = ("NAM", kind, resource)
+                support = ("NAM", "variable", f"NAM_grp_{pillar}_support")
+                self.assertEqual(facts[support], 42)
+                for balance, payable in ((price - 0.01, False), (price, True)):
+                    answer = facts | {stock: balance}
+                    self.assertEqual(self.matches(block(options["accept"], "trigger"), answer), payable)
+                    self.apply(block(options["accept"], "hidden_effect"), answer)
+                    self.assertEqual(answer[stock], 0 if payable else balance)
+                    self.assertEqual(answer[support], 47 if payable else 42)
+                    self.assertEqual(answer[("NAM", "variable", "days_mission_timeout@NAM_agreement_deadline")], 150)
+                    self.assertEqual(answer[("NAM", "variable", "NAM_agreement_current")], 4 if original == 1 else 1)
+                    self.assertFalse(self.matches(block(event, "trigger"), answer))
+                    settled = answer.copy()
+                    self.apply(block(options["accept"], "hidden_effect"), answer)
+                    self.assertEqual(answer, settled)
+                self.apply(block(options["file"], "hidden_effect"), facts)
+                self.assertEqual(facts[support], 42)
+                self.assertFalse(facts[("NAM", "has_variable", "NAM_agreement_objector")])
+
+    def test_completed_work_can_reserve_only_a_free_future_hearing(self):
+        event = self.events["ADISCORD_nam_groups.23"]
+        options = {scalar(e.value, "name").split(".")[-1]: e.value for e in event if e.key == "option"}
+        for original, pillar in ((2, "oil"), (4, "garr"), (5, "trade")):
+            for progress in (0, 1):
+                facts = self.amended_council_facts(original, progress)
+                for reserved in (False, True):
+                    answer = facts | {("NAM", "has_variable", "NAM_council_petition"): reserved}
+                    if reserved:
+                        answer[("NAM", "variable", "NAM_council_petition")] = 3
+                    eligible = progress > 0 and not reserved
+                    self.assertEqual(self.matches(block(options["hearing"], "trigger"), answer), eligible)
+                    self.apply(block(options["hearing"], "hidden_effect"), answer)
+                    self.assertEqual(answer.get(("NAM", "variable", "NAM_council_petition")),
+                                     original if eligible else 3 if reserved else None)
+                    self.assertEqual(answer[("NAM", "variable", f"NAM_grp_{pillar}_support")], 45 if eligible else 42)
+                    self.assertFalse(answer[("NAM", "has_country_flag", "NAM_agreement_part_performed")])
+                    if eligible:
+                        self.apply(self.effects["NAM_agreement_finish"], answer)
+                        self.assertEqual(answer[("NAM", "variable", "NAM_council_petition")], original)
+                        opening = {scalar(e.value, "name"): e.value for e in self.events[BASE + ".12"]
+                                   if e.key == "option"}
+                        for choice in ("audit", "workshops"):
+                            option = opening[BASE + ".12." + choice]
+                            self.assertFalse(self.matches(block(option, "trigger"), answer))
+                            self.apply(block(option, "hidden_effect"), answer)
+                            self.assertEqual(answer[("NAM", "variable", "NAM_council_petition")], original)
+
+        pending = self.amended_council_facts(5, 1)
+        for state in (("has_war", "no"), ("is_subject", "no"), ("has_active_mission", "NAM_agreement_deadline")):
+            expired = pending | {("NAM", *state): False}
+            for choice in ("accept", "hearing"):
+                answer = expired.copy()
+                self.assertFalse(self.matches(block(options[choice], "trigger"), answer))
+                self.apply(block(options[choice], "hidden_effect"), answer)
+                self.assertEqual(answer[("NAM", "variable", "ADISCORD_economy_treasury")], 10000)
+                self.assertEqual(answer[("NAM", "variable", "NAM_grp_trade_support")], 42)
+                self.assertNotIn(("NAM", "variable", "NAM_council_petition"), answer)
+
+    def test_promised_export_hearing_rechecks_harbour_before_the_second_draw(self):
+        event = self.events["ADISCORD_nam_groups.23"]
+        hearing = next(e.value for e in event if e.key == "option" and scalar(e.value, "name").endswith(".hearing"))
+        facts = self.amended_council_facts(5, 1)
+        self.apply(block(hearing, "hidden_effect"), facts)
+        self.apply(self.effects["NAM_agreement_finish"], facts)
+        facts[("NAM", "has_country_flag", "NAM_agreement_cooldown")] = False
+        facts[("NAM", "variable", "max_fuel_k")] = 150
+        facts[("NAM", "fuel_capacity")] = 150000
+        facts[("700", "is_owned_by", "NAM")] = True
+        monthly = self.expand(self.effects["NAM_agreements_monthly"])
+        for port_held in (False, True):
+            facts[("700", "is_controlled_by", "NAM")] = port_held
+            selected = [e for _, e in selected_effects(monthly, facts, "NAM")]
+            first = [scalar(e.value, "value") for e in selected if e.key == "set_variable"
+                     and scalar(e.value, "var") == "NAM_agreement_offer_a"]
+            self.assertEqual(first, ["5"] if port_held else [])
+            self.assertEqual(sum(e.key == "random_list" for e in selected), 1 if port_held else 2)
+            self.assertIn("NAM_council_petition", [e.value for e in selected if e.key == "clear_variable"])
+
+    def returning_council_facts(self, speaker):
+        facts = self.amended_council_facts(speaker, 1)
+        protest = self.events["ADISCORD_nam_groups.23"]
+        hearing = next(e.value for e in protest if e.key == "option" and scalar(e.value, "name").endswith(".hearing"))
+        self.apply(block(hearing, "hidden_effect"), facts)
+        self.apply(self.effects["NAM_agreement_finish"], facts)
+        facts.update({
+            ("NAM", "has_country_flag", "NAM_agreement_cooldown"): False,
+            ("67", "variable", "NAM_field_capacity"): 2,
+            ("67", "variable", "NAM_field_max_capacity"): 8,
+            ("NAM", "variable", "max_fuel_k"): 150,
+            ("700", "is_owned_by", "NAM"): True,
+            ("700", "is_controlled_by", "NAM"): True,
+        })
+        self.apply(self.effects["NAM_agreements_monthly"], facts)
+        self.assertEqual(facts[("NAM", "variable", "NAM_agreement_offer_a")], speaker)
+        pillar = {2: "oil", 4: "garr", 5: "trade"}[speaker]
+        self.assertTrue(self.matches(self.triggers[f"NAM_council_{pillar}_hearing"], facts))
+        # Fix the other delegation's draw to the audit office.
+        facts[("NAM", "variable", "NAM_agreement_offer_b")] = 1
+        facts[("NAM", "has_variable", "NAM_agreement_offer_b")] = True
+        return facts
+
+    def test_returning_delegations_quote_smaller_fresh_orders_and_react_once(self):
+        event = self.events["ADISCORD_nam_groups.20"]
+        choices = {scalar(e.value, "name"): e.value for e in event if e.key == "option"}
+        for speaker, pillar, target, reaction in ((2, "oil", 1, "24"), (5, "trade", 2, "25")):
+            with self.subTest(pillar=pillar):
+                facts = self.returning_council_facts(speaker)
+                offer = choices["NAM_council_choose_returning_" + pillar]
+                visible = [name for name, option in choices.items() if self.matches(block(option, "trigger"), facts)]
+                self.assertEqual(visible, ["NAM_council_choose_returning_" + pillar,
+                                           "NAM_agreement_choose_nam", "NAM_agreement_decline"])
+                self.assertEqual([scalar(e.value, "text") for e in event if e.key == "desc"
+                                  and self.matches(block(e.value, "trigger"), facts)],
+                                 ["ADISCORD_nam_groups.20." + pillar])
+                accepted = self.economy_facts() | facts
+                self.apply(block(offer, "hidden_effect"), accepted)
+                self.assertEqual(accepted[("NAM", "variable", "NAM_agreement_target")], target)
+                self.assertEqual(accepted[("NAM", "variable", "NAM_agreement_progress")], 0)
+                goal = self.triggers["NAM_agreement_goal_met"]
+                self.assertFalse(self.matches(goal, accepted))
+                if speaker == 2:
+                    drill = self.bind_field(self.decisions["NAM_econ_deep_drilling"])
+                    for site in block(self.triggers["NAM_field_state"], "OR"):
+                        output = accepted[(site.value, "variable", "NAM_field_capacity")] * 8
+                        accepted[(site.value, "variable", "NAM_field_applied_oil")] = output
+                        accepted[(site.value, "resource", "oil")] = output
+                    self.apply(block(drill, "complete_effect"), accepted)
+                    self.assertFalse(self.matches(goal, accepted))
+                    self.apply(block(drill, "remove_effect"), accepted)
+                    self.assertEqual(accepted[("67", "variable", "NAM_field_capacity")], 4)
+                else:
+                    shipment = block(self.decisions["NAM_agreement_export"], "complete_effect")
+                    accepted[("NAM", "numeric", "has_fuel")] = 200000
+                    self.apply(shipment, accepted)
+                    self.assertFalse(self.matches(goal, accepted))
+                    self.apply(shipment, accepted)
+                    self.assertEqual(accepted[("NAM", "numeric", "has_fuel")], 0)
+                self.assertTrue(self.matches(goal, accepted))
+                vote = block(choices["NAM_agreement_choose_nam"], "hidden_effect")
+                rejected = facts.copy()
+                self.apply(vote, rejected)
+                self.apply(vote, rejected)
+                self.apply(block(choices["ADISCORD_nam_resource_war.close"], "hidden_effect"), rejected)
+                self.assertEqual(rejected[("NAM", "scheduled_event", "ADISCORD_nam_groups." + reaction)], 1)
+                self.assertEqual(rejected[("NAM", "variable", "NAM_grp_" + pillar + "_support")], 42)
+                self.assertEqual(rejected[("NAM", "variable", "NAM_agreement_current")], 1)
+                self.assertEqual(rejected[("NAM", "has_variable", "NAM_agreement_offer_b")], speaker == 5)
+                if speaker == 5:
+                    self.apply(block(self.decisions["NAM_agreement_amend"], "complete_effect"), rejected)
+                    self.assertEqual(rejected[("NAM", "variable", "NAM_agreement_target")], 3)
+
+    def test_garrison_roll_call_earns_a_hearing_before_the_main_course(self):
+        muster = self.decisions["NAM_agreement_roll_call"]
+        cp = ("NAM", "numeric", "command_power")
+        xp = ("NAM", "numeric", "army_experience")
+        facts = self.agreement_facts(4)
+        facts[cp] = 10
+        facts[xp] = 0
+        for blocked in ({cp: 9.99}, {("NAM", "has_variable", "NAM_agreement_cash_deposit"): True},
+                        {("NAM", "has_war", "no"): False}):
+            unavailable = facts | blocked
+            self.apply(block(muster, "complete_effect"), unavailable)
+            self.assertEqual(unavailable, facts | blocked)
+        self.apply(block(muster, "complete_effect"), facts)
+        self.assertEqual((facts[cp], facts[xp]), (0, 5))
+        facts[cp] = 10
+        self.apply(block(muster, "complete_effect"), facts)
+        self.assertEqual((facts[cp], facts[xp]), (10, 5))
+        facts.update({
+            ("NAM", "has_completed_focus", "NAM_recognition"): True,
+            ("NAM", "variable", "days_mission_timeout@NAM_agreement_deadline"): 150,
+            ("NAM", "has_variable", "NAM_agreement_offer_b"): True,
+            ("NAM", "variable", "NAM_agreement_offer_b"): 1,
+        })
+        self.apply(block(self.decisions["NAM_agreement_amend"], "complete_effect"), facts)
+        objection = self.events["ADISCORD_nam_groups.23"]
+        desc = [scalar(e.value, "text") for e in objection if e.key == "desc"
+                and self.matches(block(e.value, "trigger"), facts)]
+        self.assertEqual(desc, ["ADISCORD_nam_groups.23.roll_call"])
+        self.assertTrue(self.matches(self.triggers["NAM_agreement_can_promise_hearing"], facts))
+
+    def test_garrison_hearing_delivers_local_training_or_holds_instructors_for_fourteen_days(self):
+        meeting = self.events["ADISCORD_nam_groups.20"]
+        options = {scalar(e.value, "name"): e.value for e in meeting if e.key == "option"}
+        facts = self.returning_council_facts(4)
+        local = "NAM_council_choose_local_reserve"
+        visible = [name for name, opt in options.items() if self.matches(block(opt, "trigger"), facts)]
+        self.assertEqual(visible, [local, "NAM_agreement_choose_nam", "NAM_agreement_decline"])
+        war = facts | {("NAM", "has_war", "no"): False}
+        self.apply(block(options["ADISCORD_nam_resource_war.close"], "hidden_effect"), war)
+        self.assertEqual(war[("NAM", "variable", "NAM_council_petition")], 4)
+        accepted = facts.copy()
+        self.apply(block(options[local], "hidden_effect"), accepted)
+        course = self.decisions["NAM_agreement_training"]
+        manpower = ("NAM", "numeric", "has_manpower")
+        experience = ("NAM", "numeric", "army_experience")
+        initial_manpower = accepted.get(manpower, 0)
+        initial_experience = accepted.get(experience, 0)
+        self.apply(block(course, "complete_effect"), accepted)
+        self.assertEqual(accepted[("NAM", "variable", "NAM_agreement_cash_deposit")], 800)
+        self.apply(block(course, "remove_effect"), accepted)
+        self.apply(block(course, "remove_effect"), accepted)
+        self.assertEqual(accepted[manpower], initial_manpower + 5000)
+        self.assertEqual(accepted[experience], initial_experience + 35)
+        goal = self.triggers["NAM_agreement_goal_met"]
+        accepted[("NAM", "equipment", "infantry_equipment")] = 1000
+        accepted[("NAM", "equipment", "support_equipment")] = 100
+        for trucks, met in ((99.99, False), (100, True)):
+            accepted[("NAM", "equipment", "motorized_equipment")] = trucks
+            self.assertEqual(self.matches(goal, accepted), met)
+        self.assertTrue(accepted[("NAM", "has_country_flag", "NAM_agreement_training_done")])
+        rival = block(options["NAM_agreement_choose_nam"], "hidden_effect")
+        deadline = ("NAM", "variable", "days_mission_timeout@NAM_agreement_deadline")
+        amend = self.decisions["NAM_agreement_amend"]
+        ordinary = facts.copy()
+        self.apply(parse_clausewitz("set_country_flag = { flag = NAM_agreement_offer_pending value = 1 }"), ordinary)
+        self.apply(rival, ordinary)
+        ordinary[deadline] = 120
+        self.assertTrue(self.matches(block(amend, "available"), ordinary))
+        self.assertNotIn(("NAM", "scheduled_event", "ADISCORD_nam_groups.28"), ordinary)
+        self.apply(rival, facts)
+        self.apply(rival, facts)
+        self.assertEqual(facts[("NAM", "variable", "NAM_grp_garr_support")], 42)
+        self.assertEqual(facts[("NAM", "scheduled_event", "ADISCORD_nam_groups.28")], 1)
+        for days, eligible in ((180, True), (167, True), (166, False), (120, False)):
+            answer = facts | {deadline: days}
+            self.assertEqual(self.matches(block(amend, "available"), answer), eligible)
+            self.apply(block(amend, "complete_effect"), answer)
+            self.assertEqual(answer[("NAM", "variable", "NAM_agreement_current")], 4 if eligible else 1)
+            if eligible:
+                self.assertEqual(answer[("NAM", "variable", "NAM_agreement_target")], 200)
+            self.assertEqual(answer[deadline], days)
+
+    def test_interrupted_hearing_and_lapsed_bid_do_not_punish_the_speaker(self):
+        event = self.events["ADISCORD_nam_groups.20"]
+        options = {scalar(e.value, "name"): e.value for e in event if e.key == "option"}
+        for speaker, pillar in ((2, "oil"), (5, "trade")):
+            facts = self.returning_council_facts(speaker)
+            support = ("NAM", "variable", "NAM_grp_" + pillar + "_support")
+            interrupted = facts | {("NAM", "has_war", "no"): False}
+            self.apply(block(options["ADISCORD_nam_resource_war.close"], "hidden_effect"), interrupted)
+            self.assertEqual(interrupted[("NAM", "variable", "NAM_council_petition")], speaker)
+            self.assertEqual(interrupted[support], facts[support])
+            lost = facts | {(("67" if speaker == 2 else "700"), "is_controlled_by", "NAM"): False}
+            self.assertTrue(self.matches(self.triggers["NAM_council_hearing_lapsed"], lost))
+            self.assertFalse(self.matches(block(options["NAM_council_choose_returning_" + pillar], "trigger"), lost))
+            for name in ("NAM_agreement_choose_nam", "NAM_agreement_decline"):
+                vote = lost.copy()
+                self.apply(block(options[name], "hidden_effect"), vote)
+                self.assertEqual(vote[support], facts[support])
+                self.assertFalse(vote[("NAM", "has_variable", "NAM_agreement_offer_b")])
+            refused = facts.copy()
+            self.apply(block(options["NAM_agreement_decline"], "hidden_effect"), refused)
+            self.assertEqual(refused[support], facts[support] - 5)
+            self.assertEqual(refused[("NAM", "variable", "NAM_grp_nam_support")], 45)
 
     def test_agreement_audit_payment_delivery_and_repeated_cancellation(self):
         decision = self.decisions["NAM_agreement_audit"]
@@ -6247,9 +6740,10 @@ class NamCampaignTests(unittest.TestCase):
         facts[("NAM", "has_country_flag", "NAM_ladder_settled")] = True
         options = [entry.value for entry in event if entry.key == "option"]
         self.assertTrue(self.matches(block(event, "trigger"), facts))
-        self.assertTrue(self.matches(block(options[0], "trigger"), facts))
+        audit = next(o for o in options if scalar(o, "name") == "NAM_agreement_choose_nam")
+        self.assertTrue(self.matches(block(audit, "trigger"), facts))
         facts[("NAM", "has_war", "no")] = False
-        self.assertFalse(self.matches(block(options[0], "trigger"), facts))
+        self.assertFalse(self.matches(block(audit, "trigger"), facts))
         self.assertTrue(self.matches(block(options[-1], "trigger"), facts))
         self.apply(block(options[-1], "hidden_effect"), facts)
         self.assertFalse(facts[("NAM", "has_country_flag", "NAM_agreement_offer_pending")])
@@ -6486,6 +6980,14 @@ class NamCampaignTests(unittest.TestCase):
             if entry.key == "any_owned_state" and any(e.key.startswith("NAM_board_") and e.key.endswith("_site")
                                                       for e in entry.value):
                 result.append(replace(entry, key="fixture_owned_board_site", value=tuple(self.expand(entry.value))))
+            elif entry.key == "any_owned_state" and entry.value == block(self.triggers["NAM_agreement_oil_possible"], "any_owned_state"):
+                sites = block(self.triggers["NAM_field_state"], "OR")
+                self.assertTrue(all(site.key == "state" for site in sites))
+                terms = self.expand([child for child in entry.value if child.key != "NAM_field_state"])
+                owned = replace(entry, key="is_owned_by", value="NAM")
+                result.append(replace(entry, key="OR", value=[
+                    replace(site, key=site.value, value=[owned, *terms]) for site in sites
+                ]))
             elif entry.key == "overlord" and [(e.key, e.value) for e in entry.value] == [("NAM_wor_southern_tag", "yes")]:
                 tags = block(self.triggers["NAM_wor_southern_tag"], "OR")
                 self.assertTrue(all(tag.key == "tag" for tag in tags))
@@ -7122,8 +7624,8 @@ class NamCampaignTests(unittest.TestCase):
 
         expected = {
             "main": (self.focuses, 95), "wartime": (self.wartime, 40),
-            "heritage": (self.heritage, 32), "postwar": (self.postwar, 226), "defeated": (self.defeated, 22),
-            "south_war": (self.south_war, 68),
+            "heritage": (self.heritage, 34), "postwar": (self.postwar, 220), "defeated": (self.defeated, 22),
+            "south_war": (self.south_war, 72),
             "exile_radical": (self.exile_trees["exile_radical"][1], 72),
             "exile_humanist": (self.exile_trees["exile_humanist"][1], 73),
             "exile_corporate": (self.exile_trees["exile_corporate"][1], 34),
@@ -9608,13 +10110,16 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_shared_southern_preparation_has_forty_nodes_and_no_mandate_gate(self):
         roots = {"NAM_pw_transport_commission", "NAM_pw_army_review", "NAM_pw_naval_review", "NAM_pw_air_review"}
+        mandate_programmes = {"NAM_pw_armament_inspectorate", "NAM_pw_public_supply", "NAM_freight_brokerage",
+                              "NAM_through_waybill", "NAM_relief_register"}
         reachable = set(roots)
         while True:
             children = {name for name, focus in self.postwar.items()
                         if any(e.key == "prerequisite" and any(p.value in reachable for p in e.value) for e in focus)}
-            if children <= reachable:
+            if children - mandate_programmes <= reachable:
                 break
-            reachable.update(children)
+            reachable.update(children - mandate_programmes)
+        self.assertEqual(children - reachable, mandate_programmes)
         self.assertEqual(len(reachable - {"NAM_svetlogorsk_shipyards"}), 40)
         for name in reachable:
             for gate in (e.value for e in self.postwar[name] if e.key == "allow_branch"):
@@ -10365,7 +10870,8 @@ class NamCampaignTests(unittest.TestCase):
     def test_southern_civil_order_keeps_its_site_and_refunds_lost_subject(self):
         cash = ("NAM", "variable", "ADISCORD_economy_treasury")
         for failure in (None, "subject", "ownership", "control", "station", "capacity"):
-            facts = self.postwar_facts()
+            facts = self.heritage_facts()
+            facts[("NAM", "has_completed_focus", "NAM_pw_southern_military_rule")] = False
             facts[cash] = 900
             facts[("SHL", "is_subject_of", "NAM")] = True
             facts[("699", "is_owned_by", "SHL")] = True
@@ -11627,6 +12133,79 @@ class NamCampaignTests(unittest.TestCase):
                 y += int(next((e.value for e in offset if e.key == "y"), 0))
         return x, y
 
+    def test_southern_staff_and_occupation_follow_the_campaign_phase(self):
+        prefix = "NAM_pw_southern_"
+        staff = {prefix + name for name in ("budget", "intelligence", "reserve", "supply_plan")}
+        occupation = {prefix + name for name in ("military_rule", "local_offices")}
+        self.assertTrue((staff | occupation).isdisjoint(self.postwar))
+        self.assertTrue(staff <= self.south_war.keys() and staff.isdisjoint(self.heritage))
+        self.assertTrue(occupation <= self.heritage.keys() and occupation.isdisjoint(self.south_war))
+
+        for name in staff:
+            focus = self.south_war[name]
+            self.assertEqual(scalar(block(focus, "allow_branch"), "has_completed_focus"), "NAM_service_state")
+            gate = list(walk(block(focus, "available")))
+            self.assertIn(("ADISCORD_south_final_active", "yes"), [(e.key, e.value) for e in gate])
+            self.assertIn(("has_country_flag", "ADISCORD_south_north_leader"), [(e.key, e.value) for e in gate])
+        for optional in ("intelligence", "reserve"):
+            self.assertIn(prefix + "supply_plan", reachable(self.south_war, {prefix + optional}))
+        self.assertNotIn(prefix + "supply_plan", reachable(self.south_war, {prefix + "intelligence", prefix + "reserve"}))
+
+        facts = self.heritage_facts()
+        facts[("NAM", "has_variable", "NAM_prewar_balance")] = True
+        facts[("NAM", "variable", "NAM_prewar_balance")] = -0.5
+        for name in occupation:
+            focus = self.heritage[name]
+            self.assertEqual({e.value for e in block(focus, "mutually_exclusive")}, occupation - {name})
+            self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "NAM_pw_permanent_institutions")
+            for subject in (False, True):
+                facts[("SHL", "is_subject_of", "NAM")] = subject
+                self.assertEqual(self.matches(block(focus, "available"), facts), subject, name)
+
+    def test_postwar_service_institutions_join_shared_programmes(self):
+        requirements = {
+            "district_inspectorate": [("civil_service_exam", "appointed_prefects"), ("development_bank",)],
+            "pw_constitutional_committee": [("service_state",), ("svetlogorye", "pw_regional_reconstruction")],
+            "pw_industrial_commission": [("state_plan", "regional_trusts"), ("pw_industrial_sites",)],
+            "pw_public_supply": [("pw_industrial_commission",), ("pw_freight_schedule",)],
+            "pw_armament_inspectorate": [("pw_southern_army",)],
+            "pw_defence_accounts": [("pw_military_governors",), ("pw_armament_inspectorate",)],
+        }
+        for name, alternatives in requirements.items():
+            focus = self.postwar["NAM_" + name]
+            actual = [frozenset(p.value for p in group.value) for group in focus if group.key == "prerequisite"]
+            expected = [frozenset("NAM_" + p for p in group) for group in alternatives]
+            self.assertCountEqual(actual, expected, name)
+            self.assertEqual(scalar(block(focus, "allow_branch"), "NAM_prewar_service_mandate"), "yes", name)
+
+    def test_postwar_pragmatic_and_district_programmes_join_nearby_branches(self):
+        requirements = {
+            "freight_brokerage": [("pw_naval_fuel_depots",)],
+            "through_waybill": [("bonded_terminal",), ("pw_freight_schedule",)],
+            "machine_tool_contracts": [("commercial_courts",), ("pw_industrial_sites",)],
+            "customs_clearinghouse": [("foreign_patents", "domestic_designs"), ("through_waybill",)],
+            "relief_register": [("pw_reserve_centres",)],
+            "cooperative_congress": [("pw_oil_equipment",)],
+            "district_fair": [("haulage_cooperatives", "tool_cooperatives"), ("district_council",)],
+            "relief_reserves": [("rescue_college",), ("district_fair",)],
+        }
+        for name, groups in requirements.items():
+            focus = self.postwar["NAM_" + name]
+            expected = [set("NAM_" + key for key in group) for group in groups]
+            actual = [{p.value for p in entry.value} for entry in focus if entry.key == "prerequisite"]
+            self.assertCountEqual(actual, expected, name)
+            x, y = self.postwar_focus_position(focus, {})
+            for parent in set.union(*actual):
+                px, py = self.postwar_focus_position(self.postwar[parent], {})
+                self.assertIn(y - py, range(1, 5), (parent, name))
+                self.assertLessEqual(abs(x - px), 13, (parent, name))
+
+        for name in ("NAM_prag_south_guarantees", "NAM_south_oil_charter"):
+            focus = self.postwar[name]
+            for gate in ("available", "bypass"):
+                self.assertIn("NAM_svetlogorye", [e.value for e in block(focus, gate)
+                                                  if e.key == "has_completed_focus"], (name, gate))
+
     def test_postwar_layout_keeps_connection_corridors_clear(self):
         for route, tree in product(("service", "district", "pragmatic"), (self.postwar, self.heritage)):
             facts = self.postwar_facts()
@@ -11694,14 +12273,15 @@ class NamCampaignTests(unittest.TestCase):
                 first_xs = [positions[n][0] for n in children[first] | {first}]
                 second_xs = [positions[n][0] for n in children[second] | {second}]
                 overlap = min(max(first_xs), max(second_xs)) - max(min(first_xs), min(second_xs))
-                self.assertLessEqual(overlap, 0, (route, first, second))
+                # Even a straight descent looks connected if another branch touches its elbow.
+                self.assertLess(overlap, 0, (route, first, second))
 
     def test_postwar_layout_is_visible_before_progress_and_mandate_specific(self):
         roots = ("NAM_civil_repair", "NAM_law_after_war", "NAM_veterans_return")
         main = reachable(self.postwar, set())
         self.assertEqual(main, set(self.postwar))
         self.assertTrue(main.isdisjoint(self.heritage))
-        for balance, course, count in ((-0.5, "service_state", 157), (0, "pragmatic_compact", 128),
+        for balance, course, count in ((-0.5, "service_state", 151), (0, "pragmatic_compact", 128),
                                        (0.5, "federal_charter", 127)):
             facts = self.postwar_facts()
             facts[("NAM", "has_variable", "NAM_prewar_balance")] = True
@@ -11725,18 +12305,44 @@ class NamCampaignTests(unittest.TestCase):
             self.assertEqual(points["NAM_svetlogorye"][1], 9)
             self.assertEqual(points["NAM_" + course][1], 10)
             if course == "federal_charter":
-                self.assertEqual(points["NAM_public_credit"], (67, 19))
-            self.assertEqual([points[n][1] for n in roots], [origin_y + 2] * 3)
-            self.assertEqual(points["NAM_law_after_war"][0], origin_x)
+                self.assertEqual(points["NAM_public_credit"], (63, 18))
+                college_x, college_y = points["NAM_rescue_college"]
+                fair_x, fair_y = points["NAM_district_fair"]
+                reserves_x, reserves_y = points["NAM_relief_reserves"]
+                self.assertEqual((fair_y, reserves_y), (college_y + 1, fair_y + 1))
+                self.assertLessEqual(abs(2 * reserves_x - college_x - fair_x), 1)
+                self.assertIn(reserves_x - college_x, range(1, 5))
+                self.assertIn(fair_x - reserves_x, range(1, 5))
+                for source, target, limit in (
+                    ("law_after_war", "federal_charter", 6),
+                    ("federal_charter", "district_council", 8),
+                    ("district_council", "district_fair", 9),
+                    ("pw_reserve_centres", "relief_register", 9),
+                    ("pw_oil_equipment", "cooperative_congress", 4),
+                ):
+                    distance = abs(points["NAM_" + source][0] - points["NAM_" + target][0])
+                    self.assertLessEqual(distance, limit, (source, target))
+            self.assertEqual(points["NAM_civil_repair"][1], origin_y + 1)
+            self.assertEqual(points["NAM_veterans_return"][1], origin_y + 1)
+            legislation_y = points["NAM_law_after_war"][1]
+            self.assertIn(legislation_y - origin_y, range(1, 4))
+            self.assertIn(points["NAM_" + course][1] - legislation_y, range(1, 4))
+            recovery_x, recovery_y = points["NAM_svetlogorye"]
+            recovery_inputs = ("NAM_law_after_war", "NAM_national_university")
+            for parent in recovery_inputs:
+                px, py = points[parent]
+                self.assertIn(recovery_y - py, range(1, 5))
+                self.assertLessEqual(abs(recovery_x - px), 3)
+            self.assertEqual(2 * recovery_x, sum(points[n][0] for n in recovery_inputs))
             forces_x = points["NAM_veterans_return"][0]
             air_x, air_y = points["NAM_pw_air_review"]
-            self.assertGreaterEqual(forces_x - origin_x, 12)
+            self.assertLess(forces_x, origin_x)
             self.assertLessEqual(abs(air_x - forces_x), 9)
             self.assertEqual(points["NAM_pw_flight_schools"], (air_x, air_y + 1))
             transport_x, transport_y = points["NAM_pw_transport_commission"]
             self.assertEqual(points["NAM_pw_rail_priority"], (transport_x, transport_y + 1))
             economic_x = points["NAM_civil_repair"][0]
-            self.assertGreaterEqual(origin_x - economic_x, 12)
+            self.assertLess(origin_x, economic_x)
             economic_children = [x for name, (x, _) in points.items()
                                  if any(p.value == "NAM_civil_repair"
                                         for group in self.postwar[name] if group.key == "prerequisite"
@@ -11744,29 +12350,72 @@ class NamCampaignTests(unittest.TestCase):
             self.assertLessEqual(abs(2 * economic_x - min(economic_children) - max(economic_children)), 1)
             xs = [points[name][0] for name in main.intersection(points)]
             self.assertLessEqual(max(xs) - min(xs), 115)
+            diamonds = {
+                "service_state": [("state_project_bureaus", "distribution_board", "building_code", "works_commission")],
+                "pragmatic_compact": [("commercial_courts", "export_clearing", "machine_tool_contracts", "contract_register")],
+                "federal_charter": [
+                    ("cooperative_congress", "haulage_cooperatives", "tool_cooperatives", "district_fair"),
+                    ("relief_register", "relief_trains", "mobile_clinics", "rescue_college"),
+                ],
+            }
+            for head, left, right, tail in diamonds[course]:
+                top, a, b, bottom = (points["NAM_" + key] for key in (head, left, right, tail))
+                self.assertEqual(a[1], b[1], head)
+                self.assertEqual(a[0] + b[0], top[0] + bottom[0], head)
+                if course == "federal_charter":
+                    for side in (a, b):
+                        for end in (top, bottom):
+                            self.assertLessEqual(abs(side[0] - end[0]), 6, head)
+                else:
+                    self.assertEqual(top[0], bottom[0], head)
+            self.assertEqual(points["NAM_depot_inquiry"][0] + points["NAM_pw_refinery_engineering"][0],
+                             2 * points["NAM_oil_exchange"][0])
             oil_root = "NAM_oil_ministry"
-            oil = set(points) - reachable(self.postwar, {oil_root})
-            self.assertEqual(oil, {oil_root, "NAM_middle_loren_wells",
-                                   "NAM_export_consortium", "NAM_state_refineries", "NAM_oil_exchange",
-                                   "NAM_pw_oil_laboratories", "NAM_pw_oil_equipment", "NAM_pw_refinery_engineering",
-                                   "NAM_depot_inquiry", "NAM_depot_revoke", "NAM_depot_reserve_charter"})
+            oil = {oil_root, "NAM_middle_loren_wells", "NAM_export_consortium", "NAM_state_refineries",
+                   "NAM_oil_exchange", "NAM_pw_oil_laboratories", "NAM_pw_oil_equipment",
+                   "NAM_pw_refinery_engineering", "NAM_depot_inquiry", "NAM_depot_revoke", "NAM_depot_reserve_charter"}
+            district_consumers = {"NAM_cooperative_congress", "NAM_haulage_cooperatives", "NAM_tool_cooperatives",
+                                  "NAM_district_fair", "NAM_relief_reserves"} if course == "federal_charter" else set()
+            self.assertEqual(set(points) - reachable(self.postwar, {oil_root}), oil | district_consumers)
             oil_right = max(points[name][0] for name in oil)
-            self.assertGreaterEqual(min(points[name][0] for name in main.intersection(points) - oil) - oil_right, 4)
+            oil_left = min(points[name][0] for name in oil)
+            oil_rows = {points[n][1] for n in oil}
+            for other in set(points) - oil:
+                x, y = points[other]
+                if y in oil_rows:
+                    self.assertTrue(x <= oil_left - 2 or x >= oil_right + 2, other)
             for name, (x, y) in points.items():
                 for group in (e for e in self.postwar[name] if e.key == "prerequisite"):
                     for parent in (p.value for p in group.value if p.value in points):
                         px, py = points[parent]
                         limit = 30 if parent in roots else 40
                         self.assertLessEqual(abs(x - px), limit, (parent, name))
-                        self.assertLessEqual(y - py, 8, (parent, name))
-            navy_y = points["NAM_pw_naval_review"][1]
-            army_y = points["NAM_pw_army_review"][1]
-            self.assertEqual(points["NAM_oil_ministry"][1], air_y)
-            self.assertIn(navy_y - air_y, (2, 3))
-            self.assertIn(army_y - navy_y, (2, 3))
-            energy_x, energy_y = points["NAM_pw_energy_commission"]
-            self.assertLess(energy_y, transport_y)
-            self.assertGreater(energy_x, oil_right)
+                        personnel_choice = name == "NAM_district_inspectorate" and parent in (
+                            "NAM_civil_service_exam", "NAM_appointed_prefects",
+                        )
+                        row_limit = 4 if personnel_choice else 3
+                        self.assertLessEqual(y - py, row_limit, (parent, name))
+            navy_x, navy_y = points["NAM_pw_naval_review"]
+            army_x, army_y = points["NAM_pw_army_review"]
+            self.assertEqual((navy_x, navy_y), (forces_x, air_y))
+            self.assertEqual((army_x - navy_x, army_y), (navy_x - air_x, air_y))
+            energy_x = points["NAM_pw_energy_commission"][0]
+            economy_heads = ("NAM_pw_transport_commission", "NAM_pw_energy_commission",
+                             "NAM_pw_industrial_recovery", "NAM_oil_ministry")
+            self.assertEqual([points[n][1] for n in economy_heads], [air_y] * 4)
+            self.assertEqual(air_y, points["NAM_veterans_return"][1] + 1)
+            for left, right in zip(economy_heads, economy_heads[1:]):
+                self.assertGreaterEqual(points[right][0] - points[left][0], 10)
+            self.assertIn(transport_x - army_x, range(2, 11))
+            army_inputs = {"NAM_pw_staff_exercises", "NAM_pw_reserve_centres", "NAM_pw_freight_schedule"}
+            required = [tuple(p.value for p in group.value) for group in self.postwar["NAM_pw_southern_army"]
+                        if group.key == "prerequisite"]
+            self.assertCountEqual(required, [(n,) for n in army_inputs])
+            formation_x, formation_y = points["NAM_pw_southern_army"]
+            for parent in army_inputs:
+                px, py = points[parent]
+                self.assertEqual(py + 1, formation_y)
+                self.assertLessEqual(abs(px - formation_x), 4)
             self.assertIn(energy_x - points["NAM_pw_oilfield_substations"][0], (1, 2))
             if "NAM_pw_constitutional_committee" in points:
                 commission_x, commission_y = points["NAM_pw_constitutional_committee"]
@@ -12565,7 +13214,7 @@ class NamCampaignTests(unittest.TestCase):
                       "NAM_common_fuel_market", "NAM_charter_ending_federation"]
             wanted = ["NAM_pw_district_congress", "NAM_pw_district_schools",
                       "NAM_pw_militia_reserve", "NAM_pw_district_cooperative"]
-        route += ["NAM_veterans_return", "NAM_civil_repair",
+        route += ["NAM_civil_repair",
                   "NAM_armed_peace" if armed else "NAM_civil_dividend", "NAM_oil_ministry",
                   "NAM_export_consortium" if export else "NAM_state_refineries",
                   "NAM_oil_exchange", "NAM_national_university"]
@@ -12573,9 +13222,9 @@ class NamCampaignTests(unittest.TestCase):
                   ["NAM_south_fenn_guarantee", "NAM_south_oil_for_water"])
         route.append("NAM_svetlogorye")
         route += ["NAM_pw_transport_commission", "NAM_pw_road_priority", "NAM_pw_logistics_depots",
-                  "NAM_pw_army_review", "NAM_pw_breakthrough_army", "NAM_pw_staff_exercises",
-                  "NAM_pw_reserve_centres", "NAM_pw_southern_army",
-                  "NAM_pw_transport_maintenance", "NAM_pw_freight_schedule"]
+                  "NAM_veterans_return", "NAM_pw_army_review", "NAM_pw_breakthrough_army", "NAM_pw_staff_exercises",
+                  "NAM_pw_reserve_centres", "NAM_pw_transport_maintenance",
+                  "NAM_pw_freight_schedule", "NAM_pw_southern_army"]
         wanted += ["NAM_program_road_priority", "NAM_program_logistics_depots"]
         wanted += ["NAM_pw_veteran_course", "NAM_postwar_rearmament" if armed else "NAM_veteran_housing",
                    "NAM_export_office_expand" if export else "NAM_econ_petrochemical_batch"]

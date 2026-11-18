@@ -1423,4 +1423,84 @@ focus_tree = {
 		}
 		ai_will_do = { base = 5 }
 	}
+
+	focus = {
+		id = NAM_pw_southern_military_rule
+		relative_position_id = NAM_pw_permanent_institutions
+		x = -1
+		y = 1
+		icon = GFX_focus_RUS_military_governors
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			NAM_won_final_southern_war = yes
+		}
+		prerequisite = { focus = NAM_pw_permanent_institutions }
+		mutually_exclusive = {
+			focus = NAM_pw_southern_local_offices
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_southern_subject_tt
+				SHL = { is_subject_of = NAM }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_southern_reserve
+			custom_effect_tooltip = NAM_program_southern_reserve_unlock_tt
+			custom_effect_tooltip = NAM_pw_southern_military_programme_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_local_offices
+		relative_position_id = NAM_pw_permanent_institutions
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_basin_is_ours
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			NAM_won_final_southern_war = yes
+		}
+		prerequisite = { focus = NAM_pw_permanent_institutions }
+		mutually_exclusive = {
+			focus = NAM_pw_southern_military_rule
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_southern_subject_tt
+				SHL = { is_subject_of = NAM }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_southern_local_offices
+			custom_effect_tooltip = NAM_program_southern_local_offices_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
 }

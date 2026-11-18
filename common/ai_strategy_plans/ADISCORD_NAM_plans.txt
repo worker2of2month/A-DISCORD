@@ -431,6 +431,11 @@ NAM_south_war_plan = {
 		NAM_sw_conscription_of_the_south
 		NAM_sw_defence_in_depth
 		NAM_south_field_fortresses
+		NAM_sw_s_occupation_namestniks
+		NAM_pw_southern_budget
+		NAM_pw_southern_reserve
+		NAM_pw_southern_supply_plan
+		NAM_pw_southern_intelligence
 		NAM_sw_district_garrisons
 		NAM_sw_staff_of_the_line
 		NAM_sw_attrition_wall
@@ -461,7 +466,6 @@ NAM_south_war_plan = {
 		NAM_sw_fall_of_the_furnaces
 		NAM_sw_last_line_of_the_belt
 		NAM_sw_victory_order
-		NAM_sw_s_occupation_namestniks
 		NAM_sw_s_furnace_inspection
 		NAM_sw_s_namestnik_levies
 		NAM_sw_s_iron_ladder
@@ -535,16 +539,16 @@ NAM_postwar_plan = {
 		NAM_south_oil_for_water
 		NAM_svetlogorye
 		NAM_pw_transport_commission
+		NAM_pw_road_priority
+		NAM_pw_logistics_depots
 		NAM_pw_army_review
 		NAM_pw_artillery_observers
 		NAM_pw_breakthrough_army
 		NAM_pw_staff_exercises
 		NAM_pw_reserve_centres
-		NAM_pw_southern_army
-		NAM_pw_road_priority
 		NAM_pw_transport_maintenance
-		NAM_pw_logistics_depots
 		NAM_pw_freight_schedule
+		NAM_pw_southern_army
 		NAM_south_oil_charter
 		NAM_depot_inquiry
 		NAM_depot_revoke
@@ -557,6 +561,7 @@ NAM_postwar_plan = {
 		NAM_workers_inspection
 		NAM_regional_university
 		NAM_common_citizenship
+		NAM_pw_oil_equipment
 		NAM_cooperative_congress
 		NAM_haulage_cooperatives
 		NAM_district_fair
@@ -568,7 +573,6 @@ NAM_postwar_plan = {
 		NAM_svetlogorsk_shipyards
 		NAM_pw_municipal_repair
 		NAM_pw_returnee_registration
-		NAM_pw_oil_equipment
 		NAM_pw_refinery_engineering
 		NAM_pw_fuel_reservoirs
 		NAM_pw_energy_commission
@@ -688,16 +692,16 @@ NAM_postwar_vertical_plan = {
 		NAM_south_desert_offices
 		NAM_svetlogorye
 		NAM_pw_transport_commission
+		NAM_pw_road_priority
+		NAM_pw_logistics_depots
 		NAM_pw_army_review
 		NAM_pw_artillery_observers
 		NAM_pw_breakthrough_army
 		NAM_pw_staff_exercises
 		NAM_pw_reserve_centres
-		NAM_pw_southern_army
-		NAM_pw_road_priority
 		NAM_pw_transport_maintenance
-		NAM_pw_logistics_depots
 		NAM_pw_freight_schedule
+		NAM_pw_southern_army
 		NAM_south_seal_over_furnaces
 		NAM_depot_inquiry
 		NAM_depot_reserve_charter
@@ -718,6 +722,10 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_administrative_courts
 		NAM_pw_public_procurement
 		NAM_pw_central_treasury
+		NAM_pw_industrial_recovery
+		NAM_pw_civil_engineering
+		NAM_pw_toolmaking
+		NAM_pw_industrial_sites
 		NAM_pw_industrial_commission
 		NAM_pw_tool_reserve
 		NAM_pw_public_supply
@@ -737,11 +745,6 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_survey_corps
 		NAM_pw_state_warehouses
 		NAM_pw_standard_projects
-		NAM_pw_southern_budget
-		NAM_pw_southern_intelligence
-		NAM_pw_southern_military_rule
-		NAM_pw_southern_supply_plan
-		NAM_pw_southern_reserve
 		NAM_pw_municipal_repair
 		NAM_pw_returnee_registration
 		NAM_pw_oil_equipment
@@ -757,12 +760,8 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_airfield_network
 		NAM_pw_air_defence
 		NAM_pw_power_reserve
-		NAM_pw_industrial_recovery
-		NAM_pw_civil_engineering
-		NAM_pw_toolmaking
 		NAM_pw_machine_repair
 		NAM_pw_testing_facilities
-		NAM_pw_industrial_sites
 		NAM_pw_rail_workshops
 		NAM_pw_southern_corridor
 		NAM_pw_district_hospitals
@@ -817,6 +816,7 @@ NAM_south_heritage_vertical_plan = {
 		NAM_pw_demobilisation_board
 		NAM_pw_southern_industrial_repair
 		NAM_pw_permanent_institutions
+		NAM_pw_southern_military_rule
 	}
 	weight = { factor = 20 }
 }
@@ -1132,36 +1132,37 @@ NAM_postwar_pragmatic_plan = {
 		NAM_normalisation
 		NAM_svetlogorye
 		NAM_pw_transport_commission
+		NAM_pw_road_priority
+		NAM_pw_logistics_depots
 		NAM_veterans_return
 		NAM_pw_army_review
 		NAM_pw_artillery_observers
 		NAM_pw_mobile_army
 		NAM_pw_staff_exercises
 		NAM_pw_reserve_centres
-		NAM_pw_southern_army
-		NAM_pw_road_priority
 		NAM_pw_transport_maintenance
-		NAM_pw_logistics_depots
 		NAM_pw_freight_schedule
+		NAM_pw_southern_army
 		NAM_prag_ending_republic
 		NAM_svetlogorsk_dam
 		NAM_prag_south_guarantees
 		NAM_merchant_charter
 		NAM_domestic_designs
+		NAM_pw_naval_review
+		NAM_pw_naval_fuel_depots
+		NAM_freight_brokerage
+		NAM_chartered_tonnage
+		NAM_bonded_terminal
+		NAM_through_waybill
 		NAM_customs_clearinghouse
 		NAM_freight_exchange
 		NAM_repair_depots
 		NAM_port_polytechnic
 		NAM_municipal_bonds
 		NAM_commercial_commonwealth
-		NAM_freight_brokerage
-		NAM_chartered_tonnage
-		NAM_bonded_terminal
 		NAM_testing_office
 		NAM_precision_gauges
 		NAM_licensed_workshop
-		NAM_through_waybill
-		NAM_pw_naval_review
 		NAM_svetlogorsk_shipyards
 		NAM_pw_municipal_repair
 		NAM_pw_returnee_registration

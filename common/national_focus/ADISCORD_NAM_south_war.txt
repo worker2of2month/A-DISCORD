@@ -21,9 +21,10 @@ focus_tree = {
 
 	# Loaded by ADISCORD_south_load_war_tree while Svetlogorye leads the north in
 	# the war for the South. Victory loads the southern settlement tree. Other
-	# outcomes restore the previous tree. Permanent results go to NAM_south_war_dynamic through
-	# NAM_refresh_south_war. The course branches share the cells on the right and
-	# read the course focus of the postwar tree; only the current course is shown.
+	# outcomes restore the previous tree. NAM_sw_close_war clears the wartime
+	# aggregate. The service staff's administration and garrison improvements
+	# belong to their own aggregates and persist after settlement.
+	# Course branches share the cells on the right and read the completed mandate.
 
 	# ----- War council -----
 
@@ -2648,6 +2649,177 @@ shared_focus = {
 		ai_will_do = {
 			base = 150
 		}
+	}
+
+shared_focus = {
+		id = NAM_pw_southern_budget
+		x = 52
+		y = 1
+		icon = GFX_focus_NAM_second_ledger
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			has_completed_focus = NAM_service_state
+		}
+		prerequisite = { focus = NAM_sw_s_occupation_namestniks }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_pw_southern_civil_service_administration_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_adm_compliance_gain
+					value = 0.04
+				}
+				NAM_refresh_administration = yes
+			}
+			unlock_decision_tooltip = NAM_program_southern_budget
+			custom_effect_tooltip = NAM_program_southern_budget_unlock_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+shared_focus = {
+		id = NAM_pw_southern_intelligence
+		x = 50
+		y = 2
+		icon = GFX_focus_NAM_underground_reports
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			has_completed_focus = NAM_service_state
+		}
+		prerequisite = { focus = NAM_pw_southern_budget }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_southern_intelligence_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_planning_speed
+					value = 0.08
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+shared_focus = {
+		id = NAM_pw_southern_reserve
+		x = 54
+		y = 2
+		icon = GFX_focus_NAM_concealed_reserve
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			has_completed_focus = NAM_service_state
+		}
+		prerequisite = { focus = NAM_pw_southern_budget }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_southern_reserve
+			custom_effect_tooltip = NAM_program_southern_reserve_unlock_tt
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 240
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+shared_focus = {
+		id = NAM_pw_southern_supply_plan
+		x = 52
+		y = 3
+		icon = GFX_focus_VAL_Logistics_Command
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = {
+			has_completed_focus = NAM_service_state
+		}
+		prerequisite = {
+			focus = NAM_pw_southern_intelligence
+			focus = NAM_pw_southern_reserve
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_war_leader_tt
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_southern_supply_plan_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = NAM_gar_supply_consumption
+					value = -0.05
+				}
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
 	}
 
 shared_focus = {

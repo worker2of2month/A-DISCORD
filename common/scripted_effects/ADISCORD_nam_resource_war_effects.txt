@@ -12671,27 +12671,37 @@ NAM_underground_close_campaign = {
 # The contract number is also the pillar number: namestniks, oil, districts,
 # garrisons, trade. Progress is written only after delivery of real assets.
 NAM_agreement_add_support = {
+	set_temp_variable = { var = NAM_agreement_support_pillar value = NAM_agreement_current }
+	NAM_agreement_adjust_pillar_support = yes
+}
+
+NAM_agreement_adjust_pillar_support = {
 	if = {
-		limit = { check_variable = { NAM_agreement_current = 1 } }
+		limit = { check_variable = { NAM_agreement_support_pillar = 1 } }
 		add_to_variable = { var = NAM_grp_nam_support value = NAM_agreement_support_delta }
 	}
 	if = {
-		limit = { check_variable = { NAM_agreement_current = 2 } }
+		limit = { check_variable = { NAM_agreement_support_pillar = 2 } }
 		add_to_variable = { var = NAM_grp_oil_support value = NAM_agreement_support_delta }
 	}
 	if = {
-		limit = { check_variable = { NAM_agreement_current = 3 } }
+		limit = { check_variable = { NAM_agreement_support_pillar = 3 } }
 		add_to_variable = { var = NAM_grp_dist_support value = NAM_agreement_support_delta }
 	}
 	if = {
-		limit = { check_variable = { NAM_agreement_current = 4 } }
+		limit = { check_variable = { NAM_agreement_support_pillar = 4 } }
 		add_to_variable = { var = NAM_grp_garr_support value = NAM_agreement_support_delta }
 	}
 	if = {
-		limit = { check_variable = { NAM_agreement_current = 5 } }
+		limit = { check_variable = { NAM_agreement_support_pillar = 5 } }
 		add_to_variable = { var = NAM_grp_trade_support value = NAM_agreement_support_delta }
 	}
 	NAM_groups_refresh = yes
+}
+
+NAM_agreement_close_objection = {
+	clear_variable = NAM_agreement_objector
+	clr_country_flag = NAM_agreement_part_performed
 }
 
 NAM_agreement_refund = {
@@ -12748,6 +12758,7 @@ NAM_agreement_refund = {
 }
 
 NAM_agreement_finish = {
+	NAM_agreement_close_objection = yes
 	NAM_agreement_refund = yes
 	clear_variable = NAM_agreement_current
 	clr_country_flag = NAM_agreement_offer_pending
@@ -12772,14 +12783,166 @@ NAM_agreement_cancel = {
 				has_country_flag = NAM_agreement_offer_pending
 			}
 		}
+		if = {
+			limit = {
+				NOT = { has_variable = NAM_council_petition }
+				has_country_flag = { flag = NAM_agreement_offer_pending value > 1 }
+			}
+			set_variable = { var = NAM_council_petition value = NAM_agreement_offer_a }
+		}
 		NAM_agreement_finish = yes
 	}
 }
 
-NAM_agreement_start = {
-	clr_country_flag = NAM_agreement_offer_pending
-	set_variable = { var = NAM_agreement_progress value = 0 }
+NAM_council_preview_rejection = {
 	if = {
+		limit = { hidden_trigger = { NAM_council_hearing_lapsed = yes } }
+		custom_effect_tooltip = NAM_council_lapsed_tt
+	}
+	else_if = {
+		limit = { hidden_trigger = { NAM_council_nam_hearing = yes } }
+		custom_effect_tooltip = NAM_council_audit_dissent_tt
+	}
+	else_if = {
+		limit = { hidden_trigger = { NAM_council_garr_hearing = yes } }
+		custom_effect_tooltip = NAM_council_garr_recall_tt
+	}
+	else_if = {
+		limit = { hidden_trigger = { NAM_council_dist_hearing = yes } }
+		custom_effect_tooltip = NAM_council_workshops_withdraw_tt
+	}
+	else_if = {
+		limit = { hidden_trigger = { NAM_council_oil_hearing = yes } }
+		custom_effect_tooltip = NAM_council_oil_withdraw_tt
+	}
+	else_if = {
+		limit = { hidden_trigger = { NAM_council_trade_hearing = yes } }
+		custom_effect_tooltip = NAM_council_trade_rebook_tt
+	}
+}
+
+# COUNTRY NAM. The selected delegation must still own one of the two live proposals.
+NAM_agreement_sign_offer = {
+	if = {
+		limit = {
+			NAM_agreement_offer_open = yes
+			OR = {
+				check_variable = { var = NAM_council_choice value = NAM_agreement_offer_a compare = equals }
+				check_variable = { var = NAM_council_choice value = NAM_agreement_offer_b compare = equals }
+			}
+			OR = {
+				check_variable = { NAM_council_choice = 1 }
+				check_variable = { NAM_council_choice = 4 }
+				AND = {
+					check_variable = { NAM_council_choice = 2 }
+					NAM_agreement_oil_possible = yes
+				}
+				AND = {
+					check_variable = { NAM_council_choice = 3 }
+					NAM_agreement_dist_possible = yes
+				}
+				AND = {
+					check_variable = { NAM_council_choice = 5 }
+					NAM_agreement_trade_possible = yes
+				}
+			}
+		}
+		set_variable = { var = NAM_agreement_current value = NAM_council_choice }
+		NAM_agreement_start = yes
+	}
+	else_if = {
+		limit = { NAM_agreement_offer_open = yes }
+		country_event = { id = ADISCORD_nam_groups.20 hours = 1 }
+	}
+	else_if = {
+		limit = { has_country_flag = NAM_agreement_offer_pending }
+		NAM_agreement_cancel = yes
+	}
+}
+
+NAM_agreement_start = {
+	NAM_agreement_set_goal = yes
+	# Keep the unsigned proposal on file until the council uses it or the agreement ends.
+	if = {
+		limit = { check_variable = { var = NAM_agreement_current value = NAM_agreement_offer_b compare = equals } }
+		set_variable = { var = NAM_agreement_offer_b value = NAM_agreement_offer_a }
+		if = {
+			limit = { NAM_council_hearing_lapsed = yes }
+			clear_variable = NAM_agreement_offer_b
+		}
+		else_if = {
+			limit = { NAM_council_nam_hearing = yes }
+			add_political_power = -15
+			country_event = { id = ADISCORD_nam_groups.26 hours = 1 }
+		}
+		else_if = {
+			limit = { NAM_council_garr_hearing = yes }
+			# Standby instructors keep the ordinary reserve bid open for the first fourteen days.
+			set_variable = { var = NAM_agreement_offer_b value = 6 }
+			add_to_variable = { var = NAM_grp_garr_support value = -3 }
+			NAM_groups_refresh = yes
+			country_event = { id = ADISCORD_nam_groups.28 hours = 1 }
+		}
+		else_if = {
+			limit = { NAM_council_dist_hearing = yes }
+			clear_variable = NAM_agreement_offer_b
+			add_to_variable = { var = NAM_grp_dist_support value = -3 }
+			NAM_groups_refresh = yes
+			country_event = { id = ADISCORD_nam_groups.27 hours = 1 }
+		}
+		else_if = {
+			limit = { NAM_council_oil_hearing = yes }
+			clear_variable = NAM_agreement_offer_b
+			add_to_variable = { var = NAM_grp_oil_support value = -3 }
+			NAM_groups_refresh = yes
+			country_event = { id = ADISCORD_nam_groups.24 hours = 1 }
+		}
+		else_if = {
+			limit = { NAM_council_trade_hearing = yes }
+			add_to_variable = { var = NAM_grp_trade_support value = -3 }
+			NAM_groups_refresh = yes
+			country_event = { id = ADISCORD_nam_groups.25 hours = 1 }
+		}
+	}
+	clear_variable = NAM_agreement_offer_a
+	clr_country_flag = NAM_agreement_offer_pending
+	activate_mission = NAM_agreement_deadline
+}
+
+NAM_agreement_set_goal = {
+	set_variable = { var = NAM_agreement_progress value = 0 }
+	clear_variable = NAM_agreement_target
+	if = {
+		limit = { check_variable = { NAM_agreement_current = 4 } }
+		set_variable = { var = NAM_agreement_target value = 200 }
+		if = {
+			limit = { NAM_council_garr_hearing = yes }
+			set_variable = { var = NAM_agreement_target value = 100 }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_agreement_current = 1 } }
+		set_variable = { var = NAM_agreement_target value = 300 }
+		if = {
+			limit = { NAM_council_nam_hearing = yes }
+			set_variable = { var = NAM_agreement_target value = 150 }
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_agreement_current = 3 }
+			NAM_council_dist_hearing = yes
+		}
+		set_variable = { var = NAM_agreement_target value = 30 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_agreement_current = 2 }
+			NAM_council_oil_hearing = yes
+		}
+		set_variable = { var = NAM_agreement_target value = 1 }
+	}
+	else_if = {
 		limit = { check_variable = { NAM_agreement_current = 2 } }
 		# The last available expansion remains a valid contract at a developed field.
 		set_variable = { var = NAM_agreement_target value = 1 }
@@ -12799,7 +12962,14 @@ NAM_agreement_start = {
 			set_variable = { var = NAM_agreement_target value = 2 }
 		}
 	}
-	activate_mission = NAM_agreement_deadline
+	else_if = {
+		limit = { check_variable = { NAM_agreement_current = 5 } }
+		set_variable = { var = NAM_agreement_target value = 3 }
+		if = {
+			limit = { NAM_council_trade_hearing = yes }
+			set_variable = { var = NAM_agreement_target value = 2 }
+		}
+	}
 }
 
 NAM_agreement_success = {
@@ -12836,6 +13006,7 @@ NAM_agreement_success = {
 }
 
 NAM_agreement_failure = {
+	NAM_agreement_close_objection = yes
 	if = {
 		limit = {
 			NAM_agreement_peace = yes
@@ -12949,63 +13120,100 @@ NAM_agreements_monthly = {
 		NAM_agreement_check_crisis = yes
 		if = {
 			limit = { NOT = { has_variable = NAM_agreement_current } }
-			random_list = {
-				20 = {
-					modifier = {
-						factor = 0
-						NAM_agreement_nam_possible = no
-					}
-					modifier = {
-						factor = 3
-						check_variable = { NAM_grp_nam_support < 35 }
-					}
-					set_variable = { var = NAM_agreement_offer_a value = 1 }
+			if = {
+				limit = { check_variable = { NAM_council_petition = 1 } }
+				set_variable = { var = NAM_agreement_offer_a value = 1 }
+				set_country_flag = { flag = NAM_agreement_offer_pending value = 6 }
+			}
+			else_if = {
+				limit = { check_variable = { NAM_council_petition = 4 } }
+				set_variable = { var = NAM_agreement_offer_a value = 4 }
+				set_country_flag = { flag = NAM_agreement_offer_pending value = 4 }
+			}
+			else_if = {
+				limit = {
+					check_variable = { NAM_council_petition = 3 }
+					NAM_agreement_dist_possible = yes
 				}
-				20 = {
-					modifier = {
-						factor = 0
-						NAM_agreement_oil_possible = no
-					}
-					modifier = {
-						factor = 3
-						check_variable = { NAM_grp_oil_support < 35 }
-					}
-					set_variable = { var = NAM_agreement_offer_a value = 2 }
+				set_variable = { var = NAM_agreement_offer_a value = 3 }
+				set_country_flag = { flag = NAM_agreement_offer_pending value = 3 }
+			}
+			else_if = {
+				limit = {
+					check_variable = { NAM_council_petition = 2 }
+					NAM_agreement_oil_possible = yes
 				}
-				20 = {
-					modifier = {
-						factor = 0
-						NAM_agreement_dist_possible = no
-					}
-					modifier = {
-						factor = 3
-						check_variable = { NAM_grp_dist_support < 35 }
-					}
-					set_variable = { var = NAM_agreement_offer_a value = 3 }
+				set_variable = { var = NAM_agreement_offer_a value = 2 }
+				set_country_flag = { flag = NAM_agreement_offer_pending value = 2 }
+			}
+			else_if = {
+				limit = {
+					check_variable = { NAM_council_petition = 5 }
+					NAM_agreement_trade_possible = yes
 				}
-				20 = {
-					modifier = {
-						factor = 0
-						NAM_agreement_garr_possible = no
+				set_variable = { var = NAM_agreement_offer_a value = 5 }
+				set_country_flag = { flag = NAM_agreement_offer_pending value = 5 }
+			}
+			else = {
+				random_list = {
+					20 = {
+						modifier = {
+							factor = 0
+							NAM_agreement_nam_possible = no
+						}
+						modifier = {
+							factor = 3
+							check_variable = { NAM_grp_nam_support < 35 }
+						}
+						set_variable = { var = NAM_agreement_offer_a value = 1 }
 					}
-					modifier = {
-						factor = 3
-						check_variable = { NAM_grp_garr_support < 35 }
+					20 = {
+						modifier = {
+							factor = 0
+							NAM_agreement_oil_possible = no
+						}
+						modifier = {
+							factor = 3
+							check_variable = { NAM_grp_oil_support < 35 }
+						}
+						set_variable = { var = NAM_agreement_offer_a value = 2 }
 					}
-					set_variable = { var = NAM_agreement_offer_a value = 4 }
-				}
-				20 = {
-					modifier = {
-						factor = 0
-						NAM_agreement_trade_possible = no
+					20 = {
+						modifier = {
+							factor = 0
+							NAM_agreement_dist_possible = no
+						}
+						modifier = {
+							factor = 3
+							check_variable = { NAM_grp_dist_support < 35 }
+						}
+						set_variable = { var = NAM_agreement_offer_a value = 3 }
 					}
-					modifier = {
-						factor = 3
-						check_variable = { NAM_grp_trade_support < 35 }
+					20 = {
+						modifier = {
+							factor = 0
+							NAM_agreement_garr_possible = no
+						}
+						modifier = {
+							factor = 3
+							check_variable = { NAM_grp_garr_support < 35 }
+						}
+						set_variable = { var = NAM_agreement_offer_a value = 4 }
 					}
-					set_variable = { var = NAM_agreement_offer_a value = 5 }
+					20 = {
+						modifier = {
+							factor = 0
+							NAM_agreement_trade_possible = no
+						}
+						modifier = {
+							factor = 3
+							check_variable = { NAM_grp_trade_support < 35 }
+						}
+						set_variable = { var = NAM_agreement_offer_a value = 5 }
+					}
 				}
 			}
+			clear_variable = NAM_council_petition
 			random_list = {
 				20 = {
 					modifier = {
@@ -13059,7 +13267,10 @@ NAM_agreements_monthly = {
 				}
 
 			}
-			set_country_flag = NAM_agreement_offer_pending
+			if = {
+				limit = { NOT = { has_country_flag = NAM_agreement_offer_pending } }
+				set_country_flag = { flag = NAM_agreement_offer_pending value = 1 }
+			}
 			country_event = { id = ADISCORD_nam_groups.20 hours = 6 }
 		}
 	}
@@ -13137,6 +13348,14 @@ NAM_agreement_district_deliver = {
 		}
 		NAM = {
 			add_to_variable = { var = NAM_agreement_progress value = 1 }
+			if = {
+				limit = { check_variable = { NAM_agreement_target > 0 } }
+				add_equipment_to_stockpile = {
+					type = motorized_equipment
+					amount = NAM_agreement_target
+					producer = NAM
+				}
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}

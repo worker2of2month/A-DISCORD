@@ -625,6 +625,10 @@
  SHL_victory_over_ration: "Победа над пайком"
  SHL_victory_over_ration_desc: "Отряды Кейзана отступили за свою границу, а Шахрабад получил земли Севира и Табара."
  # Characters, traits, parties, alliances
+ SHL_Nawal_Haddad: "Наваль Хаддад"
+ SHL_Nabil_Mansur: "Набиль Мансур"
+ SHL_Lina_Sabbagh: "Лина Саббаг"
+ SHL_Yunus_Hamdan: "Юнус Хамдан"
  SHL_Darius_Safir: "Дарий Сафир"
  SHL_Darius_Safir_desc: "Глава дома Сафир и самый богатый из девяти гербов. Он называет регентство временным, но первым делом вернул домам все печи."
  SHL_regent_of_the_crests: "Регент гербов"
