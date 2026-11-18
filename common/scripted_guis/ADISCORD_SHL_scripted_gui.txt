@@ -1,9 +1,51 @@
 scripted_gui = {
+	ADISCORD_SHL_caravans = {
+		context_type = decision_category
+		window_name = "ADISCORD_SHL_caravans_window"
+		ai_enabled = { always = no }
+		visible = {
+			tag = SHL
+			SHL_caravan_has_active_buyers = yes
+		}
+		# Buyer flags and mission timers can change between furnace cycles.
+		dynamic_lists = {
+			SHL_caravan_contract_grid = {
+				array = SHL_caravan_partners
+				change_scope = yes
+				country_scope_entry_container = "[SHLGetCaravanRow]"
+			}
+		}
+		properties = {
+			SHL_caravan_flag = { image = "[This.GetFlag]" }
+		}
+	}
+
+	ADISCORD_SHL_borders = {
+		context_type = decision_category
+		window_name = "ADISCORD_SHL_borders_window"
+		dirty = SHL_gui_dirty
+		visible = {
+			tag = SHL
+			has_country_flag = SHL_furnaces_initialized
+		}
+		ai_enabled = { always = no }
+	}
+
 	ADISCORD_SHL_furnaces = {
 		context_type = decision_category
 		window_name = "ADISCORD_SHL_furnaces_window"
 		dirty = SHL_gui_dirty
 		properties = {
+			SHL_furnace_1_interruption = { frame = SHL_delivery_block_1 }
+			SHL_furnace_2_interruption = { frame = SHL_delivery_block_2 }
+			SHL_furnace_3_interruption = { frame = SHL_delivery_block_3 }
+			SHL_furnace_4_interruption = { frame = SHL_delivery_block_4 }
+			SHL_furnace_5_interruption = { frame = SHL_delivery_block_5 }
+			SHL_furnace_6_interruption = { frame = SHL_delivery_block_6 }
+			SHL_furnace_7_interruption = { frame = SHL_delivery_block_7 }
+			SHL_furnace_8_interruption = { frame = SHL_delivery_block_8 }
+			SHL_furnace_9_interruption = { frame = SHL_delivery_block_9 }
+			SHL_furnace_10_interruption = { frame = SHL_delivery_block_10 }
 			SHL_districts = { frame = SHL_selected_furnace }
 		}
 		visible = {
@@ -12,107 +54,41 @@ scripted_gui = {
 		}
 		ai_enabled = { always = no }
 		triggers = {
+			SHL_supply_toggle_button_click_enabled = {
+				SHL_country_operable = yes
+				has_completed_focus = SHL_law_of_continuous_fire
+			}
+			SHL_next_alert_button_click_enabled = { SHL_has_furnace_alert = yes }
 			SHL_furnace_1_selected_visible = { check_variable = { var = SHL_selected_furnace value = 1 compare = equals } }
-			SHL_furnace_1_alert_visible = {
-				OR = {
-					check_variable = { var = SHL_wear_1 value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_1 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_1 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_1_wear_visible = { SHL_furnace_1_worn = yes }
+			SHL_furnace_1_interruption_visible = { SHL_furnace_1_interrupted = yes }
 			SHL_furnace_2_selected_visible = { check_variable = { var = SHL_selected_furnace value = 2 compare = equals } }
-			SHL_furnace_2_alert_visible = {
-				OR = {
-					check_variable = { var = SHL_wear_2 value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_2 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_2 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_2_wear_visible = { SHL_furnace_2_worn = yes }
+			SHL_furnace_2_interruption_visible = { SHL_furnace_2_interrupted = yes }
 			SHL_furnace_3_selected_visible = { check_variable = { var = SHL_selected_furnace value = 3 compare = equals } }
-			SHL_furnace_3_alert_visible = {
-				OR = {
-					check_variable = { var = SHL_wear_3 value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_3 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_3 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_3_wear_visible = { SHL_furnace_3_worn = yes }
+			SHL_furnace_3_interruption_visible = { SHL_furnace_3_interrupted = yes }
 			SHL_furnace_4_selected_visible = { check_variable = { var = SHL_selected_furnace value = 4 compare = equals } }
-			SHL_furnace_4_alert_visible = {
-				OR = {
-					check_variable = { var = SHL_wear_4 value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_4 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_4 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_4_wear_visible = { SHL_furnace_4_worn = yes }
+			SHL_furnace_4_interruption_visible = { SHL_furnace_4_interrupted = yes }
 			SHL_furnace_5_selected_visible = { check_variable = { var = SHL_selected_furnace value = 5 compare = equals } }
-			SHL_furnace_5_alert_visible = {
-				OR = {
-					check_variable = { var = SHL_wear_5 value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_5 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_5 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_5_wear_visible = { SHL_furnace_5_worn = yes }
+			SHL_furnace_5_interruption_visible = { SHL_furnace_5_interrupted = yes }
 			SHL_furnace_6_selected_visible = { check_variable = { var = SHL_selected_furnace value = 6 compare = equals } }
-			SHL_furnace_6_alert_visible = {
-				OR = {
-					check_variable = { var = SHL_wear_6 value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_6 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_6 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_6_wear_visible = { SHL_furnace_6_worn = yes }
+			SHL_furnace_6_interruption_visible = { SHL_furnace_6_interrupted = yes }
 			SHL_furnace_7_selected_visible = { check_variable = { var = SHL_selected_furnace value = 7 compare = equals } }
-			SHL_furnace_7_alert_visible = {
-				OR = {
-					check_variable = { var = SHL_wear_7 value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_7 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_7 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_7_wear_visible = { SHL_furnace_7_worn = yes }
+			SHL_furnace_7_interruption_visible = { SHL_furnace_7_interrupted = yes }
 			SHL_furnace_8_selected_visible = { check_variable = { var = SHL_selected_furnace value = 8 compare = equals } }
-			SHL_furnace_8_alert_visible = {
-				OR = {
-					check_variable = { var = SHL_wear_8 value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_8 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_8 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_8_wear_visible = { SHL_furnace_8_worn = yes }
+			SHL_furnace_8_interruption_visible = { SHL_furnace_8_interrupted = yes }
 			SHL_furnace_9_selected_visible = { check_variable = { var = SHL_selected_furnace value = 9 compare = equals } }
-			SHL_furnace_9_alert_visible = {
-				OR = {
-					check_variable = { var = SHL_wear_9 value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_9 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_9 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_9_wear_visible = { SHL_furnace_9_worn = yes }
+			SHL_furnace_9_interruption_visible = { SHL_furnace_9_interrupted = yes }
 			SHL_furnace_10_selected_visible = { check_variable = { var = SHL_selected_furnace value = 10 compare = equals } }
-			SHL_furnace_10_alert_visible = {
-				check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
-				OR = {
-					check_variable = { var = SHL_tenth_wear value = 75 compare = greater_than_or_equals }
-					AND = {
-						check_variable = { var = SHL_delivery_block_10 value = 0 compare = greater_than }
-						check_variable = { var = SHL_delivery_block_10 value = 4 compare = less_than }
-					}
-				}
-			}
+			SHL_furnace_10_wear_visible = { SHL_furnace_10_worn = yes }
+			SHL_furnace_10_interruption_visible = { SHL_furnace_10_interrupted = yes }
 			SHL_convoy_ore_button_click_enabled = { SHL_can_dispatch_ore = yes }
 			SHL_convoy_masons_button_click_enabled = { SHL_can_dispatch_masons = yes }
 			SHL_convoy_sale_button_click_enabled = { SHL_can_dispatch_sale = yes }
@@ -140,6 +116,14 @@ scripted_gui = {
 			SHL_house_favour_button_click_enabled = { SHL_selected_favour_house_ready = yes }
 		}
 		effects = {
+			SHL_supply_toggle_button_click = {
+				if = {
+					limit = { check_variable = { var = SHL_regular_supply value = 1 compare = equals } }
+					SHL_disable_planned_supply = yes
+				}
+				else = { SHL_enable_planned_supply = yes }
+			}
+			SHL_next_alert_button_click = { SHL_select_next_furnace_alert = yes }
 			SHL_convoy_ore_button_click = { SHL_dispatch_ore = yes }
 			SHL_convoy_masons_button_click = { SHL_dispatch_masons = yes }
 			SHL_convoy_sale_button_click = { SHL_dispatch_sale = yes }

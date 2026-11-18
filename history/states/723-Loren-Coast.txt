@@ -7,7 +7,7 @@ state={
 		17048 17251 17398 17399 17762 17763 18037 18042 18112 18158 18159 18198
 		18231 18232 18394 18395 18711 18712 18713
 	}
-	manpower = 1335000
+	manpower = 1800000
 	buildings_max_level_factor = 1.000
 	state_category = town
 	local_supplies = 1.0

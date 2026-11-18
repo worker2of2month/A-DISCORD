@@ -22,7 +22,6 @@ SHL_furnaces_plan = {
 	ai_national_focuses = {
 		SHL_law_of_continuous_fire
 		SHL_census_of_nine
-		SHL_reserve_for_next_shift
 		SHL_conclave_rules
 		SHL_railway_guard
 		SHL_factory_militia
@@ -72,7 +71,7 @@ SHL_furnaces_plan = {
 		SHL_safir_customs
 		SHL_safir_bandar_port
 		SHL_loran_cisterns
-		SHL_desert_caravanserai
+		SHL_sand_patrols
 		SHL_loran_deh_growth
 		SHL_bayrat_copi_survey
 		SHL_mine_colonies
@@ -100,13 +99,13 @@ SHL_furnaces_plan = {
 		SHL_conclave_bulletins
 		SHL_chronicle_of_the_south
 		SHL_law_of_the_written_fire
+		SHL_south_crown_of_the_south
 	}
 	weight = { factor = 20 }
 }
 
 # ----- Preliminary course by the Conclave balance -----
-# Each plan is weighted by the balance range its ratification requires; the
-# first completed preliminary focus aborts the other two.
+# The balance favours a platform. The ballot counts the actual backing at the deadline.
 
 SHL_prepare_houses_plan = {
 	name = "SHL preparation: tenth house"
@@ -131,7 +130,6 @@ SHL_prepare_houses_plan = {
 		SHL_new_house
 		SHL_house_compromise
 		SHL_house_war_mandate
-		SHL_admit_tenth_house
 	}
 	weight = {
 		factor = 30
@@ -168,7 +166,6 @@ SHL_prepare_cities_plan = {
 		SHL_open_conclave
 		SHL_city_charters
 		SHL_city_war_mandate
-		SHL_rights_without_fire
 	}
 	weight = {
 		factor = 30
@@ -205,7 +202,6 @@ SHL_prepare_directorate_plan = {
 		SHL_nur_directorate
 		SHL_common_dispatch
 		SHL_directorate_war_mandate
-		SHL_state_furnaces
 	}
 	weight = {
 		factor = 30
@@ -357,7 +353,7 @@ SHL_cities_plan = {
 		SHL_safir_customs
 		SHL_safir_bandar_port
 		SHL_loran_cisterns
-		SHL_desert_caravanserai
+		SHL_sand_patrols
 		SHL_loran_deh_growth
 		SHL_bayrat_copi_survey
 		SHL_mine_colonies
@@ -442,7 +438,7 @@ SHL_directorate_plan = {
 		SHL_safir_customs
 		SHL_safir_bandar_port
 		SHL_loran_cisterns
-		SHL_desert_caravanserai
+		SHL_sand_patrols
 		SHL_loran_deh_growth
 		SHL_bayrat_copi_survey
 		SHL_mine_colonies
@@ -608,7 +604,7 @@ SHL_commune_plan = {
 		SHL_safir_customs
 		SHL_safir_bandar_port
 		SHL_loran_cisterns
-		SHL_desert_caravanserai
+		SHL_sand_patrols
 		SHL_loran_deh_growth
 		SHL_bayrat_copi_survey
 		SHL_mine_colonies
@@ -747,6 +743,7 @@ SHL_seal_lease_plan = {
 		}
 	}
 	ai_national_focuses = {
+		SHL_law_of_continuous_fire
 		SHL_seal_conclave
 		SHL_seal_count_the_cold
 		SHL_seal_houses_in_mourning
@@ -786,6 +783,7 @@ SHL_seal_cold_fire_plan = {
 		}
 	}
 	ai_national_focuses = {
+		SHL_law_of_continuous_fire
 		SHL_seal_conclave
 		SHL_seal_count_the_cold
 		SHL_seal_houses_in_mourning

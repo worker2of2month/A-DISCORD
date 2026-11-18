@@ -5,6 +5,9 @@ state = {
 	manpower = 2250000
 	state_category = rural
 	local_supplies = 1.0
+	resources = {
+		steel = 50
+	}
 	history = {
 		owner = SHL
 		add_core_of = SHL

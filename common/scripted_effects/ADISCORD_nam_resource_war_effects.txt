@@ -4179,6 +4179,7 @@ NAM_oil_sign_contract = {
 			}
 			ADISCORD_release_non_participating_minor_optimization = yes
 			set_country_flag = NAM_oil_client
+			hidden_effect = { SHL_refresh_oil_supply_quote = yes }
 			if = {
 				limit = { has_dynamic_modifier = { modifier = NAM_fuel_shortage } }
 				remove_dynamic_modifier = { modifier = NAM_fuel_shortage }
@@ -4220,6 +4221,7 @@ NAM_oil_end_contract = {
 	if = {
 		limit = { has_country_flag = NAM_oil_client }
 		clr_country_flag = NAM_oil_client
+		hidden_effect = { SHL_refresh_oil_supply_quote = yes }
 		add_opinion_modifier = {
 			target = NAM
 			modifier = cancelled_market_trade
@@ -4244,6 +4246,7 @@ NAM_oil_validate_client = {
 			}
 		}
 		clr_country_flag = NAM_oil_client
+		hidden_effect = { SHL_refresh_oil_supply_quote = yes }
 		if = {
 			limit = { exists = yes }
 			add_dynamic_modifier = {
@@ -4466,7 +4469,11 @@ NAM_pay_municipal_instalment = {
 # COUNTRY buyer. Svetlogorye no longer exists: contracts, offers and the
 # embargo end without a shortage.
 NAM_oil_release_buyer = {
-	clr_country_flag = NAM_oil_client
+	if = {
+		limit = { has_country_flag = NAM_oil_client }
+		clr_country_flag = NAM_oil_client
+		hidden_effect = { SHL_refresh_oil_supply_quote = yes }
+	}
 	clr_country_flag = NAM_oil_offer_pending
 	NAM_oil_lift_embargo = yes
 }
@@ -4514,6 +4521,7 @@ NAM_oil_impose_embargo = {
 			}
 		}
 		add_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier }
+		hidden_effect = { SHL_refresh_oil_supply_quote = yes }
 		add_opinion_modifier = {
 			target = NAM
 			modifier = embargoed_us
@@ -4535,6 +4543,7 @@ NAM_oil_lift_embargo = {
 	if = {
 		limit = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
 		remove_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier }
+		hidden_effect = { SHL_refresh_oil_supply_quote = yes }
 		remove_opinion_modifier = {
 			target = NAM
 			modifier = embargoed_us

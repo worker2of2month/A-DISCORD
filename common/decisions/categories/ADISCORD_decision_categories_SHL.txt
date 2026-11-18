@@ -1,3 +1,17 @@
+SHL_caravans = {
+	icon = generic_industry
+	scripted_gui = ADISCORD_SHL_caravans
+	allowed = { tag = SHL }
+	visible = {
+		OR = {
+			has_completed_focus = SHL_law_of_continuous_fire
+			SHL_metal_negotiations_unlocked = yes
+		}
+	}
+	visible_when_empty = yes
+	priority = 22
+}
+
 SHL_metal_contracts = {
 	icon = generic_industry
 	picture = GFX_ADISCORD_decision_picture_deal
@@ -38,6 +52,7 @@ SHL_quarters_and_borders = {
 	visible = { has_country_flag = SHL_furnaces_initialized }
 	visible_when_empty = yes
 	priority = 23
+	scripted_gui = ADISCORD_SHL_borders
 }
 
 SHL_public_campaigns = {
@@ -83,4 +98,12 @@ SHL_treasury = {
 	}
 	visible_when_empty = yes
 	priority = 20
+}
+
+SHL_stelander_party = {
+	icon = generic_foreign_policy
+	picture = GFX_ADISCORD_decision_picture_deal
+	allowed = { tag = SHL }
+	visible = { SHL_party_front_open = yes }
+	priority = 22
 }

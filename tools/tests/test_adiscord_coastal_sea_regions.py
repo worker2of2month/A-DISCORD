@@ -619,17 +619,15 @@ class CoastalSeaRegionTests(unittest.TestCase):
                         second, self.physical[first], f"railway {first}-{second}"
                     )
 
-    def test_southern_capital_districts_conserve_population_and_industry(self) -> None:
-        # League populations include the sixfold army-support balance in
-        # both city and countryside; Shahrabad has its own population profile.
+    def test_southern_capital_district_population_and_industry(self) -> None:
         expected_populations = {
-            241: (540_000, 270_000),
-            253: (420_000, 210_000),
-            260: (288_000, 144_000),
-            275: (582_000, 288_000),
-            283: (450_000, 222_000),
+            241: (2_000_000, 480_000),
+            253: (1_150_000, 850_000),
+            260: (1_650_000, 300_000),
+            275: (2_000_000, 520_000),
+            283: (1_850_000, 400_000),
             294: (3_300_000, 2_250_000),
-            300: (474_000, 234_000),
+            300: (1_900_000, 430_000),
         }
         memberships = builder.load_states()
         for capital, (
@@ -693,7 +691,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
         for members, population in (
             ((290, 699), states.SHL_POPULATION[290] + states.SHL_POPULATION[699]),
             ((689, 700), states.NAM_POPULATION[689] + states.NAM_POPULATION[700]),
-            ((691, 701, 726), 3765000),
+            ((691, 701, 726), 4_860_000),
         ):
             sources = [states.state_path(state).read_text() for state in members]
             self.assertEqual(

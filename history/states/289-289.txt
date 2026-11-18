@@ -5,6 +5,7 @@ state = {
 	state_category = rural
 	resources = {
 		tungsten = 6
+		steel = 50
 	}
 	history = {
 		owner = SHL

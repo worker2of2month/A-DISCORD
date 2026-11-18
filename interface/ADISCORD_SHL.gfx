@@ -1,5 +1,127 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_SHL_wine_texticon"
+		texturefile = "gfx/interface/SHL_conclave/wine_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_idea_SHL_cellar_wines"
+		texturefile = "gfx/interface/ideas/SHL_cellar_wines.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_caravan_header"
+		texturefile = "gfx/interface/SHL_conclave/caravan_header.png"
+	}
+
+	spriteType = {
+		name = "GFX_SHL_caravan_row"
+		texturefile = "gfx/interface/SHL_conclave/caravan_row.png"
+	}
+
+	spriteType = {
+		name = "GFX_SHL_caravan_offer_texticon"
+		texturefile = "gfx/interface/SHL_conclave/caravan_offer_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_caravan_contract_texticon"
+		texturefile = "gfx/interface/SHL_conclave/caravan_contract_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_caravan_arrears_texticon"
+		texturefile = "gfx/interface/SHL_conclave/caravan_arrears_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_quarters_texticon"
+		texturefile = "gfx/interface/SHL_conclave/quarters_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_ballot_texticon"
+		texturefile = "gfx/interface/SHL_conclave/ballot_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_stopped_texticon"
+		texturefile = "gfx/interface/SHL_conclave/stopped_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_occupied_texticon"
+		texturefile = "gfx/interface/SHL_conclave/occupied_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_shortage_texticon"
+		texturefile = "gfx/interface/SHL_conclave/shortage_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_wear_texticon"
+		texturefile = "gfx/interface/SHL_conclave/wear_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_delivery_alerts"
+		texturefile = "gfx/interface/SHL_conclave/delivery_alerts.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_SHL_tension_cards"
+		texturefile = "gfx/interface/SHL_conclave/tension_cards.png"
+	}
+
+	spriteType = {
+		name = "GFX_SHL_furnace_texticon"
+		texturefile = "gfx/interface/SHL_conclave/furnace_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_crest_texticon"
+		texturefile = "gfx/interface/SHL_conclave/crest_texticon.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_SHL_house_loyalty_texticon"
+		texturefile = "gfx/interface/SHL_conclave/house_loyalty_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_ore_texticon"
+		texturefile = "gfx/interface/SHL_conclave/ore_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_packet_texticon"
+		texturefile = "gfx/interface/SHL_conclave/packet_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_SHL_ledger_texticon"
+		texturefile = "gfx/interface/SHL_conclave/ledger_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_SHL_districts"
 		texturefile = "gfx/interface/SHL_conclave/districts.png"
 		noOfFrames = 10
@@ -28,8 +150,9 @@ spriteTypes = {
 	}
 
 	spriteType = {
-		name = "GFX_SHL_alert"
+		name = "GFX_SHL_alert_texticon"
 		texturefile = "gfx/interface/SHL_conclave/alert.png"
+		legacy_lazy_load = no
 	}
 
 	spriteType = {

@@ -311,6 +311,7 @@ class ScriptMachine:
         self.flags = defaultdict(set)
         self.global_flags = {"ADISCORD_fresh_campaign_contract_v1"}
         self.flag_days = defaultdict(dict)
+        self.flag_values = defaultdict(dict)
         self.control = {str(i): "SHL" for i in range(287, 296)}
         self.ownership = dict(self.control)
         self.claims = defaultdict(set)
@@ -333,6 +334,7 @@ class ScriptMachine:
         self.dynamic = set()
         self.calls = []
         self.equipment = defaultdict(float)
+        self.fuel = defaultdict(float)
         self.previous_scope = "SHL"
         # Ruling character and the trees loaded by course ratification.
         self.leader = "SHL_Jalil_Nur"
@@ -361,6 +363,9 @@ class ScriptMachine:
         self.variables["SHL"]["ADISCORD_economy_treasury"] = 1000.0
         # Balances of power by id; absent until set_power_balance creates them.
         self.power_balance = {}
+
+    def stock_count(self, scope, equipment):
+        return self.equipment[scope, equipment]
 
     def value(self, value, scope):
         try:
@@ -420,6 +425,10 @@ class ScriptMachine:
                 if isinstance(e.value, list):
                     name = scalar(e.value, "flag")
                     tokens = [child.value for child in e.value if not child.key]
+                    if len(tokens) == 3 and tokens[0] == "value":
+                        current = self.flag_values[scope].get(name, 0)
+                        bound = int(tokens[2])
+                        return name in self.flags[scope] and {"<": current < bound, ">": current > bound}[tokens[1]]
                     if tokens[:2] != ["days", ">"] or len(tokens) != 3:
                         raise AssertionError("Unsupported flag-age predicate")
                     return name in self.flags[scope] and self.flag_days[scope].get(name, 0) > int(tokens[2])
@@ -427,13 +436,15 @@ class ScriptMachine:
             if e.key in ("ROOT", "SHL"):
                 country = self.root_scope if e.key == "ROOT" else "SHL"
                 return self.condition_scope(e.value, country, scope, target)
-            if e.key in REGIONAL:
+            if e.key in self.countries:
                 return self.condition_scope(e.value, e.key, scope, target)
             if e.key == "exists" and scope in self.countries:
                 return self.countries[scope]["exists"] == (e.value == "yes")
             if e.key == "is_subject_of":
                 expected = self.root_scope if e.value == "ROOT" else e.value
                 return self.countries.get(scope, {}).get("subject_of") == expected
+            if e.key == "has_autonomy_state":
+                return self.countries.get(scope, {}).get("autonomy_state") == e.value
             if e.key in ("is_subject", "has_war") and scope in self.countries:
                 value = self.countries[scope][e.key]
                 if e.key == "has_war":
@@ -474,6 +485,10 @@ class ScriptMachine:
                 expected = "SHL" if e.value == "ROOT" else e.value
                 owners = self.ownership if e.key == "is_owned_by" else self.control
                 return owners.get(scope) == expected
+            if e.key == "PREV":
+                return self.condition_scope(e.value, self.previous_scope, scope, target)
+            if e.key == "controls_state":
+                return self.control.get(e.value) == scope
             if e.key == "is_claimed_by":
                 return e.value in self.claims[scope]
             if e.key == "has_completed_focus":
@@ -490,7 +505,7 @@ class ScriptMachine:
                 tokens = [c.value for c in e.value if not c.key]
                 if len(tokens) != 3 or tokens[1] != "<":
                     raise AssertionError("Unsupported equipment comparison: " + repr(tokens))
-                return self.equipment[(scope, tokens[0])] < float(tokens[2])
+                return self.stock_count(scope, tokens[0]) < float(tokens[2])
             if e.key == "has_dynamic_modifier":
                 return (scalar(e.value, "modifier") if isinstance(e.value, list) else e.value) in self.dynamic
             if e.key == "has_building":
@@ -533,6 +548,7 @@ class ScriptMachine:
             if not entry.key:
                 comparison = [item.value for item in items[index:index + 3]]
                 native = {
+                    "has_fuel": self.fuel[scope],
                     "has_stability": self.stability,
                     "has_political_power": self.values["political_power"],
                     "num_divisions": self.divisions,
@@ -594,7 +610,7 @@ class ScriptMachine:
                 self.switch_scope(e.value, state, scope, target)
             elif e.key == "PREV":
                 self.switch_scope(e.value, self.previous_scope, scope, target)
-            elif e.key in REGIONAL:
+            elif e.key in self.countries:
                 self.switch_scope(e.value, e.key, scope, target)
             elif e.key == "random_list":
                 # Deterministic stand-in: the first weighted branch runs.
@@ -636,6 +652,12 @@ class ScriptMachine:
                 self.control[scope] = e.value
             elif e.key in ("activate_mission", "remove_mission"):
                 (self.missions.add if e.key == "activate_mission" else self.missions.discard)(e.value)
+            elif e.key == "controller":
+                self.switch_scope(e.value, self.control[scope], scope, target)
+            elif e.key == "every_possible_country":
+                for tag in self.countries.keys() | {"SHL"}:
+                    if self.condition_scope(block(e.value, "limit"), tag, scope, target):
+                        self.switch_scope([c for c in e.value if c.key != "limit"], tag, scope, target)
             elif e.key == "owner":
                 self.switch_scope(e.value, self.ownership[scope], scope, target)
             elif e.key == "add_core_of":
@@ -655,6 +677,14 @@ class ScriptMachine:
                     self.manpower += self.value(e.value, scope)
                 else:
                     self.country_manpower[scope] += self.value(e.value, scope)
+            elif e.key == "add_fuel":
+                self.fuel[scope] += self.value(e.value, scope)
+            elif e.key == "send_equipment":
+                equipment = scalar(e.value, "type")
+                amount = self.value(scalar(e.value, "amount"), scope)
+                recipient = scalar(e.value, "target")
+                self.equipment[(scope, equipment)] -= amount
+                self.equipment[(recipient, equipment)] += amount
             elif e.key == "add_equipment_to_stockpile":
                 self.equipment[(scope, scalar(e.value, "type"))] += self.value(scalar(e.value, "amount"), scope)
                 self.calls.append((e.key, scope))
@@ -733,7 +763,7 @@ class ScriptMachine:
                 if identifier in self.power_balance:
                     moved = self.power_balance[identifier] + float(scalar(e.value, "value"))
                     self.power_balance[identifier] = round(max(-1.0, min(1.0, moved)), 4)
-            elif e.key in ("set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "divide_variable"):
+            elif e.key in ("set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "divide_variable", "multiply_temp_variable", "subtract_from_temp_variable"):
                 name = scalar(e.value, "var")
                 amount = self.value(scalar(e.value, "value"), scope)
                 previous = self.variables[scope].get(name, 0.0)
@@ -741,9 +771,9 @@ class ScriptMachine:
                     self.variables[scope][name] = amount
                 elif e.key == "add_to_variable":
                     self.variables[scope][name] = previous + amount
-                elif e.key == "subtract_from_variable":
+                elif e.key in ("subtract_from_variable", "subtract_from_temp_variable"):
                     self.variables[scope][name] = previous - amount
-                elif e.key == "multiply_variable":
+                elif e.key in ("multiply_variable", "multiply_temp_variable"):
                     self.variables[scope][name] = previous * amount
                 else:
                     self.variables[scope][name] = previous / amount
@@ -759,6 +789,7 @@ class ScriptMachine:
                 name = scalar(e.value, "flag") if isinstance(e.value, list) else e.value
                 self.flags[scope].add(name)
                 self.flag_days[scope][name] = 0
+                self.flag_values[scope][name] = int(scalar(e.value, "value", 1)) if isinstance(e.value, list) else 1
             elif e.key in ("clr_country_flag", "clr_state_flag"):
                 self.flags[scope].discard(e.value)
             elif e.key == "set_global_flag":
@@ -778,13 +809,13 @@ class ScriptMachine:
             elif e.key == "add_dynamic_modifier":
                 self.dynamic.add(scalar(e.value, "modifier"))
             elif e.key == "remove_dynamic_modifier":
-                self.dynamic.discard(e.value)
+                self.dynamic.discard(scalar(e.value, "modifier") if isinstance(e.value, list) else e.value)
             elif e.key in ("country_event", "news_event"):
                 self.scheduled.append(scalar(e.value, "id"))
                 self.event_days[scalar(e.value, "id")] = int(scalar(e.value, "days", "0"))
             elif e.key in ("ADISCORD_economy_mark_dirty", "ADISCORD_economy_reprice_debt", "ADISCORD_economy_initialize_country"):
                 self.calls.append(e.key)
-            elif e.key in ("custom_effect_tooltip", "unlock_decision_tooltip", "add_to_array", "log", "air_experience", "set_character_name"):
+            elif e.key in ("effect_tooltip", "custom_effect_tooltip", "unlock_decision_tooltip", "add_to_array", "log", "air_experience", "set_character_name"):
                 self.calls.append(e.key)
             else:
                 raise AssertionError("Unsupported effect: " + e.key)
@@ -796,7 +827,7 @@ class FurnaceAccountingTests(unittest.TestCase):
         triggers = parse_clausewitz(TRIGGER_PATH.read_text(encoding="utf-8")) if TRIGGER_PATH.exists() else []
         self.machine = ScriptMachine(effects, triggers)
         # The packet price is set by the startup initialiser and every refresh.
-        self.machine.variables["SHL"]["SHL_packet_price"] = 25.0
+        self.machine.run("SHL_refresh_packet_price")
         for state in range(287, 296):
             self.machine.variables[str(state)].update({
                 "SHL_furnace_stock": 2.0,
@@ -810,6 +841,28 @@ class FurnaceAccountingTests(unittest.TestCase):
 
     def test_source_exists(self):
         self.assertTrue(EFFECT_PATH.exists(), "SHL implementation is absent")
+
+    def test_raw_material_packets_have_one_symbol_in_costs_stores_and_receipts(self):
+        from PIL import Image
+
+        asset = "gfx/interface/SHL_conclave/packet_texticon.png"
+        gfx = (ROOT / "interface/ADISCORD_SHL.gfx").read_text(encoding="utf-8")
+        self.assertRegex(gfx, r'name = "GFX_SHL_packet_texticon"\s+texturefile = "' + re.escape(asset) + '"')
+        with Image.open(ROOT / asset) as icon:
+            self.assertEqual(icon.size, (18, 16))
+            self.assertEqual(icon.convert("RGBA").getchannel("A").getextrema(), (0, 255))
+        keys = ["SHL_panel_stocks", "SHL_forecast_running", "SHL_census_tt", "SHL_supply_result_tt",
+                "SHL_tenth_condition_running", "SHL_tenth_condition_stopped"]
+        keys.extend(f"SHL_furnace_{index}_tip" for index in range(1, 10))
+        for cost in ("SHL_cost_waterworks", "SHL_cost_100_stock", "SHL_cost_directorate_aid"):
+            keys.extend(cost + suffix for suffix in ("", "_blocked", "_tooltip"))
+        for lang in ("russian", "english"):
+            loc = (ROOT / "localisation" / lang / f"ADISCORD_SHL_l_{lang}.yml").read_text(encoding="utf-8-sig")
+            for key in keys:
+                entry = re.search(rf'(?m)^ {key}:\d* "(.*)"$', loc)
+                self.assertIsNotNone(entry, key)
+                self.assertIn("£SHL_packet_texticon", entry[1], key)
+                self.assertNotIn("£SHL_ore_texticon", entry[1], key)
 
     def test_all_ten_seals_are_separate_click_targets_inside_the_survey(self):
         from PIL import Image
@@ -839,6 +892,147 @@ class FurnaceAccountingTests(unittest.TestCase):
                 self.assertTrue(end_x <= x1 or end_y <= y1 or x2 <= x or y2 <= y, numeral)
             earlier.append((x, y, end_x, end_y))
 
+    def test_panel_and_decisions_switch_the_same_supply_order_without_charging(self):
+        machine = self.machine
+        country = machine.variables["SHL"]
+        country.update({"SHL_regular_supply": 0, "SHL_gui_dirty": 0, "ADISCORD_economy_treasury": 125})
+        source = (ROOT / "common/scripted_guis/ADISCORD_SHL_scripted_gui.txt").read_text(encoding="utf-8")
+        gui = block(block(parse_clausewitz(source), "scripted_gui"), "ADISCORD_SHL_furnaces")
+        enabled = block(block(gui, "triggers"), "SHL_supply_toggle_button_click_enabled")
+        click = block(block(gui, "effects"), "SHL_supply_toggle_button_click")
+        start = decision_definition("SHL_planned_supply")
+        stop = decision_definition("SHL_stop_planned_supply")
+        self.assertFalse(machine.matches(enabled, "SHL"))
+        machine.execute(click, "SHL")
+        self.assertEqual(country["SHL_regular_supply"], 0)
+        machine.focuses.add("SHL_law_of_continuous_fire")
+        self.assertTrue(machine.matches(enabled, "SHL"))
+        self.assertTrue(machine.matches(block(start, "visible"), "SHL"))
+        machine.execute(click, "SHL")
+        self.assertEqual(country["SHL_regular_supply"], 1)
+        self.assertFalse(machine.matches(block(start, "visible"), "SHL"))
+        self.assertTrue(machine.matches(block(stop, "visible"), "SHL"))
+        machine.execute(block(start, "complete_effect"), "SHL")
+        self.assertEqual(country["SHL_gui_dirty"], 1)
+        machine.execute(block(stop, "complete_effect"), "SHL")
+        machine.execute(block(start, "complete_effect"), "SHL")
+        machine.execute(click, "SHL")
+        self.assertEqual(country["SHL_regular_supply"], 0)
+        self.assertEqual(country["SHL_gui_dirty"], 4)
+        self.assertEqual(country["ADISCORD_economy_treasury"], 125)
+        law = block(focus_definition("SHL_law_of_continuous_fire"), "completion_reward")
+        self.assertIn("SHL_planned_supply", [e.value for e in law if e.key == "unlock_decision_tooltip"])
+        self.assertIn("SHL_houses_railway", repr(block(start, "ai_will_do")))
+        self.assertNotIn("SHL_houses_railway", repr(block(start, "visible")))
+
+    def test_panel_tooltips_resolve_live_values_in_both_languages(self):
+        gui = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8"))
+        tips = {}
+        for panel in block(gui, "guiTypes"):
+            for widget in panel.value:
+                if not isinstance(widget.value, list):
+                    continue
+                tooltip = scalar(widget.value, "pdx_tooltip")
+                if tooltip:
+                    tips[scalar(widget.value, "name").strip('"')] = tooltip.strip('"')
+        for lang in ("english", "russian"):
+            path = ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml"
+            source = path.read_text(encoding="utf-8-sig")
+            strings = dict(re.findall(r'^ (\w+):\d* "(.*)"$', source, re.M))
+            for widget, token in (
+                ("SHL_cycle_line", "[?SHL_preview_income|0]"),
+                ("SHL_panel_totals", "[SHLGetShift]"),
+                ("SHL_ledger_line", "[SHLGetProjectStage]"),
+            ):
+                self.assertIn(token, strings[tips[widget]], (lang, widget))
+            for number in range(1, 10):
+                tooltip = strings[tips[f"SHL_furnace_{number}_button"]]
+                self.assertIn(f"[?SHL_wear_{number}|0]", tooltip)
+                self.assertIn(f"[SHLGetRecipient{number}]", tooltip)
+            for gauge, value in (("SHL_quarter_gauge", "SHL_unrest"), ("SHL_crest_gauge", "SHL_house_pressure")):
+                self.assertIn(f"[?{value}|0]", strings[gauge])
+                self.assertIn("60", strings[tips[gauge]])
+
+    def test_alert_navigation_matches_map_badges_and_wraps(self):
+        machine = self.machine
+        country = machine.variables["SHL"]
+        country["SHL_selected_furnace"] = 2
+        machine.run("SHL_refresh_furnaces")
+        country["SHL_wear_2"] = 74
+        country["SHL_delivery_block_6"] = 4
+        country["SHL_tenth_wear"] = 90
+        self.assertFalse(machine.matches(machine.triggers["SHL_has_furnace_alert"], "SHL"))
+        machine.run("SHL_select_next_furnace_alert")
+        self.assertEqual(country["SHL_selected_furnace"], 2)
+        country["SHL_wear_2"] = 75
+        country["SHL_wear_6"] = 80
+        for code in (1, 2, 3):
+            country["SHL_delivery_block_6"] = code
+            self.assertTrue(machine.matches(machine.triggers["SHL_furnace_6_interrupted"], "SHL"))
+            self.assertTrue(machine.matches(machine.triggers["SHL_furnace_6_worn"], "SHL"))
+        country["SHL_project_stage"] = 4
+        for expected in (6, 10, 2):
+            machine.run("SHL_select_next_furnace_alert")
+            self.assertEqual(country["SHL_selected_furnace"], expected)
+
+    def test_caravan_offers_and_terms_use_the_same_buyers(self):
+        source = (ROOT / "common/decisions/ADISCORD_SHL_decisions.txt").read_text(encoding="utf-8")
+        categories = parse_clausewitz(source)
+        caravans = block(categories, "SHL_caravans")
+        catalogue = [
+            scalar(e.value, "SHL_caravan_partners")
+            for e in self.machine.effects["SHL_initialize_programmes"] if e.key == "add_to_array"
+        ]
+        for name in ("SHL_metal_contract_offer", "SHL_metal_contract_end"):
+            self.assertTrue(block(caravans, name))
+            self.assertFalse(block(block(categories, "SHL_quarters_and_borders"), name))
+            targets = re.search(r"targets = \{ ([A-Z ]+) \}", source.split(f"\n\t{name} = {{", 1)[1])[1].split()
+            self.assertEqual(catalogue, targets)
+        guis = parse_clausewitz((ROOT / "common/scripted_guis/ADISCORD_SHL_scripted_gui.txt").read_text(encoding="utf-8"))
+        panel = block(block(guis, "scripted_gui"), "ADISCORD_SHL_caravans")
+        grid = block(block(panel, "dynamic_lists"), "SHL_caravan_contract_grid")
+        self.assertEqual(scalar(grid, "array"), "SHL_caravan_partners")
+        self.assertEqual(scalar(grid, "change_scope"), "yes")
+        self.assertEqual(scalar(grid, "country_scope_entry_container"), "[SHLGetCaravanRow]")
+        for lang in ("english", "russian"):
+            path = ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml"
+            strings = dict(re.findall(r'^ (\w+):\d* "(.*)"$', path.read_text(encoding="utf-8-sig"), re.M))
+            self.assertEqual(re.findall(r"\[([A-Z]+)\.SHLGetCaravanPending\]", strings["SHL_caravans_desc"]), catalogue)
+            self.assertIn("[SHLGetMetalOfferTitle]", strings["SHL_metal_contract_offer"])
+            self.assertIn("[FROM.GetName]", strings["SHL_metal_offer_target_title"])
+            self.assertNotIn("[FROM", strings["SHL_metal_offer_unlock_title"])
+            self.assertIn("[FROM.GetName]", strings["SHL_metal_contract_end"])
+            self.assertIn("[This.GetName]", strings["SHL_caravan_buyer"])
+            self.assertIn("[?SHL_metal_cycle_price|0]", strings["SHL_caravan_rate"])
+            self.assertIn("[?SHL_metal_arrears|0]", strings["SHL_caravan_missed_payment"])
+        tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text().splitlines()
+        for mission in ("SHL_conclave_ballot", "SHL_metal_contract_year", "SHL_metal_contract_two_years"):
+            self.assertEqual(tokens.count(mission), 1)
+
+    def test_caravan_reader_moves_a_buyer_from_pending_to_active(self):
+        path = ROOT / "common/scripted_localisation/ADISCORD_SHL_scripted_loc.txt"
+        definitions = {scalar(e.value, "name"): e.value for e in parse_clausewitz(path.read_text(encoding="utf-8"))}
+        def read(getter, buyer):
+            for option in definitions[getter]:
+                if option.key == "text" and self.machine.matches(block(option.value, "trigger"), buyer):
+                    return scalar(option.value, "localization_key")
+            self.fail(getter)
+
+        self.machine.flags["VAL"].add("SHL_metal_offer_pending")
+        self.assertEqual(read("SHLGetCaravanPending", "VAL"), "SHL_caravan_pending")
+        self.assertEqual(read("SHLGetCaravanRow", "VAL"), "")
+        self.machine.flags["VAL"].add("SHL_metal_client")
+        self.assertEqual(read("SHLGetCaravanPending", "VAL"), "SHL_borders_blank")
+        self.assertEqual(read("SHLGetCaravanRow", "VAL"), "SHL_caravan_contract_row")
+        self.machine.flags["VAL"].discard("SHL_metal_offer_pending")
+        self.machine.variables["VAL"]["SHL_metal_arrears"] = 1
+        self.assertEqual(read("SHLGetCaravanArrears", "VAL"), "SHL_caravan_missed_payment")
+        self.machine.variables["VAL"]["SHL_metal_arrears"] = 0
+        self.assertEqual(read("SHLGetCaravanArrears", "VAL"), "SHL_caravan_payments_current")
+        self.machine.flags["VAL"].discard("SHL_metal_client")
+        self.assertEqual(read("SHLGetCaravanPending", "VAL"), "SHL_borders_blank")
+        self.assertEqual(read("SHLGetCaravanRow", "VAL"), "")
+
     def test_treasury_receipt_pays_250_and_refreshes_the_budget(self):
         machine = self.machine
         machine.variables["SHL"]["ADISCORD_economy_treasury"] = 100
@@ -860,10 +1054,10 @@ class FurnaceAccountingTests(unittest.TestCase):
 
     def test_supply_affordability_fractional_boundary(self):
         m = self.machine
-        m.variables["SHL"]["ADISCORD_economy_treasury"] = 24.99
+        m.variables["SHL"]["ADISCORD_economy_treasury"] = 39.99
         m.run("SHL_begin_supply", target="287")
-        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 24.99)
-        m.variables["SHL"]["ADISCORD_economy_treasury"] = 25
+        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 39.99)
+        m.variables["SHL"]["ADISCORD_economy_treasury"] = 40
         m.run("SHL_begin_supply", target="287")
         self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 0)
 
@@ -945,7 +1139,7 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.run("SHL_begin_supply", target="288")
         m.run("SHL_cancel_operation", target="287")
         m.run("SHL_finish_supply", target="288")
-        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 975)
+        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 960)
         self.assertEqual(m.variables["288"]["SHL_furnace_stock"], 3)
 
     def test_supply_returns_payment_if_reserve_filled_the_bunker_during_delivery(self):
@@ -1333,17 +1527,56 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.variables["SHL"]["ADISCORD_economy_treasury"] = 50
         m.variables["287"]["SHL_furnace_stock"] = 0
         m.run("SHL_produce_site", scope="287")
-        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 85)
+        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 65)
         self.assertEqual(m.variables["287"]["SHL_furnace_shortages"], 0)
 
     def test_planned_supply_never_borrows_or_buys_fractional_packets(self):
         m = self.machine
         m.variables["SHL"]["SHL_regular_supply"] = 1
-        m.variables["SHL"]["ADISCORD_economy_treasury"] = 24.99
+        m.variables["SHL"]["ADISCORD_economy_treasury"] = 44.99
         m.variables["287"]["SHL_furnace_stock"] = 0
         m.run("SHL_produce_site", scope="287")
-        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 24.99)
+        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 44.99)
         self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 0)
+
+    def test_automatic_supply_buys_only_missing_whole_packets_after_an_earlier_payout(self):
+        m = self.machine
+        country = m.variables["SHL"]
+        country.update({
+            "SHL_regular_supply": 1, "SHL_shift_policy": 1, "ADISCORD_economy_treasury": 0,
+            "SHL_project_stage": 4, "SHL_tenth_running": 1, "SHL_tenth_stock": 1.25,
+        })
+        for state in range(287, 296):
+            m.variables[str(state)].update({"SHL_furnace_running": 0, "SHL_furnace_stock": 0})
+        for state, stock in (("287", 2), ("288", 0), ("290", 0.75), ("291", 1.25)):
+            m.variables[state].update({"SHL_furnace_running": 1, "SHL_furnace_stock": stock})
+        m.control["288"] = "KYZ"
+        m.run("SHL_refresh_furnaces")
+        self.assertEqual(country["SHL_preview_income"], 180)
+        m.run("SHL_produce_period")
+        self.assertEqual(country["ADISCORD_economy_current_month_action_costs"], 4 * 45)
+        self.assertEqual(country["ADISCORD_economy_treasury"], 180)
+        self.assertEqual(m.variables["290"]["SHL_furnace_stock"], 0.75)
+        self.assertEqual(m.variables["291"]["SHL_furnace_stock"], 0.25)
+        self.assertEqual(country["SHL_tenth_stock"], 0.25)
+        self.assertEqual(m.variables["288"]["SHL_furnace_stock"], 0)
+        self.assertEqual(m.variables["289"]["SHL_furnace_stock"], 0)
+
+    def test_waiver_updates_forecast_inside_railway_reward_and_survives_refresh(self):
+        m = self.machine
+        country = m.variables["SHL"]
+        country.update({"SHL_regular_supply": 1, "SHL_selected_furnace": 1, "ADISCORD_economy_treasury": 40})
+        for state in range(287, 296):
+            m.variables[str(state)].update({"SHL_furnace_running": int(state == 287), "SHL_furnace_stock": 0})
+        m.run("SHL_refresh_furnaces")
+        self.assertEqual((country["SHL_auto_packet_price"], country["SHL_preview_income"]), (45, 0))
+        m.run("SHL_waive_packet_fee")
+        self.assertEqual((country["SHL_auto_packet_price"], country["SHL_preview_income"]), (40, 20))
+        m.focuses.add("SHL_houses_railway")
+        m.run("SHL_refresh_selected_furnace")
+        self.assertEqual((country["SHL_auto_packet_price"], country["SHL_preview_income"]), (40, 20))
+        m.run("SHL_produce_period")
+        self.assertEqual(country["ADISCORD_economy_treasury"], 60)
 
     def test_native_focus_tree_has_unique_reachable_focuses_on_free_cells(self):
         shared = shared_focuses()
@@ -1503,7 +1736,7 @@ class FurnaceAccountingTests(unittest.TestCase):
         self.assertEqual(country["SHL_tenth_stock"], 0)
         self.assertEqual(country["SHL_tenth_wear"], 20)
         self.assertEqual(country["SHL_last_cycle_income"], 900)
-        self.assertEqual(country["ADISCORD_economy_treasury"], 1850)
+        self.assertEqual(country["ADISCORD_economy_treasury"], 1810)
 
     def test_tenth_restart_waits_and_lost_capital_refunds(self):
         m = self.machine
@@ -1555,7 +1788,7 @@ class FurnaceAccountingTests(unittest.TestCase):
             m.run("SHL_update_tensions")
         low, high = balance_ranges(BALANCE)["SHL_balance_equilibrium"]
         self.assertTrue(low <= m.power_balance[BALANCE] <= high)
-        # The next cycle's drift must not cancel the four-week ratification focus.
+        # The directorate can hold equilibrium through the next count.
         m.run("SHL_update_tensions")
         self.assertTrue(low <= m.power_balance[BALANCE] <= high)
 
@@ -1575,9 +1808,9 @@ class FurnaceAccountingTests(unittest.TestCase):
         m.variables["SHL"]["ADISCORD_economy_treasury"] = 69.99
         m.run("SHL_purchase_reserve")
         self.assertNotIn("SHL_reserve_stock", m.variables["SHL"])
-        m.variables["SHL"]["ADISCORD_economy_treasury"] = 130
+        m.variables["SHL"]["ADISCORD_economy_treasury"] = 190
         m.run("SHL_purchase_reserve")
-        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 60)
+        self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 90)
         m.run("SHL_purchase_reserve")
         self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 0)
         self.assertEqual(m.variables["SHL"]["SHL_reserve_stock"], 4)
@@ -1872,15 +2105,11 @@ class ObligationAccountingTests(unittest.TestCase):
     def test_early_platforms_precede_capital_ratification(self):
         for focus in ("SHL_new_house", "SHL_open_conclave", "SHL_nur_directorate"):
             self.assertEqual(scalar(block(focus_definition(focus), "prerequisite"), "focus"), "SHL_conclave_rules")
-        # The commits hang from one drawn start; the platform step is a native condition.
-        for focus, platform in (
-            ("SHL_admit_tenth_house", "SHL_house_compromise"),
-            ("SHL_rights_without_fire", "SHL_city_charters"),
-            ("SHL_state_furnaces", "SHL_common_dispatch"),
-        ):
+        # The three ballot results share one parent and cannot be picked manually.
+        for focus in ("SHL_admit_tenth_house", "SHL_rights_without_fire", "SHL_state_furnaces"):
             definition = focus_definition(focus)
             self.assertEqual(prerequisite_blocks(definition), [{"SHL_workers_charter"}], focus)
-            self.assertIn(("has_completed_focus", platform), [(e.key, e.value) for e in block(definition, "available")], focus)
+            self.assertFalse(self.m.matches(block(definition, "available"), "SHL"), focus)
         # Each platform root forks into its second step and its war mandate.
         for root, second, mandate in (
             ("SHL_new_house", "SHL_house_compromise", "SHL_house_war_mandate"),
@@ -2614,7 +2843,8 @@ class SouthernCampaignTests(unittest.TestCase):
     def test_initial_spirits_survive_initialization_and_leave_on_real_reforms(self):
         history = parse_clausewitz((ROOT / "history/countries/SHL - Shahrabad League.txt").read_text(encoding="utf-8"))
         ideas = {e.value for e in block(history, "add_ideas")}
-        self.assertTrue({"SHL_hereditary_seats", "SHL_divided_guard", "SHL_external_freight"} <= ideas)
+        self.assertTrue({"SHL_hereditary_seats", "SHL_external_freight"} <= ideas)
+        self.assertNotIn("SHL_divided_guard", ideas)
         self.m.ideas.update(ideas)
         self.m.run("SHL_refresh_furnaces")
         self.assertTrue(ideas - {"SHL_nine_furnaces_compact"} <= self.m.ideas)
@@ -2631,7 +2861,74 @@ class SouthernCampaignTests(unittest.TestCase):
         self.country()["SHL_veyr_crisis"] = 4
         self.m.run("SHL_refresh_furnaces")
         self.assertNotIn("SHL_external_freight", self.m.ideas)
-        self.assertEqual(scalar(block(focus_definition("SHL_southern_watch"), "completion_reward"), "remove_ideas"), "SHL_divided_guard")
+        self.assertEqual(scalar(block(focus_definition("SHL_southern_watch"), "completion_reward"), "SHL_shahrabad_army_reform"), "yes")
+
+    def test_starting_reforms_apply_the_displayed_deltas_and_keep_campaign_progress(self):
+        self.m.flags["SHL"].discard("SHL_furnaces_initialized")
+        self.m.run("SHL_initialize_furnaces")
+        dynamics = dict((e.key, e.value) for e in parse_clausewitz(
+            (ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_SHL.txt").read_text(encoding="utf-8")))
+        idea_file = ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt"
+        country_ideas = block(block(parse_clausewitz(idea_file.read_text(encoding="utf-8")), "ideas"), "country")
+        for spirit, opening, focuses in (
+            ("SHL_cartel_influence", {"political_power_gain": -0.20, "consumer_goods_factor": 0.10},
+             ("SHL_shift_arbitration",)),
+            ("SHL_shahrabad_army", {"army_org_factor": -0.10, "planning_speed": -0.20},
+             ("SHL_railway_guard", "SHL_southern_watch", "SHL_conclave_army")),
+            ("SHL_conclave_industry", {"industrial_capacity_factory": -0.10, "production_speed_buildings_factor": -0.10},
+             ("SHL_houses_railway", "SHL_metal_market")),
+        ):
+            self.assertIn(spirit, self.m.dynamic)
+            variables = {key: scalar(dynamics[spirit], key) for key in opening}
+            preview = block(block(country_ideas, spirit + "_reform_preview"), "modifier")
+            deltas = {e.key: float(e.value) for e in preview}
+            self.assertEqual(deltas, {key: -value / 2 for key, value in opening.items()})
+            for step, focus in enumerate(focuses, 1):
+                effect = spirit + "_reform"
+                self.assertEqual(scalar(block(focus_definition(focus), "completion_reward"), effect), "yes")
+                for key, var in variables.items():
+                    self.assertAlmostEqual(self.country()[var], opening[key] + (step - 1) * deltas[key])
+                self.m.run(effect)
+                self.m.run("SHL_initialize_furnaces")
+                self.m.run("SHL_refresh_furnaces")
+                for key, var in variables.items():
+                    self.assertAlmostEqual(self.country()[var], opening[key] + step * deltas[key])
+        self.assertEqual(scalar(block(focus_definition("SHL_counting_chamber"), "completion_reward"),
+                                "SHL_cartel_influence_reform"), "yes")
+        self.assertEqual(prerequisite_blocks(focus_definition("SHL_incident_office")),
+                         [{"SHL_shift_arbitration", "SHL_counting_chamber"}])
+        finish = block(focus_definition("SHL_incident_office"), "completion_reward")
+        self.m.execute([entry for entry in finish if entry.key == "if"], "SHL")
+        self.m.run("SHL_refresh_furnaces")
+        self.assertNotIn("SHL_cartel_influence", self.m.dynamic)
+        self.assertNotIn("SHL_cartel_pp", self.country())
+        self.assertNotIn("SHL_cartel_consumer_goods", self.country())
+
+    def test_trade_category_and_ai_wartime_reserve(self):
+        path = ROOT / "common/decisions/ADISCORD_SHL_decisions.txt"
+        categories = parse_clausewitz(path.read_text(encoding="utf-8"))
+        self.assertEqual([c.key for c in categories if block(c.value, "SHL_trade_mission")], ["SHL_caravans"])
+        panel = parse_clausewitz((ROOT / "common/decisions/categories/ADISCORD_decision_categories_SHL.txt")
+                                 .read_text(encoding="utf-8"))
+        visible = block(block(panel, "SHL_caravans"), "visible")
+        self.assertFalse(self.m.matches(visible, "SHL"))
+        self.m.focuses.add("SHL_sw_keep_the_markets")
+        self.assertTrue(self.m.matches(visible, "SHL"))
+        for cargo, load in (("rifles", 10000), ("kits", 2000), ("wholesale", 100000)):
+            decision = decision_definition("SHL_road_send_" + cargo)
+            self.assertFalse(self.m.matches(block(decision, "visible"), "SHL"))
+            if cargo == "kits":
+                continue
+            reserve = block(block(decision, "ai_will_do"), "modifier")
+            condition = [entry for entry in reserve if entry.key != "factor"]
+            self.assertEqual(scalar(reserve, "factor"), "0")
+            self.m.equipment["SHL", "infantry_equipment"] = load + 2699
+            self.assertTrue(self.m.matches(condition, "SHL"))
+            self.m.equipment["SHL", "infantry_equipment"] += 1
+            self.assertFalse(self.m.matches(condition, "SHL"))
+        self.m.focuses.add("SHL_law_of_continuous_fire")
+        self.assertTrue(self.m.matches(visible, "SHL"))
+        self.assertTrue(self.m.matches(block(decision_definition("SHL_road_send_wholesale"), "visible"), "SHL"))
 
     def test_ordinary_ai_queue_can_prepare_before_first_deadline(self):
         # The preparation plan with the higher weight interrupts the industrial
@@ -3293,6 +3590,98 @@ class EarlyCampaignTests(unittest.TestCase):
     country = CrisisLayerTests.country
     event = ShahrabadCabinetTests.event
 
+    def test_party_rifle_invoice_keeps_the_quoted_lot_until_settlement(self):
+        event = self.event("ADISCORD_SHL.205")
+        decline, standard, bulk = [entry.value for entry in event if entry.key == "option"]
+        self.assertEqual(scalar(decline, "name"), "ADISCORD_SHL.205.b")
+        offers = [
+            decision_definition("SHL_offer_party_rifles"),
+            decision_definition("SHL_offer_party_rifles_bulk"),
+        ]
+        for offer in offers:
+            self.assertEqual(scalar(offer, "days_re_enable"), "30")
+        for lot, (amount, price, accept, other) in enumerate((
+            (2700, 100, standard, bulk),
+            (13500, 300, bulk, standard),
+        )):
+            with self.subTest(amount=amount):
+                self.setUp()
+                self.m.triggers.update(shared_definitions(
+                    "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt",
+                    ("VAL_stelander_civil_war_active",),
+                ))
+                self.m.effects.update(shared_definitions(
+                    "common/scripted_effects/ADISCORD_shared_action_effects.txt",
+                    ("ADISCORD_economy_receive_300", "ADISCORD_economy_spend_100",
+                     "ADISCORD_economy_spend_300"),
+                ))
+                self.m.countries.update({tag: {"exists": True} for tag in ("STP", "STS")})
+                self.m.global_flags.add("STP_cw_started")
+                self.m.focuses.add("SHL_law_of_continuous_fire")
+                war = frozenset(("STP", "STS"))
+                self.m.wars.add(war)
+                rifles = ("SHL", "infantry_equipment")
+                delivered = ("STP", "infantry_equipment")
+                treasury = "ADISCORD_economy_treasury"
+                seller = self.country()
+                buyer = self.m.variables["STP"]
+                initial = seller.get(treasury, 0)
+                buyer[treasury] = 300
+                self.m.equipment[rifles] = 13500
+                offer_effect = block(offers[lot], "complete_effect")
+
+                def available(offer):
+                    return self.m.matches(block(offer, "available"), "SHL")
+
+                def select(option):
+                    self.m.execute(block(option, "hidden_effect"), "STP")
+
+                self.assertTrue(all(available(offer) for offer in offers))
+                self.m.execute(offer_effect, "SHL")
+                self.assertFalse(any(available(offer) for offer in offers))
+                self.m.execute(block(offers[1 - lot], "complete_effect"), "SHL")
+                self.assertFalse(self.m.matches(block(other, "trigger"), "STP"))
+                select(other)
+                self.assertEqual(buyer[treasury], 300)
+                self.assertEqual(self.m.equipment[delivered], 0)
+                select(decline)
+                select(accept)
+                self.assertEqual(seller.get(treasury, 0), initial)
+                self.assertEqual(self.m.equipment[rifles], 13500)
+                self.assertFalse(any(available(offer) for offer in offers))
+
+                # The next contact opens when the common 30-day flag expires.
+                hold = next(e.value for e in self.m.effects["SHL_send_party_invoice"] if e.key == "set_country_flag")
+                self.assertEqual((scalar(hold, "flag"), scalar(hold, "days")), ("SHL_party_order_cooldown", "30"))
+                self.m.flags["SHL"].discard("SHL_party_order_cooldown")
+                self.m.equipment[rifles] = amount
+                buyer[treasury] = price
+                self.assertTrue(available(offers[lot]))
+                if lot == 0:
+                    self.assertFalse(available(offers[1]))
+                self.m.execute(offer_effect, "SHL")
+                for stock, funds, front in (
+                    (amount - 0.1, price, True), (amount, price - 0.1, True), (amount, price, False),
+                ):
+                    self.m.equipment[rifles] = stock
+                    buyer[treasury] = funds
+                    if not front:
+                        self.m.wars.discard(war)
+                    self.assertFalse(self.m.matches(block(accept, "trigger"), "STP"))
+                    select(accept)
+                    self.assertEqual(buyer[treasury], funds)
+                    self.assertEqual(self.m.equipment[rifles], stock)
+                self.m.wars.add(war)
+                self.assertTrue(self.m.matches(block(accept, "trigger"), "STP"))
+                select(accept)
+                select(accept)
+                self.assertEqual(buyer[treasury], 0)
+                self.assertEqual(seller[treasury], initial + price)
+                self.assertEqual(self.m.equipment[rifles], 0)
+                self.assertEqual(self.m.equipment[delivered], amount)
+                self.assertEqual(buyer["ADISCORD_economy_current_month_action_costs"], price)
+                self.assertEqual(seller["ADISCORD_economy_current_month_action_income"], price)
+
     def test_unanswered_starting_problems_reach_crises_in_seven_and_eight_cycles(self):
         self.m.ideas.add("SHL_unregistered_quarters")
         reached = {}
@@ -3442,7 +3831,7 @@ class EarlyCampaignTests(unittest.TestCase):
                 self.assertEqual(scalar(available[0], "name"), "SHL_crisis_already_resolved")
                 self.assertFalse([e for e in available[0] if e.key not in ("name", "trigger", "ai_chance")])
 
-    def test_direct_routes_ratify_without_a_finished_tenth_furnace(self):
+    def test_platforms_can_win_the_ballot_without_a_finished_tenth_furnace(self):
         # The city course starts at -0.20 and needs the quarters' influence: the
         # direct route adds one quarters focus and the paid register recognition.
         for first, second, ratify, extra, days in (
@@ -3454,12 +3843,13 @@ class EarlyCampaignTests(unittest.TestCase):
                 self.setUp()
                 self.m.power_balance[BALANCE] = -0.20
                 self.m.ideas.add("SHL_unregistered_quarters")
+                self.m.run("SHL_open_ballot")
                 elapsed = 0
                 engineer_finish = 0
                 route = ("SHL_law_of_continuous_fire", "SHL_census_of_nine", *extra,
-                         "SHL_reserve_for_next_shift", "SHL_conclave_rules", first,
+                         "SHL_conclave_rules", first,
                          "SHL_common_industrial_account", "SHL_engineer_society", second,
-                         "SHL_right_to_land", "SHL_common_fund", "SHL_workers_charter", ratify)
+                         "SHL_right_to_land", "SHL_common_fund", "SHL_workers_charter")
                 for identifier in route:
                     if identifier == "SHL_right_to_land":
                         elapsed = max(elapsed, engineer_finish)
@@ -3473,7 +3863,7 @@ class EarlyCampaignTests(unittest.TestCase):
                     reward = block(focus, "completion_reward")
                     self.m.execute([e for e in reward if e.key == "add_power_balance_value"], "SHL")
                     if identifier == first:
-                        self.assertEqual(elapsed, 84 + 28 * len(extra))
+                        self.assertEqual(elapsed, 63 + 28 * len(extra))
                     elif identifier == "SHL_engineer_society":
                         self.m.run("SHL_begin_engineers")
                         engineer_finish = elapsed + int(scalar(decision_definition("SHL_project_engineers"), "days_remove"))
@@ -3481,12 +3871,18 @@ class EarlyCampaignTests(unittest.TestCase):
                         if extra:
                             self.m.run("SHL_recognise_quarter_registers")
                         self.m.execute(block(reward, "hidden_effect"), "SHL")
-                self.assertEqual(elapsed, days)
+                self.assertEqual(elapsed, days - 49)
+                mission = decision_definition("SHL_conclave_ballot")
+                self.assertLess(elapsed, int(scalar(mission, "days_mission_timeout")) + 7)
                 self.assertEqual(self.country()["SHL_project_stage"], 1)
-                reward = block(block(focus_definition(ratify), "completion_reward"), "hidden_effect")
-                self.m.execute(reward, "SHL")
+                self.assertFalse(self.m.matches(block(focus_definition(ratify), "available"), "SHL"))
+                if first == "SHL_new_house":
+                    seat_houses(self.m, 80)
+                    self.m.run("SHL_refresh_furnaces")
+                self.m.execute(block(mission, "timeout_effect"), "SHL")
+                self.assertIn(ratify, self.m.focuses)
                 settled = dict(self.country())
-                self.m.execute(reward, "SHL")
+                self.m.run("SHL_count_ballot")
                 self.assertEqual(dict(self.country()), settled)
 
 
@@ -3654,6 +4050,68 @@ class DeliveryAccountingTests(unittest.TestCase):
         self.assertNotIn("SHL_obligation_kind", self.c)
         self.assertEqual(self.m.variables["288"]["SHL_furnace_wear"], 26)
 
+    def test_buying_reserve_updates_the_forecast_before_the_packets_are_distributed(self):
+        cash = "ADISCORD_economy_treasury"
+        for state in range(287, 296):
+            self.m.variables[str(state)]["SHL_furnace_running"] = 0
+        self.m.variables["287"].update({"SHL_furnace_running": 1, "SHL_furnace_stock": 0})
+        self.c.update({cash: 90, "SHL_regular_supply": 1, "SHL_reserve_stock": 0,
+                       "SHL_selected_furnace": 1, "SHL_project_stage": 4,
+                       "SHL_tenth_running": 1, "SHL_tenth_stock": 0})
+        self.m.run("SHL_refresh_furnaces")
+        self.assertEqual(self.c["SHL_preview_income"], 30)
+        self.m.execute(block(decision_definition("SHL_buy_reserve"), "complete_effect"), "SHL")
+        self.assertEqual((self.c[cash], self.c["SHL_reserve_stock"]), (0, 2))
+        self.assertEqual((self.c["SHL_delivery_block_1"], self.c["SHL_delivery_block_10"]), (3, 3))
+        self.assertEqual(self.c["SHL_preview_income"], 0)
+        self.m.execute(block(decision_definition("SHL_use_reserve"), "complete_effect"), "SHL", "287")
+        # The first furnace can now pay for the tenth's automatic order.
+        self.assertEqual(self.c["SHL_preview_income"], 75)
+        self.m.execute(block(decision_definition("SHL_supply_tenth"), "complete_effect"), "SHL")
+        self.assertEqual(self.c["SHL_preview_income"], 120)
+        self.assertEqual((self.c[cash], self.c["SHL_reserve_stock"]), (0, 0))
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.c[cash], 120)
+
+    def test_tenth_delivery_forecast_follows_the_last_service_pour_at_eight(self):
+        cash = "ADISCORD_economy_treasury"
+        for running, stock, budget, cold, recipient, redeems in (
+            (1, 1, 0, False, 0, True),
+            (1, 0, 100, False, 1, True),
+            (1, 0, 1, False, 0, False),
+            (0, 1, 0, False, 0, False),
+            (1, 1, 0, True, 0, False),
+        ):
+            with self.subTest(running=running, stock=stock, budget=budget, cold=cold):
+                self.setUp()
+                self.m.countries["SHL"] = {"exists": True, "is_subject": True, "has_war": False, "subject_of": "NAM"}
+                for state in range(287, 296):
+                    self.m.variables[str(state)]["SHL_furnace_running"] = 0
+                # Another lease keeps the autonomy settlement out of this delivery.
+                self.m.variables["287"]["SHL_furnace_recipient"] = 4
+                site = self.m.variables["294"]
+                site.update({"SHL_furnace_running": running, "SHL_furnace_stock": stock,
+                             "SHL_furnace_recipient": 4, "SHL_seal_service_cycles": 1})
+                if cold:
+                    self.m.flags["294"].add("SHL_seal_cold_shift")
+                self.c.update({"SHL_project_stage": 4, "SHL_tenth_running": 1, "SHL_tenth_stock": 1,
+                               "SHL_tenth_recipient": recipient, "SHL_regular_supply": 1, cash: budget})
+                self.m.run("SHL_refresh_furnaces")
+                self.m.run("SHL_refresh_delivery_forecast")
+                forecast = self.c["SHL_preview_income"]
+                expected_rifles = 2700 if redeems and recipient == 1 else 0
+                self.assertEqual(self.c["SHL_delivery_cash_10"], 60 if redeems and recipient == 0 else 0)
+                self.assertEqual(self.c["SHL_delivery_rifles_10"], expected_rifles)
+                self.assertEqual(self.c["SHL_recipient_10"], 4)
+                self.assertEqual(site["SHL_seal_service_cycles"], 1)
+                self.assertEqual(self.c[cash], budget)
+                landlord_cash = self.m.variables["NAM"].get(cash, 0)
+                self.m.run("SHL_produce_period")
+                self.assertEqual(self.c[cash] - budget, forecast)
+                self.assertEqual(self.m.variables["NAM"][cash] - landlord_cash, 60)
+                self.assertEqual(self.m.equipment["SHL", "infantry_equipment"], expected_rifles)
+                self.assertEqual("SHL_seal_service_cycles" not in site, redeems)
+
     def test_preview_matches_deliveries_and_does_not_mutate_production(self):
         for shift in range(3):
             with self.subTest(shift=shift):
@@ -3692,15 +4150,21 @@ class DeliveryAccountingTests(unittest.TestCase):
     def test_ai_reserves_supply_and_repairs_before_diverting_heat(self):
         self.m.ai = True
         self.m.countries["SHL"] = {"has_war": True}
-        self.c["ADISCORD_economy_treasury"] = 100
+        self.c["ADISCORD_economy_treasury"] = 689.99
         self.m.run("SHL_ai_allocate_deliveries")
         self.assertTrue(all(self.m.variables[str(state)]["SHL_furnace_recipient"] == 0 for state in range(287, 296)))
-        self.c["ADISCORD_economy_treasury"] = 1000
+        self.assertEqual(self.c["SHL_ai_delivery_reserve"], 10 * 45 + 240)
+        self.c["ADISCORD_economy_treasury"] = 690
         self.m.run("SHL_ai_allocate_deliveries")
         self.assertEqual([self.m.variables[str(state)]["SHL_furnace_recipient"] for state in range(287, 291)], [2, 3, 1, 0])
+        self.c["SHL_shift_policy"] = 1
+        self.m.focuses.add("SHL_houses_railway")
+        self.m.run("SHL_refresh_delivery_terms")
+        self.m.run("SHL_ai_allocate_deliveries")
+        self.assertEqual(self.c["SHL_ai_delivery_reserve"], 20 * 40 + 240)
 
     def test_economic_examples_include_real_supply_but_not_hypothetical_repairs(self):
-        for arsenal, quarters, expected in ((0, 0, 315), (1, 1, 195), (2, 1, 135)):
+        for arsenal, quarters, expected in ((0, 0, 135), (1, 1, 15), (2, 1, -45)):
             with self.subTest(arsenal=arsenal, quarters=quarters):
                 self.setUp()
                 self.c["SHL_regular_supply"] = 1
@@ -3793,6 +4257,30 @@ class ConclaveBalanceTests(unittest.TestCase):
 
     def option(self, identifier, name):
         return next(e.value for e in self.event(identifier) if e.key == "option" and scalar(e.value, "name") == name)
+
+    def test_native_balance_uses_distinct_shahrabad_emblems(self):
+        from PIL import Image
+
+        balance = block(parse_clausewitz(BOP_PATH.read_text(encoding="utf-8")), BALANCE)
+        gfx = (ROOT / "interface/ADISCORD_bop.gfx").read_text(encoding="utf-8")
+        sprites = {scalar(entry.value, "name").strip('"'): scalar(entry.value, "texturefile").strip('"')
+                   for entry in block(parse_clausewitz(gfx), "spriteTypes") if entry.key == "spriteType"}
+        seen = set()
+        for name, path in sprites.items():
+            if name.startswith("GFX_bop_") and not name.startswith("GFX_bop_SHL_"):
+                with Image.open(ROOT / path) as image:
+                    seen.add(image.convert("RGBA").tobytes())
+        for side in (e.value for e in balance if e.key == "side"):
+            side_id = scalar(side, "id")
+            path = sprites[scalar(side, "icon")]
+            self.assertEqual(path, f"gfx/interface/bop/{side_id}.png")
+            with Image.open(ROOT / path) as image:
+                self.assertEqual(image.size, (78, 88))
+                self.assertEqual(image.mode, "RGBA")
+                self.assertEqual(image.getchannel("A").getextrema(), (0, 255))
+                pixels = image.tobytes()
+            self.assertNotIn(pixels, seen, side_id)
+            seen.add(pixels)
 
     def test_balance_declares_both_sides_and_five_ranges_with_economy_hooks(self):
         balance = block(parse_clausewitz(BOP_PATH.read_text(encoding="utf-8")), BALANCE)
@@ -3976,32 +4464,48 @@ class ConclaveBalanceTests(unittest.TestCase):
                 self.m.execute(effects, "SHL")
                 self.assertAlmostEqual(self.balance(), expected)
 
-    def test_ratification_finals_require_their_balance_range(self):
-        for focus, platform, tooltip, ranges, passing, failing in (
-            ("SHL_admit_tenth_house", "SHL_house_compromise", "SHL_ratify_needs_crests_tt",
-             {"SHL_balance_crests_influence", "SHL_balance_crests_dominance"}, (-0.60, -0.30), (0.0, 0.30)),
-            ("SHL_rights_without_fire", "SHL_city_charters", "SHL_ratify_needs_quarters_tt",
-             {"SHL_balance_quarters_influence", "SHL_balance_quarters_dominance"}, (0.30, 0.60), (0.0, -0.30)),
-            ("SHL_state_furnaces", "SHL_common_dispatch", "SHL_ratify_needs_equilibrium_tt",
-             {"SHL_balance_equilibrium"}, (0.0, 0.05), (-0.30, 0.30)),
+    def test_ballot_uses_the_current_electorate_and_platform_at_equilibrium(self):
+        for balance, votes, support, platform, expected in (
+            (-0.3, 5, 20, None, 1),
+            (-0.3, 4, 40, "SHL_house_compromise", 3),
+            (0.3, 5, 30, None, 2),
+            (0.3, 5, 29, "SHL_city_charters", 3),
+            (0, 5, 40, "SHL_house_compromise", 1),
+            (0, 5, 30, "SHL_city_charters", 2),
+            (0, 5, 40, None, 3),
         ):
-            with self.subTest(focus=focus):
-                available = block(focus_definition(focus), "available")
-                gate = next(e.value for e in available if e.key == "custom_trigger_tooltip" and scalar(e.value, "tooltip") == tooltip)
-                found = {scalar(e.value, "range") for e in walk_entries(gate) if e.key == "is_power_balance_in_range"}
-                self.assertEqual(found, ranges)
-                self.country()["SHL_city_support"] = 40
-                # The platform step is a condition, not a drawn parent.
-                self.m.focuses.discard(platform)
-                self.m.power_balance[BALANCE] = passing[0]
-                self.assertFalse(self.m.matches(available, "SHL"), platform)
-                self.m.focuses.add(platform)
-                for value in passing:
-                    self.m.power_balance[BALANCE] = value
-                    self.assertTrue(self.m.matches(available, "SHL"), value)
-                for value in failing:
-                    self.m.power_balance[BALANCE] = value
-                    self.assertFalse(self.m.matches(available, "SHL"), value)
+            with self.subTest(balance=balance, votes=votes, support=support, platform=platform):
+                self.setUp()
+                self.m.power_balance[BALANCE] = balance
+                self.country().update({
+                    "SHL_house_votes": 9, "SHL_crest_support": votes,
+                    "SHL_crest_support_twice": 2 * votes, "SHL_city_support": support,
+                })
+                if platform:
+                    self.m.focuses.add(platform)
+                self.m.run("SHL_open_ballot")
+                mission = decision_definition("SHL_conclave_ballot")
+                self.assertIn("SHL_conclave_ballot", self.m.missions)
+                self.assertFalse(self.m.matches(block(mission, "available"), "SHL"))
+                self.m.execute(block(mission, "timeout_effect"), "SHL")
+                self.assertEqual(self.country()["SHL_political_course"], expected)
+                self.assertNotIn("SHL_ballot_due", self.m.flags["SHL"])
+
+    def test_a_due_ballot_waits_for_liberation_and_respects_a_crisis_result(self):
+        mission = decision_definition("SHL_conclave_ballot")
+        self.m.capitulated = True
+        self.m.execute(block(mission, "timeout_effect"), "SHL")
+        self.assertEqual(self.country().get("SHL_political_course", 0), 0)
+        self.assertIn("SHL_ballot_due", self.m.flags["SHL"])
+        self.m.capitulated = False
+        self.m.run("SHL_open_ballot")
+        self.assertGreater(self.country()["SHL_political_course"], 0)
+        self.setUp()
+        self.m.run("SHL_commit_commune_course")
+        self.assertTrue(self.m.matches(block(mission, "cancel_trigger"), "SHL"))
+        self.m.execute(block(mission, "timeout_effect"), "SHL")
+        self.assertEqual(self.country()["SHL_political_course"], 5)
+        self.assertNotIn("SHL_ballot_due", self.m.flags["SHL"])
 
     def test_seven_house_votes_gate_only_the_hereditary_republic(self):
         holders = {
@@ -4172,28 +4676,24 @@ class CourseTreeStructureTests(unittest.TestCase):
     def test_shared_layer_is_defined_once_and_referenced_by_the_main_tree(self):
         shared = shared_focuses()
         source = SHARED_FOCUS_SOURCE.read_text(encoding="utf-8")
-        self.assertTrue(set(SOUTHERN_SHARED) <= set(shared))
         self.assertEqual(source.count("shared_focus = {"), len(shared))
         self.assertNotIn("\nfocus = {", source)
         for identifier in shared:
             self.assertEqual(sum(identifier in focuses for focuses in map(tree_focuses, FOCUS_TREE_SOURCES)), 0, identifier)
-        roots = {identifier for identifier, focus in shared.items() if not block(focus, "prerequisite")}
-        self.assertEqual(roots, {
-            "SHL_south_crown_of_the_south",
-            "SHL_four_districts", "SHL_chancery_of_the_gate", "SHL_written_fire",
-        })
-        references = [e.value for e in focus_tree("main") if e.key == "shared_focus"]
-        self.assertEqual(set(references), roots)
-        self.assertEqual(len(references), len(roots))
-        allow = block(shared["SHL_south_crown_of_the_south"], "allow_branch")
-        self.assertEqual([(e.key, e.value) for e in allow], [("has_global_flag", "ADISCORD_south_hegemon_SHL")])
-        self.assertTrue(set(SOUTHERN_WAR_FRONT) <= set(war_tree_focuses()))
-        self.assertFalse(set(war_tree_focuses()) & set(shared))
-        # The second-row branches are open all campaign: no allow_branch, every root at row 0.
-        for identifier in roots - {"SHL_south_crown_of_the_south"}:
-            self.assertFalse(block(shared[identifier], "allow_branch"), identifier)
-            self.assertEqual(scalar(shared[identifier], "y"), "0", identifier)
-            self.assertGreaterEqual(int(scalar(shared[identifier], "x")), 33, identifier)
+        graph = whole_tree_focuses()
+        opening = "SHL_law_of_continuous_fire"
+        self.assertEqual({name for name, focus in graph.items() if not prerequisite_blocks(focus)}, {opening})
+        self.assertEqual(reachable_focuses(graph, set()), set(graph))
+        self.assertEqual(reachable_focuses(graph, {opening}), set())
+        crown = graph["SHL_south_crown_of_the_south"]
+        self.assertEqual([(e.key, e.value) for e in block(crown, "allow_branch")],
+                         [("has_global_flag", "ADISCORD_south_hegemon_SHL")])
+        war = war_tree_focuses()
+        self.assertTrue(set(SOUTHERN_WAR_FRONT) <= set(war))
+        self.assertEqual({name for name, focus in war.items() if not prerequisite_blocks(focus)},
+                         {"SHL_sw_war_conclave"})
+        self.assertEqual(reachable_focuses(war, set()), set(war))
+        self.assertFalse(set(war) & set(graph))
 
     def test_course_focuses_keep_operability_and_cancel_after_a_course_switch(self):
         main = tree_focuses("main")
@@ -4242,7 +4742,13 @@ class CourseTreeStructureTests(unittest.TestCase):
         for identifier in COURSE_COMMIT_FOCUSES.values():
             self.assertIn(identifier, main)
             reward = block(main[identifier], "completion_reward")
-            self.assertTrue(any(e.key.startswith("SHL_commit_") for e in walk_entries(reward)), identifier)
+            if identifier in ("SHL_regency_of_crests", "SHL_commune_of_shift_councils"):
+                self.assertTrue(any(e.key.startswith("SHL_commit_") for e in walk_entries(reward)), identifier)
+            else:
+                self.assertIn(identifier, [
+                    e.value for e in walk_entries(self.m.effects["SHL_count_ballot"])
+                    if e.key == "complete_national_focus"
+                ])
             self.assertIn(f"\t\tid = {identifier}\n", native)
         for name in COURSE_TREES:
             for identifier in tree_focuses(name):
@@ -4280,7 +4786,7 @@ class CourseTreeStructureTests(unittest.TestCase):
                     elif tree == "commune":
                         reachable = course != 4
                     else:
-                        reachable = course in (0, COURSE_TREES[tree])
+                        reachable = course == COURSE_TREES[tree]
                     self.assertEqual(commit in drawn, reachable, commit)
                 # Unchosen platform chains hide after ratification; a taken one stays.
                 for root, value in platforms.items():
@@ -4426,6 +4932,29 @@ class CourseTreeStructureTests(unittest.TestCase):
         plans = {e.key: e.value for e in parse_clausewitz((ROOT / "common/ai_strategy_plans/ADISCORD_SHL_plans.txt").read_text(encoding="utf-8"))}
         self.assertIn("SHL_house_ledgers", [e.value for e in block(plans["SHL_furnaces_plan"], "ai_national_focuses")])
 
+    def test_caravan_upgrades_are_attached_to_existing_diplomatic_and_district_focuses(self):
+        focuses = whole_tree_focuses()
+        upgrades = {
+            "SHL_chancery_of_the_gate": ("stelander_fairs", "fairs"),
+            "SHL_sand_patrols": ("relay_posts", "relays"),
+            "SHL_desert_caravanserai": ("factor_houses", "factors"),
+            "SHL_northern_road": ("svetlogorsk_charter", "charter"),
+        }
+        for name, (art, benefit) in upgrades.items():
+            with self.subTest(focus=name):
+                self.assertNotIn("SHL_road_" + art, focuses)
+                self.assertEqual(scalar(focuses[name], "icon"), "GFX_focus_SHL_road_" + art)
+                shown = {entry.value for entry in block(focuses[name], "completion_reward")
+                         if entry.key == "custom_effect_tooltip"}
+                self.assertIn("SHL_road_unlock_" + benefit + "_tt", shown)
+
+        patrols, factors = "SHL_sand_patrols", "SHL_desert_caravanserai"
+        for choice, alternative in ((patrols, factors), (factors, patrols)):
+            self.assertEqual({e.value for e in block(focuses[choice], "mutually_exclusive")}, {alternative})
+            accessible = reachable_focuses(focuses, {alternative})
+            self.assertTrue({choice, "SHL_chancery_of_the_gate", "SHL_northern_road"} <= accessible)
+        self.assertNotIn("SHL_northern_road", reachable_focuses(focuses, {"SHL_chancery_of_the_gate"}))
+
     def test_ai_plans_name_existing_focuses_and_one_alternative_per_exclusive_pair(self):
         definitions = all_focus_definitions()
         exclusive = {
@@ -4470,7 +4999,7 @@ class CourseTreeStructureTests(unittest.TestCase):
             self.assertTrue(set(SOUTHERN_SHARED) <= queue, tree)
             self.assertFalse(set(war_tree_focuses()) & queue, tree)
         # The industrial programme covers the main section except what the
-        # preparation plans queue (preliminary courses, mandates, ratification),
+        # preparation plans queue (preliminary courses and mandates),
         # the hidden course entries and the closure of the unchosen alternatives.
         main = tree_focuses("main")
         programme = {e.value for e in block(plans["SHL_furnaces_plan"], "ai_national_focuses")}
@@ -4501,29 +5030,29 @@ class CourseTreeStructureTests(unittest.TestCase):
 # Defeat chapter "Under the namestnik's seal": cell and prerequisite blocks of
 # each focus (blocks are ANDed, the alternatives inside a block are ORed).
 DEFEAT_LAYOUT = {
-    "SHL_seal_conclave": ((84, 0), []),
-    "SHL_seal_count_the_cold": ((82, 1), [{"SHL_seal_conclave"}]),
-    "SHL_seal_houses_in_mourning": ((86, 1), [{"SHL_seal_conclave"}]),
-    "SHL_redeem_furnaces_of_the_lease": ((79, 2), [{"SHL_seal_count_the_cold"}, {"SHL_seal_houses_in_mourning"}]),
-    "SHL_cold_fire": ((89, 2), [{"SHL_seal_count_the_cold"}, {"SHL_seal_houses_in_mourning"}]),
-    "SHL_redeem_lease_ledger": ((77, 3), [{"SHL_redeem_furnaces_of_the_lease"}]),
-    "SHL_redeem_namestnik_audience": ((81, 3), [{"SHL_redeem_furnaces_of_the_lease"}]),
-    "SHL_redeem_by_coin": ((75, 4), [{"SHL_redeem_lease_ledger"}]),
-    "SHL_redeem_by_service": ((79, 4), [{"SHL_redeem_lease_ledger", "SHL_redeem_namestnik_audience"}]),
-    "SHL_redeem_quiet_quarters": ((83, 4), [{"SHL_redeem_namestnik_audience"}]),
-    "SHL_redeem_guarantor_houses": ((77, 5), [{"SHL_redeem_by_coin", "SHL_redeem_by_service"}]),
-    "SHL_redeem_supervised_repairs": ((81, 5), [{"SHL_redeem_by_service", "SHL_redeem_quiet_quarters"}]),
-    "SHL_redeem_charter": ((79, 6), [{"SHL_redeem_guarantor_houses"}, {"SHL_redeem_supervised_repairs"}]),
-    "SHL_cold_ash_cells": ((87, 3), [{"SHL_cold_fire"}]),
-    "SHL_cold_quarter_couriers": ((91, 3), [{"SHL_cold_fire"}]),
-    "SHL_cold_hidden_armouries": ((85, 4), [{"SHL_cold_ash_cells"}]),
-    "SHL_cold_letters_to_the_sands": ((89, 4), [{"SHL_cold_ash_cells", "SHL_cold_quarter_couriers"}]),
-    "SHL_cold_shifts": ((93, 4), [{"SHL_cold_quarter_couriers"}]),
-    "SHL_cold_desert_drill": ((87, 5), [{"SHL_cold_hidden_armouries", "SHL_cold_letters_to_the_sands"}]),
-    "SHL_cold_raid_martyrs": ((91, 5), [{"SHL_cold_letters_to_the_sands", "SHL_cold_shifts"}]),
-    "SHL_cold_night_of_fire": ((89, 6), [{"SHL_cold_desert_drill"}, {"SHL_cold_raid_martyrs"}]),
-    "SHL_cold_fire_without_masters": ((87, 7), [{"SHL_cold_night_of_fire"}]),
-    "SHL_cold_embers_under_seal": ((91, 7), [{"SHL_cold_night_of_fire"}]),
+    "SHL_seal_conclave": ((84, 1), [{"SHL_law_of_continuous_fire"}]),
+    "SHL_seal_count_the_cold": ((82, 2), [{"SHL_seal_conclave"}]),
+    "SHL_seal_houses_in_mourning": ((86, 2), [{"SHL_seal_conclave"}]),
+    "SHL_redeem_furnaces_of_the_lease": ((79, 3), [{"SHL_seal_count_the_cold"}, {"SHL_seal_houses_in_mourning"}]),
+    "SHL_cold_fire": ((89, 3), [{"SHL_seal_count_the_cold"}, {"SHL_seal_houses_in_mourning"}]),
+    "SHL_redeem_lease_ledger": ((77, 4), [{"SHL_redeem_furnaces_of_the_lease"}]),
+    "SHL_redeem_namestnik_audience": ((81, 4), [{"SHL_redeem_furnaces_of_the_lease"}]),
+    "SHL_redeem_by_coin": ((75, 5), [{"SHL_redeem_lease_ledger"}]),
+    "SHL_redeem_by_service": ((79, 5), [{"SHL_redeem_lease_ledger", "SHL_redeem_namestnik_audience"}]),
+    "SHL_redeem_quiet_quarters": ((83, 5), [{"SHL_redeem_namestnik_audience"}]),
+    "SHL_redeem_guarantor_houses": ((77, 6), [{"SHL_redeem_by_coin", "SHL_redeem_by_service"}]),
+    "SHL_redeem_supervised_repairs": ((81, 6), [{"SHL_redeem_by_service", "SHL_redeem_quiet_quarters"}]),
+    "SHL_redeem_charter": ((79, 7), [{"SHL_redeem_guarantor_houses"}, {"SHL_redeem_supervised_repairs"}]),
+    "SHL_cold_ash_cells": ((87, 4), [{"SHL_cold_fire"}]),
+    "SHL_cold_quarter_couriers": ((91, 4), [{"SHL_cold_fire"}]),
+    "SHL_cold_hidden_armouries": ((85, 5), [{"SHL_cold_ash_cells"}]),
+    "SHL_cold_letters_to_the_sands": ((89, 5), [{"SHL_cold_ash_cells", "SHL_cold_quarter_couriers"}]),
+    "SHL_cold_shifts": ((93, 5), [{"SHL_cold_quarter_couriers"}]),
+    "SHL_cold_desert_drill": ((87, 6), [{"SHL_cold_hidden_armouries", "SHL_cold_letters_to_the_sands"}]),
+    "SHL_cold_raid_martyrs": ((91, 6), [{"SHL_cold_letters_to_the_sands", "SHL_cold_shifts"}]),
+    "SHL_cold_night_of_fire": ((89, 7), [{"SHL_cold_desert_drill"}, {"SHL_cold_raid_martyrs"}]),
+    "SHL_cold_fire_without_masters": ((87, 8), [{"SHL_cold_night_of_fire"}]),
+    "SHL_cold_embers_under_seal": ((91, 8), [{"SHL_cold_night_of_fire"}]),
 }
 DEFEAT_PAIRS = (
     ("SHL_redeem_furnaces_of_the_lease", "SHL_cold_fire"),
@@ -4626,7 +5155,7 @@ class DefeatChapterTests(unittest.TestCase):
             for identifier, f in whole_tree_focuses().items() if identifier not in self.focuses
         }
         for (x, y), _ in DEFEAT_LAYOUT.values():
-            self.assertTrue(75 <= x <= 93 and 0 <= y <= 7, (x, y))
+            self.assertTrue(75 <= x <= 93 and 1 <= y <= 8, (x, y))
             self.assertFalse({(x - 1, y), (x, y), (x + 1, y)} & others, (x, y))
         cells = [cell for cell, _ in DEFEAT_LAYOUT.values()]
         for row in {y for _, y in cells}:
@@ -4649,7 +5178,7 @@ class DefeatChapterTests(unittest.TestCase):
         for choice in product((0, 1), repeat=len(DEFEAT_PAIRS)):
             blocked = {pair[1 - side] for pair, side in zip(DEFEAT_PAIRS, choice)}
             with self.subTest(blocked=sorted(blocked)):
-                done = reachable_focuses(self.focuses, blocked)
+                done = reachable_focuses({**self.focuses, "SHL_law_of_continuous_fire": focus_definition("SHL_law_of_continuous_fire")}, blocked)
                 self.assertTrue(done & DEFEAT_ENDINGS)
                 # Each route reaches its ending without the other route.
                 self.assertFalse(done & lease and done & cold)
@@ -4692,8 +5221,8 @@ class DefeatChapterTests(unittest.TestCase):
         sources = {name: focus_builder.render_source(name) for name in names}
         self.assertIn("\t\tid = SHL_cold_embers_under_seal\n", sources["SHL/main/focuses.txt"])
         carried, clauses = focus_builder.swap_plan(sources)
-        self.assertIn("SHL_seal_conclave", carried["SHL/south_war/focuses.txt"])
-        self.assertEqual(clauses["SHL_seal_conclave"], "NOT = { has_focus_tree = SHL_south_war_focus }")
+        self.assertEqual(carried["SHL/south_war/focuses.txt"], ["SHL_law_of_continuous_fire"])
+        self.assertEqual(clauses["SHL_law_of_continuous_fire"], "NOT = { has_focus_tree = SHL_south_war_focus }")
         clause = focus_builder.source_clauses(sources, clauses)["SHL/main/focuses.txt"]
         hidden = focus_builder.hide_carried_roots(sources["SHL/main/focuses.txt"], clause)
         self.assertIn(
@@ -4768,15 +5297,15 @@ class DefeatChapterTests(unittest.TestCase):
         plans = {e.key: e.value for e in parse_clausewitz((ROOT / "common/ai_strategy_plans/ADISCORD_SHL_plans.txt").read_text(encoding="utf-8"))}
         lease = [e.value for e in block(plans["SHL_seal_lease_plan"], "ai_national_focuses")]
         cold = [e.value for e in block(plans["SHL_seal_cold_fire_plan"], "ai_national_focuses")]
-        trunk = ["SHL_seal_conclave", "SHL_seal_count_the_cold", "SHL_seal_houses_in_mourning"]
-        self.assertEqual(lease[:3], trunk)
-        self.assertEqual(cold[:3], trunk)
-        self.assertTrue(all(name.startswith("SHL_redeem_") for name in lease[3:]))
-        self.assertTrue(all(name.startswith("SHL_cold_") for name in cold[3:]))
+        trunk = ["SHL_law_of_continuous_fire", "SHL_seal_conclave", "SHL_seal_count_the_cold", "SHL_seal_houses_in_mourning"]
+        self.assertEqual(lease[:len(trunk)], trunk)
+        self.assertEqual(cold[:len(trunk)], trunk)
+        self.assertTrue(all(name.startswith("SHL_redeem_") for name in lease[len(trunk):]))
+        self.assertTrue(all(name.startswith("SHL_cold_") for name in cold[len(trunk):]))
         self.assertEqual(lease[-1], "SHL_redeem_charter")
         self.assertEqual(cold[-1], "SHL_cold_fire_without_masters")
         for queue in (lease, cold):
-            self.assertEqual(set(queue) - reachable_focuses(self.focuses, set(self.focuses) - set(queue)), set())
+            self.assertEqual(set(queue) - reachable_focuses({**self.focuses, trunk[0]: focus_definition(trunk[0])}, set(self.focuses) - set(queue)), set())
         for name in ("SHL_seal_lease_plan", "SHL_seal_cold_fire_plan"):
             enable = [(e.key, e.value) for e in block(plans[name], "enable")]
             self.assertIn(("has_country_flag", "SHL_seal_chapter_open"), enable, name)
@@ -5372,11 +5901,485 @@ class CourseProgrammeTests(unittest.TestCase):
         self.assertFalse(self.m.matches(self.m.triggers["SHL_can_offer_cistern_charter"], "SHL"))
 
 
+class CaravanJourneyTests(unittest.TestCase):
+    STOPS = ("sevir", "barak", "fada", "irim", "maren", "loren", "svetlogorsk", "home")
+    MARKETS = (("280", "KYZ"), ("267", "MZR"), ("28", "STP"), ("24", "VAL"), ("175", "WEF"), ("70", "EFL"), ("688", "NAM"))
+    CASH = "ADISCORD_economy_treasury"
+    RIFLES = "infantry_equipment_0"
+    KITS = "support_equipment_1"
+    TRUCKS = "motorized_equipment_1"
+    GUNS = "artillery_equipment_1"
+
+    class Machine(ScriptMachine):
+        def __init__(self, effects, triggers):
+            super().__init__(effects, triggers)
+            self.producer_stock = defaultdict(float)
+            self.arrays = defaultdict(list)
+            self.wine_grants = []
+            self.timer_adjustments = defaultdict(int)
+            self.roll = 99
+            self.bid_chances = []
+
+        def matches(self, items, scope, target=None):
+            if len(items) == 1 and items[0].key == "has_idea" and items[0].value == "SHL_cellar_wines":
+                return any(country == scope for country, _, _ in self.wine_grants)
+            return super().matches(items, scope, target)
+
+        def stock_count(self, scope, equipment):
+            if equipment in ("infantry_equipment", "artillery_equipment", "motorized_equipment", "support_equipment"):
+                return sum(qty for (owner, model), qty in self.equipment.items()
+                           if owner == scope and model.removeprefix("ADISCORD_").rsplit("_", 1)[0] == equipment)
+            return super().stock_count(scope, equipment)
+
+        def value(self, value, scope):
+            if isinstance(value, str) and value.startswith("num_equipment@"):
+                return self.stock_count(scope, value.split("@", 1)[1])
+            if isinstance(value, str) and "^" in value:
+                name, index = value.split("^")
+                return self.arrays[scope, name][int(self.value(index, scope))]
+            return super().value(value, scope)
+
+        def execute(self, items, scope, target=None):
+            # Preserve adjacent if/else branches when delegating the ordinary effects.
+            unhandled = []
+            for entry in items:
+                key, fields = entry.key, entry.value
+                name = scalar(fields, "var", "") if isinstance(fields, list) else ""
+                if key not in {"for_loop_effect", "clear_array", "add_to_array", "add_equipment_to_stockpile",
+                               "clamp_temp_variable", "add_timed_idea", "add_days_mission_timeout", "random"} and "^" not in name:
+                    unhandled.append(entry)
+                    continue
+                super().execute(unhandled, scope, target)
+                unhandled = []
+                if key == "random":
+                    chance = int(scalar(fields, "chance"))
+                    self.bid_chances.append(chance)
+                    if self.roll < chance:
+                        self.execute([effect for effect in fields if effect.key != "chance"], scope, target)
+                elif key == "clear_array":
+                    self.arrays[scope, fields].clear()
+                elif key == "add_to_array":
+                    self.arrays[scope, scalar(fields, "array")].append(self.value(scalar(fields, "value"), scope))
+                elif key == "add_days_mission_timeout":
+                    mission = scalar(fields, "mission")
+                    if mission not in self.missions:
+                        raise AssertionError(f"Cannot adjust an inactive countdown: {mission}")
+                    self.timer_adjustments[mission] += int(scalar(fields, "days"))
+                elif key == "add_timed_idea":
+                    self.wine_grants.append((scope, scalar(fields, "idea"), int(scalar(fields, "days"))))
+                elif key == "for_loop_effect":
+                    body = [e for e in fields if e.key not in ("value", "end")]
+                    for i in range(int(scalar(fields, "end"))):
+                        self.variables[scope][scalar(fields, "value")] = i
+                        self.execute(body, scope, target)
+                elif key == "clamp_temp_variable":
+                    low = self.value(scalar(fields, "min"), scope)
+                    high = self.value(scalar(fields, "max"), scope)
+                    self.variables[scope][name] = max(low, min(high, self.value(name, scope)))
+                elif "^" in name:
+                    array, index = name.split("^")
+                    change = self.value(scalar(fields, "value"), scope)
+                    if key == "subtract_from_variable":
+                        change = -change
+                    elif key != "add_to_variable":
+                        raise AssertionError(f"Unexpected array operation: {key}")
+                    self.arrays[scope, array][int(self.value(index, scope))] += change
+                else:
+                    model = scalar(fields, "type")
+                    producer = scalar(fields, "producer", "THIS")
+                    producer = {"THIS": scope, "PREV": self.previous_scope}.get(producer, producer)
+                    amount = self.value(scalar(fields, "amount"), scope)
+                    stock = (scope, model, producer)
+                    if amount < 0:
+                        amount = -min(-amount, self.producer_stock[stock])
+                    self.producer_stock[stock] += amount
+                    self.equipment[scope, model] += amount
+            super().execute(unhandled, scope, target)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = parse_clausewitz(EFFECT_PATH.read_text(encoding="utf-8"))
+        cls.triggers = parse_clausewitz(TRIGGER_PATH.read_text(encoding="utf-8"))
+        source = (ROOT / "common/decisions/ADISCORD_SHL_decisions.txt").read_text(encoding="utf-8")
+        cls.decisions = {d.key: d.value for d in block(parse_clausewitz(source), "SHL_caravans")}
+        events = parse_clausewitz((ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8"))
+        cls.offer = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_SHL.206")
+        cls.options = {scalar(opt.value, "name").rsplit(".", 1)[-1]: opt.value for opt in cls.offer if opt.key == "option"}
+
+    def setUp(self):
+        self.m = self.Machine(self.effects, self.triggers)
+        self.elapsed = 0
+        self.m.focuses.add("SHL_law_of_continuous_fire")
+        self.m.flags["SHL"].add("SHL_furnaces_initialized")
+        for state, tag in self.MARKETS:
+            self.m.control[state] = tag
+            self.m.countries.setdefault(tag, {"exists": True})
+        self.m.fuel["SHL"] = 400
+        self.m.variables["SHL"][self.CASH] = 10
+        self.c = self.m.variables["SHL"]
+
+    def supply(self, country, model, amount, producer=None):
+        self.m.equipment[country, model] += amount
+        self.m.producer_stock[country, model, producer or country] += amount
+
+    def dispatch(self, cargo="rifles"):
+        self.m.execute(block(self.decisions["SHL_road_send_" + cargo], "complete_effect"), "SHL")
+
+    def open_long_route(self):
+        self.m.focuses.update({"SHL_chancery_of_the_gate", "SHL_desert_caravanserai", "SHL_northern_road"})
+
+    def pass_local_markets(self):
+        for stop, buyer in (("sevir", "KYZ"), ("barak", "MZR")):
+            self.arrive(stop)
+            self.answer(buyer, "a")
+
+    def arrive(self, stop):
+        mission = "SHL_road_to_" + stop
+        self.assertIn(mission, self.m.missions)
+        self.elapsed += int(scalar(self.decisions[mission], "days_mission_timeout")) + self.m.timer_adjustments.pop(mission, 0)
+        self.m.missions.remove(mission)
+        self.m.execute(block(self.decisions[mission], "timeout_effect"), "SHL")
+
+    def answer(self, buyer, choice):
+        self.m.execute(block(self.options[choice], "hidden_effect"), buyer)
+
+    def test_calendar_market_controllers_and_expiry(self):
+        self.open_long_route()
+        self.supply("SHL", self.RIFLES, 10000)
+        self.dispatch()
+        days = 0
+        for i, stop in enumerate(self.STOPS):
+            definition = self.decisions["SHL_road_to_" + stop]
+            self.assertFalse(self.m.matches(block(definition, "available"), "SHL"))
+            self.assertEqual(scalar(definition, "selectable_mission"), "no")
+            days += int(scalar(definition, "days_mission_timeout"))
+            self.arrive(stop)
+            if i < len(self.MARKETS):
+                tag = self.MARKETS[i][1]
+                self.assertTrue(self.m.matches(self.m.triggers["SHL_road_quote_current"], tag))
+                self.answer(tag, "a")
+                self.assertNotIn("SHL_road_offer", self.m.flags[tag])
+        self.assertEqual(days, 365)
+        self.assertEqual(self.m.scheduled, ["ADISCORD_SHL.206"] * 7 + ["ADISCORD_SHL.207"])
+        self.assertEqual(self.m.equipment["SHL", self.RIFLES], 10000)
+        self.assertFalse(self.m.missions)
+        self.assertEqual(scalar(self.offer, "timeout_days"), "7")
+        self.assertEqual(scalar(block(self.offer, "option"), "name"), "ADISCORD_SHL.206.a")
+        self.assertEqual(scalar(block(block(self.m.effects["SHL_road_open_market"], "if"), "set_country_flag"), "days"), "7")
+
+    def test_cash_and_barter_balances_and_arrival_once(self):
+        self.open_long_route()
+        self.supply("SHL", self.RIFLES, 6000)
+        self.supply("SHL", self.RIFLES, 4000, "EFL")
+        self.dispatch()
+        self.assertEqual((self.c[self.CASH], self.m.fuel["SHL"], self.m.equipment["SHL", self.RIFLES]), (0, 0, 0))
+        self.dispatch()
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_costs"], 10)
+        self.m.control["28"] = "MZR"
+        self.pass_local_markets()
+        self.arrive("fada")
+        self.assertNotIn("SHL_road_offer", self.m.flags["STP"])
+        self.supply("MZR", self.GUNS, 12, "KYZ")
+        self.answer("MZR", "c")
+        self.answer("MZR", "c")
+        self.assertEqual(self.m.equipment["MZR", self.GUNS], 0)
+        self.arrive("irim")
+        self.supply("VAL", self.TRUCKS, 24)
+        self.answer("VAL", "c")
+        self.assertEqual(self.m.equipment["VAL", self.TRUCKS], 0)
+        self.arrive("maren")
+        self.answer("WEF", "a")
+        self.arrive("loren")
+        self.m.variables["EFL"][self.CASH] = 75
+        self.answer("EFL", "b")
+        self.answer("EFL", "b")
+        self.assertEqual(self.m.variables["EFL"][self.CASH], 0)
+        self.arrive("svetlogorsk")
+        self.m.fuel["NAM"] = 5400
+        self.answer("NAM", "c")
+        self.assertEqual(self.m.fuel["NAM"], 0)
+        self.assertEqual([self.m.equipment[tag, self.RIFLES] for tag in ("MZR", "VAL", "EFL", "NAM")], [2500] * 4)
+        def balance():
+            return (self.c[self.CASH], self.m.fuel["SHL"], self.m.equipment["SHL", self.GUNS], self.m.equipment["SHL", self.TRUCKS])
+
+        self.assertEqual(balance(), (0, 0, 0, 0))
+        self.arrive("home")
+        self.m.run("SHL_road_unload")
+        self.assertEqual(balance(), (75, 5400, 12, 24))
+        self.assertEqual(self.m.bid_chances, [])
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 75)
+        self.assertNotIn("SHL_road_leg", self.c)
+
+    def test_shortages_war_and_inheritance(self):
+        self.open_long_route()
+        self.supply("SHL", self.KITS, 1999.9)
+        self.dispatch("kits")
+        self.assertNotIn("SHL_road_leg", self.c)
+        self.supply("SHL", self.KITS, 0.1)
+        self.m.fuel["SHL"] = 399.9
+        self.dispatch("kits")
+        self.m.fuel["SHL"] = 400
+        self.c[self.CASH] = 9.9
+        self.dispatch("kits")
+        self.assertEqual(self.m.equipment["SHL", self.KITS], 2000)
+        self.c[self.CASH] = 10
+        self.dispatch("kits")
+        self.m.wars.add(frozenset(("SHL", "STP")))
+        self.pass_local_markets()
+        self.arrive("fada")
+        self.assertNotIn("SHL_road_offer", self.m.flags["STP"])
+        self.arrive("irim")
+        self.m.variables["VAL"][self.CASH] = 74.99
+        self.answer("VAL", "b")
+        self.assertEqual(self.c["SHL_road_kits"], 2000)
+        self.m.variables["VAL"][self.CASH] = 75
+        self.m.control["24"] = "GLP"
+        self.answer("VAL", "b")
+        self.assertEqual(self.m.variables["VAL"][self.CASH], 75)
+        self.arrive("maren")
+        self.answer("WEF", "a")
+        self.arrive("loren")
+        self.m.fuel["EFL"] = 3600
+        self.answer("EFL", "c")
+        self.assertEqual(self.m.equipment["EFL", self.KITS], 500)
+        self.m.run("SHL_road_settle_annexation", "KYZ")
+        self.m.run("SHL_road_settle_annexation", "KYZ")
+        self.m.execute(block(self.decisions["SHL_road_to_home"], "timeout_effect"), "SHL")
+        self.assertEqual((self.m.equipment["KYZ", self.KITS], self.m.fuel["KYZ"]), (1500, 3600))
+        self.assertEqual(self.m.bid_chances, [])
+        self.assertFalse(self.m.missions)
+        self.assertNotIn("SHL_road_leg", self.c)
+        self.assertNotIn("SHL_road_cash", self.c)
+
+    def test_wholesale_mixed_lots_wine_and_deferred_receipts(self):
+        self.open_long_route()
+        modern = "ADISCORD_infantry_equipment_2163"
+        self.c[self.CASH] = 110
+        self.supply("SHL", self.RIFLES, 16000, "STP")
+        self.supply("SHL", modern, 84000, "EFL")
+        self.dispatch("wholesale")
+        self.assertEqual(self.m.stock_count("SHL", "infantry_equipment"), 0)
+        self.assertEqual((self.c[self.CASH], self.m.fuel["SHL"], self.c["SHL_road_wine"]), (0, 0, 5))
+        self.pass_local_markets()
+        self.arrive("fada")
+        self.m.variables["STP"][self.CASH] = 300
+        self.answer("STP", "twenty")
+        self.assertEqual(self.c["SHL_road_rifles"], 100000)
+        self.answer("STP", "ten")
+        self.answer("STP", "ten")
+        self.assertEqual(self.m.equipment["STP", self.RIFLES], 10000)
+        self.arrive("irim")
+        self.m.variables["VAL"][self.CASH] = 539.99
+        self.answer("VAL", "twenty")
+        self.assertEqual(self.c["SHL_road_rifles"], 90000)
+        self.m.variables["VAL"][self.CASH] = 540
+        self.answer("VAL", "twenty")
+        self.assertEqual((self.m.equipment["VAL", self.RIFLES], self.m.equipment["VAL", modern]), (6000, 14000))
+        self.arrive("maren")
+        self.m.variables["WEF"][self.CASH] = 80
+        self.answer("WEF", "wine")
+        self.answer("WEF", "wine")
+        self.assertEqual(self.m.wine_grants, [("WEF", "SHL_cellar_wines", 90)])
+        self.assertEqual((self.c["SHL_road_wine"], self.c["SHL_road_rifles"]), (4, 70000))
+        for _, tag in self.MARKETS[2:5]:
+            self.assertEqual(self.m.variables[tag][self.CASH], 0)
+        self.assertEqual(self.c[self.CASH], 0)
+        self.m.control["70"] = "WEF"
+        self.m.variables["WEF"][self.CASH] = 80
+        self.arrive("loren")
+        self.answer("WEF", "wine")
+        self.assertEqual(self.m.variables["WEF"][self.CASH], 80)
+        self.assertEqual(len(self.m.wine_grants), 1)
+        self.arrive("svetlogorsk")
+        self.arrive("home")
+        self.assertEqual(self.c["SHL_road_cash"], 920)
+        self.assertEqual(self.c[self.CASH], 1000)
+        self.assertEqual(self.m.equipment["SHL", modern], 70000)
+        self.m.run("SHL_road_unload")
+        self.assertEqual(self.c[self.CASH], 1000)
+
+    def test_five_bulk_sales_exhaust_the_manifest(self):
+        self.open_long_route()
+        self.c[self.CASH] = 110
+        self.supply("SHL", self.RIFLES, 99999.9)
+        self.dispatch("wholesale")
+        self.assertNotIn("SHL_road_leg", self.c)
+        self.supply("SHL", self.RIFLES, 0.1)
+        self.dispatch("wholesale")
+        self.pass_local_markets()
+        for stop, (_, buyer) in zip(self.STOPS[2:], self.MARKETS[2:]):
+            self.arrive(stop)
+            self.m.variables[buyer][self.CASH] = 540
+            self.answer(buyer, "twenty")
+            self.assertEqual(self.m.equipment[buyer, self.RIFLES], 20000)
+        self.assertEqual((self.c["SHL_road_rifles"], self.c[self.CASH]), (0, 0))
+        self.arrive("home")
+        self.assertEqual((self.c["SHL_road_cash"], self.c[self.CASH]), (2700, 2800))
+
+    def test_bulk_failed_loading_and_annexation_return_original_models(self):
+        modern = "ADISCORD_infantry_equipment_2200"
+        self.c[self.CASH] = 110
+        self.supply("SHL", self.RIFLES, 20000)
+        self.supply("SHL", modern, 79000, "STP")
+        self.supply("SHL", modern, 1000, "unavailable producer")
+        self.dispatch("wholesale")
+        self.assertNotIn("SHL_road_leg", self.c)
+        self.assertEqual((self.m.equipment["SHL", self.RIFLES], self.m.equipment["SHL", modern]), (20000, 80000))
+        self.assertEqual((self.c[self.CASH], self.m.fuel["SHL"]), (110, 400))
+        self.supply("SHL", modern, 1000)
+        self.dispatch("wholesale")
+        self.m.run("SHL_road_settle_annexation", "KYZ")
+        self.m.run("SHL_road_settle_annexation", "KYZ")
+        self.assertEqual((self.m.equipment["KYZ", self.RIFLES], self.m.equipment["KYZ", modern]), (20000, 80000))
+        self.assertEqual((self.m.variables["KYZ"][self.CASH], self.m.equipment["SHL", modern]), (100, 1000))
+        self.assertFalse(self.m.missions)
+
+    def test_route_and_relay_deadlines_follow_the_focus_tree(self):
+        for tier, relays, expected, names in (
+            (1, False, 90, ("sevir", "barak", "home")),
+            (1, True, 72, ("sevir", "barak", "home")),
+            (2, False, 210, ("sevir", "barak", "fada", "irim", "home")),
+            (2, True, 168, ("sevir", "barak", "fada", "irim", "home")),
+            (3, False, 365, self.STOPS),
+            (3, True, 292, self.STOPS),
+        ):
+            with self.subTest(tier=tier, relays=relays):
+                self.setUp()
+                if tier >= 2:
+                    self.m.focuses.add("SHL_chancery_of_the_gate")
+                self.m.focuses.add("SHL_sand_patrols" if relays else "SHL_desert_caravanserai")
+                if tier == 3:
+                    self.m.focuses.add("SHL_northern_road")
+                self.supply("SHL", self.RIFLES, 10000)
+                self.dispatch()
+                self.assertEqual(self.c["SHL_road_itinerary"], tier)
+                for stop in names:
+                    self.arrive(stop)
+                self.assertEqual(self.elapsed, expected)
+                self.assertFalse(self.m.missions)
+
+    def test_new_charter_preserves_booked_route_and_relays_apply_from_next_leg(self):
+        self.supply("SHL", self.RIFLES, 10000)
+        self.dispatch()
+        self.m.focuses.update({"SHL_chancery_of_the_gate", "SHL_sand_patrols", "SHL_northern_road"})
+        self.arrive("sevir")
+        self.assertEqual(self.elapsed, 30)
+        self.arrive("barak")
+        self.arrive("home")
+        self.assertEqual(self.elapsed, 78)
+        self.c[self.CASH] = 10
+        self.m.fuel["SHL"] = 400
+        self.dispatch()
+        self.assertEqual(self.c["SHL_road_itinerary"], 3)
+
+    def test_factor_houses_fill_one_mixed_order_per_market(self):
+        self.c[self.CASH] = 110
+        self.supply("SHL", self.RIFLES, 100000)
+        self.dispatch("wholesale")
+        self.arrive("sevir")
+        self.m.variables["KYZ"][self.CASH] = 620
+        self.answer("KYZ", "fair_order")
+        self.assertEqual(self.c["SHL_road_cash"], 0)
+        self.m.focuses.update({"SHL_chancery_of_the_gate", "SHL_desert_caravanserai"})
+        self.m.variables["KYZ"][self.CASH] = 619.99
+        self.answer("KYZ", "fair_order")
+        self.assertEqual(self.c["SHL_road_cash"], 0)
+        self.m.variables["KYZ"][self.CASH] = 620
+        self.answer("KYZ", "fair_order")
+        self.answer("KYZ", "fair_order")
+        self.assertEqual(self.m.variables["KYZ"][self.CASH], 0)
+        self.assertEqual(self.m.equipment["KYZ", self.RIFLES], 20000)
+        self.assertEqual(self.m.wine_grants, [("KYZ", "SHL_cellar_wines", 90)])
+        self.assertEqual((self.c[self.CASH], self.c["SHL_road_cash"]), (0, 620))
+        self.arrive("barak")
+        self.arrive("home")
+        self.assertEqual((self.c[self.CASH], self.m.equipment["SHL", self.RIFLES]), (700, 80000))
+
+    def test_partial_producer_debit_restores_stock_and_keeps_payment(self):
+        self.supply("SHL", self.RIFLES, 9000)
+        self.supply("SHL", self.RIFLES, 1000, "unavailable producer")
+        self.dispatch()
+        self.assertEqual(self.m.equipment["SHL", self.RIFLES], 10000)
+        self.assertEqual((self.c[self.CASH], self.m.fuel["SHL"]), (10, 400))
+        self.assertNotIn("SHL_road_leg", self.c)
+
+    def test_return_market_thresholds_income_and_receipt(self):
+        route = ("sevir", "barak", "fada", "irim")
+        for cargo, model, load in (("rifles", self.RIFLES, 10000), ("kits", self.KITS, 2000)):
+            for lots_remaining, chance in ((1, 80), (2, 60), (3, 40), (4, 40)):
+                for roll in (chance - 1, chance):
+                    with self.subTest(cargo=cargo, remaining=lots_remaining, roll=roll):
+                        self.setUp()
+                        self.m.focuses.add("SHL_chancery_of_the_gate")
+                        self.supply("SHL", model, load)
+                        self.dispatch(cargo)
+                        foreign_lots = 4 - lots_remaining
+                        for i, stop in enumerate(route):
+                            self.arrive(stop)
+                            buyer = self.MARKETS[i][1]
+                            self.m.variables[buyer][self.CASH] = 75
+                            self.answer(buyer, "b" if i < foreign_lots else "a")
+                        self.assertEqual(self.c[self.CASH], 0)
+                        self.m.roll = roll
+                        self.arrive("home")
+                        # A second callback cannot draw a new bid or credit the sale twice.
+                        self.m.execute(block(self.decisions["SHL_road_to_home"], "timeout_effect"), "SHL")
+                        self.assertEqual(self.m.bid_chances, [chance])
+                        home_lots = min(2, lots_remaining) if roll < chance else 0
+                        self.assertEqual(self.c["SHL_road_home_cash"], home_lots * 50)
+                        self.assertEqual(self.c.get("SHL_road_home_" + cargo, 0), home_lots * load // 4)
+                        self.assertEqual(self.m.equipment["SHL", model], (lots_remaining - home_lots) * load // 4)
+                        revenue = 75 * foreign_lots + 50 * home_lots
+                        self.assertEqual(self.c[self.CASH], revenue)
+                        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], revenue)
+
+    def test_return_market_checks_the_focus_on_arrival_and_clears_old_receipts(self):
+        self.supply("SHL", self.RIFLES, 10000)
+        self.m.roll = 0
+        self.dispatch()
+        self.pass_local_markets()
+        self.arrive("home")
+        self.assertEqual(self.m.bid_chances, [])
+        self.assertNotIn("SHL_road_home_cash", self.c)
+        self.c[self.CASH] = 10
+        self.m.fuel["SHL"] = 400
+        self.dispatch()
+        self.pass_local_markets()
+        self.m.focuses.add("SHL_chancery_of_the_gate")
+        self.arrive("home")
+        self.assertEqual(self.m.bid_chances, [40])
+        self.assertEqual(self.c["SHL_road_home_rifles"], 5000)
+        self.m.fuel["SHL"] = 400
+        self.supply("SHL", self.KITS, 2000)
+        self.dispatch("kits")
+        self.assertIn("SHL_road_leg", self.c)
+        self.assertNotIn("SHL_road_home_rifles", self.c)
+        self.assertNotIn("SHL_road_home_cash", self.c)
+
+    def test_home_bid_preserves_retained_rifle_models_and_wine_deposit(self):
+        modern = "ADISCORD_infantry_equipment_2200"
+        self.c[self.CASH] = 110
+        self.supply("SHL", self.RIFLES, 30000)
+        self.supply("SHL", modern, 70000, "STP")
+        self.dispatch("wholesale")
+        self.pass_local_markets()
+        self.m.focuses.add("SHL_chancery_of_the_gate")
+        self.m.roll = 39
+        self.arrive("home")
+        self.assertEqual(self.m.bid_chances, [40])
+        self.assertEqual(self.c["SHL_road_home_rifles"], 50000)
+        self.assertEqual(self.c["SHL_road_home_cash"], 1000)
+        self.assertEqual(self.c[self.CASH], 1100)
+        self.assertEqual(self.c["SHL_road_wine"], 5)
+        self.assertEqual((self.m.equipment["SHL", self.RIFLES], self.m.equipment["SHL", modern]), (30000, 20000))
+        self.assertFalse(self.m.arrays["SHL", "SHL_road_rifle_models"])
+
+
 class ExternalContractTests(unittest.TestCase):
     """Packet price under Svetlogorye's oil policy and the metal contracts of the Golden Gates."""
 
     BUYERS = ("VAL", "STP", "STS", "RUS", "GLP", "NAM")
-    PRICES = {None: 25, "NAM_oil_client": 20, "NAM_fuel_embargo_modifier": 35}
+    PRICES = {None: 40, "NAM_oil_client": 35, "NAM_fuel_embargo_modifier": 50}
 
     @staticmethod
     def flatten_modifier_removal(entries):
@@ -5405,6 +6408,7 @@ class ExternalContractTests(unittest.TestCase):
                 "SHL_furnace_running": 1.0,
                 "SHL_furnace_training": 0.0,
             })
+        self.m.focuses.add("SHL_metal_market")
         self.m.flags["SHL"].add("SHL_furnaces_initialized")
         self.m.variables["SHL"]["SHL_shift_policy"] = 0.0
         self.m.run("SHL_initialize_tensions")
@@ -5428,33 +6432,34 @@ class ExternalContractTests(unittest.TestCase):
         return self.m.calls.count("ADISCORD_economy_mark_dirty")
 
     def test_packet_price_follows_svetlogorye_contract_and_embargo(self):
-        self.assertEqual(self.c["SHL_packet_price"], 25)
+        self.assertEqual(self.c["SHL_packet_price"], 40)
         for marker, price in self.PRICES.items():
             with self.subTest(marker=marker):
                 self.setUp()
                 self.price_marker(marker)
                 self.m.run("SHL_refresh_furnaces")
                 self.assertEqual(self.c["SHL_packet_price"], price)
+                self.assertEqual(self.c["SHL_auto_packet_price"], price + 5)
         # The embargo quote wins while both markers are present.
         self.m.flags["SHL"].add("NAM_oil_client")
         self.m.dynamic.add("NAM_fuel_embargo_modifier")
         self.m.run("SHL_refresh_furnaces")
-        self.assertEqual(self.c["SHL_packet_price"], 35)
+        self.assertEqual(self.c["SHL_packet_price"], 50)
         self.m.dynamic.clear()
         self.m.flags["SHL"].discard("NAM_oil_client")
         self.m.run("SHL_refresh_furnaces")
-        self.assertEqual(self.c["SHL_packet_price"], 25)
+        self.assertEqual(self.c["SHL_packet_price"], 40)
         # Every consumer reads the variable; no literal packet quote remains.
         source = EFFECT_PATH.read_text(encoding="utf-8")
         self.assertNotIn("value = 25 }", repr(self.effects["SHL_produce_site"]))
-        self.assertEqual(source.count("multiply_variable = { var = SHL_planned_price value = PREV.SHL_packet_price }"), 1)
-        self.assertEqual(source.count("multiply_variable = { var = SHL_tenth_planned_price value = SHL_packet_price }"), 1)
+        self.assertEqual(source.count("multiply_variable = { var = SHL_planned_price value = PREV.SHL_auto_packet_price }"), 1)
+        self.assertEqual(source.count("multiply_variable = { var = SHL_tenth_planned_price value = SHL_auto_packet_price }"), 1)
         decision = decision_definition("SHL_supply_furnace")
         self.assertEqual(scalar(decision, "custom_cost_text"), "SHL_cost_packet")
         self.assertIn("SHL_packet_price", repr(block(decision, "custom_cost_trigger")))
         self.assertIn("SHL_packet_price", repr(block(decision, "available")))
         # Bayrat ore takes 5 off every quote while Bayrat (291) is held.
-        for marker, price in ((None, 20), ("NAM_oil_client", 15), ("NAM_fuel_embargo_modifier", 30)):
+        for marker, price in ((None, 35), ("NAM_oil_client", 30), ("NAM_fuel_embargo_modifier", 45)):
             with self.subTest(mines=marker):
                 self.setUp()
                 self.m.focuses.add("SHL_baryat_mines")
@@ -5467,7 +6472,18 @@ class ExternalContractTests(unittest.TestCase):
                 self.m.focuses.add("SHL_baryat_mines")
                 getattr(self.m, lost)["291"] = "KYZ"
                 self.m.run("SHL_refresh_furnaces")
-                self.assertEqual(self.c["SHL_packet_price"], 25)
+                self.assertEqual(self.c["SHL_packet_price"], 40)
+
+    def test_packet_discounts_reach_floor_before_the_automatic_fee(self):
+        self.m.focuses.update({"SHL_baryat_mines", "SHL_own_distillery", "SHL_fuel_ledger", "SHL_common_fund"})
+        self.m.flags["SHL"].update({"NAM_oil_client", "SHL_smuggler_fuel", "SHL_nam_fuel_treaty"})
+        self.m.run("SHL_refresh_oil_supply_quote")
+        self.assertEqual((self.c["SHL_packet_price"], self.c["SHL_auto_packet_price"]), (20, 25))
+        self.assertEqual((self.c["SHL_reserve_price"], self.c["SHL_reserve_price_premium"]), (70, 80))
+        self.m.focuses.add("SHL_houses_railway")
+        self.m.dynamic.add("NAM_fuel_embargo_modifier")
+        self.m.run("SHL_refresh_oil_supply_quote")
+        self.assertEqual((self.c["SHL_packet_price"], self.c["SHL_auto_packet_price"]), (35, 35))
 
     def test_supply_debits_the_current_price_exactly_once_at_the_boundary(self):
         decision = decision_definition("SHL_supply_furnace")
@@ -5496,13 +6512,13 @@ class ExternalContractTests(unittest.TestCase):
         self.setUp()
         self.m.variables["287"]["SHL_furnace_stock"] = 2
         self.m.flags["SHL"].add("NAM_oil_client")
-        self.assertEqual(self.c["SHL_packet_price"], 25)
-        self.c["ADISCORD_economy_treasury"] = 20
+        self.assertEqual(self.c["SHL_packet_price"], 40)
+        self.c["ADISCORD_economy_treasury"] = 35
         self.m.run("SHL_begin_supply", target="287")
-        self.assertEqual(self.c["SHL_packet_price"], 20)
+        self.assertEqual(self.c["SHL_packet_price"], 35)
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 0)
-        self.assertEqual(self.m.variables["287"]["SHL_operation_deposit"], 20)
-        # The planned supply of the cycle buys at the same quote.
+        self.assertEqual(self.m.variables["287"]["SHL_operation_deposit"], 35)
+        # The cycle adds the handling fee to the current manual quote.
         for marker, price in self.PRICES.items():
             with self.subTest(planned=marker):
                 self.setUp()
@@ -5511,8 +6527,27 @@ class ExternalContractTests(unittest.TestCase):
                 self.m.variables["287"]["SHL_furnace_stock"] = 0
                 self.m.run("SHL_produce_period")
                 self.assertEqual(self.c["SHL_packet_price"], price)
-                self.assertEqual(self.c["ADISCORD_economy_treasury"], 1540 - price)
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], 1540 - price - 5)
                 self.assertEqual(self.m.variables["287"]["SHL_furnace_stock"], 0)
+
+    def test_metal_offers_require_a_peacetime_or_wartime_market_focus(self):
+        decision = decision_definition("SHL_metal_contract_offer")
+        self.m.focuses.clear()
+        for buyer in self.BUYERS:
+            self.assertFalse(self.m.matches(block(decision, "visible"), "SHL", buyer))
+            self.m.execute(block(decision, "complete_effect"), "SHL", buyer)
+            self.assertNotIn("SHL_metal_offer_pending", self.m.flags[buyer])
+        self.assertNotIn("ADISCORD_SHL.130", self.m.scheduled)
+        for focus in ("SHL_metal_brokers", "SHL_metal_market", "SHL_sw_keep_the_markets"):
+            with self.subTest(focus=focus):
+                self.m.focuses = {focus}
+                self.assertTrue(self.m.matches(block(decision, "visible"), "SHL", "VAL"))
+                reward = block(focus_definition(focus), "completion_reward")
+                self.assertIn(("unlock_decision_tooltip", "SHL_metal_contract_offer"),
+                              [(e.key, e.value) for e in walk_entries(reward)])
+                self.m.execute(block(decision, "complete_effect"), "SHL", "VAL")
+                self.assertIn("SHL_metal_offer_pending", self.m.flags["VAL"])
+                self.m.flags["VAL"].remove("SHL_metal_offer_pending")
 
     def test_offer_sets_the_pending_flag_and_schedules_the_answer_once(self):
         decision = decision_definition("SHL_metal_contract_offer")
@@ -5857,7 +6892,7 @@ class ConclaveLeversTests(unittest.TestCase):
         triggers = parse_clausewitz(TRIGGER_PATH.read_text(encoding="utf-8"))
         self.m = self.Machine(effects, triggers)
         self.c = self.m.variables["SHL"]
-        self.c["SHL_packet_price"] = 25.0
+        self.m.run("SHL_refresh_packet_price")
         self.c["SHL_shift_policy"] = 0.0
         self.c["SHL_political_course"] = 0.0
         self.c["SHL_unrest"] = 30.0
@@ -6078,9 +7113,9 @@ class ConclaveLeversTests(unittest.TestCase):
         modifiers = shared_definitions("common/opinion_modifiers/ADISCORD_SHL_opinion_modifiers.txt", ("opinion_modifiers",))["opinion_modifiers"]
         self.assertEqual(scalar(block(modifiers, "ADISCORD_SHL_embassy"), "value"), "20")
 
-    def test_reserve_price_is_60_or_45_plus_the_supplier_premium(self):
+    def test_reserve_price_adds_supplier_premium_after_discounts(self):
         m = self.m
-        for focus, price in ((None, 60), ("SHL_common_fund", 45)):
+        for focus, price in ((None, 90), ("SHL_common_fund", 75)):
             if focus:
                 m.focuses.add(focus)
             for premium in (False, True):

@@ -260,6 +260,16 @@ class FocusRewardTests(unittest.TestCase):
         self.assertEqual(result.classification, "semantic_review")
         self.assertEqual(result.score, 0)
 
+    def test_focus_changes_a_native_mission_deadline(self):
+        for days, expected in ((0, "weak"), (-7, "external_milestone")):
+            with self.subTest(days=days):
+                self.write(
+                    "common/scripted_effects/sample.txt",
+                    "shorten_trip = { if = { limit = { has_completed_focus = sample } "
+                    f"add_days_mission_timeout = {{ mission = road_leg days = {days} }} }} }}",
+                )
+                self.assertEqual(self.focus("custom_effect_tooltip = road_tt").classification, expected)
+
     def test_real_external_completed_focus_consumer_exempts_milestone(self):
         self.write(
             "common/decisions/sample.txt",

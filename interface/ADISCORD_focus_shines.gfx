@@ -19,6 +19,82 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_SHL_road_stelander_fairs_shine"
+		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_stelander_fairs.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_stelander_fairs.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_SHL_road_relay_posts_shine"
+		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_relay_posts.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_relay_posts.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_SHL_road_factor_houses_shine"
+		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_factor_houses.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_factor_houses.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_SHL_road_svetlogorsk_charter_shine"
+		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_svetlogorsk_charter.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_svetlogorsk_charter.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_bookmark_hold_the_basin_shine"
 		texturefile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_hold_the_basin.png"
 		effectFile = "gfx/FX/buttonstate.lua"

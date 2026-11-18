@@ -5474,6 +5474,7 @@ VAL_stelander_war_aid = {
 			VAL_stelander_volunteer_front_open = yes
 			NOT = { has_variable = VAL_stelander_support_state }
 			NOT = { has_completed_focus = VAL_Keep_The_Arsenals }
+			NOT = { focus_progress = { focus = VAL_Keep_The_Arsenals progress > 0 } }
 		}
 		available = {
 			has_war = no
@@ -5488,7 +5489,7 @@ VAL_stelander_war_aid = {
 			custom_effect_tooltip = VAL_back_shabrat_tt
 			hidden_effect = { VAL_start_stelander_support = yes }
 		}
-		ai_will_do = { base = 0 }
+		ai_will_do = { base = 100 }
 	}
 
 	VAL_stelander_volunteers = {
@@ -5512,7 +5513,7 @@ VAL_stelander_war_aid = {
 			add_ideas = VAL_stelander_volunteer_mandate
 			custom_effect_tooltip = VAL_stelander_volunteers_tt
 		}
-		ai_will_do = { base = 0 }
+		ai_will_do = { base = 100 }
 	}
 
 	VAL_stelander_rifle_aid = {

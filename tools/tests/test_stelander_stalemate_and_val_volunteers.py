@@ -248,11 +248,15 @@ class StelanderStalemateRegressionTests(unittest.TestCase):
 
         back = block(decisions, "VAL_back_shabrat")
         self.assertIn("VAL_start_stelander_support = yes", back)
-        self.assertIn("ai_will_do = { base = 0 }", back)
+        self.assertIn("ai_will_do = { base = 100 }", back)
 
         volunteers = block(decisions, "VAL_stelander_volunteers")
         self.assertIn("VAL_stelander_support_active = yes", volunteers)
         self.assertIn("add_ideas = VAL_stelander_volunteer_mandate", volunteers)
+        self.assertIn("ai_will_do = { base = 100 }", volunteers)
+        strategy = block(read("common/ai_strategy/VAL.txt"), "VAL_volunteers_to_STS")
+        self.assertIn("STS = { VAL_stelander_volunteer_host = yes }", strategy)
+        self.assertIn("send_volunteers_desire", strategy)
 
     def test_material_support_is_paid_and_counted_once(self):
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")

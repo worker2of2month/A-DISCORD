@@ -631,6 +631,13 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_completed_focus = SHL_metal_brokers }
+					NOT = { has_completed_focus = SHL_metal_market }
+				}
+				unlock_decision_tooltip = SHL_metal_contract_offer
+			}
 			unlock_decision_tooltip = SHL_sw_market_caravans
 			730 = {
 				if = {
@@ -1805,7 +1812,8 @@ focus_tree = {
 		id = SHL_h_hired_contracts
 		icon = GFX_focus_generic_desert_training
 		x = 46
-		y = 0
+		y = 1
+		prerequisite = { focus = SHL_sw_war_conclave }
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		allow_branch = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
@@ -1826,7 +1834,7 @@ focus_tree = {
 		id = SHL_h_buy_garrisons
 		icon = GFX_focus_generic_home_defense
 		x = 44
-		y = 1
+		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		allow_branch = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
@@ -1855,7 +1863,7 @@ focus_tree = {
 		id = SHL_h_concession_war_bonds
 		icon = GFX_focus_generic_concessions
 		x = 48
-		y = 1
+		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
@@ -1891,7 +1899,7 @@ focus_tree = {
 		id = SHL_h_presell_northern_fields
 		icon = GFX_goal_generic_dangerous_deal
 		x = 46
-		y = 2
+		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
@@ -1935,7 +1943,8 @@ focus_tree = {
 		id = SHL_c_charters_for_occupied
 		icon = GFX_focus_generic_improve_the_administration
 		x = 46
-		y = 0
+		y = 1
+		prerequisite = { focus = SHL_sw_war_conclave }
 		cost = 2
 		search_filters = { FOCUS_FILTER_STABILITY }
 		allow_branch = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
@@ -1955,7 +1964,7 @@ focus_tree = {
 		id = SHL_c_compact_volunteers
 		icon = GFX_focus_generic_diverse_army
 		x = 44
-		y = 1
+		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		allow_branch = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
@@ -1984,7 +1993,7 @@ focus_tree = {
 		id = SHL_c_city_militias
 		icon = GFX_goal_generic_fortify_city
 		x = 48
-		y = 1
+		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		allow_branch = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
@@ -2016,7 +2025,7 @@ focus_tree = {
 		id = SHL_c_assembly_of_free_cities
 		icon = GFX_focus_generic_public_meetings
 		x = 46
-		y = 2
+		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_STABILITY }
 		allow_branch = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
@@ -2058,7 +2067,8 @@ focus_tree = {
 		id = SHL_d_war_orders_all
 		icon = GFX_focus_generic_money_for_equipment
 		x = 46
-		y = 0
+		y = 1
+		prerequisite = { focus = SHL_sw_war_conclave }
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_WAR_SUPPORT }
 		allow_branch = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
@@ -2082,7 +2092,7 @@ focus_tree = {
 		id = SHL_d_guard_to_front
 		icon = GFX_focus_generic_soldier_salute
 		x = 44
-		y = 1
+		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
 		allow_branch = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
@@ -2111,7 +2121,7 @@ focus_tree = {
 		id = SHL_d_iron_march_norms
 		icon = GFX_focus_generic_stalinist_industry
 		x = 48
-		y = 1
+		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
@@ -2146,7 +2156,7 @@ focus_tree = {
 		id = SHL_d_full_requisition
 		icon = GFX_focus_generic_total_war
 		x = 46
-		y = 2
+		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
@@ -2190,7 +2200,8 @@ focus_tree = {
 		id = SHL_r_hire_armies
 		icon = GFX_focus_generic_desert_training
 		x = 46
-		y = 0
+		y = 1
+		prerequisite = { focus = SHL_sw_war_conclave }
 		cost = 2
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		allow_branch = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
@@ -2214,7 +2225,7 @@ focus_tree = {
 		id = SHL_r_sell_future
 		icon = GFX_goal_generic_trade
 		x = 44
-		y = 1
+		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
@@ -2238,7 +2249,7 @@ focus_tree = {
 		id = SHL_r_regent_takes_command
 		icon = GFX_focus_generic_military_dictatorship
 		x = 48
-		y = 1
+		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		allow_branch = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
@@ -2271,7 +2282,7 @@ focus_tree = {
 		id = SHL_r_noble_retinues
 		icon = GFX_focus_generic_monarchy_2
 		x = 46
-		y = 2
+		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		allow_branch = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
@@ -2305,7 +2316,8 @@ focus_tree = {
 		id = SHL_k_shift_brigades
 		icon = GFX_goal_generic_allies_build_infantry
 		x = 46
-		y = 0
+		y = 1
+		prerequisite = { focus = SHL_sw_war_conclave }
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		allow_branch = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
@@ -2332,7 +2344,7 @@ focus_tree = {
 		id = SHL_k_strikes_on_fields
 		icon = GFX_focus_generic_strike_at_democracy3
 		x = 44
-		y = 1
+		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		allow_branch = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
@@ -2360,7 +2372,7 @@ focus_tree = {
 		id = SHL_k_rifles_for_the_uprising
 		icon = GFX_focus_generic_smugglers
 		x = 48
-		y = 1
+		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
@@ -2399,7 +2411,7 @@ focus_tree = {
 		id = SHL_k_front_councils
 		icon = GFX_focus_generic_worker_administration
 		x = 46
-		y = 2
+		y = 3
 		cost = 3
 		search_filters = { FOCUS_FILTER_STABILITY }
 		allow_branch = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
@@ -2441,7 +2453,8 @@ focus_tree = {
 		id = SHL_n_emergency_conclave
 		icon = GFX_focus_generic_conference
 		x = 46
-		y = 0
+		y = 1
+		prerequisite = { focus = SHL_sw_war_conclave }
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
@@ -2472,7 +2485,7 @@ focus_tree = {
 		id = SHL_n_house_war_chest
 		icon = GFX_focus_generic_stockpile_currency
 		x = 44
-		y = 1
+		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
@@ -2505,7 +2518,7 @@ focus_tree = {
 		id = SHL_n_directors_war_plan
 		icon = GFX_goal_generic_production
 		x = 48
-		y = 1
+		y = 2
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		allow_branch = { check_variable = { var = SHL_political_course value = 0 compare = equals } }

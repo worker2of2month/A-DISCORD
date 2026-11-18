@@ -457,7 +457,8 @@ class HouseLoyaltyTests(unittest.TestCase):
         self.m.flags["SHL"].add("SHL_furnaces_initialized")
         self.m.power_balance[BALANCE] = 0.0
         self.c = self.m.variables["SHL"]
-        self.c.update({"SHL_shift_policy": 0.0, "SHL_packet_price": 25.0, "SHL_selected_furnace": 1.0})
+        self.c.update({"SHL_shift_policy": 0.0, "SHL_selected_furnace": 1.0})
+        self.m.run("SHL_refresh_packet_price")
         self.m.run("SHL_initialize_tensions")
         self.m.run("SHL_refresh_furnaces")
 

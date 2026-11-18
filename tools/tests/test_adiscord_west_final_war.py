@@ -999,7 +999,7 @@ class SubjectIntegrationRemovalTests(unittest.TestCase):
                     )
         for source, identifier in (
             ("NAM/postwar/southern_settlement.txt", "NAM_south_heritage"),
-            ("SHL/shared/focuses.txt", "SHL_south_crown_of_the_south"),
+            ("SHL/main/focuses.txt", "SHL_south_crown_of_the_south"),
         ):
             with self.subTest(source=source):
                 path = ROOT / "focus_trees" / source

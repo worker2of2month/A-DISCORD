@@ -834,7 +834,7 @@ def render_oob(
     lines = [
         "division_template = {",
         f'\tname = "{template}"',
-        f"\ttemplate_counter = {78 if unit_type == 'infantry' else 7}",
+        f"\ttemplate_counter = {3 if unit_type == 'infantry' else 7}",
         "\tregiments = {",
         *regiment_block(unit_type, regiment_count),
         "\t}",
@@ -849,6 +849,23 @@ def render_oob(
         )
     lines.extend(("}", ""))
     return "\n".join(lines)
+
+
+def update_oobs(principal_provinces: dict[int, int], *, apply: bool) -> list[str]:
+    # Orval can be released in state 455 but owns no partition at game start.
+    armies = {
+        **COUNTRIES,
+        "ORV": {"capital": 455, "states": (455,), "divisions": 1, "unit_type": "infantry"},
+    }
+    changed = []
+    for tag, country in armies.items():
+        path = UNIT_DIR / f"{tag}.txt"
+        output = render_oob(tag, country, principal_provinces)
+        if not path.exists() or path.read_text(encoding="utf-8") != output:
+            changed.append(tag)
+            if apply:
+                path.write_text(output, encoding="utf-8", newline="\n")
+    return changed
 
 
 def render_flag(
@@ -936,12 +953,7 @@ def apply() -> None:
         state_path(state_id).write_text(
             render_state(state_id, profile), encoding="utf-8", newline="\n"
         )
-    for tag, country in COUNTRIES.items():
-        (UNIT_DIR / f"{tag}.txt").write_text(
-            render_oob(tag, country, principal_provinces),
-            encoding="utf-8",
-            newline="\n",
-        )
+    update_oobs(principal_provinces, apply=True)
     localisation: dict[str, str] = {}
     for tag, country in COUNTRIES.items():
         capital_state = int(country["capital"])
@@ -959,7 +971,7 @@ def apply() -> None:
     )
     write_flags()
     print(
-        f"Applied {len(profiles)} populated northern states, {len(COUNTRIES)} OOBs and {len(COUNTRIES) * 3} flags."
+        f"Applied {len(profiles)} populated northern states, the northern OOBs and {len(COUNTRIES) * 3} flags."
     )
 
 
@@ -1012,7 +1024,19 @@ def main() -> int:
         action="store_true",
         help="check or apply only reviewed English names",
     )
+    parser.add_argument(
+        "--oobs-only",
+        action="store_true",
+        help="check or apply only the generated northern orders of battle",
+    )
     args = parser.parse_args()
+    if args.oobs_only:
+        if args.flags_only or args.states_only or args.english_localisation:
+            parser.error("--oobs-only cannot be combined with other output selections")
+        _, provinces = build_profiles()
+        changed = update_oobs(provinces, apply=args.apply)
+        print(f"Selected OOB changes: {changed}")
+        return int(bool(changed) and not args.apply)
     if args.states_only:
         if args.flags_only or args.english_localisation:
             parser.error("--states-only cannot be combined with other output selections")

@@ -37,13 +37,12 @@ STARTING_TEMPLATE_COUNTERS = {
     "airship": 37,
     "shield": 89,
     "deception": 22,
+    "headquarters": 121,
 }
 
 
 def starting_template_role(name: str) -> str:
     lowered = name.lower()
-    if lowered == "conclave line brigade":
-        return "line"
     if lowered in {"khazar guard", "itoran emergency brigade"}:
         return "security"
     if "fake intel" in lowered:
@@ -96,8 +95,6 @@ def starting_template_role(name: str) -> str:
         or "warden" in lowered
     ):
         return "security"
-    if lowered.endswith("line brigade") and "infantry" not in lowered:
-        return "guard"
     if "guard" in lowered or "chosen" in lowered:
         return "guard"
     if any(

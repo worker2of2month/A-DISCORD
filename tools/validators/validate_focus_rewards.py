@@ -244,6 +244,9 @@ def _has_action(entries: list[Entry], scripts: dict[str, list[Entry]], stack=())
             continue
         if key in RESOURCE_UNITS or key in SUBSTANTIVE_EFFECTS or key == "add_equipment_to_stockpile":
             return True
+        if key == "add_days_mission_timeout" and isinstance(entry.value, list):
+            if _scalar(entry.value, "mission") and _number(_scalar(entry.value, "days")):
+                return True
         if key in {"add_to_variable", "subtract_from_variable"} and isinstance(entry.value, list):
             variable, _ = _variable_value(entry.value)
             if variable == TREASURY_VARIABLE:

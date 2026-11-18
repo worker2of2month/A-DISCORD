@@ -1832,6 +1832,24 @@ SHL_metal_export_site_free = {
 }
 
 # COUNTRY SHL. The Golden Gates promise metal only from a free export furnace.
+SHL_caravan_active_buyer = {
+	exists = yes
+	has_country_flag = SHL_metal_client
+}
+
+SHL_caravan_has_active_buyers = {
+	any_of_scopes = {
+		array = SHL_caravan_partners
+		SHL_caravan_active_buyer = yes
+	}
+}
+
+SHL_caravan_awaiting_reply = {
+	exists = yes
+	has_country_flag = SHL_metal_offer_pending
+	NOT = { has_country_flag = SHL_metal_client }
+}
+
 SHL_metal_export_furnace_free = {
 	OR = {
 		287 = { SHL_metal_export_site_free = yes }
@@ -2782,4 +2800,367 @@ SHL_can_sell_road_stations = {
 	KDR = { exists = yes }
 	234 = { SHL_road_station_saleable = yes }
 	242 = { SHL_road_station_saleable = yes }
+}
+
+SHL_ballot_house_majority = {
+	SHL_has_delivery_majority = yes
+	OR = {
+		is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_crests_influence }
+		is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_crests_dominance }
+		AND = {
+			is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_equilibrium }
+			has_completed_focus = SHL_house_compromise
+		}
+	}
+}
+
+SHL_ballot_city_majority = {
+	check_variable = { var = SHL_city_support value = 30 compare = greater_than_or_equals }
+	OR = {
+		is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_quarters_influence }
+		is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_quarters_dominance }
+		AND = {
+			is_power_balance_in_range = { id = SHL_conclave_balance range = SHL_balance_equilibrium }
+			has_completed_focus = SHL_city_charters
+		}
+	}
+}
+
+SHL_party_front_open = {
+	custom_trigger_tooltip = {
+		tooltip = SHL_party_diplomacy_open_tt
+		SHL_country_operable = yes
+		is_subject = no
+		has_completed_focus = SHL_law_of_continuous_fire
+		VAL_stelander_civil_war_active = yes
+		has_global_flag = STP_cw_started
+		STP = {
+			has_capitulated = no
+			NOT = { has_war_with = SHL }
+		}
+		STS = { has_capitulated = no }
+	}
+}
+
+SHL_party_trade_ready = {
+	SHL_party_front_open = yes
+	NOT = { has_equipment = { infantry_equipment < 2700 } }
+	custom_trigger_tooltip = {
+		tooltip = SHL_party_funds_tt
+		STP = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+	}
+}
+
+SHL_party_bulk_trade_ready = {
+	SHL_party_front_open = yes
+	NOT = { has_equipment = { infantry_equipment < 13500 } }
+	custom_trigger_tooltip = {
+		tooltip = SHL_party_bulk_funds_tt
+		STP = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } }
+	}
+}
+
+SHL_party_order_book_open = {
+	custom_trigger_tooltip = {
+		tooltip = SHL_party_offer_free_tt
+		NOT = { has_country_flag = SHL_party_order_cooldown }
+	}
+}
+
+SHL_party_standard_quote_valid = {
+	has_country_flag = SHL_party_offer_pending
+	has_country_flag = { flag = SHL_party_offer_pending value < 2 }
+	SHL_party_trade_ready = yes
+}
+
+SHL_party_bulk_quote_valid = {
+	has_country_flag = { flag = SHL_party_offer_pending value > 1 }
+	SHL_party_bulk_trade_ready = yes
+}
+
+SHL_furnace_1_worn = {
+	check_variable = { var = SHL_wear_1 value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_1_interrupted = {
+	check_variable = { var = SHL_delivery_block_1 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_1 value = 4 compare = less_than }
+}
+
+SHL_furnace_2_worn = {
+	check_variable = { var = SHL_wear_2 value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_2_interrupted = {
+	check_variable = { var = SHL_delivery_block_2 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_2 value = 4 compare = less_than }
+}
+
+SHL_furnace_3_worn = {
+	check_variable = { var = SHL_wear_3 value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_3_interrupted = {
+	check_variable = { var = SHL_delivery_block_3 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_3 value = 4 compare = less_than }
+}
+
+SHL_furnace_4_worn = {
+	check_variable = { var = SHL_wear_4 value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_4_interrupted = {
+	check_variable = { var = SHL_delivery_block_4 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_4 value = 4 compare = less_than }
+}
+
+SHL_furnace_5_worn = {
+	check_variable = { var = SHL_wear_5 value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_5_interrupted = {
+	check_variable = { var = SHL_delivery_block_5 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_5 value = 4 compare = less_than }
+}
+
+SHL_furnace_6_worn = {
+	check_variable = { var = SHL_wear_6 value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_6_interrupted = {
+	check_variable = { var = SHL_delivery_block_6 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_6 value = 4 compare = less_than }
+}
+
+SHL_furnace_7_worn = {
+	check_variable = { var = SHL_wear_7 value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_7_interrupted = {
+	check_variable = { var = SHL_delivery_block_7 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_7 value = 4 compare = less_than }
+}
+
+SHL_furnace_8_worn = {
+	check_variable = { var = SHL_wear_8 value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_8_interrupted = {
+	check_variable = { var = SHL_delivery_block_8 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_8 value = 4 compare = less_than }
+}
+
+SHL_furnace_9_worn = {
+	check_variable = { var = SHL_wear_9 value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_9_interrupted = {
+	check_variable = { var = SHL_delivery_block_9 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_9 value = 4 compare = less_than }
+}
+
+SHL_furnace_10_worn = {
+	check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
+	check_variable = { var = SHL_tenth_wear value = 75 compare = greater_than_or_equals }
+}
+
+SHL_furnace_10_interrupted = {
+	check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
+	check_variable = { var = SHL_delivery_block_10 value = 0 compare = greater_than }
+	check_variable = { var = SHL_delivery_block_10 value = 4 compare = less_than }
+}
+
+SHL_has_furnace_alert = {
+	OR = {
+		SHL_furnace_1_worn = yes
+		SHL_furnace_1_interrupted = yes
+		SHL_furnace_2_worn = yes
+		SHL_furnace_2_interrupted = yes
+		SHL_furnace_3_worn = yes
+		SHL_furnace_3_interrupted = yes
+		SHL_furnace_4_worn = yes
+		SHL_furnace_4_interrupted = yes
+		SHL_furnace_5_worn = yes
+		SHL_furnace_5_interrupted = yes
+		SHL_furnace_6_worn = yes
+		SHL_furnace_6_interrupted = yes
+		SHL_furnace_7_worn = yes
+		SHL_furnace_7_interrupted = yes
+		SHL_furnace_8_worn = yes
+		SHL_furnace_8_interrupted = yes
+		SHL_furnace_9_worn = yes
+		SHL_furnace_9_interrupted = yes
+		SHL_furnace_10_worn = yes
+		SHL_furnace_10_interrupted = yes
+	}
+}
+
+SHL_road_ready = {
+	has_completed_focus = SHL_law_of_continuous_fire
+	SHL_country_operable = yes
+	NOT = { has_variable = SHL_road_leg }
+}
+
+SHL_road_can_provision = {
+	check_variable = { var = ADISCORD_economy_treasury value = 10 compare = greater_than_or_equals }
+	NOT = { has_fuel < 400 }
+}
+
+SHL_road_can_load_rifles = {
+	SHL_road_can_provision = yes
+	NOT = { has_equipment = { infantry_equipment_0 < 10000 } }
+}
+
+SHL_road_can_load_kits = {
+	SHL_road_can_provision = yes
+	NOT = { has_equipment = { support_equipment_1 < 2000 } }
+}
+
+SHL_road_has_lot = {
+	OR = {
+		check_variable = { var = SHL_road_rifles value = 2500 compare = greater_than_or_equals }
+		check_variable = { var = SHL_road_kits value = 500 compare = greater_than_or_equals }
+		check_variable = { var = SHL_road_wine value = 1 compare = greater_than_or_equals }
+	}
+}
+
+SHL_road_market_open = {
+	SHL = { has_variable = SHL_road_leg }
+	exists = yes
+	NOT = { tag = SHL }
+	has_capitulated = no
+	NOT = { has_war_with = SHL }
+	SHL = {
+		SHL_country_operable = yes
+		SHL_road_has_lot = yes
+	}
+}
+
+SHL_road_quote_current = {
+	has_country_flag = SHL_road_offer
+	SHL_road_market_open = yes
+	OR = {
+		AND = {
+			controls_state = 280
+			SHL = { check_variable = { var = SHL_road_market_state value = 280 compare = equals } }
+		}
+		AND = {
+			controls_state = 267
+			SHL = { check_variable = { var = SHL_road_market_state value = 267 compare = equals } }
+		}
+		AND = {
+			controls_state = 28
+			SHL = { check_variable = { var = SHL_road_market_state value = 28 compare = equals } }
+		}
+		AND = {
+			controls_state = 24
+			SHL = { check_variable = { var = SHL_road_market_state value = 24 compare = equals } }
+		}
+		AND = {
+			controls_state = 175
+			SHL = { check_variable = { var = SHL_road_market_state value = 175 compare = equals } }
+		}
+		AND = {
+			controls_state = 70
+			SHL = { check_variable = { var = SHL_road_market_state value = 70 compare = equals } }
+		}
+		AND = {
+			controls_state = 688
+			SHL = { check_variable = { var = SHL_road_market_state value = 688 compare = equals } }
+		}
+	}
+}
+
+SHL_road_can_pay_cash = {
+	SHL = { NOT = { has_variable = SHL_road_wine } }
+	SHL_road_quote_current = yes
+	check_variable = { var = ADISCORD_economy_treasury value = 75 compare = greater_than_or_equals }
+}
+
+SHL_road_can_barter = {
+	SHL = { NOT = { has_variable = SHL_road_wine } }
+	SHL_road_quote_current = yes
+	OR = {
+		AND = {
+			SHL = { check_variable = { var = SHL_road_market_state value = 280 compare = equals } }
+			NOT = { has_fuel < 2700 }
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_road_market_state value = 267 compare = equals } }
+			NOT = { has_equipment = { motorized_equipment_1 < 18 } }
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_road_market_state value = 28 compare = equals } }
+			NOT = { has_equipment = { artillery_equipment_1 < 12 } }
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_road_market_state value = 24 compare = equals } }
+			NOT = { has_equipment = { motorized_equipment_1 < 24 } }
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_road_market_state value = 175 compare = equals } }
+			NOT = { has_fuel < 4500 }
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_road_market_state value = 70 compare = equals } }
+			NOT = { has_fuel < 3600 }
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_road_market_state value = 688 compare = equals } }
+			NOT = { has_fuel < 5400 }
+		}
+	}
+}
+
+SHL_road_can_load_wholesale = {
+	check_variable = { var = ADISCORD_economy_treasury value = 110 compare = greater_than_or_equals }
+	NOT = { has_fuel < 400 }
+	NOT = { has_equipment = { infantry_equipment < 100000 } }
+}
+
+SHL_road_can_buy_ten = {
+	SHL_road_quote_current = yes
+	SHL = {
+		has_variable = SHL_road_wine
+		check_variable = { var = SHL_road_rifles value = 10000 compare = greater_than_or_equals }
+	}
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+}
+
+SHL_road_can_buy_twenty = {
+	SHL_road_quote_current = yes
+	SHL = {
+		has_variable = SHL_road_wine
+		check_variable = { var = SHL_road_rifles value = 20000 compare = greater_than_or_equals }
+	}
+	check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals }
+}
+
+SHL_road_can_buy_wine = {
+	SHL_road_quote_current = yes
+	SHL = {
+		has_variable = SHL_road_wine
+		check_variable = { var = SHL_road_wine value = 1 compare = greater_than_or_equals }
+	}
+	check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+	NOT = { has_idea = SHL_cellar_wines }
+}
+
+SHL_road_can_buy_fair_order = {
+	SHL_road_quote_current = yes
+	SHL = {
+		has_completed_focus = SHL_desert_caravanserai
+		check_variable = { var = SHL_road_wine value = 1 compare = greater_than_or_equals }
+		check_variable = { var = SHL_road_rifles value = 20000 compare = greater_than_or_equals }
+	}
+	check_variable = { var = ADISCORD_economy_treasury value = 620 compare = greater_than_or_equals }
+	NOT = { has_idea = SHL_cellar_wines }
+}
+
+SHL_metal_negotiations_unlocked = {
+	OR = {
+		has_completed_focus = SHL_metal_brokers
+		has_completed_focus = SHL_metal_market
+		has_completed_focus = SHL_sw_keep_the_markets
+	}
 }

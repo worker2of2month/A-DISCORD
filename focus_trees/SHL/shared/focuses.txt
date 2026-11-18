@@ -1,52 +1,12 @@
-# Общий слой Шахрабада: корона Юга (видна по ADISCORD_south_hegemon_SHL,
-# x 34, y 18) над общим блоком эпилогов пяти курсов;
-# военные фокусы стоят в отдельном дереве focus_trees/SHL/south_war. Второй
-# ряд веток (округа, внешние дела, Книга печей) ниже подключается и к главному
-# дереву; его корни стоят в x 33-67.
-
-shared_focus = {
-	id = SHL_south_crown_of_the_south
-	icon = GFX_focus_generic_the_giant_wakes
-	x = 34
-	y = 18
-	cost = 3
-	search_filters = { FOCUS_FILTER_POLITICAL }
-	allow_branch = { has_global_flag = ADISCORD_south_hegemon_SHL }
-	available = {
-		SHL_country_operable = yes
-		has_global_flag = ADISCORD_south_hegemon_SHL
-	}
-	cancel_if_invalid = yes
-	completion_reward = {
-		effect_tooltip = {
-			swap_ideas = {
-				remove_idea = SHL_conclave_power_dummy_idea
-				add_idea = SHL_pow_south_crown_of_the_south_idea
-			}
-		}
-		hidden_effect = {
-			add_to_variable = { var = SHL_pow_stability_factor value = 0.03 }
-			add_to_variable = { var = SHL_pow_political_power_gain value = 0.05 }
-			SHL_refresh_conclave_power = yes
-		}
-		unlock_decision_tooltip = SHL_nationalise_region
-	}
-	ai_will_do = { base = 50 }
-}
-
 # ----- Branch A: the four districts (x 33-47) -----
-# The second row of branches is referenced by the main tree and by all five
-# course trees, so it stays visible before and after ratification. Positions
-# are absolute: rows 0-4 right of the main layout (x 0-31). The main border-war
-# group starts below them at row 6 and the course sections at row 14.
-# The roots have no prerequisite: the trees share no focus that could anchor
-# them, and the branch order is set by available and the chains themselves.
+# The regional programmes inherit the opening law across course changes.
 
 shared_focus = {
 	id = SHL_four_districts
 	icon = GFX_goal_generic_construct_civilian
 	x = 40
-	y = 0
+	y = 1
+	prerequisite = { focus = SHL_law_of_continuous_fire }
 	cost = 3
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	available = {
@@ -87,7 +47,7 @@ shared_focus = {
 	id = SHL_salt_pans_of_safir
 	icon = GFX_goal_generic_construct_civ_factory
 	x = 34
-	y = 1
+	y = 2
 	cost = 3
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -135,7 +95,7 @@ shared_focus = {
 	id = SHL_safir_customs
 	icon = GFX_focus_generic_price_controls
 	x = 33
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -165,7 +125,7 @@ shared_focus = {
 	id = SHL_safir_smugglers
 	icon = GFX_focus_generic_smugglers
 	x = 35
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -182,7 +142,8 @@ shared_focus = {
 		custom_effect_tooltip = SHL_smuggler_fuel_tt
 		hidden_effect = {
 			set_country_flag = SHL_smuggler_fuel
-			SHL_refresh_programme_prices = yes
+			SHL_refresh_selected_furnace = yes
+			add_to_variable = { var = SHL_gui_dirty value = 1 }
 		}
 		add_stability = -0.03
 	}
@@ -193,7 +154,7 @@ shared_focus = {
 	id = SHL_safir_bandar_port
 	icon = GFX_goal_generic_construct_naval_dockyard
 	x = 34
-	y = 3
+	y = 4
 	cost = 4
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -233,7 +194,7 @@ shared_focus = {
 	id = SHL_loran_cisterns
 	icon = GFX_goal_generic_construct_infrastructure
 	x = 38
-	y = 1
+	y = 2
 	cost = 3
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -269,11 +230,11 @@ shared_focus = {
 
 shared_focus = {
 	id = SHL_desert_caravanserai
-	icon = GFX_focus_generic_camel_corps
+	icon = GFX_focus_SHL_road_factor_houses
 	x = 37
-	y = 2
+	y = 3
 	cost = 3
-	search_filters = { FOCUS_FILTER_INDUSTRY }
+	search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 	prerequisite = {
 		focus = SHL_loran_cisterns
 	}
@@ -285,6 +246,7 @@ shared_focus = {
 	}
 	cancel_if_invalid = yes
 	completion_reward = {
+		custom_effect_tooltip = SHL_road_unlock_factors_tt
 		custom_effect_tooltip = SHL_cycle_income_plus_10_tt
 		hidden_effect = {
 			set_temp_variable = { var = SHL_income_delta value = 10 }
@@ -309,11 +271,11 @@ shared_focus = {
 
 shared_focus = {
 	id = SHL_sand_patrols
-	icon = GFX_focus_generic_desert_training
+	icon = GFX_focus_SHL_road_relay_posts
 	x = 39
-	y = 2
+	y = 3
 	cost = 3
-	search_filters = { FOCUS_FILTER_MANPOWER }
+	search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_INTERNATIONAL_TRADE }
 	prerequisite = {
 		focus = SHL_loran_cisterns
 	}
@@ -329,6 +291,7 @@ shared_focus = {
 	}
 	cancel_if_invalid = yes
 	completion_reward = {
+		custom_effect_tooltip = SHL_road_unlock_relays_tt
 		custom_effect_tooltip = SHL_sand_patrols_tt
 		hidden_effect = { SHL_create_sand_patrol = yes }
 		add_command_power = 20
@@ -340,7 +303,7 @@ shared_focus = {
 	id = SHL_loran_deh_growth
 	icon = GFX_focus_generic_low_cost_housing
 	x = 38
-	y = 3
+	y = 4
 	cost = 4
 	search_filters = { FOCUS_FILTER_MANPOWER }
 	prerequisite = {
@@ -381,7 +344,7 @@ shared_focus = {
 	id = SHL_bayrat_copi_survey
 	icon = GFX_focus_generic_mineral_prospecting
 	x = 42
-	y = 1
+	y = 2
 	cost = 3
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -413,7 +376,7 @@ shared_focus = {
 	id = SHL_mine_colonies
 	icon = GFX_focus_generic_mining_industry
 	x = 41
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -460,7 +423,7 @@ shared_focus = {
 	id = SHL_nomad_leases
 	icon = GFX_focus_generic_concessions
 	x = 43
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -504,7 +467,7 @@ shared_focus = {
 	id = SHL_copi_railway
 	icon = GFX_focus_generic_railroad
 	x = 42
-	y = 3
+	y = 4
 	cost = 4
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -562,7 +525,7 @@ shared_focus = {
 	id = SHL_veyran_forts
 	icon = GFX_goal_generic_fortify_city
 	x = 46
-	y = 1
+	y = 2
 	cost = 3
 	search_filters = { FOCUS_FILTER_STABILITY }
 	prerequisite = {
@@ -610,7 +573,7 @@ shared_focus = {
 	id = SHL_border_watch
 	icon = GFX_focus_generic_home_defense
 	x = 45
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_MANPOWER }
 	prerequisite = {
@@ -633,7 +596,7 @@ shared_focus = {
 	id = SHL_border_market
 	icon = GFX_goal_generic_trade
 	x = 47
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -663,7 +626,7 @@ shared_focus = {
 	id = SHL_veyran_kala
 	icon = GFX_focus_generic_reinforcing_the_supply_network
 	x = 46
-	y = 3
+	y = 4
 	cost = 4
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -709,7 +672,7 @@ shared_focus = {
 	id = SHL_desert_assembly
 	icon = GFX_goal_generic_national_unity
 	x = 40
-	y = 4
+	y = 5
 	cost = 4
 	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -767,16 +730,19 @@ shared_focus = {
 
 shared_focus = {
 	id = SHL_chancery_of_the_gate
-	icon = GFX_focus_generic_diplomatic_treaty
+	icon = GFX_focus_SHL_road_stelander_fairs
 	x = 54
-	y = 0
+	y = 1
+	prerequisite = { focus = SHL_law_of_continuous_fire }
 	cost = 3
-	search_filters = { FOCUS_FILTER_POLITICAL }
+	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INTERNATIONAL_TRADE }
 	available = {
 		SHL_country_operable = yes
 	}
 	cancel_if_invalid = yes
 	completion_reward = {
+		custom_effect_tooltip = SHL_road_unlock_fairs_tt
+		custom_effect_tooltip = SHL_road_home_market_terms
 		unlock_decision_tooltip = SHL_trade_mission
 	}
 	ai_will_do = { base = 4 }
@@ -786,7 +752,7 @@ shared_focus = {
 	id = SHL_damir_road
 	icon = GFX_focus_generic_road_investment
 	x = 50
-	y = 1
+	y = 2
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -837,7 +803,7 @@ shared_focus = {
 	id = SHL_eflor_investment
 	icon = GFX_focus_generic_industry_investment
 	x = 49
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -863,7 +829,7 @@ shared_focus = {
 	id = SHL_damir_customs
 	icon = GFX_focus_generic_stockpile_currency
 	x = 51
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -893,7 +859,7 @@ shared_focus = {
 	id = SHL_eflor_accord
 	icon = GFX_focus_generic_treaty
 	x = 50
-	y = 3
+	y = 4
 	cost = 4
 	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -921,7 +887,7 @@ shared_focus = {
 	id = SHL_fuel_ledger
 	icon = GFX_focus_generic_stockpile_fuel
 	x = 54
-	y = 1
+	y = 2
 	cost = 3
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -957,7 +923,10 @@ shared_focus = {
 			}
 		}
 		custom_effect_tooltip = SHL_reserve_discount_tt
-		hidden_effect = { SHL_refresh_programme_prices = yes }
+		hidden_effect = {
+			SHL_refresh_programme_prices = yes
+			SHL_queue_focus_refresh = yes
+		}
 	}
 	ai_will_do = { base = 4 }
 }
@@ -966,7 +935,7 @@ shared_focus = {
 	id = SHL_nam_fuel_treaty
 	icon = GFX_goal_generic_positive_trade_relations
 	x = 53
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -992,7 +961,7 @@ shared_focus = {
 	id = SHL_own_distillery
 	icon = GFX_goal_generic_oil_refinery
 	x = 55
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -1031,18 +1000,21 @@ shared_focus = {
 			}
 		}
 		custom_effect_tooltip = SHL_distillery_fuel_tt
-		hidden_effect = { SHL_refresh_programme_prices = yes }
+		hidden_effect = {
+			SHL_refresh_programme_prices = yes
+			SHL_queue_focus_refresh = yes
+		}
 	}
 	ai_will_do = { base = 3 }
 }
 
 shared_focus = {
 	id = SHL_northern_road
-	icon = GFX_focus_generic_improve_roads
+	icon = GFX_focus_SHL_road_svetlogorsk_charter
 	x = 54
-	y = 3
+	y = 4
 	cost = 4
-	search_filters = { FOCUS_FILTER_INDUSTRY }
+	search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_INTERNATIONAL_TRADE }
 	prerequisite = {
 		focus = SHL_nam_fuel_treaty
 		focus = SHL_own_distillery
@@ -1052,6 +1024,7 @@ shared_focus = {
 	}
 	cancel_if_invalid = yes
 	completion_reward = {
+		custom_effect_tooltip = SHL_road_unlock_charter_tt
 		707 = {
 			if = {
 				limit = {
@@ -1088,7 +1061,7 @@ shared_focus = {
 	id = SHL_table_of_treaties
 	icon = GFX_focus_generic_league_of_nations
 	x = 58
-	y = 1
+	y = 2
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -1117,7 +1090,7 @@ shared_focus = {
 	id = SHL_kyz_communities_seat
 	icon = GFX_focus_generic_immigration
 	x = 57
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 	prerequisite = {
@@ -1150,7 +1123,7 @@ shared_focus = {
 	id = SHL_veyr_glass_contract
 	icon = GFX_focus_generic_license_production
 	x = 59
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -1187,7 +1160,7 @@ shared_focus = {
 	id = SHL_southern_customs_union
 	icon = GFX_focus_generic_monetary_union
 	x = 58
-	y = 3
+	y = 4
 	cost = 4
 	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 	prerequisite = {
@@ -1211,7 +1184,7 @@ shared_focus = {
 	id = SHL_voice_of_the_south
 	icon = GFX_focus_generic_influence_middle_east
 	x = 54
-	y = 4
+	y = 5
 	cost = 4
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -1239,7 +1212,8 @@ shared_focus = {
 	id = SHL_written_fire
 	icon = GFX_focus_generic_phoenix
 	x = 64
-	y = 0
+	y = 1
+	prerequisite = { focus = SHL_law_of_continuous_fire }
 	cost = 3
 	search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_RESEARCH }
 	available = {
@@ -1257,7 +1231,7 @@ shared_focus = {
 	id = SHL_archive_of_the_conclave
 	icon = GFX_goal_generic_scientific_exchange
 	x = 62
-	y = 1
+	y = 2
 	cost = 3
 	search_filters = { FOCUS_FILTER_RESEARCH }
 	prerequisite = {
@@ -1293,7 +1267,7 @@ shared_focus = {
 	id = SHL_masters_university
 	icon = GFX_focus_generic_university_1
 	x = 61
-	y = 2
+	y = 3
 	cost = 9
 	search_filters = { FOCUS_FILTER_RESEARCH }
 	prerequisite = {
@@ -1316,7 +1290,7 @@ shared_focus = {
 	id = SHL_apprentice_decree
 	icon = GFX_focus_generic_education
 	x = 63
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }
 	prerequisite = {
@@ -1342,7 +1316,7 @@ shared_focus = {
 	id = SHL_engineers_of_the_tenth
 	icon = GFX_focus_generic_electrification
 	x = 62
-	y = 3
+	y = 4
 	cost = 4
 	search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
 	prerequisite = {
@@ -1364,7 +1338,7 @@ shared_focus = {
 	id = SHL_heralds_press
 	icon = GFX_focus_generic_printing_press
 	x = 66
-	y = 1
+	y = 2
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -1386,7 +1360,7 @@ shared_focus = {
 	id = SHL_open_press
 	icon = GFX_focus_generic_social_democracy
 	x = 65
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -1413,7 +1387,7 @@ shared_focus = {
 	id = SHL_conclave_bulletins
 	icon = GFX_goal_generic_propaganda
 	x = 67
-	y = 2
+	y = 3
 	cost = 3
 	search_filters = { FOCUS_FILTER_POLITICAL }
 	prerequisite = {
@@ -1440,7 +1414,7 @@ shared_focus = {
 	id = SHL_chronicle_of_the_south
 	icon = GFX_focus_generic_commission
 	x = 66
-	y = 3
+	y = 4
 	cost = 4
 	search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 	prerequisite = {
@@ -1463,7 +1437,7 @@ shared_focus = {
 	id = SHL_law_of_the_written_fire
 	icon = GFX_focus_generic_university_2
 	x = 64
-	y = 4
+	y = 5
 	cost = 4
 	search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_STABILITY }
 	prerequisite = {

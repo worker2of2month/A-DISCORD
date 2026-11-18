@@ -671,3 +671,18 @@ ADISCORD_GLP_prepare_against_SHL = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
 }
+
+SHL_volunteers_to_stelander_party = {
+	allowed = { tag = SHL }
+	enable = {
+		has_idea = SHL_party_volunteer_mandate
+		SHL_party_front_open = yes
+		has_war = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = STP
+		value = 2000
+	}
+}

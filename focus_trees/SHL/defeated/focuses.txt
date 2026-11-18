@@ -1,6 +1,6 @@
 # @section defeated
 # Under the namestnik's seal: the chapter after a Svetlogorye victory. Section of
-# the single SHL_focus tree (x 75-93, y 0-7). SHL_seal_open_chapter sets
+# the single SHL_focus tree (x 75-93, y 1-8). SHL_seal_open_chapter sets
 # SHL_seal_chapter_open once, after the southern settlement has made Shahrabad a
 # NAM subject; the root's allow_branch reads that flag. The lease terms are read
 # from the native autonomy state, never stored per focus.
@@ -8,7 +8,8 @@
 		id = SHL_seal_conclave
 		icon = GFX_focus_generic_surrender
 		x = 84
-		y = 0
+		y = 1
+		prerequisite = { focus = SHL_law_of_continuous_fire }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { has_country_flag = SHL_seal_chapter_open }
@@ -29,7 +30,7 @@
 		id = SHL_seal_count_the_cold
 		icon = GFX_focus_generic_commission
 		x = 82
-		y = 1
+		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -57,7 +58,7 @@
 		id = SHL_seal_houses_in_mourning
 		icon = GFX_focus_generic_soldier_salute
 		x = 86
-		y = 1
+		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		prerequisite = {
@@ -81,7 +82,7 @@
 		id = SHL_redeem_furnaces_of_the_lease
 		icon = GFX_focus_generic_concessions
 		x = 79
-		y = 2
+		y = 3
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -135,7 +136,7 @@
 		id = SHL_cold_fire
 		icon = GFX_focus_generic_conspiracy
 		x = 89
-		y = 2
+		y = 3
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -197,7 +198,7 @@
 		id = SHL_redeem_lease_ledger
 		icon = GFX_focus_generic_currency_reforms
 		x = 77
-		y = 3
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -229,7 +230,7 @@
 		id = SHL_redeem_namestnik_audience
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 81
-		y = 3
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -271,7 +272,7 @@
 		id = SHL_redeem_by_coin
 		icon = GFX_focus_generic_stockpile_currency
 		x = 75
-		y = 4
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -311,7 +312,7 @@
 		id = SHL_redeem_by_service
 		icon = GFX_focus_generic_steel_mill
 		x = 79
-		y = 4
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -348,7 +349,7 @@
 		id = SHL_redeem_quiet_quarters
 		icon = GFX_focus_generic_low_cost_housing
 		x = 83
-		y = 4
+		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
 		prerequisite = {
@@ -401,7 +402,7 @@
 		id = SHL_redeem_guarantor_houses
 		icon = GFX_focus_generic_treaty
 		x = 77
-		y = 5
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -436,7 +437,7 @@
 		id = SHL_redeem_supervised_repairs
 		icon = GFX_goal_generic_construction2
 		x = 81
-		y = 5
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -478,7 +479,7 @@
 		id = SHL_redeem_charter
 		icon = GFX_focus_generic_phoenix
 		x = 79
-		y = 6
+		y = 7
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -542,7 +543,7 @@
 		id = SHL_cold_ash_cells
 		icon = GFX_focus_generic_whispers
 		x = 87
-		y = 3
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -581,7 +582,7 @@
 		id = SHL_cold_quarter_couriers
 		icon = GFX_focus_generic_infiltration
 		x = 91
-		y = 3
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		prerequisite = {
@@ -621,7 +622,7 @@
 		id = SHL_cold_hidden_armouries
 		icon = GFX_goal_generic_small_arms
 		x = 85
-		y = 4
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -660,7 +661,7 @@
 		id = SHL_cold_letters_to_the_sands
 		icon = GFX_goal_generic_intelligence_exchange
 		x = 89
-		y = 4
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -701,7 +702,7 @@
 		id = SHL_cold_shifts
 		icon = GFX_focus_generic_sabotage
 		x = 93
-		y = 4
+		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -740,7 +741,7 @@
 		id = SHL_cold_desert_drill
 		icon = GFX_focus_generic_desert_training
 		x = 87
-		y = 5
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -776,7 +777,7 @@
 		id = SHL_cold_raid_martyrs
 		icon = GFX_focus_generic_forest_brothers
 		x = 91
-		y = 5
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = {
@@ -819,7 +820,7 @@
 		id = SHL_cold_night_of_fire
 		icon = GFX_focus_generic_workers_and_farmers_rise
 		x = 89
-		y = 6
+		y = 7
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -882,7 +883,7 @@
 		id = SHL_cold_fire_without_masters
 		icon = GFX_focus_generic_self_management
 		x = 87
-		y = 7
+		y = 8
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -932,7 +933,7 @@
 		id = SHL_cold_embers_under_seal
 		icon = GFX_focus_generic_subjugation
 		x = 91
-		y = 7
+		y = 8
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		prerequisite = {

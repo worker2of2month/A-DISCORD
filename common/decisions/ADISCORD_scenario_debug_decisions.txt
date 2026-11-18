@@ -907,6 +907,7 @@ ADISCORD_scenario_debug_category = {
 			SHL_update_tensions = yes
 			SHL_check_obligation_deadline = yes
 			SHL_check_crises = yes
+			SHL_open_ballot = yes
 			ADISCORD_south_crisis_cycle = yes
 			SHL_crisis_draw = yes
 			SHL_life_draw = yes

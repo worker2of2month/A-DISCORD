@@ -5,6 +5,26 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_SHL_road_stelander_fairs"
+		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_stelander_fairs.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_SHL_road_relay_posts"
+		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_relay_posts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_SHL_road_factor_houses"
+		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_factor_houses.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_SHL_road_svetlogorsk_charter"
+		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_road_svetlogorsk_charter.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_bookmark_hold_the_basin"
 		texturefile = "gfx/interface/goals/NAM/bookmark/GFX_focus_NAM_bookmark_hold_the_basin.png"
 	}

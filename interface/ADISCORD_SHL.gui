@@ -26,13 +26,53 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "SHL_panel_totals"
-			position = { x = 17 y = 40 }
+			position = { x = 17 y = 39 }
 			text = "SHL_panel_totals"
 			font = "hoi_16mbs"
-			maxWidth = 236
-			maxHeight = 36
+			maxWidth = 74
+			maxHeight = 38
 			fixedsize = yes
-			pdx_tooltip = "SHL_summary_tip"
+			pdx_tooltip = "SHL_panel_policy"
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_votes"
+			position = { x = 95 y = 39 }
+			text = "SHL_panel_votes"
+			font = "hoi_16mbs"
+			maxWidth = 74
+			maxHeight = 38
+			fixedsize = yes
+			pdx_tooltip = "SHL_panel_policy"
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_loyal"
+			position = { x = 173 y = 39 }
+			text = "SHL_panel_loyal"
+			font = "hoi_16mbs"
+			maxWidth = 74
+			maxHeight = 38
+			fixedsize = yes
+			pdx_tooltip = "SHL_panel_policy"
+		}
+		buttonType = {
+			name = "SHL_supply_toggle_button"
+			position = { x = 307 y = 12 }
+			quadTextureSprite = "GFX_SHL_dispatch"
+			buttonText = "SHL_supply_toggle_button"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_supply_toggle_help"
+		}
+		instantTextBoxType = {
+			name = "SHL_supply_packet_quote"
+			position = { x = 307 y = 45 }
+			text = "SHL_supply_packet_quote"
+			font = "hoi_16mbs"
+			maxWidth = 142
+			maxHeight = 25
+			format = center
+			fixedsize = yes
+			pdx_tooltip = "SHL_planned_supply_tt"
 		}
 		iconType = {
 			name = "SHL_survey_map"
@@ -63,9 +103,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_1_alert"
-			position = { x = 77 y = 234 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_1_wear"
+			position = { x = 44 y = 227 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_1_interruption"
+			position = { x = 75 y = 227 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -84,9 +130,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_2_alert"
-			position = { x = 86 y = 189 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_2_wear"
+			position = { x = 53 y = 182 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_2_interruption"
+			position = { x = 84 y = 182 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -105,9 +157,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_3_alert"
-			position = { x = 113 y = 297 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_3_wear"
+			position = { x = 80 y = 290 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_3_interruption"
+			position = { x = 111 y = 290 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -126,9 +184,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_4_alert"
-			position = { x = 155 y = 254 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_4_wear"
+			position = { x = 122 y = 247 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_4_interruption"
+			position = { x = 153 y = 247 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -147,9 +211,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_5_alert"
-			position = { x = 139 y = 216 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_5_wear"
+			position = { x = 106 y = 209 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_5_interruption"
+			position = { x = 137 y = 209 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -168,9 +238,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_6_alert"
-			position = { x = 151 y = 111 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_6_wear"
+			position = { x = 118 y = 104 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_6_interruption"
+			position = { x = 149 y = 104 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -189,9 +265,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_7_alert"
-			position = { x = 186 y = 167 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_7_wear"
+			position = { x = 153 y = 160 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_7_interruption"
+			position = { x = 184 y = 160 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -210,9 +292,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_8_alert"
-			position = { x = 140 y = 334 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_8_wear"
+			position = { x = 107 y = 327 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_8_interruption"
+			position = { x = 138 y = 327 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -231,9 +319,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_9_alert"
-			position = { x = 207 y = 246 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_9_wear"
+			position = { x = 174 y = 239 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_9_interruption"
+			position = { x = 205 y = 239 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -252,9 +346,15 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		iconType = {
-			name = "SHL_furnace_10_alert"
-			position = { x = 161 y = 304 }
-			quadTextureSprite = "GFX_SHL_alert"
+			name = "SHL_furnace_10_wear"
+			position = { x = 128 y = 297 }
+			quadTextureSprite = "GFX_SHL_wear_texticon"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_10_interruption"
+			position = { x = 159 y = 297 }
+			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
 		# END GENERATED FURNACE SEALS
@@ -281,8 +381,18 @@ guiTypes = {
 			position = { x = 280 y = 146 }
 			text = "SHL_panel_selected_details"
 			font = "hoi_16mbs"
-			maxWidth = 171
-			maxHeight = 64
+			maxWidth = 87
+			maxHeight = 62
+			fixedsize = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_stocks"
+			position = { x = 368 y = 146 }
+			text = "SHL_panel_stocks"
+			font = "hoi_16mbs"
+			maxWidth = 78
+			maxHeight = 62
+			format = right
 			fixedsize = yes
 		}
 		instantTextBoxType = {
@@ -329,10 +439,19 @@ guiTypes = {
 			position = { x = 8 y = 375 }
 			text = "SHL_map_legend"
 			font = "hoi_16mbs"
-			maxWidth = 444
+			maxWidth = 297
 			maxHeight = 22
 			fixedsize = yes
 			pdx_tooltip = "SHL_map_legend_tt"
+		}
+		buttonType = {
+			name = "SHL_next_alert_button"
+			position = { x = 310 y = 370 }
+			quadTextureSprite = "GFX_SHL_dispatch"
+			buttonText = "SHL_next_alert_label"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_next_alert_tt"
 		}
 		buttonType = {
 			name = "SHL_recipient_export_button"
@@ -415,7 +534,7 @@ guiTypes = {
 			maxWidth = 440
 			maxHeight = 27
 			fixedsize = yes
-			pdx_tooltip = "SHL_summary_tip"
+			pdx_tooltip = "SHL_panel_delivery_totals"
 		}
 		instantTextBoxType = {
 			name = "SHL_ledger_line"
@@ -425,7 +544,178 @@ guiTypes = {
 			maxWidth = 440
 			maxHeight = 46
 			fixedsize = yes
-			pdx_tooltip = "SHL_ledger_tip"
+			pdx_tooltip = "SHL_panel_project"
+		}
+	}
+	containerWindowType = {
+		name = "ADISCORD_SHL_borders_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 71 }
+		iconType = {
+			name = "SHL_tension_cards"
+			position = { x = 5 y = 2 }
+			quadTextureSprite = "GFX_SHL_tension_cards"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_quarter_gauge"
+			position = { x = 13 y = 8 }
+			text = "SHL_quarter_gauge"
+			font = "hoi_16mbs"
+			maxWidth = 205
+			maxHeight = 54
+			fixedsize = yes
+			pdx_tooltip = "SHL_quarter_tension_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_crest_gauge"
+			position = { x = 238 y = 8 }
+			text = "SHL_crest_gauge"
+			font = "hoi_16mbs"
+			maxWidth = 205
+			maxHeight = 54
+			fixedsize = yes
+			pdx_tooltip = "SHL_crest_tension_tt"
+		}
+	}
+
+	containerWindowType = {
+		name = "ADISCORD_SHL_caravans_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 259 }
+		iconType = {
+			name = "SHL_caravan_head_bg"
+			position = { x = 3 y = 2 }
+			quadTextureSprite = "GFX_SHL_caravan_header"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_heading"
+			position = { x = 12 y = 6 }
+			text = "SHL_caravan_heading"
+			font = "hoi_16mbs"
+			maxWidth = 290
+			maxHeight = 20
+			fixedsize = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_capacity"
+			position = { x = 306 y = 6 }
+			text = "SHL_caravan_capacity"
+			font = "hoi_16mbs"
+			maxWidth = 143
+			maxHeight = 20
+			fixedsize = yes
+			format = right
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_buyer_heading"
+			position = { x = 12 y = 33 }
+			text = "SHL_caravan_buyer_heading"
+			font = "hoi_16mbs"
+			maxWidth = 195
+			maxHeight = 19
+			fixedsize = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_rate_heading"
+			position = { x = 212 y = 33 }
+			text = "SHL_caravan_rate_heading"
+			font = "hoi_16mbs"
+			maxWidth = 86
+			maxHeight = 19
+			fixedsize = yes
+			format = right
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_term_heading"
+			position = { x = 300 y = 33 }
+			text = "SHL_caravan_term_heading"
+			font = "hoi_16mbs"
+			maxWidth = 77
+			maxHeight = 19
+			fixedsize = yes
+			format = right
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_missed_heading"
+			position = { x = 379 y = 33 }
+			text = "SHL_caravan_missed_heading"
+			font = "hoi_16mbs"
+			maxWidth = 70
+			maxHeight = 19
+			fixedsize = yes
+			format = right
+			pdx_tooltip = "SHL_caravan_missed_tt"
+		}
+		gridBoxType = {
+			name = "SHL_caravan_contract_grid"
+			position = { x = 3 y = 53 }
+			size = { width = 454 height = 204 }
+			slotsize = { width = 454 height = 34 }
+			max_slots_horizontal = 1
+			format = "UPPER_LEFT"
+		}
+	}
+
+	containerWindowType = {
+		name = "SHL_caravan_contract_row"
+		position = { x = 0 y = 0 }
+		size = { width = 454 height = 34 }
+		iconType = {
+			name = "SHL_caravan_row_bg"
+			position = { x = 0 y = 0 }
+			quadTextureSprite = "GFX_SHL_caravan_row"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_caravan_flag"
+			position = { x = 7 y = 9 }
+			quadTextureSprite = "GFX_flag_small"
+			pdx_tooltip = "SHL_caravan_contract_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_buyer"
+			position = { x = 37 y = 1 }
+			text = "SHL_caravan_buyer"
+			font = "hoi_16mbs"
+			maxWidth = 168
+			maxHeight = 33
+			fixedsize = yes
+			pdx_tooltip = "SHL_caravan_contract_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_rate"
+			position = { x = 209 y = 8 }
+			text = "SHL_caravan_rate"
+			font = "hoi_16mbs"
+			maxWidth = 86
+			maxHeight = 20
+			fixedsize = yes
+			format = right
+			pdx_tooltip = "SHL_caravan_contract_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_term"
+			position = { x = 297 y = 8 }
+			text = "SHL_caravan_term"
+			font = "hoi_16mbs"
+			maxWidth = 77
+			maxHeight = 20
+			fixedsize = yes
+			format = right
+			pdx_tooltip = "SHL_caravan_contract_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_missed"
+			position = { x = 376 y = 8 }
+			text = "SHL_caravan_missed"
+			font = "hoi_16mbs"
+			maxWidth = 70
+			maxHeight = 20
+			fixedsize = yes
+			format = right
+			pdx_tooltip = "SHL_caravan_contract_tt"
 		}
 	}
 }

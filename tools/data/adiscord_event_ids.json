@@ -9357,6 +9357,30 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_SHL.205",
+      "namespace": "ADISCORD_SHL",
+      "number": 205,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_stelander_party",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.206",
+      "namespace": "ADISCORD_SHL",
+      "number": 206,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_caravans",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.207",
+      "namespace": "ADISCORD_SHL",
+      "number": 207,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_caravans",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_SHL.76",
       "namespace": "ADISCORD_SHL",
       "number": 76,

@@ -13,14 +13,6 @@ focus_tree = {
 	}
 	continuous_focus_position = { x = 100 y = 555555 }
 
-	# The second row of branches (focus_trees/SHL/shared, x 33-67) is visible from
-	# the first day and survives ratification because every course tree references
-	# the same roots.
-	shared_focus = SHL_south_crown_of_the_south
-	shared_focus = SHL_four_districts
-	shared_focus = SHL_chancery_of_the_gate
-	shared_focus = SHL_written_fire
-
 	# ----- Law of continuous fire and the tenth furnace -----
 
 	shared_focus = SHL_law_of_continuous_fire
@@ -226,11 +218,10 @@ focus_tree = {
 	# и виден по ADISCORD_south_hegemon_SHL только на курсе регентства.
 
 # Under the namestnik's seal: the chapter after a Svetlogorye victory. Section of
-# the single SHL_focus tree (x 75-93, y 0-7). SHL_seal_open_chapter sets
+# the single SHL_focus tree (x 75-93, y 1-8). SHL_seal_open_chapter sets
 # SHL_seal_chapter_open once, after the southern settlement has made Shahrabad a
 # NAM subject; the root's allow_branch reads that flag. The lease terms are read
 # from the native autonomy state, never stored per focus.
-	shared_focus = SHL_seal_conclave
 
 	# ----- Route choice: redeem the furnaces from the lease or prepare the rising -----
 
@@ -247,13 +238,38 @@ focus_tree = {
 
 	# Carried across the war-tree swap; hidden by allow_branch.
 	shared_focus = SHL_sw_war_conclave
-	shared_focus = SHL_h_hired_contracts
-	shared_focus = SHL_c_charters_for_occupied
-	shared_focus = SHL_d_war_orders_all
-	shared_focus = SHL_r_hire_armies
-	shared_focus = SHL_k_shift_brigades
-	shared_focus = SHL_n_emergency_conclave
 }
+
+shared_focus = {
+		id = SHL_south_crown_of_the_south
+		icon = GFX_focus_generic_the_giant_wakes
+		x = 34
+		y = 18
+		prerequisite = { focus = SHL_law_of_continuous_fire }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_global_flag = ADISCORD_south_hegemon_SHL }
+		available = {
+			SHL_country_operable = yes
+			has_global_flag = ADISCORD_south_hegemon_SHL
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = SHL_conclave_power_dummy_idea
+					add_idea = SHL_pow_south_crown_of_the_south_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = SHL_pow_stability_factor value = 0.03 }
+				add_to_variable = { var = SHL_pow_political_power_gain value = 0.05 }
+				SHL_refresh_conclave_power = yes
+			}
+			unlock_decision_tooltip = SHL_nationalise_region
+		}
+		ai_will_do = { base = 50 }
+	}
 
 shared_focus = {
 		id = SHL_law_of_continuous_fire
@@ -268,6 +284,15 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_planned_supply
+			unlock_decision_tooltip = SHL_road_send_rifles
+			unlock_decision_tooltip = SHL_road_send_kits
+			unlock_decision_tooltip = SHL_road_send_wholesale
+			custom_effect_tooltip = SHL_ballot_open_tt
+			unlock_decision_tooltip = SHL_offer_party_rifles
+			unlock_decision_tooltip = SHL_offer_party_rifles_bulk
+			unlock_decision_tooltip = SHL_authorise_party_volunteers
+			custom_effect_tooltip = SHL_party_front_tt
 			add_political_power = 40
 			add_stability = 0.03
 			effect_tooltip = {
@@ -279,6 +304,8 @@ shared_focus = {
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_political_power_gain value = 0.05 }
 				SHL_refresh_conclave_power = yes
+				SHL_open_ballot = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -299,10 +326,13 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_buy_reserve
+			unlock_decision_tooltip = SHL_use_reserve
+			hidden_effect = { country_event = { id = ADISCORD_SHL.8 days = 1 } }
 			ADISCORD_reform_society_development = yes
 			custom_effect_tooltip = SHL_census_tt
 			hidden_effect = {
-				add_to_variable = { var = SHL_reserve_stock value = 2 }
+				add_to_variable = { var = SHL_reserve_stock value = 4 }
 				SHL_refresh_furnaces = yes
 			}
 			hidden_effect = { country_event = { id = ADISCORD_shl_life.1 hours = 6 } }
@@ -311,41 +341,14 @@ shared_focus = {
 	}
 
 shared_focus = {
-		id = SHL_reserve_for_next_shift
-		icon = GFX_focus_generic_resource_extraction
-		x = 13
-		y = 2
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
-		prerequisite = {
-			focus = SHL_census_of_nine
-		}
-		available = {
-			SHL_country_operable = yes
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			unlock_decision_tooltip = SHL_buy_reserve
-			unlock_decision_tooltip = SHL_use_reserve
-			hidden_effect = { country_event = { id = ADISCORD_SHL.8 days = 1 } }
-			custom_effect_tooltip = SHL_census_tt
-			hidden_effect = {
-				add_to_variable = { var = SHL_reserve_stock value = 2 }
-				SHL_refresh_furnaces = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-shared_focus = {
 		id = SHL_conclave_rules
 		icon = GFX_focus_generic_improve_the_administration
 		x = 13
-		y = 3
+		y = 2
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
-			focus = SHL_reserve_for_next_shift
+			focus = SHL_census_of_nine
 		}
 		available = {
 			SHL_country_operable = yes
@@ -477,6 +480,7 @@ shared_focus = {
 				add_to_variable = { var = SHL_reserve_stock value = 2 }
 				country_event = { id = ADISCORD_SHL.6 days = 1 }
 				SHL_refresh_furnaces = yes
+				SHL_queue_focus_refresh = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -672,13 +676,17 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = SHL_planned_supply
+			SHL_conclave_industry_reform = yes
+			custom_effect_tooltip = SHL_railway_auto_supply_tt
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 5 producer = SHL }
 			if = {
 				limit = { hidden_trigger = { has_country_flag = SHL_supplier_premium } }
 				custom_effect_tooltip = SHL_houses_railway_premium_tt
 			}
-			hidden_effect = { clr_country_flag = SHL_supplier_premium }
+			hidden_effect = {
+				clr_country_flag = SHL_supplier_premium
+				SHL_waive_packet_fee = yes
+			}
 			288 = {
 				if = {
 					limit = {
@@ -799,6 +807,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_metal_contract_offer
 			custom_effect_tooltip = SHL_metal_brokers_tt
 			custom_effect_tooltip = SHL_metal_clients_plus_tt
 			custom_effect_tooltip = SHL_metal_brokers_advance_tt
@@ -1022,6 +1031,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			SHL_conclave_industry_reform = yes
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -1031,6 +1041,10 @@ shared_focus = {
 			hidden_effect = {
 				add_to_variable = { var = SHL_pow_efficiency_gain value = 0.02 }
 				SHL_refresh_conclave_power = yes
+			}
+			if = {
+				limit = { NOT = { has_completed_focus = SHL_metal_brokers } }
+				unlock_decision_tooltip = SHL_metal_contract_offer
 			}
 			unlock_decision_tooltip = SHL_metal_dumping
 			hidden_effect = { country_event = { id = ADISCORD_shl_life.5 hours = 6 } }
@@ -1125,6 +1139,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			SHL_cartel_influence_reform = yes
 			unlock_decision_tooltip = SHL_arbitration_act
 			custom_effect_tooltip = SHL_shift_arbitration_act_tt
 			effect_tooltip = {
@@ -1158,6 +1173,15 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			if = {
+				limit = { has_dynamic_modifier = { modifier = SHL_cartel_influence } }
+				remove_dynamic_modifier = { modifier = SHL_cartel_influence }
+				hidden_effect = {
+					clear_variable = SHL_cartel_pp
+					clear_variable = SHL_cartel_consumer_goods
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 			unlock_decision_tooltip = SHL_crisis_prevention
 			unlock_decision_tooltip = SHL_crisis_fund
 			custom_effect_tooltip = SHL_incident_office_tt
@@ -1178,6 +1202,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			SHL_cartel_influence_reform = yes
 			unlock_decision_tooltip = SHL_house_audit
 			custom_effect_tooltip = SHL_counting_chamber_tt
 			custom_effect_tooltip = SHL_counting_chamber_found_tt
@@ -1505,6 +1530,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			SHL_shahrabad_army_reform = yes
 			army_experience = 10
 			add_equipment_to_stockpile = {
 				type = support_equipment
@@ -1633,7 +1659,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			remove_ideas = SHL_divided_guard
+			SHL_shahrabad_army_reform = yes
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -1826,6 +1852,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			SHL_shahrabad_army_reform = yes
 			activate_advisor = ADISCORD_staff_SHL_Rashid_Farrokh
 			effect_tooltip = {
 				swap_ideas = {
@@ -1834,7 +1861,6 @@ shared_focus = {
 				}
 			}
 			hidden_effect = {
-				add_to_variable = { var = SHL_pow_army_org value = 0.05 }
 				add_to_variable = { var = SHL_pow_war_support value = 0.05 }
 				SHL_refresh_conclave_power = yes
 			}
@@ -2237,33 +2263,14 @@ shared_focus = {
 			focus = SHL_regency_of_crests
 		}
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
-		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus }
-			OR = {
-				check_variable = { var = SHL_political_course value = 0 compare = equals }
-				check_variable = { var = SHL_political_course value = 1 compare = equals }
-			}
-		}
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } check_variable = { var = SHL_political_course value = 1 compare = equals } }
 		prerequisite = {
 			focus = SHL_workers_charter
 		}
 		available = {
-			SHL_country_operable = yes
-			has_completed_focus = SHL_house_compromise
 			custom_trigger_tooltip = {
-				tooltip = SHL_ratify_needs_crests_tt
-				OR = {
-					is_power_balance_in_range = {
-						id = SHL_conclave_balance
-						range = SHL_balance_crests_influence
-					}
-					is_power_balance_in_range = {
-						id = SHL_conclave_balance
-						range = SHL_balance_crests_dominance
-					}
-				}
-			}
-			hidden_trigger = {
-				check_variable = { var = SHL_political_course value = 0 compare = equals }
+				tooltip = SHL_ballot_result_only_tt
+				always = no
 			}
 		}
 		cancel_if_invalid = yes
@@ -2271,7 +2278,6 @@ shared_focus = {
 			remove_ideas = SHL_hereditary_seats
 			custom_effect_tooltip = SHL_course_house_tt
 			custom_effect_tooltip = SHL_rename_house_tt
-			hidden_effect = { SHL_commit_house_course = yes }
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -2289,37 +2295,14 @@ shared_focus = {
 			focus = SHL_regency_of_crests
 		}
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
-		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus }
-			OR = {
-				check_variable = { var = SHL_political_course value = 0 compare = equals }
-				check_variable = { var = SHL_political_course value = 2 compare = equals }
-			}
-		}
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } check_variable = { var = SHL_political_course value = 2 compare = equals } }
 		prerequisite = {
 			focus = SHL_workers_charter
 		}
 		available = {
-			SHL_country_operable = yes
-			has_completed_focus = SHL_city_charters
 			custom_trigger_tooltip = {
-				tooltip = SHL_civic_mandate_tt
-				check_variable = { var = SHL_city_support value = 30 compare = greater_than_or_equals }
-			}
-			custom_trigger_tooltip = {
-				tooltip = SHL_ratify_needs_quarters_tt
-				OR = {
-					is_power_balance_in_range = {
-						id = SHL_conclave_balance
-						range = SHL_balance_quarters_influence
-					}
-					is_power_balance_in_range = {
-						id = SHL_conclave_balance
-						range = SHL_balance_quarters_dominance
-					}
-				}
-			}
-			hidden_trigger = {
-				check_variable = { var = SHL_political_course value = 0 compare = equals }
+				tooltip = SHL_ballot_result_only_tt
+				always = no
 			}
 		}
 		cancel_if_invalid = yes
@@ -2327,7 +2310,6 @@ shared_focus = {
 			remove_ideas = SHL_hereditary_seats
 			custom_effect_tooltip = SHL_course_city_tt
 			custom_effect_tooltip = SHL_rename_city_tt
-			hidden_effect = { SHL_commit_city_course = yes }
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -2345,27 +2327,14 @@ shared_focus = {
 			focus = SHL_regency_of_crests
 		}
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
-		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus }
-			OR = {
-				check_variable = { var = SHL_political_course value = 0 compare = equals }
-				check_variable = { var = SHL_political_course value = 3 compare = equals }
-			}
-		}
+		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } check_variable = { var = SHL_political_course value = 3 compare = equals } }
 		prerequisite = {
 			focus = SHL_workers_charter
 		}
 		available = {
-			SHL_country_operable = yes
-			has_completed_focus = SHL_common_dispatch
 			custom_trigger_tooltip = {
-				tooltip = SHL_ratify_needs_equilibrium_tt
-				is_power_balance_in_range = {
-					id = SHL_conclave_balance
-					range = SHL_balance_equilibrium
-				}
-			}
-			hidden_trigger = {
-				check_variable = { var = SHL_political_course value = 0 compare = equals }
+				tooltip = SHL_ballot_result_only_tt
+				always = no
 			}
 		}
 		cancel_if_invalid = yes
@@ -2373,7 +2342,6 @@ shared_focus = {
 			remove_ideas = SHL_hereditary_seats
 			custom_effect_tooltip = SHL_course_state_tt
 			custom_effect_tooltip = SHL_rename_state_tt
-			hidden_effect = { SHL_commit_state_course = yes }
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -7196,6 +7164,7 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_ideas = SHL_general_governorate
+			unlock_decision_tooltip = SHL_nationalise_region
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8686,7 +8655,8 @@ shared_focus = {
 		id = SHL_seal_conclave
 		icon = GFX_focus_generic_surrender
 		x = 84
-		y = 0
+		y = 1
+		prerequisite = { focus = SHL_law_of_continuous_fire }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		allow_branch = { NOT = { has_focus_tree = SHL_south_war_focus } has_country_flag = SHL_seal_chapter_open }
@@ -8707,7 +8677,7 @@ shared_focus = {
 		id = SHL_seal_count_the_cold
 		icon = GFX_focus_generic_commission
 		x = 82
-		y = 1
+		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -8735,7 +8705,7 @@ shared_focus = {
 		id = SHL_seal_houses_in_mourning
 		icon = GFX_focus_generic_soldier_salute
 		x = 86
-		y = 1
+		y = 2
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		prerequisite = {
@@ -8757,7 +8727,7 @@ shared_focus = {
 		id = SHL_redeem_furnaces_of_the_lease
 		icon = GFX_focus_generic_concessions
 		x = 79
-		y = 2
+		y = 3
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -8811,7 +8781,7 @@ shared_focus = {
 		id = SHL_cold_fire
 		icon = GFX_focus_generic_conspiracy
 		x = 89
-		y = 2
+		y = 3
 		cost = 5
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -8871,7 +8841,7 @@ shared_focus = {
 		id = SHL_redeem_lease_ledger
 		icon = GFX_focus_generic_currency_reforms
 		x = 77
-		y = 3
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -8903,7 +8873,7 @@ shared_focus = {
 		id = SHL_redeem_namestnik_audience
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 81
-		y = 3
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -8945,7 +8915,7 @@ shared_focus = {
 		id = SHL_redeem_by_coin
 		icon = GFX_focus_generic_stockpile_currency
 		x = 75
-		y = 4
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -8985,7 +8955,7 @@ shared_focus = {
 		id = SHL_redeem_by_service
 		icon = GFX_focus_generic_steel_mill
 		x = 79
-		y = 4
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -9022,7 +8992,7 @@ shared_focus = {
 		id = SHL_redeem_quiet_quarters
 		icon = GFX_focus_generic_low_cost_housing
 		x = 83
-		y = 4
+		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
 		prerequisite = {
@@ -9075,7 +9045,7 @@ shared_focus = {
 		id = SHL_redeem_guarantor_houses
 		icon = GFX_focus_generic_treaty
 		x = 77
-		y = 5
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -9110,7 +9080,7 @@ shared_focus = {
 		id = SHL_redeem_supervised_repairs
 		icon = GFX_goal_generic_construction2
 		x = 81
-		y = 5
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -9152,7 +9122,7 @@ shared_focus = {
 		id = SHL_redeem_charter
 		icon = GFX_focus_generic_phoenix
 		x = 79
-		y = 6
+		y = 7
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -9212,7 +9182,7 @@ shared_focus = {
 		id = SHL_cold_ash_cells
 		icon = GFX_focus_generic_whispers
 		x = 87
-		y = 3
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -9251,7 +9221,7 @@ shared_focus = {
 		id = SHL_cold_quarter_couriers
 		icon = GFX_focus_generic_infiltration
 		x = 91
-		y = 3
+		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		prerequisite = {
@@ -9291,7 +9261,7 @@ shared_focus = {
 		id = SHL_cold_hidden_armouries
 		icon = GFX_goal_generic_small_arms
 		x = 85
-		y = 4
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -9330,7 +9300,7 @@ shared_focus = {
 		id = SHL_cold_letters_to_the_sands
 		icon = GFX_goal_generic_intelligence_exchange
 		x = 89
-		y = 4
+		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -9371,7 +9341,7 @@ shared_focus = {
 		id = SHL_cold_shifts
 		icon = GFX_focus_generic_sabotage
 		x = 93
-		y = 4
+		y = 5
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -9410,7 +9380,7 @@ shared_focus = {
 		id = SHL_cold_desert_drill
 		icon = GFX_focus_generic_desert_training
 		x = 87
-		y = 5
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -9446,7 +9416,7 @@ shared_focus = {
 		id = SHL_cold_raid_martyrs
 		icon = GFX_focus_generic_forest_brothers
 		x = 91
-		y = 5
+		y = 6
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		prerequisite = {
@@ -9485,7 +9455,7 @@ shared_focus = {
 		id = SHL_cold_night_of_fire
 		icon = GFX_focus_generic_workers_and_farmers_rise
 		x = 89
-		y = 6
+		y = 7
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
 		prerequisite = {
@@ -9548,7 +9518,7 @@ shared_focus = {
 		id = SHL_cold_fire_without_masters
 		icon = GFX_focus_generic_self_management
 		x = 87
-		y = 7
+		y = 8
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -9598,7 +9568,7 @@ shared_focus = {
 		id = SHL_cold_embers_under_seal
 		icon = GFX_focus_generic_subjugation
 		x = 91
-		y = 7
+		y = 8
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		prerequisite = {

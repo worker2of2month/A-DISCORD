@@ -61,7 +61,6 @@ add_ideas = {
 
 	SHL_nine_furnaces_compact
 	SHL_hereditary_seats
-	SHL_divided_guard
 	SHL_external_freight
 	SHL_unregistered_quarters
 	minister_SHL_Amin_Rashad

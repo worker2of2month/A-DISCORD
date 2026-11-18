@@ -468,7 +468,7 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
             'unlocks': {
                 'SHL_peace_has_a_price': 'focus_trees/SHL/main/focuses.txt',
                 'SHL_d_occupation_administration': 'focus_trees/SHL/directorate/focuses.txt',
-                'SHL_south_crown_of_the_south': 'focus_trees/SHL/shared/focuses.txt',
+                'SHL_south_crown_of_the_south': 'focus_trees/SHL/main/focuses.txt',
             },
             'localisation': 'ADISCORD_SHL',
             'keys': (

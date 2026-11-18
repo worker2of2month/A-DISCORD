@@ -86,38 +86,39 @@ SHL_conclave = {
 
 	SHL_planned_supply = {
 		icon = SHL_ore_cart
-		visible = { has_completed_focus = SHL_houses_railway }
-		available = {
-			SHL_country_operable = yes
+		visible = {
+			has_completed_focus = SHL_law_of_continuous_fire
 			check_variable = { var = SHL_regular_supply value = 0 compare = equals }
 		}
+		available = { SHL_country_operable = yes }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = SHL_planned_supply_description_rules_tt
 			custom_effect_tooltip = SHL_planned_supply_tt
-			hidden_effect = {
-				set_variable = { var = SHL_regular_supply value = 1 }
-				SHL_refresh_selected_furnace = yes
-				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			hidden_effect = { SHL_enable_planned_supply = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_completed_focus = SHL_houses_railway
 			}
 		}
-		ai_will_do = { base = 100 }
 	}
 
 	SHL_stop_planned_supply = {
 		icon = SHL_ore_cart
-		visible = { check_variable = { var = SHL_regular_supply value = 1 compare = equals } }
+		visible = {
+			has_completed_focus = SHL_law_of_continuous_fire
+			check_variable = { var = SHL_regular_supply value = 1 compare = equals }
+		}
 		available = { SHL_country_operable = yes }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = SHL_stop_supply_tt
-			hidden_effect = {
-				set_variable = { var = SHL_regular_supply value = 0 }
-				SHL_refresh_selected_furnace = yes
-				add_to_variable = { var = SHL_gui_dirty value = 1 }
-			}
+			hidden_effect = { SHL_disable_planned_supply = yes }
 		}
 		ai_will_do = { base = 0 }
 	}
@@ -380,7 +381,7 @@ SHL_conclave = {
 
 	SHL_buy_reserve = {
 		icon = SHL_ore_cart
-		visible = { has_completed_focus = SHL_reserve_for_next_shift }
+		visible = { has_completed_focus = SHL_census_of_nine }
 		available = {
 			SHL_country_operable = yes
 			SHL_reserve_affordable = yes
@@ -404,7 +405,10 @@ SHL_conclave = {
 		state_target = yes
 		targets = { 287 288 289 290 291 292 293 294 295 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
-		visible = { FROM = { SHL_selected_target = yes } }
+		visible = {
+			has_completed_focus = SHL_census_of_nine
+			FROM = { SHL_selected_target = yes }
+		}
 		available = {
 			FROM = {
 				SHL_furnace_site_controlled = yes
@@ -1751,6 +1755,26 @@ SHL_tenth_project = {
 }
 
 SHL_quarters_and_borders = {
+	SHL_conclave_ballot = {
+		icon = generic_political_rally
+		allowed = { tag = SHL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		cancel_trigger = { check_variable = { var = SHL_political_course value = 0 compare = greater_than } }
+		selectable_mission = no
+		days_mission_timeout = 280
+		timeout_effect = {
+			custom_effect_tooltip = SHL_ballot_rules_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+					set_country_flag = SHL_ballot_due
+					SHL_count_ballot = yes
+				}
+			}
+		}
+	}
+
 	SHL_register_quarters = {
 		icon = generic_political_discourse
 		visible = { has_idea = SHL_unregistered_quarters }
@@ -3900,106 +3924,6 @@ SHL_quarters_and_borders = {
 		}
 	}
 
-	# ----- Metal contracts -----
-	# The buyer answers in ADISCORD_SHL.130 within the 40-day pending flag;
-	# the 28-day cycle settles 60 per contract (SHL_metal_settle_clients).
-
-	SHL_metal_contract_offer = {
-		icon = ADISCORD_deal
-		allowed = { tag = SHL }
-		targets = { VAL STP STS RUS GLP NAM }
-		target_trigger = {
-			FROM = {
-				exists = yes
-				NOT = { has_war_with = ROOT }
-			}
-		}
-		visible = {
-			FROM = {
-				NOT = { has_country_flag = SHL_metal_client }
-				NOT = { has_country_flag = SHL_metal_offer_pending }
-				NOT = { has_country_flag = SHL_metal_offer_declined }
-			}
-		}
-		available = {
-			FROM = {
-				NOT = { has_country_flag = SHL_metal_client }
-				NOT = { has_country_flag = SHL_metal_offer_pending }
-				NOT = { has_country_flag = SHL_metal_offer_declined }
-			}
-			SHL_country_operable = yes
-			custom_trigger_tooltip = {
-				tooltip = SHL_metal_export_free_tt
-				SHL_metal_export_furnace_free = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = SHL_metal_clients_limit_tt
-				check_variable = { var = SHL_metal_clients value = SHL_metal_max_clients compare = less_than }
-			}
-		}
-		cost = 0
-		days_re_enable = 7
-		fire_only_once = no
-		complete_effect = {
-			custom_effect_tooltip = SHL_metal_offer_tt
-			hidden_effect = {
-				if = {
-					limit = {
-						SHL_country_operable = yes
-						SHL_metal_export_furnace_free = yes
-						check_variable = { var = SHL_metal_clients value = SHL_metal_max_clients compare = less_than }
-						FROM = {
-							exists = yes
-							NOT = { has_war_with = SHL }
-							NOT = { has_country_flag = SHL_metal_client }
-							NOT = { has_country_flag = SHL_metal_offer_pending }
-							NOT = { has_country_flag = SHL_metal_offer_declined }
-						}
-					}
-					FROM = {
-						ADISCORD_release_non_participating_minor_optimization = yes
-						set_country_flag = {
-							flag = SHL_metal_offer_pending
-							value = 1
-							days = 40
-						}
-						country_event = { id = ADISCORD_SHL.130 hours = 6 }
-					}
-				}
-			}
-		}
-		ai_will_do = {
-			base = 10
-			modifier = {
-				factor = 0
-				check_variable = { var = SHL_metal_clients value = 2 compare = greater_than_or_equals }
-			}
-		}
-	}
-
-	SHL_metal_contract_end = {
-		icon = generic_break_treaty
-		allowed = { tag = SHL }
-		targets = { VAL STP STS RUS GLP NAM }
-		target_trigger = {
-			FROM = { exists = yes }
-		}
-		visible = {
-			FROM = { has_country_flag = SHL_metal_client }
-		}
-		available = { SHL_country_operable = yes }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			custom_effect_tooltip = SHL_metal_contract_end_description_rules_tt
-			custom_effect_tooltip = SHL_metal_end_tt
-			hidden_effect = {
-				FROM = { SHL_metal_drop_client = yes }
-			}
-		}
-		ai_will_do = { base = 0 }
-	}
-
 	# ----- Conclave levers -----
 	# Opened by the main tree before ratification. Convening and arbitration
 	# share the measures' lockout (SHL_political_action); site and neighbour
@@ -4477,45 +4401,6 @@ SHL_quarters_and_borders = {
 		}
 	}
 
-	SHL_trade_mission = {
-		icon = ADISCORD_deal
-		allowed = { tag = SHL }
-		targets = { EFL KYZ GLP MZR NAM VAL STP }
-		target_root_trigger = { original_tag = SHL }
-		target_trigger = {
-			FROM = {
-				exists = yes
-				NOT = { has_war_with = ROOT }
-			}
-		}
-		visible = { has_completed_focus = SHL_chancery_of_the_gate }
-		available = { SHL_country_operable = yes }
-		cost = 25
-		days_remove = 30
-		days_re_enable = 90
-		fire_only_once = no
-		remove_effect = {
-			add_opinion_modifier = {
-				target = FROM
-				modifier = ADISCORD_SHL_trade_mission
-			}
-			FROM = {
-				add_opinion_modifier = {
-					target = ROOT
-					modifier = ADISCORD_SHL_trade_mission
-				}
-			}
-		}
-		cancel_trigger = {
-			FROM = {
-				OR = {
-					exists = no
-					has_war_with = ROOT
-				}
-			}
-		}
-		ai_will_do = { base = 2 }
-	}
 }
 
 # Measures of the Conclave. Each measure holds the Conclave's political
@@ -5706,6 +5591,428 @@ SHL_treasury = {
 	}
 }
 
+SHL_caravans = {
+	SHL_trade_mission = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		targets = { EFL KYZ GLP MZR NAM VAL STP }
+		target_root_trigger = { original_tag = SHL }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				NOT = { has_war_with = ROOT }
+			}
+		}
+		visible = { has_completed_focus = SHL_chancery_of_the_gate }
+		available = { SHL_country_operable = yes }
+		cost = 25
+		days_remove = 30
+		days_re_enable = 90
+		fire_only_once = no
+		remove_effect = {
+			add_opinion_modifier = {
+				target = FROM
+				modifier = ADISCORD_SHL_trade_mission
+			}
+			FROM = {
+				add_opinion_modifier = {
+					target = ROOT
+					modifier = ADISCORD_SHL_trade_mission
+				}
+			}
+		}
+		cancel_trigger = {
+			FROM = {
+				OR = {
+					exists = no
+					has_war_with = ROOT
+				}
+			}
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	SHL_road_send_rifles = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		visible = {
+			has_completed_focus = SHL_law_of_continuous_fire
+			NOT = { has_variable = SHL_road_leg }
+		}
+		available = { SHL_country_operable = yes }
+		cost = 0
+		custom_cost_trigger = { SHL_road_can_load_rifles = yes }
+		custom_cost_text = SHL_road_cost_rifles
+		complete_effect = {
+			custom_effect_tooltip = SHL_road_dispatch_tt
+			hidden_effect = { SHL_road_dispatch_rifles = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_equipment = { infantry_equipment < 12700 }
+			}
+		}
+	}
+
+	SHL_road_send_kits = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		visible = {
+			has_completed_focus = SHL_law_of_continuous_fire
+			NOT = { has_variable = SHL_road_leg }
+		}
+		available = { SHL_country_operable = yes }
+		cost = 0
+		custom_cost_trigger = { SHL_road_can_load_kits = yes }
+		custom_cost_text = SHL_road_cost_kits
+		complete_effect = {
+			custom_effect_tooltip = SHL_road_dispatch_tt
+			hidden_effect = { SHL_road_dispatch_kits = yes }
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	SHL_road_send_wholesale = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		visible = {
+			has_completed_focus = SHL_law_of_continuous_fire
+			NOT = { has_variable = SHL_road_leg }
+		}
+		available = { SHL_country_operable = yes }
+		cost = 0
+		custom_cost_trigger = { SHL_road_can_load_wholesale = yes }
+		custom_cost_text = SHL_road_cost_wholesale
+		complete_effect = {
+			custom_effect_tooltip = SHL_road_wholesale_tt
+			hidden_effect = { SHL_road_dispatch_wholesale = yes }
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				has_equipment = { infantry_equipment < 102700 }
+			}
+		}
+	}
+
+	SHL_road_to_sevir = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 30
+		timeout_effect = {
+			custom_effect_tooltip = SHL_road_stop_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = SHL_road_leg value = 1 compare = equals } }
+					set_variable = { var = SHL_road_leg value = 2 }
+					activate_mission = SHL_road_to_barak
+					if = {
+						limit = { has_completed_focus = SHL_sand_patrols }
+						add_days_mission_timeout = { mission = SHL_road_to_barak days = -6 }
+					}
+					set_variable = { var = SHL_road_market_state value = 280 }
+					280 = {
+						controller = { SHL_road_open_market = yes }
+					}
+				}
+			}
+		}
+	}
+
+	SHL_road_to_barak = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 30
+		timeout_effect = {
+			custom_effect_tooltip = SHL_road_stop_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = SHL_road_leg value = 2 compare = equals } }
+					if = {
+						limit = { check_variable = { var = SHL_road_itinerary value = 1 compare = equals } }
+						SHL_road_head_home = yes
+					}
+					else = {
+						set_variable = { var = SHL_road_leg value = 3 }
+						activate_mission = SHL_road_to_fada
+						if = {
+							limit = { has_completed_focus = SHL_sand_patrols }
+							add_days_mission_timeout = { mission = SHL_road_to_fada days = -11 }
+						}
+					}
+					set_variable = { var = SHL_road_market_state value = 267 }
+					267 = {
+						controller = { SHL_road_open_market = yes }
+					}
+				}
+			}
+		}
+	}
+
+	SHL_road_to_fada = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 55
+		timeout_effect = {
+			custom_effect_tooltip = SHL_road_stop_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = SHL_road_leg value = 3 compare = equals } }
+					set_variable = { var = SHL_road_leg value = 4 }
+					activate_mission = SHL_road_to_irim
+					if = {
+						limit = { has_completed_focus = SHL_sand_patrols }
+						add_days_mission_timeout = { mission = SHL_road_to_irim days = -7 }
+					}
+					set_variable = { var = SHL_road_market_state value = 28 }
+					28 = {
+						controller = { SHL_road_open_market = yes }
+					}
+				}
+			}
+		}
+	}
+
+	SHL_road_to_irim = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 35
+		timeout_effect = {
+			custom_effect_tooltip = SHL_road_stop_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = SHL_road_leg value = 4 compare = equals } }
+					if = {
+						limit = { check_variable = { var = SHL_road_itinerary value = 2 compare = equals } }
+						SHL_road_head_home = yes
+					}
+					else = {
+						set_variable = { var = SHL_road_leg value = 5 }
+						activate_mission = SHL_road_to_maren
+						if = {
+							limit = { has_completed_focus = SHL_sand_patrols }
+							add_days_mission_timeout = { mission = SHL_road_to_maren days = -7 }
+						}
+					}
+					set_variable = { var = SHL_road_market_state value = 24 }
+					24 = {
+						controller = { SHL_road_open_market = yes }
+					}
+				}
+			}
+		}
+	}
+
+	SHL_road_to_maren = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 35
+		timeout_effect = {
+			custom_effect_tooltip = SHL_road_stop_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = SHL_road_leg value = 5 compare = equals } }
+					set_variable = { var = SHL_road_leg value = 6 }
+					activate_mission = SHL_road_to_loren
+					if = {
+						limit = { has_completed_focus = SHL_sand_patrols }
+						add_days_mission_timeout = { mission = SHL_road_to_loren days = -6 }
+					}
+					set_variable = { var = SHL_road_market_state value = 175 }
+					175 = {
+						controller = { SHL_road_open_market = yes }
+					}
+				}
+			}
+		}
+	}
+
+	SHL_road_to_loren = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 30
+		timeout_effect = {
+			custom_effect_tooltip = SHL_road_stop_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = SHL_road_leg value = 6 compare = equals } }
+					set_variable = { var = SHL_road_leg value = 7 }
+					activate_mission = SHL_road_to_svetlogorsk
+					if = {
+						limit = { has_completed_focus = SHL_sand_patrols }
+						add_days_mission_timeout = { mission = SHL_road_to_svetlogorsk days = -13 }
+					}
+					set_variable = { var = SHL_road_market_state value = 70 }
+					70 = {
+						controller = { SHL_road_open_market = yes }
+					}
+				}
+			}
+		}
+	}
+
+	SHL_road_to_svetlogorsk = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 65
+		timeout_effect = {
+			custom_effect_tooltip = SHL_road_stop_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = SHL_road_leg value = 7 compare = equals } }
+					SHL_road_head_home = yes
+					set_variable = { var = SHL_road_market_state value = 688 }
+					688 = {
+						controller = { SHL_road_open_market = yes }
+					}
+				}
+			}
+		}
+	}
+
+	SHL_road_to_home = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 85
+		timeout_effect = {
+			custom_effect_tooltip = SHL_road_return_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = SHL_road_leg value = 8 compare = equals } }
+					SHL_road_home_market = yes
+					SHL_road_unload = yes
+					country_event = { id = ADISCORD_SHL.207 }
+				}
+			}
+		}
+	}
+
+	SHL_metal_contract_offer = {
+		icon = ADISCORD_deal
+		allowed = { tag = SHL }
+		targets = { VAL STP STS RUS GLP NAM }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				NOT = { has_war_with = ROOT }
+			}
+		}
+		visible = {
+			SHL_metal_negotiations_unlocked = yes
+			FROM = {
+				NOT = { has_country_flag = SHL_metal_client }
+				NOT = { has_country_flag = SHL_metal_offer_pending }
+				NOT = { has_country_flag = SHL_metal_offer_declined }
+			}
+		}
+		available = {
+			FROM = {
+				NOT = { has_country_flag = SHL_metal_client }
+				NOT = { has_country_flag = SHL_metal_offer_pending }
+				NOT = { has_country_flag = SHL_metal_offer_declined }
+			}
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_metal_export_free_tt
+				SHL_metal_export_furnace_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = SHL_metal_clients_limit_tt
+				check_variable = { var = SHL_metal_clients value = SHL_metal_max_clients compare = less_than }
+			}
+		}
+		cost = 0
+		days_re_enable = 7
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_metal_offer_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						SHL_metal_negotiations_unlocked = yes
+						SHL_country_operable = yes
+						SHL_metal_export_furnace_free = yes
+						check_variable = { var = SHL_metal_clients value = SHL_metal_max_clients compare = less_than }
+						FROM = {
+							exists = yes
+							NOT = { has_war_with = SHL }
+							NOT = { has_country_flag = SHL_metal_client }
+							NOT = { has_country_flag = SHL_metal_offer_pending }
+							NOT = { has_country_flag = SHL_metal_offer_declined }
+						}
+					}
+					FROM = {
+						ADISCORD_release_non_participating_minor_optimization = yes
+						set_country_flag = {
+							flag = SHL_metal_offer_pending
+							value = 1
+							days = 40
+						}
+						country_event = { id = ADISCORD_SHL.130 hours = 6 }
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				check_variable = { var = SHL_metal_clients value = 2 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	SHL_metal_contract_end = {
+		icon = generic_break_treaty
+		allowed = { tag = SHL }
+		targets = { VAL STP STS RUS GLP NAM }
+		target_trigger = {
+			FROM = { exists = yes }
+		}
+		visible = {
+			FROM = { has_country_flag = SHL_metal_client }
+		}
+		available = { SHL_country_operable = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_metal_contract_end_description_rules_tt
+			custom_effect_tooltip = SHL_metal_end_tt
+			hidden_effect = {
+				FROM = { SHL_metal_drop_client = yes }
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+}
+
 SHL_metal_contracts = {
 	SHL_metal_contract_year = {
 		icon = ADISCORD_deal
@@ -6015,5 +6322,93 @@ ADISCORD_south_final_war_category = {
 			}
 		}
 		ai_will_do = { base = 10 }
+	}
+}
+
+SHL_stelander_party = {
+	SHL_offer_party_rifles = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = SHL }
+		available = {
+			SHL_party_order_book_open = yes
+			SHL_party_trade_ready = yes
+		}
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = SHL_party_quote_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						SHL_party_order_book_open = yes
+						SHL_party_trade_ready = yes
+					}
+					set_country_flag = { flag = SHL_party_offer_pending value = 1 days = 14 }
+					SHL_send_party_invoice = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				has_war = yes
+			}
+		}
+	}
+
+	SHL_offer_party_rifles_bulk = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = SHL }
+		available = {
+			SHL_party_order_book_open = yes
+			SHL_party_bulk_trade_ready = yes
+		}
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = SHL_party_bulk_quote_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						SHL_party_order_book_open = yes
+						SHL_party_bulk_trade_ready = yes
+					}
+					set_country_flag = { flag = SHL_party_offer_pending value = 2 days = 14 }
+					SHL_send_party_invoice = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 6
+			modifier = {
+				factor = 0
+				has_war = yes
+			}
+		}
+	}
+
+	SHL_authorise_party_volunteers = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = SHL }
+		available = {
+			SHL_party_front_open = yes
+			has_war = no
+		}
+		cost = 50
+		fire_only_once = yes
+		complete_effect = {
+			add_ideas = SHL_party_volunteer_mandate
+			add_stability = -0.03
+			STS = { add_opinion_modifier = { target = SHL modifier = SHL_backed_party } }
+			custom_effect_tooltip = SHL_party_dispatch_tt
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				has_stability < 0.45
+			}
+		}
 	}
 }

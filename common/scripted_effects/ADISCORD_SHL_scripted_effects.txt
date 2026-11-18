@@ -35,6 +35,14 @@ SHL_initialize_furnaces = {
 		set_variable = { var = SHL_pp_gain value = 0.05 }
 		set_variable = { var = SHL_course_stability value = 0 }
 		set_variable = { var = SHL_treasury_capacity_bonus value = 0 }
+		set_variable = { var = SHL_cartel_pp value = -0.20 }
+		set_variable = { var = SHL_cartel_consumer_goods value = 0.10 }
+		add_dynamic_modifier = { modifier = SHL_cartel_influence }
+		set_variable = { var = SHL_guard_org value = -0.10 }
+		set_variable = { var = SHL_guard_planning value = -0.20 }
+		add_dynamic_modifier = { modifier = SHL_shahrabad_army }
+		set_variable = { var = SHL_workshop_output value = -0.10 }
+		set_variable = { var = SHL_workshop_construction value = -0.10 }
 		SHL_initialize_programmes = yes
 		# The book of furnaces is read by a human player only; its dispatcher
 		# requeues itself every 90 days until the fifth chapter.
@@ -150,6 +158,47 @@ SHL_schedule_cycle = {
 # A 28-day event rescheduled from its own immediate block fires one hour early
 # each cycle; once that hour crosses midnight the flag age reads 27 days.
 # Callbacks queued by an older clock are still younger than this threshold.
+SHL_open_ballot = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			NOT = { has_active_mission = SHL_conclave_ballot }
+		}
+		if = {
+			limit = { has_country_flag = SHL_ballot_due }
+			SHL_count_ballot = yes
+		}
+		else = { activate_mission = SHL_conclave_ballot }
+	}
+}
+
+SHL_count_ballot = {
+	if = {
+		limit = {
+			has_country_flag = SHL_ballot_due
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+		}
+		clr_country_flag = SHL_ballot_due
+		remove_ideas = SHL_hereditary_seats
+		ADISCORD_economy_mark_dirty = yes
+		if = {
+			limit = { SHL_ballot_house_majority = yes }
+			SHL_commit_house_course = yes
+			complete_national_focus = SHL_admit_tenth_house
+		}
+		else_if = {
+			limit = { SHL_ballot_city_majority = yes }
+			SHL_commit_city_course = yes
+			complete_national_focus = SHL_rights_without_fire
+		}
+		else = {
+			SHL_commit_state_course = yes
+			complete_national_focus = SHL_state_furnaces
+		}
+	}
+}
+
 SHL_run_cycle = {
 	if = {
 		limit = { has_country_flag = { flag = SHL_cycle_pending days > 26 } }
@@ -161,6 +210,7 @@ SHL_run_cycle = {
 			SHL_update_tensions = yes
 			SHL_check_obligation_deadline = yes
 			SHL_check_crises = yes
+			SHL_open_ballot = yes
 			ADISCORD_south_crisis_cycle = yes
 			SHL_crisis_draw = yes
 			SHL_life_draw = yes
@@ -237,7 +287,7 @@ SHL_produce_period = {
 				set_variable = { var = SHL_tenth_planned_packets value = 2 }
 			}
 			set_variable = { var = SHL_tenth_planned_price value = SHL_tenth_planned_packets }
-			multiply_variable = { var = SHL_tenth_planned_price value = SHL_packet_price }
+			multiply_variable = { var = SHL_tenth_planned_price value = SHL_auto_packet_price }
 			if = {
 				limit = {
 					check_variable = { var = ADISCORD_economy_treasury value = SHL_tenth_planned_price compare = greater_than_or_equals }
@@ -393,7 +443,7 @@ SHL_produce_site = {
 				set_variable = { var = SHL_planned_packets value = 2 }
 			}
 			set_variable = { var = SHL_planned_price value = SHL_planned_packets }
-			multiply_variable = { var = SHL_planned_price value = PREV.SHL_packet_price }
+			multiply_variable = { var = SHL_planned_price value = PREV.SHL_auto_packet_price }
 			if = {
 				limit = {
 					SHL = {
@@ -1241,8 +1291,162 @@ SHL_finish_project = {
 	}
 }
 
+SHL_find_alert_after_cursor = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 1 compare = less_than }
+			OR = {
+				SHL_furnace_1_worn = yes
+				SHL_furnace_1_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 2 compare = less_than }
+			OR = {
+				SHL_furnace_2_worn = yes
+				SHL_furnace_2_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 2 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 3 compare = less_than }
+			OR = {
+				SHL_furnace_3_worn = yes
+				SHL_furnace_3_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 3 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 4 compare = less_than }
+			OR = {
+				SHL_furnace_4_worn = yes
+				SHL_furnace_4_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 4 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 5 compare = less_than }
+			OR = {
+				SHL_furnace_5_worn = yes
+				SHL_furnace_5_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 5 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 6 compare = less_than }
+			OR = {
+				SHL_furnace_6_worn = yes
+				SHL_furnace_6_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 6 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 7 compare = less_than }
+			OR = {
+				SHL_furnace_7_worn = yes
+				SHL_furnace_7_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 7 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 8 compare = less_than }
+			OR = {
+				SHL_furnace_8_worn = yes
+				SHL_furnace_8_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 8 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 9 compare = less_than }
+			OR = {
+				SHL_furnace_9_worn = yes
+				SHL_furnace_9_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 9 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = SHL_alert_cursor value = 10 compare = less_than }
+			OR = {
+				SHL_furnace_10_worn = yes
+				SHL_furnace_10_interrupted = yes
+			}
+		}
+		set_temp_variable = { var = SHL_alert_target value = 10 }
+	}
+}
+
+SHL_select_next_furnace_alert = {
+	set_temp_variable = { var = SHL_alert_cursor value = SHL_selected_furnace }
+	set_temp_variable = { var = SHL_alert_target value = 0 }
+	SHL_find_alert_after_cursor = yes
+	if = {
+		limit = { check_variable = { var = SHL_alert_target value = 0 compare = equals } }
+		set_temp_variable = { var = SHL_alert_cursor value = 0 }
+		SHL_find_alert_after_cursor = yes
+	}
+	if = {
+		limit = {
+			check_variable = { var = SHL_alert_target value = 0 compare = greater_than }
+			NOT = { check_variable = { var = SHL_selected_furnace value = SHL_alert_target compare = equals } }
+		}
+		set_variable = { var = SHL_selected_furnace value = SHL_alert_target }
+		SHL_refresh_selected_furnace = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_enable_planned_supply = {
+	if = {
+		limit = {
+			SHL_country_operable = yes
+			has_completed_focus = SHL_law_of_continuous_fire
+			check_variable = { var = SHL_regular_supply value = 0 compare = equals }
+		}
+		set_variable = { var = SHL_regular_supply value = 1 }
+		SHL_refresh_selected_furnace = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_disable_planned_supply = {
+	if = {
+		limit = {
+			SHL_country_operable = yes
+			has_completed_focus = SHL_law_of_continuous_fire
+			check_variable = { var = SHL_regular_supply value = 1 compare = equals }
+		}
+		set_variable = { var = SHL_regular_supply value = 0 }
+		SHL_refresh_selected_furnace = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
 SHL_refresh_selected_furnace = {
 	SHL_refresh_delivery_terms = yes
+	SHL_refresh_furnace_card = yes
+}
+
+# Uses already quoted tariffs, including a railway commissioned in its own reward.
+SHL_refresh_furnace_card = {
 	SHL_refresh_delivery_forecast = yes
 	if = {
 		limit = { check_variable = { var = SHL_selected_furnace value = 1 compare = equals } }
@@ -1602,6 +1806,7 @@ SHL_purchase_reserve = {
 			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_reserve_price }
 		}
 		add_to_variable = { var = SHL_reserve_stock value = 2 }
+		SHL_refresh_selected_furnace = yes
 		add_to_variable = { var = SHL_gui_dirty value = 1 }
 	}
 }
@@ -3066,6 +3271,7 @@ SHL_commit_regency_course = {
 			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 		}
 		set_variable = { var = SHL_political_course value = 4 }
+		clr_country_flag = SHL_ballot_due
 		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_course_stability value = 0 }
 		set_variable = { var = SHL_treasury_capacity_bonus value = 0.10 }
@@ -3120,6 +3326,7 @@ SHL_commit_commune_course = {
 			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 		}
 		set_variable = { var = SHL_political_course value = 5 }
+		clr_country_flag = SHL_ballot_due
 		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_course_stability value = 0.05 }
 		set_variable = { var = SHL_treasury_capacity_bonus value = 0 }
@@ -7966,11 +8173,13 @@ SHL_assign_selected_delivery = {
 SHL_ai_allocate_deliveries = {
 	if = {
 		limit = { is_ai = yes }
-		set_variable = { var = SHL_ai_delivery_reserve value = 490 }
+		set_variable = { var = SHL_ai_delivery_reserve value = SHL_auto_packet_price }
+		multiply_variable = { var = SHL_ai_delivery_reserve value = 10 }
 		if = {
 			limit = { check_variable = { var = SHL_shift_policy value = 1 compare = equals } }
-			set_variable = { var = SHL_ai_delivery_reserve value = 740 }
+			multiply_variable = { var = SHL_ai_delivery_reserve value = 2 }
 		}
+		add_to_variable = { var = SHL_ai_delivery_reserve value = 240 }
 		set_variable = { var = SHL_ai_quarters_left value = 0 }
 		set_variable = { var = SHL_ai_crests_left value = 0 }
 		set_variable = { var = SHL_ai_arsenal_left value = 0 }
@@ -8281,10 +8490,22 @@ SHL_refresh_delivery_forecast = {
 			set_variable = { var = SHL_delivery_crests_9 value = SHL_preview_site_crests }
 		}
 	}
+	set_variable = { var = SHL_recipient_10 value = SHL_tenth_recipient }
 	set_variable = { var = SHL_preview_recipient value = SHL_tenth_recipient }
 	if = {
 		limit = { 294 = { SHL_seal_site_leased = yes } }
-		set_variable = { var = SHL_preview_recipient value = 4 }
+		set_variable = { var = SHL_recipient_10 value = 4 }
+		# A supplied final service pour at VIII redeems the lease before X delivers.
+		if = {
+			limit = {
+				OR = {
+					NOT = { check_variable = { var = SHL_delivery_block_8 value = 0 compare = equals } }
+					294 = { NOT = { check_variable = { var = SHL_seal_service_cycles value = 1 compare = equals } } }
+					294 = { has_state_flag = SHL_seal_cold_shift }
+				}
+			}
+			set_variable = { var = SHL_preview_recipient value = 4 }
+		}
 	}
 	set_variable = { var = SHL_preview_stock value = SHL_tenth_stock }
 	set_variable = { var = SHL_preview_site value = 0 }
@@ -8298,7 +8519,6 @@ SHL_refresh_delivery_forecast = {
 		}
 	}
 	SHL_preview_delivery = yes
-	set_variable = { var = SHL_recipient_10 value = SHL_preview_recipient }
 	set_variable = { var = SHL_delivery_block_10 value = SHL_preview_block }
 	set_variable = { var = SHL_delivery_cash_10 value = SHL_preview_site_cash }
 	set_variable = { var = SHL_delivery_rifles_10 value = SHL_preview_site_rifles }
@@ -8347,7 +8567,7 @@ SHL_preview_delivery = {
 				set_variable = { var = SHL_preview_packets value = 2 }
 			}
 			set_variable = { var = SHL_preview_price value = SHL_preview_packets }
-			multiply_variable = { var = SHL_preview_price value = SHL_packet_price }
+			multiply_variable = { var = SHL_preview_price value = SHL_auto_packet_price }
 			if = {
 				limit = { check_variable = { var = SHL_preview_budget value = SHL_preview_price compare = greater_than_or_equals } }
 				subtract_from_variable = { var = SHL_preview_budget value = SHL_preview_price }
@@ -8630,15 +8850,15 @@ SHL_refresh_programme_prices = {
 	SHL_refresh_packet_price = yes
 }
 
-# The common fund lowers the reserve quote from 60 to 45 and the fuel ledger
+# The common fund lowers the reserve quote from 90 to 75 and the fuel ledger
 # takes 5 off either; the supplier premium of ADISCORD_SHL.8 adds 10 on top.
 # SHL_purchase_reserve re-reads the quote before the debit so a focus completed
 # mid-cycle applies at once.
 SHL_refresh_reserve_price = {
-	set_variable = { var = SHL_reserve_price value = 60 }
+	set_variable = { var = SHL_reserve_price value = 90 }
 	if = {
 		limit = { has_completed_focus = SHL_common_fund }
-		set_variable = { var = SHL_reserve_price value = 45 }
+		set_variable = { var = SHL_reserve_price value = 75 }
 	}
 	if = {
 		limit = { has_completed_focus = SHL_fuel_ledger }
@@ -8648,24 +8868,17 @@ SHL_refresh_reserve_price = {
 	add_to_variable = { var = SHL_reserve_price_premium value = 10 }
 }
 
-# The raw-material packet follows Svetlogorye's fuel policy toward Shahrabad:
-# 25 base, 20 under its oil contract, 35 under its embargo (the embargo wins
-# when both markers are present). Svetlogorye's files have no hook into SHL,
-# so a change made mid-cycle applies at the next purchase: the cycle re-reads
-# the quote through SHL_refresh_delivery_terms before the planned supply, and
-# SHL_begin_supply re-reads it before the debit. Shahrabad's own discounts
-# (smugglers, distillery, Bayrat ore while 291 is held, fuel treaty) come off
-# that quote; the treaty is suspended by the embargo or a war with Svetlogorye.
-# Floor 10.
+# The embargo overrides the oil contract. National discounts apply to that
+# quote before the handling fee for automatic orders.
 SHL_refresh_packet_price = {
-	set_variable = { var = SHL_packet_price value = 25 }
+	set_variable = { var = SHL_packet_price value = 40 }
 	if = {
 		limit = { has_country_flag = NAM_oil_client }
-		set_variable = { var = SHL_packet_price value = 20 }
+		set_variable = { var = SHL_packet_price value = 35 }
 	}
 	if = {
 		limit = { has_dynamic_modifier = { modifier = NAM_fuel_embargo_modifier } }
-		set_variable = { var = SHL_packet_price value = 35 }
+		set_variable = { var = SHL_packet_price value = 50 }
 	}
 	if = {
 		limit = { has_country_flag = SHL_smuggler_fuel }
@@ -8693,10 +8906,41 @@ SHL_refresh_packet_price = {
 		}
 		subtract_from_variable = { var = SHL_packet_price value = 10 }
 	}
-	clamp_variable = { var = SHL_packet_price min = 10 max = 35 }
+	clamp_variable = { var = SHL_packet_price min = 20 max = 50 }
+	set_variable = { var = SHL_auto_packet_price value = SHL_packet_price }
+	if = {
+		limit = { NOT = { has_completed_focus = SHL_houses_railway } }
+		add_to_variable = { var = SHL_auto_packet_price value = 5 }
+	}
+}
+
+# NAM calls this in the affected buyer's scope when an oil contract or embargo changes.
+SHL_refresh_oil_supply_quote = {
+	if = {
+		limit = {
+			tag = SHL
+			exists = yes
+			has_country_flag = SHL_furnaces_initialized
+		}
+		SHL_refresh_selected_furnace = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_waive_packet_fee = {
+	SHL_refresh_delivery_terms = yes
+	set_variable = { var = SHL_auto_packet_price value = SHL_packet_price }
+	SHL_refresh_furnace_card = yes
+	add_to_variable = { var = SHL_gui_dirty value = 1 }
 }
 
 SHL_initialize_programmes = {
+	add_to_array = { SHL_caravan_partners = VAL }
+	add_to_array = { SHL_caravan_partners = STP }
+	add_to_array = { SHL_caravan_partners = STS }
+	add_to_array = { SHL_caravan_partners = RUS }
+	add_to_array = { SHL_caravan_partners = GLP }
+	add_to_array = { SHL_caravan_partners = NAM }
 	SHL_refresh_programme_prices = yes
 	set_variable = { var = SHL_metal_clients value = 0 }
 	set_variable = { var = SHL_metal_max_clients value = 3 }
@@ -11795,7 +12039,7 @@ SHL_nam_accept_fuel_treaty = {
 		}
 		SHL = {
 			set_country_flag = SHL_nam_fuel_treaty
-			SHL_refresh_programme_prices = yes
+			SHL_refresh_selected_furnace = yes
 			add_to_variable = { var = SHL_gui_dirty value = 1 }
 			country_event = { id = ADISCORD_SHL.155 }
 		}
@@ -13141,5 +13385,663 @@ SHL_cold_clear_pledges = {
 	MZR = {
 		clr_country_flag = SHL_cold_pledged
 		clr_country_flag = SHL_cold_pledge_pending
+	}
+}
+
+SHL_send_party_invoice = {
+	set_country_flag = { flag = SHL_party_order_cooldown days = 30 }
+	STP = { country_event = { id = ADISCORD_SHL.205 } }
+}
+
+# A negative stockpile effect selects a producer. Measure each withdrawal before releasing payment or cargo.
+SHL_road_measure_stock = {
+	if = {
+		limit = { check_variable = { var = SHL_road_item value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_road_stock value = num_equipment@infantry_equipment }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_road_item value = 2 compare = equals } }
+		set_temp_variable = { var = SHL_road_stock value = num_equipment@support_equipment }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_road_item value = 3 compare = equals } }
+		set_temp_variable = { var = SHL_road_stock value = num_equipment@artillery_equipment }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_road_item value = 4 compare = equals } }
+		set_temp_variable = { var = SHL_road_stock value = num_equipment@motorized_equipment }
+	}
+}
+
+SHL_road_move_equipment = {
+	if = {
+		limit = { check_variable = { var = SHL_road_item value = 1 compare = equals } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_road_item value = 2 compare = equals } }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_road_item value = 3 compare = equals } }
+		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_road_item value = 4 compare = equals } }
+		add_equipment_to_stockpile = { type = motorized_equipment_1 amount = SHL_road_debit producer = PREV }
+	}
+}
+
+SHL_road_take_equipment = {
+	set_temp_variable = { var = SHL_road_due value = SHL_road_price }
+	SHL_road_measure_stock = yes
+	set_temp_variable = { var = SHL_road_before value = SHL_road_stock }
+	every_possible_country = {
+		limit = { PREV = { check_variable = { var = SHL_road_due value = 0 compare = greater_than } } }
+		PREV = {
+			set_temp_variable = { var = SHL_road_debit value = SHL_road_due }
+			multiply_temp_variable = { var = SHL_road_debit value = -1 }
+			SHL_road_move_equipment = yes
+			set_temp_variable = { var = SHL_road_removed value = SHL_road_stock }
+			SHL_road_measure_stock = yes
+			subtract_from_temp_variable = { var = SHL_road_removed value = SHL_road_stock }
+			subtract_from_temp_variable = { var = SHL_road_due value = SHL_road_removed }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = SHL_road_due value = 0 compare = greater_than }
+			check_variable = { var = SHL_road_before value = SHL_road_stock compare = greater_than }
+		}
+		set_temp_variable = { var = SHL_road_debit value = SHL_road_before }
+		subtract_from_temp_variable = { var = SHL_road_debit value = SHL_road_stock }
+		if = {
+			limit = { check_variable = { var = SHL_road_item value = 1 compare = equals } }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = SHL_road_debit producer = THIS }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_road_item value = 2 compare = equals } }
+			add_equipment_to_stockpile = { type = support_equipment_1 amount = SHL_road_debit producer = THIS }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_road_item value = 3 compare = equals } }
+			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = SHL_road_debit producer = THIS }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_road_item value = 4 compare = equals } }
+			add_equipment_to_stockpile = { type = motorized_equipment_1 amount = SHL_road_debit producer = THIS }
+		}
+	}
+}
+
+SHL_road_start = {
+	clear_variable = SHL_road_home_cash
+	clear_variable = SHL_road_home_rifles
+	clear_variable = SHL_road_home_kits
+	set_variable = { var = SHL_road_rifles value = 0 }
+	set_variable = { var = SHL_road_kits value = 0 }
+	set_variable = { var = SHL_road_cash value = 0 }
+	set_variable = { var = SHL_road_trucks value = 0 }
+	set_variable = { var = SHL_road_guns value = 0 }
+	set_variable = { var = SHL_road_fuel value = 0 }
+	clear_variable = SHL_road_wine
+	add_fuel = -400
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = 10 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 10 }
+	ADISCORD_economy_mark_dirty = yes
+	set_variable = { var = SHL_road_itinerary value = 1 }
+	if = {
+		limit = { has_completed_focus = SHL_northern_road }
+		set_variable = { var = SHL_road_itinerary value = 3 }
+	}
+	else_if = {
+		limit = { has_completed_focus = SHL_chancery_of_the_gate }
+		set_variable = { var = SHL_road_itinerary value = 2 }
+	}
+	clear_variable = SHL_road_market_state
+	set_variable = { var = SHL_road_leg value = 1 }
+	activate_mission = SHL_road_to_sevir
+	if = {
+		limit = { has_completed_focus = SHL_sand_patrols }
+		add_days_mission_timeout = { mission = SHL_road_to_sevir days = -6 }
+	}
+}
+
+SHL_road_dispatch_rifles = {
+	if = {
+		limit = {
+			SHL_road_ready = yes
+			SHL_road_can_load_rifles = yes
+		}
+		set_temp_variable = { var = SHL_road_item value = 1 }
+		set_temp_variable = { var = SHL_road_price value = 10000 }
+		SHL_road_take_equipment = yes
+		if = {
+			limit = { check_variable = { var = SHL_road_due value = 0 compare = equals } }
+			SHL_road_start = yes
+			set_variable = { var = SHL_road_rifles value = 10000 }
+		}
+	}
+}
+
+SHL_road_dispatch_kits = {
+	if = {
+		limit = {
+			SHL_road_ready = yes
+			SHL_road_can_load_kits = yes
+		}
+		set_temp_variable = { var = SHL_road_item value = 2 }
+		set_temp_variable = { var = SHL_road_price value = 2000 }
+		SHL_road_take_equipment = yes
+		if = {
+			limit = { check_variable = { var = SHL_road_due value = 0 compare = equals } }
+			SHL_road_start = yes
+			set_variable = { var = SHL_road_kits value = 2000 }
+		}
+	}
+}
+
+SHL_road_open_market = {
+	if = {
+		limit = { SHL_road_market_open = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_country_flag = {
+			flag = SHL_road_offer
+			days = 7
+		}
+		country_event = { id = ADISCORD_SHL.206 }
+	}
+}
+
+SHL_road_deliver_lot = {
+	clr_country_flag = SHL_road_offer
+	if = {
+		limit = { SHL = { check_variable = { var = SHL_road_rifles value = 2500 compare = greater_than_or_equals } } }
+		SHL = { subtract_from_variable = { var = SHL_road_rifles value = 2500 } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = SHL }
+	}
+	else = {
+		SHL = { subtract_from_variable = { var = SHL_road_kits value = 500 } }
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = 500 producer = SHL }
+	}
+}
+
+SHL_road_sell_for_cash = {
+	if = {
+		limit = { SHL_road_can_pay_cash = yes }
+		SHL_road_deliver_lot = yes
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 75 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 75 }
+		ADISCORD_economy_mark_dirty = yes
+		SHL = { add_to_variable = { var = SHL_road_cash value = 75 } }
+	}
+}
+
+SHL_road_exchange = {
+	if = {
+		limit = { SHL_road_can_barter = yes }
+		if = {
+			limit = { SHL = { check_variable = { var = SHL_road_market_state value = 280 compare = equals } } }
+			SHL_road_deliver_lot = yes
+			add_fuel = -2700
+			SHL = { add_to_variable = { var = SHL_road_fuel value = 2700 } }
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_road_market_state value = 267 compare = equals } } }
+			set_temp_variable = { var = SHL_road_item value = 4 }
+			set_temp_variable = { var = SHL_road_price value = 18 }
+			SHL_road_take_equipment = yes
+			if = {
+				limit = { check_variable = { var = SHL_road_due value = 0 compare = equals } }
+				SHL_road_deliver_lot = yes
+				SHL = { add_to_variable = { var = SHL_road_trucks value = 18 } }
+			}
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_road_market_state value = 28 compare = equals } } }
+			set_temp_variable = { var = SHL_road_item value = 3 }
+			set_temp_variable = { var = SHL_road_price value = 12 }
+			SHL_road_take_equipment = yes
+			if = {
+				limit = { check_variable = { var = SHL_road_due value = 0 compare = equals } }
+				SHL_road_deliver_lot = yes
+				SHL = { add_to_variable = { var = SHL_road_guns value = 12 } }
+			}
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_road_market_state value = 24 compare = equals } } }
+			set_temp_variable = { var = SHL_road_item value = 4 }
+			set_temp_variable = { var = SHL_road_price value = 24 }
+			SHL_road_take_equipment = yes
+			if = {
+				limit = { check_variable = { var = SHL_road_due value = 0 compare = equals } }
+				SHL_road_deliver_lot = yes
+				SHL = { add_to_variable = { var = SHL_road_trucks value = 24 } }
+			}
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_road_market_state value = 175 compare = equals } } }
+			SHL_road_deliver_lot = yes
+			add_fuel = -4500
+			SHL = { add_to_variable = { var = SHL_road_fuel value = 4500 } }
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_road_market_state value = 70 compare = equals } } }
+			SHL_road_deliver_lot = yes
+			add_fuel = -3600
+			SHL = { add_to_variable = { var = SHL_road_fuel value = 3600 } }
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_road_market_state value = 688 compare = equals } } }
+			SHL_road_deliver_lot = yes
+			add_fuel = -5400
+			SHL = { add_to_variable = { var = SHL_road_fuel value = 5400 } }
+		}
+	}
+}
+
+# At home the private buyers bid on the outward cargo. Barter proceeds and wine
+# belong to separate accounts and are unloaded in full.
+SHL_road_home_market = {
+	if = {
+		limit = {
+			has_completed_focus = SHL_chancery_of_the_gate
+			OR = {
+				check_variable = { var = SHL_road_rifles value = 0 compare = greater_than }
+				check_variable = { var = SHL_road_kits value = 0 compare = greater_than }
+			}
+		}
+		set_variable = { var = SHL_road_home_cash value = 0 }
+		set_temp_variable = { var = SHL_road_home_quantity value = SHL_road_rifles }
+		set_temp_variable = { var = SHL_road_home_capacity value = 5000 }
+		if = {
+			limit = { has_variable = SHL_road_wine }
+			set_temp_variable = { var = SHL_road_home_capacity value = 50000 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_road_kits value = 0 compare = greater_than } }
+			set_temp_variable = { var = SHL_road_home_quantity value = SHL_road_kits }
+			set_temp_variable = { var = SHL_road_home_capacity value = 1000 }
+		}
+		set_temp_variable = { var = SHL_road_home_quarter value = SHL_road_home_capacity }
+		multiply_temp_variable = { var = SHL_road_home_quarter value = 0.5 }
+		if = {
+			limit = { check_variable = { var = SHL_road_home_quantity value = SHL_road_home_quarter compare = less_than_or_equals } }
+			random = {
+				chance = 80
+				SHL_road_take_home_bid = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_road_home_quantity value = SHL_road_home_capacity compare = less_than_or_equals } }
+			random = {
+				chance = 60
+				SHL_road_take_home_bid = yes
+			}
+		}
+		else = {
+			random = {
+				chance = 40
+				SHL_road_take_home_bid = yes
+			}
+		}
+	}
+}
+
+SHL_road_take_home_bid = {
+	clamp_temp_variable = {
+		var = SHL_road_home_quantity
+		min = 0
+		max = SHL_road_home_capacity
+	}
+	set_variable = { var = SHL_road_home_cash value = SHL_road_home_quantity }
+	if = {
+		limit = { check_variable = { var = SHL_road_kits value = 0 compare = greater_than } }
+		set_variable = { var = SHL_road_home_kits value = SHL_road_home_quantity }
+		subtract_from_variable = { var = SHL_road_kits value = SHL_road_home_quantity }
+		divide_variable = { var = SHL_road_home_cash value = 10 }
+	}
+	else = {
+		# Unloading takes the retained quantity from the head of the model manifest.
+		# The remaining models go to the private buyers when the manifest closes.
+		set_variable = { var = SHL_road_home_rifles value = SHL_road_home_quantity }
+		subtract_from_variable = { var = SHL_road_rifles value = SHL_road_home_quantity }
+		divide_variable = { var = SHL_road_home_cash value = 50 }
+	}
+	add_to_variable = { var = SHL_road_cash value = SHL_road_home_cash }
+}
+
+SHL_road_unload = {
+	if = {
+		limit = { SHL = { has_variable = SHL_road_leg } }
+		SHL = {
+			clear_variable = SHL_road_leg
+			clear_variable = SHL_road_market_state
+			clear_variable = SHL_road_itinerary
+		}
+		ADISCORD_economy_initialize_country = yes
+		if = {
+			limit = { SHL = { has_variable = SHL_road_wine } }
+			SHL = { set_temp_variable = { var = SHL_road_order value = SHL_road_rifles } }
+			SHL_road_release_rifles = yes
+			SHL = { clear_array = SHL_road_rifle_models }
+			set_temp_variable = { var = SHL_road_deposit_refund value = SHL.SHL_road_wine }
+			multiply_temp_variable = { var = SHL_road_deposit_refund value = 20 }
+			add_to_variable = { var = ADISCORD_economy_treasury value = SHL_road_deposit_refund }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL_road_deposit_refund }
+		}
+		else = {
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = SHL.SHL_road_rifles producer = SHL }
+		}
+		add_equipment_to_stockpile = { type = support_equipment_1 amount = SHL.SHL_road_kits producer = SHL }
+		add_equipment_to_stockpile = { type = motorized_equipment_1 amount = SHL.SHL_road_trucks }
+		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = SHL.SHL_road_guns }
+		add_fuel = SHL.SHL_road_fuel
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL.SHL_road_cash }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = SHL.SHL_road_cash }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_road_settle_annexation = {
+	if = {
+		limit = { SHL = { has_variable = SHL_road_leg } }
+		SHL_road_unload = yes
+		SHL = {
+			if = {
+				limit = { has_active_mission = SHL_road_to_fada }
+				remove_mission = SHL_road_to_fada
+			}
+			if = {
+				limit = { has_active_mission = SHL_road_to_irim }
+				remove_mission = SHL_road_to_irim
+			}
+			if = {
+				limit = { has_active_mission = SHL_road_to_loren }
+				remove_mission = SHL_road_to_loren
+			}
+			if = {
+				limit = { has_active_mission = SHL_road_to_svetlogorsk }
+				remove_mission = SHL_road_to_svetlogorsk
+			}
+			if = {
+				limit = { has_active_mission = SHL_road_to_home }
+				remove_mission = SHL_road_to_home
+			}
+			if = {
+				limit = { has_active_mission = SHL_road_to_sevir }
+				remove_mission = SHL_road_to_sevir
+			}
+			if = {
+				limit = { has_active_mission = SHL_road_to_barak }
+				remove_mission = SHL_road_to_barak
+			}
+			clear_variable = SHL_road_wine
+			clear_array = SHL_road_rifle_models
+			if = {
+				limit = { has_active_mission = SHL_road_to_maren }
+				remove_mission = SHL_road_to_maren
+			}
+			clear_variable = SHL_road_rifles
+			clear_variable = SHL_road_kits
+			clear_variable = SHL_road_cash
+			clear_variable = SHL_road_trucks
+			clear_variable = SHL_road_guns
+			clear_variable = SHL_road_fuel
+		}
+	}
+}
+
+# PREV is the producer during loading and Shahrabad during delivery. The manifest keeps each rifle model separately.
+SHL_road_move_rifle_model = {
+	if = {
+		limit = { SHL = { check_variable = { var = SHL_road_model value = 0 compare = equals } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = SHL.SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { SHL = { check_variable = { var = SHL_road_model value = 1 compare = equals } } }
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2156 amount = SHL.SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { SHL = { check_variable = { var = SHL_road_model value = 2 compare = equals } } }
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2163 amount = SHL.SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { SHL = { check_variable = { var = SHL_road_model value = 3 compare = equals } } }
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2168 amount = SHL.SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { SHL = { check_variable = { var = SHL_road_model value = 4 compare = equals } } }
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2170 amount = SHL.SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { SHL = { check_variable = { var = SHL_road_model value = 5 compare = equals } } }
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2178 amount = SHL.SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { SHL = { check_variable = { var = SHL_road_model value = 6 compare = equals } } }
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2183 amount = SHL.SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { SHL = { check_variable = { var = SHL_road_model value = 7 compare = equals } } }
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2193 amount = SHL.SHL_road_debit producer = PREV }
+	}
+	else_if = {
+		limit = { SHL = { check_variable = { var = SHL_road_model value = 8 compare = equals } } }
+		add_equipment_to_stockpile = { type = ADISCORD_infantry_equipment_2200 amount = SHL.SHL_road_debit producer = PREV }
+	}
+}
+
+SHL_road_release_rifles = {
+	SHL = {
+		for_loop_effect = {
+			end = 9
+			value = SHL_road_model
+			if = {
+				limit = { check_variable = { var = SHL_road_order value = 0 compare = greater_than } }
+				set_temp_variable = { var = SHL_road_debit value = SHL_road_rifle_models^SHL_road_model }
+				clamp_temp_variable = {
+					var = SHL_road_debit
+					min = 0
+					max = SHL_road_order
+				}
+				if = {
+					limit = { check_variable = { var = SHL_road_debit value = 0 compare = greater_than } }
+					PREV = { SHL_road_move_rifle_model = yes }
+					subtract_from_variable = { var = SHL_road_rifle_models^SHL_road_model value = SHL_road_debit }
+					subtract_from_temp_variable = { var = SHL_road_order value = SHL_road_debit }
+				}
+			}
+		}
+	}
+}
+
+SHL_road_dispatch_wholesale = {
+	if = {
+		limit = {
+			SHL_road_ready = yes
+			SHL_road_can_load_wholesale = yes
+		}
+		clear_array = SHL_road_rifle_models
+		for_loop_effect = {
+			end = 9
+			value = SHL_road_model
+			add_to_array = {
+				array = SHL_road_rifle_models
+				value = 0
+			}
+		}
+		set_temp_variable = { var = SHL_road_order value = 100000 }
+		every_possible_country = {
+			limit = { PREV = { check_variable = { var = SHL_road_order value = 0 compare = greater_than } } }
+			PREV = {
+				for_loop_effect = {
+					end = 9
+					value = SHL_road_model
+					if = {
+						limit = { check_variable = { var = SHL_road_order value = 0 compare = greater_than } }
+						set_temp_variable = { var = SHL_road_stock value = num_equipment@infantry_equipment }
+						set_temp_variable = { var = SHL_road_debit value = SHL_road_order }
+						multiply_temp_variable = { var = SHL_road_debit value = -1 }
+						SHL_road_move_rifle_model = yes
+						subtract_from_temp_variable = { var = SHL_road_stock value = num_equipment@infantry_equipment }
+						add_to_variable = { var = SHL_road_rifle_models^SHL_road_model value = SHL_road_stock }
+						subtract_from_temp_variable = { var = SHL_road_order value = SHL_road_stock }
+					}
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { var = SHL_road_order value = 0 compare = equals } }
+			SHL_road_start = yes
+			set_variable = { var = SHL_road_rifles value = 100000 }
+			set_variable = { var = SHL_road_wine value = 5 }
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			set_temp_variable = { var = SHL_road_order value = 100000 }
+			SHL_road_release_rifles = yes
+			clear_array = SHL_road_rifle_models
+		}
+	}
+}
+
+SHL_road_buy_ten = {
+	if = {
+		limit = { SHL_road_can_buy_ten = yes }
+		clr_country_flag = SHL_road_offer
+		SHL = {
+			set_temp_variable = { var = SHL_road_order value = 10000 }
+			subtract_from_variable = { var = SHL_road_rifles value = 10000 }
+		}
+		SHL_road_release_rifles = yes
+		set_temp_variable = { var = SHL_road_payment value = 300 }
+		SHL_road_book_sale = yes
+	}
+}
+
+SHL_road_buy_twenty = {
+	if = {
+		limit = { SHL_road_can_buy_twenty = yes }
+		clr_country_flag = SHL_road_offer
+		SHL_road_deliver_twenty = yes
+		set_temp_variable = { var = SHL_road_payment value = 540 }
+		SHL_road_book_sale = yes
+	}
+}
+
+SHL_road_buy_wine = {
+	if = {
+		limit = { SHL_road_can_buy_wine = yes }
+		clr_country_flag = SHL_road_offer
+		SHL_road_deliver_wine = yes
+		set_temp_variable = { var = SHL_road_payment value = 80 }
+		SHL_road_book_sale = yes
+	}
+}
+
+SHL_road_book_sale = {
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_road_payment }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = SHL_road_payment }
+	ADISCORD_economy_mark_dirty = yes
+	SHL = { add_to_variable = { var = SHL_road_cash value = PREV.SHL_road_payment } }
+}
+
+SHL_road_head_home = {
+	set_variable = { var = SHL_road_leg value = 8 }
+	activate_mission = SHL_road_to_home
+	if = {
+		limit = { check_variable = { var = SHL_road_itinerary value = 1 compare = equals } }
+		add_days_mission_timeout = { mission = SHL_road_to_home days = -55 }
+		if = {
+			limit = { has_completed_focus = SHL_sand_patrols }
+			add_days_mission_timeout = { mission = SHL_road_to_home days = -6 }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_road_itinerary value = 2 compare = equals } }
+		add_days_mission_timeout = { mission = SHL_road_to_home days = -25 }
+		if = {
+			limit = { has_completed_focus = SHL_sand_patrols }
+			add_days_mission_timeout = { mission = SHL_road_to_home days = -12 }
+		}
+	}
+	else_if = {
+		limit = { has_completed_focus = SHL_sand_patrols }
+		add_days_mission_timeout = { mission = SHL_road_to_home days = -17 }
+	}
+}
+
+SHL_road_deliver_twenty = {
+	SHL = {
+		set_temp_variable = { var = SHL_road_order value = 20000 }
+		subtract_from_variable = { var = SHL_road_rifles value = 20000 }
+	}
+	SHL_road_release_rifles = yes
+}
+
+SHL_road_deliver_wine = {
+	SHL = { subtract_from_variable = { var = SHL_road_wine value = 1 } }
+	add_timed_idea = {
+		idea = SHL_cellar_wines
+		days = 90
+	}
+}
+
+SHL_road_buy_fair_order = {
+	if = {
+		limit = { SHL_road_can_buy_fair_order = yes }
+		clr_country_flag = SHL_road_offer
+		SHL_road_deliver_twenty = yes
+		SHL_road_deliver_wine = yes
+		set_temp_variable = { var = SHL_road_payment value = 620 }
+		SHL_road_book_sale = yes
+	}
+}
+
+SHL_cartel_influence_reform = {
+	effect_tooltip = {
+		swap_ideas = {
+			remove_idea = SHL_cartel_influence_base_preview
+			add_idea = SHL_cartel_influence_reform_preview
+		}
+	}
+	hidden_effect = {
+		add_to_variable = { var = SHL_cartel_pp value = 0.10 }
+		add_to_variable = { var = SHL_cartel_consumer_goods value = -0.05 }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_shahrabad_army_reform = {
+	effect_tooltip = {
+		swap_ideas = {
+			remove_idea = SHL_shahrabad_army_base_preview
+			add_idea = SHL_shahrabad_army_reform_preview
+		}
+	}
+	hidden_effect = {
+		add_to_variable = { var = SHL_guard_org value = 0.05 }
+		add_to_variable = { var = SHL_guard_planning value = 0.10 }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_conclave_industry_reform = {
+	effect_tooltip = {
+		swap_ideas = {
+			remove_idea = SHL_conclave_industry_base_preview
+			add_idea = SHL_conclave_industry_reform_preview
+		}
+	}
+	hidden_effect = {
+		add_to_variable = { var = SHL_workshop_output value = 0.05 }
+		add_to_variable = { var = SHL_workshop_construction value = 0.05 }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
 	}
 }

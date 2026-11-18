@@ -46,6 +46,7 @@ from tools.builders.build_adiscord_new_states import (
     SETTLEMENT_CLUSTER_CENTRES,
     SETTLEMENT_CLUSTER_VICTORY_POINTS,
     SHL_RESOURCES,
+    SOUTHERN_CAPITAL_DISTRICTS,
     STATE_PROFILES,
     STATE_RESOURCES,
     STARTING_OWNERS,
@@ -338,23 +339,26 @@ def validate_states() -> None:
             bool(re.search(rf"(?m)^\s*STATE_{state_id}:\s*\".+\"", localisation)),
             f"state {state_id}: missing Russian name",
         )
-        if state_id in STATE_RESOURCES:
-            resource_block = block(source, "resources")
-            actual_resources = {
-                resource: int(value)
-                for resource, value in re.findall(
-                    r"(?m)^\s*([a-z_]+)\s*=\s*(\d+)\s*$", resource_block
-                )
-            }
-            check(
-                actual_resources == STATE_RESOURCES[state_id],
-                f"state {state_id}: wrong resource deposit",
-            )
 
     southern_tags = {"KDR", "RHM", "SDR", "MZR", "KYZ", "SHL", "GLP", "AZH", "WEF"}
     resource_totals = {tag: 0 for tag in southern_tags}
+    district_owners = {
+        district: STARTING_OWNERS[capital]
+        for capital, (district, *_) in SOUTHERN_CAPITAL_DISTRICTS.items()
+    }
     for state_id, resources in STATE_RESOURCES.items():
-        owner = STARTING_OWNERS[state_id]
+        owner = district_owners.get(state_id) or STARTING_OWNERS[state_id]
+        resource_block = block(text(state_path(state_id)), "resources")
+        actual_resources = {
+            resource: int(value)
+            for resource, value in re.findall(
+                r"(?m)^\s*([a-z_]+)\s*=\s*(\d+)\s*$", resource_block
+            )
+        }
+        check(
+            actual_resources == resources,
+            f"state {state_id}: wrong resource deposit",
+        )
         check(
             "coal" not in resources,
             f"{owner}: southern starting deposit must not use coal",
@@ -385,7 +389,7 @@ def validate_states() -> None:
             check(amount == expected, f"SHL: expected {expected} furnace deposits, found {amount}")
             continue
         check(
-            amount == (18 if tag == "AZH" else 16),
+            amount == {"AZH": 18, "MZR": 116}.get(tag, 16),
             f"{tag}: unexpected combined desert deposits, found {amount}",
         )
 

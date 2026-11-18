@@ -1,5 +1,10 @@
 # Shahrabad course programmes. Permanent opinions granted by course focuses.
 opinion_modifiers = {
+	SHL_backed_party = {
+		value = -30
+		months = 18
+	}
+
 	SHL_compact_court_opinion = {
 		value = 20
 	}

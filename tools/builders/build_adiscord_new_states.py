@@ -282,14 +282,19 @@ SHL_INDUSTRY = {
 # split carves off, so the hinterland takes half the steel and all chromium.
 SHL_RESOURCES = {
     287: {"steel": 8},
-    289: {"tungsten": 6},
+    289: {"tungsten": 6, "steel": 50},
     291: {"steel": 8},
     292: {"steel": 4},
     293: {"aluminium": 6},
     295: {"chromium": 2},
     296: {"tungsten": 4},
+    707: {"steel": 50},
     SHL_BAYRAT_MINES_STATE_ID: {"steel": 8, "chromium": 6},
     SHL_VEYRAN_BORDER_STATE_ID: {"chromium": 2},
+}
+MZR_MOUNTAIN_RESOURCES = {
+    265: {"steel": 50},
+    269: {"oil": 9, "chromium": 3, "steel": 50},
 }
 GLP_STATES = (264, 273, 297, 298, 299, 300, 301, 302, 304, 305)
 
@@ -360,13 +365,14 @@ SOUTHERN_CITY_POINTS = {entry["state"]: (entry["province"], entry["value"]) for 
 for centres in (CAPITALS, SECONDARY_CENTRES, MINOR_VPS):
     centres.update({state: point for state, point in SOUTHERN_CITY_POINTS.items() if state in centres})
 SOUTHERN_CAPITAL_DISTRICTS = {
-    241: (702, 90000, 45000, (1295, 2374, 2523, 4093, 5262, 5348, 5711, 6343, 7512, 8280, 9141, 10293, 10755)),
-    253: (703, 70000, 35000, (443, 812, 1450, 2317, 3065, 3135, 5957, 6403, 7006, 7273, 8164, 8843, 9398, 9739, 11092, 12188, 12966, 16754, 16755, 16756)),
-    260: (704, 48000, 24000, (1396, 1784, 3967, 5123, 5590, 6040, 9572, 9817, 12578)),
-    275: (705, 97000, 48000, (2249, 2303, 4397, 5458, 6904, 9006, 9830, 11177, 11348)),
-    283: (706, 75000, 37000, (1534, 1555, 4186, 4804, 5921, 6571, 6685, 9184, 9302, 10206, 10920, 10998, 12033)),
-    294: (707, 85000, 43000, (2407, 3042, 3284, 4949, 6218, 7306, 8216, 9056, 9294, 9508, 9600, 10264, 12903, 16793, 16899)),
-    300: (708, 79000, 39000, (1169, 3222, 4782, 5595, 6011, 7073, 8056, 9672, 9950, 11478, 12043, 12583)),
+    241: (702, 2_000_000, 480_000, (1295, 2374, 2523, 4093, 5262, 5348, 5711, 6343, 7512, 8280, 9141, 10293, 10755)),
+    # Rahma's outer sectors 16754-16756 belong to district 703.
+    253: (703, 1_150_000, 850_000, (443, 812, 1450, 2317, 3065, 3135, 5957, 6403, 7006, 7273, 8164, 8843, 9398, 9739, 11092, 12188, 12966, 16754, 16755, 16756)),
+    260: (704, 1_650_000, 300_000, (1396, 1784, 3967, 5123, 5590, 6040, 9572, 9817, 12578)),
+    275: (705, 2_000_000, 520_000, (2249, 2303, 4397, 5458, 6904, 9006, 9830, 11177, 11348)),
+    283: (706, 1_850_000, 400_000, (1534, 1555, 4186, 4804, 5921, 6571, 6685, 9184, 9302, 10206, 10920, 10998, 12033)),
+    294: (707, SHL_POPULATION[294], SHL_POPULATION[707], (2407, 3042, 3284, 4949, 6218, 7306, 8216, 9056, 9294, 9508, 9600, 10264, 12903, 16793, 16899)),
+    300: (708, 1_900_000, 430_000, (1169, 3222, 4782, 5595, 6011, 7073, 8056, 9672, 9950, 11478, 12043, 12583)),
 }
 
 SOUTHERN_CAPITAL_DISTRICTS = {
@@ -488,7 +494,7 @@ STATE_RESOURCES = {
     236: {"steel": 9, "oil": 3},
     255: {"aluminium": 9, "oil": 3},
     263: {"tungsten": 6, "steel": 6},
-    269: {"oil": 9, "chromium": 3},
+    **MZR_MOUNTAIN_RESOURCES,
     285: {"tungsten": 6, "aluminium": 6},
     299: {"aluminium": 9, "chromium": 3},
     174: {"tungsten": 4},
@@ -957,16 +963,16 @@ NAM_COALITION_POPULATION = {
     70: 2_820_000,
     691: 1_410_000,
     692: 4_650_000,
-    701: 1_410_000,
+    701: 2_000_000,
     720: 615_000,
     721: 615_000,
-    722: 870_000,
-    723: 1_335_000,
+    722: 1_500_000,
+    723: 1_800_000,
     724: 705_000,
     725: 2_355_000,
-    726: 945_000,
+    726: 1_450_000,
     727: 2_025_000,
-    728: 1_155_000,
+    728: 2_000_000,
     729: 2_325_000,
 }
 
@@ -1757,25 +1763,39 @@ def state_path(state_id: int) -> Path:
     return matches[0]
 
 
-# The desert leagues keep their relative sizes against Shahrabad and NAM, but
-# each must be able to raise a field army without scraping the barrel.
-SOUTHERN_LEAGUE_POPULATION_FACTOR = 6
-SOUTHERN_LEAGUES = frozenset({"RHM", "SDR", "GLP", "KDR", "MZR", "KYZ", "WEF"})
-
-
-def league_population(owner: str, population: int) -> int:
-    if owner in SOUTHERN_LEAGUES:
-        return population * SOUTHERN_LEAGUE_POPULATION_FACTOR
-    return population
+# Each figure covers the entire state, including all painted city sectors.
+# Split capitals and their hinterlands are listed together in SOUTHERN_CAPITAL_DISTRICTS.
+SOUTHERN_SETTLEMENT_POPULATION = {
+    # WEF and the Eflor border city of Damir
+    174: 1_450_000, 175: 850_000, 240: 1_800_000,
+    # KDR
+    234: 520_000, 235: 150_000, 236: 450_000, 237: 300_000,
+    238: 570_000, 239: 120_000, 242: 480_000, 244: 160_000,
+    245: 420_000, 246: 310_000, 247: 550_000,
+    # RHM
+    248: 1_350_000, 249: 1_200_000, 252: 100_000, 254: 460_000,
+    255: 320_000, 256: 560_000, 257: 380_000, 258: 220_000,
+    # SDR
+    243: 410_000, 250: 520_000, 251: 350_000, 259: 280_000,
+    261: 320_000, 262: 430_000, 263: 240_000,
+    # MZR
+    265: 1_100_000, 266: 410_000, 267: 1_400_000, 268: 470_000,
+    269: 380_000, 270: 950_000, 271: 420_000, 272: 490_000, 274: 390_000,
+    # KYZ
+    276: 950_000, 277: 1_100_000, 278: 1_450_000, 279: 140_000,
+    280: 450_000, 281: 500_000, 282: 580_000, 284: 650_000,
+    285: 250_000, 286: 1_050_000,
+    # GLP
+    264: 340_000, 273: 1_100_000, 297: 160_000, 298: 460_000,
+    299: 300_000, 301: 1_400_000, 302: 420_000, 304: 540_000, 305: 90_000,
+}
 
 
 def population(state_id: int, owner: str) -> int:
-    return league_population(owner, base_population(state_id, owner))
-
-
-def base_population(state_id: int, owner: str) -> int:
-    if state_id == 240:
-        return 97_500
+    if state_id in SOUTHERN_SETTLEMENT_POPULATION:
+        return SOUTHERN_SETTLEMENT_POPULATION[state_id]
+    if state_id in NAM_COALITION_POPULATION:
+        return NAM_COALITION_POPULATION[state_id]
     if state_id in SHL_POPULATION:
         return SHL_POPULATION[state_id]
     if state_id in SOUTHERN_CAPITAL_DISTRICTS:
@@ -1786,22 +1806,6 @@ def base_population(state_id: int, owner: str) -> int:
         return 1
     if state_id == 303:
         return 9_000
-    if state_id in CAPITALS:
-        return {
-            69: 145_000,
-            174: 95_000,
-            241: 135_000,
-            253: 105_000,
-            260: 72_000,
-            275: 145_000,
-            283: 112_000,
-            294: 128_000,
-            300: 118_000,
-        }[state_id]
-    if state_id in SECONDARY_CENTRES:
-        return 65_000
-    if 234 <= state_id <= 305:
-        return 8_000 + ((state_id * 7_919) % 35_000)
     return 24_000 + ((state_id * 5_173) % 48_000)
 
 
@@ -2886,9 +2890,7 @@ def southern_district_path(capital: int) -> Path:
 def render_southern_district(capital: int) -> str:
     """Render the rural district carved from a southern capital."""
     district, _city_population, rural_population, provinces = SOUTHERN_CAPITAL_DISTRICTS[capital]
-    rural_population = SHL_POPULATION.get(district, rural_population)
     owner = STARTING_OWNERS[capital]
-    rural_population = league_population(owner, rural_population)
     history = [f"\t\towner = {owner}", f"\t\tadd_core_of = {owner}"]
     for province, value, _name in REGIONAL_SETTLEMENTS.get(district, ()):
         if province not in provinces:
@@ -2913,7 +2915,10 @@ def render_southern_district(capital: int) -> str:
         "}",
         "",
     ]
-    return "\n".join(lines)
+    source = "\n".join(lines)
+    if district in ALL_STATE_RESOURCES:
+        source = ensure_state_resources(source, ALL_STATE_RESOURCES[district])
+    return source
 
 
 def southern_settlement_plan() -> dict[Path, bytes]:
@@ -2953,7 +2958,7 @@ def update_southern_settlements(apply: bool) -> int:
 
 
 def shahrabad_population_plan() -> dict[Path, bytes]:
-    """Own SHL population, factories and deposits without rewriting settlements."""
+    """Own Shahrabad demographics and the deposits along the Mazar mountain belt."""
     outputs = {}
     for state_id, residents in SHL_POPULATION.items():
         path = state_path(state_id)
@@ -2965,6 +2970,10 @@ def shahrabad_population_plan() -> dict[Path, bytes]:
             source = set_history_building_level(source, building, level)
         if state_id in SHL_RESOURCES:
             source = ensure_state_resources(source, SHL_RESOURCES[state_id])
+        outputs[path] = source.encode("utf-8")
+    for state_id, deposits in MZR_MOUNTAIN_RESOURCES.items():
+        path = state_path(state_id)
+        source = ensure_state_resources(path.read_text(encoding="utf-8"), deposits)
         outputs[path] = source.encode("utf-8")
     return outputs
 

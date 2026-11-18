@@ -10,7 +10,7 @@ state={
 		16975 17019 17153 17154 17155 17156 17684 17851 17852 17853 17933 18098
 		18099 18592 18593 18784 18785
 	}
-	manpower = 945000
+	manpower = 1450000
 	buildings_max_level_factor = 1.000
 	state_category = rural
 	local_supplies = 0.4

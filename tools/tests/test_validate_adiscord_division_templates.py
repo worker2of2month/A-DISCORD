@@ -22,7 +22,7 @@ class StartingTemplateCounterTests(unittest.TestCase):
         self.assertEqual(starting_template_counter("Itoran Emergency Brigade"), 80)
         self.assertEqual(starting_template_counter("Regular army"), 3)
         self.assertEqual(starting_template_counter("Capital Guard"), 78)
-        self.assertEqual(starting_template_counter("Kefreyt Line Brigade"), 78)
+        self.assertEqual(starting_template_counter("Kefreyt Line Brigade"), 3)
         self.assertEqual(starting_template_counter("Line Infantry Brigade"), 3)
         self.assertEqual(starting_template_counter("Stelander Territorial Brigade"), 12)
         self.assertEqual(starting_template_counter("Stelander Assault Division"), 4)
@@ -52,12 +52,37 @@ class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
                 icons = [child.value for child in design.value if child.key == "custom_icon"]
                 self.assertEqual(len(icons), 1, design.key)
                 designs[design.key] = icons[0]
-        self.assertEqual(designs["STP_congress_guard"], "78")
-        self.assertEqual(designs["ADISCORD_marine_brigade"], "34")
-        self.assertEqual(designs["ADISCORD_hazard_detachment"], "2")
-        self.assertEqual(designs["ADISCORD_mechanized_brigade"], "5")
-        self.assertEqual(designs["ADISCORD_mountaineer_brigade"], "110")
-        self.assertEqual(designs["ADISCORD_field_headquarters"], "121")
+        expected_roles = {
+            "guard": ("STP_congress_guard",),
+            "militia": ("ADISCORD_garrison_levy",),
+            "territorial": (
+                "ADISCORD_vorkerland_northern_line_militia", "ADISCORD_stelander_line_brigade",
+                "ADISCORD_border_territorial_militia",
+            ),
+            "line": (
+                "ADISCORD_reconstruction_brigade", "ADISCORD_line_brigade",
+                "ADISCORD_defensive_line_brigade", "ADISCORD_field_division",
+            ),
+            "assault": ("ADISCORD_assault_group", "ADISCORD_shock_group", "ADISCORD_breach_shock_group"),
+            "mobile": ("ADISCORD_mechanized_brigade", "ADISCORD_vorkerland_mobile_reserve"),
+            "cbrn": ("ADISCORD_hazard_detachment",),
+            "mountain": (
+                "STP_cw_mountain_brigade", "ADISCORD_mountaineer_brigade",
+                "ADISCORD_networked_mountaineer_brigade",
+            ),
+            "armor": (
+                "ADISCORD_tank_battlegroup", "ADISCORD_networked_tank_battlegroup",
+                "ADISCORD_armoured_division", "ADISCORD_engineered_armoured_division",
+                "ADISCORD_heavy_tank_battlegroup",
+            ),
+            "marine": ("ADISCORD_marine_brigade",),
+            "headquarters": ("ADISCORD_field_headquarters",),
+        }
+        self.assertEqual(designs, {
+            name: str(STARTING_TEMPLATE_COUNTERS[role])
+            for role, names in expected_roles.items()
+            for name in names
+        })
 
     def test_active_templates_hide_country_tags_and_use_role_icons(self) -> None:
         root = Path(__file__).resolve().parents[2]

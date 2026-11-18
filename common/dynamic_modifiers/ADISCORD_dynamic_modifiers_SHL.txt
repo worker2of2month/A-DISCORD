@@ -6,6 +6,8 @@ SHL_conclave_industry = {
 	political_power_gain = SHL_pp_gain
 	stability_factor = SHL_course_stability
 	ADISCORD_economy_treasury_capacity_factor = SHL_treasury_capacity_bonus
+	industrial_capacity_factory = SHL_workshop_output
+	production_speed_buildings_factor = SHL_workshop_construction
 }
 
 # Focus aggregate. Unlike the industry cache above, its variables only accumulate.
@@ -110,4 +112,18 @@ SHL_cold_fire_dynamic = {
 	army_defence_factor = SHL_cld_defence
 	army_attack_factor = SHL_cld_attack
 	max_dig_in = SHL_cld_dig_in
+}
+
+SHL_cartel_influence = {
+	icon = GFX_idea_generic_constitutional_guarantees
+	enable = { tag = SHL }
+	political_power_gain = SHL_cartel_pp
+	consumer_goods_factor = SHL_cartel_consumer_goods
+}
+
+SHL_shahrabad_army = {
+	icon = GFX_idea_generic_fortify_the_borders
+	enable = { tag = SHL }
+	army_org_factor = SHL_guard_org
+	planning_speed = SHL_guard_planning
 }

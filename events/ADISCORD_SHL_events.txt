@@ -47,12 +47,10 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.8.a
-		custom_effect_tooltip = SHL_suppliers_wait_tt
-		hidden_effect = {
-			if = {
-				limit = { NOT = { has_completed_focus = SHL_houses_railway } }
-				set_country_flag = SHL_supplier_premium
-			}
+		if = {
+			limit = { hidden_trigger = { NOT = { has_completed_focus = SHL_houses_railway } } }
+			custom_effect_tooltip = SHL_suppliers_wait_tt
+			hidden_effect = { set_country_flag = SHL_supplier_premium }
 		}
 	}
 	option = {
@@ -3602,4 +3600,138 @@ country_event = {
 		clr_country_flag = SHL_furnace_administrations_pending
 		SHL_form_furnace_administrations = yes
 	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.205
+	trigger = { tag = STP }
+	title = ADISCORD_SHL.205.t
+	desc = ADISCORD_SHL.205.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 7
+	option = {
+		name = ADISCORD_SHL.205.b
+		hidden_effect = { SHL = { clr_country_flag = SHL_party_offer_pending } }
+		ai_chance = { base = 15 }
+	}
+	option = {
+		name = ADISCORD_SHL.205.a
+		trigger = { SHL = { SHL_party_standard_quote_valid = yes } }
+		custom_effect_tooltip = SHL_party_purchase_tt
+		hidden_effect = {
+			if = {
+				limit = { SHL = { SHL_party_standard_quote_valid = yes } }
+				SHL = {
+					clr_country_flag = SHL_party_offer_pending
+					send_equipment = {
+						type = infantry_equipment
+						amount = 2700
+						target = STP
+					}
+					ADISCORD_economy_receive_100 = yes
+				}
+				ADISCORD_economy_spend_100 = yes
+			}
+		}
+		ai_chance = { base = 85 }
+	}
+	option = {
+		name = ADISCORD_SHL.205.c
+		trigger = { SHL = { SHL_party_bulk_quote_valid = yes } }
+		custom_effect_tooltip = SHL_party_bulk_purchase_tt
+		hidden_effect = {
+			if = {
+				limit = { SHL = { SHL_party_bulk_quote_valid = yes } }
+				SHL = {
+					clr_country_flag = SHL_party_offer_pending
+					send_equipment = {
+						type = infantry_equipment
+						amount = 13500
+						target = STP
+					}
+					ADISCORD_economy_receive_300 = yes
+				}
+				ADISCORD_economy_spend_300 = yes
+			}
+		}
+		ai_chance = { base = 85 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.206
+	title = ADISCORD_SHL.206.t
+	desc = ADISCORD_SHL.206.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 7
+	option = {
+		name = ADISCORD_SHL.206.a
+		hidden_effect = { clr_country_flag = SHL_road_offer }
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_SHL.206.b
+		trigger = { SHL_road_can_pay_cash = yes }
+		custom_effect_tooltip = SHL_road_purchase_tt
+		hidden_effect = { SHL_road_sell_for_cash = yes }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_SHL.206.c
+		trigger = { SHL_road_can_barter = yes }
+		custom_effect_tooltip = SHL_road_purchase_tt
+		hidden_effect = { SHL_road_exchange = yes }
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_SHL.206.ten
+		trigger = { SHL_road_can_buy_ten = yes }
+		custom_effect_tooltip = SHL_road_buy_ten_tt
+		hidden_effect = { SHL_road_buy_ten = yes }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_SHL.206.twenty
+		trigger = { SHL_road_can_buy_twenty = yes }
+		custom_effect_tooltip = SHL_road_buy_twenty_tt
+		hidden_effect = { SHL_road_buy_twenty = yes }
+		ai_chance = { base = 45 }
+	}
+	option = {
+		name = ADISCORD_SHL.206.wine
+		trigger = { SHL_road_can_buy_wine = yes }
+		effect_tooltip = {
+			add_timed_idea = {
+				idea = SHL_cellar_wines
+				days = 90
+			}
+		}
+		custom_effect_tooltip = SHL_road_buy_wine_tt
+		hidden_effect = { SHL_road_buy_wine = yes }
+		ai_chance = { base = 25 }
+	}
+	option = {
+		name = ADISCORD_SHL.206.fair_order
+		trigger = { SHL_road_can_buy_fair_order = yes }
+		custom_effect_tooltip = SHL_road_buy_twenty_tt
+		effect_tooltip = {
+			add_timed_idea = {
+				idea = SHL_cellar_wines
+				days = 90
+			}
+		}
+		hidden_effect = { SHL_road_buy_fair_order = yes }
+		ai_chance = { base = 55 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.207
+	title = ADISCORD_SHL.207.t
+	desc = ADISCORD_SHL.207.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = ADISCORD_SHL.207.a }
 }

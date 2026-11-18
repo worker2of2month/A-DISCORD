@@ -11096,26 +11096,17 @@ COUNTRY_AIRCRAFT_CARD_FAMILIES = {
 
 # Ready-to-use cards can cover one role without overriding the other role's art or names.
 COUNTRY_AIRCRAFT_ROLE_TEXTURES = {
-    "NAM": {
+    tag: {
         "fighter": tuple(
-            f"gfx/interface/technologies/ADISCORD_aircraft_NAM_{tier}.png"
+            f"gfx/interface/technologies/ADISCORD_aircraft_{tag}_{tier}.png"
             for tier in range(1, 4)
         ),
         "cas": tuple(
-            f"gfx/interface/technologies/ADISCORD_aircraft_cas_NAM_{tier}.png"
+            f"gfx/interface/technologies/ADISCORD_aircraft_cas_{tag}_{tier}.png"
             for tier in range(1, 4)
         ),
-    },
-    "RUS": {
-        "fighter": tuple(
-            f"gfx/interface/technologies/ADISCORD_aircraft_RUS_{tier}.png"
-            for tier in range(1, 4)
-        ),
-        "cas": tuple(
-            f"gfx/interface/technologies/ADISCORD_aircraft_cas_RUS_{tier}.png"
-            for tier in range(1, 4)
-        ),
-    },
+    }
+    for tag in ("NAM", "RUS", "SHL")
 }
 
 # Rank by the research unlock, not by the older year suffix in an equipment ID.
@@ -11303,6 +11294,7 @@ COUNTRY_APC_CARD_TEXTURES = {
     "STS": "gfx/interface/technologies/ADISCORD_apc_STS.png",
     "NAM": "gfx/interface/technologies/ADISCORD_apc_NAM.png",
     "NOD": "gfx/interface/technologies/ADISCORD_apc_NOD.png",
+    "SHL": "gfx/interface/technologies/ADISCORD_apc_SHL.png",
 }
 APC_CARD_EQUIPMENT = (
     "ADISCORD_armored_carrier_2163",

@@ -9331,7 +9331,20 @@ VAL_recall_northern_volunteers = {
 	if = { limit = { YPR = { has_volunteers_amount_from = { tag = VAL count > 0 } } } recall_volunteers_from = YPR }
 	if = { limit = { COF = { has_volunteers_amount_from = { tag = VAL count > 0 } } } recall_volunteers_from = COF }
 	if = { limit = { TFF = { has_volunteers_amount_from = { tag = VAL count > 0 } } } recall_volunteers_from = TFF }
-	if = { limit = { STS = { has_volunteers_amount_from = { tag = VAL count > 0 } } } recall_volunteers_from = STS }
+	if = {
+		limit = {
+			STS = {
+				has_volunteers_amount_from = { tag = VAL count > 0 }
+			}
+			NOT = {
+				AND = {
+					has_idea = VAL_stelander_volunteer_mandate
+					STS = { VAL_stelander_volunteer_host = yes }
+				}
+			}
+		}
+		recall_volunteers_from = STS
+	}
 	if = { limit = { STP = { has_volunteers_amount_from = { tag = VAL count > 0 } } } recall_volunteers_from = STP }
 }
 
@@ -9339,7 +9352,21 @@ VAL_reconcile_northern_volunteers = {
 	if = { limit = { YPR = { has_volunteers_amount_from = { tag = VAL count > 0 } NOT = { VAL_northern_volunteer_host = yes } } } recall_volunteers_from = YPR }
 	if = { limit = { COF = { has_volunteers_amount_from = { tag = VAL count > 0 } NOT = { VAL_northern_volunteer_host = yes } } } recall_volunteers_from = COF }
 	if = { limit = { TFF = { has_volunteers_amount_from = { tag = VAL count > 0 } NOT = { VAL_northern_volunteer_host = yes } } } recall_volunteers_from = TFF }
-	if = { limit = { STS = { has_volunteers_amount_from = { tag = VAL count > 0 } NOT = { VAL_northern_volunteer_host = yes } } } recall_volunteers_from = STS }
+	if = {
+		limit = {
+			STS = {
+				has_volunteers_amount_from = { tag = VAL count > 0 }
+				NOT = { VAL_northern_volunteer_host = yes }
+			}
+			NOT = {
+				AND = {
+					has_idea = VAL_stelander_volunteer_mandate
+					STS = { VAL_stelander_volunteer_host = yes }
+				}
+			}
+		}
+		recall_volunteers_from = STS
+	}
 	if = { limit = { STP = { has_volunteers_amount_from = { tag = VAL count > 0 } NOT = { VAL_northern_volunteer_host = yes } } } recall_volunteers_from = STP }
 }
 

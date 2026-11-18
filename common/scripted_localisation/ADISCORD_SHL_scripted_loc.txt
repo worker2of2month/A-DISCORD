@@ -1188,7 +1188,11 @@ defined_text = {
 		trigger = { has_variable = SHL_southern_programme }
 		localization_key = SHL_south_complete
 	}
-	text = { localization_key = SHL_south_open }
+	text = {
+		trigger = { SHL_south_country_ready = yes }
+		localization_key = SHL_south_open
+	}
+	text = { localization_key = SHL_borders_blank }
 }
 
 defined_text = {
@@ -1827,9 +1831,7 @@ defined_text = {
 		trigger = { has_country_flag = SHL_demand_pending }
 		localization_key = SHL_demand_status_pending
 	}
-	text = {
-		localization_key = SHL_demand_status_quiet
-	}
+	text = { localization_key = SHL_borders_blank }
 }
 
 defined_text = {
@@ -1858,9 +1860,7 @@ defined_text = {
 		trigger = { has_active_mission = SHL_council_election }
 		localization_key = SHL_cons_status_election
 	}
-	text = {
-		localization_key = SHL_cons_status_quiet
-	}
+	text = { localization_key = SHL_borders_blank }
 }
 
 defined_text = {
@@ -2176,4 +2176,459 @@ defined_text = {
 		localization_key = SHL_seal_news_title_crushed
 	}
 	text = { localization_key = SHL_seal_news_title_redeemed }
+}
+
+defined_text = {
+	name = SHLGetBallotBulletin
+	text = {
+		trigger = { has_active_mission = SHL_conclave_ballot }
+		localization_key = SHL_ballot_bulletin
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetBallotLeader
+	text = {
+		trigger = { SHL_ballot_house_majority = yes }
+		localization_key = SHL_ballot_houses
+	}
+	text = {
+		trigger = { SHL_ballot_city_majority = yes }
+		localization_key = SHL_ballot_cities
+	}
+	text = { localization_key = SHL_ballot_nur }
+}
+
+defined_text = {
+	name = SHLGetPartyInvoice
+	text = {
+		trigger = { SHL = { has_country_flag = { flag = SHL_party_offer_pending value > 1 } } }
+		localization_key = SHL_party_bulk_invoice
+	}
+	text = {
+		trigger = {
+			SHL = {
+				has_country_flag = SHL_party_offer_pending
+				has_country_flag = { flag = SHL_party_offer_pending value < 2 }
+			}
+		}
+		localization_key = SHL_party_standard_invoice
+	}
+	text = { localization_key = SHL_party_invoice_closed }
+}
+
+defined_text = {
+	name = SHLGetCaravanPending
+	text = {
+		trigger = { SHL_caravan_awaiting_reply = yes }
+		localization_key = SHL_caravan_pending
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetCaravanPendingEmpty
+	text = {
+		trigger = {
+			any_of_scopes = {
+				array = SHL_caravan_partners
+				SHL_caravan_awaiting_reply = yes
+			}
+		}
+		localization_key = SHL_borders_blank
+	}
+	text = { localization_key = SHL_caravan_pending_empty }
+}
+
+defined_text = {
+	name = SHLGetCaravanContractsEmpty
+	text = {
+		trigger = { SHL_caravan_has_active_buyers = yes }
+		localization_key = SHL_borders_blank
+	}
+	text = {
+		trigger = { SHL_metal_negotiations_unlocked = no }
+		localization_key = SHL_caravan_contracts_locked
+	}
+	text = { localization_key = SHL_caravan_contracts_empty }
+}
+
+defined_text = {
+	name = SHLGetCaravanRow
+	text = {
+		trigger = { SHL_caravan_active_buyer = yes }
+		localization_key = "SHL_caravan_contract_row"
+	}
+	text = { localization_key = "" }
+}
+
+defined_text = {
+	name = SHLGetCaravanArrears
+	text = {
+		trigger = { check_variable = { var = SHL_metal_arrears value = 0 compare = greater_than } }
+		localization_key = SHL_caravan_missed_payment
+	}
+	text = { localization_key = SHL_caravan_payments_current }
+}
+
+defined_text = {
+	name = SHLGetCaravanTerm
+	text = {
+		trigger = { has_active_mission = SHL_metal_contract_year }
+		localization_key = SHL_caravan_year_left
+	}
+	text = {
+		trigger = { has_active_mission = SHL_metal_contract_two_years }
+		localization_key = SHL_caravan_two_years_left
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAlertAction
+	text = {
+		trigger = { SHL_has_furnace_alert = yes }
+		localization_key = SHL_next_alert_ready
+	}
+	text = { localization_key = SHL_next_alert_clear }
+}
+
+defined_text = {
+	name = SHLGetRoadJournal
+	text = {
+		trigger = { has_variable = SHL_road_leg }
+		localization_key = SHL_road_journal_active
+	}
+	text = {
+		trigger = { has_variable = SHL_road_cash }
+		localization_key = SHL_road_journal_returned
+	}
+	text = { localization_key = SHL_road_journal_idle }
+}
+
+defined_text = {
+	name = SHLGetRoadPlan
+	text = {
+		trigger = {
+			has_completed_focus = SHL_northern_road
+			has_completed_focus = SHL_sand_patrols
+		}
+		localization_key = SHL_road_plan_long_fast
+	}
+	text = {
+		trigger = {
+			has_completed_focus = SHL_northern_road
+		}
+		localization_key = SHL_road_plan_long
+	}
+	text = {
+		trigger = {
+			has_completed_focus = SHL_chancery_of_the_gate
+			has_completed_focus = SHL_sand_patrols
+		}
+		localization_key = SHL_road_plan_middle_fast
+	}
+	text = {
+		trigger = {
+			has_completed_focus = SHL_chancery_of_the_gate
+		}
+		localization_key = SHL_road_plan_middle
+	}
+	text = {
+		trigger = { has_completed_focus = SHL_sand_patrols }
+		localization_key = SHL_road_plan_local_fast
+	}
+	text = { localization_key = SHL_road_plan_local }
+}
+
+defined_text = {
+	name = SHLGetRoadItinerary
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_itinerary value = 3 compare = equals }
+		}
+		localization_key = SHL_road_name_long
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_itinerary value = 2 compare = equals }
+		}
+		localization_key = SHL_road_name_middle
+	}
+	text = { localization_key = SHL_road_name_local }
+}
+
+defined_text = {
+	name = SHLGetRoadDestination
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_leg value = 1 compare = equals }
+		}
+		localization_key = SHL_road_eta_sevir
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_leg value = 2 compare = equals }
+		}
+		localization_key = SHL_road_eta_barak
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_leg value = 3 compare = equals }
+		}
+		localization_key = SHL_road_eta_fada
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_leg value = 4 compare = equals }
+		}
+		localization_key = SHL_road_eta_irim
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_leg value = 5 compare = equals }
+		}
+		localization_key = SHL_road_eta_maren
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_leg value = 6 compare = equals }
+		}
+		localization_key = SHL_road_eta_loren
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_leg value = 7 compare = equals }
+		}
+		localization_key = SHL_road_eta_svetlogorsk
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_leg value = 8 compare = equals }
+		}
+		localization_key = SHL_road_eta_home
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadPending
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 280 compare = equals }
+			280 = { controller = { SHL_road_quote_current = yes } }
+		}
+		localization_key = SHL_road_pending_sevir
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 267 compare = equals }
+			267 = { controller = { SHL_road_quote_current = yes } }
+		}
+		localization_key = SHL_road_pending_barak
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 28 compare = equals }
+			28 = { controller = { SHL_road_quote_current = yes } }
+		}
+		localization_key = SHL_road_pending_fada
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 24 compare = equals }
+			24 = { controller = { SHL_road_quote_current = yes } }
+		}
+		localization_key = SHL_road_pending_irim
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 175 compare = equals }
+			175 = { controller = { SHL_road_quote_current = yes } }
+		}
+		localization_key = SHL_road_pending_maren
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 70 compare = equals }
+			70 = { controller = { SHL_road_quote_current = yes } }
+		}
+		localization_key = SHL_road_pending_loren
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 688 compare = equals }
+			688 = { controller = { SHL_road_quote_current = yes } }
+		}
+		localization_key = SHL_road_pending_svetlogorsk
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadBarter
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 280 compare = equals }
+		}
+		localization_key = SHL_road_barter_sevir
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 267 compare = equals }
+		}
+		localization_key = SHL_road_barter_barak
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 28 compare = equals }
+		}
+		localization_key = SHL_road_barter_fada
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 24 compare = equals }
+		}
+		localization_key = SHL_road_barter_irim
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 175 compare = equals }
+		}
+		localization_key = SHL_road_barter_maren
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 70 compare = equals }
+		}
+		localization_key = SHL_road_barter_loren
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_road_market_state value = 688 compare = equals }
+		}
+		localization_key = SHL_road_barter_svetlogorsk
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadBarterTable
+	text = {
+		trigger = {
+			has_completed_focus = SHL_northern_road
+		}
+		localization_key = SHL_road_table_long
+	}
+	text = {
+		trigger = {
+			has_completed_focus = SHL_chancery_of_the_gate
+		}
+		localization_key = SHL_road_table_middle
+	}
+	text = { localization_key = SHL_road_table_local }
+}
+
+defined_text = {
+	name = SHLGetRoadFairOrder
+	text = {
+		trigger = {
+			has_completed_focus = SHL_desert_caravanserai
+		}
+		localization_key = SHL_road_fair_order_note
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadHomeTerms
+	text = {
+		trigger = { has_completed_focus = SHL_chancery_of_the_gate }
+		localization_key = SHL_road_home_market_terms
+	}
+	text = { localization_key = SHL_road_home_market_locked }
+}
+
+defined_text = {
+	name = SHLGetRoadHomeReceipt
+	text = {
+		trigger = { has_variable = SHL_road_home_rifles }
+		localization_key = SHL_road_home_sold_rifles
+	}
+	text = {
+		trigger = { has_variable = SHL_road_home_kits }
+		localization_key = SHL_road_home_sold_kits
+	}
+	text = {
+		trigger = { has_variable = SHL_road_home_cash }
+		localization_key = SHL_road_home_no_bid
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadWine
+	text = {
+		trigger = {
+			has_variable = SHL_road_wine
+		}
+		localization_key = SHL_road_wine_manifest
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadLot
+	text = {
+		trigger = { check_variable = { var = SHL_road_rifles value = 2500 compare = greater_than_or_equals } }
+		localization_key = SHL_road_lot_rifles
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_road_kits value = 500 compare = greater_than_or_equals } }
+		localization_key = SHL_road_lot_kits
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetRoadInvitation
+	text = {
+		trigger = {
+			SHL_road_quote_current = yes
+			SHL = { has_variable = SHL_road_wine }
+		}
+		localization_key = SHL_road_wholesale_invitation
+	}
+	text = {
+		trigger = { SHL_road_quote_current = yes }
+		localization_key = SHL_road_invitation_open
+	}
+	text = { localization_key = SHL_road_invitation_closed }
+}
+
+defined_text = {
+	name = SHLGetRoadReturnReceipt
+	text = {
+		trigger = {
+			NOT = { has_variable = SHL_road_leg }
+			has_variable = SHL_road_cash
+		}
+		localization_key = SHL_road_return_receipt
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetMetalOfferTitle
+	text = {
+		trigger = {
+			FROM = {
+				exists = yes
+				NOT = { tag = SHL }
+			}
+		}
+		localization_key = SHL_metal_offer_target_title
+	}
+	text = { localization_key = SHL_metal_offer_unlock_title }
 }

@@ -73,9 +73,29 @@ is_diplomatic_action_valid_international_market_access_rights = { ADISCORD_diplo
 is_diplomatic_action_valid_send_volunteers = {
 	ADISCORD_diplomacy_not_dirty_zone_pair = yes
 	OR = {
-		FROM = { NOT = { tag = VAL } }
+		FROM = {
+			NOT = { tag = VAL }
+			NOT = { has_idea = SHL_party_volunteer_mandate }
+		}
+		AND = {
+			FROM = {
+				has_idea = SHL_party_volunteer_mandate
+				SHL_party_front_open = yes
+				has_war = no
+			}
+			OR = {
+				tag = SHL
+				tag = STP
+			}
+		}
 		AND = { FROM = { has_idea = VAL_northern_volunteer_mandate } OR = { tag = VAL VAL_northern_volunteer_host = yes } }
-		AND = { FROM = { has_idea = VAL_stelander_volunteer_mandate } VAL_stelander_volunteer_host = yes }
+		AND = {
+			FROM = { has_idea = VAL_stelander_volunteer_mandate }
+			OR = {
+				tag = VAL
+				VAL_stelander_volunteer_host = yes
+			}
+		}
 		AND = { FROM = { has_idea = VAL_resource_volunteer_mandate } OR = { tag = VAL VAL_resource_aid_recipient = yes } }
 	}
 }
