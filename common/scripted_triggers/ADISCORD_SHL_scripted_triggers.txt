@@ -85,6 +85,30 @@ SHL_can_toggle_auto_reserve = {
 	has_completed_focus = SHL_law_of_continuous_fire
 }
 
+SHL_has_reserve_priorities = {
+	OR = {
+		check_variable = { var = SHL_priority_1 value = 1 compare = equals }
+		check_variable = { var = SHL_priority_2 value = 1 compare = equals }
+		check_variable = { var = SHL_priority_3 value = 1 compare = equals }
+		check_variable = { var = SHL_priority_4 value = 1 compare = equals }
+		check_variable = { var = SHL_priority_5 value = 1 compare = equals }
+		check_variable = { var = SHL_priority_6 value = 1 compare = equals }
+		check_variable = { var = SHL_priority_7 value = 1 compare = equals }
+		check_variable = { var = SHL_priority_8 value = 1 compare = equals }
+		check_variable = { var = SHL_priority_9 value = 1 compare = equals }
+		check_variable = { var = SHL_priority_10 value = 1 compare = equals }
+	}
+}
+
+SHL_can_raise_reserve_floor = {
+	SHL_can_toggle_auto_reserve = yes
+}
+
+SHL_can_lower_reserve_floor = {
+	SHL_can_toggle_auto_reserve = yes
+	check_variable = { var = SHL_reserve_floor value = 1 compare = greater_than_or_equals }
+}
+
 SHL_can_distribute_reserve = {
 	SHL_country_operable = yes
 	check_variable = { var = SHL_regular_supply value = 1 compare = equals }

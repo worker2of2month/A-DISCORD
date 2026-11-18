@@ -455,6 +455,109 @@ defined_text = {
 }
 
 defined_text = {
+	name = SHLGetFurnacePriorityHelp
+	text = {
+		trigger = { SHL_country_operable = no }
+		localization_key = SHL_reserve_unavailable
+	}
+	text = {
+		trigger = { SHL_can_toggle_auto_reserve = yes }
+		localization_key = SHL_furnace_priority_help
+	}
+	text = { localization_key = SHL_furnace_priority_locked }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar1
+	text = {
+		trigger = { check_variable = { var = SHL_priority_1 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar2
+	text = {
+		trigger = { check_variable = { var = SHL_priority_2 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar3
+	text = {
+		trigger = { check_variable = { var = SHL_priority_3 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar4
+	text = {
+		trigger = { check_variable = { var = SHL_priority_4 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar5
+	text = {
+		trigger = { check_variable = { var = SHL_priority_5 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar6
+	text = {
+		trigger = { check_variable = { var = SHL_priority_6 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar7
+	text = {
+		trigger = { check_variable = { var = SHL_priority_7 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar8
+	text = {
+		trigger = { check_variable = { var = SHL_priority_8 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar9
+	text = {
+		trigger = { check_variable = { var = SHL_priority_9 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetPriorityStar10
+	text = {
+		trigger = { check_variable = { var = SHL_priority_10 value = 1 compare = equals } }
+		localization_key = SHL_furnace_priority_star
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
 	name = SHLGetAutoReserveStatus
 	text = {
 		trigger = { SHL_can_toggle_auto_reserve = no }
@@ -476,7 +579,7 @@ defined_text = {
 	text = {
 		trigger = {
 			check_variable = { var = SHL_auto_reserve value = 1 compare = equals }
-			check_variable = { var = SHL_bulk_reserve_total value = 0 compare = greater_than }
+			check_variable = { var = SHL_auto_reserve_total value = 0 compare = greater_than }
 		}
 		localization_key = SHL_auto_reserve_contribution
 	}
@@ -492,6 +595,119 @@ defined_text = {
 			SHL_reserve_has_packet = yes
 		}
 		localization_key = SHL_reserve_exchange_note
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReservePlan
+	text = {
+		trigger = {
+			SHL_can_distribute_reserve = yes
+			check_variable = { var = SHL_auto_reserve_total value = 0 compare = greater_than }
+		}
+		localization_key = SHL_auto_reserve_plan
+	}
+	text = {
+		trigger = {
+			SHL_can_distribute_reserve = yes
+			check_variable = { var = SHL_auto_reserve_allowance value = 1 compare = less_than }
+		}
+		localization_key = SHL_auto_reserve_all_protected
+	}
+	text = {
+		trigger = { SHL_can_distribute_reserve = yes }
+		localization_key = SHL_auto_reserve_hold_for_priority
+	}
+	text = { localization_key = SHL_auto_reserve_no_orders }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow1
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_1 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_1
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow2
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_2 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_2
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow3
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_3 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_3
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow4
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_4 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_4
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow5
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_5 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_5
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow6
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_6 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_6
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow7
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_7 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_7
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow8
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_8 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_8
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow9
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_9 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_9
+	}
+	text = { localization_key = SHL_borders_blank }
+}
+
+defined_text = {
+	name = SHLGetAutoReserveRow10
+	text = {
+		trigger = { check_variable = { var = SHL_auto_reserve_10 value = 0 compare = greater_than } }
+		localization_key = SHL_auto_reserve_row_10
 	}
 	text = { localization_key = SHL_borders_blank }
 }

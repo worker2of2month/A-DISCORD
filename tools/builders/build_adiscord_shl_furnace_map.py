@@ -170,7 +170,7 @@ def survey_symbols():
     brick = (183, 112, 70)
     iron = (159, 174, 171)
     symbols = {}
-    for name in ("ballot", "stopped", "occupied", "shortage", "wear"):
+    for name in ("ballot", "stopped", "occupied", "shortage", "wear", "priority"):
         icon = Image.new("RGBA", (18, 16))
         pen = ImageDraw.Draw(icon)
         if name == "ballot":
@@ -203,6 +203,11 @@ def survey_symbols():
             pen.line((12, 8, 12, 12), fill=edge)
             pen.line(((11, 1), (8, 6), (10, 8), (6, 14)), fill=edge, width=3)
             pen.line(((11, 1), (8, 6), (10, 8), (6, 14)), fill=light)
+        elif name == "priority":
+            pen.polygon(((9, 0), (11, 4), (15, 5), (12, 9), (13, 14),
+                         (9, 12), (4, 14), (5, 9), (2, 5), (7, 4)), fill=amber, outline=edge)
+            pen.line(((9, 2), (8, 6), (5, 6)), fill=light)
+            pen.line(((9, 10), (12, 12), (11, 9)), fill=brick)
         symbols[f"{name}_texticon"] = icon
     # Delivery block 4 reserves the heat for an order and has no warning badge.
     strip = Image.new("RGBA", (72, 16))
@@ -217,6 +222,9 @@ def map_widgets(anchors):
     for i, (cx, cy) in enumerate(anchors, 1):
         x, y = MAP_X + cx - SEAL[0] // 2, MAP_Y + cy - SEAL[1] // 2
         name = f"SHL_furnace_{i}"
+        # Darban shares a site with X, whose seal sits just above it.
+        priority_x, priority_y = (x + 37, y + 3) if i == 8 else (x + 8, y - 12)
+        packets_x = x + 37 if i in (5, 9, 10) else x - 24
         widgets.append(f'''		buttonType = {{
 			name = "{name}_button"
 			position = {{ x = {x} y = {y} }}
@@ -228,11 +236,23 @@ def map_widgets(anchors):
 		}}''')
         for layer, sprite, left, top in (("selected", "selected", x - 3, y - 3),
                                         ("wear", "wear_texticon", x - 7, y - 12),
-                                        ("interruption", "delivery_alerts", x + 24, y - 12)):
+                                        ("interruption", "delivery_alerts", x + 24, y - 12),
+                                        ("priority", "priority_texticon", priority_x, priority_y)):
             widgets.append(f'''		iconType = {{
 			name = "{name}_{layer}"
 			position = {{ x = {left} y = {top} }}
 			quadTextureSprite = "GFX_SHL_{sprite}"
+			alwaystransparent = yes
+		}}''')
+        widgets.append(f'''		instantTextBoxType = {{
+			name = "{name}_packets"
+			position = {{ x = {packets_x} y = {y + 3} }}
+			text = "SHL_map_packets_{i}"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
 			alwaystransparent = yes
 		}}''')
     return "\n".join(widgets)

@@ -114,6 +114,23 @@ guiTypes = {
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
+		iconType = {
+			name = "SHL_furnace_1_priority"
+			position = { x = 59 y = 227 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_1_packets"
+			position = { x = 27 y = 242 }
+			text = "SHL_map_packets_1"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
+			alwaystransparent = yes
+		}
 		buttonType = {
 			name = "SHL_furnace_2_button"
 			position = { x = 60 y = 194 }
@@ -139,6 +156,23 @@ guiTypes = {
 			name = "SHL_furnace_2_interruption"
 			position = { x = 84 y = 182 }
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_2_priority"
+			position = { x = 68 y = 182 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_2_packets"
+			position = { x = 36 y = 197 }
+			text = "SHL_map_packets_2"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -168,6 +202,23 @@ guiTypes = {
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
+		iconType = {
+			name = "SHL_furnace_3_priority"
+			position = { x = 95 y = 290 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_3_packets"
+			position = { x = 63 y = 305 }
+			text = "SHL_map_packets_3"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
+			alwaystransparent = yes
+		}
 		buttonType = {
 			name = "SHL_furnace_4_button"
 			position = { x = 129 y = 259 }
@@ -193,6 +244,23 @@ guiTypes = {
 			name = "SHL_furnace_4_interruption"
 			position = { x = 153 y = 247 }
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_4_priority"
+			position = { x = 137 y = 247 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_4_packets"
+			position = { x = 105 y = 262 }
+			text = "SHL_map_packets_4"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -222,6 +290,23 @@ guiTypes = {
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
+		iconType = {
+			name = "SHL_furnace_5_priority"
+			position = { x = 121 y = 209 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_5_packets"
+			position = { x = 150 y = 224 }
+			text = "SHL_map_packets_5"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
+			alwaystransparent = yes
+		}
 		buttonType = {
 			name = "SHL_furnace_6_button"
 			position = { x = 125 y = 116 }
@@ -247,6 +332,23 @@ guiTypes = {
 			name = "SHL_furnace_6_interruption"
 			position = { x = 149 y = 104 }
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_6_priority"
+			position = { x = 133 y = 104 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_6_packets"
+			position = { x = 101 y = 119 }
+			text = "SHL_map_packets_6"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -276,6 +378,23 @@ guiTypes = {
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
+		iconType = {
+			name = "SHL_furnace_7_priority"
+			position = { x = 168 y = 160 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_7_packets"
+			position = { x = 136 y = 175 }
+			text = "SHL_map_packets_7"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
+			alwaystransparent = yes
+		}
 		buttonType = {
 			name = "SHL_furnace_8_button"
 			position = { x = 114 y = 339 }
@@ -301,6 +420,23 @@ guiTypes = {
 			name = "SHL_furnace_8_interruption"
 			position = { x = 138 y = 327 }
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_8_priority"
+			position = { x = 151 y = 342 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_8_packets"
+			position = { x = 90 y = 342 }
+			text = "SHL_map_packets_8"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
 			alwaystransparent = yes
 		}
 		buttonType = {
@@ -330,6 +466,23 @@ guiTypes = {
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
 			alwaystransparent = yes
 		}
+		iconType = {
+			name = "SHL_furnace_9_priority"
+			position = { x = 189 y = 239 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_9_packets"
+			position = { x = 218 y = 254 }
+			text = "SHL_map_packets_9"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
+			alwaystransparent = yes
+		}
 		buttonType = {
 			name = "SHL_furnace_10_button"
 			position = { x = 135 y = 309 }
@@ -355,6 +508,23 @@ guiTypes = {
 			name = "SHL_furnace_10_interruption"
 			position = { x = 159 y = 297 }
 			quadTextureSprite = "GFX_SHL_delivery_alerts"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "SHL_furnace_10_priority"
+			position = { x = 143 y = 297 }
+			quadTextureSprite = "GFX_SHL_priority_texticon"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_10_packets"
+			position = { x = 172 y = 312 }
+			text = "SHL_map_packets_10"
+			font = "hoi_16mbs"
+			maxWidth = 20
+			maxHeight = 18
+			format = center
+			fixedsize = yes
 			alwaystransparent = yes
 		}
 		# END GENERATED FURNACE SEALS
@@ -436,11 +606,11 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "SHL_map_legend"
-			position = { x = 8 y = 375 }
+			position = { x = 8 y = 368 }
 			text = "SHL_map_legend"
 			font = "hoi_16mbs"
 			maxWidth = 297
-			maxHeight = 22
+			maxHeight = 32
 			fixedsize = yes
 			pdx_tooltip = "SHL_map_legend_tt"
 		}
@@ -662,10 +832,50 @@ guiTypes = {
 			position = { x = 10 y = 639 }
 			text = "SHL_reserve_destination"
 			font = "hoi_16mbs"
-			maxWidth = 291
+			maxWidth = 144
 			maxHeight = 38
 			fixedsize = yes
 			pdx_tooltip = "SHL_send_reserve_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_reserve_floor_label"
+			position = { x = 155 y = 637 }
+			text = "SHL_reserve_floor_label"
+			font = "hoi_16mbs"
+			maxWidth = 147
+			maxHeight = 19
+			format = center
+			fixedsize = yes
+			pdx_tooltip = "SHL_reserve_floor_help"
+		}
+		buttonType = {
+			name = "SHL_lower_reserve_floor_button"
+			position = { x = 155 y = 658 }
+			quadTextureSprite = "GFX_SHL_seal"
+			buttonText = "-"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_lower_reserve_floor_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_reserve_floor_value"
+			position = { x = 190 y = 659 }
+			text = "SHL_reserve_floor_value"
+			font = "hoi_16mbs"
+			maxWidth = 77
+			maxHeight = 20
+			format = center
+			fixedsize = yes
+			pdx_tooltip = "SHL_reserve_floor_help"
+		}
+		buttonType = {
+			name = "SHL_raise_reserve_floor_button"
+			position = { x = 268 y = 658 }
+			quadTextureSprite = "GFX_SHL_seal"
+			buttonText = "+"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "SHL_raise_reserve_floor_tt"
 		}
 		buttonType = {
 			name = "SHL_auto_reserve_button"

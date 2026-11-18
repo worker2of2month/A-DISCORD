@@ -8,6 +8,7 @@ import json
 import re
 from PIL import Image
 
+from tools.assets.source.country_vehicles.tank_designs import TANK_EQUIPMENT as TANK_CARD_EQUIPMENT
 from tools.lib.localisation import technology_localisation_path
 from tools.lib.paths import repository_root
 from tools.lib.adiscord_remainder_countries import COUNTRIES as REMAINDER_COUNTRIES
@@ -11304,21 +11305,6 @@ APC_CARD_EQUIPMENT = (
 
 TANK_CARDS_BEGIN = "\t# BEGIN ADISCORD country tank cards\n"
 TANK_CARDS_END = "\t# END ADISCORD country tank cards\n"
-TANK_CARD_EQUIPMENT = {
-    "light": (
-        "ADISCORD_recon_platform_archetype", "ADISCORD_light_combat_platform_2163",
-        "ADISCORD_recon_drone_carrier_2170",
-    ),
-    "medium": (
-        "ADISCORD_combat_platform_archetype", "ADISCORD_combat_platform_2150",
-        "ADISCORD_combat_platform_2170", "ADISCORD_combat_platform_2183",
-        "ADISCORD_combat_platform_2200",
-    ),
-    "heavy": (
-        "ADISCORD_heavy_platform_archetype", "ADISCORD_heavy_combat_platform_2158",
-        "ADISCORD_heavy_combat_platform_2183", "ADISCORD_heavy_combat_platform_2200",
-    ),
-}
 
 
 TANK_CARD_UNLOCKS = {

@@ -4157,21 +4157,161 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
         })
         self.m.run("SHL_refresh_furnaces")
 
-    def bulk_plan(self):
-        return {n: self.c[f"SHL_bulk_reserve_{n}"] for n in range(1, 11) if self.c.get(f"SHL_bulk_reserve_{n}")}
+    def reserve_plan(self, prefix="SHL_bulk_reserve"):
+        return {n: self.c[f"{prefix}_{n}"] for n in range(1, 11) if self.c.get(f"{prefix}_{n}")}
 
     def bulk_stocks(self):
         stocks = [self.m.variables[str(state)]["SHL_furnace_stock"] for state in range(287, 296)]
         return stocks + [self.c["SHL_tenth_stock"]]
 
-    def test_bulk_hover_lists_only_planned_recipients_and_their_packet_counts_in_both_languages(self):
+    def toggle_priority(self, number):
+        action = block(self.buttons, f"SHL_furnace_{number}_button_right_click")
+        self.assertTrue(action, number)
+        self.m.execute(action, "SHL")
+
+    def test_each_map_marker_toggles_its_own_priority_without_moving_stocks_or_selection(self):
+        self.prepare_bulk_orders(range(1, 11), reserve=2, cash=0)
+        self.m.focuses.remove("SHL_law_of_continuous_fire")
+        self.assertFalse(self.m.matches(block(self.conditions, "SHL_furnace_8_button_right_click_enabled"), "SHL"))
+        self.toggle_priority(8)
+        self.assertEqual(self.c.get("SHL_priority_8", 0), 0)
+        self.m.focuses.add("SHL_law_of_continuous_fire")
+        self.c["SHL_project_stage"] = 3
+        self.assertFalse(self.m.matches(block(self.conditions, "SHL_furnace_10_button_right_click_enabled"), "SHL"))
+        self.toggle_priority(10)
+        self.assertEqual(self.c.get("SHL_priority_10", 0), 0)
+        self.c["SHL_project_stage"] = 4
+        self.m.run("SHL_disable_planned_supply")
+        for number in range(1, 11):
+            with self.subTest(number=number):
+                visible = block(self.conditions, f"SHL_furnace_{number}_priority_visible")
+                self.assertTrue(visible)
+                self.assertTrue(self.m.matches(block(self.conditions, f"SHL_furnace_{number}_button_right_click_enabled"),
+                                               "SHL"))
+                self.toggle_priority(number)
+                self.assertTrue(self.m.matches(visible, "SHL"))
+                marked = [n for n in range(1, 11) if self.c.get(f"SHL_priority_{n}")]
+                self.assertEqual(marked, [number])
+                self.toggle_priority(number)
+                self.assertFalse(self.m.matches(visible, "SHL"))
+        self.assertEqual((self.c["SHL_reserve_stock"], self.c["ADISCORD_economy_treasury"]), (2, 0))
+        self.assertEqual((self.c["SHL_selected_furnace"], self.bulk_stocks()), (8, [0] * 10))
+
+    def test_priority_reassigns_only_automatic_packets_in_tie_order_and_preserves_the_floor(self):
+        self.prepare_bulk_orders([1, 8, 10], reserve=2, cash=0)
+        self.click("SHL_raise_reserve_floor_button")
+        self.click("SHL_auto_reserve_button")
+        expected_manual = {1: 1, 8: 1}
+        for number, winner in ((10, 10), (8, 8), (8, 10), (10, 1), (10, 10)):
+            self.toggle_priority(number)
+            self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {winner: 1})
+            self.assertEqual(self.c["SHL_auto_reserve_total"], 1)
+            self.assertEqual(self.reserve_plan(), expected_manual)
+            self.assertEqual(self.c["SHL_preview_unfunded_packets"], 2)
+        manual = deepcopy(self.m)
+        manual.execute(block(self.buttons, "SHL_distribute_reserve_button_click"), "SHL")
+        for state in ("287", "294"):
+            self.assertEqual(manual.variables[state]["SHL_furnace_stock"], 1)
+        self.assertEqual(manual.variables["SHL"]["SHL_tenth_stock"], 0)
+        self.assertEqual(manual.variables["SHL"]["SHL_reserve_stock"], 0)
+        self.m.run("SHL_produce_period")
+        for state in ("287", "294"):
+            self.assertEqual(self.m.variables[state]["SHL_furnace_shortages"], 1)
+        self.assertEqual((self.c["SHL_tenth_shortages"], self.c["SHL_reserve_stock"]), (0, 1))
+        self.assertEqual(self.c["SHL_priority_10"], 1)
+
+    def test_cold_inaccessible_stocked_and_paid_markers_release_the_priority_to_an_unmarked_furnace(self):
+        self.prepare_bulk_orders([1, 3, 4, 8, 10], reserve=1, cash=45)
+        for number in (1, 2, 3, 8, 10):
+            self.toggle_priority(number)
+        self.m.control["289"] = "NAM"
+        self.m.variables["294"]["SHL_furnace_stock"] = 1
+        self.c["SHL_project_stage"] = 3
+        self.m.run("SHL_refresh_furnaces")
+        self.click("SHL_auto_reserve_button")
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {4: 1})
+        self.assertEqual(self.c["SHL_preview_autobuy_cost"], 45)
+        self.m.run("SHL_produce_period")
+        self.assertEqual((self.c["SHL_reserve_stock"], self.c["ADISCORD_economy_treasury"]), (0, 0))
+        for state in ("287", "290"):
+            self.assertEqual(self.m.variables[state]["SHL_furnace_shortages"], 0)
+        self.assertEqual((self.m.variables["289"]["SHL_furnace_stock"], self.c["SHL_tenth_stock"]), (0, 0))
+
+    def test_early_export_funds_a_marked_double_shift_and_lost_income_reassigns_at_the_pour(self):
+        self.prepare_bulk_orders([1, 8, 10], reserve=2, cash=0, shift=1)
+        self.m.variables["294"].update({"SHL_furnace_stock": 2, "SHL_furnace_recipient": 0})
+        self.m.run("SHL_refresh_furnaces")
+        self.click("SHL_auto_reserve_button")
+        self.toggle_priority(10)
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {1: 2})
+        self.assertEqual((self.c["SHL_preview_autobuy_cost"], self.c["SHL_preview_unfunded_packets"]), (90, 0))
+        self.m.variables["294"]["SHL_furnace_recipient"] = 1
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.c["SHL_reserve_stock"], 0)
+        self.assertEqual(self.c.get("ADISCORD_economy_current_month_action_costs", 0), 0)
+        self.assertEqual((self.m.variables["287"]["SHL_furnace_shortages"], self.c["SHL_tenth_shortages"]), (1, 0))
+
+    def test_priority_does_not_advance_export_income_before_a_furnace_pours(self):
+        self.prepare_bulk_orders([1, 10], reserve=1, cash=0)
+        self.c["SHL_tenth_recipient"] = 0
+        self.click("SHL_auto_reserve_button")
+        self.toggle_priority(10)
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {10: 1})
+        self.assertEqual((self.c["SHL_preview_cycle_net"], self.c["SHL_preview_unfunded_packets"]), (60, 1))
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_shortages"], 1)
+        self.assertEqual((self.c["SHL_tenth_shortages"], self.c["ADISCORD_economy_treasury"]), (0, 60))
+
+    def test_priority_double_shift_uses_one_surplus_packet_with_or_without_one_affordable_purchase(self):
+        for cash, bought, end_stock in ((45, 1, 0), (0, 0, 1)):
+            with self.subTest(cash=cash):
+                self.setUp()
+                self.prepare_bulk_orders([1, 10], reserve=2.75, cash=cash, shift=1)
+                self.click("SHL_raise_reserve_floor_button")
+                self.click("SHL_auto_reserve_button")
+                self.toggle_priority(10)
+                self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {10: 1})
+                self.assertEqual(self.c["SHL_preview_autobuy_packets"], bought)
+                self.m.run("SHL_produce_period")
+                self.assertEqual(self.c["SHL_reserve_stock"], 1.75)
+                self.assertEqual(self.c.get("ADISCORD_economy_current_month_action_costs", 0), 45 * bought)
+                self.assertEqual((self.c["SHL_tenth_stock"], self.c["SHL_tenth_shortages"]), (end_stock, 1 - bought))
+
+    def test_priority_keeps_a_paid_order_when_a_nonpriority_partial_delivery_would_take_its_cash(self):
+        self.prepare_bulk_orders([1, 10], reserve=1, cash=45, shift=1)
+        self.c["SHL_tenth_stock"] = 1
+        self.click("SHL_auto_reserve_button")
+        self.toggle_priority(10)
+        self.assertEqual(self.reserve_plan(), {1: 1})
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {})
+        self.assertEqual((self.c["SHL_preview_autobuy_cost"], self.c["SHL_preview_unfunded_packets"]), (45, 2))
+        self.m.run("SHL_produce_period")
+        self.assertEqual((self.m.variables["287"]["SHL_furnace_shortages"], self.c["SHL_tenth_shortages"]), (1, 0))
+        self.assertEqual((self.c["SHL_reserve_stock"], self.c["ADISCORD_economy_treasury"]), (1, 0))
+
+    def test_priority_keeps_its_packet_over_an_earlier_unfunded_exporter(self):
+        self.prepare_bulk_orders([1, 10], reserve=1, cash=0)
+        self.m.variables["287"]["SHL_furnace_recipient"] = 0
+        self.click("SHL_auto_reserve_button")
+        self.toggle_priority(10)
+        self.assertEqual(self.reserve_plan(), {1: 1})
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {10: 1})
+        self.assertEqual((self.c["SHL_preview_cycle_net"], self.c["SHL_preview_unfunded_packets"]), (0, 1))
+        self.m.run("SHL_produce_period")
+        self.assertEqual((self.m.variables["287"]["SHL_furnace_shortages"], self.c["SHL_tenth_shortages"]), (1, 0))
+        self.assertEqual((self.c["SHL_reserve_stock"], self.c["ADISCORD_economy_treasury"]), (0, 0))
+
+    def test_reserve_tooltips_list_their_own_recipients_and_counts_in_both_languages(self):
         gui = parse_clausewitz((ROOT / "interface/ADISCORD_SHL.gui").read_text(encoding="utf-8"))
         panel = block(block(gui, "guiTypes"), "containerWindowType")
-        button = next(row.value for row in panel if row.key == "buttonType"
-                      and scalar(row.value, "name") == "SHL_distribute_reserve_button")
-        key = scalar(button, "pdx_tooltip").strip('"')
+        tooltips = {scalar(row.value, "name").strip('"'): scalar(row.value, "pdx_tooltip").strip('"')
+                    for row in panel if row.key == "buttonType"}
         source = ROOT / "common/scripted_localisation/ADISCORD_SHL_scripted_loc.txt"
         selectors = {scalar(entry.value, "name"): entry.value for entry in parse_clausewitz(source.read_text(encoding="utf-8"))}
+        self.prepare_bulk_orders(range(1, 11), reserve=12, cash=0, shift=1)
+        self.c.update({"SHL_tenth_stock": 1, "SHL_reserve_floor": 2, "SHL_auto_reserve": 1})
+        for state in range(287, 296):
+            self.m.variables[str(state)]["SHL_furnace_stock"] = int(state != 294)
 
         for lang in ("english", "russian"):
             source = ROOT / f"localisation/{lang}/ADISCORD_SHL_l_{lang}.yml"
@@ -4186,37 +4326,46 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
                     return expand(scalar(result.value, "localization_key").strip('"'))
                 return re.sub(r"\$(\w+)\$|\[(SHLGet\w+)\]", resolve, strings[name])
 
-            self.prepare_bulk_orders(range(1, 11), reserve=12, cash=0, shift=1)
-            for state in range(287, 296):
-                self.m.variables[str(state)]["SHL_furnace_stock"] = int(state != 294)
-            self.c["SHL_tenth_stock"] = 1
-            for reserve in (12, 2):
-                with self.subTest(language=lang, reserve=reserve):
-                    self.c["SHL_reserve_stock"] = reserve
-                    self.m.run("SHL_refresh_furnaces")
-                    plan = self.bulk_plan()
-                    expected = {n: 1 + int(n == 8) for n in range(1, 11)} if reserve == 12 else {1: 1, 2: 1}
-                    self.assertEqual(plan, expected)
-                    tooltip = re.sub(r"§.", "", expand(key))
-                    lines = [" ".join(line.split()) for line in tooltip.split(r"\n")]
-                    shown = []
-                    for n in range(1, 11):
-                        label = " ".join(strings[f"SHL_furnace_{n}_label"].split())
-                        rows = [i for i, line in enumerate(lines) if label in line]
-                        if n in plan:
-                            self.assertEqual(len(rows), 1, label)
-                            self.assertIn(f"[?SHL_bulk_reserve_{n}|0] £SHL_packet_texticon", lines[rows[0]])
-                            shown.append(rows[0])
-                        else:
-                            self.assertEqual(rows, [], label)
-                    self.assertEqual(shown, sorted(shown))
+            for reserve in (13, 12, 2):
+                self.c["SHL_reserve_stock"] = reserve
+                self.m.run("SHL_refresh_furnaces")
+                manual = {n: 1 + int(n == 8) for n in range(1, 11)} if reserve >= 12 else {1: 1, 2: 1}
+                automatic = {n: manual[n] for n in range(1, 10)} if reserve == 12 else {}
+                if reserve == 13:
+                    automatic = manual
+                    for n in automatic:
+                        map_tip = expand(tooltips[f"SHL_furnace_{n}_button"])
+                        self.assertIn(f"[?SHL_auto_reserve_{n}|0]", map_tip, (lang, n))
+                for n in range(1, 11):
+                    visible = block(self.conditions, f"SHL_furnace_{n}_packets_visible")
+                    self.assertTrue(visible)
+                    self.assertEqual(self.m.matches(visible, "SHL"), n in automatic)
+                for button, prefix, expected in (
+                    ("SHL_distribute_reserve_button", "SHL_bulk_reserve", manual),
+                    ("SHL_auto_reserve_button", "SHL_auto_reserve", automatic),
+                ):
+                    with self.subTest(language=lang, reserve=reserve, button=button):
+                        self.assertEqual(self.reserve_plan(prefix), expected)
+                        tooltip = re.sub(r"§.", "", expand(tooltips[button]))
+                        lines = [" ".join(line.split()) for line in tooltip.split(r"\n")]
+                        shown = []
+                        for n in range(1, 11):
+                            label = " ".join(strings[f"SHL_furnace_{n}_label"].split())
+                            rows = [i for i, line in enumerate(lines) if label in line]
+                            if n in expected:
+                                self.assertEqual(len(rows), 1, label)
+                                self.assertIn(f"[?{prefix}_{n}|0] £SHL_packet_texticon", lines[rows[0]])
+                                shown.append(rows[0])
+                            else:
+                                self.assertEqual(rows, [], label)
+                        self.assertEqual(shown, sorted(shown))
 
     def test_bulk_preview_matches_every_store_and_export_finances_the_next_order(self):
         self.prepare_bulk_orders([1, 2, 3, 8, 10], reserve=4.75, cash=0)
         self.m.variables["287"]["SHL_furnace_recipient"] = 0
         for _ in range(2):
             self.m.run("SHL_refresh_furnaces")
-            self.assertEqual(self.bulk_plan(), {1: 1, 3: 1, 8: 1, 10: 1})
+            self.assertEqual(self.reserve_plan(), {1: 1, 3: 1, 8: 1, 10: 1})
             self.assertEqual(self.c["SHL_bulk_reserve_total"], 4)
             self.assertEqual(self.c["SHL_preview_unfunded_packets"], 5)
             self.assertEqual(self.bulk_stocks(), [0] * 10)
@@ -4224,12 +4373,12 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
 
         button = "SHL_distribute_reserve_button"
         self.assertTrue(self.enabled(button))
-        expected = self.bulk_plan()
+        expected = self.reserve_plan()
         selection = self.c["SHL_selected_furnace"]
         self.click(button)
         self.assertEqual(self.bulk_stocks(), [expected.get(n, 0) for n in range(1, 11)])
         self.assertEqual((self.c["SHL_reserve_stock"], self.c["SHL_selected_furnace"]), (0.75, selection))
-        self.assertEqual(self.bulk_plan(), {})
+        self.assertEqual(self.reserve_plan(), {})
         self.assertFalse(self.enabled(button))
         self.click(button)
         cash = "ADISCORD_economy_treasury"
@@ -4245,7 +4394,7 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
             with self.subTest(cash=cash, reserve=reserve):
                 self.prepare_bulk_orders([1], reserve=reserve, cash=cash, shift=1)
                 self.assertEqual(self.c["SHL_preview_unfunded_packets"], 2)
-                self.assertEqual(self.bulk_plan(), {1: 1})
+                self.assertEqual(self.reserve_plan(), {1: 1})
                 self.assertEqual(self.c["SHL_bulk_reserve_total"], 1)
                 self.assertTrue(self.enabled(button))
                 self.click(button)
@@ -4266,7 +4415,7 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
             with self.subTest(changed=changed):
                 self.setUp()
                 self.prepare_bulk_orders([1, 8, 10], reserve=3, cash=0)
-                self.assertEqual(self.bulk_plan(), {1: 1, 8: 1, 10: 1})
+                self.assertEqual(self.reserve_plan(), {1: 1, 8: 1, 10: 1})
                 self.assertTrue(self.enabled(button))
                 if changed == "treasury":
                     self.c["ADISCORD_economy_treasury"] = 45
@@ -4305,7 +4454,7 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
         self.assertEqual(self.c["SHL_reserve_stock"], 2)
         self.assertEqual(self.m.variables["287"]["SHL_furnace_shortages"], 1)
         self.m.run("SHL_enable_planned_supply")
-        self.assertEqual(self.bulk_plan(), {1: 1})
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {1: 1})
         self.assertEqual(self.c["SHL_preview_unfunded_packets"], 0)
         self.assertEqual(self.bulk_stocks(), [0] * 10)
         self.click(toggle)
@@ -4327,8 +4476,8 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
                 self.click(toggle)
                 for _ in range(2):
                     self.m.run("SHL_refresh_furnaces")
-                    self.assertEqual(self.bulk_plan(), planned)
-                    self.assertEqual(self.c["SHL_bulk_reserve_total"], sum(planned.values()))
+                    self.assertEqual(self.reserve_plan("SHL_auto_reserve"), planned)
+                    self.assertEqual(self.c["SHL_auto_reserve_total"], sum(planned.values()))
                     self.assertEqual(self.c["SHL_preview_unfunded_packets"], unfunded)
                     self.assertEqual(self.c["SHL_preview_autobuy_packets"], buys)
                     self.assertEqual(self.c["SHL_preview_cycle_net"], -45 * buys)
@@ -4347,7 +4496,7 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
         self.m.variables["287"].update({"SHL_furnace_stock": 1, "SHL_furnace_recipient": 0})
         self.c.update({"SHL_export_mode": 1, "SHL_exchange_price": 75})
         self.click("SHL_auto_reserve_button")
-        self.assertEqual(self.bulk_plan(), {})
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {})
         self.assertEqual(self.c["SHL_preview_autobuy_cost"], 90)
         self.assertEqual(self.c["SHL_reserve_stock"], 1)
         self.m.run("SHL_produce_period")
@@ -4366,7 +4515,7 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
         self.click(manual)
         self.assertEqual((self.m.variables["294"]["SHL_furnace_stock"], self.c["SHL_tenth_stock"]), (1, 1))
         self.assertEqual(self.c["SHL_reserve_stock"], 3)
-        self.assertEqual(self.bulk_plan(), {})
+        self.assertEqual(self.reserve_plan(), {})
         for expected_cycle, remaining, due in ((1, 3, True), (1, 3, False), (2, 1, True)):
             if due:
                 self.m.flag_days["SHL"]["SHL_cycle_pending"] = 28
@@ -4377,6 +4526,118 @@ class FurnaceSupplyButtonTests(unittest.TestCase):
             self.assertEqual(self.m.variables["294"]["SHL_furnace_shortages"], 0)
             self.assertEqual(self.c["SHL_tenth_shortages"], 0)
             self.assertEqual(self.bulk_stocks(), [0] * 10)
+
+    def test_floor_buttons_work_with_an_empty_warehouse_and_stop_at_zero(self):
+        up = "SHL_raise_reserve_floor_button"
+        down = "SHL_lower_reserve_floor_button"
+        self.m.flags["SHL"].remove("SHL_furnaces_initialized")
+        self.m.run("SHL_initialize_furnaces")
+        self.assertEqual(self.c["SHL_reserve_floor"], 0)
+        self.assertFalse(self.enabled(up))
+        self.click(up)
+        self.assertEqual(self.c["SHL_reserve_floor"], 0)
+        self.prepare_bulk_orders([8], reserve=0, cash=0)
+        for amount in range(1, 14):
+            self.assertTrue(self.enabled(up))
+            self.click(up)
+            self.assertEqual(self.c["SHL_reserve_floor"], amount)
+        for amount in reversed(range(13)):
+            self.assertTrue(self.enabled(down))
+            self.click(down)
+            self.assertEqual(self.c["SHL_reserve_floor"], amount)
+        self.assertFalse(self.enabled(down))
+        self.click(down)
+        self.assertEqual((self.c["SHL_reserve_floor"], self.c["SHL_reserve_stock"]), (0, 0))
+
+    def test_floor_requotes_double_shift_purchases_and_shortages_immediately(self):
+        for stock, auto, manual, bought, unfunded in (
+            (2, {}, {8: 1, 10: 1}, 0, 4),
+            (2.999, {}, {8: 1, 10: 1}, 0, 4),
+            (3, {8: 1}, {8: 1, 10: 2}, 1, 2),
+            (4.75, {8: 1, 10: 1}, {8: 1, 10: 2}, 1, 1),
+        ):
+            with self.subTest(stock=stock):
+                self.setUp()
+                self.prepare_bulk_orders([8, 10], reserve=stock, cash=45, shift=1)
+                self.click("SHL_auto_reserve_button")
+                self.click("SHL_raise_reserve_floor_button")
+                self.click("SHL_raise_reserve_floor_button")
+                self.assertEqual(self.reserve_plan("SHL_auto_reserve"), auto)
+                self.assertEqual(self.reserve_plan(), manual)
+                self.assertEqual(self.c["SHL_auto_reserve_total"], sum(auto.values()))
+                self.assertEqual(self.c["SHL_bulk_reserve_total"], sum(manual.values()))
+                self.assertEqual(self.c["SHL_preview_autobuy_packets"], bought)
+                self.assertEqual(self.c["SHL_preview_unfunded_packets"], unfunded)
+                self.assertEqual(self.c["SHL_preview_cycle_net"], -45 * bought)
+                self.assertEqual((self.c["SHL_reserve_stock"], self.c["ADISCORD_economy_treasury"]), (stock, 45))
+                self.m.run("SHL_produce_period")
+                self.assertAlmostEqual(self.c["SHL_reserve_stock"], stock - sum(auto.values()))
+                self.assertEqual(self.c["SHL_reserve_floor"], 2)
+                self.assertEqual(self.c["ADISCORD_economy_treasury"], 45 - 45 * bought)
+                self.assertEqual(self.m.variables["294"]["SHL_furnace_shortages"], int(not bought))
+                self.assertEqual(self.c["SHL_tenth_shortages"], 1)
+                self.assertEqual(self.c["SHL_tenth_stock"], auto.get(10, 0))
+
+    def test_protected_packets_can_be_sent_by_both_manual_buttons(self):
+        self.prepare_bulk_orders([8, 10], reserve=2, cash=0)
+        self.click("SHL_raise_reserve_floor_button")
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {8: 1})
+        self.assertEqual(self.c["SHL_preview_unfunded_packets"], 2)
+        self.click("SHL_raise_reserve_floor_button")
+        self.click("SHL_auto_reserve_button")
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {})
+        self.assertEqual(self.reserve_plan(), {8: 1, 10: 1})
+        self.assertTrue(self.enabled("SHL_send_reserve_button"))
+        self.click("SHL_send_reserve_button")
+        self.assertEqual(self.reserve_plan(), {10: 1})
+        self.assertTrue(self.enabled("SHL_distribute_reserve_button"))
+        self.click("SHL_distribute_reserve_button")
+        self.assertEqual((self.m.variables["294"]["SHL_furnace_stock"], self.c["SHL_tenth_stock"]), (1, 1))
+        self.assertEqual((self.c["SHL_reserve_floor"], self.c["SHL_reserve_stock"]), (2, 0))
+        self.assertFalse(self.enabled("SHL_distribute_reserve_button"))
+        self.m.run("SHL_produce_period")
+        self.assertEqual((self.m.variables["294"]["SHL_furnace_shortages"], self.c["SHL_tenth_shortages"]), (0, 0))
+        self.assertEqual(self.c["SHL_reserve_stock"], 0)
+
+    def test_changing_the_floor_requotes_receipts_that_finance_later_furnaces(self):
+        self.prepare_bulk_orders([1, 2], reserve=2, cash=0)
+        self.m.variables["287"]["SHL_furnace_recipient"] = 0
+        self.click("SHL_auto_reserve_button")
+        self.click("SHL_raise_reserve_floor_button")
+        self.click("SHL_raise_reserve_floor_button")
+        self.assertEqual(self.reserve_plan(), {1: 1})
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {})
+        self.assertEqual((self.c["SHL_preview_cycle_net"], self.c["SHL_preview_unfunded_packets"]), (0, 2))
+        self.click("SHL_lower_reserve_floor_button")
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {1: 1})
+        self.assertEqual(self.c["SHL_preview_autobuy_cost"], 45)
+        self.assertEqual((self.c["SHL_preview_cycle_net"], self.c["SHL_preview_unfunded_packets"]), (15, 0))
+        self.m.run("SHL_produce_period")
+        self.assertEqual((self.c["SHL_reserve_stock"], self.c["ADISCORD_economy_treasury"]), (1, 15))
+        self.assertEqual(self.m.variables["288"]["SHL_furnace_shortages"], 0)
+
+    def test_refilling_between_cycles_automatically_supplies_only_the_new_surplus(self):
+        self.prepare_bulk_orders([8, 10], reserve=3, cash=0)
+        self.click("SHL_raise_reserve_floor_button")
+        self.click("SHL_raise_reserve_floor_button")
+        self.click("SHL_auto_reserve_button")
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {8: 1})
+        self.m.flag_days["SHL"]["SHL_cycle_pending"] = 28
+        self.m.run("SHL_run_cycle")
+        self.assertEqual((self.c["SHL_reserve_stock"], self.c["SHL_tenth_shortages"]), (2, 1))
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {})
+        self.m.run("SHL_refresh_reserve_price")
+        self.c["ADISCORD_economy_treasury"] = self.c["SHL_reserve_price"]
+        self.m.run("SHL_purchase_reserve")
+        self.assertEqual((self.c["SHL_reserve_stock"], self.c["ADISCORD_economy_treasury"]), (4, 0))
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {8: 1, 10: 1})
+        self.m.flag_days["SHL"]["SHL_cycle_pending"] = 28
+        self.m.run("SHL_run_cycle")
+        self.assertEqual((self.c["SHL_reserve_floor"], self.c["SHL_reserve_stock"]), (2, 2))
+        self.assertEqual((self.m.variables["294"]["SHL_furnace_shortages"], self.c["SHL_tenth_shortages"]), (0, 0))
+        self.click("SHL_lower_reserve_floor_button")
+        self.assertEqual(self.reserve_plan("SHL_auto_reserve"), {8: 1})
+        self.assertEqual(self.c["SHL_reserve_stock"], 2)
 
     def test_navigation_wraps_only_unpaid_orders_and_skips_a_resupplied_furnace(self):
         cursor = "SHL_next_unfunded_button"

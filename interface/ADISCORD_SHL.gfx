@@ -76,6 +76,12 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_SHL_priority_texticon"
+		texturefile = "gfx/interface/SHL_conclave/priority_texticon.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_SHL_delivery_alerts"
 		texturefile = "gfx/interface/SHL_conclave/delivery_alerts.png"
 		noOfFrames = 4

@@ -222,6 +222,57 @@ class CountryVehicleTests(unittest.TestCase):
         spec.loader.exec_module(package)
         self.assertEqual(package.package(apply=False), [])
 
+    def test_playable_tank_classes_resolve_to_distinct_models_and_cards(self):
+        from PIL import Image
+        from tools.assets.source.country_vehicles import package_vehicles as registry
+        from tools.assets.source.country_vehicles.tank_designs import CLASSES, DESIGNS, TANK_EQUIPMENT, model_name
+
+        countries = set(json.loads((ROOT / "tools/data/campaign_selection.json").read_bytes()))
+        countries.update(("STS", "SRP", "NOD"))
+        self.assertEqual(set(DESIGNS), countries)
+        cards = ROOT / "gfx/interface/technologies/armor"
+        self.assertEqual({p.name for p in cards.iterdir() if p.is_dir()}, countries | {"default"})
+        entities = (ROOT / "gfx/entities/zz_ADISCORD_country_vehicles.asset").read_text()
+        mesh_registry = (ROOT / "gfx/entities/ADISCORD_country_vehicles.gfx").read_text()
+        pools = parse_clausewitz((ROOT / "gfx/interface/equipmentdesigner/graphic_db/ADISCORD_country_tanks.txt").read_text())
+        self.assertEqual({country.key for country in pools}, countries | {"default"})
+        sprites = (ROOT / "interface/ADISCORD_technologies.gfx").read_text()
+        card_hashes, mesh_hashes = set(), set()
+        for country in pools:
+            tag = country.key
+            for kind in CLASSES:
+                if tag == "default":
+                    parent = f"{kind}_armor_entity"
+                else:
+                    name = model_name(tag, kind)
+                    parent = f"ADISCORD_{name}_entity"
+                    binary = (DEST / (name + ".mesh")).read_bytes()
+                    mesh_hashes.add(hashlib.sha256(binary).digest())
+                    if name == f"{tag}_tank":
+                        paint = f"{tag}_medium_armor_diffuse.dds"
+                        self.assertIn(f'texture_diffuse = "{paint}"', mesh_registry)
+                    else:
+                        paint = f"{tag}_armor_diffuse.dds"
+                        self.assertIn(paint.encode() + b"\0", binary)
+                    self.assertTrue((DEST / paint).is_file())
+                for equipment in TANK_EQUIPMENT[kind]:
+                    pool = next(row for row in country.value if row.key == equipment).value[0].value
+                    models = next(row.value for row in pool if row.key == "models")
+                    self.assertEqual([model.value for model in models], [parent])
+                    icons = next(row.value for row in pool if row.key == "icons")
+                    self.assertEqual(len(icons), 1)
+                    self.assertIn(f'name = "{icons[0].value}"', sprites)
+                    if tag != "default":
+                        self.assertIn(registry.alias(parent, f"{tag}_{equipment}_entity"), entities)
+                if tag != "default":
+                    self.assertIn(registry.alias(parent, f"{tag}_{kind}_armor_entity"), entities)
+                with Image.open(cards / tag / (kind + ".png")) as image:
+                    self.assertEqual((image.mode, image.size), ("RGBA", (176, 72)))
+                    self.assertEqual(image.getchannel("A").getextrema(), (0, 255))
+                    card_hashes.add(hashlib.sha256(image.tobytes()).digest())
+        self.assertEqual(len(mesh_hashes), 3 * len(countries))
+        self.assertEqual(len(card_hashes), 3 * (len(countries) + 1))
+
 
 class CasProgressionTests(unittest.TestCase):
     def test_nine_cas_exports_and_editable_sources_are_verified(self):
@@ -335,9 +386,10 @@ class SharedAircraftTests(unittest.TestCase):
         routes = self.routes()
         for country in ("SHL", "SHL_conclave_of_ten", "SHL_southern_compact",
                         "SHL_iron_directorate", "SHL_hereditary_republic", "SHL_commune_of_fire"):
-            for route in ("light_armor", "medium_armor", "heavy_armor", "ADISCORD_combat_platform_2150",
-                          "ADISCORD_heavy_combat_platform_2200"):
-                self.assertEqual(routes[f"{country}_{route}_entity"], "ADISCORD_SHL_tank_entity")
+            for route, mesh in (("light_armor", "SHL_light_tank"), ("medium_armor", "SHL_tank"),
+                                ("heavy_armor", "SHL_heavy_tank"), ("ADISCORD_combat_platform_2150", "SHL_tank"),
+                                ("ADISCORD_heavy_combat_platform_2200", "SHL_heavy_tank")):
+                self.assertEqual(routes[f"{country}_{route}_entity"], f"ADISCORD_{mesh}_entity")
             for level, prefix in enumerate(("early_", "", "future_")):
                 for role in ("fighter", "cas"):
                     self.assertEqual(routes[f"{country}_ADISCORD_{role}_{level}_entity"],

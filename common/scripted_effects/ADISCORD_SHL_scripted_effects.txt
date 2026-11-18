@@ -27,6 +27,7 @@ SHL_initialize_furnaces = {
 		set_variable = { var = SHL_shift_policy value = 0 }
 		set_variable = { var = SHL_regular_supply value = 0 }
 		set_variable = { var = SHL_auto_reserve value = 0 }
+		set_variable = { var = SHL_reserve_floor value = 0 }
 		set_variable = { var = SHL_selected_furnace value = 1 }
 		set_variable = { var = SHL_city_support value = 20 }
 		set_variable = { var = SHL_project_stage value = 0 }
@@ -244,15 +245,77 @@ SHL_produce_period = {
 	else = { set_variable = { var = SHL_exchange_price value = 60 } }
 	# A lease without an overlord ends before the pour, so no share leaves the cash.
 	SHL_seal_release_without_overlord = yes
+	set_temp_variable = { var = SHL_cycle_has_priorities value = 0 }
+	if = {
+		limit = {
+			check_variable = { var = SHL_auto_reserve value = 1 compare = equals }
+			check_variable = { var = SHL_regular_supply value = 1 compare = equals }
+			check_variable = { var = SHL_reserve_stock value = SHL_reserve_floor compare = greater_than }
+			SHL_reserve_has_packet = yes
+			SHL_has_reserve_priorities = yes
+		}
+		SHL_plan_priority_deliveries = yes
+		set_temp_variable = { var = SHL_cycle_has_priorities value = 1 }
+		set_temp_variable = { var = SHL_cycle_grant_1 value = SHL_planned_transfer_1 }
+		set_temp_variable = { var = SHL_cycle_grant_2 value = SHL_planned_transfer_2 }
+		set_temp_variable = { var = SHL_cycle_grant_3 value = SHL_planned_transfer_3 }
+		set_temp_variable = { var = SHL_cycle_grant_4 value = SHL_planned_transfer_4 }
+		set_temp_variable = { var = SHL_cycle_grant_5 value = SHL_planned_transfer_5 }
+		set_temp_variable = { var = SHL_cycle_grant_6 value = SHL_planned_transfer_6 }
+		set_temp_variable = { var = SHL_cycle_grant_7 value = SHL_planned_transfer_7 }
+		set_temp_variable = { var = SHL_cycle_grant_8 value = SHL_planned_transfer_8 }
+		set_temp_variable = { var = SHL_cycle_grant_9 value = SHL_planned_transfer_9 }
+		set_temp_variable = { var = SHL_cycle_grant_10 value = SHL_planned_transfer_10 }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_1 }
+	}
 	287 = { SHL_produce_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_2 }
+	}
 	288 = { SHL_produce_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_3 }
+	}
 	289 = { SHL_produce_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_4 }
+	}
 	290 = { SHL_produce_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_5 }
+	}
 	291 = { SHL_produce_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_6 }
+	}
 	292 = { SHL_produce_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_7 }
+	}
 	293 = { SHL_produce_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_8 }
+	}
 	294 = { SHL_produce_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_9 }
+	}
 	295 = { SHL_produce_site = yes }
+	if = {
+		limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_cycle_site_grant value = SHL_cycle_grant_10 }
+	}
 	if = {
 		limit = {
 			check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
@@ -421,14 +484,24 @@ SHL_quote_furnace_order = {
 	}
 }
 
+SHL_apply_reserve_floor = {
+	subtract_from_temp_variable = { var = SHL_order_reserve value = SHL_reserve_floor }
+	clamp_temp_variable = { var = SHL_order_reserve min = 0 }
+}
+
 # The district reads the delivery in state scope; X reads it in country scope.
 # Each caller credits its own bunker before the next furnace places an order.
 SHL_settle_furnace_order = {
 	set_temp_variable = { var = SHL_order_budget value = ADISCORD_economy_treasury }
 	if = {
-		limit = { NOT = { check_variable = { var = SHL_auto_reserve value = 1 compare = equals } } }
-		set_temp_variable = { var = SHL_order_reserve value = 0 }
+		limit = { check_variable = { var = SHL_auto_reserve value = 1 compare = equals } }
+		SHL_apply_reserve_floor = yes
+		if = {
+			limit = { check_variable = { var = SHL_cycle_has_priorities value = 1 compare = equals } }
+			clamp_temp_variable = { var = SHL_order_reserve max = SHL_cycle_site_grant }
+		}
 	}
+	else = { set_temp_variable = { var = SHL_order_reserve value = 0 } }
 	SHL_quote_furnace_order = yes
 	set_variable = { var = SHL_order_delivered value = SHL_order_reserve_packets }
 	subtract_from_variable = { var = SHL_reserve_stock value = SHL_order_reserve_packets }
@@ -1467,6 +1540,157 @@ SHL_select_next_unfunded_order = {
 			SHL_refresh_selected_furnace = yes
 			add_to_variable = { var = SHL_gui_dirty value = 1 }
 		}
+	}
+}
+
+SHL_toggle_priority_1 = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = { check_variable = { var = SHL_priority_1 value = 1 compare = equals } }
+			clear_variable = SHL_priority_1
+		}
+		else = { set_variable = { var = SHL_priority_1 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_priority_2 = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = { check_variable = { var = SHL_priority_2 value = 1 compare = equals } }
+			clear_variable = SHL_priority_2
+		}
+		else = { set_variable = { var = SHL_priority_2 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_priority_3 = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = { check_variable = { var = SHL_priority_3 value = 1 compare = equals } }
+			clear_variable = SHL_priority_3
+		}
+		else = { set_variable = { var = SHL_priority_3 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_priority_4 = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = { check_variable = { var = SHL_priority_4 value = 1 compare = equals } }
+			clear_variable = SHL_priority_4
+		}
+		else = { set_variable = { var = SHL_priority_4 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_priority_5 = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = { check_variable = { var = SHL_priority_5 value = 1 compare = equals } }
+			clear_variable = SHL_priority_5
+		}
+		else = { set_variable = { var = SHL_priority_5 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_priority_6 = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = { check_variable = { var = SHL_priority_6 value = 1 compare = equals } }
+			clear_variable = SHL_priority_6
+		}
+		else = { set_variable = { var = SHL_priority_6 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_priority_7 = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = { check_variable = { var = SHL_priority_7 value = 1 compare = equals } }
+			clear_variable = SHL_priority_7
+		}
+		else = { set_variable = { var = SHL_priority_7 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_priority_8 = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = { check_variable = { var = SHL_priority_8 value = 1 compare = equals } }
+			clear_variable = SHL_priority_8
+		}
+		else = { set_variable = { var = SHL_priority_8 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_priority_9 = {
+	if = {
+		limit = { SHL_can_toggle_auto_reserve = yes }
+		if = {
+			limit = { check_variable = { var = SHL_priority_9 value = 1 compare = equals } }
+			clear_variable = SHL_priority_9
+		}
+		else = { set_variable = { var = SHL_priority_9 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_toggle_priority_10 = {
+	if = {
+		limit = {
+			SHL_can_toggle_auto_reserve = yes
+			check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_priority_10 value = 1 compare = equals } }
+			clear_variable = SHL_priority_10
+		}
+		else = { set_variable = { var = SHL_priority_10 value = 1 } }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_raise_reserve_floor = {
+	if = {
+		limit = { SHL_can_raise_reserve_floor = yes }
+		add_to_variable = { var = SHL_reserve_floor value = 1 }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
+	}
+}
+
+SHL_lower_reserve_floor = {
+	if = {
+		limit = { SHL_can_lower_reserve_floor = yes }
+		subtract_from_variable = { var = SHL_reserve_floor value = 1 }
+		SHL_refresh_furnace_card = yes
+		add_to_variable = { var = SHL_gui_dirty value = 1 }
 	}
 }
 
@@ -8500,7 +8724,6 @@ SHL_ai_steer_ratification = {
 # Preview uses a separate cash budget in production order, including planned supply.
 # It never writes production stocks, paid receipts, equipment or political scales.
 SHL_refresh_delivery_forecast = {
-	set_variable = { var = SHL_bulk_reserve_total value = 0 }
 	set_temp_variable = { var = SHL_reserve_for_plan value = 0 }
 	if = {
 		limit = {
@@ -8514,7 +8737,14 @@ SHL_refresh_delivery_forecast = {
 		}
 		set_temp_variable = { var = SHL_reserve_for_plan value = SHL_reserve_stock }
 	}
+	set_temp_variable = { var = SHL_order_reserve value = SHL_reserve_for_plan }
+	SHL_apply_reserve_floor = yes
+	set_variable = { var = SHL_auto_reserve_allowance value = SHL_order_reserve }
+	set_temp_variable = { var = SHL_priority_projection value = 0 }
+	set_temp_variable = { var = SHL_auto_plan_left value = SHL_order_reserve }
 	SHL_project_furnace_deliveries = yes
+	set_variable = { var = SHL_bulk_reserve_total value = SHL_projected_transfers }
+	set_variable = { var = SHL_auto_reserve_total value = SHL_projected_auto_transfers }
 	set_variable = { var = SHL_bulk_reserve_1 value = SHL_planned_transfer_1 }
 	set_variable = { var = SHL_bulk_reserve_2 value = SHL_planned_transfer_2 }
 	set_variable = { var = SHL_bulk_reserve_3 value = SHL_planned_transfer_3 }
@@ -8525,21 +8755,183 @@ SHL_refresh_delivery_forecast = {
 	set_variable = { var = SHL_bulk_reserve_8 value = SHL_planned_transfer_8 }
 	set_variable = { var = SHL_bulk_reserve_9 value = SHL_planned_transfer_9 }
 	set_variable = { var = SHL_bulk_reserve_10 value = SHL_planned_transfer_10 }
-	# With manual distribution the suggested transfers are still optional.
-	# Automatic distribution already forms part of the next pour's forecast.
+	set_variable = { var = SHL_auto_reserve_1 value = SHL_planned_auto_transfer_1 }
+	set_variable = { var = SHL_auto_reserve_2 value = SHL_planned_auto_transfer_2 }
+	set_variable = { var = SHL_auto_reserve_3 value = SHL_planned_auto_transfer_3 }
+	set_variable = { var = SHL_auto_reserve_4 value = SHL_planned_auto_transfer_4 }
+	set_variable = { var = SHL_auto_reserve_5 value = SHL_planned_auto_transfer_5 }
+	set_variable = { var = SHL_auto_reserve_6 value = SHL_planned_auto_transfer_6 }
+	set_variable = { var = SHL_auto_reserve_7 value = SHL_planned_auto_transfer_7 }
+	set_variable = { var = SHL_auto_reserve_8 value = SHL_planned_auto_transfer_8 }
+	set_variable = { var = SHL_auto_reserve_9 value = SHL_planned_auto_transfer_9 }
+	set_variable = { var = SHL_auto_reserve_10 value = SHL_planned_auto_transfer_10 }
 	if = {
 		limit = {
-			check_variable = { var = SHL_bulk_reserve_total value = 0 compare = greater_than }
-			NOT = { check_variable = { var = SHL_auto_reserve value = 1 compare = equals } }
+			check_variable = { var = SHL_auto_reserve_total value = 0 compare = greater_than }
+			SHL_has_reserve_priorities = yes
 		}
+		SHL_plan_priority_deliveries = yes
+		set_variable = { var = SHL_auto_reserve_total value = SHL_projected_transfers }
+		set_variable = { var = SHL_auto_reserve_1 value = SHL_planned_transfer_1 }
+		set_variable = { var = SHL_auto_reserve_2 value = SHL_planned_transfer_2 }
+		set_variable = { var = SHL_auto_reserve_3 value = SHL_planned_transfer_3 }
+		set_variable = { var = SHL_auto_reserve_4 value = SHL_planned_transfer_4 }
+		set_variable = { var = SHL_auto_reserve_5 value = SHL_planned_transfer_5 }
+		set_variable = { var = SHL_auto_reserve_6 value = SHL_planned_transfer_6 }
+		set_variable = { var = SHL_auto_reserve_7 value = SHL_planned_transfer_7 }
+		set_variable = { var = SHL_auto_reserve_8 value = SHL_planned_transfer_8 }
+		set_variable = { var = SHL_auto_reserve_9 value = SHL_planned_transfer_9 }
+		set_variable = { var = SHL_auto_reserve_10 value = SHL_planned_transfer_10 }
+		if = {
+			limit = {
+				NOT = { check_variable = { var = SHL_auto_reserve value = 1 compare = equals } }
+				check_variable = { var = SHL_auto_reserve_total value = 0 compare = greater_than }
+			}
+			set_temp_variable = { var = SHL_reserve_for_plan value = 0 }
+			SHL_project_furnace_deliveries = yes
+		}
+	}
+	else = {
+		# Reprice the pour when the active policy delivers fewer packets than a
+		# manual distribution. Earlier fires can change the budget for later ones.
 		set_temp_variable = { var = SHL_reserve_for_plan value = 0 }
-		SHL_project_furnace_deliveries = yes
+		if = {
+			limit = { check_variable = { var = SHL_auto_reserve value = 1 compare = equals } }
+			set_temp_variable = { var = SHL_reserve_for_plan value = SHL_auto_reserve_total }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_bulk_reserve_total value = SHL_reserve_for_plan compare = greater_than } }
+			set_temp_variable = { var = SHL_auto_plan_left value = 0 }
+			SHL_project_furnace_deliveries = yes
+		}
 	}
 	SHL_preview_cycle_settlement = yes
 	clear_variable = SHL_preview_lease_transfer
 }
 
+# Keep production and cash purchases in I-X order. First offer the reserve only
+# to marked furnaces. Their remaining shortages are the limits for later trials.
+SHL_plan_priority_deliveries = {
+	set_temp_variable = { var = SHL_order_reserve value = SHL_reserve_stock }
+	SHL_apply_reserve_floor = yes
+	set_temp_variable = { var = SHL_priority_budget value = SHL_order_reserve }
+	set_temp_variable = { var = SHL_priority_projection value = 1 }
+	set_temp_variable = { var = SHL_trial_furnace value = 0 }
+	set_temp_variable = { var = SHL_last_marked_order value = 0 }
+	set_temp_variable = { var = SHL_open_ordinary_tail value = 0 }
+	set_temp_variable = { var = SHL_auto_plan_left value = 0 }
+	SHL_reprice_priority_deliveries = yes
+	set_temp_variable = { var = SHL_priority_bound_1 value = SHL_rejected_1 }
+	set_temp_variable = { var = SHL_priority_bound_2 value = SHL_rejected_2 }
+	set_temp_variable = { var = SHL_priority_bound_3 value = SHL_rejected_3 }
+	set_temp_variable = { var = SHL_priority_bound_4 value = SHL_rejected_4 }
+	set_temp_variable = { var = SHL_priority_bound_5 value = SHL_rejected_5 }
+	set_temp_variable = { var = SHL_priority_bound_6 value = SHL_rejected_6 }
+	set_temp_variable = { var = SHL_priority_bound_7 value = SHL_rejected_7 }
+	set_temp_variable = { var = SHL_priority_bound_8 value = SHL_rejected_8 }
+	set_temp_variable = { var = SHL_priority_bound_9 value = SHL_rejected_9 }
+	set_temp_variable = { var = SHL_priority_bound_10 value = SHL_rejected_10 }
+	# A later trial cannot change what an earlier furnace bought or received.
+	# Keep accepted earlier grants and admit one ordinary order at a time.
+	if = {
+		limit = { check_variable = { var = SHL_reserve_for_plan value = 1 compare = greater_than_or_equals } }
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_1 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_1 }
+		SHL_try_ordinary_reserve_order = yes
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_2 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_2 }
+		SHL_try_ordinary_reserve_order = yes
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_3 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_3 }
+		SHL_try_ordinary_reserve_order = yes
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_4 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_4 }
+		SHL_try_ordinary_reserve_order = yes
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_5 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_5 }
+		SHL_try_ordinary_reserve_order = yes
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_6 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_6 }
+		SHL_try_ordinary_reserve_order = yes
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_7 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_7 }
+		SHL_try_ordinary_reserve_order = yes
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_8 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_8 }
+		SHL_try_ordinary_reserve_order = yes
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_9 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_9 }
+		SHL_try_ordinary_reserve_order = yes
+		set_temp_variable = { var = SHL_trial_marked value = SHL_priority_10 }
+		set_temp_variable = { var = SHL_trial_missing value = SHL_rejected_10 }
+		SHL_try_ordinary_reserve_order = yes
+	}
+	set_temp_variable = { var = SHL_priority_projection value = 0 }
+}
+
+SHL_reprice_priority_deliveries = {
+	set_temp_variable = { var = SHL_reserve_for_plan value = SHL_priority_budget }
+	set_temp_variable = { var = SHL_priority_regressed value = 0 }
+	SHL_project_furnace_deliveries = yes
+}
+
+SHL_try_ordinary_reserve_order = {
+	add_to_temp_variable = { var = SHL_trial_furnace value = 1 }
+	if = {
+		limit = {
+			check_variable = { var = SHL_trial_marked value = 0 compare = equals }
+			check_variable = { var = SHL_open_ordinary_tail value = 0 compare = equals }
+			check_variable = { var = SHL_trial_missing value = 0 compare = greater_than }
+			check_variable = { var = SHL_reserve_for_plan value = 1 compare = greater_than_or_equals }
+			OR = {
+				has_completed_focus = SHL_census_of_nine
+				check_variable = { var = SHL_trial_furnace value = 10 compare = equals }
+			}
+		}
+		# Once the last marked order has cleared, later purchases cannot affect it.
+		if = {
+			limit = { check_variable = { var = SHL_trial_furnace value = SHL_last_marked_order compare = greater_than } }
+			set_temp_variable = { var = SHL_open_ordinary_tail value = 1 }
+		}
+		set_temp_variable = { var = SHL_trial_grant value = SHL_trial_missing }
+		clamp_temp_variable = { var = SHL_trial_grant max = SHL_reserve_for_plan }
+		SHL_reprice_priority_deliveries = yes
+		if = {
+			limit = {
+				check_variable = { var = SHL_priority_regressed value = 1 compare = equals }
+				check_variable = { var = SHL_trial_grant value = 2 compare = greater_than_or_equals }
+			}
+			set_temp_variable = { var = SHL_trial_grant value = 1 }
+			SHL_reprice_priority_deliveries = yes
+		}
+		if = {
+			limit = { check_variable = { var = SHL_priority_regressed value = 1 compare = equals } }
+			set_temp_variable = { var = SHL_trial_grant value = 0 }
+			SHL_reprice_priority_deliveries = yes
+		}
+	}
+}
+
+# The current order may draw the uncommitted surplus. Later ordinary orders
+# have no allowance until their own turn in the planner.
+SHL_limit_ordinary_trial = {
+	if = {
+		limit = { check_variable = { var = SHL_forecast_furnace_number value = SHL_trial_furnace compare = less_than } }
+		clamp_temp_variable = { var = SHL_order_reserve max = SHL_previous_transfer }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_open_ordinary_tail value = 0 compare = equals } }
+		if = {
+			limit = { check_variable = { var = SHL_forecast_furnace_number value = SHL_trial_furnace compare = equals } }
+			clamp_temp_variable = { var = SHL_order_reserve max = SHL_trial_grant }
+		}
+		else = { set_temp_variable = { var = SHL_order_reserve value = 0 } }
+	}
+}
+
 SHL_project_furnace_deliveries = {
+	set_temp_variable = { var = SHL_projected_transfers value = 0 }
+	set_temp_variable = { var = SHL_projected_auto_transfers value = 0 }
 	set_variable = { var = SHL_forecast_treasury value = ADISCORD_economy_treasury }
 	set_variable = { var = SHL_forecast_tenth_stock value = SHL_tenth_stock }
 	set_variable = { var = SHL_forecast_reserve value = SHL_reserve_stock }
@@ -8600,12 +8992,23 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
 			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_stock_1 value = SHL_preview_stock }
-			set_variable = { var = SHL_preview_status value = SHL_status_1 }
+			SHL_read_district_pour_status = yes
 			set_variable = { var = SHL_preview_site value = 287 }
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				set_temp_variable = { var = SHL_site_marked value = SHL_priority_1 }
+				if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+					set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_1 }
+					set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_1 }
+				}
+			}
 			SHL_preview_delivery = yes
 			set_variable = { var = SHL_recipient_1 value = SHL_preview_recipient }
 			set_variable = { var = SHL_delivery_block_1 value = SHL_preview_block }
 			set_temp_variable = { var = SHL_planned_transfer_1 value = SHL_planned_site_transfer }
+			set_temp_variable = { var = SHL_rejected_1 value = SHL_rejected_packets }
+			set_temp_variable = { var = SHL_planned_auto_transfer_1 value = SHL_auto_site_transfer }
 			set_variable = { var = SHL_forecast_order_packets_1 value = SHL_preview_packets }
 			set_variable = { var = SHL_forecast_order_shortfall_1 value = SHL_preview_shortfall }
 			set_variable = { var = SHL_delivery_cash_1 value = SHL_preview_site_cash }
@@ -8620,12 +9023,23 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
 			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_stock_2 value = SHL_preview_stock }
-			set_variable = { var = SHL_preview_status value = SHL_status_2 }
+			SHL_read_district_pour_status = yes
 			set_variable = { var = SHL_preview_site value = 288 }
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				set_temp_variable = { var = SHL_site_marked value = SHL_priority_2 }
+				if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+					set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_2 }
+					set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_2 }
+				}
+			}
 			SHL_preview_delivery = yes
 			set_variable = { var = SHL_recipient_2 value = SHL_preview_recipient }
 			set_variable = { var = SHL_delivery_block_2 value = SHL_preview_block }
 			set_temp_variable = { var = SHL_planned_transfer_2 value = SHL_planned_site_transfer }
+			set_temp_variable = { var = SHL_rejected_2 value = SHL_rejected_packets }
+			set_temp_variable = { var = SHL_planned_auto_transfer_2 value = SHL_auto_site_transfer }
 			set_variable = { var = SHL_forecast_order_packets_2 value = SHL_preview_packets }
 			set_variable = { var = SHL_forecast_order_shortfall_2 value = SHL_preview_shortfall }
 			set_variable = { var = SHL_delivery_cash_2 value = SHL_preview_site_cash }
@@ -8640,12 +9054,23 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
 			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_stock_3 value = SHL_preview_stock }
-			set_variable = { var = SHL_preview_status value = SHL_status_3 }
+			SHL_read_district_pour_status = yes
 			set_variable = { var = SHL_preview_site value = 289 }
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				set_temp_variable = { var = SHL_site_marked value = SHL_priority_3 }
+				if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+					set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_3 }
+					set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_3 }
+				}
+			}
 			SHL_preview_delivery = yes
 			set_variable = { var = SHL_recipient_3 value = SHL_preview_recipient }
 			set_variable = { var = SHL_delivery_block_3 value = SHL_preview_block }
 			set_temp_variable = { var = SHL_planned_transfer_3 value = SHL_planned_site_transfer }
+			set_temp_variable = { var = SHL_rejected_3 value = SHL_rejected_packets }
+			set_temp_variable = { var = SHL_planned_auto_transfer_3 value = SHL_auto_site_transfer }
 			set_variable = { var = SHL_forecast_order_packets_3 value = SHL_preview_packets }
 			set_variable = { var = SHL_forecast_order_shortfall_3 value = SHL_preview_shortfall }
 			set_variable = { var = SHL_delivery_cash_3 value = SHL_preview_site_cash }
@@ -8660,12 +9085,23 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
 			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_stock_4 value = SHL_preview_stock }
-			set_variable = { var = SHL_preview_status value = SHL_status_4 }
+			SHL_read_district_pour_status = yes
 			set_variable = { var = SHL_preview_site value = 290 }
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				set_temp_variable = { var = SHL_site_marked value = SHL_priority_4 }
+				if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+					set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_4 }
+					set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_4 }
+				}
+			}
 			SHL_preview_delivery = yes
 			set_variable = { var = SHL_recipient_4 value = SHL_preview_recipient }
 			set_variable = { var = SHL_delivery_block_4 value = SHL_preview_block }
 			set_temp_variable = { var = SHL_planned_transfer_4 value = SHL_planned_site_transfer }
+			set_temp_variable = { var = SHL_rejected_4 value = SHL_rejected_packets }
+			set_temp_variable = { var = SHL_planned_auto_transfer_4 value = SHL_auto_site_transfer }
 			set_variable = { var = SHL_forecast_order_packets_4 value = SHL_preview_packets }
 			set_variable = { var = SHL_forecast_order_shortfall_4 value = SHL_preview_shortfall }
 			set_variable = { var = SHL_delivery_cash_4 value = SHL_preview_site_cash }
@@ -8680,12 +9116,23 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
 			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_stock_5 value = SHL_preview_stock }
-			set_variable = { var = SHL_preview_status value = SHL_status_5 }
+			SHL_read_district_pour_status = yes
 			set_variable = { var = SHL_preview_site value = 291 }
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				set_temp_variable = { var = SHL_site_marked value = SHL_priority_5 }
+				if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+					set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_5 }
+					set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_5 }
+				}
+			}
 			SHL_preview_delivery = yes
 			set_variable = { var = SHL_recipient_5 value = SHL_preview_recipient }
 			set_variable = { var = SHL_delivery_block_5 value = SHL_preview_block }
 			set_temp_variable = { var = SHL_planned_transfer_5 value = SHL_planned_site_transfer }
+			set_temp_variable = { var = SHL_rejected_5 value = SHL_rejected_packets }
+			set_temp_variable = { var = SHL_planned_auto_transfer_5 value = SHL_auto_site_transfer }
 			set_variable = { var = SHL_forecast_order_packets_5 value = SHL_preview_packets }
 			set_variable = { var = SHL_forecast_order_shortfall_5 value = SHL_preview_shortfall }
 			set_variable = { var = SHL_delivery_cash_5 value = SHL_preview_site_cash }
@@ -8700,12 +9147,23 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
 			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_stock_6 value = SHL_preview_stock }
-			set_variable = { var = SHL_preview_status value = SHL_status_6 }
+			SHL_read_district_pour_status = yes
 			set_variable = { var = SHL_preview_site value = 292 }
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				set_temp_variable = { var = SHL_site_marked value = SHL_priority_6 }
+				if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+					set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_6 }
+					set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_6 }
+				}
+			}
 			SHL_preview_delivery = yes
 			set_variable = { var = SHL_recipient_6 value = SHL_preview_recipient }
 			set_variable = { var = SHL_delivery_block_6 value = SHL_preview_block }
 			set_temp_variable = { var = SHL_planned_transfer_6 value = SHL_planned_site_transfer }
+			set_temp_variable = { var = SHL_rejected_6 value = SHL_rejected_packets }
+			set_temp_variable = { var = SHL_planned_auto_transfer_6 value = SHL_auto_site_transfer }
 			set_variable = { var = SHL_forecast_order_packets_6 value = SHL_preview_packets }
 			set_variable = { var = SHL_forecast_order_shortfall_6 value = SHL_preview_shortfall }
 			set_variable = { var = SHL_delivery_cash_6 value = SHL_preview_site_cash }
@@ -8720,12 +9178,23 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
 			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_stock_7 value = SHL_preview_stock }
-			set_variable = { var = SHL_preview_status value = SHL_status_7 }
+			SHL_read_district_pour_status = yes
 			set_variable = { var = SHL_preview_site value = 293 }
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				set_temp_variable = { var = SHL_site_marked value = SHL_priority_7 }
+				if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+					set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_7 }
+					set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_7 }
+				}
+			}
 			SHL_preview_delivery = yes
 			set_variable = { var = SHL_recipient_7 value = SHL_preview_recipient }
 			set_variable = { var = SHL_delivery_block_7 value = SHL_preview_block }
 			set_temp_variable = { var = SHL_planned_transfer_7 value = SHL_planned_site_transfer }
+			set_temp_variable = { var = SHL_rejected_7 value = SHL_rejected_packets }
+			set_temp_variable = { var = SHL_planned_auto_transfer_7 value = SHL_auto_site_transfer }
 			set_variable = { var = SHL_forecast_order_packets_7 value = SHL_preview_packets }
 			set_variable = { var = SHL_forecast_order_shortfall_7 value = SHL_preview_shortfall }
 			set_variable = { var = SHL_delivery_cash_7 value = SHL_preview_site_cash }
@@ -8740,12 +9209,23 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
 			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_stock_8 value = SHL_preview_stock }
-			set_variable = { var = SHL_preview_status value = SHL_status_8 }
+			SHL_read_district_pour_status = yes
 			set_variable = { var = SHL_preview_site value = 294 }
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				set_temp_variable = { var = SHL_site_marked value = SHL_priority_8 }
+				if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+					set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_8 }
+					set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_8 }
+				}
+			}
 			SHL_preview_delivery = yes
 			set_variable = { var = SHL_recipient_8 value = SHL_preview_recipient }
 			set_variable = { var = SHL_delivery_block_8 value = SHL_preview_block }
 			set_temp_variable = { var = SHL_planned_transfer_8 value = SHL_planned_site_transfer }
+			set_temp_variable = { var = SHL_rejected_8 value = SHL_rejected_packets }
+			set_temp_variable = { var = SHL_planned_auto_transfer_8 value = SHL_auto_site_transfer }
 			set_variable = { var = SHL_forecast_order_packets_8 value = SHL_preview_packets }
 			set_variable = { var = SHL_forecast_order_shortfall_8 value = SHL_preview_shortfall }
 			set_variable = { var = SHL_delivery_cash_8 value = SHL_preview_site_cash }
@@ -8760,12 +9240,23 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_stock value = PREV.SHL_furnace_stock }
 			set_variable = { var = SHL_preview_owner value = PREV.SHL_furnace_owner }
 			set_variable = { var = SHL_stock_9 value = SHL_preview_stock }
-			set_variable = { var = SHL_preview_status value = SHL_status_9 }
+			SHL_read_district_pour_status = yes
 			set_variable = { var = SHL_preview_site value = 295 }
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				set_temp_variable = { var = SHL_site_marked value = SHL_priority_9 }
+				if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+					set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_9 }
+					set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_9 }
+				}
+			}
 			SHL_preview_delivery = yes
 			set_variable = { var = SHL_recipient_9 value = SHL_preview_recipient }
 			set_variable = { var = SHL_delivery_block_9 value = SHL_preview_block }
 			set_temp_variable = { var = SHL_planned_transfer_9 value = SHL_planned_site_transfer }
+			set_temp_variable = { var = SHL_rejected_9 value = SHL_rejected_packets }
+			set_temp_variable = { var = SHL_planned_auto_transfer_9 value = SHL_auto_site_transfer }
 			set_variable = { var = SHL_forecast_order_packets_9 value = SHL_preview_packets }
 			set_variable = { var = SHL_forecast_order_shortfall_9 value = SHL_preview_shortfall }
 			set_variable = { var = SHL_delivery_cash_9 value = SHL_preview_site_cash }
@@ -8805,9 +9296,20 @@ SHL_project_furnace_deliveries = {
 			set_variable = { var = SHL_preview_status value = 2 }
 		}
 	}
+	if = {
+		limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+		set_temp_variable = { var = SHL_site_marked value = SHL_priority_10 }
+		if = {
+			limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than } }
+			set_temp_variable = { var = SHL_site_bound value = SHL_priority_bound_10 }
+			set_temp_variable = { var = SHL_previous_transfer value = SHL_planned_transfer_10 }
+		}
+	}
 	SHL_preview_delivery = yes
 	set_variable = { var = SHL_delivery_block_10 value = SHL_preview_block }
 	set_temp_variable = { var = SHL_planned_transfer_10 value = SHL_planned_site_transfer }
+	set_temp_variable = { var = SHL_rejected_10 value = SHL_rejected_packets }
+	set_temp_variable = { var = SHL_planned_auto_transfer_10 value = SHL_auto_site_transfer }
 	set_variable = { var = SHL_forecast_order_packets_10 value = SHL_preview_packets }
 	set_variable = { var = SHL_forecast_order_shortfall_10 value = SHL_preview_shortfall }
 	set_variable = { var = SHL_delivery_cash_10 value = SHL_preview_site_cash }
@@ -9045,8 +9547,20 @@ SHL_preview_site_condition = {
 	}
 }
 
+# The production-day quote can be requested between panel refreshes.
+# Read the district's actual controller and fire before promising it supplies.
+SHL_read_district_pour_status = {
+	set_variable = { var = SHL_preview_status value = 2 }
+	if = {
+		limit = { PREV = { SHL_furnace_site_controlled = yes } }
+		set_variable = { var = SHL_preview_status value = PREV.SHL_furnace_running }
+	}
+}
+
 SHL_preview_delivery = {
+	set_temp_variable = { var = SHL_rejected_packets value = 0 }
 	set_temp_variable = { var = SHL_planned_site_transfer value = 0 }
+	set_temp_variable = { var = SHL_auto_site_transfer value = 0 }
 	add_to_temp_variable = { var = SHL_forecast_furnace_number value = 1 }
 	set_temp_variable = { var = SHL_preview_packets value = 0 }
 	set_temp_variable = { var = SHL_preview_shortfall value = 0 }
@@ -9101,9 +9615,35 @@ SHL_preview_delivery = {
 				}
 				set_temp_variable = { var = SHL_order_reserve value = SHL_reserve_for_plan }
 			}
+			if = {
+				limit = { check_variable = { var = SHL_priority_projection value = 1 compare = equals } }
+				if = {
+					limit = { check_variable = { var = SHL_site_marked value = 0 compare = equals } }
+					SHL_limit_ordinary_trial = yes
+				}
+				else_if = {
+					limit = { check_variable = { var = SHL_trial_furnace value = 0 compare = equals } }
+					set_temp_variable = { var = SHL_last_marked_order value = SHL_forecast_furnace_number }
+				}
+			}
 			SHL_quote_furnace_order = yes
 			subtract_from_temp_variable = { var = SHL_reserve_for_plan value = SHL_order_reserve_packets }
-			add_to_variable = { var = SHL_bulk_reserve_total value = SHL_order_reserve_packets }
+			add_to_temp_variable = { var = SHL_projected_transfers value = SHL_order_reserve_packets }
+			if = {
+				limit = {
+					check_variable = { var = SHL_order_reserve_packets value = 0 compare = greater_than }
+					check_variable = { var = SHL_auto_plan_left value = 1 compare = greater_than_or_equals }
+				}
+				# Both distributions honour the same orders until the first one
+				# crosses the floor. Only whole packets fit in that final order.
+				set_temp_variable = { var = SHL_auto_site_transfer value = SHL_order_reserve_packets }
+				if = {
+					limit = { check_variable = { var = SHL_auto_plan_left value = SHL_order_reserve_packets compare = less_than } }
+					set_temp_variable = { var = SHL_auto_site_transfer value = 1 }
+				}
+				subtract_from_temp_variable = { var = SHL_auto_plan_left value = SHL_auto_site_transfer }
+				add_to_temp_variable = { var = SHL_projected_auto_transfers value = SHL_auto_site_transfer }
+			}
 			add_to_variable = { var = SHL_preview_stock value = SHL_order_reserve_packets }
 			set_temp_variable = { var = SHL_planned_site_transfer value = SHL_order_reserve_packets }
 			set_temp_variable = { var = SHL_preview_packets value = SHL_order_buy_packets }
@@ -9117,6 +9657,16 @@ SHL_preview_delivery = {
 			}
 			else_if = {
 				limit = { check_variable = { var = SHL_preview_packets value = 0 compare = greater_than } }
+				set_temp_variable = { var = SHL_rejected_packets value = SHL_preview_packets }
+				if = {
+					limit = {
+						check_variable = { var = SHL_priority_projection value = 1 compare = equals }
+						check_variable = { var = SHL_trial_furnace value = 0 compare = greater_than }
+						check_variable = { var = SHL_site_marked value = 1 compare = equals }
+						check_variable = { var = SHL_rejected_packets value = SHL_site_bound compare = greater_than }
+					}
+					set_temp_variable = { var = SHL_priority_regressed value = 1 }
+				}
 				# A refused order leaves cash available to the next district.
 				set_temp_variable = { var = SHL_preview_shortfall value = SHL_order_price }
 				subtract_from_temp_variable = { var = SHL_preview_shortfall value = SHL_preview_budget }

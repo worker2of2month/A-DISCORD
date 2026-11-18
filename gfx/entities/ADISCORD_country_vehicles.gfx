@@ -4,6 +4,14 @@ objectTypes = {
 		name = "ADISCORD_VAL_tank_mesh"
 		file = "gfx/models/units/ADISCORD_country_vehicles/VAL_tank.mesh"
 		scale = 0.55
+		meshsettings = {
+			name = "VAL_tank"
+			index = 0
+			texture_diffuse = "VAL_medium_armor_diffuse.dds"
+			texture_normal = "VAL_tank_normal.dds"
+			texture_specular = "VAL_tank_specular.dds"
+			shader = "PdxMeshAdvanced"
+		}
 		animation = { id = "idle" type = "ADISCORD_VAL_tank_idle_animation" }
 		animation = { id = "move" type = "ADISCORD_VAL_tank_move_animation" }
 		animation = { id = "attack" type = "ADISCORD_VAL_tank_attack_animation" }
@@ -24,6 +32,14 @@ objectTypes = {
 		name = "ADISCORD_NOD_tank_mesh"
 		file = "gfx/models/units/ADISCORD_country_vehicles/NOD_tank.mesh"
 		scale = 0.55
+		meshsettings = {
+			name = "NOD_tank"
+			index = 0
+			texture_diffuse = "NOD_medium_armor_diffuse.dds"
+			texture_normal = "NOD_tank_normal.dds"
+			texture_specular = "NOD_tank_specular.dds"
+			shader = "PdxMeshAdvanced"
+		}
 		animation = { id = "idle" type = "ADISCORD_NOD_tank_idle_animation" }
 		animation = { id = "move" type = "ADISCORD_NOD_tank_move_animation" }
 		animation = { id = "attack" type = "ADISCORD_NOD_tank_attack_animation" }
@@ -44,6 +60,14 @@ objectTypes = {
 		name = "ADISCORD_STP_tank_mesh"
 		file = "gfx/models/units/ADISCORD_country_vehicles/STP_tank.mesh"
 		scale = 0.55
+		meshsettings = {
+			name = "STP_tank"
+			index = 0
+			texture_diffuse = "STP_medium_armor_diffuse.dds"
+			texture_normal = "STP_tank_normal.dds"
+			texture_specular = "STP_tank_specular.dds"
+			shader = "PdxMeshAdvanced"
+		}
 		animation = { id = "idle" type = "ADISCORD_STP_tank_idle_animation" }
 		animation = { id = "move" type = "ADISCORD_STP_tank_move_animation" }
 		animation = { id = "attack" type = "ADISCORD_STP_tank_attack_animation" }
@@ -360,6 +384,14 @@ objectTypes = {
 		name = "ADISCORD_SHL_tank_mesh"
 		file = "gfx/models/units/ADISCORD_country_vehicles/SHL_tank.mesh"
 		scale = 0.55
+		meshsettings = {
+			name = "SHL_tank"
+			index = 0
+			texture_diffuse = "SHL_medium_armor_diffuse.dds"
+			texture_normal = "SHL_tank_normal.dds"
+			texture_specular = "SHL_tank_specular.dds"
+			shader = "PdxMeshAdvanced"
+		}
 		animation = { id = "idle" type = "ADISCORD_SHL_tank_idle_animation" }
 		animation = { id = "move" type = "ADISCORD_SHL_tank_move_animation" }
 		animation = { id = "attack" type = "ADISCORD_SHL_tank_attack_animation" }
@@ -411,5 +443,237 @@ objectTypes = {
 		animation = { id = "idle" type = "ADISCORD_SHL_apc_idle_animation" }
 		animation = { id = "move" type = "ADISCORD_SHL_apc_move_animation" }
 		animation = { id = "attack" type = "ADISCORD_SHL_apc_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NAM_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NAM_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_NAM_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_NAM_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_NAM_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NAM_medium_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NAM_medium_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_NAM_medium_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_NAM_medium_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_NAM_medium_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NAM_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NAM_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_NAM_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_NAM_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_NAM_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_SHL_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/SHL_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_SHL_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_SHL_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_SHL_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_SHL_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/SHL_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_SHL_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_SHL_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_SHL_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STP_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STP_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_STP_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_STP_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_STP_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STP_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STP_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_STP_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_STP_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_STP_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STS_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STS_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_STS_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_STS_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_STS_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STS_medium_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STS_medium_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_STS_medium_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_STS_medium_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_STS_medium_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STS_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STS_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_STS_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_STS_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_STS_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_SRP_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/SRP_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_SRP_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_SRP_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_SRP_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_SRP_medium_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/SRP_medium_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_SRP_medium_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_SRP_medium_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_SRP_medium_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_SRP_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/SRP_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_SRP_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_SRP_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_SRP_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_VAL_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/VAL_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_VAL_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_VAL_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_VAL_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_VAL_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/VAL_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_VAL_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_VAL_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_VAL_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NOD_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NOD_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_NOD_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_NOD_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_NOD_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NOD_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NOD_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_NOD_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_NOD_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_NOD_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_RUS_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/RUS_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_RUS_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_RUS_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_RUS_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_RUS_medium_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/RUS_medium_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_RUS_medium_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_RUS_medium_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_RUS_medium_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_RUS_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/RUS_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_RUS_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_RUS_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_RUS_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_IVN_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/IVN_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_IVN_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_IVN_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_IVN_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_IVN_medium_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/IVN_medium_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_IVN_medium_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_IVN_medium_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_IVN_medium_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_IVN_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/IVN_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_IVN_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_IVN_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_IVN_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_MON_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/MON_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_MON_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_MON_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_MON_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_MON_medium_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/MON_medium_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_MON_medium_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_MON_medium_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_MON_medium_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_MON_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/MON_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_MON_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_MON_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_MON_heavy_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_WRK_light_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/WRK_light_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_WRK_light_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_WRK_light_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_WRK_light_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_WRK_medium_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/WRK_medium_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_WRK_medium_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_WRK_medium_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_WRK_medium_tank_attack_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_WRK_heavy_tank_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/WRK_heavy_tank.mesh"
+		scale = 0.55
+		animation = { id = "idle" type = "ADISCORD_WRK_heavy_tank_idle_animation" }
+		animation = { id = "move" type = "ADISCORD_WRK_heavy_tank_move_animation" }
+		animation = { id = "attack" type = "ADISCORD_WRK_heavy_tank_attack_animation" }
 	}
 }
