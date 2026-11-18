@@ -332,6 +332,77 @@ SHL_site_on_qanat_border = {
 	}
 }
 
+# Country decision scope. FROM is the furnace where the convoy unloads.
+SHL_waterworks_dispatch_ready = {
+	SHL_country_operable = yes
+	custom_trigger_tooltip = {
+		tooltip = SHL_waterworks_trip_tt
+		NOT = { has_variable = SHL_convoy_dispatch }
+	}
+	custom_trigger_tooltip = {
+		tooltip = SHL_waterworks_site_tt
+		check_variable = { var = SHL_water_crisis value = 2 compare = less_than }
+		FROM = {
+			SHL_site_on_qanat_border = yes
+			SHL_convoy_origin_open = yes
+			NOT = { SHL_seal_site_leased = yes }
+			NOT = { has_variable = SHL_qanat_works }
+		}
+	}
+}
+
+SHL_waterworks_affordable = {
+	FROM = { check_variable = { var = SHL_furnace_stock value = 2 compare = greater_than_or_equals } }
+}
+
+SHL_has_cooling_loop = {
+	OR = {
+		check_variable = { var = SHL_qanat_works value = 1 compare = equals }
+		check_variable = { var = SHL_qanat_works value = 3 compare = equals }
+	}
+}
+
+SHL_has_standpipe = {
+	check_variable = { var = SHL_qanat_works value = 2 compare = equals }
+}
+
+SHL_cooling_loop_in_service = {
+	SHL_furnace_site_controlled = yes
+	check_variable = { var = SHL_qanat_works value = 3 compare = equals }
+	check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+	NOT = { SHL_seal_site_leased = yes }
+}
+
+SHL_can_limit_water_intake = {
+	SHL_country_operable = yes
+	custom_trigger_tooltip = {
+		tooltip = SHL_water_limit_dispute_tt
+		check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+		check_variable = { var = SHL_war_kyz value = 0 compare = equals }
+		NOT = { has_war_with = KYZ }
+		NOT = { has_country_flag = SHL_water_offer_pending }
+		NOT = { has_variable = SHL_wells_deposit }
+	}
+	287 = {
+		custom_trigger_tooltip = {
+			tooltip = SHL_water_loop_in_service_tt
+			SHL_cooling_loop_in_service = yes
+		}
+	}
+	288 = {
+		custom_trigger_tooltip = {
+			tooltip = SHL_water_loop_in_service_tt
+			SHL_cooling_loop_in_service = yes
+		}
+	}
+	289 = {
+		custom_trigger_tooltip = {
+			tooltip = SHL_water_loop_in_service_tt
+			SHL_cooling_loop_in_service = yes
+		}
+	}
+}
+
 # STATE scope: the two furnaces facing the Veyr ports.
 SHL_site_on_veyr_border = {
 	OR = {
@@ -1926,6 +1997,7 @@ SHL_glp_settled = {
 # armistice (SHL_close_*_war flags).
 SHL_neighbour_dispute_closed = {
 	OR = {
+		check_variable = { var = SHL_water_crisis value = 6 compare = equals }
 		SHL_kyz_settled = yes
 		SHL_glp_settled = yes
 		has_country_flag = SHL_qanat_war_closed

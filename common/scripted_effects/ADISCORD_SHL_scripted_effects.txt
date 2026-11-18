@@ -368,6 +368,11 @@ SHL_produce_site = {
 			clamp_variable = { var = SHL_period_income min = 0 max = 90 }
 		}
 		if = {
+			limit = { SHL_has_cooling_loop = yes }
+			subtract_from_variable = { var = SHL_period_wear value = 2 }
+			clamp_variable = { var = SHL_period_wear min = 0 max = 100 }
+		}
+		else_if = {
 			limit = {
 				SHL_site_on_qanat_border = yes
 				SHL = { check_variable = { var = SHL_water_crisis value = 1 compare = equals } }
@@ -405,6 +410,11 @@ SHL_produce_site = {
 		if = {
 			limit = { check_variable = { var = SHL_furnace_stock value = SHL_period_cost compare = greater_than_or_equals } }
 			subtract_from_variable = { var = SHL_furnace_stock value = SHL_period_cost }
+			# Commission the installed loop on its first supplied pour.
+			if = {
+				limit = { check_variable = { var = SHL_qanat_works value = 1 compare = equals } }
+				set_variable = { var = SHL_qanat_works value = 3 }
+			}
 			add_to_variable = { var = SHL_furnace_wear value = SHL_period_wear }
 			set_variable = { var = SHL_furnace_shortages value = 0 }
 			# Explicit country input avoids reading the state after the scope switch.
@@ -1457,7 +1467,17 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_period_wear value = 3 }
 	}
 	subtract_from_variable = { var = SHL_selected_period_wear value = SHL_selected_training }
+	set_variable = { var = SHL_selected_state value = SHL_selected_furnace }
+	add_to_variable = { var = SHL_selected_state value = 286 }
 	if = {
+		limit = {
+			check_variable = { var = SHL_selected_furnace value = 3 compare = less_than_or_equals }
+			var:SHL_selected_state = { SHL_has_cooling_loop = yes }
+		}
+		subtract_from_variable = { var = SHL_selected_period_wear value = 2 }
+		clamp_variable = { var = SHL_selected_period_wear min = 0 max = 100 }
+	}
+	else_if = {
 		limit = {
 			check_variable = { var = SHL_water_crisis value = 1 compare = equals }
 			check_variable = { var = SHL_selected_furnace value = 3 compare = less_than_or_equals }
@@ -1466,8 +1486,6 @@ SHL_refresh_selected_furnace = {
 	}
 	set_variable = { var = SHL_selected_period_income value = SHL_selected_delivery_cash }
 	set_variable = { var = SHL_selected_order value = 0 }
-	set_variable = { var = SHL_selected_state value = SHL_selected_furnace }
-	add_to_variable = { var = SHL_selected_state value = 286 }
 	if = {
 		limit = {
 			has_variable = SHL_obligation_kind
@@ -1512,6 +1530,12 @@ SHL_dispatch_masons = {
 		set_variable = { var = SHL_convoy_dispatch value = 2 }
 		SHL_refresh_furnaces = yes
 	}
+}
+
+SHL_dispatch_waterworks = {
+	FROM = { subtract_from_variable = { var = SHL_furnace_stock value = 2 } }
+	set_variable = { var = SHL_convoy_dispatch value = 4 }
+	SHL_refresh_furnaces = yes
 }
 
 SHL_dispatch_sale = {
@@ -7599,6 +7623,11 @@ SHL_life_draw = {
 # 0 export, 1 arsenal, 2 quarters, 3 crest. Ownership and voting rights are separate.
 SHL_refresh_delivery_terms = {
 	SHL_refresh_programme_prices = yes
+	set_variable = { var = SHL_standpipe_relief value = 3 }
+	if = {
+		limit = { has_country_flag = SHL_strike_active }
+		set_variable = { var = SHL_standpipe_relief value = 8 }
+	}
 	set_variable = { var = SHL_delivery_course value = SHL_political_course }
 	if = {
 		limit = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
@@ -7733,6 +7762,13 @@ SHL_refresh_delivery_terms = {
 SHL_deliver_site_heat = {
 	SHL = { set_variable = { var = SHL_delivery_recipient value = PREV.SHL_furnace_recipient } }
 	SHL = { SHL_deliver_heat = yes }
+	if = {
+		limit = {
+			check_variable = { var = SHL_furnace_recipient value = 2 compare = equals }
+			SHL_has_standpipe = yes
+		}
+		SHL = { subtract_from_variable = { var = SHL_unrest value = SHL_standpipe_relief } }
+	}
 	SHL_apply_site_loyalty_rate = yes
 	# A leased furnace keeps only the remainder of its cash; SHL_deliver_heat
 	# has no goods for recipient 4.
@@ -8383,6 +8419,13 @@ SHL_preview_delivery = {
 		else_if = {
 			limit = { check_variable = { var = SHL_preview_recipient value = 2 compare = equals } }
 			set_variable = { var = SHL_preview_site_quarters value = SHL_delivery_quarters }
+			if = {
+				limit = {
+					check_variable = { var = SHL_preview_site value = 0 compare = greater_than }
+					var:SHL_preview_site = { SHL_has_standpipe = yes }
+				}
+				add_to_variable = { var = SHL_preview_site_quarters value = SHL_standpipe_relief }
+			}
 		}
 		else_if = {
 			limit = {

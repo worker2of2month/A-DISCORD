@@ -1011,6 +1011,199 @@ class FurnaceAccountingTests(unittest.TestCase):
         self.assertNotIn("SHL_convoy_dispatch", m.variables["SHL"])
         self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 1)
 
+    def test_waterworks_spend_local_stock_and_compete_for_one_convoy(self):
+        m = self.machine
+        loop = decision_definition("SHL_fit_cooling_loop")
+        taps = decision_definition("SHL_fit_standpipe")
+        m.variables["SHL"]["SHL_selected_furnace"] = 1
+        self.assertTrue(m.matches(block(loop, "visible"), "SHL", "287"))
+        self.assertFalse(m.matches(block(loop, "visible"), "SHL", "288"))
+        m.variables["287"]["SHL_furnace_stock"] = 1.99
+        self.assertFalse(m.matches(block(loop, "custom_cost_trigger"), "SHL", "287"))
+        m.execute(block(loop, "complete_effect"), "SHL", "287")
+        self.assertNotIn("SHL_qanat_works", m.variables["287"])
+        m.variables["287"]["SHL_furnace_stock"] = 2
+        m.execute(block(loop, "complete_effect"), "SHL", "287")
+        self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 0)
+        self.assertEqual(m.variables["287"]["SHL_qanat_works"], 1)
+        self.assertFalse(m.matches(block(taps, "available"), "SHL", "288"))
+        m.execute(block(taps, "complete_effect"), "SHL", "288")
+        m.run("SHL_dispatch_ore")
+        self.assertEqual(m.variables["288"]["SHL_furnace_stock"], 2)
+        self.assertEqual(m.variables["291"]["SHL_furnace_stock"], 2)
+        m.run("SHL_produce_period")
+        m.variables["287"]["SHL_furnace_stock"] = 2
+        m.execute(block(taps, "complete_effect"), "SHL", "287")
+        self.assertEqual(m.variables["287"]["SHL_qanat_works"], 1)
+        self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 2)
+        self.assertTrue(m.matches(block(taps, "available"), "SHL", "288"))
+        m.variables["288"]["SHL_furnace_stock"] = 2
+        m.execute(block(taps, "complete_effect"), "SHL", "288")
+        self.assertEqual(m.variables["288"]["SHL_qanat_works"], 2)
+
+    def test_waterworks_respect_closed_disputes_and_protected_stores(self):
+        m = self.machine
+        decision = decision_definition("SHL_fit_cooling_loop")
+        site = m.variables["287"]
+        for field, value in (("SHL_operation_deposit", 25), ("SHL_furnace_running", 0)):
+            with self.subTest(field=field):
+                previous = dict(site)
+                site[field] = value
+                m.execute(block(decision, "complete_effect"), "SHL", "287")
+                self.assertNotIn("SHL_qanat_works", site)
+                site.clear()
+                site.update(previous)
+        m.flags["287"].add("SHL_quota_site")
+        self.assertFalse(m.matches(block(decision, "available"), "SHL", "287"))
+        m.flags["287"].clear()
+        m.control["287"] = "KYZ"
+        self.assertFalse(m.matches(block(decision, "available"), "SHL", "287"))
+        m.control["287"] = "SHL"
+        self.assertFalse(m.matches(block(decision, "available"), "SHL", "290"))
+        m.variables["SHL"]["SHL_water_crisis"] = 2
+        m.execute(block(decision, "complete_effect"), "SHL", "287")
+        self.assertNotIn("SHL_qanat_works", site)
+        self.assertEqual(site["SHL_furnace_stock"], 2)
+
+    def test_cooling_loop_matches_forecast_before_during_and_after_drought(self):
+        m = self.machine
+        country = m.variables["SHL"]
+        site = m.variables["287"]
+        site["SHL_qanat_works"] = 1
+        country["SHL_selected_furnace"] = 1
+        for dispute, shift, training, expected in ((0, 0, 0, 4), (1, 1, 1, 7), (2, 2, 2, 0)):
+            with self.subTest(dispute=dispute):
+                country.update({"SHL_water_crisis": dispute, "SHL_shift_policy": shift})
+                site.update({"SHL_furnace_training": training, "SHL_furnace_stock": 2})
+                m.run("SHL_refresh_furnaces")
+                self.assertEqual(country["SHL_selected_period_wear"], expected)
+                before = site["SHL_furnace_wear"]
+                m.run("SHL_produce_period")
+                self.assertEqual(site["SHL_furnace_wear"] - before, expected)
+
+    def test_standpipe_relief_requires_an_actual_delivery_to_the_quarters(self):
+        m = self.machine
+        country = m.variables["SHL"]
+        site = m.variables["287"]
+        site["SHL_qanat_works"] = 2
+        country["SHL_selected_furnace"] = 1
+        for strike, recipient, stock, control, expected in (
+            (False, 2, 1, "SHL", 7), (True, 2, 1, "SHL", 12),
+            (True, 0, 1, "SHL", 0), (True, 2, 0, "SHL", 0),
+            (True, 2, 1, "KYZ", 0), (False, 2, 1, "SHL", 7),
+        ):
+            with self.subTest(strike=strike, recipient=recipient, stock=stock, control=control):
+                m.flags["SHL"].discard("SHL_strike_active")
+                if strike:
+                    m.flags["SHL"].add("SHL_strike_active")
+                country["SHL_unrest"] = 60
+                for state in range(288, 296):
+                    m.variables[str(state)]["SHL_furnace_stock"] = 1
+                m.control["287"] = control
+                site.update({"SHL_furnace_recipient": recipient, "SHL_furnace_stock": stock})
+                m.run("SHL_refresh_furnaces")
+                self.assertEqual(country["SHL_selected_delivery_quarters"], expected)
+                m.run("SHL_produce_period")
+                self.assertEqual(country["SHL_unrest"], 60 - expected)
+
+    def test_new_campaign_can_commission_three_loops_before_the_eighth_pour(self):
+        m = self.machine
+        m.flags["SHL"].remove("SHL_furnaces_initialized")
+        m.effects.update(shared_definitions(
+            "common/scripted_effects/ADISCORD_economy_effects.txt",
+            ("ADISCORD_economy_sync_starting_accounting",),
+        ))
+        m.run("SHL_apply_starting_economy")
+        m.run("SHL_initialize_furnaces")
+        install = decision_definition("SHL_fit_cooling_loop")
+        supply = decision_definition("SHL_supply_furnace")
+        supply_days = int(scalar(supply, "days_remove")) + int(scalar(supply, "days_re_enable"))
+        for cycle in range(1, 9):
+            for number in range(1, 10):
+                target = str(286 + number)
+                site = m.variables[target]
+                m.variables["SHL"]["SHL_selected_furnace"] = number
+                shipments = 0
+                if cycle <= 3 and number == cycle:
+                    while site["SHL_furnace_stock"] < 2:
+                        m.run("SHL_begin_supply", target=target)
+                        self.assertIn("SHL_operation_deposit", site)
+                        m.run("SHL_finish_supply", target=target)
+                        shipments += 1
+                    self.assertTrue(m.matches(block(install, "visible"), "SHL", target))
+                    self.assertTrue(m.matches(block(install, "available"), "SHL", target))
+                    m.execute(block(install, "complete_effect"), "SHL", target)
+                if site["SHL_furnace_stock"] < 1:
+                    m.run("SHL_begin_supply", target=target)
+                    self.assertIn("SHL_operation_deposit", site)
+                    m.run("SHL_finish_supply", target=target)
+                    shipments += 1
+                self.assertLess(shipments * supply_days, 28)
+            m.run("SHL_produce_period")
+            m.run("SHL_refresh_furnaces")
+            m.run("SHL_update_tensions")
+            m.run("SHL_check_crises")
+        self.assertEqual(m.variables["SHL"]["SHL_cycle_number"], 8)
+        decision = decision_definition("SHL_limit_water_intake")
+        self.assertTrue(m.matches(block(decision, "available"), "SHL"))
+        m.execute(block(decision, "complete_effect"), "SHL")
+        self.assertEqual(m.variables["SHL"]["SHL_water_crisis"], 6)
+
+    def test_water_limit_requires_three_tested_loops_and_an_open_dispute(self):
+        m = self.machine
+        country = m.variables["SHL"]
+        decision = decision_definition("SHL_limit_water_intake")
+        available = block(decision, "available")
+        settle = block(decision, "complete_effect")
+        country["SHL_water_crisis"] = 1
+        for target in ("287", "288", "289"):
+            m.variables[target]["SHL_qanat_works"] = 1
+        m.variables["289"]["SHL_furnace_stock"] = 0
+        m.run("SHL_produce_period")
+        self.assertEqual(m.variables["289"]["SHL_qanat_works"], 1)
+        m.execute(settle, "SHL")
+        self.assertEqual(country["SHL_water_crisis"], 1)
+        m.variables["289"]["SHL_furnace_stock"] = 1
+        m.run("SHL_produce_period")
+        self.assertTrue(m.matches(available, "SHL"))
+        m.control["288"] = "KYZ"
+        self.assertFalse(m.matches(available, "SHL"))
+        m.control["288"] = "SHL"
+        m.flags["SHL"].add("SHL_water_offer_pending")
+        self.assertFalse(m.matches(available, "SHL"))
+        m.flags["SHL"].remove("SHL_water_offer_pending")
+        country["SHL_wells_deposit"] = 0
+        self.assertFalse(m.matches(available, "SHL"))
+        del country["SHL_wells_deposit"]
+        country["SHL_war_kyz"] = 1
+        self.assertFalse(m.matches(available, "SHL"))
+        country["SHL_war_kyz"] = 0
+        m.variables["287"]["SHL_qanat_works"] = 2
+        self.assertFalse(m.matches(block(decision, "visible"), "SHL"))
+        self.assertFalse(m.matches(available, "SHL"))
+        m.variables["287"]["SHL_qanat_works"] = 3
+        treasury = country["ADISCORD_economy_treasury"]
+        m.execute(settle, "SHL")
+        self.assertEqual(country["SHL_water_crisis"], 6)
+        self.assertFalse(m.matches(block(decision, "visible"), "SHL"))
+        self.assertFalse(m.matches(available, "SHL"))
+        self.assertEqual(country.get("SHL_water_quota", 0), 0)
+        self.assertEqual(country["ADISCORD_economy_treasury"], treasury)
+        self.assertTrue(m.matches(parse_clausewitz("SHL_neighbour_dispute_closed = yes"), "SHL"))
+
+    def test_paid_civic_order_preempts_standpipe_deliveries(self):
+        m = self.machine
+        country = m.variables["SHL"]
+        country.update({"SHL_political_course": 2, "SHL_selected_furnace": 1, "SHL_unrest": 60})
+        m.variables["287"]["SHL_qanat_works"] = 2
+        m.run("SHL_begin_civic_order", target="287")
+        m.flags["SHL"].add("SHL_strike_active")
+        m.run("SHL_refresh_furnaces")
+        self.assertEqual(country["SHL_selected_delivery_quarters"], 0)
+        m.run("SHL_produce_period")
+        self.assertEqual(country["SHL_obligation_progress"], 1)
+        self.assertEqual(country["SHL_unrest"], 60)
+
     def test_darban_masons_service_tenth_works_without_changing_the_eighth(self):
         m = self.machine
         m.variables["SHL"].update({"SHL_selected_furnace": 10, "SHL_tenth_wear": 35,

@@ -79,7 +79,35 @@ defined_text = {
 		trigger = { check_variable = { var = SHL_convoy_dispatch value = 3 compare = equals } }
 		localization_key = SHL_convoy_sent_sale
 	}
+	text = {
+		trigger = { check_variable = { var = SHL_convoy_dispatch value = 4 compare = equals } }
+		localization_key = SHL_convoy_sent_waterworks
+	}
 	text = { localization_key = SHL_convoy_free }
+}
+
+defined_text = {
+	name = SHLGetWaterworks
+	text = {
+		trigger = { var:SHL_selected_state = { check_variable = { var = SHL_qanat_works value = 1 compare = equals } } }
+		localization_key = SHL_cooling_loop_untested
+	}
+	text = {
+		trigger = { var:SHL_selected_state = { SHL_has_cooling_loop = yes } }
+		localization_key = SHL_cooling_loop_status
+	}
+	text = {
+		trigger = { var:SHL_selected_state = { SHL_has_standpipe = yes } }
+		localization_key = SHL_standpipe_status
+	}
+	text = {
+		trigger = {
+			check_variable = { var = SHL_water_crisis value = 2 compare = less_than }
+			var:SHL_selected_state = { SHL_site_on_qanat_border = yes }
+		}
+		localization_key = SHL_waterworks_open_status
+	}
+	text = { localization_key = SHL_waterworks_no_status }
 }
 
 defined_text = {
@@ -707,6 +735,15 @@ defined_text = {
 }
 
 defined_text = {
+	name = SHLGetArbinWaterReport
+	text = {
+		trigger = { 287 = { SHL_has_cooling_loop = yes } }
+		localization_key = SHL_arbin_water_recirculating
+	}
+	text = { localization_key = SHL_arbin_water_exposed }
+}
+
+defined_text = {
 	name = SHLGetWaterStatus
 	text = {
 		trigger = {
@@ -745,6 +782,10 @@ defined_text = {
 	text = {
 		trigger = { check_variable = { var = SHL_water_crisis value = 5 compare = equals } }
 		localization_key = SHL_status_water_brotherhood
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_water_crisis value = 6 compare = equals } }
+		localization_key = SHL_status_water_recirculation
 	}
 	text = {
 		localization_key = SHL_status_water_quiet

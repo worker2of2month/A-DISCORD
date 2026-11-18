@@ -1,4 +1,89 @@
 SHL_conclave = {
+	SHL_fit_cooling_loop = {
+		icon = SHL_brickwork
+		state_target = yes
+		targets = { 287 288 289 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			check_variable = { var = SHL_water_crisis value = 2 compare = less_than }
+			FROM = {
+				SHL_selected_target = yes
+				NOT = { has_variable = SHL_qanat_works }
+			}
+		}
+		available = { SHL_waterworks_dispatch_ready = yes }
+		cost = 0
+		custom_cost_text = SHL_cost_waterworks
+		custom_cost_trigger = { SHL_waterworks_affordable = yes }
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_fit_cooling_loop_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						SHL_waterworks_dispatch_ready = yes
+						SHL_waterworks_affordable = yes
+					}
+					FROM = { set_variable = { var = SHL_qanat_works value = 1 } }
+					SHL_dispatch_waterworks = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 15
+				NOT = { check_variable = { var = SHL_shift_policy value = 1 compare = equals } }
+				FROM = { check_variable = { var = SHL_furnace_stock value = 3 compare = greater_than_or_equals } }
+				OR = {
+					check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+					FROM = { check_variable = { var = SHL_furnace_wear value = 40 compare = greater_than_or_equals } }
+				}
+			}
+		}
+	}
+
+	SHL_fit_standpipe = {
+		icon = ADISCORD_construction
+		state_target = yes
+		targets = { 287 288 289 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			check_variable = { var = SHL_water_crisis value = 2 compare = less_than }
+			FROM = {
+				SHL_selected_target = yes
+				NOT = { has_variable = SHL_qanat_works }
+			}
+		}
+		available = { SHL_waterworks_dispatch_ready = yes }
+		cost = 0
+		custom_cost_text = SHL_cost_waterworks
+		custom_cost_trigger = { SHL_waterworks_affordable = yes }
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_fit_standpipe_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						SHL_waterworks_dispatch_ready = yes
+						SHL_waterworks_affordable = yes
+					}
+					FROM = { set_variable = { var = SHL_qanat_works value = 2 } }
+					SHL_dispatch_waterworks = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 15
+				NOT = { check_variable = { var = SHL_shift_policy value = 1 compare = equals } }
+				FROM = { check_variable = { var = SHL_furnace_stock value = 3 compare = greater_than_or_equals } }
+				FROM = { check_variable = { var = SHL_furnace_recipient value = 2 compare = equals } }
+			}
+		}
+	}
+
 	SHL_planned_supply = {
 		icon = SHL_ore_cart
 		visible = { has_completed_focus = SHL_houses_railway }
@@ -2005,6 +2090,34 @@ SHL_quarters_and_borders = {
 	}
 
 	# ----- Qanats -----
+
+	SHL_limit_water_intake = {
+		icon = ADISCORD_deal
+		visible = {
+			check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+			NOT = {
+				OR = {
+					287 = { SHL_has_standpipe = yes }
+					288 = { SHL_has_standpipe = yes }
+					289 = { SHL_has_standpipe = yes }
+				}
+			}
+		}
+		available = { SHL_can_limit_water_intake = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_limit_water_intake_tt
+			hidden_effect = {
+				if = {
+					limit = { SHL_can_limit_water_intake = yes }
+					set_variable = { var = SHL_water_crisis value = 6 }
+					SHL_refresh_furnaces = yes
+				}
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
 
 	SHL_offer_water_treaty = {
 		icon = ADISCORD_deal
