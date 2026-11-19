@@ -2141,9 +2141,9 @@ ideas = {
 				}
 			}
 			modifier = {
-				army_fuel_consumption_factor = -0.15
-				navy_fuel_consumption_factor = -0.15
-				air_fuel_consumption_factor = -0.15
+				army_fuel_consumption_factor = -0.20
+				navy_fuel_consumption_factor = -0.20
+				air_fuel_consumption_factor = -0.20
 			}
 		}
 
@@ -2169,8 +2169,8 @@ ideas = {
 				}
 			}
 			modifier = {
-				fuel_gain_factor = 0.25
-				local_resources_factor = 0.10
+				fuel_gain_factor = 0.35
+				local_resources_factor = 0.15
 				industrial_capacity_factory = -0.05
 			}
 		}
@@ -2225,8 +2225,8 @@ ideas = {
 				}
 			}
 			modifier = {
-				mobilization_speed = 0.25
-				training_time_army_factor = -0.15
+				mobilization_speed = 0.35
+				training_time_army_factor = -0.20
 			}
 		}
 
@@ -2252,8 +2252,8 @@ ideas = {
 				}
 			}
 			modifier = {
-				experience_loss_factor = -0.15
-				army_org_regain = 0.05
+				experience_loss_factor = -0.22
+				army_org_regain = 0.08
 			}
 		}
 
@@ -2280,7 +2280,7 @@ ideas = {
 			}
 			modifier = {
 				supply_consumption_factor = -0.01
-				army_org_regain = 0.08
+				army_org_regain = 0.10
 			}
 		}
 
@@ -2306,7 +2306,7 @@ ideas = {
 				}
 			}
 			modifier = {
-				attrition = -0.15
+				attrition = -0.20
 				army_speed_factor = 0.02
 			}
 		}
@@ -2333,7 +2333,7 @@ ideas = {
 				}
 			}
 			modifier = {
-				industrial_capacity_factory = 0.15
+				industrial_capacity_factory = 0.20
 				production_factory_efficiency_gain_factor = 0.1
 				stability_factor = -0.04
 			}
@@ -2361,8 +2361,8 @@ ideas = {
 				}
 			}
 			modifier = {
-				convoy_escort_efficiency = 0.2
-				navy_org_factor = 0.08
+				convoy_escort_efficiency = 0.30
+				navy_org_factor = 0.10
 			}
 		}
 
@@ -2388,7 +2388,7 @@ ideas = {
 				}
 			}
 			modifier = {
-				air_intercept_efficiency = 0.2
+				air_intercept_efficiency = 0.30
 			}
 		}
 
@@ -2414,7 +2414,7 @@ ideas = {
 				}
 			}
 			modifier = {
-				air_cas_efficiency = 0.15
+				air_cas_efficiency = 0.22
 			}
 		}
 
@@ -2440,8 +2440,8 @@ ideas = {
 				}
 			}
 			modifier = {
-				planning_speed = 0.2
-				max_planning = 0.1
+				planning_speed = 0.30
+				max_planning = 0.15
 			}
 		}
 
@@ -2946,17 +2946,8 @@ ideas = {
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_factory_efficiency_gain_factor = 0.05
-			}
-		}
-
-		NAM_pw_testing_facilities_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
 				research_speed_factor = 0.025
-				production_factory_efficiency_gain_factor = 0.05
+				production_factory_efficiency_gain_factor = 0.10
 			}
 		}
 

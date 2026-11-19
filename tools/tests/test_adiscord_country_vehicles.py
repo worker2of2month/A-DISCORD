@@ -353,8 +353,8 @@ class SharedAircraftTests(unittest.TestCase):
             "WRK": "WRK", "DAN": "WRK", "EYR": "WRK", "EGC": "WRK",
             "RIV": "WRK", "YOR": "WRK", "ZAO": "WRK", "PWR": "WRK",
             "VLA": "WRK", "ROM": "WRK", "SOL": "WRK", "TRU": "WRK",
-            "WCG": "WRK", "VAD": "WRK", "WKR": "WRK", "TVA": "WRK", "IBA": "WRK",
-            "RUS": "RUS", "NAM": "NAM",
+            "WCG": "WRK", "VAD": "WRK", "WKR": "WRK", "TVA": "TVA", "IBA": "WRK",
+            "RUS": "RUS", "NAM": "NAM", "IVN": "IVN", "MON": "MON",
         }
         for tag, family in groups.items():
             for role in ("fighter", "cas"):
@@ -419,7 +419,7 @@ class SharedAircraftTests(unittest.TestCase):
         self.assertTrue(path.is_file(), "Shared aircraft package has not been built")
         report = json.loads(path.read_text())
         hashes = set()
-        for family in ("DEF", "ARB", "WRK", "RUS", "NAM", "SHL"):
+        for family in ("DEF", "ARB", "WRK", "RUS", "NAM", "SHL", "IVN", "MON", "TVA"):
             for role in ("fighter", "cas"):
                 for prefix in ("early_", "", "future_"):
                     name = f"{family}_{prefix}{role}"
@@ -434,7 +434,7 @@ class SharedAircraftTests(unittest.TestCase):
                     for filename, expected in row["files"].items():
                         self.assertEqual(hashlib.sha256((DEST / filename).read_bytes()).hexdigest(), expected)
                     hashes.add(row["files"][name + ".mesh"])
-        self.assertEqual(len(hashes), 36)
+        self.assertEqual(len(hashes), 54)
 
 
 class GroundVehicleIdleTests(unittest.TestCase):

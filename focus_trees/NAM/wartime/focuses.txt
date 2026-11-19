@@ -36,6 +36,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_manpower = 2500
 			if = {
 				limit = { has_idea = disarmed_nation }
 				add_ideas = volunteer_only
@@ -143,7 +144,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			army_experience = 15
+			army_experience = 25
 			unlock_decision_tooltip = NAM_war_frontline_instructors
 			custom_effect_tooltip = NAM_war_frontline_instructors_unlock_tt
 			effect_tooltip = {
@@ -193,6 +194,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 12
+				producer = NAM
+			}
 			700 = {
 				if = {
 					limit = {
@@ -213,7 +219,7 @@ focus_tree = {
 					}
 				}
 			}
-			navy_experience = 15
+			navy_experience = 20
 		}
 		ai_will_do = { base = 70 }
 	}
@@ -240,6 +246,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_fuel = 6000
 			if = {
 				limit = { has_completed_focus = NAM_war_interceptor_control }
 				NAM_air_deliver_fighter_batch = yes
@@ -247,7 +254,7 @@ focus_tree = {
 			else = {
 				NAM_air_deliver_cas_batch = yes
 			}
-			air_experience = 15
+			air_experience = 20
 		}
 		ai_will_do = { base = 70 }
 	}
@@ -270,7 +277,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_command_power = 20
+			add_command_power = 30
 			custom_effect_tooltip = NAM_war_objective_tt
 			custom_effect_tooltip = NAM_captured_wells_warning_tt
 		}
@@ -302,12 +309,12 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 100
+				amount = 150
 				producer = NAM
 			}
 			add_equipment_to_stockpile = {
 				type = artillery_equipment
-				amount = 100
+				amount = 140
 				producer = NAM
 			}
 			add_timed_idea = {
@@ -341,7 +348,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 100
+				amount = 160
 				producer = NAM
 			}
 			unlock_decision_tooltip = NAM_relief_batch
@@ -373,7 +380,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_war_supply_priority
 			custom_effect_tooltip = NAM_war_supply_priority_unlock_tt
-			add_war_support = 0.03
+			add_war_support = 0.05
 			custom_effect_tooltip = NAM_discipline_of_seals_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_seal_discipline value = 10 }
@@ -440,10 +447,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 5000
+			add_manpower = 7000
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 22500
+				amount = 27000
 				producer = NAM
 			}
 		}
@@ -472,6 +479,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_political_power = 20
 			unlock_decision_tooltip = NAM_scorch_wells
 			custom_effect_tooltip = NAM_scorch_wells_unlock_tt
 			add_war_support = 0.05
@@ -507,7 +515,7 @@ focus_tree = {
 						is_owned_by = NAM
 						is_controlled_by = NAM
 					}
-					add_building_construction = { type = bunker level = 1 instant_build = yes province = 6099 }
+					add_building_construction = { type = bunker level = 2 instant_build = yes province = 6099 }
 				}
 			}
 			688 = {
@@ -516,7 +524,7 @@ focus_tree = {
 						is_owned_by = NAM
 						is_controlled_by = NAM
 					}
-					add_building_construction = { type = bunker level = 1 instant_build = yes province = 16721 }
+					add_building_construction = { type = bunker level = 2 instant_build = yes province = 16721 }
 				}
 			}
 			custom_effect_tooltip = NAM_guarded_wells_tt
@@ -562,12 +570,12 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = artillery_equipment
-				amount = 120
+				amount = 160
 				producer = NAM
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 80
+				amount = 120
 				producer = NAM
 			}
 			add_command_power = 20
@@ -601,7 +609,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 6000
+			add_manpower = 8500
 			custom_effect_tooltip = NAM_district_volunteers_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_underground value = -10 }
@@ -637,10 +645,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_stability = -0.03
+			add_stability = -0.02
 			custom_effect_tooltip = NAM_martial_seals_tt
 			hidden_effect = {
-				add_to_variable = { var = NAM_seal_discipline value = 15 }
+				add_to_variable = { var = NAM_seal_discipline value = 20 }
 				NAM_seal_discipline_clamp = yes
 			}
 		}
@@ -671,7 +679,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_fuel = 6000
+			add_fuel = 10000
 			add_war_support = 0.03
 			custom_effect_tooltip = NAM_oil_score_tt
 			hidden_effect = {
@@ -705,6 +713,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 60
+				producer = NAM
+			}
 			unlock_decision_tooltip = NAM_war_transport_purchase
 			custom_effect_tooltip = NAM_war_transport_purchase_unlock_tt
 		}
@@ -815,12 +828,12 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = train_equipment
-				amount = 25
+				amount = 30
 				producer = NAM
 			}
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 150
+				amount = 200
 				producer = NAM
 			}
 		}
@@ -849,6 +862,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_political_power = 25
 			unlock_decision_tooltip = NAM_war_refugee_registration
 			custom_effect_tooltip = NAM_war_refugee_registration_unlock_tt
 		}
@@ -906,10 +920,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			navy_experience = 20
+			navy_experience = 25
 			add_equipment_to_stockpile = {
 				type = convoy
-				amount = 30
+				amount = 40
 				producer = NAM
 			}
 		}
@@ -979,7 +993,7 @@ focus_tree = {
 				}
 				add_building_construction = {
 					type = anti_air_building
-					level = 1
+					level = 2
 					instant_build = yes
 				}
 			}
@@ -1010,6 +1024,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_fuel = 4000
 			688 = {
 				add_building_construction = {
 					type = air_base
@@ -1017,7 +1032,7 @@ focus_tree = {
 					instant_build = yes
 				}
 			}
-			air_experience = 15
+			air_experience = 20
 		}
 		ai_will_do = { base = 70 }
 	}
@@ -1105,6 +1120,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_political_power = 35
 			unlock_decision_tooltip = NAM_war_arms_purchase
 			custom_effect_tooltip = NAM_war_arms_purchase_unlock_tt
 		}
@@ -1134,7 +1150,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 3000
+			add_manpower = 4500
 			unlock_decision_tooltip = NAM_war_medical_rotation
 			custom_effect_tooltip = NAM_war_medical_rotation_unlock_tt
 		}
@@ -1166,7 +1182,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = artillery_equipment
-				amount = 120
+				amount = 180
 				producer = NAM
 			}
 			unlock_decision_tooltip = NAM_war_ammunition_push
@@ -1200,17 +1216,17 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 200
+				amount = 260
 				producer = NAM
 			}
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 200
+				amount = 260
 				producer = NAM
 			}
 			add_equipment_to_stockpile = {
 				type = train_equipment
-				amount = 20
+				amount = 25
 				producer = NAM
 			}
 		}
@@ -1239,6 +1255,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_fuel = 10000
 			unlock_decision_tooltip = NAM_war_oil_for_arms
 			custom_effect_tooltip = NAM_war_oil_for_arms_unlock_tt
 		}
@@ -1335,7 +1352,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 100
+				amount = 150
 				producer = NAM
 			}
 			unlock_decision_tooltip = NAM_war_dockyard_rotation
@@ -1366,7 +1383,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			air_experience = 15
+			air_experience = 25
 			unlock_decision_tooltip = NAM_war_air_service_rotation
 			custom_effect_tooltip = NAM_war_air_service_rotation_unlock_tt
 		}
@@ -1395,10 +1412,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			army_experience = 20
+			army_experience = 25
 			add_tech_bonus = {
 				name = NAM_war_counterbattery_research
-				bonus = 0.5
+				bonus = 0.75
 				uses = 1
 				category = artillery
 			}

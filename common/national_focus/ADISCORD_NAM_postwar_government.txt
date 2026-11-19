@@ -80,7 +80,7 @@ shared_focus = {
 		relative_position_id = NAM_law_after_war
 		x = -3
 		y = 3
-		icon = GFX_focus_RUS_trained_administrators
+		icon = GFX_focus_NAM_service_state
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -5053,6 +5053,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_campaign_teach_a_trade
+			custom_effect_tooltip = NAM_campaign_teach_a_trade_unlock_tt
 			add_tech_bonus = {
 				name = NAM_pw_school_network
 				bonus = 0.5

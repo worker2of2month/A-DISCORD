@@ -578,7 +578,6 @@ NAM_postwar_plan = {
 		NAM_pw_energy_commission
 		NAM_pw_regional_power
 		NAM_pw_power_grid
-		NAM_pw_oilfield_substations
 		NAM_pw_water_intakes
 		NAM_pw_reservoir_survey
 		NAM_pw_air_review
@@ -588,8 +587,6 @@ NAM_postwar_plan = {
 		NAM_pw_industrial_recovery
 		NAM_pw_civil_engineering
 		NAM_pw_toolmaking
-		NAM_pw_machine_repair
-		NAM_pw_testing_facilities
 		NAM_pw_industrial_sites
 		NAM_pw_rail_workshops
 		NAM_pw_southern_corridor
@@ -753,15 +750,12 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_energy_commission
 		NAM_pw_regional_power
 		NAM_pw_power_grid
-		NAM_pw_oilfield_substations
 		NAM_pw_irrigation_works
 		NAM_pw_reservoir_survey
 		NAM_pw_air_review
 		NAM_pw_airfield_network
 		NAM_pw_air_defence
 		NAM_pw_power_reserve
-		NAM_pw_machine_repair
-		NAM_pw_testing_facilities
 		NAM_pw_rail_workshops
 		NAM_pw_southern_corridor
 		NAM_pw_district_hospitals
@@ -1173,7 +1167,6 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_energy_commission
 		NAM_pw_regional_power
 		NAM_pw_power_grid
-		NAM_pw_oilfield_substations
 		NAM_pw_water_intakes
 		NAM_pw_reservoir_survey
 		NAM_pw_air_review
@@ -1183,8 +1176,6 @@ NAM_postwar_pragmatic_plan = {
 		NAM_pw_industrial_recovery
 		NAM_pw_civil_engineering
 		NAM_pw_toolmaking
-		NAM_pw_machine_repair
-		NAM_pw_testing_facilities
 		NAM_pw_industrial_sites
 		NAM_pw_rail_workshops
 		NAM_pw_southern_corridor

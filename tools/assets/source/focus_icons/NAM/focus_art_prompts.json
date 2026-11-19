@@ -1909,6 +1909,24 @@
   },
   "focus_compositions": [
     {
+      "focus_id": "NAM_service_state",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_service_state",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_service_state.png"
+    },
+    {
+      "focus_id": "NAM_contract_bureau",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_contract_bureau",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_contract_bureau.png"
+    },
+    {
+      "focus_id": "NAM_mobilisation_office",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_mobilisation_office",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_mobilisation_office.png"
+    },
+    {
       "focus_id": "NAM_machine_shops",
       "export_runtime": false,
       "sprite": "GFX_focus_NAM_machine_shops",
@@ -3291,6 +3309,604 @@
       ],
       "generator": "Layer composition",
       "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_service_state_composition.png",
+      "focus_id": "NAM_service_state",
+      "title": "Государственное строительство",
+      "source_assets": [
+        "postwar_service_state_subject.png",
+        "vertical_signing_hand.png",
+        "independence_state_seal.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "postwar_service_state_subject.png",
+          "source_xywh": [
+            0,
+            16,
+            1536,
+            1008
+          ],
+          "destination_xywh": [
+            350,
+            119,
+            1220,
+            801
+          ]
+        },
+        {
+          "file": "vertical_signing_hand.png",
+          "source_xywh": [
+            0,
+            25,
+            1515,
+            999
+          ],
+          "destination_xywh": [
+            17,
+            440,
+            736,
+            485
+          ]
+        },
+        {
+          "file": "independence_state_seal.png",
+          "source_xywh": [
+            76,
+            46,
+            1256,
+            1100
+          ],
+          "destination_xywh": [
+            1018,
+            690,
+            274,
+            240
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_seal_registry_composition.png",
+      "focus_id": "NAM_seal_registry",
+      "title": "Реформа государственного управления",
+      "source_assets": [
+        "quiet_lists_personnel_register.png",
+        "postwar_seal_registry_subject.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "quiet_lists_personnel_register.png",
+          "source_xywh": [
+            21,
+            72,
+            1495,
+            952
+          ],
+          "destination_xywh": [
+            620,
+            321,
+            940,
+            599
+          ]
+        },
+        {
+          "file": "postwar_seal_registry_subject.png",
+          "source_xywh": [
+            0,
+            6,
+            1536,
+            1018
+          ],
+          "destination_xywh": [
+            55,
+            156,
+            1130,
+            749
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_namestnik_garrisons_composition.png",
+      "focus_id": "NAM_namestnik_garrisons",
+      "title": "Гарнизоны наместников",
+      "source_assets": [
+        "postwar_namestnik_garrisons_subject.png",
+        "namestnik_circuits_staff_car.png",
+        "field_gendarmes_checkpoint_guard.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "postwar_namestnik_garrisons_subject.png",
+          "source_xywh": [
+            0,
+            13,
+            1536,
+            1011
+          ],
+          "destination_xywh": [
+            335,
+            0,
+            1170,
+            770
+          ]
+        },
+        {
+          "file": "namestnik_circuits_staff_car.png",
+          "source_xywh": [
+            0,
+            19,
+            1523,
+            1005
+          ],
+          "destination_xywh": [
+            849,
+            530,
+            591,
+            390
+          ]
+        },
+        {
+          "file": "field_gendarmes_checkpoint_guard.png",
+          "source_xywh": [
+            0,
+            0,
+            996,
+            1536
+          ],
+          "destination_xywh": [
+            27,
+            95,
+            535,
+            825
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_oil_quotas_composition.png",
+      "focus_id": "NAM_oil_quotas",
+      "title": "Нефтяные квоты",
+      "source_assets": [
+        "quiet_wells_pumpjack.png",
+        "postwar_oil_quotas_subject.png",
+        "metropolitan_quota_sheet_v3.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "quiet_wells_pumpjack.png",
+          "source_xywh": [
+            29,
+            6,
+            1493,
+            1005
+          ],
+          "destination_xywh": [
+            5,
+            232,
+            785,
+            528
+          ]
+        },
+        {
+          "file": "postwar_oil_quotas_subject.png",
+          "source_xywh": [
+            0,
+            0,
+            1536,
+            1024
+          ],
+          "destination_xywh": [
+            475,
+            142,
+            1100,
+            733
+          ]
+        },
+        {
+          "file": "metropolitan_quota_sheet_v3.png",
+          "source_xywh": [
+            0,
+            5,
+            1154,
+            1358
+          ],
+          "destination_xywh": [
+            114,
+            525,
+            331,
+            390
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_state_plan_composition.png",
+      "focus_id": "NAM_state_plan",
+      "title": "Центральный производственный план",
+      "source_assets": [
+        "industrial_factories.png",
+        "postwar_state_plan_subject.png",
+        "refinery_programme_blueprint_roll.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "industrial_factories.png",
+          "source_xywh": [
+            15,
+            19,
+            1505,
+            981
+          ],
+          "destination_xywh": [
+            0,
+            28,
+            1000,
+            652
+          ]
+        },
+        {
+          "file": "postwar_state_plan_subject.png",
+          "source_xywh": [
+            0,
+            0,
+            1536,
+            1024
+          ],
+          "destination_xywh": [
+            470,
+            133,
+            1090,
+            727
+          ]
+        },
+        {
+          "file": "refinery_programme_blueprint_roll.png",
+          "source_xywh": [
+            0,
+            0,
+            1535,
+            1008
+          ],
+          "destination_xywh": [
+            236,
+            590,
+            487,
+            320
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_unified_standards_composition.png",
+      "focus_id": "NAM_unified_standards",
+      "title": "Единые промышленные стандарты",
+      "source_assets": [
+        "refinery_programme_blueprint_roll.png",
+        "postwar_unified_standards_subject.png",
+        "machine_shops_machined_bushing.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "refinery_programme_blueprint_roll.png",
+          "source_xywh": [
+            0,
+            0,
+            1535,
+            1008
+          ],
+          "destination_xywh": [
+            205,
+            240,
+            1020,
+            670
+          ]
+        },
+        {
+          "file": "postwar_unified_standards_subject.png",
+          "source_xywh": [
+            0,
+            17,
+            1520,
+            1007
+          ],
+          "destination_xywh": [
+            316,
+            25,
+            1177,
+            780
+          ]
+        },
+        {
+          "file": "machine_shops_machined_bushing.png",
+          "source_xywh": [
+            0,
+            23,
+            1512,
+            1001
+          ],
+          "destination_xywh": [
+            20,
+            504,
+            590,
+            391
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_state_project_bureaus_composition.png",
+      "focus_id": "NAM_state_project_bureaus",
+      "title": "Государственные проектные бюро",
+      "source_assets": [
+        "postwar_state_project_bureaus_subject.png",
+        "technical_college_engineer.png",
+        "refinery_programme_blueprint_roll.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "postwar_state_project_bureaus_subject.png",
+          "source_xywh": [
+            0,
+            9,
+            1536,
+            1015
+          ],
+          "destination_xywh": [
+            377,
+            65,
+            1196,
+            790
+          ]
+        },
+        {
+          "file": "technical_college_engineer.png",
+          "source_xywh": [
+            0,
+            9,
+            1270,
+            1225
+          ],
+          "destination_xywh": [
+            10,
+            216,
+            720,
+            694
+          ]
+        },
+        {
+          "file": "refinery_programme_blueprint_roll.png",
+          "source_xywh": [
+            0,
+            0,
+            1535,
+            1008
+          ],
+          "destination_xywh": [
+            930,
+            685,
+            335,
+            220
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_ladder_of_seals_composition.png",
+      "focus_id": "NAM_ladder_of_seals",
+      "title": "Единая система управления",
+      "source_assets": [
+        "empire_administration_tower.png",
+        "postwar_ladder_of_seals_subject.png",
+        "districts_seal_cluster.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "empire_administration_tower.png",
+          "source_xywh": [
+            16,
+            14,
+            1007,
+            1506
+          ],
+          "destination_xywh": [
+            872,
+            0,
+            575,
+            860
+          ]
+        },
+        {
+          "file": "postwar_ladder_of_seals_subject.png",
+          "source_xywh": [
+            0,
+            0,
+            1521,
+            1024
+          ],
+          "destination_xywh": [
+            127,
+            75,
+            1225,
+            825
+          ]
+        },
+        {
+          "file": "districts_seal_cluster.png",
+          "source_xywh": [
+            0,
+            17,
+            1516,
+            1007
+          ],
+          "destination_xywh": [
+            136,
+            610,
+            452,
+            300
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_ladder_ending_iron_composition.png",
+      "focus_id": "NAM_ladder_ending_iron",
+      "title": "Исполнительная власть",
+      "source_assets": [
+        "postwar_ladder_ending_iron_subject.png",
+        "rom_address_portrait.png",
+        "rom_address_microphones.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "postwar_ladder_ending_iron_subject.png",
+          "source_xywh": [
+            0,
+            0,
+            1522,
+            1024
+          ],
+          "destination_xywh": [
+            600,
+            267,
+            970,
+            653
+          ]
+        },
+        {
+          "file": "rom_address_portrait.png",
+          "source_xywh": [
+            0,
+            9,
+            1081,
+            1446
+          ],
+          "destination_xywh": [
+            180,
+            45,
+            650,
+            870
+          ]
+        },
+        {
+          "file": "rom_address_microphones.png",
+          "source_xywh": [
+            0,
+            9,
+            1321,
+            1151
+          ],
+          "destination_xywh": [
+            598,
+            675,
+            293,
+            255
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
+    },
+    {
+      "file": "nam_postwar_ladder_ending_service_composition.png",
+      "focus_id": "NAM_ladder_ending_service",
+      "title": "Служебная республика",
+      "source_assets": [
+        "district_guarantees_city_hall.png",
+        "postwar_ladder_ending_service_subject.png"
+      ],
+      "canvas": [
+        1600,
+        940
+      ],
+      "layers": [
+        {
+          "file": "district_guarantees_city_hall.png",
+          "source_xywh": [
+            24,
+            0,
+            1482,
+            1024
+          ],
+          "destination_xywh": [
+            171,
+            0,
+            948,
+            655
+          ]
+        },
+        {
+          "file": "postwar_ladder_ending_service_subject.png",
+          "source_xywh": [
+            0,
+            0,
+            1536,
+            1024
+          ],
+          "destination_xywh": [
+            277,
+            205,
+            1065,
+            710
+          ]
+        }
+      ],
+      "generator": "Layer composition",
+      "export_runtime": false
     }
   ],
   "native_export": {
@@ -3739,6 +4355,66 @@
       "focus": "NAM_mobilisation_office",
       "generator": "Built-in image_gen",
       "prompt": "Transparent PNG single isolated cutout. A 1930s mobilisation bureau public address fixture, large dented antique dark green enamel trumpet loudspeaker with a warm brass lip, bolted on a post in front of a broad weathered wooden public notice board showing a few large bone-white posted mobilization sheets with dark lines and a burgundy stamp. One powerful shape, the horn points diagonally up to the right and breaks the top silhouette. Frontal view, monumental documentary photomontage in Hearts of Iron IV national focus art style, hard amber rim from left, naturally colored material and ivory sheets, crisp contour, strong readable contrast in a 150px thumbnail. Authentic vintage object rather than fantasy. Just the posting board with the horn attached to its right upper corner, the post ends below. No people, sky, terrain, border, ornamental base, sun, words, legible text, flags, seals floating in space. All around object is transparent, widescreen 3:2 image, all edges visible."
+    },
+    {
+      "focus": "NAM_service_state",
+      "file": "postwar_service_state_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "An imposing stepped stone entrance to the NEW civil chancellery seen from street level, granite stairs ascending diagonally toward an open heavy bronze door on the upper right, one small clerk framed inside. Bold sculptural asymmetry, tarnished green bronze trim, pale sandstone; architecture fills the sheet, open right silhouette."
+    },
+    {
+      "focus": "NAM_seal_registry",
+      "file": "postwar_seal_registry_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "A massive dark honey oak rack holding a graduated series of FIVE distinct black and red handled official rubber stamps. Rack is seen frontally from below like an organ keyboard, polished brass number plates and worn red sealing wax. Stagger their heights and make the closest tall turned handle the unmistakable focal point."
+    },
+    {
+      "focus": "NAM_namestnik_garrisons",
+      "file": "postwar_namestnik_garrisons_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "An interwar district garrison at morning roll call: two ranks of tiny soldiers wearing charcoal olive greatcoats on parade, converging toward the square gate tower with an arched passage and a brass bell. Wind catches a small plain dark red pennant, no insignia. Strong low sweeping wedge of the ranks, asymmetrical high gate at right, no giant heroic head."
+    },
+    {
+      "focus": "NAM_oil_quotas",
+      "file": "postwar_oil_quotas_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "A colossal vintage industrial volumetric OIL FLOW METER; thick circular cream enamel dial, a single red needle over broad black gauge markings, a pair of black mechanical counter windows and oily green flanged iron casing. Hard glint on glass. Wide low iron pipe sweeps out to the right. Readable bold graphic industrial silhouette."
+    },
+    {
+      "focus": "NAM_state_plan",
+      "file": "postwar_state_plan_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "Wide panoramic row of working machine shops behind a huge 1930s works scheduling wall-board: ivory horizontal rails with dark red, ochre, and black metal job tickets, one sliding ticket being moved by a foreman's sleeve. Strong zigzag factory roof on upper left, amber lit factory windows. Treat it as one chunky museum-quality cutaway prop."
+    },
+    {
+      "focus": "NAM_unified_standards",
+      "file": "postwar_unified_standards_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "A gigantic polished interwar engineering micrometer, its broad blue-black C-frame opening around a single steel cylindrical gauge block, brass knurled thimble points dramatically to the upper right. No numbers required. Optical precision, extremely simple instantly recognisable silhouette."
+    },
+    {
+      "focus": "NAM_state_project_bureaus",
+      "file": "postwar_state_project_bureaus_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "A dramatic scale model of a steel arch bridge UNDER DEVELOPMENT on a worn timber drafting bench, one half of arch still represented by skeletal brass section ribs. Raking light casts real shadows through the miniature, steel blue and brass rulers built into bench. The tall bridge arch anchors the right half."
+    },
+    {
+      "focus": "NAM_ladder_of_seals",
+      "file": "postwar_ladder_of_seals_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "The monumental ceremonial staircase of an early modernist state chancellery spiralling upward from the left into a tall, amber-lit tall landing at right, black iron railing and broad dark marble steps. Multiple shallow landings give a visible staircase profile, all architecture shown as a compact freestanding cutaway without roof or surrounding room. Slightly worn, restrained jade stone and amber brass, a hanging chain of office on the balustrade."
+    },
+    {
+      "focus": "NAM_ladder_ending_iron",
+      "file": "postwar_ladder_ending_iron_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "A single towering, EMPTY head-of-state chair on a low stepped dais and a heavy burgundy velvet hanging behind its right shoulder. Dark polished carved wood and an old tarnished brass heraldic shield above the chair (simple and shadowed, no real world national symbols). Low angle, authoritarian solemnity. Chair and drape form an asymmetrical high silhouette, amber light across the armrest."
+    },
+    {
+      "focus": "NAM_ladder_ending_service",
+      "file": "postwar_ladder_ending_service_subject.png",
+      "generator": "Built-in image_gen",
+      "prompt": "An open public hearing in a 1930s provincial republic: three district delegates, a female oilfield engineer in green work jacket, a grey haired civilian in dark suit and a union worker in blue jacket, standing close together and addressing a seated secretary across an open low counter. Lean forward, exchange eye contact, visible expressive hands and distinct profiles, looking toward left. Pale side light on faces and desk, wide compact freestanding cutout composition."
     }
   ],
   "composition_direction": "Grandiose political and industrial imagery with dominant large figures or symbols, dramatic scale and strong graphic accents. Individual assets should support a monumental photographic collage. Preserve natural materials and avoid small inventory-item presentation.",

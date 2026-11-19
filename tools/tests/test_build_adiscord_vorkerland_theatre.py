@@ -64,11 +64,10 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
             )
 
     def test_starting_supply_routes_preserve_the_existing_network(self) -> None:
-        self.assertTrue(hasattr(theatre, "STARTING_SUPPLY_RAILS"))
         source = normalized_rail_source()
         updated = theatre.update_source(source)
-        for tag in ("STP", "YPR"):
-            line = theatre.render_supply_connection(tag)
+        for _, route, _ in theatre.STARTING_SUPPLY_RAILS:
+            line = theatre.render_rail_line(1, route)
             self.assertEqual(updated.splitlines().count(line), 1)
         self.assertEqual(theatre.update_source(updated), updated)
         self.assertEqual(
@@ -109,19 +108,22 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
 
     def test_missing_supply_link_is_reported(self) -> None:
         source = normalized_rail_source()
-        for tag in ("STP", "YPR"):
-            with self.subTest(tag=tag), tempfile.TemporaryDirectory() as directory:
-                line = theatre.render_supply_connection(tag)
-                broken = source.replace(line + "\n", "")
-                self.assertNotEqual(broken, source)
-                path = Path(directory) / "railways.txt"
-                path.write_text(broken, encoding="utf-8")
-                with patch.object(theatre, "RAILWAYS_PATH", path):
-                    issues = theatre.validate()
-                self.assertTrue(
-                    any(tag in issue and "disconnected" in issue for issue in issues),
+        removed = {theatre.render_rail_line(1, route) for _, route, _ in theatre.STARTING_SUPPLY_RAILS}
+        removed.update({"1 2 176 17526", "1 4 16323 17041 17079 10006", "1 3 6557 8123 2365"})
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "railways.txt"
+            path.write_text("\n".join(line for line in source.splitlines() if line not in removed), encoding="utf-8")
+            with patch.object(theatre, "RAILWAYS_PATH", path):
+                issues = theatre.validate()
+        for tag, _, endpoints in theatre.STARTING_SUPPLY_RAILS:
+            for endpoint in endpoints[1:]:
+                self.assertIn(
+                    f"{tag} supply endpoints {endpoints[0]} and {endpoint} are disconnected inside its starting territory",
                     issues,
                 )
+        self.assertIn("NAM supply hub 176 is disconnected from the capital inside its territory", issues)
+        for tag in ("WEF", "GLP"):
+            self.assertTrue(any(issue.startswith(f"{tag} mainland railway is disconnected") for issue in issues))
 
     def test_rail_apply_preserves_unchanged_supply_bytes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

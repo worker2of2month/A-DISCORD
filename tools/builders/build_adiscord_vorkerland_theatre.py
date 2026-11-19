@@ -24,12 +24,15 @@ RAILWAYS_PATH = ROOT / "map" / "railways.txt"
 SUPPLY_NODES_PATH = ROOT / "map" / "supply_nodes.txt"
 OSV_CAPITAL_STATE = 318
 OSV_CAPITAL_RAIL = (1, (16642, 1540, 1818))
-# Each spur joins existing rail inside its starting country's borders.
-# The paired hubs are the continuity contract, not extra construction.
-STARTING_SUPPLY_RAILS = {
-    "STP": (1, (119, 1, 16440), (16547, 16440)),
-    "YPR": (1, (33, 73, 11), (16372, 11)),
-}
+# Each entry lists the feeder and the endpoints it must connect on domestic rail.
+STARTING_SUPPLY_RAILS = (
+    ("STP", (119, 1, 16440), (16547, 16440)),
+    ("YPR", (33, 73, 11), (16372, 11)),
+    ("SOL", (9104, 6716), (16582, 9104)),
+    ("SOL", (4156, 8570), (16582, 16584)),
+    ("BTL", (16556, 1397, 3344, 378, 1919, 2968, 2285), (3344, 16556, 2285)),
+    ("DAN", (569, 4242, 11636, 7274), (569, 7274)),
+)
 # Capital, forward depot and embarkation port remain connected inside each country.
 COALITION_SUPPLY_RAILS = {
     "EFL": (
@@ -389,6 +392,7 @@ SOUTH_CAPITAL_PROVINCES = {
 }
 SOUTH_SUPPLY_RAILS = {
     "NAM": (
+        (1, (176, 17526)),
         (1, (16716, 16892, 16881, 2038)),
         (1, (16890, 12668, 3127, 10967)),
     ),
@@ -401,6 +405,7 @@ SOUTH_SUPPLY_RAILS = {
         (1, (16882, 13019, 12482, 6184, 729)),
     ),
     "WEF": (
+        (1, (16323, 17041, 17079, 10006)),
         (1, (10006, 6579, 4013, 8479)),
     ),
     "KDR": (
@@ -410,6 +415,7 @@ SOUTH_SUPPLY_RAILS = {
         (1, (1377, 2785, 10861, 3142, 1459, 10241, 864)),
     ),
     "GLP": (
+        (1, (6557, 8123, 2365)),
         (1, (12583, 9672)),
         (1, (16731, 3643, 10952, 8580, 2073, 4350, 7708)),
         (1, (3415, 12369, 2342, 5473, 17140, 6512, 5595, 7073, 16796)),
@@ -514,11 +520,6 @@ def render_managed_line() -> str:
     return f"{level} {len(provinces)} {route}"
 
 
-def render_supply_connection(tag: str) -> str:
-    level, provinces, _ = STARTING_SUPPLY_RAILS[tag]
-    return f"{level} {len(provinces)} {' '.join(map(str, provinces))}"
-
-
 def render_rail_line(level: int, provinces: tuple[int, ...]) -> str:
     return f"{level} {len(provinces)} {' '.join(map(str, provinces))}"
 
@@ -548,7 +549,7 @@ def update_source(source: str) -> str:
     managed = [
         render_managed_line(),
         *(render_rail_line(level, route) for level, route in COUNTRY_RAILWAYS["branches"]),
-        *(render_supply_connection(tag) for tag in STARTING_SUPPLY_RAILS),
+        *(render_rail_line(1, route) for _, route, _ in STARTING_SUPPLY_RAILS),
         render_khan_connection(),
         *(
             render_khan_campaign_rail(level, provinces)
@@ -773,10 +774,13 @@ def south_theatre_issues(
                 if second not in physical.get(first, set()):
                     issues.append(f"{tag} southern feeder is not adjacent: {first}-{second}")
     hub_states: dict[str, set[int]] = defaultdict(set)
+    hubs: set[int] = set()
     for line in supply_lines:
         fields = line.split()
         if len(fields) == 2 and fields[1].isdigit():
-            state = state_by_province.get(int(fields[1]))
+            hub = int(fields[1])
+            hubs.add(hub)
+            state = state_by_province.get(hub)
             if state in state_owners:
                 hub_states[state_owners[state]].add(state)
     for hub, expected_state in SOUTH_SUPPLY_HUB_STATES.items():
@@ -792,9 +796,16 @@ def south_theatre_issues(
                 state_neighbours[first].add(second)
     for tag, capital in SOUTH_CAPITAL_PROVINCES.items():
         reached = _reached_by_rail(capital, rail_graph, lambda province: owner(province) == tag)
-        for hub, state in SOUTH_SUPPLY_HUB_STATES.items():
-            if state_owners.get(state) == tag and hub not in reached:
+        for hub in sorted(hubs - reached):
+            if owner(hub) == tag and state_by_province[hub] not in SOUTH_DETACHED_STATES:
                 issues.append(f"{tag} supply hub {hub} is disconnected from the capital inside its territory")
+        isolated = sorted(
+            province for province in rail_graph
+            if owner(province) == tag and province not in reached
+            and state_by_province[province] not in SOUTH_DETACHED_STATES
+        )
+        if isolated:
+            issues.append(f"{tag} mainland railway is disconnected from the capital at {isolated}")
         for state, state_owner in state_owners.items():
             if state_owner != tag or state in SOUTH_DETACHED_STATES:
                 continue
@@ -1056,9 +1067,9 @@ def validate() -> list[str]:
                 issues.append(f"{tag} forward supply hub {hub} must occur exactly once")
             if state_by_province.get(hub) != COALITION_SUPPLY_HUB_STATES[hub]:
                 issues.append(f"{tag} forward supply hub {hub} moved outside its state")
-        for tag, (_, route, hubs) in STARTING_SUPPLY_RAILS.items():
-            if source.splitlines().count(render_supply_connection(tag)) != 1:
-                issues.append(f"{tag} supply connection must occur exactly once")
+        for tag, route, endpoints in STARTING_SUPPLY_RAILS:
+            if source.splitlines().count(render_rail_line(1, route)) != 1:
+                issues.append(f"{tag} supply connection {route} must occur exactly once")
             for province in route:
                 if province_types.get(province) != "land":
                     issues.append(f"{tag} supply connection leaves land at {province}")
@@ -1071,20 +1082,12 @@ def validate() -> list[str]:
                     issues.append(
                         f"{tag} rail segment {first}-{second} is not physically adjacent"
                     )
-            pending = [hubs[0]]
-            reached = {hubs[0]}
-            while pending:
-                province = pending.pop()
-                for neighbour in rail_graph[province]:
-                    if (
-                        neighbour not in reached
-                        and state_owners.get(state_by_province.get(neighbour)) == tag
-                    ):
-                        reached.add(neighbour)
-                        pending.append(neighbour)
-            if hubs[1] not in reached:
+            reached = _reached_by_rail(
+                endpoints[0], rail_graph, lambda p: state_owners.get(state_by_province.get(p)) == tag
+            )
+            for endpoint in sorted(set(endpoints) - reached):
                 issues.append(
-                    f"{tag} supply hubs {hubs[0]} and {hubs[1]} are disconnected inside its starting territory"
+                    f"{tag} supply endpoints {endpoints[0]} and {endpoint} are disconnected inside its starting territory"
                 )
         if source.splitlines().count(render_khan_connection()) != 1:
             issues.append("RUS border supply connection must occur exactly once")

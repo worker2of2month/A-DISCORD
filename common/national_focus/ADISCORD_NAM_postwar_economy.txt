@@ -791,7 +791,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_regional_power
 		relative_position_id = NAM_pw_energy_commission
-		x = 0
+		x = -2
 		y = 1
 		icon = GFX_focus_RUS_bunker_power_school
 		cost = 3
@@ -836,6 +836,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_program_oilfield_substations
+			custom_effect_tooltip = NAM_program_oilfield_substations_unlock_tt
 			custom_effect_tooltip = NAM_grid_connect_tt
 			effect_tooltip = {
 				swap_ideas = {
@@ -855,35 +857,9 @@ shared_focus = {
 	}
 
 shared_focus = {
-		id = NAM_pw_oilfield_substations
-		relative_position_id = NAM_pw_energy_commission
-		x = -2
-		y = 1
-		icon = GFX_focus_NAM_well_register
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		prerequisite = {
-			focus = NAM_pw_energy_commission
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_program_oilfield_substations
-			custom_effect_tooltip = NAM_program_oilfield_substations_unlock_tt
-		}
-		ai_will_do = { base = 5 }
-	}
-
-shared_focus = {
 		id = NAM_pw_water_intakes
 		relative_position_id = NAM_pw_energy_commission
-		x = 0
+		x = -2
 		y = 2
 		icon = GFX_focus_RUS_bunker_utilities
 		cost = 3
@@ -925,7 +901,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_irrigation_works
 		relative_position_id = NAM_pw_energy_commission
-		x = 3
+		x = 2
 		y = 2
 		icon = GFX_focus_RUS_bunker_utilities
 		cost = 3
@@ -954,7 +930,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_reservoir_survey
 		relative_position_id = NAM_pw_energy_commission
-		x = 2
+		x = 0
 		y = 3
 		icon = GFX_focus_RUS_bunker_utilities
 		cost = 3
@@ -995,7 +971,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_grid_dispatch
 		relative_position_id = NAM_pw_energy_commission
-		x = 0
+		x = 2
 		y = 3
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
@@ -1081,7 +1057,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_civil_engineering
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -3
+		x = -2
 		y = 1
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
@@ -1103,6 +1079,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_program_machine_repair
+			custom_effect_tooltip = NAM_program_machine_repair_unlock_tt
 			unlock_decision_tooltip = NAM_program_civil_engineering
 			custom_effect_tooltip = NAM_program_civil_engineering_unlock_tt
 		}
@@ -1112,7 +1090,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_arms_engineering
 		relative_position_id = NAM_pw_industrial_recovery
-		x = 1
+		x = 2
 		y = 1
 		icon = GFX_focus_RUS_engineers_collegium
 		cost = 3
@@ -1143,10 +1121,10 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_toolmaking
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -1
+		x = 0
 		y = 2
 		icon = GFX_focus_RUS_precision_lathes
-		cost = 3
+		cost = 6
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_civil_engineering
@@ -1170,36 +1148,14 @@ shared_focus = {
 			hidden_effect = {
 				add_to_variable = {
 					var = NAM_adm_efficiency_gain
-					value = 0.05
+					value = 0.10
+				}
+				add_to_variable = {
+					var = NAM_adm_research_speed_factor
+					value = 0.025
 				}
 				NAM_refresh_administration = yes
 			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-shared_focus = {
-		id = NAM_pw_machine_repair
-		relative_position_id = NAM_pw_industrial_recovery
-		x = -5
-		y = 2
-		icon = GFX_focus_RUS_precision_lathes
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		prerequisite = {
-			focus = NAM_pw_civil_engineering
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_program_machine_repair
-			custom_effect_tooltip = NAM_program_machine_repair_unlock_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -1258,57 +1214,16 @@ shared_focus = {
 	}
 
 shared_focus = {
-		id = NAM_pw_testing_facilities
-		relative_position_id = NAM_pw_industrial_recovery
-		x = 3
-		y = 1
-		icon = GFX_focus_VAL_econ_captured_laboratories
-		cost = 6
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		prerequisite = {
-			focus = NAM_pw_industrial_recovery
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_testing_facilities_administration_preview
-				}
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_research_speed_factor
-					value = 0.025
-				}
-				add_to_variable = {
-					var = NAM_adm_efficiency_gain
-					value = 0.05
-				}
-				NAM_refresh_administration = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-shared_focus = {
 		id = NAM_pw_industrial_sites
 		relative_position_id = NAM_pw_industrial_recovery
-		x = -4
+		x = -2
 		y = 3
 		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_toolmaking
-			focus = NAM_pw_machine_repair
+			focus = NAM_pw_civil_engineering
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1530,6 +1445,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_campaign_every_crate
+			custom_effect_tooltip = NAM_campaign_every_crate_unlock_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_garrison_dummy_idea

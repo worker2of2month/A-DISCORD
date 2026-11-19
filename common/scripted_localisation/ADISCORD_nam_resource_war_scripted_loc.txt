@@ -760,17 +760,6 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMGetCost_pp_75
-	text = {
-		trigger = { NOT = { has_political_power < 75 } }
-		localization_key = NAM_amount_pp_75
-	}
-	text = {
-		localization_key = NAM_amount_pp_75_blocked
-	}
-}
-
-defined_text = {
 	name = NAMGetCost_treasury_500
 	text = {
 		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
@@ -1521,7 +1510,7 @@ defined_text = {
 		localization_key = NAM_bw_reason_scorched
 	}
 	text = {
-		trigger = { check_variable = { var = NAM_field_condition value = 100 compare = greater_than_or_equals } }
+		trigger = { NAM_field_has_damage = no }
 		localization_key = NAM_bw_reason_condition_full
 	}
 	text = {
@@ -1715,6 +1704,28 @@ defined_text = {
 }
 
 defined_text = {
+	name = NAMBasinExportOffice
+	text = {
+		trigger = { check_variable = { NAM_export_office_level > 0 } }
+		localization_key = NAM_bw_office_status
+	}
+	text = {
+		trigger = { NAM = { NAM_export_office_unlocked = yes } }
+		localization_key = NAM_bw_office_unbuilt
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMBasinOfficeStatement
+	text = {
+		trigger = { NAM_export_office_unlocked = yes }
+		localization_key = NAM_bw_office_statement
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
 	name = NAMBasinFieldCapacity
 	text = { localization_key = NAM_bw_field_capacity_detail }
 }
@@ -1738,6 +1749,10 @@ defined_text = {
 # STATE field. The project deposit identifies the work in progress.
 defined_text = {
 	name = NAMBasinWorks
+	text = {
+		trigger = { has_variable = NAM_export_office_order }
+		localization_key = NAM_bw_office_construction
+	}
 	text = {
 		trigger = {
 			has_state_flag = NAM_project_in_progress

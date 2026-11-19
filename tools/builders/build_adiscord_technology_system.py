@@ -9,6 +9,11 @@ import re
 from PIL import Image
 
 from tools.assets.source.country_vehicles.tank_designs import TANK_EQUIPMENT as TANK_CARD_EQUIPMENT
+from tools.assets.source.country_vehicles.package_vehicles import (
+    MODEL_CARD_TAGS,
+    air_routes as aircraft_model_routes,
+    country_families as aircraft_model_families,
+)
 from tools.lib.localisation import technology_localisation_path
 from tools.lib.paths import repository_root
 from tools.lib.adiscord_remainder_countries import COUNTRIES as REMAINDER_COUNTRIES
@@ -11107,7 +11112,7 @@ COUNTRY_AIRCRAFT_ROLE_TEXTURES = {
             for tier in range(1, 4)
         ),
     }
-    for tag in ("NAM", "RUS", "SHL")
+    for tag in ("NAM", "RUS", "SHL", *MODEL_CARD_TAGS)
 }
 
 # Rank by the research unlock, not by the older year suffix in an equipment ID.
@@ -11222,12 +11227,21 @@ def country_aircraft_gfx_entries() -> str:
     }
     cards["archetype_fighter_equipment"] = (1, "fighter")
     cards["archetype_CAS_equipment"] = (1, "cas")
+    model_routes = aircraft_model_routes()
+    model_cards = cards.copy()
+    for equipment in AIRCRAFT_CARD_TIERS:
+        role, level = model_routes[equipment]
+        model_cards[equipment] = (level + 1, role)
     for tech_id, equipment in ENABLE_EQUIPMENT.items():
         unlocked_cards = {cards[item] for item in equipment if item in AIRCRAFT_CARD_TIERS}
         if unlocked_cards:
             if len(unlocked_cards) != 1:
                 raise ValueError(f"Aircraft unlock spans several card roles or tiers: {tech_id}")
             cards[tech_id] = unlocked_cards.pop()
+            native_cards = {model_cards[item] for item in equipment if item in AIRCRAFT_CARD_TIERS}
+            if len(native_cards) != 1:
+                raise ValueError(f"Aircraft unlock spans several native models: {tech_id}")
+            model_cards[tech_id] = native_cards.pop()
     for tag, family in COUNTRY_AIRCRAFT_CARD_FAMILIES.items():
         for key, (tier, role) in cards.items():
             prefix = "aircraft_cas" if role == "cas" else "aircraft"
@@ -11235,8 +11249,14 @@ def country_aircraft_gfx_entries() -> str:
                 f"GFX_{tag}_{key}_medium",
                 f"gfx/interface/technologies/ADISCORD_{prefix}_{family}_{tier}.dds",
             )
-    for tag, roles in COUNTRY_AIRCRAFT_ROLE_TEXTURES.items():
-        for key, (tier, role) in cards.items():
+    national_sets = {tag: tag for tag in COUNTRY_AIRCRAFT_ROLE_TEXTURES}
+    for identity, family in aircraft_model_families().items():
+        if identity.split("_", 1)[0] in ("VAD", "WKR", "TVA"):
+            national_sets[identity] = family
+    for tag, family in national_sets.items():
+        roles = COUNTRY_AIRCRAFT_ROLE_TEXTURES[family]
+        card_set = model_cards if family in MODEL_CARD_TAGS else cards
+        for key, (tier, role) in card_set.items():
             if role in roles:
                 add(f"GFX_{tag}_{key}_medium", roles[role][tier - 1])
     entries.append(AIRCRAFT_CARDS_END)
@@ -11245,6 +11265,8 @@ def country_aircraft_gfx_entries() -> str:
 
 def aircraft_icon_outputs(role: str = "all") -> dict[Path, bytes]:
     outputs = {}
+    if role == "bindings":
+        return {ROOT / "interface/ADISCORD_technologies.gfx": aircraft_gfx_output()}
     roles = ("fighter", "cas") if role == "all" else (role,)
     for selected_role in roles:
         if selected_role not in {"fighter", "cas"}:
@@ -13278,8 +13300,8 @@ def main() -> int:
         help="check or apply supplied country aircraft cards and their GFX routes",
     )
     parser.add_argument(
-        "--aircraft-role", choices=("all", "fighter", "cas"), default="all",
-        help="limit aircraft card conversion to one role with --aircraft-icons-only",
+        "--aircraft-role", choices=("all", "fighter", "cas", "bindings"), default="all",
+        help="select the aircraft artwork to convert, or update only sprite bindings",
     )
     parser.add_argument(
         "--weapon-icons-only",

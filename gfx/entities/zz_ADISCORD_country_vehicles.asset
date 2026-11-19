@@ -454,6 +454,150 @@ entity = {
 }
 
 entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_IVN_early_fighter_entity"
+	pdxmesh = "ADISCORD_IVN_early_fighter_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_IVN_early_cas_entity"
+	pdxmesh = "ADISCORD_IVN_early_cas_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_IVN_fighter_entity"
+	pdxmesh = "ADISCORD_IVN_fighter_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_IVN_cas_entity"
+	pdxmesh = "ADISCORD_IVN_cas_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_IVN_future_fighter_entity"
+	pdxmesh = "ADISCORD_IVN_future_fighter_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_IVN_future_cas_entity"
+	pdxmesh = "ADISCORD_IVN_future_cas_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_MON_early_fighter_entity"
+	pdxmesh = "ADISCORD_MON_early_fighter_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_MON_early_cas_entity"
+	pdxmesh = "ADISCORD_MON_early_cas_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_MON_fighter_entity"
+	pdxmesh = "ADISCORD_MON_fighter_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_MON_cas_entity"
+	pdxmesh = "ADISCORD_MON_cas_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_MON_future_fighter_entity"
+	pdxmesh = "ADISCORD_MON_future_fighter_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_MON_future_cas_entity"
+	pdxmesh = "ADISCORD_MON_future_cas_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_TVA_early_fighter_entity"
+	pdxmesh = "ADISCORD_TVA_early_fighter_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_TVA_early_cas_entity"
+	pdxmesh = "ADISCORD_TVA_early_cas_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_TVA_fighter_entity"
+	pdxmesh = "ADISCORD_TVA_fighter_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_TVA_cas_entity"
+	pdxmesh = "ADISCORD_TVA_cas_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_TVA_future_fighter_entity"
+	pdxmesh = "ADISCORD_TVA_future_fighter_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
+	clone = "light_plane_entity"
+	name = "ADISCORD_TVA_future_cas_entity"
+	pdxmesh = "ADISCORD_TVA_future_cas_mesh"
+	default_state = "idle"
+	scale = 0.20
+}
+
+entity = {
 	clone = "medium_armor_entity"
 	name = "ADISCORD_STS_taran_entity"
 	pdxmesh = "ADISCORD_STS_taran_mesh"
@@ -9021,40 +9165,40 @@ entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVC_medium_plane_1_entity" 
 entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVC_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVC_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "KDL_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "KDL_ADISCORD_fighter_archetype_entity" }
@@ -9406,40 +9550,40 @@ entity = { clone = "ADISCORD_DEF_cas_entity" name = "MLR_medium_plane_1_entity" 
 entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "MLR_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "MLR_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "MON_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "MON_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "MON_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "MON_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "MON_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "MON_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "MON_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "MON_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "MON_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "MON_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "MON_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "MON_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "MON_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "MON_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "MON_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "MON_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "MON_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "MON_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "MON_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "MON_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "MON_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "MON_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "MON_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "MON_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "MON_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "MON_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "MON_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "MON_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "MON_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_MON_early_fighter_entity" name = "MON_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_MON_early_fighter_entity" name = "MON_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_MON_early_fighter_entity" name = "MON_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_MON_fighter_entity" name = "MON_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_MON_future_fighter_entity" name = "MON_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_MON_future_fighter_entity" name = "MON_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_MON_early_cas_entity" name = "MON_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_MON_early_cas_entity" name = "MON_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_MON_early_cas_entity" name = "MON_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_MON_cas_entity" name = "MON_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_MON_future_cas_entity" name = "MON_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_MON_future_cas_entity" name = "MON_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_MON_early_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_MON_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_MON_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_MON_future_fighter_entity" name = "MON_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_MON_future_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_MON_future_fighter_entity" name = "MON_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_MON_early_cas_entity" name = "MON_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_MON_cas_entity" name = "MON_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_MON_cas_entity" name = "MON_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_MON_future_cas_entity" name = "MON_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_MON_future_cas_entity" name = "MON_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_MON_future_cas_entity" name = "MON_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_MON_early_fighter_entity" name = "MON_light_plane_entity" }
+entity = { clone = "ADISCORD_MON_early_fighter_entity" name = "MON_light_plane_0_entity" }
+entity = { clone = "ADISCORD_MON_fighter_entity" name = "MON_light_plane_1_entity" }
+entity = { clone = "ADISCORD_MON_future_fighter_entity" name = "MON_light_plane_2_entity" }
+entity = { clone = "ADISCORD_MON_future_fighter_entity" name = "MON_light_plane_3_entity" }
+entity = { clone = "ADISCORD_MON_early_cas_entity" name = "MON_medium_plane_entity" }
+entity = { clone = "ADISCORD_MON_early_cas_entity" name = "MON_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_MON_cas_entity" name = "MON_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_MON_future_cas_entity" name = "MON_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_MON_future_cas_entity" name = "MON_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "MRV_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "MRV_ADISCORD_fighter_archetype_entity" }
@@ -11304,40 +11448,40 @@ entity = { clone = "ADISCORD_WRK_cas_entity" name = "TRU_medium_plane_1_entity" 
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "TRU_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "TRU_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "TVA_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "TVA_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "TVA_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_WRK_fighter_entity" name = "TVA_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "TVA_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "TVA_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "TVA_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "TVA_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "TVA_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_WRK_cas_entity" name = "TVA_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "TVA_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "TVA_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_WRK_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_WRK_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "TVA_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "TVA_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_WRK_cas_entity" name = "TVA_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_WRK_cas_entity" name = "TVA_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "TVA_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "TVA_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "TVA_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "TVA_light_plane_entity" }
-entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "TVA_light_plane_0_entity" }
-entity = { clone = "ADISCORD_WRK_fighter_entity" name = "TVA_light_plane_1_entity" }
-entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "TVA_light_plane_2_entity" }
-entity = { clone = "ADISCORD_WRK_future_fighter_entity" name = "TVA_light_plane_3_entity" }
-entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "TVA_medium_plane_entity" }
-entity = { clone = "ADISCORD_WRK_early_cas_entity" name = "TVA_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_WRK_cas_entity" name = "TVA_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "TVA_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "TVA_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_TVA_early_fighter_entity" name = "TVA_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_TVA_early_fighter_entity" name = "TVA_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_TVA_early_fighter_entity" name = "TVA_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_TVA_fighter_entity" name = "TVA_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_TVA_future_fighter_entity" name = "TVA_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_TVA_future_fighter_entity" name = "TVA_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_TVA_early_cas_entity" name = "TVA_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_TVA_early_cas_entity" name = "TVA_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_TVA_early_cas_entity" name = "TVA_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_TVA_cas_entity" name = "TVA_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_TVA_future_cas_entity" name = "TVA_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_TVA_future_cas_entity" name = "TVA_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_TVA_early_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_TVA_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_TVA_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_TVA_future_fighter_entity" name = "TVA_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_TVA_future_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_TVA_future_fighter_entity" name = "TVA_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_TVA_early_cas_entity" name = "TVA_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_TVA_cas_entity" name = "TVA_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_TVA_cas_entity" name = "TVA_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_TVA_future_cas_entity" name = "TVA_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_TVA_future_cas_entity" name = "TVA_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_TVA_future_cas_entity" name = "TVA_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_TVA_early_fighter_entity" name = "TVA_light_plane_entity" }
+entity = { clone = "ADISCORD_TVA_early_fighter_entity" name = "TVA_light_plane_0_entity" }
+entity = { clone = "ADISCORD_TVA_fighter_entity" name = "TVA_light_plane_1_entity" }
+entity = { clone = "ADISCORD_TVA_future_fighter_entity" name = "TVA_light_plane_2_entity" }
+entity = { clone = "ADISCORD_TVA_future_fighter_entity" name = "TVA_light_plane_3_entity" }
+entity = { clone = "ADISCORD_TVA_early_cas_entity" name = "TVA_medium_plane_entity" }
+entity = { clone = "ADISCORD_TVA_early_cas_entity" name = "TVA_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_TVA_cas_entity" name = "TVA_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_TVA_future_cas_entity" name = "TVA_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_TVA_future_cas_entity" name = "TVA_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "ULV_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "ULV_ADISCORD_fighter_archetype_entity" }
@@ -15679,180 +15823,180 @@ entity = { clone = "ADISCORD_ARB_cas_entity" name = "KDR_NAM_corp_6_medium_plane
 entity = { clone = "ADISCORD_ARB_future_cas_entity" name = "KDR_NAM_corp_6_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_ARB_future_cas_entity" name = "KDR_NAM_corp_6_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_victory_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_victory_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_victory_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_victory_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_victory_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_victory_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_victory_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_victory_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_victory_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_victory_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_victory_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_victory_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_victory_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_victory_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_victory_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_victory_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_victory_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_victory_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_victory_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_victory_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_joint_government_west_victory_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_joint_government_west_victory_ADISCORD_fighter_archetype_entity" }
@@ -16029,215 +16173,215 @@ entity = { clone = "ADISCORD_WRK_cas_entity" name = "WRK_vorkerland_world_empire
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_world_empire_west_victory_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_world_empire_west_victory_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_victory_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_victory_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_victory_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_west_victory_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_victory_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_victory_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_victory_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_west_victory_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_west_victory_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_victory_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_victory_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_victory_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_victory_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_victory_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_west_victory_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_victory_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_victory_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_victory_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_victory_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_west_victory_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_victory_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_victory_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_victory_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_victory_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_victory_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_west_victory_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_victory_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_victory_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_victory_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_victory_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_victory_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_west_victory_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_west_victory_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_victory_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_victory_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_victory_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_victory_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_victory_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_west_victory_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_victory_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_victory_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_victory_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_victory_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_west_victory_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_victory_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_victory_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_mandate_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_cw_committee_west_mandate_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_cw_committee_west_mandate_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_mandate_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_legion_west_mandate_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_legion_west_mandate_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_mandate_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_directory_west_mandate_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_directory_west_mandate_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_mandate_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_communes_west_mandate_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_communes_west_mandate_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_mandate_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_unified_marches_west_mandate_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_unified_marches_west_mandate_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_joint_government_west_mandate_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_vorkerland_joint_government_west_mandate_ADISCORD_fighter_archetype_entity" }
@@ -16519,40 +16663,40 @@ entity = { clone = "ADISCORD_WRK_cas_entity" name = "WRK_vorkerland_technocracy_
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_technocracy_west_mandate_medium_plane_2_entity" }
 entity = { clone = "ADISCORD_WRK_future_cas_entity" name = "WRK_vorkerland_technocracy_west_mandate_medium_plane_3_entity" }
 
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_archetype_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_west_mandate_ADISCORD_attack_airframe_2163_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_mandate_ADISCORD_drone_airframe_2183_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_mandate_ADISCORD_attack_airframe_2170_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_mandate_ADISCORD_attack_airframe_2175_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_mandate_light_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_fighter_entity" name = "IVN_west_mandate_light_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_fighter_entity" name = "IVN_west_mandate_light_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_mandate_light_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_fighter_entity" name = "IVN_west_mandate_light_plane_3_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_mandate_medium_plane_entity" }
-entity = { clone = "ADISCORD_DEF_early_cas_entity" name = "IVN_west_mandate_medium_plane_0_entity" }
-entity = { clone = "ADISCORD_DEF_cas_entity" name = "IVN_west_mandate_medium_plane_1_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_mandate_medium_plane_2_entity" }
-entity = { clone = "ADISCORD_DEF_future_cas_entity" name = "IVN_west_mandate_medium_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_archetype_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2161_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2166_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_interceptor_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_mandate_ADISCORD_fighter_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_mandate_ADISCORD_cas_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_west_mandate_ADISCORD_attack_airframe_2163_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_west_mandate_ADISCORD_vtol_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_mandate_ADISCORD_drone_airframe_2183_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_mandate_ADISCORD_attack_airframe_2170_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_mandate_ADISCORD_attack_airframe_2175_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_mandate_light_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_fighter_entity" name = "IVN_west_mandate_light_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_fighter_entity" name = "IVN_west_mandate_light_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_mandate_light_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_fighter_entity" name = "IVN_west_mandate_light_plane_3_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_mandate_medium_plane_entity" }
+entity = { clone = "ADISCORD_IVN_early_cas_entity" name = "IVN_west_mandate_medium_plane_0_entity" }
+entity = { clone = "ADISCORD_IVN_cas_entity" name = "IVN_west_mandate_medium_plane_1_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_mandate_medium_plane_2_entity" }
+entity = { clone = "ADISCORD_IVN_future_cas_entity" name = "IVN_west_mandate_medium_plane_3_entity" }
 
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_west_mandate_ADISCORD_fighter_entity" }
 entity = { clone = "ADISCORD_WRK_early_fighter_entity" name = "WRK_west_mandate_ADISCORD_fighter_archetype_entity" }

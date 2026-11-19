@@ -4071,6 +4071,19 @@ NAM_loren_close_cargo = {
 	}
 }
 
+# STATE field. A later hit may damage an improved field or deepen an existing loss.
+NAM_field_record_condition = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = NAM_field_condition_before_damage }
+				check_variable = { var = NAM_field_condition value = NAM_field_condition_before_damage compare = greater_than }
+			}
+		}
+		set_variable = { var = NAM_field_condition_before_damage value = NAM_field_condition }
+	}
+}
+
 # STATE field. Input: temp NAM_field_damage_amount set in this state scope.
 # Fires, raids and sabotage lower the condition; production follows at once.
 NAM_field_apply_damage = {
@@ -4118,6 +4131,7 @@ NAM_field_apply_damage = {
 				set_temp_variable = { var = NAM_field_effective_damage value = 0 }
 			}
 		}
+		NAM_field_record_condition = yes
 		subtract_from_variable = { var = NAM_field_condition value = NAM_field_effective_damage }
 		clamp_variable = {
 			var = NAM_field_condition
@@ -4646,7 +4660,7 @@ NAM_cabinet_install_tools = {
 NAM_water_board_dispatch = {
 	if = {
 		limit = {
-			NAM_field_repair_possible = yes
+			NAM_field_serviceable = yes
 			has_variable = NAM_field_capacity
 		}
 		add_to_variable = { var = NAM_field_condition value = 15 }
@@ -13961,7 +13975,7 @@ NAM_program_regional_power_settle = {
 			690 = {
 				if = {
 					limit = {
-						NAM_field_repair_possible = yes
+						NAM_field_serviceable = yes
 						has_variable = NAM_field_capacity
 					}
 					set_variable = { var = NAM_field_condition value = 100 }
@@ -14623,7 +14637,7 @@ NAM_program_regional_reconstruction_settle = {
 			719 = {
 				if = {
 					limit = {
-						NAM_field_repair_possible = yes
+						NAM_field_serviceable = yes
 						has_variable = NAM_field_capacity
 					}
 					set_variable = { var = NAM_field_condition value = 100 }
@@ -15237,7 +15251,34 @@ NAM_release_street_campaign_slot = {
 	}
 }
 
+NAM_campaign_teach_a_trade_release_slot = {
+	if = {
+		limit = { has_country_flag = NAM_campaign_teach_a_trade_slot_held }
+		clr_country_flag = NAM_campaign_teach_a_trade_slot_held
+		ADISCORD_campaign_slot_release = yes
+	}
+}
+
+NAM_campaign_every_crate_release_slot = {
+	if = {
+		limit = { has_country_flag = NAM_campaign_every_crate_slot_held }
+		clr_country_flag = NAM_campaign_every_crate_slot_held
+		ADISCORD_campaign_slot_release = yes
+	}
+}
+
+NAM_campaign_reserve_roll_release_slot = {
+	if = {
+		limit = { has_country_flag = NAM_campaign_reserve_roll_slot_held }
+		clr_country_flag = NAM_campaign_reserve_roll_slot_held
+		ADISCORD_campaign_slot_release = yes
+	}
+}
+
 NAM_reset_campaign_cooldowns = {
+	remove_decision_on_cooldown = NAM_campaign_teach_a_trade
+	remove_decision_on_cooldown = NAM_campaign_every_crate
+	remove_decision_on_cooldown = NAM_campaign_reserve_roll
 	remove_decision_on_cooldown = NAM_campaign_rebuild_our_streets
 	remove_decision_on_cooldown = NAM_campaign_our_own_word
 	remove_decision_on_cooldown = NAM_campaign_oil_is_ours
@@ -15693,6 +15734,9 @@ NAM_combine_support_deliver = {
 # ----- Regional export offices -----
 # STATE. Called only by the new-campaign field initializer.
 NAM_export_office_initialize = {
+	set_variable = { var = NAM_export_office_quota value = 100 }
+	set_variable = { var = NAM_export_office_full_load value = 0 }
+	set_variable = { var = NAM_export_office_half_load value = 0 }
 	set_variable = { var = NAM_export_office_rate value = 0.3 }
 	set_variable = { var = NAM_export_office_level value = 0 }
 	set_variable = { var = NAM_export_office_cost value = 200 }
@@ -15727,11 +15771,25 @@ NAM_export_office_refresh = {
 		set_variable = { var = NAM_export_office_capacity value = 4 }
 		add_to_variable = { var = NAM_export_office_capacity value = NAM.NAM_export_office_capacity_bonus }
 		multiply_variable = { var = NAM_export_office_capacity value = NAM_export_office_level }
-		set_temp_variable = { var = NAM_export_office_next value = 0 }
+		set_variable = { var = NAM_export_office_full_load value = 0 }
 		if = {
 			limit = { NAM_export_office_operating_site = yes }
-			set_temp_variable = { var = NAM_export_office_next value = NAM_export_office_capacity }
-			clamp_temp_variable = { var = NAM_export_office_next min = 0 max = NAM_field_oil }
+			set_variable = { var = NAM_export_office_full_load value = NAM_export_office_capacity }
+			clamp_variable = { var = NAM_export_office_full_load min = 0 max = NAM_field_oil }
+		}
+		# The domestic market keeps the odd unit when the dispatch is split.
+		set_variable = { var = NAM_export_office_half_load value = NAM_export_office_full_load }
+		multiply_variable = { var = NAM_export_office_half_load value = 0.5 }
+		subtract_from_variable = { var = NAM_export_office_half_load value = 0.25 }
+		round_variable = NAM_export_office_half_load
+		set_temp_variable = { var = NAM_export_office_next value = 0 }
+		if = {
+			limit = { check_variable = { var = NAM_export_office_quota value = 100 compare = equals } }
+			set_temp_variable = { var = NAM_export_office_next value = NAM_export_office_full_load }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_export_office_quota value = 50 compare = equals } }
+			set_temp_variable = { var = NAM_export_office_next value = NAM_export_office_half_load }
 		}
 		set_variable = { var = NAM_export_office_month_estimate value = NAM_export_office_next }
 		multiply_variable = { var = NAM_export_office_month_estimate value = NAM_export_office_rate }

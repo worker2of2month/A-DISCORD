@@ -432,6 +432,8 @@ def check_oil_monopoly(
         settle_block = named_block(effects, completion)
         if "NAM_field_repair_possible = yes" in settle_block:
             settle_block += named_block(triggers, "NAM_field_repair_possible")
+        if "NAM_field_serviceable = yes" in settle_block:
+            settle_block += named_block(triggers, "NAM_field_serviceable")
         check(
             "is_owned_by = NAM" in settle_block
             and "is_controlled_by = NAM" in settle_block

@@ -1,5 +1,20 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_service_state"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_service_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_contract_bureau"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_contract_bureau.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_mobilisation_office"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_mobilisation_office.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_SHL_law_of_continuous_fire"
 		texturefile = "gfx/interface/goals/SHL/GFX_focus_SHL_law_of_continuous_fire.png"
 	}

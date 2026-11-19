@@ -980,6 +980,31 @@ class CivilTechnologyRedesignTests(unittest.TestCase):
 
 
 class AircraftTechnologyIconTests(unittest.TestCase):
+    def test_model_based_aircraft_cards_match_native_visual_levels(self):
+        from PIL import Image
+
+        gfx = (ROOT / "interface/ADISCORD_technologies.gfx").read_text(encoding="utf-8")
+        sprites = dict(re.findall(r'name = "([^"]+)"\s+textureFile = "([^"]+)"', gfx))
+        equipment_text = (ROOT / "common/units/equipment/ADISCORD_air_equipment.txt").read_text()
+        seen = set()
+        for equipment in generator.AIRCRAFT_CARD_TIERS:
+            block = equipment_text.split(f"\n\t{equipment} = {{", 1)[1].split("\n\t}", 1)[0]
+            level = int(re.search(r"\bvisual_level = (\d+)", block)[1]) + 1
+            role = "" if "fighter" in equipment or "interceptor" in equipment else "cas_"
+            techs = [tech for tech, items in generator.ENABLE_EQUIPMENT.items() if equipment in items]
+            self.assertTrue(techs, equipment)
+            families = {"IVN": "IVN", "MON": "MON", "WRK": "WRK", "TVA": "TVA",
+                        "VAD": "WRK", "WKR": "WRK", "VAD_vorkerland_restoration": "WRK"}
+            for tag, family in families.items():
+                path = f"gfx/interface/technologies/ADISCORD_aircraft_{role}{family}_{level}.png"
+                for key in [equipment, *techs]:
+                    self.assertEqual(sprites[f"GFX_{tag}_{key}_medium"], path)
+                with Image.open(ROOT / path) as art:
+                    self.assertEqual((art.size, art.mode), ((176, 72), "RGBA"))
+                    self.assertEqual(art.getchannel("A").getextrema(), (0, 255))
+                    seen.add(art.tobytes())
+        self.assertEqual(len(seen), 24)
+
     def test_cas_card_conversion_preserves_pixels_and_only_outputs_cas_textures(self):
         from io import BytesIO
         from PIL import Image
