@@ -179,7 +179,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_NAM_basin_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 682 }
+		size = { width = 460 height = 708 }
 		clipping = no
 		containerWindowType = {
 			name = "NAM_bw_phase"
@@ -582,7 +582,7 @@ guiTypes = {
 		containerWindowType = {
 			name = "NAM_bw_card_background"
 			position = { x = 12 y = 358 }
-			size = { width = 436 height = 144 }
+			size = { width = 436 height = 170 }
 			background = {
 				name = "NAM_bw_card_background_texture"
 				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
@@ -603,7 +603,7 @@ guiTypes = {
 			text = "NAM_bw_card_67_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 100
+			maxHeight = 126
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_67_tt"
 		}
@@ -622,7 +622,7 @@ guiTypes = {
 			text = "NAM_bw_card_688_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 100
+			maxHeight = 126
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_688_tt"
 		}
@@ -641,7 +641,7 @@ guiTypes = {
 			text = "NAM_bw_card_689_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 100
+			maxHeight = 126
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_689_tt"
 		}
@@ -660,7 +660,7 @@ guiTypes = {
 			text = "NAM_bw_card_690_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 100
+			maxHeight = 126
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_690_tt"
 		}
@@ -679,7 +679,7 @@ guiTypes = {
 			text = "NAM_bw_card_719_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 100
+			maxHeight = 126
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_719_tt"
 		}
@@ -698,13 +698,13 @@ guiTypes = {
 			text = "NAM_bw_card_700_body"
 			font = "hoi_16mbs"
 			maxWidth = 412
-			maxHeight = 100
+			maxHeight = 126
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_700_tt"
 		}
 		containerWindowType = {
 			name = "NAM_bw_summary"
-			position = { x = 12 y = 510 }
+			position = { x = 12 y = 536 }
 			size = { width = 436 height = 164 }
 			background = {
 				name = "NAM_bw_summary_background"

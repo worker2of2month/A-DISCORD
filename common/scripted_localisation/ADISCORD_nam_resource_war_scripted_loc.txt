@@ -1704,6 +1704,15 @@ defined_text = {
 }
 
 defined_text = {
+	name = NAMBasinOfficeMark
+	text = {
+		trigger = { check_variable = { NAM_export_office_level > 0 } }
+		localization_key = NAM_bw_office_mark
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
 	name = NAMBasinExportOffice
 	text = {
 		trigger = { check_variable = { NAM_export_office_level > 0 } }

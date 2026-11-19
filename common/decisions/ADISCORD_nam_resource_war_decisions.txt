@@ -4946,12 +4946,14 @@ NAM_national_programmes = {
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
 		visible = {
-			OR = {
-				NAM_export_office_selected_district = yes
-				FROM = { has_variable = NAM_export_office_order }
-			}
 			NAM_export_office_unlocked = yes
-			FROM = { check_variable = { NAM_export_office_level < 5 } }
+			FROM = {
+				check_variable = { NAM_export_office_level < 5 }
+				OR = {
+					NAM_export_office_selected_district = yes
+					has_variable = NAM_export_office_order
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -5054,8 +5056,8 @@ NAM_national_programmes = {
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
 		visible = {
-			NAM_export_office_selected_district = yes
 			FROM = {
+				NAM_export_office_selected_district = yes
 				check_variable = { NAM_export_office_level > 0 }
 				NOT = { check_variable = { var = NAM_export_office_quota value = 50 compare = equals } }
 			}
@@ -5093,8 +5095,8 @@ NAM_national_programmes = {
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
 		visible = {
-			NAM_export_office_selected_district = yes
 			FROM = {
+				NAM_export_office_selected_district = yes
 				check_variable = { NAM_export_office_level > 0 }
 				check_variable = { NAM_export_office_quota > 0 }
 			}
@@ -5132,8 +5134,8 @@ NAM_national_programmes = {
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
 		visible = {
-			NAM_export_office_selected_district = yes
 			FROM = {
+				NAM_export_office_selected_district = yes
 				check_variable = { NAM_export_office_level > 0 }
 				check_variable = { NAM_export_office_quota < 100 }
 			}

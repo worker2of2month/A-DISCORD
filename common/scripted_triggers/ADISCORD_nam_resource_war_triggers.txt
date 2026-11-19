@@ -4614,17 +4614,17 @@ NAM_combine_support_current = {
 }
 
 # ----- Regional export offices -----
-# COUNTRY NAM, FROM is the target field. The map initially displays district 67.
+# STATE. The map initially displays district 67. AI has no map selection.
 NAM_export_office_selected_district = {
 	OR = {
-		is_ai = yes
+		NAM = { is_ai = yes }
 		AND = {
-			NOT = { has_variable = NAM_bw_selected_state }
-			FROM = { state = 67 }
+			NAM = { NOT = { has_variable = NAM_bw_selected_state } }
+			state = 67
 		}
 		AND = {
-			has_variable = NAM_bw_selected_state
-			FROM = { state = var:NAM.NAM_bw_selected_state }
+			NAM = { has_variable = NAM_bw_selected_state }
+			state = var:NAM.NAM_bw_selected_state
 		}
 	}
 }

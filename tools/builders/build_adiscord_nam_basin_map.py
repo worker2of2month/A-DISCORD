@@ -273,7 +273,7 @@ def district_cards(source: bytes) -> bytes:
         '\t\tcontainerWindowType = {',
         '\t\t\tname = "NAM_bw_card_background"',
         '\t\t\tposition = { x = 12 y = 358 }',
-        '\t\t\tsize = { width = 436 height = 144 }',
+        '\t\t\tsize = { width = 436 height = 170 }',
         '\t\t\tbackground = {',
         '\t\t\t\tname = "NAM_bw_card_background_texture"',
         '\t\t\t\tquadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"',
@@ -282,7 +282,7 @@ def district_cards(source: bytes) -> bytes:
     ]
     for number, state in enumerate(STATES, 1):
         for part, y, font, height in (("title", 366, "hoi_18mbs", 24),
-                                      ("body", 393, "hoi_16mbs", 100)):
+                                      ("body", 393, "hoi_16mbs", 126)):
             name = f"NAM_bw_card_{state}_{part}"
             text = f"{number:02}   [{state}.GetName]" if part == "title" else name
             lines.extend((
@@ -305,9 +305,9 @@ def district_cards(source: bytes) -> bytes:
     if count != 1:
         raise ValueError("Expected one basin district-card section")
     text = re.sub(r'(name = "ADISCORD_NAM_basin_window"\n\t\tposition = [^\n]+\n'
-                  r'\t\tsize = \{ width = 460 height = )\d+', r'\g<1>682', text)
+                  r'\t\tsize = \{ width = 460 height = )\d+', r'\g<1>708', text)
     text = re.sub(r'(name = "NAM_bw_summary"\n\t\t\tposition = \{ x = 12 y = )\d+',
-                  r'\g<1>510', text)
+                  r'\g<1>536', text)
     summary_pattern = (r'\t\t\tinstantTextBoxType = \{\n\t\t\t\tname = "NAM_bw_summary_title".*?'
                        r'(?=\n\t\t\}\n\t\})')
     text, count = re.subn(summary_pattern, lambda _: summary_widgets(), text, flags=re.S)

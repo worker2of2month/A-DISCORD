@@ -13764,6 +13764,38 @@ class NamCampaignTests(unittest.TestCase):
         self.apply(block(decision, "complete_effect"), facts)
         self.assertEqual(facts[("67", "variable", "NAM_export_office_level")], 5)
 
+    def test_export_office_orders_follow_the_district_selected_on_the_basin_map(self):
+        panels = parsed(f"common/decisions/{BASE}_decisions.txt")
+        actions = ("expand", "half_dispatch", "pause", "resume")
+        orders = {action: block(block(panels, "NAM_national_programmes"), "NAM_export_office_" + action)
+                  for action in actions}
+        states = ("67", "688", "689", "690", "719")
+        for decision in orders.values():
+            self.assertEqual([e.value for e in block(decision, "targets")], list(states))
+        gui = block(parsed("common/scripted_guis/ADISCORD_NAM_scripted_gui.txt"), "scripted_gui")
+        clicks = block(block(gui, "ADISCORD_NAM_basin_panel"), "effects")
+        facts = self.export_office_facts()
+        for state in states:
+            facts[(state, "variable", "NAM_export_office_level")] = 1
+            facts[(state, "variable", "NAM_export_office_quota")] = 50
+
+        for selected in (None, *states, "700"):
+            if selected:
+                self.apply(block(clicks, f"NAM_bw_select_{selected}_click"), facts)
+            for state in states:
+                # Resolve the native state comparison against the marker's actual click result.
+                selected_id = facts.get(("NAM", "variable", "NAM_bw_selected_state"))
+                facts[(state, "state", "var:NAM.NAM_bw_selected_state")] = int(state) == selected_id
+                for action, order in orders.items():
+                    visible = self.bind_field(block(order, "visible"), state)
+                    self.assertEqual(self.matches(visible, facts),
+                                     state == (selected or "67") and action != "half_dispatch")
+        facts[("688", "has_variable", "NAM_export_office_order")] = True
+        self.assertTrue(self.matches(self.bind_field(block(orders["expand"], "visible"), "688"), facts))
+        facts[("NAM", "is_ai", "yes")] = True
+        for state in states:
+            self.assertTrue(self.matches(self.bind_field(block(orders["pause"], "visible"), state), facts))
+
     def test_export_office_tooltip_uses_each_states_live_modifier_values(self):
         modifiers = parsed("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_NAM.txt")
         definitions = parsed("common/modifier_definitions/ADISCORD_NAM_modifier_definitions.txt")
