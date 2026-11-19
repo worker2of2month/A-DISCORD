@@ -9898,10 +9898,29 @@ VAL_initialize_command_balance = {
 	}
 }
 
-# COUNTRY VAL. When Shabrat and Kefreyt defeat NOD in the same war, neither
-# side receives the whole country by callback order. NOD-owned states follow
-# their actual controller at surrender; northern states already settled to YPR
-# are therefore left untouched.
+# Both launch routes wait for the same reply. An unanswered offer expires
+# even if its recipient disappears before the event window can close.
+VAL_dispatch_nod_expedition = {
+	if = {
+		limit = { NOT = { has_country_flag = VAL_shabrat_offer_pending } }
+		if = {
+			limit = { VAL_can_offer_shabrat_campaign = yes }
+			set_country_flag = { flag = VAL_shabrat_offer_pending days = 9 }
+			STS = { country_event = { id = val_rework.224 } }
+		}
+		else = {
+			if = {
+				limit = {
+					VAL_frontier_at_war_with_shabrat = yes
+					STS = { has_war_with = NOD }
+				}
+				news_event = { id = val_rework.231 }
+			}
+			VAL_final_crisis_declare_war = yes
+		}
+	}
+}
+
 VAL_form_joint_shabrat_alliance = {
 	if = {
 		limit = {
@@ -9912,7 +9931,6 @@ VAL_form_joint_shabrat_alliance = {
 				is_subject = no
 				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
 			}
-			NOT = { is_in_faction_with = STS }
 		}
 		if = {
 			limit = { is_in_faction = no STS = { is_in_faction = no } }
@@ -9938,19 +9956,20 @@ VAL_form_joint_shabrat_alliance = {
 	}
 }
 
+VAL_confirm_joint_nod_entry = {
+	VAL_call_subjects_to_wars = yes
+	VAL_call_frontier_partner = yes
+	VAL_nod_op_apply_launch = yes
+	news_event = { id = val_rework.226 }
+}
+
 VAL_begin_joint_nod_shabrat_campaign = {
 	if = {
 		limit = {
-			tag = VAL
-			NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
-			STS = {
-				exists = yes
-				has_capitulated = no
-				has_war_with = NOD
-				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
-			}
-			NOD = { exists = yes has_capitulated = no has_war_with = STS }
+			has_country_flag = VAL_shabrat_offer_pending
+			VAL_can_offer_shabrat_campaign = yes
 		}
+		clr_country_flag = VAL_shabrat_offer_pending
 		VAL_form_joint_shabrat_alliance = yes
 		if = {
 			limit = {
@@ -9967,17 +9986,192 @@ VAL_begin_joint_nod_shabrat_campaign = {
 				hostility_reason = asked_to_join
 				single_target_only = yes
 			}
-			VAL_call_subjects_to_wars = yes
-			VAL_nod_op_apply_launch = yes
+			if = {
+				limit = { has_war_with = NOD }
+				VAL_confirm_joint_nod_entry = yes
+			}
+			else = {
+				set_country_flag = VAL_final_war_entry_pending
+				country_event = { id = val_contract.356 hours = 1 }
+			}
 		}
-		else_if = {
-			limit = { NOT = { has_war_with = NOD } }
-			# If both countries are already committed to incompatible alliances, keep
-			# the campaign playable by falling back to Kefreyt's ordinary separate war.
-			declare_war_on = { target = NOD type = annex_everything }
-			VAL_call_subjects_to_wars = yes
-			VAL_nod_op_apply_launch = yes
+	}
+}
+
+# Native peace identifies the other party in FROM.
+VAL_clear_separate_northern_relation = {
+	if = {
+		limit = { is_in_array = { array = VAL_separate_northern_enemies value = FROM } }
+		remove_from_array = { array = VAL_separate_northern_enemies value = FROM }
+	}
+	FROM = {
+		if = {
+			limit = { is_in_array = { array = VAL_separate_northern_enemies value = ROOT } }
+			remove_from_array = { array = VAL_separate_northern_enemies value = ROOT }
 		}
+	}
+}
+
+# A subject that keeps fighting has its own belligerent list for these wars.
+VAL_record_separate_northern_wars = {
+	if = {
+		limit = { is_subject_of = VAL }
+		every_enemy_country = {
+			limit = {
+				OR = {
+					tag = STS
+					tag = event_target:VAL_fallen_frontier
+					VAL_nod_expedition_opponent = yes
+				}
+				NOT = { PREV = { is_in_array = { array = VAL_separate_northern_enemies value = PREV } } }
+			}
+			PREV = { add_to_array = { array = VAL_separate_northern_enemies value = PREV } }
+		}
+	}
+}
+
+# Snapshot the northern opponents before the first peace changes war relations.
+# Keep the direction of Shabrat's war in case native peace collapses the merged war.
+VAL_withdraw_nod_expedition = {
+	if = {
+		limit = { VAL_frontier_exit_current = yes }
+		set_temp_variable = { var = VAL_nod_continuing_attacker value = 0 }
+		if = {
+			limit = {
+				STS = {
+					exists = yes
+					is_subject = no
+					has_capitulated = no
+					has_war_with = NOD
+				}
+			}
+			if = {
+				limit = { STS = { has_offensive_war_with = NOD } }
+				set_temp_variable = { var = VAL_nod_continuing_attacker value = 1 }
+			}
+			else = { set_temp_variable = { var = VAL_nod_continuing_attacker value = 2 } }
+		}
+		clear_temp_array = VAL_frontier_attackers
+		clear_temp_array = VAL_frontier_defenders
+		set_temp_variable = { var = VAL_frontier_shared_nod_war value = 0 }
+		event_target:VAL_fallen_frontier = {
+			if = {
+				limit = {
+					has_war_with = NOD
+					has_war_together_with = STS
+					NOT = { has_war_with = STS }
+					STS = { has_war_with = NOD }
+				}
+				set_temp_variable = { var = VAL_frontier_shared_nod_war value = 1 }
+			}
+			every_enemy_country = {
+				limit = {
+					OR = {
+						tag = STS
+						VAL_nod_expedition_opponent = yes
+					}
+				}
+				if = {
+					limit = { has_offensive_war_with = event_target:VAL_fallen_frontier }
+					add_to_temp_array = { array = VAL_frontier_attackers value = THIS }
+				}
+				else = { add_to_temp_array = { array = VAL_frontier_defenders value = THIS } }
+			}
+		}
+		# Native peace callbacks must finish before subject war invitations resume.
+		set_country_flag = VAL_subject_war_dispatch_active
+		clear_temp_array = VAL_nod_armistice_enemies
+		every_enemy_country = {
+			limit = { VAL_nod_expedition_opponent = yes }
+			add_to_temp_array = { array = VAL_nod_armistice_enemies value = THIS }
+			if = {
+				limit = { has_country_flag = VAL_final_war_member }
+				VAL_clear_final_defeat_receipt = yes
+				clr_country_flag = VAL_final_settlement_commit
+			}
+		}
+		VAL_final_crisis_close = yes
+		for_each_scope_loop = {
+			array = VAL_nod_armistice_enemies
+			save_event_target_as = VAL_nod_armistice_enemy
+			VAL = {
+				every_subject_country = {
+					limit = {
+						NOT = { tag = event_target:VAL_fallen_frontier }
+						NOT = { tag = STS }
+						has_war_with = event_target:VAL_nod_armistice_enemy
+					}
+					white_peace = event_target:VAL_nod_armistice_enemy
+				}
+				if = {
+					limit = { has_war_with = event_target:VAL_nod_armistice_enemy }
+					white_peace = event_target:VAL_nod_armistice_enemy
+				}
+			}
+		}
+		clear_temp_array = VAL_nod_armistice_enemies
+		set_truce = { target = NOD days = 180 }
+		if = {
+			limit = {
+				STS = {
+					exists = yes
+					is_subject = no
+					has_capitulated = no
+					NOT = { has_war_with = NOD }
+					NOT = { is_in_faction_with = NOD }
+				}
+				NOD = {
+					exists = yes
+					is_subject = no
+					has_capitulated = no
+				}
+			}
+			if = {
+				limit = { check_variable = { var = VAL_nod_continuing_attacker value = 1 compare = equals } }
+				STS = { declare_war_on = { target = NOD type = annex_everything } }
+			}
+			else_if = {
+				limit = { check_variable = { var = VAL_nod_continuing_attacker value = 2 compare = equals } }
+				NOD = { declare_war_on = { target = STS type = annex_everything } }
+			}
+		}
+		event_target:VAL_fallen_frontier = {
+			if = {
+				limit = {
+					check_variable = { var = VAL_frontier_shared_nod_war value = 1 compare = equals }
+					NOT = { has_war_with = NOD }
+					NOT = { is_subject_of = NOD }
+					NOT = { is_in_faction_with = NOD }
+					STS = { has_war_with = NOD }
+				}
+				add_to_war = {
+					targeted_alliance = STS
+					enemy = NOD
+					hostility_reason = asked_to_join
+					single_target_only = yes
+				}
+			}
+		}
+		for_each_scope_loop = {
+			array = VAL_frontier_attackers
+			if = {
+				limit = { VAL_frontier_war_needs_restoration = yes }
+				declare_war_on = { target = event_target:VAL_fallen_frontier type = annex_everything }
+			}
+		}
+		for_each_scope_loop = {
+			array = VAL_frontier_defenders
+			if = {
+				limit = { VAL_frontier_war_needs_restoration = yes }
+				event_target:VAL_fallen_frontier = { declare_war_on = { target = PREV type = annex_everything } }
+			}
+		}
+		clear_temp_array = VAL_frontier_attackers
+		clear_temp_array = VAL_frontier_defenders
+		event_target:VAL_fallen_frontier = { VAL_record_separate_northern_wars = yes }
+		STS = { VAL_record_separate_northern_wars = yes }
+		clr_country_flag = VAL_subject_war_dispatch_active
+		news_event = { id = val_rework.229 }
 	}
 }
 
@@ -9990,6 +10184,7 @@ VAL_settle_joint_nod_shabrat_victory = {
 			is_subject = no
 			STS = {
 				exists = yes
+				is_subject = no
 				has_capitulated = no
 				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
 			}
@@ -9999,6 +10194,7 @@ VAL_settle_joint_nod_shabrat_victory = {
 			}
 		}
 
+		set_country_flag = VAL_joint_nod_settlement_completed
 		# Shabrat receives the southern Nodrul core outright.
 		10 = {
 			if = { limit = { is_owned_by = NOD } STS = { transfer_state = 10 } set_state_controller_to = STS }
@@ -10020,9 +10216,11 @@ VAL_settle_joint_nod_shabrat_victory = {
 		VAL_partition_nodrul_settlement = yes
 		clr_country_flag = VAL_joint_nod_partition_locked
 
-		# Ainholm is the one northern possession kept as a territorial colony rather
-		# than converted into a contract administration.
-		VAL_queue_ainholm_colony = yes
+		# The compact covers Nodrul's possession in the strait.
+		if = {
+			limit = { AIN = { is_subject_of = NOD } }
+			VAL_queue_ainholm_colony = yes
+		}
 		NOD = {
 			if = {
 				limit = { has_country_flag = VAL_final_war_added_major }
@@ -10045,11 +10243,12 @@ VAL_settle_joint_nod_shabrat_victory = {
 			ADISCORD_economy_mark_dirty = yes
 		}
 
-		set_country_flag = VAL_joint_nod_settlement_completed
+		VAL_final_crisis_close = yes
+		set_variable = { var = VAL_final_crisis_phase value = 3 }
+		news_event = { id = val_rework.228 }
+		STS = { VAL_conclude_stelander_alliance = yes }
 		country_event = { id = val_rework.153 days = 2 }
-		clr_country_flag = VAL_joint_nod_campaign_with_sts
 		NOD = {
-			clr_country_flag = VAL_joint_nod_campaign_target
 			clr_country_flag = VAL_final_defeat_pending
 			clr_country_flag = VAL_final_capitulation_immediate
 		}
@@ -12321,8 +12520,8 @@ VAL_call_subjects_to_wars = {
 		}
 		set_country_flag = VAL_subject_war_dispatch_active
 
-		# A Kefreyt client cannot fight a private war while its overlord remains neutral.
-		# Adopt subject wars first, then fan every VAL war back out to the whole client network.
+		# Adopt client wars before calling the clients to Kefreyt's side. The northern
+		# armistice leaves the Frontier's surviving fronts under its own command.
 		every_subject_country = {
 			limit = {
 				has_capitulated = no
@@ -12336,6 +12535,10 @@ VAL_call_subjects_to_wars = {
 					NOT = { tag = VAL }
 					NOT = { is_subject_of = VAL }
 					NOT = { is_in_faction_with = VAL }
+					VAL_is_frontier_shabrat_war = no
+					NOT = {
+						PREV = { is_in_array = { array = VAL_separate_northern_enemies value = PREV } }
+					}
 					VAL = { NOT = { has_war_with = PREV } }
 				}
 				save_event_target_as = VAL_subject_war_enemy
@@ -12799,7 +13002,7 @@ VAL_final_crisis_execute_launch = {
 			}
 		}
 		clr_country_flag = VAL_final_party_nod_release_pending
-		VAL_final_crisis_declare_war = yes
+		VAL_dispatch_nod_expedition = yes
 	}
 }
 
@@ -12830,6 +13033,10 @@ VAL_final_refund_supply_order = {
 }
 
 VAL_final_crisis_close = {
+	clr_country_flag = VAL_shabrat_offer_pending
+	clr_country_flag = VAL_frontier_exit_pending
+	clr_country_flag = VAL_joint_nod_campaign_with_sts
+	NOD = { clr_country_flag = VAL_joint_nod_campaign_target }
 	log = "VAL_PEACE_TRACE final_close ROOT=[ROOT.GetTag] FROM=[FROM.GetTag] phase=[?VAL_final_crisis_phase]"
 	clr_country_flag = VAL_final_war_entry_pending
 	set_variable = { var = VAL_final_crisis_phase value = 4 }
@@ -12887,6 +13094,26 @@ VAL_final_crisis_close = {
 }
 
 VAL_final_crisis_reconcile = {
+	if = {
+		limit = {
+			has_country_flag = VAL_joint_nod_campaign_with_sts
+			STS = {
+				OR = {
+					exists = no
+					has_capitulated = yes
+					is_subject = yes
+					NOT = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
+					AND = {
+						NOT = { has_war_with = NOD }
+						NOD = { has_capitulated = no }
+						VAL = { has_war_with = NOD }
+					}
+				}
+			}
+		}
+		clr_country_flag = VAL_joint_nod_campaign_with_sts
+		NOD = { clr_country_flag = VAL_joint_nod_campaign_target }
+	}
 	# A Party victory can leave NOD nested under the STP administration.
 	# A phase-2 campaign without a live war relation must rebuild the direct target.
 	if = {
@@ -13951,6 +14178,25 @@ VAL_form_equal_stelander_alliance = {
 		}
 		set_country_flag = VAL_stelander_equal_alliance
 		clr_country_flag = VAL_stelander_alliance_offer_received
+	}
+}
+
+# Run in the signatory's scope. Both campaign routes can finish in one game.
+VAL_conclude_stelander_alliance = {
+	if = {
+		limit = {
+			VAL_is_current_stelander_ally = yes
+			VAL = {
+				VAL_nw_operational = yes
+				NOT = { has_country_flag = VAL_stelander_permanent_alliance }
+			}
+		}
+		VAL = {
+			set_country_flag = VAL_stelander_permanent_alliance
+			country_event = { id = val_rework.232 }
+			news_event = { id = val_rework.233 }
+		}
+		country_event = { id = val_rework.232 }
 	}
 }
 

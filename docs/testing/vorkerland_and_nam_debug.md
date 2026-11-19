@@ -672,9 +672,12 @@ Python-модель проверяет исходные скрипты, но н�
   Verify the 25 PP / 5000 fuel export, 450 treasury delivery after 21 days,
   cancellation/refund on subjugation and exclusion of the southern charter.
   SHL can still attack after the common preparation and warning.
-- Keep the colonial interval for decisions: focuses finish on day 329;
-  colonial ordering ends at the actual WRK split, before NAM's later focus
-  unlock. A late 21/28/35-day order may be refunded instead of delivered.
+- Follow all three colonial lines and start The Calm Before the Storm on
+  day 308. The Centre's Last Register opens the 14-day archive transfer, which can run
+  alongside the focus. Check that independence completes the focus once and
+  the public declaration reveals Independence Day. Repeat with the focus
+  still unselected. Colonial ordering ends at the actual WRK split.
+  A late 21/28/35-day order may be refunded instead of delivered.
   Complete a concession exactly as WRK disappears, before wars_started:
   its 200 treasury deposit returns once, without refunding the 50 PP fee.
 

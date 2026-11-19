@@ -24,6 +24,10 @@ class NodrulWarEntryFixture(TreatyFixture):
         self.root, self.winner = "VAL", "NOD"
         self.entry = entry
         self.declarations = []
+        self.leaders = {}
+        self.news = []
+        self.temporary = {}
+        self.joint_entries = []
         self.events = []
         self.modifiers = set()
         self.completed = {"VAL_Different_Views_On_Freedom"}
@@ -64,6 +68,10 @@ class NodrulWarEntryFixture(TreatyFixture):
                 matched = any(self.matches([child], stack) for child in value)
             elif key == "NOT":
                 matched = not any(self.matches([child], stack) for child in value)
+            elif key == "any_enemy_country":
+                matched = any(self.matches(value, stack + [enemy]) for enemy in self.enemies(current))
+            elif key == "has_country_leader":
+                matched = self.leaders.get(current) == scalar(value, "character")
             elif key == "has_war":
                 matched = bool(self.enemies(current)) == (value == "yes")
             elif key == "has_variable":
@@ -73,7 +81,8 @@ class NodrulWarEntryFixture(TreatyFixture):
             elif key == "has_dynamic_modifier":
                 matched = (current, scalar(value, "modifier")) in self.modifiers
             elif key == "check_variable":
-                actual = self.variables.get((current, scalar(value, "var")), 0)
+                name = scalar(value, "var")
+                actual = self.temporary.get(name, self.variables.get((current, name), 0))
                 expected = float(scalar(value, "value"))
                 comparison = scalar(value, "compare")
                 matched = {
@@ -102,12 +111,27 @@ class NodrulWarEntryFixture(TreatyFixture):
                 if not taken and self.matches(gate, stack):
                     taken = True
                     self.execute([child for child in value if child.key != "limit"], stack)
+            elif self.execute_native(key, value, stack):
+                continue
             elif key == "declare_war_on":
                 target = self.resolve(scalar(value, "target"), stack)
                 self.declarations.append((current, target))
                 if self.entry == "immediate":
                     self.wars.add(frozenset((current, target)))
                     self.war_callback("VAL", "NOD")
+            elif key == "create_faction_from_template":
+                self.factions[current] = scalar(value, "name")
+            elif key == "add_to_faction":
+                self.factions[self.resolve(value, stack)] = self.factions[current]
+            elif key == "add_to_war":
+                ally = scalar(value, "targeted_alliance")
+                enemy = scalar(value, "enemy")
+                self.joint_entries.append((current, ally, enemy))
+                if self.entry == "immediate" and enemy in self.enemies(ally):
+                    self.wars.add(frozenset((current, enemy)))
+                    self.war_callback(current, enemy)
+            elif key == "news_event":
+                self.news.append(scalar(value, "id"))
             elif key == "country_event":
                 self.events.append((current, scalar(value, "id")))
             elif key == "hidden_effect":
@@ -118,6 +142,9 @@ class NodrulWarEntryFixture(TreatyFixture):
                 pass
             else:
                 super().execute([entry], stack)
+
+    def execute_native(self, key, value, stack):
+        return False
 
     def launch_decision(self):
         decision = parse_clausewitz(named_block(
@@ -141,6 +168,70 @@ class NodrulWarEntryFixture(TreatyFixture):
                 self.execute(block(event, "immediate"), [recipient])
 
 
+class FrontierArmisticeFixture(NodrulWarEntryFixture):
+    """Exercise bilateral peace and native cleanup that also ends Shabrat's war."""
+
+    def __init__(self, merged, attacker):
+        super().__init__(entry="immediate")
+        self.merged = merged
+        self.attacker = attacker
+        self.separate = {}
+        self.existing.update({"STS", "TFF", "ZZZ"})
+        self.subjects["TFF"] = "VAL"
+        self.capitulated.add("TFF")
+        self.targets["event_target:VAL_fallen_frontier"] = "TFF"
+        self.variables["VAL", "VAL_final_crisis_phase"] = 2
+        self.flags["VAL"].update({"VAL_frontier_exit_pending", "VAL_joint_nod_campaign_with_sts"})
+        self.flags["NOD"].update({"VAL_final_war_member", "VAL_joint_nod_campaign_target"})
+        self.wars = {frozenset(pair) for pair in (
+            ("VAL", "NOD"), ("TFF", "NOD"), ("STS", "NOD"), ("VAL", "ZZZ"),
+        )}
+        self.stubs.update({"VAL_nod_op_close", "ADISCORD_TFF_end_kefreyt_campaign"})
+
+    def resolve(self, token, stack):
+        return self.targets.get(token, token) if token.startswith("event_target:") else super().resolve(token, stack)
+
+    def matches(self, rows, stack):
+        if len(rows) == 1 and rows[0].key == "has_offensive_war_with":
+            enemy = self.resolve(rows[0].value, stack)
+            return stack[-1] == self.attacker and enemy in self.enemies(stack[-1])
+        if len(rows) == 1 and rows[0].key == "is_in_array":
+            args = rows[0].value
+            if scalar(args, "array") == "VAL_separate_northern_enemies":
+                return self.resolve(scalar(args, "value"), stack) in self.separate.get(stack[-1], set())
+        return super().matches(rows, stack)
+
+    def execute_native(self, key, value, stack):
+        if key == "every_enemy_country" and not any(row.key == "limit" for row in value):
+            for enemy in list(self.enemies(stack[-1])):
+                self.execute(value, stack + [enemy])
+        elif key == "save_event_target_as":
+            self.targets["event_target:" + value] = stack[-1]
+        elif key.startswith("event_target:"):
+            self.execute(value, stack + [self.resolve(key, stack)])
+        elif key == "set_temp_variable":
+            self.temporary[scalar(value, "var")] = float(scalar(value, "value"))
+        elif key == "white_peace":
+            target = self.resolve(value, stack)
+            self.wars.discard(frozenset((stack[-1], target)))
+            if self.merged and target == "NOD":
+                self.wars.discard(frozenset(("NOD", "STS")))
+                self.wars.discard(frozenset(("NOD", "TFF")))
+                self.wars.discard(frozenset(("STS", "TFF")))
+        elif key in ("add_to_array", "remove_from_array"):
+            other = self.resolve(scalar(value, "value"), stack)
+            record = self.separate.setdefault(stack[-1], set())
+            if key == "add_to_array":
+                record.add(other)
+            else:
+                record.discard(other)
+        elif key == "set_truce":
+            self.truces.add(frozenset((stack[-1], scalar(value, "target"))))
+        else:
+            return False
+        return True
+
+
 class NodrulWarEntryTests(unittest.TestCase):
     def assert_registered(self, fixture):
         self.assertEqual(fixture.variables.get(("VAL", "VAL_final_crisis_phase")), 2)
@@ -160,6 +251,142 @@ class NodrulWarEntryTests(unittest.TestCase):
                 fixture.wars.add(frozenset(("VAL", "NOD")))
                 fixture.war_callback(root, sender)
                 self.assert_registered(fixture)
+
+    def test_shabrat_can_accept_refuse_or_let_the_offer_lapse(self):
+        events = parse_clausewitz(EVENTS.read_text(encoding="utf-8"))
+        event = next(e.value for e in events if e.key == "country_event"
+                     and scalar(e.value, "id") == "val_rework.224")
+        for reply in ("accept", "refuse", "closed"):
+            with self.subTest(reply=reply):
+                fixture = NodrulWarEntryFixture(entry="immediate")
+                fixture.existing.add("STS")
+                fixture.wars.add(frozenset(("STS", "NOD")))
+                fixture.leaders["STS"] = "STP_maksim_shabrat"
+                fixture.launch_decision()
+                self.assertEqual(fixture.events, [("STS", "val_rework.224")])
+                self.assertFalse(fixture.allied("VAL", "STS"))
+                self.assertFalse(fixture.enemies("VAL"))
+                if reply == "closed":
+                    fixture.leaders.pop("STS")
+                option = next(e.value for e in event if e.key == "option"
+                              and scalar(e.value, "name") == "val_rework.224." + reply)
+                self.assertTrue(fixture.matches(block(option, "trigger"), ["STS"]))
+                fixture.execute(block(option, "hidden_effect"), ["STS"])
+                self.assertNotIn("VAL_shabrat_offer_pending", fixture.flags["VAL"])
+                self.assertEqual(fixture.allied("VAL", "STS"), reply == "accept")
+                self.assertEqual("NOD" in fixture.enemies("VAL"), reply != "closed")
+                self.assertEqual(bool(fixture.declarations), reply == "refuse")
+                self.assertEqual(bool(fixture.joint_entries), reply == "accept")
+                self.assertEqual("VAL_joint_nod_campaign_target" in fixture.flags["NOD"], reply == "accept")
+                self.assertEqual(fixture.news, {
+                    "accept": ["val_rework.226"], "refuse": ["val_rework.227"], "closed": [],
+                }[reply])
+
+    def test_alliance_ending_reaches_both_signatories_once_across_routes(self):
+        tree = parse_clausewitz(read_focus_source(
+            ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
+        ))
+        focus = next(row.value for row in block(tree, "focus_tree") if row.key == "focus"
+                     and scalar(row.value, "id") == "VAL_Two_States_One_Frontier")
+        reward = block(block(focus, "completion_reward"), "hidden_effect")
+        for partner in ("STP", "STS"):
+            with self.subTest(partner=partner):
+                fixture = NodrulWarEntryFixture()
+                fixture.existing.update({"STP", "STS", "TFF"})
+                fixture.subjects.clear()
+                fixture.factions.update({"VAL": "pact", partner: "pact"})
+                fixture.flags[partner].add("VAL_stelander_equal_alliance")
+                fixture.wars.add(frozenset((partner, "TFF")))
+                wars = fixture.wars.copy()
+                treaty = fixture.effects["VAL_conclude_stelander_alliance"]
+                # STS can win the Nodrul campaign before completing the pact focuses.
+                if partner == "STS":
+                    settlement = block(fixture.effects["VAL_settle_joint_nod_shabrat_victory"], "if")
+                    caller = next(row for row in settlement if row.key == "STS" and any(
+                        child.key == "VAL_conclude_stelander_alliance" for child in row.value
+                    ))
+                    fixture.execute([caller])
+                fixture.execute(reward)
+                fixture.execute(treaty, [partner])
+                self.assertEqual(fixture.events, [("VAL", "val_rework.232"), (partner, "val_rework.232")])
+                self.assertEqual(fixture.news, ["val_rework.233"])
+                self.assertEqual(fixture.wars, wars)
+
+    def test_alliance_ending_requires_a_live_sovereign_signatory(self):
+        fixture = NodrulWarEntryFixture()
+        fixture.existing.add("STS")
+        fixture.factions.update({"VAL": "pact", "STS": "pact"})
+        ending = fixture.effects["VAL_conclude_stelander_alliance"]
+        fixture.execute(ending, ["STS"])
+        fixture.flags["STS"].add("VAL_stelander_equal_alliance")
+        fixture.factions.pop("STS")
+        fixture.execute(ending, ["STS"])
+        fixture.factions["STS"] = "pact"
+        fixture.subjects["STS"] = "VAL"
+        fixture.execute(ending, ["STS"])
+        fixture.subjects.pop("STS")
+        for country in ("STS", "VAL"):
+            fixture.capitulated.add(country)
+            fixture.execute(ending, ["STS"])
+            fixture.capitulated.remove(country)
+        self.assertEqual(fixture.events, [])
+        self.assertEqual(fixture.news, [])
+        self.assertNotIn("VAL_stelander_permanent_alliance", fixture.flags["VAL"])
+
+    def test_frontier_armistice_preserves_shabrats_war_and_unrelated_enemies(self):
+        for merged in (False, True):
+            for attacker in ("NOD", "STS"):
+                with self.subTest(merged=merged, attacker=attacker):
+                    fixture = FrontierArmisticeFixture(merged, attacker)
+                    fixture.execute(fixture.effects["VAL_withdraw_nod_expedition"])
+                    self.assertEqual(fixture.enemies("VAL"), {"ZZZ"})
+                    self.assertEqual(fixture.enemies("STS"), {"NOD"})
+                    self.assertEqual(fixture.enemies("TFF"), {"NOD"})
+                    self.assertEqual(fixture.subjects["TFF"], "VAL")
+                    self.assertEqual(fixture.separate["TFF"], {"NOD"})
+                    self.assertIn(frozenset(("VAL", "NOD")), fixture.truces)
+                    self.assertNotIn("VAL_joint_nod_campaign_target", fixture.flags["NOD"])
+                    self.assertNotIn("VAL_joint_nod_campaign_with_sts", fixture.flags["VAL"])
+                    self.assertEqual(fixture.news, ["val_rework.229"])
+                    expected = [(attacker, "NOD" if attacker == "STS" else "STS")] if merged else []
+                    self.assertEqual(fixture.declarations, expected)
+
+    def test_frontier_shabrat_war_survives_withdrawal_without_kefreyt_rejoining(self):
+        for merged in (False, True):
+            with self.subTest(merged=merged):
+                fixture = FrontierArmisticeFixture(merged, "STS")
+                fixture.wars.add(frozenset(("TFF", "STS")))
+                fixture.execute(fixture.effects["VAL_withdraw_nod_expedition"])
+                self.assertEqual(fixture.enemies("TFF"), {"NOD", "STS"})
+                self.assertEqual(fixture.enemies("VAL"), {"ZZZ"})
+                self.assertEqual(fixture.subjects["TFF"], "VAL")
+                self.assertEqual(fixture.separate["TFF"], {"STS", "NOD"})
+                fixture.capitulated.discard("TFF")
+                fixture.execute(fixture.effects["VAL_call_subjects_to_wars"])
+                self.assertFalse({"NOD", "STS"} & fixture.enemies("VAL"))
+                fixture.root, fixture.winner = "STS", "TFF"
+                fixture.execute(fixture.effects["VAL_clear_separate_northern_relation"])
+                self.assertEqual(fixture.separate["TFF"], {"NOD"})
+
+    def test_kefreyt_cannot_sign_shabrats_pact_over_a_frontier_ally_at_war(self):
+        fixture = NodrulWarEntryFixture(entry="immediate")
+        fixture.existing.update({"TFF", "STS"})
+        fixture.subjects["TFF"] = "VAL"
+        fixture.leaders["STS"] = "STP_maksim_shabrat"
+        fixture.wars.update({frozenset(("STS", "TFF")), frozenset(("STS", "NOD"))})
+        fixture.launch_decision()
+        self.assertNotIn(("STS", "val_rework.224"), fixture.events)
+        self.assertFalse(fixture.allied("VAL", "STS"))
+        self.assertIn("STS", fixture.enemies("TFF"))
+        self.assertEqual(fixture.news, ["val_rework.231"])
+        self.assertEqual(fixture.declarations, [("VAL", "NOD")])
+
+    def test_armistice_blocks_a_second_northern_expedition(self):
+        fixture = NodrulWarEntryFixture()
+        fixture.truces.add(frozenset(("VAL", "NOD")))
+        fixture.launch_decision()
+        self.assertFalse(fixture.declarations)
+        self.assertFalse(fixture.events)
 
     def test_confirmation_registers_entry_without_a_war_callback(self):
         fixture = NodrulWarEntryFixture()
@@ -852,7 +1079,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_release_party_nodrul_for_final_campaign = yes", launch)
         self.assertIn("id = val_rework.122 days = 1", launch)
         self.assertNotIn("declare_war_on = { target = STP", launch)
-        self.assertIn("VAL_final_crisis_declare_war = yes", execute)
+        self.assertIn("VAL_dispatch_nod_expedition = yes", execute)
         self.assertIn(
             "declare_war_on = { target = NOD type = annex_everything }",
             named_block(self.source, "VAL_final_crisis_declare_war"),

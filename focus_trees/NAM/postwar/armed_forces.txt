@@ -3,7 +3,7 @@
 		id = NAM_veterans_return
 		x = 15
 		y = 5
-		icon = GFX_focus_NAM_oilfield_militia
+		icon = GFX_focus_NAM_veterans_return
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
 		prerequisite = {
@@ -35,7 +35,7 @@
 		relative_position_id = NAM_veterans_return
 		x = -2
 		y = 2
-		icon = GFX_focus_NAM_naval_construction
+		icon = GFX_focus_NAM_svetlogorsk_shipyards
 		cost = 4
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -134,7 +134,7 @@
 		relative_position_id = NAM_veterans_return
 		x = -4
 		y = 2
-		icon = GFX_focus_RUS_bunker_power_school
+		icon = GFX_focus_NAM_pw_power_reserve
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -160,7 +160,7 @@
 		relative_position_id = NAM_veterans_return
 		x = 9
 		y = 1
-		icon = GFX_focus_NAM_quiet_officer_lists
+		icon = GFX_focus_NAM_pw_army_review
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -188,7 +188,7 @@
 		relative_position_id = NAM_pw_army_review
 		x = -2
 		y = 2
-		icon = GFX_focus_NAM_mobile_columns
+		icon = GFX_focus_NAM_pw_breakthrough_army
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -233,7 +233,7 @@
 		relative_position_id = NAM_pw_army_review
 		x = 2
 		y = 2
-		icon = GFX_focus_NAM_mobile_columns
+		icon = GFX_focus_NAM_pw_mobile_army
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -278,7 +278,7 @@
 		relative_position_id = NAM_pw_army_review
 		x = 4
 		y = 4
-		icon = GFX_focus_NAM_concealed_reserve
+		icon = GFX_focus_NAM_pw_reserve_centres
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -316,7 +316,7 @@
 		relative_position_id = NAM_pw_army_review
 		x = -2
 		y = 3
-		icon = GFX_focus_RUS_engineers_collegium
+		icon = GFX_focus_NAM_pw_engineer_units
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -342,7 +342,7 @@
 		relative_position_id = NAM_pw_army_review
 		x = -1
 		y = 4
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
+		icon = GFX_focus_NAM_pw_field_workshops
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -377,7 +377,7 @@
 		relative_position_id = NAM_pw_army_review
 		x = 0
 		y = 1
-		icon = GFX_focus_NAM_metropolitan_depots
+		icon = GFX_focus_NAM_pw_artillery_observers
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -412,7 +412,7 @@
 		relative_position_id = NAM_pw_army_review
 		x = 1
 		y = 4
-		icon = GFX_focus_VAL_Contract_General_Staff
+		icon = GFX_focus_NAM_pw_staff_exercises
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -464,7 +464,7 @@
 		relative_position_id = NAM_pw_army_review
 		x = -2
 		y = 5
-		icon = GFX_focus_NAM_metropolitan_depots
+		icon = GFX_focus_NAM_pw_combined_arms
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -508,7 +508,7 @@
 		relative_position_id = NAM_pw_army_review
 		x = 4
 		y = 5
-		icon = GFX_focus_NAM_oilfield_militia
+		icon = GFX_focus_NAM_pw_southern_army
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -569,7 +569,7 @@
 		relative_position_id = NAM_veterans_return
 		x = 0
 		y = 1
-		icon = GFX_focus_NAM_active_squadron
+		icon = GFX_focus_NAM_pw_naval_review
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -607,7 +607,7 @@
 		relative_position_id = NAM_pw_naval_review
 		x = -3
 		y = 3
-		icon = GFX_focus_NAM_escort_school
+		icon = GFX_focus_NAM_pw_escort_fleet
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -665,7 +665,7 @@
 		relative_position_id = NAM_pw_naval_review
 		x = 0
 		y = 3
-		icon = GFX_focus_NAM_active_squadron
+		icon = GFX_focus_NAM_pw_strike_fleet
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -723,7 +723,7 @@
 		relative_position_id = NAM_pw_naval_review
 		x = -1
 		y = 2
-		icon = GFX_focus_NAM_repair_yard
+		icon = GFX_focus_NAM_pw_naval_workshops
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -759,7 +759,7 @@
 		relative_position_id = NAM_pw_naval_review
 		x = -1
 		y = 4
-		icon = GFX_focus_NAM_oilfield_militia
+		icon = GFX_focus_NAM_pw_crew_schools
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -796,7 +796,7 @@
 		relative_position_id = NAM_pw_naval_review
 		x = 2
 		y = 1
-		icon = GFX_focus_NAM_well_register
+		icon = GFX_focus_NAM_pw_naval_fuel_depots
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -822,7 +822,7 @@
 		relative_position_id = NAM_pw_naval_review
 		x = 1
 		y = 2
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_pw_landing_supply
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -857,7 +857,7 @@
 		relative_position_id = NAM_pw_naval_review
 		x = 1
 		y = 4
-		icon = GFX_focus_NAM_active_squadron
+		icon = GFX_focus_NAM_pw_naval_service
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -903,7 +903,7 @@
 		relative_position_id = NAM_veterans_return
 		x = -9
 		y = 1
-		icon = GFX_focus_NAM_air_operations
+		icon = GFX_focus_NAM_pw_air_review
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -938,7 +938,7 @@
 		relative_position_id = NAM_pw_air_review
 		x = 2
 		y = 3
-		icon = GFX_focus_NAM_air_interceptors
+		icon = GFX_focus_NAM_pw_air_defence
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -975,9 +975,9 @@
 	focus = {
 		id = NAM_pw_frontline_air
 		relative_position_id = NAM_pw_air_review
-		x = -1
+		x = -2
 		y = 3
-		icon = GFX_focus_NAM_air_support
+		icon = GFX_focus_NAM_pw_frontline_air
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1016,7 +1016,7 @@
 		relative_position_id = NAM_pw_air_review
 		x = 2
 		y = 1
-		icon = GFX_focus_RUS_capital_airfields
+		icon = GFX_focus_NAM_pw_airfield_network
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1042,7 +1042,7 @@
 		relative_position_id = NAM_pw_air_review
 		x = 0
 		y = 1
-		icon = GFX_focus_NAM_flight_school
+		icon = GFX_focus_NAM_pw_flight_schools
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1068,7 +1068,7 @@
 		relative_position_id = NAM_pw_air_review
 		x = 4
 		y = 2
-		icon = GFX_focus_RUS_air_control_network
+		icon = GFX_focus_NAM_pw_radar_posts
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1092,9 +1092,9 @@
 	focus = {
 		id = NAM_pw_engine_workshops
 		relative_position_id = NAM_pw_air_review
-		x = 1
+		x = 0
 		y = 4
-		icon = GFX_focus_NAM_air_ground_service
+		icon = GFX_focus_NAM_pw_engine_workshops
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1138,7 +1138,7 @@
 		relative_position_id = NAM_pw_air_review
 		x = 1
 		y = 2
-		icon = GFX_focus_RUS_aviation_fuel_reserve
+		icon = GFX_focus_NAM_pw_air_supply
 		cost = 3
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1165,7 +1165,7 @@
 		relative_position_id = NAM_pw_air_review
 		x = 4
 		y = 3
-		icon = GFX_focus_NAM_air_operations
+		icon = GFX_focus_NAM_pw_ground_control
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1203,7 +1203,7 @@
 		relative_position_id = NAM_pw_air_review
 		x = 3
 		y = 4
-		icon = GFX_focus_NAM_air_operations
+		icon = GFX_focus_NAM_pw_southern_air_command
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {

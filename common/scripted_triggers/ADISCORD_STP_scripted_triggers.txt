@@ -3115,7 +3115,7 @@ STP_pw_party_northern_patron_lost = {
 	NOT = { is_subject_of = NOD }
 }
 
-# COUNTRY STP: both late regional campaigns have reached a terminal state.
+# COUNTRY STP: both regional campaigns have reached a terminal state.
 STP_pw_party_external_order_resolved = {
 	tag = STP
 	has_country_flag = STP_cw_postwar

@@ -1,5 +1,350 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_NAM_klyuchevsk_pipeline"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_klyuchevsk_pipeline.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_line_survey"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_line_survey.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_crisis_office"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_crisis_office.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_quartermaster"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_quartermaster.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_field_repair_crews"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_field_repair_crews.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_insured_cargoes"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_insured_cargoes.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pillar_arbitration"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pillar_arbitration.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_engineer_depots"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_engineer_depots.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_line_engineers"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_line_engineers.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_field_gendarmes"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_field_gendarmes.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_deep_wells"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_deep_wells.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_count_garrisons"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_count_garrisons.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_field_guards"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_field_guards.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_mine_councils"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_mine_councils.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_supports_export_houses"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_supports_export_houses.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_commercial_courts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_commercial_courts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_commercial_reserve"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_commercial_reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_insured_caravans"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_insured_caravans.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_machine_tool_contracts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_machine_tool_contracts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_warehouse_receipts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_warehouse_receipts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_prag_ending_republic"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_prag_ending_republic.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_contract_register"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_contract_register.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_export_clearing"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_export_clearing.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_district_guarantees"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_district_guarantees.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_tax_rolls"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_tax_rolls.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_port_agreement"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_port_agreement.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_supports_oil_compact"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_supports_oil_compact.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pragmatic_compact"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pragmatic_compact.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_prag_ending_directorate"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_prag_ending_directorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_emergency_writ"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_emergency_writ.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_provisional_statute"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_provisional_statute.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_garrison_assembly"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_garrison_assembly.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_one_budget"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_one_budget.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_oil_charter"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_oil_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_federal_charter"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_federal_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_charter_ending_federation"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_charter_ending_federation.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_charter_ending_oil_union"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_charter_ending_oil_union.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_regional_university"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_regional_university.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_fenn_guarantee"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_fenn_guarantee.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_district_council"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_district_council.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_rural_grid"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rural_grid.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_open_libraries"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_open_libraries.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_district_scholarships"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_district_scholarships.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_district_militia"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_district_militia.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_common_fuel_market"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_common_fuel_market.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_municipal_services"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_municipal_services.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_common_citizenship"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_common_citizenship.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_oil_fund"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_oil_fund.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_oil_for_water"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_oil_for_water.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_district_workshops"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_district_workshops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_public_utilities"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_public_utilities.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_civic_audit"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_civic_audit.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_returnee_offices"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_returnee_offices.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_regional_trusts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_regional_trusts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_oil_quotas"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_oil_quotas.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_state_logistics_grid"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_state_logistics_grid.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_appointed_prefects"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_appointed_prefects.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_works_commission"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_works_commission.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_engineering_collegium"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_engineering_collegium.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_ladder_ending_iron"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_ladder_ending_iron.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_ladder_of_seals"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_ladder_of_seals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_state_project_bureaus"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_state_project_bureaus.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_namestnik_garrisons"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_namestnik_garrisons.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_district_inspectorate"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_district_inspectorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_development_bank"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_development_bank.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_state_plan"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_state_plan.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_reconstruction_statute"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_reconstruction_statute.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_ladder_ending_service"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_ladder_ending_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_civil_service_exam"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_civil_service_exam.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_service_state"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_service_state.png"
 	}
@@ -7038,5 +7383,1473 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_TVA_endgame_what_the_city_counted"
 		texturefile = "gfx/interface/goals/focus_generic_public_meetings.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pw_take_bezhaysk"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_take_bezhaysk.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_settled_state"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_settled_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_shield_corps"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_shield_corps.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_two_borders"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_two_borders.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_mountain_school"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_mountain_school.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_army_mountain"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_army_mountain.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_army_against_heavy"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_army_against_heavy.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_armored_maneuver_companies"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_armored_maneuver_companies.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_army_limited_offense"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_army_limited_offense.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_army_hegemony_cadres"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_army_hegemony_cadres.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_army_republic_control"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_army_republic_control.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_army_staff_doctrine"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_army_staff_doctrine.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_navy_coast"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_navy_coast.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_navy_ports"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_navy_ports.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_marine_school"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_marine_school.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_navy_yards"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_navy_yards.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_navy_escorts"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_navy_escorts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_navy_deny"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_navy_deny.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_air_crews"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_air_crews.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_air_fields"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_air_fields.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_unity"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_unity.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_administrations"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_administrations.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_frontier_ain"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_frontier_ain.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_frontier_cof"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_frontier_cof.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_northern_administration"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_northern_administration.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_cannibal_campaign"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_cannibal_campaign.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_chancellery"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_chancellery.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_trusted_list"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_trusted_list.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_old_guard"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_old_guard.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_new_ladder"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_new_ladder.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_personal_oath"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_personal_oath.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_official_history"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_official_history.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_rewrite_mandate"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_rewrite_mandate.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_public_trial"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_public_trial.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_closed_session"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_closed_session.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_revolution_name"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_revolution_name.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_institutions"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_institutions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_civil_army"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_civil_army.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_lock"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_lock.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_competition"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_competition.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_succession"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_succession.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_air_shield"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_air_shield.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_air_support"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_air_support.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_air_import"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_air_import.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_air_domestic"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_air_domestic.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_emergency"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_emergency.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_subordinate"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_subordinate.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_limit_parties"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_limit_parties.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_lock"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_lock.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_person"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_person.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_regional_system"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_regional_system.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_val_audit"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_val_audit.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_val_terms"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_val_terms.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_val_force"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_val_force.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_nod_break"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_nod_break.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_nod_force"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_nod_force.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_clients"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_clients.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_heg_burden"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_heg_burden.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_prepare_neighbors"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_prepare_neighbors.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_crisis"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_crisis.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_transition"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_transition.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_independent_gov"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_independent_gov.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_coalition"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_coalition.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sot_field"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sot_field.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sot_regions"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sot_regions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sot_state"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sot_state.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sot_two_threats"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sot_two_threats.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sot_limits"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sot_limits.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sot_keep_command"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sot_keep_command.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sot_transfer"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sot_transfer.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sot_val_defense"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sot_val_defense.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sot_nod_watch"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sot_nod_watch.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_oath"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_oath.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_occidia_campaign"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_occidia_campaign.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_lib_war"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_lib_war.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_chancellery_purge"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_chancellery_purge.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_fuel_depots"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_fuel_depots.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_second_drilling_crew"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_second_drilling_crew.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_motor_pool"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_motor_pool.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_reserve_rolls"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_reserve_rolls.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_port_arsenal"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_port_arsenal.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_officer_courses"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_officer_courses.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_law_after_war"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_law_after_war.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_seal_registry"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_seal_registry.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_unified_standards"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_unified_standards.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_balanced_accounts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_balanced_accounts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_water_boards"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_water_boards.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_constitutional_committee"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_constitutional_committee.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_cabinet_statute"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_cabinet_statute.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_state_chamber"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_state_chamber.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_cadastre"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_cadastre.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_administrative_courts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_administrative_courts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_public_procurement"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_public_procurement.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_industrial_commission"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_industrial_commission.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_tool_reserve"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_tool_reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_public_supply"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_public_supply.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_industrial_credit"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_industrial_credit.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_export_guarantees"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_export_guarantees.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_labour_code"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_labour_code.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_company_housing"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_company_housing.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_technical_training"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_technical_training.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_employment_offices"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_employment_offices.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_arbitration_commissions"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_arbitration_commissions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_social_budget"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_social_budget.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_state_warehouses"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_state_warehouses.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_district_hospitals"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_district_hospitals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_civil_communications"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_civil_communications.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_regional_reconstruction"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_regional_reconstruction.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_nod_war"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_nod_war.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_fuel_depots"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_fuel_depots.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_annexed_registers"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_annexed_registers.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_building_code"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_building_code.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_military_governors"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_military_governors.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_officer_appointments"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_officer_appointments.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_strategic_guard"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_strategic_guard.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_defence_accounts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_defence_accounts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_survey_corps"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_survey_corps.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_standard_projects"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_standard_projects.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_local_design_offices"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_local_design_offices.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_cooperative_congress"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_cooperative_congress.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_haulage_cooperatives"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_haulage_cooperatives.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_tool_cooperatives"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_tool_cooperatives.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_district_fair"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_district_fair.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_relief_register"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_relief_register.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_relief_trains"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_relief_trains.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_mobile_clinics"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_mobile_clinics.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_rescue_college"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rescue_college.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_relief_reserves"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_relief_reserves.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_mobile_operations"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_mobile_operations.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_south_black_basin"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_black_basin.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_desert_offices"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_desert_offices.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_normalisation"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_normalisation.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_basin_reservoirs"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_basin_reservoirs.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_foreign_patents"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_foreign_patents.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_domestic_designs"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_domestic_designs.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_port_polytechnic"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_port_polytechnic.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_commercial_commonwealth"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_commercial_commonwealth.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_central_treasury"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_central_treasury.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_insurance_fund"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_insurance_fund.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_family_pensions"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_family_pensions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_school_network"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_school_network.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_foreign_office"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_foreign_office.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_eflor_accord"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_eflor_accord.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_azhar_accord"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_azhar_accord.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_border_compacts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_border_compacts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_border_citizenship"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_border_citizenship.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_motor_columns"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_motor_columns.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_prepared_positions"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_prepared_positions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_integrated_staff"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_integrated_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_naval_signals"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_naval_signals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_convoy_escorts"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_convoy_escorts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_school_network"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_school_network.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_integrated_rear"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_integrated_rear.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_sword_directory"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_sword_directory.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_return_seal"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_return_seal.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_gornin_charter"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_gornin_charter.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_field_army"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_field_army.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_district_levies"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_district_levies.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_staff_rule"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_staff_rule.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_northern_plan"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_northern_plan.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_military_governors"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_military_governors.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_field_compacts"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_field_compacts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_arsenal_programme"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_arsenal_programme.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_rear_reconstruction"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_rear_reconstruction.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_military_prosecution"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_military_prosecution.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_field_courts"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_field_courts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_service_records"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_service_records.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_officer_college"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_officer_college.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_sdir_signal_corps"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_sdir_signal_corps.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_veterans_return"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_veterans_return.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_svetlogorsk_shipyards"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_svetlogorsk_shipyards.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_power_reserve"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_power_reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_army_review"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_army_review.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_breakthrough_army"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_breakthrough_army.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_mobile_army"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_mobile_army.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_reserve_centres"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_reserve_centres.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_engineer_units"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_engineer_units.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_field_workshops"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_field_workshops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_artillery_observers"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_artillery_observers.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_staff_exercises"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_staff_exercises.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_combined_arms"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_combined_arms.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_southern_army"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_army.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_naval_review"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_naval_review.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_escort_fleet"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_escort_fleet.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_strike_fleet"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_strike_fleet.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_naval_workshops"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_naval_workshops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_crew_schools"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_crew_schools.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_naval_fuel_depots"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_naval_fuel_depots.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_landing_supply"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_landing_supply.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_naval_service"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_naval_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_air_review"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_air_review.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_air_defence"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_air_defence.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_frontline_air"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_frontline_air.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_airfield_network"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_airfield_network.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_flight_schools"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_flight_schools.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_radar_posts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_radar_posts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_engine_workshops"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_engine_workshops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_air_supply"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_air_supply.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_ground_control"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_ground_control.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_southern_air_command"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_air_command.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_south_seal_over_furnaces"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_seal_over_furnaces.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_border_revenge"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_border_revenge.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_prag_settlement_agreements"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_prag_settlement_agreements.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_prag_border_protocol"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_prag_border_protocol.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_prag_partner_supply"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_prag_partner_supply.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_prag_south_guarantees"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_prag_south_guarantees.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_civil_police"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_civil_police.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_mobilisation_register"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_mobilisation_register.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_armament_inspectorate"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_armament_inspectorate.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_freight_brokerage"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_freight_brokerage.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_licensed_workshop"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_licensed_workshop.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_neighbour_local_commands"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_neighbour_local_commands.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_neighbour_national_charters"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_neighbour_national_charters.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_border_administration"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_border_administration.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_border_security"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_border_security.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_heritage"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_heritage.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_svetlogorsk_settlement"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_svetlogorsk_settlement.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_veyran_union_charter"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_union_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_veyran_embarkation_staff"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_embarkation_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_veyran_convoy_charter"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_convoy_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_veyran_arsenal_contract"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_arsenal_contract.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_veyran_counterplan"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_counterplan.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_veyran_invasion"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_invasion.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_trade_hearing"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_trade_hearing.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_safir_line"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_safir_line.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_bayrat_lease"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_bayrat_lease.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_safir_charter"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_safir_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_bayrat_foundry"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_bayrat_foundry.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_delegates"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_delegates.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_builders"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_builders.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_elected_watch"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_elected_watch.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_road_crews"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_road_crews.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_south_ward_armoury"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_south_ward_armoury.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_rus_crisis_watch"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rus_crisis_watch.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_rus_fuel_for_coalition"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rus_fuel_for_coalition.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_rus_demand_share"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rus_demand_share.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_rus_expedition_staff"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rus_expedition_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_postwar_commission"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_postwar_commission.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_strategic_reserve"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_strategic_reserve.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_development_fund"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_development_fund.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_war_accounts"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_war_accounts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_southern_schools"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_schools.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_unified_budget"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_unified_budget.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_demobilisation_board"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_demobilisation_board.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_southern_industrial_repair"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_industrial_repair.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_civil_administration"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_civil_administration.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_permanent_institutions"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_permanent_institutions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_southern_military_rule"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_military_rule.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_pw_southern_local_offices"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_local_offices.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_mandate"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_mandate.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_domestic_suppliers"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_domestic_suppliers.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_resistance_memory"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_resistance_memory.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_district_grants"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_district_grants.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_tools_inventory"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_tools_inventory.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_national_service"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_national_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_citizens_protection"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_citizens_protection.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_national_schools"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_national_schools.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_district_workshops"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_district_workshops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_national_defence"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_national_defence.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_officer_oath"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_officer_oath.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_national_arsenal"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_national_arsenal.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_district_reserves"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_district_reserves.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_border_drills"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_border_drills.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_protected_communities"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_protected_communities.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_district_exchange"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_district_exchange.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_defence_stores"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_defence_stores.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_charter_shabrat_charter_fulfilled"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_charter_fulfilled.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_firm_settlement"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_firm_settlement.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_civil_charter"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_civil_charter.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_civil_workshops"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_civil_workshops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_accountable_arsenals"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_accountable_arsenals.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_army_register"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_army_register.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_supply_service"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_supply_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_republic_professional_service"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_republic_professional_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_investment_precision_industry"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_investment_precision_industry.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_investment_special_metallurgy"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_investment_special_metallurgy.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_investment_logistics"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_investment_logistics.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_investment_computing"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_investment_computing.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_investment_defense_orders"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_investment_defense_orders.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_investment_integrated_economy"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_investment_integrated_economy.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_navy_capital"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_navy_capital.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_nod_recognition"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_nod_recognition.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_vera_lists"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_vera_lists.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_val_renew_aid"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_val_renew_aid.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_val_border_compact"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_val_border_compact.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_nod_ratify"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_nod_ratify.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_economy_count_the_cost"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_economy_count_the_cost.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_economy_reopen_tax_offices"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_economy_reopen_tax_offices.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_economy_stabilize_currency"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_economy_stabilize_currency.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_development_posters_on_ruins"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_development_posters_on_ruins.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_development_rebuild_as_duty"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_development_rebuild_as_duty.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_development_engineers_on_radio"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_development_engineers_on_radio.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_development_generation_reconstruction"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_development_generation_reconstruction.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_development_reopen_universities"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_development_reopen_universities.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_development_national_research_institutes"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_development_national_research_institutes.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_investment_development_fund"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_investment_development_fund.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_pc_development_captured_institutes"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_development_captured_institutes.png"
 	}
 }

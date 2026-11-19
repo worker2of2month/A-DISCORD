@@ -3583,6 +3583,8 @@ def expected_localisation_keys() -> set[str]:
         "VAD_march_commitment_desc",
         "VAD_oath_pending_district_march",
         "VAD_oath_pending_city_redoubts",
+        "VAD_issue_depot_rifles",
+        "VAD_issue_depot_rifles_desc",
         "VAD_coalition_guarantees",
         "VAD_coalition_guarantees_desc",
         "VAD_foreign_observers",

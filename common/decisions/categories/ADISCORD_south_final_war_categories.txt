@@ -7,10 +7,23 @@ ADISCORD_south_final_war_category = {
 			tag = NAM
 			tag = EFL
 			tag = AZH
+			tag = WEF
+			tag = KDR
+			tag = RHM
+			tag = SDR
+			tag = MZR
+			tag = KYZ
+			tag = GLP
+			tag = SFD
+			tag = SCD
+			tag = SMD
+			tag = SOD
+			tag = SDA
 		}
 	}
 	visible = {
 		OR = {
+			ADISCORD_south_coalition_inviter = yes
 			AND = {
 				ADISCORD_south_resource_question_closed = yes
 				NOT = { has_global_flag = ADISCORD_south_final_started }

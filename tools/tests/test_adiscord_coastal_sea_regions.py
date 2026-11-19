@@ -113,6 +113,92 @@ class ProvinceCornerTests(unittest.TestCase):
                     self.assertEqual(image.getpixel((round(x), round(y))), definitions[province])
                     self.assertEqual(image.getpixel((int(x), int(y))), definitions[province])
 
+    @staticmethod
+    def reconciled_anchors():
+        """Return the province grid, province kinds, the coastal anchor scope and its unit stacks."""
+        from collections import defaultdict
+
+        rows = [line.split(";") for line in (ROOT / "map/definition.csv").read_text().splitlines()]
+        definitions = {int(fields[0]): tuple(map(int, fields[1:4])) for fields in rows if len(fields) >= 8}
+        kinds = {int(fields[0]): fields[4] for fields in rows if len(fields) >= 8}
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            grid = geography.province_grid(np.asarray(image.convert("RGB")), definitions)
+        neighbours = geography.province_neighbours(grid)
+        touched = geography.ANCHOR_TOUCHED_PROVINCES
+        scope = set(touched) | {neighbour for province in touched for neighbour in neighbours[province]}
+        scope |= geography.DISPLACED_PROVINCES | set(geography.ANCHOR_REFERENCES)
+        stacks = defaultdict(dict)
+        for line in (ROOT / "map/unitstacks.txt").read_text().splitlines():
+            fields = line.split(";")
+            stacks[int(fields[0])][int(fields[1])] = tuple(map(float, fields[2:6]))
+        return grid, kinds, scope, stacks
+
+    def test_reconciled_land_armies_stand_in_the_province_interior(self):
+        from scipy.ndimage import distance_transform_edt, find_objects
+
+        grid, kinds, scope, stacks = self.reconciled_anchors()
+        boxes = find_objects(grid)
+        for province in sorted(scope):
+            if kinds.get(province) != "land" or 0 not in stacks[province]:
+                continue
+            box = boxes[province - 1]
+            # A snapped anchor sits one pixel from the border it crossed.
+            inside = np.pad(grid[box] == province, 1)
+            depth = distance_transform_edt(inside)
+            ys, xs = np.nonzero(inside)
+            deep_y, deep_x = np.nonzero(depth >= 0.7 * depth.max())
+            nearest = int(np.argmin((deep_x - xs.mean()) ** 2 + (deep_y - ys.mean()) ** 2))
+            x_value, _height, z_value, _rotation = stacks[province][0]
+            x = round(x_value) - box[1].start + 1
+            y = grid.shape[0] - 1 - round(z_value) - box[0].start + 1
+            with self.subTest(province=province):
+                self.assertTrue(0 <= y < inside.shape[0] and 0 <= x < inside.shape[1] and inside[y, x])
+                self.assertGreaterEqual(depth[y, x], depth.max() / 2)
+                self.assertLessEqual(np.hypot(x - deep_x[nearest], y - deep_y[nearest]), depth.max())
+
+    def test_reconciled_moving_slots_lead_to_their_neighbours(self):
+        from math import atan2, pi
+
+        from scipy.ndimage import find_objects
+
+        grid, kinds, scope, stacks = self.reconciled_anchors()
+        height = grid.shape[0]
+        boxes = find_objects(grid)
+        for province in sorted(scope):
+            if kinds.get(province) not in ("land", "sea") or 0 not in stacks[province]:
+                continue
+            box = boxes[province - 1]
+            top, left = max(box[0].start - 1, 0), max(box[1].start - 1, 0)
+            window = grid[top:box[0].stop + 1, left:box[1].stop + 1]
+            # The engine numbers neighbours by their first contact in a scan
+            # of provinces.bmp that starts at the bottom row.
+            first = {}
+            for a, b, lower in ((window[:, :-1], window[:, 1:], 0), (window[:-1], window[1:], 1)):
+                for y, x in zip(*np.nonzero((a == province) != (b == province))):
+                    other = int(b[y, x] if a[y, x] == province else a[y, x])
+                    key = (height - 1 - (top + y + lower), left + x)
+                    first[other] = min(first.get(other, key), key)
+            inside = window == province
+            padded = np.pad(window, 1)
+            x0, _height, z0, _rotation = stacks[province][0]
+            x0, z0 = round(x0), round(z0)
+            for slot, neighbour in enumerate(sorted(first, key=lambda other: (first[other], other))[:8], 1):
+                with self.subTest(province=province, slot=slot):
+                    self.assertIn(slot, stacks[province])
+                    x, _height, z, rotation = stacks[province][slot]
+                    dx, dz = x - x0, z - z0
+                    if np.hypot(dx, dz) < 1:
+                        continue
+                    touching = inside & (
+                        (padded[:-2, 1:-1] == neighbour) | (padded[2:, 1:-1] == neighbour)
+                        | (padded[1:-1, :-2] == neighbour) | (padded[1:-1, 2:] == neighbour)
+                    )
+                    ys, xs = np.nonzero(touching)
+                    contact_dx = xs.mean() + left - x0
+                    contact_dz = height - 1 - (ys.mean() + top) - z0
+                    self.assertGreaterEqual(dx * contact_dx + dz * contact_dz, 0)
+                    self.assertLessEqual(abs((rotation - atan2(dx, -dz) + pi) % (2 * pi) - pi), 0.5)
+
     def test_neftegorsk_southern_contact_has_a_broad_connected_border(self):
         from scipy.ndimage import label
 

@@ -424,11 +424,11 @@ class SupportServicesTests(unittest.TestCase):
             "ADISCORD_ew_company": ("signal_company", "field_ew_company"),
             "ADISCORD_decontamination_company": (
                 "ADISCORD_environment_company",
-                "environment_support_companies",
+                "sealed_decontamination_kits",
             ),
             "ADISCORD_desert_support_company": (
                 "ADISCORD_environment_company",
-                "environment_support_companies",
+                "desert_water_columns",
             ),
             "ADISCORD_loitering_munition_company": (None, "assisted_projectiles"),
         }
@@ -509,7 +509,7 @@ class SupportServicesTests(unittest.TestCase):
             ),
             "garrison_security": (("military_police =",), set()),
             "field_environment": (
-                ("ADISCORD_decontamination_company =", "ADISCORD_desert_support_company ="),
+                ("engineer =", "ADISCORD_decontamination_company =", "ADISCORD_desert_support_company ="),
                 set(),
             ),
         }
@@ -525,6 +525,34 @@ class SupportServicesTests(unittest.TestCase):
         for key in ("route_optimization_ai", "closed_loop_field_supply", "zero_loss_logistics"):
             branch, index = generator.TECH_POSITION_BY_ID["ADISCORD_tech_" + key]
             self.assertTrue(all(effect.startswith("logistics_company =") for effect in generator.effects_for(branch, index)))
+
+    def test_support_folder_uses_one_reachable_grid_without_overlapping_cards(self):
+        branches = [b for b in generator.BRANCHES if "support_folder" in b.folders]
+        nodes = {tech.id: (b, i) for b in branches for i, tech in enumerate(b.techs)}
+        root = "ADISCORD_tech_field_workshop_tools"
+        gui = generator.render_folder("support_folder")
+        self.assertEqual(re.findall(r'name = "(ADISCORD_tech_\w+)_tree"', gui), [root])
+        reached = set()
+        pending = [root]
+        rows = {}
+        while pending:
+            current = pending.pop()
+            if current in reached:
+                continue
+            reached.add(current)
+            branch, index = nodes[current]
+            x, y = generator.technology_grid_position(branch, index)
+            half_width = 102 if current in generator.ENABLE_EQUIPMENT else 36
+            rows.setdefault(y, []).append((x * 70, half_width, current))
+            for target in generator.technology_successors(branch, index):
+                child, i = nodes[target]
+                self.assertGreater(generator.technology_time_slot(child, i), y, target)
+                pending.append(target)
+        self.assertEqual(reached, set(nodes))
+        for row in rows.values():
+            cards = sorted(row)
+            for (left, width, _), (right, next_width, tech) in zip(cards, cards[1:]):
+                self.assertGreaterEqual(right - left, width + next_width + 4, tech)
 
     def test_support_generation_is_current_and_preserves_encoding(self):
         for path, data in generator.support_technology_outputs().items():
@@ -804,7 +832,7 @@ class CivilTechnologyRedesignTests(unittest.TestCase):
         self.assertTrue({"precision_polymer_blending", "precision_fuel_fractionation"} <= reached)
 
     def test_attached_programmes_share_native_grid_calendar_and_actual_prerequisites(self):
-        for key, (parent_key, source_key) in generator.CIVIL_TREE_ATTACHMENTS.items():
+        for key, (parent_key, source_key) in generator.VERTICAL_TREE_ATTACHMENTS.items():
             child = generator.BRANCH_BY_KEY[key]
             parent = generator.BRANCH_BY_KEY[parent_key]
             source = next(i for i, tech in enumerate(parent.techs) if tech.key == source_key)
@@ -819,7 +847,8 @@ class CivilTechnologyRedesignTests(unittest.TestCase):
                     position = generator.technology_grid_position(branch, index)
                     self.assertNotIn(position, occupied, branch.techs[index].id)
                     occupied.add(position)
-                    self.assertEqual(rows.setdefault(year, position[1]), position[1])
+                    if branch.techs[index].key != "field_workshop_tools":
+                        self.assertEqual(rows.setdefault(year, position[1]), position[1])
 
     def test_both_computing_choices_preserve_cross_folder_capabilities(self):
         computing = generator.BRANCH_BY_KEY["computing"]
@@ -1628,7 +1657,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                     for i in range(len(branch.techs))
                 ]
                 half_card = 42 if horizontal else 102
-                if branch.file in generator.CIVIL_TECHNOLOGY_FILES:
+                if branch.file in generator.CIVIL_TECHNOLOGY_FILES or folder == "support_folder":
                     half_card = 36
                 expected_center = cross_size / 2
                 if not horizontal:
@@ -1641,8 +1670,10 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                     expected_center = title_x - grid_x + title_width / 2
                 with self.subTest(folder=folder, branch=branch.key):
                     self.assertEqual((min(centers) + max(centers)) / 2, expected_center)
-                    self.assertGreaterEqual(min(centers) - half_card, 0)
-                    self.assertLessEqual(max(centers) + half_card, cross_size)
+                    for center, tech in zip(centers, branch.techs, strict=True):
+                        extent = 102 if folder == "support_folder" and tech.id in generator.ENABLE_EQUIPMENT else half_card
+                        self.assertGreaterEqual(center - extent, 0)
+                        self.assertLessEqual(center + extent, cross_size)
 
     def test_horizontal_ruler_dates_match_every_technology_start_year(self) -> None:
         for branch in generator.BRANCHES:
@@ -1674,6 +1705,14 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                         (str(year) if occurrence == 0 else f"{year}_{occurrence}")
                         if horizontal else f"{branch.key}_{year}"
                     )
+                    expected_text = str(year)
+                    if folder == "support_folder":
+                        row = generator.technology_time_slot(branch, index) // 2
+                        lo, hi = generator.SUPPORT_YEAR_BANDS[row]
+                        self.assertLessEqual(lo, year)
+                        self.assertLessEqual(year, hi)
+                        expected_text = str(lo) if lo == hi else f"{lo}-{hi}"
+                        label_id = f"left_{row}"
                     label = self._named_gui_block(
                         rendered,
                         "instantTextBoxType",
@@ -1694,7 +1733,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                     )
                     with self.subTest(folder=folder, technology=branch.techs[index].id):
                         self.assertEqual(int(pos[axis]) + extent / 2, cell_center)
-                        self.assertIn(f'text = "{year}"', label)
+                        self.assertIn(f'text = "{expected_text}"', label)
 
     def test_ui_validator_rejects_swapped_dates_displaced_labels_and_wrong_titles(
         self,
@@ -2140,6 +2179,8 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             with self.subTest(technology=key):
                 self.assertTrue(texture.endswith(".dds"), texture)
                 path = ROOT / texture
+                if not path.is_file() and not path.name.startswith("ADISCORD_"):
+                    path = generator.BASE_GAME / texture
                 self.assertTrue(path.is_file(), path)
                 self.assertEqual(path.read_bytes()[:4], b"DDS ", path)
 
@@ -3820,7 +3861,7 @@ class SpecialTechnologyFolderTests(unittest.TestCase):
 
     def test_unconfigured_special_research_is_locked_by_default(self):
         branch = replace(
-            generator.BRANCH_BY_KEY["field_support"],
+            generator.BRANCH_BY_KEY["anti_air"],
             folders=(generator.SPECIAL_TECHNOLOGY_FOLDER,),
         )
         for index in range(len(branch.techs)):

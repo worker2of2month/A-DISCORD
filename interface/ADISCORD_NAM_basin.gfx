@@ -35,6 +35,20 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
+	spriteType = {
+		name = "GFX_NAM_pirate_notoriety_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/NAM_pirate_notoriety.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_resistance_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/NAM_resistance.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
 	# BEGIN GENERATED NAM BASIN MAP
 	spriteType = {
 		name = "GFX_NAM_bw_map"
@@ -162,6 +176,90 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_NAM_support_trade_texticon"
 		texturefile = "gfx/interface/NAM_basin/texticon_trade.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_weber_underground_texticon"
+		texturefile = "gfx/interface/NAM_basin/weber_underground_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_seal_discipline_texticon"
+		texturefile = "gfx/interface/NAM_basin/seal_discipline_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_foreign_capital_texticon"
+		texturefile = "gfx/interface/NAM_basin/foreign_capital_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_corporate_influence_texticon"
+		texturefile = "gfx/interface/NAM_basin/corporate_influence_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_consolidation_texticon"
+		texturefile = "gfx/interface/NAM_basin/consolidation_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_pillar_loyalty_texticon"
+		texturefile = "gfx/interface/NAM_basin/pillar_loyalty_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_board_votes_texticon"
+		texturefile = "gfx/interface/NAM_basin/board_votes_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_field_condition_texticon"
+		texturefile = "gfx/interface/NAM_basin/field_condition_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_field_capacity_texticon"
+		texturefile = "gfx/interface/NAM_basin/field_capacity_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_oil_score_texticon"
+		texturefile = "gfx/interface/NAM_basin/oil_score_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_war_cost_texticon"
+		texturefile = "gfx/interface/NAM_basin/war_cost_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_return_readiness_texticon"
+		texturefile = "gfx/interface/NAM_basin/return_readiness_texticon.png"
 		noOfFrames = 1
 		legacy_lazy_load = no
 	}

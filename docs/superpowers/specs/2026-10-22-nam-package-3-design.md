@@ -303,10 +303,10 @@ The seven authored NAM trees contain 369 distinct focuses:
 | `NAM_exile_corporate_focus` | 34 | Corporate takeover and its military/economic choices |
 
 All three colonial chains, choosing one alternative in each pair, reach
-`NAM_letters_to_the_centre` in 329 focus-days. The gateway requires the
-three endings in separate prerequisite blocks. The declaration event reveals
-`NAM_independence_day` and its descendants. Choosing the focus still requires
-completion of the colonial gateway.
+`NAM_letters_to_the_centre` in 308 focus-days. Its prerequisites are the
+three colonial endings. Independence completes this focus, including when it
+was still unselected. The public declaration reveals `NAM_independence_day`
+and its descendants.
 The main tree spans at most 73 horizontal coordinate units and reaches row 13.
 Visual spacing and legibility still require a manual in-game check.
 

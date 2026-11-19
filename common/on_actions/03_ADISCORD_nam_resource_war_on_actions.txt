@@ -1,4 +1,25 @@
 on_actions = {
+	on_war_relation_added = {
+		effect = {
+			if = {
+				limit = {
+					tag = NAM
+					has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic }
+				}
+				FROM = { NAM_seal_record_war_entry = yes }
+			}
+			else_if = {
+				limit = {
+					FROM = {
+						tag = NAM
+						has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic }
+					}
+				}
+				NAM_seal_record_war_entry = yes
+			}
+		}
+	}
+
 	on_daily_NAM = {
 		effect = {
 			if = {
@@ -66,6 +87,19 @@ on_actions = {
 
 	on_state_control_changed = {
 		effect = {
+			if = {
+				limit = {
+					NAM_neighbour_is_command = yes
+					FROM.FROM = { is_owned_by = ROOT }
+				}
+				NAM_neighbour_bind_government = yes
+				FROM.FROM = {
+					if = {
+						limit = { is_core_of = event_target:NAM_neighbour_resistance }
+						NAM_neighbour_apply_district_charter = yes
+					}
+				}
+			}
 			if = {
 				limit = {
 					FROM.FROM = { state = 701 }

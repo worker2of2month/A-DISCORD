@@ -5,7 +5,6 @@ from pathlib import Path
 import unittest
 
 from tools.builders.build_adiscord_focus_trees import (
-    NAM_POSTWAR_BRANCHES,
     NAM_POSTWAR_SOURCE,
     OUTPUT_ROOT,
     SOURCES,
@@ -68,12 +67,13 @@ def source_focus_ids(relative):
 class NamChapterAssemblyTests(unittest.TestCase):
     def test_postwar_position_anchors_are_loaded_before_their_dependants(self):
         defined = set()
-        for filename in sorted(NAM_POSTWAR_BRANCHES.values()):
-            for row in parse_clausewitz(read_native_focus_source(OUTPUT_ROOT / filename)):
+        native = read_native_focus_source(OUTPUT_ROOT / SOURCES[NAM_POSTWAR_SOURCE])
+        for row in parse_clausewitz(native):
+            if row.key == "shared_focus":
                 name = one(row.value, "id")
                 for field in row.value:
                     if field.key == "relative_position_id":
-                        self.assertIn(field.value, defined, (filename, name))
+                        self.assertIn(field.value, defined, name)
                 defined.add(name)
 
     def test_the_loaded_nam_tree_reaches_only_its_own_focuses(self):
@@ -106,16 +106,15 @@ class NamChapterAssemblyTests(unittest.TestCase):
             self.assertEqual(reachable, expected, tree_id)
 
     def test_each_postwar_chapter_preserves_its_authored_focus_bodies(self):
-        header = read_native_focus_source(OUTPUT_ROOT / SOURCES[NAM_POSTWAR_SOURCE])
-        self.assertEqual([row.key for row in parse_clausewitz(header)], ["focus_tree"])
-        for source, filename in NAM_POSTWAR_BRANCHES.items():
-            authored = (ROOT / "focus_trees" / source).read_text(encoding="utf-8")
-            native = read_native_focus_source(OUTPUT_ROOT / filename)
-            before = parse_clausewitz(authored)
-            after = parse_clausewitz(native)
-            self.assertTrue(all(row.key == "shared_focus" for row in after), filename)
-            self.assertEqual([body_text(authored, row) for row in before],
-                             [body_text(native, row) for row in after], filename)
+        path = OUTPUT_ROOT / SOURCES[NAM_POSTWAR_SOURCE]
+        authored = read_focus_source(path)
+        native = read_native_focus_source(path)
+        trees = [row for row in parse_clausewitz(authored) if row.key == "focus_tree"]
+        rows = parse_clausewitz(native)
+        self.assertEqual([one(row.value, "id") for row in rows if row.key == "focus_tree"],
+                         ["NAM_postwar_focus", "NAM_south_heritage_focus"])
+        self.assertEqual([body_text(authored, focus) for tree in trees for focus in tree.value if focus.key == "focus"],
+                         [body_text(native, row) for row in rows if row.key == "shared_focus"])
 
 
 class SharedFocusHistoryAssemblyTests(unittest.TestCase):

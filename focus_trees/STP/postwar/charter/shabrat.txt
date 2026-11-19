@@ -2,7 +2,7 @@
 	# Shabrat: a chain of national diamonds opens into a six-way programme fan.
 	focus = {
 		id = STP_pc_charter_shabrat_mandate
-		icon = GFX_focus_STP_pc_shabrat_politics
+		icon = GFX_focus_STP_pc_charter_shabrat_mandate
 		x = -4
 		y = 1
 		relative_position_id = STP_pc_lib_lock
@@ -80,7 +80,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_domestic_suppliers
-		icon = GFX_focus_STP_party_industrial_board
+		icon = GFX_focus_STP_pc_charter_shabrat_domestic_suppliers
 		x = -1
 		y = 2
 		relative_position_id = STP_pc_lib_lock
@@ -161,7 +161,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_resistance_memory
-		icon = GFX_focus_STP_cw_press_office
+		icon = GFX_focus_STP_pc_charter_shabrat_resistance_memory
 		x = -6
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -200,7 +200,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_grants
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
+		icon = GFX_focus_STP_pc_charter_shabrat_district_grants
 		x = -11
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -235,7 +235,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_tools_inventory
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_STP_pc_charter_shabrat_tools_inventory
 		x = 3
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -264,7 +264,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_service
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_pc_charter_shabrat_national_service
 		x = -2
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -303,7 +303,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_citizens_protection
-		icon = GFX_focus_STP_ps_asylum_protocol
+		icon = GFX_focus_STP_pc_charter_shabrat_citizens_protection
 		x = -4
 		y = 5
 		relative_position_id = STP_pc_lib_lock
@@ -350,7 +350,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_schools
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_pc_charter_shabrat_national_schools
 		x = -14
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -425,7 +425,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_workshops
-		icon = GFX_focus_STP_party_industrial_board
+		icon = GFX_focus_STP_pc_charter_shabrat_district_workshops
 		x = -6
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -493,7 +493,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_defence
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_STP_pc_charter_shabrat_national_defence
 		x = 1
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -531,7 +531,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_officer_oath
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_pc_charter_shabrat_officer_oath
 		x = 4
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -624,7 +624,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_arsenal
-		icon = GFX_focus_STP_defense_budget_tank
+		icon = GFX_focus_STP_pc_charter_shabrat_national_arsenal
 		x = -6
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -737,7 +737,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_reserves
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_STP_pc_charter_shabrat_district_reserves
 		x = 1
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -778,7 +778,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_border_drills
-		icon = GFX_focus_STP_cw_arm_the_north
+		icon = GFX_focus_STP_pc_charter_shabrat_border_drills
 		x = 5
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -810,7 +810,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_protected_communities
-		icon = GFX_focus_STP_pw_party_family_pensions
+		icon = GFX_focus_STP_pc_charter_shabrat_protected_communities
 		x = -12
 		y = 8
 		relative_position_id = STP_pc_lib_lock
@@ -848,7 +848,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_exchange
-		icon = GFX_focus_STP_party_war_transport
+		icon = GFX_focus_STP_pc_charter_shabrat_district_exchange
 		x = -4
 		y = 8
 		relative_position_id = STP_pc_lib_lock
@@ -889,7 +889,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_defence_stores
-		icon = GFX_focus_STP_ps_northern_arms
+		icon = GFX_focus_STP_pc_charter_shabrat_defence_stores
 		x = 3
 		y = 8
 		relative_position_id = STP_pc_lib_lock
@@ -969,7 +969,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_charter_fulfilled
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_STP_pc_charter_shabrat_charter_fulfilled
 		x = -4
 		y = 10
 		relative_position_id = STP_pc_lib_lock

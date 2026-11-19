@@ -189,6 +189,7 @@ class GenericPeaceFixture:
         self.flags = {t: set() for t in self.countries}
         self.global_flags = set()
         self.subjects = {}
+        self.truces = set()
         self.annexed = []
         self.log = []
 
@@ -237,6 +238,8 @@ class GenericPeaceFixture:
                 return self.allied(current, self.resolve(value, stack))
             if key == "has_capitulated":
                 return (current in self.capitulated) == (value == "yes")
+            if key == "has_truce_with":
+                return frozenset((current, self.resolve(value, stack))) in self.truces
             if key == "has_war_with":
                 return self.resolve(value, stack) in self.enemies(current)
             if key == "has_war_together_with":
@@ -549,7 +552,7 @@ class WarDebugContractTests(unittest.TestCase):
         immediate = block(event, "immediate")
         self.assertTrue(
             any(
-                e.key == "VAL_begin_joint_nod_shabrat_campaign" and e.value == "yes"
+                e.key == "VAL_dispatch_nod_expedition" and e.value == "yes"
                 for e in walk(immediate)
             )
         )

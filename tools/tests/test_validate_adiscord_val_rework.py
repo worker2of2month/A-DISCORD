@@ -8121,11 +8121,13 @@ class ValExpandedCampaignTests(unittest.TestCase):
     def test_joint_shabrat_nod_campaign_forms_alliance_and_splits_fixed_regions(self):
         decisions = DECISIONS_PATH.read_text(encoding="utf-8")
         campaign = named_block_spans(decisions, "VAL_campaign_against_nod")[0].text
-        self.assertIn("VAL_begin_joint_nod_shabrat_campaign = yes", campaign)
-        self.assertIn(
-            "NOT = { has_country_flag = VAL_joint_nod_settlement_completed }", campaign
-        )
-        self.assertIn("character = STP_maksim_shabrat ruling_only = yes", campaign)
+        self.assertIn("VAL_dispatch_nod_expedition = yes", campaign)
+        eligibility = named_block_spans(
+            (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8"),
+            "VAL_can_offer_shabrat_campaign",
+        )[0].text
+        self.assertIn("NOT = { has_country_flag = VAL_joint_nod_settlement_completed }", eligibility)
+        self.assertIn("character = STP_maksim_shabrat ruling_only = yes", eligibility)
         self.assertIn("STP_cw_release_tff_to_northern_war = yes", campaign)
 
         effects = EFFECTS_PATH.read_text(encoding="utf-8")

@@ -503,6 +503,11 @@ def check_oil_monopoly(
     for decision_name, focus in DECISION_FOCUS_GATES.items():
         decision = named_block(decisions, decision_name)
         visible = named_block(decision, "visible")
+        if "NAM_overseas_trade_open = yes" in visible:
+            overseas = named_block(triggers, "NAM_overseas_trade_open")
+            check("has_global_flag = ADISCORD_nam_resource_war_resolved" in overseas,
+                  "The settlement must keep the sea terminal and overseas buyers available")
+            visible += overseas
         if "NAM_field_repair_unlocked = yes" in visible:
             visible += named_block(triggers, "NAM_field_repair_unlocked")
             visible += named_block(triggers, "NAM_field_repair_trained")
@@ -601,7 +606,7 @@ def check_ladder(
 ) -> None:
     """Ladder of seals, rivals, underground, endings, memoirs and the war of return."""
     bop = read("common/bop/NAM.txt")
-    ranges = typed_blocks(bop, "range")
+    ranges = typed_blocks(named_block(bop, "NAM_ladder_bop"), "range")
     check(
         "NAM_ladder_bop = {" in bop
         and "left_side = NAM_bop_vertical" in bop
@@ -650,7 +655,7 @@ def check_ladder(
         )
         runtime = runtime.replace(preset, "", 1)
     check(
-        runtime.count("set_power_balance") == 1,
+        sum("id = NAM_ladder_bop" in block for block in typed_blocks(runtime, "set_power_balance")) == 1,
         "outside explicit prewar debug presets, only the declaration may set the ladder balance",
     )
     declaration_event = event_block(events, "ADISCORD_nam_groups.12")

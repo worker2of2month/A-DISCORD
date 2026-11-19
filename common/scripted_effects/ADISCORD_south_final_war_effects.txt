@@ -6,23 +6,36 @@
 
 # ----- Crisis deadline -----
 
-# GLOBAL. Open once at the actual peace/return settlement, or at the first
-# eligible furnace cycle. Repeated calls preserve the original preparation age.
+# GLOBAL. First land contact after the resource settlement starts the clock.
+# A later loss of the border leaves its date intact.
 ADISCORD_south_begin_preparation = {
 	if = {
 		limit = {
-			ADISCORD_south_crisis_open = yes
 			NOT = { has_global_flag = ADISCORD_south_preparation_started }
+			ADISCORD_south_crisis_open = yes
 		}
-		set_global_flag = ADISCORD_south_preparation_started
-		ADISCORD_south_wake_regional_countries = yes
-		# Settlement events call this from visible options.
-		hidden_effect = {
-			ADISCORD_south_watch_deadline = yes
-			SHL = { ADISCORD_south_announce_deadline = yes }
-			NAM = { ADISCORD_south_announce_deadline = yes }
-			EFL = { ADISCORD_south_announce_deadline = yes }
-			AZH = { ADISCORD_south_announce_deadline = yes }
+		if = {
+			limit = { ADISCORD_south_north_candidate_exists = yes }
+			if = {
+				limit = { has_global_flag = ADISCORD_south_unopposed_since }
+				clr_global_flag = ADISCORD_south_unopposed_since
+			}
+			if = {
+				limit = { ADISCORD_south_sides_share_border = yes }
+				set_global_flag = ADISCORD_south_preparation_started
+				ADISCORD_south_wake_regional_countries = yes
+				hidden_effect = {
+					ADISCORD_south_watch_deadline = yes
+					SHL = { ADISCORD_south_announce_deadline = yes }
+					NAM = { ADISCORD_south_announce_deadline = yes }
+					EFL = { ADISCORD_south_announce_deadline = yes }
+					AZH = { ADISCORD_south_announce_deadline = yes }
+				}
+			}
+		}
+		else_if = {
+			limit = { NOT = { has_global_flag = ADISCORD_south_unopposed_since } }
+			set_global_flag = ADISCORD_south_unopposed_since
 		}
 	}
 }
@@ -171,6 +184,7 @@ ADISCORD_south_show_preparation = {
 # Ordinary load, focus completion and periodic checks never call this reset.
 ADISCORD_south_suspend_preparation = {
 	clr_global_flag = ADISCORD_south_preparation_started
+	clr_global_flag = ADISCORD_south_unopposed_since
 	clr_global_flag = ADISCORD_south_crisis_warned
 	clr_global_flag = ADISCORD_south_crisis_deadline_passed
 	NAM = { ADISCORD_south_clear_preparation = yes }
@@ -205,8 +219,14 @@ ADISCORD_south_crisis_cycle = {
 	if = {
 		limit = {
 			ADISCORD_south_crisis_open = yes
-			ADISCORD_south_preparation_elapsed = yes
 			NOT = { ADISCORD_south_north_candidate_exists = yes }
+			OR = {
+				ADISCORD_south_preparation_elapsed = yes
+				has_global_flag = {
+					flag = ADISCORD_south_unopposed_since
+					days > 179
+				}
+			}
 			SHL = { ADISCORD_south_champion_viable = yes }
 		}
 		set_global_flag = ADISCORD_south_final_resolved
@@ -559,6 +579,7 @@ ADISCORD_south_assign_bound_sides = {
 
 # COUNTRY regional participant.
 ADISCORD_south_bind_to_champion = {
+	clear_variable = ADISCORD_south_coalition_envoy
 	if = {
 		limit = {
 			exists = yes
@@ -1423,6 +1444,8 @@ ADISCORD_south_clear_participants = {
 
 # COUNTRY.
 ADISCORD_south_clear_participant = {
+	clear_variable = ADISCORD_south_coalition_envoy
+	ADISCORD_south_refund_defector = yes
 	clear_variable = ADISCORD_south_side
 	clr_country_flag = ADISCORD_south_north_leader
 	clr_country_flag = ADISCORD_south_settlement_pending
@@ -1577,6 +1600,41 @@ ADISCORD_south_apply_subject_type = {
 ADISCORD_south_queue_offer = {
 	save_event_target_as = ADISCORD_south_offer_target
 	ROOT = { country_event = { id = ADISCORD_south.46 hours = 6 } }
+}
+
+# COUNTRY envoy. Resolve the leader once; event replies verify the same destination.
+ADISCORD_south_save_inviting_leader = {
+	if = {
+		limit = { ADISCORD_south_map_country_shl = yes }
+		SHL = { save_event_target_as = ADISCORD_south_inviting_leader }
+	}
+	else_if = {
+		limit = { NAM = { ADISCORD_south_map_country_north_leader = yes } }
+		NAM = { save_event_target_as = ADISCORD_south_inviting_leader }
+	}
+	else_if = {
+		limit = { EFL = { ADISCORD_south_map_country_north_leader = yes } }
+		EFL = { save_event_target_as = ADISCORD_south_inviting_leader }
+	}
+	else = {
+		AZH = { save_event_target_as = ADISCORD_south_inviting_leader }
+	}
+}
+
+# COUNTRY departing government. Only it moves; the old faction keeps its other members.
+ADISCORD_south_leave_coalition = {
+	if = {
+		limit = { has_idea = NAM_neighbour_joint_staff }
+		remove_ideas = NAM_neighbour_joint_staff
+	}
+	if = {
+		limit = { is_faction_leader = yes }
+		random_allied_country = {
+			limit = { is_in_faction_with = PREV }
+			set_faction_leader = yes
+		}
+	}
+	ADISCORD_south_leave_previous_alliance = yes
 }
 
 # COUNTRY target; ROOT is the demanding champion (the focus owner), which
@@ -1775,16 +1833,6 @@ ADISCORD_south_leave_previous_alliance = {
 # COUNTRY target, one day after accepting submission.
 ADISCORD_south_finalize_submission = {
 	if = {
-		limit = { has_country_flag = { flag = ADISCORD_south_submits_to_NAM value > 1 } }
-		if = {
-			limit = {
-				ADISCORD_south_submission_to_nam_valid = yes
-				NAM_border_protocol_ready = yes
-			}
-			NAM_apply_border_protocol = yes
-		}
-	}
-	else_if = {
 		limit = {
 			ADISCORD_south_nam_story_clear = yes
 			ADISCORD_south_submission_to_shl_valid = yes
@@ -1891,6 +1939,7 @@ ADISCORD_south_ensure_campaign_faction = {
 # refusal war releases the members held for it.
 ADISCORD_south_note_campaign_annexation = {
 	FROM = {
+		clear_variable = ADISCORD_south_coalition_envoy
 		clr_country_flag = ADISCORD_south_refused_SHL
 		clr_country_flag = ADISCORD_south_refused_NAM
 	}
@@ -2517,6 +2566,7 @@ ADISCORD_south_refund_defector = {
 	if = {
 		limit = { has_country_flag = ADISCORD_south_defector_pending }
 		clr_country_flag = ADISCORD_south_defector_pending
+		clear_variable = ADISCORD_south_defector_target
 		add_political_power = 80
 	}
 }
@@ -2572,25 +2622,16 @@ ADISCORD_south_create_expedition_division = {
 	}
 }
 
-# COUNTRY defector (event ROOT), FROM champion. The defector makes peace with
-# the champion's side and joins its war against the former leader; the main
-# war goes on.
+# COUNTRY defector (event ROOT); FROM is the envoy. Its original side is checked before payment settles.
 ADISCORD_south_settle_defection = {
 	if = {
 		limit = { ADISCORD_south_defection_possible = yes }
-		FROM = { clr_country_flag = ADISCORD_south_defector_pending }
+		FROM = {
+			clr_country_flag = ADISCORD_south_defector_pending
+			clear_variable = ADISCORD_south_defector_target
+		}
 		set_country_flag = ADISCORD_south_defected
-		if = {
-			limit = {
-				is_in_faction = yes
-				is_faction_leader = yes
-			}
-			dismantle_faction = yes
-		}
-		else_if = {
-			limit = { is_in_faction = yes }
-			leave_faction = yes
-		}
+		ADISCORD_south_leave_coalition = yes
 		if = {
 			limit = { FROM = { ADISCORD_south_on_shl_side = yes } }
 			every_enemy_country = {
@@ -2612,8 +2653,14 @@ ADISCORD_south_settle_defection = {
 	}
 	else = {
 		FROM = {
-			ADISCORD_south_refund_defector = yes
-			country_event = { id = ADISCORD_south.65 hours = 1 }
+			if = {
+				limit = {
+					has_country_flag = ADISCORD_south_defector_pending
+					check_variable = { var = ADISCORD_south_defector_target value = ROOT compare = equals }
+				}
+				ADISCORD_south_refund_defector = yes
+				country_event = { id = ADISCORD_south.65 hours = 1 }
+			}
 		}
 	}
 }

@@ -703,7 +703,7 @@
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_technical_instructors
-		icon = GFX_focus_STP_party_technical_institutes
+		icon = GFX_focus_STP_pc_sdir_school_network
 		x = 5
 		y = 4
 		relative_position_id = STP_pc_lib_lock

@@ -5,7 +5,6 @@ NAM_ladder_bop = {
 	initial_value = 0
 	left_side = NAM_bop_vertical
 	right_side = NAM_bop_districts
-	decision_category = NAM_supports
 	range = {
 		id = NAM_ladder_compromise
 		min = -0.10
@@ -97,6 +96,65 @@ NAM_ladder_bop = {
 			}
 			on_deactivate = {
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+		}
+	}
+}
+
+NAM_postwar_future_bop = {
+	initial_value = 0
+	left_side = NAM_postwar_hawks
+	right_side = NAM_postwar_conservatives
+	decision_category = NAM_postwar_future_debate
+	range = {
+		id = NAM_future_contested
+		min = -0.15
+		max = 0.15
+		modifier = { political_power_gain = 0.05 }
+	}
+	side = {
+		id = NAM_postwar_hawks
+		icon = GFX_bop_NAM_imperial_flag
+		range = {
+			id = NAM_hawks_influence
+			min = -0.50
+			max = -0.15
+			modifier = {
+				planning_speed = 0.06
+				war_support_factor = 0.03
+			}
+		}
+		range = {
+			id = NAM_hawks_dominance
+			min = -1
+			max = -0.50
+			modifier = {
+				planning_speed = 0.12
+				war_support_factor = 0.06
+				stability_factor = -0.03
+			}
+		}
+	}
+	side = {
+		id = NAM_postwar_conservatives
+		icon = GFX_bop_NAM_sovereign_flag
+		range = {
+			id = NAM_conservatives_influence
+			min = 0.15
+			max = 0.50
+			modifier = {
+				stability_factor = 0.03
+				production_speed_industrial_complex_factor = 0.05
+			}
+		}
+		range = {
+			id = NAM_conservatives_dominance
+			min = 0.50
+			max = 1
+			modifier = {
+				stability_factor = 0.06
+				production_speed_industrial_complex_factor = 0.10
+				planning_speed = -0.05
 			}
 		}
 	}

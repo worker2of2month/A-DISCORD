@@ -11,7 +11,7 @@ import json
 from bisect import bisect_right
 from collections import defaultdict, deque
 from io import BytesIO
-from math import atan2
+from math import atan2, pi
 from pathlib import Path
 
 import numpy as np
@@ -345,9 +345,30 @@ HAND_PAINTED_PROVINCES = frozenset({
     16770, 16771, 16787, 16788, 16789, 16899,
 })
 DISPLACED_PROVINCES |= HAND_PAINTED_PROVINCES
-COLOURMAP = Path("map/terrain/colormap_rgb_cityemissivemask_a.dds")
+# Provinces whose pixels or borders the passes above changed. unit_anchors
+# reconciles their anchors and those of their neighbours.
+ANCHOR_TOUCHED_PROVINCES = (
+    frozenset(NUDGE_SPLIT_PARENTS) | NUDGE_SPLIT_DONORS | PROVINCE_REPAIR_PROVINCES | HAND_PAINTED_PROVINCES
+    | COUNTRY_DISTRICT_IDS | APPROACH_PROVINCES
+    | frozenset(RURAL_SPLIT_PARENTS) | frozenset(RURAL_SPLIT_PARENTS.values())
+)
+COLOURMAP =Path("map/terrain/colormap_rgb_cityemissivemask_a.dds")
 COLOURMAP_SOURCE = Path("tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds")
 SEA_FLOOR_HEIGHT = 89
+# Depth is the distance from a pixel to the nearest pixel outside its province.
+# The interior centre is the pixel nearest the centroid among those at least
+# ANCHOR_CENTRE_DEPTH of the greatest depth deep, so a concave province or one
+# around an enclave keeps its army inside. A standing land army (slot 0)
+# shallower than CENTRAL_ANCHOR_DEPTH of the greatest depth, or farther from
+# the interior centre than the greatest depth itself, is drawn off centre.
+ANCHOR_CENTRE_DEPTH = 0.7
+CENTRAL_ANCHOR_DEPTH = 0.5
+# Slots 0 standstill, 9 attacking, 10 defending, 21 railway-gun standstill and
+# 38 victory point stand around the province centre; every other slot leads
+# towards one neighbour.
+STANDING_SLOTS = frozenset({0, 9, 10, 21, 38})
+# Native moving slots face within 0.1 rad of their offset from slot 0.
+MOVING_FACING_TOLERANCE = 0.5
 
 
 def lowland_heights(mask: np.ndarray) -> np.ndarray:
@@ -531,32 +552,121 @@ def native_slots(kind: str, neighbour_count: int) -> set[int]:
     return {0, 9, 10, 21, 38} | {base + index for base in rows for index in range(count)}
 
 
+def province_interior(
+    grid: np.ndarray, province: int, box: tuple[slice, slice],
+) -> tuple[int, int, np.ndarray, np.ndarray, tuple[int, int]]:
+    """Return the window origin, province mask, depth and interior centre (x, y).
+
+    The window keeps a one-pixel margin around the province bounding box.
+    """
+    origin_y = max(box[0].start - 1, 0)
+    origin_x = max(box[1].start - 1, 0)
+    inside = grid[origin_y:box[0].stop + 1, origin_x:box[1].stop + 1] == province
+    # Zero padding makes the map edge a border as well.
+    depth = distance_transform_edt(np.pad(inside, 1))[1:-1, 1:-1]
+    ys, xs = np.nonzero(inside)
+    deep_y, deep_x = np.nonzero(depth >= ANCHOR_CENTRE_DEPTH * depth.max())
+    nearest = int(np.argmin((deep_x - xs.mean()) ** 2 + (deep_y - ys.mean()) ** 2))
+    centre = (int(deep_x[nearest]) + origin_x, int(deep_y[nearest]) + origin_y)
+    return origin_y, origin_x, inside, depth, centre
+
+
+def standing_anchor_central(row: list[str], grid: np.ndarray, interior: tuple) -> bool:
+    origin_y, origin_x, inside, depth, (centre_x, centre_y) = interior
+    x = round(float(row[2]))
+    y = grid.shape[0] - 1 - round(float(row[4]))
+    local_y, local_x = y - origin_y, x - origin_x
+    if not (0 <= local_y < inside.shape[0] and 0 <= local_x < inside.shape[1] and inside[local_y, local_x]):
+        return False
+    greatest = depth.max()
+    deep_enough = depth[local_y, local_x] >= CENTRAL_ANCHOR_DEPTH * greatest
+    return bool(deep_enough and np.hypot(x - centre_x, y - centre_y) <= greatest)
+
+
+def border_contacts(
+    grid: np.ndarray, province: int, box: tuple[slice, slice], interior: tuple,
+) -> list[tuple[int, float, float]]:
+    """Return each pixel neighbour with its mean contact pixel (x, y) in moving-slot order.
+
+    The engine indexes moving slots by the order in which a scan of
+    provinces.bmp, stored bottom row first, meets each neighbour: the earlier
+    pixel of the first contact pair, read bottom-up and left to right. A tie
+    goes to the lower province ID.
+    """
+    origin_y, origin_x, inside, _depth, _centre = interior
+    window = grid[origin_y:box[0].stop + 1, origin_x:box[1].stop + 1]
+    map_height, map_width = grid.shape
+    rows = np.arange(window.shape[0]) + origin_y
+    columns = np.arange(window.shape[1]) + origin_x
+    pairs = (
+        (window[:, :-1], window[:, 1:], rows[:, None], columns[None, :-1]),
+        # The lower pixel of a vertical pair comes first in the scan.
+        (window[:-1], window[1:], rows[1:, None], columns[None, :]),
+    )
+    first_contact = {}
+    for first, second, row, column in pairs:
+        contact = (first == province) != (second == province)
+        other = np.where(first == province, second, first)
+        scan = np.broadcast_to((map_height - 1 - row) * map_width + column, contact.shape)
+        for neighbour, position in zip(other[contact].tolist(), scan[contact].tolist()):
+            if neighbour not in first_contact or position < first_contact[neighbour]:
+                first_contact[neighbour] = position
+    padded = np.pad(window, 1)
+    contacts = []
+    for neighbour in sorted(first_contact, key=lambda neighbour: (first_contact[neighbour], neighbour)):
+        touching = inside & (
+            (padded[:-2, 1:-1] == neighbour) | (padded[2:, 1:-1] == neighbour)
+            | (padded[1:-1, :-2] == neighbour) | (padded[1:-1, 2:] == neighbour)
+        )
+        ys, xs = np.nonzero(touching)
+        contacts.append((neighbour, float(xs.mean()) + origin_x, float(ys.mean()) + origin_y))
+    return contacts
+
+
+def moving_anchors_native(
+    anchors: dict[int, list[str]], contacts: list[tuple[int, float, float]], map_height: int,
+) -> bool:
+    """Check that each moving slot lies towards its neighbour and faces away from the standing army."""
+    if 0 not in anchors:
+        return False
+    centre_x = round(float(anchors[0][2]))
+    centre_y = map_height - 1 - round(float(anchors[0][4]))
+    for slot, (_neighbour, contact_x, contact_y) in enumerate(contacts[:8], 1):
+        if slot not in anchors:
+            return False
+        dx = float(anchors[slot][2]) - centre_x
+        dy = map_height - 1 - float(anchors[slot][4]) - centre_y
+        if np.hypot(dx, dy) < 1:
+            continue
+        towards = dx * (contact_x - centre_x) + dy * (contact_y - centre_y) >= 0
+        error = (float(anchors[slot][5]) - atan2(dx, dy) + pi) % (2 * pi) - pi
+        if not towards or abs(error) > MOVING_FACING_TOLERANCE:
+            return False
+    return True
+
+
 def complete_native_anchors(
     province: int,
     kind: str,
     existing: dict[int, list[str]],
     grid: np.ndarray,
     heights: np.ndarray,
-    neighbours: list[int],
-    box: tuple[slice, slice],
+    interior: tuple,
+    contacts: list[tuple[int, float, float]],
+    offset: str | None = None,
 ) -> dict[int, list[str]]:
     """Keep valid rows of a native slot set and add the slots its borders now need."""
-    origin_y = max(box[0].start - 1, 0)
-    origin_x = max(box[1].start - 1, 0)
-    window = grid[origin_y:box[0].stop + 1, origin_x:box[1].stop + 1]
-    inside = window == province
+    origin_y, origin_x, inside, _depth, centre = interior
     points = np.argwhere(inside) + (origin_y, origin_x)
     map_height = heights.shape[0]
-    centre = None
     if 0 in existing:
         x = round(float(existing[0][2]))
         y = map_height - 1 - round(float(existing[0][4]))
         if grid[y, x] == province:
             centre = (x, y)
-    if centre is None:
-        centre = closest_pixel(points, points[:, 1].mean(), points[:, 0].mean())
     cx, cy = centre
-    offset = existing[0][6] if 0 in existing else ("0.12" if kind == "sea" else "0.24")
+    if offset is None:
+        offset = existing[0][6] if 0 in existing else ("0.12" if kind == "sea" else "0.24")
 
     def row(slot: int, x: float, y: float, rotation: float) -> list[str]:
         x, y = closest_pixel(points, x, y)
@@ -567,24 +677,23 @@ def complete_native_anchors(
                  21: row(21, cx - 3, cy, 0.0)}
     generated[38] = list(generated[10])
     generated[38][1] = "38"
-    padded = np.pad(window, 1)
-    for index, neighbour in enumerate(neighbours[:8], 1):
-        touching = inside & (
-            (padded[:-2, 1:-1] == neighbour) | (padded[2:, 1:-1] == neighbour)
-            | (padded[1:-1, :-2] == neighbour) | (padded[1:-1, 2:] == neighbour)
-        )
-        ys, xs = np.nonzero(touching)
-        dx = xs.mean() + origin_x - cx
-        dy = ys.mean() + origin_y - cy
+    for index, (_neighbour, contact_x, contact_y) in enumerate(contacts[:8], 1):
+        dx = contact_x - cx
+        dy = contact_y - cy
         length = max(float(np.hypot(dx, dy)), 1.0)
-        generated[index] = row(index, cx + 3 * dx / length, cy + 3 * dy / length, atan2(dx, -dy))
+        x, y = closest_pixel(points, cx + 3 * dx / length, cy + 3 * dy / length)
+        # A moving army faces from the centre to its own slot. With pixel rows
+        # growing southwards, rotation 0 faces south and pi / 2 faces east.
+        if (x, y) != (cx, cy):
+            dx, dy = x - cx, y - cy
+        generated[index] = row(index, x, y, atan2(dx, dy))
         for base in (22, 11, 30):
             copy = list(generated[index])
             copy[1] = str(base + index - 1)
             generated[base + index - 1] = copy
     return {
         slot: existing[slot] if slot in existing else generated[slot]
-        for slot in sorted(native_slots(kind, len(neighbours)))
+        for slot in sorted(native_slots(kind, len(contacts)))
     }
 
 
@@ -604,21 +713,22 @@ def unit_anchors(
     hand-painted passes keeps its valid rows, loses slots for borders it no
     longer has and gains the slots its new borders need. A province moved
     wholesale keeps no anchor inside its pixels and receives a fresh native
-    set. Rows stay grouped by slot type in the native order.
+    set. A land province of this pass or one of its neighbours whose standing
+    anchor lies outside its pixels, on a border or away from its interior
+    centre receives a fresh set around that centre and keeps its model offset;
+    so does a sea province whose standing anchor lies outside its pixels.
+    Any other province of that scope whose moving slots do not lead towards
+    their neighbours in the engine's order keeps its standing slots and has
+    the rest rebuilt. Rows stay grouped by slot type in the native order.
     """
     rows = [line.split(";") for line in original.decode("utf-8").splitlines()]
     neighbours = province_neighbours(grid)
     slots = defaultdict(dict)
     for row in rows:
         slots[int(row[0])][int(row[1])] = row
-    touched = set(NUDGE_SPLIT_PARENTS) | NUDGE_SPLIT_DONORS | PROVINCE_REPAIR_PROVINCES | HAND_PAINTED_PROVINCES
-    touched.update(COUNTRY_DISTRICT_IDS)
-    touched.update(APPROACH_PROVINCES)
-    touched.update(RURAL_SPLIT_PARENTS)
-    touched.update(RURAL_SPLIT_PARENTS.values())
     # A city carved without rural sectors has no anchors yet: it receives a
     # native set, and its parent (a neighbour here) gains the new border slots.
-    touched |= {province for province in points if province not in slots}
+    touched = set(ANCHOR_TOUCHED_PROVINCES) | {province for province in points if province not in slots}
     scope = touched | {neighbour for province in touched for neighbour in neighbours[province]}
     map_height = heights.shape[0]
 
@@ -629,17 +739,55 @@ def unit_anchors(
         province for province in touched & points.keys()
         if slots[province] and not any(anchor_inside(province, row) for row in slots[province].values())
     }
-    rebuilt = {}
     boxes = find_objects(grid)
-    for province in sorted(scope):
+    interiors = {}
+    contacts = {}
+
+    def shape(province: int) -> tuple[tuple, list[tuple[int, float, float]]]:
+        if province not in interiors:
+            interiors[province] = province_interior(grid, province, boxes[province - 1])
+            contacts[province] = border_contacts(grid, province, boxes[province - 1], interiors[province])
+        return interiors[province], contacts[province]
+
+    # Snapping a stray anchor to the nearest pixel leaves the army on the border
+    # it crossed, so the whole set moves to the interior instead. A fleet whose
+    # water became island land stands outside its province in the same way.
+    owned = scope | DISPLACED_PROVINCES | set(ANCHOR_REFERENCES)
+
+    def standing_off_centre(province: int) -> bool:
+        if kinds.get(province) == "sea":
+            return not anchor_inside(province, slots[province][0])
+        if kinds.get(province) != "land":
+            return False
+        return not standing_anchor_central(slots[province][0], grid, shape(province)[0])
+
+    centred = {province for province in owned if 0 in slots.get(province, {}) and standing_off_centre(province)}
+    # Moving rows copied from a parent, kept from an older border or ordered
+    # by province ID draw a moving army at the wrong border; they are rebuilt
+    # around the province's own standing slots.
+    misdirected = {
+        province for province in owned - centred
+        if kinds.get(province) in ("land", "sea") and slots.get(province)
+        and not moving_anchors_native(slots[province], shape(province)[1], map_height)
+    }
+    rebuilt = {}
+    for province in sorted(scope | centred | misdirected):
         kind = kinds.get(province)
         if kind not in ("land", "sea"):
             continue
-        if set(slots[province]) == native_slots(kind, len(neighbours[province])) and province not in relocated:
+        fresh = province in relocated or province in centred
+        if (set(slots[province]) == native_slots(kind, len(neighbours[province]))
+                and not fresh and province not in misdirected):
             continue
-        existing = {} if province in relocated else slots[province]
+        if fresh:
+            existing = {}
+        elif province in misdirected:
+            existing = {slot: row for slot, row in slots[province].items() if slot in STANDING_SLOTS}
+        else:
+            existing = slots[province]
         rebuilt[province] = complete_native_anchors(
-            province, kind, existing, grid, heights, sorted(neighbours[province]), boxes[province - 1]
+            province, kind, existing, grid, heights, *shape(province),
+            offset=slots[province][0][6] if province in centred else None,
         )
 
     def normalise(row: list[str]) -> list[str]:

@@ -3123,6 +3123,13 @@ ADISCORD_vorkerland_vad_regency_branch_plan = {
 	}
 
 	ai_national_focuses = {
+		VAD_invite_sol_delegation
+		VAD_dispatch_solland_liaison_mission
+		VAD_establish_mobile_headquarters
+		VAD_reconstitute_district_guard
+		VAD_inventory_eastern_works
+		VAD_standardize_district_logistics
+		VAD_reopen_armament_depots
 		VAD_army_becomes_the_state
 		VAD_regent_answer_the_parquet_jibe
 		VAD_regent_publish_the_service_record

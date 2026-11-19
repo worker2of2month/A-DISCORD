@@ -42,7 +42,7 @@
 
 	focus = {
 		id = STP_pw_party_district_authority
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_STP_pc_lib_transition
 		x = -16
 		y = 3
 		cost = 3
@@ -84,7 +84,7 @@
 
 	focus = {
 		id = STP_pw_party_civil_records
-		icon = GFX_focus_STP_PARTY_DISCIPLINE
+		icon = GFX_focus_STP_pc_sdir_service_records
 		x = -16
 		y = 4
 		cost = 4
@@ -395,7 +395,7 @@
 
 	focus = {
 		id = STP_pw_party_accountable_arsenals
-		icon = GFX_focus_STP_party_trade_industry
+		icon = GFX_focus_STP_pc_sdir_arsenal_programme
 		x = -8
 		y = 6
 		cost = 5
@@ -535,7 +535,7 @@
 
 	focus = {
 		id = STP_pw_party_officer_school
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_sdir_officer_college
 		x = 10
 		y = 4
 		cost = 4
@@ -576,7 +576,7 @@
 
 	focus = {
 		id = STP_pw_party_supply_service
-		icon = GFX_focus_STP_party_supply_directorate
+		icon = GFX_focus_STP_pc_sdir_motor_columns
 		x = 8
 		y = 5
 		cost = 4
@@ -617,7 +617,7 @@
 
 	focus = {
 		id = STP_pw_party_professional_service
-		icon = GFX_focus_STP_ch_service_act
+		icon = GFX_focus_STP_pc_sdir_field_army
 		x = 12
 		y = 5
 		cost = 5
@@ -745,11 +745,11 @@
 
 	focus = {
 		id = STP_pw_party_bezhaysk_campaign
-		icon = GFX_focus_STP_cw_capital_counteroffensive
-		x = -2
-		y = 15
+		icon = GFX_focus_STP_pw_take_bezhaysk
+		x = 6
+		y = 8
 		cost = 4
-		prerequisite = { focus = STP_pw_party_external_mandate }
+		prerequisite = { focus = STP_pw_party_border_staff }
 		allow_branch = {
 			has_country_flag = STP_cw_postwar
 			tag = STP
@@ -822,9 +822,9 @@
 		id = STP_pw_party_regional_order
 		icon = GFX_focus_STP_cw_party_mandate
 		x = 0
-		y = 16
+		y = 15
 		cost = 4
-		prerequisite = { focus = STP_pw_party_bezhaysk_campaign }
+		prerequisite = { focus = STP_pw_party_external_mandate }
 		allow_branch = {
 			has_country_flag = STP_cw_postwar
 			tag = STP
@@ -853,7 +853,7 @@
 		id = STP_pw_party_northern_march
 		icon = GFX_focus_STP_cw_capital_counteroffensive
 		x = 0
-		y = 17
+		y = 16
 		cost = 4
 		prerequisite = { focus = STP_pw_party_regional_order }
 		allow_branch = {
@@ -883,7 +883,7 @@
 		id = STP_pw_party_great_stelander
 		icon = GFX_focus_STP_cw_party_mandate
 		x = 0
-		y = 18
+		y = 17
 		cost = 5
 		prerequisite = { focus = STP_pw_party_northern_march }
 		allow_branch = {
@@ -1093,7 +1093,7 @@
 
 	focus = {
 		id = STP_party_port_contracts
-		icon = GFX_focus_STP_ps_foreign_supply_desk
+		icon = GFX_focus_STP_pc_navy_ports
 		x = -12
 		y = 7
 		cost = 4
@@ -1514,7 +1514,7 @@
 
 	focus = {
 		id = STP_pw_party_field_staff
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sot_field
 		x = 12
 		y = 6
 		cost = 4
@@ -1896,7 +1896,7 @@
 
 	focus = {
 		id = STP_pw_party_shield_corps
-		icon = GFX_focus_STP_cw_protect_congress
+		icon = GFX_focus_STP_pw_republic_shield_corps
 		x = 14
 		y = 5
 		cost = 5
@@ -2342,7 +2342,7 @@
 
 	focus = {
 		id = STP_pw_party_border_staff
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_sot_field
 		x = 10
 		y = 7
 		cost = 4
@@ -2376,7 +2376,7 @@
 
 	focus = {
 		id = STP_pw_party_mountain_school
-		icon = GFX_focus_STP_ps_asylum_protocol
+		icon = GFX_focus_STP_pw_republic_mountain_school
 		x = 10
 		y = 8
 		cost = 4
@@ -2401,7 +2401,7 @@
 
 	focus = {
 		id = STP_pw_party_marine_school
-		icon = GFX_focus_STP_cw_capital_reserve
+		icon = GFX_focus_STP_pw_republic_marine_school
 		x = 12
 		y = 8
 		cost = 4
@@ -2819,7 +2819,7 @@
 
 	focus = {
 		id = STP_ch_rules
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_STP_pc_lib_independent_gov
 		x = 16
 		y = 5
 		cost = 4
@@ -4523,7 +4523,7 @@
 
 	focus = {
 		id = STP_party_staff_commandants
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sdir_military_governors
 		x = -1
 		y = 4
 		cost = 2
@@ -4650,7 +4650,7 @@
 
 	focus = {
 		id = STP_party_staff_districts
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_sdir_integrated_rear
 		x = -1
 		y = 5
 		cost = 2
@@ -4974,7 +4974,7 @@
 
 	focus = {
 		id = STP_ch_staff_state
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sot_state
 		x = -3
 		y = 9
 		cost = 3
@@ -5850,7 +5850,7 @@
 
 	focus = {
 		id = STP_party_security_register
-		icon = GFX_focus_STP_party_succession_protocol
+		icon = GFX_focus_STP_pc_sdir_service_records
 		x = -5
 		y = 4
 		cost = 2
@@ -8511,7 +8511,7 @@
 
 	focus = {
 		id = STP_pe_staff_commission
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sot_limits
 		x = 3
 		y = 8
 		cost = 2
@@ -8547,7 +8547,7 @@
 
 	focus = {
 		id = STP_pe_staff_course_a
-		icon = GFX_focus_STP_party_succession_protocol
+		icon = GFX_focus_STP_pc_sot_limits
 		x = 1
 		y = 9
 		cost = 2
@@ -8666,7 +8666,7 @@
 
 	focus = {
 		id = STP_pe_staff_ending_b
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sot_state
 		x = 5
 		y = 11
 		cost = 3
@@ -9672,7 +9672,7 @@
 
 	focus = {
 		id = STP_pe_security_ending_b
-		icon = GFX_focus_STP_cw_counter_network
+		icon = GFX_focus_STP_pc_sdir_service_records
 		x = 5
 		y = 11
 		cost = 3
@@ -10293,7 +10293,7 @@
 
 	focus = {
 		id = STP_pw_party_naval_yards
-		icon = GFX_focus_STP_party_trade_industry
+		icon = GFX_focus_STP_pc_navy_yards
 		x = -28
 		y = 4
 		cost = 5
@@ -10328,7 +10328,7 @@
 
 	focus = {
 		id = STP_pw_party_naval_escorts
-		icon = GFX_focus_STP_ps_foreign_supply_desk
+		icon = GFX_focus_STP_pc_navy_escorts
 		x = -28
 		y = 5
 		cost = 4
@@ -10415,7 +10415,7 @@
 
 	focus = {
 		id = STP_pw_party_naval_fire_support
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_STP_pc_navy_deny
 		x = -27
 		y = 6
 		cost = 5

@@ -169,6 +169,75 @@ ADISCORD_south_nam_story_clear = {
 	NOT = { NAM = { NAM_south_story_pending = yes } }
 }
 
+# COUNTRY. Champions and regional governments assigned to a side at war entry.
+ADISCORD_south_border_participant = {
+	OR = {
+		tag = SHL
+		tag = NAM
+		ADISCORD_south_regional_country = yes
+		tag = SFD
+		tag = SCD
+		tag = SMD
+		tag = SOD
+		tag = SDA
+	}
+}
+
+# STATE. These archipelagos connect to other states only by sea crossings.
+ADISCORD_south_land_border_state = {
+	NOT = {
+		OR = {
+			state = 225
+			state = 226
+			state = 227
+			state = 228
+			state = 230
+			state = 231
+			state = 709
+		}
+	}
+}
+
+# GLOBAL. Use the controllers on the two sides of the same land boundary.
+# The two remaining inter-state straits also fail the land-border check
+# regardless of which camp controls which shore.
+ADISCORD_south_sides_share_border = {
+	any_country = {
+		ADISCORD_south_border_participant = yes
+		ADISCORD_south_map_country_shl = yes
+		any_controlled_state = {
+			ADISCORD_south_land_border_state = yes
+			any_neighbor_state = {
+				ADISCORD_south_land_border_state = yes
+				NOT = {
+					OR = {
+						AND = {
+							state = 28
+							PREV = { state = 44 }
+						}
+						AND = {
+							state = 44
+							PREV = { state = 28 }
+						}
+						AND = {
+							state = 65
+							PREV = { state = 179 }
+						}
+						AND = {
+							state = 179
+							PREV = { state = 65 }
+						}
+					}
+				}
+				controller = {
+					ADISCORD_south_border_participant = yes
+					ADISCORD_south_map_country_north = yes
+				}
+			}
+		}
+	}
+}
+
 # GLOBAL. Mutual readiness may open the warning after a minimum preparation;
 # the crisis deadline owns the latest start.
 ADISCORD_south_preparation_elapsed = {
@@ -1046,6 +1115,132 @@ ADISCORD_south_on_refusal_champion_side = {
 	}
 }
 
+# COUNTRY. Coalition diplomacy uses current membership and the actual northern succession.
+ADISCORD_south_coalition_inviter = {
+	ADISCORD_south_crisis_open = yes
+	exists = yes
+	has_capitulated = no
+	OR = {
+		AND = {
+			ADISCORD_south_map_country_shl = yes
+			SHL = { ADISCORD_south_coalition_leader_can_receive = yes }
+		}
+		AND = {
+			ADISCORD_south_map_country_north = yes
+			OR = {
+				NAM = {
+					ADISCORD_south_map_country_north_leader = yes
+					ADISCORD_south_coalition_leader_can_receive = yes
+				}
+				EFL = {
+					ADISCORD_south_map_country_north_leader = yes
+					ADISCORD_south_coalition_leader_can_receive = yes
+				}
+				AZH = {
+					ADISCORD_south_map_country_north_leader = yes
+					ADISCORD_south_coalition_leader_can_receive = yes
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY target. Only regional factions can change sides through this invitation.
+ADISCORD_south_coalition_invitee = {
+	ADISCORD_south_regional_country = yes
+	ADISCORD_south_offer_target_open = yes
+	ADISCORD_south_declarer_valid = no
+	OR = {
+		is_in_faction = no
+		faction_leader = {
+			OR = {
+				tag = NAM
+				tag = SHL
+				ADISCORD_south_regional_country = yes
+			}
+		}
+	}
+}
+
+# The Nam government reserves its two neighbouring states for their respective settlement focuses.
+ADISCORD_south_north_neighbour_recruitable = {
+	OR = {
+		NOT = { NAM = { NAM_pw_operable = yes } }
+		NOT = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+		}
+		AND = {
+			tag = EFL
+			NAM = { has_completed_focus = NAM_eflor_accord }
+		}
+		AND = {
+			tag = AZH
+			NAM = { has_completed_focus = NAM_azhar_accord }
+		}
+	}
+}
+
+# COUNTRY target; PREV is the envoy, both in the decision and when the reply is checked.
+ADISCORD_south_coalition_other_camp = {
+	NOT = { tag = PREV }
+	NOT = { has_war_with = PREV }
+	NOT = { is_in_faction_with = PREV }
+	OR = {
+		AND = {
+			PREV = { ADISCORD_south_map_country_shl = yes }
+			ADISCORD_south_map_country_shl = no
+			NOT = { has_war_with = SHL }
+		}
+		AND = {
+			PREV = { ADISCORD_south_map_country_north = yes }
+			ADISCORD_south_map_country_north = no
+			ADISCORD_south_north_neighbour_recruitable = yes
+			NOT = {
+				any_enemy_country = { ADISCORD_south_map_country_north_leader = yes }
+			}
+		}
+	}
+}
+
+# COUNTRY coalition leader. Only the head of its own faction can admit a new member.
+ADISCORD_south_coalition_leader_can_receive = {
+	ADISCORD_south_champion_viable = yes
+	OR = {
+		is_in_faction = no
+		is_faction_leader = yes
+	}
+}
+
+# COUNTRY envoy. The saved leader fixes the destination even if the envoy changes sides.
+ADISCORD_south_envoy_keeps_coalition = {
+	OR = {
+		AND = {
+			ADISCORD_south_map_country_shl = yes
+			event_target:ADISCORD_south_inviting_leader = { ADISCORD_south_map_country_shl_leader = yes }
+		}
+		AND = {
+			ADISCORD_south_map_country_north = yes
+			event_target:ADISCORD_south_inviting_leader = { ADISCORD_south_map_country_north_leader = yes }
+		}
+	}
+}
+
+# COUNTRY recipient (ROOT), FROM is the actual envoy.
+ADISCORD_south_coalition_answer_open = {
+	check_variable = { var = ADISCORD_south_coalition_envoy value = FROM compare = equals }
+	NOT = { has_variable = ADISCORD_south_offer_kind }
+	ADISCORD_south_coalition_invitee = yes
+	event_target:ADISCORD_south_inviting_leader = { ADISCORD_south_coalition_leader_can_receive = yes }
+	FROM = {
+		ADISCORD_south_coalition_inviter = yes
+		ADISCORD_south_envoy_keeps_coalition = yes
+		ROOT = { ADISCORD_south_coalition_other_camp = yes }
+	}
+}
+
 # COUNTRY target. A follower of another regional faction (AZH in Eflor's
 # Restitution Alliance) may answer an alliance invitation by switching sides;
 # faction leaders and members of outside factions are not invited.
@@ -1132,17 +1327,60 @@ ADISCORD_south_expedition_possible = {
 	}
 }
 
-# COUNTRY target (event ROOT); FROM is the champion with the offer in escrow.
-ADISCORD_south_defection_possible = {
+# COUNTRY envoy. The league focus opens wartime negotiations throughout its side;
+# Eflor and Azhar can lead the north without receiving the NAM focus tree.
+ADISCORD_south_defector_envoy = {
 	ADISCORD_south_final_active = yes
+	exists = yes
+	has_capitulated = no
+	OR = {
+		AND = {
+			ADISCORD_south_on_shl_side = yes
+			SHL = { has_completed_focus = SHL_sw_southern_league }
+		}
+		AND = {
+			ADISCORD_south_on_north_side = yes
+			OR = {
+				NAM = {
+					has_country_flag = ADISCORD_south_north_leader
+					has_completed_focus = NAM_sw_league_of_the_north
+				}
+				EFL = { has_country_flag = ADISCORD_south_north_leader }
+				AZH = { has_country_flag = ADISCORD_south_north_leader }
+			}
+		}
+	}
+}
+
+# COUNTRY target. PREV is the envoy; unrelated wars do not make a regional government a defector.
+ADISCORD_south_defector_opponent = {
+	exists = yes
 	has_capitulated = no
 	is_subject = no
 	NOT = { has_country_flag = ADISCORD_south_north_leader }
 	NOT = { tag = SHL }
-	FROM = {
-		has_country_flag = ADISCORD_south_defector_pending
-		ADISCORD_south_war_champion = yes
-		has_capitulated = no
+	NOT = { has_country_flag = ADISCORD_south_defected }
+	has_war_with = PREV
+	OR = {
+		AND = {
+			ADISCORD_south_on_north_side = yes
+			PREV = { ADISCORD_south_on_shl_side = yes }
+		}
+		AND = {
+			ADISCORD_south_on_shl_side = yes
+			PREV = { ADISCORD_south_on_north_side = yes }
+			ADISCORD_south_north_neighbour_recruitable = yes
+		}
 	}
-	has_war_with = FROM
+}
+
+# COUNTRY target (event ROOT); FROM is the envoy who paid for this request.
+ADISCORD_south_defection_possible = {
+	FROM = {
+		ADISCORD_south_defector_envoy = yes
+		has_country_flag = ADISCORD_south_defector_pending
+		check_variable = { var = ADISCORD_south_defector_target value = ROOT compare = equals }
+		ADISCORD_south_envoy_keeps_coalition = yes
+		ROOT = { ADISCORD_south_defector_opponent = yes }
+	}
 }

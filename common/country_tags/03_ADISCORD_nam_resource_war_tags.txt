@@ -1,2 +1,4 @@
 SLF = "countries/SLF.txt"
 SNG = "countries/SNG.txt"
+EFR = "countries/Eflor.txt"
+AZR = "countries/AZH.txt"

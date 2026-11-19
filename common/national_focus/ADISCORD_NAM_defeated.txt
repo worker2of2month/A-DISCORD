@@ -66,7 +66,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_defeat_rump_cabinet
-		icon = GFX_focus_RUS_trained_administrators
+		icon = GFX_focus_NAM_pw_cabinet_statute
 		x = 2
 		y = 1
 		cost = 3
@@ -460,7 +460,7 @@ shared_focus = {
 				has_global_flag = NAM_war_of_return_resolved
 			}
 		}
-		icon = GFX_focus_NAM_metropolitan_instructors
+		icon = GFX_focus_NAM_officer_courses
 		x = 16
 		y = 4
 		cost = 4
@@ -490,7 +490,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_defeat_new_levies
 		icon = GFX_focus_NAM_oilfield_militia
-		x = 20
+		x = 18
 		y = 4
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER }
@@ -521,8 +521,8 @@ shared_focus = {
 				has_global_flag = NAM_war_of_return_resolved
 			}
 		}
-		icon = GFX_focus_NAM_second_ledger
-		x = 20
+		icon = GFX_focus_NAM_pw_central_treasury
+		x = 18
 		y = 5
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -816,7 +816,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_defeat_second_chapter
 		icon = GFX_focus_NAM_independence_day
-		x = 12
+		x = 11
 		y = 7
 		cost = 9
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }

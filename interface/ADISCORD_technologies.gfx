@@ -1408,7 +1408,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_casualty_evacuation_medium"
-		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
+		textureFile = "gfx/interface/technologies/tech_field_hospital.dds"
 	}
 
 	SpriteType = {
@@ -1428,7 +1428,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_forward_surgical_cells_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_equipment_medical.dds"
+		textureFile = "gfx/interface/technologies/tech_field_hospital3.dds"
 	}
 
 	SpriteType = {
@@ -1438,7 +1438,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_distributed_combat_medicine_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_equipment_medical.dds"
+		textureFile = "gfx/interface/technologies/tech_field_hospital4.dds"
 	}
 
 	SpriteType = {
@@ -1448,17 +1448,17 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_modular_support_kits_medium"
-		textureFile = "gfx/interface/technologies/basic_construction.dds"
+		textureFile = "gfx/interface/technologies/tech_maintenance_company.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_combat_engineering_sections_medium"
-		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
+		textureFile = "gfx/interface/technologies/engineers.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_standardized_field_tool_chests_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/tech_maintenance_company2.dds"
 	}
 
 	SpriteType = {
@@ -1468,12 +1468,12 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_remote_repair_teams_medium"
-		textureFile = "gfx/interface/technologies/basic_construction.dds"
+		textureFile = "gfx/interface/technologies/tech_maintenance_company3.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_recovery_medium"
-		textureFile = "gfx/interface/technologies/improved_construction.dds"
+		textureFile = "gfx/interface/technologies/sp_armored_maintenance.dds"
 	}
 
 	SpriteType = {
@@ -1488,7 +1488,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_pack_transport_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/tech_logistics_company.dds"
 	}
 
 	SpriteType = {
@@ -1498,12 +1498,12 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_standardized_transport_columns_medium"
-		textureFile = "gfx/interface/technologies/computing_machine.dds"
+		textureFile = "gfx/interface/technologies/tech_logistics_company2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_forward_supply_hubs_medium"
-		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
+		textureFile = "gfx/interface/technologies/tech_logistics_company3.dds"
 	}
 
 	SpriteType = {
@@ -1513,22 +1513,22 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_drone_resupply_corridors_medium"
-		textureFile = "gfx/interface/technologies/computing_machine.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_drone.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_route_optimization_ai_medium"
-		textureFile = "gfx/interface/technologies/improved_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_closed_loop_field_supply_medium"
 		textureFile = "gfx/interface/technologies/computing_machine.dds"
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_closed_loop_field_supply_medium"
+		textureFile = "gfx/interface/technologies/tech_maintenance_company4.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_zero_loss_logistics_medium"
-		textureFile = "gfx/interface/technologies/assembly_line_production.dds"
+		textureFile = "gfx/interface/technologies/tech_logistics_company4.dds"
 	}
 
 	SpriteType = {
@@ -1548,7 +1548,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_rail_repair_corps_medium"
-		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
+		textureFile = "gfx/interface/technologies/tech_maintenance_company2.dds"
 	}
 
 	SpriteType = {
@@ -1558,37 +1558,37 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_smart_railbed_repair_swarms_medium"
-		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
+		textureFile = "gfx/interface/technologies/sp_armored_maintenance.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_battle_damage_survey_teams_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
+		textureFile = "gfx/interface/technologies/engineers2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_assault_breaching_packages_medium"
-		textureFile = "gfx/interface/technologies/basic_construction.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_breaching.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_integrated_engineer_command_medium"
-		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
+		textureFile = "gfx/interface/technologies/engineers4.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_reconstituted_staff_academies_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/tech_advanced_special_forces_training.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_assault_command_curriculum_medium"
-		textureFile = "gfx/interface/technologies/mechanical_computing.dds"
+		textureFile = "gfx/interface/technologies/rangers_jaegers_training_medium.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_defensive_command_curriculum_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
+		textureFile = "gfx/interface/technologies/engineers2.dds"
 	}
 
 	SpriteType = {
@@ -1598,12 +1598,12 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_theater_logistics_wargames_medium"
-		textureFile = "gfx/interface/technologies/improved_encryption.dds"
+		textureFile = "gfx/interface/technologies/tech_logistics_company3.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_rotational_front_commands_medium"
-		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
+		textureFile = "gfx/interface/technologies/recon3.dds"
 	}
 
 	SpriteType = {
@@ -5727,11 +5727,11 @@ spriteTypes = {
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_garrison_patrol_coordination_medium"
-		textureFile = "gfx/interface/technologies/tech_military_police.dds"
+		textureFile = "gfx/interface/technologies/tech_military_police2.dds"
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_garrison_service_records_medium"
-		textureFile = "gfx/interface/technologies/tech_military_police.dds"
+		textureFile = "gfx/interface/technologies/tech_military_police3.dds"
 	}
 	# BEGIN ADISCORD country APC cards
 	SpriteType = {
@@ -5951,11 +5951,11 @@ spriteTypes = {
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_armored_engineer_vehicles_medium"
-		textureFile = "gfx/interface/technologies/engineers4.dds"
+		textureFile = "gfx/interface/technologies/sp_armored_engineer.dds"
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_field_ew_company_medium"
-		textureFile = "gfx/interface/technologies/tech_signal_company2.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_drone_jammer.dds"
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_spectrum_dominance_medium"
@@ -5963,7 +5963,7 @@ spriteTypes = {
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_drone_recon_company_medium"
-		textureFile = "gfx/interface/technologies/recon2.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_drone.dds"
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_persistent_surveillance_medium"
@@ -5983,11 +5983,11 @@ spriteTypes = {
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_environment_field_kits_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
+		textureFile = "gfx/interface/technologies/tech_extreme_environment_training.dds"
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_environment_endurance_doctrine_medium"
-		textureFile = "gfx/interface/technologies/engineers2.dds"
+		textureFile = "gfx/interface/technologies/tech_survival_training.dds"
 	}
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_environment_assault_doctrine_medium"
@@ -7107,4 +7107,16 @@ spriteTypes = {
 		textureFile = "gfx/interface/technologies/armor/STS/taran.png"
 	}
 	# END ADISCORD country tank cards
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_field_rehabilitation_wards_medium"
+		textureFile = "gfx/interface/technologies/tech_field_hospital2.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_sectional_pontoon_trains_medium"
+		textureFile = "gfx/interface/abilitylist/ability_makeshift_bridges.dds"
+	}
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_mobile_bridge_columns_medium"
+		textureFile = "gfx/interface/abilitylist/ability_makeshift_bridges.dds"
+	}
 }

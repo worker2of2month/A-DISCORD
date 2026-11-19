@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -119,6 +120,23 @@ class ValStelanderEqualAllianceTests(unittest.TestCase):
             loc = read(path)
             self.assertIn("val_contract.354.t:", loc)
             self.assertIn("VAL_Equal_Powers_Pact:", loc)
+
+    def test_shared_ending_has_two_readable_perspectives_and_world_news(self) -> None:
+        ids = {entry["id"] for entry in json.loads(read("tools/data/adiscord_event_ids.json"))["events"]}
+        self.assertTrue({"val_rework.232", "val_rework.233"} <= ids)
+        for language in ("english", "russian"):
+            path = ROOT / f"localisation/{language}/ADISCORD_VAL_stelander_alliance_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            values = dict(re.findall(
+                r'^ ([\w.]+):\d* "((?:[^"\\\n]|\\.)*)"$',
+                path.read_text(encoding="utf-8-sig"), re.MULTILINE,
+            ))
+            for key in ("232.t", "232.kefreyt", "232.stelander", "232.a", "233.t", "233.d", "233.a"):
+                value = values[f"val_rework.{key}"].replace(r"\n", "\n")
+                self.assertTrue(value.strip())
+                self.assertLessEqual(len(value), 3000)
+                self.assertLessEqual(len(value.encode()), 5500)
+            self.assertNotEqual(values["val_rework.232.kefreyt"], values["val_rework.232.stelander"])
 
 
 if __name__ == "__main__":

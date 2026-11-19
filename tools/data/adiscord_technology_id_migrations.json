@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "legacy_count": 625,
-  "current_count": 536,
+  "current_count": 539,
   "migrations": {
     "ADISCORD_tech_active_hearing_protection": {
       "status": "preserved",
@@ -217,7 +217,7 @@
     },
     "ADISCORD_tech_autonomous_bridgehead_fabrication": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_armored_engineer_vehicles"
+      "replacement": "ADISCORD_tech_mobile_bridge_columns"
     },
     "ADISCORD_tech_autonomous_capital_ship_cores": {
       "status": "replaced",
@@ -1585,7 +1585,7 @@
     },
     "ADISCORD_tech_predictive_blood_logistics": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_smart_tourniquet_systems"
+      "replacement": "ADISCORD_tech_field_rehabilitation_wards"
     },
     "ADISCORD_tech_predictive_budgeting": {
       "status": "replaced",
@@ -1833,7 +1833,7 @@
     },
     "ADISCORD_tech_regenerative_surgery_modules": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_smart_tourniquet_systems"
+      "replacement": "ADISCORD_tech_field_rehabilitation_wards"
     },
     "ADISCORD_tech_regional_clearing_network": {
       "status": "replaced",
@@ -2065,7 +2065,7 @@
     },
     "ADISCORD_tech_self_repairing_field_depots": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_armored_engineer_vehicles"
+      "replacement": "ADISCORD_tech_mobile_bridge_columns"
     },
     "ADISCORD_tech_self_repairing_industrial_swarms": {
       "status": "preserved",

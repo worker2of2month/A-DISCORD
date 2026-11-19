@@ -6700,6 +6700,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 				}
 			}
 			EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			diplomatic_relation = { country = EGC relation = non_aggression_pact active = no }
 			declare_war_on = { target = EGC type = annex_everything }
 		}
 		if = {
@@ -6858,6 +6859,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 				}
 			}
 			EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			diplomatic_relation = { country = EGC relation = non_aggression_pact active = no }
 			declare_war_on = { target = EGC type = annex_everything }
 		}
 		if = {

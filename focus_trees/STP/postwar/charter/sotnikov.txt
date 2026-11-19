@@ -569,7 +569,7 @@
 
 	focus = {
 		id = STP_pc_charter_sotnikov_army_under_law
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_army_republic_control
 		x = 4
 		y = 2
 		relative_position_id = STP_pc_lib_lock
@@ -607,7 +607,7 @@
 
 	focus = {
 		id = STP_pc_charter_sotnikov_citizen_reserve
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_pc_sot_regions
 		x = 3
 		y = 3
 		relative_position_id = STP_pc_lib_lock
@@ -832,7 +832,7 @@
 
 	focus = {
 		id = STP_pc_charter_sotnikov_officer_responsibility
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_pc_army_republic_control
 		x = -2
 		y = 7
 		relative_position_id = STP_pc_lib_lock

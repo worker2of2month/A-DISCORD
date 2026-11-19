@@ -77,7 +77,7 @@ shared_focus = {
 
 shared_focus = {
 	id = STP_ps_exile_formations
-	icon = GFX_goal_generic_army_doctrines
+	icon = GFX_focus_STP_pc_sot_regions
 	x = 0
 	y = 3
 

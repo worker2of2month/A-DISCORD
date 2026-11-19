@@ -140,12 +140,6 @@ NAM_postwar_orders = {
 	priority = 22
 }
 
-NAM_postwar_programmes = {
-	icon = generic_industry
-	allowed = { tag = NAM }
-	priority = 22
-}
-
 NAM_public_campaigns = {
 	icon = ADISCORD_propaganda
 	allowed = { tag = NAM }
@@ -220,4 +214,10 @@ NAM_colonial_campaigns = {
 	}
 	visible_when_empty = yes
 	priority = 20
+}
+
+NAM_postwar_future_debate = {
+	icon = generic_political_discourse
+	allowed = { tag = NAM }
+	visible = { has_power_balance = { id = NAM_postwar_future_bop } }
 }

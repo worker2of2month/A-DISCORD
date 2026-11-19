@@ -95,6 +95,21 @@ ADISCORD_TFF_become_nod_subject = {
 				is_subject = no
 			}
 		}
+		# The treaty with Nodrul can collapse other relations in a merged war.
+		# Record the separate Shabrat front before any peace changes its sides.
+		set_temp_variable = { var = TFF_keep_shabrat_war value = 0 }
+		if = {
+			limit = {
+				has_war_with = STS
+				VAL = { VAL_nod_campaign_at_war = yes }
+				STS = {
+					has_war_with = NOD
+					has_capitulated = no
+					has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+				}
+			}
+			set_temp_variable = { var = TFF_keep_shabrat_war value = 1 }
+		}
 		ADISCORD_TFF_end_kefreyt_campaign = yes
 		if = {
 			limit = { is_in_faction = yes }
@@ -137,6 +152,20 @@ ADISCORD_TFF_become_nod_subject = {
 				end_civil_wars = no
 			}
 			ADISCORD_economy_mark_dirty = yes
+		}
+		if = {
+			limit = {
+				check_variable = { var = TFF_keep_shabrat_war value = 1 compare = equals }
+				is_subject_of = NOD
+				NOT = { has_war_with = STS }
+				NOD = { has_war_with = STS }
+			}
+			add_to_war = {
+				targeted_alliance = NOD
+				enemy = STS
+				hostility_reason = asked_to_join
+				single_target_only = yes
+			}
 		}
 		ADISCORD_economy_mark_dirty = yes
 	}

@@ -529,6 +529,7 @@ focus_tree = {
 			else = {
 				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = VAD }
 			}
+			unlock_decision_tooltip = VAD_issue_depot_rifles
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_armament_depots
 			}

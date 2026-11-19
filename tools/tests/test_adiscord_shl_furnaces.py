@@ -4016,6 +4016,8 @@ class AutomaticFurnaceForecastTests(unittest.TestCase):
         # Loan and emission widgets have independent quotes and do not participate in furnace accounting.
         self.m.effects["ADISCORD_economy_calculate_repayment_quote"] = []
         self.m.effects["ADISCORD_economy_calculate_emission_quote"] = []
+        # The campaign border check shares the daily hook with the forecast.
+        self.m.effects["ADISCORD_south_begin_preparation"] = []
         path = ROOT / "common/on_actions/03_ADISCORD_SHL_on_actions.txt"
         hooks = block(parse_clausewitz(path.read_text(encoding="utf-8")), "on_actions")
         self.daily = block(block(hooks, "on_daily_SHL"), "effect")

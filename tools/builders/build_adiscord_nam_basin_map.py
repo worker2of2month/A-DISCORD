@@ -188,6 +188,30 @@ def ui_images() -> dict[str, Image.Image]:
             draw.line((24, 14, 24, 19), fill=colour, width=2)
         images[f"support_{group}.png"] = icon
         images[f"texticon_{group}.png"] = icon.resize((20, 20), Image.Resampling.LANCZOS)
+    with Image.open(ROOT / "gfx/texticons/adiscord/custom/STP_hw_underground.png") as newspaper:
+        images["weber_underground_texticon.png"] = newspaper.resize((20, 20), Image.Resampling.LANCZOS)
+    with Image.open(ROOT / "tools/assets/source/focus_icons/NAM/metropolitan_quota_stamp.png") as stamp:
+        images["seal_discipline_texticon.png"] = stamp.resize((20, 20), Image.Resampling.LANCZOS)
+    focus_art = Path("tools/assets/source/focus_icons")
+    for name, art, size in (
+        ("foreign_capital", focus_art / "VAL/industrial_budget_banknote_bundles.png", 20),
+        ("corporate_influence", Path("gfx/interface/state_modifiers/adiscord/corporate_board.png"), 20),
+        ("consolidation", Path("gfx/interface/ideas/NAM/idea_NAM_consolidation_dynamic.png"), 20),
+        ("pillar_loyalty", focus_art / "NAM/neutral_basin_diplomatic_handshake.png", 20),
+        ("board_votes", focus_art / "NAM/district_assemblies_ballot_box.png", 20),
+        ("field_condition", focus_art / "NAM/oil_score_industrial_meter.png", 20),
+        ("field_capacity", focus_art / "NAM/quiet_wells_pumpjack.png", 20),
+        ("oil_score", focus_art / "NAM/metropolitan_quota_oil_drums_v3.png", 20),
+        ("war_cost", Path("gfx/interface/ideas/STP/idea_STP_wartime_strain.png"), 20),
+        ("return_readiness", focus_art / "NAM/general_staff_plan_map_board.png", 16),
+    ):
+        with Image.open(ROOT / art) as source:
+            icon = source.convert("RGBA")
+        icon = icon.crop(icon.getchannel("A").point(lambda alpha: 255 if alpha >= 14 else 0).getbbox())
+        icon.thumbnail((size, size), Image.Resampling.LANCZOS)
+        tile = Image.new("RGBA", (size, size))
+        tile.alpha_composite(icon, ((size - icon.width) // 2, (size - icon.height) // 2))
+        images[f"{name}_texticon.png"] = tile
     return images
 
 
@@ -219,14 +243,18 @@ def gfx_block(images: dict[str, Image.Image]) -> str:
                           "\t\tsize = { x = 64 y = 64 }", f'\t\ttextureFile = "{(OUT / filename).as_posix()}"',
                           "\t\tborderSize = { x = 3 y = 3 }", "\t\ttilingCenter = yes", "\t}", ""))
         else:
-            sprite_name = (f"GFX_NAM_support_{name.removeprefix('texticon_')}_texticon"
-                           if name.startswith("texticon_") else f"GFX_NAM_bw_{name}")
+            if name.startswith("texticon_"):
+                sprite_name = f"GFX_NAM_support_{name.removeprefix('texticon_')}_texticon"
+            elif name.endswith("_texticon"):
+                sprite_name = f"GFX_NAM_{name}"
+            else:
+                sprite_name = f"GFX_NAM_bw_{name}"
             lines.extend(("\tspriteType = {", f'\t\tname = "{sprite_name}"',
                           f'\t\ttexturefile = "{(OUT / filename).as_posix()}"',
                           f'\t\tnoOfFrames = {4 if name.startswith("state_") else 1}'))
             if name == "marker":
                 lines.append('\t\teffectFile = "gfx/FX/buttonstate.lua"')
-            if name.startswith("texticon_"):
+            if sprite_name.endswith("_texticon"):
                 lines.append("\t\tlegacy_lazy_load = no")
             lines.extend(("\t}", ""))
     return "\n".join(lines).rstrip()

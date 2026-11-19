@@ -1,0 +1,6 @@
+capital = 69
+set_politics = {
+	ruling_party = chauvinism
+	elections_allowed = no
+}
+set_popularities = { chauvinism = 100 }

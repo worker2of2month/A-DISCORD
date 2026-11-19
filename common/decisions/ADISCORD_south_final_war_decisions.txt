@@ -3,6 +3,79 @@
 
 ADISCORD_south_final_war_category = {
 
+	ADISCORD_south_invite_to_coalition = {
+		icon = generic_political_discourse
+		allowed = {
+			OR = {
+				tag = SHL
+				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = WEF
+				tag = KDR
+				tag = RHM
+				tag = SDR
+				tag = MZR
+				tag = KYZ
+				tag = GLP
+				tag = SFD
+				tag = SCD
+				tag = SMD
+				tag = SOD
+				tag = SDA
+			}
+		}
+		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			ADISCORD_south_coalition_inviter = yes
+			FROM = {
+				ADISCORD_south_coalition_invitee = yes
+				ADISCORD_south_coalition_other_camp = yes
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_coalition_talks_free_tt
+				FROM = {
+					NOT = { has_variable = ADISCORD_south_coalition_envoy }
+					NOT = { has_variable = ADISCORD_south_offer_kind }
+				}
+			}
+		}
+		cost = 0
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_coalition_invitation_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_south_coalition_inviter = yes
+						FROM = {
+							ADISCORD_south_coalition_invitee = yes
+							ADISCORD_south_coalition_other_camp = yes
+							NOT = { has_variable = ADISCORD_south_coalition_envoy }
+							NOT = { has_variable = ADISCORD_south_offer_kind }
+						}
+					}
+					ADISCORD_south_save_inviting_leader = yes
+					FROM = {
+						ADISCORD_release_non_participating_minor_optimization = yes
+						set_variable = { var = ADISCORD_south_coalition_envoy value = ROOT }
+						country_event = { id = ADISCORD_south.67 }
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0.25
+				FROM = { is_in_faction = yes }
+			}
+		}
+	}
+
 	# ----- District orders -----
 
 	# One order at a time: ADISCORD_south_order_state holds the ordered key
@@ -295,25 +368,27 @@ ADISCORD_south_final_war_category = {
 			OR = {
 				tag = SHL
 				tag = NAM
+				tag = EFL
+				tag = AZH
+				tag = WEF
+				tag = KDR
+				tag = RHM
+				tag = SDR
+				tag = MZR
+				tag = KYZ
+				tag = GLP
+				tag = SFD
+				tag = SCD
+				tag = SMD
+				tag = SOD
+				tag = SDA
 			}
 		}
 		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
-		target_trigger = {
-			FROM = { exists = yes }
-		}
+		target_trigger = { FROM = { exists = yes } }
 		visible = {
-			ADISCORD_south_final_active = yes
-			ADISCORD_south_war_champion = yes
-			OR = {
-				has_completed_focus = SHL_sw_southern_league
-				has_completed_focus = NAM_sw_league_of_the_north
-			}
-			FROM = {
-				has_war_with = ROOT
-				is_subject = no
-				NOT = { has_country_flag = ADISCORD_south_north_leader }
-				NOT = { has_country_flag = ADISCORD_south_defected }
-			}
+			ADISCORD_south_defector_envoy = yes
+			FROM = { ADISCORD_south_defector_opponent = yes }
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -330,8 +405,17 @@ ADISCORD_south_final_war_category = {
 							has_war_support < 0.40
 							ROOT = {
 								OR = {
-									has_completed_focus = SHL_sw_break_the_sands
-									has_completed_focus = NAM_sw_punitive_columns
+									AND = {
+										ADISCORD_south_on_shl_side = yes
+										SHL = { has_completed_focus = SHL_sw_break_the_sands }
+									}
+									AND = {
+										ADISCORD_south_on_north_side = yes
+										NAM = {
+											has_country_flag = ADISCORD_south_north_leader
+											has_completed_focus = NAM_sw_punitive_columns
+										}
+									}
 								}
 							}
 						}
@@ -351,6 +435,8 @@ ADISCORD_south_final_war_category = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						ADISCORD_south_defector_envoy = yes
+						FROM = { ADISCORD_south_defector_opponent = yes }
 						NOT = { has_country_flag = ADISCORD_south_defector_pending }
 						NOT = { has_political_power < 80 }
 					}
@@ -358,6 +444,8 @@ ADISCORD_south_final_war_category = {
 				add_political_power = -80
 				hidden_effect = {
 					set_country_flag = ADISCORD_south_defector_pending
+					set_variable = { var = ADISCORD_south_defector_target value = FROM }
+					ADISCORD_south_save_inviting_leader = yes
 					FROM = { country_event = { id = ADISCORD_south.63 hours = 6 } }
 					country_event = { id = ADISCORD_south.66 days = 21 }
 				}

@@ -1,4 +1,9 @@
 leader_traits = {
+	NAM_trait_svetlogorye_governor = {
+		random = no
+		sprite = 1
+	}
+
 	# Egor Rom, in every role he holds.
 	NAM_trait_keeper_of_seals = {
 		random = no

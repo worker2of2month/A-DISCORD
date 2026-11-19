@@ -5,6 +5,46 @@
   ],
   "events": [
     {
+      "id": "ADISCORD_nam_resource_war.410",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 410,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_postwar_neighbour_policy",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.411",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 411,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_postwar_neighbour_policy",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.412",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 412,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_postwar_neighbour_policy",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.413",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 413,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_postwar_government",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.414",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 414,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_postwar_government",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_mon_court.1",
       "namespace": "ADISCORD_mon_court",
       "number": 1,
@@ -1736,6 +1776,38 @@
       "id": "ADISCORD_nam_crisis.5",
       "namespace": "ADISCORD_nam_crisis",
       "number": 5,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_crisis.6",
+      "namespace": "ADISCORD_nam_crisis",
+      "number": 6,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_crisis.7",
+      "namespace": "ADISCORD_nam_crisis",
+      "number": 7,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_crisis.8",
+      "namespace": "ADISCORD_nam_crisis",
+      "number": 8,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_crisis.9",
+      "namespace": "ADISCORD_nam_crisis",
+      "number": 9,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "random_crises",
       "status": "active"
@@ -6509,6 +6581,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_south.67",
+      "namespace": "ADISCORD_south",
+      "number": 67,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_rus_crisis.1",
       "namespace": "ADISCORD_rus_crisis",
       "number": 1,
@@ -9824,6 +9904,86 @@
       "id": "val_rework.223",
       "namespace": "val_rework",
       "number": 223,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.224",
+      "namespace": "val_rework",
+      "number": 224,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.225",
+      "namespace": "val_rework",
+      "number": 225,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.226",
+      "namespace": "val_rework",
+      "number": 226,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.227",
+      "namespace": "val_rework",
+      "number": 227,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.228",
+      "namespace": "val_rework",
+      "number": 228,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.229",
+      "namespace": "val_rework",
+      "number": 229,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.230",
+      "namespace": "val_rework",
+      "number": 230,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.231",
+      "namespace": "val_rework",
+      "number": 231,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.232",
+      "namespace": "val_rework",
+      "number": 232,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.233",
+      "namespace": "val_rework",
+      "number": 233,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_rework",
       "status": "active"

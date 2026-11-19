@@ -1719,6 +1719,184 @@ ideas = {
 			}
 		}
 
+		NAM_crisis_drought = {
+			picture = GFX_idea_ADISCORD_law_welfare_rationed_support
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_factor = -0.15
+				production_speed_buildings_factor = -0.10
+			}
+		}
+
+		NAM_crisis_drought_contained = {
+			picture = GFX_idea_ADISCORD_law_welfare_rationed_support
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_factor = -0.07
+				production_speed_buildings_factor = -0.05
+			}
+		}
+
+		NAM_crisis_blackout = {
+			picture = GFX_idea_NAM_pw_industrial_schedule_idea
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_factor = -0.12
+				industrial_capacity_factory = -0.15
+			}
+		}
+
+		NAM_crisis_blackout_contained = {
+			picture = GFX_idea_NAM_pw_industrial_schedule_idea
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_factor = -0.06
+				industrial_capacity_factory = -0.07
+			}
+		}
+
+		NAM_crisis_flood = {
+			picture = GFX_idea_ADISCORD_infrastructure_patchwork_roads
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_factor = -0.12
+				production_speed_infrastructure_factor = -0.20
+			}
+		}
+
+		NAM_crisis_flood_contained = {
+			picture = GFX_idea_ADISCORD_infrastructure_patchwork_roads
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_factor = -0.06
+				production_speed_infrastructure_factor = -0.10
+			}
+		}
+
+		NAM_crisis_delivery_disruption = {
+			picture = GFX_idea_ADISCORD_law_logistics_civilian_contracts
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_factor = -0.10
+				supply_consumption_factor = 0.12
+			}
+		}
+
+		NAM_crisis_delivery_disruption_contained = {
+			picture = GFX_idea_ADISCORD_law_logistics_civilian_contracts
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_factor = -0.05
+				supply_consumption_factor = 0.06
+			}
+		}
+
+		NAM_neighbour_nationalists = {
+			picture = GFX_idea_STP_resistance_battle
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = { stability_factor = -0.05 }
+		}
+
+		NAM_neighbour_joint_staff = {
+			picture = GFX_idea_NAM_war_joint_operations_idea
+			allowed = {
+				OR = {
+					tag = EFL
+					tag = AZH
+				}
+			}
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			cancel = {
+				OR = {
+					is_subject = yes
+					NOT = { is_in_faction_with = NAM }
+				}
+			}
+			modifier = {
+				army_org_factor = 0.05
+				army_defence_factor = 0.05
+			}
+		}
+
 		NAM_army_of_shame = {
 			picture = GFX_idea_NAM_army_of_shame
 			allowed_civil_war = { always = yes }

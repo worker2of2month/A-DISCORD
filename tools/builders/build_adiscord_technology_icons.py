@@ -235,12 +235,17 @@ def _contact_sheet(rendered: tuple[tuple[IconSpec, Image.Image], ...]) -> Image.
     return sheet
 
 
-def render_outputs(root: Path = ROOT, family: str | None = None) -> dict[Path, bytes]:
+def render_outputs(
+    root: Path = ROOT, family: str | None = None, keys: tuple[str, ...] = ()
+) -> dict[Path, bytes]:
     manifest = root / "tools" / "data" / "adiscord_technology_weapon_icons.json"
     specs = tuple(
         spec for spec in load_manifest(manifest)
-        if family is None or spec.family == family
+        if (family is None or spec.family == family) and (not keys or spec.key in keys)
     )
+    missing = set(keys).difference(spec.key for spec in specs)
+    if missing:
+        raise ValueError(f"Unknown technology icons: {', '.join(sorted(missing))}")
     if not specs:
         raise ValueError(f"No technology icon sources for family {family!r}")
     rendered = tuple(
@@ -265,7 +270,7 @@ def render_outputs(root: Path = ROOT, family: str | None = None) -> dict[Path, b
                 outputs[relative] = _dds_bytes(icon, lossless=True)
         else:
             outputs[relative] = _dds_bytes(icon)
-    if family is None:
+    if family is None and not keys:
         outputs[CONTACT_SHEET.relative_to(ROOT)] = _png_bytes(_contact_sheet(rendered))
     return outputs
 
@@ -311,6 +316,7 @@ def main() -> int:
     parser.add_argument(
         "--family", help="build only one manifest family, preserving other artwork"
     )
+    parser.add_argument("--icons", nargs="+", help="build only these manifest icons")
     parser.add_argument(
         "--preview", action="store_true", help="also write the review contact sheet"
     )
@@ -320,8 +326,8 @@ def main() -> int:
         help="losslessly encode existing technology artwork with DDS headers",
     )
     args = parser.parse_args()
-    if args.family and args.normalize_existing:
-        parser.error("--family cannot be combined with --normalize-existing")
+    if (args.family or args.icons) and args.normalize_existing:
+        parser.error("icon selection cannot be combined with --normalize-existing")
 
     if args.normalize_existing:
         changed = []
@@ -344,7 +350,7 @@ def main() -> int:
         return int(bool(changed) and not args.apply)
 
     try:
-        outputs = render_outputs(ROOT, args.family)
+        outputs = render_outputs(ROOT, args.family, tuple(args.icons or ()))
     except (OSError, RuntimeError, ValueError, KeyError, json.JSONDecodeError) as exc:
         print(f"ERROR: {exc}")
         return 1
@@ -352,7 +358,7 @@ def main() -> int:
         # The contact sheet is a temporary review image, written only on request.
         outputs.pop(CONTACT_SHEET.relative_to(ROOT), None)
     if args.apply:
-        apply(outputs, ROOT, clean_connectors=args.family is None)
+        apply(outputs, ROOT, clean_connectors=args.family is None and not args.icons)
     issues = validate(outputs, ROOT)
     if issues:
         for issue in issues:

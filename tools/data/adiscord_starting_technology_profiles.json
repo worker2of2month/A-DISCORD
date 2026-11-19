@@ -338,6 +338,7 @@
       "technologies": [
         "ADISCORD_tech_bolt_head_fitting",
         "ADISCORD_tech_chamber_polishing",
+        "ADISCORD_tech_field_workshop_tools",
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_postwar_weapon_standardization",
         "ADISCORD_tech_refurbished_receivers",
@@ -712,7 +713,7 @@
         "infrastructure_levels": 18,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 4,
+        "oob_divisions": 8,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -1863,7 +1864,7 @@
         "infrastructure_levels": 32,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 5,
+        "oob_divisions": 9,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -2421,7 +2422,7 @@
         "infrastructure_levels": 20,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 5,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -2829,7 +2830,7 @@
         "infrastructure_levels": 24,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 2,
+        "oob_divisions": 6,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -3041,7 +3042,7 @@
         "infrastructure_levels": 22,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 5,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -3430,7 +3431,7 @@
         "infrastructure_levels": 20,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 2,
+        "oob_divisions": 6,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -3499,7 +3500,7 @@
         "infrastructure_levels": 35,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 3,
+        "oob_divisions": 6,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -4208,7 +4209,7 @@
         "infrastructure_levels": 18,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 5,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -4753,7 +4754,7 @@
         "infrastructure_levels": 16,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 5,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -4894,7 +4895,7 @@
         "infrastructure_levels": 30,
         "research_slots": 2,
         "convoys": 60,
-        "oob_divisions": 6,
+        "oob_divisions": 12,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -6294,7 +6295,7 @@
         "infrastructure_levels": 4,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 3,
         "starting_doctrines": []
       },
       "technologies_2160": [

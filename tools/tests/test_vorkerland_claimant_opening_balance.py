@@ -188,6 +188,21 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
         self.assertIn("factor = 0.25 FROM = { ADISCORD_vorkerland_is_central_control_leader = yes }", join)
         self.assertIn("factor = 2 FROM = { ADISCORD_vorkerland_is_central_control_laggard = yes }", join)
 
+    def test_regency_prepares_its_treaty_and_front_supply_before_staff_politics(self):
+        plans = read("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")
+        regency = named_block(plans, "ADISCORD_vorkerland_vad_regency_branch_plan")
+        focuses = named_block(regency, "ai_national_focuses").split()
+        for route in (
+            ("VAD_invite_sol_delegation", "VAD_dispatch_solland_liaison_mission"),
+            ("VAD_establish_mobile_headquarters", "VAD_reconstitute_district_guard"),
+            ("VAD_inventory_eastern_works", "VAD_standardize_district_logistics",
+             "VAD_reopen_armament_depots"),
+        ):
+            with self.subTest(route=route):
+                positions = [focuses.index(focus) for focus in route]
+                self.assertEqual(positions, sorted(positions))
+                self.assertLess(positions[-1], focuses.index("VAD_army_becomes_the_state"))
+
     def test_theatre_package_is_not_rewritten_as_a_balance_shortcut(self):
         manifest = read("tools/lib/adiscord_vorkerland_theatre_manifest.py")
         self.assertIn('"WKR": 62', manifest)

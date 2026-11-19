@@ -664,3 +664,12 @@ NAM_export_office_5 = {
 	NAM_export_office_rated_capacity = NAM_export_office_capacity
 	NAM_export_office_projected_revenue = NAM_export_office_month_estimate
 }
+
+NAM_neighbour_command_resistance = {
+	icon = GFX_modifiers_ADISCORD_border_autonomy
+	enable = {
+		controller = { NAM_neighbour_is_command = yes }
+		is_owned_by = CONTROLLER
+	}
+	resistance_target = 0.20
+}

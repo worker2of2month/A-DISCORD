@@ -649,7 +649,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pm_front_air_support
-		icon = GFX_focus_STP_ps_radio_network
+		icon = GFX_focus_STP_pc_sdir_integrated_staff
 		x = 19
 		y = 2
 		cost = 2
@@ -707,7 +707,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pm_port_workshops
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_STP_pc_navy_yards
 		x = 13
 		y = 2
 		cost = 2
@@ -736,7 +736,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pm_guard_roadstead
-		icon = GFX_focus_STP_ps_foreign_supply_desk
+		icon = GFX_focus_STP_pc_navy_coast
 		x = 12
 		y = 4
 		cost = 2
@@ -815,7 +815,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pm_port_staff
-		icon = GFX_focus_STP_party_supply_directorate
+		icon = GFX_focus_STP_pc_navy_ports
 		x = 13
 		y = 5
 		cost = 2
@@ -923,7 +923,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_district_levies
-		icon = GFX_focus_STP_cw_abila_reserve
+		icon = GFX_focus_STP_pc_sot_regions
 		x = 12
 		y = 3
 		cost = 3
@@ -1166,7 +1166,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_hw_coalition_congress
-		icon = GFX_focus_STP_cw_autonomy_guarantees
+		icon = GFX_focus_STP_pc_lib_coalition
 		x = -2
 		y = 4
 		cost = 3
@@ -1350,7 +1350,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_assault_air_cover
-		icon = GFX_focus_RUS_air_control_network
+		icon = GFX_focus_STP_pc_sdir_integrated_staff
 		x = 15
 		y = 3
 		cost = 3
@@ -1380,7 +1380,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_mountain_staff
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_pc_sot_field
 		x = 11
 		y = 1
 		cost = 2
@@ -1402,7 +1402,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_pass_watch
-		icon = GFX_focus_STP_cw_northern_desk
+		icon = GFX_focus_STP_pc_sdir_prepared_positions
 		x = 11
 		y = 2
 		cost = 3
@@ -1418,7 +1418,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_hold_the_passes
-		icon = GFX_focus_STP_cw_defensive_lines
+		icon = GFX_focus_STP_pc_sdir_prepared_positions
 		x = 10
 		y = 3
 		cost = 3
@@ -1438,7 +1438,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_raid_the_approaches
-		icon = GFX_focus_STP_cw_northern_dossier
+		icon = GFX_focus_STP_pc_army_limited_offense
 		x = 12
 		y = 3
 		cost = 3
@@ -1548,7 +1548,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_route_columns
-		icon = GFX_focus_STP_cw_supply_officers
+		icon = GFX_focus_STP_pc_sdir_motor_columns
 		x = 0
 		y = 1
 		relative_position_id = STP_cw_frontline_relief
@@ -1643,7 +1643,7 @@ focus_tree = {
 	focus = {
 		id = STP_party_war_transport
 		prerequisite = { focus = STP_cw_unified_headquarters }
-		icon = GFX_focus_STP_ps_expedition_logistics
+		icon = GFX_focus_STP_pc_sdir_motor_columns
 		x = 3
 		y = 1
 		cost = 1
@@ -1663,7 +1663,7 @@ focus_tree = {
 	focus = {
 		id = STP_party_rear_administration
 		prerequisite = { focus = STP_cw_congress_in_session focus = STP_ps_restore_couriers }
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_STP_pc_lib_transition
 		x = 11
 		y = 2
 		cost = 2
@@ -1740,7 +1740,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_presidium_broadcast
-		icon = GFX_focus_STP_cw_public_lists
+		icon = GFX_focus_STP_pc_two_borders
 		x = -1
 		y = 1
 		cost = 1
@@ -1881,7 +1881,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_district_supply
-		icon = GFX_focus_STP_party_supply_directorate
+		icon = GFX_focus_STP_pc_sdir_integrated_rear
 		x = -1
 		y = 4
 		cost = 2
@@ -2358,7 +2358,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_restore_couriers
-		icon = GFX_focus_STP_ps_radio_network
+		icon = GFX_focus_STP_pc_sdir_signal_corps
 		x = 15
 		y = 1
 		cost = 2
@@ -2620,7 +2620,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_local_officer_courses
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_sdir_officer_college
 		x = 2
 		y = 2
 		cost = 4

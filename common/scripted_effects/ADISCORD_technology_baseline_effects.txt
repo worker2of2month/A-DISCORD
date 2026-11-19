@@ -227,6 +227,7 @@ ADISCORD_grant_technology_profile_fragment_low_tech = {
 	set_technology = {
 		ADISCORD_tech_bolt_head_fitting = 1
 		ADISCORD_tech_chamber_polishing = 1
+		ADISCORD_tech_field_workshop_tools = 1
 		ADISCORD_tech_pack_transport = 1
 		ADISCORD_tech_postwar_weapon_standardization = 1
 		ADISCORD_tech_refurbished_receivers = 1

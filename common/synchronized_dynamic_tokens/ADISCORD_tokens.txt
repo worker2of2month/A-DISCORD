@@ -168,6 +168,7 @@ NAM_hold_field_689
 NAM_hold_field_690
 NAM_agreement_deadline
 NAM_agreement_crisis
+NAM_incident_countdown
 ADISCORD_interceptor_archetype
 ADISCORD_strike_drone_archetype
 transport_plane_equipment

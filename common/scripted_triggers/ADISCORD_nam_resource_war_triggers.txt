@@ -687,7 +687,10 @@ NAM_ind_border_dossier_can_start = {
 # Administrative programmes retain their course across war and tree changes.
 NAM_admin_programme_operable = {
 	NAM_independent_programmes_operable = yes
-	NAM_ladder_formed = yes
+	OR = {
+		NAM_ladder_formed = yes
+		has_power_balance = { id = NAM_postwar_future_bop }
+	}
 }
 
 # ----- Oil monopoly -----
@@ -723,13 +726,21 @@ NAM_oil_overseas_buyer = {
 	NOT = { is_neighbor_of = NAM }
 }
 
+# COUNTRY NAM. The settlement opens maritime trade even if the pre-war office was never founded.
+NAM_overseas_trade_open = {
+	OR = {
+		has_completed_focus = NAM_overseas_buyers
+		has_global_flag = ADISCORD_nam_resource_war_resolved
+	}
+}
+
 # COUNTRY buyer. A new contract may be offered to it.
 NAM_oil_buyer_eligible = {
 	NOT = { has_country_flag = NAM_oil_offer_declined }
 	NAM_oil_buyer_tag = yes
 	OR = {
 		is_neighbor_of = NAM
-		NAM = { has_completed_focus = NAM_overseas_buyers }
+		NAM = { NAM_overseas_trade_open = yes }
 	}
 	exists = yes
 	has_capitulated = no
@@ -924,6 +935,13 @@ NAM_refinery_site_ready = {
 	NAM_project_state_ready = yes
 }
 
+# A second-tier export office reserves the same cash amount on this field.
+NAM_pipeline_receipt = {
+	has_state_flag = NAM_project_in_progress
+	check_variable = { var = NAM_project_deposit value = 350 compare = equals }
+	NOT = { has_variable = NAM_export_office_order }
+}
+
 # STATE. Only the refinery order holds a 300 project escrow.
 NAM_refinery_receipt = {
 	has_state_flag = NAM_project_in_progress
@@ -1058,7 +1076,6 @@ NAM_rus_active_defender = {
 	}
 }
 
-
 # STATE. Both assembly cities can receive chassis overland.
 NAM_chassis_works_site = {
 	is_owned_by = NAM
@@ -1182,7 +1199,6 @@ NAM_rival_gavanov_free = {
 }
 
 
-
 # COUNTRY NAM. The current rival's pillar received its hearing focus: a heard
 # rival never stakes the seals on a refusal.
 NAM_rival_current_heard = {
@@ -1229,7 +1245,6 @@ NAM_rival_current_pillar_broken = {
 }
 
 
-
 # COUNTRY NAM. The garrisons will arrest a rival, unless he commands them.
 NAM_rival_can_arrest = {
 	NOT = { check_variable = { NAM_rival_current = 3 } }
@@ -1240,10 +1255,15 @@ NAM_rival_can_arrest = {
 # COUNTRY NAM. The districts can bring the city into the streets.
 NAM_rival_can_rally_districts = {
 	NOT = { check_variable = { NAM_grp_dist_support < 60 } }
-	NAM_ladder_formed = yes
-	power_balance_value = {
-		id = NAM_ladder_bop
-		value > 0
+	OR = {
+		AND = {
+			NAM_ladder_formed = yes
+			power_balance_value = { id = NAM_ladder_bop value > 0 }
+		}
+		AND = {
+			has_power_balance = { id = NAM_postwar_future_bop }
+			check_variable = { NAM_prewar_balance > 0 }
+		}
 	}
 }
 
@@ -3029,6 +3049,105 @@ NAM_crisis_case_5 = {
 	NAM_crisis_pending_5 = yes
 }
 
+NAM_crisis_drought_possible = {
+	NAM_pw_operable = yes
+	has_war = no
+	controls_state = 688
+	NOT = { has_completed_focus = NAM_pw_reservoir_survey }
+}
+
+NAM_crisis_drought_mitigated = {
+	OR = {
+		has_completed_focus = NAM_pw_water_intakes
+		has_completed_focus = NAM_pw_irrigation_works
+	}
+}
+
+NAM_crisis_pending_6 = {
+	has_country_flag = { flag = NAM_crisis_open value > 5 }
+	has_country_flag = { flag = NAM_crisis_open value < 7 }
+}
+
+NAM_crisis_case_6 = {
+	NAM_crisis_pending_6 = yes
+	NAM_crisis_drought_possible = yes
+}
+
+NAM_crisis_blackout_possible = {
+	NAM_pw_operable = yes
+	has_war = no
+	controls_state = 700
+	NOT = { has_completed_focus = NAM_pw_grid_dispatch }
+}
+
+NAM_crisis_blackout_mitigated = {
+	has_completed_focus = NAM_pw_power_grid
+}
+
+NAM_crisis_pending_7 = {
+	has_country_flag = { flag = NAM_crisis_open value > 6 }
+	has_country_flag = { flag = NAM_crisis_open value < 8 }
+}
+
+NAM_crisis_case_7 = {
+	NAM_crisis_pending_7 = yes
+	NAM_crisis_blackout_possible = yes
+}
+
+NAM_crisis_flood_possible = {
+	NAM_pw_operable = yes
+	has_war = no
+	controls_state = 688
+}
+
+NAM_crisis_flood_mitigated = {
+	OR = {
+		688 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			dam > 0
+		}
+		67 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+			dam > 0
+		}
+	}
+}
+
+NAM_crisis_pending_8 = {
+	has_country_flag = { flag = NAM_crisis_open value > 7 }
+	has_country_flag = { flag = NAM_crisis_open value < 9 }
+}
+
+NAM_crisis_case_8 = {
+	NAM_crisis_pending_8 = yes
+	NAM_crisis_flood_possible = yes
+}
+
+NAM_crisis_delivery_disruption_possible = {
+	NAM_pw_operable = yes
+	has_war = no
+	controls_state = 719
+}
+
+NAM_crisis_delivery_disruption_mitigated = {
+	OR = {
+		has_completed_focus = NAM_pw_rail_priority
+		has_completed_focus = NAM_pw_road_priority
+	}
+}
+
+NAM_crisis_pending_9 = {
+	has_country_flag = { flag = NAM_crisis_open value > 8 }
+	has_country_flag = { flag = NAM_crisis_open value < 10 }
+}
+
+NAM_crisis_case_9 = {
+	NAM_crisis_pending_9 = yes
+	NAM_crisis_delivery_disruption_possible = yes
+}
+
 NAM_industrial_claim_payable = {
 	NAM_pw_operable = yes
 	has_completed_focus = NAM_pw_insurance_fund
@@ -3498,15 +3617,10 @@ NAM_border_citizenship_ready = {
 # COUNTRY neighbouring government. A bilateral settlement binds later southern demands.
 NAM_neighbour_sovereignty_recognised = {
 	OR = {
-		AND = {
-			tag = EFL
-			NAM = { has_completed_focus = NAM_eflor_accord }
-		}
-		AND = {
-			tag = AZH
-			NAM = { has_completed_focus = NAM_azhar_accord }
-		}
+		tag = EFL
+		tag = AZH
 	}
+	NAM = { has_completed_focus = NAM_normalisation }
 }
 
 # COUNTRY neighbour. A recognised border or an existing settlement closes this offer.
@@ -3533,36 +3647,6 @@ NAM_neighbour_negotiations_free = {
 NAM_neighbour_offer_open = {
 	ADISCORD_south_campaign_target_valid = yes
 	NAM_neighbour_sovereignty_recognised = no
-}
-
-# COUNTRY defeated signatory. Recheck the award before the next-day handover.
-NAM_border_protocol_ready = {
-	exists = yes
-	has_war = no
-	has_capitulated = no
-	NAM_neighbour_settlement_closed = no
-	has_idea = NAM_reparations_to_svetlogorye
-	check_variable = { var = num_owned_states value = 1 compare = greater_than }
-	NAM = {
-		NAM_pw_operable = yes
-		NAM_independence_recognised = yes
-		has_completed_focus = NAM_pragmatic_compact
-		has_war = no
-	}
-	NOT = { has_global_flag = ADISCORD_south_final_started }
-	NOT = { has_global_flag = ADISCORD_south_final_resolved }
-	OR = {
-		AND = {
-			tag = EFL
-			owns_state = 723
-			controls_state = 723
-		}
-		AND = {
-			tag = AZH
-			owns_state = 727
-			controls_state = 727
-		}
-	}
 }
 
 NAM_border_acquisitions_held = {
@@ -3900,16 +3984,20 @@ NAM_agreement_can_promise_hearing = {
 	NOT = { has_variable = NAM_council_petition }
 }
 
-NAM_agreement_district_site = {
+NAM_agreement_district_buildable = {
 	is_owned_by = NAM
 	is_controlled_by = NAM
-	NOT = { has_state_flag = NAM_agreement_building }
 	free_building_slots = {
 		building = industrial_complex
 		size > 0
 		include_locked = yes
 	}
 	infrastructure < 5
+}
+
+NAM_agreement_district_site = {
+	NAM_agreement_district_buildable = yes
+	NOT = { has_state_flag = NAM_agreement_building }
 }
 
 NAM_agreement_nam_possible = {
@@ -4066,7 +4154,6 @@ NAM_agreement_support_broken = {
 	}
 }
 
-
 NAM_agreement_audit_ready = {
 	NAM_agreement_nam_active = yes
 	NOT = { has_country_flag = NAM_agreement_audit_done }
@@ -4075,7 +4162,6 @@ NAM_agreement_audit_ready = {
 	NOT = { has_political_power < 75 }
 	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
 }
-
 
 NAM_agreement_roll_call_open = {
 	NAM_agreement_garr_active = yes
@@ -4092,7 +4178,6 @@ NAM_agreement_training_ready = {
 	NOT = { has_political_power < 75 }
 	check_variable = { var = ADISCORD_economy_treasury value = 800 compare = greater_than_or_equals }
 }
-
 
 NAM_deep_drilling_unlocked = {
 	OR = {
@@ -4130,8 +4215,11 @@ NAM_program_rail_priority_site = {
 	controls_province = 16721
 	controls_province = 16865
 	controls_province = 4321
+	controls_province = 17829
+	controls_province = 17627
 	controls_province = 2935
 	controls_province = 8351
+	controls_province = 18450
 	controls_province = 9016
 }
 
@@ -4145,12 +4233,19 @@ NAM_program_logistics_depots_site = {
 	owns_state = 67
 	controls_state = 67
 	controls_province = 16716
+	controls_province = 16881
 	controls_province = 16884
 	controls_province = 16873
 	controls_province = 9641
+	controls_province = 18514
+	controls_province = 16874
+	controls_province = 16885
 	controls_province = 4321
+	controls_province = 17829
+	controls_province = 17627
 	controls_province = 2935
 	controls_province = 8351
+	controls_province = 18450
 	controls_province = 9016
 	690 = { supply_node < 1 }
 }
@@ -4165,11 +4260,14 @@ NAM_program_freight_depots_site = {
 	owns_state = 719
 	controls_state = 719
 	controls_province = 16716
+	controls_province = 16881
 	controls_province = 16884
 	controls_province = 16873
 	controls_province = 9641
+	controls_province = 18808
 	controls_province = 11926
 	controls_province = 176
+	controls_province = 16983
 	controls_province = 6961
 	719 = { supply_node < 1 }
 }
@@ -4186,9 +4284,13 @@ NAM_program_southern_corridor_site = {
 	controls_province = 16721
 	controls_province = 16865
 	controls_province = 4321
+	controls_province = 16885
+	controls_province = 16874
+	controls_province = 18514
 	controls_province = 9641
 	controls_province = 16873
 	controls_province = 16884
+	controls_province = 16881
 	controls_province = 16716
 }
 
@@ -4652,4 +4754,124 @@ NAM_export_office_operating_site = {
 	is_owned_by = NAM
 	is_controlled_by = NAM
 	NOT = { has_state_flag = NAM_wells_scorched }
+}
+
+NAM_neighbour_talks_idle = {
+	NOT = { has_variable = ADISCORD_south_offer_kind }
+	NOT = { has_country_flag = ADISCORD_south_submits_to_SHL }
+	NOT = { has_country_flag = ADISCORD_south_submits_to_NAM }
+}
+
+NAM_neighbour_partner = {
+	OR = {
+		tag = EFL
+		tag = AZH
+	}
+	exists = yes
+	has_war = no
+	has_capitulated = no
+	OR = {
+		is_subject = no
+		is_subject_of = NAM
+	}
+}
+
+# A country may agree to leave its old coalition. Its reply cannot dissolve an unrelated alliance.
+NAM_neighbour_faction_exit_possible = {
+	OR = {
+		is_faction_leader = no
+		is_in_faction_with = NAM
+		NOT = {
+			any_allied_country = {
+				NOT = { tag = EFL }
+				NOT = { tag = AZH }
+			}
+		}
+	}
+}
+
+NAM_neighbour_military_partner = {
+	NAM_neighbour_partner = yes
+	OR = {
+		is_subject_of = NAM
+		AND = {
+			has_global_flag = ADISCORD_nam_resource_war_nam_victory
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_standoff }
+			NAM_neighbour_faction_exit_possible = yes
+		}
+	}
+}
+
+NAM_neighbour_peace_course_open = {
+	NAM_pw_operable = yes
+	has_war = no
+	OR = {
+		EFL = { NAM_neighbour_partner = yes }
+		AZH = { NAM_neighbour_partner = yes }
+	}
+	NOT = {
+		EFL = {
+			NAM_neighbour_partner = yes
+			NAM_neighbour_talks_idle = no
+		}
+	}
+	NOT = {
+		AZH = {
+			NAM_neighbour_partner = yes
+			NAM_neighbour_talks_idle = no
+		}
+	}
+}
+
+NAM_neighbour_military_course_open = {
+	NAM_neighbour_peace_course_open = yes
+	OR = {
+		EFL = { NAM_neighbour_military_partner = yes }
+		AZH = { NAM_neighbour_military_partner = yes }
+	}
+}
+
+NAM_neighbour_alliance_offer_open = {
+	NAM_neighbour_partner = yes
+	exists = yes
+	is_subject = no
+	NAM_neighbour_talks_idle = yes
+	NAM_neighbour_faction_exit_possible = yes
+	NOT = { has_idea = NAM_neighbour_joint_staff }
+	NAM = {
+		NAM_pw_operable = yes
+		has_war = no
+		has_completed_focus = NAM_normalisation
+		OR = {
+			is_in_faction = no
+			is_faction_leader = yes
+			PREV = { is_in_faction_with = NAM }
+		}
+	}
+}
+
+NAM_neighbour_military_answer_open = {
+	has_country_flag = NAM_neighbour_command_offer
+	NAM_neighbour_military_partner = yes
+	exists = yes
+	is_subject = no
+	NAM_neighbour_talks_idle = yes
+	NAM = {
+		NAM_pw_operable = yes
+		has_war = no
+		has_completed_focus = NAM_border_revenge
+	}
+}
+
+NAM_neighbour_is_command = {
+	exists = yes
+	is_subject_of = NAM
+	has_country_flag = NAM_neighbour_military_command
+}
+
+NAM_neighbour_has_command = {
+	OR = {
+		EFL = { NAM_neighbour_is_command = yes }
+		AZH = { NAM_neighbour_is_command = yes }
+	}
 }

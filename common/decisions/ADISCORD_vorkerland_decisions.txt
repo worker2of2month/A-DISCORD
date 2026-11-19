@@ -313,15 +313,20 @@ ADISCORD_vorkerland_collapse_category = {
 				ADISCORD_vorkerland_join_coalition_of_FROM = yes
 			}
 		}
-		# No claimant is excluded by tag: districts drift toward whoever holds the
-		# fewest central districts, so the coalition evens the war out instead of
-		# piling onto one side.
+		# Districts weigh territorial control and whether the host already has military partners.
 		ai_will_do = {
 			base = 200
 			modifier = { factor = 3 has_country_flag = ADISCORD_vorkerland_compact_supply_received FROM = { tag = WKR } }
 			modifier = { factor = 0 ADISCORD_vorkerland_has_live_local_rival = yes }
 			modifier = { factor = 0.25 FROM = { ADISCORD_vorkerland_is_central_control_leader = yes } }
 			modifier = { factor = 2 FROM = { ADISCORD_vorkerland_is_central_control_laggard = yes } }
+			modifier = {
+				factor = 3
+				FROM = {
+					is_in_faction = no
+					NOT = { any_subject_country = { always = yes } }
+				}
+			}
 			modifier = { factor = 2 num_divisions > 8 }
 		}
 	}
@@ -5223,6 +5228,35 @@ ADISCORD_vorkerland_wkr_administration = {
 }
 
 ADISCORD_vorkerland_vad_administration = {
+	VAD_issue_depot_rifles = {
+		icon = ADISCORD_arms_supply
+		allowed = { tag = VAD }
+		visible = { has_completed_focus = VAD_reopen_armament_depots }
+		available = {
+			OR = {
+				has_war_with = WKR
+				has_war_with = TVA
+			}
+		}
+		cost = 20
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_infantry_equipment_2156
+				amount = 1800
+				producer = VAD
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				NOT = { has_equipment = { infantry_equipment < 1800 } }
+			}
+		}
+	}
+
 	VAD_coalition_guarantees = {
 		icon = ADISCORD_negotiations
 		allowed = { tag = VAD }

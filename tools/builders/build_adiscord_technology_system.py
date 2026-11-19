@@ -112,7 +112,6 @@ YEAR_LABEL_HEIGHT = 22
 # connector ends still meet; two cells also leave room for 84px equipment cards.
 HORIZONTAL_LANE_SLOT_MULTIPLIER = 2
 LANE_SLOT_MULTIPLIER = 3
-CIVIL_LANE_SLOT_MULTIPLIER = 2
 VERTICAL_PROGRAMME_GAP_SLOTS = 2
 CIVIL_TECHNOLOGY_FILES = frozenset({"ADISCORD_industry.txt", "ADISCORD_electronics.txt"})
 BRANCH_GAP = 90
@@ -3977,7 +3976,7 @@ BRANCHES = (
                 "casualty_evacuation",
                 "Эвакуация раненых",
                 "Casualty Evacuation",
-                "advanced_machine_tools",
+                "tech_field_hospital",
                 2158,
                 (
                     "field_hospital = { casualty_trickleback = 0.03 experience_loss_factor = -0.02 }",
@@ -4014,10 +4013,18 @@ BRANCHES = (
                 ),
             ),
             (
+                "field_rehabilitation_wards",
+                "Отделения восстановления",
+                "Field Rehabilitation Wards",
+                "tech_field_hospital2",
+                2167,
+                ("field_hospital = { experience_loss_factor = -0.04 }",),
+            ),
+            (
                 "forward_surgical_cells",
                 "Передовые хирургические группы",
                 "Forward Surgical Teams",
-                "ADISCORD_equipment_medical",
+                "tech_field_hospital3",
                 2169,
                 (
                     "field_hospital = { casualty_trickleback = 0.07 }",
@@ -4030,14 +4037,14 @@ BRANCHES = (
                 "ADISCORD_equipment_medical",
                 2172,
                 (
-                    "field_hospital = { experience_loss_factor = -0.07 }",
+                    "field_hospital = { casualty_trickleback = 0.03 }",
                 ),
             ),
             (
                 "distributed_combat_medicine",
                 "Сеть полевой медицинской помощи",
                 "Field Medical Care Network",
-                "ADISCORD_equipment_medical",
+                "tech_field_hospital4",
                 2175,
                 (
                     "field_hospital = { casualty_trickleback = 0.04 experience_loss_factor = -0.04 max_strength = 0.5 supply_consumption = -0.04 }",
@@ -4056,8 +4063,8 @@ BRANCHES = (
         (
             (
                 "field_workshop_tools",
-                "Инструменты полевых мастерских",
-                "Field Workshop Tools",
+                "Базовый комплект обеспечения",
+                "Field Service Kit",
                 "support_equipment_1",
                 2150,
                 (
@@ -4068,7 +4075,7 @@ BRANCHES = (
                 "modular_support_kits",
                 "Модульные комплекты обеспечения",
                 "Modular Support Kits",
-                "basic_construction",
+                "tech_maintenance_company",
                 2155,
                 (
                     'category_support_battalions = { supply_consumption = -0.02 }',
@@ -4078,7 +4085,7 @@ BRANCHES = (
                 "combat_engineering_sections",
                 "Инженерно-штурмовые отделения",
                 "Combat Engineering Sections",
-                "improved_machine_tools",
+                "engineers",
                 2158,
                 (
                     "engineer = { entrenchment = 0.5 defense = 0.04 }",
@@ -4089,7 +4096,7 @@ BRANCHES = (
                 "standardized_field_tool_chests",
                 "Стандартные наборы полевого инструмента",
                 "Standardized Field Tool Chests",
-                "radio",
+                "tech_maintenance_company2",
                 2160,
                 (
                     'maintenance_company = { reliability_factor = 0.02 }',
@@ -4109,7 +4116,7 @@ BRANCHES = (
                 "remote_repair_teams",
                 "Дистанционные ремонтные группы",
                 "Remote Repair Teams",
-                "basic_construction",
+                "tech_maintenance_company3",
                 2166,
                 (
                     "maintenance_company = { reliability_factor = 0.04 equipment_capture_factor = 0.02 }",
@@ -4120,7 +4127,7 @@ BRANCHES = (
                 "autonomous_recovery",
                 "Автономная эвакуация техники",
                 "Autonomous Recovery",
-                "improved_construction",
+                "sp_armored_maintenance",
                 2170,
                 (
                     "maintenance_company = { reliability_factor = 0.04 equipment_capture_factor = 0.04 }",
@@ -4161,7 +4168,7 @@ BRANCHES = (
                 "pack_transport",
                 "Вьючный транспорт",
                 "Pack Transport",
-                "radio",
+                "tech_logistics_company",
                 2150,
                 (
                     'supply_consumption_factor = -0.01',
@@ -4181,7 +4188,7 @@ BRANCHES = (
                 "standardized_transport_columns",
                 "Стандартные транспортные колонны",
                 "Standardized Transport Columns",
-                "computing_machine",
+                "tech_logistics_company2",
                 2158,
                 (
                     'logistics_company = { supply_consumption_factor = -0.02 }',
@@ -4191,10 +4198,10 @@ BRANCHES = (
                 "forward_supply_hubs",
                 "Передовые узлы снабжения",
                 "Forward Supply Hubs",
-                "improved_computing_machine",
+                "tech_logistics_company3",
                 2161,
                 (
-                    'logistics_company = { supply_consumption_factor = -0.02 }',
+                    'logistics_company = { max_organisation = 2 }',
                 ),
             ),
             (
@@ -4204,44 +4211,44 @@ BRANCHES = (
                 "train_equipment_3",
                 2166,
                 (
-                    'logistics_company = { supply_consumption_factor = -0.03 }',
+                    'logistics_company = { supply_consumption_factor = -0.03 max_organisation = 1 }',
                 ),
             ),
             (
                 "drone_resupply_corridors",
                 "Коридоры снабжения дронами",
                 "Drone Resupply Corridors",
-                "computing_machine",
+                "ADISCORD_equipment_drone",
                 2167,
                 (
-                    'logistics_company = { supply_consumption_factor = -0.03 }',
+                    'logistics_company = { fuel_consumption_factor = -0.03 }',
                 ),
             ),
             (
                 "route_optimization_ai",
                 "ИИ маршрутизации",
                 "Route Optimization AI",
-                "improved_construction",
+                "computing_machine",
                 2170,
                 (
-                    'logistics_company = { supply_consumption_factor = -0.04 fuel_consumption_factor = -0.02 }',
+                    'logistics_company = { fuel_consumption_factor = -0.05 }',
                 ),
             ),
             (
                 "closed_loop_field_supply",
                 "Замкнутый цикл полевого снабжения",
                 "Closed-Loop Field Supply",
-                "computing_machine",
+                "tech_maintenance_company4",
                 2175,
                 (
-                    'logistics_company = { supply_consumption_factor = -0.04 fuel_consumption_factor = -0.02 }',
+                    'logistics_company = { supply_consumption_factor = -0.04 }',
                 ),
             ),
             (
                 "zero_loss_logistics",
                 "Безотходная логистика",
                 "Zero-loss Logistics",
-                "assembly_line_production",
+                "tech_logistics_company4",
                 2180,
                 (
                     'logistics_company = { supply_consumption_factor = -0.05 fuel_consumption_factor = -0.03 }',
@@ -4294,7 +4301,7 @@ BRANCHES = (
                 "rail_repair_corps",
                 "Корпуса ремонта путей",
                 "Rail Repair Corps",
-                "advanced_computing_machine",
+                "tech_maintenance_company2",
                 2166,
                 (
                     "production_speed_infrastructure_factor = 0.015",
@@ -4316,7 +4323,7 @@ BRANCHES = (
                 "smart_railbed_repair_swarms",
                 "Рои ремонта железнодорожного полотна",
                 "Smart Railbed Repair Swarms",
-                "advanced_machine_tools",
+                "sp_armored_maintenance",
                 2173,
                 (
                     "production_speed_infrastructure_factor = 0.017",
@@ -4337,7 +4344,7 @@ BRANCHES = (
                 "battle_damage_survey_teams",
                 "Группы оценки боевых повреждений",
                 "Battle-damage Survey Teams",
-                "basic_machine_tools",
+                "engineers2",
                 2162,
                 (
                     "engineer = { entrenchment = 0.5 river = { movement = 0.10 } forest = { movement = 0.05 } }",
@@ -4360,7 +4367,7 @@ BRANCHES = (
                 "assault_breaching_packages",
                 "Школа штурма",
                 "Assault Engineering",
-                "basic_construction",
+                "ADISCORD_equipment_breaching",
                 2166,
                 (
                     "engineer = { breakthrough = 0.05 }",
@@ -4371,17 +4378,39 @@ BRANCHES = (
                 "armored_engineer_vehicles",
                 "Инженерные машины разграждения",
                 "Armored Engineering Vehicles",
-                "tech_engineers4",
+                "sp_armored_engineer",
                 2167,
                 (
                     "ADISCORD_armored_engineer_company = { breakthrough = 0.05 }",
                 ),
             ),
             (
+                "sectional_pontoon_trains",
+                "Понтонные парки",
+                "Pontoon Trains",
+                "marines_shore_parties_medium",
+                2165,
+                (
+                    "engineer = { river = { movement = 0.10 } }",
+                    "ADISCORD_regimental_pioneers = { river = { movement = 0.05 } }",
+                ),
+            ),
+            (
+                "mobile_bridge_columns",
+                "Мостовые колонны",
+                "Mobile Bridging Columns",
+                "marines_expeditionary_support_medium",
+                2172,
+                (
+                    "engineer = { river = { attack = 0.05 } }",
+                    "ADISCORD_armored_engineer_company = { river = { movement = 0.10 } }",
+                ),
+            ),
+            (
                 "integrated_engineer_command",
                 "Единое инженерное командование",
                 "Integrated Engineer Command",
-                "improved_machine_tools",
+                "engineers4",
                 2175,
                 (
                     "engineer = { breakthrough = 0.05 defense = 0.05 }",
@@ -4396,15 +4425,15 @@ BRANCHES = (
         "officer_training",
         "ADISCORD_logistics_trains.txt",
         ('support_folder',),
-        "Подготовка командного состава",
-        "Officer Training",
+        "Штабные школы",
+        "Staff Schools",
         "support",
         (
             (
                 "reconstituted_staff_academies",
                 "Восстановленные штабные академии",
                 "Reconstituted Staff Academies",
-                "radio",
+                "tech_advanced_special_forces_training",
                 2162,
                 (
                     "planning_speed = 0.02",
@@ -4416,7 +4445,7 @@ BRANCHES = (
                 "assault_command_curriculum",
                 "Курс наступательного командования",
                 "Assault Command Curriculum",
-                "mechanical_computing",
+                "rangers_jaegers_training_medium",
                 2164,
                 (
                     "planning_speed = 0.03",
@@ -4427,7 +4456,7 @@ BRANCHES = (
                 "defensive_command_curriculum",
                 "Курс оборонительного командования",
                 "Defensive Command Curriculum",
-                "basic_encryption",
+                "engineers2",
                 2165,
                 (
                     "dig_in_speed_factor = 0.03",
@@ -4450,7 +4479,7 @@ BRANCHES = (
                 "theater_logistics_wargames",
                 "Тыловые манёвры театра",
                 "Theater Logistics Wargames",
-                "improved_encryption",
+                "tech_logistics_company3",
                 2169,
                 (
                     "supply_consumption_factor = -0.015",
@@ -4462,7 +4491,7 @@ BRANCHES = (
                 "rotational_front_commands",
                 "Ротация фронтовых командований",
                 "Rotational Front Commands",
-                "improved_computing_machine",
+                "recon3",
                 2171,
                 (
                     "planning_speed = 0.04",
@@ -6515,8 +6544,8 @@ SUPPORT_SERVICE_BRANCHES = (
         "reserve_training",
         "ADISCORD_logistics_trains.txt",
         ("support_folder",),
-        "Ополчение и территориальная оборона",
-        "Militia and Territorial Defence",
+        "Территориальный резерв",
+        "Territorial Reserve",
         "support",
         (
             (
@@ -6624,7 +6653,7 @@ SUPPORT_SERVICE_BRANCHES = (
                 "drone_recon_company",
                 "Рота разведывательных БПЛА",
                 "Reconnaissance Drone Company",
-                "tech_recon2",
+                "ADISCORD_equipment_drone",
                 2163,
                 (
                     "ADISCORD_drone_recon_company = { recon = 0.25 }",
@@ -6695,7 +6724,7 @@ SUPPORT_SERVICE_BRANCHES = (
                 "field_ew_company",
                 "Рота радиоэлектронной борьбы",
                 "Electronic Warfare Company",
-                "tech_signal_company2",
+                "ADISCORD_equipment_drone_jammer",
                 2165,
                 (
                     "ADISCORD_ew_company = { air_attack = 0.05 }",
@@ -6740,8 +6769,8 @@ SUPPORT_SERVICE_BRANCHES = (
         "garrison_security",
         "ADISCORD_logistics_trains.txt",
         ("support_folder",),
-        "Гарнизонная служба",
-        "Garrison Service",
+        "Гарнизоны",
+        "Garrisons",
         "support",
         (
             (
@@ -6758,7 +6787,7 @@ SUPPORT_SERVICE_BRANCHES = (
                 "garrison_patrol_coordination",
                 "Координация гарнизонных патрулей",
                 "Garrison Patrol Coordination",
-                "tech_military_police",
+                "tech_military_police2",
                 2164,
                 (
                     "military_police = { suppression_factor = 0.10 }",
@@ -6768,10 +6797,10 @@ SUPPORT_SERVICE_BRANCHES = (
                 "garrison_service_records",
                 "Учёт гарнизонной службы",
                 "Garrison Service Records",
-                "tech_military_police",
+                "tech_military_police3",
                 2168,
                 (
-                    "military_police = { suppression_factor = 0.10 supply_consumption = -0.05 }",
+                    "military_police = { max_organisation = 2 supply_consumption = -0.05 }",
                 ),
             ),
         ),
@@ -6786,13 +6815,12 @@ SUPPORT_SERVICE_BRANCHES = (
         (
             (
                 "environment_support_companies",
-                "Роты обеспечения особой среды",
-                "Hostile Environment Companies",
+                "Полевая служба защиты",
+                "Field Protection Service",
                 "ADISCORD_equipment_protection_respirator",
                 2160,
                 (
-                    "ADISCORD_decontamination_company = { max_organisation = 2 }",
-                    "ADISCORD_desert_support_company = { max_organisation = 2 }",
+                    "engineer = { contaminated = { movement = 0.05 } desert = { movement = 0.05 } }",
                 ),
             ),
             (
@@ -6819,7 +6847,7 @@ SUPPORT_SERVICE_BRANCHES = (
                 "environment_field_kits",
                 "Полевые комплекты защиты от среды",
                 "Environmental Field Kits",
-                "tech_support",
+                "tech_extreme_environment_training",
                 2166,
                 (
                     "ADISCORD_decontamination_company = { max_organisation = 3 }",
@@ -6830,7 +6858,7 @@ SUPPORT_SERVICE_BRANCHES = (
                 "environment_endurance_doctrine",
                 "Выносливость в особой среде",
                 "Environmental Endurance",
-                "tech_engineers2",
+                "tech_survival_training",
                 2169,
                 (
                     "ADISCORD_decontamination_company = { entrenchment = 0.5 contaminated = { defence = 0.05 } reactor_zone = { defence = 0.05 } }",
@@ -6857,6 +6885,11 @@ SUPPORT_BRANCH_ORDER = (
     "field_support", "combat_engineering", "combat_medicine", "logistics",
     "field_signals", "field_reconnaissance", "field_environment",
     "reserve_training", "garrison_security", "officer_training", "rail",
+)
+SUPPORT_COLUMN_ORDER = (
+    "rail", "logistics", "combat_medicine", "field_environment", "combat_engineering",
+    "field_support", "field_reconnaissance", "field_signals", "garrison_security",
+    "reserve_training", "officer_training",
 )
 _support_branches = {branch.key: branch for branch in BRANCHES if "support_folder" in branch.folders}
 _ordered_support = iter(_support_branches[key] for key in SUPPORT_BRANCH_ORDER)
@@ -7713,32 +7746,49 @@ def naval_programme_graph(branch: Branch) -> BranchGraph:
 # Support company lines: an unlock, its own upgrade lanes and, where the
 # company family has a national school, one permanent stance pair.
 SUPPORT_COMPANY_GRAPHS = {
-    # Equipment generations follow the engineer sections on the central lane;
-    # maintenance and recovery form a separate right-hand programme.
+    # Equipment generations, engineer sections and repair companies all use
+    # modular kits. Buying a new kit does not require a specialist company.
     "field_support": (
-        (1, 1, 0, 2, 1, 2, 2, 1, 1),
-        [(0, 1), (1, 2), (1, 3), (2, 4), (3, 5), (5, 6), (4, 7), (7, 8)],
+        (2, 2, 0, 4, 2, 4, 4, 2, 2),
+        [(0, 1), (1, 2), (1, 3), (1, 4), (3, 5), (5, 6), (4, 7), (7, 8)],
     ),
     # Either engineering school or the armored engineers lead to the integrated
     # command; armored engineers also need the armored carrier programme.
     "combat_engineering": (
-        (1, 0, 1, 2, 1),
-        [(0, 1), (0, 2), (0, 3), (1, 4), (2, 4), (3, 4)],
+        (2, 0, 2, 4, 5, 5, 2),
+        [(0, 1), (0, 2), (0, 3), (0, 4), (4, 5), (1, 6), (2, 6), (3, 6)],
     ),
     "field_reconnaissance": (
-        (1, 1, 2, 0, 1, 1),
+        (1, 1, 2, 0, 2, 1),
         [(0, 1), (1, 2), (1, 3), (1, 4), (2, 4), (3, 5), (4, 5)],
     ),
     # Spectrum dominance is the electronic-warfare school and therefore needs
     # the EW company; resilient networks follow the ordinary signal line.
     "field_signals": (
-        (1, 1, 2, 0, 2, 1),
-        [(0, 1), (1, 2), (1, 3), (2, 4), (3, 5), (4, 5)],
+        (1, 0, 2, 0, 2, 1),
+        [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 5)],
+    ),
+    "garrison_security": (
+        (1, 0, 2), [(0, 1), (0, 2)],
+    ),
+    "logistics": (
+        (1, 1, 1, 0, 0, 3, 3, 0, 1),
+        [(0, 1), (1, 2), (2, 3), (3, 4), (2, 5), (5, 6), (4, 7), (6, 8), (7, 8)],
+        (8,),
+    ),
+    "rail": (
+        (1, 1, 0, 2, 0, 2),
+        [(0, 1), (1, 2), (1, 3), (2, 4), (3, 5)],
+    ),
+    "officer_training": (
+        (1, 0, 2, 0, 2, 0, 2, 1),
+        [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6), (5, 7), (6, 7)],
+        (7,),
     ),
     "combat_medicine": (
-        (1, 0, 2, 0, 0, 2, 1),
-        [(0, 1), (0, 2), (1, 3), (3, 4), (2, 5), (4, 6), (5, 6)],
-        (6,),
+        (1, 0, 2, 0, 2, 0, 0, 1),
+        [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (5, 6), (4, 7), (6, 7)],
+        (7,),
     ),
     "field_environment": (
         (1, 0, 2, 1, 0, 2),
@@ -8053,7 +8103,7 @@ EXTRA_TECH_DEPENDENCIES = {
         'ADISCORD_tech_remote_weapon_stations',
     ),
     "ADISCORD_tech_reconstituted_staff_academies": (
-        'ADISCORD_tech_hardened_computers',
+        'ADISCORD_tech_hardened_computers', 'ADISCORD_tech_field_workshop_tools',
     ),
     "ADISCORD_tech_railway_gun_reactivation": ('ADISCORD_tech_armored_rail_convoys',),
     "ADISCORD_tech_remote_weapon_tripods": ('ADISCORD_tech_modular_rifle_kits',),
@@ -8081,7 +8131,13 @@ EXTRA_TECH_DEPENDENCIES = {
 BRANCH_BY_KEY = {branch.key: branch for branch in BRANCHES}
 # Connected programmes share a native grid and a calendar. Only paths within
 # that grid are drawn; cross-folder integrations remain explicit dependencies.
-CIVIL_TREE_ATTACHMENTS = {
+VERTICAL_TREE_ATTACHMENTS = {
+    **{
+        key: ("field_support", "field_workshop_tools")
+        for key in SUPPORT_BRANCH_ORDER
+        if key not in {"field_support", "combat_engineering"}
+    },
+    "combat_engineering": ("field_support", "combat_engineering_sections"),
     "industry_organization": ("production", "standardized_machine_tools"),
     "synthetic_rubber": ("resources", "refinery_reclamation"),
     "synthetic_oil": ("synthetic_rubber", "synthetic_rubber_plants"),
@@ -8092,30 +8148,44 @@ CIVIL_TREE_ATTACHMENTS = {
 
 def vertical_tree_key(branch: Branch) -> str:
     key = branch.key
-    while key in CIVIL_TREE_ATTACHMENTS:
-        key = CIVIL_TREE_ATTACHMENTS[key][0]
+    while key in VERTICAL_TREE_ATTACHMENTS:
+        key = VERTICAL_TREE_ATTACHMENTS[key][0]
     return key
 
 
 def vertical_tree_branches(branch: Branch) -> tuple[Branch, ...]:
     owner = vertical_tree_key(branch)
+    if owner == "field_support":
+        return tuple(BRANCH_BY_KEY[key] for key in SUPPORT_COLUMN_ORDER)
     return tuple(b for b in BRANCHES if vertical_tree_key(b) == owner)
+
+
+def vertical_lane_spacing(branch: Branch) -> int:
+    if "support_folder" in branch.folders:
+        return 1
+    if branch.file in CIVIL_TECHNOLOGY_FILES:
+        return 2
+    return LANE_SLOT_MULTIPLIER
 
 
 def vertical_branch_span(branch: Branch) -> int:
     lanes = BRANCH_GRAPHS[branch.key].lanes
-    multiplier = (
-        CIVIL_LANE_SLOT_MULTIPLIER
-        if branch.file in CIVIL_TECHNOLOGY_FILES
-        else LANE_SLOT_MULTIPLIER
-    )
-    return (max(lanes) - min(lanes) + 1) * multiplier
+    if "support_folder" in branch.folders:
+        # Wide train cards need clearance beside the supply column.
+        padding = 4 if branch.key == "rail" else 2
+        return max(lanes) - min(lanes) + padding
+    return (max(lanes) - min(lanes) + 1) * vertical_lane_spacing(branch)
+
+
+def vertical_programme_gap(branch: Branch) -> int:
+    return 0 if "support_folder" in branch.folders else VERTICAL_PROGRAMME_GAP_SLOTS
 
 
 def vertical_tree_span(branch: Branch) -> int:
     members = vertical_tree_branches(branch)
-    gaps = (len(members) - 1) * VERTICAL_PROGRAMME_GAP_SLOTS
-    return sum(vertical_branch_span(b) for b in members) + gaps
+    gaps = (len(members) - 1) * vertical_programme_gap(branch)
+    span = sum(vertical_branch_span(b) for b in members) + gaps
+    return span + span % 2 if "support_folder" in branch.folders else span
 
 
 def vertical_branch_offset(branch: Branch) -> int:
@@ -8123,7 +8193,7 @@ def vertical_branch_offset(branch: Branch) -> int:
     for member in vertical_tree_branches(branch):
         if member.key == branch.key:
             return offset
-        offset += vertical_branch_span(member) + VERTICAL_PROGRAMME_GAP_SLOTS
+        offset += vertical_branch_span(member) + vertical_programme_gap(branch)
     raise ValueError(f"Missing vertical programme {branch.key}")
 
 
@@ -8159,8 +8229,8 @@ def technology_prerequisite_closure(seed_ids: tuple[str, ...]) -> tuple[str, ...
         for parent_index, successors in enumerate(BRANCH_GRAPHS[branch.key].successors):
             if index in successors:
                 pending.append(branch.techs[parent_index].id)
-        if index == 0 and branch.key in CIVIL_TREE_ATTACHMENTS:
-            pending.append(f"ADISCORD_tech_{CIVIL_TREE_ATTACHMENTS[branch.key][1]}")
+        if index == 0 and branch.key in VERTICAL_TREE_ATTACHMENTS:
+            pending.append(f"ADISCORD_tech_{VERTICAL_TREE_ATTACHMENTS[branch.key][1]}")
         pending.extend(EXTRA_TECH_DEPENDENCIES.get(tech_id, ()))
     return tuple(sorted(resolved))
 
@@ -8493,7 +8563,7 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE.update({
 
 
 ENABLE_SUBUNITS = {
-    "ADISCORD_tech_standardized_transport_columns": ("logistics_company", "hq_logistics"),
+    "ADISCORD_tech_standardized_transport_columns": ("logistics_company",),
     "ADISCORD_tech_foot_recon_sections": ("recon", "hq_recon"),
     "ADISCORD_tech_garrison_police_sections": ("military_police", "hq_military_police"),
     "ADISCORD_tech_field_signal_sections": ("signal_company", "hq_signal"),
@@ -8501,10 +8571,8 @@ ENABLE_SUBUNITS = {
     "ADISCORD_tech_armored_engineer_vehicles": ("ADISCORD_armored_engineer_company",),
     "ADISCORD_tech_drone_recon_company": ("ADISCORD_drone_recon_company",),
     "ADISCORD_tech_field_ew_company": ("ADISCORD_ew_company",),
-    "ADISCORD_tech_environment_support_companies": (
-        "ADISCORD_decontamination_company",
-        "ADISCORD_desert_support_company",
-    ),
+    "ADISCORD_tech_sealed_decontamination_kits": ("ADISCORD_decontamination_company",),
+    "ADISCORD_tech_desert_water_columns": ("ADISCORD_desert_support_company",),
     "ADISCORD_tech_assisted_projectiles": ("ADISCORD_loitering_munition_company",),
     "ADISCORD_tech_radiation_patrols": ("ADISCORD_hazard_infantry",),
     "ADISCORD_tech_kefreyt_shield_special_forces": ("ADISCORD_urban_breacher",),
@@ -8533,10 +8601,7 @@ ENABLE_SUBUNITS = {
         "field_hospital",
         "hq_field_hospital",
     ),
-    "ADISCORD_tech_forward_supply_hubs": (
-        "logistics_company",
-        "hq_logistics",
-    ),
+    "ADISCORD_tech_forward_supply_hubs": ("hq_logistics",),
     "ADISCORD_tech_vertical_assault_training": ("hq_paratrooper",),
     "ADISCORD_tech_restored_armored_chassis": (
         "ADISCORD_light_tank",
@@ -9394,6 +9459,54 @@ SUPPORT_BRANCH_DESCRIPTIONS = {
 
 
 TECHNICAL_TECH_DESCRIPTIONS = {
+    "field_workshop_tools": (
+        "В одном ящике мастерская получает инструмент, крепёж и запас расходников. Такой комплект нужен каждой службе дивизии",
+        "A workshop chest holds tools, fasteners and consumables. Every divisional service draws on the same kit",
+    ),
+    "sectional_pontoon_trains": (
+        "Сапёры перевозят секции понтонного парка вместе с дивизией и собирают переправу там, где тяжёлый транспорт упирается в реку",
+        "Engineers carry pontoon sections with the division and assemble a crossing where heavy transport reaches the river",
+    ),
+    "mobile_bridge_columns": (
+        "За первой переправой следует мостовая колонна с настилом для тяжёлых машин. Сапёры могут пропускать через реку броню и обозы",
+        "A bridging column follows the first crossing with decking for heavy vehicles. Engineers can bring armour and supply trains across",
+    ),
+    "field_rehabilitation_wards": (
+        "В палатах при госпитале раненые проходят восстановление рядом со своей частью. После выписки опытные солдаты возвращаются к знакомым командирам",
+        "Recovery wards keep wounded soldiers close to their formations. Once discharged, experienced soldiers can rejoin their own commanders",
+    ),
+    "casualty_evacuation": (
+        "Госпиталь принимает раненых с передовых перевязочных пунктов. Его службы отвечают за эвакуацию, лечение и возвращение бойцов в часть",
+        "The hospital receives casualties from forward dressing stations. Its staff oversee evacuation, treatment and the return to duty",
+    ),
+    "trauma_registry_networks": (
+        "Карточка раненого следует вместе с ним от перевязочного пункта до палаты. Госпиталь знает, какое лечение уже проведено и где находится его часть",
+        "A casualty record travels from dressing station to ward. Hospital staff can trace earlier treatment and find the soldier's unit",
+    ),
+    "environment_support_companies": (
+        "Сапёры размечают безопасные проходы на заражённой местности и обследуют пути через пустыню. Дальнейшее оснащение зависит от района службы",
+        "Engineers mark passages through contaminated ground and survey desert routes. Further equipment depends on the terrain they serve in",
+    ),
+    "sealed_decontamination_kits": (
+        "Рота дезактивации ведёт дивизию через загрязнённые участки и обслуживает снаряжение на выходе из опасного района",
+        "The decontamination company guides the division across contaminated ground and services its equipment on leaving the area",
+    ),
+    "desert_water_columns": (
+        "Цистерны, фильтры и ремонтный запас идут вместе с пустынной колонной. Вдали от колодцев рота развозит воду прямо по подразделениям",
+        "Tankers, filters and repair stores travel with the desert column. Far from wells, the company delivers water directly to the division",
+    ),
+    "drone_resupply_corridors": (
+        "На последнем участке пути лёгкие грузы принимают беспилотники. Машинам снабжения реже приходится выходить в рейс с неполной загрузкой",
+        "Drones take light loads over the last leg of a route. Supply trucks make fewer trips with a partial load",
+    ),
+    "rail_repair_corps": (
+        "Путейцы отправляются к повреждённым перегонам со своим инструментом и запасными секциями пути",
+        "Track crews travel to damaged sections with their own tools and replacement track",
+    ),
+    "garrison_service_records": (
+        "Гарнизонные канцелярии сверяют наряды и имущество по ротным книгам. Пополнение прибывает туда, где его ждут",
+        "Garrison clerks check duty rosters and stores against company ledgers. Replacements reach the posts expecting them",
+    ),
     "baseload_reactor_dispatch": (
         "Единая диспетчерская согласует нагрузку промышленных узлов, сокращает потери энергии и поддерживает непрерывный выпуск",
         "Central dispatch balances industrial loads, reduces energy losses and sustains continuous production",
@@ -10502,9 +10615,24 @@ def horizontal_visual_slots(branch: Branch) -> tuple[int, ...]:
     return slots
 
 
+# Display neighbouring years in one generation. The foundation has its own
+# row above the two transport services that also start in 2150.
+SUPPORT_YEAR_BANDS = (
+    (2150, 2150), (2150, 2150), (2155, 2155), (2158, 2158),
+    (2160, 2162), (2163, 2165), (2166, 2168), (2169, 2171),
+    (2172, 2174), (2175, 2175), (2180, 2180),
+)
+
+
 def technology_time_slot(branch: Branch, index: int) -> int:
     """Return the chronological slot of a node regardless of tab orientation."""
 
+    if "support_folder" in branch.folders:
+        if branch.key == "field_support" and index == 0:
+            return 0
+        year = branch.years[index]
+        row = next(i for i, (lo, hi) in enumerate(SUPPORT_YEAR_BANDS) if i and lo <= year <= hi)
+        return row * VERTICAL_YEAR_SLOT_MULTIPLIER
     if HORIZONTAL_FOLDERS.intersection(branch.folders):
         return horizontal_visual_slots(branch)[index]
     years = sorted({
@@ -10528,10 +10656,8 @@ def technology_grid_position(branch: Branch, index: int) -> tuple[int, int]:
     multiplier = (
         HORIZONTAL_LANE_SLOT_MULTIPLIER
         if HORIZONTAL_FOLDERS.intersection(branch.folders)
-        else LANE_SLOT_MULTIPLIER
+        else vertical_lane_spacing(branch)
     )
-    if branch.file in CIVIL_TECHNOLOGY_FILES:
-        multiplier = CIVIL_LANE_SLOT_MULTIPLIER
     doubled_slot = (
         2 * graph.lanes[index] - min(graph.lanes) - max(graph.lanes)
     ) * multiplier
@@ -10661,7 +10787,7 @@ def technology_successors(branch: Branch, index: int) -> tuple[str, ...]:
     )
     targets += tuple(
         BRANCH_BY_KEY[child].techs[0].id
-        for child, (parent, source) in CIVIL_TREE_ATTACHMENTS.items()
+        for child, (parent, source) in VERTICAL_TREE_ATTACHMENTS.items()
         if parent == branch.key and source == branch.techs[index].key
     )
     if index == len(branch.techs) - 1:
@@ -11060,6 +11186,8 @@ def write_starting_technology_profile_manifest() -> None:
 
 
 CUSTOM_TECH_TEXTURES = {
+    "sectional_pontoon_trains": "gfx/interface/abilitylist/ability_makeshift_bridges.dds",
+    "mobile_bridge_columns": "gfx/interface/abilitylist/ability_makeshift_bridges.dds",
     "kefreyt_shield_special_forces": "gfx/interface/technologies/ADISCORD_power_shield_equipment.dds",
     "compact_shield_generators": "gfx/interface/technologies/ADISCORD_power_shield_equipment.dds",
     "adaptive_power_shields": "gfx/interface/technologies/ADISCORD_power_shield_equipment.dds",
@@ -12740,7 +12868,7 @@ def render_folder(folder: str) -> str:
     else:
         cursor_x = GRID_X
         for branch in branches:
-            if branch.key in CIVIL_TREE_ATTACHMENTS:
+            if branch.key in VERTICAL_TREE_ATTACHMENTS:
                 continue
             members = vertical_tree_branches(branch)
             grid_height = (
@@ -12806,6 +12934,18 @@ def render_folder(folder: str) -> str:
             )
             for year, occurrence in horizontal_year_columns(folder)
         ]
+    elif folder == "support_folder":
+        year_labels = [
+            (
+                f"{side}_{row}",
+                str(lo) if lo == hi else f"{lo}-{hi}",
+                x,
+                GRID_Y + row * VERTICAL_YEAR_SLOT_MULTIPLIER * GRID_SLOT
+                + (GRID_SLOT - YEAR_LABEL_HEIGHT) // 2,
+            )
+            for row, (lo, hi) in enumerate(SUPPORT_YEAR_BANDS)
+            for side, x in (("left", GRID_X - 110), ("right", cursor_x - BRANCH_GAP + 12))
+        ]
     else:
         year_labels = [
             (
@@ -12827,7 +12967,7 @@ def render_folder(folder: str) -> str:
                 f"\t\t\t\t\tposition = {{ x = {year_x} y = {year_y} }}",
                 "\t\t\t\t\tfont = \"hoi_18b\"",
                 f"\t\t\t\t\ttext = \"{year}\"",
-                f"\t\t\t\t\tmaxWidth = {YEAR_LABEL_WIDTH}",
+                f"\t\t\t\t\tmaxWidth = {100 if folder == 'support_folder' else YEAR_LABEL_WIDTH}",
                 f"\t\t\t\t\tmaxHeight = {YEAR_LABEL_HEIGHT}",
                 f"\t\t\t\t\tformat = {'center' if horizontal else 'left'}",
                 "\t\t\t\t\tOrientation = \"UPPER_LEFT\"",
@@ -12880,7 +13020,7 @@ def render_folder(folder: str) -> str:
                 "\t\t\t}",
             )
         )
-        if branch.key in BRANCH_CONTINUATIONS or branch.key in CIVIL_TREE_ATTACHMENTS:
+        if branch.key in BRANCH_CONTINUATIONS or branch.key in VERTICAL_TREE_ATTACHMENTS:
             continue
         if not horizontal:
             grid_x, grid_y, grid_width, grid_height = vertical_tree_layouts[branch.key]
@@ -13129,7 +13269,7 @@ def selected_land_technology_outputs(file_name: str, extra_keys: set[str]) -> di
             name = f"GFX_{tech.id}_medium"
             icon = icon_for_technology(branch, index)
             texture = (tank_card_texture(TANK_CARD_UNLOCKS[tech.id]) if tech.id in TANK_CARD_UNLOCKS
-                       else f"gfx/interface/technologies/{icon}.dds")
+                       else CUSTOM_TECH_TEXTURES.get(tech.key, f"gfx/interface/technologies/{icon}.dds"))
             # Existing sprites differ in field spacing, but keep their other fields.
             pattern = rf'(name\s*=\s*"{re.escape(name)}"\s+textureFile\s*=\s*")[^"]+(")'
             gfx, count = re.subn(

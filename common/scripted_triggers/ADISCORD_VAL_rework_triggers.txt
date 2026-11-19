@@ -1,4 +1,5 @@
 VAL_final_crisis_available = {
+	NOT = { has_truce_with = NOD }
 	RUS_crisis_regional_wars_available = yes
 	tag = VAL
 	is_subject = no
@@ -1360,7 +1361,187 @@ VAL_stelander_offer_current = {
 	VAL_stelander_ultimatum_target = yes
 	VAL = { has_country_flag = VAL_stelander_offer_pending }
 }
+
+# VAL scope. Only a live northern campaign can be offered or accepted.
+VAL_nod_expedition_possible = {
+	NOT = { has_truce_with = NOD }
+	tag = VAL
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	NOT = { has_country_flag = VAL_stelander_defeated }
+	VAL_frontier_idle = yes
+	RUS_crisis_regional_wars_available = yes
+	NOD = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		NOT = { is_in_faction_with = VAL }
+		NOT = { has_country_flag = VAL_stelander_truce }
+	}
+	OR = {
+		AND = {
+			VAL_nod_campaign_stelander_ready = yes
+			OR = {
+				VAL_northern_foothold_secured = yes
+				VAL_frontier_joint_campaign_ready = yes
+				VAL_final_crisis_preparing = yes
+			}
+		}
+		AND = {
+			is_debug = yes
+			has_country_flag = ADISCORD_debug_joint_sts_nod_pending
+		}
+	}
+}
+
+VAL_is_frontier_command = {
+	OR = {
+		tag = TFF
+		has_country_flag = VAL_ardent_committee
+	}
+}
+
+# Enemy scope, PREV is the client whose war Kefreyt is considering joining.
+VAL_is_frontier_shabrat_war = {
+	OR = {
+		AND = {
+			tag = STS
+			has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+			PREV = { VAL_is_frontier_command = yes }
+		}
+		AND = {
+			VAL_is_frontier_command = yes
+			PREV = {
+				tag = STS
+				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+			}
+		}
+	}
+}
+
+VAL_frontier_at_war_with_shabrat = {
+	STS = {
+		exists = yes
+		has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+		any_enemy_country = {
+			VAL_is_frontier_command = yes
+			OR = {
+				is_subject_of = VAL
+				is_in_faction_with = VAL
+				AND = {
+					tag = TFF
+					VAL = { has_country_flag = VAL_nod_frontier_agreement }
+				}
+			}
+		}
+	}
+}
+
+VAL_can_offer_shabrat_campaign = {
+	VAL_frontier_at_war_with_shabrat = no
+	VAL_nod_expedition_possible = yes
+	NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
+	STS = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+		has_war_with = NOD
+		has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+	}
+	OR = {
+		is_in_faction = no
+		is_in_faction_with = STS
+		STS = { is_in_faction = no }
+	}
+}
+
+VAL_shabrat_offer_current = {
+	tag = STS
+	VAL = {
+		has_country_flag = VAL_shabrat_offer_pending
+		VAL_can_offer_shabrat_campaign = yes
+	}
+}
+
+VAL_nod_campaign_at_war = {
+	tag = VAL
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_war_with = NOD
+	check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
+	NOD = {
+		exists = yes
+		has_capitulated = no
+		has_country_flag = VAL_final_war_member
+	}
+}
+
+# A shared enemy alone does not identify Nodrul's side of this campaign.
+VAL_nod_expedition_opponent = {
+	OR = {
+		tag = NOD
+		has_country_flag = VAL_final_war_member
+		AND = {
+			has_war_together_with = NOD
+			OR = {
+				is_in_faction_with = NOD
+				is_subject_of = NOD
+				AND = {
+					is_subject = yes
+					OVERLORD = {
+						OR = {
+							has_country_flag = VAL_final_war_member
+							is_in_faction_with = NOD
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Enemy of the Frontier before the armistice. A surviving relation needs no repair.
+VAL_frontier_war_needs_restoration = {
+	exists = yes
+	NOT = { has_war_with = event_target:VAL_fallen_frontier }
+	NOT = { is_in_faction_with = event_target:VAL_fallen_frontier }
+	NOT = { is_subject_of = event_target:VAL_fallen_frontier }
+	event_target:VAL_fallen_frontier = {
+		exists = yes
+		NOT = { is_subject_of = PREV }
+	}
+}
+
+VAL_frontier_exit_current = {
+	VAL_nod_campaign_at_war = yes
+	has_country_flag = VAL_frontier_exit_pending
+	OR = {
+		NOT = { country_exists = event_target:VAL_fallen_frontier }
+		event_target:VAL_fallen_frontier = {
+			OR = {
+				has_capitulated = yes
+				is_subject_of = NOD
+				AND = {
+					is_subject = yes
+					NOT = { is_subject_of = VAL }
+					OVERLORD = { NOT = { is_in_faction_with = VAL } }
+				}
+			}
+		}
+	}
+}
+
 VAL_can_launch_final_campaign = {
+	FROM = {
+		OR = {
+			NOT = { tag = NOD }
+			NOT = { has_truce_with = VAL }
+		}
+	}
+	NOT = { has_country_flag = VAL_shabrat_offer_pending }
 	RUS_crisis_regional_wars_available = yes
 	NOT = { has_country_flag = VAL_stelander_defeated }
 	OR = {
@@ -2985,6 +3166,27 @@ VAL_stelander_equal_offer_can_accept = {
 	VAL = {
 		has_country_flag = VAL_stelander_alliance_offer_pending
 		VAL_stelander_equal_partner_available = yes
+	}
+}
+
+VAL_is_current_stelander_ally = {
+	OR = {
+		tag = STS
+		tag = STP
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_country_flag = VAL_stelander_equal_alliance
+	is_in_faction_with = VAL
+	NOT = { has_war_with = VAL }
+}
+
+VAL_has_current_stelander_ally = {
+	VAL_nw_operational = yes
+	OR = {
+		STS = { VAL_is_current_stelander_ally = yes }
+		STP = { VAL_is_current_stelander_ally = yes }
 	}
 }
 

@@ -204,3 +204,11 @@ shoulders through province 6 makes the city a separate front section.
 `ProvinceCornerTests` checks the approaches, connected province shapes and
 native unit-anchor positions. Native front assignment still requires a fresh
 campaign after a full game restart.
+
+Within its anchor scope the geography builder moves an off-centre standing
+anchor (slot 0) to the province interior with the whole native slot set, and
+rebuilds moving slots that do not lead to their neighbours in the engine order.
+Slot 0 feeds the ambient town audio and the strategic-region weather positions:
+after an anchor change, apply `tools.builders.build_adiscord_ambient_audio` and
+`tools.builders.build_adiscord_strategic_regions`. The latter's `--check` only
+validates `map/weatherpositions.txt` and does not detect stale positions.

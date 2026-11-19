@@ -3093,7 +3093,10 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = { NAM_subject_identity_participant = yes }
-	immediate = { NAM_board_sync_district_status = yes }
+	immediate = {
+		NAM_neighbour_check_command_status = yes
+		NAM_board_sync_district_status = yes
+	}
 }
 
 country_event = {
@@ -3403,9 +3406,9 @@ country_event = {
 			}
 		}
 		add_stability = -0.03
-		add_power_balance_value = {
-			id = NAM_ladder_bop
-			value = 0.15
+		if = {
+			limit = { hidden_trigger = { NAM_ladder_formed = yes } }
+			add_power_balance_value = { id = NAM_ladder_bop value = 0.15 }
 		}
 		custom_effect_tooltip = NAM_coup_rally_tt
 		hidden_effect = {
@@ -4155,6 +4158,342 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { NAM_crisis_pending_5 = yes }
+				NAM_crisis_close = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_crisis.6
+	title = ADISCORD_nam_crisis.6.t
+	desc = ADISCORD_nam_crisis.6.d
+	picture = GFX_event_adiscord_valley_irrigation_survey
+	is_triggered_only = yes
+	timeout_days = 22
+
+	option = {
+		name = ADISCORD_nam_crisis.6.a
+		trigger = {
+			NAM_crisis_case_6 = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_crisis_emergency_relief_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_crisis_case_6 = yes
+					check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+				}
+				ADISCORD_economy_spend_500 = yes
+				NAM_crisis_close = yes
+			}
+			else_if = {
+				limit = { NAM_crisis_pending_6 = yes }
+				NAM_crisis_response_timeout = yes
+			}
+		}
+		ai_chance = { base = 60 }
+	}
+
+	option = {
+		name = ADISCORD_nam_crisis.6.b
+		trigger = { NAM_crisis_case_6 = yes }
+		if = {
+			limit = { hidden_trigger = { NAM_crisis_drought_mitigated = yes } }
+			custom_effect_tooltip = NAM_crisis_drought_contained_tt
+		}
+		else = { custom_effect_tooltip = NAM_crisis_drought_tt }
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_case_6 = yes }
+				NAM_crisis_default_6 = yes
+			}
+			else_if = {
+				limit = { NAM_crisis_pending_6 = yes }
+				NAM_crisis_close = yes
+			}
+		}
+		ai_chance = { base = 20 }
+	}
+
+	option = {
+		name = ADISCORD_nam_crisis.6.z
+		trigger = {
+			NAM_crisis_case_6 = yes
+			has_country_flag = NAM_crisis_fund
+		}
+		custom_effect_tooltip = NAM_crisis_fund_used_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_pending_6 = yes }
+				NAM_crisis_response_timeout = yes
+			}
+		}
+		ai_chance = { base = 250 }
+	}
+
+	option = {
+		name = NAM_crisis_close_case
+		trigger = { NAM_crisis_case_6 = no }
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_crisis_pending_6 = yes
+					NAM_crisis_case_6 = no
+				}
+				NAM_crisis_close = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_crisis.7
+	title = ADISCORD_nam_crisis.7.t
+	desc = ADISCORD_nam_crisis.7.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	timeout_days = 22
+
+	option = {
+		name = ADISCORD_nam_crisis.7.a
+		trigger = {
+			NAM_crisis_case_7 = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_crisis_emergency_relief_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_crisis_case_7 = yes
+					check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+				}
+				ADISCORD_economy_spend_500 = yes
+				NAM_crisis_close = yes
+			}
+			else_if = {
+				limit = { NAM_crisis_pending_7 = yes }
+				NAM_crisis_response_timeout = yes
+			}
+		}
+		ai_chance = { base = 60 }
+	}
+
+	option = {
+		name = ADISCORD_nam_crisis.7.b
+		trigger = { NAM_crisis_case_7 = yes }
+		if = {
+			limit = { hidden_trigger = { NAM_crisis_blackout_mitigated = yes } }
+			custom_effect_tooltip = NAM_crisis_blackout_contained_tt
+		}
+		else = { custom_effect_tooltip = NAM_crisis_blackout_tt }
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_case_7 = yes }
+				NAM_crisis_default_7 = yes
+			}
+			else_if = {
+				limit = { NAM_crisis_pending_7 = yes }
+				NAM_crisis_close = yes
+			}
+		}
+		ai_chance = { base = 20 }
+	}
+
+	option = {
+		name = ADISCORD_nam_crisis.7.z
+		trigger = {
+			NAM_crisis_case_7 = yes
+			has_country_flag = NAM_crisis_fund
+		}
+		custom_effect_tooltip = NAM_crisis_fund_used_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_pending_7 = yes }
+				NAM_crisis_response_timeout = yes
+			}
+		}
+		ai_chance = { base = 250 }
+	}
+
+	option = {
+		name = NAM_crisis_close_case
+		trigger = { NAM_crisis_case_7 = no }
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_crisis_pending_7 = yes
+					NAM_crisis_case_7 = no
+				}
+				NAM_crisis_close = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_crisis.8
+	title = ADISCORD_nam_crisis.8.t
+	desc = ADISCORD_nam_crisis.8.d
+	picture = GFX_event_adiscord_valley_irrigation_survey
+	is_triggered_only = yes
+	timeout_days = 22
+
+	option = {
+		name = ADISCORD_nam_crisis.8.a
+		trigger = {
+			NAM_crisis_case_8 = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_crisis_emergency_relief_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_crisis_case_8 = yes
+					check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+				}
+				ADISCORD_economy_spend_500 = yes
+				NAM_crisis_close = yes
+			}
+			else_if = {
+				limit = { NAM_crisis_pending_8 = yes }
+				NAM_crisis_response_timeout = yes
+			}
+		}
+		ai_chance = { base = 60 }
+	}
+
+	option = {
+		name = ADISCORD_nam_crisis.8.b
+		trigger = { NAM_crisis_case_8 = yes }
+		if = {
+			limit = { hidden_trigger = { NAM_crisis_flood_mitigated = yes } }
+			custom_effect_tooltip = NAM_crisis_flood_contained_tt
+		}
+		else = { custom_effect_tooltip = NAM_crisis_flood_tt }
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_case_8 = yes }
+				NAM_crisis_default_8 = yes
+			}
+			else_if = {
+				limit = { NAM_crisis_pending_8 = yes }
+				NAM_crisis_close = yes
+			}
+		}
+		ai_chance = { base = 20 }
+	}
+
+	option = {
+		name = ADISCORD_nam_crisis.8.z
+		trigger = {
+			NAM_crisis_case_8 = yes
+			has_country_flag = NAM_crisis_fund
+		}
+		custom_effect_tooltip = NAM_crisis_fund_used_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_pending_8 = yes }
+				NAM_crisis_response_timeout = yes
+			}
+		}
+		ai_chance = { base = 250 }
+	}
+
+	option = {
+		name = NAM_crisis_close_case
+		trigger = { NAM_crisis_case_8 = no }
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_crisis_pending_8 = yes
+					NAM_crisis_case_8 = no
+				}
+				NAM_crisis_close = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_crisis.9
+	title = ADISCORD_nam_crisis.9.t
+	desc = ADISCORD_nam_crisis.9.d
+	picture = GFX_event_adiscord_rail_yard_waybills
+	is_triggered_only = yes
+	timeout_days = 22
+
+	option = {
+		name = ADISCORD_nam_crisis.9.a
+		trigger = {
+			NAM_crisis_case_9 = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_crisis_emergency_relief_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_crisis_case_9 = yes
+					check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+				}
+				ADISCORD_economy_spend_500 = yes
+				NAM_crisis_close = yes
+			}
+			else_if = {
+				limit = { NAM_crisis_pending_9 = yes }
+				NAM_crisis_response_timeout = yes
+			}
+		}
+		ai_chance = { base = 60 }
+	}
+
+	option = {
+		name = ADISCORD_nam_crisis.9.b
+		trigger = { NAM_crisis_case_9 = yes }
+		if = {
+			limit = { hidden_trigger = { NAM_crisis_delivery_disruption_mitigated = yes } }
+			custom_effect_tooltip = NAM_crisis_delivery_disruption_contained_tt
+		}
+		else = { custom_effect_tooltip = NAM_crisis_delivery_disruption_tt }
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_case_9 = yes }
+				NAM_crisis_default_9 = yes
+			}
+			else_if = {
+				limit = { NAM_crisis_pending_9 = yes }
+				NAM_crisis_close = yes
+			}
+		}
+		ai_chance = { base = 20 }
+	}
+
+	option = {
+		name = ADISCORD_nam_crisis.9.z
+		trigger = {
+			NAM_crisis_case_9 = yes
+			has_country_flag = NAM_crisis_fund
+		}
+		custom_effect_tooltip = NAM_crisis_fund_used_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_crisis_pending_9 = yes }
+				NAM_crisis_response_timeout = yes
+			}
+		}
+		ai_chance = { base = 250 }
+	}
+
+	option = {
+		name = NAM_crisis_close_case
+		trigger = { NAM_crisis_case_9 = no }
+		hidden_effect = {
+			if = {
+				limit = {
+					NAM_crisis_pending_9 = yes
+					NAM_crisis_case_9 = no
+				}
 				NAM_crisis_close = yes
 			}
 		}
@@ -6074,4 +6413,103 @@ country_event = {
 	is_triggered_only = yes
 
 	option = { name = ADISCORD_nam_resource_war.409.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.410
+	title = ADISCORD_nam_resource_war.410.t
+	desc = ADISCORD_nam_resource_war.410.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_nam_resource_war.410.a
+		trigger = { NAM_neighbour_alliance_offer_open = yes }
+		custom_effect_tooltip = NAM_neighbour_accept_alliance_tt
+		hidden_effect = { NAM_neighbour_accept_alliance = yes }
+		ai_chance = { base = 80 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.410.b
+		trigger = { NAM_neighbour_alliance_offer_open = yes }
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.410.c
+		trigger = { NAM_neighbour_alliance_offer_open = no }
+		ai_chance = { base = 100 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.411
+	title = ADISCORD_nam_resource_war.411.t
+	desc = ADISCORD_nam_resource_war.411.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_nam_resource_war.411.a
+		trigger = { NAM_neighbour_military_answer_open = yes }
+		custom_effect_tooltip = NAM_neighbour_accept_command_tt
+		hidden_effect = { NAM_neighbour_accept_command = yes }
+		ai_chance = { base = 100 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.411.b
+		trigger = { NAM_neighbour_military_answer_open = yes }
+		hidden_effect = { clr_country_flag = NAM_neighbour_command_offer }
+		ai_chance = { base = 0 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.411.c
+		trigger = { NAM_neighbour_military_answer_open = no }
+		hidden_effect = { clr_country_flag = NAM_neighbour_command_offer }
+		ai_chance = { base = 100 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.412
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				NAM_neighbour_military_answer_open = yes
+				OR = {
+					is_in_faction = no
+					is_in_faction_with = NAM
+				}
+			}
+			NAM_neighbour_establish_command = yes
+		}
+		clr_country_flag = NAM_neighbour_command_offer
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.413
+	title = ADISCORD_nam_resource_war.413.t
+	desc = ADISCORD_nam_resource_war.413.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = ADISCORD_nam_resource_war.413.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.414
+	title = ADISCORD_nam_resource_war.414.t
+	desc = ADISCORD_nam_resource_war.414.d
+	picture = GFX_event_adiscord_registry_office_keys
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = ADISCORD_nam_resource_war.414.a
+	}
 }

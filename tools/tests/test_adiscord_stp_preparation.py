@@ -104,7 +104,7 @@ def event_target(name, facts):
     return facts.get(("event_target", key), default)
 
 
-def matches_conditions(items, facts, scope="STP"):
+def matches_conditions(items, facts, scope="STP", previous_scope=None):
     """Select parsed branches from explicit scenario facts, not a game simulation."""
 
     def condition_groups(children):
@@ -124,31 +124,38 @@ def matches_conditions(items, facts, scope="STP"):
         }[operator]
 
     def matches(entry):
+        # Some scenarios bind literal PREV relations in their fact tables.
+        # Only map scenarios that supply real nested scopes resolve that stack.
+        if previous_scope is not None and facts.get(("fixture", "resolve_previous_scope"), False):
+            if entry.key == "PREV":
+                return matches_conditions(entry.value, facts, previous_scope, scope)
+            if entry.value == "PREV":
+                entry = replace(entry, value=previous_scope)
         # A target the fixture binds is resolved; an unbound one keeps the
         # handling of any other unknown scope or literal value.
         if entry.key.startswith("event_target:") and isinstance(entry.value, list):
             target = event_target(entry.key, facts)
             if target is not None:
-                return matches_conditions(entry.value, facts, target)
+                return matches_conditions(entry.value, facts, target, scope)
         if isinstance(entry.value, str) and entry.value.startswith("event_target:"):
             target = event_target(entry.value, facts)
             if target is not None:
                 entry = replace(entry, value=target)
         if entry.key == "custom_trigger_tooltip":
             return matches_conditions(
-                [child for child in entry.value if child.key != "tooltip"], facts, scope
+                [child for child in entry.value if child.key != "tooltip"], facts, scope, previous_scope
             )
         if entry.key in ("AND", "hidden_trigger"):
-            return matches_conditions(entry.value, facts, scope)
+            return matches_conditions(entry.value, facts, scope, previous_scope)
         if entry.key == "capital_scope":
             capital = facts.get((scope, "capital"))
             return capital is not None and matches_conditions(
-                entry.value, facts, capital
+                entry.value, facts, capital, scope
             )
-        if entry.key in ("owner", "controller"):
+        if entry.key in ("owner", "controller", "faction_leader") and isinstance(entry.value, list):
             country = facts.get((scope, entry.key))
             return country is not None and matches_conditions(
-                entry.value, facts, country
+                entry.value, facts, country, scope
             )
         if entry.key == "any_enemy_country":
             countries = {key[0] for key in facts if re.fullmatch(r"[A-Z]{3}", key[0])}
@@ -157,23 +164,36 @@ def matches_conditions(items, facts, scope="STP"):
                     (scope, "has_war_with", country),
                     facts.get((country, "has_war_with", scope), False),
                 )
-                and matches_conditions(entry.value, facts, country)
+                and matches_conditions(entry.value, facts, country, scope)
                 for country in countries
             )
-        if entry.key == "any_other_country":
+        if entry.key == "any_other_country" or (
+            entry.key == "any_country" and isinstance(entry.value, list)
+        ):
             countries = {key[0] for key in facts if re.fullmatch(r"[A-Z]{3}", key[0])}
             return any(
-                country != scope
+                (entry.key == "any_country" or country != scope)
                 and facts.get((country, "exists", "yes"), False)
-                and matches_conditions(entry.value, facts, country)
+                and matches_conditions(entry.value, facts, country, scope)
                 for country in countries
+            )
+        if entry.key == "any_controlled_state" and isinstance(entry.value, list):
+            return any(
+                matches_conditions(entry.value, facts, key[0], scope)
+                for key, controller in facts.items()
+                if key[1:] == ("controller",) and controller == scope
+            )
+        if entry.key == "any_neighbor_state" and isinstance(entry.value, list):
+            return any(
+                matches_conditions(entry.value, facts, neighbor, scope)
+                for neighbor in facts.get((scope, "neighbors"), ())
             )
         if entry.key == "any_subject_country":
             # Dynamic civil-war tags such as D01 are valid subjects.
             countries = {key[0] for key in facts if re.fullmatch(r"[A-Z][A-Z0-9]{2}", key[0])}
             return any(
                 facts.get((country, "is_subject_of", scope), False)
-                and matches_conditions(entry.value, facts, country)
+                and matches_conditions(entry.value, facts, country, scope)
                 for country in countries
             )
         if entry.key == "any_owned_state":
@@ -192,19 +212,19 @@ def matches_conditions(items, facts, scope="STP"):
             return owned and (not extras or matches_conditions(extras, facts, scope))
         if entry.key == "OR":
             return any(
-                matches_conditions(group, facts, scope)
+                matches_conditions(group, facts, scope, previous_scope)
                 for group in condition_groups(entry.value)
             )
         if entry.key == "NOT":
             return not any(
-                matches_conditions(group, facts, scope)
+                matches_conditions(group, facts, scope, previous_scope)
                 for group in condition_groups(entry.value)
             )
         if re.fullmatch(
             r"[A-Z]{3}|\d+|ROOT|FROM|STP_Edmund_Ravel|STP_maksim_shabrat", entry.key
         ) and isinstance(entry.value, list):
             return matches_conditions(
-                entry.value, facts, "STP" if entry.key == "ROOT" else entry.key
+                entry.value, facts, "STP" if entry.key == "ROOT" else entry.key, scope
             )
         if entry.key == "power_balance_value":
             balance = scalar(entry.value, "id")

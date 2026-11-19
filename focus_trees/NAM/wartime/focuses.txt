@@ -124,7 +124,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_replacement_school
-		icon = GFX_focus_NAM_metropolitan_instructors
+		icon = GFX_focus_NAM_officer_courses
 		x = 13
 		y = 4
 		cost = 2
@@ -491,7 +491,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_wells_under_guard
-		icon = GFX_focus_NAM_imperial_gendarmes
+		icon = GFX_focus_NAM_field_gendarmes
 		x = 19
 		y = 1
 		cost = 2
@@ -694,7 +694,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_rear_directorate
-		icon = GFX_focus_RUS_engineers_collegium
+		icon = GFX_focus_NAM_regional_trusts
 		x = 3
 		y = 1
 		cost = 1
@@ -726,7 +726,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_depot_network
-		icon = GFX_focus_NAM_concealed_reserve
+		icon = GFX_focus_NAM_pw_state_warehouses
 		x = 2
 		y = 2
 		cost = 2
@@ -766,7 +766,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_mobile_workshops
-		icon = GFX_focus_NAM_mobile_columns
+		icon = GFX_focus_NAM_field_repair_crews
 		x = 4
 		y = 2
 		cost = 2
@@ -806,7 +806,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_dispatch_service
-		icon = GFX_focus_VAL_Wireless_Contract_Bureau
+		icon = GFX_focus_NAM_crisis_office
 		x = 3
 		y = 3
 		cost = 2
@@ -871,7 +871,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_factory_shifts
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
+		icon = GFX_focus_NAM_state_plan
 		x = 4
 		y = 4
 		cost = 2
@@ -1099,7 +1099,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_procurement_board
-		icon = GFX_focus_VAL_Contract_General_Staff
+		icon = GFX_focus_NAM_pw_public_procurement
 		x = 3
 		y = 5
 		cost = 1
@@ -1129,7 +1129,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_medical_trains
-		icon = GFX_focus_RUS_field_hospitals
+		icon = GFX_focus_NAM_relief_trains
 		x = 2
 		y = 6
 		cost = 1
@@ -1193,7 +1193,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_war_rear_reserve
-		icon = GFX_focus_NAM_concealed_reserve
+		icon = GFX_focus_NAM_pw_state_warehouses
 		x = 3
 		y = 7
 		cost = 1
@@ -1393,7 +1393,7 @@ focus_tree = {
 	focus = {
 		id = NAM_war_counterbattery
 		icon = GFX_focus_RUS_artillery_tables
-		x = 7
+		x = 10
 		y = 3
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_RESEARCH }

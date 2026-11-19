@@ -31,7 +31,8 @@ def parsed(path):
 def focus_reward(tree, focus_id):
     entries = parsed(ROOT / "common/national_focus" / tree)
     focuses = [row.value for row in entries if row.key == "shared_focus" and isinstance(row.value, list)]
-    focuses.extend(row.value for row in block(entries, "focus_tree") if row.key == "focus")
+    focuses.extend(row.value for tree in entries if tree.key == "focus_tree"
+                   for row in tree.value if row.key == "focus")
     focus, = (body for body in focuses if scalar(body, "id") == focus_id)
     return block(focus, "completion_reward")
 
@@ -320,6 +321,34 @@ class PartyRepresentationTests(unittest.TestCase):
         change = block(block(hooks, "on_government_change"), "effect")
         unban, = (e.value for e in change if e.key == "if" and any(x.key == "remove_from_array" for x in e.value))
         self.assertEqual(scalar(block(unban, "remove_from_array"), "ADISCORD_banned_parties"), "current_party_ideology_group")
+
+    def test_svetlogorye_recognition_and_etatist_register_change_the_named_parties(self):
+        tree = "ADISCORD_NAM_postwar.txt"
+        recognition = focus_reward(tree, "NAM_recognition")
+        self.assertEqual(self.party_actions(recognition), [
+            ("ADISCORD_legalise_party", "token:chauvinism"),
+            ("ADISCORD_admit_coalition_party", "token:chauvinism"),
+        ])
+        committees = [entry.value for entry in parsed(ROOT / "common/national_focus" / tree)
+                      if entry.key == "shared_focus" and scalar(entry.value, "id") == "NAM_pw_constitutional_committee"]
+        committee, = committees
+        self.assertEqual(scalar(block(committee, "allow_branch"), "NAM_prewar_service_mandate"), "yes")
+        decree = block(block(committee, "completion_reward"), "if")
+        self.assertEqual(scalar(block(decree, "limit"), "has_government"), "etatism")
+        self.assertEqual(self.party_actions(decree), [
+            ("ADISCORD_ban_party", "token:anarchism"),
+            ("ADISCORD_ban_party", "token:pragmatism"),
+        ])
+        for entry, number in ((decree, 413), (focus_reward(tree, "NAM_pw_district_hospitals"), 414)):
+            event_id = f"ADISCORD_nam_resource_war.{number}"
+            self.assertEqual(scalar(block(entry, "country_event"), "id"), event_id)
+            scene = country_event("ADISCORD_nam_resource_war_events.txt", event_id)
+            self.assertEqual(scalar(scene, "fire_only_once"), "yes")
+            self.assertEqual(scalar(scene, "is_triggered_only"), "yes")
+            self.assertEqual([e.key for e in block(scene, "option")], ["name"])
+            for loc in self.localisation.values():
+                for key in (scalar(scene, "title"), scalar(scene, "desc"), scalar(block(scene, "option"), "name")):
+                    self.assertIn(key, loc)
 
     def test_all_country_cards_expose_party_status_through_gameplay(self):
         sources = {

@@ -589,6 +589,75 @@ class ValLateStoryTests(unittest.TestCase):
             with self.subTest(changed=key):
                 self.assertFalse(matches_conditions(gate, {**facts, key: value}, "VAL"))
 
+    def test_shabrat_reply_is_the_only_joint_war_entry(self):
+        effects = entries(EFFECTS)
+        dispatch = block(effects, "VAL_dispatch_nod_expedition")
+        eligible = {("VAL", "VAL_can_offer_shabrat_campaign", "yes"): True}
+        proposed = list(selected_effects(dispatch, eligible))
+        self.assertEqual(
+            [(scope, scalar(e.value, "id")) for scope, e in proposed if e.key == "country_event"],
+            [("STS", "val_rework.224")],
+        )
+        self.assertFalse(any(e.key in {"add_to_war", "VAL_form_joint_shabrat_alliance"} for _, e in proposed))
+        pending = ("VAL", "has_country_flag", "VAL_shabrat_offer_pending")
+        self.assertFalse(list(selected_effects(dispatch, {**eligible, pending: True})))
+        offer = self.scene(224)
+        options = [entry.value for entry in offer if entry.key == "option"]
+        self.assertEqual(scalar(offer, "timeout_days"), "7")
+
+        def choices(current):
+            facts = {
+                ("STS", "VAL_shabrat_offer_current", "yes"): current,
+                ("STS", "VAL_shabrat_offer_current", "no"): not current,
+            }
+            return [scalar(o, "name") for o in options if matches_conditions(block(o, "trigger"), facts, "STS")]
+
+        self.assertEqual(choices(True), ["val_rework.224.refuse", "val_rework.224.accept"])
+        self.assertEqual(choices(False), ["val_rework.224.closed"])
+        self.assertTrue(any(e.key == "VAL_final_crisis_declare_war" for e in walk(options[0])))
+        self.assertFalse(any(e.key == "VAL_begin_joint_nod_shabrat_campaign" for e in walk(options[0])))
+        self.assertTrue(any(e.key == "VAL_begin_joint_nod_shabrat_campaign" for e in walk(options[1])))
+        begin = block(effects, "VAL_begin_joint_nod_shabrat_campaign")
+        self.assertFalse(list(selected_effects(begin, eligible)))
+        self.assertFalse(list(selected_effects(begin, {pending: True})))
+
+    def test_joint_partition_only_awards_nodruls_ainholm(self):
+        settlement = block(entries(EFFECTS), "VAL_settle_joint_nod_shabrat_victory")
+        award = next(e.value for e in walk(settlement) if e.key == "if"
+                     and any(child.key == "VAL_queue_ainholm_colony" for child in e.value))
+        gate = block(award, "limit")
+        for overlord in ("NOD", "STS", "TFF", None):
+            with self.subTest(overlord=overlord):
+                facts = {("AIN", "is_subject_of", overlord): True} if overlord else {}
+                self.assertEqual(matches_conditions(gate, facts, "VAL"), overlord == "NOD")
+
+    def test_frontier_withdrawal_expires_on_liberation_or_peace(self):
+        gate = block(entries(TRIGGERS), "VAL_frontier_exit_current")
+        for frontier in ("TFF", "D01"):
+            facts = {
+                ("event_target", "VAL_fallen_frontier"): frontier,
+                ("VAL", "country_exists", frontier): True,
+                ("VAL", "VAL_nod_campaign_at_war", "yes"): True,
+                ("VAL", "has_country_flag", "VAL_frontier_exit_pending"): True,
+            }
+            self.assertFalse(matches_conditions(gate, facts, "VAL"))
+            for loss in (("has_capitulated", "yes"), ("is_subject_of", "NOD")):
+                defeated = {**facts, (frontier, *loss): True}
+                self.assertTrue(matches_conditions(gate, defeated, "VAL"))
+                defeated["VAL", "VAL_nod_campaign_at_war", "yes"] = False
+                self.assertFalse(matches_conditions(gate, defeated, "VAL"))
+        exit_event = self.scene(225)
+        options = [e.value for e in exit_event if e.key == "option"]
+        self.assertEqual(scalar(options[0], "name"), "val_rework.225.continue")
+        self.assertFalse(any(e.key == "white_peace" for e in walk(options[0])))
+        self.assertTrue(any(e.key == "VAL_withdraw_nod_expedition" for e in walk(options[1])))
+        withdraw = block(entries(EFFECTS), "VAL_withdraw_nod_expedition")
+        peace = [e.value for e in walk(withdraw) if e.key == "white_peace"]
+        self.assertEqual(peace, ["event_target:VAL_nod_armistice_enemy"] * 2)
+        declarations = [scalar(e.value, "target") for e in walk(withdraw) if e.key == "declare_war_on"]
+        self.assertCountEqual(declarations, ["NOD", "STS", "event_target:VAL_fallen_frontier", "PREV"])
+        self.assertFalse(any(e.key == "annex_country" for e in walk(withdraw)))
+
     def test_northern_outcomes_select_exactly_one_current_description(self):
         scene = self.scene(153)
         scenarios = (

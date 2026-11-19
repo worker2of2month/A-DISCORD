@@ -1518,6 +1518,7 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 		NAM = {
 			NAM_oil_refresh = yes
 			NAM_reset_campaign_cooldowns = yes
+			NAM_open_postwar_future = yes
 			load_focus_tree = {
 				tree = NAM_postwar_focus
 				keep_completed = yes
@@ -1588,6 +1589,7 @@ ADISCORD_nam_resource_war_resolve_standoff = {
 		}
 		NAM = {
 			NAM_oil_refresh = yes
+			NAM_open_postwar_future = yes
 			load_focus_tree = {
 				tree = NAM_postwar_focus
 				keep_completed = yes
@@ -2442,6 +2444,17 @@ NAM_groups_monthly = {
 	}
 }
 
+# A specialisation can complete while its last countdown day is being settled.
+NAM_crisis_apply_interval_bonus = {
+	if = {
+		limit = {
+			has_active_mission = NAM_incident_countdown
+			check_variable = { days_mission_timeout@NAM_incident_countdown > 0 }
+		}
+		add_days_mission_timeout = { mission = NAM_incident_countdown days = 15 }
+	}
+}
+
 # COUNTRY NAM. A random incident at most once per draw; the cooldown and the
 # open-crisis flag keep incidents from piling up.
 NAM_crisis_draw = {
@@ -2460,6 +2473,29 @@ NAM_crisis_draw = {
 		if = {
 			limit = { has_completed_focus = NAM_crisis_office }
 			add_days_mission_timeout = { mission = NAM_incident_countdown days = 60 }
+		}
+		if = {
+			limit = { has_completed_focus = NAM_pw_reservoir_survey }
+			add_days_mission_timeout = { mission = NAM_incident_countdown days = 15 }
+		}
+		if = {
+			limit = { has_completed_focus = NAM_pw_grid_dispatch }
+			add_days_mission_timeout = { mission = NAM_incident_countdown days = 15 }
+		}
+		if = {
+			limit = { NAM_pw_operable = yes }
+			if = {
+				limit = { NAM_crisis_flood_mitigated = yes }
+				add_days_mission_timeout = { mission = NAM_incident_countdown days = 15 }
+				if = {
+					limit = { NOT = { has_country_flag = NAM_crisis_dam_commissioned } }
+					set_country_flag = NAM_crisis_dam_commissioned
+				}
+			}
+			if = {
+				limit = { NAM_crisis_delivery_disruption_mitigated = yes }
+				add_days_mission_timeout = { mission = NAM_incident_countdown days = 15 }
+			}
 		}
 	}
 }
@@ -2503,6 +2539,38 @@ NAM_crisis_select = {
 			}
 			set_country_flag = { flag = NAM_crisis_open value = 5 }
 			country_event = { id = ADISCORD_nam_crisis.5 hours = 1 }
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				NAM_crisis_drought_possible = no
+			}
+			set_country_flag = { flag = NAM_crisis_open value = 6 }
+			country_event = { id = ADISCORD_nam_crisis.6 hours = 1 }
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				NAM_crisis_blackout_possible = no
+			}
+			set_country_flag = { flag = NAM_crisis_open value = 7 }
+			country_event = { id = ADISCORD_nam_crisis.7 hours = 1 }
+		}
+		12 = {
+			modifier = {
+				factor = 0
+				NAM_crisis_flood_possible = no
+			}
+			set_country_flag = { flag = NAM_crisis_open value = 8 }
+			country_event = { id = ADISCORD_nam_crisis.8 hours = 1 }
+		}
+		12 = {
+			modifier = {
+				factor = 0
+				NAM_crisis_delivery_disruption_possible = no
+			}
+			set_country_flag = { flag = NAM_crisis_open value = 9 }
+			country_event = { id = ADISCORD_nam_crisis.9 hours = 1 }
 		}
 	}
 	activate_mission = NAM_incident_response
@@ -2590,6 +2658,62 @@ NAM_crisis_default_5 = {
 			NAM_groups_refresh = yes
 			NAM_crisis_close = yes
 		}
+	}
+}
+
+NAM_crisis_default_6 = {
+	if = {
+		limit = { NAM_crisis_case_6 = yes }
+		if = {
+			limit = { NAM_crisis_drought_mitigated = yes }
+			add_timed_idea = { idea = NAM_crisis_drought_contained days = 45 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_crisis_drought days = 90 }
+		}
+		NAM_crisis_close = yes
+	}
+}
+
+NAM_crisis_default_7 = {
+	if = {
+		limit = { NAM_crisis_case_7 = yes }
+		if = {
+			limit = { NAM_crisis_blackout_mitigated = yes }
+			add_timed_idea = { idea = NAM_crisis_blackout_contained days = 30 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_crisis_blackout days = 60 }
+		}
+		NAM_crisis_close = yes
+	}
+}
+
+NAM_crisis_default_8 = {
+	if = {
+		limit = { NAM_crisis_case_8 = yes }
+		if = {
+			limit = { NAM_crisis_flood_mitigated = yes }
+			add_timed_idea = { idea = NAM_crisis_flood_contained days = 35 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_crisis_flood days = 70 }
+		}
+		NAM_crisis_close = yes
+	}
+}
+
+NAM_crisis_default_9 = {
+	if = {
+		limit = { NAM_crisis_case_9 = yes }
+		if = {
+			limit = { NAM_crisis_delivery_disruption_mitigated = yes }
+			add_timed_idea = { idea = NAM_crisis_delivery_disruption_contained days = 30 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_crisis_delivery_disruption days = 60 }
+		}
+		NAM_crisis_close = yes
 	}
 }
 
@@ -3644,8 +3768,11 @@ NAM_line_complete = {
 
 # COUNTRY NAM. Snapshot casualties so earlier wars do not count.
 NAM_seal_discipline_begin = {
+	set_variable = { var = NAM_seal_last_change value = 0 }
 	add_to_variable = { var = NAM_seal_discipline value = 70 }
 	set_variable = { var = NAM_seal_casualties_seen_k value = casualties_k }
+	set_variable = { var = NAM_seal_surrender_seen value = surrender_progress }
+	every_enemy_country = { set_variable = { var = NAM_seal_enemy_seen_k value = casualties_k } }
 	clr_country_flag = NAM_seal_warned_50
 	clr_country_flag = NAM_seal_warned_25
 	if = {
@@ -3710,29 +3837,80 @@ NAM_seal_discipline_clamp = {
 	}
 }
 
-# COUNTRY NAM. on_monthly_NAM: resource-war losses cost 1 point per 5000
-# casualties; every month without war restores 3 points.
+NAM_seal_record_war_entry = {
+	set_variable = { var = NAM_seal_enemy_seen_k value = casualties_k }
+	save_event_target_as = NAM_seal_new_opponent
+	NAM = {
+		if = {
+			limit = {
+				NOT = {
+					any_enemy_country = { NOT = { tag = event_target:NAM_seal_new_opponent } }
+				}
+			}
+			set_variable = { var = NAM_seal_casualties_seen_k value = casualties_k }
+			set_variable = { var = NAM_seal_surrender_seen value = surrender_progress }
+		}
+	}
+}
+
+# Casualty counters cover all current wars of a country. Sample each active opponent separately
+# so that joining the war never credits NAM with losses incurred before the encounter.
 NAM_seal_discipline_monthly = {
 	if = {
 		limit = { has_dynamic_modifier = { modifier = NAM_seal_discipline_dynamic } }
-		set_temp_variable = { var = NAM_seal_delta value = 0 }
+		set_temp_variable = { var = NAM_seal_delta value = 3 }
 		if = {
-			limit = { ADISCORD_nam_resource_war_active = yes }
-			# Native casualties count only current wars; a smaller value is no gain.
+			limit = { has_war = yes }
 			set_temp_variable = { var = NAM_seal_losses_k value = casualties_k }
 			subtract_from_temp_variable = { var = NAM_seal_losses_k value = NAM_seal_casualties_seen_k }
-			set_variable = { var = NAM_seal_casualties_seen_k value = casualties_k }
-			clamp_temp_variable = { var = NAM_seal_losses_k min = 0 max = 250 }
-			divide_temp_variable = { var = NAM_seal_losses_k value = 5 }
-			subtract_from_temp_variable = { var = NAM_seal_delta value = NAM_seal_losses_k }
+			clamp_temp_variable = { var = NAM_seal_losses_k min = 0 max = 100000 }
+			set_temp_variable = { var = NAM_seal_enemy_k value = 0 }
+			every_enemy_country = {
+				if = {
+					limit = { has_variable = NAM_seal_enemy_seen_k }
+					set_temp_variable = { var = NAM_seal_opponent_k value = casualties_k }
+					subtract_from_temp_variable = { var = NAM_seal_opponent_k value = NAM_seal_enemy_seen_k }
+					clamp_temp_variable = { var = NAM_seal_opponent_k min = 0 max = 100000 }
+					add_to_temp_variable = { var = NAM_seal_enemy_k value = NAM_seal_opponent_k }
+				}
+				set_variable = { var = NAM_seal_enemy_seen_k value = casualties_k }
+			}
+			NAM_seal_score_front = yes
 		}
-		if = {
-			limit = { has_war = no }
-			add_to_temp_variable = { var = NAM_seal_delta value = 3 }
-		}
+		set_variable = { var = NAM_seal_casualties_seen_k value = casualties_k }
+		set_variable = { var = NAM_seal_surrender_seen value = surrender_progress }
+		set_variable = { var = NAM_seal_last_change value = NAM_seal_delta }
 		add_to_variable = { var = NAM_seal_discipline value = NAM_seal_delta }
 		NAM_seal_discipline_clamp = yes
 	}
+}
+
+NAM_seal_score_front = {
+	set_temp_variable = { var = NAM_seal_delta value = NAM_seal_losses_k }
+	divide_temp_variable = { var = NAM_seal_delta value = -5 }
+	clamp_temp_variable = { var = NAM_seal_delta min = -50 max = 0 }
+	set_temp_variable = { var = NAM_seal_double_own value = NAM_seal_losses_k }
+	multiply_temp_variable = { var = NAM_seal_double_own value = 2 }
+	set_temp_variable = { var = NAM_seal_double_enemy value = NAM_seal_enemy_k }
+	multiply_temp_variable = { var = NAM_seal_double_enemy value = 2 }
+	if = {
+		limit = {
+			check_variable = { var = NAM_seal_enemy_k value = 1 compare = greater_than_or_equals }
+			check_variable = { var = NAM_seal_enemy_k value = NAM_seal_double_own compare = greater_than_or_equals }
+		}
+		add_to_temp_variable = { var = NAM_seal_delta value = 2 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = NAM_seal_losses_k value = 1 compare = greater_than_or_equals }
+			check_variable = { var = NAM_seal_losses_k value = NAM_seal_double_enemy compare = greater_than_or_equals }
+		}
+		subtract_from_temp_variable = { var = NAM_seal_delta value = 2 }
+	}
+	set_temp_variable = { var = NAM_seal_front_change value = surrender_progress }
+	subtract_from_temp_variable = { var = NAM_seal_front_change value = NAM_seal_surrender_seen }
+	multiply_temp_variable = { var = NAM_seal_front_change value = 20 }
+	subtract_from_temp_variable = { var = NAM_seal_delta value = NAM_seal_front_change }
 }
 
 # ----- Field missions -----
@@ -4772,8 +4950,7 @@ NAM_project_refund_refinery = {
 NAM_project_complete_pipeline = {
 	if = {
 		limit = {
-			has_state_flag = NAM_project_in_progress
-			check_variable = { var = NAM_project_deposit value = 350 compare = equals }
+			NAM_pipeline_receipt = yes
 			is_owned_by = NAM
 			is_controlled_by = NAM
 			700 = {
@@ -4787,8 +4964,7 @@ NAM_project_complete_pipeline = {
 	}
 	else_if = {
 		limit = {
-			has_state_flag = NAM_project_in_progress
-			check_variable = { var = NAM_project_deposit value = 350 compare = equals }
+			NAM_pipeline_receipt = yes
 		}
 		NAM_project_release = yes
 	}
@@ -5162,6 +5338,10 @@ NAM_ladder_declare_independence = {
 			NOT = { has_country_flag = NAM_independence_declared }
 		}
 		set_country_flag = NAM_independence_declared
+		if = {
+			limit = { NOT = { has_completed_focus = NAM_letters_to_the_centre } }
+			complete_national_focus = NAM_letters_to_the_centre
+		}
 		if = {
 			limit = { has_country_leader = { character = NAM_Egor_Rom ruling_only = yes } }
 			set_portraits = {
@@ -5721,10 +5901,15 @@ NAM_underground_monthly = {
 		}
 		if = {
 			limit = {
-				NAM_ladder_formed = yes
-				power_balance_value = {
-					id = NAM_ladder_bop
-					value < -0.10
+				OR = {
+					AND = {
+						NAM_ladder_formed = yes
+						power_balance_value = { id = NAM_ladder_bop value < -0.10 }
+					}
+					AND = {
+						has_power_balance = { id = NAM_postwar_future_bop }
+						check_variable = { NAM_prewar_balance < -0.10 }
+					}
 				}
 			}
 			add_to_temp_variable = { var = NAM_underground_delta value = 2 }
@@ -6351,51 +6536,6 @@ NAM_rw_clear_punishment = {
 	}
 }
 
-# COUNTRY defeated signatory. The pending submission retains the peace terms
-# while the engine updates the target's faction membership.
-NAM_begin_border_protocol = {
-	if = {
-		limit = {
-			NAM_border_protocol_ready = yes
-			ADISCORD_south_offer_target_open = yes
-			NOT = { has_variable = ADISCORD_south_offer_kind }
-		}
-		ADISCORD_release_non_participating_minor_optimization = yes
-		ADISCORD_south_leave_previous_alliance = yes
-		set_country_flag = { flag = ADISCORD_south_submits_to_NAM value = 2 }
-		country_event = { id = ADISCORD_south.41 days = 1 }
-	}
-}
-
-# COUNTRY signatory, after the faction exit. The transferred district remains
-# occupied territory until its citizenship is settled through the border tree.
-NAM_apply_border_protocol = {
-	if = {
-		limit = { tag = EFL }
-		723 = { NAM_rw_award_border_state = yes }
-	}
-	else_if = {
-		limit = { tag = AZH }
-		727 = { NAM_rw_award_border_state = yes }
-	}
-	remove_ideas = NAM_reparations_to_svetlogorye
-	NAM = {
-		puppet = {
-			target = PREV
-			end_wars = no
-			end_civil_wars = no
-		}
-		set_autonomy = {
-			target = PREV
-			autonomy_state = autonomy_shadow_state
-			freedom_level = 0.40
-			end_wars = no
-			end_civil_wars = no
-		}
-		ADISCORD_economy_mark_dirty = yes
-	}
-}
-
 # ----- War of return -----
 # The defeat tree's revenge. After the compromise peace it is one war against
 # the current owners of the lost fields and the South Harbour (67, 688, 689,
@@ -6909,6 +7049,7 @@ NAM_sync_governor_roles = {
 				promote_leader = yes
 				country_leader = {
 					ideology = humanism_ideology
+					traits = { NAM_trait_svetlogorye_governor }
 					expire = "2200.1.1.1"
 				}
 			}
@@ -6935,6 +7076,7 @@ NAM_sync_governor_roles = {
 				promote_leader = yes
 				country_leader = {
 					ideology = utilitarism_ideology
+					traits = { NAM_trait_svetlogorye_governor }
 					expire = "2200.1.1.1"
 				}
 			}
@@ -6961,6 +7103,7 @@ NAM_sync_governor_roles = {
 				promote_leader = yes
 				country_leader = {
 					ideology = chauvinism_ideology
+					traits = { NAM_trait_svetlogorye_governor }
 					expire = "2200.1.1.1"
 				}
 			}
@@ -6987,6 +7130,7 @@ NAM_sync_governor_roles = {
 				promote_leader = yes
 				country_leader = {
 					ideology = pragmatism_ideology
+					traits = { NAM_trait_svetlogorye_governor }
 					expire = "2200.1.1.1"
 				}
 			}
@@ -7013,6 +7157,7 @@ NAM_sync_governor_roles = {
 				promote_leader = yes
 				country_leader = {
 					ideology = anarchism_ideology
+					traits = { NAM_trait_svetlogorye_governor }
 					expire = "2200.1.1.1"
 				}
 			}
@@ -7039,6 +7184,7 @@ NAM_sync_governor_roles = {
 				promote_leader = yes
 				country_leader = {
 					ideology = technocracy_ideology
+					traits = { NAM_trait_svetlogorye_governor }
 					expire = "2200.1.1.1"
 				}
 			}
@@ -7065,6 +7211,7 @@ NAM_sync_governor_roles = {
 				promote_leader = yes
 				country_leader = {
 					ideology = etatism_ideology
+					traits = { NAM_trait_svetlogorye_governor }
 					expire = "2200.1.1.1"
 				}
 			}
@@ -7091,6 +7238,7 @@ NAM_sync_governor_roles = {
 				promote_leader = yes
 				country_leader = {
 					ideology = hedonism_ideology
+					traits = { NAM_trait_svetlogorye_governor }
 					expire = "2200.1.1.1"
 				}
 			}
@@ -8691,6 +8839,17 @@ NAM_board_sync_district_status = {
 		NAM_corp_dispute_clear = yes
 	}
 	if = {
+		limit = { NAM_neighbour_is_command = yes }
+		if = {
+			limit = { tag = EFL }
+			set_cosmetic_tag = EFL_NAM_subject_governorate
+		}
+		else_if = {
+			limit = { tag = AZH }
+			set_cosmetic_tag = AZH_NAM_subject_governorate
+		}
+	}
+	else_if = {
 		limit = {
 			NAM_board_federal_subject = yes
 			NAM = { has_country_flag = NAM_corp_takeover }
@@ -9600,9 +9759,8 @@ NAM_radical_open_labour_camp = {
 	if = {
 		limit = {
 			has_state_flag = NAM_labour_camp_building
-			is_owned_by = NAM
-			is_controlled_by = NAM
-			NAM_rad_direct_rule = yes
+			NAM = { NAM_country_operable = yes }
+			NAM_rad_held_direct_district = yes
 			NOT = { has_dynamic_modifier = { modifier = NAM_labour_camp_state } }
 		}
 		add_dynamic_modifier = { modifier = NAM_labour_camp_state }
@@ -11936,6 +12094,11 @@ NAM_project_complete_hydroelectric = {
 				}
 			}
 			NAM = {
+				if = {
+					limit = { NOT = { has_country_flag = NAM_crisis_dam_commissioned } }
+					set_country_flag = NAM_crisis_dam_commissioned
+					NAM_crisis_apply_interval_bonus = yes
+				}
 				NAM_grid_refresh_connections = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -12003,6 +12166,10 @@ NAM_crisis_response_timeout = {
 				NAM_crisis_case_3 = yes
 				NAM_crisis_case_4 = yes
 				NAM_crisis_case_5 = yes
+				NAM_crisis_case_6 = yes
+				NAM_crisis_case_7 = yes
+				NAM_crisis_case_8 = yes
+				NAM_crisis_case_9 = yes
 			}
 		}
 		clr_country_flag = NAM_crisis_fund
@@ -12035,6 +12202,22 @@ NAM_crisis_response_timeout = {
 	else_if = {
 		limit = { NAM_crisis_case_5 = yes }
 		NAM_crisis_default_5 = yes
+	}
+	else_if = {
+		limit = { NAM_crisis_case_6 = yes }
+		NAM_crisis_default_6 = yes
+	}
+	else_if = {
+		limit = { NAM_crisis_case_7 = yes }
+		NAM_crisis_default_7 = yes
+	}
+	else_if = {
+		limit = { NAM_crisis_case_8 = yes }
+		NAM_crisis_default_8 = yes
+	}
+	else_if = {
+		limit = { NAM_crisis_case_9 = yes }
+		NAM_crisis_default_9 = yes
 	}
 	else = { NAM_crisis_close = yes }
 }
@@ -13346,15 +13529,8 @@ NAM_agreement_district_deliver = {
 		limit = {
 			has_state_flag = NAM_agreement_building
 			has_state_flag = NAM_project_in_progress
-			is_owned_by = NAM
-			is_controlled_by = NAM
 			NAM = { NAM_agreement_dist_active = yes }
-			free_building_slots = {
-				building = industrial_complex
-				size > 0
-				include_locked = yes
-			}
-			infrastructure < 5
+			NAM_agreement_district_buildable = yes
 		}
 		clr_state_flag = NAM_agreement_building
 		NAM_project_close = yes
@@ -14325,7 +14501,7 @@ NAM_program_rail_priority_settle = {
 			build_railway = {
 				level = 3
 				build_only_on_allied = yes
-				path = { 16721 16865 4321 2935 8351 9016 }
+				path = { 16721 16865 4321 17829 17627 2935 8351 18450 9016 }
 			}
 			add_equipment_to_stockpile = {
 				type = train_equipment
@@ -14505,7 +14681,7 @@ NAM_program_freight_depots_settle = {
 			build_railway = {
 				level = 3
 				build_only_on_allied = yes
-				path = { 16716 16884 16873 9641 11926 176 6961 }
+				path = { 16716 16881 16884 16873 9641 18808 11926 176 16983 6961 }
 			}
 			add_equipment_to_stockpile = {
 				type = train_equipment
@@ -14553,7 +14729,7 @@ NAM_program_logistics_depots_settle = {
 			build_railway = {
 				level = 3
 				build_only_on_allied = yes
-				path = { 16716 16884 16873 9641 4321 2935 8351 9016 }
+				path = { 16716 16881 16884 16873 9641 18514 16874 16885 4321 17829 17627 2935 8351 18450 9016 }
 			}
 			add_equipment_to_stockpile = {
 				type = train_equipment
@@ -14593,7 +14769,7 @@ NAM_program_southern_corridor_settle = {
 			build_railway = {
 				level = 3
 				build_only_on_allied = yes
-				path = { 16721 16865 4321 9641 16873 16884 16716 }
+				path = { 16721 16865 4321 16885 16874 18514 9641 16873 16884 16881 16716 }
 			}
 			add_equipment_to_stockpile = {
 				type = train_equipment
@@ -15919,5 +16095,317 @@ NAM_export_office_install_modifier = {
 	if = {
 		limit = { check_variable = { var = NAM_export_office_level value = 5 compare = equals } }
 		add_dynamic_modifier = { modifier = NAM_export_office_5 }
+	}
+}
+
+# COUNTRY signatory. These event targets remain local to each scripted transaction.
+NAM_neighbour_bind_government = {
+	save_event_target_as = NAM_neighbour_government
+	if = {
+		limit = { tag = EFL }
+		EFR = { save_event_target_as = NAM_neighbour_resistance }
+	}
+	else_if = {
+		limit = { tag = AZH }
+		AZR = { save_event_target_as = NAM_neighbour_resistance }
+	}
+}
+
+NAM_neighbour_recognise_republics = {
+	EFL = {
+		if = {
+			limit = { NAM_neighbour_partner = yes }
+			NAM_neighbour_recognise_signatory = yes
+		}
+	}
+	AZH = {
+		if = {
+			limit = { NAM_neighbour_partner = yes }
+			NAM_neighbour_recognise_signatory = yes
+		}
+	}
+}
+
+NAM_neighbour_recognise_signatory = {
+	if = {
+		limit = { is_subject_of = NAM }
+		NAM = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_free
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+	}
+	NAM_rw_clear_punishment = yes
+	NAM = { give_guarantee = PREV }
+	add_opinion_modifier = {
+		target = NAM
+		modifier = improve_relation
+	}
+}
+
+NAM_neighbour_offer_alliance = {
+	if = {
+		limit = { NAM_neighbour_alliance_offer_open = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		country_event = { id = ADISCORD_nam_resource_war.410 hours = 1 }
+	}
+}
+
+NAM_neighbour_accept_alliance = {
+	if = {
+		limit = { NAM_neighbour_alliance_offer_open = yes }
+		if = {
+			limit = { NOT = { is_in_faction_with = NAM } }
+			ADISCORD_south_leave_previous_alliance = yes
+			NAM = {
+				ADISCORD_south_ensure_campaign_faction = yes
+				add_to_faction = PREV
+			}
+		}
+		if = {
+			limit = { is_in_faction_with = NAM }
+			add_ideas = NAM_neighbour_joint_staff
+		}
+	}
+}
+
+NAM_neighbour_install_commands = {
+	EFL = {
+		if = {
+			limit = { NAM_neighbour_military_partner = yes }
+			NAM_neighbour_offer_command = yes
+		}
+	}
+	AZH = {
+		if = {
+			limit = { NAM_neighbour_military_partner = yes }
+			NAM_neighbour_offer_command = yes
+		}
+	}
+}
+
+NAM_neighbour_offer_command = {
+	if = {
+		limit = {
+			exists = yes
+			is_subject = no
+		}
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_country_flag = NAM_neighbour_command_offer
+		country_event = { id = ADISCORD_nam_resource_war.411 hours = 1 }
+	}
+	else = { NAM_neighbour_establish_command = yes }
+}
+
+# A one-day interval after leaving a faction lets the native membership cache update before puppet.
+NAM_neighbour_accept_command = {
+	if = {
+		limit = {
+			NAM_neighbour_military_answer_open = yes
+			has_country_flag = NAM_neighbour_command_offer
+		}
+		if = {
+			limit = {
+				is_in_faction = yes
+				NOT = { is_in_faction_with = NAM }
+			}
+			ADISCORD_south_leave_previous_alliance = yes
+		}
+		country_event = { id = ADISCORD_nam_resource_war.412 days = 1 }
+	}
+}
+
+NAM_neighbour_establish_command = {
+	ADISCORD_release_non_participating_minor_optimization = yes
+	if = {
+		limit = { NOT = { is_subject_of = NAM } }
+		NAM = {
+			puppet = {
+				target = PREV
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+	}
+	if = {
+		limit = {
+			is_subject_of = NAM
+			NOT = { has_country_flag = NAM_neighbour_military_command }
+		}
+		NAM = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_NAM_namestnik_office
+				freedom_level = 0.05
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+		NAM_rw_clear_punishment = yes
+		set_country_flag = NAM_neighbour_military_command
+		NAM_board_sync_district_status = yes
+		NAM = {
+			if = {
+				limit = {
+					NOT = { has_completed_focus = NAM_neighbour_national_charters }
+					NOT = { has_idea = NAM_neighbour_nationalists }
+				}
+				add_ideas = NAM_neighbour_nationalists
+			}
+		}
+		NAM_neighbour_bind_government = yes
+		# Preserve all current claims to national territory, including disputed
+		# districts outside the governorate, under its own opposition tag.
+		every_core_state = {
+			add_core_of = event_target:NAM_neighbour_resistance
+			remove_core_of = event_target:NAM_neighbour_government
+		}
+		NAM_neighbour_apply_completed_charters = yes
+	}
+}
+
+# STATE. Each landless opposition has a fixed tag so both can hold cores concurrently.
+NAM_neighbour_start_resistance = {
+	add_dynamic_modifier = { modifier = NAM_neighbour_command_resistance }
+	force_enable_resistance = {
+		occupier = event_target:NAM_neighbour_government
+		occupied = event_target:NAM_neighbour_resistance
+	}
+	start_resistance = event_target:NAM_neighbour_resistance
+	set_resistance = 30
+}
+
+NAM_neighbour_restore_local_core = {
+	force_enable_resistance = {
+		clear = yes
+		occupier = event_target:NAM_neighbour_government
+		occupied = event_target:NAM_neighbour_resistance
+	}
+	if = {
+		limit = {
+			is_controlled_by = event_target:NAM_neighbour_government
+			has_resistance = yes
+		}
+		cancel_resistance = yes
+	}
+	add_core_of = event_target:NAM_neighbour_government
+	remove_core_of = event_target:NAM_neighbour_resistance
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_neighbour_command_resistance } }
+		remove_dynamic_modifier = { modifier = NAM_neighbour_command_resistance }
+	}
+}
+
+NAM_neighbour_integrate_centres = {
+	every_subject_country = {
+		limit = { NAM_neighbour_is_command = yes }
+		army_experience = 15
+		NAM_neighbour_bind_government = yes
+		every_owned_state = {
+			limit = {
+				is_controlled_by = event_target:NAM_neighbour_government
+				is_core_of = event_target:NAM_neighbour_resistance
+				is_capital = yes
+			}
+			NAM_neighbour_restore_local_core = yes
+		}
+	}
+}
+
+NAM_neighbour_integrate_provinces = {
+	if = {
+		limit = { has_idea = NAM_neighbour_nationalists }
+		remove_ideas = NAM_neighbour_nationalists
+	}
+	every_subject_country = {
+		limit = { NAM_neighbour_is_command = yes }
+		add_war_support = 0.10
+		NAM_neighbour_bind_government = yes
+		every_owned_state = {
+			limit = {
+				is_controlled_by = event_target:NAM_neighbour_government
+				is_core_of = event_target:NAM_neighbour_resistance
+			}
+			NAM_neighbour_restore_local_core = yes
+		}
+	}
+}
+
+# A government accepting after the charter vote also receives the enacted stage.
+NAM_neighbour_apply_completed_charters = {
+	NAM_neighbour_bind_government = yes
+	every_owned_state = {
+		limit = {
+			is_controlled_by = event_target:NAM_neighbour_government
+			is_core_of = event_target:NAM_neighbour_resistance
+		}
+		NAM_neighbour_apply_district_charter = yes
+	}
+}
+
+# STATE, held by its local government. Reapply the local penalty after an occupation
+# if the district is still administered under the military mandate.
+NAM_neighbour_apply_district_charter = {
+	if = {
+		limit = {
+			OR = {
+				NAM = { has_completed_focus = NAM_neighbour_national_charters }
+				AND = {
+					is_capital = yes
+					NAM = { has_completed_focus = NAM_neighbour_local_commands }
+				}
+			}
+		}
+		NAM_neighbour_restore_local_core = yes
+	}
+	else_if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = NAM_neighbour_command_resistance } } }
+		NAM_neighbour_start_resistance = yes
+	}
+}
+
+# COUNTRY former subject. A third party's temporary occupation does not cancel the native claim.
+NAM_neighbour_close_command = {
+	if = {
+		limit = { has_country_flag = NAM_neighbour_military_command }
+		NAM_neighbour_bind_government = yes
+		event_target:NAM_neighbour_resistance = {
+			every_core_state = { NAM_neighbour_restore_local_core = yes }
+		}
+		clr_country_flag = NAM_neighbour_military_command
+		NAM = {
+			if = {
+				limit = {
+					has_idea = NAM_neighbour_nationalists
+					NAM_neighbour_has_command = no
+				}
+				remove_ideas = NAM_neighbour_nationalists
+			}
+		}
+	}
+}
+
+NAM_neighbour_check_command_status = {
+	if = {
+		limit = {
+			has_country_flag = NAM_neighbour_military_command
+			NOT = { is_subject_of = NAM }
+		}
+		NAM_neighbour_close_command = yes
+	}
+}
+
+NAM_open_postwar_future = {
+	if = {
+		limit = { has_power_balance = { id = NAM_ladder_bop } }
+		remove_power_balance = { id = NAM_ladder_bop }
+		ADISCORD_economy_mark_dirty = yes
+	}
+	if = {
+		limit = { NOT = { has_power_balance = { id = NAM_postwar_future_bop } } }
+		set_power_balance = { id = NAM_postwar_future_bop set_value = 0 }
 	}
 }

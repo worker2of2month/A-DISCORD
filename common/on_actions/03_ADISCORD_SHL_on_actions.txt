@@ -1,10 +1,21 @@
 on_actions = {
 	on_daily_SHL = {
-		effect = { SHL_refresh_forecast_if_changed = yes }
+		effect = {
+			SHL_refresh_forecast_if_changed = yes
+			# Faction membership and subject status can change without a territorial transfer.
+			ADISCORD_south_begin_preparation = yes
+		}
 	}
 
 	on_state_control_changed = {
 		effect = {
+			if = {
+				limit = {
+					NOT = { has_global_flag = ADISCORD_south_preparation_started }
+					ADISCORD_south_border_participant = yes
+				}
+				ADISCORD_south_begin_preparation = yes
+			}
 			if = {
 				limit = {
 					OR = {

@@ -2286,7 +2286,19 @@ country_event = {
 		has_country_flag = VAL_final_war_entry_pending
 	}
 	immediate = {
-		VAL_final_crisis_join_war = yes
+		if = {
+			limit = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+			if = {
+				limit = {
+					VAL_nod_campaign_at_war = yes
+					STS = { has_war_with = NOD }
+				}
+				clr_country_flag = VAL_final_war_entry_pending
+				VAL_confirm_joint_nod_entry = yes
+			}
+			else = { VAL_final_crisis_close = yes }
+		}
+		else = { VAL_final_crisis_join_war = yes }
 		if = {
 			limit = { has_country_flag = VAL_final_war_entry_pending }
 			clr_country_flag = VAL_final_war_entry_pending
@@ -2379,28 +2391,209 @@ country_event = {
 		has_country_flag = ADISCORD_debug_joint_sts_nod_pending
 	}
 	immediate = {
-		clr_country_flag = ADISCORD_debug_joint_sts_nod_pending
 		if = {
 			limit = {
 				is_debug = yes
-				has_capitulated = no
-				is_subject = no
-				NOT = { has_war_with = NOD }
-				STS = {
-					exists = yes
-					has_capitulated = no
-					has_war_with = NOD
-					has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
-				}
-				NOD = {
-					exists = yes
-					has_capitulated = no
-					has_war_with = STS
+				VAL_can_offer_shabrat_campaign = yes
+			}
+			VAL_dispatch_nod_expedition = yes
+		}
+		else = { clr_country_flag = ADISCORD_debug_joint_sts_nod_pending }
+	}
+}
+
+country_event = {
+	id = val_rework.224
+	title = val_rework.224.t
+	desc = val_rework.224.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 7
+
+	option = {
+		name = val_rework.224.refuse
+		trigger = { VAL_shabrat_offer_current = yes }
+		ai_chance = { base = 35 }
+		custom_effect_tooltip = VAL_shabrat_refuse_campaign_tt
+		hidden_effect = {
+			VAL = {
+				if = {
+					limit = {
+						has_country_flag = VAL_shabrat_offer_pending
+						VAL_can_offer_shabrat_campaign = yes
+					}
+					clr_country_flag = VAL_shabrat_offer_pending
+					clr_country_flag = ADISCORD_debug_joint_sts_nod_pending
+					VAL_final_crisis_declare_war = yes
+					news_event = { id = val_rework.227 }
 				}
 			}
-			VAL_begin_joint_nod_shabrat_campaign = yes
 		}
 	}
+	option = {
+		name = val_rework.224.accept
+		trigger = { VAL_shabrat_offer_current = yes }
+		ai_chance = {
+			base = 65
+			modifier = {
+				factor = 2
+				VAL = { has_country_flag = VAL_stelander_volunteer_contribution }
+			}
+		}
+		custom_effect_tooltip = VAL_shabrat_accept_campaign_tt
+		hidden_effect = {
+			VAL = {
+				VAL_begin_joint_nod_shabrat_campaign = yes
+				clr_country_flag = ADISCORD_debug_joint_sts_nod_pending
+			}
+		}
+	}
+	option = {
+		name = val_rework.224.closed
+		trigger = { VAL_shabrat_offer_current = no }
+		hidden_effect = {
+			VAL = {
+				if = {
+					limit = {
+						has_country_flag = VAL_shabrat_offer_pending
+						VAL_nod_expedition_possible = yes
+						VAL_frontier_at_war_with_shabrat = yes
+						STS = { has_war_with = NOD }
+					}
+					clr_country_flag = VAL_shabrat_offer_pending
+					VAL_dispatch_nod_expedition = yes
+				}
+				clr_country_flag = VAL_shabrat_offer_pending
+				clr_country_flag = ADISCORD_debug_joint_sts_nod_pending
+			}
+		}
+	}
+}
+
+country_event = {
+	id = val_rework.225
+	title = val_rework.225.t
+	desc = val_rework.225.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	timeout_days = 7
+	trigger = { VAL_frontier_exit_current = yes }
+
+	option = {
+		name = val_rework.225.continue
+		trigger = { VAL_frontier_exit_current = yes }
+		ai_chance = { base = 30 }
+		hidden_effect = {
+			if = {
+				limit = { VAL_frontier_exit_current = yes }
+				clr_country_flag = VAL_frontier_exit_pending
+				news_event = { id = val_rework.230 }
+			}
+		}
+	}
+	option = {
+		name = val_rework.225.withdraw
+		trigger = { VAL_frontier_exit_current = yes }
+		ai_chance = { base = 70 }
+		custom_effect_tooltip = VAL_frontier_exit_tt
+		hidden_effect = { VAL_withdraw_nod_expedition = yes }
+	}
+	option = {
+		name = val_rework.224.closed
+		trigger = { VAL_frontier_exit_current = no }
+		hidden_effect = { clr_country_flag = VAL_frontier_exit_pending }
+	}
+}
+
+news_event = {
+	id = val_rework.226
+	title = val_rework.226.t
+	desc = val_rework.226.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	is_triggered_only = yes
+	option = { name = val_rework.226.a }
+}
+
+news_event = {
+	id = val_rework.227
+	title = val_rework.227.t
+	desc = val_rework.227.d
+	picture = GFX_news_event_adiscord_kefreyt_address
+	major = yes
+	is_triggered_only = yes
+	option = { name = val_rework.227.a }
+}
+
+news_event = {
+	id = val_rework.228
+	title = val_rework.228.t
+	desc = val_rework.228.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	is_triggered_only = yes
+	option = { name = val_rework.228.a }
+}
+
+news_event = {
+	id = val_rework.229
+	title = val_rework.229.t
+	desc = val_rework.229.d
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	is_triggered_only = yes
+	option = { name = val_rework.229.a }
+}
+
+news_event = {
+	id = val_rework.230
+	title = val_rework.230.t
+	desc = val_rework.230.d
+	picture = GFX_news_event_adiscord_kefreyt_address
+	major = yes
+	is_triggered_only = yes
+	option = { name = val_rework.230.a }
+}
+
+news_event = {
+	id = val_rework.231
+	title = val_rework.231.t
+	desc = val_rework.231.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	is_triggered_only = yes
+	option = { name = val_rework.231.a }
+}
+
+country_event = {
+	id = val_rework.232
+	title = val_rework.232.t
+	desc = {
+		trigger = { tag = VAL }
+		text = val_rework.232.kefreyt
+	}
+	desc = {
+		trigger = { NOT = { tag = VAL } }
+		text = val_rework.232.stelander
+	}
+	picture = GFX_event_adiscord_rail_yard_waybills
+	is_triggered_only = yes
+	trigger = { is_ai = no }
+	option = { name = val_rework.232.a }
+}
+
+news_event = {
+	id = val_rework.233
+	title = val_rework.233.t
+	desc = val_rework.233.d
+	picture = GFX_news_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	major = yes
+	show_major = {
+		NOT = { tag = VAL }
+		VAL_is_current_stelander_ally = no
+	}
+	option = { name = val_rework.233.a }
 }
 
 # Party-path final campaign cache barrier. Releasing Nodrul from a defeated

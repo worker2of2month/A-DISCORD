@@ -1515,7 +1515,7 @@ ADISCORD_scenario_debug_category = {
 			clr_country_flag = VAL_joint_nod_settlement_completed
 			NOD = { clr_country_flag = VAL_joint_nod_campaign_target }
 			STS = { declare_war_on = { target = NOD type = annex_everything } }
-			set_country_flag = ADISCORD_debug_joint_sts_nod_pending
+			set_country_flag = { flag = ADISCORD_debug_joint_sts_nod_pending days = 10 }
 			country_event = { id = val_rework.121 hours = 1 }
 		}
 		ai_will_do = { factor = 0 }
@@ -1544,6 +1544,8 @@ ADISCORD_scenario_debug_category = {
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_debug_war_val_vs_nod_description_rules_tt
+			clr_country_flag = VAL_shabrat_offer_pending
+			clr_country_flag = VAL_frontier_exit_pending
 			clr_country_flag = VAL_joint_nod_campaign_with_sts
 			set_variable = { var = VAL_final_crisis_phase value = 2 }
 			NOD = { VAL_final_crisis_register_member = yes }
@@ -1701,6 +1703,8 @@ ADISCORD_scenario_debug_category = {
 				remove_ideas = STP_pw_nod_invasion_mandate
 				clr_country_flag = VAL_joint_nod_campaign_target
 			}
+			clr_country_flag = VAL_shabrat_offer_pending
+			clr_country_flag = VAL_frontier_exit_pending
 			clr_country_flag = VAL_joint_nod_campaign_with_sts
 			clr_country_flag = VAL_joint_nod_settlement_completed
 			clr_country_flag = VAL_joint_nod_partition_locked

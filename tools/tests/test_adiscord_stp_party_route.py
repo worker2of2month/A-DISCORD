@@ -532,13 +532,9 @@ class PartyRouteContracts(unittest.TestCase):
             ),
         ):
             focus = self.focus[focus_id]
-            # The Kefreyt campaign opens from the army branch, before the
-            # settled-state reforms; Bezhaysk waits for the external mandate.
-            self.assertIn(
-                "STP_pw_party_external_mandate"
-                if target == "BJK"
-                else "STP_pw_party_border_staff",
+            self.assertEqual(
                 [e.value for p in children(focus, "prerequisite") for e in p],
+                ["STP_pw_party_border_staff"],
             )
             reward = one(focus, "completion_reward")
             self.assertIn(
@@ -563,9 +559,7 @@ class PartyRouteContracts(unittest.TestCase):
             for e in p
             if e.key == "focus"
         }
-        # The early Kefreyt campaign is not drawn into the final order; its
-        # result is still required through STP_pw_party_external_order_resolved.
-        self.assertEqual(prerequisites, {"STP_pw_party_bezhaysk_campaign"})
+        self.assertEqual(prerequisites, {"STP_pw_party_external_mandate"})
         self.assertIn(
             "STP_pw_party_external_order_resolved", str(one(final, "available"))
         )
@@ -573,14 +567,17 @@ class PartyRouteContracts(unittest.TestCase):
         self.assertIn("STP_pw_party_can_attack_bezhaysk = {", triggers)
         self.assertIn("STP_pw_party_can_attack_kefreyt = {", triggers)
         self.assertIn("STP_pw_party_external_order_resolved = {", triggers)
-        plan = read(PLANS)
-        for focus_id in (
-            "STP_pw_party_external_mandate",
+        plan = one(parse_clausewitz(read(PLANS)), "STP_party_reconstruction_plan")
+        queue = [e.value for e in one(plan, "ai_national_focuses")]
+        for campaign in (
             "STP_pw_party_bezhaysk_campaign",
             "STP_pw_party_kefreyt_campaign",
-            "STP_pw_party_regional_order",
         ):
-            self.assertIn(focus_id, plan)
+            self.assertLess(queue.index("STP_pw_party_border_staff"), queue.index(campaign))
+            self.assertLess(queue.index(campaign), queue.index("STP_pw_party_settled_state"))
+        self.assertLess(
+            queue.index("STP_pw_party_external_mandate"), queue.index("STP_pw_party_regional_order")
+        )
 
     def test_sovereignty_opens_a_terminal_nod_invasion_crisis(self):
         sovereignty = one(self.focus["STP_pw_party_sovereignty"], "completion_reward")

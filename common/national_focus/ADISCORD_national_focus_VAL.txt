@@ -4603,7 +4603,12 @@ shared_focus = {
 		}
 		cost = 4
 		prerequisite = { focus = VAL_Equal_Powers_Pact }
-		available = { has_country_flag = VAL_stelander_equal_alliance }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_current_stelander_ally_tt
+				VAL_has_current_stelander_ally = yes
+			}
+		}
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Joint_General_Staff_tt
@@ -4630,7 +4635,12 @@ shared_focus = {
 		}
 		cost = 4
 		prerequisite = { focus = VAL_Equal_Powers_Pact }
-		available = { has_country_flag = VAL_stelander_equal_alliance }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_current_stelander_ally_tt
+				VAL_has_current_stelander_ally = yes
+			}
+		}
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Cross_Border_Contracts_tt
@@ -4659,14 +4669,23 @@ shared_focus = {
 		cost = 5
 		prerequisite = { focus = VAL_Joint_General_Staff }
 		prerequisite = { focus = VAL_Cross_Border_Contracts }
-		available = { has_country_flag = VAL_stelander_equal_alliance }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_current_stelander_ally_tt
+				VAL_has_current_stelander_ally = yes
+			}
+		}
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			add_war_support = 0.05
 			add_stability = 0.03
 			custom_effect_tooltip = VAL_two_states_frontier_tt
 			hidden_effect = {
-				set_country_flag = VAL_stelander_permanent_alliance
+				if = {
+					limit = { STS = { VAL_is_current_stelander_ally = yes } }
+					STS = { VAL_conclude_stelander_alliance = yes }
+				}
+				else = { STP = { VAL_conclude_stelander_alliance = yes } }
 				VAL_call_stelander_partner_to_wars = yes
 			}
 		}

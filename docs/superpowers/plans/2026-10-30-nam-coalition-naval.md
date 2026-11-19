@@ -232,13 +232,11 @@ reward when all eligible lines were already built before the resource war.
 
 ## Colonial timing
 
-The 17 compatible colonial focuses take 329 days. Independence follows the
-WRK collapse event and its response, roughly on days 352-396. The approved
-choice preserves this interval for colonial decisions; do not lengthen the
-mandatory chains or add continuous focuses. Paid operations must settle
-through the normal collapse lifecycle.
+The three compatible colonial routes reach The Calm Before the Storm on
+day 308. Independence completes the focus at the WRK collapse, roughly on
+days 352-396. Colonial orders can run alongside the focus.
 
 The ordering window ends at the actual WRK split, roughly days 350-394.
-Fourteen-day orders fit after day 329; longer orders may be cancelled by an
-early split. Concession settlement rechecks the same operating predicate as
+The Centre's Last Register opens the 14-day archive order by day 308. A late
+order may be cancelled by an early split. Concession settlement rechecks the same operating predicate as
 payment and refunds its 200 treasury once if the metropole has disappeared.

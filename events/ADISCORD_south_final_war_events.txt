@@ -1047,7 +1047,7 @@ country_event = {
 	}
 }
 
-# ROOT is the courted enemy regional state; FROM is the champion whose offer
+# ROOT is the courted enemy regional state; FROM is the envoy whose offer
 # waits in escrow. The unattended default keeps the old alliance.
 country_event = {
 	id = ADISCORD_south.63
@@ -1061,8 +1061,14 @@ country_event = {
 		custom_effect_tooltip = ADISCORD_south_defector_refuse_tt
 		hidden_effect = {
 			FROM = {
-				ADISCORD_south_refund_defector = yes
-				country_event = { id = ADISCORD_south.65 hours = 1 }
+				if = {
+					limit = {
+						has_country_flag = ADISCORD_south_defector_pending
+						check_variable = { var = ADISCORD_south_defector_target value = ROOT compare = equals }
+					}
+					ADISCORD_south_refund_defector = yes
+					country_event = { id = ADISCORD_south.65 hours = 1 }
+				}
 			}
 		}
 		ai_chance = { base = 60 }
@@ -1137,6 +1143,49 @@ country_event = {
 				}
 			}
 			ADISCORD_south_refund_defector = yes
+		}
+	}
+}
+
+# ROOT decides whether to join the saved leader; FROM is the country that sent its envoy.
+country_event = {
+	id = ADISCORD_south.67
+	title = ADISCORD_south.67.t
+	desc = ADISCORD_south.67.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.67.a
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { var = ADISCORD_south_coalition_envoy value = FROM compare = equals } }
+				clear_variable = ADISCORD_south_coalition_envoy
+			}
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_south.67.b
+		trigger = { ADISCORD_south_coalition_answer_open = yes }
+		custom_effect_tooltip = ADISCORD_south_coalition_join_tt
+		hidden_effect = {
+			if = {
+				limit = { ADISCORD_south_coalition_answer_open = yes }
+				ADISCORD_south_leave_coalition = yes
+				event_target:ADISCORD_south_inviting_leader = {
+					ADISCORD_south_ensure_campaign_faction = yes
+					add_to_faction = ROOT
+				}
+				clear_variable = ADISCORD_south_coalition_envoy
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0.5
+				is_in_faction = yes
+			}
 		}
 	}
 }

@@ -659,6 +659,29 @@ on_actions = {
 					}
 				}
 
+				# Record the participant before Frontier's own treaty can change its overlord.
+				if = {
+					limit = {
+						VAL_is_frontier_command = yes
+						OR = {
+							is_subject_of = VAL
+							is_in_faction_with = VAL
+							has_country_flag = TFF_kefreyt_northern_campaign
+						}
+						has_war_with = NOD
+						has_war_together_with = VAL
+						VAL = {
+							VAL_nod_campaign_at_war = yes
+							NOT = { has_country_flag = VAL_frontier_exit_pending }
+						}
+					}
+					save_event_target_as = VAL_fallen_frontier
+					VAL = {
+						set_country_flag = { flag = VAL_frontier_exit_pending days = 9 }
+						country_event = { id = val_rework.225 hours = 1 }
+					}
+				}
+
 				# A shared NOD war has one settlement owner. Run it before VAL's
 				# ordinary final-campaign reservation can claim the whole country.
 				if = {
@@ -2449,6 +2472,7 @@ on_actions = {
 				# END vorkerland_diplomacy:on_peace
 
 				# BEGIN kefreyt:on_peace
+				VAL_clear_separate_northern_relation = yes
 				if = {
 					limit = { OR = { ROOT = { tag = RUS } FROM = { tag = RUS } } }
 					ROOT = { clr_country_flag = VAL_nw_defence_pending }
@@ -2520,6 +2544,24 @@ on_actions = {
 	on_before_peace_conference_start = {
 		effect = {
 			# BEGIN kefreyt:on_before_peace_conference_start
+			if = {
+				limit = {
+					FROM = {
+						tag = NOD
+						has_capitulated = yes
+						has_country_flag = VAL_joint_nod_campaign_target
+					}
+					VAL = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+					ROOT = {
+						OR = {
+							VAL_final_campaign_ally = yes
+							tag = STS
+							is_subject_of = STS
+						}
+					}
+				}
+				VAL = { VAL_settle_joint_nod_shabrat_victory = yes }
+			}
 			# Conference scopes reverse the capitulation hook's winner and loser.
 			if = {
 				limit = {
@@ -2665,6 +2707,15 @@ on_actions = {
 				}
 				# END vorkerland_collapse:on_annex
 				# BEGIN nam:on_annex
+				if = {
+					limit = { FROM = { has_country_flag = NAM_neighbour_military_command } }
+					FROM = { NAM_neighbour_close_command = yes }
+				}
+				else_if = {
+					limit = { FROM = { tag = NAM } }
+					EFL = { NAM_neighbour_close_command = yes }
+					AZH = { NAM_neighbour_close_command = yes }
+				}
 				NAM_veyran_close_external = yes
 				ADISCORD_nam_resource_war_close_external = yes
 				NAM_war_of_return_close_external = yes

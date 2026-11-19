@@ -1377,9 +1377,180 @@ defined_text = {
 	}
 }
 
-# The native ladder ranges of common/bop/NAM.txt.
+defined_text = {
+	name = NAMGetLadderVertical10
+	text = {
+		trigger = { NAM_ladder_formed = yes }
+		localization_key = NAM_ladder_shift_Vertical10
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetLadderDistricts5
+	text = {
+		trigger = { NAM_ladder_formed = yes }
+		localization_key = NAM_ladder_shift_Districts5
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetLadderDistricts10
+	text = {
+		trigger = { NAM_ladder_formed = yes }
+		localization_key = NAM_ladder_shift_Districts10
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetLadderVertical5
+	text = {
+		trigger = { NAM_ladder_formed = yes }
+		localization_key = NAM_ladder_shift_Vertical5
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetLadderVertical20
+	text = {
+		trigger = { NAM_ladder_formed = yes }
+		localization_key = NAM_ladder_shift_Vertical20
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetLadderDistricts20
+	text = {
+		trigger = { NAM_ladder_formed = yes }
+		localization_key = NAM_ladder_shift_Districts20
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetRivalBalanceSource
+	text = {
+		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		localization_key = NAM_rival_balance_mandate
+	}
+	text = { localization_key = NAM_rival_balance_ladder }
+}
+
+defined_text = {
+	name = NAMGetLadderVertical15
+	text = {
+		trigger = { NAM_ladder_formed = yes }
+		localization_key = NAM_ladder_shift_Vertical15
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetPillarBalanceTooltip
+	text = {
+		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		localization_key = NAM_bw_future_course_tt
+	}
+	text = { localization_key = NAM_bw_ladder_tt_prewar }
+}
+
+defined_text = {
+	name = NAMGetBasinBalanceLabel
+	text = {
+		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		localization_key = NAM_bw_future_course_short
+	}
+	text = { localization_key = NAM_bw_ladder_short_prewar }
+}
+
+defined_text = {
+	name = NAMGetBasinBalanceTooltip
+	text = {
+		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		localization_key = NAM_bw_future_course_tt
+	}
+	text = { localization_key = NAM_bw_ladder_full_tt_prewar }
+}
+
+defined_text = {
+	name = NAMGetLadderCentre
+	text = {
+		trigger = { NAM_ladder_formed = yes }
+		localization_key = NAM_ladder_shift_Centre
+	}
+	text = { localization_key = NAM_prewar_mandate_none }
+}
+
+defined_text = {
+	name = NAMGetPillarBalanceLabel
+	text = {
+		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		localization_key = NAM_bw_future_course_short
+	}
+	text = { localization_key = NAM_bw_balance_hint_prewar }
+}
+
+defined_text = {
+	name = NAMGetUndergroundVerticalPressure
+	text = {
+		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		localization_key = NAM_underground_pressure_mandate
+	}
+	text = { localization_key = NAM_underground_pressure_ladder }
+}
+
+# Both native balances are defined in common/bop/NAM.txt.
 defined_text = {
 	name = NAMBasinLadder
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = NAM_postwar_future_bop
+				range = NAM_future_contested
+			}
+		}
+		localization_key = NAM_future_contested
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = NAM_postwar_future_bop
+				range = NAM_hawks_influence
+			}
+		}
+		localization_key = NAM_hawks_influence
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = NAM_postwar_future_bop
+				range = NAM_hawks_dominance
+			}
+		}
+		localization_key = NAM_hawks_dominance
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = NAM_postwar_future_bop
+				range = NAM_conservatives_influence
+			}
+		}
+		localization_key = NAM_conservatives_influence
+	}
+	text = {
+		trigger = {
+			is_power_balance_in_range = {
+				id = NAM_postwar_future_bop
+				range = NAM_conservatives_dominance
+			}
+		}
+		localization_key = NAM_conservatives_dominance
+	}
 	text = {
 		trigger = { NOT = { NAM_ladder_formed = yes } }
 		localization_key = NAM_bw_ladder_unformed
@@ -3008,6 +3179,10 @@ defined_text = {
 				NAM_crisis_case_3 = yes
 				NAM_crisis_case_4 = yes
 				NAM_crisis_case_5 = yes
+				NAM_crisis_case_6 = yes
+				NAM_crisis_case_7 = yes
+				NAM_crisis_case_8 = yes
+				NAM_crisis_case_9 = yes
 			}
 		}
 		localization_key = NAM_incident_timeout_fund
@@ -3031,6 +3206,50 @@ defined_text = {
 	text = {
 		trigger = { NAM_crisis_case_5 = yes }
 		localization_key = NAM_incident_timeout_garrison
+	}
+	text = {
+		trigger = {
+			NAM_crisis_case_6 = yes
+			NAM_crisis_drought_mitigated = yes
+		}
+		localization_key = NAM_crisis_drought_contained_tt
+	}
+	text = {
+		trigger = { NAM_crisis_case_6 = yes }
+		localization_key = NAM_crisis_drought_tt
+	}
+	text = {
+		trigger = {
+			NAM_crisis_case_7 = yes
+			NAM_crisis_blackout_mitigated = yes
+		}
+		localization_key = NAM_crisis_blackout_contained_tt
+	}
+	text = {
+		trigger = { NAM_crisis_case_7 = yes }
+		localization_key = NAM_crisis_blackout_tt
+	}
+	text = {
+		trigger = {
+			NAM_crisis_case_8 = yes
+			NAM_crisis_flood_mitigated = yes
+		}
+		localization_key = NAM_crisis_flood_contained_tt
+	}
+	text = {
+		trigger = { NAM_crisis_case_8 = yes }
+		localization_key = NAM_crisis_flood_tt
+	}
+	text = {
+		trigger = {
+			NAM_crisis_case_9 = yes
+			NAM_crisis_delivery_disruption_mitigated = yes
+		}
+		localization_key = NAM_crisis_delivery_disruption_contained_tt
+	}
+	text = {
+		trigger = { NAM_crisis_case_9 = yes }
+		localization_key = NAM_crisis_delivery_disruption_tt
 	}
 	text = { localization_key = NAM_incident_timeout_closed }
 }

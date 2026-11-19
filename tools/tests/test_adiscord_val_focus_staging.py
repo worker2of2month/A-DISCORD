@@ -809,7 +809,9 @@ class KefreytNorthernOperationTests(unittest.TestCase):
         self.assertIn("VAL_op_pay_offensive = yes", launch)
         self.assertIn("VAL_nod_op_apply_launch = yes", named_block(self.effects, "VAL_final_crisis_join_war"))
         joint = named_block(self.effects, "VAL_begin_joint_nod_shabrat_campaign")
-        self.assertEqual(joint.count("VAL_nod_op_apply_launch = yes"), 2)
+        self.assertIn("VAL_confirm_joint_nod_entry = yes", joint)
+        confirmed = named_block(self.effects, "VAL_confirm_joint_nod_entry")
+        self.assertEqual(confirmed.count("VAL_nod_op_apply_launch = yes"), 1)
 
         close = named_block(self.effects, "VAL_nod_op_close")
         self.assertIn("VAL_op_clear_offensive = yes", close)

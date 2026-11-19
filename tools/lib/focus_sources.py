@@ -41,10 +41,13 @@ def read_focus_source(path: Path | str, encoding: str = "utf-8-sig") -> str:
         resolved = repository_root() / resolved
     if resolved.resolve() == (repository_root() / "focus_trees" / NAM_POSTWAR_SOURCE).resolve():
         return render_source(NAM_POSTWAR_SOURCE)
-    for source in SHARED_HISTORY_SOURCES:
-        output = repository_root() / "common/national_focus" / SOURCES[source]
-        if resolved.resolve() == output.resolve():
-            return render_source(source)
+    native_dir = (repository_root() / "common/national_focus").resolve()
+    native_path = resolved.resolve()
+    if native_path.parent == native_dir:
+        owners = [source for source, output in SOURCES.items()
+                  if native_dir / output == native_path and source in SHARED_HISTORY_SOURCES]
+        if owners:
+            return "\n".join(render_source(source) for source in owners)
     if resolved.is_file():
         return resolved.read_text(encoding=encoding)
 
@@ -53,11 +56,11 @@ def read_focus_source(path: Path | str, encoding: str = "utf-8-sig") -> str:
         prefixes = (resolved.name + "/",)
     if prefixes is None:
         raise FileNotFoundError(resolved)
-    sources = [
+    sources = dict.fromkeys(
         repository_root() / "common/national_focus" / output
         for source, output in SOURCES.items()
         if source.startswith(prefixes)
-    ]
+    )
     if not sources:
         raise FileNotFoundError(f"No focus sources found for {resolved}")
     return "\n".join(read_focus_source(source, encoding=encoding) for source in sources)

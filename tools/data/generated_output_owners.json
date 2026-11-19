@@ -2830,6 +2830,18 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_nam_basin_map.py",
+        "gfx/texticons/adiscord/custom/STP_hw_underground.png",
+        "tools/assets/source/focus_icons/NAM/metropolitan_quota_stamp.png",
+        "tools/assets/source/focus_icons/VAL/industrial_budget_banknote_bundles.png",
+        "gfx/interface/state_modifiers/adiscord/corporate_board.png",
+        "gfx/interface/ideas/NAM/idea_NAM_consolidation_dynamic.png",
+        "tools/assets/source/focus_icons/NAM/neutral_basin_diplomatic_handshake.png",
+        "tools/assets/source/focus_icons/NAM/district_assemblies_ballot_box.png",
+        "tools/assets/source/focus_icons/NAM/oil_score_industrial_meter.png",
+        "tools/assets/source/focus_icons/NAM/quiet_wells_pumpjack.png",
+        "tools/assets/source/focus_icons/NAM/metropolitan_quota_oil_drums_v3.png",
+        "gfx/interface/ideas/STP/idea_STP_wartime_strain.png",
+        "tools/assets/source/focus_icons/NAM/general_staff_plan_map_board.png",
         "history/states/*.txt",
         "map/definition.csv",
         "map/provinces.bmp",
@@ -3294,7 +3306,7 @@
       ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, definition.csv terrain field 6 of every Arab city and urban-growth province (desert_city, hill_city or urban by the surroundings of its cluster) and of the Svetlogorye city provinces listed in tools/lib/city_terrains.py, plus the explicit city and surrounding rural-sector province pixels, bounded province-corner repairs, the 4287-6099 and eight Yubor contact widenings, the Ishait 6-16372-51 frontage with the 6-48 contact removed, the Zshat 10926 connection, and the river-bank repairs in tools/data/adiscord_river_bank_repairs.json that give every land part a river cut off to the province on its own bank or move the river course onto the province border; owns surface samples and unit-anchor reconciliation for those exact province repairs, and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail; Nudge splits inside that mask keep its surface while their terrain stays authored. Owns city rasters for the explicit southern urban-growth provinces, the northern hand-painted urban provinces listed in URBAN_GROWTH, unit anchors for the southern Nudge splits 16864-16894 and their donors, and railway reroutes through those splits. Owns the Shahrabad house towns 16895-16899 and the southern regional towns 16902-16929, including their urban rasters, native unit anchors and their parents' border slots. Owns the southern rural splits 16930-17058, their inherited terrain and continent at creation, and the native unit anchors along their borders. Owns the DXT5 night light mask derived from the map-wide dry urban footprint. Preserves IVN terrain and compatible snow output."
+      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, definition.csv terrain field 6 of every Arab city and urban-growth province (desert_city, hill_city or urban by the surroundings of its cluster) and of the Svetlogorye city provinces listed in tools/lib/city_terrains.py, plus the explicit city and surrounding rural-sector province pixels, bounded province-corner repairs, the 4287-6099 and eight Yubor contact widenings, the Ishait 6-16372-51 frontage with the 6-48 contact removed, the Zshat 10926 connection, and the river-bank repairs in tools/data/adiscord_river_bank_repairs.json that give every land part a river cut off to the province on its own bank or move the river course onto the province border; owns surface samples and unit-anchor reconciliation for those exact province repairs, and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail; Nudge splits inside that mask keep its surface while their terrain stays authored. Owns city rasters for the explicit southern urban-growth provinces, the northern hand-painted urban provinces listed in URBAN_GROWTH, unit anchors for the southern Nudge splits 16864-16894 and their donors, and railway reroutes through those splits. Owns the Shahrabad house towns 16895-16899 and the southern regional towns 16902-16929, including their urban rasters, native unit anchors and their parents' border slots. Owns the southern rural splits 16930-17058, their inherited terrain and continent at creation, and the native unit anchors along their borders. In that anchor scope, the provinces above with their neighbours, it rebuilds the native unit-anchor set of a land province whose standing anchor lies outside its pixels, on a border or away from its interior centre, of a sea province whose standing anchor lies outside its pixels, and the moving slots of a province whose moving rows do not lead to their neighbours in the engine order; the Khan district 16531 is included, and slot 0 feeds the ambient town audio and the strategic-region weather positions, so those owners are reapplied afterwards. Owns the DXT5 night light mask derived from the map-wide dry urban footprint. Preserves IVN terrain and compatible snow output."
     },
     {
       "id": "ivn_geography",
@@ -3388,10 +3400,6 @@
         "common/national_focus/ADISCORD_NAM_focus.txt",
         "common/national_focus/ADISCORD_NAM_wartime.txt",
         "common/national_focus/ADISCORD_NAM_postwar.txt",
-        "common/national_focus/ADISCORD_NAM_postwar_government.txt",
-        "common/national_focus/ADISCORD_NAM_postwar_economy.txt",
-        "common/national_focus/ADISCORD_NAM_postwar_armed_forces.txt",
-        "common/national_focus/ADISCORD_NAM_postwar_southern_settlement.txt",
         "common/national_focus/ADISCORD_NAM_defeated.txt",
         "common/national_focus/ADISCORD_NAM_exile_radical.txt",
         "common/national_focus/ADISCORD_NAM_exile_humanist.txt",
@@ -3792,7 +3800,8 @@
         "map/cities.txt",
         "map/trees.bmp",
         "map/terrain.bmp",
-        "common/terrain/00_terrain.txt"
+        "common/terrain/00_terrain.txt",
+        "map/unitstacks.txt"
       ],
       "output_globs": [
         "gfx/models/buildings/NAM_export_office/*.mesh",

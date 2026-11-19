@@ -3,7 +3,7 @@
 		id = NAM_civil_repair
 		x = 54
 		y = 5
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
+		icon = GFX_focus_NAM_pillar_arbitration
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_recognition }
@@ -34,7 +34,7 @@
 	focus = {
 		id = NAM_civil_dividend
 		relative_position_id = NAM_civil_repair
-		x = 16
+		x = 18
 		y = 1
 		icon = GFX_focus_VAL_Bread_From_Barracks
 		cost = 4
@@ -209,7 +209,7 @@
 		relative_position_id = NAM_civil_repair
 		x = 10
 		y = 1
-		icon = GFX_focus_NAM_well_register
+		icon = GFX_focus_NAM_oil_quotas
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -257,7 +257,7 @@
 		relative_position_id = NAM_oil_ministry
 		x = -5
 		y = 2
-		icon = GFX_focus_NAM_well_register
+		icon = GFX_focus_NAM_deep_wells
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_pw_oil_laboratories }
@@ -430,7 +430,7 @@
 		relative_position_id = NAM_oil_ministry
 		x = 2
 		y = 2
-		icon = GFX_focus_NAM_well_register
+		icon = GFX_focus_NAM_oil_quotas
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -466,10 +466,10 @@
 	focus = {
 		id = NAM_svetlogorsk_dam
 		relative_position_id = NAM_civil_repair
-		x = 18
+		x = 19
 		y = 3
 		icon = GFX_focus_RUS_bunker_power_school
-		cost = 5
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		prerequisite = { focus = NAM_national_university }
 		available = {
@@ -486,6 +486,7 @@
 		completion_reward = {
 			unlock_decision_tooltip = NAM_project_hydroelectric
 			custom_effect_tooltip = NAM_project_hydroelectric_unlock_tt
+			custom_effect_tooltip = NAM_crisis_flood_mitigation_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -495,7 +496,7 @@
 		relative_position_id = NAM_civil_repair
 		x = -3
 		y = 1
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
+		icon = GFX_focus_NAM_field_repair_crews
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -523,7 +524,7 @@
 		relative_position_id = NAM_civil_repair
 		x = 3
 		y = 1
-		icon = GFX_focus_RUS_trained_administrators
+		icon = GFX_focus_NAM_civil_service_exam
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -683,7 +684,7 @@
 		relative_position_id = NAM_oil_ministry
 		x = 4
 		y = 3
-		icon = GFX_focus_RUS_engineers_collegium
+		icon = GFX_focus_NAM_engineering_collegium
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -834,6 +835,7 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_crisis_blackout_mitigation_tt
 			unlock_decision_tooltip = NAM_program_oilfield_substations
 			custom_effect_tooltip = NAM_program_oilfield_substations_unlock_tt
 			custom_effect_tooltip = NAM_grid_connect_tt
@@ -877,6 +879,7 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_crisis_drought_mitigation_tt
 			unlock_decision_tooltip = NAM_program_city_water
 			custom_effect_tooltip = NAM_program_city_water_unlock_tt
 			effect_tooltip = {
@@ -919,6 +922,7 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_crisis_drought_mitigation_tt
 			unlock_decision_tooltip = NAM_program_irrigation_works
 			custom_effect_tooltip = NAM_program_irrigation_works_unlock_tt
 		}
@@ -930,7 +934,7 @@
 		relative_position_id = NAM_pw_energy_commission
 		x = 0
 		y = 3
-		icon = GFX_focus_RUS_bunker_utilities
+		icon = GFX_focus_NAM_line_survey
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -946,6 +950,17 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_crisis_drought_prevention_tt
+			hidden_effect = {
+				if = {
+					limit = { has_idea = NAM_crisis_drought }
+					remove_ideas = NAM_crisis_drought
+				}
+				if = {
+					limit = { has_idea = NAM_crisis_drought_contained }
+					remove_ideas = NAM_crisis_drought_contained
+				}
+			}
 			if = {
 				limit = {
 					owns_state = 690
@@ -971,7 +986,7 @@
 		relative_position_id = NAM_pw_energy_commission
 		x = 2
 		y = 3
-		icon = GFX_focus_RUS_engineers_collegium
+		icon = GFX_focus_NAM_crisis_office
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -986,6 +1001,17 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = NAM_crisis_blackout_prevention_tt
+			hidden_effect = {
+				if = {
+					limit = { has_idea = NAM_crisis_blackout }
+					remove_ideas = NAM_crisis_blackout
+				}
+				if = {
+					limit = { has_idea = NAM_crisis_blackout_contained }
+					remove_ideas = NAM_crisis_blackout_contained
+				}
+			}
 			unlock_decision_tooltip = NAM_grid_send_generator
 			custom_effect_tooltip = NAM_grid_send_generator_unlock_tt
 			effect_tooltip = {
@@ -1010,7 +1036,7 @@
 		relative_position_id = NAM_civil_repair
 		x = 0
 		y = 1
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
+		icon = GFX_focus_NAM_state_plan
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1057,13 +1083,14 @@
 		relative_position_id = NAM_pw_industrial_recovery
 		x = -2
 		y = 1
-		icon = GFX_focus_RUS_engineers_collegium
+		icon = GFX_focus_NAM_state_project_bureaus
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		mutually_exclusive = {
 			focus = NAM_pw_arms_engineering
 		}
 		prerequisite = {
+			focus = NAM_pw_municipal_repair
 			focus = NAM_pw_industrial_recovery
 		}
 		available = {
@@ -1184,13 +1211,13 @@
 					controls_state = 689
 				}
 				689 = {
-					add_resource = { type = rubber amount = 4 }
+					add_resource = { type = rubber amount = 8 }
 				}
 			}
 			else = {
 				add_equipment_to_stockpile = {
 					type = support_equipment
-					amount = 220
+					amount = 350
 					producer = NAM
 				}
 			}
@@ -1216,7 +1243,7 @@
 		relative_position_id = NAM_pw_industrial_recovery
 		x = -2
 		y = 3
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
+		icon = GFX_focus_NAM_regional_trusts
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1285,7 +1312,7 @@
 		relative_position_id = NAM_pw_transport_commission
 		x = 0
 		y = 1
-		icon = GFX_focus_RUS_imperial_railways
+		icon = GFX_focus_NAM_state_logistics_grid
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		mutually_exclusive = {
@@ -1305,6 +1332,8 @@
 		completion_reward = {
 			unlock_decision_tooltip = NAM_program_rail_priority
 			custom_effect_tooltip = NAM_program_rail_priority_unlock_tt
+			custom_effect_tooltip = NAM_crisis_delivery_disruption_mitigation_tt
+			hidden_effect = { NAM_crisis_apply_interval_bonus = yes }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -1334,6 +1363,8 @@
 		completion_reward = {
 			unlock_decision_tooltip = NAM_program_road_priority
 			custom_effect_tooltip = NAM_program_road_priority_unlock_tt
+			custom_effect_tooltip = NAM_crisis_delivery_disruption_mitigation_tt
+			hidden_effect = { NAM_crisis_apply_interval_bonus = yes }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -1369,7 +1400,7 @@
 		relative_position_id = NAM_pw_transport_commission
 		x = 3
 		y = 2
-		icon = GFX_focus_VAL_Logistics_Command
+		icon = GFX_focus_NAM_line_engineers
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1395,7 +1426,7 @@
 		relative_position_id = NAM_pw_transport_commission
 		x = -3
 		y = 3
-		icon = GFX_focus_VAL_Logistics_Command
+		icon = GFX_focus_NAM_insured_cargoes
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1467,7 +1498,7 @@
 		relative_position_id = NAM_pw_transport_commission
 		x = -1
 		y = 3
-		icon = GFX_focus_VAL_Logistics_Command
+		icon = GFX_focus_NAM_insured_cargoes
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1499,7 +1530,7 @@
 		relative_position_id = NAM_pw_transport_commission
 		x = 4
 		y = 1
-		icon = GFX_focus_VAL_Logistics_Command
+		icon = GFX_focus_NAM_state_logistics_grid
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
@@ -1525,7 +1556,7 @@
 		relative_position_id = NAM_pw_transport_commission
 		x = -2
 		y = 4
-		icon = GFX_focus_VAL_Logistics_Command
+		icon = GFX_focus_NAM_pw_public_supply
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {

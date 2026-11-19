@@ -652,7 +652,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pm_front_air_support
-		icon = GFX_focus_STP_ps_radio_network
+		icon = GFX_focus_STP_pc_sdir_integrated_staff
 		x = 19
 		y = 2
 		cost = 2
@@ -710,7 +710,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pm_port_workshops
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_STP_pc_navy_yards
 		x = 13
 		y = 2
 		cost = 2
@@ -739,7 +739,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pm_guard_roadstead
-		icon = GFX_focus_STP_ps_foreign_supply_desk
+		icon = GFX_focus_STP_pc_navy_coast
 		x = 12
 		y = 4
 		cost = 2
@@ -818,7 +818,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pm_port_staff
-		icon = GFX_focus_STP_party_supply_directorate
+		icon = GFX_focus_STP_pc_navy_ports
 		x = 13
 		y = 5
 		cost = 2
@@ -926,7 +926,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_district_levies
-		icon = GFX_focus_STP_cw_abila_reserve
+		icon = GFX_focus_STP_pc_sot_regions
 		x = 12
 		y = 3
 		cost = 3
@@ -1169,7 +1169,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_hw_coalition_congress
-		icon = GFX_focus_STP_cw_autonomy_guarantees
+		icon = GFX_focus_STP_pc_lib_coalition
 		x = -2
 		y = 4
 		cost = 3
@@ -1353,7 +1353,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_assault_air_cover
-		icon = GFX_focus_RUS_air_control_network
+		icon = GFX_focus_STP_pc_sdir_integrated_staff
 		x = 15
 		y = 3
 		cost = 3
@@ -1383,7 +1383,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_mountain_staff
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_pc_sot_field
 		x = 11
 		y = 1
 		cost = 2
@@ -1405,7 +1405,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_pass_watch
-		icon = GFX_focus_STP_cw_northern_desk
+		icon = GFX_focus_STP_pc_sdir_prepared_positions
 		x = 11
 		y = 2
 		cost = 3
@@ -1421,7 +1421,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_hold_the_passes
-		icon = GFX_focus_STP_cw_defensive_lines
+		icon = GFX_focus_STP_pc_sdir_prepared_positions
 		x = 10
 		y = 3
 		cost = 3
@@ -1441,7 +1441,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_raid_the_approaches
-		icon = GFX_focus_STP_cw_northern_dossier
+		icon = GFX_focus_STP_pc_army_limited_offense
 		x = 12
 		y = 3
 		cost = 3
@@ -1551,7 +1551,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_route_columns
-		icon = GFX_focus_STP_cw_supply_officers
+		icon = GFX_focus_STP_pc_sdir_motor_columns
 		x = 0
 		y = 1
 		relative_position_id = STP_cw_frontline_relief
@@ -1646,7 +1646,7 @@ focus_tree = {
 	focus = {
 		id = STP_party_war_transport
 		prerequisite = { focus = STP_cw_unified_headquarters }
-		icon = GFX_focus_STP_ps_expedition_logistics
+		icon = GFX_focus_STP_pc_sdir_motor_columns
 		x = 3
 		y = 1
 		cost = 1
@@ -1666,7 +1666,7 @@ focus_tree = {
 	focus = {
 		id = STP_party_rear_administration
 		prerequisite = { focus = STP_cw_congress_in_session focus = STP_ps_restore_couriers }
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_STP_pc_lib_transition
 		x = 11
 		y = 2
 		cost = 2
@@ -1743,7 +1743,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_presidium_broadcast
-		icon = GFX_focus_STP_cw_public_lists
+		icon = GFX_focus_STP_pc_two_borders
 		x = -1
 		y = 1
 		cost = 1
@@ -1884,7 +1884,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_district_supply
-		icon = GFX_focus_STP_party_supply_directorate
+		icon = GFX_focus_STP_pc_sdir_integrated_rear
 		x = -1
 		y = 4
 		cost = 2
@@ -2364,7 +2364,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_firm_settlement
-		icon = GFX_focus_VAL_Ministry_Auditors
+		icon = GFX_focus_STP_pw_republic_firm_settlement
 		x = 1
 		y = 7
 		cost = 5
@@ -2385,7 +2385,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_civil_charter
-		icon = GFX_focus_VAL_One_Ledger_One_Banner
+		icon = GFX_focus_STP_pw_republic_civil_charter
 		x = 0
 		y = 8
 		cost = 5
@@ -2453,7 +2453,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_civil_workshops
-		icon = GFX_focus_VAL_Reclamation_Workshops
+		icon = GFX_focus_STP_pw_republic_civil_workshops
 		x = 5
 		y = 7
 		cost = 5
@@ -2500,7 +2500,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_accountable_arsenals
-		icon = GFX_focus_VAL_Inventory_The_Empty_Yards
+		icon = GFX_focus_STP_pw_republic_accountable_arsenals
 		x = 7
 		y = 7
 		cost = 5
@@ -2567,7 +2567,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_army_register
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_STP_pw_republic_army_register
 		x = 38
 		y = 4
 		prerequisite = { focus = STP_pc_after_victory }
@@ -2590,7 +2590,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_officer_school
-		icon = GFX_focus_RUS_officer_courses
+		icon = GFX_focus_STP_pc_sdir_officer_college
 		x = 38
 		y = 5
 		cost = 4
@@ -2612,7 +2612,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_supply_service
-		icon = GFX_focus_VAL_Morns_Supply_Trains
+		icon = GFX_focus_STP_pw_republic_supply_service
 		x = 38
 		y = 6
 		cost = 4
@@ -2632,7 +2632,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_professional_service
-		icon = GFX_focus_VAL_Contractor_Officers
+		icon = GFX_focus_STP_pw_republic_professional_service
 		x = 38
 		y = 7
 		cost = 5
@@ -2656,7 +2656,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_take_bezhaysk
-		icon = GFX_focus_VAL_Frontier_Assault
+		icon = GFX_focus_STP_pw_take_bezhaysk
 		x = 44
 		y = 8
 		cost = 5
@@ -2675,7 +2675,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_settled_state
-		icon = GFX_focus_VAL_State_Contract
+		icon = GFX_focus_STP_pw_republic_settled_state
 		x = 4
 		y = 10
 		prerequisite = { focus = STP_pw_republic_civil_charter }
@@ -2695,7 +2695,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_shield_corps
-		icon = GFX_focus_VAL_Vorons_Companies
+		icon = GFX_focus_STP_pw_republic_shield_corps
 		x = 34
 		y = 6
 		cost = 5
@@ -2764,7 +2764,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_district_authority
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_STP_pc_lib_transition
 		x = -16
 		y = 3
 		cost = 3
@@ -2806,7 +2806,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_civil_records
-		icon = GFX_focus_STP_PARTY_DISCIPLINE
+		icon = GFX_focus_STP_pc_sdir_service_records
 		x = -16
 		y = 4
 		cost = 4
@@ -3117,7 +3117,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_accountable_arsenals
-		icon = GFX_focus_STP_party_trade_industry
+		icon = GFX_focus_STP_pc_sdir_arsenal_programme
 		x = -8
 		y = 6
 		cost = 5
@@ -3257,7 +3257,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_officer_school
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_sdir_officer_college
 		x = 10
 		y = 4
 		cost = 4
@@ -3298,7 +3298,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_supply_service
-		icon = GFX_focus_STP_party_supply_directorate
+		icon = GFX_focus_STP_pc_sdir_motor_columns
 		x = 8
 		y = 5
 		cost = 4
@@ -3339,7 +3339,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_professional_service
-		icon = GFX_focus_STP_ch_service_act
+		icon = GFX_focus_STP_pc_sdir_field_army
 		x = 12
 		y = 5
 		cost = 5
@@ -3467,11 +3467,11 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_bezhaysk_campaign
-		icon = GFX_focus_STP_cw_capital_counteroffensive
-		x = -2
-		y = 15
+		icon = GFX_focus_STP_pw_take_bezhaysk
+		x = 6
+		y = 8
 		cost = 4
-		prerequisite = { focus = STP_pw_party_external_mandate }
+		prerequisite = { focus = STP_pw_party_border_staff }
 		allow_branch = {
 			has_country_flag = STP_cw_postwar
 			tag = STP
@@ -3544,9 +3544,9 @@ focus_tree = {
 		id = STP_pw_party_regional_order
 		icon = GFX_focus_STP_cw_party_mandate
 		x = 0
-		y = 16
+		y = 15
 		cost = 4
-		prerequisite = { focus = STP_pw_party_bezhaysk_campaign }
+		prerequisite = { focus = STP_pw_party_external_mandate }
 		allow_branch = {
 			has_country_flag = STP_cw_postwar
 			tag = STP
@@ -3575,7 +3575,7 @@ focus_tree = {
 		id = STP_pw_party_northern_march
 		icon = GFX_focus_STP_cw_capital_counteroffensive
 		x = 0
-		y = 17
+		y = 16
 		cost = 4
 		prerequisite = { focus = STP_pw_party_regional_order }
 		allow_branch = {
@@ -3605,7 +3605,7 @@ focus_tree = {
 		id = STP_pw_party_great_stelander
 		icon = GFX_focus_STP_cw_party_mandate
 		x = 0
-		y = 18
+		y = 17
 		cost = 5
 		prerequisite = { focus = STP_pw_party_northern_march }
 		allow_branch = {
@@ -3815,7 +3815,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_port_contracts
-		icon = GFX_focus_STP_ps_foreign_supply_desk
+		icon = GFX_focus_STP_pc_navy_ports
 		x = -12
 		y = 7
 		cost = 4
@@ -4236,7 +4236,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_field_staff
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sot_field
 		x = 12
 		y = 6
 		cost = 4
@@ -4618,7 +4618,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_shield_corps
-		icon = GFX_focus_STP_cw_protect_congress
+		icon = GFX_focus_STP_pw_republic_shield_corps
 		x = 14
 		y = 5
 		cost = 5
@@ -4720,7 +4720,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_two_borders
-		icon = GFX_focus_STP_cw_northern_dossier
+		icon = GFX_focus_STP_pc_two_borders
 		x = 48
 		y = 4
 		cost = 2
@@ -4755,7 +4755,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_mountain_school
-		icon = GFX_focus_RUS_field_sappers
+		icon = GFX_focus_STP_pw_republic_mountain_school
 		x = 34
 		y = 9
 		cost = 4
@@ -4780,7 +4780,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_army_mountain
-		icon = GFX_focus_RUS_patient_war
+		icon = GFX_focus_STP_pc_army_mountain
 		x = 38
 		y = 9
 		prerequisite = { focus = STP_pw_republic_professional_service }
@@ -4801,7 +4801,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_army_against_heavy
-		icon = GFX_focus_RUS_artillery_tables
+		icon = GFX_focus_STP_pc_army_against_heavy
 		x = 42
 		y = 9
 		prerequisite = { focus = STP_pw_republic_professional_service }
@@ -4822,7 +4822,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_armored_maneuver_companies
-		icon = GFX_focus_generic_mechanized
+		icon = GFX_focus_STP_pc_armored_maneuver_companies
 		x = 42
 		y = 11
 		prerequisite = { focus = STP_pc_army_against_heavy }
@@ -4924,7 +4924,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_army_limited_offense
-		icon = GFX_focus_RUS_swift_columns
+		icon = GFX_focus_STP_pc_army_limited_offense
 		x = 38
 		y = 11
 		prerequisite = { focus = STP_pc_army_mountain }
@@ -4947,7 +4947,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_army_hegemony_cadres
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_pc_army_hegemony_cadres
 		x = 40
 		y = 13
 		cost = 5
@@ -4971,7 +4971,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_army_republic_control
-		icon = GFX_focus_RUS_district_courts
+		icon = GFX_focus_STP_pc_army_republic_control
 		x = 44
 		y = 14
 		cost = 5
@@ -5001,7 +5001,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_army_staff_doctrine
-		icon = GFX_focus_VAL_Contract_General_Staff
+		icon = GFX_focus_STP_pc_army_staff_doctrine
 		x = 48
 		y = 13
 		cost = 5
@@ -5039,7 +5039,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_navy_coast
-		icon = GFX_focus_RUS_quiet_perimeter
+		icon = GFX_focus_STP_pc_navy_coast
 		x = -6
 		y = 6
 		# Coastal logistics follow the wartime supply branch; reconstruction keeps its own layout.
@@ -5090,7 +5090,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_navy_ports
-		icon = GFX_focus_STP_cw_port_budget
+		icon = GFX_focus_STP_pc_navy_ports
 		x = 0
 		y = 1
 		relative_position_id = STP_pc_navy_coast
@@ -5113,7 +5113,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_marine_school
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_STP_pw_republic_marine_school
 		x = 2
 		y = 2
 		relative_position_id = STP_pc_navy_coast
@@ -5133,7 +5133,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_navy_yards
-		icon = GFX_focus_STP_cw_port_budget
+		icon = GFX_focus_STP_pc_navy_yards
 		x = -2
 		y = 2
 		relative_position_id = STP_pc_navy_coast
@@ -5159,7 +5159,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_navy_escorts
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_STP_pc_navy_escorts
 		x = -2
 		y = 3
 		relative_position_id = STP_pc_navy_coast
@@ -5214,7 +5214,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_navy_deny
-		icon = GFX_focus_VAL_Border_Survey_Corps
+		icon = GFX_focus_STP_pc_navy_deny
 		x = -6
 		y = 10
 		cost = 5
@@ -5252,7 +5252,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_air_crews
-		icon = GFX_focus_RUS_flight_school
+		icon = GFX_focus_STP_pc_air_crews
 		x = 48
 		y = 9
 		prerequisite = { focus = STP_pw_republic_professional_service }
@@ -5273,7 +5273,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_air_fields
-		icon = GFX_focus_RUS_capital_airfields
+		icon = GFX_focus_STP_pc_air_fields
 		x = 48
 		y = 10
 		cost = 5
@@ -5297,7 +5297,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_air_shield
-		icon = GFX_focus_RUS_fighter_cover
+		icon = GFX_focus_STP_pc_air_shield
 		x = 46
 		y = 11
 		cost = 5
@@ -5319,7 +5319,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_air_support
-		icon = GFX_focus_RUS_assault_squadrons
+		icon = GFX_focus_STP_pc_air_support
 		x = 46
 		y = 12
 		cost = 5
@@ -5339,7 +5339,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_air_import
-		icon = GFX_focus_RUS_military_contract_board
+		icon = GFX_focus_STP_pc_air_import
 		x = 50
 		y = 11
 		cost = 5
@@ -5360,7 +5360,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_air_domestic
-		icon = GFX_focus_RUS_aircraft_workshops
+		icon = GFX_focus_STP_pc_air_domestic
 		x = 48
 		y = 14
 		cost = 5
@@ -5522,7 +5522,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_unity
-		icon = GFX_focus_RUS_parallel_public_addresses
+		icon = GFX_focus_STP_pc_heg_unity
 		x = 16
 		y = 6
 		cost = 4
@@ -5550,7 +5550,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_emergency
-		icon = GFX_focus_VAL_Operational_Directorate
+		icon = GFX_focus_STP_pc_heg_emergency
 		x = 16
 		y = 7
 		cost = 4
@@ -5572,7 +5572,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_subordinate
-		icon = GFX_focus_VAL_Company_Mandates
+		icon = GFX_focus_STP_pc_heg_subordinate
 		x = 16
 		y = 8
 		cost = 4
@@ -5599,7 +5599,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_limit_parties
-		icon = GFX_focus_VAL_Captains_Cannot_Veto
+		icon = GFX_focus_STP_pc_heg_limit_parties
 		x = 16
 		y = 9
 		cost = 4
@@ -5623,7 +5623,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_lock
-		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		icon = GFX_focus_STP_pc_heg_lock
 		x = 16
 		y = 10
 		cost = 3
@@ -5645,7 +5645,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_person
-		icon = GFX_focus_STP_Kefreite_Security_Offer
+		icon = GFX_focus_STP_pc_heg_person
 		x = 14
 		y = 11
 		cost = 5
@@ -5670,7 +5670,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_regional_system
-		icon = GFX_focus_VAL_Reclamation_Survey
+		icon = GFX_focus_STP_pc_heg_regional_system
 		x = 18
 		y = 11
 		cost = 5
@@ -5692,7 +5692,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_val_audit
-		icon = GFX_focus_STP_Kefreite_Security_Offer
+		icon = GFX_focus_STP_pc_heg_val_audit
 		x = 2
 		y = 12
 		cost = 4
@@ -5727,7 +5727,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_val_terms
-		icon = GFX_focus_VAL_Trading_Partners
+		icon = GFX_focus_STP_pc_heg_val_terms
 		x = 2
 		y = 13
 		cost = 4
@@ -5762,7 +5762,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_val_force
-		icon = GFX_focus_STP_End_Kefreit
+		icon = GFX_focus_STP_pc_heg_val_force
 		x = 2
 		y = 14
 		cost = 4
@@ -5796,7 +5796,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_nod_break
-		icon = GFX_focus_RUS_press_the_closed_zone
+		icon = GFX_focus_STP_pc_heg_nod_break
 		x = 22
 		y = 12
 		cost = 3
@@ -5847,7 +5847,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_nod_force
-		icon = GFX_focus_destroy_nodrul
+		icon = GFX_focus_STP_pc_heg_nod_force
 		x = 22
 		y = 13
 		cost = 3
@@ -5876,7 +5876,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_clients
-		icon = GFX_focus_VAL_Provincial_Brokers
+		icon = GFX_focus_STP_pc_heg_clients
 		x = 18
 		y = 14
 		cost = 3
@@ -5897,7 +5897,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_burden
-		icon = GFX_focus_VAL_Price_Of_Loyalty
+		icon = GFX_focus_STP_pc_heg_burden
 		x = 18
 		y = 15
 		cost = 3
@@ -5923,7 +5923,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_administrations
-		icon = GFX_focus_VAL_Ministry_Auditors
+		icon = GFX_focus_STP_pc_heg_administrations
 		x = 18
 		y = 16
 		cost = 3
@@ -5993,7 +5993,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_frontier_ain
-		icon = GFX_focus_STP_Break_The_Northern_Ring
+		icon = GFX_focus_STP_pc_heg_frontier_ain
 		x = 14
 		y = 17
 		cost = 4
@@ -6014,7 +6014,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_frontier_cof
-		icon = GFX_focus_STP_Break_The_Northern_Ring
+		icon = GFX_focus_STP_pc_heg_frontier_cof
 		x = 22
 		y = 17
 		cost = 4
@@ -6063,7 +6063,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_northern_administration
-		icon = GFX_focus_VAL_Reclamation_Land_Register
+		icon = GFX_focus_STP_pc_heg_northern_administration
 		x = 18
 		y = 19
 		cost = 3
@@ -6083,7 +6083,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_cannibal_campaign
-		icon = GFX_focus_STP_Break_The_Northern_Ring
+		icon = GFX_focus_STP_pc_heg_cannibal_campaign
 		x = 18
 		y = 20
 		cost = 4
@@ -6104,7 +6104,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_chancellery
-		icon = GFX_focus_RUS_seal_chancery
+		icon = GFX_focus_STP_pc_heg_chancellery
 		x = 10
 		y = 6
 		cost = 3
@@ -6131,7 +6131,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_trusted_list
-		icon = GFX_focus_RUS_trained_administrators
+		icon = GFX_focus_STP_pc_heg_trusted_list
 		x = 10
 		y = 7
 		cost = 3
@@ -6159,7 +6159,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_old_guard
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_pc_heg_old_guard
 		x = 8
 		y = 8
 		cost = 4
@@ -6192,7 +6192,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_new_ladder
-		icon = GFX_focus_RUS_officer_courses
+		icon = GFX_focus_STP_pc_heg_new_ladder
 		x = 12
 		y = 8
 		cost = 4
@@ -6225,7 +6225,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_personal_oath
-		icon = GFX_focus_RUS_written_oaths
+		icon = GFX_focus_STP_pc_heg_personal_oath
 		x = 8
 		y = 9
 		cost = 3
@@ -6253,7 +6253,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_official_history
-		icon = GFX_focus_VAL_Ministry_Of_Contract_Memory
+		icon = GFX_focus_STP_pc_heg_official_history
 		x = 12
 		y = 9
 		cost = 3
@@ -6281,7 +6281,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_rewrite_mandate
-		icon = GFX_focus_VAL_Quarterly_Contract_Norm
+		icon = GFX_focus_STP_pc_heg_rewrite_mandate
 		x = 10
 		y = 10
 		cost = 4
@@ -6317,7 +6317,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_public_trial
-		icon = GFX_focus_VAL_Provincial_Contract_Courts
+		icon = GFX_focus_STP_pc_heg_public_trial
 		x = 8
 		y = 12
 		cost = 4
@@ -6352,7 +6352,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_closed_session
-		icon = GFX_focus_VAL_Company_Mandates
+		icon = GFX_focus_STP_pc_heg_closed_session
 		x = 12
 		y = 12
 		cost = 3
@@ -6385,7 +6385,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_revolution_name
-		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		icon = GFX_focus_STP_pc_heg_revolution_name
 		x = 10
 		y = 13
 		cost = 5
@@ -6450,7 +6450,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_institutions
-		icon = GFX_focus_VAL_Provincial_Contract_Courts
+		icon = GFX_focus_STP_pc_lib_institutions
 		x = 24
 		y = 7
 		cost = 4
@@ -6477,7 +6477,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_civil_army
-		icon = GFX_focus_STP_pc_lib_assembly
+		icon = GFX_focus_STP_pc_lib_civil_army
 		x = 24
 		y = 8
 		cost = 5
@@ -6566,7 +6566,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_lock
-		icon = GFX_focus_VAL_One_Ledger_One_Banner
+		icon = GFX_focus_STP_pc_lib_lock
 		x = 24
 		y = 9
 		cost = 3
@@ -6588,7 +6588,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_competition
-		icon = GFX_focus_RUS_aimaq_council
+		icon = GFX_focus_STP_pc_lib_competition
 		x = 30
 		y = 10
 		cost = 5
@@ -6620,7 +6620,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_succession
-		icon = GFX_focus_RUS_seal_chancery
+		icon = GFX_focus_STP_pc_lib_succession
 		x = 30
 		y = 11
 		cost = 5
@@ -6664,7 +6664,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_prepare_neighbors
-		icon = GFX_focus_STP_cw_northern_dossier
+		icon = GFX_focus_STP_pc_lib_prepare_neighbors
 		x = 36
 		y = 10
 		cost = 4
@@ -6710,7 +6710,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_crisis
-		icon = GFX_focus_VAL_Operational_Directorate
+		icon = GFX_focus_STP_pc_lib_crisis
 		x = 36
 		y = 12
 		cost = 4
@@ -6753,7 +6753,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_war
-		icon = GFX_focus_VAL_Frontier_Assault
+		icon = GFX_focus_STP_pc_lib_war
 		x = 36
 		y = 13
 		cost = 4
@@ -6803,7 +6803,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_transition
-		icon = GFX_focus_VAL_Provincial_Brokers
+		icon = GFX_focus_STP_pc_lib_transition
 		x = 36
 		y = 14
 		cost = 5
@@ -6860,7 +6860,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_independent_gov
-		icon = GFX_focus_VAL_State_Contract
+		icon = GFX_focus_STP_pc_lib_independent_gov
 		x = 36
 		y = 15
 		cost = 5
@@ -6886,7 +6886,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_coalition
-		icon = GFX_focus_RUS_parallel_public_addresses
+		icon = GFX_focus_STP_pc_lib_coalition
 		x = 32
 		y = 16
 		cost = 5
@@ -6945,7 +6945,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_field
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_pc_sot_field
 		x = 16
 		y = 5
 		cost = 5
@@ -6972,7 +6972,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_regions
-		icon = GFX_focus_VAL_Reserve_Battalions
+		icon = GFX_focus_STP_pc_sot_regions
 		x = 16
 		y = 6
 		cost = 5
@@ -6994,7 +6994,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_state
-		icon = GFX_focus_RUS_imperial_general_staff
+		icon = GFX_focus_STP_pc_sot_state
 		x = 16
 		y = 7
 		cost = 5
@@ -7020,7 +7020,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_two_threats
-		icon = GFX_focus_STP_cw_northern_dossier
+		icon = GFX_focus_STP_pc_sot_two_threats
 		x = 18
 		y = 8
 		cost = 2
@@ -7058,7 +7058,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_limits
-		icon = GFX_focus_VAL_Captains_Cannot_Veto
+		icon = GFX_focus_STP_pc_sot_limits
 		x = 16
 		y = 9
 		cost = 5
@@ -7080,7 +7080,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_keep_command
-		icon = GFX_focus_VAL_Count_The_Captains
+		icon = GFX_focus_STP_pc_sot_keep_command
 		x = 15
 		y = 11
 		cost = 5
@@ -7124,7 +7124,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_transfer
-		icon = GFX_focus_RUS_seal_chancery
+		icon = GFX_focus_STP_pc_sot_transfer
 		x = 17
 		y = 11
 		cost = 5
@@ -7151,7 +7151,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_val_defense
-		icon = GFX_focus_RUS_patient_war
+		icon = GFX_focus_STP_pc_sot_val_defense
 		x = 14
 		y = 9
 		cost = 5
@@ -7173,7 +7173,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_nod_watch
-		icon = GFX_focus_VAL_Border_Survey_Corps
+		icon = GFX_focus_STP_pc_sot_nod_watch
 		x = 18
 		y = 9
 		cost = 5
@@ -7198,7 +7198,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_oath
-		icon = GFX_focus_RUS_written_oaths
+		icon = GFX_focus_STP_pc_sdir_oath
 		x = 16
 		y = 4
 		cost = 3
@@ -7228,7 +7228,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_occidia_campaign
-		icon = GFX_focus_RUS_claim_the_opened_zone
+		icon = GFX_focus_STP_pc_sdir_occidia_campaign
 		x = 11
 		y = 5
 		cost = 3
@@ -7250,7 +7250,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_field_army
-		icon = GFX_focus_VAL_Contractor_Officers
+		icon = GFX_focus_STP_pc_sdir_field_army
 		x = 14
 		y = 5
 		cost = 4
@@ -7279,7 +7279,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_district_levies
-		icon = GFX_focus_VAL_Reserve_Battalions
+		icon = GFX_focus_STP_pc_sdir_district_levies
 		x = 18
 		y = 5
 		cost = 4
@@ -7340,7 +7340,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_staff_rule
-		icon = GFX_focus_RUS_imperial_general_staff
+		icon = GFX_focus_STP_pc_sdir_staff_rule
 		x = 18
 		y = 6
 		cost = 4
@@ -7367,7 +7367,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_northern_plan
-		icon = GFX_focus_STP_cw_northern_dossier
+		icon = GFX_focus_STP_pc_sdir_northern_plan
 		x = 16
 		y = 7
 		cost = 3
@@ -7435,7 +7435,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_nod_war
-		icon = GFX_focus_destroy_nodrul
+		icon = GFX_focus_STP_pc_sdir_nod_war
 		x = 18
 		y = 8
 		cost = 4
@@ -7467,7 +7467,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_military_governors
-		icon = GFX_focus_RUS_military_governors
+		icon = GFX_focus_STP_pc_sdir_military_governors
 		x = 16
 		y = 9
 		cost = 4
@@ -7506,7 +7506,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_central_command
-		icon = GFX_focus_VAL_Contract_General_Staff
+		icon = GFX_focus_STP_pc_army_staff_doctrine
 		x = 14
 		y = 10
 		cost = 3
@@ -7533,7 +7533,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_field_compacts
-		icon = GFX_focus_VAL_Company_Mandates
+		icon = GFX_focus_STP_pc_sdir_field_compacts
 		x = 18
 		y = 10
 		cost = 3
@@ -7560,7 +7560,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_arsenal_programme
-		icon = GFX_focus_VAL_Salvage_Every_Barrel
+		icon = GFX_focus_STP_pc_sdir_arsenal_programme
 		x = 14
 		y = 11
 		cost = 3
@@ -7584,7 +7584,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_naval_programme
-		icon = GFX_focus_STP_cw_port_budget
+		icon = GFX_focus_STP_pc_navy_yards
 		x = 18
 		y = 11
 		cost = 3
@@ -7608,7 +7608,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_rear_reconstruction
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_STP_pc_sdir_rear_reconstruction
 		x = 11
 		y = 10
 		cost = 3
@@ -7630,7 +7630,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_command_register
-		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		icon = GFX_focus_STP_pc_sdir_service_records
 		x = 10
 		y = 6
 		cost = 2
@@ -7652,7 +7652,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_military_prosecution
-		icon = GFX_focus_VAL_Provincial_Contract_Courts
+		icon = GFX_focus_STP_pc_sdir_military_prosecution
 		x = 9
 		y = 7
 		cost = 2
@@ -7684,7 +7684,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_field_courts
-		icon = GFX_focus_RUS_district_courts
+		icon = GFX_focus_STP_pc_sdir_field_courts
 		x = 11
 		y = 7
 		cost = 2
@@ -7750,7 +7750,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_service_records
-		icon = GFX_focus_VAL_Closed_Ledgers
+		icon = GFX_focus_STP_pc_sdir_service_records
 		x = 10
 		y = 9
 		cost = 2
@@ -7781,7 +7781,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_officer_college
-		icon = GFX_focus_RUS_officer_courses
+		icon = GFX_focus_STP_pc_sdir_officer_college
 		x = 10
 		y = 15
 		cost = 4
@@ -7815,7 +7815,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_signal_corps
-		icon = GFX_focus_RUS_air_control_network
+		icon = GFX_focus_STP_pc_sdir_signal_corps
 		x = 22
 		y = 7
 		cost = 3
@@ -7840,7 +7840,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_motor_columns
-		icon = GFX_focus_VAL_Morns_Supply_Trains
+		icon = GFX_focus_STP_pc_sdir_motor_columns
 		x = 22
 		y = 8
 		cost = 3
@@ -7862,7 +7862,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_mobile_operations
-		icon = GFX_focus_VAL_Motorized_Columns
+		icon = GFX_focus_STP_pc_sdir_mobile_operations
 		x = 20
 		y = 9
 		cost = 3
@@ -7894,7 +7894,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_prepared_positions
-		icon = GFX_focus_RUS_patient_war
+		icon = GFX_focus_STP_pc_sdir_prepared_positions
 		x = 24
 		y = 9
 		cost = 3
@@ -7950,7 +7950,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_integrated_staff
-		icon = GFX_focus_RUS_air_ground_coordination
+		icon = GFX_focus_STP_pc_sdir_integrated_staff
 		x = 22
 		y = 12
 		cost = 4
@@ -8117,7 +8117,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_naval_signals
-		icon = GFX_focus_RUS_air_control_network
+		icon = GFX_focus_STP_pc_sdir_naval_signals
 		x = 18
 		y = 12
 		cost = 3
@@ -8139,7 +8139,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_convoy_escorts
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_STP_pc_sdir_convoy_escorts
 		x = 18
 		y = 13
 		cost = 3
@@ -8162,7 +8162,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_naval_repair_yards
-		icon = GFX_focus_STP_cw_port_budget
+		icon = GFX_focus_STP_pc_navy_yards
 		x = 18
 		y = 14
 		cost = 3
@@ -8254,7 +8254,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_annexed_registers
-		icon = GFX_focus_VAL_Reclamation_Land_Register
+		icon = GFX_focus_STP_pc_sdir_annexed_registers
 		x = 8
 		y = 12
 		cost = 3
@@ -8330,7 +8330,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_fuel_depots
-		icon = GFX_focus_RUS_aviation_fuel_reserve
+		icon = GFX_focus_STP_pc_sdir_fuel_depots
 		x = 8
 		y = 14
 		cost = 3
@@ -8352,7 +8352,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_school_network
-		icon = GFX_focus_RUS_engineers_collegium
+		icon = GFX_focus_STP_pc_sdir_school_network
 		x = 8
 		y = 15
 		cost = 3
@@ -8383,7 +8383,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_integrated_rear
-		icon = GFX_focus_RUS_bunker_layer_service_school
+		icon = GFX_focus_STP_pc_sdir_integrated_rear
 		x = 8
 		y = 16
 		cost = 4
@@ -8419,7 +8419,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_sword_directory
-		icon = GFX_focus_STP_Steland_Hegemony
+		icon = GFX_focus_STP_pc_sdir_sword_directory
 		x = 16
 		y = 17
 		cost = 5
@@ -8472,7 +8472,7 @@ focus_tree = {
 	# The alternative final returns the seal to the arrested founder and his hegemony course.
 	focus = {
 		id = STP_pc_sdir_return_seal
-		icon = GFX_focus_RUS_seal_chancery
+		icon = GFX_focus_STP_pc_sdir_return_seal
 		x = 18
 		y = 17
 		cost = 5
@@ -8506,7 +8506,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_gornin_charter
-		icon = GFX_focus_VAL_One_Ledger_One_Banner
+		icon = GFX_focus_STP_pc_gornin_charter
 		x = 14
 		y = 4
 		cost = 5
@@ -8552,7 +8552,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_vera_lists
-		icon = GFX_focus_VAL_Closed_Ledgers
+		icon = GFX_focus_STP_pc_vera_lists
 		x = 18
 		y = 4
 		cost = 5
@@ -8579,7 +8579,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_val_renew_aid
-		icon = GFX_focus_RUS_military_contract_board
+		icon = GFX_focus_STP_pc_val_renew_aid
 		x = 6
 		y = 13
 		cost = 4
@@ -8602,7 +8602,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_val_border_compact
-		icon = GFX_focus_VAL_Westerholm_Concessions
+		icon = GFX_focus_STP_pc_val_border_compact
 		x = 6
 		y = 13
 		cost = 4
@@ -8647,7 +8647,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_nod_ratify
-		icon = GFX_focus_RUS_foreign_press_bureau
+		icon = GFX_focus_STP_pc_nod_ratify
 		x = 26
 		y = 13
 		cost = 4
@@ -8669,7 +8669,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_nod_recognition
-		icon = GFX_focus_VAL_Company_Mandates
+		icon = GFX_focus_STP_pc_nod_recognition
 		x = 26
 		y = 12
 		cost = 4
@@ -9110,7 +9110,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_border_staff
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_sot_field
 		x = 10
 		y = 7
 		cost = 4
@@ -9144,7 +9144,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_mountain_school
-		icon = GFX_focus_STP_ps_asylum_protocol
+		icon = GFX_focus_STP_pw_republic_mountain_school
 		x = 10
 		y = 8
 		cost = 4
@@ -9169,7 +9169,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_marine_school
-		icon = GFX_focus_STP_cw_capital_reserve
+		icon = GFX_focus_STP_pw_republic_marine_school
 		x = 12
 		y = 8
 		cost = 4
@@ -9587,7 +9587,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ch_rules
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_STP_pc_lib_independent_gov
 		x = 16
 		y = 5
 		cost = 4
@@ -11291,7 +11291,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_staff_commandants
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sdir_military_governors
 		x = -1
 		y = 4
 		cost = 2
@@ -11418,7 +11418,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_staff_districts
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_sdir_integrated_rear
 		x = -1
 		y = 5
 		cost = 2
@@ -11742,7 +11742,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ch_staff_state
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sot_state
 		x = -3
 		y = 9
 		cost = 3
@@ -12618,7 +12618,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_security_register
-		icon = GFX_focus_STP_party_succession_protocol
+		icon = GFX_focus_STP_pc_sdir_service_records
 		x = -5
 		y = 4
 		cost = 2
@@ -15279,7 +15279,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pe_staff_commission
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sot_limits
 		x = 3
 		y = 8
 		cost = 2
@@ -15315,7 +15315,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pe_staff_course_a
-		icon = GFX_focus_STP_party_succession_protocol
+		icon = GFX_focus_STP_pc_sot_limits
 		x = 1
 		y = 9
 		cost = 2
@@ -15434,7 +15434,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pe_staff_ending_b
-		icon = GFX_focus_STP_ph_pen_of_staff
+		icon = GFX_focus_STP_pc_sot_state
 		x = 5
 		y = 11
 		cost = 3
@@ -16440,7 +16440,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pe_security_ending_b
-		icon = GFX_focus_STP_cw_counter_network
+		icon = GFX_focus_STP_pc_sdir_service_records
 		x = 5
 		y = 11
 		cost = 3
@@ -17061,7 +17061,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_naval_yards
-		icon = GFX_focus_STP_party_trade_industry
+		icon = GFX_focus_STP_pc_navy_yards
 		x = -28
 		y = 4
 		cost = 5
@@ -17096,7 +17096,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_naval_escorts
-		icon = GFX_focus_STP_ps_foreign_supply_desk
+		icon = GFX_focus_STP_pc_navy_escorts
 		x = -28
 		y = 5
 		cost = 4
@@ -17183,7 +17183,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_naval_fire_support
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_STP_pc_navy_deny
 		x = -27
 		y = 6
 		cost = 5
@@ -17230,7 +17230,7 @@ focus_tree = {
 	}
 	focus = {
 		id = STP_pc_economy_count_the_cost
-		icon = GFX_focus_RUS_state_budget
+		icon = GFX_focus_STP_pc_economy_count_the_cost
 		x = 54
 		y = 4
 		cost = 3
@@ -17257,7 +17257,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_economy_reopen_tax_offices
-		icon = GFX_focus_RUS_trained_administrators
+		icon = GFX_focus_STP_pc_economy_reopen_tax_offices
 		x = 54
 		y = 5
 		cost = 4
@@ -17319,7 +17319,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_economy_stabilize_currency
-		icon = GFX_focus_VAL_Export_Clearing_House
+		icon = GFX_focus_STP_pc_economy_stabilize_currency
 		x = 56
 		y = 6
 		cost = 4
@@ -17397,7 +17397,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_posters_on_ruins
-		icon = GFX_focus_VAL_Two_Concurrent_Narratives
+		icon = GFX_focus_STP_pc_development_posters_on_ruins
 		x = 62
 		y = 5
 		cost = 4
@@ -17417,7 +17417,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_rebuild_as_duty
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_STP_pc_development_rebuild_as_duty
 		x = 60
 		y = 6
 		cost = 4
@@ -17438,7 +17438,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_engineers_on_radio
-		icon = GFX_focus_VAL_Wireless_Contract_Bureau
+		icon = GFX_focus_STP_pc_development_engineers_on_radio
 		x = 64
 		y = 6
 		cost = 4
@@ -17459,7 +17459,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_generation_reconstruction
-		icon = GFX_focus_VAL_Reclamation_Return_Home
+		icon = GFX_focus_STP_pc_development_generation_reconstruction
 		x = 62
 		y = 7
 		cost = 5
@@ -17488,7 +17488,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_reopen_universities
-		icon = GFX_focus_RUS_scientists_at_headquarters
+		icon = GFX_focus_STP_pc_development_reopen_universities
 		x = 64
 		y = 8
 		cost = 4
@@ -17510,7 +17510,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_national_research_institutes
-		icon = GFX_focus_RUS_empire_without_rivals
+		icon = GFX_focus_STP_pc_development_national_research_institutes
 		x = 62
 		y = 9
 		cost = 5
@@ -17535,7 +17535,7 @@ focus_tree = {
 	# A functioning Bezhaysk administration provides access without direct annexation.
 	focus = {
 		id = STP_pc_development_captured_institutes
-		icon = GFX_focus_RUS_scientists_council
+		icon = GFX_focus_STP_pc_development_captured_institutes
 		x = 62
 		y = 10
 		cost = 5
@@ -17653,7 +17653,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_restore_couriers
-		icon = GFX_focus_STP_ps_radio_network
+		icon = GFX_focus_STP_pc_sdir_signal_corps
 		x = 15
 		y = 1
 		cost = 2
@@ -17808,7 +17808,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_investment_development_fund
-		icon = GFX_focus_RUS_underground_fund
+		icon = GFX_focus_STP_pc_investment_development_fund
 		x = 54
 		y = 9
 		cost = 3
@@ -17838,7 +17838,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_investment_precision_industry
-		icon = GFX_focus_VAL_Reclamation_Industrial_Sites
+		icon = GFX_focus_STP_pc_investment_precision_industry
 		x = 52
 		y = 10
 		cost = 5
@@ -17860,7 +17860,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_investment_special_metallurgy
-		icon = GFX_focus_VAL_Westerholm_Concessions
+		icon = GFX_focus_STP_pc_investment_special_metallurgy
 		x = 56
 		y = 10
 		cost = 5
@@ -17895,7 +17895,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_investment_logistics
-		icon = GFX_focus_VAL_Motorized_Columns
+		icon = GFX_focus_STP_pc_investment_logistics
 		x = 56
 		y = 11
 		cost = 3
@@ -17911,7 +17911,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_investment_computing
-		icon = GFX_focus_ADISCORD_Wall_Of_Screens
+		icon = GFX_focus_STP_pc_investment_computing
 		x = 52
 		y = 12
 		cost = 3
@@ -17927,7 +17927,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_investment_defense_orders
-		icon = GFX_focus_VAL_Munitions_Board
+		icon = GFX_focus_STP_pc_investment_defense_orders
 		x = 56
 		y = 12
 		cost = 5
@@ -17969,7 +17969,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_investment_integrated_economy
-		icon = GFX_focus_VAL_The_Steel_Contract
+		icon = GFX_focus_STP_pc_investment_integrated_economy
 		x = 54
 		y = 14
 		cost = 5
@@ -17997,7 +17997,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_navy_capital
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_STP_pc_navy_capital
 		x = -10
 		y = 10
 		cost = 10
@@ -18608,7 +18608,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_sotnikov_army_under_law
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_army_republic_control
 		x = 4
 		y = 2
 		relative_position_id = STP_pc_lib_lock
@@ -18646,7 +18646,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_sotnikov_citizen_reserve
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_pc_sot_regions
 		x = 3
 		y = 3
 		relative_position_id = STP_pc_lib_lock
@@ -18871,7 +18871,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_sotnikov_officer_responsibility
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_pc_army_republic_control
 		x = -2
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -19055,7 +19055,7 @@ focus_tree = {
 	# Shabrat: a chain of national diamonds opens into a six-way programme fan.
 	focus = {
 		id = STP_pc_charter_shabrat_mandate
-		icon = GFX_focus_STP_pc_shabrat_politics
+		icon = GFX_focus_STP_pc_charter_shabrat_mandate
 		x = -4
 		y = 1
 		relative_position_id = STP_pc_lib_lock
@@ -19133,7 +19133,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_domestic_suppliers
-		icon = GFX_focus_STP_party_industrial_board
+		icon = GFX_focus_STP_pc_charter_shabrat_domestic_suppliers
 		x = -1
 		y = 2
 		relative_position_id = STP_pc_lib_lock
@@ -19214,7 +19214,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_resistance_memory
-		icon = GFX_focus_STP_cw_press_office
+		icon = GFX_focus_STP_pc_charter_shabrat_resistance_memory
 		x = -6
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -19253,7 +19253,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_grants
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
+		icon = GFX_focus_STP_pc_charter_shabrat_district_grants
 		x = -11
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -19288,7 +19288,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_tools_inventory
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_STP_pc_charter_shabrat_tools_inventory
 		x = 3
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -19317,7 +19317,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_service
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_pc_charter_shabrat_national_service
 		x = -2
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -19356,7 +19356,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_citizens_protection
-		icon = GFX_focus_STP_ps_asylum_protocol
+		icon = GFX_focus_STP_pc_charter_shabrat_citizens_protection
 		x = -4
 		y = 5
 		relative_position_id = STP_pc_lib_lock
@@ -19403,7 +19403,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_schools
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_pc_charter_shabrat_national_schools
 		x = -14
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -19478,7 +19478,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_workshops
-		icon = GFX_focus_STP_party_industrial_board
+		icon = GFX_focus_STP_pc_charter_shabrat_district_workshops
 		x = -6
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -19546,7 +19546,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_defence
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_STP_pc_charter_shabrat_national_defence
 		x = 1
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -19584,7 +19584,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_officer_oath
-		icon = GFX_focus_STP_Turn_The_Young_Officers
+		icon = GFX_focus_STP_pc_charter_shabrat_officer_oath
 		x = 4
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -19677,7 +19677,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_arsenal
-		icon = GFX_focus_STP_defense_budget_tank
+		icon = GFX_focus_STP_pc_charter_shabrat_national_arsenal
 		x = -6
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -19790,7 +19790,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_reserves
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_STP_pc_charter_shabrat_district_reserves
 		x = 1
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -19831,7 +19831,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_border_drills
-		icon = GFX_focus_STP_cw_arm_the_north
+		icon = GFX_focus_STP_pc_charter_shabrat_border_drills
 		x = 5
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -19863,7 +19863,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_protected_communities
-		icon = GFX_focus_STP_pw_party_family_pensions
+		icon = GFX_focus_STP_pc_charter_shabrat_protected_communities
 		x = -12
 		y = 8
 		relative_position_id = STP_pc_lib_lock
@@ -19901,7 +19901,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_exchange
-		icon = GFX_focus_STP_party_war_transport
+		icon = GFX_focus_STP_pc_charter_shabrat_district_exchange
 		x = -4
 		y = 8
 		relative_position_id = STP_pc_lib_lock
@@ -19942,7 +19942,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_defence_stores
-		icon = GFX_focus_STP_ps_northern_arms
+		icon = GFX_focus_STP_pc_charter_shabrat_defence_stores
 		x = 3
 		y = 8
 		relative_position_id = STP_pc_lib_lock
@@ -20022,7 +20022,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_charter_fulfilled
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_STP_pc_charter_shabrat_charter_fulfilled
 		x = -4
 		y = 10
 		relative_position_id = STP_pc_lib_lock
@@ -20760,7 +20760,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_tikhoreva_technical_instructors
-		icon = GFX_focus_STP_party_technical_institutes
+		icon = GFX_focus_STP_pc_sdir_school_network
 		x = 5
 		y = 4
 		relative_position_id = STP_pc_lib_lock
@@ -21128,7 +21128,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_local_officer_courses
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_pc_sdir_officer_college
 		x = 2
 		y = 2
 		cost = 4

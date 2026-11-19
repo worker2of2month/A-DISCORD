@@ -37,6 +37,7 @@ try:
         TECHNOLOGY_ID_MIGRATIONS as GENERATED_TECHNOLOGY_ID_MIGRATIONS,
         XOR_KIND_BY_BRANCH as GENERATED_XOR_KIND_BY_BRANCH,
         XOR_INDEX_GROUPS_BY_BRANCH as GENERATED_XOR_INDEX_GROUPS_BY_BRANCH,
+        SUPPORT_YEAR_BANDS as GENERATED_SUPPORT_YEAR_BANDS,
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
@@ -83,6 +84,7 @@ except ModuleNotFoundError:
         TECHNOLOGY_ID_MIGRATIONS as GENERATED_TECHNOLOGY_ID_MIGRATIONS,
         XOR_KIND_BY_BRANCH as GENERATED_XOR_KIND_BY_BRANCH,
         XOR_INDEX_GROUPS_BY_BRANCH as GENERATED_XOR_INDEX_GROUPS_BY_BRANCH,
+        SUPPORT_YEAR_BANDS as GENERATED_SUPPORT_YEAR_BANDS,
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
@@ -2417,6 +2419,8 @@ def check_technology_ui_years() -> list[str]:
                     if folder in branch.folders
                 )
             )
+            if folder == "support_folder":
+                expected = 2 * GENERATED_SUPPORT_YEAR_BANDS.count((int(year), int(year)))
             if count != expected:
                 issues.append(
                     f"{folder} has {count} labels for era {year}; expected exactly {expected}"
@@ -3461,6 +3465,9 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                     ("maintenance_company", "equipment_capture_factor", 1, 0.03),
                     ("maintenance_company", "reliability_factor", 1, 0.03),
                     ("logistics_company", "supply_consumption_factor", -1, 0.03),
+                    ("logistics_company", "fuel_consumption_factor", -1, 0.03),
+                    ("field_hospital", "experience_loss_factor", -1, 0.04),
+                    ("field_hospital", "casualty_trickleback", 1, 0.03),
                     ("signal_company", "initiative", 1, 0.04),
                 ):
                     scope = re.search(rf"\b{unit}\s*=\s*\{{", effect_prefix)
@@ -3623,7 +3630,10 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
             expected_leaves = {
                 "reserve_training": 2,
                 # Equipment generations and maintenance are separate outcomes.
-                "field_support": 2,
+                "field_support": 3,
+                "combat_engineering": 2,
+                "rail": 2,
+                "garrison_security": 2,
                 "fighter": 2,
                 "air_support": 2,
                 "strategic_air": 2,

@@ -1909,6 +1909,420 @@
   },
   "focus_compositions": [
     {
+      "focus_id": "NAM_klyuchevsk_pipeline",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_klyuchevsk_pipeline",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_klyuchevsk_pipeline.png"
+    },
+    {
+      "focus_id": "NAM_line_survey",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_line_survey",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_line_survey.png"
+    },
+    {
+      "focus_id": "NAM_crisis_office",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_crisis_office",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_crisis_office.png"
+    },
+    {
+      "focus_id": "NAM_quartermaster",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_quartermaster",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_quartermaster.png"
+    },
+    {
+      "focus_id": "NAM_field_repair_crews",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_field_repair_crews",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_field_repair_crews.png"
+    },
+    {
+      "focus_id": "NAM_insured_cargoes",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_insured_cargoes",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_insured_cargoes.png"
+    },
+    {
+      "focus_id": "NAM_pillar_arbitration",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pillar_arbitration",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pillar_arbitration.png"
+    },
+    {
+      "focus_id": "NAM_engineer_depots",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_engineer_depots",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_engineer_depots.png"
+    },
+    {
+      "focus_id": "NAM_line_engineers",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_line_engineers",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_line_engineers.png"
+    },
+    {
+      "focus_id": "NAM_field_gendarmes",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_field_gendarmes",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_field_gendarmes.png"
+    },
+    {
+      "focus_id": "NAM_deep_wells",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_deep_wells",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_deep_wells.png"
+    },
+    {
+      "focus_id": "NAM_count_garrisons",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_count_garrisons",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_count_garrisons.png"
+    },
+    {
+      "focus_id": "NAM_field_guards",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_field_guards",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_field_guards.png"
+    },
+    {
+      "focus_id": "NAM_mine_councils",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_mine_councils",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_mine_councils.png"
+    },
+    {
+      "focus_id": "NAM_supports_export_houses",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_supports_export_houses",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_supports_export_houses.png"
+    },
+    {
+      "focus_id": "NAM_commercial_courts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_commercial_courts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_commercial_courts.png"
+    },
+    {
+      "focus_id": "NAM_commercial_reserve",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_commercial_reserve",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_commercial_reserve.png"
+    },
+    {
+      "focus_id": "NAM_insured_caravans",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_insured_caravans",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_insured_caravans.png"
+    },
+    {
+      "focus_id": "NAM_machine_tool_contracts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_machine_tool_contracts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_machine_tool_contracts.png"
+    },
+    {
+      "focus_id": "NAM_warehouse_receipts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_warehouse_receipts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_warehouse_receipts.png"
+    },
+    {
+      "focus_id": "NAM_prag_ending_republic",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_prag_ending_republic",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_prag_ending_republic.png"
+    },
+    {
+      "focus_id": "NAM_contract_register",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_contract_register",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_contract_register.png"
+    },
+    {
+      "focus_id": "NAM_export_clearing",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_export_clearing",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_export_clearing.png"
+    },
+    {
+      "focus_id": "NAM_district_guarantees",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_district_guarantees",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_district_guarantees.png"
+    },
+    {
+      "focus_id": "NAM_tax_rolls",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_tax_rolls",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_tax_rolls.png"
+    },
+    {
+      "focus_id": "NAM_port_agreement",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_port_agreement",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_port_agreement.png"
+    },
+    {
+      "focus_id": "NAM_supports_oil_compact",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_supports_oil_compact",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_supports_oil_compact.png"
+    },
+    {
+      "focus_id": "NAM_pragmatic_compact",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pragmatic_compact",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pragmatic_compact.png"
+    },
+    {
+      "focus_id": "NAM_prag_ending_directorate",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_prag_ending_directorate",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_prag_ending_directorate.png"
+    },
+    {
+      "focus_id": "NAM_emergency_writ",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_emergency_writ",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_emergency_writ.png"
+    },
+    {
+      "focus_id": "NAM_provisional_statute",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_provisional_statute",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_provisional_statute.png"
+    },
+    {
+      "focus_id": "NAM_garrison_assembly",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_garrison_assembly",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_garrison_assembly.png"
+    },
+    {
+      "focus_id": "NAM_one_budget",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_one_budget",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_one_budget.png"
+    },
+    {
+      "focus_id": "NAM_south_oil_charter",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_oil_charter",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_oil_charter.png"
+    },
+    {
+      "focus_id": "NAM_federal_charter",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_federal_charter",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_federal_charter.png"
+    },
+    {
+      "focus_id": "NAM_charter_ending_federation",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_charter_ending_federation",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_charter_ending_federation.png"
+    },
+    {
+      "focus_id": "NAM_charter_ending_oil_union",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_charter_ending_oil_union",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_charter_ending_oil_union.png"
+    },
+    {
+      "focus_id": "NAM_regional_university",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_regional_university",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_regional_university.png"
+    },
+    {
+      "focus_id": "NAM_south_fenn_guarantee",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_fenn_guarantee",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_fenn_guarantee.png"
+    },
+    {
+      "focus_id": "NAM_district_council",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_district_council",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_district_council.png"
+    },
+    {
+      "focus_id": "NAM_rural_grid",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_rural_grid",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_rural_grid.png"
+    },
+    {
+      "focus_id": "NAM_open_libraries",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_open_libraries",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_open_libraries.png"
+    },
+    {
+      "focus_id": "NAM_district_scholarships",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_district_scholarships",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_district_scholarships.png"
+    },
+    {
+      "focus_id": "NAM_district_militia",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_district_militia",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_district_militia.png"
+    },
+    {
+      "focus_id": "NAM_common_fuel_market",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_common_fuel_market",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_common_fuel_market.png"
+    },
+    {
+      "focus_id": "NAM_municipal_services",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_municipal_services",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_municipal_services.png"
+    },
+    {
+      "focus_id": "NAM_common_citizenship",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_common_citizenship",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_common_citizenship.png"
+    },
+    {
+      "focus_id": "NAM_oil_fund",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_oil_fund",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_oil_fund.png"
+    },
+    {
+      "focus_id": "NAM_south_oil_for_water",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_oil_for_water",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_oil_for_water.png"
+    },
+    {
+      "focus_id": "NAM_district_workshops",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_district_workshops",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_district_workshops.png"
+    },
+    {
+      "focus_id": "NAM_public_utilities",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_public_utilities",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_public_utilities.png"
+    },
+    {
+      "focus_id": "NAM_civic_audit",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_civic_audit",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_civic_audit.png"
+    },
+    {
+      "focus_id": "NAM_returnee_offices",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_returnee_offices",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_returnee_offices.png"
+    },
+    {
+      "focus_id": "NAM_regional_trusts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_regional_trusts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_regional_trusts.png"
+    },
+    {
+      "focus_id": "NAM_oil_quotas",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_oil_quotas",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_oil_quotas.png"
+    },
+    {
+      "focus_id": "NAM_state_logistics_grid",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_state_logistics_grid",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_state_logistics_grid.png"
+    },
+    {
+      "focus_id": "NAM_appointed_prefects",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_appointed_prefects",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_appointed_prefects.png"
+    },
+    {
+      "focus_id": "NAM_works_commission",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_works_commission",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_works_commission.png"
+    },
+    {
+      "focus_id": "NAM_engineering_collegium",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_engineering_collegium",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_engineering_collegium.png"
+    },
+    {
+      "focus_id": "NAM_ladder_ending_iron",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_ladder_ending_iron",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_ladder_ending_iron.png"
+    },
+    {
+      "focus_id": "NAM_ladder_of_seals",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_ladder_of_seals",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_ladder_of_seals.png"
+    },
+    {
+      "focus_id": "NAM_state_project_bureaus",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_state_project_bureaus",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_state_project_bureaus.png"
+    },
+    {
+      "focus_id": "NAM_namestnik_garrisons",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_namestnik_garrisons",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_namestnik_garrisons.png"
+    },
+    {
+      "focus_id": "NAM_district_inspectorate",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_district_inspectorate",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_district_inspectorate.png"
+    },
+    {
+      "focus_id": "NAM_development_bank",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_development_bank",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_development_bank.png"
+    },
+    {
+      "focus_id": "NAM_state_plan",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_state_plan",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_state_plan.png"
+    },
+    {
+      "focus_id": "NAM_reconstruction_statute",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_reconstruction_statute",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_reconstruction_statute.png"
+    },
+    {
+      "focus_id": "NAM_ladder_ending_service",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_ladder_ending_service",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_ladder_ending_service.png"
+    },
+    {
+      "focus_id": "NAM_civil_service_exam",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_civil_service_exam",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_civil_service_exam.png"
+    },
+    {
       "focus_id": "NAM_service_state",
       "export_runtime": false,
       "sprite": "GFX_focus_NAM_service_state",
@@ -2367,6 +2781,888 @@
       "sprite": "GFX_focus_NAM_letters_to_the_centre",
       "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_letters_to_the_centre.png",
       "generator": "Built-in image_gen"
+    },
+    {
+      "focus_id": "NAM_chancellery_purge",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_chancellery_purge",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_chancellery_purge.png"
+    },
+    {
+      "focus_id": "NAM_fuel_depots",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_fuel_depots",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_fuel_depots.png"
+    },
+    {
+      "focus_id": "NAM_second_drilling_crew",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_second_drilling_crew",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_second_drilling_crew.png"
+    },
+    {
+      "focus_id": "NAM_motor_pool",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_motor_pool",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_motor_pool.png"
+    },
+    {
+      "focus_id": "NAM_reserve_rolls",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_reserve_rolls",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_reserve_rolls.png"
+    },
+    {
+      "focus_id": "NAM_port_arsenal",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_port_arsenal",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_port_arsenal.png"
+    },
+    {
+      "focus_id": "NAM_officer_courses",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_officer_courses",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_officer_courses.png"
+    },
+    {
+      "focus_id": "NAM_law_after_war",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_law_after_war",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_law_after_war.png"
+    },
+    {
+      "focus_id": "NAM_seal_registry",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_seal_registry",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_seal_registry.png"
+    },
+    {
+      "focus_id": "NAM_unified_standards",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_unified_standards",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_unified_standards.png"
+    },
+    {
+      "focus_id": "NAM_balanced_accounts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_balanced_accounts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_balanced_accounts.png"
+    },
+    {
+      "focus_id": "NAM_water_boards",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_water_boards",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_water_boards.png"
+    },
+    {
+      "focus_id": "NAM_pw_constitutional_committee",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_constitutional_committee",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_constitutional_committee.png"
+    },
+    {
+      "focus_id": "NAM_pw_cabinet_statute",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_cabinet_statute",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_cabinet_statute.png"
+    },
+    {
+      "focus_id": "NAM_pw_state_chamber",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_state_chamber",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_state_chamber.png"
+    },
+    {
+      "focus_id": "NAM_pw_cadastre",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_cadastre",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_cadastre.png"
+    },
+    {
+      "focus_id": "NAM_pw_administrative_courts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_administrative_courts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_administrative_courts.png"
+    },
+    {
+      "focus_id": "NAM_pw_public_procurement",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_public_procurement",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_public_procurement.png"
+    },
+    {
+      "focus_id": "NAM_pw_industrial_commission",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_industrial_commission",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_industrial_commission.png"
+    },
+    {
+      "focus_id": "NAM_pw_tool_reserve",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_tool_reserve",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_tool_reserve.png"
+    },
+    {
+      "focus_id": "NAM_pw_public_supply",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_public_supply",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_public_supply.png"
+    },
+    {
+      "focus_id": "NAM_pw_industrial_credit",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_industrial_credit",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_industrial_credit.png"
+    },
+    {
+      "focus_id": "NAM_pw_export_guarantees",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_export_guarantees",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_export_guarantees.png"
+    },
+    {
+      "focus_id": "NAM_pw_labour_code",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_labour_code",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_labour_code.png"
+    },
+    {
+      "focus_id": "NAM_pw_company_housing",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_company_housing",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_company_housing.png"
+    },
+    {
+      "focus_id": "NAM_pw_technical_training",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_technical_training",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_technical_training.png"
+    },
+    {
+      "focus_id": "NAM_pw_employment_offices",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_employment_offices",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_employment_offices.png"
+    },
+    {
+      "focus_id": "NAM_pw_arbitration_commissions",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_arbitration_commissions",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_arbitration_commissions.png"
+    },
+    {
+      "focus_id": "NAM_pw_social_budget",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_social_budget",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_social_budget.png"
+    },
+    {
+      "focus_id": "NAM_pw_state_warehouses",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_state_warehouses",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_state_warehouses.png"
+    },
+    {
+      "focus_id": "NAM_pw_district_hospitals",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_district_hospitals",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_district_hospitals.png"
+    },
+    {
+      "focus_id": "NAM_pw_civil_communications",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_civil_communications",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_civil_communications.png"
+    },
+    {
+      "focus_id": "NAM_pw_regional_reconstruction",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_regional_reconstruction",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_regional_reconstruction.png"
+    },
+    {
+      "focus_id": "NAM_building_code",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_building_code",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_building_code.png"
+    },
+    {
+      "focus_id": "NAM_pw_military_governors",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_military_governors",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_military_governors.png"
+    },
+    {
+      "focus_id": "NAM_pw_officer_appointments",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_officer_appointments",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_officer_appointments.png"
+    },
+    {
+      "focus_id": "NAM_pw_strategic_guard",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_strategic_guard",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_strategic_guard.png"
+    },
+    {
+      "focus_id": "NAM_pw_defence_accounts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_defence_accounts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_defence_accounts.png"
+    },
+    {
+      "focus_id": "NAM_pw_survey_corps",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_survey_corps",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_survey_corps.png"
+    },
+    {
+      "focus_id": "NAM_pw_standard_projects",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_standard_projects",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_standard_projects.png"
+    },
+    {
+      "focus_id": "NAM_pw_local_design_offices",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_local_design_offices",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_local_design_offices.png"
+    },
+    {
+      "focus_id": "NAM_cooperative_congress",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_cooperative_congress",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_cooperative_congress.png"
+    },
+    {
+      "focus_id": "NAM_haulage_cooperatives",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_haulage_cooperatives",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_haulage_cooperatives.png"
+    },
+    {
+      "focus_id": "NAM_tool_cooperatives",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_tool_cooperatives",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_tool_cooperatives.png"
+    },
+    {
+      "focus_id": "NAM_district_fair",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_district_fair",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_district_fair.png"
+    },
+    {
+      "focus_id": "NAM_relief_register",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_relief_register",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_relief_register.png"
+    },
+    {
+      "focus_id": "NAM_relief_trains",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_relief_trains",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_relief_trains.png"
+    },
+    {
+      "focus_id": "NAM_mobile_clinics",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_mobile_clinics",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_mobile_clinics.png"
+    },
+    {
+      "focus_id": "NAM_rescue_college",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_rescue_college",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_rescue_college.png"
+    },
+    {
+      "focus_id": "NAM_relief_reserves",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_relief_reserves",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_relief_reserves.png"
+    },
+    {
+      "focus_id": "NAM_south_black_basin",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_black_basin",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_black_basin.png"
+    },
+    {
+      "focus_id": "NAM_south_desert_offices",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_desert_offices",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_desert_offices.png"
+    },
+    {
+      "focus_id": "NAM_normalisation",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_normalisation",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_normalisation.png"
+    },
+    {
+      "focus_id": "NAM_basin_reservoirs",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_basin_reservoirs",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_basin_reservoirs.png"
+    },
+    {
+      "focus_id": "NAM_foreign_patents",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_foreign_patents",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_foreign_patents.png"
+    },
+    {
+      "focus_id": "NAM_domestic_designs",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_domestic_designs",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_domestic_designs.png"
+    },
+    {
+      "focus_id": "NAM_port_polytechnic",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_port_polytechnic",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_port_polytechnic.png"
+    },
+    {
+      "focus_id": "NAM_commercial_commonwealth",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_commercial_commonwealth",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_commercial_commonwealth.png"
+    },
+    {
+      "focus_id": "NAM_pw_central_treasury",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_central_treasury",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_central_treasury.png"
+    },
+    {
+      "focus_id": "NAM_pw_insurance_fund",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_insurance_fund",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_insurance_fund.png"
+    },
+    {
+      "focus_id": "NAM_pw_family_pensions",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_family_pensions",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_family_pensions.png"
+    },
+    {
+      "focus_id": "NAM_pw_school_network",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_school_network",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_school_network.png"
+    },
+    {
+      "focus_id": "NAM_foreign_office",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_foreign_office",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_foreign_office.png"
+    },
+    {
+      "focus_id": "NAM_eflor_accord",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_eflor_accord",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_eflor_accord.png"
+    },
+    {
+      "focus_id": "NAM_azhar_accord",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_azhar_accord",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_azhar_accord.png"
+    },
+    {
+      "focus_id": "NAM_border_compacts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_border_compacts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_border_compacts.png"
+    },
+    {
+      "focus_id": "NAM_border_citizenship",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_border_citizenship",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_border_citizenship.png"
+    },
+    {
+      "focus_id": "NAM_veterans_return",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_veterans_return",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_veterans_return.png"
+    },
+    {
+      "focus_id": "NAM_svetlogorsk_shipyards",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_svetlogorsk_shipyards",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_svetlogorsk_shipyards.png"
+    },
+    {
+      "focus_id": "NAM_pw_power_reserve",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_power_reserve",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_power_reserve.png"
+    },
+    {
+      "focus_id": "NAM_pw_army_review",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_army_review",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_army_review.png"
+    },
+    {
+      "focus_id": "NAM_pw_breakthrough_army",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_breakthrough_army",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_breakthrough_army.png"
+    },
+    {
+      "focus_id": "NAM_pw_mobile_army",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_mobile_army",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_mobile_army.png"
+    },
+    {
+      "focus_id": "NAM_pw_reserve_centres",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_reserve_centres",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_reserve_centres.png"
+    },
+    {
+      "focus_id": "NAM_pw_engineer_units",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_engineer_units",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_engineer_units.png"
+    },
+    {
+      "focus_id": "NAM_pw_field_workshops",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_field_workshops",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_field_workshops.png"
+    },
+    {
+      "focus_id": "NAM_pw_artillery_observers",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_artillery_observers",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_artillery_observers.png"
+    },
+    {
+      "focus_id": "NAM_pw_staff_exercises",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_staff_exercises",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_staff_exercises.png"
+    },
+    {
+      "focus_id": "NAM_pw_combined_arms",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_combined_arms",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_combined_arms.png"
+    },
+    {
+      "focus_id": "NAM_pw_southern_army",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_southern_army",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_army.png"
+    },
+    {
+      "focus_id": "NAM_pw_naval_review",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_naval_review",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_naval_review.png"
+    },
+    {
+      "focus_id": "NAM_pw_escort_fleet",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_escort_fleet",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_escort_fleet.png"
+    },
+    {
+      "focus_id": "NAM_pw_strike_fleet",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_strike_fleet",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_strike_fleet.png"
+    },
+    {
+      "focus_id": "NAM_pw_naval_workshops",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_naval_workshops",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_naval_workshops.png"
+    },
+    {
+      "focus_id": "NAM_pw_crew_schools",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_crew_schools",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_crew_schools.png"
+    },
+    {
+      "focus_id": "NAM_pw_naval_fuel_depots",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_naval_fuel_depots",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_naval_fuel_depots.png"
+    },
+    {
+      "focus_id": "NAM_pw_landing_supply",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_landing_supply",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_landing_supply.png"
+    },
+    {
+      "focus_id": "NAM_pw_naval_service",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_naval_service",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_naval_service.png"
+    },
+    {
+      "focus_id": "NAM_pw_air_review",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_air_review",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_air_review.png"
+    },
+    {
+      "focus_id": "NAM_pw_air_defence",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_air_defence",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_air_defence.png"
+    },
+    {
+      "focus_id": "NAM_pw_frontline_air",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_frontline_air",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_frontline_air.png"
+    },
+    {
+      "focus_id": "NAM_pw_airfield_network",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_airfield_network",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_airfield_network.png"
+    },
+    {
+      "focus_id": "NAM_pw_flight_schools",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_flight_schools",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_flight_schools.png"
+    },
+    {
+      "focus_id": "NAM_pw_radar_posts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_radar_posts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_radar_posts.png"
+    },
+    {
+      "focus_id": "NAM_pw_engine_workshops",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_engine_workshops",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_engine_workshops.png"
+    },
+    {
+      "focus_id": "NAM_pw_air_supply",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_air_supply",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_air_supply.png"
+    },
+    {
+      "focus_id": "NAM_pw_ground_control",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_ground_control",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_ground_control.png"
+    },
+    {
+      "focus_id": "NAM_pw_southern_air_command",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_southern_air_command",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_air_command.png"
+    },
+    {
+      "focus_id": "NAM_south_seal_over_furnaces",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_seal_over_furnaces",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_seal_over_furnaces.png"
+    },
+    {
+      "focus_id": "NAM_border_revenge",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_border_revenge",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_border_revenge.png"
+    },
+    {
+      "focus_id": "NAM_prag_settlement_agreements",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_prag_settlement_agreements",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_prag_settlement_agreements.png"
+    },
+    {
+      "focus_id": "NAM_prag_border_protocol",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_prag_border_protocol",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_prag_border_protocol.png"
+    },
+    {
+      "focus_id": "NAM_prag_partner_supply",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_prag_partner_supply",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_prag_partner_supply.png"
+    },
+    {
+      "focus_id": "NAM_prag_south_guarantees",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_prag_south_guarantees",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_prag_south_guarantees.png"
+    },
+    {
+      "focus_id": "NAM_pw_civil_police",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_civil_police",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_civil_police.png"
+    },
+    {
+      "focus_id": "NAM_pw_mobilisation_register",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_mobilisation_register",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_mobilisation_register.png"
+    },
+    {
+      "focus_id": "NAM_pw_armament_inspectorate",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_armament_inspectorate",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_armament_inspectorate.png"
+    },
+    {
+      "focus_id": "NAM_freight_brokerage",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_freight_brokerage",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_freight_brokerage.png"
+    },
+    {
+      "focus_id": "NAM_licensed_workshop",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_licensed_workshop",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_licensed_workshop.png"
+    },
+    {
+      "focus_id": "NAM_neighbour_local_commands",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_neighbour_local_commands",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_neighbour_local_commands.png"
+    },
+    {
+      "focus_id": "NAM_neighbour_national_charters",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_neighbour_national_charters",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_neighbour_national_charters.png"
+    },
+    {
+      "focus_id": "NAM_border_administration",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_border_administration",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_border_administration.png"
+    },
+    {
+      "focus_id": "NAM_border_security",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_border_security",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_border_security.png"
+    },
+    {
+      "focus_id": "NAM_south_heritage",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_heritage",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_heritage.png"
+    },
+    {
+      "focus_id": "NAM_svetlogorsk_settlement",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_svetlogorsk_settlement",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_svetlogorsk_settlement.png"
+    },
+    {
+      "focus_id": "NAM_veyran_union_charter",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_veyran_union_charter",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_union_charter.png"
+    },
+    {
+      "focus_id": "NAM_veyran_embarkation_staff",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_veyran_embarkation_staff",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_embarkation_staff.png"
+    },
+    {
+      "focus_id": "NAM_veyran_convoy_charter",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_veyran_convoy_charter",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_convoy_charter.png"
+    },
+    {
+      "focus_id": "NAM_veyran_arsenal_contract",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_veyran_arsenal_contract",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_arsenal_contract.png"
+    },
+    {
+      "focus_id": "NAM_veyran_counterplan",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_veyran_counterplan",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_counterplan.png"
+    },
+    {
+      "focus_id": "NAM_veyran_invasion",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_veyran_invasion",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_veyran_invasion.png"
+    },
+    {
+      "focus_id": "NAM_south_trade_hearing",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_trade_hearing",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_trade_hearing.png"
+    },
+    {
+      "focus_id": "NAM_south_safir_line",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_safir_line",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_safir_line.png"
+    },
+    {
+      "focus_id": "NAM_south_bayrat_lease",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_bayrat_lease",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_bayrat_lease.png"
+    },
+    {
+      "focus_id": "NAM_south_safir_charter",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_safir_charter",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_safir_charter.png"
+    },
+    {
+      "focus_id": "NAM_south_bayrat_foundry",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_bayrat_foundry",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_bayrat_foundry.png"
+    },
+    {
+      "focus_id": "NAM_south_delegates",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_delegates",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_delegates.png"
+    },
+    {
+      "focus_id": "NAM_south_builders",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_builders",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_builders.png"
+    },
+    {
+      "focus_id": "NAM_south_elected_watch",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_elected_watch",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_elected_watch.png"
+    },
+    {
+      "focus_id": "NAM_south_road_crews",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_road_crews",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_road_crews.png"
+    },
+    {
+      "focus_id": "NAM_south_ward_armoury",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_south_ward_armoury",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_south_ward_armoury.png"
+    },
+    {
+      "focus_id": "NAM_rus_crisis_watch",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_rus_crisis_watch",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_rus_crisis_watch.png"
+    },
+    {
+      "focus_id": "NAM_rus_fuel_for_coalition",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_rus_fuel_for_coalition",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_rus_fuel_for_coalition.png"
+    },
+    {
+      "focus_id": "NAM_rus_demand_share",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_rus_demand_share",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_rus_demand_share.png"
+    },
+    {
+      "focus_id": "NAM_rus_expedition_staff",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_rus_expedition_staff",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_rus_expedition_staff.png"
+    },
+    {
+      "focus_id": "NAM_pw_postwar_commission",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_postwar_commission",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_postwar_commission.png"
+    },
+    {
+      "focus_id": "NAM_pw_strategic_reserve",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_strategic_reserve",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_strategic_reserve.png"
+    },
+    {
+      "focus_id": "NAM_pw_development_fund",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_development_fund",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_development_fund.png"
+    },
+    {
+      "focus_id": "NAM_pw_war_accounts",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_war_accounts",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_war_accounts.png"
+    },
+    {
+      "focus_id": "NAM_pw_southern_schools",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_southern_schools",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_schools.png"
+    },
+    {
+      "focus_id": "NAM_pw_unified_budget",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_unified_budget",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_unified_budget.png"
+    },
+    {
+      "focus_id": "NAM_pw_demobilisation_board",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_demobilisation_board",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_demobilisation_board.png"
+    },
+    {
+      "focus_id": "NAM_pw_southern_industrial_repair",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_southern_industrial_repair",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_industrial_repair.png"
+    },
+    {
+      "focus_id": "NAM_pw_civil_administration",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_civil_administration",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_civil_administration.png"
+    },
+    {
+      "focus_id": "NAM_pw_permanent_institutions",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_permanent_institutions",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_permanent_institutions.png"
+    },
+    {
+      "focus_id": "NAM_pw_southern_military_rule",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_southern_military_rule",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_military_rule.png"
+    },
+    {
+      "focus_id": "NAM_pw_southern_local_offices",
+      "export_runtime": false,
+      "sprite": "GFX_focus_NAM_pw_southern_local_offices",
+      "runtime": "gfx/interface/goals/NAM/GFX_focus_NAM_pw_southern_local_offices.png"
     }
   ],
   "focus_composition_variants": [
