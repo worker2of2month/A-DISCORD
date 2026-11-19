@@ -417,7 +417,7 @@ scripted_gui = {
 				NAM_pirate_commissioned = yes
 				NAM_pirate_lane_oil_open = yes
 				OR = {
-					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					has_idea = NAM_pirate_blockade
 					NAM_pirate_lane_oil_alert = yes
 				}
 			}
@@ -425,7 +425,7 @@ scripted_gui = {
 				NOT = { has_decision = NAM_pirate_raid_lane_oil }
 				NAM_pirate_commissioned = yes
 				NAM_pirate_lane_oil_open = yes
-				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { has_idea = NAM_pirate_blockade }
 				NAM_pirate_lane_oil_alert = no
 			}
 			NAM_pw_raid_oil_click_enabled = {
@@ -449,7 +449,7 @@ scripted_gui = {
 				NAM_pirate_commissioned = yes
 				NAM_pirate_lane_coast_open = yes
 				OR = {
-					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					has_idea = NAM_pirate_blockade
 					NAM_pirate_lane_coast_alert = yes
 				}
 			}
@@ -457,7 +457,7 @@ scripted_gui = {
 				NOT = { has_decision = NAM_pirate_raid_lane_coast }
 				NAM_pirate_commissioned = yes
 				NAM_pirate_lane_coast_open = yes
-				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { has_idea = NAM_pirate_blockade }
 				NAM_pirate_lane_coast_alert = no
 			}
 			NAM_pw_raid_coast_click_enabled = {
@@ -481,7 +481,7 @@ scripted_gui = {
 				NAM_pirate_commissioned = yes
 				NAM_pirate_lane_strait_open = yes
 				OR = {
-					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					has_idea = NAM_pirate_blockade
 					NAM_pirate_lane_strait_alert = yes
 				}
 			}
@@ -489,7 +489,7 @@ scripted_gui = {
 				NOT = { has_decision = NAM_pirate_raid_lane_strait }
 				NAM_pirate_commissioned = yes
 				NAM_pirate_lane_strait_open = yes
-				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { has_idea = NAM_pirate_blockade }
 				NAM_pirate_lane_strait_alert = no
 			}
 			NAM_pw_raid_strait_click_enabled = {
@@ -513,7 +513,7 @@ scripted_gui = {
 				NAM_pirate_commissioned = yes
 				NAM_pirate_lane_crossing_open = yes
 				OR = {
-					has_dynamic_modifier = { modifier = NAM_pirate_blockade }
+					has_idea = NAM_pirate_blockade
 					NAM_pirate_lane_crossing_alert = yes
 				}
 			}
@@ -521,7 +521,7 @@ scripted_gui = {
 				NOT = { has_decision = NAM_pirate_raid_lane_crossing }
 				NAM_pirate_commissioned = yes
 				NAM_pirate_lane_crossing_open = yes
-				NOT = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+				NOT = { has_idea = NAM_pirate_blockade }
 				NAM_pirate_lane_crossing_alert = no
 			}
 			NAM_pw_raid_crossing_click_enabled = {

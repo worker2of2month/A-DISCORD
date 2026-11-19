@@ -4929,7 +4929,7 @@ VAL_command_balance_category = {
 			custom_effect_tooltip = VAL_command_conspiracy_closed_tt
 			effect_tooltip = {
 				add_stability = -0.05
-				add_dynamic_modifier = { modifier = VAL_command_trial_disruption days = 180 }
+				add_timed_idea = { idea = VAL_command_trial_disruption days = 180 }
 			}
 			hidden_effect = {
 				if = {
@@ -5091,7 +5091,13 @@ VAL_command_balance_category = {
 		complete_effect = {
 			add_command_power = -30
 			add_power_balance_value = { id = VAL_command_balance value = 0.25 }
-			add_dynamic_modifier = { modifier = VAL_staff_review_disruption days = 60 }
+			hidden_effect = {
+				if = {
+					limit = { has_idea = VAL_staff_review_disruption }
+					remove_ideas = VAL_staff_review_disruption
+				}
+			}
+			add_timed_idea = { idea = VAL_staff_review_disruption days = 60 }
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -6886,8 +6892,8 @@ VAL_peace_payroll_category = {
 		complete_effect = {
 			add_power_balance_value = { id = VAL_peace_balance value = -0.10 }
 			if = {
-				limit = { NOT = { has_dynamic_modifier = { modifier = VAL_staff_review_disruption } } }
-				add_dynamic_modifier = { modifier = VAL_staff_review_disruption days = 60 }
+				limit = { NOT = { has_idea = VAL_staff_review_disruption } }
+				add_timed_idea = { idea = VAL_staff_review_disruption days = 60 }
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -11736,7 +11742,7 @@ VAL_council_balance_category = {
 			VAL_council_operational = yes
 			has_war = yes
 			has_capitulated = no
-			NOT = { has_dynamic_modifier = VAL_council_favour_front }
+			NOT = { has_idea = VAL_council_favour_front }
 		}
 		cost = 0
 		fire_only_once = no
@@ -11749,10 +11755,10 @@ VAL_council_balance_category = {
 						VAL_council_operational = yes
 						has_war = yes
 						has_capitulated = no
-						NOT = { has_dynamic_modifier = VAL_council_favour_front }
+						NOT = { has_idea = VAL_council_favour_front }
 					}
 				}
-				add_dynamic_modifier = { modifier = VAL_council_favour_front days = 90 }
+				add_timed_idea = { idea = VAL_council_favour_front days = 90 }
 				hidden_effect = { clr_country_flag = VAL_council_front_plan_ready }
 			}
 		}
@@ -11768,7 +11774,7 @@ VAL_council_balance_category = {
 			VAL_council_operational = yes
 			has_war = yes
 			has_capitulated = no
-			NOT = { has_dynamic_modifier = VAL_council_favour_garrison }
+			NOT = { has_idea = VAL_council_favour_garrison }
 		}
 		cost = 0
 		fire_only_once = no
@@ -11781,10 +11787,10 @@ VAL_council_balance_category = {
 						VAL_council_operational = yes
 						has_war = yes
 						has_capitulated = no
-						NOT = { has_dynamic_modifier = VAL_council_favour_garrison }
+						NOT = { has_idea = VAL_council_favour_garrison }
 					}
 				}
-				add_dynamic_modifier = { modifier = VAL_council_favour_garrison days = 90 }
+				add_timed_idea = { idea = VAL_council_favour_garrison days = 90 }
 				hidden_effect = { clr_country_flag = VAL_council_garrison_plan_ready }
 			}
 		}
@@ -11816,7 +11822,13 @@ VAL_council_balance_category = {
 		}
 		cost = 30
 		complete_effect = {
-			add_dynamic_modifier = { modifier = VAL_council_favour_garrison days = 120 }
+			hidden_effect = {
+				if = {
+					limit = { has_idea = VAL_council_favour_garrison }
+					remove_ideas = VAL_council_favour_garrison
+				}
+			}
+			add_timed_idea = { idea = VAL_council_favour_garrison days = 120 }
 			add_manpower = 4000
 			add_power_balance_value = { id = VAL_council_balance value = -0.05 }
 			custom_effect_tooltip = VAL_council_favour_garrison_seat_tt
@@ -11857,7 +11869,13 @@ VAL_council_balance_category = {
 		}
 		cost = 30
 		complete_effect = {
-			add_dynamic_modifier = { modifier = VAL_council_favour_front days = 120 }
+			hidden_effect = {
+				if = {
+					limit = { has_idea = VAL_council_favour_front }
+					remove_ideas = VAL_council_favour_front
+				}
+			}
+			add_timed_idea = { idea = VAL_council_favour_front days = 120 }
 			add_power_balance_value = { id = VAL_council_balance value = -0.05 }
 			custom_effect_tooltip = VAL_council_favour_front_seat_tt
 			hidden_effect = {
@@ -11896,7 +11914,13 @@ VAL_council_balance_category = {
 		}
 		cost = 30
 		complete_effect = {
-			add_dynamic_modifier = { modifier = VAL_council_favour_supply days = 120 }
+			hidden_effect = {
+				if = {
+					limit = { has_idea = VAL_council_favour_supply }
+					remove_ideas = VAL_council_favour_supply
+				}
+			}
+			add_timed_idea = { idea = VAL_council_favour_supply days = 120 }
 			add_equipment_to_stockpile = { type = motorized_equipment amount = 100 producer = VAL }
 			add_power_balance_value = { id = VAL_council_balance value = -0.05 }
 			custom_effect_tooltip = VAL_council_favour_supply_seat_tt

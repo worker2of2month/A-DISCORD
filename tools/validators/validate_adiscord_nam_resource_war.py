@@ -335,8 +335,7 @@ def check_oil_monopoly(
     validate = named_block(effects, "NAM_oil_validate_client")
     check(
         "has_war_with = NAM" in validate
-        and "modifier = NAM_fuel_shortage" in validate
-        and "days = 90" in validate,
+        and has_script_fragment(validate, "add_timed_idea = { idea = NAM_fuel_shortage days = 90 }"),
         "a war with a client must end its contract with a 90-day shortage",
     )
     for removal in re.finditer(r"remove_dynamic_modifier\s*=\s*\{\s*modifier\s*=\s*(\w+)", effects):

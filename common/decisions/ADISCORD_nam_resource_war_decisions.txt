@@ -3745,7 +3745,7 @@ NAM_mobilisation = {
 			}
 		}
 		available = {
-			NOT = { has_dynamic_modifier = { modifier = NAM_mil_mobile_operation } }
+			NOT = { has_idea = NAM_mil_mobile_operation }
 			custom_trigger_tooltip = {
 				tooltip = NAM_mil_security_operable_tt
 				NAM_mil_security_operable = yes
@@ -3786,7 +3786,7 @@ NAM_mobilisation = {
 				tooltip = NAM_mil_mobile_open_tt
 				NAM_mil_mobile_operation_open = yes
 			}
-			NOT = { has_dynamic_modifier = { modifier = NAM_mil_mobile_operation } }
+			NOT = { has_idea = NAM_mil_mobile_operation }
 		}
 		cost = 0
 		custom_cost_text = NAM_mil_mobile_surge_cost
@@ -3804,15 +3804,12 @@ NAM_mobilisation = {
 						NAM_mil_mobile_operation_open = yes
 						NOT = { has_decision = NAM_mil_field_security }
 						check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
-						NOT = { has_dynamic_modifier = { modifier = NAM_mil_mobile_operation } }
+						NOT = { has_idea = NAM_mil_mobile_operation }
 					}
 				}
 				hidden_effect = {
 					ADISCORD_economy_spend_250 = yes
-					add_dynamic_modifier = {
-						modifier = NAM_mil_mobile_operation
-						days = 30
-					}
+					add_timed_idea = { idea = NAM_mil_mobile_operation days = 30 }
 				}
 			}
 		}
@@ -3826,11 +3823,11 @@ NAM_mobilisation = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						has_dynamic_modifier = { modifier = NAM_mil_mobile_operation }
+						has_idea = NAM_mil_mobile_operation
 					}
 				}
 				hidden_effect = {
-					remove_dynamic_modifier = { modifier = NAM_mil_mobile_operation }
+					remove_ideas = NAM_mil_mobile_operation
 				}
 			}
 		}
@@ -3839,11 +3836,11 @@ NAM_mobilisation = {
 			if = {
 				limit = {
 					hidden_trigger = {
-						has_dynamic_modifier = { modifier = NAM_mil_mobile_operation }
+						has_idea = NAM_mil_mobile_operation
 					}
 				}
 				hidden_effect = {
-					remove_dynamic_modifier = { modifier = NAM_mil_mobile_operation }
+					remove_ideas = NAM_mil_mobile_operation
 				}
 			}
 		}
@@ -19158,7 +19155,7 @@ ADISCORD_south_final_war_category = {
 			ADISCORD_south_final_active = yes
 			has_country_flag = ADISCORD_south_north_leader
 			has_war_with = SHL
-			SHL = { NOT = { has_dynamic_modifier = { modifier = NAM_south_convoy_blockade } } }
+			SHL = { NOT = { has_idea = NAM_south_convoy_blockade } }
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -19168,7 +19165,7 @@ ADISCORD_south_final_war_category = {
 			has_war_with = SHL
 			custom_trigger_tooltip = {
 				tooltip = NAM_south_blockade_free_tt
-				SHL = { NOT = { has_dynamic_modifier = { modifier = NAM_south_convoy_blockade } } }
+				SHL = { NOT = { has_idea = NAM_south_convoy_blockade } }
 			}
 		}
 		cost = 0
@@ -19184,6 +19181,7 @@ ADISCORD_south_final_war_category = {
 				limit = {
 					hidden_trigger = {
 						has_war_with = SHL
+						SHL = { NOT = { has_idea = NAM_south_convoy_blockade } }
 						NOT = { has_political_power < 20 }
 						NOT = { has_fuel < 2000 }
 					}
@@ -19193,10 +19191,7 @@ ADISCORD_south_final_war_category = {
 				navy_experience = 5
 				SHL = {
 					add_fuel = -5000
-					add_dynamic_modifier = {
-						modifier = NAM_south_convoy_blockade
-						days = 60
-					}
+					add_timed_idea = { idea = NAM_south_convoy_blockade days = 60 }
 				}
 			}
 			else = {
@@ -19204,10 +19199,7 @@ ADISCORD_south_final_war_category = {
 					navy_experience = 5
 					SHL = {
 						add_fuel = -5000
-						add_dynamic_modifier = {
-							modifier = NAM_south_convoy_blockade
-							days = 60
-						}
+						add_timed_idea = { idea = NAM_south_convoy_blockade days = 60 }
 					}
 				}
 			}

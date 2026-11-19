@@ -12,7 +12,7 @@ from PIL import Image
 
 from tools.builders.build_adiscord_focus_trees import expected_outputs, render_source
 from tools.lib.paths import source_section
-from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar, walk
+from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar, selected_effects, walk
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
@@ -3097,9 +3097,24 @@ class RusCampaignTests(unittest.TestCase):
         world.run("RUS_suspicion_monthly")
         self.assertEqual(world.value("RUS_suspicion"), 21)
         cut = self.effects["RUS_energy_contract_cut"]
-        modifier = next(row.value for row in walk(cut) if row.key == "add_dynamic_modifier")
-        self.assertEqual((scalar(modifier, "modifier"), scalar(modifier, "days")), ("RUS_power_cut", "90"))
-        self.assertIn("RUS_power_cut", [row.key for row in parse("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt")])
+        grant = next(row.value for row in walk(cut) if row.key == "add_timed_idea")
+        self.assertEqual((scalar(grant, "idea"), scalar(grant, "days")), ("RUS_power_cut", "90"))
+        for customer, active, expected in (
+            (True, False, ["add_timed_idea"]),
+            (True, True, ["remove_ideas", "add_timed_idea"]),
+            (False, True, []),
+        ):
+            facts = {("SLA", "has_country_flag", "RUS_energy_customer"): customer,
+                     ("SLA", "has_idea", "RUS_power_cut"): active}
+            actions = [row for scope, row in selected_effects(cut, facts, "SLA")
+                       if scope == "SLA" and row.key in ("remove_ideas", "add_timed_idea")]
+            self.assertEqual([row.key for row in actions], expected)
+            self.assertTrue(all(row.value == "RUS_power_cut" for row in actions if row.key == "remove_ideas"))
+        self.assertEqual({entry.key: float(entry.value) for entry in block(self.ideas["RUS_power_cut"], "modifier")}, {
+            "industrial_capacity_factory": -0.15,
+            "production_speed_buildings_factor": -0.20,
+            "army_org_factor": -0.05,
+        })
         hooks = block(parse("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_actions")
         self.assertIn("RUS_energy_contracts_monthly", [row.key for row in walk(block(hooks, "on_monthly_RUS"))])
         self.assertIn("RUS_energy_contract_cut", [row.key for row in walk(block(hooks, "on_war_relation_added"))])
@@ -3417,14 +3432,19 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_faction_favours_spend_support_on_strong_rewards(self):
         specs = {
-            "RUS_favour_shock_fist": ("RUS_black_army_support", 0.20, "modifier"),
+            "RUS_favour_shock_fist": ("RUS_black_army_support", 0.20, "idea"),
             "RUS_favour_black_army_musters": ("RUS_black_army_support", 0.15, "manpower"),
             "RUS_favour_guard_instructors": ("RUS_black_army_support", 0.15, "experience"),
-            "RUS_favour_night_shifts": ("RUS_scientists_support", 0.20, "modifier"),
+            "RUS_favour_night_shifts": ("RUS_scientists_support", 0.20, "idea"),
             "RUS_favour_prototypes": ("RUS_scientists_support", 0.15, "tech"),
-            "RUS_favour_reactor_current": ("RUS_scientists_support", 0.15, "modifier"),
+            "RUS_favour_reactor_current": ("RUS_scientists_support", 0.15, "idea"),
         }
-        modifiers = {row.key: row.value for row in parse("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_RUS.txt")}
+        bonuses = {
+            "RUS_favour_shock_fist": {"army_attack_factor": 0.15, "breakthrough_factor": 0.10},
+            "RUS_favour_night_shifts": {"research_speed_factor": 0.15},
+            "RUS_favour_reactor_current": {"industrial_capacity_factory": 0.10, "production_speed_buildings_factor": 0.10},
+        }
+        self.assertEqual(scalar(block(self.ideas["RUS_favour_shock_fist"], "cancel"), "has_war"), "no")
         for name, (support, price, reward) in specs.items():
             with self.subTest(name=name):
                 rows = self.balance[name]
@@ -3441,9 +3461,13 @@ class RusCampaignTests(unittest.TestCase):
                 world.begin(name)
                 self.assertAlmostEqual(world.value(support), 0.6 - price)
                 self.assertAlmostEqual(world.value(other), 0.6)
-                if reward == "modifier":
-                    self.assertIn(name, world.modifiers)
-                    self.assertIn(name, modifiers)
+                if reward == "idea":
+                    self.assertIn(name, world.ideas)
+                    completion = block(rows, "complete_effect")
+                    for branch in ("effect_tooltip", "hidden_effect"):
+                        grant, = (row.value for row in walk(block(completion, branch)) if row.key == "add_timed_idea")
+                        self.assertEqual((scalar(grant, "idea"), scalar(grant, "days")), (name, "120"))
+                    self.assertEqual({row.key: float(row.value) for row in block(self.ideas[name], "modifier")}, bonuses[name])
                 elif reward == "manpower":
                     self.assertEqual(world.manpower, 12000)
                 elif reward == "experience":
@@ -3453,9 +3477,9 @@ class RusCampaignTests(unittest.TestCase):
                 poor = self.world()
                 poor.variables.update({support: price - 0.001})
                 self.assertFalse(poor.matches(block(rows, "custom_cost_trigger")))
-                before = deepcopy(poor.variables), poor.manpower, set(poor.modifiers)
+                before = deepcopy(poor.variables), poor.manpower, set(poor.ideas)
                 poor.execute(block(rows, "complete_effect"))
-                self.assertEqual((poor.variables, poor.manpower, poor.modifiers), before)
+                self.assertEqual((poor.variables, poor.manpower, poor.ideas), before)
 
     def test_faction_favours_panel_links_decisions_and_localises_every_label(self):
         panel = block(block(parse("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"), "scripted_gui"), "ADISCORD_RUS_favours_panel")
@@ -4154,13 +4178,13 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_terminal_shutdown_refunds_and_clears_policies(self):
         world = self.world()
-        # Regional winners hold the volunteer mandate; the crisis roster clears it.
+        # The volunteer mandate and the grid penalty belong to foreign recipients.
         government_previews = {"RUS_council_mandate", "RUS_chancery_mandate", "RUS_repair_depots_spirit"}
         world.ideas = {
             name for name in self.ideas
             if name.startswith("RUS_")
             and not name.endswith(("_delta", "_bookmark"))
-            and name != "RUS_crisis_volunteer_mandate"
+            and name not in {"RUS_crisis_volunteer_mandate", "RUS_power_cut"}
             and name not in government_previews
         }
         before = world.balances()
@@ -4168,7 +4192,7 @@ class RusCampaignTests(unittest.TestCase):
         world.variables["RUS_crisis_phase"] = 4
         world.run("RUS_campaign_shutdown")
         self.assertEqual(world.balances(), before)
-        self.assertFalse(world.ideas)
+        self.assertEqual(world.ideas, {"RUS_favour_shock_fist", "RUS_favour_night_shifts", "RUS_favour_reactor_current"})
         self.assertFalse(world.modifiers)
         self.assertFalse(world.active)
         self.assertFalse(world.matches(self.triggers["RUS_khan_governing"]))

@@ -3230,6 +3230,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_staff_loyalty_review:0 "Krutov's Staff Review"
  VAL_staff_loyalty_review_desc:0 "Krutov's people move unreliable officers to the rear and replace them with proven ones. The staffs work worse while the posts change hands."
  VAL_staff_review_disruption:0 "Staff Reshuffle"
+ VAL_staff_review_disruption_desc:0 "As the new staff officers take over, reports from the front still arrive addressed to their predecessors."
  VAL_command_conspiracy_preparation_tt:0 "The conspiracy is exposed, but the commanders retain their influence. Completing §Y$VAL_Captains_Cannot_Veto$§! unlocks two paid ways to remove it. The balance and coup threat remain until preparation succeeds."
  VAL_command_consolidation_dominance_tt:0 "The command balance is at least §Y+0.75§! in Solgalov's favour"
  VAL_command_consolidation_free_tt:0 "No other operation against the conspiracy is being prepared"

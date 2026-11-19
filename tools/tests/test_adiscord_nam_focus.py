@@ -766,6 +766,30 @@ class NamCampaignTests(unittest.TestCase):
             act("end_contract", "VAL")
             self.assertEqual(facts[free_berths], 1)
             self.assertTrue(decision("VAL", "available"))
+            shortage = "NAM_fuel_shortage"
+            self.assertFalse(facts.get(("VAL", "has_idea", shortage)))
+            facts[("AZH", "has_war_with", "NAM")] = True
+            self.apply(self.effects["NAM_oil_validate_clients"], facts)
+            self.assertFalse(facts[("AZH", "has_country_flag", "NAM_oil_client")])
+            duration = ("AZH", "idea_days", shortage)
+            self.assertEqual(facts[duration], 90)
+            for other in ("NAM", "EFL", "STP", "VAL"):
+                self.assertFalse(facts.get((other, "has_idea", shortage)), other)
+            facts[duration] = 80
+            self.apply(self.effects["NAM_oil_validate_clients"], facts)
+            self.assertEqual(facts[duration], 80)
+            facts[("AZH", "has_war_with", "NAM")] = False
+            act("offer_contract", "AZH")
+            self.assertTrue(facts[("AZH", "has_idea", shortage)])
+            act("sign_contract", "AZH")
+            self.assertTrue(facts[("AZH", "has_country_flag", "NAM_oil_client")])
+            self.assertFalse(facts[("AZH", "has_idea", shortage)])
+            self.assertNotIn(duration, facts)
+            modifiers = block(self.ideas[shortage], "modifier")
+            self.assertEqual({e.key: Decimal(e.value) for e in modifiers}, {
+                "fuel_gain_factor": Decimal("-0.25"),
+                "army_fuel_consumption_factor": Decimal("0.10"),
+            })
 
     def test_coalition_reserve_tops_up_only_the_missing_fuel_and_convoys(self):
         for fuel, convoys in ((0, 0), (19999, 39), (20000, 40), (30000, 60)):
@@ -3989,26 +4013,52 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_mobile_operation_spends_treasury_and_closes_on_every_terminal_condition(self):
         body = self.decisions["NAM_mil_mobile_surge"]
-        modifier = "NAM_mil_mobile_operation"
-        definition = block(parsed("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_NAM.txt"), modifier)
+        spirit = "NAM_mil_mobile_operation"
+        definition = self.ideas[spirit]
         for key in (("NAM", "has_war", "yes"), ("NAM", "is_subject", "no"), ("NAM", "has_capitulated", "no")):
             facts = self.military_facts()
             self.apply(block(body, "complete_effect"), facts)
-            self.assertTrue(facts[("NAM", "has_dynamic_modifier", modifier)])
+            self.assertTrue(facts[("NAM", "has_idea", spirit)])
+            self.assertEqual(facts[("NAM", "idea_days", spirit)], 30)
+            self.assertFalse(self.matches(block(definition, "cancel"), facts))
             self.assertEqual(facts[("NAM", "variable", "ADISCORD_economy_treasury")], 9750)
             self.assertEqual(facts[("NAM", "numeric", "has_fuel")], 20000)
             self.assertEqual(facts[("NAM", "numeric", "has_political_power")], 1000)
             facts[key] = False
             self.assertTrue(self.matches(block(body, "cancel_trigger"), facts))
-            self.assertFalse(self.matches(block(definition, "enable"), facts))
-            self.assertTrue(self.matches(block(definition, "remove_trigger"), facts))
+            self.assertTrue(self.matches(block(definition, "cancel"), facts))
             self.apply(block(body, "cancel_effect"), facts)
-            self.assertFalse(facts[("NAM", "has_dynamic_modifier", modifier)])
+            self.assertFalse(facts[("NAM", "has_idea", spirit)])
+            self.assertNotIn(("NAM", "idea_days", spirit), facts)
             settled = dict(facts)
             self.apply(block(body, "remove_effect"), facts)
             self.assertEqual(facts, settled)
-        self.assertEqual(scalar(definition, "army_speed_factor"), "0.10")
-        self.assertEqual(scalar(definition, "army_fuel_consumption_factor"), "0.15")
+        self.assertEqual({e.key: e.value for e in block(definition, "modifier")}, {
+            "army_speed_factor": "0.10", "planning_speed": "0.25",
+            "army_fuel_consumption_factor": "0.15", "supply_consumption_factor": "0.05",
+        })
+
+    def test_southern_convoy_hunters_apply_to_shahrabad_for_sixty_days(self):
+        spirit = "NAM_south_convoy_blockade"
+        category = block(parsed(f"common/decisions/{BASE}_decisions.txt"), "ADISCORD_south_final_war_category")
+        decision = block(category, "NAM_south_convoy_interdiction")
+        facts = self.military_facts()
+        facts[("NAM", "has_war_with", "SHL")] = True
+        facts[("SHL", "numeric", "has_fuel")] = 7000
+        self.assertTrue(self.matches(block(decision, "available"), facts))
+        self.apply(block(decision, "complete_effect"), facts)
+        self.assertEqual(facts[("SHL", "idea_days", spirit)], 60)
+        self.assertFalse(facts.get(("NAM", "has_idea", spirit)))
+        self.assertEqual(facts[("SHL", "numeric", "has_fuel")], 2000)
+        self.assertEqual(facts[("NAM", "numeric", "has_fuel")], 18000)
+        self.assertEqual(facts[("NAM", "numeric", "has_political_power")], 980)
+        self.assertFalse(self.matches(block(decision, "available"), facts))
+        applied = dict(facts)
+        self.apply(block(decision, "complete_effect"), facts)
+        self.assertEqual(facts, applied)
+        self.assertEqual({e.key: e.value for e in block(self.ideas[spirit], "modifier")}, {
+            "fuel_gain_factor": "-0.25", "industrial_capacity_factory": "-0.05",
+        })
 
     def test_forward_supply_uses_line_slots_and_refunds_every_paid_resource(self):
         body = self.bind_field(self.decisions["NAM_mil_forward_supply"])
@@ -5412,13 +5462,20 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_flood_and_delivery_penalties_match_both_translations(self):
         cases = (
-            ("flood", "production_speed_infrastructure_factor", -12, -20, -6, -10),
-            ("delivery_disruption", "supply_consumption_factor", -10, 12, -5, 6),
+            ("flood", "production_speed_infrastructure_factor", -12, -20, -6, -10, 70, 35),
+            ("delivery_disruption", "supply_consumption_factor", -10, 12, -5, 6, 60, 30),
         )
         for language in ("english", "russian"):
             values = {m[1]: m[2] for line in read(f"localisation/{language}/{BASE}_l_{language}.yml").splitlines()
                       if (m := ENTRY.fullmatch(line))}
-            for name, resource, full_stability, full_penalty, partial_stability, partial_penalty in cases:
+            for name, resource, full_stability, full_penalty, partial_stability, partial_penalty, days, reduced_days in cases:
+                preview = values[f"NAM_crisis_{name}_mitigation_tt"]
+                self.assertCountEqual(re.findall(r"[+-]\d+%", preview), [
+                    f"{value:+d}%" for value in (full_stability, full_penalty, partial_stability, partial_penalty)
+                ], (language, name))
+                for duration in (days, reduced_days):
+                    self.assertIn(f"§Y{duration}§!", preview)
+                self.assertIn("§G+15§! £time_texticon", preview)
                 for suffix, stability, penalty in (("", full_stability, full_penalty),
                                                    ("_contained", partial_stability, partial_penalty)):
                     idea = f"NAM_crisis_{name}{suffix}"
@@ -10661,6 +10718,23 @@ class NamCampaignTests(unittest.TestCase):
             self.assertEqual(self.matches(self.triggers["NAM_pirate_exchange_open"], facts),
                              outcome == "radical")
 
+    def test_pirate_blockade_renews_the_term_and_changes_raid_odds(self):
+        spirit = "NAM_pirate_blockade"
+        grant = self.effects["NAM_pirate_apply_blockade"]
+        facts = {}
+        remaining = ("NAM", "idea_days", spirit)
+        self.apply(grant, facts)
+        self.assertEqual(facts[remaining], 90)
+        facts[remaining] = 17
+        self.apply(grant, facts)
+        self.assertEqual(facts[remaining], 90)
+        for hook in ("on_add", "on_remove"):
+            self.assertEqual(scalar(block(block(self.ideas[spirit], hook), "hidden_effect"),
+                                    "ADISCORD_economy_mark_dirty"), "yes")
+        odds = [row.value for row in walk(self.effects["NAM_pirate_raid_settle"])
+                if row.key == "modifier" and any(e.key == "has_idea" and e.value == spirit for e in row.value)]
+        self.assertCountEqual([scalar(modifier, "factor") for modifier in odds], ["0.7", "1.3"])
+
     def test_exile_fence_pays_once_and_rechecks_country_price_and_cooldown(self):
         category = block(parsed("common/decisions/ADISCORD_nam_resource_war_decisions.txt"), "NAM_piracy")
         decision = block(category, "NAM_pirate_fence_loot")
@@ -10920,7 +10994,7 @@ class NamCampaignTests(unittest.TestCase):
         self.assertEqual(facts, before)
         facts[("NAM", "has_decision", "NAM_mil_field_security")] = False
         self.apply(block(column, "complete_effect"), facts)
-        self.assertTrue(facts[("NAM", "has_dynamic_modifier", "NAM_mil_mobile_operation")])
+        self.assertTrue(facts[("NAM", "has_idea", "NAM_mil_mobile_operation")])
         self.assertFalse(self.matches(block(guard, "available"), facts))
         self.apply(block(column, "remove_effect"), facts)
         self.assertTrue(self.matches(block(guard, "available"), facts))

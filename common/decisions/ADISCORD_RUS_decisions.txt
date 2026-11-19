@@ -4353,7 +4353,7 @@ RUS_state_balance_measures_category = {
 			custom_effect_tooltip = RUS_favour_shock_fist_description_rules_tt
 			custom_effect_tooltip = RUS_favour_army_20_tt
 			effect_tooltip = {
-				add_dynamic_modifier = { modifier = RUS_favour_shock_fist days = 120 }
+				add_timed_idea = { idea = RUS_favour_shock_fist days = 120 }
 			}
 			hidden_effect = {
 				if = {
@@ -4368,7 +4368,7 @@ RUS_state_balance_measures_category = {
 					set_temp_variable = { var = RUS_black_army_support_delta value = -0.2 }
 					set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
 					RUS_faction_support_change = yes
-					add_dynamic_modifier = { modifier = RUS_favour_shock_fist days = 120 }
+					add_timed_idea = { idea = RUS_favour_shock_fist days = 120 }
 				}
 			}
 		}
@@ -4488,7 +4488,7 @@ RUS_state_balance_measures_category = {
 			custom_effect_tooltip = RUS_favour_night_shifts_description_rules_tt
 			custom_effect_tooltip = RUS_favour_science_20_tt
 			effect_tooltip = {
-				add_dynamic_modifier = { modifier = RUS_favour_night_shifts days = 120 }
+				add_timed_idea = { idea = RUS_favour_night_shifts days = 120 }
 			}
 			hidden_effect = {
 				if = {
@@ -4500,7 +4500,7 @@ RUS_state_balance_measures_category = {
 					set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
 					set_temp_variable = { var = RUS_scientists_support_delta value = -0.2 }
 					RUS_faction_support_change = yes
-					add_dynamic_modifier = { modifier = RUS_favour_night_shifts days = 120 }
+					add_timed_idea = { idea = RUS_favour_night_shifts days = 120 }
 				}
 			}
 		}
@@ -4586,7 +4586,7 @@ RUS_state_balance_measures_category = {
 			custom_effect_tooltip = RUS_favour_reactor_current_description_rules_tt
 			custom_effect_tooltip = RUS_favour_science_15_tt
 			effect_tooltip = {
-				add_dynamic_modifier = { modifier = RUS_favour_reactor_current days = 120 }
+				add_timed_idea = { idea = RUS_favour_reactor_current days = 120 }
 			}
 			hidden_effect = {
 				if = {
@@ -4598,7 +4598,7 @@ RUS_state_balance_measures_category = {
 					set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
 					set_temp_variable = { var = RUS_scientists_support_delta value = -0.15 }
 					RUS_faction_support_change = yes
-					add_dynamic_modifier = { modifier = RUS_favour_reactor_current days = 120 }
+					add_timed_idea = { idea = RUS_favour_reactor_current days = 120 }
 				}
 			}
 		}
@@ -5586,7 +5586,7 @@ RUS_reactor_council_category = {
 			FROM = {
 				custom_trigger_tooltip = {
 					tooltip = RUS_sci_power_blockade_free_tt
-					NOT = { has_dynamic_modifier = { modifier = RUS_power_cut } }
+					NOT = { has_idea = RUS_power_cut }
 				}
 			}
 		}
@@ -5594,7 +5594,7 @@ RUS_reactor_council_category = {
 		fire_only_once = no
 		days_re_enable = 90
 		complete_effect = {
-			FROM = { add_dynamic_modifier = { modifier = RUS_power_cut days = 90 } }
+			FROM = { add_timed_idea = { idea = RUS_power_cut days = 90 } }
 		}
 		ai_will_do = {
 			base = 30

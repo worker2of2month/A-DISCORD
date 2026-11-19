@@ -1031,6 +1031,57 @@ ideas = {
 		}
 
 		# --- commanders_council ---
+		VAL_council_favour_garrison = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = VAL }
+			cancel = { has_war = no }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.10
+				army_org_regain = 0.05
+			}
+		}
+
+		VAL_council_favour_front = {
+			picture = ADISCORD_law_military_general_staff
+			allowed = { original_tag = VAL }
+			cancel = { has_war = no }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.10
+			}
+		}
+
+		VAL_council_favour_supply = {
+			picture = generic_production_bonus
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.10
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		VAL_staff_review_disruption = {
+			picture = ADISCORD_law_military_general_staff
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				planning_speed = -0.10
+				army_org_factor = -0.03
+			}
+		}
+
+		VAL_command_trial_disruption = {
+			picture = ADISCORD_law_military_general_staff
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = -0.05
+			}
+		}
+
 		VAL_council_equal_votes_delta = {
 			name = VAL_contract_state
 			allowed = {

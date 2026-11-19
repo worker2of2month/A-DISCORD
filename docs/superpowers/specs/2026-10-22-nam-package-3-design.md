@@ -217,8 +217,9 @@ Owner: core phase 2.
   `NAM_oil_client` and occupy one berth. Monthly in `on_monthly_NAM`:
   NAM +40 treasury per contract through the economy API and
   `ADISCORD_economy_mark_dirty`; the buyer +1500 fuel. War between NAM and a
-  client ends the contract and gives the client `NAM_fuel_shortage` for 90
-  days (guard removals with `has_dynamic_modifier`). `NAM_oil_contract_end`
+  client ends the contract and gives the client the `NAM_fuel_shortage`
+  national spirit for 90 days. Signing a new contract removes the shortage
+  immediately. `NAM_oil_contract_end`
   cancels a contract from NAM's side.
 - Consequences: oil and export pillars +5 on signature; a contract with RHM or
   MZR at hostilities withholds `ADISCORD_nam_profitable_volunteer_contracts`

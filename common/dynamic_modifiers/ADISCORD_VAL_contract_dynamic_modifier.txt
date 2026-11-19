@@ -221,37 +221,3 @@ VAL_operation_offensive = {
 	planning_speed = VAL_op_planning
 	army_morale_factor = VAL_op_morale
 }
-
-# --- commanders_council ---
-# VAL for a limited period after a delegation favour or an accepted demand.
-VAL_council_favour_garrison = {
-	remove_trigger = { has_war = no }
-	icon = GFX_idea_generic_fortify_the_borders
-	army_defence_factor = 0.10
-	army_org_regain = 0.05
-}
-
-VAL_council_favour_front = {
-	remove_trigger = { has_war = no }
-	icon = GFX_idea_ADISCORD_law_military_general_staff
-	army_attack_factor = 0.10
-	breakthrough_factor = 0.10
-}
-
-VAL_council_favour_supply = {
-	icon = GFX_idea_generic_production_bonus
-	supply_consumption_factor = -0.10
-	industrial_capacity_factory = 0.05
-}
-
-# VAL for 60 days after Krutov's staff loyalty review under Solgalov's rule.
-VAL_staff_review_disruption = {
-	icon = GFX_idea_ADISCORD_law_military_general_staff
-	planning_speed = -0.10
-	army_org_factor = -0.03
-}
-
-VAL_command_trial_disruption = {
-	icon = GFX_idea_ADISCORD_law_military_general_staff
-	army_org_factor = -0.05
-}

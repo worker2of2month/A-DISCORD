@@ -83,37 +83,9 @@ RUS_faction_support = {
 	power_balance_weekly = RUS_faction_power_balance_weekly
 }
 
-# --- rus_faction_favours ---
-# RUS for 120 days after the matching favour is paid with faction support.
-RUS_favour_shock_fist = {
-	remove_trigger = { has_war = no }
-	icon = GFX_idea_ADISCORD_law_military_general_staff
-	army_attack_factor = 0.15
-	breakthrough_factor = 0.10
-}
-
-RUS_favour_night_shifts = {
-	icon = GFX_idea_ADISCORD_law_education_technical_institutes
-	research_speed_factor = 0.15
-}
-
-RUS_favour_reactor_current = {
-	icon = GFX_idea_ADISCORD_industrial_policy_military_prioritization
-	industrial_capacity_factory = 0.10
-	production_speed_buildings_factor = 0.10
-}
-
-# Customer scope for 90 days after a war with RUS cuts the energy contract.
 # STATE for 180 days after a commandant levy took its men and rifles.
 RUS_ba_levy_burden = {
 	icon = GFX_idea_ADISCORD_law_military_total_defense_grid
 	local_manpower = -0.50
 	local_factories = -0.10
-}
-
-RUS_power_cut = {
-	icon = GFX_idea_ADISCORD_law_military_total_defense_grid
-	industrial_capacity_factory = -0.15
-	production_speed_buildings_factor = -0.20
-	army_org_factor = -0.05
 }

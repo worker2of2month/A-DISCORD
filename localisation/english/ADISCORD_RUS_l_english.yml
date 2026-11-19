@@ -1041,6 +1041,7 @@
  RUS_energy_contract_end_desc:0 "Disconnect the line without a war and return the power to the bunker."
  RUS_energy_contract_end_tt:0 "The contract ends: the power returns to the bunker, and the §G+8§! £ADISCORD_economy_treasury_texticon monthly income and slower suspicion growth stop. No 'Power Cut' penalty is applied."
  RUS_power_cut:0 "Power Cut"
+ RUS_power_cut_desc:0 "Across the border, the switches have been thrown. The factory lathes stand idle and army depots have switched to backup generators."
  RUS_suspicion_growth_energy:0 ", energy contracts §G-[?RUS_energy_contracts|0]§! £RUS_suspicion_texticon"
  RUS_war_spoils_full_tt:0 "Spoils: §G+100§! £ADISCORD_economy_treasury_texticon, §G+27000§! £infantry_equipment_texticon, §G+1500§! £manpower_texticon, §G+30§! £supply_texticon to the bunker's stocks."
  RUS_war_spoils_half_tt:0 "Spoils: §G+50§! £ADISCORD_economy_treasury_texticon, §G+13500§! £infantry_equipment_texticon, §G+750§! £manpower_texticon, §G+15§! £supply_texticon to the bunker's stocks."

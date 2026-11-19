@@ -240,6 +240,14 @@ well as its sprite name; a descriptive alias may still point to a placeholder.
 Country variables are authoritative for dynamic modifiers; dummy ideas show
 the exact delta through `effect_tooltip` and are never installed. Verify
 transfer to successor countries and cleanup when the mechanic ends.
+For all countries, implement fixed country-wide bonuses and penalties with a
+defined duration as national spirits granted by `add_timed_idea`. Use
+`has_idea` for consumers, including tooltips and map panels. Preserve the
+recipient, duration, renewal or stacking behaviour and early removal. If the
+spirit changes the scripted economy, invalidate its cache in `on_add` and
+`on_remove` so expiry and early removal both refresh the budget.
+Keep state effects attached to their state and use dynamic modifiers for
+values that change while the effect is active.
 Guard `remove_dynamic_modifier` with `has_dynamic_modifier`; unused branches and successor countries may never have received the modifier.
 
 STP elections determine the winner's mandate. An ordinary victory still leads

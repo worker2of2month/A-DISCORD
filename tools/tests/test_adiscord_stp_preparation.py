@@ -226,6 +226,8 @@ def matches_conditions(items, facts, scope="STP", previous_scope=None):
             return matches_conditions(
                 entry.value, facts, "STP" if entry.key == "ROOT" else entry.key, scope
             )
+        if entry.key == "has_power_balance":
+            return facts.get((scope, entry.key, scalar(entry.value, "id")), False)
         if entry.key == "power_balance_value":
             balance = scalar(entry.value, "id")
             comparison = [child.value for child in entry.value if not child.key]

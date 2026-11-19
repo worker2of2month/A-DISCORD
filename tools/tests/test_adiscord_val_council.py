@@ -11,7 +11,7 @@ import unittest
 from PIL import Image
 
 from tools.builders import build_adiscord_val_flags
-from tools.tests.test_adiscord_stp_preparation import block, entries, matches_conditions, scalar, walk
+from tools.tests.test_adiscord_stp_preparation import block, entries, matches_conditions, scalar, selected_effects, walk
 from tools.tests.test_adiscord_val_new_world import ContractWorld
 from tools.tests.test_adiscord_val_focus_layout import PERSONAL_FOCUSES
 from tools.tests.test_validate_adiscord_val_rework import RIFLE_MODELS
@@ -94,6 +94,8 @@ class CouncilWorld(ContractWorld):
                 results.append(self.debug == (value == "yes"))
             elif key == "has_active_mission":
                 results.append(value in country["missions"])
+            elif key == "has_idea":
+                results.append(value in country.get("timed_ideas", {}))
             elif key == "has_power_balance":
                 results.append(country[self.balance_field(value)] is not None)
             elif key == "power_balance_value":
@@ -222,9 +224,10 @@ class CouncilWorld(ContractWorld):
                 country["cosmetic"] = None
             elif key == "add_field_marshal_role":
                 country.setdefault("field_marshals", set()).add(scalar(value, "character"))
-            elif key == "add_dynamic_modifier":
-                country["modifiers"].add(scalar(value, "modifier"))
-                country.setdefault("modifier_days", {})[scalar(value, "modifier")] = scalar(value, "days")
+            elif key == "add_timed_idea":
+                country.setdefault("timed_ideas", {})[scalar(value, "idea")] = scalar(value, "days")
+            elif key == "remove_ideas":
+                country.get("timed_ideas", {}).pop(value, None)
             elif key == "retire_character":
                 country["characters"].discard(value)
             elif key == "add_country_leader_role":
@@ -331,11 +334,12 @@ class CommandConsolidationTests(unittest.TestCase):
                 self.assertEqual(world.events.count(("VAL", "val_council.28")), 1)
                 self.assertAlmostEqual(world.val["stability"], 0.45 if route == "trial" else 0.5)
                 if route == "trial":
-                    self.assertEqual(world.val["modifier_days"]["VAL_command_trial_disruption"], "180")
-                    modifier = block(entries("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"), "VAL_command_trial_disruption")
-                    self.assertEqual(scalar(modifier, "army_org_factor"), "-0.05")
+                    self.assertEqual(world.val["timed_ideas"]["VAL_command_trial_disruption"], "180")
+                    ideas = block(block(entries("common/ideas/ADISCORD_VAL_rework_ideas.txt"), "ideas"), "country")
+                    idea = block(ideas, "VAL_command_trial_disruption")
+                    self.assertEqual(scalar(block(idea, "modifier"), "army_org_factor"), "-0.05")
                 else:
-                    self.assertNotIn("VAL_command_trial_disruption", world.val["modifiers"])
+                    self.assertNotIn("VAL_command_trial_disruption", world.val.get("timed_ideas", {}))
 
     def test_exact_affordability_is_available_and_debited_to_zero(self):
         for route in ("trial", "retirements"):
@@ -1502,7 +1506,7 @@ class CouncilStoryTests(unittest.TestCase):
         world = self.war_world()
         self.assertEqual(scalar(world.decisions[PREFIX + "favour_front"], "cost"), "30")
         self.assertTrue(world.choose("favour_front"))
-        self.assertIn(PREFIX + "favour_front", world.val["modifiers"])
+        self.assertEqual(world.val["timed_ideas"][PREFIX + "favour_front"], "120")
         self.assertEqual(self.seats(world), (1, 3, 2))
         self.assertAlmostEqual(world.val["council_bop"], -0.05)
         self.assertFalse(world.choose("favour_supply"))
@@ -1513,6 +1517,28 @@ class CouncilStoryTests(unittest.TestCase):
         self.set_seats(world, (2, 2, 2))
         self.assertFalse(world.choose("favour_front"))
         self.assertTrue(world.choose("favour_supply"))
+
+    def test_overlapping_rewards_restart_only_the_announced_term(self):
+        decisions = {d.key: d.value for category in entries(DECISIONS) for d in category.value}
+        event = next(row.value for row in entries("events/ADISCORD_VAL_contract_events.txt")
+                     if row.key == "country_event" and scalar(row.value, "id") == "val_council.18")
+        awards = [(block(decisions[PREFIX + "favour_" + side], "complete_effect"), PREFIX + "favour_" + side, "120")
+                  for side in ("garrison", "front", "supply")]
+        awards.append((block(decisions["VAL_staff_loyalty_review"], "complete_effect"), "VAL_staff_review_disruption", "60"))
+        awards.append((next(row.value for row in event if row.key == "option"), PREFIX + "favour_supply", "90"))
+        for award, idea, days in awards:
+            for active in (False, True):
+                facts = {("VAL", "has_idea", idea): active}
+                selected = [effect for _, effect in selected_effects(award, facts, "VAL")
+                            if effect.key in ("add_timed_idea", "remove_ideas")]
+                self.assertEqual([e.key for e in selected], (["remove_ideas"] if active else []) + ["add_timed_idea"])
+                if active:
+                    self.assertEqual(selected[0].value, idea)
+                self.assertEqual(scalar(selected[-1].value, "idea"), idea)
+                self.assertEqual(scalar(selected[-1].value, "days"), days)
+        inspection = block(decisions["VAL_peace_krutov_inspection"], "complete_effect")
+        facts = {("VAL", "has_idea", "VAL_staff_review_disruption"): True}
+        self.assertFalse(any(e.key in ("add_timed_idea", "remove_ideas") for _, e in selected_effects(inspection, facts, "VAL")))
 
     def test_five_seats_raise_one_demand_per_interval(self):
         world = self.war_world()
@@ -1676,7 +1702,8 @@ class CouncilStoryTests(unittest.TestCase):
         self.assertIn("ADISCORD_economy_mark_dirty", honour_effect)
         review_effect = {row.key: row.value for row in walk(block(review, "complete_effect"))}
         self.assertEqual(review_effect["add_command_power"], "-30")
-        self.assertEqual(scalar(review_effect["add_dynamic_modifier"], "modifier"), "VAL_staff_review_disruption")
+        self.assertEqual(scalar(review_effect["add_timed_idea"], "idea"), "VAL_staff_review_disruption")
+        self.assertEqual(scalar(review_effect["add_timed_idea"], "days"), "60")
         settle = category["VAL_settle_command_crisis"]
         self.assertNotIn("VAL_solgalov_dominance", values(block(settle, "available")))
 

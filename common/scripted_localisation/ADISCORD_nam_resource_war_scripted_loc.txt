@@ -2274,7 +2274,7 @@ defined_text = {
 defined_text = {
 	name = NAMPwCoalition
 	text = {
-		trigger = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+		trigger = { has_idea = NAM_pirate_blockade }
 		localization_key = NAM_pw_coalition_blockade
 	}
 	text = {
@@ -2586,7 +2586,7 @@ defined_text = {
 defined_text = {
 	name = NAMPwBlockadeFactor
 	text = {
-		trigger = { has_dynamic_modifier = { modifier = NAM_pirate_blockade } }
+		trigger = { has_idea = NAM_pirate_blockade }
 		localization_key = NAM_pw_factor_blockade
 	}
 	text = {

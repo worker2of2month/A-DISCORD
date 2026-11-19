@@ -397,10 +397,9 @@ class WartimeRewardsTests(unittest.TestCase):
                     self.assertIn(key + "_desc", all_keys)
 
     def test_val_council_awards_wait_for_war_and_cannot_overwrite_active_bonus(self):
-        modifiers = definitions("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt")
         for kind in ("garrison", "front"):
             decision = self.decisions[f"VAL_council_{kind}_execute"]
-            modifier = f"VAL_council_favour_{kind}"
+            idea = f"VAL_council_favour_{kind}"
             for earned, war, active in ((True, False, False), (False, True, False), (True, True, True), (True, True, False)):
                 facts = {
                     ("VAL", "has_country_flag", f"VAL_council_{kind}_plan_ready"): earned,
@@ -408,15 +407,16 @@ class WartimeRewardsTests(unittest.TestCase):
                     ("VAL", "has_war", "yes"): war,
                     ("VAL", "has_war", "no"): not war,
                     ("VAL", "has_capitulated", "no"): True,
-                    ("VAL", "has_dynamic_modifier", modifier): active,
+                    ("VAL", "has_idea", idea): active,
                 }
                 effects = [node for _, node in selected_effects(one(decision, "complete_effect"), facts, "VAL")]
-                granted = [node for node in effects if node.key == "add_dynamic_modifier"]
+                granted = [node for node in effects if node.key == "add_timed_idea"]
                 self.assertEqual(len(granted), int(earned and war and not active))
                 self.assertEqual(sum(node.key == "clr_country_flag" for node in effects), len(granted))
                 if granted:
+                    self.assertEqual(one(granted[0].value, "idea"), idea)
                     self.assertEqual(one(granted[0].value, "days"), "90")
-                self.assertEqual(matches_conditions(one(one(modifiers, modifier), "remove_trigger"), facts, "VAL"), not war)
+                self.assertEqual(matches_conditions(one(self.ideas[idea], "cancel"), facts, "VAL"), not war)
 
     def test_rus_shock_fist_cannot_charge_support_in_peacetime(self):
         decision = self.decisions["RUS_favour_shock_fist"]

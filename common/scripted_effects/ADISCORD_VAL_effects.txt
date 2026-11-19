@@ -16311,7 +16311,7 @@ VAL_finish_command_consolidation = {
 		if = {
 			limit = { check_variable = { var = VAL_command_consolidation_kind value = 1 compare = equals } }
 			add_stability = -0.05
-			add_dynamic_modifier = { modifier = VAL_command_trial_disruption days = 180 }
+			add_timed_idea = { idea = VAL_command_trial_disruption days = 180 }
 		}
 		clear_variable = VAL_command_consolidation_kind
 		remove_mission = VAL_command_trial_timer

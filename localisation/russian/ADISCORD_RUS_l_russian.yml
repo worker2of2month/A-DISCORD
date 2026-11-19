@@ -1042,6 +1042,7 @@
  RUS_energy_contract_end_desc:0 "Отключить линию без войны и вернуть мощность бункеру."
  RUS_energy_contract_end_tt:0 "Контракт расторгнут: мощность возвращается бункеру, доход §G+8§! £ADISCORD_economy_treasury_texticon в месяц и снижение роста подозрения пропадают. Штрафа \"Отключённый ток\" нет."
  RUS_power_cut:0 "Отключённый ток"
+ RUS_power_cut_desc:0 "За границей разомкнули рубильники. В заводских цехах встали станки, а армейские склады перешли на резервные генераторы."
  RUS_suspicion_growth_energy:0 ", энергоконтракты §G-[?RUS_energy_contracts|0]§! £RUS_suspicion_texticon"
  RUS_war_spoils_full_tt:0 "Трофеи: §G+100§! £ADISCORD_economy_treasury_texticon, §G+27000§! £infantry_equipment_texticon, §G+1500§! £manpower_texticon, §G+30§! £supply_texticon в запасы бункера."
  RUS_war_spoils_half_tt:0 "Трофеи: §G+50§! £ADISCORD_economy_treasury_texticon, §G+13500§! £infantry_equipment_texticon, §G+750§! £manpower_texticon, §G+15§! £supply_texticon в запасы бункера."

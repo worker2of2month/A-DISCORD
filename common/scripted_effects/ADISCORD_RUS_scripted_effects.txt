@@ -1977,7 +1977,11 @@ RUS_energy_contract_cut = {
 	if = {
 		limit = { has_country_flag = RUS_energy_customer }
 		clr_country_flag = RUS_energy_customer
-		add_dynamic_modifier = { modifier = RUS_power_cut days = 90 }
+		if = {
+			limit = { has_idea = RUS_power_cut }
+			remove_ideas = RUS_power_cut
+		}
+		add_timed_idea = { idea = RUS_power_cut days = 90 }
 		RUS = { RUS_energy_contracts_recount = yes }
 	}
 }

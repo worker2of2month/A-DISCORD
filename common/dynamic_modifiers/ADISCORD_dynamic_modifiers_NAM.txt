@@ -129,15 +129,6 @@ NAM_klyuchevsk_oil_strike = {
 	state_resources_factor = -0.50
 }
 
-# COUNTRY former client. A contract voided by war leaves its fuel plan empty
-# for 90 days.
-NAM_fuel_shortage = {
-	icon = GFX_idea_ADISCORD_trade_policy_closed_economy
-	enable = { always = yes }
-	fuel_gain_factor = -0.25
-	army_fuel_consumption_factor = 0.10
-}
-
 # COUNTRY target. Control-loss cleanup removes the modifier and its opinion
 # penalty together. The native enable also disables it without a basin source.
 NAM_fuel_embargo_modifier = {
@@ -187,16 +178,6 @@ NAM_island_steel_levy_modifier = {
 		}
 	}
 	state_resources_factor = -0.15
-}
-
-# COUNTRY NAM in exile. The coalition's squadrons close the island harbours
-# for 90 days after Svetlogorsk piracy has become notorious.
-NAM_pirate_blockade = {
-	icon = GFX_idea_NAM_pirate_blockade
-	enable = { always = yes }
-	fuel_gain_factor = -0.25
-	ADISCORD_economy_trade_income_factor = -0.15
-	convoy_raiding_efficiency_factor = -0.15
 }
 
 # COUNTRY NAM under Veter's humanists. Corporate influence bands and the tax
@@ -445,35 +426,6 @@ NAM_stripped_state = {
 	enable = { always = yes }
 	state_resources_factor = -0.25
 	compliance_growth = -0.05
-}
-
-# COUNTRY SHL. Svetlogorsk convoy hunters cut the furnaces' fuel routes.
-NAM_south_convoy_blockade = {
-	icon = GFX_idea_ADISCORD_trade_policy_limited_exports
-	enable = { always = yes }
-	fuel_gain_factor = -0.25
-	industrial_capacity_factory = -0.05
-}
-
-# Temporary operational tempo; payment is made before installation.
-NAM_mil_mobile_operation = {
-	icon = GFX_idea_NAM_mil_mobile_operation
-	enable = {
-		custom_trigger_tooltip = {
-			tooltip = NAM_mil_mobile_operation_active_tt
-			NAM_mil_mobile_operation_open = yes
-		}
-	}
-	remove_trigger = {
-		custom_trigger_tooltip = {
-			tooltip = NAM_mil_mobile_operation_removed_tt
-			NOT = { NAM_mil_mobile_operation_open = yes }
-		}
-	}
-	army_speed_factor = 0.10
-	planning_speed = 0.25
-	army_fuel_consumption_factor = 0.15
-	supply_consumption_factor = 0.05
 }
 
 # STATE. Supply remains local and closes when the defended campaign ends.

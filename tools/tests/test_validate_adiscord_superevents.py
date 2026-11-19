@@ -467,7 +467,12 @@ class SupereventContractTests(unittest.TestCase):
                      if row.key == "focus" and scalar(row.value, "id") == "NAM_veyran_union_charter")
         reward = block(focus, "completion_reward")
         for ai in (True, False):
-            effects = list(selected_effects(reward, {("NAM", "is_ai"): ai}, "NAM"))
+            facts = {
+                ("NAM", "is_ai", "yes"): ai,
+                ("NAM", "is_ai", "no"): not ai,
+                ("NAM", "has_power_balance", "NAM_postwar_future_bop"): True,
+            }
+            effects = list(selected_effects(reward, facts, "NAM"))
             requests = [scalar(row.value, "ADISCORD_superevent_request")
                         for _, row in effects if row.key == "set_temp_variable"]
             self.assertEqual(requests, ["71"])

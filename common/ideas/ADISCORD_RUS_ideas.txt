@@ -71,6 +71,48 @@ ideas = {
 		}
 
 # --- rus_campaign_ideas ---
+		RUS_favour_shock_fist = {
+			picture = ADISCORD_law_military_general_staff
+			allowed = { tag = RUS }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { has_war = no }
+			modifier = {
+				army_attack_factor = 0.15
+				breakthrough_factor = 0.10
+			}
+		}
+
+		RUS_favour_night_shifts = {
+			picture = ADISCORD_law_education_technical_institutes
+			allowed = { tag = RUS }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			modifier = { research_speed_factor = 0.15 }
+		}
+
+		RUS_favour_reactor_current = {
+			picture = ADISCORD_industrial_policy_military_prioritization
+			allowed = { tag = RUS }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.10
+				production_speed_buildings_factor = 0.10
+			}
+		}
+
+		RUS_power_cut = {
+			picture = ADISCORD_law_military_total_defense_grid
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = -0.15
+				production_speed_buildings_factor = -0.20
+				army_org_factor = -0.05
+			}
+		}
+
 		# Bookmark previews use the initial values before country variables exist.
 		# These ideas are never installed; campaign modifiers own all live bonuses.
 		RUS_black_army_bookmark = {

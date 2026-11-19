@@ -94,6 +94,32 @@ ideas = {
 			}
 		}
 
+		NAM_fuel_shortage = {
+			picture = ADISCORD_trade_policy_closed_economy
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				fuel_gain_factor = -0.25
+				army_fuel_consumption_factor = 0.10
+			}
+		}
+
+		NAM_pirate_blockade = {
+			picture = NAM_pirate_blockade
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				fuel_gain_factor = -0.25
+				ADISCORD_economy_trade_income_factor = -0.15
+				convoy_raiding_efficiency_factor = -0.15
+			}
+		}
+
 		NAM_state_fuel_reserve = {
 			picture = GFX_idea_NAM_state_fuel_reserve
 			allowed = { tag = NAM }
@@ -326,6 +352,40 @@ ideas = {
 			}
 			modifier = {
 				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		NAM_south_convoy_blockade = {
+			picture = ADISCORD_trade_policy_limited_exports
+			allowed = { tag = SHL }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				fuel_gain_factor = -0.25
+				industrial_capacity_factory = -0.05
+			}
+		}
+
+		NAM_mil_mobile_operation = {
+			picture = NAM_mil_mobile_operation
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			cancel = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_mil_mobile_operation_removed_tt
+					NAM_mil_mobile_operation_open = no
+				}
+			}
+			modifier = {
+				army_speed_factor = 0.10
+				planning_speed = 0.25
+				army_fuel_consumption_factor = 0.15
+				supply_consumption_factor = 0.05
 			}
 		}
 
