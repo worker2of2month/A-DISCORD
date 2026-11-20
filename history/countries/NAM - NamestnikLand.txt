@@ -23,6 +23,14 @@ recruit_character = NAM_Vadim_Krechetov
 recruit_character = NAM_Irina_Somova
 recruit_character = NAM_Matvei_Prichal
 recruit_character = NAM_Yaroslav_Weber
+recruit_character = NAM_Rostislav_Karamyshev
+recruit_character = NAM_Mark_Olshansky
+recruit_character = NAM_Aristarkh_Vyazemtsev
+recruit_character = NAM_Taisiya_Valts
+recruit_character = NAM_Saveliy_Kruze
+recruit_character = NAM_Rodion_Kalyonov
+recruit_character = NAM_Nazar_Guryev
+recruit_character = NAM_Lidiya_Velyaminova
 
 ####### Basic shit
 
@@ -108,3 +116,6 @@ recruit_character = NAM_party_representative_pragmatism
 recruit_character = NAM_party_representative_anarchism
 recruit_character = NAM_party_representative_technocracy
 recruit_character = NAM_party_representative_hedonism
+
+promote_character = { character = NAM_Yaroslav_Weber ideology = humanism_ideology }
+promote_character = { character = NAM_Rostislav_Karamyshev ideology = chauvinism_ideology }

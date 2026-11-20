@@ -28,6 +28,7 @@ scripted_gui = {
 		visible = {
 			tag = NAM
 			has_country_flag = NAM_groups_initialized
+			NAM_mainland_programmes_active = yes
 		}
 		ai_enabled = { always = no }
 		effects = {

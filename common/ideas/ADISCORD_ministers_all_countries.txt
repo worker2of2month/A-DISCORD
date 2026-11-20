@@ -147,7 +147,7 @@ ideas = {
 			cost = 75
 			picture = NAM_Kirill_Vykup
 			allowed = { tag = NAM }
-			visible = { tag = NAM }
+			visible = { NOT = { has_country_flag = NAM_corp_takeover } }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_hos_appointed_viceroy }
 		}
@@ -446,16 +446,11 @@ ideas = {
 			name = minister_NAM_Mara_Kluch
 			default = no
 			cost = 75
-			picture = generic_political_advisor_south_america_2
+			picture = NAM_Mark_Vetlugin
 			allowed = { tag = NAM }
-			visible = { tag = NAM }
+			visible = { NOT = { has_country_flag = NAM_corp_takeover } }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_def_quota_battalions }
-			on_add = {
-				custom_effect_tooltip = NAM_board_appointment_4_tt
-				hidden_effect = { NAM_board_queue_recount = yes }
-			}
-			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
 		}
 		minister_VAD_Ruslan_Pike = {
 			name = minister_VAD_Ruslan_Pike
@@ -752,16 +747,11 @@ ideas = {
 			name = minister_NAM_Boris_Nar
 			default = no
 			cost = 75
-			picture = generic_political_advisor_asia_1
+			picture = NAM_Boris_Nartov
 			allowed = { tag = NAM }
-			visible = { tag = NAM }
+			visible = { NOT = { has_country_flag = NAM_corp_takeover } }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_eco_quota_keeper }
-			on_add = {
-				custom_effect_tooltip = NAM_board_appointment_1_tt
-				hidden_effect = { NAM_board_queue_recount = yes }
-			}
-			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
 		}
 		minister_VAD_Yulia_Mera = {
 			name = minister_VAD_Yulia_Mera
@@ -1068,7 +1058,7 @@ ideas = {
 			cost = 75
 			picture = generic_political_advisor_arab_1
 			allowed = { tag = NAM }
-			visible = { tag = NAM }
+			visible = { NOT = { has_country_flag = NAM_corp_takeover } }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_hea_registry_care }
 		}
@@ -1375,16 +1365,11 @@ ideas = {
 			name = minister_NAM_Fedot_Mir
 			default = no
 			cost = 75
-			picture = generic_political_advisor_arab_3
+			picture = NAM_Fedot_Ermolin
 			allowed = { tag = NAM }
-			visible = { tag = NAM }
+			visible = { NOT = { has_country_flag = NAM_corp_takeover } }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_edu_registry_schools }
-			on_add = {
-				custom_effect_tooltip = NAM_board_appointment_2_tt
-				hidden_effect = { NAM_board_queue_recount = yes }
-			}
-			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
 		}
 		minister_VAD_Lidia_Takt = {
 			name = minister_VAD_Lidia_Takt
@@ -1683,7 +1668,7 @@ ideas = {
 			cost = 75
 			picture = generic_political_advisor_europe_1
 			allowed = { tag = NAM }
-			visible = { tag = NAM }
+			visible = { NOT = { has_country_flag = NAM_corp_takeover } }
 			allowed_to_remove = { }
 			traits = { minister_trait_NAM_int_registry_spider }
 		}
@@ -2140,11 +2125,11 @@ ideas = {
 
 		minister_NAM_Pavel_Ordyntsev = {
 			name = minister_NAM_Pavel_Ordyntsev
-			picture = generic_political_advisor_europe_2
+			picture = NAM_Pavel_Ordyntsev
 			cost = 75
 			removal_cost = -1
 			allowed = { tag = NAM }
-			visible = { tag = NAM }
+			visible = { NOT = { has_country_flag = NAM_corp_takeover } }
 			available = {
 				hidden_trigger = { STP_party_minister_change_allowed = yes }
 			}
@@ -2157,16 +2142,13 @@ ideas = {
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 			on_add = {
-				custom_effect_tooltip = NAM_board_appointment_3_tt
 				hidden_effect = {
-					NAM_board_queue_recount = yes
 					ADISCORD_economy_mark_dirty = yes
 					ADISCORD_economy_queue_law_refresh = yes
 				}
 			}
 			on_remove = {
 				hidden_effect = {
-					NAM_board_queue_recount = yes
 					ADISCORD_economy_mark_dirty = yes
 					ADISCORD_economy_queue_law_refresh = yes
 				}
@@ -3925,6 +3907,306 @@ ideas = {
 			available = { STP_party_minister_change_allowed = yes }
 			allowed_to_remove = { STP_party_minister_change_allowed = yes }
 			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_IMD_Andrei_Rakitin = {
+			name = minister_IMD_Andrei_Rakitin
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = IMD }
+			visible = { tag = IMD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_IFC_Maksim_Veres = {
+			name = minister_IFC_Maksim_Veres
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = IFC }
+			visible = { tag = IFC }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_envoy }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_IAM_Kirill_Travin = {
+			name = minister_IAM_Kirill_Travin
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = IAM }
+			visible = { tag = IAM }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_delegate }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_EFR_Oren_Vald = {
+			name = minister_EFR_Oren_Vald
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = EFR }
+			visible = { tag = EFR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_AZR_Rashid_Saffar = {
+			name = minister_AZR_Rashid_Saffar
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = AZR }
+			visible = { tag = AZR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SFD_Farid_Naravi = {
+			name = minister_SFD_Farid_Naravi
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SFD }
+			visible = { tag = SFD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SCD_Ilyas_Sabet = {
+			name = minister_SCD_Ilyas_Sabet
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SCD }
+			visible = { tag = SCD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SMD_Yunus_Soran = {
+			name = minister_SMD_Yunus_Soran
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SMD }
+			visible = { tag = SMD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_trade }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SOD_Naim_Daran = {
+			name = minister_SOD_Naim_Daran
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SOD }
+			visible = { tag = SOD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_contracts }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SDA_Omar_Kashan = {
+			name = minister_SDA_Omar_Kashan
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SDA }
+			visible = { tag = SDA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_envoy }
 			modifier = {
 				political_power_gain = 0.05
 				ADISCORD_economy_admin_expense_factor = 0.025

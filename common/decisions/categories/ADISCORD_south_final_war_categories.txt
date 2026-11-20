@@ -23,6 +23,11 @@ ADISCORD_south_final_war_category = {
 	}
 	visible = {
 		OR = {
+			NOT = { has_country_flag = NAM_corp_takeover }
+			has_focus_tree = NAM_south_war_focus
+			has_global_flag = NAM_war_of_return_won
+		}
+		OR = {
 			ADISCORD_south_coalition_inviter = yes
 			AND = {
 				ADISCORD_south_resource_question_closed = yes

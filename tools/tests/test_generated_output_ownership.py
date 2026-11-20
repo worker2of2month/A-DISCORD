@@ -43,6 +43,7 @@ from tools.lib.generated_outputs import (
 
 ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_FAMILIES = {
+    "debug_idea_catalogue",
     "ambient_audio",
     "battalion_icons",
     "azhar_palace",

@@ -909,6 +909,7 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_sdr_tt
 			unlock_decision_tooltip = NAM_pw_district_cooperative
 			custom_effect_tooltip = NAM_pw_district_cooperative_unlock_tt
 			effect_tooltip = {
@@ -1050,19 +1051,7 @@
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = { focus = NAM_common_fuel_market }
 		bypass = {
-			WEF = {
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
-					ADISCORD_south_campaign_target_settled = yes
-				}
-			}
 			RHM = {
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
-					ADISCORD_south_campaign_target_settled = yes
-				}
-			}
-			SDR = {
 				custom_trigger_tooltip = {
 					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
 					ADISCORD_south_campaign_target_settled = yes
@@ -1090,12 +1079,7 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_south_oil_for_water_tt
-			hidden_effect = {
-				WEF = { ADISCORD_south_offer_alliance = yes }
-				RHM = { ADISCORD_south_offer_alliance = yes }
-				SDR = { ADISCORD_south_offer_alliance = yes }
-			}
+			custom_effect_tooltip = ADISCORD_south_contact_rhm_tt
 		}
 		ai_will_do = {
 			base = 5
@@ -1107,7 +1091,7 @@
 		relative_position_id = NAM_federal_charter
 		x = 0
 		y = 2
-		icon = GFX_focus_NAM_pipeline_patrols
+		icon = GFX_focus_NAM_relay_trials
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -1121,6 +1105,7 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_wef_tt
 			add_command_power = 20
 			add_equipment_to_stockpile = {
 				type = support_equipment
@@ -1813,6 +1798,7 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_kdr_tt
 			effect_tooltip = {
 				swap_ideas = { remove_idea = NAM_navy_dummy_idea add_idea = NAM_prag_convoy_insurance_idea }
 			}
@@ -2267,7 +2253,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -8
 		y = 8
-		icon = GFX_focus_NAM_pw_public_supply
+		icon = GFX_focus_NAM_distribution_board
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -2579,7 +2565,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -9
 		y = 6
-		icon = GFX_focus_VAL_State_Contract
+		icon = GFX_focus_NAM_merchant_charter
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -2693,7 +2679,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -31
 		y = 8
-		icon = GFX_focus_NAM_rom_address
+		icon = GFX_focus_NAM_customs_clearinghouse
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -2751,7 +2737,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -10
 		y = 7
-		icon = GFX_focus_NAM_pw_public_supply
+		icon = GFX_focus_NAM_freight_exchange
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -2789,7 +2775,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -9
 		y = 9
-		icon = GFX_focus_NAM_field_repair_crews
+		icon = GFX_focus_NAM_repair_depots
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -2839,7 +2825,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -5
 		y = 9
-		icon = GFX_focus_VAL_Industrial_Mobilization_Plan
+		icon = GFX_focus_NAM_licensed_assembly
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -2950,7 +2936,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -18
 		y = 10
-		icon = GFX_focus_NAM_development_bank
+		icon = GFX_focus_NAM_municipal_bonds
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -3157,7 +3143,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -5
 		y = 8
-		icon = GFX_focus_NAM_line_survey
+		icon = GFX_focus_NAM_municipal_land
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -3202,7 +3188,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -1
 		y = 8
-		icon = GFX_focus_NAM_open_ledgers
+		icon = GFX_focus_NAM_tenant_councils
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -3284,7 +3270,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -14
 		y = 11
-		icon = GFX_focus_NAM_development_bank
+		icon = GFX_focus_NAM_public_credit
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -3336,7 +3322,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -3
 		y = 10
-		icon = GFX_focus_NAM_district_inspectorate
+		icon = GFX_focus_NAM_workers_inspection
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -3639,7 +3625,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -2
 		y = 5
-		icon = GFX_focus_NAM_civil_service_exam
+		icon = GFX_focus_NAM_pw_civil_payroll
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -4047,6 +4033,7 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_kyz_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -4304,7 +4291,7 @@
 		relative_position_id = NAM_law_after_war
 		x = 17
 		y = 10
-		icon = GFX_focus_NAM_district_inspectorate
+		icon = GFX_focus_NAM_pw_labour_inspection
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		allow_branch = { NAM_prewar_service_mandate = yes }
@@ -5487,7 +5474,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -60
 		y = 2
-		icon = GFX_focus_VAL_State_Contract
+		icon = GFX_focus_NAM_chartered_tonnage
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -5516,7 +5503,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -57
 		y = 2
-		icon = GFX_focus_NAM_motor_pool
+		icon = GFX_focus_NAM_tractor_leasing
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -5545,7 +5532,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -57
 		y = 4
-		icon = GFX_focus_NAM_second_ledger
+		icon = GFX_focus_NAM_bonded_terminal
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -5599,7 +5586,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -10
 		y = 11
-		icon = GFX_focus_NAM_unified_standards
+		icon = GFX_focus_NAM_testing_office
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -5674,7 +5661,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -8
 		y = 12
-		icon = GFX_focus_NAM_unified_standards
+		icon = GFX_focus_NAM_precision_gauges
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -5707,7 +5694,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -12
 		y = 12
-		icon = GFX_focus_VAL_econ_captured_laboratories
+		icon = GFX_focus_NAM_relay_trials
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -5822,7 +5809,7 @@
 		relative_position_id = NAM_law_after_war
 		x = -44
 		y = 5
-		icon = GFX_focus_RUS_engineers_collegium
+		icon = GFX_focus_NAM_through_waybill
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -5905,13 +5892,17 @@
 			EFL = {
 				custom_trigger_tooltip = {
 					tooltip = NAM_neighbour_alliance_offer_open_tt
-					NAM_neighbour_alliance_offer_open = yes
+					NAM_neighbour_accord_available = yes
 				}
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { EFL = { NAM_neighbour_alliance_offer_open = no } } }
+				custom_effect_tooltip = ADISCORD_south_contact_efl_tt
+			}
 			custom_effect_tooltip = NAM_eflor_accord_result_tt
 			hidden_effect = {
 				EFL = { NAM_neighbour_offer_alliance = yes }
@@ -5938,13 +5929,17 @@
 			AZH = {
 				custom_trigger_tooltip = {
 					tooltip = NAM_neighbour_alliance_offer_open_tt
-					NAM_neighbour_alliance_offer_open = yes
+					NAM_neighbour_accord_available = yes
 				}
 			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { AZH = { NAM_neighbour_alliance_offer_open = no } } }
+				custom_effect_tooltip = ADISCORD_south_contact_azh_tt
+			}
 			custom_effect_tooltip = NAM_azhar_accord_result_tt
 			hidden_effect = {
 				AZH = { NAM_neighbour_offer_alliance = yes }

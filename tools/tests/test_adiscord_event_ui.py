@@ -487,6 +487,27 @@ class EventWindowUiTests(unittest.TestCase):
             checked, 100, "event audit unexpectedly skipped the main story files"
         )
 
+    def printed_picture(self, photo):
+        # The game's exported overlay is the transparent top layer of the PSD.
+        canvas = Image.new("RGBA", (499, 176))
+        with Image.open(ROOT / "gfx/interface/event_news_pic_overlay.dds") as overlay:
+            canvas.paste(overlay.convert("RGBA"), (0, 0))
+        return Image.alpha_composite(
+            photo.convert("RGBA"), canvas.resize(photo.size, Image.Resampling.LANCZOS)
+        ).convert("RGB")
+
+    def test_country_print_keeps_finished_plates_and_filters_clean_sources_once(self):
+        from tools.builders.build_adiscord_event_pictures import FINISHED_COUNTRY, formatted_art, texture_path
+
+        for scene in FINISHED_COUNTRY:
+            original = ROOT / "gfx/event_pictures/standard/country" / f"{scene}.png"
+            export = texture_path(scene, "country")
+            with self.subTest(scene=scene), Image.open(original) as source:
+                expected = source if original == export else self.printed_picture(source)
+                self.assertEqual(formatted_art(scene, "country").tobytes(), expected.tobytes())
+        self.assertEqual(texture_path("pier_evacuation", "country").name, "pier_evacuation.png")
+        self.assertEqual(texture_path("nam_navis_shipping", "country").name, "nam_navis_shipping_print.png")
+
     def test_news_art_uses_preserved_authored_sources(self):
         from PIL import ImageOps
         from tools.builders.build_adiscord_event_pictures import (
@@ -515,6 +536,8 @@ class EventWindowUiTests(unittest.TestCase):
                         (396, 153),
                         method=Image.Resampling.LANCZOS,
                     )
+                if scene == "stelander_empire":
+                    expected = self.printed_picture(expected)
                 self.assertEqual(
                     formatted_art(scene, "news").tobytes(), expected.tobytes()
                 )

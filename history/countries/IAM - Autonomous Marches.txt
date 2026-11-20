@@ -6,3 +6,4 @@ set_politics = {
 }
 set_popularities = { pragmatism = 100 }
 set_research_slots = 2
+add_ideas = minister_IAM_Kirill_Travin

@@ -511,7 +511,7 @@ class SouthFinalWarContractTests(unittest.TestCase):
             )
 
         self.assertTrue(closes_when_war_starts(definitions(TRIGGERS)[target_gate]))
-        checked = 0
+        checked = set()
         for path in (
             *SHL_TREES,
             ROOT / "focus_trees/NAM/postwar/focuses.txt",
@@ -523,7 +523,7 @@ class SouthFinalWarContractTests(unittest.TestCase):
                            and any(i.key in offers for i in flatten(e.value))}
                 if not targets:
                     continue
-                checked += 1
+                checked.add(identifier)
                 bypass = block(focus, "bypass")
                 # A bypass may list extra story conditions (partner flag, war
                 # started) inside OR; every demand target must still appear.
@@ -534,7 +534,12 @@ class SouthFinalWarContractTests(unittest.TestCase):
                     gated = {e.key for e in flatten(available) if e.key in REGIONAL and
                              any(c.key == target_gate and c.value == "yes" for c in flatten(e.value))}
                     self.assertEqual(gated, targets, identifier)
-        self.assertGreaterEqual(checked, 16)
+        self.assertTrue({
+            "SHL_south_trade_protectorates", "SHL_south_great_road", "SHL_h_kerdan_trading_house",
+            "SHL_south_free_road", "SHL_south_water_and_sea", "SHL_south_last_ration",
+            "SHL_south_iron_march", "SHL_south_toll_debtors", "SHL_south_veyr_debt",
+            "NAM_south_desert_offices",
+        }.issubset(checked))
 
     def test_answers_always_clear_the_pending_offer(self):
         for name in ("ADISCORD_south_accept_offer", "ADISCORD_south_refuse_offer"):
@@ -880,37 +885,108 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.assertEqual(self.trigger_matches("NAM_neighbour_sovereignty_recognised", tag),
                                  normalised and tag in ("EFL", "AZH"))
 
-    def test_both_leaders_and_their_allies_can_invite_a_regional_country(self):
-        decisions = definitions(ROOT / "common/decisions/ADISCORD_south_final_war_decisions.txt")
-        invitation = block(decisions["ADISCORD_south_final_war_category"], "ADISCORD_south_invite_to_coalition")
-        self.assertEqual({e.value for e in block(invitation, "targets")}, set(REGIONAL))
-        self.event_sender = "KYZ"
-        for tag in ("KDR", "WEF", "KYZ"):
-            for key, value in (("exists", "yes"), ("has_capitulated", "no"), ("is_subject", "no"),
-                               ("is_in_faction", "no"), ("has_war", "no")):
-                self.facts[(tag, key, value)] = True
-        for ally, leader in (("KDR", "NAM"), ("WEF", "SHL")):
-            self.facts[(ally, "faction_leader")] = leader
-            self.facts[(ally, "is_in_faction_with", leader)] = True
-            self.facts[(ally, "is_in_faction", "no")] = False
+    def regional_country(self, country, leader=None):
+        for key, value in (("exists", "yes"), ("has_capitulated", "no"), ("is_subject", "no"), ("has_war", "no")):
+            self.facts[(country, key, value)] = True
+        self.facts[(country, "is_in_faction", "no")] = leader is None
+        if leader:
+            self.facts[(country, "faction_leader")] = leader
+            self.facts[(country, "is_in_faction_with", leader)] = True
             self.facts[(leader, "is_faction_leader", "yes")] = True
             self.facts[(leader, "is_in_faction", "no")] = False
-        for sender in ("NAM", "SHL", "KDR", "WEF"):
-            with self.subTest(sender=sender):
-                self.event_root = sender
-                self.assertTrue(self.matches(block(invitation, "allowed"), sender))
-                self.assertTrue(self.matches(block(invitation, "visible"), sender))
-                self.assertTrue(self.matches(block(invitation, "target_trigger"), sender))
-        self.event_root = "WEF"
+
+    def test_diplomatic_decisions_require_the_current_leaders_target_focus(self):
+        decisions = south_decisions()
+        invitation = decisions["ADISCORD_south_invite_to_coalition"]
+        influence = decisions["ADISCORD_south_build_coalition_influence"]
+        for decision in (invitation, influence):
+            self.assertEqual({node.value for node in block(decision, "targets")}, set(REGIONAL))
+        self.regional_country("KDR")
+        self.regional_country("WEF")
+        for leader, ally, focus, sign in (("NAM", "RHM", "NAM_insured_caravans", 1),
+                                         ("SHL", "MZR", "SHL_south_throne_and_crests", -1)):
+            self.regional_country(ally, leader)
+            self.variable("ADISCORD_south_coalition_influence", sign * 60, "KDR")
+            self.facts[(ally, "has_completed_focus", focus)] = True
+            self.event_sender = "KDR"
+            for completed in (False, True):
+                self.facts[(leader, "has_completed_focus", focus)] = completed
+                for envoy in (leader, ally):
+                    self.event_root = envoy
+                    for decision in (influence, invitation):
+                        self.assertEqual(self.matches(block(decision, "visible"), envoy), completed,
+                                         (leader, envoy, completed))
+            self.event_sender = "WEF"
+            self.assertFalse(self.matches(block(influence, "visible"), ally))
+            self.facts[(leader, "has_completed_focus", focus)] = False
+
         self.event_sender = "KDR"
-        self.assertTrue(self.matches(block(invitation, "visible"), "WEF"))
-        self.event_root = "NAM"
-        self.assertFalse(self.matches(block(invitation, "visible"), "NAM"))
-        self.event_sender = "KYZ"
-        for key in ("has_capitulated", "is_subject"):
-            self.facts[("KYZ", key, "no")] = False
-            self.assertFalse(self.trigger_matches("ADISCORD_south_coalition_invitee", "KYZ"), key)
-            self.facts[("KYZ", key, "no")] = True
+        self.facts[("NAM", "has_completed_focus", "NAM_insured_caravans")] = True
+        for predecessor, leader in (("NAM", "EFL"), ("EFL", "AZH")):
+            self.facts[(predecessor, "is_subject", "no")] = False
+            self.facts[(predecessor, "is_subject_of", leader)] = True
+            self.event_root = leader
+            self.assertFalse(self.matches(block(influence, "visible"), leader))
+            self.facts[(leader, "has_completed_focus", "ADISCORD_south_restitution_contact_kdr")] = True
+            self.assertTrue(self.matches(block(influence, "visible"), leader))
+
+    def test_northern_contacts_unlock_exactly_the_addressed_country(self):
+        contacts = {
+            "EFL": ("NAM_eflor_accord", "NAM_defeat_open_border"),
+            "AZH": ("NAM_azhar_accord", "NAM_defeat_road_south"),
+            "KDR": ("NAM_insured_caravans",),
+            "WEF": ("NAM_south_fenn_guarantee",),
+            "RHM": ("NAM_south_oil_for_water",),
+            "MZR": ("NAM_contract_bureau",),
+            "SDR": ("NAM_common_fuel_market",),
+            "KYZ": ("NAM_pw_export_guarantees",),
+            "GLP": ("NAM_island_concession",),
+        }
+        self.assertEqual(set(contacts), set(REGIONAL))
+        trigger = "ADISCORD_south_north_invitation_unlocked"
+        for leader in ("NAM", "EFL", "AZH"):
+            if leader != "NAM":
+                predecessor = "NAM" if leader == "EFL" else "EFL"
+                self.facts[(predecessor, "is_subject", "no")] = False
+                self.facts[(predecessor, "is_subject_of", leader)] = True
+            for target, focuses in contacts.items():
+                if leader == target:
+                    continue
+                if leader != "NAM":
+                    focuses = (f"ADISCORD_south_restitution_contact_{target.lower()}",)
+                for focus in focuses:
+                    with self.subTest(leader=leader, target=target, focus=focus):
+                        self.facts[(leader, "has_completed_focus", focus)] = True
+                        opened = {tag for tag in REGIONAL if self.trigger_matches(trigger, tag)}
+                        self.assertEqual(opened, {target})
+                        self.facts[(leader, "has_completed_focus", focus)] = False
+
+    def test_focus_alliance_cannot_import_a_war_with_either_camp(self):
+        self.regional_country("KDR")
+        self.regional_country("WEF", "NAM")
+        self.regional_country("SDR", "SHL")
+        for champion in ("NAM", "SHL"):
+            for enemy in ("NAM", "SHL", "WEF", "SDR"):
+                with self.subTest(champion=champion, enemy=enemy):
+                    self.event_root, self.event_sender = champion, champion
+                    war = ("KDR", "has_war_with", enemy)
+                    self.facts[war] = True
+                    self.execute("ADISCORD_south_offer_alliance", "KDR")
+                    self.assertFalse(self.facts.get(("KDR", "has_variable", "ADISCORD_south_offer_kind")))
+                    self.assertEqual(self.calls, [])
+                    self.facts[war] = False
+                    self.execute("ADISCORD_south_offer_alliance", "KDR")
+                    self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_offer_kind")], 3)
+                    self.assertTrue(self.calls)
+                    self.calls.clear()
+                    self.event_root, self.event_sender = "KDR", champion
+                    self.assertTrue(self.trigger_matches("ADISCORD_south_offer_answer_valid", "KDR"))
+                    self.facts[war] = True
+                    self.assertFalse(self.trigger_matches("ADISCORD_south_offer_answer_valid", "KDR"))
+                    self.execute("ADISCORD_south_accept_offer", "KDR")
+                    self.assertFalse(self.facts[("KDR", "has_variable", "ADISCORD_south_offer_kind")])
+                    self.assertEqual(self.calls, [])
+                    self.facts[war] = False
 
     def test_map_distinguishes_leaders_from_allies_and_northern_successors(self):
         self.facts[("KDR", "exists", "yes")] = True
@@ -927,6 +1003,201 @@ class SouthLifecycleTests(unittest.TestCase):
             self.assertFalse(self.trigger_matches("ADISCORD_south_map_country_north_leader", leader))
         self.assertTrue(self.trigger_matches("ADISCORD_south_map_country_north_leader", "AZH"))
 
+    def test_map_binds_each_flag_to_its_own_influence_marker_and_caption(self):
+        gui = definitions(ROOT / "interface/ADISCORD_south_final_war.gui")["guiTypes"]
+        window = block(gui, "containerWindowType")
+        widgets = {scalar(e.value, "name"): e.value for e in window
+                   if e.key in ("containerWindowType", "iconType", "instantTextBoxType")}
+        scripted = definitions(ROOT / "common/scripted_guis/ADISCORD_south_final_war_scripted_gui.txt")
+        panel = block(scripted["scripted_gui"], "ADISCORD_south_map_panel")
+        self.assertEqual(scalar(panel, "window_name"), scalar(window, "name"))
+        properties = block(panel, "properties")
+        triggers = block(panel, "triggers")
+        for tag in (*CHAMPIONS, *REGIONAL):
+            with self.subTest(tag=tag):
+                flag = f"ADISCORD_south_map_flag_{tag}"
+                self.assertEqual(scalar(widgets[flag], "pdx_tooltip"), f"ADISCORD_south_map_{tag}_tt")
+                gauge = f"ADISCORD_south_map_gauge_{tag}"
+                contents = {scalar(e.value, "name"): e.value for e in widgets[gauge] if e.key == "iconType"}
+                marker = f"ADISCORD_south_map_marker_{tag}"
+                self.assertEqual(set(contents), {marker, f"ADISCORD_south_map_track_{tag}"})
+                scoped = block(block(triggers, gauge + "_visible"), tag)
+                self.assertEqual(scalar(scoped, "ADISCORD_south_map_influence_contested"), "yes")
+                self.assertEqual(scalar(contents[marker], "orientation"), "center_up")
+                flag_pos = block(widgets[flag], "position")
+                gauge_pos = block(widgets[gauge], "position")
+                self.assertEqual(scalar(flag_pos, "x"), scalar(gauge_pos, "x"))
+                self.assertLess(int(scalar(flag_pos, "y")), int(scalar(gauge_pos, "y")))
+                self.assertEqual(scalar(block(properties, marker), "x"), f"{tag}.ADISCORD_south_coalition_influence?0")
+                caption = scalar(widgets[f"ADISCORD_south_map_gap_{tag}"], "text")
+                for lang in ("russian", "english"):
+                    self.assertIn(f"[{tag}.ADISCORDSouthMapGaps]", loc_value(lang, caption))
+
+    def test_map_shows_the_actual_points_missing_for_each_camps_invitation(self):
+        scripted = parse_clausewitz(SCRIPTED_LOC.read_text(encoding="utf-8"))
+        display = next(e.value for e in scripted if scalar(e.value, "name") == "ADISCORDSouthMapGaps")
+        gap_variants = [block(e.value, "trigger") for e in display if e.key == "text"
+                        and scalar(e.value, "localization_key") == "ADISCORD_south_map_gaps"]
+        for lang in ("russian", "english"):
+            caption = loc_value(lang, "ADISCORD_south_map_gaps")
+            self.assertIn("[?ADISCORD_south_map_shl_gap", caption)
+            self.assertIn("[?ADISCORD_south_map_north_gap", caption)
+        score = "ADISCORD_south_coalition_influence"
+        invitation = block(south_decisions()["ADISCORD_south_invite_to_coalition"], "available")
+        self.regional_country("KDR")
+        self.event_sender = "KDR"
+        for score_value in (None, -100, -61, -60, -59, 0, 59, 60, 61, 100):
+            values = {}
+            if score_value is not None:
+                self.variable(score, score_value, "KDR")
+                values[score] = score_value
+            balance = score_value or 0
+            variant = next(entries for entries in gap_variants if self.matches(
+                [e for e in entries if not e.key.endswith("_temp_variable")], "KDR"))
+            for entry in (e for e in variant if e.key.endswith("_temp_variable")):
+                var = scalar(entry.value, "var")
+                if entry.key == "clamp_temp_variable":
+                    low = int(scalar(entry.value, "min"))
+                    high = int(scalar(entry.value, "max"))
+                    values[var] = max(low, min(values[var], high))
+                    continue
+                operand = scalar(entry.value, "value")
+                amount = values[operand] if operand in values else int(operand)
+                if entry.key == "set_temp_variable":
+                    values[var] = amount
+                elif entry.key == "add_to_temp_variable":
+                    values[var] += amount
+                elif entry.key == "subtract_from_temp_variable":
+                    values[var] -= amount
+                else:
+                    self.fail(f"Unsupported display calculation {entry.key}")
+            for leader, camp, sign in (("SHL", "shl", -1), ("NAM", "north", 1)):
+                with self.subTest(balance=balance, camp=camp):
+                    gap = f"ADISCORD_south_map_{camp}_gap"
+                    self.assertEqual(values[gap], max(0, 60 - sign * balance))
+                    self.event_root = leader
+                    self.assertEqual(values[gap] == 0, self.matches(invitation, leader))
+
+    def test_map_contested_status_follows_targets_and_campaign_lifecycle(self):
+        trigger = "ADISCORD_south_map_influence_contested"
+        self.regional_country("KDR")
+        self.assertTrue(self.trigger_matches(trigger, "KDR"))
+        self.assertTrue(self.trigger_matches(trigger, "EFL"))
+        for leader in CHAMPIONS:
+            self.assertFalse(self.trigger_matches(trigger, leader))
+        self.facts[("NAM", "is_subject", "no")] = False
+        self.assertFalse(self.trigger_matches(trigger, "EFL"))
+        for field, value in (("exists", "yes"), ("is_subject", "no"), ("has_capitulated", "no")):
+            self.facts[("KDR", field, value)] = False
+            self.assertFalse(self.trigger_matches(trigger, "KDR"), field)
+            self.facts[("KDR", field, value)] = True
+        self.facts[("KDR", "has_war_with", "SHL")] = True
+        self.assertFalse(self.trigger_matches(trigger, "KDR"))
+        self.facts[("KDR", "has_war_with", "SHL")] = False
+        for flag in ("ADISCORD_south_final_started", "ADISCORD_south_final_resolved"):
+            self.flag(flag)
+            self.assertFalse(self.trigger_matches(trigger, "KDR"), flag)
+            self.flag(flag, False)
+
+    def test_rival_advisers_deliver_only_after_a_valid_mission(self):
+        decision = south_decisions()["ADISCORD_south_send_advisers"]
+        self.assertEqual(scalar(decision, "days_remove"), "40")
+        self.assertEqual(scalar(decision, "days_re_enable"), "35")
+        self.regional_country("KDR")
+        self.facts[("NAM", "has_completed_focus", "NAM_insured_caravans")] = True
+        self.facts[("SHL", "has_completed_focus", "SHL_south_throne_and_crests")] = True
+        self.event_sender = "KDR"
+        score = ("KDR", "variable", "ADISCORD_south_coalition_influence")
+        experience = ("KDR", "army_experience")
+        for sender in ("NAM", "SHL"):
+            self.event_root = sender
+            power = (sender, "numeric", "has_political_power")
+            self.facts[power] = 19.99
+            self.execute_entries(block(decision, "complete_effect"), sender)
+            self.assertEqual(self.facts[power], 19.99)
+            self.facts[power] = 40
+            self.assertTrue(self.matches(block(decision, "available"), sender))
+            self.execute_entries(block(decision, "complete_effect"), sender)
+            self.execute_entries(block(decision, "complete_effect"), sender)
+            self.assertEqual(self.facts[power], 20)
+            self.assertFalse(self.matches(block(decision, "available"), sender))
+            self.assertFalse(self.matches(block(decision, "cancel_trigger"), sender))
+        self.assertNotIn(score, self.facts)
+        self.assertNotIn(experience, self.facts)
+        self.execute_entries(block(decision, "remove_effect"), "SHL")
+        self.assertEqual(self.facts[score], -15)
+        self.assertEqual(self.facts[experience], 5)
+        self.event_root = "NAM"
+        self.facts[("KDR", "has_war_with", "SHL")] = True
+        self.assertTrue(self.matches(block(decision, "cancel_trigger"), "NAM"))
+        self.execute_entries(block(decision, "cancel_effect"), "NAM")
+        self.execute_entries(block(decision, "remove_effect"), "NAM")
+        self.assertEqual(self.facts[score], -15)
+        self.assertEqual(self.facts[experience], 5)
+        self.assertFalse(self.facts[("KDR", "has_variable", "ADISCORD_south_north_advisers")])
+
+    def test_delegations_compete_for_one_target_and_charge_only_valid_sends(self):
+        decisions = south_decisions()
+        delegates = decisions["ADISCORD_south_build_coalition_influence"]
+        invitation = decisions["ADISCORD_south_invite_to_coalition"]
+        campaign = block(delegates, "complete_effect")
+        self.assertEqual(scalar(delegates, "cost"), "0")
+        self.regional_country("KDR")
+        self.regional_country("RHM", "NAM")
+        self.facts[("NAM", "has_completed_focus", "NAM_insured_caravans")] = True
+        self.facts[("SHL", "has_completed_focus", "SHL_south_throne_and_crests")] = True
+        self.event_sender = "KDR"
+        influence = ("KDR", "variable", "ADISCORD_south_coalition_influence")
+        for leader, side, sign in (("NAM", "north", 1), ("SHL", "shl", -1)):
+            with self.subTest(leader=leader):
+                self.event_root = leader
+                treasury = (leader, "numeric", "has_political_power")
+                cooldown = ("KDR", "has_country_flag", f"ADISCORD_south_{side}_envoys_recent")
+                self.variable(influence[-1], 40 * sign, "KDR")
+                self.assertFalse(self.matches(block(invitation, "available"), leader))
+                self.facts[treasury] = 24.99
+                self.assertFalse(self.matches(block(delegates, "custom_cost_trigger"), leader))
+                self.execute_entries(campaign, leader)
+                self.assertEqual(self.facts[treasury], 24.99)
+                self.assertEqual(self.facts[influence], 40 * sign)
+                self.facts[treasury] = 25
+                self.assertTrue(self.matches(block(delegates, "custom_cost_trigger"), leader))
+                self.execute_entries(campaign, leader)
+                self.assertEqual(self.facts[treasury], 0)
+                self.assertEqual(self.facts[influence], 60 * sign)
+                self.assertTrue(self.facts[cooldown])
+                self.assertEqual(self.facts[("KDR", "flag_duration", cooldown[-1])], 30)
+                self.assertTrue(self.matches(block(invitation, "available"), leader))
+
+                self.facts[treasury] = 25
+                self.assertFalse(self.matches(block(delegates, "available"), leader))
+                self.execute_entries(campaign, leader)
+                self.assertEqual(self.facts[treasury], 25)
+                self.assertEqual(self.facts[influence], 60 * sign)
+                if leader == "NAM":
+                    self.event_root = "RHM"
+                    self.assertFalse(self.matches(block(delegates, "available"), "RHM"))
+                opponent = "SHL" if leader == "NAM" else "NAM"
+                self.event_root = opponent
+                self.facts[(opponent, "numeric", "has_political_power")] = 25
+                self.assertTrue(self.matches(block(delegates, "available"), opponent))
+                self.execute_entries(campaign, opponent)
+                self.assertEqual(self.facts[influence], 40 * sign)
+                self.event_root = leader
+                self.assertFalse(self.matches(block(invitation, "available"), leader))
+
+                self.variable(influence[-1], 90 * sign, "KDR")
+                self.facts[cooldown] = False
+                self.execute_entries(campaign, leader)
+                self.assertEqual(self.facts[influence], 100 * sign)
+                self.facts[treasury] = 25
+                self.facts[cooldown] = False
+                self.assertFalse(self.matches(block(delegates, "available"), leader))
+                self.execute_entries(campaign, leader)
+                self.assertEqual(self.facts[treasury], 25)
+                for flag in ("north", "shl"):
+                    self.facts[("KDR", "has_country_flag", f"ADISCORD_south_{flag}_envoys_recent")] = False
+
     def test_envoy_reserves_one_recipient_and_consent_names_the_actual_leader(self):
         invitation = south_decisions()["ADISCORD_south_invite_to_coalition"]
         self.event_root, self.event_sender = "WEF", "KDR"
@@ -936,6 +1207,8 @@ class SouthLifecycleTests(unittest.TestCase):
         self.facts[("WEF", "is_in_faction_with", "SHL")] = True
         self.facts[("KDR", "is_in_faction_with", "NAM")] = True
         self.facts[("KDR", "faction_leader")] = "NAM"
+        self.facts[("SHL", "has_completed_focus", "SHL_south_throne_and_crests")] = True
+        self.variable("ADISCORD_south_coalition_influence", -60, "KDR")
         send = block(block(invitation, "complete_effect"), "hidden_effect")
         self.execute_entries(send, "WEF")
         self.assertEqual(self.calls, [("KDR", "country_event", "ADISCORD_south.67", "WEF",
@@ -954,6 +1227,21 @@ class SouthLifecycleTests(unittest.TestCase):
             return [(scope, e.value) for scope, e in selected_effects(payload, self.facts, "KDR")
                     if e.key == "add_to_faction"]
         self.assertEqual(join_orders(), [("SHL", "KDR")])
+        self.event_root, self.event_sender = "NAM", "KDR"
+        self.facts[("NAM", "has_completed_focus", "NAM_insured_caravans")] = True
+        self.facts[("NAM", "numeric", "has_political_power")] = 25
+        delegates = south_decisions()["ADISCORD_south_build_coalition_influence"]
+        self.assertTrue(self.matches(block(delegates, "available"), "NAM"))
+        self.execute_entries(block(delegates, "complete_effect"), "NAM")
+        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_coalition_influence")], -40)
+        self.event_root, self.event_sender = "KDR", "WEF"
+        self.assertFalse(self.matches(guard, "KDR"))
+        self.assertEqual(join_orders(), [])
+        self.variable("ADISCORD_south_coalition_influence", -60, "KDR")
+        self.facts[("KDR", "has_war_with", "SHL")] = True
+        self.assertFalse(self.matches(guard, "KDR"))
+        self.assertEqual(join_orders(), [])
+        self.facts[("KDR", "has_war_with", "SHL")] = False
         self.facts[("WEF", "is_in_faction_with", "SHL")] = False
         self.facts[("WEF", "is_in_faction_with", "NAM")] = True
         self.assertFalse(self.matches(guard, "KDR"))
@@ -963,6 +1251,49 @@ class SouthLifecycleTests(unittest.TestCase):
         self.assertFalse(self.facts[("KDR", "has_variable", "ADISCORD_south_coalition_envoy")])
         self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_offer_kind")], 2)
         self.assertTrue(self.facts[("KDR", "is_in_faction_with", "NAM")])
+
+    def test_declining_an_open_invitation_blocks_the_camp_for_ninety_days(self):
+        decision = south_decisions()["ADISCORD_south_invite_to_coalition"]
+        self.regional_country("KDR")
+        self.regional_country("RHM", "NAM")
+        self.facts[("NAM", "has_completed_focus", "NAM_insured_caravans")] = True
+        self.variable("ADISCORD_south_coalition_influence", 60, "KDR")
+        self.event_root, self.event_sender = "RHM", "KDR"
+        self.execute_entries(block(decision, "complete_effect"), "RHM")
+        self.event_root, self.event_sender = "KDR", "RHM"
+        reject = next(e.value for e in self.event(67) if e.key == "option")
+        self.execute_entries(block(reject, "hidden_effect"), "KDR")
+        self.assertEqual(self.facts[("KDR", "flag_duration", "ADISCORD_south_north_offer_declined")], 90)
+        for sender in ("NAM", "RHM"):
+            self.event_root, self.event_sender = sender, "KDR"
+            self.assertFalse(self.matches(block(decision, "available"), sender))
+            self.execute_entries(block(decision, "complete_effect"), sender)
+        self.assertEqual(len(self.calls), 1)
+
+    def test_northern_invitation_cannot_pull_shahrabads_war_into_the_coalition(self):
+        decision = south_decisions()["ADISCORD_south_invite_to_coalition"]
+        self.regional_country("KDR")
+        self.regional_country("SDR", "SHL")
+        self.event_root, self.event_sender = "NAM", "KDR"
+        self.facts[("NAM", "has_completed_focus", "NAM_insured_caravans")] = True
+        self.variable("ADISCORD_south_coalition_influence", 60, "KDR")
+        for enemy in ("SHL", "SDR"):
+            self.facts[("KDR", "has_war_with", enemy)] = True
+            self.execute_entries(block(decision, "complete_effect"), "NAM")
+            self.assertEqual(self.calls, [], enemy)
+            self.assertFalse(self.facts.get(("KDR", "has_variable", "ADISCORD_south_coalition_envoy")))
+            self.facts[("KDR", "has_war_with", enemy)] = False
+        self.execute_entries(block(decision, "complete_effect"), "NAM")
+        self.assertEqual([(scope, kind, event) for scope, kind, event, *_ in self.calls],
+                         [("KDR", "country_event", "ADISCORD_south.67")])
+        self.event_root, self.event_sender = "KDR", "NAM"
+        answer = next(e.value for e in self.event(67) if e.key == "option" and
+                      scalar(e.value, "name") == "ADISCORD_south.67.b")
+        self.assertTrue(self.matches(block(answer, "trigger"), "KDR"))
+        self.facts[("KDR", "has_war_with", "SHL")] = True
+        self.assertFalse(self.matches(block(answer, "trigger"), "KDR"))
+        self.assertFalse(any(e.key == "add_to_faction" for _, e in
+                             selected_effects(self.expand(block(answer, "hidden_effect")), self.facts, "KDR")))
 
     def test_wartime_defection_requires_opposing_camps_and_uses_the_leaders_programme(self):
         decision = south_decisions()["ADISCORD_south_court_defector"]
@@ -1026,7 +1357,16 @@ class SouthLifecycleTests(unittest.TestCase):
             elif entry.key in ("set_global_flag", "clr_global_flag"):
                 self.flag(entry.value, entry.key == "set_global_flag")
             elif entry.key in ("set_country_flag", "clr_country_flag"):
-                self.facts[(current, "has_country_flag", entry.value)] = entry.key == "set_country_flag"
+                if isinstance(entry.value, list):
+                    flag = scalar(entry.value, "flag")
+                    self.facts[(current, "flag_duration", flag)] = int(scalar(entry.value, "days"))
+                else:
+                    flag = entry.value
+                self.facts[(current, "has_country_flag", flag)] = entry.key == "set_country_flag"
+            elif entry.key == "add_political_power":
+                self.facts[(current, "numeric", "has_political_power")] += float(entry.value)
+            elif entry.key == "army_experience":
+                self.facts[(current, "army_experience")] = self.facts.get((current, "army_experience"), 0) + int(entry.value)
             elif entry.key in ("set_variable", "add_to_variable", "clamp_variable"):
                 name = scalar(entry.value, "var")
                 holder = "GLB" if name.startswith("global.") else current
@@ -1073,6 +1413,8 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.calls.append((current, "add_to_war", scalar(entry.value, "targeted_alliance"), scalar(entry.value, "enemy")))
             elif entry.key == "ADISCORD_economy_mark_dirty":
                 self.calls.append((current, entry.key))
+            elif entry.key == "custom_effect_tooltip":
+                continue
             else:
                 self.assertIn(entry.key, ("news_event", "mark_focus_tree_layout_dirty", "ADISCORD_release_non_participating_minor_optimization"), entry.key)
 
@@ -1243,7 +1585,10 @@ class SouthLifecycleTests(unittest.TestCase):
         for key in list(self.facts):
             if key[0] == "NAM" and key[1] == "has_completed_focus":
                 self.facts[key] = False
-        for focus in ("NAM_rad_great_war_plan", "NAM_hum_union_call", "NAM_board_stock_mobilisation"):
+        self.facts[("NAM", "has_country_flag", "NAM_corp_takeover")] = True
+        self.assertFalse(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"))
+        self.facts[("NAM", "has_country_flag", "NAM_corp_takeover")] = False
+        for focus in ("NAM_rad_great_war_plan", "NAM_hum_union_call"):
             self.facts[("NAM", "has_completed_focus", focus)] = True
             self.assertTrue(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"), focus)
             self.facts[("NAM", "has_completed_focus", focus)] = False

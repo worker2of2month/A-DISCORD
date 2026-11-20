@@ -12,6 +12,9 @@ state = {
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.0
 # Populated by tools/build_adiscord_remainder_states.py
+	resources = {
+		rubber = 4
+	}
 	history = {
 		owner = FLR
 		add_core_of = FLR

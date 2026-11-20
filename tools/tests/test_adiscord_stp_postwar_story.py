@@ -55,18 +55,26 @@ class FounderCourseChoiceTests(unittest.TestCase):
             facts = {
                 ("STS", "STP_pc_focus_available", "yes"): True,
                 ("STS", "STP_pc_founder_rules", "yes"): True,
+                ("STS", "has_country_flag", "STP_cw_postwar"): True,
                 ("STS", "STP_pc_founder_choice_pending", "yes"): True,
             }
             if answer is not None:
                 effects = list(selected_effects(
                     block(options[answer], "hidden_effect"), facts, "STS"
                 ))
-                self.assertEqual([effect.key for _, effect in effects], ["set_variable"])
-                for scope, effect in effects:
-                    variable = scalar(effect.value, "var")
-                    facts[(scope, "variable", variable)] = float(
-                        scalar(effect.value, "value")
-                    )
+                keys = ["set_variable"]
+                if expected == "hegemony":
+                    keys.append("mark_focus_tree_layout_dirty")
+                self.assertEqual([effect.key for _, effect in effects], keys)
+                scope, assignment = effects[0]
+                variable = scalar(assignment.value, "var")
+                facts[(scope, "variable", variable)] = float(scalar(assignment.value, "value"))
+            for focus_id in ("STP_pc_lib_competition", "STP_pc_lib_succession"):
+                visibility = block(self.focuses[focus_id], "allow_branch")
+                with self.subTest(answer=answer, focus=focus_id):
+                    self.assertEqual(matches_conditions(visibility, facts, "STS"), expected != "hegemony")
+                    cabinet = {("STS", "has_variable", "STP_pc_charter_cabinet"): True}
+                    self.assertFalse(matches_conditions(visibility, facts | cabinet, "STS"))
             for route in ("hegemony", "freedom"):
                 focus = self.focuses[f"STP_pc_{route}_open"]
                 with self.subTest(answer=answer, route=route):

@@ -579,7 +579,7 @@ ADISCORD_south_assign_bound_sides = {
 
 # COUNTRY regional participant.
 ADISCORD_south_bind_to_champion = {
-	clear_variable = ADISCORD_south_coalition_envoy
+	ADISCORD_south_close_coalition_diplomacy = yes
 	if = {
 		limit = {
 			exists = yes
@@ -1334,14 +1334,6 @@ ADISCORD_south_load_war_tree = {
 			set_variable = { var = ADISCORD_south_prior_tree value = 3 }
 		}
 		else_if = {
-			limit = { has_focus_tree = NAM_exile_humanist_focus }
-			set_variable = { var = ADISCORD_south_prior_tree value = 4 }
-		}
-		else_if = {
-			limit = { has_focus_tree = NAM_exile_radical_focus }
-			set_variable = { var = ADISCORD_south_prior_tree value = 5 }
-		}
-		else_if = {
 			limit = { has_focus_tree = NAM_exile_corporate_focus }
 			set_variable = { var = ADISCORD_south_prior_tree value = 6 }
 		}
@@ -1396,20 +1388,6 @@ ADISCORD_south_restore_prior_tree = {
 				keep_completed = yes
 			}
 		}
-		else_if = {
-			limit = { check_variable = { var = ADISCORD_south_prior_tree value = 4 compare = equals } }
-			load_focus_tree = {
-				tree = NAM_exile_humanist_focus
-				keep_completed = yes
-			}
-		}
-		else_if = {
-			limit = { check_variable = { var = ADISCORD_south_prior_tree value = 5 compare = equals } }
-			load_focus_tree = {
-				tree = NAM_exile_radical_focus
-				keep_completed = yes
-			}
-		}
 		else = {
 			load_focus_tree = {
 				tree = NAM_exile_corporate_focus
@@ -1444,7 +1422,7 @@ ADISCORD_south_clear_participants = {
 
 # COUNTRY.
 ADISCORD_south_clear_participant = {
-	clear_variable = ADISCORD_south_coalition_envoy
+	ADISCORD_south_close_coalition_diplomacy = yes
 	ADISCORD_south_refund_defector = yes
 	clear_variable = ADISCORD_south_side
 	clr_country_flag = ADISCORD_south_north_leader
@@ -1602,6 +1580,53 @@ ADISCORD_south_queue_offer = {
 	ROOT = { country_event = { id = ADISCORD_south.46 hours = 6 } }
 }
 
+# COUNTRY participant. A new campaign starts with a fresh negotiation table.
+ADISCORD_south_close_coalition_diplomacy = {
+	clear_variable = ADISCORD_south_coalition_envoy
+	clear_variable = ADISCORD_south_coalition_influence
+	clr_country_flag = ADISCORD_south_shl_envoys_recent
+	clr_country_flag = ADISCORD_south_north_envoys_recent
+	clr_country_flag = ADISCORD_south_shl_offer_declined
+	clr_country_flag = ADISCORD_south_north_offer_declined
+	clear_variable = ADISCORD_south_north_advisers
+	clear_variable = ADISCORD_south_shl_advisers
+}
+
+ADISCORD_south_shift_influence_to_north = {
+	add_to_variable = { var = ADISCORD_south_coalition_influence value = 20 }
+	clamp_variable = { var = ADISCORD_south_coalition_influence min = -100 max = 100 }
+}
+
+# The sponsor may have switched camps or the post may already have been released.
+ADISCORD_south_withdraw_advisers = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_north_advisers value = ROOT compare = equals } }
+		clear_variable = ADISCORD_south_north_advisers
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_shl_advisers value = ROOT compare = equals } }
+		clear_variable = ADISCORD_south_shl_advisers
+	}
+}
+
+ADISCORD_south_shift_influence_to_shl = {
+	add_to_variable = { var = ADISCORD_south_coalition_influence value = -20 }
+	clamp_variable = { var = ADISCORD_south_coalition_influence min = -100 max = 100 }
+}
+
+# COUNTRY target. ROOT sends the delegation. The cooldown belongs to its camp.
+ADISCORD_south_gain_coalition_influence = {
+	if = {
+		limit = { ROOT = { ADISCORD_south_map_country_shl = yes } }
+		ADISCORD_south_shift_influence_to_shl = yes
+		set_country_flag = { flag = ADISCORD_south_shl_envoys_recent days = 30 }
+	}
+	else = {
+		ADISCORD_south_shift_influence_to_north = yes
+		set_country_flag = { flag = ADISCORD_south_north_envoys_recent days = 30 }
+	}
+}
+
 # COUNTRY envoy. Resolve the leader once; event replies verify the same destination.
 ADISCORD_south_save_inviting_leader = {
 	if = {
@@ -1675,6 +1700,7 @@ ADISCORD_south_offer_alliance = {
 	if = {
 		limit = {
 			ADISCORD_south_campaign_target_valid = yes
+			ADISCORD_south_coalition_target_war_clear = yes
 			OR = {
 				is_in_faction = no
 				ADISCORD_south_alliance_switch_possible = yes
@@ -1939,11 +1965,36 @@ ADISCORD_south_ensure_campaign_faction = {
 # refusal war releases the members held for it.
 ADISCORD_south_note_campaign_annexation = {
 	FROM = {
-		clear_variable = ADISCORD_south_coalition_envoy
+		ADISCORD_south_close_coalition_diplomacy = yes
 		clr_country_flag = ADISCORD_south_refused_SHL
 		clr_country_flag = ADISCORD_south_refused_NAM
 	}
+	EFL = { ADISCORD_south_recall_annexed_envoy = yes }
+	AZH = { ADISCORD_south_recall_annexed_envoy = yes }
+	WEF = { ADISCORD_south_recall_annexed_envoy = yes }
+	KDR = { ADISCORD_south_recall_annexed_envoy = yes }
+	RHM = { ADISCORD_south_recall_annexed_envoy = yes }
+	SDR = { ADISCORD_south_recall_annexed_envoy = yes }
+	MZR = { ADISCORD_south_recall_annexed_envoy = yes }
+	KYZ = { ADISCORD_south_recall_annexed_envoy = yes }
+	GLP = { ADISCORD_south_recall_annexed_envoy = yes }
 	ADISCORD_south_recheck_held_refusals = yes
+}
+
+# COUNTRY host, FROM is the dissolved sponsor.
+ADISCORD_south_recall_annexed_envoy = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_coalition_envoy value = FROM compare = equals } }
+		clear_variable = ADISCORD_south_coalition_envoy
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_north_advisers value = FROM compare = equals } }
+		clear_variable = ADISCORD_south_north_advisers
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_shl_advisers value = FROM compare = equals } }
+		clear_variable = ADISCORD_south_shl_advisers
+	}
 }
 
 # ----- Refused consolidation offers -----

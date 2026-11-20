@@ -603,13 +603,21 @@ class CivilWarContracts(unittest.TestCase):
         self.assertNotIn("STP_cw_clear_political_modifiers", start[:transfer])
         self.assertNotIn("STP_cw_clear_resistance_modifiers", start[:transfer])
 
-    def test_campaign_stats_keep_native_nonnegative_floors(self):
+    def test_stability_and_war_support_range(self):
+        bounds = []
         for path in (ROOT / "common/defines").glob("*.lua"):
             for name, value in re.findall(
-                r"NDefines\.NCountry\.(MIN_STABILITY|MIN_WAR_SUPPORT)\s*=\s*(-?[\d.]+)",
+                r"^\s*NDefines\.NCountry\.((?:MIN|MAX)_(?:STABILITY|WAR_SUPPORT))\s*=\s*(-?[\d.]+)",
                 path.read_text(encoding="utf-8-sig"),
+                re.MULTILINE,
             ):
-                self.assertGreaterEqual(float(value), 0, f"{path.name}: {name}")
+                bounds.append((name, float(value)))
+        self.assertCountEqual(bounds, [
+            ("MIN_STABILITY", -1.0),
+            ("MAX_STABILITY", 1.0),
+            ("MIN_WAR_SUPPORT", -1.0),
+            ("MAX_WAR_SUPPORT", 1.0),
+        ])
 
     def test_allies_can_be_called_but_unsolicited_war_entry_stays_blocked(self):
         diplomacy = entries("common/scripted_triggers/diplomacy_scripted_triggers.txt")

@@ -8,22 +8,30 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from bisect import bisect_right
 from collections import defaultdict, deque
 from io import BytesIO
-from math import atan2, pi
+from math import atan2, cos, pi, radians, sin
 from pathlib import Path
 
 import numpy as np
 from PIL import Image
-from scipy.ndimage import distance_transform_edt, find_objects, gaussian_filter
-
-from tools.builders.build_adiscord_ivn_geography import native_river_bmp, normal_from_height
-from tools.builders.build_adiscord_new_states import (
-    COUNTRY_DISTRICTS, DISTRICT_CHILDREN, NEW_CITY_APPROACHES, SOUTHERN_CITIES, SOUTHERN_CITY_APPROACHES,
-    SOUTHERN_CITY_POINTS, SOUTHERN_INTERIOR_DISTRICTS, SOUTHERN_RURAL_SPLITS, southern_city_rail_route,
+from scipy.ndimage import (
+    binary_dilation, binary_fill_holes, distance_transform_edt, find_objects, gaussian_filter, label,
 )
-from tools.lib.city_terrains import CITY_TERRAINS, NATIONAL_CITY_TERRAIN
+
+from tools.builders.build_adiscord_ivn_geography import (
+    RIVER_SEA_PALETTE, RIVER_SOURCE_PALETTE, compact_partition, lattice_noise, native_river_bmp,
+    normal_from_height, province_borders, river_width_palette, stable_unit_hash,
+)
+from tools.builders.build_adiscord_new_states import (
+    COUNTRY_DISTRICTS, DISTRICT_CHILDREN, ISLAND_DISTRICTS, ISLAND_TOWNS, NAM_ARCHIPELAGO_ISLANDS,
+    NEW_CITY_APPROACHES, REGIONAL_SETTLEMENTS, SOUTHERN_CITIES, SOUTHERN_CITY_APPROACHES, SOUTHERN_CITY_POINTS,
+    SOUTHERN_INTERIOR_DISTRICTS, SOUTHERN_RURAL_SPLITS, island_district_provinces, southern_city_rail_route,
+    state_file_provinces, state_path,
+)
+from tools.lib.city_terrains import CITY_TERRAINS, NATIONAL_CITY_CLUSTERS, NATIONAL_CITY_TERRAIN
 from tools.lib.coastal_clearance import (
     URBAN_FALLBACK_PALETTE,
     province_colours,
@@ -296,8 +304,30 @@ def load_river_courses(path: Path) -> dict[tuple[int, int], int]:
     return courses
 
 
+def load_island_rivers(path: Path) -> tuple[tuple[tuple[int, int], ...], ...]:
+    """Read the rivers authored on island districts, each from its source to its mouth."""
+    rivers = []
+    for entry in json.loads(path.read_text(encoding="utf-8"))["island_rivers"]:
+        course = tuple((x, y) for x, y in entry["path"])
+        for (x, y), (next_x, next_y) in zip(course, course[1:]):
+            if abs(x - next_x) + abs(y - next_y) != 1:
+                raise ValueError(f"island river from {course[0]}: the course breaks at {x}, {y}")
+        rivers.append(course)
+    return tuple(rivers)
+
+
 RIVER_BANK_REPAIRS, RIVER_BANK_KEPT_SURFACE = load_river_bank_repairs(RIVER_BANK_REPAIRS_PATH)
 RIVER_COURSES = load_river_courses(RIVER_BANK_REPAIRS_PATH)
+# An island river is a source pixel followed by a course that widens towards
+# the mouth. It runs on province-border pixels of the island districts.
+ISLAND_RIVERS = load_island_rivers(RIVER_BANK_REPAIRS_PATH)
+for river_course in ISLAND_RIVERS:
+    for index, pixel in enumerate(river_course):
+        if pixel in RIVER_COURSES:
+            raise ValueError(f"island river pixel {pixel} is listed twice")
+        RIVER_COURSES[pixel] = (
+            RIVER_SOURCE_PALETTE if index == 0 else river_width_palette(index / len(river_course), len(river_course))
+        )
 PROVINCE_PIXEL_REPAIRS.update(RIVER_BANK_REPAIRS)
 PROVINCE_REPAIR_PROVINCES = frozenset(
     province for pair in PROVINCE_PIXEL_REPAIRS.values() for province in pair
@@ -352,6 +382,85 @@ ANCHOR_TOUCHED_PROVINCES = (
     | COUNTRY_DISTRICT_IDS | APPROACH_PROVINCES
     | frozenset(RURAL_SPLIT_PARENTS) | frozenset(RURAL_SPLIT_PARENTS.values())
 )
+# Districts of the neighbouring island states and the provinces they were cut
+# from. They stay in the archipelago scope below: relief, terrain and forests
+# follow the generated island surface, and their anchors are reconciled.
+ISLAND_DISTRICT_PARENTS = {district["province"]: district["parent"] for district in ISLAND_DISTRICTS}
+ISLAND_DISTRICT_PROVINCES = frozenset(ISLAND_DISTRICT_PARENTS)
+ISLAND_DISTRICT_SCOPE = ISLAND_DISTRICT_PROVINCES | frozenset(ISLAND_DISTRICT_PARENTS.values())
+ISLAND_TOWN_PROVINCES = frozenset(district["province"] for district in ISLAND_TOWNS)
+ANCHOR_TOUCHED_PROVINCES |= ISLAND_DISTRICT_SCOPE
+# The Svetlogorye archipelago and its neighbouring island states: relief is a
+# pure function of position, coastline and the authored river courses, and
+# each province takes one terrain from the relief under it. Islands raised
+# from the sea join it; an island of several provinces is cut into compact
+# parts. A near island is bridged to the island its sea province touches; a
+# distant one is reached by sea and, when settled, has a harbour.
+ARCHIPELAGO_STATES = (225, 226, 227, 228, 229, 230, 231)
+# The neighbours share the relief, terrain, forests and anchor heights. Towns
+# and harbours stay with the states whose settlements are authored.
+ARCHIPELAGO_NEIGHBOUR_STATES = {
+    "FLR": (623, 624, 653, 681, 682, 683, 684, 685),
+    "CHD": (672, 673, 674, 675, 676, 677, 678, 679, 680),
+    "LUR": (649, 650, 651, 652),
+    "ULV": (643, 644, 645, 646, 647, 648),
+    "PIV": (232,),
+}
+# Provinces another pass of this builder shapes keep that treatment.
+ARCHIPELAGO_FOREIGN_SCOPES = (
+    CITIES | URBAN_GROWTH | RELIEF_SURFACE_PROVINCES | ISLANDS
+    | frozenset(COUNTRY_DISTRICT_IDS) | DISPLACED_PROVINCES | PROVINCE_REPAIR_PROVINCES
+)
+ARCHIPELAGO_NEIGHBOUR_PROVINCES = frozenset().union(
+    *(
+        state_file_provinces(state_path(state))
+        for states in ARCHIPELAGO_NEIGHBOUR_STATES.values()
+        for state in states
+    )
+) - ARCHIPELAGO_FOREIGN_SCOPES
+ARCHIPELAGO_NEW_PROVINCES = frozenset(
+    part["province"] for island in NAM_ARCHIPELAGO_ISLANDS for part in island["provinces"]
+)
+ARCHIPELAGO_PROVINCES = ARCHIPELAGO_NEW_PROVINCES.union(
+    *(state_file_provinces(state_path(state)) for state in ARCHIPELAGO_STATES)
+) | ARCHIPELAGO_NEIGHBOUR_PROVINCES | ISLAND_DISTRICT_PROVINCES
+ISLAND_BRIDGE_COMMENT = "nam archipelago island bridge"
+# Narrow straits of the Ulven League, bridged between the listed states.
+STRAIT_BRIDGES = ((643, 644), (643, 645), (647, 648))
+# Surveyed islets a narrow strait away from the rest of their state: (state,
+# islet province). Each is bridged to the nearest shore of that state.
+ISLET_BRIDGES = ((643, 5943), (643, 5632))
+STRAIT_BRIDGE_COMMENT = "ulven league strait bridge"
+# Every settlement of the Svetlogorye states, the harbour towns of raised
+# islands and the governorate's big-city clusters are city provinces: the
+# whole dry area away from the shore band carries the urban texture, city
+# models and lights, and the province declares a city terrain. A neighbour
+# province already declared as a city keeps its terrain and is painted alike.
+ARCHIPELAGO_TOWNS = frozenset(
+    province
+    for state in ARCHIPELAGO_STATES
+    for province, _value, _name in REGIONAL_SETTLEMENTS.get(state, ())
+) | frozenset(island["town"]["province"] for island in NAM_ARCHIPELAGO_ISLANDS if "town" in island)
+ARCHIPELAGO_CITY_CLUSTERS = frozenset(NATIONAL_CITY_CLUSTERS.get("svetlogorye_town", ())) & ARCHIPELAGO_PROVINCES
+ARCHIPELAGO_CITY_TERRAIN = {
+    province: NATIONAL_CITY_TERRAIN.get(province, "svetlogorye_town")
+    for province in (ARCHIPELAGO_TOWNS | ARCHIPELAGO_CITY_CLUSTERS) & ARCHIPELAGO_PROVINCES
+}
+# Towns of the neighbouring island states have no national city terrain.
+ARCHIPELAGO_CITY_TERRAIN.update({province: "urban" for province in ISLAND_TOWN_PROVINCES})
+CITY_BACKGROUND_INDEX = 1
+ARCHIPELAGO_PALETTES = {"plains": 0, "forest": 4, "marsh": 9, "hills": 17, "mountain": 20}
+ARCHIPELAGO_MOUNTAIN_HEIGHT = 148.0
+ARCHIPELAGO_HILL_HEIGHT = 127.0
+ARCHIPELAGO_FOREST_SHARE = 0.62
+ARCHIPELAGO_TREE_PALETTES = (6, 5)
+# A river cuts a valley of this radius; it sinks by a share of its height
+# above the shore plus a fixed channel, so lowland rivers stay below their banks.
+ARCHIPELAGO_RIVER_RADIUS = 2.5
+ARCHIPELAGO_RIVER_DEPTH = 0.45
+ARCHIPELAGO_RIVER_CHANNEL = 2.0
+ARCHIPELAGO_MIN_HEIGHT = 97
+ARCHIPELAGO_MAX_HEIGHT = 180
 COLOURMAP =Path("map/terrain/colormap_rgb_cityemissivemask_a.dds")
 COLOURMAP_SOURCE = Path("tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds")
 SEA_FLOOR_HEIGHT = 89
@@ -386,6 +495,302 @@ def lowland_heights(mask: np.ndarray) -> np.ndarray:
             & padded[1:-1, 2:]
         )
     return result
+
+
+def archipelago_heights(land: np.ndarray) -> np.ndarray:
+    """Raise island interiors into massifs and basins that fall to the shore.
+
+    Broad noise decides where an interior becomes a massif; ridged noise cuts
+    it into spurs and valleys. An islet is too narrow to rise far, so it stays
+    a low rock. Sea pixels return zero.
+    """
+    ys, xs = np.nonzero(land)
+    crop = np.s_[ys.min() - 2:ys.max() + 3, xs.min() - 2:xs.max() + 3]
+    inside = land[crop]
+    shore_distance = distance_transform_edt(inside)
+    gy, gx = np.mgrid[crop].astype(float)
+    massif = np.clip((lattice_noise(gx, gy, 34.0, 71) - 0.3) / 0.45, 0.0, 1.0) ** 1.5
+    rise = shore_distance / (shore_distance + 7.0) * (6.0 + 64.0 * massif)
+    ridges = 1.0 - np.abs(2.0 * lattice_noise(gx, gy, 9.0, 73) - 1.0)
+    grain = (lattice_noise(gx, gy, 4.0, 79) - 0.5) * np.minimum(1.0, shore_distance / 3.0)
+    surface = 97.0 + 3.0 * np.minimum(1.0, shore_distance / 2.5) + rise * (0.85 + 0.45 * ridges) + 3.0 * grain
+    result = np.zeros(land.shape, dtype=np.uint8)
+    result[crop] = np.where(inside, np.clip(np.rint(surface), ARCHIPELAGO_MIN_HEIGHT, ARCHIPELAGO_MAX_HEIGHT), 0)
+    return result
+
+
+def carve_river_valleys(heights: np.ndarray, land: np.ndarray, rivers: np.ndarray) -> np.ndarray:
+    """Cut a valley along every river pixel on the given land.
+
+    The rivers stay where rivers.bmp draws them; only the ground around them
+    sinks. No land pixel drops below the shore level, so a river never runs
+    under the sea surface. Pixels outside the land keep their heights.
+    """
+    river = land & (rivers < RIVER_SEA_PALETTE)
+    if not river.any():
+        return heights
+    ys, xs = np.nonzero(river)
+    margin = int(ARCHIPELAGO_RIVER_RADIUS * 4) + 1
+    crop = np.s_[
+        max(0, ys.min() - margin):ys.max() + margin + 1,
+        max(0, xs.min() - margin):xs.max() + margin + 1,
+    ]
+    valley = np.exp(-((distance_transform_edt(~river[crop]) / ARCHIPELAGO_RIVER_RADIUS) ** 2))
+    level = heights[crop].astype(float)
+    above_shore = np.maximum(0.0, level - (ARCHIPELAGO_MIN_HEIGHT + 3))
+    cut = valley * (ARCHIPELAGO_RIVER_DEPTH * above_shore + ARCHIPELAGO_RIVER_CHANNEL)
+    carved = np.clip(np.rint(level - cut), ARCHIPELAGO_MIN_HEIGHT, ARCHIPELAGO_MAX_HEIGHT).astype(heights.dtype)
+    result = heights.copy()
+    result[crop] = np.where(land[crop], carved, heights[crop])
+    return result
+
+
+def sea_anchor_pixels(
+    unitstacks: bytes, buildings: bytes, shape: tuple[int, int], sea_provinces: set[int], margin: int = 0
+) -> np.ndarray:
+    """Mark the pixels of every sea unit anchor and floating harbour, with a margin."""
+    result = np.zeros(shape, bool)
+    rows = [
+        fields
+        for line in unitstacks.decode("utf-8").splitlines()
+        if int((fields := line.split(";"))[0]) in sea_provinces
+    ]
+    rows += [
+        [fields[6], "", fields[2], fields[3], fields[4]]
+        for line in buildings.decode("utf-8-sig").splitlines()
+        if len(fields := line.split(";")) == 7 and fields[1] == "floating_harbor"
+    ]
+    for row in rows:
+        x = round(float(row[2]))
+        y = shape[0] - 1 - round(float(row[4]))
+        result[max(0, y - margin):y + margin + 1, max(0, x - margin):x + margin + 1] = True
+    return result
+
+
+def island_mask(shape: tuple[int, int], island: dict) -> np.ndarray:
+    """Return an island's rotated, ragged outline as a full-map mask.
+
+    The body is a rotated ellipse; optional lobes, given in the body's own
+    axes, add capes and peninsulas. Fine noise frays the shore and coarse
+    noise, scaled to the island, cuts bays. Only the largest landmass is kept,
+    without lagoons.
+    """
+    x, y = island["centre"]
+    x_radius, y_radius = island["radii"]
+    angle = radians(island["angle"])
+    salt = island["provinces"][0]["province"]
+    lobes = island.get("lobes", ())
+    extent = max(
+        (max(x_radius, y_radius), *(abs(ox) + max(lx, ly) for ox, _oy, lx, ly in lobes),
+         *(abs(oy) + max(lx, ly) for _ox, oy, lx, ly in lobes))
+    )
+    reach = int(extent * 1.4) + 3
+    window = np.s_[y - reach:y + reach + 1, x - reach:x + reach + 1]
+    gy, gx = np.mgrid[window].astype(float)
+    dx = gx - x
+    dy = gy - y
+    along = dx * cos(angle) + dy * sin(angle)
+    across = dy * cos(angle) - dx * sin(angle)
+    outline = (along / x_radius) ** 2 + (across / y_radius) ** 2
+    for offset_along, offset_across, lobe_along, lobe_across in lobes:
+        lobe = ((along - offset_along) / lobe_along) ** 2 + ((across - offset_across) / lobe_across) ** 2
+        outline = np.minimum(outline, lobe)
+    coast = 0.55 * (lattice_noise(gx, gy, 3.0, salt) - 0.5)
+    coast += 0.9 * (lattice_noise(gx, gy, max(3.0, max(x_radius, y_radius) / 1.6), salt + 1) - 0.5)
+    inside = outline + coast <= 1.0
+    pieces, count = label(inside)
+    if count > 1:
+        sizes = np.bincount(pieces.ravel())
+        sizes[0] = 0
+        inside = pieces == int(sizes.argmax())
+    result = np.zeros(shape, bool)
+    result[window] = binary_fill_holes(inside)
+    return result
+
+
+def island_provinces(mask: np.ndarray, island: dict) -> np.ndarray:
+    """Cut an island into its listed provinces; return their IDs, zero elsewhere."""
+    ys, xs = np.nonzero(mask)
+    window = np.s_[ys.min() - 1:ys.max() + 2, xs.min() - 1:xs.max() + 2]
+    ids = np.array([part["province"] for part in island["provinces"]])
+    result = np.zeros(mask.shape, np.int32)
+    if len(ids) == 1:
+        result[mask] = ids[0]
+        return result
+    owner = compact_partition(mask[window], len(ids))
+    if (owner[mask[window]] < 0).any():
+        raise ValueError(f"island {ids[0]}: its outline is not one landmass")
+    result[window] = np.where(owner >= 0, ids[np.maximum(owner, 0)], 0)
+    return result
+
+
+def bridge_endpoints(
+    grid: np.ndarray, parts: list[int], home: int, sea: int
+) -> tuple[tuple[int, int], tuple[int, int]] | None:
+    """Return the shortest straight crossing from an island to its home.
+
+    The crossing runs only over its own sea province, so it neither cuts
+    across other land nor passes through waters whose fleets cannot block it.
+    """
+    island = np.isin(grid, parts)
+    ys, xs = np.nonzero(island)
+    reach = 40
+    window = np.s_[max(0, ys.min() - reach):ys.max() + reach + 1, max(0, xs.min() - reach):xs.max() + reach + 1]
+    local = grid[window]
+    water = local == sea
+    start = np.argwhere(island[window] & binary_dilation(water))
+    stop = np.argwhere((local == home) & binary_dilation(water))
+    if not len(start) or not len(stop):
+        return None
+    gaps = ((start[:, None, :] - stop[None, :, :]) ** 2).sum(axis=2)
+    allowed = {sea, home, *parts}
+    for flat in np.argsort(gaps, axis=None, kind="stable")[:400]:
+        first, second = np.unravel_index(int(flat), gaps.shape)
+        (y0, x0), (y1, x1) = start[first], stop[second]
+        steps = int(np.ceil(np.hypot(y1 - y0, x1 - x0) * 3)) + 2
+        path_y = np.rint(np.linspace(y0, y1, steps)).astype(int)
+        path_x = np.rint(np.linspace(x0, x1, steps)).astype(int)
+        if set(np.unique(local[path_y, path_x]).tolist()) <= allowed:
+            return (
+                (int(y0) + window[0].start, int(x0) + window[1].start),
+                (int(y1) + window[0].start, int(x1) + window[1].start),
+            )
+    return None
+
+
+def strait_crossing(
+    grid: np.ndarray, first: frozenset[int], second: frozenset[int], seas: set[int]
+) -> tuple[int, int, int, tuple[int, int], tuple[int, int]]:
+    """Return the shortest crossing between two states over one sea province.
+
+    The result names both shore provinces, the sea province between them and
+    the two shore pixels.
+    """
+    water = binary_dilation(np.isin(grid, list(seas)))
+    start = np.argwhere(np.isin(grid, list(first)) & water)
+    stop = np.argwhere(np.isin(grid, list(second)) & water)
+    gaps = ((start[:, None, :] - stop[None, :, :]) ** 2).sum(axis=2)
+    for flat in np.argsort(gaps, axis=None, kind="stable")[:400]:
+        index, other = np.unravel_index(int(flat), gaps.shape)
+        (y0, x0), (y1, x1) = start[index], stop[other]
+        steps = int(np.ceil(np.hypot(y1 - y0, x1 - x0) * 3)) + 2
+        path = grid[
+            np.rint(np.linspace(y0, y1, steps)).astype(int), np.rint(np.linspace(x0, x1, steps)).astype(int)
+        ]
+        crossed = set(np.unique(path).tolist()) - {int(grid[y0, x0]), int(grid[y1, x1])}
+        if len(crossed) == 1 and crossed <= seas:
+            return int(grid[y0, x0]), int(grid[y1, x1]), crossed.pop(), (int(y0), int(x0)), (int(y1), int(x1))
+    raise ValueError("strait bridge: no crossing over a single sea province")
+
+
+def island_bridges(original: bytes, grid: np.ndarray, seas: set[int]) -> bytes:
+    """Bridge every near raised island to its home island across the sea around it."""
+    text = original.decode("utf-8-sig")
+    newline = "\r\n" if "\r\n" in text else "\n"
+    lines = [
+        line for line in text.splitlines()
+        if not line.endswith((ISLAND_BRIDGE_COMMENT, STRAIT_BRIDGE_COMMENT))
+    ]
+    tail = [lines.pop()] if lines and lines[-1].startswith("-1;") else []
+    map_height = grid.shape[0]
+    for island in NAM_ARCHIPELAGO_ISLANDS:
+        # A distant island has no bridge; it is reached by sea.
+        if not island["bridge"]:
+            continue
+        parts = [part["province"] for part in island["provinces"]]
+        endpoints = bridge_endpoints(grid, parts, island["home"], island["sea"])
+        if endpoints is None:
+            raise ValueError(f"island {parts[0]}: no crossing to {island['home']} stays over sea province {island['sea']}")
+        (y0, x0), (y1, x1) = endpoints
+        province = int(grid[y0, x0])
+        lines.append(
+            f"{province};{island['home']};sea;{island['sea']};{x0};{map_height - 1 - y0};"
+            f"{x1};{map_height - 1 - y1};;{ISLAND_BRIDGE_COMMENT}"
+        )
+    def surveyed(state: int) -> frozenset[int]:
+        # Districts belong to their state before its province list names them.
+        members = state_file_provinces(state_path(state)) | island_district_provinces(state)
+        return members - ARCHIPELAGO_NEW_PROVINCES
+
+    crossings = [(surveyed(first), surveyed(second)) for first, second in STRAIT_BRIDGES]
+    crossings += [(frozenset({islet}), surveyed(state) - {islet}) for state, islet in ISLET_BRIDGES]
+    for first, second in crossings:
+        start, stop, sea, (y0, x0), (y1, x1) = strait_crossing(grid, first, second, seas)
+        lines.append(
+            f"{start};{stop};sea;{sea};{x0};{map_height - 1 - y0};{x1};{map_height - 1 - y1};;{STRAIT_BRIDGE_COMMENT}"
+        )
+    return (newline.join([*lines, *tail]) + newline).encode("utf-8")
+
+
+def check_island_rivers(rivers: np.ndarray, grid: np.ndarray, sea: np.ndarray) -> None:
+    """Reject an island river off the district borders and a town on a river.
+
+    An island river runs over province-border pixels of island district land
+    and its last pixel touches the sea. No island town carries a river pixel:
+    a river beside a town lies on the opposite bank.
+    """
+    border = province_borders(grid)
+    land = np.isin(grid, list(ISLAND_DISTRICT_SCOPE - ISLAND_TOWN_PROVINCES))
+    for course in ISLAND_RIVERS:
+        xs, ys = np.array(course).T
+        if not (land[ys, xs] & border[ys, xs]).all():
+            raise ValueError(f"island river from {course[0]}: it leaves the district borders")
+        x, y = course[-1]
+        if not (sea[y - 1, x] or sea[y + 1, x] or sea[y, x - 1] or sea[y, x + 1]):
+            raise ValueError(f"island river from {course[0]}: its mouth at {x}, {y} is not on the coast")
+    towns = np.isin(grid, list(ISLAND_TOWN_PROVINCES))
+    if (towns & (rivers < RIVER_SEA_PALETTE)).any():
+        raise ValueError("an island town covers a river pixel")
+
+
+def archipelago_terrain(
+    grid: np.ndarray, heights: np.ndarray, boxes: list, city_terrain: dict[int, str]
+) -> dict[int, str]:
+    """Give each island province the terrain of the relief under it.
+
+    City provinces take their entry in `city_terrain` instead.
+    """
+    result = {}
+    for province in sorted(ARCHIPELAGO_PROVINCES):
+        if province in city_terrain:
+            result[province] = city_terrain[province]
+            continue
+        box = boxes[province - 1] if province <= len(boxes) else None
+        if box is None:
+            raise ValueError(f"archipelago province {province}: no pixels on the province map")
+        inside = grid[box] == province
+        ys, xs = np.nonzero(inside)
+        level = float(heights[box][inside].mean())
+        x = float(xs.mean()) + box[1].start
+        y = float(ys.mean()) + box[0].start
+        moisture = float(lattice_noise(np.array([x]), np.array([y]), 38.0, 83)[0])
+        if level >= ARCHIPELAGO_MOUNTAIN_HEIGHT:
+            result[province] = "mountain"
+        elif level >= ARCHIPELAGO_HILL_HEIGHT:
+            result[province] = "hills"
+        elif moisture >= 0.72 and level < 104.5:
+            result[province] = "marsh"
+        elif moisture >= 0.5:
+            result[province] = "forest"
+        else:
+            result[province] = "plains"
+    return result
+
+
+def archipelago_trees(pixels: np.ndarray, forest: np.ndarray, land: np.ndarray) -> None:
+    """Plant the island forests and clear the tree cells of other island land."""
+    height, width = pixels.shape
+    ys, xs = np.nonzero(land)
+    tx0, tx1 = xs.min() * width // land.shape[1], xs.max() * width // land.shape[1]
+    ty0, ty1 = ys.min() * height // land.shape[0], ys.max() * height // land.shape[0]
+    for ty in range(ty0, ty1 + 1):
+        y = (2 * ty + 1) * land.shape[0] // (2 * height)
+        for tx in range(tx0, tx1 + 1):
+            x = (2 * tx + 1) * land.shape[1] // (2 * width)
+            if not land[y, x]:
+                continue
+            planted = forest[y, x] and stable_unit_hash(tx, ty, 23) < ARCHIPELAGO_FOREST_SHARE
+            pixels[ty, tx] = ARCHIPELAGO_TREE_PALETTES[stable_unit_hash(tx, ty, 29) >= 0.65] if planted else 0
 
 
 def bmp_bytes(source: Image.Image, pixels: np.ndarray, original: bytes) -> bytes:
@@ -476,17 +881,27 @@ compression block avoids repeated lossy recompression of its untouched pixels.
     return bytes(result)
 
 
+def exclusion_zone_provinces(root: Path) -> set[int]:
+    provinces = set()
+    for path in (root / "history/states").glob("*.txt"):
+        source = path.read_text(encoding="utf-8-sig")
+        owner = re.search(r"(?m)^\s*owner\s*=\s*([A-Z0-9]{3})\b", source)
+        if owner and owner.group(1) == "EXZ":
+            provinces.update(state_file_provinces(path))
+    return provinces
+
+
 def build_colourmap(
-    base: bytes, islands: np.ndarray, water: np.ndarray, terrain: bytes, cities: bytes,
+    base: bytes, islands: np.ndarray, unlit: np.ndarray, terrain: bytes, cities: bytes,
 ) -> bytes:
-    """Use the built-up fraction of each 2x2 map cell as its night light mask."""
+    """Count lit settlement pixels in each 2x2 map cell."""
     colourmap = patch_colourmap(base, islands)
     with Image.open(BytesIO(terrain)) as ground, Image.open(BytesIO(cities)) as buildings:
         for raster in (ground, buildings):
             if raster.mode != "P" or raster.size != islands.shape[::-1]:
                 raise ValueError("city lights require indexed terrain and city rasters matching provinces.bmp")
         # Indices 2 and 15 mark settlements. Index 1 covers the city map background.
-        footprint = ((np.asarray(ground) == 13) | np.isin(np.asarray(buildings), (2, 15))) & ~water
+        footprint = ((np.asarray(ground) == 13) | np.isin(np.asarray(buildings), (2, 15))) & ~unlit
     height, width = islands.shape[0] // 2, islands.shape[1] // 2
     coverage = footprint.reshape(height, 2, width, 2).sum(axis=(1, 3), dtype=np.uint8)
     # BC3 endpoints 64 and 224 give the palette 64, 224, 96, 128, 160,
@@ -511,10 +926,10 @@ def current_colourmap_plan(root: Path = ROOT) -> dict[Path, bytes]:
     definition = (root / "map/definition.csv").read_bytes()
     with Image.open(root / "map/provinces.bmp") as source:
         provinces = np.asarray(source.convert("RGB"))
-    islands = water_mask(provinces, province_colours(definition, ISLANDS))
-    water = water_mask(provinces, water_colours(definition))
+    islands = water_mask(provinces, province_colours(definition, ISLANDS | ARCHIPELAGO_NEW_PROVINCES))
+    unlit_colours = water_colours(definition) | province_colours(definition, exclusion_zone_provinces(root))
     colourmap = build_colourmap(
-        (root / COLOURMAP_SOURCE).read_bytes(), islands, water,
+        (root / COLOURMAP_SOURCE).read_bytes(), islands, water_mask(provinces, unlit_colours),
         (root / "map/terrain.bmp").read_bytes(), (root / "map/cities.bmp").read_bytes(),
     )
     return {COLOURMAP: colourmap}
@@ -792,7 +1207,8 @@ def unit_anchors(
 
     def normalise(row: list[str]) -> list[str]:
         province = int(row[0])
-        if province in DISPLACED_PROVINCES or province in ANCHOR_REFERENCES or province in COUNTRY_DISTRICT_IDS:
+        if (province in DISPLACED_PROVINCES or province in ANCHOR_REFERENCES or province in COUNTRY_DISTRICT_IDS
+                or province in ISLAND_DISTRICT_SCOPE):
             x = float(row[2])
             y = map_height - 1 - float(row[4])
             # Half-pixel anchors must resolve to the province under both
@@ -800,10 +1216,12 @@ def unit_anchors(
             if grid[round(y), round(x)] != province or grid[int(y), int(x)] != province:
                 x, y = closest_pixel(points[province], x, y)
                 row[2:5] = [f"{x:.2f}", f"{heights[y, x] / 10:.2f}", f"{map_height - 1 - y:.2f}"]
-        if province in RELIEF_PROVINCES:
+        if province in RELIEF_PROVINCES or province in ARCHIPELAGO_PROVINCES:
             x = round(float(row[2]))
             y = map_height - 1 - round(float(row[4]))
-            row[3] = f"{heights[y, x] / 10:.2f}"
+            # An anchor over water keeps the sea surface, not the seabed.
+            if grid[y, x] == province:
+                row[3] = f"{heights[y, x] / 10:.2f}"
         return row
 
     blocks = defaultdict(list)
@@ -953,7 +1371,8 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         fields = definition_lines[parent_index].split(";")
         if "parent_terrain" in entry:
             fields[6] = entry["parent_terrain"]
-        elif fields[6] != entry["terrain"]:
+        # Island terrain follows the generated relief, province by province.
+        elif entry["state"] not in ARCHIPELAGO_STATES and fields[6] != entry["terrain"]:
             raise ValueError(f"rural province {entry['province']}: parent terrain differs from the split")
         definition_lines[parent_index] = ";".join(fields)
         province = entry["province"]
@@ -964,6 +1383,28 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             definition_lines.append(";".join(map(str, (province, *entry["rgb"], "land", "false", entry.get("terrain", "urban"), fields[7]))))
         elif tuple(map(int, definition_lines[entries_by_id[province]].split(";")[1:4])) != tuple(entry["rgb"]):
             raise ValueError(f"province {province}: city ID is occupied by another color")
+    for island in NAM_ARCHIPELAGO_ISLANDS:
+        continent = definition_lines[entries_by_id[island["home"]]].split(";")[7]
+        for part in island["provinces"]:
+            province = part["province"]
+            if province not in entries_by_id:
+                if province != max(entries_by_id) + 1:
+                    raise ValueError(f"province {province}: non-contiguous island ID")
+                entries_by_id[province] = len(definition_lines)
+                definition_lines.append(";".join(map(str, (province, *part["rgb"], "land", "true", "plains", continent))))
+            elif tuple(map(int, definition_lines[entries_by_id[province]].split(";")[1:4])) != tuple(part["rgb"]):
+                raise ValueError(f"province {province}: island ID is occupied by another color")
+    for district in ISLAND_DISTRICTS:
+        province = district["province"]
+        if province not in entries_by_id:
+            if province != max(entries_by_id) + 1:
+                raise ValueError(f"province {province}: non-contiguous island district ID")
+            parent = definition_lines[entries_by_id[district["parent"]]].split(";")
+            entries_by_id[province] = len(definition_lines)
+            # The coastal flag and the terrain are set from the final geometry below.
+            definition_lines.append(";".join(map(str, (province, *district["rgb"], "land", "false", parent[6], parent[7]))))
+        elif tuple(map(int, definition_lines[entries_by_id[province]].split(";")[1:4])) != tuple(district["rgb"]):
+            raise ValueError(f"province {province}: island district ID is occupied by another color")
     sea_colors = []
     for line in definition_lines:
         fields = line.split(";")
@@ -988,7 +1429,8 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         mask = np.array([list(row) for row in entry["mask"]]) == "1"
         window = np.s_[y:y + mask.shape[0], x:x + mask.shape[1]]
         country_masks.append((entry, mask, window))
-    for entry in (*SOUTHERN_GEOMETRY, *(area for area in SOUTHERN_CITY_APPROACHES if "rgb" not in area)):
+    stamped = (*SOUTHERN_GEOMETRY, *(area for area in SOUTHERN_CITY_APPROACHES if "rgb" not in area), *ISLAND_DISTRICTS)
+    for entry in stamped:
         left, top = entry["origin"]
         for y, row in enumerate(entry["mask"], top):
             for x, selected_pixel in enumerate(row, left):
@@ -998,13 +1440,39 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
                 if (x, y) in PROVINCE_PIXEL_REPAIRS:
                     permitted.add(definitions[PROVINCE_PIXEL_REPAIRS[x, y][1]])
                 if tuple(provinces[y, x]) not in permitted:
-                    raise ValueError(f"southern city {entry['province']}: geometry changed at {x}, {y}")
+                    raise ValueError(f"carved province {entry['province']}: geometry changed at {x}, {y}")
                 provinces[y, x] = definitions[entry["province"]]
     for (x, y), (original, replacement) in PROVINCE_PIXEL_REPAIRS.items():
         if tuple(provinces[y, x]) not in (definitions[original], definitions[replacement]):
             raise ValueError(f"province repair source changed at {x}, {y}")
         provinces[y, x] = definitions[replacement]
-    selected = set(ANCHOR_REFERENCES) | DISPLACED_PROVINCES | CITIES | URBAN_GROWTH | RELIEF_SURFACE_PROVINCES
+    raised = np.zeros(provinces.shape[:2], bool)
+    colour_table = np.zeros((max(definitions) + 1, 3), dtype=np.uint8)
+    for province, colour in definitions.items():
+        colour_table[province] = colour
+    sea_provinces = {int(line.split(";")[0]) for line in definition_lines if line.split(";")[4] == "sea"}
+    anchors = sea_anchor_pixels(
+        read(Path("map/unitstacks.txt")), read(Path("map/buildings.txt")), raised.shape, sea_provinces
+    )
+    for island in NAM_ARCHIPELAGO_ISLANDS:
+        mask = island_mask(raised.shape, island)
+        parts = island_provinces(mask, island)
+        allowed = [definitions[island["sea"]], *(definitions[part["province"]] for part in island["provinces"])]
+        # An island may only rise from open water of its own sea province,
+        # clear of the fleet and floating-harbour anchors drawn there.
+        if not np.isin(provinces[mask], allowed).all() or (raised & mask).any():
+            raise ValueError(f"island {parts[mask][0]}: its site is no longer open water of sea province {island['sea']}")
+        if (mask & anchors).any():
+            raise ValueError(f"island {parts[mask][0]}: it would cover a sea anchor")
+        provinces[mask] = colour_table[parts[mask]]
+        raised |= mask
+        sea_left = np.all(provinces == definitions[island["sea"]], axis=2)
+        if label(sea_left)[1] != 1:
+            raise ValueError(f"sea province {island['sea']}: an island would split it")
+    selected = (
+        set(ANCHOR_REFERENCES) | DISPLACED_PROVINCES | CITIES | URBAN_GROWTH | RELIEF_SURFACE_PROVINCES
+        | ARCHIPELAGO_NEW_PROVINCES | ISLAND_DISTRICT_SCOPE
+    )
     grid = province_grid(provinces, definitions)
     # Keep local pixel coordinates for anchor placement. A full world mask for each
     # rural subdivision would scale memory with both map area and province count.
@@ -1039,6 +1507,32 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         if box is None:
             raise ValueError(f"province {province}: empty rural district")
         points[province] = np.argwhere(grid[box] == province) + (box[0].start, box[1].start)
+    # Archipelago: Svetlogorye towns and cities take their city terrain; a
+    # neighbour province declared as a city keeps it. Every other province
+    # follows the relief.
+    archipelago = np.isin(grid, list(ARCHIPELAGO_PROVINCES))
+    declared_terrain = {int(fields[0]): fields[6] for line in definition_lines if len(fields := line.split(";")) >= 8}
+    city_terrain = {
+        **ARCHIPELAGO_CITY_TERRAIN,
+        **{
+            province: declared_terrain[province]
+            for province in ARCHIPELAGO_NEIGHBOUR_PROVINCES
+            if declared_terrain.get(province) in CITY_TERRAINS
+        },
+    }
+    archipelago_heightmap = archipelago_heights(archipelago)
+    island_terrain = archipelago_terrain(grid, archipelago_heightmap, boxes, city_terrain)
+    island_palette = np.zeros(max(definitions) + 1, dtype=np.uint8)
+    for province, kind in island_terrain.items():
+        island_palette[province] = URBAN_FALLBACK_PALETTE if province in city_terrain else ARCHIPELAGO_PALETTES[kind]
+    # Cities of the CITIES scope are painted by the city pass below.
+    archipelago_cities = np.isin(grid, list(set(city_terrain) - CITIES))
+    # A city stands on levelled ground at the height of its surroundings.
+    city_ground = np.isin(grid, list(city_terrain))
+    levelled = gaussian_filter(np.where(archipelago, archipelago_heightmap, ARCHIPELAGO_MIN_HEIGHT).astype(float), 3.0)
+    archipelago_heightmap[city_ground] = np.clip(
+        np.rint(levelled[city_ground]), ARCHIPELAGO_MIN_HEIGHT, ARCHIPELAGO_MAX_HEIGHT
+    ).astype(np.uint8)
     original_provinces = (root / "map/provinces.bmp").read_bytes()
     with Image.open(BytesIO(original_provinces)) as source:
         if np.array_equal(np.asarray(source), provinces):
@@ -1056,6 +1550,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     definition_text = "\n".join(definition_lines).encode("utf-8")
     water = water_mask(provinces, water_colours(definition_text))
     shore = urban_blocked(water, provinces, definition_text) & ~water
+    built_up = archipelago_cities & ~shore
     relief_terrain = {}
     for index, line in enumerate(definition_lines):
         fields = line.split(";")
@@ -1074,10 +1569,17 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             fields[6] = RELIEF_TERRAIN[int(fields[0])]
             relief_terrain[int(fields[0])] = fields[6]
         definition_lines[index] = ";".join(fields)
+    for index, line in enumerate(definition_lines):
+        fields = line.split(";")
+        if int(fields[0]) in island_terrain and int(fields[0]) not in CITIES:
+            fields[6] = island_terrain[int(fields[0])]
+            definition_lines[index] = ";".join(fields)
     newline = "\r\n" if b"\r\n" in definition_bytes else "\n"
     outputs[Path("map/definition.csv")] = (newline.join(definition_lines) + newline).encode("utf-8")
     heights = None
-    for name, mode, value in (("terrain", "P", 0), ("heightmap", "L", None), ("rivers", "P", 255), ("cities", "P", None)):
+    river_bed = None
+    # Rivers precede the heightmap: the archipelago relief carves their final course.
+    for name, mode, value in (("terrain", "P", 0), ("rivers", "P", 255), ("heightmap", "L", None), ("cities", "P", None)):
         path = Path(f"map/{name}.bmp")
         original = read(path)
         with Image.open(BytesIO(original)) as source:
@@ -1109,18 +1611,27 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             if name == "heightmap":
                 pixels[mountains] = mountain_heightmap[mountains]
                 pixels[islands] = lowland_heights(islands)[islands]
+                carved = carve_river_valleys(archipelago_heightmap, archipelago, river_bed)
+                pixels[archipelago] = carved[archipelago]
                 flooded &= pixels > SEA_FLOOR_HEIGHT
                 pixels[flooded] = SEA_FLOOR_HEIGHT
                 heights = pixels
             elif name == "cities":
+                # Only the city provinces carry city models on the archipelago.
+                pixels[archipelago & ~cities] = CITY_BACKGROUND_INDEX
+                pixels[built_up] = 15
                 pixels[cities] = 15
                 pixels[arab_cities] = 2
             else:
-                pixels[islands] = value
+                pixels[islands | raised] = value
                 if name == "rivers":
                     for (x, y), course in RIVER_COURSES.items():
                         pixels[y, x] = course
+                    check_island_rivers(pixels, grid, sea)
+                    river_bed = pixels
                 if name == "terrain":
+                    pixels[archipelago] = island_palette[grid[archipelago]]
+                    pixels[built_up] = 13
                     pixels[cities & ~shore] = 13
                     pixels[cities & shore] = URBAN_FALLBACK_PALETTE
                     for province, kind in relief_terrain.items():
@@ -1134,7 +1645,9 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     normal_path = Path("map/world_normal.bmp")
     original = (root / normal_path).read_bytes()
     with Image.open(BytesIO(original)) as source:
-        normal = normal_from_height(Image.fromarray(heights), source, bytearray((islands | mountains | flooded).tobytes()))
+        normal = normal_from_height(
+            Image.fromarray(heights), source, bytearray((islands | mountains | flooded | archipelago).tobytes())
+        )
         if normal.tobytes() == source.tobytes():
             outputs[normal_path] = original
         else:
@@ -1142,16 +1655,17 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             normal.save(encoded, format="BMP")
             outputs[normal_path] = encoded.getvalue()
     outputs[COLOURMAP] = build_colourmap(
-        read(COLOURMAP_SOURCE), islands, water,
+        read(COLOURMAP_SOURCE), islands | raised, water | np.isin(grid, list(exclusion_zone_provinces(root))),
         outputs[Path("map/terrain.bmp")], outputs[Path("map/cities.bmp")],
     )
     tree_path = Path("map/trees.bmp")
     original = read(tree_path)
     with Image.open(BytesIO(original)) as source:
         pixels = np.array(source)
+        archipelago_trees(pixels, archipelago & (island_palette[grid] == ARCHIPELAGO_PALETTES["forest"]), archipelago)
         # Remove trees from every cell intersecting the new urban footprint.
         # The tree map uses a different grid, so point sampling misses narrow cities.
-        tree_clearance = cities | (mountains & (mountain_heightmap >= 165))
+        tree_clearance = cities | archipelago_cities | (mountains & (mountain_heightmap >= 165))
         urban = {
             int(fields[0]) for line in definition_lines
             if (fields := line.split(";"))[6] in CITY_TERRAINS
@@ -1172,6 +1686,8 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
     )
     railways = Path("map/railways.txt")
     outputs[railways] = railway_plan(read(railways), provinces, definitions)
+    adjacencies = Path("map/adjacencies.csv")
+    outputs[adjacencies] = island_bridges(read(adjacencies), grid, sea_provinces)
     return outputs
 
 

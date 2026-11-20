@@ -158,6 +158,7 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_GLP_tt
 			custom_effect_tooltip = SHL_veyr_partnership_tt
 			hidden_effect = {
 				set_country_flag = SHL_veyr_offer_pending
@@ -356,6 +357,7 @@
 					has_country_flag = SHL_veyr_partner
 					GLP = {
 						exists = yes
+						ADISCORD_south_coalition_target_war_clear = yes
 						is_in_faction = no
 						NOT = { has_war_with = SHL }
 					}

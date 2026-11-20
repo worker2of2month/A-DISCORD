@@ -56,15 +56,33 @@ except ModuleNotFoundError:
         connected_components,
     )
     from builders.build_adiscord_northern_countries import POPULATION_MARKER
+from tools.builders.build_adiscord_new_states import island_district_provinces
 from tools.validators.validate_adiscord_northern_countries import (
     validate as validate_northern_countries,
 )
 
 
+def sea_crossings() -> set[frozenset[int]]:
+    """Province pairs joined only by a strait or bridge row of adjacencies.csv."""
+    crossings = set()
+    path = _REPOSITORY_ROOT / "map" / "adjacencies.csv"
+    for line in path.read_text(encoding="utf-8-sig").splitlines():
+        row = line.split(";")
+        if len(row) > 2 and row[0].isdigit() and row[1].isdigit() and row[2] == "sea":
+            crossings.add(frozenset((int(row[0]), int(row[1]))))
+    return crossings
+
+
 def western_geography_issues(adjacency, data) -> list[str]:
-    """Require a connected mainland core and explicitly bounded island groups."""
+    """Require a connected mainland core and explicitly bounded island groups.
+
+    Island membership is land contact: a bridged islet stays a component of
+    its own. An island district counts as part of the surveyed province it was
+    cut from.
+    """
     errors = []
     source = western_source()
+    crossings = sea_crossings()
     mainland = set().union(*(
         set(row["provinces"])
         for state_id, row in source["source_partitions"].items()
@@ -83,8 +101,17 @@ def western_geography_issues(adjacency, data) -> list[str]:
         elif not core or len(connected_components(core, adjacency)) != 1:
             errors.append(f"western state {state_id}: mainland core is not connected")
         islands = [set(component) for component in row["island_components"]]
-        actual = connected_components(provinces - mainland, adjacency)
-        if {frozenset(c) for c in actual} != {frozenset(c) for c in islands}:
+        districts = island_district_provinces(int(state_id))
+        members = (provinces - mainland) | districts
+        land = {
+            province: {
+                neighbour for neighbour in adjacency[province]
+                if frozenset((province, neighbour)) not in crossings
+            }
+            for province in members
+        }
+        actual = connected_components(members, land)
+        if {frozenset(c - districts) for c in actual} != {frozenset(c) for c in islands}:
             errors.append(f"western state {state_id}: unexpected island membership")
         if row["island_group"]:
             centers = [cluster_statistics(component, data) for component in islands]

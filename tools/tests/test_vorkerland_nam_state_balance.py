@@ -10,6 +10,7 @@ from tools.lib.paths import source_section
 from tools.builders import build_adiscord_map_buildings as map_buildings
 from tools.builders import build_adiscord_new_states as builder
 from tools.builders import build_adiscord_strategic_regions as regions
+from tools.lib.city_terrains import NATIONAL_CITY_CLUSTERS
 from tools.lib.adiscord_vorkerland_theatre_manifest import (
     UNITY_TOWER_NAME,
     UNITY_TOWER_PROVINCE,
@@ -1141,7 +1142,38 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 self.assertRegex(
                     source, rf"(?m)^\s*{port}\s*=\s*\{{\s*naval_base\s*=\s*{level}\s*\}}"
                 )
-                self.assertEqual(len(re.findall(r"\bnaval_base\s*=", source)), 1)
+                harbours = {
+                    *(province for province, _level in builder.NAM_OVERSEAS_HARBOURS.get(state_id, ())),
+                    *(
+                        island["town"]["province"]
+                        for island in builder.NAM_ARCHIPELAGO_ISLANDS
+                        if island["state"] == state_id and "harbour" in island
+                    ),
+                }
+                bases = {int(p) for p in re.findall(r"\b(\d+)\s*=\s*\{\s*naval_base\s*=", source)}
+                self.assertEqual(bases, {port} | harbours)
+                # The main port stays the largest base of its state.
+                levels = [int(v) for v in re.findall(r"\bnaval_base\s*=\s*(\d+)", source)]
+                self.assertEqual(max(levels), level)
+
+    def test_archipelago_names_islands_and_capital_are_current(self) -> None:
+        for path, expected in builder.archipelago_island_plan().items():
+            self.assertEqual(path.read_bytes(), expected, path.name)
+        state_names = (
+            builder.ROOT / "localisation" / "russian" / "state_names_l_russian.yml"
+        ).read_text(encoding="utf-8-sig")
+        for state_id, name in builder.NAM_ARCHIPELAGO_STATE_NAMES.items():
+            with self.subTest(state=state_id):
+                pattern = rf'(?m)^\s*STATE_{state_id}:\s*"{re.escape(name)}"\s*$'
+                self.assertEqual(len(re.findall(pattern, state_names)), 1)
+        # Ryuminsk is a city port, yet Smolyanoy Posad keeps the state capital.
+        points = {province: value for province, value, _name in builder.REGIONAL_SETTLEMENTS[228]}
+        self.assertEqual(points[6893], 10)
+        self.assertGreater(points[16903], max(v for p, v in points.items() if p != 16903))
+        # Each city spans two provinces; the second one has no VP of its own.
+        clustered = set(NATIONAL_CITY_CLUSTERS["svetlogorye_town"])
+        self.assertLessEqual({16903, 17161, 6893, 17786}, clustered)
+        self.assertFalse({17161, 17786} & set(points))
 
     def test_nam_coalition_front_can_supply_an_offensive(self) -> None:
         families = ((68, 725), (69, 727, 728), (70, 723, 724), (691, 726, 701), (692, 729))

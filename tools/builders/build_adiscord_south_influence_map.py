@@ -21,6 +21,8 @@ GUI = Path("interface/ADISCORD_south_final_war.gui")
 GFX = Path("interface/ADISCORD_south_final_war.gfx")
 SGUI = Path("common/scripted_guis/ADISCORD_south_final_war_scripted_gui.txt")
 WIDTH, HEIGHT = 436, 300
+GAUGE_WIDTH = 208
+CARD_TOP, CARD_HEIGHT, COLUMN_PITCH = 363, 38, 224
 COUNTRIES = ("SHL", "NAM", "EFL", "AZH", "WEF", "KDR", "RHM", "SDR", "KYZ", "MZR", "GLP")
 # Layer order keeps the leader shades above the light alliance fills.
 PALETTE = ((104, 113, 114), (231, 174, 105), (119, 185, 220), (158, 82, 34), (38, 83, 133))
@@ -107,6 +109,22 @@ def render_images():
     draw.line((WIDTH - 22, 14, WIDTH - 22, 42), fill=(210, 198, 163), width=1)
     draw.polygon(((WIDTH - 22, 12), (WIDTH - 26, 22), (WIDTH - 18, 22)), fill=(210, 198, 163))
     images = {"background.png": background}
+    # With a centred GUI origin, each influence point moves the marker one pixel.
+    track = Image.new("RGBA", (GAUGE_WIDTH, 12))
+    rail = ImageDraw.Draw(track)
+    centre = GAUGE_WIDTH // 2 + 2
+    rail.rectangle((centre - 101, 3, centre + 101, 9), fill=(27, 28, 26), outline=(101, 97, 80))
+    rail.rectangle((centre - 100, 4, centre - 1, 8), fill=PALETTE[3])
+    rail.rectangle((centre + 1, 4, centre + 100, 8), fill=PALETTE[4])
+    for offset in (-60, 0, 60):
+        rail.line((centre + offset, 2, centre + offset, 10), fill=(218, 210, 178))
+    images["influence_track.png"] = track
+    marker = Image.new("RGBA", (5, 12))
+    pointer = ImageDraw.Draw(marker)
+    pointer.polygon(((0, 0), (4, 0), (4, 4), (2, 7), (0, 4)), fill=(255, 248, 220), outline=(32, 27, 22))
+    pointer.rectangle((1, 7, 3, 11), fill=(30, 28, 23))
+    pointer.line((2, 6, 2, 10), fill=(255, 248, 220))
+    images["influence_marker.png"] = marker
     for state, info in geometry["states"].items():
         images[f"state_{state}.png"] = state_strip(info["mask"].crop(info["box"]), info["box"][:2])
     for tag in COUNTRIES:
@@ -115,7 +133,7 @@ def render_images():
     return images, geometry
 
 
-def icon(name, sprite, x, y, frame=1, tooltip=None, passive=False):
+def icon(name, sprite, x, y, frame=1, tooltip=None, passive=False, orientation=None):
     lines = ["\t\ticonType = {", f'\t\t\tname = "{name}"',
              f"\t\t\tposition = {{ x = {x} y = {y} }}", f'\t\t\tquadTextureSprite = "{sprite}"',
              f"\t\t\tframe = {frame}"]
@@ -123,14 +141,18 @@ def icon(name, sprite, x, y, frame=1, tooltip=None, passive=False):
         lines.append(f'\t\t\tpdx_tooltip = "{tooltip}"')
     if passive:
         lines.append("\t\t\talwaystransparent = yes")
+    if orientation:
+        lines.append(f'\t\t\torientation = {orientation}')
     return "\n".join([*lines, "\t\t}"])
 
 
-def textbox(name, key, x, y, width, height, tooltip=None):
+def textbox(name, key, x, y, width, height, tooltip=None, right=False):
     lines = ["\t\tinstantTextBoxType = {", f'\t\t\tname = "{name}"',
              f"\t\t\tposition = {{ x = {x} y = {y} }}", f'\t\t\ttext = "{key}"',
              '\t\t\tfont = "hoi_16mbs"', f"\t\t\tmaxWidth = {width}", f"\t\t\tmaxHeight = {height}",
              '\t\t\tfixedsize = yes']
+    if right:
+        lines.append('\t\t\tformat = right')
     if tooltip:
         lines.append(f'\t\t\tpdx_tooltip = "{tooltip}"')
     else:
@@ -139,8 +161,9 @@ def textbox(name, key, x, y, width, height, tooltip=None):
 
 
 def gui(geometry):
+    cards_bottom = CARD_TOP + (len(COUNTRIES) + 1) // 2 * CARD_HEIGHT
     parts = [HEADER + 'guiTypes = {\n\tcontainerWindowType = {\n\t\tname = "ADISCORD_south_map_window"\n'
-             '\t\tposition = { x = 0 y = 0 }\n\t\tsize = { width = 460 height = 474 }',
+             f'\t\tposition = {{ x = 0 y = 0 }}\n\t\tsize = {{ width = 460 height = {cards_bottom + 104} }}',
              textbox("ADISCORD_south_map_heading", "ADISCORD_south_map_heading", 12, 4, 436, 22, "ADISCORD_south_map_rules_tt"),
              icon("ADISCORD_south_map_background", "GFX_ADISCORD_south_map_background", 12, 30, passive=True)]
     for state, info in geometry["states"].items():
@@ -148,12 +171,33 @@ def gui(geometry):
         x, y = info["box"][:2]
         for frame, suffix in enumerate(LAYERS, 1):
             parts.append(icon(name + "_" + suffix, "GFX_" + name, 12 + x, 30 + y, frame, name + "_tt"))
+    prefix = "ADISCORD_south_map_"
+    parts.append(textbox(prefix + "gap_heading", prefix + "gap_heading", 12, 337, WIDTH, 21, prefix + "gap_help"))
     for index, tag in enumerate(COUNTRIES):
-        parts.append(icon(f"ADISCORD_south_map_flag_{tag}", f"GFX_ADISCORD_south_map_flag_{tag}",
-                          15 + index * 39, 341, tooltip=f"ADISCORD_south_map_{tag}_tt"))
+        x = 12 + index % 2 * COLUMN_PITCH
+        y = CARD_TOP + index // 2 * CARD_HEIGHT
+        tip = f"{prefix}{tag}_tt"
+        parts.extend([
+            icon(f"{prefix}flag_{tag}", f"GFX_{prefix}flag_{tag}", x, y, tooltip=tip),
+            textbox(f"{prefix}name_{tag}", f"{prefix}name_{tag}", x + 34, y, 94, 20, tip),
+            textbox(f"{prefix}gap_{tag}", f"{prefix}gap_{tag}", x + 129, y, GAUGE_WIDTH - 129, 20, tip, right=True),
+        ])
+        # The marker's x property is local to the midpoint of this country's rail.
+        children = [
+            icon(f"{prefix}track_{tag}", "GFX_" + prefix + "influence_track", 0, 0, tooltip=tip),
+            icon(f"{prefix}marker_{tag}", "GFX_" + prefix + "influence_marker", 0, 0,
+                 passive=True, orientation="center_up"),
+        ]
+        inner = "\n\n".join(children)
+        parts.append("\n".join([
+            "\t\tcontainerWindowType = {", f'\t\t\tname = "{prefix}gauge_{tag}"',
+            f"\t\t\tposition = {{ x = {x} y = {y + 20} }}",
+            f"\t\t\tsize = {{ width = {GAUGE_WIDTH} height = 12 }}",
+            *(("\t" + line) if line else "" for line in inner.splitlines()), "\t\t}",
+        ]))
     parts.extend([
-        textbox("ADISCORD_south_map_legend", "ADISCORD_south_map_legend", 12, 370, 436, 54, "ADISCORD_south_map_rules_tt"),
-        textbox("ADISCORD_south_map_readiness", "ADISCORD_south_map_readiness", 12, 432, 436, 34, "ADISCORD_south_map_status_tt"),
+        textbox("ADISCORD_south_map_legend", "ADISCORD_south_map_legend", 12, cards_bottom, WIDTH, 54, "ADISCORD_south_map_rules_tt"),
+        textbox("ADISCORD_south_map_readiness", "ADISCORD_south_map_readiness", 12, cards_bottom + 60, WIDTH, 36, "ADISCORD_south_map_status_tt"),
         '\t}\n}\n',
     ])
     return "\n\n".join(parts)
@@ -181,6 +225,12 @@ def scripted_gui(geometry):
         for side in LAYERS[1:]:
             lines.extend([f'\t\t\t{name}_{side}_visible = {{',
                           f'\t\t\t\t{state} = {{ ADISCORD_south_map_state_{side} = yes }}', '\t\t\t}'])
+    for tag in COUNTRIES:
+        lines.extend([f'\t\t\tADISCORD_south_map_gauge_{tag}_visible = {{',
+                      f'\t\t\t\t{tag} = {{ ADISCORD_south_map_influence_contested = yes }}', '\t\t\t}'])
+    lines.extend(['\t\t}', '\t\tproperties = {'])
+    for tag in COUNTRIES:
+        lines.append(f'\t\t\tADISCORD_south_map_marker_{tag} = {{ x = {tag}.ADISCORD_south_coalition_influence?0 }}')
     lines.extend(['\t\t}', '\t}', '}', ''])
     return "\n".join(lines)
 
@@ -189,6 +239,14 @@ def localisation(geometry, language):
     if language == "russian":
         texts = {
             "heading": "§YЗОНЫ ВЛИЯНИЯ НА ЮГЕ§!",
+            "gap_heading": "До порога приглашения: §OШахрабад§! / §CСевер§!",
+            "gap_help": "Метка сдвигается влево при росте влияния §OШахрабада§! и вправо при росте влияния §CСевера§!. Средняя риска означает равновесие, две крайние отмечают порог приглашения: §Y60§! пунктов перевеса. Числа у флага показывают, сколько влияния осталось набрать каждому лагерю. При нуле по-прежнему нужны соответствующий фокус и согласие страны.",
+            "gap_absent": "Нет страны",
+            "gap_leader": "Лидер",
+            "gap_subject": "Зависима",
+            "gap_war": "Война",
+            "gap_closed": "Закрыто",
+            "gap_resolved": "Мир",
             "legend": "Оранжевый - Шахрабад; синий - север.\\nТёмный - лидер; светлый - союзники.\\nСерый - вне лагерей; штрихи - чужой контроль.",
             "readiness": "[ADISCORDSouthMapPhase]\\n§YОбстановка и подготовка: наведите курсор§!",
             "rules_tt": "§YКарта Юга§!\\nТёмно-оранжевый - сам Шахрабад; светло-оранжевый - его союзники и зависимые страны. Тёмно-синий - северный лидер; светло-синий - его союзники и зависимые страны. Серый - страны вне этих лагерей.\\nДо войны цвет учитывает сюзерена и альянс текущего владельца. Во время войны - выбранную сторону фактического контролёра. Тёмный оттенок получает только страна, возглавляющая лагерь. После мира карта отражает новые границы и подчинение.\\nШтриховка отмечает области, чей контролёр отличается от владельца. Наведите курсор на область или флаг для подробностей.",
@@ -209,6 +267,14 @@ def localisation(geometry, language):
     else:
         texts = {
             "heading": "§YSPHERES OF INFLUENCE IN THE SOUTH§!",
+            "gap_heading": "Points to invite: §OShahrabad§! / §CNorth§!",
+            "gap_help": "The marker moves left as §OShahrabad§! gains influence and right as the §Cnorth§! gains influence. The middle tick marks a tie. The two outer ticks mark the §Y60§!-point lead required for an invitation. The numbers beside each flag show how many more points each camp needs. At zero, the camp still needs the relevant focus and the country's consent.",
+            "gap_absent": "Absent",
+            "gap_leader": "Leader",
+            "gap_subject": "Subject",
+            "gap_war": "At war",
+            "gap_closed": "Closed",
+            "gap_resolved": "At peace",
             "legend": "Orange - Shahrabad; blue - the north.\\nDark - leader; light - allies.\\nGrey - unaligned; hatching - foreign control.",
             "readiness": "[ADISCORDSouthMapPhase]\\n§YHover for the situation and preparation requirements§!",
             "rules_tt": "§YMap of the South§!\\nDark orange - Shahrabad itself; light orange - its allies and subjects. Dark blue - the northern leader; light blue - its allies and subjects. Grey - countries outside either camp.\\nBefore war, colours follow the current owner's overlord and faction. During war, they follow the actual controller's chosen side. Only the country leading a camp receives its dark shade. After peace, the map reflects new borders and subjects.\\nHatching marks states whose controller differs from their owner. Hover over a state or flag for details.",
@@ -226,11 +292,17 @@ def localisation(geometry, language):
             "phase_waiting": "Southern crisis",
         }
         state_text = "§Y[{state}.GetName]§!\\nOwner: [{state}.Owner.GetName]\\n[{state}.Owner.ADISCORDSouthMapAlignment]\\n\\nController: [{state}.Controller.GetName]\\n[{state}.Controller.ADISCORDSouthMapAlignment]"
+    texts["gaps"] = "§O[?ADISCORD_south_map_shl_gap|0]§! / §C[?ADISCORD_south_map_north_gap|0]§!"
     lines = [f' ADISCORD_south_map_{key}:0 "{value}"' for key, value in texts.items()]
     for state in geometry["states"]:
         lines.append(f' ADISCORD_south_map_state_{state}_tt:0 "{state_text.format(state=state)}"')
     for tag in COUNTRIES:
-        lines.append(f' ADISCORD_south_map_{tag}_tt:0 "§Y[{tag}.GetName]§!\\n[{tag}.ADISCORDSouthMapAlignment]"')
+        name = f"${tag}$"
+        if tag == "EFL":
+            name = "Эфлор" if language == "russian" else "Eflor"
+        lines.append(f' ADISCORD_south_map_name_{tag}:0 "{name}"')
+        lines.append(f' ADISCORD_south_map_gap_{tag}:0 "[{tag}.ADISCORDSouthMapGaps]"')
+        lines.append(f' ADISCORD_south_map_{tag}_tt:0 "§Y[{tag}.GetName]§!\\n[{tag}.ADISCORDSouthMapAlignment][{tag}.ADISCORDSouthMapInfluence]"')
     return "\n".join(lines) + "\n"
 
 

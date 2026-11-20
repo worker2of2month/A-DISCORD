@@ -2031,6 +2031,7 @@ country_event = {
 			if = {
 				limit = { STP_pc_founder_choice_pending = yes }
 				set_variable = { var = STP_pc_founder_choice value = 1 }
+				mark_focus_tree_layout_dirty = yes
 			}
 		}
 	}

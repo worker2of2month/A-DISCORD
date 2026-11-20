@@ -9,6 +9,20 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_ADISCORD_south_map_influence_track"
+		texturefile = "gfx/interface/south_influence/influence_track.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_south_map_influence_marker"
+		texturefile = "gfx/interface/south_influence/influence_marker.png"
+		noOfFrames = 1
+		transparencecheck = yes
+	}
+
+	spriteType = {
 		name = "GFX_ADISCORD_south_map_state_67"
 		texturefile = "gfx/interface/south_influence/state_67.png"
 		noOfFrames = 6

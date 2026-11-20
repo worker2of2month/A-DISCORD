@@ -8503,6 +8503,8 @@ class EconomyScriptFixture:
                 return value in self.scopes[scope]
             if key == "has_idea":
                 return self.scopes[scope].get("idea@" + value, False)
+            if key == "has_completed_focus":
+                return self.scopes[scope].get("focus@" + value, False)
             if key in ("has_country_flag", "has_global_flag"):
                 return bool(self.scopes[scope].get(value, False))
             if key in ("is_controlled_by", "is_core_of"):

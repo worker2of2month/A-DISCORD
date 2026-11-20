@@ -8,10 +8,15 @@ state = {
 	state_category = town
 	provinces = {
 		1605 3094 6452 7579 7830 8802
+		19106
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.0
 # Populated by tools/build_adiscord_remainder_states.py
+	resources = {
+		steel = 6
+		chromium = 4
+	}
 	history = {
 		owner = ULV
 		add_core_of = ULV

@@ -30,6 +30,7 @@ try:
         LOCALISATION,
         band_for_y,
     )
+    from tools.builders.build_adiscord_new_states import NAM_ARCHIPELAGO_ISLANDS
     from tools.builders.build_adiscord_strategic_regions import (
         OUTER_CLIMATE_BELTS,
         OUTER_REGION_SPECS,
@@ -53,6 +54,7 @@ except ModuleNotFoundError:
         LOCALISATION,
         band_for_y,
     )
+    from builders.build_adiscord_new_states import NAM_ARCHIPELAGO_ISLANDS
     from builders.build_adiscord_strategic_regions import (
         OUTER_CLIMATE_BELTS,
         OUTER_REGION_SPECS,
@@ -64,6 +66,54 @@ except ModuleNotFoundError:
 
 ROOT = Path(__file__).resolve().parents[2]
 STATE_DIR = ROOT / "history" / "states"
+ADJACENCIES = ROOT / "map" / "adjacencies.csv"
+ISLAND_BRIDGE_COMMENT = "nam archipelago island bridge"
+
+
+def raised_islands() -> dict[int, list[tuple[frozenset[int], bool]]]:
+    """Group the archipelago table by state as (provinces, bridged) rows."""
+    islands: dict[int, list[tuple[frozenset[int], bool]]] = {}
+    for island in NAM_ARCHIPELAGO_ISLANDS:
+        provinces = frozenset(part["province"] for part in island["provinces"])
+        islands.setdefault(island["state"], []).append((provinces, bool(island["bridge"])))
+    return islands
+
+
+def island_bridge_ends() -> set[int]:
+    """Provinces named by an archipelago bridge row of adjacencies.csv."""
+    ends: set[int] = set()
+    for line in ADJACENCIES.read_text(encoding="utf-8-sig").splitlines():
+        row = line.split(";")
+        if len(row) > 9 and row[9].strip() == ISLAND_BRIDGE_COMMENT:
+            ends.update(int(value) for value in row[:2] if value.strip().isdigit())
+    return ends
+
+
+def raised_island_issues(
+    state_id: int,
+    provinces: set[int],
+    islands: list[tuple[frozenset[int], bool]],
+    adjacency: dict[int, set[int]],
+    bridge_ends: set[int],
+) -> list[str]:
+    """Check that each raised island is a separate component of its state.
+
+    A bridged island needs its strait row; an unbridged one is reached by sea.
+    """
+    errors = []
+    components = {frozenset(c) for c in connected_components(provinces, adjacency)}
+    for island, bridged in islands:
+        label = f"state {state_id}: raised island {sorted(island)}"
+        if not island <= provinces:
+            errors.append(f"{label} is missing from the state")
+        elif island not in components:
+            errors.append(f"{label} is not a separate land component")
+        if bridged != bool(island & bridge_ends):
+            errors.append(
+                f"{label} {'lacks its' if bridged else 'has an unlisted'} bridge adjacency"
+            )
+    return errors
+
 
 def load_localisation(path: Path, errors: list[str]) -> dict[int, str]:
     if not path.exists():
@@ -84,6 +134,12 @@ def main() -> int:
     errors: list[str] = []
     rows: dict[int, tuple[Path, set[int], str, str]] = {}
     all_provinces: set[int] = set()
+    islands = raised_islands()
+    raised_by_state = {
+        state_id: set().union(*(island for island, _bridged in state_islands))
+        for state_id, state_islands in islands.items()
+    }
+    all_raised = set().union(*raised_by_state.values())
     for path in sorted(STATE_DIR.glob("*.txt")):
         text = path.read_text(encoding="utf-8-sig", errors="strict")
         if not text.startswith(GENERATED_MARKER):
@@ -107,6 +163,12 @@ def main() -> int:
                 f"{path.relative_to(ROOT)} overlaps provinces {sorted(overlap)[:20]}"
             )
         all_provinces.update(provinces)
+        if provinces & all_raised != raised_by_state.get(state_id, set()):
+            errors.append(
+                f"{path.relative_to(ROOT)}: raised island provinces "
+                f"{sorted(provinces & all_raised)} differ from the archipelago table "
+                f"{sorted(raised_by_state.get(state_id, set()))}"
+            )
         rows[state_id] = (
             path,
             provinces,
@@ -120,7 +182,8 @@ def main() -> int:
             errors.append(
                 f"{path.relative_to(ROOT)}: neutral shell has ownership/core/content history"
             )
-        if state_id not in STATE_OWNERS and not re.search(r"\bmanpower\s*=\s*1\b", text):
+        settled = "settlement" in western_source()["states"].get(str(state_id), {})
+        if state_id not in STATE_OWNERS and not settled and not re.search(r"\bmanpower\s*=\s*1\b", text):
             errors.append(f"{path.relative_to(ROOT)}: neutral shell manpower must be 1")
 
     if 23 not in rows:
@@ -132,7 +195,7 @@ def main() -> int:
         )
     source_provinces = set().union(*(
         set(western_source()["source_partitions"][str(state_id)]["provinces"])
-        if str(state_id) in western_source()["states"] else row[1]
+        if str(state_id) in western_source()["states"] else row[1] - all_raised
         for state_id, row in rows.items()
     ))
     if len(source_provinces) != EXPECTED_PROVINCE_COUNT:
@@ -145,15 +208,21 @@ def main() -> int:
     adjacency = load_province_adjacency(
         province_types, color_to_province, include_special_adjacencies=False
     )
+    bridge_ends = island_bridge_ends()
     for state_id, (path, provinces, climate_key, strategic_name) in sorted(
         rows.items()
     ):
+        errors.extend(
+            raised_island_issues(
+                state_id, provinces, islands.get(state_id, []), adjacency, bridge_ends
+            )
+        )
         if str(state_id) in western_source()["states"]:
             continue
-        if not provinces:
+        if not provinces - all_raised:
             errors.append(f"state {state_id}: empty")
             continue
-        components = connected_components(provinces, adjacency)
+        components = connected_components(provinces - all_raised, adjacency)
         if len(components) != 1:
             errors.append(
                 f"state {state_id}: {len(components)} disconnected components "
@@ -161,7 +230,7 @@ def main() -> int:
             )
         bands = {
             band_for_y(data[province_id].y)
-            for province_id in provinces
+            for province_id in provinces - all_raised
             if province_id in data
         }
         if len(bands) != 1:

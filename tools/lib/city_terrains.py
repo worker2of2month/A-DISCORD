@@ -30,7 +30,9 @@ NATIONAL_CITY_CLUSTERS = {
     "dopotoydron_city": (16514, 16515, 16519, 16521, 16530, 16535),
     # Seat of the Svetlogorye governorate.
     "south_harbour_city": (16716, 16881, 16884, 16892),
-    "svetlogorye_town": (16721, 16885, 16887, 16890),
+    # Svetlogorye towns. On Ryumin Island the capital Smolyanoy Posad
+    # (16903, 17161) and the port city Ryuminsk (6893, 17786) span two provinces.
+    "svetlogorye_town": (16721, 16885, 16887, 16890, 16903, 17161, 6893, 17786),
     "kefreyt_city": (16510, 16511, 16534, 16645, 16653),
     "stelander_city": (16345, 16349, 16448, 16450, 16529, 16547),
     # Wealthy cities of Nodrul and Stelander: Cussington, Ostrium, New Monaii, Abilia.

@@ -940,10 +940,11 @@ class CoastalSeaRegionTests(unittest.TestCase):
             neighbours = {p for p in self.physical[port] if p in self.sea}
             self.assertTrue(neighbours, port)
             self.assertIn(expected, {region_by_province[p] for p in neighbours})
+        # The outlying islands raised in the open southern ocean are excepted.
         island_waters = {
             region_by_province[sea]
             for state in range(225, 232)
-            for province in builder.load_states()[state]
+            for province in builder.load_states()[state] - geography.ARCHIPELAGO_NEW_PROVINCES
             for sea in self.physical[province] if sea in self.sea
         }
         self.assertTrue({242, 243, 244} <= island_waters)
@@ -995,6 +996,380 @@ class CoastalSeaRegionTests(unittest.TestCase):
             ),
             0,
         )
+
+
+
+class ArchipelagoIslandTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.rows = {
+            int(fields[0]): fields
+            for line in (ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines()
+            if len(fields := line.split(";")) >= 8 and fields[0].isdigit()
+        }
+        colours = {province: tuple(map(int, row[1:4])) for province, row in cls.rows.items()}
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            rgb = np.asarray(image.convert("RGB"))
+        cls.grid = geography.province_grid(rgb, colours)
+        cls.sea = np.isin(cls.grid, [p for p, row in cls.rows.items() if row[4] == "sea"])
+        cls.bridges = [
+            line.split(";")
+            for line in (ROOT / "map/adjacencies.csv").read_text(encoding="utf-8-sig").splitlines()
+            if line.endswith(geography.ISLAND_BRIDGE_COMMENT)
+        ]
+        rasters = {}
+        for name in ("terrain", "cities", "heightmap", "rivers"):
+            with Image.open(ROOT / f"map/{name}.bmp") as image:
+                rasters[name] = np.asarray(image)
+        cls.terrain = rasters["terrain"]
+        cls.cities = rasters["cities"]
+        cls.heights = rasters["heightmap"]
+        cls.rivers = rasters["rivers"]
+        definition = ROOT / "map/definition.csv"
+        water = clearance.water_mask(rgb, clearance.water_colours(definition))
+        cls.shore = clearance.urban_blocked(water, rgb, definition) & ~water
+        # Every island state of the shared relief, read from the state files.
+        cls.state_provinces = {
+            state: states.state_file_provinces(states.state_path(state))
+            for state in (
+                *geography.ARCHIPELAGO_STATES,
+                *(state for group in geography.ARCHIPELAGO_NEIGHBOUR_STATES.values() for state in group),
+            )
+        }
+        svetlogorye = set().union(*(cls.state_provinces[state] for state in geography.ARCHIPELAGO_STATES))
+        cls.svetlogorye_provinces = svetlogorye | geography.ARCHIPELAGO_NEW_PROVINCES
+        cls.neighbour_provinces = set().union(*(
+            cls.state_provinces[state]
+            for group in geography.ARCHIPELAGO_NEIGHBOUR_STATES.values()
+            for state in group
+        )) - geography.ARCHIPELAGO_FOREIGN_SCOPES
+        # Svetlogorye towns: every authored settlement of its states, the
+        # raised-island towns and the governorate's big-city cluster.
+        cls.svetlogorye_cities = {
+            province
+            for state in geography.ARCHIPELAGO_STATES
+            for province, _value, _name in states.REGIONAL_SETTLEMENTS.get(state, ())
+        } | {
+            island["town"]["province"] for island in states.NAM_ARCHIPELAGO_ISLANDS if "town" in island
+        } | (set(city_terrains.NATIONAL_CITY_CLUSTERS.get("svetlogorye_town", ())) & svetlogorye)
+
+    def test_islands_are_isolated_land_of_their_state(self) -> None:
+        from scipy.ndimage import binary_dilation, label
+
+        self.assertGreaterEqual(len(states.NAM_ARCHIPELAGO_ISLANDS), 30)
+        for island in states.NAM_ARCHIPELAGO_ISLANDS:
+            parts = [part["province"] for part in island["provinces"]]
+            with self.subTest(island=parts[0]):
+                members = states.state_file_provinces(states.state_path(island["state"]))
+                self.assertTrue(set(parts) <= members)
+                mask = np.isin(self.grid, parts)
+                self.assertEqual(label(mask)[1], 1)
+                shore = binary_dilation(mask) & ~mask
+                # The island touches only its own sea province: no land and no
+                # other sea, so the bridge is its only land link.
+                self.assertEqual(set(np.unique(self.grid[shore]).tolist()), {island["sea"]})
+                self.assertEqual(label(self.grid == island["sea"])[1], 1)
+                for part in parts:
+                    row = self.rows[part]
+                    self.assertEqual(row[4:6], ["land", "true"] if (binary_dilation(self.grid == part) & self.sea).any() else ["land", "false"])
+                    # Only the island's harbour town is a city province.
+                    if part == island.get("town", {}).get("province"):
+                        self.assertEqual(row[6], "svetlogorye_town")
+                    else:
+                        self.assertNotIn(row[6], city_terrains.CITY_TERRAINS)
+                    self.assertEqual(label(self.grid == part)[1], 1)
+                    self.assertGreaterEqual(int((self.grid == part).sum()), 12)
+
+    def test_near_islands_have_one_bridge_and_distant_ones_none(self) -> None:
+        map_height = self.grid.shape[0]
+        self.assertTrue(any(not island["bridge"] for island in states.NAM_ARCHIPELAGO_ISLANDS))
+        for island in states.NAM_ARCHIPELAGO_ISLANDS:
+            parts = {part["province"] for part in island["provinces"]}
+            with self.subTest(island=min(parts)):
+                links = [row for row in self.bridges if int(row[0]) in parts or int(row[1]) in parts]
+                if not island["bridge"]:
+                    self.assertEqual(links, [])
+                    # A settled island without a bridge keeps a harbour of its own.
+                    if len(parts) > 1:
+                        self.assertIn("harbour", island)
+                    continue
+                self.assertEqual(len(links), 1)
+                start, home, kind, through, x0, y0, x1, y1 = links[0][:8]
+                self.assertEqual((int(home), kind, int(through)), (island["home"], "sea", island["sea"]))
+                self.assertEqual(self.grid[map_height - 1 - int(y0), int(x0)], int(start))
+                self.assertEqual(self.grid[map_height - 1 - int(y1), int(x1)], island["home"])
+                # The crossing stays over its own sea province.
+                ya, xa = map_height - 1 - int(y0), int(x0)
+                yb, xb = map_height - 1 - int(y1), int(x1)
+                steps = int(np.ceil(np.hypot(yb - ya, xb - xa) * 3)) + 2
+                path = self.grid[
+                    np.rint(np.linspace(ya, yb, steps)).astype(int),
+                    np.rint(np.linspace(xa, xb, steps)).astype(int),
+                ]
+                self.assertLessEqual(set(np.unique(path).tolist()), parts | {island["home"], island["sea"]})
+
+    def test_island_towns_are_named_harbours(self) -> None:
+        russian = (ROOT / "localisation/russian/victory_points_l_russian.yml").read_text(encoding="utf-8-sig")
+        english = (ROOT / "localisation/english/victory_points_l_english.yml").read_text(encoding="utf-8-sig")
+        towns = [island for island in states.NAM_ARCHIPELAGO_ISLANDS if "town" in island]
+        self.assertGreaterEqual(len(towns), 8)
+        for island in towns:
+            town = island["town"]
+            with self.subTest(town=town["province"]):
+                source = states.state_path(island["state"]).read_text(encoding="utf-8-sig")
+                self.assertRegex(source, rf"victory_points\s*=\s*\{{\s*{town['province']}\s+{town['value']}\s*\}}")
+                self.assertRegex(source, rf"\b{town['province']}\s*=\s*\{{\s*naval_base\s*=\s*{island['harbour']}\s*\}}")
+                self.assertIn(f'VICTORY_POINTS_{town["province"]}: "{town["name"]}"', russian)
+                self.assertRegex(english, rf'(?m)^\s*VICTORY_POINTS_{town["province"]}:\s*"[A-Za-z ]+"')
+                self.assertEqual(self.rows[town["province"]][5], "true")
+
+    def test_ulven_straits_are_bridged_between_their_states(self) -> None:
+        map_height = self.grid.shape[0]
+        rows = [
+            line.split(";")
+            for line in (ROOT / "map/adjacencies.csv").read_text(encoding="utf-8-sig").splitlines()
+            if line.endswith(geography.STRAIT_BRIDGE_COMMENT)
+        ]
+        self.assertEqual(len(rows), len(geography.STRAIT_BRIDGES) + len(geography.ISLET_BRIDGES))
+        sides = [
+            (
+                states.state_file_provinces(states.state_path(first)),
+                states.state_file_provinces(states.state_path(second)),
+            )
+            for first, second in geography.STRAIT_BRIDGES
+        ]
+        # An islet is bridged to the rest of its own state.
+        sides += [
+            ({islet}, states.state_file_provinces(states.state_path(state)) - {islet})
+            for state, islet in geography.ISLET_BRIDGES
+        ]
+        neighbours = geography.province_neighbours(self.grid)
+        for state, islet in geography.ISLET_BRIDGES:
+            self.assertEqual({self.rows[province][4] for province in neighbours[islet]}, {"sea"})
+        for (first, second), row in zip(sides, rows):
+            with self.subTest(row=row[:2]):
+                start, stop, kind, sea = int(row[0]), int(row[1]), row[2], int(row[3])
+                self.assertIn(start, first)
+                self.assertIn(stop, second)
+                self.assertEqual((kind, self.rows[sea][4]), ("sea", "sea"))
+                self.assertEqual(self.grid[map_height - 1 - int(row[5]), int(row[4])], start)
+                self.assertEqual(self.grid[map_height - 1 - int(row[7]), int(row[6])], stop)
+                self.assertLessEqual(np.hypot(int(row[4]) - int(row[6]), int(row[5]) - int(row[7])), 8)
+
+    def test_raised_islands_leave_every_sea_anchor_on_water(self) -> None:
+        raised = np.isin(self.grid, list(geography.ARCHIPELAGO_NEW_PROVINCES))
+        anchors = geography.sea_anchor_pixels(
+            (ROOT / "map/unitstacks.txt").read_bytes(),
+            (ROOT / "map/buildings.txt").read_bytes(),
+            self.grid.shape,
+            {province for province, row in self.rows.items() if row[4] == "sea"},
+        )
+        self.assertFalse((raised & anchors).any())
+
+    def test_archipelago_covers_the_neighbouring_island_states(self) -> None:
+        import re
+
+        for tag, group in geography.ARCHIPELAGO_NEIGHBOUR_STATES.items():
+            for state in group:
+                with self.subTest(tag=tag, state=state):
+                    source = states.state_path(state).read_text(encoding="utf-8-sig")
+                    self.assertEqual(re.search(r"\bowner\s*=\s*(\w+)", source).group(1), tag)
+                    expected = self.state_provinces[state] - geography.ARCHIPELAGO_FOREIGN_SCOPES
+                    self.assertTrue(expected)
+                    self.assertLessEqual(expected, geography.ARCHIPELAGO_PROVINCES)
+        for state in geography.ARCHIPELAGO_STATES:
+            self.assertLessEqual(self.state_provinces[state], geography.ARCHIPELAGO_PROVINCES)
+        # Each island state is surrounded by water, so the relief falls to a
+        # coast on every side and never meets foreign land.
+        from scipy.ndimage import binary_dilation
+
+        land = np.isin(self.grid, list(geography.ARCHIPELAGO_PROVINCES))
+        ring = np.unique(self.grid[binary_dilation(land) & ~land]).tolist()
+        self.assertEqual({self.rows[province][4] for province in ring} - {"sea", "lake"}, set())
+
+    def test_svetlogorye_towns_and_cities_are_built_up_city_provinces(self) -> None:
+        self.assertGreaterEqual(len(self.svetlogorye_cities), 30)
+        neighbour_cities = {
+            province for province in self.neighbour_provinces
+            if self.rows[province][6] in city_terrains.CITY_TERRAINS
+        }
+        for province in sorted(self.svetlogorye_cities | neighbour_cities):
+            kind = self.rows[province][6]
+            with self.subTest(province=province, terrain=kind):
+                if province in self.svetlogorye_cities:
+                    self.assertEqual(kind, city_terrains.NATIONAL_CITY_TERRAIN.get(province, "svetlogorye_town"))
+                self.assertIn(kind, city_terrains.CITY_TERRAINS)
+                mask = self.grid == province
+                inland = mask & ~self.shore
+                # The whole dry area away from the shore band is built up.
+                self.assertTrue((self.terrain[inland] == 13).all())
+                self.assertTrue((self.cities[inland] == 15).all())
+                self.assertTrue((self.terrain[mask & self.shore] == clearance.URBAN_FALLBACK_PALETTE).all())
+                if province not in geography.CITIES:
+                    self.assertFalse((self.cities[mask & self.shore] == 15).any())
+
+    def test_other_archipelago_provinces_are_painted_in_their_terrain(self) -> None:
+        palettes = geography.ARCHIPELAGO_PALETTES
+        declared = (ROOT / "common/terrain/00_terrain.txt").read_text(encoding="utf-8-sig")
+        for kind, index in palettes.items():
+            self.assertRegex(declared, rf"type\s*=\s*{kind}\s+color\s*=\s*\{{\s*{index}\s*\}}")
+        rural = sorted(
+            province for province in self.svetlogorye_provinces | self.neighbour_provinces
+            if self.rows[province][6] not in city_terrains.CITY_TERRAINS
+        )
+        self.assertEqual(len(set(self.rows[province][6] for province in rural)), len(palettes))
+        for province in rural:
+            kind = self.rows[province][6]
+            with self.subTest(province=province, terrain=kind):
+                mask = self.grid == province
+                self.assertIn(kind, palettes)
+                # One terrain over the whole province, without city models.
+                self.assertTrue((self.terrain[mask] == palettes[kind]).all())
+                self.assertFalse(np.isin(self.cities[mask], (2, 15)).any())
+
+    def test_archipelago_rivers_run_in_valleys_above_the_sea(self) -> None:
+        from scipy.ndimage import distance_transform_edt
+
+        land = np.isin(self.grid, list(geography.ARCHIPELAGO_PROVINCES))
+        river = land & (self.rivers < 254)
+        neighbours = np.isin(self.grid, list(self.neighbour_provinces))
+        # FLR, RSV and CHD carry authored rivers.
+        self.assertGreaterEqual(int((river & neighbours).sum()), 600)
+        self.assertGreaterEqual(int(self.heights[land].min()), 97)
+        self.assertGreaterEqual(int(self.heights[river].min()), 97)
+        distance = distance_transform_edt(~river)
+        banks = land & (distance >= 2) & (distance <= 3)
+        self.assertLess(float(self.heights[river].mean()) + 2.0, float(self.heights[banks].mean()))
+
+    def province_mask(self, province: int) -> tuple[np.ndarray, tuple[slice, slice]]:
+        from scipy.ndimage import find_objects
+
+        if not hasattr(type(self), "boxes"):
+            type(self).boxes = find_objects(self.grid)
+        box = self.boxes[province - 1]
+        return self.grid[box] == province, box
+
+    def test_island_districts_are_compact_connected_parts_of_their_parents(self) -> None:
+        from scipy.ndimage import label
+
+        districts = states.ISLAND_DISTRICTS
+        self.assertGreaterEqual(len(districts), 150)
+        ids = [district["province"] for district in districts]
+        self.assertEqual(ids, list(range(ids[0], ids[0] + len(ids))))
+        colours = [tuple(map(int, row[1:4])) for row in self.rows.values()]
+        self.assertEqual(len(colours), len(set(colours)))
+        for district in districts:
+            province, parent = district["province"], district["parent"]
+            with self.subTest(province=province):
+                self.assertTrue({province, parent} <= self.state_provinces[district["state"]])
+                self.assertNotIn(parent, geography.ISLAND_DISTRICT_PROVINCES)
+                self.assertEqual(tuple(map(int, self.rows[province][1:4])), tuple(district["rgb"]))
+                self.assertEqual(self.rows[province][4], "land")
+                self.assertEqual(self.rows[province][7], self.rows[parent][7])
+                # The province is exactly its reviewed mask.
+                reviewed = np.array([list(row) for row in district["mask"]]) == "1"
+                x, y = district["origin"]
+                window = self.grid[y:y + reviewed.shape[0], x:x + reviewed.shape[1]]
+                np.testing.assert_array_equal(window == province, reviewed)
+                mask, _box = self.province_mask(province)
+                self.assertEqual(int(mask.sum()), int(reviewed.sum()))
+        # Every part of a split is one compact piece of mainland-like size; a town is smaller.
+        for province in sorted(geography.ISLAND_DISTRICT_SCOPE):
+            with self.subTest(province=province):
+                mask, box = self.province_mask(province)
+                self.assertEqual(label(mask)[1], 1)
+                size = int(mask.sum())
+                if province in geography.ISLAND_TOWN_PROVINCES:
+                    self.assertTrue(45 <= size <= 80, size)
+                else:
+                    self.assertTrue(150 <= size <= 300, size)
+                axes = np.linalg.eigvalsh(np.cov(np.argwhere(mask).T) + np.eye(2) / 12)
+                self.assertLessEqual(np.sqrt(axes[1] / axes[0]), 2.6)
+                ys, xs = np.nonzero(mask)
+                ys, xs = ys + box[0].start, xs + box[1].start
+                coastal = any(
+                    self.sea[ys + dy, xs + dx].any() for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1))
+                )
+                self.assertEqual(self.rows[province][5], "true" if coastal else "false")
+
+    def test_island_towns_are_built_up_named_city_provinces(self) -> None:
+        import re
+
+        towns = states.ISLAND_TOWNS
+        self.assertGreaterEqual(len(towns), 6)
+        russian = (ROOT / "localisation/russian/victory_points_l_russian.yml").read_text(encoding="utf-8-sig")
+        english = (ROOT / "localisation/english/victory_points_l_english.yml").read_text(encoding="utf-8-sig")
+        map_height = self.grid.shape[0]
+        ports = set()
+        for line in (ROOT / "map/buildings.txt").read_text(encoding="utf-8-sig").splitlines():
+            fields = line.split(";")
+            if len(fields) == 7 and fields[1] == "naval_base_spawn":
+                ports.add(int(self.grid[map_height - 1 - round(float(fields[4])), round(float(fields[2]))]))
+        centres = {}
+        names = [town["town"]["name"] for town in towns]
+        self.assertEqual(len(names), len(set(names)))
+        for town in towns:
+            province, entry = town["province"], town["town"]
+            with self.subTest(town=province):
+                source = states.state_path(town["state"]).read_text(encoding="utf-8-sig")
+                self.assertEqual(self.rows[province][6], "urban")
+                mask, box = self.province_mask(province)
+                shore = self.shore[box]
+                inland = mask & ~shore
+                # A usable city core remains behind the shore band, fully built up.
+                self.assertGreaterEqual(int(inland.sum()), 30)
+                self.assertTrue((self.terrain[box][inland] == 13).all())
+                self.assertTrue((self.cities[box][inland] == 15).all())
+                self.assertTrue((self.terrain[box][mask & shore] == clearance.URBAN_FALLBACK_PALETTE).all())
+                self.assertFalse((self.cities[box][mask & shore] == 15).any())
+                # The river beside a town runs on the opposite bank.
+                self.assertFalse((self.rivers[box][mask] < 254).any())
+                self.assertRegex(source, rf"victory_points\s*=\s*\{{\s*{province}\s+{entry['value']}\s*\}}")
+                self.assertEqual(len(re.findall(rf"(?m)^\s*VICTORY_POINTS_{province}:", russian)), 1)
+                self.assertIn(f'VICTORY_POINTS_{province}: "{entry["name"]}"', russian)
+                self.assertRegex(english, rf'(?m)^\s*VICTORY_POINTS_{province}:\s*"[A-Za-z ]+"')
+                harbour = rf"\b{province}\s*=\s*\{{\s*naval_base\s*=\s*(\d+)\s*\}}"
+                if "harbour" in entry:
+                    self.assertEqual(re.search(harbour, source).group(1), str(entry["harbour"]))
+                    self.assertEqual(self.rows[province][5], "true")
+                    self.assertIn(province, ports)
+                else:
+                    self.assertNotRegex(source, harbour)
+                ys, xs = np.nonzero(mask)
+                centres[province] = (xs.mean() + box[1].start, ys.mean() + box[0].start)
+        # Towns stand apart; only the halves of a two-province city adjoin.
+        neighbours = geography.province_neighbours(self.grid)
+        provinces = sorted(centres)
+        for index, first in enumerate(provinces):
+            for second in provinces[index + 1:]:
+                if second in neighbours[first]:
+                    continue
+                gap = np.hypot(centres[first][0] - centres[second][0], centres[first][1] - centres[second][1])
+                self.assertGreaterEqual(gap, 40, (first, second))
+        # The names reach the English file through the reviewed catalogue.
+        self.assertEqual(
+            sync_builder_english_localisation(ROOT, "tools.builders.build_adiscord_new_states", apply=False), 0
+        )
+
+    def test_island_rivers_follow_district_borders_from_a_source_to_the_sea(self) -> None:
+        self.assertGreaterEqual(len(geography.ISLAND_RIVERS), 3)
+        border = geography.province_borders(self.grid)
+        land = np.isin(self.grid, list(geography.ISLAND_DISTRICT_SCOPE - geography.ISLAND_TOWN_PROVINCES))
+        for course in geography.ISLAND_RIVERS:
+            with self.subTest(source=course[0]):
+                self.assertGreaterEqual(len(course), 30)
+                self.assertEqual(len(set(course)), len(course))
+                xs, ys = np.array(course).T
+                self.assertTrue((np.abs(np.diff(xs)) + np.abs(np.diff(ys)) == 1).all())
+                self.assertEqual(int(self.rivers[ys[0], xs[0]]), 0)
+                body = self.rivers[ys[1:], xs[1:]]
+                self.assertTrue(((body > 0) & (body < 254)).all())
+                # It never crosses a province interior or a town.
+                self.assertTrue((land[ys, xs] & border[ys, xs]).all())
+                x, y = course[-1]
+                self.assertTrue(self.sea[y - 1, x] or self.sea[y + 1, x] or self.sea[y, x - 1] or self.sea[y, x + 1])
+                self.assertFalse(self.sea[ys, xs].any())
+                self.assertGreater(int(self.heights[ys[0], xs[0]]), int(self.heights[y, x]) + 10)
 
 
 if __name__ == "__main__":

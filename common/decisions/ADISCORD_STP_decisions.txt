@@ -6011,47 +6011,6 @@ STP_military_operations = {
 		ai_will_do = { base = 4 modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals } } } }
 	}
 
-	STP_pw_settle_kefreyt_accounts = {
-		icon = ADISCORD_treasury
-		allowed = { tag = STS }
-		visible = { has_completed_focus = STP_pc_war_ledgers has_country_flag = STP_cw_kefreyt_shipment_received NOT = { has_country_flag = STP_pw_kefreyt_accounts_settled } }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = STP_ui_STP_pw_can_reconstruct_tt
-				STP_pw_can_reconstruct = yes
-			}
-			VAL = { exists = yes has_capitulated = no }
-			NOT = { has_war_with = VAL }
-		}
-		cost = 0
-		custom_cost_text = STP_pw_price_900
-		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
-		days_re_enable = 0
-		fire_only_once = yes
-		complete_effect = {
-			hidden_effect = {
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
-				ADISCORD_economy_mark_dirty = yes
-			}
-			VAL = {
-				custom_effect_tooltip = STP_ui_treasury_900_result_tt
-				hidden_effect = {
-					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
-				}
-				hidden_effect = {
-					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
-				}
-				hidden_effect = {
-					ADISCORD_economy_mark_dirty = yes
-				}
-			}
-			hidden_effect = { set_country_flag = STP_pw_kefreyt_accounts_settled }
-			add_stability = 0.05
-		}
-		ai_will_do = { base = 4 modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals } } } }
-	}
-
 	STP_pw_plan_offensive = {
 		icon = ADISCORD_operations
 		allowed = { tag = STS }

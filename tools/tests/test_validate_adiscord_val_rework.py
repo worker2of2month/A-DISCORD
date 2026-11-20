@@ -8555,7 +8555,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         from tools.builders.build_adiscord_new_states import REGIONAL_STATE_RESOURCES
 
         self.assertEqual(REGIONAL_STATE_RESOURCES[230], {"steel": 16})
-        self.assertEqual(REGIONAL_STATE_RESOURCES[231], {"steel": 16})
+        self.assertEqual(REGIONAL_STATE_RESOURCES[231], {"steel": 16, "chromium": 4})
         effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
         from tools.tests.test_adiscord_stp_preparation import walk
 

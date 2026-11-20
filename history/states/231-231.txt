@@ -7,6 +7,7 @@ state={
 		18737 18738 18739 18740 18741 18742 18743 18909 18910 18911 18912 18913
 		18914 18915 18916 18917 18918 18919 18920 18942 18943 18944 18945 18946
 		18947 18948 18949 18950 18951 18952 18953 18954
+		19072 19076 19077
 	}
 	manpower = 1200000
 	buildings_max_level_factor = 1.000
@@ -14,6 +15,7 @@ state={
 	local_supplies = 2.5
 	resources = {
 		steel = 16
+		chromium = 4
 	}
 	history = {
 		owner = NAM
@@ -23,6 +25,7 @@ state={
 			industrial_complex = 1
 			infrastructure = 2
 			13018 = { naval_base = 3 }
+			432 = { naval_base = 1 }
 		}
 		victory_points = { 13018 2 }
 		victory_points = { 12732 1 }

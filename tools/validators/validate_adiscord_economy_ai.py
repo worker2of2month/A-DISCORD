@@ -2472,9 +2472,20 @@ def debt_reconciler_issues(text: str) -> list[str]:
                 "debt reconciler branch has the wrong state band or predicate"
             )
 
+        # The corporate cabinet can suppress the visible debt spirit; this
+        # condition must never control the debt state or notification receipt.
+        operations = []
+        for operation in branch.value:
+            if operation.key == "if" and isinstance(operation.value, list) and len(operation.value) == 2:
+                gate, payout = operation.value
+                if (gate.key == "limit" and isinstance(gate.value, list) and len(gate.value) == 1
+                        and _exact_scalar(gate.value, "ADISCORD_economy_automatic_spirits_enabled", "yes")
+                        and payout.key == "add_ideas"):
+                    operation = payout
+            operations.append(operation)
         nested_conditions = [
             candidate
-            for candidate in branch.value
+            for candidate in operations
             if candidate.key in {"if", "else_if"} and isinstance(candidate.value, list)
         ]
         metadata_ok = len(nested_conditions) == 1
@@ -2516,12 +2527,12 @@ def debt_reconciler_issues(text: str) -> list[str]:
             )
 
         removed: set[str] = set()
-        for operation in branch.value:
+        for operation in operations:
             if operation.key == "remove_ideas":
                 removed.update(_operand_values(operation))
         additions = [
             idea
-            for operation in branch.value
+            for operation in operations
             if operation.key == "add_ideas"
             for idea in _operand_values(operation)
             if idea in debuffs
@@ -2530,12 +2541,12 @@ def debt_reconciler_issues(text: str) -> list[str]:
         additions_ok = additions == ([] if expected_idea is None else [expected_idea])
         remove_positions = [
             index
-            for index, operation in enumerate(branch.value)
+            for index, operation in enumerate(operations)
             if operation.key == "remove_ideas"
         ]
         add_positions = [
             index
-            for index, operation in enumerate(branch.value)
+            for index, operation in enumerate(operations)
             if operation.key == "add_ideas"
         ]
         order_ok = bool(remove_positions) and (

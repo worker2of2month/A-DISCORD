@@ -1466,6 +1466,202 @@ spriteTypes = {
 		tilingCenter = no
 	}
 
+	corneredTileSpriteType = {
+		name = "GFX_idea_NAM_Mark_Olshansky"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Mark_Olshansky.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Aristarkh_Vyazemtsev"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Aristarkh_Vyazemtsev.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Aristarkh_Vyazemtsev_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Aristarkh_Vyazemtsev.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Taisiya_Valts"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Taisiya_Valts.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Taisiya_Valts_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Taisiya_Valts.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Saveliy_Kruze"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Saveliy_Kruze.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Saveliy_Kruze_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Saveliy_Kruze.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Rodion_Kalyonov"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Rodion_Kalyonov.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Rodion_Kalyonov_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Rodion_Kalyonov.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Nazar_Guryev"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Nazar_Guryev.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Nazar_Guryev_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Nazar_Guryev.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_NAM_Lidiya_Velyaminova"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Lidiya_Velyaminova.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_NAM_Lidiya_Velyaminova_small"
+		texturefile = "gfx/leaders/NAM/portrait_NAM_Lidiya_Velyaminova.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Vsevolod_Rakhmanov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Vsevolod_Rakhmanov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Yulian_Dashkov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Yulian_Dashkov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Matvei_Bronnikov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Matvei_Bronnikov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Varvara_Stavrova"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Varvara_Stavrova_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Efrem_Batalov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Efrem_Batalov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Raisa_Chaikina"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Raisa_Chaikina_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Tikhon_Zarubin"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Tikhon_Zarubin_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Innokentiy_Bakhmetyev"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Innokentiy_Bakhmetyev_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Faina_Odintsova"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Faina_Odintsova_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Rashid_Ildarov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Rashid_Ildarov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Veniamin_Kramskoy"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Veniamin_Kramskoy_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Yuliya_Savitskaya"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Yuliya_Savitskaya_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Boris_Nartov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Boris_Nartov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Leonid_Belov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Leonid_Belov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Fedot_Ermolin"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Fedot_Ermolin_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Pyotr_Litvinov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Pyotr_Litvinov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Mark_Vetlugin"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Mark_Vetlugin_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Pavel_Ordyntsev"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Pavel_Ordyntsev_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Semyon_Kornev"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Semyon_Kornev_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Viktor_Selivanov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Viktor_Selivanov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Lev_Veresov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Lev_Veresov_small.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_Andrei_Bulatov"
+		texturefile = "gfx/interface/ideas/NAM/portrait_NAM_Andrei_Bulatov_small.png"
+	}
+
 	spriteType = {
 		name = "GFX_portrait_NAM_Matvei_Prichal"
 		texturefile = "gfx/leaders/NAM/portrait_NAM_Matvei_Prichal.png"

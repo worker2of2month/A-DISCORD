@@ -1,9 +1,2183 @@
+defined_text = {
+	name = NAMGetWeberPartyBiography
+	text = {
+		trigger = { has_country_leader = { character = NAM_Yaroslav_Weber ruling_only = yes } }
+		localization_key = NAM_Yaroslav_Weber_leader_desc
+	}
+	text = { localization_key = NAM_weber_opposition_desc }
+}
+
+defined_text = {
+	name = NAMGetEtatistPartyName
+	text = {
+		trigger = { NAM_is_vorkerland_dependency = yes }
+		localization_key = NAM_metropolitan_administration
+	}
+	text = { localization_key = NAM_independent_etatists }
+}
+
+defined_text = {
+	name = NAMGetEtatistPartyLongName
+	text = {
+		trigger = { NAM_is_vorkerland_dependency = yes }
+		localization_key = NAM_metropolitan_administration
+	}
+	text = { localization_key = NAM_independent_etatists_long }
+}
+
+defined_text = {
+	name = NAMBoardAgenda1
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^1 value = global.num_days compare = greater_than }
+				NAM_board_may_table_loren_5 = yes
+			}
+		}
+		localization_key = NAM_board_motion_loren_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^1 value = global.num_days compare = greater_than }
+				NAM_board_may_table_loren_4 = yes
+			}
+		}
+		localization_key = NAM_board_motion_loren_4
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_loren_1 = yes
+		}
+		localization_key = NAM_board_motion_loren_1
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_loren_2 = yes
+		}
+		localization_key = NAM_board_motion_loren_2
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_loren_3 = yes
+		}
+		localization_key = NAM_board_motion_loren_3
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_loren_4 = yes
+		}
+		localization_key = NAM_board_motion_loren_4
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_loren_5 = yes
+		}
+		localization_key = NAM_board_motion_loren_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardAgenda2
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^2 value = global.num_days compare = greater_than }
+				NAM_board_may_table_ferrant_5 = yes
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^2 value = global.num_days compare = greater_than }
+				NAM_board_may_table_ferrant_4 = yes
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_4
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_ferrant_1 = yes
+		}
+		localization_key = NAM_board_motion_ferrant_1
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_ferrant_2 = yes
+		}
+		localization_key = NAM_board_motion_ferrant_2
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_ferrant_3 = yes
+		}
+		localization_key = NAM_board_motion_ferrant_3
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_ferrant_4 = yes
+		}
+		localization_key = NAM_board_motion_ferrant_4
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_ferrant_5 = yes
+		}
+		localization_key = NAM_board_motion_ferrant_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardAgenda3
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^3 value = global.num_days compare = greater_than }
+				NAM_board_may_table_navis_5 = yes
+			}
+		}
+		localization_key = NAM_board_motion_navis_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^3 value = global.num_days compare = greater_than }
+				NAM_board_may_table_navis_4 = yes
+			}
+		}
+		localization_key = NAM_board_motion_navis_4
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_navis_1 = yes
+		}
+		localization_key = NAM_board_motion_navis_1
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_navis_2 = yes
+		}
+		localization_key = NAM_board_motion_navis_2
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_navis_3 = yes
+		}
+		localization_key = NAM_board_motion_navis_3
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_navis_4 = yes
+		}
+		localization_key = NAM_board_motion_navis_4
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_navis_5 = yes
+		}
+		localization_key = NAM_board_motion_navis_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardAgenda4
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^4 value = global.num_days compare = greater_than }
+				NAM_board_may_table_arktur_5 = yes
+			}
+		}
+		localization_key = NAM_board_motion_arktur_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^4 value = global.num_days compare = greater_than }
+				NAM_board_may_table_arktur_2 = yes
+			}
+		}
+		localization_key = NAM_board_motion_arktur_2
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_arktur_1 = yes
+		}
+		localization_key = NAM_board_motion_arktur_1
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_arktur_2 = yes
+		}
+		localization_key = NAM_board_motion_arktur_2
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_arktur_3 = yes
+		}
+		localization_key = NAM_board_motion_arktur_3
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_arktur_4 = yes
+		}
+		localization_key = NAM_board_motion_arktur_4
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_arktur_5 = yes
+		}
+		localization_key = NAM_board_motion_arktur_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardAgenda5
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^5 value = global.num_days compare = greater_than }
+				NAM_board_may_table_smenkom_5 = yes
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^5 value = global.num_days compare = greater_than }
+				NAM_board_may_table_smenkom_3 = yes
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_3
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_smenkom_1 = yes
+		}
+		localization_key = NAM_board_motion_smenkom_1
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_smenkom_2 = yes
+		}
+		localization_key = NAM_board_motion_smenkom_2
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_smenkom_3 = yes
+		}
+		localization_key = NAM_board_motion_smenkom_3
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_smenkom_4 = yes
+		}
+		localization_key = NAM_board_motion_smenkom_4
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_smenkom_5 = yes
+		}
+		localization_key = NAM_board_motion_smenkom_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardAgenda6
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^6 value = global.num_days compare = greater_than }
+				NAM_board_may_table_reidbank_4 = yes
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_loss_until^6 value = global.num_days compare = greater_than }
+				NAM_board_may_table_reidbank_3 = yes
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_3
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_reidbank_1 = yes
+		}
+		localization_key = NAM_board_motion_reidbank_1
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_reidbank_2 = yes
+		}
+		localization_key = NAM_board_motion_reidbank_2
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_reidbank_3 = yes
+		}
+		localization_key = NAM_board_motion_reidbank_3
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_reidbank_4 = yes
+		}
+		localization_key = NAM_board_motion_reidbank_4
+	}
+	text = {
+		trigger = {
+			NAM_board_may_table_reidbank_5 = yes
+		}
+		localization_key = NAM_board_motion_reidbank_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardResolution1
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardTerms1
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_1_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_2_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_3_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_4_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^1 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_loren_5_terms
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardResolution2
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardTerms2
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_1_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_2_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_3_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_4_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^2 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_ferrant_5_terms
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardResolution3
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardTerms3
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_1_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_2_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_3_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_4_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^3 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_navis_5_terms
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardResolution4
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardTerms4
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_1_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_2_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_3_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_4_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^4 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_arktur_5_terms
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardResolution5
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardTerms5
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_1_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_2_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_3_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_4_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^5 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_smenkom_5_terms
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardResolution6
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardTerms6
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 1 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_1_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 2 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_2_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 3 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_3_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 4 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_4_terms
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_motion^6 value = 5 compare = equals }
+		}
+		localization_key = NAM_board_motion_reidbank_5_terms
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardSelected
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_selected value = 1 compare = equals }
+		}
+		localization_key = NAM_corp_name_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_selected value = 2 compare = equals }
+		}
+		localization_key = NAM_corp_name_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_selected value = 3 compare = equals }
+		}
+		localization_key = NAM_corp_name_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_selected value = 4 compare = equals }
+		}
+		localization_key = NAM_corp_name_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_selected value = 5 compare = equals }
+		}
+		localization_key = NAM_corp_name_5
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_selected value = 6 compare = equals }
+		}
+		localization_key = NAM_corp_name_6
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardSpeaker1
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_1 value = 1 compare = equals }
+		}
+		localization_key = NAM_corp_name_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_1 value = 2 compare = equals }
+		}
+		localization_key = NAM_corp_name_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_1 value = 3 compare = equals }
+		}
+		localization_key = NAM_corp_name_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_1 value = 4 compare = equals }
+		}
+		localization_key = NAM_corp_name_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_1 value = 5 compare = equals }
+		}
+		localization_key = NAM_corp_name_5
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_1 value = 6 compare = equals }
+		}
+		localization_key = NAM_corp_name_6
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardOffered1
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+		}
+		localization_key = NAM_corp_name_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+		}
+		localization_key = NAM_corp_name_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+		}
+		localization_key = NAM_corp_name_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+		}
+		localization_key = NAM_corp_name_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+		}
+		localization_key = NAM_corp_name_5
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+		}
+		localization_key = NAM_corp_name_6
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardOffer1
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardOffer1Terms
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_5_terms
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardSpeaker2
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_2 value = 1 compare = equals }
+		}
+		localization_key = NAM_corp_name_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_2 value = 2 compare = equals }
+		}
+		localization_key = NAM_corp_name_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_2 value = 3 compare = equals }
+		}
+		localization_key = NAM_corp_name_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_2 value = 4 compare = equals }
+		}
+		localization_key = NAM_corp_name_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_2 value = 5 compare = equals }
+		}
+		localization_key = NAM_corp_name_5
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_speaker_2 value = 6 compare = equals }
+		}
+		localization_key = NAM_corp_name_6
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardOffered2
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+		}
+		localization_key = NAM_corp_name_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+		}
+		localization_key = NAM_corp_name_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+		}
+		localization_key = NAM_corp_name_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+		}
+		localization_key = NAM_corp_name_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+		}
+		localization_key = NAM_corp_name_5
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+		}
+		localization_key = NAM_corp_name_6
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardOffer2
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_5
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_1
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_2
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_3
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_4
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_5
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardOffer2Terms
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_loren_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_ferrant_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_navis_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_arktur_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_smenkom_5_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_1_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_2_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_3_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_4_terms
+	}
+	text = {
+		trigger = {
+			AND = {
+				check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+				check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_motion_reidbank_5_terms
+	}
+	text = { localization_key = NAM_board_agenda_empty }
+}
+
+defined_text = {
+	name = NAMBoardRailPrice
+	text = {
+		trigger = {
+			has_active_mission = NAM_board_bid_rail
+		}
+		localization_key = NAM_board_bid_free
+	}
+	text = { localization_key = NAM_board_rail_price }
+}
+
+defined_text = {
+	name = NAMBoardRailPriceBlocked
+	text = {
+		trigger = {
+			has_active_mission = NAM_board_bid_rail
+		}
+		localization_key = NAM_board_bid_free
+	}
+	text = { localization_key = NAM_board_rail_price_blocked }
+}
+
+defined_text = {
+	name = NAMBoardLobbyTarget
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_lobby_target value = 1 compare = equals }
+		}
+		localization_key = NAM_corp_name_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_lobby_target value = 2 compare = equals }
+		}
+		localization_key = NAM_corp_name_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_lobby_target value = 3 compare = equals }
+		}
+		localization_key = NAM_corp_name_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_lobby_target value = 4 compare = equals }
+		}
+		localization_key = NAM_corp_name_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_lobby_target value = 5 compare = equals }
+		}
+		localization_key = NAM_corp_name_5
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_lobby_target value = 6 compare = equals }
+		}
+		localization_key = NAM_corp_name_6
+	}
+	text = { localization_key = NAM_board_current_selection }
+}
+
+defined_text = {
+	name = NAMBoardDismissalTarget
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_dismissal_target value = 1 compare = equals }
+		}
+		localization_key = NAM_corp_name_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_dismissal_target value = 2 compare = equals }
+		}
+		localization_key = NAM_corp_name_2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_dismissal_target value = 3 compare = equals }
+		}
+		localization_key = NAM_corp_name_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_dismissal_target value = 4 compare = equals }
+		}
+		localization_key = NAM_corp_name_4
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_dismissal_target value = 5 compare = equals }
+		}
+		localization_key = NAM_corp_name_5
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_dismissal_target value = 6 compare = equals }
+		}
+		localization_key = NAM_corp_name_6
+	}
+	text = { localization_key = NAM_board_current_selection }
+}
+
 # Corporate governance in the decision category. Rankings and deliveries are country values.
 defined_text = {
 	name = NAMBoardCategoryTitle
 	text = {
 		trigger = { has_country_flag = NAM_corp_takeover }
-		localization_key = NAM_board_corporate_title
+		localization_key = NAM_board_technocrats_title
 	}
 	text = { localization_key = NAM_board_exile_title }
 }
@@ -78,12 +2252,12 @@ defined_text = {
 defined_text = {
 	name = NAMBoardRepresentative1
 	text = {
-		trigger = { NAM_board_minister_1 = yes }
-		localization_key = NAM_board_rep_appointed
+		trigger = { check_variable = { var = NAM_board_stance^1 value = 1 compare = equals } }
+		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { NAM_board_rate_a_1 < 0 } }
-		localization_key = NAM_board_rep_discontent
+		trigger = { check_variable = { var = NAM_board_stance^1 value = -1 compare = equals } }
+		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
@@ -92,9 +2266,9 @@ defined_text = {
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
-		localization_key = NAM_board_rep_waiting
+		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_absent }
+	text = { localization_key = NAM_board_rep_waiting }
 }
 
 defined_text = {
@@ -158,12 +2332,12 @@ defined_text = {
 defined_text = {
 	name = NAMBoardRepresentative2
 	text = {
-		trigger = { NAM_board_minister_2 = yes }
-		localization_key = NAM_board_rep_appointed
+		trigger = { check_variable = { var = NAM_board_stance^2 value = 1 compare = equals } }
+		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { NAM_board_rate_a_2 < 0 } }
-		localization_key = NAM_board_rep_discontent
+		trigger = { check_variable = { var = NAM_board_stance^2 value = -1 compare = equals } }
+		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
@@ -172,9 +2346,9 @@ defined_text = {
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
-		localization_key = NAM_board_rep_waiting
+		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_absent }
+	text = { localization_key = NAM_board_rep_waiting }
 }
 
 defined_text = {
@@ -238,12 +2412,12 @@ defined_text = {
 defined_text = {
 	name = NAMBoardRepresentative3
 	text = {
-		trigger = { NAM_board_minister_3 = yes }
-		localization_key = NAM_board_rep_appointed
+		trigger = { check_variable = { var = NAM_board_stance^3 value = 1 compare = equals } }
+		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { NAM_board_rate_a_3 < 0 } }
-		localization_key = NAM_board_rep_discontent
+		trigger = { check_variable = { var = NAM_board_stance^3 value = -1 compare = equals } }
+		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
@@ -252,9 +2426,9 @@ defined_text = {
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
-		localization_key = NAM_board_rep_waiting
+		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_absent }
+	text = { localization_key = NAM_board_rep_waiting }
 }
 
 defined_text = {
@@ -318,12 +2492,12 @@ defined_text = {
 defined_text = {
 	name = NAMBoardRepresentative4
 	text = {
-		trigger = { NAM_board_minister_4 = yes }
-		localization_key = NAM_board_rep_appointed
+		trigger = { check_variable = { var = NAM_board_stance^4 value = 1 compare = equals } }
+		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { NAM_board_rate_a_4 < 0 } }
-		localization_key = NAM_board_rep_discontent
+		trigger = { check_variable = { var = NAM_board_stance^4 value = -1 compare = equals } }
+		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
@@ -332,9 +2506,9 @@ defined_text = {
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
-		localization_key = NAM_board_rep_waiting
+		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_absent }
+	text = { localization_key = NAM_board_rep_waiting }
 }
 
 defined_text = {
@@ -398,12 +2572,12 @@ defined_text = {
 defined_text = {
 	name = NAMBoardRepresentative5
 	text = {
-		trigger = { NAM_board_minister_5 = yes }
-		localization_key = NAM_board_rep_appointed
+		trigger = { check_variable = { var = NAM_board_stance^5 value = 1 compare = equals } }
+		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { NAM_board_rate_a_5 < 0 } }
-		localization_key = NAM_board_rep_discontent
+		trigger = { check_variable = { var = NAM_board_stance^5 value = -1 compare = equals } }
+		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
@@ -412,9 +2586,9 @@ defined_text = {
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
-		localization_key = NAM_board_rep_waiting
+		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_absent }
+	text = { localization_key = NAM_board_rep_waiting }
 }
 
 defined_text = {
@@ -478,12 +2652,12 @@ defined_text = {
 defined_text = {
 	name = NAMBoardRepresentative6
 	text = {
-		trigger = { NAM_board_minister_6 = yes }
-		localization_key = NAM_board_rep_appointed
+		trigger = { check_variable = { var = NAM_board_stance^6 value = 1 compare = equals } }
+		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { NAM_board_rate_a_6 < 0 } }
-		localization_key = NAM_board_rep_discontent
+		trigger = { check_variable = { var = NAM_board_stance^6 value = -1 compare = equals } }
+		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
@@ -492,9 +2666,70 @@ defined_text = {
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
-		localization_key = NAM_board_rep_waiting
+		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_absent }
+	text = { localization_key = NAM_board_rep_waiting }
+}
+
+defined_text = {
+	name = NAMBoardConfidenceForecast
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_votes_against value = NAM_board_votes_for compare = greater_than }
+			check_variable = { NAM_board_challenger = 1 }
+		}
+		localization_key = NAM_Aristarkh_Vyazemtsev
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_votes_against value = NAM_board_votes_for compare = greater_than }
+			check_variable = { NAM_board_challenger = 2 }
+		}
+		localization_key = NAM_Taisiya_Valts
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_votes_against value = NAM_board_votes_for compare = greater_than }
+			check_variable = { NAM_board_challenger = 3 }
+		}
+		localization_key = NAM_Saveliy_Kruze
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_votes_against value = NAM_board_votes_for compare = greater_than }
+			check_variable = { NAM_board_challenger = 4 }
+		}
+		localization_key = NAM_Rodion_Kalyonov
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_votes_against value = NAM_board_votes_for compare = greater_than }
+			check_variable = { NAM_board_challenger = 5 }
+		}
+		localization_key = NAM_Nazar_Guryev
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_votes_against value = NAM_board_votes_for compare = greater_than }
+			check_variable = { NAM_board_challenger = 6 }
+		}
+		localization_key = NAM_Lidiya_Velyaminova
+	}
+	text = { localization_key = NAM_board_chair_unchanged }
+}
+
+defined_text = {
+	name = NAMBoardConfidenceClock
+	text = {
+		trigger = {
+			check_variable = { NAM_board_no_confidence_day > -1 }
+			set_temp_variable = { var = NAM_board_confidence_remaining value = NAM_board_no_confidence_day }
+			subtract_from_temp_variable = { var = NAM_board_confidence_remaining value = global.num_days }
+			clamp_temp_variable = { var = NAM_board_confidence_remaining min = 0 max = 45 }
+		}
+		localization_key = NAM_board_confidence_clock
+	}
+	text = { localization_key = NAM_board_no_motion }
 }
 
 defined_text = {
@@ -1191,7 +3426,7 @@ defined_text = {
 defined_text = {
 	name = NAMGetDrillCurrency
 	text = {
-		trigger = { has_country_flag = NAM_exile_humanist }
+		trigger = { has_country_flag = NAM_corp_takeover }
 		localization_key = NAM_drill_currency_capital
 	}
 	text = {
@@ -3295,4 +5530,52 @@ defined_text = {
 		localization_key = NAM_depot_report_filed
 	}
 	text = { localization_key = NAM_depot_report_start }
+}
+
+defined_text = {
+	name = NAMIslandWeberStatus
+	text = {
+		trigger = { has_country_leader = { character = NAM_Yaroslav_Weber ruling_only = yes } }
+		localization_key = NAM_island_weber_ruler
+	}
+	text = {
+		trigger = { has_completed_focus = NAM_board_last_debtor }
+		localization_key = NAM_island_weber_killed
+	}
+	text = {
+		trigger = {
+			has_completed_focus = NAM_board_treaty_two_judases
+			is_in_array = { ADISCORD_cabinet_parties = token:humanism }
+		}
+		localization_key = NAM_island_weber_allied
+	}
+	text = {
+		trigger = { has_completed_focus = NAM_board_treaty_two_judases }
+		localization_key = NAM_island_weber_outside
+	}
+	text = { localization_key = NAM_island_weber_undecided }
+}
+
+defined_text = {
+	name = NAMIslandKaramyshevStatus
+	text = {
+		trigger = { has_country_leader = { character = NAM_Rostislav_Karamyshev ruling_only = yes } }
+		localization_key = NAM_island_karamyshev_ruler
+	}
+	text = {
+		trigger = { has_completed_focus = NAM_board_posthumous_signature }
+		localization_key = NAM_island_karamyshev_killed
+	}
+	text = {
+		trigger = {
+			has_completed_focus = NAM_board_escheated_throne
+			is_in_array = { ADISCORD_cabinet_parties = token:etatism }
+		}
+		localization_key = NAM_island_karamyshev_allied
+	}
+	text = {
+		trigger = { has_completed_focus = NAM_board_escheated_throne }
+		localization_key = NAM_island_karamyshev_outside
+	}
+	text = { localization_key = NAM_island_karamyshev_undecided }
 }

@@ -1717,6 +1717,52 @@ scripted_gui = {
 			ADISCORD_south_map_state_733_occupied_visible = {
 				733 = { ADISCORD_south_map_state_occupied = yes }
 			}
+			ADISCORD_south_map_gauge_SHL_visible = {
+				SHL = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_NAM_visible = {
+				NAM = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_EFL_visible = {
+				EFL = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_AZH_visible = {
+				AZH = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_WEF_visible = {
+				WEF = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_KDR_visible = {
+				KDR = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_RHM_visible = {
+				RHM = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_SDR_visible = {
+				SDR = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_KYZ_visible = {
+				KYZ = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_MZR_visible = {
+				MZR = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_gauge_GLP_visible = {
+				GLP = { ADISCORD_south_map_influence_contested = yes }
+			}
+		}
+		properties = {
+			ADISCORD_south_map_marker_SHL = { x = SHL.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_NAM = { x = NAM.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_EFL = { x = EFL.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_AZH = { x = AZH.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_WEF = { x = WEF.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_KDR = { x = KDR.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_RHM = { x = RHM.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_SDR = { x = SDR.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_KYZ = { x = KYZ.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_MZR = { x = MZR.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_GLP = { x = GLP.ADISCORD_south_coalition_influence?0 }
 		}
 	}
 }

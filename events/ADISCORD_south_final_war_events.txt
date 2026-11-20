@@ -1157,7 +1157,19 @@ country_event = {
 
 	option = {
 		name = ADISCORD_south.67.a
+		if = {
+			limit = { hidden_trigger = { ADISCORD_south_coalition_answer_open = no } }
+			custom_effect_tooltip = ADISCORD_south_invitation_lapsed_tt
+		}
 		hidden_effect = {
+			if = {
+				limit = { ADISCORD_south_coalition_answer_open = yes }
+				if = {
+					limit = { FROM = { ADISCORD_south_map_country_shl = yes } }
+					set_country_flag = { flag = ADISCORD_south_shl_offer_declined days = 90 }
+				}
+				else = { set_country_flag = { flag = ADISCORD_south_north_offer_declined days = 90 } }
+			}
 			if = {
 				limit = { check_variable = { var = ADISCORD_south_coalition_envoy value = FROM compare = equals } }
 				clear_variable = ADISCORD_south_coalition_envoy
@@ -1177,11 +1189,19 @@ country_event = {
 					ADISCORD_south_ensure_campaign_faction = yes
 					add_to_faction = ROOT
 				}
+				NAM_neighbour_apply_allied_staff = yes
 				clear_variable = ADISCORD_south_coalition_envoy
 			}
 		}
 		ai_chance = {
 			base = 50
+			modifier = {
+				factor = 2
+				OR = {
+					check_variable = { var = ADISCORD_south_coalition_influence value = 80 compare = greater_than_or_equals }
+					check_variable = { var = ADISCORD_south_coalition_influence value = -80 compare = less_than_or_equals }
+				}
+			}
 			modifier = {
 				factor = 0.5
 				is_in_faction = yes

@@ -1,9 +1,27 @@
 ideas = {
-	political_advisor_minister_of_economy = {
-		NAM_board_bank_nominee = {
-			name = NAM_board_bank_nominee
-			picture = generic_political_advisor_europe_2
-			cost = 75
+	political_advisor_head_of_state = {
+		NAM_board_premier_kornev = {
+			name = NAM_board_premier_kornev
+			picture = NAM_Semyon_Kornev
+			cost = 25
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			modifier = { political_power_gain = 0.05 }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_loren_premier = {
+			name = NAM_board_min_loren_premier
+			picture = NAM_Vsevolod_Rakhmanov
+			cost = 50
 			default = no
 			allowed = { tag = NAM }
 			visible = { has_country_flag = NAM_corp_takeover }
@@ -14,31 +32,629 @@ ideas = {
 				}
 			}
 			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_loren }
+			modifier = {
+				stability_factor = 0.04
+				fuel_gain_factor = 0.15
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_premier_appointment_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^1 value = 4 compare = equals }
+							}
+						}
+						set_temp_variable = { var = NAM_board_seat_fulfilled value = 1 }
+					}
+					NAM_board_minister_seated = yes
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^1 value = 4 compare = equals }
+							}
+						}
+						remove_mission = NAM_board_resolution_loren
+						set_temp_variable = { var = NAM_board_company_input value = 1 }
+						set_temp_variable = { var = NAM_board_result_input value = 1 }
+						NAM_board_settle_resolution = yes
+					}
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_reidbank_premier = {
+			name = NAM_board_min_reidbank_premier
+			picture = NAM_Veniamin_Kramskoy
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_reidbank }
+			modifier = {
+				consumer_goods_factor = -0.03
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_premier_appointment_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^6 value = 3 compare = equals }
+							}
+						}
+						set_temp_variable = { var = NAM_board_seat_fulfilled value = 1 }
+					}
+					NAM_board_minister_seated = yes
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^6 value = 3 compare = equals }
+							}
+						}
+						remove_mission = NAM_board_resolution_reidbank
+						set_temp_variable = { var = NAM_board_company_input value = 6 }
+						set_temp_variable = { var = NAM_board_result_input value = 1 }
+						NAM_board_settle_resolution = yes
+					}
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+	}
+
+	political_advisor_minister_of_defense = {
+		NAM_board_defense_selivanov = {
+			name = NAM_board_defense_selivanov
+			picture = NAM_Viktor_Selivanov
+			cost = 25
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			modifier = { planning_speed = 0.05 }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_arktur_defense = {
+			name = NAM_board_min_arktur_defense
+			picture = NAM_Mark_Vetlugin
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_arktur }
+			modifier = {
+				land_reinforce_rate = 0.02
+				army_org_factor = 0.03
+				stability_factor = -0.03
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_4_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^4 value = 2 compare = equals }
+							}
+						}
+						set_temp_variable = { var = NAM_board_seat_fulfilled value = 1 }
+					}
+					NAM_board_minister_seated = yes
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^4 value = 2 compare = equals }
+							}
+						}
+						remove_mission = NAM_board_resolution_arktur
+						set_temp_variable = { var = NAM_board_company_input value = 4 }
+						set_temp_variable = { var = NAM_board_result_input value = 1 }
+						NAM_board_settle_resolution = yes
+					}
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_ferrant_defense = {
+			name = NAM_board_min_ferrant_defense
+			picture = NAM_Matvei_Bronnikov
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_ferrant }
+			modifier = {
+				army_armor_attack_factor = 0.05
+				army_armor_defence_factor = 0.05
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_2_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^2 value = 4 compare = equals }
+							}
+						}
+						set_temp_variable = { var = NAM_board_seat_fulfilled value = 1 }
+					}
+					NAM_board_minister_seated = yes
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^2 value = 4 compare = equals }
+							}
+						}
+						remove_mission = NAM_board_resolution_ferrant
+						set_temp_variable = { var = NAM_board_company_input value = 2 }
+						set_temp_variable = { var = NAM_board_result_input value = 1 }
+						NAM_board_settle_resolution = yes
+					}
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_navis_defense = {
+			name = NAM_board_min_navis_defense
+			picture = NAM_Efrem_Batalov
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_navis }
+			modifier = {
+				amphibious_invasion = 0.15
+				naval_invasion_prep_speed = 0.15
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_3_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					NAM_board_minister_seated = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+	}
+
+	political_advisor_minister_of_health = {
+		NAM_board_health_veresov = {
+			name = NAM_board_health_veresov
+			picture = NAM_Lev_Veresov
+			cost = 25
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			modifier = { casualty_trickleback = 0.04 }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_smenkom_health = {
+			name = NAM_board_min_smenkom_health
+			picture = NAM_Faina_Odintsova
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_smenkom }
+			modifier = {
+				monthly_population = 0.05
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_labor_appointment_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^5 value = 3 compare = equals }
+							}
+						}
+						set_temp_variable = { var = NAM_board_seat_fulfilled value = 1 }
+					}
+					NAM_board_minister_seated = yes
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^5 value = 3 compare = equals }
+							}
+						}
+						remove_mission = NAM_board_resolution_smenkom
+						set_temp_variable = { var = NAM_board_company_input value = 5 }
+						set_temp_variable = { var = NAM_board_result_input value = 1 }
+						NAM_board_settle_resolution = yes
+					}
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_reidbank_health = {
+			name = NAM_board_min_reidbank_health
+			picture = NAM_Yuliya_Savitskaya
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_reidbank }
+			modifier = {
+				stability_factor = 0.03
+				war_support_factor = -0.02
+			}
 			on_add = {
 				custom_effect_tooltip = NAM_board_bank_appointment_tt
-				hidden_effect = { NAM_board_queue_recount = yes }
-			}
-			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
-			ai_will_do = {
-				factor = 1
-				modifier = {
-					factor = 0
-					check_variable = { var = NAM_board_sectors_6 value = 0 compare = equals }
-					check_variable = { var = NAM_board_districts_6 value = 0 compare = equals }
-				}
-				modifier = {
-					factor = 4
-					has_war = no
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					NAM_board_minister_seated = yes
 				}
 			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+	}
+
+	political_advisor_chief_of_intelligence = {
+		NAM_board_intelligence_bulatov = {
+			name = NAM_board_intelligence_bulatov
+			picture = NAM_Andrei_Bulatov
+			cost = 25
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			modifier = { army_intel_factor = 0.04 }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_arktur_intelligence = {
+			name = NAM_board_min_arktur_intelligence
+			picture = NAM_Tikhon_Zarubin
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_arktur }
+			modifier = {
+				root_out_resistance_effectiveness_factor = 0.15
+				enemy_operative_detection_chance_factor = 0.15
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_4_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					NAM_board_minister_seated = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_navis_intelligence = {
+			name = NAM_board_min_navis_intelligence
+			picture = NAM_Raisa_Chaikina
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_navis }
+			modifier = {
+				navy_intel_factor = 0.10
+				naval_detection = 0.10
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_3_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^3 value = 4 compare = equals }
+							}
+						}
+						set_temp_variable = { var = NAM_board_seat_fulfilled value = 1 }
+					}
+					NAM_board_minister_seated = yes
+					if = {
+						limit = {
+							AND = {
+								NAM_board_operable = yes
+								NOT = { has_country_flag = NAM_board_silence_seats }
+								check_variable = { var = NAM_board_motion^3 value = 4 compare = equals }
+							}
+						}
+						remove_mission = NAM_board_resolution_navis
+						set_temp_variable = { var = NAM_board_company_input value = 3 }
+						set_temp_variable = { var = NAM_board_result_input value = 1 }
+						NAM_board_settle_resolution = yes
+					}
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+	}
+
+	political_advisor_minister_of_economy = {
+		NAM_board_bank_nominee = {
+			name = NAM_board_bank_nominee
+			picture = NAM_Leonid_Belov
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_reidbank }
+			modifier = {
+				production_lack_of_resource_penalty_factor = -0.15
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_bank_appointment_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					NAM_board_minister_seated = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_loren_economy = {
+			name = NAM_board_min_loren_economy
+			picture = NAM_Boris_Nartov
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_loren }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.04
+				compliance_growth = 0.03
+				industrial_capacity_factory = -0.02
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_1_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					NAM_board_minister_seated = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_ferrant_economy = {
+			name = NAM_board_min_ferrant_economy
+			picture = NAM_Varvara_Stavrova
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_ferrant }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				line_change_production_efficiency_factor = 0.10
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_2_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					NAM_board_minister_seated = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
 		}
 	}
 
 	political_advisor_minister_of_education = {
 		NAM_board_labor_nominee = {
 			name = NAM_board_labor_nominee
-			picture = generic_political_advisor_europe_5
-			cost = 75
+			picture = NAM_Pyotr_Litvinov
+			cost = 50
 			default = no
 			allowed = { tag = NAM }
 			visible = { has_country_flag = NAM_corp_takeover }
@@ -49,23 +665,210 @@ ideas = {
 				}
 			}
 			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_smenkom }
+			modifier = {
+				training_time_army_factor = -0.10
+			}
 			on_add = {
 				custom_effect_tooltip = NAM_board_labor_appointment_tt
-				hidden_effect = { NAM_board_queue_recount = yes }
-			}
-			on_remove = { hidden_effect = { NAM_board_queue_recount = yes } }
-			ai_will_do = {
-				factor = 1
-				modifier = {
-					factor = 0
-					check_variable = { var = NAM_board_sectors_5 value = 0 compare = equals }
-					check_variable = { var = NAM_board_districts_5 value = 0 compare = equals }
-				}
-				modifier = {
-					factor = 4
-					check_variable = { NAM_board_sectors_5 > 1 }
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					NAM_board_minister_seated = yes
 				}
 			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_ferrant_education = {
+			name = NAM_board_min_ferrant_education
+			picture = NAM_Fedot_Ermolin
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_ferrant }
+			modifier = {
+				research_speed_factor = 0.02
+				compliance_growth = 0.02
+				stability_factor = -0.02
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_2_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					NAM_board_minister_seated = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_arktur_education = {
+			name = NAM_board_min_arktur_education
+			picture = NAM_Innokentiy_Bakhmetyev
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_arktur }
+			modifier = {
+				experience_gain_army_factor = 0.10
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_4_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					NAM_board_minister_seated = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+	}
+
+	political_advisor_minister_of_foreign_affairs = {
+		NAM_board_min_navis_foreign = {
+			name = NAM_board_min_navis_foreign
+			picture = NAM_Pavel_Ordyntsev
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_navis }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_3_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					NAM_board_minister_seated = yes
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					NAM_board_minister_unseated = yes
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_loren_foreign = {
+			name = NAM_board_min_loren_foreign
+			picture = NAM_Yulian_Dashkov
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_loren }
+			modifier = {
+				trade_opinion_factor = 0.25
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_appointment_1_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					NAM_board_minister_seated = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		NAM_board_min_smenkom_foreign = {
+			name = NAM_board_min_smenkom_foreign
+			picture = NAM_Rashid_Ildarov
+			cost = 50
+			default = no
+			allowed = { tag = NAM }
+			visible = { has_country_flag = NAM_corp_takeover }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_governing_tt
+					NAM_board_operable = yes
+				}
+			}
+			allowed_to_remove = { always = yes }
+			traits = { NAM_trait_company_smenkom }
+			modifier = {
+				recruitable_population_factor = 0.03
+				drift_defence_factor = 0.15
+			}
+			on_add = {
+				custom_effect_tooltip = NAM_board_labor_appointment_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					NAM_board_minister_seated = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					NAM_board_minister_unseated = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
 		}
 	}
 
@@ -82,6 +885,523 @@ ideas = {
 	}
 
 	country = {
+		NAM_board_sanction_loren = {
+			picture = GFX_idea_NAM_board_sanction_loren
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = NAM_board_sanction_loren_tt
+				fuel_gain_factor = -0.50
+				max_fuel_factor = -0.30
+			}
+		}
+
+		NAM_board_sanction_ferrant = {
+			picture = GFX_idea_NAM_board_sanction_ferrant
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					for_each_scope_loop = {
+						array = NAM_board_export_sites
+						if = {
+							limit = {
+								has_dynamic_modifier = { modifier = NAM_corp_steel_export_state }
+							}
+							remove_dynamic_modifier = { modifier = NAM_corp_steel_export_state }
+						}
+					}
+					clear_array = NAM_board_export_sites
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					every_owned_state = {
+						limit = { NAM_corp_steel_site = yes }
+						NAM = { add_to_array = { array = NAM_board_export_sites value = PREV } }
+						add_dynamic_modifier = { modifier = NAM_corp_steel_export_state days = 60 }
+					}
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = NAM_board_sanction_ferrant_tt
+				industrial_capacity_dockyard = -0.10
+			}
+		}
+
+		NAM_board_sanction_navis = {
+			picture = GFX_idea_NAM_board_sanction_navis
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					for_loop_effect = {
+						end = 8
+						value = NAM_board_convoy
+						if = {
+							limit = {
+								AND = {
+									check_variable = { var = NAM_board_navis_withheld value = 8 compare = less_than }
+									NOT = {
+										has_equipment = { convoy_1 < 1 }
+									}
+								}
+							}
+							add_equipment_to_stockpile = { type = convoy_1 amount = -1 }
+							add_to_variable = { var = NAM_board_navis_withheld value = 1 }
+						}
+					}
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					add_equipment_to_stockpile = { type = convoy_1 amount = NAM_board_navis_withheld producer = NAM }
+					set_variable = { var = NAM_board_navis_withheld value = 0 }
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = NAM_board_sanction_navis_tt
+			}
+		}
+
+		NAM_board_sanction_arktur = {
+			picture = GFX_idea_NAM_board_sanction_arktur
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = NAM_board_sanction_arktur_tt
+				industrial_capacity_factory = -0.10
+			}
+		}
+
+		NAM_board_sanction_smenkom = {
+			picture = GFX_idea_NAM_board_sanction_smenkom
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = NAM_board_sanction_smenkom_tt
+				production_speed_buildings_factor = -0.25
+				monthly_population = -0.20
+			}
+		}
+
+		NAM_board_sanction_reidbank = {
+			picture = GFX_idea_NAM_board_sanction_reidbank
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = NAM_board_sanction_reidbank_tt
+			}
+		}
+
+		NAM_board_loren_order_fee = {
+			picture = GFX_idea_NAM_board_sanction_loren
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		NAM_board_ferrant_steel_monopoly = {
+			picture = GFX_idea_NAM_board_sanction_ferrant
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				industrial_capacity_dockyard = -0.10
+			}
+		}
+
+		NAM_board_ferrant_shift = {
+			picture = GFX_idea_NAM_board_sanction_ferrant
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.10
+			}
+		}
+
+		NAM_board_navis_free_fairway = {
+			picture = GFX_idea_NAM_board_sanction_navis
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				convoy_escort_efficiency = 0.20
+				naval_speed_factor = 0.05
+			}
+		}
+
+		NAM_board_arktur_arms_monopoly = {
+			picture = GFX_idea_NAM_board_sanction_arktur
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = NAM_board_arktur_arms_monopoly_tt
+				consumer_goods_factor = 0.03
+			}
+		}
+
+		NAM_board_arktur_line = {
+			picture = GFX_idea_NAM_board_sanction_arktur
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				production_factory_max_efficiency_factor = 0.10
+				equipment_conversion_speed = 0.25
+			}
+		}
+
+		NAM_board_smenkom_closed_shop = {
+			picture = GFX_idea_NAM_board_sanction_smenkom
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				conscription_factor = -0.05
+			}
+		}
+
+		NAM_board_smenkom_brigades = {
+			picture = GFX_idea_NAM_board_sanction_smenkom
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				production_speed_buildings_factor = 0.15
+			}
+		}
+
+		NAM_judas_weber_committees = {
+			picture = GFX_idea_NAM_judas_weber_committees
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			modifier = {
+				production_speed_dockyard_factor = 0.05
+			}
+		}
+
+		NAM_judas_karamyshev_watch = {
+			picture = GFX_idea_NAM_judas_karamyshev_watch
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				naval_invasion_prep_speed = 0.10
+			}
+		}
+
+		NAM_judas_port_arrests = {
+			picture = GFX_idea_NAM_judas_strike
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.05
+				political_power_gain = -0.10
+			}
+		}
+
+		NAM_judas_dock_walkout = {
+			picture = GFX_idea_NAM_judas_strike
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				clear_variable = NAM_judas_walkout_target
+				NAM_board_queue_recount = yes
+			}
+		}
+
+		NAM_judas_drill_block = {
+			picture = GFX_idea_NAM_judas_mutiny
+			allowed = { tag = NAM }
+			removal_cost = -1
+		}
+
+		NAM_judas_drill_boycott = {
+			picture = GFX_idea_NAM_judas_mutiny
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = -0.10
+				training_time_factor = 0.20
+			}
+		}
+
+		NAM_judas_unseated_proxies = {
+			picture = GFX_idea_NAM_judas_strike
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = -0.10
+			}
+		}
+
+		NAM_judas_embankment_blood = {
+			picture = GFX_idea_NAM_judas_strike
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.08
+			}
+		}
+
+		NAM_judas_bought_captains = {
+			picture = GFX_idea_NAM_judas_staff_oath
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				experience_gain_army_factor = -0.15
+			}
+		}
+
+		NAM_judas_general_strike = {
+			picture = GFX_idea_NAM_judas_strike
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			modifier = {
+				industrial_capacity_dockyard = -0.20
+				stability_factor = -0.10
+			}
+		}
+
+		NAM_judas_dock_strike = {
+			picture = GFX_idea_NAM_judas_strike
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			modifier = {
+				industrial_capacity_dockyard = -0.10
+				stability_factor = -0.05
+			}
+		}
+
+		NAM_judas_port_peace = {
+			picture = GFX_idea_NAM_judas_port_peace
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				production_speed_dockyard_factor = 0.10
+				stability_factor = 0.05
+			}
+		}
+
+		NAM_judas_coast_guard_mutiny = {
+			picture = GFX_idea_NAM_judas_mutiny
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = -0.15
+				naval_invasion_prep_speed = -0.25
+			}
+		}
+
+		NAM_judas_officers_unrest = {
+			picture = GFX_idea_NAM_judas_mutiny
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				army_morale_factor = -0.15
+				training_time_factor = 0.15
+			}
+		}
+
+		NAM_judas_staff_oath = {
+			picture = GFX_idea_NAM_judas_staff_oath
+			allowed = { tag = NAM }
+			removal_cost = -1
+			modifier = {
+				naval_invasion_prep_speed = 0.15
+				experience_gain_army_factor = 0.10
+			}
+		}
+
+		NAM_board_reidbank_clearing = {
+			picture = GFX_idea_NAM_board_sanction_reidbank
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				custom_modifier_tooltip = NAM_board_reidbank_clearing_tt
+			}
+		}
+
+		NAM_board_reidbank_bills = {
+			picture = GFX_idea_NAM_board_sanction_reidbank
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = {
+				stability_factor = 0.05
+			}
+		}
+
+		NAM_board_no_confidence_spirit = {
+			picture = ADISCORD_trade_policy_closed_economy
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				political_power_gain = -0.20
+				stability_factor = -0.10
+			}
+		}
+
 		NAM_private_tank_farms = {
 			picture = GFX_idea_NAM_private_tank_farms
 			allowed = { tag = NAM }

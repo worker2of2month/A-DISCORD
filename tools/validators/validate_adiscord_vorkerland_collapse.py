@@ -5977,7 +5977,7 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
             )
 
     category = named_block(categories, "ADISCORD_scenario_debug_category")
-    if "visible = { is_debug = yes }" not in category:
+    if "is_debug = yes" not in named_block(category, "visible"):
         issues.append("scenario debug category is no longer debug-only")
     for key in (
         "ADISCORD_debug_add_vorkerland_war_exhaustion",

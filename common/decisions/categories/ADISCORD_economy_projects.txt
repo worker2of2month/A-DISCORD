@@ -11,6 +11,7 @@ ADISCORD_economy_demobilization = {
 	priority = 100
 	visible_when_empty = yes
 	visible = {
+		NOT = { has_country_flag = NAM_corp_takeover }
 		has_war = no
 		ADISCORD_economy_has_current_schema = yes
 		OR = {

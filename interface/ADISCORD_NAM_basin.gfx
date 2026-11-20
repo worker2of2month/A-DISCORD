@@ -49,6 +49,28 @@ spriteTypes = {
 		legacy_lazy_load = no
 	}
 
+	spriteType = {
+		name = "GFX_NAM_board_stance_marks"
+		texturefile = "gfx/interface/NAM_basin/board_stance_marks.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_board_resolution_marker"
+		texturefile = "gfx/interface/NAM_basin/board_resolution_marker.png"
+		noOfFrames = 1
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_NAM_board_seat_select"
+		textureFile = "gfx/interface/NAM_basin/board_seat_select.png"
+		size = { x = 24 y = 24 }
+		borderSize = { x = 6 y = 6 }
+		noOfFrames = 3
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
 	# BEGIN GENERATED NAM BASIN MAP
 	spriteType = {
 		name = "GFX_NAM_bw_map"
@@ -261,6 +283,41 @@ spriteTypes = {
 		name = "GFX_NAM_return_readiness_texticon"
 		texturefile = "gfx/interface/NAM_basin/return_readiness_texticon.png"
 		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_board_trust_texticon"
+		texturefile = "gfx/interface/NAM_basin/board_trust_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_board_slot_texticon"
+		texturefile = "gfx/interface/NAM_basin/board_slot_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_judas_committees_texticon"
+		texturefile = "gfx/interface/NAM_basin/judas_committees_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_judas_officers_texticon"
+		texturefile = "gfx/interface/NAM_basin/judas_officers_texticon.png"
+		noOfFrames = 1
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_NAM_board_stance_texticon"
+		texturefile = "gfx/interface/NAM_basin/board_stance_texticon.png"
+		noOfFrames = 4
 		legacy_lazy_load = no
 	}
 	# END GENERATED NAM BASIN MAP

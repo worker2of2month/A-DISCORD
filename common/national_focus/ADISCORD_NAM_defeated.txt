@@ -672,6 +672,7 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_efl_tt
 			add_stability = 0.05
 			add_manpower = 3000
 			custom_effect_tooltip = NAM_grp_defeat_open_border_tt
@@ -697,12 +698,6 @@ shared_focus = {
 			focus = NAM_defeat_oil_union
 		}
 		bypass = {
-			EFL = {
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
-					ADISCORD_south_campaign_target_settled = yes
-				}
-			}
 			AZH = {
 				custom_trigger_tooltip = {
 					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
@@ -732,11 +727,7 @@ shared_focus = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = NAM_defeat_road_south_tt
-			hidden_effect = {
-				EFL = { ADISCORD_south_offer_alliance = yes }
-				AZH = { ADISCORD_south_offer_alliance = yes }
-			}
+			custom_effect_tooltip = ADISCORD_south_contact_azh_tt
 		}
 		ai_will_do = {
 			base = 10

@@ -8,3 +8,4 @@ set_stability = 0.45
 set_war_support = 0.50
 set_research_slots = 2
 recruit_character = SOD_Bahram_Kord
+add_ideas = minister_SOD_Naim_Daran

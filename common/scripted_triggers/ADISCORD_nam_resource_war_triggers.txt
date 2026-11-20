@@ -305,7 +305,6 @@ NAM_convoy_service_authorised = {
 	OR = {
 		has_completed_focus = NAM_harbour_service
 		has_completed_focus = NAM_defeat_harbour_economy
-		has_completed_focus = NAM_board_private_navy
 	}
 }
 
@@ -451,6 +450,11 @@ NAM_country_operable = {
 	tag = NAM
 	has_capitulated = no
 	exists = yes
+}
+
+NAM_mainland_programmes_active = {
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+	NOT = { has_country_flag = NAM_corp_takeover }
 }
 
 NAM_compact_effective = {
@@ -1351,7 +1355,6 @@ NAM_ai_war_of_return_preparing = {
 		focus_progress = { focus = NAM_defeat_war_of_return progress > 0 }
 		focus_progress = { focus = NAM_rad_war_of_return progress > 0 }
 		focus_progress = { focus = NAM_hum_war_of_return progress > 0 }
-		focus_progress = { focus = NAM_board_war_of_return progress > 0 }
 	}
 }
 
@@ -1430,22 +1433,16 @@ NAM_rad_mining_site_available = {
 		}
 	}
 }
-# COUNTRY NAM. The island council of event .100 may still overthrow the
-# namestnik: the choice between the pillars and Veter's humanists is made once
-# per campaign, right after the flight to the islands.
+
+# COUNTRY NAM. The island council hands the seals to the boards once.
 NAM_exile_revolution_open = {
 	tag = NAM
 	has_global_flag = ADISCORD_nam_resource_war_island_exile
-	NOT = { has_country_flag = NAM_exile_radical }
-	NOT = { has_country_flag = NAM_exile_humanist }
+	NOT = { has_country_flag = NAM_corp_takeover }
 }
 
-# COUNTRY NAM. The namestnik has fallen to one of the two courses.
 NAM_exile_revolution_done = {
-	OR = {
-		has_country_flag = NAM_exile_radical
-		has_country_flag = NAM_exile_humanist
-	}
+	has_country_flag = NAM_corp_takeover
 }
 
 # COUNTRY NAM. The exile still prepares its return. The programme pauses during
@@ -1465,31 +1462,12 @@ NAM_marine_orders_open = {
 	NOT = { has_variable = NAM_marines_orders_delivered }
 }
 
-# COUNTRY NAM. The landing drill is open in the course's own tree: the junta's
-# general staff, the humanists' citizen army or the boards' company guard.
-# The humanist focuses are shared with the corporate tree, so a drill opened
-# before the takeover stays open after it.
 NAM_exile_drill_unlocked = {
-	OR = {
-		has_completed_focus = NAM_exile_general_staff
-		has_completed_focus = NAM_hum_citizen_army
-		has_completed_focus = NAM_hum_company_guard
-	}
+	has_completed_focus = NAM_board_dead_mans_veto
 }
 
-# COUNTRY NAM. The drill's deposit is in hand in the course's currency: 30
-# corporate capital under the humanists, 30 loot under the junta.
 NAM_exile_drill_currency_ready = {
-	OR = {
-		AND = {
-			has_country_flag = NAM_exile_humanist
-			check_variable = { var = NAM_corp_capital value = 30 compare = greater_than_or_equals }
-		}
-		AND = {
-			NOT = { has_country_flag = NAM_exile_humanist }
-			check_variable = { var = NAM_pirate_loot value = 30 compare = greater_than_or_equals }
-		}
-	}
+	check_variable = { var = NAM_corp_capital value = 30 compare = greater_than_or_equals }
 }
 
 # COUNTRY. One of the southern states the exile war or the great war fights.
@@ -1776,33 +1754,30 @@ NAM_consolidation_open = {
 	NAM_country_operable = yes
 }
 
-# ----- Humanist exile: corporations and free zones -----
-# COUNTRY NAM. Veter's government finances the return with foreign capital.
+# ----- Corporate exile: foreign capital and free zones -----
 NAM_corp_open = {
 	tag = NAM
-	has_country_flag = NAM_exile_humanist
+	has_country_flag = NAM_corp_takeover
 	NAM_country_operable = yes
 }
 
-NAM_board_can_sell_rail = {
+NAM_board_tenders_operable = {
 	NAM_board_operable = yes
-	check_variable = { var = NAM_board_lot_rail value = 0 compare = equals }
-}
-
-NAM_board_can_sell_yards = {
-	NAM_board_operable = yes
-	has_completed_focus = NAM_board_island_concessions
-	check_variable = { var = NAM_board_lot_yards value = 0 compare = equals }
-}
-
-NAM_board_can_sell_depots = {
-	NAM_board_operable = yes
-	has_completed_focus = NAM_board_shareholders
-	check_variable = { var = NAM_board_lot_depots value = 0 compare = equals }
+	OR = {
+		225 = { NAM_board_held_site = yes }
+		226 = { NAM_board_held_site = yes }
+		227 = { NAM_board_held_site = yes }
+		228 = { NAM_board_held_site = yes }
+		229 = { NAM_board_held_site = yes }
+		230 = { NAM_board_held_site = yes }
+		231 = { NAM_board_held_site = yes }
+	}
 }
 
 NAM_hum_government_operable = {
-	NAM_corp_open = yes
+	tag = NAM
+	has_country_flag = NAM_exile_humanist
+	NAM_country_operable = yes
 	is_subject = no
 	NOT = { has_country_flag = NAM_corp_takeover }
 }
@@ -1995,10 +1970,1055 @@ NAM_corp_case_can_be_heard = {
 	NAM = { NAM_board_operable = yes }
 }
 
+NAM_judas_weber_unlocked_target = {
+	has_idea = NAM_judas_weber_committees
+	OR = {
+		NOT = { has_variable = NAM_judas_weber_day }
+		check_variable = { var = NAM_judas_weber_lock value = global.num_days compare = greater_than }
+	}
+}
+
+NAM_judas_karamyshev_unlocked_target = {
+	has_idea = NAM_judas_karamyshev_watch
+	OR = {
+		NOT = { has_variable = NAM_judas_karamyshev_day }
+		check_variable = { var = NAM_judas_karamyshev_lock value = global.num_days compare = greater_than }
+	}
+}
+
+NAM_judas_willing_navis = {
+	check_variable = { var = NAM_board_support^3 value = 50 compare = greater_than_or_equals }
+	NOT = { check_variable = { var = NAM_board_stance^3 value = -1 compare = equals } }
+	check_variable = { var = NAM_board_objection_days^3 value = 0 compare = less_than_or_equals }
+}
+
+NAM_judas_willing_arktur = {
+	check_variable = { var = NAM_board_support^4 value = 50 compare = greater_than_or_equals }
+	NOT = { check_variable = { var = NAM_board_stance^4 value = -1 compare = equals } }
+	check_variable = { var = NAM_board_objection_days^4 value = 0 compare = less_than_or_equals }
+}
+
+NAM_judas_willing_delegate = {
+	check_variable = { var = NAM_judas_weber_pending value = 0 compare = greater_than }
+	check_variable = { var = NAM_board_support^NAM_judas_weber_pending value = 50 compare = greater_than_or_equals }
+	NOT = { check_variable = { var = NAM_board_stance^NAM_judas_weber_pending value = -1 compare = equals } }
+	check_variable = { var = NAM_board_objection_days^NAM_judas_weber_pending value = 0 compare = less_than_or_equals }
+}
+
+NAM_judas_weber_promise = {
+	check_variable = { var = NAM_board_motion^5 value = 2 compare = equals }
+}
+
+NAM_judas_karamyshev_promise = {
+	check_variable = { var = NAM_board_motion^2 value = 3 compare = equals }
+}
+
+NAM_judas_buy_notes_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_weber_committees
+	has_completed_focus = NAM_board_founders_of_unrest
+	NOT = { has_variable = NAM_judas_buy_notes_receipt }
+	NOT = { has_country_flag = NAM_judas_buy_notes_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_weber_promise = no
+}
+
+NAM_judas_unseat_proxies_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_weber_committees
+	has_completed_focus = NAM_board_elected_in_absentia
+	NOT = { has_variable = NAM_judas_unseat_proxies_receipt }
+	NOT = { has_country_flag = NAM_judas_unseat_proxies_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_weber_promise = no
+}
+
+NAM_judas_exchange_hiring_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_weber_committees
+	has_completed_focus = NAM_board_widows_share
+	NOT = { has_variable = NAM_judas_exchange_hiring_receipt }
+	NOT = { has_country_flag = NAM_judas_exchange_hiring_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_weber_promise = no
+}
+
+NAM_judas_pay_moderates_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_weber_committees
+	has_completed_focus = NAM_board_subsidised_opposition
+	NOT = { has_variable = NAM_judas_pay_moderates_receipt }
+	NOT = { has_country_flag = NAM_judas_pay_moderates_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_weber_promise = no
+}
+
+NAM_judas_disperse_mourners_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_weber_committees
+	has_completed_focus = NAM_board_mourning_licence
+	NOT = { has_variable = NAM_judas_disperse_mourners_receipt }
+	NOT = { has_country_flag = NAM_judas_disperse_mourners_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_weber_promise = no
+	NAM_judas_willing_arktur = yes
+}
+
+NAM_judas_register_patents_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_karamyshev_watch
+	has_completed_focus = NAM_board_dead_mans_veto
+	NOT = { has_variable = NAM_judas_register_patents_receipt }
+	NOT = { has_country_flag = NAM_judas_register_patents_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_karamyshev_promise = no
+}
+
+NAM_judas_appoint_masters_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_karamyshev_watch
+	has_completed_focus = NAM_board_inheritance_without_empire
+	NOT = { has_variable = NAM_judas_appoint_masters_receipt }
+	NOT = { has_country_flag = NAM_judas_appoint_masters_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_karamyshev_promise = no
+}
+
+NAM_judas_buy_mortgages_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_karamyshev_watch
+	has_completed_focus = NAM_board_uncrested_buyers
+	NOT = { has_variable = NAM_judas_buy_mortgages_receipt }
+	NOT = { has_country_flag = NAM_judas_buy_mortgages_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_karamyshev_promise = no
+}
+
+NAM_judas_pay_captains_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_karamyshev_watch
+	has_completed_focus = NAM_board_district_buyout
+	NOT = { has_variable = NAM_judas_pay_captains_receipt }
+	NOT = { has_country_flag = NAM_judas_pay_captains_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_karamyshev_promise = no
+}
+
+NAM_judas_disarm_cutters_eligible = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_karamyshev_watch
+	has_completed_focus = NAM_board_privatise_governorate
+	NOT = { has_variable = NAM_judas_disarm_cutters_receipt }
+	NOT = { has_country_flag = NAM_judas_disarm_cutters_done }
+	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+	NAM_judas_karamyshev_promise = no
+	OR = {
+		NAM_judas_willing_navis = yes
+		NAM_judas_willing_arktur = yes
+	}
+}
+
+NAM_is_vorkerland_dependency = {
+	OR = {
+		is_subject_of = event_target:ADISCORD_vorkerland_nation
+		is_subject_of = WKR
+	}
+}
+
 NAM_board_operable = {
+	NOT = { check_variable = { NAM_board_ended = 1 } }
 	NAM_corp_open = yes
-	has_country_flag = NAM_corp_takeover
 	is_subject = no
+}
+
+NAM_board_has_majority = {
+	NAM_board_operable = yes
+	has_variable = NAM_board_majority_since
+	check_variable = { NAM_board_majority_since > -1 }
+}
+
+NAM_board_majority_held = {
+	set_temp_variable = { var = NAM_board_held_days value = 0 }
+	if = {
+		limit = { NAM_board_has_majority = yes }
+		set_temp_variable = { var = NAM_board_held_days value = global.num_days }
+		subtract_from_temp_variable = { var = NAM_board_held_days value = NAM_board_majority_since }
+	}
+	custom_trigger_tooltip = {
+		tooltip = NAM_board_majority_held_tt
+		check_variable = { NAM_board_held_days > 59 }
+	}
+}
+
+NAM_board_product_blocked_1 = {
+	has_country_flag = NAM_board_opened
+	OR = {
+		check_variable = { var = NAM_board_stance^1 value = -1 compare = equals }
+		has_idea = NAM_board_sanction_loren
+	}
+}
+
+NAM_board_product_blocked_2 = {
+	has_country_flag = NAM_board_opened
+	OR = {
+		check_variable = { var = NAM_board_stance^2 value = -1 compare = equals }
+		has_idea = NAM_board_sanction_ferrant
+	}
+}
+
+NAM_board_product_blocked_3 = {
+	has_country_flag = NAM_board_opened
+	OR = {
+		check_variable = { var = NAM_board_stance^3 value = -1 compare = equals }
+		has_idea = NAM_board_sanction_navis
+	}
+}
+
+NAM_board_product_blocked_4 = {
+	has_country_flag = NAM_board_opened
+	OR = {
+		check_variable = { var = NAM_board_stance^4 value = -1 compare = equals }
+		has_idea = NAM_board_sanction_arktur
+	}
+}
+
+NAM_board_product_blocked_5 = {
+	has_country_flag = NAM_board_opened
+	OR = {
+		check_variable = { var = NAM_board_stance^5 value = -1 compare = equals }
+		has_idea = NAM_board_sanction_smenkom
+	}
+}
+
+NAM_board_product_blocked_6 = {
+	has_country_flag = NAM_board_opened
+	OR = {
+		check_variable = { var = NAM_board_stance^6 value = -1 compare = equals }
+		has_idea = NAM_board_sanction_reidbank
+	}
+}
+
+NAM_board_may_table_loren_1 = {
+	check_variable = { var = NAM_board_fulfilled^1 value = 0 compare = equals }
+	AND = {
+		NOT = {
+			has_active_mission = NAM_board_bid_depots
+		}
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_lot_depots value = 0 compare = equals }
+				check_variable = { var = NAM_board_public_agenda^3 value = 0 compare = greater_than }
+			}
+		}
+	}
+}
+
+NAM_board_may_table_loren_2 = {
+	check_variable = { var = NAM_board_fulfilled^2 value = 0 compare = equals }
+	AND = {
+		has_variable = NAM_judas_weber
+		NOT = {
+			has_completed_focus = NAM_board_last_debtor
+		}
+		check_variable = { var = NAM_judas_weber value = 40 compare = greater_than_or_equals }
+	}
+}
+
+NAM_board_may_table_loren_3 = {
+	check_variable = { var = NAM_board_fulfilled^3 value = 0 compare = equals }
+	fuel_ratio < 0.5
+}
+
+NAM_board_may_table_loren_4 = {
+	check_variable = { var = NAM_board_fulfilled^4 value = 0 compare = equals }
+	OR = {
+		has_idea = NAM_board_premier_kornev
+		has_idea = NAM_board_min_reidbank_premier
+	}
+}
+
+NAM_board_may_table_loren_5 = {
+	check_variable = { var = NAM_board_fulfilled^5 value = 0 compare = equals }
+	has_idea = NAM_board_bank_nominee
+}
+
+NAM_board_may_table_ferrant_1 = {
+	check_variable = { var = NAM_board_fulfilled^6 value = 0 compare = equals }
+	AND = {
+		NOT = {
+			has_active_mission = NAM_board_bid_rail
+		}
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_lot_rail value = 0 compare = equals }
+				check_variable = { var = NAM_board_public_agenda^1 value = 0 compare = greater_than }
+			}
+			AND = {
+				check_variable = { var = NAM_board_lot_rail value = 5 compare = equals }
+				NOT = {
+					check_variable = { var = NAM_board_stance^5 value = 1 compare = equals }
+				}
+			}
+		}
+	}
+}
+
+NAM_board_may_table_ferrant_2 = {
+	check_variable = { var = NAM_board_fulfilled^7 value = 0 compare = equals }
+	AND = {
+		check_variable = { var = NAM_board_lot_yards value = 0 compare = greater_than }
+		OR = {
+			check_variable = { var = NAM_board_seat_count^2 value = 0 compare = greater_than }
+			check_variable = { var = NAM_board_sectors_2 value = 0 compare = greater_than }
+		}
+	}
+}
+
+NAM_board_may_table_ferrant_3 = {
+	check_variable = { var = NAM_board_fulfilled^8 value = 0 compare = equals }
+	AND = {
+		has_variable = NAM_judas_karamyshev
+		NOT = {
+			has_completed_focus = NAM_board_posthumous_signature
+		}
+		NOT = {
+			check_variable = { var = NAM_board_stance^2 value = -1 compare = equals }
+		}
+	}
+}
+
+NAM_board_may_table_ferrant_4 = {
+	check_variable = { var = NAM_board_fulfilled^9 value = 0 compare = equals }
+	OR = {
+		has_idea = NAM_board_defense_selivanov
+		has_idea = NAM_board_min_arktur_defense
+		has_idea = NAM_board_min_navis_defense
+	}
+}
+
+NAM_board_may_table_ferrant_5 = {
+	check_variable = { var = NAM_board_fulfilled^10 value = 0 compare = equals }
+	has_idea = NAM_board_labor_nominee
+}
+
+NAM_board_may_table_navis_1 = {
+	check_variable = { var = NAM_board_fulfilled^11 value = 0 compare = equals }
+	AND = {
+		NOT = {
+			has_active_mission = NAM_board_bid_yards
+		}
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_lot_yards value = 0 compare = equals }
+				check_variable = { var = NAM_board_public_agenda^2 value = 0 compare = greater_than }
+			}
+		}
+	}
+}
+
+NAM_board_may_table_navis_2 = {
+	check_variable = { var = NAM_board_fulfilled^12 value = 0 compare = equals }
+	AND = {
+		has_variable = NAM_judas_karamyshev
+		NOT = {
+			has_completed_focus = NAM_board_posthumous_signature
+		}
+		check_variable = { var = NAM_judas_karamyshev value = 40 compare = greater_than_or_equals }
+	}
+}
+
+NAM_board_may_table_navis_3 = {
+	check_variable = { var = NAM_board_fulfilled^13 value = 0 compare = equals }
+	has_equipment = { convoy < 40 }
+}
+
+NAM_board_may_table_navis_4 = {
+	check_variable = { var = NAM_board_fulfilled^14 value = 0 compare = equals }
+	OR = {
+		has_idea = NAM_board_intelligence_bulatov
+		has_idea = NAM_board_min_arktur_intelligence
+	}
+}
+
+NAM_board_may_table_navis_5 = {
+	check_variable = { var = NAM_board_fulfilled^15 value = 0 compare = equals }
+	has_idea = NAM_board_min_arktur_defense
+}
+
+NAM_board_may_table_arktur_1 = {
+	check_variable = { var = NAM_board_fulfilled^16 value = 0 compare = equals }
+	AND = {
+		NOT = {
+			has_active_mission = NAM_board_bid_yards
+		}
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_lot_yards value = 0 compare = equals }
+				check_variable = { var = NAM_board_public_agenda^2 value = 0 compare = greater_than }
+			}
+		}
+	}
+}
+
+NAM_board_may_table_arktur_2 = {
+	check_variable = { var = NAM_board_fulfilled^17 value = 0 compare = equals }
+	OR = {
+		has_idea = NAM_board_defense_selivanov
+		has_idea = NAM_board_min_ferrant_defense
+		has_idea = NAM_board_min_navis_defense
+	}
+}
+
+NAM_board_may_table_arktur_3 = {
+	check_variable = { var = NAM_board_fulfilled^18 value = 0 compare = equals }
+	AND = {
+		has_variable = NAM_judas_weber
+		NOT = {
+			has_completed_focus = NAM_board_last_debtor
+		}
+		check_variable = { var = NAM_judas_weber value = 40 compare = greater_than_or_equals }
+	}
+}
+
+NAM_board_may_table_arktur_4 = {
+	check_variable = { var = NAM_board_fulfilled^19 value = 0 compare = equals }
+	OR = {
+		check_variable = { var = NAM_board_seat_count^4 value = 0 compare = greater_than }
+		check_variable = { var = NAM_board_lot_yards value = 4 compare = equals }
+	}
+}
+
+NAM_board_may_table_arktur_5 = {
+	check_variable = { var = NAM_board_fulfilled^20 value = 0 compare = equals }
+	has_idea = NAM_board_min_navis_foreign
+}
+
+NAM_board_may_table_smenkom_1 = {
+	check_variable = { var = NAM_board_fulfilled^21 value = 0 compare = equals }
+	AND = {
+		NOT = {
+			has_active_mission = NAM_board_bid_rail
+		}
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_lot_rail value = 0 compare = equals }
+				check_variable = { var = NAM_board_public_agenda^1 value = 0 compare = greater_than }
+			}
+		}
+	}
+}
+
+NAM_board_may_table_smenkom_2 = {
+	check_variable = { var = NAM_board_fulfilled^22 value = 0 compare = equals }
+	AND = {
+		has_variable = NAM_judas_weber
+		NOT = {
+			has_completed_focus = NAM_board_last_debtor
+		}
+	}
+}
+
+NAM_board_may_table_smenkom_3 = {
+	check_variable = { var = NAM_board_fulfilled^23 value = 0 compare = equals }
+	OR = {
+		has_idea = NAM_board_health_veresov
+		has_idea = NAM_board_min_reidbank_health
+	}
+}
+
+NAM_board_may_table_smenkom_4 = {
+	check_variable = { var = NAM_board_fulfilled^24 value = 0 compare = equals }
+	check_variable = { var = NAM_board_seat_count^5 value = 0 compare = greater_than }
+}
+
+NAM_board_may_table_smenkom_5 = {
+	check_variable = { var = NAM_board_fulfilled^25 value = 0 compare = equals }
+	has_idea = NAM_board_min_ferrant_education
+}
+
+NAM_board_may_table_reidbank_1 = {
+	check_variable = { var = NAM_board_fulfilled^26 value = 0 compare = equals }
+	AND = {
+		NOT = {
+			has_active_mission = NAM_board_bid_depots
+		}
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_lot_depots value = 0 compare = equals }
+				check_variable = { var = NAM_board_public_agenda^3 value = 0 compare = greater_than }
+			}
+		}
+	}
+}
+
+NAM_board_may_table_reidbank_2 = {
+	check_variable = { var = NAM_board_fulfilled^27 value = 0 compare = equals }
+	AND = {
+		NOT = {
+			check_variable = { var = NAM_board_stance^6 value = -1 compare = equals }
+		}
+		check_variable = { NAM_free_zone_slots < 3 }
+	}
+}
+
+NAM_board_may_table_reidbank_3 = {
+	check_variable = { var = NAM_board_fulfilled^28 value = 0 compare = equals }
+	OR = {
+		has_idea = NAM_board_premier_kornev
+		has_idea = NAM_board_min_loren_premier
+	}
+}
+
+NAM_board_may_table_reidbank_4 = {
+	check_variable = { var = NAM_board_fulfilled^29 value = 0 compare = equals }
+	has_idea = NAM_board_min_loren_premier
+}
+
+NAM_board_may_table_reidbank_5 = {
+	check_variable = { var = NAM_board_fulfilled^30 value = 0 compare = equals }
+	AND = {
+		has_variable = NAM_judas_karamyshev
+		NOT = {
+			has_completed_focus = NAM_board_posthumous_signature
+		}
+		check_variable = { var = NAM_judas_karamyshev value = 40 compare = greater_than_or_equals }
+	}
+}
+
+NAM_board_can_adopt_1 = {
+	NAM_board_operable = yes
+	check_variable = { var = NAM_board_resolution_count value = 2 compare = less_than }
+	check_variable = { var = NAM_board_motion^NAM_board_offered_1 value = 0 compare = equals }
+	OR = {
+		AND = {
+			check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+					NAM_board_may_table_loren_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+					NAM_board_may_table_loren_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+					NAM_board_may_table_loren_3 = yes
+					check_variable = { var = NAM_corp_capital value = 50 compare = greater_than_or_equals }
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+					NAM_board_may_table_loren_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+					NAM_board_may_table_loren_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+					NAM_board_may_table_ferrant_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+					NAM_board_may_table_ferrant_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+					NAM_board_may_table_ferrant_3 = yes
+					check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+					NAM_board_may_table_ferrant_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+					NAM_board_may_table_ferrant_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+					NAM_board_may_table_navis_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+					NAM_board_may_table_navis_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+					NAM_board_may_table_navis_3 = yes
+					check_variable = { var = NAM_corp_capital value = 45 compare = greater_than_or_equals }
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+					NAM_board_may_table_navis_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+					NAM_board_may_table_navis_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+					NAM_board_may_table_arktur_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+					NAM_board_may_table_arktur_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+					NAM_board_may_table_arktur_3 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+					NAM_board_may_table_arktur_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+					NAM_board_may_table_arktur_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+					NAM_board_may_table_smenkom_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+					NAM_board_may_table_smenkom_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+					NAM_board_may_table_smenkom_3 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+					NAM_board_may_table_smenkom_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+					NAM_board_may_table_smenkom_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 1 compare = equals }
+					NAM_board_may_table_reidbank_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 2 compare = equals }
+					NAM_board_may_table_reidbank_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 3 compare = equals }
+					NAM_board_may_table_reidbank_3 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 4 compare = equals }
+					NAM_board_may_table_reidbank_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_1 value = 5 compare = equals }
+					NAM_board_may_table_reidbank_5 = yes
+				}
+			}
+		}
+	}
+}
+
+NAM_board_can_adopt_2 = {
+	NAM_board_operable = yes
+	check_variable = { var = NAM_board_resolution_count value = 2 compare = less_than }
+	check_variable = { var = NAM_board_motion^NAM_board_offered_2 value = 0 compare = equals }
+	OR = {
+		AND = {
+			check_variable = { var = NAM_board_offered_2 value = 1 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+					NAM_board_may_table_loren_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+					NAM_board_may_table_loren_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+					NAM_board_may_table_loren_3 = yes
+					check_variable = { var = NAM_corp_capital value = 50 compare = greater_than_or_equals }
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+					NAM_board_may_table_loren_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+					NAM_board_may_table_loren_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_2 value = 2 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+					NAM_board_may_table_ferrant_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+					NAM_board_may_table_ferrant_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+					NAM_board_may_table_ferrant_3 = yes
+					check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+					NAM_board_may_table_ferrant_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+					NAM_board_may_table_ferrant_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_2 value = 3 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+					NAM_board_may_table_navis_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+					NAM_board_may_table_navis_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+					NAM_board_may_table_navis_3 = yes
+					check_variable = { var = NAM_corp_capital value = 45 compare = greater_than_or_equals }
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+					NAM_board_may_table_navis_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+					NAM_board_may_table_navis_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_2 value = 4 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+					NAM_board_may_table_arktur_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+					NAM_board_may_table_arktur_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+					NAM_board_may_table_arktur_3 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+					NAM_board_may_table_arktur_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+					NAM_board_may_table_arktur_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_2 value = 5 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+					NAM_board_may_table_smenkom_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+					NAM_board_may_table_smenkom_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+					NAM_board_may_table_smenkom_3 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+					NAM_board_may_table_smenkom_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+					NAM_board_may_table_smenkom_5 = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { var = NAM_board_offered_2 value = 6 compare = equals }
+			OR = {
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 1 compare = equals }
+					NAM_board_may_table_reidbank_1 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 2 compare = equals }
+					NAM_board_may_table_reidbank_2 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 3 compare = equals }
+					NAM_board_may_table_reidbank_3 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 4 compare = equals }
+					NAM_board_may_table_reidbank_4 = yes
+				}
+				AND = {
+					check_variable = { var = NAM_board_offer_motion_2 value = 5 compare = equals }
+					NAM_board_may_table_reidbank_5 = yes
+				}
+			}
+		}
+	}
+}
+
+NAM_board_can_adopt_both = {
+	NAM_board_can_adopt_1 = yes
+	NAM_board_can_adopt_2 = yes
+	check_variable = { var = NAM_board_resolution_count value = 0 compare = equals }
+	NAM_board_has_majority = yes
+	NOT = {
+		has_political_power < 50
+	}
+	check_variable = { var = NAM_board_last_double value = global.num_days compare = less_than_or_equals }
+	check_variable = { var = NAM_corp_capital value = NAM_board_joint_quote compare = greater_than_or_equals }
+}
+
+NAM_board_goal_loren = {
+	AND = {
+		NAM_board_operable = yes
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_motion^1 value = 1 compare = equals }
+				check_variable = { var = NAM_board_lot_depots value = 1 compare = equals }
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^1 value = 2 compare = equals }
+				AND = {
+					has_variable = NAM_judas_weber
+					check_variable = { var = NAM_judas_weber value = NAM_board_baseline^1 compare = less_than_or_equals }
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^1 value = 3 compare = equals }
+				AND = {
+					check_variable = { var = days_mission_timeout@NAM_board_resolution_loren value = 60 compare = less_than_or_equals }
+					NAM_board_product_blocked_1 = no
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^1 value = 4 compare = equals }
+				has_idea = NAM_board_min_loren_premier
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^1 value = 5 compare = equals }
+				NOT = {
+					has_idea = NAM_board_bank_nominee
+				}
+			}
+		}
+	}
+}
+
+NAM_board_goal_ferrant = {
+	AND = {
+		NAM_board_operable = yes
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_motion^2 value = 1 compare = equals }
+				check_variable = { var = NAM_board_lot_rail value = 2 compare = equals }
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^2 value = 2 compare = equals }
+				AND = {
+					check_variable = { var = days_mission_timeout@NAM_board_resolution_ferrant value = 30 compare = less_than_or_equals }
+					has_idea = NAM_board_ferrant_steel_monopoly
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^2 value = 4 compare = equals }
+				has_idea = NAM_board_min_ferrant_defense
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^2 value = 5 compare = equals }
+				NOT = {
+					has_idea = NAM_board_labor_nominee
+				}
+			}
+		}
+	}
+}
+
+NAM_board_goal_navis = {
+	AND = {
+		NAM_board_operable = yes
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_motion^3 value = 1 compare = equals }
+				check_variable = { var = NAM_board_lot_yards value = 3 compare = equals }
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^3 value = 2 compare = equals }
+				AND = {
+					has_variable = NAM_judas_karamyshev
+					check_variable = { var = NAM_judas_karamyshev value = NAM_board_baseline^3 compare = less_than_or_equals }
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^3 value = 3 compare = equals }
+				AND = {
+					check_variable = { var = days_mission_timeout@NAM_board_resolution_navis value = 60 compare = less_than_or_equals }
+					NAM_board_product_blocked_3 = no
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^3 value = 4 compare = equals }
+				has_idea = NAM_board_min_navis_intelligence
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^3 value = 5 compare = equals }
+				NOT = {
+					has_idea = NAM_board_min_arktur_defense
+				}
+			}
+		}
+	}
+}
+
+NAM_board_goal_arktur = {
+	AND = {
+		NAM_board_operable = yes
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_motion^4 value = 1 compare = equals }
+				check_variable = { var = NAM_board_lot_yards value = 4 compare = equals }
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^4 value = 2 compare = equals }
+				has_idea = NAM_board_min_arktur_defense
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^4 value = 3 compare = equals }
+				AND = {
+					has_variable = NAM_judas_weber
+					check_variable = { var = NAM_judas_weber value = NAM_board_baseline^4 compare = less_than_or_equals }
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^4 value = 4 compare = equals }
+				AND = {
+					check_variable = { var = days_mission_timeout@NAM_board_resolution_arktur value = 30 compare = less_than_or_equals }
+					has_idea = NAM_board_arktur_arms_monopoly
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^4 value = 5 compare = equals }
+				NOT = {
+					has_idea = NAM_board_min_navis_foreign
+				}
+			}
+		}
+	}
+}
+
+NAM_board_goal_smenkom = {
+	AND = {
+		NAM_board_operable = yes
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_motion^5 value = 1 compare = equals }
+				check_variable = { var = NAM_board_lot_rail value = 5 compare = equals }
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^5 value = 3 compare = equals }
+				has_idea = NAM_board_min_smenkom_health
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^5 value = 4 compare = equals }
+				AND = {
+					check_variable = { var = days_mission_timeout@NAM_board_resolution_smenkom value = 30 compare = less_than_or_equals }
+					has_idea = NAM_board_smenkom_closed_shop
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^5 value = 5 compare = equals }
+				NOT = {
+					has_idea = NAM_board_min_ferrant_education
+				}
+			}
+		}
+	}
+}
+
+NAM_board_goal_reidbank = {
+	AND = {
+		NAM_board_operable = yes
+		OR = {
+			AND = {
+				check_variable = { var = NAM_board_motion^6 value = 1 compare = equals }
+				check_variable = { var = NAM_board_lot_depots value = 6 compare = equals }
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^6 value = 2 compare = equals }
+				AND = {
+					check_variable = { var = days_mission_timeout@NAM_board_resolution_reidbank value = 30 compare = less_than_or_equals }
+					has_idea = NAM_board_reidbank_clearing
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^6 value = 3 compare = equals }
+				has_idea = NAM_board_min_reidbank_premier
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^6 value = 4 compare = equals }
+				NOT = {
+					has_idea = NAM_board_min_loren_premier
+				}
+			}
+			AND = {
+				check_variable = { var = NAM_board_motion^6 value = 5 compare = equals }
+				AND = {
+					has_variable = NAM_judas_karamyshev
+					check_variable = { var = NAM_judas_karamyshev value = NAM_board_baseline^6 compare = less_than_or_equals }
+				}
+			}
+		}
+	}
 }
 
 NAM_board_held_site = {
@@ -2111,42 +3131,42 @@ NAM_board_airport_site = {
 }
 
 NAM_insured_freight_route = {
+	NAM_independent_programmes_operable = yes
+	owns_state = 700
+	controls_state = 700
+}
+
+NAM_board_chairman_rules = {
 	OR = {
-		AND = {
-			NAM_independent_programmes_operable = yes
-			owns_state = 700
-			controls_state = 700
+		has_country_leader = {
+			character = NAM_Mark_Olshansky
+			ruling_only = yes
 		}
-		AND = {
-			NAM_board_operable = yes
-			has_completed_focus = NAM_board_company_docks
-			any_owned_state = { NAM_board_dock_site = yes }
+		has_country_leader = {
+			character = NAM_Aristarkh_Vyazemtsev
+			ruling_only = yes
+		}
+		has_country_leader = {
+			character = NAM_Taisiya_Valts
+			ruling_only = yes
+		}
+		has_country_leader = {
+			character = NAM_Saveliy_Kruze
+			ruling_only = yes
+		}
+		has_country_leader = {
+			character = NAM_Rodion_Kalyonov
+			ruling_only = yes
+		}
+		has_country_leader = {
+			character = NAM_Nazar_Guryev
+			ruling_only = yes
+		}
+		has_country_leader = {
+			character = NAM_Lidiya_Velyaminova
+			ruling_only = yes
 		}
 	}
-}
-
-NAM_board_minister_1 = {
-	has_idea = minister_NAM_Boris_Nar
-}
-
-NAM_board_minister_2 = {
-	has_idea = minister_NAM_Fedot_Mir
-}
-
-NAM_board_minister_3 = {
-	has_idea = minister_NAM_Pavel_Ordyntsev
-}
-
-NAM_board_minister_4 = {
-	has_idea = minister_NAM_Mara_Kluch
-}
-
-NAM_board_minister_5 = {
-	has_idea = NAM_board_labor_nominee
-}
-
-NAM_board_minister_6 = {
-	has_idea = NAM_board_bank_nominee
 }
 
 NAM_subject_identity_participant = {
@@ -2310,20 +3330,7 @@ NAM_corp_zone_operable = {
 }
 
 NAM_corp_charter_authorized = {
-	NAM_corp_open = yes
-	OR = {
-		AND = {
-			NOT = { has_country_flag = NAM_corp_takeover }
-			has_completed_focus = NAM_hum_free_zones
-		}
-		AND = {
-			NAM_board_operable = yes
-			OR = {
-				has_completed_focus = NAM_hum_free_zones
-				has_completed_focus = NAM_board_company_capital
-			}
-		}
-	}
+	NAM_board_operable = yes
 }
 
 # STATE field. Another independent country owns a lost Svetlogorsk field.
@@ -2600,7 +3607,6 @@ NAM_pirate_raid_ready = {
 
 # COUNTRY NAM. Another marine formation fits under NAM_marine_order_cap and
 # the absolute ceiling of three; orders close once the war of return begins.
-# The junta pays in loot, the humanists in corporate capital.
 NAM_marine_order_can_place = {
 	NAM_marine_orders_open = yes
 	check_variable = { var = NAM_marine_order_cap value = NAM_marine_orders_paid compare = greater_than }
@@ -3799,7 +4805,6 @@ NAM_nationalisation_unlocked = {
 		has_completed_focus = NAM_defeat_second_chapter
 		has_completed_focus = NAM_hum_federal_districts
 		has_completed_focus = NAM_rad_pacification
-		has_completed_focus = NAM_hum_board_districts
 	}
 }
 
@@ -4831,7 +5836,7 @@ NAM_neighbour_military_course_open = {
 	}
 }
 
-NAM_neighbour_alliance_offer_open = {
+NAM_neighbour_accord_available = {
 	NAM_neighbour_partner = yes
 	exists = yes
 	is_subject = no
@@ -4847,6 +5852,15 @@ NAM_neighbour_alliance_offer_open = {
 			is_faction_leader = yes
 			PREV = { is_in_faction_with = NAM }
 		}
+	}
+}
+
+NAM_neighbour_alliance_offer_open = {
+	NAM_neighbour_accord_available = yes
+	ADISCORD_south_coalition_target_war_clear = yes
+	OR = {
+		is_in_faction_with = NAM
+		has_global_flag = ADISCORD_south_final_resolved
 	}
 }
 

@@ -883,6 +883,18 @@ def check_ladder(
 
 
 CUSTOM_COST_DECISIONS = {
+    "NAM_judas_buy_notes": "NAM_judas_buy_notes_cost",
+    "NAM_judas_unseat_proxies": "NAM_judas_unseat_proxies_cost",
+    "NAM_judas_exchange_hiring": "NAM_judas_exchange_hiring_cost",
+    "NAM_judas_pay_moderates": "NAM_judas_pay_moderates_cost",
+    "NAM_judas_disperse_mourners": "NAM_judas_disperse_mourners_cost",
+    "NAM_judas_register_patents": "NAM_judas_register_patents_cost",
+    "NAM_judas_appoint_masters": "NAM_judas_appoint_masters_cost",
+    "NAM_judas_buy_mortgages": "NAM_judas_buy_mortgages_cost",
+    "NAM_judas_pay_captains": "NAM_judas_pay_captains_cost",
+    "NAM_judas_disarm_cutters": "NAM_judas_disarm_cutters_cost",
+    "NAM_board_lobby_company": "NAM_board_lobby_cost",
+    "NAM_board_award_rail_ferrant": "NAM_board_rail_cost",
     "NAM_wrk_fuel_shipment": "NAM_cost_wrk_fuel_shipment",
     "NAM_wrk_trade_concession": "NAM_cost_wrk_trade_concession",
     "NAM_counterinsurgency_sweep": "NAM_cost_counterinsurgency_sweep",
@@ -899,26 +911,6 @@ CUSTOM_COST_DECISIONS = {
     "NAM_corp_labour_contract": "NAM_cost_corp_labour",
     "NAM_corp_innovation_park": "NAM_cost_corp_park",
     "NAM_corp_buy_arms": "NAM_cost_corp_arms",
-    "NAM_order_marines_corp": "NAM_cost_order_marines_corp",
-}
-# Humanist decisions and the focus that opens each (M10).
-CORP_DECISION_FOCUSES = {
-    "NAM_corp_court_investors": "NAM_hum_open_doors",
-    "NAM_corp_sell_steel": "NAM_hum_steel_exchange",
-    "NAM_corp_innovation_park": "NAM_hum_innovation_parks",
-    "NAM_corp_labour_contract": "NAM_hum_labour_bureau",
-    "NAM_corp_buy_arms": "NAM_hum_credit_arms",
-    "NAM_order_marines_corp": "NAM_hum_marine_contracts",
-    "NAM_federal_council_session": "NAM_hum_union_council",
-    "NAM_radical_labour_camp": "NAM_rad_labour_camps",
-    "NAM_radical_strip_state": "NAM_rad_spoils_of_return",
-    "NAM_rad_terror_campaign": "NAM_rad_martial_law",
-    "NAM_rad_garrison_order": "NAM_rad_garrison_belt",
-    "NAM_hum_federal_treaty": "NAM_hum_federal_treaties",
-    "NAM_hum_reconstruction_fund": "NAM_hum_harbour_rebuilding",
-    "NAM_corp_board_arbitration": "NAM_board_constitution",
-    "NAM_corp_charter_renewal": "NAM_board_shareholders",
-    "NAM_corp_auction_district": "NAM_board_district_auction",
 }
 GREAT_WAR_TARGETS = ("EFL", "AZH", "RHM", "SDR", "KDR")
 # The war of return and the great war end only by full capitulation; none of
@@ -955,7 +947,7 @@ def check_exile_revolution(
     events: str,
     loc: str,
 ) -> None:
-    """M10: the island council, the two courses, the corporations and the great war."""
+    """The island council, corporate mobilisation and the great war."""
     flight = event_block(events, "ADISCORD_nam_resource_war.81")
     revolution = event_block(events, "ADISCORD_nam_resource_war.100")
     revolution_open = named_block(triggers, "NAM_exile_revolution_open")
@@ -969,53 +961,58 @@ def check_exile_revolution(
         and "has_global_flag = ADISCORD_nam_resource_war_island_exile" in revolution_open
         and "NAM_exile_revolution_open = yes" in named_block(revolution, "trigger")
         and "timeout_days" in revolution
-        and revolution.count("option = {") == 2,
+        and revolution.count("option = {") == 1,
         "every answer of the flight .81 must convene the island council .100, which needs no focus or decision",
     )
-    options = revolution.split("option = {")[1:]
+    takeover = named_block(effects, "NAM_corp_takeover")
+    opening = ("NAM_board_initialize = yes", "NAM_board_appoint_cabinet = yes",
+               "var = NAM_board_support^6 value = 66", "set_country_flag = NAM_board_opened", "NAM_board_recount = yes")
+    for source in (effects, on_actions, decisions, events):
+        check(
+            not re.search(r"set_country_flag\s*=\s*(?:\{\s*flag\s*=\s*)?NAM_exile_(?:humanist|radical)\b", source)
+            and not re.search(r"\btree\s*=\s*NAM_exile_(?:radical|humanist)_focus\b", source),
+            "exile scripts may grant and load only the corporate government",
+        )
     check(
-        len(options) == 2
-        and -1 < options[0].find("NAM_exile_choose_radical = yes") < options[0].find("tree = NAM_exile_radical_focus")
-        and -1 < options[1].find("NAM_exile_choose_humanist = yes") < options[1].find("tree = NAM_exile_humanist_focus")
-        and all("keep_completed = yes" in option for option in options),
-        "each council answer, the unattended junta first, must set its flag and then load its tree",
-    )
-    radical = named_block(effects, "NAM_exile_choose_radical")
-    humanist = named_block(effects, "NAM_exile_choose_humanist")
-    check(
-        "set_country_flag = NAM_exile_radical" in radical
-        and "character = NAM_Rostislav_Karamyshev" in radical
-        and "set_country_flag = NAM_exile_humanist" in humanist
-        and "character = NAM_Yaroslav_Weber" in humanist
-        and "ideology = humanism_ideology" in humanist
-        and "NAM_corp_initialize = yes" in humanist,
-        "each course must install its leader and set its flag",
+        "NAM_corp_takeover = yes" in named_block(revolution, "option")
+        and "NAM_corp_initialize = yes" in takeover
+        and all(step in takeover for step in opening)
+        and [takeover.index(step) for step in opening] == sorted(takeover.index(step) for step in opening)
+        and "NAM_rom_step_down = yes" in takeover,
+        "the island council must install the boards and fund them directly",
     )
     check(
-        "has_country_flag = NAM_exile_radical" in named_block(triggers, "NAM_piracy_open")
-        and "NAM_marine_orders_open = yes" in named_block(triggers, "NAM_marine_order_can_place")
+        "NAM_marine_orders_open = yes" in named_block(triggers, "NAM_marine_order_can_place")
         and "NAM_exile_return_programme_open = yes" in named_block(triggers, "NAM_marine_orders_open")
         and "NOT = { has_variable = NAM_marines_orders_delivered }" in named_block(triggers, "NAM_marine_orders_open")
         and "NAM_exile_return_programme_open = yes" in named_block(named_block(decisions, "NAM_exile_drill"), "visible")
         and "NAM_exile_drill_currency_ready = yes" in named_block(decisions, "NAM_exile_drill")
-        and "has_country_flag = NAM_exile_humanist" in named_block(effects, "NAM_exile_drill_refund")
-        and "has_country_flag = NAM_exile_humanist" in named_block(effects, "NAM_marine_orders_refund"),
-        "piracy is the junta's; drill and marines serve both courses and refund in the paid currency",
+        and all("NAM_corp_capital_add = yes" in named_block(effects, refund)
+                for refund in ("NAM_exile_drill_refund", "NAM_marine_orders_refund")),
+        "the corporate drill and marine orders must settle refunds in corporate capital",
     )
-    for decision_name, focus in CORP_DECISION_FOCUSES.items():
+    arbitration = named_block(decisions, "NAM_corp_board_arbitration")
+    check(
+        "NAM_board_operable = yes" in named_block(arbitration, "visible")
+        and "NAM_corp_case_can_be_heard = yes" in named_block(arbitration, "available")
+        and "NAM_corp_case_can_be_heard = yes" in named_block(arbitration, "complete_effect"),
+        "corporate arbitration must recheck jurisdiction over the disputed district before payment",
+    )
+    for name in ("NAM_corp_charter_renewal", "NAM_corp_auction_district"):
+        decision = named_block(decisions, name)
         check(
-            f"has_completed_focus = {focus}" in named_block(named_block(decisions, decision_name), "visible"),
-            f"{decision_name} must open with {focus}",
+            "NAM_corp_open = yes" in named_block(decision, "visible")
+            and "NAM_board_federal_subject = yes" in named_block(decision, "target_trigger")
+            and "NAM_board_operable = yes" in named_block(decision, "available"),
+            f"{name} must be exercisable by the operating board in a current federal district",
         )
     charter = named_block(decisions, "NAM_corp_charter_free_zone")
     rights = named_block(triggers, "NAM_corp_charter_authorized")
     check(
         "NAM_corp_charter_authorized = yes" in named_block(charter, "visible")
         and "NAM_corp_charter_authorized = yes" in named_block(charter, "complete_effect")
-        and "has_completed_focus = NAM_hum_free_zones" in rights
-        and "has_completed_focus = NAM_board_company_capital" in rights
         and "NAM_board_operable = yes" in rights,
-        "free-zone charters must accept humanist authorisation or the operating board's capital programme",
+        "free-zone charters must require a functioning board when offered and purchased",
     )
     monthly = named_block(effects, "NAM_corp_monthly")
     check(
@@ -1023,20 +1020,16 @@ def check_exile_revolution(
         and "every_country" not in monthly
         and "every_owned_state" not in monthly
         and "NAM_corp_count_zones = yes" in monthly
-        and "NAM_corp_queue_takeover = yes" in monthly
-        and "max = 100" in named_block(effects, "NAM_corp_influence_clamp")
-        and "NAM_corp_check_thresholds = yes" in named_block(effects, "NAM_corp_influence_clamp")
-        and all(
-            f"id = ADISCORD_nam_resource_war.{number}" in named_block(effects, name)
-            for number, name in (
-                (101, "NAM_corp_check_thresholds"),
-                (102, "NAM_corp_check_thresholds"),
-                (103, "NAM_corp_queue_takeover"),
-            )
-        ),
-        "the corporations must advance in on_monthly_NAM over the fixed islands and open their events",
+        and "NAM_corp_capital_add = yes" in monthly
+        and "NAM_corp_districts_monthly = yes" in monthly
+        and "start = 1" in named_block(monthly, "for_loop_effect")
+        and "end = 7" in named_block(monthly, "for_loop_effect")
+        and -1 < monthly.find("value = NAM_board_drift_company")
+        < monthly.find("NAM_board_support_change = yes")
+        < monthly.find("NAM_board_recount = yes")
+        < monthly.find("NAM_board_check_no_confidence = yes"),
+        "the board must settle income, drift six companies, recount, then check no confidence",
     )
-    takeover = named_block(effects, "NAM_corp_takeover")
     check(
         "set_cosmetic_tag = NAM_corporate_state" in takeover
         and "character = NAM_Mark_Olshansky" in takeover
@@ -1047,12 +1040,6 @@ def check_exile_revolution(
         and "keep_completed = yes" in takeover,
         "the takeover must install the board, the cosmetic tag, the island boards and the corporate tree",
     )
-    for event_id in ("101", "102"):
-        block = event_block(events, f"ADISCORD_nam_resource_war.{event_id}")
-        check(
-            block.count("option = {") == 3 and block.count("NAM_corp_close_event = yes") == 3,
-            f"corporate event .{event_id} needs three answers that each close the event",
-        )
     start = named_block(effects, "NAM_war_of_return_start")
     register = named_block(effects, "NAM_wor_register_target")
     coalition = named_block(effects, "NAM_wor_form_coalition")
@@ -1080,19 +1067,6 @@ def check_exile_revolution(
         and "NAM_war_of_return_close = yes" in named_block(effects, "NAM_war_of_return_resolve_defeat")
         and "NAM_war_of_return_resolve_defeat = yes" in read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"),
         "the exile war must settle Eflor and Azhar by the course, then open the consolidation",
-    )
-    # Each exile tree opens the drill and the humanist marine contracts.
-    drill_unlocked = named_block(triggers, "NAM_exile_drill_unlocked")
-    check(
-        all(
-            f"has_completed_focus = {focus}" in drill_unlocked
-            for focus in ("NAM_exile_general_staff", "NAM_hum_citizen_army", "NAM_hum_company_guard")
-        )
-        and "NAM_exile_drill_unlocked = yes" in named_block(named_block(decisions, "NAM_exile_drill"), "visible")
-        and "NAM_exile_drill_unlocked = yes" in named_block(categories, "NAM_exile_politics")
-        and "has_completed_focus = NAM_board_landing_contracts"
-        in named_block(named_block(decisions, "NAM_order_marines_corp"), "visible"),
-        "the drill and the humanist marines must open in the junta's, the humanists' and the boards' trees",
     )
     # Both wars end only by full capitulation. A closure outside the treaty is
     # the only ending that can leave Svetlogorye independent without a win, so
@@ -1212,7 +1186,7 @@ def check_exile_revolution(
     )
     # The corporate state's districts.
     check(
-        "NAM_corp_assign_district = yes" in named_block(effects, "NAM_corp_takeover")
+        "NAM_corp_init_owner_turn = yes" in takeover
         and "NAM_corp_districts_monthly = yes" in named_block(effects, "NAM_corp_monthly")
         and "id = ADISCORD_nam_resource_war.108" in named_block(effects, "NAM_corp_open_dispute")
         and all(
@@ -1263,7 +1237,6 @@ def check_exile_revolution(
         "NAM_free_zones",
         "NAM_southern_lands",
         "ADISCORD_nam_resource_war.100.d",
-        "ADISCORD_nam_resource_war.103.d",
         "ADISCORD_nam_resource_war.60.d_exile",
         "ADISCORD_nam_resource_war.105.d",
         "ADISCORD_nam_resource_war.107.d_won_federal",
@@ -1297,9 +1270,8 @@ def check_colony_and_exile(
 ) -> None:
     """Colony phase, the active underground, the flight to the islands and piracy."""
     check(
-        "visible = { NAM_colony_phase = yes }" in named_block(categories, "NAM_colony")
-        and has_script_fragment(named_block(categories, "NAM_piracy"),
-                                "visible = { NAM_piracy_open = yes }")
+        "NAM_colony_phase = yes" in named_block(named_block(categories, "NAM_colony"), "visible")
+        and "NAM_piracy_open = yes" in named_block(named_block(categories, "NAM_piracy"), "visible")
         and has_script_fragment(named_block(triggers, "NAM_colony_phase"),
                                 "NOT = { custom_trigger_tooltip = { tooltip = NAM_metropolitan_rule_ended_tt has_country_flag = NAM_center_vanished } }"),
         "colonial programmes must close with the centre; sea raids open only in radical exile",
@@ -1308,8 +1280,9 @@ def check_colony_and_exile(
     check(
         all(
             f"{call} = yes" in monthly
-            for call in ("NAM_colony_monthly", "NAM_underground_monthly", "NAM_pirate_monthly")
+            for call in ("NAM_colony_monthly", "NAM_underground_monthly")
         )
+        and "NAM_rad_collect_kadir_tolls" not in monthly and "NAM_pirate_monthly" not in monthly
         and "NAM_underground_monthly" not in named_block(effects, "NAM_ladder_monthly")
         and all(
             "every_country" not in named_block(effects, name)
@@ -1317,10 +1290,9 @@ def check_colony_and_exile(
                 "NAM_colony_monthly",
                 "NAM_underground_monthly",
                 "NAM_underground_sabotage_roll",
-                "NAM_pirate_monthly",
             )
         ),
-        "colony income, the underground and piracy must run in on_monthly_NAM without world scans",
+        "only active island and underground programmes may run in on_monthly_NAM, without world scans",
     )
     groups_init = named_block(effects, "NAM_groups_initialize")
     check(
@@ -1418,9 +1390,9 @@ def check_colony_and_exile(
     check(
         all(f"{state} = {{ NAM_rw_exile_scorch_state = yes }}" in exile for state in (67, 688, 689, 690, 719, 700))
         and "NAM_rw_exile_land_remnants" not in effects
-        and "NAM_pirate_initialize = yes" in exile
+        and "NAM_exile_prepare_landing = yes" in exile
         and "id = ADISCORD_nam_resource_war.81" in exile,
-        "the exile must burn the ceded mainland, open piracy and report the flight without spawning remnants",
+        "the exile must burn the ceded mainland, prepare the landing and report the flight without spawning remnants",
     )
     start = named_block(effects, "NAM_war_of_return_start")
     landing = named_block(effects, "NAM_wor_revenge_landing")
@@ -2584,7 +2556,7 @@ def main() -> int:
     )
     check(
         has_script_fragment(scenario_debug_category, "allowed = { always = yes }")
-        and has_script_fragment(scenario_debug_category, "visible = { is_debug = yes }"),
+        and "is_debug = yes" in named_block(scenario_debug_category, "visible"),
         "shared scenario debug category must allow country switching and remain debug-only",
     )
     check(

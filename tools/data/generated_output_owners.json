@@ -72,7 +72,8 @@
     "superevent_music",
     "superevent_art",
     "superevent_animation",
-    "nam_subject_flags"
+    "nam_subject_flags",
+    "debug_idea_catalogue"
   ],
   "families": [
     {
@@ -1012,7 +1013,8 @@
         "history/states/5[0-4]?-outer-*.txt",
         "history/states/550-outer-*.txt",
         "localisation/russian/state_names_l_russian.yml",
-        "map/buildings.txt"
+        "map/buildings.txt",
+        "localisation/russian/victory_points_l_russian.yml"
       ],
       "source_inputs": [
         "tools/data/adiscord_western_states.json",
@@ -1021,7 +1023,8 @@
         "map/definition.csv",
         "map/provinces.bmp",
         "map/heightmap.bmp",
-        "map/adjacencies.csv"
+        "map/adjacencies.csv",
+        "tools/data/adiscord_southern_cities.json"
       ],
       "check_command": [
         "{python}",
@@ -1038,7 +1041,7 @@
       ],
       "may_delete_outputs": true,
       "ownership_mode": "layered",
-      "overlap_explanation": "Outer state shells are later populated by northern and exclusion passes; their generated name block shares the canonical state localisation, and the builder invokes the shared building synchronizer after repartitioning."
+      "overlap_explanation": "Outer state shells are later populated by northern and exclusion passes; their generated name block shares the canonical state localisation, and the builder invokes the shared building synchronizer after repartitioning. A western state with a settlement entry also receives its population, buildings and deposits here, and the names of its island towns go into the shared victory-point localisation."
     },
     {
       "id": "remainder_states",
@@ -1169,7 +1172,9 @@
         "map/provinces.bmp",
         "map/heightmap.bmp",
         "map/adjacencies.csv",
-        "map/unitstacks.txt"
+        "map/unitstacks.txt",
+        "tools/builders/build_adiscord_new_states.py",
+        "tools/data/adiscord_southern_cities.json"
       ],
       "check_command": [
         "{python}",
@@ -1853,7 +1858,8 @@
         "tools/builders/build_adiscord_event_ui_assets.py",
         "tools/lib/adiscord_ui_surfaces.py",
         "tools/assets/source/production_gui/production_surface_source.png",
-        "tools/assets/source/event_pictures/event_adiscord_ui_test_source.png"
+        "tools/assets/source/event_pictures/event_adiscord_ui_test_source.png",
+        "tools/assets/source/news_picture.psd"
       ],
       "check_command": [
         "{python}",
@@ -1896,6 +1902,16 @@
         "gfx/event_pictures/standard/country/freighter_docking.png",
         "gfx/event_pictures/standard/country/ledger_handover.png",
         "gfx/event_pictures/standard/country/mountain_militia_assembly.png",
+        "gfx/event_pictures/standard/country/nam_arktur_arsenal.png",
+        "gfx/event_pictures/standard/country/nam_board_session.png",
+        "gfx/event_pictures/standard/country/nam_chair_handover.png",
+        "gfx/event_pictures/standard/country/nam_ferrant_steel.png",
+        "gfx/event_pictures/standard/country/nam_karamyshev_officers.png",
+        "gfx/event_pictures/standard/country/nam_loren_oil.png",
+        "gfx/event_pictures/standard/country/nam_navis_shipping.png",
+        "gfx/event_pictures/standard/country/nam_reidbank_credit.png",
+        "gfx/event_pictures/standard/country/nam_smenkom_exchange.png",
+        "gfx/event_pictures/standard/country/nam_weber_committees.png",
         "gfx/event_pictures/standard/country/pier_evacuation.png",
         "gfx/event_pictures/standard/country/pipeline_welding.png",
         "gfx/event_pictures/standard/country/port_machinery_unloading.png",
@@ -1912,6 +1928,7 @@
         "gfx/event_pictures/standard/news/vorkerland_world_empire_news.png",
         "tools/builders/build_adiscord_event_pictures.py",
         "tools/builders/build_adiscord_event_ui_assets.py",
+        "tools/assets/source/news_picture.psd",
         "tools/lib/adiscord_ui_surfaces.py",
         "tools/assets/source/event_pictures/*.png",
         "tools/assets/source/event_pictures/*.dds",
@@ -3270,7 +3287,8 @@
         "map/rivers.bmp",
         "map/world_normal.bmp",
         "map/terrain/colormap_rgb_cityemissivemask_a.dds",
-        "map/unitstacks.txt"
+        "map/unitstacks.txt",
+        "map/adjacencies.csv"
       ],
       "source_inputs": [
         "map/railways.txt",
@@ -3289,7 +3307,10 @@
         "map/heightmap.bmp",
         "map/rivers.bmp",
         "map/world_normal.bmp",
-        "map/unitstacks.txt"
+        "map/unitstacks.txt",
+        "map/adjacencies.csv",
+        "map/buildings.txt",
+        "history/states/*.txt"
       ],
       "check_command": [
         "{python}",
@@ -3306,7 +3327,7 @@
       ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, definition.csv terrain field 6 of every Arab city and urban-growth province (desert_city, hill_city or urban by the surroundings of its cluster) and of the Svetlogorye city provinces listed in tools/lib/city_terrains.py, plus the explicit city and surrounding rural-sector province pixels, bounded province-corner repairs, the 4287-6099 and eight Yubor contact widenings, the Ishait 6-16372-51 frontage with the 6-48 contact removed, the Zshat 10926 connection, and the river-bank repairs in tools/data/adiscord_river_bank_repairs.json that give every land part a river cut off to the province on its own bank or move the river course onto the province border; owns surface samples and unit-anchor reconciliation for those exact province repairs, and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail; Nudge splits inside that mask keep its surface while their terrain stays authored. Owns city rasters for the explicit southern urban-growth provinces, the northern hand-painted urban provinces listed in URBAN_GROWTH, unit anchors for the southern Nudge splits 16864-16894 and their donors, and railway reroutes through those splits. Owns the Shahrabad house towns 16895-16899 and the southern regional towns 16902-16929, including their urban rasters, native unit anchors and their parents' border slots. Owns the southern rural splits 16930-17058, their inherited terrain and continent at creation, and the native unit anchors along their borders. In that anchor scope, the provinces above with their neighbours, it rebuilds the native unit-anchor set of a land province whose standing anchor lies outside its pixels, on a border or away from its interior centre, of a sea province whose standing anchor lies outside its pixels, and the moving slots of a province whose moving rows do not lead to their neighbours in the engine order; the Khan district 16531 is included, and slot 0 feeds the ambient town audio and the strategic-region weather positions, so those owners are reapplied afterwards. Owns the DXT5 night light mask derived from the map-wide dry urban footprint. Preserves IVN terrain and compatible snow output."
+      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, definition.csv terrain field 6 of every Arab city and urban-growth province (desert_city, hill_city or urban by the surroundings of its cluster) and of the Svetlogorye city provinces listed in tools/lib/city_terrains.py, plus the explicit city and surrounding rural-sector province pixels, bounded province-corner repairs, the 4287-6099 and eight Yubor contact widenings, the Ishait 6-16372-51 frontage with the 6-48 contact removed, the Zshat 10926 connection, and the river-bank repairs in tools/data/adiscord_river_bank_repairs.json that give every land part a river cut off to the province on its own bank or move the river course onto the province border; owns surface samples and unit-anchor reconciliation for those exact province repairs, and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail; Nudge splits inside that mask keep its surface while their terrain stays authored. Owns city rasters for the explicit southern urban-growth provinces, the northern hand-painted urban provinces listed in URBAN_GROWTH, unit anchors for the southern Nudge splits 16864-16894 and their donors, and railway reroutes through those splits. Owns the Shahrabad house towns 16895-16899 and the southern regional towns 16902-16929, including their urban rasters, native unit anchors and their parents' border slots. Owns the southern rural splits 16930-17058, their inherited terrain and continent at creation, and the native unit anchors along their borders. In that anchor scope, the provinces above with their neighbours, it rebuilds the native unit-anchor set of a land province whose standing anchor lies outside its pixels, on a border or away from its interior centre, of a sea province whose standing anchor lies outside its pixels, and the moving slots of a province whose moving rows do not lead to their neighbours in the engine order; the Khan district 16531 is included, and slot 0 feeds the ambient town audio and the strategic-region weather positions, so those owners are reapplied afterwards. Owns the DXT5 night light mask derived from the dry urban footprint outside the starting EXZ states. Preserves IVN terrain and compatible snow output. It also owns the Svetlogorye archipelago (states 225-231): relief, normals, trees, the province-by-province graphical and definition.csv terrain of its land, the town cores in cities.bmp, the islands raised from tools/data/adiscord_southern_cities.json archipelago_islands with their provinces, and the map/adjacencies.csv rows commented \"nam archipelago island bridge\". For the neighbouring island states it stamps the island_districts table of the same file (districts and urban town provinces of state 643), draws the island_rivers of tools/data/adiscord_river_bank_repairs.json and writes the map/adjacencies.csv rows commented \"ulven league strait bridge\"."
     },
     {
       "id": "ivn_geography",
@@ -3898,6 +3919,34 @@
         "tools.builders.build_adiscord_nam_subject_flags",
         "--apply"
       ]
+    },
+    {
+      "id": "debug_idea_catalogue",
+      "owner_module": "tools.builders.build_adiscord_idea_reset",
+      "source_inputs": [
+        "tools/builders/build_adiscord_idea_reset.py",
+        "tools/validators/validate_adiscord_economy_ai.py",
+        "common/ideas/*.txt",
+        "common/characters/NAM.txt"
+      ],
+      "output_globs": [
+        "common/scripted_effects/ADISCORD_debug_idea_catalogue.txt"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_idea_reset"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_idea_reset",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
     }
   ]
 }

@@ -492,7 +492,6 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
                 'NAM_defeat_second_chapter': 'focus_trees/NAM/defeated/focuses.txt',
                 'NAM_hum_federal_districts': 'focus_trees/NAM/exile_humanist/focuses.txt',
                 'NAM_rad_pacification': 'focus_trees/NAM/exile_radical/focuses.txt',
-                'NAM_hum_board_districts': 'focus_trees/NAM/exile_corporate/focuses.txt',
             },
             'localisation': 'ADISCORD_nam_resource_war',
             'keys': (

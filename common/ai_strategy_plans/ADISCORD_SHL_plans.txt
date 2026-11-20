@@ -84,6 +84,7 @@ SHL_furnaces_plan = {
 		SHL_damir_road
 		SHL_damir_customs
 		SHL_eflor_accord
+		SHL_azhar_legation
 		SHL_fuel_ledger
 		SHL_own_distillery
 		SHL_northern_road
@@ -282,6 +283,7 @@ SHL_houses_plan = {
 		SHL_damir_road
 		SHL_damir_customs
 		SHL_eflor_accord
+		SHL_azhar_legation
 		SHL_fuel_ledger
 		SHL_own_distillery
 		SHL_northern_road
@@ -366,6 +368,7 @@ SHL_cities_plan = {
 		SHL_damir_road
 		SHL_damir_customs
 		SHL_eflor_accord
+		SHL_azhar_legation
 		SHL_fuel_ledger
 		SHL_own_distillery
 		SHL_northern_road
@@ -451,6 +454,7 @@ SHL_directorate_plan = {
 		SHL_damir_road
 		SHL_damir_customs
 		SHL_eflor_accord
+		SHL_azhar_legation
 		SHL_fuel_ledger
 		SHL_own_distillery
 		SHL_northern_road
@@ -535,6 +539,7 @@ SHL_regency_plan = {
 		SHL_damir_road
 		SHL_damir_customs
 		SHL_eflor_accord
+		SHL_azhar_legation
 		SHL_fuel_ledger
 		SHL_own_distillery
 		SHL_northern_road
@@ -617,6 +622,7 @@ SHL_commune_plan = {
 		SHL_damir_road
 		SHL_damir_customs
 		SHL_eflor_accord
+		SHL_azhar_legation
 		SHL_fuel_ledger
 		SHL_own_distillery
 		SHL_northern_road

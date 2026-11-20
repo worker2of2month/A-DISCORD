@@ -306,17 +306,21 @@ def audit_buildings(root: Path = ROOT) -> tuple[list[str], list[BuildingMismatch
 def mountain_building_heights(
     root: Path, lines: list[str]
 ) -> tuple[list[str], list[int]]:
-    from tools.builders.build_adiscord_coastal_geography import RELIEF_SURFACE_PROVINCES
+    from tools.builders.build_adiscord_coastal_geography import (
+        ARCHIPELAGO_PROVINCES,
+        RELIEF_SURFACE_PROVINCES,
+    )
     from tools.builders.build_adiscord_ivn_geography import (
         ISLAND_PROVINCE_TERRAIN,
         RELIEF_STATE_IDS,
         relief_province_ids,
     )
 
-    # The coastal, IVN mainland and island reliefs are generated, so their
-    # models follow the surface.
+    # The coastal, archipelago, IVN mainland and island reliefs are generated,
+    # so their models follow the surface.
     surface_provinces = (
         RELIEF_SURFACE_PROVINCES
+        | ARCHIPELAGO_PROVINCES
         | relief_province_ids(RELIEF_STATE_IDS)
         | frozenset(ISLAND_PROVINCE_TERRAIN)
     )

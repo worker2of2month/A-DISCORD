@@ -6,14 +6,19 @@ The four finished plates in `gfx/event_pictures/standard/news/` are
 and `vorkerland_world_empire_news.png`. Edit these plates in place. The builder
 writes their `*_print.png` game textures and `interface/ADISCORD_event_art.gfx`.
 
-Finished COUNTRY plates supplied at 507 x 184 are also edited in place in
-`gfx/event_pictures/standard/country/` and listed in the builder's
-`FINISHED_COUNTRY`; the builder only re-encodes them and registers their sprites.
+Native-size COUNTRY plates in `FINISHED_COUNTRY` are edited at their original
+paths in `gfx/event_pictures/standard/country/`. Plates with their own print
+texture are used directly. For the others, the builder exports a separate
+`*_print.png` and binds it to the same event sprite.
 
 - COUNTRY: 507 x 184 pixels, matching the approved military-headquarters sample.
 - NEWS uses 396 x 153 pixels for photographs. Finished 499 x 176 plates scale
   proportionally to 396 x 140 so the full composition fits the newspaper.
-- Cropping preserves aspect ratio. No stretching, decorative overlays, or tinting.
+- Clean photographs receive the `event_news_pic_overlay` layer from
+  `tools/assets/source/news_picture.psd` after cropping. The layer uses its
+  original position, opacity and transparent canvas edge. The preprinted
+  source lists cover photographs which already carry print lines; applying
+  the layer again would darken them. All finished NEWS plates carry the print.
 - The old explosion's embedded frame is cropped out; its source stays untouched.
 - Files and sprites describe the scene. The NEWS prefix distinguishes its smaller format.
 - Event scripts own scene assignments; the builder never rewrites gameplay.
@@ -72,6 +77,25 @@ The supplied COUNTRY illustrations retain their original 507 x 184 pixels:
 | `school_classroom.png` | `ADISCORD_rus_campaign.26`, `ADISCORD_rus_campaign.27` |
 
 ## Generated photographs: exact prompts
+
+### NAM corporate board plates
+
+Use a muted 1930s-40s documentary photograph in the style of `ledger_handover.png`, with fine horizontal scanlines. Export as an opaque 507x184 RGB PNG. No readable markings, real insignia, borders or watermarks. Use the named character's existing NAM portrait as the identity reference.
+
+For the six company scenes, place the head in the final image's right third. Limit the photograph to the right 338 pixels and use the left 169 pixels for the flat company field. Centre the matching native 50x36 frame from `gfx/interface/NAM_basin/board_company_marks.png`; do not generate a mark. Frame order and field colours: Loren oxblood, Ferrant steel blue-grey, Navis dark teal, Arktur dark sand-khaki, Smenkom warm brown, Reidbank bottle green.
+
+| Scene | Composition prompt |
+| --- | --- |
+| `nam_board_loren` | Aristarkh Vyazemtsev in a dark frock coat and oxblood waistcoat stands by a tall window in a panelled office. Island tank farms and an oil derrick show through the glass against orange dusk. |
+| `nam_board_ferrant` | Taisiya Valts in steel-grey workwear and wire glasses overlooks a glowing billet and workers from a gantry on the right. For the composited plate, crop `nam_ferrant_steel.png` without altering it. |
+| `nam_board_navis` | Saveliy Kruze in dark navy wool stands on a wet quay at night. Moored coasters and cargo nets recede into teal harbour light. |
+| `nam_board_arktur` | Rodion Kalyonov in a plain khaki stand-collar tunic stands between stacked rifle crates in an arsenal shed. Guards inspect crate markings from an angle that keeps them unreadable. |
+| `nam_board_smenkom` | Nazar Guryev in a tight brown suit and loosened amber tie leans on the hiring counter. Workers queue with caps in hand under amber lamps. |
+| `nam_board_reidbank` | Lidiya Velyaminova with a starched white collar stands at a green-baize desk before an open vault door. Clerks carry ledgers past marble columns. |
+| `nam_board_session` | View the long council table from its foot. Six delegations in subdued house colours sit along its sides, with the high-backed seat at the far end. Every face is small and indistinct. |
+| `nam_board_chair_falls` | In the same hall, the empty high-backed chair is pulled out. A man walks away in backlight while another person's hand rests on the chair back. No identifiable faces. |
+| `nam_judas_committees` | Dockers vote by raising their hands in a warehouse among cranes and bales. Yaroslav Weber speaks from a crate at mid-distance. |
+| `nam_judas_officers` | Officers in dark greatcoats sit around a wardroom table at a patrol-boat base. Rostislav Karamyshev sits at the head; a grey cutter is visible through the porthole. |
 
 ### `parliament_chamber.png`
 

@@ -41,7 +41,7 @@ class RuntimeCompatibilityTests(unittest.TestCase):
              "NAM_bw_line_building", "NAM_bw_line_none"],
         )
 
-    def test_weber_starts_dormant_and_both_routes_activate_his_commander_role(self):
+    def test_weber_starts_dormant_and_amnesty_activates_his_commander_role(self):
         from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
 
         history = entries("history/countries/NAM - NamestnikLand.txt")
@@ -53,8 +53,8 @@ class RuntimeCompatibilityTests(unittest.TestCase):
         dormant = block(characters, "NAM_Yaroslav_Weber")
         self.assertFalse({"corps_commander", "country_leader"} & {item.key for item in dormant})
         effects = entries("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
-        for route in ("NAM_weber_amnesty", "NAM_exile_choose_humanist"):
-            self.assertEqual(scalar(block(effects, route), "NAM_activate_weber_commander"), "yes")
+        self.assertEqual(scalar(block(effects, "NAM_weber_amnesty"), "NAM_activate_weber_commander"), "yes")
+        self.assertNotIn("NAM_activate_weber_commander", {item.key for item in block(effects, "NAM_corp_takeover")})
         activation = block(block(effects, "NAM_activate_weber_commander"), "if")
         guard = block(block(activation, "limit"), "NAM_Yaroslav_Weber")
         self.assertEqual(scalar(guard, "is_unit_leader"), "no")
@@ -69,6 +69,34 @@ class RuntimeCompatibilityTests(unittest.TestCase):
         for token in ("ADISCORD_interceptor_archetype", "ADISCORD_strike_drone_archetype",
                       "transport_plane_equipment", "ADISCORD_marine_infantry", "train_equipment"):
             self.assertEqual(tokens.count(token), 1)
+
+    def test_board_chairman_is_recruited_before_his_promotion_on_the_island(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar, walk
+
+        history = entries("history/countries/NAM - NamestnikLand.txt")
+        effects = entries("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
+        takeover = block(effects, "NAM_corp_takeover")
+        opening, = (row.value for row in takeover if row.key == "if" and
+                    any(child.key == "add_country_leader_role" for child in row.value))
+        self.assertEqual(scalar(block(block(opening, "limit"), "NOT"), "has_country_flag"), "NAM_board_opened")
+        roles = {scalar(row.value, "character"): row.value for row in opening if row.key == "add_country_leader_role"}
+        self.assertEqual(sum(row.key == "add_country_leader_role" for row in opening), 7)
+        promotion = roles.pop("NAM_Mark_Olshansky")
+        characters = block(entries("common/characters/NAM.txt"), "characters")
+        self.assertCountEqual(roles, ["NAM_Aristarkh_Vyazemtsev", "NAM_Taisiya_Valts", "NAM_Saveliy_Kruze",
+                                      "NAM_Rodion_Kalyonov", "NAM_Nazar_Guryev", "NAM_Lidiya_Velyaminova"])
+        for head, role in roles.items():
+            self.assertFalse(any(row.key == "promote_leader" for row in role))
+            self.assertFalse(any(row.key == "country_leader" for row in block(characters, head)))
+            self.assertEqual(sum(e.key == "recruit_character" and e.value == head for e in history), 1)
+        install = list(walk(block(effects, "NAM_board_install_chairman")))
+        self.assertFalse({"remove_country_leader_role", "retire_character", "add_country_leader_role"} & {e.key for e in install})
+        self.assertCountEqual([scalar(e.value, "character") for e in install if e.key == "promote_character"],
+                              ["NAM_Mark_Olshansky", *roles])
+        chairman = scalar(promotion, "character")
+        self.assertEqual(chairman, "NAM_Mark_Olshansky")
+        self.assertEqual(sum(row.key == "recruit_character" and row.value == chairman for row in history), 1)
+        self.assertEqual(scalar(promotion, "promote_leader"), "yes")
 
     def test_port_contract_texture_and_shine_resolve_to_the_same_asset(self):
         from tools.tests.test_adiscord_stp_preparation import block, entries, scalar

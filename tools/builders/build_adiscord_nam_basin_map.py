@@ -148,6 +148,69 @@ def map_images() -> tuple[dict[str, Image.Image], dict[int, dict]]:
     return images, geometry
 
 
+def board_icon(glyph: str) -> Image.Image:
+    icon = Image.new("RGBA", (28, 28))
+    draw = ImageDraw.Draw(icon)
+    ink, paper, brass = "#171e20", "#ded0a6", "#dfb272"
+    if glyph in ("trust", "support", "boycott", "resolution"):
+        draw.polygon([(3, 3), (18, 3), (24, 8), (24, 24), (3, 24)], fill=paper, outline=ink, width=2)
+        draw.line([(5, 22), (5, 5), (17, 5)], fill="#f4e6ba", width=2)
+        draw.line((8, 9, 18, 9), fill="#77664c", width=2)
+        if glyph in ("trust", "resolution"):
+            draw.polygon([(15, 17), (24, 17), (24, 27), (20, 24), (15, 27)], fill="#843b30", outline=ink)
+            draw.ellipse((13, 11, 26, 24), fill="#9a4533", outline=ink, width=2)
+            draw.ellipse((16, 14, 23, 21), outline="#e99368", width=2)
+        else:
+            strokes = [[(8, 15), (13, 20), (23, 11)]] if glyph == "support" else [[(8, 11), (21, 21)], [(21, 11), (8, 21)]]
+            for stroke in strokes:
+                draw.line(stroke, fill=ink, width=6, joint="curve")
+            for stroke in strokes:
+                draw.line(stroke, fill="#a4d89d" if glyph == "support" else "#ee8166", width=3, joint="curve")
+    elif glyph == "slot":
+        draw.rounded_rectangle((2, 15, 19, 26), radius=3, fill="#54777d", outline=ink, width=2)
+        draw.rectangle((3, 14, 19, 17), fill="#a8c1bf", outline=ink)
+        draw.polygon([(10, 20), (14, 8), (25, 1), (23, 11), (17, 16)], fill=paper, outline=ink)
+        draw.line((11, 19, 22, 6), fill="#97794c", width=2)
+    elif glyph == "committees":
+        hook = [(24, 4), (18, 10), (16, 19), (12, 24), (7, 24), (3, 20), (4, 16), (7, 15)]
+        draw.line(hook, fill=ink, width=8, joint="curve")
+        draw.line(hook, fill="#b9ced1", width=4, joint="curve")
+        draw.line((18, 10, 24, 4), fill=brass, width=5)
+    elif glyph == "officers":
+        draw.polygon([(1, 12), (5, 7), (13, 4), (23, 7), (27, 12), (22, 17), (5, 17)], fill="#dddccc", outline=ink, width=2)
+        draw.polygon([(6, 15), (23, 15), (26, 20), (21, 23), (9, 23), (4, 20)], fill="#415f6c", outline=ink, width=2)
+        draw.ellipse((12, 8, 16, 12), outline="#745839", width=2)
+        draw.line((14, 12, 14, 19), fill=brass, width=2)
+        draw.arc((8, 11, 20, 20), 7, 173, fill=brass, width=2)
+    elif glyph == "waiting":
+        draw.polygon([(5, 4), (22, 4), (20, 11), (16, 14), (20, 17), (22, 24), (5, 24), (8, 17), (12, 14), (8, 11)], fill="#6c5138", outline=ink, width=2)
+        draw.polygon([(9, 7), (19, 7), (14, 13)], fill="#f2ca85")
+        draw.polygon([(8, 22), (20, 22), (14, 17)], fill="#d9a052")
+        for height in (3, 23):
+            draw.rectangle((5, height, 22, height + 2), fill=brass, outline=ink)
+    elif glyph == "countdown":
+        draw.ellipse((2, 3, 24, 25), fill="#55482f", outline=ink, width=2)
+        draw.ellipse((4, 5, 22, 23), outline=brass, width=2)
+        draw.line([(12, 8), (12, 14), (16, 16)], fill="#f1dfb0", width=2)
+        draw.rectangle((19, 9, 25, 24), fill=ink)
+        draw.rectangle((21, 10, 24, 17), fill="#ffc665")
+        draw.rectangle((21, 20, 24, 23), fill="#ffc665")
+    else:
+        raise ValueError(f"Unknown board icon: {glyph}")
+    return icon
+
+
+def board_texticons() -> dict[str, Image.Image]:
+    images = {}
+    for prefix, glyph in (("board", "trust"), ("board", "slot"), ("judas", "committees"), ("judas", "officers")):
+        images[f"{prefix}_{glyph}_texticon.png"] = board_icon(glyph).resize((20, 20), Image.Resampling.LANCZOS)
+    strip = Image.new("RGBA", (80, 20))
+    for index, glyph in enumerate(("support", "waiting", "countdown", "boycott")):
+        strip.paste(board_icon(glyph).resize((20, 20), Image.Resampling.LANCZOS), (20 * index, 0))
+    images["board_stance_texticon.png"] = strip
+    return images
+
+
 def ui_images() -> dict[str, Image.Image]:
     images = {}
     for name, fill, edge in (("panel.png", (23, 30, 32), (100, 94, 73)),
@@ -212,6 +275,7 @@ def ui_images() -> dict[str, Image.Image]:
         tile = Image.new("RGBA", (size, size))
         tile.alpha_composite(icon, ((size - icon.width) // 2, (size - icon.height) // 2))
         images[f"{name}_texticon.png"] = tile
+    images.update(board_texticons())
     return images
 
 
@@ -251,7 +315,7 @@ def gfx_block(images: dict[str, Image.Image]) -> str:
                 sprite_name = f"GFX_NAM_bw_{name}"
             lines.extend(("\tspriteType = {", f'\t\tname = "{sprite_name}"',
                           f'\t\ttexturefile = "{(OUT / filename).as_posix()}"',
-                          f'\t\tnoOfFrames = {4 if name.startswith("state_") else 1}'))
+                          f'\t\tnoOfFrames = {4 if name.startswith("state_") or name == "board_stance_texticon" else 1}'))
             if name == "marker":
                 lines.append('\t\teffectFile = "gfx/FX/buttonstate.lua"')
             if sprite_name.endswith("_texticon"):

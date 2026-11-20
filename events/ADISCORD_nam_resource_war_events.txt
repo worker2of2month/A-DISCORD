@@ -1,5 +1,510 @@
 add_namespace = ADISCORD_nam_resource_war
 
+country_event = {
+	id = ADISCORD_nam_resource_war.430
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_offered_1 value = 1 compare = equals }
+			}
+			country_event = { id = ADISCORD_nam_resource_war.431 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_board_offered_1 value = 2 compare = equals }
+			}
+			country_event = { id = ADISCORD_nam_resource_war.432 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_board_offered_1 value = 3 compare = equals }
+			}
+			country_event = { id = ADISCORD_nam_resource_war.433 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_board_offered_1 value = 4 compare = equals }
+			}
+			country_event = { id = ADISCORD_nam_resource_war.434 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_board_offered_1 value = 5 compare = equals }
+			}
+			country_event = { id = ADISCORD_nam_resource_war.435 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_board_offered_1 value = 6 compare = equals }
+			}
+			country_event = { id = ADISCORD_nam_resource_war.436 }
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.431
+	title = NAM_board_session
+	desc = NAM_board_minutes
+	picture = GFX_event_adiscord_nam_loren_oil
+	is_triggered_only = yes
+	timeout_days = 7
+	option = {
+		name = NAM_board_close_session
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				NAM_board_can_adopt_1 = no
+				NAM_board_can_adopt_2 = no
+			}
+		}
+		custom_effect_tooltip = NAM_board_close_session_tt
+		hidden_effect = {
+			NAM_board_close_session = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_first
+		trigger = {
+			NAM_board_can_adopt_1 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_2 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_1 value = NAM_board_ballot^NAM_board_offered_2 compare = less_than }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_first_tt
+		hidden_effect = {
+			NAM_board_adopt_first = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_second
+		trigger = {
+			NAM_board_can_adopt_2 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_1 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_2 value = NAM_board_ballot^NAM_board_offered_1 compare = less_than_or_equals }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_second_tt
+		hidden_effect = {
+			NAM_board_adopt_second = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_both
+		trigger = {
+			NAM_board_can_adopt_both = yes
+		}
+		ai_chance = {
+			base = 0
+		}
+		custom_effect_tooltip = NAM_board_adopt_both_tt
+		hidden_effect = {
+			NAM_board_adopt_both = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.432
+	title = NAM_board_session
+	desc = NAM_board_minutes
+	picture = GFX_event_adiscord_nam_ferrant_steel
+	is_triggered_only = yes
+	timeout_days = 7
+	option = {
+		name = NAM_board_close_session
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				NAM_board_can_adopt_1 = no
+				NAM_board_can_adopt_2 = no
+			}
+		}
+		custom_effect_tooltip = NAM_board_close_session_tt
+		hidden_effect = {
+			NAM_board_close_session = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_first
+		trigger = {
+			NAM_board_can_adopt_1 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_2 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_1 value = NAM_board_ballot^NAM_board_offered_2 compare = less_than }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_first_tt
+		hidden_effect = {
+			NAM_board_adopt_first = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_second
+		trigger = {
+			NAM_board_can_adopt_2 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_1 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_2 value = NAM_board_ballot^NAM_board_offered_1 compare = less_than_or_equals }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_second_tt
+		hidden_effect = {
+			NAM_board_adopt_second = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_both
+		trigger = {
+			NAM_board_can_adopt_both = yes
+		}
+		ai_chance = {
+			base = 0
+		}
+		custom_effect_tooltip = NAM_board_adopt_both_tt
+		hidden_effect = {
+			NAM_board_adopt_both = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.433
+	title = NAM_board_session
+	desc = NAM_board_minutes
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	timeout_days = 7
+	option = {
+		name = NAM_board_close_session
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				NAM_board_can_adopt_1 = no
+				NAM_board_can_adopt_2 = no
+			}
+		}
+		custom_effect_tooltip = NAM_board_close_session_tt
+		hidden_effect = {
+			NAM_board_close_session = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_first
+		trigger = {
+			NAM_board_can_adopt_1 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_2 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_1 value = NAM_board_ballot^NAM_board_offered_2 compare = less_than }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_first_tt
+		hidden_effect = {
+			NAM_board_adopt_first = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_second
+		trigger = {
+			NAM_board_can_adopt_2 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_1 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_2 value = NAM_board_ballot^NAM_board_offered_1 compare = less_than_or_equals }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_second_tt
+		hidden_effect = {
+			NAM_board_adopt_second = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_both
+		trigger = {
+			NAM_board_can_adopt_both = yes
+		}
+		ai_chance = {
+			base = 0
+		}
+		custom_effect_tooltip = NAM_board_adopt_both_tt
+		hidden_effect = {
+			NAM_board_adopt_both = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.434
+	title = NAM_board_session
+	desc = NAM_board_minutes
+	picture = GFX_event_adiscord_nam_arktur_arsenal
+	is_triggered_only = yes
+	timeout_days = 7
+	option = {
+		name = NAM_board_close_session
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				NAM_board_can_adopt_1 = no
+				NAM_board_can_adopt_2 = no
+			}
+		}
+		custom_effect_tooltip = NAM_board_close_session_tt
+		hidden_effect = {
+			NAM_board_close_session = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_first
+		trigger = {
+			NAM_board_can_adopt_1 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_2 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_1 value = NAM_board_ballot^NAM_board_offered_2 compare = less_than }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_first_tt
+		hidden_effect = {
+			NAM_board_adopt_first = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_second
+		trigger = {
+			NAM_board_can_adopt_2 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_1 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_2 value = NAM_board_ballot^NAM_board_offered_1 compare = less_than_or_equals }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_second_tt
+		hidden_effect = {
+			NAM_board_adopt_second = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_both
+		trigger = {
+			NAM_board_can_adopt_both = yes
+		}
+		ai_chance = {
+			base = 0
+		}
+		custom_effect_tooltip = NAM_board_adopt_both_tt
+		hidden_effect = {
+			NAM_board_adopt_both = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.435
+	title = NAM_board_session
+	desc = NAM_board_minutes
+	picture = GFX_event_adiscord_nam_smenkom_exchange
+	is_triggered_only = yes
+	timeout_days = 7
+	option = {
+		name = NAM_board_close_session
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				NAM_board_can_adopt_1 = no
+				NAM_board_can_adopt_2 = no
+			}
+		}
+		custom_effect_tooltip = NAM_board_close_session_tt
+		hidden_effect = {
+			NAM_board_close_session = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_first
+		trigger = {
+			NAM_board_can_adopt_1 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_2 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_1 value = NAM_board_ballot^NAM_board_offered_2 compare = less_than }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_first_tt
+		hidden_effect = {
+			NAM_board_adopt_first = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_second
+		trigger = {
+			NAM_board_can_adopt_2 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_1 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_2 value = NAM_board_ballot^NAM_board_offered_1 compare = less_than_or_equals }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_second_tt
+		hidden_effect = {
+			NAM_board_adopt_second = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_both
+		trigger = {
+			NAM_board_can_adopt_both = yes
+		}
+		ai_chance = {
+			base = 0
+		}
+		custom_effect_tooltip = NAM_board_adopt_both_tt
+		hidden_effect = {
+			NAM_board_adopt_both = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.436
+	title = NAM_board_session
+	desc = NAM_board_minutes
+	picture = GFX_event_adiscord_nam_reidbank_credit
+	is_triggered_only = yes
+	timeout_days = 7
+	option = {
+		name = NAM_board_close_session
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 100
+				NAM_board_can_adopt_1 = no
+				NAM_board_can_adopt_2 = no
+			}
+		}
+		custom_effect_tooltip = NAM_board_close_session_tt
+		hidden_effect = {
+			NAM_board_close_session = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_first
+		trigger = {
+			NAM_board_can_adopt_1 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_2 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_1 value = NAM_board_ballot^NAM_board_offered_2 compare = less_than }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_first_tt
+		hidden_effect = {
+			NAM_board_adopt_first = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_second
+		trigger = {
+			NAM_board_can_adopt_2 = yes
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				factor = 0
+				NAM_board_can_adopt_1 = yes
+				check_variable = { var = NAM_board_ballot^NAM_board_offered_2 value = NAM_board_ballot^NAM_board_offered_1 compare = less_than_or_equals }
+			}
+		}
+		custom_effect_tooltip = NAM_board_adopt_second_tt
+		hidden_effect = {
+			NAM_board_adopt_second = yes
+		}
+	}
+	option = {
+		name = NAM_board_adopt_both
+		trigger = {
+			NAM_board_can_adopt_both = yes
+		}
+		ai_chance = {
+			base = 0
+		}
+		custom_effect_tooltip = NAM_board_adopt_both_tt
+		hidden_effect = {
+			NAM_board_adopt_both = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.437
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	immediate = {
+		for_loop_effect = {
+			start = 1
+			end = 7
+			value = NAM_board_expiry_company
+			if = {
+				limit = {
+					check_variable = { var = NAM_board_dismissal_prepared^NAM_board_expiry_company value = global.num_days compare = less_than_or_equals }
+				}
+				set_variable = { var = NAM_board_dismissal_prepared^NAM_board_expiry_company value = -1 }
+			}
+		}
+	}
+}
+
 # Refresh after the reward so branch gates and offsets read the committed
 # completed-focus state. A replaced tree must not receive the queued refresh.
 country_event = {
@@ -252,8 +757,7 @@ news_event = {
 	option = { name = ADISCORD_nam_resource_news.8.a }
 }
 
-# The exile war or the great war is won: annexation under the pillars or the
-# federation under Veter's humanists.
+# The return campaign and the southern campaign have distinct victory headlines.
 news_event = {
 	id = ADISCORD_nam_resource_news.9
 	title = {
@@ -1177,7 +1681,10 @@ country_event = {
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
-	trigger = { tag = NAM }
+	trigger = {
+		tag = NAM
+		NOT = { has_country_flag = NAM_debug_corporate_start }
+	}
 
 	immediate = {
 		hidden_effect = { NAM_colony_close = yes }
@@ -1195,7 +1702,7 @@ country_event = {
 # The island exile settlement has evacuated the army and burnt the mainland;
 # the tooltip reports the counts written by NAM_rw_exile_evacuate. Every
 # answer, including the unattended first one, convenes the island council of
-# event .100; the salvaged loot is credited before the humanists could sell it.
+# event .100, where any salvaged cargo becomes the boards' starting capital.
 country_event = {
 	id = ADISCORD_nam_resource_war.81
 	title = ADISCORD_nam_resource_war.81.t
@@ -1342,7 +1849,7 @@ country_event = {
 	id = ADISCORD_nam_resource_war.83
 	title = ADISCORD_nam_resource_war.83.t
 	desc = ADISCORD_nam_resource_war.83.d
-	picture = GFX_event_adiscord_factory_workshop
+	picture = GFX_event_adiscord_nam_weber_committees
 	is_triggered_only = yes
 	trigger = {
 		tag = NAM
@@ -2659,181 +3166,31 @@ country_event = {
 	}
 }
 
-# ----- Exile revolution -----
-# The island council, opened by every answer of .81 right after the flight.
-# Both answers overthrow the namestnik, fix the exile's course for the
-# campaign and load that course's tree after its flag is set; the first answer
-# is the unattended one, so the exile never stays without a course.
+# ----- Island government -----
+# Either evacuation choice leads to the council, including an unanswered event.
 country_event = {
 	id = ADISCORD_nam_resource_war.100
 	title = ADISCORD_nam_resource_war.100.t
 	desc = ADISCORD_nam_resource_war.100.d
-	picture = GFX_event_adiscord_parliament_chamber
+	picture = GFX_event_adiscord_nam_chair_handover
 	is_triggered_only = yes
 	timeout_days = 7
 	trigger = { NAM_exile_revolution_open = yes }
 
 	option = {
-		name = ADISCORD_nam_resource_war.100.a
-		custom_effect_tooltip = NAM_exile_radical_tt
+		name = ADISCORD_nam_resource_war.100.c
+		custom_effect_tooltip = NAM_exile_corporate_tt
 		hidden_effect = {
-			NAM_exile_choose_radical = yes
-			load_focus_tree = {
-				tree = NAM_exile_radical_focus
-				keep_completed = yes
+			if = {
+				limit = { NAM_exile_revolution_open = yes }
+				NAM_corp_takeover = yes
 			}
 		}
-		ai_chance = { base = 50 }
-	}
-	option = {
-		name = ADISCORD_nam_resource_war.100.b
-		custom_effect_tooltip = NAM_exile_humanist_tt
-		hidden_effect = {
-			NAM_exile_choose_humanist = yes
-			load_focus_tree = {
-				tree = NAM_exile_humanist_focus
-				keep_completed = yes
-			}
-		}
-		ai_chance = { base = 50 }
-	}
-}
-
-# ----- Humanist exile: the corporations -----
-# Influence of 70: the boards ask for guarantees. Every answer closes the event.
-country_event = {
-	id = ADISCORD_nam_resource_war.101
-	title = ADISCORD_nam_resource_war.101.t
-	desc = ADISCORD_nam_resource_war.101.d
-	picture = GFX_event_adiscord_administrative_office
-	is_triggered_only = yes
-	trigger = {
-		tag = NAM
-		has_country_flag = NAM_exile_humanist
-		NOT = { has_country_flag = NAM_corp_takeover }
-	}
-
-	option = {
-		name = ADISCORD_nam_resource_war.101.a
-		trigger = { NOT = { has_political_power < 40 } }
-		add_political_power = -40
-		custom_effect_tooltip = NAM_corp_101_a_tt
-		hidden_effect = {
-			NAM_corp_close_event = yes
-			add_to_variable = { var = NAM_corp_influence value = -8 }
-			NAM_corp_influence_clamp = yes
-		}
-		ai_chance = { base = 40 }
-	}
-	option = {
-		name = ADISCORD_nam_resource_war.101.b
-		add_stability = -0.03
-		custom_effect_tooltip = NAM_corp_101_b_tt
-		hidden_effect = {
-			NAM_corp_close_event = yes
-			set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-			NAM_corp_capital_add = yes
-			add_to_variable = { var = NAM_corp_influence value = 5 }
-			NAM_corp_influence_clamp = yes
-		}
-		ai_chance = { base = 30 }
-	}
-	option = {
-		name = ADISCORD_nam_resource_war.101.c
-		add_stability = -0.02
-		custom_effect_tooltip = NAM_corp_101_c_tt
-		hidden_effect = {
-			NAM_corp_close_event = yes
-			add_to_variable = { var = NAM_corp_influence value = 2 }
-			NAM_corp_influence_clamp = yes
-		}
-		ai_chance = { base = 30 }
-	}
-}
-
-# Influence of 90: the boards demand the seals. A costed answer pushes them
-# back; yielding brings the takeover closer.
-country_event = {
-	id = ADISCORD_nam_resource_war.102
-	title = ADISCORD_nam_resource_war.102.t
-	desc = ADISCORD_nam_resource_war.102.d
-	picture = GFX_event_adiscord_negotiation_table
-	is_triggered_only = yes
-	trigger = {
-		tag = NAM
-		has_country_flag = NAM_exile_humanist
-		NOT = { has_country_flag = NAM_corp_takeover }
-	}
-
-	option = {
-		name = ADISCORD_nam_resource_war.102.a
-		trigger = { NOT = { has_political_power < 100 } }
-		add_political_power = -100
-		add_stability = -0.05
-		custom_effect_tooltip = NAM_corp_102_a_tt
-		hidden_effect = {
-			NAM_corp_close_event = yes
-			add_to_variable = { var = NAM_corp_influence value = -20 }
-			NAM_corp_influence_clamp = yes
-		}
-		ai_chance = { base = 40 }
-	}
-	option = {
-		name = ADISCORD_nam_resource_war.102.b
-		trigger = {
-			check_variable = { var = NAM_corp_capital value = 150 compare = greater_than_or_equals }
-		}
-		custom_effect_tooltip = NAM_corp_102_b_tt
-		hidden_effect = {
-			NAM_corp_close_event = yes
-			set_temp_variable = { var = NAM_corp_capital_change value = -150 }
-			NAM_corp_capital_add = yes
-			add_to_variable = { var = NAM_corp_influence value = -15 }
-			NAM_corp_influence_clamp = yes
-		}
-		ai_chance = { base = 40 }
-	}
-	option = {
-		name = ADISCORD_nam_resource_war.102.c
-		custom_effect_tooltip = NAM_corp_102_c_tt
-		hidden_effect = {
-			NAM_corp_close_event = yes
-			set_temp_variable = { var = NAM_corp_capital_change value = 80 }
-			NAM_corp_capital_add = yes
-			add_to_variable = { var = NAM_corp_influence value = 5 }
-			NAM_corp_influence_clamp = yes
-		}
-		ai_chance = { base = 20 }
-	}
-}
-
-# The boards take power: three months at 90 or the full 100 of influence.
-country_event = {
-	id = ADISCORD_nam_resource_war.103
-	title = ADISCORD_nam_resource_war.103.t
-	desc = ADISCORD_nam_resource_war.103.d
-	picture = GFX_event_adiscord_administrative_office
-	is_triggered_only = yes
-	trigger = {
-		tag = NAM
-		has_country_flag = NAM_exile_humanist
-		NOT = { has_country_flag = NAM_corp_takeover }
-	}
-
-	option = {
-		name = ADISCORD_nam_resource_war.103.a
-		custom_effect_tooltip = NAM_corp_takeover_tt
-		unlock_decision_tooltip = NAM_board_tender_rail
-		custom_effect_tooltip = NAM_board_tender_rail_event_unlock_tt
-		hidden_effect = { NAM_corp_takeover = yes }
 	}
 }
 
 # ----- Consolidation of the returned south -----
-# NAM_consolidation_open_incident: a conquered state resists the junta or a
-# federal district protests against the humanists. Each course has three
-# answers; the last of each is always available and every answer closes the
-# event.
+# Deferring intervention must also clear the pending incident.
 country_event = {
 	id = ADISCORD_nam_resource_war.104
 	title = ADISCORD_nam_resource_war.104.t
@@ -3085,7 +3442,46 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = { has_country_flag = NAM_corp_takeover }
-	immediate = { NAM_board_recount = yes }
+	immediate = {
+		clr_country_flag = NAM_board_recount_queued
+		NAM_board_recount = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.420
+	title = ADISCORD_nam_resource_war.420.t
+	desc = ADISCORD_nam_resource_war.420.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_nam_resource_war.420.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.421
+	title = ADISCORD_nam_resource_war.421.t
+	desc = ADISCORD_nam_resource_war.421.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_nam_resource_war.421.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.422
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_corp_takeover
+		has_variable = NAM_board_no_confidence_day
+		check_variable = { NAM_board_no_confidence_day > -1 }
+	}
+	immediate = {
+		NAM_board_arm_no_confidence = yes
+	}
 }
 
 country_event = {
@@ -3268,7 +3664,10 @@ country_event = {
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
-	trigger = { tag = NAM }
+	trigger = {
+		tag = NAM
+		NOT = { has_country_flag = NAM_debug_corporate_start }
+	}
 
 	immediate = {
 		hidden_effect = {
@@ -3464,6 +3863,7 @@ add_namespace = ADISCORD_nam_crisis
 
 country_event = {
 	id = ADISCORD_nam_crisis.1
+	trigger = { NAM_mainland_programmes_active = yes }
 	title = ADISCORD_nam_crisis.1.t
 	desc = ADISCORD_nam_crisis.1.d
 	picture = GFX_event_adiscord_factory_workshop
@@ -3624,6 +4024,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_nam_crisis.2
+	trigger = { NAM_mainland_programmes_active = yes }
 	title = ADISCORD_nam_crisis.2.t
 	desc = ADISCORD_nam_crisis.2.d
 	picture = GFX_event_adiscord_factory_workshop
@@ -3790,6 +4191,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_nam_crisis.3
+	trigger = { NAM_mainland_programmes_active = yes }
 	title = ADISCORD_nam_crisis.3.t
 	desc = ADISCORD_nam_crisis.3.d
 	picture = GFX_event_adiscord_administrative_office
@@ -3912,6 +4314,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_nam_crisis.4
+	trigger = { NAM_mainland_programmes_active = yes }
 	title = ADISCORD_nam_crisis.4.t
 	desc = ADISCORD_nam_crisis.4.d
 	picture = GFX_event_adiscord_perimeter_checkpoint
@@ -4023,6 +4426,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_nam_crisis.5
+	trigger = { NAM_mainland_programmes_active = yes }
 	title = ADISCORD_nam_crisis.5.t
 	desc = ADISCORD_nam_crisis.5.d
 	picture = GFX_event_adiscord_military_headquarters
@@ -4166,6 +4570,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_nam_crisis.6
+	trigger = { NAM_mainland_programmes_active = yes }
 	title = ADISCORD_nam_crisis.6.t
 	desc = ADISCORD_nam_crisis.6.d
 	picture = GFX_event_adiscord_valley_irrigation_survey
@@ -4250,6 +4655,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_nam_crisis.7
+	trigger = { NAM_mainland_programmes_active = yes }
 	title = ADISCORD_nam_crisis.7.t
 	desc = ADISCORD_nam_crisis.7.d
 	picture = GFX_event_adiscord_factory_workshop
@@ -4334,6 +4740,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_nam_crisis.8
+	trigger = { NAM_mainland_programmes_active = yes }
 	title = ADISCORD_nam_crisis.8.t
 	desc = ADISCORD_nam_crisis.8.d
 	picture = GFX_event_adiscord_valley_irrigation_survey
@@ -4418,6 +4825,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_nam_crisis.9
+	trigger = { NAM_mainland_programmes_active = yes }
 	title = ADISCORD_nam_crisis.9.t
 	desc = ADISCORD_nam_crisis.9.d
 	picture = GFX_event_adiscord_rail_yard_waybills
@@ -5976,7 +6384,7 @@ country_event = {
 	option = { name = ADISCORD_nam_story.14.a }
 }
 
-# Boards: Weber is offered an honorary chair after the takeover.
+# The evacuation broadcaster speaks for the districts regardless of the cabinet's partners.
 country_event = {
 	id = ADISCORD_nam_story.21
 	title = ADISCORD_nam_story.21.t
@@ -6053,7 +6461,7 @@ country_event = {
 	id = ADISCORD_nam_story.23
 	title = ADISCORD_nam_story.23.t
 	desc = ADISCORD_nam_story.23.d
-	picture = GFX_event_adiscord_negotiation_table
+	picture = GFX_event_adiscord_nam_board_session
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { has_country_flag = NAM_corp_takeover }
@@ -6062,227 +6470,224 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_nam_story.24
-	title = ADISCORD_nam_story.24.t
-	desc = ADISCORD_nam_story.24.d
-	picture = GFX_event_adiscord_negotiation_table
+	hidden = yes
 	is_triggered_only = yes
-	option = {
-		name = NAM_board_tender_keep
-		custom_effect_tooltip = NAM_board_tender_keep_tt
-		hidden_effect = {
-			clr_country_flag = NAM_board_tender_rail_closed
-			if = {
-				limit = { check_variable = { var = NAM_board_lot_rail value = 0 compare = equals } }
-				set_country_flag = {
-					flag = NAM_board_tender_rail_closed
-					value = 1
-					days = 30
-				}
-			}
-		}
-		ai_chance = {
-			base = 1
-			modifier = {
-				factor = 0
-				NAM_board_can_sell_rail = yes
-				OR = {
-					NAM_board_minister_2 = yes
-					NAM_board_minister_5 = yes
-				}
-			}
-		}
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
 	}
-	option = {
-		name = NAM_board_tender_accept_2
-		trigger = { NAM_board_can_sell_rail = yes }
-		custom_effect_tooltip = NAM_board_tender_bid_2_tt
-		hidden_effect = {
-			if = {
-				limit = { NAM_board_can_sell_rail = yes }
-				set_variable = { var = NAM_board_lot_rail value = 2 }
-				clr_country_flag = NAM_board_tender_rail_closed
-				NAM_board_recount = yes
-			}
-		}
-		ai_chance = {
-			base = 50
-			modifier = {
-				factor = 0
-				NAM_board_minister_2 = no
-			}
-		}
-	}
-	option = {
-		name = NAM_board_tender_accept_5
-		trigger = { NAM_board_can_sell_rail = yes }
-		custom_effect_tooltip = NAM_board_tender_bid_5_tt
-		hidden_effect = {
-			if = {
-				limit = { NAM_board_can_sell_rail = yes }
-				set_variable = { var = NAM_board_lot_rail value = 5 }
-				clr_country_flag = NAM_board_tender_rail_closed
-				NAM_board_recount = yes
-			}
-		}
-		ai_chance = {
-			base = 50
-			modifier = {
-				factor = 0
-				NAM_board_minister_5 = no
-			}
-		}
+	immediate = {
+		country_event = { id = ADISCORD_nam_story.41 days = 30 }
 	}
 }
 
 country_event = {
 	id = ADISCORD_nam_story.25
-	title = ADISCORD_nam_story.25.t
-	desc = ADISCORD_nam_story.25.d
-	picture = GFX_event_adiscord_negotiation_table
+	hidden = yes
 	is_triggered_only = yes
-	option = {
-		name = NAM_board_tender_keep
-		custom_effect_tooltip = NAM_board_tender_keep_tt
-		hidden_effect = {
-			clr_country_flag = NAM_board_tender_yards_closed
-			if = {
-				limit = { check_variable = { var = NAM_board_lot_yards value = 0 compare = equals } }
-				set_country_flag = {
-					flag = NAM_board_tender_yards_closed
-					value = 1
-					days = 30
-				}
-			}
-		}
-		ai_chance = {
-			base = 1
-			modifier = {
-				factor = 0
-				NAM_board_can_sell_yards = yes
-				OR = {
-					NAM_board_minister_3 = yes
-					NAM_board_minister_4 = yes
-				}
-			}
-		}
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
 	}
-	option = {
-		name = NAM_board_tender_accept_3
-		trigger = { NAM_board_can_sell_yards = yes }
-		custom_effect_tooltip = NAM_board_tender_bid_3_tt
-		hidden_effect = {
-			if = {
-				limit = { NAM_board_can_sell_yards = yes }
-				set_variable = { var = NAM_board_lot_yards value = 3 }
-				clr_country_flag = NAM_board_tender_yards_closed
-				NAM_board_recount = yes
-			}
-		}
-		ai_chance = {
-			base = 50
-			modifier = {
-				factor = 0
-				NAM_board_minister_3 = no
-			}
-		}
-	}
-	option = {
-		name = NAM_board_tender_accept_4
-		trigger = { NAM_board_can_sell_yards = yes }
-		custom_effect_tooltip = NAM_board_tender_bid_4_tt
-		hidden_effect = {
-			if = {
-				limit = { NAM_board_can_sell_yards = yes }
-				set_variable = { var = NAM_board_lot_yards value = 4 }
-				clr_country_flag = NAM_board_tender_yards_closed
-				NAM_board_recount = yes
-			}
-		}
-		ai_chance = {
-			base = 50
-			modifier = {
-				factor = 0
-				NAM_board_minister_4 = no
-			}
-		}
+	immediate = {
+		country_event = { id = ADISCORD_nam_story.43 days = 30 }
 	}
 }
 
 country_event = {
 	id = ADISCORD_nam_story.26
-	title = ADISCORD_nam_story.26.t
-	desc = ADISCORD_nam_story.26.d
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	immediate = {
+		country_event = { id = ADISCORD_nam_story.44 days = 30 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_story.28
+	title = ADISCORD_nam_story.28.t
+	desc = ADISCORD_nam_story.28.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = {
-		name = NAM_board_tender_keep
-		custom_effect_tooltip = NAM_board_tender_keep_tt
-		hidden_effect = {
-			clr_country_flag = NAM_board_tender_depots_closed
-			if = {
-				limit = { check_variable = { var = NAM_board_lot_depots value = 0 compare = equals } }
-				set_country_flag = {
-					flag = NAM_board_tender_depots_closed
-					value = 1
-					days = 30
+	timeout_days = 7
+
+	option = { name = ADISCORD_nam_story.28.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_story.29
+	title = ADISCORD_nam_story.29.t
+	desc = ADISCORD_nam_story.29.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 7
+
+	option = { name = ADISCORD_nam_story.28.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_story.30
+	title = ADISCORD_nam_story.30.t
+	desc = ADISCORD_nam_story.30.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 7
+
+	option = { name = ADISCORD_nam_story.28.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_story.41
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	immediate = {
+		if = {
+			limit = {
+				AND = {
+					check_variable = { var = NAM_board_lot_rail value = 0 compare = equals }
+					NOT = {
+						check_variable = { var = NAM_board_public_agenda^1 value = 1 compare = equals }
+					}
 				}
 			}
-		}
-		ai_chance = {
-			base = 1
-			modifier = {
-				factor = 0
-				NAM_board_can_sell_depots = yes
-				OR = {
-					NAM_board_minister_1 = yes
-					NAM_board_minister_6 = yes
-				}
-			}
+			activate_mission = NAM_board_bid_rail
 		}
 	}
-	option = {
-		name = NAM_board_tender_accept_1
-		trigger = { NAM_board_can_sell_depots = yes }
-		custom_effect_tooltip = NAM_board_tender_bid_1_tt
-		hidden_effect = {
-			if = {
-				limit = { NAM_board_can_sell_depots = yes }
-				set_variable = { var = NAM_board_lot_depots value = 1 }
-				clr_country_flag = NAM_board_tender_depots_closed
-				NAM_board_recount = yes
+}
+
+country_event = {
+	id = ADISCORD_nam_story.42
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	immediate = {
+		NAM_board_arm_session = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_story.43
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	immediate = {
+		if = {
+			limit = {
+				AND = {
+					check_variable = { var = NAM_board_lot_yards value = 0 compare = equals }
+					NOT = {
+						check_variable = { var = NAM_board_public_agenda^2 value = 1 compare = equals }
+					}
+				}
 			}
-		}
-		ai_chance = {
-			base = 50
-			modifier = {
-				factor = 0
-				NAM_board_minister_1 = no
-			}
+			activate_mission = NAM_board_bid_yards
 		}
 	}
+}
+
+country_event = {
+	id = ADISCORD_nam_story.44
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	immediate = {
+		if = {
+			limit = {
+				AND = {
+					check_variable = { var = NAM_board_lot_depots value = 0 compare = equals }
+					NOT = {
+						check_variable = { var = NAM_board_public_agenda^3 value = 1 compare = equals }
+					}
+				}
+			}
+			activate_mission = NAM_board_bid_depots
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_story.27
+	title = ADISCORD_nam_story.27.t
+	desc = ADISCORD_nam_story.27.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	fire_only_once = yes
+
 	option = {
-		name = NAM_board_tender_accept_6
-		trigger = { NAM_board_can_sell_depots = yes }
-		custom_effect_tooltip = NAM_board_tender_bid_6_tt
+		name = ADISCORD_nam_story.27.a
+		add_equipment_to_stockpile = {
+			type = convoy
+			amount = 55
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_board_capital_100_tt
 		hidden_effect = {
-			if = {
-				limit = { NAM_board_can_sell_depots = yes }
-				set_variable = { var = NAM_board_lot_depots value = 6 }
-				clr_country_flag = NAM_board_tender_depots_closed
-				NAM_board_recount = yes
+			set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+			NAM_corp_capital_add = yes
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_nam_story.27.b
+		trigger = {
+			any_owned_state = {
+				is_controlled_by = ROOT
+				is_coastal = yes
+				dockyard < 20
 			}
 		}
-		ai_chance = {
-			base = 50
-			modifier = {
-				factor = 0
-				NAM_board_minister_6 = no
-				OR = {
-					has_war = yes
-					has_political_power < 75
+		random_owned_controlled_state = {
+			limit = {
+				is_coastal = yes
+				dockyard < 20
+			}
+			prioritize = { 700 225 226 227 228 229 230 231 }
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = dockyard
+				level = 1
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = NAM_board_partition_ports_tt
+		hidden_effect = {
+			for_each_scope_loop = {
+				array = NAM_federal_districts
+				if = {
+					limit = {
+						NAM_board_operating_district = yes
+						capital_scope = { industrial_complex < 20 }
+					}
+					capital_scope = {
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+							instant_build = yes
+						}
+					}
 				}
 			}
 		}
+		ai_chance = { base = 50 }
 	}
 }
 
@@ -6291,7 +6696,7 @@ country_event = {
 	id = ADISCORD_nam_story.31
 	title = ADISCORD_nam_story.31.t
 	desc = ADISCORD_nam_story.31.d
-	picture = GFX_event_adiscord_administrative_office
+	picture = GFX_event_adiscord_nam_karamyshev_officers
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { has_capitulated = no }

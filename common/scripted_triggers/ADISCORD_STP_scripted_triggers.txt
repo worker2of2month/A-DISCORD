@@ -2530,10 +2530,18 @@ STP_pc_nod_offer_current = {
 	}
 }
 
+STP_pc_val_compact_credit_earned = {
+	has_completed_focus = STP_pc_war_ledgers
+	has_country_flag = STP_cw_kefreyt_shipment_received
+}
+
 STP_pc_can_pay_val_compact = {
 	OR = {
-		AND = { has_country_flag = STP_pw_kefreyt_accounts_settled check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
-		AND = { NOT = { has_country_flag = STP_pw_kefreyt_accounts_settled } check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
+		check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals }
+		AND = {
+			STP_pc_val_compact_credit_earned = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
 	}
 }
 STP_pc_can_pay_nod_compact = { check_variable = { var = ADISCORD_economy_treasury value = 1350 compare = greater_than_or_equals } }

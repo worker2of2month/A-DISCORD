@@ -880,8 +880,31 @@ shared_focus = {
 	}
 	cancel_if_invalid = yes
 	completion_reward = {
+		custom_effect_tooltip = SHL_coalition_EFL_tt
 		custom_effect_tooltip = SHL_eflor_accord_tt
 		hidden_effect = { SHL_eflor_offer_accord = yes }
+	}
+	ai_will_do = { base = 4 }
+}
+
+shared_focus = {
+	id = SHL_azhar_legation
+	icon = GFX_focus_generic_conference
+	x = 50
+	y = 5
+	cost = 2
+	search_filters = { FOCUS_FILTER_POLITICAL }
+	prerequisite = { focus = SHL_eflor_accord }
+	available = {
+		SHL_country_operable = yes
+		AZH = { exists = yes }
+		NOT = { has_war_with = AZH }
+		NOT = { has_global_flag = ADISCORD_south_final_started }
+		NOT = { has_global_flag = ADISCORD_south_final_resolved }
+	}
+	cancel_if_invalid = yes
+	completion_reward = {
+		custom_effect_tooltip = SHL_coalition_AZH_tt
 	}
 	ai_will_do = { base = 4 }
 }
@@ -1027,6 +1050,7 @@ shared_focus = {
 	}
 	cancel_if_invalid = yes
 	completion_reward = {
+		custom_effect_tooltip = SHL_coalition_WEF_tt
 		custom_effect_tooltip = SHL_road_unlock_charter_tt
 		707 = {
 			if = {

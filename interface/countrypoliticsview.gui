@@ -7,6 +7,13 @@ guiTypes = {
 		clipping = yes
 
 		iconType = {
+			name = "ideology_icon_techno_corporatism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_techno_corporatism_countryview"
+			pdx_tooltip = "techno_corporatism_desc"
+		}
+
+		iconType = {
 			name = "ideology_icon_dorian_technocracy"
 			position = { x = 0 y = 0 }
 			spriteType = "GFX_ideology_dorian_technocracy_countryview"

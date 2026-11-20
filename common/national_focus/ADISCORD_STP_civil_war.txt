@@ -2406,7 +2406,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_restore_roads
-		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		icon = GFX_focus_STP_pw_republic_restore_roads
 		x = 6
 		y = 5
 		cost = 3
@@ -2431,7 +2431,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_homes_for_returnees
-		icon = GFX_focus_VAL_Reclamation_Return_Home
+		icon = GFX_focus_STP_pw_republic_homes_for_returnees
 		x = 6
 		y = 6
 		cost = 4
@@ -2542,7 +2542,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_industrial_settlement
-		icon = GFX_focus_VAL_The_Steel_Contract
+		icon = GFX_focus_STP_pw_republic_industrial_settlement
 		x = 6
 		y = 8
 		cost = 5
@@ -2590,7 +2590,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_republic_officer_school
-		icon = GFX_focus_STP_pc_sdir_officer_college
+		icon = GFX_focus_STP_pw_republic_officer_school
 		x = 38
 		y = 5
 		cost = 4
@@ -4698,7 +4698,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_war_ledgers
-		icon = GFX_focus_VAL_Reserve_Accounting
+		icon = GFX_focus_STP_pc_war_ledgers
 		x = 8
 		y = 5
 		prerequisite = { focus = STP_pw_republic_new_republic }
@@ -4712,9 +4712,37 @@ focus_tree = {
 		}
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			unlock_decision_tooltip = STP_pw_settle_kefreyt_accounts
-			add_intel = { target = VAL civilian_intel = 15 }
-			hidden_effect = { if = { limit = { VAL = { exists = yes } NOT = { has_country_flag = STP_pc_val_crisis } } country_event = { id = ADISCORD_STP_pc.9 days = 1 } } }
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 120
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 80
+				producer = ROOT
+			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_country_flag = STP_cw_kefreyt_shipment_received
+						VAL = { exists = yes }
+						NOT = { has_country_flag = STP_pc_val_terms_accepted }
+						NOT = { has_country_flag = STP_pc_val_terms_refused }
+					}
+				}
+				custom_effect_tooltip = STP_pc_war_ledgers_credit_tt
+			}
+			if = {
+				limit = { VAL = { exists = yes } }
+				add_intel = { target = VAL civilian_intel = 15 }
+				hidden_effect = {
+					if = {
+						limit = { NOT = { has_country_flag = STP_pc_val_crisis } }
+						country_event = { id = ADISCORD_STP_pc.9 days = 1 }
+					}
+				}
+			}
 		}
 	}
 
@@ -5496,7 +5524,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_shared_archive_policy
-		icon = GFX_focus_VAL_Closed_Ledgers
+		icon = GFX_focus_STP_pc_shared_archive_policy
 		x = 20
 		y = 6
 		cost = 4
@@ -6592,7 +6620,12 @@ focus_tree = {
 		x = 30
 		y = 10
 		cost = 5
-		allow_branch = { NOT = { has_variable = STP_pc_charter_cabinet } has_country_flag = STP_cw_postwar STP_pc_founder_rules = yes }
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_founder_rules = yes
+			NOT = { has_variable = STP_pc_charter_cabinet }
+			NOT = { check_variable = { var = STP_pc_founder_choice value = 1 compare = equals } }
+		}
 		available = {
 			hidden_trigger = { NOT = { has_variable = STP_pc_charter_cabinet } }
 			custom_trigger_tooltip = {
@@ -6624,7 +6657,12 @@ focus_tree = {
 		x = 30
 		y = 11
 		cost = 5
-		allow_branch = { NOT = { has_variable = STP_pc_charter_cabinet } has_country_flag = STP_cw_postwar STP_pc_founder_rules = yes }
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			STP_pc_founder_rules = yes
+			NOT = { has_variable = STP_pc_charter_cabinet }
+			NOT = { check_variable = { var = STP_pc_founder_choice value = 1 compare = equals } }
+		}
 		available = {
 			hidden_trigger = { NOT = { has_variable = STP_pc_charter_cabinet } }
 			custom_trigger_tooltip = {
@@ -6642,7 +6680,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_emergency_limit
-		icon = GFX_focus_VAL_Quarterly_Contract_Norm
+		icon = GFX_focus_STP_pc_lib_emergency_limit
 		x = 28
 		y = 10
 		cost = 5
@@ -6687,7 +6725,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_lib_local_contacts
-		icon = GFX_focus_RUS_foreign_press_bureau
+		icon = GFX_focus_STP_pc_lib_local_contacts
 		x = 36
 		y = 11
 		cost = 2
@@ -6913,7 +6951,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_chain
-		icon = GFX_focus_VAL_Contract_General_Staff
+		icon = GFX_focus_STP_pc_sot_chain
 		x = 16
 		y = 4
 		cost = 2
@@ -7307,7 +7345,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_war_orders
-		icon = GFX_focus_RUS_military_contract_board
+		icon = GFX_focus_STP_pc_sdir_war_orders
 		x = 14
 		y = 6
 		cost = 5
@@ -7400,7 +7438,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_val_war
-		icon = GFX_focus_STP_End_Kefreit
+		icon = GFX_focus_STP_pc_sdir_val_war
 		x = 14
 		y = 8
 		cost = 4
@@ -7506,7 +7544,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_central_command
-		icon = GFX_focus_STP_pc_army_staff_doctrine
+		icon = GFX_focus_STP_pc_sdir_central_command
 		x = 14
 		y = 10
 		cost = 3
@@ -7584,7 +7622,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_naval_programme
-		icon = GFX_focus_STP_pc_navy_yards
+		icon = GFX_focus_STP_pc_sdir_naval_programme
 		x = 18
 		y = 11
 		cost = 3
@@ -7630,7 +7668,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_command_register
-		icon = GFX_focus_STP_pc_sdir_service_records
+		icon = GFX_focus_STP_pc_sdir_command_register
 		x = 10
 		y = 6
 		cost = 2
@@ -7716,7 +7754,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_district_audit
-		icon = GFX_focus_VAL_Ministry_Auditors
+		icon = GFX_focus_STP_pc_sdir_district_audit
 		x = 10
 		y = 8
 		cost = 3
@@ -7926,7 +7964,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_forward_airfields
-		icon = GFX_focus_RUS_capital_airfields
+		icon = GFX_focus_STP_pc_sdir_forward_airfields
 		x = 22
 		y = 10
 		cost = 3
@@ -7973,7 +8011,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_arsenal_standards
-		icon = GFX_focus_VAL_Standardize_Rifle_Lots
+		icon = GFX_focus_STP_pc_sdir_arsenal_standards
 		x = 14
 		y = 12
 		cost = 3
@@ -7994,7 +8032,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_arsenal_machine_tools
-		icon = GFX_focus_RUS_precision_lathes
+		icon = GFX_focus_STP_pc_sdir_arsenal_machine_tools
 		x = 14
 		y = 13
 		cost = 3
@@ -8025,7 +8063,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_arsenal_acceptance
-		icon = GFX_focus_VAL_Inventory_The_Empty_Yards
+		icon = GFX_focus_STP_pc_sdir_arsenal_acceptance
 		x = 14
 		y = 14
 		cost = 3
@@ -8162,7 +8200,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_naval_repair_yards
-		icon = GFX_focus_STP_pc_navy_yards
+		icon = GFX_focus_STP_pc_sdir_naval_repair_yards
 		x = 18
 		y = 14
 		cost = 3
@@ -8286,7 +8324,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_covered_frontier
-		icon = GFX_focus_RUS_quiet_perimeter
+		icon = GFX_focus_STP_pc_sdir_covered_frontier
 		x = 6
 		y = 13
 		cost = 3
@@ -8308,7 +8346,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sdir_return_to_work
-		icon = GFX_focus_VAL_Reclamation_Workshops
+		icon = GFX_focus_STP_pc_sdir_return_to_work
 		x = 10
 		y = 13
 		cost = 3
@@ -8625,7 +8663,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_val_ratify
-		icon = GFX_focus_VAL_Trading_Partners
+		icon = GFX_focus_STP_pc_val_ratify
 		x = 6
 		y = 14
 		cost = 4
@@ -17278,7 +17316,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_economy_repair_workshops
-		icon = GFX_focus_VAL_Reclamation_Workshops
+		icon = GFX_focus_STP_pc_economy_repair_workshops
 		x = 52
 		y = 6
 		cost = 4
@@ -17344,7 +17382,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_economy_recovery_budget
-		icon = GFX_focus_VAL_Central_Payment_Office
+		icon = GFX_focus_STP_pc_economy_recovery_budget
 		x = 54
 		y = 7
 		cost = 5
@@ -17376,7 +17414,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_country_must_live
-		icon = GFX_focus_VAL_Wireless_Contract_Bureau
+		icon = GFX_focus_STP_pc_development_country_must_live
 		x = 62
 		y = 4
 		cost = 3
@@ -17879,7 +17917,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_investment_automation
-		icon = GFX_focus_VAL_Three_Shift_Arsenals
+		icon = GFX_focus_STP_pc_investment_automation
 		x = 52
 		y = 11
 		cost = 3
@@ -17950,7 +17988,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_investment_export_finance
-		icon = GFX_focus_VAL_Export_Clearing_House
+		icon = GFX_focus_STP_pc_investment_export_finance
 		x = 56
 		y = 13
 		cost = 3
@@ -19094,7 +19132,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_common_citizenship
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_pc_charter_shabrat_common_citizenship
 		x = -7
 		y = 2
 		relative_position_id = STP_pc_lib_lock
@@ -19171,7 +19209,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_registers
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_STP_pc_charter_shabrat_district_registers
 		x = -4
 		y = 3
 		relative_position_id = STP_pc_lib_lock
@@ -19440,7 +19478,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_compact
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_pc_charter_shabrat_national_compact
 		x = -11
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -19508,7 +19546,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_common_standards
-		icon = GFX_focus_STP_pw_party_domestic_pattern
+		icon = GFX_focus_STP_pc_charter_shabrat_common_standards
 		x = -3
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -19634,7 +19672,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_citizenship_duty
-		icon = GFX_focus_STP_party_personnel_commissions
+		icon = GFX_focus_STP_pc_charter_shabrat_citizenship_duty
 		x = -12
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -19741,7 +19779,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_economic_sovereignty
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_pc_charter_shabrat_economic_sovereignty
 		x = -2
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -19977,7 +20015,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_charter_shabrat_cabinet_review
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_STP_pc_charter_shabrat_cabinet_review
 		x = -4
 		y = 9
 		relative_position_id = STP_pc_lib_lock

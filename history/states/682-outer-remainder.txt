@@ -8,10 +8,14 @@ state = {
 	state_category = rural
 	provinces = {
 		1155 2012 4701 5410 5477 7401 7785 8548 8828 9474 9502 12506
+		19086 19087
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.0
 # Populated by tools/build_adiscord_remainder_states.py
+	resources = {
+		rubber = 8
+	}
 	history = {
 		owner = FLR
 		add_core_of = FLR

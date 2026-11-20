@@ -25,7 +25,10 @@ SHL_metal_contracts = {
 			tag = NAM
 		}
 	}
-	visible = { has_country_flag = SHL_metal_client }
+	visible = {
+		NOT = { has_country_flag = NAM_corp_takeover }
+		has_country_flag = SHL_metal_client
+	}
 	priority = 20
 }
 

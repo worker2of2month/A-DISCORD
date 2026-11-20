@@ -203,11 +203,6 @@ focus_tree = {
 
 	# ----- Консолидация Юга: престол и гербы -----
 
-	# Брак с Кадиром: союзнику - конвои, отказавшему престолу - повторное предложение.
-	# Обход читается в скоупе цели: престол исчез, воюет с нами, война за Юг уже
-	# идёт или закончилась. Отложенный сюжет Светлогорья задерживает только ответ
-	# престола внутри ADISCORD_south_offer_alliance, а не сам фокус.
-
 	# Дух обещанных ленов ставится до войны; ADISCORD_south_add_path_spirit не
 	# дублирует его, ADISCORD_south_remove_path_spirit снимает на любом исходе.
 
@@ -2675,6 +2670,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_KYZ_tt
 			custom_effect_tooltip = SHL_kyz_brotherhood_offer_tt
 			hidden_effect = {
 				set_country_flag = SHL_water_offer_pending
@@ -2801,6 +2797,7 @@ shared_focus = {
 				limit = {
 					KYZ = {
 						exists = yes
+						ADISCORD_south_coalition_target_war_clear = yes
 						is_in_faction = no
 						NOT = { has_war_with = SHL }
 					}
@@ -3150,10 +3147,6 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_south_councils_abroad_tt
-			hidden_effect = {
-				MZR = { ADISCORD_south_offer_alliance = yes }
-				GLP = { ADISCORD_south_offer_alliance = yes }
-			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3187,6 +3180,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_GLP_tt
 			custom_effect_tooltip = SHL_k_councils_term_tt
 			hidden_effect = { SHL_start_cons_councils = yes }
 		}
@@ -3772,6 +3766,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_GLP_tt
 			custom_effect_tooltip = SHL_veyr_partnership_tt
 			hidden_effect = {
 				set_country_flag = SHL_veyr_offer_pending
@@ -3969,6 +3964,7 @@ shared_focus = {
 					has_country_flag = SHL_veyr_partner
 					GLP = {
 						exists = yes
+						ADISCORD_south_coalition_target_war_clear = yes
 						is_in_faction = no
 						NOT = { has_war_with = SHL }
 					}
@@ -5034,6 +5030,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_KYZ_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -5050,6 +5047,7 @@ shared_focus = {
 				limit = {
 					KYZ = {
 						exists = yes
+						ADISCORD_south_coalition_target_war_clear = yes
 						is_in_faction = no
 						NOT = { has_war_with = SHL }
 					}
@@ -5677,11 +5675,6 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_south_wells_charters_tt
-			hidden_effect = {
-				RHM = { ADISCORD_south_offer_alliance = yes }
-				MZR = { ADISCORD_south_offer_alliance = yes }
-				SDR = { ADISCORD_south_offer_alliance = yes }
-			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -5712,6 +5705,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_MZR_tt
 			add_manpower = -6000
 			custom_effect_tooltip = SHL_south_compact_staff_tt
 			hidden_effect = { SHL_raise_paid_levies_2 = yes }
@@ -5780,6 +5774,7 @@ shared_focus = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_SDR_tt
 			unlock_decision_tooltip = SHL_cons_charter_round
 			custom_effect_tooltip = SHL_c_charter_round_tt
 			hidden_effect = { SHL_start_cons_charter_round = yes }
@@ -8207,9 +8202,6 @@ shared_focus = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_south_throne_and_crests_tt
-			hidden_effect = {
-				KDR = { ADISCORD_south_offer_alliance = yes }
-			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -8295,10 +8287,11 @@ shared_focus = {
 					producer = SHL
 				}
 			}
-			else = {
+			else_if = {
+				limit = { KDR = { SHL_south_can_influence_partner = yes } }
 				custom_effect_tooltip = SHL_r_kadir_marriage_tt
 				hidden_effect = {
-					KDR = { ADISCORD_south_offer_alliance = yes }
+					KDR = { ADISCORD_south_shift_influence_to_shl = yes }
 				}
 			}
 		}

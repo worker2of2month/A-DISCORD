@@ -190,8 +190,9 @@ runtime files or third-party reference material: `decisions.psd`,
 land-colour base for `tools.builders.build_adiscord_coastal_geography`.
 The builder adds the island land tint to the RGB channels. It generates the
 night light mask in the DXT5 alpha channel from dry urban terrain (index 13)
-and settlement pixels (city indices 2 and 15). Brightness follows the built-up
-fraction of each 2x2 map cell. Edit the source rasters to change the footprint.
+and settlement pixels (city indices 2 and 15). Provinces owned by EXZ at the
+start of the campaign contribute no light. Brightness follows the fraction of
+lit settlement pixels in each 2x2 map cell, including along the zone boundary.
 Use `--colourmap-only` to rebuild the texture from the current map rasters.
 Run with `--check` before `--apply`, then repeat `--check` to verify stable output. The base retains
 SHA256 `ff8d76680ef6600e146ca72dc0007643e31bca4fd05c01c686be1a408ee83da6`.

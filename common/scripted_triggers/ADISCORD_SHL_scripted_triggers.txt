@@ -1078,7 +1078,10 @@ SHL_can_offer_cistern_charter = {
 		SHL_city_mandate_current = yes
 		SHL_commune_mandate_current = yes
 	}
-	KYZ = { is_in_faction = no }
+	KYZ = {
+		is_in_faction = no
+		ADISCORD_south_coalition_target_war_clear = yes
+	}
 	OR = {
 		SHL_can_settle_cisterns = yes
 		SHL_can_offer_early_charter = yes
@@ -3311,4 +3314,13 @@ SHL_metal_negotiations_unlocked = {
 		has_completed_focus = SHL_metal_market
 		has_completed_focus = SHL_sw_keep_the_markets
 	}
+}
+
+# COUNTRY recipient of a diplomatic reward from Shahrabad.
+SHL_south_can_influence_partner = {
+	ADISCORD_south_crisis_open = yes
+	ADISCORD_south_coalition_invitee = yes
+	ADISCORD_south_shl_invitation_unlocked = yes
+	ADISCORD_south_map_country_shl = no
+	SHL = { ADISCORD_south_coalition_leader_can_receive = yes }
 }

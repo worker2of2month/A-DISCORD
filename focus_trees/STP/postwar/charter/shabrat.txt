@@ -41,7 +41,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_common_citizenship
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_pc_charter_shabrat_common_citizenship
 		x = -7
 		y = 2
 		relative_position_id = STP_pc_lib_lock
@@ -118,7 +118,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_district_registers
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_STP_pc_charter_shabrat_district_registers
 		x = -4
 		y = 3
 		relative_position_id = STP_pc_lib_lock
@@ -387,7 +387,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_national_compact
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_pc_charter_shabrat_national_compact
 		x = -11
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -455,7 +455,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_common_standards
-		icon = GFX_focus_STP_pw_party_domestic_pattern
+		icon = GFX_focus_STP_pc_charter_shabrat_common_standards
 		x = -3
 		y = 6
 		relative_position_id = STP_pc_lib_lock
@@ -581,7 +581,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_citizenship_duty
-		icon = GFX_focus_STP_party_personnel_commissions
+		icon = GFX_focus_STP_pc_charter_shabrat_citizenship_duty
 		x = -12
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -688,7 +688,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_economic_sovereignty
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_pc_charter_shabrat_economic_sovereignty
 		x = -2
 		y = 7
 		relative_position_id = STP_pc_lib_lock
@@ -924,7 +924,7 @@
 
 	focus = {
 		id = STP_pc_charter_shabrat_cabinet_review
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_STP_pc_charter_shabrat_cabinet_review
 		x = -4
 		y = 9
 		relative_position_id = STP_pc_lib_lock

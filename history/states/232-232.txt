@@ -8,6 +8,9 @@ state={
 	buildings_max_level_factor = 1.000
 	state_category = rural
 	local_supplies = 1.5
+	resources = {
+		rubber = 4
+	}
 	history = {
 		owner = PIV
 		add_core_of = PIV

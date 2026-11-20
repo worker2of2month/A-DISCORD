@@ -21,4 +21,237 @@ focus_tree = {
 	continuous_focus_position = { x = 100 y = 555555 }
 
 	shared_focus = STP_ps_exile_office
+
+	focus = {
+		id = ADISCORD_south_restitution_contact_efl
+		icon = GFX_focus_NAM_eflor_accord
+		x = 1
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = {
+			tag = AZH
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_restitution_delegations_open_tt
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_efl_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = ADISCORD_south_restitution_contact_azh
+		icon = GFX_focus_NAM_azhar_accord
+		x = 3
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = {
+			tag = EFL
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_restitution_delegations_open_tt
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_azh_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = ADISCORD_south_restitution_contact_wef
+		icon = GFX_focus_NAM_pipeline_patrols
+		x = 5
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_restitution_delegations_open_tt
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_wef_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = ADISCORD_south_restitution_contact_kdr
+		icon = GFX_focus_NAM_insured_caravans
+		x = 9
+		y = 0
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_restitution_delegations_open_tt
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_kdr_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = ADISCORD_south_restitution_contact_rhm
+		icon = GFX_focus_NAM_south_oil_for_water
+		x = 7
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+		}
+		prerequisite = { focus = ADISCORD_south_restitution_contact_kdr }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_restitution_delegations_open_tt
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_rhm_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = ADISCORD_south_restitution_contact_sdr
+		icon = GFX_focus_NAM_common_fuel_market
+		x = 11
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+		}
+		prerequisite = { focus = ADISCORD_south_restitution_contact_kdr }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_restitution_delegations_open_tt
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_sdr_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = ADISCORD_south_restitution_contact_mzr
+		icon = GFX_focus_NAM_contract_bureau
+		x = 3
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+		}
+		prerequisite = { focus = ADISCORD_south_restitution_contact_wef }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_restitution_delegations_open_tt
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_mzr_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = ADISCORD_south_restitution_contact_kyz
+		icon = GFX_focus_NAM_pw_export_guarantees
+		x = 5
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+		}
+		prerequisite = { focus = ADISCORD_south_restitution_contact_mzr }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_restitution_delegations_open_tt
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_kyz_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = ADISCORD_south_restitution_contact_glp
+		icon = GFX_focus_NAM_island_concession
+		x = 12
+		y = 2
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = {
+			OR = {
+				tag = EFL
+				tag = AZH
+			}
+		}
+		prerequisite = { focus = ADISCORD_south_restitution_contact_sdr }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_restitution_delegations_open_tt
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = ADISCORD_south_contact_glp_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
 }

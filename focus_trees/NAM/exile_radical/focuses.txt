@@ -726,7 +726,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_island_fuel_dumps
-		icon = GFX_focus_NAM_fuel_depots
+		icon = GFX_focus_NAM_bonded_terminal
 		x = 8
 		y = 6
 		cost = 5
@@ -923,7 +923,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_convict_power_plant
-		icon = GFX_focus_RUS_bunker_power_school
+		icon = GFX_focus_NAM_pw_energy_commission
 		x = 2
 		y = 4
 		cost = 6
@@ -2628,7 +2628,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_kadir_tolls
-		icon = GFX_focus_NAM_second_ledger
+		icon = GFX_focus_NAM_customs_clearinghouse
 		x = 22
 		y = 17
 		cost = 4
@@ -2759,7 +2759,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rad_rakhma_wells
-		icon = GFX_focus_NAM_well_register
+		icon = GFX_focus_NAM_pw_water_intakes
 		x = 22
 		y = 19
 		cost = 4

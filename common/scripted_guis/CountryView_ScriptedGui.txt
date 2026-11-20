@@ -98,7 +98,12 @@ scripted_gui = {
 			ideology_icon_technocracy_visible = {
 				has_government = technocracy
 				NOT = { has_country_leader_ideology = dorian_technocracy }
+				NOT = { has_country_leader_ideology = techno_corporatism }
 			}
+			ideology_icon_techno_corporatism_visible = {
+				has_country_leader_ideology = techno_corporatism
+			}
+
 			ideology_icon_dorian_technocracy_visible = {
 				has_country_leader_ideology = dorian_technocracy
 			}

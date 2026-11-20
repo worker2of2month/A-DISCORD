@@ -294,7 +294,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_charter_harbours
-		icon = GFX_focus_VAL_State_Contract
+		icon = GFX_focus_NAM_merchant_charter
 		x = 1
 		y = 5
 		cost = 5
@@ -468,7 +468,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_exile_refugee_homesteads
-		icon = GFX_focus_VAL_Bread_From_Barracks
+		icon = GFX_focus_NAM_municipal_land
 		x = 21
 		y = 2
 		cost = 5
@@ -736,7 +736,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_loan_roads
-		icon = GFX_focus_NAM_state_logistics_grid
+		icon = GFX_focus_NAM_municipal_bonds
 		x = 7
 		y = 3
 		cost = 6
@@ -775,7 +775,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_refugee_housing
-		icon = GFX_focus_NAM_pw_company_housing
+		icon = GFX_focus_NAM_tenant_councils
 		x = 11
 		y = 3
 		cost = 5
@@ -897,7 +897,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_island_power_grid
-		icon = GFX_focus_RUS_bunker_power_school
+		icon = GFX_focus_NAM_pw_energy_commission
 		x = 11
 		y = 4
 		cost = 6
@@ -975,7 +975,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_water_works
-		icon = GFX_focus_NAM_water_boards
+		icon = GFX_focus_NAM_pw_municipal_repair
 		x = 11
 		y = 5
 		cost = 6
@@ -1529,7 +1529,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_credit_arms
-		icon = GFX_focus_NAM_second_ledger
+		icon = GFX_focus_NAM_public_credit
 		x = 35
 		y = 1
 		cost = 4
@@ -1616,39 +1616,16 @@ focus_tree = {
 	}
 
 	focus = {
-		id = NAM_hum_marine_contracts
-		icon = GFX_focus_VAL_Marine_Contract_Corps
-		x = 38
-		y = 2
-		cost = 5
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		prerequisite = {
-			focus = NAM_hum_district_militia
-			focus = NAM_hum_hired_instructors
-		}
-		available = {
-			has_capitulated = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_order_marines_corp
-			custom_effect_tooltip = NAM_order_marines_corp_unlock_tt
-			add_command_power = 10
-		}
-		ai_will_do = {
-			base = 20
-		}
-	}
-
-	focus = {
 		id = NAM_hum_landing_rehearsals
-		icon = GFX_focus_VAL_Marine_Contract_Corps
+		icon = GFX_focus_NAM_chartered_tonnage
 		x = 38
 		y = 3
 		cost = 5
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_hum_marine_contracts }
+		prerequisite = {
+			focus = NAM_hum_district_militia
+			focus = NAM_hum_hired_instructors
+		}
 		available = {
 			has_capitulated = no
 		}
@@ -1919,7 +1896,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_harbour_rebuilding
-		icon = GFX_focus_NAM_repair_yard
+		icon = GFX_focus_NAM_repair_depots
 		x = 27
 		y = 10
 		cost = 4
@@ -2544,7 +2521,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_hum_caravan_charter
-		icon = GFX_focus_VAL_State_Contract
+		icon = GFX_focus_NAM_merchant_charter
 		x = 28
 		y = 17
 		cost = 4

@@ -11627,7 +11627,7 @@ country_event = {
 		}
 		text = ADISCORD_vorkerland_executive_cw.103.d
 	}
-	picture = GFX_report_event_generic_read_write
+	picture = GFX_event_adiscord_ledger_handover
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -11980,7 +11980,7 @@ country_event = {
 	id = ADISCORD_vorkerland_executive_cw.110
 	title = ADISCORD_vorkerland_executive_cw.110.t
 	desc = ADISCORD_vorkerland_executive_cw.110.d
-	picture = GFX_report_event_generic_research_lab
+	picture = GFX_event_adiscord_signal_archive_basement
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { WKR_administration_active = yes }
@@ -12015,7 +12015,7 @@ country_event = {
 	id = ADISCORD_vorkerland_executive_cw.111
 	title = ADISCORD_vorkerland_executive_cw.111.t
 	desc = ADISCORD_vorkerland_executive_cw.111.d
-	picture = GFX_report_event_generic_rally
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { WKR_administration_active = yes }
@@ -12062,7 +12062,7 @@ country_event = {
 		trigger = { NOT = { has_completed_focus = WKR_contract_overtime_norm } }
 		text = ADISCORD_vorkerland_executive_cw.112.d
 	}
-	picture = GFX_report_event_generic_strike
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { WKR_administration_active = yes }
@@ -12254,7 +12254,7 @@ country_event = {
 		trigger = { NOT = { has_country_flag = WKR_audit_strike_crushed } }
 		text = ADISCORD_vorkerland_executive_cw.116.d
 	}
-	picture = GFX_report_event_generic_rally2
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -12340,7 +12340,7 @@ country_event = {
 		trigger = { NOT = { has_country_flag = WKR_audit_councils_defied } }
 		text = ADISCORD_vorkerland_executive_cw.117.d
 	}
-	picture = GFX_report_event_generic_riot
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { WKR_administration_active = yes }
@@ -12612,7 +12612,7 @@ country_event = {
 		}
 		text = ADISCORD_vorkerland_executive_cw.123.d
 	}
-	picture = GFX_report_event_generic_factory
+	picture = GFX_event_adiscord_factory_workshop
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { WKR_administration_active = yes }
@@ -12931,7 +12931,7 @@ country_event = {
 	id = ADISCORD_vorkerland_executive_cw.129
 	title = ADISCORD_vorkerland_executive_cw.129.t
 	desc = ADISCORD_vorkerland_executive_cw.129.d
-	picture = GFX_report_event_generic_train
+	picture = GFX_event_adiscord_rail_yard_waybills
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -13014,7 +13014,7 @@ country_event = {
 	id = ADISCORD_vorkerland_executive_cw.131
 	title = ADISCORD_vorkerland_executive_cw.131.t
 	desc = ADISCORD_vorkerland_executive_cw.131.d
-	picture = GFX_report_event_generic_rally_3
+	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { WKR_administration_active = yes }
@@ -13264,7 +13264,7 @@ country_event = {
 		trigger = { NOT = { has_completed_focus = WKR_audit_exchange_of_prisoners } }
 		text = ADISCORD_vorkerland_executive_cw.136.d
 	}
-	picture = GFX_report_event_generic_soldiers_surrendering
+	picture = GFX_event_adiscord_ledger_handover
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { WKR_administration_active = yes }
@@ -13302,7 +13302,7 @@ country_event = {
 		trigger = { NOT = { has_completed_focus = WKR_audit_resource_concessions } }
 		text = ADISCORD_vorkerland_executive_cw.137.d
 	}
-	picture = GFX_report_event_generic_stock_traders
+	picture = GFX_event_adiscord_registry_office_keys
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { WKR_administration_active = yes }
@@ -13381,7 +13381,7 @@ country_event = {
 		trigger = { NOT = { has_completed_focus = WKR_audit_supply_columns } }
 		text = ADISCORD_vorkerland_executive_cw.139.d
 	}
-	picture = GFX_report_event_generic_truck
+	picture = GFX_event_adiscord_road_barrier_bus
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { WKR_administration_active = yes }
@@ -13687,7 +13687,7 @@ country_event = {
 		trigger = { has_country_flag = VAD_crownless_regalia_held }
 		text = ADISCORD_vorkerland_restoration_cw.105.dr
 	}
-	picture = GFX_report_event_generic_read_write
+	picture = GFX_event_adiscord_ledger_handover
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { VAD_administration_active = yes }
@@ -13885,7 +13885,7 @@ country_event = {
 	id = ADISCORD_vorkerland_restoration_cw.108
 	title = ADISCORD_vorkerland_restoration_cw.108.t
 	desc = ADISCORD_vorkerland_restoration_cw.108.d
-	picture = GFX_report_event_generic_army
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -14200,7 +14200,7 @@ country_event = {
 	id = ADISCORD_vorkerland_restoration_cw.113
 	title = ADISCORD_vorkerland_restoration_cw.113.t
 	desc = ADISCORD_vorkerland_restoration_cw.113.d
-	picture = GFX_report_event_generic_read_write
+	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { VAD_administration_active = yes }
@@ -14240,7 +14240,7 @@ country_event = {
 	id = ADISCORD_vorkerland_restoration_cw.114
 	title = ADISCORD_vorkerland_restoration_cw.114.t
 	desc = ADISCORD_vorkerland_restoration_cw.114.d
-	picture = GFX_report_event_generic_army
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { VAD_administration_active = yes }
@@ -14654,7 +14654,7 @@ country_event = {
 	id = ADISCORD_vorkerland_restoration_cw.122
 	title = ADISCORD_vorkerland_restoration_cw.122.t
 	desc = ADISCORD_vorkerland_restoration_cw.122.d
-	picture = GFX_report_event_generic_soldiers_surrendering
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { VAD_administration_active = yes }
@@ -16774,7 +16774,7 @@ country_event = {
 	id = ADISCORD_vorkerland_directorate_cw.123
 	title = ADISCORD_vorkerland_directorate_cw.123.t
 	desc = ADISCORD_vorkerland_directorate_cw.123.d
-	picture = GFX_report_event_generic_research_lab
+	picture = GFX_event_adiscord_signal_archive_basement
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -16873,7 +16873,7 @@ country_event = {
 	id = ADISCORD_vorkerland_directorate_cw.125
 	title = ADISCORD_vorkerland_directorate_cw.125.t
 	desc = ADISCORD_vorkerland_directorate_cw.125.d
-	picture = GFX_report_event_generic_strike
+	picture = GFX_event_adiscord_field_switchboard
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -16942,7 +16942,7 @@ country_event = {
 	id = ADISCORD_vorkerland_directorate_cw.126
 	title = ADISCORD_vorkerland_directorate_cw.126.t
 	desc = ADISCORD_vorkerland_directorate_cw.126.d
-	picture = GFX_report_event_generic_ruins
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -17383,7 +17383,7 @@ country_event = {
 	id = ADISCORD_vorkerland_directorate_cw.134
 	title = ADISCORD_vorkerland_directorate_cw.134.t
 	desc = ADISCORD_vorkerland_directorate_cw.134.d
-	picture = GFX_report_event_generic_construction_site
+	picture = GFX_event_adiscord_field_switchboard
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -21148,7 +21148,7 @@ country_event = {
 	id = ADISCORD_vorkerland_restoration_cw.144
 	title = ADISCORD_vorkerland_restoration_cw.144.t
 	desc = ADISCORD_vorkerland_restoration_cw.144.d
-	picture = GFX_report_event_generic_military_parade
+	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { VAD_administration_active = yes }
@@ -21233,7 +21233,7 @@ country_event = {
 		}
 		text = ADISCORD_vorkerland_restoration_cw.145.dr
 	}
-	picture = GFX_report_event_generic_battle
+	picture = GFX_event_adiscord_vorkerland_explosion
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -21361,7 +21361,7 @@ country_event = {
 		}
 		text = ADISCORD_vorkerland_restoration_cw.147.dn
 	}
-	picture = GFX_report_event_generic_rally
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -21419,7 +21419,7 @@ country_event = {
 		trigger = { has_country_flag = VAD_standard_rival_in_reserve }
 		text = ADISCORD_vorkerland_restoration_cw.148.dr
 	}
-	picture = GFX_report_event_generic_destroyed_vehicles
+	picture = GFX_event_adiscord_rail_yard_waybills
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { VAD_administration_active = yes }
@@ -21569,7 +21569,7 @@ country_event = {
 		trigger = { VAD_joint_core_course = yes }
 		text = ADISCORD_vorkerland_restoration_cw.151.dj
 	}
-	picture = GFX_report_event_generic_soldiers_surrendering
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -21633,7 +21633,7 @@ country_event = {
 		trigger = { has_country_flag = VAD_standard_old_city_shelled }
 		text = ADISCORD_vorkerland_restoration_cw.152.ds
 	}
-	picture = GFX_report_event_generic_ruins
+	picture = GFX_event_adiscord_perimeter_checkpoint
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
@@ -23471,7 +23471,7 @@ country_event = {
 	id = ADISCORD_vorkerland_directorate_cw.147
 	title = ADISCORD_vorkerland_directorate_cw.147.t
 	desc = ADISCORD_vorkerland_directorate_cw.147.d
-	picture = GFX_report_event_generic_battle
+	picture = GFX_event_adiscord_mountain_militia_assembly
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -23689,7 +23689,7 @@ country_event = {
 			}
 		}
 	}
-	picture = GFX_report_event_generic_defensive_preparations
+	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -23901,7 +23901,7 @@ country_event = {
 	id = ADISCORD_vorkerland_directorate_cw.153
 	title = ADISCORD_vorkerland_directorate_cw.153.t
 	desc = ADISCORD_vorkerland_directorate_cw.153.d
-	picture = GFX_report_event_generic_ruins
+	picture = GFX_event_adiscord_signal_archive_basement
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -24114,7 +24114,7 @@ country_event = {
 			has_completed_focus = TVA_endgame_officers_convention
 		}
 	}
-	picture = GFX_report_event_generic_soldiers_surrendering
+	picture = GFX_event_adiscord_expedition_camp
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -24162,7 +24162,7 @@ country_event = {
 	id = ADISCORD_vorkerland_directorate_cw.157
 	title = ADISCORD_vorkerland_directorate_cw.157.t
 	desc = ADISCORD_vorkerland_directorate_cw.157.d
-	picture = GFX_report_event_generic_research_lab
+	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -24468,7 +24468,7 @@ country_event = {
 			has_completed_focus = TVA_protocol_classify_the_archive
 		}
 	}
-	picture = GFX_report_event_generic_read_write
+	picture = GFX_event_adiscord_field_switchboard
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes
@@ -25473,7 +25473,7 @@ country_event = {
 			has_completed_focus = TVA_endgame_names_not_numbers
 		}
 	}
-	picture = GFX_report_event_generic_rally
+	picture = GFX_event_adiscord_mountain_militia_assembly
 	is_triggered_only = yes
 	trigger = {
 		TVA_administration_active = yes

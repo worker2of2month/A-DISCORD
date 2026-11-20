@@ -94,6 +94,14 @@ class NamChapterAssemblyTests(unittest.TestCase):
         for source in (s for s in SOURCES if s.startswith("NAM/")):
             tree = one(parse_clausewitz(render_source(source)), "focus_tree")
             tree_id = one(tree, "id")
+            expected = set(source_focus_ids(source))
+            if tree_id in ("NAM_exile_radical_focus", "NAM_exile_humanist_focus"):
+                self.assertNotIn(tree_id, roots)
+                self.assertTrue(expected <= definitions)
+                self.assertFalse(any(expected & active_roots for active_roots in roots.values()))
+                self.assertFalse(any(parent not in expected and descendants & expected
+                                     for parent, descendants in children.items()))
+                continue
             reachable = set()
             pending = list(roots[tree_id])
             while pending:
@@ -101,7 +109,6 @@ class NamChapterAssemblyTests(unittest.TestCase):
                 if name not in reachable:
                     reachable.add(name)
                     pending.extend(children.get(name, ()))
-            expected = set(source_focus_ids(source))
             self.assertTrue(reachable <= definitions, tree_id)
             self.assertEqual(reachable, expected, tree_id)
 

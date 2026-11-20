@@ -332,6 +332,11 @@ ideologies = {
 		types = {
 			technocracy_ideology = {
 			}
+			techno_corporatism = {
+				can_be_randomly_selected = no
+				color = { 52 161 173 }
+			}
+
 			dorian_technocracy = {
 				can_be_randomly_selected = no
 				color = { 73 110 156 }

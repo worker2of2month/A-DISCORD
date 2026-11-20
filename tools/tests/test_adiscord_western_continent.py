@@ -14,6 +14,8 @@ from tools.validators.validate_adiscord_division_templates import parse_clausewi
 
 ROOT = Path(__file__).resolve().parents[2]
 CLOSED = {"RSV"}
+# The south-eastern archipelago belongs to the Ulven League.
+CEDED = {"643": "ULV"}
 
 
 def read(path: str) -> str:
@@ -28,7 +30,7 @@ class WesternContinentTests(unittest.TestCase):
         states = source["states"]
         assigned = []
         for state_id, row in states.items():
-            self.assertIn(row["owner"], CLOSED)
+            self.assertIn(row["owner"], {CEDED[state_id]} if state_id in CEDED else CLOSED)
             self.assertIn(row["anchor"], row["provinces"])
             assigned.extend(row["provinces"])
         self.assertEqual(len(assigned), len(set(assigned)))
@@ -46,6 +48,39 @@ class WesternContinentTests(unittest.TestCase):
             text = histories[0].read_text(encoding="utf-8")
             self.assertRegex(text, rf"\bcapital\s*=\s*{capital}\b")
             self.assertNotRegex(text, r"\b(oob|recruit_character|create_country_leader)\s*=")
+
+    def test_ceded_island_is_settled_below_the_league_capital(self):
+        states = geography.western_source()["states"]
+        for state_id, row in states.items():
+            # Only a ceded state is settled; the closed continent stays a shell.
+            self.assertEqual("settlement" in row, state_id in CEDED, state_id)
+        for state_id in CEDED:
+            settlement = states[state_id]["settlement"]
+            path = geography.western_source()["source_partitions"][state_id]["file"]
+            text = read(path)
+            self.assertRegex(text, rf"(?m)^\tmanpower = {settlement['population']}$")
+            self.assertRegex(text, rf"(?m)^\tstate_category = {settlement['category']}$")
+            self.assertTrue(300_000 <= settlement["population"] <= 1_200_000)
+            for building, level in settlement["buildings"].items():
+                self.assertRegex(text, rf"(?m)^\t\t\t{building} = {level}$")
+            for resource, amount in settlement["resources"].items():
+                self.assertRegex(text, rf"(?m)^\t\t{resource} = {amount}$")
+            factories = sum(
+                settlement["buildings"].get(key, 0) for key in ("industrial_complex", "arms_factory", "dockyard")
+            )
+            self.assertLessEqual(factories, 2)
+            # The national centre stays in the League's own capital state.
+            history = read(f"history/countries/{CEDED[state_id]} - {CEDED[state_id]}.txt")
+            capital = re.search(r"(?m)^capital\s*=\s*(\d+)", history).group(1)
+            capital_text = next((ROOT / "history/states").glob(f"{capital}-*.txt")).read_text(encoding="utf-8")
+            pattern = r"victory_points\s*=\s*\{\s*\d+\s+(\d+)\s*\}"
+            points = [int(value) for value in re.findall(pattern, text)]
+            self.assertGreaterEqual(len(points), 6)
+            self.assertLess(max(points), max(int(value) for value in re.findall(pattern, capital_text)))
+            self.assertLess(
+                settlement["population"],
+                2 * int(re.search(r"\bmanpower\s*=\s*(\d+)", capital_text).group(1)),
+            )
 
     def test_diplomacy_guards_are_symmetric_and_preserve_other_countries(self):
         definitions = {

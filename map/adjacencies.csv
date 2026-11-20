@@ -18,4 +18,19 @@ From;To;Type;Through;start_x;start_y;stop_x;stop_y;adjacency_rule_name;Comment
 16535;16807;sea;15477;3729;907;3737;910;;southwestern island bridge
 16448;16804;sea;15477;3728;928;3735;927;;western island bridge
 14634;16266;sea;147;-1;-1;-1;-1;strugent_canal;strugent
+19047;18478;sea;14388;3566;453;3555;445;;nam archipelago island bridge
+19073;17568;sea;14640;3201;504;3211;495;;nam archipelago island bridge
+19076;18944;sea;13924;3275;534;3269;523;;nam archipelago island bridge
+19078;17844;sea;13177;3532;342;3533;354;;nam archipelago island bridge
+19079;6854;sea;16147;2943;489;2949;478;;nam archipelago island bridge
+19085;656;sea;15819;2844;486;2833;476;;nam archipelago island bridge
+19087;12506;sea;13486;4061;229;4075;235;;nam archipelago island bridge
+19089;12186;sea;13406;4136;185;4139;197;;nam archipelago island bridge
+19091;1894;sea;16014;3994;375;3981;367;;nam archipelago island bridge
+19092;3382;sea;15043;3871;332;3864;346;;nam archipelago island bridge
+8308;5667;sea;16179;2957;417;2955;415;;ulven league strait bridge
+7297;12216;sea;15285;3000;435;3000;432;;ulven league strait bridge
+8772;1605;sea;15028;3217;372;3221;369;;ulven league strait bridge
+5943;19235;sea;13973;2688;463;2690;458;;ulven league strait bridge
+5632;1738;sea;15293;2657;422;2664;422;;ulven league strait bridge
 -1;-1;;-1;-1;-1;-1;-1;-1

@@ -734,9 +734,6 @@
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_south_throne_and_crests_tt
-			hidden_effect = {
-				KDR = { ADISCORD_south_offer_alliance = yes }
-			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -778,10 +775,6 @@
 		ai_will_do = { base = 5 }
 	}
 
-	# Брак с Кадиром: союзнику - конвои, отказавшему престолу - повторное предложение.
-	# Обход читается в скоупе цели: престол исчез, воюет с нами, война за Юг уже
-	# идёт или закончилась. Отложенный сюжет Светлогорья задерживает только ответ
-	# престола внутри ADISCORD_south_offer_alliance, а не сам фокус.
 	focus = {
 		id = SHL_r_kadir_marriage
 		icon = GFX_goal_generic_improve_relations
@@ -826,10 +819,11 @@
 					producer = SHL
 				}
 			}
-			else = {
+			else_if = {
+				limit = { KDR = { SHL_south_can_influence_partner = yes } }
 				custom_effect_tooltip = SHL_r_kadir_marriage_tt
 				hidden_effect = {
-					KDR = { ADISCORD_south_offer_alliance = yes }
+					KDR = { ADISCORD_south_shift_influence_to_shl = yes }
 				}
 			}
 		}

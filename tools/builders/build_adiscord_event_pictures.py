@@ -2,7 +2,7 @@
 
 Owns standardized artwork, its GFX extension, and the review contact sheet.
 Story assignments remain hand-authored in events/*.txt. Original artwork is
-preserved; only aspect-preserving crops and resampling are applied here.
+preserved. Photographs receive the print layer unless already printed.
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageOps
 
 from tools.builders.build_adiscord_event_ui_assets import _test_picture as military_headquarters_art
+from tools.builders.build_adiscord_event_ui_assets import print_event_picture
 from tools.lib.adiscord_ui_surfaces import apply_or_check
 from tools.lib.paths import repository_root
 
@@ -54,8 +55,8 @@ ART = {
     "factory_workshop": ("source/factory_workshop_color.png", ("country",)),
 }
 
-# Finished COUNTRY plates supplied at the native size are edited in place;
-# the builder only re-encodes them and registers their sprites.
+# These native-size plates are the editable inputs. A separate print is needed
+# when the supplied artwork has no print texture of its own.
 FINISHED_COUNTRY = (
     "valley_irrigation_survey",
     "signal_archive_basement",
@@ -71,10 +72,26 @@ FINISHED_COUNTRY = (
     "pier_evacuation",
     "rail_yard_waybills",
     "railway_signal_box",
+    "nam_arktur_arsenal",
+    "nam_board_session",
+    "nam_chair_handover",
+    "nam_ferrant_steel",
+    "nam_karamyshev_officers",
+    "nam_loren_oil",
+    "nam_navis_shipping",
+    "nam_reidbank_credit",
+    "nam_smenkom_exchange",
+    "nam_weber_committees",
 )
 ART.update(
     {scene: (f"standard/country/{scene}.png", ("country",)) for scene in FINISHED_COUNTRY}
 )
+
+PREPRINTED_COUNTRY = {
+    "freighter_docking", "ledger_handover", "pier_evacuation", "pipeline_welding",
+    "port_machinery_unloading", "rail_yard_waybills", "railway_signal_box",
+    "registry_office_keys", "road_barrier_bus", "village_fingerprint_signing",
+}
 
 # Preserve public sprite IDs while naming the textures after their visible scene.
 NEWS_SCENES = {
@@ -96,6 +113,14 @@ PRINT_NEWS = {
     "vorkerland_world_empire": "vorkerland_world_empire_news",
 }
 
+# These source photographs already contain the template's print layer.
+# The separately finished PRINT_NEWS plates also carry their own print.
+PREPRINTED_NEWS_PHOTOS = {
+    "armed_uprising", "city_in_civil_war", "imperial_proclamation", "military_planning",
+    "negotiation_table", "peace_negotiations", "treaty_signing", "urban_resistance",
+    "vorkerland_explosion", "vorkerland_northern_settlement",
+}
+
 
 def sprite_name(scene: str, kind: str) -> str:
     if scene == "vorkerland_world_empire" and kind == "news":
@@ -105,6 +130,8 @@ def sprite_name(scene: str, kind: str) -> str:
 
 
 def texture_path(scene: str, kind: str) -> Path:
+    if kind == "country" and scene in FINISHED_COUNTRY and scene not in PREPRINTED_COUNTRY:
+        return ART_ROOT / "standard/country" / f"{scene}_print.png"
     if kind == "news" and scene in PRINT_NEWS:
         return ART_ROOT / "standard/news" / f"{PRINT_NEWS[scene]}_print.png"
     filename = NEWS_SCENES.get(scene, scene) if kind == "news" else scene
@@ -130,8 +157,9 @@ def formatted_art(scene: str, kind: str) -> Image.Image:
     )
     with Image.open(source_path) as image:
         artwork = image.convert("RGB")
-        # No stretching, added frames, tint, blur bars, or artificial sharpening.
-        return ImageOps.fit(artwork, SIZES[kind], method=Image.Resampling.LANCZOS)
+        picture = ImageOps.fit(artwork, SIZES[kind], method=Image.Resampling.LANCZOS)
+    preprinted = PREPRINTED_NEWS_PHOTOS if kind == "news" else PREPRINTED_COUNTRY
+    return picture if scene in preprinted else print_event_picture(picture)
 
 
 def _png(image: Image.Image) -> bytes:

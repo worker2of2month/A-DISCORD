@@ -174,12 +174,18 @@ characters = {
 		}
 	}
 
-	# Leaders of the island exile. The pillars' junta chief and the chairman
-	# of the corporate boards receive their leader roles from
-	# NAM_exile_choose_radical and NAM_corp_takeover.
 	NAM_Rostislav_Karamyshev = {
 		name = NAM_Rostislav_Karamyshev
+		country_leader = {
+			desc = NAM_karamyshev_mainland_party_desc
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+		}
 		portraits = {
+			navy = {
+				large = GFX_portrait_NAM_Rostislav_Karamyshev
+				small = GFX_portrait_NAM_Rostislav_Karamyshev_small
+			}
 			civilian = {
 				large = GFX_portrait_NAM_Rostislav_Karamyshev
 				small = GFX_portrait_NAM_Rostislav_Karamyshev_small
@@ -197,11 +203,76 @@ characters = {
 		}
 	}
 
-	# Yaroslav Weber on Svetlogorye's side after the amnesty or as the humanist
-	# leader of the island exile. Recruited dormant at startup; the amnesty and
-	# the humanist takeover activate his roles. SLF has a separate character.
+	NAM_Aristarkh_Vyazemtsev = {
+		name = NAM_Aristarkh_Vyazemtsev
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NAM_Aristarkh_Vyazemtsev
+				small = GFX_portrait_NAM_Aristarkh_Vyazemtsev_small
+			}
+		}
+	}
+
+	NAM_Taisiya_Valts = {
+		name = NAM_Taisiya_Valts
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NAM_Taisiya_Valts
+				small = GFX_portrait_NAM_Taisiya_Valts_small
+			}
+		}
+	}
+
+	NAM_Saveliy_Kruze = {
+		name = NAM_Saveliy_Kruze
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NAM_Saveliy_Kruze
+				small = GFX_portrait_NAM_Saveliy_Kruze_small
+			}
+		}
+	}
+
+	NAM_Rodion_Kalyonov = {
+		name = NAM_Rodion_Kalyonov
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NAM_Rodion_Kalyonov
+				small = GFX_portrait_NAM_Rodion_Kalyonov_small
+			}
+		}
+	}
+
+	NAM_Nazar_Guryev = {
+		name = NAM_Nazar_Guryev
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NAM_Nazar_Guryev
+				small = GFX_portrait_NAM_Nazar_Guryev_small
+			}
+		}
+	}
+
+	NAM_Lidiya_Velyaminova = {
+		name = NAM_Lidiya_Velyaminova
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NAM_Lidiya_Velyaminova
+				small = GFX_portrait_NAM_Lidiya_Velyaminova_small
+			}
+		}
+	}
+
+	# Weber is recruited at startup and takes command after the amnesty.
+	# SLF uses a separate character.
 	NAM_Yaroslav_Weber = {
 		name = NAM_Yaroslav_Weber
+		country_leader = {
+			desc = NAM_weber_party_leader_desc
+			ideology = humanism_ideology
+			traits = { NAM_trait_voice_of_the_districts }
+			expire = "2200.1.1.1"
+		}
 		portraits = {
 			army = {
 				large = GFX_portrait_NAM_Yaroslav_Weber
@@ -565,6 +636,7 @@ characters = {
 			}
 		}
 		country_leader = {
+			desc = NAM_party_delegate_humanism_desc
 			ideology = humanism_ideology
 			expire = "2200.1.1.1"
 		}
@@ -578,6 +650,7 @@ characters = {
 			}
 		}
 		country_leader = {
+			desc = NAM_party_delegate_utilitarism_desc
 			ideology = utilitarism_ideology
 			expire = "2200.1.1.1"
 		}
@@ -591,6 +664,7 @@ characters = {
 			}
 		}
 		country_leader = {
+			desc = NAM_party_delegate_chauvinism_desc
 			ideology = chauvinism_ideology
 			expire = "2200.1.1.1"
 		}
@@ -604,6 +678,7 @@ characters = {
 			}
 		}
 		country_leader = {
+			desc = NAM_party_delegate_pragmatism_desc
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
 		}
@@ -617,6 +692,7 @@ characters = {
 			}
 		}
 		country_leader = {
+			desc = NAM_party_delegate_anarchism_desc
 			ideology = anarchism_ideology
 			expire = "2200.1.1.1"
 		}
@@ -630,6 +706,7 @@ characters = {
 			}
 		}
 		country_leader = {
+			desc = NAM_party_delegate_technocracy_desc
 			ideology = technocracy_ideology
 			expire = "2200.1.1.1"
 		}
@@ -643,6 +720,7 @@ characters = {
 			}
 		}
 		country_leader = {
+			desc = NAM_party_delegate_hedonism_desc
 			ideology = hedonism_ideology
 			expire = "2200.1.1.1"
 		}

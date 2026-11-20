@@ -207,7 +207,7 @@ defined_text = {
 	name = ADISCORDGetStartupSpoilerLabel
 	text = {
 		trigger = {
-			check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
+			check_variable = { var = ADISCORD_startup_spoilers value = 0 compare = greater_than }
 		}
 		localization_key = ADISCORD_startup_hide_spoilers
 	}
@@ -241,25 +241,6 @@ defined_text = {
 			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
 		}
 		localization_key = SHL_startup_path_5_title
-	}
-	text = {
-		trigger = {
-			tag = NAM
-			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
-		}
-		localization_key = NAM_startup_path_5_title
-	}
-	text = { localization_key = ADISCORD_startup_unsupported }
-}
-
-defined_text = {
-	name = ADISCORDGetStartupPageTitle6
-	text = {
-		trigger = {
-			tag = NAM
-			check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
-		}
-		localization_key = NAM_startup_path_6_title
 	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }

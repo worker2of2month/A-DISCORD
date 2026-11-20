@@ -5373,7 +5373,10 @@ NAM_national_programmes = {
 			custom_effect_tooltip = NAM_incident_draw_tt
 			hidden_effect = {
 				if = {
-					limit = { NAM_country_operable = yes }
+					limit = {
+						NAM_country_operable = yes
+						NAM_mainland_programmes_active = yes
+					}
 					NAM_crisis_select = yes
 				}
 			}
@@ -13914,10 +13917,7 @@ NAM_basin_economy = {
 		icon = ADISCORD_factory
 		allowed = { tag = NAM }
 		visible = {
-			OR = {
-				has_completed_focus = NAM_insured_cargoes
-				has_completed_focus = NAM_board_company_docks
-			}
+			has_completed_focus = NAM_insured_cargoes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -20547,98 +20547,6 @@ NAM_piracy = {
 # Island exile: the landing drill both courses share once the island council
 # of event .100 has chosen the course.
 NAM_exile_politics = {
-	# Thirty days of landing drill on the island beaches. The junta pays 30
-	# loot, the humanists 30 corporate capital; the deposit returns in the
-	# same currency if the drill is interrupted. The piracy window starts the
-	# junta's drill through activate_decision.
-	NAM_exile_drill = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = NAM }
-		visible = {
-			NAM_exile_return_programme_open = yes
-			NAM_exile_drill_unlocked = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_revenge_not_full_tt
-				check_variable = { var = NAM_revenge_readiness value = 100 compare = less_than }
-			}
-		}
-		cost = 0
-		custom_cost_text = NAM_cost_exile_drill
-		custom_cost_trigger = {
-			NOT = { has_political_power < 20 }
-			NAM_exile_drill_currency_ready = yes
-		}
-		fire_only_once = no
-		days_remove = 30
-		days_re_enable = 15
-		cancel_trigger = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_not_met_tt
-				NAM_country_operable = no
-			}
-		}
-		complete_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
-						NOT = { has_political_power < 20 }
-						NAM_exile_drill_currency_ready = yes
-					}
-				}
-				add_political_power = -20
-				custom_effect_tooltip = NAM_exile_drill_started_tt
-				hidden_effect = {
-					if = {
-						limit = { has_country_flag = NAM_exile_humanist }
-						set_temp_variable = { var = NAM_corp_capital_change value = -30 }
-						NAM_corp_capital_add = yes
-					}
-					else = {
-						set_temp_variable = { var = NAM_pirate_loot_change value = -30 }
-						NAM_pirate_loot_add = yes
-					}
-					set_variable = { var = NAM_exile_drill_deposit value = 30 }
-					set_country_flag = { flag = NAM_exile_drill_cd value = 1 days = 45 }
-				}
-			}
-		}
-		remove_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
-						check_variable = { var = NAM_exile_drill_deposit value = 0 compare = greater_than }
-					}
-				}
-				army_experience = 15
-				custom_effect_tooltip = NAM_exile_drill_done_tt
-				hidden_effect = {
-					clear_variable = NAM_exile_drill_deposit
-					add_to_variable = { var = NAM_revenge_readiness value = 10 }
-					NAM_revenge_readiness_clamp = yes
-				}
-			}
-			else = {
-				effect_tooltip = {
-					army_experience = 15
-				}
-				custom_effect_tooltip = NAM_exile_drill_done_tt
-			}
-		}
-		cancel_effect = {
-			custom_effect_tooltip = NAM_exile_drill_refund_tt
-			hidden_effect = { NAM_exile_drill_refund = yes }
-		}
-		ai_will_do = {
-			base = 10
-		}
-	}
-
 	# The exile war ends only in full victory or in the annexation of
 	# Svetlogorye, except when NAM_war_of_return_close_external closes it
 	# outside the treaty: its principals were removed or made peace by another
@@ -20675,113 +20583,1370 @@ NAM_exile_politics = {
 # Humanist exile: foreign corporations finance the return through free zones,
 # island steel, leased labour and innovation; their influence is the price.
 NAM_free_zones = {
-	NAM_board_tender_rail = {
-		icon = generic_industry
+	NAM_board_bid_rail = {
+		icon = ADISCORD_deal
 		allowed = { tag = NAM }
+		activation = { always = no }
 		visible = {
-			NAM_board_can_sell_rail = yes
-			NOT = { has_country_flag = NAM_board_tender_rail_closed }
+			NAM_board_tenders_operable = yes
 		}
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			custom_effect_tooltip = NAM_board_tender_rail_unlock_tt
+		available = {
+			hidden_trigger = { always = no }
+		}
+		selectable_mission = no
+		days_mission_timeout = 14
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_bid_timeout_tt
 			hidden_effect = {
 				if = {
 					limit = {
-						NAM_board_can_sell_rail = yes
-						NOT = { has_country_flag = NAM_board_tender_rail_closed }
+						NAM_board_tenders_operable = yes
 					}
-					set_country_flag = NAM_board_tender_rail_closed
-					country_event = { id = ADISCORD_nam_story.24 }
+					set_temp_variable = { var = NAM_board_lot_input value = 1 }
+					set_temp_variable = { var = NAM_board_company_input value = 0 }
+					set_temp_variable = { var = NAM_board_delta_input value = -10 }
+					NAM_board_close_tender = yes
 				}
-			}
-		}
-		ai_will_do = {
-			base = 5
-			modifier = {
-				factor = 0
-				NOT = {
-					OR = {
-						NAM_board_minister_2 = yes
-						NAM_board_minister_5 = yes
-					}
-				}
+				country_event = { id = ADISCORD_nam_story.24 }
 			}
 		}
 	}
 
-	NAM_board_tender_yards = {
-		icon = generic_industry
+	NAM_board_award_rail_smenkom = {
+		icon = ADISCORD_deal
 		allowed = { tag = NAM }
 		visible = {
-			NAM_board_can_sell_yards = yes
-			NOT = { has_country_flag = NAM_board_tender_yards_closed }
+			NAM_board_tenders_operable = yes
+			OR = {
+				has_active_mission = NAM_board_bid_rail
+				AND = {
+					check_variable = { var = NAM_board_motion^5 value = 1 compare = equals }
+					check_variable = { var = NAM_board_lot_rail value = 0 compare = equals }
+				}
+			}
+		}
+		available = {
+			always = yes
 		}
 		cost = 0
-		fire_only_once = no
 		complete_effect = {
-			custom_effect_tooltip = NAM_board_tender_yards_decision_effect_tt
-			hidden_effect = {
-				if = {
-					limit = {
-						NAM_board_can_sell_yards = yes
-						NOT = { has_country_flag = NAM_board_tender_yards_closed }
-					}
-					set_country_flag = NAM_board_tender_yards_closed
-					country_event = { id = ADISCORD_nam_story.25 }
-				}
-			}
-		}
-		ai_will_do = {
-			base = 5
-			modifier = {
-				factor = 0
-				NOT = {
-					OR = {
-						NAM_board_minister_3 = yes
-						NAM_board_minister_4 = yes
-					}
-				}
-			}
-		}
-	}
-
-	NAM_board_tender_depots = {
-		icon = generic_industry
-		allowed = { tag = NAM }
-		visible = {
-			NAM_board_can_sell_depots = yes
-			NOT = { has_country_flag = NAM_board_tender_depots_closed }
-		}
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			custom_effect_tooltip = NAM_board_tender_depots_decision_effect_tt
-			hidden_effect = {
-				if = {
-					limit = {
-						NAM_board_can_sell_depots = yes
-						NOT = { has_country_flag = NAM_board_tender_depots_closed }
-					}
-					set_country_flag = NAM_board_tender_depots_closed
-					country_event = { id = ADISCORD_nam_story.26 }
-				}
-			}
-		}
-		ai_will_do = {
-			base = 5
-			modifier = {
-				factor = 0
-				NOT = {
-					OR = {
-						NAM_board_minister_1 = yes
-						NAM_board_minister_6 = yes
-						AND = {
-							has_war = no
-							NOT = { has_political_power < 75 }
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_tenders_operable = yes
+						OR = {
+							has_active_mission = NAM_board_bid_rail
+							AND = {
+								check_variable = { var = NAM_board_motion^5 value = 1 compare = equals }
+								check_variable = { var = NAM_board_lot_rail value = 0 compare = equals }
+							}
 						}
 					}
+				}
+				custom_effect_tooltip = NAM_board_award_rail_smenkom_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							has_active_mission = NAM_board_bid_rail
+						}
+						remove_mission = NAM_board_bid_rail
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 1 }
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					NAM_board_close_tender = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				has_active_mission = NAM_board_bid_rail
+				check_variable = { var = NAM_board_support^5 value = NAM_board_support^2 compare = less_than }
+			}
+		}
+	}
+
+	NAM_board_award_rail_ferrant = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_tenders_operable = yes
+			OR = {
+				has_active_mission = NAM_board_bid_rail
+				AND = {
+					check_variable = { var = NAM_board_motion^2 value = 1 compare = equals }
+					check_variable = { var = NAM_board_lot_rail value = 0 compare = equals }
+				}
+				AND = {
+					check_variable = { var = NAM_board_motion^2 value = 1 compare = equals }
+					check_variable = { var = NAM_board_lot_rail value = 5 compare = equals }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_board_rail_cost
+		custom_cost_trigger = {
+			OR = {
+				has_active_mission = NAM_board_bid_rail
+				NOT = {
+					has_political_power < 50
+				}
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_tenders_operable = yes
+						OR = {
+							has_active_mission = NAM_board_bid_rail
+							AND = {
+								check_variable = { var = NAM_board_motion^2 value = 1 compare = equals }
+								check_variable = { var = NAM_board_lot_rail value = 0 compare = equals }
+							}
+							AND = {
+								check_variable = { var = NAM_board_motion^2 value = 1 compare = equals }
+								check_variable = { var = NAM_board_lot_rail value = 5 compare = equals }
+							}
+						}
+						OR = {
+							has_active_mission = NAM_board_bid_rail
+							NOT = {
+								has_political_power < 50
+							}
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_board_award_rail_ferrant_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							NOT = {
+								has_active_mission = NAM_board_bid_rail
+							}
+						}
+						add_political_power = -50
+					}
+					if = {
+						limit = {
+							has_active_mission = NAM_board_bid_rail
+						}
+						remove_mission = NAM_board_bid_rail
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 1 }
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					NAM_board_close_tender = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				has_active_mission = NAM_board_bid_rail
+				check_variable = { var = NAM_board_support^2 value = NAM_board_support^5 compare = less_than_or_equals }
+			}
+		}
+	}
+
+	NAM_board_keep_rail_public = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_tenders_operable = yes
+			has_active_mission = NAM_board_bid_rail
+		}
+		available = {
+			always = yes
+		}
+		cost = 0
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_tenders_operable = yes
+						has_active_mission = NAM_board_bid_rail
+					}
+				}
+				custom_effect_tooltip = NAM_board_keep_rail_public_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							has_active_mission = NAM_board_bid_rail
+						}
+						remove_mission = NAM_board_bid_rail
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 1 }
+					set_temp_variable = { var = NAM_board_company_input value = 0 }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					NAM_board_close_tender = yes
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	NAM_board_bid_yards = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_tenders_operable = yes
+		}
+		available = {
+			hidden_trigger = { always = no }
+		}
+		selectable_mission = no
+		days_mission_timeout = 14
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_bid_timeout_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_tenders_operable = yes
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 2 }
+					set_temp_variable = { var = NAM_board_company_input value = 0 }
+					set_temp_variable = { var = NAM_board_delta_input value = -10 }
+					NAM_board_close_tender = yes
+				}
+				country_event = { id = ADISCORD_nam_story.25 }
+			}
+		}
+	}
+
+	NAM_board_award_yards_navis = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_tenders_operable = yes
+			OR = {
+				has_active_mission = NAM_board_bid_yards
+				AND = {
+					check_variable = { var = NAM_board_motion^3 value = 1 compare = equals }
+					check_variable = { var = NAM_board_lot_yards value = 0 compare = equals }
+				}
+			}
+		}
+		available = {
+			always = yes
+		}
+		cost = 0
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_tenders_operable = yes
+						OR = {
+							has_active_mission = NAM_board_bid_yards
+							AND = {
+								check_variable = { var = NAM_board_motion^3 value = 1 compare = equals }
+								check_variable = { var = NAM_board_lot_yards value = 0 compare = equals }
+							}
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_board_award_yards_navis_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							has_active_mission = NAM_board_bid_yards
+						}
+						remove_mission = NAM_board_bid_yards
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 2 }
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					NAM_board_close_tender = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				has_active_mission = NAM_board_bid_yards
+				check_variable = { var = NAM_board_support^3 value = NAM_board_support^4 compare = less_than }
+			}
+		}
+	}
+
+	NAM_board_award_yards_arktur = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_tenders_operable = yes
+			OR = {
+				has_active_mission = NAM_board_bid_yards
+				AND = {
+					check_variable = { var = NAM_board_motion^4 value = 1 compare = equals }
+					check_variable = { var = NAM_board_lot_yards value = 0 compare = equals }
+				}
+			}
+		}
+		available = {
+			always = yes
+		}
+		cost = 0
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_tenders_operable = yes
+						OR = {
+							has_active_mission = NAM_board_bid_yards
+							AND = {
+								check_variable = { var = NAM_board_motion^4 value = 1 compare = equals }
+								check_variable = { var = NAM_board_lot_yards value = 0 compare = equals }
+							}
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_board_award_yards_arktur_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							has_active_mission = NAM_board_bid_yards
+						}
+						remove_mission = NAM_board_bid_yards
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 2 }
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					NAM_board_close_tender = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				has_active_mission = NAM_board_bid_yards
+				check_variable = { var = NAM_board_support^4 value = NAM_board_support^3 compare = less_than_or_equals }
+			}
+		}
+	}
+
+	NAM_board_keep_yards_public = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_tenders_operable = yes
+			has_active_mission = NAM_board_bid_yards
+		}
+		available = {
+			always = yes
+		}
+		cost = 0
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_tenders_operable = yes
+						has_active_mission = NAM_board_bid_yards
+					}
+				}
+				custom_effect_tooltip = NAM_board_keep_yards_public_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							has_active_mission = NAM_board_bid_yards
+						}
+						remove_mission = NAM_board_bid_yards
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 2 }
+					set_temp_variable = { var = NAM_board_company_input value = 0 }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					NAM_board_close_tender = yes
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	NAM_board_bid_depots = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_tenders_operable = yes
+		}
+		available = {
+			hidden_trigger = { always = no }
+		}
+		selectable_mission = no
+		days_mission_timeout = 14
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_bid_timeout_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_tenders_operable = yes
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 3 }
+					set_temp_variable = { var = NAM_board_company_input value = 0 }
+					set_temp_variable = { var = NAM_board_delta_input value = -10 }
+					NAM_board_close_tender = yes
+				}
+				country_event = { id = ADISCORD_nam_story.26 }
+			}
+		}
+	}
+
+	NAM_board_award_depots_loren = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_tenders_operable = yes
+			OR = {
+				has_active_mission = NAM_board_bid_depots
+				AND = {
+					check_variable = { var = NAM_board_motion^1 value = 1 compare = equals }
+					check_variable = { var = NAM_board_lot_depots value = 0 compare = equals }
+				}
+			}
+		}
+		available = {
+			always = yes
+		}
+		cost = 0
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_tenders_operable = yes
+						OR = {
+							has_active_mission = NAM_board_bid_depots
+							AND = {
+								check_variable = { var = NAM_board_motion^1 value = 1 compare = equals }
+								check_variable = { var = NAM_board_lot_depots value = 0 compare = equals }
+							}
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_board_award_depots_loren_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							has_active_mission = NAM_board_bid_depots
+						}
+						remove_mission = NAM_board_bid_depots
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 3 }
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					NAM_board_close_tender = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				has_active_mission = NAM_board_bid_depots
+				check_variable = { var = NAM_board_support^1 value = NAM_board_support^6 compare = less_than }
+			}
+		}
+	}
+
+	NAM_board_award_depots_reidbank = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_tenders_operable = yes
+			OR = {
+				has_active_mission = NAM_board_bid_depots
+				AND = {
+					check_variable = { var = NAM_board_motion^6 value = 1 compare = equals }
+					check_variable = { var = NAM_board_lot_depots value = 0 compare = equals }
+				}
+			}
+		}
+		available = {
+			always = yes
+		}
+		cost = 0
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_tenders_operable = yes
+						OR = {
+							has_active_mission = NAM_board_bid_depots
+							AND = {
+								check_variable = { var = NAM_board_motion^6 value = 1 compare = equals }
+								check_variable = { var = NAM_board_lot_depots value = 0 compare = equals }
+							}
+						}
+					}
+				}
+				custom_effect_tooltip = NAM_board_award_depots_reidbank_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							has_active_mission = NAM_board_bid_depots
+						}
+						remove_mission = NAM_board_bid_depots
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 3 }
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					NAM_board_close_tender = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				has_active_mission = NAM_board_bid_depots
+				check_variable = { var = NAM_board_support^6 value = NAM_board_support^1 compare = less_than_or_equals }
+			}
+		}
+	}
+
+	NAM_board_keep_depots_public = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_tenders_operable = yes
+			has_active_mission = NAM_board_bid_depots
+		}
+		available = {
+			always = yes
+		}
+		cost = 0
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_board_tenders_operable = yes
+						has_active_mission = NAM_board_bid_depots
+					}
+				}
+				custom_effect_tooltip = NAM_board_keep_depots_public_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							has_active_mission = NAM_board_bid_depots
+						}
+						remove_mission = NAM_board_bid_depots
+					}
+					set_temp_variable = { var = NAM_board_lot_input value = 3 }
+					set_temp_variable = { var = NAM_board_company_input value = 0 }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					NAM_board_close_tender = yes
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	NAM_board_session = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_operable = yes
+		}
+		available = {
+			hidden_trigger = { always = no }
+		}
+		selectable_mission = no
+		days_mission_timeout = 60
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_session_due_tt
+			hidden_effect = {
+				NAM_board_session_due = yes
+			}
+		}
+	}
+
+	NAM_board_withdraw_question = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_operable = yes
+			has_active_mission = NAM_board_session
+			check_variable = { var = days_mission_timeout@NAM_board_session value = 15 compare = less_than }
+		}
+		available = {
+			check_variable = { var = NAM_board_deferred value = 0 compare = equals }
+		}
+		cost = 40
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_withdraw_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_speaker_1 }
+				set_temp_variable = { var = NAM_board_delta_input value = -5 }
+				NAM_board_support_change = yes
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_speaker_2 }
+				set_temp_variable = { var = NAM_board_delta_input value = -5 }
+				NAM_board_support_change = yes
+				add_to_variable = { var = NAM_board_session_day value = 30 }
+				add_days_mission_timeout = { mission = NAM_board_session days = 30 }
+				set_variable = { var = NAM_board_deferred value = 2 }
+				NAM_board_queue_recount = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	NAM_board_resolution_loren = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_operable = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_resolution_goal_1_tt
+				NAM_board_goal_loren = yes
+			}
+		}
+		selectable_mission = no
+		days_mission_timeout = 150
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_success_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 1 }
+				set_temp_variable = { var = NAM_board_result_input value = 1 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_board_resolution_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = yes
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_resolution_end_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = no
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 1 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+	}
+
+	NAM_board_resolution_ferrant = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_operable = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_resolution_goal_2_tt
+				NAM_board_goal_ferrant = yes
+			}
+		}
+		selectable_mission = no
+		days_mission_timeout = 150
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				AND = {
+					check_variable = { var = NAM_board_motion^2 value = 3 compare = equals }
+					AND = {
+						has_variable = NAM_judas_last_op_karamyshev
+						check_variable = { var = NAM_judas_last_op_karamyshev value = NAM_board_baseline^2 compare = greater_than }
+						check_variable = { var = NAM_judas_last_op_karamyshev value = NAM_board_motion_start^2 compare = greater_than_or_equals }
+					}
+				}
+				AND = {
+					check_variable = { var = NAM_board_motion^2 value = 2 compare = equals }
+					NOT = {
+						has_idea = NAM_board_ferrant_steel_monopoly
+					}
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_success_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 2 }
+				set_temp_variable = { var = NAM_board_result_input value = 1 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_board_resolution_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = yes
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_resolution_end_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = no
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+				else_if = {
+					limit = {
+						check_variable = { var = NAM_board_motion^2 value = 3 compare = equals }
+						NOT = {
+							AND = {
+								has_variable = NAM_judas_last_op_karamyshev
+								check_variable = { var = NAM_judas_last_op_karamyshev value = NAM_board_baseline^2 compare = greater_than }
+								check_variable = { var = NAM_judas_last_op_karamyshev value = NAM_board_motion_start^2 compare = greater_than_or_equals }
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					set_temp_variable = { var = NAM_board_result_input value = 1 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 2 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+	}
+
+	NAM_board_revoke_ferrant = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_operable = yes
+			check_variable = { var = NAM_board_motion^2 value = 2 compare = equals }
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_failure_tt
+			hidden_effect = {
+				remove_mission = NAM_board_resolution_ferrant
+				set_temp_variable = { var = NAM_board_company_input value = 2 }
+				set_temp_variable = { var = NAM_board_result_input value = 0 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	NAM_board_resolution_navis = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_operable = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_resolution_goal_3_tt
+				NAM_board_goal_navis = yes
+			}
+		}
+		selectable_mission = no
+		days_mission_timeout = 150
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_success_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 3 }
+				set_temp_variable = { var = NAM_board_result_input value = 1 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_board_resolution_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = yes
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_resolution_end_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = no
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 3 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+	}
+
+	NAM_board_resolution_arktur = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_operable = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_resolution_goal_4_tt
+				NAM_board_goal_arktur = yes
+			}
+		}
+		selectable_mission = no
+		days_mission_timeout = 150
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				AND = {
+					check_variable = { var = NAM_board_motion^4 value = 4 compare = equals }
+					NOT = {
+						has_idea = NAM_board_arktur_arms_monopoly
+					}
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_success_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 4 }
+				set_temp_variable = { var = NAM_board_result_input value = 1 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_board_resolution_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = yes
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_resolution_end_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = no
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 4 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+	}
+
+	NAM_board_revoke_arktur = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_operable = yes
+			check_variable = { var = NAM_board_motion^4 value = 4 compare = equals }
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_failure_tt
+			hidden_effect = {
+				remove_mission = NAM_board_resolution_arktur
+				set_temp_variable = { var = NAM_board_company_input value = 4 }
+				set_temp_variable = { var = NAM_board_result_input value = 0 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	NAM_board_resolution_smenkom = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_operable = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_resolution_goal_5_tt
+				NAM_board_goal_smenkom = yes
+			}
+		}
+		selectable_mission = no
+		days_mission_timeout = 150
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				AND = {
+					check_variable = { var = NAM_board_motion^5 value = 2 compare = equals }
+					AND = {
+						has_variable = NAM_judas_last_op_weber
+						check_variable = { var = NAM_judas_last_op_weber value = NAM_board_baseline^5 compare = greater_than }
+						check_variable = { var = NAM_judas_last_op_weber value = NAM_board_motion_start^5 compare = greater_than_or_equals }
+					}
+				}
+				AND = {
+					check_variable = { var = NAM_board_motion^5 value = 4 compare = equals }
+					NOT = {
+						has_idea = NAM_board_smenkom_closed_shop
+					}
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_success_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 5 }
+				set_temp_variable = { var = NAM_board_result_input value = 1 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_board_resolution_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = yes
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_resolution_end_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = no
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+				else_if = {
+					limit = {
+						check_variable = { var = NAM_board_motion^5 value = 2 compare = equals }
+						NOT = {
+							AND = {
+								has_variable = NAM_judas_last_op_weber
+								check_variable = { var = NAM_judas_last_op_weber value = NAM_board_baseline^5 compare = greater_than }
+								check_variable = { var = NAM_judas_last_op_weber value = NAM_board_motion_start^5 compare = greater_than_or_equals }
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					set_temp_variable = { var = NAM_board_result_input value = 1 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 5 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+	}
+
+	NAM_board_revoke_smenkom = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_operable = yes
+			check_variable = { var = NAM_board_motion^5 value = 4 compare = equals }
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_failure_tt
+			hidden_effect = {
+				remove_mission = NAM_board_resolution_smenkom
+				set_temp_variable = { var = NAM_board_company_input value = 5 }
+				set_temp_variable = { var = NAM_board_result_input value = 0 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	NAM_board_resolution_reidbank = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_operable = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_resolution_goal_6_tt
+				NAM_board_goal_reidbank = yes
+			}
+		}
+		selectable_mission = no
+		days_mission_timeout = 150
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				AND = {
+					check_variable = { var = NAM_board_motion^6 value = 2 compare = equals }
+					NOT = {
+						has_idea = NAM_board_reidbank_clearing
+					}
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_success_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_result_input value = 1 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_board_resolution_cancel_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = yes
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_resolution_end_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_board_operable = no
+					}
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					set_temp_variable = { var = NAM_board_result_input value = -1 }
+					NAM_board_settle_resolution = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = 6 }
+					set_temp_variable = { var = NAM_board_result_input value = 0 }
+					NAM_board_settle_resolution = yes
+				}
+			}
+		}
+	}
+
+	NAM_board_revoke_reidbank = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_operable = yes
+			check_variable = { var = NAM_board_motion^6 value = 2 compare = equals }
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_resolution_failure_tt
+			hidden_effect = {
+				remove_mission = NAM_board_resolution_reidbank
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_result_input value = 0 }
+				NAM_board_settle_resolution = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	# Interim selector cycles the same index used by the company-seat buttons.
+	NAM_board_select_company = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			NAM_board_operable = yes
+			is_ai = no
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				add_to_variable = { var = NAM_board_selected value = 1 }
+				if = {
+					limit = {
+						check_variable = { var = NAM_board_selected value = 6 compare = greater_than }
+					}
+					set_variable = { var = NAM_board_selected value = 1 }
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	NAM_board_lobby_company = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_decision = NAM_board_lobby_company
+				AND = {
+					NAM_board_operable = yes
+					AND = {
+						check_variable = { var = NAM_board_selected value = 0 compare = greater_than }
+						check_variable = { var = NAM_board_selected value = 7 compare = less_than }
+					}
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_lobby_eligible_tt
+				AND = {
+					NAM_board_operable = yes
+					AND = {
+						check_variable = { var = NAM_board_selected value = 0 compare = greater_than }
+						check_variable = { var = NAM_board_selected value = 7 compare = less_than }
+					}
+					check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+					check_variable = { var = NAM_board_lobby_target value = 0 compare = equals }
+					check_variable = { var = NAM_board_lobby_day^NAM_board_selected value = global.num_days compare = less_than_or_equals }
+					check_variable = { var = NAM_board_support^NAM_board_selected value = 65 compare = less_than }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_board_lobby_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 30
+			}
+			check_variable = { var = NAM_corp_capital value = 25 compare = greater_than_or_equals }
+		}
+		days_remove = 21
+		cancel_trigger = {
+			NAM_board_operable = no
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_lobby_started_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						hidden_trigger = {
+							AND = {
+								NAM_board_operable = yes
+								AND = {
+									check_variable = { var = NAM_board_selected value = 0 compare = greater_than }
+									check_variable = { var = NAM_board_selected value = 7 compare = less_than }
+								}
+								check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+								check_variable = { var = NAM_board_lobby_target value = 0 compare = equals }
+								check_variable = { var = NAM_board_lobby_day^NAM_board_selected value = global.num_days compare = less_than_or_equals }
+								check_variable = { var = NAM_board_support^NAM_board_selected value = 65 compare = less_than }
+							}
+							NOT = {
+								has_political_power < 30
+							}
+							check_variable = { var = NAM_corp_capital value = 25 compare = greater_than_or_equals }
+						}
+					}
+					set_variable = { var = NAM_board_lobby_target value = NAM_board_selected }
+					NAM_board_take_action_slot = yes
+					add_political_power = -30
+					set_temp_variable = { var = NAM_corp_capital_change value = -25 }
+					NAM_corp_capital_add = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_board_lobby_refund_tt
+			hidden_effect = {
+				NAM_board_refund_lobby = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_board_lobby_result_tt
+			hidden_effect = {
+				NAM_board_finish_lobby = yes
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	NAM_board_prepare_dismissal = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_decision = NAM_board_prepare_dismissal
+				AND = {
+					NAM_board_operable = yes
+					AND = {
+						check_variable = { var = NAM_board_selected value = 0 compare = greater_than }
+						check_variable = { var = NAM_board_selected value = 7 compare = less_than }
+					}
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_dismissal_eligible_tt
+				AND = {
+					NAM_board_operable = yes
+					AND = {
+						check_variable = { var = NAM_board_selected value = 0 compare = greater_than }
+						check_variable = { var = NAM_board_selected value = 7 compare = less_than }
+					}
+					check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+					check_variable = { var = NAM_board_dismissal_target value = 0 compare = equals }
+					check_variable = { var = NAM_board_seat_count^NAM_board_selected value = 0 compare = greater_than }
+					check_variable = { var = NAM_board_dismissal_prepared^NAM_board_selected value = global.num_days compare = less_than_or_equals }
+				}
+			}
+		}
+		cost = 20
+		days_remove = 21
+		cancel_trigger = {
+			NAM_board_operable = no
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_board_dismissal_started_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						hidden_trigger = {
+							AND = {
+								NAM_board_operable = yes
+								AND = {
+									check_variable = { var = NAM_board_selected value = 0 compare = greater_than }
+									check_variable = { var = NAM_board_selected value = 7 compare = less_than }
+								}
+								check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+								check_variable = { var = NAM_board_dismissal_target value = 0 compare = equals }
+								check_variable = { var = NAM_board_seat_count^NAM_board_selected value = 0 compare = greater_than }
+								check_variable = { var = NAM_board_dismissal_prepared^NAM_board_selected value = global.num_days compare = less_than_or_equals }
+							}
+						}
+					}
+					set_variable = { var = NAM_board_dismissal_target value = NAM_board_selected }
+					NAM_board_take_action_slot = yes
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_board_dismissal_refund_tt
+			hidden_effect = {
+				NAM_board_refund_dismissal = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_board_dismissal_result_tt
+			hidden_effect = {
+				NAM_board_finish_dismissal = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	NAM_board_no_confidence = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = { NAM_board_operable = yes }
+		available = { hidden_trigger = { always = no } }
+		days_mission_timeout = 45
+		selectable_mission = no
+		fire_only_once = no
+		is_good = no
+		timeout_effect = {
+			custom_effect_tooltip = NAM_board_no_confidence_result_tt
+			hidden_effect = {
+				if = {
+					limit = { NAM_board_operable = yes }
+					NAM_board_settle_no_confidence = yes
+				}
+				else = {
+					country_event = { id = ADISCORD_nam_resource_war.422 days = 1 }
 				}
 			}
 		}
@@ -20878,6 +22043,10 @@ NAM_free_zones = {
 		}
 		available = {
 			custom_trigger_tooltip = {
+				tooltip = NAM_board_product_available_2_tt
+				NAM_board_product_blocked_2 = no
+			}
+			custom_trigger_tooltip = {
 				tooltip = NAM_pirate_country_operable_tt
 				NAM_country_operable = yes
 			}
@@ -20931,6 +22100,10 @@ NAM_free_zones = {
 			has_completed_focus = NAM_hum_labour_bureau
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_product_available_5_tt
+				NAM_board_product_blocked_5 = no
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_pirate_country_operable_tt
 				NAM_country_operable = yes
@@ -20992,10 +22165,7 @@ NAM_free_zones = {
 		allowed = { tag = NAM }
 		visible = {
 			NAM_corp_open = yes
-			OR = {
-				has_completed_focus = NAM_hum_innovation_parks
-				has_completed_focus = NAM_board_humanist_facade
-			}
+			has_completed_focus = NAM_board_treaty_two_judases
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -21024,6 +22194,7 @@ NAM_free_zones = {
 				limit = {
 					hidden_trigger = {
 						NAM_corp_open = yes
+						has_completed_focus = NAM_board_treaty_two_judases
 						NOT = { has_variable = NAM_corp_park_deposit }
 						NOT = { has_political_power < 25 }
 						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
@@ -21055,7 +22226,9 @@ NAM_free_zones = {
 					producer = NAM
 				}
 				if = {
-					limit = { has_completed_focus = NAM_board_humanist_facade }
+					limit = {
+						has_completed_focus = NAM_board_treaty_two_judases
+					}
 					add_equipment_to_stockpile = {
 						type = motorized_equipment_1
 						amount = 100
@@ -21085,17 +22258,23 @@ NAM_free_zones = {
 		}
 	}
 
-	NAM_corp_buy_arms = {
+NAM_corp_buy_arms = {
 		icon = ADISCORD_arms_supply
 		allowed = { tag = NAM }
 		visible = {
 			NAM_corp_open = yes
-			OR = {
-				has_completed_focus = NAM_hum_credit_arms
-				has_completed_focus = NAM_board_purge_ministers
-			}
+			has_completed_focus = NAM_board_last_debtor
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_general_strike_over_tt
+				NOT = { has_idea = NAM_judas_general_strike }
+			}
+			NOT = { has_idea = NAM_board_arktur_arms_monopoly }
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_product_available_4_tt
+				NAM_board_product_blocked_4 = no
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_pirate_country_operable_tt
 				NAM_country_operable = yes
@@ -21112,6 +22291,10 @@ NAM_free_zones = {
 			if = {
 				limit = {
 					hidden_trigger = {
+						NAM_board_product_blocked_4 = no
+						NOT = { has_idea = NAM_board_arktur_arms_monopoly }
+						NAM_corp_open = yes
+						has_completed_focus = NAM_board_last_debtor
 						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
 					}
 				}
@@ -21132,7 +22315,7 @@ NAM_free_zones = {
 					producer = NAM
 				}
 				if = {
-					limit = { has_completed_focus = NAM_board_purge_ministers }
+					limit = { has_completed_focus = NAM_board_last_debtor }
 					if = {
 						limit = { NOT = { has_tech = ADISCORD_tech_armored_carrier_program } }
 						set_technology = { ADISCORD_tech_armored_carrier_program = 1 }
@@ -21149,6 +22332,7 @@ NAM_free_zones = {
 				}
 				hidden_effect = {
 					set_temp_variable = { var = NAM_corp_capital_change value = -60 }
+					NAM_judas_report_arms = yes
 					NAM_corp_capital_add = yes
 					add_to_variable = { var = NAM_corp_influence value = 2 }
 					NAM_corp_influence_clamp = yes
@@ -21261,305 +22445,6 @@ NAM_free_zones = {
 		}
 	}
 
-	# A marine formation paid with foreign capital; the landing at the South
-	# Harbour delivers it like the junta's orders. The humanists contract it
-	# through their own focus, the boards after the takeover through theirs.
-	NAM_order_marines_corp = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = NAM }
-		visible = {
-			NAM_corp_open = yes
-			NAM_marine_orders_open = yes
-			OR = {
-				has_completed_focus = NAM_hum_marine_contracts
-				has_completed_focus = NAM_board_landing_contracts
-			}
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_marine_slot_free_tt
-				NAM_marine_order_can_place = yes
-			}
-		}
-		cost = 0
-		custom_cost_text = NAM_cost_order_marines_corp
-		custom_cost_trigger = {
-			check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
-			NOT = { has_manpower < 4300 }
-		}
-		fire_only_once = no
-		days_re_enable = 14
-		complete_effect = {
-			custom_effect_tooltip = NAM_order_marines_corp_tt
-			if = {
-				limit = {
-					hidden_trigger = {
-						NAM_marine_order_can_place = yes
-						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
-						NOT = { has_manpower < 4300 }
-					}
-				}
-				add_manpower = -4300
-				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = -60 }
-					NAM_corp_capital_add = yes
-					add_to_variable = { var = NAM_marine_orders_paid value = 1 }
-					NAM_marine_ensure_template = yes
-				}
-			}
-		}
-		ai_will_do = {
-			base = 15
-		}
-	}
-
-	NAM_order_marines_corp_release = {
-		icon = generic_political_discourse
-		allowed = { tag = NAM }
-		visible = {
-			NAM_corp_open = yes
-			NAM_exile_return_programme_open = yes
-			check_variable = { var = NAM_marine_orders_paid value = 0 compare = greater_than }
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-		}
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			custom_effect_tooltip = NAM_order_marines_corp_release_tt
-			hidden_effect = { NAM_marine_orders_refund = yes }
-		}
-		ai_will_do = { base = 0 }
-	}
-
-	# ----- Corporate state: the districts of the corporations -----
-	NAM_board_post_contract_guard = {
-		icon = ADISCORD_arms_supply
-		allowed = { tag = NAM }
-		state_target = yes
-		targets = { 67 69 701 260 253 241 }
-		target_trigger = { always = yes }
-		highlight_states = { highlight_state_targets = { state = FROM } }
-		on_map_mode = map_and_decisions_view
-		visible = {
-			has_completed_focus = NAM_board_security_contracts
-			NAM_board_operable = yes
-			FROM = { NAM_board_guard_site = yes }
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_board_guard_relief_tt
-				FROM = { NOT = { has_state_flag = NAM_board_guard_post } }
-			}
-		}
-		cost = 0
-		custom_cost_text = NAM_cost_board_guard
-		custom_cost_trigger = {
-			NOT = { has_equipment = { infantry_equipment < 300 } }
-			NOT = { has_equipment = { motorized_equipment < 20 } }
-		}
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = { hidden_trigger = { FROM = { state = 67 } } }
-				custom_effect_tooltip = NAM_board_guard_field_tt
-			}
-			else = { custom_effect_tooltip = NAM_board_guard_district_tt }
-			if = {
-				limit = {
-					hidden_trigger = {
-						has_completed_focus = NAM_board_security_contracts
-						NAM_board_operable = yes
-						NOT = { has_equipment = { infantry_equipment < 300 } }
-						NOT = { has_equipment = { motorized_equipment < 20 } }
-						FROM = {
-							NAM_board_guard_site = yes
-							NOT = { has_state_flag = NAM_board_guard_post }
-						}
-					}
-				}
-				hidden_effect = {
-					add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
-					add_equipment_to_stockpile = { type = motorized_equipment amount = -20 }
-					FROM = { set_state_flag = { flag = NAM_board_guard_post days = 90 } }
-				}
-			}
-		}
-		ai_will_do = { base = 8 }
-	}
-
-	NAM_loren_book_oil_cargo = {
-		icon = ADISCORD_deal
-		allowed = { tag = NAM }
-		visible = {
-			has_completed_focus = NAM_board_homeland_concession
-			NAM_corp_open = yes
-			has_country_flag = NAM_corp_takeover
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_loren_lease_site_tt
-				NAM_loren_lease_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_loren_loading_slot_tt
-				NOT = { has_variable = NAM_loren_cargo_quote }
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_loren_cargo_clearance_tt
-				NAM_loren_cargo_can_clear = yes
-			}
-		}
-		cost = 0
-		days_remove = 30
-		days_re_enable = 30
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
-						has_completed_focus = NAM_board_homeland_concession
-						NAM_loren_lease_operable = yes
-						NOT = { has_variable = NAM_loren_cargo_quote }
-						NAM_loren_cargo_can_clear = yes
-					}
-				}
-				if = {
-					limit = { hidden_trigger = { NAM_loren_premium_quote = yes } }
-					custom_effect_tooltip = NAM_loren_quote_35_tt
-					hidden_effect = { set_variable = { var = NAM_loren_cargo_quote value = 35 } }
-				}
-				else = {
-					custom_effect_tooltip = NAM_loren_quote_25_tt
-					hidden_effect = { set_variable = { var = NAM_loren_cargo_quote value = 25 } }
-				}
-			}
-			else = {
-				if = {
-					limit = { hidden_trigger = { NAM_loren_premium_quote = yes } }
-					custom_effect_tooltip = NAM_loren_quote_35_tt
-				}
-				else = { custom_effect_tooltip = NAM_loren_quote_25_tt }
-			}
-		}
-		cancel_trigger = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_loren_loading_interrupted_tt
-				NAM_loren_loading_route = no
-			}
-		}
-		remove_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
-						has_variable = NAM_loren_cargo_quote
-						NAM_loren_loading_route = yes
-						NAM_loren_cargo_can_clear = yes
-					}
-				}
-				custom_effect_tooltip = NAM_loren_delivery_tt
-				hidden_effect = {
-					add_fuel = -15000
-					set_temp_variable = { var = NAM_corp_capital_change value = NAM_loren_cargo_quote }
-					NAM_corp_capital_add = yes
-				}
-			}
-			else = { custom_effect_tooltip = NAM_loren_no_delivery_tt }
-			hidden_effect = { NAM_loren_close_cargo = yes }
-		}
-		cancel_effect = {
-			custom_effect_tooltip = NAM_loren_no_delivery_tt
-			hidden_effect = { NAM_loren_close_cargo = yes }
-		}
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 6
-				NOT = { has_fuel < 45000 }
-			}
-		}
-	}
-
-	NAM_board_issue_war_shares = {
-		icon = ADISCORD_deal
-		allowed = { tag = NAM }
-		target_array = NAM.NAM_federal_districts
-		target_trigger = { FROM = { NAM_board_federal_subject = yes } }
-		visible = {
-			has_completed_focus = NAM_board_stock_mobilisation
-			NAM_corp_open = yes
-			has_country_flag = NAM_corp_takeover
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_board_governing_tt
-				NAM_board_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_corp_auction_clear_tt
-				FROM = { NAM_board_trading_concession = yes }
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_board_stock_register_tt
-				FROM = { NOT = { has_variable = NAM_board_stock_coupon } }
-			}
-		}
-		cost = 0
-		custom_cost_text = NAM_cost_board_stock
-		custom_cost_trigger = {
-			check_variable = { var = NAM_corp_capital value = 25 compare = greater_than_or_equals }
-		}
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = {
-					hidden_trigger = {
-						has_completed_focus = NAM_board_stock_mobilisation
-						NAM_board_operable = yes
-						check_variable = { var = NAM_corp_capital value = 25 compare = greater_than_or_equals }
-						FROM = {
-							NAM_board_trading_concession = yes
-							NOT = { has_variable = NAM_board_stock_coupon }
-						}
-					}
-				}
-				custom_effect_tooltip = NAM_board_stock_dividends_tt
-				hidden_effect = {
-					FROM = { set_variable = { var = NAM_board_stock_coupon value = 1 } }
-					set_temp_variable = { var = NAM_corp_capital_change value = -25 }
-					NAM_corp_capital_add = yes
-				}
-				add_equipment_to_stockpile = {
-					type = infantry_equipment
-					amount = 1800
-					producer = NAM
-				}
-				add_equipment_to_stockpile = {
-					type = artillery_equipment
-					amount = 60
-					producer = NAM
-				}
-				add_equipment_to_stockpile = {
-					type = support_equipment
-					amount = 50
-					producer = NAM
-				}
-			}
-			else = {
-				custom_effect_tooltip = NAM_board_issue_war_shares_unlock_tt
-			}
-		}
-		ai_will_do = { base = 8 }
-	}
-
 	# The board auctions a district's concession to the next corporation.
 	NAM_corp_auction_district = {
 		icon = ADISCORD_deal
@@ -21569,7 +22454,6 @@ NAM_free_zones = {
 			FROM = { NAM_board_federal_subject = yes }
 		}
 		visible = {
-			has_completed_focus = NAM_board_district_auction
 			NAM_corp_open = yes
 			has_country_flag = NAM_corp_takeover
 		}
@@ -21618,7 +22502,6 @@ NAM_free_zones = {
 		icon = generic_political_discourse
 		allowed = { tag = NAM }
 		visible = {
-			has_completed_focus = NAM_board_constitution
 			NAM_board_operable = yes
 			has_country_flag = NAM_corp_dispute_open
 			event_target:NAM_corp_dispute_district = { NAM_corp_live_disputed_district = yes }
@@ -21669,10 +22552,6 @@ NAM_free_zones = {
 			FROM = { NAM_board_federal_subject = yes }
 		}
 		visible = {
-			OR = {
-				has_completed_focus = NAM_board_shareholders
-				has_completed_focus = NAM_board_union_of_boards
-			}
 			NAM_corp_open = yes
 			has_country_flag = NAM_corp_takeover
 		}
@@ -21700,7 +22579,9 @@ NAM_free_zones = {
 				}
 				if = {
 					limit = {
-						hidden_trigger = { has_completed_focus = NAM_board_union_of_boards }
+						FROM = {
+							check_variable = { var = NAM_corp_district_owner value = NAM.NAM_board_chair compare = equals }
+						}
 					}
 					custom_effect_tooltip = NAM_board_renewal_delivery_tt
 					hidden_effect = { FROM = { NAM_board_ship_district_order = yes } }
@@ -22718,32 +23599,22 @@ NAM_consolidation = {
 		}
 	}
 
-	# Sixty days of rebuilding the war-torn districts with foreign capital; the
-	# deposit returns if the work is interrupted. After the takeover the
-	# corporate tree replaces the humanist harbour focus, so its reconstruction
-	# tenders open the same fund.
+	# The harbour project retains its receipt and construction site until settlement.
 	NAM_hum_reconstruction_fund = {
 		icon = ADISCORD_construction
 		allowed = { tag = NAM }
 		visible = {
-			OR = {
-				has_completed_focus = NAM_hum_harbour_rebuilding
-				has_completed_focus = NAM_board_reconstruction_tenders
-			}
 			NAM_consolidation_open = yes
-			has_country_flag = NAM_exile_humanist
+			has_country_flag = NAM_corp_takeover
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_board_harbour_receipt_tt
 				NOT = { has_variable = NAM_hum_reconstruction_deposit }
 			}
-			if = {
-				limit = { has_completed_focus = NAM_board_reconstruction_tenders }
-				custom_trigger_tooltip = {
-					tooltip = NAM_board_harbour_site_tt
-					NAM_board_harbour_works_operable = yes
-				}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_harbour_site_tt
+				NAM_board_harbour_works_operable = yes
 			}
 		}
 		cost = 0
@@ -22771,26 +23642,16 @@ NAM_consolidation = {
 				limit = {
 					hidden_trigger = {
 						NAM_consolidation_open = yes
-						has_country_flag = NAM_exile_humanist
-						OR = {
-							has_completed_focus = NAM_hum_harbour_rebuilding
-							has_completed_focus = NAM_board_reconstruction_tenders
-						}
-						OR = {
-							NOT = { has_completed_focus = NAM_board_reconstruction_tenders }
-							NAM_board_harbour_works_operable = yes
-						}
+						has_country_flag = NAM_corp_takeover
+						NAM_board_harbour_works_operable = yes
 						NOT = { has_variable = NAM_hum_reconstruction_deposit }
 						check_variable = { var = NAM_corp_capital value = 60 compare = greater_than_or_equals }
 					}
 				}
 				custom_effect_tooltip = NAM_hum_reconstruction_started_tt
-				if = {
-					limit = { hidden_trigger = { has_completed_focus = NAM_board_reconstruction_tenders } }
-					custom_effect_tooltip = NAM_board_harbour_works_tt
-					hidden_effect = { 700 = { set_state_flag = NAM_board_harbour_contract } }
-				}
+				custom_effect_tooltip = NAM_board_harbour_works_tt
 				hidden_effect = {
+					700 = { set_state_flag = NAM_board_harbour_contract }
 					set_temp_variable = { var = NAM_corp_capital_change value = -60 }
 					NAM_corp_capital_add = yes
 					set_variable = { var = NAM_hum_reconstruction_deposit value = 60 }
@@ -22804,18 +23665,13 @@ NAM_consolidation = {
 					hidden_trigger = {
 						has_variable = NAM_hum_reconstruction_deposit
 						NAM_country_operable = yes
-						OR = {
-							700 = { NOT = { has_state_flag = NAM_board_harbour_contract } }
-							NAM_board_harbour_works_operable = yes
-						}
+						700 = { has_state_flag = NAM_board_harbour_contract }
+						NAM_board_harbour_works_operable = yes
 					}
 				}
-				if = {
-					limit = { hidden_trigger = { 700 = { has_state_flag = NAM_board_harbour_contract } } }
-					700 = {
-						NAM_board_complete_harbour_works = yes
-						hidden_effect = { clr_state_flag = NAM_board_harbour_contract }
-					}
+				700 = {
+					NAM_board_complete_harbour_works = yes
+					hidden_effect = { clr_state_flag = NAM_board_harbour_contract }
 				}
 				hidden_effect = {
 					clear_variable = NAM_hum_reconstruction_deposit
@@ -23227,4 +24083,833 @@ NAM_postwar_future_debate = {
 			}
 		}
 	}
+}
+
+NAM_two_judases = {
+	NAM_judas_buy_notes = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_buy_notes_receipt
+				AND = {
+					has_idea = NAM_judas_weber_committees
+					has_completed_focus = NAM_board_founders_of_unrest
+					NOT = { has_country_flag = NAM_judas_buy_notes_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_weber_no_promise_tt
+				NAM_judas_weber_promise = no
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_buy_notes_cost
+		custom_cost_trigger = {
+			check_variable = { var = NAM_corp_capital value = 40 compare = greater_than_or_equals }
+			NOT = { has_political_power < 15 }
+		}
+		days_remove = 30
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_weber_committees }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_buy_notes_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_buy_notes_eligible = yes
+						check_variable = { var = NAM_corp_capital value = 40 compare = greater_than_or_equals }
+						NOT = { has_political_power < 15 }
+					}
+					set_variable = { var = NAM_judas_buy_notes_receipt value = 1 }
+					NAM_board_take_action_slot = yes
+					set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+					NAM_corp_capital_add = yes
+					add_political_power = -15
+					NAM_judas_weber_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_buy_notes_result_tt
+			hidden_effect = { NAM_judas_buy_notes_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_buy_notes_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_unseat_proxies = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_unseat_proxies_receipt
+				AND = {
+					has_idea = NAM_judas_weber_committees
+					has_completed_focus = NAM_board_elected_in_absentia
+					NOT = { has_country_flag = NAM_judas_unseat_proxies_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_weber_no_promise_tt
+				NAM_judas_weber_promise = no
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_unseat_proxies_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+		}
+		days_remove = 21
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_weber_committees }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_unseat_proxies_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_unseat_proxies_eligible = yes
+						NOT = { has_political_power < 25 }
+					}
+					set_variable = { var = NAM_judas_unseat_proxies_receipt value = 1 }
+					NAM_board_take_action_slot = yes
+					add_political_power = -25
+					NAM_judas_weber_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_unseat_proxies_result_tt
+			hidden_effect = { NAM_judas_unseat_proxies_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_unseat_proxies_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_exchange_hiring = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_exchange_hiring_receipt
+				AND = {
+					has_idea = NAM_judas_weber_committees
+					has_completed_focus = NAM_board_widows_share
+					NOT = { has_country_flag = NAM_judas_exchange_hiring_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_weber_no_promise_tt
+				NAM_judas_weber_promise = no
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_exchange_hiring_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 20 }
+			NOT = { has_manpower < 1500 }
+		}
+		days_remove = 45
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_weber_committees }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_exchange_hiring_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_exchange_hiring_eligible = yes
+						NOT = { has_political_power < 20 }
+						NOT = { has_manpower < 1500 }
+					}
+					set_variable = { var = NAM_judas_exchange_hiring_receipt value = 1 }
+					NAM_board_take_action_slot = yes
+					add_political_power = -20
+					add_manpower = -1500
+					NAM_judas_weber_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_exchange_hiring_result_tt
+			hidden_effect = { NAM_judas_exchange_hiring_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_exchange_hiring_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_pay_moderates = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_pay_moderates_receipt
+				AND = {
+					has_idea = NAM_judas_weber_committees
+					has_completed_focus = NAM_board_subsidised_opposition
+					NOT = { has_country_flag = NAM_judas_pay_moderates_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_weber_no_promise_tt
+				NAM_judas_weber_promise = no
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_pay_moderates_cost
+		custom_cost_trigger = {
+			check_variable = { var = NAM_corp_capital value = 50 compare = greater_than_or_equals }
+		}
+		days_remove = 60
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_weber_committees }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_pay_moderates_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_pay_moderates_eligible = yes
+						check_variable = { var = NAM_corp_capital value = 50 compare = greater_than_or_equals }
+					}
+					set_variable = { var = NAM_judas_pay_moderates_receipt value = 1 }
+					NAM_board_take_action_slot = yes
+					set_temp_variable = { var = NAM_corp_capital_change value = -50 }
+					NAM_corp_capital_add = yes
+					NAM_judas_weber_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_pay_moderates_result_tt
+			hidden_effect = { NAM_judas_pay_moderates_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_pay_moderates_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_disperse_mourners = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_disperse_mourners_receipt
+				AND = {
+					has_idea = NAM_judas_weber_committees
+					has_completed_focus = NAM_board_mourning_licence
+					NOT = { has_country_flag = NAM_judas_disperse_mourners_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_weber_no_promise_tt
+				NAM_judas_weber_promise = no
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_arktur_willing_tt
+				NAM_judas_willing_arktur = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_disperse_mourners_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 20 }
+		}
+		days_remove = 14
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_weber_committees }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_disperse_mourners_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_disperse_mourners_eligible = yes
+						NOT = { has_political_power < 20 }
+					}
+					set_variable = { var = NAM_judas_disperse_mourners_receipt value = 1 }
+					NAM_board_take_action_slot = yes
+					add_political_power = -20
+					NAM_judas_weber_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_disperse_mourners_result_tt
+			hidden_effect = { NAM_judas_disperse_mourners_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_disperse_mourners_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_register_patents = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_register_patents_receipt
+				AND = {
+					has_idea = NAM_judas_karamyshev_watch
+					has_completed_focus = NAM_board_dead_mans_veto
+					NOT = { has_country_flag = NAM_judas_register_patents_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_karamyshev_no_promise_tt
+				NAM_judas_karamyshev_promise = no
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_register_patents_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 30 }
+		}
+		days_remove = 30
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_karamyshev_watch }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_register_patents_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_register_patents_eligible = yes
+						NOT = { has_political_power < 30 }
+					}
+					set_variable = { var = NAM_judas_register_patents_receipt value = 2 }
+					NAM_board_take_action_slot = yes
+					add_political_power = -30
+					NAM_judas_karamyshev_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_register_patents_result_tt
+			hidden_effect = { NAM_judas_register_patents_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_register_patents_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_appoint_masters = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_appoint_masters_receipt
+				AND = {
+					has_idea = NAM_judas_karamyshev_watch
+					has_completed_focus = NAM_board_inheritance_without_empire
+					NOT = { has_country_flag = NAM_judas_appoint_masters_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_karamyshev_no_promise_tt
+				NAM_judas_karamyshev_promise = no
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_appoint_masters_cost
+		custom_cost_trigger = {
+			check_variable = { var = NAM_corp_capital value = 30 compare = greater_than_or_equals }
+			NOT = { has_political_power < 25 }
+		}
+		days_remove = 45
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_karamyshev_watch }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_appoint_masters_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_appoint_masters_eligible = yes
+						check_variable = { var = NAM_corp_capital value = 30 compare = greater_than_or_equals }
+						NOT = { has_political_power < 25 }
+					}
+					set_variable = { var = NAM_judas_appoint_masters_receipt value = 2 }
+					NAM_board_take_action_slot = yes
+					set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+					NAM_corp_capital_add = yes
+					add_political_power = -25
+					NAM_judas_karamyshev_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_appoint_masters_result_tt
+			hidden_effect = { NAM_judas_appoint_masters_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_appoint_masters_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_buy_mortgages = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_buy_mortgages_receipt
+				AND = {
+					has_idea = NAM_judas_karamyshev_watch
+					has_completed_focus = NAM_board_uncrested_buyers
+					NOT = { has_country_flag = NAM_judas_buy_mortgages_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_karamyshev_no_promise_tt
+				NAM_judas_karamyshev_promise = no
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_buy_mortgages_cost
+		custom_cost_trigger = {
+			check_variable = { var = NAM_corp_capital value = 45 compare = greater_than_or_equals }
+		}
+		days_remove = 30
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_karamyshev_watch }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_buy_mortgages_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_buy_mortgages_eligible = yes
+						check_variable = { var = NAM_corp_capital value = 45 compare = greater_than_or_equals }
+					}
+					set_variable = { var = NAM_judas_buy_mortgages_receipt value = 2 }
+					NAM_board_take_action_slot = yes
+					set_temp_variable = { var = NAM_corp_capital_change value = -45 }
+					NAM_corp_capital_add = yes
+					NAM_judas_karamyshev_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_buy_mortgages_result_tt
+			hidden_effect = { NAM_judas_buy_mortgages_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_buy_mortgages_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_pay_captains = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_pay_captains_receipt
+				AND = {
+					has_idea = NAM_judas_karamyshev_watch
+					has_completed_focus = NAM_board_district_buyout
+					NOT = { has_country_flag = NAM_judas_pay_captains_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_karamyshev_no_promise_tt
+				NAM_judas_karamyshev_promise = no
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_pay_captains_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			NOT = { has_command_power < 30 }
+		}
+		days_remove = 45
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_karamyshev_watch }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_pay_captains_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_pay_captains_eligible = yes
+						NOT = { has_political_power < 25 }
+						NOT = { has_command_power < 30 }
+					}
+					set_variable = { var = NAM_judas_pay_captains_receipt value = 2 }
+					NAM_board_take_action_slot = yes
+					add_political_power = -25
+					add_command_power = -30
+					NAM_judas_karamyshev_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_pay_captains_result_tt
+			hidden_effect = { NAM_judas_pay_captains_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_pay_captains_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_disarm_cutters = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		visible = {
+			OR = {
+				has_variable = NAM_judas_disarm_cutters_receipt
+				AND = {
+					has_idea = NAM_judas_karamyshev_watch
+					has_completed_focus = NAM_board_privatise_governorate
+					NOT = { has_country_flag = NAM_judas_disarm_cutters_done }
+				}
+			}
+		}
+		available = {
+			NAM_board_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_slot_tt
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_karamyshev_no_promise_tt
+				NAM_judas_karamyshev_promise = no
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_officer_willing_tt
+				OR = {
+					NAM_judas_willing_navis = yes
+					NAM_judas_willing_arktur = yes
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_judas_disarm_cutters_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 20 }
+		}
+		days_remove = 21
+		cancel_trigger = {
+			OR = {
+				NAM_board_operable = no
+				NOT = { has_idea = NAM_judas_karamyshev_watch }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = NAM_judas_disarm_cutters_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NAM_judas_disarm_cutters_eligible = yes
+						NOT = { has_political_power < 20 }
+					}
+					if = {
+						limit = {
+							NAM_judas_willing_navis = yes
+						}
+						set_variable = { var = NAM_judas_disarm_cutters_receipt value = 3 }
+					}
+					else = {
+						set_variable = { var = NAM_judas_disarm_cutters_receipt value = 4 }
+					}
+					NAM_board_take_action_slot = yes
+					add_political_power = -20
+					NAM_judas_karamyshev_record_operation = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = NAM_judas_disarm_cutters_result_tt
+			hidden_effect = { NAM_judas_disarm_cutters_finish = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_judas_refund_tt
+			hidden_effect = { NAM_judas_disarm_cutters_refund = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	NAM_judas_weber_meeting = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_weber_committees
+		}
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 50
+		timeout_effect = {
+			custom_effect_tooltip = NAM_judas_weber_due_tt
+			hidden_effect = {
+				NAM_judas_weber_due = yes
+			}
+		}
+	}
+
+	NAM_judas_karamyshev_meeting = {
+		icon = ADISCORD_deal
+		allowed = { tag = NAM }
+		activation = { always = no }
+		visible = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_karamyshev_watch
+		}
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 60
+		timeout_effect = {
+			custom_effect_tooltip = NAM_judas_karamyshev_due_tt
+			hidden_effect = {
+				NAM_judas_karamyshev_due = yes
+			}
+		}
+	}
+
+NAM_exile_drill = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		visible = {
+			NAM_exile_return_programme_open = yes
+			NAM_exile_drill_unlocked = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_drill_block_over_tt
+				NOT = { has_idea = NAM_judas_drill_block }
+			}
+			hidden_trigger = { NOT = { has_variable = NAM_exile_drill_deposit } }
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_revenge_not_full_tt
+				check_variable = { var = NAM_revenge_readiness value = 100 compare = less_than }
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_exile_drill
+		custom_cost_trigger = {
+			NOT = { has_political_power < 20 }
+			NAM_exile_drill_currency_ready = yes
+		}
+		fire_only_once = no
+		days_remove = 30
+		days_re_enable = 15
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_not_met_tt
+				NAM_country_operable = no
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { has_variable = NAM_exile_drill_deposit }
+						NOT = { has_political_power < 20 }
+						NAM_exile_drill_currency_ready = yes
+					}
+				}
+				add_political_power = -20
+				custom_effect_tooltip = NAM_exile_drill_started_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+					NAM_corp_capital_add = yes
+					set_variable = { var = NAM_exile_drill_deposit value = 30 }
+					set_country_flag = { flag = NAM_exile_drill_cd value = 1 days = 45 }
+				}
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = NAM_exile_drill_deposit value = 0 compare = greater_than }
+					}
+				}
+				army_experience = 15
+				custom_effect_tooltip = NAM_exile_drill_done_tt
+				hidden_effect = {
+					clear_variable = NAM_exile_drill_deposit
+					NAM_judas_report_drill = yes
+					add_to_variable = { var = NAM_revenge_readiness value = 10 }
+					NAM_revenge_readiness_clamp = yes
+				}
+			}
+			else = {
+				effect_tooltip = {
+					army_experience = 15
+				}
+				custom_effect_tooltip = NAM_exile_drill_done_tt
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = NAM_exile_drill_refund_tt
+			hidden_effect = { NAM_exile_drill_refund = yes }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+NAM_island_recruit_warehouse_guards = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_board_last_debtor }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_general_strike_over_tt
+				NOT = { has_idea = NAM_judas_general_strike }
+			}
+		}
+		cost = 20
+		fire_only_once = yes
+		complete_effect = {
+			add_manpower = 300
+			hidden_effect = { NAM_judas_report_arms = yes }
+		}
+		ai_will_do = { base = 1 }
+	}
+
+NAM_island_requisition_transports = {
+		icon = generic_naval
+		allowed = { tag = NAM }
+		visible = { has_completed_focus = NAM_board_posthumous_signature }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_judas_coast_guard_mutiny_over_tt
+				NOT = { has_idea = NAM_judas_coast_guard_mutiny }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_product_available_3_tt
+				NAM_board_product_blocked_3 = no
+			}
+		}
+		cost = 25
+		fire_only_once = yes
+		complete_effect = {
+			hidden_effect = { NAM_judas_report_convoys = yes }
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 3
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
 }

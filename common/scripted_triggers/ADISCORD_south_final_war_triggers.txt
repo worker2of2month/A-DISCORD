@@ -480,7 +480,6 @@ ADISCORD_south_nam_focus_ready = {
 		}
 		has_completed_focus = NAM_rad_great_war_plan
 		has_completed_focus = NAM_hum_union_call
-		has_completed_focus = NAM_board_stock_mobilisation
 	}
 }
 
@@ -924,6 +923,7 @@ ADISCORD_south_offer_terms_valid = {
 		}
 		AND = {
 			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+			ADISCORD_south_coalition_target_war_clear = yes
 			OR = {
 				is_in_faction = no
 				ADISCORD_south_alliance_switch_possible = yes
@@ -1116,6 +1116,109 @@ ADISCORD_south_on_refusal_champion_side = {
 }
 
 # COUNTRY. Coalition diplomacy uses current membership and the actual northern succession.
+# Recipient scope. Only the current northern leader's completed focuses open contacts.
+ADISCORD_south_north_invitation_unlocked = {
+	OR = {
+		NAM = {
+			ADISCORD_south_map_country_north_leader = yes
+			OR = {
+				AND = {
+					PREV = { tag = EFL }
+					OR = {
+						has_completed_focus = NAM_eflor_accord
+						has_completed_focus = NAM_defeat_open_border
+					}
+				}
+				AND = {
+					PREV = { tag = AZH }
+					OR = {
+						has_completed_focus = NAM_azhar_accord
+						has_completed_focus = NAM_defeat_road_south
+					}
+				}
+				AND = {
+					PREV = { tag = WEF }
+					has_completed_focus = NAM_south_fenn_guarantee
+				}
+				AND = {
+					PREV = { tag = KDR }
+					has_completed_focus = NAM_insured_caravans
+				}
+				AND = {
+					PREV = { tag = RHM }
+					has_completed_focus = NAM_south_oil_for_water
+				}
+				AND = {
+					PREV = { tag = SDR }
+					has_completed_focus = NAM_common_fuel_market
+				}
+				AND = {
+					PREV = { tag = MZR }
+					has_completed_focus = NAM_contract_bureau
+				}
+				AND = {
+					PREV = { tag = KYZ }
+					has_completed_focus = NAM_pw_export_guarantees
+				}
+				AND = {
+					PREV = { tag = GLP }
+					has_completed_focus = NAM_island_concession
+				}
+			}
+		}
+		EFL = {
+			ADISCORD_south_map_country_north_leader = yes
+			ADISCORD_south_restitution_envoy_ready = yes
+		}
+		AZH = {
+			ADISCORD_south_map_country_north_leader = yes
+			ADISCORD_south_restitution_envoy_ready = yes
+		}
+	}
+}
+
+# Leader scope. PREV is the country receiving the delegation.
+ADISCORD_south_restitution_envoy_ready = {
+	OR = {
+		AND = {
+			PREV = { tag = EFL }
+			has_completed_focus = ADISCORD_south_restitution_contact_efl
+		}
+		AND = {
+			PREV = { tag = AZH }
+			has_completed_focus = ADISCORD_south_restitution_contact_azh
+		}
+		AND = {
+			PREV = { tag = WEF }
+			has_completed_focus = ADISCORD_south_restitution_contact_wef
+		}
+		AND = {
+			PREV = { tag = KDR }
+			has_completed_focus = ADISCORD_south_restitution_contact_kdr
+		}
+		AND = {
+			PREV = { tag = RHM }
+			has_completed_focus = ADISCORD_south_restitution_contact_rhm
+		}
+		AND = {
+			PREV = { tag = SDR }
+			has_completed_focus = ADISCORD_south_restitution_contact_sdr
+		}
+		AND = {
+			PREV = { tag = MZR }
+			has_completed_focus = ADISCORD_south_restitution_contact_mzr
+		}
+		AND = {
+			PREV = { tag = KYZ }
+			has_completed_focus = ADISCORD_south_restitution_contact_kyz
+		}
+		AND = {
+			PREV = { tag = GLP }
+			has_completed_focus = ADISCORD_south_restitution_contact_glp
+		}
+	}
+}
+
 ADISCORD_south_coalition_inviter = {
 	ADISCORD_south_crisis_open = yes
 	exists = yes
@@ -1146,10 +1249,22 @@ ADISCORD_south_coalition_inviter = {
 }
 
 # COUNTRY target. Only regional factions can change sides through this invitation.
+ADISCORD_south_coalition_target_war_clear = {
+	NOT = {
+		any_enemy_country = {
+			OR = {
+				ADISCORD_south_map_country_north = yes
+				ADISCORD_south_map_country_shl = yes
+			}
+		}
+	}
+}
+
 ADISCORD_south_coalition_invitee = {
 	ADISCORD_south_regional_country = yes
 	ADISCORD_south_offer_target_open = yes
 	ADISCORD_south_declarer_valid = no
+	ADISCORD_south_coalition_target_war_clear = yes
 	OR = {
 		is_in_faction = no
 		faction_leader = {
@@ -1160,6 +1275,11 @@ ADISCORD_south_coalition_invitee = {
 			}
 		}
 	}
+}
+
+ADISCORD_south_map_influence_contested = {
+	ADISCORD_south_crisis_open = yes
+	ADISCORD_south_coalition_invitee = yes
 }
 
 # The Nam government reserves its two neighbouring states for their respective settlement focuses.
@@ -1184,6 +1304,94 @@ ADISCORD_south_north_neighbour_recruitable = {
 }
 
 # COUNTRY target; PREV is the envoy, both in the decision and when the reply is checked.
+ADISCORD_south_coalition_diplomacy_open = {
+	NOT = { tag = PREV }
+	ADISCORD_south_coalition_invitee = yes
+	OR = {
+		AND = {
+			PREV = { ADISCORD_south_map_country_shl = yes }
+			ADISCORD_south_shl_invitation_unlocked = yes
+		}
+		AND = {
+			PREV = { ADISCORD_south_map_country_north = yes }
+			ADISCORD_south_north_invitation_unlocked = yes
+		}
+	}
+}
+
+ADISCORD_south_coalition_influence_available = {
+	OR = {
+		AND = {
+			PREV = { ADISCORD_south_map_country_shl = yes }
+			NOT = { has_country_flag = ADISCORD_south_shl_envoys_recent }
+			NOT = { check_variable = { var = ADISCORD_south_coalition_influence value = -100 compare = less_than_or_equals } }
+		}
+		AND = {
+			PREV = { ADISCORD_south_map_country_north = yes }
+			NOT = { has_country_flag = ADISCORD_south_north_envoys_recent }
+			NOT = { check_variable = { var = ADISCORD_south_coalition_influence value = 100 compare = greater_than_or_equals } }
+		}
+	}
+}
+
+ADISCORD_south_coalition_invitation_ready = {
+	OR = {
+		AND = {
+			PREV = { ADISCORD_south_map_country_shl = yes }
+			check_variable = { var = ADISCORD_south_coalition_influence value = -60 compare = less_than_or_equals }
+		}
+		AND = {
+			PREV = { ADISCORD_south_map_country_north = yes }
+			check_variable = { var = ADISCORD_south_coalition_influence value = 60 compare = greater_than_or_equals }
+		}
+	}
+}
+
+# COUNTRY target, PREV sends the invitation. A refusal binds the whole camp.
+ADISCORD_south_coalition_talks_free = {
+	NOT = { has_variable = ADISCORD_south_coalition_envoy }
+	NOT = { has_variable = ADISCORD_south_offer_kind }
+	OR = {
+		AND = {
+			PREV = { ADISCORD_south_map_country_shl = yes }
+			NOT = { has_country_flag = ADISCORD_south_shl_offer_declined }
+		}
+		AND = {
+			PREV = { ADISCORD_south_map_country_north = yes }
+			NOT = { has_country_flag = ADISCORD_south_north_offer_declined }
+		}
+	}
+}
+
+# COUNTRY host, ROOT is the sponsor. Rival missions may overlap in the same country.
+ADISCORD_south_adviser_post_free = {
+	OR = {
+		AND = {
+			ROOT = { ADISCORD_south_map_country_north = yes }
+			NOT = { has_variable = ADISCORD_south_north_advisers }
+		}
+		AND = {
+			ROOT = { ADISCORD_south_map_country_shl = yes }
+			NOT = { has_variable = ADISCORD_south_shl_advisers }
+		}
+	}
+}
+
+ADISCORD_south_adviser_mission_valid = {
+	ADISCORD_south_coalition_diplomacy_open = yes
+	ROOT = { ADISCORD_south_coalition_inviter = yes }
+	OR = {
+		AND = {
+			ROOT = { ADISCORD_south_map_country_north = yes }
+			check_variable = { var = ADISCORD_south_north_advisers value = ROOT compare = equals }
+		}
+		AND = {
+			ROOT = { ADISCORD_south_map_country_shl = yes }
+			check_variable = { var = ADISCORD_south_shl_advisers value = ROOT compare = equals }
+		}
+	}
+}
+
 ADISCORD_south_coalition_other_camp = {
 	NOT = { tag = PREV }
 	NOT = { has_war_with = PREV }
@@ -1237,7 +1445,11 @@ ADISCORD_south_coalition_answer_open = {
 	FROM = {
 		ADISCORD_south_coalition_inviter = yes
 		ADISCORD_south_envoy_keeps_coalition = yes
-		ROOT = { ADISCORD_south_coalition_other_camp = yes }
+		ROOT = {
+			ADISCORD_south_coalition_diplomacy_open = yes
+			ADISCORD_south_coalition_other_camp = yes
+			ADISCORD_south_coalition_invitation_ready = yes
+		}
 	}
 }
 
@@ -1382,5 +1594,65 @@ ADISCORD_south_defection_possible = {
 		check_variable = { var = ADISCORD_south_defector_target value = ROOT compare = equals }
 		ADISCORD_south_envoy_keeps_coalition = yes
 		ROOT = { ADISCORD_south_defector_opponent = yes }
+	}
+}
+
+# COUNTRY recipient. Each mandate negotiates only through its own diplomatic contacts.
+ADISCORD_south_shl_invitation_unlocked = {
+	OR = {
+		AND = {
+			tag = EFL
+			SHL = { has_completed_focus = SHL_eflor_accord }
+		}
+		AND = {
+			tag = AZH
+			SHL = { has_completed_focus = SHL_azhar_legation }
+		}
+		AND = {
+			tag = WEF
+			SHL = { has_completed_focus = SHL_northern_road }
+		}
+		AND = {
+			tag = KDR
+			SHL = { has_completed_focus = SHL_south_throne_and_crests }
+		}
+		AND = {
+			tag = KYZ
+			SHL = {
+				OR = {
+					has_completed_focus = SHL_southern_compact
+					has_completed_focus = SHL_qanat_brotherhood
+				}
+			}
+		}
+		AND = {
+			tag = GLP
+			SHL = {
+				OR = {
+					has_completed_focus = SHL_k_councils_term
+					AND = {
+						has_completed_focus = SHL_veyr_partnership
+						NOT = { has_completed_focus = SHL_h_kerdan_trading_house }
+					}
+				}
+			}
+		}
+		AND = {
+			tag = MZR
+			SHL = {
+				OR = {
+					has_completed_focus = SHL_south_councils_abroad
+					has_completed_focus = SHL_south_compact_staff
+				}
+			}
+		}
+		AND = {
+			tag = RHM
+			SHL = { has_completed_focus = SHL_south_wells_charters }
+		}
+		AND = {
+			tag = SDR
+			SHL = { has_completed_focus = SHL_c_charter_round }
+		}
 	}
 }

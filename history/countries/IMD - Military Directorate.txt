@@ -6,3 +6,4 @@ set_politics = {
 }
 set_popularities = { etatism = 100 }
 set_research_slots = 2
+add_ideas = minister_IMD_Andrei_Rakitin

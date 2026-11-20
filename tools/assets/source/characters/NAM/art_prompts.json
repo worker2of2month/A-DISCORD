@@ -253,6 +253,230 @@
           "sprite": "GFX_portrait_NAM_staff_Petr_Chernov_small"
         }
       ]
+    },
+    {
+      "tool": "built-in image_gen",
+      "variant": "NAM company directors and cabinet",
+      "style_source": "style",
+      "leader_template": "tools/assets/source/portrait.psd",
+      "large_size": [
+        156,
+        210
+      ],
+      "frame_source": "tools/assets/source/portar idea.psd",
+      "frame_layer": 4,
+      "advisor_size": [
+        62,
+        67
+      ],
+      "portraits": [
+        {
+          "id": "NAM_Aristarkh_Vyazemtsev",
+          "company": "Loren",
+          "subject": "Oil company patriarch, 67. Heavyset man with a broad full grey beard and heavy eyelids. Dark frock coat, a watch chain across his waistcoat. Impatient to retake the oilfields, even at the cost of war.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Aristarkh_Vyazemtsev.png",
+          "sprite": "GFX_portrait_NAM_Aristarkh_Vyazemtsev"
+        },
+        {
+          "id": "NAM_Taisiya_Valts",
+          "company": "Ferrant",
+          "subject": "Steel trust chairwoman, 52. Spare angular face and build, short greying hair, steel-rimmed spectacles, grey worker's jacket with one plain unlettered trust pin. A practical factory builder who regards the army as an expense.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Taisiya_Valts.png",
+          "sprite": "GFX_portrait_NAM_Taisiya_Valts"
+        },
+        {
+          "id": "NAM_Saveliy_Kruze",
+          "company": "Navis",
+          "subject": "Shipping director, 59. Weathered face, short skipper's beard under his chin, narrowed eyes, dark navy tunic without epaulettes. A seaman aligned with Karamyshev's captains who wants a fleet and island holdings.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Saveliy_Kruze.png",
+          "sprite": "GFX_portrait_NAM_Saveliy_Kruze"
+        },
+        {
+          "id": "NAM_Rodion_Kalyonov",
+          "company": "Arktur",
+          "subject": "Arsenal director, 55. Broad square jaw, a close military crew cut, healed scar across one cheekbone, plain semi-military service tunic without insignia. Impassive, forceful, pursuing arms contracts and the suppression of committees.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Rodion_Kalyonov.png",
+          "sprite": "GFX_portrait_NAM_Rodion_Kalyonov"
+        },
+        {
+          "id": "NAM_Nazar_Guryev",
+          "company": "Smenkom",
+          "subject": "Labour exchange chairman, 48. Broad approachable face, thick moustache, easy familiar smile. Expensive but ill-fitting suit with bunching at the collar. Trades in work shifts; Weber regards him as a traitor.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Nazar_Guryev.png",
+          "sprite": "GFX_portrait_NAM_Nazar_Guryev"
+        },
+        {
+          "id": "NAM_Lidiya_Velyaminova",
+          "company": "Reidbank",
+          "subject": "Bank chairwoman, 44. Slender fine-boned face, sleek dark hair swept back, pearl earrings, black dress with a white collar. A calm creditor opposed to war until the debt is paid.",
+          "runtime": "gfx/leaders/NAM/portrait_NAM_Lidiya_Velyaminova.png",
+          "sprite": "GFX_portrait_NAM_Lidiya_Velyaminova"
+        },
+        {
+          "id": "NAM_Vsevolod_Rakhmanov",
+          "company": "Loren",
+          "subject": "Premier, 61. Heavyset balding man, luxuriant grey moustache, three-piece suit, pince-nez on a cord.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Vsevolod_Rakhmanov_small.png",
+          "sprite": "GFX_idea_NAM_Vsevolod_Rakhmanov"
+        },
+        {
+          "id": "NAM_Yulian_Dashkov",
+          "company": "Loren",
+          "subject": "Foreign minister, 45. Clean-shaven man with dark hair brushed back, pale suit and bow tie, courteous smile.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Yulian_Dashkov_small.png",
+          "sprite": "GFX_idea_NAM_Yulian_Dashkov"
+        },
+        {
+          "id": "NAM_Matvei_Bronnikov",
+          "company": "Ferrant",
+          "subject": "Defence minister, 50. Stocky man with dense brows and a short leather work jacket over his shirt and tie.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Matvei_Bronnikov_small.png",
+          "sprite": "GFX_idea_NAM_Matvei_Bronnikov"
+        },
+        {
+          "id": "NAM_Varvara_Stavrova",
+          "company": "Ferrant",
+          "subject": "Economy minister, 47. Stern woman with dark hair drawn into a bun, horn-rimmed glasses and grey tailored suit.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Varvara_Stavrova_small.png",
+          "sprite": "GFX_idea_NAM_Varvara_Stavrova"
+        },
+        {
+          "id": "NAM_Efrem_Batalov",
+          "company": "Navis",
+          "subject": "Defence minister, 56. Man with a pointed grey beard, merchant marine peaked cap and black pea coat.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Efrem_Batalov_small.png",
+          "sprite": "GFX_idea_NAM_Efrem_Batalov"
+        },
+        {
+          "id": "NAM_Raisa_Chaikina",
+          "company": "Navis",
+          "subject": "Intelligence chief, 39. Woman with auburn hair under a beret, observant eyes, practical trench coat.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Raisa_Chaikina_small.png",
+          "sprite": "GFX_idea_NAM_Raisa_Chaikina"
+        },
+        {
+          "id": "NAM_Tikhon_Zarubin",
+          "company": "Arktur",
+          "subject": "Intelligence chief, 49. Shaved head, heavy penetrating gaze, black high-neck service shirt and leather shoulder belt.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Tikhon_Zarubin_small.png",
+          "sprite": "GFX_idea_NAM_Tikhon_Zarubin"
+        },
+        {
+          "id": "NAM_Innokentiy_Bakhmetyev",
+          "company": "Arktur",
+          "subject": "Education minister, 63. Thin man with a small grey goatee, old uniform without shoulder boards, pince-nez.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Innokentiy_Bakhmetyev_small.png",
+          "sprite": "GFX_idea_NAM_Innokentiy_Bakhmetyev"
+        },
+        {
+          "id": "NAM_Faina_Odintsova",
+          "company": "Smenkom",
+          "subject": "Health minister, 42. Woman with a short haircut and tired eyes, white medical coat over a dark dress.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Faina_Odintsova_small.png",
+          "sprite": "GFX_idea_NAM_Faina_Odintsova"
+        },
+        {
+          "id": "NAM_Rashid_Ildarov",
+          "company": "Smenkom",
+          "subject": "Foreign minister, 38. Olive complexion, closely trimmed beard, dark three-piece suit and signet ring, appraising gaze.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Rashid_Ildarov_small.png",
+          "sprite": "GFX_idea_NAM_Rashid_Ildarov"
+        },
+        {
+          "id": "NAM_Veniamin_Kramskoy",
+          "company": "Reidbank",
+          "subject": "Premier, 58. Lean man with grey sideburns, a formal morning coat and stiff standing collar.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Veniamin_Kramskoy_small.png",
+          "sprite": "GFX_idea_NAM_Veniamin_Kramskoy"
+        },
+        {
+          "id": "NAM_Yuliya_Savitskaya",
+          "company": "Reidbank",
+          "subject": "Health minister, 36. Blonde hair pulled into a tight bun, fine-rimmed glasses, dark green fitted jacket.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Yuliya_Savitskaya_small.png",
+          "sprite": "GFX_idea_NAM_Yuliya_Savitskaya"
+        },
+        {
+          "id": "NAM_Boris_Nartov",
+          "company": "Loren",
+          "subject": "Economy minister, 54. A stout oilfield accountant with round glasses, a worn waistcoat and shirt sleeves with sleeve garters.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Boris_Nartov_small.png",
+          "sprite": "GFX_idea_NAM_Boris_Nartov",
+          "idea": "minister_NAM_Boris_Nar"
+        },
+        {
+          "id": "NAM_Leonid_Belov",
+          "company": "Reidbank",
+          "subject": "Economy minister, 41. A neat bank clerk with slicked hair and a pencil moustache, precise shirt collar and muted tie.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Leonid_Belov_small.png",
+          "sprite": "GFX_idea_NAM_Leonid_Belov",
+          "idea": "NAM_board_bank_nominee"
+        },
+        {
+          "id": "NAM_Fedot_Ermolin",
+          "company": "Ferrant",
+          "subject": "Education minister, 58. Factory instructor with a bristling short grey crew cut and a plain, worn work blazer.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Fedot_Ermolin_small.png",
+          "sprite": "GFX_idea_NAM_Fedot_Ermolin",
+          "idea": "minister_NAM_Fedot_Mir"
+        },
+        {
+          "id": "NAM_Pyotr_Litvinov",
+          "company": "Smenkom",
+          "subject": "Education minister, 46. Workshop training master with a weather-beaten face, work jacket over a shirt and tie.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Pyotr_Litvinov_small.png",
+          "sprite": "GFX_idea_NAM_Pyotr_Litvinov",
+          "idea": "NAM_board_labor_nominee"
+        },
+        {
+          "id": "NAM_Mark_Vetlugin",
+          "company": "Arktur",
+          "subject": "Defence minister, 51. A retired officer with upright military bearing, plain structured high-collared service tunic.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Mark_Vetlugin_small.png",
+          "sprite": "GFX_idea_NAM_Mark_Vetlugin",
+          "idea": "minister_NAM_Mara_Kluch"
+        },
+        {
+          "id": "NAM_Pavel_Ordyntsev",
+          "company": "Navis",
+          "subject": "Foreign minister, 49. Grey at the temples, formal diplomatic suit and restrained tie, composed expression.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Pavel_Ordyntsev_small.png",
+          "sprite": "GFX_idea_NAM_Pavel_Ordyntsev",
+          "idea": "minister_NAM_Pavel_Ordyntsev"
+        },
+        {
+          "id": "NAM_Semyon_Kornev",
+          "company": "Independent",
+          "subject": "Premier, 55. Former port transport dispatcher, tired lined face and a modest, well-worn civilian suit.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Semyon_Kornev_small.png",
+          "sprite": "GFX_idea_NAM_Semyon_Kornev",
+          "idea": "NAM_board_premier_kornev"
+        },
+        {
+          "id": "NAM_Viktor_Selivanov",
+          "company": "Independent",
+          "subject": "Defence minister, 52. Colonel in a faded military greatcoat, squared shoulders and a seasoned face.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Viktor_Selivanov_small.png",
+          "sprite": "GFX_idea_NAM_Viktor_Selivanov",
+          "idea": "NAM_board_defense_selivanov"
+        },
+        {
+          "id": "NAM_Lev_Veresov",
+          "company": "Independent",
+          "subject": "Health minister, 60. Grey-haired ship's surgeon, white medical coat over a navy tunic, steady, attentive eyes.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Lev_Veresov_small.png",
+          "sprite": "GFX_idea_NAM_Lev_Veresov",
+          "idea": "NAM_board_health_veresov"
+        },
+        {
+          "id": "NAM_Andrei_Bulatov",
+          "company": "Independent",
+          "subject": "Intelligence chief, 37. Slender radio operator with a narrow face, plain knitted sweater under a jacket.",
+          "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Andrei_Bulatov_small.png",
+          "sprite": "GFX_idea_NAM_Andrei_Bulatov",
+          "idea": "NAM_board_intelligence_bulatov"
+        }
+      ]
     }
   ]
 }

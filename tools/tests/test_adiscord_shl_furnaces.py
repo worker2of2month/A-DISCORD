@@ -461,6 +461,12 @@ class ScriptMachine:
             if e.key == "has_war_with":
                 other = self.root_scope if e.value == "ROOT" else e.value
                 return frozenset((scope, other)) in self.wars
+            if e.key == "any_enemy_country":
+                return any(
+                    self.condition_scope(e.value, enemy, scope, target)
+                    for war in self.wars if scope in war
+                    for enemy in war if enemy != scope
+                )
             if e.key == "is_in_faction_with":
                 other = self.root_scope if e.value == "ROOT" else e.value
                 return self.factions.get(scope) is not None and self.factions.get(scope) == self.factions.get(other)
@@ -2535,6 +2541,26 @@ class CrisisLayerTests(unittest.TestCase):
         self.assertIn(frozenset(("GLP", "KYZ")), self.m.wars)
         self.m.run("SHL_join_golden_gate", scope="GLP")
         self.assertEqual(self.m.calls.count(("add_to_war", "GLP")), 1)
+
+    def test_bilateral_alliances_recheck_war_with_the_northern_camp_at_reply(self):
+        for tag, course, request, accept, flag in (
+            ("KYZ", 2, "SHL_request_southern_alliance", "SHL_join_southern_compact", "SHL_southern_alliance_pending"),
+            ("GLP", 1, "SHL_request_golden_alliance", "SHL_join_golden_gate", "SHL_golden_alliance_pending"),
+        ):
+            with self.subTest(tag=tag):
+                self.country()["SHL_political_course"] = course
+                war = frozenset((tag, "NAM"))
+                self.m.wars.add(war)
+                self.m.run(request)
+                self.assertNotIn(flag, self.m.flags["SHL"])
+                self.m.wars.remove(war)
+                self.m.run(request)
+                self.assertIn(flag, self.m.flags["SHL"])
+                self.m.wars.add(war)
+                self.m.run(accept, scope=tag)
+                self.assertNotIn(flag, self.m.flags["SHL"])
+                self.assertIsNone(self.m.factions.get(tag))
+                self.m.wars.remove(war)
 
     def test_late_trade_acceptance_reaches_finished_conclave_and_preserves_harbour(self):
         self.country()["SHL_political_course"] = 1
@@ -6899,13 +6925,20 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.run("SHL_produce_period")
         self.assertEqual(self.c["SHL_last_cycle_income"], 540)
 
-    def test_strike_support_reaches_seventy_five_and_repeats_the_alliance_offer(self):
+    def test_strike_support_reaches_seventy_five_and_increases_coalition_influence(self):
+        self.m.global_flags.add("ADISCORD_nam_resource_war_resolved")
+        self.m.triggers["NAM_south_story_pending"] = parse_clausewitz("always = no")
+        self.m.effects.update(shared_definitions(
+            "common/scripted_effects/ADISCORD_south_final_war_effects.txt",
+            ("ADISCORD_south_shift_influence_to_shl",),
+        ))
+        self.m.focuses.add("SHL_k_councils_term")
         for _ in range(3):
             self.m.run("SHL_begin_strike_support", target="GLP")
             self.m.run("SHL_finish_strike_support", target="GLP")
         self.assertEqual(self.m.variables["GLP"]["SHL_cons_councils_support"], 75)
         self.assertIn("SHL_cons_councils_backed", self.m.flags["GLP"])
-        self.assertEqual(self.m.calls.count(("ADISCORD_south_offer_alliance", "GLP")), 1)
+        self.assertEqual(self.m.variables["GLP"]["ADISCORD_south_coalition_influence"], -20)
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 850)
         self.assertEqual(self.m.values["political_power"], 140)
         self.m.run("SHL_begin_strike_support", target="GLP")
@@ -6913,6 +6946,29 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.run("SHL_finish_strike_support", target="GLP")
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 850)
         self.assertEqual(self.m.values["political_power"], 140)
+
+    def test_shahrabad_coalition_contacts_open_only_their_own_government(self):
+        contacts = {
+            "EFL": ("SHL_eflor_accord",),
+            "AZH": ("SHL_azhar_legation",),
+            "WEF": ("SHL_northern_road",),
+            "KDR": ("SHL_south_throne_and_crests",),
+            "KYZ": ("SHL_southern_compact", "SHL_qanat_brotherhood"),
+            "GLP": ("SHL_veyr_partnership", "SHL_k_councils_term"),
+            "MZR": ("SHL_south_compact_staff", "SHL_south_councils_abroad"),
+            "RHM": ("SHL_south_wells_charters",),
+            "SDR": ("SHL_c_charter_round",),
+        }
+        trigger = self.m.triggers["ADISCORD_south_shl_invitation_unlocked"]
+        tree = whole_tree_focuses()
+        for country, focuses in contacts.items():
+            for focus in focuses:
+                with self.subTest(country=country, focus=focus):
+                    self.assertIn(focus, tree)
+                    self.m.focuses = {focus}
+                    self.assertEqual({tag for tag in contacts if self.m.matches(trigger, tag)}, {country})
+        self.m.focuses = {"SHL_veyr_partnership", "SHL_h_kerdan_trading_house"}
+        self.assertFalse(self.m.matches(trigger, "GLP"))
 
     def test_missions_are_registered_once_and_started_only_by_their_starter(self):
         tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text(encoding="utf-8").split()

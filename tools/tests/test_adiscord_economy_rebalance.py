@@ -1479,17 +1479,16 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
                 self.assertNotIn(variable, f.scopes["STP"])
 
     def test_bilateral_compacts_debit_and_credit_the_same_amount(self):
-        for recipient, price, settled in (
+        for recipient, price, audited in (
             ("VAL", 1800, False),
             ("VAL", 900, True),
             ("NOD", 1350, False),
         ):
             f = self.fixture(
                 countries={"A": {P + "treasury": price}, recipient: {}},
-                facts={"STP_pw_kefreyt_accounts_settled": settled},
+                facts={"has_completed_focus": audited},
             )
-            if settled:
-                f.scopes["A"]["STP_pw_kefreyt_accounts_settled"] = True
+            f.scopes["A"]["STP_cw_kefreyt_shipment_received"] = True
             gate = f.definitions["STP_pc_can_pay_" + recipient.lower() + "_compact"]
             self.assertTrue(f.condition(gate))
             f.scopes["A"][P + "treasury"] = price - 0.01

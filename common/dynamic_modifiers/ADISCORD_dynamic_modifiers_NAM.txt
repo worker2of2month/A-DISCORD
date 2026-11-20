@@ -180,13 +180,16 @@ NAM_island_steel_levy_modifier = {
 	state_resources_factor = -0.15
 }
 
-# COUNTRY NAM under Veter's humanists. Corporate influence bands and the tax
-# holidays of the free zones; NAM_corp_refresh writes every field.
-NAM_corp_dynamic = {
-	icon = GFX_idea_NAM_corp_dynamic
+# COUNTRY NAM under the corporate boards. Readiness follows island military preparation.
+NAM_board_army = {
+	icon = GFX_idea_NAM_board_army
 	enable = { tag = NAM }
-	research_speed_factor = NAM_corp_mod_research
-	production_factory_efficiency_gain_factor = NAM_corp_mod_efficiency
+	planning_speed = NAM_board_expedition_planning
+}
+
+NAM_board_politics = {
+	icon = GFX_idea_NAM_board_politics
+	enable = { tag = NAM }
 	ADISCORD_economy_trade_income_factor = NAM_corp_mod_trade
 	ADISCORD_economy_tax_collection_factor = NAM_corp_mod_tax
 	stability_factor = NAM_corp_mod_stability
@@ -194,13 +197,9 @@ NAM_corp_dynamic = {
 }
 
 NAM_board_industrial_policy = {
-	icon = GFX_idea_NAM_board_industrial_policy
-	enable = {
-		custom_trigger_tooltip = {
-			tooltip = NAM_board_governing_tt
-			NAM_board_operable = yes
-		}
-	}
+	icon = GFX_idea_NAM_board_island_industry
+	enable = { tag = NAM }
+	research_speed_factor = NAM_corp_mod_research
 	industrial_capacity_factory = NAM_board_mod_output
 	production_speed_buildings_factor = NAM_board_mod_construction
 	production_factory_efficiency_gain_factor = NAM_board_mod_growth

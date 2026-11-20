@@ -110,11 +110,11 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_event_adiscord_valley_irrigation_survey"
-		texturefile = "gfx/event_pictures/standard/country/valley_irrigation_survey.png"
+		texturefile = "gfx/event_pictures/standard/country/valley_irrigation_survey_print.png"
 	}
 	spriteType = {
 		name = "GFX_event_adiscord_signal_archive_basement"
-		texturefile = "gfx/event_pictures/standard/country/signal_archive_basement.png"
+		texturefile = "gfx/event_pictures/standard/country/signal_archive_basement_print.png"
 	}
 	spriteType = {
 		name = "GFX_event_adiscord_village_fingerprint_signing"
@@ -146,11 +146,11 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_event_adiscord_mountain_militia_assembly"
-		texturefile = "gfx/event_pictures/standard/country/mountain_militia_assembly.png"
+		texturefile = "gfx/event_pictures/standard/country/mountain_militia_assembly_print.png"
 	}
 	spriteType = {
 		name = "GFX_event_adiscord_field_switchboard"
-		texturefile = "gfx/event_pictures/standard/country/field_switchboard.png"
+		texturefile = "gfx/event_pictures/standard/country/field_switchboard_print.png"
 	}
 	spriteType = {
 		name = "GFX_event_adiscord_pier_evacuation"
@@ -163,5 +163,45 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_event_adiscord_railway_signal_box"
 		texturefile = "gfx/event_pictures/standard/country/railway_signal_box.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_arktur_arsenal"
+		texturefile = "gfx/event_pictures/standard/country/nam_arktur_arsenal_print.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_board_session"
+		texturefile = "gfx/event_pictures/standard/country/nam_board_session_print.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_chair_handover"
+		texturefile = "gfx/event_pictures/standard/country/nam_chair_handover_print.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_ferrant_steel"
+		texturefile = "gfx/event_pictures/standard/country/nam_ferrant_steel_print.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_karamyshev_officers"
+		texturefile = "gfx/event_pictures/standard/country/nam_karamyshev_officers_print.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_loren_oil"
+		texturefile = "gfx/event_pictures/standard/country/nam_loren_oil_print.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_navis_shipping"
+		texturefile = "gfx/event_pictures/standard/country/nam_navis_shipping_print.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_reidbank_credit"
+		texturefile = "gfx/event_pictures/standard/country/nam_reidbank_credit_print.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_smenkom_exchange"
+		texturefile = "gfx/event_pictures/standard/country/nam_smenkom_exchange_print.png"
+	}
+	spriteType = {
+		name = "GFX_event_adiscord_nam_weber_committees"
+		texturefile = "gfx/event_pictures/standard/country/nam_weber_committees_print.png"
 	}
 }

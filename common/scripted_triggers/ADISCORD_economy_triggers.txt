@@ -830,7 +830,13 @@ ADISCORD_economy_demobilization_threat = {
 	}
 }
 
+# The corporate cabinet keeps its own national modifiers while the treasury settles normally.
+ADISCORD_economy_automatic_spirits_enabled = {
+	NOT = { has_country_flag = NAM_corp_takeover }
+}
+
 ADISCORD_economy_demobilization_can_proceed = {
+	ADISCORD_economy_automatic_spirits_enabled = yes
 	check_variable = { var = ADISCORD_economy_demobilization_phase value = 0 compare = greater_than }
 	has_war = no
 	ADISCORD_economy_demobilization_threat = no

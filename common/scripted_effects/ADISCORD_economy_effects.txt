@@ -550,6 +550,7 @@ ADISCORD_economy_update_postwar_demobilization = {
 	}
 	else_if = {
 		limit = {
+			ADISCORD_economy_automatic_spirits_enabled = yes
 			has_war = no
 			check_variable = { var = ADISCORD_economy_was_at_war value = 1 compare = greater_than_or_equals }
 			ADISCORD_economy_demobilization_threat = no
@@ -788,7 +789,10 @@ ADISCORD_economy_prepare_weekly_country = {
 # This receipt tracks the installed idea so weekly accounting avoids idea queries.
 ADISCORD_economy_update_overflow_investments = {
 	if = {
-		limit = { check_variable = { var = ADISCORD_economy_overflow_investment_fund value = 10 compare = greater_than_or_equals } }
+		limit = {
+			ADISCORD_economy_automatic_spirits_enabled = yes
+			check_variable = { var = ADISCORD_economy_overflow_investment_fund value = 10 compare = greater_than_or_equals }
+		}
 		subtract_from_variable = { var = ADISCORD_economy_overflow_investment_fund value = 10 }
 		if = {
 			limit = { NOT = { has_country_flag = ADISCORD_economy_overflow_investment_active } }
@@ -1566,7 +1570,10 @@ ADISCORD_economy_update_debt_crisis_level = {
 
 ADISCORD_economy_sync_debt_state_idea = {
 	if = {
-		limit = { NOT = { check_variable = { var = ADISCORD_economy_last_debt_state_idea value = ADISCORD_economy_debt_state compare = equals } } }
+		limit = {
+			ADISCORD_economy_automatic_spirits_enabled = yes
+			NOT = { check_variable = { var = ADISCORD_economy_last_debt_state_idea value = ADISCORD_economy_debt_state compare = equals } }
+		}
 		remove_ideas = {
 			ADISCORD_economy_debt_strain
 			ADISCORD_economy_debt_crisis
@@ -1729,7 +1736,10 @@ ADISCORD_economy_reconcile_debt_state_after_action = {
 			set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 1 }
 		}
 		remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
-		add_ideas = ADISCORD_economy_debt_strain
+		if = {
+			limit = { ADISCORD_economy_automatic_spirits_enabled = yes }
+			add_ideas = ADISCORD_economy_debt_strain
+		}
 	}
 	else_if = {
 		limit = {
@@ -1742,7 +1752,10 @@ ADISCORD_economy_reconcile_debt_state_after_action = {
 			set_variable = { var = ADISCORD_economy_last_notified_debt_state value = 2 }
 		}
 		remove_ideas = { ADISCORD_economy_debt_strain ADISCORD_economy_debt_crisis ADISCORD_economy_debt_emergency ADISCORD_economy_debt_default }
-		add_ideas = ADISCORD_economy_debt_crisis
+		if = {
+			limit = { ADISCORD_economy_automatic_spirits_enabled = yes }
+			add_ideas = ADISCORD_economy_debt_crisis
+		}
 	}
 	set_variable = { var = ADISCORD_economy_debt_crisis_level value = ADISCORD_economy_debt_state }
 	set_variable = { var = ADISCORD_economy_last_debt_state_idea value = ADISCORD_economy_debt_state }
@@ -2890,7 +2903,10 @@ ADISCORD_economy_sync_weekly_loan_ideas = {
 	multiply_temp_variable = { var = ADISCORD_economy_loan_idea_signature_temp value = 10 }
 	add_to_temp_variable = { var = ADISCORD_economy_loan_idea_signature_temp value = ADISCORD_economy_stretched_level }
 	if = {
-		limit = { NOT = { check_variable = { var = ADISCORD_economy_last_loan_visible_idea_signature value = ADISCORD_economy_loan_idea_signature_temp compare = equals } } }
+		limit = {
+			ADISCORD_economy_automatic_spirits_enabled = yes
+			NOT = { check_variable = { var = ADISCORD_economy_last_loan_visible_idea_signature value = ADISCORD_economy_loan_idea_signature_temp compare = equals } }
+		}
 		set_variable = { var = ADISCORD_economy_last_loan_visible_idea_signature value = ADISCORD_economy_loan_idea_signature_temp }
 		remove_ideas = ADISCORD_economy_rising_inflation
 		remove_ideas = ADISCORD_economy_high_inflation
@@ -3786,6 +3802,7 @@ ADISCORD_economy_refresh_spending_ideas = {
 	add_to_temp_variable = { var = ADISCORD_economy_idea_signature_b_temp value = ADISCORD_economy_idea_tier_temp }
 	if = {
 		limit = {
+			ADISCORD_economy_automatic_spirits_enabled = yes
 			OR = {
 				NOT = { check_variable = { var = ADISCORD_economy_last_idea_signature value = ADISCORD_economy_idea_signature_temp compare = equals } }
 				NOT = { check_variable = { var = ADISCORD_economy_last_idea_signature_b value = ADISCORD_economy_idea_signature_b_temp compare = equals } }

@@ -62,7 +62,11 @@ def expected_province_counts(root: Path, plan: TradeRegionPlan, issues: list[str
     """Add authored southern subdivisions to the approved counts of the remaining land."""
     geography = json.loads((root / "tools/data/adiscord_southern_cities.json").read_bytes())
     counts = Counter(BASE_PROVINCE_COUNTS)
-    for group in ("cities", "rural_splits", "interior_splits", "city_approaches", "interior_districts", "country_districts"):
+    groups = (
+        "cities", "rural_splits", "interior_splits", "city_approaches", "interior_districts", "country_districts",
+        "island_districts",
+    )
+    for group in groups:
         for entry in geography[group]:
             # Approaches with no new RGB reshape a province already counted in the map.
             if group == "city_approaches" and "rgb" not in entry:
@@ -77,6 +81,16 @@ def expected_province_counts(root: Path, plan: TradeRegionPlan, issues: list[str
                 counts[continent] += 1
                 if plan.province_continents.get(province) != continent:
                     issues.append(f"province {province}: must inherit trade region {continent} from {parent}")
+    for island in geography.get("archipelago_islands", ()):
+        home, state = island["home"], island["state"]
+        continent = plan.state_continents.get(state)
+        if continent is None or continent != plan.province_continents.get(home):
+            issues.append(f"province {home}: trade region differs from island state {state}")
+            continue
+        for part in island["provinces"]:
+            counts[continent] += 1
+            if plan.province_continents.get(part["province"]) != continent:
+                issues.append(f"province {part['province']}: must inherit trade region {continent} from {home}")
     return counts
 
 

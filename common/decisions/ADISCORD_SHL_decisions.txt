@@ -2716,6 +2716,7 @@ SHL_quarters_and_borders = {
 				NOT = { has_country_flag = SHL_golden_alliance_pending }
 			}
 			GLP = {
+				ADISCORD_south_coalition_target_war_clear = yes
 				is_subject = no
 				is_in_faction = no
 				NOT = { has_war_with = SHL }
@@ -2753,6 +2754,7 @@ SHL_quarters_and_borders = {
 				NOT = { has_country_flag = SHL_southern_alliance_pending }
 			}
 			KYZ = {
+				ADISCORD_south_coalition_target_war_clear = yes
 				is_subject = no
 				is_in_faction = no
 				NOT = { has_war_with = SHL }
@@ -3563,16 +3565,15 @@ SHL_quarters_and_borders = {
 		selectable_mission = no
 		fire_only_once = no
 		complete_effect = {
-			custom_effect_tooltip = SHL_cons_charter_round_description_rules_tt
 			custom_effect_tooltip = SHL_cons_success_tt
 			hidden_effect = { SHL_cons_campaign_won = yes }
 		}
 		timeout_effect = {
 			custom_effect_tooltip = SHL_cons_charter_round_timeout_tt
 			hidden_effect = {
-				RHM = { ADISCORD_south_offer_alliance = yes }
-				MZR = { ADISCORD_south_offer_alliance = yes }
-				SDR = { ADISCORD_south_offer_alliance = yes }
+				RHM = { SHL_back_coalition_delegation = yes }
+				MZR = { SHL_back_coalition_delegation = yes }
+				SDR = { SHL_back_coalition_delegation = yes }
 			}
 		}
 	}
@@ -3853,15 +3854,14 @@ SHL_quarters_and_borders = {
 		selectable_mission = no
 		fire_only_once = no
 		complete_effect = {
-			custom_effect_tooltip = SHL_cons_councils_description_rules_tt
 			custom_effect_tooltip = SHL_cons_success_tt
 			hidden_effect = { SHL_cons_campaign_won = yes }
 		}
 		timeout_effect = {
 			custom_effect_tooltip = SHL_cons_councils_timeout_tt
 			hidden_effect = {
-				MZR = { ADISCORD_south_offer_alliance = yes }
-				GLP = { ADISCORD_south_offer_alliance = yes }
+				MZR = { SHL_back_coalition_delegation = yes }
+				GLP = { SHL_back_coalition_delegation = yes }
 			}
 		}
 	}

@@ -16,6 +16,7 @@ from PIL import Image
 
 from tools.lib.adiscord_starting_navies import with_naval_history, with_starting_navy
 
+from tools.builders.build_adiscord_new_states import NAM_ARCHIPELAGO_ISLANDS
 from tools.builders.build_adiscord_northern_countries import (
     distribute_levels,
     largest_remainder,
@@ -39,6 +40,12 @@ COUNTRIES = json.loads(SOURCE.read_text(encoding="utf-8"))["countries"]
 STATE_OWNERS = {
     state_id: tag for tag, row in COUNTRIES.items() for state_id in row["states"]
 }
+# Islets raised from the sea are unsettled: they join a state's province list
+# without shifting its population weight, port or capital anchor. A detached
+# islet draws the state's local supply and receives no naval base.
+RAISED_ISLAND_PROVINCES = frozenset(
+    part["province"] for island in NAM_ARCHIPELAGO_ISLANDS for part in island["provinces"]
+)
 IDEOLOGIES = (
     "humanism", "hedonism", "etatism", "pragmatism", "technocracy",
     "utilitarism", "chauvinism", "anarchism",
@@ -50,6 +57,18 @@ def state_path(state_id: int) -> Path:
     if len(matches) != 1:
         raise ValueError(f"State {state_id}: expected one geographic source")
     return matches[0]
+
+
+def state_resources(tag: str, state_id: int) -> dict[str, int]:
+    """Starting deposits of one state from the country's ``resources`` map."""
+    deposits = COUNTRIES[tag].get("resources", {})
+    unknown = sorted(set(deposits) - set(map(str, COUNTRIES[tag]["states"])))
+    if unknown:
+        raise ValueError(f"{tag}: resources name foreign states {unknown}")
+    return {
+        resource: int(amount)
+        for resource, amount in deposits.get(str(state_id), {}).items()
+    }
 
 
 @lru_cache(maxsize=1)
@@ -70,15 +89,17 @@ def profiles() -> dict[int, dict]:
             provinces = set(map(int, match[1].split()))
             if any(details[p]["type"] != "land" for p in provinces):
                 raise ValueError(f"State {state_id} contains non-land provinces")
+            settled = provinces - RAISED_ISLAND_PROVINCES
             ports = []
-            for component in connected_components(provinces, adjacency):
+            for component in connected_components(settled, adjacency):
                 coastal = [p for p in component if details[p]["coastal"]]
                 if coastal:
                     ports.append(max(coastal, key=lambda p: (areas[p], -p)))
-            anchor = max(ports or provinces, key=lambda p: (areas[p], -p))
-            weights[state_id] = sum(areas[p] for p in provinces)
+            anchor = max(ports or settled, key=lambda p: (areas[p], -p))
+            weights[state_id] = sum(areas[p] for p in settled)
             result[state_id] = dict(
-                owner=tag, provinces=provinces, ports=sorted(ports), anchor=anchor
+                owner=tag, provinces=provinces, ports=sorted(ports), anchor=anchor,
+                resources=state_resources(tag, state_id),
             )
         ordered = [country["capital"]] + sorted(
             (s for s in state_ids if s != country["capital"]),
@@ -113,9 +134,13 @@ def populate_state(source: str, state_id: int) -> str:
     source = re.sub(r"\bmanpower\s*=\s*\d+", f"manpower = {profile['population']}", source)
     source = re.sub(r"\bstate_category\s*=\s*\w+", f"state_category = {category}", source)
     source = re.sub(r"\blocal_supplies\s*=\s*[\d.]+", "local_supplies = 2.0", source)
-    history = [
-        MARKER, "\thistory = {", f"\t\towner = {tag}", f"\t\tadd_core_of = {tag}",
-    ]
+    history = [MARKER]
+    if profile["resources"]:
+        history.append("\tresources = {")
+        for resource, amount in profile["resources"].items():
+            history.append(f"\t\t{resource} = {amount}")
+        history.append("\t}")
+    history += ["\thistory = {", f"\t\towner = {tag}", f"\t\tadd_core_of = {tag}"]
     if profile["capital"]:
         history.append(f"\t\tvictory_points = {{ {profile['anchor']} 10 }}")
     history += ["\t\tbuildings = {", f"\t\t\tinfrastructure = {profile['infrastructure']}"]

@@ -2729,6 +2729,21 @@ on_actions = {
 					limit = { FROM = { has_variable = NAM_corp_district_owner } }
 					NAM = { NAM_board_queue_recount = yes }
 				}
+				if = {
+					limit = {
+						FROM = { tag = NAM }
+						FROM = { has_variable = NAM_board_no_confidence_day }
+					}
+					FROM = {
+						NAM_board_end_operations = yes
+						remove_mission = NAM_board_no_confidence
+						set_variable = { var = NAM_board_no_confidence_day value = -1 }
+						set_variable = { var = NAM_board_majority_since value = -1 }
+						clr_country_flag = NAM_board_recount_queued
+						clr_country_flag = NAM_board_no_confidence_immunity
+						remove_ideas = NAM_board_no_confidence_spirit
+					}
+				}
 				# END nam:on_annex
 				# BEGIN stelander:on_annex
 				STP = { STP_bezhaysk_queue_reconciliation = yes }

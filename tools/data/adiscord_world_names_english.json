@@ -1263,8 +1263,8 @@
           "english": "Saydar Coast"
         },
         "STATE_643": {
-          "russian": "Юго-восточный архипелаг",
-          "english": "Southeastern Archipelago"
+          "russian": "Тарвен",
+          "english": "Tarven"
         },
         "STATE_644": {
           "russian": "Северо-западный Ульвен",
@@ -1831,8 +1831,8 @@
           "english": "Svetlogorye Coast"
         },
         "STRATEGICREGION_25": {
-          "russian": "Южные острова",
-          "english": "Southern Islands"
+          "russian": "Рюминский архипелаг",
+          "english": "Ryumin Archipelago"
         },
         "STRATEGICREGION_26": {
           "russian": "Северный полярный океан",
@@ -2792,6 +2792,34 @@
       "marker": "tools.builders.build_adiscord_new_states",
       "source_marker": false,
       "entries": {
+        "STATE_225": {
+          "russian": "Ворваньи острова",
+          "english": "Vorvanyi Islands"
+        },
+        "STATE_226": {
+          "russian": "Бисерные острова",
+          "english": "Bisernye Islands"
+        },
+        "STATE_227": {
+          "russian": "Зарянские острова",
+          "english": "Zaryanskiye Islands"
+        },
+        "STATE_228": {
+          "russian": "остров Рюмина",
+          "english": "Ryumin Island"
+        },
+        "STATE_229": {
+          "russian": "Лебяжьи острова",
+          "english": "Lebyazhi Islands"
+        },
+        "STATE_230": {
+          "russian": "Закатные острова",
+          "english": "Zakatnye Islands"
+        },
+        "STATE_231": {
+          "russian": "остров Кукушкин",
+          "english": "Kukushkin Island"
+        },
         "STATE_699": {
           "russian": "Хазар",
           "english": "Khazar"
@@ -3233,64 +3261,88 @@
           "english": "West Reyng"
         },
         "VICTORY_POINTS_11393": {
-          "russian": "Южноостровск",
-          "english": "Yuzhnoostrovsk"
+          "russian": "Китовка",
+          "english": "Kitovka"
         },
         "VICTORY_POINTS_11606": {
-          "russian": "Дальний мыс",
-          "english": "Far Cape"
+          "russian": "Камбалий",
+          "english": "Kambaliy"
         },
         "VICTORY_POINTS_4396": {
-          "russian": "Малая гавань",
-          "english": "Little Harbour"
+          "russian": "Сельдяной",
+          "english": "Seldyanoy"
         },
         "VICTORY_POINTS_8537": {
           "russian": "Чаечий",
           "english": "Chayechiy"
         },
         "VICTORY_POINTS_2478": {
-          "russian": "Восточная пристань",
-          "english": "Eastern Wharf"
+          "russian": "Зарянка",
+          "english": "Zaryanka"
         },
         "VICTORY_POINTS_5482": {
-          "russian": "Каменный остров",
-          "english": "Stone Island"
+          "russian": "Валунный",
+          "english": "Valunny"
         },
         "VICTORY_POINTS_6322": {
-          "russian": "Тихая бухта",
-          "english": "Quiet Bay"
+          "russian": "Штилевой",
+          "english": "Shtilevoy"
         },
         "VICTORY_POINTS_9192": {
           "russian": "Рыбачий",
           "english": "Rybachiy"
         },
         "VICTORY_POINTS_6893": {
-          "russian": "Большой остров",
-          "english": "Great Island"
+          "russian": "Рюминск",
+          "english": "Ryuminsk"
         },
         "VICTORY_POINTS_6145": {
-          "russian": "Дальний рейд",
-          "english": "Outer Roads"
+          "russian": "Бригантина",
+          "english": "Brigantina"
         },
         "VICTORY_POINTS_8682": {
-          "russian": "Малый рейд",
-          "english": "Little Roads"
+          "russian": "Шлюпочный",
+          "english": "Shlyupochny"
+        },
+        "VICTORY_POINTS_17702": {
+          "russian": "Гудронка",
+          "english": "Gudronka"
+        },
+        "VICTORY_POINTS_3884": {
+          "russian": "Канатный",
+          "english": "Kanatny"
+        },
+        "VICTORY_POINTS_17444": {
+          "russian": "Ловцы",
+          "english": "Lovtsy"
+        },
+        "VICTORY_POINTS_17722": {
+          "russian": "Варница",
+          "english": "Varnitsa"
+        },
+        "VICTORY_POINTS_18079": {
+          "russian": "Баржевое",
+          "english": "Barzhevoe"
+        },
+        "VICTORY_POINTS_11043": {
+          "russian": "Вышковый",
+          "english": "Vyshkovy"
         },
         "VICTORY_POINTS_3731": {
-          "russian": "Северная пристань",
-          "english": "Northern Wharf"
+          "russian": "Тресковый",
+          "english": "Treskovy"
         },
         "VICTORY_POINTS_2742": {
-          "russian": "Западная пристань",
-          "english": "Western Wharf"
+          "russian": "Шкиперский",
+          "english": "Shkiperskiy"
         },
         "VICTORY_POINTS_13018": {
-          "russian": "Среднеостровск",
-          "english": "Sredneostrovsk"
+          "russian": "Брусничный",
+          "english": "Brusnichny"
         },
         "VICTORY_POINTS_12732": {
-          "russian": "Западный мыс",
-          "english": "West Cape"
+          "russian": "Бакенский",
+          "english": "Bakenskiy"
         },
         "VICTORY_POINTS_3924": {
           "russian": "Караль",
@@ -4535,6 +4587,74 @@
         "VICTORY_POINTS_18994": {
           "russian": "Рейдаль",
           "english": "Reydal"
+        },
+        "VICTORY_POINTS_19041": {
+          "russian": "Тюлений",
+          "english": "Tyuleny"
+        },
+        "VICTORY_POINTS_19045": {
+          "russian": "Прибойный",
+          "english": "Priboyny"
+        },
+        "VICTORY_POINTS_19046": {
+          "russian": "Рифовый",
+          "english": "Rifovy"
+        },
+        "VICTORY_POINTS_19051": {
+          "russian": "Бакланий",
+          "english": "Baklany"
+        },
+        "VICTORY_POINTS_19053": {
+          "russian": "Штормовой",
+          "english": "Shtormovoy"
+        },
+        "VICTORY_POINTS_19056": {
+          "russian": "Кайрово",
+          "english": "Kayrovo"
+        },
+        "VICTORY_POINTS_19060": {
+          "russian": "Нерпичий",
+          "english": "Nerpichiy"
+        },
+        "VICTORY_POINTS_19064": {
+          "russian": "Лоцманский",
+          "english": "Lotsmansky"
+        },
+        "VICTORY_POINTS_19066": {
+          "russian": "Сигнальный",
+          "english": "Signalny"
+        },
+        "VICTORY_POINTS_19108": {
+          "russian": "Хельвик",
+          "english": "Helvik"
+        },
+        "VICTORY_POINTS_19109": {
+          "russian": "Новый Хельвик",
+          "english": "New Helvik"
+        },
+        "VICTORY_POINTS_19110": {
+          "russian": "Скагрен",
+          "english": "Skagren"
+        },
+        "VICTORY_POINTS_19111": {
+          "russian": "Остенар",
+          "english": "Ostenar"
+        },
+        "VICTORY_POINTS_19112": {
+          "russian": "Сольвар",
+          "english": "Solvar"
+        },
+        "VICTORY_POINTS_19113": {
+          "russian": "Гренна",
+          "english": "Grenna"
+        },
+        "VICTORY_POINTS_19114": {
+          "russian": "Тингвалл",
+          "english": "Tingvall"
+        },
+        "VICTORY_POINTS_19115": {
+          "russian": "Эйден",
+          "english": "Eiden"
         }
       }
     }

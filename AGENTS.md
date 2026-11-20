@@ -18,6 +18,10 @@ localisation to make a one-off correction. Use the builder's dry-run or
 `--check` mode before its explicit `--apply` mode, then prove a second run is
 idempotent when the builder changes data.
 
+Не добавляй ночные огни городам и другим поселениям в регионах, принадлежащих
+EXZ на старте кампании. При генерации карты сохраняй их тёмными независимо
+от типа местности и последующей смены владельца.
+
 ## Public release
 
 Debug decisions and their required events, categories, and localisation may be

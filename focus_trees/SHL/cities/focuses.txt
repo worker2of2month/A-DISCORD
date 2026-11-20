@@ -130,6 +130,7 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_KYZ_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = SHL_conclave_power_dummy_idea
@@ -146,6 +147,7 @@
 				limit = {
 					KYZ = {
 						exists = yes
+						ADISCORD_south_coalition_target_war_clear = yes
 						is_in_faction = no
 						NOT = { has_war_with = SHL }
 					}
@@ -781,11 +783,6 @@
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_south_wells_charters_tt
-			hidden_effect = {
-				RHM = { ADISCORD_south_offer_alliance = yes }
-				MZR = { ADISCORD_south_offer_alliance = yes }
-				SDR = { ADISCORD_south_offer_alliance = yes }
-			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -816,6 +813,7 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_MZR_tt
 			add_manpower = -6000
 			custom_effect_tooltip = SHL_south_compact_staff_tt
 			hidden_effect = { SHL_raise_paid_levies_2 = yes }
@@ -887,6 +885,7 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_SDR_tt
 			unlock_decision_tooltip = SHL_cons_charter_round
 			custom_effect_tooltip = SHL_c_charter_round_tt
 			hidden_effect = { SHL_start_cons_charter_round = yes }

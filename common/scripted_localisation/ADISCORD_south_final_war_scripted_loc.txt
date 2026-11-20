@@ -1,5 +1,95 @@
 # COUNTRY. Map tooltips use the same alignment predicates as the colour layers.
 defined_text = {
+	name = ADISCORDSouthMapInfluence
+	text = {
+		trigger = {
+			ADISCORD_south_crisis_open = yes
+			ADISCORD_south_regional_country = yes
+			ADISCORD_south_declarer_valid = no
+			exists = yes
+			is_subject = no
+		}
+		localization_key = ADISCORD_south_map_influence_line
+	}
+	text = { localization_key = ADISCORD_south_influence_blank }
+}
+
+defined_text = {
+	name = ADISCORDSouthDiplomaticBalance
+	text = {
+		trigger = { has_variable = ADISCORD_south_coalition_influence }
+		localization_key = ADISCORD_south_influence_value
+	}
+	text = { localization_key = ADISCORD_south_influence_zero }
+}
+
+defined_text = {
+	name = ADISCORDSouthMapGaps
+	text = {
+		trigger = { exists = no }
+		localization_key = ADISCORD_south_map_gap_absent
+	}
+	text = {
+		trigger = {
+			OR = {
+				ADISCORD_south_map_country_shl_leader = yes
+				ADISCORD_south_map_country_north_leader = yes
+			}
+		}
+		localization_key = ADISCORD_south_map_gap_leader
+	}
+	text = {
+		trigger = { is_subject = yes }
+		localization_key = ADISCORD_south_map_gap_subject
+	}
+	text = {
+		trigger = { has_global_flag = ADISCORD_south_final_resolved }
+		localization_key = ADISCORD_south_map_gap_resolved
+	}
+	text = {
+		trigger = {
+			OR = {
+				ADISCORD_south_final_active = yes
+				ADISCORD_south_coalition_target_war_clear = no
+			}
+		}
+		localization_key = ADISCORD_south_map_gap_war
+	}
+	text = {
+		trigger = {
+			ADISCORD_south_map_influence_contested = yes
+			has_variable = ADISCORD_south_coalition_influence
+			set_temp_variable = { var = ADISCORD_south_map_shl_gap value = 60 }
+			add_to_temp_variable = { var = ADISCORD_south_map_shl_gap value = ADISCORD_south_coalition_influence }
+			clamp_temp_variable = { var = ADISCORD_south_map_shl_gap min = 0 max = 160 }
+			set_temp_variable = { var = ADISCORD_south_map_north_gap value = 60 }
+			subtract_from_temp_variable = { var = ADISCORD_south_map_north_gap value = ADISCORD_south_coalition_influence }
+			clamp_temp_variable = { var = ADISCORD_south_map_north_gap min = 0 max = 160 }
+		}
+		localization_key = ADISCORD_south_map_gaps
+	}
+	text = {
+		trigger = {
+			ADISCORD_south_map_influence_contested = yes
+			NOT = { has_variable = ADISCORD_south_coalition_influence }
+			set_temp_variable = { var = ADISCORD_south_map_shl_gap value = 60 }
+			set_temp_variable = { var = ADISCORD_south_map_north_gap value = 60 }
+		}
+		localization_key = ADISCORD_south_map_gaps
+	}
+	text = { localization_key = ADISCORD_south_map_gap_closed }
+}
+
+defined_text = {
+	name = ADISCORDSouthWarBlocksTalks
+	text = {
+		trigger = { ADISCORD_south_coalition_target_war_clear = no }
+		localization_key = ADISCORD_south_war_blocks_talks_tt
+	}
+	text = { localization_key = ADISCORD_south_influence_blank }
+}
+
+defined_text = {
 	name = ADISCORDSouthMapAlignment
 	text = {
 		trigger = { exists = no }

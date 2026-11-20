@@ -14,7 +14,9 @@ state={
 		18135 18136 18137 18138 18139 18140 18150 18151 18152 18153 18154 18155
 		18156 18163 18164 18165 18166 18167 18168 18169 18691 18692 18693 18694
 		18695 18696 18697 18698 18699 18700 18701 18747 18748 18749 18750 18751
-		18752 18753 18754 18755 18756 18757
+		18752 18753 18754 18755 18756 18757 19040 19041 19042 19043 19049 19050
+		19051 19052 19053 19054 19055 19056 19057 19058 19059 19060 19061 19062
+		19066 19067 19068 19074
 	}
 	manpower = 2400000
 	buildings_max_level_factor = 1.000
@@ -22,6 +24,8 @@ state={
 	local_supplies = 3.5
 	resources = {
 		steel = 16
+		chromium = 6
+		aluminium = 4
 	}
 	history = {
 		owner = NAM
@@ -31,12 +35,33 @@ state={
 			industrial_complex = 2
 			infrastructure = 3
 			6893 = { naval_base = 4 }
+			6816 = { naval_base = 1 }
+			6145 = { naval_base = 1 }
+			8682 = { naval_base = 1 }
+			19041 = { naval_base = 1 }
+			19051 = { naval_base = 1 }
+			19053 = { naval_base = 1 }
+			19056 = { naval_base = 1 }
+			19060 = { naval_base = 1 }
+			19066 = { naval_base = 1 }
 		}
-		victory_points = { 6893 3 }
+		victory_points = { 6893 10 }
 		victory_points = { 6145 1 }
 		victory_points = { 8682 1 }
 		victory_points = { 6816 2 }
 		victory_points = { 3243 1 }
 		victory_points = { 16903 15 }
+		victory_points = { 17702 1 }
+		victory_points = { 3884 1 }
+		victory_points = { 17444 1 }
+		victory_points = { 17722 1 }
+		victory_points = { 18079 1 }
+		victory_points = { 11043 1 }
+		victory_points = { 19041 1 }
+		victory_points = { 19051 1 }
+		victory_points = { 19053 1 }
+		victory_points = { 19056 1 }
+		victory_points = { 19060 1 }
+		victory_points = { 19066 1 }
 	}
 }

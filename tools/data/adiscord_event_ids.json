@@ -45,6 +45,94 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_resource_war.420",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 420,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.421",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 421,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.422",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 422,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.430",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 430,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.431",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 431,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.432",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 432,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.433",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 433,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.434",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 434,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.435",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 435,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.436",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 436,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.437",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 437,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_mon_court.1",
       "namespace": "ADISCORD_mon_court",
       "number": 1,
@@ -2170,7 +2258,7 @@
       "number": 101,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_island_exile",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_nam_resource_war.102",
@@ -2178,7 +2266,7 @@
       "number": 102,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_island_exile",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_nam_resource_war.103",
@@ -2186,7 +2274,7 @@
       "number": 103,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_island_exile",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_nam_groups.12",
@@ -2525,6 +2613,38 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_story.27",
+      "namespace": "ADISCORD_nam_story",
+      "number": 27,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.28",
+      "namespace": "ADISCORD_nam_story",
+      "number": 28,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.29",
+      "namespace": "ADISCORD_nam_story",
+      "number": 29,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.30",
+      "namespace": "ADISCORD_nam_story",
+      "number": 30,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_story.31",
       "namespace": "ADISCORD_nam_story",
       "number": 31,
@@ -2560,6 +2680,38 @@
       "id": "ADISCORD_nam_story.40",
       "namespace": "ADISCORD_nam_story",
       "number": 40,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.41",
+      "namespace": "ADISCORD_nam_story",
+      "number": 41,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.42",
+      "namespace": "ADISCORD_nam_story",
+      "number": 42,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.43",
+      "namespace": "ADISCORD_nam_story",
+      "number": 43,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.44",
+      "namespace": "ADISCORD_nam_story",
+      "number": 44,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_story",
       "status": "active"

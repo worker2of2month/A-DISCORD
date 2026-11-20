@@ -16,10 +16,15 @@ state = {
 		9287 9298 9539 9591 9755 9764 9905 10036 10340 10459 10538 10549 10611 10656 10886 10914
 		10954 10991 11064 11460 11539 11570 11852 11883 11924 12027 12034 12268 12429 12475 12768 12805
 		12908 12936 12986
+		19107
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.0
 # Populated by tools/build_adiscord_remainder_states.py
+	resources = {
+		steel = 6
+		aluminium = 6
+	}
 	history = {
 		owner = FLR
 		add_core_of = FLR

@@ -1,7 +1,10 @@
 ADISCORD_scenario_debug_category = {
 	# Shared war diagnostics are usable after switching to any test country.
 	allowed = { always = yes }
-	visible = { is_debug = yes }
+	visible = {
+		NOT = { has_country_flag = NAM_corp_takeover }
+		is_debug = yes
+	}
 }
 
 # BEGIN CONSOLIDATED: ADISCORD_test_wars_categories.txt

@@ -24,7 +24,7 @@ EXPECTED_COUNTRY_NAMES = {
     "COF_anarchism_party": "Вольные Друиды",
     "DAN_etatism_party": "Командование Группы",
     "EFL_chauvinism_party": "Партия Единой Земли",
-    "NAM_etatism_party": "Администрация Автономной Зоны",
+    "NAM_etatism_party": "[NAM.NAMGetEtatistPartyName]",
     "PIV_hedonism_party": "Клуб Сахарных Баронов",
     "RUS_etatism_party": "Держава Хана",
     "TFF_anarchism_party": "Вольные Рейнджеры",
@@ -67,6 +67,7 @@ class PartyTexticonLibraryContractTests(unittest.TestCase):
         expected.update({
             key + "_long": value for key, value in EXPECTED_COUNTRY_NAMES.items()
         })
+        expected["NAM_etatism_party_long"] = "[NAM.NAMGetEtatistPartyLongName]"
         expected["RUS_etatism_party_long"] = "Государственная партия Хана"
         self.assertDictEqual(selected, expected)
 

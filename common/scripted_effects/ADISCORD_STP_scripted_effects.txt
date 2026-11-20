@@ -7983,7 +7983,8 @@ STP_pc_settle_val_compact = {
 }
 
 STP_pc_credit_val_compact = {
-	if = { limit = { has_country_flag = STP_pw_kefreyt_accounts_settled }
+	if = {
+		limit = { STP_pc_val_compact_credit_earned = yes }
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
 		VAL = { add_to_variable = { var = ADISCORD_economy_treasury value = 900 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 } }
@@ -7993,7 +7994,6 @@ STP_pc_credit_val_compact = {
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1800 }
 		VAL = { add_to_variable = { var = ADISCORD_economy_treasury value = 1800 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1800 } }
 	}
-	set_country_flag = STP_pw_kefreyt_accounts_settled
 }
 
 # Recipient accepts before either treasury changes; clear the receipt before delivery.

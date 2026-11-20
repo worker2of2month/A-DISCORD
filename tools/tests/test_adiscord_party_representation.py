@@ -8,7 +8,7 @@ import unittest
 from PIL import Image
 
 from tools.lib.campaign_selection import ATLAS, campaign_roster
-from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions, walk
+from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions, selected_effects, walk
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.validators.validate_adiscord_english_localisation import ENTRY
 
@@ -356,7 +356,7 @@ class PartyRepresentationTests(unittest.TestCase):
                          "STP_ch_update_cabinet_parties"),
             "IVN": focus_reward("ADISCORD_IVN_focus.txt", "IVN_parliament_coalition_pragmatists"),
             "SHL": focus_reward("ADISCORD_SHL_focus.txt", "SHL_council_of_cities"),
-            "NAM": focus_reward("ADISCORD_NAM_exile_humanist.txt", "NAM_hum_salvation_cabinet"),
+            "NAM": focus_reward("ADISCORD_NAM_postwar.txt", "NAM_recognition"),
             "RUS": focus_reward("ADISCORD_national_focus_RUS.txt", "RUS_scientists_council"),
             "WRK": focus_reward("ADISCORD_Vorkerland_prewar.txt", "WRK_committee_bagley_executive"),
             "VAL": country_event("ADISCORD_VAL_contract_events.txt", "val_rework.275"),
@@ -434,21 +434,110 @@ class PartyRepresentationTests(unittest.TestCase):
         vorkerland = parsed(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         self.assertEqual(scalar(block(vorkerland, "ADISCORD_vorkerland_begin_collapse"), "ADISCORD_end_party_coalition"), "yes")
 
+    def test_nam_opposition_leaders_keep_their_identity_through_the_takeover(self):
+        weber = "NAM_Yaroslav_Weber"
+        karamyshev = "NAM_Rostislav_Karamyshev"
+        cabinet = parsed(ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
+        history = self.histories["NAM"]
+        for person, ideology in ((weber, "humanism_ideology"), (karamyshev, "chauvinism_ideology")):
+            self.assertEqual(scalar(block(self.characters[person], "country_leader"), "ideology"), ideology)
+            recruit, = (i for i, e in enumerate(history) if e.key == "recruit_character" and e.value == person)
+            promote, = (i for i, e in enumerate(history) if e.key == "promote_character"
+                        and scalar(e.value, "character") == person and scalar(e.value, "ideology") == ideology)
+            self.assertLess(recruit, promote)
+        takeover = block(cabinet, "NAM_corp_takeover")
+        opening, = (e.value for e in takeover if e.key == "if" and
+                    any(a.key == "NAM_board_seat_opposition_leaders" for a in e.value))
+        self.assertEqual(scalar(block(block(opening, "limit"), "NOT"), "has_country_flag"), "NAM_board_opened")
+        seats = block(cabinet, "NAM_board_seat_opposition_leaders")
+        for alive_weber in (False, True):
+            for alive_karamyshev in (False, True):
+                facts = {("NAM", "has_character", weber): alive_weber,
+                         ("NAM", "has_character", karamyshev): alive_karamyshev}
+                chosen = [e for _, e in selected_effects(seats, facts, "NAM")]
+                self.assertEqual([scalar(e.value, "character") for e in chosen if e.key == "promote_character"],
+                                 [weber] if alive_weber else [])
+                roles = [e.value for e in chosen if e.key == "add_country_leader_role"]
+                self.assertEqual([scalar(b, "character") for b in roles], [karamyshev] if alive_karamyshev else [])
+                if roles:
+                    self.assertEqual(scalar(block(roles[0], "country_leader"), "ideology"), "etatism_ideology")
+
+    def test_partition_night_settles_only_the_surviving_island_leader(self):
+        effects = parsed(ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
+        tree = "ADISCORD_NAM_exile_corporate.txt"
+        final = "NAM_island_partition_succession"
+        self.assertEqual(scalar(block(focus_reward(tree, "NAM_board_partition_night"), "hidden_effect"), final), "yes")
+        triggers = parsed(ROOT / "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt")
+        chair_rules = block(triggers, "NAM_board_chairman_rules")
+        for branch in (row.value for row in block(effects, final) if row.key in ("if", "else_if")):
+            self.assertEqual(scalar(block(branch, "limit"), "NAM_board_chairman_rules"), "yes")
+        chairmen = [scalar(entry.value, "character") for entry in block(chair_rules, "OR")]
+        self.assertCountEqual(chairmen, ["NAM_Mark_Olshansky", "NAM_Aristarkh_Vyazemtsev", "NAM_Taisiya_Valts",
+                                        "NAM_Saveliy_Kruze", "NAM_Rodion_Kalyonov", "NAM_Nazar_Guryev",
+                                        "NAM_Lidiya_Velyaminova"])
+        self.assertFalse(matches_conditions(chair_rules, {("NAM", "ruling_leader"): "NAM_party_representative_technocracy"}, "NAM"))
+        weber = "NAM_Yaroslav_Weber"
+        karamyshev = "NAM_Rostislav_Karamyshev"
+        for chairman in chairmen:
+            for humanists, empire, successor, party in (
+                ("last_debtor", "posthumous_signature", chairman, "technocracy"),
+                ("last_debtor", "escheated_throne", karamyshev, "etatism"),
+                ("treaty_two_judases", "posthumous_signature", weber, "humanism"),
+            ):
+                with self.subTest(chairman=chairman, humanists=humanists, empire=empire):
+                    facts = {("NAM", "ruling_leader"): chairman, ("NAM", "has_character", weber): True,
+                             ("NAM", "has_character", karamyshev): True}
+                    facts["NAM", "NAM_board_chairman_rules", "yes"] = matches_conditions(chair_rules, facts, "NAM")
+                    for choice in (humanists, empire):
+                        focus = "NAM_board_" + choice
+                        action, = block(focus_reward(tree, focus), "hidden_effect")
+                        choice_effects = block(effects, action.key)
+                        if choice in {"last_debtor", "posthumous_signature"}:
+                            for _, step in selected_effects(choice_effects, facts, "NAM"):
+                                if step.key == "retire_character":
+                                    facts["NAM", "has_character", step.value] = False
+                        else:
+                            self.assertNotIn("retire_character", {step.key for step in walk(choice_effects)})
+                        facts["NAM", "has_completed_focus", focus] = True
+                    self.assertEqual(facts["NAM", "has_character", weber], successor == weber)
+                    self.assertEqual(facts["NAM", "has_character", karamyshev], successor == karamyshev)
+                    outcome = [step for _, step in selected_effects(block(effects, final), facts, "NAM")]
+                    if successor == chairman:
+                        self.assertFalse(any(step.key in {"set_politics", "add_country_leader_role",
+                                                          "drop_cosmetic_tag", "remove_ideas"} for step in outcome))
+                    else:
+                        self.assertEqual(scalar(block(outcome, "set_politics"), "ruling_party"), party)
+                        promotion = block(outcome, "promote_character")
+                        self.assertEqual(scalar(promotion, "character"), successor)
+                        self.assertEqual(self.ideology_groups[scalar(promotion, "ideology")], party)
+                        facts["NAM", "has_character", successor] = False
+                        self.assertFalse(list(selected_effects(block(effects, final), facts, "NAM")))
+
     def test_story_cabinets_apply_changes_to_the_country_receiving_the_seats(self):
         admit = "ADISCORD_admit_coalition_party"
         legalise = "ADISCORD_legalise_party"
         remove = "ADISCORD_remove_coalition_party"
         directory = ROOT / "common/scripted_effects"
-        takeover = block(parsed(directory / "ADISCORD_nam_resource_war_effects.txt"), "NAM_corp_takeover")
+        nam = parsed(directory / "ADISCORD_nam_resource_war_effects.txt")
+        takeover = block(nam, "NAM_corp_takeover")
         keys = [entry.key for entry in takeover]
         self.assertLess(keys.index("ADISCORD_end_party_coalition"), keys.index("set_politics"))
-        self.assertLess(keys.index("set_politics"), keys.index(admit))
-        self.assertEqual(self.party_actions(takeover), [(admit, "token:humanism")])
-        corporate = "ADISCORD_NAM_exile_corporate.txt"
+        self.assertEqual(scalar(takeover, "clear_array"), "ADISCORD_banned_parties")
+        self.assertLess(keys.index("clear_array"), keys.index("set_politics"))
+        self.assertEqual(scalar(block(takeover, "set_politics"), "ruling_party"), "technocracy")
+        roles = {scalar(e.value, "character"): scalar(block(e.value, "country_leader"), "ideology")
+                 for e in walk(takeover) if e.key == "add_country_leader_role"}
+        promotions = {scalar(e.value, "character"): scalar(e.value, "ideology")
+                      for e in walk(block(nam, "NAM_board_install_chairman")) if e.key == "promote_character"}
+        self.assertEqual(len(roles), 7)
+        self.assertEqual(set(roles.values()), {"techno_corporatism"})
+        self.assertEqual(promotions, roles)
+        treaty = focus_reward("ADISCORD_NAM_exile_corporate.txt", "NAM_board_treaty_two_judases")
+        self.assertEqual(scalar(block(treaty, "hidden_effect"), "NAM_island_compact_with_humanists"), "yes")
+        self.assertEqual(self.party_actions(block(nam, "NAM_island_compact_with_humanists")),
+                         [(legalise, "token:humanism"), (admit, "token:humanism")])
+        self.assertEqual(self.party_actions(block(nam, "NAM_island_spare_karamyshev")), [])
         for tree, focus_id, expected in [
-            ("ADISCORD_NAM_exile_humanist.txt", "NAM_hum_salvation_cabinet", [(admit, "token:etatism")]),
-            (corporate, "NAM_board_humanist_facade", []),
-            (corporate, "NAM_board_purge_ministers", [(remove, "token:humanism")]),
             ("ADISCORD_SHL_focus.txt", "SHL_council_of_cities", [(admit, "token:hedonism")]),
             ("ADISCORD_national_focus_RUS.txt", "RUS_scientists_council",
              [(legalise, "token:technocracy"), (admit, "token:technocracy")]),
@@ -548,7 +637,8 @@ class PartyRepresentationTests(unittest.TestCase):
             key: body for key, body in effects.items()
             if re.fullmatch(r"[A-Z]{3}_party_representatives_\w+", key)
         }
-        self.assertEqual(len(profiles), 41)
+        self.assertEqual(len(profiles), 39)
+        self.assertTrue({"NAM_party_representatives_exile_radical", "NAM_party_representatives_exile_humanist"}.isdisjoint(profiles))
         names_by_country = {}
         for name, body in profiles.items():
             tag = name[:3]

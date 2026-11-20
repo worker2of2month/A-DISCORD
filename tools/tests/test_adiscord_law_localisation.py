@@ -41,6 +41,20 @@ def military_advisor_definitions():
 NATION_TARGET = "ADISCORD_vorkerland_nation"
 VORKERLAND_CLAIMANTS = ("WKR", "VAD", "TVA")
 VORKERLAND_TAGS = ("WRK",) + VORKERLAND_CLAIMANTS
+FURNACE_ADMINISTRATIONS = ("SFD", "SCD", "SMD", "SOD", "SDA")
+
+
+def installed_ideas(selected, tag):
+    for scope, entry in selected:
+        if scope != tag:
+            continue
+        if entry.key == "add_ideas":
+            if isinstance(entry.value, str):
+                yield entry.value
+            else:
+                yield from (idea.value for idea in entry.value)
+        elif entry.key == "swap_ideas":
+            yield from (idea.value for idea in entry.value if idea.key == "add_idea")
 
 
 def names_country_target(entries) -> bool:
@@ -713,13 +727,19 @@ class SevenRowPoliticsContracts(unittest.TestCase):
                     )
 
     def test_stp_foreign_minister_leaves_when_cabinet_becomes_unavailable(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
         ministers = self.groups["political_advisor_minister_of_foreign_affairs"]
         minister = next(idea for idea in ministers if idea.key == "minister_STP_Adrian_Vels")
         self.assertEqual(self.one(minister.value, "cancel_if_invalid"), "yes")
-        self.assertEqual(
-            self.one(self.one(minister.value, "available"), "STP_party_minister_change_allowed"),
-            "yes",
-        )
+        for cabinet in (False, True):
+            for specialists in (False, True):
+                facts = {
+                    ("STP", "STP_party_minister_change_allowed", "yes"): cabinet,
+                    ("STP", "STP_pw_party_specialists_available", "yes"): specialists,
+                }
+                self.assertEqual(matches_conditions(self.one(minister.value, "available"), facts),
+                                 cabinet and specialists)
 
     def test_foreign_ministers_have_national_names_offices_and_cabinet_guards(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions
@@ -789,16 +809,18 @@ class SevenRowPoliticsContracts(unittest.TestCase):
             if not dynamic:
                 self.assertTrue(eligible[0].key.startswith(f"minister_{tag}_"), tag)
         for idea in choices:
+            country = idea.key.split("_")[1] if idea.key.startswith("minister_") else "D01"
             cabinet_guard = (
                 "SHL_country_operable"
                 if idea.key.startswith("minister_SHL_")
                 else "STP_party_minister_change_allowed"
             )
             for gate in ("available", "allowed_to_remove"):
-                self.assertEqual(
-                    self.one(self.one(idea.value, gate), cabinet_guard),
-                    "yes",
-                )
+                for cabinet in (False, True):
+                    facts = {(country, cabinet_guard, "yes"): cabinet,
+                             (country, "STP_pw_party_specialists_available", "yes"): True}
+                    self.assertEqual(matches_conditions(self.one(idea.value, gate), facts, country),
+                                     cabinet, (idea.key, gate, cabinet))
             office = self.one(idea.value, "traits")[0].value
             self.assertTrue(self.one(traits, office))
             for language, values in names.items():
@@ -910,7 +932,50 @@ class SevenRowPoliticsContracts(unittest.TestCase):
             self.assertTrue(tags, idea.key)
             for tag in tags:
                 with self.subTest(tag=tag, minister=idea.key):
-                    self.assertEqual(list(selected_effects(initializer, {}, tag)), [])
+                    facts = {
+                        (tag, "has_idea", idea.key): True,
+                        (tag, "has_idea", "political_advisor_minister_of_foreign_affairs_vacant"): False,
+                    }
+                    self.assertEqual(list(selected_effects(initializer, facts, tag)), [])
+
+    def test_dormant_countries_enter_with_their_own_foreign_minister(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions, selected_effects
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        slot = "political_advisor_minister_of_foreign_affairs"
+        members = {idea.key: idea.value for idea in self.groups[slot] if isinstance(idea.value, list)}
+        # These fixed tags keep their country history when they gain their first state.
+        # EFR and AZR can hold resistance cores before they own any territory.
+        for tag in ("IMD", "IFC", "IAM", *FURNACE_ADMINISTRATIONS, "EFR", "AZR"):
+            with self.subTest(tag=tag):
+                history, = (ROOT / "history/countries").glob(f"{tag} - *.txt")
+                entries = parse_clausewitz(history.read_text(encoding="utf-8-sig"))
+                appointments = [idea for idea in installed_ideas(selected_effects(entries, {}, tag), tag)
+                                if idea in members]
+                self.assertEqual(len(appointments), 1, (tag, appointments))
+                minister = appointments[0]
+                self.assertTrue(minister.startswith(f"minister_{tag}_"), minister)
+                self.assertTrue(matches_conditions(self.one(members[minister], "allowed"), {}, tag))
+
+    def test_extending_a_furnace_administration_preserves_a_dismissed_minister(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        slot = "political_advisor_minister_of_foreign_affairs"
+        ministers = {idea.key for idea in self.groups[slot] if idea.key.startswith("minister_")}
+        effects_dir = ROOT / "common/scripted_effects"
+        shl = parse_clausewitz((effects_dir / "ADISCORD_SHL_scripted_effects.txt").read_text(encoding="utf-8-sig"))
+        generic = parse_clausewitz((effects_dir / "ADISCORD_scripted_effects_generic.txt").read_text(encoding="utf-8-sig"))
+        finish = self.one(shl, "SHL_finish_furnace_administration")
+        initializer = self.one(generic, "ADISCORD_initialize_foreign_minister")
+        for tag in FURNACE_ADMINISTRATIONS:
+            facts = {(tag, "exists", "yes"): True, (tag, "is_subject", "yes"): True,
+                     (tag, "has_idea", slot + "_vacant"): True}
+            selected = list(selected_effects(finish, facts, tag))
+            for scope, entry in selected.copy():
+                if entry.key == "ADISCORD_initialize_foreign_minister":
+                    selected.extend(selected_effects(initializer, facts, scope))
+            self.assertFalse(ministers.intersection(installed_ideas(selected, tag)), tag)
 
     def test_foreign_ministers_are_initialized_once_before_the_starting_budget(self):
         from tools.tests.test_adiscord_stp_preparation import selected_effects

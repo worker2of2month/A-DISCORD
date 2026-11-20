@@ -54,8 +54,12 @@ SOURCES = {
 NAM_POSTWAR_SOURCE = "NAM/postwar/focuses.txt"
 INCLUDE = re.compile(r"(?m)^# @include ([\w/.-]+)#(\w+)\n")
 SECTION = re.compile(r"(?m)^# @section (\w+)\n")
-# The humanist exile tree is replaced by the corporate tree at the takeover;
-# its completed focuses still open the free-zone and federation decisions.
+# Decisions and archived scripts still reference these focus IDs. Keep the
+# definitions resolvable without registering a selectable tree or any roots.
+UNASSIGNED_FOCUS_SOURCES = frozenset({
+    "NAM/exile_radical/focuses.txt",
+    "NAM/exile_humanist/focuses.txt",
+})
 # WKR copies WRK completion through the prewar tree before loading its own tree.
 # Shared history retains preparation rewards without displaying the old branches.
 # Restoration programmes keep their unlocks through a later cabinet transition.
@@ -210,7 +214,7 @@ def block_end(source: str, opening: int) -> int:
     raise ValueError("Unterminated focus block")
 
 
-def render_shared_history_tree(source: str) -> str:
+def render_shared_history_tree(source: str, *, include_tree: bool = True) -> str:
     """Keep one definition per old focus so native tree changes retain its completion."""
     trees = [row for row in parse_clausewitz(source) if row.key == "focus_tree"]
     if len(trees) != 1:
@@ -268,6 +272,8 @@ def render_shared_history_tree(source: str) -> str:
         shared.append("shared_focus = " + source[opening:end])
         cursor = end
     chunks.append(source[cursor:])
+    if not include_tree:
+        return "\n\n".join(shared) + "\n"
     tree = re.sub(r"\n(?:[ \t]*\n){2,}", "\n\n", "".join(chunks)).rstrip()
     return "\n\n".join([tree, *shared]) + "\n"
 
@@ -275,7 +281,7 @@ def render_shared_history_tree(source: str) -> str:
 def render_native_source(relative: str, source: str) -> str:
     """Compose engine definitions separately from the authored tooling view."""
     if relative in SHARED_HISTORY_SOURCES:
-        return render_shared_history_tree(source)
+        return render_shared_history_tree(source, include_tree=relative not in UNASSIGNED_FOCUS_SOURCES)
     return source
 
 

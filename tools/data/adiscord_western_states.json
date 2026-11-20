@@ -7943,8 +7943,8 @@
       "island_components": []
     },
     "643": {
-      "owner": "RSV",
-      "name": "Юго-восточный архипелаг",
+      "owner": "ULV",
+      "name": "Тарвен",
       "climate": "left_southern_coast",
       "anchor": 260,
       "provinces": [
@@ -8131,7 +8131,20 @@
         [
           5943
         ]
-      ]
+      ],
+      "settlement": {
+        "population": 720000,
+        "category": "town",
+        "local_supplies": 2.0,
+        "resources": {
+          "rubber": 4
+        },
+        "buildings": {
+          "infrastructure": 2,
+          "industrial_complex": 1,
+          "air_base": 1
+        }
+      }
     },
     "663": {
       "owner": "RSV",

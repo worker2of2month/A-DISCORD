@@ -1978,6 +1978,11 @@ type = {
 		rotation = { 0 0 0 }
 	}
 	object = {
+		name = "ADISCORD_coast_3481_1825"
+		position = { 3481.00 0.00 222.00 }
+		rotation = { 0 0 0 }
+	}
+	object = {
 		name = "ADISCORD_coast_1970_1831"
 		position = { 1970.00 0.00 216.00 }
 		rotation = { 0 0 0 }
@@ -2039,7 +2044,7 @@ type = {
 	}
 	object = {
 		name = "ADISCORD_town_1610"
-		position = { 3920.00 11.10 81.00 }
+		position = { 3920.00 10.60 81.00 }
 		rotation = { 0 0 0 }
 	}
 	object = {
@@ -2049,7 +2054,7 @@ type = {
 	}
 	object = {
 		name = "ADISCORD_town_1894"
-		position = { 3961.00 10.80 365.00 }
+		position = { 3961.00 10.50 365.00 }
 		rotation = { 0 0 0 }
 	}
 	object = {
@@ -2124,7 +2129,7 @@ type = {
 	}
 	object = {
 		name = "ADISCORD_town_5178"
-		position = { 4101.00 11.30 304.00 }
+		position = { 4101.00 13.50 304.00 }
 		rotation = { 0 0 0 }
 	}
 	object = {
@@ -2164,7 +2169,7 @@ type = {
 	}
 	object = {
 		name = "ADISCORD_town_6452"
-		position = { 3245.00 11.00 392.00 }
+		position = { 3245.00 13.60 392.00 }
 		rotation = { 0 0 0 }
 	}
 	object = {
@@ -2185,6 +2190,11 @@ type = {
 	object = {
 		name = "ADISCORD_town_6779"
 		position = { 3242.00 15.10 929.00 }
+		rotation = { 0 0 0 }
+	}
+	object = {
+		name = "ADISCORD_town_6893"
+		position = { 3463.00 10.30 456.00 }
 		rotation = { 0 0 0 }
 	}
 	object = {
@@ -2469,7 +2479,7 @@ type = {
 	}
 	object = {
 		name = "ADISCORD_town_16903"
-		position = { 3495.00 11.10 399.00 }
+		position = { 3495.00 10.50 399.00 }
 		rotation = { 0 0 0 }
 	}
 	object = {
@@ -2515,6 +2525,16 @@ type = {
 	object = {
 		name = "ADISCORD_town_18994"
 		position = { 2724.00 11.50 1115.00 }
+		rotation = { 0 0 0 }
+	}
+	object = {
+		name = "ADISCORD_town_19108"
+		position = { 2886.00 10.40 449.00 }
+		rotation = { 0 0 0 }
+	}
+	object = {
+		name = "ADISCORD_town_19111"
+		position = { 3144.00 11.60 433.00 }
 		rotation = { 0 0 0 }
 	}
 }

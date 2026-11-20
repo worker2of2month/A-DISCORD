@@ -209,8 +209,7 @@ for _tag in ("GLP", "KDR", "KYZ", "SDR", "WEF"):
 
 # Svetlogorye wakes a desert minor before a fuel contract or island concession
 # offer reaches it, and the exile great war wakes Sardan and Kadir before the
-# declaration; the post-war focuses of the three exile trees (junta, humanists
-# and the corporate boards) read only those woken tags.
+# declaration. The island focus definitions read only those woken tags.
 NAM_DESERT_FILES = {
     Path("common/decisions/ADISCORD_nam_resource_war_decisions.txt"),
     Path("common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt"),

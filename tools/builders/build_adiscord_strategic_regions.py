@@ -14,6 +14,7 @@ from pathlib import Path
 
 from PIL import Image
 from tools.builders.build_adiscord_ivn_geography import IIA_STATE_IDS as ISLAND_ADMINISTRATION_STATE_IDS
+from tools.builders.build_adiscord_new_states import ISLAND_DISTRICTS, NAM_ARCHIPELAGO_ISLANDS
 from tools.lib.paths import repository_root
 
 
@@ -653,7 +654,7 @@ BASE_REGIONS = (
     Region(
         25,
         "southern-islands",
-        "Южные острова",
+        "Рюминский архипелаг",
         "tropical_maritime",
         (200, 225, 226, 227, 228, 229, 230, 231, 232),
     ),
@@ -1892,12 +1893,19 @@ DISTRICT_PARENT = {
         for entry in json.loads((ROOT / "tools/data/adiscord_ivn_provinces.json").read_bytes())["provinces"]
         if entry["state"] in ISLAND_ADMINISTRATION_STATE_IDS
     },
+    # Island districts weigh as the surveyed province they were cut from.
+    **{district["province"]: district["parent"] for district in ISLAND_DISTRICTS},
 }
+# Raised archipelago islands follow their state: weather and region grouping
+# keep the original geography, so an added islet never shifts either.
+RAISED_ISLAND_PROVINCES = frozenset(
+    part["province"] for island in NAM_ARCHIPELAGO_ISLANDS for part in island["provinces"]
+)
 
 
 def climate_sample_latitudes(provinces: set[int], positions: dict[int, tuple[float, float, float]]) -> list[float]:
     samples: dict[int, list[float]] = {}
-    for province in sorted(provinces & positions.keys()):
+    for province in sorted((provinces & positions.keys()) - RAISED_ISLAND_PROVINCES):
         parent = DISTRICT_PARENT.get(province, province)
         samples.setdefault(parent, []).append(MAP_HEIGHT - positions[province][2])
     return [sum(group) / len(group) for group in samples.values()]
@@ -2419,6 +2427,8 @@ def load_generated_outer_regions() -> tuple[Region, ...]:
 
     if not generated_states:
         return ()
+    for provinces in generated_states.values():
+        provinces -= RAISED_ISLAND_PROVINCES
 
     province_types, color_to_province = load_province_definitions()
     physical_adjacency = load_province_adjacency(

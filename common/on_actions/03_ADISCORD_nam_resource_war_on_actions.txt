@@ -102,13 +102,6 @@ on_actions = {
 			}
 			if = {
 				limit = {
-					FROM.FROM = { state = 701 }
-					NAM = { has_completed_focus = NAM_board_eflor_oil }
-				}
-				NAM = { NAM_board_queue_recount = yes }
-			}
-			if = {
-				limit = {
 					OR = {
 						ROOT = { tag = NAM }
 						FROM = { tag = NAM }
@@ -198,10 +191,8 @@ on_actions = {
 			NAM_rw_monthly = yes
 			NAM_underground_monthly = yes
 			NAM_ladder_monthly = yes
-			NAM_pirate_monthly = yes
 			NAM_corp_monthly = yes
 			NAM_consolidation_monthly = yes
-			NAM_rad_collect_kadir_tolls = yes
 		}
 	}
 

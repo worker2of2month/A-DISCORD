@@ -6421,6 +6421,7 @@ SHL_join_southern_compact = {
 					check_variable = { var = SHL_political_course value = 5 compare = equals }
 				}
 			}
+			ADISCORD_south_coalition_target_war_clear = yes
 			is_subject = no
 			is_in_faction = no
 			NOT = { has_war_with = SHL }
@@ -6455,6 +6456,7 @@ SHL_join_golden_gate = {
 				has_country_flag = SHL_golden_alliance_pending
 				check_variable = { var = SHL_political_course value = 1 compare = equals }
 			}
+			ADISCORD_south_coalition_target_war_clear = yes
 			is_subject = no
 			is_in_faction = no
 			NOT = { has_war_with = SHL }
@@ -7354,6 +7356,7 @@ SHL_request_golden_alliance = {
 			NOT = { has_country_flag = SHL_golden_alliance_pending }
 			GLP = {
 				exists = yes
+				ADISCORD_south_coalition_target_war_clear = yes
 				is_subject = no
 				is_in_faction = no
 				NOT = { has_war_with = SHL }
@@ -7378,6 +7381,7 @@ SHL_request_southern_alliance = {
 			NOT = { has_country_flag = SHL_southern_alliance_pending }
 			KYZ = {
 				exists = yes
+				ADISCORD_south_coalition_target_war_clear = yes
 				is_subject = no
 				is_in_faction = no
 				NOT = { has_war_with = SHL }
@@ -11153,8 +11157,7 @@ SHL_cancel_strike_support = {
 	}
 }
 
-# At 75 support the councils ask for the alliance again; the backing flag is
-# read by the offer's acceptance weights.
+# Backed councils gain influence only while their government is open to negotiations.
 SHL_finish_strike_support = {
 	if = {
 		limit = { FROM = { has_variable = SHL_strike_support_deposit } }
@@ -11176,7 +11179,7 @@ SHL_finish_strike_support = {
 						ADISCORD_south_campaign_target_settled = no
 					}
 					set_country_flag = SHL_cons_councils_backed
-					ADISCORD_south_offer_alliance = yes
+					SHL_back_coalition_delegation = yes
 				}
 			}
 		}
@@ -15300,5 +15303,12 @@ SHL_conclave_industry_reform = {
 		add_to_variable = { var = SHL_workshop_construction value = 0.05 }
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_back_coalition_delegation = {
+	if = {
+		limit = { SHL_south_can_influence_partner = yes }
+		ADISCORD_south_shift_influence_to_shl = yes
 	}
 }

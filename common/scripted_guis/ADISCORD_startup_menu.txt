@@ -91,20 +91,22 @@ scripted_gui = {
 				set_variable = { var = ADISCORD_startup_page value = 5 }
 				clear_variable = ADISCORD_startup_spoilers
 			}
-			ADISCORD_startup_page_6_click = {
-				set_variable = { var = ADISCORD_startup_page value = 6 }
-				clear_variable = ADISCORD_startup_spoilers
-			}
 			ADISCORD_startup_spoilers_click = {
 				if = {
 					limit = {
-						check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
+						check_variable = { var = ADISCORD_startup_spoilers value = 0 compare = greater_than }
 					}
 					clear_variable = ADISCORD_startup_spoilers
 				}
 				else = {
 					set_variable = { var = ADISCORD_startup_spoilers value = 1 }
 				}
+			}
+			ADISCORD_startup_details_next_click = {
+				set_variable = { var = ADISCORD_startup_spoilers value = 2 }
+			}
+			ADISCORD_startup_details_previous_click = {
+				set_variable = { var = ADISCORD_startup_spoilers value = 1 }
 			}
 		}
 		triggers = {
@@ -203,10 +205,7 @@ scripted_gui = {
 				}
 			}
 			ADISCORD_startup_page_5_visible = {
-				OR = {
-					tag = NAM
-					tag = SHL
-				}
+				tag = SHL
 				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
 			}
 			ADISCORD_startup_page_5_click_enabled = {
@@ -214,17 +213,26 @@ scripted_gui = {
 					check_variable = { var = ADISCORD_startup_page value = 5 compare = equals }
 				}
 			}
-			ADISCORD_startup_page_6_visible = {
-				tag = NAM
-				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
-			}
-			ADISCORD_startup_page_6_click_enabled = {
-				NOT = {
-					check_variable = { var = ADISCORD_startup_page value = 6 compare = equals }
-				}
-			}
 			ADISCORD_startup_spoilers_visible = {
 				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+			}
+			ADISCORD_startup_details_next_visible = {
+				tag = NAM
+				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+				OR = {
+					check_variable = { var = ADISCORD_startup_page value = 0 compare = equals }
+					check_variable = { var = ADISCORD_startup_page value = 2 compare = equals }
+				}
+				check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
+			}
+			ADISCORD_startup_details_previous_visible = {
+				tag = NAM
+				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+				OR = {
+					check_variable = { var = ADISCORD_startup_page value = 0 compare = equals }
+					check_variable = { var = ADISCORD_startup_page value = 2 compare = equals }
+				}
+				check_variable = { var = ADISCORD_startup_spoilers value = 2 compare = equals }
 			}
 			ADISCORD_startup_stp_picture_visible = {
 				tag = STP
@@ -561,6 +569,12 @@ scripted_gui = {
 				check_variable = { var = ADISCORD_startup_page value = 0 compare = equals }
 				check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
 			}
+			ADISCORD_startup_text_NAM_startup_path_0_details_2_visible = {
+				tag = NAM
+				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+				check_variable = { var = ADISCORD_startup_page value = 0 compare = equals }
+				check_variable = { var = ADISCORD_startup_spoilers value = 2 compare = equals }
+			}
 			ADISCORD_startup_text_NAM_startup_path_1_visible = {
 				tag = NAM
 				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
@@ -585,6 +599,12 @@ scripted_gui = {
 				check_variable = { var = ADISCORD_startup_page value = 2 compare = equals }
 				check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
 			}
+			ADISCORD_startup_text_NAM_startup_path_2_details_2_visible = {
+				tag = NAM
+				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
+				check_variable = { var = ADISCORD_startup_page value = 2 compare = equals }
+				check_variable = { var = ADISCORD_startup_spoilers value = 2 compare = equals }
+			}
 			ADISCORD_startup_text_NAM_startup_path_3_visible = {
 				tag = NAM
 				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
@@ -607,30 +627,6 @@ scripted_gui = {
 				tag = NAM
 				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
 				check_variable = { var = ADISCORD_startup_page value = 4 compare = equals }
-				check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
-			}
-			ADISCORD_startup_text_NAM_startup_path_5_visible = {
-				tag = NAM
-				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
-				check_variable = { var = ADISCORD_startup_page value = 5 compare = equals }
-				check_variable = { var = ADISCORD_startup_spoilers value = 0 compare = equals }
-			}
-			ADISCORD_startup_text_NAM_startup_path_5_details_visible = {
-				tag = NAM
-				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
-				check_variable = { var = ADISCORD_startup_page value = 5 compare = equals }
-				check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
-			}
-			ADISCORD_startup_text_NAM_startup_path_6_visible = {
-				tag = NAM
-				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
-				check_variable = { var = ADISCORD_startup_page value = 6 compare = equals }
-				check_variable = { var = ADISCORD_startup_spoilers value = 0 compare = equals }
-			}
-			ADISCORD_startup_text_NAM_startup_path_6_details_visible = {
-				tag = NAM
-				check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals }
-				check_variable = { var = ADISCORD_startup_page value = 6 compare = equals }
 				check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals }
 			}
 			ADISCORD_startup_text_STP_startup_region_visible = {

@@ -750,7 +750,7 @@ class SupereventContractTests(unittest.TestCase):
                 check(selector, "NAM", "south_" + ending, {**facts, ("NAM", "has_completed_focus", "NAM_" + focus): True})
         humanists = {("NAM", "has_country_flag", "NAM_exile_humanist"): True}
         rump = {("NAM", "has_focus_tree", "NAM_defeated_focus"): True}
-        check(selector, "NAM", "south_boards", {**humanists, ("NAM", "has_country_flag", "NAM_corp_takeover"): True})
+        check(selector, "NAM", "south_boards", {("NAM", "has_country_flag", "NAM_corp_takeover"): True})
         check(selector, "NAM", "south_free_islands", humanists)
         check(selector, "NAM", "south_radical", {("NAM", "has_country_flag", "NAM_exile_radical"): True})
         check(selector, "NAM", "south_revenge", {**rump, ("NAM", "has_completed_focus", "NAM_defeat_revenge"): True})

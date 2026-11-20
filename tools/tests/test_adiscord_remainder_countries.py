@@ -93,6 +93,57 @@ class RemainderCountryTests(unittest.TestCase):
                     self.assertFalse(actual.startswith(b"\xef\xbb\xbf"))
                     parse_clausewitz(actual.decode("utf-8"))
 
+    def test_raised_islets_join_states_without_ports_or_anchors(self):
+        from tools.builders.build_adiscord_new_states import raised_island_provinces
+
+        raised_states = 0
+        for state_id, profile in countries.profiles().items():
+            raised = profile["provinces"] & countries.RAISED_ISLAND_PROVINCES
+            with self.subTest(state=state_id):
+                self.assertEqual(raised, raised_island_provinces(state_id))
+                self.assertFalse(raised & {*profile["ports"], profile["anchor"]})
+                source = countries.state_path(state_id).read_text(encoding="utf-8")
+                history = source.split(countries.MARKER)[1]
+                for province in raised:
+                    self.assertNotRegex(history, rf"\b{province}\b")
+            raised_states += bool(raised)
+        self.assertGreater(raised_states, 0)
+
+    def test_starting_deposits_follow_the_country_resource_map(self):
+        declared = 0
+        for tag, row in countries.COUNTRIES.items():
+            self.assertLessEqual(set(map(int, row.get("resources", {}))), set(row["states"]))
+            for state_id in row["states"]:
+                with self.subTest(state=state_id):
+                    expected = row.get("resources", {}).get(str(state_id), {})
+                    self.assertEqual(countries.profiles()[state_id]["resources"], expected)
+                    source = countries.state_path(state_id).read_text(encoding="utf-8")
+                    state = next(e.value for e in parse_clausewitz(source) if e.key == "state")
+                    blocks = [entry.value for entry in state if entry.key == "resources"]
+                    self.assertEqual(len(blocks), int(bool(expected)))
+                    actual = {entry.key: int(entry.value) for entry in blocks[0]} if blocks else {}
+                    self.assertEqual(actual, expected)
+                    if expected:
+                        self.assertLess(source.index(countries.MARKER), source.index("resources = {"))
+                        self.assertLess(source.index("resources = {"), source.index("history = {"))
+                    declared += len(expected)
+        self.assertGreater(declared, 0)
+
+    def test_svetlogorye_islands_have_exact_deposits_without_rubber(self):
+        from tools.builders import build_adiscord_new_states as states
+
+        self.assertEqual(set(states.SVETLOGORYE_RESOURCES), set(range(225, 232)))
+        for state_id, expected in states.SVETLOGORYE_RESOURCES.items():
+            with self.subTest(state=state_id):
+                self.assertNotIn("rubber", expected)
+                self.assertEqual(states.REGIONAL_STATE_RESOURCES[state_id], expected)
+                source = states.state_path(state_id).read_text(encoding="utf-8-sig")
+                block = re.search(r"\bresources\s*=\s*\{([^}]*)\}", source)[1]
+                actual = {key: int(value) for key, value in re.findall(r"(\w+)\s*=\s*(\d+)", block)}
+                self.assertEqual(actual, expected)
+        piv = states.state_path(232).read_text(encoding="utf-8-sig")
+        self.assertRegex(piv, r"resources\s*=\s*\{\s*rubber\s*=\s*4\s*\}")
+
 
 if __name__ == "__main__":
     unittest.main()

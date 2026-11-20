@@ -2387,7 +2387,7 @@ class StartupGuideContractTests(unittest.TestCase):
             for _, name, _ in named_gui_nodes(gui)
             if name.startswith('ADISCORD_startup_text_')
         }
-        self.assertEqual(len(pages), 71)
+        expected_pages = set()
         for tag in ('STP', 'VAL', 'RUS', 'SHL', 'NAM'):
             topics = {
                 'STP': ('history', 'nodrul', 'party'),
@@ -2423,10 +2423,13 @@ class StartupGuideContractTests(unittest.TestCase):
                     spoiler,
                     f'{tag}_startup_path_{i}' + ('_details' if spoiler else ''),
                 )
-                for i in range({'NAM': 7, 'SHL': 6, 'VAL': 3}.get(tag, 2))
+                for i in range({'NAM': 5, 'SHL': 6, 'VAL': 3}.get(tag, 2))
                 for spoiler in (0, 1)
             ]
+            if tag == 'NAM':
+                cases += [(2, i, 2, f'NAM_startup_path_{i}_details_2') for i in (0, 2)]
             for tab, page, spoilers, expected in cases:
+                expected_pages.add(expected)
                 facts = {
                     (tag, 'variable', 'ADISCORD_startup_' + k): v
                     for k, v in [('tab', tab), ('page', page), ('spoilers', spoilers)]
@@ -2439,10 +2442,18 @@ class StartupGuideContractTests(unittest.TestCase):
                     )
                 ]
                 self.assertEqual(chosen, [expected], (tag, tab, page, spoilers))
+                multipart = tag == 'NAM' and tab == 2 and page in (0, 2)
+                for direction, current_part in (('next', 1), ('previous', 2)):
+                    control = _unique_direct_block(
+                        triggers, f'ADISCORD_startup_details_{direction}_visible'
+                    )
+                    self.assertEqual(matches_conditions(control, facts, tag),
+                                     multipart and spoilers == current_part,
+                                     (tag, tab, page, spoilers, direction))
                 if tab in (3, 4):
                     hidden_controls = (
                         'page_0', 'page_1', 'page_2', 'page_3',
-                        'page_4', 'page_5', 'page_6', 'nam_paths_note', 'shl_paths_note', 'spoilers',
+                        'page_4', 'page_5', 'nam_paths_note', 'shl_paths_note', 'spoilers',
                         'intro_note', 'guide_note', 'paths_note',
                         'stp_picture', 'val_picture', 'rus_picture',
                         'shl_picture', 'nam_picture',
@@ -2482,7 +2493,7 @@ class StartupGuideContractTests(unittest.TestCase):
                     (tag, tab, page, spoilers),
                 )
 
-                for extra_page in (4, 5, 6):
+                for extra_page in (4, 5):
                     self.assertEqual(
                         matches_conditions(
                             _unique_direct_block(
@@ -2491,9 +2502,71 @@ class StartupGuideContractTests(unittest.TestCase):
                             facts,
                             tag,
                         ),
-                        tab == 2 and (tag == 'NAM' or (tag == 'SHL' and extra_page < 6)),
+                        tab == 2 and (tag == 'SHL' or (tag == 'NAM' and extra_page == 4)),
                         (tag, tab, page, spoilers, extra_page),
                     )
+        self.assertEqual(set(pages), {'ADISCORD_startup_text_' + key for key in expected_pages})
+
+    def test_nam_details_navigation_and_exit_from_each_part(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions, selected_effects
+
+        menu = _unique_direct_block(self.scripts(), 'ADISCORDStartupMenu')
+        effects = _unique_direct_block(menu, 'effects')
+        triggers = _unique_direct_block(menu, 'triggers')
+        label = named_assignment_body(self.read('common/scripted_localisation/ADISCORD_startup_menu.txt'),
+                                      'defined_text', 'ADISCORDGetStartupSpoilerLabel')
+        variants = _direct_clausewitz(economy_validator.parse_clausewitz(label), 'text')
+        for page in (0, 2):
+            for part, click, result in (
+                (0, 'spoilers', 1), (1, 'details_next', 2), (2, 'details_previous', 1),
+                (1, 'spoilers', 0), (2, 'spoilers', 0),
+            ):
+                facts = {
+                    ('NAM', 'variable', 'ADISCORD_startup_tab'): 2,
+                    ('NAM', 'variable', 'ADISCORD_startup_page'): page,
+                    ('NAM', 'variable', 'ADISCORD_startup_spoilers'): part,
+                }
+                self.assertTrue(matches_conditions(
+                    _unique_direct_block(triggers, f'ADISCORD_startup_{click}_visible'), facts, 'NAM'
+                ))
+                selected_label = next(_direct_scalar(v.value, 'localization_key') for v in variants
+                                      if matches_conditions(_unique_direct_block(v.value, 'trigger') or [], facts, 'NAM'))
+                self.assertEqual(selected_label, 'ADISCORD_startup_hide_spoilers' if part else 'ADISCORD_startup_spoilers')
+                payload = _unique_direct_block(effects, f'ADISCORD_startup_{click}_click')
+                writes = [entry for _, entry in selected_effects(payload, facts, 'NAM')]
+                self.assertEqual(len(writes), 1)
+                write = writes[0]
+                if result == 0:
+                    self.assertEqual((write.key, write.value), ('clear_variable', 'ADISCORD_startup_spoilers'))
+                else:
+                    self.assertEqual(write.key, 'set_variable')
+                    self.assertEqual(_direct_scalar(write.value, 'var'), 'ADISCORD_startup_spoilers')
+                    self.assertEqual(int(_direct_scalar(write.value, 'value')), result)
+                for exit_control in ('close', 'play'):
+                    for gate in ('visible', 'click_enabled'):
+                        condition = _unique_direct_block(triggers, f'ADISCORD_startup_{exit_control}_{gate}')
+                        self.assertTrue(matches_conditions(condition or [], facts, 'NAM'))
+
+    def test_nam_briefing_fits_after_localisation_substitutions(self):
+        entries = re.compile(r'^\s*([\w.-]+):\d*\s+"((?:[^"\\\r\n]|\\.)*)"', re.M)
+        reference = re.compile(r'\$([\w.-]+)\$')
+        for language in ('russian', 'english'):
+            values = {}
+            for directory in (ROOT / 'localisation' / language, ROOT / 'localisation/replace'):
+                for path in sorted(directory.glob(f'*_l_{language}.yml')):
+                    values.update(entries.findall(path.read_text(encoding='utf-8-sig')))
+
+            def expand(key, parents=()):
+                self.assertNotIn(key, parents, (language, key))
+                return reference.sub(
+                    lambda match: expand(match[1], (*parents, key)), values[key]
+                )
+
+            for key in values:
+                if key.startswith('NAM_startup_'):
+                    text = expand(key).replace('\\n', '\n').replace(r'\"', '"')
+                    self.assertLessEqual(len(text), 3000, (language, key))
+                    self.assertLessEqual(len(text.encode('utf-8')), 5500, (language, key))
 
     def test_localisation_keys_values_and_encodings(self):
         by_language = {}

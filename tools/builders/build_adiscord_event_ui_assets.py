@@ -9,6 +9,7 @@ run without ``--apply`` first, then explicitly apply stale outputs.
 from __future__ import annotations
 
 import argparse
+from functools import lru_cache
 from io import BytesIO
 from pathlib import Path
 
@@ -34,6 +35,7 @@ POPUP_BG = ROOT / "gfx/interface/event_popup_bg.png"
 POPUP_TOP = ROOT / "gfx/interface/event_popup_top.png"
 POPUP_MIDDLE = ROOT / "gfx/interface/event_popup_middle.png"
 POPUP_BOTTOM = ROOT / "gfx/interface/event_popup_bottom.png"
+PRINT_TEMPLATE = ROOT / "tools/assets/source/news_picture.psd"
 OPTION_ENTRY = ROOT / "gfx/interface/event_option_entry_adiscord.png"
 PREVIEW = ROOT / "docs/development/previews/ADISCORD_event_window_preview.png"
 TEST_PICTURE = ROOT / "gfx/event_pictures/event_adiscord_ui_test.png"
@@ -53,6 +55,22 @@ def _png_bytes(image: Image.Image) -> bytes:
     stream = BytesIO()
     image.save(stream, format="PNG", optimize=False, compress_level=9)
     return stream.getvalue()
+
+
+@lru_cache(maxsize=2)
+def _picture_print_overlay(size: tuple[int, int]) -> Image.Image:
+    from psd_tools import PSDImage
+
+    document = PSDImage.open(PRINT_TEMPLATE)
+    layer, = (item for item in document if item.name == "event_news_pic_overlay")
+    # The last canvas row is outside the print layer. Keep that transparent edge.
+    canvas = Image.new("RGBA", document.size)
+    canvas.paste(layer.topil().convert("RGBA"), layer.offset)
+    return canvas.resize(size, Image.Resampling.LANCZOS)
+
+
+def print_event_picture(picture: Image.Image) -> Image.Image:
+    return Image.alpha_composite(picture.convert("RGBA"), _picture_print_overlay(picture.size)).convert("RGB")
 
 
 def _metal_source() -> Image.Image:
@@ -179,7 +197,7 @@ def _test_picture() -> Image.Image:
     )
     fitted = ImageEnhance.Color(fitted).enhance(0.78)
     fitted = ImageEnhance.Contrast(fitted).enhance(1.04)
-    return fitted.convert("RGB")
+    return print_event_picture(fitted)
 
 
 def _preview() -> Image.Image:

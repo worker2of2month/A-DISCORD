@@ -943,7 +943,7 @@ class PreparationLifecycleTests(unittest.TestCase):
         self.facts["EFL", "owns_state", "67"] = True
         self.facts["VAL", "owns_state", "688"] = True
         for focus in ("NAM_defeat_war_of_return", "NAM_rad_war_of_return",
-                      "NAM_hum_war_of_return", "NAM_board_war_of_return"):
+                      "NAM_hum_war_of_return"):
             with self.subTest(focus=focus):
                 self.focuses["NAM"] = focus
                 for owner, expected in (("EFL", True), ("VAL", True), ("AZH", False)):

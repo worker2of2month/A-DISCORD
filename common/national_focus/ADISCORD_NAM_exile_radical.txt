@@ -2,75 +2,6 @@
 # Source: focus_trees/NAM/exile_radical/focuses.txt
 # Native layout: shared focus history; tools read the authored focus tree.
 
-focus_tree = {
-	id = NAM_exile_radical_focus
-	country = {
-		factor = 0
-		modifier = {
-			add = 100
-			original_tag = NAM
-			has_country_flag = NAM_exile_radical
-		}
-	}
-	default = no
-	continuous_focus_position = {
-		x = 50
-		y = 1900
-	}
-
-	# Loaded by event ADISCORD_nam_resource_war.100 when the pillars of
-	# Svetlogorye overthrow the namestnik on the islands. The junta pays for the
-	# return with piracy and requisitions, wins back the homeland from Eflor and
-	# Azhar, holds it by terror and strips the south after the great war.
-
-	# ----- The pillar junta -----
-	# The pillars that overthrew the namestnik rule by tribunal or by a shared
-	# purse; their war council purges or pardons the namestnik's officers,
-	# sends agents to Eflor and Azhar, and the agents lead the mainland
-	# underground that guides the landing.
-
-	shared_focus = NAM_rad_pillar_junta
-
-	# ----- Fortress islands -----
-	# Requisitioned islands become a war port or a barracks for the refugees;
-	# both are covered by the coastal batteries, the foundry and the convict
-	# shipyards, which together stock the island arsenal.
-
-	# ----- Neo-Svetlogorsk, the fortress capital -----
-	# Labour battalions of refugees and convicts found the island capital,
-	# power its factories or feed its mines, and ring it with roads, airfields
-	# and air defence. The fortress is part of the return plan.
-
-	# ----- The army of return -----
-	# The staff opens the landing drill; the army is paid with loot and its
-	# marines through NAM_order_marines.
-
-	shared_focus = NAM_exile_general_staff
-
-	# ----- The privateers -----
-	# Raids need a working island base; marque and brotherhood decide how loud
-	# the fleet is, the squadron or the submarines how it hunts.
-
-	shared_focus = NAM_exile_sea_raiders
-
-	# ----- The war of return -----
-	# The operation needs the final focus of every exile branch: the return
-	# harbour pilots, fortress capital, island fuel dumps, cadets, landing
-	# craft and corsair admiralty. The war against Eflor and
-	# Azhar lands the marines at South Harbour.
-
-	# ----- Holding the reconquered lands -----
-	# The war ends with NAM_war_of_return_won. Terror, garrisons, tribunals and
-	# camps raise NAM_consolidation, which the great war requires; the radical
-	# settlement marks taken states with NAM_conquered_state for the camps and
-	# the stripping decision.
-
-	# ----- Preparing the great war -----
-
-	# ----- After the great war: the pillars strip the conquered south -----
-
-}
-
 shared_focus = {
 		id = NAM_rad_pillar_junta
 		icon = GFX_focus_NAM_oilfield_militia
@@ -767,7 +698,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_rad_island_fuel_dumps
-		icon = GFX_focus_NAM_fuel_depots
+		icon = GFX_focus_NAM_bonded_terminal
 		x = 8
 		y = 6
 		cost = 5
@@ -959,7 +890,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_rad_convict_power_plant
-		icon = GFX_focus_RUS_bunker_power_school
+		icon = GFX_focus_NAM_pw_energy_commission
 		x = 2
 		y = 4
 		cost = 6
@@ -2640,7 +2571,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_rad_kadir_tolls
-		icon = GFX_focus_NAM_second_ledger
+		icon = GFX_focus_NAM_customs_clearinghouse
 		x = 22
 		y = 17
 		cost = 4
@@ -2771,7 +2702,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_rad_rakhma_wells
-		icon = GFX_focus_NAM_well_register
+		icon = GFX_focus_NAM_pw_water_intakes
 		x = 22
 		y = 19
 		cost = 4

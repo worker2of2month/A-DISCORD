@@ -101,4 +101,53 @@ leader_traits = {
 		ADISCORD_economy_trade_income_factor = 0.10
 		stability_factor = -0.03
 	}
+
+	NAM_trait_oil_patriarch = {
+		random = no
+		sprite = 1
+		fuel_gain_factor = 0.20
+		max_fuel_factor = 0.25
+		research_speed_factor = -0.05
+	}
+
+	NAM_trait_steel_trust_director = {
+		random = no
+		sprite = 1
+		industrial_capacity_factory = 0.05
+		production_factory_max_efficiency_factor = 0.05
+		experience_gain_army_factor = -0.10
+	}
+
+	NAM_trait_freight_king = {
+		random = no
+		sprite = 1
+		industrial_capacity_dockyard = 0.10
+		convoy_retreat_speed = 0.20
+		ADISCORD_economy_tax_collection_factor = -0.05
+	}
+
+	NAM_trait_order_before_profit = {
+		random = no
+		sprite = 1
+		war_support_factor = 0.10
+		army_core_defence_factor = 0.05
+		stability_factor = -0.05
+		consumer_goods_factor = 0.03
+	}
+
+	NAM_trait_exchange_steward = {
+		random = no
+		sprite = 1
+		monthly_population = 0.10
+		production_speed_buildings_factor = 0.05
+		stability_factor = -0.03
+	}
+
+	NAM_trait_bill_holder = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.10
+		ADISCORD_economy_admin_expense_factor = -0.05
+		war_support_factor = -0.10
+	}
 }

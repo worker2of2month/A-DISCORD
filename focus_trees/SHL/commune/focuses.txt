@@ -255,6 +255,7 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_KYZ_tt
 			custom_effect_tooltip = SHL_kyz_brotherhood_offer_tt
 			hidden_effect = {
 				set_country_flag = SHL_water_offer_pending
@@ -381,6 +382,7 @@
 				limit = {
 					KYZ = {
 						exists = yes
+						ADISCORD_south_coalition_target_war_clear = yes
 						is_in_faction = no
 						NOT = { has_war_with = SHL }
 					}
@@ -742,10 +744,6 @@
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = SHL_south_councils_abroad_tt
-			hidden_effect = {
-				MZR = { ADISCORD_south_offer_alliance = yes }
-				GLP = { ADISCORD_south_offer_alliance = yes }
-			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -779,6 +777,7 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = SHL_coalition_GLP_tt
 			custom_effect_tooltip = SHL_k_councils_term_tt
 			hidden_effect = { SHL_start_cons_councils = yes }
 		}

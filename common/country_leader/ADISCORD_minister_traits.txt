@@ -1289,6 +1289,30 @@ leader_traits = {
 		random = no
 	}
 
+	NAM_trait_company_loren = {
+		random = no
+	}
+
+	NAM_trait_company_ferrant = {
+		random = no
+	}
+
+	NAM_trait_company_navis = {
+		random = no
+	}
+
+	NAM_trait_company_arktur = {
+		random = no
+	}
+
+	NAM_trait_company_smenkom = {
+		random = no
+	}
+
+	NAM_trait_company_reidbank = {
+		random = no
+	}
+
 	minister_trait_foreign_contracts = {
 		random = no
 	}

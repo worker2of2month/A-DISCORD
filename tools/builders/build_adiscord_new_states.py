@@ -47,6 +47,16 @@ SOUTHERN_RURAL_SPLITS = (*SOUTHERN_GEOGRAPHY["rural_splits"], *SOUTHERN_INTERIOR
 
 COUNTRY_DISTRICTS = SOUTHERN_GEOGRAPHY["country_districts"]
 COUNTRY_RAILWAYS = SOUTHERN_GEOGRAPHY["country_railways"]
+# Islands raised from the sea around the archipelago, with their provinces,
+# outline, state, surrounding sea province, nearest home province, whether a
+# bridge reaches it, optional settlement and harbour level.
+NAM_ARCHIPELAGO_ISLANDS = SOUTHERN_GEOGRAPHY["archipelago_islands"]
+# Districts cut out of surveyed provinces of a neighbouring island state: each
+# keeps its parent's state and stamps its mask onto the parent's pixels. A
+# district with a "town" entry is a city province with a name, a victory point
+# value and an optional harbour level.
+ISLAND_DISTRICTS = SOUTHERN_GEOGRAPHY["island_districts"]
+ISLAND_TOWNS = tuple(district for district in ISLAND_DISTRICTS if "town" in district)
 COUNTRY_RAIL_ROUTES = {
     tuple(original): tuple(route) for original, route in COUNTRY_RAILWAYS["routes"]
 }
@@ -553,6 +563,7 @@ IVANLAND_STATE_RESOURCES = {
 }
 
 AFRELA_STATE_RESOURCES = {
+    232: {"rubber": 4},
     326: {"steel": 10},
 }
 
@@ -581,22 +592,25 @@ STELANDER_REGIONAL_RESOURCES = {
     for state_id in (43, 44, 45, 88)
 }
 
-# Small deposits beside the oil basin: the Svetlogorye interior and the
-# Eflorian states that face it in the resource war.
+# Small deposits beside the oil basin: the seven Svetlogorye island states and
+# the Eflorian states that face the basin in the resource war. The table is
+# exact for the islands: an unlisted strategic resource is removed, and rubber
+# stays outside Svetlogorye.
 SVETLOGORYE_RESOURCES = {
-    225: {"aluminium": 12},
-    226: {"rubber": 8},
-    227: {"tungsten": 12},
-    228: {"steel": 16},
-    229: {"chromium": 8},
+    225: {"aluminium": 12, "oil": 3},
+    226: {"aluminium": 6},
+    227: {"tungsten": 12, "steel": 4},
+    228: {"steel": 16, "chromium": 6, "aluminium": 4},
+    229: {"chromium": 8, "tungsten": 4},
+    230: {"steel": 16},
+    231: {"steel": 16, "chromium": 4},
 }
+STRATEGIC_RESOURCES = ("oil", "steel", "aluminium", "tungsten", "chromium", "rubber")
 NAM_NEIGHBOUR_RESOURCES = {
     sid: deposits for sid, deposits in NAM_COALITION_FRONT_RESOURCES.items() if deposits
 }
 
 REGIONAL_STATE_RESOURCES = {
-    230: {"steel": 16},
-    231: {"steel": 16},
     **VORKERLAND_STATE_RESOURCES,
     **IVANLAND_STATE_RESOURCES,
     **AFRELA_STATE_RESOURCES,
@@ -684,7 +698,10 @@ SETTLEMENT_CLUSTER_VICTORY_POINT_NAMES = {
 }
 
 # Small regional objectives retain rural terrain and do not grant urban
-# population or industry. Island groups include their detached inhabited islets.
+# population or industry. The Svetlogorye archipelago (states 225-231) is the
+# exception: its towns are svetlogorye_town city provinces at any value, so a
+# 1-3 point island town may stand on city terrain. Island groups include their
+# detached inhabited islets.
 REGIONAL_SETTLEMENTS = {
     1: ((16382, 2, "Абилийский берег"),),
     2: ((1, 2, "Монайский бор"),),
@@ -724,18 +741,32 @@ REGIONAL_SETTLEMENTS = {
     195: ((8032, 2, "Норвен"),),
     196: ((7129, 2, "Центральная станция"),),
     218: ((7047, 2, "Западный Рейнг"),),
-    225: ((11393, 2, "Южноостровск"), (11606, 1, "Дальний мыс"), (3350, 2, "Дозорный")),
-    226: ((4396, 1, "Малая гавань"), (8537, 1, "Чаечий")),
+    225: ((11393, 2, "Китовка"), (11606, 1, "Камбалий"), (3350, 2, "Дозорный")),
+    226: ((4396, 1, "Сельдяной"), (8537, 1, "Чаечий")),
     227: (
-        (2478, 1, "Восточная пристань"),
-        (5482, 1, "Каменный остров"),
-        (6322, 1, "Тихая бухта"),
+        (2478, 1, "Зарянка"),
+        (5482, 1, "Валунный"),
+        (6322, 1, "Штилевой"),
         (9192, 1, "Рыбачий"),
     ),
-    228: ((6893, 3, "Большой остров"), (6145, 1, "Дальний рейд"), (8682, 1, "Малый рейд"), (6816, 2, "Угольщики"), (3243, 1, "Сосновка")),
-    229: ((3731, 1, "Северная пристань"), (7373, 2, "Морянка")),
-    230: ((2742, 1, "Западная пристань"), (12376, 2, "Ключевой")),
-    231: ((13018, 2, "Среднеостровск"), (12732, 1, "Западный мыс"), (432, 2, "Песчанка")),
+    # Ryumin Island: the port city of Ryuminsk stays below the capital
+    # Smolyanoy Posad (16903, SOUTHERN_CITIES), which keeps the state capital.
+    228: (
+        (6893, 10, "Рюминск"),
+        (6145, 1, "Бригантина"),
+        (8682, 1, "Шлюпочный"),
+        (6816, 2, "Угольщики"),
+        (3243, 1, "Сосновка"),
+        (17702, 1, "Гудронка"),
+        (3884, 1, "Канатный"),
+        (17444, 1, "Ловцы"),
+        (17722, 1, "Варница"),
+        (18079, 1, "Баржевое"),
+        (11043, 1, "Вышковый"),
+    ),
+    229: ((3731, 1, "Тресковый"), (7373, 2, "Морянка")),
+    230: ((2742, 1, "Шкиперский"), (12376, 2, "Ключевой")),
+    231: ((13018, 2, "Брусничный"), (12732, 1, "Бакенский"), (432, 2, "Песчанка")),
     234: ((11045, 2, "Мадран"),),
     235: ((3924, 1, "Караль"), (11410, 2, "Халис"), (8590, 1, "Караль-дех")),
     236: ((2811, 2, "Тарим-кала"),),
@@ -842,6 +873,14 @@ REGIONAL_SETTLEMENTS = {
     729: ((2804, 2, "Шадран"),),
 }
 
+for island in NAM_ARCHIPELAGO_ISLANDS:
+    if "town" in island:
+        town = island["town"]
+        REGIONAL_SETTLEMENTS[island["state"]] = (
+            *REGIONAL_SETTLEMENTS.get(island["state"], ()),
+            (town["province"], town["value"], town["name"]),
+        )
+
 for town in SOUTHERN_CITIES:
     if town.get("regional_town"):
         state_id = town["state"]
@@ -927,11 +966,12 @@ NAM_POPULATION = {
     700: 1_500_000,
 }
 # NAM can lose the whole mainland and continue the war from its overseas
-# districts, so each island state starts with one port for naval supply and
-# evacuation. Every province already has a native naval_base_spawn facing an
-# adjacent sea zone; the largest island hosts the main fleet base. Detached
-# islets reach their state's port through the island bridges in
-# map/adjacencies.csv instead of separate piers.
+# districts, so each island state starts with a main port for naval supply and
+# evacuation; the largest island hosts the main fleet base. Island towns and
+# roadsteads keep small harbours of their own (NAM_OVERSEAS_HARBOURS and the
+# raised islands). Every province already has a native naval_base_spawn facing
+# an adjacent sea zone. Detached islets reach their state's ports through the
+# island bridges in map/adjacencies.csv instead of separate piers.
 NAM_OVERSEAS_PORTS = {
     225: (11393, 3),
     226: (4396, 2),
@@ -940,6 +980,14 @@ NAM_OVERSEAS_PORTS = {
     229: (3731, 2),
     230: (2742, 2),
     231: (13018, 3),
+}
+# Secondary harbours of the island towns and roadsteads.
+NAM_OVERSEAS_HARBOURS = {
+    225: ((3350, 1),),
+    228: ((6816, 1), (6145, 1), (8682, 1)),
+    229: ((7373, 1),),
+    230: ((12376, 1),),
+    231: ((432, 1),),
 }
 NAM_STATE_PROFILES = {
     67: {"population": NAM_POPULATION[67], "category": "large_city", "infrastructure": 4, "civilian": 2, "military": 1, "air_base": 1, "supplies": 5.0},
@@ -1627,9 +1675,24 @@ VORKERLAND_STATE_NAMES = {
     105: "Фирновская агломерация",
 }
 
+# The Svetlogorye archipelago; svetlogorye_homeland_plan owns these names.
+NAM_ARCHIPELAGO_STATE_NAMES = {
+    225: "Ворваньи острова",
+    226: "Бисерные острова",
+    227: "Зарянские острова",
+    228: "остров Рюмина",
+    229: "Лебяжьи острова",
+    230: "Закатные острова",
+    231: "остров Кукушкин",
+}
+# The state capital is its highest victory point. NAM_rw_exile_move_capital
+# moves the exile capital to 228, so no other settlement may reach this city.
+NAM_ARCHIPELAGO_CAPITAL_CITIES = {228: 16903}
+
 GENERATED_STATE_NAMES = {
     **{sid: region["name"] for sid, region in NAM_COALITION_REGIONS.items()},
     **VORKERLAND_STATE_NAMES,
+    **NAM_ARCHIPELAGO_STATE_NAMES,
     NAM_SVETLOGORSK_STATE_ID: "Светлогорский округ",
     NAM_RESIDUAL_CITY_STATE_ID: "Южнобережный округ",
     NAM_DRYRIVER_STATE_ID: "Сухоречье",
@@ -2185,7 +2248,7 @@ def remove_state_resource(source: str, resource: str) -> str:
     closing = matching_brace(source, opening)
     block = source[opening:closing + 1]
     block = re.sub(
-        rf"(?m)^[ \t]*{re.escape(resource)}\s*=\s*-?\d+\s*\r?\n?",
+        rf"(?m)^[ \t]*{re.escape(resource)}[ \t]*=[ \t]*-?\d+[ \t]*\r?\n?",
         "",
         block,
     )
@@ -3092,8 +3155,107 @@ def update_shahrabad_split(apply: bool) -> int:
     return int(bool(changed))
 
 
+def raised_island_provinces(state_id: int) -> frozenset[int]:
+    return frozenset(
+        part["province"]
+        for island in NAM_ARCHIPELAGO_ISLANDS
+        if island["state"] == state_id
+        for part in island["provinces"]
+    )
+
+
+def island_district_provinces(state_id: int) -> frozenset[int]:
+    return frozenset(
+        district["province"] for district in ISLAND_DISTRICTS if district["state"] == state_id
+    )
+
+
+def with_appended_provinces(source: str, provinces: frozenset[int], width: int | None = None) -> str:
+    """Append the missing provinces after the existing rows of a state's list.
+
+    Existing rows keep their order and layout, so a state rendered by another
+    builder changes only by the added province IDs. `width` wraps the added
+    IDs into rows of that many; without it they form one row.
+    """
+    opening, closing = named_block(source, "provinces")
+    members = set(map(int, re.findall(r"\d+", source[opening:closing])))
+    missing = sorted(provinces - members)
+    if not missing:
+        return source
+    newline = "\r\n" if "\r\n" in source else "\n"
+    body = source[opening + 1:closing].rstrip()
+    row_indent = re.search(r"\n([ \t]*)\d", source[opening:closing])
+    indent = row_indent.group(1) if row_indent else "\t\t"
+    step = width or len(missing)
+    rows = newline.join(
+        indent + " ".join(map(str, missing[start:start + step]))
+        for start in range(0, len(missing), step)
+    )
+    closing_line = source[:closing].rsplit("\n", 1)[-1]
+    closing_indent = closing_line if not closing_line.strip(" \t") else "\t"
+    return source[:opening + 1] + body + newline + rows + newline + closing_indent + source[closing:]
+
+
+def with_raised_island_provinces(source: str, state_id: int) -> str:
+    """Append the state's missing raised island provinces as one last row."""
+    return with_appended_provinces(source, raised_island_provinces(state_id))
+
+
+def with_island_districts(source: str, state_id: int) -> str:
+    """Append the state's missing island districts in rows of sixteen."""
+    return with_appended_provinces(source, island_district_provinces(state_id), 16)
+
+
+def archipelago_island_plan() -> dict[Path, bytes]:
+    """Add every raised island and island district to its state's province list and nothing else."""
+    land = {
+        int(row[0])
+        for line in (ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines()
+        if len(row := line.split(";")) > 4 and row[0].isdigit() and row[4] == "land"
+    }
+    owners: dict[int, int] = {}
+    for path in STATE_DIR.glob("*.txt"):
+        state_id = int(path.name.split("-", 1)[0])
+        for province in state_file_provinces(path):
+            owners[province] = state_id
+    outputs = {}
+    for district in ISLAND_DISTRICTS:
+        if owners.get(district["parent"]) != district["state"]:
+            raise RuntimeError(
+                f"state {district['state']}: island district {district['province']} "
+                f"has a foreign parent {district['parent']}"
+            )
+    states = {entry["state"] for entry in (*NAM_ARCHIPELAGO_ISLANDS, *ISLAND_DISTRICTS)}
+    for state_id in sorted(states):
+        for province in sorted(raised_island_provinces(state_id) | island_district_provinces(state_id)):
+            if province not in land:
+                raise RuntimeError(f"state {state_id}: added island province {province} is not land")
+            if owners.get(province, state_id) != state_id:
+                raise RuntimeError(
+                    f"state {state_id}: added island province {province} belongs to state {owners[province]}"
+                )
+        path = state_path(state_id)
+        source = with_raised_island_provinces(path.read_bytes().decode("utf-8"), state_id)
+        outputs[path] = with_island_districts(source, state_id).encode("utf-8")
+    return outputs
+
+
+def update_archipelago_islands(apply: bool) -> int:
+    outputs = archipelago_island_plan()
+    changed = [path for path, data in outputs.items() if path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply:
+        if any(path.read_bytes() != data for path, data in archipelago_island_plan().items()):
+            raise RuntimeError("archipelago island provinces are not idempotent")
+        return 0
+    return int(bool(changed))
+
+
 def svetlogorye_homeland_plan() -> dict[Path, bytes]:
-    """Own NAM population, overseas ports and the small deposits around the oil basin."""
+    """Own NAM population, overseas ports, island state names and oil-basin deposits."""
     outputs = {}
     deposits = {
         **NAM_MAINLAND_STATE_RESOURCES,
@@ -3115,24 +3277,52 @@ def svetlogorye_homeland_plan() -> dict[Path, bytes]:
             source = set_scalar(source, "manpower", str(NAM_POPULATION[state_id]))
         if state_id in deposits:
             source = ensure_state_resources(source, deposits[state_id])
+        if state_id in SVETLOGORYE_RESOURCES:
+            # Listed deposits are written first, so the block is never emptied
+            # and keeps its place in the file.
+            for resource in STRATEGIC_RESOURCES:
+                if resource not in SVETLOGORYE_RESOURCES[state_id]:
+                    source = remove_state_resource(source, resource)
         if state_id in NAM_OVERSEAS_PORTS and state_id in SOUTHERN_CITY_POINTS:
-            provinces = set(with_rural_splits(state_file_provinces(path))) | {SOUTHERN_CITY_POINTS[state_id][0]}
+            provinces = (
+                set(with_rural_splits(state_file_provinces(path)))
+                | {SOUTHERN_CITY_POINTS[state_id][0]}
+                | raised_island_provinces(state_id)
+            )
             source = replace_state_provinces(source, tuple(sorted(provinces)))
+        source = with_raised_island_provinces(source, state_id)
         if state_id in NAM_OVERSEAS_PORTS:
-            province, level = NAM_OVERSEAS_PORTS[state_id]
+            ports = (
+                NAM_OVERSEAS_PORTS[state_id],
+                *NAM_OVERSEAS_HARBOURS.get(state_id, ()),
+                *(
+                    (island["town"]["province"], island["harbour"])
+                    for island in NAM_ARCHIPELAGO_ISLANDS
+                    if island["state"] == state_id and "harbour" in island
+                ),
+            )
             province_open, province_close = named_block(source, "provinces")
-            if province not in set(map(int, re.findall(r"\d+", source[province_open:province_close]))):
-                raise RuntimeError(f"state {state_id}: port province {province} is outside the state")
-            if province not in coastal:
-                raise RuntimeError(f"state {state_id}: port province {province} is not coastal land")
-            # The manifest is the island state's only port; drop any other pier.
+            members = set(map(int, re.findall(r"\d+", source[province_open:province_close])))
+            for province, _level in ports:
+                if province not in members:
+                    raise RuntimeError(f"state {state_id}: port province {province} is outside the state")
+                if province not in coastal:
+                    raise RuntimeError(f"state {state_id}: port province {province} is not coastal land")
+            # The manifest lists every port of the island state; drop any other pier.
+            listed = "|".join(str(province) for province, _level in ports)
             source = re.sub(
-                rf"(?m)^[ \t]*(?!{province}\b)\d+\s*=\s*\{{\s*naval_base\s*=\s*\d+\s*\}}[ \t]*\n",
+                rf"(?m)^[ \t]*(?!(?:{listed})\b)\d+\s*=\s*\{{\s*naval_base\s*=\s*\d+\s*\}}[ \t]*\n",
                 "",
                 source,
             )
-            source = set_history_province_building(source, province, "naval_base", level)
+            for province, level in ports:
+                source = set_history_province_building(source, province, "naval_base", level)
         outputs[path] = source.encode("utf-8")
+    path = ROOT / "localisation/russian/state_names_l_russian.yml"
+    source = path.read_text(encoding="utf-8-sig")
+    for state_id, name in NAM_ARCHIPELAGO_STATE_NAMES.items():
+        source = replace_localisation_value(source, f"STATE_{state_id}", name)
+    outputs[path] = source.encode("utf-8-sig")
     return outputs
 
 
@@ -3269,13 +3459,24 @@ def regional_settlement_plan() -> dict[Path, bytes]:
         for province, value, name in settlements:
             if province in seen or province not in provinces or definitions.get(province, ("", ""))[0] != "land":
                 raise RuntimeError(f"state {state_id}: duplicate or invalid regional VP {province}")
-            if definitions[province][1] in CITY_TERRAINS:
-                if value < 10:
+            terrain = definitions[province][1]
+            island_town = (
+                terrain == "svetlogorye_town"
+                and state_id in NAM_ARCHIPELAGO_STATE_NAMES
+                and 1 <= value <= 3
+            )
+            if terrain in CITY_TERRAINS:
+                if value < 10 and not island_town:
                     raise RuntimeError(f"urban VP {province}: expected at least 10 points")
             elif not 1 <= value <= 3:
                 raise RuntimeError(f"regional VP {province}: expected a minor settlement value")
             seen.add(province)
             localisation = replace_localisation_value(localisation, f"VICTORY_POINTS_{province}", name)
+        if state_id in NAM_ARCHIPELAGO_CAPITAL_CITIES:
+            capital = NAM_ARCHIPELAGO_CAPITAL_CITIES[state_id]
+            values = {province: value for province, value, _name in settlements}
+            if any(value >= values[capital] for province, value in values.items() if province != capital):
+                raise RuntimeError(f"state {state_id}: a settlement reaches the capital {capital}")
         points = tuple((province, value) for province, value, _name in settlements)
         source = ensure_history_victory_points(source, points)
         outputs[path] = source.encode("utf-8")
@@ -3311,6 +3512,7 @@ def apply() -> None:
         state_path(state_id).write_text(render_state(state_id, owner), encoding="utf-8", newline="\n")
     apply_legacy_state_profiles()
     update_svetlogorye_homeland(True)
+    update_archipelago_islands(True)
     update_coastal_city_states(True)
     update_southern_settlements(True)
     update_stelander_islands(True)
@@ -3370,7 +3572,7 @@ def update_val_resources(apply_changes: bool = False) -> int:
         path = ROOT / relative_path
         source = path.read_text(encoding="utf-8-sig")
         updated = source
-        for resource in ("oil", "steel", "aluminium", "tungsten", "chromium", "rubber"):
+        for resource in STRATEGIC_RESOURCES:
             updated = remove_state_resource(updated, resource)
         expected = EXPECTED_RESOURCES[state_id]
         if expected:
@@ -3563,6 +3765,16 @@ def main() -> int:
     )
     actions.add_argument("--check-svetlogorye-homeland", action="store_true")
     actions.add_argument("--apply-svetlogorye-homeland", action="store_true")
+    actions.add_argument(
+        "--check-archipelago-islands",
+        action="store_true",
+        help="check that every raised island belongs to its state's province list",
+    )
+    actions.add_argument(
+        "--apply-archipelago-islands",
+        action="store_true",
+        help="add raised island provinces to their states without touching other state data",
+    )
     actions.add_argument("--apply-coastal-cities", action="store_true")
     actions.add_argument("--check-southern-settlements", action="store_true")
     actions.add_argument("--apply-southern-settlements", action="store_true")
@@ -3602,6 +3814,8 @@ def main() -> int:
         return update_shahrabad_split(args.apply_shahrabad_split)
     if args.check_svetlogorye_homeland or args.apply_svetlogorye_homeland:
         return update_svetlogorye_homeland(args.apply_svetlogorye_homeland)
+    if args.check_archipelago_islands or args.apply_archipelago_islands:
+        return update_archipelago_islands(args.apply_archipelago_islands)
     if args.check_regional_settlements or args.apply_regional_settlements:
         return update_regional_settlements(args.apply_regional_settlements)
     if args.check_stelander_islands or args.apply_stelander_islands:
@@ -3672,9 +3886,10 @@ def main() -> int:
     shahrabad_drift = update_shahrabad_population(False)
     shahrabad_split_drift = update_shahrabad_split(False)
     svetlogorye_drift = update_svetlogorye_homeland(False)
+    archipelago_drift = update_archipelago_islands(False)
     return max(
         coalition_drift, island_drift, port_drift, regional_drift, shahrabad_drift,
-        shahrabad_split_drift, svetlogorye_drift, validate_main(),
+        shahrabad_split_drift, svetlogorye_drift, archipelago_drift, validate_main(),
     )
 
 

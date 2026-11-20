@@ -627,6 +627,91 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_idea_NAM_board_army"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_army.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_politics"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_politics.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_no_confidence"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_no_confidence.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_sanction_loren"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_sanction_loren.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_sanction_ferrant"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_sanction_ferrant.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_sanction_navis"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_sanction_navis.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_sanction_arktur"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_sanction_arktur.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_sanction_smenkom"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_sanction_smenkom.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_sanction_reidbank"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_sanction_reidbank.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_weber_committees"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_weber_committees.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_karamyshev_watch"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_karamyshev_watch.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_strike"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_strike.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_mutiny"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_mutiny.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_port_peace"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_port_peace.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_staff_oath"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_staff_oath.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_loan_service"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_loan_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_island_industry"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_island_industry.png"
+	}
+
+	spriteType = {
 		name = "GFX_idea_NAM_corp_dynamic"
 		texturefile = "gfx/interface/ideas/NAM/idea_NAM_corp_dynamic.png"
 	}

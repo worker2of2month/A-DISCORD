@@ -37,11 +37,29 @@ spriteTypes = {
 	}
 
 	corneredTileSpriteType = {
+		name = "GFX_ideology_techno_corporatism"
+		texturefile = "gfx/interface/ideologies/techno_corporatism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
 		name = "GFX_ideology_dorian_technocracy"
 		texturefile = "gfx/interface/ideologies/dorian_technocracy_group.png"
 		size = {
 			x = 70
 			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_ideology_techno_corporatism_countryview"
+		texturefile = "gfx/interface/ideologies/techno_corporatism_group.png"
+		size = {
+			x = 125
+			y = 125
 		}
 	}
 

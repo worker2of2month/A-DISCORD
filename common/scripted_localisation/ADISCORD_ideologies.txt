@@ -100,6 +100,11 @@ defined_text = {
 defined_text = {
 	name = GetSubIdeologyTechnocracy
 	text = {
+		trigger = { has_country_leader_ideology = techno_corporatism }
+		localization_key = techno_corporatism
+	}
+
+	text = {
 		trigger = { has_country_leader_ideology = dorian_technocracy }
 		localization_key = dorian_technocracy
 	}
@@ -242,6 +247,10 @@ defined_text = {
 
 defined_text = {
 	name = GetPartyLocTechnocracy
+	text = {
+		trigger = { has_country_leader_ideology = techno_corporatism }
+		localization_key = "[GetRulingParty]"
+	}
 	text = { localization_key = "[ROOT.GetTag]_technocracy_party" }
 }
 
@@ -261,6 +270,13 @@ defined_text = {
 	text = {
 		trigger = { has_government = humanism }
 		localization_key = "[GetRulingParty]"
+	}
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_humanism_party
 	}
 	text = { localization_key = "country_culture|humanism_party" }
 }
@@ -301,6 +317,13 @@ defined_text = {
 		trigger = { has_government = utilitarism }
 		localization_key = "[GetRulingParty]"
 	}
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_utilitarism_party
+	}
 	text = { localization_key = "country_culture|utilitarism_party" }
 }
 
@@ -339,6 +362,13 @@ defined_text = {
 	text = {
 		trigger = { has_government = chauvinism }
 		localization_key = "[GetRulingParty]"
+	}
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_chauvinism_party
 	}
 	text = { localization_key = "country_culture|chauvinism_party" }
 }
@@ -379,6 +409,13 @@ defined_text = {
 		trigger = { has_government = pragmatism }
 		localization_key = "[GetRulingParty]"
 	}
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_pragmatism_party
+	}
 	text = { localization_key = "country_culture|pragmatism_party" }
 }
 
@@ -417,6 +454,13 @@ defined_text = {
 	text = {
 		trigger = { has_government = anarchism }
 		localization_key = "[GetRulingParty]"
+	}
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_anarchism_party
 	}
 	text = { localization_key = "country_culture|anarchism_party" }
 }
@@ -457,6 +501,13 @@ defined_text = {
 		trigger = { has_government = technocracy }
 		localization_key = "[GetRulingParty]"
 	}
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_technocracy_party
+	}
 	text = { localization_key = "country_culture|technocracy_party" }
 }
 
@@ -495,6 +546,13 @@ defined_text = {
 	text = {
 		trigger = { has_government = etatism }
 		localization_key = "[GetRulingParty]"
+	}
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_etatism_party
 	}
 	text = {
 		trigger = {
@@ -557,6 +615,13 @@ defined_text = {
 	text = {
 		trigger = { has_government = hedonism }
 		localization_key = "[GetRulingParty]"
+	}
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_hedonism_party
 	}
 	text = { localization_key = "country_culture|hedonism_party" }
 }

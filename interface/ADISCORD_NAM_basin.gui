@@ -799,18 +799,18 @@ guiTypes = {
 
 		iconType = {
 			name = "NAM_board_mark_1"
-			position = { x = 186 y = 40 }
+			position = { x = 186 y = 54 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_1_tt"
 		}
 
 		instantTextBoxType = {
 			name = "NAM_board_seat_1"
-			position = { x = 124 y = 75 }
+			position = { x = 124 y = 89 }
 			text = "NAM_board_seat_1"
 			font = "hoi_16mbs"
 			maxWidth = 174
-			maxHeight = 69
+			maxHeight = 52
 			fixedsize = yes
 			format = centre
 			pdx_tooltip = "NAM_board_seat_1_tt"
@@ -818,18 +818,18 @@ guiTypes = {
 
 		iconType = {
 			name = "NAM_board_mark_2"
-			position = { x = 114 y = 162 }
+			position = { x = 114 y = 176 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_2_tt"
 		}
 
 		instantTextBoxType = {
 			name = "NAM_board_seat_2"
-			position = { x = 74 y = 197 }
+			position = { x = 74 y = 211 }
 			text = "NAM_board_seat_2"
 			font = "hoi_16mbs"
 			maxWidth = 130
-			maxHeight = 69
+			maxHeight = 52
 			fixedsize = yes
 			format = centre
 			pdx_tooltip = "NAM_board_seat_2_tt"
@@ -837,18 +837,18 @@ guiTypes = {
 
 		iconType = {
 			name = "NAM_board_mark_3"
-			position = { x = 257 y = 162 }
+			position = { x = 257 y = 176 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_3_tt"
 		}
 
 		instantTextBoxType = {
 			name = "NAM_board_seat_3"
-			position = { x = 217 y = 197 }
+			position = { x = 217 y = 211 }
 			text = "NAM_board_seat_3"
 			font = "hoi_16mbs"
 			maxWidth = 130
-			maxHeight = 69
+			maxHeight = 52
 			fixedsize = yes
 			format = centre
 			pdx_tooltip = "NAM_board_seat_3_tt"
@@ -856,18 +856,18 @@ guiTypes = {
 
 		iconType = {
 			name = "NAM_board_mark_4"
-			position = { x = 59 y = 284 }
+			position = { x = 59 y = 298 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_4_tt"
 		}
 
 		instantTextBoxType = {
 			name = "NAM_board_seat_4"
-			position = { x = 22 y = 319 }
+			position = { x = 22 y = 333 }
 			text = "NAM_board_seat_4"
 			font = "hoi_16mbs"
 			maxWidth = 124
-			maxHeight = 69
+			maxHeight = 52
 			fixedsize = yes
 			format = centre
 			pdx_tooltip = "NAM_board_seat_4_tt"
@@ -875,18 +875,18 @@ guiTypes = {
 
 		iconType = {
 			name = "NAM_board_mark_5"
-			position = { x = 184 y = 284 }
+			position = { x = 184 y = 298 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_5_tt"
 		}
 
 		instantTextBoxType = {
 			name = "NAM_board_seat_5"
-			position = { x = 147 y = 319 }
+			position = { x = 147 y = 333 }
 			text = "NAM_board_seat_5"
 			font = "hoi_16mbs"
 			maxWidth = 124
-			maxHeight = 69
+			maxHeight = 52
 			fixedsize = yes
 			format = centre
 			pdx_tooltip = "NAM_board_seat_5_tt"
@@ -894,18 +894,18 @@ guiTypes = {
 
 		iconType = {
 			name = "NAM_board_mark_6"
-			position = { x = 313 y = 284 }
+			position = { x = 313 y = 298 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_6_tt"
 		}
 
 		instantTextBoxType = {
 			name = "NAM_board_seat_6"
-			position = { x = 274 y = 319 }
+			position = { x = 274 y = 333 }
 			text = "NAM_board_seat_6"
 			font = "hoi_16mbs"
 			maxWidth = 128
-			maxHeight = 69
+			maxHeight = 52
 			fixedsize = yes
 			format = centre
 			pdx_tooltip = "NAM_board_seat_6_tt"

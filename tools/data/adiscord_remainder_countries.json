@@ -308,6 +308,11 @@
       "civilian": 5,
       "military": 2,
       "dockyard": 1,
+      "resources": {
+        "682": {"rubber": 8},
+        "685": {"rubber": 4},
+        "653": {"steel": 6, "aluminium": 6}
+      },
       "divisions": 4,
       "color": [
         100,
@@ -443,6 +448,10 @@
       "civilian": 2,
       "military": 1,
       "dockyard": 1,
+      "resources": {
+        "648": {"steel": 6, "chromium": 4},
+        "647": {"aluminium": 4}
+      },
       "divisions": 2,
       "color": [
         76,
@@ -510,6 +519,10 @@
       "civilian": 2,
       "military": 1,
       "dockyard": 1,
+      "resources": {
+        "651": {"rubber": 6},
+        "650": {"tungsten": 4}
+      },
       "divisions": 2,
       "color": [
         90,
@@ -582,6 +595,10 @@
       "civilian": 4,
       "military": 2,
       "dockyard": 1,
+      "resources": {
+        "680": {"rubber": 12, "chromium": 4},
+        "676": {"rubber": 6}
+      },
       "divisions": 3,
       "color": [
         175,

@@ -6,3 +6,4 @@ set_politics = {
 }
 set_popularities = { anarchism = 100 }
 set_research_slots = 2
+add_ideas = minister_IFC_Maksim_Veres

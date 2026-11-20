@@ -1,0 +1,21 @@
+{
+  "style_reference": "gfx/interface/ideas/NAM/idea_NAM_board_politics.png",
+  "render_method": "Locally drawn raster vignettes",
+  "shared_style": "68x68 RGBA isolated HOI4 idea cutout, no enclosing frame, cool industrial shadows, muted highlights, dark sculpted edges and transparent corners. No lettering.",
+  "assets": [
+    {"id": "idea_NAM_board_no_confidence", "prompt": "Toppled chairman's chair, with raised voting hands behind it. Cool council clothes and worn walnut upholstery."},
+    {"id": "idea_NAM_board_sanction_loren", "prompt": "Closed fuel pipe valve, dominant handwheel, burnt orange and oxblood."},
+    {"id": "idea_NAM_board_sanction_ferrant", "prompt": "Steel ingots carted away on a low wheeled trolley, steel blue-grey."},
+    {"id": "idea_NAM_board_sanction_navis", "prompt": "A laid-up ship tied at the quay, conspicuous slack mooring lines, teal and dark navy."},
+    {"id": "idea_NAM_board_sanction_arktur", "prompt": "Closed arsenal gate with a large padlock, sand-khaki and black."},
+    {"id": "idea_NAM_board_sanction_smenkom", "prompt": "Empty labour exchange hall with vacant service windows and a long bare counter, amber and brown."},
+    {"id": "idea_NAM_board_sanction_reidbank", "prompt": "Closed sage and bottle-green bank shutter with a refused bill in front, white paper against dark enamel."},
+    {"id": "idea_NAM_judas_weber_committees", "prompt": "Dockworkers gathered around a committee table under cranes."},
+    {"id": "idea_NAM_judas_karamyshev_watch", "prompt": "Coast guard cutter behind two officers in pale peaked caps."},
+    {"id": "idea_NAM_judas_strike", "prompt": "Picket line with raised hands at barred port gates."},
+    {"id": "idea_NAM_judas_mutiny", "prompt": "Two cutters leaving the roadstead with their flags lowered, restrained cool palette."},
+    {"id": "idea_NAM_judas_port_peace", "prompt": "Working quay at dawn, crane and cargo in amber sidelight."},
+    {"id": "idea_NAM_judas_staff_oath", "prompt": "Two officers swearing over a company charter with a wax seal."},
+    {"id": "idea_NAM_board_loan_service", "prompt": "Angled promissory note on a dark folio, with a bottle-green bank seal and ribbon."}
+  ]
+}

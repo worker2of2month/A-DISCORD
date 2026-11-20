@@ -2518,7 +2518,7 @@ class PostwarRecoveryTransactions(unittest.TestCase):
 
 
 class PostwarDiplomacyTransactions(unittest.TestCase):
-    def facts(self, tag, treasury=1800, paid=False):
+    def facts(self, tag, treasury=1800, audited=False, shipment=False):
         facts = package_facts()
         facts.update(
             {
@@ -2527,7 +2527,8 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
                 ("STS", "has_country_flag", "STP_cw_won_union_battle"): True,
                 ("STS", "has_global_flag", "STP_cw_union_wars_finished"): True,
                 ("STS", "variable", "ADISCORD_economy_treasury"): treasury,
-                ("STS", "has_country_flag", "STP_pw_kefreyt_accounts_settled"): paid,
+                ("STS", "has_completed_focus", "STP_pc_war_ledgers"): audited,
+                ("STS", "has_country_flag", "STP_cw_kefreyt_shipment_received"): shipment,
                 ("STS", "has_completed_focus", f"STP_pc_heg_{tag.lower()}_force"): True,
                 ("STS", "has_variable", f"STP_pc_{tag.lower()}_offer_kind"): True,
                 ("STS", "variable", f"STP_pc_{tag.lower()}_offer_kind"): 1,
@@ -2536,16 +2537,18 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
         return facts
 
     def test_recipient_acceptance_conserves_money_and_replay_cannot_pay_twice(self):
-        for tag, number, paid, price in (
-            ("VAL", 17, False, 1800),
-            ("VAL", 17, True, 900),
-            ("NOD", 18, False, 1350),
+        for tag, number, audited, shipment, price in (
+            ("VAL", 17, False, False, 1800),
+            ("VAL", 17, True, False, 1800),
+            ("VAL", 17, False, True, 1800),
+            ("VAL", 17, True, True, 900),
+            ("NOD", 18, False, False, 1350),
         ):
             option = option_by_name(
                 f"ADISCORD_STP_pc.{number}", "STP_pc_accept_compact"
             )
             for balance in (price - 0.01, price, price + 100):
-                facts, events = self.facts(tag, balance, paid), []
+                facts, events = self.facts(tag, balance, audited, shipment), []
                 execute_package_effects(option, facts, events, tag)
                 accepted = balance >= price
                 self.assertEqual(

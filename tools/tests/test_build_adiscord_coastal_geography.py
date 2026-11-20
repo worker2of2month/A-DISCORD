@@ -10,6 +10,7 @@ import numpy as np
 from PIL import Image
 
 from tools.builders import build_adiscord_coastal_geography as geography
+from tools.builders.build_adiscord_exclusion_zone_boundaries import load_current_owners, load_current_province_states
 from tools.lib.coastal_clearance import water_colours, water_mask
 
 
@@ -34,7 +35,7 @@ class CoastalColourmapTests(unittest.TestCase):
             self.assertEqual(decoded.getpalette(), river.getpalette())
             self.assertEqual(decoded.tobytes(), bytes(range(256)))
 
-    def test_runtime_preserves_daylight_and_lights_dry_settlements(self) -> None:
+    def test_runtime_preserves_daylight_and_lights_only_settlements_outside_exz(self) -> None:
         definitions = {
             int(fields[0]): tuple(map(int, fields[1:4]))
             for line in (ROOT / "map/definition.csv").read_text().splitlines()
@@ -42,9 +43,9 @@ class CoastalColourmapTests(unittest.TestCase):
         }
         with Image.open(ROOT / "map/provinces.bmp") as source:
             provinces = np.asarray(source.convert("RGB"))
-        islands = np.zeros(provinces.shape[:2], dtype=bool)
-        for province in geography.ISLANDS:
-            islands |= np.all(provinces == definitions[province], axis=2)
+        grid = geography.province_grid(provinces, definitions)
+        # Raised land takes the daylight land tint as well.
+        islands = np.isin(grid, list(geography.ISLANDS | geography.ARCHIPELAGO_NEW_PROVINCES))
         expected = geography.patch_colourmap(SOURCE.read_bytes(), islands)
         actual = (ROOT / geography.COLOURMAP).read_bytes()
         self.assertEqual(actual[:128], expected[:128])
@@ -59,7 +60,12 @@ class CoastalColourmapTests(unittest.TestCase):
         with Image.open(BytesIO(actual)) as texture:
             alpha = np.asarray(texture.getchannel("A"))
         height, width = alpha.shape
-        coverage = (built_up & ~water).reshape(height, 2, width, 2).sum(axis=(1, 3))
+        owners = load_current_owners()
+        zone = np.isin(grid, [
+            province for province, state in load_current_province_states().items() if owners[state] == "EXZ"
+        ])
+        self.assertTrue((built_up & ~water & zone).any())
+        coverage = (built_up & ~water & ~zone).reshape(height, 2, width, 2).sum(axis=(1, 3))
         self.assertGreater(np.count_nonzero(coverage == 4), 0)
         np.testing.assert_array_equal(alpha, np.minimum(coverage * 64, 255))
 

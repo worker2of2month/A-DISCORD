@@ -4,6 +4,7 @@ RUS_last_empire_crisis = {
 	allowed = { always = yes }
 	visible_when_empty = yes
 	visible = {
+		NOT = { has_country_flag = NAM_corp_takeover }
 		NOT = { has_global_flag = RUS_crisis_world_ended }
 		OR = {
 			RUS_crisis_player_attack_visible = yes

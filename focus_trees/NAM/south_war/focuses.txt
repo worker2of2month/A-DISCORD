@@ -1013,7 +1013,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_sw_war_export_tariff
-		icon = GFX_focus_NAM_wrk_trade_house
+		icon = GFX_focus_NAM_customs_clearinghouse
 		x = 18
 		y = 4
 		cost = 2
@@ -2429,7 +2429,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_sw_s_furnace_inspection
-		icon = GFX_focus_NAM_district_inspectorate
+		icon = GFX_focus_NAM_testing_office
 		x = 44
 		y = 1
 		cost = 2
@@ -3014,7 +3014,7 @@ focus_tree = {
 
 	focus = {
 		id = NAM_sw_p_logistics_contracts
-		icon = GFX_focus_NAM_motor_pool
+		icon = GFX_focus_NAM_freight_exchange
 		x = 46
 		y = 0
 		cost = 2

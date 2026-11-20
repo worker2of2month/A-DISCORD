@@ -200,7 +200,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             "common/decisions/categories/ADISCORD_scenario_debug_categories.txt"
         )
         category = named_block(categories, "ADISCORD_scenario_debug_category")
-        self.assertIn("visible = { is_debug = yes }", category)
+        self.assertIn("is_debug = yes", named_block(category, "visible"))
         decisions = read("common/decisions/ADISCORD_scenario_debug_decisions.txt")
         add = named_block(decisions, "ADISCORD_debug_add_vorkerland_war_exhaustion")
         reset = named_block(decisions, "ADISCORD_debug_reset_vorkerland_war_exhaustion")
