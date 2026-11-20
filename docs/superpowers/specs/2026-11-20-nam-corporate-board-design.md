@@ -1,9 +1,10 @@
 # NAM corporate exile: the council of boards
 
-Status: design draft for implementation by subagents. Nothing in this document
-is implemented yet. Line numbers are hints from a snapshot taken on 2026-11-20;
-the NAM files are edited in parallel by the user and by Codex, so re-read every
-target before inserting and splice by section, never by line.
+Status: M0-M8 and the focus layer of the upper tree (appendix C) are
+implemented in the script; the lower branch (appendix D) and the stage-3 tree
+are not. Nothing was checked in the running game. Line numbers are hints; the
+NAM files are edited in parallel, so re-read every target before inserting and
+splice by section, never by line.
 
 ## Goal
 
@@ -493,9 +494,11 @@ Do not name anything `NAM_board_tender_<lot>`: two tests forbid those ids.
 - Award: the winner gains the industry and +15 trust; the loser gets -15 and
   becomes a guaranteed speaker for 180 days, with its dismissal or seat motion
   against the winner first on its agenda.
-- Keep public: the existing public-lot bonus in
-  `NAM_board_update_industrial_policy` stays, both bidders lose 5, and the lot
-  returns as a motion.
+- Keep public: the lot pays +10 capital a month in `NAM_corp_monthly` while
+  the treasury holds it (+5 with `quay_chain`), both bidders lose 5, and the
+  lot returns as a motion. It gives the industrial policy nothing.
+- The first award of each lot also opens the winner's next charter line
+  (appendix C.2); a retender award does not.
 - Unattended timeout: the lot stays public, both lose 10, and the tender
   reopens 30 days later.
 
@@ -546,7 +549,7 @@ Chair: the head of the company at the top of the pyramid
 nomination and no exception for a majority. Olshansky, who has no company,
 therefore holds the chair only until the first annual meeting or the first
 successful vote of no confidence. The top company is read once, when the
-mission times out; the category text and the pyramid show who would take the
+mission times out. The pyramid shows who would take the
 chair if the meeting were held today, and the days left.
 
 This makes the pyramid a race toward a known date: tenders, seats and later
@@ -760,9 +763,10 @@ Seized island states become company concessions: a state variable names the
 owning company, and the recount counts 2 votes per concession beside the
 districts. They are not subject countries.
 
-Temporary exception to the focus-tree rules: the Judas branches have no live
-exclusive pair while the two WIP focuses are closed. A test pins the exception
-so it is removed with them.
+Temporary exception to the focus-tree rules: the two kill focuses have no
+live alternative while their WIP partners are closed. The Karamyshev and Weber
+lanes carry live exclusive pairs below the kills (appendix C.4). A test pins
+the exception so it is removed with the WIP focuses.
 
 ### After the return (stage 3)
 
@@ -854,11 +858,22 @@ M0 added `NAM_interregnum_begin`, `NAM_interregnum_close`,
 event `ADISCORD_nam_resource_war.460`. Package 4 added the support variables,
 `NAM_judas_support_change`, the meeting missions
 `NAM_judas_<camp>_meeting` with events `.450-.454`, ten operations
-`NAM_judas_<operation>`, fifteen spirits, the banded killings and the report
-panel `ADISCORD_NAM_judas_panel`. It leaves `NAM_judas_dividend_surcharge`
+`NAM_judas_<operation>`, fifteen spirits, the banded killings and the camp
+report in the two portrait cards of the `NAM_two_judases` category. Hovering
+over a card shows `NAMJudasWeberBlock` or `NAMJudasKaramyshevBlock`. It leaves `NAM_judas_dividend_surcharge`
 for the annual dividend to consume and clear. Under the tree's exclusive
 pairs nine of the ten operations are reachable in one campaign; that is
 intended.
+
+Status: packages 5-8 are implemented. The focus layer (package 7) follows
+appendix C: rewards in one writing order with shared script shapes, charter
+lines of the industrial policy opened by the tenders and nine wing focuses,
+alive and dead branches with the three-band spoils, seven exclusive pairs,
+story events `ADISCORD_nam_story.50-96`, the council decisions D1-D6, the
+Directory campaigns in `NAM_public_campaigns`, the development reset at the
+flight with six Directory programmes, and the end of the mainland leftovers at
+the flight or the takeover. The focus-effects guide section "Корпоративное
+изгнание NAM" describes the same contract (package 8).
 
 Notes for every package:
 
@@ -877,7 +892,9 @@ Notes for every package:
   `tools/data/adiscord_event_ids.json` (ids with a gap above the current
   maximum), and every paid decision in `CUSTOM_COST_DECISIONS` of the NAM
   validator.
-- No new decision category: a test allows exactly two under the takeover.
+- Island categories under the takeover: `NAM_two_judases`, `NAM_free_zones`,
+  `NAM_public_campaigns` and `NAM_directory_development` (appendix C.9). Add
+  no other category.
 
 ## Review findings to fix (packages 1-3)
 
@@ -933,8 +950,8 @@ Appendices A, B, D and E were drafted against an earlier version of the core.
 Where they differ, sections M1-M10 win. Known differences:
 
 - A.6 (leader traits) is replaced by the table in M6, which adds the debuffs.
-- A.7 point 1: a public lot already has a bonus in
-  `NAM_board_update_industrial_policy`; do not add capital income for it.
+- A.7 point 1 holds: a public lot pays +10 capital a month and gives the
+  industrial policy nothing (M4, appendix C.2).
 - A.0: one resolution mission per company (six ids) is accepted; at most two
   run at once.
 - Any mention of nominating a chairman is void: the chair goes strictly to the
@@ -963,8 +980,8 @@ Where they differ, sections M1-M10 win. Known differences:
     beside the older `NAM_board_votes_texticon`, `NAM_board_mark_texticon|N`,
     `NAM_foreign_capital_texticon` and `NAM_return_readiness_texticon`;
   - pyramid sprites `GFX_NAM_board_stance_marks` (4 frames, 28x28),
-    `GFX_NAM_board_resolution_marker` (20x20) and `GFX_NAM_board_seat_select`
-    (3 frames, cornered tile, border 6);
+    `GFX_NAM_board_resolution_marker` (20x20) and `GFX_NAM_board_seat_selected`
+    (single frame, cornered tile, border 6; a cornered tile ignores frames);
   - spirit pictures `GFX_idea_NAM_board_no_confidence`,
     `GFX_idea_NAM_board_sanction_<company>` for the six companies,
     `GFX_idea_NAM_judas_weber_committees`, `_karamyshev_watch`, `_strike`,
@@ -974,13 +991,9 @@ Where they differ, sections M1-M10 win. Known differences:
     ideas reference theirs; check before use.
 - Appendix A writes `NAM_corp_zone_slots`; the real variable is
   `NAM_free_zone_slots`.
-- Appendix C assumes the premier's seat stays fixed until
-  `NAM_board_privatise_governorate`. It does not: Kornev is removable from the
-  start (M2). Ignore C.10 point 3 and any reward that "frees" that seat; give
-  that focus another reward of the same weight.
-- Appendix C is the starting table for package 7. It is re-checked against the
-  focus source and the implemented ids of packages 1-6 before use, because the
-  tree is being edited while this document is written.
+- Appendix C is the maintained contract of the implemented focus layer; the
+  focus source and its reward keys hold the values. Kornev is removable from
+  the start (M2), so no reward "frees" the premier's seat.
 
 ## Appendix A. Company agendas, sanctions, tender terms, signature decisions, minister modifiers
 
@@ -1198,7 +1211,7 @@ The meeting runs as the visible mission `NAM_judas_weber_meeting`.
 - Target: the company the council favoured last, meaning the last tender winner or the beneficiary of the last resolution. The target is stored in `NAM_judas_weber_target`.
 - If that company holds no industry, the target falls back to the non-boycotting company with the most industry votes, lower id on a tie.
 - The target follows the player's actions until 14 days before the meeting, then locks. Until then the player can redirect it by favouring another company.
-- How the player sees it: the category text names the target and the reason ("Комитеты идут на причалы Навис: Навис выиграла торги"). The target's pyramid card carries a marker, and the council line warns at 14 days.
+- Weber's card names the target. Its tooltip explains why the committee chose it. The target's pyramid card carries a marker, and the council line warns at 14 days.
 
 | Answer | Price | Camp | Trust | Economy / army |
 | --- | --- | --- | --- | --- |
@@ -1216,7 +1229,7 @@ The meeting runs as the visible mission `NAM_judas_karamyshev_meeting`.
   - 1 readiness: set by the drill.
   - 2 convoys: set by requisitioning transports or a Navis consignment.
   - 3 army equipment: set by buying arms, an Arktur consignment, or recruiting guards.
-- Visibility is the same as for Weber: category text with the reason, and a warning at 14 days.
+- Karamyshev's card shows the target, with the reason on hover and a warning at 14 days.
 
 | Answer | Price | Camp | Trust | Economy / army |
 | --- | --- | --- | --- | --- |
@@ -1383,236 +1396,458 @@ Density:
 
 These are static design proposals. Nothing in this appendix was implemented or tested in the game, and no repository file was changed.
 
-## Appendix C. Reward table of the 70 focuses
+## Appendix C. Focus rewards of the council of boards
 
-This appendix was written from a static reading of `focus_trees/NAM/exile_corporate/focuses.txt` on 2026-11-20. Nothing was run or changed.
+This appendix is the maintained contract of the focus layer: the corporate tree
+`NAM_exile_corporate_focus` (64 playable focuses and six closed stubs:
+`escheated_throne`, `treaty_two_judases`, `silence_after_settlement`,
+`proxy_parliament`, `escheated_land_auction`, `ministries_in_concession`) and
+the interregnum tree `NAM_exile_interregnum_focus` (eight playable focuses; the
+finals `seals_committees` and `seals_officers` stay closed). The focus sources
+are `focus_trees/NAM/exile_corporate/focuses.txt` and
+`focus_trees/NAM/exile_interregnum/focuses.txt`; the files in
+`common/national_focus/` are generated from them. The values of each reward
+live in the focus source and its `NAM_board_<focus>_reward_tt` key; this
+appendix fixes the rules they follow. Ids are written without the
+`NAM_board_` prefix where the tree makes it unambiguous.
 
-**Conventions**
-- Ids are written without the `NAM_board_` prefix. PP means political power, cap means `NAM_corp_capital`, d means days. W1-W5 and K1-K5 are the operations of B2.
-- **Trust.** "+N Loren" means a call to `NAM_board_support_change`. Trust is never the main reward of a focus; it rides beside a material result.
-- **Permanent modifiers** go into an existing aggregate through a focus component variable, and each is shown through a dummy idea, `NAM_board_preview_<focus>`, with `effect_tooltip`.
-  - `NAM_corp_refresh` adds `NAM_board_focus_pp` and `NAM_board_focus_stab` to `NAM_corp_mod_pp` and `NAM_corp_mod_stability`.
-  - `NAM_board_update_industrial_policy` adds `NAM_board_focus_output`, `_construction` and `_goods`, the same way it already adds the 0.08 growth base (effects:9260).
-  - `NAM_board_army` gets one new key: `army_org_factor = NAM_board_focus_org`.
-- **Dead target.** An operation unlocked after its man is already dead is useless. Each such row names the fallback paid instead ("if dead"), chosen with native `if` in `completion_reward`.
-- **Re-gating** means adding `OR = { has_completed_focus = <focus> }` to the decision's existing `visible`. Nothing is copied.
+Companies: 1 Loren, 2 Ferrant, 3 Navis, 4 Arktur, 5 Smenkom, 6 Reidbank.
+"Capital" is `NAM_corp_capital`, "readiness" `NAM_revenge_readiness`,
+"committees" `NAM_judas_weber`, "officers" `NAM_judas_karamyshev`.
 
-### C.1 Centre (chancery, majority, final)
+### C.1 Writing order of a reward
 
-| Focus | Title | Kind | Reward | Feeds | Gate |
-|---|---|---|---|---|---|
-| beacon_out | Когда в гавани погас маяк | operation | Unlocks `op_lobby` (M5: 20 PP + 25 cap, 21 d, trust +12 up to 70, the same company not again within 90 d). +30 cap. Loren, Ferrant and Arktur +5 each (they open at 45). | M5, M1 | - |
-| bought_century | Скупленное столетие | slot | `NAM_board_action_slots` 1 to 2. Unlocks `op_prepare_dismissal` (15 PP, 21 d). | M5 | - |
-| property_qualification | Имущественный ценз | slot | Slots 2 to 3. Reidbank +5, Smenkom -5. | M5 | - |
-| both_squares_bought | Обе площади куплены | modifier | `NAM_board_politics`: PP +0.10 a day, stability +5% (preview). The session clock drops from 60 to 45 d (B6). | M1, M3 | Existing: both killings |
-| original_stays_home | Подлинник остаётся дома | rule | No-confidence immunity rises from 180 to 270 d. A no-confidence mission already running gets +30 d once. +40 cap. | M1 | - |
-| sole_vote_holder | Единый держатель голосов | operation | Unlocks `op_buy_proxies` "Скупить доверенности миноритариев": 40 cap + 15 PP, 30 d. The selected company gets +1 vote until the next annual meeting, at most 2 per company (array `NAM_board_proxy_votes`, read by the recount, cleared at the meeting). | M1, M6 | - |
-| copy_across_strait | Копия за проливом | building | `NAM_board_expand_company_airport` in the capital state (+2 air base). 2 `convoy_1`. Navis +8. | - | Capital state owned and controlled at completion, otherwise 40 cap |
-| mainland_inventory | Материк по описи | capital | +120 cap (the mortgage roll is sold abroad). Reidbank +10, Loren -5. | capital | Existing: `harbour_exchange` |
-| table_six | Стол на шесть приборов | trust | Every company below 50 gets +10 (up to 60). Every boycott countdown that is running restarts at 30 d. | M1 | Existing: `residency_for_hire` |
-| partition_night | Одна ночь на раздел мира | partition | See below. | M1, M10 | `NAM_board_has_majority` |
+Inside `completion_reward`, in this order:
 
-**How `partition_night` works**
-- `available` needs `NAM_board_has_majority`, one localised custom trigger.
-- The reward runs `NAM_board_partition_assign`. It writes `NAM_board_partition_order^1..6`: companies sorted by votes plus `NAM_board_partition_weight`, ties to the lower id.
-- `NAM_corp_assign_district` takes owners from that order before it falls back to the round-robin.
-- From exile the return creates 2 districts, EFL and AZH (effects:6811). The companies in the first 2 places get +10 trust; the others get -5.
-- The call to `NAM_island_partition_succession` goes. The chair changes only through M6.
-- It sets the flag that the lower branch reads.
+1. `unlock_decision_tooltip = <decision>` directly followed by
+   `custom_effect_tooltip = <decision>_unlock_tt`, one pair per unlocked
+   decision, campaign or development programme. The `_unlock_tt` value starts
+   with "После применения решения: " (pinned by
+   `test_visible_decision_summaries_share_one_lead_in_across_trees`).
+2. Native effects (`add_political_power`, `add_manpower`,
+   `add_equipment_to_stockpile`, `army_experience`, `navy_experience`,
+   `add_command_power`, `add_stability`, `add_popularity`, `add_timed_idea`)
+   and the development call of C.8. All of them print their own line and stay
+   outside every `hidden_effect`.
+3. `effect_tooltip = { add_ideas = NAM_board_preview_<x> }` for a fixed
+   aggregate. The preview ideas (`allowed = { always = no }`) are in
+   `common/ideas/ADISCORD_nam_resource_war_ideas.txt`; the applied delta equals
+   the preview (`test_upper_reward_previews_equal_the_applied_deltas`).
+4. One `custom_effect_tooltip = NAM_board_<focus>_reward_tt`, or the
+   `_alive_tt` / `_dead_tt` pair of C.3.
+5. One `hidden_effect` with the script. The story event call is its last line.
 
-### C.2 Left branch (economy)
+The two kill focuses (`posthumous_signature`, `last_debtor`) keep their single
+`hidden_effect` with the kill effect and fire their story event from a second
+`hidden_effect` after it (`tools/tests/test_adiscord_party_representation.py`
+unpacks exactly one entry from the first).
 
-| Focus | Title | Kind | Reward | Feeds | Gate |
-|---|---|---|---|---|---|
-| quay_chain | Хозяева причальной цепи | tender | Every tender bid pays +20 cap on top of the A.3 terms. A lot kept public pays +10 cap a month more, on top of the A.7.1 +10. Smenkom, Navis and Loren +3. | M4 | - |
-| private_gospel | Евангелие частной собственности | programme | Re-gates `NAM_corp_sell_steel` (+60 cap, -8 steel for 60 d, 60 d cooldown). Ferrant +8. | A.2 | Blocked by a Ferrant boycott or sanction |
-| salt_monopoly | Солевая монополия | zone | `NAM_free_zone_slots` +1, to 2. +30 cap. | zone slot | - |
-| future_output_pledge | Залог будущей добычи | income | +15 cap a month until `NAM_war_of_return_won`; `NAM_corp_monthly` reads the focus. Loren +8. | capital income | - |
-| double_lock_warehouse | Склад под двумя замками | rule | The base annual dividend drops from 60 to 40 cap; +20 per sold lot still applies. Reidbank +5. | M6 | - |
-| loren_receipt | Долг переживёт должника | building | +1 `synthetic_refinery` on the island of 225-231 with the most free slots, excluding the capital (motion L4 builds there). Loren +5. | building | Free slot checked at completion, otherwise 60 cap |
-| bearer_warrant | Варрант на предъявителя | modifier | `NAM_board_industrial_policy`: consumer goods -2% (`NAM_board_focus_goods`, preview). Reidbank +8. | aggregate | - |
-| loren_priority | Первой взыщет Лорэн | delivery | Loren's consignment now: 12000 fuel, through the same fuel-reserve path as `NAM_board_ship_district_order` for company 1. Loren +10, Reidbank -5. | delivery | 6000 fuel if Loren is boycotting |
-| eflor_debt_purchase | Мы купили ваш долг | programme | Unlocks `buy_eflor_mortgages` "Скупка эфлорских закладных": 50 cap, 60 d, at most 3. Each adds 1 to `NAM_board_eflor_mortgages`. At the return victory each mortgage pays 100 cap and Reidbank +5. | capital, return settlement | EFL exists |
-| land_foreclosure | Взыскание землёй | programme | Re-gates `NAM_corp_labour_contract` (3000 manpower lent for 90 d, +45 cap). +1500 manpower now. Smenkom +8. | A.2 | Blocked by a Smenkom boycott or sanction |
-| concession_courts | Концессионные суды | programme | Re-gates `NAM_island_concession_231` (VAL or GLP buys the Middle Island steel rights for 300 treasury). Reidbank +5, Ferrant -5. | foreign income | 231 owned and controlled |
-| harbour_exchange | Биржа у последнего причала | zone | Zone slots +1, to 3. Zone income rises from 50 to 60 cap per zone. | capital income | - |
+Script shapes, all in `common/scripted_effects/ADISCORD_nam_resource_war_effects.txt`:
 
-### C.3 Centre-left (Karamyshev)
+| Result | Shape |
+| --- | --- |
+| Trust | temp `NAM_board_trust_input_1` .. `_6` (signed, unset reads 0), then `NAM_board_trust_package = yes`; one package per reward or answer; it resets the inputs and recounts once |
+| Capital | temp `NAM_corp_capital_change` (negative spends), then `NAM_corp_capital_add = yes` |
+| Readiness | `add_to_variable = { var = NAM_revenge_readiness value = <n> }`, then `NAM_revenge_readiness_clamp = yes` |
+| Camp support | temp `NAM_judas_camp_input` (1 committees, 2 officers) and `NAM_judas_delta_input`, then `NAM_judas_support_change = yes`; no effect once that man is dead |
+| Charter line | temp `NAM_board_company_input` (1-6), then `NAM_board_grant_charter = yes` (C.2) |
+| Fixed aggregate | `add_to_variable` on `NAM_board_focus_pp`, `_stab`, `_output`, `_construction`, `_goods`, `_org` or `_research`, then `NAM_board_recount = yes` |
+| Fuel | `add_to_variable` on `NAM_open_fuel_reserve`, then `NAM_open_fuel_release = yes` |
+| Vote until the next annual meeting | `add_to_variable = { var = NAM_board_proxy_votes^<company> value = 1 }`, then `NAM_board_recount = yes` |
+| Dead-branch spoils | temp `NAM_judas_camp_input` and `NAM_corp_capital_change` (the full replacement), then `NAM_judas_pay_spoils = yes` |
+| Story event | `country_event = { id = ADISCORD_nam_story.<N> days = <d> }` as the last line of the `hidden_effect` |
 
-| Focus | Title | Kind | Reward | Feeds | Gate |
-|---|---|---|---|---|---|
-| dead_mans_veto | Вето мертвеца | readiness | `NAM_exile_drill_unlocked` gains this focus in an OR (B7.2): drill 20 PP + 30 cap, 30 d, +10 readiness, +15 army XP. Readiness +5 now. Unlocks K1. | readiness, M7 | - |
-| escheated_throne | Выморочный престол | WIP, unchanged | - | - | `always = no` |
-| posthumous_signature | Посмертная подпись | kill | Keeps `NAM_island_requisition_transports`. Applies the B4 band read at completion and the B5 trust table. | M7 | None |
-| silence_after_settlement | Тишина после расчёта | WIP, unchanged | - | - | Closed |
-| inheritance_without_empire | Наследство без империи | operation | Unlocks K2. Navis +5. If dead: 2 `convoy_1` + 30 cap. | M7 | Re-parent to `dead_mans_veto` (B7.1) |
-| facsimile_blood | Кровь под факсимиле | modifier | `NAM_board_army`: organisation +5% (`NAM_board_focus_org`, preview). Readiness +5. | aggregate, readiness | Existing: after the killing |
-| escheated_land_auction | Аукцион выморочных земель | WIP, unchanged | - | - | Closed |
-| uncrested_buyers | Покупатели без гербов | capital | +60 cap. Reidbank +8. Unlocks K3; if dead, +30 cap more. | capital, M7 | - |
-| privatise_governorate | Приватизация наместничества | seat | The premier's seat opens: Корнев becomes removable, and Рахманов and Крамской become eligible (their `allowed`/`available` read this focus). Unlocks K5. Loren and Reidbank +5. | M2, M7 | - |
-| hereditary_roll | Наследственный список | rule | At the officers' meeting the concession costs 20 cap instead of 35 and gives Karamyshev +6 instead of +10. Reidbank +8, Loren +5, Smenkom -8. | M7 | Exclusive |
-| old_settlers_oath | Присяга старожилов | programme | Unlocks `settlers_militia` "Дружина старожилов": 25 PP + 2000 manpower + 1200 `infantry_equipment`, 45 d, once. Result: one locked 6-battalion infantry division at the capital. The officers' "arrest" answer no longer needs a willing company and costs readiness -4 instead of -8. Smenkom +8, Reidbank -5. | M7, army | Exclusive |
-| admitted_owners_register | Реестр допущенных собственников | building | `NAM_board_build_company_offices` (business centre) in the capital state. Arktur and Reidbank +4. | building | Capital state owned at completion |
-| boundary_notches | Зарубки на меже | programme | Re-gates `NAM_island_public_works` (+1 infrastructure, 42 d, 30 PP + 250 treasury). +1000 manpower. | building | - |
-| eflor_petition | Прошение из Эфлора | partition | An event with one answer per company that holds a vote. The chosen company gets +10 trust and +3 `NAM_board_partition_weight`; the others get -3. | M10 | - |
-| district_buyout | Отступные за округ | operation | Unlocks K4. Arktur +4. If dead: 30 command power + 40 cap. | M7 | - |
-| price_of_silence | Выкуп за молчание | Judas pressure | Karamyshev -6 directly, using no slot, and his next meeting comes 20 d later, once. Reidbank -5. If dead: +60 cap. | M7 | - |
-| close_the_lawsuit | Черта под тяжбой | trust | All companies +5. After the return, the dispute roll (effects:9713) is off for 360 d. | M1, districts | - |
-| land_under_seal | Земля под печатью | readiness | Readiness +10 and 2000 manpower. | readiness | - |
+Every "all six companies" result is written with the trust package and six
+inputs, not with a loop. A loop of the council follows the loop contract
+stated above `NAM_board_recount`: its own temp counter is set to the loop
+start minus one directly before `for_loop_effect`, the first body statement
+advances it by 1, arrays are indexed only through that counter, and the loop
+`value = NAM_board_loop_step` is never read. Counters per site:
+`NAM_board_petitioner` (focus rewards), `NAM_board_partition_index`
+(`partition_night`), `NAM_board_expiry_company` (event `.437`),
+`NAM_board_story_company` (story events). The counts are pinned by
+`test_board_loops_never_read_the_native_loop_value` as `[9, 2, 4]` (effects,
+events, corporate focus source).
 
-### C.4 Centre-right (Weber)
+**Kinds.** Every playable focus gives two to five rewards of different kinds;
+the typical focus gives three or four. Kinds: political power, manpower,
+equipment (convoys, fuel), experience or command power, stability or
+technocracy popularity, capital, readiness, trust given, rival camp support
+lowered, decision or programme unlock, lasting rule (slot, vote, charter
+line), aggregate or timed spirit or monthly income, building, development.
+Costs (trust taken, camp support raised, capital spent, humanism popularity)
+and the story event do not count. Two rows of one kind count once. Pinned by
+`test_every_playable_focus_gives_two_to_five_kinds_of_reward`, whose table
+mirrors the source. The two kills and six one-week interregnum focuses are the
+only two-kind focuses.
 
-| Focus | Title | Kind | Reward | Feeds | Gate |
-|---|---|---|---|---|---|
-| founders_of_unrest | Учредители будущей смуты | operation | Unlocks W1 and makes the Weber meeting clock visible. +30 cap. | M7 | - |
-| last_debtor | Голос последнего должника | kill | Keeps `NAM_corp_buy_arms` and `NAM_island_recruit_warehouse_guards`. Applies the B4 band read at completion and the B5 trust table. | M7 | None |
-| treaty_two_judases | Договор с обоими Иудами | WIP, unchanged | - | - | `always = no` |
-| purged_majority | Большинство после чистки | modifier | `NAM_board_politics`: PP +0.10 a day (preview). Smenkom +5. | aggregate | Existing: after the killing |
-| elected_in_absentia | Избран заочно повешенным | operation | Unlocks W2. Loren +5. If dead: +40 cap. | M7 | Re-parent to `founders_of_unrest` |
-| proxy_parliament | Парламент доверенностей | WIP, unchanged | - | - | Closed |
-| widows_share | Вдовья доля | delivery | 4 `convoy_1`. Navis +5. Unlocks W3; if dead, +1500 manpower instead. | delivery, M7 | - |
-| ministries_in_concession | Министерства в концессию | WIP, unchanged | - | - | Closed |
-| society_99_1 | Общество 99\1 | income | +20 cap a month in club dues. `NAM_board_politics`: stability -3% (`NAM_board_focus_stab`, preview). | capital income | - |
-| subsidised_opposition | Оппозиция на содержании | operation | Unlocks W4. At the committees' meeting the concession costs 25 cap instead of 40 and gives Weber +6 instead of +10. Humanism +5. | M7 | Exclusive |
-| incumbents_credit | Кредит действующей власти | programme | Unlocks `mainland_officials` "Жалованье чиновникам материка": 30 cap + 20 PP, 90 d, can run again 90 d later. EFL and AZH get `NAM_mainland_bought_officials` for 90 d: war support -5%, stability -5%. Loren +5. | return war | Exclusive; EFL or AZH exists |
-| political_debt_register | Реестр политических долгов | rule | A rejected company's sanction lasts 30 d instead of 60. "Return for revision" costs 20 PP instead of 40. | M3 | - |
-| family_relief_fund | Касса семейного призрения | timed spirit | Unlocks `relief_fund`: 60 cap, every 180 d. Adds `NAM_board_relief_fund_spirit` for 180 d: stability +5%, monthly population +10%. Smenkom +8. | spirit | - |
-| lawyers_of_both_shores | Стряпчие обоих берегов | tender | Unlocks `retender_lot` "Повторные торги": 25 PP. It reopens one public lot's tender now instead of 90 d later, and both bids pay +20 cap. | M4 | A lot is public |
-| mourning_licence | Лицензия на траур | operation | Unlocks W5. Arktur +4. If dead: +40 cap. | M7 | - |
-| representation_for_loss | Представительство по утрате | seat | The next health appointment costs 0 PP. Smenkom and Reidbank +5. | M2 | - |
-| chairmans_copy | Председательский экземпляр | votes | The chair's company gets +1 vote; the recount reads `NAM_board_chair` and the focus. +50 cap. | M1, M6 | - |
-| port_rights_monopoly | Монополия портовых прав | income | +25 cap a month. Navis +10, Arktur -5. | capital income | - |
+**Tooltip layout.** Every custom tooltip of this route follows the layout
+rules pinned by `test_council_tooltips_follow_the_layout_standard`: one fact
+per line (`Label: value icon`, the value coloured, the number before its
+icon); a group gets one yellow heading and two-space indented rows with
+`$NAM_board_short_<n>$` names; `§G` for what the council gains (including
+lower rival support), `§R` for losses and prices, `§Y` for neutral amounts;
+fallbacks and conditions on their own indented line under the fact; delayed
+results under their own heading ("После возвращения:", "При передаче
+печатей:", "В любом исходе:"); at most 55 visible characters per line
+(`_unlock_tt` up to 100); no value starts or ends with `\n` and no `\n\n\n`;
+native lines are never restated. Texticons follow rule T17: the renderer drops
+the character directly after a `£name` token, so one space precedes a line
+break, punctuation, a closing bracket, an escaped quote or `§!`, and two spaces
+precede anything that needs a visible gap. Pinned also by
+`NamDirectoryCampaignTests.test_council_texticons_keep_the_next_character`.
 
-### C.5 Right branch (army and fleet)
+### C.2 Charter lines of the industrial policy
 
-| Focus | Title | Kind | Reward | Feeds | Gate |
-|---|---|---|---|---|---|
-| order_arsenal | Арсенал порядка | delivery | 1500 `infantry_equipment` and 12 `artillery_equipment`. Arktur +10. | delivery | - |
-| arsenal_monopoly | Арсенальная монополия | modifier | `NAM_board_industrial_policy`: factory output +5% (`NAM_board_focus_output`, preview). Arktur +5, Ferrant -5. | aggregate | - |
-| foundry_mark | Клеймо литейного двора | building | +1 `arms_factory` on an island of 225-231 with a free slot. Ferrant +5. | building | Slot checked at completion, otherwise 60 cap |
-| island_fleet_shares | Паи островного флота | programme | Re-gates `NAM_island_convoy_service` (+15% resources on the islands for 180 d, 25 PP + 150 treasury). Navis +5. | programme | - |
-| factory_guard | Частная заводская стража | readiness | Readiness +10 and 1500 manpower. Arktur +5. | readiness | - |
-| captains_share_qualification | Паевой ценз капитанов | delivery | 6 `convoy_1`. Navis +8. | delivery | - |
-| last_voyage_rifles | Винтовки последнего рейса | programme | Re-gates `NAM_order_marines` under the takeover: 50 cap + 4300 manpower, at most 3; the loot price stays for the radical route. +1000 `infantry_equipment`. | readiness, landing | - |
-| return_voyage | Обратный рейс | readiness | The drill gives +15 readiness instead of +10. +2000 manpower. | readiness | - |
-| azhar_land_fund | Земельный фонд Ажара | partition | Navis +3 `NAM_board_partition_weight`. +60 cap. Navis +5, Loren -3. | M10 | - |
-| private_strait | Частный пролив | building | `NAM_board_build_company_docks` in the capital state (+1 dockyard). Navis +5. | building | Existing dockyard cap of 20 |
-| corporate_mass_housing | Корпоративная массовая застройка | programme | Unlocks `company_housing`: 50 cap + 20 PP, 60 d, on at most 2 islands. At completion it calls `NAM_board_build_company_housing` on the target; ownership is checked again, otherwise the price is refunded. Smenkom +5. | building | - |
-| residency_for_hire | Прописка по найму | modifier | `NAM_board_industrial_policy`: construction +10% (`NAM_board_focus_construction`) and `NAM_board_politics`: stability -2% (preview). Smenkom +10. | aggregate | Existing gate of `table_six` |
+The spirit `NAM_board_industrial_policy` starts with penalties only. Each
+company has a charter level 0-2 in `NAM_board_charter` (size 7): level 1 opens
+its rate A, level 2 rates A and B. A closed line applies minus its factor,
+whatever the company's stance or industries; an open line applies the live
+potential (weight x factor while the company is "for", 0 while it waits or
+holds no industry, -0.5 x the potential while it boycotts).
 
-### C.6 The exclusive pairs
+| Company | Rate A (factor) | Rate B (factor) |
+| --- | --- | --- |
+| 1 Loren | factory output 1 | construction 2 |
+| 2 Ferrant | factory output 2 | efficiency growth 3 |
+| 3 Navis | dockyard output 3 | dockyard construction 3 |
+| 4 Arktur | factory output 3 | max efficiency 1 |
+| 5 Smenkom | construction 2 | efficiency growth 2 |
+| 6 Reidbank | construction 3 | consumer goods -1 |
 
-**`hereditary_roll` / `old_settlers_oath`: buy the officers or out-arm them.**
-- **Hereditary roll.** Karamyshev's meetings become cheap to concede, and the line opens K4, a bribe operation. The money flows through Reidbank and Loren, which gain, while Smenkom loses. Karamyshev ends lower through capital spent and slots used.
-- **Old settlers' oath.**
-  - The line has no K4. Karamyshev loses 47 support through operations instead of 59; `price_of_silence` adds -6.
-  - The player instead gets a standing division and an arrest answer that needs no company and costs only -4 readiness, so the officers can be faced down at every meeting.
-  - It pays in manpower and equipment, not capital. Smenkom gains and Reidbank loses.
-  - The line ends with readiness +10 (`land_under_seal`), not with the trust reset of `close_the_lawsuit`.
+Day one, no line open: factory output -6%, construction -7%, efficiency growth
+-5%, dockyard output -3%, dockyard construction -3%, max efficiency -1%,
+consumer goods +1%, research -10%. There is no flat efficiency base and public
+lots give the spirit nothing; each lot still held by the treasury pays +10
+capital a month in `NAM_corp_monthly` (+5 with `quay_chain`).
 
-**`subsidised_opposition` / `incumbents_credit`: buy the committees or weaken the enemy abroad.**
-- **Subsidised opposition.** The council pays the moderates: W4, cheaper concessions, humanism up. The line gives tools for running the council (shorter sanctions, cheaper revision, retenders, +1 vote for the chair). It reaches `table_six` through `chairmans_copy`.
-- **Incumbents credit.**
-  - Weber is broken by force (W5, `mourning_licence`).
-  - Capital goes abroad: the paid officials weaken EFL and AZH before the return war.
-  - The line pays back in social spirits and +25 cap a month from port rights.
-  - It reaches `table_six` through `port_rights_monopoly`, which needs `residency_for_hire` from the right branch.
-- The AI plan keeps hereditary and incumbents, as today.
+Levels rise only through `NAM_board_grant_charter`. A grant to a company whose
+two lines are open pays +40 capital instead. Callers:
 
-### C.7 Timeline
+- the tender award: `NAM_board_close_tender` grants the winner's next line on
+  the first award of each lot (`NAM_board_lot_awarded`); a retender award and
+  "Оставить в казне" open nothing;
+- nine focuses of the two industrial wings, none behind an exclusive choice:
 
-- **How long it takes.** A focus point is 7 days. One playthrough is 121-125 points, 847-875 days:
-  - centre 23 points;
-  - left 26;
-  - right 26;
-  - the shared Weber and Karamyshev focuses 14 each;
-  - one Weber line and one Karamyshev line, 9-11 points each.
-- **What must come early.** These six focuses make the mechanics usable before the clocks of B6 start: `beacon_out`, `quay_chain`, `bought_century`, `founders_of_unrest`, `dead_mans_veto` and `property_qualification`. Together they are 13 points, about day 91.
-  - Tenders run on days 7-49.
-  - Weber's first meeting is on day 30, the first session on day 60, Karamyshev's first meeting on day 75.
-  - The drill is the only source of readiness before the killings.
-- **Proposed cost change.** Lower `quay_chain` from 2 to 1. Taken right after the root, its terms then apply to every lot from the shipyard tender on. The total becomes 156; costs stay within the test's (0,3].
-- **Re-parents** (B7.1): `elected_in_absentia` under `founders_of_unrest`, and `inheritance_without_empire` under `dead_mans_veto`.
-  - Then every operation is reachable while its man lives. W5 lies 105 days of branch focuses deep, and so does K4.
-  - That fits the B6 estimates: Weber killed around day 260, Karamyshev around day 420.
-- **The bottom of the centre.** `both_squares_bought` needs both killings, so the lower centre (126 days) starts at about day 420 and ends at about day 546, well inside the playthrough.
-- **Why three slots by day 63 is right.**
-  - Up to day 420 the slots carry 10 operations, the lobby and the prepared dismissal.
-  - After the killings three separate operations are left (lobby, prepared dismissal, buying proxies), so the third slot never sits idle: one decision cannot run twice (w3_X).
-- **No other focus needs to move.** The partition race does need the annual meeting at day 690 to fall before `partition_night` (about day 850). That holds.
+| Company | Focus grants |
+| --- | --- |
+| 1 Loren | `future_output_pledge`, `loren_priority` |
+| 2 Ferrant | `concession_courts` |
+| 3 Navis | `island_fleet_shares`, `private_strait` |
+| 4 Arktur | `last_voyage_rifles` |
+| 5 Smenkom | `corporate_mass_housing`, `residency_for_hire` |
+| 6 Reidbank | `bearer_warrant` |
 
-### C.8 Count of rewards by kind
+Research comes from `NAM_board_focus_research` (read by `NAM_corp_refresh`
+into `NAM_corp_mod_research`): -0.10 at the takeover, +0.10 each from
+`foundry_mark` (right wing) and `harbour_exchange` (left wing), shown by the
+preview `NAM_board_preview_research`. No focus of the centre or of the
+Karamyshev and Weber lanes opens a line or a research step. The charter grant
+has no dummy preview, because its delta depends on the stance on the
+completion day; the nested key `NAM_board_charter_grant_<n>_tt` shows the line
+that opens and its live potential. Pinned by
+`test_charter_lines_open_in_order_and_close_with_penalties`,
+`test_first_tender_award_opens_the_winners_line_once` and
+`test_nine_wing_focuses_grant_charters_and_two_raise_research`.
 
-| Kind | Count |
-|---|---|
-| Programme (price and duration) | 10 |
-| Operation unlock | 8 |
-| WIP, unchanged | 6 |
-| Permanent modifier (aggregate) | 6 |
-| Rule or terms | 5 |
-| Building | 5 |
-| Readiness | 4 |
-| Delivery | 4 |
-| Capital income | 3 |
-| Partition | 3 |
-| Slot | 2 |
-| Kill | 2 |
-| Capital | 2 |
-| Zone slot | 2 |
-| Tender | 2 |
-| Trust | 2 |
-| Seat | 2 |
-| Judas pressure | 1 |
-| Votes | 1 |
-| Timed spirit | 1 |
-| **Total** | **70** |
+### C.3 Alive and dead branches
 
-No chain has three focuses of the same kind in a row.
+A focus whose camp operation or rule needs the man alive splits its reward:
 
-### C.9 New ids required beyond appendices A and B
+```
+if = {
+	limit = { has_idea = NAM_judas_karamyshev_watch }
+	custom_effect_tooltip = NAM_board_<focus>_alive_tt
+	hidden_effect = { ... }
+}
+else = {
+	if = {
+		limit = { check_variable = { NAM_judas_karamyshev_end < 2 } }
+		<native replacement, full>
+	}
+	else_if = {
+		limit = { check_variable = { NAM_judas_karamyshev_end < 3 } }
+		<native replacement, half>
+	}
+	custom_effect_tooltip = NAM_board_<focus>_dead_tt
+	hidden_effect = { ... NAM_judas_pay_spoils = yes ... }
+}
+```
 
-**Decisions**
-- `NAM_board_op_lobby` and `NAM_board_op_prepare_dismissal`: named here, specified in M5.
-- `NAM_board_op_buy_proxies`
-- `NAM_board_buy_eflor_mortgages`
-- `NAM_board_settlers_militia`
-- `NAM_board_mainland_officials`
-- `NAM_board_relief_fund`
-- `NAM_board_retender_lot`
-- `NAM_board_company_housing`
+Committees use `has_idea = NAM_judas_weber_committees` and
+`NAM_judas_weber_end`. The engine shows only the branch that applies. A
+development call sits before the `if`, so both branches get it. An unlock that
+needs the man alive (his operation, the campaigns "Агитаторы на жалованье" and
+"Мятежники в погонах") sits inside the alive branch only.
 
-**Ideas**
-- Previews: `NAM_board_preview_both_squares`, `_purged_majority`, `_society_99_1`, `_bearer_warrant`, `_arsenal_monopoly`, `_facsimile_blood`, `_residency_for_hire`.
-- Timed: `NAM_board_relief_fund_spirit`; `NAM_mainland_bought_officials`, which goes on EFL and AZH.
+**Three-band spoils.** The kill effects `NAM_island_eliminate_weber` and
+`NAM_island_eliminate_karamyshev` store the band in `NAM_judas_weber_end` /
+`NAM_judas_karamyshev_end`: 3 (support 60+), 2 (30-59), 1 (below 30). A dead
+branch keeps the part both branches share and pays its replacement at 100% /
+50% / 0% by that band; a missing variable reads as band 1. The capital part goes
+through `NAM_judas_pay_spoils`; a native part uses the band `if` above. The
+tooltip names the share through `NAMJudasKaramyshevSpoils` /
+`NAMJudasWeberSpoils`. Split focuses: `founders_of_unrest`,
+`inheritance_without_empire`, `uncrested_buyers`, `privatise_governorate`,
+`hereditary_roll`, `old_settlers_oath`, `district_buyout`, `price_of_silence`,
+`elected_in_absentia`, `widows_share`, `subsidised_opposition`,
+`mourning_licence`. Pinned by
+`test_dead_branches_pay_their_replacement_by_the_kill_band`.
 
-**Variables**
-- Focus components: `NAM_board_focus_pp`, `_stab`, `_output`, `_construction`, `_goods`, `_org`.
-- Arrays: `NAM_board_proxy_votes`, `NAM_board_partition_order`, `NAM_board_partition_weight`.
-- `NAM_board_eflor_mortgages`.
+The kill tooltips `NAM_island_eliminate_karamyshev_tt` and
+`NAM_island_eliminate_weber_tt` show the band that applies now in full
+("Если завершить сейчас (<band>): ...", chosen by
+`NAMJudas<Man>OutcomeNow`), the other two bands as one line each, and the
+results that hold in every band.
 
-**Other**
-- Scripted trigger `NAM_board_has_majority`.
-- Effect `NAM_board_partition_assign`.
-- The `eflor_petition` event, registered in `adiscord_event_ids.json`.
-- The division template "Дружина старожилов".
+### C.4 Exclusive pairs
 
-### C.10 Problems found
+Seven `mutually_exclusive` pairs; the AI plan in
+`common/ai_strategy_plans/ADISCORD_NAM_plans.txt` names one side of each live
+pair.
 
-1. **Wrong variable name in appendix A.** Appendix A writes `NAM_corp_zone_slots`. The real variable is `NAM_free_zone_slots`, clamped to 1-3 (effects:8344-8356). Once `harbour_exchange` is done, Reidbank's motion 2 can no longer be tabled; its "below 3" condition already handles that.
-2. **The hidden island decisions need more than a re-gate.**
-   - `NAM_island_public_works`, `_convoy_service` and `_concession_231` need `NAM_independent_programmes_operable`, which needs `NAM_center_vanished` (triggers:670-677). They are priced in treasury.
-   - They sit in `NAM_national_programmes`, which is hidden under the takeover, and the pin at test:8950-8981 allows only two categories there.
-   - Fix: move the three blocks into `NAM_free_zones` and add a takeover branch to their operable triggers. `NAM_island_steel_levy` stays unused.
-3. **The premier motions can be tabled before the seat exists.** Appendix A's Loren motion 4 and Reidbank motion 3 can come up from day 60, but Корнев stays fixed until `privatise_governorate`. Gate both motions on that focus.
-4. **`partition_night` has little to divide.** From exile the return creates only 2 districts (EFL, AZH), so only the top two companies get land. That is a sharp, readable race, but the spec should say so. If the lower branch's island wars do not create districts (w3_X, M10 finding), the weights from `eflor_petition` and `azhar_land_fund` matter only for those two places.
-5. **The Karamyshev arithmetic in B2 assumes the hereditary route.** On the oath route K4 is missing. B2 should state 47 + 6, not 59.
-6. **Tests and tools must change together with the rewards.**
-   - The reward lint exemption for this tree (test:8079-8085) must be removed.
-   - `validate_focus_rewards` will then judge these rows.
-   - The `quay_chain` cost change and the two re-parents need the layout inspector run and the parent-above-child pin checked.
-   - The user and Codex are editing the focus source live, so package 7 must start from a frozen file.
+| Pair | Lane | One side | Other side | AI |
+| --- | --- | --- | --- | --- |
+| `original_stays_home` / `sole_vote_holder` | centre | the council protects itself: third chancery slot, longer no-confidence immunity, capital | the council plays for votes: third chancery slot, D1, the keeper vote of event 73 | `sole_vote_holder` |
+| `double_lock_warehouse` / `loren_receipt` | left | the creditors' route: cheaper dividend rule, fuel now | Loren's route: refinery (capital fallback), a Loren vote, the expedition of events 54 and 83 | `loren_receipt` |
+| `hereditary_roll` / `old_settlers_oath` | Karamyshev | buy the officers: capital, cheaper "Удовлетворить требования" | out-arm them: D2, manpower, readiness, "Арестовать зачинщиков" without a company | `hereditary_roll` |
+| `subsidised_opposition` / `incumbents_credit` | Weber | buy the committees: cheaper "Уступить комитетам", the council tools of its line | weaken the enemy abroad: D5 and the social line | `incumbents_credit` |
+| `factory_guard` / `captains_share_qualification` | right | the army: organisation preview, manpower, readiness, army development | the fleet: convoys, naval experience, capital, the newsreel campaign | `factory_guard` |
+| `posthumous_signature` / `escheated_throne` | Karamyshev | the kill, always available | closed stub | - |
+| `last_debtor` / `treaty_two_judases` | Weber | the kill, always available | closed stub | - |
 
-None of this was checked in the running game.
+Each live side fires its own story event (C.5) and rejoins its lane, so both
+alternatives reach the capstones and the final. Pinned by
+`test_island_focus_diagram_and_duration` (seven pairs) and
+`test_partition_requires_every_compatible_branch_and_only_spared_leaders_are_wip`.
+
+### C.5 Story events
+
+- Namespace `ADISCORD_nam_story`, ids 50-96, in
+  `events/ADISCORD_nam_resource_war_events.txt`, one commented section
+  "Council of boards: story events" after story event 44. Every id is
+  registered in `tools/data/adiscord_event_ids.json` (subsystem `nam_story`).
+- One source per event: the focus reward that names it, as the last line of its
+  `hidden_effect` (the kill focuses from their second `hidden_effect`). Event
+  82 comes from the interregnum focus `open_customs`; event 83 comes only from
+  event 54, ninety days later. `seals_boards` fires the existing takeover event
+  `ADISCORD_nam_resource_war.100` and has no story event of its own.
+- `is_triggered_only = yes`, `fire_only_once = yes`. The trigger reads
+  `has_country_flag = NAM_board_opened` and `NAM_board_ended = 0`, never
+  `NAM_board_operable`: an offer that arrives while the council is paralysed
+  is delayed, not discarded. Event 65 also needs
+  `has_idea = NAM_judas_karamyshev_watch`, event 83 `has_variable =
+  NAM_story_54_choice`, event 82 `has_idea = NAM_interregnum_power_vacuum`.
+- The first option is the one an unattended event takes on timeout. It is
+  never a pure gain: it costs capital (at most 40) or political power, or at
+  most -3 trust to a company that asked. Event 82, the lane choice of the
+  interregnum, is the only exemption.
+- Native effects print themselves; the option key `NAM_story_<N>_<option>_tt`
+  covers capital, trust, votes, readiness and camp support only. Camp rows sit
+  inside the alive `if` on the camp idea.
+- Development answers, each with a price and written natively outside the
+  `hidden_effect`: 86 c (cultural), 89 c (economic), 90 b (state), 93 c
+  (social system), all `ADISCORD_programme_<track>_development`.
+- Descriptions are prose on light paper: no colour codes, ASCII `-` and `"`,
+  under 3000 characters and 5500 UTF-8 bytes. The chairman is named through
+  `[NAMBoardChairLeader]`; Olshansky is named only in 50 and 82.
+- Pictures are the ten registered plates `GFX_event_adiscord_nam_<plate>`;
+  `chair_handover` stays reserved for the takeover and chair installation.
+
+Important focuses and their events:
+
+| Role | Focus (event) |
+| --- | --- |
+| Branch openers | `beacon_out` (50), `quay_chain` (84), `dead_mans_veto` (59), `founders_of_unrest` (66), `order_arsenal` (74) |
+| Kills | `posthumous_signature` (60), `last_debtor` (67) |
+| Pairs | `original_stays_home` (86), `sole_vote_holder` (73), `double_lock_warehouse` (85), `loren_receipt` (54), `hereditary_roll` (63), `old_settlers_oath` (64), `subsidised_opposition` (87), `incumbents_credit` (88), `factory_guard` (76), `captains_share_qualification` (77) |
+| Turning points | `facsimile_blood` (96), `purged_majority` (68), `both_squares_bought` (72), `society_99_1` (70), `mainland_inventory` (94), `table_six` (95) |
+| Capstones | `harbour_exchange` (89), `close_the_lawsuit` (90), `eflor_petition` (58), `land_under_seal` (91), `chairmans_copy` (80), `port_rights_monopoly` (92), `residency_for_hire` (93) |
+| Final | `partition_night` (81) |
+| Others | `property_qualification` (51), `private_gospel` (52), `salt_monopoly` (53), `loren_priority` (55), `land_foreclosure` (56), `concession_courts` (57), `uncrested_buyers` (61), `privatise_governorate` (62), `price_of_silence` (65), `widows_share` (69), `mourning_licence` (71), `arsenal_monopoly` (75), `return_voyage` (78), `corporate_mass_housing` (79); interregnum `open_customs` (82) |
+
+Lasting state written by the events and read by the council:
+`NAM_board_guarantor_vote` (event 58) and `NAM_board_keeper_vote` (event 73),
+each +1 vote to one company until `partition_night` clears them;
+`NAM_story_54_choice` (cleared by event 83); the flags
+`NAM_judas_officer_families_listed` and `NAM_judas_receipts_published`;
+`NAM_board_society_dues` (event 70). Pinned by
+`test_story_events_are_registered_safe_by_default_and_fired_once` and
+`test_bought_and_story_votes_expire_at_their_own_moments`.
+
+### C.6 Council decisions D1-D6
+
+All in the category `NAM_free_zones`. The paid ones follow the custom cost
+contract (`cost = 0`, `custom_cost_text` with `_blocked` and `_tooltip`,
+every currency checked in `custom_cost_trigger`, rechecked and debited once in
+`complete_effect`) and are listed in `CUSTOM_COST_DECISIONS` of the NAM
+validator.
+
+| # | Decision | Unlocked by | Price | Run | Result | Hidden when |
+| --- | --- | --- | --- | --- | --- | --- |
+| D1 | `NAM_board_buy_proxies` | `sole_vote_holder` | 15 PP, 40 capital | 30 days, a chancery slot | the selected company +1 vote until the next annual meeting, at most two bought votes in the council; the top company -5 if another company is the target | - |
+| D2 | `NAM_board_settlers_militia` | `old_settlers_oath` (cap 1), `land_under_seal` (cap 2) | 25 PP, 4000 manpower, 3600 `infantry_equipment` | 45 days | one locked four-battalion division "Old Settlers Militia" in the capital | every allowed division stands and none is being raised |
+| D3 | `NAM_board_relief_fund` | `family_relief_fund` | 60 capital | instant | timed spirit `NAM_board_family_relief` for 180 days, Smenkom +3 | - (the spirit gates a repeat) |
+| D4 | `NAM_board_retender` | `lawyers_of_both_shores` | native 25 PP | reopens the selected company's lot as its bid mission | the holder keeps or loses the lot; no second charter grant | all three lots retendered |
+| D5 | `NAM_board_underwrite_payroll` "Жалованье чиновникам материка" | `incumbents_credit` | 30 capital, 20 PP | 90 days, a chancery slot, again 90 days later | `NAM_mainland_bought_officials` for 90 days on EFL and AZH while they exist and are not NAM subjects; Navis -3; Loren and Reidbank +4 on the first run | - |
+| D6 | `NAM_board_redeem_mortgages` "Скупка эфлорских закладных" | `eflor_debt_purchase` | 50 capital | 60 days | `NAM_board_eflor_mortgages` +1, at most 3; each pays 100 capital and Reidbank +5 at the return victory | the third package is bought |
+
+D2, D4 and D6 leave the list once used up, so the council category does not
+grow. Each cancellation (`NAM_board_operable = no`) refunds the capital or
+the goods, keeps political power spent and releases the slot. Pinned by
+`test_council_rows_hide_once_used_up`.
+
+### C.7 Directory campaigns
+
+The eight campaigns `NAM_dir_campaign_<name>` (timed spirits
+`NAM_dir_campaign_<name>_spirit`, launch effects
+`NAM_dir_campaign_<name>_launch`, at most two running through
+`NAM_dir_campaign_room`) sit at the end of the category
+`NAM_public_campaigns`. That category shows on this route from the takeover
+until `NAM_board_ended`, and its title and description switch to the
+Directory through `NAMPublicCampaignsTitle` / `NAMPublicCampaignsDesc`. The
+nine mainland campaigns of the category carry
+`NAM_mainland_programmes_active = yes` in their `visible`, so they never show
+on the islands.
+
+"Дивиденд в каждый дом" (`dividend`) is an economic action without the
+propaganda prefix and is open from the takeover. The seven propaganda
+campaigns open by a focus: the reward carries `unlock_decision_tooltip =
+NAM_dir_campaign_<name>`, `custom_effect_tooltip =
+NAM_dir_campaign_<name>_unlock_tt` and, in its `hidden_effect`,
+`set_country_flag = NAM_dir_campaign_<name>_open`.
+
+| Campaign | Flag | Focus | Placement |
+| --- | --- | --- | --- |
+| `pays_on_time` "Директория платит в срок" | `NAM_dir_campaign_pays_on_time_open` | `property_qualification` | top of the reward |
+| `newsreel` "Акционерная кинохроника" | `NAM_dir_campaign_newsreel_open` | `captains_share_qualification` | top of the reward |
+| `gazette` "Ведомости Директории" | `NAM_dir_campaign_gazette_open` | `foundry_mark` | top of the reward |
+| `lottery` "Лотерея акций" | `NAM_dir_campaign_lottery_open` | `society_99_1` | top of the reward |
+| `return` "Мы вернёмся" | `NAM_dir_campaign_return_open` | `return_voyage` | top of the reward |
+| `agitators` "Агитаторы на жалованье" | `NAM_dir_campaign_agitators_open` | `elected_in_absentia` | alive branch (Weber) |
+| `mutineers` "Мятежники в погонах" | `NAM_dir_campaign_mutineers_open` | `inheritance_without_empire` | alive branch (Karamyshev) |
+
+`NAM_dir_campaigns_close`, the last call of `NAM_board_end_operations`,
+removes the running spirits and clears the seven flags. A launch moves trust
+once; campaigns are an optional paid lever and are not part of the route
+totals. Pinned by `NamDirectoryCampaignTests` and
+`test_directory_campaigns_sit_in_the_public_campaigns_category`.
+
+### C.8 Development: the reset at the flight and the six programmes
+
+**Reset.** `NAM_rw_settle_island_exile` calls
+`ADISCORD_reset_country_development` (in
+`common/scripted_effects/ADISCORD_society_development_effects.txt`) on NAM
+while the global flag `ADISCORD_nam_resource_war_island_exile` is still unset,
+so it runs once per campaign on the ordinary and the debug entry. Every track
+returns to level 1 with zero progress and zero monthly growth; science then
+regains points from research slots alone. The debug idea reset keeps every
+law slot, so the reset survives `NAM_debug_prepare_corporate_start`. The
+evacuation tooltip `NAM_exile_evacuation_tt` (event
+`ADISCORD_nam_resource_war.81`) lists the level-1 penalties.
+
+**Focus rows.** Fifteen rows rebuild development, in position 2 of the
+reward. The first row of each track calls `ADISCORD_reform_<track>_development`
+(+25 progress now, +2 growth a month); every later row calls
+`ADISCORD_programme_<track>_development` (+40 progress, no growth, economy
+marked dirty).
+
+| Track | Reform | Progress rows |
+| --- | --- | --- |
+| society | `beacon_out` | `eflor_debt_purchase`, `both_squares_bought` |
+| social system | `widows_share` | `corporate_mass_housing` |
+| army | `order_arsenal` | `factory_guard` |
+| cultural | `copy_across_strait` | `mourning_licence` |
+| state | `bought_century` | `admitted_owners_register` or `boundary_notches`, `chairmans_copy` |
+| economic | `property_qualification` | `bearer_warrant` |
+
+Science has no reform; the research steps of C.2 are its focus-side help. No
+other focus or event calls a development effect except the four answers of
+C.5.
+
+**Programmes.** Category `NAM_directory_development` "Развитие Директории"
+(visible under the takeover until `NAM_board_ended`, no
+`visible_when_empty`, so it appears with the first programme). Arrays
+`NAM_dev_runs` and `NAM_dev_running` (size 7) are created in the one-time guard
+of `NAM_board_initialize`; index 1-6 is the row of the table.
+
+| # | Decision | Track | Opened by | Price | Result besides +40 progress | Sponsor +4 | Rival -3 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `NAM_dev_census_halls` | society | `salt_monopoly` | 20 PP, 30 capital | 1500 manpower | Smenkom | Reidbank |
+| 2 | `NAM_dev_harbour_infirmaries` | social system | `widows_share` | 40 capital | stability +2% | Navis | Arktur |
+| 3 | `NAM_dev_drill_cadres` | army | `arsenal_monopoly` | 30 PP, 20 capital | 15 army experience | Arktur | Ferrant |
+| 4 | `NAM_dev_works_schools` | cultural | `foundry_mark` | 25 PP, 30 capital | one industry research bonus | Ferrant | Smenkom |
+| 5 | `NAM_dev_notary_registers` | state | `bought_century` | native 35 PP | 25 political power | Reidbank | Loren |
+| 6 | `NAM_dev_oil_credit` | economic | `quay_chain` | 50 capital | fuel reserve +6000 | Loren | Navis |
+
+Shared rules: 60 days, a chancery slot for the whole run, 120 days before the
+next run, at most two runs per programme. The first run needs the sponsor not
+boycotting, the second needs it "for". The `NAM_dev_running^k` receipt gates
+the result in `remove_effect` and the refund in `cancel_effect`
+(`NAM_board_operable = no`: capital back, political power spent, run and slot
+returned). The `visible` hides a programme after its second run unless a run
+is in progress. Pinned by
+`test_flight_resets_development_once_and_survives_the_debug_start`,
+`test_development_programme_effects_add_progress_only`,
+`test_directory_programmes_follow_their_price_run_and_sponsor` and
+`test_development_rows_follow_the_table_outside_hidden_effects`.
+
+### C.9 Mainland leftovers
+
+Completed mainland focuses stay completed through the tree swaps, so a
+`has_completed_focus` gate does not hide mainland content on the islands. The
+trigger `NAM_mainland_programmes_active` (no island exile, no takeover) is the
+gate.
+
+Ending at the flight:
+
+- the categories `NAM_mobilisation`, `NAM_administration`,
+  `NAM_postwar_orders` and `NAM_basin_economy` (the last one stays for the
+  south-war tree) and the nine mainland campaigns of `NAM_public_campaigns`
+  hide; no new mainland work starts;
+- 31 running decisions and the two combine missions
+  (`NAM_combine_frame_process`, `NAM_combine_plant_process`) that act on
+  mainland states are cancelled through their own `cancel_effect` by the
+  condition `NAM_mainland_programmes_active = no` with the tooltip
+  `NAM_mainland_programmes_lost_tt`, placed as a branch of a top-level `OR`
+  of the `cancel_trigger`;
+- running national work (the `NAM_ind_*` projects, the pre-war campaigns)
+  finishes for the government in exile and returns its slot, because its
+  payload names no state;
+- the settlement's first NAM block removes the mission
+  `NAM_depot_public_hearing`, calls `NAM_end_depot_concessions` (the depot
+  case and the spirit `NAM_private_tank_farms`) and clears `NAM_coup_pending`;
+  the rivals and pillar monthly blocks read `NAM_mainland_programmes_active`;
+- country development (C.8).
+
+Ending at the takeover:
+
+- `NAM_board_install_spirits` removes the balance of power `NAM_ladder_bop`
+  (the interregnum events may still read it until then) and the mainland
+  dynamic modifiers;
+- `NAM_clear_mainland_national_spirits` (ordinary entry) and the debug idea
+  reset clear the mainland national spirits.
+
+After the flight and before the takeover only `NAM_interregnum_quay` is
+visible. After the takeover the island categories are `NAM_two_judases`,
+`NAM_free_zones`, `NAM_public_campaigns` and, once a programme opens,
+`NAM_directory_development`. Pinned by
+`test_mainland_leftovers_end_at_the_flight_and_the_takeover` and
+`test_corporate_takeover_exposes_only_the_island_categories`.
+
+### C.10 Interregnum rewards
+
+The 56-day interregnum gives men, readiness or capital now and pledges for the
+takeover. `NAM_interregnum_apply_pledges`, called by `NAM_corp_takeover`
+after the opening trust is written, applies them: the boards' lane gives two
+companies trust, the committees' and officers' lanes raise that camp's opening
+support (a worse kill band later). Capital goes through
+`NAM_corp_seed_capital` and `NAM_corp_capital_add`. `open_customs` fires event
+82, whose answer is the lane pledge. Pinned by
+`test_interregnum_pledges_move_the_opening_camp_support` and
+`test_interregnum_finals_and_board_capital`.
+
+Nothing in this appendix was checked in the running game.
 
 ## Appendix D. Outline of the lower branch
 

@@ -215,6 +215,7 @@ STP_party_constitution_category = {
 }
 
 STP_ch_chapters = {
+	scripted_gui = ADISCORD_STP_chapter_votes
 	icon = generic_political_discourse
 	allowed = {
 		tag = STP

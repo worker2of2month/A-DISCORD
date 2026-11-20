@@ -112,4 +112,11 @@ scripted_gui = {
 			STP_pf_radicals_card = { frame = STP_pf_radicals_frame }
 		}
 	}
+
+	ADISCORD_STP_chapter_votes = {
+		context_type = decision_category
+		window_name = "ADISCORD_STP_chapter_votes_window"
+		visible = { always = yes }
+		ai_enabled = { always = no }
+	}
 }

@@ -905,14 +905,12 @@ NAM_exile_corporate_plan = {
 		NAM_board_last_debtor
 		NAM_board_foundry_mark
 		NAM_board_island_fleet_shares
-		NAM_board_double_lock_warehouse
 		NAM_board_loren_receipt
 		NAM_board_inheritance_without_empire
 		NAM_board_facsimile_blood
 		NAM_board_purged_majority
 		NAM_board_elected_in_absentia
 		NAM_board_factory_guard
-		NAM_board_captains_share_qualification
 		NAM_board_bearer_warrant
 		NAM_board_uncrested_buyers
 		NAM_board_widows_share
@@ -932,7 +930,6 @@ NAM_exile_corporate_plan = {
 		NAM_board_corporate_mass_housing
 		NAM_board_harbour_exchange
 		NAM_board_admitted_owners_register
-		NAM_board_original_stays_home
 		NAM_board_sole_vote_holder
 		NAM_board_copy_across_strait
 		NAM_board_family_relief_fund

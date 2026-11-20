@@ -978,3 +978,15 @@ country_event = {
 		ADISCORD_superevent_enqueue = yes
 	}
 }
+
+# superevent_nam_mainland_inventory
+country_event = {
+	id = ADISCORD_superevent.76
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 78 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}

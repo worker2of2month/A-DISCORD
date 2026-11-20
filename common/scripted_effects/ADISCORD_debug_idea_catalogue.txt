@@ -641,9 +641,14 @@ NAM_clear_mainland_national_spirits = {
 		NAM_board_loren_order_fee
 		NAM_board_navis_free_fairway
 		NAM_board_no_confidence_spirit
+		NAM_board_partition_charter
 		NAM_board_preview_arsenal
+		NAM_board_preview_beacon
 		NAM_board_preview_facsimile
+		NAM_board_preview_guard
+		NAM_board_preview_inventory
 		NAM_board_preview_purged
+		NAM_board_preview_research
 		NAM_board_preview_residency
 		NAM_board_preview_residency_politics
 		NAM_board_preview_society
@@ -657,6 +662,7 @@ NAM_clear_mainland_national_spirits = {
 		NAM_board_sanction_navis
 		NAM_board_sanction_reidbank
 		NAM_board_sanction_smenkom
+		NAM_board_silent_vote
 		NAM_board_smenkom_brigades
 		NAM_board_smenkom_closed_shop
 		NAM_bond_payments
@@ -669,6 +675,14 @@ NAM_clear_mainland_national_spirits = {
 		NAM_crisis_drought_contained
 		NAM_crisis_flood
 		NAM_crisis_flood_contained
+		NAM_dir_campaign_agitators_spirit
+		NAM_dir_campaign_dividend_spirit
+		NAM_dir_campaign_gazette_spirit
+		NAM_dir_campaign_lottery_spirit
+		NAM_dir_campaign_mutineers_spirit
+		NAM_dir_campaign_newsreel_spirit
+		NAM_dir_campaign_pays_on_time_spirit
+		NAM_dir_campaign_return_spirit
 		NAM_exile_free_islands
 		NAM_exile_pillar_junta
 		NAM_favour_dist_idea
@@ -701,6 +715,7 @@ NAM_clear_mainland_national_spirits = {
 		NAM_judas_staff_oath
 		NAM_judas_unseated_proxies
 		NAM_judas_weber_committees
+		NAM_mainland_bought_officials
 		NAM_metropolitan_garrison_charter
 		NAM_mil_mobile_operation
 		NAM_national_spirit

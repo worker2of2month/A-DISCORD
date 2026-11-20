@@ -980,6 +980,29 @@ ADISCORD_initialize_default_country_development = {
 	ADISCORD_update_total_country_development = yes
 }
 
+# COUNTRY. A government that loses its institutions: every track returns to
+# level 1 with no progress and no accumulated monthly growth. This is not a
+# handoff; the country keeps its tag, laws and economy registration.
+ADISCORD_reset_country_development = {
+	ADISCORD_initialize_society_development_variables = yes
+	ADISCORD_set_society_development_1 = yes
+	ADISCORD_set_social_system_development_1 = yes
+	ADISCORD_set_army_development_1 = yes
+	ADISCORD_set_cultural_development_1 = yes
+	ADISCORD_set_state_development_1 = yes
+	ADISCORD_set_economic_development_1 = yes
+	ADISCORD_set_science_development_1 = yes
+	set_variable = { var = ADISCORD_society_development_monthly_growth value = 0 }
+	set_variable = { var = ADISCORD_social_system_development_monthly_growth value = 0 }
+	set_variable = { var = ADISCORD_army_development_monthly_growth value = 0 }
+	set_variable = { var = ADISCORD_cultural_development_monthly_growth value = 0 }
+	set_variable = { var = ADISCORD_state_development_monthly_growth value = 0 }
+	set_variable = { var = ADISCORD_economic_development_monthly_growth value = 0 }
+	set_variable = { var = ADISCORD_science_development_monthly_growth value = 0 }
+	ADISCORD_update_total_country_development = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
 ADISCORD_tick_society_development_monthly = {
 	set_variable = {
 		var = ADISCORD_society_development_monthly_gain
@@ -1478,6 +1501,62 @@ ADISCORD_reform_economic_development = {
 		ADISCORD_initialize_society_development_variables = yes
 		add_to_variable = { var = ADISCORD_economic_development_progress value = 25 }
 		add_to_variable = { var = ADISCORD_economic_development_monthly_growth value = 2 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY. A one-off investment in a track: progress only, no lasting growth,
+# for programmes and story answers that must not compound over a campaign.
+ADISCORD_programme_society_development = {
+	custom_effect_tooltip = ADISCORD_society_development_programme_tt
+	hidden_effect = {
+		ADISCORD_initialize_society_development_variables = yes
+		add_to_variable = { var = ADISCORD_society_development_progress value = 40 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+ADISCORD_programme_social_system_development = {
+	custom_effect_tooltip = ADISCORD_social_system_development_programme_tt
+	hidden_effect = {
+		ADISCORD_initialize_society_development_variables = yes
+		add_to_variable = { var = ADISCORD_social_system_development_progress value = 40 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+ADISCORD_programme_army_development = {
+	custom_effect_tooltip = ADISCORD_army_development_programme_tt
+	hidden_effect = {
+		ADISCORD_initialize_society_development_variables = yes
+		add_to_variable = { var = ADISCORD_army_development_progress value = 40 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+ADISCORD_programme_cultural_development = {
+	custom_effect_tooltip = ADISCORD_cultural_development_programme_tt
+	hidden_effect = {
+		ADISCORD_initialize_society_development_variables = yes
+		add_to_variable = { var = ADISCORD_cultural_development_progress value = 40 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+ADISCORD_programme_state_development = {
+	custom_effect_tooltip = ADISCORD_state_development_programme_tt
+	hidden_effect = {
+		ADISCORD_initialize_society_development_variables = yes
+		add_to_variable = { var = ADISCORD_state_development_progress value = 40 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+ADISCORD_programme_economic_development = {
+	custom_effect_tooltip = ADISCORD_economic_development_programme_tt
+	hidden_effect = {
+		ADISCORD_initialize_society_development_variables = yes
+		add_to_variable = { var = ADISCORD_economic_development_progress value = 40 }
 		ADISCORD_economy_mark_dirty = yes
 	}
 }

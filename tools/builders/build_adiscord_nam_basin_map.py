@@ -24,6 +24,7 @@ GFX = Path("interface/ADISCORD_NAM_basin.gfx")
 BEGIN = "# BEGIN GENERATED NAM BASIN MAP"
 END = "# END GENERATED NAM BASIN MAP"
 COLOURS = ((60, 150, 143, 68), (190, 78, 65, 115), (110, 116, 121, 110))
+CATEGORY_PICTURE_GAP = 12
 
 
 def pack_rgb(rgb: np.ndarray) -> np.ndarray:
@@ -411,6 +412,180 @@ def district_cards(source: bytes) -> bytes:
     return text.encode("utf-8")
 
 
+def camp_dossiers(source: bytes) -> bytes:
+    cards = []
+    for camp, character, x in (("weber", "Yaroslav_Weber", 4), ("karamyshev", "Rostislav_Karamyshev", 233)):
+        key = f"NAM_judas_{camp}"
+        cards.append(f'''		containerWindowType = {{
+			name = "{key}_card"
+			position = {{ x = {x} y = {2 + CATEGORY_PICTURE_GAP} }}
+			size = {{ width = 223 height = 148 }}
+			background = {{
+				name = "{key}_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}}
+			iconType = {{
+				name = "{key}_portrait"
+				position = {{ x = 8 y = 7 }}
+				spriteType = "GFX_portrait_NAM_{character}"
+				scale = 0.25
+				pdx_tooltip = "{key}_details"
+			}}
+			instantTextBoxType = {{
+				name = "{key}_heading"
+				position = {{ x = 55 y = 9 }}
+				text = "{key}_heading"
+				font = "hoi_16mbs"
+				maxWidth = 160
+				maxHeight = 48
+				fixedsize = yes
+				pdx_tooltip = "{key}_details"
+			}}
+			instantTextBoxType = {{
+				name = "{key}_summary"
+				position = {{ x = 10 y = 66 }}
+				text = "{key}_summary"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 76
+				fixedsize = yes
+				pdx_tooltip = "{key}_details"
+			}}
+		}}''')
+
+    start = "\t# BEGIN GENERATED NAM CAMP DOSSIERS"
+    end = "\t# END GENERATED NAM CAMP DOSSIERS"
+    panel = (start + '\n\tcontainerWindowType = {\n\t\tname = "ADISCORD_NAM_camps_window"\n'
+             '\t\tposition = { x = 0 y = 0 }\n'
+             f'\t\tsize = {{ width = 460 height = {152 + CATEGORY_PICTURE_GAP} }}\n'
+             + "\n\n".join(cards) + "\n\t}\n" + end + "\n\n")
+    anchor = '\tcontainerWindowType = {\n\t\tname = "ADISCORD_NAM_board_window"'
+    pattern = rf"(?:{re.escape(start)}.*?{re.escape(end)}\n\n)?(?={re.escape(anchor)})"
+    text, count = re.subn(pattern, lambda _: panel, source.decode("utf-8"), count=1, flags=re.S)
+    if count != 1:
+        raise ValueError("Expected the corporate board window")
+    return text.encode("utf-8")
+
+
+def board_picture_gap(source: bytes) -> bytes:
+    text = source.decode("utf-8")
+    start = text.index('\tcontainerWindowType = {\n\t\tname = "ADISCORD_NAM_board_window"')
+    end = text.index("\n\t}", start)
+    board = text[start:end]
+    # Direct children include the pyramid, its overlays and the transparent seat buttons.
+    positions = re.compile(r"^(\t{3}position = \{ x = -?\d+ y = )(-?\d+)", re.M)
+    offset = CATEGORY_PICTURE_GAP - min(int(match[2]) for match in positions.finditer(board))
+    if offset:
+        def shift(match):
+            return match[1] + str(int(match[2]) + offset)
+
+        board = positions.sub(shift, board)
+        board, count = re.subn(r"^(\t{2}size = \{ width = \d+ height = )(\d+)", shift, board, flags=re.M)
+        if count != 1:
+            raise ValueError("Expected one corporate board window size")
+    return (text[:start] + board + text[end:]).encode("utf-8")
+
+
+def report_card(name, x, y, width, height, fields):
+    lines = [
+        "\t\tcontainerWindowType = {",
+        f'\t\t\tname = "{name}"',
+        f"\t\t\tposition = {{ x = {x} y = {y} }}",
+        f"\t\t\tsize = {{ width = {width} height = {height} }}",
+        "\t\t\tbackground = {",
+        f'\t\t\t\tname = "{name}_background"',
+        '\t\t\t\tquadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"',
+        "\t\t\t}",
+    ]
+    for key, left, top, span, depth, tip in fields:
+        lines.extend((
+            "\t\t\tinstantTextBoxType = {",
+            f'\t\t\t\tname = "{key}"',
+            f"\t\t\t\tposition = {{ x = {left} y = {top} }}",
+            f'\t\t\t\ttext = "{key}"',
+            '\t\t\t\tfont = "hoi_16mbs"',
+            f"\t\t\t\tmaxWidth = {span}",
+            f"\t\t\t\tmaxHeight = {depth}",
+            "\t\t\t\tfixedsize = yes",
+            f'\t\t\t\tpdx_tooltip = "{tip}"',
+            "\t\t\t}",
+        ))
+    return "\n".join([*lines, "\t\t}"])
+
+
+def mainland_reports(source: bytes) -> bytes:
+    text = source.decode("utf-8")
+    # The course needs a full line for the longest party majority in either language.
+    for tile, left, width in (("phase", 12, 108), ("underground", 128, 100), ("ladder", 236, 212)):
+        pattern = rf'(name = "NAM_bw_{tile}"\n\s+position = \{{ x = )\d+( y = 4 \}}\n\s+size = \{{ width = )\d+'
+        text, count = re.subn(pattern, rf"\g<1>{left}\g<2>{width}", text)
+        if count != 1:
+            raise ValueError(f"Expected basin header tile {tile}")
+        for field, top, height in (("label", 6, 18), ("value", 29, 22)):
+            pattern = (rf'(name = "NAM_bw_{tile}_{field}"\n\s+position = \{{ x = 8 y = )\d+'
+                       r'( \}\n\s+text = "[^"]*"\n\s+font = "[^"]*"\n\s+maxWidth = )\d+(\n\s+maxHeight = )\d+')
+            text, count = re.subn(pattern, rf"\g<1>{top}\g<2>{width - 16}\g<3>{height}", text)
+            if count != 1:
+                raise ValueError(f"Expected {field} in basin header tile {tile}")
+
+    calendar = [("NAM_calendar_heading", 10, 7, 430, 19, "NAM_calendar_rules")]
+    for i, measure in enumerate(("desk", "azhar", "claims", "dossier", "protocol")):
+        y = 32 + i * 24
+        key = f"NAM_calendar_{measure}"
+        calendar.extend((
+            (key, 10, y, 203, 21, "NAM_calendar_rules"),
+            (key + "_days", 218, y, 65, 21, "NAM_calendar_rules"),
+            (key + "_status", 289, y, 150, 21, "NAM_calendar_rules"),
+        ))
+    calendar.append(("NAM_calendar_price", 10, 158, 428, 38, "NAM_calendar_rules"))
+    reports = {
+        "calendar": (206, [report_card("NAM_calendar_table", 4, 2, 452, 200, calendar)]),
+        "network": (172, [
+            report_card("NAM_network_growth", 4, 2, 223, 166, [
+                ("NAM_network_growth_title", 10, 7, 203, 20, "NAM_network_growth_rules"),
+                ("NAM_network_factors", 10, 33, 203, 129, "NAM_network_growth_rules"),
+            ]),
+            report_card("NAM_network_security", 233, 2, 223, 166, [
+                ("NAM_network_risk_title", 10, 7, 203, 20, "NAM_network_risk_rules"),
+                ("NAM_network_risk", 10, 31, 203, 48, "NAM_network_risk_rules"),
+                ("NAM_network_guard_title", 10, 77, 203, 20, "NAM_network_risk_rules"),
+                ("NAM_network_guards", 10, 101, 203, 59, "NAM_network_risk_rules"),
+            ]),
+        ]),
+        "reserve": (240, [
+            report_card("NAM_reserve_ledger", 4, 2, 223, 137, [
+                ("NAM_reserve_title", 10, 7, 203, 20, "NAM_reserve_rules"),
+                ("NAM_reserve_units", 10, 32, 203, 100, "NAM_reserve_rules"),
+            ]),
+            report_card("NAM_reserve_works", 233, 2, 223, 137, [
+                ("NAM_reserve_works_title", 10, 7, 203, 20, "NAM_reserve_defence_rules"),
+                ("NAM_mobilisation_active_desc", 10, 32, 203, 100, "NAM_reserve_defence_rules"),
+            ]),
+            report_card("NAM_reserve_districts", 4, 143, 452, 93, [
+                ("NAM_reserve_hold_title", 10, 7, 430, 20, "NAM_hold_field_context_tt"),
+                ("NAM_reserve_hold_names", 10, 30, 202, 57, "NAM_hold_field_context_tt"),
+                ("NAM_reserve_hold_orders", 219, 30, 222, 57, "NAM_hold_field_context_tt"),
+            ]),
+        ]),
+    }
+    windows = []
+    for name, (height, cards) in reports.items():
+        windows.append("\n".join([
+            "\tcontainerWindowType = {", f'\t\tname = "ADISCORD_NAM_{name}_window"',
+            "\t\tposition = { x = 0 y = 0 }", f"\t\tsize = {{ width = 460 height = {height} }}",
+            "\n\n".join(cards), "\t}",
+        ]))
+    begin = "\t# BEGIN GENERATED NAM MAINLAND REPORTS"
+    end = "\t# END GENERATED NAM MAINLAND REPORTS"
+    anchor = "\t# BEGIN GENERATED NAM CAMP DOSSIERS"
+    region = begin + "\n" + "\n\n".join(windows) + "\n" + end + "\n\n"
+    pattern = rf"(?:{re.escape(begin)}.*?{re.escape(end)}\n\n)?(?={re.escape(anchor)})"
+    text, count = re.subn(pattern, lambda _: region, text, count=1, flags=re.S)
+    if count != 1:
+        raise ValueError("Expected NAM dossier windows")
+    return text.encode("utf-8")
+
+
 def build_outputs() -> tuple[dict[Path, bytes], dict[int, dict]]:
     images, geometry = map_images()
     images.update(ui_images())
@@ -419,7 +594,8 @@ def build_outputs() -> tuple[dict[Path, bytes], dict[int, dict]]:
         buffer = io.BytesIO()
         image.save(buffer, format="PNG", optimize=True)
         outputs[OUT / filename] = buffer.getvalue()
-    outputs[GUI] = district_cards(replace_generated(GUI, gui_block(geometry), "\t\t"))
+    basin_gui = district_cards(replace_generated(GUI, gui_block(geometry), "\t\t"))
+    outputs[GUI] = mainland_reports(camp_dossiers(board_picture_gap(basin_gui)))
     outputs[GFX] = replace_generated(GFX, gfx_block(images), "\t")
     return outputs, geometry
 

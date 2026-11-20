@@ -7,6 +7,7 @@ focus_tree = {
 	focus = {
 		id = STP_kc_emergency_staff
 		icon = {
+			GFX_focus_STP_kc_emergency_staff = { tag = STS }
 			GFX_focus_STP_ps_joint_staff = { tag = STP }
 			GFX_focus_STP_cw_arm_the_north = yes
 		}
@@ -58,7 +59,10 @@ focus_tree = {
 
 	focus = {
 		id = STP_kc_war_production
-		icon = GFX_focus_STP_cw_capital_reserve
+		icon = {
+			GFX_focus_STP_kc_war_production = { tag = STS }
+			GFX_focus_STP_cw_capital_reserve = yes
+		}
 		x = -2
 		y = 1
 		relative_position_id = STP_kc_emergency_staff
@@ -89,6 +93,7 @@ focus_tree = {
 	focus = {
 		id = STP_kc_army_supply
 		icon = {
+			GFX_focus_STP_kc_army_supply = { tag = STS }
 			GFX_focus_STP_party_supply_directorate = { tag = STP }
 			GFX_focus_STP_cw_arm_the_north = yes
 		}
@@ -119,6 +124,7 @@ focus_tree = {
 	focus = {
 		id = STP_kc_counterattack_plan
 		icon = {
+			GFX_focus_STP_kc_counterattack_plan = { tag = STS }
 			GFX_focus_STP_cw_capital_counteroffensive = { tag = STP }
 			GFX_focus_STP_cw_arm_the_north = yes
 		}
@@ -2521,6 +2527,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_regional_citizenship
 		icon = {
+			GFX_focus_STP_pw_regional_citizenship = { tag = STS }
 			GFX_focus_STP_party_district_compact = { tag = STP }
 			GFX_focus_STP_pw_party_open_settlement = yes
 		}
@@ -2542,7 +2549,10 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_cadastral_commissions
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = {
+			GFX_focus_STP_pw_cadastral_commissions = { tag = STS }
+			GFX_focus_STP_cw_protocol_office = yes
+		}
 		x = -2
 		y = 1
 		cost = 4
@@ -2562,6 +2572,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_regional_connections
 		icon = {
+			GFX_focus_STP_pw_regional_connections = { tag = STS }
 			GFX_focus_STP_ps_foreign_supply_desk = { tag = STP }
 			GFX_focus_VAL_Market_Roads_North = yes
 		}
@@ -2591,6 +2602,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_workshop_contracts
 		icon = {
+			GFX_focus_STP_pw_workshop_contracts = { tag = STS }
 			GFX_focus_STP_party_technical_institutes = { tag = STP }
 			GFX_focus_STP_pw_party_civilian_retraining = yes
 		}
@@ -2620,7 +2632,10 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_local_officer_courses
-		icon = GFX_focus_STP_pc_sdir_officer_college
+		icon = {
+			GFX_focus_STP_pw_local_officer_courses = { tag = STS }
+			GFX_focus_STP_pc_sdir_officer_college = yes
+		}
 		x = 2
 		y = 2
 		cost = 4
@@ -2646,6 +2661,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_common_market
 		icon = {
+			GFX_focus_STP_pw_common_market = { tag = STS }
 			GFX_focus_STP_ps_expedition_logistics = { tag = STP }
 			GFX_focus_VAL_Bread_From_Barracks = yes
 		}
@@ -2670,6 +2686,7 @@ focus_tree = {
 	focus = {
 		id = STP_pc_cannibal_campaign
 		icon = {
+			GFX_focus_STP_pc_cannibal_campaign = { tag = STS }
 			GFX_focus_STP_cw_capital_counteroffensive = { tag = STP }
 			GFX_focus_STP_Break_The_Northern_Ring = yes
 		}
@@ -2731,6 +2748,7 @@ focus_tree = {
 	focus = {
 		id = STP_pw_kefreyt_settlement
 		icon = {
+			GFX_focus_STP_pw_kefreyt_settlement = { tag = STS }
 			GFX_focus_STP_ph_last_signature = { tag = STP }
 			GFX_focus_STP_GUARANTEE_MINISTERS = yes
 		}

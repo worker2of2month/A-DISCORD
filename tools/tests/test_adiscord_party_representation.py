@@ -144,8 +144,18 @@ class PartyRepresentationTests(unittest.TestCase):
             self.assertTrue(any(row.key == "text" and
                                 scalar(row.value, "localization_key") == f"country_culture|{group}_party"
                                 for row in names))
-            first = next(row.value for row in names if row.key == "text")
-            self.assertEqual(scalar(block(first, "trigger"), "has_government"), group)
+            name_rows = [row.value for row in names if row.key == "text"]
+            if group == "technocracy":
+                panel = resolvers["GetPartyLocTechnocracy"]
+                panel_first = next(row.value for row in panel if row.key == "text")
+                for board in (name_rows.pop(0), panel_first):
+                    self.assertEqual(scalar(block(board, "trigger"), "tag"), "NAM")
+                    self.assertEqual(scalar(block(board, "trigger"), "has_country_flag"), "NAM_corp_takeover")
+                    key = scalar(board, "localization_key")
+                    self.assertEqual(key, "NAM_board_technocracy_party")
+                    for entries in self.localisation.values():
+                        self.assertTrue(entries[key][0][1].split(maxsplit=1)[1].strip())
+            self.assertEqual(scalar(block(name_rows[0], "trigger"), "has_government"), group)
             rows = resolvers[f"GetADiscordPartyStatus{suffix}"]
             for status in ("leader", "member", "banned"):
                 name = f"ADISCORD_party_{group}_{status}"
@@ -167,7 +177,7 @@ class PartyRepresentationTests(unittest.TestCase):
                     and scalar(entry.value, "localization_key") == key)
             self.assertEqual(scalar(block(row, "trigger"), "ADISCORD_party_etatism_member"), "yes")
 
-    def test_party_hover_and_badges_align_with_the_native_colour_legend(self):
+    def test_party_badges_leave_hover_to_the_native_colour_legend(self):
         def widget(entries, kind, name):
             result, = (e.value for e in entries if e.key == kind and scalar(e.value, "name") == name)
             return result
@@ -184,7 +194,11 @@ class PartyRepresentationTests(unittest.TestCase):
         pitch = int(scalar(block(native_grid, "slotsize"), "height"))
         origin = {axis: int(scalar(block(legend, "position"), axis)) for axis in ("x", "y")}
         origin["y"] += int(scalar(block(legend, "margin"), "top"))
-        self.assertEqual(int(scalar(block(overlay, "size"), "height")), pitch * len(groups))
+        self.assertEqual(scalar(block(overlay, "size"), "width"), "0")
+        self.assertEqual(scalar(block(overlay, "size"), "height"), "0")
+        self.assertEqual(scalar(overlay, "clipping"), "no")
+        self.assertEqual({e.key for e in overlay if isinstance(e.value, list)},
+                         {"position", "size", "iconType"})
         self.assertEqual({axis: int(scalar(block(overlay, "position"), axis)) for axis in ("x", "y")}, origin)
         for status in ("member", "leader"):
             path = ROOT / "gfx/interface/party_status_system" / f"party_status_coalition_{status}.png"
@@ -193,16 +207,10 @@ class PartyRepresentationTests(unittest.TestCase):
                 self.assertEqual(image.mode, "RGBA")
                 self.assertGreater(image.getchannel("A").histogram()[0], image.width * image.height // 5)
         for i, group in enumerate(groups):
-            hit = widget(overlay, "buttonType", f"party_{group}_hover")
-            self.assertEqual(scalar(hit, "pdx_tooltip"), f"ADISCORD_party_{group}_tt")
             for axis in ("x", "y"):
                 offset = i * pitch if axis == "y" else 0
                 fill_start = (int(scalar(block(native_grid, "position"), axis)) +
                               int(scalar(block(fill, "position"), axis)) + offset)
-                hit_start = int(scalar(block(hit, "position"), axis))
-                hit_end = hit_start + int(scalar(block(hit, "size"), axis))
-                self.assertLessEqual(hit_start, fill_start)
-                self.assertGreaterEqual(hit_end, fill_start + 13)
                 for status in ("banned", "member", "leader"):
                     badge = widget(overlay, "iconType", f"party_{group}_{status}")
                     badge_start = int(scalar(block(badge, "position"), axis))
@@ -210,11 +218,8 @@ class PartyRepresentationTests(unittest.TestCase):
                         self.assertEqual(badge_start, fill_start)
                     else:
                         self.assertEqual(badge_start + 8, fill_start + 6)
-                        self.assertGreaterEqual(badge_start, hit_start)
-                        self.assertLessEqual(badge_start + 16, hit_end)
                         self.assertNotIn("scale", {entry.key for entry in badge})
                     self.assertEqual(scalar(badge, "alwaystransparent"), "yes")
-        self.assertEqual(len([e for e in overlay if e.key == "buttonType"]), len(groups))
         self.assertEqual(len([e for e in overlay if e.key == "iconType"]), 3 * len(groups))
         self.assertFalse(any(e.key == "name" and e.value in {
             "ADISCORD_parties_launcher", "ADISCORD_parties_window", "ADISCORD_parties_toggle",
@@ -466,7 +471,8 @@ class PartyRepresentationTests(unittest.TestCase):
         effects = parsed(ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
         tree = "ADISCORD_NAM_exile_corporate.txt"
         final = "NAM_island_partition_succession"
-        self.assertEqual(scalar(block(focus_reward(tree, "NAM_board_partition_night"), "hidden_effect"), final), "yes")
+        partition = [row.value for row in focus_reward(tree, "NAM_board_partition_night") if row.key == "hidden_effect"]
+        self.assertEqual(scalar(partition[0], final), "yes")
         triggers = parsed(ROOT / "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt")
         chair_rules = block(triggers, "NAM_board_chairman_rules")
         for branch in (row.value for row in block(effects, final) if row.key in ("if", "else_if")):
@@ -490,7 +496,16 @@ class PartyRepresentationTests(unittest.TestCase):
                     facts["NAM", "NAM_board_chairman_rules", "yes"] = matches_conditions(chair_rules, facts, "NAM")
                     for choice in (humanists, empire):
                         focus = "NAM_board_" + choice
-                        action, = block(focus_reward(tree, focus), "hidden_effect")
+                        hidden = [row.value for row in focus_reward(tree, focus) if row.key == "hidden_effect"]
+                        # The settlement call stays alone in the first hidden_effect; a kill
+                        # fires its story event from a second one.
+                        action, = hidden[0]
+                        if choice in {"last_debtor", "posthumous_signature"}:
+                            self.assertEqual(len(hidden), 2, focus)
+                            event, = hidden[1]
+                            self.assertEqual(event.key, "country_event", focus)
+                        else:
+                            self.assertEqual(len(hidden), 1, focus)
                         choice_effects = block(effects, action.key)
                         if choice in {"last_debtor", "posthumous_signature"}:
                             for _, step in selected_effects(choice_effects, facts, "NAM"):

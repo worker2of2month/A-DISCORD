@@ -262,6 +262,10 @@
   superevent_south_oil_union_quote: "The proletarians have nothing to lose but their chains. They have a world to win.\n\n- Karl Marx and Friedrich Engels, \"Manifesto of the Communist Party\""
   superevent_south_oil_union_comment: "Open the valve"
 
+  superevent_nam_mainland_inventory_title: "The Mainland Inventory"
+  superevent_nam_mainland_inventory_quote: "Capital is thus the governing power over labour and its products.\n\n- Karl Marx, \"Economic and Philosophic Manuscripts of 1844\""
+  superevent_nam_mainland_inventory_comment: "The docks are on the register."
+
   superevent_south_contract_republic_title: "The Republic of Contracts Wins the South"
   superevent_south_contract_republic_quote: "Wherever law ends, tyranny begins.\n\n- John Locke, \"Second Treatise of Government\", 202"
   superevent_south_contract_republic_comment: "The first service departs"

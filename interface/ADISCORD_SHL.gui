@@ -966,7 +966,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_SHL_borders_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 71 }
+		size = { width = 460 height = 292 }
 		iconType = {
 			name = "SHL_tension_cards"
 			position = { x = 5 y = 2 }
@@ -993,37 +993,127 @@ guiTypes = {
 			fixedsize = yes
 			pdx_tooltip = "SHL_crest_tension_tt"
 		}
+		containerWindowType = {
+			name = "SHL_frontier_ledger"
+			position = { x = 3 y = 80 }
+			size = { width = 454 height = 208 }
+			background = {
+				name = "SHL_frontier_ledger_bg"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+		}
+		instantTextBoxType = {
+			name = "SHL_border_heading"
+			position = { x = 15 y = 88 }
+			text = "SHL_border_heading"
+			font = "hoi_16mbs"
+			maxWidth = 426
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_border_water"
+			position = { x = 15 y = 116 }
+			text = "SHL_border_water"
+			font = "hoi_16mbs"
+			maxWidth = 426
+			maxHeight = 48
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_border_veyr"
+			position = { x = 15 y = 166 }
+			text = "SHL_border_veyr"
+			font = "hoi_16mbs"
+			maxWidth = 426
+			maxHeight = 32
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_border_keizan"
+			position = { x = 15 y = 200 }
+			text = "SHL_border_keizan"
+			font = "hoi_16mbs"
+			maxWidth = 426
+			maxHeight = 32
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_border_flank"
+			position = { x = 15 y = 235 }
+			text = "SHL_border_flank"
+			font = "hoi_16mbs"
+			maxWidth = 425
+			maxHeight = 48
+			fixedsize = yes
+			alwaystransparent = yes
+		}
 	}
 
 	containerWindowType = {
 		name = "ADISCORD_SHL_caravans_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 34 }
-		iconType = {
-			name = "SHL_caravan_head_bg"
-			position = { x = 3 y = 1 }
-			quadTextureSprite = "GFX_SHL_caravan_header"
-			alwaystransparent = yes
+		size = { width = 460 height = 78 }
+		containerWindowType = {
+			name = "SHL_caravan_lot_plate"
+			position = { x = 3 y = 9 }
+			size = { width = 223 height = 65 }
+			background = {
+				name = "SHL_caravan_lot_plate_bg"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_lot_label"
+			position = { x = 13 y = 16 }
+			text = "SHL_caravan_lot_label"
+			font = "hoi_16mbs"
+			maxWidth = 204
+			maxHeight = 20
+			fixedsize = yes
+			pdx_tooltip = "SHL_road_dispatch_tt"
+		}
+		instantTextBoxType = {
+			name = "SHL_caravan_lot_terms"
+			position = { x = 13 y = 43 }
+			text = "SHL_caravan_lot_terms"
+			font = "hoi_16mbs"
+			maxWidth = 204
+			maxHeight = 23
+			fixedsize = yes
+			pdx_tooltip = "SHL_road_dispatch_tt"
+		}
+		containerWindowType = {
+			name = "SHL_caravan_forecast_plate"
+			position = { x = 232 y = 9 }
+			size = { width = 223 height = 65 }
+			background = {
+				name = "SHL_caravan_forecast_plate_bg"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
 		}
 		instantTextBoxType = {
 			name = "SHL_caravan_forecast_label"
-			position = { x = 12 y = 8 }
+			position = { x = 242 y = 16 }
 			text = "SHL_caravan_forecast_label"
 			font = "hoi_16mbs"
-			maxWidth = 337
+			maxWidth = 204
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "SHL_caravan_forecast_tt"
 		}
 		instantTextBoxType = {
 			name = "SHL_caravan_forecast_value"
-			position = { x = 358 y = 8 }
+			position = { x = 242 y = 43 }
 			text = "SHL_caravan_forecast_value"
 			font = "hoi_16mbs"
-			maxWidth = 91
-			maxHeight = 20
+			maxWidth = 204
+			maxHeight = 23
 			fixedsize = yes
-			format = right
 			pdx_tooltip = "SHL_caravan_forecast_tt"
 		}
 	}

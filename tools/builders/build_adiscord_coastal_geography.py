@@ -421,9 +421,20 @@ ARCHIPELAGO_NEIGHBOUR_PROVINCES = frozenset().union(
 ARCHIPELAGO_NEW_PROVINCES = frozenset(
     part["province"] for island in NAM_ARCHIPELAGO_ISLANDS for part in island["provinces"]
 )
+# Raised islands are painted by this builder, so their seas and shores keep
+# the anchor slots of the island borders.
+ANCHOR_TOUCHED_PROVINCES |= ARCHIPELAGO_NEW_PROVINCES
 ARCHIPELAGO_PROVINCES = ARCHIPELAGO_NEW_PROVINCES.union(
     *(state_file_provinces(state_path(state)) for state in ARCHIPELAGO_STATES)
 ) | ARCHIPELAGO_NEIGHBOUR_PROVINCES | ISLAND_DISTRICT_PROVINCES
+# Besides the provinces the passes above reshape and their neighbours,
+# unit_anchors reconciles the anchors of the whole archipelago with its
+# neighbouring island states and of concave southern provinces whose pixel
+# centroid lies next to a border or, for a sea province, on land.
+ANCHOR_RECONCILED_PROVINCES = ARCHIPELAGO_PROVINCES | frozenset({
+    57, 4518, 5210, 6377, 12563, 16378, 16517,
+    13439, 14792, 16264,
+})
 ISLAND_BRIDGE_COMMENT = "nam archipelago island bridge"
 # Narrow straits of the Ulven League, bridged between the listed states.
 STRAIT_BRIDGES = ((643, 644), (643, 645), (647, 648))
@@ -464,6 +475,9 @@ ARCHIPELAGO_MAX_HEIGHT = 180
 COLOURMAP =Path("map/terrain/colormap_rgb_cityemissivemask_a.dds")
 COLOURMAP_SOURCE = Path("tools/assets/source/map/colormap_rgb_cityemissivemask_a.dds")
 SEA_FLOOR_HEIGHT = 89
+# Fleets float on the sea surface, the height of the native sea anchors;
+# under water the heightmap holds the seabed.
+SEA_SURFACE_ANCHOR_HEIGHT = 9.5
 # Depth is the distance from a pixel to the nearest pixel outside its province.
 # The interior centre is the pixel nearest the centroid among those at least
 # ANCHOR_CENTRE_DEPTH of the greatest depth deep, so a concave province or one
@@ -1085,7 +1099,8 @@ def complete_native_anchors(
 
     def row(slot: int, x: float, y: float, rotation: float) -> list[str]:
         x, y = closest_pixel(points, x, y)
-        return [str(province), str(slot), f"{x:.2f}", f"{heights[y, x] / 10:.2f}",
+        height = SEA_SURFACE_ANCHOR_HEIGHT if kind == "sea" else heights[y, x] / 10
+        return [str(province), str(slot), f"{x:.2f}", f"{height:.2f}",
                 f"{map_height - 1 - y:.2f}", f"{rotation:.2f}", offset]
 
     generated = {0: row(0, cx, cy, 0.0), 9: row(9, cx - 3, cy, 1.57), 10: row(10, cx + 3, cy, -1.57),
@@ -1128,13 +1143,16 @@ def unit_anchors(
     hand-painted passes keeps its valid rows, loses slots for borders it no
     longer has and gains the slots its new borders need. A province moved
     wholesale keeps no anchor inside its pixels and receives a fresh native
-    set. A land province of this pass or one of its neighbours whose standing
-    anchor lies outside its pixels, on a border or away from its interior
-    centre receives a fresh set around that centre and keeps its model offset;
-    so does a sea province whose standing anchor lies outside its pixels.
+    set. A land province of this pass, one of its neighbours or one of
+    ANCHOR_RECONCILED_PROVINCES whose standing anchor lies outside its pixels,
+    on a border or away from its interior centre receives a fresh set around
+    that centre and keeps its model offset; so does a sea province whose
+    standing anchor lies outside its pixels.
     Any other province of that scope whose moving slots do not lead towards
     their neighbours in the engine's order keeps its standing slots and has
-    the rest rebuilt. Rows stay grouped by slot type in the native order.
+    the rest rebuilt. Every fleet anchor of the scope rests on the sea
+    surface rather than on the seabed of the heightmap. Rows stay grouped by
+    slot type in the native order.
     """
     rows = [line.split(";") for line in original.decode("utf-8").splitlines()]
     neighbours = province_neighbours(grid)
@@ -1167,7 +1185,7 @@ def unit_anchors(
     # Snapping a stray anchor to the nearest pixel leaves the army on the border
     # it crossed, so the whole set moves to the interior instead. A fleet whose
     # water became island land stands outside its province in the same way.
-    owned = scope | DISPLACED_PROVINCES | set(ANCHOR_REFERENCES)
+    owned = scope | DISPLACED_PROVINCES | set(ANCHOR_REFERENCES) | ANCHOR_RECONCILED_PROVINCES
 
     def standing_off_centre(province: int) -> bool:
         if kinds.get(province) == "sea":
@@ -1222,6 +1240,9 @@ def unit_anchors(
             # An anchor over water keeps the sea surface, not the seabed.
             if grid[y, x] == province:
                 row[3] = f"{heights[y, x] / 10:.2f}"
+        # A fleet of this scope never rests below the sea surface.
+        if province in owned and kinds.get(province) == "sea" and float(row[3]) < SEA_SURFACE_ANCHOR_HEIGHT:
+            row[3] = f"{SEA_SURFACE_ANCHOR_HEIGHT:.2f}"
         return row
 
     blocks = defaultdict(list)

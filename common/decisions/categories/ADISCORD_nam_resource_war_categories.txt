@@ -29,7 +29,8 @@ NAM_piracy = {
 }
 
 NAM_interregnum_quay = {
-	icon = generic_political_pressure
+	icon = NAM_interregnum_quay
+	picture = GFX_decision_picture_NAM_interregnum_quay
 	allowed = { tag = NAM }
 	visible = { has_idea = NAM_interregnum_power_vacuum }
 	priority = 26
@@ -49,7 +50,8 @@ NAM_exile_politics = {
 
 # Veter's humanists: foreign capital, free zones and corporate influence.
 NAM_free_zones = {
-	icon = generic_industry
+	icon = NAM_free_zones
+	picture = GFX_decision_picture_NAM_board_quay
 	allowed = { tag = NAM }
 	visible = {
 		OR = {
@@ -101,6 +103,7 @@ NAM_southern_lands = {
 }
 
 NAM_restitution = {
+	scripted_gui = ADISCORD_NAM_calendar_panel
 	icon = generic_political_discourse
 	allowed = { tag = NAM }
 	visible = {
@@ -114,9 +117,10 @@ NAM_restitution = {
 # Army, fleet and air orders, fortification lines and district recruitment.
 # Each decision opens through its own focus or war phase, so an empty category stays hidden.
 NAM_mobilisation = {
+	scripted_gui = ADISCORD_NAM_reserve_panel
 	icon = generic_prepare_civil_war
 	allowed = { tag = NAM }
-	visible = { NOT = { has_country_flag = NAM_corp_takeover } }
+	visible = { NAM_mainland_programmes_active = yes }
 	priority = 23
 }
 
@@ -150,7 +154,7 @@ NAM_basin_economy = {
 	allowed = { tag = NAM }
 	visible = {
 		OR = {
-			NOT = { has_country_flag = NAM_corp_takeover }
+			NAM_mainland_programmes_active = yes
 			has_focus_tree = NAM_south_war_focus
 		}
 	}
@@ -161,7 +165,7 @@ NAM_administration = {
 	icon = generic_political_discourse
 	allowed = { tag = NAM }
 	visible = {
-		NOT = { has_country_flag = NAM_corp_takeover }
+		NAM_mainland_programmes_active = yes
 	}
 	priority = 22
 }
@@ -183,7 +187,7 @@ NAM_depot_concessions = {
 NAM_postwar_orders = {
 	icon = generic_political_discourse
 	allowed = { tag = NAM }
-	visible = { NOT = { has_country_flag = NAM_corp_takeover } }
+	visible = { NAM_mainland_programmes_active = yes }
 	priority = 22
 }
 
@@ -192,25 +196,34 @@ NAM_public_campaigns = {
 	allowed = { tag = NAM }
 	visible = {
 		OR = {
-			NOT = { has_country_flag = NAM_corp_takeover }
-			has_focus_tree = NAM_south_war_focus
-		}
-		OR = {
+			# The Directory's campaigns run while the council governs the islands.
 			AND = {
-				OR = {
-					has_completed_focus = NAM_inventory
-					has_completed_focus = NAM_recognition
-				}
-				NAM_independent_programmes_operable = yes
+				has_country_flag = NAM_corp_takeover
+				NOT = { check_variable = { NAM_board_ended = 1 } }
 			}
-			# The war tree brings its own campaigns on every route.
 			AND = {
 				OR = {
-					has_completed_focus = NAM_sw_rear_of_svetlogorye
-					has_completed_focus = NAM_sw_drive_to_khazar
+					NAM_mainland_programmes_active = yes
+					has_focus_tree = NAM_south_war_focus
 				}
-				ADISCORD_south_final_active = yes
-				has_country_flag = ADISCORD_south_north_leader
+				OR = {
+					AND = {
+						OR = {
+							has_completed_focus = NAM_inventory
+							has_completed_focus = NAM_recognition
+						}
+						NAM_independent_programmes_operable = yes
+					}
+					# The war tree brings its own campaigns on every route.
+					AND = {
+						OR = {
+							has_completed_focus = NAM_sw_rear_of_svetlogorye
+							has_completed_focus = NAM_sw_drive_to_khazar
+						}
+						ADISCORD_south_final_active = yes
+						has_country_flag = ADISCORD_south_north_leader
+					}
+				}
 			}
 		}
 	}
@@ -222,7 +235,9 @@ NAM_supports = {
 	scripted_gui = ADISCORD_NAM_supports
 	icon = generic_political_pressure
 	allowed = { tag = NAM }
+	# The pillars are mainland institutions: the island exile ends them.
 	visible = {
+		NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
 		NOT = { has_country_flag = NAM_corp_takeover }
 		OR = {
 			has_country_flag = NAM_groups_initialized
@@ -235,6 +250,7 @@ NAM_supports = {
 }
 
 NAM_underground = {
+	scripted_gui = ADISCORD_NAM_network_panel
 	icon = generic_operation
 	allowed = { tag = NAM }
 	visible = {
@@ -280,10 +296,23 @@ NAM_postwar_future_debate = {
 }
 
 NAM_two_judases = {
-	scripted_gui = ADISCORD_NAM_judas_panel
-	icon = generic_prepare_civil_war
+	icon = NAM_two_judases
+	picture = GFX_decision_picture_NAM_two_judases
 	allowed = { tag = NAM }
 	visible = { has_country_flag = NAM_corp_takeover }
+	scripted_gui = ADISCORD_NAM_camps_panel
 	visible_when_empty = yes
 	priority = 27
+}
+
+# The Directory rebuilds on the islands what stayed on the mainland. Each
+# programme opens through its focus, so the category stays hidden until then.
+NAM_directory_development = {
+	icon = generic_political_discourse
+	allowed = { tag = NAM }
+	visible = {
+		has_country_flag = NAM_corp_takeover
+		NOT = { check_variable = { NAM_board_ended = 1 } }
+	}
+	priority = 24
 }

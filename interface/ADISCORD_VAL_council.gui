@@ -1,0 +1,136 @@
+guiTypes = {
+	containerWindowType = {
+		name = "ADISCORD_VAL_council_seats_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 143 }
+		containerWindowType = {
+			name = "ADISCORD_VAL_council_seats_frame"
+			position = { x = 3 y = 8 }
+			size = { width = 454 height = 131 }
+			background = {
+				name = "ADISCORD_VAL_council_seats_frame_bg"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+		}
+		instantTextBoxType = {
+			name = "VAL_council_seat_title"
+			position = { x = 14 y = 16 }
+			text = "VAL_council_seat_title"
+			font = "hoi_16mbs"
+			maxWidth = 178
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_seat_count_title"
+			position = { x = 202 y = 16 }
+			text = "VAL_council_seat_count_title"
+			font = "hoi_16mbs"
+			maxWidth = 72
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_seat_days_title"
+			position = { x = 284 y = 16 }
+			text = "VAL_council_seat_days_title"
+			font = "hoi_16mbs"
+			maxWidth = 158
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_delegation_garrison"
+			position = { x = 14 y = 46 }
+			text = "VAL_council_delegation_garrison"
+			font = "hoi_16mbs"
+			maxWidth = 180
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_count_garrison"
+			position = { x = 202 y = 46 }
+			text = "VAL_council_count_garrison"
+			font = "hoi_16mbs"
+			maxWidth = 68
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_days_garrison"
+			position = { x = 284 y = 46 }
+			text = "VAL_council_days_garrison"
+			font = "hoi_16mbs"
+			maxWidth = 161
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_delegation_front"
+			position = { x = 14 y = 75 }
+			text = "VAL_council_delegation_front"
+			font = "hoi_16mbs"
+			maxWidth = 180
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_count_front"
+			position = { x = 202 y = 75 }
+			text = "VAL_council_count_front"
+			font = "hoi_16mbs"
+			maxWidth = 68
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_days_front"
+			position = { x = 284 y = 75 }
+			text = "VAL_council_days_front"
+			font = "hoi_16mbs"
+			maxWidth = 161
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_delegation_supply"
+			position = { x = 14 y = 104 }
+			text = "VAL_council_delegation_supply"
+			font = "hoi_16mbs"
+			maxWidth = 180
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_count_supply"
+			position = { x = 202 y = 104 }
+			text = "VAL_council_count_supply"
+			font = "hoi_16mbs"
+			maxWidth = 68
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+		instantTextBoxType = {
+			name = "VAL_council_days_supply"
+			position = { x = 284 y = 104 }
+			text = "VAL_council_days_supply"
+			font = "hoi_16mbs"
+			maxWidth = 161
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "VAL_council_seat_rules"
+		}
+	}
+}

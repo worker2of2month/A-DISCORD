@@ -2319,7 +2319,7 @@ type = {
 	}
 	object = {
 		name = "ADISCORD_town_16517"
-		position = { 3569.00 9.70 874.00 }
+		position = { 3570.00 9.70 875.00 }
 		rotation = { 0 0 0 }
 	}
 	object = {

@@ -673,8 +673,10 @@ NAM_independence_recognised = {
 }
 
 # ----- Independent institutions -----
-# COUNTRY NAM. National institutions survive war, settlement and an island handoff.
-# Subjugation refunds pending work; liberation reopens the existing authorisations.
+# COUNTRY NAM. Running national institutions survive war, settlement and the flight;
+# new ones start only while the republic's categories are open, which ends at the
+# flight. Subjugation refunds pending work; liberation reopens the existing
+# authorisations.
 NAM_independent_programmes_operable = {
 	NAM_country_operable = yes
 	custom_trigger_tooltip = {
@@ -1283,6 +1285,19 @@ NAM_rival_can_rally_districts = {
 NAM_underground_open = {
 	NOT = { has_country_flag = NAM_weber_amnesty }
 	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+}
+
+NAM_underground_vertical_pressure = {
+	OR = {
+		AND = {
+			NAM_ladder_formed = yes
+			power_balance_value = { id = NAM_ladder_bop value < -0.10 }
+		}
+		AND = {
+			has_power_balance = { id = NAM_postwar_future_bop }
+			check_variable = { NAM_prewar_balance < -0.10 }
+		}
+	}
 }
 
 # COUNTRY NAM. Weber's network grows and strikes on the mainland until the
@@ -1986,6 +2001,16 @@ NAM_corp_case_can_be_heard = {
 	NAM = { NAM_board_operable = yes }
 }
 
+NAM_judas_weber_camp_active = {
+	has_idea = NAM_judas_weber_committees
+	NOT = { has_completed_focus = NAM_board_last_debtor }
+}
+
+NAM_judas_karamyshev_camp_active = {
+	has_idea = NAM_judas_karamyshev_watch
+	NOT = { has_completed_focus = NAM_board_posthumous_signature }
+}
+
 NAM_judas_weber_unlocked_target = {
 	has_idea = NAM_judas_weber_committees
 	OR = {
@@ -2019,6 +2044,50 @@ NAM_judas_willing_delegate = {
 	check_variable = { var = NAM_board_support^NAM_judas_weber_pending value = 50 compare = greater_than_or_equals }
 	NOT = { check_variable = { var = NAM_board_stance^NAM_judas_weber_pending value = -1 compare = equals } }
 	check_variable = { var = NAM_board_objection_days^NAM_judas_weber_pending value = 0 compare = less_than_or_equals }
+}
+
+# COUNTRY NAM. "Удовлетворить требования" at the officers' meeting: 35 capital,
+# 20 after the hereditary roll, 15 once event 63 listed the officers' families.
+NAM_judas_karamyshev_can_concede = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_karamyshev_watch
+	has_variable = NAM_judas_karamyshev_pending
+	OR = {
+		check_variable = { var = NAM_corp_capital value = 35 compare = greater_than_or_equals }
+		AND = {
+			has_completed_focus = NAM_board_hereditary_roll
+			check_variable = { var = NAM_corp_capital value = 20 compare = greater_than_or_equals }
+		}
+		AND = {
+			has_completed_focus = NAM_board_hereditary_roll
+			has_country_flag = NAM_judas_officer_families_listed
+			check_variable = { var = NAM_corp_capital value = 15 compare = greater_than_or_equals }
+		}
+	}
+}
+
+# COUNTRY NAM. "Арестовать зачинщиков" needs men from Navis or Arktur; after the old
+# settlers' oath the settlers bring them.
+NAM_judas_karamyshev_can_force = {
+	OR = {
+		NAM_judas_willing_navis = yes
+		NAM_judas_willing_arktur = yes
+		has_completed_focus = NAM_board_old_settlers_oath
+	}
+}
+
+# COUNTRY NAM. "Уступить комитетам": 40 capital, 25 with the subsidised opposition.
+NAM_judas_weber_can_concede = {
+	NAM_board_operable = yes
+	has_idea = NAM_judas_weber_committees
+	has_variable = NAM_judas_weber_pending
+	OR = {
+		check_variable = { var = NAM_corp_capital value = 40 compare = greater_than_or_equals }
+		AND = {
+			has_completed_focus = NAM_board_subsidised_opposition
+			check_variable = { var = NAM_corp_capital value = 25 compare = greater_than_or_equals }
+		}
+	}
 }
 
 NAM_judas_weber_promise = {
@@ -2198,6 +2267,24 @@ NAM_board_operable = {
 	NOT = { check_variable = { NAM_board_ended = 1 } }
 	NAM_corp_open = yes
 	is_subject = no
+}
+
+# The Directory runs at most two propaganda campaigns at once; a running
+# campaign is its timed spirit, so expiry frees the place without bookkeeping.
+NAM_dir_campaign_room = {
+	NOT = {
+		count_triggers = {
+			amount = 2
+			has_idea = NAM_dir_campaign_newsreel_spirit
+			has_idea = NAM_dir_campaign_dividend_spirit
+			has_idea = NAM_dir_campaign_pays_on_time_spirit
+			has_idea = NAM_dir_campaign_agitators_spirit
+			has_idea = NAM_dir_campaign_mutineers_spirit
+			has_idea = NAM_dir_campaign_return_spirit
+			has_idea = NAM_dir_campaign_lottery_spirit
+			has_idea = NAM_dir_campaign_gazette_spirit
+		}
+	}
 }
 
 NAM_board_has_majority = {
@@ -4932,6 +5019,7 @@ NAM_nationalisation_state_free = {
 # Civil agreements use one country contract and one cooldown. A settled
 # constitution closes coups, not economic programmes.
 NAM_agreement_peace = {
+	NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
 	NAM_independent_programmes_operable = yes
 	has_country_flag = NAM_independence_declared
 	has_country_flag = NAM_groups_initialized

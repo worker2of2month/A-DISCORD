@@ -1,30 +1,6 @@
 guiTypes = {
 
 	containerWindowType = {
-		name = "ADISCORD_NAM_judas_window"
-		position = { x = 0 y = 0 }
-		size = { width = 460 height = 156 }
-		instantTextBoxType = {
-			name = "NAM_judas_weber_report"
-			position = { x = 8 y = 0 }
-			text = "NAM_judas_weber_report"
-			font = "hoi_16mbs"
-			maxWidth = 442
-			maxHeight = 76
-			format = left
-		}
-		instantTextBoxType = {
-			name = "NAM_judas_karamyshev_report"
-			position = { x = 8 y = 78 }
-			text = "NAM_judas_karamyshev_report"
-			font = "hoi_16mbs"
-			maxWidth = 442
-			maxHeight = 76
-			format = left
-		}
-	}
-
-	containerWindowType = {
 		name = "ADISCORD_NAM_supports_window"
 		position = { x = 0 y = 0 }
 		size = { width = 460 height = 206 }
@@ -208,7 +184,7 @@ guiTypes = {
 		containerWindowType = {
 			name = "NAM_bw_phase"
 			position = { x = 12 y = 4 }
-			size = { width = 140 height = 54 }
+			size = { width = 108 height = 54 }
 			background = {
 				name = "NAM_bw_phase_background"
 				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
@@ -218,7 +194,7 @@ guiTypes = {
 				position = { x = 8 y = 6 }
 				text = "[NAMBasinPhaseShortLabel]"
 				font = "hoi_16mbs"
-				maxWidth = 124
+				maxWidth = 92
 				maxHeight = 18
 				fixedsize = yes
 				pdx_tooltip = "NAM_bw_phase_full_tt"
@@ -228,7 +204,7 @@ guiTypes = {
 				position = { x = 8 y = 29 }
 				text = "NAM_bw_phase_value"
 				font = "hoi_16mbs"
-				maxWidth = 124
+				maxWidth = 92
 				maxHeight = 22
 				fixedsize = yes
 				pdx_tooltip = "NAM_bw_phase_full_tt"
@@ -236,8 +212,8 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "NAM_bw_underground"
-			position = { x = 160 y = 4 }
-			size = { width = 140 height = 54 }
+			position = { x = 128 y = 4 }
+			size = { width = 100 height = 54 }
 			background = {
 				name = "NAM_bw_underground_background"
 				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
@@ -247,7 +223,7 @@ guiTypes = {
 				position = { x = 8 y = 6 }
 				text = "NAM_bw_underground_short"
 				font = "hoi_16mbs"
-				maxWidth = 124
+				maxWidth = 84
 				maxHeight = 18
 				fixedsize = yes
 				pdx_tooltip = "NAM_bw_underground_full_tt"
@@ -257,7 +233,7 @@ guiTypes = {
 				position = { x = 8 y = 29 }
 				text = "NAM_bw_underground_value"
 				font = "hoi_16mbs"
-				maxWidth = 124
+				maxWidth = 84
 				maxHeight = 22
 				fixedsize = yes
 				pdx_tooltip = "NAM_bw_underground_full_tt"
@@ -265,8 +241,8 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "NAM_bw_ladder"
-			position = { x = 308 y = 4 }
-			size = { width = 140 height = 54 }
+			position = { x = 236 y = 4 }
+			size = { width = 212 height = 54 }
 			background = {
 				name = "NAM_bw_ladder_background"
 				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
@@ -276,7 +252,7 @@ guiTypes = {
 				position = { x = 8 y = 6 }
 				text = "NAM_bw_ladder_short"
 				font = "hoi_16mbs"
-				maxWidth = 124
+				maxWidth = 196
 				maxHeight = 18
 				fixedsize = yes
 				pdx_tooltip = "NAM_bw_ladder_full_tt"
@@ -286,7 +262,7 @@ guiTypes = {
 				position = { x = 8 y = 29 }
 				text = "NAM_bw_ladder_value"
 				font = "hoi_16mbs"
-				maxWidth = 124
+				maxWidth = 196
 				maxHeight = 22
 				fixedsize = yes
 				pdx_tooltip = "NAM_bw_ladder_full_tt"
@@ -797,21 +773,479 @@ guiTypes = {
 		}
 	}
 
+	# BEGIN GENERATED NAM MAINLAND REPORTS
+	containerWindowType = {
+		name = "ADISCORD_NAM_calendar_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 206 }
+		containerWindowType = {
+			name = "NAM_calendar_table"
+			position = { x = 4 y = 2 }
+			size = { width = 452 height = 200 }
+			background = {
+				name = "NAM_calendar_table_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_heading"
+				position = { x = 10 y = 7 }
+				text = "NAM_calendar_heading"
+				font = "hoi_16mbs"
+				maxWidth = 430
+				maxHeight = 19
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_desk"
+				position = { x = 10 y = 32 }
+				text = "NAM_calendar_desk"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_desk_days"
+				position = { x = 218 y = 32 }
+				text = "NAM_calendar_desk_days"
+				font = "hoi_16mbs"
+				maxWidth = 65
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_desk_status"
+				position = { x = 289 y = 32 }
+				text = "NAM_calendar_desk_status"
+				font = "hoi_16mbs"
+				maxWidth = 150
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_azhar"
+				position = { x = 10 y = 56 }
+				text = "NAM_calendar_azhar"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_azhar_days"
+				position = { x = 218 y = 56 }
+				text = "NAM_calendar_azhar_days"
+				font = "hoi_16mbs"
+				maxWidth = 65
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_azhar_status"
+				position = { x = 289 y = 56 }
+				text = "NAM_calendar_azhar_status"
+				font = "hoi_16mbs"
+				maxWidth = 150
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_claims"
+				position = { x = 10 y = 80 }
+				text = "NAM_calendar_claims"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_claims_days"
+				position = { x = 218 y = 80 }
+				text = "NAM_calendar_claims_days"
+				font = "hoi_16mbs"
+				maxWidth = 65
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_claims_status"
+				position = { x = 289 y = 80 }
+				text = "NAM_calendar_claims_status"
+				font = "hoi_16mbs"
+				maxWidth = 150
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_dossier"
+				position = { x = 10 y = 104 }
+				text = "NAM_calendar_dossier"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_dossier_days"
+				position = { x = 218 y = 104 }
+				text = "NAM_calendar_dossier_days"
+				font = "hoi_16mbs"
+				maxWidth = 65
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_dossier_status"
+				position = { x = 289 y = 104 }
+				text = "NAM_calendar_dossier_status"
+				font = "hoi_16mbs"
+				maxWidth = 150
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_protocol"
+				position = { x = 10 y = 128 }
+				text = "NAM_calendar_protocol"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_protocol_days"
+				position = { x = 218 y = 128 }
+				text = "NAM_calendar_protocol_days"
+				font = "hoi_16mbs"
+				maxWidth = 65
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_protocol_status"
+				position = { x = 289 y = 128 }
+				text = "NAM_calendar_protocol_status"
+				font = "hoi_16mbs"
+				maxWidth = 150
+				maxHeight = 21
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_calendar_price"
+				position = { x = 10 y = 158 }
+				text = "NAM_calendar_price"
+				font = "hoi_16mbs"
+				maxWidth = 428
+				maxHeight = 38
+				fixedsize = yes
+				pdx_tooltip = "NAM_calendar_rules"
+			}
+		}
+	}
+
+	containerWindowType = {
+		name = "ADISCORD_NAM_network_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 172 }
+		containerWindowType = {
+			name = "NAM_network_growth"
+			position = { x = 4 y = 2 }
+			size = { width = 223 height = 166 }
+			background = {
+				name = "NAM_network_growth_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			instantTextBoxType = {
+				name = "NAM_network_growth_title"
+				position = { x = 10 y = 7 }
+				text = "NAM_network_growth_title"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_network_growth_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_network_factors"
+				position = { x = 10 y = 33 }
+				text = "NAM_network_factors"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 129
+				fixedsize = yes
+				pdx_tooltip = "NAM_network_growth_rules"
+			}
+		}
+
+		containerWindowType = {
+			name = "NAM_network_security"
+			position = { x = 233 y = 2 }
+			size = { width = 223 height = 166 }
+			background = {
+				name = "NAM_network_security_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			instantTextBoxType = {
+				name = "NAM_network_risk_title"
+				position = { x = 10 y = 7 }
+				text = "NAM_network_risk_title"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_network_risk_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_network_risk"
+				position = { x = 10 y = 31 }
+				text = "NAM_network_risk"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 48
+				fixedsize = yes
+				pdx_tooltip = "NAM_network_risk_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_network_guard_title"
+				position = { x = 10 y = 77 }
+				text = "NAM_network_guard_title"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_network_risk_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_network_guards"
+				position = { x = 10 y = 101 }
+				text = "NAM_network_guards"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 59
+				fixedsize = yes
+				pdx_tooltip = "NAM_network_risk_rules"
+			}
+		}
+	}
+
+	containerWindowType = {
+		name = "ADISCORD_NAM_reserve_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 240 }
+		containerWindowType = {
+			name = "NAM_reserve_ledger"
+			position = { x = 4 y = 2 }
+			size = { width = 223 height = 137 }
+			background = {
+				name = "NAM_reserve_ledger_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			instantTextBoxType = {
+				name = "NAM_reserve_title"
+				position = { x = 10 y = 7 }
+				text = "NAM_reserve_title"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_reserve_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_reserve_units"
+				position = { x = 10 y = 32 }
+				text = "NAM_reserve_units"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 100
+				fixedsize = yes
+				pdx_tooltip = "NAM_reserve_rules"
+			}
+		}
+
+		containerWindowType = {
+			name = "NAM_reserve_works"
+			position = { x = 233 y = 2 }
+			size = { width = 223 height = 137 }
+			background = {
+				name = "NAM_reserve_works_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			instantTextBoxType = {
+				name = "NAM_reserve_works_title"
+				position = { x = 10 y = 7 }
+				text = "NAM_reserve_works_title"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_reserve_defence_rules"
+			}
+			instantTextBoxType = {
+				name = "NAM_mobilisation_active_desc"
+				position = { x = 10 y = 32 }
+				text = "NAM_mobilisation_active_desc"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 100
+				fixedsize = yes
+				pdx_tooltip = "NAM_reserve_defence_rules"
+			}
+		}
+
+		containerWindowType = {
+			name = "NAM_reserve_districts"
+			position = { x = 4 y = 143 }
+			size = { width = 452 height = 93 }
+			background = {
+				name = "NAM_reserve_districts_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			instantTextBoxType = {
+				name = "NAM_reserve_hold_title"
+				position = { x = 10 y = 7 }
+				text = "NAM_reserve_hold_title"
+				font = "hoi_16mbs"
+				maxWidth = 430
+				maxHeight = 20
+				fixedsize = yes
+				pdx_tooltip = "NAM_hold_field_context_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_reserve_hold_names"
+				position = { x = 10 y = 30 }
+				text = "NAM_reserve_hold_names"
+				font = "hoi_16mbs"
+				maxWidth = 202
+				maxHeight = 57
+				fixedsize = yes
+				pdx_tooltip = "NAM_hold_field_context_tt"
+			}
+			instantTextBoxType = {
+				name = "NAM_reserve_hold_orders"
+				position = { x = 219 y = 30 }
+				text = "NAM_reserve_hold_orders"
+				font = "hoi_16mbs"
+				maxWidth = 222
+				maxHeight = 57
+				fixedsize = yes
+				pdx_tooltip = "NAM_hold_field_context_tt"
+			}
+		}
+	}
+	# END GENERATED NAM MAINLAND REPORTS
+
+	# BEGIN GENERATED NAM CAMP DOSSIERS
+	containerWindowType = {
+		name = "ADISCORD_NAM_camps_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 164 }
+		containerWindowType = {
+			name = "NAM_judas_weber_card"
+			position = { x = 4 y = 14 }
+			size = { width = 223 height = 148 }
+			background = {
+				name = "NAM_judas_weber_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			iconType = {
+				name = "NAM_judas_weber_portrait"
+				position = { x = 8 y = 7 }
+				spriteType = "GFX_portrait_NAM_Yaroslav_Weber"
+				scale = 0.25
+				pdx_tooltip = "NAM_judas_weber_details"
+			}
+			instantTextBoxType = {
+				name = "NAM_judas_weber_heading"
+				position = { x = 55 y = 9 }
+				text = "NAM_judas_weber_heading"
+				font = "hoi_16mbs"
+				maxWidth = 160
+				maxHeight = 48
+				fixedsize = yes
+				pdx_tooltip = "NAM_judas_weber_details"
+			}
+			instantTextBoxType = {
+				name = "NAM_judas_weber_summary"
+				position = { x = 10 y = 66 }
+				text = "NAM_judas_weber_summary"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 76
+				fixedsize = yes
+				pdx_tooltip = "NAM_judas_weber_details"
+			}
+		}
+
+		containerWindowType = {
+			name = "NAM_judas_karamyshev_card"
+			position = { x = 233 y = 14 }
+			size = { width = 223 height = 148 }
+			background = {
+				name = "NAM_judas_karamyshev_background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+			iconType = {
+				name = "NAM_judas_karamyshev_portrait"
+				position = { x = 8 y = 7 }
+				spriteType = "GFX_portrait_NAM_Rostislav_Karamyshev"
+				scale = 0.25
+				pdx_tooltip = "NAM_judas_karamyshev_details"
+			}
+			instantTextBoxType = {
+				name = "NAM_judas_karamyshev_heading"
+				position = { x = 55 y = 9 }
+				text = "NAM_judas_karamyshev_heading"
+				font = "hoi_16mbs"
+				maxWidth = 160
+				maxHeight = 48
+				fixedsize = yes
+				pdx_tooltip = "NAM_judas_karamyshev_details"
+			}
+			instantTextBoxType = {
+				name = "NAM_judas_karamyshev_summary"
+				position = { x = 10 y = 66 }
+				text = "NAM_judas_karamyshev_summary"
+				font = "hoi_16mbs"
+				maxWidth = 203
+				maxHeight = 76
+				fixedsize = yes
+				pdx_tooltip = "NAM_judas_karamyshev_details"
+			}
+		}
+	}
+	# END GENERATED NAM CAMP DOSSIERS
+
 	containerWindowType = {
 		name = "ADISCORD_NAM_board_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 594 }
+		size = { width = 460 height = 606 }
 		clipping = no
 		iconType = {
 			name = "NAM_board_pyramid"
 			spriteType = "GFX_NAM_board_pyramid"
-			position = { x = 0 y = 0 }
+			position = { x = 0 y = 12 }
 			alwaystransparent = yes
 		}
 
 		instantTextBoxType = {
 			name = "NAM_board_chair_caption"
-			position = { x = 8 y = 1 }
+			position = { x = 8 y = 13 }
 			text = "NAM_board_chair_caption"
 			font = "hoi_18mbs"
 			maxWidth = 444
@@ -822,8 +1256,8 @@ guiTypes = {
 		}
 
 		instantTextBoxType = {
-name = "NAM_board_council_line"
-			position = { x = 8 y = 23 }
+			name = "NAM_board_council_line"
+			position = { x = 8 y = 35 }
 			text = "NAM_board_council_line"
 			font = "hoi_16mbs"
 			maxWidth = 444
@@ -833,40 +1267,59 @@ name = "NAM_board_council_line"
 			pdx_tooltip = "NAM_board_risk_tt"
 		}
 
+		# The side panels mirror each other around the window centre (x = 230)
+		# and stay clear of the top cell and the slanted faces of the pyramid.
 		instantTextBoxType = {
 			name = "NAM_board_vote_panel"
-			position = { x = 4 y = 44 }
+			position = { x = 4 y = 56 }
 			text = "NAM_board_vote_panel"
 			font = "hoi_16mbs"
-			maxWidth = 98
+			maxWidth = 104
 			maxHeight = 104
 			fixedsize = yes
-			format = left
+			format = centre
 			pdx_tooltip = "NAM_board_election_rules"
 		}
 
 		instantTextBoxType = {
 			name = "NAM_board_chair_panel"
-			position = { x = 348 y = 44 }
+			position = { x = 352 y = 56 }
 			text = "NAM_board_chair_panel"
 			font = "hoi_16mbs"
-			maxWidth = 108
+			maxWidth = 104
 			maxHeight = 104
 			fixedsize = yes
 			format = centre
 			pdx_tooltip = "NAM_board_chair_forecast_tt"
 		}
 
+		# Each cell is drawn bottom to top: emblem, stance, resolution marker,
+		# text and selection border, then an invisible button that takes hover
+		# and clicks for the whole cell. The scripted GUI binds every name here.
 		iconType = {
 			name = "NAM_board_mark_1"
-			position = { x = 186 y = 54 }
+			position = { x = 186 y = 66 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_1_tt"
 		}
 
+		iconType = {
+			name = "NAM_board_stance_1"
+			position = { x = 156 y = 70 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_1"
+			position = { x = 237 y = 74 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
 		instantTextBoxType = {
 			name = "NAM_board_seat_1"
-			position = { x = 124 y = 89 }
+			position = { x = 124 y = 101 }
 			text = "NAM_board_seat_1"
 			font = "hoi_16mbs"
 			maxWidth = 174
@@ -876,16 +1329,47 @@ name = "NAM_board_council_line"
 			pdx_tooltip = "NAM_board_seat_1_tt"
 		}
 
+		buttonType = {
+			name = "NAM_board_selected_1"
+			position = { x = 124 y = 62 }
+			size = { x = 174 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_selected"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_1"
+			position = { x = 124 y = 62 }
+			size = { x = 174 y = 92 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_1_tt"
+		}
+
 		iconType = {
 			name = "NAM_board_mark_2"
-			position = { x = 114 y = 176 }
+			position = { x = 114 y = 188 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_2_tt"
 		}
 
+		iconType = {
+			name = "NAM_board_stance_2"
+			position = { x = 84 y = 192 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_2"
+			position = { x = 165 y = 196 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
 		instantTextBoxType = {
 			name = "NAM_board_seat_2"
-			position = { x = 74 y = 211 }
+			position = { x = 74 y = 223 }
 			text = "NAM_board_seat_2"
 			font = "hoi_16mbs"
 			maxWidth = 130
@@ -895,16 +1379,47 @@ name = "NAM_board_council_line"
 			pdx_tooltip = "NAM_board_seat_2_tt"
 		}
 
+		buttonType = {
+			name = "NAM_board_selected_2"
+			position = { x = 74 y = 184 }
+			size = { x = 130 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_selected"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_2"
+			position = { x = 74 y = 184 }
+			size = { x = 130 y = 92 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_2_tt"
+		}
+
 		iconType = {
 			name = "NAM_board_mark_3"
-			position = { x = 257 y = 176 }
+			position = { x = 257 y = 188 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_3_tt"
 		}
 
+		iconType = {
+			name = "NAM_board_stance_3"
+			position = { x = 227 y = 192 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_3"
+			position = { x = 308 y = 196 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
 		instantTextBoxType = {
 			name = "NAM_board_seat_3"
-			position = { x = 217 y = 211 }
+			position = { x = 217 y = 223 }
 			text = "NAM_board_seat_3"
 			font = "hoi_16mbs"
 			maxWidth = 130
@@ -914,16 +1429,47 @@ name = "NAM_board_council_line"
 			pdx_tooltip = "NAM_board_seat_3_tt"
 		}
 
+		buttonType = {
+			name = "NAM_board_selected_3"
+			position = { x = 217 y = 184 }
+			size = { x = 130 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_selected"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_3"
+			position = { x = 217 y = 184 }
+			size = { x = 130 y = 92 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_3_tt"
+		}
+
 		iconType = {
 			name = "NAM_board_mark_4"
-			position = { x = 59 y = 298 }
+			position = { x = 59 y = 310 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_4_tt"
 		}
 
+		iconType = {
+			name = "NAM_board_stance_4"
+			position = { x = 29 y = 314 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_4"
+			position = { x = 110 y = 318 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
 		instantTextBoxType = {
 			name = "NAM_board_seat_4"
-			position = { x = 22 y = 333 }
+			position = { x = 22 y = 345 }
 			text = "NAM_board_seat_4"
 			font = "hoi_16mbs"
 			maxWidth = 124
@@ -933,16 +1479,47 @@ name = "NAM_board_council_line"
 			pdx_tooltip = "NAM_board_seat_4_tt"
 		}
 
+		buttonType = {
+			name = "NAM_board_selected_4"
+			position = { x = 22 y = 306 }
+			size = { x = 124 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_selected"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_4"
+			position = { x = 22 y = 306 }
+			size = { x = 124 y = 92 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_4_tt"
+		}
+
 		iconType = {
 			name = "NAM_board_mark_5"
-			position = { x = 184 y = 298 }
+			position = { x = 184 y = 310 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_5_tt"
 		}
 
+		iconType = {
+			name = "NAM_board_stance_5"
+			position = { x = 154 y = 314 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_5"
+			position = { x = 235 y = 318 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
 		instantTextBoxType = {
 			name = "NAM_board_seat_5"
-			position = { x = 147 y = 333 }
+			position = { x = 147 y = 345 }
 			text = "NAM_board_seat_5"
 			font = "hoi_16mbs"
 			maxWidth = 124
@@ -952,16 +1529,47 @@ name = "NAM_board_council_line"
 			pdx_tooltip = "NAM_board_seat_5_tt"
 		}
 
+		buttonType = {
+			name = "NAM_board_selected_5"
+			position = { x = 147 y = 306 }
+			size = { x = 124 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_selected"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_5"
+			position = { x = 147 y = 306 }
+			size = { x = 124 y = 92 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_5_tt"
+		}
+
 		iconType = {
 			name = "NAM_board_mark_6"
-			position = { x = 313 y = 298 }
+			position = { x = 313 y = 310 }
 			spriteType = "GFX_NAM_board_company_marks"
 			pdx_tooltip = "NAM_board_seat_6_tt"
 		}
 
+		iconType = {
+			name = "NAM_board_stance_6"
+			position = { x = 283 y = 314 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_6"
+			position = { x = 364 y = 318 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
 		instantTextBoxType = {
 			name = "NAM_board_seat_6"
-			position = { x = 274 y = 333 }
+			position = { x = 274 y = 345 }
 			text = "NAM_board_seat_6"
 			font = "hoi_16mbs"
 			maxWidth = 128
@@ -971,226 +1579,27 @@ name = "NAM_board_council_line"
 			pdx_tooltip = "NAM_board_seat_6_tt"
 		}
 
-		iconType = {
-			name = "NAM_board_stance_1"
-			position = { x = 156 y = 58 }
-			spriteType = "GFX_NAM_board_stance_marks"
-			alwaystransparent = yes
-		}
-
-		iconType = {
-			name = "NAM_board_motion_mark_1"
-			position = { x = 237 y = 62 }
-			spriteType = "GFX_NAM_board_resolution_marker"
-			alwaystransparent = yes
-		}
-
 		buttonType = {
-			name = "NAM_board_choose_1"
-			position = { x = 124 y = 50 }
-			size = { x = 174 y = 92 }
-			quadTextureSprite = "GFX_NAM_board_seat_select"
-			frame = 2
-			clicksound = click_default
-			pdx_tooltip = "NAM_board_seat_1_tt"
-		}
-
-		containerWindowType = {
-			name = "NAM_board_selected_1"
-			position = { x = 124 y = 50 }
-			size = { width = 174 height = 92 }
-			alwaystransparent = yes
-			background = {
-				name = "NAM_board_selected_border_1"
-				quadTextureSprite = "GFX_NAM_board_seat_select"
-				frame = 3
-			}
-		}
-
-		iconType = {
-			name = "NAM_board_stance_2"
-			position = { x = 84 y = 180 }
-			spriteType = "GFX_NAM_board_stance_marks"
-			alwaystransparent = yes
-		}
-
-		iconType = {
-			name = "NAM_board_motion_mark_2"
-			position = { x = 165 y = 184 }
-			spriteType = "GFX_NAM_board_resolution_marker"
-			alwaystransparent = yes
-		}
-
-		buttonType = {
-			name = "NAM_board_choose_2"
-			position = { x = 74 y = 172 }
-			size = { x = 130 y = 92 }
-			quadTextureSprite = "GFX_NAM_board_seat_select"
-			frame = 2
-			clicksound = click_default
-			pdx_tooltip = "NAM_board_seat_2_tt"
-		}
-
-		containerWindowType = {
-			name = "NAM_board_selected_2"
-			position = { x = 74 y = 172 }
-			size = { width = 130 height = 92 }
-			alwaystransparent = yes
-			background = {
-				name = "NAM_board_selected_border_2"
-				quadTextureSprite = "GFX_NAM_board_seat_select"
-				frame = 3
-			}
-		}
-
-		iconType = {
-			name = "NAM_board_stance_3"
-			position = { x = 227 y = 180 }
-			spriteType = "GFX_NAM_board_stance_marks"
-			alwaystransparent = yes
-		}
-
-		iconType = {
-			name = "NAM_board_motion_mark_3"
-			position = { x = 308 y = 184 }
-			spriteType = "GFX_NAM_board_resolution_marker"
-			alwaystransparent = yes
-		}
-
-		buttonType = {
-			name = "NAM_board_choose_3"
-			position = { x = 217 y = 172 }
-			size = { x = 130 y = 92 }
-			quadTextureSprite = "GFX_NAM_board_seat_select"
-			frame = 2
-			clicksound = click_default
-			pdx_tooltip = "NAM_board_seat_3_tt"
-		}
-
-		containerWindowType = {
-			name = "NAM_board_selected_3"
-			position = { x = 217 y = 172 }
-			size = { width = 130 height = 92 }
-			alwaystransparent = yes
-			background = {
-				name = "NAM_board_selected_border_3"
-				quadTextureSprite = "GFX_NAM_board_seat_select"
-				frame = 3
-			}
-		}
-
-		iconType = {
-			name = "NAM_board_stance_4"
-			position = { x = 29 y = 302 }
-			spriteType = "GFX_NAM_board_stance_marks"
-			alwaystransparent = yes
-		}
-
-		iconType = {
-			name = "NAM_board_motion_mark_4"
-			position = { x = 110 y = 306 }
-			spriteType = "GFX_NAM_board_resolution_marker"
-			alwaystransparent = yes
-		}
-
-		buttonType = {
-			name = "NAM_board_choose_4"
-			position = { x = 22 y = 294 }
-			size = { x = 124 y = 92 }
-			quadTextureSprite = "GFX_NAM_board_seat_select"
-			frame = 2
-			clicksound = click_default
-			pdx_tooltip = "NAM_board_seat_4_tt"
-		}
-
-		containerWindowType = {
-			name = "NAM_board_selected_4"
-			position = { x = 22 y = 294 }
-			size = { width = 124 height = 92 }
-			alwaystransparent = yes
-			background = {
-				name = "NAM_board_selected_border_4"
-				quadTextureSprite = "GFX_NAM_board_seat_select"
-				frame = 3
-			}
-		}
-
-		iconType = {
-			name = "NAM_board_stance_5"
-			position = { x = 154 y = 302 }
-			spriteType = "GFX_NAM_board_stance_marks"
-			alwaystransparent = yes
-		}
-
-		iconType = {
-			name = "NAM_board_motion_mark_5"
-			position = { x = 235 y = 306 }
-			spriteType = "GFX_NAM_board_resolution_marker"
-			alwaystransparent = yes
-		}
-
-		buttonType = {
-			name = "NAM_board_choose_5"
-			position = { x = 147 y = 294 }
-			size = { x = 124 y = 92 }
-			quadTextureSprite = "GFX_NAM_board_seat_select"
-			frame = 2
-			clicksound = click_default
-			pdx_tooltip = "NAM_board_seat_5_tt"
-		}
-
-		containerWindowType = {
-			name = "NAM_board_selected_5"
-			position = { x = 147 y = 294 }
-			size = { width = 124 height = 92 }
-			alwaystransparent = yes
-			background = {
-				name = "NAM_board_selected_border_5"
-				quadTextureSprite = "GFX_NAM_board_seat_select"
-				frame = 3
-			}
-		}
-
-		iconType = {
-			name = "NAM_board_stance_6"
-			position = { x = 283 y = 302 }
-			spriteType = "GFX_NAM_board_stance_marks"
-			alwaystransparent = yes
-		}
-
-		iconType = {
-			name = "NAM_board_motion_mark_6"
-			position = { x = 364 y = 306 }
-			spriteType = "GFX_NAM_board_resolution_marker"
+			name = "NAM_board_selected_6"
+			position = { x = 274 y = 306 }
+			size = { x = 128 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_selected"
 			alwaystransparent = yes
 		}
 
 		buttonType = {
 			name = "NAM_board_choose_6"
-			position = { x = 274 y = 294 }
+			position = { x = 274 y = 306 }
 			size = { x = 128 y = 92 }
-			quadTextureSprite = "GFX_NAM_board_seat_select"
-			frame = 2
+			quadTextureSprite = "GFX_tiled_window_transparent"
 			clicksound = click_default
 			pdx_tooltip = "NAM_board_seat_6_tt"
-		}
-
-		containerWindowType = {
-			name = "NAM_board_selected_6"
-			position = { x = 274 y = 294 }
-			size = { width = 128 height = 92 }
-			alwaystransparent = yes
-			background = {
-				name = "NAM_board_selected_border_6"
-				quadTextureSprite = "GFX_NAM_board_seat_select"
-				frame = 3
-			}
 		}
 
 		instantTextBoxType = {
 			name = "NAM_board_sector_heading"
 			format = centre
-			position = { x = 8 y = 410 }
+			position = { x = 8 y = 422 }
 			text = "NAM_board_sector_heading"
 			font = "hoi_18mbs"
 			maxWidth = 444
@@ -1202,7 +1611,7 @@ name = "NAM_board_council_line"
 
 		instantTextBoxType = {
 			name = "NAM_board_registry_oil"
-			position = { x = 17 y = 463 }
+			position = { x = 17 y = 475 }
 			text = "NAM_board_registry_oil"
 			font = "hoi_16mbs"
 			maxWidth = 210
@@ -1213,7 +1622,7 @@ name = "NAM_board_council_line"
 
 		instantTextBoxType = {
 			name = "NAM_board_registry_coast"
-			position = { x = 17 y = 504 }
+			position = { x = 17 y = 516 }
 			text = "NAM_board_registry_coast"
 			font = "hoi_16mbs"
 			maxWidth = 210
@@ -1224,7 +1633,7 @@ name = "NAM_board_council_line"
 
 		instantTextBoxType = {
 			name = "NAM_board_registry_labour"
-			position = { x = 17 y = 545 }
+			position = { x = 17 y = 557 }
 			text = "NAM_board_registry_labour"
 			font = "hoi_16mbs"
 			maxWidth = 210
@@ -1235,7 +1644,7 @@ name = "NAM_board_council_line"
 
 		instantTextBoxType = {
 			name = "NAM_board_registry_rail"
-			position = { x = 236 y = 463 }
+			position = { x = 236 y = 475 }
 			text = "NAM_board_registry_rail"
 			font = "hoi_16mbs"
 			maxWidth = 210
@@ -1246,7 +1655,7 @@ name = "NAM_board_council_line"
 
 		instantTextBoxType = {
 			name = "NAM_board_registry_yards"
-			position = { x = 236 y = 504 }
+			position = { x = 236 y = 516 }
 			text = "NAM_board_registry_yards"
 			font = "hoi_16mbs"
 			maxWidth = 210
@@ -1257,7 +1666,7 @@ name = "NAM_board_council_line"
 
 		instantTextBoxType = {
 			name = "NAM_board_registry_depots"
-			position = { x = 236 y = 545 }
+			position = { x = 236 y = 557 }
 			text = "NAM_board_registry_depots"
 			font = "hoi_16mbs"
 			maxWidth = 210
@@ -1268,7 +1677,7 @@ name = "NAM_board_council_line"
 
 		instantTextBoxType = {
 			name = "NAM_board_chartered_caption"
-			position = { x = 17 y = 440 }
+			position = { x = 17 y = 452 }
 			text = "NAM_board_chartered_caption"
 			font = "hoi_16mbs"
 			maxWidth = 210
@@ -1279,7 +1688,7 @@ name = "NAM_board_council_line"
 
 		instantTextBoxType = {
 			name = "NAM_board_tenders_caption"
-			position = { x = 236 y = 440 }
+			position = { x = 236 y = 452 }
 			text = "NAM_board_tenders_caption"
 			font = "hoi_16mbs"
 			maxWidth = 208

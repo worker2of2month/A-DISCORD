@@ -405,7 +405,7 @@ class CountryDevelopmentReformTests(unittest.TestCase):
     def test_science_budget_growth_recomputes_without_accumulating(self):
         fixture = self.fixture({"A": {"amount_research_slots": 3}})
         state = fixture.scopes["A"]
-        for mode, expected in ((1, 0.9), (2, 1.95), (3, 3), (4, 6), (5, 9), (3, 3)):
+        for mode, expected in ((1, 1.95), (2, 2.4), (3, 3), (4, 4.5), (5, 6), (3, 3)):
             with self.subTest(mode=mode):
                 state["ADISCORD_economy_research_spending_mode"] = mode
                 fixture.run("ADISCORD_calculate_science_development_gain")
@@ -454,6 +454,16 @@ class CountryDevelopmentReformTests(unittest.TestCase):
         text = (ROOT / "common/ideas/ADISCORD_society_development.txt").read_text(encoding="utf-8")
         groups = parse_clausewitz(text)[0].value
         axes = (*self.AXES, "science")
+        # Each investment improves its defining benefit at every level, including level III.
+        benefits = {
+            "society": ("mobilization_speed", [-8, -4, 3, 7, 10]),
+            "social_system": ("monthly_population", [-8, -4, 3, 6, 10]),
+            "army": ("supply_consumption_factor", [6, 3, -2, -5, -7]),
+            "cultural": ("war_support_factor", [-5, -3, 2, 4, 6]),
+            "state": ("industry_repair_factor", [-8, -4, 3, 7, 10]),
+            "economic": ("production_factory_efficiency_gain_factor", [-6, -3, 2, 5, 8]),
+            "science": ("line_change_production_efficiency_factor", [-6, -3, 2, 5, 8]),
+        }
         self.assertEqual([group.key for group in groups], [f"ADISCORD_{axis}_development_laws" for axis in axes])
         categories = (ROOT / "common/idea_tags/00_idea.txt").read_text(encoding="utf-8")
         category = named_block(categories, "ADISCORD_development_laws")
@@ -479,8 +489,33 @@ class CountryDevelopmentReformTests(unittest.TestCase):
                 })
                 modifiers = {entry.key: entry.value for entry in values["modifier"]}
                 self.assertEqual(modifiers["custom_modifier_tooltip"], f"ADISCORD_{axis}_development_status_tt")
+                benefit, percentages = benefits[axis]
+                self.assertAlmostEqual(float(modifiers[benefit]), percentages[level - 1] / 100)
                 if axis == "science":
-                    self.assertAlmostEqual(float(modifiers["research_speed_factor"]), (-0.06, -0.03, 0, 0.03, 0.06)[level - 1])
+                    self.assertAlmostEqual(float(modifiers["research_speed_factor"]), (-0.08, -0.04, 0.03, 0.07, 0.10)[level - 1])
+
+    def test_extreme_levels_have_three_opposing_effects_exclusive_to_the_endpoints(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        text = (ROOT / "common/ideas/ADISCORD_society_development.txt").read_text(encoding="utf-8")
+        for group in parse_clausewitz(text)[0].value:
+            levels = []
+            for law in (entry for entry in group.value if isinstance(entry.value, list)):
+                fields = {entry.key: entry.value for entry in law.value}
+                modifiers = {
+                    entry.key: float(entry.value) for entry in fields["modifier"]
+                    if entry.key != "custom_modifier_tooltip"
+                }
+                levels.append(modifiers)
+                if any(key.startswith("ADISCORD_economy_") for key in modifiers):
+                    for hook in ("on_add", "on_remove"):
+                        self.assertIn("ADISCORD_economy_mark_dirty = yes", named_block(named_block(text, law.key), hook))
+            low, *middle, high = levels
+            exclusive = (low.keys() & high.keys()).difference(*middle)
+            with self.subTest(group=group.key):
+                self.assertGreaterEqual(len(exclusive), 3)
+                for key in exclusive:
+                    self.assertLess(low[key] * high[key], 0, key)
 
     def test_law_progress_and_science_localisation_load_in_both_languages(self):
         for language in ("russian", "english"):

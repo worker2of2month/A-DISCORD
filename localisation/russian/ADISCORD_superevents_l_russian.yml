@@ -262,6 +262,10 @@
   superevent_south_oil_union_quote: "Пролетариям нечего терять, кроме своих цепей. Приобретут же они весь мир.\n\n- Карл Маркс и Фридрих Энгельс, \"Манифест Коммунистической партии\""
   superevent_south_oil_union_comment: "Промыслы в наших руках."
 
+  superevent_nam_mainland_inventory_title: "Материк по описи"
+  superevent_nam_mainland_inventory_quote: "Итак, капитал есть командная власть над трудом и его продуктами.\n\n- Карл Маркс, \"Экономическо-философские рукописи 1844 года\""
+  superevent_nam_mainland_inventory_comment: "Причалы внесены в реестр."
+
   superevent_south_contract_republic_title: "Республика держит слово"
   superevent_south_contract_republic_quote: "Где кончается закон, начинается тирания.\n\n- Джон Локк, \"Второй трактат о правлении\", 202"
   superevent_south_contract_republic_comment: "Договор касается и правителя."

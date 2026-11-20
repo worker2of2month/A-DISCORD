@@ -1169,6 +1169,12 @@ scripted_gui = {
 			}
 		}
 		triggers = {
+			RUS_favours_suspicion_value_visible = { RUS_suspicion_active = yes }
+			RUS_favours_morale_value_visible = { RUS_morale_active = yes }
+			RUS_favours_intro_visible = {
+				RUS_suspicion_active = no
+				RUS_morale_active = no
+			}
 			RUS_favour_night_shifts_button_click_enabled = {
 				RUS_favour_science_20_affordable = yes
 				NOT = { has_country_flag = RUS_favour_night_shifts_ui_cooldown }

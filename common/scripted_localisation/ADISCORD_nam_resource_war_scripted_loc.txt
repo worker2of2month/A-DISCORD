@@ -8,24 +8,6 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMGetEtatistPartyName
-	text = {
-		trigger = { NAM_is_vorkerland_dependency = yes }
-		localization_key = NAM_metropolitan_administration
-	}
-	text = { localization_key = NAM_independent_etatists }
-}
-
-defined_text = {
-	name = NAMGetEtatistPartyLongName
-	text = {
-		trigger = { NAM_is_vorkerland_dependency = yes }
-		localization_key = NAM_metropolitan_administration
-	}
-	text = { localization_key = NAM_independent_etatists_long }
-}
-
-defined_text = {
 	name = NAMBoardAgenda1
 	text = {
 		trigger = {
@@ -2220,6 +2202,47 @@ defined_text = {
 	text = { localization_key = NAM_board_exile_report }
 }
 
+# The public campaigns category serves the republic on the mainland and the
+# Directory on the islands.
+defined_text = {
+	name = NAMPublicCampaignsTitle
+	text = {
+		trigger = { has_country_flag = NAM_corp_takeover }
+		localization_key = NAM_dir_campaigns_title
+	}
+	text = { localization_key = NAM_public_campaigns_mainland }
+}
+
+defined_text = {
+	name = NAMPublicCampaignsDesc
+	text = {
+		trigger = { has_country_flag = NAM_corp_takeover }
+		localization_key = NAM_dir_campaigns_desc
+	}
+	text = { localization_key = NAM_public_campaigns_mainland_desc }
+}
+
+# Speakers are fixed when the session mission is armed.
+defined_text = {
+	name = NAMBoardCategorySession
+	text = {
+		trigger = { check_variable = { NAM_board_session_day < 0 } }
+		localization_key = NAM_board_category_session_none
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_speaker_1 > 0 }
+			check_variable = { NAM_board_speaker_2 > 0 }
+		}
+		localization_key = NAM_board_category_session_pair
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_speaker_1 > 0 } }
+		localization_key = NAM_board_category_session_single
+	}
+	text = { localization_key = NAM_board_category_session_open }
+}
+
 defined_text = {
 	name = NAMBoardSeat1Card
 	text = {
@@ -2278,26 +2301,58 @@ defined_text = {
 	text = { localization_key = NAM_board_seat_empty }
 }
 
+# A seat's stance word, tooltip line and icon read the same frame variable;
+# the countdown reads the deadline of the company that holds the seat.
 defined_text = {
-	name = NAMBoardRepresentative1
+	name = NAMBoardSeat1Stance
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^1 value = 1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_1 = 1 } }
 		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^1 value = -1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_1 = 4 } }
 		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
-			check_variable = { var = NAM_board_objection_days^1 value = 0 compare = greater_than }
-			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^1 }
+			check_variable = { NAM_board_stance_frame_1 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_1 }
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
 		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_waiting }
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_1 = 2 } }
+		localization_key = NAM_board_rep_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
+}
+
+defined_text = {
+	name = NAMBoardSeat1Position
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_1 = 1 } }
+		localization_key = NAM_board_position_for
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_1 = 4 } }
+		localization_key = NAM_board_position_boycott
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_stance_frame_1 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_1 }
+			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
+			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
+		}
+		localization_key = NAM_board_position_countdown
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_1 = 2 } }
+		localization_key = NAM_board_position_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
 }
 
 defined_text = {
@@ -2359,25 +2414,55 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMBoardRepresentative2
+	name = NAMBoardSeat2Stance
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^2 value = 1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_2 = 1 } }
 		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^2 value = -1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_2 = 4 } }
 		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
-			check_variable = { var = NAM_board_objection_days^2 value = 0 compare = greater_than }
-			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^2 }
+			check_variable = { NAM_board_stance_frame_2 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_2 }
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
 		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_waiting }
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_2 = 2 } }
+		localization_key = NAM_board_rep_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
+}
+
+defined_text = {
+	name = NAMBoardSeat2Position
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_2 = 1 } }
+		localization_key = NAM_board_position_for
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_2 = 4 } }
+		localization_key = NAM_board_position_boycott
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_stance_frame_2 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_2 }
+			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
+			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
+		}
+		localization_key = NAM_board_position_countdown
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_2 = 2 } }
+		localization_key = NAM_board_position_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
 }
 
 defined_text = {
@@ -2439,25 +2524,55 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMBoardRepresentative3
+	name = NAMBoardSeat3Stance
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^3 value = 1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_3 = 1 } }
 		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^3 value = -1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_3 = 4 } }
 		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
-			check_variable = { var = NAM_board_objection_days^3 value = 0 compare = greater_than }
-			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^3 }
+			check_variable = { NAM_board_stance_frame_3 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_3 }
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
 		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_waiting }
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_3 = 2 } }
+		localization_key = NAM_board_rep_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
+}
+
+defined_text = {
+	name = NAMBoardSeat3Position
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_3 = 1 } }
+		localization_key = NAM_board_position_for
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_3 = 4 } }
+		localization_key = NAM_board_position_boycott
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_stance_frame_3 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_3 }
+			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
+			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
+		}
+		localization_key = NAM_board_position_countdown
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_3 = 2 } }
+		localization_key = NAM_board_position_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
 }
 
 defined_text = {
@@ -2519,25 +2634,55 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMBoardRepresentative4
+	name = NAMBoardSeat4Stance
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^4 value = 1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_4 = 1 } }
 		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^4 value = -1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_4 = 4 } }
 		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
-			check_variable = { var = NAM_board_objection_days^4 value = 0 compare = greater_than }
-			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^4 }
+			check_variable = { NAM_board_stance_frame_4 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_4 }
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
 		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_waiting }
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_4 = 2 } }
+		localization_key = NAM_board_rep_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
+}
+
+defined_text = {
+	name = NAMBoardSeat4Position
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_4 = 1 } }
+		localization_key = NAM_board_position_for
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_4 = 4 } }
+		localization_key = NAM_board_position_boycott
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_stance_frame_4 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_4 }
+			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
+			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
+		}
+		localization_key = NAM_board_position_countdown
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_4 = 2 } }
+		localization_key = NAM_board_position_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
 }
 
 defined_text = {
@@ -2599,25 +2744,55 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMBoardRepresentative5
+	name = NAMBoardSeat5Stance
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^5 value = 1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_5 = 1 } }
 		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^5 value = -1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_5 = 4 } }
 		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
-			check_variable = { var = NAM_board_objection_days^5 value = 0 compare = greater_than }
-			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^5 }
+			check_variable = { NAM_board_stance_frame_5 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_5 }
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
 		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_waiting }
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_5 = 2 } }
+		localization_key = NAM_board_rep_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
+}
+
+defined_text = {
+	name = NAMBoardSeat5Position
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_5 = 1 } }
+		localization_key = NAM_board_position_for
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_5 = 4 } }
+		localization_key = NAM_board_position_boycott
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_stance_frame_5 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_5 }
+			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
+			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
+		}
+		localization_key = NAM_board_position_countdown
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_5 = 2 } }
+		localization_key = NAM_board_position_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
 }
 
 defined_text = {
@@ -2679,25 +2854,55 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMBoardRepresentative6
+	name = NAMBoardSeat6Stance
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^6 value = 1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_6 = 1 } }
 		localization_key = NAM_board_rep_for
 	}
 	text = {
-		trigger = { check_variable = { var = NAM_board_stance^6 value = -1 compare = equals } }
+		trigger = { check_variable = { NAM_board_stance_frame_6 = 4 } }
 		localization_key = NAM_board_rep_boycott
 	}
 	text = {
 		trigger = {
-			check_variable = { var = NAM_board_objection_days^6 value = 0 compare = greater_than }
-			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^6 }
+			check_variable = { NAM_board_stance_frame_6 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_6 }
 			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
 			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
 		}
 		localization_key = NAM_board_rep_countdown
 	}
-	text = { localization_key = NAM_board_rep_waiting }
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_6 = 2 } }
+		localization_key = NAM_board_rep_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
+}
+
+defined_text = {
+	name = NAMBoardSeat6Position
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_6 = 1 } }
+		localization_key = NAM_board_position_for
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_6 = 4 } }
+		localization_key = NAM_board_position_boycott
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_stance_frame_6 = 3 }
+			set_temp_variable = { var = NAM_board_days_to_boycott value = NAM_board_objection_days^NAM_board_rank_6 }
+			subtract_from_temp_variable = { var = NAM_board_days_to_boycott value = global.num_days }
+			clamp_temp_variable = { var = NAM_board_days_to_boycott min = 0 max = 30 }
+		}
+		localization_key = NAM_board_position_countdown
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_stance_frame_6 = 2 } }
+		localization_key = NAM_board_position_waiting
+	}
+	text = { localization_key = NAM_board_rep_none }
 }
 
 defined_text = {
@@ -2816,6 +3021,324 @@ defined_text = {
 		localization_key = NAM_Lidiya_Velyaminova
 	}
 	text = { localization_key = NAM_Mark_Olshansky }
+}
+
+# Votes formula term for the chair's extra vote, matching NAM_board_recount.
+defined_text = {
+	name = NAMBoardChairVote1
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_chair value = 1 compare = equals }
+			check_variable = { NAM_board_chair_vote > 0 }
+		}
+		localization_key = NAM_board_chair_vote_term
+	}
+	text = { localization_key = NAM_board_chair_vote_none }
+}
+
+defined_text = {
+	name = NAMBoardChairVote2
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_chair value = 2 compare = equals }
+			check_variable = { NAM_board_chair_vote > 0 }
+		}
+		localization_key = NAM_board_chair_vote_term
+	}
+	text = { localization_key = NAM_board_chair_vote_none }
+}
+
+defined_text = {
+	name = NAMBoardChairVote3
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_chair value = 3 compare = equals }
+			check_variable = { NAM_board_chair_vote > 0 }
+		}
+		localization_key = NAM_board_chair_vote_term
+	}
+	text = { localization_key = NAM_board_chair_vote_none }
+}
+
+defined_text = {
+	name = NAMBoardChairVote4
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_chair value = 4 compare = equals }
+			check_variable = { NAM_board_chair_vote > 0 }
+		}
+		localization_key = NAM_board_chair_vote_term
+	}
+	text = { localization_key = NAM_board_chair_vote_none }
+}
+
+defined_text = {
+	name = NAMBoardChairVote5
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_chair value = 5 compare = equals }
+			check_variable = { NAM_board_chair_vote > 0 }
+		}
+		localization_key = NAM_board_chair_vote_term
+	}
+	text = { localization_key = NAM_board_chair_vote_none }
+}
+
+defined_text = {
+	name = NAMBoardChairVote6
+	text = {
+		trigger = {
+			check_variable = { var = NAM_board_chair value = 6 compare = equals }
+			check_variable = { NAM_board_chair_vote > 0 }
+		}
+		localization_key = NAM_board_chair_vote_term
+	}
+	text = { localization_key = NAM_board_chair_vote_none }
+}
+
+# Industrial policy charter: the next line a grant opens, by charter level.
+# Level 0 opens line A, level 1 line B; a company with both lines open is paid.
+defined_text = {
+	name = NAMBoardCharterNext1
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^1 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_next_1_a
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^1 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_next_1_b
+	}
+	text = { localization_key = NAM_board_charter_next_full }
+}
+
+defined_text = {
+	name = NAMBoardCharterNext2
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^2 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_next_2_a
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^2 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_next_2_b
+	}
+	text = { localization_key = NAM_board_charter_next_full }
+}
+
+defined_text = {
+	name = NAMBoardCharterNext3
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^3 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_next_3_a
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^3 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_next_3_b
+	}
+	text = { localization_key = NAM_board_charter_next_full }
+}
+
+defined_text = {
+	name = NAMBoardCharterNext4
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^4 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_next_4_a
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^4 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_next_4_b
+	}
+	text = { localization_key = NAM_board_charter_next_full }
+}
+
+defined_text = {
+	name = NAMBoardCharterNext5
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^5 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_next_5_a
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^5 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_next_5_b
+	}
+	text = { localization_key = NAM_board_charter_next_full }
+}
+
+defined_text = {
+	name = NAMBoardCharterNext6
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^6 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_next_6_a
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^6 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_next_6_b
+	}
+	text = { localization_key = NAM_board_charter_next_full }
+}
+
+# Company card mark beside each product rate: a closed charter line applies its penalty.
+defined_text = {
+	name = NAMBoardCharterMark1A
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^1 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark1B
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^1 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark2A
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^2 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark2B
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^2 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark3A
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^3 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark3B
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^3 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark4A
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^4 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark4B
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^4 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark5A
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^5 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark5B
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^5 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark6A
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^6 value = 1 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+defined_text = {
+	name = NAMBoardCharterMark6B
+	text = {
+		trigger = { check_variable = { var = NAM_board_charter^6 value = 2 compare = less_than } }
+		localization_key = NAM_board_charter_closed
+	}
+	text = { localization_key = NAM_board_charter_open }
+}
+
+# Award tooltips: only the first award of a lot (NAM_board_lot_awarded, 1 rail,
+# 2 yards, 3 depots) grants the winner's charter line in NAM_board_close_tender.
+defined_text = {
+	name = NAMBoardAwardCharterRail2
+	text = {
+		trigger = { check_variable = { var = NAM_board_lot_awarded^1 value = 0 compare = equals } }
+		localization_key = NAM_board_charter_grant_2_tt
+	}
+	text = { localization_key = NAM_board_charter_lot_used }
+}
+
+defined_text = {
+	name = NAMBoardAwardCharterRail5
+	text = {
+		trigger = { check_variable = { var = NAM_board_lot_awarded^1 value = 0 compare = equals } }
+		localization_key = NAM_board_charter_grant_5_tt
+	}
+	text = { localization_key = NAM_board_charter_lot_used }
+}
+
+defined_text = {
+	name = NAMBoardAwardCharterYards3
+	text = {
+		trigger = { check_variable = { var = NAM_board_lot_awarded^2 value = 0 compare = equals } }
+		localization_key = NAM_board_charter_grant_3_tt
+	}
+	text = { localization_key = NAM_board_charter_lot_used }
+}
+
+defined_text = {
+	name = NAMBoardAwardCharterYards4
+	text = {
+		trigger = { check_variable = { var = NAM_board_lot_awarded^2 value = 0 compare = equals } }
+		localization_key = NAM_board_charter_grant_4_tt
+	}
+	text = { localization_key = NAM_board_charter_lot_used }
+}
+
+defined_text = {
+	name = NAMBoardAwardCharterDepots1
+	text = {
+		trigger = { check_variable = { var = NAM_board_lot_awarded^3 value = 0 compare = equals } }
+		localization_key = NAM_board_charter_grant_1_tt
+	}
+	text = { localization_key = NAM_board_charter_lot_used }
+}
+
+defined_text = {
+	name = NAMBoardAwardCharterDepots6
+	text = {
+		trigger = { check_variable = { var = NAM_board_lot_awarded^3 value = 0 compare = equals } }
+		localization_key = NAM_board_charter_grant_6_tt
+	}
+	text = { localization_key = NAM_board_charter_lot_used }
 }
 
 defined_text = {
@@ -3087,6 +3610,18 @@ defined_text = {
 			clamp_temp_variable = { var = NAM_board_confidence_remaining min = 0 max = 45 }
 		}
 		localization_key = NAM_board_confidence_clock
+	}
+	# NAM_board_settle_no_confidence locks the next motion for 270 days after original_stays_home.
+	text = {
+		trigger = {
+			has_country_flag = NAM_board_no_confidence_immunity
+			has_completed_focus = NAM_board_original_stays_home
+		}
+		localization_key = NAM_board_confidence_immune_long
+	}
+	text = {
+		trigger = { has_country_flag = NAM_board_no_confidence_immunity }
+		localization_key = NAM_board_confidence_immune
 	}
 	text = { localization_key = NAM_board_no_motion }
 }
@@ -3457,6 +3992,178 @@ defined_text = {
 	}
 }
 
+defined_text = {
+	name = NAMCalendarClock
+	text = {
+		trigger = { NAM_rw_deadline_open = yes }
+		localization_key = NAM_calendar_remaining
+	}
+	text = { localization_key = NAM_calendar_ended }
+}
+
+defined_text = {
+	name = NAMCalendarDesk
+	text = {
+		trigger = { has_completed_focus = NAM_restitution_desk }
+		localization_key = NAM_calendar_desk_done
+	}
+	text = { localization_key = NAM_calendar_unused }
+}
+
+defined_text = {
+	name = NAMCalendarAzhar
+	text = {
+		trigger = { has_country_flag = NAM_rw_time_bought }
+		localization_key = NAM_calendar_applied
+	}
+	text = { localization_key = NAM_calendar_unused }
+}
+
+defined_text = {
+	name = NAMCalendarClaims
+	text = {
+		trigger = { has_country_flag = NAM_rw_note_sent }
+		localization_key = NAM_calendar_applied
+	}
+	text = { localization_key = NAM_calendar_unused }
+}
+
+defined_text = {
+	name = NAMCalendarProtocol
+	text = {
+		trigger = { has_country_flag = NAM_rw_protocol_signed }
+		localization_key = NAM_calendar_applied
+	}
+	text = { localization_key = NAM_calendar_unused }
+}
+
+defined_text = {
+	name = NAMCalendarDossier
+	text = {
+		trigger = { has_country_flag = NAM_ind_border_dossier_paid }
+		localization_key = NAM_calendar_pending
+	}
+	text = {
+		trigger = { has_country_flag = NAM_ind_border_dossier_delivered }
+		localization_key = NAM_calendar_applied
+	}
+	text = {
+		trigger = { has_country_flag = NAM_ind_border_dossier_used }
+		localization_key = NAM_calendar_spent
+	}
+	text = { localization_key = NAM_calendar_unused }
+}
+
+defined_text = {
+	name = NAMNetworkSummary
+	text = {
+		trigger = { NAM_underground_active = yes }
+		localization_key = NAM_network_summary
+	}
+	text = { localization_key = NAM_network_closed }
+}
+
+defined_text = {
+	name = NAMNetworkDistricts
+	text = {
+		trigger = { check_variable = { NAM_grp_dist_support < 25 } }
+		localization_key = NAM_network_dist_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_grp_dist_support < 40 } }
+		localization_key = NAM_network_dist_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_grp_dist_support > 59 } }
+		localization_key = NAM_network_dist_relief
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMNetworkPressure
+	text = {
+		trigger = { NAM_underground_vertical_pressure = yes }
+		localization_key = NAM_network_pressure
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMNetworkCompact
+	text = {
+		trigger = { has_country_flag = NAM_district_compact }
+		localization_key = NAM_network_compact
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMNetworkPress
+	text = {
+		trigger = { has_decision = NAM_disrupt_print_supply }
+		localization_key = NAM_network_press
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMNetworkPipeline
+	text = {
+		trigger = { has_decision = NAM_colonial_pipeline_guard }
+		localization_key = NAM_network_pipeline
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMNetworkLeaflets
+	text = {
+		trigger = { has_decision = NAM_campaign_answer_leaflets }
+		localization_key = NAM_network_leaflets
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMNetworkRisk
+	text = {
+		trigger = { NAM_compact_effective = yes }
+		localization_key = NAM_network_risk_pact
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_underground value = 60 compare = greater_than_or_equals } }
+		localization_key = NAM_network_risk_certain
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_underground value = 30 compare = greater_than_or_equals } }
+		localization_key = NAM_network_risk_half
+	}
+	text = { localization_key = NAM_network_risk_none }
+}
+
+defined_text = {
+	name = NAMNetworkPipeWatch
+	text = {
+		trigger = { has_country_flag = NAM_pipeline_watched }
+		localization_key = NAM_network_guard_yes
+	}
+	text = {
+		trigger = { has_decision = NAM_colonial_pipeline_guard }
+		localization_key = NAM_network_guard_yes
+	}
+	text = { localization_key = NAM_network_guard_no }
+}
+
+defined_text = {
+	name = NAMNetworkDepotWatch
+	text = {
+		trigger = { has_country_flag = NAM_depots_guarded }
+		localization_key = NAM_network_guard_yes
+	}
+	text = { localization_key = NAM_network_guard_no }
+}
+
 # The next step of the restitution clock in the NAM_restitution category.
 defined_text = {
 	name = NAMGetTensionNext
@@ -3471,6 +4178,10 @@ defined_text = {
 	text = {
 		trigger = { has_country_flag = NAM_rw_ultimatum_sent }
 		localization_key = NAM_rw_next_ultimatum
+	}
+	text = {
+		trigger = { has_country_flag = NAM_rw_notes_sent }
+		localization_key = NAM_calendar_await_ultimatum
 	}
 	text = { localization_key = NAM_rw_next_notes }
 }
@@ -5363,7 +6074,7 @@ defined_text = {
 	name = NAMGetMobilisationDescription
 	text = {
 		trigger = { NAM_line_programme_open = yes }
-		localization_key = NAM_mobilisation_active_desc
+		localization_key = NAM_bw_empty
 	}
 	text = {
 		trigger = { NAM_permanent_lines_authorized = yes }
@@ -5911,16 +6622,37 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMJudasWeberSupport
+	name = NAMJudasWeberSummary
 	text = {
-		trigger = {
-			has_idea = NAM_judas_weber_committees
-		}
-		localization_key = NAM_judas_weber_support
+		trigger = { NAM_judas_weber_camp_active = yes }
+		localization_key = NAM_judas_weber_agenda
 	}
-	text = { localization_key = NAM_bw_empty }
+	text = { localization_key = NAM_judas_weber_standing }
 }
 
+# Category report of a living camp. A dead man or a dissolved camp keeps only
+# its heading and status line, so the report never shows an empty row.
+defined_text = {
+	name = NAMJudasWeberBlock
+	text = {
+		trigger = { NAM_judas_weber_camp_active = yes }
+		localization_key = NAM_judas_weber_block
+	}
+	text = { localization_key = NAM_judas_weber_block_closed }
+}
+
+# Weber names no company until a tender, a resolution or the vote count gives
+# him one; the reason is shown only beside a named target.
+defined_text = {
+	name = NAMJudasWeberTargetLine
+	text = {
+		trigger = { check_variable = { NAM_judas_weber_target > 0 } }
+		localization_key = NAM_judas_weber_target_line
+	}
+	text = { localization_key = NAM_judas_weber_target_none }
+}
+
+# Meeting state; the meeting mission below the report shows the days left.
 defined_text = {
 	name = NAMJudasWeberClock
 	text = {
@@ -5936,7 +6668,11 @@ defined_text = {
 		}
 		localization_key = NAM_judas_locked
 	}
-	text = { localization_key = NAM_judas_open_target }
+	text = {
+		trigger = { has_variable = NAM_judas_weber_day }
+		localization_key = NAM_judas_open_target
+	}
+	text = { localization_key = NAM_judas_meeting_now }
 }
 
 defined_text = {
@@ -5971,14 +6707,21 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMJudasKaramyshevSupport
+	name = NAMJudasKaramyshevSummary
 	text = {
-		trigger = {
-			has_idea = NAM_judas_karamyshev_watch
-		}
-		localization_key = NAM_judas_karamyshev_support
+		trigger = { NAM_judas_karamyshev_camp_active = yes }
+		localization_key = NAM_judas_karamyshev_agenda
 	}
-	text = { localization_key = NAM_bw_empty }
+	text = { localization_key = NAM_judas_karamyshev_standing }
+}
+
+defined_text = {
+	name = NAMJudasKaramyshevBlock
+	text = {
+		trigger = { NAM_judas_karamyshev_camp_active = yes }
+		localization_key = NAM_judas_karamyshev_block
+	}
+	text = { localization_key = NAM_judas_karamyshev_block_closed }
 }
 
 defined_text = {
@@ -5996,7 +6739,11 @@ defined_text = {
 		}
 		localization_key = NAM_judas_locked
 	}
-	text = { localization_key = NAM_judas_open_target }
+	text = {
+		trigger = { has_variable = NAM_judas_karamyshev_day }
+		localization_key = NAM_judas_open_target
+	}
+	text = { localization_key = NAM_judas_meeting_now }
 }
 
 defined_text = {
@@ -6019,15 +6766,304 @@ defined_text = {
 defined_text = {
 	name = NAMJudasKaramyshevForce
 	text = {
-		trigger = {
-			OR = {
-				NAM_judas_willing_navis = yes
-				NAM_judas_willing_arktur = yes
-			}
-		}
+		trigger = { NAM_judas_karamyshev_can_force = yes }
 		localization_key = NAM_judas_karamyshev_force_ready
 	}
 	text = { localization_key = NAM_judas_karamyshev_force_blocked }
+}
+
+# Kill tooltips of posthumous_signature and last_debtor: the band that applies now in
+# full, the other two as one line each.
+defined_text = {
+	name = NAMJudasKaramyshevOutcomeNow
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_karamyshev value = 60 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_karamyshev_now_high
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_karamyshev value = 30 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_karamyshev_now_mid
+	}
+	text = { localization_key = NAM_judas_karamyshev_now_low }
+}
+
+defined_text = {
+	name = NAMJudasKaramyshevOutcomeOther
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_karamyshev value = 60 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_karamyshev_other_high
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_karamyshev value = 30 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_karamyshev_other_mid
+	}
+	text = { localization_key = NAM_judas_karamyshev_other_low }
+}
+
+defined_text = {
+	name = NAMJudasWeberOutcomeNow
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_weber value = 60 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_weber_now_high
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_weber value = 30 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_weber_now_mid
+	}
+	text = { localization_key = NAM_judas_weber_now_low }
+}
+
+defined_text = {
+	name = NAMJudasWeberOutcomeOther
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_weber value = 60 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_weber_other_high
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_weber value = 30 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_weber_other_mid
+	}
+	text = { localization_key = NAM_judas_weber_other_low }
+}
+
+# Share of a dead camp's replacement by the band stored at the kill; no band reads as 1.
+defined_text = {
+	name = NAMJudasKaramyshevSpoils
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_karamyshev_end value = 3 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_karamyshev_spoils_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_karamyshev_end value = 2 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_karamyshev_spoils_2
+	}
+	text = { localization_key = NAM_judas_karamyshev_spoils_1 }
+}
+
+defined_text = {
+	name = NAMJudasWeberSpoils
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_weber_end value = 3 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_weber_spoils_3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = NAM_judas_weber_end value = 2 compare = greater_than_or_equals }
+		}
+		localization_key = NAM_judas_weber_spoils_2
+	}
+	text = { localization_key = NAM_judas_weber_spoils_1 }
+}
+
+# Rejection and resolution failure: the sanction is shorter after political_debt_register.
+defined_text = {
+	name = NAMBoardRejectTerms
+	text = {
+		trigger = { has_completed_focus = NAM_board_political_debt_register }
+		localization_key = NAM_board_reject_short_tt
+	}
+	text = { localization_key = NAM_board_reject_tt }
+}
+
+defined_text = {
+	name = NAMBoardResolutionFailureTerms
+	text = {
+		trigger = { has_completed_focus = NAM_board_political_debt_register }
+		localization_key = NAM_board_resolution_failure_short_tt
+	}
+	text = { localization_key = NAM_board_resolution_failure_tt }
+}
+
+# The two vote leaders that partition_night would freeze now.
+defined_text = {
+	name = NAMBoardRankShort1
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_1 value = 1 compare = equals } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_1 value = 2 compare = equals } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_1 value = 3 compare = equals } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_1 value = 4 compare = equals } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_1 value = 5 compare = equals } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_1 value = 6 compare = equals } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_board_rank_none }
+}
+
+defined_text = {
+	name = NAMBoardRankShort2
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_2 value = 1 compare = equals } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_2 value = 2 compare = equals } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_2 value = 3 compare = equals } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_2 value = 4 compare = equals } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_2 value = 5 compare = equals } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_rank_2 value = 6 compare = equals } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_board_rank_none }
+}
+
+# The company a running proxy purchase serves, otherwise the pyramid selection.
+defined_text = {
+	name = NAMBoardProxyTarget
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = NAM_board_proxy_target value = 1 compare = equals }
+				AND = {
+					check_variable = { var = NAM_board_proxy_target value = 0 compare = equals }
+					check_variable = { var = NAM_board_selected value = 1 compare = equals }
+				}
+			}
+		}
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = NAM_board_proxy_target value = 2 compare = equals }
+				AND = {
+					check_variable = { var = NAM_board_proxy_target value = 0 compare = equals }
+					check_variable = { var = NAM_board_selected value = 2 compare = equals }
+				}
+			}
+		}
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = NAM_board_proxy_target value = 3 compare = equals }
+				AND = {
+					check_variable = { var = NAM_board_proxy_target value = 0 compare = equals }
+					check_variable = { var = NAM_board_selected value = 3 compare = equals }
+				}
+			}
+		}
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = NAM_board_proxy_target value = 4 compare = equals }
+				AND = {
+					check_variable = { var = NAM_board_proxy_target value = 0 compare = equals }
+					check_variable = { var = NAM_board_selected value = 4 compare = equals }
+				}
+			}
+		}
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = NAM_board_proxy_target value = 5 compare = equals }
+				AND = {
+					check_variable = { var = NAM_board_proxy_target value = 0 compare = equals }
+					check_variable = { var = NAM_board_selected value = 5 compare = equals }
+				}
+			}
+		}
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = NAM_board_proxy_target value = 6 compare = equals }
+				AND = {
+					check_variable = { var = NAM_board_proxy_target value = 0 compare = equals }
+					check_variable = { var = NAM_board_selected value = 6 compare = equals }
+				}
+			}
+		}
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_board_rank_none }
+}
+
+# The lot of the company selected on the pyramid: 2 and 5 rail, 3 and 4 yards, 1 and 6 depots.
+defined_text = {
+	name = NAMBoardRetenderLot
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = NAM_board_selected value = 2 compare = equals }
+				check_variable = { var = NAM_board_selected value = 5 compare = equals }
+			}
+		}
+		localization_key = NAM_board_retender_lot_rail
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = NAM_board_selected value = 3 compare = equals }
+				check_variable = { var = NAM_board_selected value = 4 compare = equals }
+			}
+		}
+		localization_key = NAM_board_retender_lot_yards
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { var = NAM_board_selected value = 1 compare = equals }
+				check_variable = { var = NAM_board_selected value = 6 compare = equals }
+			}
+		}
+		localization_key = NAM_board_retender_lot_depots
+	}
+	text = { localization_key = NAM_board_retender_lot_none }
 }
 
 defined_text = {

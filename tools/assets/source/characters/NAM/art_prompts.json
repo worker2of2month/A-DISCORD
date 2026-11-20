@@ -316,6 +316,8 @@
           "id": "NAM_Vsevolod_Rakhmanov",
           "company": "Loren",
           "subject": "Premier, 61. Heavyset balding man, luxuriant grey moustache, three-piece suit, pince-nez on a cord.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/vsevolod_rakhmanov.png",
+          "pose": "Three-quarter view facing the viewer's left.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Vsevolod_Rakhmanov_small.png",
           "sprite": "GFX_idea_NAM_Vsevolod_Rakhmanov"
         },
@@ -330,6 +332,8 @@
           "id": "NAM_Matvei_Bronnikov",
           "company": "Ferrant",
           "subject": "Defence minister, 50. Stocky man with dense brows and a short leather work jacket over his shirt and tie.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/matvei_bronnikov.png",
+          "pose": "Three-quarter view facing the viewer's left.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Matvei_Bronnikov_small.png",
           "sprite": "GFX_idea_NAM_Matvei_Bronnikov"
         },
@@ -351,6 +355,8 @@
           "id": "NAM_Raisa_Chaikina",
           "company": "Navis",
           "subject": "Intelligence chief, 39. Woman with auburn hair under a beret, observant eyes, practical trench coat.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/raisa_chaikina.png",
+          "pose": "Three-quarter view facing the viewer's left.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Raisa_Chaikina_small.png",
           "sprite": "GFX_idea_NAM_Raisa_Chaikina"
         },
@@ -358,6 +364,8 @@
           "id": "NAM_Tikhon_Zarubin",
           "company": "Arktur",
           "subject": "Intelligence chief, 49. Shaved head, heavy penetrating gaze, black high-neck service shirt and leather shoulder belt.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/tikhon_zarubin.png",
+          "pose": "Frontal head and direct gaze.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Tikhon_Zarubin_small.png",
           "sprite": "GFX_idea_NAM_Tikhon_Zarubin"
         },
@@ -379,6 +387,8 @@
           "id": "NAM_Rashid_Ildarov",
           "company": "Smenkom",
           "subject": "Foreign minister, 38. Olive complexion, closely trimmed beard, dark three-piece suit and signet ring, appraising gaze.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/rashid_ildarov.png",
+          "pose": "Three-quarter view facing the viewer's left.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Rashid_Ildarov_small.png",
           "sprite": "GFX_idea_NAM_Rashid_Ildarov"
         },
@@ -393,6 +403,8 @@
           "id": "NAM_Yuliya_Savitskaya",
           "company": "Reidbank",
           "subject": "Health minister, 36. Blonde hair pulled into a tight bun, fine-rimmed glasses, dark green fitted jacket.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/yuliya_savitskaya.png",
+          "pose": "Frontal head and direct gaze.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Yuliya_Savitskaya_small.png",
           "sprite": "GFX_idea_NAM_Yuliya_Savitskaya"
         },
@@ -400,6 +412,8 @@
           "id": "NAM_Boris_Nartov",
           "company": "Loren",
           "subject": "Economy minister, 54. A stout oilfield accountant with round glasses, a worn waistcoat and shirt sleeves with sleeve garters.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/boris_nartov.png",
+          "pose": "Frontal head and direct gaze.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Boris_Nartov_small.png",
           "sprite": "GFX_idea_NAM_Boris_Nartov",
           "idea": "minister_NAM_Boris_Nar"
@@ -408,6 +422,8 @@
           "id": "NAM_Leonid_Belov",
           "company": "Reidbank",
           "subject": "Economy minister, 41. A neat bank clerk with slicked hair and a pencil moustache, precise shirt collar and muted tie.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/leonid_belov.png",
+          "pose": "Three-quarter view facing the viewer's left.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Leonid_Belov_small.png",
           "sprite": "GFX_idea_NAM_Leonid_Belov",
           "idea": "NAM_board_bank_nominee"
@@ -416,6 +432,8 @@
           "id": "NAM_Fedot_Ermolin",
           "company": "Ferrant",
           "subject": "Education minister, 58. Factory instructor with a bristling short grey crew cut and a plain, worn work blazer.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/fedot_ermolin.png",
+          "pose": "Frontal head and direct gaze.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Fedot_Ermolin_small.png",
           "sprite": "GFX_idea_NAM_Fedot_Ermolin",
           "idea": "minister_NAM_Fedot_Mir"
@@ -432,6 +450,8 @@
           "id": "NAM_Mark_Vetlugin",
           "company": "Arktur",
           "subject": "Defence minister, 51. A retired officer with upright military bearing, plain structured high-collared service tunic.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/mark_vetlugin.png",
+          "pose": "Three-quarter view facing the viewer's left.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Mark_Vetlugin_small.png",
           "sprite": "GFX_idea_NAM_Mark_Vetlugin",
           "idea": "minister_NAM_Mara_Kluch"
@@ -440,6 +460,8 @@
           "id": "NAM_Pavel_Ordyntsev",
           "company": "Navis",
           "subject": "Foreign minister, 49. Grey at the temples, formal diplomatic suit and restrained tie, composed expression.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/pavel_ordyntsev.png",
+          "pose": "Three-quarter view facing the viewer's left.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Pavel_Ordyntsev_small.png",
           "sprite": "GFX_idea_NAM_Pavel_Ordyntsev",
           "idea": "minister_NAM_Pavel_Ordyntsev"
@@ -448,6 +470,8 @@
           "id": "NAM_Semyon_Kornev",
           "company": "Independent",
           "subject": "Premier, 55. Former port transport dispatcher, tired lined face and a modest, well-worn civilian suit.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/semyon_kornev.png",
+          "pose": "Frontal head and direct gaze.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Semyon_Kornev_small.png",
           "sprite": "GFX_idea_NAM_Semyon_Kornev",
           "idea": "NAM_board_premier_kornev"
@@ -472,6 +496,8 @@
           "id": "NAM_Andrei_Bulatov",
           "company": "Independent",
           "subject": "Intelligence chief, 37. Slender radio operator with a narrow face, plain knitted sweater under a jacket.",
+          "cutout": "tools/assets/source/characters/NAM/cabinet_cutouts/andrei_bulatov.png",
+          "pose": "Three-quarter view facing the viewer's left.",
           "runtime": "gfx/interface/ideas/NAM/portrait_NAM_Andrei_Bulatov_small.png",
           "sprite": "GFX_idea_NAM_Andrei_Bulatov",
           "idea": "NAM_board_intelligence_bulatov"

@@ -24,7 +24,7 @@ focus_tree = {
 
 shared_focus = {
 		id = NAM_interregnum_open_customs
-		icon = GFX_focus_NAM_seal_registry
+		icon = GFX_focus_NAM_interregnum_open_customs
 		x = 4
 		y = 0
 		cost = 1
@@ -35,13 +35,20 @@ shared_focus = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			add_political_power = 25
+			custom_effect_tooltip = NAM_interregnum_open_customs_reward_tt
+			hidden_effect = {
+				NAM_corp_seed_capital = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 10 }
+				NAM_corp_capital_add = yes
+				country_event = { id = ADISCORD_nam_story.82 days = 1 }
+			}
 		}
 		ai_will_do = { factor = 1 }
 	}
 
 shared_focus = {
 		id = NAM_interregnum_guarantors
-		icon = GFX_focus_NAM_open_ledgers
+		icon = GFX_focus_NAM_interregnum_guarantors
 		x = 1
 		y = 2
 		cost = 1
@@ -52,10 +59,11 @@ shared_focus = {
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		completion_reward = {
-			custom_effect_tooltip = NAM_interregnum_credit_10_tt
+			add_political_power = 15
+			custom_effect_tooltip = NAM_interregnum_guarantors_reward_tt
 			hidden_effect = {
 				NAM_corp_seed_capital = yes
-				set_temp_variable = { var = NAM_corp_capital_change value = 10 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 20 }
 				NAM_corp_capital_add = yes
 			}
 		}
@@ -64,7 +72,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_interregnum_underwrite_freight
-		icon = GFX_focus_NAM_pw_industrial_credit
+		icon = GFX_focus_NAM_interregnum_underwrite_freight
 		x = 3
 		y = 3
 		cost = 1
@@ -75,10 +83,15 @@ shared_focus = {
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		completion_reward = {
-			custom_effect_tooltip = NAM_interregnum_credit_15_tt
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 2
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_interregnum_underwrite_freight_reward_tt
 			hidden_effect = {
 				NAM_corp_seed_capital = yes
-				set_temp_variable = { var = NAM_corp_capital_change value = 15 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 25 }
 				NAM_corp_capital_add = yes
 			}
 		}
@@ -87,7 +100,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_interregnum_roll_call
-		icon = GFX_focus_NAM_relief_register
+		icon = GFX_focus_NAM_interregnum_roll_call
 		x = 2
 		y = 1
 		cost = 1
@@ -99,13 +112,14 @@ shared_focus = {
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		completion_reward = {
 			add_manpower = 1500
+			custom_effect_tooltip = NAM_interregnum_roll_call_reward_tt
 		}
 		ai_will_do = { factor = 0 }
 	}
 
 shared_focus = {
 		id = NAM_interregnum_second_shift
-		icon = GFX_focus_NAM_pw_mobilisation_register
+		icon = GFX_focus_NAM_interregnum_second_shift
 		x = 5
 		y = 3
 		cost = 1
@@ -117,13 +131,15 @@ shared_focus = {
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		completion_reward = {
 			add_manpower = 2000
+			add_stability = 0.02
+			custom_effect_tooltip = NAM_interregnum_second_shift_reward_tt
 		}
 		ai_will_do = { factor = 0 }
 	}
 
 shared_focus = {
 		id = NAM_interregnum_coast_watch
-		icon = GFX_focus_NAM_colonial_watch
+		icon = GFX_focus_NAM_interregnum_coast_watch
 		x = 6
 		y = 1
 		cost = 1
@@ -135,13 +151,15 @@ shared_focus = {
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		completion_reward = {
 			army_experience = 15
+			navy_experience = 10
+			custom_effect_tooltip = NAM_interregnum_coast_watch_reward_tt
 		}
 		ai_will_do = { factor = 0 }
 	}
 
 shared_focus = {
 		id = NAM_interregnum_chart_soundings
-		icon = GFX_focus_NAM_officer_courses
+		icon = GFX_focus_NAM_interregnum_chart_soundings
 		x = 7
 		y = 2
 		cost = 1
@@ -152,7 +170,8 @@ shared_focus = {
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_ARMY_XP }
 		completion_reward = {
-			custom_effect_tooltip = NAM_interregnum_readiness_tt
+			navy_experience = 15
+			custom_effect_tooltip = NAM_interregnum_chart_soundings_reward_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_revenge_readiness value = 5 }
 				NAM_revenge_readiness_clamp = yes
@@ -163,7 +182,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_interregnum_seals_boards
-		icon = GFX_focus_NAM_seal_courts
+		icon = GFX_focus_NAM_interregnum_seals_boards
 		x = 0
 		y = 4
 		cost = 1
@@ -178,15 +197,20 @@ shared_focus = {
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			custom_effect_tooltip = NAM_interregnum_takeover_tt
-			hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.100 } }
+			custom_effect_tooltip = NAM_interregnum_seals_boards_reward_tt
+			hidden_effect = {
+				NAM_corp_seed_capital = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 20 }
+				NAM_corp_capital_add = yes
+				country_event = { id = ADISCORD_nam_resource_war.100 }
+			}
 		}
 		ai_will_do = { factor = 1 }
 	}
 
 shared_focus = {
 		id = NAM_interregnum_seals_committees
-		icon = GFX_focus_NAM_south_elected_watch
+		icon = GFX_focus_NAM_interregnum_seals_committees
 		x = 4
 		y = 4
 		cost = 1
@@ -209,7 +233,7 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_interregnum_seals_officers
-		icon = GFX_focus_NAM_pw_officer_appointments
+		icon = GFX_focus_NAM_interregnum_seals_officers
 		x = 8
 		y = 4
 		cost = 1

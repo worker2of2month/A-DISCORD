@@ -19,10 +19,20 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_society_icon_1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_society_development_status_tt
-				stability_factor = -0.06
-				political_power_gain = -0.05
+				stability_factor = -0.08
+				mobilization_speed = -0.08
+				political_power_gain = -0.06
+				conscription_factor = -0.08
+				production_speed_infrastructure_factor = -0.12
+				ADISCORD_economy_population_tax_income_factor = -0.06
 			}
 		}
 
@@ -41,7 +51,8 @@ ideas = {
 			picture = ADISCORD_development_society_icon_2
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_society_development_status_tt
-				stability_factor = -0.03
+				stability_factor = -0.04
+				mobilization_speed = -0.04
 			}
 		}
 
@@ -60,7 +71,8 @@ ideas = {
 			picture = ADISCORD_development_society_icon_3
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_society_development_status_tt
-				stability_factor = 0.02
+				stability_factor = 0.03
+				mobilization_speed = 0.03
 			}
 		}
 
@@ -79,8 +91,9 @@ ideas = {
 			picture = ADISCORD_development_society_icon_4
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_society_development_status_tt
-				stability_factor = 0.05
-				political_power_gain = 0.03
+				stability_factor = 0.06
+				mobilization_speed = 0.07
+				political_power_gain = 0.04
 			}
 		}
 
@@ -97,11 +110,21 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_society_icon_5
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_society_development_status_tt
-				stability_factor = 0.08
+				stability_factor = 0.10
+				mobilization_speed = 0.10
+				political_power_gain = 0.06
 				war_support_factor = 0.04
-				political_power_gain = 0.05
+				conscription_factor = 0.08
+				production_speed_infrastructure_factor = 0.12
+				ADISCORD_economy_population_tax_income_factor = 0.06
 			}
 		}
 	}
@@ -123,11 +146,21 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_social_system_icon_1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
-				research_speed_factor = -0.05
-				stability_factor = -0.02
-				production_speed_buildings_factor = -0.03
+				monthly_population = -0.08
+				research_speed_factor = -0.06
+				stability_factor = -0.03
+				production_speed_buildings_factor = -0.04
+				training_time_factor = 0.06
+				ADISCORD_economy_social_expense_factor = 0.06
+				ADISCORD_economy_demographic_fatigue_gain_factor = 0.12
 			}
 		}
 
@@ -146,7 +179,8 @@ ideas = {
 			picture = ADISCORD_development_social_system_icon_2
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
-				research_speed_factor = -0.02
+				monthly_population = -0.04
+				research_speed_factor = -0.03
 			}
 		}
 
@@ -165,7 +199,8 @@ ideas = {
 			picture = ADISCORD_development_social_system_icon_3
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
-				research_speed_factor = 0.01
+				monthly_population = 0.03
+				research_speed_factor = 0.02
 				stability_factor = 0.01
 			}
 		}
@@ -185,9 +220,10 @@ ideas = {
 			picture = ADISCORD_development_social_system_icon_4
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
+				monthly_population = 0.06
 				research_speed_factor = 0.04
-				production_speed_buildings_factor = 0.03
 				stability_factor = 0.02
+				production_speed_buildings_factor = 0.03
 			}
 		}
 
@@ -204,11 +240,21 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_social_system_icon_5
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_social_system_development_status_tt
-				research_speed_factor = 0.06
+				monthly_population = 0.10
+				research_speed_factor = 0.07
 				stability_factor = 0.03
 				production_speed_buildings_factor = 0.04
+				training_time_factor = -0.06
+				ADISCORD_economy_social_expense_factor = -0.06
+				ADISCORD_economy_demographic_fatigue_gain_factor = -0.12
 			}
 		}
 	}
@@ -232,10 +278,14 @@ ideas = {
 			picture = ADISCORD_development_army_icon_1
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_army_development_status_tt
-				army_org_factor = -0.08
-				army_morale_factor = -0.08
-				training_time_factor = 0.12
-				command_power_gain = -0.05
+				army_org_factor = -0.10
+				army_morale_factor = -0.10
+				supply_consumption_factor = 0.06
+				training_time_factor = 0.14
+				command_power_gain = -0.06
+				planning_speed = -0.15
+				dig_in_speed_factor = -0.12
+				land_reinforce_rate = -0.02
 			}
 		}
 
@@ -254,9 +304,10 @@ ideas = {
 			picture = ADISCORD_development_army_icon_2
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_army_development_status_tt
-				army_org_factor = -0.04
-				army_morale_factor = -0.04
-				training_time_factor = 0.06
+				army_org_factor = -0.05
+				army_morale_factor = -0.05
+				supply_consumption_factor = 0.03
+				training_time_factor = 0.07
 			}
 		}
 
@@ -275,8 +326,9 @@ ideas = {
 			picture = ADISCORD_development_army_icon_3
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_army_development_status_tt
-				army_org_factor = 0.02
-				army_morale_factor = 0.02
+				army_org_factor = 0.03
+				army_morale_factor = 0.03
+				supply_consumption_factor = -0.02
 			}
 		}
 
@@ -295,8 +347,9 @@ ideas = {
 			picture = ADISCORD_development_army_icon_4
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_army_development_status_tt
-				army_org_factor = 0.05
-				army_morale_factor = 0.05
+				army_org_factor = 0.08
+				army_morale_factor = 0.08
+				supply_consumption_factor = -0.05
 				training_time_factor = -0.04
 				command_power_gain = 0.05
 			}
@@ -317,10 +370,14 @@ ideas = {
 			picture = ADISCORD_development_army_icon_5
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_army_development_status_tt
-				army_org_factor = 0.08
-				army_morale_factor = 0.08
-				training_time_factor = -0.06
+				army_org_factor = 0.11
+				army_morale_factor = 0.11
+				supply_consumption_factor = -0.07
+				training_time_factor = -0.07
 				command_power_gain = 0.10
+				planning_speed = 0.15
+				dig_in_speed_factor = 0.12
+				land_reinforce_rate = 0.02
 			}
 		}
 	}
@@ -342,11 +399,21 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_cultural_icon_1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
-				stability_factor = -0.05
-				drift_defence_factor = -0.10
-				political_power_gain = -0.03
+				stability_factor = -0.06
+				war_support_factor = -0.05
+				drift_defence_factor = -0.12
+				political_power_gain = -0.04
+				army_core_defence_factor = -0.05
+				war_stability_factor = -0.04
+				ADISCORD_economy_war_fatigue_gain_factor = 0.10
 			}
 		}
 
@@ -365,8 +432,8 @@ ideas = {
 			picture = ADISCORD_development_cultural_icon_2
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
-				stability_factor = -0.02
-				war_support_factor = -0.02
+				stability_factor = -0.03
+				war_support_factor = -0.03
 			}
 		}
 
@@ -385,8 +452,9 @@ ideas = {
 			picture = ADISCORD_development_cultural_icon_3
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
-				stability_factor = 0.02
-				drift_defence_factor = 0.05
+				stability_factor = 0.03
+				war_support_factor = 0.02
+				drift_defence_factor = 0.06
 			}
 		}
 
@@ -405,8 +473,9 @@ ideas = {
 			picture = ADISCORD_development_cultural_icon_4
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
-				stability_factor = 0.04
-				drift_defence_factor = 0.10
+				stability_factor = 0.05
+				war_support_factor = 0.04
+				drift_defence_factor = 0.12
 				political_power_gain = 0.03
 			}
 		}
@@ -424,12 +493,22 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_cultural_icon_5
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_cultural_development_status_tt
-				stability_factor = 0.06
-				war_support_factor = 0.04
-				drift_defence_factor = 0.15
+				stability_factor = 0.07
+				war_support_factor = 0.06
+				drift_defence_factor = 0.18
+				political_power_gain = 0.03
 				research_speed_factor = -0.01
+				army_core_defence_factor = 0.05
+				war_stability_factor = 0.04
+				ADISCORD_economy_war_fatigue_gain_factor = -0.10
 			}
 		}
 	}
@@ -451,10 +530,20 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_state_icon_1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_state_development_status_tt
-				political_power_gain = -0.10
-				production_speed_buildings_factor = -0.05
+				political_power_gain = -0.12
+				industry_repair_factor = -0.08
+				production_speed_buildings_factor = -0.06
+				production_speed_rail_way_factor = -0.12
+				ADISCORD_economy_admin_expense_factor = 0.08
+				ADISCORD_economy_tax_collection_factor = -0.05
 			}
 		}
 
@@ -473,7 +562,8 @@ ideas = {
 			picture = ADISCORD_development_state_icon_2
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_state_development_status_tt
-				political_power_gain = -0.05
+				political_power_gain = -0.06
+				industry_repair_factor = -0.04
 			}
 		}
 
@@ -492,7 +582,8 @@ ideas = {
 			picture = ADISCORD_development_state_icon_3
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_state_development_status_tt
-				political_power_gain = 0.02
+				political_power_gain = 0.03
+				industry_repair_factor = 0.03
 				production_speed_buildings_factor = 0.02
 			}
 		}
@@ -512,7 +603,8 @@ ideas = {
 			picture = ADISCORD_development_state_icon_4
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_state_development_status_tt
-				political_power_gain = 0.06
+				political_power_gain = 0.08
+				industry_repair_factor = 0.07
 				production_speed_buildings_factor = 0.04
 			}
 		}
@@ -530,11 +622,21 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_state_icon_5
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_state_development_status_tt
-				political_power_gain = 0.10
+				political_power_gain = 0.12
+				industry_repair_factor = 0.10
 				production_speed_buildings_factor = 0.06
 				stability_factor = -0.01
+				production_speed_rail_way_factor = 0.12
+				ADISCORD_economy_admin_expense_factor = -0.08
+				ADISCORD_economy_tax_collection_factor = 0.05
 			}
 		}
 	}
@@ -556,10 +658,20 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_economic_icon_1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
-				production_speed_buildings_factor = -0.08
-				industrial_capacity_factory = -0.05
+				production_speed_buildings_factor = -0.10
+				industrial_capacity_factory = -0.07
+				production_factory_efficiency_gain_factor = -0.06
+				local_resources_factor = -0.10
+				industrial_capacity_dockyard = -0.10
+				ADISCORD_economy_trade_income_factor = -0.08
 			}
 		}
 
@@ -578,7 +690,9 @@ ideas = {
 			picture = ADISCORD_development_economic_icon_2
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
-				production_speed_buildings_factor = -0.03
+				production_speed_buildings_factor = -0.05
+				industrial_capacity_factory = -0.03
+				production_factory_efficiency_gain_factor = -0.03
 			}
 		}
 
@@ -597,8 +711,9 @@ ideas = {
 			picture = ADISCORD_development_economic_icon_3
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
-				production_speed_buildings_factor = 0.02
-				industrial_capacity_factory = 0.02
+				production_speed_buildings_factor = 0.03
+				industrial_capacity_factory = 0.03
+				production_factory_efficiency_gain_factor = 0.02
 			}
 		}
 
@@ -617,8 +732,9 @@ ideas = {
 			picture = ADISCORD_development_economic_icon_4
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
-				production_speed_buildings_factor = 0.04
-				industrial_capacity_factory = 0.04
+				production_speed_buildings_factor = 0.08
+				industrial_capacity_factory = 0.06
+				production_factory_efficiency_gain_factor = 0.05
 			}
 		}
 
@@ -635,11 +751,21 @@ ideas = {
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 			picture = ADISCORD_development_economic_icon_5
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_economic_development_status_tt
-				production_speed_buildings_factor = 0.06
-				industrial_capacity_factory = 0.06
+				production_speed_buildings_factor = 0.11
+				industrial_capacity_factory = 0.09
+				production_factory_efficiency_gain_factor = 0.08
 				research_speed_factor = 0.02
+				local_resources_factor = 0.10
+				industrial_capacity_dockyard = 0.10
+				ADISCORD_economy_trade_income_factor = 0.08
 			}
 		}
 	}
@@ -663,7 +789,11 @@ ideas = {
 			picture = ADISCORD_development_science_icon_1
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_science_development_status_tt
-				research_speed_factor = -0.06
+				research_speed_factor = -0.08
+				line_change_production_efficiency_factor = -0.06
+				production_factory_start_efficiency_factor = -0.05
+				production_factory_max_efficiency_factor = -0.05
+				equipment_conversion_speed = -0.12
 			}
 		}
 
@@ -682,7 +812,8 @@ ideas = {
 			picture = ADISCORD_development_science_icon_2
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_science_development_status_tt
-				research_speed_factor = -0.03
+				research_speed_factor = -0.04
+				line_change_production_efficiency_factor = -0.03
 			}
 		}
 
@@ -701,7 +832,8 @@ ideas = {
 			picture = ADISCORD_development_science_icon_3
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_science_development_status_tt
-				research_speed_factor = 0
+				research_speed_factor = 0.03
+				line_change_production_efficiency_factor = 0.02
 			}
 		}
 
@@ -720,7 +852,8 @@ ideas = {
 			picture = ADISCORD_development_science_icon_4
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_science_development_status_tt
-				research_speed_factor = 0.03
+				research_speed_factor = 0.07
+				line_change_production_efficiency_factor = 0.05
 			}
 		}
 
@@ -739,7 +872,11 @@ ideas = {
 			picture = ADISCORD_development_science_icon_5
 			modifier = {
 				custom_modifier_tooltip = ADISCORD_science_development_status_tt
-				research_speed_factor = 0.06
+				research_speed_factor = 0.10
+				line_change_production_efficiency_factor = 0.08
+				production_factory_start_efficiency_factor = 0.05
+				production_factory_max_efficiency_factor = 0.05
+				equipment_conversion_speed = 0.12
 			}
 		}
 	}

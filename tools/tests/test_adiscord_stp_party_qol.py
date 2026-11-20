@@ -477,23 +477,23 @@ class PartyQualityOfLifeTests(unittest.TestCase):
         facts[('STP', 'has_country_flag', 'STP_ch_trade_delay_used')] = True
         self.assertFalse(matches_conditions(block(decision, 'visible'), facts))
 
-    def test_chapter_summary_uses_three_paragraphs_in_both_languages(self):
+    def test_chapter_summary_binds_foundations_and_votes_to_the_panel(self):
+        gui = (ROOT / 'interface/ADISCORD_STP_regions.gui').read_text(encoding='utf-8')
         for language in ('russian', 'english'):
-            path = ROOT / f'localisation/{language}/ADISCORD_STP_l_{language}.yml'
-            self.assertTrue(path.read_bytes().startswith(b'\xef\xbb\xbf'))
-            summary = localization(language)['STP_ch_chapters_desc']
-            paragraphs = summary.split(r'\n\n')
-            self.assertEqual(len(paragraphs), 3)
-            # Stage and live pressure first, then the three foundations one per
-            # line, then the congress arithmetic.
-            self.assertIn('[STPGetChapterPhaseHint]', paragraphs[0])
-            self.assertIn('[STPGetChapterPressureLine]', paragraphs[0])
+            strings = localization(language)
+            summary = strings['STP_ch_chapters_desc']
+            self.assertIn('[STPGetChapterPhaseHint]', summary)
+            self.assertIn('[STPGetChapterPressureLine]', summary)
+            self.assertIn('[STPGetChapterNominee]', summary)
             for area in ('Army', 'Economy', 'Party'):
-                self.assertIn(f'[STPGetChapter{area}Foundation]', paragraphs[1])
-            self.assertIn('[STPGetChapterNominee]', paragraphs[2])
-            self.assertIn('[?STP_ch_votes_5|1]', paragraphs[2])
-            line = localization(language)['STP_ch_pressure_line_1']
-            self.assertIn('[STPGetChapterPressureTarget]', line)
+                key = f'STP_ch_{area.lower()}_report'
+                self.assertIn(f'text = "{key}"', gui)
+                self.assertEqual(strings[key], f'[STPGetChapter{area}Foundation]')
+            for index in range(1, 6):
+                key = f'STP_ch_vote_count_{index}'
+                self.assertIn(f'text = "{key}"', gui)
+                self.assertIn(f'[?STP_ch_votes_{index}|1]', strings[key])
+            self.assertIn('[STPGetChapterPressureTarget]', strings['STP_ch_pressure_line_1'])
 
     def test_pressure_affects_the_current_shipment_on_purchase(self):
         start = list(

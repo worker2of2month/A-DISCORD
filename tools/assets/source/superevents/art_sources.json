@@ -172,6 +172,20 @@
       "adaptation": "Centre-cropped to the super-event viewport and passed once through the supplied CRT and colour stack. The exported PNG is shared under the same licence.",
       "source_sha256": "e239273d48400f4fc613ba69ae3ec0a742c9930ae71eb6611ddfd0e144fc6883",
       "runtime_sha256": "785233734c0a9155fae83e91a336a7ad73f5b5a18dc71f494eb4dfde788e8658"
+    },
+    "superevent_south_boards": {
+      "runtime_file": "gfx/interface/superevents/NAM/superevent_south_boards_auction.png",
+      "generated_file": "01a18333-cbff-7901-8f88-b35b07882f72/nam_south_boards_auction_master_a0f3f237-a3dd-4caf-b556-5be9e6e471d7.png",
+      "prompt": "1930s harbor auction, the final strike of a silver-banded gavel above a scale model of the port. The directors watch with the real harbor visible through the window. Graphite and silver with restrained cyan reflections. The finished source incorporates the Svetlogorye board emblem on the winning bidder's paddle.",
+      "source_sha256": "dea5bf161fc18e93593c56c64a8624637cb6c2403feb51d010c96456d1a63caf",
+      "runtime_sha256": "55c6715684738cabc3286821793ec9a7256b8848e3950484d9e9d895ec8ed852"
+    },
+    "superevent_nam_mainland_inventory": {
+      "runtime_file": "gfx/interface/superevents/NAM/superevent_nam_mainland_inventory.png",
+      "generated_file": "01a18333-cbff-7901-8f88-b35b07882f72/mainland_inventory_exec-7a68a337-fd6c-4d84-a062-3bf118ed72e4.png",
+      "prompt": "The board returns from island exile: commissioners disembark onto the mainland quay, the foreman hands over the warehouse keys and the port registrar records the transfer. Silver-gelatin documentary style, graphite and cold cyan highlights.",
+      "source_sha256": "4876b77ac9986748a36bfa9487e16b71e0cc0fc95f2025f9a49ff4bd940c86dd",
+      "runtime_sha256": "3fd8b99e8ae0a54b2a68f1f49d1789b060e58bb449f1d21a2d78ae06bd19308d"
     }
   },
   "retained": {
@@ -514,11 +528,11 @@
       "theme_note": "Sophie Hutchings - By Night, with harbor waves, a ferry horn and a welcoming crowd; continuous music level."
     },
     "superevent_south_boards": {
-      "texture": "gfx/interface/superevents/NAM/superevent_south_boards.png",
+      "texture": "gfx/interface/superevents/NAM/superevent_south_boards_auction.png",
       "effect": "superevent_south_boards_sound_e",
-      "sample": "superevent_south_boards_sound",
-      "audio_file": "superevents/superevent_south_boards_sound.wav",
-      "theme_note": "Schwefelgelb - Es zieht mich, 3:00-3:56. Catalogue pages, three auction hammer strikes and a shop door locked with keys."
+      "sample": "superevent_south_oil_union_sound",
+      "audio_file": "superevents/superevent_south_oil_union_sound.wav",
+      "theme_note": "Northaunt - Until Dawn Do Us Part, with quiet continuous factory ambience, two brief pump passages and one distant factory whistle; no music ducking."
     },
     "superevent_south_restitution": {
       "texture": "gfx/interface/superevents/South/superevent_south_restitution.png",
@@ -702,6 +716,13 @@
       "sample": "superevent_vorkerland_singularity_sound",
       "audio_file": "superevents/superevent_vorkerland_singularity_sound.wav",
       "theme_note": "Chris Zabriskie - Made Me Smart, Told Me the Sky Wasn't Blue (CC BY 4.0). A narrow console speaker opens into stereo as the bass returns. Two relay clicks and the control-room hum give way to the music alone."
+    },
+    "superevent_nam_mainland_inventory": {
+      "texture": "gfx/interface/superevents/NAM/superevent_nam_mainland_inventory.png",
+      "effect": "superevent_nam_mainland_inventory_sound_e",
+      "sample": "superevent_south_boards_sound",
+      "audio_file": "superevents/superevent_south_boards_sound.wav",
+      "theme_note": "Schwefelgelb - Es zieht mich, 3:00-3:56. Catalogue pages, three auction hammer strikes and a shop door locked with keys."
     }
   }
 }

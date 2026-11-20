@@ -3005,7 +3005,10 @@ class RusCampaignTests(unittest.TestCase):
             self.assertIn("RUS_suspicion_active", gate, focus)
             self.assertEqual(scalar(block(self.focuses[focus], "bypass"), "has_country_flag"), "ADISCORD_vorkerland_rus_last_empire_proclaimed")
         self.assertIn("RUS_suspicion_open_tt", self.loc)
-        self.assertIn("[GetRUSSuspicionStatus]", self.loc["RUS_state_balance_category_desc"])
+        self.assertIn('pdx_tooltip = "RUS_favours_suspicion_details"', read("interface/ADISCORD_RUS.gui"))
+        self.assertEqual(self.loc["RUS_favours_suspicion_details"], "[GetRUSSuspicionStatus]")
+        self.assertIn("RUS_favours_suspicion_value_visible = { RUS_suspicion_active = yes }",
+                      read("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"))
         self.assertIn("decision_category = RUS_state_balance_measures_category", read("common/bop/RUS.txt"))
         for key in ("RUS_suspicion_status", "RUS_suspicion_opens_tt", "RUS_suspicion_relief_15_tt", "RUS_suspicion_relief_25_tt"):
             self.assertIn(key, self.loc)
@@ -3969,7 +3972,10 @@ class RusCampaignTests(unittest.TestCase):
         self.assertEqual(scalar(gates[0], "custom_effect_tooltip"), "RUS_morale_gain_5_tt")
         deltas = [scalar(row.value, "value") for row in walk(gates[0]) if row.key == "set_temp_variable"]
         self.assertEqual(deltas, ["5"])
-        self.assertIn("[GetRUSMoraleStatus]", self.loc["RUS_state_balance_category_desc"])
+        self.assertIn('pdx_tooltip = "RUS_favours_morale_details"', read("interface/ADISCORD_RUS.gui"))
+        self.assertEqual(self.loc["RUS_favours_morale_details"], "[GetRUSMoraleStatus]")
+        self.assertIn("RUS_favours_morale_value_visible = { RUS_morale_active = yes }",
+                      read("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"))
         names = {row.value for row in walk(parse("common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt")) if row.key == "name"}
         for name in re.findall(r"\[(GetRUSMorale\w+)\]", self.loc["RUS_morale_status"] + "[GetRUSMoraleStatus]"):
             self.assertIn(name, names)

@@ -723,6 +723,19 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
         map_visibility = (
             "STP_operations_map_available = yes" if prefix == "STP" else "always = yes"
         )
+        if prefix == "STP":
+            gui.append(
+                '\t\tinstantTextBoxType = {\n'
+                '\t\t\tname = "STP_operations_map_legend"\n'
+                '\t\t\tposition = { x = 20 y = 10 }\n'
+                '\t\t\ttext = "STP_operations_map_legend"\n'
+                '\t\t\tfont = "hoi_16mbs"\n'
+                '\t\t\tmaxWidth = 420\n'
+                '\t\t\tmaxHeight = 22\n'
+                '\t\t\tfixedsize = yes\n'
+                '\t\t\tpdx_tooltip = "STP_operations_map_tt"\n'
+                '\t\t}\n'
+            )
         script.append(
             f"\tADISCORD_{prefix}_operations_panel = {{\n"
             "\t\tcontext_type = decision_category\n"
@@ -869,11 +882,13 @@ def main() -> int:
         action="store_true",
         help="write the deterministic operations-map PNGs",
     )
-    parser.add_argument(
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument(
         "--effects-only",
         action="store_true",
         help="check or write only the cache effects, preserving GUI and image outputs",
     )
+    scope.add_argument("--gui-only", action="store_true", help="check or write only the map windows")
     args = parser.parse_args()
     if args.effects_only:
         path = ROOT / "common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt"
@@ -887,6 +902,16 @@ def main() -> int:
         return 0
     outputs, box, size, offset = render_outputs()
     outputs, boxes = compact_overlays(outputs)
+    if args.gui_only:
+        name = "interface/ADISCORD_VAL_operations.gui"
+        path = ROOT / name
+        expected = interface_outputs(boxes)[name]
+        if path.read_text(encoding="utf-8") != expected:
+            if not args.apply:
+                print(f"Different: {name}")
+                return 1
+            path.write_text(expected, encoding="utf-8")
+        return int(path.read_text(encoding="utf-8") != expected)
     outputs.update(render_trade_routes())
     interfaces = interface_outputs(boxes)
     if args.apply:

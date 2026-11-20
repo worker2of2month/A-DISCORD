@@ -4,14 +4,9 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_party_markers"
 		position = { x = 342 y = 320 }
-		size = { width = 30 height = 160 }
-		buttonType = {
-			name = "party_humanism_hover"
-			position = { x = 10 y = 2 }
-			size = { x = 20 y = 18 }
-			quadTextureSprite = "GFX_tiled_window_transparent"
-			pdx_tooltip = "ADISCORD_party_humanism_tt"
-		}
+		# Draw badges outside the anchor so the native legend receives mouse input.
+		size = { width = 0 height = 0 }
+		clipping = no
 		iconType = {
 			name = "party_humanism_banned"
 			position = { x = 14 y = 6 }
@@ -30,13 +25,6 @@ guiTypes = {
 			position = { x = 12 y = 4 }
 			spriteType = "GFX_ADISCORD_party_leader"
 			alwaystransparent = yes
-		}
-		buttonType = {
-			name = "party_utilitarism_hover"
-			position = { x = 10 y = 22 }
-			size = { x = 20 y = 18 }
-			quadTextureSprite = "GFX_tiled_window_transparent"
-			pdx_tooltip = "ADISCORD_party_utilitarism_tt"
 		}
 		iconType = {
 			name = "party_utilitarism_banned"
@@ -57,13 +45,6 @@ guiTypes = {
 			spriteType = "GFX_ADISCORD_party_leader"
 			alwaystransparent = yes
 		}
-		buttonType = {
-			name = "party_chauvinism_hover"
-			position = { x = 10 y = 42 }
-			size = { x = 20 y = 18 }
-			quadTextureSprite = "GFX_tiled_window_transparent"
-			pdx_tooltip = "ADISCORD_party_chauvinism_tt"
-		}
 		iconType = {
 			name = "party_chauvinism_banned"
 			position = { x = 14 y = 46 }
@@ -82,13 +63,6 @@ guiTypes = {
 			position = { x = 12 y = 44 }
 			spriteType = "GFX_ADISCORD_party_leader"
 			alwaystransparent = yes
-		}
-		buttonType = {
-			name = "party_pragmatism_hover"
-			position = { x = 10 y = 62 }
-			size = { x = 20 y = 18 }
-			quadTextureSprite = "GFX_tiled_window_transparent"
-			pdx_tooltip = "ADISCORD_party_pragmatism_tt"
 		}
 		iconType = {
 			name = "party_pragmatism_banned"
@@ -109,13 +83,6 @@ guiTypes = {
 			spriteType = "GFX_ADISCORD_party_leader"
 			alwaystransparent = yes
 		}
-		buttonType = {
-			name = "party_anarchism_hover"
-			position = { x = 10 y = 82 }
-			size = { x = 20 y = 18 }
-			quadTextureSprite = "GFX_tiled_window_transparent"
-			pdx_tooltip = "ADISCORD_party_anarchism_tt"
-		}
 		iconType = {
 			name = "party_anarchism_banned"
 			position = { x = 14 y = 86 }
@@ -134,13 +101,6 @@ guiTypes = {
 			position = { x = 12 y = 84 }
 			spriteType = "GFX_ADISCORD_party_leader"
 			alwaystransparent = yes
-		}
-		buttonType = {
-			name = "party_technocracy_hover"
-			position = { x = 10 y = 102 }
-			size = { x = 20 y = 18 }
-			quadTextureSprite = "GFX_tiled_window_transparent"
-			pdx_tooltip = "ADISCORD_party_technocracy_tt"
 		}
 		iconType = {
 			name = "party_technocracy_banned"
@@ -161,13 +121,6 @@ guiTypes = {
 			spriteType = "GFX_ADISCORD_party_leader"
 			alwaystransparent = yes
 		}
-		buttonType = {
-			name = "party_etatism_hover"
-			position = { x = 10 y = 122 }
-			size = { x = 20 y = 18 }
-			quadTextureSprite = "GFX_tiled_window_transparent"
-			pdx_tooltip = "ADISCORD_party_etatism_tt"
-		}
 		iconType = {
 			name = "party_etatism_banned"
 			position = { x = 14 y = 126 }
@@ -186,13 +139,6 @@ guiTypes = {
 			position = { x = 12 y = 124 }
 			spriteType = "GFX_ADISCORD_party_leader"
 			alwaystransparent = yes
-		}
-		buttonType = {
-			name = "party_hedonism_hover"
-			position = { x = 10 y = 142 }
-			size = { x = 20 y = 18 }
-			quadTextureSprite = "GFX_tiled_window_transparent"
-			pdx_tooltip = "ADISCORD_party_hedonism_tt"
 		}
 		iconType = {
 			name = "party_hedonism_banned"

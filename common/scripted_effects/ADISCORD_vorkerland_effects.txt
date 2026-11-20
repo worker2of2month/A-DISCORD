@@ -4760,6 +4760,10 @@ ADISCORD_superevent_enqueue = {
 						has_global_flag = superevent_south_oil_union
 					}
 					AND = {
+						check_variable = { ADISCORD_superevent_request = 78 }
+						has_global_flag = superevent_nam_mainland_inventory
+					}
+					AND = {
 						check_variable = { ADISCORD_superevent_request = 66 }
 						has_global_flag = superevent_south_contract_republic
 					}
@@ -4872,6 +4876,7 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_south_civil_service
 					has_global_flag = superevent_south_federation
 					has_global_flag = superevent_south_oil_union
+					has_global_flag = superevent_nam_mainland_inventory
 					has_global_flag = superevent_south_contract_republic
 					has_global_flag = superevent_south_directorate
 					has_global_flag = superevent_south_nam
@@ -5140,6 +5145,10 @@ ADISCORD_superevent_dispatch_next = {
 			set_global_flag = superevent_south_oil_union
 		}
 		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 78 } }
+			set_global_flag = superevent_nam_mainland_inventory
+		}
+		else_if = {
 			limit = { check_variable = { ADISCORD_superevent_next = 66 } }
 			set_global_flag = superevent_south_contract_republic
 		}
@@ -5237,6 +5246,7 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_south_civil_service
 	clr_global_flag = superevent_south_federation
 	clr_global_flag = superevent_south_oil_union
+	clr_global_flag = superevent_nam_mainland_inventory
 	clr_global_flag = superevent_south_contract_republic
 	clr_global_flag = superevent_south_directorate
 	clr_global_flag = superevent_south_nam
@@ -9708,6 +9718,11 @@ ADISCORD_vorkerland_release_losing_claimant_subjects = {
 }
 
 ADISCORD_vorkerland_prepare_claimants_for_formation = {
+	# The winner is already the national target, even for subjects whose overlord stays the same.
+	if = {
+		limit = { country_exists = NAM }
+		NAM = { NAM_sync_etatist_party_name = yes }
+	}
 	# Treaty eligibility depends on the wartime coalition, before it is dissolved.
 	ADISCORD_vorkerland_prep_settle_treaties = yes
 	ADISCORD_vorkerland_disengage_regional_allies_before_formation = yes
@@ -12536,6 +12551,7 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_south_civil_service days > 6 }
 					has_global_flag = { flag = superevent_south_federation days > 6 }
 					has_global_flag = { flag = superevent_south_oil_union days > 6 }
+					has_global_flag = { flag = superevent_nam_mainland_inventory days > 6 }
 					has_global_flag = { flag = superevent_south_contract_republic days > 6 }
 					has_global_flag = { flag = superevent_south_directorate days > 6 }
 					has_global_flag = { flag = superevent_south_nam days > 6 }
@@ -12769,6 +12785,10 @@ ADISCORD_superevent_observer_tick = {
 			if = {
 				limit = { has_global_flag = { flag = superevent_south_oil_union days > 6 } }
 				clr_global_flag = superevent_south_oil_union
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_nam_mainland_inventory days > 6 } }
+				clr_global_flag = superevent_nam_mainland_inventory
 			}
 			if = {
 				limit = { has_global_flag = { flag = superevent_south_contract_republic days > 6 } }

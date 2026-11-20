@@ -1011,6 +1011,22 @@ scripted_gui = {
 		}
 	}
 
+	superevent_nam_mainland_inventory = {
+		window_name = "superevent_nam_mainland_inventory"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_nam_mainland_inventory
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_nam_mainland_inventory
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
 	superevent_south_contract_republic = {
 		window_name = "superevent_south_contract_republic"
 		context_type = player_context

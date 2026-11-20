@@ -1,8 +1,29 @@
 scripted_gui = {
-	ADISCORD_NAM_judas_panel = {
+	ADISCORD_NAM_calendar_panel = {
 		context_type = decision_category
-		window_name = "ADISCORD_NAM_judas_window"
-		visible = { has_country_flag = NAM_corp_takeover }
+		window_name = "ADISCORD_NAM_calendar_window"
+		visible = { NAM_rw_clock_running = yes }
+		ai_enabled = { always = no }
+	}
+
+	ADISCORD_NAM_network_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_NAM_network_window"
+		visible = { NAM_underground_active = yes }
+		ai_enabled = { always = no }
+	}
+
+	ADISCORD_NAM_reserve_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_NAM_reserve_window"
+		visible = { NAM_line_programme_open = yes }
+		ai_enabled = { always = no }
+	}
+
+	ADISCORD_NAM_camps_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_NAM_camps_window"
+		visible = { always = yes }
 		ai_enabled = { always = no }
 	}
 
@@ -51,36 +72,78 @@ scripted_gui = {
 		triggers = {
 			NAM_board_selected_1_visible = {
 				check_variable = { var = NAM_board_selected value = NAM_board_rank_1 compare = equals }
+				check_variable = { NAM_board_rank_1 > 0 }
+			}
+			NAM_board_mark_1_visible = {
+				check_variable = { NAM_board_rank_1 > 0 }
+			}
+			NAM_board_stance_1_visible = {
+				check_variable = { NAM_board_stance_frame_1 > 0 }
 			}
 			NAM_board_motion_mark_1_visible = {
 				check_variable = { NAM_board_motion^NAM_board_rank_1 > 0 }
 			}
 			NAM_board_selected_2_visible = {
 				check_variable = { var = NAM_board_selected value = NAM_board_rank_2 compare = equals }
+				check_variable = { NAM_board_rank_2 > 0 }
+			}
+			NAM_board_mark_2_visible = {
+				check_variable = { NAM_board_rank_2 > 0 }
+			}
+			NAM_board_stance_2_visible = {
+				check_variable = { NAM_board_stance_frame_2 > 0 }
 			}
 			NAM_board_motion_mark_2_visible = {
 				check_variable = { NAM_board_motion^NAM_board_rank_2 > 0 }
 			}
 			NAM_board_selected_3_visible = {
 				check_variable = { var = NAM_board_selected value = NAM_board_rank_3 compare = equals }
+				check_variable = { NAM_board_rank_3 > 0 }
+			}
+			NAM_board_mark_3_visible = {
+				check_variable = { NAM_board_rank_3 > 0 }
+			}
+			NAM_board_stance_3_visible = {
+				check_variable = { NAM_board_stance_frame_3 > 0 }
 			}
 			NAM_board_motion_mark_3_visible = {
 				check_variable = { NAM_board_motion^NAM_board_rank_3 > 0 }
 			}
 			NAM_board_selected_4_visible = {
 				check_variable = { var = NAM_board_selected value = NAM_board_rank_4 compare = equals }
+				check_variable = { NAM_board_rank_4 > 0 }
+			}
+			NAM_board_mark_4_visible = {
+				check_variable = { NAM_board_rank_4 > 0 }
+			}
+			NAM_board_stance_4_visible = {
+				check_variable = { NAM_board_stance_frame_4 > 0 }
 			}
 			NAM_board_motion_mark_4_visible = {
 				check_variable = { NAM_board_motion^NAM_board_rank_4 > 0 }
 			}
 			NAM_board_selected_5_visible = {
 				check_variable = { var = NAM_board_selected value = NAM_board_rank_5 compare = equals }
+				check_variable = { NAM_board_rank_5 > 0 }
+			}
+			NAM_board_mark_5_visible = {
+				check_variable = { NAM_board_rank_5 > 0 }
+			}
+			NAM_board_stance_5_visible = {
+				check_variable = { NAM_board_stance_frame_5 > 0 }
 			}
 			NAM_board_motion_mark_5_visible = {
 				check_variable = { NAM_board_motion^NAM_board_rank_5 > 0 }
 			}
 			NAM_board_selected_6_visible = {
 				check_variable = { var = NAM_board_selected value = NAM_board_rank_6 compare = equals }
+				check_variable = { NAM_board_rank_6 > 0 }
+			}
+			NAM_board_mark_6_visible = {
+				check_variable = { NAM_board_rank_6 > 0 }
+			}
+			NAM_board_stance_6_visible = {
+				check_variable = { NAM_board_stance_frame_6 > 0 }
 			}
 			NAM_board_motion_mark_6_visible = {
 				check_variable = { NAM_board_motion^NAM_board_rank_6 > 0 }

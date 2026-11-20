@@ -235,6 +235,16 @@ guiTypes = {
   size = { width = 460 height = 398 }
   clipping = no
   iconType = { name = "STP_operations_map" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_map_background" pdx_tooltip = "STP_operations_map_tt" }
+		instantTextBoxType = {
+			name = "STP_operations_map_legend"
+			position = { x = 20 y = 10 }
+			text = "STP_operations_map_legend"
+			font = "hoi_16mbs"
+			maxWidth = 420
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "STP_operations_map_tt"
+		}
   iconType = { name = "STP_ops_43_controller" position = { x = 218 y = 244 } quadTextureSprite = "GFX_VAL_ops_state_43" }
   iconType = { name = "STP_ops_44_controller" position = { x = 233 y = 262 } quadTextureSprite = "GFX_VAL_ops_state_44" }
   iconType = { name = "STP_ops_45_controller" position = { x = 212 y = 233 } quadTextureSprite = "GFX_VAL_ops_state_45" }

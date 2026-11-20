@@ -637,8 +637,48 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_idea_NAM_corp_owner_1_district"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_corp_owner_1_district.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_corp_owner_2_district"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_corp_owner_2_district.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_corp_owner_3_district"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_corp_owner_3_district.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_corp_owner_4_district"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_corp_owner_4_district.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_corp_owner_5_district"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_corp_owner_5_district.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_corp_owner_6_district"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_corp_owner_6_district.png"
+	}
+
+	spriteType = {
 		name = "GFX_idea_NAM_board_no_confidence"
 		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_no_confidence.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_board_family_relief"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_family_relief.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_interregnum_power_vacuum"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_interregnum_power_vacuum.png"
 	}
 
 	spriteType = {
@@ -669,6 +709,61 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_idea_NAM_board_sanction_reidbank"
 		texturefile = "gfx/interface/ideas/NAM/idea_NAM_board_sanction_reidbank.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_dock_strike"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_dock_strike.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_coast_guard_mutiny"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_coast_guard_mutiny.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_port_arrests"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_port_arrests.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_dock_walkout"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_dock_walkout.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_drill_block"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_drill_block.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_drill_boycott"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_drill_boycott.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_unseated_proxies"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_unseated_proxies.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_embankment_blood"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_embankment_blood.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_bought_captains"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_bought_captains.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_general_strike"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_general_strike.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_NAM_judas_officers_unrest"
+		texturefile = "gfx/interface/ideas/NAM/idea_NAM_judas_officers_unrest.png"
 	}
 
 	spriteType = {
@@ -914,6 +1009,10 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_welfare_social_insurance"
 		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_social_insurance.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_law_welfare_society_99_1"
+		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_society_99_1.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_welfare_universal_provision"

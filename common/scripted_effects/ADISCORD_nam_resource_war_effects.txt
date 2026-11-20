@@ -906,9 +906,18 @@ NAM_rw_cede_mainland_state = {
 # The defeat tree belongs to the compromise only.
 NAM_rw_settle_island_exile = {
 	ADISCORD_south_suspend_preparation = yes
+	# The country's institutions stay on the mainland. Only the first settlement
+	# finds the island flag unset, so the reset runs once per campaign.
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile } }
+		NAM = { ADISCORD_reset_country_development = yes }
+	}
 	set_global_flag = ADISCORD_nam_resource_war_island_exile
 	NAM = {
+		# The pillars stay on the mainland: a running agreement or offer ends here.
+		NAM_agreement_cancel = yes
 		clr_country_flag = NAM_crisis_open
+		clr_country_flag = NAM_coup_pending
 		if = {
 			limit = { has_active_mission = NAM_incident_countdown }
 			remove_mission = NAM_incident_countdown
@@ -917,6 +926,12 @@ NAM_rw_settle_island_exile = {
 			limit = { has_active_mission = NAM_incident_response }
 			remove_mission = NAM_incident_response
 		}
+		# The depot case and the private tank farms belong to the mainland.
+		if = {
+			limit = { has_active_mission = NAM_depot_public_hearing }
+			remove_mission = NAM_depot_public_hearing
+		}
+		NAM_end_depot_concessions = yes
 		every_owned_state = {
 			limit = { NOT = { is_controlled_by = NAM } }
 			set_state_controller_to = NAM
@@ -1823,9 +1838,13 @@ NAM_rw_compute_oil_score = {
 # Compact entry points for the shared debug category. They deliberately call
 # the production effects instead of duplicating any resource-war mechanics.
 # The political ratings are the displayed totals, including diplomacy and world tension.
+# The idea reset also strips the two Judas camps that NAM_corp_takeover has just
+# installed; their meeting clocks and operations need them back.
 NAM_debug_prepare_corporate_start = {
 	set_country_flag = NAM_board_silence_seats
 	ADISCORD_debug_clear_country_ideas = yes
+	add_ideas = NAM_judas_weber_committees
+	add_ideas = NAM_judas_karamyshev_watch
 	if = {
 		limit = { has_active_mission = ADISCORD_economy_demobilization_deadline }
 		remove_mission = ADISCORD_economy_demobilization_deadline
@@ -1865,8 +1884,31 @@ ADISCORD_nam_debug_resolve_coalition_victory = {
 	}
 }
 
-# COUNTRY NAM. Enter the treaty directly so starting before the imperial
-# collapse does not declare wars or schedule the war's introductory events.
+# COUNTRY NAM. Shared opening of both debug defeats: reach the treaty directly so
+# starting before the imperial collapse does not declare wars or schedule the war's
+# introductory events. The caller resolves the war itself.
+NAM_debug_open_resource_war_defeat = {
+	if = {
+		limit = { is_subject = yes }
+		overlord = { set_autonomy = { target = NAM autonomy_state = autonomy_free } }
+	}
+	if = {
+		limit = { is_in_faction = yes }
+		leave_faction = yes
+	}
+	NAM_colony_close = yes
+	set_country_flag = NAM_independence_declared
+	NAM_agreement_cancel = yes
+	NAM_freeze_prewar_mandate = yes
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_nam_resource_war_started } }
+		NAM_rw_close_preparation = yes
+		set_global_flag = ADISCORD_nam_resource_war_started
+	}
+	clr_global_flag = ADISCORD_nam_resource_war_scheduled
+}
+
+# COUNTRY NAM. The defeat with the corporate shortcut: the boards take power at once.
 ADISCORD_nam_debug_corporate_exile = {
 	if = {
 		limit = {
@@ -1877,27 +1919,27 @@ ADISCORD_nam_debug_corporate_exile = {
 			country_exists = AZH
 		}
 		set_country_flag = NAM_debug_corporate_start
-		if = {
-			limit = { is_subject = yes }
-			overlord = { set_autonomy = { target = NAM autonomy_state = autonomy_free } }
-		}
-		if = {
-			limit = { is_in_faction = yes }
-			leave_faction = yes
-		}
-		NAM_colony_close = yes
-		set_country_flag = NAM_independence_declared
-		NAM_agreement_cancel = yes
-		NAM_freeze_prewar_mandate = yes
-		if = {
-			limit = { NOT = { has_global_flag = ADISCORD_nam_resource_war_started } }
-			NAM_rw_close_preparation = yes
-			set_global_flag = ADISCORD_nam_resource_war_started
-		}
-		clr_global_flag = ADISCORD_nam_resource_war_scheduled
+		NAM_debug_open_resource_war_defeat = yes
 		ADISCORD_nam_resource_war_resolve_coalition_victory = yes
 		NAM_corp_takeover = yes
 		NAM_debug_prepare_corporate_start = yes
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
+# COUNTRY NAM. The ordinary defeat: the settlement queues the flight event and the
+# interregnum follows on its own clock, as in a lost campaign.
+ADISCORD_nam_debug_lose_resource_war = {
+	if = {
+		limit = {
+			tag = NAM
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+			NAM_rw_can_go_into_exile = yes
+			country_exists = EFL
+			country_exists = AZH
+		}
+		NAM_debug_open_resource_war_defeat = yes
+		ADISCORD_nam_resource_war_resolve_coalition_victory = yes
 		mark_focus_tree_layout_dirty = yes
 	}
 }
@@ -2309,6 +2351,7 @@ NAM_groups_initialize = {
 	if = {
 		limit = { NOT = { has_country_flag = NAM_groups_initialized } }
 		set_country_flag = NAM_groups_initialized
+		NAM_sync_etatist_party_name = yes
 		EFL = { NAM_board_sync_district_status = yes }
 		AZH = { NAM_board_sync_district_status = yes }
 		RHM = { NAM_board_sync_district_status = yes }
@@ -2484,7 +2527,7 @@ NAM_groups_monthly = {
 	if = {
 		limit = {
 			has_country_flag = NAM_groups_initialized
-			NOT = { has_country_flag = NAM_corp_takeover }
+			NAM_mainland_programmes_active = yes
 		}
 		# The monthly drift has no new modifier inputs when every group is at rest.
 		if = {
@@ -5560,6 +5603,7 @@ NAM_ladder_monthly = {
 		limit = {
 			has_country_flag = NAM_independence_declared
 			NAM_country_operable = yes
+			NAM_mainland_programmes_active = yes
 		}
 		NAM_rivals_monthly = yes
 	}
@@ -6016,18 +6060,7 @@ NAM_underground_monthly = {
 			add_to_temp_variable = { var = NAM_underground_delta value = -1 }
 		}
 		if = {
-			limit = {
-				OR = {
-					AND = {
-						NAM_ladder_formed = yes
-						power_balance_value = { id = NAM_ladder_bop value < -0.10 }
-					}
-					AND = {
-						has_power_balance = { id = NAM_postwar_future_bop }
-						check_variable = { NAM_prewar_balance < -0.10 }
-					}
-				}
-			}
+			limit = { NAM_underground_vertical_pressure = yes }
 			add_to_temp_variable = { var = NAM_underground_delta value = 2 }
 		}
 		if = {
@@ -6949,14 +6982,38 @@ NAM_war_of_return_resolve_victory = {
 		set_global_flag = NAM_war_of_return_won
 		NAM = {
 			if = {
-				limit = { check_variable = { var = NAM_board_loren_debt value = 2 compare = equals } }
+				limit = { check_variable = { var = NAM_board_loren_debt value = 3 compare = greater_than_or_equals } }
+				add_timed_idea = { idea = NAM_board_loren_lien days = 540 }
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_board_loren_debt value = 2 compare = greater_than_or_equals } }
 				add_timed_idea = { idea = NAM_board_loren_lien days = 360 }
 			}
 			else_if = {
-				limit = { check_variable = { var = NAM_board_loren_debt value = 1 compare = equals } }
+				limit = { check_variable = { var = NAM_board_loren_debt value = 1 compare = greater_than_or_equals } }
 				add_timed_idea = { idea = NAM_board_loren_lien days = 180 }
 			}
 			clear_variable = NAM_board_loren_debt
+			# Eflor mortgages bought by the council pay out once: 100 capital and
+			# Reidbank +5 trust for each package.
+			if = {
+				limit = { check_variable = { var = NAM_board_eflor_mortgages value = 0 compare = greater_than } }
+				set_temp_variable = { var = NAM_corp_capital_change value = NAM_board_eflor_mortgages }
+				multiply_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_delta_input value = NAM_board_eflor_mortgages }
+				multiply_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				NAM_board_queue_recount = yes
+			}
+			clear_variable = NAM_board_eflor_mortgages
+			# The lawsuit closed before the return keeps the districts free of claims
+			# for the first year.
+			if = {
+				limit = { has_completed_focus = NAM_board_close_the_lawsuit }
+				set_country_flag = { flag = NAM_corp_dispute_cooldown value = 1 days = 360 }
+			}
 		}
 		67 = { NAM_wor_return_field = yes }
 		688 = { NAM_wor_return_field = yes }
@@ -6983,6 +7040,11 @@ NAM_war_of_return_resolve_victory = {
 			NAM_wor_restore_mainland_capital = yes
 			NAM_oil_refresh = yes
 			country_event = { id = ADISCORD_nam_resource_war.62 hours = 1 }
+			if = {
+				limit = { has_country_flag = NAM_corp_takeover }
+				set_temp_variable = { ADISCORD_superevent_request = 78 }
+				ADISCORD_superevent_enqueue = yes
+			}
 		}
 		ADISCORD_south_begin_preparation = yes
 	}
@@ -8406,6 +8468,12 @@ NAM_corp_influence_clamp = {
 
 # COUNTRY NAM. The boards take over the island administration after the territorial settlement.
 NAM_board_install_spirits = {
+	# The seal ladder is a mainland balance; the interregnum may still read it.
+	if = {
+		limit = { has_power_balance = { id = NAM_ladder_bop } }
+		remove_power_balance = { id = NAM_ladder_bop }
+		ADISCORD_economy_mark_dirty = yes
+	}
 	if = {
 		limit = { has_dynamic_modifier = { modifier = NAM_administration_dynamic } }
 		remove_dynamic_modifier = { modifier = NAM_administration_dynamic }
@@ -8473,7 +8541,7 @@ NAM_corp_refresh = {
 		limit = { has_country_flag = NAM_corp_takeover }
 		set_variable = { var = NAM_corp_mod_tax value = NAM_free_zones_active }
 		multiply_variable = { var = NAM_corp_mod_tax value = -0.03 }
-		set_variable = { var = NAM_corp_mod_research value = 0.10 }
+		set_variable = { var = NAM_corp_mod_research value = NAM_board_focus_research }
 		set_variable = { var = NAM_corp_mod_trade value = 0.25 }
 		set_variable = { var = NAM_corp_mod_stability value = -0.05 }
 		set_variable = { var = NAM_corp_mod_pp value = -0.15 }
@@ -8663,6 +8731,31 @@ NAM_corp_monthly = {
 			add_to_temp_variable = { var = NAM_corp_capital_change value = 10 }
 		}
 		multiply_temp_variable = { var = NAM_corp_capital_change value = NAM_free_zones_active }
+		# A lot still held by the treasury pays the council directly.
+		if = {
+			limit = { check_variable = { NAM_board_lot_rail = 0 } }
+			add_to_temp_variable = { var = NAM_corp_capital_change value = 10 }
+			if = {
+				limit = { has_completed_focus = NAM_board_quay_chain }
+				add_to_temp_variable = { var = NAM_corp_capital_change value = 5 }
+			}
+		}
+		if = {
+			limit = { check_variable = { NAM_board_lot_yards = 0 } }
+			add_to_temp_variable = { var = NAM_corp_capital_change value = 10 }
+			if = {
+				limit = { has_completed_focus = NAM_board_quay_chain }
+				add_to_temp_variable = { var = NAM_corp_capital_change value = 5 }
+			}
+		}
+		if = {
+			limit = { check_variable = { NAM_board_lot_depots = 0 } }
+			add_to_temp_variable = { var = NAM_corp_capital_change value = 10 }
+			if = {
+				limit = { has_completed_focus = NAM_board_quay_chain }
+				add_to_temp_variable = { var = NAM_corp_capital_change value = 5 }
+			}
+		}
 		if = {
 			limit = {
 				has_completed_focus = NAM_board_future_output_pledge
@@ -8672,9 +8765,9 @@ NAM_corp_monthly = {
 		}
 		if = {
 			limit = {
-				has_completed_focus = NAM_board_society_99_1
+				has_idea = NAM_welfare_society_99_1
 			}
-			add_to_temp_variable = { var = NAM_corp_capital_change value = 20 }
+			add_to_temp_variable = { var = NAM_corp_capital_change value = NAM_board_society_dues }
 		}
 		if = {
 			limit = {
@@ -8757,10 +8850,13 @@ NAM_corp_monthly = {
 				add_to_variable = { var = NAM_board_bank_payments value = -1 }
 			}
 			NAM_corp_districts_monthly = yes
+			# Board loops count companies themselves; see NAM_board_recount.
+			set_temp_variable = { var = NAM_board_drift_company value = 0 }
 			for_loop_effect = {
 				start = 1
 				end = 7
-				value = NAM_board_drift_company
+				value = NAM_board_loop_step
+				add_to_temp_variable = { var = NAM_board_drift_company value = 1 }
 				set_temp_variable = { var = NAM_board_company_input value = NAM_board_drift_company }
 				set_temp_variable = { var = NAM_board_delta_input value = 0 }
 				if = {
@@ -9000,6 +9096,7 @@ NAM_corp_takeover = {
 		set_variable = { var = NAM_board_support^4 value = 45 }
 		set_variable = { var = NAM_board_support^5 value = 66 }
 		set_variable = { var = NAM_board_support^6 value = 66 }
+		NAM_interregnum_apply_pledges = yes
 		set_country_flag = NAM_board_opened
 		add_ideas = NAM_judas_weber_committees
 		set_variable = { var = NAM_judas_weber_remaining value = 30 }
@@ -9028,6 +9125,76 @@ NAM_corp_takeover = {
 	}
 	log = "[ADISCORD][NAM][CORP] The corporate boards take power."
 	NAM_party_representatives_corporate = yes
+}
+
+# COUNTRY NAM. Called once by NAM_corp_takeover after the opening trust is written and
+# before NAM_board_opened: the interregnum lanes and the answer of event 82 move the
+# opening values of the council and both camps. The event 82 flags are consumed here.
+# Trust goes through NAM_board_support_change, which clamps to 0-100 and does not recount;
+# the caller recounts once after the opening block.
+NAM_interregnum_apply_pledges = {
+	if = {
+		limit = { has_completed_focus = NAM_interregnum_guarantors }
+		set_temp_variable = { var = NAM_board_company_input value = 6 }
+		set_temp_variable = { var = NAM_board_delta_input value = 4 }
+		NAM_board_support_change = yes
+	}
+	if = {
+		limit = { has_completed_focus = NAM_interregnum_underwrite_freight }
+		set_temp_variable = { var = NAM_board_company_input value = 3 }
+		set_temp_variable = { var = NAM_board_delta_input value = 4 }
+		NAM_board_support_change = yes
+	}
+	if = {
+		limit = { has_completed_focus = NAM_interregnum_roll_call }
+		add_to_variable = { var = NAM_judas_weber value = 5 }
+		set_temp_variable = { var = NAM_board_company_input value = 5 }
+		set_temp_variable = { var = NAM_board_delta_input value = 3 }
+		NAM_board_support_change = yes
+	}
+	if = {
+		limit = { has_completed_focus = NAM_interregnum_second_shift }
+		add_to_variable = { var = NAM_judas_weber value = 5 }
+	}
+	if = {
+		limit = { has_completed_focus = NAM_interregnum_coast_watch }
+		add_to_variable = { var = NAM_judas_karamyshev value = 5 }
+		set_temp_variable = { var = NAM_board_company_input value = 4 }
+		set_temp_variable = { var = NAM_board_delta_input value = 3 }
+		NAM_board_support_change = yes
+	}
+	if = {
+		limit = { has_completed_focus = NAM_interregnum_chart_soundings }
+		add_to_variable = { var = NAM_judas_karamyshev value = 5 }
+	}
+	if = {
+		limit = { has_country_flag = NAM_interregnum_first_boards }
+		set_temp_variable = { var = NAM_board_company_input value = 1 }
+		set_temp_variable = { var = NAM_board_delta_input value = 3 }
+		NAM_board_support_change = yes
+		set_temp_variable = { var = NAM_board_company_input value = 2 }
+		set_temp_variable = { var = NAM_board_delta_input value = 3 }
+		NAM_board_support_change = yes
+		clr_country_flag = NAM_interregnum_first_boards
+	}
+	if = {
+		limit = { has_country_flag = NAM_interregnum_first_committees }
+		add_to_variable = { var = NAM_judas_weber value = 3 }
+		set_temp_variable = { var = NAM_board_company_input value = 5 }
+		set_temp_variable = { var = NAM_board_delta_input value = 3 }
+		NAM_board_support_change = yes
+		clr_country_flag = NAM_interregnum_first_committees
+	}
+	if = {
+		limit = { has_country_flag = NAM_interregnum_first_officers }
+		add_to_variable = { var = NAM_judas_karamyshev value = 3 }
+		set_temp_variable = { var = NAM_board_company_input value = 4 }
+		set_temp_variable = { var = NAM_board_delta_input value = 3 }
+		NAM_board_support_change = yes
+		clr_country_flag = NAM_interregnum_first_officers
+	}
+	clamp_variable = { var = NAM_judas_weber min = 0 max = 100 }
+	clamp_variable = { var = NAM_judas_karamyshev min = 0 max = 100 }
 }
 
 NAM_board_seat_opposition_leaders = {
@@ -9060,6 +9227,7 @@ NAM_island_eliminate_weber = {
 			limit = {
 				check_variable = { var = NAM_judas_weber value = 60 compare = greater_than_or_equals }
 			}
+			set_variable = { var = NAM_judas_weber_end value = 3 }
 			add_timed_idea = { idea = NAM_judas_general_strike days = 90 }
 			add_popularity = { ideology = humanism popularity = 0.05 }
 			set_temp_variable = { var = NAM_board_company_input value = 1 }
@@ -9082,6 +9250,7 @@ NAM_island_eliminate_weber = {
 			limit = {
 				check_variable = { var = NAM_judas_weber value = 30 compare = greater_than_or_equals }
 			}
+			set_variable = { var = NAM_judas_weber_end value = 2 }
 			add_timed_idea = { idea = NAM_judas_dock_strike days = 45 }
 			set_temp_variable = { var = NAM_board_company_input value = 1 }
 			set_temp_variable = { var = NAM_board_delta_input value = -3 }
@@ -9100,6 +9269,7 @@ NAM_island_eliminate_weber = {
 			NAM_board_support_change = yes
 		}
 		else = {
+			set_variable = { var = NAM_judas_weber_end value = 1 }
 			add_manpower = 2000
 			add_popularity = { ideology = humanism popularity = -0.1 }
 			add_popularity = { ideology = hedonism popularity = 0.1 }
@@ -9163,6 +9333,7 @@ NAM_island_eliminate_karamyshev = {
 			limit = {
 				check_variable = { var = NAM_judas_karamyshev value = 60 compare = greater_than_or_equals }
 			}
+			set_variable = { var = NAM_judas_karamyshev_end value = 3 }
 			add_timed_idea = { idea = NAM_judas_coast_guard_mutiny days = 90 }
 			add_equipment_to_stockpile = { type = convoy_1 amount = -6 producer = NAM }
 			add_to_variable = { var = NAM_revenge_readiness value = -25 }
@@ -9194,6 +9365,7 @@ NAM_island_eliminate_karamyshev = {
 			limit = {
 				check_variable = { var = NAM_judas_karamyshev value = 30 compare = greater_than_or_equals }
 			}
+			set_variable = { var = NAM_judas_karamyshev_end value = 2 }
 			add_to_variable = { var = NAM_revenge_readiness value = -10 }
 			NAM_revenge_readiness_clamp = yes
 			add_timed_idea = { idea = NAM_judas_officers_unrest days = 60 }
@@ -9208,6 +9380,7 @@ NAM_island_eliminate_karamyshev = {
 			NAM_board_support_change = yes
 		}
 		else = {
+			set_variable = { var = NAM_judas_karamyshev_end value = 1 }
 			add_to_variable = { var = NAM_revenge_readiness value = 15 }
 			NAM_revenge_readiness_clamp = yes
 			army_experience = 25
@@ -9333,6 +9506,27 @@ NAM_island_partition_succession = {
 # and renews charters through decisions. The board leader rules the
 # metropole.
 
+NAM_sync_etatist_party_name = {
+	if = {
+		limit = { NOT = { has_country_flag = NAM_corp_takeover } }
+		if = {
+			limit = { NAM_is_vorkerland_dependency = yes }
+			set_party_name = {
+				ideology = etatism
+				name = NAM_etatism_party
+				long_name = NAM_etatism_party_long
+			}
+		}
+		else = {
+			set_party_name = {
+				ideology = etatism
+				name = NAM_independent_etatists
+				long_name = NAM_independent_etatists_long
+			}
+		}
+	}
+}
+
 NAM_board_subject_change = {
 	if = {
 		limit = {
@@ -9341,10 +9535,7 @@ NAM_board_subject_change = {
 				NAM_subject_identity_participant = yes
 			}
 		}
-		if = {
-			limit = { NAM_subject_identity_participant = yes }
-			country_event = { id = ADISCORD_nam_resource_war.112 hours = 1 }
-		}
+		country_event = { id = ADISCORD_nam_resource_war.112 hours = 1 }
 		NAM = { NAM_board_queue_recount = yes }
 	}
 }
@@ -9436,10 +9627,13 @@ NAM_board_settle_no_confidence = {
 			check_variable = { NAM_board_challenger > 0 }
 		}
 		set_temp_variable = { var = NAM_board_winner value = NAM_board_challenger }
+		# Board loops count companies themselves; see NAM_board_recount.
+		set_temp_variable = { var = NAM_board_voter value = 0 }
 		for_loop_effect = {
 			start = 1
 			end = 7
-			value = NAM_board_voter
+			value = NAM_board_loop_step
+			add_to_temp_variable = { var = NAM_board_voter value = 1 }
 			if = {
 				limit = { check_variable = { var = NAM_board_stance^NAM_board_voter value = -1 compare = equals } }
 				set_temp_variable = { var = NAM_board_company_input value = NAM_board_voter }
@@ -9447,10 +9641,12 @@ NAM_board_settle_no_confidence = {
 				NAM_board_support_change = yes
 			}
 		}
+		set_temp_variable = { var = NAM_board_voter value = 0 }
 		for_loop_effect = {
 			start = 1
 			end = 7
-			value = NAM_board_voter
+			value = NAM_board_loop_step
+			add_to_temp_variable = { var = NAM_board_voter value = 1 }
 			if = {
 				limit = { check_variable = { var = NAM_board_stance^NAM_board_voter value = 1 compare = equals } }
 				set_temp_variable = { var = NAM_board_company_input value = NAM_board_voter }
@@ -9465,10 +9661,12 @@ NAM_board_settle_no_confidence = {
 		country_event = ADISCORD_nam_resource_war.420
 	}
 	else = {
+		set_temp_variable = { var = NAM_board_voter value = 0 }
 		for_loop_effect = {
 			start = 1
 			end = 7
-			value = NAM_board_voter
+			value = NAM_board_loop_step
+			add_to_temp_variable = { var = NAM_board_voter value = 1 }
 			if = {
 				limit = { check_variable = { var = NAM_board_stance^NAM_board_voter value = -1 compare = equals } }
 				set_temp_variable = { var = NAM_board_company_input value = NAM_board_voter }
@@ -9480,7 +9678,13 @@ NAM_board_settle_no_confidence = {
 		NAM_board_recount = yes
 		country_event = ADISCORD_nam_resource_war.421
 	}
-	set_country_flag = { flag = NAM_board_no_confidence_immunity days = 180 }
+	if = {
+		limit = { has_completed_focus = NAM_board_original_stays_home }
+		set_country_flag = { flag = NAM_board_no_confidence_immunity days = 270 }
+	}
+	else = {
+		set_country_flag = { flag = NAM_board_no_confidence_immunity days = 180 }
+	}
 }
 
 # Callers supply a company and either an absolute value or a signed delta.
@@ -9497,6 +9701,61 @@ NAM_board_support_change = {
 	}
 	clamp_temp_variable = { var = NAM_board_trust_value min = 0 max = 100 }
 	set_variable = { var = NAM_board_support^NAM_board_trust_company value = NAM_board_trust_value }
+}
+
+# COUNTRY NAM. Inputs: temp NAM_board_trust_input_1 .. NAM_board_trust_input_6, signed
+# trust deltas; an unset input reads as 0. Applies each non-zero delta through
+# NAM_board_support_change, resets the six inputs to 0 and recounts once.
+NAM_board_trust_package = {
+	set_temp_variable = { var = NAM_board_package_1 value = NAM_board_trust_input_1 }
+	set_temp_variable = { var = NAM_board_package_2 value = NAM_board_trust_input_2 }
+	set_temp_variable = { var = NAM_board_package_3 value = NAM_board_trust_input_3 }
+	set_temp_variable = { var = NAM_board_package_4 value = NAM_board_trust_input_4 }
+	set_temp_variable = { var = NAM_board_package_5 value = NAM_board_trust_input_5 }
+	set_temp_variable = { var = NAM_board_package_6 value = NAM_board_trust_input_6 }
+	set_temp_variable = { var = NAM_board_trust_input_1 value = 0 }
+	set_temp_variable = { var = NAM_board_trust_input_2 value = 0 }
+	set_temp_variable = { var = NAM_board_trust_input_3 value = 0 }
+	set_temp_variable = { var = NAM_board_trust_input_4 value = 0 }
+	set_temp_variable = { var = NAM_board_trust_input_5 value = 0 }
+	set_temp_variable = { var = NAM_board_trust_input_6 value = 0 }
+	if = {
+		limit = { NOT = { check_variable = { NAM_board_package_1 = 0 } } }
+		set_temp_variable = { var = NAM_board_company_input value = 1 }
+		set_temp_variable = { var = NAM_board_delta_input value = NAM_board_package_1 }
+		NAM_board_support_change = yes
+	}
+	if = {
+		limit = { NOT = { check_variable = { NAM_board_package_2 = 0 } } }
+		set_temp_variable = { var = NAM_board_company_input value = 2 }
+		set_temp_variable = { var = NAM_board_delta_input value = NAM_board_package_2 }
+		NAM_board_support_change = yes
+	}
+	if = {
+		limit = { NOT = { check_variable = { NAM_board_package_3 = 0 } } }
+		set_temp_variable = { var = NAM_board_company_input value = 3 }
+		set_temp_variable = { var = NAM_board_delta_input value = NAM_board_package_3 }
+		NAM_board_support_change = yes
+	}
+	if = {
+		limit = { NOT = { check_variable = { NAM_board_package_4 = 0 } } }
+		set_temp_variable = { var = NAM_board_company_input value = 4 }
+		set_temp_variable = { var = NAM_board_delta_input value = NAM_board_package_4 }
+		NAM_board_support_change = yes
+	}
+	if = {
+		limit = { NOT = { check_variable = { NAM_board_package_5 = 0 } } }
+		set_temp_variable = { var = NAM_board_company_input value = 5 }
+		set_temp_variable = { var = NAM_board_delta_input value = NAM_board_package_5 }
+		NAM_board_support_change = yes
+	}
+	if = {
+		limit = { NOT = { check_variable = { NAM_board_package_6 = 0 } } }
+		set_temp_variable = { var = NAM_board_company_input value = 6 }
+		set_temp_variable = { var = NAM_board_delta_input value = NAM_board_package_6 }
+		NAM_board_support_change = yes
+	}
+	NAM_board_recount = yes
 }
 
 NAM_board_minister_seated = {
@@ -9968,6 +10227,49 @@ NAM_judas_karamyshev_adjust_clock = {
 	}
 }
 
+# COUNTRY NAM. Inputs: temp NAM_judas_camp_input (1 committees, 2 officers) and
+# NAM_judas_delay_input (signed days). A running meeting is moved and respaced against
+# the council session; a paused clock keeps the days for its next arm. No effect once
+# the camp is closed.
+NAM_judas_delay_meeting = {
+	set_temp_variable = { var = NAM_judas_delay_camp value = NAM_judas_camp_input }
+	set_temp_variable = { var = NAM_judas_delay value = NAM_judas_delay_input }
+	if = {
+		limit = {
+			check_variable = { var = NAM_judas_delay_camp value = 1 compare = equals }
+			has_idea = NAM_judas_weber_committees
+		}
+		if = {
+			limit = { has_active_mission = NAM_judas_weber_meeting }
+			add_to_variable = { var = NAM_judas_weber_day value = NAM_judas_delay }
+			add_days_mission_timeout = { mission = NAM_judas_weber_meeting days = NAM_judas_delay }
+			NAM_judas_weber_adjust_clock = yes
+		}
+		else_if = {
+			limit = { has_variable = NAM_judas_weber_remaining }
+			add_to_variable = { var = NAM_judas_weber_remaining value = NAM_judas_delay }
+			clamp_variable = { var = NAM_judas_weber_remaining min = 1 }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = NAM_judas_delay_camp value = 2 compare = equals }
+			has_idea = NAM_judas_karamyshev_watch
+		}
+		if = {
+			limit = { has_active_mission = NAM_judas_karamyshev_meeting }
+			add_to_variable = { var = NAM_judas_karamyshev_day value = NAM_judas_delay }
+			add_days_mission_timeout = { mission = NAM_judas_karamyshev_meeting days = NAM_judas_delay }
+			NAM_judas_karamyshev_adjust_clock = yes
+		}
+		else_if = {
+			limit = { has_variable = NAM_judas_karamyshev_remaining }
+			add_to_variable = { var = NAM_judas_karamyshev_remaining value = NAM_judas_delay }
+			clamp_variable = { var = NAM_judas_karamyshev_remaining min = 1 }
+		}
+	}
+}
+
 NAM_judas_karamyshev_arm = {
 	if = {
 		limit = {
@@ -10101,6 +10403,44 @@ NAM_judas_support_change = {
 			NAM_judas_karamyshev_arm = yes
 		}
 	}
+}
+
+# COUNTRY NAM. Inputs: temp NAM_judas_camp_input (1 committees, 2 officers) and
+# NAM_corp_capital_change (the full replacement of a dead camp's operation). Pays it by
+# the band stored at the kill: band 1 or no band in full, band 2 half, band 3 nothing.
+NAM_judas_pay_spoils = {
+	set_temp_variable = { var = NAM_judas_spoils_camp value = NAM_judas_camp_input }
+	set_temp_variable = { var = NAM_judas_spoils value = NAM_corp_capital_change }
+	set_temp_variable = { var = NAM_judas_spoils_band value = 1 }
+	if = {
+		limit = {
+			check_variable = { var = NAM_judas_spoils_camp value = 1 compare = equals }
+			has_variable = NAM_judas_weber_end
+		}
+		set_temp_variable = { var = NAM_judas_spoils_band value = NAM_judas_weber_end }
+	}
+	if = {
+		limit = {
+			check_variable = { var = NAM_judas_spoils_camp value = 2 compare = equals }
+			has_variable = NAM_judas_karamyshev_end
+		}
+		set_temp_variable = { var = NAM_judas_spoils_band value = NAM_judas_karamyshev_end }
+	}
+	if = {
+		limit = {
+			check_variable = { var = NAM_judas_spoils_band value = 3 compare = greater_than_or_equals }
+		}
+		set_temp_variable = { var = NAM_judas_spoils value = 0 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = NAM_judas_spoils_band value = 2 compare = greater_than_or_equals }
+		}
+		multiply_temp_variable = { var = NAM_judas_spoils value = 0.5 }
+	}
+	round_temp_variable = NAM_judas_spoils
+	set_temp_variable = { var = NAM_corp_capital_change value = NAM_judas_spoils }
+	NAM_corp_capital_add = yes
 }
 
 NAM_judas_report_drill = {
@@ -10687,13 +11027,14 @@ NAM_judas_weber_ignore = {
 
 NAM_judas_weber_concede = {
 	if = {
-		limit = {
-			NAM_board_operable = yes
-			has_idea = NAM_judas_weber_committees
-			has_variable = NAM_judas_weber_pending
-			check_variable = { var = NAM_corp_capital value = 40 compare = greater_than_or_equals }
-		}
+		limit = { NAM_judas_weber_can_concede = yes }
 		set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+		set_temp_variable = { var = NAM_judas_concede_support value = 10 }
+		if = {
+			limit = { has_completed_focus = NAM_board_subsidised_opposition }
+			set_temp_variable = { var = NAM_corp_capital_change value = -25 }
+			set_temp_variable = { var = NAM_judas_concede_support value = 6 }
+		}
 		NAM_corp_capital_add = yes
 		if = {
 			limit = {
@@ -10707,7 +11048,7 @@ NAM_judas_weber_concede = {
 		set_temp_variable = { var = NAM_board_delta_input value = -5 }
 		NAM_board_support_change = yes
 		set_temp_variable = { var = NAM_judas_camp_input value = 1 }
-		set_temp_variable = { var = NAM_judas_delta_input value = 10 }
+		set_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_concede_support }
 		NAM_judas_support_change = yes
 		clear_variable = NAM_judas_weber_pending
 	}
@@ -10821,13 +11162,19 @@ NAM_judas_karamyshev_ignore = {
 
 NAM_judas_karamyshev_concede = {
 	if = {
-		limit = {
-			NAM_board_operable = yes
-			has_idea = NAM_judas_karamyshev_watch
-			has_variable = NAM_judas_karamyshev_pending
-			check_variable = { var = NAM_corp_capital value = 35 compare = greater_than_or_equals }
-		}
+		limit = { NAM_judas_karamyshev_can_concede = yes }
 		set_temp_variable = { var = NAM_corp_capital_change value = -35 }
+		set_temp_variable = { var = NAM_judas_delta_input value = 10 }
+		if = {
+			limit = { has_completed_focus = NAM_board_hereditary_roll }
+			set_temp_variable = { var = NAM_corp_capital_change value = -20 }
+			set_temp_variable = { var = NAM_judas_delta_input value = 6 }
+			if = {
+				limit = { has_country_flag = NAM_judas_officer_families_listed }
+				set_temp_variable = { var = NAM_corp_capital_change value = -15 }
+			}
+		}
+		set_temp_variable = { var = NAM_judas_concede_support value = NAM_judas_delta_input }
 		NAM_corp_capital_add = yes
 		set_temp_variable = { var = NAM_board_company_input value = 4 }
 		set_temp_variable = { var = NAM_board_delta_input value = -5 }
@@ -10836,7 +11183,7 @@ NAM_judas_karamyshev_concede = {
 		set_temp_variable = { var = NAM_board_delta_input value = -3 }
 		NAM_board_support_change = yes
 		set_temp_variable = { var = NAM_judas_camp_input value = 2 }
-		set_temp_variable = { var = NAM_judas_delta_input value = 10 }
+		set_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_concede_support }
 		NAM_judas_support_change = yes
 		clear_variable = NAM_judas_karamyshev_pending
 	}
@@ -10848,27 +11195,46 @@ NAM_judas_karamyshev_force = {
 			NAM_board_operable = yes
 			has_idea = NAM_judas_karamyshev_watch
 			has_variable = NAM_judas_karamyshev_pending
-			OR = {
-				NAM_judas_willing_navis = yes
-				NAM_judas_willing_arktur = yes
+			NAM_judas_karamyshev_can_force = yes
+		}
+		# The old settlers bring the men: Smenkom is credited, the readiness cost halves,
+		# and published receipts (event 65) waive it once.
+		if = {
+			limit = {
+				has_completed_focus = NAM_board_old_settlers_oath
+			}
+			set_temp_variable = { var = NAM_board_company_input value = 5 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+			if = {
+				limit = {
+					has_country_flag = NAM_judas_receipts_published
+				}
+				clr_country_flag = NAM_judas_receipts_published
+			}
+			else = {
+				add_to_variable = { var = NAM_revenge_readiness value = -4 }
+				NAM_revenge_readiness_clamp = yes
 			}
 		}
-		if = {
+		else_if = {
 			limit = {
 				NAM_judas_willing_navis = yes
 			}
 			set_temp_variable = { var = NAM_board_company_input value = 3 }
 			set_temp_variable = { var = NAM_board_delta_input value = 5 }
 			NAM_board_support_change = yes
+			add_to_variable = { var = NAM_revenge_readiness value = -8 }
+			NAM_revenge_readiness_clamp = yes
 		}
 		else = {
 			set_temp_variable = { var = NAM_board_company_input value = 4 }
 			set_temp_variable = { var = NAM_board_delta_input value = 5 }
 			NAM_board_support_change = yes
+			add_to_variable = { var = NAM_revenge_readiness value = -8 }
+			NAM_revenge_readiness_clamp = yes
 		}
 		NAM_judas_karamyshev_record_operation = yes
-		add_to_variable = { var = NAM_revenge_readiness value = -8 }
-		NAM_revenge_readiness_clamp = yes
 		set_temp_variable = { var = NAM_judas_camp_input value = 2 }
 		set_temp_variable = { var = NAM_judas_delta_input value = -8 }
 		NAM_judas_support_change = yes
@@ -10994,6 +11360,19 @@ NAM_board_initialize = {
 		set_variable = { var = NAM_board_focus_output value = 0 }
 		set_variable = { var = NAM_board_focus_construction value = 0 }
 		set_variable = { var = NAM_board_focus_goods value = 0 }
+		set_variable = { var = NAM_board_focus_research value = -0.10 }
+		set_variable = { var = NAM_board_charter_lines value = 0 }
+		set_variable = { var = NAM_board_charter_working value = 0 }
+		resize_array = {
+			array = NAM_board_charter
+			size = 7
+			value = 0
+		}
+		resize_array = {
+			array = NAM_board_lot_awarded
+			size = 4
+			value = 0
+		}
 		set_variable = { var = NAM_board_chair_vote value = 0 }
 		set_variable = { var = NAM_board_sig_oil_advance_uses value = 0 }
 		set_variable = { var = NAM_board_sig_trust_plan_uses value = 0 }
@@ -11039,6 +11418,40 @@ NAM_board_initialize = {
 		resize_array = {
 			array = NAM_board_forecast
 			size = 7
+			value = 0
+		}
+		# Directory development programmes, index 1-6: runs so far and the receipt of a paid run.
+		resize_array = {
+			array = NAM_dev_runs
+			size = 7
+			value = 0
+		}
+		resize_array = {
+			array = NAM_dev_running
+			size = 7
+			value = 0
+		}
+		# Extra votes, index = company: bought proxies (cleared by the annual meeting)
+		# and the guarantor and keeper votes of events 58 and 73 (cleared by partition night).
+		resize_array = {
+			array = NAM_board_proxy_votes
+			size = 7
+			value = 0
+		}
+		set_variable = { var = NAM_board_proxy_target value = 0 }
+		set_variable = { var = NAM_board_proxy_bought value = 0 }
+		set_variable = { var = NAM_board_guarantor_vote value = 0 }
+		set_variable = { var = NAM_board_keeper_vote value = 0 }
+		set_variable = { var = NAM_board_society_dues value = 20 }
+		set_variable = { var = NAM_board_militia_cap value = 0 }
+		set_variable = { var = NAM_board_militia_raised value = 0 }
+		set_variable = { var = NAM_board_militia_deposit value = 0 }
+		set_variable = { var = NAM_board_mainland_officials_runs value = 0 }
+		set_variable = { var = NAM_board_eflor_mortgages value = 0 }
+		# Lots retendered once, index 1 rail, 2 yards, 3 depots.
+		resize_array = {
+			array = NAM_board_lot_retendered
+			size = 4
 			value = 0
 		}
 		set_variable = { var = NAM_board_votes_for value = 0 }
@@ -11139,6 +11552,11 @@ NAM_board_initialize = {
 			value = 0
 		}
 		resize_array = {
+			array = NAM_board_extra_votes
+			size = 7
+			value = 0
+		}
+		resize_array = {
 			array = NAM_board_public_agenda
 			size = 7
 			value = 0
@@ -11185,6 +11603,13 @@ NAM_board_close_tender = {
 			NAM_board_support_change = yes
 			set_variable = { var = NAM_board_loss_until^NAM_board_bid_loser value = global.num_days }
 			add_to_variable = { var = NAM_board_loss_until^NAM_board_bid_loser value = 180 }
+			# Only the first award of a lot opens a charter line; a retender does not.
+			if = {
+				limit = { check_variable = { var = NAM_board_lot_awarded^NAM_board_bid_lot value = 0 compare = equals } }
+				set_variable = { var = NAM_board_lot_awarded^NAM_board_bid_lot value = 1 }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_bid_winner }
+				NAM_board_grant_charter = yes
+			}
 			if = {
 				limit = {
 					check_variable = { var = NAM_board_bid_winner value = 5 compare = equals }
@@ -11237,6 +11662,12 @@ NAM_board_close_tender = {
 			set_variable = { var = NAM_board_loss_until^NAM_board_bid_loser value = global.num_days }
 			add_to_variable = { var = NAM_board_loss_until^NAM_board_bid_loser value = 180 }
 			if = {
+				limit = { check_variable = { var = NAM_board_lot_awarded^NAM_board_bid_lot value = 0 compare = equals } }
+				set_variable = { var = NAM_board_lot_awarded^NAM_board_bid_lot value = 1 }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_bid_winner }
+				NAM_board_grant_charter = yes
+			}
+			if = {
 				limit = {
 					check_variable = { var = NAM_board_bid_winner value = 3 compare = equals }
 				}
@@ -11287,6 +11718,12 @@ NAM_board_close_tender = {
 			NAM_board_support_change = yes
 			set_variable = { var = NAM_board_loss_until^NAM_board_bid_loser value = global.num_days }
 			add_to_variable = { var = NAM_board_loss_until^NAM_board_bid_loser value = 180 }
+			if = {
+				limit = { check_variable = { var = NAM_board_lot_awarded^NAM_board_bid_lot value = 0 compare = equals } }
+				set_variable = { var = NAM_board_lot_awarded^NAM_board_bid_lot value = 1 }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_bid_winner }
+				NAM_board_grant_charter = yes
+			}
 			if = {
 				limit = {
 					check_variable = { var = NAM_board_bid_winner value = 1 compare = equals }
@@ -11384,7 +11821,13 @@ NAM_board_sanction_company = {
 			}
 			remove_ideas = NAM_board_sanction_loren
 		}
-		add_timed_idea = { idea = NAM_board_sanction_loren days = 60 }
+		if = {
+			limit = { has_completed_focus = NAM_board_political_debt_register }
+			add_timed_idea = { idea = NAM_board_sanction_loren days = 30 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_board_sanction_loren days = 60 }
+		}
 	}
 	else_if = {
 		limit = {
@@ -11396,7 +11839,13 @@ NAM_board_sanction_company = {
 			}
 			remove_ideas = NAM_board_sanction_ferrant
 		}
-		add_timed_idea = { idea = NAM_board_sanction_ferrant days = 60 }
+		if = {
+			limit = { has_completed_focus = NAM_board_political_debt_register }
+			add_timed_idea = { idea = NAM_board_sanction_ferrant days = 30 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_board_sanction_ferrant days = 60 }
+		}
 	}
 	else_if = {
 		limit = {
@@ -11408,7 +11857,13 @@ NAM_board_sanction_company = {
 			}
 			remove_ideas = NAM_board_sanction_navis
 		}
-		add_timed_idea = { idea = NAM_board_sanction_navis days = 60 }
+		if = {
+			limit = { has_completed_focus = NAM_board_political_debt_register }
+			add_timed_idea = { idea = NAM_board_sanction_navis days = 30 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_board_sanction_navis days = 60 }
+		}
 	}
 	else_if = {
 		limit = {
@@ -11420,7 +11875,13 @@ NAM_board_sanction_company = {
 			}
 			remove_ideas = NAM_board_sanction_arktur
 		}
-		add_timed_idea = { idea = NAM_board_sanction_arktur days = 60 }
+		if = {
+			limit = { has_completed_focus = NAM_board_political_debt_register }
+			add_timed_idea = { idea = NAM_board_sanction_arktur days = 30 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_board_sanction_arktur days = 60 }
+		}
 	}
 	else_if = {
 		limit = {
@@ -11432,7 +11893,13 @@ NAM_board_sanction_company = {
 			}
 			remove_ideas = NAM_board_sanction_smenkom
 		}
-		add_timed_idea = { idea = NAM_board_sanction_smenkom days = 60 }
+		if = {
+			limit = { has_completed_focus = NAM_board_political_debt_register }
+			add_timed_idea = { idea = NAM_board_sanction_smenkom days = 30 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_board_sanction_smenkom days = 60 }
+		}
 	}
 	else_if = {
 		limit = {
@@ -11444,7 +11911,13 @@ NAM_board_sanction_company = {
 			}
 			remove_ideas = NAM_board_sanction_reidbank
 		}
-		add_timed_idea = { idea = NAM_board_sanction_reidbank days = 60 }
+		if = {
+			limit = { has_completed_focus = NAM_board_political_debt_register }
+			add_timed_idea = { idea = NAM_board_sanction_reidbank days = 30 }
+		}
+		else = {
+			add_timed_idea = { idea = NAM_board_sanction_reidbank days = 60 }
+		}
 	}
 }
 
@@ -11781,10 +12254,13 @@ NAM_board_pick_speaker = {
 	set_temp_variable = { var = NAM_board_excluded value = NAM_board_company_input }
 	set_temp_variable = { var = NAM_board_best value = 0 }
 	set_temp_variable = { var = NAM_board_best_priority value = -100 }
+	# Board loops count companies themselves; see NAM_board_recount.
+	set_temp_variable = { var = NAM_board_candidate value = 0 }
 	for_loop_effect = {
 		start = 1
 		end = 7
-		value = NAM_board_candidate
+		value = NAM_board_loop_step
+		add_to_temp_variable = { var = NAM_board_candidate value = 1 }
 		if = {
 			limit = {
 				AND = {
@@ -11869,6 +12345,17 @@ NAM_board_sig_trust_plan_deliver = {
 		clear_variable = NAM_board_sig_trust_plan_receipt
 	}
 	else = { NAM_board_sig_trust_plan_refund = yes }
+}
+
+# COUNTRY NAM. The proxy purchase target is its receipt: the refund runs once, from
+# the decision's cancel_effect or from NAM_board_end_operations, whichever comes first.
+NAM_board_buy_proxies_refund = {
+	if = {
+		limit = { check_variable = { var = NAM_board_proxy_target value = 0 compare = greater_than } }
+		set_variable = { var = NAM_board_proxy_target value = 0 }
+		set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+		NAM_corp_capital_add = yes
+	}
 }
 
 NAM_board_sig_out_of_turn_refund = {
@@ -11981,10 +12468,13 @@ NAM_board_ai_monthly = {
 		else = { clr_country_flag = NAM_board_ai_seat_3 }
 		set_temp_variable = { var = NAM_board_ai_target value = 0 }
 		set_temp_variable = { var = NAM_board_ai_trust value = 101 }
+		# Board loops count companies themselves; see NAM_board_recount.
+		set_temp_variable = { var = NAM_board_ai_company value = 0 }
 		for_loop_effect = {
 			start = 1
 			end = 7
-			value = NAM_board_ai_company
+			value = NAM_board_loop_step
+			add_to_temp_variable = { var = NAM_board_ai_company value = 1 }
 			if = {
 				limit = {
 					check_variable = { var = NAM_board_ballot^NAM_board_ai_company value = 0 compare = greater_than }
@@ -12137,6 +12627,15 @@ NAM_board_meeting_due = {
 			add_to_variable = { var = NAM_board_dividend_quote value = NAM_judas_dividend_surcharge }
 			clear_variable = NAM_judas_dividend_surcharge
 		}
+		# Bought proxies expire at the meeting that counted them; the story votes stay.
+		set_variable = { var = NAM_board_proxy_votes^1 value = 0 }
+		set_variable = { var = NAM_board_proxy_votes^2 value = 0 }
+		set_variable = { var = NAM_board_proxy_votes^3 value = 0 }
+		set_variable = { var = NAM_board_proxy_votes^4 value = 0 }
+		set_variable = { var = NAM_board_proxy_votes^5 value = 0 }
+		set_variable = { var = NAM_board_proxy_votes^6 value = 0 }
+		set_variable = { var = NAM_board_proxy_bought value = 0 }
+		NAM_board_queue_recount = yes
 		if = {
 			limit = { check_variable = { var = NAM_board_meeting_winner value = NAM_board_chair compare = equals } }
 			country_event = { id = ADISCORD_nam_resource_war.472 }
@@ -13263,6 +13762,188 @@ NAM_board_reward_ferrant = {
 	}
 }
 
+# COUNTRY NAM. One naval base level in the port of the capital's island state, if the
+# council holds that site and the port is not full. Output: temp NAM_board_site_built
+# (1 built, 0 not), so the caller pays its own fallback.
+NAM_board_build_capital_naval_base = {
+	set_temp_variable = { var = NAM_board_site_built value = 0 }
+	if = {
+		limit = {
+			capital_scope = {
+				state = 225
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 11393 }
+					building = naval_base
+					level < 10
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = naval_base
+				level = 1
+				instant_build = yes
+				province = 11393
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 226
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 4396 }
+					building = naval_base
+					level < 10
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = naval_base
+				level = 1
+				instant_build = yes
+				province = 4396
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 227
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 9192 }
+					building = naval_base
+					level < 10
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = naval_base
+				level = 1
+				instant_build = yes
+				province = 9192
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 228
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 6893 }
+					building = naval_base
+					level < 10
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = naval_base
+				level = 1
+				instant_build = yes
+				province = 6893
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 229
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 3731 }
+					building = naval_base
+					level < 10
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = naval_base
+				level = 1
+				instant_build = yes
+				province = 3731
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 230
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 2742 }
+					building = naval_base
+					level < 10
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = naval_base
+				level = 1
+				instant_build = yes
+				province = 2742
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 231
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 13018 }
+					building = naval_base
+					level < 10
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = naval_base
+				level = 1
+				instant_build = yes
+				province = 13018
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+}
+
+# COUNTRY NAM. The fixed template of the old settlers' militia. Its price in the
+# militia decision is four infantry battalions: 4000 manpower and 3600 rifles.
+NAM_board_militia_ensure_template = {
+	if = {
+		limit = { NOT = { has_template = "Old Settlers Militia" } }
+		division_template = {
+			name = "Old Settlers Militia"
+			is_locked = yes
+			force_allow_recruiting = yes
+			template_counter = 7
+			division_names_group = ADISCORD_INF_01
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+			}
+		}
+	}
+}
+
 NAM_board_reward_navis = {
 	if = {
 		limit = {
@@ -13290,154 +13971,11 @@ NAM_board_reward_navis = {
 			check_variable = { var = NAM_board_motion^3 value = 4 compare = equals }
 		}
 		set_variable = { var = NAM_board_fulfilled^14 value = 1 }
+		NAM_board_build_capital_naval_base = yes
 		if = {
 			limit = {
-				capital_scope = {
-					state = 225
-					NAM_board_held_site = yes
-					any_province_building_level = {
-						province = { id = 11393 }
-						building = naval_base
-						level < 10
-					}
-				}
+				check_variable = { var = NAM_board_site_built value = 0 compare = equals }
 			}
-			capital_scope = {
-				add_building_construction = {
-					type = naval_base
-					level = 1
-					instant_build = yes
-					province = 11393
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				capital_scope = {
-					state = 226
-					NAM_board_held_site = yes
-					any_province_building_level = {
-						province = { id = 4396 }
-						building = naval_base
-						level < 10
-					}
-				}
-			}
-			capital_scope = {
-				add_building_construction = {
-					type = naval_base
-					level = 1
-					instant_build = yes
-					province = 4396
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				capital_scope = {
-					state = 227
-					NAM_board_held_site = yes
-					any_province_building_level = {
-						province = { id = 9192 }
-						building = naval_base
-						level < 10
-					}
-				}
-			}
-			capital_scope = {
-				add_building_construction = {
-					type = naval_base
-					level = 1
-					instant_build = yes
-					province = 9192
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				capital_scope = {
-					state = 228
-					NAM_board_held_site = yes
-					any_province_building_level = {
-						province = { id = 6893 }
-						building = naval_base
-						level < 10
-					}
-				}
-			}
-			capital_scope = {
-				add_building_construction = {
-					type = naval_base
-					level = 1
-					instant_build = yes
-					province = 6893
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				capital_scope = {
-					state = 229
-					NAM_board_held_site = yes
-					any_province_building_level = {
-						province = { id = 3731 }
-						building = naval_base
-						level < 10
-					}
-				}
-			}
-			capital_scope = {
-				add_building_construction = {
-					type = naval_base
-					level = 1
-					instant_build = yes
-					province = 3731
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				capital_scope = {
-					state = 230
-					NAM_board_held_site = yes
-					any_province_building_level = {
-						province = { id = 2742 }
-						building = naval_base
-						level < 10
-					}
-				}
-			}
-			capital_scope = {
-				add_building_construction = {
-					type = naval_base
-					level = 1
-					instant_build = yes
-					province = 2742
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				capital_scope = {
-					state = 231
-					NAM_board_held_site = yes
-					any_province_building_level = {
-						province = { id = 13018 }
-						building = naval_base
-						level < 10
-					}
-				}
-			}
-			capital_scope = {
-				add_building_construction = {
-					type = naval_base
-					level = 1
-					instant_build = yes
-					province = 13018
-				}
-			}
-		}
-		else = {
 			set_temp_variable = { var = NAM_corp_capital_change value = 60 }
 			NAM_corp_capital_add = yes
 		}
@@ -13978,10 +14516,15 @@ NAM_board_finish_dismissal = {
 # The terminal owner settles receipts before native removal, which runs no refund.
 NAM_board_end_operations = {
 	set_variable = { var = NAM_board_ended value = 1 }
+	if = {
+		limit = { has_idea = NAM_welfare_society_99_1 }
+		add_ideas = ADISCORD_welfare_basic_services
+	}
 	clr_country_flag = NAM_board_letters_of_marque
 	NAM_board_sig_trust_plan_refund = yes
 	NAM_board_sig_out_of_turn_refund = yes
 	NAM_board_sig_contract_recruitment_refund = yes
+	NAM_board_buy_proxies_refund = yes
 	remove_mission = NAM_board_annual_meeting
 	clear_variable = NAM_board_previous_meeting_day
 	set_variable = { var = NAM_board_meeting_day value = -1 }
@@ -14147,20 +14690,167 @@ NAM_board_end_operations = {
 	remove_ideas = NAM_board_arktur_line
 	remove_ideas = NAM_board_smenkom_brigades
 	remove_ideas = NAM_board_reidbank_bills
+	NAM_dir_campaigns_close = yes
 }
 
-# One-based company IDs match district concessions. Public holdings accrue at index zero.
-# Seniority is the last digit of the ballot, so equal votes have a stable order.
-NAM_board_recount = {
+# Directory propaganda campaigns (decisions NAM_dir_campaign_* in NAM_free_zones).
+# COUNTRY NAM. A launch moves company trust and the Judas camps once; the timed
+# spirit added by the decision carries the running effect. Judas changes are
+# ignored by NAM_judas_support_change when that man is already dead.
+NAM_dir_campaign_newsreel_launch = {
+	set_temp_variable = { var = NAM_board_company_input value = 3 }
+	set_temp_variable = { var = NAM_board_delta_input value = 6 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = 4 }
+	set_temp_variable = { var = NAM_board_delta_input value = -4 }
+	NAM_board_support_change = yes
+	NAM_board_queue_recount = yes
+}
+
+NAM_dir_campaign_dividend_launch = {
+	set_temp_variable = { var = NAM_board_company_input value = 5 }
+	set_temp_variable = { var = NAM_board_delta_input value = 5 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = 6 }
+	set_temp_variable = { var = NAM_board_delta_input value = -8 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+	set_temp_variable = { var = NAM_judas_delta_input value = -5 }
+	NAM_judas_support_change = yes
+	NAM_board_queue_recount = yes
+}
+
+NAM_dir_campaign_pays_on_time_launch = {
+	set_temp_variable = { var = NAM_board_company_input value = 6 }
+	set_temp_variable = { var = NAM_board_delta_input value = 8 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = 1 }
+	set_temp_variable = { var = NAM_board_delta_input value = 4 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = 5 }
+	set_temp_variable = { var = NAM_board_delta_input value = -5 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+	set_temp_variable = { var = NAM_judas_delta_input value = 5 }
+	NAM_judas_support_change = yes
+	NAM_board_queue_recount = yes
+}
+
+NAM_dir_campaign_agitators_launch = {
+	set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+	set_temp_variable = { var = NAM_judas_delta_input value = -10 }
+	NAM_judas_support_change = yes
+	set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+	set_temp_variable = { var = NAM_judas_delta_input value = 5 }
+	NAM_judas_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = 4 }
+	set_temp_variable = { var = NAM_board_delta_input value = 4 }
+	NAM_board_support_change = yes
+	NAM_board_queue_recount = yes
+}
+
+NAM_dir_campaign_mutineers_launch = {
+	set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+	set_temp_variable = { var = NAM_judas_delta_input value = -10 }
+	NAM_judas_support_change = yes
+	set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+	set_temp_variable = { var = NAM_judas_delta_input value = 5 }
+	NAM_judas_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = 4 }
+	set_temp_variable = { var = NAM_board_delta_input value = -5 }
+	NAM_board_support_change = yes
+	NAM_board_queue_recount = yes
+}
+
+NAM_dir_campaign_return_launch = {
+	add_to_variable = { var = NAM_revenge_readiness value = 5 }
+	NAM_revenge_readiness_clamp = yes
+	set_temp_variable = { var = NAM_board_company_input value = 4 }
+	set_temp_variable = { var = NAM_board_delta_input value = 5 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = 3 }
+	set_temp_variable = { var = NAM_board_delta_input value = -4 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+	set_temp_variable = { var = NAM_judas_delta_input value = 5 }
+	NAM_judas_support_change = yes
+	NAM_board_queue_recount = yes
+}
+
+NAM_dir_campaign_lottery_launch = {
+	set_temp_variable = { var = NAM_board_company_input value = 6 }
+	set_temp_variable = { var = NAM_board_delta_input value = 6 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = 1 }
+	set_temp_variable = { var = NAM_board_delta_input value = -5 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+	set_temp_variable = { var = NAM_judas_delta_input value = -5 }
+	NAM_judas_support_change = yes
+	NAM_board_queue_recount = yes
+}
+
+NAM_dir_campaign_gazette_launch = {
+	set_temp_variable = { var = NAM_board_company_input value = 2 }
+	set_temp_variable = { var = NAM_board_delta_input value = 6 }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = 5 }
+	set_temp_variable = { var = NAM_board_delta_input value = -4 }
+	NAM_board_support_change = yes
+	NAM_board_queue_recount = yes
+}
+
+# COUNTRY NAM. Called once from NAM_board_end_operations: running campaigns end
+# with the council, and the focus unlock flags stop meaning anything.
+NAM_dir_campaigns_close = {
+	if = {
+		limit = { has_idea = NAM_dir_campaign_newsreel_spirit }
+		remove_ideas = NAM_dir_campaign_newsreel_spirit
+	}
+	if = {
+		limit = { has_idea = NAM_dir_campaign_dividend_spirit }
+		remove_ideas = NAM_dir_campaign_dividend_spirit
+	}
+	if = {
+		limit = { has_idea = NAM_dir_campaign_pays_on_time_spirit }
+		remove_ideas = NAM_dir_campaign_pays_on_time_spirit
+	}
+	if = {
+		limit = { has_idea = NAM_dir_campaign_agitators_spirit }
+		remove_ideas = NAM_dir_campaign_agitators_spirit
+	}
+	if = {
+		limit = { has_idea = NAM_dir_campaign_mutineers_spirit }
+		remove_ideas = NAM_dir_campaign_mutineers_spirit
+	}
+	if = {
+		limit = { has_idea = NAM_dir_campaign_return_spirit }
+		remove_ideas = NAM_dir_campaign_return_spirit
+	}
+	if = {
+		limit = { has_idea = NAM_dir_campaign_lottery_spirit }
+		remove_ideas = NAM_dir_campaign_lottery_spirit
+	}
+	if = {
+		limit = { has_idea = NAM_dir_campaign_gazette_spirit }
+		remove_ideas = NAM_dir_campaign_gazette_spirit
+	}
+	clr_country_flag = NAM_dir_campaign_agitators_open
+	clr_country_flag = NAM_dir_campaign_mutineers_open
+	clr_country_flag = NAM_dir_campaign_return_open
+	clr_country_flag = NAM_dir_campaign_lottery_open
+	clr_country_flag = NAM_dir_campaign_gazette_open
+	clr_country_flag = NAM_dir_campaign_pays_on_time_open
+	clr_country_flag = NAM_dir_campaign_newsreel_open
+}
+
+# COUNTRY NAM. Temp array of industries per company; index zero collects the
+# public lots. Temp arrays do not outlive the effect that built them, so the
+# recount and every direct call of NAM_board_update_industrial_policy build it.
+NAM_board_count_industries = {
 	clear_temp_array = NAM_board_industries
 	resize_temp_array = {
 		array = NAM_board_industries
-		size = 7
-		value = 0
-	}
-	clear_temp_array = NAM_board_holdings
-	resize_temp_array = {
-		array = NAM_board_holdings
 		size = 7
 		value = 0
 	}
@@ -14170,6 +14860,21 @@ NAM_board_recount = {
 	add_to_temp_variable = { var = NAM_board_industries^NAM_board_lot_rail value = 1 }
 	add_to_temp_variable = { var = NAM_board_industries^NAM_board_lot_yards value = 1 }
 	add_to_temp_variable = { var = NAM_board_industries^NAM_board_lot_depots value = 1 }
+}
+
+# One-based company IDs match district concessions. Public holdings accrue at index zero.
+# Seniority is the last digit of the ballot, so equal votes have a stable order.
+# Board loops index company arrays through their own counter: it is set to the
+# loop start minus one before the loop and advanced first in the body. The
+# for_loop_effect value variable is never read, including in focuses and events.
+NAM_board_recount = {
+	NAM_board_count_industries = yes
+	clear_temp_array = NAM_board_holdings
+	resize_temp_array = {
+		array = NAM_board_holdings
+		size = 7
+		value = 0
+	}
 	for_each_scope_loop = {
 		array = NAM_federal_districts
 		if = {
@@ -14259,10 +14964,12 @@ NAM_board_recount = {
 		add_to_variable = { var = NAM_board_seat_count^6 value = 1 }
 	}
 	add_to_temp_array = { array = NAM_board_seats value = 0 }
+	set_temp_variable = { var = NAM_board_company value = 0 }
 	for_loop_effect = {
 		start = 1
 		end = 7
-		value = NAM_board_company
+		value = NAM_board_loop_step
+		add_to_temp_variable = { var = NAM_board_company value = 1 }
 		set_temp_variable = { var = NAM_board_votes value = NAM_board_industries^NAM_board_company }
 		multiply_temp_variable = { var = NAM_board_votes value = 2 }
 		add_to_temp_variable = { var = NAM_board_votes value = 2 }
@@ -14276,6 +14983,23 @@ NAM_board_recount = {
 			}
 			add_to_temp_variable = { var = NAM_board_votes value = NAM_board_chair_vote }
 		}
+		# Story votes (events 58 and 73) last until partition night; bought proxies
+		# until the next annual meeting. Their sum is kept for the company card.
+		set_temp_variable = { var = NAM_board_extra_count value = NAM_board_proxy_votes^NAM_board_company }
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_company value = NAM_board_guarantor_vote compare = equals }
+			}
+			add_to_temp_variable = { var = NAM_board_extra_count value = 1 }
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_company value = NAM_board_keeper_vote compare = equals }
+			}
+			add_to_temp_variable = { var = NAM_board_extra_count value = 1 }
+		}
+		set_variable = { var = NAM_board_extra_votes^NAM_board_company value = NAM_board_extra_count }
+		add_to_temp_variable = { var = NAM_board_votes value = NAM_board_extra_count }
 		set_variable = { var = NAM_board_ballot^NAM_board_company value = NAM_board_votes }
 		add_to_temp_array = { array = NAM_board_seats value = NAM_board_votes }
 		multiply_temp_variable = { var = NAM_board_votes value = 10 }
@@ -14323,8 +15047,30 @@ NAM_board_recount = {
 	NAM_judas_refresh_targets = yes
 }
 
+# COUNTRY NAM. Input: temp NAM_board_company_input (1-6). Opens the company's next
+# product line; a company with both lines open is paid 40 capital instead.
+# Trust is moved by the caller. Callers: the tender award and nine focus rewards.
+NAM_board_grant_charter = {
+	set_temp_variable = { var = NAM_board_charter_company value = NAM_board_company_input }
+	if = {
+		limit = {
+			check_variable = { var = NAM_board_charter^NAM_board_charter_company value = 2 compare = less_than }
+		}
+		add_to_variable = { var = NAM_board_charter^NAM_board_charter_company value = 1 }
+		add_to_variable = { var = NAM_board_charter_lines value = 1 }
+	}
+	else = {
+		set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+		NAM_corp_capital_add = yes
+	}
+	NAM_board_recount = yes
+}
+
 # Recounts preserve the first deadline throughout an uninterrupted low-trust period.
+# Focus rewards call this directly after changing a profile level, so it reads
+# votes from the stored ballot and rebuilds the industry count it needs.
 NAM_board_update_industrial_policy = {
+	NAM_board_count_industries = yes
 	clear_temp_array = NAM_board_weights
 	add_to_temp_array = { array = NAM_board_weights value = 0 }
 	set_temp_variable = { var = NAM_board_new_objection value = 0 }
@@ -14341,10 +15087,12 @@ NAM_board_update_industrial_policy = {
 	set_variable = { var = NAM_board_challenger value = 0 }
 	set_temp_variable = { var = NAM_board_best_opposition value = 0 }
 	set_temp_variable = { var = NAM_board_envy value = 0 }
+	set_temp_variable = { var = NAM_board_company value = 0 }
 	for_loop_effect = {
 		start = 1
 		end = 7
-		value = NAM_board_company
+		value = NAM_board_loop_step
+		add_to_temp_variable = { var = NAM_board_company value = 1 }
 		if = {
 			limit = { check_variable = { var = NAM_board_industries^NAM_board_company value = 1 compare = greater_than } }
 			add_to_temp_variable = { var = NAM_board_envy value = -5 }
@@ -14352,10 +15100,12 @@ NAM_board_update_industrial_policy = {
 	}
 	clear_temp_array = NAM_board_frames
 	add_to_temp_array = { array = NAM_board_frames value = 0 }
+	set_temp_variable = { var = NAM_board_company value = 0 }
 	for_loop_effect = {
 		start = 1
 		end = 7
-		value = NAM_board_company
+		value = NAM_board_loop_step
+		add_to_temp_variable = { var = NAM_board_company value = 1 }
 		set_temp_variable = { var = NAM_board_rest_value value = NAM_board_seat_count^NAM_board_company }
 		multiply_temp_variable = { var = NAM_board_rest_value value = 10 }
 		add_to_temp_variable = { var = NAM_board_rest_value value = 30 }
@@ -14387,7 +15137,7 @@ NAM_board_update_industrial_policy = {
 			add_to_variable = { var = NAM_board_forecast^NAM_board_company value = -1 }
 		}
 		set_variable = { var = NAM_board_stance^NAM_board_company value = 0 }
-		add_to_variable = { var = NAM_board_votes_total value = NAM_board_seats^NAM_board_company }
+		add_to_variable = { var = NAM_board_votes_total value = NAM_board_ballot^NAM_board_company }
 		set_temp_variable = { var = NAM_board_weight value = NAM_board_industries^NAM_board_company }
 		if = {
 			limit = {
@@ -14410,16 +15160,16 @@ NAM_board_update_industrial_policy = {
 				limit = { check_variable = { var = global.num_days value = NAM_board_deadline compare = greater_than_or_equals } }
 				set_variable = { var = NAM_board_stance^NAM_board_company value = -1 }
 				set_temp_variable = { var = NAM_board_frame value = 4 }
-				add_to_variable = { var = NAM_board_votes_against value = NAM_board_seats^NAM_board_company }
+				add_to_variable = { var = NAM_board_votes_against value = NAM_board_ballot^NAM_board_company }
 				add_to_variable = { var = NAM_board_majority_stab value = -0.03 }
 				multiply_temp_variable = { var = NAM_board_weight value = -0.5 }
 				if = {
 					limit = {
 						NOT = { check_variable = { var = NAM_board_company value = NAM_board_chair compare = equals } }
-						check_variable = { var = NAM_board_seats^NAM_board_company value = NAM_board_best_opposition compare = greater_than }
+						check_variable = { var = NAM_board_ballot^NAM_board_company value = NAM_board_best_opposition compare = greater_than }
 					}
 					set_variable = { var = NAM_board_challenger value = NAM_board_company }
-					set_temp_variable = { var = NAM_board_best_opposition value = NAM_board_seats^NAM_board_company }
+					set_temp_variable = { var = NAM_board_best_opposition value = NAM_board_ballot^NAM_board_company }
 				}
 			}
 			else = {
@@ -14433,7 +15183,7 @@ NAM_board_update_industrial_policy = {
 				limit = { check_variable = { NAM_board_trust > 59 } }
 				set_variable = { var = NAM_board_stance^NAM_board_company value = 1 }
 				set_temp_variable = { var = NAM_board_frame value = 1 }
-				add_to_variable = { var = NAM_board_votes_for value = NAM_board_seats^NAM_board_company }
+				add_to_variable = { var = NAM_board_votes_for value = NAM_board_ballot^NAM_board_company }
 			}
 			else = {
 				set_temp_variable = { var = NAM_board_weight value = 0 }
@@ -14487,55 +15237,154 @@ NAM_board_update_industrial_policy = {
 	set_variable = { var = NAM_board_mod_dockyards value = 0 }
 	set_variable = { var = NAM_board_mod_ceiling value = 0 }
 	set_variable = { var = NAM_board_mod_goods value = 0 }
-	set_variable = { var = NAM_board_rate_a_1 value = NAM_board_weights^1 }
-	add_to_variable = { var = NAM_board_mod_output value = NAM_board_rate_a_1 }
-	set_variable = { var = NAM_board_rate_b_1 value = NAM_board_weights^1 }
-	multiply_variable = { var = NAM_board_rate_b_1 value = 2 }
-	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_rate_b_1 }
-	set_variable = { var = NAM_board_rate_a_2 value = NAM_board_weights^2 }
-	multiply_variable = { var = NAM_board_rate_a_2 value = 2 }
-	add_to_variable = { var = NAM_board_mod_output value = NAM_board_rate_a_2 }
-	set_variable = { var = NAM_board_rate_b_2 value = NAM_board_weights^2 }
-	multiply_variable = { var = NAM_board_rate_b_2 value = 3 }
-	add_to_variable = { var = NAM_board_mod_growth value = NAM_board_rate_b_2 }
-	set_variable = { var = NAM_board_rate_a_3 value = NAM_board_weights^3 }
-	multiply_variable = { var = NAM_board_rate_a_3 value = 3 }
-	add_to_variable = { var = NAM_board_mod_naval value = NAM_board_rate_a_3 }
-	set_variable = { var = NAM_board_rate_b_3 value = NAM_board_weights^3 }
-	multiply_variable = { var = NAM_board_rate_b_3 value = 3 }
-	add_to_variable = { var = NAM_board_mod_dockyards value = NAM_board_rate_b_3 }
-	set_variable = { var = NAM_board_rate_a_4 value = NAM_board_weights^4 }
-	multiply_variable = { var = NAM_board_rate_a_4 value = 3 }
-	add_to_variable = { var = NAM_board_mod_output value = NAM_board_rate_a_4 }
-	set_variable = { var = NAM_board_rate_b_4 value = NAM_board_weights^4 }
-	add_to_variable = { var = NAM_board_mod_ceiling value = NAM_board_rate_b_4 }
-	set_variable = { var = NAM_board_rate_a_5 value = NAM_board_weights^5 }
-	multiply_variable = { var = NAM_board_rate_a_5 value = 2 }
-	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_rate_a_5 }
-	set_variable = { var = NAM_board_rate_b_5 value = NAM_board_weights^5 }
-	multiply_variable = { var = NAM_board_rate_b_5 value = 2 }
-	add_to_variable = { var = NAM_board_mod_growth value = NAM_board_rate_b_5 }
-	set_variable = { var = NAM_board_rate_a_6 value = NAM_board_weights^6 }
-	multiply_variable = { var = NAM_board_rate_a_6 value = 3 }
-	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_rate_a_6 }
-	set_variable = { var = NAM_board_rate_b_6 value = NAM_board_weights^6 }
-	multiply_variable = { var = NAM_board_rate_b_6 value = -1 }
-	add_to_variable = { var = NAM_board_mod_goods value = NAM_board_rate_b_6 }
+	set_variable = { var = NAM_board_charter_working value = 0 }
+	# A closed charter line applies minus its factor whatever the stance; an open
+	# one applies the live potential. The potentials are kept for the tooltips.
+	set_variable = { var = NAM_board_potential_a_1 value = NAM_board_weights^1 }
+	set_variable = { var = NAM_board_potential_b_1 value = NAM_board_weights^1 }
+	multiply_variable = { var = NAM_board_potential_b_1 value = 2 }
+	set_variable = { var = NAM_board_rate_a_1 value = -1 }
+	set_variable = { var = NAM_board_rate_b_1 value = -2 }
 	if = {
-		limit = { check_variable = { NAM_board_active = 1 } }
-		if = {
-			limit = { check_variable = { NAM_board_lot_rail = 0 } }
-			add_to_variable = { var = NAM_board_mod_output value = 2 }
-		}
-		if = {
-			limit = { check_variable = { NAM_board_lot_yards = 0 } }
-			add_to_variable = { var = NAM_board_mod_naval value = 3 }
-		}
-		if = {
-			limit = { check_variable = { NAM_board_lot_depots = 0 } }
-			add_to_variable = { var = NAM_board_mod_construction value = 2 }
-		}
+		limit = { check_variable = { var = NAM_board_charter^1 value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_a_1 value = NAM_board_potential_a_1 }
 	}
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^1 value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_b_1 value = NAM_board_potential_b_1 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_a_1 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_b_1 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	add_to_variable = { var = NAM_board_mod_output value = NAM_board_rate_a_1 }
+	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_rate_b_1 }
+	set_variable = { var = NAM_board_potential_a_2 value = NAM_board_weights^2 }
+	multiply_variable = { var = NAM_board_potential_a_2 value = 2 }
+	set_variable = { var = NAM_board_potential_b_2 value = NAM_board_weights^2 }
+	multiply_variable = { var = NAM_board_potential_b_2 value = 3 }
+	set_variable = { var = NAM_board_rate_a_2 value = -2 }
+	set_variable = { var = NAM_board_rate_b_2 value = -3 }
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^2 value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_a_2 value = NAM_board_potential_a_2 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^2 value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_b_2 value = NAM_board_potential_b_2 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_a_2 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_b_2 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	add_to_variable = { var = NAM_board_mod_output value = NAM_board_rate_a_2 }
+	add_to_variable = { var = NAM_board_mod_growth value = NAM_board_rate_b_2 }
+	set_variable = { var = NAM_board_potential_a_3 value = NAM_board_weights^3 }
+	multiply_variable = { var = NAM_board_potential_a_3 value = 3 }
+	set_variable = { var = NAM_board_potential_b_3 value = NAM_board_weights^3 }
+	multiply_variable = { var = NAM_board_potential_b_3 value = 3 }
+	set_variable = { var = NAM_board_rate_a_3 value = -3 }
+	set_variable = { var = NAM_board_rate_b_3 value = -3 }
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^3 value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_a_3 value = NAM_board_potential_a_3 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^3 value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_b_3 value = NAM_board_potential_b_3 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_a_3 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_b_3 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	add_to_variable = { var = NAM_board_mod_naval value = NAM_board_rate_a_3 }
+	add_to_variable = { var = NAM_board_mod_dockyards value = NAM_board_rate_b_3 }
+	set_variable = { var = NAM_board_potential_a_4 value = NAM_board_weights^4 }
+	multiply_variable = { var = NAM_board_potential_a_4 value = 3 }
+	set_variable = { var = NAM_board_potential_b_4 value = NAM_board_weights^4 }
+	set_variable = { var = NAM_board_rate_a_4 value = -3 }
+	set_variable = { var = NAM_board_rate_b_4 value = -1 }
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^4 value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_a_4 value = NAM_board_potential_a_4 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^4 value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_b_4 value = NAM_board_potential_b_4 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_a_4 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_b_4 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	add_to_variable = { var = NAM_board_mod_output value = NAM_board_rate_a_4 }
+	add_to_variable = { var = NAM_board_mod_ceiling value = NAM_board_rate_b_4 }
+	set_variable = { var = NAM_board_potential_a_5 value = NAM_board_weights^5 }
+	multiply_variable = { var = NAM_board_potential_a_5 value = 2 }
+	set_variable = { var = NAM_board_potential_b_5 value = NAM_board_weights^5 }
+	multiply_variable = { var = NAM_board_potential_b_5 value = 2 }
+	set_variable = { var = NAM_board_rate_a_5 value = -2 }
+	set_variable = { var = NAM_board_rate_b_5 value = -2 }
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^5 value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_a_5 value = NAM_board_potential_a_5 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^5 value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_b_5 value = NAM_board_potential_b_5 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_a_5 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_b_5 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_rate_a_5 }
+	add_to_variable = { var = NAM_board_mod_growth value = NAM_board_rate_b_5 }
+	set_variable = { var = NAM_board_potential_a_6 value = NAM_board_weights^6 }
+	multiply_variable = { var = NAM_board_potential_a_6 value = 3 }
+	set_variable = { var = NAM_board_potential_b_6 value = NAM_board_weights^6 }
+	multiply_variable = { var = NAM_board_potential_b_6 value = -1 }
+	set_variable = { var = NAM_board_rate_a_6 value = -3 }
+	set_variable = { var = NAM_board_rate_b_6 value = 1 }
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^6 value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_a_6 value = NAM_board_potential_a_6 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_charter^6 value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = NAM_board_rate_b_6 value = NAM_board_potential_b_6 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_rate_a_6 > 0 } }
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = NAM_board_stance^6 value = 1 compare = equals }
+			check_variable = { NAM_board_rate_b_6 < 0 }
+		}
+		add_to_variable = { var = NAM_board_charter_working value = 1 }
+	}
+	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_rate_a_6 }
+	add_to_variable = { var = NAM_board_mod_goods value = NAM_board_rate_b_6 }
 	multiply_variable = { var = NAM_board_mod_output value = 0.01 }
 	multiply_variable = { var = NAM_board_mod_construction value = 0.01 }
 	multiply_variable = { var = NAM_board_mod_growth value = 0.01 }
@@ -14543,7 +15392,6 @@ NAM_board_update_industrial_policy = {
 	multiply_variable = { var = NAM_board_mod_dockyards value = 0.01 }
 	multiply_variable = { var = NAM_board_mod_ceiling value = 0.01 }
 	multiply_variable = { var = NAM_board_mod_goods value = 0.01 }
-	add_to_variable = { var = NAM_board_mod_growth value = 0.08 }
 	add_to_variable = { var = NAM_board_mod_output value = NAM_board_focus_output }
 	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_focus_construction }
 	add_to_variable = { var = NAM_board_mod_goods value = NAM_board_focus_goods }
@@ -15180,37 +16028,41 @@ NAM_radical_strip = {
 # ----- Notes of Egor Rom -----
 # COUNTRY NAM. Hidden dispatcher .99: one chapter every 90 days for a human
 # ruler; an AI-held Svetlogorye skips the chapter. Five chapters at most.
+# The notes are Rom's own voice: the chain ends for good once he no longer rules.
 NAM_memoir_dispatch = {
 	if = {
-		limit = {
-			is_ai = no
-			NAM_country_operable = yes
-		}
+		limit = { has_country_leader = { character = NAM_Egor_Rom ruling_only = yes } }
 		if = {
-			limit = { check_variable = { NAM_memoir_next = 1 } }
-			country_event = { id = ADISCORD_nam_memoir.1 hours = 1 }
+			limit = {
+				is_ai = no
+				NAM_country_operable = yes
+			}
+			if = {
+				limit = { check_variable = { NAM_memoir_next = 1 } }
+				country_event = { id = ADISCORD_nam_memoir.1 hours = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { NAM_memoir_next = 2 } }
+				country_event = { id = ADISCORD_nam_memoir.2 hours = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { NAM_memoir_next = 3 } }
+				country_event = { id = ADISCORD_nam_memoir.3 hours = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { NAM_memoir_next = 4 } }
+				country_event = { id = ADISCORD_nam_memoir.4 hours = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { NAM_memoir_next = 5 } }
+				country_event = { id = ADISCORD_nam_memoir.5 hours = 1 }
+			}
 		}
-		else_if = {
-			limit = { check_variable = { NAM_memoir_next = 2 } }
-			country_event = { id = ADISCORD_nam_memoir.2 hours = 1 }
+		add_to_variable = { var = NAM_memoir_next value = 1 }
+		if = {
+			limit = { check_variable = { NAM_memoir_next < 6 } }
+			country_event = { id = ADISCORD_nam_memoir.99 days = 90 }
 		}
-		else_if = {
-			limit = { check_variable = { NAM_memoir_next = 3 } }
-			country_event = { id = ADISCORD_nam_memoir.3 hours = 1 }
-		}
-		else_if = {
-			limit = { check_variable = { NAM_memoir_next = 4 } }
-			country_event = { id = ADISCORD_nam_memoir.4 hours = 1 }
-		}
-		else_if = {
-			limit = { check_variable = { NAM_memoir_next = 5 } }
-			country_event = { id = ADISCORD_nam_memoir.5 hours = 1 }
-		}
-	}
-	add_to_variable = { var = NAM_memoir_next value = 1 }
-	if = {
-		limit = { check_variable = { NAM_memoir_next < 6 } }
-		country_event = { id = ADISCORD_nam_memoir.99 days = 90 }
 	}
 }
 

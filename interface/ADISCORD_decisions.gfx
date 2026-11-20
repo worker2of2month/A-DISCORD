@@ -17,6 +17,19 @@ spriteTypes = {
 	}
 
 
+	spriteType = {
+		name = "GFX_decision_picture_NAM_board_quay"
+		texturefile = "gfx/interface/decisions/NAM/decision_picture_NAM_board_quay.png"
+	}
+	spriteType = {
+		name = "GFX_decision_picture_NAM_two_judases"
+		texturefile = "gfx/interface/decisions/NAM/decision_picture_NAM_two_judases.png"
+	}
+	spriteType = {
+		name = "GFX_decision_picture_NAM_interregnum_quay"
+		texturefile = "gfx/interface/decisions/NAM/decision_picture_NAM_interregnum_quay.png"
+	}
+
 	### CATEGORY ICON ALIASES
 	spriteType = {
 		name = "GFX_decision_category_ADISCORD_deal"
@@ -39,6 +52,23 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_decision_category_ADISCORD_factory"
 		texturefile = "gfx/interface/decisions/decision_category_ADISCORD_factory.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_category_NAM_two_judases"
+		texturefile = "gfx/interface/decisions/NAM/decision_category_NAM_two_judases.png"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_decision_category_NAM_interregnum_quay"
+		texturefile = "gfx/interface/decisions/NAM/decision_category_NAM_interregnum_quay.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_category_NAM_free_zones"
+		texturefile = "gfx/interface/decisions/NAM/decision_category_NAM_free_zones.png"
 		legacy_lazy_load = no
 	}
 
@@ -124,6 +154,12 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_decision_ADISCORD_treasury"
 		texturefile = "gfx/interface/decisions/decision_ADISCORD_treasury.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_NAM_interregnum_islands"
+		texturefile = "gfx/interface/decisions/NAM/decision_NAM_interregnum_islands.png"
 		legacy_lazy_load = no
 	}
 

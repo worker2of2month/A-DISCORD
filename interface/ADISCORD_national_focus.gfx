@@ -7800,6 +7800,56 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_NAM_interregnum_open_customs"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_open_customs.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_interregnum_guarantors"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_guarantors.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_interregnum_underwrite_freight"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_underwrite_freight.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_interregnum_roll_call"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_roll_call.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_interregnum_second_shift"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_second_shift.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_interregnum_coast_watch"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_coast_watch.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_interregnum_chart_soundings"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_chart_soundings.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_interregnum_seals_boards"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_seals_boards.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_interregnum_seals_committees"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_seals_committees.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_NAM_interregnum_seals_officers"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_interregnum_seals_officers.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_NAM_unified_standards"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_unified_standards.png"
 	}
@@ -9342,6 +9392,66 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_STP_pc_charter_shabrat_cabinet_review"
 		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_charter_shabrat_cabinet_review.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_regional_citizenship"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_regional_citizenship.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_cadastral_commissions"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_cadastral_commissions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_regional_connections"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_regional_connections.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_workshop_contracts"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_workshop_contracts.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_local_officer_courses"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_local_officer_courses.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_common_market"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_common_market.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pc_cannibal_campaign"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pc_cannibal_campaign.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_kefreyt_settlement"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_pw_kefreyt_settlement.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_kc_emergency_staff"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_kc_emergency_staff.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_kc_war_production"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_kc_war_production.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_kc_army_supply"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_kc_army_supply.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_kc_counterattack_plan"
+		texturefile = "gfx/interface/goals/STP/shabrat_postcivilwar/GFX_focus_STP_kc_counterattack_plan.png"
 	}
 	spriteType = {
 		name = "GFX_focus_NAM_board_beacon_out"

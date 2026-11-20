@@ -61,14 +61,14 @@ spriteTypes = {
 		noOfFrames = 1
 	}
 
+	# A cornered tile ignores frame selection and tiles its whole texture,
+	# so the selected-seat border is a single-frame texture.
 	corneredTileSpriteType = {
-		name = "GFX_NAM_board_seat_select"
-		textureFile = "gfx/interface/NAM_basin/board_seat_select.png"
+		name = "GFX_NAM_board_seat_selected"
+		textureFile = "gfx/interface/NAM_basin/board_seat_selected.png"
 		size = { x = 24 y = 24 }
 		borderSize = { x = 6 y = 6 }
-		noOfFrames = 3
 		tilingCenter = yes
-		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
 	}
 
 	# BEGIN GENERATED NAM BASIN MAP

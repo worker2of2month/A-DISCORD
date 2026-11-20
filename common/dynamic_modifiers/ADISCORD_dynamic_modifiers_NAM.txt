@@ -186,6 +186,7 @@ NAM_board_army = {
 	enable = { tag = NAM }
 	planning_speed = NAM_board_expedition_planning
 	army_org_factor = NAM_board_focus_org
+	custom_modifier_tooltip = NAM_board_army_modifier_tt
 }
 
 NAM_board_politics = {
@@ -195,6 +196,7 @@ NAM_board_politics = {
 	ADISCORD_economy_tax_collection_factor = NAM_corp_mod_tax
 	stability_factor = NAM_corp_mod_stability
 	political_power_gain = NAM_corp_mod_pp
+	custom_modifier_tooltip = NAM_board_politics_modifier_tt
 }
 
 NAM_board_industrial_policy = {
@@ -287,7 +289,7 @@ NAM_consolidation_dynamic = {
 # COUNTRY federal district under the corporate state: the owning
 # corporation's profile (NAM_corp_district_owner 1-6).
 NAM_corp_owner_1_district = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_idea_NAM_corp_owner_1_district
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_board_federal_subject_focus_condition_tt
@@ -299,7 +301,7 @@ NAM_corp_owner_1_district = {
 }
 
 NAM_corp_owner_2_district = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_idea_NAM_corp_owner_2_district
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_board_federal_subject_focus_condition_tt
@@ -311,7 +313,7 @@ NAM_corp_owner_2_district = {
 }
 
 NAM_corp_owner_3_district = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_idea_NAM_corp_owner_3_district
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_board_federal_subject_focus_condition_tt
@@ -323,7 +325,7 @@ NAM_corp_owner_3_district = {
 }
 
 NAM_corp_owner_4_district = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_idea_NAM_corp_owner_4_district
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_board_federal_subject_focus_condition_tt
@@ -335,7 +337,7 @@ NAM_corp_owner_4_district = {
 }
 
 NAM_corp_owner_5_district = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_idea_NAM_corp_owner_5_district
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_board_federal_subject_focus_condition_tt
@@ -347,7 +349,7 @@ NAM_corp_owner_5_district = {
 }
 
 NAM_corp_owner_6_district = {
-	icon = GFX_idea_ADISCORD_trade_policy_export_focus
+	icon = GFX_idea_NAM_corp_owner_6_district
 	enable = {
 		custom_trigger_tooltip = {
 			tooltip = NAM_board_federal_subject_focus_condition_tt

@@ -126,7 +126,7 @@ class ProvinceCornerTests(unittest.TestCase):
         neighbours = geography.province_neighbours(grid)
         touched = geography.ANCHOR_TOUCHED_PROVINCES
         scope = set(touched) | {neighbour for province in touched for neighbour in neighbours[province]}
-        scope |= geography.DISPLACED_PROVINCES | set(geography.ANCHOR_REFERENCES)
+        scope |= geography.DISPLACED_PROVINCES | set(geography.ANCHOR_REFERENCES) | geography.ANCHOR_RECONCILED_PROVINCES
         stacks = defaultdict(dict)
         for line in (ROOT / "map/unitstacks.txt").read_text().splitlines():
             fields = line.split(";")
@@ -198,6 +198,17 @@ class ProvinceCornerTests(unittest.TestCase):
                     contact_dz = height - 1 - (ys.mean() + top) - z0
                     self.assertGreaterEqual(dx * contact_dx + dz * contact_dz, 0)
                     self.assertLessEqual(abs((rotation - atan2(dx, -dz) + pi) % (2 * pi) - pi), 0.5)
+
+    def test_reconciled_fleets_rest_on_the_sea_surface(self):
+        # Under water the heightmap holds the seabed. Native sea anchors stand
+        # at the surface height 9.5.
+        _grid, kinds, scope, stacks = self.reconciled_anchors()
+        for province in sorted(scope):
+            if kinds.get(province) != "sea":
+                continue
+            for slot, (_x, height, _z, _rotation) in stacks[province].items():
+                with self.subTest(province=province, slot=slot):
+                    self.assertGreaterEqual(height, 9.5)
 
     def test_neftegorsk_southern_contact_has_a_broad_connected_border(self):
         from scipy.ndimage import label

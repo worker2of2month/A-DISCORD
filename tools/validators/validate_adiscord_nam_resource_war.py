@@ -897,6 +897,11 @@ CUSTOM_COST_DECISIONS = {
     "NAM_judas_pay_captains": "NAM_judas_pay_captains_cost",
     "NAM_judas_disarm_cutters": "NAM_judas_disarm_cutters_cost",
     "NAM_board_lobby_company": "NAM_board_lobby_cost",
+    "NAM_board_buy_proxies": "NAM_board_buy_proxies_cost",
+    "NAM_board_settlers_militia": "NAM_board_settlers_militia_cost",
+    "NAM_board_relief_fund": "NAM_board_relief_fund_cost",
+    "NAM_board_underwrite_payroll": "NAM_board_underwrite_payroll_cost",
+    "NAM_board_redeem_mortgages": "NAM_board_redeem_mortgages_cost",
     "NAM_board_award_rail_ferrant": "NAM_board_rail_cost",
     "NAM_wrk_fuel_shipment": "NAM_cost_wrk_fuel_shipment",
     "NAM_wrk_trade_concession": "NAM_cost_wrk_trade_concession",
@@ -914,6 +919,11 @@ CUSTOM_COST_DECISIONS = {
     "NAM_corp_labour_contract": "NAM_cost_corp_labour",
     "NAM_corp_innovation_park": "NAM_cost_corp_park",
     "NAM_corp_buy_arms": "NAM_cost_corp_arms",
+    "NAM_dev_census_halls": "NAM_dev_census_halls_cost",
+    "NAM_dev_harbour_infirmaries": "NAM_dev_harbour_infirmaries_cost",
+    "NAM_dev_drill_cadres": "NAM_dev_drill_cadres_cost",
+    "NAM_dev_works_schools": "NAM_dev_works_schools_cost",
+    "NAM_dev_oil_credit": "NAM_dev_oil_credit_cost",
 }
 GREAT_WAR_TARGETS = ("EFL", "AZH", "RHM", "SDR", "KDR")
 # The war of return and the great war end only by full capitulation; none of
@@ -976,7 +986,8 @@ def check_exile_revolution(
     )
     takeover = named_block(effects, "NAM_corp_takeover")
     opening = ("NAM_board_initialize = yes", "NAM_board_appoint_cabinet = yes",
-               "var = NAM_board_support^6 value = 66", "set_country_flag = NAM_board_opened", "NAM_board_recount = yes")
+               "var = NAM_board_support^6 value = 66", "NAM_interregnum_apply_pledges = yes",
+               "set_country_flag = NAM_board_opened", "NAM_board_recount = yes")
     for source in (effects, on_actions, decisions, events):
         check(
             not re.search(r"set_country_flag\s*=\s*(?:\{\s*flag\s*=\s*)?NAM_exile_(?:humanist|radical)\b", source)

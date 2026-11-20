@@ -1,0 +1,8 @@
+scripted_gui = {
+	ADISCORD_VAL_council_seats = {
+		context_type = decision_category
+		window_name = "ADISCORD_VAL_council_seats_window"
+		visible = { has_country_flag = VAL_council_seats_initialized }
+		ai_enabled = { always = no }
+	}
+}

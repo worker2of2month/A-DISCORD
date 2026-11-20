@@ -544,8 +544,9 @@ def gui_block(geometry):
         prefix = f"WRK_intrigue_{number}"
         parts.extend([icon(prefix + "_card", "GFX_WRK_intrigue_card", x, y, tooltip=prefix + "_tt"),
                       icon(prefix + "_portrait", "GFX_WRK_intrigue_portrait_empty", x + 11, y + 11, scale=0.28, transparent=True),
-                      textbox(prefix + "_name", prefix + "_name", x + 66, y + 11, 130, 44),
-                      textbox(prefix + "_status", prefix + "_status", x + 12, y + 76, 196, 20)])
+                      textbox(prefix + "_name", prefix + "_name", x + 66, y + 8, 126, 50),
+                      textbox(prefix + "_status", prefix + "_status", x + 6, y + 76, 130, 22),
+                      textbox(prefix + "_gift", prefix + "_gift", x + 138, y + 76, 81, 22)])
     parts.append('\t}')
     return "\n\n".join(parts) + "\n"
 
@@ -702,6 +703,21 @@ def interaction_localisation(language):
         'Dormant cells qualify; exposed or legalized cells do not.\\n'
         'Green dashes show the cell connection; a cross marks a closed link. This is not a street route.\\n'
         'Forecast: [GetVorkerlandWorkerFateForecast]')
+    # The portrait tooltip owns each ally's reward, including its resource icon.
+    for number in range(1, 7):
+        prefix = f"WRK_intrigue_{number}"
+        tooltip = re.search(rf'(?m)^ {prefix}_tt:\d* "(.*)"$', source)
+        gift = tooltip[1].split(r"\n")[-1].split(": ", 1)[1]
+        gift = gift.replace(" стабильности" if russian else " stability", " £stability_texticon")
+        texts[prefix + "_gift"] = gift.replace(" и " if russian else " and ", "  ")
+    court = "ADISCORD_vorkerland_court_category_desc"
+    heading = '§YПозиция и вклад при расколе§!' if russian else '§YStance and aid at the split§!'
+    previous = "ВКЛАД СОЮЗНИКОВ ПРИ РАСКОЛЕ" if russian else "WHAT ALLIES BRING AT THE SPLIT"
+    def court_summary(match):
+        intro = match[2].split(r'\n\n§Y' + previous + '§!')[0].removesuffix(r'\n\n' + heading)
+        return match[1] + intro + r'\n\n' + heading + '"'
+
+    source = re.sub(rf'(?m)^( {court}:\d* ")(.*)"$', court_summary, source)
     previous_symbols = re.search(r'(?m)^ WRK_capital_symbols_tt:\d* "(.*)"$', source)
 
     def district_tooltip(match):

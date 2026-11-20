@@ -118,6 +118,10 @@
     },
     "virgil": {
       "url": "https://dcc.dickinson.edu/vergil-aeneid/vergil-aeneid-i-272-296"
+    },
+    "marx_1844_capital": {
+      "url": "https://www.marxists.org/archive/marx/works/1844/manuscripts/capital.htm",
+      "russian_url": "https://marxism-leninism.info/marx_engels/42.htm"
     }
   },
   "quotes": {
@@ -648,6 +652,13 @@
       "russian": "Гордых смирять, освобождать раба от цепей - вот достойное тебя искусство империи.\n\n- Вергилий, \"Энеида\", VI (по переводу Джона Драйдена)",
       "english": "To tame the proud, the fetter'd slave to free: These are imperial arts, and worthy thee.\n\n- Virgil, \"Aeneid\", VI (John Dryden translation)",
       "note": "Russian translates Dryden's English rendering, not the Latin line directly."
+    },
+    "superevent_nam_mainland_inventory_quote": {
+      "source": "marx_1844_capital",
+      "location": "First Manuscript, Profit of Capital, 1. Capital",
+      "source_passage": "Capital is thus the governing power over labour and its products.",
+      "russian": "Итак, капитал есть командная власть над трудом и его продуктами.\n\n- Карл Маркс, \"Экономическо-философские рукописи 1844 года\"",
+      "english": "Capital is thus the governing power over labour and its products.\n\n- Karl Marx, \"Economic and Philosophic Manuscripts of 1844\""
     }
   },
   "aliases": {

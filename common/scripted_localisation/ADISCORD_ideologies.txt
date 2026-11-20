@@ -248,14 +248,39 @@ defined_text = {
 defined_text = {
 	name = GetPartyLocTechnocracy
 	text = {
-		trigger = { has_country_leader_ideology = techno_corporatism }
-		localization_key = "[GetRulingParty]"
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_technocracy_party
 	}
 	text = { localization_key = "[ROOT.GetTag]_technocracy_party" }
 }
 
 defined_text = {
 	name = GetPartyLocEtatism
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+			has_country_leader = { character = NAM_Rostislav_Karamyshev ruling_only = yes }
+		}
+		localization_key = NAM_island_imperial_party
+	}
+	text = {
+		trigger = {
+			tag = NAM
+			has_country_flag = NAM_corp_takeover
+		}
+		localization_key = NAM_board_etatism_party
+	}
+	text = {
+		trigger = {
+			tag = NAM
+			NAM_is_vorkerland_dependency = no
+		}
+		localization_key = NAM_independent_etatists
+	}
 	text = { localization_key = "[ROOT.GetTag]_etatism_party" }
 }
 
@@ -498,15 +523,15 @@ defined_text = {
 defined_text = {
 	name = GetADiscordPartyNameTechnocracy
 	text = {
-		trigger = { has_government = technocracy }
-		localization_key = "[GetRulingParty]"
-	}
-	text = {
 		trigger = {
 			tag = NAM
 			has_country_flag = NAM_corp_takeover
 		}
 		localization_key = NAM_board_technocracy_party
+	}
+	text = {
+		trigger = { has_government = technocracy }
+		localization_key = "[GetRulingParty]"
 	}
 	text = { localization_key = "country_culture|technocracy_party" }
 }

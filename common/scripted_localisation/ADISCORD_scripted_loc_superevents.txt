@@ -278,6 +278,10 @@ defined_text = {
 		localization_key = superevent_south_oil_union_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_nam_mainland_inventory }
+		localization_key = superevent_nam_mainland_inventory_quote
+	}
+	text = {
 		trigger = { has_global_flag = superevent_south_contract_republic }
 		localization_key = superevent_south_contract_republic_quote
 	}
@@ -575,6 +579,10 @@ defined_text = {
 		localization_key = superevent_south_oil_union_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_nam_mainland_inventory }
+		localization_key = superevent_nam_mainland_inventory_title
+	}
+	text = {
 		trigger = { has_global_flag = superevent_south_contract_republic }
 		localization_key = superevent_south_contract_republic_title
 	}
@@ -870,6 +878,10 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_south_oil_union }
 		localization_key = superevent_south_oil_union_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_nam_mainland_inventory }
+		localization_key = superevent_nam_mainland_inventory_comment
 	}
 	text = {
 		trigger = { has_global_flag = superevent_south_contract_republic }

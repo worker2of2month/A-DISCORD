@@ -306,6 +306,26 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	ADISCORD_nam_debug_lose_resource_war = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_nam_debug_corporate_exile_ready_tt
+				NAM_rw_can_go_into_exile = yes
+				country_exists = EFL
+				country_exists = AZH
+			}
+		}
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_lose_resource_war_tt
+			hidden_effect = { ADISCORD_nam_debug_lose_resource_war = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	ADISCORD_nam_debug_tree_south_war = {
 		allowed = { tag = NAM }
 		visible = { NOT = { has_focus_tree = NAM_south_war_focus } }

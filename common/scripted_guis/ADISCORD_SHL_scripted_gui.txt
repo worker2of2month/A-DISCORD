@@ -5,14 +5,12 @@ scripted_gui = {
 		ai_enabled = { always = no }
 		visible = {
 			tag = SHL
-			SHL_caravan_has_active_buyers = yes
 		}
 	}
 
 	ADISCORD_SHL_borders = {
 		context_type = decision_category
 		window_name = "ADISCORD_SHL_borders_window"
-		dirty = SHL_gui_dirty
 		visible = {
 			tag = SHL
 			has_country_flag = SHL_furnaces_initialized

@@ -156,4 +156,230 @@ guiTypes = {
 		instantTextBoxType = { name = "STP_pf_radicals_effect_value" position = { x = 31 y = 424 } text = "STP_pf_radicals_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_radicals_tt" }
 	}
 
+	containerWindowType = {
+		name = "ADISCORD_STP_chapter_votes_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 299 }
+		containerWindowType = {
+			name = "ADISCORD_STP_chapter_votes_frame"
+			position = { x = 3 y = 160 }
+			size = { width = 454 height = 135 }
+			background = {
+				name = "ADISCORD_STP_chapter_votes_frame_bg"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_title"
+			position = { x = 14 y = 168 }
+			text = "STP_ch_vote_title"
+			font = "hoi_16mbs"
+			maxWidth = 425
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_group_1"
+			position = { x = 14 y = 197 }
+			text = "STP_ch_vote_group_1"
+			font = "hoi_16mbs"
+			maxWidth = 155
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_count_1"
+			position = { x = 169 y = 197 }
+			text = "STP_ch_vote_count_1"
+			font = "hoi_16mbs"
+			maxWidth = 46
+			maxHeight = 22
+			fixedsize = yes
+			format = right
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_group_2"
+			position = { x = 234 y = 197 }
+			text = "STP_ch_vote_group_2"
+			font = "hoi_16mbs"
+			maxWidth = 155
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_count_2"
+			position = { x = 389 y = 197 }
+			text = "STP_ch_vote_count_2"
+			font = "hoi_16mbs"
+			maxWidth = 46
+			maxHeight = 22
+			fixedsize = yes
+			format = right
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_group_3"
+			position = { x = 14 y = 227 }
+			text = "STP_ch_vote_group_3"
+			font = "hoi_16mbs"
+			maxWidth = 155
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_count_3"
+			position = { x = 169 y = 227 }
+			text = "STP_ch_vote_count_3"
+			font = "hoi_16mbs"
+			maxWidth = 46
+			maxHeight = 22
+			fixedsize = yes
+			format = right
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_group_4"
+			position = { x = 234 y = 227 }
+			text = "STP_ch_vote_group_4"
+			font = "hoi_16mbs"
+			maxWidth = 155
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_count_4"
+			position = { x = 389 y = 227 }
+			text = "STP_ch_vote_count_4"
+			font = "hoi_16mbs"
+			maxWidth = 46
+			maxHeight = 22
+			fixedsize = yes
+			format = right
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_group_5"
+			position = { x = 14 y = 257 }
+			text = "STP_ch_vote_group_5"
+			font = "hoi_16mbs"
+			maxWidth = 155
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_vote_count_5"
+			position = { x = 169 y = 257 }
+			text = "STP_ch_vote_count_5"
+			font = "hoi_16mbs"
+			maxWidth = 46
+			maxHeight = 22
+			fixedsize = yes
+			format = right
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_foundation_title"
+			position = { x = 10 y = 10 }
+			text = "STP_ch_foundation_title"
+			font = "hoi_16mbs"
+			maxWidth = 440
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		containerWindowType = {
+			name = "STP_ch_army_plate"
+			position = { x = 3 y = 36 }
+			size = { width = 148 height = 116 }
+			background = {
+				name = "STP_ch_army_plate_bg"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+		}
+		instantTextBoxType = {
+			name = "STP_ch_army_title"
+			position = { x = 10 y = 44 }
+			text = "STP_ch_army_title"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 19
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_army_report"
+			position = { x = 10 y = 70 }
+			text = "STP_ch_army_report"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 81
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		containerWindowType = {
+			name = "STP_ch_economy_plate"
+			position = { x = 156 y = 36 }
+			size = { width = 148 height = 116 }
+			background = {
+				name = "STP_ch_economy_plate_bg"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+		}
+		instantTextBoxType = {
+			name = "STP_ch_economy_title"
+			position = { x = 163 y = 44 }
+			text = "STP_ch_economy_title"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 19
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_economy_report"
+			position = { x = 163 y = 70 }
+			text = "STP_ch_economy_report"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 81
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		containerWindowType = {
+			name = "STP_ch_party_plate"
+			position = { x = 309 y = 36 }
+			size = { width = 148 height = 116 }
+			background = {
+				name = "STP_ch_party_plate_bg"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_desc_bg"
+			}
+		}
+		instantTextBoxType = {
+			name = "STP_ch_party_title"
+			position = { x = 316 y = 44 }
+			text = "STP_ch_party_title"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 19
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_ch_party_report"
+			position = { x = 316 y = 70 }
+			text = "STP_ch_party_report"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 81
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+	}
 }

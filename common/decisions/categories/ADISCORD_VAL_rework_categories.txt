@@ -225,6 +225,7 @@ VAL_stelander_war_aid = {
 
 # --- commanders_council ---
 VAL_council_government_category = {
+	scripted_gui = ADISCORD_VAL_council_seats
 	priority = 960
 	allowed = { tag = VAL }
 	visible = {

@@ -1584,22 +1584,33 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_1_name"
-			position = { x = 71 y = 25 }
+			position = { x = 71 y = 22 }
 			text = "WRK_intrigue_1_name"
 			font = "hoi_16mbs"
-			maxWidth = 130
-			maxHeight = 44
+			maxWidth = 126
+			maxHeight = 50
 			fixedsize = yes
 			alwaystransparent = yes
 		}
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_1_status"
-			position = { x = 17 y = 90 }
+			position = { x = 11 y = 90 }
 			text = "WRK_intrigue_1_status"
 			font = "hoi_16mbs"
-			maxWidth = 196
-			maxHeight = 20
+			maxWidth = 130
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "WRK_intrigue_1_gift"
+			position = { x = 143 y = 90 }
+			text = "WRK_intrigue_1_gift"
+			font = "hoi_16mbs"
+			maxWidth = 81
+			maxHeight = 22
 			fixedsize = yes
 			alwaystransparent = yes
 		}
@@ -1623,22 +1634,33 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_2_name"
-			position = { x = 301 y = 25 }
+			position = { x = 301 y = 22 }
 			text = "WRK_intrigue_2_name"
 			font = "hoi_16mbs"
-			maxWidth = 130
-			maxHeight = 44
+			maxWidth = 126
+			maxHeight = 50
 			fixedsize = yes
 			alwaystransparent = yes
 		}
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_2_status"
-			position = { x = 247 y = 90 }
+			position = { x = 241 y = 90 }
 			text = "WRK_intrigue_2_status"
 			font = "hoi_16mbs"
-			maxWidth = 196
-			maxHeight = 20
+			maxWidth = 130
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "WRK_intrigue_2_gift"
+			position = { x = 373 y = 90 }
+			text = "WRK_intrigue_2_gift"
+			font = "hoi_16mbs"
+			maxWidth = 81
+			maxHeight = 22
 			fixedsize = yes
 			alwaystransparent = yes
 		}
@@ -1662,22 +1684,33 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_3_name"
-			position = { x = 71 y = 137 }
+			position = { x = 71 y = 134 }
 			text = "WRK_intrigue_3_name"
 			font = "hoi_16mbs"
-			maxWidth = 130
-			maxHeight = 44
+			maxWidth = 126
+			maxHeight = 50
 			fixedsize = yes
 			alwaystransparent = yes
 		}
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_3_status"
-			position = { x = 17 y = 202 }
+			position = { x = 11 y = 202 }
 			text = "WRK_intrigue_3_status"
 			font = "hoi_16mbs"
-			maxWidth = 196
-			maxHeight = 20
+			maxWidth = 130
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "WRK_intrigue_3_gift"
+			position = { x = 143 y = 202 }
+			text = "WRK_intrigue_3_gift"
+			font = "hoi_16mbs"
+			maxWidth = 81
+			maxHeight = 22
 			fixedsize = yes
 			alwaystransparent = yes
 		}
@@ -1701,22 +1734,33 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_4_name"
-			position = { x = 301 y = 137 }
+			position = { x = 301 y = 134 }
 			text = "WRK_intrigue_4_name"
 			font = "hoi_16mbs"
-			maxWidth = 130
-			maxHeight = 44
+			maxWidth = 126
+			maxHeight = 50
 			fixedsize = yes
 			alwaystransparent = yes
 		}
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_4_status"
-			position = { x = 247 y = 202 }
+			position = { x = 241 y = 202 }
 			text = "WRK_intrigue_4_status"
 			font = "hoi_16mbs"
-			maxWidth = 196
-			maxHeight = 20
+			maxWidth = 130
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "WRK_intrigue_4_gift"
+			position = { x = 373 y = 202 }
+			text = "WRK_intrigue_4_gift"
+			font = "hoi_16mbs"
+			maxWidth = 81
+			maxHeight = 22
 			fixedsize = yes
 			alwaystransparent = yes
 		}
@@ -1740,22 +1784,33 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_5_name"
-			position = { x = 71 y = 249 }
+			position = { x = 71 y = 246 }
 			text = "WRK_intrigue_5_name"
 			font = "hoi_16mbs"
-			maxWidth = 130
-			maxHeight = 44
+			maxWidth = 126
+			maxHeight = 50
 			fixedsize = yes
 			alwaystransparent = yes
 		}
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_5_status"
-			position = { x = 17 y = 314 }
+			position = { x = 11 y = 314 }
 			text = "WRK_intrigue_5_status"
 			font = "hoi_16mbs"
-			maxWidth = 196
-			maxHeight = 20
+			maxWidth = 130
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "WRK_intrigue_5_gift"
+			position = { x = 143 y = 314 }
+			text = "WRK_intrigue_5_gift"
+			font = "hoi_16mbs"
+			maxWidth = 81
+			maxHeight = 22
 			fixedsize = yes
 			alwaystransparent = yes
 		}
@@ -1779,22 +1834,33 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_6_name"
-			position = { x = 301 y = 249 }
+			position = { x = 301 y = 246 }
 			text = "WRK_intrigue_6_name"
 			font = "hoi_16mbs"
-			maxWidth = 130
-			maxHeight = 44
+			maxWidth = 126
+			maxHeight = 50
 			fixedsize = yes
 			alwaystransparent = yes
 		}
 
 		instantTextBoxType = {
 			name = "WRK_intrigue_6_status"
-			position = { x = 247 y = 314 }
+			position = { x = 241 y = 314 }
 			text = "WRK_intrigue_6_status"
 			font = "hoi_16mbs"
-			maxWidth = 196
-			maxHeight = 20
+			maxWidth = 130
+			maxHeight = 22
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "WRK_intrigue_6_gift"
+			position = { x = 373 y = 314 }
+			text = "WRK_intrigue_6_gift"
+			font = "hoi_16mbs"
+			maxWidth = 81
+			maxHeight = 22
 			fixedsize = yes
 			alwaystransparent = yes
 		}
