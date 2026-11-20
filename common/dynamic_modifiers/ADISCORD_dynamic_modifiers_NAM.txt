@@ -185,6 +185,7 @@ NAM_board_army = {
 	icon = GFX_idea_NAM_board_army
 	enable = { tag = NAM }
 	planning_speed = NAM_board_expedition_planning
+	army_org_factor = NAM_board_focus_org
 }
 
 NAM_board_politics = {

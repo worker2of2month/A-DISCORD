@@ -726,6 +726,10 @@ spriteTypes = {
 
 	###NAM
 	spriteType = {
+		name = "GFX_portrait_NAM_absent_government"
+		texturefile = "gfx/leaders/TFF/portrait_TFF_absent_government.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_NAM_Yaroslav_Weber"
 		texturefile = "gfx/leaders/NAM/portrait_NAM_Yaroslav_Weber.png"
 	}

@@ -29,6 +29,20 @@ shared_focus = {
 		y = 0
 		cost = 1
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_grant_30_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+				NAM_corp_capital_add = yes
+			}
+			custom_effect_tooltip = NAM_board_trust_1_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 1 }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -40,6 +54,14 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_beacon_out }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_quay_chain_reward_tt
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 4
+				producer = NAM
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -51,6 +73,12 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_beacon_out }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_slot_2_tt
+			hidden_effect = {
+				set_variable = { var = NAM_board_action_slots value = 2 }
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -62,6 +90,25 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_beacon_out }
 		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_1
+				amount = 1500
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 12
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_trust_4_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 4 }
+				set_temp_variable = { var = NAM_board_delta_input value = 10 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -73,6 +120,17 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_quay_chain }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_sell_steel
+			custom_effect_tooltip = NAM_corp_sell_steel_unlock_tt
+			custom_effect_tooltip = NAM_board_trust_2_8_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 2 }
+				set_temp_variable = { var = NAM_board_delta_input value = 8 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -84,6 +142,17 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_bought_century }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_register_patents
+			custom_effect_tooltip = NAM_judas_register_patents_unlock_tt
+			unlock_decision_tooltip = NAM_exile_drill
+			custom_effect_tooltip = NAM_exile_drill_unlock_tt
+			custom_effect_tooltip = NAM_board_grant_5_readiness_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 5 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -95,6 +164,16 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_bought_century }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_trust_6_12_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_delta_input value = 12 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+			add_political_power = 30
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -106,6 +185,15 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_bought_century }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_buy_notes
+			custom_effect_tooltip = NAM_judas_buy_notes_unlock_tt
+			custom_effect_tooltip = NAM_board_grant_30_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+				NAM_corp_capital_add = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -117,6 +205,15 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_order_arsenal }
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = NAM_board_preview_arsenal
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_board_focus_output value = 0.05 }
+				NAM_board_update_industrial_policy = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -128,6 +225,27 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_private_gospel }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_extra_zone_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = NAM_free_zone_slots value = 3 compare = less_than }
+					}
+					add_to_variable = { var = NAM_free_zone_slots value = 1 }
+					clamp_variable = { var = NAM_free_zone_slots min = 1 max = 3 }
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+				}
+			}
+			custom_effect_tooltip = NAM_board_grant_30_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+				NAM_corp_capital_add = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -139,6 +257,16 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_private_gospel }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_future_output_pledge_reward_tt
+			custom_effect_tooltip = NAM_board_trust_1_8_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 1 }
+				set_temp_variable = { var = NAM_board_delta_input value = 8 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -234,6 +362,34 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_arsenal_monopoly }
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_foundry_mark_reward_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						any_owned_state = {
+							NAM_owned_overseas_district = yes
+							free_building_slots = { building = arms_factory size > 0 include_locked = no }
+						}
+					}
+					random_owned_state = {
+						limit = {
+							NAM_owned_overseas_district = yes
+							free_building_slots = { building = arms_factory size > 0 include_locked = no }
+						}
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+				}
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -245,6 +401,17 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_arsenal_monopoly }
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_island_convoy_service
+			custom_effect_tooltip = NAM_island_convoy_service_unlock_tt
+			custom_effect_tooltip = NAM_board_trust_3_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 3 }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -256,6 +423,16 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_salt_monopoly }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_double_lock_warehouse_reward_tt
+			custom_effect_tooltip = NAM_board_trust_6_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -267,6 +444,34 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_future_output_pledge }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_loren_receipt_reward_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						any_owned_state = {
+							NAM_owned_overseas_district = yes
+							free_building_slots = { building = synthetic_refinery size > 0 include_locked = no }
+						}
+					}
+					random_owned_state = {
+						limit = {
+							NAM_owned_overseas_district = yes
+							free_building_slots = { building = synthetic_refinery size > 0 include_locked = no }
+						}
+						add_building_construction = {
+							type = synthetic_refinery
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+				}
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -287,8 +492,17 @@ shared_focus = {
 		x = 12
 		y = 4
 		cost = 2
-		prerequisite = { focus = NAM_board_posthumous_signature }
+		prerequisite = { focus = NAM_board_dead_mans_veto }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_appoint_masters
+			custom_effect_tooltip = NAM_judas_appoint_masters_unlock_tt
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 4
+				producer = NAM
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -300,6 +514,20 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_posthumous_signature }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = NAM_board_preview_facsimile
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_board_focus_org value = 0.05 }
+				NAM_board_update_industrial_policy = yes
+			}
+			custom_effect_tooltip = NAM_board_grant_5_readiness_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 5 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -311,6 +539,22 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_last_debtor }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = NAM_board_preview_purged
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_board_focus_pp value = 0.1 }
+				NAM_board_update_industrial_policy = yes
+			}
+			custom_effect_tooltip = NAM_board_trust_5_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 5 }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -320,8 +564,17 @@ shared_focus = {
 		x = 24
 		y = 4
 		cost = 2
-		prerequisite = { focus = NAM_board_last_debtor }
+		prerequisite = { focus = NAM_board_founders_of_unrest }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_unseat_proxies
+			custom_effect_tooltip = NAM_judas_unseat_proxies_unlock_tt
+			custom_effect_tooltip = NAM_board_grant_40_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -344,6 +597,14 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_foundry_mark }
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_grant_10_readiness_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 10 }
+				NAM_revenge_readiness_clamp = yes
+			}
+			add_manpower = 1500
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -355,6 +616,20 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_island_fleet_shares }
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 6
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_trust_3_8_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 3 }
+				set_temp_variable = { var = NAM_board_delta_input value = 8 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -367,6 +642,15 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_double_lock_warehouse }
 		prerequisite = { focus = NAM_board_loren_receipt }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = NAM_board_preview_warrant
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_board_focus_goods value = -0.02 }
+				NAM_board_update_industrial_policy = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -389,6 +673,15 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_inheritance_without_empire }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_buy_mortgages
+			custom_effect_tooltip = NAM_judas_buy_mortgages_unlock_tt
+			custom_effect_tooltip = NAM_board_grant_60_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_corp_capital_add = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -400,6 +693,16 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_elected_in_absentia }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_exchange_hiring
+			custom_effect_tooltip = NAM_judas_exchange_hiring_unlock_tt
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 4
+				producer = NAM
+			}
+			add_manpower = 1500
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -423,6 +726,18 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_captains_share_qualification }
 		prerequisite = { focus = NAM_board_factory_guard }
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_order_marines
+			custom_effect_tooltip = NAM_order_marines_unlock_tt
+			hidden_effect = {
+				set_variable = { var = NAM_marine_order_cap value = 3 }
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_1
+				amount = 1000
+				producer = NAM
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -434,6 +749,20 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_bearer_warrant }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_loren_priority_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_open_fuel_reserve value = 12000 }
+				NAM_open_fuel_release = yes
+			}
+			custom_effect_tooltip = NAM_board_trust_1_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 1 }
+				set_temp_variable = { var = NAM_board_delta_input value = 10 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -445,6 +774,10 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_bearer_warrant }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_redeem_mortgages
+			custom_effect_tooltip = NAM_board_redeem_mortgages_unlock_tt
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -459,6 +792,17 @@ shared_focus = {
 			focus = NAM_board_uncrested_buyers
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_disarm_cutters
+			custom_effect_tooltip = NAM_judas_disarm_cutters_unlock_tt
+			custom_effect_tooltip = NAM_board_trust_1_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 1 }
+				set_temp_variable = { var = NAM_board_delta_input value = 10 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -485,6 +829,16 @@ shared_focus = {
 			}
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = NAM_board_preview_squares
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_board_focus_pp value = 0.1 }
+				add_to_variable = { var = NAM_board_focus_stab value = 0.05 }
+				NAM_board_update_industrial_policy = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -499,6 +853,16 @@ shared_focus = {
 			focus = NAM_board_ministries_in_concession
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_society_99_1_reward_tt
+			effect_tooltip = {
+				add_ideas = NAM_board_preview_society
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_board_focus_stab value = -0.03 }
+				NAM_board_update_industrial_policy = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -510,6 +874,14 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_last_voyage_rifles }
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_grant_15_readiness_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 15 }
+				NAM_revenge_readiness_clamp = yes
+			}
+			add_manpower = 2000
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -521,6 +893,20 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_last_voyage_rifles }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_grant_60_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_corp_capital_add = yes
+			}
+			custom_effect_tooltip = NAM_board_trust_3_8_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 3 }
+				set_temp_variable = { var = NAM_board_delta_input value = 8 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -532,6 +918,11 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_loren_priority }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_corp_labour_contract
+			custom_effect_tooltip = NAM_corp_labour_contract_unlock_tt
+			add_manpower = 1500
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -543,6 +934,17 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_eflor_debt_purchase }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_island_concession_231
+			custom_effect_tooltip = NAM_island_concession_231_unlock_tt
+			custom_effect_tooltip = NAM_board_trust_6_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -555,6 +957,20 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_privatise_governorate }
 		mutually_exclusive = { focus = NAM_board_old_settlers_oath }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_grant_80_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+				NAM_corp_capital_add = yes
+			}
+			custom_effect_tooltip = NAM_board_trust_6_8_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_delta_input value = 8 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -567,6 +983,19 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_privatise_governorate }
 		mutually_exclusive = { focus = NAM_board_hereditary_roll }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_1
+				amount = 2400
+				producer = NAM
+			}
+			add_manpower = 3000
+			custom_effect_tooltip = NAM_board_grant_8_readiness_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 8 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -579,6 +1008,15 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_society_99_1 }
 		mutually_exclusive = { focus = NAM_board_incumbents_credit }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_pay_moderates
+			custom_effect_tooltip = NAM_judas_pay_moderates_unlock_tt
+			custom_effect_tooltip = NAM_board_grant_45_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 45 }
+				NAM_corp_capital_add = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -591,6 +1029,10 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_society_99_1 }
 		mutually_exclusive = { focus = NAM_board_subsidised_opposition }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_underwrite_payroll
+			custom_effect_tooltip = NAM_board_underwrite_payroll_unlock_tt
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -602,6 +1044,25 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_return_voyage }
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_yard_construction_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						capital_scope = {
+							NAM_board_yard_site = yes
+						}
+					}
+					capital_scope = {
+						NAM_board_build_company_docks = yes
+					}
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+				}
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -613,6 +1074,10 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_azhar_land_fund }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_commission_housing
+			custom_effect_tooltip = NAM_board_commission_housing_unlock_tt
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -625,6 +1090,23 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_land_foreclosure }
 		prerequisite = { focus = NAM_board_concession_courts }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_extra_zone_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = NAM_free_zone_slots value = 3 compare = less_than }
+					}
+					add_to_variable = { var = NAM_free_zone_slots value = 1 }
+					clamp_variable = { var = NAM_free_zone_slots min = 1 max = 3 }
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+				}
+			}
+			custom_effect_tooltip = NAM_board_harbour_exchange_reward_tt
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -636,6 +1118,25 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_hereditary_roll }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_office_construction_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						capital_scope = {
+							NAM_board_office_site = yes
+						}
+					}
+					capital_scope = {
+						NAM_board_build_company_offices = yes
+					}
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+				}
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -647,6 +1148,14 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_old_settlers_oath }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_island_public_works
+			custom_effect_tooltip = NAM_island_public_works_unlock_tt
+			hidden_effect = {
+				clamp_variable = { var = NAM_project_slots min = 1 max = 2 }
+			}
+			add_manpower = 1000
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -658,6 +1167,20 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_both_squares_bought }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_trust_6_12_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_delta_input value = 12 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+			custom_effect_tooltip = NAM_board_grant_40_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -668,7 +1191,19 @@ shared_focus = {
 		y = 8
 		cost = 2
 		prerequisite = { focus = NAM_board_both_squares_bought }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_second_year_tt
+				has_country_flag = { flag = NAM_board_opened days > 364 }
+			}
+		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_slot_3_tt
+			hidden_effect = {
+				set_variable = { var = NAM_board_action_slots value = 3 }
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -680,6 +1215,30 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_both_squares_bought }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_airport_construction_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						capital_scope = {
+							NAM_board_airport_site = yes
+						}
+					}
+					capital_scope = {
+						NAM_board_expand_company_airport = yes
+					}
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 2
+				producer = NAM
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -691,6 +1250,14 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_subsidised_opposition }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_grant_60_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_corp_capital_add = yes
+			}
+			add_political_power = 30
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -702,6 +1269,12 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_incumbents_credit }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_board_family_relief
+				days = 180
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -714,6 +1287,22 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_corporate_mass_housing }
 		prerequisite = { focus = NAM_board_private_strait }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			effect_tooltip = {
+				add_ideas = NAM_board_preview_residency
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_board_focus_construction value = 0.1 }
+				NAM_board_update_industrial_policy = yes
+			}
+			effect_tooltip = {
+				add_ideas = NAM_board_preview_residency_politics
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_board_focus_stab value = -0.02 }
+				NAM_board_update_industrial_policy = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -726,6 +1315,16 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_harbour_exchange }
 		prerequisite = { focus = NAM_board_admitted_owners_register }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_trust_5_12_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 5 }
+				set_temp_variable = { var = NAM_board_delta_input value = 12 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+			add_manpower = 1400
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -737,6 +1336,15 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_admitted_owners_register }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_pay_captains
+			custom_effect_tooltip = NAM_judas_pay_captains_unlock_tt
+			custom_effect_tooltip = NAM_board_grant_40_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -748,6 +1356,26 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_boundary_notches }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			if = {
+				limit = {
+					has_idea = NAM_judas_karamyshev_watch
+				}
+				custom_effect_tooltip = NAM_board_price_of_silence_reward_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+					set_temp_variable = { var = NAM_judas_delta_input value = -6 }
+					NAM_judas_support_change = yes
+				}
+			}
+			else = {
+				custom_effect_tooltip = NAM_board_grant_60_capital_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					NAM_corp_capital_add = yes
+				}
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -759,6 +1387,14 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_political_debt_register }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_grant_45_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 45 }
+				NAM_corp_capital_add = yes
+			}
+			custom_effect_tooltip = NAM_board_lawyers_of_both_shores_reward_tt
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -770,6 +1406,15 @@ shared_focus = {
 		cost = 2
 		prerequisite = { focus = NAM_board_family_relief_fund }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_judas_disperse_mourners
+			custom_effect_tooltip = NAM_judas_disperse_mourners_unlock_tt
+			custom_effect_tooltip = NAM_board_grant_40_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_corp_capital_add = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -782,6 +1427,22 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_residency_for_hire }
 		prerequisite = { focus = NAM_board_family_relief_fund }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_trust_5_8_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 5 }
+				set_temp_variable = { var = NAM_board_delta_input value = 8 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+			custom_effect_tooltip = NAM_board_trust_6_8_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_delta_input value = 8 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -794,6 +1455,20 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_eflor_petition }
 		prerequisite = { focus = NAM_board_district_buyout }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_close_the_lawsuit_reward_tt
+			hidden_effect = {
+				for_loop_effect = {
+					start = 1
+					end = 7
+					value = NAM_board_petitioner
+					set_temp_variable = { var = NAM_board_company_input value = NAM_board_petitioner }
+					set_temp_variable = { var = NAM_board_delta_input value = 5 }
+					NAM_board_support_change = yes
+				}
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -805,6 +1480,14 @@ shared_focus = {
 		cost = 3
 		prerequisite = { focus = NAM_board_price_of_silence }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_grant_10_readiness_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 10 }
+				NAM_revenge_readiness_clamp = yes
+			}
+			add_manpower = 2000
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -816,6 +1499,18 @@ shared_focus = {
 		cost = 3
 		prerequisite = { focus = NAM_board_lawyers_of_both_shores }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_chairmans_copy_reward_tt
+			hidden_effect = {
+				set_variable = { var = NAM_board_chair_vote value = 1 }
+				NAM_board_recount = yes
+			}
+			custom_effect_tooltip = NAM_board_grant_50_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 50 }
+				NAM_corp_capital_add = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -828,6 +1523,16 @@ shared_focus = {
 		prerequisite = { focus = NAM_board_representation_for_loss }
 		prerequisite = { focus = NAM_board_mourning_licence }
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_port_rights_monopoly_reward_tt
+			custom_effect_tooltip = NAM_board_trust_3_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 3 }
+				set_temp_variable = { var = NAM_board_delta_input value = 10 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -847,6 +1552,20 @@ shared_focus = {
 			has_completed_focus = NAM_board_harbour_exchange
 		}
 		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_grant_120_capital_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 120 }
+				NAM_corp_capital_add = yes
+			}
+			custom_effect_tooltip = NAM_board_trust_6_10_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = 6 }
+				set_temp_variable = { var = NAM_board_delta_input value = 10 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -866,6 +1585,26 @@ shared_focus = {
 			has_completed_focus = NAM_board_residency_for_hire
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = NAM_board_table_six_reward_tt
+			hidden_effect = {
+				for_loop_effect = {
+					start = 1
+					end = 7
+					value = NAM_board_petitioner
+					if = {
+						limit = {
+							check_variable = { var = NAM_board_support^NAM_board_petitioner value = 50 compare = less_than }
+						}
+						set_temp_variable = { var = NAM_board_company_input value = NAM_board_petitioner }
+						set_temp_variable = { var = NAM_board_delta_input value = 12 }
+						NAM_board_support_change = yes
+					}
+				}
+				NAM_board_recount = yes
+			}
+		}
 		ai_will_do = { factor = 1 }
 	}
 
@@ -877,10 +1616,32 @@ shared_focus = {
 		cost = 3
 		prerequisite = { focus = NAM_board_mainland_inventory }
 		prerequisite = { focus = NAM_board_table_six }
+		available = {
+			NAM_board_majority_held = yes
+		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			custom_effect_tooltip = NAM_island_partition_succession_tt
-			hidden_effect = { NAM_island_partition_succession = yes }
+			custom_effect_tooltip = NAM_board_partition_night_reward_tt
+			hidden_effect = {
+				NAM_board_recount = yes
+				set_variable = { var = NAM_board_partition_efl value = NAM_board_rank_1 }
+				set_variable = { var = NAM_board_partition_azh value = NAM_board_rank_2 }
+				set_country_flag = NAM_board_partition_fixed
+				for_loop_effect = {
+					start = 0
+					end = 6
+					value = NAM_board_partition_index
+					set_temp_variable = { var = NAM_board_company_input value = NAM_board_order^NAM_board_partition_index }
+					set_temp_variable = { var = NAM_board_delta_input value = -5 }
+					if = {
+						limit = { check_variable = { NAM_board_partition_index < 2 } }
+						set_temp_variable = { var = NAM_board_delta_input value = 10 }
+					}
+					NAM_board_support_change = yes
+				}
+				NAM_board_recount = yes
+				NAM_island_partition_succession = yes
+			}
 		}
 		ai_will_do = { factor = 1 }
 	}

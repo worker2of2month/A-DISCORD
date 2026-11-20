@@ -268,6 +268,24 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	ADISCORD_nam_debug_tree_exile_interregnum = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_exile_interregnum_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_exile_interregnum_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	ADISCORD_nam_debug_tree_exile_corporate = {
 		allowed = { tag = NAM }
 		visible = { NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved } }
@@ -420,6 +438,225 @@ ADISCORD_scenario_debug_category = {
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_nam_debug_prepare_etatism_tt
 			hidden_effect = { ADISCORD_nam_debug_prepare_etatism = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_session = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			has_active_mission = NAM_board_session
+			check_variable = { var = NAM_board_offered_1 value = 0 compare = equals }
+			check_variable = { var = NAM_board_resolution_count value = 2 compare = less_than }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				remove_mission = NAM_board_session
+				NAM_board_session_due = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_no_confidence = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			NOT = { has_active_mission = NAM_board_no_confidence }
+			NOT = { has_country_flag = NAM_board_meeting_open }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				NAM_board_arm_no_confidence = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_annual_meeting = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			has_active_mission = NAM_board_annual_meeting
+			NOT = { has_country_flag = NAM_board_meeting_open }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				remove_mission = NAM_board_annual_meeting
+				NAM_board_meeting_due = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_trust_20 = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			check_variable = { var = NAM_board_selected value = 0 compare = greater_than }
+			check_variable = { var = NAM_board_selected value = 7 compare = less_than }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_selected }
+				set_temp_variable = { var = NAM_board_delta_input value = 20 }
+				subtract_from_temp_variable = { var = NAM_board_delta_input value = NAM_board_support^NAM_board_company_input }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_trust_50 = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			check_variable = { var = NAM_board_selected value = 0 compare = greater_than }
+			check_variable = { var = NAM_board_selected value = 7 compare = less_than }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_selected }
+				set_temp_variable = { var = NAM_board_delta_input value = 50 }
+				subtract_from_temp_variable = { var = NAM_board_delta_input value = NAM_board_support^NAM_board_company_input }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_trust_80 = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			check_variable = { var = NAM_board_selected value = 0 compare = greater_than }
+			check_variable = { var = NAM_board_selected value = 7 compare = less_than }
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_selected }
+				set_temp_variable = { var = NAM_board_delta_input value = 80 }
+				subtract_from_temp_variable = { var = NAM_board_delta_input value = NAM_board_support^NAM_board_company_input }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_weber_20 = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			has_idea = NAM_judas_weber_committees
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+				set_temp_variable = { var = NAM_judas_delta_input value = 20 }
+				subtract_from_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_weber }
+				NAM_judas_support_change = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_weber_50 = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			has_idea = NAM_judas_weber_committees
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+				set_temp_variable = { var = NAM_judas_delta_input value = 50 }
+				subtract_from_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_weber }
+				NAM_judas_support_change = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_weber_80 = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			has_idea = NAM_judas_weber_committees
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+				set_temp_variable = { var = NAM_judas_delta_input value = 80 }
+				subtract_from_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_weber }
+				NAM_judas_support_change = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_karamyshev_20 = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			has_idea = NAM_judas_karamyshev_watch
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+				set_temp_variable = { var = NAM_judas_delta_input value = 20 }
+				subtract_from_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_karamyshev }
+				NAM_judas_support_change = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_karamyshev_50 = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			has_idea = NAM_judas_karamyshev_watch
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+				set_temp_variable = { var = NAM_judas_delta_input value = 50 }
+				subtract_from_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_karamyshev }
+				NAM_judas_support_change = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_board_karamyshev_80 = {
+		allowed = { tag = NAM }
+		visible = { NAM_board_operable = yes }
+		available = {
+			has_idea = NAM_judas_karamyshev_watch
+		}
+		cost = 0
+		complete_effect = {
+			hidden_effect = {
+				set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+				set_temp_variable = { var = NAM_judas_delta_input value = 80 }
+				subtract_from_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_karamyshev }
+				NAM_judas_support_change = yes
+			}
 		}
 		ai_will_do = { factor = 0 }
 	}

@@ -129,6 +129,17 @@ class LoadedFocusRewardTests(unittest.TestCase):
 
 
 class FocusRewardTests(unittest.TestCase):
+    def test_closed_board_heads_do_not_exclude_open_alternatives(self):
+        source = """
+        focus = { id = closed available = { custom_trigger_tooltip = { tooltip = NAM_island_wip_tt always = no } } }
+        focus = { id = open }
+        focus = { id = either prerequisite = { focus = open focus = closed } }
+        focus = { id = both prerequisite = { focus = open } prerequisite = { focus = closed } }
+        focus = { id = descendant prerequisite = { focus = both } }
+        """
+        definitions = list(rewards._definitions(rewards.parse_clausewitz(source)))
+        self.assertEqual(rewards._closed_board_branches(definitions), {"closed", "both", "descendant"})
+
     def setUp(self):
         self.workspace = TemporaryDirectory()
         self.addCleanup(self.workspace.cleanup)

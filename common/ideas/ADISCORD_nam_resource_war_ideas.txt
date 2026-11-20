@@ -74,7 +74,16 @@ ideas = {
 				}
 			}
 			cancel_if_invalid = no
-			ai_will_do = { factor = 0 }
+			ai_will_do = {
+				factor = 0
+				modifier = {
+					add = 100
+					is_ai = yes
+					NAM_board_operable = yes
+					has_country_flag = NAM_board_ai_seat_1
+					check_variable = { var = NAM_board_motion^1 value = 4 compare = equals }
+				}
+			}
 		}
 
 		NAM_board_min_reidbank_premier = {
@@ -132,7 +141,16 @@ ideas = {
 				}
 			}
 			cancel_if_invalid = no
-			ai_will_do = { factor = 0 }
+			ai_will_do = {
+				factor = 0
+				modifier = {
+					add = 100
+					is_ai = yes
+					NAM_board_operable = yes
+					has_country_flag = NAM_board_ai_seat_6
+					check_variable = { var = NAM_board_motion^6 value = 3 compare = equals }
+				}
+			}
 		}
 	}
 
@@ -212,7 +230,16 @@ ideas = {
 				}
 			}
 			cancel_if_invalid = no
-			ai_will_do = { factor = 0 }
+			ai_will_do = {
+				factor = 0
+				modifier = {
+					add = 100
+					is_ai = yes
+					NAM_board_operable = yes
+					has_country_flag = NAM_board_ai_seat_4
+					check_variable = { var = NAM_board_motion^4 value = 2 compare = equals }
+				}
+			}
 		}
 
 		NAM_board_min_ferrant_defense = {
@@ -271,7 +298,16 @@ ideas = {
 				}
 			}
 			cancel_if_invalid = no
-			ai_will_do = { factor = 0 }
+			ai_will_do = {
+				factor = 0
+				modifier = {
+					add = 100
+					is_ai = yes
+					NAM_board_operable = yes
+					has_country_flag = NAM_board_ai_seat_2
+					check_variable = { var = NAM_board_motion^2 value = 4 compare = equals }
+				}
+			}
 		}
 
 		NAM_board_min_navis_defense = {
@@ -385,7 +421,16 @@ ideas = {
 				}
 			}
 			cancel_if_invalid = no
-			ai_will_do = { factor = 0 }
+			ai_will_do = {
+				factor = 0
+				modifier = {
+					add = 100
+					is_ai = yes
+					NAM_board_operable = yes
+					has_country_flag = NAM_board_ai_seat_5
+					check_variable = { var = NAM_board_motion^5 value = 3 compare = equals }
+				}
+			}
 		}
 
 		NAM_board_min_reidbank_health = {
@@ -536,7 +581,16 @@ ideas = {
 				}
 			}
 			cancel_if_invalid = no
-			ai_will_do = { factor = 0 }
+			ai_will_do = {
+				factor = 0
+				modifier = {
+					add = 100
+					is_ai = yes
+					NAM_board_operable = yes
+					has_country_flag = NAM_board_ai_seat_3
+					check_variable = { var = NAM_board_motion^3 value = 4 compare = equals }
+				}
+			}
 		}
 	}
 
@@ -885,6 +939,111 @@ ideas = {
 	}
 
 	country = {
+		NAM_board_preview_arsenal = {
+			name = NAM_board_industrial_policy
+			picture = GFX_idea_NAM_board_island_industry
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		NAM_board_preview_facsimile = {
+			name = NAM_board_army
+			picture = GFX_idea_NAM_board_army
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+			}
+		}
+
+		NAM_board_preview_purged = {
+			name = NAM_board_politics
+			picture = GFX_idea_NAM_board_politics
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.1
+			}
+		}
+
+		NAM_board_preview_warrant = {
+			name = NAM_board_industrial_policy
+			picture = GFX_idea_NAM_board_island_industry
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		NAM_board_preview_squares = {
+			name = NAM_board_politics
+			picture = GFX_idea_NAM_board_politics
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.1
+				stability_factor = 0.05
+			}
+		}
+
+		NAM_board_preview_society = {
+			name = NAM_board_politics
+			picture = GFX_idea_NAM_board_politics
+			allowed = { always = no }
+			modifier = {
+				stability_factor = -0.03
+			}
+		}
+
+		NAM_board_preview_residency = {
+			name = NAM_board_industrial_policy
+			picture = GFX_idea_NAM_board_island_industry
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.1
+			}
+		}
+
+		NAM_board_preview_residency_politics = {
+			name = NAM_board_politics
+			picture = GFX_idea_NAM_board_politics
+			allowed = { always = no }
+			modifier = {
+				stability_factor = -0.02
+			}
+		}
+
+		NAM_board_family_relief = {
+			picture = GFX_idea_NAM_board_sanction_smenkom
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_factor = 0.05
+				monthly_population = 0.10
+			}
+		}
+
+		NAM_interregnum_power_vacuum = {
+			picture = GFX_idea_NAM_wage_arrears
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				stability_weekly = -0.005
+				political_power_gain = -0.25
+			}
+		}
+
 		NAM_board_sanction_loren = {
 			picture = GFX_idea_NAM_board_sanction_loren
 			allowed = { tag = NAM }
@@ -1198,10 +1357,14 @@ ideas = {
 			allowed = { tag = NAM }
 			removal_cost = -1
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			modifier = {
 				production_speed_dockyard_factor = 0.05
@@ -1215,6 +1378,16 @@ ideas = {
 			modifier = {
 				naval_invasion_prep_speed = 0.10
 			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		NAM_judas_port_arrests = {
@@ -1225,6 +1398,16 @@ ideas = {
 				stability_factor = -0.05
 				political_power_gain = -0.10
 			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		NAM_judas_dock_walkout = {
@@ -1232,8 +1415,16 @@ ideas = {
 			allowed = { tag = NAM }
 			removal_cost = -1
 			on_remove = {
-				clear_variable = NAM_judas_walkout_target
-				NAM_board_queue_recount = yes
+				hidden_effect = {
+					clear_variable = NAM_judas_walkout_target
+					NAM_board_queue_recount = yes
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -1241,6 +1432,16 @@ ideas = {
 			picture = GFX_idea_NAM_judas_mutiny
 			allowed = { tag = NAM }
 			removal_cost = -1
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		NAM_judas_drill_boycott = {
@@ -1251,6 +1452,16 @@ ideas = {
 				army_org_factor = -0.10
 				training_time_factor = 0.20
 			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		NAM_judas_unseated_proxies = {
@@ -1259,6 +1470,16 @@ ideas = {
 			removal_cost = -1
 			modifier = {
 				political_power_gain = -0.10
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -1269,6 +1490,16 @@ ideas = {
 			modifier = {
 				stability_factor = -0.08
 			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		NAM_judas_bought_captains = {
@@ -1278,6 +1509,16 @@ ideas = {
 			modifier = {
 				experience_gain_army_factor = -0.15
 			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		NAM_judas_general_strike = {
@@ -1285,10 +1526,14 @@ ideas = {
 			allowed = { tag = NAM }
 			removal_cost = -1
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			modifier = {
 				industrial_capacity_dockyard = -0.20
@@ -1296,15 +1541,48 @@ ideas = {
 			}
 		}
 
+		NAM_board_loren_lien = {
+			picture = GFX_idea_NAM_board_sanction_loren
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = { fuel_gain_factor = -0.40 }
+		}
+
+		NAM_board_loan_service = {
+			picture = GFX_idea_NAM_board_loan_service
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = {
+				hidden_effect = {
+					if = {
+						limit = { check_variable = { var = NAM_board_loan_balance value = 0 compare = greater_than } }
+						set_temp_variable = { var = NAM_corp_capital_change value = 0 }
+						subtract_from_temp_variable = { var = NAM_corp_capital_change value = NAM_board_loan_balance }
+						NAM_corp_capital_add = yes
+					}
+					clear_variable = NAM_board_loan_balance
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			modifier = { }
+		}
+
 		NAM_judas_dock_strike = {
 			picture = GFX_idea_NAM_judas_strike
 			allowed = { tag = NAM }
 			removal_cost = -1
 			on_add = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			on_remove = {
-				ADISCORD_economy_mark_dirty = yes
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 			modifier = {
 				industrial_capacity_dockyard = -0.10
@@ -1320,6 +1598,16 @@ ideas = {
 				production_speed_dockyard_factor = 0.10
 				stability_factor = 0.05
 			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		NAM_judas_coast_guard_mutiny = {
@@ -1329,6 +1617,16 @@ ideas = {
 			modifier = {
 				army_org_factor = -0.15
 				naval_invasion_prep_speed = -0.25
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 
@@ -1340,6 +1638,16 @@ ideas = {
 				army_morale_factor = -0.15
 				training_time_factor = 0.15
 			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
 		}
 
 		NAM_judas_staff_oath = {
@@ -1349,6 +1657,16 @@ ideas = {
 			modifier = {
 				naval_invasion_prep_speed = 0.15
 				experience_gain_army_factor = 0.10
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 

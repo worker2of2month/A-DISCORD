@@ -633,11 +633,22 @@ NAM_clear_mainland_national_spirits = {
 		NAM_army_of_shame
 		NAM_board_arktur_arms_monopoly
 		NAM_board_arktur_line
+		NAM_board_family_relief
 		NAM_board_ferrant_shift
 		NAM_board_ferrant_steel_monopoly
+		NAM_board_loan_service
+		NAM_board_loren_lien
 		NAM_board_loren_order_fee
 		NAM_board_navis_free_fairway
 		NAM_board_no_confidence_spirit
+		NAM_board_preview_arsenal
+		NAM_board_preview_facsimile
+		NAM_board_preview_purged
+		NAM_board_preview_residency
+		NAM_board_preview_residency_politics
+		NAM_board_preview_society
+		NAM_board_preview_squares
+		NAM_board_preview_warrant
 		NAM_board_reidbank_bills
 		NAM_board_reidbank_clearing
 		NAM_board_sanction_arktur
@@ -674,6 +685,22 @@ NAM_clear_mainland_national_spirits = {
 		NAM_gar_namestnik_garrisons_idea
 		NAM_garrison_dummy_idea
 		NAM_housing_programme
+		NAM_interregnum_power_vacuum
+		NAM_judas_bought_captains
+		NAM_judas_coast_guard_mutiny
+		NAM_judas_dock_strike
+		NAM_judas_dock_walkout
+		NAM_judas_drill_block
+		NAM_judas_drill_boycott
+		NAM_judas_embankment_blood
+		NAM_judas_general_strike
+		NAM_judas_karamyshev_watch
+		NAM_judas_officers_unrest
+		NAM_judas_port_arrests
+		NAM_judas_port_peace
+		NAM_judas_staff_oath
+		NAM_judas_unseated_proxies
+		NAM_judas_weber_committees
 		NAM_metropolitan_garrison_charter
 		NAM_mil_mobile_operation
 		NAM_national_spirit

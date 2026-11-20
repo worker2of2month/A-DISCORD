@@ -1,6 +1,30 @@
 guiTypes = {
 
 	containerWindowType = {
+		name = "ADISCORD_NAM_judas_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 156 }
+		instantTextBoxType = {
+			name = "NAM_judas_weber_report"
+			position = { x = 8 y = 0 }
+			text = "NAM_judas_weber_report"
+			font = "hoi_16mbs"
+			maxWidth = 442
+			maxHeight = 76
+			format = left
+		}
+		instantTextBoxType = {
+			name = "NAM_judas_karamyshev_report"
+			position = { x = 8 y = 78 }
+			text = "NAM_judas_karamyshev_report"
+			font = "hoi_16mbs"
+			maxWidth = 442
+			maxHeight = 76
+			format = left
+		}
+	}
+
+	containerWindowType = {
 		name = "ADISCORD_NAM_supports_window"
 		position = { x = 0 y = 0 }
 		size = { width = 460 height = 206 }
@@ -794,7 +818,43 @@ guiTypes = {
 			maxHeight = 22
 			fixedsize = yes
 			format = centre
+			pdx_tooltip = "NAM_board_chair_forecast_tt"
+		}
+
+		instantTextBoxType = {
+name = "NAM_board_council_line"
+			position = { x = 8 y = 23 }
+			text = "NAM_board_council_line"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 20
+			fixedsize = yes
+			format = centre
+			pdx_tooltip = "NAM_board_risk_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_vote_panel"
+			position = { x = 4 y = 44 }
+			text = "NAM_board_vote_panel"
+			font = "hoi_16mbs"
+			maxWidth = 98
+			maxHeight = 104
+			fixedsize = yes
+			format = left
 			pdx_tooltip = "NAM_board_election_rules"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_board_chair_panel"
+			position = { x = 348 y = 44 }
+			text = "NAM_board_chair_panel"
+			font = "hoi_16mbs"
+			maxWidth = 108
+			maxHeight = 104
+			fixedsize = yes
+			format = centre
+			pdx_tooltip = "NAM_board_chair_forecast_tt"
 		}
 
 		iconType = {
@@ -909,6 +969,222 @@ guiTypes = {
 			fixedsize = yes
 			format = centre
 			pdx_tooltip = "NAM_board_seat_6_tt"
+		}
+
+		iconType = {
+			name = "NAM_board_stance_1"
+			position = { x = 156 y = 58 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_1"
+			position = { x = 237 y = 62 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_1"
+			position = { x = 124 y = 50 }
+			size = { x = 174 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_select"
+			frame = 2
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_1_tt"
+		}
+
+		containerWindowType = {
+			name = "NAM_board_selected_1"
+			position = { x = 124 y = 50 }
+			size = { width = 174 height = 92 }
+			alwaystransparent = yes
+			background = {
+				name = "NAM_board_selected_border_1"
+				quadTextureSprite = "GFX_NAM_board_seat_select"
+				frame = 3
+			}
+		}
+
+		iconType = {
+			name = "NAM_board_stance_2"
+			position = { x = 84 y = 180 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_2"
+			position = { x = 165 y = 184 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_2"
+			position = { x = 74 y = 172 }
+			size = { x = 130 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_select"
+			frame = 2
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_2_tt"
+		}
+
+		containerWindowType = {
+			name = "NAM_board_selected_2"
+			position = { x = 74 y = 172 }
+			size = { width = 130 height = 92 }
+			alwaystransparent = yes
+			background = {
+				name = "NAM_board_selected_border_2"
+				quadTextureSprite = "GFX_NAM_board_seat_select"
+				frame = 3
+			}
+		}
+
+		iconType = {
+			name = "NAM_board_stance_3"
+			position = { x = 227 y = 180 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_3"
+			position = { x = 308 y = 184 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_3"
+			position = { x = 217 y = 172 }
+			size = { x = 130 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_select"
+			frame = 2
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_3_tt"
+		}
+
+		containerWindowType = {
+			name = "NAM_board_selected_3"
+			position = { x = 217 y = 172 }
+			size = { width = 130 height = 92 }
+			alwaystransparent = yes
+			background = {
+				name = "NAM_board_selected_border_3"
+				quadTextureSprite = "GFX_NAM_board_seat_select"
+				frame = 3
+			}
+		}
+
+		iconType = {
+			name = "NAM_board_stance_4"
+			position = { x = 29 y = 302 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_4"
+			position = { x = 110 y = 306 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_4"
+			position = { x = 22 y = 294 }
+			size = { x = 124 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_select"
+			frame = 2
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_4_tt"
+		}
+
+		containerWindowType = {
+			name = "NAM_board_selected_4"
+			position = { x = 22 y = 294 }
+			size = { width = 124 height = 92 }
+			alwaystransparent = yes
+			background = {
+				name = "NAM_board_selected_border_4"
+				quadTextureSprite = "GFX_NAM_board_seat_select"
+				frame = 3
+			}
+		}
+
+		iconType = {
+			name = "NAM_board_stance_5"
+			position = { x = 154 y = 302 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_5"
+			position = { x = 235 y = 306 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_5"
+			position = { x = 147 y = 294 }
+			size = { x = 124 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_select"
+			frame = 2
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_5_tt"
+		}
+
+		containerWindowType = {
+			name = "NAM_board_selected_5"
+			position = { x = 147 y = 294 }
+			size = { width = 124 height = 92 }
+			alwaystransparent = yes
+			background = {
+				name = "NAM_board_selected_border_5"
+				quadTextureSprite = "GFX_NAM_board_seat_select"
+				frame = 3
+			}
+		}
+
+		iconType = {
+			name = "NAM_board_stance_6"
+			position = { x = 283 y = 302 }
+			spriteType = "GFX_NAM_board_stance_marks"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_board_motion_mark_6"
+			position = { x = 364 y = 306 }
+			spriteType = "GFX_NAM_board_resolution_marker"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_board_choose_6"
+			position = { x = 274 y = 294 }
+			size = { x = 128 y = 92 }
+			quadTextureSprite = "GFX_NAM_board_seat_select"
+			frame = 2
+			clicksound = click_default
+			pdx_tooltip = "NAM_board_seat_6_tt"
+		}
+
+		containerWindowType = {
+			name = "NAM_board_selected_6"
+			position = { x = 274 y = 294 }
+			size = { width = 128 height = 92 }
+			alwaystransparent = yes
+			background = {
+				name = "NAM_board_selected_border_6"
+				quadTextureSprite = "GFX_NAM_board_seat_select"
+				frame = 3
+			}
 		}
 
 		instantTextBoxType = {

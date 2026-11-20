@@ -50,6 +50,10 @@ on_actions = {
 
 	on_release_as_puppet = {
 		effect = {
+			if = {
+				limit = { tag = NAM }
+				NAM_interregnum_close = yes
+			}
 			NAM_sync_neighbor_governor = yes
 			NAM_board_subject_change = yes
 		}
@@ -77,6 +81,13 @@ on_actions = {
 
 	on_subject_autonomy_level_change = {
 		effect = {
+			if = {
+				limit = {
+					tag = NAM
+					is_subject = yes
+				}
+				NAM_interregnum_close = yes
+			}
 			NAM_board_subject_change = yes
 		}
 	}

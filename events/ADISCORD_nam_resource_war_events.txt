@@ -1700,9 +1700,7 @@ country_event = {
 
 # ----- Flight to the islands -----
 # The island exile settlement has evacuated the army and burnt the mainland;
-# the tooltip reports the counts written by NAM_rw_exile_evacuate. Every
-# answer, including the unattended first one, convenes the island council of
-# event .100, where any salvaged cargo becomes the boards' starting capital.
+# the tooltip reports the counts written by NAM_rw_exile_evacuate.
 country_event = {
 	id = ADISCORD_nam_resource_war.81
 	title = ADISCORD_nam_resource_war.81.t
@@ -1711,8 +1709,14 @@ country_event = {
 	is_triggered_only = yes
 	timeout_days = 7
 	trigger = {
-		tag = NAM
-		has_global_flag = ADISCORD_nam_resource_war_island_exile
+		NAM_exile_revolution_open = yes
+		has_country_flag = NAM_interregnum_execution_pending
+	}
+	immediate = {
+		country_event = {
+			id = ADISCORD_nam_resource_war.460
+			days = 7
+		}
 	}
 
 	option = {
@@ -1725,7 +1729,6 @@ country_event = {
 			NAM_revenge_readiness_clamp = yes
 		}
 		custom_effect_tooltip = NAM_exile_council_next_tt
-		hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.100 hours = 6 } }
 		ai_chance = { base = 60 }
 	}
 	option = {
@@ -1738,7 +1741,6 @@ country_event = {
 			NAM_pirate_loot_add = yes
 		}
 		custom_effect_tooltip = NAM_exile_council_next_tt
-		hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.100 hours = 6 } }
 		ai_chance = { base = 40 }
 	}
 }
@@ -3166,8 +3168,28 @@ country_event = {
 	}
 }
 
-# ----- Island government -----
-# Either evacuation choice leads to the council, including an unanswered event.
+# ----- Interregnum and transfer of the seals -----
+country_event = {
+	id = ADISCORD_nam_resource_war.460
+	title = ADISCORD_nam_resource_war.460.t
+	desc = {
+		trigger = { NOT = { has_country_flag = NAM_coup_succeeded } }
+		text = ADISCORD_nam_resource_war.460.d
+	}
+	desc = {
+		trigger = { has_country_flag = NAM_coup_succeeded }
+		text = ADISCORD_nam_resource_war.460.d_coup
+	}
+	picture = GFX_event_adiscord_pier_evacuation
+	is_triggered_only = yes
+	trigger = {
+		NAM_exile_revolution_open = yes
+		has_country_flag = NAM_interregnum_execution_pending
+	}
+	immediate = { NAM_interregnum_begin = yes }
+	option = { name = ADISCORD_nam_resource_war.460.a }
+}
+
 country_event = {
 	id = ADISCORD_nam_resource_war.100
 	title = ADISCORD_nam_resource_war.100.t
@@ -3175,17 +3197,14 @@ country_event = {
 	picture = GFX_event_adiscord_nam_chair_handover
 	is_triggered_only = yes
 	timeout_days = 7
-	trigger = { NAM_exile_revolution_open = yes }
+	trigger = {
+		NAM_exile_revolution_open = yes
+		has_idea = NAM_interregnum_power_vacuum
+	}
+	immediate = { NAM_corp_takeover = yes }
 
 	option = {
 		name = ADISCORD_nam_resource_war.100.c
-		custom_effect_tooltip = NAM_exile_corporate_tt
-		hidden_effect = {
-			if = {
-				limit = { NAM_exile_revolution_open = yes }
-				NAM_corp_takeover = yes
-			}
-		}
 	}
 }
 
@@ -3477,6 +3496,7 @@ country_event = {
 	trigger = {
 		has_country_flag = NAM_corp_takeover
 		has_variable = NAM_board_no_confidence_day
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
 		check_variable = { NAM_board_no_confidence_day > -1 }
 	}
 	immediate = {
@@ -6903,6 +6923,301 @@ country_event = {
 
 	option = {
 		name = ADISCORD_nam_resource_war.413.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.450
+	title = ADISCORD_nam_resource_war.450.t
+	desc = ADISCORD_nam_resource_war.450.d
+	picture = GFX_event_adiscord_nam_weber_committees
+	is_triggered_only = yes
+	timeout_days = 7
+	trigger = {
+		NAM_board_operable = yes
+		has_idea = NAM_judas_weber_committees
+		has_variable = NAM_judas_weber_pending
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.450.a
+		ai_chance = { base = 15 }
+		custom_effect_tooltip = NAM_judas_weber_ignore_tt
+		hidden_effect = {
+			NAM_judas_weber_ignore = yes
+		}
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.450.b
+		trigger = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_weber_committees
+			has_variable = NAM_judas_weber_pending
+			check_variable = { var = NAM_corp_capital value = 40 compare = greater_than_or_equals }
+		}
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = NAM_judas_weber_concede_tt
+		hidden_effect = {
+			NAM_judas_weber_concede = yes
+		}
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.450.c
+		ai_chance = {
+			base = 85
+			modifier = {
+				factor = 0
+				NOT = { NAM_judas_willing_delegate = yes }
+				NOT = { NAM_judas_willing_arktur = yes }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					NAM_judas_willing_delegate = yes
+					NAM_judas_willing_arktur = yes
+				}
+			}
+			custom_effect_tooltip = NAM_judas_weber_force_tt
+		}
+		else = {
+			custom_effect_tooltip = NAM_judas_weber_force_reason
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						NAM_judas_willing_delegate = yes
+						NAM_judas_willing_arktur = yes
+					}
+				}
+				NAM_judas_weber_force = yes
+			}
+			else_if = {
+				limit = {
+					NAM_board_operable = yes
+					has_idea = NAM_judas_weber_committees
+					has_variable = NAM_judas_weber_pending
+				}
+				country_event = { id = ADISCORD_nam_resource_war.450 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.451
+	title = ADISCORD_nam_resource_war.451.t
+	desc = ADISCORD_nam_resource_war.451.d
+	picture = GFX_event_adiscord_nam_karamyshev_officers
+	is_triggered_only = yes
+	timeout_days = 7
+	trigger = {
+		NAM_board_operable = yes
+		has_idea = NAM_judas_karamyshev_watch
+		has_variable = NAM_judas_karamyshev_pending
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.451.a
+		ai_chance = { base = 15 }
+		custom_effect_tooltip = NAM_judas_karamyshev_ignore_tt
+		hidden_effect = {
+			NAM_judas_karamyshev_ignore = yes
+		}
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.451.b
+		trigger = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_karamyshev_watch
+			has_variable = NAM_judas_karamyshev_pending
+			check_variable = { var = NAM_corp_capital value = 35 compare = greater_than_or_equals }
+		}
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = NAM_judas_karamyshev_concede_tt
+		hidden_effect = {
+			NAM_judas_karamyshev_concede = yes
+		}
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.451.c
+		ai_chance = {
+			base = 85
+			modifier = {
+				factor = 0
+				NOT = { NAM_judas_willing_navis = yes }
+				NOT = { NAM_judas_willing_arktur = yes }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					NAM_judas_willing_navis = yes
+					NAM_judas_willing_arktur = yes
+				}
+			}
+			custom_effect_tooltip = NAM_judas_karamyshev_force_tt
+		}
+		else = {
+			custom_effect_tooltip = NAM_judas_karamyshev_force_reason
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					OR = {
+						NAM_judas_willing_navis = yes
+						NAM_judas_willing_arktur = yes
+					}
+				}
+				NAM_judas_karamyshev_force = yes
+			}
+			else_if = {
+				limit = {
+					NAM_board_operable = yes
+					has_idea = NAM_judas_karamyshev_watch
+					has_variable = NAM_judas_karamyshev_pending
+				}
+				country_event = { id = ADISCORD_nam_resource_war.451 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.452
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		NAM_judas_weber_arm = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.453
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		NAM_judas_karamyshev_arm = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.454
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		NAM_judas_return_convoys = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.470
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NOT = { has_active_mission = NAM_board_annual_meeting }
+	}
+	immediate = {
+		set_temp_variable = { var = NAM_board_interval_input value = 359 }
+		NAM_board_arm_meeting = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.471
+	title = ADISCORD_nam_resource_war.471.t
+	desc = ADISCORD_nam_resource_war.471.d
+	picture = GFX_event_adiscord_nam_chair_handover
+	is_triggered_only = yes
+	trigger = { NAM_board_operable = yes }
+	immediate = {
+		set_country_flag = NAM_board_meeting_open
+		set_temp_variable = { var = NAM_board_company_input value = NAM_board_meeting_winner }
+		NAM_board_install_chairman = yes
+	}
+	option = {
+		name = NAM_board_dividend_withhold
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_board_affords_dividend = yes
+			}
+		}
+		custom_effect_tooltip = NAM_board_withhold_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_delta_input value = -8 }
+			NAM_board_settle_dividend = yes
+		}
+	}
+	option = {
+		name = NAM_board_dividend_pay
+		trigger = { NAM_board_affords_dividend = yes }
+		ai_chance = { factor = 1 }
+		custom_effect_tooltip = NAM_board_pay_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_delta_input value = 8 }
+			NAM_board_settle_dividend = yes
+		}
+	}
+	option = {
+		name = NAM_board_dividend_short
+		trigger = { NAM_board_affords_dividend = no }
+		ai_chance = { factor = 0 }
+		custom_effect_tooltip = NAM_board_withhold_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_delta_input value = -8 }
+			NAM_board_settle_dividend = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.472
+	title = ADISCORD_nam_resource_war.472.t
+	desc = ADISCORD_nam_resource_war.472.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	trigger = { NAM_board_operable = yes }
+	immediate = {
+		set_country_flag = NAM_board_meeting_open
+		set_temp_variable = { var = NAM_board_company_input value = NAM_board_meeting_winner }
+		NAM_board_install_chairman = yes
+	}
+	option = {
+		name = NAM_board_dividend_withhold
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_board_affords_dividend = yes
+			}
+		}
+		custom_effect_tooltip = NAM_board_withhold_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_delta_input value = -8 }
+			NAM_board_settle_dividend = yes
+		}
+	}
+	option = {
+		name = NAM_board_dividend_pay
+		trigger = { NAM_board_affords_dividend = yes }
+		ai_chance = { factor = 1 }
+		custom_effect_tooltip = NAM_board_pay_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_delta_input value = 8 }
+			NAM_board_settle_dividend = yes
+		}
+	}
+	option = {
+		name = NAM_board_dividend_short
+		trigger = { NAM_board_affords_dividend = no }
+		ai_chance = { factor = 0 }
+		custom_effect_tooltip = NAM_board_withhold_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_delta_input value = -8 }
+			NAM_board_settle_dividend = yes
+		}
 	}
 }
 

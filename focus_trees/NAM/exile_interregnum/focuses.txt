@@ -1,0 +1,224 @@
+focus_tree = {
+	id = NAM_exile_interregnum_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 100
+			original_tag = NAM
+			has_idea = NAM_interregnum_power_vacuum
+		}
+	}
+	default = no
+	continuous_focus_position = {
+		x = 50
+		y = 2400
+	}
+
+	focus = {
+		id = NAM_interregnum_open_customs
+		icon = GFX_focus_NAM_seal_registry
+		x = 4
+		y = 0
+		cost = 1
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_political_power = 25
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_interregnum_guarantors
+		icon = GFX_focus_NAM_open_ledgers
+		x = 1
+		y = 2
+		cost = 1
+		prerequisite = { focus = NAM_interregnum_open_customs }
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_interregnum_credit_10_tt
+			hidden_effect = {
+				NAM_corp_seed_capital = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 10 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_interregnum_underwrite_freight
+		icon = GFX_focus_NAM_pw_industrial_credit
+		x = 3
+		y = 3
+		cost = 1
+		prerequisite = { focus = NAM_interregnum_guarantors }
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_interregnum_credit_15_tt
+			hidden_effect = {
+				NAM_corp_seed_capital = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 15 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_interregnum_roll_call
+		icon = GFX_focus_NAM_relief_register
+		x = 2
+		y = 1
+		cost = 1
+		prerequisite = { focus = NAM_interregnum_open_customs }
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		completion_reward = {
+			add_manpower = 1500
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = NAM_interregnum_second_shift
+		icon = GFX_focus_NAM_pw_mobilisation_register
+		x = 5
+		y = 3
+		cost = 1
+		prerequisite = { focus = NAM_interregnum_roll_call }
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		completion_reward = {
+			add_manpower = 2000
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = NAM_interregnum_coast_watch
+		icon = GFX_focus_NAM_colonial_watch
+		x = 6
+		y = 1
+		cost = 1
+		prerequisite = { focus = NAM_interregnum_open_customs }
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			army_experience = 15
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = NAM_interregnum_chart_soundings
+		icon = GFX_focus_NAM_officer_courses
+		x = 7
+		y = 2
+		cost = 1
+		prerequisite = { focus = NAM_interregnum_coast_watch }
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			custom_effect_tooltip = NAM_interregnum_readiness_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 5 }
+				NAM_revenge_readiness_clamp = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = NAM_interregnum_seals_boards
+		icon = GFX_focus_NAM_seal_courts
+		x = 0
+		y = 4
+		cost = 1
+		prerequisite = { focus = NAM_interregnum_underwrite_freight }
+		mutually_exclusive = {
+			focus = NAM_interregnum_seals_committees
+			focus = NAM_interregnum_seals_officers
+		}
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			custom_effect_tooltip = NAM_interregnum_takeover_tt
+			hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.100 } }
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_interregnum_seals_committees
+		icon = GFX_focus_NAM_south_elected_watch
+		x = 4
+		y = 4
+		cost = 1
+		prerequisite = { focus = NAM_interregnum_second_shift }
+		mutually_exclusive = {
+			focus = NAM_interregnum_seals_boards
+			focus = NAM_interregnum_seals_officers
+		}
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+			custom_trigger_tooltip = {
+				tooltip = NAM_island_wip_tt
+				always = no
+			}
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = NAM_interregnum_seals_officers
+		icon = GFX_focus_NAM_pw_officer_appointments
+		x = 8
+		y = 4
+		cost = 1
+		prerequisite = { focus = NAM_interregnum_chart_soundings }
+		mutually_exclusive = {
+			focus = NAM_interregnum_seals_boards
+			focus = NAM_interregnum_seals_committees
+		}
+		available = {
+			has_idea = NAM_interregnum_power_vacuum
+			custom_trigger_tooltip = {
+				tooltip = NAM_island_wip_tt
+				always = no
+			}
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		ai_will_do = { factor = 0 }
+	}
+}

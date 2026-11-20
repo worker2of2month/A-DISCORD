@@ -5,6 +5,10 @@ on_actions = {
 	on_capitulation_immediate = {
 		effect = {
 			if = {
+				limit = { tag = NAM }
+				NAM_interregnum_close = yes
+			}
+			if = {
 				limit = {
 					NOT = { has_global_flag = RUS_crisis_truce_in_progress }
 					NOT = { has_global_flag = RUS_crisis_world_ended }
@@ -2636,6 +2640,10 @@ on_actions = {
 			}
 			# END vorkerland_collapse:on_puppet
 			# BEGIN nam:on_puppet
+			if = {
+				limit = { tag = NAM }
+				NAM_interregnum_close = yes
+			}
 			NAM_veyran_close_external = yes
 			ADISCORD_nam_resource_war_close_external = yes
 			NAM_war_of_return_close_external = yes
@@ -2659,6 +2667,12 @@ on_actions = {
 	}
 	on_annex = {
 		effect = {
+			FROM = {
+				if = {
+					limit = { tag = NAM }
+					NAM_interregnum_close = yes
+				}
+			}
 			if = {
 				limit = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 				# BEGIN vorkerland_collapse:on_annex
@@ -2736,11 +2750,10 @@ on_actions = {
 					}
 					FROM = {
 						NAM_board_end_operations = yes
-						remove_mission = NAM_board_no_confidence
-						set_variable = { var = NAM_board_no_confidence_day value = -1 }
-						set_variable = { var = NAM_board_majority_since value = -1 }
-						clr_country_flag = NAM_board_recount_queued
-						clr_country_flag = NAM_board_no_confidence_immunity
+						clear_variable = NAM_board_loren_debt
+						remove_ideas = NAM_board_loren_lien
+						clear_variable = NAM_board_loan_balance
+						remove_ideas = NAM_board_loan_service
 						remove_ideas = NAM_board_no_confidence_spirit
 					}
 				}

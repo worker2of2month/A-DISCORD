@@ -282,8 +282,15 @@ NAM_owned_overseas_district = {
 }
 
 # COUNTRY NAM. Regular shipping can use an island harbour after mainland defeat.
+NAM_island_contracts_operable = {
+	OR = {
+		NAM_independent_programmes_operable = yes
+		NAM_board_operable = yes
+	}
+}
+
 NAM_overseas_service_operable = {
-	NAM_independent_programmes_operable = yes
+	NAM_island_contracts_operable = yes
 	OR = {
 		225 = { NAM_owned_overseas_district = yes }
 		226 = { NAM_owned_overseas_district = yes }
@@ -298,13 +305,14 @@ NAM_overseas_service_operable = {
 # STATE. The local route ends with loss of the island or its funding government.
 NAM_island_route_operable = {
 	NAM_owned_overseas_district = yes
-	NAM = { NAM_independent_programmes_operable = yes }
+	NAM = { NAM_island_contracts_operable = yes }
 }
 
 NAM_convoy_service_authorised = {
 	OR = {
 		has_completed_focus = NAM_harbour_service
 		has_completed_focus = NAM_defeat_harbour_economy
+		has_completed_focus = NAM_board_island_fleet_shares
 	}
 }
 
@@ -1022,7 +1030,7 @@ NAM_steel_concession_offer_current = {
 
 NAM_steel_concession_can_accept = {
 	NAM_steel_concession_target_valid = yes
-	NAM = { NAM_independent_programmes_operable = yes }
+	NAM = { NAM_island_contracts_operable = yes }
 	231 = { NAM_owned_overseas_district = yes }
 	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
 	hidden_trigger = { NAM_steel_concession_offer_current = yes }
@@ -1437,6 +1445,8 @@ NAM_rad_mining_site_available = {
 # COUNTRY NAM. The island council hands the seals to the boards once.
 NAM_exile_revolution_open = {
 	tag = NAM
+	is_subject = no
+	has_capitulated = no
 	has_global_flag = ADISCORD_nam_resource_war_island_exile
 	NOT = { has_country_flag = NAM_corp_takeover }
 }
@@ -1458,7 +1468,13 @@ NAM_exile_return_programme_open = {
 # COUNTRY NAM. The first landing's delivery receipt closes fixed-price orders;
 # a renewed war uses the standing army and ordinary recruitment.
 NAM_marine_orders_open = {
-	NAM_exile_return_programme_open = yes
+	OR = {
+		NAM_exile_return_programme_open = yes
+		AND = {
+			NAM_piracy_open = yes
+			NOT = { NAM_war_of_return_active = yes }
+		}
+	}
 	NOT = { has_variable = NAM_marines_orders_delivered }
 }
 
@@ -1973,7 +1989,7 @@ NAM_corp_case_can_be_heard = {
 NAM_judas_weber_unlocked_target = {
 	has_idea = NAM_judas_weber_committees
 	OR = {
-		NOT = { has_variable = NAM_judas_weber_day }
+		NOT = { has_variable = NAM_judas_weber_lock }
 		check_variable = { var = NAM_judas_weber_lock value = global.num_days compare = greater_than }
 	}
 }
@@ -1981,7 +1997,7 @@ NAM_judas_weber_unlocked_target = {
 NAM_judas_karamyshev_unlocked_target = {
 	has_idea = NAM_judas_karamyshev_watch
 	OR = {
-		NOT = { has_variable = NAM_judas_karamyshev_day }
+		NOT = { has_variable = NAM_judas_karamyshev_lock }
 		check_variable = { var = NAM_judas_karamyshev_lock value = global.num_days compare = greater_than }
 	}
 }
@@ -2125,6 +2141,59 @@ NAM_is_vorkerland_dependency = {
 	}
 }
 
+NAM_board_trust_plan_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	free_building_slots = { building = arms_factory size > 0 include_locked = no }
+}
+
+NAM_board_sig_oil_advance_ready = {
+	NAM_board_operable = yes
+	check_variable = { var = NAM_board_chair value = 1 compare = equals }
+	check_variable = { var = NAM_board_sig_oil_advance_uses value = 2 compare = less_than }
+	NOT = { has_global_flag = NAM_war_of_return_won }
+}
+
+NAM_board_sig_trust_plan_ready = {
+	NAM_board_operable = yes
+	check_variable = { var = NAM_board_chair value = 2 compare = equals }
+	check_variable = { var = NAM_board_sig_trust_plan_uses value = 2 compare = less_than }
+	NOT = { has_variable = NAM_board_sig_trust_plan_receipt }
+	NOT = { has_country_flag = NAM_board_sig_trust_plan_cooldown }
+}
+
+NAM_board_sig_letters_of_marque_ready = {
+	NAM_board_operable = yes
+	check_variable = { var = NAM_board_chair value = 3 compare = equals }
+	NOT = { has_country_flag = NAM_board_letters_of_marque }
+	NOT = { has_global_flag = NAM_war_of_return_won }
+}
+
+NAM_board_sig_out_of_turn_ready = {
+	NAM_board_operable = yes
+	check_variable = { var = NAM_board_chair value = 4 compare = equals }
+	check_variable = { var = NAM_board_sig_out_of_turn_uses value = 1 compare = less_than }
+	NOT = { has_variable = NAM_board_sig_out_of_turn_receipt }
+}
+
+NAM_board_sig_contract_recruitment_ready = {
+	NAM_board_operable = yes
+	check_variable = { var = NAM_board_chair value = 5 compare = equals }
+	check_variable = { var = NAM_board_sig_contract_recruitment_uses value = 3 compare = less_than }
+	NOT = { has_variable = NAM_board_sig_contract_recruitment_receipt }
+	NOT = { has_country_flag = NAM_board_sig_contract_recruitment_cooldown }
+}
+
+NAM_board_sig_consolidated_loan_ready = {
+	NAM_board_operable = yes
+	check_variable = { var = NAM_board_chair value = 6 compare = equals }
+	NOT = { has_idea = NAM_board_loan_service }
+}
+
+NAM_board_affords_dividend = {
+	check_variable = { var = NAM_corp_capital value = NAM_board_dividend_quote compare = greater_than_or_equals }
+}
+
 NAM_board_operable = {
 	NOT = { check_variable = { NAM_board_ended = 1 } }
 	NAM_corp_open = yes
@@ -2151,6 +2220,7 @@ NAM_board_majority_held = {
 }
 
 NAM_board_product_blocked_1 = {
+	check_variable = { var = NAM_board_ended value = 0 compare = equals }
 	has_country_flag = NAM_board_opened
 	OR = {
 		check_variable = { var = NAM_board_stance^1 value = -1 compare = equals }
@@ -2159,6 +2229,7 @@ NAM_board_product_blocked_1 = {
 }
 
 NAM_board_product_blocked_2 = {
+	check_variable = { var = NAM_board_ended value = 0 compare = equals }
 	has_country_flag = NAM_board_opened
 	OR = {
 		check_variable = { var = NAM_board_stance^2 value = -1 compare = equals }
@@ -2167,6 +2238,7 @@ NAM_board_product_blocked_2 = {
 }
 
 NAM_board_product_blocked_3 = {
+	check_variable = { var = NAM_board_ended value = 0 compare = equals }
 	has_country_flag = NAM_board_opened
 	OR = {
 		check_variable = { var = NAM_board_stance^3 value = -1 compare = equals }
@@ -2175,6 +2247,7 @@ NAM_board_product_blocked_3 = {
 }
 
 NAM_board_product_blocked_4 = {
+	check_variable = { var = NAM_board_ended value = 0 compare = equals }
 	has_country_flag = NAM_board_opened
 	OR = {
 		check_variable = { var = NAM_board_stance^4 value = -1 compare = equals }
@@ -2183,6 +2256,7 @@ NAM_board_product_blocked_4 = {
 }
 
 NAM_board_product_blocked_5 = {
+	check_variable = { var = NAM_board_ended value = 0 compare = equals }
 	has_country_flag = NAM_board_opened
 	OR = {
 		check_variable = { var = NAM_board_stance^5 value = -1 compare = equals }
@@ -2191,6 +2265,7 @@ NAM_board_product_blocked_5 = {
 }
 
 NAM_board_product_blocked_6 = {
+	check_variable = { var = NAM_board_ended value = 0 compare = equals }
 	has_country_flag = NAM_board_opened
 	OR = {
 		check_variable = { var = NAM_board_stance^6 value = -1 compare = equals }
@@ -3511,8 +3586,19 @@ NAM_piracy_open = {
 }
 
 NAM_pirate_commissioned = {
-	NAM_piracy_open = yes
-	has_completed_focus = NAM_exile_sea_raiders
+	OR = {
+		AND = {
+			NOT = { has_country_flag = NAM_corp_takeover }
+			NAM_piracy_open = yes
+			has_completed_focus = NAM_exile_sea_raiders
+		}
+		AND = {
+			has_country_flag = NAM_corp_takeover
+			NAM_board_operable = yes
+			has_country_flag = NAM_board_letters_of_marque
+			NOT = { has_global_flag = NAM_war_of_return_won }
+		}
+	}
 }
 
 NAM_pirate_exchange_open = {
@@ -3539,6 +3625,7 @@ NAM_pirate_victim_valid = {
 # COUNTRY NAM. A shipping lane stays open to raids while one of its owners may
 # still be raided; the owners match NAM_pirate_save_lane_victims.
 NAM_pirate_lane_oil_open = {
+	NOT = { has_country_flag = NAM_corp_takeover }
 	OR = {
 		EFL = { NAM_pirate_victim_valid = yes }
 		AZH = { NAM_pirate_victim_valid = yes }
@@ -3546,6 +3633,7 @@ NAM_pirate_lane_oil_open = {
 }
 
 NAM_pirate_lane_coast_open = {
+	NOT = { has_country_flag = NAM_corp_takeover }
 	OR = {
 		RIV = { NAM_pirate_victim_valid = yes }
 		EFL = { NAM_pirate_victim_valid = yes }
@@ -3562,7 +3650,10 @@ NAM_pirate_lane_strait_open = {
 NAM_pirate_lane_crossing_open = {
 	OR = {
 		CHD = { NAM_pirate_victim_valid = yes }
-		RIV = { NAM_pirate_victim_valid = yes }
+		AND = {
+			NOT = { has_country_flag = NAM_corp_takeover }
+			RIV = { NAM_pirate_victim_valid = yes }
+		}
 	}
 }
 
@@ -3591,7 +3682,10 @@ NAM_pirate_lane_strait_alert = {
 NAM_pirate_lane_crossing_alert = {
 	OR = {
 		CHD = { has_country_flag = NAM_pirate_alert }
-		RIV = { has_country_flag = NAM_pirate_alert }
+		AND = {
+			NOT = { has_country_flag = NAM_corp_takeover }
+			RIV = { has_country_flag = NAM_pirate_alert }
+		}
 	}
 }
 

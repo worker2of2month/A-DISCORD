@@ -15,12 +15,24 @@ NAM_piracy = {
 	icon = generic_naval
 	allowed = { tag = NAM }
 	visible = {
-		NOT = { has_country_flag = NAM_corp_takeover }
-		NAM_piracy_open = yes
+		OR = {
+			AND = {
+				NOT = { has_country_flag = NAM_corp_takeover }
+				NAM_piracy_open = yes
+			}
+			NAM_pirate_commissioned = yes
+		}
 	}
 	visible_when_empty = yes
 	priority = 25
 	scripted_gui = ADISCORD_NAM_piracy_panel
+}
+
+NAM_interregnum_quay = {
+	icon = generic_political_pressure
+	allowed = { tag = NAM }
+	visible = { has_idea = NAM_interregnum_power_vacuum }
+	priority = 26
 }
 
 # After the island council of event .100 the exiles drill for the return,
@@ -39,7 +51,26 @@ NAM_exile_politics = {
 NAM_free_zones = {
 	icon = generic_industry
 	allowed = { tag = NAM }
-	visible = { NAM_corp_open = yes }
+	visible = {
+		OR = {
+			NAM_corp_open = yes
+			AND = {
+				NAM_mainland_programmes_active = yes
+				OR = {
+					has_completed_focus = NAM_island_accounts
+					has_completed_focus = NAM_island_concession
+					NAM_convoy_service_authorised = yes
+				}
+			}
+			AND = {
+				NAM_piracy_open = yes
+				OR = {
+					has_completed_focus = NAM_exile_marine_orders
+					check_variable = { NAM_marine_orders_paid > 0 }
+				}
+			}
+		}
+	}
 	scripted_gui = ADISCORD_NAM_board_panel
 	visible_when_empty = yes
 	priority = 25
@@ -249,6 +280,7 @@ NAM_postwar_future_debate = {
 }
 
 NAM_two_judases = {
+	scripted_gui = ADISCORD_NAM_judas_panel
 	icon = generic_prepare_civil_war
 	allowed = { tag = NAM }
 	visible = { has_country_flag = NAM_corp_takeover }

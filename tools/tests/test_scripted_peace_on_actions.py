@@ -139,6 +139,13 @@ class ScriptedPeaceOwnershipTests(unittest.TestCase):
         hooks = native_hooks(self.source())
         for name in ('on_annex', 'on_state_control_changed'):
             effect = block(block(hooks, name), 'effect')
+            if name == 'on_annex':
+                cleanup, *effect = effect
+                self.assertEqual(cleanup.key, 'FROM')
+                guard, = cleanup.value
+                self.assertEqual(guard.key, 'if')
+                self.assertEqual([row.key for row in guard.value], ['limit', 'NAM_interregnum_close'])
+                self.assertEqual(scalar(block(guard.value, 'limit'), 'tag'), 'NAM')
             self.assertEqual([row.key for row in effect], ['if'])
             gate = block(block(effect, 'if'), 'limit')
             self.assertEqual(scalar(block(gate, 'NOT'), 'has_global_flag'), 'RUS_crisis_world_ended')

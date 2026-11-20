@@ -167,6 +167,30 @@ def _definitions(entries: list[Entry]):
             yield from _definitions(entry.value)
 
 
+WIP_GATED_FILES = {"ADISCORD_NAM_exile_corporate.txt", "ADISCORD_NAM_exile_interregnum.txt"}
+
+
+def _closed_board_branches(definitions):
+    closed = set()
+    requirements = {}
+    for definition in definitions:
+        name = _scalar(definition.value, "id")
+        requirements[name] = [{parent.value for parent in field.value if parent.key == "focus"}
+                              for field in definition.value if field.key == "prerequisite"]
+        for field in definition.value:
+            if field.key != "available":
+                continue
+            if any(row.key == "custom_trigger_tooltip" and _scalar(row.value, "tooltip") == "NAM_island_wip_tt"
+                   and _scalar(row.value, "always") == "no" for row in field.value):
+                closed.add(name)
+    while True:
+        blocked = {name for name, groups in requirements.items()
+                   if any(group and group <= closed for group in groups)} - closed
+        if not blocked:
+            return closed
+        closed.update(blocked)
+
+
 def _equipment_resource(name: str | None) -> str | None:
     if name is None:
         return None
@@ -348,7 +372,12 @@ def audit(root: Path = ROOT) -> AuditReport:
     for path, entries in parsed.items():
         if "national_focus" not in path.parts:
             continue
-        for definition in _definitions(entries):
+        definitions = list(_definitions(entries))
+        closed = _closed_board_branches(definitions) if path.name in WIP_GATED_FILES else set()
+        for definition in definitions:
+            if _scalar(definition.value, "id") in closed:
+                report.counts["excluded_wip"] += 1
+                continue
             if path.name in PREVIEW_FILES:
                 report.counts["excluded_preview"] += 1
                 continue

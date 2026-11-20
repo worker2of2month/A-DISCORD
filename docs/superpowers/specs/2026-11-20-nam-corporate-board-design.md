@@ -585,6 +585,13 @@ never test the chair in `cancel_trigger`.
 
 ### The six chairmen
 
+Changed by the user on 2026-11-20: the directorate is ruled by the technocracy
+party, and Olshansky and all six heads carry the one leader ideology
+`techno_corporatism` ("Технокорпоратократия"). The "Sub-ideology" column of
+the table below and every mention of a hedonism leader role are void:
+`promote_character` makes a character leader only inside the ruling party.
+The chairmen differ by their traits and signature decisions.
+
 Each head has leader traits that carry both buffs and debuffs, and one
 signature decision that exists only while he chairs. The decisions differ in
 kind, and so do the traits: no two chairmen are the same bonus with different
@@ -831,7 +838,7 @@ missions `NAM_board_bid_<lot>` with `NAM_board_award_<lot>_<company>` and
 events `ADISCORD_nam_resource_war.430-.437`, one resolution mission
 `NAM_board_resolution_<company>` per company, the sanction spirits
 `NAM_board_sanction_<company>`, the chancery (`NAM_board_action_slots`,
-`NAM_board_action_used`, `NAM_board_select_company`, `NAM_board_lobby_company`,
+`NAM_board_action_used`, the company selection (now the six seat buttons), `NAM_board_lobby_company`,
 `NAM_board_prepare_dismissal`) and `NAM_board_end_operations`, which the
 future stage-3 tree loader must call. The Judas motions read
 `NAM_judas_weber`, `NAM_judas_karamyshev` and `NAM_judas_last_op_weber` /
@@ -839,6 +846,19 @@ future stage-3 tree loader must call. The Judas motions read
 operation dates are day numbers: two writes on one day cannot be told apart,
 so a resolution adopted on day D counts an operation as a breach only when
 its date is greater than D.
+
+Status: the interregnum (M0) and package 4 were implemented on 2026-11-20.
+M0 added `NAM_interregnum_begin`, `NAM_interregnum_close`,
+`NAM_corp_seed_capital`, the tree `NAM_exile_interregnum_focus`, the mission
+`NAM_interregnum_islands`, the spirit `NAM_interregnum_power_vacuum` and
+event `ADISCORD_nam_resource_war.460`. Package 4 added the support variables,
+`NAM_judas_support_change`, the meeting missions
+`NAM_judas_<camp>_meeting` with events `.450-.454`, ten operations
+`NAM_judas_<operation>`, fifteen spirits, the banded killings and the report
+panel `ADISCORD_NAM_judas_panel`. It leaves `NAM_judas_dividend_surcharge`
+for the annual dividend to consume and clear. Under the tree's exclusive
+pairs nine of the ten operations are reachable in one campaign; that is
+intended.
 
 Notes for every package:
 
@@ -858,6 +878,37 @@ Notes for every package:
   maximum), and every paid decision in `CUSTOM_COST_DECISIONS` of the NAM
   validator.
 - No new decision category: a test allows exactly two under the takeover.
+
+## Review findings to fix (packages 1-3)
+
+Confirmed by an independent review on 2026-11-20. Fix them in the next script
+package; none is covered by a test yet, so add one for each.
+
+1. A speaker whose agenda is empty is still seated and then "rejected": it
+   loses trust and gets a sanction for a motion it never made. In
+   `NAM_board_close_session`, `NAM_board_adopt_first` and
+   `NAM_board_adopt_second`, call `NAM_board_reject_motion` for a slot only
+   when its `NAM_board_offer_motion_N` is above 0. In `NAM_board_pick_speaker`
+   a company with an empty agenda speaks only when nobody else can; read the
+   agendas at the start of `NAM_board_arm_session`.
+2. `NAM_board_end_operations` does not end the vote of no confidence or the
+   majority bonus. After setting `NAM_board_ended`, it must remove the mission
+   `NAM_board_no_confidence`, set `NAM_board_no_confidence_day` to -1, clear
+   `NAM_board_no_confidence_immunity` and `NAM_board_recount_queued`, call
+   `NAM_board_recount` (with the council inoperable it zeroes the majority
+   values) and `NAM_corp_refresh`. The annexation handler then drops the
+   lines it duplicates. Each `NAM_board_product_blocked_<n>` is false once
+   `NAM_board_ended` is 1. Event `.422` also requires `NAM_board_ended = 0`.
+   Do not reset the stance array or clear `NAM_board_opened`.
+3. A company that lost a tender must beat both speaker exclusions for 180
+   days (M3, M4). Today a loser that spoke at the previous session is passed
+   over.
+4. Lobbying whose gain is clamped to zero at completion (the target passed
+   65 meanwhile) refunds the price and applies neither the rival's -5 nor the
+   120-day lockout.
+5. `NAM_board_adopt_both` calls `NAM_board_recount` directly, as M1 requires.
+6. `NAM_board_withdraw_question` shows the raw variable `NAM_board_deferred`
+   in its condition: wrap it in a localised custom trigger tooltip.
 
 ## Verification
 
@@ -1046,7 +1097,7 @@ Payments still owed are withheld while the company boycotts (M1).
 | Вяземцев | `NAM_board_sig_oil_advance` | "Аванс под будущую нефть" | 25 political power | instant | +120 capital and 10000 fuel now. After `NAM_war_of_return_won`, spirit `NAM_board_loren_lien` lasts 180 days per advance: fuel gain -40%. No repayment if the return never comes. | 2 per campaign |
 | Вальц | `NAM_board_sig_trust_plan` | "Трестовый план" | 90 capital + 20 political power (escrow) | 120 days | Targets an island of 225-231 with a free slot: +1 `arms_factory`, slot checked again at delivery or the price refunded | every 180 days, 2 per chairmanship |
 | Крузе | `NAM_board_sig_letters_of_marque` | "Каперские свидетельства" | 40 political power + 30 capital | 180 days (timed flag `NAM_board_letters_of_marque`) | Opens the strait (ULV, LUR) and crossing (CHD) lanes; `NAM_pirate_raid_slots` at least 1; loot goes to capital | renewable after it expires |
-| Калёнов | `NAM_board_sig_out_of_turn` | "Заказ вне очереди" | 70 capital + 25 political power | 45 days | 3000 `infantry_equipment`, 36 `artillery_equipment`, and the locked division "Гвардия Арктура" (6 infantry, artillery support) at the capital | once per chairmanship |
+| Калёнов | `NAM_board_sig_out_of_turn` | "Заказ вне очереди" | 70 capital + 25 political power | 45 days | 3000 `infantry_equipment`, 36 `artillery_equipment`, and the locked division "Arktur Guard" (6 infantry, artillery support) at the capital | once per chairmanship |
 | Гурьев | `NAM_board_sig_contract_recruitment` | "Контрактный набор" | 30 political power + 30 capital | 60 days | +5000 manpower; Weber's support +5 while he lives | every 120 days, 3 per chairmanship |
 | Вельяминова | `NAM_board_sig_consolidated_loan` | "Консолидированный заём" | 20 political power | instant | +200 capital. Spirit `NAM_board_loan_service`, 360 days: -20 capital a month through the income effect, 240 in total | not while the spirit runs |
 

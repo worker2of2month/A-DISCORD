@@ -176,6 +176,7 @@ NAM_resource_war_deadline
 NAM_judas_weber_meeting
 NAM_judas_karamyshev_meeting
 NAM_board_session
+NAM_board_annual_meeting
 NAM_board_resolution_loren
 NAM_board_resolution_ferrant
 NAM_board_resolution_navis
@@ -185,6 +186,7 @@ NAM_board_resolution_reidbank
 
 NAM_board_no_confidence
 ADISCORD_marine_infantry
+NAM_interregnum_islands
 train_equipment
 SHL_conclave_ballot
 SHL_metal_contract_year

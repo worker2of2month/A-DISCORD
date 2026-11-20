@@ -902,7 +902,7 @@ NAM_rw_cede_mainland_state = {
 # GLOBAL. The coalition holds the whole mainland; Svetlogorye survives on its
 # overseas districts. NAM_rw_exile_evacuate has already moved the capital and
 # the army to the islands; the islands return to Svetlogorsk control. The
-# island council in event .100 installs the corporate government after .81.
+# evacuation starts the island succession outside the debug route.
 # The defeat tree belongs to the compromise only.
 NAM_rw_settle_island_exile = {
 	ADISCORD_south_suspend_preparation = yes
@@ -939,7 +939,13 @@ NAM_rw_settle_island_exile = {
 		mark_focus_tree_layout_dirty = yes
 		ADISCORD_economy_mark_dirty = yes
 		if = {
-			limit = { NOT = { has_country_flag = NAM_debug_corporate_start } }
+			limit = {
+				NOT = { has_country_flag = NAM_debug_corporate_start }
+				NOT = { has_country_flag = NAM_corp_takeover }
+				NOT = { has_idea = NAM_interregnum_power_vacuum }
+				NOT = { has_country_flag = NAM_interregnum_execution_pending }
+			}
+			set_country_flag = NAM_interregnum_execution_pending
 			country_event = { id = ADISCORD_nam_resource_war.81 hours = 2 }
 		}
 	}
@@ -6941,6 +6947,17 @@ NAM_war_of_return_resolve_victory = {
 	if = {
 		limit = { NAM_war_of_return_active = yes }
 		set_global_flag = NAM_war_of_return_won
+		NAM = {
+			if = {
+				limit = { check_variable = { var = NAM_board_loren_debt value = 2 compare = equals } }
+				add_timed_idea = { idea = NAM_board_loren_lien days = 360 }
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_board_loren_debt value = 1 compare = equals } }
+				add_timed_idea = { idea = NAM_board_loren_lien days = 180 }
+			}
+			clear_variable = NAM_board_loren_debt
+		}
 		67 = { NAM_wor_return_field = yes }
 		688 = { NAM_wor_return_field = yes }
 		689 = { NAM_wor_return_field = yes }
@@ -6979,6 +6996,7 @@ NAM_war_of_return_resolve_defeat = {
 			NAM_war_of_return_active = yes
 			has_global_flag = NAM_wor_exile_war
 		}
+		NAM = { clear_variable = NAM_board_loren_debt }
 		NAM_wor_pick_annexer = yes
 		NAM_war_of_return_close = yes
 		NAM_wor_annex_svetlogorye = yes
@@ -7012,6 +7030,7 @@ NAM_war_of_return_close_external = {
 			NAM_war_of_return_active = yes
 			NAM_wor_campaign_lost_outside_treaty = yes
 		}
+		NAM = { clear_variable = NAM_board_loren_debt }
 		NAM_war_of_return_close = yes
 	}
 }
@@ -8337,12 +8356,16 @@ NAM_activate_weber_commander = {
 }
 
 # ----- Corporate exile: capital, island concessions and the boards -----
-# Liquidate the stocks rescued in the evacuation before the first orders are paid.
-NAM_corp_initialize = {
+NAM_corp_seed_capital = {
 	if = {
 		limit = { NOT = { has_variable = NAM_corp_capital } }
 		set_variable = { var = NAM_corp_capital value = 50 }
 	}
+}
+
+# Liquidate the stocks rescued in the evacuation before the first orders are paid.
+NAM_corp_initialize = {
+	NAM_corp_seed_capital = yes
 	if = {
 		limit = { NOT = { has_variable = NAM_free_zone_slots } }
 		set_variable = { var = NAM_free_zone_slots value = 1 }
@@ -8456,6 +8479,8 @@ NAM_corp_refresh = {
 		set_variable = { var = NAM_corp_mod_pp value = -0.15 }
 		add_to_variable = { var = NAM_corp_mod_pp value = NAM_board_majority_pp }
 		add_to_variable = { var = NAM_corp_mod_stability value = NAM_board_majority_stab }
+		add_to_variable = { var = NAM_corp_mod_pp value = NAM_board_focus_pp }
+		add_to_variable = { var = NAM_corp_mod_stability value = NAM_board_focus_stab }
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
@@ -8631,7 +8656,32 @@ NAM_corp_monthly = {
 		set_temp_variable = { var = NAM_corp_capital_change value = NAM_corp_influence }
 		multiply_temp_variable = { var = NAM_corp_capital_change value = 0.3 }
 		add_to_temp_variable = { var = NAM_corp_capital_change value = 20 }
+		if = {
+			limit = {
+				has_completed_focus = NAM_board_harbour_exchange
+			}
+			add_to_temp_variable = { var = NAM_corp_capital_change value = 10 }
+		}
 		multiply_temp_variable = { var = NAM_corp_capital_change value = NAM_free_zones_active }
+		if = {
+			limit = {
+				has_completed_focus = NAM_board_future_output_pledge
+				NOT = { has_global_flag = NAM_war_of_return_won }
+			}
+			add_to_temp_variable = { var = NAM_corp_capital_change value = 15 }
+		}
+		if = {
+			limit = {
+				has_completed_focus = NAM_board_society_99_1
+			}
+			add_to_temp_variable = { var = NAM_corp_capital_change value = 20 }
+		}
+		if = {
+			limit = {
+				has_completed_focus = NAM_board_port_rights_monopoly
+			}
+			add_to_temp_variable = { var = NAM_corp_capital_change value = 25 }
+		}
 		if = {
 			limit = {
 				has_idea = NAM_board_reidbank_clearing
@@ -8665,11 +8715,23 @@ NAM_corp_monthly = {
 			}
 			add_to_temp_variable = { var = NAM_corp_capital_change value = 10 }
 		}
+		if = {
+			limit = {
+				has_idea = NAM_board_loan_service
+				check_variable = { var = NAM_board_loan_balance value = 0 compare = greater_than }
+			}
+			subtract_from_temp_variable = { var = NAM_corp_capital_change value = 20 }
+			subtract_from_variable = { var = NAM_board_loan_balance value = 20 }
+		}
 		round_temp_variable = NAM_corp_capital_change
 		set_variable = { var = NAM_corp_last_income value = NAM_corp_capital_change }
 		NAM_corp_capital_add = yes
 		if = {
 			limit = { NAM_board_operable = yes }
+			if = {
+				limit = { NAM_pirate_commissioned = yes }
+				NAM_pirate_monthly = yes
+			}
 			NAM_board_deliver_bid_cargo = yes
 			if = {
 				limit = {
@@ -8682,29 +8744,6 @@ NAM_corp_monthly = {
 				clamp_temp_variable = { var = NAM_judas_watch_readiness max = 60 }
 				set_variable = { var = NAM_revenge_readiness value = NAM_judas_watch_readiness }
 				NAM_revenge_readiness_clamp = yes
-			}
-			if = {
-				limit = {
-					has_idea = NAM_judas_weber_committees
-				}
-				set_temp_variable = { var = NAM_judas_growth value = 2 }
-				if = {
-					limit = {
-						check_variable = { var = NAM_board_chair value = 5 compare = equals }
-					}
-					add_to_temp_variable = { var = NAM_judas_growth value = 1 }
-				}
-				set_temp_variable = { var = NAM_judas_camp_input value = 1 }
-				set_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_growth }
-				NAM_judas_support_change = yes
-			}
-			if = {
-				limit = {
-					has_idea = NAM_judas_karamyshev_watch
-				}
-				set_temp_variable = { var = NAM_judas_camp_input value = 2 }
-				set_temp_variable = { var = NAM_judas_delta_input value = 2 }
-				NAM_judas_support_change = yes
 			}
 			if = {
 				limit = {
@@ -8736,16 +8775,86 @@ NAM_corp_monthly = {
 			}
 			NAM_board_recount = yes
 			NAM_board_check_no_confidence = yes
+			if = {
+				limit = { is_ai = yes }
+				NAM_board_ai_monthly = yes
+			}
 		}
 		else = {
 			set_variable = { var = NAM_corp_last_dividend value = 0 }
 			NAM_corp_refresh = yes
 		}
 	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_weber_committees
+		}
+		set_temp_variable = { var = NAM_judas_growth value = 2 }
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_chair value = 5 compare = equals }
+			}
+			add_to_temp_variable = { var = NAM_judas_growth value = 1 }
+		}
+		set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+		set_temp_variable = { var = NAM_judas_delta_input value = NAM_judas_growth }
+		NAM_judas_support_change = yes
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_karamyshev_watch
+		}
+		set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+		set_temp_variable = { var = NAM_judas_delta_input value = 2 }
+		NAM_judas_support_change = yes
+	}
+}
+
+# ----- Island interregnum -----
+NAM_interregnum_begin = {
+	clr_country_flag = NAM_interregnum_execution_pending
+	kill_country_leader = yes
+	ADISCORD_end_party_coalition = yes
+	clear_array = ADISCORD_banned_parties
+	set_party_name = {
+		ideology = anarchism
+		name = NAM_interregnum_party
+		long_name = NAM_interregnum_party
+	}
+	set_politics = {
+		ruling_party = anarchism
+		elections_allowed = no
+	}
+	promote_character = {
+		character = NAM_Absent_Government
+		ideology = anarchism_ideology
+	}
+	add_ideas = NAM_interregnum_power_vacuum
+	activate_mission = NAM_interregnum_islands
+	load_focus_tree = {
+		tree = NAM_exile_interregnum_focus
+		keep_completed = yes
+	}
+}
+
+NAM_interregnum_close = {
+	if = {
+		limit = { has_country_flag = NAM_interregnum_execution_pending }
+		clr_country_flag = NAM_interregnum_execution_pending
+	}
+	if = {
+		limit = { has_active_mission = NAM_interregnum_islands }
+		remove_mission = NAM_interregnum_islands
+	}
+	if = {
+		limit = { has_idea = NAM_interregnum_power_vacuum }
+		remove_ideas = NAM_interregnum_power_vacuum
+	}
 }
 
 # COUNTRY NAM. The island council vests the seals in the chairman.
 NAM_corp_takeover = {
+	NAM_interregnum_close = yes
 	NAM_rom_step_down = yes
 	ADISCORD_end_party_coalition = yes
 	clear_array = ADISCORD_banned_parties
@@ -8902,6 +9011,8 @@ NAM_corp_takeover = {
 		limit = {
 			check_variable = { var = NAM_board_session_day value = -1 compare = equals }
 		}
+		set_temp_variable = { var = NAM_board_interval_input value = 330 }
+		NAM_board_arm_meeting = yes
 		NAM_board_arm_session = yes
 		NAM_judas_weber_arm = yes
 		NAM_judas_karamyshev_arm = yes
@@ -8942,6 +9053,95 @@ NAM_board_seat_opposition_leaders = {
 
 NAM_island_eliminate_weber = {
 	if = {
+		limit = {
+			has_idea = NAM_judas_weber_committees
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_judas_weber value = 60 compare = greater_than_or_equals }
+			}
+			add_timed_idea = { idea = NAM_judas_general_strike days = 90 }
+			add_popularity = { ideology = humanism popularity = 0.05 }
+			set_temp_variable = { var = NAM_board_company_input value = 1 }
+			set_temp_variable = { var = NAM_board_delta_input value = -5 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_delta_input value = -15 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 5 }
+			set_temp_variable = { var = NAM_board_delta_input value = -10 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 6 }
+			set_temp_variable = { var = NAM_board_delta_input value = -10 }
+			NAM_board_support_change = yes
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_judas_weber value = 30 compare = greater_than_or_equals }
+			}
+			add_timed_idea = { idea = NAM_judas_dock_strike days = 45 }
+			set_temp_variable = { var = NAM_board_company_input value = 1 }
+			set_temp_variable = { var = NAM_board_delta_input value = -3 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_delta_input value = -8 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_delta_input value = 3 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 5 }
+			set_temp_variable = { var = NAM_board_delta_input value = -5 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 6 }
+			set_temp_variable = { var = NAM_board_delta_input value = -5 }
+			NAM_board_support_change = yes
+		}
+		else = {
+			add_manpower = 2000
+			add_popularity = { ideology = humanism popularity = -0.1 }
+			add_popularity = { ideology = hedonism popularity = 0.1 }
+			add_timed_idea = { idea = NAM_judas_port_peace days = 120 }
+			set_temp_variable = { var = NAM_board_company_input value = 1 }
+			set_temp_variable = { var = NAM_board_delta_input value = 3 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 2 }
+			set_temp_variable = { var = NAM_board_delta_input value = 3 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 5 }
+			set_temp_variable = { var = NAM_board_delta_input value = 15 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 6 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+		}
+		NAM_judas_weber_record_operation = yes
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_motion^1 value = 2 compare = equals }
+			}
+			set_temp_variable = { var = NAM_board_company_input value = 1 }
+			set_temp_variable = { var = NAM_board_result_input value = 1 }
+			NAM_board_settle_resolution = yes
+			remove_mission = NAM_board_resolution_loren
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_motion^4 value = 3 compare = equals }
+			}
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_result_input value = 1 }
+			NAM_board_settle_resolution = yes
+			remove_mission = NAM_board_resolution_arktur
+		}
+		NAM_judas_weber_close = yes
+	}
+	if = {
 		limit = { has_character = NAM_Yaroslav_Weber }
 		retire_character = NAM_Yaroslav_Weber
 		promote_character = { character = NAM_party_representative_humanism ideology = humanism_ideology }
@@ -8955,6 +9155,97 @@ NAM_island_compact_with_humanists = {
 }
 
 NAM_island_eliminate_karamyshev = {
+	if = {
+		limit = {
+			has_idea = NAM_judas_karamyshev_watch
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_judas_karamyshev value = 60 compare = greater_than_or_equals }
+			}
+			add_timed_idea = { idea = NAM_judas_coast_guard_mutiny days = 90 }
+			add_equipment_to_stockpile = { type = convoy_1 amount = -6 producer = NAM }
+			add_to_variable = { var = NAM_revenge_readiness value = -25 }
+			NAM_revenge_readiness_clamp = yes
+			if = {
+				limit = {
+					num_divisions > 2
+				}
+				random_country_division = { destroy_unit = yes }
+			}
+			else = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = -1500 }
+				add_manpower = -1000
+			}
+			set_temp_variable = { var = NAM_board_company_input value = 1 }
+			set_temp_variable = { var = NAM_board_delta_input value = -5 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_delta_input value = -10 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_delta_input value = -15 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 6 }
+			set_temp_variable = { var = NAM_board_delta_input value = -5 }
+			NAM_board_support_change = yes
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_judas_karamyshev value = 30 compare = greater_than_or_equals }
+			}
+			add_to_variable = { var = NAM_revenge_readiness value = -10 }
+			NAM_revenge_readiness_clamp = yes
+			add_timed_idea = { idea = NAM_judas_officers_unrest days = 60 }
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_delta_input value = -5 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_delta_input value = -8 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 6 }
+			set_temp_variable = { var = NAM_board_delta_input value = -3 }
+			NAM_board_support_change = yes
+		}
+		else = {
+			add_to_variable = { var = NAM_revenge_readiness value = 15 }
+			NAM_revenge_readiness_clamp = yes
+			army_experience = 25
+			add_timed_idea = { idea = NAM_judas_staff_oath days = 120 }
+			set_temp_variable = { var = NAM_board_company_input value = 2 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_delta_input value = 12 }
+			NAM_board_support_change = yes
+			set_temp_variable = { var = NAM_board_company_input value = 6 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+		}
+		NAM_judas_karamyshev_record_operation = yes
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_motion^3 value = 2 compare = equals }
+			}
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_result_input value = 1 }
+			NAM_board_settle_resolution = yes
+			remove_mission = NAM_board_resolution_navis
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_motion^6 value = 5 compare = equals }
+			}
+			set_temp_variable = { var = NAM_board_company_input value = 6 }
+			set_temp_variable = { var = NAM_board_result_input value = 1 }
+			NAM_board_settle_resolution = yes
+			remove_mission = NAM_board_resolution_reidbank
+		}
+		NAM_judas_karamyshev_close = yes
+	}
 	if = {
 		limit = { has_character = NAM_Rostislav_Karamyshev }
 		retire_character = NAM_Rostislav_Karamyshev
@@ -9109,6 +9400,7 @@ NAM_board_queue_recount = {
 	if = {
 		limit = {
 			has_country_flag = NAM_corp_takeover
+			NOT = { check_variable = { NAM_board_ended = 1 } }
 			NOT = { has_country_flag = NAM_board_recount_queued }
 		}
 		set_country_flag = NAM_board_recount_queued
@@ -9315,6 +9607,9 @@ NAM_board_install_chairman = {
 			}
 		}
 		set_variable = { var = NAM_board_chair value = NAM_board_incoming_chair }
+		set_variable = { var = NAM_board_sig_trust_plan_uses value = 0 }
+		set_variable = { var = NAM_board_sig_out_of_turn_uses value = 0 }
+		set_variable = { var = NAM_board_sig_contract_recruitment_uses value = 0 }
 		if = {
 			limit = {
 				check_variable = { NAM_board_incoming_chair > 0 }
@@ -9496,52 +9791,79 @@ NAM_judas_refresh_targets = {
 	}
 }
 
+NAM_judas_space_clock = {
+	set_temp_variable = { var = NAM_judas_spaced_day value = NAM_judas_day_input }
+	set_temp_variable = { var = NAM_judas_spacing_previous value = -1 }
+	while_loop_effect = {
+		limit = { NOT = { check_variable = { var = NAM_judas_spaced_day value = NAM_judas_spacing_previous compare = equals } } }
+		set_temp_variable = { var = NAM_judas_spacing_previous value = NAM_judas_spaced_day }
+		if = {
+			limit = {
+				has_variable = NAM_board_session_day
+			}
+			set_temp_variable = { var = NAM_judas_gap value = NAM_judas_spaced_day }
+			subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_session_day }
+			if = {
+				limit = {
+					check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
+					check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
+				}
+				set_temp_variable = { var = NAM_judas_spaced_day value = NAM_board_session_day }
+				add_to_temp_variable = { var = NAM_judas_spaced_day value = 7 }
+			}
+		}
+		if = {
+			limit = {
+				has_variable = NAM_board_meeting_day
+			}
+			set_temp_variable = { var = NAM_judas_gap value = NAM_judas_spaced_day }
+			subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_meeting_day }
+			if = {
+				limit = {
+					check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
+					check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
+				}
+				set_temp_variable = { var = NAM_judas_spaced_day value = NAM_board_meeting_day }
+				add_to_temp_variable = { var = NAM_judas_spaced_day value = 7 }
+			}
+		}
+		if = {
+			limit = {
+				has_variable = NAM_board_previous_session_day
+			}
+			set_temp_variable = { var = NAM_judas_gap value = NAM_judas_spaced_day }
+			subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_previous_session_day }
+			if = {
+				limit = {
+					check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
+					check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
+				}
+				set_temp_variable = { var = NAM_judas_spaced_day value = NAM_board_previous_session_day }
+				add_to_temp_variable = { var = NAM_judas_spaced_day value = 7 }
+			}
+		}
+		if = {
+			limit = {
+				has_variable = NAM_board_previous_meeting_day
+			}
+			set_temp_variable = { var = NAM_judas_gap value = NAM_judas_spaced_day }
+			subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_previous_meeting_day }
+			if = {
+				limit = {
+					check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
+					check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
+				}
+				set_temp_variable = { var = NAM_judas_spaced_day value = NAM_board_previous_meeting_day }
+				add_to_temp_variable = { var = NAM_judas_spaced_day value = 7 }
+			}
+		}
+	}
+}
+
 NAM_judas_weber_space_clock = {
-	if = {
-		limit = {
-			has_variable = NAM_board_session_day
-		}
-		set_temp_variable = { var = NAM_judas_gap value = NAM_judas_weber_day }
-		subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_session_day }
-		if = {
-			limit = {
-				check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
-				check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
-			}
-			set_variable = { var = NAM_judas_weber_day value = NAM_board_session_day }
-			add_to_variable = { var = NAM_judas_weber_day value = 7 }
-		}
-	}
-	if = {
-		limit = {
-			has_variable = NAM_board_meeting_day
-		}
-		set_temp_variable = { var = NAM_judas_gap value = NAM_judas_weber_day }
-		subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_meeting_day }
-		if = {
-			limit = {
-				check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
-				check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
-			}
-			set_variable = { var = NAM_judas_weber_day value = NAM_board_meeting_day }
-			add_to_variable = { var = NAM_judas_weber_day value = 7 }
-		}
-	}
-	if = {
-		limit = {
-			has_variable = NAM_board_previous_session_day
-		}
-		set_temp_variable = { var = NAM_judas_gap value = NAM_judas_weber_day }
-		subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_previous_session_day }
-		if = {
-			limit = {
-				check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
-				check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
-			}
-			set_variable = { var = NAM_judas_weber_day value = NAM_board_previous_session_day }
-			add_to_variable = { var = NAM_judas_weber_day value = 7 }
-		}
-	}
+	set_temp_variable = { var = NAM_judas_day_input value = NAM_judas_weber_day }
+	NAM_judas_space_clock = yes
+	set_variable = { var = NAM_judas_weber_day value = NAM_judas_spaced_day }
 }
 
 NAM_judas_weber_adjust_clock = {
@@ -9550,8 +9872,11 @@ NAM_judas_weber_adjust_clock = {
 	set_temp_variable = { var = NAM_judas_adjust value = NAM_judas_weber_day }
 	subtract_from_temp_variable = { var = NAM_judas_adjust value = NAM_judas_old_day }
 	add_days_mission_timeout = { mission = NAM_judas_weber_meeting days = NAM_judas_adjust }
-	set_variable = { var = NAM_judas_weber_lock value = NAM_judas_weber_day }
-	add_to_variable = { var = NAM_judas_weber_lock value = -14 }
+	if = {
+		limit = { NAM_judas_weber_unlocked_target = yes }
+		set_variable = { var = NAM_judas_weber_lock value = NAM_judas_weber_day }
+		add_to_variable = { var = NAM_judas_weber_lock value = -14 }
+	}
 }
 
 NAM_judas_weber_arm = {
@@ -9579,14 +9904,25 @@ NAM_judas_weber_arm = {
 			add_to_variable = { var = NAM_judas_weber_day value = 49 }
 		}
 		NAM_judas_weber_space_clock = yes
-		set_variable = { var = NAM_judas_weber_lock value = NAM_judas_weber_day }
-		add_to_variable = { var = NAM_judas_weber_lock value = -14 }
+		if = {
+			limit = { NAM_judas_weber_unlocked_target = yes }
+			set_variable = { var = NAM_judas_weber_lock value = NAM_judas_weber_day }
+			add_to_variable = { var = NAM_judas_weber_lock value = -14 }
+		}
 		activate_mission = NAM_judas_weber_meeting
 		set_temp_variable = { var = NAM_judas_adjust value = NAM_judas_weber_day }
 		subtract_from_temp_variable = { var = NAM_judas_adjust value = global.num_days }
 		add_to_temp_variable = { var = NAM_judas_adjust value = -50 }
 		add_days_mission_timeout = { mission = NAM_judas_weber_meeting days = NAM_judas_adjust }
 		NAM_judas_refresh_targets = yes
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_weber_committees
+			check_variable = { var = NAM_judas_weber value = 20 compare = less_than }
+			NOT = { has_variable = NAM_judas_weber_remaining }
+		}
+		set_variable = { var = NAM_judas_weber_remaining value = 50 }
 	}
 }
 
@@ -9604,61 +9940,19 @@ NAM_judas_weber_due = {
 		country_event = { id = ADISCORD_nam_resource_war.450 }
 	}
 	if = {
-	limit = {
-		has_idea = NAM_judas_weber_committees
-		check_variable = { var = NAM_judas_weber value = 20 compare = less_than }
+		limit = {
+			has_idea = NAM_judas_weber_committees
+			check_variable = { var = NAM_judas_weber value = 20 compare = less_than }
+		}
+		set_variable = { var = NAM_judas_weber_remaining value = 50 }
 	}
-	set_variable = { var = NAM_judas_weber_remaining value = 50 }
-}
 	country_event = { id = ADISCORD_nam_resource_war.452 days = 1 }
 }
 
 NAM_judas_karamyshev_space_clock = {
-	if = {
-		limit = {
-			has_variable = NAM_board_session_day
-		}
-		set_temp_variable = { var = NAM_judas_gap value = NAM_judas_karamyshev_day }
-		subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_session_day }
-		if = {
-			limit = {
-				check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
-				check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
-			}
-			set_variable = { var = NAM_judas_karamyshev_day value = NAM_board_session_day }
-			add_to_variable = { var = NAM_judas_karamyshev_day value = 7 }
-		}
-	}
-	if = {
-		limit = {
-			has_variable = NAM_board_meeting_day
-		}
-		set_temp_variable = { var = NAM_judas_gap value = NAM_judas_karamyshev_day }
-		subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_meeting_day }
-		if = {
-			limit = {
-				check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
-				check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
-			}
-			set_variable = { var = NAM_judas_karamyshev_day value = NAM_board_meeting_day }
-			add_to_variable = { var = NAM_judas_karamyshev_day value = 7 }
-		}
-	}
-	if = {
-		limit = {
-			has_variable = NAM_board_previous_session_day
-		}
-		set_temp_variable = { var = NAM_judas_gap value = NAM_judas_karamyshev_day }
-		subtract_from_temp_variable = { var = NAM_judas_gap value = NAM_board_previous_session_day }
-		if = {
-			limit = {
-				check_variable = { var = NAM_judas_gap value = -7 compare = greater_than }
-				check_variable = { var = NAM_judas_gap value = 7 compare = less_than }
-			}
-			set_variable = { var = NAM_judas_karamyshev_day value = NAM_board_previous_session_day }
-			add_to_variable = { var = NAM_judas_karamyshev_day value = 7 }
-		}
-	}
+	set_temp_variable = { var = NAM_judas_day_input value = NAM_judas_karamyshev_day }
+	NAM_judas_space_clock = yes
+	set_variable = { var = NAM_judas_karamyshev_day value = NAM_judas_spaced_day }
 }
 
 NAM_judas_karamyshev_adjust_clock = {
@@ -9667,8 +9961,11 @@ NAM_judas_karamyshev_adjust_clock = {
 	set_temp_variable = { var = NAM_judas_adjust value = NAM_judas_karamyshev_day }
 	subtract_from_temp_variable = { var = NAM_judas_adjust value = NAM_judas_old_day }
 	add_days_mission_timeout = { mission = NAM_judas_karamyshev_meeting days = NAM_judas_adjust }
-	set_variable = { var = NAM_judas_karamyshev_lock value = NAM_judas_karamyshev_day }
-	add_to_variable = { var = NAM_judas_karamyshev_lock value = -14 }
+	if = {
+		limit = { NAM_judas_karamyshev_unlocked_target = yes }
+		set_variable = { var = NAM_judas_karamyshev_lock value = NAM_judas_karamyshev_day }
+		add_to_variable = { var = NAM_judas_karamyshev_lock value = -14 }
+	}
 }
 
 NAM_judas_karamyshev_arm = {
@@ -9696,14 +9993,25 @@ NAM_judas_karamyshev_arm = {
 			add_to_variable = { var = NAM_judas_karamyshev_day value = 59 }
 		}
 		NAM_judas_karamyshev_space_clock = yes
-		set_variable = { var = NAM_judas_karamyshev_lock value = NAM_judas_karamyshev_day }
-		add_to_variable = { var = NAM_judas_karamyshev_lock value = -14 }
+		if = {
+			limit = { NAM_judas_karamyshev_unlocked_target = yes }
+			set_variable = { var = NAM_judas_karamyshev_lock value = NAM_judas_karamyshev_day }
+			add_to_variable = { var = NAM_judas_karamyshev_lock value = -14 }
+		}
 		activate_mission = NAM_judas_karamyshev_meeting
 		set_temp_variable = { var = NAM_judas_adjust value = NAM_judas_karamyshev_day }
 		subtract_from_temp_variable = { var = NAM_judas_adjust value = global.num_days }
 		add_to_temp_variable = { var = NAM_judas_adjust value = -60 }
 		add_days_mission_timeout = { mission = NAM_judas_karamyshev_meeting days = NAM_judas_adjust }
 		NAM_judas_refresh_targets = yes
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_karamyshev_watch
+			check_variable = { var = NAM_judas_karamyshev value = 20 compare = less_than }
+			NOT = { has_variable = NAM_judas_karamyshev_remaining }
+		}
+		set_variable = { var = NAM_judas_karamyshev_remaining value = 60 }
 	}
 }
 
@@ -9721,12 +10029,12 @@ NAM_judas_karamyshev_due = {
 		country_event = { id = ADISCORD_nam_resource_war.451 }
 	}
 	if = {
-	limit = {
-		has_idea = NAM_judas_karamyshev_watch
-		check_variable = { var = NAM_judas_karamyshev value = 20 compare = less_than }
+		limit = {
+			has_idea = NAM_judas_karamyshev_watch
+			check_variable = { var = NAM_judas_karamyshev value = 20 compare = less_than }
+		}
+		set_variable = { var = NAM_judas_karamyshev_remaining value = 60 }
 	}
-	set_variable = { var = NAM_judas_karamyshev_remaining value = 60 }
-}
 	country_event = { id = ADISCORD_nam_resource_war.453 days = 1 }
 }
 
@@ -9750,7 +10058,10 @@ NAM_judas_support_change = {
 			clamp_variable = { var = NAM_judas_weber_remaining min = 1 }
 			remove_mission = NAM_judas_weber_meeting
 			clear_variable = NAM_judas_weber_day
-			clear_variable = NAM_judas_weber_lock
+			if = {
+				limit = { NAM_judas_weber_unlocked_target = yes }
+				clear_variable = NAM_judas_weber_lock
+			}
 		}
 		if = {
 			limit = {
@@ -9777,7 +10088,10 @@ NAM_judas_support_change = {
 			clamp_variable = { var = NAM_judas_karamyshev_remaining min = 1 }
 			remove_mission = NAM_judas_karamyshev_meeting
 			clear_variable = NAM_judas_karamyshev_day
-			clear_variable = NAM_judas_karamyshev_lock
+			if = {
+				limit = { NAM_judas_karamyshev_unlocked_target = yes }
+				clear_variable = NAM_judas_karamyshev_lock
+			}
 		}
 		if = {
 			limit = {
@@ -9907,8 +10221,23 @@ NAM_judas_buy_notes_finish = {
 				set_temp_variable = { var = NAM_judas_move value = NAM_judas_weber_day }
 				subtract_from_temp_variable = { var = NAM_judas_move value = NAM_judas_saved_due }
 				add_days_mission_timeout = { mission = NAM_judas_weber_meeting days = NAM_judas_move }
-				set_variable = { var = NAM_judas_weber_lock value = NAM_judas_weber_day }
-				add_to_variable = { var = NAM_judas_weber_lock value = -14 }
+				if = {
+					limit = { NAM_judas_weber_unlocked_target = yes }
+					set_variable = { var = NAM_judas_weber_lock value = NAM_judas_weber_day }
+					add_to_variable = { var = NAM_judas_weber_lock value = -14 }
+				}
+			}
+			else = {
+				if = {
+					limit = { NOT = { has_variable = NAM_judas_weber_remaining } }
+					set_variable = { var = NAM_judas_weber_remaining value = 49 }
+					if = {
+						limit = { check_variable = { var = NAM_judas_weber value = 60 compare = greater_than_or_equals } }
+						set_variable = { var = NAM_judas_weber_remaining value = 39 }
+					}
+				}
+				add_to_variable = { var = NAM_judas_weber_remaining value = -10 }
+				clamp_variable = { var = NAM_judas_weber_remaining min = 1 }
 			}
 			NAM_board_queue_recount = yes
 		}
@@ -10315,10 +10644,373 @@ NAM_judas_disarm_cutters_finish = {
 	}
 }
 
+NAM_judas_return_convoys = {
+	if = {
+		limit = {
+			check_variable = { var = NAM_judas_convoy_receipts^num value = 0 compare = greater_than }
+		}
+		add_equipment_to_stockpile = { type = convoy_1 amount = NAM_judas_convoy_receipts^0 producer = NAM }
+		remove_from_array = { array = NAM_judas_convoy_receipts index = 0 }
+	}
+}
+
+NAM_judas_weber_ignore = {
+	if = {
+		limit = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_weber_committees
+			has_variable = NAM_judas_weber_pending
+		}
+		if = {
+			limit = {
+				has_idea = NAM_judas_dock_walkout
+			}
+			remove_ideas = NAM_judas_dock_walkout
+		}
+		set_variable = { var = NAM_judas_walkout_target value = NAM_judas_weber_pending }
+		add_timed_idea = { idea = NAM_judas_dock_walkout days = 60 }
+		if = {
+			limit = {
+				check_variable = { var = NAM_judas_weber_pending value = 0 compare = greater_than }
+			}
+			set_temp_variable = { var = NAM_board_company_input value = NAM_judas_weber_pending }
+			set_temp_variable = { var = NAM_board_delta_input value = -10 }
+			NAM_board_support_change = yes
+		}
+		NAM_board_queue_recount = yes
+		set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+		set_temp_variable = { var = NAM_judas_delta_input value = 5 }
+		NAM_judas_support_change = yes
+	}
+	clear_variable = NAM_judas_weber_pending
+}
+
+NAM_judas_weber_concede = {
+	if = {
+		limit = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_weber_committees
+			has_variable = NAM_judas_weber_pending
+			check_variable = { var = NAM_corp_capital value = 40 compare = greater_than_or_equals }
+		}
+		set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+		NAM_corp_capital_add = yes
+		if = {
+			limit = {
+				check_variable = { var = NAM_judas_weber_pending value = 0 compare = greater_than }
+			}
+			set_temp_variable = { var = NAM_board_company_input value = NAM_judas_weber_pending }
+			set_temp_variable = { var = NAM_board_delta_input value = -5 }
+			NAM_board_support_change = yes
+		}
+		set_temp_variable = { var = NAM_board_company_input value = 5 }
+		set_temp_variable = { var = NAM_board_delta_input value = -5 }
+		NAM_board_support_change = yes
+		set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+		set_temp_variable = { var = NAM_judas_delta_input value = 10 }
+		NAM_judas_support_change = yes
+		clear_variable = NAM_judas_weber_pending
+	}
+}
+
+NAM_judas_weber_force = {
+	if = {
+		limit = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_weber_committees
+			has_variable = NAM_judas_weber_pending
+			OR = {
+				NAM_judas_willing_delegate = yes
+				NAM_judas_willing_arktur = yes
+			}
+		}
+		if = {
+			limit = {
+				NAM_judas_willing_delegate = yes
+			}
+			set_temp_variable = { var = NAM_board_company_input value = NAM_judas_weber_pending }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+		}
+		else = {
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+		}
+		NAM_judas_weber_record_operation = yes
+		add_timed_idea = { idea = NAM_judas_port_arrests days = 60 }
+		set_temp_variable = { var = NAM_board_company_input value = 5 }
+		set_temp_variable = { var = NAM_board_delta_input value = 5 }
+		NAM_board_support_change = yes
+		set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+		set_temp_variable = { var = NAM_judas_delta_input value = -8 }
+		NAM_judas_support_change = yes
+		clear_variable = NAM_judas_weber_pending
+	}
+}
+
+NAM_judas_karamyshev_ignore = {
+	if = {
+		limit = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_karamyshev_watch
+			has_variable = NAM_judas_karamyshev_pending
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_judas_karamyshev_pending value = 2 compare = equals }
+			}
+			set_temp_variable = { var = NAM_judas_loan value = 0 }
+			if = {
+				limit = {
+					has_navy_size = { size > 3 type = convoy }
+				}
+				set_temp_variable = { var = NAM_judas_loan value = 4 }
+			}
+			else_if = {
+				limit = {
+					has_navy_size = { size > 2 type = convoy }
+				}
+				set_temp_variable = { var = NAM_judas_loan value = 3 }
+			}
+			else_if = {
+				limit = {
+					has_navy_size = { size > 1 type = convoy }
+				}
+				set_temp_variable = { var = NAM_judas_loan value = 2 }
+			}
+			else_if = {
+				limit = {
+					has_navy_size = { size > 0 type = convoy }
+				}
+				set_temp_variable = { var = NAM_judas_loan value = 1 }
+			}
+			if = {
+				limit = {
+					check_variable = { var = NAM_judas_loan value = 0 compare = greater_than }
+				}
+				add_to_array = { array = NAM_judas_convoy_receipts value = NAM_judas_loan }
+				multiply_temp_variable = { var = NAM_judas_loan value = -1 }
+				add_equipment_to_stockpile = { type = convoy_1 amount = NAM_judas_loan producer = NAM }
+				country_event = { id = ADISCORD_nam_resource_war.454 days = 90 }
+			}
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_delta_input value = -8 }
+			NAM_board_support_change = yes
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_judas_karamyshev_pending value = 3 compare = equals }
+			}
+			add_timed_idea = { idea = NAM_judas_drill_boycott days = 60 }
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_delta_input value = -8 }
+			NAM_board_support_change = yes
+		}
+		else = {
+			add_to_variable = { var = NAM_revenge_readiness value = -10 }
+			NAM_revenge_readiness_clamp = yes
+			add_timed_idea = { idea = NAM_judas_drill_block days = 60 }
+		}
+		set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+		set_temp_variable = { var = NAM_judas_delta_input value = 5 }
+		NAM_judas_support_change = yes
+	}
+	clear_variable = NAM_judas_karamyshev_pending
+}
+
+NAM_judas_karamyshev_concede = {
+	if = {
+		limit = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_karamyshev_watch
+			has_variable = NAM_judas_karamyshev_pending
+			check_variable = { var = NAM_corp_capital value = 35 compare = greater_than_or_equals }
+		}
+		set_temp_variable = { var = NAM_corp_capital_change value = -35 }
+		NAM_corp_capital_add = yes
+		set_temp_variable = { var = NAM_board_company_input value = 4 }
+		set_temp_variable = { var = NAM_board_delta_input value = -5 }
+		NAM_board_support_change = yes
+		set_temp_variable = { var = NAM_board_company_input value = 6 }
+		set_temp_variable = { var = NAM_board_delta_input value = -3 }
+		NAM_board_support_change = yes
+		set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+		set_temp_variable = { var = NAM_judas_delta_input value = 10 }
+		NAM_judas_support_change = yes
+		clear_variable = NAM_judas_karamyshev_pending
+	}
+}
+
+NAM_judas_karamyshev_force = {
+	if = {
+		limit = {
+			NAM_board_operable = yes
+			has_idea = NAM_judas_karamyshev_watch
+			has_variable = NAM_judas_karamyshev_pending
+			OR = {
+				NAM_judas_willing_navis = yes
+				NAM_judas_willing_arktur = yes
+			}
+		}
+		if = {
+			limit = {
+				NAM_judas_willing_navis = yes
+			}
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+		}
+		else = {
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+		}
+		NAM_judas_karamyshev_record_operation = yes
+		add_to_variable = { var = NAM_revenge_readiness value = -8 }
+		NAM_revenge_readiness_clamp = yes
+		set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+		set_temp_variable = { var = NAM_judas_delta_input value = -8 }
+		NAM_judas_support_change = yes
+		clear_variable = NAM_judas_karamyshev_pending
+	}
+}
+
+NAM_judas_weber_close = {
+	remove_mission = NAM_judas_weber_meeting
+	if = {
+		limit = {
+			has_variable = NAM_judas_buy_notes_receipt
+		}
+		NAM_judas_buy_notes_refund = yes
+		remove_decision = NAM_judas_buy_notes
+	}
+	if = {
+		limit = {
+			has_variable = NAM_judas_unseat_proxies_receipt
+		}
+		NAM_judas_unseat_proxies_refund = yes
+		remove_decision = NAM_judas_unseat_proxies
+	}
+	if = {
+		limit = {
+			has_variable = NAM_judas_exchange_hiring_receipt
+		}
+		NAM_judas_exchange_hiring_refund = yes
+		remove_decision = NAM_judas_exchange_hiring
+	}
+	if = {
+		limit = {
+			has_variable = NAM_judas_pay_moderates_receipt
+		}
+		NAM_judas_pay_moderates_refund = yes
+		remove_decision = NAM_judas_pay_moderates
+	}
+	if = {
+		limit = {
+			has_variable = NAM_judas_disperse_mourners_receipt
+		}
+		NAM_judas_disperse_mourners_refund = yes
+		remove_decision = NAM_judas_disperse_mourners
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_weber_committees
+		}
+		remove_ideas = NAM_judas_weber_committees
+	}
+	clear_variable = NAM_judas_weber
+	clear_variable = NAM_judas_weber_target
+	clear_variable = NAM_judas_weber_day
+	clear_variable = NAM_judas_weber_lock
+	clear_variable = NAM_judas_weber_pending
+	clear_variable = NAM_judas_weber_remaining
+	clear_variable = NAM_judas_last_op_weber
+	clear_variable = NAM_judas_weber_reason
+	clear_variable = NAM_judas_favour_reason
+	clear_variable = NAM_judas_favoured
+}
+
+NAM_judas_karamyshev_close = {
+	remove_mission = NAM_judas_karamyshev_meeting
+	if = {
+		limit = {
+			has_variable = NAM_judas_register_patents_receipt
+		}
+		NAM_judas_register_patents_refund = yes
+		remove_decision = NAM_judas_register_patents
+	}
+	if = {
+		limit = {
+			has_variable = NAM_judas_appoint_masters_receipt
+		}
+		NAM_judas_appoint_masters_refund = yes
+		remove_decision = NAM_judas_appoint_masters
+	}
+	if = {
+		limit = {
+			has_variable = NAM_judas_buy_mortgages_receipt
+		}
+		NAM_judas_buy_mortgages_refund = yes
+		remove_decision = NAM_judas_buy_mortgages
+	}
+	if = {
+		limit = {
+			has_variable = NAM_judas_pay_captains_receipt
+		}
+		NAM_judas_pay_captains_refund = yes
+		remove_decision = NAM_judas_pay_captains
+	}
+	if = {
+		limit = {
+			has_variable = NAM_judas_disarm_cutters_receipt
+		}
+		NAM_judas_disarm_cutters_refund = yes
+		remove_decision = NAM_judas_disarm_cutters
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_karamyshev_watch
+		}
+		remove_ideas = NAM_judas_karamyshev_watch
+	}
+	clear_variable = NAM_judas_karamyshev
+	clear_variable = NAM_judas_karamyshev_target
+	clear_variable = NAM_judas_karamyshev_day
+	clear_variable = NAM_judas_karamyshev_lock
+	clear_variable = NAM_judas_karamyshev_pending
+	clear_variable = NAM_judas_karamyshev_remaining
+	clear_variable = NAM_judas_last_op_karamyshev
+	clear_variable = NAM_judas_preparation
+}
+
 NAM_board_initialize = {
 	if = {
 		limit = { NOT = { has_variable = NAM_board_lot_rail } }
 		set_variable = { var = NAM_board_lot_rail value = 0 }
+		set_variable = { var = NAM_board_focus_pp value = 0 }
+		set_variable = { var = NAM_board_focus_stab value = 0 }
+		set_variable = { var = NAM_board_focus_org value = 0 }
+		set_variable = { var = NAM_board_focus_output value = 0 }
+		set_variable = { var = NAM_board_focus_construction value = 0 }
+		set_variable = { var = NAM_board_focus_goods value = 0 }
+		set_variable = { var = NAM_board_chair_vote value = 0 }
+		set_variable = { var = NAM_board_sig_oil_advance_uses value = 0 }
+		set_variable = { var = NAM_board_sig_trust_plan_uses value = 0 }
+		set_variable = { var = NAM_board_sig_out_of_turn_uses value = 0 }
+		set_variable = { var = NAM_board_sig_contract_recruitment_uses value = 0 }
+		set_variable = { var = NAM_board_loren_debt value = 0 }
+		set_variable = { var = NAM_board_loan_balance value = 0 }
+		set_variable = { var = NAM_board_dividend_quote value = 0 }
+		set_variable = { var = NAM_board_meeting_winner value = 0 }
+		set_variable = { var = NAM_board_meeting_sectors_1 value = 0 }
+		set_variable = { var = NAM_board_meeting_sectors_2 value = 0 }
+		set_variable = { var = NAM_board_meeting_sectors_3 value = 0 }
+		set_variable = { var = NAM_board_meeting_sectors_4 value = 0 }
+		set_variable = { var = NAM_board_meeting_sectors_5 value = 0 }
+		set_variable = { var = NAM_board_meeting_sectors_6 value = 0 }
+		set_variable = { var = NAM_board_meeting_day value = -1 }
+		set_variable = { var = NAM_board_previous_meeting_day value = -7 }
 		set_variable = { var = NAM_judas_weber value = 70 }
 		set_variable = { var = NAM_judas_karamyshev value = 60 }
 		set_variable = { var = NAM_judas_preparation value = 1 }
@@ -10628,13 +11320,29 @@ NAM_board_close_tender = {
 		}
 	}
 	if = {
-	limit = {
-		has_idea = NAM_judas_weber_committees
-		check_variable = { var = NAM_board_bid_winner value = 0 compare = greater_than }
+		limit = {
+			has_idea = NAM_judas_weber_committees
+			check_variable = { var = NAM_board_bid_winner value = 0 compare = greater_than }
+		}
+		set_variable = { var = NAM_judas_favoured value = NAM_board_bid_winner }
+		set_variable = { var = NAM_judas_favour_reason value = 1 }
 	}
-	set_variable = { var = NAM_judas_favoured value = NAM_board_bid_winner }
-	set_variable = { var = NAM_judas_favour_reason value = 1 }
-}
+	if = {
+		limit = {
+			has_completed_focus = NAM_board_quay_chain
+			check_variable = { var = NAM_board_bid_winner value = 0 compare = greater_than }
+		}
+		set_temp_variable = { var = NAM_corp_capital_change value = 20 }
+		NAM_corp_capital_add = yes
+	}
+	if = {
+		limit = {
+			has_completed_focus = NAM_board_lawyers_of_both_shores
+			check_variable = { var = NAM_board_bid_winner value = 0 compare = greater_than }
+		}
+		set_temp_variable = { var = NAM_corp_capital_change value = 10 }
+		NAM_corp_capital_add = yes
+	}
 	NAM_board_recount = yes
 	NAM_board_deliver_bid_cargo = yes
 }
@@ -11068,7 +11776,7 @@ NAM_board_read_agendas = {
 	}
 }
 
-# A running resolution ranks below a repeat appearance; within either tier a tender loss takes precedence.
+# An empty agenda is the last resort; among usable agendas a tender loss overrides both speaker exclusions.
 NAM_board_pick_speaker = {
 	set_temp_variable = { var = NAM_board_excluded value = NAM_board_company_input }
 	set_temp_variable = { var = NAM_board_best value = 0 }
@@ -11110,7 +11818,11 @@ NAM_board_pick_speaker = {
 				limit = {
 					check_variable = { var = NAM_board_loss_until^NAM_board_candidate value = global.num_days compare = greater_than }
 				}
-				add_to_temp_variable = { var = NAM_board_priority value = 1 }
+				set_temp_variable = { var = NAM_board_priority value = 1 }
+			}
+			if = {
+				limit = { check_variable = { var = NAM_board_agenda^NAM_board_candidate value = 0 compare = equals } }
+				add_to_temp_variable = { var = NAM_board_priority value = -10 }
 			}
 			if = {
 				limit = {
@@ -11136,7 +11848,370 @@ NAM_board_pick_speaker = {
 	}
 }
 
+NAM_board_sig_trust_plan_refund = {
+	if = {
+		limit = { has_variable = NAM_board_sig_trust_plan_receipt }
+		clear_variable = NAM_board_sig_trust_plan_receipt
+		add_political_power = 20
+		set_temp_variable = { var = NAM_corp_capital_change value = 90 }
+		NAM_corp_capital_add = yes
+	}
+}
+
+NAM_board_sig_trust_plan_deliver = {
+	if = {
+		limit = {
+			has_variable = NAM_board_sig_trust_plan_receipt
+			NAM_board_operable = yes
+			var:NAM_board_sig_trust_plan_receipt = { NAM_board_trust_plan_site = yes }
+		}
+		var:NAM_board_sig_trust_plan_receipt = { add_building_construction = { type = arms_factory level = 1 instant_build = yes } }
+		clear_variable = NAM_board_sig_trust_plan_receipt
+	}
+	else = { NAM_board_sig_trust_plan_refund = yes }
+}
+
+NAM_board_sig_out_of_turn_refund = {
+	if = {
+		limit = { has_variable = NAM_board_sig_out_of_turn_receipt }
+		clear_variable = NAM_board_sig_out_of_turn_receipt
+		add_political_power = 25
+		set_temp_variable = { var = NAM_corp_capital_change value = 70 }
+		NAM_corp_capital_add = yes
+	}
+}
+
+NAM_board_sig_out_of_turn_deliver = {
+	if = {
+		limit = {
+			has_variable = NAM_board_sig_out_of_turn_receipt
+			NAM_board_operable = yes
+		}
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = NAM }
+		add_equipment_to_stockpile = { type = artillery_equipment amount = 36 producer = NAM }
+		if = {
+			limit = { NOT = { has_template = "Arktur Guard" } }
+			division_template = {
+				name = "Arktur Guard"
+				template_counter = 78
+				is_locked = yes
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 2 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+					infantry = { x = 1 y = 2 }
+				}
+				support = { artillery = { x = 0 y = 0 } }
+			}
+		}
+		capital_scope = {
+			create_unit = {
+				division = "division_template = \"Arktur Guard\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+		clear_variable = NAM_board_sig_out_of_turn_receipt
+	}
+	else = { NAM_board_sig_out_of_turn_refund = yes }
+}
+
+NAM_board_sig_contract_recruitment_refund = {
+	if = {
+		limit = { has_variable = NAM_board_sig_contract_recruitment_receipt }
+		clear_variable = NAM_board_sig_contract_recruitment_receipt
+		add_political_power = 30
+		set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+		NAM_corp_capital_add = yes
+	}
+}
+
+NAM_board_sig_contract_recruitment_deliver = {
+	if = {
+		limit = {
+			has_variable = NAM_board_sig_contract_recruitment_receipt
+			NAM_board_operable = yes
+		}
+		add_manpower = 5000
+		set_temp_variable = { var = NAM_judas_camp_input value = 1 }
+		set_temp_variable = { var = NAM_judas_delta_input value = 5 }
+		NAM_judas_support_change = yes
+		clear_variable = NAM_board_sig_contract_recruitment_receipt
+	}
+	else = { NAM_board_sig_contract_recruitment_refund = yes }
+}
+
+NAM_board_ai_monthly = {
+	if = {
+		limit = {
+			is_ai = yes
+			NAM_board_operable = yes
+		}
+		if = {
+			limit = { check_variable = { var = NAM_board_motion^1 value = 4 compare = equals } }
+			set_country_flag = NAM_board_ai_seat_1
+		}
+		else = { clr_country_flag = NAM_board_ai_seat_1 }
+		if = {
+			limit = { check_variable = { var = NAM_board_motion^6 value = 3 compare = equals } }
+			set_country_flag = NAM_board_ai_seat_6
+		}
+		else = { clr_country_flag = NAM_board_ai_seat_6 }
+		if = {
+			limit = { check_variable = { var = NAM_board_motion^4 value = 2 compare = equals } }
+			set_country_flag = NAM_board_ai_seat_4
+		}
+		else = { clr_country_flag = NAM_board_ai_seat_4 }
+		if = {
+			limit = { check_variable = { var = NAM_board_motion^2 value = 4 compare = equals } }
+			set_country_flag = NAM_board_ai_seat_2
+		}
+		else = { clr_country_flag = NAM_board_ai_seat_2 }
+		if = {
+			limit = { check_variable = { var = NAM_board_motion^5 value = 3 compare = equals } }
+			set_country_flag = NAM_board_ai_seat_5
+		}
+		else = { clr_country_flag = NAM_board_ai_seat_5 }
+		if = {
+			limit = { check_variable = { var = NAM_board_motion^3 value = 4 compare = equals } }
+			set_country_flag = NAM_board_ai_seat_3
+		}
+		else = { clr_country_flag = NAM_board_ai_seat_3 }
+		set_temp_variable = { var = NAM_board_ai_target value = 0 }
+		set_temp_variable = { var = NAM_board_ai_trust value = 101 }
+		for_loop_effect = {
+			start = 1
+			end = 7
+			value = NAM_board_ai_company
+			if = {
+				limit = {
+					check_variable = { var = NAM_board_ballot^NAM_board_ai_company value = 0 compare = greater_than }
+					check_variable = { var = NAM_board_support^NAM_board_ai_company value = NAM_board_ai_trust compare = less_than }
+				}
+				set_temp_variable = { var = NAM_board_ai_target value = NAM_board_ai_company }
+				set_temp_variable = { var = NAM_board_ai_trust value = NAM_board_support^NAM_board_ai_company }
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_ai_target value = 0 compare = greater_than }
+				check_variable = { var = NAM_board_ai_trust value = 65 compare = less_than }
+				check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
+				check_variable = { var = NAM_board_lobby_target value = 0 compare = equals }
+				check_variable = { var = NAM_board_lobby_day^NAM_board_ai_target value = global.num_days compare = less_than_or_equals }
+				NOT = { has_political_power < 30 }
+				check_variable = { var = NAM_corp_capital value = 25 compare = greater_than_or_equals }
+			}
+			set_variable = { var = NAM_board_selected value = NAM_board_ai_target }
+			activate_decision = NAM_board_lobby_company
+		}
+		else_if = {
+			limit = {
+				NAM_judas_disperse_mourners_eligible = yes
+				NOT = { has_political_power < 20 }
+			}
+			activate_decision = NAM_judas_disperse_mourners
+		}
+		else_if = {
+			limit = {
+				NAM_judas_disarm_cutters_eligible = yes
+				NOT = { has_political_power < 20 }
+			}
+			activate_decision = NAM_judas_disarm_cutters
+		}
+		else_if = {
+			limit = {
+				NAM_judas_exchange_hiring_eligible = yes
+				NOT = { has_political_power < 20 }
+				NOT = { has_manpower < 1500 }
+			}
+			activate_decision = NAM_judas_exchange_hiring
+		}
+		else_if = {
+			limit = {
+				NAM_judas_unseat_proxies_eligible = yes
+				NOT = { has_political_power < 25 }
+			}
+			activate_decision = NAM_judas_unseat_proxies
+		}
+		else_if = {
+			limit = {
+				NAM_judas_pay_captains_eligible = yes
+				NOT = { has_political_power < 25 }
+				NOT = { command_power < 30 }
+			}
+			activate_decision = NAM_judas_pay_captains
+		}
+		else_if = {
+			limit = {
+				NAM_judas_register_patents_eligible = yes
+				NOT = { has_political_power < 30 }
+			}
+			activate_decision = NAM_judas_register_patents
+		}
+		else_if = {
+			limit = {
+				NAM_judas_buy_mortgages_eligible = yes
+				check_variable = { var = NAM_corp_capital value = 45 compare = greater_than_or_equals }
+			}
+			activate_decision = NAM_judas_buy_mortgages
+		}
+		else_if = {
+			limit = {
+				NAM_judas_pay_moderates_eligible = yes
+				check_variable = { var = NAM_corp_capital value = 50 compare = greater_than_or_equals }
+			}
+			activate_decision = NAM_judas_pay_moderates
+		}
+		else_if = {
+			limit = {
+				NAM_judas_buy_notes_eligible = yes
+				check_variable = { var = NAM_corp_capital value = 40 compare = greater_than_or_equals }
+				NOT = { has_political_power < 15 }
+			}
+			activate_decision = NAM_judas_buy_notes
+		}
+		else_if = {
+			limit = {
+				NAM_judas_appoint_masters_eligible = yes
+				check_variable = { var = NAM_corp_capital value = 30 compare = greater_than_or_equals }
+				NOT = { has_political_power < 25 }
+			}
+			activate_decision = NAM_judas_appoint_masters
+		}
+	}
+}
+
+NAM_board_arm_meeting = {
+	set_temp_variable = { var = NAM_board_meeting_interval value = NAM_board_interval_input }
+	set_variable = { var = NAM_board_meeting_day value = global.num_days }
+	add_to_variable = { var = NAM_board_meeting_day value = NAM_board_meeting_interval }
+	activate_mission = NAM_board_annual_meeting
+	add_to_temp_variable = { var = NAM_board_meeting_interval value = -330 }
+	add_days_mission_timeout = { mission = NAM_board_annual_meeting days = NAM_board_meeting_interval }
+	if = {
+		limit = { has_active_mission = NAM_judas_weber_meeting }
+		NAM_judas_weber_adjust_clock = yes
+	}
+	if = {
+		limit = { has_active_mission = NAM_judas_karamyshev_meeting }
+		NAM_judas_karamyshev_adjust_clock = yes
+	}
+}
+
+NAM_board_meeting_due = {
+	set_variable = { var = NAM_board_previous_meeting_day value = global.num_days }
+	if = {
+		limit = {
+			NAM_board_operable = yes
+			NOT = { has_country_flag = NAM_board_meeting_open }
+		}
+		NAM_board_recount = yes
+		set_variable = { var = NAM_board_meeting_winner value = NAM_board_rank_1 }
+		set_variable = { var = NAM_board_dividend_quote value = 0 }
+		add_to_variable = { var = NAM_board_dividend_quote value = NAM_board_sectors_1 }
+		set_variable = { var = NAM_board_meeting_sectors_1 value = NAM_board_sectors_1 }
+		add_to_variable = { var = NAM_board_dividend_quote value = NAM_board_sectors_2 }
+		set_variable = { var = NAM_board_meeting_sectors_2 value = NAM_board_sectors_2 }
+		add_to_variable = { var = NAM_board_dividend_quote value = NAM_board_sectors_3 }
+		set_variable = { var = NAM_board_meeting_sectors_3 value = NAM_board_sectors_3 }
+		add_to_variable = { var = NAM_board_dividend_quote value = NAM_board_sectors_4 }
+		set_variable = { var = NAM_board_meeting_sectors_4 value = NAM_board_sectors_4 }
+		add_to_variable = { var = NAM_board_dividend_quote value = NAM_board_sectors_5 }
+		set_variable = { var = NAM_board_meeting_sectors_5 value = NAM_board_sectors_5 }
+		add_to_variable = { var = NAM_board_dividend_quote value = NAM_board_sectors_6 }
+		set_variable = { var = NAM_board_meeting_sectors_6 value = NAM_board_sectors_6 }
+		if = {
+			limit = {
+				has_completed_focus = NAM_board_double_lock_warehouse
+			}
+			multiply_variable = { var = NAM_board_dividend_quote value = 30 }
+		}
+		else = {
+			multiply_variable = { var = NAM_board_dividend_quote value = 40 }
+		}
+		if = {
+			limit = { has_variable = NAM_judas_dividend_surcharge }
+			add_to_variable = { var = NAM_board_dividend_quote value = NAM_judas_dividend_surcharge }
+			clear_variable = NAM_judas_dividend_surcharge
+		}
+		if = {
+			limit = { check_variable = { var = NAM_board_meeting_winner value = NAM_board_chair compare = equals } }
+			country_event = { id = ADISCORD_nam_resource_war.472 }
+		}
+		else = { country_event = { id = ADISCORD_nam_resource_war.471 } }
+	}
+	country_event = { id = ADISCORD_nam_resource_war.470 days = 1 }
+}
+
+NAM_board_settle_dividend = {
+	set_temp_variable = { var = NAM_board_dividend_delta value = NAM_board_delta_input }
+	if = {
+		limit = {
+			has_country_flag = NAM_board_meeting_open
+			NAM_board_operable = yes
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_dividend_delta value = 0 compare = greater_than }
+				NAM_board_affords_dividend = yes
+			}
+			subtract_from_variable = { var = NAM_corp_capital value = NAM_board_dividend_quote }
+		}
+		else = { set_temp_variable = { var = NAM_board_dividend_delta value = -8 } }
+		if = {
+			limit = { check_variable = { var = NAM_board_meeting_sectors_1 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = 1 }
+			set_temp_variable = { var = NAM_board_delta_input value = NAM_board_dividend_delta }
+			NAM_board_support_change = yes
+		}
+		if = {
+			limit = { check_variable = { var = NAM_board_meeting_sectors_2 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = 2 }
+			set_temp_variable = { var = NAM_board_delta_input value = NAM_board_dividend_delta }
+			NAM_board_support_change = yes
+		}
+		if = {
+			limit = { check_variable = { var = NAM_board_meeting_sectors_3 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = 3 }
+			set_temp_variable = { var = NAM_board_delta_input value = NAM_board_dividend_delta }
+			NAM_board_support_change = yes
+		}
+		if = {
+			limit = { check_variable = { var = NAM_board_meeting_sectors_4 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = 4 }
+			set_temp_variable = { var = NAM_board_delta_input value = NAM_board_dividend_delta }
+			NAM_board_support_change = yes
+		}
+		if = {
+			limit = { check_variable = { var = NAM_board_meeting_sectors_5 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = 5 }
+			set_temp_variable = { var = NAM_board_delta_input value = NAM_board_dividend_delta }
+			NAM_board_support_change = yes
+		}
+		if = {
+			limit = { check_variable = { var = NAM_board_meeting_sectors_6 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = 6 }
+			set_temp_variable = { var = NAM_board_delta_input value = NAM_board_dividend_delta }
+			NAM_board_support_change = yes
+		}
+		NAM_board_recount = yes
+	}
+	clr_country_flag = NAM_board_meeting_open
+	clear_variable = NAM_board_meeting_winner
+	clear_variable = NAM_board_dividend_quote
+	clear_variable = NAM_board_meeting_sectors_1
+	clear_variable = NAM_board_meeting_sectors_2
+	clear_variable = NAM_board_meeting_sectors_3
+	clear_variable = NAM_board_meeting_sectors_4
+	clear_variable = NAM_board_meeting_sectors_5
+	clear_variable = NAM_board_meeting_sectors_6
+}
+
 NAM_board_arm_session = {
+	NAM_board_read_agendas = yes
 	set_temp_variable = { var = NAM_board_company_input value = 0 }
 	NAM_board_pick_speaker = yes
 	set_variable = { var = NAM_board_speaker_1 value = NAM_board_best }
@@ -11283,10 +12358,16 @@ NAM_board_close_session = {
 				check_variable = { var = NAM_board_offered_1 value = 0 compare = greater_than }
 			}
 		}
-		set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_1 }
-		NAM_board_reject_motion = yes
-		set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_2 }
-		NAM_board_reject_motion = yes
+		if = {
+			limit = { check_variable = { var = NAM_board_offer_motion_1 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_1 }
+			NAM_board_reject_motion = yes
+		}
+		if = {
+			limit = { check_variable = { var = NAM_board_offer_motion_2 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_2 }
+			NAM_board_reject_motion = yes
+		}
 		NAM_board_queue_recount = yes
 	}
 	set_variable = { var = NAM_board_offered_1 value = 0 }
@@ -11305,8 +12386,11 @@ NAM_board_adopt_first = {
 		set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_1 }
 		set_temp_variable = { var = NAM_board_motion_input value = NAM_board_offer_motion_1 }
 		NAM_board_adopt_motion = yes
-		set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_2 }
-		NAM_board_reject_motion = yes
+		if = {
+			limit = { check_variable = { var = NAM_board_offer_motion_2 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_2 }
+			NAM_board_reject_motion = yes
+		}
 		NAM_board_queue_recount = yes
 	}
 	set_variable = { var = NAM_board_offered_1 value = 0 }
@@ -11322,8 +12406,11 @@ NAM_board_adopt_second = {
 				NAM_board_can_adopt_2 = yes
 			}
 		}
-		set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_1 }
-		NAM_board_reject_motion = yes
+		if = {
+			limit = { check_variable = { var = NAM_board_offer_motion_1 value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_1 }
+			NAM_board_reject_motion = yes
+		}
 		set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_2 }
 		set_temp_variable = { var = NAM_board_motion_input value = NAM_board_offer_motion_2 }
 		NAM_board_adopt_motion = yes
@@ -11351,7 +12438,7 @@ NAM_board_adopt_both = {
 		set_temp_variable = { var = NAM_board_company_input value = NAM_board_offered_2 }
 		set_temp_variable = { var = NAM_board_motion_input value = NAM_board_offer_motion_2 }
 		NAM_board_adopt_motion = yes
-		NAM_board_queue_recount = yes
+		NAM_board_recount = yes
 	}
 	set_variable = { var = NAM_board_offered_1 value = 0 }
 	set_variable = { var = NAM_board_offered_2 value = 0 }
@@ -12791,13 +13878,13 @@ NAM_board_settle_resolution = {
 			}
 		}
 		if = {
-	limit = {
-		has_idea = NAM_judas_weber_committees
-		check_variable = { var = NAM_board_settled_result value = 1 compare = equals }
-	}
-	set_variable = { var = NAM_judas_favoured value = NAM_board_settler }
-	set_variable = { var = NAM_judas_favour_reason value = 2 }
-}
+			limit = {
+				has_idea = NAM_judas_weber_committees
+				check_variable = { var = NAM_board_settled_result value = 1 compare = equals }
+			}
+			set_variable = { var = NAM_judas_favoured value = NAM_board_settler }
+			set_variable = { var = NAM_judas_favour_reason value = 2 }
+		}
 		set_variable = { var = NAM_board_motion^NAM_board_settler value = 0 }
 		set_variable = { var = NAM_board_deposit^NAM_board_settler value = 0 }
 		add_to_variable = { var = NAM_board_resolution_count value = -1 }
@@ -12831,6 +13918,7 @@ NAM_board_finish_lobby = {
 		if = {
 			limit = {
 				NAM_board_operable = yes
+				check_variable = { var = NAM_board_support^NAM_board_lobby_target value = 65 compare = less_than }
 			}
 			set_temp_variable = { var = NAM_board_lobby_gain value = 65 }
 			subtract_from_temp_variable = { var = NAM_board_lobby_gain value = NAM_board_support^NAM_board_lobby_target }
@@ -12890,6 +13978,121 @@ NAM_board_finish_dismissal = {
 # The terminal owner settles receipts before native removal, which runs no refund.
 NAM_board_end_operations = {
 	set_variable = { var = NAM_board_ended value = 1 }
+	clr_country_flag = NAM_board_letters_of_marque
+	NAM_board_sig_trust_plan_refund = yes
+	NAM_board_sig_out_of_turn_refund = yes
+	NAM_board_sig_contract_recruitment_refund = yes
+	remove_mission = NAM_board_annual_meeting
+	clear_variable = NAM_board_previous_meeting_day
+	set_variable = { var = NAM_board_meeting_day value = -1 }
+	clr_country_flag = NAM_board_meeting_open
+	clear_variable = NAM_board_meeting_winner
+	clear_variable = NAM_board_dividend_quote
+	clear_variable = NAM_board_meeting_sectors_1
+	clear_variable = NAM_board_meeting_sectors_2
+	clear_variable = NAM_board_meeting_sectors_3
+	clear_variable = NAM_board_meeting_sectors_4
+	clear_variable = NAM_board_meeting_sectors_5
+	clear_variable = NAM_board_meeting_sectors_6
+	clr_country_flag = NAM_board_ai_seat_1
+	clr_country_flag = NAM_board_ai_seat_2
+	clr_country_flag = NAM_board_ai_seat_3
+	clr_country_flag = NAM_board_ai_seat_4
+	clr_country_flag = NAM_board_ai_seat_5
+	clr_country_flag = NAM_board_ai_seat_6
+	remove_mission = NAM_board_no_confidence
+	set_variable = { var = NAM_board_no_confidence_day value = -1 }
+	clr_country_flag = NAM_board_no_confidence_immunity
+	clr_country_flag = NAM_board_recount_queued
+	NAM_board_recount = yes
+	NAM_corp_refresh = yes
+	NAM_judas_weber_close = yes
+	NAM_judas_karamyshev_close = yes
+	if = {
+		limit = {
+			has_idea = NAM_judas_port_arrests
+		}
+		remove_ideas = NAM_judas_port_arrests
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_dock_walkout
+		}
+		remove_ideas = NAM_judas_dock_walkout
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_drill_block
+		}
+		remove_ideas = NAM_judas_drill_block
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_drill_boycott
+		}
+		remove_ideas = NAM_judas_drill_boycott
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_unseated_proxies
+		}
+		remove_ideas = NAM_judas_unseated_proxies
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_embankment_blood
+		}
+		remove_ideas = NAM_judas_embankment_blood
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_bought_captains
+		}
+		remove_ideas = NAM_judas_bought_captains
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_general_strike
+		}
+		remove_ideas = NAM_judas_general_strike
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_dock_strike
+		}
+		remove_ideas = NAM_judas_dock_strike
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_port_peace
+		}
+		remove_ideas = NAM_judas_port_peace
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_coast_guard_mutiny
+		}
+		remove_ideas = NAM_judas_coast_guard_mutiny
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_officers_unrest
+		}
+		remove_ideas = NAM_judas_officers_unrest
+	}
+	if = {
+		limit = {
+			has_idea = NAM_judas_staff_oath
+		}
+		remove_ideas = NAM_judas_staff_oath
+	}
+	clear_variable = NAM_judas_dividend_surcharge
+	while_loop_effect = {
+		limit = {
+			check_variable = { var = NAM_judas_convoy_receipts^num value = 0 compare = greater_than }
+		}
+		NAM_judas_return_convoys = yes
+	}
 	set_variable = { var = NAM_board_offered_1 value = 0 }
 	set_variable = { var = NAM_board_offered_2 value = 0 }
 	set_variable = { var = NAM_board_session_day value = -1 }
@@ -13067,6 +14270,12 @@ NAM_board_recount = {
 		multiply_temp_variable = { var = NAM_board_territorial_votes value = 2 }
 		add_to_temp_variable = { var = NAM_board_votes value = NAM_board_territorial_votes }
 		add_to_temp_variable = { var = NAM_board_votes value = NAM_board_seat_count^NAM_board_company }
+		if = {
+			limit = {
+				check_variable = { var = NAM_board_company value = NAM_board_chair compare = equals }
+			}
+			add_to_temp_variable = { var = NAM_board_votes value = NAM_board_chair_vote }
+		}
 		set_variable = { var = NAM_board_ballot^NAM_board_company value = NAM_board_votes }
 		add_to_temp_array = { array = NAM_board_seats value = NAM_board_votes }
 		multiply_temp_variable = { var = NAM_board_votes value = 10 }
@@ -13233,12 +14442,12 @@ NAM_board_update_industrial_policy = {
 		}
 		add_to_temp_array = { array = NAM_board_frames value = NAM_board_frame }
 		if = {
-	limit = {
-		has_idea = NAM_judas_dock_walkout
-		check_variable = { var = NAM_judas_walkout_target value = NAM_board_company compare = equals }
-	}
-	set_temp_variable = { var = NAM_board_weight value = 0 }
-}
+			limit = {
+				has_idea = NAM_judas_dock_walkout
+				check_variable = { var = NAM_judas_walkout_target value = NAM_board_company compare = equals }
+			}
+			set_temp_variable = { var = NAM_board_weight value = 0 }
+		}
 		multiply_temp_variable = { var = NAM_board_weight value = NAM_board_active }
 		add_to_temp_array = { array = NAM_board_weights value = NAM_board_weight }
 	}
@@ -13335,6 +14544,9 @@ NAM_board_update_industrial_policy = {
 	multiply_variable = { var = NAM_board_mod_ceiling value = 0.01 }
 	multiply_variable = { var = NAM_board_mod_goods value = 0.01 }
 	add_to_variable = { var = NAM_board_mod_growth value = 0.08 }
+	add_to_variable = { var = NAM_board_mod_output value = NAM_board_focus_output }
+	add_to_variable = { var = NAM_board_mod_construction value = NAM_board_focus_construction }
+	add_to_variable = { var = NAM_board_mod_goods value = NAM_board_focus_goods }
 	NAM_corp_refresh = yes
 }
 
@@ -13428,13 +14640,29 @@ NAM_corp_init_owner_turn = {
 NAM_corp_assign_district = {
 	if = {
 		limit = { NOT = { has_variable = NAM_corp_district_owner } }
-		NAM = { NAM_corp_init_owner_turn = yes }
-		set_variable = { var = NAM_corp_district_owner value = NAM.NAM_corp_next_owner }
-		NAM = {
-			add_to_variable = { var = NAM_corp_next_owner value = 1 }
-			if = {
-				limit = { check_variable = { NAM_corp_next_owner > 6 } }
-				set_variable = { var = NAM_corp_next_owner value = 1 }
+		if = {
+			limit = {
+				tag = EFL
+				NAM = { has_country_flag = NAM_board_partition_fixed }
+			}
+			set_variable = { var = NAM_corp_district_owner value = NAM.NAM_board_partition_efl }
+		}
+		else_if = {
+			limit = {
+				tag = AZH
+				NAM = { has_country_flag = NAM_board_partition_fixed }
+			}
+			set_variable = { var = NAM_corp_district_owner value = NAM.NAM_board_partition_azh }
+		}
+		else = {
+			NAM = { NAM_corp_init_owner_turn = yes }
+			set_variable = { var = NAM_corp_district_owner value = NAM.NAM_corp_next_owner }
+			NAM = {
+				add_to_variable = { var = NAM_corp_next_owner value = 1 }
+				if = {
+					limit = { check_variable = { NAM_corp_next_owner > 6 } }
+					set_variable = { var = NAM_corp_next_owner value = 1 }
+				}
 			}
 		}
 	}
@@ -14038,11 +15266,18 @@ NAM_revenge_readiness_clamp = {
 
 # COUNTRY NAM. Input: temp NAM_pirate_loot_change (negative spends).
 NAM_pirate_loot_add = {
-	add_to_variable = { var = NAM_pirate_loot value = NAM_pirate_loot_change }
-	clamp_variable = {
-		var = NAM_pirate_loot
-		min = 0
-		max = 100000
+	if = {
+		limit = { has_country_flag = NAM_corp_takeover }
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_pirate_loot_change }
+		NAM_corp_capital_add = yes
+	}
+	else = {
+		add_to_variable = { var = NAM_pirate_loot value = NAM_pirate_loot_change }
+		clamp_variable = {
+			var = NAM_pirate_loot
+			min = 0
+			max = 100000
+		}
 	}
 }
 
@@ -14144,7 +15379,10 @@ NAM_pirate_save_lane_victims = {
 			set_temp_variable = { NAM_pirate_victims = 1 }
 		}
 		if = {
-			limit = { RIV = { NAM_pirate_victim_valid = yes } }
+			limit = {
+				NOT = { has_country_flag = NAM_corp_takeover }
+				RIV = { NAM_pirate_victim_valid = yes }
+			}
 			if = {
 				limit = { check_variable = { NAM_pirate_victims = 0 } }
 				RIV = { save_event_target_as = NAM_pirate_victim_a }
@@ -14379,7 +15617,10 @@ NAM_pirate_close_event = {
 NAM_pirate_monthly = {
 	if = {
 		limit = {
-			NAM_piracy_open = yes
+			OR = {
+				NAM_piracy_open = yes
+				NAM_pirate_commissioned = yes
+			}
 			NAM_country_operable = yes
 			has_variable = NAM_pirate_notoriety
 		}
@@ -14388,6 +15629,7 @@ NAM_pirate_monthly = {
 		if = {
 			limit = {
 				NAM_piracy_open = yes
+				NOT = { has_country_flag = NAM_corp_takeover }
 				check_variable = { NAM_pirate_notoriety > 49 }
 				has_war = no
 				NOT = { has_country_flag = NAM_pirate_retaliation_cooldown }
@@ -14502,8 +15744,16 @@ NAM_marine_orders_refund = {
 		limit = { check_variable = { NAM_marine_orders_paid > 0 } }
 		subtract_from_variable = { var = NAM_marine_orders_paid value = 1 }
 		add_manpower = 4300
-		set_temp_variable = { var = NAM_corp_capital_change value = 60 }
-		NAM_corp_capital_add = yes
+		if = {
+			limit = { check_variable = { NAM_marine_loot_orders > 0 } }
+			subtract_from_variable = { var = NAM_marine_loot_orders value = 1 }
+			set_temp_variable = { var = NAM_pirate_loot_change value = 50 }
+			NAM_pirate_loot_add = yes
+		}
+		else = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 50 }
+			NAM_corp_capital_add = yes
+		}
 	}
 	set_variable = { var = NAM_marine_orders_paid value = 0 }
 	NAM_marine_unlock_template = yes
@@ -14641,6 +15891,7 @@ NAM_wor_revenge_landing = {
 			}
 		}
 		set_variable = { var = NAM_marine_orders_paid value = 0 }
+		clear_variable = NAM_marine_loot_orders
 		NAM_marine_unlock_template = yes
 		set_temp_variable = { var = NAM_landing_harbour_held value = 0 }
 		if = {

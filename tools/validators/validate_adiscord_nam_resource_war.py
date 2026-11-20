@@ -530,9 +530,11 @@ def check_oil_monopoly(
         )
     check(
         "NAM_overseas_districts = {" not in categories
-        and "NAM_island_convoy_service = {" in named_block(decisions, "NAM_national_programmes")
-        and "ADISCORD_nam_resource_war_compromise" in named_block(categories, "NAM_national_programmes"),
-        "island decisions must share national programmes with defeat-route visibility",
+        and all(name + " = {" in named_block(decisions, "NAM_free_zones")
+                for name in ("NAM_island_convoy_service", "NAM_island_public_works", "NAM_island_concession_231"))
+        and all(gate in named_block(categories, "NAM_free_zones")
+                for gate in ("NAM_mainland_programmes_active", "NAM_corp_open")),
+        "island programmes must be visible in the council for mainland and corporate routes",
     )
     for event_id in (
         "ADISCORD_nam_oil.1",
@@ -584,14 +586,11 @@ FAVOUR_FOCUSES = {
 
 
 def event_block(events: str, event_id: str) -> str:
-    return next(
-        (
-            block
-            for block in typed_blocks(events, "country_event")
-            if re.search(rf"(?m)^\s*id\s*=\s*{re.escape(event_id)}\s*$", block)
-        ),
-        "",
-    )
+    definition = re.search(rf"(?m)^country_event\s*=\s*\{{\s*id\s*=\s*{re.escape(event_id)}(?=\s|\}})", events)
+    if not definition:
+        return ""
+    closing = matching_brace(events, events.index("{", definition.start()))
+    return events[definition.start():closing + 1] if closing >= 0 else ""
 
 
 def check_ladder(
@@ -883,6 +882,10 @@ def check_ladder(
 
 
 CUSTOM_COST_DECISIONS = {
+    "NAM_board_sig_trust_plan": "NAM_board_sig_trust_plan_cost",
+    "NAM_board_sig_letters_of_marque": "NAM_board_sig_letters_of_marque_cost",
+    "NAM_board_sig_out_of_turn": "NAM_board_sig_out_of_turn_cost",
+    "NAM_board_sig_contract_recruitment": "NAM_board_sig_contract_recruitment_cost",
     "NAM_judas_buy_notes": "NAM_judas_buy_notes_cost",
     "NAM_judas_unseat_proxies": "NAM_judas_unseat_proxies_cost",
     "NAM_judas_exchange_hiring": "NAM_judas_exchange_hiring_cost",
@@ -949,20 +952,27 @@ def check_exile_revolution(
 ) -> None:
     """The island council, corporate mobilisation and the great war."""
     flight = event_block(events, "ADISCORD_nam_resource_war.81")
+    execution = event_block(events, "ADISCORD_nam_resource_war.460")
+    delay = named_block(named_block(flight, "immediate"), "country_event")
+    deadline = named_block(named_block(decisions, "NAM_interregnum_islands"), "timeout_effect")
     revolution = event_block(events, "ADISCORD_nam_resource_war.100")
     revolution_open = named_block(triggers, "NAM_exile_revolution_open")
     check(
         "NAM_exile_overthrow_namestnik" not in decisions
         and "NAM_exile_overthrow_namestnik" not in loc
         and flight.count("option = {") == 2
-        and flight.count("id = ADISCORD_nam_resource_war.100") == 2
+        and "ADISCORD_nam_resource_war.100" not in flight
+        and "id = ADISCORD_nam_resource_war.460" in delay and "days = 7" in delay
+        and "NAM_interregnum_begin = yes" in named_block(execution, "immediate")
+        and execution.count("option = {") == 1
+        and "ADISCORD_nam_resource_war.100" in named_block(deadline, "hidden_effect")
         and "timeout_days" in flight
         and "has_completed_focus" not in revolution_open
         and "has_global_flag = ADISCORD_nam_resource_war_island_exile" in revolution_open
         and "NAM_exile_revolution_open = yes" in named_block(revolution, "trigger")
         and "timeout_days" in revolution
         and revolution.count("option = {") == 1,
-        "every answer of the flight .81 must convene the island council .100, which needs no focus or decision",
+        "the evacuation must start the seven-day execution clock; the island deadline must convene the boards",
     )
     takeover = named_block(effects, "NAM_corp_takeover")
     opening = ("NAM_board_initialize = yes", "NAM_board_appoint_cabinet = yes",
@@ -974,7 +984,7 @@ def check_exile_revolution(
             "exile scripts may grant and load only the corporate government",
         )
     check(
-        "NAM_corp_takeover = yes" in named_block(revolution, "option")
+        "NAM_corp_takeover = yes" in named_block(revolution, "immediate")
         and "NAM_corp_initialize = yes" in takeover
         and all(step in takeover for step in opening)
         and [takeover.index(step) for step in opening] == sorted(takeover.index(step) for step in opening)
@@ -1035,6 +1045,7 @@ def check_exile_revolution(
         and "character = NAM_Mark_Olshansky" in takeover
         and "modifier = NAM_corporate_board_state" in takeover
         and -1
+        < takeover.find("NAM_interregnum_close = yes")
         < takeover.find("set_country_flag = NAM_corp_takeover")
         < takeover.find("tree = NAM_exile_corporate_focus")
         and "keep_completed = yes" in takeover,

@@ -193,6 +193,17 @@ characters = {
 		}
 	}
 
+	NAM_Absent_Government = {
+		name = NAM_Absent_Government
+		portraits = {
+			civilian = { large = GFX_portrait_NAM_absent_government }
+		}
+		country_leader = {
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
 	NAM_Mark_Olshansky = {
 		name = NAM_Mark_Olshansky
 		portraits = {

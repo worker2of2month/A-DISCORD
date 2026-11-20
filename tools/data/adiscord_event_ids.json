@@ -5,6 +5,38 @@
   ],
   "events": [
     {
+      "id": "ADISCORD_nam_resource_war.460",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 460,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_interregnum",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.470",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 470,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.471",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 471,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.472",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 472,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_resource_war.410",
       "namespace": "ADISCORD_nam_resource_war",
       "number": 410,
@@ -128,6 +160,46 @@
       "id": "ADISCORD_nam_resource_war.437",
       "namespace": "ADISCORD_nam_resource_war",
       "number": 437,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.450",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 450,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.451",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 451,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.452",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 452,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.453",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 453,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_corporate_board",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.454",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 454,
       "owner": "events/ADISCORD_nam_resource_war_events.txt",
       "subsystem": "nam_corporate_board",
       "status": "active"

@@ -25,6 +25,7 @@ recruit_character = NAM_Matvei_Prichal
 recruit_character = NAM_Yaroslav_Weber
 recruit_character = NAM_Rostislav_Karamyshev
 recruit_character = NAM_Mark_Olshansky
+recruit_character = NAM_Absent_Government
 recruit_character = NAM_Aristarkh_Vyazemtsev
 recruit_character = NAM_Taisiya_Valts
 recruit_character = NAM_Saveliy_Kruze

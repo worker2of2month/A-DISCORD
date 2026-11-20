@@ -855,6 +855,24 @@ NAM_defeated_plan = {
 	weight = { factor = 20 }
 }
 
+NAM_exile_interregnum_plan = {
+	name = "NAM island interregnum"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		is_ai = yes
+		has_focus_tree = NAM_exile_interregnum_focus
+		has_idea = NAM_interregnum_power_vacuum
+	}
+	abort = { NOT = { has_idea = NAM_interregnum_power_vacuum } }
+	ai_national_focuses = {
+		NAM_interregnum_open_customs
+		NAM_interregnum_guarantors
+		NAM_interregnum_underwrite_freight
+		NAM_interregnum_seals_boards
+	}
+}
+
 NAM_exile_corporate_plan = {
 	name = "NAM corporate boards"
 	desc = ""
