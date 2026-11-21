@@ -924,6 +924,23 @@ CUSTOM_COST_DECISIONS = {
     "NAM_dev_drill_cadres": "NAM_dev_drill_cadres_cost",
     "NAM_dev_works_schools": "NAM_dev_works_schools_cost",
     "NAM_dev_oil_credit": "NAM_dev_oil_credit_cost",
+    "NAM_board_inv_convert_plant": "NAM_board_inv_convert_plant_cost",
+    "NAM_board_inv_arsenal_order": "NAM_board_inv_arsenal_order_cost",
+    "NAM_board_inv_fuel_freight": "NAM_board_inv_fuel_freight_cost",
+    "NAM_board_inv_harbour_works": "NAM_board_inv_harbour_works_cost",
+    "NAM_board_inv_tonnage": "NAM_board_inv_tonnage_cost",
+    "NAM_board_inv_escort_contract": "NAM_board_inv_escort_contract_cost",
+    "NAM_board_inv_raise_marines": "NAM_board_inv_raise_marines_cost",
+    "NAM_board_inv_holders_levy": "NAM_board_inv_holders_levy_cost",
+    "NAM_board_inv_expedition_share": "NAM_board_inv_expedition_share_cost",
+    "NAM_board_inv_cells": "NAM_board_inv_cells_cost",
+    "NAM_isl_depots": "NAM_isl_depots_cost",
+    "NAM_isl_bribe": "NAM_isl_bribe_cost",
+    "NAM_isl_launch": "NAM_isl_launch_cost",
+    "NAM_isl_sharden_blockade": "NAM_isl_sharden_blockade_cost",
+    "NAM_isl_pacify": "NAM_isl_pacify_cost",
+    "NAM_isl_nationalise": "NAM_isl_nationalise_cost",
+    "NAM_isl_insurance": "NAM_isl_insurance_cost",
 }
 GREAT_WAR_TARGETS = ("EFL", "AZH", "RHM", "SDR", "KDR")
 # The war of return and the great war end only by full capitulation; none of

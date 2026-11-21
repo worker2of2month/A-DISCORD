@@ -14355,6 +14355,54 @@
       }
     },
     {
+      "key": "script_adiscord_nam_resource_war_effects_mainland_partisans",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Mainland Partisans",
+      "display_name": "Mainland Partisans",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 40.75,
+        "manpower": 3000,
+        "equipment": {
+          "infantry_equipment": 2700
+        },
+        "supply": 0.12
+      },
+      "equipment_availability": {
+        "infantry_equipment": true
+      },
+      "ai_role": "emergency_militia",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_nam_resource_war_effects_mainland_partisans"
+      },
+      "definition_metadata": {
+        "is_locked": true
+      }
+    },
+    {
       "key": "script_coalition_restitution_regiment",
       "source": {
         "kind": "script",
@@ -14906,6 +14954,26 @@
       "count": 1
     },
     {
+      "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_2_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Line Infantry Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1,
+      "count": 3
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_mainland_partisans_xp_0_1_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Mainland Partisans",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 1,
+      "count": 6
+    },
+    {
       "key": "adiscord_nam_resource_war_effects_create_unit_mobilisation_guard_xp_0_25_eq_1_0",
       "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
       "kind": "create_unit",
@@ -14995,7 +15063,47 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 2
+      "count": 5
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_island_marines_xp_0_35_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Island Marines",
+      "legacy_names": [],
+      "start_experience_factor": 0.35,
+      "start_equipment_factor": 1,
+      "count": 6
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_territorial_brigade_xp_0_1_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_island_marines_xp_0_2_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Island Marines",
+      "legacy_names": [],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_5_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Line Infantry Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.5,
+      "start_equipment_factor": 1,
+      "count": 1
     },
     {
       "key": "adiscord_nam_resource_war_decisions_create_unit_old_settlers_militia_xp_0_eq_1_0",

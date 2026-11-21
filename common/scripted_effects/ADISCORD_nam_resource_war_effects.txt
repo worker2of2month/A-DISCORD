@@ -6827,9 +6827,10 @@ NAM_wor_call_participants = {
 }
 
 # COUNTRY NAM. Called by the focuses NAM_defeat_war_of_return (compromise),
-# NAM_rad_war_of_return, NAM_hum_war_of_return and NAM_board_war_of_return
-# (exile) and by the renewal decision NAM_exile_renew_war_of_return after an
-# exile war closed outside the treaty.
+# NAM_rad_war_of_return, NAM_hum_war_of_return and NAM_board_operation_poseidon
+# (exile, through NAM_board_poseidon_launch) and by the renewal decision
+# NAM_exile_renew_war_of_return after an exile war closed outside the treaty
+# or by the council's armistice.
 NAM_war_of_return_start = {
 	if = {
 		limit = { NAM_war_of_return_can_start = yes }
@@ -6951,9 +6952,19 @@ NAM_wor_release_participants = {
 NAM_war_of_return_close = {
 	set_global_flag = NAM_war_of_return_resolved
 	NAM_wor_release_participants = yes
+	67 = { NAM_board_rising_sabotage_clear = yes }
+	688 = { NAM_board_rising_sabotage_clear = yes }
+	689 = { NAM_board_rising_sabotage_clear = yes }
+	690 = { NAM_board_rising_sabotage_clear = yes }
+	700 = { NAM_board_rising_sabotage_clear = yes }
+	719 = { NAM_board_rising_sabotage_clear = yes }
 	NAM = {
 		clr_country_flag = NAM_return_yard_warrant
 		ADISCORD_nam_resource_war_release_major = yes
+		if = {
+			limit = { has_active_mission = NAM_board_poseidon_beachhead }
+			remove_mission = NAM_board_poseidon_beachhead
+		}
 		mark_focus_tree_layout_dirty = yes
 	}
 }
@@ -7027,6 +7038,11 @@ NAM_war_of_return_resolve_victory = {
 			NAM_war_of_return_close = yes
 			NAM_wor_settle_list_by_route = yes
 			NAM = {
+				# A won return ends the council's mainland cells; an armistice keeps them.
+				if = {
+					limit = { has_country_flag = NAM_corp_takeover }
+					NAM_board_cells_close = yes
+				}
 				NAM_consolidation_begin = yes
 				news_event = { id = ADISCORD_nam_resource_news.9 hours = 1 }
 			}
@@ -8666,16 +8682,12 @@ NAM_board_build_company_housing = {
 	add_dynamic_modifier = { modifier = NAM_board_company_quarters_state }
 }
 
+# STATE scope. The dockyard brings its own shared slot, so it never takes a slot
+# already in use in the port.
 NAM_board_build_company_docks = {
 	if = {
-		limit = {
-			dockyard < 20
-			free_building_slots = { building = dockyard size > 0 include_locked = yes }
-		}
-		if = {
-			limit = { NOT = { free_building_slots = { building = dockyard size > 0 include_locked = no } } }
-			add_extra_state_shared_building_slots = 1
-		}
+		limit = { dockyard < 20 }
+		add_extra_state_shared_building_slots = 1
 		add_building_construction = {
 			type = dockyard
 			level = 1
@@ -8819,6 +8831,8 @@ NAM_corp_monthly = {
 		round_temp_variable = NAM_corp_capital_change
 		set_variable = { var = NAM_corp_last_income value = NAM_corp_capital_change }
 		NAM_corp_capital_add = yes
+		NAM_isl_monthly = yes
+		NAM_board_cells_monthly = yes
 		if = {
 			limit = { NAM_board_operable = yes }
 			if = {
@@ -11431,6 +11445,29 @@ NAM_board_initialize = {
 			size = 7
 			value = 0
 		}
+		# Invasion programmes, index 1-9: runs, paid receipts and caps (raised by the
+		# unlocking focuses and later rewards); the expedition share once per company.
+		resize_array = {
+			array = NAM_board_inv_runs
+			size = 10
+			value = 0
+		}
+		resize_array = {
+			array = NAM_board_inv_running
+			size = 10
+			value = 0
+		}
+		resize_array = {
+			array = NAM_board_inv_cap
+			size = 10
+			value = 0
+		}
+		resize_array = {
+			array = NAM_board_inv_share_done
+			size = 7
+			value = 0
+		}
+		set_variable = { var = NAM_board_inv_share_target value = 0 }
 		# Extra votes, index = company: bought proxies (cleared by the annual meeting)
 		# and the guarantor and keeper votes of events 58 and 73 (cleared by partition night).
 		resize_array = {
@@ -11448,6 +11485,9 @@ NAM_board_initialize = {
 		set_variable = { var = NAM_board_militia_deposit value = 0 }
 		set_variable = { var = NAM_board_mainland_officials_runs value = 0 }
 		set_variable = { var = NAM_board_eflor_mortgages value = 0 }
+		# Directory campaign places: none at the takeover, one from each of
+		# property_qualification, foundry_mark and society_99_1 (at most 3).
+		set_variable = { var = NAM_dir_campaign_slots value = 0 }
 		# Lots retendered once, index 1 rail, 2 yards, 3 depots.
 		resize_array = {
 			array = NAM_board_lot_retendered
@@ -11574,6 +11614,23 @@ NAM_board_initialize = {
 		set_variable = { var = NAM_board_chair value = 0 }
 		set_variable = { var = NAM_board_lot_yards value = 0 }
 		set_variable = { var = NAM_board_lot_depots value = 0 }
+		# Island operations, index 1 Ulven, 2 Luren, 3 Sharden: status
+		# (0 independent, 1 at war, 2 annexed, 3 national) and concession operator.
+		resize_array = {
+			array = NAM_isl_status
+			size = 4
+			value = 0
+		}
+		resize_array = {
+			array = NAM_board_isl_owner
+			size = 4
+			value = 0
+		}
+		set_variable = { var = NAM_isl_op_target value = 0 }
+		set_variable = { var = NAM_isl_pact_member value = 0 }
+		set_variable = { var = NAM_isl_last_target value = 0 }
+		set_variable = { var = NAM_isl_flare_target value = 0 }
+		set_variable = { var = NAM_isl_echelon_k value = 0 }
 		country_event = { id = ADISCORD_nam_story.41 days = 14 }
 		country_event = { id = ADISCORD_nam_story.43 days = 60 }
 		country_event = { id = ADISCORD_nam_story.44 days = 120 }
@@ -14513,13 +14570,942 @@ NAM_board_finish_dismissal = {
 	}
 }
 
+# ----- Council of boards: laws -----
+# COUNTRY NAM. One enactment per council law, called once by its focus. The law the slot
+# holds is swapped out visibly, whichever law the player kept from the mainland, so the
+# native line shows what the council gives up; the else branch covers an empty slot.
+NAM_board_enact_property_census = {
+	if = {
+		limit = { has_idea = ADISCORD_taxation_light_dues }
+		swap_ideas = {
+			remove_idea = ADISCORD_taxation_light_dues
+			add_idea = NAM_board_law_property_census
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_balanced_register }
+		swap_ideas = {
+			remove_idea = ADISCORD_taxation_balanced_register
+			add_idea = NAM_board_law_property_census
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_progressive_brackets }
+		swap_ideas = {
+			remove_idea = ADISCORD_taxation_progressive_brackets
+			add_idea = NAM_board_law_property_census
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_industrial_tariffs }
+		swap_ideas = {
+			remove_idea = ADISCORD_taxation_industrial_tariffs
+			add_idea = NAM_board_law_property_census
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_extraction_quotas }
+		swap_ideas = {
+			remove_idea = ADISCORD_taxation_extraction_quotas
+			add_idea = NAM_board_law_property_census
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_corporate_assessment }
+		swap_ideas = {
+			remove_idea = ADISCORD_taxation_corporate_assessment
+			add_idea = NAM_board_law_property_census
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_property_census
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_paid_publicity = {
+	if = {
+		limit = { has_idea = ADISCORD_information_open_press }
+		swap_ideas = {
+			remove_idea = ADISCORD_information_open_press
+			add_idea = NAM_board_law_paid_publicity
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_information_licensed_press }
+		swap_ideas = {
+			remove_idea = ADISCORD_information_licensed_press
+			add_idea = NAM_board_law_paid_publicity
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_information_state_bulletins }
+		swap_ideas = {
+			remove_idea = ADISCORD_information_state_bulletins
+			add_idea = NAM_board_law_paid_publicity
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_information_wartime_censorship }
+		swap_ideas = {
+			remove_idea = ADISCORD_information_wartime_censorship
+			add_idea = NAM_board_law_paid_publicity
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_information_sealed_networks }
+		swap_ideas = {
+			remove_idea = ADISCORD_information_sealed_networks
+			add_idea = NAM_board_law_paid_publicity
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_paid_publicity
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_concession_courts = {
+	if = {
+		limit = { has_idea = ADISCORD_justice_regular_tribunals }
+		swap_ideas = {
+			remove_idea = ADISCORD_justice_regular_tribunals
+			add_idea = NAM_board_law_concession_courts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_field_courts }
+		swap_ideas = {
+			remove_idea = ADISCORD_justice_field_courts
+			add_idea = NAM_board_law_concession_courts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_military_immunity }
+		swap_ideas = {
+			remove_idea = ADISCORD_justice_military_immunity
+			add_idea = NAM_board_law_concession_courts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_military_prosecution }
+		swap_ideas = {
+			remove_idea = ADISCORD_justice_military_prosecution
+			add_idea = NAM_board_law_concession_courts
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_concession_courts
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_harbour_exchange = {
+	if = {
+		limit = { has_idea = free_trade }
+		swap_ideas = {
+			remove_idea = free_trade
+			add_idea = NAM_board_law_harbour_exchange
+		}
+	}
+	else_if = {
+		limit = { has_idea = export_focus }
+		swap_ideas = {
+			remove_idea = export_focus
+			add_idea = NAM_board_law_harbour_exchange
+		}
+	}
+	else_if = {
+		limit = { has_idea = limited_exports }
+		swap_ideas = {
+			remove_idea = limited_exports
+			add_idea = NAM_board_law_harbour_exchange
+		}
+	}
+	else_if = {
+		limit = { has_idea = closed_economy }
+		swap_ideas = {
+			remove_idea = closed_economy
+			add_idea = NAM_board_law_harbour_exchange
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_trade_policy_autarky }
+		swap_ideas = {
+			remove_idea = ADISCORD_trade_policy_autarky
+			add_idea = NAM_board_law_harbour_exchange
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_harbour_exchange
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_hereditary_patents = {
+	if = {
+		limit = { has_idea = ADISCORD_officer_corps_local_seniority }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_local_seniority
+			add_idea = NAM_board_law_hereditary_patents
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_merit_commissions }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_merit_commissions
+			add_idea = NAM_board_law_hereditary_patents
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_political_commissars }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_political_commissars
+			add_idea = NAM_board_law_hereditary_patents
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_general_staff_academy }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_general_staff_academy
+			add_idea = NAM_board_law_hereditary_patents
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_emergency_promotions }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_emergency_promotions
+			add_idea = NAM_board_law_hereditary_patents
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_field_commissions }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_field_commissions
+			add_idea = NAM_board_law_hereditary_patents
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_hereditary_patents
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_sworn_commanders = {
+	if = {
+		limit = { has_idea = ADISCORD_officer_corps_local_seniority }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_local_seniority
+			add_idea = NAM_board_law_sworn_commanders
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_merit_commissions }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_merit_commissions
+			add_idea = NAM_board_law_sworn_commanders
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_political_commissars }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_political_commissars
+			add_idea = NAM_board_law_sworn_commanders
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_general_staff_academy }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_general_staff_academy
+			add_idea = NAM_board_law_sworn_commanders
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_emergency_promotions }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_emergency_promotions
+			add_idea = NAM_board_law_sworn_commanders
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_officer_corps_field_commissions }
+		swap_ideas = {
+			remove_idea = ADISCORD_officer_corps_field_commissions
+			add_idea = NAM_board_law_sworn_commanders
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_sworn_commanders
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_district_wardens = {
+	if = {
+		limit = { has_idea = ADISCORD_internal_security_neighborhood_watch }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_neighborhood_watch
+			add_idea = NAM_board_law_district_wardens
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_local_garrisons }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_local_garrisons
+			add_idea = NAM_board_law_district_wardens
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_investigative_bureaus }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_investigative_bureaus
+			add_idea = NAM_board_law_district_wardens
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_emergency_patrols }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_emergency_patrols
+			add_idea = NAM_board_law_district_wardens
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_internal_directorate }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_internal_directorate
+			add_idea = NAM_board_law_district_wardens
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_civilian_oversight }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_civilian_oversight
+			add_idea = NAM_board_law_district_wardens
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_district_wardens
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_society_99_1 = {
+	if = {
+		limit = { has_idea = ADISCORD_welfare_charity_relief }
+		swap_ideas = {
+			remove_idea = ADISCORD_welfare_charity_relief
+			add_idea = NAM_welfare_society_99_1
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_basic_services }
+		swap_ideas = {
+			remove_idea = ADISCORD_welfare_basic_services
+			add_idea = NAM_welfare_society_99_1
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_social_insurance }
+		swap_ideas = {
+			remove_idea = ADISCORD_welfare_social_insurance
+			add_idea = NAM_welfare_society_99_1
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_universal_provision }
+		swap_ideas = {
+			remove_idea = ADISCORD_welfare_universal_provision
+			add_idea = NAM_welfare_society_99_1
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_rationed_support }
+		swap_ideas = {
+			remove_idea = ADISCORD_welfare_rationed_support
+			add_idea = NAM_welfare_society_99_1
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_employer_insurance }
+		swap_ideas = {
+			remove_idea = ADISCORD_welfare_employer_insurance
+			add_idea = NAM_welfare_society_99_1
+		}
+	}
+	else = {
+		add_ideas = NAM_welfare_society_99_1
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_mourning_licence = {
+	if = {
+		limit = { has_idea = STP_law_public_orgies }
+		swap_ideas = {
+			remove_idea = STP_law_public_orgies
+			add_idea = NAM_board_law_mourning_licence
+		}
+	}
+	else_if = {
+		limit = { has_idea = STP_law_private_societies }
+		swap_ideas = {
+			remove_idea = STP_law_private_societies
+			add_idea = NAM_board_law_mourning_licence
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_tolerated_subcultures }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_tolerated_subcultures
+			add_idea = NAM_board_law_mourning_licence
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_public_entertainment }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_public_entertainment
+			add_idea = NAM_board_law_mourning_licence
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_civic_festivals }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_civic_festivals
+			add_idea = NAM_board_law_mourning_licence
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_avant_garde_patronage }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_avant_garde_patronage
+			add_idea = NAM_board_law_mourning_licence
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_national_mythmaking }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_national_mythmaking
+			add_idea = NAM_board_law_mourning_licence
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_heritage_protection }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_heritage_protection
+			add_idea = NAM_board_law_mourning_licence
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_mourning_licence
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_permitted_dissent = {
+	if = {
+		limit = { has_idea = STP_law_public_orgies }
+		swap_ideas = {
+			remove_idea = STP_law_public_orgies
+			add_idea = NAM_board_law_permitted_dissent
+		}
+	}
+	else_if = {
+		limit = { has_idea = STP_law_private_societies }
+		swap_ideas = {
+			remove_idea = STP_law_private_societies
+			add_idea = NAM_board_law_permitted_dissent
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_tolerated_subcultures }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_tolerated_subcultures
+			add_idea = NAM_board_law_permitted_dissent
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_public_entertainment }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_public_entertainment
+			add_idea = NAM_board_law_permitted_dissent
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_civic_festivals }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_civic_festivals
+			add_idea = NAM_board_law_permitted_dissent
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_avant_garde_patronage }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_avant_garde_patronage
+			add_idea = NAM_board_law_permitted_dissent
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_national_mythmaking }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_national_mythmaking
+			add_idea = NAM_board_law_permitted_dissent
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_heritage_protection }
+		swap_ideas = {
+			remove_idea = ADISCORD_cultural_policy_heritage_protection
+			add_idea = NAM_board_law_permitted_dissent
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_permitted_dissent
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_arsenal_monopoly = {
+	if = {
+		limit = { has_idea = ADISCORD_industrial_policy_artisan_markets }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_artisan_markets
+			add_idea = NAM_board_law_arsenal_monopoly
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_balanced_workshops }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_balanced_workshops
+			add_idea = NAM_board_law_arsenal_monopoly
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_civilian_expansion
+			add_idea = NAM_board_law_arsenal_monopoly
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_military_prioritization
+			add_idea = NAM_board_law_arsenal_monopoly
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_state_planning_boards }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_state_planning_boards
+			add_idea = NAM_board_law_arsenal_monopoly
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_export_contracts }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_export_contracts
+			add_idea = NAM_board_law_arsenal_monopoly
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_arsenal_monopoly
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_factory_guard = {
+	if = {
+		limit = { has_idea = ADISCORD_military_organization_militia_autonomy }
+		swap_ideas = {
+			remove_idea = ADISCORD_military_organization_militia_autonomy
+			add_idea = NAM_board_law_factory_guard
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_military_organization_cadre_army }
+		swap_ideas = {
+			remove_idea = ADISCORD_military_organization_cadre_army
+			add_idea = NAM_board_law_factory_guard
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_military_organization_contract_brigades }
+		swap_ideas = {
+			remove_idea = ADISCORD_military_organization_contract_brigades
+			add_idea = NAM_board_law_factory_guard
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_military_organization_general_staff }
+		swap_ideas = {
+			remove_idea = ADISCORD_military_organization_general_staff
+			add_idea = NAM_board_law_factory_guard
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_military_organization_total_defense_grid }
+		swap_ideas = {
+			remove_idea = ADISCORD_military_organization_total_defense_grid
+			add_idea = NAM_board_law_factory_guard
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_military_organization_territorial_reserves }
+		swap_ideas = {
+			remove_idea = ADISCORD_military_organization_territorial_reserves
+			add_idea = NAM_board_law_factory_guard
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_factory_guard
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_captains_share = {
+	if = {
+		limit = { has_idea = ADISCORD_logistics_local_foraging }
+		swap_ideas = {
+			remove_idea = ADISCORD_logistics_local_foraging
+			add_idea = NAM_board_law_captains_share
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_civilian_contracts }
+		swap_ideas = {
+			remove_idea = ADISCORD_logistics_civilian_contracts
+			add_idea = NAM_board_law_captains_share
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_centralized_depots }
+		swap_ideas = {
+			remove_idea = ADISCORD_logistics_centralized_depots
+			add_idea = NAM_board_law_captains_share
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_motorized_supply }
+		swap_ideas = {
+			remove_idea = ADISCORD_logistics_motorized_supply
+			add_idea = NAM_board_law_captains_share
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_emergency_requisitioning }
+		swap_ideas = {
+			remove_idea = ADISCORD_logistics_emergency_requisitioning
+			add_idea = NAM_board_law_captains_share
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_regional_warehouses }
+		swap_ideas = {
+			remove_idea = ADISCORD_logistics_regional_warehouses
+			add_idea = NAM_board_law_captains_share
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_captains_share
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_residency_for_hire = {
+	if = {
+		limit = { has_idea = STP_law_slavery }
+		swap_ideas = {
+			remove_idea = STP_law_slavery
+			add_idea = NAM_board_law_residency_for_hire
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_loose_contracts }
+		swap_ideas = {
+			remove_idea = ADISCORD_labor_policy_loose_contracts
+			add_idea = NAM_board_law_residency_for_hire
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_guild_protections }
+		swap_ideas = {
+			remove_idea = ADISCORD_labor_policy_guild_protections
+			add_idea = NAM_board_law_residency_for_hire
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_regulated_shifts }
+		swap_ideas = {
+			remove_idea = ADISCORD_labor_policy_regulated_shifts
+			add_idea = NAM_board_law_residency_for_hire
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_technocratic_work_norms }
+		swap_ideas = {
+			remove_idea = ADISCORD_labor_policy_technocratic_work_norms
+			add_idea = NAM_board_law_residency_for_hire
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_mobilized_labor }
+		swap_ideas = {
+			remove_idea = ADISCORD_labor_policy_mobilized_labor
+			add_idea = NAM_board_law_residency_for_hire
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_collective_bargaining }
+		swap_ideas = {
+			remove_idea = ADISCORD_labor_policy_collective_bargaining
+			add_idea = NAM_board_law_residency_for_hire
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_residency_for_hire
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+# COUNTRY NAM. Called from nam:on_annex after NAM_board_end_operations.
+# NAM_board_end_operations keeps the laws, so a future stage-3 tree loader that calls it
+# leaves them in force. Each council law is swapped explicitly for the default law of its slot.
+NAM_board_repeal_laws = {
+	if = {
+		limit = { has_idea = NAM_board_law_property_census }
+		swap_ideas = {
+			remove_idea = NAM_board_law_property_census
+			add_idea = ADISCORD_taxation_balanced_register
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_paid_publicity }
+		swap_ideas = {
+			remove_idea = NAM_board_law_paid_publicity
+			add_idea = ADISCORD_information_licensed_press
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_concession_courts }
+		swap_ideas = {
+			remove_idea = NAM_board_law_concession_courts
+			add_idea = ADISCORD_justice_regular_tribunals
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_harbour_exchange }
+		swap_ideas = {
+			remove_idea = NAM_board_law_harbour_exchange
+			add_idea = export_focus
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_hereditary_patents }
+		swap_ideas = {
+			remove_idea = NAM_board_law_hereditary_patents
+			add_idea = ADISCORD_officer_corps_local_seniority
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_sworn_commanders }
+		swap_ideas = {
+			remove_idea = NAM_board_law_sworn_commanders
+			add_idea = ADISCORD_officer_corps_local_seniority
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_district_wardens }
+		swap_ideas = {
+			remove_idea = NAM_board_law_district_wardens
+			add_idea = ADISCORD_internal_security_local_garrisons
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_welfare_society_99_1 }
+		swap_ideas = {
+			remove_idea = NAM_welfare_society_99_1
+			add_idea = ADISCORD_welfare_basic_services
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_mourning_licence }
+		swap_ideas = {
+			remove_idea = NAM_board_law_mourning_licence
+			add_idea = ADISCORD_cultural_policy_public_entertainment
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_permitted_dissent }
+		swap_ideas = {
+			remove_idea = NAM_board_law_permitted_dissent
+			add_idea = ADISCORD_cultural_policy_public_entertainment
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_arsenal_monopoly }
+		swap_ideas = {
+			remove_idea = NAM_board_law_arsenal_monopoly
+			add_idea = ADISCORD_industrial_policy_balanced_workshops
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_factory_guard }
+		swap_ideas = {
+			remove_idea = NAM_board_law_factory_guard
+			add_idea = ADISCORD_military_organization_cadre_army
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_captains_share }
+		swap_ideas = {
+			remove_idea = NAM_board_law_captains_share
+			add_idea = ADISCORD_logistics_civilian_contracts
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_residency_for_hire }
+		swap_ideas = {
+			remove_idea = NAM_board_law_residency_for_hire
+			add_idea = ADISCORD_labor_policy_loose_contracts
+		}
+	}
+}
+
+# ----- Council of boards: development trades -----
+# COUNTRY NAM. A trade moves 100 progress from a social track to another track. The
+# raised track checks its level at once (economic through the shared economy upgrade gate);
+# at level 5 the council takes 100 capital instead. The social track drops one level and
+# keeps its progress; at level 1 it loses its progress and, once per campaign and track,
+# one point of monthly growth. The level setters do not invalidate the economy.
+NAM_board_trade_social_system_for_economic = {
+	if = {
+		limit = { ADISCORD_economic_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_board_trade_social_system_for_economic_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+			NAM_corp_capital_add = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_board_trade_social_system_for_economic_tt
+		hidden_effect = { NAM_board_dev_raise_economic = yes }
+	}
+	hidden_effect = {
+		NAM_board_dev_lower_social_system = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_board_trade_society_for_economic = {
+	if = {
+		limit = { ADISCORD_economic_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_board_trade_society_for_economic_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+			NAM_corp_capital_add = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_board_trade_society_for_economic_tt
+		hidden_effect = { NAM_board_dev_raise_economic = yes }
+	}
+	hidden_effect = {
+		NAM_board_dev_lower_society = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_board_trade_society_for_state = {
+	if = {
+		limit = { ADISCORD_state_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_board_trade_society_for_state_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+			NAM_corp_capital_add = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_board_trade_society_for_state_tt
+		hidden_effect = { NAM_board_dev_raise_state = yes }
+	}
+	hidden_effect = {
+		NAM_board_dev_lower_society = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# The level waits for the economic gate; banked progress is retried by the monthly tick.
+NAM_board_dev_raise_economic = {
+	ADISCORD_initialize_society_development_variables = yes
+	add_to_variable = { var = ADISCORD_economic_development_progress value = 100 }
+	ADISCORD_economy_check_economic_development_upgrade = yes
+}
+
+NAM_board_dev_raise_state = {
+	ADISCORD_initialize_society_development_variables = yes
+	add_to_variable = { var = ADISCORD_state_development_progress value = 100 }
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_state_development_progress value = 100 compare = greater_than_or_equals }
+			NOT = { ADISCORD_state_development_at_least_5 = yes }
+		}
+		set_temp_variable = { var = ADISCORD_development_remainder value = ADISCORD_state_development_progress }
+		add_to_temp_variable = { var = ADISCORD_development_remainder value = -100 }
+		ADISCORD_increase_state_development = yes
+		set_variable = { var = ADISCORD_state_development_progress value = ADISCORD_development_remainder }
+	}
+	if = {
+		limit = { ADISCORD_state_development_at_least_5 = yes }
+		set_variable = { var = ADISCORD_state_development_progress value = 0 }
+	}
+}
+
+# The level setter clears progress, so the kept progress is restored after the drop.
+NAM_board_dev_lower_society = {
+	ADISCORD_initialize_society_development_variables = yes
+	if = {
+		limit = { ADISCORD_society_development_at_least_2 = yes }
+		set_temp_variable = { var = NAM_board_dev_kept value = ADISCORD_society_development_progress }
+		ADISCORD_decrease_society_development = yes
+		set_variable = { var = ADISCORD_society_development_progress value = NAM_board_dev_kept }
+	}
+	else = {
+		set_variable = { var = ADISCORD_society_development_progress value = 0 }
+		if = {
+			limit = {
+				NOT = { has_country_flag = NAM_board_dev_cut_society }
+				check_variable = { var = ADISCORD_society_development_monthly_growth value = 0 compare = greater_than }
+			}
+			add_to_variable = { var = ADISCORD_society_development_monthly_growth value = -1 }
+			set_country_flag = NAM_board_dev_cut_society
+		}
+	}
+}
+
+NAM_board_dev_lower_social_system = {
+	ADISCORD_initialize_society_development_variables = yes
+	if = {
+		limit = { ADISCORD_social_system_development_at_least_2 = yes }
+		set_temp_variable = { var = NAM_board_dev_kept value = ADISCORD_social_system_development_progress }
+		ADISCORD_decrease_social_system_development = yes
+		set_variable = { var = ADISCORD_social_system_development_progress value = NAM_board_dev_kept }
+	}
+	else = {
+		set_variable = { var = ADISCORD_social_system_development_progress value = 0 }
+		if = {
+			limit = {
+				NOT = { has_country_flag = NAM_board_dev_cut_social_system }
+				check_variable = { var = ADISCORD_social_system_development_monthly_growth value = 0 compare = greater_than }
+			}
+			add_to_variable = { var = ADISCORD_social_system_development_monthly_growth value = -1 }
+			set_country_flag = NAM_board_dev_cut_social_system
+		}
+	}
+}
+
 # The terminal owner settles receipts before native removal, which runs no refund.
 NAM_board_end_operations = {
 	set_variable = { var = NAM_board_ended value = 1 }
-	if = {
-		limit = { has_idea = NAM_welfare_society_99_1 }
-		add_ideas = ADISCORD_welfare_basic_services
-	}
 	clr_country_flag = NAM_board_letters_of_marque
 	NAM_board_sig_trust_plan_refund = yes
 	NAM_board_sig_out_of_turn_refund = yes
@@ -14690,6 +15676,9 @@ NAM_board_end_operations = {
 	remove_ideas = NAM_board_arktur_line
 	remove_ideas = NAM_board_smenkom_brigades
 	remove_ideas = NAM_board_reidbank_bills
+	NAM_board_inv_close = yes
+	NAM_isl_close_all = yes
+	NAM_board_cells_close = yes
 	NAM_dir_campaigns_close = yes
 }
 
@@ -14880,6 +15869,40 @@ NAM_board_recount = {
 		if = {
 			limit = { NAM_board_current_concession = yes }
 			add_to_temp_variable = { var = NAM_board_holdings^NAM_corp_district_owner value = 1 }
+		}
+	}
+	# Island concessions count with the districts once the island is the
+	# Directory's (status 2 or 3); the operator is copied first because the
+	# engine resolves only one index name. After the southern promise Sharden's
+	# concession is worth half a holding, one vote.
+	if = {
+		limit = {
+			check_variable = { var = NAM_isl_status^1 value = 1 compare = greater_than }
+			check_variable = { var = NAM_board_isl_owner^1 value = 0 compare = greater_than }
+		}
+		set_temp_variable = { var = NAM_board_isl_owner_input value = NAM_board_isl_owner^1 }
+		add_to_temp_variable = { var = NAM_board_holdings^NAM_board_isl_owner_input value = 1 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = NAM_isl_status^2 value = 1 compare = greater_than }
+			check_variable = { var = NAM_board_isl_owner^2 value = 0 compare = greater_than }
+		}
+		set_temp_variable = { var = NAM_board_isl_owner_input value = NAM_board_isl_owner^2 }
+		add_to_temp_variable = { var = NAM_board_holdings^NAM_board_isl_owner_input value = 1 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = NAM_isl_status^3 value = 1 compare = greater_than }
+			check_variable = { var = NAM_board_isl_owner^3 value = 0 compare = greater_than }
+		}
+		set_temp_variable = { var = NAM_board_isl_owner_input value = NAM_board_isl_owner^3 }
+		if = {
+			limit = { has_country_flag = NAM_isl_sharden_promise_done }
+			add_to_temp_variable = { var = NAM_board_holdings^NAM_board_isl_owner_input value = 0.5 }
+		}
+		else = {
+			add_to_temp_variable = { var = NAM_board_holdings^NAM_board_isl_owner_input value = 1 }
 		}
 	}
 	clear_temp_array = NAM_board_ballots
@@ -15954,6 +16977,3482 @@ NAM_corp_arbitrate_dispute = {
 	}
 }
 
+# ----- Council of boards: mainland cells -----
+# Cells are the state variable NAM_cells (0-100) on the six mainland districts:
+# 67 and 688 for Eflor's holder, 689, 690, 700 and 719 for Azhar's. Only
+# NAM_board_cells_add writes it. A paid run "Ячейка" holds the state flag
+# NAM_board_cells_work on its district: value 1 for the 750-rifle price of the
+# holders' underwriting, 2 for 1500. NAM_board_cells_running counts the runs.
+# The cells rise and are spent when the war of return starts; a won return or
+# the end of the council closes them, an armistice keeps them.
+
+# STATE district. Input: temp NAM_board_cells_change, signed.
+NAM_board_cells_add = {
+	set_temp_variable = { var = NAM_board_cells_value value = NAM_cells }
+	add_to_temp_variable = { var = NAM_board_cells_value value = NAM_board_cells_change }
+	clamp_temp_variable = { var = NAM_board_cells_value min = 0 max = 100 }
+	set_variable = { var = NAM_cells value = NAM_board_cells_value }
+}
+
+# COUNTRY NAM. NAM_board_mainland_contacts: ten cells in every district.
+NAM_board_cells_seed = {
+	set_temp_variable = { var = NAM_board_cells_change value = 10 }
+	67 = { NAM_board_cells_add = yes }
+	688 = { NAM_board_cells_add = yes }
+	689 = { NAM_board_cells_add = yes }
+	690 = { NAM_board_cells_add = yes }
+	700 = { NAM_board_cells_add = yes }
+	719 = { NAM_board_cells_add = yes }
+}
+
+# COUNTRY NAM, complete_effect of NAM_board_inv_cells after its price
+# recheck; FROM is the district. Debits the run once and opens its escrow.
+NAM_board_cells_pay_run = {
+	add_political_power = -25
+	set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+	NAM_corp_capital_add = yes
+	if = {
+		limit = { has_completed_focus = NAM_board_holders_underwrite }
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = -750
+		}
+		FROM = {
+			set_state_flag = {
+				flag = NAM_board_cells_work
+				value = 1
+			}
+		}
+	}
+	else = {
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = -1500
+		}
+		FROM = {
+			set_state_flag = {
+				flag = NAM_board_cells_work
+				value = 2
+			}
+		}
+	}
+	add_to_variable = { var = NAM_board_cells_running value = 1 }
+}
+
+# STATE district. Returns a paid run: 40 capital and its rifles.
+NAM_board_cells_refund_run = {
+	if = {
+		limit = { has_state_flag = NAM_board_cells_work }
+		if = {
+			limit = {
+				has_state_flag = {
+					flag = NAM_board_cells_work
+					value = 1
+				}
+			}
+			NAM = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 750
+				}
+			}
+		}
+		else = {
+			NAM = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1500
+				}
+			}
+		}
+		clr_state_flag = NAM_board_cells_work
+		NAM = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+			NAM_corp_capital_add = yes
+			add_to_variable = { var = NAM_board_cells_running value = -1 }
+			clamp_variable = {
+				var = NAM_board_cells_running
+				min = 0
+			}
+		}
+	}
+}
+
+# STATE district, remove_effect of NAM_board_inv_cells. The run settles only
+# while Eflor or Azhar still holds the district and the war has not started;
+# otherwise the price returns.
+NAM_board_cells_settle_run = {
+	if = {
+		limit = {
+			has_state_flag = NAM_board_cells_work
+			OR = {
+				is_owned_by = EFL
+				is_owned_by = AZH
+			}
+			NAM = { NAM_board_cells_open = yes }
+		}
+		set_temp_variable = { var = NAM_board_cells_change value = 20 }
+		if = {
+			limit = { NAM_board_cells_safehouse_cover = yes }
+			set_temp_variable = { var = NAM_board_cells_change value = 25 }
+		}
+		NAM_board_cells_add = yes
+		clr_state_flag = NAM_board_cells_work
+		NAM = {
+			add_to_variable = { var = NAM_board_cells_running value = -1 }
+			clamp_variable = {
+				var = NAM_board_cells_running
+				min = 0
+			}
+		}
+	}
+	else = {
+		NAM_board_cells_refund_run = yes
+	}
+}
+
+# STATE district. Opens the exposure event 130 for this district. Callers check
+# that no exposure event is pending.
+NAM_board_cells_expose = {
+	save_global_event_target_as = NAM_board_cells_district
+	NAM = {
+		set_country_flag = {
+			flag = NAM_board_cells_event_pending
+			value = 1
+			days = 30
+		}
+		country_event = { id = ADISCORD_nam_story.130 }
+	}
+}
+
+# STATE district, remove_effect of the enemy's NAM_cells_raid.
+NAM_board_cells_raid_settle = {
+	set_temp_variable = { var = NAM_board_cells_change value = -25 }
+	if = {
+		limit = { NAM_board_cells_safehouse_cover = yes }
+		set_temp_variable = { var = NAM_board_cells_change value = -15 }
+	}
+	NAM_board_cells_add = yes
+	set_state_flag = {
+		flag = NAM_cells_raided
+		value = 1
+		days = 120
+	}
+	if = {
+		limit = {
+			NAM = {
+				NAM_board_cells_open = yes
+				NOT = { has_country_flag = NAM_board_cells_event_pending }
+			}
+		}
+		NAM_board_cells_expose = yes
+	}
+}
+
+# STATE district. A network of ten or more recruits itself up to 60; higher
+# values need paid runs.
+NAM_board_cells_grow = {
+	if = {
+		limit = {
+			OR = {
+				is_owned_by = EFL
+				is_owned_by = AZH
+			}
+			check_variable = { NAM_cells > 9 }
+			check_variable = { NAM_cells < 60 }
+		}
+		set_temp_variable = { var = NAM_board_cells_change value = 1 }
+		NAM_board_cells_add = yes
+	}
+}
+
+# STATE district. One 8% exposure roll for a network of 40 or more without a
+# raid cooldown, while no exposure event is pending.
+NAM_board_cells_expose_roll = {
+	if = {
+		limit = {
+			check_variable = { NAM_cells > 39 }
+			NOT = { has_state_flag = NAM_cells_raided }
+			NAM = { NOT = { has_country_flag = NAM_board_cells_event_pending } }
+		}
+		random = {
+			chance = 8
+			NAM_board_cells_expose = yes
+		}
+	}
+}
+
+# COUNTRY NAM, from NAM_corp_monthly after its main NAM_corp_capital_add. Six
+# explicit rows each, no scope scan; the first exposure hit sets the pending
+# flag, so the later rows wait for the next month.
+NAM_board_cells_monthly = {
+	if = {
+		limit = { NAM_board_cells_open = yes }
+		67 = { NAM_board_cells_grow = yes }
+		688 = { NAM_board_cells_grow = yes }
+		689 = { NAM_board_cells_grow = yes }
+		690 = { NAM_board_cells_grow = yes }
+		700 = { NAM_board_cells_grow = yes }
+		719 = { NAM_board_cells_grow = yes }
+		67 = { NAM_board_cells_expose_roll = yes }
+		688 = { NAM_board_cells_expose_roll = yes }
+		689 = { NAM_board_cells_expose_roll = yes }
+		690 = { NAM_board_cells_expose_roll = yes }
+		700 = { NAM_board_cells_expose_roll = yes }
+		719 = { NAM_board_cells_expose_roll = yes }
+	}
+}
+
+# COUNTRY NAM. The locked militia template of the risings; never recruitable.
+NAM_board_partisan_template = {
+	if = {
+		limit = { NOT = { has_template = "Mainland Partisans" } }
+		division_template = {
+			name = "Mainland Partisans"
+			division_names_group = ADISCORD_INF_01
+			is_locked = yes
+			regiments = {
+				ADISCORD_militia = { x = 0 y = 0 }
+				ADISCORD_militia = { x = 0 y = 1 }
+				ADISCORD_militia = { x = 0 y = 2 }
+			}
+		}
+	}
+}
+
+# STATE district. NAM takes the rising province: a non-VP land province, in
+# the South Harbour the smallest of its four VP provinces.
+NAM_board_cells_take_rising_province = {
+	if = {
+		limit = { state = 67 }
+		NAM = { set_province_controller = 4287 }
+	}
+	else_if = {
+		limit = { state = 688 }
+		NAM = { set_province_controller = 3127 }
+	}
+	else_if = {
+		limit = { state = 689 }
+		NAM = { set_province_controller = 176 }
+	}
+	else_if = {
+		limit = { state = 690 }
+		NAM = { set_province_controller = 2935 }
+	}
+	else_if = {
+		limit = { state = 700 }
+		NAM = { set_province_controller = 16881 }
+	}
+	else_if = {
+		limit = { state = 719 }
+		NAM = { set_province_controller = 461 }
+	}
+}
+
+# STATE district. One partisan division on the rising province, counted
+# against the cap of eight in the temp NAM_board_partisans_raised.
+NAM_board_cells_raise_partisan = {
+	add_to_temp_variable = { var = NAM_board_partisans_raised value = 1 }
+	if = {
+		limit = { state = 67 }
+		create_unit = {
+			division = "division_template = \"Mainland Partisans\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 4287
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else_if = {
+		limit = { state = 688 }
+		create_unit = {
+			division = "division_template = \"Mainland Partisans\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 3127
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else_if = {
+		limit = { state = 689 }
+		create_unit = {
+			division = "division_template = \"Mainland Partisans\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 176
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else_if = {
+		limit = { state = 690 }
+		create_unit = {
+			division = "division_template = \"Mainland Partisans\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 2935
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else_if = {
+		limit = { state = 700 }
+		create_unit = {
+			division = "division_template = \"Mainland Partisans\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 16881
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else_if = {
+		limit = { state = 719 }
+		create_unit = {
+			division = "division_template = \"Mainland Partisans\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 461
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+}
+
+# STATE district. Rising by the district's cells: sabotage from 30; from 50
+# the hostile armies there fall back to their capitals, NAM takes the rising
+# province and one partisan division forms on it; from 70 a second division,
+# and Svetlogorsk also gives up its port province 689 with the northern
+# safehouses. The cap of eight divisions holds across the six districts. Only
+# a district held by the enemy, or already by NAM, rises.
+NAM_board_cells_rise_state = {
+	if = {
+		limit = {
+			check_variable = { NAM_cells > 29 }
+			OR = {
+				is_controlled_by = NAM
+				controller = {
+					OR = {
+						has_war_with = NAM
+						has_country_flag = NAM_wor_participant
+					}
+				}
+			}
+		}
+		add_dynamic_modifier = {
+			modifier = NAM_board_rising_sabotage
+			days = 120
+		}
+		damage_building = {
+			type = infrastructure
+			damage = 1
+		}
+		if = {
+			limit = {
+				check_variable = { NAM_cells > 49 }
+				check_variable = { NAM_board_partisans_raised < 8 }
+			}
+			teleport_armies = {
+				limit = {
+					OR = {
+						has_war_with = NAM
+						has_country_flag = NAM_wor_participant
+					}
+				}
+			}
+			NAM_board_cells_take_rising_province = yes
+			NAM_board_cells_raise_partisan = yes
+			if = {
+				limit = {
+					check_variable = { NAM_cells > 69 }
+					check_variable = { NAM_board_partisans_raised < 8 }
+				}
+				NAM_board_cells_raise_partisan = yes
+			}
+			if = {
+				limit = { state = 700 }
+				NAM = { set_country_flag = NAM_board_harbour_rose }
+			}
+			if = {
+				limit = {
+					state = 688
+					check_variable = { NAM_cells > 69 }
+					NAM = { has_completed_focus = NAM_board_northern_safehouses }
+				}
+				NAM = { set_province_controller = 689 }
+			}
+		}
+	}
+}
+
+# STATE district. Spends the network: a paid run returns its price first.
+NAM_board_cells_spend = {
+	NAM_board_cells_refund_run = yes
+	clear_variable = NAM_cells
+}
+
+# COUNTRY NAM, after a successful NAM_war_of_return_start (operation Poseidon
+# or the renewal decision). Every district rises by its cells, then the cells
+# are spent. The harbour landing rule has already read district 700.
+NAM_board_cells_rise = {
+	clr_country_flag = NAM_board_harbour_rose
+	NAM_board_partisan_template = yes
+	set_temp_variable = { var = NAM_board_partisans_raised value = 0 }
+	67 = { NAM_board_cells_rise_state = yes }
+	688 = { NAM_board_cells_rise_state = yes }
+	689 = { NAM_board_cells_rise_state = yes }
+	690 = { NAM_board_cells_rise_state = yes }
+	700 = { NAM_board_cells_rise_state = yes }
+	719 = { NAM_board_cells_rise_state = yes }
+	67 = { NAM_board_cells_spend = yes }
+	688 = { NAM_board_cells_spend = yes }
+	689 = { NAM_board_cells_spend = yes }
+	690 = { NAM_board_cells_spend = yes }
+	700 = { NAM_board_cells_spend = yes }
+	719 = { NAM_board_cells_spend = yes }
+	set_variable = { var = NAM_board_cells_running value = 0 }
+	log = "[ADISCORD][NAM][CELLS] Mainland rising: [?NAM_board_partisans_raised] partisan divisions."
+}
+
+# STATE district, from NAM_war_of_return_close. The rising's sabotage ends with
+# the war; after an armistice or defeat it must not burden the peacetime controller.
+NAM_board_rising_sabotage_clear = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = NAM_board_rising_sabotage } }
+		remove_dynamic_modifier = { modifier = NAM_board_rising_sabotage }
+	}
+}
+
+# COUNTRY NAM. Route end (NAM_board_end_operations) or a won return: every
+# running run returns its price and the networks are cleared.
+NAM_board_cells_close = {
+	67 = { NAM_board_cells_spend = yes }
+	688 = { NAM_board_cells_spend = yes }
+	689 = { NAM_board_cells_spend = yes }
+	690 = { NAM_board_cells_spend = yes }
+	700 = { NAM_board_cells_spend = yes }
+	719 = { NAM_board_cells_spend = yes }
+	set_variable = { var = NAM_board_cells_running value = 0 }
+	clr_country_flag = NAM_board_cells_event_pending
+}
+
+# ----- Council of boards: operation Poseidon -----
+# The final focus NAM_board_operation_poseidon starts the existing war of
+# return; no second war exists. The landing-hour grants follow only when the
+# exile war really began. A start refused in the same tick pays nothing more:
+# the renewal decision NAM_exile_renew_war_of_return becomes visible through
+# the completed focus and reopens it.
+
+# COUNTRY NAM. Reward of NAM_board_operation_poseidon, in landing order:
+# the war and its harbour landing, the risings, the island brigades, the
+# flagship division, the spirit, the council's trust and the beachhead mission.
+NAM_board_poseidon_launch = {
+	NAM_war_of_return_start = yes
+	if = {
+		limit = {
+			NAM_war_of_return_active = yes
+			has_global_flag = NAM_wor_exile_war
+		}
+		NAM_board_cells_rise = yes
+		NAM_board_poseidon_island_brigades = yes
+		NAM_marine_ensure_template = yes
+		if = {
+			limit = { controls_province = 16716 }
+			700 = {
+				create_unit = {
+					division = "name = \"Флагманский десант\" division_template = \"Island Marines\" start_experience_factor = 0.35 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = NAM
+					prioritize_location = 16716
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+		}
+		else = {
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Флагманский десант\" division_template = \"Island Marines\" start_experience_factor = 0.35 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = NAM
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+		}
+		add_timed_idea = {
+			idea = NAM_board_poseidon_spirit
+			days = 120
+		}
+		set_temp_variable = { var = NAM_board_holders_gain value = 5 }
+		set_temp_variable = { var = NAM_board_others_gain value = 0 }
+		set_temp_variable = { var = NAM_board_chair_gain value = 5 }
+		NAM_board_holders_package = yes
+		activate_mission = NAM_board_poseidon_beachhead
+		log = "[ADISCORD][NAM][POSEIDON] Operation Poseidon began the war of return."
+	}
+	else = {
+		log = "[ADISCORD][NAM][POSEIDON] Operation Poseidon found no war of return to start; the renewal decision reopens it."
+	}
+}
+
+# COUNTRY NAM. One brigade from each nationalised island (NAM_isl_status 3).
+NAM_board_poseidon_island_brigades = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_status^1 value = 3 compare = equals } }
+		NAM_board_poseidon_island_brigade_1 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_status^2 value = 3 compare = equals } }
+		NAM_board_poseidon_island_brigade_2 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_status^3 value = 3 compare = equals } }
+		NAM_board_poseidon_island_brigade_3 = yes
+	}
+}
+
+# COUNTRY NAM. Ulven's brigade at its capital 648; also called by
+# NAM_isl_nationalise_finish when the island is cored during the return.
+# Without the template or the capital the island's men join the pool.
+NAM_board_poseidon_island_brigade_1 = {
+	if = {
+		limit = {
+			has_template = "Line Infantry Brigade"
+			controls_state = 648
+		}
+		648 = {
+			create_unit = {
+				division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 6452
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		add_manpower = 6300
+	}
+}
+
+# COUNTRY NAM. Luren's brigade at its capital 651.
+NAM_board_poseidon_island_brigade_2 = {
+	if = {
+		limit = {
+			has_template = "Line Infantry Brigade"
+			controls_state = 651
+		}
+		651 = {
+			create_unit = {
+				division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 1894
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		add_manpower = 6300
+	}
+}
+
+# COUNTRY NAM. Sharden's brigade at its capital 680.
+NAM_board_poseidon_island_brigade_3 = {
+	if = {
+		limit = {
+			has_template = "Line Infantry Brigade"
+			controls_state = 680
+		}
+		680 = {
+			create_unit = {
+				division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 1610
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		add_manpower = 6300
+	}
+}
+
+# COUNTRY NAM, from event 133 a: the coalition's leader accepted the council's
+# armistice. Terms from event 131: 1 - the "Отлив" spirit and the holders -5,
+# 2 - the holders -12. NAM_war_of_return_close sets the resolved flag first,
+# white-peaces and releases every participant and keeps NAM_wor_exile_war,
+# so the renewal decision reopens the war after the truce. The external close
+# is not used: it would clear NAM_board_loren_debt, and Loren's advances are
+# charged at the victory of a renewed war. The cells stay for the renewal.
+NAM_board_poseidon_armistice = {
+	if = {
+		limit = {
+			NAM_war_of_return_active = yes
+			check_variable = { NAM_board_armistice_terms > 0 }
+		}
+		set_temp_variable = { var = NAM_board_holders_gain value = -12 }
+		if = {
+			limit = { check_variable = { NAM_board_armistice_terms < 2 } }
+			add_timed_idea = {
+				idea = NAM_board_poseidon_ebb
+				days = 180
+			}
+			set_temp_variable = { var = NAM_board_holders_gain value = -5 }
+		}
+		set_temp_variable = { var = NAM_board_others_gain value = 0 }
+		set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+		NAM_board_holders_package = yes
+		# The price passes to the leader that accepted, before the close clears
+		# the target; send_equipment moves only rifles NAM actually holds.
+		send_equipment = {
+			equipment = infantry_equipment
+			amount = 3000
+			target = event_target:NAM_wor_primary
+		}
+		set_country_flag = {
+			flag = NAM_board_poseidon_truce
+			value = 1
+			days = 180
+		}
+		if = {
+			limit = { has_active_mission = NAM_board_poseidon_beachhead }
+			remove_mission = NAM_board_poseidon_beachhead
+		}
+		clear_variable = NAM_board_armistice_terms
+		NAM_war_of_return_close = yes
+		log = "[ADISCORD][NAM][POSEIDON] Armistice: the war of return closed, renewal after 180 days."
+	}
+}
+
+# ----- Council of boards: invasion preparation -----
+# Programmes 1-9 of the category NAM_board_invasion keep their runs, paid receipts
+# and caps in NAM_board_inv_runs, NAM_board_inv_running and NAM_board_inv_cap
+# (index = programme). Caps only grow through NAM_board_inv_cap_add, so the order of
+# rewards never overwrites a bonus. The targeted programmes 1 and 4 share one receipt
+# per programme; the receipt blocks a second target until the first run settles.
+
+# COUNTRY NAM. Inputs: temp NAM_board_inv_k (programme 1-9) and
+# NAM_board_inv_cap_change (signed). Keeps the cap within 0-6 (arsenal 0-7, marines 0-4)
+# and never below the runs already made. The arsenal ceiling leaves room for event 100 c
+# on top of the open-tenders route (base 4, tenders +2).
+NAM_board_inv_cap_add = {
+	add_to_variable = { var = NAM_board_inv_cap^NAM_board_inv_k value = NAM_board_inv_cap_change }
+	set_temp_variable = { var = NAM_board_inv_cap_max value = 6 }
+	if = {
+		limit = { check_variable = { NAM_board_inv_k = 2 } }
+		set_temp_variable = { var = NAM_board_inv_cap_max value = 7 }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_inv_k = 7 } }
+		set_temp_variable = { var = NAM_board_inv_cap_max value = 4 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_cap^NAM_board_inv_k value = NAM_board_inv_cap_max compare = greater_than } }
+		set_variable = { var = NAM_board_inv_cap^NAM_board_inv_k value = NAM_board_inv_cap_max }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_cap^NAM_board_inv_k value = NAM_board_inv_runs^NAM_board_inv_k compare = less_than } }
+		set_variable = { var = NAM_board_inv_cap^NAM_board_inv_k value = NAM_board_inv_runs^NAM_board_inv_k }
+	}
+	set_temp_variable = { var = NAM_board_inv_cap_change value = 0 }
+}
+
+# COUNTRY NAM. Inputs: temp NAM_board_holders_gain (both partition holders),
+# NAM_board_others_gain (the four other companies) and the optional
+# NAM_board_chair_gain (added once to the chairing company; unset reads 0). The
+# holders are the companies frozen by partition_night, not the current ranks.
+# Writes the six trust inputs itself, so a caller must not set them beforehand, and
+# applies them as one package with one recount.
+NAM_board_holders_package = {
+	set_temp_variable = { var = NAM_board_holders_value value = NAM_board_holders_gain }
+	set_temp_variable = { var = NAM_board_others_value value = NAM_board_others_gain }
+	set_temp_variable = { var = NAM_board_chair_value value = NAM_board_chair_gain }
+	set_temp_variable = { var = NAM_board_holders_gain value = 0 }
+	set_temp_variable = { var = NAM_board_others_gain value = 0 }
+	set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+	set_temp_variable = { var = NAM_board_trust_input_1 value = NAM_board_others_value }
+	set_temp_variable = { var = NAM_board_trust_input_2 value = NAM_board_others_value }
+	set_temp_variable = { var = NAM_board_trust_input_3 value = NAM_board_others_value }
+	set_temp_variable = { var = NAM_board_trust_input_4 value = NAM_board_others_value }
+	set_temp_variable = { var = NAM_board_trust_input_5 value = NAM_board_others_value }
+	set_temp_variable = { var = NAM_board_trust_input_6 value = NAM_board_others_value }
+	if = {
+		limit = {
+			OR = {
+				check_variable = { NAM_board_partition_efl = 1 }
+				check_variable = { NAM_board_partition_azh = 1 }
+			}
+		}
+		set_temp_variable = { var = NAM_board_trust_input_1 value = NAM_board_holders_value }
+	}
+	if = {
+		limit = {
+			OR = {
+				check_variable = { NAM_board_partition_efl = 2 }
+				check_variable = { NAM_board_partition_azh = 2 }
+			}
+		}
+		set_temp_variable = { var = NAM_board_trust_input_2 value = NAM_board_holders_value }
+	}
+	if = {
+		limit = {
+			OR = {
+				check_variable = { NAM_board_partition_efl = 3 }
+				check_variable = { NAM_board_partition_azh = 3 }
+			}
+		}
+		set_temp_variable = { var = NAM_board_trust_input_3 value = NAM_board_holders_value }
+	}
+	if = {
+		limit = {
+			OR = {
+				check_variable = { NAM_board_partition_efl = 4 }
+				check_variable = { NAM_board_partition_azh = 4 }
+			}
+		}
+		set_temp_variable = { var = NAM_board_trust_input_4 value = NAM_board_holders_value }
+	}
+	if = {
+		limit = {
+			OR = {
+				check_variable = { NAM_board_partition_efl = 5 }
+				check_variable = { NAM_board_partition_azh = 5 }
+			}
+		}
+		set_temp_variable = { var = NAM_board_trust_input_5 value = NAM_board_holders_value }
+	}
+	if = {
+		limit = {
+			OR = {
+				check_variable = { NAM_board_partition_efl = 6 }
+				check_variable = { NAM_board_partition_azh = 6 }
+			}
+		}
+		set_temp_variable = { var = NAM_board_trust_input_6 value = NAM_board_holders_value }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_chair = 1 } }
+		add_to_temp_variable = { var = NAM_board_trust_input_1 value = NAM_board_chair_value }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_chair = 2 } }
+		add_to_temp_variable = { var = NAM_board_trust_input_2 value = NAM_board_chair_value }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_chair = 3 } }
+		add_to_temp_variable = { var = NAM_board_trust_input_3 value = NAM_board_chair_value }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_chair = 4 } }
+		add_to_temp_variable = { var = NAM_board_trust_input_4 value = NAM_board_chair_value }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_chair = 5 } }
+		add_to_temp_variable = { var = NAM_board_trust_input_5 value = NAM_board_chair_value }
+	}
+	if = {
+		limit = { check_variable = { NAM_board_chair = 6 } }
+		add_to_temp_variable = { var = NAM_board_trust_input_6 value = NAM_board_chair_value }
+	}
+	NAM_board_trust_package = yes
+}
+
+# COUNTRY NAM. Inputs: temp NAM_board_build_kind (1 war plant, 2 synthetic refinery,
+# 3 dockyard, 4 civilian factory converted to a war plant) and NAM_board_build_pref
+# (state id). Builds in the preferred island state, else in the first held island of
+# the fixed order 228, 227, 225, 231, 226, 229, 230 that can take the building.
+# Output: temp NAM_board_site_built (1 built, 0 not); the caller then pays its
+# fallback through NAM_board_pay_site_fallback.
+NAM_board_build_on_island = {
+	set_temp_variable = { var = NAM_board_site_built value = 0 }
+	set_temp_variable = { var = NAM_board_build_try value = NAM_board_build_pref }
+	NAM_board_build_try_state = yes
+	if = {
+		limit = { check_variable = { NAM_board_site_built = 0 } }
+		set_temp_variable = { var = NAM_board_build_try value = 228 }
+		NAM_board_build_try_state = yes
+	}
+	if = {
+		limit = { check_variable = { NAM_board_site_built = 0 } }
+		set_temp_variable = { var = NAM_board_build_try value = 227 }
+		NAM_board_build_try_state = yes
+	}
+	if = {
+		limit = { check_variable = { NAM_board_site_built = 0 } }
+		set_temp_variable = { var = NAM_board_build_try value = 225 }
+		NAM_board_build_try_state = yes
+	}
+	if = {
+		limit = { check_variable = { NAM_board_site_built = 0 } }
+		set_temp_variable = { var = NAM_board_build_try value = 231 }
+		NAM_board_build_try_state = yes
+	}
+	if = {
+		limit = { check_variable = { NAM_board_site_built = 0 } }
+		set_temp_variable = { var = NAM_board_build_try value = 226 }
+		NAM_board_build_try_state = yes
+	}
+	if = {
+		limit = { check_variable = { NAM_board_site_built = 0 } }
+		set_temp_variable = { var = NAM_board_build_try value = 229 }
+		NAM_board_build_try_state = yes
+	}
+	if = {
+		limit = { check_variable = { NAM_board_site_built = 0 } }
+		set_temp_variable = { var = NAM_board_build_try value = 230 }
+		NAM_board_build_try_state = yes
+	}
+}
+
+# COUNTRY NAM. One attempt of NAM_board_build_on_island on the island state named by
+# temp NAM_board_build_try.
+NAM_board_build_try_state = {
+	if = {
+		limit = {
+			check_variable = { NAM_board_build_try = 225 }
+			225 = { NAM_board_inv_build_site = yes }
+		}
+		225 = { NAM_board_build_kind_effect = yes }
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_board_build_try = 226 }
+			226 = { NAM_board_inv_build_site = yes }
+		}
+		226 = { NAM_board_build_kind_effect = yes }
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_board_build_try = 227 }
+			227 = { NAM_board_inv_build_site = yes }
+		}
+		227 = { NAM_board_build_kind_effect = yes }
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_board_build_try = 228 }
+			228 = { NAM_board_inv_build_site = yes }
+		}
+		228 = { NAM_board_build_kind_effect = yes }
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_board_build_try = 229 }
+			229 = { NAM_board_inv_build_site = yes }
+		}
+		229 = { NAM_board_build_kind_effect = yes }
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_board_build_try = 230 }
+			230 = { NAM_board_inv_build_site = yes }
+		}
+		230 = { NAM_board_build_kind_effect = yes }
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_board_build_try = 231 }
+			231 = { NAM_board_inv_build_site = yes }
+		}
+		231 = { NAM_board_build_kind_effect = yes }
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+}
+
+# STATE. Builds the kind named by temp NAM_board_build_kind.
+NAM_board_build_kind_effect = {
+	if = {
+		limit = { check_variable = { NAM_board_build_kind = 1 } }
+		NAM_board_build_war_plant = yes
+	}
+	else_if = {
+		limit = { check_variable = { NAM_board_build_kind = 2 } }
+		NAM_board_build_refinery = yes
+	}
+	else_if = {
+		limit = { check_variable = { NAM_board_build_kind = 3 } }
+		NAM_board_build_company_docks = yes
+	}
+	else_if = {
+		limit = { check_variable = { NAM_board_build_kind = 4 } }
+		NAM_board_convert_plant = yes
+	}
+}
+
+# STATE. A war plant brings its own shared slot when the state has no free one.
+NAM_board_build_war_plant = {
+	if = {
+		limit = {
+			NOT = { free_building_slots = { building = arms_factory size > 0 include_locked = yes } }
+		}
+		add_extra_state_shared_building_slots = 1
+	}
+	add_building_construction = {
+		type = arms_factory
+		level = 1
+		instant_build = yes
+	}
+}
+
+# STATE. The site trigger NAM_board_inv_refinery_site keeps at most three refineries.
+NAM_board_build_refinery = {
+	if = {
+		limit = {
+			NOT = { free_building_slots = { building = synthetic_refinery size > 0 include_locked = yes } }
+		}
+		add_extra_state_shared_building_slots = 1
+	}
+	add_building_construction = {
+		type = synthetic_refinery
+		level = 1
+		instant_build = yes
+	}
+}
+
+# STATE. Converts one civilian factory into a war plant in the slot it frees.
+NAM_board_convert_plant = {
+	remove_building = {
+		type = industrial_complex
+		level = 1
+	}
+	add_building_construction = {
+		type = arms_factory
+		level = 1
+		instant_build = yes
+	}
+}
+
+# STATE. One naval base level in the island's main port while it is below 10.
+# Output: temp NAM_board_site_built.
+NAM_board_build_port_level = {
+	set_temp_variable = { var = NAM_board_site_built value = 0 }
+	if = {
+		limit = {
+			state = 225
+			NAM_board_held_site = yes
+			any_province_building_level = {
+				province = { id = 11393 }
+				building = naval_base
+				level < 10
+			}
+		}
+		add_building_construction = {
+			type = naval_base
+			level = 1
+			instant_build = yes
+			province = 11393
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			state = 226
+			NAM_board_held_site = yes
+			any_province_building_level = {
+				province = { id = 4396 }
+				building = naval_base
+				level < 10
+			}
+		}
+		add_building_construction = {
+			type = naval_base
+			level = 1
+			instant_build = yes
+			province = 4396
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			state = 227
+			NAM_board_held_site = yes
+			any_province_building_level = {
+				province = { id = 9192 }
+				building = naval_base
+				level < 10
+			}
+		}
+		add_building_construction = {
+			type = naval_base
+			level = 1
+			instant_build = yes
+			province = 9192
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			state = 228
+			NAM_board_held_site = yes
+			any_province_building_level = {
+				province = { id = 6893 }
+				building = naval_base
+				level < 10
+			}
+		}
+		add_building_construction = {
+			type = naval_base
+			level = 1
+			instant_build = yes
+			province = 6893
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			state = 229
+			NAM_board_held_site = yes
+			any_province_building_level = {
+				province = { id = 3731 }
+				building = naval_base
+				level < 10
+			}
+		}
+		add_building_construction = {
+			type = naval_base
+			level = 1
+			instant_build = yes
+			province = 3731
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			state = 230
+			NAM_board_held_site = yes
+			any_province_building_level = {
+				province = { id = 2742 }
+				building = naval_base
+				level < 10
+			}
+		}
+		add_building_construction = {
+			type = naval_base
+			level = 1
+			instant_build = yes
+			province = 2742
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			state = 231
+			NAM_board_held_site = yes
+			any_province_building_level = {
+				province = { id = 13018 }
+				building = naval_base
+				level < 10
+			}
+		}
+		add_building_construction = {
+			type = naval_base
+			level = 1
+			instant_build = yes
+			province = 13018
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+}
+
+# COUNTRY NAM. A supply hub in the main port of the capital's island state, if the
+# council holds it and the port has none. Output: temp NAM_board_site_built.
+NAM_board_build_supply_hub = {
+	set_temp_variable = { var = NAM_board_site_built value = 0 }
+	if = {
+		limit = {
+			capital_scope = {
+				state = 225
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 11393 }
+					building = supply_node
+					level < 1
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = supply_node
+				level = 1
+				instant_build = yes
+				province = 11393
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 226
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 4396 }
+					building = supply_node
+					level < 1
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = supply_node
+				level = 1
+				instant_build = yes
+				province = 4396
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 227
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 9192 }
+					building = supply_node
+					level < 1
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = supply_node
+				level = 1
+				instant_build = yes
+				province = 9192
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 228
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 6893 }
+					building = supply_node
+					level < 1
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = supply_node
+				level = 1
+				instant_build = yes
+				province = 6893
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 229
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 3731 }
+					building = supply_node
+					level < 1
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = supply_node
+				level = 1
+				instant_build = yes
+				province = 3731
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 230
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 2742 }
+					building = supply_node
+					level < 1
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = supply_node
+				level = 1
+				instant_build = yes
+				province = 2742
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+	else_if = {
+		limit = {
+			capital_scope = {
+				state = 231
+				NAM_board_held_site = yes
+				any_province_building_level = {
+					province = { id = 13018 }
+					building = supply_node
+					level < 1
+				}
+			}
+		}
+		capital_scope = {
+			add_building_construction = {
+				type = supply_node
+				level = 1
+				instant_build = yes
+				province = 13018
+			}
+		}
+		set_temp_variable = { var = NAM_board_site_built value = 1 }
+	}
+}
+
+# COUNTRY NAM. Input: temp NAM_corp_capital_change, the fallback of a building reward.
+# Pays it only when the preceding build call left NAM_board_site_built at 0.
+NAM_board_pay_site_fallback = {
+	if = {
+		limit = { check_variable = { NAM_board_site_built = 0 } }
+		NAM_corp_capital_add = yes
+	}
+	set_temp_variable = { var = NAM_corp_capital_change value = 0 }
+}
+
+# COUNTRY NAM. One "Island Marines" division at the capital, at 35% experience once
+# storm_companies is completed, otherwise 20%. Used by the marine programme and by
+# the focus rewards that grant a division.
+NAM_board_raise_marine_division = {
+	NAM_marine_ensure_template = yes
+	if = {
+		limit = { has_completed_focus = NAM_board_storm_companies }
+		capital_scope = {
+			create_unit = {
+				division = "division_template = \"Island Marines\" start_experience_factor = 0.35 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		capital_scope = {
+			create_unit = {
+				division = "division_template = \"Island Marines\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. One veteran brigade, or its recruits when the template is gone.
+NAM_board_raise_mercenary_brigade = {
+	if = {
+		limit = { has_template = "Line Infantry Brigade" }
+		capital_scope = {
+			create_unit = {
+				division = "division_template = \"Line Infantry Brigade\" start_experience_factor = 0.50 start_equipment_factor = 1.0"
+				owner = NAM
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		add_manpower = 6300
+	}
+}
+
+# COUNTRY NAM. Input: temp NAM_board_hulls (0-2). Launches that many escort ships.
+NAM_board_launch_escorts = {
+	if = {
+		limit = { check_variable = { NAM_board_hulls > 0 } }
+		create_ship = {
+			type = ADISCORD_escort_ship_2155
+			equipment_variant = "ADISCORD_escort_ship_2155"
+		}
+	}
+	if = {
+		limit = { check_variable = { NAM_board_hulls > 1 } }
+		create_ship = {
+			type = ADISCORD_escort_ship_2155
+			equipment_variant = "ADISCORD_escort_ship_2155"
+		}
+	}
+	set_temp_variable = { var = NAM_board_hulls value = 0 }
+}
+
+# Settlements of the nine programmes. COUNTRY NAM; the caller checks the receipt
+# NAM_board_inv_running^k. Programmes 1 and 4 read their target as FROM and recheck
+# the site, returning the capital when the work cannot be done.
+
+NAM_board_inv_settle_1 = {
+	custom_effect_tooltip = NAM_board_inv_convert_plant_result_tt
+	hidden_effect = {
+		if = {
+			limit = { FROM = { NAM_board_inv_plant_site = yes } }
+			FROM = { NAM_board_convert_plant = yes }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+			NAM_corp_capital_add = yes
+		}
+		FROM = { clr_state_flag = NAM_board_inv_work }
+		set_variable = { var = NAM_board_inv_running^1 value = 0 }
+	}
+}
+
+NAM_board_inv_settle_2 = {
+	add_equipment_to_stockpile = {
+		type = infantry_equipment
+		amount = 4500
+		producer = NAM
+	}
+	add_equipment_to_stockpile = {
+		type = ADISCORD_squad_weapons_equipment
+		amount = 96
+		producer = NAM
+	}
+	hidden_effect = {
+		set_variable = { var = NAM_board_inv_running^2 value = 0 }
+	}
+}
+
+NAM_board_inv_settle_3 = {
+	custom_effect_tooltip = NAM_board_inv_fuel_freight_result_tt
+	hidden_effect = {
+		add_to_variable = { var = NAM_open_fuel_reserve value = 6000 }
+		NAM_open_fuel_release = yes
+		set_variable = { var = NAM_board_inv_running^3 value = 0 }
+	}
+}
+
+NAM_board_inv_settle_4 = {
+	custom_effect_tooltip = NAM_board_inv_harbour_works_result_tt
+	hidden_effect = {
+		set_temp_variable = { var = NAM_board_site_built value = 0 }
+		FROM = { NAM_board_build_port_level = yes }
+		if = {
+			limit = { check_variable = { NAM_board_site_built = 0 } }
+			set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+			NAM_corp_capital_add = yes
+		}
+		FROM = { clr_state_flag = NAM_board_inv_work }
+		set_variable = { var = NAM_board_inv_running^4 value = 0 }
+	}
+}
+
+NAM_board_inv_settle_5 = {
+	add_equipment_to_stockpile = {
+		type = convoy_1
+		amount = 5
+		producer = NAM
+	}
+	hidden_effect = {
+		set_variable = { var = NAM_board_inv_running^5 value = 0 }
+	}
+}
+
+NAM_board_inv_settle_6 = {
+	custom_effect_tooltip = NAM_board_inv_escort_contract_result_tt
+	hidden_effect = {
+		if = {
+			limit = { NAM_board_island_yard_ready = yes }
+			set_temp_variable = { var = NAM_board_hulls value = 1 }
+			NAM_board_launch_escorts = yes
+		}
+		else = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 120 }
+			NAM_corp_capital_add = yes
+		}
+		set_variable = { var = NAM_board_inv_running^6 value = 0 }
+	}
+}
+
+NAM_board_inv_settle_7 = {
+	custom_effect_tooltip = NAM_board_inv_raise_marines_result_tt
+	hidden_effect = {
+		NAM_board_raise_marine_division = yes
+		set_variable = { var = NAM_board_inv_running^7 value = 0 }
+	}
+}
+
+NAM_board_inv_settle_8 = {
+	add_equipment_to_stockpile = {
+		type = convoy_1
+		amount = 4
+		producer = NAM
+	}
+	custom_effect_tooltip = NAM_board_inv_holders_levy_result_tt
+	hidden_effect = {
+		add_to_variable = { var = NAM_open_fuel_reserve value = 5000 }
+		NAM_open_fuel_release = yes
+		set_variable = { var = NAM_board_inv_running^8 value = 0 }
+	}
+}
+
+# The share pays in the stored company's own product and returns its trust with
+# interest; the product block of NAM_board_product_blocked_<k> ends with the receipt.
+NAM_board_inv_settle_9 = {
+	custom_effect_tooltip = NAM_board_inv_expedition_share_result_tt
+	hidden_effect = {
+		if = {
+			limit = { check_variable = { NAM_board_inv_share_target = 1 } }
+			add_to_variable = { var = NAM_open_fuel_reserve value = 6000 }
+			NAM_open_fuel_release = yes
+		}
+		else_if = {
+			limit = { check_variable = { NAM_board_inv_share_target = 2 } }
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4500
+				producer = NAM
+			}
+		}
+		else_if = {
+			limit = { check_variable = { NAM_board_inv_share_target = 3 } }
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 5
+				producer = NAM
+			}
+		}
+		else_if = {
+			limit = { check_variable = { NAM_board_inv_share_target = 4 } }
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 36
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 96
+				producer = NAM
+			}
+		}
+		else_if = {
+			limit = { check_variable = { NAM_board_inv_share_target = 5 } }
+			add_manpower = 2500
+		}
+		else_if = {
+			limit = { check_variable = { NAM_board_inv_share_target = 6 } }
+			set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+			NAM_corp_capital_add = yes
+		}
+		if = {
+			limit = { check_variable = { NAM_board_inv_share_target > 0 } }
+			set_temp_variable = { var = NAM_board_company_input value = NAM_board_inv_share_target }
+			set_temp_variable = { var = NAM_board_delta_input value = 6 }
+			NAM_board_support_change = yes
+			NAM_board_recount = yes
+		}
+		set_variable = { var = NAM_board_inv_share_target value = 0 }
+		set_variable = { var = NAM_board_inv_running^9 value = 0 }
+	}
+}
+
+# Refunds of the nine programmes on cancellation or at the end of the council. Each
+# returns capital, manpower, equipment and fuel (political power and trust stay
+# spent), returns the run and clears the receipt. The targeted programmes clear their
+# state flag at the call site, where the target is known.
+
+NAM_board_inv_refund_1 = {
+	set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+	NAM_corp_capital_add = yes
+	add_to_variable = { var = NAM_board_inv_runs^1 value = -1 }
+	set_variable = { var = NAM_board_inv_running^1 value = 0 }
+}
+
+NAM_board_inv_refund_2 = {
+	set_temp_variable = { var = NAM_corp_capital_change value = 50 }
+	NAM_corp_capital_add = yes
+	add_to_variable = { var = NAM_board_inv_runs^2 value = -1 }
+	set_variable = { var = NAM_board_inv_running^2 value = 0 }
+}
+
+NAM_board_inv_refund_3 = {
+	set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+	NAM_corp_capital_add = yes
+	add_to_variable = { var = NAM_board_inv_runs^3 value = -1 }
+	set_variable = { var = NAM_board_inv_running^3 value = 0 }
+}
+
+NAM_board_inv_refund_4 = {
+	set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+	NAM_corp_capital_add = yes
+	add_to_variable = { var = NAM_board_inv_runs^4 value = -1 }
+	set_variable = { var = NAM_board_inv_running^4 value = 0 }
+}
+
+NAM_board_inv_refund_5 = {
+	set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+	NAM_corp_capital_add = yes
+	add_to_variable = { var = NAM_board_inv_runs^5 value = -1 }
+	set_variable = { var = NAM_board_inv_running^5 value = 0 }
+}
+
+NAM_board_inv_refund_6 = {
+	set_temp_variable = { var = NAM_corp_capital_change value = 120 }
+	NAM_corp_capital_add = yes
+	add_to_variable = { var = NAM_board_inv_runs^6 value = -1 }
+	set_variable = { var = NAM_board_inv_running^6 value = 0 }
+}
+
+NAM_board_inv_refund_7 = {
+	set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+	NAM_corp_capital_add = yes
+	add_manpower = 4300
+	add_equipment_to_stockpile = {
+		type = infantry_equipment
+		amount = 3870
+		producer = NAM
+	}
+	add_equipment_to_stockpile = {
+		type = ADISCORD_squad_weapons_equipment
+		amount = 192
+		producer = NAM
+	}
+	add_to_variable = { var = NAM_board_inv_runs^7 value = -1 }
+	set_variable = { var = NAM_board_inv_running^7 value = 0 }
+}
+
+# The levy cost only political power and trust: nothing returns but the run.
+NAM_board_inv_refund_8 = {
+	add_to_variable = { var = NAM_board_inv_runs^8 value = -1 }
+	set_variable = { var = NAM_board_inv_running^8 value = 0 }
+}
+
+NAM_board_inv_refund_9 = {
+	set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+	NAM_corp_capital_add = yes
+	if = {
+		limit = { check_variable = { NAM_board_inv_share_target > 0 } }
+		set_variable = { var = NAM_board_inv_share_done^NAM_board_inv_share_target value = 0 }
+	}
+	set_variable = { var = NAM_board_inv_share_target value = 0 }
+	add_to_variable = { var = NAM_board_inv_runs^9 value = -1 }
+	set_variable = { var = NAM_board_inv_running^9 value = 0 }
+}
+
+# COUNTRY NAM. Called by NAM_board_end_operations before NAM_dir_campaigns_close:
+# refunds every paid run. The running decisions then cancel through
+# NAM_board_operable = no and find no receipt. No target is known here, so the work
+# flags of the targeted programmes are cleared on all seven islands.
+NAM_board_inv_close = {
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_running^1 value = 1 compare = equals } }
+		NAM_board_inv_refund_1 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_running^2 value = 1 compare = equals } }
+		NAM_board_inv_refund_2 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_running^3 value = 1 compare = equals } }
+		NAM_board_inv_refund_3 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_running^4 value = 1 compare = equals } }
+		NAM_board_inv_refund_4 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_running^5 value = 1 compare = equals } }
+		NAM_board_inv_refund_5 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_running^6 value = 1 compare = equals } }
+		NAM_board_inv_refund_6 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_running^7 value = 1 compare = equals } }
+		NAM_board_inv_refund_7 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_running^8 value = 1 compare = equals } }
+		NAM_board_inv_refund_8 = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_board_inv_running^9 value = 1 compare = equals } }
+		NAM_board_inv_refund_9 = yes
+	}
+	225 = { clr_state_flag = NAM_board_inv_work }
+	226 = { clr_state_flag = NAM_board_inv_work }
+	227 = { clr_state_flag = NAM_board_inv_work }
+	228 = { clr_state_flag = NAM_board_inv_work }
+	229 = { clr_state_flag = NAM_board_inv_work }
+	230 = { clr_state_flag = NAM_board_inv_work }
+	231 = { clr_state_flag = NAM_board_inv_work }
+}
+
+# ----- Council of boards: island operations -----
+# Island index k: 1 Ulven (ULV, capital state 648, landing province 3094,
+# states 643-648), 2 Luren (LUR, 651, 3313, states 649-652), 3 Sharden (CHD,
+# 680, 3224, states 672-680). NAM_isl_status^k: 0 independent, 1 registered in
+# the running island war, 2 annexed, 3 national. One island war runs at a time:
+# NAM_isl_op_target names its main target and NAM_isl_pact_member a warned
+# strait partner drawn into the same war. Readiness lives on the capital state
+# (NAM_isl_readiness) and is kept through the war: the stalled settlement
+# halves it, the failed one empties it.
+# Commit rule: every terminal path copies both into the temps NAM_isl_settle_k
+# and NAM_isl_settle_member, writes the statuses and clears NAM_isl_op_target
+# before the first white_peace or annex_country, so the peace, annexation and
+# subjugation callbacks these raise find no open war. NAM_isl_release runs last.
+
+# COUNTRY NAM; FROM is an island capital state.
+NAM_isl_k_from_target = {
+	set_temp_variable = { var = NAM_isl_k value = 0 }
+	if = {
+		limit = { FROM = { state = 648 } }
+		set_temp_variable = { var = NAM_isl_k value = 1 }
+	}
+	if = {
+		limit = { FROM = { state = 651 } }
+		set_temp_variable = { var = NAM_isl_k value = 2 }
+	}
+	if = {
+		limit = { FROM = { state = 680 } }
+		set_temp_variable = { var = NAM_isl_k value = 3 }
+	}
+}
+
+# STATE island capital; temp NAM_isl_gain.
+NAM_isl_add_readiness = {
+	add_to_variable = { var = NAM_isl_readiness value = NAM_isl_gain }
+	clamp_variable = {
+		var = NAM_isl_readiness
+		min = 0
+		max = 100
+	}
+}
+
+# COUNTRY NAM; temps NAM_isl_k and NAM_isl_gain.
+NAM_isl_add_readiness_k = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_k value = 1 compare = equals } }
+		648 = { NAM_isl_add_readiness = yes }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_k value = 2 compare = equals } }
+		651 = { NAM_isl_add_readiness = yes }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_k value = 3 compare = equals } }
+		680 = { NAM_isl_add_readiness = yes }
+	}
+}
+
+# COUNTRY NAM; temps NAM_isl_k and NAM_isl_gain (the focus's readiness).
+# Called by the three operation focuses: the island keeps status 0 and its
+# readiness starts 10 higher after the assembly roads.
+NAM_isl_open_target = {
+	if = {
+		limit = { has_completed_focus = NAM_board_assembly_roads }
+		add_to_temp_variable = { var = NAM_isl_gain value = 10 }
+	}
+	NAM_isl_add_readiness_k = yes
+}
+
+# COUNTRY NAM; temps NAM_isl_rows_k (1-3) and NAM_isl_rows_mode. Runs
+# NAM_isl_state_row on every state of island k's explicit list; Ulven includes
+# Tarven (643).
+NAM_isl_island_rows = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 1 compare = equals } }
+		643 = { NAM_isl_state_row = yes }
+		644 = { NAM_isl_state_row = yes }
+		645 = { NAM_isl_state_row = yes }
+		646 = { NAM_isl_state_row = yes }
+		647 = { NAM_isl_state_row = yes }
+		648 = { NAM_isl_state_row = yes }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 2 compare = equals } }
+		649 = { NAM_isl_state_row = yes }
+		650 = { NAM_isl_state_row = yes }
+		651 = { NAM_isl_state_row = yes }
+		652 = { NAM_isl_state_row = yes }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 3 compare = equals } }
+		672 = { NAM_isl_state_row = yes }
+		673 = { NAM_isl_state_row = yes }
+		674 = { NAM_isl_state_row = yes }
+		675 = { NAM_isl_state_row = yes }
+		676 = { NAM_isl_state_row = yes }
+		677 = { NAM_isl_state_row = yes }
+		678 = { NAM_isl_state_row = yes }
+		679 = { NAM_isl_state_row = yes }
+		680 = { NAM_isl_state_row = yes }
+	}
+}
+
+# STATE of an island list; temps NAM_isl_rows_k and NAM_isl_rows_mode:
+# 1 pacification, 2-4 answers a-c of event 129, 5 transfer of remnants after
+# the annexation, 6 nationalisation. After the southern promise Sharden's four
+# southern states keep CHD's core and receive none from Svetlogorye.
+NAM_isl_state_row = {
+	if = {
+		limit = {
+			check_variable = { var = NAM_isl_rows_mode value = 5 compare = equals }
+		}
+		if = {
+			limit = {
+				NOT = { is_owned_by = NAM }
+				owner = { has_country_flag = NAM_isl_participant }
+			}
+			NAM = { transfer_state = PREV }
+		}
+		if = {
+			limit = { is_owned_by = NAM }
+			set_state_controller_to = NAM
+		}
+	}
+	else_if = {
+		limit = { is_owned_by = NAM }
+		if = {
+			limit = { check_variable = { var = NAM_isl_rows_mode value = 1 compare = equals } }
+			add_resistance = -15
+			add_compliance = 10
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_isl_rows_mode value = 2 compare = equals } }
+			add_resistance = -15
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_isl_rows_mode value = 3 compare = equals } }
+			add_resistance = -20
+			add_compliance = 10
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_isl_rows_mode value = 4 compare = equals } }
+			add_resistance = -10
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_isl_rows_mode value = 6 compare = equals } }
+			if = {
+				limit = {
+					OR = {
+						NOT = { check_variable = { var = NAM_isl_rows_k value = 3 compare = equals } }
+						NOT = { NAM = { has_country_flag = NAM_isl_sharden_promise_done } }
+						NOT = {
+							OR = {
+								state = 672
+								state = 677
+								state = 678
+								state = 679
+							}
+						}
+					}
+				}
+				add_core_of = NAM
+				if = {
+					limit = { check_variable = { var = NAM_isl_rows_k value = 1 compare = equals } }
+					remove_core_of = ULV
+				}
+				else_if = {
+					limit = { check_variable = { var = NAM_isl_rows_k value = 2 compare = equals } }
+					remove_core_of = LUR
+				}
+				else = {
+					remove_core_of = CHD
+				}
+			}
+			if = {
+				limit = {
+					is_controlled_by = NAM
+					has_resistance = yes
+				}
+				cancel_resistance = yes
+			}
+		}
+	}
+}
+
+# COUNTRY NAM; temp NAM_isl_k. Pacification of every state of the island.
+NAM_isl_pacify_island = {
+	set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_k }
+	set_temp_variable = { var = NAM_isl_rows_mode value = 1 }
+	NAM_isl_island_rows = yes
+}
+
+# COUNTRY island government. Woken from minor suppression and freed from any
+# faction before the declaration, so no outside ally is drawn into the war.
+NAM_isl_register_target = {
+	ADISCORD_release_non_participating_minor_optimization = yes
+	set_country_flag = NAM_isl_participant
+	if = {
+		limit = { is_in_faction = yes }
+		leave_faction = yes
+	}
+}
+
+# COUNTRY island government, once per war: spec D5's reserves. ULV and LUR
+# receive 6000 men, 4000 rifles and two territorial brigades (three above
+# normal difficulty); CHD 15000 men, 10000 rifles, 120 support equipment, four
+# brigades (six) and coastal forts at its two harbours. A bribed garrison
+# brings one brigade fewer, the southern promise two; a warned strait island
+# fortifies its capital beach unless the fire squadron shells it, a warned
+# Sharden musters one more brigade. Units given in an earlier war stay.
+NAM_isl_reinforce_defender = {
+	if = {
+		limit = { NOT = { has_country_flag = NAM_isl_defence_mobilised } }
+		set_country_flag = NAM_isl_defence_mobilised
+		if = {
+			limit = { tag = CHD }
+			set_temp_variable = { var = NAM_isl_brigades value = 4 }
+			add_manpower = 15000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 10000
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 120
+			}
+			680 = {
+				add_building_construction = {
+					type = coastal_bunker
+					level = 2
+					instant_build = yes
+					province = 1610
+				}
+			}
+			672 = {
+				add_building_construction = {
+					type = coastal_bunker
+					level = 2
+					instant_build = yes
+					province = 1858
+				}
+			}
+			if = {
+				limit = { difficulty > 2 }
+				add_to_temp_variable = { var = NAM_isl_brigades value = 2 }
+			}
+			if = {
+				limit = { NAM = { has_country_flag = NAM_isl_sharden_promise_done } }
+				subtract_from_temp_variable = { var = NAM_isl_brigades value = 2 }
+			}
+			if = {
+				limit = { has_country_flag = NAM_isl_alerted }
+				add_to_temp_variable = { var = NAM_isl_brigades value = 1 }
+			}
+			if = {
+				limit = { 680 = { has_state_flag = NAM_isl_bribed } }
+				subtract_from_temp_variable = { var = NAM_isl_brigades value = 1 }
+			}
+		}
+		else = {
+			set_temp_variable = { var = NAM_isl_brigades value = 2 }
+			add_manpower = 6000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4000
+			}
+			if = {
+				limit = { difficulty > 2 }
+				add_to_temp_variable = { var = NAM_isl_brigades value = 1 }
+			}
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							tag = ULV
+							648 = { has_state_flag = NAM_isl_bribed }
+						}
+						AND = {
+							tag = LUR
+							651 = { has_state_flag = NAM_isl_bribed }
+						}
+					}
+				}
+				subtract_from_temp_variable = { var = NAM_isl_brigades value = 1 }
+			}
+			if = {
+				limit = {
+					has_country_flag = NAM_isl_alerted
+					NOT = { NAM = { has_completed_focus = NAM_board_fire_squadron } }
+				}
+				if = {
+					limit = { tag = ULV }
+					648 = {
+						add_building_construction = {
+							type = coastal_bunker
+							level = 1
+							instant_build = yes
+							province = 6452
+						}
+					}
+				}
+				else = {
+					651 = {
+						add_building_construction = {
+							type = coastal_bunker
+							level = 1
+							instant_build = yes
+							province = 1894
+						}
+					}
+				}
+			}
+		}
+		set_temp_variable = { var = NAM_isl_raised value = 0 }
+		if = {
+			limit = { has_template = "Territorial Brigade" }
+			while_loop_effect = {
+				limit = { check_variable = { var = NAM_isl_raised value = NAM_isl_brigades compare = less_than } }
+				add_to_temp_variable = { var = NAM_isl_raised value = 1 }
+				capital_scope = {
+					create_unit = {
+						division = "division_template = \"Territorial Brigade\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = PREV
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY NAM; temps NAM_isl_k and NAM_isl_wave. Marine divisions on island k's
+# landing province (30% experience, 35% after the storm companies).
+NAM_isl_land_wave = {
+	set_temp_variable = { var = NAM_isl_landed value = 0 }
+	while_loop_effect = {
+		limit = { check_variable = { var = NAM_isl_landed value = NAM_isl_wave compare = less_than } }
+		add_to_temp_variable = { var = NAM_isl_landed value = 1 }
+		if = {
+			limit = { check_variable = { var = NAM_isl_k value = 1 compare = equals } }
+			648 = {
+				if = {
+					limit = { NAM = { has_completed_focus = NAM_board_storm_companies } }
+					create_unit = {
+						division = "division_template = \"Island Marines\" start_experience_factor = 0.35 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = NAM
+						prioritize_location = 3094
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+				else = {
+					create_unit = {
+						division = "division_template = \"Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = NAM
+						prioritize_location = 3094
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_isl_k value = 2 compare = equals } }
+			651 = {
+				if = {
+					limit = { NAM = { has_completed_focus = NAM_board_storm_companies } }
+					create_unit = {
+						division = "division_template = \"Island Marines\" start_experience_factor = 0.35 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = NAM
+						prioritize_location = 3313
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+				else = {
+					create_unit = {
+						division = "division_template = \"Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = NAM
+						prioritize_location = 3313
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_isl_k value = 3 compare = equals } }
+			680 = {
+				if = {
+					limit = { NAM = { has_completed_focus = NAM_board_storm_companies } }
+					create_unit = {
+						division = "division_template = \"Island Marines\" start_experience_factor = 0.35 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = NAM
+						prioritize_location = 3224
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+				else = {
+					create_unit = {
+						division = "division_template = \"Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = NAM
+						prioritize_location = 3224
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY NAM; temp NAM_isl_k. create_unit refuses a province held by the
+# enemy, so the defenders of the capital state fall back to their capital
+# province in the same state and Svetlogorye takes the coastal landing
+# province before two marine divisions land there (three on Sharden).
+NAM_isl_land_first_wave = {
+	NAM_marine_ensure_template = yes
+	set_temp_variable = { var = NAM_isl_wave value = 2 }
+	if = {
+		limit = { check_variable = { var = NAM_isl_k value = 1 compare = equals } }
+		648 = {
+			teleport_armies = {
+				limit = { has_country_flag = NAM_isl_participant }
+			}
+		}
+		set_province_controller = 3094
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_k value = 2 compare = equals } }
+		651 = {
+			teleport_armies = {
+				limit = { has_country_flag = NAM_isl_participant }
+			}
+		}
+		set_province_controller = 3313
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_k value = 3 compare = equals } }
+		set_temp_variable = { var = NAM_isl_wave value = 3 }
+		680 = {
+			teleport_armies = {
+				limit = { has_country_flag = NAM_isl_participant }
+			}
+		}
+		set_province_controller = 3224
+	}
+	NAM_isl_land_wave = yes
+}
+
+# COUNTRY NAM. The pending second echelon returns its men and rifles: one
+# division for Ulven or Luren, two for Sharden.
+NAM_isl_echelon_refund = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_echelon_k value = 3 compare = equals } }
+		add_manpower = 8600
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 7740
+			producer = NAM
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_echelon_k value = 0 compare = greater_than } }
+		add_manpower = 4300
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 3870
+			producer = NAM
+		}
+	}
+	set_variable = { var = NAM_isl_echelon_k value = 0 }
+}
+
+# COUNTRY NAM, hidden event 132 ten days after a landing. The echelon lands
+# only on the beachhead of the war it was paid for; a newer landing's echelon
+# waits for its own day.
+NAM_isl_second_echelon = {
+	if = {
+		limit = {
+			check_variable = { var = NAM_isl_echelon_k value = 0 compare = greater_than }
+			check_variable = { var = NAM_isl_echelon_day value = global.num_days compare = less_than_or_equals }
+		}
+		set_temp_variable = { var = NAM_isl_k value = NAM_isl_echelon_k }
+		if = {
+			limit = {
+				check_variable = { var = NAM_isl_op_target value = NAM_isl_echelon_k compare = equals }
+				OR = {
+					AND = {
+						check_variable = { var = NAM_isl_k value = 1 compare = equals }
+						controls_province = 3094
+					}
+					AND = {
+						check_variable = { var = NAM_isl_k value = 2 compare = equals }
+						controls_province = 3313
+					}
+					AND = {
+						check_variable = { var = NAM_isl_k value = 3 compare = equals }
+						controls_province = 3224
+					}
+				}
+			}
+			NAM_marine_ensure_template = yes
+			set_temp_variable = { var = NAM_isl_wave value = 1 }
+			if = {
+				limit = { check_variable = { var = NAM_isl_k value = 3 compare = equals } }
+				set_temp_variable = { var = NAM_isl_wave value = 2 }
+			}
+			NAM_isl_land_wave = yes
+			set_variable = { var = NAM_isl_echelon_k value = 0 }
+		}
+		else = {
+			NAM_isl_echelon_refund = yes
+		}
+	}
+}
+
+# COUNTRY NAM; temp NAM_isl_launch_k. Landing spirit for 60 days: tier 1, 2 or
+# 3 at readiness 50, 75 or 100, one tier higher after the fire squadron.
+NAM_isl_launch_spirit = {
+	set_temp_variable = { var = NAM_isl_tier value = 1 }
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					check_variable = { var = NAM_isl_launch_k value = 1 compare = equals }
+					648 = { check_variable = { var = NAM_isl_readiness value = 100 compare = greater_than_or_equals } }
+				}
+				AND = {
+					check_variable = { var = NAM_isl_launch_k value = 2 compare = equals }
+					651 = { check_variable = { var = NAM_isl_readiness value = 100 compare = greater_than_or_equals } }
+				}
+				AND = {
+					check_variable = { var = NAM_isl_launch_k value = 3 compare = equals }
+					680 = { check_variable = { var = NAM_isl_readiness value = 100 compare = greater_than_or_equals } }
+				}
+			}
+		}
+		set_temp_variable = { var = NAM_isl_tier value = 3 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				AND = {
+					check_variable = { var = NAM_isl_launch_k value = 1 compare = equals }
+					648 = { check_variable = { var = NAM_isl_readiness value = 75 compare = greater_than_or_equals } }
+				}
+				AND = {
+					check_variable = { var = NAM_isl_launch_k value = 2 compare = equals }
+					651 = { check_variable = { var = NAM_isl_readiness value = 75 compare = greater_than_or_equals } }
+				}
+				AND = {
+					check_variable = { var = NAM_isl_launch_k value = 3 compare = equals }
+					680 = { check_variable = { var = NAM_isl_readiness value = 75 compare = greater_than_or_equals } }
+				}
+			}
+		}
+		set_temp_variable = { var = NAM_isl_tier value = 2 }
+	}
+	if = {
+		limit = { has_completed_focus = NAM_board_fire_squadron }
+		add_to_temp_variable = { var = NAM_isl_tier value = 1 }
+	}
+	if = {
+		limit = { has_idea = NAM_isl_landing_spirit_1 }
+		remove_ideas = NAM_isl_landing_spirit_1
+	}
+	if = {
+		limit = { has_idea = NAM_isl_landing_spirit_2 }
+		remove_ideas = NAM_isl_landing_spirit_2
+	}
+	if = {
+		limit = { has_idea = NAM_isl_landing_spirit_3 }
+		remove_ideas = NAM_isl_landing_spirit_3
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_tier value = 3 compare = greater_than_or_equals } }
+		add_timed_idea = { idea = NAM_isl_landing_spirit_3 days = 60 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_tier value = 2 compare = equals } }
+		add_timed_idea = { idea = NAM_isl_landing_spirit_2 days = 60 }
+	}
+	else = {
+		add_timed_idea = { idea = NAM_isl_landing_spirit_1 days = 60 }
+	}
+}
+
+# COUNTRY NAM; FROM is the target's capital state, temp NAM_isl_k. Called by
+# NAM_isl_launch after its price was paid. A warned, peaceful second strait island
+# joins as a pact member on the target's side, and then every member must fall
+# (campaign major status on both sides). A declaration that does not create
+# the war undoes the registration and returns the whole price.
+NAM_isl_op_launch = {
+	set_temp_variable = { var = NAM_isl_launch_k value = NAM_isl_k }
+	set_variable = { var = NAM_isl_op_target value = NAM_isl_launch_k }
+	set_variable = { var = NAM_isl_status^NAM_isl_launch_k value = 1 }
+	set_variable = { var = NAM_isl_pact_member value = 0 }
+	clr_country_flag = NAM_isl_capital_hold
+	if = {
+		limit = {
+			check_variable = { var = NAM_isl_launch_k value = 1 compare = equals }
+			check_variable = { var = NAM_isl_status^2 value = 0 compare = equals }
+			LUR = { NAM_isl_pact_partner_ready = yes }
+		}
+		set_variable = { var = NAM_isl_pact_member value = 2 }
+		set_variable = { var = NAM_isl_status^2 value = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = NAM_isl_launch_k value = 2 compare = equals }
+			check_variable = { var = NAM_isl_status^1 value = 0 compare = equals }
+			ULV = { NAM_isl_pact_partner_ready = yes }
+		}
+		set_variable = { var = NAM_isl_pact_member value = 1 }
+		set_variable = { var = NAM_isl_status^1 value = 1 }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_status^1 value = 1 compare = equals } }
+		ULV = { NAM_isl_register_target = yes }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_status^2 value = 1 compare = equals } }
+		LUR = { NAM_isl_register_target = yes }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_status^3 value = 1 compare = equals } }
+		CHD = { NAM_isl_register_target = yes }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_pact_member value = 0 compare = greater_than } }
+		ADISCORD_nam_resource_war_reserve_major = yes
+		ULV = { ADISCORD_nam_resource_war_reserve_major = yes }
+		LUR = { ADISCORD_nam_resource_war_reserve_major = yes }
+		if = {
+			limit = { check_variable = { var = NAM_isl_launch_k value = 1 compare = equals } }
+			ULV = {
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = NAM_isl_pact_faction
+				}
+				set_country_flag = NAM_isl_pact_founder
+				add_to_faction = LUR
+			}
+		}
+		else = {
+			LUR = {
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = NAM_isl_pact_faction
+				}
+				set_country_flag = NAM_isl_pact_founder
+				add_to_faction = ULV
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_status^1 value = 1 compare = equals } }
+		ULV = { NAM_isl_reinforce_defender = yes }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_status^2 value = 1 compare = equals } }
+		LUR = { NAM_isl_reinforce_defender = yes }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_status^3 value = 1 compare = equals } }
+		CHD = { NAM_isl_reinforce_defender = yes }
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_launch_k value = 1 compare = equals } }
+		declare_war_on = {
+			target = ULV
+			type = annex_everything
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_isl_pact_member value = 2 compare = equals }
+				NOT = { has_war_with = LUR }
+			}
+			LUR = {
+				add_to_war = {
+					targeted_alliance = ULV
+					enemy = NAM
+					hostility_reason = asked_to_join
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_launch_k value = 2 compare = equals } }
+		declare_war_on = {
+			target = LUR
+			type = annex_everything
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_isl_pact_member value = 1 compare = equals }
+				NOT = { has_war_with = ULV }
+			}
+			ULV = {
+				add_to_war = {
+					targeted_alliance = LUR
+					enemy = NAM
+					hostility_reason = asked_to_join
+				}
+			}
+		}
+	}
+	else = {
+		declare_war_on = {
+			target = CHD
+			type = annex_everything
+		}
+	}
+	# A partner that did not enter the war is not a member of it.
+	if = {
+		limit = {
+			check_variable = { var = NAM_isl_pact_member value = 2 compare = equals }
+			NOT = { has_war_with = LUR }
+		}
+		set_variable = { var = NAM_isl_status^2 value = 0 }
+		set_variable = { var = NAM_isl_pact_member value = 0 }
+		LUR = {
+			clr_country_flag = NAM_isl_participant
+			clr_country_flag = NAM_isl_defence_mobilised
+			ADISCORD_nam_resource_war_release_major = yes
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = NAM_isl_pact_member value = 1 compare = equals }
+			NOT = { has_war_with = ULV }
+		}
+		set_variable = { var = NAM_isl_status^1 value = 0 }
+		set_variable = { var = NAM_isl_pact_member value = 0 }
+		ULV = {
+			clr_country_flag = NAM_isl_participant
+			clr_country_flag = NAM_isl_defence_mobilised
+			ADISCORD_nam_resource_war_release_major = yes
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					check_variable = { var = NAM_isl_launch_k value = 1 compare = equals }
+					NOT = { has_war_with = ULV }
+				}
+				AND = {
+					check_variable = { var = NAM_isl_launch_k value = 2 compare = equals }
+					NOT = { has_war_with = LUR }
+				}
+				AND = {
+					check_variable = { var = NAM_isl_launch_k value = 3 compare = equals }
+					NOT = { has_war_with = CHD }
+				}
+			}
+		}
+		NAM_isl_launch_abort = yes
+	}
+	else = {
+		NAM_isl_launch_spirit = yes
+		set_temp_variable = { var = NAM_isl_k value = NAM_isl_launch_k }
+		NAM_isl_land_first_wave = yes
+		if = {
+			limit = { check_variable = { var = NAM_isl_launch_k value = 3 compare = equals } }
+			activate_mission = NAM_isl_beachhead_sharden
+		}
+		else = {
+			activate_mission = NAM_isl_beachhead_strait
+		}
+		if = {
+			limit = { check_variable = { var = NAM_isl_echelon_k value = 0 compare = greater_than } }
+			NAM_isl_echelon_refund = yes
+		}
+		set_variable = { var = NAM_isl_echelon_k value = NAM_isl_launch_k }
+		set_variable = { var = NAM_isl_echelon_day value = global.num_days }
+		add_to_variable = { var = NAM_isl_echelon_day value = 10 }
+		country_event = { id = ADISCORD_nam_story.132 days = 10 }
+		FROM = { clr_state_flag = NAM_isl_bribed }
+		log = "[ADISCORD][NAM][ISLANDS] Landing on island [?NAM_isl_launch_k], pact member [?NAM_isl_pact_member], spirit tier [?NAM_isl_tier]."
+	}
+}
+
+# COUNTRY NAM. The declaration did not create the war: the registration is
+# undone without a settlement and the launch price comes back in full.
+NAM_isl_launch_abort = {
+	set_temp_variable = { var = NAM_isl_settle_k value = NAM_isl_op_target }
+	set_temp_variable = { var = NAM_isl_settle_member value = NAM_isl_pact_member }
+	set_variable = { var = NAM_isl_status^NAM_isl_settle_k value = 0 }
+	if = {
+		limit = { check_variable = { var = NAM_isl_settle_member value = 0 compare = greater_than } }
+		set_variable = { var = NAM_isl_status^NAM_isl_settle_member value = 0 }
+	}
+	set_variable = { var = NAM_isl_op_target value = 0 }
+	set_variable = { var = NAM_isl_pact_member value = 0 }
+	if = {
+		limit = { check_variable = { var = NAM_isl_settle_k value = 3 compare = equals } }
+		add_political_power = 40
+		add_manpower = 21500
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 19350
+			producer = NAM
+		}
+	}
+	else = {
+		add_political_power = 25
+		add_manpower = 12900
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 11610
+			producer = NAM
+		}
+	}
+	NAM_isl_release = yes
+	log = "[ADISCORD][NAM][ISLANDS] Landing on island [?NAM_isl_settle_k] found no war; price returned."
+}
+
+# COUNTRY NAM; temp NAM_isl_rows_k. White peace with island k's government.
+NAM_isl_peace_k = {
+	if = {
+		limit = {
+			check_variable = { var = NAM_isl_rows_k value = 1 compare = equals }
+			country_exists = ULV
+			has_war_with = ULV
+		}
+		white_peace = ULV
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = NAM_isl_rows_k value = 2 compare = equals }
+			country_exists = LUR
+			has_war_with = LUR
+		}
+		white_peace = LUR
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = NAM_isl_rows_k value = 3 compare = equals }
+			country_exists = CHD
+			has_war_with = CHD
+		}
+		white_peace = CHD
+	}
+}
+
+# COUNTRY NAM; temp NAM_isl_rows_k. Peace and annexation of island k; states of
+# its explicit list still held by its government follow, and every owned one
+# returns to Svetlogorye's control. Sharden's hunger ends with its government.
+NAM_isl_annex_island = {
+	NAM_isl_peace_k = yes
+	if = {
+		limit = {
+			check_variable = { var = NAM_isl_rows_k value = 1 compare = equals }
+			country_exists = ULV
+		}
+		annex_country = {
+			target = ULV
+			transfer_troops = no
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = NAM_isl_rows_k value = 2 compare = equals }
+			country_exists = LUR
+		}
+		annex_country = {
+			target = LUR
+			transfer_troops = no
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = NAM_isl_rows_k value = 3 compare = equals }
+			country_exists = CHD
+		}
+		CHD = {
+			if = {
+				limit = { has_idea = NAM_isl_sharden_hunger }
+				remove_ideas = NAM_isl_sharden_hunger
+			}
+		}
+		annex_country = {
+			target = CHD
+			transfer_troops = no
+		}
+	}
+	set_temp_variable = { var = NAM_isl_rows_mode value = 5 }
+	NAM_isl_island_rows = yes
+}
+
+# COUNTRY NAM; temp NAM_isl_rows_k. A stalled landing on island k: half the
+# readiness stays, a new landing waits 90 days and the island is warned.
+NAM_isl_stall_island = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 1 compare = equals } }
+		648 = {
+			multiply_variable = { var = NAM_isl_readiness value = 0.5 }
+			round_variable = NAM_isl_readiness
+		}
+		set_country_flag = { flag = NAM_isl_reopen_1 days = 90 value = 1 }
+		ULV = { set_country_flag = NAM_isl_alerted }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 2 compare = equals } }
+		651 = {
+			multiply_variable = { var = NAM_isl_readiness value = 0.5 }
+			round_variable = NAM_isl_readiness
+		}
+		set_country_flag = { flag = NAM_isl_reopen_2 days = 90 value = 1 }
+		LUR = { set_country_flag = NAM_isl_alerted }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 3 compare = equals } }
+		680 = {
+			multiply_variable = { var = NAM_isl_readiness value = 0.5 }
+			round_variable = NAM_isl_readiness
+		}
+		set_country_flag = { flag = NAM_isl_reopen_3 days = 90 value = 1 }
+		CHD = { set_country_flag = NAM_isl_alerted }
+	}
+}
+
+# COUNTRY NAM; temp NAM_isl_rows_k. A failed landing on island k: readiness is
+# lost, a new landing waits 120 days, the island is warned and keeps the
+# reserves it received.
+NAM_isl_fail_island = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 1 compare = equals } }
+		648 = { set_variable = { var = NAM_isl_readiness value = 0 } }
+		set_country_flag = { flag = NAM_isl_reopen_1 days = 120 value = 1 }
+		ULV = { set_country_flag = NAM_isl_alerted }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 2 compare = equals } }
+		651 = { set_variable = { var = NAM_isl_readiness value = 0 } }
+		set_country_flag = { flag = NAM_isl_reopen_2 days = 120 value = 1 }
+		LUR = { set_country_flag = NAM_isl_alerted }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 3 compare = equals } }
+		680 = { set_variable = { var = NAM_isl_readiness value = 0 } }
+		set_country_flag = { flag = NAM_isl_reopen_3 days = 120 value = 1 }
+		CHD = { set_country_flag = NAM_isl_alerted }
+	}
+}
+
+# COUNTRY NAM; temps NAM_isl_settle_k and NAM_isl_bidder_loss (negative).
+# Navis, whose pilots led the crossing, and the island's two tender bidders
+# carry the loss; Navis counts once when it is a bidder.
+NAM_isl_blame_bidders = {
+	set_temp_variable = { var = NAM_board_trust_input_3 value = NAM_isl_bidder_loss }
+	if = {
+		limit = { check_variable = { var = NAM_isl_settle_k value = 1 compare = equals } }
+		set_temp_variable = { var = NAM_board_trust_input_2 value = NAM_isl_bidder_loss }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_settle_k value = 2 compare = equals } }
+		set_temp_variable = { var = NAM_board_trust_input_1 value = NAM_isl_bidder_loss }
+		set_temp_variable = { var = NAM_board_trust_input_5 value = NAM_isl_bidder_loss }
+	}
+	else = {
+		set_temp_variable = { var = NAM_board_trust_input_4 value = NAM_isl_bidder_loss }
+		set_temp_variable = { var = NAM_board_trust_input_6 value = NAM_isl_bidder_loss }
+	}
+	NAM_board_trust_package = yes
+}
+
+# COUNTRY NAM. Victory: every annexed island becomes the Directory's, its tender
+# follows the next day. Temp NAM_isl_member_stalled = 1 when a pact partner's
+# capital held out: the partner is settled as stalled inside the victory.
+NAM_isl_settle_victory = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_op_target value = 0 compare = greater_than } }
+		set_temp_variable = { var = NAM_isl_settle_k value = NAM_isl_op_target }
+		set_temp_variable = { var = NAM_isl_settle_member value = NAM_isl_pact_member }
+		set_variable = { var = NAM_isl_status^NAM_isl_settle_k value = 2 }
+		if = {
+			limit = { check_variable = { var = NAM_isl_settle_member value = 0 compare = greater_than } }
+			if = {
+				limit = { check_variable = { var = NAM_isl_member_stalled value = 1 compare = equals } }
+				set_variable = { var = NAM_isl_status^NAM_isl_settle_member value = 0 }
+			}
+			else = {
+				set_variable = { var = NAM_isl_status^NAM_isl_settle_member value = 2 }
+			}
+		}
+		set_variable = { var = NAM_isl_op_target value = 0 }
+		set_variable = { var = NAM_isl_pact_member value = 0 }
+		set_variable = { var = NAM_isl_last_target value = NAM_isl_settle_k }
+		if = {
+			limit = {
+				check_variable = { var = NAM_isl_settle_member value = 0 compare = greater_than }
+				check_variable = { var = NAM_isl_member_stalled value = 1 compare = equals }
+			}
+			set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_settle_member }
+			NAM_isl_peace_k = yes
+			NAM_isl_stall_island = yes
+		}
+		set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_settle_k }
+		NAM_isl_annex_island = yes
+		if = {
+			limit = {
+				check_variable = { var = NAM_isl_settle_member value = 0 compare = greater_than }
+				NOT = { check_variable = { var = NAM_isl_member_stalled value = 1 compare = equals } }
+			}
+			set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_settle_member }
+			NAM_isl_annex_island = yes
+		}
+		clr_country_flag = NAM_isl_insured
+		add_stability = 0.03
+		if = {
+			limit = {
+				check_variable = { var = NAM_isl_settle_k value = 1 compare = equals }
+				check_variable = { var = NAM_isl_status^2 value = 0 compare = equals }
+				country_exists = LUR
+			}
+			LUR = { set_country_flag = NAM_isl_alerted }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_isl_settle_k value = 2 compare = equals }
+				check_variable = { var = NAM_isl_status^1 value = 0 compare = equals }
+				country_exists = ULV
+			}
+			ULV = { set_country_flag = NAM_isl_alerted }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_isl_status^1 value = 2 compare = equals } }
+			if = {
+				limit = {
+					OR = {
+						check_variable = { var = NAM_isl_settle_k value = 1 compare = equals }
+						check_variable = { var = NAM_isl_settle_member value = 1 compare = equals }
+					}
+				}
+				country_event = { id = ADISCORD_nam_story.125 days = 1 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = NAM_isl_status^2 value = 2 compare = equals } }
+			if = {
+				limit = {
+					OR = {
+						check_variable = { var = NAM_isl_settle_k value = 2 compare = equals }
+						check_variable = { var = NAM_isl_settle_member value = 2 compare = equals }
+					}
+				}
+				country_event = { id = ADISCORD_nam_story.126 days = 1 }
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { var = NAM_isl_settle_k value = 3 compare = equals }
+				check_variable = { var = NAM_isl_status^3 value = 2 compare = equals }
+			}
+			country_event = { id = ADISCORD_nam_story.127 days = 1 }
+		}
+		ADISCORD_economy_mark_dirty = yes
+		NAM_board_queue_recount = yes
+		log = "[ADISCORD][NAM][ISLANDS] Victory on island [?NAM_isl_settle_k], pact member [?NAM_isl_settle_member], member stalled [?NAM_isl_member_stalled]."
+		NAM_isl_release = yes
+	}
+}
+
+# COUNTRY NAM. Stalled landing: white peace with every registered island, light
+# penalties and a new landing after 90 days. Temp NAM_isl_quiet = 1 (the end
+# of the council) skips the companies' trust.
+NAM_isl_settle_stalled = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_op_target value = 0 compare = greater_than } }
+		set_temp_variable = { var = NAM_isl_settle_k value = NAM_isl_op_target }
+		set_temp_variable = { var = NAM_isl_settle_member value = NAM_isl_pact_member }
+		set_variable = { var = NAM_isl_status^NAM_isl_settle_k value = 0 }
+		if = {
+			limit = { check_variable = { var = NAM_isl_settle_member value = 0 compare = greater_than } }
+			set_variable = { var = NAM_isl_status^NAM_isl_settle_member value = 0 }
+		}
+		set_variable = { var = NAM_isl_op_target value = 0 }
+		set_variable = { var = NAM_isl_pact_member value = 0 }
+		set_variable = { var = NAM_isl_last_target value = NAM_isl_settle_k }
+		set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_settle_k }
+		NAM_isl_peace_k = yes
+		NAM_isl_stall_island = yes
+		if = {
+			limit = { check_variable = { var = NAM_isl_settle_member value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_settle_member }
+			NAM_isl_peace_k = yes
+			NAM_isl_stall_island = yes
+		}
+		add_timed_idea = { idea = NAM_isl_landing_stalled days = 120 }
+		if = {
+			limit = { has_country_flag = NAM_isl_insured }
+			clr_country_flag = NAM_isl_insured
+			set_temp_variable = { var = NAM_corp_capital_change value = 75 }
+			NAM_corp_capital_add = yes
+		}
+		if = {
+			limit = { NOT = { check_variable = { var = NAM_isl_quiet value = 1 compare = equals } } }
+			set_temp_variable = { var = NAM_isl_bidder_loss value = -5 }
+			NAM_isl_blame_bidders = yes
+		}
+		log = "[ADISCORD][NAM][ISLANDS] Stalled landing on island [?NAM_isl_settle_k], pact member [?NAM_isl_settle_member]."
+		NAM_isl_release = yes
+	}
+}
+
+# COUNTRY NAM. Failed landing, also when Svetlogorye capitulates to an island:
+# white peace, spec D5's penalties, a new landing after 120 days and event 128
+# on who carries the blame.
+NAM_isl_settle_failed = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_op_target value = 0 compare = greater_than } }
+		set_temp_variable = { var = NAM_isl_settle_k value = NAM_isl_op_target }
+		set_temp_variable = { var = NAM_isl_settle_member value = NAM_isl_pact_member }
+		set_variable = { var = NAM_isl_status^NAM_isl_settle_k value = 0 }
+		if = {
+			limit = { check_variable = { var = NAM_isl_settle_member value = 0 compare = greater_than } }
+			set_variable = { var = NAM_isl_status^NAM_isl_settle_member value = 0 }
+		}
+		set_variable = { var = NAM_isl_op_target value = 0 }
+		set_variable = { var = NAM_isl_pact_member value = 0 }
+		set_variable = { var = NAM_isl_last_target value = NAM_isl_settle_k }
+		set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_settle_k }
+		NAM_isl_peace_k = yes
+		NAM_isl_fail_island = yes
+		if = {
+			limit = { check_variable = { var = NAM_isl_settle_member value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_settle_member }
+			NAM_isl_peace_k = yes
+			NAM_isl_fail_island = yes
+		}
+		add_timed_idea = { idea = NAM_isl_landing_failed days = 180 }
+		set_temp_variable = { var = NAM_isl_bidder_loss value = -15 }
+		if = {
+			limit = { has_country_flag = NAM_isl_insured }
+			clr_country_flag = NAM_isl_insured
+			set_temp_variable = { var = NAM_isl_bidder_loss value = -8 }
+			set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+			NAM_corp_capital_add = yes
+		}
+		NAM_isl_blame_bidders = yes
+		if = {
+			limit = { has_completed_focus = NAM_board_expedition_rear }
+			if = {
+				limit = { check_variable = { var = NAM_isl_settle_k value = 3 compare = equals } }
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 9675
+					producer = NAM
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 5805
+					producer = NAM
+				}
+			}
+		}
+		log = "[ADISCORD][NAM][ISLANDS] Failed landing on island [?NAM_isl_settle_k], pact member [?NAM_isl_settle_member]."
+		NAM_isl_release = yes
+		country_event = { id = ADISCORD_nam_story.128 days = 1 }
+	}
+}
+
+# COUNTRY island government; from NAM_isl_release.
+NAM_isl_release_target = {
+	if = {
+		limit = { has_country_flag = NAM_isl_participant }
+		clr_country_flag = NAM_isl_participant
+		clr_country_flag = NAM_isl_defence_mobilised
+		ADISCORD_nam_resource_war_release_major = yes
+	}
+	if = {
+		limit = { has_country_flag = NAM_isl_pact_founder }
+		clr_country_flag = NAM_isl_pact_founder
+		if = {
+			limit = {
+				exists = yes
+				is_faction_leader = yes
+			}
+			dismantle_faction = yes
+		}
+	}
+}
+
+# COUNTRY NAM. Last step of every terminal path: island missions, the
+# campaign's major status, the strait pact and the war flags of every
+# registered island.
+NAM_isl_release = {
+	if = {
+		limit = { has_active_mission = NAM_isl_beachhead_strait }
+		remove_mission = NAM_isl_beachhead_strait
+	}
+	if = {
+		limit = { has_active_mission = NAM_isl_beachhead_sharden }
+		remove_mission = NAM_isl_beachhead_sharden
+	}
+	if = {
+		limit = { has_active_mission = NAM_isl_campaign_strait }
+		remove_mission = NAM_isl_campaign_strait
+	}
+	if = {
+		limit = { has_active_mission = NAM_isl_campaign_sharden }
+		remove_mission = NAM_isl_campaign_sharden
+	}
+	clr_country_flag = NAM_isl_capital_hold
+	ADISCORD_nam_resource_war_release_major = yes
+	ULV = { NAM_isl_release_target = yes }
+	LUR = { NAM_isl_release_target = yes }
+	CHD = { NAM_isl_release_target = yes }
+}
+
+# COUNTRY NAM; temp NAM_isl_rows_k. An island left by a war that ended outside
+# the settlements is the Directory's when it owns the capital state.
+NAM_isl_status_by_capital = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 1 compare = equals } }
+		if = {
+			limit = { owns_state = 648 }
+			set_variable = { var = NAM_isl_status^1 value = 2 }
+		}
+		else = {
+			set_variable = { var = NAM_isl_status^1 value = 0 }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 2 compare = equals } }
+		if = {
+			limit = { owns_state = 651 }
+			set_variable = { var = NAM_isl_status^2 value = 2 }
+		}
+		else = {
+			set_variable = { var = NAM_isl_status^2 value = 0 }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_rows_k value = 3 compare = equals } }
+		if = {
+			limit = { owns_state = 680 }
+			set_variable = { var = NAM_isl_status^3 value = 2 }
+		}
+		else = {
+			set_variable = { var = NAM_isl_status^3 value = 0 }
+		}
+	}
+}
+
+# Any scope; from on_peace, on_annex and on_puppet. An island war that another
+# hand ended closes without awards or penalties. A strait partner that left
+# the war alone is released while the main target fights on.
+NAM_isl_close_external = {
+	if = {
+		limit = {
+			NAM_isl_op_running = yes
+			NAM_isl_war_interrupted = yes
+		}
+		NAM = {
+			set_temp_variable = { var = NAM_isl_settle_k value = NAM_isl_op_target }
+			set_temp_variable = { var = NAM_isl_settle_member value = NAM_isl_pact_member }
+			set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_settle_k }
+			NAM_isl_status_by_capital = yes
+			if = {
+				limit = { check_variable = { var = NAM_isl_settle_member value = 0 compare = greater_than } }
+				set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_settle_member }
+				NAM_isl_status_by_capital = yes
+			}
+			set_variable = { var = NAM_isl_op_target value = 0 }
+			set_variable = { var = NAM_isl_pact_member value = 0 }
+			log = "[ADISCORD][NAM][ISLANDS] Island war [?NAM_isl_settle_k] closed outside the settlements."
+			NAM_isl_release = yes
+		}
+	}
+	else_if = {
+		limit = {
+			NAM_isl_op_running = yes
+			NAM_isl_member_interrupted = yes
+		}
+		NAM = {
+			set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_pact_member }
+			NAM_isl_status_by_capital = yes
+			if = {
+				limit = { check_variable = { var = NAM_isl_rows_k value = 1 compare = equals } }
+				ULV = {
+					clr_country_flag = NAM_isl_participant
+					clr_country_flag = NAM_isl_defence_mobilised
+					ADISCORD_nam_resource_war_release_major = yes
+				}
+			}
+			else = {
+				LUR = {
+					clr_country_flag = NAM_isl_participant
+					clr_country_flag = NAM_isl_defence_mobilised
+					ADISCORD_nam_resource_war_release_major = yes
+				}
+			}
+			set_variable = { var = NAM_isl_pact_member value = 0 }
+		}
+	}
+}
+
+# Native ROOT of a capitulation, FROM the credited victor; called inside both
+# nam: capitulation hooks after the Veyran call. A registered island beaten by
+# Svetlogorye or its subject keeps a two-day receipt and settles once every
+# registered island has fallen; Svetlogorye falling to an island government
+# is a failed landing. The receipt of either direction reserves the late
+# callback from the generic annexation fallback (the nam: block sets
+# skip_default_capitulation from it), so the ZZ handler never annexes the
+# Directory or a target; the immediate callback leaves the global flag alone,
+# because white peace can omit the late callback that would clear it.
+NAM_isl_record_capitulation = {
+	if = {
+		limit = { ROOT = { NAM_isl_target_beaten = yes } }
+		ROOT = { set_country_flag = { flag = NAM_isl_capitulation_reserved value = 1 days = 2 } }
+		if = {
+			limit = { NAM_isl_all_defeated = yes }
+			NAM = {
+				set_temp_variable = { var = NAM_isl_member_stalled value = 0 }
+				NAM_isl_settle_victory = yes
+			}
+			ROOT = { set_country_flag = { flag = NAM_isl_capitulation_reserved value = 1 days = 2 } }
+		}
+	}
+	else_if = {
+		limit = { ROOT = { NAM_isl_directory_beaten = yes } }
+		ROOT = { set_country_flag = { flag = NAM_isl_capitulation_reserved value = 1 days = 2 } }
+		NAM = { NAM_isl_settle_failed = yes }
+		# The settlement can consume the receipt through a synchronous callback.
+		ROOT = { set_country_flag = { flag = NAM_isl_capitulation_reserved value = 1 days = 2 } }
+	}
+}
+
+# COUNTRY NAM; timeout of the beachhead mission. A foothold opens the campaign
+# mission; none is a failed landing.
+NAM_isl_beachhead_check = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_op_target value = 0 compare = greater_than } }
+		if = {
+			limit = { NAM_isl_any_foothold = yes }
+			if = {
+				limit = { check_variable = { var = NAM_isl_op_target value = 3 compare = equals } }
+				activate_mission = NAM_isl_campaign_sharden
+			}
+			else = {
+				activate_mission = NAM_isl_campaign_strait
+			}
+		}
+		else = {
+			NAM_isl_settle_failed = yes
+		}
+	}
+}
+
+# COUNTRY NAM; timeout of the campaign mission. Every registered capital state
+# held is a victory; the main target's capital alone annexes it and settles
+# the pact partner as stalled; a foothold alone is a stalled landing; nothing
+# is a failed one.
+NAM_isl_campaign_check = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_op_target value = 0 compare = greater_than } }
+		if = {
+			limit = { NAM_isl_capitals_held = yes }
+			set_temp_variable = { var = NAM_isl_member_stalled value = 0 }
+			NAM_isl_settle_victory = yes
+		}
+		else_if = {
+			limit = { NAM_isl_main_capital_held = yes }
+			set_temp_variable = { var = NAM_isl_member_stalled value = 1 }
+			NAM_isl_settle_victory = yes
+		}
+		else_if = {
+			limit = { NAM_isl_any_foothold = yes }
+			NAM_isl_settle_stalled = yes
+		}
+		else = {
+			NAM_isl_settle_failed = yes
+		}
+	}
+}
+
+# COUNTRY NAM; from NAM_corp_monthly after its main NAM_corp_capital_add.
+# Concession dividends join the council's income report; an annexed island
+# whose capital resists above 50% raises event 129 at most once per 90 days and
+# never while another is open; an island war is won by holding every
+# registered capital state through two consecutive pulses.
+NAM_isl_monthly = {
+	if = {
+		limit = { NAM_board_operable = yes }
+		set_temp_variable = { var = NAM_isl_dividend value = 0 }
+		if = {
+			limit = { check_variable = { var = NAM_isl_status^1 value = 1 compare = greater_than } }
+			if = {
+				limit = {
+					OR = {
+						check_variable = { var = NAM_board_isl_owner^1 value = 3 compare = equals }
+						check_variable = { var = NAM_board_isl_owner^1 value = 2 compare = equals }
+					}
+				}
+				add_to_temp_variable = { var = NAM_isl_dividend value = 10 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = NAM_isl_status^2 value = 1 compare = greater_than } }
+			if = {
+				limit = { check_variable = { var = NAM_board_isl_owner^2 value = 1 compare = equals } }
+				add_to_temp_variable = { var = NAM_isl_dividend value = 8 }
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_board_isl_owner^2 value = 5 compare = equals } }
+				add_to_temp_variable = { var = NAM_isl_dividend value = 12 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = NAM_isl_status^3 value = 1 compare = greater_than } }
+			if = {
+				limit = { check_variable = { var = NAM_board_isl_owner^3 value = 4 compare = equals } }
+				if = {
+					limit = { has_country_flag = NAM_isl_sharden_promise_done }
+					add_to_temp_variable = { var = NAM_isl_dividend value = 3 }
+				}
+				else = {
+					add_to_temp_variable = { var = NAM_isl_dividend value = 6 }
+				}
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_board_isl_owner^3 value = 6 compare = equals } }
+				if = {
+					limit = { has_country_flag = NAM_isl_sharden_promise_done }
+					add_to_temp_variable = { var = NAM_isl_dividend value = 8 }
+				}
+				else = {
+					add_to_temp_variable = { var = NAM_isl_dividend value = 15 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { var = NAM_isl_dividend value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_corp_capital_change value = NAM_isl_dividend }
+			NAM_corp_capital_add = yes
+			add_to_variable = { var = NAM_corp_last_income value = NAM_isl_dividend }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_isl_flare_target value = 0 compare = equals } }
+			if = {
+				limit = {
+					check_variable = { var = NAM_isl_status^1 value = 2 compare = equals }
+					NOT = { has_country_flag = NAM_isl_flare_1 }
+					648 = { resistance > 50 }
+				}
+				set_variable = { var = NAM_isl_flare_target value = 1 }
+				set_country_flag = { flag = NAM_isl_flare_1 days = 90 value = 1 }
+				country_event = { id = ADISCORD_nam_story.129 }
+			}
+			else_if = {
+				limit = {
+					check_variable = { var = NAM_isl_status^2 value = 2 compare = equals }
+					NOT = { has_country_flag = NAM_isl_flare_2 }
+					651 = { resistance > 50 }
+				}
+				set_variable = { var = NAM_isl_flare_target value = 2 }
+				set_country_flag = { flag = NAM_isl_flare_2 days = 90 value = 1 }
+				country_event = { id = ADISCORD_nam_story.129 }
+			}
+			else_if = {
+				limit = {
+					check_variable = { var = NAM_isl_status^3 value = 2 compare = equals }
+					NOT = { has_country_flag = NAM_isl_flare_3 }
+					680 = { resistance > 50 }
+				}
+				set_variable = { var = NAM_isl_flare_target value = 3 }
+				set_country_flag = { flag = NAM_isl_flare_3 days = 90 value = 1 }
+				country_event = { id = ADISCORD_nam_story.129 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = NAM_isl_op_target value = 0 compare = greater_than } }
+			if = {
+				limit = { NAM_isl_capitals_held = yes }
+				if = {
+					limit = { has_country_flag = NAM_isl_capital_hold }
+					set_temp_variable = { var = NAM_isl_member_stalled value = 0 }
+					NAM_isl_settle_victory = yes
+				}
+				else = {
+					set_country_flag = { flag = NAM_isl_capital_hold days = 40 value = 1 }
+				}
+			}
+			else = {
+				clr_country_flag = NAM_isl_capital_hold
+			}
+		}
+	}
+}
+
+# COUNTRY NAM; temp NAM_isl_flare_answer 1-3, from the answers of event 129.
+# The island named by NAM_isl_flare_target: martial law, money for the elders
+# or the operator's guards; every answer closes the event's island record.
+NAM_isl_flare_settle = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_flare_target value = 0 compare = greater_than } }
+		set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_flare_target }
+		set_temp_variable = { var = NAM_isl_rows_mode value = 2 }
+		if = {
+			limit = { check_variable = { var = NAM_isl_flare_answer value = 2 compare = equals } }
+			set_temp_variable = { var = NAM_isl_rows_mode value = 3 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_isl_flare_answer value = 3 compare = equals } }
+			set_temp_variable = { var = NAM_isl_rows_mode value = 4 }
+			if = {
+				limit = { check_variable = { var = NAM_board_isl_owner^NAM_isl_flare_target value = 0 compare = greater_than } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_isl_owner^NAM_isl_flare_target }
+				set_temp_variable = { var = NAM_board_delta_input value = 4 }
+				NAM_board_support_change = yes
+				NAM_board_queue_recount = yes
+			}
+			else = {
+				set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		NAM_isl_island_rows = yes
+	}
+	set_variable = { var = NAM_isl_flare_target value = 0 }
+}
+
+# COUNTRY NAM; temps NAM_isl_k and NAM_board_company_input (the winner), from
+# answers b and c of events 125-127. The concession, its votes and dividend go
+# to the winner; with the chair's flag on the flagship the chair's company
+# gains 20 instead of 15.
+NAM_isl_tender_award = {
+	set_temp_variable = { var = NAM_isl_tender_winner value = NAM_board_company_input }
+	set_variable = { var = NAM_board_isl_owner^NAM_isl_k value = NAM_isl_tender_winner }
+	set_temp_variable = { var = NAM_isl_tender_loser value = 5 }
+	if = {
+		limit = { check_variable = { var = NAM_isl_k value = 1 compare = equals } }
+		set_country_flag = NAM_isl_tender_done_1
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_k value = 2 compare = equals } }
+		set_temp_variable = { var = NAM_isl_tender_loser value = 6 }
+		set_country_flag = NAM_isl_tender_done_2
+	}
+	else = {
+		set_temp_variable = { var = NAM_isl_tender_loser value = 10 }
+		set_country_flag = NAM_isl_tender_done_3
+	}
+	subtract_from_temp_variable = { var = NAM_isl_tender_loser value = NAM_isl_tender_winner }
+	set_temp_variable = { var = NAM_board_delta_input value = 15 }
+	if = {
+		limit = {
+			check_variable = { var = NAM_board_expedition_flag value = 2 compare = equals }
+			check_variable = { var = NAM_board_chair value = NAM_isl_tender_winner compare = equals }
+		}
+		set_temp_variable = { var = NAM_board_delta_input value = 20 }
+	}
+	set_temp_variable = { var = NAM_board_company_input value = NAM_isl_tender_winner }
+	NAM_board_support_change = yes
+	set_temp_variable = { var = NAM_board_company_input value = NAM_isl_tender_loser }
+	set_temp_variable = { var = NAM_board_delta_input value = -15 }
+	NAM_board_support_change = yes
+	NAM_board_recount = yes
+}
+
+# COUNTRY NAM; temp NAM_isl_k, from answer a of events 125-127. Both bidders
+# lose 5 unless the council's flag flies on the flagship; the tender returns
+# in 90 days while the island is held and has no operator.
+NAM_isl_tender_postpone = {
+	if = {
+		limit = { NOT = { check_variable = { var = NAM_board_expedition_flag value = 1 compare = equals } } }
+		if = {
+			limit = { check_variable = { var = NAM_isl_k value = 1 compare = equals } }
+			set_temp_variable = { var = NAM_board_trust_input_3 value = -5 }
+			set_temp_variable = { var = NAM_board_trust_input_2 value = -5 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_isl_k value = 2 compare = equals } }
+			set_temp_variable = { var = NAM_board_trust_input_1 value = -5 }
+			set_temp_variable = { var = NAM_board_trust_input_5 value = -5 }
+		}
+		else = {
+			set_temp_variable = { var = NAM_board_trust_input_4 value = -5 }
+			set_temp_variable = { var = NAM_board_trust_input_6 value = -5 }
+		}
+		NAM_board_trust_package = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_k value = 1 compare = equals } }
+		country_event = { id = ADISCORD_nam_story.125 days = 90 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_k value = 2 compare = equals } }
+		country_event = { id = ADISCORD_nam_story.126 days = 90 }
+	}
+	else = {
+		country_event = { id = ADISCORD_nam_story.127 days = 90 }
+	}
+}
+
+# COUNTRY NAM, answer b of event 128 on the island NAM_isl_last_target: Navis's
+# pilots take the blame (-6, written last when Navis is a bidder) and the
+# island's bidders regain 3.
+NAM_isl_blame_pilots = {
+	if = {
+		limit = { check_variable = { var = NAM_isl_last_target value = 1 compare = equals } }
+		set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_last_target value = 2 compare = equals } }
+		set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+		set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_isl_last_target value = 3 compare = equals } }
+		set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+		set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+	}
+	set_temp_variable = { var = NAM_board_trust_input_3 value = -6 }
+	NAM_board_trust_package = yes
+}
+
+# COUNTRY NAM; FROM is the island capital, temp NAM_isl_k. The caller consumed
+# the receipt. The island must still be held and its capital calm (resistance
+# at most 40), else the paid capital returns. The explicit list becomes
+# national territory: national recruitment and the scripted economy's core
+# population count it from now on.
+NAM_isl_nationalise_finish = {
+	if = {
+		limit = {
+			NAM_isl_island_held = yes
+			FROM = { NOT = { resistance > 40 } }
+		}
+		set_temp_variable = { var = NAM_isl_rows_k value = NAM_isl_k }
+		set_temp_variable = { var = NAM_isl_rows_mode value = 6 }
+		NAM_isl_island_rows = yes
+		set_variable = { var = NAM_isl_status^NAM_isl_k value = 3 }
+		if = {
+			limit = { check_variable = { var = NAM_board_isl_owner^NAM_isl_k value = 0 compare = greater_than } }
+			set_temp_variable = { var = NAM_board_company_input value = NAM_board_isl_owner^NAM_isl_k }
+			set_temp_variable = { var = NAM_board_delta_input value = 5 }
+			NAM_board_support_change = yes
+		}
+		if = {
+			limit = { has_completed_focus = NAM_board_expedition_rear }
+			if = {
+				limit = { check_variable = { var = NAM_isl_k value = 1 compare = equals } }
+				648 = {
+					add_building_construction = {
+						type = naval_base
+						level = 1
+						instant_build = yes
+						province = 6452
+					}
+					add_building_construction = {
+						type = supply_node
+						level = 1
+						instant_build = yes
+						province = 6452
+					}
+				}
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_isl_k value = 2 compare = equals } }
+				651 = {
+					add_building_construction = {
+						type = naval_base
+						level = 1
+						instant_build = yes
+						province = 1894
+					}
+					add_building_construction = {
+						type = supply_node
+						level = 1
+						instant_build = yes
+						province = 1894
+					}
+				}
+			}
+			else = {
+				680 = {
+					add_building_construction = {
+						type = naval_base
+						level = 1
+						instant_build = yes
+						province = 1610
+					}
+					add_building_construction = {
+						type = supply_node
+						level = 1
+						instant_build = yes
+						province = 1610
+					}
+				}
+			}
+		}
+		# An island cored during the war of return sends its brigade at once.
+		if = {
+			limit = {
+				NAM_war_of_return_active = yes
+				has_completed_focus = NAM_board_operation_poseidon
+			}
+			if = {
+				limit = { check_variable = { var = NAM_isl_k value = 1 compare = equals } }
+				NAM_board_poseidon_island_brigade_1 = yes
+			}
+			else_if = {
+				limit = { check_variable = { var = NAM_isl_k value = 2 compare = equals } }
+				NAM_board_poseidon_island_brigade_2 = yes
+			}
+			else = {
+				NAM_board_poseidon_island_brigade_3 = yes
+			}
+		}
+		ADISCORD_economy_mark_dirty = yes
+		NAM_board_queue_recount = yes
+	}
+	else = {
+		FROM = { set_temp_variable = { var = NAM_corp_capital_change value = NAM_isl_nationalise_paid } }
+		NAM_corp_capital_add = yes
+	}
+	FROM = { clear_variable = NAM_isl_nationalise_paid }
+}
+
+# STATE island capital. Each refund runs only while its receipt stands and
+# consumes it, so the route's closing and a later native cancel never pay twice.
+NAM_isl_soundings_refund = {
+	if = {
+		limit = { has_state_flag = NAM_isl_prep_soundings }
+		clr_state_flag = NAM_isl_prep_soundings
+		NAM = { NAM_board_release_action_slot = yes }
+	}
+}
+
+NAM_isl_depots_refund = {
+	if = {
+		limit = { has_state_flag = NAM_isl_prep_depots }
+		clr_state_flag = NAM_isl_prep_depots
+		NAM = {
+			NAM_board_release_action_slot = yes
+			set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+			NAM_corp_capital_add = yes
+		}
+		if = {
+			limit = { check_variable = { var = NAM_isl_depots_fuel value = 500 compare = equals } }
+			NAM = { add_fuel = 500 }
+		}
+		else = {
+			NAM = { add_fuel = 1000 }
+		}
+		clear_variable = NAM_isl_depots_fuel
+	}
+}
+
+NAM_isl_bribe_refund = {
+	if = {
+		limit = { has_state_flag = NAM_isl_prep_bribe }
+		clr_state_flag = NAM_isl_prep_bribe
+		NAM = {
+			NAM_board_release_action_slot = yes
+			set_temp_variable = { var = NAM_corp_capital_change value = 50 }
+			NAM_corp_capital_add = yes
+		}
+	}
+}
+
+NAM_isl_pacify_refund = {
+	if = {
+		limit = { has_state_flag = NAM_isl_pacifying }
+		clr_state_flag = NAM_isl_pacifying
+		NAM = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 50 }
+			NAM_corp_capital_add = yes
+		}
+	}
+}
+
+NAM_isl_nationalise_refund = {
+	if = {
+		limit = { has_state_flag = NAM_isl_nationalising }
+		clr_state_flag = NAM_isl_nationalising
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_isl_nationalise_paid }
+		NAM = { NAM_corp_capital_add = yes }
+		clear_variable = NAM_isl_nationalise_paid
+	}
+}
+
+# COUNTRY NAM; FROM is the island capital. Debits the nationalisation price of
+# NAM_isl_from_nationalise_affordable once and keeps the paid capital on the
+# capital state for a refund.
+NAM_isl_nationalise_pay = {
+	if = {
+		limit = { FROM = { state = 648 } }
+		add_political_power = -70
+		set_temp_variable = { var = NAM_isl_price value = 180 }
+		if = {
+			limit = { NAM_isl_operator_discount_1 = yes }
+			set_temp_variable = { var = NAM_isl_price value = 120 }
+		}
+	}
+	else_if = {
+		limit = { FROM = { state = 651 } }
+		add_political_power = -50
+		set_temp_variable = { var = NAM_isl_price value = 120 }
+		if = {
+			limit = { NAM_isl_operator_discount_2 = yes }
+			set_temp_variable = { var = NAM_isl_price value = 80 }
+		}
+	}
+	else = {
+		add_political_power = -90
+		set_temp_variable = { var = NAM_isl_price value = 250 }
+		if = {
+			limit = { NAM_isl_operator_discount_3 = yes }
+			set_temp_variable = { var = NAM_isl_price value = 170 }
+		}
+	}
+	set_temp_variable = { var = NAM_corp_capital_change value = NAM_isl_price }
+	multiply_temp_variable = { var = NAM_corp_capital_change value = -1 }
+	NAM_corp_capital_add = yes
+	FROM = {
+		set_variable = { var = NAM_isl_nationalise_paid value = NAM_isl_price }
+		set_state_flag = NAM_isl_nationalising
+	}
+}
+
+# COUNTRY NAM; from NAM_board_end_operations. Running preparations,
+# pacifications, nationalisations and Sharden's blockade return their capital
+# and fuel and free their chancery places; a running island war closes as a
+# stalled landing without trust changes. Running decisions then cancel natively
+# and find no receipt.
+NAM_isl_close_all = {
+	648 = {
+		NAM_isl_soundings_refund = yes
+		NAM_isl_depots_refund = yes
+		NAM_isl_bribe_refund = yes
+		NAM_isl_pacify_refund = yes
+		NAM_isl_nationalise_refund = yes
+	}
+	651 = {
+		NAM_isl_soundings_refund = yes
+		NAM_isl_depots_refund = yes
+		NAM_isl_bribe_refund = yes
+		NAM_isl_pacify_refund = yes
+		NAM_isl_nationalise_refund = yes
+	}
+	680 = {
+		NAM_isl_soundings_refund = yes
+		NAM_isl_depots_refund = yes
+		NAM_isl_bribe_refund = yes
+		NAM_isl_pacify_refund = yes
+		NAM_isl_nationalise_refund = yes
+	}
+	clr_country_flag = NAM_isl_promise_running
+	if = {
+		limit = { has_country_flag = NAM_isl_blockade_running }
+		clr_country_flag = NAM_isl_blockade_running
+		set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+		NAM_corp_capital_add = yes
+		add_fuel = 2000
+	}
+	if = {
+		limit = { has_country_flag = NAM_isl_insurance_running }
+		clr_country_flag = NAM_isl_insurance_running
+		set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+		NAM_corp_capital_add = yes
+	}
+	if = {
+		limit = { check_variable = { var = NAM_isl_op_target value = 0 compare = greater_than } }
+		set_temp_variable = { var = NAM_isl_quiet value = 1 }
+		NAM_isl_settle_stalled = yes
+		set_temp_variable = { var = NAM_isl_quiet value = 0 }
+	}
+	set_variable = { var = NAM_isl_last_target value = 0 }
+	set_variable = { var = NAM_isl_flare_target value = 0 }
+}
+
 # ----- Radical exploitation of the conquered south -----
 # STATE. The council's guarantees survive the district changing hands again.
 NAM_rad_devolve_district = {
@@ -16643,12 +21142,13 @@ NAM_hum_divert_return_supplies = {
 # COUNTRY NAM, NAM_war_of_return_start after the declaration, from the island
 # exile only. create_unit refuses a province held by the enemy, so the landing
 # first takes a beachhead: hostile armies in the South Harbour (province 16716
-# is the whole of state 700) fall back to their capitals and Svetlogorye
-# becomes its controller. Two marine divisions land there, a third with a
-# trained order or a revenge readiness of 70. The landing never exceeds three
-# divisions: further trained orders form on the island capital, and so does
-# the whole landing when the harbour's controller is not at war with
-# Svetlogorye. The beachhead is ordinary control and awards nothing by itself:
+# is the harbour province of state 700) fall back to their capitals and
+# Svetlogorye becomes its controller. Two marine divisions land there, a third
+# with a trained order or a revenge readiness of 70. Further trained orders
+# form on the island capital, and so does the whole landing when the harbour's
+# controller is not at war with Svetlogorye. Only the council's southern rising
+# (NAM_board_harbour_rising_ready, read before NAM_board_cells_rise spends the
+# cells) lands those orders at the harbour instead. The beachhead is ordinary control and awards nothing by itself:
 # the harbour returns only with the capitulation of its owner. Every trained
 # order is delivered here. The delivery receipt prevents a renewed war from
 # creating the expedition again, including when the first landing used no orders.
@@ -16716,6 +21216,16 @@ NAM_wor_revenge_landing = {
 			limit = { check_variable = { NAM_landing_at_harbour = 0 } }
 			add_to_variable = { var = NAM_marines_island value = NAM_marines_landed }
 			set_variable = { var = NAM_marines_landed value = 0 }
+		}
+		# The council's southern rising holds the harbour: every trained order
+		# lands there as well.
+		if = {
+			limit = {
+				check_variable = { NAM_landing_at_harbour > 0 }
+				NAM_board_harbour_rising_ready = yes
+			}
+			add_to_variable = { var = NAM_marines_landed value = NAM_marines_island }
+			set_variable = { var = NAM_marines_island value = 0 }
 		}
 		set_temp_variable = { var = NAM_landing_index value = 0 }
 		while_loop_effect = {

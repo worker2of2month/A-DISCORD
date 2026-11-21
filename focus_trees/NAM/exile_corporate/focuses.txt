@@ -22,13 +22,17 @@ focus_tree = {
 		cost = 1
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_manpower = 1500
+			add_manpower = 3000
 			ADISCORD_reform_society_development = yes
 			effect_tooltip = {
 				add_ideas = NAM_board_preview_beacon
 			}
 			custom_effect_tooltip = NAM_board_beacon_out_reward_tt
 			hidden_effect = {
+				if = {
+					limit = { is_ai = no }
+					scoped_play_song = "ADISCORD_killing_joke_corporate_elect"
+				}
 				add_to_variable = { var = NAM_board_focus_pp value = 0.05 }
 				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
 				NAM_corp_capital_add = yes
@@ -53,9 +57,14 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_dev_oil_credit
 			custom_effect_tooltip = NAM_dev_oil_credit_unlock_tt
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 3
+				producer = NAM
+			}
 			custom_effect_tooltip = NAM_board_quay_chain_reward_tt
 			hidden_effect = {
-				set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 80 }
 				NAM_corp_capital_add = yes
 				set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
 				set_temp_variable = { var = NAM_board_trust_input_3 value = -4 }
@@ -81,8 +90,8 @@ focus_tree = {
 			custom_effect_tooltip = NAM_board_bought_century_reward_tt
 			hidden_effect = {
 				set_variable = { var = NAM_board_action_slots value = 2 }
-				set_temp_variable = { var = NAM_corp_capital_change value = 30 }
-				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_open_fuel_reserve value = 8000 }
+				NAM_open_fuel_release = yes
 				set_temp_variable = { var = NAM_board_trust_input_3 value = 6 }
 				set_temp_variable = { var = NAM_board_trust_input_6 value = -4 }
 				NAM_board_trust_package = yes
@@ -102,12 +111,12 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 1500
+				amount = 7500
 				producer = NAM
 			}
 			add_equipment_to_stockpile = {
 				type = artillery_equipment_1
-				amount = 12
+				amount = 36
 				producer = NAM
 			}
 			ADISCORD_reform_army_development = yes
@@ -133,10 +142,11 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_corp_sell_steel
 			custom_effect_tooltip = NAM_corp_sell_steel_unlock_tt
+			add_ideas = ADISCORD_economic_system_oligarchic_clan
+			custom_effect_tooltip = NAM_board_law_lock_tt
+			add_political_power = 60
 			custom_effect_tooltip = NAM_board_private_gospel_reward_tt
 			hidden_effect = {
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-				NAM_corp_capital_add = yes
 				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
 				set_temp_variable = { var = NAM_board_trust_input_5 value = -5 }
 				NAM_board_trust_package = yes
@@ -159,6 +169,8 @@ focus_tree = {
 			custom_effect_tooltip = NAM_judas_register_patents_unlock_tt
 			unlock_decision_tooltip = NAM_exile_drill
 			custom_effect_tooltip = NAM_exile_drill_unlock_tt
+			add_manpower = 3000
+			army_experience = 20
 			custom_effect_tooltip = NAM_board_dead_mans_veto_reward_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_revenge_readiness value = 5 }
@@ -183,11 +195,14 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_dir_campaign_pays_on_time
 			custom_effect_tooltip = NAM_dir_campaign_pays_on_time_unlock_tt
-			add_political_power = 30
+			NAM_board_enact_property_census = yes
+			add_political_power = 75
 			ADISCORD_reform_economic_development = yes
 			custom_effect_tooltip = NAM_board_property_qualification_reward_tt
 			hidden_effect = {
 				set_country_flag = NAM_dir_campaign_pays_on_time_open
+				add_to_variable = { var = NAM_dir_campaign_slots value = 1 }
+				clamp_variable = { var = NAM_dir_campaign_slots max = 3 }
 				add_to_variable = { var = NAM_board_proxy_votes^6 value = 1 }
 				set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
 				set_temp_variable = { var = NAM_board_trust_input_1 value = -5 }
@@ -210,11 +225,12 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_judas_buy_notes
 			custom_effect_tooltip = NAM_judas_buy_notes_unlock_tt
+			add_political_power = 60
 			if = {
 				limit = { has_idea = NAM_judas_weber_committees }
 				custom_effect_tooltip = NAM_board_founders_of_unrest_alive_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
 					NAM_corp_capital_add = yes
 					set_temp_variable = { var = NAM_judas_camp_input value = 1 }
 					set_temp_variable = { var = NAM_judas_delta_input value = -5 }
@@ -225,7 +241,7 @@ focus_tree = {
 			else = {
 				custom_effect_tooltip = NAM_board_founders_of_unrest_dead_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
 					NAM_corp_capital_add = yes
 					country_event = { id = ADISCORD_nam_story.66 days = 2 }
 				}
@@ -245,9 +261,15 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_dev_drill_cadres
 			custom_effect_tooltip = NAM_dev_drill_cadres_unlock_tt
+			NAM_board_enact_arsenal_monopoly = yes
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 1000
+				amount = 6000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 36
 				producer = NAM
 			}
 			effect_tooltip = {
@@ -276,7 +298,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_dev_census_halls
 			custom_effect_tooltip = NAM_dev_census_halls_unlock_tt
-			add_manpower = 1000
+			add_manpower = 3000
 			custom_effect_tooltip = NAM_board_salt_monopoly_reward_tt
 			hidden_effect = {
 				if = {
@@ -287,7 +309,7 @@ focus_tree = {
 					clamp_variable = { var = NAM_free_zone_slots min = 1 max = 3 }
 				}
 				else = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 150 }
 					NAM_corp_capital_add = yes
 				}
 				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
@@ -310,7 +332,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 2000
+				amount = 7000
 				producer = NAM
 			}
 			custom_effect_tooltip = NAM_board_future_output_pledge_reward_tt
@@ -361,6 +383,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_island_requisition_transports
 			custom_effect_tooltip = NAM_island_requisition_transports_unlock_tt
+			add_manpower = 7000
 			custom_effect_tooltip = NAM_island_eliminate_karamyshev_tt
 			hidden_effect = { NAM_island_eliminate_karamyshev = yes }
 			hidden_effect = {
@@ -385,6 +408,11 @@ focus_tree = {
 			custom_effect_tooltip = NAM_corp_buy_arms_unlock_tt
 			unlock_decision_tooltip = NAM_island_recruit_warehouse_guards
 			custom_effect_tooltip = NAM_island_recruit_warehouse_guards_unlock_tt
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 10000
+				producer = NAM
+			}
 			hidden_effect = { NAM_island_eliminate_weber = yes }
 			hidden_effect = {
 				country_event = { id = ADISCORD_nam_story.67 days = 2 }
@@ -435,18 +463,17 @@ focus_tree = {
 			custom_effect_tooltip = NAM_board_foundry_mark_reward_tt
 			hidden_effect = {
 				set_country_flag = NAM_dir_campaign_gazette_open
+				add_to_variable = { var = NAM_dir_campaign_slots value = 1 }
+				clamp_variable = { var = NAM_dir_campaign_slots max = 3 }
+				# The factory brings its own shared slot, so it never takes one of the
+				# island slots already in use.
 				if = {
 					limit = {
-						any_owned_state = {
-							NAM_owned_overseas_district = yes
-							free_building_slots = { building = arms_factory size > 0 include_locked = no }
-						}
+						any_owned_state = { NAM_owned_overseas_district = yes }
 					}
 					random_owned_state = {
-						limit = {
-							NAM_owned_overseas_district = yes
-							free_building_slots = { building = arms_factory size > 0 include_locked = no }
-						}
+						limit = { NAM_owned_overseas_district = yes }
+						add_extra_state_shared_building_slots = 1
 						add_building_construction = {
 							type = arms_factory
 							level = 1
@@ -455,7 +482,7 @@ focus_tree = {
 					}
 				}
 				else = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 150 }
 					NAM_corp_capital_add = yes
 				}
 				add_to_variable = { var = NAM_board_focus_research value = 0.10 }
@@ -480,8 +507,8 @@ focus_tree = {
 			custom_effect_tooltip = NAM_island_convoy_service_unlock_tt
 			custom_effect_tooltip = NAM_board_island_fleet_shares_reward_tt
 			hidden_effect = {
-				set_temp_variable = { var = NAM_corp_capital_change value = 30 }
-				NAM_corp_capital_add = yes
+				add_to_variable = { var = NAM_open_fuel_reserve value = 8000 }
+				NAM_open_fuel_release = yes
 				set_temp_variable = { var = NAM_board_trust_input_3 value = 5 }
 				set_temp_variable = { var = NAM_board_trust_input_4 value = -5 }
 				NAM_board_trust_package = yes
@@ -504,7 +531,7 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = NAM_board_double_lock_warehouse_reward_tt
 			hidden_effect = {
-				add_to_variable = { var = NAM_open_fuel_reserve value = 6000 }
+				add_to_variable = { var = NAM_open_fuel_reserve value = 12000 }
 				NAM_open_fuel_release = yes
 				set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
 				set_temp_variable = { var = NAM_board_trust_input_1 value = -4 }
@@ -527,18 +554,21 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = NAM_board_loren_receipt_reward_tt
 			hidden_effect = {
+				# The refinery brings its own shared slot, so it never takes one of the
+				# island slots already in use; the state cap of refineries is 3.
 				if = {
 					limit = {
 						any_owned_state = {
 							NAM_owned_overseas_district = yes
-							free_building_slots = { building = synthetic_refinery size > 0 include_locked = no }
+							synthetic_refinery < 3
 						}
 					}
 					random_owned_state = {
 						limit = {
 							NAM_owned_overseas_district = yes
-							free_building_slots = { building = synthetic_refinery size > 0 include_locked = no }
+							synthetic_refinery < 3
 						}
+						add_extra_state_shared_building_slots = 1
 						add_building_construction = {
 							type = synthetic_refinery
 							level = 1
@@ -547,7 +577,7 @@ focus_tree = {
 					}
 				}
 				else = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 150 }
 					NAM_corp_capital_add = yes
 				}
 				add_to_variable = { var = NAM_board_proxy_votes^1 value = 1 }
@@ -581,6 +611,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_dead_mans_veto }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			add_political_power = 60
 			add_command_power = 20
 			if = {
 				limit = { has_idea = NAM_judas_karamyshev_watch }
@@ -601,7 +632,7 @@ focus_tree = {
 					limit = { check_variable = { NAM_judas_karamyshev_end < 2 } }
 					add_equipment_to_stockpile = {
 						type = convoy_1
-						amount = 2
+						amount = 4
 						producer = NAM
 					}
 				}
@@ -609,7 +640,7 @@ focus_tree = {
 					limit = { check_variable = { NAM_judas_karamyshev_end < 3 } }
 					add_equipment_to_stockpile = {
 						type = convoy_1
-						amount = 1
+						amount = 2
 						producer = NAM
 					}
 				}
@@ -636,6 +667,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_posthumous_signature }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			add_manpower = 4000
 			effect_tooltip = {
 				add_ideas = NAM_board_preview_facsimile
 			}
@@ -662,7 +694,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_last_debtor }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_manpower = 2000
+			add_manpower = 5000
 			effect_tooltip = {
 				add_ideas = NAM_board_preview_purged
 			}
@@ -687,7 +719,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_founders_of_unrest }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_manpower = 1500
+			add_manpower = 4000
 			if = {
 				limit = { has_idea = NAM_judas_weber_committees }
 				unlock_decision_tooltip = NAM_judas_unseat_proxies
@@ -738,7 +770,8 @@ focus_tree = {
 		mutually_exclusive = { focus = NAM_board_captains_share_qualification }
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY_XP }
 		completion_reward = {
-			add_manpower = 1500
+			NAM_board_enact_factory_guard = yes
+			add_manpower = 5000
 			ADISCORD_programme_army_development = yes
 			effect_tooltip = {
 				add_ideas = NAM_board_preview_guard
@@ -769,12 +802,13 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_dir_campaign_newsreel
 			custom_effect_tooltip = NAM_dir_campaign_newsreel_unlock_tt
+			NAM_board_enact_captains_share = yes
 			add_equipment_to_stockpile = {
 				type = convoy_1
-				amount = 6
+				amount = 10
 				producer = NAM
 			}
-			navy_experience = 25
+			navy_experience = 30
 			custom_effect_tooltip = NAM_board_captains_share_qualification_reward_tt
 			hidden_effect = {
 				set_country_flag = NAM_dir_campaign_newsreel_open
@@ -811,7 +845,7 @@ focus_tree = {
 				NAM_board_recount = yes
 				set_temp_variable = { var = NAM_board_company_input value = 6 }
 				NAM_board_grant_charter = yes
-				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
 				NAM_corp_capital_add = yes
 				set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
 				set_temp_variable = { var = NAM_board_trust_input_2 value = -4 }
@@ -847,7 +881,7 @@ focus_tree = {
 				custom_effect_tooltip = NAM_judas_buy_mortgages_unlock_tt
 				custom_effect_tooltip = NAM_board_uncrested_buyers_alive_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 120 }
 					NAM_corp_capital_add = yes
 					set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
 					set_temp_variable = { var = NAM_board_trust_input_1 value = -5 }
@@ -858,7 +892,7 @@ focus_tree = {
 			else = {
 				custom_effect_tooltip = NAM_board_uncrested_buyers_dead_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 120 }
 					NAM_corp_capital_add = yes
 					set_temp_variable = { var = NAM_judas_camp_input value = 2 }
 					set_temp_variable = { var = NAM_corp_capital_change value = 30 }
@@ -884,7 +918,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_dev_harbour_infirmaries
 			custom_effect_tooltip = NAM_dev_harbour_infirmaries_unlock_tt
-			add_stability = 0.02
+			add_stability = 0.05
 			ADISCORD_reform_social_system_development = yes
 			if = {
 				limit = { has_idea = NAM_judas_weber_committees }
@@ -902,11 +936,11 @@ focus_tree = {
 				# Spoils by the kill band: < 2 full, < 3 half, otherwise nothing.
 				if = {
 					limit = { check_variable = { NAM_judas_weber_end < 2 } }
-					add_manpower = 1500
+					add_manpower = 3000
 				}
 				else_if = {
 					limit = { check_variable = { NAM_judas_weber_end < 3 } }
-					add_manpower = 750
+					add_manpower = 1500
 				}
 				custom_effect_tooltip = NAM_board_widows_share_dead_tt
 				hidden_effect = {
@@ -947,7 +981,12 @@ focus_tree = {
 			custom_effect_tooltip = NAM_order_marines_unlock_tt
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 1000
+				amount = 12000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 192
 				producer = NAM
 			}
 			custom_effect_tooltip = NAM_board_last_voyage_rifles_reward_tt
@@ -976,7 +1015,7 @@ focus_tree = {
 			hidden_effect = {
 				set_temp_variable = { var = NAM_board_company_input value = 1 }
 				NAM_board_grant_charter = yes
-				add_to_variable = { var = NAM_open_fuel_reserve value = 10000 }
+				add_to_variable = { var = NAM_open_fuel_reserve value = 12000 }
 				NAM_open_fuel_release = yes
 				set_temp_variable = { var = NAM_board_trust_input_1 value = 5 }
 				set_temp_variable = { var = NAM_board_trust_input_6 value = -5 }
@@ -999,7 +1038,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_board_redeem_mortgages
 			custom_effect_tooltip = NAM_board_redeem_mortgages_unlock_tt
-			add_manpower = 1500
+			add_manpower = 4000
 			ADISCORD_programme_society_development = yes
 			custom_effect_tooltip = NAM_board_eflor_debt_purchase_reward_tt
 			hidden_effect = {
@@ -1023,7 +1062,8 @@ focus_tree = {
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 50
+			NAM_board_enact_district_wardens = yes
+			add_political_power = 110
 			if = {
 				limit = { has_idea = NAM_judas_karamyshev_watch }
 				unlock_decision_tooltip = NAM_judas_disarm_cutters
@@ -1076,7 +1116,8 @@ focus_tree = {
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 50
+			NAM_board_enact_paid_publicity = yes
+			add_political_power = 120
 			ADISCORD_programme_society_development = yes
 			effect_tooltip = {
 				add_ideas = NAM_board_preview_squares
@@ -1111,16 +1152,21 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_dir_campaign_lottery
 			custom_effect_tooltip = NAM_dir_campaign_lottery_unlock_tt
-			add_ideas = NAM_welfare_society_99_1
+			NAM_board_enact_society_99_1 = yes
+			add_manpower = 7000
 			add_popularity = {
 				ideology = technocracy
 				popularity = 0.05
 			}
+			NAM_board_trade_social_system_for_economic = yes
 			effect_tooltip = {
 				add_ideas = NAM_board_preview_society
 			}
+			custom_effect_tooltip = NAM_board_society_99_1_reward_tt
 			hidden_effect = {
 				set_country_flag = NAM_dir_campaign_lottery_open
+				add_to_variable = { var = NAM_dir_campaign_slots value = 1 }
+				clamp_variable = { var = NAM_dir_campaign_slots max = 3 }
 				set_variable = { var = NAM_board_society_dues value = 20 }
 				add_to_variable = { var = NAM_board_focus_stab value = -0.03 }
 				NAM_board_recount = yes
@@ -1141,7 +1187,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_dir_campaign_return
 			custom_effect_tooltip = NAM_dir_campaign_return_unlock_tt
-			add_manpower = 2000
+			add_manpower = 6000
 			custom_effect_tooltip = NAM_board_return_voyage_reward_tt
 			hidden_effect = {
 				set_country_flag = NAM_dir_campaign_return_open
@@ -1165,16 +1211,19 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_last_voyage_rifles }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 8
+				producer = NAM
+			}
 			custom_effect_tooltip = NAM_board_azhar_land_fund_reward_tt
 			hidden_effect = {
-				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
-				NAM_corp_capital_add = yes
 				NAM_board_build_capital_naval_base = yes
 				if = {
 					limit = {
 						check_variable = { var = NAM_board_site_built value = 0 compare = equals }
 					}
-					set_temp_variable = { var = NAM_corp_capital_change value = 30 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
 					NAM_corp_capital_add = yes
 				}
 				set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
@@ -1196,7 +1245,8 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_corp_labour_contract
 			custom_effect_tooltip = NAM_corp_labour_contract_unlock_tt
-			add_manpower = 1500
+			add_manpower = 4000
+			NAM_board_trade_society_for_economic = yes
 			custom_effect_tooltip = NAM_board_land_foreclosure_reward_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_board_trust_input_5 value = 5 }
@@ -1219,12 +1269,12 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_island_concession_231
 			custom_effect_tooltip = NAM_island_concession_231_unlock_tt
+			NAM_board_enact_concession_courts = yes
+			add_political_power = 60
 			custom_effect_tooltip = NAM_board_concession_courts_reward_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_board_company_input value = 2 }
 				NAM_board_grant_charter = yes
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-				NAM_corp_capital_add = yes
 				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
 				set_temp_variable = { var = NAM_board_trust_input_5 value = -5 }
 				NAM_board_trust_package = yes
@@ -1244,11 +1294,12 @@ focus_tree = {
 		mutually_exclusive = { focus = NAM_board_old_settlers_oath }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			NAM_board_enact_hereditary_patents = yes
 			if = {
 				limit = { has_idea = NAM_judas_karamyshev_watch }
 				custom_effect_tooltip = NAM_board_hereditary_roll_alive_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 120 }
 					NAM_corp_capital_add = yes
 					set_temp_variable = { var = NAM_board_trust_input_6 value = 6 }
 					set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
@@ -1260,15 +1311,15 @@ focus_tree = {
 			else = {
 				if = {
 					limit = { check_variable = { NAM_judas_karamyshev_end < 2 } }
-					add_political_power = 40
+					add_political_power = 80
 				}
 				else_if = {
 					limit = { check_variable = { NAM_judas_karamyshev_end < 3 } }
-					add_political_power = 20
+					add_political_power = 40
 				}
 				custom_effect_tooltip = NAM_board_hereditary_roll_dead_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 120 }
 					NAM_corp_capital_add = yes
 					set_temp_variable = { var = NAM_board_trust_input_6 value = 6 }
 					set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
@@ -1293,7 +1344,8 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_board_settlers_militia
 			custom_effect_tooltip = NAM_board_settlers_militia_unlock_tt
-			add_manpower = 2000
+			NAM_board_enact_sworn_commanders = yes
+			add_manpower = 5000
 			if = {
 				limit = { has_idea = NAM_judas_karamyshev_watch }
 				custom_effect_tooltip = NAM_board_old_settlers_oath_alive_tt
@@ -1310,11 +1362,11 @@ focus_tree = {
 			else = {
 				if = {
 					limit = { check_variable = { NAM_judas_karamyshev_end < 2 } }
-					army_experience = 15
+					army_experience = 30
 				}
 				else_if = {
 					limit = { check_variable = { NAM_judas_karamyshev_end < 3 } }
-					army_experience = 8
+					army_experience = 15
 				}
 				custom_effect_tooltip = NAM_board_old_settlers_oath_dead_tt
 				hidden_effect = {
@@ -1341,16 +1393,18 @@ focus_tree = {
 		mutually_exclusive = { focus = NAM_board_incumbents_credit }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 30
+			NAM_board_enact_permitted_dissent = yes
+			add_political_power = 60
 			add_popularity = {
 				ideology = humanism
 				popularity = 0.05
 			}
+			NAM_board_trade_society_for_state = yes
 			if = {
 				limit = { has_idea = NAM_judas_weber_committees }
 				unlock_decision_tooltip = NAM_judas_pay_moderates
 				custom_effect_tooltip = NAM_judas_pay_moderates_unlock_tt
-				add_manpower = 1000
+				add_manpower = 2500
 				custom_effect_tooltip = NAM_board_subsidised_opposition_alive_tt
 				hidden_effect = {
 					set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
@@ -1363,6 +1417,14 @@ focus_tree = {
 				}
 			}
 			else = {
+				if = {
+					limit = { check_variable = { NAM_judas_weber_end < 2 } }
+					add_manpower = 2500
+				}
+				else_if = {
+					limit = { check_variable = { NAM_judas_weber_end < 3 } }
+					add_manpower = 1250
+				}
 				custom_effect_tooltip = NAM_board_subsidised_opposition_dead_tt
 				hidden_effect = {
 					set_temp_variable = { var = NAM_judas_camp_input value = 1 }
@@ -1392,7 +1454,7 @@ focus_tree = {
 			custom_effect_tooltip = NAM_board_underwrite_payroll_unlock_tt
 			custom_effect_tooltip = NAM_board_incumbents_credit_reward_tt
 			hidden_effect = {
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
 				NAM_corp_capital_add = yes
 				set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
 				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
@@ -1426,7 +1488,7 @@ focus_tree = {
 					}
 				}
 				else = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 150 }
 					NAM_corp_capital_add = yes
 				}
 				set_temp_variable = { var = NAM_board_trust_input_3 value = 5 }
@@ -1450,7 +1512,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_board_commission_housing
 			custom_effect_tooltip = NAM_board_commission_housing_unlock_tt
-			add_manpower = 1500
+			add_manpower = 4000
 			ADISCORD_programme_social_system_development = yes
 			custom_effect_tooltip = NAM_board_corporate_mass_housing_reward_tt
 			hidden_effect = {
@@ -1475,6 +1537,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_concession_courts }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		completion_reward = {
+			NAM_board_enact_harbour_exchange = yes
 			effect_tooltip = {
 				add_ideas = NAM_board_preview_research
 			}
@@ -1490,7 +1553,7 @@ focus_tree = {
 					clamp_variable = { var = NAM_free_zone_slots min = 1 max = 3 }
 				}
 				else = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 200 }
 					NAM_corp_capital_add = yes
 				}
 				set_temp_variable = { var = NAM_board_trust_input_3 value = 5 }
@@ -1511,7 +1574,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_hereditary_roll }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 30
+			add_political_power = 50
 			ADISCORD_programme_state_development = yes
 			custom_effect_tooltip = NAM_board_admitted_owners_register_reward_tt
 			hidden_effect = {
@@ -1526,7 +1589,7 @@ focus_tree = {
 					}
 				}
 				else = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+					set_temp_variable = { var = NAM_corp_capital_change value = 150 }
 					NAM_corp_capital_add = yes
 				}
 				set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
@@ -1549,12 +1612,11 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_island_public_works
 			custom_effect_tooltip = NAM_island_public_works_unlock_tt
+			army_experience = 30
 			ADISCORD_programme_state_development = yes
 			custom_effect_tooltip = NAM_board_boundary_notches_reward_tt
 			hidden_effect = {
 				clamp_variable = { var = NAM_project_slots min = 1 max = 2 }
-				set_temp_variable = { var = NAM_corp_capital_change value = 30 }
-				NAM_corp_capital_add = yes
 				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
 				set_temp_variable = { var = NAM_board_trust_input_1 value = -3 }
 				NAM_board_trust_package = yes
@@ -1583,7 +1645,7 @@ focus_tree = {
 					add_days_mission_timeout = { mission = NAM_board_no_confidence days = 30 }
 					add_to_variable = { var = NAM_board_no_confidence_day value = 30 }
 				}
-				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
 				NAM_corp_capital_add = yes
 				set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
 				set_temp_variable = { var = NAM_board_trust_input_6 value = -3 }
@@ -1612,7 +1674,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_board_buy_proxies
 			custom_effect_tooltip = NAM_board_buy_proxies_unlock_tt
-			add_political_power = 30
+			add_political_power = 75
 			custom_effect_tooltip = NAM_board_sole_vote_holder_reward_tt
 			hidden_effect = {
 				set_variable = { var = NAM_board_action_slots value = 3 }
@@ -1633,9 +1695,10 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = convoy_1
-				amount = 2
+				amount = 10
 				producer = NAM
 			}
+			navy_experience = 15
 			ADISCORD_reform_cultural_development = yes
 			custom_effect_tooltip = NAM_board_copy_across_strait_reward_tt
 			hidden_effect = {
@@ -1656,7 +1719,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_subsidised_opposition }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 40
+			add_political_power = 75
 			custom_effect_tooltip = NAM_board_political_debt_register_reward_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
@@ -1678,6 +1741,7 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_board_relief_fund
 			custom_effect_tooltip = NAM_board_relief_fund_unlock_tt
+			add_manpower = 4000
 			add_timed_idea = {
 				idea = NAM_board_family_relief
 				days = 180
@@ -1702,6 +1766,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_private_strait }
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		completion_reward = {
+			NAM_board_enact_residency_for_hire = yes
 			effect_tooltip = {
 				add_ideas = NAM_board_preview_residency
 			}
@@ -1710,6 +1775,26 @@ focus_tree = {
 			}
 			custom_effect_tooltip = NAM_board_residency_for_hire_reward_tt
 			hidden_effect = {
+				# Both civilian factories bring their own shared slots, so they never take
+				# an island slot already in use.
+				if = {
+					limit = {
+						any_owned_state = { NAM_owned_overseas_district = yes }
+					}
+					random_owned_state = {
+						limit = { NAM_owned_overseas_district = yes }
+						add_extra_state_shared_building_slots = 2
+						add_building_construction = {
+							type = industrial_complex
+							level = 2
+							instant_build = yes
+						}
+					}
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 200 }
+					NAM_corp_capital_add = yes
+				}
 				add_to_variable = { var = NAM_board_focus_construction value = 0.1 }
 				add_to_variable = { var = NAM_board_focus_stab value = -0.02 }
 				set_temp_variable = { var = NAM_board_trust_input_5 value = 5 }
@@ -1735,7 +1820,7 @@ focus_tree = {
 		bypass = { has_completed_focus = NAM_board_partition_night }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_manpower = 1500
+			add_manpower = 4000
 			custom_effect_tooltip = NAM_board_eflor_petition_reward_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
@@ -1757,14 +1842,17 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_admitted_owners_register }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6000
+				producer = NAM
+			}
 			if = {
 				limit = { has_idea = NAM_judas_karamyshev_watch }
 				unlock_decision_tooltip = NAM_judas_pay_captains
 				custom_effect_tooltip = NAM_judas_pay_captains_unlock_tt
 				custom_effect_tooltip = NAM_board_district_buyout_alive_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-					NAM_corp_capital_add = yes
 					set_temp_variable = { var = NAM_board_trust_input_4 value = 5 }
 					set_temp_variable = { var = NAM_board_trust_input_3 value = -4 }
 					NAM_board_trust_package = yes
@@ -1781,8 +1869,6 @@ focus_tree = {
 				}
 				custom_effect_tooltip = NAM_board_district_buyout_dead_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-					NAM_corp_capital_add = yes
 					set_temp_variable = { var = NAM_board_trust_input_4 value = 5 }
 					set_temp_variable = { var = NAM_board_trust_input_3 value = -4 }
 					NAM_board_trust_package = yes
@@ -1801,7 +1887,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_boundary_notches }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 25
+			add_political_power = 70
 			if = {
 				limit = { has_idea = NAM_judas_karamyshev_watch }
 				custom_effect_tooltip = NAM_board_price_of_silence_alive_tt
@@ -1848,7 +1934,7 @@ focus_tree = {
 			custom_effect_tooltip = NAM_board_retender_unlock_tt
 			custom_effect_tooltip = NAM_board_lawyers_of_both_shores_reward_tt
 			hidden_effect = {
-				set_temp_variable = { var = NAM_corp_capital_change value = 45 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 120 }
 				NAM_corp_capital_add = yes
 				set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
 				set_temp_variable = { var = NAM_board_trust_input_3 value = -4 }
@@ -1867,6 +1953,8 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_family_relief_fund }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			NAM_board_enact_mourning_licence = yes
+			army_experience = 25
 			ADISCORD_programme_cultural_development = yes
 			if = {
 				limit = { has_idea = NAM_judas_weber_committees }
@@ -1874,8 +1962,6 @@ focus_tree = {
 				custom_effect_tooltip = NAM_judas_disperse_mourners_unlock_tt
 				custom_effect_tooltip = NAM_board_mourning_licence_alive_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-					NAM_corp_capital_add = yes
 					set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
 					set_temp_variable = { var = NAM_board_trust_input_5 value = -4 }
 					NAM_board_trust_package = yes
@@ -1885,8 +1971,6 @@ focus_tree = {
 			else = {
 				custom_effect_tooltip = NAM_board_mourning_licence_dead_tt
 				hidden_effect = {
-					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
-					NAM_corp_capital_add = yes
 					set_temp_variable = { var = NAM_judas_camp_input value = 1 }
 					set_temp_variable = { var = NAM_corp_capital_change value = 40 }
 					NAM_judas_pay_spoils = yes
@@ -1913,6 +1997,26 @@ focus_tree = {
 			add_stability = 0.03
 			custom_effect_tooltip = NAM_board_representation_for_loss_reward_tt
 			hidden_effect = {
+				# The replacement plant brings its own shared slot, so it never takes an
+				# island slot already in use.
+				if = {
+					limit = {
+						any_owned_state = { NAM_owned_overseas_district = yes }
+					}
+					random_owned_state = {
+						limit = { NAM_owned_overseas_district = yes }
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+					NAM_corp_capital_add = yes
+				}
 				add_to_variable = { var = NAM_board_proxy_votes^5 value = 1 }
 				add_to_variable = { var = NAM_board_proxy_votes^6 value = 1 }
 				set_temp_variable = { var = NAM_board_trust_input_5 value = 5 }
@@ -1935,7 +2039,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_district_buyout }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 50
+			add_political_power = 110
 			custom_effect_tooltip = NAM_board_close_the_lawsuit_reward_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_board_petitioner value = 0 }
@@ -1964,7 +2068,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_price_of_silence }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_manpower = 2000
+			add_manpower = 7000
 			custom_effect_tooltip = NAM_board_land_under_seal_reward_tt
 			hidden_effect = {
 				set_variable = { var = NAM_board_militia_cap value = 2 }
@@ -1988,7 +2092,7 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_lawyers_of_both_shores }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 40
+			add_political_power = 100
 			ADISCORD_programme_state_development = yes
 			# Olshansky chairs until the first annual meeting: no company is spared the loss.
 			if = {
@@ -2032,7 +2136,8 @@ focus_tree = {
 		prerequisite = { focus = NAM_board_mourning_licence }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 40
+			add_political_power = 100
+			NAM_board_trade_social_system_for_economic = yes
 			custom_effect_tooltip = NAM_board_port_rights_monopoly_reward_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_board_trust_input_3 value = 6 }
@@ -2063,14 +2168,14 @@ focus_tree = {
 		}
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		completion_reward = {
-			add_political_power = 50
+			add_political_power = 100
 			effect_tooltip = {
 				add_ideas = NAM_board_preview_inventory
 			}
 			custom_effect_tooltip = NAM_board_mainland_inventory_reward_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_board_focus_stab value = 0.03 }
-				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
 				NAM_corp_capital_add = yes
 				set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
 				set_temp_variable = { var = NAM_board_trust_input_1 value = -3 }
@@ -2097,7 +2202,7 @@ focus_tree = {
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			add_political_power = 50
+			add_political_power = 125
 			custom_effect_tooltip = NAM_board_table_six_reward_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_board_petitioner value = 0 }
@@ -2148,6 +2253,11 @@ focus_tree = {
 		}
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 10
+				producer = NAM
+			}
 			add_timed_idea = {
 				idea = NAM_board_partition_charter
 				days = 180
@@ -2179,7 +2289,1536 @@ focus_tree = {
 				NAM_island_partition_succession = yes
 				add_to_variable = { var = NAM_revenge_readiness value = 10 }
 				NAM_revenge_readiness_clamp = yes
+				add_to_variable = { var = NAM_open_fuel_reserve value = 6000 }
+				NAM_open_fuel_release = yes
+				# Reveals the invasion branch, whose allow_branch reads this focus.
+				mark_focus_tree_layout_dirty = yes
 				country_event = { id = ADISCORD_nam_story.81 days = 1 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	# Lower branch after partition_night: invasion preparation in four lanes,
+	# the optional island operations and Operation Poseidon, which starts the
+	# war of return. The prospectus carries allow_branch, so the branch stays
+	# hidden until partition_night marks the layout dirty.
+	focus = {
+		id = NAM_board_invasion_prospectus
+		icon = GFX_focus_NAM_board_invasion_prospectus
+		x = 18
+		y = 13
+		cost = 1
+		prerequisite = { focus = NAM_board_partition_night }
+		allow_branch = {
+			has_completed_focus = NAM_board_partition_night
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = NAM_board_invasion_prospectus_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_holders_gain value = 4 }
+				set_temp_variable = { var = NAM_board_others_gain value = 0 }
+				NAM_board_holders_package = yes
+				country_event = { id = ADISCORD_nam_story.97 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_holders_underwrite
+		icon = GFX_focus_NAM_board_holders_underwrite
+		x = 16
+		y = 16
+		cost = 1
+		prerequisite = { focus = NAM_board_invasion_prospectus }
+		mutually_exclusive = { focus = NAM_board_six_share_pool }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_holders_levy
+			custom_effect_tooltip = NAM_board_inv_holders_levy_unlock_tt
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 6
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_holders_underwrite_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 8 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 3 }
+				NAM_board_inv_cap_add = yes
+				# The two holders frozen at the partition night; the proxy votes
+				# expire at the next annual meeting with every other proxy vote.
+				add_to_variable = { var = NAM_board_proxy_votes^NAM_board_partition_efl value = 1 }
+				add_to_variable = { var = NAM_board_proxy_votes^NAM_board_partition_azh value = 1 }
+				# The package recounts once, so the proxy votes above count at once.
+				set_temp_variable = { var = NAM_board_holders_gain value = 8 }
+				set_temp_variable = { var = NAM_board_others_gain value = -3 }
+				NAM_board_holders_package = yes
+				country_event = { id = ADISCORD_nam_story.98 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_six_share_pool
+		icon = GFX_focus_NAM_board_six_share_pool
+		x = 20
+		y = 16
+		cost = 1
+		prerequisite = { focus = NAM_board_invasion_prospectus }
+		mutually_exclusive = { focus = NAM_board_holders_underwrite }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_expedition_share
+			custom_effect_tooltip = NAM_board_inv_expedition_share_unlock_tt
+			add_political_power = 50
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_board_six_share_pool_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.99 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_mainland_contacts
+		icon = GFX_focus_NAM_board_mainland_contacts
+		x = 18
+		y = 18
+		cost = 1
+		prerequisite = {
+			focus = NAM_board_holders_underwrite
+			focus = NAM_board_six_share_pool
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_cells
+			custom_effect_tooltip = NAM_board_inv_cells_unlock_tt
+			add_manpower = 2000
+			custom_effect_tooltip = NAM_board_mainland_contacts_reward_tt
+			hidden_effect = {
+				NAM_board_cells_seed = yes
+				set_temp_variable = { var = NAM_board_holders_gain value = 3 }
+				set_temp_variable = { var = NAM_board_others_gain value = 0 }
+				NAM_board_holders_package = yes
+				country_event = { id = ADISCORD_nam_story.118 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_assembly_roads
+		icon = GFX_focus_NAM_board_assembly_roads
+		x = 18
+		y = 20
+		cost = 2
+		prerequisite = { focus = NAM_board_mainland_contacts }
+		prerequisite = { focus = NAM_board_supply_overseas }
+		prerequisite = { focus = NAM_board_landing_flotilla }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 10
+				producer = NAM
+			}
+			navy_experience = 25
+			add_timed_idea = {
+				idea = NAM_board_assembly_roads_spirit
+				days = 180
+			}
+			custom_effect_tooltip = NAM_board_assembly_roads_reward_tt
+			hidden_effect = {
+				# The readiness rule of new island targets is read by
+				# NAM_isl_open_target through has_completed_focus.
+				country_event = { id = ADISCORD_nam_story.100 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_invasion_fleet
+		icon = GFX_focus_NAM_board_invasion_fleet
+		x = 18
+		y = 22
+		cost = 2
+		prerequisite = { focus = NAM_board_assembly_roads }
+		prerequisite = { focus = NAM_board_arsenal_of_the_boards }
+		prerequisite = { focus = NAM_board_expedition_rear }
+		prerequisite = { focus = NAM_board_island_squadron }
+		prerequisite = { focus = NAM_board_first_wave }
+		available = {
+			NAM_board_majority_held = yes
+		}
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_political_power = 60
+			add_manpower = 6000
+			add_timed_idea = {
+				idea = NAM_board_invasion_fleet_spirit
+				days = 365
+			}
+			custom_effect_tooltip = NAM_board_invasion_fleet_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_revenge_readiness value = 5 }
+				NAM_revenge_readiness_clamp = yes
+				set_temp_variable = { var = NAM_board_holders_gain value = 5 }
+				set_temp_variable = { var = NAM_board_others_gain value = 0 }
+				set_temp_variable = { var = NAM_board_chair_gain value = 5 }
+				NAM_board_holders_package = yes
+				country_event = { id = ADISCORD_nam_story.101 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_war_economy_charter
+		icon = GFX_focus_NAM_board_war_economy_charter
+		x = 5
+		y = 14
+		cost = 1
+		prerequisite = { focus = NAM_board_invasion_prospectus }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_convert_plant
+			custom_effect_tooltip = NAM_board_inv_convert_plant_unlock_tt
+			if = {
+				limit = { has_idea = civilian_economy }
+				add_ideas = low_economic_mobilisation
+			}
+			else = {
+				add_political_power = 40
+			}
+			custom_effect_tooltip = NAM_board_war_economy_charter_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 1 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 3 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -3 }
+				NAM_board_trust_package = yes
+				ADISCORD_economy_mark_dirty = yes
+				country_event = { id = ADISCORD_nam_story.102 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_double_shifts
+		icon = GFX_focus_NAM_board_double_shifts
+		x = 3
+		y = 15
+		cost = 1
+		prerequisite = { focus = NAM_board_war_economy_charter }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_board_double_shifts_spirit
+				days = 270
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_double_shifts_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -4 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_steel_for_guns
+		icon = GFX_focus_NAM_board_steel_for_guns
+		x = 7
+		y = 15
+		cost = 1
+		prerequisite = { focus = NAM_board_war_economy_charter }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 24
+				producer = NAM
+			}
+			army_experience = 10
+			custom_effect_tooltip = NAM_board_steel_for_guns_reward_tt
+			hidden_effect = {
+				# Conversion keeps the island's slot count: one civilian plant becomes an arms plant.
+				set_temp_variable = { var = NAM_board_build_kind value = 4 }
+				set_temp_variable = { var = NAM_board_build_pref value = 228 }
+				NAM_board_build_on_island = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+				NAM_board_pay_site_fallback = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_cartel_prices
+		icon = GFX_focus_NAM_board_cartel_prices
+		x = 3
+		y = 17
+		cost = 1
+		prerequisite = { focus = NAM_board_double_shifts }
+		mutually_exclusive = { focus = NAM_board_open_war_tenders }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4500
+				producer = NAM
+			}
+			effect_tooltip = {
+				add_ideas = NAM_board_preview_arsenal
+			}
+			custom_effect_tooltip = NAM_board_cartel_prices_reward_tt
+			hidden_effect = {
+				# The sponsor rule of the arms programmes reads this focus directly;
+				# the trust package below recounts the output aggregate.
+				add_to_variable = { var = NAM_board_focus_output value = 0.05 }
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -8 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -8 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.103 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_open_war_tenders
+		icon = GFX_focus_NAM_board_open_war_tenders
+		x = 7
+		y = 17
+		cost = 1
+		prerequisite = { focus = NAM_board_steel_for_guns }
+		mutually_exclusive = { focus = NAM_board_cartel_prices }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			add_manpower = 3000
+			add_political_power = 40
+			custom_effect_tooltip = NAM_board_open_war_tenders_reward_tt
+			hidden_effect = {
+				# The charter has already set the conversion base cap; the arsenal cap
+				# is added by island_arsenal, so neither row can pass the ceiling of 6.
+				set_temp_variable = { var = NAM_board_inv_k value = 1 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 2 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_board_inv_k value = 2 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 2 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = -6 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -6 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 6 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.104 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_island_arsenal
+		icon = GFX_focus_NAM_board_island_arsenal
+		x = 5
+		y = 18
+		cost = 1
+		prerequisite = {
+			focus = NAM_board_cartel_prices
+			focus = NAM_board_open_war_tenders
+		}
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_arsenal_order
+			custom_effect_tooltip = NAM_board_inv_arsenal_order_unlock_tt
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 96
+				producer = NAM
+			}
+			army_experience = 15
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 2 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 4 }
+				NAM_board_inv_cap_add = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_synthetic_plant
+		icon = GFX_focus_NAM_board_synthetic_plant
+		x = 3
+		y = 19
+		cost = 2
+		prerequisite = { focus = NAM_board_island_arsenal }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_synthetic_plant_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_build_kind value = 2 }
+				set_temp_variable = { var = NAM_board_build_pref value = 231 }
+				NAM_board_build_on_island = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+				NAM_board_pay_site_fallback = yes
+				add_to_variable = { var = NAM_open_fuel_reserve value = 4000 }
+				NAM_open_fuel_release = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_war_bonds
+		icon = GFX_focus_NAM_board_war_bonds
+		x = 7
+		y = 19
+		cost = 1
+		prerequisite = { focus = NAM_board_island_arsenal }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_fuel_freight
+			custom_effect_tooltip = NAM_board_inv_fuel_freight_unlock_tt
+			unlock_decision_tooltip = NAM_isl_insurance
+			custom_effect_tooltip = NAM_isl_insurance_unlock_tt
+			custom_effect_tooltip = NAM_board_war_bonds_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 3 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 3 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_arsenal_of_the_boards
+		icon = GFX_focus_NAM_board_arsenal_of_the_boards
+		x = 5
+		y = 21
+		cost = 2
+		prerequisite = {
+			focus = NAM_board_synthetic_plant
+			focus = NAM_board_war_bonds
+		}
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			if = {
+				limit = { has_idea = low_economic_mobilisation }
+				add_ideas = partial_economic_mobilisation
+			}
+			else_if = {
+				limit = { has_idea = civilian_economy }
+				add_ideas = low_economic_mobilisation
+			}
+			else = {
+				add_political_power = 60
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4500
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 96
+				producer = NAM
+			}
+			ADISCORD_programme_economic_development = yes
+			custom_effect_tooltip = NAM_board_arsenal_of_the_boards_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_build_kind value = 1 }
+				set_temp_variable = { var = NAM_board_build_pref value = 227 }
+				NAM_board_build_on_island = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+				NAM_board_pay_site_fallback = yes
+				set_temp_variable = { var = NAM_board_company_input value = 2 }
+				NAM_board_grant_charter = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				NAM_board_trust_package = yes
+				ADISCORD_economy_mark_dirty = yes
+				country_event = { id = ADISCORD_nam_story.105 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_war_quartermaster
+		icon = GFX_focus_NAM_board_war_quartermaster
+		x = 12
+		y = 14
+		cost = 1
+		prerequisite = { focus = NAM_board_invasion_prospectus }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_war_quartermaster_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_open_fuel_reserve value = 6000 }
+				NAM_open_fuel_release = yes
+				NAM_board_build_capital_naval_base = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_board_pay_site_fallback = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.106 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_tanker_caravan
+		icon = GFX_focus_NAM_board_tanker_caravan
+		x = 10
+		y = 15
+		cost = 1
+		prerequisite = { focus = NAM_board_war_quartermaster }
+		mutually_exclusive = { focus = NAM_board_shore_depots }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			add_political_power = 40
+			add_timed_idea = {
+				idea = NAM_board_tanker_caravan_spirit
+				days = 365
+			}
+			custom_effect_tooltip = NAM_board_tanker_caravan_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_open_fuel_reserve value = 6000 }
+				NAM_open_fuel_release = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.107 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_shore_depots
+		icon = GFX_focus_NAM_board_shore_depots
+		x = 14
+		y = 15
+		cost = 1
+		prerequisite = { focus = NAM_board_war_quartermaster }
+		mutually_exclusive = { focus = NAM_board_tanker_caravan }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_harbour_works
+			custom_effect_tooltip = NAM_board_inv_harbour_works_unlock_tt
+			add_manpower = 3000
+			custom_effect_tooltip = NAM_board_shore_depots_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 4 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 3 }
+				NAM_board_inv_cap_add = yes
+				NAM_board_build_supply_hub = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_board_pay_site_fallback = yes
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_1 value = -4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.108 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_ration_lists
+		icon = GFX_focus_NAM_board_ration_lists
+		x = 12
+		y = 16
+		cost = 2
+		prerequisite = {
+			focus = NAM_board_tanker_caravan
+			focus = NAM_board_shore_depots
+		}
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			add_manpower = 4000
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 150
+				producer = NAM
+			}
+			add_stability = 0.02
+			custom_effect_tooltip = NAM_board_ration_lists_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_bunker_piers
+		icon = GFX_focus_NAM_board_bunker_piers
+		x = 10
+		y = 17
+		cost = 1
+		prerequisite = { focus = NAM_board_ration_lists }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			custom_effect_tooltip = NAM_board_bunker_piers_reward_tt
+			hidden_effect = {
+				# Each pier is paid separately: a port that is lost or full pays its
+				# own capital fallback while the other one is still built.
+				set_temp_variable = { var = NAM_board_site_built value = 0 }
+				if = {
+					limit = {
+						225 = { NAM_board_inv_port_site = yes }
+					}
+					225 = { NAM_board_build_port_level = yes }
+				}
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_board_pay_site_fallback = yes
+				set_temp_variable = { var = NAM_board_site_built value = 0 }
+				if = {
+					limit = {
+						231 = { NAM_board_inv_port_site = yes }
+					}
+					231 = { NAM_board_build_port_level = yes }
+				}
+				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+				NAM_board_pay_site_fallback = yes
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_hospital_ships
+		icon = GFX_focus_NAM_board_hospital_ships
+		x = 14
+		y = 17
+		cost = 1
+		prerequisite = { focus = NAM_board_ration_lists }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			add_manpower = 3000
+			add_timed_idea = {
+				idea = NAM_board_hospital_ships_spirit
+				days = 365
+			}
+			ADISCORD_programme_social_system_development = yes
+			custom_effect_tooltip = NAM_board_hospital_ships_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_supply_overseas
+		icon = GFX_focus_NAM_board_supply_overseas
+		x = 12
+		y = 19
+		cost = 1
+		prerequisite = {
+			focus = NAM_board_bunker_piers
+			focus = NAM_board_hospital_ships
+		}
+		prerequisite = { focus = NAM_board_island_arsenal }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			add_political_power = 40
+			custom_effect_tooltip = NAM_board_supply_overseas_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_open_fuel_reserve value = 5000 }
+				NAM_open_fuel_release = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_expedition_rear
+		icon = GFX_focus_NAM_board_expedition_rear
+		x = 12
+		y = 21
+		cost = 2
+		prerequisite = { focus = NAM_board_supply_overseas }
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 90
+				producer = NAM
+			}
+			add_timed_idea = {
+				idea = NAM_board_expedition_rear_spirit
+				days = 365
+			}
+			custom_effect_tooltip = NAM_board_expedition_rear_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.109 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_private_navy
+		icon = GFX_focus_NAM_board_private_navy
+		x = 24
+		y = 14
+		cost = 1
+		prerequisite = { focus = NAM_board_invasion_prospectus }
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_tonnage
+			custom_effect_tooltip = NAM_board_inv_tonnage_unlock_tt
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 8
+				producer = NAM
+			}
+			navy_experience = 15
+			custom_effect_tooltip = NAM_board_private_navy_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 5 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 4 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.110 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_escort_flotilla
+		icon = GFX_focus_NAM_board_escort_flotilla
+		x = 26
+		y = 15
+		cost = 1
+		prerequisite = { focus = NAM_board_private_navy }
+		mutually_exclusive = { focus = NAM_board_fire_squadron }
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_board_escort_flotilla_spirit
+				days = 365
+			}
+			custom_effect_tooltip = NAM_board_escort_flotilla_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_hulls value = 1 }
+				NAM_board_launch_escorts = yes
+				set_temp_variable = { var = NAM_board_inv_k value = 6 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 1 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.111 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_fire_squadron
+		icon = GFX_focus_NAM_board_fire_squadron
+		x = 22
+		y = 15
+		cost = 1
+		prerequisite = { focus = NAM_board_private_navy }
+		mutually_exclusive = { focus = NAM_board_escort_flotilla }
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			navy_experience = 25
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_amphibious_assault_landing_systems }
+				}
+				set_technology = {
+					ADISCORD_tech_amphibious_assault_landing_systems = 1
+					popup = no
+				}
+			}
+			else = {
+				navy_experience = 15
+			}
+			add_timed_idea = {
+				idea = NAM_board_fire_squadron_spirit
+				days = 365
+			}
+			custom_effect_tooltip = NAM_board_fire_squadron_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.112 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_company_docks
+		icon = GFX_focus_NAM_board_company_docks
+		x = 24
+		y = 16
+		cost = 2
+		prerequisite = {
+			focus = NAM_board_escort_flotilla
+			focus = NAM_board_fire_squadron
+		}
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_escort_contract
+			custom_effect_tooltip = NAM_board_inv_escort_contract_unlock_tt
+			custom_effect_tooltip = NAM_board_company_docks_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 6 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 2 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_board_build_kind value = 3 }
+				set_temp_variable = { var = NAM_board_build_pref value = 227 }
+				NAM_board_build_on_island = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+				NAM_board_pay_site_fallback = yes
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_landing_craft
+		icon = GFX_focus_NAM_board_landing_craft
+		x = 26
+		y = 17
+		cost = 1
+		prerequisite = { focus = NAM_board_company_docks }
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_amphibious_landing_craft }
+				}
+				set_technology = {
+					ADISCORD_tech_amphibious_landing_craft = 1
+					popup = no
+				}
+			}
+			else = {
+				navy_experience = 15
+			}
+			navy_experience = 10
+			custom_effect_tooltip = NAM_board_landing_craft_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_loading_schedules
+		icon = GFX_focus_NAM_board_loading_schedules
+		x = 22
+		y = 17
+		cost = 1
+		prerequisite = { focus = NAM_board_company_docks }
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_tech = ADISCORD_tech_amphibious_embarkation_schedules }
+				}
+				set_technology = {
+					ADISCORD_tech_amphibious_embarkation_schedules = 1
+					popup = no
+				}
+			}
+			else = {
+				navy_experience = 15
+			}
+			navy_experience = 15
+			add_political_power = 40
+			custom_effect_tooltip = NAM_board_loading_schedules_reward_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_landing_flotilla
+		icon = GFX_focus_NAM_board_landing_flotilla
+		x = 24
+		y = 19
+		cost = 1
+		prerequisite = {
+			focus = NAM_board_landing_craft
+			focus = NAM_board_loading_schedules
+		}
+		prerequisite = { focus = NAM_board_marine_officers }
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 30
+				producer = NAM
+			}
+			army_experience = 10
+			custom_effect_tooltip = NAM_board_landing_flotilla_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_island_squadron
+		icon = GFX_focus_NAM_board_island_squadron
+		x = 24
+		y = 21
+		cost = 2
+		prerequisite = { focus = NAM_board_landing_flotilla }
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		completion_reward = {
+			navy_experience = 30
+			custom_effect_tooltip = NAM_board_island_squadron_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 6 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 1 }
+				NAM_board_inv_cap_add = yes
+				# Each port level is paid separately: a full port or a lost capital
+				# island turns only the missing level into capital.
+				NAM_board_build_capital_naval_base = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_board_pay_site_fallback = yes
+				NAM_board_build_capital_naval_base = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+				NAM_board_pay_site_fallback = yes
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 6 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.113 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_landing_contracts
+		icon = GFX_focus_NAM_board_landing_contracts
+		x = 31
+		y = 14
+		cost = 1
+		prerequisite = { focus = NAM_board_invasion_prospectus }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_board_inv_raise_marines
+			custom_effect_tooltip = NAM_board_inv_raise_marines_unlock_tt
+			if = {
+				limit = { NOT = { has_tech = ADISCORD_tech_amphibious_formation_organization } }
+				set_technology = {
+					ADISCORD_tech_amphibious_formation_organization = 1
+					popup = no
+				}
+			}
+			else = {
+				army_experience = 10
+			}
+			army_experience = 10
+			custom_effect_tooltip = NAM_board_landing_contracts_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 7 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 1 }
+				NAM_board_inv_cap_add = yes
+				NAM_marine_ensure_template = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.114 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_marine_school
+		icon = GFX_focus_NAM_board_marine_school
+		x = 33
+		y = 15
+		cost = 1
+		prerequisite = { focus = NAM_board_landing_contracts }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			add_manpower = 3000
+			army_experience = 10
+			custom_effect_tooltip = NAM_board_marine_school_reward_tt
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_marine_kit
+		icon = GFX_focus_NAM_board_marine_kit
+		x = 29
+		y = 15
+		cost = 1
+		prerequisite = { focus = NAM_board_landing_contracts }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 96
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_marine_kit_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 7 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 1 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_storm_companies
+		icon = GFX_focus_NAM_board_storm_companies
+		x = 33
+		y = 17
+		cost = 1
+		prerequisite = { focus = NAM_board_marine_school }
+		mutually_exclusive = { focus = NAM_board_shore_battalions }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			if = {
+				limit = { NOT = { has_tech = ADISCORD_tech_amphibious_shore_parties } }
+				set_technology = {
+					ADISCORD_tech_amphibious_shore_parties = 1
+					popup = no
+				}
+			}
+			else = {
+				army_experience = 10
+			}
+			army_experience = 15
+			add_timed_idea = {
+				idea = NAM_board_storm_companies_spirit
+				days = 365
+			}
+			custom_effect_tooltip = NAM_board_storm_companies_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.115 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_shore_battalions
+		icon = GFX_focus_NAM_board_shore_battalions
+		x = 29
+		y = 17
+		cost = 1
+		prerequisite = { focus = NAM_board_marine_kit }
+		mutually_exclusive = { focus = NAM_board_storm_companies }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			add_manpower = 3000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_shore_battalions_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_inv_k value = 7 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 1 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.116 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_marine_officers
+		icon = GFX_focus_NAM_board_marine_officers
+		x = 31
+		y = 18
+		cost = 1
+		prerequisite = {
+			focus = NAM_board_storm_companies
+			focus = NAM_board_shore_battalions
+		}
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			if = {
+				limit = { NOT = { has_tech = ADISCORD_tech_amphibious_staff_sections } }
+				set_technology = {
+					ADISCORD_tech_amphibious_staff_sections = 1
+					popup = no
+				}
+			}
+			else = {
+				army_experience = 10
+			}
+			add_command_power = 20
+			add_political_power = 40
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_beach_masters
+		icon = GFX_focus_NAM_board_beach_masters
+		x = 33
+		y = 19
+		cost = 2
+		prerequisite = { focus = NAM_board_marine_officers }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 48
+				producer = NAM
+			}
+			army_experience = 10
+			custom_effect_tooltip = NAM_board_beach_masters_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_mercenary_battalions
+		icon = GFX_focus_NAM_board_mercenary_battalions
+		x = 29
+		y = 19
+		cost = 1
+		prerequisite = { focus = NAM_board_marine_officers }
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_board_mercenary_pay
+				days = 180
+			}
+			custom_effect_tooltip = NAM_board_mercenary_battalions_reward_tt
+			hidden_effect = {
+				NAM_board_raise_mercenary_brigade = yes
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_first_wave
+		icon = GFX_focus_NAM_board_first_wave
+		x = 31
+		y = 21
+		cost = 2
+		prerequisite = {
+			focus = NAM_board_beach_masters
+			focus = NAM_board_mercenary_battalions
+		}
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 192
+				producer = NAM
+			}
+			ADISCORD_programme_army_development = yes
+			custom_effect_tooltip = NAM_board_first_wave_reward_tt
+			hidden_effect = {
+				NAM_board_raise_marine_division = yes
+				set_temp_variable = { var = NAM_board_inv_k value = 7 }
+				set_temp_variable = { var = NAM_board_inv_cap_change value = 1 }
+				NAM_board_inv_cap_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+				NAM_board_trust_package = yes
+				set_temp_variable = { var = NAM_board_company_input value = 4 }
+				NAM_board_grant_charter = yes
+				country_event = { id = ADISCORD_nam_story.117 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_ulven_operation
+		icon = GFX_focus_NAM_board_ulven_operation
+		x = 14
+		y = 24
+		cost = 2
+		prerequisite = { focus = NAM_board_invasion_fleet }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_isl_target_free_tt
+				ULV = {
+					exists = yes
+					is_subject = no
+				}
+			}
+		}
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_isl_launch
+			custom_effect_tooltip = NAM_isl_launch_unlock_tt
+			unlock_decision_tooltip = NAM_isl_soundings
+			custom_effect_tooltip = NAM_isl_soundings_unlock_tt
+			navy_experience = 20
+			custom_effect_tooltip = NAM_board_ulven_operation_reward_tt
+			hidden_effect = {
+				# Claims on every Ulven state, Tarven included: the native claim
+				# lowers resistance on them after the annexation.
+				643 = { add_claim_by = NAM }
+				644 = { add_claim_by = NAM }
+				645 = { add_claim_by = NAM }
+				646 = { add_claim_by = NAM }
+				647 = { add_claim_by = NAM }
+				648 = { add_claim_by = NAM }
+				set_temp_variable = { var = NAM_isl_k value = 1 }
+				set_temp_variable = { var = NAM_isl_gain value = 15 }
+				NAM_isl_open_target = yes
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.119 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_luren_operation
+		icon = GFX_focus_NAM_board_luren_operation
+		x = 22
+		y = 24
+		cost = 2
+		prerequisite = { focus = NAM_board_invasion_fleet }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_isl_target_free_tt
+				LUR = {
+					exists = yes
+					is_subject = no
+				}
+			}
+		}
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_isl_launch
+			custom_effect_tooltip = NAM_isl_launch_unlock_tt
+			unlock_decision_tooltip = NAM_isl_soundings
+			custom_effect_tooltip = NAM_isl_soundings_unlock_tt
+			navy_experience = 20
+			custom_effect_tooltip = NAM_board_luren_operation_reward_tt
+			hidden_effect = {
+				649 = { add_claim_by = NAM }
+				650 = { add_claim_by = NAM }
+				651 = { add_claim_by = NAM }
+				652 = { add_claim_by = NAM }
+				set_temp_variable = { var = NAM_isl_k value = 2 }
+				set_temp_variable = { var = NAM_isl_gain value = 15 }
+				NAM_isl_open_target = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.120 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = NAM_board_sharden_operation
+		icon = GFX_focus_NAM_board_sharden_operation
+		x = 18
+		y = 25
+		cost = 3
+		prerequisite = {
+			focus = NAM_board_ulven_operation
+			focus = NAM_board_luren_operation
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_isl_target_free_tt
+				CHD = {
+					exists = yes
+					is_subject = no
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_isl_staging_tt
+				NAM_isl_staging_port_held = yes
+			}
+		}
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		completion_reward = {
+			unlock_decision_tooltip = NAM_isl_sharden_promise
+			custom_effect_tooltip = NAM_isl_sharden_promise_unlock_tt
+			unlock_decision_tooltip = NAM_isl_sharden_blockade
+			custom_effect_tooltip = NAM_isl_sharden_blockade_unlock_tt
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 10
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_board_sharden_operation_reward_tt
+			hidden_effect = {
+				672 = { add_claim_by = NAM }
+				673 = { add_claim_by = NAM }
+				674 = { add_claim_by = NAM }
+				675 = { add_claim_by = NAM }
+				676 = { add_claim_by = NAM }
+				677 = { add_claim_by = NAM }
+				678 = { add_claim_by = NAM }
+				679 = { add_claim_by = NAM }
+				680 = { add_claim_by = NAM }
+				set_temp_variable = { var = NAM_isl_k value = 3 }
+				set_temp_variable = { var = NAM_isl_gain value = 10 }
+				NAM_isl_open_target = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.121 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = NAM_board_northern_safehouses
+		icon = GFX_focus_NAM_board_northern_safehouses
+		x = 12
+		y = 26
+		cost = 1
+		prerequisite = { focus = NAM_board_invasion_fleet }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_manpower = 2000
+			add_political_power = 40
+			custom_effect_tooltip = NAM_board_northern_safehouses_reward_tt
+			hidden_effect = {
+				# The port rule of a tier-3 rising in 688 and the softer raids on 67
+				# and 688 are read through has_completed_focus.
+				67 = {
+					set_temp_variable = { var = NAM_board_cells_change value = 15 }
+					NAM_board_cells_add = yes
+				}
+				688 = {
+					set_temp_variable = { var = NAM_board_cells_change value = 15 }
+					NAM_board_cells_add = yes
+				}
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				NAM_board_queue_recount = yes
+				country_event = { id = ADISCORD_nam_story.122 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_southern_safehouses
+		icon = GFX_focus_NAM_board_southern_safehouses
+		x = 24
+		y = 26
+		cost = 1
+		prerequisite = { focus = NAM_board_invasion_fleet }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			add_manpower = 2000
+			add_political_power = 40
+			custom_effect_tooltip = NAM_board_southern_safehouses_reward_tt
+			hidden_effect = {
+				# The harbour rule of a tier-3 rising in 700 is read by
+				# NAM_wor_revenge_landing through NAM_board_harbour_rising_ready; the
+				# softer raids on the four southern districts through has_completed_focus.
+				689 = {
+					set_temp_variable = { var = NAM_board_cells_change value = 15 }
+					NAM_board_cells_add = yes
+				}
+				690 = {
+					set_temp_variable = { var = NAM_board_cells_change value = 15 }
+					NAM_board_cells_add = yes
+				}
+				700 = {
+					set_temp_variable = { var = NAM_board_cells_change value = 15 }
+					NAM_board_cells_add = yes
+				}
+				719 = {
+					set_temp_variable = { var = NAM_board_cells_change value = 15 }
+					NAM_board_cells_add = yes
+				}
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_azh }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				NAM_board_queue_recount = yes
+				country_event = { id = ADISCORD_nam_story.123 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_board_operation_poseidon
+		icon = GFX_focus_NAM_board_operation_poseidon
+		x = 18
+		y = 28
+		cost = 3
+		prerequisite = { focus = NAM_board_northern_safehouses }
+		prerequisite = { focus = NAM_board_southern_safehouses }
+		available = {
+			NAM_board_majority_held = yes
+			NAM_board_invasion_backers_ready = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_war_of_return_ready_tt
+				NAM_war_of_return_can_start = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_poseidon_ready_tt
+				NOT = { check_variable = { NAM_revenge_readiness < 70 } }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_poseidon_force_tt
+				num_divisions > 7
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_poseidon_marines_tt
+				NAM_board_poseidon_marines_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_board_poseidon_convoys_tt
+				NOT = { has_equipment = { convoy_1 < 20 } }
+			}
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		completion_reward = {
+			add_manpower = 9000
+			effect_tooltip = {
+				add_timed_idea = {
+					idea = NAM_board_poseidon_spirit
+					days = 120
+				}
+			}
+			custom_effect_tooltip = NAM_board_operation_poseidon_reward_tt
+			hidden_effect = {
+				# The war, the risings, the island brigades, the flagship division, the
+				# council's trust and the beachhead mission all come from the launch,
+				# in that order, after NAM_war_of_return_start.
+				NAM_board_poseidon_launch = yes
+				# The launch adds the war spirit on a real start; the landing scene
+				# follows only then, and a failed start leaves the renewal decision open.
+				if = {
+					limit = { NAM_war_of_return_active = yes }
+					country_event = { id = ADISCORD_nam_story.124 days = 1 }
+				}
 			}
 		}
 		ai_will_do = { factor = 1 }

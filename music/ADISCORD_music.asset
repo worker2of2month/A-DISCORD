@@ -208,6 +208,12 @@ music = {
 }
 
 music = {
+	name = "ADISCORD_killing_joke_corporate_elect"
+	file = "ADISCORD_killing_joke_corporate_elect.ogg"
+	volume = 0.65
+}
+
+music = {
 	name = "ADISCORD_luke_c_est_la_guerre"
 	file = "ADISCORD_luke_c_est_la_guerre.ogg"
 	volume = 0.65

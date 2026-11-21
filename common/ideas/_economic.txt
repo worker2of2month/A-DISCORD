@@ -857,6 +857,19 @@ ideas = {
 			cost = 300
 			removal_cost = -1
 
+			allowed_to_remove = {
+				if = {
+					limit = {
+						tag = NAM
+						has_completed_focus = NAM_board_private_gospel
+					}
+					custom_trigger_tooltip = {
+						tooltip = NAM_board_law_locked_tt
+						always = no
+					}
+				}
+			}
+
 			available = {
 				OR = {
 					has_government = chauvinism

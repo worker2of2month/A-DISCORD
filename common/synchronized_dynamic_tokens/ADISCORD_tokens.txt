@@ -185,6 +185,11 @@ NAM_board_resolution_smenkom
 NAM_board_resolution_reidbank
 
 NAM_board_no_confidence
+NAM_board_poseidon_beachhead
+NAM_isl_beachhead_strait
+NAM_isl_beachhead_sharden
+NAM_isl_campaign_strait
+NAM_isl_campaign_sharden
 ADISCORD_marine_infantry
 NAM_interregnum_islands
 train_equipment

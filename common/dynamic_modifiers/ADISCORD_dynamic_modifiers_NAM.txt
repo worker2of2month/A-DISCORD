@@ -112,6 +112,18 @@ NAM_scorched_wells_modifier = {
 	local_supplies_for_controller = NAM_scorched_enemy_supply
 }
 
+# STATE mainland district. The council's rising at the start of the war of
+# return (NAM_board_cells_rise_state, 120 days); it ends once NAM holds the
+# district.
+NAM_board_rising_sabotage = {
+	icon = GFX_modifiers_ADISCORD_district_uprising
+	enable = { always = yes }
+	remove_trigger = { is_controlled_by = NAM }
+	attrition_for_controller = 0.10
+	local_supplies_for_controller = -0.30
+	army_speed_factor_for_controller = -0.15
+}
+
 NAM_klyuchevsk_oil_strike = {
 	icon = GFX_modifiers_ADISCORD_oil_strike
 	enable = {

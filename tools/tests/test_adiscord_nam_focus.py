@@ -8142,7 +8142,7 @@ class NamCampaignTests(unittest.TestCase):
             "south_war": (self.south_war, 72),
             "exile_radical": (self.exile_trees["exile_radical"][1], 72),
             "exile_humanist": (self.exile_trees["exile_humanist"][1], 72),
-            "exile_corporate": (self.exile_trees["exile_corporate"][1], 70),
+            "exile_corporate": (self.exile_trees["exile_corporate"][1], 116),
         }
         names = [name for focuses, _ in expected.values() for name in focuses]
         self.assertEqual(len(names), len(set(names)))
@@ -8150,7 +8150,7 @@ class NamCampaignTests(unittest.TestCase):
             playable = (reachable(focuses, {"NAM_board_escheated_throne", "NAM_board_treaty_two_judases"})
                         if kind == "exile_corporate" else set(focuses))
             if kind == "exile_corporate":
-                self.assertEqual(len(playable), 64)
+                self.assertEqual(len(playable), 110)
             coordinates = set()
             self.assertEqual(len(focuses), count, kind)
             filters = set()
@@ -8833,7 +8833,7 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_island_focus_diagram_and_duration(self):
         focuses = self.exile_trees["exile_corporate"][1]
-        self.assertEqual(len(focuses), 70)
+        self.assertEqual(len(focuses), 116)
         positions = {}
         edges = []
         pairs = set()
@@ -8845,12 +8845,14 @@ class NamCampaignTests(unittest.TestCase):
                     edges.extend((parent.value, name) for parent in field.value)
                 elif field.key == "mutually_exclusive":
                     pairs.update(tuple(sorted((name, other.value))) for other in field.value)
-        self.assertEqual(len(pairs), 7)
+        self.assertEqual(len(pairs), 12)
         root = "NAM_board_beacon_out"
-        final = "NAM_board_partition_night"
+        final = "NAM_board_operation_poseidon"
         self.assertEqual(set(focuses) - {child for _, child in edges}, {root})
-        self.assertEqual(set(focuses) - {parent for parent, _ in edges}, {final})
+        # The invasion branch ends on Poseidon; the Sharden landing is its optional side leaf.
+        self.assertEqual(set(focuses) - {parent for parent, _ in edges}, {final, "NAM_board_sharden_operation"})
         self.assertEqual(positions[root][0], positions[final][0])
+        self.assertEqual(positions[root][0], positions["NAM_board_partition_night"][0])
         self.assertLess(positions["NAM_board_escheated_throne"][0], positions["NAM_board_posthumous_signature"][0])
         for parent, child in edges:
             self.assertLess(positions[parent][1], positions[child][1], (parent, child))
@@ -8942,7 +8944,11 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertTrue(self.matches(block(decision, "available"), facts), programme)
 
     def test_partition_requires_every_compatible_branch_and_only_spared_leaders_are_wip(self):
-        focuses = self.exile_trees["exile_corporate"][1]
+        # The partition gate is the last upper focus (rows 0-12); the invasion branch
+        # below it opens only afterwards and has its own completeness tests.
+        focuses = {name: focus for name, focus in self.exile_trees["exile_corporate"][1].items()
+                   if int(scalar(focus, "y")) <= 12}
+        self.assertEqual(len(focuses), 70)
         final = "NAM_board_partition_night"
         start = "NAM_board_beacon_out"
         wip = {"NAM_board_escheated_throne", "NAM_board_treaty_two_judases"}
@@ -9021,7 +9027,7 @@ class NamCampaignTests(unittest.TestCase):
                 ("NAM", "NAM_board_majority_held", "yes"): True,
                 ("NAM", "NAM_board_operable", "yes"): True}
 
-    def test_corporate_ai_completes_every_compatible_focus_before_partition_night(self):
+    def test_corporate_ai_completes_every_compatible_focus_before_poseidon(self):
         plan = block(parsed("common/ai_strategy_plans/ADISCORD_NAM_plans.txt"), "NAM_exile_corporate_plan")
         queue = [entry.value for entry in block(plan, "ai_national_focuses")]
         tree = self.exile_trees["exile_corporate"][1]
@@ -9030,9 +9036,24 @@ class NamCampaignTests(unittest.TestCase):
         facts[("NAM", "NAM_board_operable", "yes")] = self.matches(self.triggers["NAM_board_operable"], facts)
         facts.update({("NAM", "has_focus_tree", "NAM_exile_corporate_focus"): True,
                       ("NAM", "is_ai", "yes"): True})
+        # A prepared expedition: Poseidon's own readiness, force, marine and convoy gates.
+        facts.update({("NAM", "variable", "NAM_revenge_readiness"): 70,
+                      ("NAM", "numeric", "num_divisions"): 8,
+                      ("NAM", "NAM_board_poseidon_marines_ready", "yes"): True,
+                      ("NAM", "equipment", "convoy_1"): 20,
+                      ("NAM", "NAM_board_invasion_backers_ready", "yes"): True,
+                      ("NAM", "NAM_war_of_return_can_start", "yes"): True,
+                      ("ULV", "exists", "yes"): True,
+                      ("ULV", "is_subject", "no"): True})
         self.assertTrue(self.matches(block(plan, "enable"), facts))
         self.assertFalse(self.matches(block(plan, "abort"), facts))
         completed = set()
+
+        def comparisons(entries):
+            # Scripted predicates stay fact-bound; only the short check_variable form is rewritten.
+            return [replace(entry, value=self.expand([entry])[0].value) if entry.key == "check_variable"
+                    else replace(entry, value=comparisons(entry.value)) if isinstance(entry.value, list)
+                    else entry for entry in entries]
 
         def selectable(name):
             for entry in tree[name]:
@@ -9040,40 +9061,51 @@ class NamCampaignTests(unittest.TestCase):
                     return False
                 if entry.key == "mutually_exclusive" and any(row.value in completed for row in entry.value):
                     return False
-                if entry.key == "available" and not matches_conditions(entry.value, facts, "NAM"):
+                if entry.key == "available" and not matches_conditions(comparisons(entry.value), facts, "NAM"):
                     return False
             return True
 
         self.assertEqual(queue[0], "NAM_board_beacon_out")
-        self.assertEqual(queue[-1], "NAM_board_partition_night")
+        self.assertEqual(queue[-1], "NAM_board_operation_poseidon")
+        self.assertLess(queue.index("NAM_board_partition_night"), queue.index("NAM_board_invasion_prospectus"))
         self.assertTrue({"NAM_board_posthumous_signature", "NAM_board_last_debtor"}.issubset(queue))
         self.assertTrue({"NAM_board_treaty_two_judases", "NAM_board_escheated_throne"}.isdisjoint(queue))
+        # The AI lands only on Ulven; Luren and Sharden stay outside its plan.
+        self.assertIn("NAM_board_ulven_operation", queue)
+        self.assertTrue({"NAM_board_luren_operation", "NAM_board_sharden_operation"}.isdisjoint(queue))
         for name in queue:
             self.assertNotIn(name, completed)
             self.assertIn(name, tree)
             self.assertTrue(selectable(name), name)
             facts[("NAM", "has_completed_focus", name)] = True
             completed.add(name)
-        self.assertEqual({name for name in tree.keys() - completed if selectable(name)}, set())
+        # Only the optional island landings the AI skips remain selectable.
+        facts.update({("LUR", "exists", "yes"): True, ("LUR", "is_subject", "no"): True})
+        self.assertEqual({name for name in tree.keys() - completed if selectable(name)}, {"NAM_board_luren_operation"})
 
     def test_society_law_requires_the_boards_and_their_focus(self):
+        # The 99 to 1 law is a council law: only its focus enacts it, and it cannot be left.
         name = "NAM_board_society_99_1"
         token = "NAM_welfare_society_99_1"
         groups = block(parsed(f"common/ideas/{BASE}_ideas.txt"), "ideas")
         law = block(block(groups, "ADISCORD_welfare_laws"), token)
         reward = block(self.exile_trees["exile_corporate"][1][name], "completion_reward")
-        self.assertEqual(scalar(reward, "add_ideas"), token)
+        self.assertNotIn("add_ideas", [entry.key for entry in reward])
+        self.assertEqual(scalar(reward, "NAM_board_enact_society_99_1"), "yes")
+        self.assertEqual(scalar(law, "cost"), "0")
         for tag in ("NAM", "VAL"):
             for corporate in (False, True):
                 for completed in (False, True):
-                    facts = self.board_facts()
-                    facts[(tag, "has_country_flag", "NAM_corp_takeover")] = corporate
-                    facts[(tag, "has_completed_focus", name)] = completed
-                    with self.subTest(tag=tag, corporate=corporate, completed=completed):
-                        self.assertEqual(self.matches(block(law, "allowed"), facts, tag), tag == "NAM")
-                        self.assertEqual(self.matches(block(law, "visible"), facts, tag), tag == "NAM" and corporate)
-                        self.assertEqual(self.matches(block(law, "available"), facts, tag),
-                                         tag == "NAM" and corporate and completed)
+                    for held in (False, True):
+                        facts = self.board_facts()
+                        facts[(tag, "has_country_flag", "NAM_corp_takeover")] = corporate
+                        facts[(tag, "has_completed_focus", name)] = completed
+                        facts[(tag, "has_idea", token)] = held
+                        with self.subTest(tag=tag, corporate=corporate, completed=completed, held=held):
+                            self.assertEqual(self.matches(block(law, "allowed"), facts, tag), tag == "NAM")
+                            self.assertEqual(self.matches(block(law, "visible"), facts, tag), held)
+                            self.assertFalse(self.matches(block(law, "available"), facts, tag))
+                            self.assertFalse(self.matches(block(law, "allowed_to_remove"), facts, tag))
 
     def test_corporate_wiring_distinguishes_a_shared_fork_from_an_unrelated_contact(self):
         diamond = {"p": (2, 0), "l": (0, 1), "r": (4, 1), "q": (2, 2)}
@@ -9944,6 +9976,8 @@ class NamCampaignTests(unittest.TestCase):
             for subject, disputed, chairman, boycott in product((False, True), repeat=4):
                 facts = self.board_facts()
                 facts[("NAM", "has_country_flag", "NAM_board_opened")] = True
+                # NAM_board_initialize sizes the programme arrays; no expedition share runs here.
+                facts[("NAM", "array", "NAM_board_inv_running")] = (0,) * 10
                 facts[("NAM", "array", "NAM_board_stance")] = tuple(
                     -1 if boycott and company == operator else 0 for company in range(7))
                 self.operating_board_district(facts, "FROM", "701")
@@ -16402,6 +16436,21 @@ class NamCampaignTests(unittest.TestCase):
         self.apply(block(drill, "remove_effect"), voyage)
         self.assertEqual((voyage[capital], voyage[readiness]), (45, 15))
         self.assertAlmostEqual(voyage[("NAM", "variable", "NAM_board_expedition_planning")], -0.085)
+        # After marine_school a paid drill also trains the landing and restarts the 90-day rehearsal.
+        for school in (False, True):
+            with self.subTest(marine_school=school):
+                drilled = self.board_facts()
+                drilled[("NAM", "variable", "NAM_exile_drill_deposit")] = 30
+                drilled[("NAM", "has_variable", "NAM_exile_drill_deposit")] = True
+                drilled[("NAM", "has_completed_focus", "NAM_board_marine_school")] = school
+                drilled[("NAM", "has_idea", "NAM_board_landing_rehearsal_spirit")] = True
+                rows = [entry for _, entry in selected_effects(self.expand(block(drill, "remove_effect")), drilled, "NAM")]
+                self.assertEqual([entry.value for entry in rows if entry.key == "navy_experience"], ["5"] if school else [])
+                spirits = [(scalar(entry.value, "idea"), scalar(entry.value, "days"))
+                           for entry in rows if entry.key == "add_timed_idea"]
+                self.assertEqual(spirits, [("NAM_board_landing_rehearsal_spirit", "90")] if school else [])
+                removed = [entry.value for entry in rows if entry.key == "remove_ideas"]
+                self.assertEqual(removed, ["NAM_board_landing_rehearsal_spirit"] if school else [])
 
     def judas_facts(self):
         facts = self.board_session_facts()
@@ -16669,7 +16718,8 @@ class NamCampaignTests(unittest.TestCase):
         self.assertEqual((scalar(delay, "id"), scalar(delay, "days")), (BASE + ".460", "7"))
         execution = self.events[BASE + ".460"]
         self.assertEqual([entry.key for entry in execution].count("option"), 1)
-        self.assertEqual(scalar(block(execution, "immediate"), "NAM_interregnum_begin"), "yes")
+        self.assertEqual([entry.key for entry in block(execution, "immediate")], ["hidden_effect"])
+        self.assertEqual(scalar(block(block(execution, "immediate"), "hidden_effect"), "NAM_interregnum_begin"), "yes")
         for coup in (False, True):
             descriptions = [entry.value for entry in execution if entry.key == "desc"
                             and self.matches(block(entry.value, "trigger"), {("NAM", "has_country_flag", "NAM_coup_succeeded"): coup})]
@@ -16709,7 +16759,7 @@ class NamCampaignTests(unittest.TestCase):
         plan = block(parsed("common/ai_strategy_plans/ADISCORD_NAM_plans.txt"), "NAM_exile_interregnum_plan")
         self.assertEqual([entry.value for entry in block(plan, "ai_national_focuses")],
                          [prefix + name for name in ("open_customs", "guarantors", "underwrite_freight", "seals_boards")])
-        for name, resource, amount in (("roll_call", "add_manpower", "1500"), ("second_shift", "add_manpower", "2000"), ("coast_watch", "army_experience", "15")):
+        for name, resource, amount in (("roll_call", "add_manpower", "3000"), ("second_shift", "add_manpower", "3000"), ("coast_watch", "army_experience", "15")):
             self.assertEqual(scalar(block(focuses[prefix + name], "completion_reward"), resource), amount)
         soundings = block(block(focuses[prefix + "chart_soundings"], "completion_reward"), "hidden_effect")
         readiness = block(soundings, "add_to_variable")
@@ -18505,6 +18555,14 @@ DIRECTORY_UNLOCKS = {
     "lottery": "NAM_board_society_99_1",
     "gazette": "NAM_board_foundry_mark",
 }
+# Corporate focuses that each add one Directory campaign place, with the defined
+# text that prints the total in their reward tooltip. Capacity starts at 0.
+DIRECTORY_SLOT_FOCUSES = {
+    "NAM_board_property_qualification": "NAMDirCampaignSlotsAfterPropertyQualification",
+    "NAM_board_foundry_mark": "NAMDirCampaignSlotsAfterFoundryMark",
+    "NAM_board_society_99_1": "NAMDirCampaignSlotsAfterSociety",
+}
+DIRECTORY_SLOT_CAP = 3
 # Base-game idea sprites used by the campaign spirits (GFX_idea_<name>).
 DIRECTORY_BASE_GAME_PICTURES = frozenset({
     "generic_foreign_capital",
@@ -18637,10 +18695,16 @@ class NamDirectoryCampaignTests(unittest.TestCase):
     def test_campaigns_follow_the_council_and_their_unlock_flags(self):
         day_one = [name for name, (flag, _) in DIRECTORY_CAMPAIGNS.items() if flag is None]
         self.assertEqual(day_one, ["dividend"])
-        room = block(block(self.triggers["NAM_dir_campaign_room"], "NOT"), "count_triggers")
-        self.assertEqual(scalar(room, "amount"), "2")
-        self.assertEqual({e.value for e in room if e.key == "has_idea"},
-                         {f"NAM_dir_campaign_{name}_spirit" for name in DIRECTORY_CAMPAIGNS})
+        # The free count subtracts one per running spirit from the capacity variable.
+        count = self.triggers["NAM_dir_campaign_count_free"]
+        self.assertEqual([(scalar(count[0].value, "var"), scalar(count[0].value, "value"))],
+                         [("NAM_dir_campaign_free", "NAM_dir_campaign_slots")])
+        self.assertEqual({e.key for e in count[1:]}, {"if"})
+        self.assertEqual([scalar(block(e.value, "limit"), "has_idea") for e in count[1:]],
+                         [f"NAM_dir_campaign_{name}_spirit" for name in DIRECTORY_CAMPAIGNS])
+        room = self.triggers["NAM_dir_campaign_room"]
+        self.assertEqual([(e.key, e.value if isinstance(e.value, str) else None) for e in room],
+                         [("NAM_dir_campaign_count_free", "yes"), ("check_variable", None)])
         close = self.effects["NAM_dir_campaigns_close"]
         self.assertEqual(scalar(self.effects["NAM_board_end_operations"], "NAM_dir_campaigns_close"), "yes")
         removed = {e.value for e in walk(close) if e.key == "remove_ideas"}
@@ -18814,50 +18878,263 @@ class NamDirectoryCampaignTests(unittest.TestCase):
                     if readiness:
                         self.assertIn(f"§G+{readiness}§! £NAM_return_readiness_texticon", values[main])
 
+    # ----- campaign places: capacity from focuses, free count from running spirits -----
+
+    def slot_state(self, slots, running=(), completed=()):
+        """Facts of a Directory with a capacity, running campaign spirits and completed focuses."""
+        facts = {("NAM", "variable", "NAM_dir_campaign_slots"): slots}
+        facts.update({("NAM", "has_idea", f"NAM_dir_campaign_{name}_spirit"): True for name in running})
+        facts.update({("NAM", "has_completed_focus", name): True for name in completed})
+        return facts
+
+    def slot_conditions(self, conditions, facts):
+        """Evaluate the place triggers: the free count, shorthand variable checks and focus completion."""
+        compare = {">": float.__gt__, "<": float.__lt__}
+        for entry in conditions:
+            if entry.key == "NAM_dir_campaign_count_free":
+                self.assertEqual(entry.value, "yes")
+                free = None
+                for row in self.triggers["NAM_dir_campaign_count_free"]:
+                    if row.key == "set_temp_variable":
+                        self.assertEqual(scalar(row.value, "value"), "NAM_dir_campaign_slots")
+                        free = float(facts.get(("NAM", "variable", "NAM_dir_campaign_slots"), 0))
+                    else:
+                        self.assertEqual(row.key, "if")
+                        subtraction = block(row.value, "subtract_from_temp_variable")
+                        self.assertEqual(scalar(subtraction, "var"), "NAM_dir_campaign_free")
+                        if facts.get(("NAM", "has_idea", scalar(block(row.value, "limit"), "has_idea"))):
+                            free -= float(scalar(subtraction, "value"))
+                facts[("NAM", "variable", "NAM_dir_campaign_free")] = free
+            elif entry.key == "NAM_dir_campaign_room":
+                self.assertEqual(entry.value, "yes")
+                if not self.slot_conditions(self.triggers["NAM_dir_campaign_room"], facts):
+                    return False
+            elif entry.key == "check_variable":
+                self.assertTrue(all(not e.key for e in entry.value), entry.value)
+                variable, operator, threshold = (e.value for e in entry.value)
+                value = float(facts.get(("NAM", "variable", variable), 0))
+                if not compare[operator](value, float(threshold)):
+                    return False
+            elif entry.key == "has_completed_focus":
+                if not facts.get(("NAM", "has_completed_focus", entry.value)):
+                    return False
+            else:
+                raise AssertionError(f"Unsupported place condition {entry.key}")
+        return True
+
+    def test_campaign_capacity_starts_at_zero_on_both_entries(self):
+        initialize = self.effects["NAM_board_initialize"]
+        # The one-time guard of a new council.
+        guard = next(e.value for e in initialize if e.key == "if")
+        self.assertEqual(scalar(block(block(guard, "limit"), "NOT"), "has_variable"), "NAM_board_lot_rail")
+        assignments = [(scalar(e.value, "var"), scalar(e.value, "value")) for e in guard if e.key == "set_variable"]
+        self.assertIn(("NAM_dir_campaign_slots", "0"), assignments)
+        # Both the ordinary takeover event and the debug corporate start go through
+        # NAM_corp_takeover, which initializes the council once.
+        self.assertIn("NAM_board_initialize", [e.key for e in self.effects["NAM_corp_takeover"]])
+        self.assertIn("NAM_corp_takeover", [e.key for e in walk(self.effects["ADISCORD_nam_debug_corporate_exile"])])
+        self.assertIn("hidden_effect = { NAM_corp_takeover = yes }", read(f"events/{BASE}_events.txt"))
+        writers = re.findall(r"(\w+) = \{ var = NAM_dir_campaign_slots\b",
+                             "".join(read(path) for path in (
+                                 f"common/scripted_effects/{BASE}_effects.txt", f"events/{BASE}_events.txt",
+                                 f"common/decisions/{BASE}_decisions.txt")))
+        self.assertEqual(writers, ["set_variable"])
+        self.assertNotIn("NAM_dir_campaign_slots", repr(self.effects["NAM_debug_prepare_corporate_start"]))
+        for name in DIRECTORY_CAMPAIGNS:
+            decision = self.decision(name)
+            with self.subTest(campaign=name):
+                facts = {
+                    ("NAM", "NAM_board_operable", "yes"): True,
+                    ("NAM", "NAM_dir_campaign_room", "yes"): self.slot_conditions(
+                        self.triggers["NAM_dir_campaign_room"], self.slot_state(0)),
+                    ("NAM", "NAM_judas_weber_promise", "no"): True,
+                    ("NAM", "NAM_judas_karamyshev_promise", "no"): True,
+                    ("NAM", "numeric", "has_political_power"): 500,
+                    ("NAM", "variable", "NAM_corp_capital"): 500,
+                }
+                self.assertFalse(matches_conditions(block(decision, "available"), facts, "NAM"))
+                facts[("NAM", "NAM_dir_campaign_room", "yes")] = True
+                self.assertTrue(matches_conditions(block(decision, "available"), facts, "NAM"))
+                if scalar(decision, "cost") == "0":
+                    recheck = block(block(block(decision, "complete_effect"), "if"), "limit")
+                    self.assertTrue(matches_conditions(recheck, facts, "NAM"))
+                    facts[("NAM", "NAM_dir_campaign_room", "yes")] = False
+                    self.assertFalse(matches_conditions(recheck, facts, "NAM"))
+
+    def test_each_slot_focus_adds_one_place_and_says_so(self):
+        focuses = {scalar(e.value, "id"): e.value for e in walk(parsed(TREES["exile_corporate"][0]))
+                   if e.key == "focus" and isinstance(e.value, list)}
+        interregnum = read(TREES["exile_interregnum"][0])
+        self.assertNotIn("NAM_dir_campaign_slots", interregnum)
+        texts = {e.value[0].value: e.value for e in parsed(
+            f"common/scripted_localisation/{BASE}_scripted_loc.txt") if e.key == "defined_text"}
+        writers = {name for name, body in focuses.items() if "NAM_dir_campaign_slots" in repr(body)}
+        self.assertEqual(writers, set(DIRECTORY_SLOT_FOCUSES))
+        steps = {}
+        for name, total_text in DIRECTORY_SLOT_FOCUSES.items():
+            reward = block(focuses[name], "completion_reward")
+            with self.subTest(focus=name):
+                hidden = block(reward, "hidden_effect")
+                rows = [(e.key, scalar(e.value, "var"), scalar(e.value, "value") if e.key == "add_to_variable"
+                         else scalar(e.value, "max")) for e in hidden
+                        if e.key in ("add_to_variable", "clamp_variable") and scalar(e.value, "var") == "NAM_dir_campaign_slots"]
+                self.assertEqual(rows, [("add_to_variable", "NAM_dir_campaign_slots", "1"),
+                                        ("clamp_variable", "NAM_dir_campaign_slots", str(DIRECTORY_SLOT_CAP))])
+                steps[name] = lambda slots: min(slots + 1, DIRECTORY_SLOT_CAP)
+                # The place is a row of the focus's own reward tooltip, shown outside the script.
+                key = f"{name}_reward_tt"
+                self.assertIn(("custom_effect_tooltip", key), [(e.key, e.value) for e in reward])
+                rows = {"russian": "Места кампаний Директории: §G+1§! £operatives_propaganda_texticon , всего §Y[{}]§!",
+                        "english": "Directorate campaign slots: §G+1§! £operatives_propaganda_texticon , total §Y[{}]§!"}
+                for language, values in self.loc.items():
+                    self.assertEqual(values[key].split("\\n")[0], rows[language].format(total_text), language)
+                # The total printed before and after completion equals the script's result.
+                branches = [entry.value for entry in texts[total_text] if entry.key == "text"]
+                for slots in range(DIRECTORY_SLOT_CAP):
+                    for done in (False, True):
+                        shown_slots = steps[name](slots) if done else slots
+                        facts = self.slot_state(shown_slots, completed=(name,) if done else ())
+                        chosen = next(scalar(branch, "localization_key") for branch in branches
+                                      if self.slot_conditions(next((e.value for e in branch if e.key == "trigger"), []),
+                                                              facts))
+                        for language, values in self.loc.items():
+                            text = values[chosen]
+                            if text == "[?NAM_dir_campaign_slots|0]":
+                                text = str(shown_slots)
+                            self.assertEqual(int(text), steps[name](slots), (slots, done, language))
+        # Any order of the three focuses reaches the cap exactly once each.
+        for order in permutations(DIRECTORY_SLOT_FOCUSES):
+            slots = 0
+            for position, name in enumerate(order, 1):
+                slots = steps[name](slots)
+                self.assertEqual(slots, position)
+        self.assertEqual(slots, DIRECTORY_SLOT_CAP)
+
+    def test_capacity_refuses_the_campaign_after_the_last_place(self):
+        # Campaigns that can run side by side: no exclusive partner among them.
+        together = ("newsreel", "agitators", "lottery", "gazette", "dividend", "return")
+        for slots in range(DIRECTORY_SLOT_CAP + 1):
+            for running in range(slots + 2):
+                if running > len(together):
+                    continue
+                facts = self.slot_state(slots, together[:running])
+                with self.subTest(slots=slots, running=running):
+                    room = self.slot_conditions(self.triggers["NAM_dir_campaign_room"], facts)
+                    self.assertEqual(room, running < slots)
+                    available = {
+                        ("NAM", "NAM_board_operable", "yes"): True,
+                        ("NAM", "NAM_dir_campaign_room", "yes"): room,
+                        ("NAM", "NAM_judas_weber_promise", "no"): True,
+                        ("NAM", "NAM_judas_karamyshev_promise", "no"): True,
+                        ("NAM", "numeric", "has_political_power"): 500,
+                        ("NAM", "variable", "NAM_corp_capital"): 500,
+                    }
+                    available.update({key: True for key in facts if key[1] == "has_idea"})
+                    for name in set(DIRECTORY_CAMPAIGNS) - set(together[:running]):
+                        self.assertEqual(matches_conditions(block(self.decision(name), "available"), available, "NAM"),
+                                         room and not any(name in pair and other in together[:running]
+                                                          for pair in DIRECTORY_EXCLUSIVE for other in pair
+                                                          if other != name), name)
+
+    def test_category_description_reports_the_enforced_free_count(self):
+        texts = {e.value[0].value: e.value for e in parsed(
+            f"common/scripted_localisation/{BASE}_scripted_loc.txt") if e.key == "defined_text"}
+
+        def chosen(name, facts):
+            branches = [entry.value for entry in texts[name] if entry.key == "text"]
+            return next(scalar(branch, "localization_key") for branch in branches
+                        if self.slot_conditions(next((e.value for e in branch if e.key == "trigger"), []), dict(facts)))
+
+        lines = {"russian": "Свободно мест для кампаний: ", "english": "Free campaign slots: "}
+        for language, values in self.loc.items():
+            self.assertTrue(values["NAM_dir_campaigns_desc"].startswith("[NAMDirCampaignSlots]\\n"), language)
+            self.assertIn("[NAMDirCampaignFree]", values["NAM_dir_campaign_room_tt"], language)
+            self.assertIn("[?NAM_dir_campaign_slots|0]", values["NAM_dir_campaign_room_tt"], language)
+            none = values["NAM_dir_campaigns_slots_none"]
+            self.assertTrue(none.startswith(lines[language] + "§Y0§! "), language)
+            self.assertIn("$NAM_board_property_qualification$", none)
+            self.assertTrue(values["NAM_dir_campaigns_slots_line"].startswith(
+                lines[language] + "§Y[NAMDirCampaignFree]§! "), language)
+            self.assertIn("§Y[?NAM_dir_campaign_slots|0]§! £operatives_propaganda_texticon \\n",
+                          values["NAM_dir_campaigns_slots_line"])
+        spirits = list(DIRECTORY_CAMPAIGNS)
+        for slots in range(DIRECTORY_SLOT_CAP + 1):
+            for running in range(4):
+                facts = self.slot_state(slots, spirits[:running])
+                with self.subTest(slots=slots, running=running):
+                    room = self.slot_conditions(self.triggers["NAM_dir_campaign_room"], dict(facts))
+                    line = chosen("NAMDirCampaignSlots", facts)
+                    free = int(self.loc["russian"][chosen("NAMDirCampaignFree", facts)])
+                    for language, values in self.loc.items():
+                        self.assertEqual(int(values[chosen("NAMDirCampaignFree", facts)]), free, language)
+                    self.assertEqual(free, max(0, slots - running))
+                    self.assertEqual(free > 0, room)
+                    self.assertEqual(line, "NAM_dir_campaigns_slots_none" if slots == 0
+                                     else "NAM_dir_campaigns_slots_line")
+
 
 # Charter factors of the industrial policy (plan 2.1): rate A and rate B per company.
 BOARD_CHARTER_FACTORS = ((1, 2), (2, 3), (3, 3), (3, 1), (2, 2), (3, -1))
 # Day one: every line closed, so the spirit applies minus each factor (plan 2.2).
 BOARD_CHARTER_DAY_ONE = {"output": -6, "construction": -7, "growth": -5, "naval": -3, "dockyards": -3,
                          "ceiling": -1, "goods": 1}
-# The nine focus grants of plan 2.7: focus -> company.
+# The eleven focus grants of plan 2.7 and the invasion branch: focus -> company.
 BOARD_CHARTER_FOCUSES = {
     "future_output_pledge": 1, "loren_priority": 1, "concession_courts": 2, "island_fleet_shares": 3,
     "private_strait": 3, "last_voyage_rifles": 4, "corporate_mass_housing": 5, "residency_for_hire": 5,
     "bearer_warrant": 6,
+    # The capstones of the invasion branch's war-economy and marine lanes.
+    "arsenal_of_the_boards": 2, "first_wave": 4,
 }
 # Reward kinds of plan 3.10 as the game files implement them. Dead branches whose camp
 # decision needs the man alive do not announce it (AGENTS.md: a promised unlock must be usable).
 BOARD_REWARD_KINDS = {
-    "beacon_out": "A C M T V", "bought_century": "C D R T V", "property_qualification": "D P R T V",
-    "both_squares_bought": "A P V", "purged_majority": "A M T", "original_stays_home": "C R T",
-    "sole_vote_holder": "D P R", "copy_across_strait": "Q T V", "mainland_inventory": "A C P T",
-    "table_six": "P R T", "partition_night": "A R T Y", "quay_chain": "C D R T", "private_gospel": "C D T",
+    "beacon_out": "A C M T V", "bought_century": "D Q R T V", "property_qualification": "D L P R T V",
+    "both_squares_bought": "A L P V", "purged_majority": "A M T", "original_stays_home": "C R T",
+    "sole_vote_holder": "D P R", "copy_across_strait": "Q T V X", "mainland_inventory": "A C P T",
+    "table_six": "P R T", "partition_night": "A Q R T Y", "quay_chain": "C D Q R T", "private_gospel": "D P R T",
     "salt_monopoly": "D M R T", "future_output_pledge": "A Q R T", "double_lock_warehouse": "Q R T",
     "loren_receipt": "B R T", "bearer_warrant": "A C R T V", "loren_priority": "Q R T",
-    "eflor_debt_purchase": "D M T V", "land_foreclosure": "D M T", "concession_courts": "C D R T",
-    "harbour_exchange": "A R T", "eflor_petition": "C M Y", "dead_mans_veto": "D T Y",
-    "posthumous_signature": "D J", "facsimile_blood": "A T Y", "inheritance_without_empire": "D T X",
-    "uncrested_buyers": "C D T", "privatise_governorate": "D P T", "hereditary_roll": "C R T",
-    "old_settlers_oath": "D M R T Y", "admitted_owners_register": "B P T V", "boundary_notches": "C D T V",
-    "district_buyout": "C D T", "price_of_silence": "J P R T", "close_the_lawsuit": "P R T",
-    "land_under_seal": "M R T Y", "founders_of_unrest": "C D J", "last_debtor": "D J",
-    "elected_in_absentia": "D M T", "widows_share": "D S T V", "society_99_1": "A D R S",
-    "subsidised_opposition": "D M P R T", "incumbents_credit": "C D T", "political_debt_register": "P R T",
-    "family_relief_fund": "A D T", "lawyers_of_both_shores": "C D R T", "mourning_licence": "C D T V",
-    "representation_for_loss": "R S T", "chairmans_copy": "P R V", "port_rights_monopoly": "A P T",
-    "order_arsenal": "Q T V", "arsenal_monopoly": "A D Q T", "foundry_mark": "A B D T",
-    "island_fleet_shares": "C D R T", "factory_guard": "A M T V Y", "captains_share_qualification": "C D Q T X",
-    "last_voyage_rifles": "D Q R T", "return_voyage": "D M R T Y", "azhar_land_fund": "B C T",
-    "private_strait": "B R T", "corporate_mass_housing": "D M R T V", "residency_for_hire": "A R T",
+    "eflor_debt_purchase": "D M T V", "land_foreclosure": "D M T W", "concession_courts": "D L P R T",
+    "harbour_exchange": "A L R T", "eflor_petition": "C M Y", "dead_mans_veto": "D M T X Y",
+    "posthumous_signature": "D J M", "facsimile_blood": "A M T Y", "inheritance_without_empire": "D P T X",
+    "uncrested_buyers": "C D T", "privatise_governorate": "D L P T", "hereditary_roll": "C L R T",
+    "old_settlers_oath": "D L M R T Y", "admitted_owners_register": "B P T V", "boundary_notches": "D T V X",
+    "district_buyout": "D Q T", "price_of_silence": "J P R T", "close_the_lawsuit": "P R T",
+    "land_under_seal": "M R T Y", "founders_of_unrest": "C D J P", "last_debtor": "D J Q",
+    "elected_in_absentia": "D M T", "widows_share": "D S T V", "society_99_1": "A D L M R S W",
+    "subsidised_opposition": "D L M P R T W", "incumbents_credit": "C D T", "political_debt_register": "P R T",
+    "family_relief_fund": "A D M T", "lawyers_of_both_shores": "C D R T", "mourning_licence": "D L T V X",
+    "representation_for_loss": "B R S T", "chairmans_copy": "P R V", "port_rights_monopoly": "A P T W",
+    "order_arsenal": "Q T V", "arsenal_monopoly": "A D L Q T", "foundry_mark": "A B D R T",
+    "island_fleet_shares": "D Q R T", "factory_guard": "A L M T V Y", "captains_share_qualification": "C D L Q T X",
+    "last_voyage_rifles": "D Q R T", "return_voyage": "D M R T Y", "azhar_land_fund": "B C Q T",
+    "private_strait": "B R T", "corporate_mass_housing": "D M R T V", "residency_for_hire": "A B L R T",
     "open_customs": "C P", "guarantors": "C P T", "underwrite_freight": "C Q T", "roll_call": "M T",
     "second_shift": "M S", "coast_watch": "T X", "chart_soundings": "X Y", "seals_boards": "C R",
+    # The invasion branch below the partition (branch design section 3; Z is "war started").
+    "invasion_prospectus": "P T", "holders_underwrite": "D Q R T", "six_share_pool": "D P S T",
+    "mainland_contacts": "D M R T", "assembly_roads": "A Q R X", "invasion_fleet": "A M P T Y",
+    "war_economy_charter": "D R T", "double_shifts": "A Q T", "steel_for_guns": "B Q T X",
+    "cartel_prices": "A Q T", "open_war_tenders": "M P R T", "island_arsenal": "D Q X",
+    "synthetic_plant": "B Q T", "war_bonds": "C D T", "arsenal_of_the_boards": "B Q R T V",
+    "war_quartermaster": "B Q T", "tanker_caravan": "A P Q T", "shore_depots": "B D M T",
+    "ration_lists": "M Q S T", "bunker_piers": "B T", "hospital_ships": "A M T V",
+    "supply_overseas": "P Q R T", "expedition_rear": "A Q R T", "private_navy": "D Q T X",
+    "escort_flotilla": "A R T U", "fire_squadron": "A K R T X", "company_docks": "B D T",
+    "landing_craft": "K T X", "loading_schedules": "K P R X", "landing_flotilla": "Q T X",
+    "island_squadron": "B R T X", "landing_contracts": "D K T X", "marine_school": "M R X",
+    "marine_kit": "Q R T", "storm_companies": "A K R T X", "shore_battalions": "M Q R T",
+    "marine_officers": "K P X", "beach_masters": "Q T X", "mercenary_battalions": "A T U",
+    "first_wave": "Q R T U V", "ulven_operation": "D R T X Y", "luren_operation": "D R T X Y",
+    "sharden_operation": "D Q R T Y", "northern_safehouses": "M P R T", "southern_safehouses": "M P R T",
+    "operation_poseidon": "A M T U Z",
 }
 BOARD_DEAD_KINDS = {
-    "inheritance_without_empire": "C Q T X", "uncrested_buyers": "C T", "privatise_governorate": "C P T",
-    "hereditary_roll": "C P T", "old_settlers_oath": "D M T X Y", "district_buyout": "C T X",
+    "inheritance_without_empire": "C P Q T X", "uncrested_buyers": "C T", "privatise_governorate": "C L P T",
+    "hereditary_roll": "C L P T", "old_settlers_oath": "D L M T X Y", "district_buyout": "Q T X",
     "price_of_silence": "C P T", "elected_in_absentia": "C M T", "widows_share": "D M S T V",
-    "subsidised_opposition": "C P T", "mourning_licence": "C T V", "founders_of_unrest": "C D",
+    "subsidised_opposition": "C L M P T W", "mourning_licence": "C L T V X", "founders_of_unrest": "C D P",
 }
 # Lasting rules and incomes read from the completed focus outside its reward:
 # focus -> (kind, branch that announces it). None means both branches.
@@ -18867,6 +19144,10 @@ BOARD_FOCUS_CONSUMERS = {
     "subsidised_opposition": ("R", "alive"), "political_debt_register": ("R", None),
     "lawyers_of_both_shores": ("R", None), "close_the_lawsuit": ("R", None),
     "port_rights_monopoly": ("A", None),
+    # Island, drill and landing rules of the invasion branch.
+    "assembly_roads": ("R", None), "supply_overseas": ("R", None), "expedition_rear": ("R", None),
+    "fire_squadron": ("R", None), "loading_schedules": ("R", None), "marine_school": ("R", None),
+    "storm_companies": ("R", None),
 }
 BOARD_EVENT_FOCUSES = {
     "beacon_out": 50, "quay_chain": 84, "dead_mans_veto": 59, "founders_of_unrest": 66, "order_arsenal": 74,
@@ -18877,6 +19158,15 @@ BOARD_EVENT_FOCUSES = {
     "mainland_inventory": 94, "table_six": 95, "harbour_exchange": 89, "close_the_lawsuit": 90,
     "eflor_petition": 58, "land_under_seal": 91, "chairmans_copy": 80, "port_rights_monopoly": 92,
     "residency_for_hire": 93, "partition_night": 81, "open_customs": 82,
+    # The invasion branch (branch design section 4).
+    "invasion_prospectus": 97, "holders_underwrite": 98, "six_share_pool": 99, "assembly_roads": 100,
+    "invasion_fleet": 101, "war_economy_charter": 102, "cartel_prices": 103, "open_war_tenders": 104,
+    "arsenal_of_the_boards": 105, "war_quartermaster": 106, "tanker_caravan": 107, "shore_depots": 108,
+    "expedition_rear": 109, "private_navy": 110, "escort_flotilla": 111, "fire_squadron": 112,
+    "island_squadron": 113, "landing_contracts": 114, "storm_companies": 115, "shore_battalions": 116,
+    "first_wave": 117, "mainland_contacts": 118, "ulven_operation": 119, "luren_operation": 120,
+    "sharden_operation": 121, "northern_safehouses": 122, "southern_safehouses": 123,
+    "operation_poseidon": 124,
 }
 # Development rows of plan 7.3: focus -> (track, effect kind).
 BOARD_DEVELOPMENT_ROWS = {
@@ -18888,9 +19178,47 @@ BOARD_DEVELOPMENT_ROWS = {
     "admitted_owners_register": ("state", "programme"), "boundary_notches": ("state", "programme"),
     "chairmans_copy": ("state", "programme"), "property_qualification": ("economic", "reform"),
     "bearer_warrant": ("economic", "programme"),
+    # Capstones of the invasion branch.
+    "arsenal_of_the_boards": ("economic", "programme"), "hospital_ships": ("social_system", "programme"),
+    "first_wave": ("army", "programme"),
 }
 # Event answers with a development call (plan 4.0): (event, option index) -> track.
 BOARD_DEVELOPMENT_ANSWERS = {(86, 2): "cultural", (89, 2): "economic", (90, 1): "state", (93, 2): "social_system"}
+# Council laws of plan item 14: focus -> (enactment key, law, slot, history law it replaces).
+BOARD_COUNCIL_LAWS = {
+    "property_qualification": ("property_census", "NAM_board_law_property_census", "ADISCORD_taxation_laws",
+                               "ADISCORD_taxation_balanced_register"),
+    "both_squares_bought": ("paid_publicity", "NAM_board_law_paid_publicity", "ADISCORD_information_laws",
+                            "ADISCORD_information_state_bulletins"),
+    "concession_courts": ("concession_courts", "NAM_board_law_concession_courts", "ADISCORD_military_justice_laws",
+                          "ADISCORD_justice_regular_tribunals"),
+    "harbour_exchange": ("harbour_exchange", "NAM_board_law_harbour_exchange", "trade_laws", "export_focus"),
+    "hereditary_roll": ("hereditary_patents", "NAM_board_law_hereditary_patents", "ADISCORD_officer_corps_laws",
+                        "ADISCORD_officer_corps_political_commissars"),
+    "old_settlers_oath": ("sworn_commanders", "NAM_board_law_sworn_commanders", "ADISCORD_officer_corps_laws",
+                          "ADISCORD_officer_corps_political_commissars"),
+    "privatise_governorate": ("district_wardens", "NAM_board_law_district_wardens", "ADISCORD_internal_security_laws",
+                              "ADISCORD_internal_security_internal_directorate"),
+    "society_99_1": ("society_99_1", "NAM_welfare_society_99_1", "ADISCORD_welfare_laws",
+                     "ADISCORD_welfare_basic_services"),
+    "mourning_licence": ("mourning_licence", "NAM_board_law_mourning_licence", "ADISCORD_cultural_policy_laws",
+                         "ADISCORD_cultural_policy_heritage_protection"),
+    "subsidised_opposition": ("permitted_dissent", "NAM_board_law_permitted_dissent", "ADISCORD_cultural_policy_laws",
+                              "ADISCORD_cultural_policy_heritage_protection"),
+    "arsenal_monopoly": ("arsenal_monopoly", "NAM_board_law_arsenal_monopoly", "ADISCORD_industrial_policy_laws",
+                         "ADISCORD_industrial_policy_state_planning_boards"),
+    "factory_guard": ("factory_guard", "NAM_board_law_factory_guard", "ADISCORD_military_organization_laws",
+                      "ADISCORD_military_organization_cadre_army"),
+    "captains_share_qualification": ("captains_share", "NAM_board_law_captains_share", "ADISCORD_logistics_laws",
+                                     "ADISCORD_logistics_centralized_depots"),
+    "residency_for_hire": ("residency_for_hire", "NAM_board_law_residency_for_hire", "ADISCORD_labor_policy_laws",
+                           "ADISCORD_labor_policy_regulated_shifts"),
+}
+# Development trades of plan item 14: focus -> (lowered social track, raised track).
+BOARD_DEVELOPMENT_TRADES = {
+    "society_99_1": ("social_system", "economic"), "land_foreclosure": ("society", "economic"),
+    "subsidised_opposition": ("society", "state"), "port_rights_monopoly": ("social_system", "economic"),
+}
 # Programmes of plan 7.4: index, track, sponsor, rival, PP, capital, opening focus.
 BOARD_PROGRAMMES = {
     "census_halls": (1, "society", 5, 6, 20, 30, "salt_monopoly"),
@@ -19106,7 +19434,7 @@ class NamBoardFocusLayerTests(unittest.TestCase):
 
     # ----- 3. grant focuses -----
 
-    def test_nine_wing_focuses_grant_charters_and_two_raise_research(self):
+    def test_eleven_wing_focuses_grant_charters_and_two_raise_research(self):
         def grants(entries):
             found = []
             for entry in walk(entries):
@@ -19158,17 +19486,74 @@ class NamBoardFocusLayerTests(unittest.TestCase):
             self.apply(self.effects["NAM_corp_refresh"], facts)
         self.assertAlmostEqual(facts[("NAM", "variable", "NAM_corp_mod_research")], 0.10)
 
+    def test_island_factory_rewards_bring_their_own_slot(self):
+        # The islands use nearly every shared slot, so each factory reward adds the slot
+        # it fills; capital replaces it only when no owned island qualifies.
+        # focus -> (building, levels = slots added, capital fallback of its cost)
+        factories = {"foundry_mark": ("arms_factory", "1", "150"), "loren_receipt": ("synthetic_refinery", "1", "150"),
+                     "representation_for_loss": ("arms_factory", "1", "150"),
+                     "residency_for_hire": ("industrial_complex", "2", "200")}
+        for short, (building, levels, fallback_capital) in factories.items():
+            reward = self.reward(self.board["NAM_board_" + short])
+            hidden = next(e.value for e in reward if e.key == "hidden_effect")
+            branch = next(e.value for e in hidden if e.key == "if")
+            fallback = next(e.value for e in hidden if e.key == "else")
+            target = block(branch, "random_owned_state")
+            self.assertEqual(scalar(target, "add_extra_state_shared_building_slots"), levels, short)
+            construction = block(target, "add_building_construction")
+            self.assertEqual((scalar(construction, "type"), scalar(construction, "level")), (building, levels), short)
+            self.assertEqual([scalar(e.value, "value") for e in fallback if e.key == "set_temp_variable"],
+                             [fallback_capital], short)
+            for language in ("russian", "english"):
+                text = read(f"localisation/{language}/{BASE}_l_{language}.yml")
+                line = next(row for row in text.splitlines() if row.startswith(f" NAM_board_{short}_reward_tt:"))
+                self.assertIn(f"§G+{fallback_capital}§!", line, (short, language))
+                self.assertIn(f"§G+{levels}§!", line, (short, language))
+                self.assertNotIn("§G+60§!", line, (short, language))
+        # The private_strait dockyard adds its slot too, so a full capital port still qualifies.
+        docks = self.effects["NAM_board_build_company_docks"]
+        branch = block(docks, "if")
+        self.assertEqual(scalar(branch, "add_extra_state_shared_building_slots"), "1")
+        self.assertEqual(scalar(block(branch, "add_building_construction"), "type"), "dockyard")
+        self.assertNotIn("free_building_slots", repr(docks))
+        self.assertNotIn("free_building_slots", repr(self.triggers["NAM_board_yard_site"]))
+        hidden = next(e.value for e in self.reward(self.board["NAM_board_private_strait"]) if e.key == "hidden_effect")
+        fallback = next(e.value for e in hidden if e.key == "else")
+        self.assertEqual([scalar(e.value, "value") for e in fallback if e.key == "set_temp_variable"], ["150"])
+        for language, slot in (("russian", "вместе с новым местом под застройку"),
+                               ("english", "together with a new building slot")):
+            text = read(f"localisation/{language}/{BASE}_l_{language}.yml")
+            line = next(row for row in text.splitlines() if row.startswith(" NAM_board_private_strait_reward_tt:"))
+            self.assertIn(slot, line, language)
+            self.assertIn("§G+150§!", line, language)
+
     # ----- 4. reward kinds -----
 
     RULE_VARIABLES = ("NAM_board_proxy_votes", "NAM_board_guarantor_vote", "NAM_board_keeper_vote",
                       "NAM_board_chair_vote", "NAM_board_action_slots", "NAM_free_zone_slots",
                       "NAM_board_militia_cap", "NAM_marine_order_cap", "NAM_board_objection_days",
-                      "NAM_board_no_confidence_day")
+                      "NAM_board_no_confidence_day", "NAM_dir_campaign_slots", "NAM_board_inv_cap^")
+    # Invasion programmes by their NAM_board_inv_cap index (section 5A of the branch design).
+    INVASION_PROGRAMMES = {1: "NAM_board_inv_convert_plant", 2: "NAM_board_inv_arsenal_order",
+                           3: "NAM_board_inv_fuel_freight", 4: "NAM_board_inv_harbour_works",
+                           5: "NAM_board_inv_tonnage", 6: "NAM_board_inv_escort_contract",
+                           7: "NAM_board_inv_raise_marines", 8: "NAM_board_inv_holders_levy",
+                           9: "NAM_board_inv_expedition_share"}
+    FORMATION_EFFECTS = ("create_unit", "create_ship", "NAM_board_raise_marine_division",
+                         "NAM_board_raise_mercenary_brigade", "NAM_board_launch_escorts")
 
     def reward_kinds(self, entries, unlocks):
-        """Classify reward statements by the kinds of plan 3.10; costs and story events count as nothing."""
+        """Classify reward statements by the kinds of plan 3.10; costs and story events count as nothing.
+
+        Invasion-branch letters: K technology, U formation, Z war started (W is the development trade).
+        """
         kinds = set()
         values = {}
+        latest = {}
+
+        def programme_unlocked(index):
+            # A programme's cap set by the reward that unlocks it is part of that unlock.
+            return index is not None and self.INVASION_PROGRAMMES.get(int(index)) in unlocks
 
         def number(text):
             try:
@@ -19186,11 +19571,27 @@ class NamBoardFocusLayerTests(unittest.TestCase):
                     visit([row for row in value if row.key != "limit"])
                 elif key == "effect_tooltip":
                     kinds.update("A" for row in value if row.key == "add_ideas")
+                elif re.fullmatch(r"\d+", key) and isinstance(value, list):
+                    # State scopes of the branch: island claims and mainland cells are lasting rules.
+                    for row in value:
+                        if row.key in ("set_temp_variable", "add_to_temp_variable"):
+                            latest[scalar(row.value, "var")] = number(scalar(row.value, "value"))
+                        elif row.key == "add_claim_by" or (
+                                row.key == "NAM_board_cells_add" and (latest.get("NAM_board_cells_change") or 0) > 0):
+                            kinds.add("R")
+                        elif row.key == "create_unit":
+                            kinds.add("U")
+                        elif row.key.startswith("NAM_board_build_"):
+                            kinds.add("B")
                 elif key in ("set_temp_variable", "add_to_variable", "set_variable", "add_to_temp_variable"):
                     variable, amount = scalar(value, "var"), number(scalar(value, "value"))
                     values.setdefault(variable, set()).add(amount)
+                    latest[variable] = amount
                     positive = (amount or 0) > 0
-                    if variable.startswith("NAM_board_trust_input_"):
+                    if variable.startswith("NAM_board_inv_cap^") and programme_unlocked(
+                            number(variable.removeprefix("NAM_board_inv_cap^"))):
+                        continue
+                    elif variable.startswith("NAM_board_trust_input_"):
                         # Trust is given only when the package applies the inputs.
                         continue
                     elif variable == "NAM_revenge_readiness" and positive:
@@ -19232,8 +19633,32 @@ class NamBoardFocusLayerTests(unittest.TestCase):
                         if name.startswith("NAM_board_trust_input_") for amount in amounts):
                     kinds.add("T")
                     values.update({name: set() for name in values if name.startswith("NAM_board_trust_input_")})
+                elif key == "NAM_board_holders_package" and any((latest.get(name) or 0) > 0 for name in (
+                        "NAM_board_holders_gain", "NAM_board_others_gain", "NAM_board_chair_gain")):
+                    kinds.add("T")
+                elif key == "NAM_board_inv_cap_add":
+                    if (latest.get("NAM_board_inv_cap_change") or 0) > 0 and not programme_unlocked(latest.get("NAM_board_inv_k")):
+                        kinds.add("R")
+                elif key in ("NAM_board_cells_seed", "NAM_board_cells_add"):
+                    kinds.add("R")
+                elif key in ("NAM_isl_open_target", "NAM_isl_add_readiness") and (latest.get("NAM_isl_gain") or 0) > 0:
+                    kinds.add("Y")
+                elif key == "set_technology":
+                    kinds.add("K")
+                elif key in self.FORMATION_EFFECTS:
+                    kinds.add("U")
+                elif key == "NAM_board_poseidon_launch":
+                    # The final's grants follow the war start inside the launch (branch design 7B).
+                    kinds.add("Z")
+                    visit(self.effects[key])
                 elif key == "unlock_decision_tooltip":
                     kinds.add("D")
+                elif key.startswith("NAM_board_enact_"):
+                    # A council law the player cannot change afterwards (plan item 14).
+                    kinds.add("L")
+                elif key.startswith("NAM_board_trade_"):
+                    # A development trade: a social track pays for another track.
+                    kinds.add("W")
                 elif key in ("NAM_board_grant_charter", "NAM_judas_delay_meeting", "add_ideas"):
                     kinds.add("R")
                 elif key == "set_country_flag" and "NAM_board_no_confidence_immunity" in repr(value):
@@ -19262,15 +19687,16 @@ class NamBoardFocusLayerTests(unittest.TestCase):
                         "dead": rest + reward[index + 1].value}
         return {"": reward}
 
-    def test_every_playable_focus_gives_two_to_five_kinds_of_reward(self):
+    def test_every_playable_focus_gives_two_to_seven_kinds_of_reward(self):
         consumers = "".join(read(path) for path in (
             f"common/scripted_effects/{BASE}_effects.txt", f"common/scripted_triggers/{BASE}_triggers.txt",
             f"events/{BASE}_events.txt", f"common/decisions/{BASE}_decisions.txt"))
         pledges = self.effects["NAM_interregnum_apply_pledges"]
         playable = self.playable()
-        self.assertEqual(len(playable), 72)
+        self.assertEqual(len(playable), 118)
         self.assertEqual(set(playable), set(BOARD_REWARD_KINDS))
-        exempt = {"both_squares_bought", "posthumous_signature", "last_debtor"}
+        # An all-native reward has no _reward_tt: it would only restate native lines.
+        exempt = {"both_squares_bought", "posthumous_signature", "last_debtor", "island_arsenal", "marine_officers"}
         camp_rewards = set()
         for short, (name, body) in playable.items():
             reward = list(self.reward(body))
@@ -19293,7 +19719,8 @@ class NamBoardFocusLayerTests(unittest.TestCase):
                             kinds.add(kind)
                     expected = BOARD_DEAD_KINDS[short] if branch == "dead" else BOARD_REWARD_KINDS[short]
                     self.assertEqual(" ".join(sorted(kinds)), expected)
-                    self.assertTrue(2 <= len(kinds) <= 5, kinds)
+                    # The author lifted the ceiling to seven when laws and trades joined the rewards.
+                    self.assertTrue(2 <= len(kinds) <= 7, kinds)
             if short in exempt:
                 continue
             tooltips = [e.value for e in walk(self.reward(body)) if e.key == "custom_effect_tooltip"]
@@ -19379,11 +19806,13 @@ class NamBoardFocusLayerTests(unittest.TestCase):
     # ----- 6. tooltip layout -----
 
     LAYOUT_KEY = re.compile(
-        r"NAM_board_\w+_(reward|alive|dead|unlock)_tt|NAM_board_charter_\w+|NAM_story_(5\d|[6-8]\d|9[0-6])_\w*_tt"
+        r"NAM_board_\w+_(reward|alive|dead|unlock)_tt|NAM_board_charter_\w+|NAM_story_(5\d|[6-9]\d|1[0-3]\d)_\w*_tt"
+        r"|NAM_board_inv_\w+_tt|NAM_isl_\w+_tt|NAM_board_inv_\w+_cost\w*|NAM_isl_\w+_cost\w*|NAM_cells_\w+_tt"
+        r"|NAM_board_poseidon_\w+_tt"
         r"|NAM_judas_\w+_(now|other|spoils)_\w+|NAM_judas_\w+_concede\w*_tt|NAM_judas_\w+_force\w*_tt"
         r"|NAM_judas_\w+_ignore_tt|NAM_island_eliminate_\w+_tt|NAM_dev_\w+_tt|NAM_dev_\w+_cost\w*"
         r"|NAM_board_retender_\w+_tt|NAM_dir_campaign_\w+_tt|NAM_board_award_\w+_tt|NAM_exile_evacuation_tt"
-        r"|ADISCORD_\w+_development_(reform|programme)_tt")
+        r"|ADISCORD_\w+_development_(reform|programme)_tt|NAM_board_trade_\w+_tt|NAM_board_law_lock_tt")
     ICON = re.compile(r"£(\w+)(?:\|\d+)?")
 
     @staticmethod
@@ -19425,6 +19854,63 @@ class NamBoardFocusLayerTests(unittest.TestCase):
                                         and not consumed.match(rest[2:]),
                                         f"£{match[1]} followed by {rest[:6]!r}")
         self.assertGreater(checked, 400)
+
+    # Council law -> the focus that enacts it (its _source_tt names that focus).
+    COUNCIL_LAW_SOURCES = {
+        "property_census": "property_qualification",
+        "paid_publicity": "both_squares_bought",
+        "concession_courts": "concession_courts",
+        "harbour_exchange": "harbour_exchange",
+        "hereditary_patents": "hereditary_roll",
+        "sworn_commanders": "old_settlers_oath",
+        "district_wardens": "privatise_governorate",
+        "mourning_licence": "mourning_licence",
+        "permitted_dissent": "subsidised_opposition",
+        "arsenal_monopoly": "arsenal_monopoly",
+        "factory_guard": "factory_guard",
+        "captains_share": "captains_share_qualification",
+        "residency_for_hire": "residency_for_hire",
+    }
+    COUNCIL_TRADE_KEYS = (
+        "social_system_for_economic",
+        "society_for_economic",
+        "society_for_state",
+    )
+
+    def test_council_law_and_trade_localisation_load_in_both_languages(self):
+        sources = dict(self.COUNCIL_LAW_SOURCES, society_99_1="society_99_1")
+        names = [f"NAM_board_law_{law}" for law in self.COUNCIL_LAW_SOURCES]
+        descriptions = [f"{name}_desc" for name in names]
+        tooltips = ["NAM_board_law_locked_tt", "NAM_board_law_lock_tt"]
+        tooltips += [f"NAM_board_law_{law}_source_tt" for law in sources]
+        tooltips += [f"NAM_board_trade_{trade}{suffix}_tt"
+                     for trade in self.COUNCIL_TRADE_KEYS for suffix in ("", "_capped")]
+        forbidden = ("–", "—", "«", "»")
+        for language, values in self.loc.items():
+            for key in names + descriptions + tooltips:
+                with self.subTest(language=language, key=key):
+                    # ENTRY only matches a complete one-line value, so a missing key also
+                    # catches a value broken across physical lines.
+                    self.assertIn(key, values)
+                    value = values[key]
+                    self.assertTrue(value.strip())
+                    for character in forbidden:
+                        self.assertNotIn(character, value)
+                    self.assertEqual(value.count("\\n"), self.loc["russian"][key].count("\\n"))
+            for key in descriptions:
+                with self.subTest(language=language, key=key):
+                    # Narrative only: no colour codes, icons, substitutions or numbers.
+                    self.assertIsNone(re.search(r"[§£$\[\d]", values[key]), values[key])
+            for key in tooltips:
+                with self.subTest(language=language, key=key):
+                    value = values[key]
+                    self.assertFalse(value.startswith("\\n") or value.endswith("\\n"))
+                    for line in value.split("\\n"):
+                        self.assertLessEqual(self.visible_width(line), 55, line)
+            for law, focus in sources.items():
+                with self.subTest(language=language, law=law):
+                    self.assertIn(f"$NAM_board_{focus}$", values[f"NAM_board_law_{law}_source_tt"])
+                    self.assertIn(f"NAM_board_{focus}", values)
 
     # ----- 7. story events 50-96 -----
 
@@ -19477,6 +19963,10 @@ class NamBoardFocusLayerTests(unittest.TestCase):
                     capital.append(int(values[variable]))
             elif entry.key == "NAM_board_support_change":
                 trust.append(int(values["NAM_board_delta_input"]))
+            elif entry.key == "NAM_board_holders_package":
+                # The package spreads the holders', others' and chair's gains over the six inputs.
+                trust.extend(int(values[variable]) for variable in (
+                    "NAM_board_holders_gain", "NAM_board_others_gain", "NAM_board_chair_gain") if variable in values)
             elif entry.key == "add_political_power":
                 power.append(float(entry.value))
             elif entry.key == "add_stability" and float(entry.value) < 0:
@@ -19493,7 +19983,8 @@ class NamBoardFocusLayerTests(unittest.TestCase):
             path.read_text(encoding="utf-8-sig", errors="replace") for path in (ROOT / "interface").glob("*.gfx")))}
         self.assertEqual(len(plates), 10)
         sources = self.story_sources()
-        for number in range(50, 97):
+        # Story events 50-124; the invasion branch's operational events 125-134 have their own tests.
+        for number in range(50, 125):
             event_id = f"ADISCORD_nam_story.{number}"
             with self.subTest(event=number):
                 self.assertIn(event_id, registered)
@@ -19543,7 +20034,10 @@ class NamBoardFocusLayerTests(unittest.TestCase):
                 event_id = f"ADISCORD_nam_story.{number}"
                 self.assertEqual(sources[event_id], {("focus", name)})
                 last = [entry.value[-1] for entry in walk(self.reward(body)) if entry.key == "hidden_effect"
-                        and entry.value and entry.value[-1].key == "country_event"]
+                        and entry.value]
+                # Poseidon's landing scene closes the reward only after a real start of the war.
+                last = [row.value[-1] if short == "operation_poseidon" and row.key == "if" else row for row in last]
+                last = [row for row in last if row.key == "country_event"]
                 self.assertIn(event_id, [scalar(row.value, "id") for row in last])
 
     # ----- 8. interregnum pledges -----
@@ -19807,6 +20301,283 @@ class NamBoardFocusLayerTests(unittest.TestCase):
                         self.assertTrue(event_id.startswith("ADISCORD_nam_story."), event_id)
         self.assertEqual(answers, BOARD_DEVELOPMENT_ANSWERS)
 
+    # ----- 10b. council laws and development trades -----
+
+    # Modifiers whose positive value costs the country.
+    COUNCIL_LAW_PRICES = re.compile(
+        r"min_export|\w+_intel_to_others|training_time_factor|consumer_goods_expected_value"
+        r"|ADISCORD_economy_\w+_expense_factor|ADISCORD_economy_\w+_fatigue_gain_factor")
+
+    @staticmethod
+    def law_catalogue():
+        """Slot -> {law: (file name, body)} and the slots declared with law = yes."""
+        slots, law_slots = {}, set()
+        for path in sorted((ROOT / "common/ideas").glob("*.txt")):
+            for root in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if root.key != "ideas":
+                    continue
+                for slot in root.value:
+                    if not isinstance(slot.value, list):
+                        continue
+                    if any(entry.key == "law" and entry.value == "yes" for entry in slot.value):
+                        law_slots.add(slot.key)
+                    for law in slot.value:
+                        if isinstance(law.value, list):
+                            slots.setdefault(slot.key, {})[law.key] = (path.name, law.value)
+        return slots, law_slots
+
+    def test_private_gospel_enacts_and_locks_the_existing_clan_economy(self):
+        focus = "NAM_board_private_gospel"
+        law = "ADISCORD_economic_system_oligarchic_clan"
+        self.assertEqual(scalar(self.reward(self.board[focus]), "add_ideas"), law)
+        slots, _ = self.law_catalogue()
+        removal = block(slots["ADISCORD_economic_system_laws"][law][1], "allowed_to_remove")
+        lock = block(removal, "if")
+        self.assertEqual(scalar(block(lock, "custom_trigger_tooltip"), "always"), "no")
+        for tag in ("NAM", "STP"):
+            for completed in (False, True):
+                with self.subTest(tag=tag, completed=completed):
+                    facts = {(tag, "has_completed_focus", focus): completed}
+                    self.assertEqual(self.matches(block(lock, "limit"), facts, tag), tag == "NAM" and completed)
+
+    def test_council_laws_are_scripted_locked_and_refresh_the_economy(self):
+        slots, law_slots = self.law_catalogue()
+        sprites = "".join(path.read_text(encoding="utf-8-sig") for path in (ROOT / "interface").glob("*.gfx"))
+        council_icons = set(re.findall(r"icon = GFX_idea_(\w+)",
+                                       read("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_NAM.txt")))
+        history = read("history/countries/NAM - NamestnikLand.txt")
+        pictures = []
+        for focus, (key, law, slot, replaced) in BOARD_COUNCIL_LAWS.items():
+            with self.subTest(law=law):
+                self.assertIn(slot, law_slots)
+                self.assertEqual(slots[slot][law][0], f"{BASE}_ideas.txt")
+                self.assertNotIn(law, (name for other, laws in slots.items() if other != slot for name in laws))
+                self.assertIn(replaced, slots[slot])
+                self.assertRegex(history, rf"\n\t{replaced}\n")
+                body = slots[slot][law][1]
+                self.assertEqual(scalar(body, "cost"), "0")
+                self.assertEqual(scalar(block(body, "allowed"), "tag"), "NAM")
+                self.assertEqual([(e.key, e.value) for e in block(body, "visible")], [("has_idea", law)])
+                for gate, tooltip in (("available", f"NAM_board_law_{key}_source_tt"),
+                                      ("allowed_to_remove", "NAM_board_law_locked_tt")):
+                    lock = block(block(body, gate), "custom_trigger_tooltip")
+                    self.assertEqual(scalar(lock, "tooltip"), tooltip)
+                    self.assertEqual(scalar(lock, "always"), "no")
+                    self.assertEqual(len(block(body, gate)), 1)
+                self.assertEqual(scalar(block(body, "ai_will_do"), "factor"), "0")
+                for hook in ("on_add", "on_remove"):
+                    self.assertEqual(scalar(block(block(body, hook), "hidden_effect"),
+                                            "ADISCORD_economy_queue_law_refresh"), "yes")
+                # Each law is a trade: at least one gain and one felt price.
+                signs = [float(e.value) > 0 if not self.COUNCIL_LAW_PRICES.fullmatch(e.key) else float(e.value) < 0
+                         for e in block(body, "modifier") if e.key != "custom_modifier_tooltip"]
+                self.assertIn(True, signs)
+                self.assertIn(False, signs)
+                picture = scalar(body, "picture")
+                pictures.append(picture)
+                self.assertIn(f'"GFX_idea_{picture}"', sprites)
+                self.assertNotIn(picture, council_icons)
+        self.assertEqual(len(pictures), len(set(pictures)))
+
+    def test_council_laws_are_enacted_once_by_their_focus_with_a_visible_swap(self):
+        slots, _ = self.law_catalogue()
+        council = {law for _, law, _, _ in BOARD_COUNCIL_LAWS.values()}
+        enactments = {f"NAM_board_enact_{key}" for key, _, _, _ in BOARD_COUNCIL_LAWS.values()}
+        for focus, (key, law, slot, replaced) in BOARD_COUNCIL_LAWS.items():
+            with self.subTest(focus=focus):
+                effect = self.effects[f"NAM_board_enact_{key}"]
+                branches = [entry for entry in effect if entry.key in ("if", "else_if")]
+                swapped = []
+                for branch in branches:
+                    held = scalar(block(branch.value, "limit"), "has_idea")
+                    swap = block(branch.value, "swap_ideas")
+                    self.assertEqual((scalar(swap, "remove_idea"), scalar(swap, "add_idea")), (held, law))
+                    swapped.append(held)
+                self.assertEqual(set(swapped), set(slots[slot]) - council)
+                self.assertIn(replaced, swapped)
+                self.assertEqual(scalar(block(effect, "else"), "add_ideas"), law)
+                self.assertEqual([(e.key, e.value) for e in effect[-1:]],
+                                 [("custom_effect_tooltip", "NAM_board_law_lock_tt")])
+                reward = self.reward(self.board["NAM_board_" + focus])
+                calls = [index for index, entry in enumerate(reward) if entry.key == f"NAM_board_enact_{key}"]
+                self.assertEqual(len(calls), 1)
+                self.assertEqual(scalar(reward, f"NAM_board_enact_{key}"), "yes")
+                nested = [e for e in walk(reward) if e.key.startswith("NAM_board_enact_")]
+                self.assertEqual(len(nested), 1)
+                camps = [index for index, entry in enumerate(reward) if entry.key == "if"]
+                self.assertTrue(all(calls[0] < index for index in camps))
+                unlocks = [index for index, entry in enumerate(reward) if entry.key == "unlock_decision_tooltip"]
+                self.assertTrue(all(index < calls[0] for index in unlocks))
+        # Nothing else enacts or adds a council law.
+        callers = []
+        for kind in TREES:
+            for name, body in tree_focuses(kind)[1].items():
+                callers += [(name, e.key) for e in walk(body) if e.key in enactments]
+        sources = [*self.story.values(), *self.all_decisions.values(),
+                   *(body for name, body in self.effects.items() if name not in enactments)]
+        for body in sources:
+            callers += [("other", e.key) for e in walk(body) if e.key in enactments]
+            adds = {e.value for e in walk(body) if e.key in ("add_ideas", "add_idea") and isinstance(e.value, str)}
+            adds |= {row.key for e in walk(body) if e.key == "add_ideas" and isinstance(e.value, list) for row in e.value}
+            self.assertFalse(council & adds)
+        self.assertEqual(sorted(key for _, key in callers), sorted(enactments))
+        self.assertTrue(all(name.startswith("NAM_board_") for name, _ in callers))
+        # Two laws of one slot come from mutually exclusive routes.
+        shared = [(one, two) for (one, first), (two, second) in combinations(BOARD_COUNCIL_LAWS.items(), 2)
+                  if first[2] == second[2]]
+        self.assertEqual(len(shared), 2)
+        for one, two in shared:
+            self.assertTrue(self.mutually_exclusive_routes("NAM_board_" + one, "NAM_board_" + two), (one, two))
+
+    def mutually_exclusive_routes(self, first, second):
+        """True when every route to one focus passes an exclusive partner of a route to the other."""
+        def ancestors(name):
+            found, stack = set(), [name]
+            while stack:
+                for row in self.board[stack.pop()]:
+                    if row.key == "prerequisite":
+                        for entry in row.value:
+                            if entry.value not in found:
+                                found.add(entry.value)
+                                stack.append(entry.value)
+            return found | {name}
+
+        left, right = ancestors(first), ancestors(second)
+        for name in left:
+            for row in self.board[name]:
+                if row.key == "mutually_exclusive" and any(entry.value in right for entry in row.value):
+                    return True
+        return False
+
+    def test_council_laws_are_repealed_to_slot_defaults_at_the_annexation(self):
+        slots, _ = self.law_catalogue()
+        hooks = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        section = hooks[hooks.index("# BEGIN nam:on_annex"):hooks.index("# END nam:on_annex")]
+        self.assertRegex(section, r"NAM_board_end_operations = yes\n(?:\t*#[^\n]*\n)?\t*NAM_board_repeal_laws = yes\n")
+        self.assertEqual(section.count("NAM_board_repeal_laws"), 1)
+        council = {law for _, law, _, _ in BOARD_COUNCIL_LAWS.values()}
+        # A future stage-3 loader is to call NAM_board_end_operations, so it must keep the laws.
+        self.assertFalse(council & {e.value for e in walk(self.effects["NAM_board_end_operations"])
+                                    if isinstance(e.value, str)})
+        repeal = self.effects["NAM_board_repeal_laws"]
+        self.assertTrue(all(entry.key == "if" for entry in repeal))
+        restored = {}
+        for entry in repeal:
+            law = scalar(block(entry.value, "limit"), "has_idea")
+            swap = block(entry.value, "swap_ideas")
+            self.assertEqual(scalar(swap, "remove_idea"), law)
+            self.assertNotIn("add_ideas", [row.key for row in entry.value])
+            self.assertNotIn(law, restored)
+            restored[law] = scalar(swap, "add_idea")
+        self.assertEqual(set(restored), council)
+        for _, law, slot, _ in BOARD_COUNCIL_LAWS.values():
+            defaults = [name for name, (_, body) in slots[slot].items()
+                        if any(e.key == "default" and e.value == "yes" for e in body)]
+            self.assertEqual(defaults, [restored[law]], law)
+        # Every council law held at the annexation leaves its slot with the default law.
+        held = {law for law in council if law not in ("NAM_board_law_sworn_commanders",
+                                                      "NAM_board_law_permitted_dissent")}
+        for entry in repeal:
+            law = scalar(block(entry.value, "limit"), "has_idea")
+            if law in held:
+                swap = block(entry.value, "swap_ideas")
+                held = (held - {scalar(swap, "remove_idea")}) | {scalar(swap, "add_idea")}
+        self.assertFalse(held & council)
+        self.assertEqual(len(held), len(council) - 2)
+
+    def test_development_trades_follow_the_table_outside_hidden_effects(self):
+        pattern = re.compile(r"NAM_board_trade_(\w+)_for_(\w+)")
+        trades = {}
+        for short, (name, body) in self.playable().items():
+            reward = self.reward(body)
+            for entry in walk(reward):
+                if entry.key == "hidden_effect":
+                    self.assertFalse([row for row in walk(entry.value) if pattern.fullmatch(row.key)], short)
+            calls = [(index, entry) for index, entry in enumerate(reward) if pattern.fullmatch(entry.key)]
+            self.assertEqual(len([e for e in walk(reward) if pattern.fullmatch(e.key)]), len(calls), short)
+            if calls:
+                self.assertEqual(len(calls), 1, short)
+                index, entry = calls[0]
+                self.assertEqual(entry.value, "yes")
+                match = pattern.fullmatch(entry.key)
+                trades[short] = (match[1], match[2])
+                self.assertTrue(all(index < position for position, row in enumerate(reward) if row.key == "if"), short)
+        self.assertEqual(trades, BOARD_DEVELOPMENT_TRADES)
+        names = {f"NAM_board_trade_{low}_for_{high}" for low, high in trades.values()}
+        for body in [*self.story.values(), *self.all_decisions.values(),
+                     *(body for name, body in self.effects.items() if name not in names)]:
+            self.assertFalse([e for e in walk(body) if pattern.fullmatch(e.key)])
+        for name in names:
+            trade = self.effects[name]
+            # Every branch prints its tooltip natively; the arithmetic stays hidden.
+            self.assertEqual([e.key for e in trade], ["if", "else", "hidden_effect"])
+            hidden = block(trade, "hidden_effect")
+            self.assertEqual(hidden[-1].key, "ADISCORD_economy_mark_dirty")
+            for branch, suffix in ((block(trade, "if"), "_capped_tt"), (block(trade, "else"), "_tt")):
+                self.assertEqual(scalar(branch, "custom_effect_tooltip"), name + suffix)
+
+    def test_development_trades_move_one_hundred_points_each_way(self):
+        self.triggers = {**self.triggers, **{e.key: e.value for e in parsed(
+            "common/scripted_triggers/ADISCORD_society_development_triggers.txt")}}
+        economy = {e.key: e.value for e in parsed("common/scripted_triggers/ADISCORD_economy_triggers.txt")}
+        self.triggers["ADISCORD_economy_can_upgrade_economic_development"] = \
+            economy["ADISCORD_economy_can_upgrade_economic_development"]
+        effects = {e.key: e.value for e in parsed("common/scripted_effects/ADISCORD_economy_effects.txt")}
+        self.effects = {**self.effects, **{name: effects[name] for name in (
+            "ADISCORD_economy_check_economic_development_upgrade",
+            "ADISCORD_economy_refresh_existing_economic_development_idea")}}
+
+        def state(levels, gate=True):
+            facts = self.board_session_facts()
+            for track in DEVELOPMENT_TRACKS:
+                level, progress, growth = levels.get(track, (1, 0, 0))
+                for field, value in (("level", level), ("progress", progress), ("monthly_growth", growth)):
+                    name = f"ADISCORD_{track}_development_{field}"
+                    facts[("NAM", "variable", name)] = value
+                    facts[("NAM", "has_variable", name)] = True
+            for name, value in (("ADISCORD_economy_stretched_level", 0), ("ADISCORD_economy_debt_pressure", 0),
+                                ("ADISCORD_economy_inflation", 0), ("ADISCORD_economy_treasury", 100 if gate else 0)):
+                facts[("NAM", "variable", name)] = value
+            return facts
+
+        def track(facts, name):
+            return tuple(facts[("NAM", "variable", f"ADISCORD_{name}_development_{field}")]
+                         for field in ("level", "progress", "monthly_growth"))
+
+        for low, high in sorted(set(BOARD_DEVELOPMENT_TRADES.values())):
+            trade = self.effects[f"NAM_board_trade_{low}_for_{high}"]
+            with self.subTest(low=low, high=high, case="level 2"):
+                facts = state({low: (2, 30, 2), high: (1, 60, 0)})
+                self.apply(trade, facts)
+                self.assertEqual(track(facts, low), (1, 30, 2))
+                self.assertEqual(track(facts, high), (2, 60, 0))
+            with self.subTest(low=low, high=high, case="floor"):
+                facts = state({low: (1, 40, 2), high: (1, 60, 0)})
+                self.apply(trade, facts)
+                self.assertEqual(track(facts, low), (1, 0, 1))
+                self.assertEqual(track(facts, high), (2, 60, 0))
+                # A second floor hit takes the progress only.
+                facts[("NAM", "variable", f"ADISCORD_{low}_development_progress")] = 50
+                self.apply(trade, facts)
+                self.assertEqual(track(facts, low), (1, 0, 1))
+                self.assertEqual(track(facts, high), (3, 60, 0))
+            with self.subTest(low=low, high=high, case="no growth"):
+                facts = state({low: (1, 20, 0)})
+                self.apply(trade, facts)
+                self.assertEqual(track(facts, low), (1, 0, 0))
+            with self.subTest(low=low, high=high, case="raised at 5"):
+                facts = state({low: (3, 10, 0), high: (5, 0, 0)})
+                capital = facts[("NAM", "variable", "NAM_corp_capital")]
+                self.apply(trade, facts)
+                self.assertEqual(facts[("NAM", "variable", "NAM_corp_capital")], capital + 100)
+                self.assertEqual(track(facts, high), (5, 0, 0))
+                self.assertEqual(track(facts, low), (2, 10, 0))
+            if high == "economic":
+                with self.subTest(low=low, case="closed gate"):
+                    facts = state({high: (2, 60, 0)}, gate=False)
+                    self.apply(trade, facts)
+                    self.assertEqual(track(facts, high), (2, 160, 0))
+
     # ----- 11. mainland leftovers on the islands -----
 
     def visible_categories(self, facts):
@@ -19968,6 +20739,1164 @@ class NamBoardFocusLayerTests(unittest.TestCase):
             facts[("NAM", "variable", "NAM_board_eflor_mortgages")] = bought
             facts[("NAM", "has_decision", "NAM_board_redeem_mortgages")] = running
             self.assertEqual(self.matches(block(mortgages, "visible"), facts), shown, (bought, running))
+
+
+INVASION_PROGRAMMES = {
+    1: "convert_plant", 2: "arsenal_order", 3: "fuel_freight", 4: "harbour_works", 5: "tonnage",
+    6: "escort_contract", 7: "raise_marines", 8: "holders_levy", 9: "expedition_share",
+}
+# Lower-branch focuses that open a story event, by event number.
+INVASION_EVENTS = {
+    "invasion_prospectus": 97, "holders_underwrite": 98, "six_share_pool": 99, "assembly_roads": 100,
+    "invasion_fleet": 101, "war_economy_charter": 102, "cartel_prices": 103, "open_war_tenders": 104,
+    "arsenal_of_the_boards": 105, "war_quartermaster": 106, "tanker_caravan": 107, "shore_depots": 108,
+    "expedition_rear": 109, "private_navy": 110, "escort_flotilla": 111, "fire_squadron": 112,
+    "island_squadron": 113, "landing_contracts": 114, "storm_companies": 115, "shore_battalions": 116,
+    "first_wave": 117, "mainland_contacts": 118, "ulven_operation": 119, "luren_operation": 120,
+    "sharden_operation": 121, "northern_safehouses": 122, "southern_safehouses": 123,
+    "operation_poseidon": 124,
+}
+INVASION_CENTRE = {"invasion_prospectus", "mainland_contacts", "assembly_roads", "invasion_fleet",
+                   "sharden_operation", "operation_poseidon"}
+ISLAND_OPERATIONS = {"ulven_operation", "luren_operation", "sharden_operation"}
+# One side of every exclusive pair: the AI plan's and the elite one.
+INVASION_ROUTES = {
+    "ai": {"six_share_pool", "open_war_tenders", "shore_depots", "escort_flotilla", "shore_battalions"},
+    "elite": {"holders_underwrite", "cartel_prices", "tanker_caravan", "fire_squadron", "storm_companies"},
+}
+ISLAND_STATES = {1: tuple(range(643, 649)), 2: tuple(range(649, 653)), 3: tuple(range(672, 681))}
+SHARDEN_PROMISE_STATES = {"672", "677", "678", "679"}
+MAINLAND_DISTRICTS = ("67", "688", "689", "690", "700", "719")
+
+
+class NamInvasionBranchTests(unittest.TestCase):
+    """Lower corporate branch: invasion preparation, island wars, mainland cells and operation Poseidon."""
+
+    expand = NamCampaignTests.expand
+    matches = NamBoardFocusLayerTests.matches
+    apply = NamBoardFocusLayerTests.apply
+    array_cells = staticmethod(NamBoardFocusLayerTests.array_cells)
+
+    @classmethod
+    def setUpClass(cls):
+        NamBoardFocusLayerTests.setUpClass.__func__(cls)
+        cls.lower = {name[len("NAM_board_"):]: body for name, body in cls.board.items()
+                     if int(scalar(body, "y")) > 12}
+        cls.on_actions = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+
+    # ----- helpers -----
+
+    @staticmethod
+    def field(items, name):
+        """The scalar value of one key, or None when the block lacks it."""
+        found = [entry.value for entry in items if entry.key == name and not isinstance(entry.value, list)]
+        return found[0] if len(found) == 1 else None
+
+    def raw(self, entries, facts, scope="NAM"):
+        """Conditions with scripted triggers kept as fixtures and array cells exposed."""
+        view = dict(facts)
+        self.array_cells(view)
+        return matches_conditions(entries, view, scope)
+
+    @staticmethod
+    def calls(entries):
+        return [entry.key for entry in walk(entries)]
+
+    def assignments(self, entries, key, variable):
+        return [self.field(entry.value, "value") for entry in walk(entries)
+                if entry.key == key and isinstance(entry.value, list) and self.field(entry.value, "var") == variable]
+
+    def price(self, trigger):
+        """Currency -> amount of every lower bound of a price trigger."""
+        found = {}
+        for entry in walk(trigger):
+            if entry.key == "check_variable" and self.field(entry.value, "var") == "NAM_corp_capital":
+                found["capital"] = int(self.field(entry.value, "value"))
+            elif entry.key == "NOT" and len(entry.value) == 3 and not entry.value[0].key:
+                if entry.value[1].value == "<":
+                    found[entry.value[0].value] = int(entry.value[2].value)
+            elif entry.key == "NOT" and len(entry.value) == 1 and entry.value[0].key == "has_equipment":
+                equipment, operator, amount = (child.value for child in entry.value[0].value)
+                if operator == "<":
+                    found[equipment] = int(amount)
+        return found
+
+    def debits(self, effect):
+        """Currency -> signed amounts the effect moves, in the price's currency names."""
+        found = {}
+
+        def add(currency, amount):
+            # Amounts read from variables (a stored escrow) are not literal prices.
+            if re.fullmatch(r"-?\d+", amount or ""):
+                found.setdefault(currency, []).append(int(amount))
+
+        for entry in walk(effect):
+            if entry.key == "add_political_power":
+                add("has_political_power", entry.value)
+            elif entry.key == "add_manpower":
+                add("has_manpower", entry.value)
+            elif entry.key == "add_equipment_to_stockpile":
+                add(scalar(entry.value, "type"), scalar(entry.value, "amount"))
+            elif entry.key == "set_temp_variable" and self.field(entry.value, "var") == "NAM_corp_capital_change":
+                add("capital", self.field(entry.value, "value"))
+        return found
+
+    def compares(self, entries, variable, value, operator="equals"):
+        return any(entry.key == "check_variable" and self.field(entry.value, "var") == variable
+                   and self.field(entry.value, "value") == value and self.field(entry.value, "compare") == operator
+                   for entry in walk(entries))
+
+    @staticmethod
+    def first(sequence, predicate):
+        return next((index for index, entry in enumerate(sequence) if predicate(entry)), None)
+
+    def board_variables(self, facts):
+        """Condition view that resolves indirect indices such as NAM_board_stance^NAM_board_partition_efl."""
+        def read(name, scope):
+            array, index = name.split("^", 1)
+            position = int(index) if index.isdigit() else int(facts[(scope, "variable", index)])
+            return facts[(scope, "array", array)][position]
+        return BoardVariables(facts, read)
+
+    def section(self, hook):
+        """Text of one nam: section of the shared peace dispatch."""
+        match = re.search(rf"# BEGIN nam:{hook}\n(.*?)# END nam:{hook}\n", self.on_actions, re.S)
+        self.assertIsNotNone(match, hook)
+        return match.group(1)
+
+    def cap_changes(self, entries):
+        """(programme, change) pairs in call order of NAM_board_inv_cap_add."""
+        programme = change = None
+        result = []
+        for entry in walk(entries):
+            if entry.key == "set_temp_variable" and isinstance(entry.value, list):
+                if self.field(entry.value, "var") == "NAM_board_inv_k":
+                    programme = int(self.field(entry.value, "value"))
+                elif self.field(entry.value, "var") == "NAM_board_inv_cap_change":
+                    change = int(self.field(entry.value, "value"))
+            elif entry.key == "NAM_board_inv_cap_add":
+                result.append((programme, change))
+                programme = change = None
+        return result
+
+    def route(self, side):
+        other = INVASION_ROUTES["elite" if side == "ai" else "ai"]
+        return set(self.lower) - ISLAND_OPERATIONS - other
+
+    def minimal_closure(self, target):
+        """Cheapest set of lower focuses that unlocks the target, respecting exclusive pairs."""
+        upper = {name for name in self.board if name[len("NAM_board_"):] not in self.lower}
+        groups = {name: [[child.value for child in entry.value] for entry in body if entry.key == "prerequisite"]
+                  for name, body in self.board.items()}
+        exclusive = {name: {child.value for entry in body if entry.key == "mutually_exclusive"
+                            for child in entry.value} for name, body in self.board.items()}
+        cost = {name: int(scalar(body, "cost")) for name, body in self.board.items()}
+        best = [float("inf"), None]
+
+        def search(chosen):
+            total = sum(cost[name] for name in chosen)
+            if total >= best[0]:
+                return
+            for name in sorted(chosen):
+                for group in groups[name]:
+                    if not any(option in chosen or option in upper for option in group):
+                        for option in group:
+                            if not exclusive[option] & chosen:
+                                search(chosen | {option})
+                        return
+            best[:] = [total, chosen]
+
+        search(frozenset({"NAM_board_" + target}))
+        return best
+
+    # ----- layout and route -----
+
+    def test_branch_is_mirrored_and_spaced(self):
+        # Breaks when a lower focus leaves its mirror cell, a mirrored pair gets unequal costs or
+        # unmirrored prerequisites, a pair is added or a side costs more than 1, a focus joins or
+        # leaves the centre column, two cards touch, a straight chain grows past two, or a wire
+        # of the branch hits a card or crosses another wire.
+        self.assertEqual(len(self.lower), 46)
+        positions = {name: (int(scalar(body, "x")), int(scalar(body, "y"))) for name, body in self.board.items()}
+        cells = {cell: name for name, cell in positions.items()}
+        self.assertEqual(len(cells), len(positions))
+
+        def mirror(name):
+            x, y = positions[name]
+            return cells.get((36 - x, y))
+
+        def groups(name):
+            return {frozenset(child.value for child in entry.value)
+                    for entry in self.board[name] if entry.key == "prerequisite"}
+
+        for short in self.lower:
+            name = "NAM_board_" + short
+            partner = mirror(name)
+            with self.subTest(focus=short):
+                self.assertIsNotNone(partner)
+                self.assertEqual(scalar(self.board[partner], "cost"), scalar(self.board[name], "cost"))
+                self.assertEqual({frozenset(mirror(parent) for parent in group) for group in groups(name)},
+                                 groups(partner))
+        self.assertEqual({short for short in self.lower if positions["NAM_board_" + short][0] == 18},
+                         INVASION_CENTRE)
+        pairs = {tuple(sorted((name, child.value))) for name, body in self.board.items()
+                 if name[len("NAM_board_"):] in self.lower
+                 for entry in body if entry.key == "mutually_exclusive" for child in entry.value}
+        self.assertEqual(len(pairs), 5)
+        for first, second in pairs:
+            self.assertIn(tuple(sorted((mirror(first), mirror(second)))), pairs)
+            self.assertEqual((scalar(self.board[first], "cost"), scalar(self.board[second], "cost")), ("1", "1"))
+        for (first, (ax, ay)), (second, (bx, by)) in combinations(
+                [(short, positions["NAM_board_" + short]) for short in self.lower], 2):
+            if ay == by:
+                self.assertGreaterEqual(abs(ax - bx), 2, (first, second))
+        # Leader-branch definition: a focus with one single-parent group whose parent has no other child.
+        children = {}
+        single_parent = {}
+        for short in self.lower:
+            name = "NAM_board_" + short
+            for group in groups(name):
+                for parent in group:
+                    children.setdefault(parent, []).append(name)
+            if len(groups(name)) == 1 and len(next(iter(groups(name)))) == 1:
+                single_parent[name] = next(iter(next(iter(groups(name)))))
+        for name in single_parent:
+            chain = [name]
+            while (chain[-1] in single_parent and single_parent[chain[-1]][len("NAM_board_"):] in self.lower
+                   and children[single_parent[chain[-1]]] == [chain[-1]]):
+                chain.append(single_parent[chain[-1]])
+            self.assertLessEqual(len(chain), 2, " < ".join(chain))
+        edges = [(child.value, name) for name, body in self.board.items()
+                 for entry in body if entry.key == "prerequisite" for child in entry.value]
+        all_pairs = sorted({tuple(sorted((name, child.value))) for name, body in self.board.items()
+                            for entry in body if entry.key == "mutually_exclusive" for child in entry.value})
+        branch = {"NAM_board_" + short for short in self.lower}
+
+        def names(conflict):
+            if isinstance(conflict, str):
+                return {conflict}
+            return set().union(*(names(part) for part in conflict)) if isinstance(conflict, tuple) else set()
+
+        for kind, conflicts in corporate_focus_wiring(positions, edges, all_pairs).items():
+            self.assertEqual([conflict for conflict in conflicts if names(conflict) & branch], [], kind)
+
+    def test_branch_entry_waits_for_the_partition_night(self):
+        # Breaks when the prospectus loses its prerequisite or allow_branch, when partition_night
+        # stops marking the layout dirty before its closing event, when another lower focus
+        # carries allow_branch or an unexpected available block, when a leaf is added or the
+        # final needs an island operation, or when one side of a pair leads nowhere.
+        prospectus = self.lower["invasion_prospectus"]
+        self.assertEqual([[child.value for child in entry.value] for entry in prospectus
+                          if entry.key == "prerequisite"], [["NAM_board_partition_night"]])
+        self.assertEqual([(entry.key, entry.value) for entry in block(prospectus, "allow_branch")],
+                         [("has_completed_focus", "NAM_board_partition_night")])
+        night = block(block(self.board["NAM_board_partition_night"], "completion_reward"), "hidden_effect")
+        self.assertEqual([entry.key for entry in night[-2:]], ["mark_focus_tree_layout_dirty", "country_event"])
+        self.assertEqual(scalar(night[-1].value, "id"), "ADISCORD_nam_story.81")
+        for short, body in self.lower.items():
+            keys = {entry.key for entry in body}
+            self.assertEqual("allow_branch" in keys, short == "invasion_prospectus", short)
+            self.assertEqual("available" in keys,
+                             short in {"invasion_fleet", "operation_poseidon"} | ISLAND_OPERATIONS, short)
+        parents = {child.value for body in self.board.values()
+                   for entry in body if entry.key == "prerequisite" for child in entry.value}
+        self.assertEqual({short for short in self.lower if "NAM_board_" + short not in parents},
+                         {"operation_poseidon", "sharden_operation"})
+        islands = {"NAM_board_" + short for short in ISLAND_OPERATIONS}
+        self.assertIn("NAM_board_operation_poseidon", reachable(self.board, islands))
+        self.assertNotIn("NAM_board_operation_poseidon", reachable(self.board, {"NAM_board_invasion_fleet"}))
+        self.assertNotIn("NAM_board_invasion_prospectus", reachable(self.board, {"NAM_board_partition_night"}))
+        for side, chosen in INVASION_ROUTES.items():
+            other = INVASION_ROUTES["elite" if side == "ai" else "ai"]
+            with self.subTest(route=side):
+                blocked = {"NAM_board_" + short for short in other} | islands
+                self.assertIn("NAM_board_operation_poseidon", reachable(self.board, blocked))
+                self.assertLessEqual({"NAM_board_" + short for short in chosen}, parents)
+
+    def test_branch_timeline(self):
+        # Breaks when a cost, a prerequisite or an exclusive pair changes the cheapest route to
+        # the gate (37 points, P+259) or to the final (42 points, 32 focuses, P+294).
+        gate, gate_set = self.minimal_closure("invasion_fleet")
+        final, final_set = self.minimal_closure("operation_poseidon")
+        self.assertEqual(gate, 37)
+        self.assertEqual(final, 42)
+        self.assertEqual(len(final_set), 32)
+        self.assertFalse(final_set & {"NAM_board_" + short for short in ISLAND_OPERATIONS})
+        self.assertEqual(final * 7, 294)
+
+    # ----- rewards, tooltips and story events -----
+
+    def test_branch_rewards_explain_themselves_and_fire_their_story_events(self):
+        # Breaks when a lower focus loses its reward tooltip or localisation, when an all-native
+        # focus gains a redundant tooltip, when a description shows a number, or when an event
+        # focus stops ending its hidden payload with its story event (two days, the final one).
+        native_only = {"island_arsenal", "marine_officers"}
+        for short, body in self.lower.items():
+            reward = block(body, "completion_reward")
+            name = "NAM_board_" + short
+            with self.subTest(focus=short):
+                tooltips = [entry.value for entry in reward if entry.key == "custom_effect_tooltip"]
+                self.assertEqual(name + "_reward_tt" in tooltips, short not in native_only)
+                self.assertGreaterEqual(len({entry.key for entry in reward}), 2)
+                for language, values in self.loc.items():
+                    for key in (name, name + "_desc", *tooltips):
+                        self.assertTrue(values.get(key, "").strip(), (language, key))
+                    self.assertIsNone(re.search(r"\d", values[name + "_desc"]), (language, name))
+                hidden = [entry.value for entry in reward if entry.key == "hidden_effect"]
+                events = [self.field(entry.value, "id") for entry in walk(reward) if entry.key == "country_event"]
+                if short not in INVASION_EVENTS:
+                    self.assertEqual(events, [])
+                    continue
+                story = f"ADISCORD_nam_story.{INVASION_EVENTS[short]}"
+                self.assertEqual(events, [story])
+                self.assertIn(story, self.story)
+                last = hidden[-1][-1]
+                if short == "operation_poseidon":
+                    # The landing scene follows only a war that really started.
+                    self.assertEqual(last.key, "if")
+                    self.assertEqual([(e.key, e.value) for e in block(last.value, "limit")],
+                                     [("NAM_war_of_return_active", "yes")])
+                    last = [entry for entry in last.value if entry.key == "country_event"][0]
+                    self.assertEqual(scalar(last.value, "days"), "1")
+                else:
+                    self.assertEqual(last.key, "country_event")
+                    self.assertEqual(scalar(last.value, "days"), "2")
+
+    # ----- invasion programmes -----
+
+    def test_invasion_programmes_follow_the_cost_contract(self):
+        # Breaks when a programme gains a native cost, misses a currency in its recheck, debits
+        # twice, loses its receipt, refunds political power or trust, keeps the run after a
+        # refund, stops reading its cap, lets a targeted run start on a second state, or when a
+        # focus writes a cap past the helper or the route caps of the design change.
+        names = {entry.key for entry in self.categories["NAM_board_invasion"] if isinstance(entry.value, list)}
+        self.assertLessEqual({"NAM_board_inv_" + short for short in INVASION_PROGRAMMES.values()}, names)
+        close = self.effects["NAM_board_inv_close"]
+        for k, short in INVASION_PROGRAMMES.items():
+            key = "NAM_board_inv_" + short
+            decision = self.all_decisions[key]
+            receipt = f"NAM_board_inv_running^{k}"
+            with self.subTest(programme=short):
+                self.assertEqual(scalar(decision, "cost"), "0")
+                self.assertEqual(scalar(decision, "custom_cost_text"), key + "_cost")
+                price = self.price(block(decision, "custom_cost_trigger"))
+                self.assertTrue(price)
+                complete = block(decision, "complete_effect")
+                branch, = [entry.value for entry in complete if entry.key == "if"]
+                self.assertEqual([entry.key for entry in block(branch, "limit")], ["hidden_trigger"])
+                self.assertEqual(self.price(block(branch, "limit")), price)
+                self.assertEqual(self.debits(complete), {currency: [-amount] for currency, amount in price.items()})
+                self.assertEqual(self.calls(complete).count("NAM_corp_capital_add"), int("capital" in price))
+                self.assertEqual(self.assignments(complete, "set_variable", receipt), ["1"])
+                self.assertEqual(self.assignments(complete, "add_to_variable", f"NAM_board_inv_runs^{k}"), ["1"])
+                for phase, effect in (("remove_effect", "settle"), ("cancel_effect", "refund")):
+                    guard, = [entry.value for entry in block(decision, phase) if entry.key == "if"]
+                    self.assertTrue(self.compares(block(guard, "limit"), receipt, "1"), phase)
+                    self.assertIn(f"NAM_board_inv_{effect}_{k}", self.calls(guard))
+                refund = self.effects[f"NAM_board_inv_refund_{k}"]
+                self.assertEqual(self.debits(refund), {currency: [amount] for currency, amount in price.items()
+                                                       if currency != "has_political_power"})
+                self.assertFalse({"NAM_board_trust_package", "NAM_board_holders_package",
+                                  "NAM_board_support_change"} & set(self.calls(refund)))
+                self.assertEqual(self.assignments(refund, "add_to_variable", f"NAM_board_inv_runs^{k}"), ["-1"])
+                self.assertEqual(self.assignments(refund, "set_variable", receipt), ["0"])
+                self.assertIn("0", self.assignments(self.effects[f"NAM_board_inv_settle_{k}"], "set_variable", receipt))
+                guard, = [entry.value for entry in close if entry.key == "if"
+                          and self.compares(block(entry.value, "limit"), receipt, "1")]
+                self.assertEqual(self.calls(guard)[-1], f"NAM_board_inv_refund_{k}")
+                available = block(decision, "available")
+                if k == 9:
+                    self.assertIn("NAM_board_inv_share_open", self.calls(available))
+                    self.assertTrue(self.compares(block(decision, "visible"), "NAM_board_inv_runs^9", "6", "less_than"))
+                else:
+                    for part in (block(decision, "visible"), available, block(branch, "limit")):
+                        self.assertTrue(self.compares(part, f"NAM_board_inv_runs^{k}", f"NAM_board_inv_cap^{k}",
+                                                      "less_than"))
+                targeted = self.field(decision, "state_target") == "yes"
+                self.assertEqual(targeted, k in (1, 4))
+                for part in (available, block(branch, "limit")):
+                    self.assertEqual(self.compares(part, receipt, "0"), targeted)
+        self.assertEqual([self.calls(block(close, str(state))) for state in range(225, 232)],
+                         [["clr_state_flag"]] * 7)
+        # Caps only grow through the helper, never by a direct write.
+        events = [self.story[f"ADISCORD_nam_story.{number}"] for number in range(97, 135)]
+        for entries in [block(body, "completion_reward") for body in self.lower.values()] + events:
+            self.assertFalse([entry for entry in walk(entries) if isinstance(entry.value, list)
+                              and (self.field(entry.value, "var") or "").startswith("NAM_board_inv_cap^")])
+        caps = {}
+        for side in INVASION_ROUTES:
+            totals = Counter()
+            for short in self.route(side):
+                for programme, change in self.cap_changes(block(self.lower[short], "completion_reward")):
+                    totals[programme] += change
+            caps[side] = totals
+        self.assertEqual((caps["ai"][7], caps["elite"][7]), (4, 3))
+        self.assertEqual((caps["ai"][1], caps["elite"][1]), (5, 3))
+        self.assertEqual((caps["ai"][2], caps["elite"][2]), (6, 4))
+        self.assertEqual((caps["ai"][6], caps["elite"][6]), (4, 3))
+        self.assertEqual(caps["elite"][8], 3)
+        fleet_answer = [change for option in self.story["ADISCORD_nam_story.113"] if option.key == "option"
+                        for programme, change in self.cap_changes(option.value) if programme == 6]
+        self.assertEqual(fleet_answer, [1])
+        for k, short in INVASION_PROGRAMMES.items():
+            if k == 9:
+                continue
+            opener = scalar(block(self.all_decisions["NAM_board_inv_" + short], "visible"), "has_completed_focus")
+            for side, totals in caps.items():
+                if opener[len("NAM_board_"):] in self.route(side):
+                    self.assertGreater(totals[k], 0, (short, side))
+        # The helper keeps 0-6 (arsenal 0-7, marines 0-4) and never drops below the runs made.
+        # Event 100 c must still add its order on top of the open-tenders arsenal cap of 6.
+        for k, change, runs, start, expected in ((7, 9, 0, 0, 4), (1, 9, 0, 0, 6), (2, -3, 3, 4, 3),
+                                                 (2, -5, 0, 4, 0), (5, 1, 0, 3, 4), (2, 9, 0, 0, 7),
+                                                 (2, 1, 0, 6, 7), (5, 1, 0, 6, 6)):
+            with self.subTest(cap=(k, change, runs, start)):
+                facts = {("global", "variable", "num_days"): 1,
+                         ("NAM", "array", "NAM_board_inv_cap"): tuple(start if i == k else 0 for i in range(10)),
+                         ("NAM", "array", "NAM_board_inv_runs"): tuple(runs if i == k else 0 for i in range(10)),
+                         ("NAM", "variable", "NAM_board_inv_k"): k,
+                         ("NAM", "variable", "NAM_board_inv_cap_change"): change}
+                self.apply(self.effects["NAM_board_inv_cap_add"], facts)
+                self.assertEqual(facts[("NAM", "array", "NAM_board_inv_cap")][k], expected)
+                self.assertEqual(facts[("NAM", "variable", "NAM_board_inv_cap_change")], 0)
+
+    def test_raised_marines_spend_once_and_keep_the_template_locked(self):
+        # Breaks when the marine run debits a price twice or with a non-exact boundary, when the
+        # division ignores the storm companies' experience, when the decision outlives the
+        # orders window or refunds less than it took, or when the template unlocks while paid
+        # orders are still possible.
+        decision = self.all_decisions["NAM_board_inv_raise_marines"]
+        price = {"capital": 40, "has_manpower": 4300, "infantry_equipment": 3870,
+                 "ADISCORD_squad_weapons_equipment": 192}
+        self.assertEqual(self.price(block(decision, "custom_cost_trigger")), price)
+        self.assertEqual(self.debits(block(decision, "complete_effect")),
+                         {currency: [-amount] for currency, amount in price.items()})
+        self.assertEqual(self.debits(self.effects["NAM_board_inv_refund_7"]),
+                         {currency: [amount] for currency, amount in price.items()})
+        self.assertEqual(self.calls(self.effects["NAM_board_inv_settle_7"]).count("NAM_board_raise_marine_division"), 1)
+        raise_division = self.effects["NAM_board_raise_marine_division"]
+        branch = block(raise_division, "if")
+        self.assertEqual(scalar(block(branch, "limit"), "has_completed_focus"), "NAM_board_storm_companies")
+        experience = [re.search(r"start_experience_factor = ([\d.]+)", scalar(entry.value, "division")).group(1)
+                      for entry in walk(raise_division) if entry.key == "create_unit"]
+        self.assertEqual(experience, ["0.35", "0.20"])
+        for part in ("visible", "available"):
+            self.assertIn(("NAM_marine_orders_open", "yes"),
+                          [(entry.key, entry.value) for entry in walk(block(decision, part))])
+        self.assertIn(("NAM_marine_orders_open", "no"),
+                      [(entry.key, entry.value) for entry in walk(block(decision, "cancel_trigger"))])
+        guard, = [entry.value for entry in block(decision, "cancel_effect") if entry.key == "if"]
+        self.assertIn("NAM_board_inv_refund_7", self.calls(guard))
+        unlock = block(self.effects["NAM_marine_unlock_template"], "if")
+        for open_orders in (True, False):
+            facts = {("NAM", "has_template", "Island Marines"): True,
+                     ("NAM", "NAM_marine_orders_open", "no"): not open_orders,
+                     ("NAM", "NAM_marine_orders_open", "yes"): open_orders}
+            self.assertEqual(self.raw(block(unlock, "limit"), facts), not open_orders)
+            self.assertEqual(self.raw(block(decision, "available"), {
+                **facts, ("NAM", "NAM_board_operable", "yes"): True,
+                ("NAM", "NAM_board_product_blocked_4", "no"): True,
+                ("NAM", "array", "NAM_board_inv_runs"): (0,) * 10,
+                ("NAM", "array", "NAM_board_inv_cap"): (0,) * 7 + (3, 0, 0)}), open_orders)
+
+    def test_holders_package_reaches_the_frozen_holders(self):
+        # Breaks when the package reads the current ranks instead of the frozen partition, misses
+        # a company of either partition, adds the chair's gain twice, or recounts more than once.
+        package = self.effects["NAM_board_holders_package"]
+        self.assertEqual(self.calls(package).count("NAM_board_trust_package"), 1)
+        self.assertNotIn("NAM_board_recount", self.calls(package))
+        self.assertNotIn("NAM_board_rank", repr(package))
+        self.effects = {**type(self).effects, "NAM_board_trust_package": []}
+        for efl, azh in permutations(range(1, 7), 2):
+            for chair, chair_gain in ((efl, 0), (3, 4), (azh, 5)):
+                with self.subTest(efl=efl, azh=azh, chair=chair, gain=chair_gain):
+                    facts = {("global", "variable", "num_days"): 1,
+                             ("NAM", "variable", "NAM_board_partition_efl"): efl,
+                             ("NAM", "variable", "NAM_board_partition_azh"): azh,
+                             ("NAM", "variable", "NAM_board_rank_1"): 7 - efl,
+                             ("NAM", "variable", "NAM_board_rank_2"): 7 - azh,
+                             ("NAM", "variable", "NAM_board_chair"): chair,
+                             ("NAM", "variable", "NAM_board_holders_gain"): 7,
+                             ("NAM", "variable", "NAM_board_others_gain"): -2,
+                             ("NAM", "variable", "NAM_board_chair_gain"): chair_gain}
+                    self.apply(package, facts)
+                    inputs = [facts[("NAM", "variable", f"NAM_board_trust_input_{company}")] for company in range(1, 7)]
+                    self.assertEqual(inputs, [(7 if company in (efl, azh) else -2) + (chair_gain if company == chair else 0)
+                                              for company in range(1, 7)])
+                    self.assertEqual([facts[("NAM", "variable", "NAM_board_" + gain + "_gain")]
+                                      for gain in ("holders", "others", "chair")], [0, 0, 0])
+
+    def test_poseidon_backers_follow_the_route(self):
+        # Breaks when the holders' route accepts a boycotting holder, the pool route accepts two
+        # boycotts or refuses one, or when the gate rather than the final reads the backers.
+        trigger = self.triggers["NAM_board_invasion_backers_ready"]
+        holders, pool = block(trigger, "if"), block(trigger, "else")
+        self.assertEqual(scalar(block(holders, "limit"), "has_completed_focus"), "NAM_board_holders_underwrite")
+
+        def ready(boycotts, holders_route):
+            facts = {("global", "variable", "num_days"): 1,
+                     ("NAM", "array", "NAM_board_stance"): (0,) + tuple(-1 if c in boycotts else 0 for c in range(1, 7)),
+                     ("NAM", "variable", "NAM_board_partition_efl"): 2,
+                     ("NAM", "variable", "NAM_board_partition_azh"): 5}
+            if holders_route:
+                rule = self.triggers["NAM_board_holders_backing"]
+            else:
+                self.apply(self.triggers["NAM_board_inv_count_boycotts"], facts)
+                rule = [entry for entry in pool if entry.key != "NAM_board_inv_count_boycotts"]
+            return matches_conditions(self.expand(rule), self.board_variables(facts), "NAM")
+
+        self.assertEqual([entry.key for entry in holders if entry.key != "limit"], ["custom_trigger_tooltip"])
+        self.assertEqual(scalar(block(holders, "custom_trigger_tooltip"), "NAM_board_holders_backing"), "yes")
+        for boycotts, holders_ok, pool_ok in (((), True, True), ((2,), False, True), ((5,), False, True),
+                                              ((1,), True, True), ((1, 3), True, False), ((2, 5), False, False)):
+            with self.subTest(boycotts=boycotts):
+                self.assertEqual(ready(set(boycotts), True), holders_ok)
+                self.assertEqual(ready(set(boycotts), False), pool_ok)
+        self.assertIn("NAM_board_invasion_backers_ready", self.calls(block(self.lower["operation_poseidon"], "available")))
+        self.assertNotIn("NAM_board_invasion_backers_ready", self.calls(block(self.lower["invasion_fleet"], "available")))
+
+    def test_branch_buildings_fall_back(self):
+        # Breaks when a building reward skips the preferred state, tries the islands out of the
+        # fixed order, pays its fallback although it built, or pays it more than once.
+        order = ("228", "227", "225", "231", "226", "229", "230")
+        self.triggers = {name: body for name, body in type(self).triggers.items()
+                         if name != "NAM_board_inv_build_site"}
+        self.effects = {**type(self).effects,
+                        "NAM_board_build_kind_effect": parse_clausewitz("set_state_flag = fixture_built"),
+                        "NAM_corp_capital_add": parse_clausewitz(
+                            "add_to_variable = { var = fixture_paid value = NAM_corp_capital_change }")}
+        for preferred, sites, expected in (("230", {"230", "228"}, "230"), ("230", {"227", "229"}, "227"),
+                                           ("231", {"229", "226"}, "226"), ("228", set(), None)):
+            with self.subTest(preferred=preferred, sites=sorted(sites)):
+                facts = {("global", "variable", "num_days"): 1,
+                         ("NAM", "variable", "NAM_board_build_pref"): int(preferred),
+                         ("NAM", "variable", "NAM_board_build_kind"): 1,
+                         ("NAM", "variable", "fixture_paid"): 0}
+                for state in order:
+                    facts[(state, "NAM_board_inv_build_site", "yes")] = state in sites
+                self.apply(self.effects["NAM_board_build_on_island"], facts)
+                built = [state for state in order if facts.get((state, "has_state_flag", "fixture_built"))]
+                self.assertEqual(built, [expected] if expected else [])
+                facts[("NAM", "variable", "NAM_corp_capital_change")] = 150
+                self.apply(self.effects["NAM_board_pay_site_fallback"], facts)
+                self.assertEqual(facts[("NAM", "variable", "fixture_paid")], 0 if expected else 150)
+        for short, body in self.lower.items():
+            sequence = list(walk(block(body, "completion_reward")))
+            with self.subTest(focus=short):
+                for index, entry in enumerate(sequence):
+                    if entry.key == "NAM_board_build_on_island":
+                        before = [self.field(e.value, "var") for e in sequence[:index] if e.key == "set_temp_variable"]
+                        self.assertLessEqual({"NAM_board_build_kind", "NAM_board_build_pref"}, set(before))
+                    if entry.key == "NAM_board_pay_site_fallback":
+                        fallback = [int(self.field(e.value, "value")) for e in sequence[:index]
+                                    if e.key == "set_temp_variable" and self.field(e.value, "var") == "NAM_corp_capital_change"]
+                        self.assertTrue(fallback and fallback[-1] > 0)
+
+    def test_tech_rewards_fall_back_when_researched(self):
+        # Breaks when a lower focus grants a technology without checking it, or gives nothing
+        # when the technology is already known.
+        granted = 0
+        for short, body in self.lower.items():
+            for entry in walk(block(body, "completion_reward")):
+                if entry.key != "if" or "set_technology" not in [e.key for e in entry.value]:
+                    continue
+                granted += 1
+                technology = next(e.key for e in block(entry.value, "set_technology") if e.key != "popup")
+                with self.subTest(focus=short, technology=technology):
+                    self.assertEqual([(e.key, e.value) for e in block(block(entry.value, "limit"), "NOT")],
+                                     [("has_tech", technology)])
+            reward = block(body, "completion_reward")
+            for index, entry in enumerate(reward):
+                if entry.key == "if" and "set_technology" in [e.key for e in entry.value]:
+                    self.assertEqual(reward[index + 1].key, "else", short)
+                    self.assertTrue({"navy_experience", "army_experience"} & {e.key for e in reward[index + 1].value},
+                                    short)
+        self.assertGreaterEqual(granted, 6)
+
+    def test_war_economy_pair_sets_the_arms_sponsor_rule(self):
+        # Breaks when the cartel stops requiring the supplier's support, the tenders stop
+        # ignoring a boycott or raising both caps by 2, or the boycott gate survives either side.
+        for company in (2, 4):
+            trigger = self.triggers[f"NAM_board_inv_arms_sponsor_ok_{company}"]
+            for cartel, tenders, blocked, stance in product((False, True), repeat=4):
+                if cartel and tenders:
+                    continue
+                facts = {("NAM", "has_completed_focus", "NAM_board_cartel_prices"): cartel,
+                         ("NAM", "has_completed_focus", "NAM_board_open_war_tenders"): tenders,
+                         (f"NAM", f"NAM_board_product_blocked_{company}", "no"): not blocked,
+                         ("NAM", "array", "NAM_board_stance"): tuple(1 if stance and i == company else 0
+                                                                     for i in range(7))}
+                expected = True if tenders else (not blocked and (stance or not cartel))
+                with self.subTest(company=company, cartel=cartel, tenders=tenders, blocked=blocked, stance=stance):
+                    self.assertEqual(self.raw(trigger, facts), expected)
+        self.assertEqual(sorted(self.cap_changes(block(self.lower["open_war_tenders"], "completion_reward"))),
+                         [(1, 2), (2, 2)])
+        self.assertEqual(self.cap_changes(block(self.lower["cartel_prices"], "completion_reward")), [])
+
+    def test_expedition_share_holds_the_product(self):
+        # Breaks when a running share blocks the wrong company's product, or when the share stops
+        # costing the payer 3 trust at launch and returning 6 at delivery.
+        for target in range(1, 7):
+            facts = {("NAM", "has_country_flag", "NAM_board_opened"): True,
+                     ("NAM", "array", "NAM_board_stance"): (0,) * 7,
+                     ("NAM", "array", "NAM_board_inv_running"): (0,) * 9 + (1,),
+                     ("NAM", "variable", "NAM_board_inv_share_target"): target}
+            for company in range(1, 7):
+                with self.subTest(target=target, company=company):
+                    self.assertEqual(self.raw(self.triggers[f"NAM_board_product_blocked_{company}"], facts),
+                                     company == target)
+            facts[("NAM", "array", "NAM_board_inv_running")] = (0,) * 10
+            self.assertFalse(self.raw(self.triggers[f"NAM_board_product_blocked_{target}"], facts))
+        launch = block(self.all_decisions["NAM_board_inv_expedition_share"], "complete_effect")
+        self.assertEqual(self.assignments(launch, "set_temp_variable", "NAM_board_delta_input"), ["-3"])
+        self.assertEqual(self.assignments(self.effects["NAM_board_inv_settle_9"], "set_temp_variable",
+                                          "NAM_board_delta_input"), ["6"])
+
+    # ----- island operations -----
+
+    def test_island_launch_follows_the_cost_contract(self):
+        # Breaks when a launch price changes or stops matching its first wave and echelon, when
+        # its boundary is not exact, when it debits twice or an aborted declaration refunds less,
+        # when the launch stops requiring a peaceful target and an idle island, or when a lost
+        # beachhead keeps the second echelon's price.
+        prices = {True: {"has_political_power": 40, "has_manpower": 21500, "infantry_equipment": 19350},
+                  False: {"has_political_power": 25, "has_manpower": 12900, "infantry_equipment": 11610}}
+        trigger = self.triggers["NAM_isl_from_launch_affordable"]
+        self.assertEqual(scalar(block(block(block(trigger, "if"), "limit"), "FROM"), "state"), "680")
+        decision = self.all_decisions["NAM_isl_launch"]
+        complete = block(block(decision, "complete_effect"), "if")
+        payment = block(complete, "hidden_effect")
+        # The abort's price branch: the one that returns political power.
+        abort = [entry for entry in self.effects["NAM_isl_launch_abort"] if entry.key in ("if", "else")
+                 and "add_political_power" in self.calls(entry.value)]
+        for sharden, price in prices.items():
+            rule = [entry for entry in block(trigger, "if" if sharden else "else") if entry.key != "limit"]
+            self.assertEqual(self.price(rule), price)
+            for short in (None, *price):
+                facts = {("NAM", "numeric", "has_political_power"): price["has_political_power"],
+                         ("NAM", "numeric", "has_manpower"): price["has_manpower"],
+                         ("NAM", "equipment", "infantry_equipment"): price["infantry_equipment"]}
+                if short == "infantry_equipment":
+                    facts[("NAM", "equipment", short)] -= 1
+                elif short:
+                    facts[("NAM", "numeric", short)] -= 1
+                with self.subTest(sharden=sharden, short=short):
+                    self.assertEqual(self.raw(rule, facts), short is None)
+            paid = block(payment, "if" if sharden else "else")
+            self.assertEqual(self.debits([entry for entry in paid if entry.key != "limit"]),
+                             {currency: [-amount] for currency, amount in price.items()})
+            returned = block(abort, "if" if sharden else "else")
+            self.assertEqual(self.debits([entry for entry in returned if entry.key != "limit"]),
+                             {currency: [amount] for currency, amount in price.items()})
+            # The price is the first wave plus the second echelon, at a marine order's 4300 men.
+            first_wave = 3 if sharden else 2
+            echelon = 2 if sharden else 1
+            self.assertEqual(price["has_manpower"], 4300 * (first_wave + echelon))
+            self.assertEqual(price["infantry_equipment"], 3870 * (first_wave + echelon))
+        self.assertEqual(self.calls(payment)[-2:], ["NAM_isl_k_from_target", "NAM_isl_op_launch"])
+        self.assertEqual(sorted(self.assignments(self.effects["NAM_isl_land_first_wave"], "set_temp_variable",
+                                                 "NAM_isl_wave")), ["2", "3"])
+        self.assertEqual(sorted(self.assignments(self.effects["NAM_isl_second_echelon"], "set_temp_variable",
+                                                 "NAM_isl_wave")), ["1", "2"])
+        refund = self.effects["NAM_isl_echelon_refund"]
+        self.assertEqual(self.debits(block(refund, "if")), {"has_manpower": [8600], "infantry_equipment": [7740]})
+        self.assertEqual(self.debits(block(refund, "else_if")), {"has_manpower": [4300], "infantry_equipment": [3870]})
+        self.assertEqual(self.calls(block(block(self.effects["NAM_isl_second_echelon"], "if"), "else")),
+                         ["NAM_isl_echelon_refund"])
+        limit = block(complete, "limit")
+        for name in ("NAM_isl_from_target_at_peace", "NAM_isl_from_prep_idle", "NAM_isl_from_launch_affordable"):
+            self.assertIn(name, self.calls(block(decision, "available")) + self.calls(block(decision, "custom_cost_trigger")))
+            self.assertIn(name, self.calls(limit))
+        peace = block(block(self.triggers["NAM_isl_from_target_at_peace"], "FROM"), "owner")
+        self.assertEqual([(e.key, e.value) for e in peace], [("has_war", "no"), ("is_subject", "no")])
+        idle = self.triggers["NAM_isl_from_prep_idle"]
+        self.assertEqual({e.value for e in walk(idle) if e.key == "has_state_flag"},
+                         {"NAM_isl_prep_soundings", "NAM_isl_prep_depots", "NAM_isl_prep_bribe"})
+
+    def test_island_war_has_three_defined_peaces(self):
+        # Breaks when a settlement makes peace before it records the result, when the timeouts
+        # or the capital hold pick another ending, when a held-out partner is annexed, when the
+        # dispatch loses an island hook or its order, or when a terminal path skips the release.
+        peace_calls = {"NAM_isl_peace_k", "NAM_isl_annex_island", "white_peace", "annex_country"}
+        for name in ("NAM_isl_peace_k", "NAM_isl_annex_island"):
+            self.assertTrue({"white_peace", "annex_country"} & set(self.calls(self.effects[name])), name)
+        for name in ("NAM_isl_settle_victory", "NAM_isl_settle_stalled", "NAM_isl_settle_failed",
+                     "NAM_isl_launch_abort"):
+            effect = self.effects[name]
+            body = effect
+            if name != "NAM_isl_launch_abort":
+                guard, = [entry.value for entry in effect if entry.key == "if"]
+                self.assertTrue(self.compares(block(guard, "limit"), "NAM_isl_op_target", "0", "greater_than"))
+                body = guard
+            sequence = list(walk(body))
+            copy = self.first(sequence, lambda e: e.key == "set_temp_variable"
+                              and self.field(e.value, "var") == "NAM_isl_settle_k"
+                              and self.field(e.value, "value") == "NAM_isl_op_target")
+            status = self.first(sequence, lambda e: e.key == "set_variable"
+                                and self.field(e.value, "var").startswith("NAM_isl_status^"))
+            cleared = self.first(sequence, lambda e: e.key == "set_variable"
+                                 and self.field(e.value, "var") == "NAM_isl_op_target" and self.field(e.value, "value") == "0")
+            peace = self.first(sequence, lambda e: e.key in peace_calls)
+            release = max(index for index, entry in enumerate(sequence) if entry.key == "NAM_isl_release")
+            with self.subTest(settlement=name):
+                self.assertIsNotNone(copy)
+                self.assertLess(copy, status)
+                self.assertLess(status, cleared)
+                if peace is not None:
+                    self.assertLess(cleared, peace)
+                    self.assertLess(max(i for i, e in enumerate(sequence) if e.key in peace_calls), release)
+        # Timeouts and the capital hold choose the ending of section 7A.
+        settlements = {"NAM_isl_settle_victory", "NAM_isl_settle_stalled", "NAM_isl_settle_failed"}
+        for capitals, main, foothold in product((False, True), repeat=3):
+            facts = {("NAM", "variable", "NAM_isl_op_target"): 1,
+                     ("NAM", "NAM_isl_capitals_held", "yes"): capitals,
+                     ("NAM", "NAM_isl_main_capital_held", "yes"): main,
+                     ("NAM", "NAM_isl_any_foothold", "yes"): foothold}
+            chosen = [(e.key, self.field(e.value, "value") if isinstance(e.value, list) else e.value)
+                      for _, e in selected_effects(self.effects["NAM_isl_campaign_check"], facts, "NAM")
+                      if e.key in settlements or (e.key == "set_temp_variable"
+                                                  and self.field(e.value, "var") == "NAM_isl_member_stalled")]
+            expected = ([("set_temp_variable", "0"), ("NAM_isl_settle_victory", "yes")] if capitals else
+                        [("set_temp_variable", "1"), ("NAM_isl_settle_victory", "yes")] if main else
+                        [("NAM_isl_settle_stalled", "yes")] if foothold else [("NAM_isl_settle_failed", "yes")])
+            with self.subTest(capitals=capitals, main=main, foothold=foothold):
+                self.assertEqual(chosen, expected)
+            beachhead = [e.key if e.key != "activate_mission" else e.value
+                         for _, e in selected_effects(self.effects["NAM_isl_beachhead_check"], facts, "NAM")]
+            self.assertEqual(beachhead, ["NAM_isl_campaign_strait"] if foothold else ["NAM_isl_settle_failed"])
+        hold = next(entry.value for entry in walk(self.effects["NAM_isl_monthly"]) if entry.key == "if"
+                    and [e.key for e in block(entry.value, "limit")] == ["NAM_isl_capitals_held"])
+        held = block(hold, "if")
+        self.assertEqual(scalar(block(held, "limit"), "has_country_flag"), "NAM_isl_capital_hold")
+        self.assertIn("NAM_isl_settle_victory", self.calls(held))
+        flag = block(block(hold, "else"), "set_country_flag")
+        # The receipt survives one monthly pulse and lapses before a third.
+        self.assertTrue(30 < int(scalar(flag, "days")) < 60)
+        # A partner whose capital held out is settled as stalled inside the victory.
+        victory = list(walk(block(self.effects["NAM_isl_settle_victory"], "if")))
+        stalled_member = next(e.value for e in victory if e.key == "if"
+                              and self.compares(block(e.value, "limit"), "NAM_isl_member_stalled", "1")
+                              and "NAM_isl_stall_island" in self.calls(e.value))
+        self.assertEqual(self.calls(stalled_member)[-2:], ["NAM_isl_peace_k", "NAM_isl_stall_island"])
+        annex_member = next(e.value for e in victory if e.key == "if" and "NAM_isl_annex_island" in self.calls(e.value))
+        self.assertEqual([e.key for e in block(block(annex_member, "limit"), "NOT")], ["check_variable"])
+        # External closes and capitulations reach the island war through the existing nam: blocks.
+        self.assertIn("NAM_isl_op_running", self.calls(self.effects["NAM_isl_close_external"]))
+        self.assertTrue(self.compares(self.triggers["NAM_isl_op_running"], "NAM_isl_op_target", "0", "greater_than"))
+        for hook in ("on_peace", "on_puppet", "on_annex"):
+            self.assertEqual(self.section(hook).count("NAM_isl_close_external = yes"), 1, hook)
+        for hook in ("on_capitulation_immediate", "on_capitulation"):
+            text = self.section(hook)
+            self.assertLess(text.index("NAM_veyran_handle_capitulation = yes"), text.index("NAM_isl_record_capitulation = yes"))
+        late = self.section("on_capitulation")
+        self.assertRegex(late, r"NAM_isl_record_capitulation = yes\n\t*if = \{\n\t*limit = \{ ROOT = \{ has_country_flag = "
+                               r"NAM_isl_capitulation_reserved \} \}\n\t*set_global_flag = skip_default_capitulation")
+        record = self.effects["NAM_isl_record_capitulation"]
+        for branch, settlement in (("if", "NAM_isl_settle_victory"), ("else_if", "NAM_isl_settle_failed")):
+            body = block(record, branch)
+            receipts = [e for e in walk(body) if e.key == "set_country_flag"
+                        and self.field(e.value, "flag") == "NAM_isl_capitulation_reserved"]
+            self.assertTrue(receipts, branch)
+            self.assertIn(settlement, self.calls(body))
+        release = self.effects["NAM_isl_release"]
+        self.assertEqual({e.value for e in walk(release) if e.key == "remove_mission"},
+                         {"NAM_isl_beachhead_strait", "NAM_isl_beachhead_sharden",
+                          "NAM_isl_campaign_strait", "NAM_isl_campaign_sharden"})
+        self.assertIn("ADISCORD_nam_resource_war_release_major", self.calls(release))
+        self.assertEqual([e.key for e in release if e.key in ("ULV", "LUR", "CHD")], ["ULV", "LUR", "CHD"])
+        target = self.effects["NAM_isl_release_target"]
+        self.assertLessEqual({"NAM_isl_participant", "NAM_isl_defence_mobilised", "NAM_isl_pact_founder"},
+                             {e.value for e in walk(target) if e.key == "clr_country_flag"})
+        self.assertLessEqual({"dismantle_faction", "ADISCORD_nam_resource_war_release_major"}, set(self.calls(target)))
+
+    def test_island_missions_are_timeout_only_and_registered(self):
+        # Breaks when a mission's goal can complete, when it becomes selectable or self-activating,
+        # or when its id leaves the synchronized token file.
+        tokens = set(read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").split())
+        for name in ("NAM_isl_beachhead_strait", "NAM_isl_beachhead_sharden", "NAM_isl_campaign_strait",
+                     "NAM_isl_campaign_sharden", "NAM_board_poseidon_beachhead"):
+            mission = self.all_decisions[name]
+            with self.subTest(mission=name):
+                self.assertEqual([e.key for e in block(mission, "available")], ["hidden_trigger"])
+                self.assertEqual([(e.key, e.value) for e in block(block(mission, "available"), "hidden_trigger")],
+                                 [("always", "no")])
+                self.assertEqual([(e.key, e.value) for e in block(mission, "activation")], [("always", "no")])
+                self.assertEqual(scalar(mission, "selectable_mission"), "no")
+                self.assertTrue(int(scalar(mission, "days_mission_timeout")) > 0)
+                self.assertTrue(block(mission, "timeout_effect"))
+                self.assertIn(name, tokens)
+
+    def test_island_nationalisation_cores_the_island_and_ends_resistance(self):
+        # Breaks when the decision stops rechecking the island at completion, when an island list
+        # changes (Ulven without Tarven), when a state keeps its old core or its resistance, when
+        # the promise's southern states are cored, when the economy is not refreshed, when a
+        # cancellation keeps the capital, or when anything cores the Directory's own islands.
+        decision = self.all_decisions["NAM_isl_nationalise"]
+        limit = block(block(block(decision, "complete_effect"), "if"), "limit")
+        for name in ("NAM_isl_from_island_held", "NAM_isl_from_nationalise_affordable", "resistance"):
+            self.assertIn(name, repr(limit))
+        self.assertIn("NAM_isl_nationalise_finish", self.calls(block(decision, "remove_effect")))
+        self.assertIn("NAM_isl_nationalise_refund", self.calls(block(decision, "cancel_effect")))
+        refund = self.effects["NAM_isl_nationalise_refund"]
+        self.assertEqual(self.assignments(refund, "set_temp_variable", "NAM_corp_capital_change"),
+                         ["NAM_isl_nationalise_paid"])
+        rows = self.effects["NAM_isl_island_rows"]
+        for index, branch in zip((1, 2, 3), [e.value for e in rows if e.key in ("if", "else_if")]):
+            self.assertTrue(self.compares(block(branch, "limit"), "NAM_isl_rows_k", str(index)))
+            self.assertEqual([e.key for e in branch if e.key != "limit"], [str(s) for s in ISLAND_STATES[index]])
+        finish = block(self.effects["NAM_isl_nationalise_finish"], "if")
+        self.assertIn("NAM_isl_island_held", self.calls(block(finish, "limit")))
+        self.assertEqual(self.assignments(finish, "set_temp_variable", "NAM_isl_rows_mode"), ["6"])
+        self.assertEqual(self.assignments(finish, "set_variable", "NAM_isl_status^NAM_isl_k"), ["3"])
+        self.assertIn("ADISCORD_economy_mark_dirty", self.calls(finish))
+        self.assertIn("NAM_corp_capital_add", self.calls(block(self.effects["NAM_isl_nationalise_finish"], "else")))
+        old = {1: "ULV", 2: "LUR", 3: "CHD"}
+        for index, states in ISLAND_STATES.items():
+            for promise in ((False, True) if index == 3 else (False,)):
+                for state in map(str, states):
+                    facts = {("global", "variable", "num_days"): 1,
+                             (state, "variable", "NAM_isl_rows_mode"): 6,
+                             (state, "variable", "NAM_isl_rows_k"): index,
+                             (state, "is_owned_by", "NAM"): True,
+                             (state, "is_controlled_by", "NAM"): True,
+                             (state, "has_resistance", "yes"): True,
+                             (state, "is_core_of", old[index]): True,
+                             ("NAM", "has_country_flag", "NAM_isl_sharden_promise_done"): promise}
+                    self.apply(self.effects["NAM_isl_state_row"], facts, state)
+                    cored = not (promise and state in SHARDEN_PROMISE_STATES)
+                    with self.subTest(island=index, state=state, promise=promise):
+                        self.assertEqual(facts.get((state, "is_core_of", "NAM"), False), cored)
+                        self.assertEqual(facts[(state, "is_core_of", old[index])], not cored)
+        row = self.effects["NAM_isl_state_row"]
+        resistance = next(e.value for e in walk(row) if e.key == "if" and "cancel_resistance" in [c.key for c in e.value])
+        self.assertIn(("has_resistance", "yes"), [(e.key, e.value) for e in walk(block(resistance, "limit"))])
+        directory = {str(state) for state in range(225, 232)}
+        sources = [self.effects.values(), self.all_decisions.values(), self.story.values(),
+                   [body for body in self.board.values()]]
+        for group in sources:
+            for entries in group:
+                for entry in walk(entries if isinstance(entries, list) else []):
+                    if entry.key in directory and isinstance(entry.value, list):
+                        self.assertNotIn("add_core_of", self.calls(entry.value), entry.key)
+
+    def test_island_concessions_vote_and_pay(self):
+        # Breaks when the recount indexes the holdings by a nested index, counts an operator twice
+        # or ignores the promise, when a dividend goes to the wrong company or skips the income
+        # report, or when the island pulse runs before the council's main income.
+        recount = list(walk(self.effects["NAM_board_recount"]))
+        copies = [index for index, e in enumerate(recount) if e.key == "set_temp_variable"
+                  and self.field(e.value, "var") == "NAM_board_isl_owner_input"]
+        self.assertEqual([self.field(recount[index].value, "value") for index in copies],
+                         [f"NAM_board_isl_owner^{island}" for island in (1, 2, 3)])
+        additions = [index for index, e in enumerate(recount) if e.key == "add_to_temp_variable"
+                     and self.field(e.value, "var") == "NAM_board_holdings^NAM_board_isl_owner_input"]
+        # Each copy precedes its island's additions, which precede the next copy.
+        for index, copy in enumerate(copies):
+            following = copies[index + 1] if index + 1 < len(copies) else len(recount)
+            self.assertTrue([addition for addition in additions if copy < addition < following], index)
+        self.assertLess(copies[0], min(additions))
+        votes = [self.field(recount[index].value, "value") for index in additions]
+        self.assertEqual(votes, ["1", "1", "0.5", "1"])
+        self.assertIsNone(re.search(r"\w+\^\w+\^\w+", read(f"common/scripted_effects/{BASE}_effects.txt")))
+        self.triggers = {name: body for name, body in type(self).triggers.items() if name != "NAM_board_operable"}
+        self.effects = {**type(self).effects, "NAM_corp_capital_add": parse_clausewitz(
+            "add_to_variable = { var = fixture_paid value = NAM_corp_capital_change }")}
+        for island, operator, promise, dividend in ((1, 3, False, 10), (1, 2, False, 10), (1, 1, False, 0),
+                                                    (2, 1, False, 8), (2, 5, False, 12), (2, 3, False, 0),
+                                                    (3, 4, False, 6), (3, 4, True, 3), (3, 6, False, 15),
+                                                    (3, 6, True, 8)):
+            for status in (1, 2, 3):
+                facts = {("global", "variable", "num_days"): 1,
+                         ("NAM", "NAM_board_operable", "yes"): True,
+                         ("NAM", "array", "NAM_isl_status"): tuple(status if i == island else 0 for i in range(4)),
+                         ("NAM", "array", "NAM_board_isl_owner"): tuple(operator if i == island else 0 for i in range(4)),
+                         ("NAM", "has_country_flag", "NAM_isl_sharden_promise_done"): promise,
+                         ("NAM", "variable", "NAM_isl_flare_target"): island,
+                         ("NAM", "variable", "NAM_isl_op_target"): 0,
+                         ("NAM", "variable", "NAM_corp_last_income"): 50,
+                         ("NAM", "variable", "fixture_paid"): 0}
+                self.apply(self.effects["NAM_isl_monthly"], facts)
+                paid = dividend if status > 1 else 0
+                with self.subTest(island=island, operator=operator, promise=promise, status=status):
+                    self.assertEqual(facts[("NAM", "variable", "fixture_paid")], paid)
+                    self.assertEqual(facts[("NAM", "variable", "NAM_corp_last_income")], 50 + paid)
+        monthly = self.calls(self.effects["NAM_corp_monthly"])
+        income = max(i for i, key in enumerate(monthly) if key == "NAM_corp_capital_add" and i < monthly.index("NAM_isl_monthly"))
+        self.assertEqual(monthly[income:income + 3], ["NAM_corp_capital_add", "NAM_isl_monthly", "NAM_board_cells_monthly"])
+        self.assertEqual(monthly.count("NAM_isl_monthly"), 1)
+        self.assertEqual(scalar(block(block(self.effects["NAM_isl_monthly"], "if"), "limit"), "NAM_board_operable"), "yes")
+
+    # ----- mainland cells -----
+
+    def test_cells_rise_only_at_the_war_and_are_spent(self):
+        # Breaks when the rising has another caller or runs before the war began, when a tier or
+        # the cap of eight changes, when a province is taken before the armies leave it, when
+        # the cells survive the rising, when the harbour rule is read after they are spent, or
+        # when the armistice ends the cells or the won return keeps them.
+        callers = []
+        for group, label in ((self.effects, "effect"), (self.all_decisions, "decision"), (self.story, "event")):
+            for name, body in group.items():
+                if "NAM_board_cells_rise" in self.calls(body):
+                    callers.append(name)
+        self.assertCountEqual(callers, ["NAM_board_poseidon_launch", "NAM_exile_renew_war_of_return"])
+        launch = self.effects["NAM_board_poseidon_launch"]
+        self.assertEqual(launch[0].key, "NAM_war_of_return_start")
+        started = block(launch, "if")
+        self.assertEqual({e.key for e in block(started, "limit")}, {"NAM_war_of_return_active", "has_global_flag"})
+        self.assertIn("NAM_board_cells_rise", self.calls(started))
+        renew = block(block(self.all_decisions["NAM_exile_renew_war_of_return"], "complete_effect"), "hidden_effect")
+        self.assertEqual(renew[0].key, "NAM_war_of_return_start")
+        self.assertIn(("NAM_war_of_return_active", "yes"),
+                      [(e.key, e.value) for e in walk(block(block(renew, "if"), "limit"))])
+        rise = block(self.effects["NAM_board_cells_rise_state"], "if")
+        self.assertEqual([[c.value for c in e.value] for e in block(rise, "limit") if e.key == "check_variable"],
+                         [["NAM_cells", ">", "29"]])
+        armed = block(rise, "if")
+        self.assertEqual([[c.value for c in e.value] for e in block(armed, "limit") if e.key == "check_variable"],
+                         [["NAM_cells", ">", "49"], ["NAM_board_partisans_raised", "<", "8"]])
+        keys = [e.key for e in armed]
+        self.assertLess(keys.index("teleport_armies"), keys.index("NAM_board_cells_take_rising_province"))
+        self.assertLess(keys.index("NAM_board_cells_take_rising_province"), keys.index("NAM_board_cells_raise_partisan"))
+        second = next(e.value for e in armed if e.key == "if" and "NAM_board_cells_raise_partisan" in self.calls(e.value))
+        self.assertEqual([[c.value for c in e.value] for e in block(second, "limit") if e.key == "check_variable"],
+                         [["NAM_cells", ">", "69"], ["NAM_board_partisans_raised", "<", "8"]])
+        self.assertEqual(self.calls(self.effects["NAM_board_cells_raise_partisan"])[:2],
+                         ["add_to_temp_variable", "var"])
+        rising = self.effects["NAM_board_cells_rise"]
+        order = [(e.key, e.value[0].key) for e in rising if e.key in MAINLAND_DISTRICTS]
+        self.assertEqual(order, [(d, "NAM_board_cells_rise_state") for d in MAINLAND_DISTRICTS]
+                         + [(d, "NAM_board_cells_spend") for d in MAINLAND_DISTRICTS])
+        self.assertIn(("clear_variable", "NAM_cells"), [(e.key, e.value) for e in self.effects["NAM_board_cells_spend"]])
+        start = self.calls(self.effects["NAM_war_of_return_start"])
+        self.assertIn("NAM_wor_revenge_landing", start)
+        self.assertIn("NAM_board_harbour_rising_ready", self.calls(self.effects["NAM_wor_revenge_landing"]))
+        self.assertLess(self.calls(launch).index("NAM_war_of_return_start"), self.calls(launch).index("NAM_board_cells_rise"))
+        victory = block(self.effects["NAM_war_of_return_resolve_victory"], "if")
+        exile = next(e.value for e in victory if e.key == "if"
+                     and [(c.key, c.value) for c in block(e.value, "limit")] == [("has_global_flag", "NAM_wor_exile_war")])
+        self.assertIn("NAM_board_cells_close", self.calls(exile))
+        for name in ("NAM_board_poseidon_armistice", "NAM_war_of_return_close"):
+            self.assertFalse({"NAM_board_cells_close", "NAM_board_cells_rise", "NAM_board_cells_spend"}
+                             & set(self.calls(self.effects[name])), name)
+
+    def test_cell_programme_and_raid(self):
+        # Breaks when the cell run's price or its holders' discount changes, when a refund misses
+        # a district or the rifles of its tier, when a third run can start, when a raid ignores
+        # the safehouses, its cooldown or the exposure event, when event 130 b stops granting
+        # the cooldown, or when the monthly pulse scans scopes instead of six rows.
+        price = self.triggers["NAM_board_cells_price_ready"]
+        self.assertEqual(self.price(price), {"has_political_power": 25, "capital": 40, "infantry_equipment": 1500})
+        discounted = block(block(price, "OR"), "AND")
+        self.assertEqual(scalar(discounted, "has_completed_focus"), "NAM_board_holders_underwrite")
+        self.assertEqual(self.price(discounted), {"infantry_equipment": 750})
+        pay = self.effects["NAM_board_cells_pay_run"]
+        self.assertEqual(self.debits(block(pay, "if")), {"infantry_equipment": [-750]})
+        self.assertEqual(self.debits(block(pay, "else")), {"infantry_equipment": [-1500]})
+        self.assertEqual({(self.field(e.value, "flag"), self.field(e.value, "value")) for e in walk(pay)
+                          if e.key == "set_state_flag"}, {("NAM_board_cells_work", "1"), ("NAM_board_cells_work", "2")})
+        refund = block(self.effects["NAM_board_cells_refund_run"], "if")
+        self.assertEqual(self.debits(block(refund, "if")), {"infantry_equipment": [750]})
+        self.assertEqual(self.debits(block(refund, "else")), {"infantry_equipment": [1500]})
+        self.assertEqual(self.assignments(refund, "set_temp_variable", "NAM_corp_capital_change"), ["40"])
+        self.assertEqual(self.assignments(refund, "add_to_variable", "NAM_board_cells_running"), ["-1"])
+        self.assertEqual(self.debits([e for e in pay if e.key != "if" and e.key != "else"]),
+                         {"has_political_power": [-25], "capital": [-40]})
+        decision = self.all_decisions["NAM_board_inv_cells"]
+        self.assertEqual(scalar(decision, "cost"), "0")
+        for part in (block(decision, "available"), block(block(block(decision, "complete_effect"), "if"), "limit")):
+            self.assertIn(["NAM_board_cells_running", "<", "2"],
+                          [[c.value for c in e.value] for e in walk(part) if e.key == "check_variable"])
+        self.assertIn("NAM_board_cells_refund_run", self.calls(block(decision, "cancel_effect")))
+        close = self.effects["NAM_board_cells_close"]
+        self.assertEqual([(e.key, e.value[0].key) for e in close if e.key in MAINLAND_DISTRICTS],
+                         [(d, "NAM_board_cells_spend") for d in MAINLAND_DISTRICTS])
+        self.assertEqual(self.assignments(close, "set_variable", "NAM_board_cells_running"), ["0"])
+        self.assertEqual(self.calls(self.effects["NAM_board_cells_spend"])[0], "NAM_board_cells_refund_run")
+        raid = self.effects["NAM_board_cells_raid_settle"]
+        self.assertEqual(self.assignments(raid, "set_temp_variable", "NAM_board_cells_change"), ["-25", "-15"])
+        self.assertIn("NAM_board_cells_safehouse_cover", self.calls(raid))
+        cooldown = [e.value for e in walk(raid) if e.key == "set_state_flag"]
+        self.assertEqual([(self.field(c, "flag"), self.field(c, "days")) for c in cooldown], [("NAM_cells_raided", "120")])
+        self.assertIn("NAM_board_cells_expose", self.calls(raid))
+        self.assertEqual(scalar(block(block(self.effects["NAM_board_cells_expose"], "NAM"), "country_event"), "id"),
+                         "ADISCORD_nam_story.130")
+        counter = self.categories["NAM_cells_counter"]
+        order = block(counter, "NAM_cells_raid")
+        self.assertIn(("has_state_flag", "NAM_cells_raided"),
+                      [(e.key, e.value) for e in walk(block(block(order, "target_trigger"), "FROM"))])
+        self.assertIn("NAM_board_cells_raid_settle", self.calls(block(order, "remove_effect")))
+        self.assertIn(("has_state_flag", "NAM_cells_raided"),
+                      [(e.key, e.value) for e in walk(self.effects["NAM_board_cells_expose_roll"])])
+        answer = [o.value for o in self.story["ADISCORD_nam_story.130"] if o.key == "option"][1]
+        self.assertEqual([(self.field(e.value, "flag"), self.field(e.value, "days")) for e in walk(answer)
+                          if e.key == "set_state_flag"], [("NAM_cells_raided", "120")])
+        monthly = block(self.effects["NAM_board_cells_monthly"], "if")
+        self.assertEqual([(e.key, e.value[0].key) for e in monthly if e.key != "limit"],
+                         [(d, "NAM_board_cells_grow") for d in MAINLAND_DISTRICTS]
+                         + [(d, "NAM_board_cells_expose_roll") for d in MAINLAND_DISTRICTS])
+        self.assertFalse([key for key in self.calls(monthly) if key.startswith(("every_", "any_", "random_", "for_each"))])
+
+    # ----- operation Poseidon -----
+
+    def test_poseidon_calls_the_existing_war_and_grants_after_it(self):
+        # Breaks when the final starts a second war, grants anything before or without the war,
+        # when the renewal decision loses either visibility branch or the truce gate, when the
+        # armistice loops over the participants itself or skips the shared close, or when event
+        # 131 reaches the armistice without the coalition leader's answer.
+        reward = block(self.lower["operation_poseidon"], "completion_reward")
+        self.assertIn("NAM_board_poseidon_launch", self.calls(block(reward, "hidden_effect")))
+        launch = self.effects["NAM_board_poseidon_launch"]
+        self.assertEqual([e.key for e in launch], ["NAM_war_of_return_start", "if", "else"])
+        started = block(launch, "if")
+        grants = {"NAM_board_cells_rise", "NAM_board_poseidon_island_brigades", "create_unit", "add_timed_idea",
+                  "NAM_board_holders_package", "activate_mission"}
+        self.assertLessEqual(grants, set(self.calls(started)))
+        self.assertFalse(grants & set(self.calls(block(launch, "else"))))
+        branch_effects = [block(body, "completion_reward") for body in self.lower.values()]
+        branch_effects += [self.effects[name] for name in self.effects
+                           if name.startswith(("NAM_board_poseidon", "NAM_board_cells", "NAM_board_inv_"))]
+        for entries in branch_effects:
+            self.assertNotIn("declare_war_on", self.calls(entries))
+        renewal = self.all_decisions["NAM_exile_renew_war_of_return"]
+        for exile_flag, focus, shown in ((True, False, True), (False, True, True), (True, True, True), (False, False, False)):
+            facts = {("NAM", "has_global_flag", "NAM_wor_exile_war"): exile_flag,
+                     ("NAM", "has_completed_focus", "NAM_board_operation_poseidon"): focus,
+                     ("NAM", "NAM_exile_return_programme_open", "yes"): True}
+            self.assertEqual(self.raw(block(renewal, "visible"), facts), shown, (exile_flag, focus))
+        for truce in (False, True):
+            facts = {("NAM", "NAM_war_of_return_can_start", "yes"): True,
+                     ("NAM", "has_country_flag", "NAM_board_poseidon_truce"): truce}
+            self.assertEqual(self.raw(block(renewal, "available"), facts), not truce)
+        armistice = self.effects["NAM_board_poseidon_armistice"]
+        body = block(armistice, "if")
+        self.assertEqual(self.calls(body)[-2:], ["NAM_war_of_return_close", "log"])
+        self.assertNotIn("NAM_wor_participants", repr(armistice))
+        self.assertNotIn("NAM_war_of_return_close_external", self.calls(armistice))
+        # The price moves from NAM's real stock to the target before the close clears it;
+        # the leader's answer creates no rifles of its own.
+        body_calls = self.calls(body)
+        sends = [e.value for e in walk(body) if e.key == "send_equipment"]
+        self.assertEqual([(self.field(s, "equipment"), self.field(s, "amount"), self.field(s, "target")) for s in sends],
+                         [("infantry_equipment", "3000", "event_target:NAM_wor_primary")])
+        self.assertLess(body_calls.index("send_equipment"), body_calls.index("NAM_war_of_return_close"))
+        self.assertNotIn("infantry_equipment", self.debits(body))
+        offer_answers = [o.value for o in self.story["ADISCORD_nam_story.133"] if o.key == "option"]
+        for answer in offer_answers:
+            self.assertNotIn("add_equipment_to_stockpile", self.calls(answer))
+        truce = [e.value for e in walk(body) if e.key == "set_country_flag"]
+        self.assertEqual([(self.field(t, "flag"), self.field(t, "days")) for t in truce], [("NAM_board_poseidon_truce", "180")])
+        callers = [scalar(event, "id") for event in self.story.values()
+                   if "NAM_board_poseidon_armistice" in self.calls(event)]
+        callers += [name for name, body in {**self.effects, **self.all_decisions}.items()
+                    if "NAM_board_poseidon_armistice" in self.calls(body)]
+        self.assertEqual(callers, ["ADISCORD_nam_story.133"])
+        offer = self.story["ADISCORD_nam_story.133"]
+        options = [o.value for o in offer if o.key == "option"]
+        self.assertIn("NAM_board_poseidon_armistice", self.calls(options[0]))
+        self.assertNotIn("NAM_board_poseidon_armistice", self.calls(options[1]))
+        council = [o.value for o in self.story["ADISCORD_nam_story.131"] if o.key == "option"]
+        sent = []
+        for option in council:
+            targets = [e for e in walk(option) if e.key == "event_target:NAM_wor_primary"]
+            sent.append([scalar(block(t.value, "country_event"), "id") for t in targets])
+        self.assertEqual(sent, [["ADISCORD_nam_story.133"], [], ["ADISCORD_nam_story.133"]])
+        self.assertEqual(self.calls(self.lower["operation_poseidon"]).count("NAM_board_poseidon_launch"), 1)
+        self.assertIn(("cancel_if_invalid", "no"), [(e.key, e.value) for e in self.lower["operation_poseidon"]])
+
+    def test_branch_totals_cover_the_return(self):
+        # Breaks when a focus row of manpower or rifles changes the route sums of section 8 (40 000
+        # men and 22 500 rifles on the AI sides, 31 000 men on the elite sides), or when the
+        # island first-wave prices change.
+        totals = {}
+        for side in INVASION_ROUTES:
+            rows = [entry for short in self.route(side) for entry in block(self.lower[short], "completion_reward")]
+            men = sum(int(entry.value) for entry in rows if entry.key == "add_manpower")
+            rifles = sum(int(scalar(entry.value, "amount")) for entry in rows if entry.key == "add_equipment_to_stockpile"
+                         and scalar(entry.value, "type") == "infantry_equipment")
+            totals[side] = (men, rifles)
+        self.assertEqual(totals["ai"], (40000, 22500))
+        self.assertEqual(totals["elite"][0], 31000)
+        prices = [self.debits(entry.value)["has_manpower"] for entry in self.effects["NAM_isl_launch_abort"]
+                  if entry.key in ("if", "else") and "add_manpower" in self.calls(entry.value)]
+        self.assertEqual(prices, [[21500], [12900]])
+
+    def test_operational_events_keep_their_targets(self):
+        # Breaks when event 128 or 129 stops reading its island record, an option leaves it set,
+        # a settlement or the pulse stops writing it, the route end stops clearing it, event 124
+        # loses a description variant, or event 133 is sent to anyone but the coalition leader.
+        failed = self.story["ADISCORD_nam_story.128"]
+        self.assertTrue(self.compares(block(failed, "trigger"), "NAM_isl_last_target", "0", "greater_than"))
+        for option in (o.value for o in failed if o.key == "option"):
+            self.assertEqual(self.assignments(option, "set_variable", "NAM_isl_last_target")[-1:], ["0"])
+        flare = self.story["ADISCORD_nam_story.129"]
+        self.assertTrue(self.compares(block(flare, "trigger"), "NAM_isl_flare_target", "0", "greater_than"))
+        for option in (o.value for o in flare if o.key == "option"):
+            self.assertEqual(self.calls(option).count("NAM_isl_flare_settle"), 1)
+        self.assertEqual(self.effects["NAM_isl_flare_settle"][-1].key, "set_variable")
+        self.assertEqual(self.assignments(self.effects["NAM_isl_flare_settle"][-1:], "set_variable",
+                                          "NAM_isl_flare_target"), ["0"])
+        for name in ("NAM_isl_settle_victory", "NAM_isl_settle_stalled", "NAM_isl_settle_failed"):
+            self.assertEqual(self.assignments(self.effects[name], "set_variable", "NAM_isl_last_target"),
+                             ["NAM_isl_settle_k"], name)
+        failed_settlement = list(walk(self.effects["NAM_isl_settle_failed"]))
+        written = self.first(failed_settlement, lambda e: e.key == "set_variable"
+                             and self.field(e.value, "var") == "NAM_isl_last_target")
+        fired = self.first(failed_settlement, lambda e: e.key == "country_event"
+                           and self.field(e.value, "id") == "ADISCORD_nam_story.128")
+        self.assertLess(written, fired)
+        pulse = list(walk(self.effects["NAM_isl_monthly"]))
+        for index, entry in enumerate(pulse):
+            if entry.key == "country_event" and self.field(entry.value, "id") == "ADISCORD_nam_story.129":
+                previous = [e for e in pulse[max(0, index - 8):index] if e.key == "set_variable"]
+                self.assertEqual([self.field(e.value, "var") for e in previous], ["NAM_isl_flare_target"])
+        close = self.effects["NAM_isl_close_all"]
+        self.assertEqual([(self.field(e.value, "var"), self.field(e.value, "value")) for e in close if e.key == "set_variable"],
+                         [("NAM_isl_last_target", "0"), ("NAM_isl_flare_target", "0")])
+        landing = self.story["ADISCORD_nam_story.124"]
+        variants = [(scalar(d, "text"), repr(block(d, "trigger"))) for d in (e.value for e in landing if e.key == "desc")]
+        self.assertEqual([text for text, _ in variants], ["ADISCORD_nam_story.124.d_rising", "ADISCORD_nam_story.124.d_cold"])
+        self.assertTrue(all("NAM_board_harbour_rose" in trigger for _, trigger in variants))
+        for language, values in self.loc.items():
+            for text, _ in variants:
+                self.assertTrue(values.get(text, "").strip(), (language, text))
+        def own_events(entries):
+            # Events this scope sends itself, outside any event-target scope.
+            for entry in entries:
+                if entry.key == "country_event":
+                    yield scalar(entry.value, "id")
+                elif isinstance(entry.value, list) and not entry.key.startswith("event_target:"):
+                    yield from own_events(entry.value)
+
+        for option in (o.value for o in self.story["ADISCORD_nam_story.131"] if o.key == "option"):
+            self.assertEqual(list(own_events(option)), [])
+            self.assertEqual({entry.key for entry in walk(option) if entry.key.startswith("event_target:")}
+                             - {"event_target:NAM_wor_primary"}, set())
+        offer = self.story["ADISCORD_nam_story.133"]
+        self.assertIn(("tag", "EFL"), [(e.key, e.value) for e in walk(block(offer, "trigger"))])
+        self.assertIn(("tag", "AZH"), [(e.key, e.value) for e in walk(block(offer, "trigger"))])
+
+    def test_route_end_closes_every_receipt_of_the_branch(self):
+        # Breaks when the council's end stops refunding the programmes, the island preparations
+        # or the cells before the campaigns close, or when a running island war survives it.
+        end = self.calls(self.effects["NAM_board_end_operations"])
+        positions = [end.index(name) for name in ("NAM_board_inv_close", "NAM_isl_close_all",
+                                                   "NAM_board_cells_close", "NAM_dir_campaigns_close")]
+        self.assertEqual(positions, sorted(positions))
+        close = self.effects["NAM_isl_close_all"]
+        for capital in ("648", "651", "680"):
+            self.assertEqual(self.calls(block(close, capital)),
+                             ["NAM_isl_soundings_refund", "NAM_isl_depots_refund", "NAM_isl_bribe_refund",
+                              "NAM_isl_pacify_refund", "NAM_isl_nationalise_refund"])
+        war = next(e.value for e in close if e.key == "if"
+                   and self.compares(block(e.value, "limit"), "NAM_isl_op_target", "0", "greater_than"))
+        self.assertEqual([entry.key for entry in war if entry.key != "limit"],
+                         ["set_temp_variable", "NAM_isl_settle_stalled", "set_temp_variable"])
+        self.assertEqual(self.assignments(war, "set_temp_variable", "NAM_isl_quiet"), ["1", "0"])
+        for name in ("NAM_isl_soundings_refund", "NAM_isl_depots_refund", "NAM_isl_bribe_refund",
+                     "NAM_isl_pacify_refund", "NAM_isl_nationalise_refund"):
+            refund = block(self.effects[name], "if")
+            flag = scalar(block(refund, "limit"), "has_state_flag")
+            self.assertIn(("clr_state_flag", flag), [(e.key, e.value) for e in refund], name)
 
 
 if __name__ == "__main__":

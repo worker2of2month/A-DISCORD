@@ -472,6 +472,37 @@ ADISCORD_nam_war_of_return_nam_azhar = {
 	}
 }
 
+# Operation Poseidon: the council's return is a landing war. Marines go to the
+# coast of Eflor and Azhar; the land front keeps a smaller share.
+NAM_board_poseidon_ai = {
+	allowed = { original_tag = NAM }
+	enable = {
+		NAM_war_of_return_active = yes
+		has_country_flag = NAM_corp_takeover
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = invasion_unit_request
+		tag = EFL
+		value = 50
+	}
+	ai_strategy = {
+		type = invasion_unit_request
+		tag = AZH
+		value = 50
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = EFL
+		value = 20
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = AZH
+		value = 20
+	}
+}
+
 ADISCORD_nam_war_of_return_coalition_defence = {
 	allowed = { OR = { tag = EFL tag = AZH } }
 	enable = { NAM_war_of_return_active = yes has_war_with = NAM }
@@ -623,5 +654,45 @@ NAM_rw_azh_landing_reserve = {
 		states = { 692 }
 		subtract_invasions_from_need = yes
 		subtract_fronts_from_need = no
+	}
+}
+
+# The council's island war: follow-up waves cross by native naval invasion
+# while the landing's mission runs. Requests toward an island not at war with
+# Svetlogorye stay idle.
+NAM_isl_ai_landing = {
+	allowed = { original_tag = NAM }
+	enable = { NAM_isl_op_running = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = naval_invasion_focus value = 40 }
+	ai_strategy = {
+		type = invade
+		id = ULV
+		value = 100
+	}
+	ai_strategy = {
+		type = invade
+		id = LUR
+		value = 100
+	}
+	ai_strategy = {
+		type = invade
+		id = CHD
+		value = 100
+	}
+	ai_strategy = {
+		type = invasion_unit_request
+		tag = ULV
+		value = 60
+	}
+	ai_strategy = {
+		type = invasion_unit_request
+		tag = LUR
+		value = 60
+	}
+	ai_strategy = {
+		type = invasion_unit_request
+		tag = CHD
+		value = 60
 	}
 }

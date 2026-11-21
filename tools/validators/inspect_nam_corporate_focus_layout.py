@@ -69,8 +69,10 @@ def main():
         body = entry.value
         fields = {field.key: field.value for field in body}
         name = fields["id"]
-        if "offset" in fields or "allow_branch" in fields:
-            parser.error(f"{name} has conditional positioning or visibility; inspect its active layout in game")
+        # allow_branch only hides a branch until its condition holds; the wiring
+        # model treats the branch as revealed. An offset moves the card itself.
+        if "offset" in fields:
+            parser.error(f"{name} has conditional positioning; inspect its active layout in game")
         positions[name] = (int(fields.get("x", 0)), int(fields.get("y", 0)))
         parents[name] = fields.get("relative_position_id")
         for group in body:

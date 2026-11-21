@@ -2222,6 +2222,96 @@ defined_text = {
 	text = { localization_key = NAM_public_campaigns_mainland_desc }
 }
 
+# First line of the Directory's category description. The free count comes from
+# NAM_dir_campaign_count_free, the same count NAM_dir_campaign_room enforces.
+defined_text = {
+	name = NAMDirCampaignSlots
+	text = {
+		trigger = { check_variable = { NAM_dir_campaign_slots < 1 } }
+		localization_key = NAM_dir_campaigns_slots_none
+	}
+	text = { localization_key = NAM_dir_campaigns_slots_line }
+}
+
+defined_text = {
+	name = NAMDirCampaignFree
+	text = {
+		trigger = {
+			NAM_dir_campaign_count_free = yes
+			check_variable = { NAM_dir_campaign_free > 2 }
+		}
+		localization_key = NAM_dir_campaign_count_3
+	}
+	text = {
+		trigger = {
+			NAM_dir_campaign_count_free = yes
+			check_variable = { NAM_dir_campaign_free > 1 }
+		}
+		localization_key = NAM_dir_campaign_count_2
+	}
+	text = {
+		trigger = {
+			NAM_dir_campaign_count_free = yes
+			check_variable = { NAM_dir_campaign_free > 0 }
+		}
+		localization_key = NAM_dir_campaign_count_1
+	}
+	text = { localization_key = NAM_dir_campaign_count_0 }
+}
+
+# Campaign capacity after a slot focus: the current value once that focus is
+# completed, otherwise one more. The three focuses can be taken in any order.
+defined_text = {
+	name = NAMDirCampaignSlotsAfterPropertyQualification
+	text = {
+		trigger = { has_completed_focus = NAM_board_property_qualification }
+		localization_key = NAM_dir_campaign_slots_now
+	}
+	text = {
+		trigger = { check_variable = { NAM_dir_campaign_slots < 1 } }
+		localization_key = NAM_dir_campaign_count_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_dir_campaign_slots < 2 } }
+		localization_key = NAM_dir_campaign_count_2
+	}
+	text = { localization_key = NAM_dir_campaign_count_3 }
+}
+
+defined_text = {
+	name = NAMDirCampaignSlotsAfterFoundryMark
+	text = {
+		trigger = { has_completed_focus = NAM_board_foundry_mark }
+		localization_key = NAM_dir_campaign_slots_now
+	}
+	text = {
+		trigger = { check_variable = { NAM_dir_campaign_slots < 1 } }
+		localization_key = NAM_dir_campaign_count_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_dir_campaign_slots < 2 } }
+		localization_key = NAM_dir_campaign_count_2
+	}
+	text = { localization_key = NAM_dir_campaign_count_3 }
+}
+
+defined_text = {
+	name = NAMDirCampaignSlotsAfterSociety
+	text = {
+		trigger = { has_completed_focus = NAM_board_society_99_1 }
+		localization_key = NAM_dir_campaign_slots_now
+	}
+	text = {
+		trigger = { check_variable = { NAM_dir_campaign_slots < 1 } }
+		localization_key = NAM_dir_campaign_count_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_dir_campaign_slots < 2 } }
+		localization_key = NAM_dir_campaign_count_2
+	}
+	text = { localization_key = NAM_dir_campaign_count_3 }
+}
+
 # Speakers are fixed when the session mission is armed.
 defined_text = {
 	name = NAMBoardCategorySession
@@ -4565,6 +4655,240 @@ defined_text = {
 	text = {
 		localization_key = NAM_underground_status_low
 	}
+}
+
+# ----- Council of boards: mainland cells and operation Poseidon -----
+
+# COUNTRY NAM. Rifle price of a cell run: half after the holders' underwriting.
+defined_text = {
+	name = NAMBoardCellsRifles
+	text = {
+		trigger = { has_completed_focus = NAM_board_holders_underwrite }
+		localization_key = NAM_board_cells_rifles_750
+	}
+	text = { localization_key = NAM_board_cells_rifles_1500 }
+}
+
+defined_text = {
+	name = NAMBoardCellsRiflesRaw
+	text = {
+		trigger = { has_completed_focus = NAM_board_holders_underwrite }
+		localization_key = NAM_board_cells_rifles_750_raw
+	}
+	text = { localization_key = NAM_board_cells_rifles_1500_raw }
+}
+
+# STATE district, called as [FROM.NAMBoardCellsGain]: a run's cells.
+defined_text = {
+	name = NAMBoardCellsGain
+	text = {
+		trigger = { NAM_board_cells_safehouse_cover = yes }
+		localization_key = NAM_board_cells_gain_25
+	}
+	text = { localization_key = NAM_board_cells_gain_20 }
+}
+
+# STATE district, called as [FROM.NAMCellsRaidLoss] for the raiding country.
+defined_text = {
+	name = NAMCellsRaidLoss
+	text = {
+		trigger = { NAM_board_cells_safehouse_cover = yes }
+		localization_key = NAM_cells_raid_loss_15
+	}
+	text = { localization_key = NAM_cells_raid_loss_25 }
+}
+
+# STATE district, called as [67.NAMBoardCellsTier]: what the district does at
+# the landing, by the tiers of NAM_board_cells_rise_state.
+defined_text = {
+	name = NAMBoardCellsTier
+	text = {
+		trigger = {
+			check_variable = { NAM_cells > 69 }
+			OR = {
+				AND = {
+					state = 688
+					NAM = { has_completed_focus = NAM_board_northern_safehouses }
+				}
+				AND = {
+					state = 700
+					NAM = { has_completed_focus = NAM_board_southern_safehouses }
+				}
+			}
+		}
+		localization_key = NAM_board_cells_tier_port
+	}
+	text = {
+		trigger = { check_variable = { NAM_cells > 69 } }
+		localization_key = NAM_board_cells_tier_strong
+	}
+	text = {
+		trigger = { check_variable = { NAM_cells > 49 } }
+		localization_key = NAM_board_cells_tier_rising
+	}
+	text = {
+		trigger = { check_variable = { NAM_cells > 29 } }
+		localization_key = NAM_board_cells_tier_sabotage
+	}
+	text = { localization_key = NAM_board_cells_tier_quiet }
+}
+
+# COUNTRY NAM. One line for the reward of operation Poseidon: how many districts
+# rise and how many partisan divisions form, counted by
+# NAM_board_cells_count_rising with the tiers of the rising itself.
+defined_text = {
+	name = NAMBoardCellsRisingSummary
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_districts > 0 }
+		}
+		localization_key = NAM_board_cells_rising_line
+	}
+	text = { localization_key = NAM_board_cells_rising_none }
+}
+
+defined_text = {
+	name = NAMBoardCellsRisingDistricts
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_districts > 4 }
+		}
+		localization_key = NAM_board_cells_rising_districts_many
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_districts > 1 }
+		}
+		localization_key = NAM_board_cells_rising_districts_few
+	}
+	text = { localization_key = NAM_board_cells_rising_districts_one }
+}
+
+defined_text = {
+	name = NAMBoardCellsRisingCount
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_districts > 5 }
+		}
+		localization_key = NAM_board_cells_n_6
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_districts > 4 }
+		}
+		localization_key = NAM_board_cells_n_5
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_districts > 3 }
+		}
+		localization_key = NAM_board_cells_n_4
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_districts > 2 }
+		}
+		localization_key = NAM_board_cells_n_3
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_districts > 1 }
+		}
+		localization_key = NAM_board_cells_n_2
+	}
+	text = { localization_key = NAM_board_cells_n_1 }
+}
+
+defined_text = {
+	name = NAMBoardCellsRisingUnits
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_units > 7 }
+		}
+		localization_key = NAM_board_cells_units_8
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_units > 6 }
+		}
+		localization_key = NAM_board_cells_units_7
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_units > 5 }
+		}
+		localization_key = NAM_board_cells_units_6
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_units > 4 }
+		}
+		localization_key = NAM_board_cells_units_5
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_units > 3 }
+		}
+		localization_key = NAM_board_cells_units_4
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_units > 2 }
+		}
+		localization_key = NAM_board_cells_units_3
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_units > 1 }
+		}
+		localization_key = NAM_board_cells_units_2
+	}
+	text = {
+		trigger = {
+			NAM_board_cells_count_rising = yes
+			check_variable = { NAM_board_rising_units > 0 }
+		}
+		localization_key = NAM_board_cells_units_1
+	}
+	text = { localization_key = NAM_board_cells_units_0 }
+}
+
+# COUNTRY NAM, event 130: the exposed district saved as the global event
+# target NAM_board_cells_district, and the partition holder of that district.
+defined_text = {
+	name = NAMCellsDistrictName
+	text = { localization_key = NAM_cells_district_name }
+}
+
+defined_text = {
+	name = NAMCellsDistrictHolder
+	text = {
+		trigger = {
+			event_target:NAM_board_cells_district = {
+				OR = {
+					state = 67
+					state = 688
+				}
+			}
+		}
+		localization_key = NAM_cells_district_holder_efl
+	}
+	text = { localization_key = NAM_cells_district_holder_azh }
 }
 
 # ----- Basin window -----
@@ -7231,4 +7555,547 @@ defined_text = {
 		localization_key = NAM_cost_order_marines_corp_tooltip
 	}
 	text = { localization_key = NAM_cost_order_marines_loot_tooltip }
+}
+
+defined_text = {
+	name = NAMBoardHolderShortEfl
+	text = {
+		trigger = { check_variable = { NAM_board_partition_efl = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_efl = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_efl = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_efl = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_efl = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_efl = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_board_rank_none }
+}
+
+defined_text = {
+	name = NAMBoardHolderShortAzh
+	text = {
+		trigger = { check_variable = { NAM_board_partition_azh = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_azh = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_azh = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_azh = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_azh = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_partition_azh = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_board_rank_none }
+}
+
+defined_text = {
+	name = NAMBoardInvasionReport
+	text = { localization_key = NAM_board_invasion_report }
+}
+
+defined_text = {
+	name = NAMBoardInvMarineExperience
+	text = {
+		trigger = { has_completed_focus = NAM_board_storm_companies }
+		localization_key = NAM_board_inv_marine_experience_storm
+	}
+	text = { localization_key = NAM_board_inv_marine_experience_base }
+}
+
+defined_text = {
+	name = NAMBoardInvShareCompany
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 1 }
+		}
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 2 }
+		}
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 3 }
+		}
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 4 }
+		}
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 5 }
+		}
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 6 }
+		}
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_board_inv_share_none }
+}
+
+defined_text = {
+	name = NAMBoardInvShareResult
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 1 } }
+		localization_key = NAM_board_inv_share_result_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 2 } }
+		localization_key = NAM_board_inv_share_result_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 3 } }
+		localization_key = NAM_board_inv_share_result_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 4 } }
+		localization_key = NAM_board_inv_share_result_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 5 } }
+		localization_key = NAM_board_inv_share_result_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_board_inv_share_target = 6 } }
+		localization_key = NAM_board_inv_share_result_6
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 1 }
+		}
+		localization_key = NAM_board_inv_share_result_1
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 2 }
+		}
+		localization_key = NAM_board_inv_share_result_2
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 3 }
+		}
+		localization_key = NAM_board_inv_share_result_3
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 4 }
+		}
+		localization_key = NAM_board_inv_share_result_4
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 5 }
+		}
+		localization_key = NAM_board_inv_share_result_5
+	}
+	text = {
+		trigger = {
+			check_variable = { NAM_board_inv_share_target = 0 }
+			check_variable = { NAM_board_selected = 6 }
+		}
+		localization_key = NAM_board_inv_share_result_6
+	}
+	text = { localization_key = NAM_board_inv_share_none }
+}
+
+# ----- Council of boards: island operations -----
+# COUNTRY NAM. Category text of the island operations: one line per island and
+# the countdown of the running mission.
+defined_text = {
+	name = NAMIslReport
+	text = { localization_key = NAM_isl_report }
+}
+
+defined_text = {
+	name = NAMIslReportUlven
+	text = {
+		trigger = { check_variable = { var = NAM_isl_status^1 value = 3 compare = equals } }
+		localization_key = NAM_isl_report_national_1
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_isl_status^1 value = 2 compare = equals } }
+		localization_key = NAM_isl_report_annexed_1
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_isl_status^1 value = 1 compare = equals } }
+		localization_key = NAM_isl_report_war_1
+	}
+	text = {
+		trigger = { has_completed_focus = NAM_board_ulven_operation }
+		localization_key = NAM_isl_report_open_1
+	}
+	text = { localization_key = NAM_isl_report_closed_1 }
+}
+
+defined_text = {
+	name = NAMIslReportLuren
+	text = {
+		trigger = { check_variable = { var = NAM_isl_status^2 value = 3 compare = equals } }
+		localization_key = NAM_isl_report_national_2
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_isl_status^2 value = 2 compare = equals } }
+		localization_key = NAM_isl_report_annexed_2
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_isl_status^2 value = 1 compare = equals } }
+		localization_key = NAM_isl_report_war_2
+	}
+	text = {
+		trigger = { has_completed_focus = NAM_board_luren_operation }
+		localization_key = NAM_isl_report_open_2
+	}
+	text = { localization_key = NAM_isl_report_closed_2 }
+}
+
+defined_text = {
+	name = NAMIslReportSharden
+	text = {
+		trigger = { check_variable = { var = NAM_isl_status^3 value = 3 compare = equals } }
+		localization_key = NAM_isl_report_national_3
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_isl_status^3 value = 2 compare = equals } }
+		localization_key = NAM_isl_report_annexed_3
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_isl_status^3 value = 1 compare = equals } }
+		localization_key = NAM_isl_report_war_3
+	}
+	text = {
+		trigger = { has_completed_focus = NAM_board_sharden_operation }
+		localization_key = NAM_isl_report_open_3
+	}
+	text = { localization_key = NAM_isl_report_closed_3 }
+}
+
+# STATE island capital, called as [648.NAMIslResistance]: whether the island is
+# calm enough for its nationalisation.
+defined_text = {
+	name = NAMIslResistance
+	text = {
+		trigger = { NOT = { resistance > 25 } }
+		localization_key = NAM_isl_report_resistance_low
+	}
+	text = { localization_key = NAM_isl_report_resistance_high }
+}
+
+defined_text = {
+	name = NAMIslReportMission
+	text = {
+		trigger = { has_active_mission = NAM_isl_beachhead_strait }
+		localization_key = NAM_isl_report_beachhead_strait
+	}
+	text = {
+		trigger = { has_active_mission = NAM_isl_beachhead_sharden }
+		localization_key = NAM_isl_report_beachhead_sharden
+	}
+	text = {
+		trigger = { has_active_mission = NAM_isl_campaign_strait }
+		localization_key = NAM_isl_report_campaign_strait
+	}
+	text = {
+		trigger = { has_active_mission = NAM_isl_campaign_sharden }
+		localization_key = NAM_isl_report_campaign_sharden
+	}
+	text = { localization_key = NAM_isl_report_no_mission }
+}
+
+# COUNTRY NAM. Island names by the running war, the last settled landing and
+# the island of an open event 129.
+defined_text = {
+	name = NAMIslTargetName
+	text = {
+		trigger = { check_variable = { var = NAM_isl_op_target value = 1 compare = equals } }
+		localization_key = NAM_isl_name_1
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_isl_op_target value = 2 compare = equals } }
+		localization_key = NAM_isl_name_2
+	}
+	text = { localization_key = NAM_isl_name_3 }
+}
+
+defined_text = {
+	name = NAMIslLastTargetName
+	text = {
+		trigger = { check_variable = { var = NAM_isl_last_target value = 1 compare = equals } }
+		localization_key = NAM_isl_name_1
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_isl_last_target value = 2 compare = equals } }
+		localization_key = NAM_isl_name_2
+	}
+	text = { localization_key = NAM_isl_name_3 }
+}
+
+defined_text = {
+	name = NAMIslFlareTargetName
+	text = {
+		trigger = { check_variable = { var = NAM_isl_flare_target value = 1 compare = equals } }
+		localization_key = NAM_isl_name_1
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_isl_flare_target value = 2 compare = equals } }
+		localization_key = NAM_isl_name_2
+	}
+	text = { localization_key = NAM_isl_name_3 }
+}
+
+# COUNTRY NAM. The concession operator of the island of event 129.
+defined_text = {
+	name = NAMIslOperatorName
+	text = {
+		trigger = { check_variable = { var = NAM_board_isl_owner^NAM_isl_flare_target value = 1 compare = equals } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_isl_owner^NAM_isl_flare_target value = 2 compare = equals } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_isl_owner^NAM_isl_flare_target value = 3 compare = equals } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_isl_owner^NAM_isl_flare_target value = 4 compare = equals } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_isl_owner^NAM_isl_flare_target value = 5 compare = equals } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_isl_owner^NAM_isl_flare_target value = 6 compare = equals } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_isl_operator_none }
+}
+
+# COUNTRY NAM. Sharden's dividend for each bidder, halved after the southern promise.
+defined_text = {
+	name = NAMIslShardenDividend4
+	text = {
+		trigger = { has_country_flag = NAM_isl_sharden_promise_done }
+		localization_key = NAM_isl_sharden_dividend_4_half
+	}
+	text = { localization_key = NAM_isl_sharden_dividend_4 }
+}
+
+defined_text = {
+	name = NAMIslShardenDividend6
+	text = {
+		trigger = { has_country_flag = NAM_isl_sharden_promise_done }
+		localization_key = NAM_isl_sharden_dividend_6_half
+	}
+	text = { localization_key = NAM_isl_sharden_dividend_6 }
+}
+
+# COUNTRY NAM; FROM is the island capital of a targeted decision.
+defined_text = {
+	name = NAMIslLaunchCost
+	text = {
+		trigger = { FROM = { state = 680 } }
+		localization_key = NAM_isl_launch_cost_sharden
+	}
+	text = { localization_key = NAM_isl_launch_cost_strait }
+}
+
+defined_text = {
+	name = NAMIslLaunchCostBlocked
+	text = {
+		trigger = { FROM = { state = 680 } }
+		localization_key = NAM_isl_launch_cost_sharden_blocked
+	}
+	text = { localization_key = NAM_isl_launch_cost_strait_blocked }
+}
+
+defined_text = {
+	name = NAMIslFirstWave
+	text = {
+		trigger = { FROM = { state = 680 } }
+		localization_key = NAM_isl_wave_3
+	}
+	text = { localization_key = NAM_isl_wave_2 }
+}
+
+defined_text = {
+	name = NAMIslSecondWave
+	text = {
+		trigger = { FROM = { state = 680 } }
+		localization_key = NAM_isl_wave_2
+	}
+	text = { localization_key = NAM_isl_wave_1 }
+}
+
+defined_text = {
+	name = NAMIslNationaliseCost
+	text = {
+		trigger = {
+			FROM = { state = 648 }
+			NAM_isl_operator_discount_1 = yes
+		}
+		localization_key = NAM_isl_nationalise_cost_1_operator
+	}
+	text = {
+		trigger = { FROM = { state = 648 } }
+		localization_key = NAM_isl_nationalise_cost_1
+	}
+	text = {
+		trigger = {
+			FROM = { state = 651 }
+			NAM_isl_operator_discount_2 = yes
+		}
+		localization_key = NAM_isl_nationalise_cost_2_operator
+	}
+	text = {
+		trigger = { FROM = { state = 651 } }
+		localization_key = NAM_isl_nationalise_cost_2
+	}
+	text = {
+		trigger = { NAM_isl_operator_discount_3 = yes }
+		localization_key = NAM_isl_nationalise_cost_3_operator
+	}
+	text = { localization_key = NAM_isl_nationalise_cost_3 }
+}
+
+defined_text = {
+	name = NAMIslNationaliseCostBlocked
+	text = {
+		trigger = {
+			FROM = { state = 648 }
+			NAM_isl_operator_discount_1 = yes
+		}
+		localization_key = NAM_isl_nationalise_cost_1_operator_blocked
+	}
+	text = {
+		trigger = { FROM = { state = 648 } }
+		localization_key = NAM_isl_nationalise_cost_1_blocked
+	}
+	text = {
+		trigger = {
+			FROM = { state = 651 }
+			NAM_isl_operator_discount_2 = yes
+		}
+		localization_key = NAM_isl_nationalise_cost_2_operator_blocked
+	}
+	text = {
+		trigger = { FROM = { state = 651 } }
+		localization_key = NAM_isl_nationalise_cost_2_blocked
+	}
+	text = {
+		trigger = { NAM_isl_operator_discount_3 = yes }
+		localization_key = NAM_isl_nationalise_cost_3_operator_blocked
+	}
+	text = { localization_key = NAM_isl_nationalise_cost_3_blocked }
+}
+
+# COUNTRY NAM. Rules of the supply and fleet lanes for the preparations.
+defined_text = {
+	name = NAMIslDepotsFuel
+	text = {
+		trigger = { has_completed_focus = NAM_board_supply_overseas }
+		localization_key = NAM_isl_depots_fuel_cheap
+	}
+	text = { localization_key = NAM_isl_depots_fuel_full }
+}
+
+defined_text = {
+	name = NAMIslDepotsFuelRaw
+	text = {
+		trigger = { has_completed_focus = NAM_board_supply_overseas }
+		localization_key = NAM_isl_depots_fuel_cheap_raw
+	}
+	text = { localization_key = NAM_isl_depots_fuel_full_raw }
+}
+
+defined_text = {
+	name = NAMIslDepotsGain
+	text = {
+		trigger = { has_completed_focus = NAM_board_supply_overseas }
+		localization_key = NAM_isl_gain_25
+	}
+	text = { localization_key = NAM_isl_gain_20 }
+}
+
+defined_text = {
+	name = NAMIslSoundingsGain
+	text = {
+		trigger = { has_completed_focus = NAM_board_loading_schedules }
+		localization_key = NAM_isl_gain_20
+	}
+	text = { localization_key = NAM_isl_gain_15 }
 }

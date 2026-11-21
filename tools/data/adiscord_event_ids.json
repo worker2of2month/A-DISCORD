@@ -3165,6 +3165,310 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_story.97",
+      "namespace": "ADISCORD_nam_story",
+      "number": 97,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.98",
+      "namespace": "ADISCORD_nam_story",
+      "number": 98,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.99",
+      "namespace": "ADISCORD_nam_story",
+      "number": 99,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.100",
+      "namespace": "ADISCORD_nam_story",
+      "number": 100,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.101",
+      "namespace": "ADISCORD_nam_story",
+      "number": 101,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.102",
+      "namespace": "ADISCORD_nam_story",
+      "number": 102,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.103",
+      "namespace": "ADISCORD_nam_story",
+      "number": 103,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.104",
+      "namespace": "ADISCORD_nam_story",
+      "number": 104,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.105",
+      "namespace": "ADISCORD_nam_story",
+      "number": 105,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.106",
+      "namespace": "ADISCORD_nam_story",
+      "number": 106,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.107",
+      "namespace": "ADISCORD_nam_story",
+      "number": 107,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.108",
+      "namespace": "ADISCORD_nam_story",
+      "number": 108,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.109",
+      "namespace": "ADISCORD_nam_story",
+      "number": 109,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.110",
+      "namespace": "ADISCORD_nam_story",
+      "number": 110,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.111",
+      "namespace": "ADISCORD_nam_story",
+      "number": 111,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.112",
+      "namespace": "ADISCORD_nam_story",
+      "number": 112,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.113",
+      "namespace": "ADISCORD_nam_story",
+      "number": 113,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.114",
+      "namespace": "ADISCORD_nam_story",
+      "number": 114,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.115",
+      "namespace": "ADISCORD_nam_story",
+      "number": 115,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.116",
+      "namespace": "ADISCORD_nam_story",
+      "number": 116,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.117",
+      "namespace": "ADISCORD_nam_story",
+      "number": 117,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.118",
+      "namespace": "ADISCORD_nam_story",
+      "number": 118,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.119",
+      "namespace": "ADISCORD_nam_story",
+      "number": 119,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.120",
+      "namespace": "ADISCORD_nam_story",
+      "number": 120,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.121",
+      "namespace": "ADISCORD_nam_story",
+      "number": 121,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.122",
+      "namespace": "ADISCORD_nam_story",
+      "number": 122,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.123",
+      "namespace": "ADISCORD_nam_story",
+      "number": 123,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.124",
+      "namespace": "ADISCORD_nam_story",
+      "number": 124,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.125",
+      "namespace": "ADISCORD_nam_story",
+      "number": 125,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.126",
+      "namespace": "ADISCORD_nam_story",
+      "number": 126,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.127",
+      "namespace": "ADISCORD_nam_story",
+      "number": 127,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.128",
+      "namespace": "ADISCORD_nam_story",
+      "number": 128,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.129",
+      "namespace": "ADISCORD_nam_story",
+      "number": 129,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.130",
+      "namespace": "ADISCORD_nam_story",
+      "number": 130,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.131",
+      "namespace": "ADISCORD_nam_story",
+      "number": 131,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.132",
+      "namespace": "ADISCORD_nam_story",
+      "number": 132,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.133",
+      "namespace": "ADISCORD_nam_story",
+      "number": 133,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_story.134",
+      "namespace": "ADISCORD_nam_story",
+      "number": 134,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_story",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_rin_crisis.1",
       "namespace": "ADISCORD_rin_crisis",
       "number": 1,

@@ -182,6 +182,13 @@ music = {
 }
 
 music = {
+	song = "ADISCORD_killing_joke_corporate_elect"
+	chance = {
+		modifier = { factor = 0 }
+	}
+}
+
+music = {
 	song = "ADISCORD_nam_who"
 	chance = {
 		modifier = { factor = 0 }

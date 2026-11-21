@@ -1002,6 +1002,15 @@ on_actions = {
 					ROOT = { clr_country_flag = NAM_veyran_capitulation_reserved }
 				}
 				NAM_veyran_handle_capitulation = yes
+				# Island wars: a repeated delivery after white peace starts a fresh receipt.
+				if = {
+					limit = {
+						ROOT = { has_country_flag = NAM_isl_capitulation_reserved }
+						FROM = { has_war_with = ROOT }
+					}
+					ROOT = { clr_country_flag = NAM_isl_capitulation_reserved }
+				}
+				NAM_isl_record_capitulation = yes
 				ROOT = { clr_country_flag = ADISCORD_nam_capitulation_reserved }
 				if = {
 					limit = {
@@ -1788,6 +1797,12 @@ on_actions = {
 					limit = { ROOT = { has_country_flag = NAM_veyran_capitulation_reserved } }
 					set_global_flag = skip_default_capitulation
 				}
+				# An island war settles by its own treaty in both directions.
+				NAM_isl_record_capitulation = yes
+				if = {
+					limit = { ROOT = { has_country_flag = NAM_isl_capitulation_reserved } }
+					set_global_flag = skip_default_capitulation
+				}
 				if = {
 					limit = { tag = NAM }
 					NAM_board_queue_recount = yes
@@ -2349,6 +2364,7 @@ on_actions = {
 				ADISCORD_nam_resource_war_close_external = yes
 				NAM_war_of_return_close_external = yes
 				NAM_great_war_close_external = yes
+				NAM_isl_close_external = yes
 				# END nam:on_peace
 				# BEGIN shahrabad:on_peace
 				SHL = { SHL_close_external_kyz_war = yes }
@@ -2648,6 +2664,7 @@ on_actions = {
 			ADISCORD_nam_resource_war_close_external = yes
 			NAM_war_of_return_close_external = yes
 			NAM_great_war_close_external = yes
+			NAM_isl_close_external = yes
 			# END nam:on_puppet
 			# BEGIN shahrabad:on_puppet
 			SHL = { SHL_close_external_kyz_war = yes }
@@ -2734,6 +2751,7 @@ on_actions = {
 				ADISCORD_nam_resource_war_close_external = yes
 				NAM_war_of_return_close_external = yes
 				NAM_great_war_close_external = yes
+				NAM_isl_close_external = yes
 				# The punitive spirits end with an annexed principal.
 				if = {
 					limit = { FROM = { OR = { tag = EFL tag = AZH } } }
@@ -2750,6 +2768,8 @@ on_actions = {
 					}
 					FROM = {
 						NAM_board_end_operations = yes
+						# The council's laws end only here; a future stage-3 loader keeps them.
+						NAM_board_repeal_laws = yes
 						clear_variable = NAM_board_loren_debt
 						remove_ideas = NAM_board_loren_lien
 						clear_variable = NAM_board_loan_balance

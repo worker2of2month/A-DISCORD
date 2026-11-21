@@ -943,6 +943,45 @@ NAM_exile_corporate_plan = {
 		NAM_board_mainland_inventory
 		NAM_board_table_six
 		NAM_board_partition_night
+		NAM_board_invasion_prospectus
+		NAM_board_war_economy_charter
+		NAM_board_war_quartermaster
+		NAM_board_private_navy
+		NAM_board_landing_contracts
+		NAM_board_six_share_pool
+		NAM_board_mainland_contacts
+		NAM_board_double_shifts
+		NAM_board_steel_for_guns
+		NAM_board_shore_depots
+		NAM_board_escort_flotilla
+		NAM_board_marine_kit
+		NAM_board_marine_school
+		NAM_board_open_war_tenders
+		NAM_board_ration_lists
+		NAM_board_company_docks
+		NAM_board_shore_battalions
+		NAM_board_island_arsenal
+		NAM_board_bunker_piers
+		NAM_board_hospital_ships
+		NAM_board_landing_craft
+		NAM_board_loading_schedules
+		NAM_board_marine_officers
+		NAM_board_supply_overseas
+		NAM_board_landing_flotilla
+		NAM_board_assembly_roads
+		NAM_board_synthetic_plant
+		NAM_board_war_bonds
+		NAM_board_beach_masters
+		NAM_board_mercenary_battalions
+		NAM_board_arsenal_of_the_boards
+		NAM_board_expedition_rear
+		NAM_board_island_squadron
+		NAM_board_first_wave
+		NAM_board_invasion_fleet
+		NAM_board_ulven_operation
+		NAM_board_northern_safehouses
+		NAM_board_southern_safehouses
+		NAM_board_operation_poseidon
 	}
 	weight = { factor = 20 }
 }
