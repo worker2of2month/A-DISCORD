@@ -858,7 +858,7 @@ shared_focus = {
 		x = 34
 		y = 4
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
 		prerequisite = {
 			focus = NAM_metropolitan_instructors
 			focus = NAM_quiet_officer_lists
@@ -1114,7 +1114,7 @@ shared_focus = {
 		x = 22
 		y = 10
 		cost = 3
-		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
 		prerequisite = { focus = NAM_provisional_statute }
 		available = {
 			has_capitulated = no
@@ -1129,6 +1129,10 @@ shared_focus = {
 			add_war_support = 0.05
 			add_stability = 0.03
 			add_command_power = 15
+			if = {
+				limit = { hidden_trigger = { NAM_ladder_formed = yes } }
+				custom_effect_tooltip = NAM_rom_address_balance_choice_tt
+			}
 			country_event = {
 				id = ADISCORD_nam_resource_war.70
 				hours = 1
@@ -1198,7 +1202,7 @@ shared_focus = {
 		x = 3
 		y = 9
 		cost = 4
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
 
 		mutually_exclusive = { focus = NAM_districts }
 		prerequisite = {
@@ -1253,7 +1257,7 @@ shared_focus = {
 		x = 5
 		y = 9
 		cost = 4
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
 
 		mutually_exclusive = { focus = NAM_vertical }
 		prerequisite = {
@@ -1348,7 +1352,7 @@ shared_focus = {
 		x = 3
 		y = 10
 		cost = 4
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL FOCUS_FILTER_BALANCE_OF_POWER }
 
 		prerequisite = {
 			focus = NAM_vertical
@@ -1382,7 +1386,7 @@ shared_focus = {
 		x = 5
 		y = 10
 		cost = 4
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
 
 		prerequisite = {
 			focus = NAM_districts
@@ -1480,7 +1484,7 @@ shared_focus = {
 		x = 8
 		y = 12
 		cost = 4
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
 
 		prerequisite = {
 			focus = NAM_one_budget
@@ -1514,7 +1518,7 @@ shared_focus = {
 		x = 10
 		y = 9
 		cost = 4
-		search_filters = { FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_BALANCE_OF_POWER }
 
 		mutually_exclusive = { focus = NAM_supports_export_houses }
 		prerequisite = {
@@ -1613,7 +1617,7 @@ shared_focus = {
 		x = 9
 		y = 10
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP FOCUS_FILTER_BALANCE_OF_POWER }
 
 		prerequisite = {
 			focus = NAM_supports_oil_compact
@@ -1904,7 +1908,7 @@ shared_focus = {
 		x = 18
 		y = 9
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
 		prerequisite = { focus = NAM_underground_reports }
 		mutually_exclusive = { focus = NAM_cache_hunters }
 		available = {
@@ -2608,7 +2612,7 @@ shared_focus = {
 		x = 44
 		y = 8
 		cost = 2
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER FOCUS_FILTER_BALANCE_OF_POWER }
 		prerequisite = { focus = NAM_independence_day }
 		available = {
 			custom_trigger_tooltip = {
@@ -2643,7 +2647,7 @@ shared_focus = {
 		x = 44
 		y = 9
 		cost = 3
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER FOCUS_FILTER_BALANCE_OF_POWER }
 		prerequisite = { focus = NAM_count_garrisons }
 		mutually_exclusive = { focus = NAM_mobile_columns }
 		available = {
@@ -2848,7 +2852,7 @@ shared_focus = {
 		x = 41
 		y = 10
 		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_BALANCE_OF_POWER }
 		prerequisite = { focus = NAM_mobile_columns }
 		available = {
 			has_capitulated = no

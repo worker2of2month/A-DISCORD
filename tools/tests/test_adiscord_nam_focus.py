@@ -358,11 +358,13 @@ class NamCampaignTests(unittest.TestCase):
     def test_prewar_mandate_boundaries_freeze_exact_native_balance_once(self):
         for balance, ideology, party in (
                 (-1, "etatism_ideology", "etatism"),
-                (-0.2501, "etatism_ideology", "etatism"),
-                (-0.25, "pragmatism_ideology", "pragmatism"),
+                (-0.3001, "etatism_ideology", "etatism"),
+                (-0.30, "pragmatism_ideology", "pragmatism"),
+                (-0.28, "pragmatism_ideology", "pragmatism"),
                 (0, "pragmatism_ideology", "pragmatism"),
-                (0.25, "pragmatism_ideology", "pragmatism"),
-                (0.2501, "humanism_ideology", "humanism"),
+                (0.30, "pragmatism_ideology", "pragmatism"),
+                (0.28, "pragmatism_ideology", "pragmatism"),
+                (0.3001, "humanism_ideology", "humanism"),
                 (1, "humanism_ideology", "humanism")):
             with self.subTest(balance=balance):
                 facts = self.mandate_facts(balance)
@@ -417,7 +419,7 @@ class NamCampaignTests(unittest.TestCase):
         self.assertEqual(facts[("NAM", "ruling_party")], "pragmatism")
 
     def test_postwar_constitution_follows_frozen_balance_not_focus_or_live_bop(self):
-        for balance in (-0.7, -0.25, 0, 0.25, 0.7):
+        for balance in (-0.7, -0.3001, -0.30, -0.28, 0, 0.28, 0.30, 0.3001, 0.7):
             for old_focus in ("NAM_districts", "NAM_vertical"):
                 facts = self.mandate_facts(balance)
                 facts[("NAM", "tag", "NAM")] = True
@@ -426,9 +428,9 @@ class NamCampaignTests(unittest.TestCase):
                 self.apply(self.effects["NAM_freeze_prewar_mandate"], facts)
                 facts[("NAM", "has_completed_focus", old_focus)] = True
                 facts[("NAM", "power_balance_value", "NAM_ladder_bop")] = -balance
-                for name, expected in (("NAM_service_state", balance < -0.25),
-                                       ("NAM_federal_charter", balance > 0.25),
-                                       ("NAM_pragmatic_compact", -0.25 <= balance <= 0.25)):
+                for name, expected in (("NAM_service_state", balance < -0.30),
+                                       ("NAM_federal_charter", balance > 0.30),
+                                       ("NAM_pragmatic_compact", -0.30 <= balance <= 0.30)):
                     self.assertEqual(self.matches(block(self.postwar[name], "available"), facts),
                                      expected, (balance, old_focus, name))
 
@@ -457,7 +459,8 @@ class NamCampaignTests(unittest.TestCase):
     def test_prewar_forecast_uses_stored_result_after_live_balance_changes(self):
         definitions = parsed(f"common/scripted_localisation/{BASE}_scripted_loc.txt")
         course = next(e.value for e in definitions if scalar(e.value, "name") == "NAMGetPrewarCourse")
-        for balance, expected in ((-0.7, "vertical"), (-0.25, "service"), (0, "service"), (0.25, "service"), (0.7, "districts")):
+        for balance, expected in ((-0.3001, "vertical"), (-0.30, "service"), (0, "service"),
+                                  (0.30, "service"), (0.3001, "districts")):
             facts = self.mandate_facts(balance)
             for frozen in (False, True):
                 if frozen:
@@ -5140,7 +5143,7 @@ class NamCampaignTests(unittest.TestCase):
             self.assertEqual(facts, settled)
         facts = self.statist_allotment_facts()
         for key, value in ((pp, 24.999), (("NAM", "variable", "NAM_grp_dist_support"), 29.999),
-                           (("NAM", "variable", "NAM_prewar_balance"), -0.25),
+                           (("NAM", "variable", "NAM_prewar_balance"), -0.30),
                            (("NAM", "is_subject", "no"), False), (("688", "is_owned_by", "NAM"), False)):
             unavailable = {**facts, key: value}
             before = dict(unavailable)
@@ -5905,6 +5908,20 @@ class NamCampaignTests(unittest.TestCase):
         address = block(self.focuses["NAM_rom_address"], "completion_reward")
         self.assertEqual(sum(e.key == "ADISCORD_campaign_slot_grant" for e in walk(address)), 0)
         self.assertEqual(scalar(block(address, "country_event"), "id"), BASE + ".70")
+
+    def test_rom_address_moves_only_the_active_ladder_by_the_chosen_answer(self):
+        event_id = BASE + ".70"
+        options = {scalar(entry.value, "name"): entry.value for entry in self.events[event_id] if entry.key == "option"}
+        changes = {"a": -0.10, "b": 0.10, "c": -0.05}
+        self.assertEqual(set(options), {event_id + "." + answer for answer in changes})
+        for answer, change in changes.items():
+            for active in (False, True):
+                with self.subTest(answer=answer, active=active):
+                    facts = self.mandate_facts(0.20)
+                    facts[("NAM", "fixture_power_balance", "NAM_ladder_bop")] = active
+                    self.apply(options[event_id + "." + answer], facts)
+                    self.assertAlmostEqual(facts[("NAM", "power_balance_value", "NAM_ladder_bop")],
+                                           0.20 + (change if active else 0))
 
     def test_independent_institutions_survive_war_and_settlement_but_refund_subjugation(self):
         for name, project in self.independence_projects().items():
@@ -13015,7 +13032,7 @@ class NamCampaignTests(unittest.TestCase):
         for outcome in ("resolve_nam_victory", "resolve_standoff"):
             settlement = self.effects[f"{BASE}_{outcome}"]
             self.assertEqual(sum(e.key == "NAM_open_postwar_future" for e in walk(settlement)), 1)
-        for mandate, present in ((-0.5, False), (-0.5, True), (-0.25, False), (0, False), (0.5, False)):
+        for mandate, present in ((-0.5, False), (-0.5, True), (-0.30, False), (0, False), (0.5, False)):
             facts = {
                 ("NAM", "fixture_power_balance", balance): present,
                 ("NAM", "fixture_power_balance", "NAM_ladder_bop"): not present,
@@ -13025,7 +13042,7 @@ class NamCampaignTests(unittest.TestCase):
             changes = [e for _, e in selected_effects(self.expand(switch), facts, "NAM")
                        if e.key in ("set_power_balance", "remove_power_balance")]
             expected = [] if present else ["remove_power_balance"]
-            if mandate < -0.25 and not present:
+            if mandate < -0.30 and not present:
                 expected.append("set_power_balance")
             self.assertEqual([e.key for e in changes], expected, (mandate, present))
             if "set_power_balance" in expected:
@@ -13069,7 +13086,7 @@ class NamCampaignTests(unittest.TestCase):
                 (("has_global_flag", "ADISCORD_south_hegemon_NAM"), False),
                 (("has_government", "etatism"), False),
                 (("ruling_leader",), "NAM_coup_governor"),
-                (("variable", "NAM_prewar_balance"), -0.25),
+                (("variable", "NAM_prewar_balance"), -0.30),
             ):
                 blocked = {**facts, ("NAM", *field): rejected}
                 self.assertFalse(self.matches(available, blocked), (name, field))
@@ -14680,7 +14697,7 @@ class NamCampaignTests(unittest.TestCase):
     def test_postwar_ai_respects_inherited_political_course(self):
         plans = parsed("common/ai_strategy_plans/ADISCORD_NAM_plans.txt")
         names = ("NAM_postwar_vertical_plan", "NAM_postwar_pragmatic_plan", "NAM_postwar_plan")
-        for balance, active in ((-0.5, 0), (-0.25, 1), (0, 1), (0.25, 1), (0.5, 2)):
+        for balance, active in ((-0.5, 0), (-0.30, 1), (0, 1), (0.30, 1), (0.5, 2)):
             facts = self.postwar_facts()
             facts[("NAM", "is_ai", "yes")] = True
             facts[("NAM", "has_focus_tree", "NAM_postwar_focus")] = True

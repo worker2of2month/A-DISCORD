@@ -6395,12 +6395,12 @@ NAM_bw_chromium_startable = {
 # COUNTRY NAM. The postwar constitution follows the mandate fixed at war entry.
 NAM_prewar_district_mandate = {
 	has_variable = NAM_prewar_balance
-	check_variable = { NAM_prewar_balance > 0.25 }
+	check_variable = { NAM_prewar_balance > 0.30 }
 }
 
 NAM_prewar_service_mandate = {
 	has_variable = NAM_prewar_balance
-	check_variable = { NAM_prewar_balance < -0.25 }
+	check_variable = { NAM_prewar_balance < -0.30 }
 }
 
 NAM_won_final_southern_war = {
@@ -6440,8 +6440,8 @@ NAM_veyran_rom_mandate = {
 
 NAM_prewar_pragmatic_mandate = {
 	has_variable = NAM_prewar_balance
-	NOT = { check_variable = { NAM_prewar_balance < -0.25 } }
-	NOT = { check_variable = { NAM_prewar_balance > 0.25 } }
+	NAM_prewar_service_mandate = no
+	NAM_prewar_district_mandate = no
 }
 
 # COUNTRY NAM. AI weights only. Above +0.10 the compromise course stops paying

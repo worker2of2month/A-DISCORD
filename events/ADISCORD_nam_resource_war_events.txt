@@ -1197,6 +1197,10 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_resource_war.70.a
 		add_stability = 0.04
+		if = {
+			limit = { hidden_trigger = { NAM_ladder_formed = yes } }
+			add_power_balance_value = { id = NAM_ladder_bop value = -0.10 }
+		}
 		custom_effect_tooltip = NAM_rom_address_a_tt
 		hidden_effect = {
 			add_to_variable = { var = NAM_grp_nam_support value = 5 }
@@ -1204,11 +1208,22 @@ country_event = {
 			add_to_variable = { var = NAM_grp_dist_support value = -3 }
 			NAM_groups_refresh = yes
 		}
-		ai_chance = { base = 50 }
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				NAM_ai_compromise_ladder_drifted = yes
+				power_balance_value = { id = NAM_ladder_bop value < 0 }
+			}
+		}
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.70.b
 		add_stability = 0.02
+		if = {
+			limit = { hidden_trigger = { NAM_ladder_formed = yes } }
+			add_power_balance_value = { id = NAM_ladder_bop value = 0.10 }
+		}
 		custom_effect_tooltip = NAM_rom_address_b_tt
 		hidden_effect = {
 			add_to_variable = { var = NAM_grp_oil_support value = 6 }
@@ -1216,18 +1231,35 @@ country_event = {
 			add_to_variable = { var = NAM_grp_trade_support value = -3 }
 			NAM_groups_refresh = yes
 		}
-		ai_chance = { base = 30 }
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 0
+				NAM_ai_compromise_ladder_full = yes
+			}
+		}
 	}
 	option = {
 		name = ADISCORD_nam_resource_war.70.c
 		add_war_support = 0.06
+		if = {
+			limit = { hidden_trigger = { NAM_ladder_formed = yes } }
+			add_power_balance_value = { id = NAM_ladder_bop value = -0.05 }
+		}
 		custom_effect_tooltip = NAM_rom_address_c_tt
 		hidden_effect = {
 			add_to_variable = { var = NAM_grp_garr_support value = 5 }
 			add_to_variable = { var = NAM_grp_trade_support value = -5 }
 			NAM_groups_refresh = yes
 		}
-		ai_chance = { base = 20 }
+		ai_chance = {
+			base = 20
+			modifier = {
+				factor = 0
+				NAM_ai_compromise_ladder_drifted = yes
+				power_balance_value = { id = NAM_ladder_bop value < 0 }
+			}
+		}
 	}
 }
 

@@ -911,7 +911,7 @@
  ADD_FACILITY_BUTTON: "Add Facility"
  INTELLIGENCE_POPUP_DESCRIPTION: "Are you sure you wish to appoint $GROUP|H$? This will cost $COST|H$ £faction_initiative_texticon"
  ADD_GOAL_TITLE: "Add Goal"
- ADD_GOAL_CANNOT_AFFORD: "§RCannot add this goal: it costs $COST|.0$ £faction_initiative_texticon§!"
+ ADD_GOAL_CANNOT_AFFORD: "§RCannot add this goal: it costs $COST|.0$§! £faction_initiative_texticon"
  REPLACE_GOAL_TT_ALREADY_SELECTED: "§RThis goal is already active§!"
  ADD_GOAL_TT_ALREADY_COMPLETED: "§RThis goal has already been completed§!"
  ADD_GOAL_TT_ALREADY_ATTEMPTED: "§RThis goal has already been attempted§!"

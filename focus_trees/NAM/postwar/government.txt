@@ -135,7 +135,7 @@
 		y = 2
 		icon = GFX_focus_NAM_normalisation
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER FOCUS_FILTER_BALANCE_OF_POWER }
 		mutually_exclusive = { focus = NAM_border_revenge }
 		prerequisite = {
 			focus = NAM_foreign_office
@@ -187,7 +187,7 @@
 		y = 2
 		icon = GFX_focus_NAM_border_revenge
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP FOCUS_FILTER_BALANCE_OF_POWER }
 		mutually_exclusive = { focus = NAM_normalisation }
 		prerequisite = {
 			focus = NAM_foreign_office

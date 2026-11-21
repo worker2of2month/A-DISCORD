@@ -65,7 +65,7 @@
 		icon = GFX_focus_NAM_ladder_ending_iron
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
-		search_filters = { FOCUS_FILTER_POLITICAL }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_BALANCE_OF_POWER }
 		prerequisite = { focus = NAM_service_state }
 		mutually_exclusive = { focus = NAM_ladder_ending_service }
 		available = {
@@ -138,7 +138,7 @@
 		icon = GFX_focus_NAM_ladder_ending_service
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
-		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_RESEARCH }
+		search_filters = { FOCUS_FILTER_STABILITY FOCUS_FILTER_RESEARCH FOCUS_FILTER_BALANCE_OF_POWER }
 		prerequisite = { focus = NAM_service_state }
 		mutually_exclusive = { focus = NAM_ladder_ending_iron }
 		available = {
@@ -1607,7 +1607,7 @@
 		icon = GFX_focus_NAM_ladder_of_seals
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
 		prerequisite = {
 			focus = NAM_pw_labour_code
 			focus = NAM_pw_insurance_fund
@@ -1641,7 +1641,16 @@
 				add_political_power = 150
 				if = {
 					limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
-					add_power_balance_value = { id = NAM_postwar_future_bop value = 0.10 }
+					if = {
+						limit = { hidden_trigger = { has_completed_focus = NAM_ladder_ending_service } }
+						add_power_balance_value = { id = NAM_postwar_future_bop value = 0.10 }
+					}
+					else = {
+						custom_effect_tooltip = NAM_ladder_of_seals_balance_tt
+						hidden_effect = {
+							add_power_balance_value = { id = NAM_postwar_future_bop value = 0.10 }
+						}
+					}
 				}
 			}
 			effect_tooltip = {

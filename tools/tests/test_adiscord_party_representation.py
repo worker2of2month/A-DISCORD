@@ -338,7 +338,8 @@ class PartyRepresentationTests(unittest.TestCase):
                       if entry.key == "shared_focus" and scalar(entry.value, "id") == "NAM_pw_constitutional_committee"]
         committee, = committees
         self.assertEqual(scalar(block(committee, "allow_branch"), "NAM_prewar_service_mandate"), "yes")
-        decree = block(block(committee, "completion_reward"), "if")
+        # The committee also carries the folded iron-ending reform; the decree stays its first `if`.
+        decree = next(e.value for e in block(committee, "completion_reward") if e.key == "if")
         self.assertEqual(scalar(block(decree, "limit"), "has_government"), "etatism")
         self.assertEqual(self.party_actions(decree), [
             ("ADISCORD_ban_party", "token:anarchism"),

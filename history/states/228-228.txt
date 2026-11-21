@@ -44,6 +44,7 @@ state={
 			19056 = { naval_base = 1 }
 			19060 = { naval_base = 1 }
 			19066 = { naval_base = 1 }
+			fuel_silo = 1
 		}
 		victory_points = { 6893 10 }
 		victory_points = { 6145 1 }

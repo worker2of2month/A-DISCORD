@@ -20,12 +20,14 @@ state={
 	history = {
 		owner = NAM
 		# adiscord_nam_overseas_colony = yes
+		add_extra_state_shared_building_slots = 1
 		buildings = {
 			arms_factory = 1
 			industrial_complex = 1
 			infrastructure = 2
 			13018 = { naval_base = 3 }
 			432 = { naval_base = 1 }
+			fuel_silo = 1
 		}
 		victory_points = { 13018 2 }
 		victory_points = { 12732 1 }

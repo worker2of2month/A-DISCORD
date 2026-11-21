@@ -27,7 +27,7 @@ NAM_freeze_prewar_mandate = {
 		if = {
 			limit = { has_country_leader = { character = NAM_Egor_Rom ruling_only = yes } }
 			if = {
-				limit = { check_variable = { NAM_prewar_balance > 0.25 } }
+				limit = { NAM_prewar_district_mandate = yes }
 				NAM_rom_take_humanism = yes
 				set_portraits = {
 					character = NAM_Egor_Rom
@@ -35,7 +35,7 @@ NAM_freeze_prewar_mandate = {
 				}
 			}
 			else_if = {
-				limit = { check_variable = { NAM_prewar_balance < -0.25 } }
+				limit = { NAM_prewar_service_mandate = yes }
 				NAM_rom_take_etatism = yes
 				set_portraits = {
 					character = NAM_Egor_Rom

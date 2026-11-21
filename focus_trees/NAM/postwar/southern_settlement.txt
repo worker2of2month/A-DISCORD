@@ -627,7 +627,7 @@ focus_tree = {
 		y = 1
 		icon = GFX_focus_NAM_veyran_union_charter
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_NAVY_XP }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_NAVY_XP FOCUS_FILTER_BALANCE_OF_POWER }
 		allow_branch = { NAM_veyran_southern_route = yes }
 		prerequisite = { focus = NAM_south_heritage }
 		mutually_exclusive = { focus = NAM_svetlogorsk_settlement }
@@ -669,7 +669,7 @@ focus_tree = {
 		y = 1
 		icon = GFX_focus_NAM_svetlogorsk_settlement
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
 		allow_branch = { NAM_veyran_southern_route = yes }
 		prerequisite = { focus = NAM_south_heritage }
 		mutually_exclusive = { focus = NAM_veyran_union_charter }

@@ -7706,17 +7706,11 @@ defined_text = {
 defined_text = {
 	name = NAMGetPrewarCourse
 	text = {
-		trigger = {
-			has_variable = NAM_prewar_balance
-			check_variable = { NAM_prewar_balance > 0.25 }
-		}
+		trigger = { NAM_prewar_district_mandate = yes }
 		localization_key = NAM_prewar_course_districts
 	}
 	text = {
-		trigger = {
-			has_variable = NAM_prewar_balance
-			check_variable = { NAM_prewar_balance < -0.25 }
-		}
+		trigger = { NAM_prewar_service_mandate = yes }
 		localization_key = NAM_prewar_course_vertical
 	}
 	text = {
@@ -7726,14 +7720,14 @@ defined_text = {
 	text = {
 		trigger = {
 			has_power_balance = { id = NAM_ladder_bop }
-			power_balance_value = { id = NAM_ladder_bop value > 0.25 }
+			power_balance_value = { id = NAM_ladder_bop value > 0.30 }
 		}
 		localization_key = NAM_prewar_course_districts
 	}
 	text = {
 		trigger = {
 			has_power_balance = { id = NAM_ladder_bop }
-			power_balance_value = { id = NAM_ladder_bop value < -0.25 }
+			power_balance_value = { id = NAM_ladder_bop value < -0.30 }
 		}
 		localization_key = NAM_prewar_course_vertical
 	}

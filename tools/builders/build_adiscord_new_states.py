@@ -989,6 +989,8 @@ NAM_OVERSEAS_HARBOURS = {
     230: ((12376, 1),),
     231: ((432, 1),),
 }
+
+NAM_OVERSEAS_FUEL_SILOS = {225: 2, 226: 1, 227: 1, 228: 1, 229: 1, 230: 1, 231: 1}
 NAM_STATE_PROFILES = {
     67: {"population": NAM_POPULATION[67], "category": "large_city", "infrastructure": 4, "civilian": 2, "military": 1, "air_base": 1, "supplies": 5.0},
     225: {"population": NAM_POPULATION[225], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
@@ -3255,7 +3257,7 @@ def update_archipelago_islands(apply: bool) -> int:
 
 
 def svetlogorye_homeland_plan() -> dict[Path, bytes]:
-    """Own NAM population, overseas ports, island state names and oil-basin deposits."""
+    """Own NAM population, overseas ports and fuel silos, island names and oil-basin deposits."""
     outputs = {}
     deposits = {
         **NAM_MAINLAND_STATE_RESOURCES,
@@ -3291,6 +3293,18 @@ def svetlogorye_homeland_plan() -> dict[Path, bytes]:
             )
             source = replace_state_provinces(source, tuple(sorted(provinces)))
         source = with_raised_island_provinces(source, state_id)
+        if state_id in NAM_OVERSEAS_FUEL_SILOS:
+            source = set_history_building_level(source, "fuel_silo", NAM_OVERSEAS_FUEL_SILOS[state_id])
+        if state_id == 231:
+            # Kukushkin's two rural slots are occupied by its civilian and military factories.
+            start, end = named_block(source, "history")
+            history = re.sub(
+                r"(?m)^\t\tadd_extra_state_shared_building_slots\s*=\s*\d+[ \t]*\n",
+                "", source[start:end],
+            )
+            buildings = re.search(r"(?m)^\t\tbuildings\s*=", history).start()
+            history = history[:buildings] + "\t\tadd_extra_state_shared_building_slots = 1\n" + history[buildings:]
+            source = source[:start] + history + source[end:]
         if state_id in NAM_OVERSEAS_PORTS:
             ports = (
                 NAM_OVERSEAS_PORTS[state_id],
