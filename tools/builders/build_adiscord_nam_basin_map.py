@@ -18,7 +18,8 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 OUT = Path("gfx/interface/NAM_basin")
 WIDTH, HEIGHT = 436, 246
-STATES = (67, 688, 689, 690, 719, 700)
+STATES = (67, 688, 689, 690, 719, 700, 701, 720, 721, 722, 723, 727)
+MARKER_SIZE = 26
 GUI = Path("interface/ADISCORD_NAM_basin.gui")
 GFX = Path("interface/ADISCORD_NAM_basin.gfx")
 BEGIN = "# BEGIN GENERATED NAM BASIN MAP"
@@ -146,6 +147,20 @@ def map_images() -> tuple[dict[str, Image.Image], dict[int, dict]]:
     drawing.line((WIDTH - 25, 22, WIDTH - 25, 62), fill=(203, 186, 139), width=1)
     drawing.line((WIDTH - 36, 42, WIDTH - 14, 42), fill=(203, 186, 139), width=1)
     drawing.polygon(((WIDTH - 25, 22), (WIDTH - 29, 34), (WIDTH - 21, 34)), fill=(203, 186, 139))
+    # Small coastal districts have few possible anchors. Place their buttons first.
+    placed = []
+    for node in sorted(geometry.values(), key=lambda item: item["mask"].histogram()[255]):
+        x, y = node["anchor"]
+        ys, xs = np.where(np.asarray(node["mask"]) > 0)
+        free = np.ones(xs.shape, dtype=bool)
+        for px, py in placed:
+            free &= (abs(xs - px) >= MARKER_SIZE + 1) | (abs(ys - py) >= MARKER_SIZE + 1)
+        if not free.any():
+            raise ValueError(f"No clickable map position near {(x, y)}")
+        xs, ys = xs[free], ys[free]
+        index = np.argmin((xs - x) ** 2 + (ys - y) ** 2)
+        node["anchor"] = (int(xs[index]), int(ys[index]))
+        placed.append(node["anchor"])
     return images, geometry
 
 
@@ -225,7 +240,7 @@ def ui_images() -> dict[str, Image.Image]:
     draw = ImageDraw.Draw(marker)
     draw.ellipse((1, 1, 30, 30), fill=(19, 30, 32), outline=(219, 187, 121), width=2)
     draw.ellipse((5, 5, 26, 26), outline=(70, 104, 101))
-    images["marker.png"] = marker
+    images["marker.png"] = marker.resize((MARKER_SIZE, MARKER_SIZE), Image.Resampling.LANCZOS)
     for group in ("nam", "oil", "dist", "garr", "trade"):
         icon = Image.new("RGBA", (28, 28))
         draw = ImageDraw.Draw(icon)
@@ -291,11 +306,19 @@ def gui_block(geometry: dict[int, dict]) -> str:
     for number, state in enumerate(STATES, 1):
         x, y = geometry[state]["anchor"]
         lines.extend(("\t\tbuttonType = {", f'\t\t\tname = "NAM_bw_select_{state}"',
-                      f"\t\t\tposition = {{ x = {x - 4} y = {y + 50} }}",
+                      f"\t\t\tposition = {{ x = {12 + x - MARKER_SIZE // 2} y = {66 + y - MARKER_SIZE // 2} }}",
                       '\t\t\tquadTextureSprite = "GFX_NAM_bw_marker"',
                       f'\t\t\tbuttonText = "{number:02d}"', '\t\t\tbuttonFont = "hoi_16mbs"',
                       "\t\t\tclicksound = click_default", f'\t\t\tpdx_tooltip = "NAM_bw_map_{state}_tt"',
                       "\t\t}", ""))
+    for row, state in enumerate(STATES[6:]):
+        lines.extend((
+            '\t\tinstantTextBoxType = {', f'\t\t\tname = "NAM_bw_map_label_{state}"',
+            f'\t\t\tposition = {{ x = 342 y = {66 + 41 * row} }}',
+            f'\t\t\ttext = "{row + 7:02}   [{state}.GetName]"', '\t\t\tfont = "hoi_16mbs"',
+            '\t\t\tmaxWidth = 104', '\t\t\tmaxHeight = 40', '\t\t\tfixedsize = yes',
+            '\t\t\talwaystransparent = yes', f'\t\t\tpdx_tooltip = "NAM_bw_map_{state}_tt"', '\t\t}', '',
+        ))
     return "\n".join(lines).rstrip()
 
 
@@ -409,6 +432,14 @@ def district_cards(source: bytes) -> bytes:
     text = text.replace(
         "# Map selection changes presentation only; actions dispatch the original targeted decisions.",
         "# Map selection changes presentation only; operations use native map decisions.")
+    for index, state in enumerate(STATES[:6]):
+        top = 66 + 41 * index
+        pattern = (rf'(name = "NAM_bw_map_label_{state}"\n\s+position = )\{{[^}}]+\}}'
+                   r'(\n\s+text = "[^"]+"\n\s+font = "[^"]+"\n\s+maxWidth = )\d+'
+                   r'(\n\s+maxHeight = )\d+')
+        text, count = re.subn(pattern, rf"\g<1>{{ x = 14 y = {top} }}\g<2>104\g<3>40", text)
+        if count != 1:
+            raise ValueError(f"Expected economic label for state {state}")
     return text.encode("utf-8")
 
 

@@ -171,6 +171,21 @@ country_event = {
 	}
 }
 
+country_event = {
+	id = ADISCORD_south.7
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		difficulty > 1
+		is_ai = yes
+		ADISCORD_south_final_active = yes
+		ADISCORD_south_war_champion = yes
+		ADISCORD_south_final_broken = no
+		any_owned_state = { is_controlled_by = PREV }
+	}
+	immediate = { ADISCORD_south_raise_second_wave = yes }
+}
+
 # A regional state without a champion's subject or faction tie chooses its side.
 # There is no neutral answer: the desert states are the only land routes.
 country_event = {
@@ -926,7 +941,7 @@ country_event = {
 	}
 }
 
-# A champion's home front gives way at the full cost of the war. Every answer
+# A champion's home front gives way at maximum home front strain. Every answer
 # clears the crisis marker set by ADISCORD_south_add_strain.
 country_event = {
 	id = ADISCORD_south.50

@@ -43,7 +43,7 @@ focus_tree = {
 
 	# ----- Home front of the quarters -----
 
-	# Rations slow the cost of the war; martial law answers its crises with force.
+	# Rations slow the rise in home front strain. Martial law softens the crisis crackdown.
 
 	# ----- To the last furnace -----
 

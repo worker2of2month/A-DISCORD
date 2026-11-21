@@ -114,6 +114,42 @@ spriteTypes = {
 		noOfFrames = 4
 	}
 
+	spriteType = {
+		name = "GFX_NAM_bw_state_701"
+		texturefile = "gfx/interface/NAM_basin/state_701.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_720"
+		texturefile = "gfx/interface/NAM_basin/state_720.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_721"
+		texturefile = "gfx/interface/NAM_basin/state_721.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_722"
+		texturefile = "gfx/interface/NAM_basin/state_722.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_723"
+		texturefile = "gfx/interface/NAM_basin/state_723.png"
+		noOfFrames = 4
+	}
+
+	spriteType = {
+		name = "GFX_NAM_bw_state_727"
+		texturefile = "gfx/interface/NAM_basin/state_727.png"
+		noOfFrames = 4
+	}
+
 	corneredTileSpriteType = {
 		name = "GFX_NAM_bw_panel"
 		size = { x = 64 y = 64 }

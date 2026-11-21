@@ -486,6 +486,7 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
             'category': 'NAM_administration',
             'decision': 'NAM_nationalise_region',
             'triggers': 'common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt',
+            'shared_triggers': 'common/scripted_triggers/ADISCORD_south_final_war_triggers.txt',
             'receipt': 'NAM_nationalisation_pending',
             'unlocks': {
                 'NAM_border_citizenship': 'focus_trees/NAM/postwar/government.txt',
@@ -516,6 +517,9 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
         case = self.CASES[country]
         self.case = case
         self.triggers = {e.key: e.value for e in entries(case['triggers'])}
+        if 'shared_triggers' in case:
+            for e in entries(case['shared_triggers']):
+                self.triggers.setdefault(e.key, e.value)
         self.current = block(
             block(entries(case['decisions']), case['category']), case['decision']
         )
@@ -604,6 +608,8 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
                 # No national neighbour yet, and an island with no neighbour at all.
                 self.assertFalse(self.eligible(f, country, '3'))
                 self.assertFalse(self.eligible(f, country, '4'))
+                # Without the southern war flags, has_war means a war other than the
+                # war for the South.
                 for key in [
                     (country, 'is_subject', 'no'),
                     (country, 'has_war', 'no'),
@@ -642,14 +648,16 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
     def test_broken_programme_refunds_exactly_once(self):
         for country, failure in product(
             self.CASES,
-            ('war', 'subject', 'ownership', 'control', 'neighbour', 'already_core'),
+            ('other_war', 'subject', 'ownership', 'control', 'neighbour', 'already_core'),
         ):
             with self.subTest(country=country, failure=failure):
                 self.use(country)
                 f = self.facts(country)
                 self.apply('complete_effect', f, country)
+                # Without the southern war flags in the facts, a war is one other than
+                # the war for the South, which still cancels the programme.
                 key = {
-                    'war': (country, 'has_war', 'no'),
+                    'other_war': (country, 'has_war', 'no'),
                     'subject': (country, 'is_subject', 'no'),
                     'ownership': ('2', 'is_owned_by', country),
                     'control': ('2', 'is_controlled_by', country),
@@ -693,17 +701,17 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
                     self.apply('remove_effect', f, country, '4'), {'power': 0, 'cores': 1}
                 )
 
-    def test_svetlogorye_treaty_districts_may_also_be_nationalised(self):
-        # After the victorious settlement the six treaty districts keep their paid
-        # incorporation programme and may also take the slower nationalisation.
+    def test_svetlogorye_reserves_the_treaty_districts_for_incorporation(self):
         self.use('NAM')
-        self.adjacency = {'1': ['701'], '701': ['1']}
+        districts = ('701', '720', '721', '722', '723', '727')
+        for state in districts:
+            self.adjacency[state] = ['1']
         f = self.facts('NAM')
-        self.assertTrue(self.eligible(f, 'NAM', '701'))
-        f['701', 'has_global_flag', 'ADISCORD_nam_resource_war_nam_victory'] = True
-        self.assertTrue(self.eligible(f, 'NAM', '701'))
-        target = self.expand(block(self.decision(), 'target_trigger'), 'NAM', '701')
-        self.assertTrue(matches_conditions(target, f, 'NAM'))
+        for state in (*districts, '2'):
+            with self.subTest(state=state):
+                target = self.expand(block(self.decision(), 'target_trigger'), 'NAM', state)
+                self.assertEqual(matches_conditions(target, f, 'NAM'), state == '2')
+                self.assertEqual(self.eligible(f, 'NAM', state), state == '2')
 
     def test_svetlogorye_direct_rule_blocks_and_refunds(self):
         self.use('NAM')
@@ -716,6 +724,69 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
         f[regime] = True
         self.assertTrue(self.cancelled(f, 'NAM'))
         self.assertEqual(self.apply('remove_effect', f, 'NAM'), {'power': 50, 'cores': 0})
+
+    def south_war_facts(self):
+        """Svetlogorye leads the north against Shahrabad and its bound subject."""
+        f = self.facts('NAM')
+        f['NAM', 'has_completed_focus', 'NAM_border_citizenship'] = True
+        f['NAM', 'has_war', 'no'] = False
+        f['NAM', 'has_global_flag', 'ADISCORD_south_final_started'] = True
+        f['NAM', 'variable', 'ADISCORD_south_side'] = 2
+        f['SHL', 'variable', 'ADISCORD_south_side'] = 1
+        f['NAM', 'has_war_with', 'SHL'] = True
+        f['SDA', 'is_subject_of', 'SHL'] = True
+        f['NAM', 'has_war_with', 'SDA'] = True
+        return f
+
+    def test_svetlogorye_nationalises_during_the_war_for_the_south(self):
+        self.use('NAM')
+        f = self.south_war_facts()
+        visible = self.expand(block(self.decision(), 'visible'), 'NAM')
+        self.assertTrue(matches_conditions(visible, f, 'NAM'))
+        self.assertTrue(self.eligible(f, 'NAM'))
+        # A programme paid in peace keeps running once the war begins.
+        running = dict(f)
+        running['NAM', 'has_war', 'no'] = True
+        running['NAM', 'has_global_flag', 'ADISCORD_south_final_started'] = False
+        self.apply('complete_effect', running, 'NAM')
+        running['NAM', 'has_war', 'no'] = False
+        running['NAM', 'has_global_flag', 'ADISCORD_south_final_started'] = True
+        self.assertFalse(self.cancelled(running, 'NAM'))
+        self.assertEqual(self.apply('remove_effect', running, 'NAM'), {'power': 0, 'cores': 1})
+        for callback in ('remove_effect', 'cancel_effect'):
+            self.assertEqual(self.apply(callback, running, 'NAM'), {'power': 0, 'cores': 0})
+        # A member of Shahrabad's faction without a side variable belongs to that war.
+        allied = self.south_war_facts()
+        allied['VAL', 'exists', 'yes'] = True
+        allied['VAL', 'is_in_faction_with', 'SHL'] = True
+        allied['NAM', 'has_war_with', 'VAL'] = True
+        self.assertTrue(self.eligible(allied, 'NAM'))
+        self.apply('complete_effect', allied, 'NAM')
+        self.assertFalse(self.cancelled(allied, 'NAM'))
+        self.assertEqual(self.apply('remove_effect', allied, 'NAM'), {'power': 0, 'cores': 1})
+
+    def test_svetlogorye_war_for_the_south_keeps_the_other_war_rules(self):
+        self.use('NAM')
+        for case in ('enemy_holds_target', 'other_enemy', 'not_on_north_side', 'resolved'):
+            with self.subTest(case=case):
+                f = self.south_war_facts()
+                self.apply('complete_effect', f, 'NAM')
+                if case == 'enemy_holds_target':
+                    f['2', 'is_controlled_by', 'NAM'] = False
+                    f['2', 'is_controlled_by', 'SHL'] = True
+                elif case == 'other_enemy':
+                    f['VAL', 'exists', 'yes'] = True
+                    f['NAM', 'has_war_with', 'VAL'] = True
+                elif case == 'not_on_north_side':
+                    f['NAM', 'variable', 'ADISCORD_south_side'] = 0
+                else:
+                    f['NAM', 'has_global_flag', 'ADISCORD_south_final_resolved'] = True
+                fresh = dict(f)
+                fresh['2', 'has_state_flag', 'NAM_nationalisation_pending'] = False
+                self.assertFalse(self.eligible(fresh, 'NAM'))
+                self.assertTrue(self.cancelled(f, 'NAM'))
+                self.assertEqual(self.apply('cancel_effect', f, 'NAM'), {'power': 50, 'cores': 0})
+                self.assertEqual(self.apply('remove_effect', f, 'NAM'), {'power': 0, 'cores': 0})
 
     def test_svetlogorye_citizenship_and_occupation_thresholds(self):
         self.use('NAM')

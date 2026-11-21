@@ -540,6 +540,95 @@ ADISCORD_south_prepare_champion = {
 		set_major = yes
 	}
 	ADISCORD_south_open_champion_front = yes
+	if = {
+		limit = { difficulty > 1 }
+		hidden_effect = { country_event = { id = ADISCORD_south.7 days = 45 } }
+	}
+	if = {
+		limit = {
+			is_ai = yes
+			difficulty > 2
+		}
+		ADISCORD_south_issue_campaign_reserve = yes
+		if = {
+			limit = { difficulty > 3 }
+			ADISCORD_south_issue_campaign_reserve = yes
+		}
+	}
+}
+
+ADISCORD_south_issue_campaign_reserve = {
+	add_manpower = 20000
+	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 18000 producer = THIS }
+	add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 160 producer = THIS }
+	add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 120 producer = THIS }
+}
+
+# The event creates a fixed composition at delivery, independent of templates
+# edited during preparation or inherited from the resource war.
+ADISCORD_south_raise_second_wave = {
+	if = {
+		limit = { difficulty > 2 }
+		add_manpower = 100000
+		set_temp_variable = { var = ADISCORD_south_second_wave_regiments value = 7 }
+	}
+	else = {
+		add_manpower = 30000
+		set_temp_variable = { var = ADISCORD_south_second_wave_regiments value = 4 }
+	}
+	random_owned_controlled_state = {
+		prioritize = { 699 700 701 69 }
+		save_event_target_as = ADISCORD_south_second_wave_state
+	}
+	division_template = {
+		name = "Southern Reserve Regiment"
+		template_counter = 3
+		division_names_group = ADISCORD_INF_01
+		regiments = {
+			infantry = { x = 0 y = 0 }
+			infantry = { x = 0 y = 1 }
+			infantry = { x = 1 y = 0 }
+			infantry = { x = 1 y = 1 }
+		}
+	}
+	for_loop_effect = {
+		end = ADISCORD_south_second_wave_regiments
+		value = ADISCORD_south_second_wave_index
+		if = {
+			limit = { ADISCORD_south_can_equip_reserve_regiment = yes }
+			add_manpower = -4000
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -3600 }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = -32 }
+			event_target:ADISCORD_south_second_wave_state = {
+				create_unit = {
+					division = "division_template = \"Southern Reserve Regiment\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = PREV
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+		}
+	}
+	division_template = {
+		name = "Southern Reserve Militia"
+		template_counter = 80
+		division_names_group = ADISCORD_INF_01
+		regiments = {
+			ADISCORD_militia = { x = 0 y = 0 }
+			ADISCORD_militia = { x = 0 y = 1 }
+			ADISCORD_militia = { x = 1 y = 0 }
+		}
+	}
+	event_target:ADISCORD_south_second_wave_state = {
+		for_loop_effect = {
+			end = 10
+			value = ADISCORD_south_second_wave_militia_index
+			create_unit = {
+				division = "division_template = \"Southern Reserve Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = PREV
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
 }
 
 # GLOBAL. Subjects and faction partners enter with their champion. NAM can
@@ -2365,7 +2454,7 @@ ADISCORD_south_offer_economic_contract = {
 	}
 }
 
-# ----- Cost of the war -----
+# ----- Home front strain -----
 # ADISCORD_south_war_strain (0-100) belongs to each champion. The furnace cycle
 # raises it; ADISCORD_south_war_strain_dynamic reads the derived field variables.
 # District orders and the hold mission are the champion's operations in the
@@ -2456,7 +2545,7 @@ ADISCORD_south_add_strain = {
 			max = 100
 		}
 		ADISCORD_south_refresh_strain = yes
-		# The crisis clears its own marker in every answer and lowers the cost.
+		# The crisis clears its own marker in every answer and relieves home front strain.
 		if = {
 			limit = {
 				check_variable = { var = ADISCORD_south_war_strain value = 100 compare = greater_than_or_equals }

@@ -10,6 +10,8 @@ import json
 import re
 import unittest
 
+from PIL import Image
+
 from tools.lib.focus_sources import read_focus_source
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions, selected_effects, walk
@@ -339,6 +341,35 @@ def numeric_date(date):
 
 
 class SouthFinalWarContractTests(unittest.TestCase):
+    def test_war_entry_grants_reserves_to_current_ai_champions_by_difficulty(self):
+        effects = definitions(EFFECTS)
+        prepare = "ADISCORD_south_prepare_champion"
+        reserve = "ADISCORD_south_issue_campaign_reserve"
+        start = block(effects["ADISCORD_south_begin_hostilities"], "if")
+        recipients = [e for e in start if isinstance(e.value, list)
+                      and any(item.key == prepare for item in walk(e.value))]
+        self.assertCountEqual([e.key for e in recipients], CANDIDATES)
+        for recipient in recipients:
+            tag = recipient.key
+            for leader in ("NAM", "EFL", "AZH"):
+                facts = {(tag, "has_country_flag", "ADISCORD_south_north_leader"): tag == leader}
+                calls = [e.key for _, e in selected_effects(recipient.value, facts, tag)]
+                self.assertEqual(calls.count(prepare), int(tag in ("SHL", leader)))
+            for level in range(5):
+                for ai in (False, True):
+                    facts = {(tag, "numeric", "difficulty"): level, (tag, "is_ai", "yes"): ai}
+                    calls = [e.key for _, e in selected_effects(effects[prepare], facts, tag)]
+                    self.assertEqual(calls.count(reserve), max(0, level - 2) if ai else 0)
+        package = effects[reserve]
+        self.assertEqual(scalar(package, "add_manpower"), "20000")
+        equipment = {scalar(e.value, "type"): int(scalar(e.value, "amount"))
+                     for e in package if e.key == "add_equipment_to_stockpile"}
+        self.assertEqual(equipment, {
+            "infantry_equipment_0": 18000,
+            "ADISCORD_squad_weapons_equipment_0": 160,
+            "motorized_equipment_1": 120,
+        })
+
     def test_veyr_approaches_match_the_physical_naran_hamad_border(self):
         from tools.builders import build_adiscord_strategic_regions as regions
 
@@ -882,17 +913,102 @@ class SouthLifecycleTests(unittest.TestCase):
     def trigger_matches(self, name, scope="SHL"):
         return self.matches(self.triggers[name], scope)
 
+    def test_second_wave_follows_the_current_ai_champions_and_their_war(self):
+        event_id = "ADISCORD_south.7"
+        event, = [e.value for e in parse_clausewitz(EVENTS.read_text(encoding="utf-8"))
+                  if e.key == "country_event" and scalar(e.value, "id") == event_id]
+        trigger = block(event, "trigger")
+        self.assertEqual(scalar(block(event, "immediate"), "ADISCORD_south_raise_second_wave"), "yes")
+        prepare = self.effects["ADISCORD_south_prepare_champion"]
+        for level in range(5):
+            self.facts[("SHL", "numeric", "difficulty")] = level
+            calls = [e.value for _, e in selected_effects(prepare, self.facts, "SHL")
+                     if e.key == "country_event" and scalar(e.value, "id") == event_id]
+            self.assertEqual([scalar(call, "days") for call in calls], ["45"] if level >= 2 else [])
+        self.flag("ADISCORD_south_final_started")
+        self.variable("ADISCORD_south_side", 1, "SHL")
+        for tag in CANDIDATES:
+            self.facts.update({
+                (tag, "numeric", "difficulty"): 3, (tag, "is_ai", "yes"): True,
+                (tag, "owns_state", "700"): True, (tag, "controls_state", "700"): True,
+                (tag, "numeric", "has_manpower"): 0, (tag, "equipment", "infantry_equipment"): 0,
+                (tag, "equipment", "ADISCORD_squad_weapons_equipment"): 0,
+                (tag, "has_war_with", "SHL"): True,
+            })
+        for north in ("NAM", "EFL", "AZH"):
+            self.facts[(north, "has_country_flag", "ADISCORD_south_north_leader")] = True
+            for tag in CANDIDATES:
+                self.assertEqual(self.matches(trigger, tag), tag in ("SHL", north))
+            for scope, key, value in (
+                (north, "has_war_with", "SHL"), (north, "has_capitulated", "no"),
+                ("SHL", "is_subject", "no"),
+            ):
+                self.facts[(scope, key, value)] = False
+                self.assertFalse(self.matches(trigger, north))
+                self.assertFalse(self.matches(trigger, "SHL"))
+                self.facts[(scope, key, value)] = True
+            for level in range(5):
+                for ai in (False, True):
+                    self.facts[(north, "numeric", "difficulty")] = level
+                    self.facts[(north, "is_ai", "yes")] = ai
+                    self.assertEqual(self.matches(trigger, north), ai and level >= 2)
+            self.flag("ADISCORD_south_final_resolved")
+            self.assertFalse(self.matches(trigger, north))
+            self.flag("ADISCORD_south_final_resolved", False)
+            self.facts[(north, "has_country_flag", "ADISCORD_south_north_leader")] = False
+
+    def test_second_wave_delivers_ten_militias_and_charges_only_for_regulars(self):
+        wave = self.effects["ADISCORD_south_raise_second_wave"]
+        regular = "Southern Reserve Regiment"
+        militia = "Southern Reserve Militia"
+        templates = {scalar(e.value, "name"): [b.key for b in block(e.value, "regiments")]
+                     for e in wave if e.key == "division_template"}
+        self.assertEqual(templates, {regular: ["infantry"] * 4, militia: ["ADISCORD_militia"] * 3})
+        place = scalar(block(wave, "random_owned_controlled_state"), "save_event_target_as")
+        self.targets[place] = "699"
+        manpower = ("SHL", "numeric", "has_manpower")
+        rifles = ("SHL", "equipment", "infantry_equipment")
+        squads = ("SHL", "equipment", "ADISCORD_squad_weapons_equipment")
+        for level, men, guns, weapons, expected in (
+            (2, 0, 0, 0, 0), (2, 0, 14400, 128, 4), (2, 0, 14400, 127.99, 3),
+            (2, 32000, 28800, 256, 4), (2, 0, 14399.99, 128, 3),
+            (3, 32000, 28800, 256, 7), (4, 28000, 25200, 224, 7),
+            (3, 0, 25200, 224, 7), (4, 28000, 25199.99, 224, 6),
+            (3, 28000, 25200, 223.99, 6), (4, 4000, 3600, 32, 1), (3, 4000, 3600, 31.99, 0),
+            (4, 0, 0, 0, 0),
+        ):
+            self.facts[("SHL", "numeric", "difficulty")] = level
+            self.facts.update({manpower: men, rifles: guns, squads: weapons})
+            counts = {regular: 0, militia: 0}
+            for scope, e in selected_effects(self.expand(wave), self.facts, "SHL"):
+                if e.key == "set_temp_variable":
+                    self.variable(scalar(e.value, "var"), int(scalar(e.value, "value")), scope)
+                elif e.key == "add_manpower":
+                    self.facts[(scope, "numeric", "has_manpower")] += int(e.value)
+                elif e.key == "add_equipment_to_stockpile":
+                    self.facts[(scope, "equipment", scalar(e.value, "type"))] += int(scalar(e.value, "amount"))
+                elif e.key == "create_unit":
+                    self.assertEqual((scope, scalar(e.value, "owner")), ("699", "PREV"))
+                    unit = parse_clausewitz(scalar(e.value, "division"))
+                    for field in ("start_equipment_factor", "start_manpower_factor"):
+                        self.assertEqual(float(scalar(unit, field)), 1)
+                    counts[scalar(unit, "division_template")] += 1
+            self.assertEqual(counts, {regular: expected, militia: 10})
+            grant = 30000 if level == 2 else 100000
+            self.assertEqual(self.facts[manpower], men + grant - 4000 * expected)
+            self.assertEqual(self.facts[rifles], guns - 3600 * expected)
+            self.assertEqual(self.facts[squads], weapons - 32 * expected)
+
     def test_expedition_offer_checks_the_price_of_the_requested_force(self):
-        self.event_root = "EFL"
+        available = block(south_decisions()["ADISCORD_south_request_expedition"], "available")
         self.flag("ADISCORD_south_final_started")
         for champion, side, focus in (
             ("SHL", 1, "SHL_sw_buy_the_sands"),
             ("NAM", 2, "NAM_sw_protectorate_offers"),
         ):
-            self.event_sender = champion
             self.variable("ADISCORD_south_side", side, champion)
             self.variable("ADISCORD_south_side", side, "EFL")
-            self.facts[(champion, "has_country_flag", "ADISCORD_south_expedition_pending")] = True
+            pending = (champion, "has_country_flag", "ADISCORD_south_expedition_pending")
             self.facts[(champion, "has_country_flag", "ADISCORD_south_north_leader")] = side == 2
             for count in (2, 3):
                 self.facts[(champion, "has_completed_focus", focus)] = count == 3
@@ -905,6 +1021,12 @@ class SouthLifecycleTests(unittest.TestCase):
                     with self.subTest(champion=champion, count=count, manpower=manpower, stock=stock):
                         self.facts[("EFL", "numeric", "has_manpower")] = manpower
                         self.facts[("EFL", "equipment", "infantry_equipment")] = stock
+                        self.event_root, self.event_sender = champion, "EFL"
+                        self.facts[pending] = False
+                        checks = [entry for _, entry in selected_effects(self.expand(available), self.facts, champion)]
+                        self.assertEqual(matches_conditions(checks, self.facts, champion), ready)
+                        self.event_root, self.event_sender = "EFL", champion
+                        self.facts[pending] = True
                         self.assertEqual(self.trigger_matches("ADISCORD_south_expedition_possible", "EFL"), ready)
 
     def test_normalisation_protects_both_neighbours_in_southern_negotiations(self):
@@ -1043,25 +1165,71 @@ class SouthLifecycleTests(unittest.TestCase):
         self.assertEqual(scalar(panel, "window_name"), scalar(window, "name"))
         properties = block(panel, "properties")
         triggers = block(panel, "triggers")
+        textures = ROOT / "gfx/interface/south_influence"
+        with Image.open(textures / "influence_marker.png") as marker_image:
+            tip_offset = marker_image.width // 2
+        with Image.open(textures / "influence_track.png") as track_image:
+            rail = track_image.convert("RGB")
+        tick_positions = [x for x in range(rail.width) if rail.getpixel((x, 2)) == (218, 210, 178)]
+        orange, blue = (158, 82, 34), (38, 83, 133)
         for tag in (*CHAMPIONS, *REGIONAL):
             with self.subTest(tag=tag):
                 flag = f"ADISCORD_south_map_flag_{tag}"
                 self.assertEqual(scalar(widgets[flag], "pdx_tooltip"), f"ADISCORD_south_map_{tag}_tt")
-                gauge = f"ADISCORD_south_map_gauge_{tag}"
-                contents = {scalar(e.value, "name"): e.value for e in widgets[gauge] if e.key == "iconType"}
                 marker = f"ADISCORD_south_map_marker_{tag}"
-                self.assertEqual(set(contents), {marker, f"ADISCORD_south_map_track_{tag}"})
-                scoped = block(block(triggers, gauge + "_visible"), tag)
-                self.assertEqual(scalar(scoped, "ADISCORD_south_map_influence_contested"), "yes")
-                self.assertEqual(scalar(contents[marker], "orientation"), "center_up")
+                track = f"ADISCORD_south_map_track_{tag}"
+                self.assertIn(marker, widgets)
+                marker_pos = block(widgets[marker], "position")
+                track_pos = block(widgets[track], "position")
                 flag_pos = block(widgets[flag], "position")
-                gauge_pos = block(widgets[gauge], "position")
-                self.assertEqual(scalar(flag_pos, "x"), scalar(gauge_pos, "x"))
-                self.assertLess(int(scalar(flag_pos, "y")), int(scalar(gauge_pos, "y")))
-                self.assertEqual(scalar(block(properties, marker), "x"), f"{tag}.ADISCORD_south_coalition_influence?0")
+                self.assertEqual(scalar(flag_pos, "x"), scalar(track_pos, "x"))
+                self.assertLess(int(scalar(flag_pos, "y")), int(scalar(track_pos, "y")))
+                self.assertEqual(scalar(marker_pos, "y"), scalar(track_pos, "y"))
+                self.assertEqual(scalar(marker_pos, "x"), "0")
+                for name in (track, marker):
+                    scoped = block(block(triggers, name + "_visible"), tag)
+                    self.assertEqual(scalar(scoped, "ADISCORD_south_map_influence_contested"), "yes")
+
+                position_var = scalar(block(properties, marker), "x")
+                self.assertEqual(position_var, marker + "_x")
+                refresh = block(triggers, marker + "_visible")
+                origin = block(refresh, "set_temp_variable")
+                self.assertEqual(scalar(origin, "var"), position_var)
+                shift = block(refresh, "if")
+                score = "ADISCORD_south_coalition_influence"
+                self.assertEqual(scalar(block(block(shift, "limit"), tag), "has_variable"), score)
+                delta = block(shift, "add_to_temp_variable")
+                self.assertEqual(scalar(delta, "var"), position_var)
+                self.assertEqual(scalar(delta, "value"), f"{tag}.{score}")
+                neutral_tip = int(scalar(origin, "value")) - int(scalar(track_pos, "x")) + tip_offset
+                self.assertEqual([neutral_tip + offset for offset in (-60, 0, 60)], tick_positions)
+                for score_value in (-100, -20, 15, 100):
+                    color = rail.getpixel((neutral_tip + score_value, 5))
+                    self.assertEqual(color, orange if score_value < 0 else blue)
                 caption = scalar(widgets[f"ADISCORD_south_map_gap_{tag}"], "text")
                 for lang in ("russian", "english"):
                     self.assertIn(f"[{tag}.ADISCORDSouthMapGaps]", loc_value(lang, caption))
+
+    def test_map_shows_home_front_strain_from_zero_until_the_front_closes(self):
+        gui = definitions(ROOT / "interface/ADISCORD_south_final_war.gui")["guiTypes"]
+        window = block(gui, "containerWindowType")
+        row = next(e.value for e in window if e.key == "instantTextBoxType"
+                   and scalar(e.value, "name") == "ADISCORD_south_map_strain")
+        scripted = definitions(ROOT / "common/scripted_guis/ADISCORD_south_final_war_scripted_gui.txt")
+        panel = block(scripted["scripted_gui"], "ADISCORD_south_map_panel")
+        triggers = block(panel, "triggers")
+        strain = "ADISCORD_south_war_strain"
+        for points in (None, 0, 73, 100, None):
+            self.facts[("NAM", "has_variable", strain)] = points is not None
+            if points is not None:
+                self.variable(strain, points, "NAM")
+            self.assertEqual(self.matches(block(triggers, "ADISCORD_south_map_strain_visible"), "NAM"), points is not None)
+            self.assertEqual(self.matches(block(triggers, "ADISCORD_south_map_heading_visible"), "NAM"), points is None)
+        for language in ("russian", "english"):
+            self.assertIn(f"[?{strain}|0]/100", loc_value(language, scalar(row, "text")))
+            detail = loc_value(language, scalar(row, "pdx_tooltip"))
+            for field in ("stability", "war_support", "factory"):
+                self.assertIn(f"[?ADISCORD_south_strain_{field}|=+1%]", detail)
 
     def test_map_shows_the_actual_points_missing_for_each_camps_invitation(self):
         scripted = parse_clausewitz(SCRIPTED_LOC.read_text(encoding="utf-8"))
@@ -2845,9 +3013,9 @@ def loc_value(language, key):
 
 
 class SouthWarOperationsTests(unittest.TestCase):
-    """Cost of the war, district orders and the hold mission shared by both champions."""
+    """Home front strain, district orders and the hold mission shared by both champions."""
 
-    def test_cost_rises_only_in_the_furnace_cycle_after_the_war_starts(self):
+    def test_strain_rises_only_in_the_furnace_cycle_after_the_war_starts(self):
         cycle = body(EFFECTS, "ADISCORD_south_crisis_cycle")
         guard = cycle[cycle.index("ADISCORD_south_final_active = yes", cycle.rindex("if = {")):]
         self.assertIn("flag = ADISCORD_south_final_started", guard)
@@ -2860,7 +3028,7 @@ class SouthWarOperationsTests(unittest.TestCase):
         for path in (ROOT / "common/on_actions").glob("*.txt"):
             self.assertNotIn("ADISCORD_south_strain", path.read_text(encoding="utf-8-sig"), path.name)
 
-    def test_cost_modifier_reads_the_derived_variables_and_refreshes_the_economy(self):
+    def test_strain_modifier_reads_the_derived_variables_and_refreshes_the_economy(self):
         modifier = next(e.value for e in parse_clausewitz(STRAIN_MODIFIER.read_text(encoding="utf-8")) if e.key == "ADISCORD_south_war_strain_dynamic")
         fields = {e.value for e in modifier if e.key not in ("icon", "enable")}
         self.assertEqual(fields, set(STRAIN_FIELDS))
@@ -2876,6 +3044,49 @@ class SouthWarOperationsTests(unittest.TestCase):
         self.assertIn("NOT = { has_country_flag = ADISCORD_south_home_front_crisis }", add)
         self.assertNotIn("hidden_effect", add)
 
+    def test_relief_tooltips_read_live_strain_and_clamp_each_preview(self):
+        prefix = "ADISCORDSouthStrainAfter"
+        definitions = parse_clausewitz(SCRIPTED_LOC.read_text(encoding="utf-8"))
+        previews = {scalar(e.value, "name"): e.value for e in definitions if e.key == "defined_text"
+                    and scalar(e.value, "name").startswith(prefix)}
+        for language, label in (("russian", "Усталость тыла"), ("english", "Home front strain")):
+            linked = set()
+            for family in ("nam_resource_war", "SHL", "south_final_war"):
+                path = ROOT / f"localisation/{language}/ADISCORD_{family}_l_{language}.yml"
+                for line in path.read_text(encoding="utf-8-sig").splitlines():
+                    key = line.split(":", 1)[0].strip()
+                    match = re.search(re.escape(label) + r":? §G-(\d+)§!", line, re.I)
+                    if key == "ADISCORD_south_district_order_result_tt":
+                        match = re.search(r"§G(\d+)§! £NAM_war_cost_texticon", line)
+                        self.assertIsNotNone(match, key)
+                    elif key.startswith("ADISCORD_south_crisis_") or not match:
+                        continue
+                    name = prefix + match[1]
+                    self.assertIn(f"[{name}]", line, key)
+                    linked.add(name)
+            self.assertEqual(linked, set(previews))
+            self.assertEqual(loc_value(language, "ADISCORD_south_strain_none"), "")
+            caption = loc_value(language, "ADISCORD_south_strain_preview")
+            for var in ("ADISCORD_south_war_strain", "ADISCORD_south_preview_strain"):
+                self.assertIn(f"[?{var}|0]", caption)
+
+        for name, definition in previews.items():
+            active, inactive = [entry.value for entry in definition if entry.key == "text"]
+            self.assertEqual(scalar(active, "localization_key"), "ADISCORD_south_strain_preview")
+            self.assertEqual(scalar(inactive, "localization_key"), "ADISCORD_south_strain_none")
+            guard, copy, subtract, clamp = block(active, "trigger")
+            self.assertEqual((guard.key, guard.value), ("has_variable", "ADISCORD_south_war_strain"))
+            self.assertEqual((copy.key, scalar(copy.value, "value")), ("set_temp_variable", guard.value))
+            self.assertEqual(subtract.key, "subtract_from_temp_variable")
+            self.assertEqual(clamp.key, "clamp_temp_variable")
+            for operation in (copy, subtract, clamp):
+                self.assertEqual(scalar(operation.value, "var"), "ADISCORD_south_preview_strain")
+            reduction = int(name.removeprefix(prefix))
+            amount = int(scalar(subtract.value, "value"))
+            floor, ceiling = (int(scalar(clamp.value, key)) for key in ("min", "max"))
+            for current in (0, reduction - 1, reduction, reduction + 1, 73, 100):
+                self.assertEqual(max(floor, min(ceiling, current - amount)), max(0, current - reduction))
+
     def test_every_terminal_path_closes_the_front(self):
         self.assertIn("ADISCORD_south_open_champion_front = yes", body(EFFECTS, "ADISCORD_south_prepare_champion"))
         self.assertIn("ADISCORD_south_close_champion_front = yes", body(EFFECTS, "ADISCORD_south_close_member_state"))
@@ -2889,7 +3100,7 @@ class SouthWarOperationsTests(unittest.TestCase):
         self.assertIn("clr_country_flag = ADISCORD_south_home_front_crisis", close)
         self.assertIn("remove_ideas = ADISCORD_south_order_failed", close)
 
-    def test_home_front_crisis_answers_clear_the_marker_and_lower_the_cost(self):
+    def test_home_front_crisis_answers_clear_the_marker_and_lower_strain(self):
         event = next(e.value for e in parse_clausewitz(EVENTS.read_text(encoding="utf-8")) if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_south.50")
         options = [e.value for e in event if e.key == "option"]
         self.assertEqual(len(options), 2)

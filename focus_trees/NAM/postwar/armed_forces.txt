@@ -18,7 +18,7 @@
 		continue_if_invalid = no
 		completion_reward = {
 			if = {
-				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_pw_family_pensions } } }
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_pw_insurance_fund } } }
 				unlock_decision_tooltip = NAM_pw_veteran_course
 				custom_effect_tooltip = NAM_pw_veteran_course_unlock_tt
 			}
@@ -381,21 +381,6 @@
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
 			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_army_assets_tt
-				OR = {
-					AND = {
-						has_army_manpower = { size > 17999 }
-						NOT = { has_equipment = { infantry_equipment < 3000 } }
-						NOT = { has_equipment = { support_equipment < 200 } }
-					}
-					AND = {
-						NOT = { has_manpower < 6000 }
-						NOT = { has_equipment = { infantry_equipment < 9000 } }
-						NOT = { has_equipment = { support_equipment < 200 } }
-					}
-				}
-			}
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
@@ -438,13 +423,13 @@
 	}
 
 	focus = {
-		id = NAM_pw_naval_review
+		id = NAM_svetlogorsk_shipyards
 		relative_position_id = NAM_pw_southern_army
 		x = -3
 		y = 2
-		icon = GFX_focus_NAM_pw_naval_review
+		icon = GFX_focus_NAM_svetlogorsk_shipyards
 		cost = 3
-		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
 		prerequisite = {
 			focus = NAM_pw_southern_army
 		}
@@ -490,100 +475,16 @@
 				unlock_decision_tooltip = NAM_submarine_order
 				custom_effect_tooltip = NAM_submarine_order_unlock_tt
 			}
-			NAM_pw_enact_sea_training = yes
-			add_equipment_to_stockpile = {
-				type = convoy
-				amount = 15
-				producer = NAM
-			}
-			navy_experience = 40
-			set_technology = { ADISCORD_tech_destroyer_hull_2155 = 1 }
-			set_technology = { ADISCORD_tech_submarine_hull_2155 = 1 }
-			add_tech_bonus = {
-				name = NAM_pw_naval_review
-				bonus = 0.75
-				uses = 1
-				category = naval_equipment
-			}
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_navy_dummy_idea
-					add_idea = NAM_pw_naval_review_navy_preview
-				}
-			}
-			hidden_effect = {
-				create_equipment_variant = {
-					name = "NAM_auxiliary_patrol_design"
-					type = ADISCORD_coastal_patrol_ship_1
-				}
-				# The pre-war tree already created these designs when both of its
-				# focuses were taken; the order then stays with that tree.
-				if = {
-					limit = {
-						NOT = {
-							AND = {
-								has_completed_focus = NAM_naval_construction
-								has_completed_focus = NAM_escort_school
-							}
-						}
-					}
-					create_equipment_variant = {
-						name = "ADISCORD_escort_ship_2155"
-						type = ADISCORD_escort_ship_2155
-						allow_without_tech = yes
-					}
-				}
-				if = {
-					limit = {
-						NOT = {
-							AND = {
-								has_completed_focus = NAM_naval_construction
-								has_completed_focus = NAM_active_squadron
-							}
-						}
-					}
-					create_equipment_variant = {
-						name = "ADISCORD_submarine_2155"
-						type = ADISCORD_submarine_2155
-						allow_without_tech = yes
-					}
-				}
-				add_to_variable = { var = NAM_navy_repair_speed value = 0.10 }
-				NAM_refresh_navy = yes
-				country_event = { id = ADISCORD_nam_story.303 days = 2 }
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_svetlogorsk_shipyards
-		relative_position_id = NAM_pw_naval_review
-		x = -2
-		y = 2
-		icon = GFX_focus_NAM_svetlogorsk_shipyards
-		cost = 2
-		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
-		prerequisite = {
-			focus = NAM_pw_naval_review
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			owns_state = 688
-			controls_state = 688
-			controls_province = 689
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
 			unlock_decision_tooltip = NAM_program_naval_workshops
 			custom_effect_tooltip = NAM_program_naval_workshops_unlock_tt
+			NAM_pw_enact_sea_training = yes
 			688 = {
 				if = {
-					limit = { free_building_slots = { building = dockyard size > 0 include_locked = yes } }
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						free_building_slots = { building = dockyard size > 0 include_locked = yes }
+					}
 					add_extra_state_shared_building_slots = 1
 					add_building_construction = {
 						type = dockyard
@@ -594,10 +495,17 @@
 			}
 			add_equipment_to_stockpile = {
 				type = convoy
-				amount = 10
+				amount = 20
 				producer = NAM
 			}
-			navy_experience = 25
+			set_technology = { ADISCORD_tech_destroyer_hull_2155 = 1 }
+			set_technology = { ADISCORD_tech_submarine_hull_2155 = 1 }
+			add_tech_bonus = {
+				name = NAM_svetlogorsk_shipyards
+				bonus = 0.75
+				uses = 1
+				category = naval_equipment
+			}
 			if = {
 				limit = {
 					NOT = {
@@ -651,7 +559,71 @@
 				specialization = specialization_naval
 				value = 1
 			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_navy_dummy_idea
+					add_idea = NAM_svetlogorsk_shipyards_navy_preview
+				}
+			}
 			custom_effect_tooltip = NAM_barge_project_tt
+			custom_effect_tooltip = NAM_svetlogorsk_shipyards_reward_tt
+			hidden_effect = {
+				create_equipment_variant = {
+					name = "NAM_auxiliary_patrol_design"
+					type = ADISCORD_coastal_patrol_ship_1
+				}
+				# The pre-war tree already created these designs when both of its
+				# focuses were taken; the order then stays with that tree.
+				if = {
+					limit = {
+						NOT = {
+							AND = {
+								has_completed_focus = NAM_naval_construction
+								has_completed_focus = NAM_escort_school
+							}
+						}
+					}
+					create_equipment_variant = {
+						name = "ADISCORD_escort_ship_2155"
+						type = ADISCORD_escort_ship_2155
+						allow_without_tech = yes
+					}
+				}
+				if = {
+					limit = {
+						NOT = {
+							AND = {
+								has_completed_focus = NAM_naval_construction
+								has_completed_focus = NAM_active_squadron
+							}
+						}
+					}
+					create_equipment_variant = {
+						name = "ADISCORD_submarine_2155"
+						type = ADISCORD_submarine_2155
+						allow_without_tech = yes
+					}
+				}
+				# The dock brings its own shared slot, so a slot that was free before
+				# delivery is still free here; the fallback pays when the harbour is
+				# lost or full.
+				if = {
+					limit = {
+						NOT = {
+							688 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+								free_building_slots = { building = dockyard size > 0 include_locked = yes }
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_navy_repair_speed value = 0.10 }
+				NAM_refresh_navy = yes
+				country_event = { id = ADISCORD_nam_story.303 days = 2 }
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -660,14 +632,14 @@
 
 	focus = {
 		id = NAM_pw_landing_supply
-		relative_position_id = NAM_pw_naval_review
-		x = 2
+		relative_position_id = NAM_svetlogorsk_shipyards
+		x = 0
 		y = 2
 		icon = GFX_focus_NAM_pw_landing_supply
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_MANPOWER }
 		prerequisite = {
-			focus = NAM_pw_naval_review
+			focus = NAM_svetlogorsk_shipyards
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -721,7 +693,7 @@
 			focus = NAM_pw_southern_army
 		}
 		mutually_exclusive = {
-			focus = NAM_pw_naval_review
+			focus = NAM_svetlogorsk_shipyards
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -786,49 +758,9 @@
 	}
 
 	focus = {
-		id = NAM_pw_air_defence
-		relative_position_id = NAM_pw_air_review
-		x = -2
-		y = 2
-		icon = GFX_focus_NAM_pw_air_defence
-		cost = 2
-		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
-		prerequisite = {
-			focus = NAM_pw_air_review
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_program_power_reserve
-			custom_effect_tooltip = NAM_program_power_reserve_unlock_tt
-			add_equipment_to_stockpile = {
-				type = anti_air_equipment
-				amount = 72
-				producer = NAM
-			}
-			if = {
-				limit = { hidden_trigger = { NOT = { has_tech = ADISCORD_tech_high_altitude_interceptors } } }
-				set_technology = { ADISCORD_tech_high_altitude_interceptors = 1 }
-			}
-			if = {
-				limit = { hidden_trigger = { NOT = { has_tech = ADISCORD_tech_precision_glide_bomb_kits } } }
-				set_technology = { ADISCORD_tech_precision_glide_bomb_kits = 1 }
-			}
-			custom_effect_tooltip = NAM_pw_air_defence_reward_tt
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
 		id = NAM_pw_southern_air_command
 		relative_position_id = NAM_pw_air_review
-		x = 2
+		x = 0
 		y = 2
 		icon = GFX_focus_NAM_pw_southern_air_command
 		cost = 2
@@ -849,7 +781,22 @@
 			custom_effect_tooltip = NAM_program_radar_posts_unlock_tt
 			unlock_decision_tooltip = NAM_program_air_supply
 			custom_effect_tooltip = NAM_program_air_supply_unlock_tt
+			unlock_decision_tooltip = NAM_program_power_reserve
+			custom_effect_tooltip = NAM_program_power_reserve_unlock_tt
 			add_fuel = 20000
+			add_equipment_to_stockpile = {
+				type = anti_air_equipment
+				amount = 36
+				producer = NAM
+			}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_tech = ADISCORD_tech_high_altitude_interceptors } } }
+				set_technology = { ADISCORD_tech_high_altitude_interceptors = 1 }
+			}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_tech = ADISCORD_tech_precision_glide_bomb_kits } } }
+				set_technology = { ADISCORD_tech_precision_glide_bomb_kits = 1 }
+			}
 			add_command_power = 25
 			air_experience = 25
 			effect_tooltip = {

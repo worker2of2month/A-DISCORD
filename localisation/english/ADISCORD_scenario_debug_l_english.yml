@@ -136,7 +136,7 @@
  ADISCORD_south_debug_win_nam:0 "§RDEBUG:§! Win the War for the South as Svetlogorye"
  ADISCORD_south_debug_win_nam_desc:0 "Svetlogorye's delegation prepares the terms of victory."
  ADISCORD_south_debug_win_nam_tt:0 "Ends the current southern war with Svetlogorye victorious. The normal settlement for its political course applies after 1 day; temporary campaign statuses are removed."
- ADISCORD_south_debug_win_nam_available_tt:0 "Svetlogorye exists and leads the northern side of the current war."
+ ADISCORD_south_debug_win_nam_available_tt:0 "Svetlogorye exists and leads the southern camp of the current war."
  ADISCORD_south_debug_win_shl:0 "§RDEBUG:§! Win the War for the South as Shahrabad"
  ADISCORD_south_debug_win_shl_desc:0 "Shahrabad's houses and cities welcome news of victory."
  ADISCORD_south_debug_win_shl_tt:0 "Ends the current southern war with Shahrabad victorious. Annexation or subjugation under its political course applies after 1 day; temporary campaign statuses are removed."

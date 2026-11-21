@@ -562,15 +562,11 @@ NAM_clear_mainland_national_spirits = {
 		NAM_adm_balanced_accounts_idea
 		NAM_adm_charter_ending_federation_idea
 		NAM_adm_charter_ending_oil_union_idea
-		NAM_adm_civic_audit_idea
 		NAM_adm_civil_dividend_idea
-		NAM_adm_commercial_commonwealth_idea
-		NAM_adm_common_citizenship_idea
 		NAM_adm_common_fuel_market_idea
+		NAM_adm_contract_register_idea
 		NAM_adm_crisis_office_idea
-		NAM_adm_development_bank_idea
 		NAM_adm_district_guarantees_idea
-		NAM_adm_district_inspectorate_idea
 		NAM_adm_districts_idea
 		NAM_adm_domestic_designs_idea
 		NAM_adm_domestic_refining_idea
@@ -583,12 +579,10 @@ NAM_clear_mainland_national_spirits = {
 		NAM_adm_ladder_of_seals_idea
 		NAM_adm_law_after_war_idea
 		NAM_adm_machine_shops_idea
-		NAM_adm_machine_tool_contracts_idea
 		NAM_adm_municipal_bonds_idea
 		NAM_adm_municipal_land_idea
+		NAM_adm_namestnik_garrisons_idea
 		NAM_adm_national_university_slot_idea
-		NAM_adm_oil_fund_idea
-		NAM_adm_oil_quotas_idea
 		NAM_adm_one_budget_idea
 		NAM_adm_open_ledgers_idea
 		NAM_adm_port_polytechnic_slot_idea
@@ -596,37 +590,31 @@ NAM_clear_mainland_national_spirits = {
 		NAM_adm_prag_ending_republic_idea
 		NAM_adm_prag_treasury_guarantee_idea
 		NAM_adm_pragmatic_compact_idea
-		NAM_adm_pw_armament_inspectorate_idea
-		NAM_adm_pw_central_treasury_idea
+		NAM_adm_pw_cadastre_idea
 		NAM_adm_pw_constitutional_committee_idea
 		NAM_adm_pw_development_fund_idea
 		NAM_adm_pw_district_hospitals_idea
-		NAM_adm_pw_employment_offices_idea
 		NAM_adm_pw_export_guarantees_idea
-		NAM_adm_pw_family_pensions_idea
-		NAM_adm_pw_industrial_commission_idea
 		NAM_adm_pw_insurance_fund_idea
+		NAM_adm_pw_labour_code_idea
 		NAM_adm_pw_postwar_commission_idea
-		NAM_adm_pw_returnee_registration_idea
 		NAM_adm_pw_southern_schools_idea
 		NAM_adm_regional_trusts_idea
 		NAM_adm_regional_university_idea
-		NAM_adm_repair_depots_idea
 		NAM_adm_service_state_idea
 		NAM_adm_south_contract_court_idea
 		NAM_adm_south_delegates_idea
 		NAM_adm_south_heritage_idea
 		NAM_adm_south_safir_customs_idea
 		NAM_adm_south_ward_magistrates_idea
+		NAM_adm_state_plan_idea
 		NAM_adm_state_project_bureaus_idea
 		NAM_adm_supports_balance_idea
 		NAM_adm_svetlogorye_idea
 		NAM_adm_tax_rolls_slot_idea
 		NAM_adm_tenant_councils_idea
 		NAM_adm_vertical_idea
-		NAM_adm_water_boards_idea
 		NAM_adm_well_register_idea
-		NAM_adm_works_commission_idea
 		NAM_administration_dummy_idea
 		NAM_agreement_dist_failure
 		NAM_agreement_dist_reward
@@ -725,10 +713,7 @@ NAM_clear_mainland_national_spirits = {
 		NAM_gar_ladder_ending_iron_idea
 		NAM_gar_mobile_columns_idea
 		NAM_gar_namestnik_garrisons_idea
-		NAM_gar_pw_armament_inspectorate_idea
 		NAM_gar_south_black_basin_idea
-		NAM_gar_state_logistics_grid_idea
-		NAM_gar_tractor_leasing_idea
 		NAM_garrison_dummy_idea
 		NAM_housing_programme
 		NAM_interregnum_power_vacuum
@@ -760,7 +745,6 @@ NAM_clear_mainland_national_spirits = {
 		NAM_national_spirit
 		NAM_navy_active_squadron_idea
 		NAM_navy_basin_reconnaissance_idea
-		NAM_navy_chartered_tonnage_idea
 		NAM_navy_construction_idea
 		NAM_navy_dummy_idea
 		NAM_navy_harbour_service_idea
@@ -781,7 +765,6 @@ NAM_clear_mainland_national_spirits = {
 		NAM_pw_landing_supply_navy_preview
 		NAM_pw_mobile_army_garrison_preview
 		NAM_pw_municipal_services_idea
-		NAM_pw_naval_review_navy_preview
 		NAM_pw_oil_laboratories_administration_preview
 		NAM_pw_power_grid_administration_preview
 		NAM_pw_public_utilities_idea
@@ -792,7 +775,6 @@ NAM_clear_mainland_national_spirits = {
 		NAM_pw_southern_civil_service_administration_preview
 		NAM_pw_southern_intelligence_garrison_preview
 		NAM_pw_southern_supply_plan_garrison_preview
-		NAM_pw_water_intakes_administration_preview
 		NAM_rebel_depot_maps
 		NAM_reparations_to_svetlogorye
 		NAM_rtw_bond_default
@@ -839,6 +821,7 @@ NAM_clear_mainland_national_spirits = {
 		NAM_sub_labour_strike
 		NAM_sub_leaflets
 		NAM_sub_trophy_quarrel
+		NAM_svetlogorsk_shipyards_navy_preview
 		NAM_sw_armoured_spearheads_idea
 		NAM_sw_attrition_wall_idea
 		NAM_sw_burned_wells_idea

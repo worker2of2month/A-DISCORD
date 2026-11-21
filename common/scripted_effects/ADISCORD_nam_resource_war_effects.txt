@@ -340,6 +340,88 @@ NAM_rw_coalition_transport_reserve = {
 	}
 }
 
+NAM_rw_grant_wartime_rifle_stockpile = {
+	if = {
+		limit = { difficulty > 2 }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100000 producer = THIS }
+	}
+	else = {
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 60000 producer = THIS }
+	}
+}
+
+# Country event in the recipient's scope. Both templates are created at delivery
+# so edits to the peacetime army cannot change the composition or the price.
+NAM_rw_coalition_second_wave = {
+	random_owned_controlled_state = {
+		prioritize = { 69 701 }
+		save_event_target_as = NAM_rw_second_wave_state
+	}
+	set_temp_variable = { var = NAM_rw_second_wave_regiments value = 4 }
+	if = {
+		limit = { difficulty > 2 }
+		add_manpower = 100000
+		set_temp_variable = { var = NAM_rw_second_wave_regiments value = 7 }
+	}
+	else_if = {
+		limit = { difficulty > 1 }
+		add_manpower = 30000
+	}
+	division_template = {
+		name = "Coalition Reserve Regiment"
+		template_counter = 3
+		division_names_group = ADISCORD_INF_01
+		regiments = {
+			infantry = { x = 0 y = 0 }
+			infantry = { x = 0 y = 1 }
+			infantry = { x = 1 y = 0 }
+			infantry = { x = 1 y = 1 }
+		}
+	}
+	for_loop_effect = {
+		end = NAM_rw_second_wave_regiments
+		value = NAM_rw_second_wave_index
+		if = {
+			limit = {
+				NOT = { has_manpower < 4000 }
+				NOT = { has_equipment = { infantry_equipment < 3600 } }
+				NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 32 } }
+			}
+			add_manpower = -4000
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -3600 }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = -32 }
+			event_target:NAM_rw_second_wave_state = {
+				create_unit = {
+					division = "division_template = \"Coalition Reserve Regiment\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = PREV
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+		}
+	}
+	division_template = {
+		name = "Coalition Reserve Militia"
+		template_counter = 80
+		division_names_group = ADISCORD_INF_01
+		regiments = {
+			ADISCORD_militia = { x = 0 y = 0 }
+			ADISCORD_militia = { x = 0 y = 1 }
+			ADISCORD_militia = { x = 1 y = 0 }
+		}
+	}
+	event_target:NAM_rw_second_wave_state = {
+		for_loop_effect = {
+			end = 10
+			value = NAM_rw_second_wave_militia_index
+			create_unit = {
+				division = "division_template = \"Coalition Reserve Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = PREV
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+}
+
 # Every queued ADISCORD_nam_resource_war.1 is counted. A dispatch that fails
 # readiness may stop the entry only when no other dispatch is still queued, so
 # a pending retry always owns the final decision and no war follows a refund.
@@ -417,6 +499,8 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.18
 		NAM_rw_coalition_muster = yes
+		NAM_rw_grant_wartime_rifle_stockpile = yes
+		hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.119 days = 45 } }
 	}
 	AZH = {
 		if = {
@@ -426,6 +510,8 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.22
 		NAM_rw_coalition_muster = yes
+		NAM_rw_grant_wartime_rifle_stockpile = yes
+		hidden_effect = { country_event = { id = ADISCORD_nam_resource_war.119 days = 45 } }
 	}
 	if = {
 		limit = { NAM = { has_country_flag = NAM_rw_first_strike } }
@@ -2351,6 +2437,7 @@ NAM_groups_initialize = {
 	if = {
 		limit = { NOT = { has_country_flag = NAM_groups_initialized } }
 		set_country_flag = NAM_groups_initialized
+		every_subject_country = { NAM_sync_subject_resource_tariff = yes }
 		NAM_sync_etatist_party_name = yes
 		EFL = { NAM_board_sync_district_status = yes }
 		AZH = { NAM_board_sync_district_status = yes }
@@ -2631,10 +2718,6 @@ NAM_crisis_draw = {
 		if = {
 			limit = { has_completed_focus = NAM_crisis_office }
 			add_days_mission_timeout = { mission = NAM_incident_countdown days = 60 }
-		}
-		if = {
-			limit = { has_completed_focus = NAM_pw_water_intakes }
-			add_days_mission_timeout = { mission = NAM_incident_countdown days = 15 }
 		}
 		if = {
 			limit = { has_completed_focus = NAM_pw_power_grid }
@@ -4667,7 +4750,7 @@ NAM_certify_shipping_manifest = {
 	if = {
 		limit = {
 			OR = {
-				has_completed_focus = NAM_commercial_commonwealth
+				has_completed_focus = NAM_municipal_bonds
 				has_completed_focus = NAM_export_clearing
 			}
 		}
@@ -5037,7 +5120,7 @@ NAM_project_complete_repair = {
 			}
 			if = {
 				limit = {
-					NAM = { has_completed_focus = NAM_rescue_college }
+					NAM = { has_completed_focus = NAM_south_fenn_guarantee }
 				}
 				set_variable = { var = NAM_field_condition value = 100 }
 			}
@@ -5047,7 +5130,7 @@ NAM_project_complete_repair = {
 				max = 100
 			}
 			if = {
-				limit = { NAM = { has_completed_focus = NAM_water_boards } }
+				limit = { NAM = { has_completed_focus = NAM_south_fenn_guarantee } }
 				if = {
 					limit = { state = 67 }
 					690 = { NAM_water_board_dispatch = yes }
@@ -9606,10 +9689,41 @@ NAM_board_subject_change = {
 			OR = {
 				tag = NAM
 				NAM_subject_identity_participant = yes
+				is_subject_of = NAM
+				FROM = { tag = NAM }
+				NAM_has_subject_resource_tariff = yes
 			}
 		}
 		country_event = { id = ADISCORD_nam_resource_war.112 hours = 1 }
 		NAM = { NAM_board_queue_recount = yes }
+	}
+}
+
+# NAM is the exporter. The relation's target buys its resources.
+NAM_sync_subject_resource_tariff = {
+	if = {
+		limit = {
+			is_subject_of = NAM
+			NAM_has_subject_resource_tariff = no
+		}
+		NAM = {
+			add_relation_modifier = {
+				target = PREV
+				modifier = NAM_subject_resource_tariff
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { is_subject_of = NAM }
+			NAM_has_subject_resource_tariff = yes
+		}
+		NAM = {
+			remove_relation_modifier = {
+				target = PREV
+				modifier = NAM_subject_resource_tariff
+			}
+		}
 	}
 }
 
@@ -22909,6 +23023,59 @@ NAM_isl_launch_spirit = {
 	}
 }
 
+NAM_isl_pay_for_landing = {
+	if = {
+		limit = { FROM = { state = 680 } }
+		add_political_power = -40
+		add_manpower = -21500
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = -19350
+			producer = NAM
+		}
+	}
+	else = {
+		add_political_power = -25
+		add_manpower = -12900
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = -11610
+			producer = NAM
+		}
+	}
+}
+
+NAM_isl_complete_nationalisation = {
+	if = {
+		limit = { hidden_trigger = { FROM = { has_state_flag = NAM_isl_nationalising } } }
+		if = {
+			limit = {
+				hidden_trigger = {
+					FROM = { state = 680 }
+					has_country_flag = NAM_isl_sharden_promise_done
+				}
+			}
+			custom_effect_tooltip = NAM_isl_nationalise_result_promise_tt
+		}
+		else = {
+			custom_effect_tooltip = NAM_isl_nationalise_result_tt
+		}
+		hidden_effect = {
+			FROM = { clr_state_flag = NAM_isl_nationalising }
+			NAM_isl_k_from_target = yes
+			NAM_isl_nationalise_finish = yes
+		}
+	}
+}
+
+NAM_isl_cancel_nationalisation = {
+	if = {
+		limit = { hidden_trigger = { FROM = { has_state_flag = NAM_isl_nationalising } } }
+		custom_effect_tooltip = NAM_isl_nationalise_refund_tt
+		hidden_effect = { FROM = { NAM_isl_nationalise_refund = yes } }
+	}
+}
+
 # COUNTRY NAM; FROM is the target's capital state, temp NAM_isl_k. Called by
 # NAM_isl_launch after its price was paid. A warned, peaceful second strait island
 # joins as a pact member on the target's side, and then every member must fall
@@ -26490,7 +26657,7 @@ NAM_pw_district_allotment_settle = {
 							NOT = { has_state_flag = NAM_pw_allotment_site_opened }
 							OR = {
 								infrastructure > 4
-								NAM = { has_completed_focus = NAM_district_inspectorate }
+								NAM = { has_completed_focus = NAM_pw_cadastre }
 							}
 						}
 					}
@@ -26527,7 +26694,7 @@ NAM_pw_district_allotment_settle = {
 					}
 				}
 				if = {
-					limit = { hidden_trigger = { NAM = { has_completed_focus = NAM_pw_armament_inspectorate } } }
+					limit = { hidden_trigger = { NAM = { has_completed_focus = NAM_namestnik_garrisons } } }
 					add_dynamic_modifier = {
 						modifier = NAM_pw_district_fleet_called
 						days = 90
@@ -26620,7 +26787,7 @@ NAM_pw_garrison_order_settle = {
 			producer = NAM
 		}
 		if = {
-			limit = { has_completed_focus = NAM_pw_armament_inspectorate }
+			limit = { has_completed_focus = NAM_namestnik_garrisons }
 			add_equipment_to_stockpile = {
 				type = artillery_equipment
 				amount = 96
@@ -26696,7 +26863,7 @@ NAM_pw_state_arsenal_settle = {
 		clr_country_flag = NAM_pw_state_arsenal_paid
 		if = {
 			limit = {
-				has_completed_focus = NAM_pw_industrial_commission
+				has_completed_focus = NAM_state_plan
 			}
 			add_equipment_to_stockpile = {
 				type = artillery_equipment
@@ -27061,7 +27228,7 @@ NAM_pw_district_cooperative_settle = {
 		688 = { add_extra_state_shared_building_slots = 1 }
 		if = {
 			limit = {
-				has_completed_focus = NAM_district_fair
+				has_completed_focus = NAM_charter_ending_oil_union
 			}
 			add_equipment_to_stockpile = {
 				type = train_equipment
@@ -27091,7 +27258,7 @@ NAM_pw_district_cooperative_settle = {
 		add_to_variable = { var = NAM_grp_dist_support value = 5 }
 		NAM_groups_refresh = yes
 		if = {
-			limit = { has_completed_focus = NAM_cooperative_congress }
+			limit = { has_completed_focus = NAM_charter_ending_oil_union }
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
 				amount = 150
@@ -27912,7 +28079,7 @@ NAM_pw_industrial_schedule_settle = {
 		clr_country_flag = NAM_pw_industrial_schedule_paid
 		if = {
 			limit = {
-				has_completed_focus = NAM_pw_industrial_commission
+				has_completed_focus = NAM_state_plan
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
@@ -27979,7 +28146,7 @@ NAM_pw_regional_contracts_settle = {
 		}
 		if = {
 			limit = {
-				has_completed_focus = NAM_development_bank
+				has_completed_focus = NAM_regional_trusts
 			}
 			add_equipment_to_stockpile = {
 				type = train_equipment
@@ -28089,7 +28256,7 @@ NAM_pw_public_utilities_settle = {
 		clr_country_flag = NAM_pw_civil_busy
 		add_timed_idea = { idea = NAM_pw_public_utilities_idea days = 180 }
 		if = {
-			limit = { has_completed_focus = NAM_civic_audit }
+			limit = { has_completed_focus = NAM_charter_ending_federation }
 			NAM_returnee_audit_rolls = yes
 		}
 	}
@@ -28117,7 +28284,7 @@ NAM_pw_municipal_services_settle = {
 		clr_country_flag = NAM_pw_civil_busy
 		add_timed_idea = { idea = NAM_pw_municipal_services_idea days = 180 }
 		if = {
-			limit = { has_completed_focus = NAM_civic_audit }
+			limit = { has_completed_focus = NAM_charter_ending_federation }
 			NAM_returnee_audit_rolls = yes
 		}
 	}
@@ -28275,7 +28442,7 @@ NAM_pw_merchant_order_settle = {
 		clr_country_flag = NAM_pw_merchant_order_paid
 		if = {
 			limit = {
-				has_completed_focus = NAM_licensed_assembly
+				has_completed_focus = NAM_export_clearing
 			}
 			add_equipment_to_stockpile = {
 				type = ADISCORD_armored_carrier_2163
@@ -28293,22 +28460,6 @@ NAM_pw_merchant_order_settle = {
 			type = motorized_equipment
 			amount = 300
 			producer = NAM
-		}
-		if = {
-			limit = { has_completed_focus = NAM_chartered_tonnage }
-			add_equipment_to_stockpile = {
-				type = convoy
-				amount = 15
-				producer = NAM
-			}
-		}
-		if = {
-			limit = { has_completed_focus = NAM_tractor_leasing }
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 240
-				producer = NAM
-			}
 		}
 	}
 	else = { NAM_pw_merchant_order_refund = yes }
@@ -30841,76 +30992,36 @@ NAM_program_flight_schools_refund = {
 # Scripted effects take no argument blocks in the engine, so each air order has its own delivery.
 NAM_air_deliver_fighter_batch = {
 	if = {
-		limit = { hidden_trigger = { has_completed_focus = NAM_pw_air_defence } }
-		if = {
-			limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
-			add_equipment_to_stockpile = {
-				type = ADISCORD_fighter_airframe_2161
-				amount = 36
-				producer = NAM
-			}
-		}
-		else = {
-			add_equipment_to_stockpile = {
-				type = ADISCORD_fighter_airframe_2161
-				amount = 24
-				producer = NAM
-			}
+		limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
+		add_equipment_to_stockpile = {
+			type = ADISCORD_fighter_airframe_2161
+			amount = 36
+			producer = NAM
 		}
 	}
 	else = {
-		if = {
-			limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
-			add_equipment_to_stockpile = {
-				type = ADISCORD_fighter_airframe_2163
-				amount = 36
-				producer = NAM
-			}
-		}
-		else = {
-			add_equipment_to_stockpile = {
-				type = ADISCORD_fighter_airframe_2163
-				amount = 24
-				producer = NAM
-			}
+		add_equipment_to_stockpile = {
+			type = ADISCORD_fighter_airframe_2163
+			amount = 24
+			producer = NAM
 		}
 	}
 }
 
 NAM_air_deliver_cas_batch = {
 	if = {
-		limit = { hidden_trigger = { has_completed_focus = NAM_pw_air_defence } }
-		if = {
-			limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
-			add_equipment_to_stockpile = {
-				type = ADISCORD_attack_airframe_2163
-				amount = 36
-				producer = NAM
-			}
-		}
-		else = {
-			add_equipment_to_stockpile = {
-				type = ADISCORD_attack_airframe_2163
-				amount = 24
-				producer = NAM
-			}
+		limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
+		add_equipment_to_stockpile = {
+			type = ADISCORD_attack_airframe_2163
+			amount = 36
+			producer = NAM
 		}
 	}
 	else = {
-		if = {
-			limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
-			add_equipment_to_stockpile = {
-				type = ADISCORD_cas_airframe_2170
-				amount = 36
-				producer = NAM
-			}
-		}
-		else = {
-			add_equipment_to_stockpile = {
-				type = ADISCORD_cas_airframe_2170
-				amount = 24
-				producer = NAM
-			}
+		add_equipment_to_stockpile = {
+			type = ADISCORD_cas_airframe_2170
+			amount = 24
+			producer = NAM
 		}
 	}
 }
@@ -31956,7 +32067,7 @@ NAM_neighbour_establish_command = {
 		NAM = {
 			if = {
 				limit = {
-					NOT = { has_completed_focus = NAM_neighbour_local_commands }
+					NOT = { has_completed_focus = NAM_border_citizenship }
 					NOT = { has_idea = NAM_neighbour_nationalists }
 				}
 				add_ideas = NAM_neighbour_nationalists
@@ -32057,7 +32168,7 @@ NAM_neighbour_apply_completed_charters = {
 NAM_neighbour_apply_district_charter = {
 	if = {
 		limit = {
-			NAM = { has_completed_focus = NAM_neighbour_local_commands }
+			NAM = { has_completed_focus = NAM_border_citizenship }
 		}
 		NAM_neighbour_restore_local_core = yes
 	}

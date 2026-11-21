@@ -130,15 +130,15 @@
 # @section government_border
 	focus = {
 		id = NAM_normalisation
-		relative_position_id = NAM_foreign_office
-		x = -3
-		y = 2
+		relative_position_id = NAM_law_after_war
+		x = -16
+		y = 1
 		icon = GFX_focus_NAM_normalisation
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER FOCUS_FILTER_BALANCE_OF_POWER }
 		mutually_exclusive = { focus = NAM_border_revenge }
 		prerequisite = {
-			focus = NAM_foreign_office
+			focus = NAM_law_after_war
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -156,6 +156,10 @@
 		completion_reward = {
 			unlock_decision_tooltip = NAM_border_autonomy_agreement
 			custom_effect_tooltip = NAM_border_autonomy_agreement_unlock_tt
+			unlock_decision_tooltip = NAM_border_reconstruction_eflor
+			custom_effect_tooltip = NAM_border_reconstruction_eflor_unlock_tt
+			unlock_decision_tooltip = NAM_border_reconstruction_azhar
+			custom_effect_tooltip = NAM_border_reconstruction_azhar_unlock_tt
 			add_manpower = 10000
 			add_stability = 0.05
 			if = {
@@ -165,12 +169,24 @@
 			69 = { remove_claim_by = NAM }
 			727 = { remove_claim_by = NAM }
 			728 = { remove_claim_by = NAM }
+			if = {
+				limit = { country_exists = EFL }
+				add_intel = { target = EFL civilian_intel = 30 }
+			}
+			if = {
+				limit = { country_exists = AZH }
+				add_intel = { target = AZH civilian_intel = 30 }
+			}
 			custom_effect_tooltip = NAM_normalisation_result_tt
 			custom_effect_tooltip = NAM_port_extra_slot_tt
+			custom_effect_tooltip = NAM_grp_normalisation_tt
 			hidden_effect = {
 				NAM_neighbour_recognise_republics = yes
 				add_to_variable = { var = NAM_port_general_slots value = 1 }
 				NAM_port_refresh_capacity = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
 				country_event = {
 					id = ADISCORD_nam_archive.6
 					hours = 2
@@ -182,15 +198,15 @@
 
 	focus = {
 		id = NAM_border_revenge
-		relative_position_id = NAM_foreign_office
-		x = 3
-		y = 2
+		relative_position_id = NAM_law_after_war
+		x = -12
+		y = 1
 		icon = GFX_focus_NAM_border_revenge
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP FOCUS_FILTER_BALANCE_OF_POWER }
 		mutually_exclusive = { focus = NAM_normalisation }
 		prerequisite = {
-			focus = NAM_foreign_office
+			focus = NAM_law_after_war
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -206,6 +222,10 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = NAM_border_reconstruction_eflor
+			custom_effect_tooltip = NAM_border_reconstruction_eflor_unlock_tt
+			unlock_decision_tooltip = NAM_border_reconstruction_azhar
+			custom_effect_tooltip = NAM_border_reconstruction_azhar_unlock_tt
 			army_experience = 40
 			add_equipment_to_stockpile = {
 				type = artillery_equipment
@@ -216,6 +236,14 @@
 			if = {
 				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
 				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.20 }
+			}
+			if = {
+				limit = { country_exists = EFL }
+				add_intel = { target = EFL civilian_intel = 30 }
+			}
+			if = {
+				limit = { country_exists = AZH }
+				add_intel = { target = AZH civilian_intel = 30 }
 			}
 			every_owned_state = {
 				limit = {
@@ -236,8 +264,12 @@
 				custom_effect_tooltip = NAM_border_security_preview_tt
 			}
 			custom_effect_tooltip = NAM_border_revenge_result_tt
+			custom_effect_tooltip = NAM_grp_border_revenge_tt
 			hidden_effect = {
 				NAM_neighbour_install_commands = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
 				country_event = {
 					id = ADISCORD_nam_archive.6
 					hours = 2
@@ -249,85 +281,15 @@
 
 # @section government_civil_services
 	focus = {
-		id = NAM_pw_returnee_registration
-		relative_position_id = NAM_law_after_war
-		x = 14
-		y = 1
-		icon = GFX_focus_NAM_pw_returnee_registration
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		prerequisite = {
-			focus = NAM_law_after_war
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_manpower = 12000
-			688 = {
-				if = {
-					limit = {
-						is_owned_by = ROOT
-						is_controlled_by = ROOT
-					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
-					}
-				}
-			}
-			ADISCORD_reform_society_development = yes
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_adm_pw_returnee_registration_idea
-				}
-			}
-			custom_effect_tooltip = NAM_pw_returnee_registration_reward_tt
-			custom_effect_tooltip = NAM_grp_pw_returnee_registration_tt
-			hidden_effect = {
-				# The factory brings its own shared slot; the fallback pays when the
-				# district is not held at delivery.
-				if = {
-					limit = {
-						NOT = {
-							688 = {
-								is_owned_by = ROOT
-								is_controlled_by = ROOT
-							}
-						}
-					}
-					set_temp_variable = { var = NAM_treasury_amount value = 450 }
-					NAM_add_treasury = yes
-				}
-				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
-				add_to_variable = { var = NAM_adm_civilian_speed value = 0.05 }
-				NAM_refresh_administration = yes
-				add_to_variable = { var = NAM_grp_dist_support value = 12 }
-				add_to_variable = { var = NAM_grp_nam_support value = -6 }
-				NAM_groups_refresh = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
 		id = NAM_pw_school_network
-		relative_position_id = NAM_pw_returnee_registration
-		x = -3
-		y = 2
+		relative_position_id = NAM_law_after_war
+		x = 12
+		y = 1
 		icon = GFX_focus_NAM_pw_school_network
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
-			focus = NAM_pw_returnee_registration
+			focus = NAM_law_after_war
 		}
 		mutually_exclusive = {
 			focus = NAM_pw_district_hospitals
@@ -343,7 +305,20 @@
 		completion_reward = {
 			unlock_decision_tooltip = NAM_campaign_teach_a_trade
 			custom_effect_tooltip = NAM_campaign_teach_a_trade_unlock_tt
-			add_political_power = 100
+			688 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 			add_tech_bonus = {
 				name = NAM_pw_school_network
 				bonus = 0.5
@@ -363,9 +338,29 @@
 					add_idea = NAM_pw_school_network_administration_preview
 				}
 			}
+			custom_effect_tooltip = NAM_pw_school_network_reward_tt
+			custom_effect_tooltip = NAM_grp_pw_school_network_tt
 			hidden_effect = {
+				# The factory brings its own shared slot; the fallback pays when the
+				# district is not held at delivery.
+				if = {
+					limit = {
+						NOT = {
+							688 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
+				}
 				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.04 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.05 }
 				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 12 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
 				country_event = { id = ADISCORD_nam_story.310 days = 2 }
 			}
 		}
@@ -374,14 +369,14 @@
 
 	focus = {
 		id = NAM_pw_district_hospitals
-		relative_position_id = NAM_pw_returnee_registration
-		x = 3
-		y = 2
+		relative_position_id = NAM_law_after_war
+		x = 16
+		y = 1
 		icon = GFX_focus_NAM_pw_district_hospitals
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
-			focus = NAM_pw_returnee_registration
+			focus = NAM_law_after_war
 		}
 		mutually_exclusive = {
 			focus = NAM_pw_school_network
@@ -395,21 +390,52 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_manpower = 10000
+			add_manpower = 14000
 			add_stability = 0.03
+			688 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 			ADISCORD_programme_social_system_development = yes
+			ADISCORD_reform_society_development = yes
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
 					add_idea = NAM_adm_pw_district_hospitals_idea
 				}
 			}
+			custom_effect_tooltip = NAM_pw_district_hospitals_reward_tt
 			custom_effect_tooltip = NAM_grp_pw_district_hospitals_tt
 			hidden_effect = {
-				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
+				# The factory brings its own shared slot; the fallback pays when the
+				# district is not held at delivery.
+				if = {
+					limit = {
+						NOT = {
+							688 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.05 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.05 }
 				NAM_refresh_administration = yes
-				add_to_variable = { var = NAM_grp_dist_support value = 12 }
-				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				add_to_variable = { var = NAM_grp_dist_support value = 15 }
+				add_to_variable = { var = NAM_grp_garr_support value = -8 }
 				NAM_groups_refresh = yes
 				country_event = { id = ADISCORD_nam_resource_war.414 }
 			}
@@ -418,48 +444,13 @@
 	}
 
 	focus = {
-		id = NAM_pw_civil_communications
-		relative_position_id = NAM_pw_school_network
-		x = -1
-		y = 2
-		icon = GFX_focus_NAM_pw_civil_communications
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
-		prerequisite = {
-			focus = NAM_pw_school_network
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			if = {
-				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_rom_address } } }
-				unlock_decision_tooltip = NAM_campaign_our_own_word
-				custom_effect_tooltip = NAM_campaign_our_own_word_unlock_tt
-			}
-			add_political_power = 75
-			add_war_support = 0.05
-			custom_effect_tooltip = NAM_pw_broadcast_slot_tt
-			hidden_effect = {
-				ADISCORD_campaign_slot_grant = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
 		id = NAM_national_university
 		relative_position_id = NAM_pw_school_network
-		x = 1
+		x = 0
 		y = 2
 		icon = GFX_focus_NAM_national_university
 		cost = 2
-		search_filters = { FOCUS_FILTER_RESEARCH }
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = {
 			focus = NAM_pw_school_network
 		}
@@ -470,8 +461,14 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_rom_address } } }
+				unlock_decision_tooltip = NAM_campaign_our_own_word
+				custom_effect_tooltip = NAM_campaign_our_own_word_unlock_tt
+			}
 			add_research_slot = 1
-			add_political_power = 60
+			add_political_power = 100
+			add_war_support = 0.05
 			add_tech_bonus = {
 				name = NAM_national_university
 				bonus = 1
@@ -485,9 +482,11 @@
 					add_idea = NAM_adm_national_university_slot_idea
 				}
 			}
+			custom_effect_tooltip = NAM_pw_broadcast_slot_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.05 }
 				NAM_refresh_administration = yes
+				ADISCORD_campaign_slot_grant = yes
 			}
 		}
 		ai_will_do = {
@@ -645,49 +644,6 @@
 
 # @section government_neighbours
 	focus = {
-		id = NAM_foreign_office
-		relative_position_id = NAM_law_after_war
-		x = -14
-		y = 1
-		icon = GFX_focus_NAM_foreign_office
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_law_after_war }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			has_war = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_border_reconstruction_eflor
-			custom_effect_tooltip = NAM_border_reconstruction_eflor_unlock_tt
-			unlock_decision_tooltip = NAM_border_reconstruction_azhar
-			custom_effect_tooltip = NAM_border_reconstruction_azhar_unlock_tt
-			add_political_power = 100
-			add_war_support = 0.03
-			if = {
-				limit = { country_exists = EFL }
-				add_intel = { target = EFL civilian_intel = 30 }
-			}
-			if = {
-				limit = { country_exists = AZH }
-				add_intel = { target = AZH civilian_intel = 30 }
-			}
-			custom_effect_tooltip = NAM_grp_foreign_office_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_grp_trade_support value = 12 }
-				add_to_variable = { var = NAM_grp_garr_support value = -6 }
-				NAM_groups_refresh = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
 		id = NAM_eflor_accord
 		relative_position_id = NAM_normalisation
 		x = -1
@@ -772,59 +728,27 @@
 	}
 
 	focus = {
-		id = NAM_neighbour_local_commands
-		relative_position_id = NAM_border_revenge
-		x = -1
-		y = 2
-		icon = GFX_focus_NAM_neighbour_local_commands
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_border_revenge }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_neighbour_has_command_tt
-				NAM_neighbour_has_command = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_manpower = 7000
-			add_command_power = 25
-			custom_effect_tooltip = NAM_neighbour_local_commands_result_tt
-			hidden_effect = {
-				# The centres first, then the provinces: the capital of each command
-				# becomes national territory before its home districts.
-				NAM_neighbour_integrate_centres = yes
-				NAM_neighbour_integrate_provinces = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
 		id = NAM_border_citizenship
 		relative_position_id = NAM_border_revenge
-		x = 1
+		x = 0
 		y = 2
 		icon = GFX_focus_NAM_border_citizenship
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		prerequisite = {
 			focus = NAM_border_revenge
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = NAM_border_possession_tt
-				NAM_border_acquisitions_held = yes
-			}
-			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
 				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_border_citizenship_ground_tt
+				OR = {
+					NAM_border_acquisitions_held = yes
+					NAM_neighbour_has_command = yes
+				}
 			}
 		}
 		cancel_if_invalid = yes
@@ -837,7 +761,13 @@
 			unlock_decision_tooltip = NAM_border_incorporation_azhar
 			custom_effect_tooltip = NAM_border_incorporation_azhar_unlock_tt
 			add_political_power = 60
+			add_manpower = 4000
+			add_command_power = 15
 			custom_effect_tooltip = NAM_border_citizenship_reward_tt
+			if = {
+				limit = { hidden_trigger = { NAM_neighbour_has_command = yes } }
+				custom_effect_tooltip = NAM_border_citizenship_charters_tt
+			}
 			hidden_effect = {
 				set_temp_variable = { var = NAM_treasury_amount value = 300 }
 				NAM_add_treasury = yes
@@ -845,6 +775,11 @@
 					limit = { NAM_border_integration_site = yes }
 					add_compliance = 5
 				}
+				# The centres first, then the provinces: the capital of each command
+				# becomes national territory before its home districts. Both do
+				# nothing while no governorate exists.
+				NAM_neighbour_integrate_centres = yes
+				NAM_neighbour_integrate_provinces = yes
 			}
 		}
 		ai_will_do = { base = 5 }

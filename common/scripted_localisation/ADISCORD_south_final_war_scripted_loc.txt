@@ -348,3 +348,103 @@ defined_text = {
 		localization_key = ADISCORD_south_strain_crisis
 	}
 }
+
+# COUNTRY. Calculate each prospective reward when its tooltip is drawn.
+# Before the champion's front opens there is no current strain to preview.
+defined_text = {
+	name = ADISCORDSouthStrainAfter4
+	text = {
+		trigger = {
+			has_variable = ADISCORD_south_war_strain
+			set_temp_variable = { var = ADISCORD_south_preview_strain value = ADISCORD_south_war_strain }
+			subtract_from_temp_variable = { var = ADISCORD_south_preview_strain value = 4 }
+			clamp_temp_variable = { var = ADISCORD_south_preview_strain min = 0 max = 100 }
+		}
+		localization_key = ADISCORD_south_strain_preview
+	}
+	text = { localization_key = ADISCORD_south_strain_none }
+}
+
+defined_text = {
+	name = ADISCORDSouthStrainAfter5
+	text = {
+		trigger = {
+			has_variable = ADISCORD_south_war_strain
+			set_temp_variable = { var = ADISCORD_south_preview_strain value = ADISCORD_south_war_strain }
+			subtract_from_temp_variable = { var = ADISCORD_south_preview_strain value = 5 }
+			clamp_temp_variable = { var = ADISCORD_south_preview_strain min = 0 max = 100 }
+		}
+		localization_key = ADISCORD_south_strain_preview
+	}
+	text = { localization_key = ADISCORD_south_strain_none }
+}
+
+defined_text = {
+	name = ADISCORDSouthStrainAfter6
+	text = {
+		trigger = {
+			has_variable = ADISCORD_south_war_strain
+			set_temp_variable = { var = ADISCORD_south_preview_strain value = ADISCORD_south_war_strain }
+			subtract_from_temp_variable = { var = ADISCORD_south_preview_strain value = 6 }
+			clamp_temp_variable = { var = ADISCORD_south_preview_strain min = 0 max = 100 }
+		}
+		localization_key = ADISCORD_south_strain_preview
+	}
+	text = { localization_key = ADISCORD_south_strain_none }
+}
+
+defined_text = {
+	name = ADISCORDSouthStrainAfter8
+	text = {
+		trigger = {
+			has_variable = ADISCORD_south_war_strain
+			set_temp_variable = { var = ADISCORD_south_preview_strain value = ADISCORD_south_war_strain }
+			subtract_from_temp_variable = { var = ADISCORD_south_preview_strain value = 8 }
+			clamp_temp_variable = { var = ADISCORD_south_preview_strain min = 0 max = 100 }
+		}
+		localization_key = ADISCORD_south_strain_preview
+	}
+	text = { localization_key = ADISCORD_south_strain_none }
+}
+
+defined_text = {
+	name = ADISCORDSouthStrainAfter10
+	text = {
+		trigger = {
+			has_variable = ADISCORD_south_war_strain
+			set_temp_variable = { var = ADISCORD_south_preview_strain value = ADISCORD_south_war_strain }
+			subtract_from_temp_variable = { var = ADISCORD_south_preview_strain value = 10 }
+			clamp_temp_variable = { var = ADISCORD_south_preview_strain min = 0 max = 100 }
+		}
+		localization_key = ADISCORD_south_strain_preview
+	}
+	text = { localization_key = ADISCORD_south_strain_none }
+}
+
+defined_text = {
+	name = ADISCORDSouthStrainAfter12
+	text = {
+		trigger = {
+			has_variable = ADISCORD_south_war_strain
+			set_temp_variable = { var = ADISCORD_south_preview_strain value = ADISCORD_south_war_strain }
+			subtract_from_temp_variable = { var = ADISCORD_south_preview_strain value = 12 }
+			clamp_temp_variable = { var = ADISCORD_south_preview_strain min = 0 max = 100 }
+		}
+		localization_key = ADISCORD_south_strain_preview
+	}
+	text = { localization_key = ADISCORD_south_strain_none }
+}
+
+defined_text = {
+	name = ADISCORDSouthStrainAfter15
+	text = {
+		trigger = {
+			has_variable = ADISCORD_south_war_strain
+			set_temp_variable = { var = ADISCORD_south_preview_strain value = ADISCORD_south_war_strain }
+			subtract_from_temp_variable = { var = ADISCORD_south_preview_strain value = 15 }
+			clamp_temp_variable = { var = ADISCORD_south_preview_strain min = 0 max = 100 }
+		}
+		localization_key = ADISCORD_south_strain_preview
+	}
+	text = { localization_key = ADISCORD_south_strain_none }
+}

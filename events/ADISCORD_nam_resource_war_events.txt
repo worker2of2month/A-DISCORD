@@ -3551,14 +3551,18 @@ country_event = {
 		OR = {
 			tag = NAM
 			NAM_subject_identity_participant = yes
+			is_subject_of = NAM
+			NAM_has_subject_resource_tariff = yes
 		}
 	}
 	immediate = {
+		NAM_sync_subject_resource_tariff = yes
 		if = {
 			limit = { tag = NAM }
 			NAM_sync_etatist_party_name = yes
 		}
-		else = {
+		else_if = {
+			limit = { NAM_subject_identity_participant = yes }
 			NAM_neighbour_check_command_status = yes
 			NAM_board_sync_district_status = yes
 		}
@@ -5577,6 +5581,23 @@ country_event = {
 		}
 	}
 	immediate = { NAM_rw_coalition_muster = yes }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.119
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+		ADISCORD_nam_resource_war_active = yes
+		has_war_with = NAM
+		has_capitulated = no
+		any_owned_state = { is_controlled_by = PREV }
+	}
+	immediate = { NAM_rw_coalition_second_wave = yes }
 }
 
 # Settlement is independent of this notification and its unattended timeout.
@@ -13973,7 +13994,7 @@ country_event = {
 	}
 }
 
-# pw_armament_inspectorate: empty rifle crates in the Loren depots.
+# namestnik_garrisons: empty rifle crates in the Loren depots.
 country_event = {
 	id = ADISCORD_nam_story.328
 	title = ADISCORD_nam_story.328.t
@@ -14024,7 +14045,7 @@ country_event = {
 	}
 }
 
-# district_inspectorate: two estimates for one district road.
+# pw_cadastre: two estimates for one district road.
 country_event = {
 	id = ADISCORD_nam_story.329
 	title = ADISCORD_nam_story.329.t
@@ -14391,97 +14412,6 @@ country_event = {
 		name = ADISCORD_nam_story.344.c
 		add_political_power = -40
 		army_experience = 25
-		ai_chance = { base = 30 }
-	}
-}
-
-# chartered_tonnage: tankers on a year's charter and the insurers' rates.
-country_event = {
-	id = ADISCORD_nam_story.345
-	title = ADISCORD_nam_story.345.t
-	desc = ADISCORD_nam_story.345.d
-	picture = GFX_event_adiscord_nam_navis_shipping
-	is_triggered_only = yes
-	fire_only_once = yes
-	trigger = { has_capitulated = no }
-	option = {
-		name = ADISCORD_nam_story.345.a
-		add_equipment_to_stockpile = {
-			type = convoy
-			amount = 10
-			producer = NAM
-		}
-		custom_effect_tooltip = NAM_story_345_a_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_treasury_amount value = 300 }
-			NAM_spend_treasury = yes
-		}
-		ai_chance = { base = 40 }
-	}
-	option = {
-		name = ADISCORD_nam_story.345.b
-		add_fuel = -15000
-		navy_experience = 15
-		ai_chance = { base = 30 }
-	}
-	option = {
-		name = ADISCORD_nam_story.345.c
-		add_fuel = -25000
-		custom_effect_tooltip = NAM_story_345_c_tt
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_trade_support value = 6 }
-			NAM_groups_refresh = yes
-		}
-		ai_chance = { base = 30 }
-	}
-}
-
-# tractor_leasing: tractors off the pier, the drivers' share and the railway queue.
-country_event = {
-	id = ADISCORD_nam_story.346
-	title = ADISCORD_nam_story.346.t
-	desc = ADISCORD_nam_story.346.d
-	picture = GFX_event_adiscord_nam_navis_shipping
-	is_triggered_only = yes
-	fire_only_once = yes
-	trigger = { has_capitulated = no }
-	option = {
-		name = ADISCORD_nam_story.346.a
-		add_equipment_to_stockpile = {
-			type = motorized_equipment
-			amount = 120
-			producer = NAM
-		}
-		custom_effect_tooltip = NAM_story_346_a_tt
-		hidden_effect = {
-			set_temp_variable = { var = NAM_treasury_amount value = 250 }
-			NAM_spend_treasury = yes
-		}
-		ai_chance = { base = 40 }
-	}
-	option = {
-		name = ADISCORD_nam_story.346.b
-		add_equipment_to_stockpile = {
-			type = train_equipment
-			amount = 10
-			producer = NAM
-		}
-		custom_effect_tooltip = NAM_story_346_b_tt
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_trade_support value = -5 }
-			NAM_groups_refresh = yes
-		}
-		ai_chance = { base = 30 }
-	}
-	option = {
-		name = ADISCORD_nam_story.346.c
-		add_political_power = -40
-		add_stability = 0.03
-		custom_effect_tooltip = NAM_story_346_c_tt
-		hidden_effect = {
-			add_to_variable = { var = NAM_grp_garr_support value = 5 }
-			NAM_groups_refresh = yes
-		}
 		ai_chance = { base = 30 }
 	}
 }
@@ -15284,7 +15214,7 @@ country_event = {
 	}
 }
 
-# District course: the first passports of common citizenship (common_citizenship).
+# District course: the first passports of common citizenship (public_utilities, federation).
 country_event = {
 	id = ADISCORD_nam_story.368
 	title = ADISCORD_nam_story.368.t
@@ -15324,7 +15254,7 @@ country_event = {
 	}
 }
 
-# District course: the artels bring their wares to Svetlogorsk (district_fair).
+# District course: the artels bring their wares to Svetlogorsk (common_fuel_market, union).
 country_event = {
 	id = ADISCORD_nam_story.369
 	title = ADISCORD_nam_story.369.t
@@ -16032,7 +15962,7 @@ country_event = {
 	}
 }
 
-# Shared: the admiralty can lay down only one type of ship (pw_naval_review).
+# Shared: the admiralty can lay down only one type of ship (svetlogorsk_shipyards).
 country_event = {
 	id = ADISCORD_nam_story.303
 	title = ADISCORD_nam_story.303.t

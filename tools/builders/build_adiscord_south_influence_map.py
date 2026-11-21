@@ -22,6 +22,7 @@ GFX = Path("interface/ADISCORD_south_final_war.gfx")
 SGUI = Path("common/scripted_guis/ADISCORD_south_final_war_scripted_gui.txt")
 WIDTH, HEIGHT = 436, 300
 GAUGE_WIDTH = 208
+CARD_LEFT = 12
 CARD_TOP, CARD_HEIGHT, COLUMN_PITCH = 363, 38, 224
 COUNTRIES = ("SHL", "NAM", "EFL", "AZH", "WEF", "KDR", "RHM", "SDR", "KYZ", "MZR", "GLP")
 # Layer order keeps the leader shades above the light alliance fills.
@@ -109,7 +110,6 @@ def render_images():
     draw.line((WIDTH - 22, 14, WIDTH - 22, 42), fill=(210, 198, 163), width=1)
     draw.polygon(((WIDTH - 22, 12), (WIDTH - 26, 22), (WIDTH - 18, 22)), fill=(210, 198, 163))
     images = {"background.png": background}
-    # With a centred GUI origin, each influence point moves the marker one pixel.
     track = Image.new("RGBA", (GAUGE_WIDTH, 12))
     rail = ImageDraw.Draw(track)
     centre = GAUGE_WIDTH // 2 + 2
@@ -133,7 +133,7 @@ def render_images():
     return images, geometry
 
 
-def icon(name, sprite, x, y, frame=1, tooltip=None, passive=False, orientation=None):
+def icon(name, sprite, x, y, frame=1, tooltip=None, passive=False):
     lines = ["\t\ticonType = {", f'\t\t\tname = "{name}"',
              f"\t\t\tposition = {{ x = {x} y = {y} }}", f'\t\t\tquadTextureSprite = "{sprite}"',
              f"\t\t\tframe = {frame}"]
@@ -141,8 +141,6 @@ def icon(name, sprite, x, y, frame=1, tooltip=None, passive=False, orientation=N
         lines.append(f'\t\t\tpdx_tooltip = "{tooltip}"')
     if passive:
         lines.append("\t\t\talwaystransparent = yes")
-    if orientation:
-        lines.append(f'\t\t\torientation = {orientation}')
     return "\n".join([*lines, "\t\t}"])
 
 
@@ -165,6 +163,7 @@ def gui(geometry):
     parts = [HEADER + 'guiTypes = {\n\tcontainerWindowType = {\n\t\tname = "ADISCORD_south_map_window"\n'
              f'\t\tposition = {{ x = 0 y = 0 }}\n\t\tsize = {{ width = 460 height = {cards_bottom + 104} }}',
              textbox("ADISCORD_south_map_heading", "ADISCORD_south_map_heading", 12, 4, 436, 22, "ADISCORD_south_map_rules_tt"),
+             textbox("ADISCORD_south_map_strain", "ADISCORD_south_map_strain", 12, 4, WIDTH, 22, "ADISCORD_south_map_strain_tt"),
              icon("ADISCORD_south_map_background", "GFX_ADISCORD_south_map_background", 12, 30, passive=True)]
     for state, info in geometry["states"].items():
         name = f"ADISCORD_south_map_state_{state}"
@@ -174,27 +173,16 @@ def gui(geometry):
     prefix = "ADISCORD_south_map_"
     parts.append(textbox(prefix + "gap_heading", prefix + "gap_heading", 12, 337, WIDTH, 21, prefix + "gap_help"))
     for index, tag in enumerate(COUNTRIES):
-        x = 12 + index % 2 * COLUMN_PITCH
+        x = CARD_LEFT + index % 2 * COLUMN_PITCH
         y = CARD_TOP + index // 2 * CARD_HEIGHT
         tip = f"{prefix}{tag}_tt"
         parts.extend([
             icon(f"{prefix}flag_{tag}", f"GFX_{prefix}flag_{tag}", x, y, tooltip=tip),
             textbox(f"{prefix}name_{tag}", f"{prefix}name_{tag}", x + 34, y, 94, 20, tip),
             textbox(f"{prefix}gap_{tag}", f"{prefix}gap_{tag}", x + 129, y, GAUGE_WIDTH - 129, 20, tip, right=True),
+            icon(f"{prefix}track_{tag}", "GFX_" + prefix + "influence_track", x, y + 20, tooltip=tip),
+            icon(f"{prefix}marker_{tag}", "GFX_" + prefix + "influence_marker", 0, y + 20, passive=True),
         ])
-        # The marker's x property is local to the midpoint of this country's rail.
-        children = [
-            icon(f"{prefix}track_{tag}", "GFX_" + prefix + "influence_track", 0, 0, tooltip=tip),
-            icon(f"{prefix}marker_{tag}", "GFX_" + prefix + "influence_marker", 0, 0,
-                 passive=True, orientation="center_up"),
-        ]
-        inner = "\n\n".join(children)
-        parts.append("\n".join([
-            "\t\tcontainerWindowType = {", f'\t\t\tname = "{prefix}gauge_{tag}"',
-            f"\t\t\tposition = {{ x = {x} y = {y + 20} }}",
-            f"\t\t\tsize = {{ width = {GAUGE_WIDTH} height = 12 }}",
-            *(("\t" + line) if line else "" for line in inner.splitlines()), "\t\t}",
-        ]))
     parts.extend([
         textbox("ADISCORD_south_map_legend", "ADISCORD_south_map_legend", 12, cards_bottom, WIDTH, 54, "ADISCORD_south_map_rules_tt"),
         textbox("ADISCORD_south_map_readiness", "ADISCORD_south_map_readiness", 12, cards_bottom + 60, WIDTH, 36, "ADISCORD_south_map_status_tt"),
@@ -219,18 +207,37 @@ def scripted_gui(geometry):
              '\t\tcontext_type = decision_category', '\t\twindow_name = "ADISCORD_south_map_window"',
              '\t\tvisible = { always = yes }', '\t\tai_enabled = { always = no }',
              '\t\t# Ownership and control have no shared dirty variable; refresh only while this category is drawn.',
-             '\t\ttriggers = {']
+             '\t\ttriggers = {',
+             '\t\t\tADISCORD_south_map_heading_visible = { NOT = { has_variable = ADISCORD_south_war_strain } }',
+             '\t\t\tADISCORD_south_map_strain_visible = { has_variable = ADISCORD_south_war_strain }']
     for state in geometry["states"]:
         name = f"ADISCORD_south_map_state_{state}"
         for side in LAYERS[1:]:
             lines.extend([f'\t\t\t{name}_{side}_visible = {{',
                           f'\t\t\t\t{state} = {{ ADISCORD_south_map_state_{side} = yes }}', '\t\t\t}'])
+    for index, tag in enumerate(COUNTRIES):
+        marker = f"ADISCORD_south_map_marker_{tag}"
+        track = f"ADISCORD_south_map_track_{tag}"
+        contested = f"\t\t\t\t{tag} = {{ ADISCORD_south_map_influence_contested = yes }}"
+        neutral_x = CARD_LEFT + index % 2 * COLUMN_PITCH + GAUGE_WIDTH // 2
+        # Properties read in the panel's player scope. Compute each marker's pixel position there.
+        lines.extend([
+            f"\t\t\t{track}_visible = {{",
+            contested,
+            "\t\t\t}",
+            f"\t\t\t{marker}_visible = {{",
+            contested,
+            f"\t\t\t\tset_temp_variable = {{ var = {marker}_x value = {neutral_x} }}",
+            "\t\t\t\tif = {",
+            f"\t\t\t\t\tlimit = {{ {tag} = {{ has_variable = ADISCORD_south_coalition_influence }} }}",
+            f"\t\t\t\t\tadd_to_temp_variable = {{ var = {marker}_x value = {tag}.ADISCORD_south_coalition_influence }}",
+            "\t\t\t\t}",
+            "\t\t\t}",
+        ])
+    lines.extend(["\t\t}", "\t\tproperties = {"])
     for tag in COUNTRIES:
-        lines.extend([f'\t\t\tADISCORD_south_map_gauge_{tag}_visible = {{',
-                      f'\t\t\t\t{tag} = {{ ADISCORD_south_map_influence_contested = yes }}', '\t\t\t}'])
-    lines.extend(['\t\t}', '\t\tproperties = {'])
-    for tag in COUNTRIES:
-        lines.append(f'\t\t\tADISCORD_south_map_marker_{tag} = {{ x = {tag}.ADISCORD_south_coalition_influence?0 }}')
+        marker = f"ADISCORD_south_map_marker_{tag}"
+        lines.append(f"\t\t\t{marker} = {{ x = {marker}_x }}")
     lines.extend(['\t\t}', '\t}', '}', ''])
     return "\n".join(lines)
 
@@ -239,22 +246,31 @@ def localisation(geometry, language):
     if language == "russian":
         texts = {
             "heading": "§YЗОНЫ ВЛИЯНИЯ НА ЮГЕ§!",
-            "gap_heading": "До порога приглашения: §OШахрабад§! / §CСевер§!",
-            "gap_help": "Метка сдвигается влево при росте влияния §OШахрабада§! и вправо при росте влияния §CСевера§!. Средняя риска означает равновесие, две крайние отмечают порог приглашения: §Y60§! пунктов перевеса. Числа у флага показывают, сколько влияния осталось набрать каждому лагерю. При нуле по-прежнему нужны соответствующий фокус и согласие страны.",
+            "strain": "Усталость тыла   §Y[?ADISCORD_south_war_strain|0]/100§! £NAM_war_cost_texticon",
+            "strain_tt": (
+                "§YКак война сказывается на тыле§!\\nСтабильность [?ADISCORD_south_strain_stability|=+1%]"
+                "\\nПоддержка войны [?ADISCORD_south_strain_war_support|=+1%]"
+                "\\nВыпуск военных заводов [?ADISCORD_south_strain_factory|=+1%]"
+                "\\n\\nЗа каждые 10 пунктов усталости стабильность снижается на 2%, поддержка войны и выпуск заводов - на 1%."
+                "\\n\\nКаждые 28 дней базовый прирост составляет 3 пункта. Враг добавляет ещё 2 за каждый наш ключевой район под его контролем."
+                " Успешный приказ о взятии района снимает 8 пунктов. При 100 пунктах начинается кризис тыла."
+            ),
+            "gap_heading": "До порога приглашения: §OСевер (Шахрабад)§! / §CЮг§!",
+            "gap_help": "Метка сдвигается влево при росте влияния §Oсеверного лагеря Шахрабада§! и вправо при росте влияния §Cюжного лагеря§!. Средняя риска означает равновесие, две крайние отмечают порог приглашения: §Y60§! пунктов перевеса. Числа у флага показывают, сколько влияния осталось набрать каждому лагерю. При нуле по-прежнему нужны соответствующий фокус и согласие страны.",
             "gap_absent": "Нет страны",
             "gap_leader": "Лидер",
             "gap_subject": "Зависима",
             "gap_war": "Война",
             "gap_closed": "Закрыто",
             "gap_resolved": "Мир",
-            "legend": "Оранжевый - Шахрабад; синий - север.\\nТёмный - лидер; светлый - союзники.\\nСерый - вне лагерей; штрихи - чужой контроль.",
+            "legend": "Оранжевый - север (Шахрабад), синий - юг.\\nТёмный - лидер; светлый - союзники.\\nСерый - вне лагерей; штрихи - чужой контроль.",
             "readiness": "[ADISCORDSouthMapPhase]\\n§YОбстановка и подготовка: наведите курсор§!",
-            "rules_tt": "§YКарта Юга§!\\nТёмно-оранжевый - сам Шахрабад; светло-оранжевый - его союзники и зависимые страны. Тёмно-синий - северный лидер; светло-синий - его союзники и зависимые страны. Серый - страны вне этих лагерей.\\nДо войны цвет учитывает сюзерена и альянс текущего владельца. Во время войны - выбранную сторону фактического контролёра. Тёмный оттенок получает только страна, возглавляющая лагерь. После мира карта отражает новые границы и подчинение.\\nШтриховка отмечает области, чей контролёр отличается от владельца. Наведите курсор на область или флаг для подробностей.",
-            "status_tt": "Северный претендент: [ADISCORDSouthNorthSide]\\n\\n[ADISCORDSouthStatus]",
-            "shl": "§YСоюзник или зависимая страна Шахрабада§!",
-            "north": "§CСоюзник или зависимая страна северного лидера§!",
-            "shl_leader": "§YШахрабад - лидер лагеря§!",
-            "north_leader": "§CЛидер северного лагеря§!",
+            "rules_tt": "§YКарта Юга§!\\nТёмно-оранжевым показан Шахрабад, лидер северного лагеря. Тёмно-синим показан лидер южного лагеря (Светлогорье, Эфлор или Ажар). Светлые оттенки обозначают союзников и зависимые страны соответствующего лагеря. Серый - страны вне этих лагерей.\\nДо войны цвет учитывает сюзерена и альянс текущего владельца. Во время войны - выбранную сторону фактического контролёра. Тёмный оттенок получает только страна, возглавляющая лагерь. После мира карта отражает новые границы и подчинение.\\nШтриховка отмечает области, чей контролёр отличается от владельца. Наведите курсор на область или флаг для подробностей.",
+            "status_tt": "Претендент от южного лагеря: [ADISCORDSouthNorthSide]\\n\\n[ADISCORDSouthStatus]",
+            "shl": "§YСеверный лагерь (союзник или зависимая страна Шахрабада)§!",
+            "north": "§CСоюзник или зависимая страна лидера южного лагеря§!",
+            "shl_leader": "§YШахрабад - лидер северного лагеря§!",
+            "north_leader": "§CЛидер южного лагеря§!",
             "neutral": "Вне двух лагерей",
             "absent": "Государство не существует",
             "phase_preparing": "Подготовка сторон к войне",
@@ -267,22 +283,31 @@ def localisation(geometry, language):
     else:
         texts = {
             "heading": "§YSPHERES OF INFLUENCE IN THE SOUTH§!",
-            "gap_heading": "Points to invite: §OShahrabad§! / §CNorth§!",
-            "gap_help": "The marker moves left as §OShahrabad§! gains influence and right as the §Cnorth§! gains influence. The middle tick marks a tie. The two outer ticks mark the §Y60§!-point lead required for an invitation. The numbers beside each flag show how many more points each camp needs. At zero, the camp still needs the relevant focus and the country's consent.",
+            "strain": "Home front strain   §Y[?ADISCORD_south_war_strain|0]/100§! £NAM_war_cost_texticon",
+            "strain_tt": (
+                "§YHow the war affects the home front§!\\nStability [?ADISCORD_south_strain_stability|=+1%]"
+                "\\nWar support [?ADISCORD_south_strain_war_support|=+1%]"
+                "\\nMilitary factory output [?ADISCORD_south_strain_factory|=+1%]"
+                "\\n\\nEvery 10 points of strain reduce stability by 2%, war support by 1% and factory output by 1%."
+                "\\n\\nThe base increase every 28 days is 3 points. Each of our key districts held by the enemy adds 2 more."
+                " Completing an order to take a district relieves 8 points. At 100 points a home front crisis begins."
+            ),
+            "gap_heading": "Points to invite: §ONorth (Shahrabad)§! / §CSouth§!",
+            "gap_help": "The marker moves left as §OShahrabad's northern camp§! gains influence and right as the §Csouthern camp§! gains influence. The middle tick marks a tie. The two outer ticks mark the §Y60§!-point lead required for an invitation. The numbers beside each flag show how many more points each camp needs. At zero, the camp still needs the relevant focus and the country's consent.",
             "gap_absent": "Absent",
             "gap_leader": "Leader",
             "gap_subject": "Subject",
             "gap_war": "At war",
             "gap_closed": "Closed",
             "gap_resolved": "At peace",
-            "legend": "Orange - Shahrabad; blue - the north.\\nDark - leader; light - allies.\\nGrey - unaligned; hatching - foreign control.",
+            "legend": "Orange - north (Shahrabad), blue - south.\\nDark - leader; light - allies.\\nGrey - unaligned; hatching - foreign control.",
             "readiness": "[ADISCORDSouthMapPhase]\\n§YHover for the situation and preparation requirements§!",
-            "rules_tt": "§YMap of the South§!\\nDark orange - Shahrabad itself; light orange - its allies and subjects. Dark blue - the northern leader; light blue - its allies and subjects. Grey - countries outside either camp.\\nBefore war, colours follow the current owner's overlord and faction. During war, they follow the actual controller's chosen side. Only the country leading a camp receives its dark shade. After peace, the map reflects new borders and subjects.\\nHatching marks states whose controller differs from their owner. Hover over a state or flag for details.",
-            "status_tt": "Northern contender: [ADISCORDSouthNorthSide]\\n\\n[ADISCORDSouthStatus]",
-            "shl": "§YAlly or subject of Shahrabad§!",
-            "north": "§CAlly or subject of the northern leader§!",
-            "shl_leader": "§YShahrabad - camp leader§!",
-            "north_leader": "§CNorthern camp leader§!",
+            "rules_tt": "§YMap of the South§!\\nDark orange marks Shahrabad, leader of the northern camp. Dark blue marks the leader of the southern camp (Svetlogorye, Eflor or Azhar). Lighter shades mark each camp's allies and subjects. Grey - countries outside either camp.\\nBefore war, colours follow the current owner's overlord and faction. During war, they follow the actual controller's chosen side. Only the country leading a camp receives its dark shade. After peace, the map reflects new borders and subjects.\\nHatching marks states whose controller differs from their owner. Hover over a state or flag for details.",
+            "status_tt": "Southern contender: [ADISCORDSouthNorthSide]\\n\\n[ADISCORDSouthStatus]",
+            "shl": "§YNorthern camp (ally or subject of Shahrabad)§!",
+            "north": "§CAlly or subject of the southern camp leader§!",
+            "shl_leader": "§YShahrabad - northern camp leader§!",
+            "north_leader": "§CSouthern camp leader§!",
             "neutral": "Outside both camps",
             "absent": "Country does not exist",
             "phase_preparing": "Both sides are preparing for war",

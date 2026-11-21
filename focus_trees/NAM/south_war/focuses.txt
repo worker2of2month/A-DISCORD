@@ -1282,7 +1282,7 @@ focus_tree = {
 		icon = GFX_focus_NAM_commissioner_plan
 		x = 27
 		y = 1
-		cost = 2
+		cost = 1
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = NAM_south_war_council
@@ -1311,7 +1311,7 @@ focus_tree = {
 				}
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 1000
+					amount = 2000
 					producer = NAM
 				}
 			}
@@ -1323,6 +1323,7 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = { var = NAM_sw_war_support value = 0.03 }
+				add_to_variable = { var = NAM_sw_supply_consumption value = -0.05 }
 				NAM_refresh_south_war = yes
 			}
 		}
@@ -1364,7 +1365,7 @@ focus_tree = {
 					ADISCORD_south_on_north_side = yes
 					has_capitulated = no
 				}
-				add_fuel = 3000
+				add_fuel = 6000
 				add_war_support = 0.05
 			}
 			custom_effect_tooltip = NAM_sw_protectorate_offers_war_tt
@@ -1376,6 +1377,7 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = { var = NAM_sw_compliance value = 0.05 }
+				add_to_variable = { var = NAM_sw_army_defence value = 0.08 }
 				NAM_refresh_south_war = yes
 			}
 		}
@@ -1411,7 +1413,12 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_war_support = 0.05
-			army_experience = 10
+			army_experience = 25
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 250
+				producer = NAM
+			}
 			custom_effect_tooltip = NAM_sw_punitive_columns_war_tt
 			effect_tooltip = {
 				swap_ideas = {
@@ -1421,6 +1428,7 @@ focus_tree = {
 			}
 			hidden_effect = {
 				add_to_variable = { var = NAM_sw_resistance value = -0.1 }
+				add_to_variable = { var = NAM_sw_breakthrough value = 0.10 }
 				NAM_refresh_south_war = yes
 			}
 		}
@@ -1464,10 +1472,10 @@ focus_tree = {
 					ADISCORD_south_on_north_side = yes
 					has_capitulated = no
 				}
-				add_fuel = 4000
+				add_fuel = 10000
 				add_equipment_to_stockpile = {
 					type = support_equipment
-					amount = 100
+					amount = 250
 					producer = NAM
 				}
 			}
@@ -1482,6 +1490,7 @@ focus_tree = {
 				set_temp_variable = { var = NAM_treasury_amount value = 100 }
 				NAM_spend_treasury = yes
 				add_to_variable = { var = NAM_sw_stability value = 0.02 }
+				add_to_variable = { var = NAM_sw_fuel_consumption value = -0.15 }
 				NAM_refresh_south_war = yes
 			}
 		}
@@ -1521,13 +1530,14 @@ focus_tree = {
 					ADISCORD_south_on_north_side = yes
 					has_capitulated = no
 				}
+				add_manpower = 9000
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 2000
+					amount = 3000
 					producer = NAM
 				}
 			}
-			add_manpower = 3000
+			add_manpower = 9000
 		}
 		ai_will_do = {
 			base = 120
@@ -1562,12 +1572,12 @@ focus_tree = {
 			SHL = {
 				if = {
 					limit = { ADISCORD_south_champion_viable = yes }
-					add_fuel = -3000
+					add_fuel = -9000
 				}
 			}
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 100
+				amount = 250
 				producer = NAM
 			}
 			effect_tooltip = {
@@ -1577,7 +1587,7 @@ focus_tree = {
 				}
 			}
 			hidden_effect = {
-				add_to_variable = { var = NAM_sw_army_attack value = 0.03 }
+				add_to_variable = { var = NAM_sw_army_attack value = 0.08 }
 				NAM_refresh_south_war = yes
 			}
 		}
@@ -1611,7 +1621,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_political_power = 40
+			add_political_power = 80
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_south_war_dummy_idea
@@ -1621,6 +1631,7 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = { var = NAM_sw_compliance value = 0.05 }
 				add_to_variable = { var = NAM_sw_resistance value = -0.1 }
+				add_to_variable = { var = NAM_sw_reinforce value = 0.04 }
 				NAM_refresh_south_war = yes
 			}
 		}
@@ -1634,7 +1645,7 @@ focus_tree = {
 		icon = GFX_focus_NAM_neutral_basin
 		x = 27
 		y = 4
-		cost = 2
+		cost = 1
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = NAM_sw_fuel_guarantees
@@ -1668,7 +1679,9 @@ focus_tree = {
 				}
 			}
 			hidden_effect = {
-				set_temp_variable = { var = ADISCORD_south_strain_delta value = -4 }
+				set_temp_variable = { var = NAM_treasury_amount value = 120 }
+				NAM_add_treasury = yes
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -10 }
 				ADISCORD_south_add_strain = yes
 				add_to_variable = { var = NAM_sw_stability value = 0.03 }
 				NAM_refresh_south_war = yes
@@ -1712,10 +1725,10 @@ focus_tree = {
 					}
 					add_equipment_to_stockpile = {
 						type = infantry_equipment
-						amount = 3000
+						amount = 4500
 						producer = NAM
 					}
-					add_fuel = 3000
+					add_fuel = 7500
 				}
 			}
 			AZH = {
@@ -1726,13 +1739,18 @@ focus_tree = {
 					}
 					add_equipment_to_stockpile = {
 						type = infantry_equipment
-						amount = 3000
+						amount = 4500
 						producer = NAM
 					}
-					add_fuel = 3000
+					add_fuel = 7500
 				}
 			}
-			add_political_power = 40
+			add_political_power = 60
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 240
+				producer = NAM
+			}
 		}
 		ai_will_do = {
 			base = 100
@@ -1775,7 +1793,7 @@ focus_tree = {
 				add_war_support = 0.05
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = 2000
+					amount = 4000
 					producer = NAM
 				}
 			}
@@ -1787,9 +1805,10 @@ focus_tree = {
 				}
 			}
 			hidden_effect = {
-				set_temp_variable = { var = ADISCORD_south_strain_delta value = -6 }
+				set_temp_variable = { var = ADISCORD_south_strain_delta value = -15 }
 				ADISCORD_south_add_strain = yes
 				add_to_variable = { var = NAM_sw_war_support value = 0.03 }
+				add_to_variable = { var = NAM_sw_army_org value = 0.08 }
 				NAM_refresh_south_war = yes
 			}
 		}
@@ -1841,7 +1860,7 @@ focus_tree = {
 		}
 	}
 
-	# A compact with the districts slows the cost of the war; emergency powers meet its crises with force.
+	# The district compact slows the rise in home front strain. Emergency powers soften the crisis crackdown.
 	focus = {
 		id = NAM_sw_district_compact_at_war
 		icon = GFX_focus_NAM_districts

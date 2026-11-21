@@ -513,24 +513,21 @@ NAM_postwar_plan = {
 		NAM_federal_charter
 		NAM_veterans_return
 		NAM_charter_ending_federation
+		NAM_public_utilities
 		NAM_civil_repair
 		NAM_pw_transport_commission
-		NAM_civic_audit
 		NAM_oil_ministry
 		NAM_pw_mobile_army
-		NAM_public_utilities
-		NAM_civil_dividend
-		NAM_rescue_college
 		NAM_pw_freight_schedule
 		NAM_district_militia
-		NAM_relief_reserves
+		NAM_civil_dividend
 		NAM_regional_university
 		NAM_oil_exchange
 		NAM_south_fenn_guarantee
-		NAM_foreign_office
 		NAM_pw_southern_army
 		NAM_south_oil_for_water
 		NAM_normalisation
+		NAM_tenant_councils
 		NAM_kadir_oil_charter
 		NAM_svetlogorye
 		NAM_eflor_accord
@@ -597,6 +594,7 @@ NAM_postwar_vertical_plan = {
 		NAM_veterans_return
 		NAM_ladder_ending_iron
 		NAM_south_black_basin
+		NAM_namestnik_garrisons
 		NAM_state_project_bureaus
 		NAM_civil_repair
 		NAM_pw_transport_commission
@@ -607,14 +605,13 @@ NAM_postwar_vertical_plan = {
 		NAM_pw_freight_schedule
 		NAM_south_desert_offices
 		NAM_oil_exchange
-		NAM_foreign_office
 		NAM_pw_labour_code
 		NAM_pw_southern_army
-		NAM_border_revenge
-		NAM_namestnik_garrisons
 		NAM_svetlogorye
+		NAM_border_revenge
 		NAM_pw_export_guarantees
-		NAM_neighbour_local_commands
+		NAM_pw_constitutional_committee
+		NAM_border_citizenship
 		NAM_ladder_of_seals
 		NAM_south_seal_over_furnaces
 	}
@@ -642,7 +639,6 @@ NAM_south_heritage_vertical_plan = {
 		NAM_south_heritage
 		NAM_pw_strategic_reserve
 		NAM_veyran_union_charter
-		NAM_svetlogorsk_settlement
 		NAM_pw_postwar_commission
 		NAM_veyran_embarkation_staff
 		NAM_veyran_arsenal_contract
@@ -855,18 +851,17 @@ NAM_postwar_pragmatic_plan = {
 		NAM_oil_ministry
 		NAM_pw_mobile_army
 		NAM_contract_register
-		NAM_repair_depots
 		NAM_civil_dividend
 		NAM_port_polytechnic
+		NAM_domestic_designs
 		NAM_pw_freight_schedule
 		NAM_insured_caravans
 		NAM_prag_partner_supply
 		NAM_oil_exchange
-		NAM_foreign_office
 		NAM_prag_treasury_guarantee
 		NAM_pw_southern_army
-		NAM_normalisation
 		NAM_svetlogorye
+		NAM_normalisation
 		NAM_eflor_accord
 		NAM_balanced_accounts
 		NAM_azhar_accord

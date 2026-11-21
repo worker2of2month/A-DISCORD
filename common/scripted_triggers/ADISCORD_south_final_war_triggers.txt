@@ -548,6 +548,12 @@ ADISCORD_south_final_active = {
 	NOT = { has_global_flag = ADISCORD_south_final_resolved }
 }
 
+ADISCORD_south_can_equip_reserve_regiment = {
+	NOT = { has_manpower < 4000 }
+	NOT = { has_equipment = { infantry_equipment < 3600 } }
+	NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 32 } }
+}
+
 # COUNTRY. A sovereign country able to lead one side of the final war.
 ADISCORD_south_champion_viable = {
 	exists = yes
@@ -1533,6 +1539,16 @@ ADISCORD_south_large_expedition = {
 	}
 }
 
+ADISCORD_south_can_supply_two_divisions = {
+	NOT = { has_manpower < 6000 }
+	NOT = { has_equipment = { infantry_equipment < 1000 } }
+}
+
+ADISCORD_south_can_supply_three_divisions = {
+	NOT = { has_manpower < 9000 }
+	NOT = { has_equipment = { infantry_equipment < 1500 } }
+}
+
 # COUNTRY ally (event ROOT); FROM is the champion with the request in escrow.
 # The ally gives 3000 men and 500 rifles for each division it sends.
 ADISCORD_south_expedition_possible = {
@@ -1553,14 +1569,10 @@ ADISCORD_south_expedition_possible = {
 			FROM = { ADISCORD_south_on_north_side = yes }
 		}
 	}
-	NOT = { has_manpower < 6000 }
-	NOT = { has_equipment = { infantry_equipment < 1000 } }
+	ADISCORD_south_can_supply_two_divisions = yes
 	OR = {
 		FROM = { ADISCORD_south_large_expedition = no }
-		AND = {
-			NOT = { has_manpower < 9000 }
-			NOT = { has_equipment = { infantry_equipment < 1500 } }
-		}
+		ADISCORD_south_can_supply_three_divisions = yes
 	}
 }
 

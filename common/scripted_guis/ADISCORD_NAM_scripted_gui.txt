@@ -155,7 +155,7 @@ scripted_gui = {
 	# state control, project status and country variables, which have no shared
 	# invalidation, so it keeps the native per-tick refresh. The panel
 	# is evaluated only in its decision category; checks read fixed states and tags only.
-	# District selection is UI state only. Operations use native map decisions.
+	# District selection is UI state only. District orders use the selected state in the decision list.
 	ADISCORD_NAM_basin_panel = {
 		context_type = decision_category
 		window_name = "ADISCORD_NAM_basin_window"
@@ -183,6 +183,24 @@ scripted_gui = {
 			}
 			NAM_bw_select_700_click = {
 				set_variable = { NAM_bw_selected_state = 700 }
+			}
+			NAM_bw_select_701_click = {
+				set_variable = { NAM_bw_selected_state = 701 }
+			}
+			NAM_bw_select_720_click = {
+				set_variable = { NAM_bw_selected_state = 720 }
+			}
+			NAM_bw_select_721_click = {
+				set_variable = { NAM_bw_selected_state = 721 }
+			}
+			NAM_bw_select_722_click = {
+				set_variable = { NAM_bw_selected_state = 722 }
+			}
+			NAM_bw_select_723_click = {
+				set_variable = { NAM_bw_selected_state = 723 }
+			}
+			NAM_bw_select_727_click = {
+				set_variable = { NAM_bw_selected_state = 727 }
 			}
 		}
 		triggers = {
@@ -353,6 +371,168 @@ scripted_gui = {
 			}
 			NAM_bw_map_700_lost_visible = {
 				700 = {
+					NOT = { is_owned_by = NAM }
+				}
+			}
+
+			NAM_bw_card_701_title_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 701 compare = equals }
+			}
+			NAM_bw_card_701_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 701 compare = equals }
+			}
+			NAM_bw_map_701_selected_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 701 compare = equals }
+			}
+			NAM_bw_map_701_held_visible = {
+				701 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+			}
+			NAM_bw_map_701_occupied_visible = {
+				701 = {
+					is_owned_by = NAM
+					NOT = { is_controlled_by = NAM }
+				}
+			}
+			NAM_bw_map_701_lost_visible = {
+				701 = {
+					NOT = { is_owned_by = NAM }
+				}
+			}
+
+			NAM_bw_card_720_title_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 720 compare = equals }
+			}
+			NAM_bw_card_720_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 720 compare = equals }
+			}
+			NAM_bw_map_720_selected_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 720 compare = equals }
+			}
+			NAM_bw_map_720_held_visible = {
+				720 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+			}
+			NAM_bw_map_720_occupied_visible = {
+				720 = {
+					is_owned_by = NAM
+					NOT = { is_controlled_by = NAM }
+				}
+			}
+			NAM_bw_map_720_lost_visible = {
+				720 = {
+					NOT = { is_owned_by = NAM }
+				}
+			}
+
+			NAM_bw_card_721_title_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 721 compare = equals }
+			}
+			NAM_bw_card_721_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 721 compare = equals }
+			}
+			NAM_bw_map_721_selected_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 721 compare = equals }
+			}
+			NAM_bw_map_721_held_visible = {
+				721 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+			}
+			NAM_bw_map_721_occupied_visible = {
+				721 = {
+					is_owned_by = NAM
+					NOT = { is_controlled_by = NAM }
+				}
+			}
+			NAM_bw_map_721_lost_visible = {
+				721 = {
+					NOT = { is_owned_by = NAM }
+				}
+			}
+
+			NAM_bw_card_722_title_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 722 compare = equals }
+			}
+			NAM_bw_card_722_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 722 compare = equals }
+			}
+			NAM_bw_map_722_selected_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 722 compare = equals }
+			}
+			NAM_bw_map_722_held_visible = {
+				722 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+			}
+			NAM_bw_map_722_occupied_visible = {
+				722 = {
+					is_owned_by = NAM
+					NOT = { is_controlled_by = NAM }
+				}
+			}
+			NAM_bw_map_722_lost_visible = {
+				722 = {
+					NOT = { is_owned_by = NAM }
+				}
+			}
+
+			NAM_bw_card_723_title_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 723 compare = equals }
+			}
+			NAM_bw_card_723_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 723 compare = equals }
+			}
+			NAM_bw_map_723_selected_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 723 compare = equals }
+			}
+			NAM_bw_map_723_held_visible = {
+				723 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+			}
+			NAM_bw_map_723_occupied_visible = {
+				723 = {
+					is_owned_by = NAM
+					NOT = { is_controlled_by = NAM }
+				}
+			}
+			NAM_bw_map_723_lost_visible = {
+				723 = {
+					NOT = { is_owned_by = NAM }
+				}
+			}
+
+			NAM_bw_card_727_title_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 727 compare = equals }
+			}
+			NAM_bw_card_727_body_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 727 compare = equals }
+			}
+			NAM_bw_map_727_selected_visible = {
+				check_variable = { var = NAM_bw_selected_state value = 727 compare = equals }
+			}
+			NAM_bw_map_727_held_visible = {
+				727 = {
+					is_owned_by = NAM
+					is_controlled_by = NAM
+				}
+			}
+			NAM_bw_map_727_occupied_visible = {
+				727 = {
+					is_owned_by = NAM
+					NOT = { is_controlled_by = NAM }
+				}
+			}
+			NAM_bw_map_727_lost_visible = {
+				727 = {
 					NOT = { is_owned_by = NAM }
 				}
 			}

@@ -197,6 +197,12 @@ def matches_conditions(items, facts, scope="STP", previous_scope=None):
                 for country in countries
             )
         if entry.key == "any_owned_state":
+            if ("fixture", "state_draw") in facts:
+                return any(
+                    facts.get((state, "is_owned_by", scope), False)
+                    and matches_conditions(entry.value, facts, state, scope)
+                    for state in facts[("fixture", "state_draw")]
+                )
             extras = [e for e in entry.value if e.key != "is_controlled_by"]
             if not any(
                 e.key == "is_controlled_by" and e.value == "PREV" for e in entry.value
@@ -226,6 +232,12 @@ def matches_conditions(items, facts, scope="STP", previous_scope=None):
             return matches_conditions(
                 entry.value, facts, "STP" if entry.key == "ROOT" else entry.key, scope
             )
+        if entry.key == "has_relation_modifier":
+            target = scalar(entry.value, "target")
+            if target == "PREV":
+                target = previous_scope
+            modifier = scalar(entry.value, "modifier")
+            return facts.get((scope, entry.key, target, modifier), False)
         if entry.key == "has_power_balance":
             return facts.get((scope, entry.key, scalar(entry.value, "id")), False)
         if entry.key == "power_balance_value":
@@ -360,7 +372,7 @@ def selected_effects(items, facts, scope="STP"):
         elif entry.key == "hidden_effect":
             yield from selected_effects(entry.value, facts, scope)
         elif entry.key == "for_loop_effect":
-            # Literal bounded deployment loops, using the documented defaults
+            # Bounded deployment loops, using the documented defaults
             # start=0/end exclusive/add=1. Reject unsupported forms explicitly.
             controls = {
                 e.key: e.value
@@ -369,10 +381,13 @@ def selected_effects(items, facts, scope="STP"):
             }
             if set(controls) != {"end", "value"}:
                 raise AssertionError(f"Unsupported deployment loop: {controls}")
-            count = int(controls["end"])
+            end = controls["end"]
+            count = int(end) if end.lstrip("-").isdigit() else facts[(scope, "variable", end)]
+            if count != int(count):
+                raise AssertionError(f"Non-integral deployment loop: {count}")
             if not 0 <= count <= 64:
                 raise AssertionError(f"Unbounded deployment loop: {count}")
-            for _ in range(count):
+            for _ in range(int(count)):
                 yield from selected_effects(
                     [e for e in entry.value if e.key not in controls], facts, scope
                 )

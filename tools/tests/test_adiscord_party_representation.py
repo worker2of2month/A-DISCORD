@@ -347,7 +347,8 @@ class PartyRepresentationTests(unittest.TestCase):
         ])
         for entry, number in ((decree, 413), (focus_reward(tree, "NAM_pw_district_hospitals"), 414)):
             event_id = f"ADISCORD_nam_resource_war.{number}"
-            self.assertEqual(scalar(block(entry, "country_event"), "id"), event_id)
+            # The hospitals fire the scene from the reward's single hidden effect (C.1 layout).
+            self.assertIn(event_id, [scalar(e.value, "id") for e in walk(entry) if e.key == "country_event"])
             scene = country_event("ADISCORD_nam_resource_war_events.txt", event_id)
             self.assertEqual(scalar(scene, "fire_only_once"), "yes")
             self.assertEqual(scalar(scene, "is_triggered_only"), "yes")

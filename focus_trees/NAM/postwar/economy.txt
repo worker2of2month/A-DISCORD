@@ -98,7 +98,7 @@
 				limit = {
 					hidden_trigger = {
 						NOT = {
-							has_completed_focus = NAM_freight_brokerage
+							has_completed_focus = NAM_insured_caravans
 							has_completed_focus = NAM_defeat_oil_peace
 							has_completed_focus = NAM_oil_exchange
 						}
@@ -482,7 +482,7 @@
 				limit = {
 					hidden_trigger = {
 						NOT = { has_completed_focus = NAM_second_drilling_crew }
-						NOT = { has_completed_focus = NAM_repair_depots }
+						NOT = { has_completed_focus = NAM_contract_register }
 					}
 				}
 				unlock_decision_tooltip = NAM_econ_emergency_service
@@ -599,11 +599,11 @@
 	focus = {
 		id = NAM_pw_power_grid
 		relative_position_id = NAM_pw_energy_commission
-		x = -2
+		x = 0
 		y = 2
 		icon = GFX_focus_NAM_pw_power_grid
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
 		prerequisite = {
 			focus = NAM_pw_energy_commission
 		}
@@ -620,52 +620,6 @@
 			custom_effect_tooltip = NAM_program_oilfield_substations_unlock_tt
 			unlock_decision_tooltip = NAM_grid_send_generator
 			custom_effect_tooltip = NAM_grid_send_generator_unlock_tt
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_power_grid_administration_preview
-				}
-			}
-			custom_effect_tooltip = NAM_pw_power_grid_reward_tt
-			hidden_effect = {
-				if = {
-					limit = { has_idea = NAM_crisis_blackout }
-					remove_ideas = NAM_crisis_blackout
-				}
-				if = {
-					limit = { has_idea = NAM_crisis_blackout_contained }
-					remove_ideas = NAM_crisis_blackout_contained
-				}
-				add_to_variable = { var = NAM_adm_civilian_speed value = 0.04 }
-				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.03 }
-				NAM_refresh_administration = yes
-				set_temp_variable = { var = NAM_treasury_amount value = 300 }
-				NAM_add_treasury = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_pw_water_intakes
-		relative_position_id = NAM_pw_energy_commission
-		x = 2
-		y = 2
-		icon = GFX_focus_NAM_pw_water_intakes
-		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = {
-			focus = NAM_pw_energy_commission
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
 			unlock_decision_tooltip = NAM_program_city_water
 			custom_effect_tooltip = NAM_program_city_water_unlock_tt
 			unlock_decision_tooltip = NAM_program_irrigation_works
@@ -690,11 +644,19 @@
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_water_intakes_administration_preview
+					add_idea = NAM_pw_power_grid_administration_preview
 				}
 			}
-			custom_effect_tooltip = NAM_pw_water_intakes_reward_tt
+			custom_effect_tooltip = NAM_pw_power_grid_reward_tt
 			hidden_effect = {
+				if = {
+					limit = { has_idea = NAM_crisis_blackout }
+					remove_ideas = NAM_crisis_blackout
+				}
+				if = {
+					limit = { has_idea = NAM_crisis_blackout_contained }
+					remove_ideas = NAM_crisis_blackout_contained
+				}
 				if = {
 					limit = { has_idea = NAM_crisis_drought }
 					remove_ideas = NAM_crisis_drought
@@ -703,8 +665,11 @@
 					limit = { has_idea = NAM_crisis_drought_contained }
 					remove_ideas = NAM_crisis_drought_contained
 				}
-				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.04 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.03 }
 				NAM_refresh_administration = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -713,7 +678,7 @@
 	focus = {
 		id = NAM_pw_refinery_engineering
 		relative_position_id = NAM_pw_oil_laboratories
-		x = -2
+		x = 0
 		y = 2
 		icon = GFX_focus_NAM_pw_refinery_engineering
 		cost = 2
@@ -754,38 +719,6 @@
 			else = {
 				add_fuel = 40000
 			}
-			add_tech_bonus = {
-				name = NAM_pw_refinery_engineering
-				bonus = 0.5
-				uses = 1
-				category = industry
-			}
-			custom_effect_tooltip = NAM_pw_refinery_engineering_reward_tt
-			hidden_effect = {
-				set_temp_variable = { var = NAM_treasury_amount value = 150 }
-				NAM_add_treasury = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_middle_loren_wells
-		relative_position_id = NAM_pw_oil_laboratories
-		x = 2
-		y = 2
-		icon = GFX_focus_NAM_middle_loren_wells
-		cost = 2
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_pw_oil_laboratories }
-		available = {
-			has_capitulated = no
-			has_war = no
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_fuel = 20000
 			701 = {
 				if = {
 					limit = {
@@ -800,23 +733,20 @@
 					}
 				}
 			}
-			720 = {
-				if = {
-					limit = {
-						is_owned_by = ROOT
-						is_controlled_by = ROOT
-						infrastructure < 5
-					}
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
-					}
-				}
+			add_fuel = 8000
+			add_tech_bonus = {
+				name = NAM_pw_refinery_engineering
+				bonus = 0.5
+				uses = 1
+				category = industry
 			}
-			custom_effect_tooltip = NAM_middle_loren_wells_reward_tt
-			custom_effect_tooltip = NAM_grp_middle_loren_wells_tt
+			custom_effect_tooltip = NAM_pw_refinery_engineering_reward_tt
+			custom_effect_tooltip = NAM_grp_pw_refinery_engineering_tt
 			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
+				# The Middle Loren factory brings its own shared slot; the fallback
+				# pays when the district is not held at delivery.
 				if = {
 					limit = {
 						NOT = {
@@ -834,7 +764,5 @@
 				NAM_groups_refresh = yes
 			}
 		}
-		ai_will_do = {
-			base = 5
-		}
+		ai_will_do = { base = 5 }
 	}

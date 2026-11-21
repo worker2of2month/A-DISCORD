@@ -437,11 +437,17 @@ ADISCORD_south_final_war_category = {
 				tooltip = ADISCORD_south_request_slot_free_tt
 				NOT = { has_country_flag = ADISCORD_south_expedition_pending }
 			}
-			custom_trigger_tooltip = {
-				tooltip = ADISCORD_south_ally_can_send_tt
-				FROM = {
-					NOT = { has_manpower < 9000 }
-					NOT = { has_equipment = { infantry_equipment < 1500 } }
+			if = {
+				limit = { ADISCORD_south_large_expedition = yes }
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_ally_can_send_tt
+					FROM = { ADISCORD_south_can_supply_three_divisions = yes }
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_ally_can_send_two_tt
+					FROM = { ADISCORD_south_can_supply_two_divisions = yes }
 				}
 			}
 		}

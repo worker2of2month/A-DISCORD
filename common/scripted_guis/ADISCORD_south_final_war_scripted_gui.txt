@@ -7,6 +7,8 @@ scripted_gui = {
 		ai_enabled = { always = no }
 		# Ownership and control have no shared dirty variable; refresh only while this category is drawn.
 		triggers = {
+			ADISCORD_south_map_heading_visible = { NOT = { has_variable = ADISCORD_south_war_strain } }
+			ADISCORD_south_map_strain_visible = { has_variable = ADISCORD_south_war_strain }
 			ADISCORD_south_map_state_67_shl_visible = {
 				67 = { ADISCORD_south_map_state_shl = yes }
 			}
@@ -1717,52 +1719,140 @@ scripted_gui = {
 			ADISCORD_south_map_state_733_occupied_visible = {
 				733 = { ADISCORD_south_map_state_occupied = yes }
 			}
-			ADISCORD_south_map_gauge_SHL_visible = {
+			ADISCORD_south_map_track_SHL_visible = {
 				SHL = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_NAM_visible = {
+			ADISCORD_south_map_marker_SHL_visible = {
+				SHL = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_SHL_x value = 116 }
+				if = {
+					limit = { SHL = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_SHL_x value = SHL.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_NAM_visible = {
 				NAM = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_EFL_visible = {
+			ADISCORD_south_map_marker_NAM_visible = {
+				NAM = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_NAM_x value = 340 }
+				if = {
+					limit = { NAM = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_NAM_x value = NAM.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_EFL_visible = {
 				EFL = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_AZH_visible = {
+			ADISCORD_south_map_marker_EFL_visible = {
+				EFL = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_EFL_x value = 116 }
+				if = {
+					limit = { EFL = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_EFL_x value = EFL.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_AZH_visible = {
 				AZH = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_WEF_visible = {
+			ADISCORD_south_map_marker_AZH_visible = {
+				AZH = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_AZH_x value = 340 }
+				if = {
+					limit = { AZH = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_AZH_x value = AZH.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_WEF_visible = {
 				WEF = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_KDR_visible = {
+			ADISCORD_south_map_marker_WEF_visible = {
+				WEF = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_WEF_x value = 116 }
+				if = {
+					limit = { WEF = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_WEF_x value = WEF.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_KDR_visible = {
 				KDR = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_RHM_visible = {
+			ADISCORD_south_map_marker_KDR_visible = {
+				KDR = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_KDR_x value = 340 }
+				if = {
+					limit = { KDR = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_KDR_x value = KDR.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_RHM_visible = {
 				RHM = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_SDR_visible = {
+			ADISCORD_south_map_marker_RHM_visible = {
+				RHM = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_RHM_x value = 116 }
+				if = {
+					limit = { RHM = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_RHM_x value = RHM.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_SDR_visible = {
 				SDR = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_KYZ_visible = {
+			ADISCORD_south_map_marker_SDR_visible = {
+				SDR = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_SDR_x value = 340 }
+				if = {
+					limit = { SDR = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_SDR_x value = SDR.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_KYZ_visible = {
 				KYZ = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_MZR_visible = {
+			ADISCORD_south_map_marker_KYZ_visible = {
+				KYZ = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_KYZ_x value = 116 }
+				if = {
+					limit = { KYZ = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_KYZ_x value = KYZ.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_MZR_visible = {
 				MZR = { ADISCORD_south_map_influence_contested = yes }
 			}
-			ADISCORD_south_map_gauge_GLP_visible = {
+			ADISCORD_south_map_marker_MZR_visible = {
+				MZR = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_MZR_x value = 340 }
+				if = {
+					limit = { MZR = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_MZR_x value = MZR.ADISCORD_south_coalition_influence }
+				}
+			}
+			ADISCORD_south_map_track_GLP_visible = {
 				GLP = { ADISCORD_south_map_influence_contested = yes }
+			}
+			ADISCORD_south_map_marker_GLP_visible = {
+				GLP = { ADISCORD_south_map_influence_contested = yes }
+				set_temp_variable = { var = ADISCORD_south_map_marker_GLP_x value = 116 }
+				if = {
+					limit = { GLP = { has_variable = ADISCORD_south_coalition_influence } }
+					add_to_temp_variable = { var = ADISCORD_south_map_marker_GLP_x value = GLP.ADISCORD_south_coalition_influence }
+				}
 			}
 		}
 		properties = {
-			ADISCORD_south_map_marker_SHL = { x = SHL.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_NAM = { x = NAM.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_EFL = { x = EFL.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_AZH = { x = AZH.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_WEF = { x = WEF.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_KDR = { x = KDR.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_RHM = { x = RHM.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_SDR = { x = SDR.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_KYZ = { x = KYZ.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_MZR = { x = MZR.ADISCORD_south_coalition_influence?0 }
-			ADISCORD_south_map_marker_GLP = { x = GLP.ADISCORD_south_coalition_influence?0 }
+			ADISCORD_south_map_marker_SHL = { x = ADISCORD_south_map_marker_SHL_x }
+			ADISCORD_south_map_marker_NAM = { x = ADISCORD_south_map_marker_NAM_x }
+			ADISCORD_south_map_marker_EFL = { x = ADISCORD_south_map_marker_EFL_x }
+			ADISCORD_south_map_marker_AZH = { x = ADISCORD_south_map_marker_AZH_x }
+			ADISCORD_south_map_marker_WEF = { x = ADISCORD_south_map_marker_WEF_x }
+			ADISCORD_south_map_marker_KDR = { x = ADISCORD_south_map_marker_KDR_x }
+			ADISCORD_south_map_marker_RHM = { x = ADISCORD_south_map_marker_RHM_x }
+			ADISCORD_south_map_marker_SDR = { x = ADISCORD_south_map_marker_SDR_x }
+			ADISCORD_south_map_marker_KYZ = { x = ADISCORD_south_map_marker_KYZ_x }
+			ADISCORD_south_map_marker_MZR = { x = ADISCORD_south_map_marker_MZR_x }
+			ADISCORD_south_map_marker_GLP = { x = ADISCORD_south_map_marker_GLP_x }
 		}
 	}
 }

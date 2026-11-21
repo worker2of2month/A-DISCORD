@@ -1,3 +1,45 @@
+# Decision tooltips can supply the order target. The compact price also renders in country scope.
+defined_text = {
+	name = NAMExportOfficePrice
+	text = {
+		trigger = { FROM = { state = 67 } }
+		localization_key = NAM_export_office_cost_67
+	}
+	text = {
+		trigger = { FROM = { state = 688 } }
+		localization_key = NAM_export_office_cost_688
+	}
+	text = {
+		trigger = { FROM = { state = 689 } }
+		localization_key = NAM_export_office_cost_689
+	}
+	text = {
+		trigger = { FROM = { state = 690 } }
+		localization_key = NAM_export_office_cost_690
+	}
+	text = {
+		trigger = { FROM = { state = 719 } }
+		localization_key = NAM_export_office_cost_719
+	}
+	text = {
+		trigger = { NAM = { check_variable = { var = NAM_bw_selected_state value = 688 compare = equals } } }
+		localization_key = NAM_export_office_cost_688
+	}
+	text = {
+		trigger = { NAM = { check_variable = { var = NAM_bw_selected_state value = 689 compare = equals } } }
+		localization_key = NAM_export_office_cost_689
+	}
+	text = {
+		trigger = { NAM = { check_variable = { var = NAM_bw_selected_state value = 690 compare = equals } } }
+		localization_key = NAM_export_office_cost_690
+	}
+	text = {
+		trigger = { NAM = { check_variable = { var = NAM_bw_selected_state value = 719 compare = equals } } }
+		localization_key = NAM_export_office_cost_719
+	}
+	text = { localization_key = NAM_export_office_cost_67 }
+}
+
 defined_text = {
 	name = NAMGetWeberPartyBiography
 	text = {
@@ -6521,7 +6563,7 @@ defined_text = {
 defined_text = {
 	name = NAMBasinRepairBody
 	text = {
-		trigger = { has_completed_focus = NAM_rescue_college }
+		trigger = { has_completed_focus = NAM_south_fenn_guarantee }
 		localization_key = NAM_bw_repair_body_trained
 	}
 	text = {
@@ -9246,24 +9288,6 @@ defined_text = {
 
 # COUNTRY NAM; FROM is the island capital of a targeted decision.
 defined_text = {
-	name = NAMIslLaunchCost
-	text = {
-		trigger = { FROM = { state = 680 } }
-		localization_key = NAM_isl_launch_cost_sharden
-	}
-	text = { localization_key = NAM_isl_launch_cost_strait }
-}
-
-defined_text = {
-	name = NAMIslLaunchCostBlocked
-	text = {
-		trigger = { FROM = { state = 680 } }
-		localization_key = NAM_isl_launch_cost_sharden_blocked
-	}
-	text = { localization_key = NAM_isl_launch_cost_strait_blocked }
-}
-
-defined_text = {
 	name = NAMIslFirstWave
 	text = {
 		trigger = { FROM = { state = 680 } }
@@ -9282,29 +9306,43 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMIslNationaliseCost
+	name = NAMIslUlvenNationaliseCost
 	text = {
-		trigger = {
-			FROM = { state = 648 }
-			NAM_isl_operator_discount_1 = yes
-		}
+		trigger = { NAM_isl_operator_discount_1 = yes }
 		localization_key = NAM_isl_nationalise_cost_1_operator
 	}
+	text = { localization_key = NAM_isl_nationalise_cost_1 }
+}
+
+defined_text = {
+	name = NAMIslUlvenNationaliseCostBlocked
 	text = {
-		trigger = { FROM = { state = 648 } }
-		localization_key = NAM_isl_nationalise_cost_1
+		trigger = { NAM_isl_operator_discount_1 = yes }
+		localization_key = NAM_isl_nationalise_cost_1_operator_blocked
 	}
+	text = { localization_key = NAM_isl_nationalise_cost_1_blocked }
+}
+
+defined_text = {
+	name = NAMIslLurenNationaliseCost
 	text = {
-		trigger = {
-			FROM = { state = 651 }
-			NAM_isl_operator_discount_2 = yes
-		}
+		trigger = { NAM_isl_operator_discount_2 = yes }
 		localization_key = NAM_isl_nationalise_cost_2_operator
 	}
+	text = { localization_key = NAM_isl_nationalise_cost_2 }
+}
+
+defined_text = {
+	name = NAMIslLurenNationaliseCostBlocked
 	text = {
-		trigger = { FROM = { state = 651 } }
-		localization_key = NAM_isl_nationalise_cost_2
+		trigger = { NAM_isl_operator_discount_2 = yes }
+		localization_key = NAM_isl_nationalise_cost_2_operator_blocked
 	}
+	text = { localization_key = NAM_isl_nationalise_cost_2_blocked }
+}
+
+defined_text = {
+	name = NAMIslShardenNationaliseCost
 	text = {
 		trigger = { NAM_isl_operator_discount_3 = yes }
 		localization_key = NAM_isl_nationalise_cost_3_operator
@@ -9313,29 +9351,7 @@ defined_text = {
 }
 
 defined_text = {
-	name = NAMIslNationaliseCostBlocked
-	text = {
-		trigger = {
-			FROM = { state = 648 }
-			NAM_isl_operator_discount_1 = yes
-		}
-		localization_key = NAM_isl_nationalise_cost_1_operator_blocked
-	}
-	text = {
-		trigger = { FROM = { state = 648 } }
-		localization_key = NAM_isl_nationalise_cost_1_blocked
-	}
-	text = {
-		trigger = {
-			FROM = { state = 651 }
-			NAM_isl_operator_discount_2 = yes
-		}
-		localization_key = NAM_isl_nationalise_cost_2_operator_blocked
-	}
-	text = {
-		trigger = { FROM = { state = 651 } }
-		localization_key = NAM_isl_nationalise_cost_2_blocked
-	}
+	name = NAMIslShardenNationaliseCostBlocked
 	text = {
 		trigger = { NAM_isl_operator_discount_3 = yes }
 		localization_key = NAM_isl_nationalise_cost_3_operator_blocked

@@ -16,6 +16,17 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_rules_tt"
 		}
 
+		instantTextBoxType = {
+			name = "ADISCORD_south_map_strain"
+			position = { x = 12 y = 4 }
+			text = "ADISCORD_south_map_strain"
+			font = "hoi_16mbs"
+			maxWidth = 436
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "ADISCORD_south_map_strain_tt"
+		}
+
 		iconType = {
 			name = "ADISCORD_south_map_background"
 			position = { x = 12 y = 30 }
@@ -5538,26 +5549,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_SHL_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_SHL"
+		iconType = {
+			name = "ADISCORD_south_map_track_SHL"
 			position = { x = 12 y = 383 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_SHL"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_SHL_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_SHL_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_SHL"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_SHL"
+			position = { x = 0 y = 383 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -5591,26 +5596,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_NAM_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_NAM"
+		iconType = {
+			name = "ADISCORD_south_map_track_NAM"
 			position = { x = 236 y = 383 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_NAM"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_NAM_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_NAM_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_NAM"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_NAM"
+			position = { x = 0 y = 383 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -5644,26 +5643,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_EFL_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_EFL"
+		iconType = {
+			name = "ADISCORD_south_map_track_EFL"
 			position = { x = 12 y = 421 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_EFL"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_EFL_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_EFL_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_EFL"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_EFL"
+			position = { x = 0 y = 421 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -5697,26 +5690,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_AZH_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_AZH"
+		iconType = {
+			name = "ADISCORD_south_map_track_AZH"
 			position = { x = 236 y = 421 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_AZH"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_AZH_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_AZH_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_AZH"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_AZH"
+			position = { x = 0 y = 421 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -5750,26 +5737,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_WEF_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_WEF"
+		iconType = {
+			name = "ADISCORD_south_map_track_WEF"
 			position = { x = 12 y = 459 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_WEF"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_WEF_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_WEF_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_WEF"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_WEF"
+			position = { x = 0 y = 459 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -5803,26 +5784,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_KDR_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_KDR"
+		iconType = {
+			name = "ADISCORD_south_map_track_KDR"
 			position = { x = 236 y = 459 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_KDR"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_KDR_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_KDR_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_KDR"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_KDR"
+			position = { x = 0 y = 459 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -5856,26 +5831,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_RHM_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_RHM"
+		iconType = {
+			name = "ADISCORD_south_map_track_RHM"
 			position = { x = 12 y = 497 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_RHM"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_RHM_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_RHM_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_RHM"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_RHM"
+			position = { x = 0 y = 497 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -5909,26 +5878,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_SDR_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_SDR"
+		iconType = {
+			name = "ADISCORD_south_map_track_SDR"
 			position = { x = 236 y = 497 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_SDR"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_SDR_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_SDR_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_SDR"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_SDR"
+			position = { x = 0 y = 497 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -5962,26 +5925,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_KYZ_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_KYZ"
+		iconType = {
+			name = "ADISCORD_south_map_track_KYZ"
 			position = { x = 12 y = 535 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_KYZ"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_KYZ_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_KYZ_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_KYZ"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_KYZ"
+			position = { x = 0 y = 535 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -6015,26 +5972,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_MZR_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_MZR"
+		iconType = {
+			name = "ADISCORD_south_map_track_MZR"
 			position = { x = 236 y = 535 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_MZR"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_MZR_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_MZR_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_MZR"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_MZR"
+			position = { x = 0 y = 535 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		iconType = {
@@ -6068,26 +6019,20 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_GLP_tt"
 		}
 
-		containerWindowType = {
-			name = "ADISCORD_south_map_gauge_GLP"
+		iconType = {
+			name = "ADISCORD_south_map_track_GLP"
 			position = { x = 12 y = 573 }
-			size = { width = 208 height = 12 }
-			iconType = {
-				name = "ADISCORD_south_map_track_GLP"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
-				frame = 1
-				pdx_tooltip = "ADISCORD_south_map_GLP_tt"
-			}
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_track"
+			frame = 1
+			pdx_tooltip = "ADISCORD_south_map_GLP_tt"
+		}
 
-			iconType = {
-				name = "ADISCORD_south_map_marker_GLP"
-				position = { x = 0 y = 0 }
-				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-				frame = 1
-				alwaystransparent = yes
-				orientation = center_up
-			}
+		iconType = {
+			name = "ADISCORD_south_map_marker_GLP"
+			position = { x = 0 y = 573 }
+			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+			frame = 1
+			alwaystransparent = yes
 		}
 
 		instantTextBoxType = {

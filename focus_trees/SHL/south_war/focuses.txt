@@ -1388,7 +1388,7 @@ focus_tree = {
 		ai_will_do = { base = 150 }
 	}
 
-	# Rations slow the cost of the war; martial law answers its crises with force.
+	# Rations slow the rise in home front strain. Martial law softens the crisis crackdown.
 	focus = {
 		id = SHL_sw_ration_cards
 		icon = GFX_focus_generic_price_controls

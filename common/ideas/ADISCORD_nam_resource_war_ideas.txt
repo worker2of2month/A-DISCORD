@@ -4517,6 +4517,7 @@ ideas = {
 			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
+				supply_consumption_factor = -0.05
 				war_support_factor = 0.03
 			}
 		}
@@ -4526,6 +4527,7 @@ ideas = {
 			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
+				army_defence_factor = 0.08
 				compliance_gain = 0.05
 			}
 		}
@@ -4535,6 +4537,7 @@ ideas = {
 			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
+				breakthrough_factor = 0.10
 				resistance_growth = -0.1
 			}
 		}
@@ -4544,6 +4547,7 @@ ideas = {
 			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
+				army_fuel_consumption_factor = -0.15
 				stability_factor = 0.02
 			}
 		}
@@ -4553,7 +4557,7 @@ ideas = {
 			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
-				army_attack_factor = 0.03
+				army_attack_factor = 0.08
 			}
 		}
 
@@ -4562,6 +4566,7 @@ ideas = {
 			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
+				land_reinforce_rate = 0.04
 				compliance_gain = 0.05
 				resistance_growth = -0.1
 			}
@@ -4581,6 +4586,7 @@ ideas = {
 			picture = GFX_idea_NAM_south_war_dynamic
 			allowed = { always = no }
 			modifier = {
+				army_org_factor = 0.08
 				war_support_factor = 0.03
 			}
 		}
@@ -5116,17 +5122,7 @@ ideas = {
 			}
 		}
 
-		NAM_adm_pw_returnee_registration_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.02
-				production_speed_industrial_complex_factor = 0.05
-			}
-		}
-
-		NAM_adm_pw_employment_offices_idea = {
+		NAM_adm_pw_labour_code_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
@@ -5141,7 +5137,8 @@ ideas = {
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
-				stability_factor = 0.03
+				stability_factor = 0.05
+				production_speed_industrial_complex_factor = 0.05
 			}
 		}
 
@@ -5173,17 +5170,15 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				army_defence_factor = 0.08
-				max_dig_in = 1
 			}
 		}
 
-		NAM_adm_oil_quotas_idea = {
+		NAM_adm_namestnik_garrisons_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				fuel_gain_factor = 0.08
-				industrial_capacity_factory = 0.04
 			}
 		}
 
@@ -5195,16 +5190,6 @@ ideas = {
 				compliance_gain = 0.10
 				stability_factor = 0.06
 				ADISCORD_economy_admin_expense_factor = 0.03
-			}
-		}
-
-		NAM_adm_oil_fund_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_trade_income_factor = 0.08
-				fuel_gain_factor = 0.06
 			}
 		}
 
@@ -6035,16 +6020,6 @@ ideas = {
 			}
 		}
 
-		NAM_adm_civic_audit_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.08
-				ADISCORD_economy_tax_collection_factor = 0.08
-			}
-		}
-
 		NAM_prag_convoy_insurance_idea = {
 			name = NAM_navy_dynamic
 			picture = GFX_idea_NAM_navy_dynamic
@@ -6077,16 +6052,6 @@ ideas = {
 			}
 		}
 
-		NAM_adm_district_inspectorate_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.06
-				compliance_gain = 0.06
-			}
-		}
-
 		NAM_adm_domestic_designs_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_administration_dynamic
@@ -6096,14 +6061,13 @@ ideas = {
 			}
 		}
 
-		NAM_adm_repair_depots_idea = {
+		NAM_adm_contract_register_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.08
 				industrial_capacity_factory = 0.06
-				ADISCORD_economy_tax_collection_factor = -0.04
 			}
 		}
 
@@ -6114,16 +6078,6 @@ ideas = {
 			modifier = {
 				production_speed_industrial_complex_factor = 0.08
 				ADISCORD_economy_tax_collection_factor = 0.08
-			}
-		}
-
-		NAM_adm_commercial_commonwealth_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_trade_income_factor = 0.08
-				stability_factor = 0.06
 			}
 		}
 
@@ -6156,16 +6110,6 @@ ideas = {
 			modifier = {
 				research_speed_factor = 0.06
 				stability_factor = 0.06
-			}
-		}
-
-		NAM_adm_common_citizenship_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.06
-				compliance_gain = 0.06
 			}
 		}
 
@@ -6773,21 +6717,13 @@ ideas = {
 			}
 		}
 
-		NAM_pw_water_intakes_administration_preview = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.03
-			}
-		}
-
 		NAM_pw_school_network_administration_preview = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.04
+				production_speed_industrial_complex_factor = 0.05
 			}
 		}
 
@@ -6850,7 +6786,7 @@ ideas = {
 		}
 
 		# The pre-war tree keeps NAM_navy_repair_yard_idea at its own value.
-		NAM_pw_naval_review_navy_preview = {
+		NAM_svetlogorsk_shipyards_navy_preview = {
 			name = NAM_navy_dynamic
 			picture = GFX_idea_NAM_navy_dynamic
 			allowed = { always = no }
@@ -6878,31 +6814,13 @@ ideas = {
 			}
 		}
 
-		NAM_gar_pw_armament_inspectorate_idea = {
-			name = NAM_garrison_dynamic
-			picture = GFX_idea_NAM_garrison_dynamic
-			allowed = { always = no }
-			modifier = {
-				planning_speed = 0.06
-			}
-		}
-
-		NAM_adm_pw_armament_inspectorate_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.04
-			}
-		}
-
-		NAM_adm_pw_central_treasury_idea = {
+		NAM_adm_pw_cadastre_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				ADISCORD_economy_tax_collection_factor = 0.08
-				production_factory_efficiency_gain_factor = 0.06
+				ADISCORD_economy_admin_expense_factor = -0.06
 			}
 		}
 
@@ -6912,6 +6830,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				supply_consumption_factor = -0.06
+				army_speed_factor = 0.04
 			}
 		}
 
@@ -6921,6 +6840,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = {
 				research_speed_factor = 0.05
+				production_speed_industrial_complex_factor = 0.08
 				ADISCORD_economy_admin_expense_factor = 0.02
 			}
 		}
@@ -6930,28 +6850,18 @@ ideas = {
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_industrial_complex_factor = 0.06
+				production_speed_industrial_complex_factor = 0.08
 				ADISCORD_economy_trade_income_factor = 0.06
 				political_power_gain = -0.04
 			}
 		}
 
-		NAM_adm_pw_industrial_commission_idea = {
+		NAM_adm_state_plan_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
 				production_factory_efficiency_gain_factor = 0.08
-			}
-		}
-
-		NAM_adm_development_bank_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				production_speed_industrial_complex_factor = 0.06
-				ADISCORD_economy_trade_income_factor = -0.03
 			}
 		}
 
@@ -6975,42 +6885,13 @@ ideas = {
 			}
 		}
 
-		NAM_adm_works_commission_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				production_speed_industrial_complex_factor = 0.08
-			}
-		}
-
-		NAM_gar_state_logistics_grid_idea = {
-			name = NAM_garrison_dynamic
-			picture = GFX_idea_NAM_garrison_dynamic
-			allowed = { always = no }
-			modifier = {
-				supply_consumption_factor = -0.06
-				army_speed_factor = 0.04
-			}
-		}
-
 		NAM_adm_pw_insurance_fund_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_administration_dynamic
 			allowed = { always = no }
 			modifier = {
-				stability_factor = 0.06
+				stability_factor = 0.08
 				ADISCORD_economy_admin_expense_factor = 0.04
-			}
-		}
-
-		NAM_adm_pw_family_pensions_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				stability_factor = 0.06
-				ADISCORD_economy_admin_expense_factor = 0.03
 			}
 		}
 
@@ -7087,36 +6968,6 @@ ideas = {
 			}
 		}
 
-		NAM_adm_machine_tool_contracts_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				production_factory_efficiency_gain_factor = 0.08
-				industrial_capacity_factory = 0.06
-			}
-		}
-
-		NAM_navy_chartered_tonnage_idea = {
-			name = NAM_navy_dynamic
-			picture = GFX_idea_NAM_navy_dynamic
-			allowed = { always = no }
-			modifier = {
-				amphibious_invasion = 0.10
-				naval_coordination = 0.08
-			}
-		}
-
-		NAM_gar_tractor_leasing_idea = {
-			name = NAM_garrison_dynamic
-			picture = GFX_idea_NAM_garrison_dynamic
-			allowed = { always = no }
-			modifier = {
-				supply_consumption_factor = -0.08
-				army_speed_factor = 0.06
-			}
-		}
-
 		NAM_adm_south_safir_customs_idea = {
 			name = NAM_administration_dynamic
 			picture = GFX_idea_NAM_administration_dynamic
@@ -7134,16 +6985,6 @@ ideas = {
 			modifier = {
 				stability_factor = 0.06
 				compliance_gain = 0.06
-			}
-		}
-
-		NAM_adm_water_boards_idea = {
-			name = NAM_administration_dynamic
-			picture = GFX_idea_NAM_administration_dynamic
-			allowed = { always = no }
-			modifier = {
-				production_factory_efficiency_gain_factor = 0.08
-				fuel_gain_factor = 0.06
 			}
 		}
 

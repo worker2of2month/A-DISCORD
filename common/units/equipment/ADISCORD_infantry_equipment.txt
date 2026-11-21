@@ -60,6 +60,7 @@ equipments = {
 		active = yes
 		priority = 10
 		visual_level = 0
+		reliability = 0.90
 		defense = 20
 		soft_attack = 5
 		ap_attack = 3

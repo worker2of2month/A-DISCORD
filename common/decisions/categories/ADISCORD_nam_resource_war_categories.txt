@@ -134,6 +134,7 @@ NAM_national_programmes = {
 	visible = {
 		NAM_mainland_programmes_active = yes
 		OR = {
+			has_country_flag = NAM_groups_initialized
 			NAM_export_office_unlocked = yes
 			NAM_oil_trade_authorized = yes
 			has_active_mission = NAM_incident_countdown

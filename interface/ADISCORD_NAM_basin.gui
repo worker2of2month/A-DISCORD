@@ -442,9 +442,177 @@ guiTypes = {
 			frame = 4
 		}
 
+		iconType = {
+			name = "NAM_bw_map_701_held"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_701"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_bw_map_701_occupied"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_701"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_bw_map_701_lost"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_701"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_bw_map_701_selected"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_701"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_bw_map_720_held"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_720"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_bw_map_720_occupied"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_720"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_bw_map_720_lost"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_720"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_bw_map_720_selected"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_720"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_bw_map_721_held"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_721"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_bw_map_721_occupied"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_721"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_bw_map_721_lost"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_721"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_bw_map_721_selected"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_721"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_bw_map_722_held"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_722"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_bw_map_722_occupied"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_722"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_bw_map_722_lost"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_722"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_bw_map_722_selected"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_722"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_bw_map_723_held"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_723"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_bw_map_723_occupied"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_723"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_bw_map_723_lost"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_723"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_bw_map_723_selected"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_723"
+			frame = 4
+		}
+
+		iconType = {
+			name = "NAM_bw_map_727_held"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_727"
+			frame = 1
+		}
+
+		iconType = {
+			name = "NAM_bw_map_727_occupied"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_727"
+			frame = 2
+		}
+
+		iconType = {
+			name = "NAM_bw_map_727_lost"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_727"
+			frame = 3
+		}
+
+		iconType = {
+			name = "NAM_bw_map_727_selected"
+			position = { x = 12 y = 66 }
+			quadTextureSprite = "GFX_NAM_bw_state_727"
+			frame = 4
+		}
+
 		buttonType = {
 			name = "NAM_bw_select_67"
-			position = { x = 239 y = 108 }
+			position = { x = 211 y = 144 }
 			quadTextureSprite = "GFX_NAM_bw_marker"
 			buttonText = "01"
 			buttonFont = "hoi_16mbs"
@@ -454,7 +622,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "NAM_bw_select_688"
-			position = { x = 144 y = 130 }
+			position = { x = 145 y = 160 }
 			quadTextureSprite = "GFX_NAM_bw_marker"
 			buttonText = "02"
 			buttonFont = "hoi_16mbs"
@@ -464,7 +632,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "NAM_bw_select_689"
-			position = { x = 206 y = 224 }
+			position = { x = 197 y = 224 }
 			quadTextureSprite = "GFX_NAM_bw_marker"
 			buttonText = "03"
 			buttonFont = "hoi_16mbs"
@@ -474,7 +642,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "NAM_bw_select_690"
-			position = { x = 211 y = 175 }
+			position = { x = 191 y = 190 }
 			quadTextureSprite = "GFX_NAM_bw_marker"
 			buttonText = "04"
 			buttonFont = "hoi_16mbs"
@@ -484,7 +652,7 @@ guiTypes = {
 
 		buttonType = {
 			name = "NAM_bw_select_719"
-			position = { x = 275 y = 232 }
+			position = { x = 235 y = 229 }
 			quadTextureSprite = "GFX_NAM_bw_marker"
 			buttonText = "05"
 			buttonFont = "hoi_16mbs"
@@ -494,76 +662,208 @@ guiTypes = {
 
 		buttonType = {
 			name = "NAM_bw_select_700"
-			position = { x = 179 y = 228 }
+			position = { x = 170 y = 226 }
 			quadTextureSprite = "GFX_NAM_bw_marker"
 			buttonText = "06"
 			buttonFont = "hoi_16mbs"
 			clicksound = click_default
 			pdx_tooltip = "NAM_bw_map_700_tt"
 		}
+
+		buttonType = {
+			name = "NAM_bw_select_701"
+			position = { x = 292 y = 131 }
+			quadTextureSprite = "GFX_NAM_bw_marker"
+			buttonText = "07"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_map_701_tt"
+		}
+
+		buttonType = {
+			name = "NAM_bw_select_720"
+			position = { x = 288 y = 158 }
+			quadTextureSprite = "GFX_NAM_bw_marker"
+			buttonText = "08"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_map_720_tt"
+		}
+
+		buttonType = {
+			name = "NAM_bw_select_721"
+			position = { x = 196 y = 112 }
+			quadTextureSprite = "GFX_NAM_bw_marker"
+			buttonText = "09"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_map_721_tt"
+		}
+
+		buttonType = {
+			name = "NAM_bw_select_722"
+			position = { x = 243 y = 264 }
+			quadTextureSprite = "GFX_NAM_bw_marker"
+			buttonText = "10"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_map_722_tt"
+		}
+
+		buttonType = {
+			name = "NAM_bw_select_723"
+			position = { x = 160 y = 109 }
+			quadTextureSprite = "GFX_NAM_bw_marker"
+			buttonText = "11"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_map_723_tt"
+		}
+
+		buttonType = {
+			name = "NAM_bw_select_727"
+			position = { x = 274 y = 222 }
+			quadTextureSprite = "GFX_NAM_bw_marker"
+			buttonText = "12"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_bw_map_727_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_bw_map_label_701"
+			position = { x = 342 y = 66 }
+			text = "07   [701.GetName]"
+			font = "hoi_16mbs"
+			maxWidth = 104
+			maxHeight = 40
+			fixedsize = yes
+			alwaystransparent = yes
+			pdx_tooltip = "NAM_bw_map_701_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_bw_map_label_720"
+			position = { x = 342 y = 107 }
+			text = "08   [720.GetName]"
+			font = "hoi_16mbs"
+			maxWidth = 104
+			maxHeight = 40
+			fixedsize = yes
+			alwaystransparent = yes
+			pdx_tooltip = "NAM_bw_map_720_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_bw_map_label_721"
+			position = { x = 342 y = 148 }
+			text = "09   [721.GetName]"
+			font = "hoi_16mbs"
+			maxWidth = 104
+			maxHeight = 40
+			fixedsize = yes
+			alwaystransparent = yes
+			pdx_tooltip = "NAM_bw_map_721_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_bw_map_label_722"
+			position = { x = 342 y = 189 }
+			text = "10   [722.GetName]"
+			font = "hoi_16mbs"
+			maxWidth = 104
+			maxHeight = 40
+			fixedsize = yes
+			alwaystransparent = yes
+			pdx_tooltip = "NAM_bw_map_722_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_bw_map_label_723"
+			position = { x = 342 y = 230 }
+			text = "11   [723.GetName]"
+			font = "hoi_16mbs"
+			maxWidth = 104
+			maxHeight = 40
+			fixedsize = yes
+			alwaystransparent = yes
+			pdx_tooltip = "NAM_bw_map_723_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_bw_map_label_727"
+			position = { x = 342 y = 271 }
+			text = "12   [727.GetName]"
+			font = "hoi_16mbs"
+			maxWidth = 104
+			maxHeight = 40
+			fixedsize = yes
+			alwaystransparent = yes
+			pdx_tooltip = "NAM_bw_map_727_tt"
+		}
 		# END GENERATED NAM BASIN MAP
 		instantTextBoxType = {
 			name = "NAM_bw_map_label_67"
-			position = { x = 226 y = 88 }
+			position = { x = 14 y = 66 }
 			text = "NAM_bw_map_name_67"
 			font = "hoi_16mbs"
-			maxWidth = 180
-			maxHeight = 34
+			maxWidth = 104
+			maxHeight = 40
 			fixedsize = yes
 			alwaystransparent = yes
 			pdx_tooltip = "NAM_bw_map_67_tt"
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_map_label_688"
-			position = { x = 25 y = 138 }
+			position = { x = 14 y = 107 }
 			text = "NAM_bw_map_name_688"
 			font = "hoi_16mbs"
-			maxWidth = 132
-			maxHeight = 34
+			maxWidth = 104
+			maxHeight = 40
 			fixedsize = yes
 			alwaystransparent = yes
 			pdx_tooltip = "NAM_bw_map_688_tt"
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_map_label_689"
-			position = { x = 176 y = 271 }
+			position = { x = 14 y = 148 }
 			text = "NAM_bw_map_name_689"
 			font = "hoi_16mbs"
-			maxWidth = 142
-			maxHeight = 34
+			maxWidth = 104
+			maxHeight = 40
 			fixedsize = yes
 			alwaystransparent = yes
 			pdx_tooltip = "NAM_bw_map_689_tt"
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_map_label_690"
-			position = { x = 258 y = 176 }
+			position = { x = 14 y = 189 }
 			text = "NAM_bw_map_name_690"
 			font = "hoi_16mbs"
-			maxWidth = 138
-			maxHeight = 34
+			maxWidth = 104
+			maxHeight = 40
 			fixedsize = yes
 			alwaystransparent = yes
 			pdx_tooltip = "NAM_bw_map_690_tt"
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_map_label_719"
-			position = { x = 320 y = 235 }
+			position = { x = 14 y = 230 }
 			text = "NAM_bw_map_name_719"
 			font = "hoi_16mbs"
-			maxWidth = 122
-			maxHeight = 34
+			maxWidth = 104
+			maxHeight = 40
 			fixedsize = yes
 			alwaystransparent = yes
 			pdx_tooltip = "NAM_bw_map_719_tt"
 		}
 		instantTextBoxType = {
 			name = "NAM_bw_map_label_700"
-			position = { x = 28 y = 240 }
+			position = { x = 14 y = 271 }
 			text = "NAM_bw_map_name_700"
 			font = "hoi_16mbs"
-			maxWidth = 138
-			maxHeight = 34
+			maxWidth = 104
+			maxHeight = 40
 			fixedsize = yes
 			alwaystransparent = yes
 			pdx_tooltip = "NAM_bw_map_700_tt"
@@ -701,6 +1001,120 @@ guiTypes = {
 			maxHeight = 126
 			fixedsize = yes
 			pdx_tooltip = "NAM_bw_map_700_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_701_title"
+			position = { x = 24 y = 366 }
+			text = "07   [701.GetName]"
+			font = "hoi_18mbs"
+			maxWidth = 412
+			maxHeight = 24
+			fixedsize = yes
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_701_body"
+			position = { x = 24 y = 393 }
+			text = "NAM_bw_card_701_body"
+			font = "hoi_16mbs"
+			maxWidth = 412
+			maxHeight = 126
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_map_701_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_720_title"
+			position = { x = 24 y = 366 }
+			text = "08   [720.GetName]"
+			font = "hoi_18mbs"
+			maxWidth = 412
+			maxHeight = 24
+			fixedsize = yes
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_720_body"
+			position = { x = 24 y = 393 }
+			text = "NAM_bw_card_720_body"
+			font = "hoi_16mbs"
+			maxWidth = 412
+			maxHeight = 126
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_map_720_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_721_title"
+			position = { x = 24 y = 366 }
+			text = "09   [721.GetName]"
+			font = "hoi_18mbs"
+			maxWidth = 412
+			maxHeight = 24
+			fixedsize = yes
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_721_body"
+			position = { x = 24 y = 393 }
+			text = "NAM_bw_card_721_body"
+			font = "hoi_16mbs"
+			maxWidth = 412
+			maxHeight = 126
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_map_721_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_722_title"
+			position = { x = 24 y = 366 }
+			text = "10   [722.GetName]"
+			font = "hoi_18mbs"
+			maxWidth = 412
+			maxHeight = 24
+			fixedsize = yes
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_722_body"
+			position = { x = 24 y = 393 }
+			text = "NAM_bw_card_722_body"
+			font = "hoi_16mbs"
+			maxWidth = 412
+			maxHeight = 126
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_map_722_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_723_title"
+			position = { x = 24 y = 366 }
+			text = "11   [723.GetName]"
+			font = "hoi_18mbs"
+			maxWidth = 412
+			maxHeight = 24
+			fixedsize = yes
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_723_body"
+			position = { x = 24 y = 393 }
+			text = "NAM_bw_card_723_body"
+			font = "hoi_16mbs"
+			maxWidth = 412
+			maxHeight = 126
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_map_723_tt"
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_727_title"
+			position = { x = 24 y = 366 }
+			text = "12   [727.GetName]"
+			font = "hoi_18mbs"
+			maxWidth = 412
+			maxHeight = 24
+			fixedsize = yes
+		}
+		instantTextBoxType = {
+			name = "NAM_bw_card_727_body"
+			position = { x = 24 y = 393 }
+			text = "NAM_bw_card_727_body"
+			font = "hoi_16mbs"
+			maxWidth = 412
+			maxHeight = 126
+			fixedsize = yes
+			pdx_tooltip = "NAM_bw_map_727_tt"
 		}
 		containerWindowType = {
 			name = "NAM_bw_summary"

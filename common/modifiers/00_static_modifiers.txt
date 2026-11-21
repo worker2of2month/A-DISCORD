@@ -756,3 +756,10 @@ the_great_wall = {
 	dig_in_speed_factor = 0.15
 	max_dig_in_factor = 0.1
 }
+
+NAM_subject_resource_tariff = {
+	valid_relation_trigger = {
+		FROM = { is_subject_of = NAM }
+	}
+	trade_cost_for_target_factor = -0.50
+}

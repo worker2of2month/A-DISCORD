@@ -40,7 +40,7 @@ NDefines.NMilitary.BASE_DIVISION_SUPPORT_SLOT_COST = 5
 NDefines.NMilitary.ATTRITION_DAMAGE_ORG = 0.04
 -- Keep wasteland attrition relevant without erasing the rifle reserve
 -- before the divisions have had a chance to fight.
-NDefines.NMilitary.ATTRITION_EQUIPMENT_LOSS_CHANCE = 0.01
+NDefines.NMilitary.ATTRITION_EQUIPMENT_LOSS_CHANCE = 0.005
 NDefines.NMilitary.TACTIC_SWAP_FREQUENCEY = 24
 NDefines.NMilitary.LEADER_EXPERIENCE_SCALE = 0.5
 NDefines.NMilitary.SLOWEST_SPEED = 4
