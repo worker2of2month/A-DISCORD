@@ -3308,7 +3308,7 @@ focus_tree = {
 			add_political_power = 25
 		}
 		ai_will_do = {
-			base = 100
+			base = 30
 		}
 	}
 

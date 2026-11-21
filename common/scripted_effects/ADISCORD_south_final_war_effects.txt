@@ -527,22 +527,7 @@ ADISCORD_south_prepare_champion = {
 		}
 		leave_faction = yes
 	}
-	if = {
-		limit = { is_in_faction = no }
-		if = {
-			limit = { tag = SHL }
-			create_faction_from_template = {
-				template = faction_template_ADISCORD_standard
-				name = ADISCORD_south_shl_faction
-			}
-		}
-		else = {
-			create_faction_from_template = {
-				template = faction_template_ADISCORD_standard
-				name = ADISCORD_south_north_faction
-			}
-		}
-	}
+	ADISCORD_south_ensure_campaign_faction = yes
 	if = {
 		limit = {
 			OR = {
@@ -1950,6 +1935,10 @@ ADISCORD_south_ensure_campaign_faction = {
 				template = faction_template_ADISCORD_standard
 				name = ADISCORD_south_shl_faction
 			}
+		}
+		else_if = {
+			limit = { tag = NAM }
+			NAM_form_campaign_alliance = yes
 		}
 		else = {
 			create_faction_from_template = {

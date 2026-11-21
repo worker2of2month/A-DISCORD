@@ -440,6 +440,7 @@ ADISCORD_vorkerland_recount_central_control = {
 
 # Clear all coalition overlays first, then add at most one against the live
 # claimant holding strictly the most central-theatre states (more than eight).
+# Every other main claimant at war receives it, whether AI or human.
 # Legitimacy ties fall back to WKR, so they cannot select the territorial leader.
 ADISCORD_vorkerland_refresh_claimant_coalition = {
 	if = { limit = { has_idea = ADISCORD_vorkerland_coalition_against_wkr } remove_ideas = ADISCORD_vorkerland_coalition_against_wkr }
@@ -449,7 +450,6 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 	if = {
 		limit = {
 			ADISCORD_vorkerland_is_main_claimant = yes
-			is_ai = yes
 			has_war = yes
 			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
@@ -464,7 +464,6 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 	else_if = {
 		limit = {
 			ADISCORD_vorkerland_is_main_claimant = yes
-			is_ai = yes
 			has_war = yes
 			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
@@ -479,7 +478,6 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 	else_if = {
 		limit = {
 			ADISCORD_vorkerland_is_main_claimant = yes
-			is_ai = yes
 			has_war = yes
 			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
@@ -1180,8 +1178,18 @@ ADISCORD_vorkerland_prepare_conflict_country = {
 	}
 	else_if = { limit = { tag = WPA } add_ideas = ADISCORD_vorkerland_wpa_municipal_compact }
 	else_if = { limit = { tag = WPS } add_ideas = ADISCORD_vorkerland_wps_factory_councils }
-	else_if = { limit = { tag = EBA } add_ideas = ADISCORD_vorkerland_eba_free_quays }
-	else_if = { limit = { tag = ZTA } add_ideas = ADISCORD_vorkerland_zta_golden_river_order }
+	# Regional breakaways contest their region on the incumbent republics'
+	# footing. CSL and TGD keep their authored crises.
+	else_if = {
+		limit = { tag = EBA }
+		add_ideas = ADISCORD_vorkerland_republics_from_the_ruins
+		add_ideas = ADISCORD_vorkerland_eba_free_quays
+	}
+	else_if = {
+		limit = { tag = ZTA }
+		add_ideas = ADISCORD_vorkerland_republics_from_the_ruins
+		add_ideas = ADISCORD_vorkerland_zta_golden_river_order
+	}
 	else_if = { limit = { tag = TGD } add_ideas = ADISCORD_vorkerland_tgd_grid_collapse }
 	else_if = {
 		limit = { tag = CSL }
@@ -1189,7 +1197,11 @@ ADISCORD_vorkerland_prepare_conflict_country = {
 		add_ideas = ADISCORD_vorkerland_csl_isolated_city
 	}
 	else_if = {
-		limit = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV tag = PSD tag = DVA tag = SRA tag = IBL tag = IBA } }
+		limit = { OR = { tag = DVA tag = SRA } }
+		add_ideas = ADISCORD_vorkerland_republics_from_the_ruins
+	}
+	else_if = {
+		limit = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV tag = PSD tag = IBL tag = IBA } }
 		add_ideas = ADISCORD_vorkerland_mobilized_periphery
 	}
 	# This thin locked template turns one political mobilisation into frontage
@@ -1237,13 +1249,13 @@ ADISCORD_vorkerland_raise_emergency_levies = {
 	}
 }
 
-# WKR normally inherits WRK's armed forces, but annexation transfers divisions
-# without copying WRK's recruitable template database. Materialize an editable
-# line division and mobile group alongside the locked emergency guard. The
-# one-shot reserve itself remains small: three border guards in state 33 and
-# three formations in the state 32 capital reserve (was 2+2; raised because
-# WKR could not hold two claimant fronts against TVA's nineteen formations).
-# WKR also inherits WRK's twelve pre-collapse formations and one mobile group.
+# WRK's field divisions are disbanded into the depots that the collapse splits
+# between the three claimants, so WKR inherits neither WRK formations nor its
+# recruitable template database. Materialize an editable line division and
+# mobile group alongside the locked emergency guard. The one-shot reserve
+# itself remains small: three border guards in state 33 and three formations
+# in the state 32 capital reserve, beside the mobile group raised at the
+# collapse.
 ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = {
 	if = {
 		limit = {
@@ -1393,8 +1405,18 @@ ADISCORD_vorkerland_finalize_conflict_spirits = {
 	}
 	else_if = { limit = { tag = WPA } add_ideas = ADISCORD_vorkerland_wpa_municipal_compact }
 	else_if = { limit = { tag = WPS } add_ideas = ADISCORD_vorkerland_wps_factory_councils }
-	else_if = { limit = { tag = EBA } add_ideas = ADISCORD_vorkerland_eba_free_quays }
-	else_if = { limit = { tag = ZTA } add_ideas = ADISCORD_vorkerland_zta_golden_river_order }
+	# Regional breakaways contest their region on the incumbent republics'
+	# footing. CSL and TGD keep their authored crises.
+	else_if = {
+		limit = { tag = EBA }
+		add_ideas = ADISCORD_vorkerland_republics_from_the_ruins
+		add_ideas = ADISCORD_vorkerland_eba_free_quays
+	}
+	else_if = {
+		limit = { tag = ZTA }
+		add_ideas = ADISCORD_vorkerland_republics_from_the_ruins
+		add_ideas = ADISCORD_vorkerland_zta_golden_river_order
+	}
 	else_if = { limit = { tag = TGD } add_ideas = ADISCORD_vorkerland_tgd_grid_collapse }
 	else_if = {
 		limit = { tag = CSL }
@@ -1402,7 +1424,11 @@ ADISCORD_vorkerland_finalize_conflict_spirits = {
 		add_ideas = ADISCORD_vorkerland_csl_isolated_city
 	}
 	else_if = {
-		limit = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV tag = PSD tag = DVA tag = SRA tag = IBL tag = IBA } }
+		limit = { OR = { tag = DVA tag = SRA } }
+		add_ideas = ADISCORD_vorkerland_republics_from_the_ruins
+	}
+	else_if = {
+		limit = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV tag = PSD tag = IBL tag = IBA } }
 		add_ideas = ADISCORD_vorkerland_mobilized_periphery
 	}
 	set_country_flag = ADISCORD_vorkerland_conflict_spirits_finalized
@@ -1560,8 +1586,10 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		add_ideas = ADISCORD_vorkerland_last_stand
 		add_ideas = ADISCORD_vorkerland_wkr_arsenal_command
 		# WKR is dormant at campaign start, so it is outside the initial
-		# every_country technology pass. Grant only the three variants consumed
-		# below before adding equipment or loading the claimant air OOB.
+		# every_country technology pass. It copies WRK's technology like VAD and
+		# TVA before its formations are created, then receives the three variants
+		# consumed below before adding equipment or loading the claimant air OOB.
+		inherit_technology = WRK
 		set_technology = {
 			ADISCORD_tech_armored_carrier_program = 1
 			ADISCORD_tech_semi_autonomous_combat_modules = 1
@@ -1605,6 +1633,9 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 			PREV = { ADISCORD_copy_development_from_prev = yes }
 		}
 		ADISCORD_vorkerland_prepare_conflict_country = yes
+		# VAD and TVA succeed to the same WRK institutions as WKR. Copy WRK's
+		# technology before the profile grants so no granted level is replaced.
+		inherit_technology = WRK
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_economy_initialize_country = yes
@@ -2476,6 +2507,9 @@ ADISCORD_vorkerland_setup_tva = {
 			portrait = GFX_portrait_WRK_Dorian_Worx
 		}
 		set_capital = { state = 36 }
+		# Runs before the claimants are prepared, while WRK still exists. The
+		# copy precedes the profile grants and the OOB, whose rifles use it.
+		inherit_technology = WRK
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_industrial = yes
 		ADISCORD_grant_technology_profile_energy = yes
@@ -2849,6 +2883,9 @@ ADISCORD_vorkerland_setup_eba = {
 		set_capital = { state = 197 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		# Breakaway republics share the incumbents' land doctrine base, so their
+		# brackets are decided by the war rather than a missing technology tier.
+		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_eba_free_quays
@@ -2874,6 +2911,7 @@ ADISCORD_vorkerland_setup_dva = {
 		set_capital = { state = 145 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "DVA_vorkerland_collapse"
@@ -2896,6 +2934,7 @@ ADISCORD_vorkerland_setup_sra = {
 		set_capital = { state = 198 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SRA_vorkerland_collapse"
@@ -2914,6 +2953,7 @@ ADISCORD_vorkerland_setup_zta = {
 		set_capital = { state = 199 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_zta_golden_river_order
@@ -4166,7 +4206,8 @@ ADISCORD_vorkerland_form_joint_government = {
 # owner, capital and OOB has been established.
 ADISCORD_vorkerland_relocate_legacy_armies = {
 	every_state = {
-		# WRK's legacy formations move before transfer_troops hands them to WKR.
+		# WRK's legacy formations are gathered here; collapse.1 then disbands
+		# them into the depots that ADISCORD_vorkerland_partition_wrk_arsenal splits.
 		# Do not teleport WKR itself: its new state-33 home guard must keep the
 		# border deployment authored by ensure_wkr_home_guard.
 		teleport_armies = { limit = { tag = WRK } to_state = 32 }
@@ -4178,6 +4219,79 @@ ADISCORD_vorkerland_relocate_legacy_armies = {
 		teleport_armies = { limit = { tag = ROM } to_state = 73 }
 		teleport_armies = { limit = { tag = SOL } to_state = 76 }
 		teleport_armies = { limit = { tag = TRU } to_state = 80 }
+	}
+}
+
+# Called once from collapse.1 while the dormant republic still exists. WRK's
+# field divisions are disbanded into its depots first, so their equipment and
+# men are divided with the stockpile and no WRK formation reaches a claimant.
+# VAD then receives a third of the depots, aircraft and fuel and TVA half of
+# the rest; the annex hands the last third to WKR. Each recipient gets
+# exactly one transfer: a second transfer_units_fraction to the same country
+# loses the first delivery. Unit leaders and the fleet stay with WRK and pass
+# to WKR with the annex.
+ADISCORD_vorkerland_partition_wrk_arsenal = {
+	event_target:ADISCORD_vorkerland_nation = {
+		delete_unit = { disband = yes }
+		# The disbanded divisions return their men to WRK's pool. Pay each claimant
+		# an equal third directly and empty the pool, so the annex hands WKR no
+		# extra share whether or not the engine carries a pool over on annexation.
+		set_temp_variable = { var = ADISCORD_vorkerland_wrk_manpower_share value = manpower }
+		divide_temp_variable = { var = ADISCORD_vorkerland_wrk_manpower_share value = 3 }
+		WKR = { add_manpower = var:ADISCORD_vorkerland_wrk_manpower_share }
+		VAD = { add_manpower = var:ADISCORD_vorkerland_wrk_manpower_share }
+		TVA = { add_manpower = var:ADISCORD_vorkerland_wrk_manpower_share }
+		multiply_temp_variable = { var = ADISCORD_vorkerland_wrk_manpower_share value = -3 }
+		add_manpower = var:ADISCORD_vorkerland_wrk_manpower_share
+		transfer_units_fraction = {
+			target = VAD
+			size = 0
+			stockpile_ratio = 0.333
+			army_ratio = 0
+			navy_ratio = 0
+			air_ratio = 0.333
+			keep_unit_leaders_trigger = { always = yes }
+		}
+		transfer_units_fraction = {
+			target = TVA
+			size = 0
+			stockpile_ratio = 0.5
+			army_ratio = 0
+			navy_ratio = 0
+			air_ratio = 0.5
+			keep_unit_leaders_trigger = { always = yes }
+		}
+	}
+}
+
+# Called once from collapse.1 after WKR annexed WRK. All three claimants
+# inherit WRK's technology and succeed to its research institutions, so each
+# keeps the republic's five research slots. The common fuel ceiling removes
+# the excess that WKR's inherited tank capacity would keep over the split.
+ADISCORD_vorkerland_equalize_claimant_inheritance = {
+	WKR = {
+		set_research_slots = 5
+		if = {
+			limit = { has_fuel > 50000 }
+			set_fuel = 50000
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+	VAD = {
+		set_research_slots = 5
+		if = {
+			limit = { has_fuel > 50000 }
+			set_fuel = 50000
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+	TVA = {
+		set_research_slots = 5
+		if = {
+			limit = { has_fuel > 50000 }
+			set_fuel = 50000
+		}
+		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
@@ -8343,47 +8457,48 @@ ADISCORD_vorkerland_set_phase_postwar_integration = {
 	ADISCORD_vorkerland_refresh_focus_lifecycle = yes
 }
 
-# The worker government and technical administration claim the central theatre.
-# Independent peripheral republics retain their own national territory.
+# Each main claimant claims the whole central theatre, so land any of them
+# conquers there is core land for it. Independent peripheral republics retain
+# their own national territory.
 ADISCORD_vorkerland_grant_central_claimant_cores = {
-	27 = { add_core_of = WKR add_core_of = TVA }
-	32 = { add_core_of = WKR add_core_of = TVA }
-	33 = { add_core_of = WKR add_core_of = TVA }
-	35 = { add_core_of = WKR add_core_of = TVA }
-	36 = { add_core_of = WKR add_core_of = TVA }
-	37 = { add_core_of = WKR add_core_of = TVA }
-	38 = { add_core_of = WKR add_core_of = TVA }
-	39 = { add_core_of = WKR add_core_of = TVA }
-	40 = { add_core_of = WKR add_core_of = TVA }
-	75 = { add_core_of = WKR add_core_of = TVA }
-	79 = { add_core_of = WKR add_core_of = TVA }
-	81 = { add_core_of = WKR add_core_of = TVA }
-	82 = { add_core_of = WKR add_core_of = TVA }
-	102 = { add_core_of = WKR add_core_of = TVA }
-	106 = { add_core_of = WKR add_core_of = TVA }
-	107 = { add_core_of = WKR add_core_of = TVA }
-	108 = { add_core_of = WKR add_core_of = TVA }
-	109 = { add_core_of = WKR add_core_of = TVA }
-	110 = { add_core_of = WKR add_core_of = TVA }
-	111 = { add_core_of = WKR add_core_of = TVA }
-	121 = { add_core_of = WKR add_core_of = TVA }
-	122 = { add_core_of = WKR add_core_of = TVA }
-	123 = { add_core_of = WKR add_core_of = TVA }
-	124 = { add_core_of = WKR add_core_of = TVA }
-	200 = { add_core_of = WKR add_core_of = TVA }
-	201 = { add_core_of = WKR add_core_of = TVA }
-	306 = { add_core_of = WKR add_core_of = TVA }
-	308 = { add_core_of = WKR add_core_of = TVA }
-	309 = { add_core_of = WKR add_core_of = TVA }
-	315 = { add_core_of = WKR add_core_of = TVA }
-	316 = { add_core_of = WKR add_core_of = TVA }
-	317 = { add_core_of = WKR add_core_of = TVA }
-	318 = { add_core_of = WKR add_core_of = TVA }
-	320 = { add_core_of = WKR add_core_of = TVA }
-	323 = { add_core_of = WKR add_core_of = TVA }
-	324 = { add_core_of = WKR add_core_of = TVA }
-	325 = { add_core_of = WKR add_core_of = TVA }
-	327 = { add_core_of = WKR add_core_of = TVA }
+	27 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	32 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	33 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	35 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	36 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	37 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	38 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	39 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	40 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	75 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	79 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	81 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	82 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	102 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	106 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	107 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	108 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	109 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	110 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	111 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	121 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	122 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	123 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	124 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	200 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	201 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	306 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	308 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	309 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	315 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	316 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	317 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	318 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	320 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	323 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	324 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	325 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
+	327 = { add_core_of = WKR add_core_of = VAD add_core_of = TVA }
 }
 
 # Prewar WRK cores remain historical data. At runtime they are stripped before
@@ -15868,12 +15983,12 @@ ADISCORD_vorkerland_prep_accept_offer = {
 				add_political_power = -35
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = -13500
+					amount = -6000
 				}
 			}
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
-				amount = 13500
+				amount = 6000
 			}
 		}
 		if = {
@@ -15910,12 +16025,12 @@ ADISCORD_vorkerland_prep_accept_offer = {
 				add_political_power = -35
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
-					amount = -18000
+					amount = -8000
 				}
 			}
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
-				amount = 18000
+				amount = 8000
 			}
 		}
 		if = {

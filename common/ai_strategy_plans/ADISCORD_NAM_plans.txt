@@ -891,97 +891,100 @@ NAM_exile_corporate_plan = {
 	}
 	ai_national_focuses = {
 		NAM_board_beacon_out
-		NAM_board_quay_chain
 		NAM_board_bought_century
-		NAM_board_order_arsenal
-		NAM_board_private_gospel
 		NAM_board_dead_mans_veto
-		NAM_board_property_qualification
 		NAM_board_founders_of_unrest
-		NAM_board_arsenal_monopoly
-		NAM_board_salt_monopoly
-		NAM_board_future_output_pledge
+		NAM_board_property_qualification
 		NAM_board_posthumous_signature
 		NAM_board_last_debtor
-		NAM_board_foundry_mark
-		NAM_board_island_fleet_shares
-		NAM_board_loren_receipt
-		NAM_board_inheritance_without_empire
 		NAM_board_facsimile_blood
 		NAM_board_purged_majority
-		NAM_board_elected_in_absentia
-		NAM_board_factory_guard
-		NAM_board_bearer_warrant
-		NAM_board_uncrested_buyers
-		NAM_board_widows_share
-		NAM_board_last_voyage_rifles
-		NAM_board_loren_priority
-		NAM_board_eflor_debt_purchase
 		NAM_board_privatise_governorate
-		NAM_board_both_squares_bought
 		NAM_board_society_99_1
-		NAM_board_return_voyage
-		NAM_board_azhar_land_fund
-		NAM_board_land_foreclosure
-		NAM_board_concession_courts
+		NAM_board_both_squares_bought
 		NAM_board_hereditary_roll
 		NAM_board_incumbents_credit
-		NAM_board_private_strait
-		NAM_board_corporate_mass_housing
-		NAM_board_harbour_exchange
-		NAM_board_admitted_owners_register
-		NAM_board_sole_vote_holder
-		NAM_board_copy_across_strait
-		NAM_board_family_relief_fund
-		NAM_board_residency_for_hire
-		NAM_board_eflor_petition
-		NAM_board_district_buyout
-		NAM_board_mourning_licence
-		NAM_board_representation_for_loss
 		NAM_board_close_the_lawsuit
 		NAM_board_port_rights_monopoly
 		NAM_board_mainland_inventory
 		NAM_board_table_six
-		NAM_board_partition_night
-		NAM_board_invasion_prospectus
-		NAM_board_war_economy_charter
-		NAM_board_war_quartermaster
+		NAM_board_sole_vote_holder
+		NAM_board_order_arsenal
+		NAM_board_arsenal_monopoly
+		NAM_board_factory_guard
+		NAM_board_last_voyage_rifles
+		NAM_board_private_strait
 		NAM_board_private_navy
+		NAM_board_corporate_mass_housing
 		NAM_board_landing_contracts
-		NAM_board_six_share_pool
-		NAM_board_mainland_contacts
-		NAM_board_double_shifts
-		NAM_board_steel_for_guns
-		NAM_board_shore_depots
-		NAM_board_escort_flotilla
-		NAM_board_marine_kit
-		NAM_board_marine_school
-		NAM_board_open_war_tenders
-		NAM_board_ration_lists
-		NAM_board_company_docks
-		NAM_board_shore_battalions
-		NAM_board_island_arsenal
-		NAM_board_bunker_piers
-		NAM_board_hospital_ships
-		NAM_board_landing_craft
-		NAM_board_loading_schedules
-		NAM_board_marine_officers
-		NAM_board_supply_overseas
-		NAM_board_landing_flotilla
-		NAM_board_assembly_roads
-		NAM_board_synthetic_plant
-		NAM_board_war_bonds
-		NAM_board_beach_masters
-		NAM_board_mercenary_battalions
-		NAM_board_arsenal_of_the_boards
-		NAM_board_expedition_rear
-		NAM_board_island_squadron
-		NAM_board_first_wave
-		NAM_board_invasion_fleet
 		NAM_board_ulven_operation
-		NAM_board_northern_safehouses
-		NAM_board_southern_safehouses
+		NAM_board_partition_night
+		NAM_board_quay_chain
+		NAM_board_private_gospel
+		NAM_board_loren_receipt
+		NAM_board_shore_battalions
+		NAM_board_bearer_warrant
+		NAM_board_concession_courts
+		NAM_board_land_foreclosure
+		NAM_board_war_economy_charter
+		NAM_board_cartel_prices
+		NAM_board_island_arsenal
+		NAM_board_war_quartermaster
+		NAM_board_shore_depots
+		NAM_board_first_wave
+		NAM_board_supply_overseas
 		NAM_board_operation_poseidon
+	}
+	weight = { factor = 20 }
+}
+
+# The war of return replaces the corporate tree while the war lasts. The AI
+# lands in the south: it fights Azhar and forces Eflor's surrender through the
+# regime crisis, so it keeps one front. The holders' war precedes the crisis,
+# so the surrender offer finds the form of rule already chosen.
+NAM_return_war_plan = {
+	name = "NAM war of return"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_return_war_focus
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_return_war_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_rtw_war_cabinet
+		NAM_rtw_south_front
+		NAM_rtw_districts_rise
+		NAM_rtw_strait_convoys
+		NAM_rtw_holders_war
+		NAM_rtw_harbour_fortress
+		NAM_rtw_dry_river
+		NAM_rtw_north_front
+		NAM_rtw_amnesty
+		NAM_rtw_company_tankers
+		NAM_rtw_war_bonds
+		NAM_rtw_svetlogorsk_rising
+		NAM_rtw_storm_black_basin
+		NAM_rtw_northern_fields
+		NAM_rtw_loren_regime_crisis
+		NAM_rtw_district_militias
+		NAM_rtw_island_arsenals
+		NAM_rtw_officers_at_front
+		NAM_rtw_docks_at_war
+		NAM_rtw_basin_defectors
+		NAM_rtw_black_coast_raid
+		NAM_rtw_south_border
+		NAM_rtw_north_border
+		NAM_rtw_left_behind_registry
+		NAM_rtw_loren_colonels
+		NAM_rtw_loren_coast_landing
+		NAM_rtw_return_treaty
 	}
 	weight = { factor = 20 }
 }

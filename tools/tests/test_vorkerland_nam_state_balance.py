@@ -231,8 +231,8 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             68: ((68, 725), builder.EFL_UPPER_LOREN_PROVINCES, 8145000, 2, 1, 0),
             70: ((70, 723, 724), builder.EFL_LOWER_LOREN_PROVINCES, 5_325_000, 2, 1, 1),
             691: ((691, 726), builder.EFL_MIDDLE_LOREN_PROVINCES, 2_860_000, 0, 0, 0),
-            69: ((69, 727, 728), builder.AZH_CORE_PROVINCES, 11_000_000, 2, 2, 0),
-            692: ((692, 729), builder.AZH_BLACK_COAST_PROVINCES, 6975000, 1, 0, 1),
+            69: ((69, 727, 728), builder.AZH_CORE_PROVINCES, 11_000_000, 3, 2, 0),
+            692: ((692, 729), builder.AZH_BLACK_COAST_PROVINCES, 6975000, 3, 0, 1),
         }
         for parent, (members, original, population, civilian, military, dockyards) in families.items():
             self.assertTrue(set(members) <= self.states.keys(), (parent, members))

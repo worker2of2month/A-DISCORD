@@ -9058,6 +9058,76 @@
       }
     },
     {
+      "key": "oob_tva_vorkerland_collapse_tva_line_infantry_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/TVA_vorkerland_collapse.txt",
+        "owner": "TVA"
+      },
+      "technical_name": "Line Infantry Brigade",
+      "display_name": "Line Infantry Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 50.642857,
+        "manpower": 6300,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "infantry_equipment": 5670,
+          "support_equipment": 30
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_vla_line_infantry_brigade"
+      }
+    },
+    {
       "key": "oob_tva_vorkerland_collapse_tva_infiltration_cell",
       "source": {
         "kind": "oob",
@@ -14961,7 +15031,17 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
-      "count": 3
+      "count": 6
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_25_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Line Infantry Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.25,
+      "start_equipment_factor": 1,
+      "count": 2
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_mainland_partisans_xp_0_1_eq_1_0",
@@ -14971,7 +15051,17 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 1,
-      "count": 6
+      "count": 9
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_old_settlers_militia_xp_0_1_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Old Settlers Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 1,
+      "count": 8
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_mobilisation_guard_xp_0_25_eq_1_0",
@@ -15063,7 +15153,17 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
-      "count": 5
+      "count": 7
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_island_marines_xp_0_25_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Island Marines",
+      "legacy_names": [],
+      "start_experience_factor": 0.25,
+      "start_equipment_factor": 1,
+      "count": 2
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_island_marines_xp_0_35_eq_1_0",
@@ -16803,13 +16903,23 @@
       "legacy_names": [],
       "start_experience_factor": 0.18,
       "start_equipment_factor": 0.85,
-      "count": 10
+      "count": 7
     },
     {
-      "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_2_eq_0_88",
+      "key": "tva_vorkerland_collapse_oob_tva_line_infantry_brigade_xp_0_18_eq_0_85",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
-      "technical_name": "Collapse Militia",
+      "technical_name": "Line Infantry Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.18,
+      "start_equipment_factor": 0.85,
+      "count": 3
+    },
+    {
+      "key": "tva_vorkerland_collapse_oob_tva_line_infantry_brigade_xp_0_2_eq_0_88",
+      "path": "history/units/TVA_vorkerland_collapse.txt",
+      "kind": "oob",
+      "technical_name": "Line Infantry Brigade",
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 0.88,

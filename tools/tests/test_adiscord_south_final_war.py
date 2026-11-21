@@ -339,6 +339,36 @@ def numeric_date(date):
 
 
 class SouthFinalWarContractTests(unittest.TestCase):
+    def test_veyr_approaches_match_the_physical_naran_hamad_border(self):
+        from tools.builders import build_adiscord_strategic_regions as regions
+
+        types, colors = regions.load_province_definitions()
+        neighbors = regions.load_province_adjacency(types, colors, include_special_adjacencies=False)
+
+        def provinces(state_id):
+            state = definitions(ROOT / f"history/states/{state_id}-{state_id}.txt")["state"]
+            return {int(entry.value) for entry in block(state, "provinces")}
+
+        hamad = provinces(258)
+        physical = {p: neighbors[p] & hamad for p in provinces(264) if neighbors[p] & hamad}
+        shl = definitions(ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt")
+        gate = block(shl["SHL_rakhma_border_crossing_open"], "OR")
+        scripted = {}
+        for crossing in gate:
+            route = block(crossing.value, "can_build_railway")
+            province = int(scalar(route, "target_province"))
+            self.assertEqual(scalar(route, "start_province"), "16713")
+            staging = block(crossing.value, f"var:global.province_controllers^{province}")
+            self.assertEqual(scalar(staging, "SHL_rakhma_staging_controller"), "yes")
+            weight = block(route, "controller_priority")
+            closed = block(weight, "modifier")
+            self.assertEqual(scalar(closed, "SHL_rakhma_transit_controller"), "no")
+            self.assertLess(int(scalar(weight, "base")) + int(scalar(closed, "add")), 0)
+            self.assertNotIn(province, scripted)
+            scripted[province] = {int(e.value) for e in flatten(block(crossing.value, "RHM"))
+                                  if e.key == "controls_province"}
+        self.assertEqual(scripted, physical)
+
     def test_shared_settlement_variables_have_native_global_writers(self):
         entries = list(flatten(parse_clausewitz(EFFECTS.read_text(encoding="utf-8"))))
         self.assertFalse(any(entry.key == "set_global_variable" for entry in entries))
@@ -538,7 +568,7 @@ class SouthFinalWarContractTests(unittest.TestCase):
             "SHL_south_trade_protectorates", "SHL_south_great_road", "SHL_h_kerdan_trading_house",
             "SHL_south_free_road", "SHL_south_water_and_sea", "SHL_south_last_ration",
             "SHL_south_iron_march", "SHL_south_toll_debtors", "SHL_south_veyr_debt",
-            "NAM_south_desert_offices",
+            "NAM_south_desert_offices", "NAM_kadir_oil_charter",
         }.issubset(checked))
 
     def test_answers_always_clear_the_pending_offer(self):
@@ -1952,6 +1982,179 @@ class SouthLifecycleTests(unittest.TestCase):
         self.assertIn("ADISCORD_south_offer_target", repr(events["ADISCORD_south.46"]))
         self.assertIn("ADISCORD_south_nam_story_clear", repr(events["ADISCORD_south.46"]))
         self.assertIn("28", repr(events["ADISCORD_south.41"]))
+
+    def test_ai_rakhma_ultimatum_waits_at_dispatch_and_at_the_answer(self):
+        shl = definitions(ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt")
+        for key in ("SHL_demand_would_engage_rakhma", "SHL_would_join_refusing_side",
+                    "SHL_has_unreachable_regional_defender", "SHL_rakhma_transit_controller",
+                    "SHL_rakhma_staging_controller"):
+            self.triggers[key] = shl[key]
+        self.facts["RHM", "exists", "yes"] = True
+        self.facts["RHM", "has_capitulated", "no"] = True
+        self.facts["GLP", "gives_military_access_to", "SHL"] = True
+        self.assertTrue(self.trigger_matches("SHL_rakhma_transit_controller", "GLP"))
+        self.assertFalse(self.trigger_matches("SHL_rakhma_staging_controller", "GLP"))
+        self.facts["GLP", "has_war_with", "RHM"] = True
+        self.assertTrue(self.trigger_matches("SHL_rakhma_staging_controller", "GLP"))
+        self.facts["GLP", "has_war_with", "SHL"] = True
+        self.assertFalse(self.trigger_matches("SHL_rakhma_staging_controller", "GLP"))
+
+        self.facts["SDR", "is_in_faction_with", "RHM"] = True
+        for sponsor, recipient, kind, ai, route, allowed in (
+            ("SHL", "RHM", 1, True, False, False),
+            ("SHL", "RHM", 2, True, True, True),
+            ("SHL", "SDR", 2, True, False, False),
+            ("SHL", "KDR", 2, True, False, True),
+            ("SHL", "RHM", 3, True, False, True),
+            ("SHL", "RHM", 1, False, False, True),
+            ("NAM", "RHM", 2, True, False, True),
+        ):
+            self.variable("ADISCORD_south_offer_kind", kind, recipient)
+            self.facts["SHL", "is_ai", "yes"] = ai
+            self.facts["SHL", "SHL_rakhma_front_reachable", "no"] = not route
+            for root, sender in ((sponsor, "SHL"), (recipient, sponsor)):
+                with self.subTest(root=root, sender=sender, recipient=recipient, kind=kind):
+                    self.event_root, self.event_sender = root, sender
+                    self.assertEqual(self.trigger_matches("ADISCORD_south_offer_war_clear", recipient), allowed)
+
+    def test_regional_demands_check_each_defender_before_a_shl_refusal_war(self):
+        shl = definitions(ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt")
+        for key in ("SHL_demand_would_engage_rakhma", "SHL_would_join_refusing_side",
+                    "SHL_has_unreachable_regional_defender"):
+            self.triggers[key] = shl[key]
+        for tag in ("SDR", "MZR", "KDR", "GLP", "KYZ"):
+            self.facts[tag, "exists", "yes"] = True
+            self.facts[tag, "has_capitulated", "no"] = True
+        self.facts["SHL", "is_ai", "yes"] = True
+        for recipient, partner in (("MZR", "SDR"), ("SDR", "MZR"), ("KDR", "SDR"), ("SDR", "KDR"),
+                                   ("GLP", "KYZ"), ("KYZ", "GLP")):
+            for own_route, pact, ally_route, expected in (
+                (False, False, True, False), (False, True, True, False), (True, False, False, True),
+                (True, True, False, False), (True, True, True, True),
+            ):
+                self.facts[recipient, "is_in_faction_with", partner] = pact
+                self.facts[partner, "is_in_faction_with", recipient] = pact
+                self.facts[recipient, "SHL_regional_front_reachable", "no"] = not own_route
+                self.facts[partner, "SHL_regional_front_reachable", "no"] = not ally_route
+                self.variable("ADISCORD_south_offer_kind", 1 if recipient == "KDR" else 2, recipient)
+                for self.event_root, self.event_sender in (("SHL", "NAM"), (recipient, "SHL")):
+                    with self.subTest(recipient=recipient, own_route=own_route, pact=pact,
+                                      ally_route=ally_route, root=self.event_root):
+                        self.assertEqual(self.trigger_matches("ADISCORD_south_offer_war_clear", recipient),
+                                         expected)
+            self.facts[recipient, "SHL_regional_front_reachable", "no"] = True
+            self.event_root, self.event_sender = recipient, "SHL"
+            self.variable("ADISCORD_south_offer_kind", 3, recipient)
+            self.assertTrue(self.trigger_matches("ADISCORD_south_offer_war_clear", recipient))
+            self.variable("ADISCORD_south_offer_kind", 1, recipient)
+            self.event_sender = "NAM"
+            self.assertTrue(self.trigger_matches("ADISCORD_south_offer_war_clear", recipient))
+            self.facts[partner, "is_in_faction_with", recipient] = False
+            self.facts[recipient, "is_in_faction_with", partner] = False
+
+    def test_shl_border_war_starts_require_reachable_opponents(self):
+        shl = definitions(ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt")
+        effects = definitions(ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt")
+        for name in ("SHL_would_join_refusing_side", "SHL_has_unreachable_regional_defender",
+                     "SHL_can_seize_qanats", "SHL_can_strike_veyr", "SHL_can_launch_keizan_offensive",
+                     "SHL_unreachable_keizan_signatory"):
+            self.triggers[name] = shl[name]
+        for condition in ("SHL_country_operable", "SHL_qanat_dispute_open", "SHL_veyr_dispute_open",
+                          "SHL_qanat_counterpart", "SHL_glp_counterpart", "SHL_keizan_can_threaten"):
+            self.facts["SHL", condition, "yes"] = True
+        for tag, focus, effect in (("GLP", "SHL_key_to_sea", "SHL_start_glp_war"),
+                                   ("KYZ", "SHL_right_to_water", "SHL_start_qanat_war")):
+            self.facts[tag, "exists", "yes"] = True
+            self.facts[tag, "has_capitulated", "no"] = True
+            self.facts[tag, "has_war", "no"] = True
+            self.facts["SHL", "has_completed_focus", focus] = True
+            self.facts["SHL", "is_ai", "yes"] = True
+            limit = block(block(effects[effect], "if"), "limit")
+            for reachable in (False, True):
+                self.facts[tag, "SHL_regional_front_reachable", "no"] = not reachable
+                self.assertEqual(self.matches(limit), reachable, tag)
+
+        self.variable("SHL_keizan_state", 5, "SHL")
+        limit = block(block(effects["SHL_start_kyz_war"], "if"), "limit")
+        self.facts["GLP", "has_country_flag", "SHL_kyz_pact_signed"] = True
+        self.facts["GLP", "SHL_kyz_partner_eligible", "yes"] = True
+        for offensive, keizan_open, veyr_open, expected in (
+            (True, False, True, False), (True, True, False, False),
+            (True, True, True, True), (False, False, False, True),
+        ):
+            self.facts["SHL", "has_country_flag", "SHL_kyz_offensive"] = offensive
+            self.facts["KYZ", "SHL_regional_front_reachable", "no"] = not keizan_open
+            self.facts["GLP", "SHL_regional_front_reachable", "no"] = not veyr_open
+            self.assertEqual(self.matches(limit), expected)
+
+    def test_southern_front_orders_follow_each_active_war(self):
+        profiles = definitions(ROOT / "common/ai_strategy/ADISCORD_SHL_ai.txt")
+        profile = profiles["ADISCORD_SHL_regional_front"]
+        order = block(profile, "ai_strategy")
+        target = block(order, "country_trigger")
+        opponents = {"GLP", "KYZ", "KDR", "RHM", "SDR", "MZR"}
+        self.assertNotIn("state_trigger", [entry.key for entry in order])
+        self.assertFalse(self.matches(target, "NAM"))
+        for name in ("ADISCORD_SHL_limited_front_glp", "ADISCORD_SHL_limited_front_kyz"):
+            for entry in profiles[name]:
+                if entry.key == "ai_strategy" and scalar(entry.value, "type") == "front_control":
+                    self.assertGreater(int(scalar(order, "priority")), int(scalar(entry.value, "priority")))
+        for key, value in (("execution_type", "rush_weak"), ("execute_order", "yes"),
+                           ("manual_attack", "yes"), ("ordertype", "front")):
+            self.assertEqual(scalar(order, key), value)
+        self.facts["SHL", "is_ai", "yes"] = True
+        for opponent in opponents:
+            self.assertTrue(self.matches(target, opponent))
+            self.facts["SHL", "has_war_with", opponent] = True
+            self.assertTrue(self.matches(block(profile, "enable")))
+            self.facts["SHL", "has_war_with", opponent] = False
+            self.assertFalse(self.matches(block(profile, "enable")))
+
+    def test_regional_land_route_distinguishes_staging_from_neutral_transit(self):
+        shl = definitions(ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt")
+        route = shl["SHL_regional_front_reachable"]
+        self.assertEqual(scalar(block(route, "set_temp_variable"), "SHL_land_opponent"), "THIS")
+        alternatives = block(route, "OR")
+        direct = block(block(alternatives, "AND"), "can_build_railway")
+        neighbor = block(block(alternatives, "any_controlled_state"), "any_neighbor_state")
+        transit = block(neighbor, "can_build_railway")
+        self.assertEqual(scalar(neighbor, "ADISCORD_south_land_neighbor"), "yes")
+        self.assertEqual(scalar(block(neighbor, "controller"), "SHL_regional_launch_controller"), "yes")
+        self.assertEqual(scalar(direct, "start_state"), "SHL.capital")
+        self.assertEqual(scalar(direct, "target_state"), "THIS.capital")
+        self.assertEqual(scalar(transit, "start_state"), "SHL.capital")
+        self.assertEqual(scalar(transit, "target_state"), "THIS")
+
+        for key in ("SHL_regional_launch_controller", "SHL_regional_transit_controller",
+                    "SHL_rakhma_transit_controller"):
+            self.triggers[key] = shl[key]
+
+        def forbidden(query, country, enemy):
+            weight = block(query, "controller_priority")
+            modifier = block(weight, "modifier")
+            self.assertLess(int(scalar(weight, "base")) + int(scalar(modifier, "add")), 0)
+            rules = self.expand([entry for entry in modifier if entry.key != "add"])
+
+            def bind(entries):
+                for e in entries:
+                    key = enemy if e.key == "var:SHL_land_opponent" else e.key
+                    value = list(bind(e.value)) if isinstance(e.value, list) else e.value
+                    yield replace(e, key=key, value=enemy if value == "var:SHL_land_opponent" else value)
+
+            return matches_conditions(list(bind(rules)), self.facts, country)
+
+        self.facts["GLP", "gives_military_access_to", "SHL"] = True
+        for enemy in ("SDR", "MZR", "KDR"):
+            self.assertFalse(forbidden(direct, "SHL", enemy))
+            self.assertFalse(forbidden(direct, enemy, enemy))
+            self.assertTrue(forbidden(direct, "GLP", enemy))
+            self.assertFalse(forbidden(transit, "GLP", enemy))
+            self.facts["GLP", "has_war_with", enemy] = True
+            self.assertFalse(forbidden(direct, "GLP", enemy))
+            self.facts["GLP", "has_war_with", enemy] = False
+            self.facts["GLP", "is_in_faction_with", enemy] = True
+            self.assertTrue(forbidden(transit, "GLP", enemy))
+            self.facts["GLP", "is_in_faction_with", enemy] = False
 
     def test_deferred_offers_preserve_each_recipient_sender_and_unattended_exit(self):
         events = {scalar(e.value, "id"): e.value for e in parse_clausewitz(EVENTS.read_text(encoding="utf-8"))

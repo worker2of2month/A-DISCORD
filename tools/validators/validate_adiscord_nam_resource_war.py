@@ -103,15 +103,15 @@ def check_front_ai(source: str) -> None:
     """Validate baseline fronts independently of conditional difficulty overrides."""
     plans = parse_clausewitz(source)
     expected = (
-        ("resource_war_eflor_offensive", "NAM", "1500", "rush", "yes"),
-        ("resource_war_azhar_offensive", "NAM", "1500", "rush", "yes"),
+        ("resource_war_eflor_offensive", "NAM", "1500", "balanced", "yes"),
+        ("resource_war_azhar_offensive", "NAM", "1500", "balanced", "yes"),
         ("resource_war_rebel_offensive", "NAM", "1500", "rush", "yes"),
         ("resource_war_nam_eflor_front", "EFL", "1500", "careful", "no"),
         ("resource_war_nam_azhar_front", "AZH", "1500", "careful", "no"),
         ("resource_war_nam_rebel_front", "SLF", "1500", "careful", "no"),
         ("war_of_return_nam_eflor", "EFL", "1200", "balanced", "yes"),
         ("war_of_return_nam_azhar", "AZH", "1200", "balanced", "yes"),
-        ("war_of_return_coalition_defence", "NAM", "1200", "careful", "no"),
+        ("war_of_return_coalition_defence", "NAM", "1200", "balanced", "yes"),
     )
     for suffix, tag, priority, execution, manual_attack in expected:
         name = f"ADISCORD_nam_{suffix}"
@@ -941,6 +941,25 @@ CUSTOM_COST_DECISIONS = {
     "NAM_isl_pacify": "NAM_isl_pacify_cost",
     "NAM_isl_nationalise": "NAM_isl_nationalise_cost",
     "NAM_isl_insurance": "NAM_isl_insurance_cost",
+    "NAM_sub_sand_in_tanks_op": "NAM_sub_residency_cost",
+    "NAM_sub_bad_castings_op": "NAM_sub_residency_cost",
+    "NAM_sub_dock_fire_op": "NAM_sub_residency_cost",
+    "NAM_sub_bad_sights_op": "NAM_sub_residency_cost",
+    "NAM_sub_labour_strike_op": "NAM_sub_residency_cost",
+    "NAM_sub_bond_crash_op": "NAM_sub_residency_cost",
+    "NAM_sub_leaflets_op": "NAM_sub_leaflets_op_cost",
+    "NAM_sub_trophy_quarrel_op": "NAM_sub_trophy_quarrel_op_cost",
+    "NAM_rtw_order": "NAM_rtw_order_cost",
+    "NAM_rtw_provisional_admin": "NAM_rtw_provisional_admin_cost",
+    "NAM_rtw_landing_loren_coast": "NAM_rtw_landing_loren_coast_cost",
+    "NAM_rtw_coal_raid": "NAM_rtw_coal_raid_cost",
+    "NAM_rtw_buy_colonel": "NAM_rtw_buy_colonel_cost",
+    "NAM_rtw_lure_levy": "NAM_rtw_lure_levy_cost",
+    "NAM_rtw_offer_surrender_efl": "NAM_rtw_offer_surrender_efl_cost",
+    "NAM_rtw_renewed_landing": "NAM_rtw_renewed_landing_cost",
+    "NAM_rtw_district_militia": "NAM_rtw_district_militia_cost",
+    "NAM_rtw_convoy_run": "NAM_rtw_convoy_run_cost",
+    "NAM_rtw_raise_district": "NAM_rtw_raise_district_cost",
 }
 GREAT_WAR_TARGETS = ("EFL", "AZH", "RHM", "SDR", "KDR")
 # The war of return and the great war end only by full capitulation; none of

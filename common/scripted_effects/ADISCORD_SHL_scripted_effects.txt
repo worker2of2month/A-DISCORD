@@ -4875,6 +4875,10 @@ SHL_start_kyz_war = {
 			check_variable = { var = SHL_keizan_state value = 5 compare = equals }
 			SHL_country_operable = yes
 			SHL_keizan_can_threaten = yes
+			OR = {
+				NOT = { has_country_flag = SHL_kyz_offensive }
+				SHL_can_launch_keizan_offensive = yes
+			}
 		}
 		set_variable = { var = SHL_keizan_state value = 4 }
 		set_variable = { var = SHL_war_kyz value = 2 }
@@ -4963,6 +4967,7 @@ SHL_start_kyz_war = {
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_keizan_state value = 5 compare = equals } }
+		clr_country_flag = SHL_kyz_offensive
 		SHL_clear_kyz_diplomacy = yes
 		set_variable = { var = SHL_keizan_state value = 2 }
 		set_variable = { var = SHL_keizan_repeat_cycle value = SHL_cycle_number }
@@ -11775,7 +11780,7 @@ SHL_metal_sign_contract = {
 		SHL_metal_establish_contract = yes
 		if = {
 			limit = { has_country_flag = SHL_metal_client }
-			set_variable = { var = SHL_metal_cycle_price value = 20 }
+			set_variable = { var = SHL_metal_cycle_price value = 60 }
 			activate_mission = SHL_metal_contract_year
 			SHL = { SHL_refresh_selected_furnace = yes }
 		}
@@ -11792,7 +11797,7 @@ SHL_metal_sign_contract_two_years = {
 		SHL_metal_establish_contract = yes
 		if = {
 			limit = { has_country_flag = SHL_metal_client }
-			set_variable = { var = SHL_metal_cycle_price value = 15 }
+			set_variable = { var = SHL_metal_cycle_price value = 50 }
 			activate_mission = SHL_metal_contract_two_years
 			SHL = { SHL_refresh_selected_furnace = yes }
 		}

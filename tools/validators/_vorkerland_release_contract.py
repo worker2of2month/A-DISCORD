@@ -7,9 +7,10 @@ import re
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
-# Peer-claimant fronts switch to careful only against a materially stronger
-# enemy (ADISCORD_difficulty_enemy_outmatches); every other adaptive front
-# keeps the full ADISCORD_difficulty_enemy_requires_caution guard.
+# Peer-claimant fronts switch to careful only against a routing enemy and push
+# with the claimant field-army bar (the ADISCORD_vorkerland_peer_enemy_*
+# predicates); every other adaptive front keeps the mod-wide
+# ADISCORD_difficulty_enemy_requires_caution and _allows_push guards.
 PEER_CAUTION_PROFILES = frozenset({
     "ADISCORD_vorkerland_front_central_against_wrk",
     "ADISCORD_vorkerland_front_central_against_vad",
@@ -18,6 +19,8 @@ PEER_CAUTION_PROFILES = frozenset({
     "ADISCORD_vorkerland_claimant_breakthrough_vad",
     "ADISCORD_vorkerland_claimant_breakthrough_tva",
 })
+PEER_CAUTION_GUARD = "ADISCORD_vorkerland_peer_enemy_outmatches"
+PEER_PUSH_GUARD = "ADISCORD_vorkerland_peer_enemy_allows_push"
 # Global event target for the country that currently is Vorkerland: WRK until a
 # civil-war claimant unifies the country, that claimant afterwards.
 VORKERLAND_NATION = "event_target:ADISCORD_vorkerland_nation"
@@ -66,9 +69,12 @@ def validate_adaptive_fronts(source: str, issues: list[str]) -> None:
             issues.append(f"{profile.key}: default front needs a numeric priority")
             continue
         offset = 2 if profile.key.startswith("ADISCORD_vorkerland_auxiliary_of_") else 1
-        caution = "outmatches" if profile.key in PEER_CAUTION_PROFILES else "requires_caution"
-        modes = [("allows_push", "careful", "yes")] if base["execution_type"] == "careful" else [
-            (caution, "careful", "no"), ("allows_push", "rush_weak", "yes")
+        if profile.key in PEER_CAUTION_PROFILES:
+            caution, push = PEER_CAUTION_GUARD, PEER_PUSH_GUARD
+        else:
+            caution, push = "ADISCORD_difficulty_enemy_requires_caution", "ADISCORD_difficulty_enemy_allows_push"
+        modes = [(push, "careful", "yes")] if base["execution_type"] == "careful" else [
+            (caution, "careful", "no"), (push, "rush_weak", "yes")
         ]
         if base.get("execute_order") == "no":
             modes = []
@@ -78,7 +84,7 @@ def validate_adaptive_fronts(source: str, issues: list[str]) -> None:
                       "execution_type": execution, "manual_attack": manual}
             target = fields.pop("tag")
             text = "\n".join(f"{key} = {value}" for key, value in fields.items())
-            text += f"\ncountry_trigger = {{ tag = {target} ADISCORD_difficulty_enemy_{guard} = yes }}"
+            text += f"\ncountry_trigger = {{ tag = {target} {guard} = yes }}"
             expected.append(canonical(parse_clausewitz(text)))
         actual = [canonical(body) for body in controls if body is not bases[0]]
         if sorted(actual) != sorted(expected):

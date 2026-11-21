@@ -2825,7 +2825,7 @@ focus_tree = {
 			}
 		}
 		ai_will_do = {
-			base = 100
+			base = 30
 		}
 	}
 
@@ -2880,7 +2880,7 @@ focus_tree = {
 			hidden_effect = { country_event = { id = ADISCORD_vorkerland_directorate_cw.1 days = 1 } }
 		}
 		ai_will_do = {
-			base = 100
+			base = 30
 		}
 	}
 

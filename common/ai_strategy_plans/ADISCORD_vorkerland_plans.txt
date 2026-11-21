@@ -2765,6 +2765,10 @@ ADISCORD_vorkerland_petrichev_empire_plan = {
 }
 
 # --- leader_branch_plans ---
+# Each branch plan opens with its claimant's core war preparation, so leader
+# politics do not displace the arms, depot and manpower rewards that the
+# showdown depends on. The remaining-fronts focus leads because its own
+# availability limits it to a stalled district front or the showdown.
 ADISCORD_vorkerland_wkr_worker_branch_plan = {
 	name = "WKR Worker siege branch"
 	desc = ""
@@ -2799,6 +2803,13 @@ ADISCORD_vorkerland_wkr_worker_branch_plan = {
 	}
 
 	ai_national_focuses = {
+		WKR_open_the_remaining_fronts
+		WKR_put_railways_under_councils
+		WKR_form_revolutionary_supply_commission
+		WKR_reopen_collective_workshops
+		WKR_organize_factory_battalions
+		WKR_train_shopfloor_officers
+		WKR_authorize_retreat_levies
 		WKR_chairman_survives_the_tower
 		WKR_siege_the_living_banner
 		WKR_siege_the_chairmans_whims
@@ -2958,6 +2969,13 @@ ADISCORD_vorkerland_wkr_executive_branch_plan = {
 	}
 
 	ai_national_focuses = {
+		WKR_open_the_remaining_fronts
+		WKR_put_railways_under_councils
+		WKR_form_revolutionary_supply_commission
+		WKR_reopen_collective_workshops
+		WKR_organize_factory_battalions
+		WKR_train_shopfloor_officers
+		WKR_authorize_retreat_levies
 		WKR_executive_takes_the_ledger
 		WKR_ledger_executive_statute
 		WKR_ledger_accountable_executive
@@ -3123,6 +3141,7 @@ ADISCORD_vorkerland_vad_regency_branch_plan = {
 	}
 
 	ai_national_focuses = {
+		VAD_open_the_remaining_fronts
 		VAD_invite_sol_delegation
 		VAD_dispatch_solland_liaison_mission
 		VAD_establish_mobile_headquarters
@@ -3264,6 +3283,8 @@ ADISCORD_vorkerland_vad_regency_branch_plan = {
 	weight = { factor = 1 }
 }
 
+# The directorate's army, repair and workshop line comes before the protocol
+# politics so its combat and industry rewards arrive before the showdown.
 ADISCORD_vorkerland_tva_protocol_branch_plan = {
 	name = "TVA calculation protocol branch"
 	desc = ""
@@ -3291,7 +3312,29 @@ ADISCORD_vorkerland_tva_protocol_branch_plan = {
 	}
 
 	ai_national_focuses = {
+		TVA_open_the_remaining_fronts
+		TVA_reroute_city_grid
+		TVA_issue_emergency_output_norms
+		TVA_build_mobile_repair_trains
+		TVA_harden_switching_stations
 		TVA_the_war_by_calculation
+		TVA_machine_form_the_engineer_corps
+		TVA_machine_open_the_sapper_school
+		TVA_machine_mechanise_technical_battalions
+		TVA_machine_repair_train_depots
+		TVA_machine_administration_motor_columns
+		TVA_lab_convene_the_design_council
+		TVA_lab_requisition_institute_workshops
+		TVA_lab_open_the_uval_test_range
+		TVA_machine_wire_batteries_to_the_grid
+		TVA_machine_breaching_charge_series
+		TVA_machine_armoured_sapper_tractors
+		TVA_machine_digital_fire_maps
+		TVA_machine_convene_the_doctrine_council
+		TVA_machine_computed_fire
+		TVA_machine_counter_battery_registry
+		TVA_machine_fire_assault_groups
+		TVA_machine_battalions_take_the_line
 		TVA_protocol_measure_the_order_delay
 		TVA_protocol_engineers_collegium
 		TVA_protocol_direct_wire_to_the_battalions
@@ -3320,18 +3363,6 @@ ADISCORD_vorkerland_tva_protocol_branch_plan = {
 		TVA_protocol_answer_on_schedule
 		TVA_protocol_the_city_that_sees_itself
 		TVA_protocol_vorkensberg_runs_as_one
-		TVA_machine_form_the_engineer_corps
-		TVA_machine_open_the_sapper_school
-		TVA_machine_mechanise_technical_battalions
-		TVA_machine_wire_batteries_to_the_grid
-		TVA_machine_breaching_charge_series
-		TVA_machine_armoured_sapper_tractors
-		TVA_machine_digital_fire_maps
-		TVA_machine_convene_the_doctrine_council
-		TVA_machine_computed_fire
-		TVA_machine_counter_battery_registry
-		TVA_machine_fire_assault_groups
-		TVA_machine_battalions_take_the_line
 		TVA_machine_unattended_systems_bureau
 		TVA_machine_guidance_relays
 		TVA_machine_automatic_strongpoints
@@ -3342,9 +3373,7 @@ ADISCORD_vorkerland_tva_protocol_branch_plan = {
 		TVA_machine_plotting_rooms
 		TVA_machine_automatic_flak_belts
 		TVA_machine_the_automated_front
-		TVA_machine_repair_train_depots
 		TVA_machine_spare_parts_registry
-		TVA_machine_administration_motor_columns
 		TVA_machine_forward_supply_points
 		TVA_machine_the_logistics_ledger
 		TVA_machine_repair_network
@@ -3352,9 +3381,6 @@ ADISCORD_vorkerland_tva_protocol_branch_plan = {
 		TVA_machine_scheduled_maintenance_shifts
 		TVA_machine_reinforcement_trains
 		TVA_machine_self_repairing_army
-		TVA_lab_convene_the_design_council
-		TVA_lab_requisition_institute_workshops
-		TVA_lab_open_the_uval_test_range
 		TVA_lab_draft_the_bureau_plan
 		TVA_lab_applied_bureaus
 		TVA_lab_tanner_prototype_lines

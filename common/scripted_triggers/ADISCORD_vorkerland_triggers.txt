@@ -703,6 +703,61 @@ ADISCORD_vorkerland_has_matching_pending_central_minor_settlement = {
 	}
 }
 
+# Peer fronts between the claimants (and WTD on the WKR and VAD fronts) use
+# these overlays instead of the mod-wide difficulty guards. Enemy scope in a
+# front country_trigger; FROM is the allocating country. Careful execution is
+# reserved for a rout: below 1.6 times our fighting army the balanced base
+# order holds, so a moderately weaker claimant keeps executing its plan.
+ADISCORD_vorkerland_peer_enemy_outmatches = {
+	has_war_with = FROM
+	FROM = { ADISCORD_difficulty_ai_abyss_front = yes }
+	fighting_army_strength_ratio = { tag = FROM ratio > 1.6 }
+}
+
+# The opportunistic push uses the claimant field-army bar below rather than
+# the mod-wide four-fifths gate, so a side with thinner rifle stocks can still
+# exploit a weaker peer front.
+ADISCORD_vorkerland_peer_enemy_allows_push = {
+	has_war_with = FROM
+	FROM = {
+		ADISCORD_difficulty_ai_abyss_front = yes
+		OR = {
+			ADISCORD_economy_ai_is_healthy = yes
+			ADISCORD_economy_ai_is_stressed = yes
+		}
+		ADISCORD_vorkerland_claimant_field_army_can_attack = yes
+	}
+	fighting_army_strength_ratio = { tag = FROM ratio < 0.8 }
+}
+
+# Country scope. Same measure as ADISCORD_ai_field_army_can_attack at seven
+# tenths of the target equipment: the claimants fight below their paper
+# establishment, and a thinner-stocked side must still be able to attack.
+ADISCORD_vorkerland_claimant_field_army_can_attack = {
+	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@infantry_equipment }
+	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.70 }
+	OR = {
+		NOT = { check_variable = { num_equipment_in_armies_k@infantry_equipment < ADISCORD_ai_equipment_threshold } }
+		NOT = {
+			stockpile_ratio = {
+				archetype = infantry_equipment
+				ratio < 0.10
+			}
+		}
+	}
+	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@ADISCORD_squad_weapons_equipment }
+	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.70 }
+	OR = {
+		NOT = { check_variable = { num_equipment_in_armies_k@ADISCORD_squad_weapons_equipment < ADISCORD_ai_equipment_threshold } }
+		NOT = {
+			stockpile_ratio = {
+				archetype = ADISCORD_squad_weapons_equipment
+				ratio < 0.10
+			}
+		}
+	}
+}
+
 # --- diplomacy_triggers ---
 ADISCORD_vorkerland_solar_terminal_sol = {
 	country_exists = SOL
@@ -2622,9 +2677,11 @@ ADISCORD_vorkerland_has_live_central_minor_war = {
 }
 
 # Peer claimant wars stay live while at least one rival successor government
-# still exists, fights this country and has not capitulated.
+# still exists, fights this country and has not capitulated. Unlike the
+# district and Solarino windows this gate admits a human claimant: the showdown
+# window grants the same spirit to every side, while its flag is read only by
+# the AI-only breakthrough orders.
 ADISCORD_vorkerland_has_live_claimant_war = {
-	is_ai = yes
 	is_subject = no
 	NOT = { has_capitulated = yes }
 	OR = {
@@ -3078,9 +3135,14 @@ WRK_capability_public_charter = {
 	}
 }
 
-# Treaty offers to the autonomous districts.
+# Treaty offers to the autonomous districts; each offer admits only the
+# apparatus whose heir holds that district's sphere.
 WRK_capability_district_offers = {
-	has_completed_focus = WRK_convene_council_of_republics
+	OR = {
+		has_completed_focus = WRK_convene_council_of_republics
+		has_completed_focus = WRK_network_district_bank_credit
+		has_completed_focus = WRK_staff_adjutants_at_court
+	}
 }
 
 # The heir opens with the mandate of a convened council.
@@ -3591,7 +3653,7 @@ ADISCORD_vorkerland_prep_offer_valid = {
 			FROM = {
 				NOT = { has_political_power < 35 }
 				NOT = {
-					has_equipment = { infantry_equipment < 13500 }
+					has_equipment = { infantry_equipment < 6000 }
 				}
 			}
 		}
@@ -3618,7 +3680,7 @@ ADISCORD_vorkerland_prep_offer_valid = {
 			FROM = {
 				NOT = { has_political_power < 35 }
 				NOT = {
-					has_equipment = { infantry_equipment < 18000 }
+					has_equipment = { infantry_equipment < 8000 }
 				}
 			}
 		}

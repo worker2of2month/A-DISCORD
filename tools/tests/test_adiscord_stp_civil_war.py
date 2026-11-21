@@ -210,9 +210,13 @@ class CivilWarContracts(unittest.TestCase):
                 self.assertEqual(matches_conditions(guard, facts, scope), expected)
 
     def test_starting_party_ministers_guard_appointment_and_replacement(self):
-        history = read("history/countries/STP - StepanLand.txt")
-        ministers = set(re.findall(r"\bminister_STP_\w+", history))
-        self.assertEqual(len(ministers), 6)
+        history = entries("history/countries/STP - StepanLand.txt")
+        ministers = {
+            idea.value for idea in ast_block(history, "add_ideas")
+            if idea.value.startswith("minister_STP_")
+        }
+        self.assertIn("minister_STP_Adrian_Vels", ministers)
+        self.assertEqual(len(ministers), 7)
         definitions = [
             entry
             for path in (

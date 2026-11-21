@@ -25,6 +25,7 @@ SOURCES = {
     "NAM/exile_corporate/focuses.txt": "ADISCORD_NAM_exile_corporate.txt",
     "NAM/exile_interregnum/focuses.txt": "ADISCORD_NAM_exile_interregnum.txt",
     "NAM/south_war/focuses.txt": "ADISCORD_NAM_south_war.txt",
+    "NAM/return_war/focuses.txt": "ADISCORD_NAM_return_war.txt",
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
     "SHL/shared/focuses.txt": "ADISCORD_SHL_shared.txt",
     "SHL/south_war/focuses.txt": "ADISCORD_SHL_south_war.txt",
@@ -67,6 +68,8 @@ UNASSIGNED_FOCUS_SOURCES = frozenset({
 # The war for the South swaps each champion into its war tree and back: the
 # course trees, every Svetlogorye tree a champion can hold and both war trees
 # keep their completions across both swaps.
+# The corporate tree and the war-of-return tree keep their completions across
+# the swap at operation Poseidon, the renewal and every terminal path.
 SHARED_HISTORY_SOURCES = frozenset({
     "VAL/main/focuses.txt",
     "NAM/main/focuses.txt",
@@ -79,6 +82,7 @@ SHARED_HISTORY_SOURCES = frozenset({
     "NAM/exile_corporate/focuses.txt",
     "NAM/exile_interregnum/focuses.txt",
     "NAM/south_war/focuses.txt",
+    "NAM/return_war/focuses.txt",
     "SHL/main/focuses.txt",
     "SHL/south_war/focuses.txt",
     "Vorkerland/prewar/focuses.txt",

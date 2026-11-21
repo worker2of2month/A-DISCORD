@@ -2996,6 +2996,10 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
     specialized_collapse_profiles = {
         "tva": ("industrial", "energy", "institutional", "land", "air"),
         "wtd": ("industrial", "energy"),
+        "eba": ("fragment_low_tech", "land"),
+        "dva": ("fragment_low_tech", "land"),
+        "sra": ("fragment_low_tech", "land"),
+        "zta": ("fragment_low_tech", "land"),
     }
     for collapse_name in ("ADISCORD_vorkerland_effects.txt",):
         collapse_text = read_text(ROOT / "common" / "scripted_effects" / collapse_name)

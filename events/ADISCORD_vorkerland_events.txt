@@ -840,7 +840,11 @@ country_event = {
 				tree = ADISCORD_vorkerland_wkr_focus
 				keep_completed = yes
 			}
+			# WRK's depots, aircraft and fuel are a shared inheritance: the annex
+			# hands WKR only the third left after the partition.
+			ADISCORD_vorkerland_partition_wrk_arsenal = yes
 			annex_country = { target = event_target:ADISCORD_vorkerland_nation transfer_troops = yes }
+			ADISCORD_vorkerland_equalize_claimant_inheritance = yes
 			ADISCORD_vorkerland_relocate_legacy_armies = yes
 			ADISCORD_vorkerland_teardown_confederation = yes
 			ADISCORD_vorkerland_align_wtd_with_worx = yes

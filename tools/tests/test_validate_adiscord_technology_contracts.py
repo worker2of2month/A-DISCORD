@@ -1003,6 +1003,24 @@ ADISCORD_produce_artillery_low_stock = {
                     composition["optimal_composition"].get(ship, 0), number
                 )
 
+        # Strike missions add only a percentage of their dominance to a region,
+        # so at least one patrol template must take cruisers.
+        cruiser_patrols = {
+            name
+            for name, ships in minimums.items()
+            if missions[name] == {"naval_patrol"}
+            and {"light_cruiser", "heavy_cruiser"} & set(ships)
+        }
+        self.assertTrue(cruiser_patrols)
+        dominance = validator.top_level_blocks(
+            sources["fleet"]["ADISCORD_coastal_dominance_fleet"],
+            "optional_taskforces",
+        )[0]
+        self.assertTrue(
+            cruiser_patrols & set(re.findall(r"(\w+)\s*=", dominance)),
+            "The dominance fleet must list a cruiser patrol group",
+        )
+
         supported = set()
         for name, fleet in sources["fleet"].items():
             required = validator.top_level_blocks(fleet, "required_taskforces")[0]

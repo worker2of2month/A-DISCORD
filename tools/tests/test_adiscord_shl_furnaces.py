@@ -4148,11 +4148,11 @@ class AutomaticFurnaceForecastTests(unittest.TestCase):
             self.m.countries[tag] = {"exists": True, "is_ai": True}
         self.m.flags["VAL"].add("SHL_metal_client")
         buyer = self.m.variables["VAL"]
-        buyer.update({"SHL_metal_cycle_price": 20, "ADISCORD_economy_treasury": 19.99})
+        buyer.update({"SHL_metal_cycle_price": 60, "ADISCORD_economy_treasury": 59.99})
         self.c["SHL_metal_clients"] = 1
         self.m.run("SHL_refresh_furnaces")
         self.assertEqual(self.c["SHL_preview_cycle_net"], 0)
-        for balance, receipt, from_budget in ((20, 20, True), (21, 20, True), (19.99, 0, False)):
+        for balance, receipt, from_budget in ((60, 60, True), (61, 60, True), (59.99, 0, False)):
             buyer["ADISCORD_economy_treasury"] = balance
             dirty = self.c["SHL_gui_dirty"]
             if from_budget:
@@ -4162,7 +4162,7 @@ class AutomaticFurnaceForecastTests(unittest.TestCase):
             else:
                 self.m.execute(self.daily, "SHL")
             self.assertEqual((self.c["SHL_preview_contract_income"], self.c["SHL_preview_cycle_net"]), (receipt, receipt))
-            if balance == 21:
+            if balance == 61:
                 self.assertEqual(self.c["SHL_gui_dirty"], dirty)
             self.assertEqual(buyer["ADISCORD_economy_treasury"], balance)
             self.assertEqual(self.c["ADISCORD_economy_treasury"], 44.99)
@@ -4973,17 +4973,17 @@ class DeliveryAccountingTests(unittest.TestCase):
         self.m.countries["KYZ"] = {"exists": True, "is_subject": False}
         for tag in ("VAL", "STP", "STS", "RUS", "GLP", "NAM"):
             self.m.countries.setdefault(tag, {"exists": True})
-        buyers = (("STP", 20, 20), ("RUS", 15, 15), ("VAL", 20, 19.99))
+        buyers = (("STP", 60, 60), ("RUS", 50, 50), ("VAL", 60, 59.99))
         for buyer, rate, balance in buyers:
             self.m.flags[buyer].add("SHL_metal_client")
             self.m.variables[buyer].update({"SHL_metal_cycle_price": rate, cash: balance})
         self.m.run("SHL_refresh_furnaces")
-        self.assertEqual(self.c["SHL_preview_contract_income"], 65)
+        self.assertEqual(self.c["SHL_preview_contract_income"], 140)
         self.assertEqual(self.c["SHL_preview_credit_net"], 0)
         self.assertEqual(self.c["SHL_preview_indemnity"], 8)
         for buyer, _, balance in buyers:
             self.assertEqual(self.m.variables[buyer][cash], balance)
-        self.assert_cycle_cash(180 + 65 - 11 - 8)
+        self.assert_cycle_cash(180 + 140 - 11 - 8)
         self.assertEqual((self.c["SHL_credit_cycles"], self.c["SHL_indemnity_due"]), (0, 232))
         self.assertNotIn("SHL_seal_bond_cycles", self.c)
         self.assertEqual(self.m.variables["VAL"]["SHL_metal_arrears"], 1)
@@ -5051,18 +5051,18 @@ class DeliveryAccountingTests(unittest.TestCase):
         for state in range(287, 296):
             self.m.variables[str(state)]["SHL_furnace_running"] = int(state == 287)
         self.m.variables["287"].update({"SHL_furnace_recipient": 4, "SHL_seal_service_cycles": 2})
-        self.m.variables["NAM"].update({cash: 0, "SHL_metal_cycle_price": 20})
+        self.m.variables["NAM"].update({cash: 0, "SHL_metal_cycle_price": 60})
         self.m.flags["NAM"].add("SHL_metal_client")
         self.c["SHL_metal_clients"] = 1
         self.m.run("SHL_refresh_furnaces")
-        self.assertEqual(self.c["SHL_preview_contract_income"], 20)
+        self.assertEqual(self.c["SHL_preview_contract_income"], 60)
         self.assertEqual(self.m.variables["NAM"][cash], 0)
-        self.assert_cycle_cash(20)
-        self.assertEqual(self.m.variables["NAM"][cash], 40)
+        self.assert_cycle_cash(60)
+        self.assertEqual(self.m.variables["NAM"][cash], 0)
 
     def test_metal_mission_expiry_skips_only_a_future_payment(self):
         cash = "ADISCORD_economy_treasury"
-        for mission, rate in (("SHL_metal_contract_year", 20), ("SHL_metal_contract_two_years", 15)):
+        for mission, rate in (("SHL_metal_contract_year", 60), ("SHL_metal_contract_two_years", 50)):
             for days, final in ((27, True), (28, False)):
                 with self.subTest(mission=mission, days=days):
                     self.setUp()
@@ -5073,11 +5073,11 @@ class DeliveryAccountingTests(unittest.TestCase):
                     self.m.flags["RUS"].add("SHL_metal_client")
                     self.m.missions.add(mission)
                     self.m.variables["RUS"].update({
-                        cash: 100, "SHL_metal_cycle_price": rate, "days_mission_timeout@" + mission: days,
+                        cash: 2 * rate, "SHL_metal_cycle_price": rate, "days_mission_timeout@" + mission: days,
                     })
                     self.m.run("SHL_produce_period")
                     self.m.run("SHL_refresh_furnaces")
-                    self.assertEqual(self.m.variables["RUS"][cash], 100 - rate)
+                    self.assertEqual(self.m.variables["RUS"][cash], rate)
                     self.assertEqual("SHL_metal_final_pour" in self.m.flags["RUS"], final)
                     self.assertEqual(self.c["SHL_preview_contract_income"], 0 if final else rate + 15)
                     self.m.run("SHL_metal_close_account", scope="RUS")
@@ -8151,12 +8151,12 @@ class ExternalContractTests(unittest.TestCase):
         self.sign("VAL")
         before = self.dirty_calls()
         self.m.run("SHL_produce_period")
-        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 480)
-        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_current_month_action_costs"], 20)
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1560)
+        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 440)
+        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_current_month_action_costs"], 60)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1600)
         # The ledger books the whole cycle, contract payment included.
-        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 560)
-        self.assertEqual(self.c["SHL_last_cycle_income"], 560)
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 600)
+        self.assertEqual(self.c["SHL_last_cycle_income"], 600)
         self.assertEqual(self.dirty_calls() - before, 2)
         self.assertIn("SHL_metal_client", self.m.flags["VAL"])
         self.assertEqual(self.m.variables["VAL"]["SHL_metal_arrears"], 0)
@@ -8169,25 +8169,25 @@ class ExternalContractTests(unittest.TestCase):
         self.m.run("SHL_metal_sign_contract_two_years", scope="STP")
         self.m.focuses.add("SHL_metal_brokers")
         buyer = self.m.variables["STP"]
-        buyer["ADISCORD_economy_treasury"] = 14.99
+        buyer["ADISCORD_economy_treasury"] = 49.99
         self.m.run("SHL_metal_settle_clients")
         self.assertEqual(buyer["SHL_metal_arrears"], 1)
-        self.assertEqual(buyer["ADISCORD_economy_treasury"], 14.99)
-        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 35)
+        self.assertEqual(buyer["ADISCORD_economy_treasury"], 49.99)
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 75)
 
-        buyer["ADISCORD_economy_treasury"] = 15
+        buyer["ADISCORD_economy_treasury"] = 50
         self.m.run("SHL_metal_settle_clients")
         self.assertEqual(buyer["SHL_metal_arrears"], 0)
         self.assertEqual(buyer["ADISCORD_economy_treasury"], 0)
-        self.assertEqual(buyer["ADISCORD_economy_current_month_action_costs"], 15)
-        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_current_month_action_costs"], 40)
-        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1100)
-        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 100)
-        self.assertEqual(self.c["SHL_last_cycle_income"], 100)
+        self.assertEqual(buyer["ADISCORD_economy_current_month_action_costs"], 50)
+        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_current_month_action_costs"], 120)
+        self.assertEqual(self.c["ADISCORD_economy_treasury"], 1215)
+        self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 215)
+        self.assertEqual(self.c["SHL_last_cycle_income"], 215)
 
     def test_brokers_premium_only_on_paid_cycles(self):
-        # The buyer pays 20 either way and the brokers add 15 from their own margin.
-        for brokers, treasury, received in ((False, 500, 20), (True, 500, 35), (True, 19.99, 0)):
+        # The buyer pays 60 either way and the brokers add 15 from their own margin.
+        for brokers, treasury, received in ((False, 500, 60), (True, 500, 75), (True, 59.99, 0)):
             with self.subTest(brokers=brokers, treasury=treasury):
                 self.setUp()
                 if brokers:
@@ -8195,7 +8195,7 @@ class ExternalContractTests(unittest.TestCase):
                 self.sign("VAL")
                 self.m.variables["VAL"]["ADISCORD_economy_treasury"] = treasury
                 self.m.run("SHL_produce_period")
-                paid = 20 if received else 0
+                paid = 60 if received else 0
                 self.assertAlmostEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], treasury - paid)
                 self.assertEqual(self.c["ADISCORD_economy_treasury"], 1540 + received)
                 self.assertEqual(self.c["ADISCORD_economy_current_month_action_income"], 540 + received)
@@ -8208,14 +8208,14 @@ class ExternalContractTests(unittest.TestCase):
 
     def test_two_unpaid_cycles_or_a_war_end_the_contract_and_remove_the_modifier(self):
         self.sign("VAL")
-        self.m.variables["VAL"]["ADISCORD_economy_treasury"] = 19.99
+        self.m.variables["VAL"]["ADISCORD_economy_treasury"] = 59.99
         self.m.run("SHL_produce_period")
         self.assertEqual(self.m.variables["VAL"]["SHL_metal_arrears"], 1)
         self.assertIn("SHL_metal_client", self.m.flags["VAL"])
-        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 19.99)
+        self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 59.99)
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 1540)
         # One paid cycle clears the arrears again.
-        self.m.variables["VAL"]["ADISCORD_economy_treasury"] = 20
+        self.m.variables["VAL"]["ADISCORD_economy_treasury"] = 60
         self.m.run("SHL_produce_period")
         self.assertEqual(self.m.variables["VAL"]["ADISCORD_economy_treasury"], 0)
         self.assertEqual(self.m.variables["VAL"]["SHL_metal_arrears"], 0)

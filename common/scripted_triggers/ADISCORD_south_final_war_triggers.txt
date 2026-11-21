@@ -198,6 +198,31 @@ ADISCORD_south_land_border_state = {
 	}
 }
 
+# STATE adjacent to PREV. Exclude islands and the two mainland strait links.
+ADISCORD_south_land_neighbor = {
+	ADISCORD_south_land_border_state = yes
+	NOT = {
+		OR = {
+			AND = {
+				state = 28
+				PREV = { state = 44 }
+			}
+			AND = {
+				state = 44
+				PREV = { state = 28 }
+			}
+			AND = {
+				state = 65
+				PREV = { state = 179 }
+			}
+			AND = {
+				state = 179
+				PREV = { state = 65 }
+			}
+		}
+	}
+}
+
 # GLOBAL. Use the controllers on the two sides of the same land boundary.
 # The two remaining inter-state straits also fail the land-border check
 # regardless of which camp controls which shore.
@@ -208,27 +233,7 @@ ADISCORD_south_sides_share_border = {
 		any_controlled_state = {
 			ADISCORD_south_land_border_state = yes
 			any_neighbor_state = {
-				ADISCORD_south_land_border_state = yes
-				NOT = {
-					OR = {
-						AND = {
-							state = 28
-							PREV = { state = 44 }
-						}
-						AND = {
-							state = 44
-							PREV = { state = 28 }
-						}
-						AND = {
-							state = 65
-							PREV = { state = 179 }
-						}
-						AND = {
-							state = 179
-							PREV = { state = 65 }
-						}
-					}
-				}
+				ADISCORD_south_land_neighbor = yes
 				controller = {
 					ADISCORD_south_border_participant = yes
 					ADISCORD_south_map_country_north = yes
@@ -1003,6 +1008,26 @@ ADISCORD_south_offer_war_clear = {
 		AND = {
 			NOT = { has_war_with = SHL }
 			NOT = { has_war_with = NAM }
+			NOT = {
+				# The sender is ROOT during dispatch and FROM in the recipient's answer.
+				AND = {
+					OR = {
+						ROOT = { tag = SHL }
+						AND = {
+							tag = ROOT
+							FROM = { tag = SHL }
+						}
+					}
+					SHL = { is_ai = yes }
+					OR = {
+						AND = {
+							SHL_demand_would_engage_rakhma = yes
+							SHL = { SHL_rakhma_front_reachable = no }
+						}
+						SHL_has_unreachable_regional_defender = yes
+					}
+				}
+			}
 		}
 	}
 }

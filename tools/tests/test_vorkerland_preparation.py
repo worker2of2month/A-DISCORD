@@ -3867,7 +3867,7 @@ class PreparationAccounting(unittest.TestCase):
         self.assertEqual(script.scopes["WRK"].resources["people"], before["people"] + 3000)
 
     def test_offer_requires_consent_and_rechecks_donor_stocks(self):
-        for tag, stock, amount in (("EYR", "infantry_equipment", 13500), ("EGC", "support_equipment", 100), ("RIV", "train_equipment", 5), ("YOR", "infantry_equipment", 18000)):
+        for tag, stock, amount in (("EYR", "infantry_equipment", 6000), ("EGC", "support_equipment", 100), ("RIV", "train_equipment", 5), ("YOR", "infantry_equipment", 8000)):
             script = Script()
             script.source = tag
             script.scopes[tag].subject = "WRK"
@@ -3886,6 +3886,44 @@ class PreparationAccounting(unittest.TestCase):
             self.assertEqual(script.scopes["WRK"].resources["pp"], before["pp"] - 35)
             self.assertEqual(script.scopes[tag].variables[P + "treaty_patron"], 1)
             self.assertFalse(any(call[0] == V + "join_coalition_of_FROM" for call in script.calls))
+
+    def test_district_offers_follow_the_heir_sphere_and_quote_the_settled_price(self):
+        # Each apparatus prepares treaties only with the districts of its heir's
+        # sphere; after the split the sphere's live claimant alone may offer
+        # until that claimant falls and the sphere opens.
+        heirs = {"committees": "WKR", "staff": "VAD", "network": "TVA"}
+        spheres = {}
+        for branch in fields(TRIGGERS[V + "central_minor_is_open_to_ROOT"])["OR"]:
+            parts = fields(branch[2])
+            members = [value for key, _, value in walk([("OR", "=", branch[2][0][2])]) if key == "tag"]
+            owners = [value for key, _, value in walk(parts["OR"]) if key == "tag"]
+            for member in members:
+                spheres[member] = owners[0]
+        prices = {
+            fields(branch)["tag"]: fields(branch)["FROM"]
+            for _, _, branch in fields(TRIGGERS[P + "offer_valid"])["OR"]
+        }
+        for tag in ("EYR", "EGC", "RIV", "YOR"):
+            with self.subTest(tag=tag):
+                decision = fields(DECISIONS[P + "offer_" + tag.lower()])
+                routes = fields(decision["visible"])["OR"]
+                self.assertEqual(len(routes), 2)
+                prewar, postwar = (fields(route) for _, _, route in routes)
+                self.assertEqual(prewar.get(V + "prep_open"), "yes")
+                patrons = [key[len(V + "prewar_patron_"):] for key in prewar if key.startswith(V + "prewar_patron_")]
+                self.assertEqual(len(patrons), 1)
+                self.assertEqual(heirs[patrons[0]], spheres[tag])
+                self.assertEqual(postwar, {
+                    V + "is_main_claimant": "yes",
+                    "FROM": [(V + "central_minor_is_open_to_ROOT", "=", "yes")],
+                })
+                # The focus that unlocks the offer is drawn in the matching tree.
+                gates = [name for name, body in PREWAR_FOCUSES.items()
+                         if ("unlock_decision_tooltip", "=", P + "offer_" + tag.lower()) in body["completion_reward"]]
+                self.assertEqual([patron_of(PREWAR_FOCUSES[name]) for name in gates], patrons)
+                self.assertTrue(set(gates) <= set(granting("WRK_capability_district_offers")))
+                # The button checks the same stock the acceptance debits.
+                self.assertEqual(decision["custom_cost_trigger"], prices[tag])
 
     def test_dormant_offer_cannot_spend_after_the_split(self):
         script = Script()
@@ -4000,9 +4038,13 @@ class PreparationAccounting(unittest.TestCase):
         self.assertEqual(granting("WRK_capability_military_evacuation")[1:], ["WRK_staff_military_route"])
         self.assertEqual(granting("WRK_capability_third_project")[1:],
                          ["WRK_network_shadow_budget", "WRK_staff_war_chest"])
-        # What stays the committees' alone: the districts' treaties and the compact,
-        # the civil evacuation, the levies and the charter's mandate.
-        for capability in ("WRK_capability_district_offers", "WRK_capability_emergency_compact",
+        # Every apparatus can talk to the districts of its heir's sphere; the
+        # offers themselves check which district belongs to which patron.
+        self.assertEqual(granting("WRK_capability_district_offers")[1:],
+                         ["WRK_network_district_bank_credit", "WRK_staff_adjutants_at_court"])
+        # What stays the committees' alone: the compact, the civil evacuation,
+        # the levies and the charter's mandate.
+        for capability in ("WRK_capability_emergency_compact",
                            "WRK_capability_civil_evacuation", "WRK_capability_central_levy",
                            "WRK_capability_district_mandates", "WRK_capability_council_mandate",
                            "WRK_capability_charter_mandate"):
@@ -4017,6 +4059,7 @@ class PreparationAccounting(unittest.TestCase):
             "WRK_network_relay_by_wire", "WRK_network_open_broadcast", "WRK_network_shadow_budget",
             "WRK_staff_railway_commandants", "WRK_staff_arsenal_seals", "WRK_staff_military_route",
             "WRK_staff_war_chest", "WRK_network_technical_continuity",
+            "WRK_network_district_bank_credit", "WRK_staff_adjutants_at_court",
         })
         sources = (
             "common/decisions/ADISCORD_vorkerland_decisions.txt",

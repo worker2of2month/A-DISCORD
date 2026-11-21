@@ -18,8 +18,13 @@ control ratio is not overridden. Enemy fleets can still contest a crossing.
 
 Every combat-ship archetype in `ADISCORD_convoy_equipment.txt` declares the native
 `naval_dominance_factor`: escorts 20, light cruisers 35, heavy cruisers 60,
-submarines 4, battleships 150 and carriers 120. Models inherit their archetype's
-value. Range, speed, mission, intelligence and other native modifiers determine
+submarines 4, battleships 150 and carriers 120. Every concrete hull restates its
+archetype's value, as the native designer hulls do; an archetype-only value left
+starting escorts at about 1.35 dominance each. Patrol groups count their full
+value toward control; strike groups add only `NAVAL_DOMINANCE_STRIKE_FORCE_FRACTION`
+(0.003 here) of theirs as a percentage, so the dominance fleet keeps optional
+cruiser and escort patrol groups (`ADISCORD_cruiser_patrol`, `ADISCORD_coastal_patrol`).
+Range, speed, mission, intelligence and other native modifiers determine
 the actual contribution. Two 2155 escorts provide 40 base hull points before
 those modifiers; their range and speed exceed the native neutral values.
 This is a planning budget for uncontested local waters, not guaranteed control

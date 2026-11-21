@@ -1098,6 +1098,46 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_12.png"
 	}
 
+	spriteType = {
+		name = "GFX_portrait_STP_staff_13_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_13.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_14_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_14.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_15_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_15.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_16_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_16.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_17_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_17.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_18_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_18.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_19_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_19.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_staff_20_small"
+		texturefile = "gfx/interface/ideas/STP/portrait_STP_staff_20.png"
+	}
+
 	# STS army advisors use preframed compact portraits.
 	spriteType = {
 		name = "GFX_portrait_STS_staff_01_small"
@@ -1177,6 +1217,26 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_portrait_STS_staff_16_small"
 		texturefile = "gfx/interface/ideas/STS/portrait_STS_staff_16.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STS_staff_17_small"
+		texturefile = "gfx/interface/ideas/STS/portrait_STS_staff_17.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STS_staff_18_small"
+		texturefile = "gfx/interface/ideas/STS/portrait_STS_staff_18.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STS_staff_19_small"
+		texturefile = "gfx/interface/ideas/STS/portrait_STS_staff_19.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STS_staff_20_small"
+		texturefile = "gfx/interface/ideas/STS/portrait_STS_staff_20.png"
 	}
 
 	# VAL army advisors use preframed compact portraits.

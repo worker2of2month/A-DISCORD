@@ -120,6 +120,36 @@ class VorkerlandStalemateValidatorTests(unittest.TestCase):
         self.assertTrue(any("AI-only" in issue for issue in issues), issues)
         self.assertTrue(any("missing EYR" in issue for issue in issues), issues)
 
+    def test_claimant_window_admits_a_human_claimant(self) -> None:
+        # The showdown spirit reaches every claimant; the orders stay AI-only.
+        temporary, root = _fixture()
+        self.addCleanup(temporary.cleanup)
+        trigger_path = (
+            root / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
+        )
+        header = "ADISCORD_vorkerland_has_live_claimant_war = {\n"
+        text = trigger_path.read_text(encoding="utf-8")
+        self.assertEqual(text.count(header), 1)
+        trigger_path.write_text(
+            text.replace(header, header + "\tis_ai = yes\n", 1), encoding="utf-8"
+        )
+        issues = collect_issues(root)
+        self.assertTrue(any("admit a human claimant" in issue for issue in issues), issues)
+        trigger_path.write_text(text, encoding="utf-8")
+        ai_path = root / "common/ai_strategy/ADISCORD_vorkerland_ai.txt"
+        ai = ai_path.read_text(encoding="utf-8")
+        gate = "\tenable = {\n\t\tis_ai = yes\n\t\thas_country_flag = ADISCORD_vorkerland_claimant_breakthrough_window_active\n"
+        self.assertEqual(ai.count(gate), 3)
+        ai_path.write_text(
+            ai.replace(gate, "\tenable = {\n\t\thas_country_flag = ADISCORD_vorkerland_claimant_breakthrough_window_active\n", 1),
+            encoding="utf-8",
+        )
+        issues = collect_issues(root)
+        self.assertTrue(
+            any("claimant_breakthrough_wkr must enable only for an AI" in issue for issue in issues),
+            issues,
+        )
+
     def test_no_startup_polling_or_retry_is_allowed(self) -> None:
         temporary, root = _fixture()
         self.addCleanup(temporary.cleanup)

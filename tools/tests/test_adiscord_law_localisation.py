@@ -857,7 +857,7 @@ class SevenRowPoliticsContracts(unittest.TestCase):
             ),
             "yes",
         )
-        national = [idea for idea in choices if idea.key.startswith("minister_")]
+        members = {idea.key: idea.value for idea in choices}
         owners = set()
         for path in (ROOT / "history/states").glob("*.txt"):
             state = self.one(
@@ -872,71 +872,20 @@ class SevenRowPoliticsContracts(unittest.TestCase):
             path.name[:3]: parse_clausewitz(path.read_text(encoding="utf-8-sig"))
             for path in (ROOT / "history/countries").glob("*.txt")
         }
-        # The initializer selects Vorkerland's minister through the country
-        # target, so it sees whatever is bound by the time startup calls it.
         nation = startup_country_target("ADISCORD_initialize_foreign_minister")
+        facts = {("event_target", NATION_TARGET): nation}
+        startup = list(selected_effects(initializer, facts, "global"))
+        self.assertFalse({scope for scope, _ in startup} - owners)
         for tag in sorted(owners):
             with self.subTest(tag=tag):
-                installed = []
-                for entry in histories[tag]:
-                    if entry.key != "add_ideas":
-                        continue
-                    if isinstance(entry.value, list):
-                        installed.extend(child.value for child in entry.value)
-                    else:
-                        installed.append(entry.value)
-                ministers = [idea.key for idea in national if idea.key in installed]
-                facts = {
-                    (
-                        tag,
-                        "has_idea",
-                        "political_advisor_minister_of_foreign_affairs_vacant",
-                    ): not ministers,
-                    ("event_target", NATION_TARGET): nation,
-                }
+                history = [(tag, entry) for entry in histories[tag]]
                 appointments = [
-                    entry.value
-                    for scope, entry in selected_effects(initializer, facts, tag)
-                    if scope == tag and entry.key == "add_ideas"
+                    idea for idea in installed_ideas(history + startup, tag) if idea in members
                 ]
-                ministers.extend(appointments)
-                self.assertEqual(
-                    len(ministers), 1, (ministers, f"country target names {nation}")
-                )
-                candidate = next(idea for idea in national if idea.key == ministers[0])
-                self.assertTrue(
-                    matches_conditions(self.one(candidate.value, "allowed"), {}, tag)
-                )
-
-    def test_foreign_minister_initializer_preserves_occupied_cabinets(self):
-        from tools.tests.test_adiscord_stp_preparation import selected_effects
-        from tools.tests.test_adiscord_stp_party_route import walk
-        from tools.validators.validate_adiscord_division_templates import (
-            parse_clausewitz,
-        )
-
-        initializer = self.one(
-            parse_clausewitz(
-                (ROOT / "common/scripted_effects/ADISCORD_scripted_effects_generic.txt")
-                .read_text(encoding="utf-8")
-            ),
-            "ADISCORD_initialize_foreign_minister",
-        )
-        for idea in self.groups["political_advisor_minister_of_foreign_affairs"]:
-            if not idea.key.startswith("minister_"):
-                continue
-            tags = {
-                entry.value for entry in walk(self.one(idea.value, "allowed"))
-                if entry.key == "tag"
-            }
-            self.assertTrue(tags, idea.key)
-            for tag in tags:
-                with self.subTest(tag=tag, minister=idea.key):
-                    facts = {
-                        (tag, "has_idea", idea.key): True,
-                        (tag, "has_idea", "political_advisor_minister_of_foreign_affairs_vacant"): False,
-                    }
-                    self.assertEqual(list(selected_effects(initializer, facts, tag)), [])
+                self.assertEqual(len(appointments), 1, appointments)
+                minister = appointments[0]
+                self.assertTrue(minister.startswith(f"minister_{tag}_"), minister)
+                self.assertTrue(matches_conditions(self.one(members[minister], "allowed"), {}, tag))
 
     def test_dormant_countries_enter_with_their_own_foreign_minister(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions, selected_effects
@@ -1015,7 +964,8 @@ class SevenRowPoliticsContracts(unittest.TestCase):
                 self.assertEqual(len(calls), expected)
                 if expected:
                     countries = [entry for entry in effects if entry.key == "every_country"]
-                    self.assertIn(calls[0], countries[0].value)
+                    self.assertIn(calls[0], effects)
+                    self.assertLess(effects.index(calls[0]), effects.index(countries[0]))
                     ordered = [entry.key for entry in walk(effects)]
                     self.assertLess(
                         ordered.index("ADISCORD_initialize_foreign_minister"),

@@ -144,6 +144,14 @@ class VorkerlandClaimantCleanupTests(unittest.TestCase):
         ):
             with self.subTest(trigger=name):
                 self.assertIn(exclusion, compact(named_block(triggers, name)))
+        distribute = compact(
+            named_block(read(EFFECTS), "ADISCORD_vorkerland_distribute_central_states_to_cobelligerents")
+        )
+        self.assertIn(
+            "OR = { has_war_together_with = FROM has_war_with = PREV.PREV }", distribute
+        )
+        self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", distribute)
+        self.assertIn("NOT = { has_capitulated = yes }", distribute)
         fold = compact(named_block(read(EFFECTS), "ADISCORD_vorkerland_fold_worx_protectorates"))
         for protectorate in ("WTD", "TGD"):
             with self.subTest(protectorate=protectorate):

@@ -273,12 +273,21 @@ NAM_coalition_logistics = {
 			tag = AZH
 		}
 	}
-	visible = { has_country_flag = NAM_rw_coalition_mobilised }
+	visible = {
+		OR = {
+			AND = {
+				has_country_flag = NAM_rw_coalition_mobilised
+				NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+			}
+			has_country_flag = NAM_rw_transport_contract_paid
+		}
+	}
 	priority = 20
 }
 
-# Eflor's and Azhar's political police against the council's mainland cells.
-# The raids stop once the war of return begins: the cells have risen by then.
+# Eflor's and Azhar's political police against the council's mainland cells
+# and its subversive operations. Both stop once the war of return begins: the
+# cells have risen by then.
 NAM_cells_counter = {
 	icon = military_operation
 	allowed = {
@@ -288,8 +297,11 @@ NAM_cells_counter = {
 		}
 	}
 	visible = {
+		OR = {
+			NAM = { has_completed_focus = NAM_board_mainland_inventory }
+			NAM_sub_op_against_root = yes
+		}
 		NAM = {
-			has_completed_focus = NAM_board_mainland_contacts
 			NOT = { check_variable = { NAM_board_ended = 1 } }
 		}
 		NOT = { NAM_war_of_return_active = yes }
@@ -340,16 +352,55 @@ NAM_directory_development = {
 	priority = 24
 }
 
+# Invasion programmes. The partition flag survives the swap to the wartime
+# tree and keeps the beachhead mission and its armistice timeout visible; the
+# lane openers show the programmes they unlock before the partition night.
 NAM_board_invasion = {
 	icon = generic_naval
 	picture = GFX_decision_cat_picture_naval_treaties
 	allowed = { tag = NAM }
 	visible = {
 		has_country_flag = NAM_corp_takeover
-		has_completed_focus = NAM_board_invasion_prospectus
+		OR = {
+			has_country_flag = NAM_board_partition_fixed
+			has_completed_focus = NAM_board_war_economy_charter
+			has_completed_focus = NAM_board_war_quartermaster
+			has_completed_focus = NAM_board_private_navy
+			has_completed_focus = NAM_board_landing_contracts
+			has_completed_focus = NAM_board_mainland_inventory
+		}
 		NOT = { check_variable = { NAM_board_ended = 1 } }
 	}
 	priority = 25
+}
+
+# Subversive operations against Eflor and Azhar, opened by the partition night.
+# The flag set by that focus survives a tree swap; the category hides while
+# neither country can be targeted.
+NAM_board_subversion = {
+	icon = hol_secret_staff_talks
+	allowed = { tag = NAM }
+	visible = {
+		has_country_flag = NAM_corp_takeover
+		has_country_flag = NAM_board_partition_fixed
+		NOT = { check_variable = { NAM_board_ended = 1 } }
+		NOT = { NAM_war_of_return_active = yes }
+		NOT = { has_global_flag = NAM_war_of_return_won }
+		NAM_sub_any_target = yes
+	}
+	priority = 26
+}
+
+# The war of return of the council: orders, risings, administration, landings
+# and the offers of peace. Shown while the war tree is loaded.
+NAM_rtw_war = {
+	icon = military_operation
+	allowed = { tag = NAM }
+	visible = {
+		has_focus_tree = NAM_return_war_focus
+		has_completed_focus = NAM_rtw_war_cabinet
+	}
+	priority = 27
 }
 
 # Island wars against Ulven, Luren and Sharden: preparations, the landing,

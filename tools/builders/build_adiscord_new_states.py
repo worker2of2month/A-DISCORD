@@ -1029,14 +1029,14 @@ NAM_COALITION_FRONT_PROFILES = {
     69: {"population": NAM_COALITION_POPULATION[69], "category": "town", "infrastructure": 3, "civilian": 1, "military": 2, "supplies": 2.4, "air_base": 1},
     70: {"population": NAM_COALITION_POPULATION[70], "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.0, "air_base": 1},
     691: {"population": NAM_COALITION_POPULATION[691], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 0.6},
-    692: {"population": NAM_COALITION_POPULATION[692], "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 2.5, "custom_buildings": {"dockyard": 1}},
+    692: {"population": NAM_COALITION_POPULATION[692], "category": "town", "infrastructure": 3, "civilian": 2, "military": 0, "supplies": 2.5, "custom_buildings": {"dockyard": 1}},
     723: {"population": NAM_COALITION_POPULATION[723], "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 1.0, "custom_buildings": {"dockyard": 1}},
     724: {"population": NAM_COALITION_POPULATION[724], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 0.5},
     725: {"population": NAM_COALITION_POPULATION[725], "category": "rural", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 1.2},
     726: {"population": NAM_COALITION_POPULATION[726], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 0.4},
     727: {"population": NAM_COALITION_POPULATION[727], "category": "rural", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 0.7},
-    728: {"population": NAM_COALITION_POPULATION[728], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 0.4},
-    729: {"population": NAM_COALITION_POPULATION[729], "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 1.0},
+    728: {"population": NAM_COALITION_POPULATION[728], "category": "rural", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 0.4},
+    729: {"population": NAM_COALITION_POPULATION[729], "category": "rural", "infrastructure": 3, "civilian": 1, "military": 0, "supplies": 1.0},
 }
 
 # Treaty border belts retain their province membership and local supplies.

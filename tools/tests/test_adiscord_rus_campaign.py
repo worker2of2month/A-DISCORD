@@ -442,8 +442,6 @@ class BunkerWorld:
                 self.buildings[scalar(value, "type")] += int(scalar(value, "level"))
             elif key == "add_timed_idea":
                 self.ideas.add(scalar(value, "idea"))
-            elif key == "ADISCORD_vorkerland_ensure_limited_conscription":
-                self.ideas.add("limited_conscription")
             elif key in ("effect_tooltip", "custom_effect_tooltip", "unlock_decision_tooltip"):
                 continue
             elif key in ("set_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "divide_variable", "set_temp_variable", "add_to_temp_variable", "subtract_from_temp_variable", "multiply_temp_variable", "divide_temp_variable"):

@@ -672,6 +672,66 @@ ADISCORD_GLP_prepare_against_SHL = {
 	ai_strategy = { type = prepare_for_war id = SHL value = 100 }
 }
 
+ADISCORD_SHL_regional_front = {
+	allowed = { tag = SHL }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		OR = {
+			has_war_with = GLP
+			has_war_with = KYZ
+			has_war_with = KDR
+			has_war_with = RHM
+			has_war_with = SDR
+			has_war_with = MZR
+		}
+		NOT = { has_global_flag = ADISCORD_south_final_started }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			OR = {
+				tag = GLP
+				tag = KYZ
+				tag = KDR
+				tag = RHM
+				tag = SDR
+				tag = MZR
+			}
+		}
+		ratio = 0.01
+		# Border-war orders on objective states reach priority 1501.
+		priority = 1510
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
+ADISCORD_SHL_military_construction = {
+	allowed = { tag = SHL }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		OR = {
+			num_of_military_factories < 8
+			has_war = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = building_target
+		id = arms_factory
+		value = 8
+	}
+	ai_strategy = {
+		type = added_military_to_civilian_factory_ratio
+		value = 35
+	}
+}
+
 SHL_volunteers_to_stelander_party = {
 	allowed = { tag = SHL }
 	enable = {

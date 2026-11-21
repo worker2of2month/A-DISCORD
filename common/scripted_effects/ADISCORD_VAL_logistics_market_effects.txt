@@ -360,18 +360,9 @@ VAL_refresh_trade_network = {
 		}
 	}
 	else = {
-		if = {
-			limit = { has_idea = VAL_corridor_network_fragmented }
-			remove_ideas = VAL_corridor_network_fragmented
-		}
-		if = {
-			limit = { has_idea = VAL_corridor_network_partial }
-			remove_ideas = VAL_corridor_network_partial
-		}
-		if = {
-			limit = { has_idea = VAL_corridor_network_integrated }
-			remove_ideas = VAL_corridor_network_integrated
-		}
+		remove_ideas = VAL_corridor_network_fragmented
+		remove_ideas = VAL_corridor_network_partial
+		remove_ideas = VAL_corridor_network_integrated
 	}
 }
 
@@ -670,10 +661,7 @@ VAL_refresh_refugee_state = {
 		}
 	}
 	else = {
-		if = {
-			limit = { has_idea = VAL_refugee_strain }
-			remove_ideas = VAL_refugee_strain
-		}
+		remove_ideas = VAL_refugee_strain
 	}
 }
 

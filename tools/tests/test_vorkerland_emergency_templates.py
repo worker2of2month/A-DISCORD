@@ -72,8 +72,11 @@ class EmergencyTemplateTests(unittest.TestCase):
         }
         actual = {int(value) for value in re.findall(r"^\t(\d+) =", grants, re.M)}
         self.assertEqual(actual, expected)
-        self.assertEqual(grants.count("add_core_of = WKR"), len(expected))
-        self.assertEqual(grants.count("add_core_of = TVA"), len(expected))
+        for claimant in ("WKR", "VAD", "TVA"):
+            with self.subTest(claimant=claimant):
+                self.assertEqual(
+                    grants.count(f"add_core_of = {claimant}"), len(expected)
+                )
         cleanup = re.search(
             r"(?ms)^ADISCORD_vorkerland_inherit_integrated_claimant_cores = \{.*?^\}",
             source,

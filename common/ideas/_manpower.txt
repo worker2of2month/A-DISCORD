@@ -149,6 +149,18 @@ ideas = {
 						#	}
 						#}
 					}
+					# The Vorkerland claimants govern under different
+					# ideologies; the central war opens the law to all three.
+					AND = {
+						ADISCORD_vorkerland_is_main_claimant = yes
+						custom_trigger_tooltip = {
+							tooltip = WKR_ranks_central_war_near_tt
+							OR = {
+								has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+								has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+							}
+						}
+					}
 				}
 				has_war_support > 0.2
 			}
@@ -216,6 +228,16 @@ ideas = {
 						#		ratio > 0.6
 						#	}
 						#}
+					}
+					AND = {
+						ADISCORD_vorkerland_is_main_claimant = yes
+						custom_trigger_tooltip = {
+							tooltip = WKR_ranks_central_war_near_tt
+							OR = {
+								has_global_flag = ADISCORD_vorkerland_phase_central_preparation
+								has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+							}
+						}
 					}
 				}
 				OR = {

@@ -8409,6 +8409,17 @@ country_event = {
 		has_country_flag = NAM_board_opened
 		check_variable = { var = NAM_board_ended value = 0 compare = equals }
 	}
+	# Every answer and the unattended timeout dispatch the partition night's
+	# chain inside the 90-day window before operation Poseidon: the prospectus,
+	# the backers' choice and the two safehouse scenes.
+	immediate = {
+		hidden_effect = {
+			country_event = { id = ADISCORD_nam_story.97 days = 7 }
+			country_event = { id = ADISCORD_nam_story.180 days = 12 }
+			country_event = { id = ADISCORD_nam_story.122 days = 20 }
+			country_event = { id = ADISCORD_nam_story.123 days = 40 }
+		}
+	}
 	option = {
 		name = ADISCORD_nam_story.81.a
 		add_stability = 0.03
@@ -9249,7 +9260,9 @@ country_event = {
 # The lower branch of the council of boards: preparation lanes 102-117, the
 # island operations 119-121 and 125-132, the cells 118, 122, 123, 130 and the
 # return 124, 131, 133, 134. Focus rewards dispatch the story scenes from their
-# hidden_effect; the first option is the one an unattended event takes.
+# hidden_effect; the partition night's event 81 dispatches 97, 180, 122 and
+# 123, and the backers' choice 180 dispatches 98 or 99. The first option is the
+# one an unattended event takes.
 
 # Council of boards: the expedition prospectus and the second printing.
 country_event = {
@@ -9296,6 +9309,82 @@ country_event = {
 				check_variable = { var = NAM_board_support^6 value = 45 compare = less_than }
 			}
 		}
+	}
+}
+
+# Council of boards: the expedition's subscription list. Dispatched by event 81.
+# Each answer sets NAM_board_inv_backing once (2 pool, 1 holders, 0 none), the
+# value read by the holders' levy, the expedition share, the cell price and the
+# backers' condition of operation Poseidon.
+country_event = {
+	id = ADISCORD_nam_story.180
+	title = ADISCORD_nam_story.180.t
+	desc = ADISCORD_nam_story.180.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	option = {
+		name = ADISCORD_nam_story.180.a
+		unlock_decision_tooltip = NAM_board_inv_expedition_share
+		custom_effect_tooltip = NAM_board_inv_expedition_share_unlock_tt
+		add_political_power = 50
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_180_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+			set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+			set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+			set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+			set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+			set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+			NAM_board_trust_package = yes
+			set_variable = { var = NAM_board_inv_backing value = 2 }
+			country_event = { id = ADISCORD_nam_story.99 days = 30 }
+		}
+		ai_chance = { base = 80 }
+	}
+	option = {
+		name = ADISCORD_nam_story.180.b
+		unlock_decision_tooltip = NAM_board_inv_holders_levy
+		custom_effect_tooltip = NAM_board_inv_holders_levy_unlock_tt
+		add_equipment_to_stockpile = {
+			type = convoy_1
+			amount = 6
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_180_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_inv_k value = 8 }
+			set_temp_variable = { var = NAM_board_inv_cap_change value = 3 }
+			NAM_board_inv_cap_add = yes
+			# The two holders frozen at the partition night; the proxy votes
+			# expire at the next annual meeting with every other proxy vote.
+			add_to_variable = { var = NAM_board_proxy_votes^NAM_board_partition_efl value = 1 }
+			add_to_variable = { var = NAM_board_proxy_votes^NAM_board_partition_azh value = 1 }
+			# The package recounts once, so the proxy votes above count at once.
+			set_temp_variable = { var = NAM_board_holders_gain value = 8 }
+			set_temp_variable = { var = NAM_board_others_gain value = -3 }
+			NAM_board_holders_package = yes
+			set_variable = { var = NAM_board_inv_backing value = 1 }
+			country_event = { id = ADISCORD_nam_story.98 days = 30 }
+		}
+		ai_chance = { base = 15 }
+	}
+	option = {
+		name = ADISCORD_nam_story.180.c
+		custom_effect_tooltip = NAM_story_180_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+			NAM_corp_capital_add = yes
+			set_variable = { var = NAM_board_inv_backing value = 0 }
+		}
+		ai_chance = { base = 5 }
 	}
 }
 
@@ -9489,10 +9578,19 @@ country_event = {
 
 # Council of boards: the empty halyard of the flagship. Every option writes
 # NAM_board_expedition_flag, read only by the island concession tenders 125-127.
+# Fired by the first island launch, or by operation Poseidon when no island was
+# launched; in the war of return every option then dispatches event 124.
 country_event = {
 	id = ADISCORD_nam_story.101
 	title = ADISCORD_nam_story.101.t
-	desc = ADISCORD_nam_story.101.d
+	desc = {
+		text = ADISCORD_nam_story.101.d.leaders
+		trigger = { NOT = { has_country_flag = NAM_board_partition_fixed } }
+	}
+	desc = {
+		text = ADISCORD_nam_story.101.d
+		trigger = { has_country_flag = NAM_board_partition_fixed }
+	}
 	picture = GFX_event_adiscord_nam_board_session
 	is_triggered_only = yes
 	fire_only_once = yes
@@ -9513,13 +9611,23 @@ country_event = {
 			set_temp_variable = { var = NAM_board_trust_input_6 value = 2 }
 			NAM_board_trust_package = yes
 			set_variable = { var = NAM_board_expedition_flag value = 1 }
+			if = {
+				limit = { NAM_war_of_return_active = yes }
+				country_event = { id = ADISCORD_nam_story.124 days = 1 }
+			}
 		}
 		ai_chance = { base = 40 }
 	}
 	option = {
 		name = ADISCORD_nam_story.101.b
 		army_experience = 15
-		custom_effect_tooltip = NAM_story_101_b_tt
+		if = {
+			limit = { has_country_flag = NAM_board_partition_fixed }
+			custom_effect_tooltip = NAM_story_101_b_tt
+		}
+		else = {
+			custom_effect_tooltip = NAM_story_101_b_leaders_tt
+		}
 		hidden_effect = {
 			# Olshansky (chair 0) has no company; the council keeps the fee instead.
 			if = {
@@ -9533,10 +9641,38 @@ country_event = {
 				set_temp_variable = { var = NAM_corp_capital_change value = 40 }
 				NAM_corp_capital_add = yes
 			}
-			set_temp_variable = { var = NAM_board_holders_gain value = -3 }
-			set_temp_variable = { var = NAM_board_others_gain value = 0 }
-			NAM_board_holders_package = yes
+			if = {
+				limit = { has_country_flag = NAM_board_partition_fixed }
+				set_temp_variable = { var = NAM_board_holders_gain value = -3 }
+				set_temp_variable = { var = NAM_board_others_gain value = 0 }
+				NAM_board_holders_package = yes
+			}
+			else = {
+				# The first island launch can come before the partition night: the
+				# two current vote leaders pay instead of the holders.
+				NAM_board_recount = yes
+				set_temp_variable = { var = NAM_board_leader_a value = NAM_board_order^0 }
+				set_temp_variable = { var = NAM_board_leader_b value = NAM_board_order^1 }
+				if = {
+					limit = { check_variable = { NAM_board_chair_gain > 0 } }
+					set_temp_variable = { var = NAM_board_company_input value = NAM_board_chair }
+					set_temp_variable = { var = NAM_board_delta_input value = NAM_board_chair_gain }
+					NAM_board_support_change = yes
+					set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+				}
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_leader_a }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_leader_b }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
 			set_variable = { var = NAM_board_expedition_flag value = 2 }
+			if = {
+				limit = { NAM_war_of_return_active = yes }
+				country_event = { id = ADISCORD_nam_story.124 days = 1 }
+			}
 		}
 		ai_chance = { base = 30 }
 	}
@@ -9553,6 +9689,10 @@ country_event = {
 			set_temp_variable = { var = NAM_board_trust_input_6 value = -2 }
 			NAM_board_trust_package = yes
 			set_variable = { var = NAM_board_expedition_flag value = 3 }
+			if = {
+				limit = { NAM_war_of_return_active = yes }
+				country_event = { id = ADISCORD_nam_story.124 days = 1 }
+			}
 		}
 		ai_chance = { base = 30 }
 	}
@@ -9562,7 +9702,14 @@ country_event = {
 country_event = {
 	id = ADISCORD_nam_story.102
 	title = ADISCORD_nam_story.102.t
-	desc = ADISCORD_nam_story.102.d
+	desc = {
+		text = ADISCORD_nam_story.102.d.leaders
+		trigger = { NOT = { has_country_flag = NAM_board_partition_fixed } }
+	}
+	desc = {
+		text = ADISCORD_nam_story.102.d
+		trigger = { has_country_flag = NAM_board_partition_fixed }
+	}
 	picture = GFX_event_adiscord_nam_ferrant_steel
 	is_triggered_only = yes
 	fire_only_once = yes
@@ -9599,16 +9746,43 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_story.102.c
 		add_manpower = 2500
-		custom_effect_tooltip = NAM_story_102_c_tt
+		if = {
+			limit = { has_country_flag = NAM_board_partition_fixed }
+			custom_effect_tooltip = NAM_story_102_c_tt
+		}
+		else = {
+			custom_effect_tooltip = NAM_story_102_c_leaders_tt
+		}
 		hidden_effect = {
-			# Smenkom's gain goes in first: the holders package recounts once for both,
-			# and a holder that is Smenkom receives both rows.
-			set_temp_variable = { var = NAM_board_company_input value = 5 }
-			set_temp_variable = { var = NAM_board_delta_input value = 5 }
-			NAM_board_support_change = yes
-			set_temp_variable = { var = NAM_board_holders_gain value = -3 }
-			set_temp_variable = { var = NAM_board_others_gain value = 0 }
-			NAM_board_holders_package = yes
+			if = {
+				limit = { has_country_flag = NAM_board_partition_fixed }
+				# Smenkom's gain goes in first: the holders package recounts once for both,
+				# and a holder that is Smenkom receives both rows.
+				set_temp_variable = { var = NAM_board_company_input value = 5 }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				set_temp_variable = { var = NAM_board_holders_gain value = -3 }
+				set_temp_variable = { var = NAM_board_others_gain value = 0 }
+				NAM_board_holders_package = yes
+			}
+			else = {
+				# The charter can be signed before the partition night: the two
+				# current vote leaders pay instead of the holders, ranked before
+				# Smenkom's gain; a leader that is Smenkom receives both rows.
+				NAM_board_recount = yes
+				set_temp_variable = { var = NAM_board_leader_a value = NAM_board_order^0 }
+				set_temp_variable = { var = NAM_board_leader_b value = NAM_board_order^1 }
+				set_temp_variable = { var = NAM_board_company_input value = 5 }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_leader_a }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_leader_b }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
 		}
 		ai_chance = { base = 30 }
 	}
@@ -9931,7 +10105,7 @@ country_event = {
 }
 
 # Invasion preparation, supply lane: whose paper takes the keys of the expedition
-# warehouses (expedition_rear).
+# warehouses (supply_overseas).
 country_event = {
 	id = ADISCORD_nam_story.109
 	title = ADISCORD_nam_story.109.t
@@ -10426,11 +10600,26 @@ country_event = {
 	option = {
 		name = ADISCORD_nam_story.118.b
 		add_political_power = 30
-		custom_effect_tooltip = NAM_story_118_b_tt
+		custom_effect_tooltip = NAM_story_118_b_leaders_tt
 		hidden_effect = {
-			set_temp_variable = { var = NAM_board_holders_gain value = 6 }
-			set_temp_variable = { var = NAM_board_others_gain value = -2 }
-			NAM_board_holders_package = yes
+			# Fired before the partition night, when no holders exist yet: the
+			# list goes to the two current vote leaders, the same loop as the night.
+			NAM_board_recount = yes
+			set_temp_variable = { var = NAM_board_story_index value = -1 }
+			for_loop_effect = {
+				start = 0
+				end = 6
+				value = NAM_board_loop_step
+				add_to_temp_variable = { var = NAM_board_story_index value = 1 }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_order^NAM_board_story_index }
+				set_temp_variable = { var = NAM_board_delta_input value = -2 }
+				if = {
+					limit = { check_variable = { NAM_board_story_index < 2 } }
+					set_temp_variable = { var = NAM_board_delta_input value = 6 }
+				}
+				NAM_board_support_change = yes
+			}
+			NAM_board_recount = yes
 		}
 		ai_chance = { base = 30 }
 	}
@@ -10742,7 +10931,8 @@ country_event = {
 }
 
 # Council of boards: the landing night of operation Poseidon. Fired only after a
-# successful start; the description follows the rising in state 700.
+# successful start, by the focus or by event 101 when the flagship's flag is
+# chosen at the landing; the description follows the rising in state 700.
 country_event = {
 	id = ADISCORD_nam_story.124
 	title = ADISCORD_nam_story.124.t
@@ -11226,21 +11416,44 @@ country_event = {
 				add_stability = -0.02
 			}
 		}
-		custom_effect_tooltip = NAM_story_130_c_tt
+		if = {
+			limit = { has_country_flag = NAM_board_partition_fixed }
+			custom_effect_tooltip = NAM_story_130_c_tt
+		}
+		else = {
+			custom_effect_tooltip = NAM_story_130_c_leaders_tt
+		}
 		hidden_effect = {
 			event_target:NAM_board_cells_district = {
 				set_temp_variable = { var = NAM_board_cells_change value = -5 }
 				NAM_board_cells_add = yes
 			}
-			# The district's holder is the partition holder of its owner.
+			# The district's holder is the partition holder of its owner. Before
+			# the night the company the night would give it pays: the vote leader
+			# for Eflor, the runner-up for Azhar, as partition_night assigns them.
 			if = {
-				limit = {
-					event_target:NAM_board_cells_district = { is_owned_by = EFL }
+				limit = { has_country_flag = NAM_board_partition_fixed }
+				if = {
+					limit = {
+						event_target:NAM_board_cells_district = { is_owned_by = EFL }
+					}
+					set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
 				}
-				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_azh }
+				}
 			}
 			else = {
-				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_azh }
+				NAM_board_recount = yes
+				if = {
+					limit = {
+						event_target:NAM_board_cells_district = { is_owned_by = EFL }
+					}
+					set_temp_variable = { var = NAM_board_company_input value = NAM_board_rank_1 }
+				}
+				else = {
+					set_temp_variable = { var = NAM_board_company_input value = NAM_board_rank_2 }
+				}
 			}
 			set_temp_variable = { var = NAM_board_delta_input value = -4 }
 			NAM_board_support_change = yes
@@ -11254,7 +11467,8 @@ country_event = {
 
 # Council of boards: the Poseidon beachhead lost. Fired by the timeout of the
 # mission NAM_board_poseidon_beachhead while NAM holds no homeland district; an
-# armistice reaches the war only through the coalition leader's event 133.
+# armistice reaches the war only through event 133 of the principal that can
+# still decide (NAM_board_send_armistice_offer).
 country_event = {
 	id = ADISCORD_nam_story.131
 	title = ADISCORD_nam_story.131.t
@@ -11268,18 +11482,20 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_nam_story.131.a
+		# The paid offers need a principal to receive them and no other offer
+		# pending; b stays as the answer always open.
+		trigger = { NAM_board_armistice_offer_possible = yes }
 		add_political_power = -20
 		custom_effect_tooltip = NAM_story_131_a_tt
+		if = {
+			limit = { NAM_board_belt_claimed = yes }
+			custom_effect_tooltip = NAM_story_131_a_claims_tt
+		}
 		hidden_effect = {
-			set_variable = { var = NAM_board_armistice_terms value = 1 }
 			# A refusal or a silence keeps the 90-day check running.
 			activate_mission = NAM_board_poseidon_beachhead
-			if = {
-				limit = { has_global_flag = NAM_wor_primary_saved }
-				event_target:NAM_wor_primary = {
-					country_event = { id = ADISCORD_nam_story.133 days = 1 }
-				}
-			}
+			set_temp_variable = { var = NAM_board_armistice_offer value = 1 }
+			NAM_board_send_armistice_offer = yes
 		}
 		ai_chance = { base = 60 }
 	}
@@ -11296,17 +11512,17 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_nam_story.131.c
+		trigger = { NAM_board_armistice_offer_possible = yes }
 		add_political_power = -10
 		custom_effect_tooltip = NAM_story_131_c_tt
+		if = {
+			limit = { NAM_board_belt_claimed = yes }
+			custom_effect_tooltip = NAM_story_131_c_belt_tt
+		}
 		hidden_effect = {
-			set_variable = { var = NAM_board_armistice_terms value = 2 }
 			activate_mission = NAM_board_poseidon_beachhead
-			if = {
-				limit = { has_global_flag = NAM_wor_primary_saved }
-				event_target:NAM_wor_primary = {
-					country_event = { id = ADISCORD_nam_story.133 days = 1 }
-				}
-			}
+			set_temp_variable = { var = NAM_board_armistice_offer value = 2 }
+			NAM_board_send_armistice_offer = yes
 		}
 		ai_chance = { base = 20 }
 	}
@@ -11325,8 +11541,9 @@ country_event = {
 	}
 }
 
-# War of return: the council's armistice offer reaches the coalition leader.
-# A human Eflor or Azhar chooses; the AI usually refuses while it holds an island.
+# War of return: the council's armistice offer reaches the first principal that
+# can still decide. A human Eflor or Azhar chooses; the AI usually refuses while
+# it holds an island. A principal beaten in the day of delivery never answers.
 country_event = {
 	id = ADISCORD_nam_story.133
 	title = ADISCORD_nam_story.133.t
@@ -11334,10 +11551,7 @@ country_event = {
 	picture = GFX_event_adiscord_administrative_office
 	is_triggered_only = yes
 	trigger = {
-		OR = {
-			tag = EFL
-			tag = AZH
-		}
+		NAM_rtw_can_decide = yes
 		NAM_war_of_return_active = yes
 		NAM = {
 			check_variable = { var = NAM_board_armistice_terms value = 0 compare = greater_than }
@@ -11347,7 +11561,28 @@ country_event = {
 		name = ADISCORD_nam_story.133.a
 		add_war_support = -0.05
 		custom_effect_tooltip = NAM_story_133_a_tt
+		# The holders' terms cede the claimed belt land NAM controls; the council's
+		# terms drop the claims.
+		if = {
+			limit = {
+				NAM = {
+					check_variable = { NAM_board_armistice_terms > 1 }
+					NAM_board_belt_controlled = yes
+				}
+			}
+			custom_effect_tooltip = NAM_story_133_a_belt_tt
+		}
+		else_if = {
+			limit = {
+				NAM = {
+					check_variable = { NAM_board_armistice_terms < 2 }
+					NAM_board_belt_claimed = yes
+				}
+			}
+			custom_effect_tooltip = NAM_story_133_a_claims_tt
+		}
 		hidden_effect = {
+			save_event_target_as = NAM_board_armistice_acceptor
 			NAM = { NAM_board_poseidon_armistice = yes }
 		}
 		# Against the refusal's weight 20: 80% acceptance, 20% while the
@@ -11401,6 +11636,19 @@ country_event = {
 					}
 				}
 			}
+			# The quarrel over the spoils makes the leader readier to settle;
+			# the holders' terms that keep occupied belt land make it less so.
+			modifier = {
+				factor = 1.5
+				has_idea = NAM_sub_trophy_quarrel
+			}
+			modifier = {
+				factor = 0.5
+				NAM = {
+					check_variable = { NAM_board_armistice_terms > 1 }
+					NAM_board_belt_controlled = yes
+				}
+			}
 		}
 	}
 	option = {
@@ -11433,7 +11681,1792 @@ country_event = {
 		hidden_effect = {
 			# The beachhead mission was already activated again by event 131.
 			clear_variable = NAM_board_armistice_terms
+			clr_country_flag = NAM_board_armistice_sent
 		}
+	}
+}
+
+# ----- Council of boards: subversive operations -----
+# The council hears of an exposed operation. Fired by NAM_sub_expose, which
+# writes NAM_sub_exposed_target (1 Eflor, 2 Azhar) and NAM_sub_exposed_runner
+# (the company blamed, 0 when no company chairs a council operation) only when
+# no hearing is pending; every answer clears both.
+country_event = {
+	id = ADISCORD_nam_story.135
+	title = ADISCORD_nam_story.135.t
+	desc = ADISCORD_nam_story.135.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		check_variable = { NAM_sub_exposed_target > 0 }
+	}
+	option = {
+		name = ADISCORD_nam_story.135.a
+		if = {
+			limit = { check_variable = { NAM_sub_exposed_runner > 0 } }
+			custom_effect_tooltip = NAM_story_135_a_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = NAM_sub_exposed_runner }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+				NAM_board_queue_recount = yes
+			}
+		}
+		else = {
+			add_political_power = -15
+			custom_effect_tooltip = NAM_story_135_a_nochair_tt
+		}
+		hidden_effect = { NAM_sub_exposed_clear = yes }
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_story.135.b
+		if = {
+			limit = { check_variable = { NAM_sub_exposed_runner > 0 } }
+			custom_effect_tooltip = NAM_story_135_b_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_company_input value = NAM_sub_exposed_runner }
+				set_temp_variable = { var = NAM_board_delta_input value = 3 }
+				NAM_board_support_change = yes
+				NAM_board_queue_recount = yes
+			}
+		}
+		else = {
+			custom_effect_tooltip = NAM_story_135_b_nochair_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+				NAM_corp_capital_add = yes
+			}
+		}
+		hidden_effect = { NAM_sub_exposed_clear = yes }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.135.c
+		add_war_support = 0.03
+		custom_effect_tooltip = NAM_story_135_c_tt
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { NAM_sub_exposed_target = 1 } }
+				EFL = {
+					set_country_flag = {
+						flag = NAM_sub_vigilant
+						value = 1
+						days = 180
+					}
+				}
+			}
+			else = {
+				AZH = {
+					set_country_flag = {
+						flag = NAM_sub_vigilant
+						value = 1
+						days = 180
+					}
+				}
+			}
+			NAM_sub_exposed_clear = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Eflor or Azhar: its political police caught an agent of the council.
+# Fired by NAM_sub_expose_target_side on every exposure.
+country_event = {
+	id = ADISCORD_nam_story.136
+	title = ADISCORD_nam_story.136.t
+	desc = ADISCORD_nam_story.136.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+	}
+	option = {
+		name = ADISCORD_nam_story.136.a
+		add_war_support = 0.02
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.136.b
+		add_political_power = 20
+		ai_chance = { base = 40 }
+	}
+}
+
+# Both residencies have a network: who keeps the card index. Fired three days
+# after a successful residency settlement; the choice NAM_sub_files (1-3) is
+# read by NAM_sub_risk_compute for the rest of the route.
+country_event = {
+	id = ADISCORD_nam_story.137
+	title = ADISCORD_nam_story.137.t
+	desc = ADISCORD_nam_story.137.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NOT = { has_variable = NAM_sub_files }
+		NAM_sub_both_networks = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.137.a
+		add_political_power = -15
+		custom_effect_tooltip = NAM_story_137_a_tt
+		hidden_effect = {
+			set_variable = { var = NAM_sub_files value = 1 }
+			set_temp_variable = { var = NAM_board_holders_gain value = 3 }
+			set_temp_variable = { var = NAM_board_others_gain value = 0 }
+			set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_story.137.b
+		custom_effect_tooltip = NAM_story_137_b_tt
+		if = {
+			limit = { country_exists = EFL }
+			add_intel = {
+				target = EFL
+				army_intel = 15
+			}
+		}
+		if = {
+			limit = { country_exists = AZH }
+			add_intel = {
+				target = AZH
+				army_intel = 15
+			}
+		}
+		hidden_effect = {
+			set_variable = { var = NAM_sub_files value = 2 }
+			set_temp_variable = { var = NAM_board_holders_gain value = -3 }
+			set_temp_variable = { var = NAM_board_others_gain value = 3 }
+			set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.137.c
+		custom_effect_tooltip = NAM_story_137_c_tt
+		hidden_effect = {
+			set_variable = { var = NAM_sub_files value = 3 }
+			set_temp_variable = { var = NAM_corp_capital_change value = 40 }
+			NAM_corp_capital_add = yes
+			if = {
+				limit = { check_variable = { NAM_board_partition_efl > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+				set_temp_variable = { var = NAM_board_delta_input value = 6 }
+				NAM_board_support_change = yes
+			}
+			if = {
+				limit = { check_variable = { NAM_board_partition_azh > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_azh }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+			}
+			NAM_board_queue_recount = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# ----- Council of boards: the war of return -----
+# Hidden. One day after operation Poseidon the war tree replaces the corporate
+# tree while the war of return is still live.
+country_event = {
+	id = ADISCORD_nam_story.168
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		NAM_rtw_load_tree = yes
+	}
+}
+
+# War of return: the war charter signed in the flagship's wardroom; who sits at
+# the head of the war table. Fired by NAM_rtw_war_cabinet.
+country_event = {
+	id = ADISCORD_nam_story.138
+	title = ADISCORD_nam_story.138.t
+	desc = ADISCORD_nam_story.138.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.138.a
+		add_political_power = -15
+		custom_effect_tooltip = NAM_story_138_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_holders_gain value = 0 }
+			set_temp_variable = { var = NAM_board_others_gain value = 0 }
+			set_temp_variable = { var = NAM_board_chair_gain value = 5 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.138.b
+		add_command_power = 15
+		custom_effect_tooltip = NAM_story_138_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_holders_gain value = 4 }
+			set_temp_variable = { var = NAM_board_others_gain value = 0 }
+			set_temp_variable = { var = NAM_board_chair_gain value = -3 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.138.c
+		army_experience = 15
+		custom_effect_tooltip = NAM_story_138_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_1 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_2 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_3 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_4 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_5 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_6 value = -2 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# War of return: the holders present their bills for the war. Fired by
+# NAM_rtw_holders_war; answer c adds a bond issue without rifles.
+country_event = {
+	id = ADISCORD_nam_story.139
+	title = ADISCORD_nam_story.139.t
+	desc = ADISCORD_nam_story.139.d
+	picture = GFX_event_adiscord_nam_reidbank_credit
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.139.a
+		custom_effect_tooltip = NAM_story_139_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_holders_gain value = 3 }
+			set_temp_variable = { var = NAM_board_others_gain value = 0 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.139.b
+		add_manpower = 2500
+		custom_effect_tooltip = NAM_story_139_b_tt
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { NAM_board_partition_efl > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+			}
+			if = {
+				limit = { check_variable = { NAM_board_partition_azh > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_azh }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+			}
+			set_temp_variable = { var = NAM_board_company_input value = 6 }
+			set_temp_variable = { var = NAM_board_delta_input value = 3 }
+			NAM_board_support_change = yes
+			NAM_board_queue_recount = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.139.c
+		custom_effect_tooltip = NAM_story_139_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_rtw_bonds value = 1 }
+			set_temp_variable = { var = NAM_board_holders_gain value = 5 }
+			set_temp_variable = { var = NAM_board_others_gain value = 0 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# War of return: a lawyer brings a writ against the emergency powers. Fired by
+# NAM_rtw_chairmans_war. NAM_rtw_find_boycott leaves NAM_rtw_boycott_target
+# (the lowest company index with stance -1, else 0); without a boycotting company
+# the answers fall on Reidbank.
+country_event = {
+	id = ADISCORD_nam_story.140
+	title = ADISCORD_nam_story.140.t
+	desc = ADISCORD_nam_story.140.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	immediate = {
+		hidden_effect = {
+			NAM_rtw_find_boycott = yes
+		}
+	}
+	option = {
+		name = ADISCORD_nam_story.140.a
+		add_political_power = -20
+		if = {
+			limit = { check_variable = { NAM_rtw_boycott_target > 0 } }
+			custom_effect_tooltip = NAM_story_140_a_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = NAM_rtw_boycott_target }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+				NAM_board_queue_recount = yes
+			}
+		}
+		else = {
+			custom_effect_tooltip = NAM_story_140_a_bank_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		hidden_effect = {
+			clear_variable = NAM_rtw_boycott_target
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.140.b
+		if = {
+			limit = { check_variable = { NAM_rtw_boycott_target > 0 } }
+			custom_effect_tooltip = NAM_story_140_b_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_company_input value = NAM_rtw_boycott_target }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+				NAM_board_queue_recount = yes
+			}
+		}
+		else = {
+			custom_effect_tooltip = NAM_story_140_b_bank_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
+				NAM_board_trust_package = yes
+			}
+		}
+		hidden_effect = {
+			clear_variable = NAM_rtw_boycott_target
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.140.c
+		add_war_support = 0.03
+		custom_effect_tooltip = NAM_story_140_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_1 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_2 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_3 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_4 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_5 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_6 value = -2 }
+			NAM_board_trust_package = yes
+		}
+		hidden_effect = {
+			clear_variable = NAM_rtw_boycott_target
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# War of return: the coast guard officers ask for a staff of their own on the
+# beachhead. Fired by NAM_rtw_officers_at_front; the camp rows exist only while
+# Karamyshev lives, the dead text and rows follow his officers without a master.
+country_event = {
+	id = ADISCORD_nam_story.141
+	title = ADISCORD_nam_story.141.t
+	desc = {
+		text = ADISCORD_nam_story.141.d_alive
+		trigger = { has_idea = NAM_judas_karamyshev_watch }
+	}
+	desc = {
+		text = ADISCORD_nam_story.141.d_dead
+		trigger = {
+			NOT = { has_idea = NAM_judas_karamyshev_watch }
+		}
+	}
+	picture = GFX_event_adiscord_nam_karamyshev_officers
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.141.a
+		add_political_power = -15
+		if = {
+			limit = { has_idea = NAM_judas_karamyshev_watch }
+			custom_effect_tooltip = NAM_story_141_a_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+				set_temp_variable = { var = NAM_judas_delta_input value = 5 }
+				NAM_judas_support_change = yes
+			}
+		}
+		else = {
+			army_experience = 10
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.141.b
+		custom_effect_tooltip = NAM_story_141_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.141.c
+		add_stability = 0.03
+		if = {
+			limit = { has_idea = NAM_judas_karamyshev_watch }
+			custom_effect_tooltip = NAM_story_141_c_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_judas_camp_input value = 2 }
+				set_temp_variable = { var = NAM_judas_delta_input value = -5 }
+				NAM_judas_support_change = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		else = {
+			add_manpower = 2000
+			custom_effect_tooltip = NAM_story_141_c_dead_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# War of return: the dockers stop the night loading and a company keeps its
+# berths shut. Fired by NAM_rtw_docks_at_war. Answer c falls on the boycotting
+# company (NAM_rtw_boycott_target), else on Navis, whose berths load the convoys.
+country_event = {
+	id = ADISCORD_nam_story.142
+	title = ADISCORD_nam_story.142.t
+	desc = {
+		text = ADISCORD_nam_story.142.d_alive
+		trigger = { has_idea = NAM_judas_weber_committees }
+	}
+	desc = {
+		text = ADISCORD_nam_story.142.d_dead
+		trigger = {
+			NOT = { has_idea = NAM_judas_weber_committees }
+		}
+	}
+	picture = GFX_event_adiscord_nam_weber_committees
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	immediate = {
+		hidden_effect = {
+			NAM_rtw_find_boycott = yes
+		}
+	}
+	option = {
+		name = ADISCORD_nam_story.142.a
+		custom_effect_tooltip = NAM_story_142_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		hidden_effect = {
+			clear_variable = NAM_rtw_boycott_target
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.142.b
+		add_war_support = -0.02
+		add_equipment_to_stockpile = {
+			type = convoy_1
+			amount = 3
+			producer = NAM
+		}
+		hidden_effect = {
+			clear_variable = NAM_rtw_boycott_target
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.142.c
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 3000
+			producer = NAM
+		}
+		if = {
+			limit = { check_variable = { NAM_rtw_boycott_target > 0 } }
+			custom_effect_tooltip = NAM_story_142_c_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_company_input value = NAM_rtw_boycott_target }
+				set_temp_variable = { var = NAM_board_delta_input value = -5 }
+				NAM_board_support_change = yes
+				NAM_board_queue_recount = yes
+			}
+		}
+		else = {
+			custom_effect_tooltip = NAM_story_142_c_navis_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -5 }
+				NAM_board_trust_package = yes
+			}
+		}
+		hidden_effect = {
+			clear_variable = NAM_rtw_boycott_target
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# War of return: a widow from the harbour list brings the deed of her house.
+# Fired by NAM_rtw_left_behind_registry; no war condition, so a focus completed
+# in the last days of the war still gets its scene.
+country_event = {
+	id = ADISCORD_nam_story.143
+	title = ADISCORD_nam_story.143.t
+	desc = ADISCORD_nam_story.143.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	option = {
+		name = ADISCORD_nam_story.143.a
+		custom_effect_tooltip = NAM_story_143_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.143.b
+		add_political_power = -15
+		add_manpower = 2500
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.143.c
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_143_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_6 value = -3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# War of return: the treaty of return at the printers; whose share is printed
+# first. Fired by NAM_rtw_return_treaty.
+country_event = {
+	id = ADISCORD_nam_story.144
+	title = ADISCORD_nam_story.144.t
+	desc = ADISCORD_nam_story.144.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	option = {
+		name = ADISCORD_nam_story.144.a
+		add_political_power = -20
+		custom_effect_tooltip = NAM_story_144_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_holders_gain value = 3 }
+			set_temp_variable = { var = NAM_board_others_gain value = 0 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.144.b
+		custom_effect_tooltip = NAM_story_144_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_1 value = 2 }
+			set_temp_variable = { var = NAM_board_trust_input_2 value = 2 }
+			set_temp_variable = { var = NAM_board_trust_input_3 value = 2 }
+			set_temp_variable = { var = NAM_board_trust_input_4 value = 2 }
+			set_temp_variable = { var = NAM_board_trust_input_5 value = 2 }
+			set_temp_variable = { var = NAM_board_trust_input_6 value = 2 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.144.c
+		custom_effect_tooltip = NAM_story_144_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_holders_gain value = -2 }
+			set_temp_variable = { var = NAM_board_others_gain value = -2 }
+			set_temp_variable = { var = NAM_board_chair_gain value = 8 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Eflor front: the north commander and the holder's agent quarrel over the first
+# target (north_front).
+country_event = {
+	id = ADISCORD_nam_story.145
+	title = ADISCORD_nam_story.145.t
+	desc = ADISCORD_nam_story.145.d
+	picture = GFX_event_adiscord_nam_arktur_arsenal
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.145.a
+		add_political_power = -15
+		add_command_power = 10
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.145.b
+		custom_effect_tooltip = NAM_story_145_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_open_fuel_reserve value = 4000 }
+			NAM_open_fuel_release = yes
+			if = {
+				limit = { check_variable = { NAM_board_partition_efl > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+			}
+			set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.145.c
+		add_political_power = -10
+		army_experience = 10
+		custom_effect_tooltip = NAM_story_145_c_tt
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { NAM_board_partition_efl > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+			}
+			NAM_board_queue_recount = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Eflor front: the opposition's envoy on a fishing boat asks for money and a
+# guarantee for its ministers (loren_regime_crisis). The two flags change Eflor's
+# answer to the surrender demand of event 157.
+country_event = {
+	id = ADISCORD_nam_story.146
+	title = ADISCORD_nam_story.146.t
+	desc = ADISCORD_nam_story.146.d
+	picture = GFX_event_adiscord_nam_reidbank_credit
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.146.a
+		add_political_power = -20
+		custom_effect_tooltip = NAM_story_146_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.146.b
+		custom_effect_tooltip = NAM_story_146_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			set_country_flag = NAM_rtw_surrender_bonus_efl
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.146.c
+		add_war_support = 0.03
+		custom_effect_tooltip = NAM_story_146_c_tt
+		hidden_effect = {
+			set_country_flag = NAM_rtw_surrender_malus_efl
+			if = {
+				limit = { check_variable = { NAM_board_partition_efl > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+				set_temp_variable = { var = NAM_board_delta_input value = 3 }
+				NAM_board_support_change = yes
+			}
+			NAM_board_queue_recount = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Eflor front: the mined bridge before Middle Loren (march_on_loren). The flag of
+# option b lengthens the next capital order and is consumed at its activation.
+country_event = {
+	id = ADISCORD_nam_story.147
+	title = ADISCORD_nam_story.147.t
+	desc = ADISCORD_nam_story.147.d
+	picture = GFX_event_adiscord_nam_arktur_arsenal
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.147.a
+		add_political_power = -15
+		army_experience = 10
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.147.b
+		add_manpower = -2000
+		custom_effect_tooltip = NAM_story_147_b_tt
+		hidden_effect = {
+			set_country_flag = NAM_rtw_order_extra_days
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.147.c
+		custom_effect_tooltip = NAM_story_147_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Eflor front: whose company guards the new northern posts (north_border).
+country_event = {
+	id = ADISCORD_nam_story.148
+	title = ADISCORD_nam_story.148.t
+	desc = ADISCORD_nam_story.148.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.148.a
+		add_political_power = -15
+		custom_effect_tooltip = NAM_story_148_a_tt
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { NAM_board_partition_efl > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+				set_temp_variable = { var = NAM_board_delta_input value = 4 }
+				NAM_board_support_change = yes
+			}
+			NAM_board_queue_recount = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.148.b
+		add_stability = 0.02
+		custom_effect_tooltip = NAM_story_148_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_1 value = 1 }
+			set_temp_variable = { var = NAM_board_trust_input_2 value = 1 }
+			set_temp_variable = { var = NAM_board_trust_input_3 value = 1 }
+			set_temp_variable = { var = NAM_board_trust_input_4 value = 1 }
+			set_temp_variable = { var = NAM_board_trust_input_5 value = 1 }
+			set_temp_variable = { var = NAM_board_trust_input_6 value = 1 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.148.c
+		add_manpower = 2500
+		custom_effect_tooltip = NAM_story_148_c_tt
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { NAM_board_partition_efl > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+			}
+			NAM_board_queue_recount = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Azhar front: the harbour quay and the next convoy (south_front).
+country_event = {
+	id = ADISCORD_nam_story.149
+	title = ADISCORD_nam_story.149.t
+	desc = ADISCORD_nam_story.149.d
+	picture = GFX_event_adiscord_nam_arktur_arsenal
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.149.a
+		add_political_power = -15
+		custom_effect_tooltip = NAM_story_149_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.149.b
+		army_experience = 10
+		custom_effect_tooltip = NAM_story_149_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -20 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.149.c
+		custom_effect_tooltip = NAM_story_149_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_open_fuel_reserve value = 4000 }
+			NAM_open_fuel_release = yes
+			set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+			set_temp_variable = { var = NAM_board_trust_input_4 value = -2 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Azhar front: the Basin families ask for their wells and a seat at the exchange (basin_concession).
+country_event = {
+	id = ADISCORD_nam_story.150
+	title = ADISCORD_nam_story.150.t
+	desc = ADISCORD_nam_story.150.d
+	picture = GFX_event_adiscord_nam_smenkom_exchange
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.150.a
+		add_political_power = -20
+		custom_effect_tooltip = NAM_story_150_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.150.b
+		custom_effect_tooltip = NAM_story_150_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			if = {
+				limit = {
+					AZH = {
+						exists = yes
+						has_idea = NAM_rtw_families_turn
+					}
+				}
+				AZH = {
+					modify_timed_idea = {
+						idea = NAM_rtw_families_turn
+						days = 60
+					}
+				}
+			}
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.150.c
+		add_war_support = 0.03
+		add_fuel = -4000
+		custom_effect_tooltip = NAM_story_150_c_tt
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { NAM_board_partition_azh > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_azh }
+				set_temp_variable = { var = NAM_board_delta_input value = 3 }
+				NAM_board_support_change = yes
+			}
+			NAM_board_queue_recount = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Azhar front: the Basin city sets its oil reservoirs alight (storm_black_basin).
+country_event = {
+	id = ADISCORD_nam_story.151
+	title = ADISCORD_nam_story.151.t
+	desc = ADISCORD_nam_story.151.d
+	picture = GFX_event_adiscord_nam_loren_oil
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.151.a
+		add_political_power = -15
+		army_experience = 10
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.151.b
+		add_manpower = -2000
+		custom_effect_tooltip = NAM_story_151_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_open_fuel_reserve value = 6000 }
+			NAM_open_fuel_release = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.151.c
+		custom_effect_tooltip = NAM_story_151_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Azhar front: the harbour's dry dock between warships, convoys and the holder (south_border).
+country_event = {
+	id = ADISCORD_nam_story.152
+	title = ADISCORD_nam_story.152.t
+	desc = ADISCORD_nam_story.152.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.152.a
+		add_political_power = -15
+		navy_experience = 10
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.152.b
+		add_equipment_to_stockpile = {
+			type = convoy_1
+			amount = 4
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_152_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_3 value = -2 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.152.c
+		custom_effect_tooltip = NAM_story_152_c_tt
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { NAM_board_partition_azh > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_azh }
+				set_temp_variable = { var = NAM_board_delta_input value = 5 }
+				NAM_board_support_change = yes
+			}
+			set_temp_variable = { var = NAM_board_holders_gain value = 0 }
+			set_temp_variable = { var = NAM_board_others_gain value = -2 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Loren raises the tanker freight in the second month.
+country_event = {
+	id = ADISCORD_nam_story.153
+	title = ADISCORD_nam_story.153.t
+	desc = ADISCORD_nam_story.153.d
+	picture = GFX_event_adiscord_nam_loren_oil
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.153.a
+		custom_effect_tooltip = NAM_story_153_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.153.b
+		add_fuel = -4000
+		custom_effect_tooltip = NAM_story_153_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_1 value = 2 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.153.c
+		add_equipment_to_stockpile = {
+			type = convoy_1
+			amount = 3
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_153_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_1 value = -3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# a requisitioned captain scuttles his steamer in the harbour mouth.
+country_event = {
+	id = ADISCORD_nam_story.154
+	title = ADISCORD_nam_story.154.t
+	desc = ADISCORD_nam_story.154.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.154.a
+		add_political_power = -15
+		add_war_support = 0.02
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.154.b
+		custom_effect_tooltip = NAM_story_154_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.154.c
+		add_equipment_to_stockpile = {
+			type = convoy_1
+			amount = 2
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_154_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_3 value = -2 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# the families recognise a pardoned police chief.
+country_event = {
+	id = ADISCORD_nam_story.155
+	title = ADISCORD_nam_story.155.t
+	desc = ADISCORD_nam_story.155.d
+	picture = GFX_event_adiscord_nam_smenkom_exchange
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.155.a
+		add_political_power = -15
+		custom_effect_tooltip = NAM_story_155_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_6 value = 2 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.155.b
+		add_stability = 0.02
+		custom_effect_tooltip = NAM_story_155_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+			NAM_corp_capital_add = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.155.c
+		add_stability = -0.02
+		custom_effect_tooltip = NAM_story_155_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# a field court sentences a schoolteacher and the district stops work.
+country_event = {
+	id = ADISCORD_nam_story.156
+	title = ADISCORD_nam_story.156.t
+	desc = ADISCORD_nam_story.156.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+	}
+	option = {
+		name = ADISCORD_nam_story.156.a
+		add_political_power = -15
+		add_war_support = 0.02
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.156.b
+		custom_effect_tooltip = NAM_story_156_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.156.c
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_156_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_trust_input_6 value = -3 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# Eflor: the council demands its surrender (decision NAM_rtw_offer_surrender_efl).
+# The refusal is the first option, so an unanswered demand lapses into a
+# refusal and the escrow returns; acceptance settles once through
+# NAM_rtw_accept_surrender_efl, which rechecks the war itself.
+country_event = {
+	id = ADISCORD_nam_story.157
+	title = ADISCORD_nam_story.157.t
+	desc = ADISCORD_nam_story.157.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		tag = EFL
+		NAM_war_of_return_active = yes
+		NAM = { has_country_flag = NAM_rtw_surrender_pending }
+	}
+	option = {
+		name = ADISCORD_nam_story.157.b
+		custom_effect_tooltip = NAM_story_157_b_tt
+		hidden_effect = {
+			NAM = { NAM_rtw_surrender_refused = yes }
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.157.a
+		if = {
+			limit = {
+				NAM = { NAM_rtw_direct_rule = yes }
+			}
+			custom_effect_tooltip = NAM_story_157_a_annex_tt
+		}
+		else = {
+			custom_effect_tooltip = NAM_story_157_a_district_tt
+		}
+		hidden_effect = {
+			NAM = { NAM_rtw_accept_surrender_efl = yes }
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 15
+				has_idea = NAM_rtw_loren_crisis
+			}
+			modifier = {
+				add = 30
+				surrender_progress > 0.4
+			}
+			modifier = {
+				add = 20
+				NAM = {
+					controls_state = 67
+					controls_state = 688
+				}
+			}
+			modifier = {
+				add = 25
+				has_idea = NAM_rtw_capital_fallen
+			}
+			modifier = {
+				add = 25
+				AZH = {
+					exists = yes
+					has_capitulated = yes
+				}
+			}
+			modifier = {
+				add = 20
+				NAM = { has_country_flag = NAM_rtw_surrender_bonus_efl }
+			}
+			modifier = {
+				add = -10
+				NAM = { has_country_flag = NAM_rtw_surrender_malus_efl }
+			}
+			# No cabinet survives the council's direct rule.
+			modifier = {
+				factor = 0.5
+				NAM = { NAM_rtw_direct_rule = yes }
+			}
+			modifier = {
+				factor = 0
+				NAM = { surrender_progress > 0.3 }
+				NOT = { surrender_progress > 0.2 }
+			}
+			modifier = {
+				factor = 0.25
+				OR = {
+					225 = { is_controlled_by = EFL }
+					226 = { is_controlled_by = EFL }
+					227 = { is_controlled_by = EFL }
+					228 = { is_controlled_by = EFL }
+					229 = { is_controlled_by = EFL }
+					230 = { is_controlled_by = EFL }
+					231 = { is_controlled_by = EFL }
+				}
+			}
+		}
+	}
+}
+
+# The coalition's decider (NAM_rtw_pick_decider) chooses whether to dictate
+# terms to the Directory. Fired monthly by NAM_rtw_dictate_check.
+country_event = {
+	id = ADISCORD_nam_story.158
+	title = ADISCORD_nam_story.158.t
+	desc = ADISCORD_nam_story.158.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+		NAM_war_of_return_active = yes
+		NAM = { has_country_flag = NAM_rtw_dictate_pending }
+	}
+	option = {
+		name = ADISCORD_nam_story.158.a
+		custom_effect_tooltip = NAM_story_158_a_tt
+		hidden_effect = {
+			NAM = { country_event = { id = ADISCORD_nam_story.164 days = 1 } }
+		}
+		ai_chance = {
+			base = 70
+			# Annexation is close: finish the Directory instead.
+			modifier = {
+				factor = 0.3
+				NAM = { surrender_progress > 0.45 }
+			}
+			modifier = {
+				factor = 1.5
+				surrender_progress > 0.3
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_story.158.b
+		custom_effect_tooltip = NAM_story_158_b_tt
+		hidden_effect = {
+			NAM = {
+				clr_country_flag = NAM_rtw_dictate_pending
+				set_country_flag = {
+					flag = NAM_rtw_dictate_cooldown
+					value = 1
+					days = 90
+				}
+			}
+			NAM_rtw_clear_decider = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# The Directory: Eflor's surrender signed in Middle Loren. Fired by
+# NAM_rtw_accept_surrender_efl; the text follows the form of rule.
+country_event = {
+	id = ADISCORD_nam_story.159
+	title = ADISCORD_nam_story.159.t
+	desc = {
+		trigger = { NAM_rtw_direct_rule = yes }
+		text = ADISCORD_nam_story.159.d_annex
+	}
+	desc = {
+		trigger = { NAM_rtw_direct_rule = no }
+		text = ADISCORD_nam_story.159.d_district
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_nam_story.159.a
+	}
+}
+
+# The Directory: the demand was refused or Eflor could no longer sign; the
+# escrow has already returned (NAM_rtw_surrender_refused).
+country_event = {
+	id = ADISCORD_nam_story.160
+	title = ADISCORD_nam_story.160.t
+	desc = ADISCORD_nam_story.160.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_nam_story.160.a
+		custom_effect_tooltip = NAM_story_160_a_tt
+	}
+}
+
+# The coalition's decider answers the armistice on the line of contact (NAM_rtw_line_armistice).
+country_event = {
+	id = ADISCORD_nam_story.161
+	title = ADISCORD_nam_story.161.t
+	desc = ADISCORD_nam_story.161.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+		NAM_war_of_return_active = yes
+		NAM = { has_country_flag = NAM_rtw_line_pending }
+	}
+	option = {
+		name = ADISCORD_nam_story.161.a
+		custom_effect_tooltip = NAM_story_161_a_tt
+		hidden_effect = {
+			NAM = {
+				country_event = { id = ADISCORD_nam_story.162 hours = 1 }
+				NAM_rtw_line_armistice = yes
+			}
+		}
+		ai_chance = {
+			base = 20
+			modifier = {
+				add = 40
+				surrender_progress > 0.3
+			}
+			modifier = {
+				add = 20
+				NAM = {
+					NAM_rtw_homeland_held_count = yes
+					check_variable = { NAM_rtw_homeland_held > 2 }
+				}
+			}
+			modifier = {
+				factor = 1.5
+				has_idea = NAM_sub_trophy_quarrel
+			}
+			modifier = {
+				factor = 0
+				NAM = { surrender_progress > 0.3 }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_nam_story.161.b
+		custom_effect_tooltip = NAM_story_161_b_tt
+		hidden_effect = {
+			NAM = {
+				clr_country_flag = NAM_rtw_line_pending
+				set_country_flag = {
+					flag = NAM_rtw_armistice_cooldown
+					value = 1
+					days = 90
+				}
+				country_event = { id = ADISCORD_nam_story.163 days = 1 }
+			}
+			NAM_rtw_clear_decider = yes
+		}
+		ai_chance = { base = 60 }
+	}
+}
+
+# The Directory: the guns fall silent on the line of contact.
+country_event = {
+	id = ADISCORD_nam_story.162
+	title = ADISCORD_nam_story.162.t
+	desc = ADISCORD_nam_story.162.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_nam_story.162.a
+		custom_effect_tooltip = NAM_story_162_a_tt
+	}
+}
+
+# The Directory: the coalition refused the line; the 90-day cooldown was set
+# by the refusal itself.
+country_event = {
+	id = ADISCORD_nam_story.163
+	title = ADISCORD_nam_story.163.t
+	desc = ADISCORD_nam_story.163.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_nam_story.163.a
+		add_war_support = 0.03
+		custom_effect_tooltip = NAM_story_163_a_tt
+	}
+}
+
+# The Directory: the coalition dictates its terms (158 a). Accepting or buying
+# the peace off is a lost pause; fighting on raises the next threshold and a
+# second refusal ends the offers.
+country_event = {
+	id = ADISCORD_nam_story.164
+	title = ADISCORD_nam_story.164.t
+	desc = ADISCORD_nam_story.164.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	trigger = {
+		NAM_war_of_return_active = yes
+		has_country_flag = NAM_rtw_dictate_pending
+		has_global_flag = NAM_rtw_decider_saved
+	}
+	option = {
+		name = ADISCORD_nam_story.164.a
+		custom_effect_tooltip = NAM_story_164_a_tt
+		effect_tooltip = {
+			add_timed_idea = {
+				idea = NAM_rtw_reparations
+				days = 365
+			}
+		}
+		hidden_effect = {
+			set_temp_variable = { var = NAM_rtw_terms value = 1 }
+			NAM_rtw_dictated_peace = yes
+		}
+		ai_chance = { base = 60 }
+	}
+	option = {
+		name = ADISCORD_nam_story.164.b
+		custom_effect_tooltip = NAM_story_164_b_tt
+		effect_tooltip = {
+			add_timed_idea = {
+				idea = NAM_rtw_reparations
+				days = 540
+			}
+		}
+		hidden_effect = {
+			set_temp_variable = { var = NAM_rtw_terms value = 2 }
+			NAM_rtw_dictated_peace = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_nam_story.164.c
+		add_war_support = 0.05
+		custom_effect_tooltip = NAM_story_164_c_tt
+		hidden_effect = {
+			clr_country_flag = NAM_rtw_dictate_pending
+			add_to_variable = { var = NAM_rtw_dictate_refusals value = 1 }
+			set_country_flag = {
+				flag = NAM_rtw_dictate_cooldown
+				value = 1
+				days = 90
+			}
+			NAM_rtw_clear_decider = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# The Directory: a council order carried out (NAM_rtw_order_success). The
+# text follows the target kept in NAM_rtw_order_last: an enemy capital (701, 69)
+# or a district.
+country_event = {
+	id = ADISCORD_nam_story.166
+	title = ADISCORD_nam_story.166.t
+	desc = {
+		text = ADISCORD_nam_story.166.d_capital
+		trigger = {
+			OR = {
+				check_variable = { NAM_rtw_order_last = 701 }
+				check_variable = { NAM_rtw_order_last = 69 }
+			}
+		}
+	}
+	desc = {
+		text = ADISCORD_nam_story.166.d_district
+		trigger = {
+			NOT = { check_variable = { NAM_rtw_order_last = 701 } }
+			NOT = { check_variable = { NAM_rtw_order_last = 69 } }
+		}
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_nam_story.166.a
+	}
+}
+
+# The Directory: a council order failed (NAM_rtw_order_fail).
+country_event = {
+	id = ADISCORD_nam_story.167
+	title = ADISCORD_nam_story.167.t
+	desc = ADISCORD_nam_story.167.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_nam_story.167.a
+	}
+}
+
+# The boycotting company answers the measure of NAM_rtw_boycott_measure. The
+# company is the stored NAM_rtw_boycott_target; every answer clears it.
+country_event = {
+	id = ADISCORD_nam_story.165
+	title = ADISCORD_nam_story.165.t
+	desc = ADISCORD_nam_story.165.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+		NAM_war_of_return_active = yes
+		check_variable = { NAM_rtw_boycott_target > 0 }
+	}
+	option = {
+		name = ADISCORD_nam_story.165.a
+		custom_effect_tooltip = NAM_story_165_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -30 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_rtw_boycott_delta value = 3 }
+			NAM_rtw_boycott_trust = yes
+			clear_variable = NAM_rtw_boycott_target
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_story.165.b
+		add_war_support = 0.02
+		custom_effect_tooltip = NAM_story_165_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_rtw_boycott_delta value = -5 }
+			NAM_rtw_boycott_trust = yes
+			clear_variable = NAM_rtw_boycott_target
+		}
+		ai_chance = { base = 25 }
+	}
+	option = {
+		name = ADISCORD_nam_story.165.c
+		custom_effect_tooltip = NAM_story_165_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_rtw_boycott_delta value = 6 }
+			NAM_rtw_boycott_trust = yes
+			if = {
+				limit = { check_variable = { NAM_board_chair > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_chair }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+				NAM_board_recount = yes
+			}
+			clear_variable = NAM_rtw_boycott_target
+		}
+		ai_chance = { base = 25 }
+	}
+}
+
+# Victory with the treaty of the return: the six divide the mainland's shares.
+# Fired by NAM_rtw_settle_victory one day after the settlement.
+country_event = {
+	id = ADISCORD_nam_story.169
+	title = ADISCORD_nam_story.169.t
+	desc = ADISCORD_nam_story.169.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		has_country_flag = NAM_board_opened
+		check_variable = { var = NAM_board_ended value = 0 compare = equals }
+	}
+	option = {
+		name = ADISCORD_nam_story.169.a
+		custom_effect_tooltip = NAM_story_169_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -40 }
+			NAM_corp_capital_add = yes
+			if = {
+				limit = { check_variable = { NAM_board_rank_6 > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_rank_6 }
+				set_temp_variable = { var = NAM_board_delta_input value = -3 }
+				NAM_board_support_change = yes
+			}
+			if = {
+				limit = { check_variable = { NAM_board_rank_1 > 0 } }
+				set_temp_variable = { var = NAM_board_company_input value = NAM_board_rank_1 }
+				set_temp_variable = { var = NAM_board_delta_input value = 10 }
+				NAM_board_support_change = yes
+			}
+			NAM_board_recount = yes
+		}
+		ai_chance = { base = 50 }
+	}
+	option = {
+		name = ADISCORD_nam_story.169.b
+		custom_effect_tooltip = NAM_story_169_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_board_holders_gain value = 8 }
+			set_temp_variable = { var = NAM_board_others_gain value = -3 }
+			set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+			NAM_board_holders_package = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.169.c
+		custom_effect_tooltip = NAM_story_169_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = -100 }
+			NAM_corp_capital_add = yes
+			set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+			set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+			set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+			set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+			set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+			set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+			NAM_board_trust_package = yes
+		}
+		ai_chance = { base = 20 }
 	}
 }
 

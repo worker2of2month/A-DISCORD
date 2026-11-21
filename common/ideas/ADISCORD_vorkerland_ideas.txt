@@ -2627,8 +2627,10 @@ ideas = {
 		}
 
 # --- stalemate_ideas ---
-		# Granted only by the two AI-gated one-shot deadline effects and always
-		# removed by the engine after seventy-five days.
+		# Granted by the three one-shot deadline effects (district, Solarino and
+		# claimant showdown). The district and Solarino windows are AI-only; the
+		# claimant window also reaches a human claimant. The engine removes the
+		# spirit after seventy-five days.
 		ADISCORD_vorkerland_ai_breakthrough_window = {
 			picture = generic_infantry_bonus
 			allowed = { always = no }
@@ -3599,9 +3601,7 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			available = {
-				is_ai = yes
 				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-				WKR = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
 			}
 			targeted_modifier = { tag = WKR attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
 		}
@@ -3611,9 +3611,7 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			available = {
-				is_ai = yes
 				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-				VAD = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
 			}
 			targeted_modifier = { tag = VAD attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
 		}
@@ -3623,9 +3621,7 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			available = {
-				is_ai = yes
 				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-				TVA = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
 			}
 			targeted_modifier = { tag = TVA attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
 		}

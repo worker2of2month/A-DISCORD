@@ -50,14 +50,11 @@ guiTypes = {
 			}
 		}
 
-		containerWindowType = {
+		iconType = {
 			name = "trade_header"
-			position = { x = 15 y = 48 }
-			size = { width = 810 height = 30 }
-			background = {
-				name = "Background"
-				quadTextureSprite = "GFX_ADISCORD_market_generic"
-			}
+			position = { x = 154 y = 46 }
+			quadTextureSprite = "GFX_ADISCORD_market_summary"
+			alwaystransparent = yes
 		}
 
 		iconType = {

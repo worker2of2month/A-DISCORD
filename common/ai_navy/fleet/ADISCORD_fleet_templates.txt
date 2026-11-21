@@ -1,10 +1,14 @@
 # Required groups fit the small coastal fleets; optional groups use later reinforcements.
+# Optional patrol groups let cruisers and spare escorts hold sea regions with
+# their full dominance; strike groups add only a percentage of theirs.
 ADISCORD_coastal_dominance_fleet = {
 	required_taskforces = {
 		ADISCORD_coastal_patrol = 1
 		ADISCORD_coastal_strike = 1
 	}
 	optional_taskforces = {
+		ADISCORD_cruiser_patrol = 1
+		ADISCORD_coastal_patrol = 2
 		ADISCORD_cruiser_strike = 1
 		ADISCORD_light_cruiser_group = 1
 		ADISCORD_battleship_group = 1

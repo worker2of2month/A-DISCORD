@@ -640,6 +640,14 @@ SHL_can_seize_qanats = {
 		has_completed_focus = SHL_right_to_water
 	}
 	SHL_qanat_counterpart = yes
+	hidden_trigger = {
+		NOT = {
+			AND = {
+				is_ai = yes
+				KYZ = { SHL_has_unreachable_regional_defender = yes }
+			}
+		}
+	}
 	NOT = { has_country_flag = SHL_neutral_to_KYZ }
 	KYZ = { has_war = no }
 }
@@ -664,6 +672,14 @@ SHL_can_strike_veyr = {
 		has_completed_focus = SHL_key_to_sea
 	}
 	SHL_glp_counterpart = yes
+	hidden_trigger = {
+		NOT = {
+			AND = {
+				is_ai = yes
+				GLP = { SHL_has_unreachable_regional_defender = yes }
+			}
+		}
+	}
 	NOT = { has_country_flag = SHL_neutral_to_GLP }
 	GLP = { has_war = no }
 }
@@ -928,6 +944,7 @@ SHL_can_march_on_keizan = {
 	NOT = { check_variable = { var = SHL_keizan_state value = 3 compare = equals } }
 	NOT = { check_variable = { var = SHL_war_kyz value = 2 compare = equals } }
 	SHL_keizan_can_threaten = yes
+	hidden_trigger = { SHL_can_launch_keizan_offensive = yes }
 }
 
 SHL_kyz_objectives_held = {
@@ -3313,6 +3330,362 @@ SHL_metal_negotiations_unlocked = {
 		has_completed_focus = SHL_metal_brokers
 		has_completed_focus = SHL_metal_market
 		has_completed_focus = SHL_sw_keep_the_markets
+	}
+}
+
+SHL_rakhma_transit_controller = {
+	NOT = { has_war_with = SHL }
+	OR = {
+		tag = SHL
+		is_in_faction_with = SHL
+		is_subject_of = SHL
+		gives_military_access_to = SHL
+	}
+}
+
+# COUNTRY. Neutral transit alone cannot serve as the launch point of an attack.
+SHL_rakhma_staging_controller = {
+	SHL_rakhma_transit_controller = yes
+	OR = {
+		tag = SHL
+		has_war_with = RHM
+	}
+}
+
+# COUNTRY SHL. Either state can be split between controllers before the answer.
+# The railway pathfinder checks a land route without requiring or building tracks.
+SHL_rakhma_border_crossing_open = {
+	OR = {
+		AND = {
+			RHM = {
+				OR = {
+					controls_province = 5648
+					controls_province = 5703
+					controls_province = 16956
+				}
+			}
+			var:global.province_controllers^1382 = { SHL_rakhma_staging_controller = yes }
+			can_build_railway = {
+				start_province = 16713
+				target_province = 1382
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						SHL_rakhma_transit_controller = no
+					}
+				}
+			}
+		}
+		AND = {
+			RHM = { controls_province = 5703 }
+			var:global.province_controllers^3654 = { SHL_rakhma_staging_controller = yes }
+			can_build_railway = {
+				start_province = 16713
+				target_province = 3654
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						SHL_rakhma_transit_controller = no
+					}
+				}
+			}
+		}
+		AND = {
+			RHM = { controls_province = 5703 }
+			var:global.province_controllers^11244 = { SHL_rakhma_staging_controller = yes }
+			can_build_railway = {
+				start_province = 16713
+				target_province = 11244
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						SHL_rakhma_transit_controller = no
+					}
+				}
+			}
+		}
+		AND = {
+			RHM = {
+				OR = {
+					controls_province = 2545
+					controls_province = 2882
+					controls_province = 17572
+				}
+			}
+			var:global.province_controllers^16945 = { SHL_rakhma_staging_controller = yes }
+			can_build_railway = {
+				start_province = 16713
+				target_province = 16945
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						SHL_rakhma_transit_controller = no
+					}
+				}
+			}
+		}
+		AND = {
+			RHM = { controls_province = 2545 }
+			var:global.province_controllers^6557 = { SHL_rakhma_staging_controller = yes }
+			can_build_railway = {
+				start_province = 16713
+				target_province = 6557
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						SHL_rakhma_transit_controller = no
+					}
+				}
+			}
+		}
+		AND = {
+			RHM = { controls_province = 2882 }
+			var:global.province_controllers^18420 = { SHL_rakhma_staging_controller = yes }
+			can_build_railway = {
+				start_province = 16713
+				target_province = 18420
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						SHL_rakhma_transit_controller = no
+					}
+				}
+			}
+		}
+		AND = {
+			RHM = { controls_province = 2882 }
+			var:global.province_controllers^8903 = { SHL_rakhma_staging_controller = yes }
+			can_build_railway = {
+				start_province = 16713
+				target_province = 8903
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						SHL_rakhma_transit_controller = no
+					}
+				}
+			}
+		}
+		AND = {
+			RHM = {
+				OR = {
+					controls_province = 2882
+					controls_province = 5703
+					controls_province = 16973
+					controls_province = 17625
+				}
+			}
+			var:global.province_controllers^18717 = { SHL_rakhma_staging_controller = yes }
+			can_build_railway = {
+				start_province = 16713
+				target_province = 18717
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						SHL_rakhma_transit_controller = no
+					}
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY SHL. A partner already fighting Rakhma can have advanced beyond
+# Hamad. The rear must still be traversable, and a forward staging area
+# must be connected to it and able to attack across the current front.
+SHL_rakhma_front_reachable = {
+	controls_province = 16713
+	OR = {
+		SHL_rakhma_border_crossing_open = yes
+		AND = {
+			264 = {
+				is_fully_controlled_by = CONTROLLER
+				controller = { SHL_rakhma_transit_controller = yes }
+			}
+			258 = {
+				is_fully_controlled_by = CONTROLLER
+				controller = { SHL_rakhma_staging_controller = yes }
+			}
+			can_build_railway = {
+				start_state = 699
+				target_state = 264
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						SHL_rakhma_transit_controller = no
+					}
+				}
+			}
+			RHM = {
+				any_controlled_state = {
+					is_fully_controlled_by = RHM
+					any_neighbor_state = {
+						is_core_of = RHM
+						is_fully_controlled_by = CONTROLLER
+						controller = { SHL_rakhma_staging_controller = yes }
+						OR = {
+							state = 258
+							can_build_railway = {
+								start_state = 258
+								target_state = THIS
+								controller_priority = {
+									base = 1
+									modifier = {
+										add = -2
+										SHL_rakhma_transit_controller = no
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY demand recipient. A regional faction partner can call Rakhma into
+# the same war on refusal even if Rakhma never received a demand of its own.
+SHL_demand_would_engage_rakhma = {
+	RHM = { SHL_would_join_refusing_side = yes }
+}
+
+# COUNTRY target. Check each potential defender on its own front.
+SHL_has_unreachable_regional_defender = {
+	OR = {
+		GLP = {
+			SHL_would_join_refusing_side = yes
+			SHL_regional_front_reachable = no
+		}
+		KYZ = {
+			SHL_would_join_refusing_side = yes
+			SHL_regional_front_reachable = no
+		}
+		KDR = {
+			SHL_would_join_refusing_side = yes
+			SHL_regional_front_reachable = no
+		}
+		SDR = {
+			SHL_would_join_refusing_side = yes
+			SHL_regional_front_reachable = no
+		}
+		MZR = {
+			SHL_would_join_refusing_side = yes
+			SHL_regional_front_reachable = no
+		}
+	}
+}
+
+# Keizan's border pact can commit a signatory before it shares a faction.
+SHL_can_launch_keizan_offensive = {
+	NOT = {
+		AND = {
+			is_ai = yes
+			OR = {
+				KYZ = { SHL_has_unreachable_regional_defender = yes }
+				MZR = { SHL_unreachable_keizan_signatory = yes }
+				GLP = { SHL_unreachable_keizan_signatory = yes }
+			}
+		}
+	}
+}
+
+SHL_unreachable_keizan_signatory = {
+	has_country_flag = SHL_kyz_pact_signed
+	SHL_kyz_partner_eligible = yes
+	SHL_regional_front_reachable = no
+}
+
+# COUNTRY potential defender; PREV is the recipient of the demand.
+SHL_would_join_refusing_side = {
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = SHL }
+	OR = {
+		tag = PREV
+		is_in_faction_with = PREV
+		is_subject_of = PREV
+		PREV = { is_subject_of = PREV }
+	}
+}
+
+# COUNTRY controller. Access granted by the prospective enemy or its allies
+# cannot carry the army after the declaration.
+SHL_regional_transit_controller = {
+	SHL_rakhma_transit_controller = yes
+	NOT = {
+		OR = {
+			tag = var:SHL_land_opponent
+			is_in_faction_with = var:SHL_land_opponent
+			is_subject_of = var:SHL_land_opponent
+			var:SHL_land_opponent = { is_subject_of = PREV }
+		}
+	}
+}
+
+SHL_regional_launch_controller = {
+	SHL_regional_transit_controller = yes
+	OR = {
+		tag = SHL
+		has_war_with = var:SHL_land_opponent
+	}
+}
+
+# COUNTRY prospective opponent. A continuous path through launch-capable
+# territory into the opponent also detects fronts inside divided states.
+# With neutral transit, verify the last friendly state and the enemy bank
+# separately: a movement permit does not allow an attack from neutral soil.
+SHL_regional_front_reachable = {
+	set_temp_variable = { SHL_land_opponent = THIS }
+	OR = {
+		AND = {
+			capital_scope = { is_fully_controlled_by = PREV }
+			can_build_railway = {
+				start_state = SHL.capital
+				target_state = THIS.capital
+				controller_priority = {
+					base = 1
+					modifier = {
+						add = -2
+						NOT = {
+							OR = {
+								tag = var:SHL_land_opponent
+								SHL_regional_launch_controller = yes
+							}
+						}
+					}
+				}
+			}
+		}
+		any_controlled_state = {
+			is_fully_controlled_by = PREV
+			ADISCORD_south_land_border_state = yes
+			any_neighbor_state = {
+				ADISCORD_south_land_neighbor = yes
+				is_fully_controlled_by = CONTROLLER
+				controller = { SHL_regional_launch_controller = yes }
+				can_build_railway = {
+					start_state = SHL.capital
+					target_state = THIS
+					controller_priority = {
+						base = 1
+						modifier = {
+							add = -2
+							SHL_regional_transit_controller = no
+						}
+					}
+				}
+			}
+		}
 	}
 }
 

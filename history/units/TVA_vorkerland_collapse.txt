@@ -10,6 +10,23 @@ division_template = {
 }
 
 division_template = {
+	name = "Line Infantry Brigade"
+	template_counter = 3
+	division_names_group = ADISCORD_INF_01
+	regiments = {
+		infantry = { x = 0 y = 0 }
+		infantry = { x = 0 y = 1 }
+		infantry = { x = 0 y = 2 }
+		infantry = { x = 1 y = 0 }
+		infantry = { x = 1 y = 1 }
+		infantry = { x = 1 y = 2 }
+	}
+	support = {
+		engineer = { x = 0 y = 0 }
+	}
+}
+
+division_template = {
 	name = "Infiltration Cell"
 	template_counter = 17
 	division_names_group = TVA_COLLAPSE_INF_01
@@ -47,14 +64,14 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 1 }
 		location = 12227
-		division_template = "Collapse Militia"
+		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.18
 		start_equipment_factor = 0.85
 	}
 	division = {
 		division_name = { is_name_ordered = yes name_order = 2 }
 		location = 12227
-		division_template = "Collapse Militia"
+		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.18
 		start_equipment_factor = 0.85
 	}
@@ -75,13 +92,13 @@ units = {
 	division = {
 		division_name = { is_name_ordered = yes name_order = 5 }
 		location = 16400
-		division_template = "Collapse Militia"
+		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.18
 		start_equipment_factor = 0.85
 	}
-	division = { division_name = { is_name_ordered = yes name_order = 6 } location = 16400 division_template = "Collapse Militia" start_experience_factor = 0.20 start_equipment_factor = 0.88 }
-	division = { division_name = { is_name_ordered = yes name_order = 7 } location = 16397 division_template = "Collapse Militia" start_experience_factor = 0.20 start_equipment_factor = 0.88 }
-	division = { division_name = { is_name_ordered = yes name_order = 8 } location = 16397 division_template = "Collapse Militia" start_experience_factor = 0.20 start_equipment_factor = 0.88 }
+	division = { division_name = { is_name_ordered = yes name_order = 6 } location = 16400 division_template = "Line Infantry Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.88 }
+	division = { division_name = { is_name_ordered = yes name_order = 7 } location = 16397 division_template = "Line Infantry Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.88 }
+	division = { division_name = { is_name_ordered = yes name_order = 8 } location = 16397 division_template = "Line Infantry Brigade" start_experience_factor = 0.20 start_equipment_factor = 0.88 }
 	division = { division_name = { is_name_ordered = yes name_order = 9 } location = 12227 division_template = "Mobile Test Group" start_experience_factor = 0.45 start_equipment_factor = 0.95 }
 	division = {
 		division_name = { is_name_ordered = yes name_order = 10 }

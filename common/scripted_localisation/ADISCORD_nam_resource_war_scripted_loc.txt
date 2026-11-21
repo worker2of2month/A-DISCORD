@@ -4663,7 +4663,7 @@ defined_text = {
 defined_text = {
 	name = NAMBoardCellsRifles
 	text = {
-		trigger = { has_completed_focus = NAM_board_holders_underwrite }
+		trigger = { check_variable = { NAM_board_inv_backing = 1 } }
 		localization_key = NAM_board_cells_rifles_750
 	}
 	text = { localization_key = NAM_board_cells_rifles_1500 }
@@ -4672,7 +4672,7 @@ defined_text = {
 defined_text = {
 	name = NAMBoardCellsRiflesRaw
 	text = {
-		trigger = { has_completed_focus = NAM_board_holders_underwrite }
+		trigger = { check_variable = { NAM_board_inv_backing = 1 } }
 		localization_key = NAM_board_cells_rifles_750_raw
 	}
 	text = { localization_key = NAM_board_cells_rifles_1500_raw }
@@ -4689,13 +4689,995 @@ defined_text = {
 }
 
 # STATE district, called as [FROM.NAMCellsRaidLoss] for the raiding country.
+# The council's leaflets on the owner protect ten cells (NAM_board_cells_raid_settle).
 defined_text = {
 	name = NAMCellsRaidLoss
 	text = {
-		trigger = { NAM_board_cells_safehouse_cover = yes }
+		trigger = {
+			NAM_board_cells_safehouse_cover = yes
+			owner = { has_idea = NAM_sub_leaflets }
+		}
+		localization_key = NAM_cells_raid_loss_5
+	}
+	text = {
+		trigger = {
+			OR = {
+				NAM_board_cells_safehouse_cover = yes
+				owner = { has_idea = NAM_sub_leaflets }
+			}
+		}
 		localization_key = NAM_cells_raid_loss_15
 	}
 	text = { localization_key = NAM_cells_raid_loss_25 }
+}
+
+# ----- Council of boards: subversive operations -----
+# Risk texts set temp NAM_sub_k, call the one formula NAM_sub_risk_compute and
+# print its tier; called on the target, as [FROM.NAMSubRiskR1].
+
+# COUNTRY NAM, category description of NAM_board_subversion.
+defined_text = {
+	name = NAMSubReport
+	text = {
+		trigger = {
+			country_exists = EFL
+			EFL = { NAM_sub_target_valid = yes }
+			country_exists = AZH
+			AZH = { NAM_sub_target_valid = yes }
+		}
+		localization_key = NAM_sub_report_both
+	}
+	text = {
+		trigger = {
+			country_exists = EFL
+			EFL = { NAM_sub_target_valid = yes }
+		}
+		localization_key = NAM_sub_report_efl_only
+	}
+	text = { localization_key = NAM_sub_report_azh_only }
+}
+
+# COUNTRY NAM. Optional report lines: each key starts with its own line break.
+defined_text = {
+	name = NAMSubVigilantEfl
+	text = {
+		trigger = {
+			EFL = { has_country_flag = NAM_sub_vigilant }
+		}
+		localization_key = NAM_sub_report_vigilant_line
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMSubVigilantAzh
+	text = {
+		trigger = {
+			AZH = { has_country_flag = NAM_sub_vigilant }
+		}
+		localization_key = NAM_sub_report_vigilant_line
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMSubSightsEfl
+	text = {
+		trigger = {
+			EFL = { has_variable = NAM_sub_sights_days }
+		}
+		localization_key = NAM_sub_report_sights_line
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMSubSightsAzh
+	text = {
+		trigger = {
+			AZH = { has_variable = NAM_sub_sights_days }
+		}
+		localization_key = NAM_sub_report_sights_line
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+defined_text = {
+	name = NAMSubQuarrelLine
+	text = {
+		trigger = { has_country_flag = NAM_sub_quarrel_ready }
+		localization_key = NAM_sub_report_quarrel_line
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+# COUNTRY NAM. The residency operation running against each country.
+defined_text = {
+	name = NAMSubRunningEfl
+	text = {
+		trigger = {
+			EFL = { check_variable = { NAM_sub_op_kind = 1 } }
+		}
+		localization_key = NAM_sub_running_1
+	}
+	text = {
+		trigger = {
+			EFL = { check_variable = { NAM_sub_op_kind = 2 } }
+		}
+		localization_key = NAM_sub_running_2
+	}
+	text = {
+		trigger = {
+			EFL = { check_variable = { NAM_sub_op_kind = 3 } }
+		}
+		localization_key = NAM_sub_running_3
+	}
+	text = {
+		trigger = {
+			EFL = { check_variable = { NAM_sub_op_kind = 4 } }
+		}
+		localization_key = NAM_sub_running_4
+	}
+	text = {
+		trigger = {
+			EFL = { check_variable = { NAM_sub_op_kind = 5 } }
+		}
+		localization_key = NAM_sub_running_5
+	}
+	text = {
+		trigger = {
+			EFL = { check_variable = { NAM_sub_op_kind = 6 } }
+		}
+		localization_key = NAM_sub_running_6
+	}
+	text = { localization_key = NAM_sub_running_free }
+}
+
+defined_text = {
+	name = NAMSubRunningAzh
+	text = {
+		trigger = {
+			AZH = { check_variable = { NAM_sub_op_kind = 1 } }
+		}
+		localization_key = NAM_sub_running_1
+	}
+	text = {
+		trigger = {
+			AZH = { check_variable = { NAM_sub_op_kind = 2 } }
+		}
+		localization_key = NAM_sub_running_2
+	}
+	text = {
+		trigger = {
+			AZH = { check_variable = { NAM_sub_op_kind = 3 } }
+		}
+		localization_key = NAM_sub_running_3
+	}
+	text = {
+		trigger = {
+			AZH = { check_variable = { NAM_sub_op_kind = 4 } }
+		}
+		localization_key = NAM_sub_running_4
+	}
+	text = {
+		trigger = {
+			AZH = { check_variable = { NAM_sub_op_kind = 5 } }
+		}
+		localization_key = NAM_sub_running_5
+	}
+	text = {
+		trigger = {
+			AZH = { check_variable = { NAM_sub_op_kind = 6 } }
+		}
+		localization_key = NAM_sub_running_6
+	}
+	text = { localization_key = NAM_sub_running_free }
+}
+
+# COUNTRY NAM. Strikes on each country, the count of NAM_sub_below_cap.
+defined_text = {
+	name = NAMSubCountEfl
+	text = {
+		trigger = {
+			EFL = { NAM_sub_count_strikes = yes }
+			check_variable = { NAM_sub_count < 1 }
+		}
+		localization_key = NAM_sub_count_0
+	}
+	text = {
+		trigger = {
+			EFL = { NAM_sub_count_strikes = yes }
+			check_variable = { NAM_sub_count < 2 }
+		}
+		localization_key = NAM_sub_count_1
+	}
+	text = {
+		trigger = {
+			EFL = { NAM_sub_count_strikes = yes }
+			check_variable = { NAM_sub_count < 3 }
+		}
+		localization_key = NAM_sub_count_2
+	}
+	text = { localization_key = NAM_sub_count_3 }
+}
+
+defined_text = {
+	name = NAMSubCountAzh
+	text = {
+		trigger = {
+			AZH = { NAM_sub_count_strikes = yes }
+			check_variable = { NAM_sub_count < 1 }
+		}
+		localization_key = NAM_sub_count_0
+	}
+	text = {
+		trigger = {
+			AZH = { NAM_sub_count_strikes = yes }
+			check_variable = { NAM_sub_count < 2 }
+		}
+		localization_key = NAM_sub_count_1
+	}
+	text = {
+		trigger = {
+			AZH = { NAM_sub_count_strikes = yes }
+			check_variable = { NAM_sub_count < 3 }
+		}
+		localization_key = NAM_sub_count_2
+	}
+	text = { localization_key = NAM_sub_count_3 }
+}
+
+# COUNTRY EFL or AZH, [EFL.NAMSubRiskBase]: the council's base risk there,
+# without the bonus of a holder running its own trade.
+defined_text = {
+	name = NAMSubRiskBase
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 6 }
+		}
+		localization_key = NAM_sub_risk_5
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 11 }
+		}
+		localization_key = NAM_sub_risk_10
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 16 }
+		}
+		localization_key = NAM_sub_risk_15
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 21 }
+		}
+		localization_key = NAM_sub_risk_20
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 26 }
+		}
+		localization_key = NAM_sub_risk_25
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 31 }
+		}
+		localization_key = NAM_sub_risk_30
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 36 }
+		}
+		localization_key = NAM_sub_risk_35
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 41 }
+		}
+		localization_key = NAM_sub_risk_40
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 46 }
+		}
+		localization_key = NAM_sub_risk_45
+	}
+	text = { localization_key = NAM_sub_risk_50 }
+}
+
+# COUNTRY EFL or AZH, [FROM.NAMSubRiskR1]: residency operation 1.
+defined_text = {
+	name = NAMSubRiskR1
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 1 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 6 }
+		}
+		localization_key = NAM_sub_risk_5
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 1 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 11 }
+		}
+		localization_key = NAM_sub_risk_10
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 1 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 16 }
+		}
+		localization_key = NAM_sub_risk_15
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 1 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 21 }
+		}
+		localization_key = NAM_sub_risk_20
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 1 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 26 }
+		}
+		localization_key = NAM_sub_risk_25
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 1 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 31 }
+		}
+		localization_key = NAM_sub_risk_30
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 1 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 36 }
+		}
+		localization_key = NAM_sub_risk_35
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 1 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 41 }
+		}
+		localization_key = NAM_sub_risk_40
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 1 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 46 }
+		}
+		localization_key = NAM_sub_risk_45
+	}
+	text = { localization_key = NAM_sub_risk_50 }
+}
+
+# COUNTRY EFL or AZH, [FROM.NAMSubRiskR2]: residency operation 2.
+defined_text = {
+	name = NAMSubRiskR2
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 2 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 6 }
+		}
+		localization_key = NAM_sub_risk_5
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 2 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 11 }
+		}
+		localization_key = NAM_sub_risk_10
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 2 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 16 }
+		}
+		localization_key = NAM_sub_risk_15
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 2 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 21 }
+		}
+		localization_key = NAM_sub_risk_20
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 2 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 26 }
+		}
+		localization_key = NAM_sub_risk_25
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 2 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 31 }
+		}
+		localization_key = NAM_sub_risk_30
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 2 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 36 }
+		}
+		localization_key = NAM_sub_risk_35
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 2 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 41 }
+		}
+		localization_key = NAM_sub_risk_40
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 2 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 46 }
+		}
+		localization_key = NAM_sub_risk_45
+	}
+	text = { localization_key = NAM_sub_risk_50 }
+}
+
+# COUNTRY EFL or AZH, [FROM.NAMSubRiskR3]: residency operation 3.
+defined_text = {
+	name = NAMSubRiskR3
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 3 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 6 }
+		}
+		localization_key = NAM_sub_risk_5
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 3 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 11 }
+		}
+		localization_key = NAM_sub_risk_10
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 3 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 16 }
+		}
+		localization_key = NAM_sub_risk_15
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 3 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 21 }
+		}
+		localization_key = NAM_sub_risk_20
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 3 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 26 }
+		}
+		localization_key = NAM_sub_risk_25
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 3 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 31 }
+		}
+		localization_key = NAM_sub_risk_30
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 3 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 36 }
+		}
+		localization_key = NAM_sub_risk_35
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 3 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 41 }
+		}
+		localization_key = NAM_sub_risk_40
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 3 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 46 }
+		}
+		localization_key = NAM_sub_risk_45
+	}
+	text = { localization_key = NAM_sub_risk_50 }
+}
+
+# COUNTRY EFL or AZH, [FROM.NAMSubRiskR4]: residency operation 4.
+defined_text = {
+	name = NAMSubRiskR4
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 4 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 6 }
+		}
+		localization_key = NAM_sub_risk_5
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 4 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 11 }
+		}
+		localization_key = NAM_sub_risk_10
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 4 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 16 }
+		}
+		localization_key = NAM_sub_risk_15
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 4 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 21 }
+		}
+		localization_key = NAM_sub_risk_20
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 4 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 26 }
+		}
+		localization_key = NAM_sub_risk_25
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 4 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 31 }
+		}
+		localization_key = NAM_sub_risk_30
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 4 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 36 }
+		}
+		localization_key = NAM_sub_risk_35
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 4 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 41 }
+		}
+		localization_key = NAM_sub_risk_40
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 4 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 46 }
+		}
+		localization_key = NAM_sub_risk_45
+	}
+	text = { localization_key = NAM_sub_risk_50 }
+}
+
+# COUNTRY EFL or AZH, [FROM.NAMSubRiskR5]: residency operation 5.
+defined_text = {
+	name = NAMSubRiskR5
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 5 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 6 }
+		}
+		localization_key = NAM_sub_risk_5
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 5 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 11 }
+		}
+		localization_key = NAM_sub_risk_10
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 5 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 16 }
+		}
+		localization_key = NAM_sub_risk_15
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 5 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 21 }
+		}
+		localization_key = NAM_sub_risk_20
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 5 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 26 }
+		}
+		localization_key = NAM_sub_risk_25
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 5 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 31 }
+		}
+		localization_key = NAM_sub_risk_30
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 5 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 36 }
+		}
+		localization_key = NAM_sub_risk_35
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 5 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 41 }
+		}
+		localization_key = NAM_sub_risk_40
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 5 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 46 }
+		}
+		localization_key = NAM_sub_risk_45
+	}
+	text = { localization_key = NAM_sub_risk_50 }
+}
+
+# COUNTRY EFL or AZH, [FROM.NAMSubRiskR6]: residency operation 6.
+defined_text = {
+	name = NAMSubRiskR6
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 6 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 6 }
+		}
+		localization_key = NAM_sub_risk_5
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 6 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 11 }
+		}
+		localization_key = NAM_sub_risk_10
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 6 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 16 }
+		}
+		localization_key = NAM_sub_risk_15
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 6 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 21 }
+		}
+		localization_key = NAM_sub_risk_20
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 6 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 26 }
+		}
+		localization_key = NAM_sub_risk_25
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 6 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 31 }
+		}
+		localization_key = NAM_sub_risk_30
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 6 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 36 }
+		}
+		localization_key = NAM_sub_risk_35
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 6 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 41 }
+		}
+		localization_key = NAM_sub_risk_40
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 6 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 46 }
+		}
+		localization_key = NAM_sub_risk_45
+	}
+	text = { localization_key = NAM_sub_risk_50 }
+}
+
+# COUNTRY EFL or AZH, [FROM.NAMSubRiskJ1]: the leaflets.
+defined_text = {
+	name = NAMSubRiskJ1
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 6 }
+		}
+		localization_key = NAM_sub_risk_5
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 11 }
+		}
+		localization_key = NAM_sub_risk_10
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 16 }
+		}
+		localization_key = NAM_sub_risk_15
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 21 }
+		}
+		localization_key = NAM_sub_risk_20
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 26 }
+		}
+		localization_key = NAM_sub_risk_25
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 31 }
+		}
+		localization_key = NAM_sub_risk_30
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 36 }
+		}
+		localization_key = NAM_sub_risk_35
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 41 }
+		}
+		localization_key = NAM_sub_risk_40
+	}
+	text = {
+		trigger = {
+			set_temp_variable = { var = NAM_sub_k value = 7 }
+			NAM_sub_risk_compute = yes
+			check_variable = { NAM_sub_risk < 46 }
+		}
+		localization_key = NAM_sub_risk_45
+	}
+	text = { localization_key = NAM_sub_risk_50 }
+}
+
+# COUNTRY NAM, [NAMSubRiskJ2]: the quarrel, read on the coalition leader.
+defined_text = {
+	name = NAMSubRiskJ2
+	text = {
+		trigger = {
+			NAM_sub_quarrel_risk = yes
+			check_variable = { NAM_sub_risk < 6 }
+		}
+		localization_key = NAM_sub_risk_5
+	}
+	text = {
+		trigger = {
+			NAM_sub_quarrel_risk = yes
+			check_variable = { NAM_sub_risk < 11 }
+		}
+		localization_key = NAM_sub_risk_10
+	}
+	text = {
+		trigger = {
+			NAM_sub_quarrel_risk = yes
+			check_variable = { NAM_sub_risk < 16 }
+		}
+		localization_key = NAM_sub_risk_15
+	}
+	text = {
+		trigger = {
+			NAM_sub_quarrel_risk = yes
+			check_variable = { NAM_sub_risk < 21 }
+		}
+		localization_key = NAM_sub_risk_20
+	}
+	text = {
+		trigger = {
+			NAM_sub_quarrel_risk = yes
+			check_variable = { NAM_sub_risk < 26 }
+		}
+		localization_key = NAM_sub_risk_25
+	}
+	text = {
+		trigger = {
+			NAM_sub_quarrel_risk = yes
+			check_variable = { NAM_sub_risk < 31 }
+		}
+		localization_key = NAM_sub_risk_30
+	}
+	text = {
+		trigger = {
+			NAM_sub_quarrel_risk = yes
+			check_variable = { NAM_sub_risk < 36 }
+		}
+		localization_key = NAM_sub_risk_35
+	}
+	text = {
+		trigger = {
+			NAM_sub_quarrel_risk = yes
+			check_variable = { NAM_sub_risk < 41 }
+		}
+		localization_key = NAM_sub_risk_40
+	}
+	text = {
+		trigger = {
+			NAM_sub_quarrel_risk = yes
+			check_variable = { NAM_sub_risk < 46 }
+		}
+		localization_key = NAM_sub_risk_45
+	}
+	text = { localization_key = NAM_sub_risk_50 }
+}
+
+# COUNTRY NAM. The chairing company's trust row of the council operations.
+defined_text = {
+	name = NAMSubChairGainRow
+	text = {
+		trigger = { check_variable = { NAM_board_chair > 0 } }
+		localization_key = NAM_sub_chair_gain_row
+	}
+	text = { localization_key = NAM_sub_chair_none_row }
+}
+
+defined_text = {
+	name = NAMSubChairLossRow
+	text = {
+		trigger = { check_variable = { NAM_board_chair > 0 } }
+		localization_key = NAM_sub_chair_loss_row
+	}
+	text = { localization_key = NAM_sub_chair_none_row }
+}
+
+# COUNTRY NAM, event 135: the company blamed for the exposure.
+defined_text = {
+	name = NAMSubExposedRunner
+	text = {
+		trigger = { check_variable = { NAM_sub_exposed_runner = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_sub_exposed_runner = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_sub_exposed_runner = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_sub_exposed_runner = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_sub_exposed_runner = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_sub_exposed_runner = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_bw_empty }
+}
+
+# COUNTRY NAM, event 135: the country whose police made the arrest.
+defined_text = {
+	name = NAMSubExposedCountry
+	text = {
+		trigger = { check_variable = { NAM_sub_exposed_target = 2 } }
+		localization_key = NAM_sub_exposed_country_azh
+	}
+	text = { localization_key = NAM_sub_exposed_country_efl }
 }
 
 # STATE district, called as [67.NAMBoardCellsTier]: what the district does at
@@ -4706,15 +5688,10 @@ defined_text = {
 		trigger = {
 			check_variable = { NAM_cells > 69 }
 			OR = {
-				AND = {
-					state = 688
-					NAM = { has_completed_focus = NAM_board_northern_safehouses }
-				}
-				AND = {
-					state = 700
-					NAM = { has_completed_focus = NAM_board_southern_safehouses }
-				}
+				state = 688
+				state = 700
 			}
+			NAM = { has_country_flag = NAM_board_partition_fixed }
 		}
 		localization_key = NAM_board_cells_tier_port
 	}
@@ -4891,6 +5868,298 @@ defined_text = {
 	text = { localization_key = NAM_cells_district_holder_azh }
 }
 
+# COUNTRY NAM, event 130 before the partition night: the vote leader pays for an
+# Eflor district and the runner-up for an Azhar district, by the owner as the
+# event's answer reads it.
+defined_text = {
+	name = NAMCellsDistrictLeader
+	text = {
+		trigger = {
+			event_target:NAM_board_cells_district = { is_owned_by = EFL }
+		}
+		localization_key = NAM_cells_district_leader_efl
+	}
+	text = { localization_key = NAM_cells_district_leader_azh }
+}
+
+# ----- Council of boards: war of return -----
+# COUNTRY NAM. The company of the boycott measure: the stored target while event
+# 165 is open, otherwise the lowest-numbered boycotting company, as
+# NAM_rtw_find_boycott will choose it.
+defined_text = {
+	name = NAMRtwBoycottTargetName
+	text = {
+		trigger = { check_variable = { NAM_rtw_boycott_target = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_rtw_boycott_target = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_rtw_boycott_target = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_rtw_boycott_target = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_rtw_boycott_target = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_rtw_boycott_target = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_stance^1 value = -1 compare = equals } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_stance^2 value = -1 compare = equals } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_stance^3 value = -1 compare = equals } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_stance^4 value = -1 compare = equals } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_stance^5 value = -1 compare = equals } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { var = NAM_board_stance^6 value = -1 compare = equals } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_board_rank_none }
+}
+
+# COUNTRY NAM. The price of the boycott measure follows the form of rule.
+defined_text = {
+	name = NAMRtwBoycottCost
+	text = {
+		trigger = { NAM_rtw_direct_rule = yes }
+		localization_key = NAM_rtw_boycott_measure_power_cost
+	}
+	text = { localization_key = NAM_rtw_boycott_measure_money_cost }
+}
+
+defined_text = {
+	name = NAMRtwBoycottCostBlocked
+	text = {
+		trigger = { NAM_rtw_direct_rule = yes }
+		localization_key = NAM_rtw_boycott_measure_power_cost_blocked
+	}
+	text = { localization_key = NAM_rtw_boycott_measure_money_cost_blocked }
+}
+
+defined_text = {
+	name = NAMRtwBoycottCostTooltip
+	text = {
+		trigger = { NAM_rtw_direct_rule = yes }
+		localization_key = NAM_rtw_boycott_measure_power_cost_tooltip
+	}
+	text = { localization_key = NAM_rtw_boycott_measure_money_cost_tooltip }
+}
+
+# COUNTRY NAM. Report of the category NAM_rtw_war; reads variables and flags only.
+defined_text = {
+	name = NAMRtwWarReport
+	text = { localization_key = NAM_rtw_war_report }
+}
+
+# COUNTRY NAM. The running order and its days left.
+defined_text = {
+	name = NAMRtwOrderLine
+	text = {
+		trigger = { has_active_mission = NAM_rtw_capital_order_mission }
+		localization_key = NAM_rtw_report_capital_order
+	}
+	text = {
+		trigger = { has_active_mission = NAM_rtw_order_mission }
+		localization_key = NAM_rtw_report_order
+	}
+	text = { localization_key = NAM_rtw_report_no_order }
+}
+
+# COUNTRY NAM. The running order's target, else the last one (events 166 and 167).
+defined_text = {
+	name = NAMRtwOrderTargetName
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_rtw_order_target = 688 }
+				AND = {
+					NOT = { has_variable = NAM_rtw_order_target }
+					check_variable = { NAM_rtw_order_last = 688 }
+				}
+			}
+		}
+		localization_key = NAM_rtw_target_688
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_rtw_order_target = 67 }
+				AND = {
+					NOT = { has_variable = NAM_rtw_order_target }
+					check_variable = { NAM_rtw_order_last = 67 }
+				}
+			}
+		}
+		localization_key = NAM_rtw_target_67
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_rtw_order_target = 701 }
+				AND = {
+					NOT = { has_variable = NAM_rtw_order_target }
+					check_variable = { NAM_rtw_order_last = 701 }
+				}
+			}
+		}
+		localization_key = NAM_rtw_target_701
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_rtw_order_target = 700 }
+				AND = {
+					NOT = { has_variable = NAM_rtw_order_target }
+					check_variable = { NAM_rtw_order_last = 700 }
+				}
+			}
+		}
+		localization_key = NAM_rtw_target_700
+	}
+	text = {
+		trigger = {
+			OR = {
+				check_variable = { NAM_rtw_order_target = 690 }
+				AND = {
+					NOT = { has_variable = NAM_rtw_order_target }
+					check_variable = { NAM_rtw_order_last = 690 }
+				}
+			}
+		}
+		localization_key = NAM_rtw_target_690
+	}
+	text = { localization_key = NAM_rtw_target_69 }
+}
+
+# COUNTRY NAM. One front of the war: at war, beaten, under the council or out.
+defined_text = {
+	name = NAMRtwFrontEfl
+	text = {
+		trigger = {
+			EFL = {
+				exists = yes
+				is_subject_of = NAM
+			}
+		}
+		localization_key = NAM_rtw_report_front_ruled
+	}
+	text = {
+		trigger = {
+			EFL = {
+				exists = yes
+				has_capitulated = yes
+			}
+		}
+		localization_key = NAM_rtw_report_front_beaten
+	}
+	text = {
+		trigger = {
+			EFL = {
+				exists = yes
+				has_war_with = NAM
+			}
+		}
+		localization_key = NAM_rtw_report_front_fighting
+	}
+	text = { localization_key = NAM_rtw_report_front_out }
+}
+
+defined_text = {
+	name = NAMRtwFrontAzh
+	text = {
+		trigger = {
+			AZH = {
+				exists = yes
+				is_subject_of = NAM
+			}
+		}
+		localization_key = NAM_rtw_report_front_ruled
+	}
+	text = {
+		trigger = {
+			AZH = {
+				exists = yes
+				has_capitulated = yes
+			}
+		}
+		localization_key = NAM_rtw_report_front_beaten
+	}
+	text = {
+		trigger = {
+			AZH = {
+				exists = yes
+				has_war_with = NAM
+			}
+		}
+		localization_key = NAM_rtw_report_front_fighting
+	}
+	text = { localization_key = NAM_rtw_report_front_out }
+}
+
+# COUNTRY NAM. The form of rule after the victory.
+defined_text = {
+	name = NAMRtwRuleLine
+	text = {
+		trigger = { NAM_rtw_direct_rule = yes }
+		localization_key = NAM_rtw_report_rule_direct
+	}
+	text = {
+		trigger = { has_completed_focus = NAM_rtw_holders_war }
+		localization_key = NAM_rtw_report_rule_holders
+	}
+	text = { localization_key = NAM_rtw_report_rule_default }
+}
+
+# COUNTRY NAM. The political power price of the provisional administration.
+defined_text = {
+	name = NAMRtwAdminCost
+	text = {
+		trigger = { has_completed_focus = NAM_rtw_amnesty }
+		localization_key = NAM_rtw_provisional_admin_cost_amnesty
+	}
+	text = { localization_key = NAM_rtw_provisional_admin_cost_base }
+}
+
+defined_text = {
+	name = NAMRtwAdminCostBlocked
+	text = {
+		trigger = { has_completed_focus = NAM_rtw_amnesty }
+		localization_key = NAM_rtw_provisional_admin_cost_amnesty_blocked
+	}
+	text = { localization_key = NAM_rtw_provisional_admin_cost_base_blocked }
+}
+
+defined_text = {
+	name = NAMRtwAdminCostTooltip
+	text = {
+		trigger = { has_completed_focus = NAM_rtw_amnesty }
+		localization_key = NAM_rtw_provisional_admin_cost_amnesty_tooltip
+	}
+	text = { localization_key = NAM_rtw_provisional_admin_cost_base_tooltip }
+}
+
 # ----- Basin window -----
 # COUNTRY NAM unless noted. The header gauge follows the campaign phase:
 # restitution pressure before the war, seal discipline during and after it.
@@ -5063,7 +6332,7 @@ defined_text = {
 defined_text = {
 	name = NAMGetRivalBalanceSource
 	text = {
-		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_nam_victory }
 		localization_key = NAM_rival_balance_mandate
 	}
 	text = { localization_key = NAM_rival_balance_ladder }
@@ -5084,13 +6353,17 @@ defined_text = {
 		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
 		localization_key = NAM_bw_future_course_tt
 	}
+	text = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_nam_victory }
+		localization_key = NAM_prewar_mandate_result_tt
+	}
 	text = { localization_key = NAM_bw_ladder_tt_prewar }
 }
 
 defined_text = {
 	name = NAMGetBasinBalanceLabel
 	text = {
-		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_nam_victory }
 		localization_key = NAM_bw_future_course_short
 	}
 	text = { localization_key = NAM_bw_ladder_short_prewar }
@@ -5101,6 +6374,10 @@ defined_text = {
 	text = {
 		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
 		localization_key = NAM_bw_future_course_tt
+	}
+	text = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_nam_victory }
+		localization_key = NAM_prewar_mandate_result_tt
 	}
 	text = { localization_key = NAM_bw_ladder_full_tt_prewar }
 }
@@ -5117,7 +6394,7 @@ defined_text = {
 defined_text = {
 	name = NAMGetPillarBalanceLabel
 	text = {
-		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_nam_victory }
 		localization_key = NAM_bw_future_course_short
 	}
 	text = { localization_key = NAM_bw_balance_hint_prewar }
@@ -5126,7 +6403,7 @@ defined_text = {
 defined_text = {
 	name = NAMGetUndergroundVerticalPressure
 	text = {
-		trigger = { has_power_balance = { id = NAM_postwar_future_bop } }
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_nam_victory }
 		localization_key = NAM_underground_pressure_mandate
 	}
 	text = { localization_key = NAM_underground_pressure_ladder }
@@ -5179,6 +6456,20 @@ defined_text = {
 			}
 		}
 		localization_key = NAM_conservatives_dominance
+	}
+	text = {
+		trigger = {
+			has_global_flag = ADISCORD_nam_resource_war_nam_victory
+			NAM_prewar_district_mandate = yes
+		}
+		localization_key = NAM_prewar_course_districts
+	}
+	text = {
+		trigger = {
+			has_global_flag = ADISCORD_nam_resource_war_nam_victory
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		localization_key = NAM_prewar_course_service
 	}
 	text = {
 		trigger = { NOT = { NAM_ladder_formed = yes } }
@@ -6393,16 +7684,11 @@ defined_text = {
 	}
 }
 
-# Permanent border works retain their construction report after the resource war.
 defined_text = {
 	name = NAMGetMobilisationDescription
 	text = {
 		trigger = { NAM_line_programme_open = yes }
 		localization_key = NAM_bw_empty
-	}
-	text = {
-		trigger = { NAM_permanent_lines_authorized = yes }
-		localization_key = NAM_mobilisation_border_desc
 	}
 	text = { localization_key = NAM_mobilisation_orders_desc }
 }
@@ -7201,11 +8487,11 @@ defined_text = {
 	text = { localization_key = NAM_judas_weber_spoils_1 }
 }
 
-# Rejection and resolution failure: the sanction is shorter after political_debt_register.
+# Rejection and resolution failure: the sanction is shorter after subsidised_opposition.
 defined_text = {
 	name = NAMBoardRejectTerms
 	text = {
-		trigger = { has_completed_focus = NAM_board_political_debt_register }
+		trigger = { has_completed_focus = NAM_board_subsidised_opposition }
 		localization_key = NAM_board_reject_short_tt
 	}
 	text = { localization_key = NAM_board_reject_tt }
@@ -7214,7 +8500,7 @@ defined_text = {
 defined_text = {
 	name = NAMBoardResolutionFailureTerms
 	text = {
-		trigger = { has_completed_focus = NAM_board_political_debt_register }
+		trigger = { has_completed_focus = NAM_board_subsidised_opposition }
 		localization_key = NAM_board_resolution_failure_short_tt
 	}
 	text = { localization_key = NAM_board_resolution_failure_tt }
@@ -8094,7 +9380,7 @@ defined_text = {
 defined_text = {
 	name = NAMIslSoundingsGain
 	text = {
-		trigger = { has_completed_focus = NAM_board_loading_schedules }
+		trigger = { has_completed_focus = NAM_board_company_docks }
 		localization_key = NAM_isl_gain_20
 	}
 	text = { localization_key = NAM_isl_gain_15 }

@@ -663,6 +663,7 @@ NAM_clear_mainland_national_spirits = {
 		NAM_board_preview_research
 		NAM_board_preview_residency
 		NAM_board_preview_residency_politics
+		NAM_board_preview_rtw_arsenals
 		NAM_board_preview_society
 		NAM_board_preview_squares
 		NAM_board_preview_warrant
@@ -801,6 +802,27 @@ NAM_clear_mainland_national_spirits = {
 		NAM_pw_water_intakes_administration_preview
 		NAM_rebel_depot_maps
 		NAM_reparations_to_svetlogorye
+		NAM_rtw_bond_default
+		NAM_rtw_bought_colonels
+		NAM_rtw_capital_assault
+		NAM_rtw_capital_fallen
+		NAM_rtw_coal_blockade
+		NAM_rtw_convoy_line
+		NAM_rtw_families_turn
+		NAM_rtw_field_oil
+		NAM_rtw_fields_lost
+		NAM_rtw_front_school
+		NAM_rtw_harbour_spirit
+		NAM_rtw_hill_spirit
+		NAM_rtw_hill_villages
+		NAM_rtw_home_front_strain
+		NAM_rtw_last_storm
+		NAM_rtw_levy_drained
+		NAM_rtw_loren_crisis
+		NAM_rtw_order_failed
+		NAM_rtw_reparations
+		NAM_rtw_svetlogorsk_strike
+		NAM_rtw_terms_published
 		NAM_ruined_economy
 		NAM_seal_junta
 		NAM_south_convoy_blockade
@@ -814,6 +836,14 @@ NAM_clear_mainland_national_spirits = {
 		NAM_spirit_prag_republic
 		NAM_spirit_service_republic
 		NAM_state_fuel_reserve
+		NAM_sub_bad_castings
+		NAM_sub_bad_sights
+		NAM_sub_bond_crash
+		NAM_sub_dock_fire
+		NAM_sub_dry_tanks
+		NAM_sub_labour_strike
+		NAM_sub_leaflets
+		NAM_sub_trophy_quarrel
 		NAM_sw_armoured_spearheads_idea
 		NAM_sw_attrition_wall_idea
 		NAM_sw_burned_wells_idea

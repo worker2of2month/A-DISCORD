@@ -3986,7 +3986,7 @@ BRANCHES = (
                 "battlefield_medical_drones",
                 "Медицинские дроны",
                 "Battlefield Medical Drones",
-                "ADISCORD_equipment_medical_drone",
+                "tech_field_hospital2",
                 2161,
                 (
                     "field_hospital = { casualty_trickleback = 0.07 }",
@@ -3996,7 +3996,7 @@ BRANCHES = (
                 "trauma_registry_networks",
                 "Полевой учёт ранений",
                 "Field Casualty Records",
-                "ADISCORD_equipment_casualty_monitor",
+                "tech_field_hospital3",
                 2162,
                 (
                     "field_hospital = { experience_loss_factor = -0.06 }",
@@ -9218,10 +9218,8 @@ INFANTRY_COMPACT_ICONS = {
         ),
         "ADISCORD_antitank_11_loitering_munition": ("loitering_munition_teams",),
         "ADISCORD_equipment_mortar": ("autonomous_mortar_sections",),
-        "ADISCORD_equipment_medical_drone": ("battlefield_medical_drones",),
         "ADISCORD_equipment_insertion_pod": ("high_altitude_insertion_capsules",),
         "ADISCORD_equipment_hearing_protection": ("active_hearing_protection",),
-        "ADISCORD_equipment_casualty_monitor": ("autonomous_casualty_monitors",),
         "ADISCORD_equipment_life_support": ("closed_loop_combat_life_support",),
         "ADISCORD_equipment_ammunition_carrier": ("distributed_ammunition_carriers",),
         "ADISCORD_equipment_drone_jammer": ("microdrone_suppression_nets",),
@@ -9262,8 +9260,6 @@ WEAPON_CATEGORY_ICONS.update(
         "autonomous_support_weapons": "ADISCORD_squad_04_advanced_fire_support",
         "robotic_heavy_weapon_teams": "ADISCORD_squad_04_advanced_fire_support",
         "swarm_fireteams": "ADISCORD_squad_04_advanced_fire_support",
-        "electrothermal_ignition": "ADISCORD_weapon_03_standardized_battle_rifle",
-        "biometric_trigger_locks": "ADISCORD_weapon_03_standardized_battle_rifle",
         "field_workshop_tools": EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_field_workshop_tools"],
         "drone_delivered_repair_spares": EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_drone_delivered_repair_spares"],
         "predictive_parts_prepositioning": EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_predictive_parts_prepositioning"],
@@ -11185,12 +11181,74 @@ def write_starting_technology_profile_manifest() -> None:
     path.write_text(render_starting_technology_profile_manifest(), encoding="utf-8")
 
 
+INFANTRY_RESEARCH_ART = {
+    "electrothermal_ignition", "biometric_trigger_locks",
+    "rifling_alignment", "bolt_head_fitting",
+    "chamber_polishing", "magazine_feed_geometry",
+    "extractor_heat_treatment", "recoil_spring_tuning",
+    "bolt_carrier_guides", "trigger_reset_geometry",
+    "networked_weapon_sights", "rangefinder_zeroing",
+    "sight_mount_repeatability", "integrated_target_designation",
+    "gas_regulator_sealing", "bore_plating_control",
+    "chamber_erosion_control", "barrel_heat_treatment",
+    "buffered_bolt_travel", "muzzle_compensation_ports",
+    "drone_guided_support_fire", "networked_command_terminals",
+    "cooperative_target_handoff", "autonomous_mortar_sections",
+    "adaptive_spectrum_concealment", "adaptive_radiation_shielding",
+    "closed_loop_combat_life_support", "self_sealing_combat_skins",
+    "assault_infantry_formations", "assault_group_coordination",
+    "assault_fire_suppression", "assault_battle_control",
+    "assault_forward_supply", "assault_coordinated_attack",
+    "fieldcraft_manuals", "urban_breaching",
+    "radiation_patrols", "subterranean_route_reconnaissance",
+    "combat_recon_drones", "urban_vertical_access_rigs",
+    "low_observable_infiltration_suits", "autonomous_scout_microdrones",
+    "vertical_assault_training", "multispectral_concealment_discipline",
+    "augmented_special_forces",
+}
+
+
+TANK_CARD_UNLOCKS = {
+    tech: kind
+    for kind, models in TANK_CARD_EQUIPMENT.items()
+    for tech, equipment in ENABLE_EQUIPMENT.items()
+    if any(model in models for model in equipment)
+}
+
+
+RESEARCH_ART_FOLDERS = {
+    "electronics": "electronics_folder",
+    "industry": "industry_folder",
+    "infantry": "infantry_folder",
+    "support": "support_folder",
+    "air": "air_techs_folder",
+    "armor": "armour_folder",
+    "artillery": "artillery_folder",
+    "naval": "naval_folder",
+    "special": SPECIAL_TECHNOLOGY_FOLDER,
+}
+
+SHARED_SHIELD_ART = {
+    "kefreyt_shield_special_forces", "compact_shield_generators", "adaptive_power_shields",
+}
+
+
+def tab_technology_textures(tab: str) -> dict[str, str]:
+    return {
+        tech.key: f"gfx/interface/technologies/{tab}/{tech.key}.png"
+        for branch in BRANCHES
+        if RESEARCH_ART_FOLDERS[tab] in branch.folders
+        for tech in branch.techs
+        if tab != "infantry" or tech.key in INFANTRY_RESEARCH_ART
+        if tab != "armor" or tech.id not in TANK_CARD_UNLOCKS
+        if tab != "naval" or tech.icon not in NAVAL_HULL_ART
+        if tab != "special" or tech.key not in SHARED_SHIELD_ART
+    }
+
+
 CUSTOM_TECH_TEXTURES = {
-    "sectional_pontoon_trains": "gfx/interface/abilitylist/ability_makeshift_bridges.dds",
-    "mobile_bridge_columns": "gfx/interface/abilitylist/ability_makeshift_bridges.dds",
-    "kefreyt_shield_special_forces": "gfx/interface/technologies/ADISCORD_power_shield_equipment.dds",
-    "compact_shield_generators": "gfx/interface/technologies/ADISCORD_power_shield_equipment.dds",
-    "adaptive_power_shields": "gfx/interface/technologies/ADISCORD_power_shield_equipment.dds",
+    **{key: path for tab in RESEARCH_ART_FOLDERS for key, path in tab_technology_textures(tab).items()},
+    **{key: "gfx/interface/technologies/ADISCORD_power_shield_equipment.dds" for key in SHARED_SHIELD_ART},
     "recovered_medium_chassis": "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank.dds",
     "recovered_shaped_charge_cells": "gfx/interface/technologies/ADISCORD_antitank_01_incendiary_bottle.dds",
     "disposable_launcher_standards": "gfx/interface/technologies/ADISCORD_antitank_02_satchel_charge.dds",
@@ -11457,14 +11515,6 @@ TANK_CARDS_BEGIN = "\t# BEGIN ADISCORD country tank cards\n"
 TANK_CARDS_END = "\t# END ADISCORD country tank cards\n"
 
 
-TANK_CARD_UNLOCKS = {
-    tech: kind
-    for kind, models in TANK_CARD_EQUIPMENT.items()
-    for tech, equipment in ENABLE_EQUIPMENT.items()
-    if any(model in models for model in equipment)
-}
-
-
 def tank_card_countries() -> list[str]:
     campaigns = json.loads((ROOT / "tools/data/campaign_selection.json").read_text(encoding="utf-8"))
     return sorted(set(campaigns) | {"STS", "SRP", "NOD"})
@@ -11474,16 +11524,19 @@ def tank_card_texture(kind: str, country: str = "default") -> str:
     return f"gfx/interface/technologies/armor/{country}/{kind}.png"
 
 
-def tank_gfx_output() -> bytes:
-    content = vehicle_card_gfx_output(TANK_CARDS_BEGIN, TANK_CARDS_END, country_tank_gfx_entries())
-    for tech, kind in TANK_CARD_UNLOCKS.items():
+def with_research_textures(content: bytes, textures: dict[str, str]) -> bytes:
+    for tech, texture in textures.items():
         sprite = f"GFX_{tech}_medium".encode()
         pattern = rb'(name\s*=\s*"' + re.escape(sprite) + rb'"\s+textureFile\s*=\s*")[^"]+(")'
-        texture = tank_card_texture(kind).encode()
-        content, count = re.subn(pattern, lambda m: m[1] + texture + m[2], content)
+        content, count = re.subn(pattern, lambda m: m[1] + texture.encode() + m[2], content)
         if count != 1:
             raise ValueError(f"Expected one research sprite for {tech}, found {count}")
     return content
+
+
+def tank_gfx_output() -> bytes:
+    content = vehicle_card_gfx_output(TANK_CARDS_BEGIN, TANK_CARDS_END, country_tank_gfx_entries())
+    return with_research_textures(content, {tech: tank_card_texture(kind) for tech, kind in TANK_CARD_UNLOCKS.items()})
 
 
 def country_tank_gfx_entries() -> str:
@@ -11620,10 +11673,7 @@ def infantry_card_outputs() -> dict[Path, bytes]:
         ROOT / "interface/ADISCORD_technologies.gfx": {
             f"GFX_{tech}_medium": shield_texture
             for tech in ENABLE_EQUIPMENT
-            if tech.removeprefix("ADISCORD_tech_") in {
-                "kefreyt_shield_special_forces", "compact_shield_generators",
-                "adaptive_power_shields",
-            }
+            if tech.removeprefix("ADISCORD_tech_") in SHARED_SHIELD_ART
         },
         ROOT / "interface/ADISCORD_subuniticons.gfx": {
             "GFX_ADISCORD_power_shield_equipment_medium": shield_texture,
@@ -11818,17 +11868,6 @@ def write_gfx() -> None:
                     if texture.startswith("gfx/")
                     else f"gfx/interface/technologies/{texture}.dds"
                 )
-                if tech.key in {
-                    "electrothermal_ignition",
-                    "biometric_trigger_locks",
-                }:
-                    source = ROOT / texture_file
-                    target = source.with_name(source.stem + "_card.dds")
-                    with Image.open(source) as original:
-                        card = original.convert("RGBA")
-                        card.thumbnail((64, 64), Image.Resampling.LANCZOS)
-                        card.save(target, format="DDS")
-                    texture_file = target.relative_to(ROOT).as_posix()
                 entries.append(
                     "\tSpriteType = {\n"
                     f"\t\tname = \"{sprite}\"\n"
@@ -11865,11 +11904,7 @@ def weapon_category_gfx_output(branch_key: str | None = None) -> str:
                 continue
             sprite = f"GFX_{tech.id}_medium"
             pattern = rf'\tSpriteType = \{{\s*name = "{re.escape(sprite)}"[^{{}}]*\}}'
-            texture = (
-                f"gfx/interface/technologies/{icons[tech.key]}.dds"
-            )
-            if tech.key in {"electrothermal_ignition", "biometric_trigger_locks"}:
-                texture = texture.removesuffix(".dds") + "_card.dds"
+            texture = CUSTOM_TECH_TEXTURES.get(tech.key, f"gfx/interface/technologies/{icons[tech.key]}.dds")
             replacement = (
                 "\tSpriteType = {\n"
                 f'\t\tname = "{sprite}"\n'
@@ -13053,6 +13088,32 @@ def render_special_technology_tab() -> str:
     )
 
 
+EQUIPMENT_CARD_FOLDERS = {
+    "armor": ("armour_folder", "nsb_armour_folder"),
+    "air": ("air_techs_folder", "bba_air_techs_folder"),
+    "artillery": ("artillery_folder",),
+}
+
+
+def center_equipment_card_icons(text: str, folders: tuple[str, ...]) -> str:
+    for folder in folders:
+        name = f"techtree_{folder}_item"
+        head = re.search(rf'containerWindowType\s*=\s*\{{\s*name\s*=\s*"{name}"', text)
+        if head is None:
+            raise ValueError(f"Missing equipment card {name}")
+        end = find_block_end(text, text.index("{", head.start()))
+        card = text[head.start():end]
+        card, sizes = re.subn(r'size\s*=\s*\{\s*width\s*=\s*\d+\s+height\s*=\s*\d+\s*\}',
+                              "size = { width = 183 height = 84 }", card, count=1)
+        # The title uses the top band of the shared 183x84 background.
+        card, icons = re.subn(r'(name\s*=\s*"Icon"\s+position\s*=\s*)\{[^}]+\}',
+                              r'\g<1>{ x=91 y=50 }', card)
+        if sizes != 1 or icons != 1:
+            raise ValueError(f"Expected one size and one equipment icon in {name}")
+        text = text[:head.start()] + card + text[end:]
+    return text
+
+
 def render_tree_gui() -> str:
     base_gui = BASE_GAME / "interface" / "countrytechtreeview.gui"
     source = (
@@ -13150,6 +13211,8 @@ def render_tree_gui() -> str:
         replacements.append((start, end, card))
     for start, end, replacement in sorted(replacements, reverse=True):
         text = text[:start] + replacement + text[end:]
+    for folders in EQUIPMENT_CARD_FOLDERS.values():
+        text = center_equipment_card_icons(text, folders)
     text = apply_tree_skin(text)
     return text
 
@@ -13218,10 +13281,11 @@ def civil_technology_outputs() -> dict[Path, bytes]:
         for index, tech in enumerate(branch.techs):
             name = f"GFX_{tech.id}_medium"
             icon = icon_for_technology(branch, index)
+            texture = CUSTOM_TECH_TEXTURES.get(tech.key, f"gfx/interface/technologies/{icon}.dds")
             sprite = (
                 "\tSpriteType = {\n"
                 f'\t\tname = "{name}"\n'
-                f'\t\ttextureFile = "gfx/interface/technologies/{icon}.dds"\n'
+                f'\t\ttextureFile = "{texture}"\n'
                 "\t}"
             )
             pattern = rf'(?im)^\tSpriteType\s*=\s*\{{\s*name\s*=\s*"{re.escape(name)}"[^}}]*\}}'
@@ -13479,11 +13543,37 @@ def main() -> int:
         "--apc-icons-only", action="store_true",
         help="check or apply country APC sprites without rebuilding other UI",
     )
+    artwork_modes = parser.add_mutually_exclusive_group()
+    for tab in RESEARCH_ART_FOLDERS:
+        artwork_modes.add_argument(
+            f"--{tab}-icons-only", action="store_const", const=tab, dest="artwork_tab",
+            help=f"check or apply research artwork for the entire {tab} tab",
+        )
     parser.add_argument(
         "--tank-icons-only", action="store_true",
         help="check tank PNGs and refresh their research and production sprites",
     )
     args = parser.parse_args()
+    if args.artwork_tab:
+        if any(value for key, value in vars(args).items()
+               if key not in {"check", "apply", "artwork_tab", "aircraft_role"}) or args.aircraft_role != "all":
+            parser.error(f"--{args.artwork_tab}-icons-only cannot be combined with other partial output modes")
+        path = ROOT / "interface/ADISCORD_technologies.gfx"
+        textures = {f"ADISCORD_tech_{key}": texture for key, texture in tab_technology_textures(args.artwork_tab).items()}
+        original = path.read_bytes()
+        content = with_research_textures(original, textures)
+        outputs = {path: content}
+        if args.artwork_tab in EQUIPMENT_CARD_FOLDERS:
+            gui = ROOT / "interface/countrytechtreeview.gui"
+            text = gui.read_bytes().decode("utf-8")
+            outputs[gui] = center_equipment_card_icons(text, EQUIPMENT_CARD_FOLDERS[args.artwork_tab]).encode("utf-8")
+        changed = [target for target, data in outputs.items() if target.read_bytes() != data]
+        for target in changed:
+            if args.apply:
+                target.write_bytes(outputs[target])
+            print(target.relative_to(ROOT).as_posix())
+        print(f"{args.artwork_tab.capitalize()} artwork {'updated' if args.apply else 'different'}: {len(changed)} file(s)")
+        return int(bool(changed) and not args.apply)
     if args.tank_icons_only:
         if any(value for key, value in vars(args).items()
                if key not in {"check", "apply", "tank_icons_only", "aircraft_role"}) or args.aircraft_role != "all":

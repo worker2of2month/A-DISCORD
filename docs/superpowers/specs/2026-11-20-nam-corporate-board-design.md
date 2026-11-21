@@ -1,13 +1,13 @@
 # NAM corporate exile: the council of boards
 
-Status: M0-M8, the focus layer of the upper tree (appendix C) and the lower
-branch below `NAM_board_partition_night` (appendix D: invasion preparation,
-island wars, mainland cells and "Операция \"Посейдон\"", which starts the war
-of return) are implemented in the script. The wartime tree of the return, the
-subversive operations against Eflor and Azhar and the stage-3 tree are not
-(appendix D15). Nothing was checked in the running game. Line numbers are hints; the
-NAM files are edited in parallel, so re-read every target before inserting and
-splice by section, never by line.
+Status: M0-M8, the reward layer (appendix C), the compact corporate tree of
+68 focuses with its invasion lanes, island wars, mainland cells and
+"Операция \"Посейдон\"" (appendix D), the subversive operations and the
+partition claims (appendix F) and the wartime tree of the return (appendix G)
+are implemented in the script. The tree after the return (stage 3) is not
+(appendix D15). Nothing was checked in the running game. Line numbers are
+hints; the NAM files are edited in parallel, so re-read every target before
+inserting and splice by section, never by line.
 
 ## Goal
 
@@ -734,46 +734,36 @@ editing, and keep new board sprites outside the generated blocks.
 
 ## M10. The tree
 
-### Upper tree (70 focuses)
+### The corporate tree (68 focuses)
 
-Every focus gets a full reward tied to the mechanics above: a seat, a slot, an
-operation, a programme with a price and a duration, a concrete delivery. No
-focus rewards a tooltip alone, and no branch is a chain of the same bonus. The
-per-focus table is appendix C. Fixed points:
+One tree in one source file, `focus_trees/NAM/exile_corporate/focuses.txt`,
+mirrored around x 18 (columns 0-36, rows 0-10). Every focus gets a full reward
+tied to the mechanics above: a seat, a slot, an operation, a programme with a
+price and a duration, a concrete delivery. No focus rewards a tooltip alone,
+and no branch is a chain of the same bonus. Contract in appendix D, reward
+rules in appendix C. Lanes:
 
-- left branch: capital income, zones, tender terms, the re-gating of
-  `NAM_corp_sell_steel` and `NAM_corp_labour_contract`, whose humanist gates
-  are unreachable today;
-- centre: the chancery slots, the majority tools, the final;
-- centre-left and centre-right: the operations against each Judas and the
-  consequences of his death;
-- right branch: readiness, the drill, arms and the fleet.
+- centre: the chancery trunk, the Judas turning points, the chancery pair,
+  "Материк по описи", "Стол на шесть приборов", the partition night and
+  "Операция \"Посейдон\"" directly under it;
+- Karamyshev lane (x 8-14) and Weber lane (x 22-28): the operations against
+  each Judas, the kill, the law focus, the pair and one capstone per side;
+- left wing (x 2-7): capital income, zones, tender terms, the re-gating of
+  `NAM_corp_sell_steel` and `NAM_corp_labour_contract`; its outer lane (x 0-9,
+  rows 7-10) is war economy and supply;
+- right wing (x 29-34): readiness, the drill, arms; its outer lane (x 27-36,
+  rows 7-10) is fleet, marines and the three island operations, which open
+  early from "Флот компаний" and "Подряд на высадку".
 
-`NAM_board_partition_night` needs a majority. Its reward divides the mainland
-in advance: in order of votes each company is assigned the districts it will
-hold after the return, replacing the round-robin of `NAM_corp_assign_district`
-for those districts.
-
-### Lower branch (46 focuses)
-
-Opens after `NAM_board_partition_night` in the same tree and in the same
-source file, as its own commented section. Its single entry
-`NAM_board_invasion_prospectus` takes `partition_night` as prerequisite and
-carries `allow_branch = { has_completed_focus = NAM_board_partition_night }`;
-the reward of `partition_night` calls `mark_focus_tree_layout_dirty`. The
-layout is mirrored around x 18 with the upper tree's spacing rules. Contract in
-appendix D:
-
-- stage A, invasion preparation: a centre and four lanes (war economy, supply,
-  fleet, marines) with five exclusive pairs, nine paid programmes and the mainland
-  cells, closed by the gate `invasion_fleet`;
-- stage B, optional island wars against Ulven, Luren and Sharden, each a
-  scripted war started by a decision, settled by capitulation, capital hold or
-  mission timeout, and followed by annexation, a concession tender and a paid
-  nationalisation that cores the island;
-- stage C, the safehouses and the final "Операция \"Посейдон\"", which calls
-  `NAM_war_of_return_start` and adds the risings, the island brigades and the
-  flagship division.
+`NAM_board_partition_night` needs a majority, both turning points of the
+centre and, through the chancery pair, both kills. Its reward divides the
+mainland in advance between the two companies with the most votes
+(`NAM_board_partition_efl` / `_azh`, frozen), replacing the round-robin of
+`NAM_corp_assign_district` for those districts, opens the subversive
+operations and the claims (appendix F), seeds the mainland cells and
+dispatches the backers' choice (event 180). "Операция \"Посейдон\"" opens 90
+days after it on its material conditions, declares the war of return and
+hands the war to the wartime tree one day later (appendix G).
 
 Seized islands are annexed, not subject countries. The concession operator,
 named by `NAM_board_isl_owner^<island>`, counts 2 votes in the recount beside
@@ -784,10 +774,19 @@ live alternative while their WIP partners are closed. The Karamyshev and Weber
 lanes carry live exclusive pairs below the kills (appendix C.4). A test pins
 the exception so it is removed with the WIP focuses.
 
+### The wartime tree of the return (32 focuses)
+
+`NAM_return_war_focus` (`focus_trees/NAM/return_war/focuses.txt`) replaces
+the corporate tree for the war of return and gives it back on every terminal
+path: two fronts, the strait, the districts and the council at war, five
+locked war laws, two development trades, the form of rule after victory, and
+the endings (victory, Eflor's surrender, three pauses, defeat). Contract in
+appendix G.
+
 ### After the return (stage 3)
 
 A separate tree for the corporate winner, loaded in the victory path of the
-return war. Out of scope here; it needs its own document.
+return war; not in the script yet (appendix D15).
 
 ## Tests and tools this design breaks
 
@@ -892,15 +891,23 @@ flight with six Directory programmes, and the end of the mainland leftovers at
 the flight or the takeover. The focus-effects guide section "Корпоративное
 изгнание NAM" describes the same contract (package 8).
 
-Status: the lower branch is implemented as appendix D describes: 46 focuses
-mirrored around x 18 with five exclusive pairs, the invasion programmes of the
-category `NAM_board_invasion`, the island wars of the category
-`NAM_board_islands` with their settlements, tenders and nationalisation, the
-mainland cells with the enemy's raid category `NAM_cells_counter` (EFL and
-AZH), "Операция \"Посейдон\"" as the corporate caller of
-`NAM_war_of_return_start` with the armistice of events 131-134, and story and
-operational events `ADISCORD_nam_story.97-134`. The orders listed in appendix
-D15 remain open.
+Status: the corporate tree is the compact tree of appendix D: 68 focuses in
+one mirrored tree with 11 exclusive pairs; 45 focuses of the former upper tree
+and lower branch are folded into the focuses that stay, two moved to the
+wartime tree and one parked for stage 3 (table in D3). The invasion
+programmes of `NAM_board_invasion`, the island wars of `NAM_board_islands`,
+the mainland cells with the enemy's `NAM_cells_counter`, the backers' choice
+(event `ADISCORD_nam_story.180`) and "Операция \"Посейдон\"" with its 90-day
+window follow D5-D8.
+
+Status: the subversive operations and the partition claims are implemented
+as appendix F describes (category `NAM_board_subversion`, events 135-137).
+
+Status: the wartime tree of the return is implemented as appendix G
+describes: `NAM_return_war_focus` with 32 focuses, the category `NAM_rtw_war`
+with decisions W1-W12, five locked war laws, two development trades, the
+endings with their transfers, and events `ADISCORD_nam_story.138-169`.
+Stage 3, the tree after the return, remains open (D15).
 
 Notes for every package:
 
@@ -920,10 +927,12 @@ Notes for every package:
   maximum), and every paid decision in `CUSTOM_COST_DECISIONS` of the NAM
   validator.
 - Island categories under the takeover: `NAM_two_judases`, `NAM_free_zones`,
-  `NAM_public_campaigns` and `NAM_directory_development` (appendix C.9); the
-  lower branch adds `NAM_board_invasion` (after the prospectus) and
-  `NAM_board_islands` (after the first strait operation), and the enemy's
-  `NAM_cells_counter` for EFL and AZH (appendix D). Add no other category.
+  `NAM_public_campaigns` and `NAM_directory_development` (appendix C.9);
+  `NAM_board_invasion` (after a lane opener or the partition night),
+  `NAM_board_islands` (after the first strait operation) and
+  `NAM_board_subversion` (after the partition night), the enemy's
+  `NAM_cells_counter` for EFL and AZH (appendices D and F), and during the war
+  of return `NAM_rtw_war` (appendix G). Add no other category.
 
 ## Review findings to fix (packages 1-3)
 
@@ -976,8 +985,12 @@ Runtime, by the user after a full restart, none of it provable statically:
 ## Appendices
 
 Appendices A, B and E were drafted against an earlier version of the core.
-Where they differ, sections M1-M10 win. Appendices C and D are the maintained
-contracts of the implemented focus layer and lower branch. Known differences:
+Where they differ, sections M1-M10 win. Appendix C is the maintained contract
+of the reward rules, appendix D of the compact corporate tree, appendix F of
+the subversive operations and the partition claims, appendix G of the wartime
+tree of the return. Appendix C still names focuses by the ids they had before
+the compaction; a folded id stands for its absorber in the D3 table, and its
+rows, laws, unlocks and events are those of the absorber. Known differences:
 
 - A.6 (leader traits) is replaced by the table in M6, which adds the debuffs.
 - A.7 point 1 holds: a public lot pays +10 capital a month and gives the
@@ -2079,6 +2092,18 @@ ever finds another council law in its slot; an enactment that did would fall to
 its `add_ideas` fallback, and a new focus that breaks this must extend the
 enactment chain first.
 
+**One law per slot.** A slot never holds two laws: the law enacted later
+replaces the one in the slot. Three war laws of appendix G.5 share a slot with
+a council law (`holders_contracts` with `arsenal_monopoly`, `martial_rule` with
+`district_wardens`, `field_courts` with `concession_courts`; `strait_requisition`
+and `veteran_reserve` have no council partner). A war law's chain names its
+council law first; the council law's chain names its war law first, for the
+council focus completed after an armistice has reloaded the corporate tree.
+Either way the native `swap_ideas` line of the focus names the replaced law.
+The replaced law is not restored when the later one is repealed:
+`NAM_board_repeal_laws` returns the slot to its default. Pinned by
+`test_a_law_slot_never_holds_two_laws`.
+
 **Enactment.** The focus calls `NAM_board_enact_<x> = yes` as the first
 position-2 row (after the unlock pairs, before a camp `if`, so both branches
 enact it). The effect is an `if`/`else_if` chain over every law of the slot,
@@ -2138,31 +2163,32 @@ cost of the laws against the history laws is about -13.5% on the AI route
 
 Nothing in this appendix was checked in the running game.
 
-## Appendix D. The lower branch: invasion, island wars, partisans and "Посейдон"
+## Appendix D. The compact tree: lanes, islands, partisans and "Посейдон"
 
-This appendix is the maintained contract of the lower branch of
-`NAM_exile_corporate_focus` as implemented: 46 focuses below
-`NAM_board_partition_night`, the invasion programmes, the island wars against
-Ulven, Luren and Sharden with their nationalisation, the mainland cells and
-"Операция \"Посейдон\"", which starts the existing war of return. The focus
-source, the decisions and the effects hold the values; this appendix fixes the
-rules they follow and names the script that carries them. Section D15 lists the
-author's orders that the branch does not implement yet. Nothing here was checked
-in the running game.
+This appendix is the maintained contract of `NAM_exile_corporate_focus` as it
+stands after the compaction: one tree of 68 focuses in which the council
+lanes, the invasion preparation, the island operations and the final
+"Операция \"Посейдон\"" are woven together. The focus source
+(`focus_trees/NAM/exile_corporate/focuses.txt`), the decisions and the
+effects hold the values; this appendix fixes the rules they follow and names
+the script that carries them. Appendix C keeps the reward rules (writing
+order, script shapes, tooltip layout, T17, kinds, events, laws); appendix F
+the subversive operations and the claims; appendix G the wartime tree of the
+return. Nothing here was checked in the running game.
 
-**Author's orders for the lower branch (binding for every design and layout of it):**
+**Author's orders for this tree (binding for every design and layout of it):**
 
 - The first stage below `NAM_board_partition_night` prepares the invasion in four lanes:
   fleet, marines, supply, war economy ("следующая ветка с подготовкой вторжения: флот,
   морпехи, снабжение, военная экономика; пусть открывается после последнего фокуса").
 - The branch is as symmetric as the upper tree ("ветка должна быть такая же симметричная").
   It is mirrored around the tree's centre column (x 18, the column of
-  `NAM_board_partition_night`): two lanes on each side at mirrored x positions, the same
+  `NAM_board_partition_night`): lanes on each side at mirrored x positions, the same
   number of rows and the same shape of forks and merges on both sides, exclusive pairs
-  placed as mirror images, and the opener and the final of the branch on the centre
-  column. A focus on one side has a counterpart cell on the other; an odd focus sits on
-  the centre column. The upper tree's spacing rules stay: a free cell between neighbours
-  and no straight chain longer than two.
+  placed as mirror images, and the opener and the final on the centre column. A focus on
+  one side has a counterpart cell on the other; an odd focus sits on the centre column.
+  The upper tree's spacing rules stay: a free cell between neighbours and no straight
+  chain longer than two.
 - Rewards follow the magnitude pass ordered together with it ("баффни фокусы. 300 людей
   условные - ни о чём").
 - Recruitment stays as it is: the Directory's own islands 225-231 do not become national
@@ -2174,298 +2200,342 @@ in the running game.
   last focus is named "Операция \"Посейдон\"" (the author's name for it).
 - Before that last focus the Directory may invade the neighbours' islands and nationalise
   them ("а до этого можно вторгнуться на другие острова соседей и национализировать их;
-  открывает \"Одна ночь на раздел мира\""). The island wars (section D6) therefore belong to
-  this same branch, between the preparation lanes and the final, and are optional: the
-  final must be reachable without them. A nationalised island becomes the Directory's
-  national territory.
+  открывает \"Одна ночь на раздел мира\""). The island wars are optional: the final must
+  be reachable without them. A nationalised island becomes the Directory's national
+  territory.
 - The branch can prepare partisans who rise on the enemy's territory ("можно подготовить
   партизан, которые будут вставать на территории врага").
 - `NAM_board_partition_night` also opens subversive operations against Eflor and Azhar,
   through which the Directory can hang penalties on them, and gives claims on land ("пусть
   одна ночь на раздел мира также открывает операции подрывные против Эфлора и Ажара
   (возможность дебафов навешать), даёт претензии на земли").
-- The island operations come earlier in the branch than the end of the preparation
-  ("сами операции на острова я бы сделал раньше"): they must not wait for the gate that
-  closes the four preparation lanes. Ulven and Luren open from the early fleet and marines
-  focuses, Sharden after one of them is taken; only the final waits for the whole
-  preparation.
+- The island operations come earlier than the end of the preparation ("сами операции на
+  острова я бы сделал раньше").
 - The final declares the war and loads another focus tree, the wartime tree of the return
   ("последний фокус объявляет войну, загружая другую ветку фокусов - военную на
   возвращение").
-- The two parts of the tree are joined (the author, on seeing the council tree with the
-  invasion branch hanging under it: "может совместим эти две ветки?"; "вплести в крылья";
-  "по горизонтали можно расширить"; "операции сделать пораньше, но не Посейдон, она будет
-  последним фокусом"; "пусть не всё обязательно выполнять будет"). The preparation lanes are
-  continuations of the wings of the council tree, not a separate block below it: war
-  economy and supply grow out of the left wing, fleet and marines out of the right wing,
-  and the tree may grow wider instead of taller. The island operations come early.
-  "Операция \"Посейдон\"" stays the last focus of the tree. Neither it nor any other
-  capstone requires every focus: the player chooses what to complete.
-- The tree is too long: all of it took almost four years of focus time. It is cut to a year
-  or a year and a half ("может быть, тогда примерно на год ограничить эту ветку фокусов";
-  "год-полтора, я бы так делал"; "после одной
-  ночи на раздел мира сразу показывать там операцию Посейдон; часть фокусов просто внедрить
+- The two parts of the tree are joined ("может совместим эти две ветки?"; "вплести в
+  крылья"; "по горизонтали можно расширить"; "операции сделать пораньше, но не Посейдон,
+  она будет последним фокусом"; "пусть не всё обязательно выполнять будет"). The
+  preparation lanes continue the wings of the council tree: war economy and supply grow
+  out of the left wing, fleet and marines out of the right wing, and the tree grows wider
+  instead of taller. "Операция \"Посейдон\"" stays the last focus of the tree. Neither it
+  nor any other capstone requires every focus: the player chooses what to complete.
+- The tree is cut to a year or a year and a half ("может быть, тогда примерно на год
+  ограничить эту ветку фокусов"; "год-полтора, я бы так делал"; "после одной ночи на
+  раздел мира сразу показывать там операцию Посейдон; часть фокусов просто внедрить
   непосредственно в другие фокусы, а часть фокусов перенести уже на послевоенные либо на
   военную ветку"). "Операция \"Посейдон\"" sits directly under "Одна ночь на раздел мира".
-  A focus that is folded hands its rewards, events, laws and unlocks to the focus that
-  absorbs it; a focus that is moved goes to the wartime tree of the return or is kept for
-  the tree after the return.
+  A folded focus hands its rewards, events, laws and unlocks to the focus that absorbs it;
+  a moved focus goes to the wartime tree of the return or is kept for the tree after the
+  return.
+- After a won return a separate tree loads: the Directory on the mainland and its
+  preparation for the war for the South, sized for two to three years of focus time
+  ("сделай теперь ветку после возвращения и подготовке к войне за юг (фокус на 2-3 года)").
+  The great war against the southern neighbours (Rahma, Sardan, Kadir) stays a separate
+  stage inside that tree, before the war for the South against Shahrabad ("да, должна").
 - The war of return has two real endings ("поражение - это полный конец; победа - это
   получение полностью владычества над Эфлором и Ажаром, ну и территории своей, конечно").
   Defeat ends the Directory's campaign. Victory gives the Directory its own former
   territory and complete dominion over both Eflor and Azhar, all of their land; a choice
-  inside the wartime tree may decide the form of that rule (company districts or direct
-  rule), never its extent. Armistices and a separate peace are pauses on the way, not
-  victories: they must leave the player a way to finish both enemies later.
+  inside the wartime tree decides the form of that rule (company districts or direct
+  rule), never its extent. Armistices and a dictated peace are pauses on the way, not
+  victories: they leave the player a way to finish both enemies later (appendix G).
 
-### D1. Scope and attachment
+### D1. Shape, budget and what the capstones require
 
-The lower branch sits in the same tree and the same source file as the upper
-tree (`focus_trees/NAM/exile_corporate/focuses.txt`, commented section after
-`NAM_board_partition_night`). The tree now has 116 focuses (70 upper, 46
-lower) and 12 exclusive pairs (7 upper, 5 lower).
+| Measure | Value |
+| --- | --- |
+| Focuses | 68: 66 playable and the two closed stubs `escheated_throne` and `treaty_two_judases` (cost 1, `available` never) |
+| Exclusive pairs | 11: seven in the council lanes and wings, four in the outer lanes |
+| Grid | columns 0-36, rows 0-10, centre column x 18; mirror of column x is 36 - x |
+| Costs | c1 (7 days) everywhere except the 2-point focuses pinned in `COMPACT_TWO_POINT_FOCUSES`: the two kills, `facsimile_blood`, `purged_majority`, `both_squares_bought`, `mainland_inventory`, `table_six`, `partition_night`, "Посейдон", `harbour_exchange`, `residency_for_hire`, `close_the_lawsuit`, `land_under_seal`, `port_rights_monopoly`, `chairmans_copy`, `supply_overseas`, `first_wave`, `arsenal_of_the_boards`, `sharden_operation` |
+| AI plan `NAM_exile_corporate_plan` | 44 focuses, 57 points (about day 399 for "Посейдон"), pinned at 58 points or less |
+| Whole tree, one side of each pair | 55 focuses, 72 points (504 days), pinned at 77 points (a year and a half) or less |
+| Fastest route | partition night after 20 focuses (day 210); "Посейдон" by prerequisite after 21, but not before day 314 because of its window |
 
-| Stage | Rows | Focuses | Pairs | In one playthrough |
-| --- | --- | --- | --- | --- |
-| A, preparation: centre 6, war economy 9, supply 8, fleet 8, marines 9 | 13-22 | 40 | 5 | 35 |
-| B, island wars (optional) | 24-25 | 3 | 0 | 0-3 |
-| C, partisans and the final | 26-28 | 3 | 0 | 3 |
-| Total | 13-28 | 46 | 5 | 38 without islands, 41 with all three |
+No focus carries `bypass`, `allow_branch` or `relative_position_id`; nothing is
+hidden, so the partition night no longer marks the layout dirty.
 
-- Entry: `NAM_board_invasion_prospectus` (18,13) has
-  `prerequisite = { focus = NAM_board_partition_night }` and
-  `allow_branch = { has_completed_focus = NAM_board_partition_night }`. The
-  `hidden_effect` of `partition_night` calls `mark_focus_tree_layout_dirty = yes`
-  directly before its last line, `country_event = { id = ADISCORD_nam_story.81 days = 1 }`.
-- Leaves: `NAM_board_operation_poseidon` (18,28) is the only mandatory leaf;
-  `NAM_board_sharden_operation` (18,25) is the optional side leaf. Nothing is
-  bypassed. An island focus whose target no longer exists or is a subject stays
-  unavailable; nothing waits on it.
-- The gate `NAM_board_invasion_fleet` (18,22) closes stage A and opens stages B
-  and C; the war of return starts only with "Операция \"Посейдон\"".
-- The Directory's own islands 225-231 are never cored. Only a conquered and
-  nationalised neighbour island becomes national territory.
-- Not built in this branch (section D15): army rearmament, the society
-  "99 к 1", the letters of marque and raider cruisers (raids stay radical-only),
-  the trunk pair `mainland_shares` / `union_of_boards`, the night-landing
-  threshold, the post-return tree.
+**What the capstones require.**
 
-### D2. Lanes, stages and the mirror rule
+- "Одна ночь на раздел мира" (`partition_night`, 18,9, c2): prerequisites
+  `mainland_inventory`, `table_six` and one side of the chancery pair
+  (`original_stays_home` | `sole_vote_holder`); `available = { NAM_board_majority_held = yes }`.
+  Through the pair it needs `both_squares_bought`, whose `available` requires
+  the property census and, for each camp, the kill or its closed stub; with
+  both stubs closed that means both kills and both Judas turning points
+  (`facsimile_blood`, `purged_majority`). No wing, no wing capstone and no
+  outer lane is required. `sole_vote_holder` needs the chancery open for 180
+  days (`NAM_board_half_year_tt`).
+- "Операция \"Посейдон\"" (`operation_poseidon`, 18,10, c2): shown directly
+  under the night; its only prerequisite is `partition_night`. Its
+  `available` (section D8) is the 90-day window and the material conditions;
+  no lane focus, island or further kill is required.
 
-Columns: war economy x 3-7, supply x 10-14, centre x 16-20, fleet x 22-26,
-marines x 29-33; island stage x 14-22; safehouses x 12 and 24. The mirror of
-column x is 36 - x.
+### D2. Lanes and the mirror rule
 
 ```
-row 13                                   [prospectus 18]
-row 14      [WE-O 5]        [SU-O 12]                      [FL-O 24]        [MA-O 31]
-row 15  [WE-A 3] [WE-B 7] [SU-P1 10]x[SU-P2 14]          [FL-P2 22]x[FL-P1 26] [MA-B 29] [MA-A 33]
-row 16                          [SU-M 12]  [CP-a 16]x[CP-b 20]  [FL-M 24]
-row 17  [WE-P1 3]x[WE-P2 7] [SU-A 10] [SU-B 14]                [FL-B 22] [FL-A 26] [MA-P2 29]x[MA-P1 33]
-row 18      [WE-M 5]------------------> (SU-N)   [contacts 18]   (FL-N) <---------------[MA-M 31]
-row 19  [WE-C 3] [WE-D 7]   [SU-N 12]                      [FL-N 24]        [MA-D 29] [MA-C 33]
-row 20                                   [assembly 18]
-row 21      [WE-K 5]        [SU-K 12]                      [FL-K 24]        [MA-K 31]
-row 22                                   [invasion fleet 18]
-row 24                        [Ulven 14]                [Luren 22]
-row 25                                   [Sharden 18]
-row 26                    [north safehouses 12]          [south safehouses 24]
-row 28                                   [POSEIDON 18]
+row 0                                         [beacon 18]
+row 1   [quay 5]                              [bought 18]                              [order_arsenal 31]
+row 2   [gospel 5]          [dead_veto 12]    [property 18]    [founders 24]          [arsenal_mon 31]
+row 3 [dbl_lock 3]x[loren_rcpt 5] [salt 7]  [eschtd 12]x[posthum 14] [last_debtor 22]x[treaty 24] [foundry 29] [guard 31]x[captains 33]
+row 4    [bearer 4]      [privatise 10]   [facsimile 16]    [purged 20]   [society 26]      [last_voyage 32]
+row 5 [courts 2] [foreclosure 6] [hered 8]x[oath 12]  [both_squares 18]  [incumb 24]x[subsid 28] [housing 30] [strait 34]
+row 6    [exchange 4]                    [original 16]x[sole 20]                      [residency 32]
+row 7 [war_econ 2] [quarterm 6] [close 10] [land_seal 14]          [port_rights 22] [chairmans 26] [landing 30] [navy 34]
+row 8 [cartel 0]x[tenders 2] [bonds 4] [synth 6]  [mainland_inv 16] [table_six 20]  [luren 30] [ulven 32] [fire 34]x[escort 36]
+row 9 [isl_arsenal 1] [ars_boards 5] [tanker 7]x[depots 9] [partition 18] [shore 27]x[storm 29] [sharden 31] [docks 35]
+row 10                [supply_overseas 8]       [poseidon 18]       [first_wave 28]
 ```
 
-Ids without `NAM_board_`; "A|B" is one prerequisite group (either), "A, B" are
-separate groups (all). Costs are in focus points of 7 days.
+Ids without `NAM_board_`; "A\|B" is one prerequisite group (either), "A, B"
+separate groups (all). Costs in points of 7 days. "Event" is the story event
+the focus fires itself (a second id is the delayed event of a folded focus).
 
-| Code | id | Name | x,y | c | Prerequisites | Exclusive with | Event |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| C1 | `invasion_prospectus` | Проспект экспедиции | 18,13 | 1 | partition_night (+ allow_branch) | | 97 |
-| CP-a | `holders_underwrite` | Подряд держателей | 16,16 | 1 | invasion_prospectus | six_share_pool | 98 |
-| CP-b | `six_share_pool` | Складчина шести правлений | 20,16 | 1 | invasion_prospectus | holders_underwrite | 99 |
-| CC | `mainland_contacts` | Связные на материке | 18,18 | 1 | holders_underwrite\|six_share_pool | | 118 |
-| CM | `assembly_roads` | Сборный рейд | 18,20 | 2 | mainland_contacts, supply_overseas, landing_flotilla | | 100 |
-| CF | `invasion_fleet` | Флот вторжения | 18,22 | 2 | assembly_roads, arsenal_of_the_boards, expedition_rear, island_squadron, first_wave | | 101 |
-| WE-O | `war_economy_charter` | Военный устав компаний | 5,14 | 1 | invasion_prospectus | | 102 |
-| WE-A | `double_shifts` | Две смены у станка | 3,15 | 1 | war_economy_charter | | |
-| WE-B | `steel_for_guns` | Сталь в стволы | 7,15 | 1 | war_economy_charter | | |
-| WE-P1 | `cartel_prices` | Картельные цены | 3,17 | 1 | double_shifts | open_war_tenders | 103 |
-| WE-P2 | `open_war_tenders` | Открытые военные торги | 7,17 | 1 | steel_for_guns | cartel_prices | 104 |
-| WE-M | `island_arsenal` | Островной арсенал | 5,18 | 1 | cartel_prices\|open_war_tenders | | |
-| WE-C | `synthetic_plant` | Синтетика Лорэн | 3,19 | 2 | island_arsenal | | |
-| WE-D | `war_bonds` | Военные облигации | 7,19 | 1 | island_arsenal | | |
-| WE-K | `arsenal_of_the_boards` | Военная экономика правлений | 5,21 | 2 | synthetic_plant\|war_bonds | | 105 |
-| SU-O | `war_quartermaster` | Интендантство совета | 12,14 | 1 | invasion_prospectus | | 106 |
-| SU-P1 | `tanker_caravan` | Танкерный караван | 10,15 | 1 | war_quartermaster | shore_depots | 107 |
-| SU-P2 | `shore_depots` | Береговые склады | 14,15 | 1 | war_quartermaster | tanker_caravan | 108 |
-| SU-M | `ration_lists` | Пайковые ведомости | 12,16 | 2 | tanker_caravan\|shore_depots | | |
-| SU-A | `bunker_piers` | Бункерные причалы | 10,17 | 1 | ration_lists | | |
-| SU-B | `hospital_ships` | Госпитальные суда | 14,17 | 1 | ration_lists | | |
-| SU-N | `supply_overseas` | Подвоз за море | 12,19 | 1 | bunker_piers\|hospital_ships, island_arsenal | | |
-| SU-K | `expedition_rear` | Тыл экспедиции | 12,21 | 2 | supply_overseas | | 109 |
-| FL-O | `private_navy` | Флот компаний | 24,14 | 1 | invasion_prospectus | | 110 |
-| FL-P1 | `escort_flotilla` | Конвойная флотилия | 26,15 | 1 | private_navy | fire_squadron | 111 |
-| FL-P2 | `fire_squadron` | Огневая эскадра | 22,15 | 1 | private_navy | escort_flotilla | 112 |
-| FL-M | `company_docks` | Доки пароходства "Навис" | 24,16 | 2 | escort_flotilla\|fire_squadron | | |
-| FL-A | `landing_craft` | Десантные баржи | 26,17 | 1 | company_docks | | |
-| FL-B | `loading_schedules` | Расписание погрузки | 22,17 | 1 | company_docks | | |
-| FL-N | `landing_flotilla` | Десантная флотилия | 24,19 | 1 | landing_craft\|loading_schedules, marine_officers | | |
-| FL-K | `island_squadron` | Эскадра Семи островов | 24,21 | 2 | landing_flotilla | | 113 |
-| MA-O | `landing_contracts` | Подряд на высадку | 31,14 | 1 | invasion_prospectus | | 114 |
-| MA-A | `marine_school` | Школа морской пехоты | 33,15 | 1 | landing_contracts | | |
-| MA-B | `marine_kit` | Снаряжение десанта | 29,15 | 1 | landing_contracts | | |
-| MA-P1 | `storm_companies` | Ударные роты | 33,17 | 1 | marine_school | shore_battalions | 115 |
-| MA-P2 | `shore_battalions` | Береговые батальоны | 29,17 | 1 | marine_kit | storm_companies | 116 |
-| MA-M | `marine_officers` | Офицеры десанта | 31,18 | 1 | storm_companies\|shore_battalions | | |
-| MA-C | `beach_masters` | Пляжные коменданты | 33,19 | 2 | marine_officers | | |
-| MA-D | `mercenary_battalions` | Наёмные батальоны | 29,19 | 1 | marine_officers | | |
-| MA-K | `first_wave` | Первая волна | 31,21 | 2 | beach_masters\|mercenary_battalions | | 117 |
-| IS-U | `ulven_operation` | Операция "Ульвен" | 14,24 | 2 | invasion_fleet | | 119 |
-| IS-L | `luren_operation` | Операция "Лурен" | 22,24 | 2 | invasion_fleet | | 120 |
-| IS-S | `sharden_operation` | Операция "Шарден" | 18,25 | 3 | ulven_operation\|luren_operation | | 121 |
-| PA-N | `northern_safehouses` | Северные явки | 12,26 | 1 | invasion_fleet | | 122 |
-| PA-S | `southern_safehouses` | Южные явки | 24,26 | 1 | invasion_fleet | | 123 |
-| F | `operation_poseidon` | Операция "Посейдон" | 18,28 | 3 | northern_safehouses, southern_safehouses | | 124 |
+**Centre (the chancery trunk, the Judas turning points, the night and the final)**
 
-**The mirror rule** (the author's order, pinned by
-`NamInvasionBranchTests.test_branch_is_mirrored_and_spaced`):
+| id | Название | x,y | c | Prerequisites | Exclusive | Event |
+| --- | --- | --- | --- | --- | --- | --- |
+| `beacon_out` | Когда в гавани погас маяк | 18,0 | 1 | - | | 50 |
+| `bought_century` | Скупленное столетие | 18,1 | 1 | beacon_out | | |
+| `property_qualification` | Имущественный ценз | 18,2 | 1 | bought_century | | 51 |
+| `facsimile_blood` | Кровь под факсимиле | 16,4 | 2 | posthumous_signature | | 96 |
+| `purged_majority` | Большинство после чистки | 20,4 | 2 | last_debtor | | 68 |
+| `both_squares_bought` | Обе площади куплены | 18,5 | 2 | property_qualification\|facsimile_blood\|purged_majority | | 72 |
+| `original_stays_home` | Подлинник остаётся дома | 16,6 | 1 | both_squares_bought | sole_vote_holder | 86 |
+| `sole_vote_holder` | Единый держатель голосов | 20,6 | 1 | both_squares_bought | original_stays_home | 73 |
+| `mainland_inventory` | Материк по описи | 16,8 | 2 | close_the_lawsuit\|land_under_seal | | 94, 118 |
+| `table_six` | Стол на шесть приборов | 20,8 | 2 | chairmans_copy\|port_rights_monopoly | | 95 |
+| `partition_night` | Одна ночь на раздел мира | 18,9 | 2 | mainland_inventory, table_six, original_stays_home\|sole_vote_holder | | 81 |
+| `operation_poseidon` | Операция \"Посейдон\" | 18,10 | 2 | partition_night | | 101 or 124 |
+
+**Karamyshev lane (x 8-14) and Weber lane (x 22-28)**
+
+| id | Название | x,y | c | Prerequisites | Exclusive | Event |
+| --- | --- | --- | --- | --- | --- | --- |
+| `dead_mans_veto` | Вето мертвеца | 12,2 | 1 | bought_century | | 59 |
+| `escheated_throne` | Выморочный престол | 12,3 | 1 | dead_mans_veto | posthumous_signature | (closed) |
+| `posthumous_signature` | Посмертная подпись | 14,3 | 2 | dead_mans_veto | escheated_throne | 60 |
+| `privatise_governorate` | Приватизация наместничества | 10,4 | 1 | dead_mans_veto | | 62, 61 |
+| `hereditary_roll` | Наследственный список | 8,5 | 1 | privatise_governorate | old_settlers_oath | 63 |
+| `old_settlers_oath` | Присяга старожилов | 12,5 | 1 | privatise_governorate | hereditary_roll | 64, 65 |
+| `close_the_lawsuit` | Черта под тяжбой | 10,7 | 2 | hereditary_roll | | 90, 58 |
+| `land_under_seal` | Земля под печатью | 14,7 | 2 | old_settlers_oath | | 91 |
+| `founders_of_unrest` | Учредители будущей смуты | 24,2 | 1 | bought_century | | 66 |
+| `last_debtor` | Голос последнего должника | 22,3 | 2 | founders_of_unrest | treaty_two_judases | 67 |
+| `treaty_two_judases` | Договор с обоими Иудами | 24,3 | 1 | founders_of_unrest | last_debtor | (closed) |
+| `society_99_1` | Общество 99\1 | 26,4 | 1 | founders_of_unrest | | 70, 69 |
+| `incumbents_credit` | Кредит действующей власти | 24,5 | 1 | society_99_1 | subsidised_opposition | 88, 71 |
+| `subsidised_opposition` | Оппозиция на содержании | 28,5 | 1 | society_99_1 | incumbents_credit | 87 |
+| `port_rights_monopoly` | Монополия портовых прав | 22,7 | 2 | incumbents_credit | | 92 |
+| `chairmans_copy` | Председательский экземпляр | 26,7 | 2 | subsidised_opposition | | 80 |
+
+`posthumous_signature` kills Karamyshev and `last_debtor` kills Weber; the
+stubs beside them are the spared-leader routes, closed as work in progress
+(user decision 9). A test pins this exception so it is removed together with
+the stubs.
+
+**Left wing (x 2-7) and right wing (x 29-34)**
+
+| id | Название | x,y | c | Prerequisites | Exclusive | Event |
+| --- | --- | --- | --- | --- | --- | --- |
+| `quay_chain` | Хозяева причальной цепи | 5,1 | 1 | beacon_out | | 84 |
+| `private_gospel` | Евангелие частной собственности | 5,2 | 1 | quay_chain | | 52 |
+| `double_lock_warehouse` | Склад под двумя замками | 3,3 | 1 | private_gospel | loren_receipt | 85 |
+| `loren_receipt` | Долг переживёт должника | 5,3 | 1 | private_gospel | double_lock_warehouse | 54 |
+| `salt_monopoly` | Солевая монополия | 7,3 | 1 | private_gospel | | 53 |
+| `bearer_warrant` | Варрант на предъявителя | 4,4 | 1 | double_lock_warehouse\|loren_receipt | | |
+| `concession_courts` | Концессионные суды | 2,5 | 1 | bearer_warrant | | 57 |
+| `land_foreclosure` | Взыскание землёй | 6,5 | 1 | bearer_warrant | | 56, 55 |
+| `harbour_exchange` | Биржа у последнего причала | 4,6 | 2 | land_foreclosure, concession_courts | | 89 |
+| `order_arsenal` | Арсенал порядка | 31,1 | 1 | beacon_out | | 74 |
+| `arsenal_monopoly` | Арсенальная монополия | 31,2 | 1 | order_arsenal | | 75 |
+| `foundry_mark` | Клеймо литейного двора | 29,3 | 1 | arsenal_monopoly | | |
+| `factory_guard` | Частная заводская стража | 31,3 | 1 | arsenal_monopoly | captains_share_qualification | 76 |
+| `captains_share_qualification` | Паевой ценз капитанов | 33,3 | 1 | arsenal_monopoly | factory_guard | 77 |
+| `last_voyage_rifles` | Винтовки последнего рейса | 32,4 | 1 | captains_share_qualification\|factory_guard | | |
+| `corporate_mass_housing` | Корпоративная массовая застройка | 30,5 | 1 | last_voyage_rifles | | 79 |
+| `private_strait` | Частный пролив | 34,5 | 1 | last_voyage_rifles | | 78 |
+| `residency_for_hire` | Прописка по найму | 32,6 | 2 | corporate_mass_housing, private_strait | | 93 |
+
+**Outer lanes: war economy and supply (x 0-9), fleet, marines and islands (x 27-36)**
+
+| id | Название | x,y | c | Prerequisites | Exclusive | Event |
+| --- | --- | --- | --- | --- | --- | --- |
+| `war_economy_charter` | Военный устав компаний | 2,7 | 1 | concession_courts | | 102 |
+| `war_quartermaster` | Интендантство совета | 6,7 | 1 | land_foreclosure | | 106 |
+| `cartel_prices` | Картельные цены | 0,8 | 1 | war_economy_charter | open_war_tenders | 103 |
+| `open_war_tenders` | Открытые военные торги | 2,8 | 1 | war_economy_charter | cartel_prices | 104 |
+| `war_bonds` | Военные облигации | 4,8 | 1 | war_economy_charter | | |
+| `synthetic_plant` | Синтетика Лорэн | 6,8 | 1 | war_quartermaster | | |
+| `island_arsenal` | Островной арсенал | 1,9 | 1 | cartel_prices\|open_war_tenders | | |
+| `arsenal_of_the_boards` | Военная экономика правлений | 5,9 | 2 | synthetic_plant\|war_bonds | | 105 |
+| `tanker_caravan` | Танкерный караван | 7,9 | 1 | war_quartermaster | shore_depots | 107 |
+| `shore_depots` | Береговые склады | 9,9 | 1 | war_quartermaster | tanker_caravan | 108 |
+| `supply_overseas` | Подвоз за море | 8,10 | 2 | shore_depots\|tanker_caravan | | 109 |
+| `landing_contracts` | Подряд на высадку | 30,7 | 1 | corporate_mass_housing | | 114 |
+| `private_navy` | Флот компаний | 34,7 | 1 | private_strait | | 110, 100 |
+| `luren_operation` | Операция \"Лурен\" | 30,8 | 1 | landing_contracts | | 120 |
+| `ulven_operation` | Операция \"Ульвен\" | 32,8 | 1 | private_navy | | 119 |
+| `fire_squadron` | Огневая эскадра | 34,8 | 1 | private_navy | escort_flotilla | 112 |
+| `escort_flotilla` | Конвойная флотилия | 36,8 | 1 | private_navy | fire_squadron | 111 |
+| `shore_battalions` | Береговые батальоны | 27,9 | 1 | landing_contracts | storm_companies | 116 |
+| `storm_companies` | Ударные роты | 29,9 | 1 | landing_contracts | shore_battalions | 115 |
+| `sharden_operation` | Операция \"Шарден\" | 31,9 | 2 | ulven_operation\|luren_operation | | 121 |
+| `company_docks` | Доки пароходства \"Навис\" | 35,9 | 1 | escort_flotilla\|fire_squadron | | 113 |
+| `first_wave` | Первая волна | 28,10 | 2 | shore_battalions\|storm_companies | | 117 |
+
+The cells mirror, not the content: `war_bonds`, `synthetic_plant` and
+`arsenal_of_the_boards` face "Ульвен", "Лурен" and "Шарден".
+
+**The mirror rule** (the author's order):
 
 - every focus at (x, y) has a focus at (36 - x, y) whose prerequisite groups
-  are the mirror images of its own and whose cost is equal;
-- the five pairs are mirror images (row 15: 10/14 and 22/26; row 16: 16/20;
-  row 17: 3/7 and 29/33), and every pair side costs 1;
-- the prospectus, `mainland_contacts`, `assembly_roads`, the gate, Sharden and
-  "Посейдон" sit on the centre column x 18, the column of `partition_night`;
-- same-row gaps are at least 2 cells; the longest chain of single
-  prerequisites is 2 (the leader-branch definition); the inspector's wiring
-  model (`tools/validators/inspect_nam_corporate_focus_layout.py`, which treats
-  an `allow_branch` focus as visible) finds no card hit and no crossing beyond
-  the two upper-tree crossings pinned in `test_island_focus_diagram_and_duration`.
+  are the mirror images of its own, whose exclusive partner is the mirror of
+  its partner and whose cost is equal; focuses on x 18 are their own mirror;
+- every exclusive pair sits on one row with no card between its two cells;
+- cards in one row are at least two columns apart; the longest chain of
+  single prerequisites is two links;
+- under the repository wiring model (`corporate_focus_wiring` in
+  `tools/validators/inspect_nam_corporate_focus_layout.py`) the tree has no
+  card hit and no wire crossing.
 
-A new focus therefore always comes with its mirror cell, or sits on x 18. The
-inspector runs a wire sideways under the parent and then down the child's
-column, so a mirrored focus pair straddling x 18 below the gate would cross the
-final's wire: stage B has no focus pair (its exclusive choice is a decision
-pair), and Sharden at (18,25) sits above the final's bus at 26.5, which comes
-from the two safehouses. Cells that must stay empty: (18,14), (18,15), (18,17),
-(18,19), (18,21), (18,23), (18,24), (18,26), (18,27), (12,23)-(12,25),
-(24,23)-(24,25), (16,25), (20,25), (3,16), (7,16), (29,16), (33,16), (5,20),
-(12,20), (24,20), (31,20).
-
-The row-17 and row-19 sibling pairs merge with OR (`supply_overseas`,
-`landing_flotilla`, `arsenal_of_the_boards`, `first_wave`), so one side can be
-skipped; the cross links `island_arsenal` -> `supply_overseas` and
-`marine_officers` -> `landing_flotilla` are AND. Only these focuses have an
-`available` block: the gate (`NAM_board_majority_held = yes`), the three island
-operations (section D6) and "Посейдон" (section D8, `cancel_if_invalid = no`,
-`continue_if_invalid = no`: it pauses instead of cancelling).
+A new focus therefore always comes with its mirror cell, or sits on x 18.
 
 Lane patrons (trust in the lane's rewards and events): war economy Ferrant 2
 and Reidbank 6 against Smenkom 5; supply Loren 1 and Smenkom 5 against
 Reidbank 6; fleet Navis 3 and Ferrant 2 against Arktur 4; marines Arktur 4 and
 Smenkom 5 against Navis 3. The island operations pay their tender pair. The
-centre and the safehouses pay the two partition holders,
-`NAM_board_partition_efl` and `NAM_board_partition_azh`, frozen by
-`partition_night`; they are not the current ranks.
+partition night and the launch pay the two partition holders,
+`NAM_board_partition_efl` and `NAM_board_partition_azh`, frozen by the night;
+they are not the current ranks.
 
-### D3. Exclusive pairs
+### D3. Folds, moves and the parked focus
 
-| Lane | Side A | Side B | Rejoin |
-| --- | --- | --- | --- |
-| Centre | "Подряд держателей": the two holders pay; levy programme 8, 6 convoys, one proxy vote to each holder until the next annual meeting, cell runs cost 750 rifles instead of 1500; holders +8, others -3; "Посейдон" then needs both holders not boycotting | "Складчина шести правлений": all six pay equal shares; expedition-share programme 9, +50 PP, stability +3%; all six +3; "Посейдон" tolerates one boycotting company | `mainland_contacts` |
-| War economy | "Картельные цены": output aggregate +5% (`NAM_board_preview_arsenal`), 4500 rifles; programmes 1 and 2 need their sponsor's stance "for"; Loren +5, Ferrant and Arktur +8, Smenkom and Reidbank -8 | "Открытые военные торги": programmes 1 and 2 ignore the sponsor's boycott and each gets cap +2; +3000 men, +40 PP; Reidbank and Smenkom +6, Arktur and Ferrant -6 | `island_arsenal` |
-| Supply | "Танкерный караван": +40 PP, a 365-day fuel spirit, fuel reserve +6000; Loren +8, Navis +4, Smenkom -5 | "Береговые склады": harbour-works programme 4, +3000 men, a supply hub at the capital's main port (fallback 100 capital); Smenkom +8, Loren -4 | `ration_lists` |
-| Fleet | "Конвойная флотилия": a 365-day convoy spirit, one escort ship now, escort contracts cap +1; Navis +8, Arktur -5 | "Огневая эскадра": naval XP +25, `ADISCORD_tech_amphibious_assault_landing_systems`, a 365-day bombardment spirit; island rule: an alerted strait island builds no coastal fort and the landing spirit is one tier stronger; Arktur and Ferrant +6, Navis -5 | `company_docks` |
-| Marines | "Ударные роты": `ADISCORD_tech_amphibious_shore_parties`, army XP +15, a 365-day attack spirit; raised and landed marines start at 35% experience instead of 20% / 30%; Arktur +8, Smenkom -5 | "Береговые батальоны": +3000 men, 3000 rifles, marine raise cap +1; Smenkom +8, Arktur -5 | `marine_officers` |
+A folded focus is gone from the source, the AI plan and both localisation
+files; its rows, unlocks, law, development row, charter grant, rule hooks and
+story event live in the absorbing focus. A story event of a folded focus fires
+from the absorber 10-30 days after the absorber's own event, or from the event
+or effect named below. The merged trust of an absorber is the sum of the
+absorbed rows, without rows of -2 to +2 and capped at 10 per company (the
+partition night's holders +12 is the exception).
 
-Stage B has a decision pair instead of a focus pair: "Обещание южным
-островам" or "Хлебная блокада Шардена" (section D6).
+| Absorber | Absorbed | What moves with it |
+| --- | --- | --- |
+| `private_gospel` | `future_output_pledge` | the pledge income row of `NAM_corp_monthly` |
+| `arsenal_monopoly` | `island_fleet_shares` | `NAM_convoy_service_authorised` and the convoy service unlock |
+| `escheated_throne` | `silence_after_settlement`, `escheated_land_auction` | empty stubs |
+| `treaty_two_judases` | `proxy_parliament`, `ministries_in_concession` | empty stubs |
+| `privatise_governorate` | `inheritance_without_empire`, `uncrested_buyers` | appoint masters, buy mortgages, campaign mutineers; event 61 |
+| `society_99_1` | `elected_in_absentia`, `widows_share`, `family_relief_fund` | unseat proxies, campaign agitators, harbour infirmaries, exchange hiring, relief fund; event 69 |
+| `land_foreclosure` | `loren_priority` | event 55 |
+| `concession_courts` | `eflor_debt_purchase` | redeem mortgages |
+| `hereditary_roll` | `district_buyout` | pay captains |
+| `old_settlers_oath` | `boundary_notches`, `price_of_silence` | public works; event 65 |
+| `subsidised_opposition` | `political_debt_register` | the four revoke decisions, the six sanction rows, two scripted-loc texts |
+| `incumbents_credit` | `mourning_licence` | the mourning licence law and disperse mourners; event 71 |
+| `private_strait` | `return_voyage` | the return campaign, the drill's return rows; event 78 |
+| `corporate_mass_housing` | `azhar_land_fund` | rows only |
+| `table_six` | `copy_across_strait` | rows only |
+| `close_the_lawsuit` | `eflor_petition` | event 58 (it keeps its own guard) |
+| `chairmans_copy` | `lawyers_of_both_shores` | retender and the tender bonus of `NAM_board_close_tender` |
+| `port_rights_monopoly` | `representation_for_loss` | rows only |
+| `mainland_inventory` | `mainland_contacts` | the cell programme, the cell seed, the enemy's raid category; event 118 |
+| `partition_night` | `invasion_prospectus`, `holders_underwrite`, `six_share_pool`, `northern_safehouses`, `southern_safehouses` | event 81 dispatches 97, 180 (the backers' choice), 122 and 123; the holders-or-pool pair is the three answers of event 180; the safehouse rules read `NAM_board_partition_fixed` |
+| `operation_poseidon` | `invasion_fleet` | the gate's men and the fleet spirit; event 101 |
+| `war_economy_charter` | `double_shifts` | `NAM_board_double_shifts_spirit` |
+| `island_arsenal` | `steel_for_guns` | rows only |
+| `supply_overseas` | `ration_lists`, `bunker_piers`, `expedition_rear` | `NAM_board_expedition_rear_spirit` and the expedition-rear island rules |
+| `private_navy` | `assembly_roads` | `NAM_board_assembly_roads_spirit`, the +10 island readiness of `NAM_isl_open_target`; event 100 |
+| `company_docks` | `landing_craft`, `loading_schedules`, `island_squadron` | the two technologies, the soundings rule, the island squadron's escort cap and naval bases |
+| `landing_contracts` | `marine_school`, `marine_kit` | the drill's landing rehearsal rows, the second marine raise slot |
+| `storm_companies` | `marine_officers` | rows only |
+| `shore_battalions` | `mercenary_battalions` | the mercenary brigade and `NAM_board_mercenary_pay` |
+| `first_wave` | `landing_flotilla` | rows only |
+
+Moved to the wartime tree of the return (appendix G): `hospital_ships` into
+`NAM_rtw_districts_rise` (the spirit `NAM_board_hospital_ships_spirit`, the
+social-system programme and its men) and `beach_masters` into
+`NAM_rtw_war_cabinet` (its rifles, support equipment, squad weapons, army
+experience and trust). Parked for the tree after the return:
+`admitted_owners_register` (section D15).
+
+`tools/tests/test_adiscord_nam_focus.py` lists the 48 removed ids in
+`COMPACT_REMOVED` and checks that none of them is left in the source.
 
 ### D4. Rewards
 
-The rewards follow appendix C.1 (writing order, script shapes, tooltip layout
-and T17). Every focus gives two to five kinds; the branch adds three kind
-letters to the kinds table of the test: K (technology through `set_technology`
-with an experience fallback when it is already researched), U (a formation:
-`create_unit`, `create_ship`, `NAM_board_raise_marine_division`,
-`NAM_board_raise_mercenary_brigade`, `NAM_board_launch_escorts`) and W (war
-started, `NAM_board_poseidon_launch`). A focus whose rows are all native has no
-`_reward_tt`, because the key would only restate native lines:
-`island_arsenal` and `marine_officers`. Island claims are written in the
-`hidden_effect` and shown by one tooltip line; they have a native consumer
-(lower resistance target and faster decay on claimed states).
+The rewards follow appendix C.1: writing order, script shapes, tooltip layout
+and T17; two to seven kinds per focus, with the letters of `reward_kinds`
+(the invasion lanes add K technology with an experience fallback, U a
+formation, Y readiness and Z war started). The focus source holds every row.
+Fixed points of the compact tree:
 
-| Focus | Rewards (trust in the reward key) |
-| --- | --- |
-| `invasion_prospectus` | +50 PP; holders +4; opens the category "Подготовка вторжения" |
-| `holders_underwrite`, `six_share_pool` | section D3 |
-| `mainland_contacts` | unlocks the cell programme; cells +10 in each of the six districts; +2000 men; holders +3 |
-| `assembly_roads` | 10 convoys; naval XP +25; spirit `NAM_board_assembly_roads_spirit` 180 days; island rule: a newly opened target starts at readiness +10 |
-| `invasion_fleet` | +60 PP; +6000 men; spirit `NAM_board_invasion_fleet_spirit` 365 days; readiness +5; holders +5 and the chair's company +5 in one package |
-| `war_economy_charter` | unlocks programme 1; `low_economic_mobilisation` from `civilian_economy`, else +40 PP; Ferrant +5, Smenkom -3; economy marked dirty |
-| `double_shifts` | spirit `NAM_board_double_shifts_spirit` 270 days; 3000 rifles; Ferrant +3, Smenkom -4 |
-| `steel_for_guns` | one civilian factory converted to an arms factory (state 228 first; fallback 80 capital); 24 artillery; army XP +10; Ferrant +5 |
-| `island_arsenal` | unlocks programme 2; 3000 rifles, 96 squad weapons; army XP +15 |
-| `synthetic_plant` | one synthetic refinery (state 231 first, a slot added; fallback 150 capital); fuel reserve +4000; Loren +5, Reidbank -3 |
-| `war_bonds` | unlocks programme 3 and the decision "Страховой полис экспедиции"; +100 capital; Reidbank +6, Smenkom -3 |
-| `arsenal_of_the_boards` | one economy-law step (low -> partial, civilian -> low, else +60 PP); 4500 rifles, 96 squad weapons; economic development programme; one arms factory (state 227 first, a slot added; fallback 150 capital); charter line of Ferrant (C.2); Ferrant +5, Reidbank +4 |
-| `war_quartermaster` | fuel reserve +6000; +1 naval base at the capital's main port (fallback 60 capital); Loren +5, Reidbank -3 |
-| `ration_lists` | +4000 men; 60 support equipment, 150 trucks; stability +2%; Smenkom +3, Loren +3 |
-| `bunker_piers` | +1 naval base at 11393 (state 225) and at 13018 (231), each with its own 40-capital fallback; Navis +3, Loren +3 |
-| `hospital_ships` | +3000 men; spirit `NAM_board_hospital_ships_spirit` 365 days; social-system development programme; Smenkom +4, Reidbank -3 |
-| `supply_overseas` | +40 PP; fuel reserve +5000; Loren +4, Smenkom +4; island rule: "Склады плацдарма" costs 500 fuel instead of 1000 and gives readiness +25 instead of +20 |
-| `expedition_rear` | 90 support equipment; spirit `NAM_board_expedition_rear_spirit` 365 days; Loren +5, Smenkom +4; island rule: a nationalised island's capital gets +1 naval base and a supply hub, a failed landing returns half of the launch rifles |
-| `private_navy` | unlocks programme 5; 8 convoys; naval XP +15; Navis +6, Arktur -3 |
-| `company_docks` | unlocks programme 6 (base cap 2); one dockyard (state 227 first, a slot added; fallback 150 capital); Navis +4, Ferrant +3 |
-| `landing_craft` | `ADISCORD_tech_amphibious_landing_craft`; naval XP +10; Ferrant +3 |
-| `loading_schedules` | `ADISCORD_tech_amphibious_embarkation_schedules`; naval XP +15; +40 PP; island rule: "Промер глубин" gives readiness +20 instead of +15 |
-| `landing_flotilla` | 30 support equipment; army XP +10; Navis +4, Arktur +4 |
-| `island_squadron` | escort contracts cap +1; naval XP +30; two naval-base levels at the capital's main port, each with a 60-capital fallback; Navis +6 |
-| `landing_contracts` | unlocks programme 7 (cap 1, the marine template ensured); `ADISCORD_tech_amphibious_formation_organization` (naval invasion cap 4 -> 6); army XP +10; Arktur +6, Navis -3 |
-| `marine_school` | the existing drill `NAM_exile_drill` ("Учения на пляжах островов") also gives naval XP +5 and the spirit `NAM_board_landing_rehearsal_spirit` "Отработка высадки" for 90 days, restarted by each drill; +3000 men; army XP +10 |
-| `marine_kit` | 3000 rifles, 96 squad weapons; marine raise cap +1; Arktur +4 |
-| `marine_officers` | `ADISCORD_tech_amphibious_staff_sections`; command power +20; +40 PP |
-| `beach_masters` | 6000 rifles, 60 support equipment, 48 squad weapons; army XP +10; Smenkom +3, Arktur +3 |
-| `mercenary_battalions` | one "Line Infantry Brigade" at the capital at 50% experience (without the template 6300 men); price: spirit `NAM_board_mercenary_pay` 180 days; Smenkom +4, Reidbank -3 |
-| `first_wave` | 192 squad weapons; army development programme; one marine division at the capital now; marine raise cap +1; charter line of Arktur (C.2); Arktur +5, Smenkom +3 |
-| island operations | section D6 |
-| safehouses, "Посейдон" | sections D7 and D8 |
+- `mainland_inventory`: unlocks the cell programme, +100 PP, +2000 men, the
+  inventory preview, cells +10 in the six districts (`NAM_board_cells_seed`),
+  trust Reidbank +5 and Loren -3; event 94, then event 118, whose answer b
+  pays the two current vote leaders +6 and the other four -2
+  (`NAM_story_118_b_leaders_tt`), because no holder exists before the night.
+- `table_six`: +125 PP, 10 convoys, naval experience 15, the cultural
+  development reform; +12 trust to every company below 50, Navis +4,
+  Arktur -4, a 90-day immunity from the vote of no confidence.
+- `partition_night`: opens the category `NAM_board_subversion` (appendix F),
+  +4000 men, 10 convoys, `NAM_board_partition_charter` for 180 days, the
+  partition of the mainland between the two vote leaders (holders +12, the
+  other four -5), readiness +10, fuel reserve +6000, cells +15 in each of the
+  six districts, `NAM_board_partition_claims` once, then event 81. With the
+  category unlock it is at the ceiling of seven kinds.
+- `operation_poseidon`: +15 000 men and +60 PP; previews of
+  `NAM_board_poseidon_spirit` (120 days) and `NAM_board_invasion_fleet_spirit`
+  (365 days), which the launch adds only on a real start;
+  `NAM_rtw_tree_next_day_tt`; then `NAM_board_poseidon_launch` (section D8).
+- The outer lanes carry the former invasion rewards of their absorbed
+  focuses: the programme unlocks of section D5, the technologies
+  `ADISCORD_tech_amphibious_*` with their fallback, the buildings through
+  `NAM_board_build_on_island` with the capital fallback, the formations, the
+  timed spirits and the island rules of D6.
 
-Caps of the programmes only grow through `NAM_board_inv_cap_add`, so the order
-of completion never overwrites a bonus. The marine raise cap reaches 3 on the
-storm route and 4 on the battalions route.
+Island rules read the completed focus, never a mirror flag:
+`private_navy` adds 10 readiness to a newly opened island target;
+`company_docks` raises "Промер глубин" to readiness +20; `supply_overseas`
+makes "Склады плацдарма" cost 500 fuel for readiness +25 and gives a
+nationalised island's capital a naval base and a supply hub, and a failed
+landing returns half of the launch rifles; `fire_squadron` stops alerted
+strait islands from building a coastal fort and raises the landing spirit one
+tier; `storm_companies` lands marines at 35% experience.
 
-Spirits (all `add_timed_idea`, registered pictures, expire by themselves):
-`NAM_board_assembly_roads_spirit` (invasion preparation speed, invasion
-penalty), `NAM_board_invasion_fleet_spirit` (amphibious invasion, invasion
-planning speed), `NAM_board_double_shifts_spirit` (factory and dockyard output,
-stability; `on_add` / `on_remove` mark the economy dirty),
-`NAM_board_tanker_caravan_spirit` (fuel gain, navy fuel use),
-`NAM_board_hospital_ships_spirit` (attrition, experience loss),
-`NAM_board_expedition_rear_spirit` (supply and army fuel use),
-`NAM_board_escort_flotilla_spirit` (convoy escort efficiency, convoy retreat),
-`NAM_board_fire_squadron_spirit` (shore bombardment, naval hit chance),
-`NAM_board_storm_companies_spirit` (army attack and organisation),
-`NAM_board_landing_rehearsal_spirit`, `NAM_board_mercenary_pay` and
-`NAM_board_porous_barrels` (prices), `NAM_board_poseidon_spirit` and
-`NAM_board_poseidon_ebb` (section D8). The values live in
-`common/ideas/ADISCORD_nam_resource_war_ideas.txt`.
+Spirits of the outer lanes (all `add_timed_idea`, values in
+`common/ideas/ADISCORD_nam_resource_war_ideas.txt`):
+`NAM_board_assembly_roads_spirit`, `NAM_board_invasion_fleet_spirit`,
+`NAM_board_double_shifts_spirit` (`on_add` / `on_remove` mark the economy
+dirty), `NAM_board_tanker_caravan_spirit`, `NAM_board_expedition_rear_spirit`,
+`NAM_board_escort_flotilla_spirit`, `NAM_board_fire_squadron_spirit`,
+`NAM_board_storm_companies_spirit`, `NAM_board_landing_rehearsal_spirit`,
+`NAM_board_mercenary_pay`, `NAM_board_porous_barrels`,
+`NAM_board_poseidon_spirit` and `NAM_board_poseidon_ebb`.
 
 ### D5. Invasion programmes
 
 Category `NAM_board_invasion` "Подготовка вторжения"
-(`common/decisions/categories/ADISCORD_nam_resource_war_categories.txt`):
-`allowed = { tag = NAM }`, visible with `NAM_corp_takeover`, the prospectus
-completed and `NAM_board_ended` not 1; priority 25. It holds programmes 1-9,
-the cell programme and the mission "Плацдарм \"Посейдона\"".
+(`common/decisions/categories/ADISCORD_nam_resource_war_categories.txt`,
+priority 25): `allowed = { tag = NAM }`, visible with `NAM_corp_takeover`,
+`NAM_board_ended` not 1 and any of `NAM_board_partition_fixed` (first row: the
+flag survives the tree swap) or the completed lane openers
+`war_economy_charter`, `war_quartermaster`, `private_navy`,
+`landing_contracts`, `mainland_inventory`. It holds programmes 1-9, the cell
+programme and the mission "Плацдарм \"Посейдона\"".
 
 Shared rules:
 
 - arrays `NAM_board_inv_runs`, `NAM_board_inv_running`, `NAM_board_inv_cap`
   (index = programme) and `NAM_board_inv_share_done` are created in the
   one-time guard of `NAM_board_initialize`;
-- caps: the unlocking focus sets the base and rules or events add to it, all
+- caps: the unlocking focus or answer sets the base and rules add to it, all
   through `NAM_board_inv_cap_add` (temps `NAM_board_inv_k`,
   `NAM_board_inv_cap_change`), clamped to 0-6 (arsenal 0-7, marines 0-4) and
-  never below the runs already made;
+  never below the runs already made, so the order of completion never
+  overwrites a bonus;
 - custom cost contract of C.6: `cost = 0`, `custom_cost_text` with `_blocked`
   and `_tooltip`, every currency checked, rechecked in a `hidden_trigger` of
   `complete_effect` and debited once; all nine are in `CUSTOM_COST_DECISIONS`
@@ -2480,28 +2550,45 @@ Shared rules:
 - the sponsor gate reads `NAM_board_product_blocked_<k> = no`; none of the
   programmes takes a chancery slot.
 
-| # | Decision | Unlock | Price | Days | Result | Cap | Sponsor | Launch trust |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `NAM_board_inv_convert_plant` "Перевод завода на военный заказ" (state 225-231) | `war_economy_charter` | 30 capital, 20 PP | 30 | one civilian factory of the target becomes an arms factory; no site: 30 capital back | 3, +2 tenders | Ferrant (`NAM_board_inv_arms_sponsor_ok_2`: cartel needs "for", tenders ignore the boycott) | Ferrant +3, Smenkom -2 |
-| 2 | `NAM_board_inv_arsenal_order` "Заказ островного арсенала" | `island_arsenal` | 50 capital, 10 PP | 30 | 4500 rifles, 96 squad weapons | 4, +2 tenders, event 100 +1 or -1 | Arktur (`_ok_4`, same rule) | Arktur +3, Ferrant +2 |
-| 3 | `NAM_board_inv_fuel_freight` "Нефтяной фрахт Рейдбанка" | `war_bonds` | 60 capital, 15 PP | 30 | fuel reserve +6000 | 3 | Reidbank | Reidbank +3, Loren -2 |
-| 4 | `NAM_board_inv_harbour_works` "Портовые работы" (state 225-231) | `shore_depots` | 30 capital, 15 PP | 30 | +1 naval base at the island's main port while below 10; else 30 capital back | 3 | Smenkom | Smenkom +3 |
-| 5 | `NAM_board_inv_tonnage` "Фрахт транспортного тоннажа" | `private_navy` | 80 capital, 15 PP | 30 | 5 convoys | 4, event 100 +1 or -1 | Navis | Navis +3, Arktur -2 |
-| 6 | `NAM_board_inv_escort_contract` "Закладка эскорта" | `company_docks` | 120 capital, 25 PP | 120 | one `ADISCORD_escort_ship_2155` while an island yard is held (`NAM_board_island_yard_ready`); else 120 capital back | 2, +1 `escort_flotilla`, +1 `island_squadron`, +1 event 113 b | Navis; from the second run Navis "for" | Navis +4, Arktur -3 |
-| 7 | `NAM_board_inv_raise_marines` "Набор морской бригады" | `landing_contracts` | 40 capital, 4300 men, 3870 rifles, 192 squad weapons | 45 | one "Island Marines" division at the capital, 20% experience, 35% after `storm_companies` | 1, +1 `marine_kit`, `shore_battalions`, `first_wave` | Arktur; visible and available only while `NAM_marine_orders_open = yes` | Arktur +3, Smenkom +2 |
-| 8 | `NAM_board_inv_holders_levy` "Взнос держателей" | `holders_underwrite` | 25 PP; each holder -3 at launch | 30 | 4 convoys, fuel reserve +5000 | 3 | both holders not boycotting (`NAM_board_holders_backing`) | holders -3 (the price) |
-| 9 | `NAM_board_inv_expedition_share` "Пай в экспедиции" (the company selected on the pyramid, stored in `NAM_board_inv_share_target`) | `six_share_pool` | 40 capital, 25 PP; that company -3 and its product blocked while the run lasts | 30 | by company: Loren fuel +6000, Ferrant 4500 rifles, Navis 5 convoys, Arktur 36 artillery and 96 squad weapons, Smenkom 2500 men, Reidbank 80 capital; that company +6 | once per company | the selected company | that company -3 |
+| # | Decision | Unlock | Price | Days | Result | Cap | Sponsor |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `NAM_board_inv_convert_plant` "Перевод завода на военный заказ" (state 225-231) | `war_economy_charter` | 30 capital, 20 PP | 30 | one civilian factory of the target becomes an arms factory; no site: 30 capital back | 3, +2 `open_war_tenders` | Ferrant (`NAM_board_inv_arms_sponsor_ok_2`: cartel needs "for", tenders ignore the boycott) |
+| 2 | `NAM_board_inv_arsenal_order` "Заказ островного арсенала" | `island_arsenal` | 50 capital, 10 PP | 30 | 4500 rifles, 96 squad weapons | 4, +2 tenders, event 100 +1 or -1 | Arktur (`_ok_4`, same rule) |
+| 3 | `NAM_board_inv_fuel_freight` "Нефтяной фрахт Рейдбанка" | `war_bonds` | 60 capital, 15 PP | 30 | fuel reserve +6000 | 3 | Reidbank |
+| 4 | `NAM_board_inv_harbour_works` "Портовые работы" (state 225-231) | `shore_depots` | 30 capital, 15 PP | 30 | +1 naval base at the island's main port while below 10; else 30 capital back | 3 | Smenkom |
+| 5 | `NAM_board_inv_tonnage` "Фрахт транспортного тоннажа" | `private_navy` | 80 capital, 15 PP | 30 | 5 convoys | 4, event 100 +1 or -1 | Navis |
+| 6 | `NAM_board_inv_escort_contract` "Закладка эскорта" | `company_docks` | 120 capital, 25 PP | 120 | one `ADISCORD_escort_ship_2155` while an island yard is held (`NAM_board_island_yard_ready`); else 120 capital back | 3, +1 `escort_flotilla`, +1 event 113 b | Navis; from the second run Navis "for" |
+| 7 | `NAM_board_inv_raise_marines` "Набор морской бригады" | `landing_contracts` | 40 capital, 4300 men, 3870 rifles, 192 squad weapons | 45 | one "Island Marines" division at the capital, 20% experience, 35% after `storm_companies` | 2, +1 `shore_battalions`, +1 `first_wave` | Arktur; visible and available only while `NAM_marine_orders_open = yes` |
+| 8 | `NAM_board_inv_holders_levy` "Взнос держателей" | event 180 b (`NAM_board_inv_backing = 1`) | 25 PP; each holder -3 at launch | 30 | 4 convoys, fuel reserve +5000 | 3 | both holders not boycotting (`NAM_board_holders_backing`) |
+| 9 | `NAM_board_inv_expedition_share` "Пай в экспедиции" (the company selected on the pyramid, stored in `NAM_board_inv_share_target`) | event 180 a (`NAM_board_inv_backing = 2`) | 40 capital, 25 PP; that company -3 and its product blocked while the run lasts | 30 | by company: Loren fuel +6000, Ferrant 4500 rifles, Navis 5 convoys, Arktur 36 artillery and 96 squad weapons, Smenkom 2500 men, Reidbank 80 capital; that company +6 | once per company | the selected company |
 
-Programme 7 and the marine template: "Island Marines" is sold at a fixed
-price, and `NAM_marine_unlock_template` unlocks the template only once
-`NAM_marine_orders_open = no`. A running raise is cancelled with its full
-refund when the return landing closes the marine orders, so the template stays
-locked whenever a fixed-price raise is possible.
+The marine raise cap reaches 3 on the storm route and 4 on the battalions
+route. "Island Marines" is sold at a fixed price, and
+`NAM_marine_unlock_template` unlocks the template only once
+`NAM_marine_orders_open = no`; a running raise is cancelled with its full
+refund when the return landing closes the marine orders, so the template
+stays locked whenever a fixed-price raise is possible.
 
 The expedition share holds the product: each `NAM_board_product_blocked_<k>`
 trigger has a row that is true while `NAM_board_inv_running^9 = 1` and
-`NAM_board_inv_share_target = <k>`, so every consumer of that company's product
-sees the block for the 30 days of the run without another flag.
+`NAM_board_inv_share_target = <k>`.
+
+**The backers' choice** (`ADISCORD_nam_story.180` "Подписной лист экспедиции",
+dispatched by event 81 twelve days after the night; `is_triggered_only`,
+`fire_only_once`). Each answer writes `NAM_board_inv_backing` once; that
+number replaces every reader of the two folded pair focuses: the holders'
+levy, the expedition share, the cell price, the rifle debit of a cell run, the
+backers' condition of "Посейдон" and two scripted-loc texts.
+
+| Answer | Effects | Backing | Follow-up |
+| --- | --- | --- | --- |
+| a "Складчина шести правлений" (default, AI 80) | unlocks the expedition share; capital -40; +50 PP; stability +3%; all six +3 | 2 | event 99 in 30 days |
+| b "Подряд держателей" (AI 15) | unlocks the holders' levy (cap 8 +3); 6 convoys; one proxy vote to each holder until the next annual meeting; holders +8, the other four -3; cell runs cost 750 rifles | 1 | event 98 in 30 days |
+| c "Совет обходится без подписки" (AI 5) | capital +40; no decision | 0 | - |
+
+"Посейдон" then needs both holders not boycotting (backing 1) or tolerates one
+boycotting company (backing 0 or 2): `NAM_board_invasion_backers_ready`.
+`NAM_board_end_operations` clears the variable.
 
 ### D6. Island operations and nationalisation
 
@@ -2520,18 +2607,24 @@ overlord in history, and guarantees are blocked by the default game rule. They
 are not suppressed minors, but each registration still calls
 `ADISCORD_release_non_participating_minor_optimization`.
 
-**Operation focuses** (`available`: the target exists and is not a subject,
-tooltip `NAM_isl_target_free_tt`; Sharden also needs `NAM_isl_staging_port_held`,
-648 or 651 owned and controlled, tooltip `NAM_isl_staging_tt`):
+**Operation focuses**, early in the outer right lane ("Ульвен" from
+`private_navy`, "Лурен" from `landing_contracts`, both on row 8, "Шарден" from
+either on row 9). `available`: the target exists and is not a subject (tooltip
+`NAM_isl_target_free_tt`); Sharden also needs `NAM_isl_staging_port_held`, 648
+or 651 owned and controlled (tooltip `NAM_isl_staging_tt`). An operation focus
+does not declare war: the war starts with "Высадка" at the moment the player
+chooses.
 
 | Focus | Rewards |
 | --- | --- |
-| `ulven_operation` (c2) | unlocks "Высадка" and "Промер глубин" (the rest of the category is named in the key); claims on 643-648; Ulven readiness +15 through `NAM_isl_open_target`; naval XP +20; Navis +5, Ferrant +5 |
-| `luren_operation` (c2) | the same for 649-652 and Luren; Loren +5, Smenkom +5 |
-| `sharden_operation` (c3) | unlocks the promise and the blockade; claims on 672-680; Sharden readiness +10; 10 convoys; Arktur +5, Reidbank +5 |
+| `ulven_operation` (c1) | unlocks "Высадка" and "Промер глубин"; claims on 643-648; Ulven readiness +15, +25 after `private_navy` (`NAM_isl_open_target`); naval XP +20; Navis +5, Ferrant +5 |
+| `luren_operation` (c1) | the same for 649-652 and Luren; Loren +5, Smenkom +5 |
+| `sharden_operation` (c2) | unlocks the promise and the blockade; claims on 672-680; Sharden readiness +10, +20 after `private_navy`; 10 convoys; Arktur +5, Reidbank +5 |
 
-An operation focus does not declare war: the war starts with "Высадка" at the
-moment the player chooses.
+The first successful launch fires `ADISCORD_nam_story.101` "Флаг на флагмане"
+the next day (`fire_only_once`): every answer writes
+`NAM_board_expedition_flag`, which the island tenders 125-127 read, and the
+landing settles weeks later, so the flag is always written before a tender.
 
 **Category** `NAM_board_islands` "Островные операции": NAM only, visible with
 `NAM_corp_takeover`, `NAM_board_ended` not 1 and the Ulven or Luren operation
@@ -2543,22 +2636,21 @@ state variable `NAM_isl_readiness` on the capital state (0-100,
 
 | Decision | Price | Days | Conditions beyond the council operating | Result |
 | --- | --- | --- | --- | --- |
-| `NAM_isl_soundings` "Промер глубин" | 20 PP | 21 | operation focus done, status 0, chancery slot (`NAM_judas_slot_tt`), no reopen cooldown | readiness +15, +20 after `loading_schedules` |
+| `NAM_isl_soundings` "Промер глубин" | 20 PP | 21 | operation focus done, status 0, chancery slot (`NAM_judas_slot_tt`), no reopen cooldown | readiness +15, +20 after `company_docks` |
 | `NAM_isl_depots` "Склады плацдарма" | 40 capital, 1000 fuel (500 after `supply_overseas`) | 28 | as above; Loren's product not blocked | readiness +20, +25 after `supply_overseas` |
 | `NAM_isl_bribe` "Подкуп гарнизона" | 50 capital | 30 | as above, once per island; Reidbank trust 35 or more | readiness +15; flag `NAM_isl_bribed`: one defender brigade fewer at the declaration |
 | `NAM_isl_launch` "Высадка" | Ulven, Luren: 25 PP, 12 900 men, 11 610 rifles; Sharden: 40 PP, 21 500 men, 19 350 rifles | instant | `has_war = no`; no island war and no war of return; majority held; Navis and Loren products not blocked; readiness 50 or more; 20 convoys; no reopen cooldown; the target (and a pact partner) independent and at peace; no preparation running on the island; Sharden: the staging port | `NAM_isl_op_launch` |
 | `NAM_isl_sharden_promise` "Обещание южным островам" | 35 PP | 30 | Sharden focus done, CHD status 0, neither Sharden decision done or running | flag `NAM_isl_sharden_promise_done`: two CHD brigades fewer at the declaration; the four southern states 672, 677, 678, 679 are never cored; Arktur and Reidbank -8 at completion; the Sharden concession counts 1 vote and half its dividend |
-| `NAM_isl_sharden_blockade` "Хлебная блокада Шардена" | 40 capital, 2000 fuel | 60 | as the promise, mirrored | CHD spirit `NAM_isl_sharden_hunger` 180 days (stability, war support, organisation, attrition); NAM spirit `NAM_isl_blockade_strain` 180 days; Sharden readiness +10 |
+| `NAM_isl_sharden_blockade` "Хлебная блокада Шардена" | 40 capital, 2000 fuel | 60 | as the promise, mirrored | CHD spirit `NAM_isl_sharden_hunger` 180 days; NAM spirit `NAM_isl_blockade_strain` 180 days; Sharden readiness +10 |
 | `NAM_isl_pacify` "Умиротворение" | 25 PP, 50 capital | 30 | status 2, every island state owned and controlled | every island state: resistance -15, compliance +10 |
 | `NAM_isl_nationalise` "Национализация" | Ulven 70 PP + 180 capital, Luren 50 + 120, Sharden 90 + 250; with an operator whose product is not blocked 120 / 80 / 170 capital | 90 | status 2, island held, capital-state resistance 25% or less | `NAM_isl_nationalise_finish` |
 | `NAM_isl_insurance` "Страховой полис экспедиции" | 15 PP, 60 capital | 30 | `war_bonds` done, an island at status 0, not insured; Reidbank's product not blocked | flag `NAM_isl_insured`, consumed by the next settlement: a failed landing pays back 150 capital and costs the blamed companies 8 instead of 15; a stalled one pays back 75; a victory consumes it for nothing |
 
 The three preparations take a chancery slot each and keep a state receipt on
 the capital (`NAM_isl_prep_soundings`, `_depots`, `_bribe`); "Высадка" refuses
-an island with a running preparation, so no paid run is cut off by the war.
-All paid island decisions follow the custom cost contract and are in
-`CUSTOM_COST_DECISIONS`; a cancel returns capital and fuel, never political
-power or trust.
+an island with a running preparation. All paid island decisions follow the
+custom cost contract and are in `CUSTOM_COST_DECISIONS`; a cancel returns
+capital and fuel, never political power or trust.
 
 Missions (timeout-only, `available = { hidden_trigger = { always = no } }`,
 `selectable_mission = no`, registered in
@@ -2599,8 +2691,8 @@ Missions (timeout-only, `available = { hidden_trigger = { always = no } }`,
    `NAM_isl_echelon_k` / `NAM_isl_echelon_day` and the hidden event 132 runs
    `NAM_isl_second_echelon` 10 days later: 1 division (Sharden 2) on a held
    landing province, otherwise 4300 men and 3870 rifles back per division;
-8. the bribe flag on the capital is consumed; readiness stays through the war
-   (the settlements read it).
+8. the bribe flag on the capital is consumed; readiness stays through the war;
+9. event 101 the next day (it fires once per campaign).
 
 **Defender reinforcement**, once per war (`NAM_isl_defence_mobilised`, cleared
 at release; units given earlier stay):
@@ -2614,49 +2706,42 @@ at release; units given earlier stay):
 
 - native capitulation: `NAM_isl_record_capitulation` runs inside the existing
   `nam:on_capitulation_immediate` and `nam:on_capitulation` blocks of
-  `common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt`, after the
-  Veyran call. A registered island beaten by NAM or its subject keeps the
-  two-day receipt `NAM_isl_capitulation_reserved` and the war settles as a
-  victory once every registered island has fallen (`NAM_isl_all_defeated`).
-  NAM capitulating to a participant is a failed landing. The receipt makes the
-  `nam:` block set `skip_default_capitulation` in both directions, so the ZZ
-  fallback never annexes the Directory or a target;
+  `common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt`. A registered
+  island beaten by NAM or its subject keeps the two-day receipt
+  `NAM_isl_capitulation_reserved` and the war settles as a victory once every
+  registered island has fallen (`NAM_isl_all_defeated`). NAM capitulating to a
+  participant is a failed landing. The receipt makes the `nam:` block set
+  `skip_default_capitulation` in both directions, so the ZZ fallback never
+  annexes the Directory or a target;
 - capital hold: `NAM_isl_monthly` sets `NAM_isl_capital_hold` (40 days) when NAM
   controls every registered capital state and settles a victory at the next
-  pulse that still finds them held; a lost capital clears the flag, so the
-  defender has a month to answer;
+  pulse that still finds them held; a lost capital clears the flag;
 - beachhead timeout (45 / 60 days): a foothold (landing province or any island
   state) opens the campaign mission, none is a failed landing;
 - campaign timeout (105 / 150 days): every registered capital held is a
   victory; the main capital held but not the partner's annexes the main target
   and settles the partner as stalled; a foothold alone is a stalled landing;
-  nothing is a failed landing;
 - external: `NAM_isl_close_external` (inside the existing `nam:on_peace`,
   `nam:on_puppet` and `nam:on_annex` blocks, after
-  `NAM_great_war_close_external`) runs only while `NAM_isl_op_target > 0`. When
-  NAM, the target or the partner stopped being an independent belligerent by
-  another hand, the war closes without awards (status 2 for an island whose
-  capital NAM owns, else 0); a partner that left alone is released while the
-  main target fights on.
+  `NAM_great_war_close_external`) runs only while `NAM_isl_op_target > 0`; the
+  war closes without awards (status 2 for an island whose capital NAM owns,
+  else 0); a partner that left alone is released while the main target fights
+  on.
 
-**Commit rule.** Native peace, annexation and subjugation raise callbacks that
-reach `NAM_isl_close_external`. Every terminal island effect therefore first
-copies `NAM_isl_op_target` and `NAM_isl_pact_member` into the temps
-`NAM_isl_settle_k` and `NAM_isl_settle_member`, writes the terminal statuses
-and clears both variables, and only then calls `white_peace` or
-`annex_country`. `NAM_isl_release` runs last: it removes the island missions,
-releases the campaign major status of NAM and the islands, dismantles the pact
-faction (founder flag) and clears `NAM_isl_participant`,
-`NAM_isl_defence_mobilised` and `NAM_isl_capital_hold`. Pinned by
-`test_island_war_has_three_defined_peaces`.
+**Commit rule.** Every terminal island effect first copies `NAM_isl_op_target`
+and `NAM_isl_pact_member` into the temps `NAM_isl_settle_k` and
+`NAM_isl_settle_member`, writes the terminal statuses and clears both
+variables, and only then calls `white_peace` or `annex_country`.
+`NAM_isl_release` runs last: it removes the island missions, releases the
+campaign major status of NAM and the islands, dismantles the pact faction
+(founder flag) and clears `NAM_isl_participant`, `NAM_isl_defence_mobilised`
+and `NAM_isl_capital_hold`.
 
 | Settlement | Effects |
 | --- | --- |
 | `NAM_isl_settle_victory` (temp `NAM_isl_member_stalled`) | status 2; `white_peace` and `annex_country` (`transfer_troops = no`) of each annexed island; island states still held by a participant are transferred and every owned one set to NAM's control; Sharden's hunger spirit removed; insurance consumed; a stalled partner gets white peace, half readiness, a 90-day reopen flag and the alert; stability +3%; the other strait island is alerted; tender event 125/126/127 the next day per annexed island; economy dirty; recount queued |
 | `NAM_isl_settle_stalled` | status 0; white peace with every registered island; spirit `NAM_isl_landing_stalled` 120 days; readiness halved, reopen after 90 days, island alerted; insurance pays 75; Navis and the island's bidders -5 (skipped with temp `NAM_isl_quiet = 1`) |
-| `NAM_isl_settle_failed` | status 0; white peace; spirit `NAM_isl_landing_failed` 180 days; readiness 0, reopen after 120 days, island alerted and keeps its reserves; Navis and both bidders -15 (-8 insured, insurance pays 150); with `expedition_rear` half of the launch rifles back (5805, Sharden 9675); event 128 the next day |
-
-Every settlement writes `NAM_isl_last_target` (read by event 128).
+| `NAM_isl_settle_failed` | status 0; white peace; spirit `NAM_isl_landing_failed` 180 days; readiness 0, reopen after 120 days, island alerted and keeps its reserves; Navis and both bidders -15 (-8 insured, insurance pays 150); with `supply_overseas` half of the launch rifles back (5805, Sharden 9675); event 128 the next day |
 
 **Tenders and concessions.** Events 125-127 fire one day after the victory.
 "Отложить тендер" costs both bidders 5 (nothing with
@@ -2664,15 +2749,13 @@ Every settlement writes `NAM_isl_last_target` (read by event 128).
 the island is held without an operator; an award (`NAM_isl_tender_award`)
 writes `NAM_board_isl_owner^k`, sets `NAM_isl_tender_done_<k>`, gives the
 winner +15 (+20 when it chairs and `NAM_board_expedition_flag = 2`) and the
-loser -15, then recounts. A concession is 2 votes in `NAM_board_recount`: the
-operator is copied into the temp `NAM_board_isl_owner_input` before it indexes
-`NAM_board_holdings`, and the island adds 1 holding (0.5 for Sharden after the
-promise) that the territorial rule doubles. Islands are annexed, not federal
-districts, so they never enter the district dispute roll. Monthly dividends
-(`NAM_isl_monthly`): Ulven 10 (Navis or Ferrant), Luren 8 (Loren) or 12
-(Smenkom), Sharden 6 (Arktur) or 15 (Reidbank), halved to 3 or 8 after the
-promise; they are added to `NAM_corp_last_income` as well. A concession
-survives the nationalisation.
+loser -15, then recounts. A concession is 2 votes in `NAM_board_recount`
+(Sharden 1 after the promise; the operator is copied into the temp
+`NAM_board_isl_owner_input` before it indexes `NAM_board_holdings`). Islands
+are annexed, not federal districts. Monthly dividends (`NAM_isl_monthly`):
+Ulven 10 (Navis or Ferrant), Luren 8 (Loren) or 12 (Smenkom), Sharden 6
+(Arktur) or 15 (Reidbank), halved to 3 or 8 after the promise; they are added
+to `NAM_corp_last_income` as well. A concession survives the nationalisation.
 
 **Nationalisation.** `NAM_isl_nationalise_pay` keeps the paid capital on the
 capital state (`NAM_isl_nationalise_paid`) and sets `NAM_isl_nationalising`;
@@ -2681,7 +2764,7 @@ resistance above 40% or a lost state cancels with the capital back.
 40%, then on every state of the explicit list adds NAM's core, removes the old
 tag's core and cancels resistance (Sharden after the promise: 672, 677, 678 and
 679 keep CHD's core and get none); status 3; the operator +5; with
-`expedition_rear` +1 naval base and a supply hub at the capital province
+`supply_overseas` +1 naval base and a supply hub at the capital province
 (6452, 1894, 1610); during an active war of return after "Посейдон" the
 island's brigade at once; economy dirty; recount queued. From then on the
 island counts for national recruitment and for the scripted economy's core
@@ -2697,75 +2780,90 @@ districts: 67 and 688 for Eflor's holder, 689, 690, 700 and 719 for Azhar's.
 Only `NAM_board_cells_add` (state scope, signed temp
 `NAM_board_cells_change`, clamp 0-100) writes it.
 
-- Seed: `mainland_contacts` gives +10 in every district
-  (`NAM_board_cells_seed`); the safehouse focuses +15 in their districts; events
+- Seed: `mainland_inventory` gives +10 in every district
+  (`NAM_board_cells_seed`); the partition night +15 in every district; events
   118, 122 and 123 add more.
 - Programme `NAM_board_inv_cells` "Ячейка" (category `NAM_board_invasion`,
-  targets the six districts held by EFL or AZH and not controlled by NAM):
-  25 PP, 40 capital, 1500 rifles (750 after `holders_underwrite`), 60 days, at
-  most two runs at once (`NAM_board_cells_running`), visible while
-  `NAM_board_cells_open` (council operating, no war of return active, return
-  not won). The paid run is the state flag `NAM_board_cells_work` (value 1 for
-  the 750-rifle price, 2 for 1500). Result +20, +25 in a district covered by
-  its safehouse focus (`NAM_board_cells_safehouse_cover`); a district lost or a
-  closed programme returns capital and rifles.
+  visible after `mainland_inventory`, targets the six districts held by EFL or
+  AZH and not controlled by NAM): 25 PP, 40 capital, 1500 rifles (750 with
+  `NAM_board_inv_backing = 1`), 60 days, at most two runs at once
+  (`NAM_board_cells_running`), visible while `NAM_board_cells_open` (council
+  operating, no war of return active, return not won). The paid run is the
+  state flag `NAM_board_cells_work` (value 1 for the 750-rifle price, 2 for
+  1500). Result +20, +25 once the partition night has set
+  `NAM_board_partition_fixed` (`NAM_board_cells_safehouse_cover`); a district
+  lost or a closed programme returns capital and rifles. Every running run is
+  refunded when the war starts, so the cover matters inside the window of D8.
 - Monthly (`NAM_board_cells_monthly`, after the main `NAM_corp_capital_add` of
   `NAM_corp_monthly`, six explicit rows each): a network of 10-59 grows by 1;
   then each district of 40 or more without `NAM_cells_raided` rolls 8% for
   event 130 while no exposure event is pending
   (`NAM_board_cells_event_pending`, 30 days).
 - Enemy answer: category `NAM_cells_counter` "Охранка" for EFL and AZH
-  (`icon = military_operation`, visible after NAM's `mainland_contacts`, while
+  (`icon = military_operation`, visible after NAM's `mainland_inventory`, while
   the council has not ended and no war of return runs). Decision
   `NAM_cells_raid` "Облава": 25 PP, 30 days, a district of the raider with
-  cells 30 or more and no `NAM_cells_raided`. Result -25 (-15 under a safehouse
-  rule), `NAM_cells_raided` for 120 days (no raid and no exposure roll there),
-  then event 130 for NAM. AI: 15 from cells 40, doubled in 688 and 700, 0 at
-  war. Event 130 b sets the same 120-day flag.
+  cells 30 or more and no `NAM_cells_raided`. Result -25 (-15 after the
+  partition night), `NAM_cells_raided` for 120 days, then event 130 for NAM.
+  The same category holds the counter-intelligence decision of appendix F.
 - Rising (`NAM_board_cells_rise`, only after a successful start of the war of
   return, from "Посейдон" or the renewal decision): it clears
   `NAM_board_harbour_rose`, ensures the locked template "Mainland Partisans"
   (3 `ADISCORD_militia`, not recruitable) and runs each district that the
   enemy or NAM controls: 30+ sabotage (dynamic modifier
-  `NAM_board_rising_sabotage` for 120 days: attrition, local supply and speed
-  for the controller, removed when NAM controls the state; infrastructure
-  damaged); 50+ the hostile armies there are teleported out, NAM takes the
-  rising province (67: 4287, 688: 3127, 689: 176, 690: 2935, 700: 16881, 719:
-  461; 16881 is the smallest of the four VP provinces of 700) and one partisan
-  division forms (10% experience); 70+ a second division, and 688 with
-  `northern_safehouses` also gives NAM the port province 689. At most 8
-  divisions in all (temp `NAM_board_partisans_raised`). A rising in 700 from 50
-  sets NAM's `NAM_board_harbour_rose`. Then every network is spent
+  `NAM_board_rising_sabotage` for 120 days, removed when NAM controls the
+  state; infrastructure damaged); 50+ the hostile armies there are teleported
+  out, NAM takes the rising province (67: 4287, 688: 3127, 689: 176, 690:
+  2935, 700: 16881, 719: 461) and one partisan division forms (10%
+  experience); 70+ a second division, and 688 after the partition night also
+  gives NAM the port province 689. At most 8 divisions in all (temp
+  `NAM_board_partisans_raised`, carried into the wartime tree as
+  `NAM_rtw_partisans`). A rising in 700 from 50 sets NAM's
+  `NAM_board_harbour_rose`. Then every network is spent
   (`NAM_board_cells_spend` returns a paid run first and clears `NAM_cells`).
-- Southern harbour rule: `NAM_board_harbour_rising_ready`
-  (`southern_safehouses` completed and 700 at 70 or more) is read inside
-  `NAM_wor_revenge_landing` before the cells are spent; every trained marine
-  order then lands at the harbour instead of the island capital.
+- Southern harbour rule: `NAM_board_harbour_rising_ready` (the partition flag
+  set and 700 at 70 or more) is read inside `NAM_wor_revenge_landing` before
+  the cells are spent; every trained marine order then lands at the harbour
+  instead of the island capital.
 - Close: `NAM_board_cells_close` returns every paid run and clears all six
-  networks; it runs at the end of the council and in the exile branch of a won
-  return. An armistice keeps the cells; `NAM_board_cells_open` is true again, so
-  they can be rebuilt and rise again on the renewal. `NAM_war_of_return_close`
-  removes the sabotage modifier from the six districts.
+  networks; it runs at the end of the council, in the exile branch of a won
+  return and in the dictated peace of appendix G. An armistice keeps the
+  cells, so they can be rebuilt and rise again on the renewal.
+  `NAM_war_of_return_close` removes the sabotage modifier from the six
+  districts.
 
-### D8. "Операция \"Посейдон\"" and the war of return
+### D8. "Операция \"Посейдон\"" and its window
 
-**`available`** (each line localised; the focus pauses, it is not cancelled):
+**`available`** (each line localised; `cancel_if_invalid = no`,
+`continue_if_invalid = no`: the focus pauses, it is not cancelled):
 
-1. `NAM_board_majority_held = yes`;
-2. `NAM_board_invasion_backers_ready = yes`: on the holders route both holders
-   not boycotting, otherwise at most one boycotting company;
-3. `NAM_war_of_return_can_start = yes` (no war, which also excludes an island
+1. the window: `has_country_flag = { flag = NAM_board_partition_fixed days > 89 }`
+   (`NAM_board_poseidon_window_tt`);
+2. `NAM_board_majority_held = yes`;
+3. `NAM_board_invasion_backers_ready = yes` (section D5);
+4. `NAM_war_of_return_can_start = yes` (no war, which also excludes an island
    war);
-4. readiness 70 or more;
-5. more than 7 divisions;
-6. `NAM_board_poseidon_marines_ready`: two formed marine formations from paid
+5. readiness 70 or more;
+6. more than 7 divisions;
+7. `NAM_board_poseidon_marines_ready`: two formed marine formations from paid
    orders (`NAM_marine_orders_paid`) and raised brigades
-   (`NAM_board_inv_runs^7`, a run still training does not count);
-7. 20 convoys.
+   (`NAM_board_inv_runs^7`; a run still training does not count);
+8. 20 convoys.
 
-**Reward.** Native +9000 men and a preview of the spirit; the
-`hidden_effect` calls `NAM_board_poseidon_launch` and fires event 124 (days 1)
-only when the war of return is active. `NAM_board_poseidon_launch`:
+**Why the window.** Everything the night opens ends when the war starts:
+subversion (`NAM_sub_open`, operations of 45-90 days), cell runs (60 days,
+refunded at the landing) and the night's story chain (81 day 1, 97 day 8, 180
+day 13, 122 day 21, 123 day 41, 98 or 99 about day 45-60). Ninety days hold two
+45-day operations or one 90-day operation per target, one cell run per
+district pair and the whole chain. The AI plan reaches "Посейдон" about 112
+days after the night.
+
+**Reward.** Native +15 000 men and +60 PP, previews of the two spirits,
+`NAM_rtw_tree_next_day_tt`, `NAM_board_operation_poseidon_reward_tt`; the
+`hidden_effect` calls `NAM_board_poseidon_launch` and, only when the war of
+return is active, fires event 124 the next day when
+`NAM_board_expedition_flag > 0`, otherwise event 101, whose every answer
+chains 124. `NAM_board_poseidon_launch`:
 
 1. `NAM_war_of_return_start = yes`: the existing war (EFL and AZH registered
    and claimed, campaign major status, the coalition from
@@ -2779,45 +2877,44 @@ only when the war of return is active. `NAM_board_poseidon_launch`:
    Infantry Brigade" at 20% experience at each nationalised island's capital,
    6300 men without the template or the capital); the flagship division
    "Флагманский десант" ("Island Marines", 35% experience) at 16716 when NAM
-   controls it, else at the capital; spirit `NAM_board_poseidon_spirit` 120 days;
-   holders +5 and the chair's company +5 in one package; mission
+   controls it, else at the capital; `NAM_board_poseidon_spirit` 120 days and
+   `NAM_board_invasion_fleet_spirit` 365 days; `NAM_sub_apply_landing_charges`
+   (appendix F); holders +5 and the chair's company +5 in one package;
+   `NAM_rtw_begin` and the hidden event `ADISCORD_nam_story.168` one day later,
+   which loads the wartime tree (appendix G); mission
    `NAM_board_poseidon_beachhead` (90 days);
 3. otherwise nothing more: the renewal decision reopens the start.
 
-No new recruit is spawned before a paid one; the programme brigades and the
-island first waves already exist and sail with the fleet by native orders.
+**Outcomes** of the war are the contract of appendix G. The stalled-landing
+armistice stays as built: at the beachhead mission's timeout, while the war
+runs and NAM controls none of 67, 688, 689, 690, 700, 719
+(`NAM_board_poseidon_no_homeland_held`), event 131 "Отлив" offers the
+armistice (a, c call `NAM_board_send_armistice_offer` with the temp
+`NAM_board_armistice_offer` 1 or 2) or "Держать пляжи" (b). The offer goes to
+the first principal that can still decide (`NAM_rtw_can_decide`: exists, a
+participant, at war with NAM, not capitulated) in the order of
+`NAM_rtw_pick_decider` (the primary, Eflor, Azhar), without saving
+`NAM_rtw_decider`, so a pending line or dictate offer keeps its decider; only
+then are `NAM_board_armistice_terms` and the flag `NAM_board_armistice_sent`
+written. With nobody left the war is won and no offer goes out. Event 133
+requires `NAM_rtw_can_decide`; a human principal answers it, the AI by its
+weights. 133 a saves itself as `NAM_board_armistice_acceptor` and calls
+`NAM_board_poseidon_armistice` (terms 1: `NAM_board_poseidon_ebb` 180 days,
+holders -5, the belt claims dropped; terms 2: holders -12, claimed belt land
+NAM controls kept); `send_equipment` moves 3000 rifles to the acceptor; flag
+`NAM_board_poseidon_truce` for 180 days; then `NAM_war_of_return_close`. 133 b
+costs the principal 25 PP and sends event 134 to NAM, which clears the terms.
+An offer whose 133 never fired lapses after 30 days (`NAM_rtw_expire_offers`).
 
-**Outcomes.**
-
-- Victory: the existing `NAM_war_of_return_resolve_victory` (council hooks:
-  Loren lien by `NAM_board_loren_debt`, Eflor mortgages, lawsuit cooldown; EFL
-  and AZH settled as federal districts under the partition holders through
-  `NAM_wor_settle_list_by_route`; consolidation). Its exile branch calls
-  `NAM_board_cells_close` under `NAM_corp_takeover`.
-- Defeat: the existing annexation of the Directory with its islands.
-- Stalled landing: at the mission's timeout, while the war runs and NAM
-  controls none of 67, 688, 689, 690, 700, 719
-  (`NAM_board_poseidon_no_homeland_held`), event 131. Answers a and c set
-  `NAM_board_armistice_terms` (1 or 2), reactivate the mission and send event
-  133 to `event_target:NAM_wor_primary`; b reactivates the mission (Arktur +5,
-  stability -3%). 133 a calls `NAM_board_poseidon_armistice` on NAM: terms 1
-  add `NAM_board_poseidon_ebb` for 180 days and cost the holders 5, terms 2 cost
-  them 12 (one package); `send_equipment` moves 3000 rifles to the leader; flag
-  `NAM_board_poseidon_truce` for 180 days; the mission is removed; then
-  `NAM_war_of_return_close` (resolved flag first, every participant
-  white-peaced and released, `NAM_wor_exile_war` kept). `NAM_board_loren_debt`
-  is kept: Loren's advances are charged at the victory of a renewed war. 133 b
-  costs the leader 25 PP and sends event 134 to NAM, which clears the terms;
-  the mission already checks again in 90 days. AI: 131 a 60, b 20, c 20; 133 a
-  80 against b 20, with factor 0.0625 on a while EFL or AZH controls any of
-  225-231 (20% acceptance).
-- Renewal: `NAM_exile_renew_war_of_return` is visible with `NAM_wor_exile_war`
-  or with "Посейдон" completed (a start that failed in the same tick), plus
-  `NAM_exile_return_programme_open`; `available` adds the truce flag
-  (`NAM_board_poseidon_truce_tt`); after the start it calls
-  `NAM_board_cells_rise` under `NAM_corp_takeover`. The free landing does not
-  repeat (the delivery receipt `NAM_marines_orders_delivered` stays); island
-  brigades and the flagship do not repeat.
+**Renewal.** `NAM_exile_renew_war_of_return` is visible with
+`NAM_wor_exile_war` or with "Посейдон" completed (a start that failed in the
+same tick), plus `NAM_exile_return_programme_open`; `available` adds no
+`NAM_board_poseidon_truce` and no `NAM_rtw_dictated_truce`. After the start it
+calls `NAM_board_cells_rise` and `NAM_sub_apply_landing_charges` under
+`NAM_corp_takeover`, restores the belt claims (`NAM_board_partition_claims`
+behind `NAM_board_partition_fixed`) and reloads the wartime tree (appendix
+G.2). The free landing does not repeat (`NAM_marines_orders_delivered`
+stays); island brigades and the flagship do not repeat.
 
 **Hook-up in existing script** (all in
 `common/scripted_effects/ADISCORD_nam_resource_war_effects.txt`):
@@ -2825,12 +2922,10 @@ island first waves already exist and sail with the fleet by native orders.
 - `NAM_wor_revenge_landing`: one branch after the harbour block and before the
   landing loop moves the island-capital orders to the harbour when
   `NAM_landing_at_harbour > 0` and `NAM_board_harbour_rising_ready = yes`;
-- `NAM_war_of_return_close`: clears the rising sabotage on the six districts
-  and removes `NAM_board_poseidon_beachhead`;
+- `NAM_war_of_return_close`: clears the rising sabotage on the six districts,
+  removes `NAM_board_poseidon_beachhead` and ends with `NAM_rtw_close` behind
+  `NAM_rtw_at_war`;
 - `NAM_war_of_return_resolve_victory`: the cells close in its exile branch;
-- the caller comments of `NAM_war_of_return_start` and
-  `NAM_war_of_return_can_start` name `NAM_board_operation_poseidon` as the
-  corporate caller;
 - `09_ADISCORD_scripted_peace_on_actions.txt`: no new country section; the
   island calls sit inside the existing `nam:` blocks of each native hook.
 
@@ -2838,30 +2933,35 @@ island first waves already exist and sail with the fleet by native orders.
 
 Namespace `ADISCORD_nam_story`, file `events/ADISCORD_nam_resource_war_events.txt`,
 registered in `tools/data/adiscord_event_ids.json` (subsystem `nam_story`).
-Story events 97-124 follow C.5 (`is_triggered_only`, `fire_only_once`, trigger
+Story events follow C.5 (`is_triggered_only`, `fire_only_once`, trigger
 `NAM_board_opened` and `NAM_board_ended = 0`, answer a is the timeout default
 and costs, prose only in the description). The operational events 125-134 are
-not `fire_only_once` and keep their own validity.
+not `fire_only_once` and keep their own validity. Ids 135-137 are the
+subversion events (appendix F), 138-169 the wartime tree (appendix G, 170-179
+reserved), 180 the backers' choice.
 
 | Event | Source | Note |
 | --- | --- | --- |
-| 97-101 | prospectus, holders, six pool, assembly roads, gate | 100 b/c move the caps of programmes 5 and 2; 101 writes `NAM_board_expedition_flag` (1 council, 2 chair's company, 3 old flag) for the tenders |
-| 102-105 | charter, cartel, tenders, `arsenal_of_the_boards` | 104 c adds `NAM_board_porous_barrels` |
-| 106-109 | quartermaster, caravan, depots, `expedition_rear` | |
-| 110-113 | private navy, escorts, fire squadron, island squadron | 113 b raises the escort cap |
-| 114-117 | landing contracts, storm companies, battalions, first wave | |
-| 118 | `mainland_contacts` | cells in all districts or in 688 and 700 |
+| 50-96 | the council focuses (appendix C.5) | eight absorbers fire a second, delayed event of a folded focus: 61, 69, 55, 65, 71, 58, 118, 100 |
+| 81 | `partition_night` | its `immediate = { hidden_effect }` dispatches 97 (7 days), 180 (12), 122 (20) and 123 (40), so every answer and the timeout send the same chain |
+| 97 | event 81 | "Двенадцать страниц", unchanged answers |
+| 98, 99 | event 180 b / a, 30 days | the holders' advance, the pool's shares |
+| 100 | `private_navy` (delayed) | b/c move the caps of programmes 5 and 2 |
+| 101 | the first island launch, else "Посейдон" | writes `NAM_board_expedition_flag` (1 council, 2 chair's company, 3 old flag); each answer chains 124 while the war of return is active; before the partition night answer b charges the two vote leaders of the fresh ranking 3 trust each (tooltip `NAM_story_101_b_leaders_tt`, description `.d.leaders`), after it the two holders; no answer is a pure gain in either state |
+| 102-117 | the outer-lane focuses that kept them (102-105 war economy, 106-109 supply, 110-113 fleet, 114-117 marines) | 104 c adds `NAM_board_porous_barrels`; 113 b raises the escort cap |
+| 118 | `mainland_inventory` (delayed) | cells in all districts or in 688 and 700; answer b pays the two vote leaders |
 | 119-121 | the three operation focuses | answer a gives readiness +5 |
-| 122-123 | the safehouses | holders and cells |
-| 124 | "Посейдон", days 1, only after a real start | descriptions `.d_rising` (flag `NAM_board_harbour_rose`) and `.d_cold`; every answer clears the flag |
+| 122, 123 | event 81 (20 and 40 days) | holders and cells |
+| 124 | "Посейдон" or event 101, only after a real start | descriptions `.d_rising` (flag `NAM_board_harbour_rose`) and `.d_cold`; every answer clears the flag |
 | 125-127 | tenders of Ulven, Luren, Sharden | re-fired after a postponement; guarded by `NAM_isl_tender_done_<k>` |
 | 128 | failed landing | reads `NAM_isl_last_target`; every answer clears it |
-| 129 | unrest on an annexed island | reads `NAM_isl_flare_target` (`NAM_isl_flare_settle`); every answer clears it |
+| 129 | unrest on an annexed island | reads `NAM_isl_flare_target`; every answer clears it |
 | 130 | cell exposure | district in the global event target `NAM_board_cells_district` |
 | 131 | "Отлив", Poseidon beachhead timeout | armistice offer or "Держать пляжи" |
 | 132 | hidden | `NAM_isl_second_echelon` |
-| 133 | to the coalition leader (EFL or AZH) | accept or refuse the armistice |
+| 133 | to the first principal that can still decide (D8) | accept or refuse the armistice |
 | 134 | refusal, to NAM | clears the terms |
+| 180 | event 81 (12 days) | the backers' choice, section D5 |
 
 ### D10. Shared script and state
 
@@ -2878,7 +2978,7 @@ preparation" and "island operations"):
 | `NAM_board_build_port_level`, `NAM_board_build_supply_hub`, `NAM_board_build_capital_naval_base` | state / NAM | port level or supply hub at the main port; set `NAM_board_site_built` |
 | `NAM_board_raise_marine_division`, `NAM_board_raise_mercenary_brigade`, `NAM_board_launch_escorts` (temp `NAM_board_hulls`) | NAM | formations of the rewards and programmes |
 | `NAM_board_inv_settle_<k>`, `NAM_board_inv_refund_<k>`, `NAM_board_inv_close` | NAM | programme result, refund, route-end refund of every running programme (nine explicit rows) |
-| `NAM_isl_open_target` | NAM; temps `NAM_isl_k`, `NAM_isl_gain` | first readiness of an operation focus (+10 after `assembly_roads`) |
+| `NAM_isl_open_target` | NAM; temps `NAM_isl_k`, `NAM_isl_gain` | first readiness of an operation focus (+10 after `private_navy`) |
 | `NAM_isl_op_launch`, `NAM_isl_launch_abort`, `NAM_isl_reinforce_defender`, `NAM_isl_land_first_wave`, `NAM_isl_second_echelon` | NAM (FROM, `NAM_isl_k`) / target | the landing (D6) |
 | `NAM_isl_beachhead_check`, `NAM_isl_campaign_check`, `NAM_isl_monthly` | NAM | mission timeouts; dividends, unrest events and the capital hold |
 | `NAM_isl_settle_victory` (temp `NAM_isl_member_stalled`), `_stalled` (temp `NAM_isl_quiet`), `_failed`, `NAM_isl_release`, `NAM_isl_close_external`, `NAM_isl_record_capitulation`, `NAM_isl_close_all` | NAM / any | terminal paths under the commit rule |
@@ -2905,9 +3005,10 @@ State (NAM unless noted):
 
 - persistent for the campaign: `NAM_isl_status`, `NAM_board_isl_owner` (arrays
   created in `NAM_board_initialize`), the programme arrays,
-  `NAM_board_expedition_flag`, `NAM_isl_tender_done_<k>`,
-  `NAM_isl_sharden_promise_done`, `NAM_isl_sharden_blockade_done`; island cores
-  stay when a state is later lost;
+  `NAM_board_expedition_flag`, `NAM_board_inv_backing` (written once by event
+  180), `NAM_isl_tender_done_<k>`, `NAM_isl_sharden_promise_done`,
+  `NAM_isl_sharden_blockade_done`; island cores stay when a state is later
+  lost;
 - one island war: `NAM_isl_op_target`, `NAM_isl_pact_member`,
   `NAM_isl_echelon_k`, `NAM_isl_echelon_day`, `NAM_isl_capital_hold` (40 days),
   `NAM_isl_capitulation_reserved` (2 days, on the defeated side); on the
@@ -2926,8 +3027,12 @@ State (NAM unless noted):
 - the return: `NAM_board_poseidon_truce` (180 days), `NAM_board_cells_running`,
   `NAM_cells` and `NAM_cells_raided` (120 days) on the six districts.
 
-No flag mirrors a completed focus: every pair route and island rule is read
-through `has_completed_focus`.
+Pair routes and island rules are read through `has_completed_focus`; the
+partition flag `NAM_board_partition_fixed` carries the safehouse rules, the
+invasion category and the window, because those consumers must also work
+while the wartime tree is loaded. Both trees are built as shared history
+(`SHARED_HISTORY_SOURCES` of `tools/builders/build_adiscord_focus_trees.py`),
+so completed corporate focuses stay completed across the swaps.
 
 Scripted localisation (`common/scripted_localisation/ADISCORD_nam_resource_war_scripted_loc.txt`):
 `NAMBoardHolderShortEfl` / `NAMBoardHolderShortAzh`, the invasion and island
@@ -2940,136 +3045,104 @@ raid.
 - End of the council (`NAM_board_end_operations`): `NAM_board_inv_close`,
   `NAM_isl_close_all` (refunds running preparations, pacifications,
   nationalisations, the blockade and the insurance; closes a running island war
-  as a stalled landing without trust changes; clears the event records) and
-  `NAM_board_cells_close` run before `NAM_dir_campaigns_close`, which stays
-  last. The two NAM categories hide at `NAM_board_ended = 1`, and so does the
-  enemy's "Охранка".
+  as a stalled landing without trust changes; clears the event records),
+  `NAM_board_cells_close`, `NAM_board_inv_backing` cleared, and the wartime
+  rows of appendix G.6 (`NAM_rtw_close` when the war still runs, then the
+  bonds default) run before `NAM_dir_campaigns_close`, which stays last. The
+  NAM categories hide at `NAM_board_ended = 1`, and so does the enemy's
+  "Охранка".
 - One island war at a time, never during another war or the war of return;
   pacification and nationalisation are peacetime decisions and do not block a
   new landing.
 - Every island terminal path removes its missions; `NAM_war_of_return_close`
   removes the Poseidon mission.
-- The cells end at the rising, at the end of the council and at a won return,
-  never at an armistice.
-- After "Посейдон" the tree stays loaded (section D15).
+- The cells end at the rising, at the end of the council, at a won return and
+  at the dictated peace, never at an armistice.
+- "Посейдон" hands the war to the wartime tree one day later; every terminal
+  path of the war restores this tree (appendix G).
 
 ### D12. AI
 
 `NAM_exile_corporate_plan` (`common/ai_strategy_plans/ADISCORD_NAM_plans.txt`)
-continues after `partition_night` through the 38 focuses of one playthrough and
-ends on `NAM_board_operation_poseidon`. Sides: six-share pool, open tenders,
-shore depots, escort flotilla, shore battalions. The AI takes Ulven only:
+takes 44 focuses, one side of every pair: centre and Judas lanes first, then
+the right wing to the fleet, the marines and Ulven, then the partition night,
+then the left wing, war economy and supply inside the window, ending on
+"Посейдон". Sides: `loren_receipt`, `factory_guard`, `hereditary_roll`,
+`incumbents_credit`, `sole_vote_holder`, `cartel_prices`, `shore_depots`,
+`shore_battalions`; answer a of event 180. Outside the plan:
+`salt_monopoly`, `foundry_mark`, `harbour_exchange`, `residency_for_hire`,
+`war_bonds`, `synthetic_plant`, `arsenal_of_the_boards`, `escort_flotilla`,
+`company_docks`, Luren and Sharden. The AI takes Ulven only:
 `luren_operation` and `sharden_operation` have `ai_will_do = { factor = 0 }`,
 the launch weighs 50 on 648 only and needs more than 7 divisions, and the
-Sharden decisions weigh 0. Every NAM weight is quartered while capital is below
-100 or political power below 40. Strategies in
+Sharden decisions weigh 0. The subversion decisions read the age of
+`NAM_board_partition_fixed` (45 days) to tell the network phase from the
+landing phase of the window. Every NAM weight is quartered while capital is
+below 100 or political power below 40. Strategies in
 `common/ai_strategy/ADISCORD_nam_resource_war_ai.txt`: `NAM_isl_ai_landing`
-(enabled by `NAM_isl_op_running`; naval invasion focus and invasion requests
-against the three islands) and `NAM_board_poseidon_ai` (enabled by an active
-war of return under the takeover; invasion and front requests against EFL and
-AZH). The defenders and the coalition fight natively; event AI as in D8 and
-D9.
+(enabled by `NAM_isl_op_running`) and `NAM_board_poseidon_ai` (enabled by an
+active war of return under the takeover).
 
 ### D13. Time and men
 
-Points cost 7 days; P is the day `partition_night` completes. Pinned by
-`test_branch_timeline`: the cheapest route to the gate is 37 points (P+259),
-to "Посейдон" 42 points (P+294, 32 focuses). One playthrough without islands
-is 50 points (P+350), with the three island focuses 57 (P+399 of focus time),
-all 46 focuses 62 (P+434). Planning estimates, not measured: the AI's Ulven
-route reaches "Посейдон" about P+400; the full-island route between P+580
-(right after Sharden) and P+720 (with Sharden's cores); the worst case, every
-island war run to its campaign timeout, about P+840.
-
-Men: the Directory's own islands stay non-national, so its native recruitable
-pool is about 1900 (2800 under `volunteer_only`). The branch's focus rows give 40 000 men and 22 500 rifles
-on the AI's sides (31 000 men on the elite sides: cartel, caravan, storm
-companies), pinned by `test_branch_totals_cover_the_return`. Estimates for the
-return against a coalition of 25-30 divisions: need about 83 000 men without
-islands against about 104 000 available (96 000 without any manpower event
-answer); with all three islands the need rises to about 111 500 and the margin
-depends on whether "Посейдон" waits for Sharden's cores (about 3% right after
-Sharden, 22% with the cores). Cored islands at 1% recruitment: Ulven 15 700
-(Tarven 7200 of it), Luren 5400, Sharden 19 000 (18 740 after the promise).
-Confirm the island wars and the return in recent text saves.
+Points cost 7 days. Design estimates, not measured: on the AI plan the
+partition night falls on about day 273, Ulven is taken on about day 259 and
+settled before "Посейдон" checks `has_war = no`, and "Посейдон" falls on about
+day 399. The AI route's focus rows give about 101 000 men, 65 000 rifles, 53
+convoys and 45 000 fuel (the whole route about 104 000 men and 69 500 rifles).
+Against the landing estimate of about 83 000 men and 65 000 rifles for a
+coalition of 25-30 divisions, the AI route has about 118 500 men with the
+interregnum, event answers, programmes and the native pool (110 500 without
+the manpower answers) and about 100 000 rifles after six cell runs (82 000
+without the arsenal orders). The Directory's own islands stay non-national, so
+its native recruitable pool is about 1900. Cored islands at 1% recruitment:
+Ulven 15 700 (Tarven 7200 of it), Luren 5400, Sharden 19 000 (18 740 after the
+promise). Confirm the island wars and the return in recent text saves.
 
 ### D14. Tests
 
-`tools/tests/test_adiscord_nam_focus.py`, class `NamInvasionBranchTests`:
-layout and route (`test_branch_is_mirrored_and_spaced`,
-`test_branch_entry_waits_for_the_partition_night`, `test_branch_timeline`),
-rewards and events (`test_branch_rewards_explain_themselves_and_fire_their_story_events`),
-programmes (`test_invasion_programmes_follow_the_cost_contract`,
-`test_raised_marines_spend_once_and_keep_the_template_locked`,
-`test_holders_package_reaches_the_frozen_holders`,
-`test_poseidon_backers_follow_the_route`, `test_branch_buildings_fall_back`,
-`test_tech_rewards_fall_back_when_researched`,
-`test_war_economy_pair_sets_the_arms_sponsor_rule`,
-`test_expedition_share_holds_the_product`), island wars
-(`test_island_launch_follows_the_cost_contract`,
-`test_island_war_has_three_defined_peaces`,
-`test_island_missions_are_timeout_only_and_registered`,
-`test_island_nationalisation_cores_the_island_and_ends_resistance`,
-`test_island_concessions_vote_and_pay`), partisans and the return
-(`test_cells_rise_only_at_the_war_and_are_spent`, `test_cell_programme_and_raid`,
-`test_poseidon_calls_the_existing_war_and_grants_after_it`), totals and
-lifecycle (`test_branch_totals_cover_the_return`,
-`test_operational_events_keep_their_targets`,
-`test_route_end_closes_every_receipt_of_the_branch`). The tree pins of
-`test_island_focus_diagram_and_duration` (116 focuses, 12 pairs, the leaves),
-the reward-kinds table of
+`tools/tests/test_adiscord_nam_focus.py`: `NamCompactTreeTests` (budget and
+2-point focuses, removed ids, the backers' event, the window and the dispatch
+of event 81, the delayed second events, the capstone requirements, the
+fleet's island bonus, event 101 before the tenders, the invasion category on
+the shortest route, the subversion AI window, the safehouse rules on the
+partition flag); `NamInvasionBranchTests` (mirror and spacing, programmes,
+islands, cells, "Посейдон", totals and the route end); the tree pins of
+`test_island_focus_diagram_and_duration`, the reward-kinds table of
 `test_every_playable_focus_gives_two_to_seven_kinds_of_reward` and the AI plan
-test `test_corporate_ai_completes_every_compatible_focus_before_poseidon` cover
-the whole tree.
+test cover the whole tree. `tools/validators/inspect_nam_corporate_focus_layout.py`
+checks the wiring.
 
-### D15. What remains for later stages
+### D15. What waits for the tree after the return
 
-Orders of the author that the branch as built does not implement yet:
+After a won return the corporate tree is restored with "Посейдон" and the war
+focuses completed; there is no stage-3 tree in the script yet. Waiting for it:
 
-- `partition_night` opens no subversive operations against Eflor and Azhar and
-  gives no claims on their land; the claims on 67, 688, 689, 690, 700 and 719
-  are written only by `NAM_war_of_return_start` when the war begins.
-- The island operations open after the gate `invasion_fleet`, not from the
-  early fleet and marine focuses. Moving them up means new mirrored cells and a
-  new layout check: the current geometry keeps stage B below the gate so that
-  no wire crosses the centre.
-- "Посейдон" declares the war but loads no wartime tree; the corporate tree
-  stays loaded during the war.
-- The two endings of the war of return: defeat already ends the Directory
-  (annexation with the islands). Victory today returns the former territory and
-  settles Eflor and Azhar as federal districts under the partition holders
-  (`NAM_wor_settle_list_by_route`); the choice of the form of rule belongs to
-  the wartime tree. The armistice of D8 is a pause: the renewal decision keeps
-  the way back to finishing both enemies.
+- the tree of the Directory on the mainland and its preparation for the war
+  for the South, two to three years of focus time, with the great war against
+  Rahma, Sardan and Kadir as its own stage before the war against Shahrabad;
+  its loader calls `NAM_board_end_operations` (status note of package 3), which
+  settles every receipt of this tree and of the wartime tree;
+- `admitted_owners_register` "Реестр допущенных собственников", parked: block
+  and AI-plan entry removed; its Russian and English keys and the icon sprite
+  stay under the comment "Parked for the post-return tree", and
+  `NAM_board_build_company_offices` / `NAM_board_office_site` stay without a
+  caller;
+- the trunk pair `mainland_shares` / `union_of_boards` and the snapshots it
+  needs (`NAM_board_return_chair`, the district owners, the course), not
+  written yet;
+- the succession of the council laws and war laws (appendix G.5); today only
+  the annexation repeals them (`NAM_board_repeal_laws`).
 
-Other stages:
-
-- stage 3: the post-return tree and the trunk pair `mainland_shares` /
-  `union_of_boards`; the snapshots it needs (`NAM_board_return_chair`, the
-  district owners, the course) are not written yet;
-- army rearmament and the society "99 к 1" (no contract-battalion programme:
-  the men are in the focus rows);
-- runtime checks, all by the user after a full restart: the `allow_branch`
-  reveal; the scripted landings on 3094, 3313 and 3224 and `teleport_armies`
-  inside a capital state; `create_unit` on a province just taken; the rising
-  provinces and their teleport; resistance on annexed states and
-  `cancel_resistance`; the capital-hold settlement; the armistice offer and
-  `NAM_war_of_return_close` after it; `send_equipment` of the armistice; the
-  refusal of a second target for the targeted programmes; the war results in
-  recent text saves.
-
-Questions for the author, with the recommended answer kept by the build: the
-safehouse focuses are mandatory steps before "Посейдон" (yes); a new landing is
-allowed while another island is pacified (yes); no contract-battalion
-programme (no); the island launch price stays (yes); the Directory's own
-islands are not cored (your order); concessions survive the nationalisation
-(yes); one readiness gate of 50 and the Sharden decision pair (yes); no extra
-garrison rule against coalition landings (no); no scan for guarantors at the
-launch (no: guarantees are blocked by the default rule); no armistice started
-by the coalition (no); Ulven is won by holding its capital, Tarven follows by
-annexation (yes); the post-return tree belongs to stage 3; partisan divisions
-are free (acceptable); the full-island route pays in full only when "Посейдон"
-waits for Sharden's cores (accepted).
+Runtime checks, all by the user after a full restart: the scripted landings
+on 3094, 3313 and 3224 and `teleport_armies` inside a capital state;
+`create_unit` on a province just taken; the rising provinces and their
+teleport; resistance on annexed states and `cancel_resistance`; the
+capital-hold settlement; the 90-day window and the dispatch of event 81; the
+backers' choice answered and timed out; event 101 at the first launch; the
+armistice offer and `NAM_war_of_return_close` after it; `send_equipment` of
+the armistice; the refusal of a second target for the targeted programmes; the
+war results in recent text saves.
 
 ## Appendix E. Portrait and event plate briefs
 
@@ -3234,3 +3307,505 @@ Arktur and Smenkom marks are both ochre. Keep Arktur's clothing black and khaki,
 Всего 38 изображений: 6 портретов глав компаний 156x210 (в `gfx/leaders/NAM/`), 22 иконки министров 62x67 с рамкой из `portar idea.psd` (в `gfx/interface/ideas/NAM/`) и 10 картинок событий 507x184 без прозрачности (в `gfx/event_pictures/standard/country/`).
 Оригиналы, исходники и промпты сохраняете вы сами (AGENTS.md); в мод кладутся только эти игровые копии, а превью удаляются после работы.
 
+## Appendix F. Subversive operations and the partition claims
+
+Maintained contract of the layer opened by `NAM_board_partition_night`. The
+script holds the values: decisions in `ADISCORD_nam_resource_war_decisions.txt`
+(category `NAM_board_subversion`, counter `NAM_sub_counter` in
+`NAM_cells_counter`), the section "Council of boards: subversive operations"
+in the NAM effects and triggers, eight timed spirits in the NAM ideas file,
+events `ADISCORD_nam_story.135`-`137`, scripted localisation `NAMSub*`, tests
+`NamSubversionTests`.
+
+### F.1 Opening and the partition night
+
+The partition night's `completion_reward` opens the category with an
+`unlock_decision_category_tooltip` pair at its head and calls
+`NAM_board_partition_claims` once, before its story event 81. The
+category is visible while `NAM_sub_open`: the council governs
+(`NAM_board_operable`), `NAM_corp_takeover` and `NAM_board_partition_fixed`
+are set (flags, so a tree swap keeps them), the war of return is not running
+and has not been won. A target is valid (`NAM_sub_target_valid`) while it is
+EFL or AZH, exists, is not NAM's subject, is not at war with NAM and owns and
+controls its capital.
+
+### F.2 Operations
+
+Residency operations R1-R6 are targeted (EFL, AZH), run by company k and
+covered by the holder of the target's partition share. Price is debited in
+`complete_effect` behind `custom_cost_text` (`cost = 0`); the result settles in
+`remove_effect`.
+
+| Op | Decision | Runner | Price | Days | Success on the target | Spirit (days: 120 when the share holder is the runner, else 90) |
+|---|---|---|---|---|---|---|
+| R1 | `NAM_sub_sand_in_tanks_op` "Песок в цистернах" | 1 Лорэн | 20 PP, 80 capital | 45 | -5000 fuel | `NAM_sub_dry_tanks`: fuel gain -30%, max fuel -20% |
+| R2 | `NAM_sub_bad_castings_op` "Брак на литейных заводах" | 2 Феррант | 20 PP, 80 capital | 45 | -2500 infantry equipment | `NAM_sub_bad_castings`: factory output -8%, max efficiency -5% |
+| R3 | `NAM_sub_dock_fire_op` "Пожар в доках" | 3 Навис | 20 PP, 80 capital | 45 | -4 convoys | `NAM_sub_dock_fire`: dockyard output -15%, navy org -10% |
+| R4 | `NAM_sub_bad_sights_op` "Сбитые прицелы" | 4 Арктур | 20 PP, 80 capital | 45 | charge `NAM_sub_sights_days` (90 or 60) waits for the landing | `NAM_sub_bad_sights` at the landing hour: army org -8%, defence -8% |
+| R5 | `NAM_sub_labour_strike_op` "Стачка артелей" | 5 Сменком | 20 PP, 80 capital | 45 | -4000 manpower | `NAM_sub_labour_strike`: conscription -10%, mobilisation speed -15%, construction -10% |
+| R6 | `NAM_sub_bond_crash_op` "Обвал облигаций" | 6 Рейдбанк | 20 PP, 80 capital | 45 | -40 PP | `NAM_sub_bond_crash`: PP gain -20%, consumer goods +3% |
+| J1 | `NAM_sub_leaflets_op` "ПРОПАГАНДА: Листки с того берега" | chair, chancery slot | 30 PP, 60 capital | 60 | network +1 | `NAM_sub_leaflets` 120: war support -10%; cells in its mainland districts grow +3 a month (10-59 cells), raids take 10 fewer |
+| J2 | `NAM_sub_trophy_quarrel_op` "Спор о трофеях" | chair, chancery slot | 40 PP, 100 capital | 60 | charge `NAM_sub_quarrel_ready`; holders +3, other four -2, chair +2 | `NAM_sub_trophy_quarrel` 120 on EFL and AZH at the landing hour: attack -5%, supply consumption +10% |
+
+Availability. A residency operation needs: runner not boycotting
+(`NAM_board_stance^k` not -1), the target's residency free (receipt
+`NAM_sub_op_kind` absent, one per target), share holder not boycotting
+(`NAM_sub_holder_backing`), the strike cap and no active own spirit (R4
+instead: no waiting charge, `NAM_sub_sights_free_tt`). J1 needs a free slot,
+no leaflets receipt, a valid target, the cap and no active leaflets spirit. J2
+needs a free slot, both members valid and no waiting quarrel charge.
+
+Strike cap. At most three strikes per target (`NAM_sub_below_cap`): the six
+capped spirits (R1-R3, R5, R6, J1), the running residency operation and the
+leaflets printed for it; the settling operation does not count itself
+(`NAM_sub_cap_self`). R4 and J2 are landing charges outside the cap; one R4
+charge per target.
+
+Escrow. Residency receipt on the target (`NAM_sub_op_kind`,
+`NAM_sub_op_capital` = 80); J1 receipt on NAM (`NAM_sub_leaflets_receipt` =
+60, `NAM_sub_leaflets_target` 1/2); J2 receipt on NAM
+(`NAM_sub_quarrel_receipt` = 100). Settlement, refund and exposure each clear
+a receipt exactly once. Capital is refunded when the target became invalid,
+the cap filled or the result is already in place, and on cancellation (war of
+return, council stops governing, target invalid); political power and trust
+are never refunded. No operation moves a resource to NAM or writes the cells.
+
+### F.3 Risk, trust and network
+
+`NAM_sub_risk_compute` (target scope, temp `NAM_sub_k`) is the one formula for
+the roll, the tooltips and the report: base 20; residency run by the share
+holder -10 (and -5 more with card index 1); cells cover (30+ cells in a
+mainland district the target owns) -5; each network level -5 (max 2); card
+index 2 -5; card index 3: Eflor -10, Azhar +5; alert `NAM_sub_vigilant` +15;
+missed counter `NAM_sub_hunted` +10; clamped 5-50. Success: residency company
++2 and share holder +1 trust, the chair +2 for J1, network +1 (max 2). Event
+137 (card index, fire once) follows a residency success once both targets
+have a network. Exposure (`NAM_sub_expose`): no strike or charge, price lost,
+residency company -4 and holder -2 (chair -4 for J1/J2), readiness -3, target
+alert 120 days, network -1, event 136 for the target.
+
+### F.4 The enemy's answer
+
+Each launch rolls a hunch on the target (J2: on Eflor) with 50%, one flag per
+operation: `NAM_sub_hunch_residency`, `NAM_sub_hunch_leaflets`,
+`NAM_sub_hunch_quarrel`. Settlement, refund and exposure clear only their own
+operation's hunch. `NAM_sub_counter` (EFL/AZH, 30 PP, 20 days) is visible
+while `NAM_sub_counter_lead`: a smelled operation still runs. Available
+without alert and without a war. At the end it picks a smelled running
+operation in the order residency, leaflets, quarrel and catches it with 30%,
++10 against R4 or J2, -10 under cells cover, -10 when the share holder runs a
+residency operation (10-40%). A catch exposes it and removes NAM's decision; a
+miss sets the shared `NAM_sub_hunted` (+10 risk on the next operation against
+that country to settle, cleared at any settlement). Either way the target is
+on alert for 120 days. The category `NAM_cells_counter` also opens while an
+operation runs against the country. Event 136 (EFL/AZH): open trial (+2% war
+support) or quiet expulsion (+20 PP).
+
+Event 135 hears one exposure at a time: `NAM_sub_expose` writes
+`NAM_sub_exposed_target` and `_runner` and fires 135 only while no hearing is
+pending; a second exposure before the answer pays all its costs but has no
+hearing. Answers: blame the runner (-3 trust, or -15 PP without a chair), buy
+silence (-40 capital, runner +3), or press the target (+3% war support, target
+alert 180 days); each clears the record.
+
+### F.5 Claims on the belt
+
+`NAM_board_partition_claims`: claims on 720 Моренский округ, 721 Лоренское
+порубежье, 723 Лоренский берег (Eflor's share) and 722 Ажарское взморье, 727
+Западные промыслы (Azhar's share), each only while owned by EFL or AZH.
+Consumers:
+
+- victory in the exile war of return (`NAM_board_partition_take_belt`, before
+  the participants are copied and released): every claimed belt state owned
+  by a participant passes to NAM with control (`NAM_wor_take_state`), old
+  cores stay; holders +5 trust when any passed;
+- armistice on the council's terms (`NAM_board_armistice_terms` < 2): claims
+  dropped (`NAM_board_partition_drop_claims`);
+- armistice on the holders' terms (> 1): claimed belt states NAM controls and
+  EFL/AZH still owns pass to NAM before the white peace
+  (`NAM_board_partition_keep_belt`); the remaining claims stay;
+- the recount: each share holder gets half a holding while NAM owns and
+  controls belt land of its share (`NAM_board_belt_held_efl/azh`);
+- event 133 AI: x1.5 acceptance with the trophy quarrel, x0.5 when the
+  holders' terms would keep belt land;
+- answer tooltips: 131 a and 133 a (council's terms) name the dropped claims
+  while a claim exists (`NAM_board_belt_claimed`); 131 c names the kept land
+  while a claim exists; 133 a names the ceded land when NAM controls claimed
+  belt land on the holders' terms.
+
+### F.6 Lifecycle
+
+- Landing hour (`NAM_board_poseidon_launch` and the renewal decision):
+  `NAM_sub_apply_landing_charges` turns R4 charges and the quarrel charge into
+  spirits and clears them.
+- Route end (`NAM_board_end_operations`): `NAM_sub_close` refunds every
+  running operation's capital and slot, drops the landing charges and the
+  hearing record.
+- Victory: `NAM_sub_clear_target` on both targets (spirits, receipts,
+  charges, network, alert, hunch and hunted flags), then `NAM_sub_close`.
+- Defeat: `NAM_sub_clear_target` on both targets before the annexation.
+- Armistice: operations stay closed during the war and reopen after it;
+  spirits run out on their own timers.
+
+### F.7 Unverified in the running game
+
+Negative `add_fuel`, `add_equipment_to_stockpile` and `add_manpower` on a
+foreign country; `remove_targeted_decision`/`remove_decision` called on NAM
+from EFL/AZH scope; temp variables and `clamp_temp_variable` inside scripted
+localisation triggers and FROM-scoped risk texts in decision tooltips; a
+`random_list` entry raised from weight 0 by `add`; the belt transfer at
+victory and armistice and native resistance in occupied claimed states.
+
+## Appendix G. The wartime tree of the return
+
+Maintained contract of `NAM_return_war_focus` "Война за возвращение", the
+tree that the council plays during the war of return on the corporate route.
+The script holds the values: source `focus_trees/NAM/return_war/focuses.txt`
+(generated output `common/national_focus/ADISCORD_NAM_return_war.txt`, owner
+`tools/builders/build_adiscord_focus_trees.py`), the section "Council of
+boards: war of return" of the NAM effects, triggers, ideas, decisions and
+scripted localisation, the category `NAM_rtw_war`, events
+`ADISCORD_nam_story.138`-`169` (170-179 reserved), the AI plan
+`NAM_return_war_plan`, tests `NamReturnWarTreeTests`. Nothing here was
+checked in the running game.
+
+**Author's orders (binding):** "Посейдон" declares the war through the
+existing machinery and loads this tree ("последний фокус объявляет войну,
+загружая другую ветку фокусов - военную на возвращение"); the tree is
+mirrored around x 18 ("ветка должна быть такая же симметричная"); rewards as
+in The Fire Rises, with locked laws and development trades ("пусть дают
+законы разные, которые сменить нельзя. А ещё понижает уровень соц. развития,
+но повышает другое"); partisans rise on enemy land; each enemy carries
+penalties; defeat is the end and victory is complete dominion over Eflor and
+Azhar with the Directory's own territory ("Поражение это полный конец; победа
+это получение полностью владычества над Эфлором и Ажаром, ну и территории
+своей, конечно"); wars and peace only through scripted focuses, decisions and
+events.
+
+### G.1 Identity and size
+
+| Item | Value |
+| --- | --- |
+| Tree | `NAM_return_war_focus`, prefix `NAM_rtw_`, shared history, `default = no`, continuous focus position x 50, y 1600 |
+| Weight | `factor = 0`; +300 for `original_tag = NAM` with `NAM_corp_takeover`, the global flag `NAM_wor_exile_war` and `NAM_war_of_return_active = yes` (above the south war tree's 200, so a hot reload keeps it) |
+| Focuses | 32 on rows 0-10 in five lanes, 60 points (420 days); one side of each of the five pairs: 27 focuses, 48-50 points; shortest path to `return_treaty`: 14 focuses, 196 days |
+| Icons | every focus binds its own `GFX_focus_NAM_rtw_<id>` (`interface/ADISCORD_national_focus.gfx`, shines in `interface/ADISCORD_focus_shines.gfx`, textures in `gfx/interface/goals/NAM/`) |
+| AI plan | `NAM_return_war_plan`, 27 focuses, 49 points |
+
+### G.2 Attachment and the swaps
+
+- **Entry.** Inside the success branch of `NAM_board_poseidon_launch`, after
+  the holders' package and before the beachhead mission: `NAM_rtw_begin`
+  (flag `NAM_rtw_at_war`, whose age is the war's day count; `NAM_rtw_partisans`
+  copied from the temp `NAM_board_partisans_raised` of the landing's rising;
+  `NAM_rtw_renewed` cleared), then the hidden event `ADISCORD_nam_story.168`
+  one day later, which runs `NAM_rtw_load_tree`: `load_focus_tree` with
+  `keep_completed = yes` only while the war is active and the corporate tree
+  is loaded, then `mark_focus_tree_layout_dirty`. The day's delay keeps the
+  swap out of Poseidon's own `completion_reward`;
+  `NAM_rtw_tree_next_day_tt` on "Посейдон" tells the player.
+- **Exit.** `NAM_war_of_return_close` ends with `NAM_rtw_close` behind
+  `NAM = { exists = yes has_country_flag = NAM_rtw_at_war }`, so every
+  terminal path of the war (victory, defeat, armistices, dictated peace,
+  external close) runs it. `NAM_rtw_close` first runs `NAM_rtw_fronts_close`
+  (every receipt refunded by its holder, missions removed, offers and the
+  decider cleared, NAM war spirits removed except `NAM_rtw_reparations` and
+  `NAM_rtw_bond_default`, the enemy spirits removed through
+  `NAM_rtw_clear_enemy_ideas`, administered and militia flags cleared), clears
+  the war's counters and calls `NAM_rtw_restore_tree`: the corporate tree is
+  loaded back with `keep_completed = yes` unless NAM has capitulated and
+  `NAM_wor_pick_annexer` left `NAM_wor_annexer_found = 1`.
+- **Route end.** `NAM_board_end_operations` runs `NAM_rtw_close` while
+  `NAM_rtw_at_war` is set, then `NAM_rtw_bonds_default`, before
+  `NAM_dir_campaigns_close`.
+- **What the swap keeps.** Both trees are shared history, so completed
+  corporate focuses and war focuses stay completed across every swap;
+  running decisions (programmes, island pacification and nationalisation,
+  development, campaigns, chancery, tenders) continue; the cells were spent
+  by the rising and subversion is closed in the war (its charges were applied
+  at the landing); the beachhead mission belongs to the war, not to a tree.
+- **The way back.** `NAM_exile_renew_war_of_return` (not available during
+  `NAM_board_poseidon_truce` or `NAM_rtw_dictated_truce`) restores the belt
+  claims behind `NAM_board_partition_fixed`, and on the corporate route calls
+  `NAM_rtw_begin`, sets `NAM_rtw_renewed` when the free landing was already
+  spent (`NAM_marines_orders_delivered`) and loads the tree at once. Only
+  principals that are still valid targets are registered again: a
+  surrendered Eflor is a NAM subject and `NAM_wor_target_valid` refuses it.
+  Completed war focuses, laws, trades and story events do not repeat; open
+  focuses continue; bonds carry over.
+
+### G.3 Lanes and pairs
+
+```
+row 0                                          [war_cabinet 18]
+row 2         [north_front 7]   [strait_convoys 12]  [holders_war 16]x[chairmans_war 20]  [districts_rise 24]   [south_front 29]
+row 4  [loren_coast 2] [svetlogorsk 5] [fields 9]             [war_bonds 18]             [dry_river 27] [harbour 31] [black_coast 34]
+row 5                               [tankers 11]x[requisition 13]       [reprisals 23]x[amnesty 25]
+row 6  [colonels 2]  [regime_crisis 6]x[march_loren 10]  [officers 16] [docks 20]  [storm_basin 26]x[concession 30]  [defectors 34]
+row 7                                    [island_arsenals 12]           [district_militias 24]
+row 8                [north_border 8]                  [left_behind 18]                  [south_border 28]
+row 10                                         [return_treaty 18]
+```
+
+| id (`NAM_rtw_`) | Название | x,y | c | Prerequisites | Exclusive | Event |
+| --- | --- | --- | --- | --- | --- | --- |
+| `war_cabinet` | Военный кабинет на борту | 18,0 | 1 | - | | 138 |
+| `holders_war` | Война держателей | 16,2 | 2 | war_cabinet | chairmans_war | 139 |
+| `chairmans_war` | Чрезвычайные полномочия | 20,2 | 2 | war_cabinet | holders_war | 140 |
+| `war_bonds` | Облигации возвращения | 18,4 | 2 | holders_war\|chairmans_war | | |
+| `officers_at_front` | Офицеры на фронте | 16,6 | 2 | war_bonds | | 141 |
+| `docks_at_war` | Доки в военное время | 20,6 | 2 | war_bonds | | 142 |
+| `left_behind_registry` | Реестр оставленных | 18,8 | 2 | officers_at_front\|docks_at_war | | 143 |
+| `return_treaty` | Договор о возвращении | 18,10 | 3 | left_behind_registry, north_border, south_border | | 144 |
+| `north_front` | Северный фронт | 7,2 | 2 | war_cabinet | | 145 |
+| `loren_coast_landing` | Десант на Лоренский берег | 2,4 | 1 | north_front | | |
+| `svetlogorsk_rising` | Светлогорск встаёт | 5,4 | 2 | north_front | | |
+| `northern_fields` | Северные промыслы | 9,4 | 2 | north_front | | |
+| `loren_colonels` | Купленные полковники | 2,6 | 1 | loren_coast_landing\|svetlogorsk_rising | | |
+| `loren_regime_crisis` | Кризис в Среднем Лорене | 6,6 | 2 | svetlogorsk_rising\|northern_fields | march_on_loren | 146 |
+| `march_on_loren` | Марш на Средний Лорен | 10,6 | 3 | svetlogorsk_rising\|northern_fields | loren_regime_crisis | 147 |
+| `north_border` | Северная граница | 8,8 | 2 | loren_regime_crisis\|march_on_loren | | 148 |
+| `south_front` | Южный фронт | 29,2 | 2 | war_cabinet | | 149 |
+| `dry_river` | Сухоречье | 27,4 | 2 | south_front | | |
+| `harbour_fortress` | Крепость гавани | 31,4 | 2 | south_front | | |
+| `black_coast_raid` | Налёт на Чёрный берег | 34,4 | 1 | south_front | | |
+| `storm_black_basin` | Штурм Чёрного бассейна | 26,6 | 3 | harbour_fortress\|dry_river | basin_concession | 151 |
+| `basin_concession` | Концессия семей бассейна | 30,6 | 2 | harbour_fortress\|dry_river | storm_black_basin | 150 |
+| `basin_defectors` | Перебежчики бассейна | 34,6 | 1 | black_coast_raid\|harbour_fortress | | |
+| `south_border` | Южная граница | 28,8 | 2 | basin_concession\|storm_black_basin | | 152 |
+| `strait_convoys` | Конвойная линия | 12,2 | 1 | war_cabinet | | |
+| `company_tankers` | Танкеры компаний | 11,5 | 2 | strait_convoys | strait_requisition | 153 |
+| `strait_requisition` | Реквизиция пролива | 13,5 | 2 | strait_convoys | company_tankers | 154 |
+| `island_arsenals` | Острова работают на фронт | 12,7 | 2 | company_tankers\|strait_requisition | | |
+| `districts_rise` | Округа поднимаются | 24,2 | 1 | war_cabinet | | |
+| `reprisals` | Суд над коллаборантами | 23,5 | 2 | districts_rise | amnesty | 156 |
+| `amnesty` | Амнистия | 25,5 | 2 | districts_rise | reprisals | 155 |
+| `district_militias` | Ополчение округов | 24,7 | 2 | amnesty\|reprisals | | |
+
+Mirror of cells, not of content: the north (Eflor, a fragile regime with a
+one-province capital) ends in a regime crisis that opens Eflor's surrender or
+in the march on Middle Loren; the south (Azhar, a mobilised oil state) ends in
+the Basin families' concession or the storm of the Black Basin; the strait
+(hulls and fuel) faces the districts (people). Every cell has its mirror at
+36 - x with mirrored prerequisites, partner and cost; same-row cards are at
+least two columns apart; the longest single-prerequisite chain is two links;
+the wiring model finds no card hit and two crossings, one OR merge per wing
+pair.
+
+Common blocks:
+
+- every focus: `available = { has_capitulated = no custom_trigger_tooltip = { tooltip = NAM_rtw_war_live_tt NAM_war_of_return_active = yes } has_war = yes }`
+  plus its own rows; `cancel_if_invalid = no`, `continue_if_invalid = no`;
+- wing bypass: `north_front`, `svetlogorsk_rising`, `northern_fields`,
+  `loren_coast_landing`, `march_on_loren`, `loren_colonels` bypass on
+  `NAM_rtw_front_closed_efl` (Eflor gone, capitulated or out of the war with
+  NAM), the six mirrored south focuses on `NAM_rtw_front_closed_azh`; the
+  regime crisis, the concession and both borders never bypass, and the crisis
+  and the concession require their front to be open, so a closed front leaves
+  the bypassed side of the pair to satisfy the border's OR;
+- map gates, explicit states without scans: `NAM_rtw_near_svetlogorsk`,
+  `NAM_rtw_near_fields`, `NAM_rtw_near_loren` (720 or 691, the neighbours of
+  701), `NAM_rtw_in_harbour` (province 16716), `NAM_rtw_near_dry_river`,
+  `NAM_rtw_near_basin` (the neighbours of 69); the final needs
+  `NAM_rtw_treaty_ready` (one front closed, or either principal above 40%
+  surrender progress or with `NAM_rtw_capital_fallen`).
+
+Five pairs:
+
+| Lane | Side A | Side B |
+| --- | --- | --- |
+| Centre, the form of rule | `holders_war`: law `NAM_board_law_holders_contracts`, trade `NAM_board_trade_war_for_army`, men and rifles, holders' trust; victory gives the holders' company districts | `chairmans_war`: law `NAM_board_law_martial_rule`, trade `NAM_board_trade_war_for_state`, command power and experience; victory gives the council's direct rule (trigger `NAM_rtw_direct_rule`); an armed vote of no confidence is dissolved and none opens while a war of return runs |
+| North | `loren_regime_crisis`: unlocks Eflor's surrender (W5), `NAM_rtw_loren_crisis` on Eflor, PP | `march_on_loren`: men, rifles and experience for the capital order on 701 |
+| South | `basin_concession`: `NAM_rtw_families_turn` on Azhar, fuel, PP | `storm_black_basin`: men, support equipment, fuel, experience for the capital order on 69 |
+| Strait | `company_tankers`: fuel, a refinery on the islands, Loren's charter line | `strait_requisition`: law `NAM_board_law_strait_requisition`, convoys, naval experience |
+| Districts | `amnesty`: stability, men, the society programme, cheaper and faster administrations | `reprisals`: law `NAM_board_law_field_courts`, rifles, more men from each administration |
+
+Moved corporate focuses: `war_cabinet` carries the beach masters' rifles,
+support equipment, squad weapons, army experience and trust;
+`districts_rise` carries `NAM_board_hospital_ships_spirit` (365 days) and the
+social-system programme.
+
+### G.4 Decisions
+
+Category `NAM_rtw_war` "Война за возвращение" (`icon = military_operation`,
+priority 27), visible with the tree loaded and `war_cabinet` completed; its
+description is the scripted report `[NAMRtwWarReport]` (running order,
+administrations, partisans, bonds, the two fronts, the form of rule, the day
+of the line armistice). Every paid decision follows the custom cost contract
+and is in `CUSTOM_COST_DECISIONS`.
+
+**Refund rule.** Native removal runs no refund. Every paid run keeps a receipt
+in the scope it belongs to (a district's state flag with a stored amount, or a
+NAM variable); `cancel_effect`, the remove-time recheck and
+`NAM_rtw_fronts_close` refund only while the receipt exists and clear it in
+the same block, so a run is returned at most once.
+
+| # | Decision | Opened by | Price | Days | Result |
+| --- | --- | --- | --- | --- | --- |
+| W1 | `NAM_rtw_order` "Приказ совета: [FROM.GetName]" (688, 67, 701, 700, 690, 69) | `war_cabinet`; each target by its front focus | 25 PP, 20 CP | instant | one order at a time: mission `NAM_rtw_order_mission` (75 days) or `NAM_rtw_capital_order_mission` (120 days, with `NAM_rtw_capital_assault`); success pays PP, war support, the share holder and a target result (701 / 69: `NAM_rtw_capital_fallen` on the owner); timeout `NAM_rtw_order_failed`; 30-day cooldown |
+| W2 | `NAM_rtw_provisional_admin` "Временная администрация" (six districts) | `districts_rise` | 40 PP, 60 capital (20 PP and 30 days after `amnesty`) | 45 | state flag `NAM_rtw_administered`, compliance, men (more after `reprisals`); ownership does not change; two at once |
+| W3a | `NAM_rtw_landing_loren_coast` "Десант на Лоренский берег" | `loren_coast_landing` | 60 capital, 25 PP, 4300 men, 3870 rifles; 15 convoys | 21 | port province 6495 seized and one marine division landed; once per campaign (`NAM_rtw_landed`) |
+| W3b | `NAM_rtw_coal_raid` "Налёт на угольные причалы" | `black_coast_raid` | 50 capital, 25 PP, 1500 fuel; 15 convoys | 14 | naval base 493 damaged, `NAM_rtw_coal_blockade` on the owner; once per war |
+| W4a | `NAM_rtw_buy_colonel` "Купить полковника Эфлора" | `loren_colonels` | 80 capital, 30 PP | 30 | `NAM_rtw_bought_colonels` and a manpower loss on Eflor, a defectors' brigade for NAM; twice per war |
+| W4b | `NAM_rtw_lure_levy` "Переманить ополченцев бассейна" | `basin_defectors` | 60 capital, 30 PP | 30 | `NAM_rtw_levy_drained` and a manpower loss on Azhar, men for NAM; twice per war |
+| W5 | `NAM_rtw_offer_surrender_efl` "Капитуляция Среднего Лорена" | `loren_regime_crisis`; the centre pair chosen; leverage (both of 67 and 688, Eflor above 25% surrender, its capital fallen or Azhar capitulated); no offer pending | 150 capital in escrow, 50 PP | instant | event 157 to Eflor; refusal or timeout returns the escrow (event 160, 60-day cooldown); acceptance spends it (G.6) |
+| W6 | `NAM_rtw_sell_bonds` "Выпуск облигаций" | `war_bonds` | 10 PP | instant, re-enable 60 | 6000 rifles, one issue of `NAM_rtw_bonds` (at most three), Reidbank +2 |
+| W7 | `NAM_rtw_boycott_measure` "Мера против бойкота" | `docks_at_war`; a boycotting company | 25 PP under direct rule, else 100 capital | instant, re-enable 90 | direct rule: requisition (6000 rifles, that company -15, the others -2, twice per war); otherwise buy-off (that company +15); event 165 |
+| W8 | `NAM_rtw_line_armistice` "Перемирие по линии фронта" | `war_cabinet`; from day 180 of the war; a homeland district held; a principal able to answer; no offer pending | 50 PP | instant | event 161 to the decider (G.6) |
+| W9 | `NAM_rtw_renewed_landing` "Повторная высадка" | `NAM_rtw_renewed` | 80 capital, 30 PP, 4300 men, 3870 rifles; 15 convoys | instant | the harbour province 16716 taken and one marine division landed |
+| W10 | `NAM_rtw_district_militia` "Ополчение округа" | `district_militias`; administered district | 25 PP, 4000 men, 3600 rifles | 45 | one "Old Settlers Militia" on the district's rising province |
+| W11 | `NAM_rtw_convoy_run` "Конвой через пролив" | `strait_convoys` | 30 capital, 1500 fuel | 60 | `NAM_rtw_convoy_line` for 60 days |
+| W12 | `NAM_rtw_raise_district` "Поднять округ" | `districts_rise`; a district held by the enemy, not yet risen | 30 PP, 60 capital, 3000 rifles | 20 | `NAM_rtw_rise_state`: hostile armies leave, NAM takes the rising province, one partisan division, sabotage for 120 days; within the cap of eight partisan divisions per war (`NAM_rtw_partisans`) |
+
+Both mission ids are registered in
+`common/synchronized_dynamic_tokens/ADISCORD_tokens.txt`.
+
+### G.5 War laws and development trades
+
+Five locked laws in `common/ideas/ADISCORD_nam_resource_war_ideas.txt`
+(`cost = 0`, `removal_cost = -1`, `available` scripted-only with a source
+tooltip, `allowed_to_remove` false, economy refresh in `on_add` /
+`on_remove`), enacted by `NAM_board_enact_<law>` with one `swap_ideas` branch
+per law the slot can hold:
+
+| Law | Slot | Enacted by | Succeeds | Repealed to |
+| --- | --- | --- | --- | --- |
+| `NAM_board_law_holders_contracts` "Подряды держателей" | `ADISCORD_industrial_policy_laws` | `holders_war` | the arsenal monopoly | `ADISCORD_industrial_policy_balanced_workshops` |
+| `NAM_board_law_martial_rule` "Военное положение" | `ADISCORD_internal_security_laws` | `chairmans_war` | the district wardens | `ADISCORD_internal_security_local_garrisons` |
+| `NAM_board_law_strait_requisition` "Реквизиция пролива" | `ADISCORD_infrastructure_laws` | `strait_requisition` | whatever the slot holds | `ADISCORD_infrastructure_patchwork_roads` |
+| `NAM_board_law_field_courts` "Военно-полевые суды" | `ADISCORD_military_justice_laws` | `reprisals` | the concession courts | `ADISCORD_justice_regular_tribunals` |
+| `NAM_board_law_veteran_reserve` "Резерв ветеранов возвращения" | `ADISCORD_training_laws` | `return_treaty` | whatever the slot holds | `ADISCORD_training_basic_drills` |
+
+Only `NAM_board_repeal_laws` (the annexation) repeals them. A route takes two
+or three of them. A slot holds one law (C.12): a council focus completed after
+an armistice swaps the war law of its slot out by name, and the war law does
+not return when the council law is repealed.
+
+Both sides of the centre pair carry one development trade
+(`NAM_board_trade_war_for_army`, `NAM_board_trade_war_for_state`): the shared
+`NAM_board_trade_war_lower_social` lowers whichever social track is above
+level 1 (society first, then the social system) or, when both are at 1, adds
+`NAM_rtw_home_front_strain` for 180 days; the raised track (army through
+`NAM_board_dev_raise_army`, or state) pays 100 capital instead when it is
+already at level 5; the economy is marked dirty.
+
+### G.6 Endings
+
+Terms: a principal is EFL or AZH while it is a participant of the war of
+return; the form of rule is direct rule when `chairmans_war` is completed
+(`NAM_rtw_direct_rule`), otherwise the holders' company districts. The form
+decides how the Directory rules, never how much.
+
+| Ending | Kind | Trigger | Transfers | Way back |
+| --- | --- | --- | --- | --- |
+| Victory | end of the war, won | every principal capitulated or gone (the capitulation callbacks), or Eflor's surrender with Azhar already down | see below | done: both are finished |
+| Eflor's surrender | Eflor finished, the war goes on | event 157 a after W5 | see below | Azhar by the war, or after a pause by the renewal |
+| Armistice on the line | pause | event 161 a after W8 | every administered district still owned by a principal passes to NAM with its core; holders -5, the chair +3; 180-day `NAM_board_poseidon_truce`; claims kept | the renewal after 180 days |
+| Stalled-landing armistice | pause | event 133 a of the first principal that can still decide (appendix D8) | 3000 rifles to the acceptor (terms 2 keep claimed belt land NAM controls); 180-day truce | the renewal after 180 days; it restores dropped belt claims |
+| Dictated peace | pause, lost | monthly `NAM_rtw_dictate_check` -> event 158 a by the decider -> event 164 a or b | terms 1: an island (the most recently nationalised, else annexed, else state 230 unless it is the capital) to the decider, 10 000 rifles, capital debit up to 300, `NAM_rtw_reparations` 365 days, holders -15; terms 2 (or no island to cede): 20 000 rifles and 10 convoys (`convoy_1`, the variant of the `convoy` archetype; every grant and shipment of both trees names it; the shared island decision `NAM_island_convoy_service`, also opened by the main and defeated trees, keeps the archetype, a valid stockpile type), capital debit up to 500, `NAM_rtw_reparations` 540 days, holders -10, Reidbank +5; both: bonds defaulted, cells closed | the renewal after 360 days (`NAM_rtw_dictated_truce`); a ceded island returns at the victory, or at Eflor's surrender if Eflor holds it |
+| External close | pause | `NAM_war_of_return_close_external` (not while `NAM_rtw_surrender_settling`) | none | the renewal at once |
+| Defeat | end of the Directory | native capitulation of NAM -> `NAM_war_of_return_resolve_defeat` | the annexer takes the Directory with every island | none |
+
+**Victory** (`NAM_war_of_return_resolve_victory`, in this order): the six
+homeland fields return with NAM cores; ceded islands owned by EFL or AZH come
+back with their status and concession owner
+(`NAM_rtw_return_ceded_states`); the claimed belt passes
+(`NAM_board_partition_take_belt`: 720, 721, 723, 722, 727); in the exile branch
+the temp `NAM_rtw_settling_return = 1` makes `NAM_wor_settle_list_by_route`
+call `NAM_rtw_settle_country` on each principal: its subjects become the
+Directory's puppets, then under direct rule `NAM_wor_radical_annex` (the
+country annexed, homeland cored, the rest flagged `NAM_conquered_state`), or
+under the holders' form `NAM_wor_federal_district_join` with
+`NAM_rtw_restore_district_control` (the district owns and controls all its
+land; the holder of its share takes its concession). Then
+`NAM_rtw_settle_victory`: a surrendered Eflor held as a provisional subject
+is annexed (`NAM_rtw_annex_surrendered`), the homeland share taken at the
+surrender is cored, bonds are repaid at 150 capital per issue (or defaulted:
+`NAM_rtw_bond_default` and Reidbank -5), `left_behind_registry` pays its
+restitution (10 000 men and 100 society progress), trust follows the form
+(holders +10 and the other four -3, or the chair +10 and the holders -12),
+and `return_treaty` fires event 169 "Доли материка". Nothing of Eflor or Azhar
+stays independent.
+
+**Eflor's surrender** (`NAM_rtw_accept_surrender_efl`, from 157 a), committed
+before the white peace under the global flag `NAM_rtw_surrender_settling`:
+whether Azhar is already down is recorded first; Eflor leaves the
+participants, its major status and the coalition (Azhar becomes the primary);
+the escrow is spent; every homeland state and belt state Eflor owns passes to
+NAM (explicit rows, by ownership), and so does any island ceded to Eflor;
+Eflor's field army is deleted; white peace; Eflor's war spirits and
+subversion marks are cleared; the form of rule applies at once (holders'
+district, or under direct rule `NAM_rtw_hold_surrendered`: a provisional
+subject with no district flag, no concession and no dividend, annexed at the
+victory); a live Azhar no longer at war is attacked again; then the campaign
+routes to the victory when Azhar is down, else to the external close, which
+closes only when nobody fights. Loren and Reidbank +3, event 159.
+
+**The decider.** `NAM_rtw_pick_decider` saves the global target
+`NAM_rtw_decider`: the primary, else Eflor, else Azhar, each only while at war
+with NAM and not capitulated; every answer of 158, 161 and 164,
+`NAM_rtw_dictated_peace` and `NAM_rtw_close` clear it. The dictated peace is
+offered when no offer is pending, no cooldown runs, fewer than two refusals,
+a decider exists, and either NAM's surrender progress passes the threshold
+(0.35, after one refusal 0.45, without an owned core; 0.5 / 0.65 with one,
+`NAM_rtw_holds_own_core`) or the war is past day 90 and NAM has been off the
+mainland (`NAM_rtw_off_mainland`) for 60 days. An offer whose event never
+fired lapses after 30 days (`NAM_rtw_expire_offers`).
+
+**Symmetry.** The Directory always declares; no deadline or war-score award
+decides; every ending short of capitulation needs the other side's answer
+(157, 161, 158 and 164). The Directory can lose without annexation (the
+dictated peace) and the coalition can lose a part (Eflor's surrender, the line
+armistice). Both forms leave Eflor's land out of NAM's owned base until the
+victory, so NAM's surrender maths is the same under either form. Verify in
+recent text saves.
+
+### G.7 Events
+
+| Event | Source | Note |
+| --- | --- | --- |
+| 138-156 | the story focuses (centre 138-144, north 145-148, south 149-152, strait 153-154, districts 155-156) | three answers, C.5 rules, `fire_only_once`; in wartime also `NAM_war_of_return_active` except 143 and 144 |
+| 157 | to Eflor from W5 | the refusal is the first (timeout) option; acceptance settles the surrender |
+| 158 | to the decider from `NAM_rtw_dictate_check` | dictate terms or fight on |
+| 159, 160 | NAM | the surrender signed (`.d_district` / `.d_annex`); the demand refused |
+| 161 | to the decider from W8 | accept or refuse the line armistice |
+| 162, 163 | NAM | the line holds; the line refused (90-day cooldown) |
+| 164 | NAM from 158 a | accept terms 1, buy off with terms 2, or fight on (a second refusal ends the offers) |
+| 165 | NAM from W7 | the company answers the measure |
+| 166, 167 | NAM | order carried out; order failed |
+| 168 | NAM, hidden | loads the tree one day after "Посейдон" |
+| 169 | NAM from the victory with `return_treaty` | "Доли материка": spoils by votes, to the holders or to all six |
+
+### G.8 State and lifecycle
+
+War-scoped state, cleared by `NAM_rtw_close`: `NAM_rtw_at_war`,
+`NAM_rtw_partisans`, `NAM_rtw_renewed`, `NAM_rtw_renewed_landed`, the order
+variable, missions and cooldown, the administration and rising counters with
+their state receipts, the landing, raid, colonel and levy receipts, the
+surrender escrow, pending and cooldown flags, the line and dictate offers,
+`NAM_rtw_off_mainland`, the decider, the requisitions, the NAM war spirits
+and the enemy spirits. Kept across pauses: `NAM_wor_exile_war`, the claims, a
+surrendered Eflor as NAM's subject (`NAM_rtw_annex_pending` under direct rule),
+the laws, the completed war focuses, the bonds and the ceded-island arrays
+(`NAM_rtw_ceded_states`, `NAM_rtw_ceded_status`, `NAM_rtw_ceded_owner`).
+`NAM_rtw_landed` stays for the campaign. Nothing of this tree marks Eflor or
+Azhar after it ends.
+
+### G.9 AI
+
+`NAM_return_war_plan` takes one side of each pair: the holders' war, the
+regime crisis with Eflor's surrender, the storm of the Black Basin, the
+company tankers and the amnesty, south first. `NAM_rtw_ai_fronts` shifts the
+front requests towards Azhar (EFL -60, AZH +60) while both are participants at
+war with NAM; `NAM_board_poseidon_ai` and the existing war-of-return
+strategies stay. Decision weights are quartered below 40 PP or 100 capital.
+
+### G.10 Unverified in the running game
+
+The swap one day after "Посейдон" and the restore on every ending;
+`keep_completed` with shared history in both directions; `delete_unit` without
+a filter on Eflor; white peace and `declare_war_on` in one effect at the
+surrender; `send_equipment` of convoys in the dictated peace; the
+subject-of-an-annexed-overlord case at defeat; the map gates and bypasses on a
+live front; the war results of two AI runs and one player run in recent text
+saves.

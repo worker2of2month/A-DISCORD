@@ -3444,7 +3444,7 @@ class TopbarTradeConstructionGuiContractTests(unittest.TestCase):
                 'factories_consumer', 'factories_trade', 'auto_import_label',
                 'auto_import_budget_txt',
             ),
-            'iconType': ('consumer_goods_icon', 'traded_factories_icon', 'auto_import_budget_bg'),
+            'iconType': ('trade_header', 'consumer_goods_icon', 'traded_factories_icon', 'auto_import_budget_bg'),
             'checkBoxType': ('auto_import_checkbox',),
             'buttonType': ('auto_import_priority_open_button',),
             'extendedScrollbarType': ('auto_import_slider',),
@@ -3473,10 +3473,16 @@ class TopbarTradeConstructionGuiContractTests(unittest.TestCase):
             self.assert_gui_node(nodes, 'buttonType', name, ('auto_import_priority_entry',))
 
     def test_auto_import_controls_clear_the_resource_filters(self):
+        from PIL import Image
+
         gui = (ROOT / 'interface/countrytradeview.gui').read_text(encoding='utf-8-sig')
         filter_top = _gui_position(gui_node_body(gui, 'filters'))[1]
         header = gui_node_body(gui, 'trade_header')
-        header_bottom = _gui_position(header)[1] + _gui_size(header)[1]
+        sprites = (ROOT / 'interface/ADISCORD_market_ui.gfx').read_text(encoding='utf-8-sig')
+        parse = economy_validator.parse_clausewitz
+        sprite = gui_node_body(sprites, _direct_scalar(parse(header), 'quadTextureSprite'))
+        with Image.open(ROOT / _direct_scalar(parse(sprite), 'textureFile')) as texture:
+            header_bottom = _gui_position(header)[1] + texture.height
         # Icon widgets inherit the hit area of one texture frame.
         sprite_heights = {
             'auto_import_checkbox': 32,

@@ -136,9 +136,9 @@ class NavalProgrammeTests(unittest.TestCase):
         equipment = block(entries("common/units/equipment/ADISCORD_convoy_equipment.txt"), "equipments")
         # Use only base hull points: range and speed are above their native
         # neutral values, so the budget does not depend on their extra bonus.
+        # The engine reads the factor from the concrete hull, not its archetype.
         escort = block(equipment, "ADISCORD_escort_ship_2155")
-        archetype = block(equipment, "ADISCORD_coastal_patrol_ship")
-        dominance = float(scalar(archetype, "naval_dominance_factor"))
+        dominance = float(scalar(escort, "naval_dominance_factor"))
         self.assertGreaterEqual(float(scalar(escort, "naval_range")), 2000)
         self.assertGreaterEqual(float(scalar(escort, "naval_speed")), 20)
         self.assertEqual(float(scalar(block(terrain, "water_strongest_current"), "minimum_seazone_dominance")), 400)
@@ -146,10 +146,21 @@ class NavalProgrammeTests(unittest.TestCase):
             self.assertEqual(float(scalar(block(terrain, kind), "minimum_seazone_dominance")), baseline)
         for kind in ("water_fjords", "water_shallow_sea"):
             self.assertGreater(2 * dominance, 1.5 * float(scalar(block(terrain, kind), "minimum_seazone_dominance")))
+        archetypes = {}
         for hull in equipment:
             if hull.key == "convoy" or not any(field.key == "is_archetype" and field.value == "yes" for field in hull.value):
                 continue
-            self.assertGreater(float(scalar(hull.value, "naval_dominance_factor")), 0, hull.key)
+            archetypes[hull.key] = float(scalar(hull.value, "naval_dominance_factor"))
+            self.assertGreater(archetypes[hull.key], 0, hull.key)
+        concrete = 0
+        for hull in equipment:
+            parent = [field.value for field in hull.value if field.key == "archetype"]
+            if not parent or parent[0] == "convoy":
+                continue
+            concrete += 1
+            with self.subTest(hull=hull.key):
+                self.assertEqual(float(scalar(hull.value, "naval_dominance_factor")), archetypes[parent[0]])
+        self.assertGreaterEqual(concrete, len(archetypes))
 
     def test_added_fleets_are_allowed_in_native_ai_landing_and_patrol_templates(self):
         goals = entries("common/ai_navy/goals/ADISCORD_naval_goals.txt")
@@ -162,6 +173,45 @@ class NavalProgrammeTests(unittest.TestCase):
             self.assertTrue(set(STARTING_NAVIES) <= tags)
         patrol = block(templates, "ADISCORD_coastal_patrol")
         self.assertEqual(scalar(block(block(patrol, "min_composition"), "ADISCORD_coastal_patrol_vessel"), "amount"), "2")
+
+    def test_cruisers_have_a_patrol_group_in_the_dominance_fleet(self):
+        # Strike groups add only a percentage of their dominance to a region;
+        # cruisers count in full toward landing-route control only on patrol.
+        templates = entries("common/ai_navy/taskforce/ADISCORD_taskforce_templates.txt")
+        patrol = block(templates, "ADISCORD_cruiser_patrol")
+        self.assertEqual([row.value for row in block(patrol, "mission")], ["naval_patrol"])
+        tags = {row.value for row in walk(block(patrol, "allowed")) if row.key == "original_tag"}
+        self.assertTrue({"EFL", "AZH", "NAM"} | set(STARTING_NAVIES) <= tags)
+        weight = block(patrol, "ai_will_do")
+        self.assertEqual(scalar(weight, "factor"), "3")
+        gate = block(weight, "modifier")
+        self.assertEqual(scalar(gate, "factor"), "0")
+        self.assertEqual(scalar(block(gate, "NOT"), "has_tech"), "ADISCORD_tech_light_cruiser_hull_2155")
+        minimum = {row.key: scalar(row.value, "amount") for row in block(patrol, "min_composition")}
+        self.assertEqual(minimum, {"light_cruiser": "1", "ADISCORD_coastal_patrol_vessel": "1"})
+        optimal = {row.key: scalar(row.value, "amount") for row in block(patrol, "optimal_composition")}
+        self.assertEqual(optimal, {"heavy_cruiser": "1", "light_cruiser": "2", "ADISCORD_coastal_patrol_vessel": "2"})
+        fleet = block(entries("common/ai_navy/fleet/ADISCORD_fleet_templates.txt"), "ADISCORD_coastal_dominance_fleet")
+        required = [(row.key, row.value) for row in block(fleet, "required_taskforces")]
+        self.assertEqual(required, [("ADISCORD_coastal_patrol", "1"), ("ADISCORD_coastal_strike", "1")])
+        optional = [(row.key, row.value) for row in block(fleet, "optional_taskforces")]
+        self.assertEqual(optional[:2], [("ADISCORD_cruiser_patrol", "1"), ("ADISCORD_coastal_patrol", "2")])
+
+    def test_native_naval_ai_defines_fit_the_coalition_fleets(self):
+        defines = (ROOT / "common/defines").glob("*.lua")
+        assignments = Counter()
+        values = {}
+        pattern = r"(?m)^\s*NDefines\.(\w+)\.(ENEMY_NAVY_STRENGTH_DONT_BOTHER|MAX_DISTANCE_NAVAL_INVASION|NAVAL_DOMINANCE_STRIKE_FORCE_FRACTION)\s*=\s*([\d.]+)"
+        for path in defines:
+            for table, key, value in re.findall(pattern, path.read_text(encoding="utf-8-sig")):
+                assignments[key] += 1
+                values[key] = (table, float(value))
+        self.assertEqual(set(assignments.values()), {1})
+        self.assertEqual(values, {
+            "ENEMY_NAVY_STRENGTH_DONT_BOTHER": ("NAI", 3.5),
+            "MAX_DISTANCE_NAVAL_INVASION": ("NAI", 350.0),
+            "NAVAL_DOMINANCE_STRIKE_FORCE_FRACTION": ("NNavy", 0.003),
+        })
 
     def test_naval_unit_names_have_native_small_texticons(self):
         units = block(entries("common/units/ADISCORD_naval_units.txt"), "sub_units")
@@ -277,16 +327,18 @@ class NavalProgrammeTests(unittest.TestCase):
         plan_gate = block(triggers, "NAM_rw_coalition_landing_planned")
         sail_gate = block(triggers, "NAM_rw_coalition_landing_ready")
         for tag in ("EFL", "AZH"):
-            for preparing, active, enemy, allied, supplied, expected_plan, expected_sail in (
-                (True, False, False, False, True, True, False),
-                (True, False, False, True, True, False, False),
-                (False, True, True, False, True, True, True),
-                (False, True, True, False, False, False, False),
-                (False, True, False, False, True, False, False),
-                (False, False, False, False, True, False, False),
+            for preparing, mustered, active, enemy, allied, supplied, expected_plan, expected_sail in (
+                (True, True, False, False, False, True, True, False),
+                (True, False, False, False, False, True, False, False),
+                (True, True, False, False, True, True, False, False),
+                (False, False, True, True, False, True, True, True),
+                (False, True, True, True, False, False, False, False),
+                (False, True, True, False, False, True, False, False),
+                (False, True, False, False, False, True, False, False),
             ):
                 facts = {
                     (tag, "ADISCORD_nam_resource_war_preparation", "yes"): preparing,
+                    (tag, "has_country_flag", "NAM_rw_coalition_mobilised"): mustered,
                     (tag, "ADISCORD_nam_resource_war_active", "yes"): active,
                     (tag, "NAM_rw_coalition_can_embark", "yes"): supplied,
                     (tag, "has_war_with", "NAM"): enemy,
@@ -294,6 +346,173 @@ class NavalProgrammeTests(unittest.TestCase):
                 }
                 self.assertEqual(matches_conditions(plan_gate, facts, tag), expected_plan)
                 self.assertEqual(matches_conditions(sail_gate, facts, tag), expected_sail)
+        weight, = (row.value for row in planning if row.key == "ai_strategy"
+                   and scalar(row.value, "type") == "naval_invasion_dominance_weight")
+        self.assertGreater(int(scalar(weight, "value")), 0)
+
+    def test_coalition_embarks_on_its_sealift_not_its_field_army(self):
+        triggers = entries("common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt")
+        embark = block(triggers, "NAM_rw_coalition_can_embark")
+        self.assertEqual(scalar(embark, "NAM_rw_coalition_sealift_ready"), "yes")
+        names = {row.key for row in walk(embark)} | {row.value for row in walk(embark) if isinstance(row.value, str)}
+        self.assertFalse({"difficulty", "ADISCORD_ai_field_army_can_attack", "ADISCORD_ai_supply_transport_shortage"} & names)
+        self.assertEqual(semantic(block(triggers, "NAM_rw_coalition_sealift_ready")), semantic(parse_clausewitz(
+            "has_tech = ADISCORD_tech_restored_dockyards\n"
+            "has_navy_size = { size > 23 type = convoy }\n"
+            "has_navy_size = { size > 0 unit = ADISCORD_coastal_patrol_vessel }\n"
+            "NOT = { has_fuel < 1000 }\n"
+        )))
+
+    def coalition_route_regions(self):
+        from tools.builders import build_adiscord_strategic_regions as map_regions
+
+        types, colors = map_regions.load_province_definitions()
+        adjacency = map_regions.load_province_adjacency(types, colors, include_special_adjacencies=False)
+        regions = {}
+        for path in (ROOT / "map/strategicregions").glob("*.txt"):
+            region = block(parse_clausewitz(path.read_text(encoding="utf-8-sig")), "strategic_region")
+            regions[scalar(region, "id")] = {int(row.value) for row in block(region, "provinces")}
+        return types, adjacency, regions
+
+    def naval_region_strategies(self, policy, kind):
+        return {
+            scalar(row.value, "id"): scalar(row.value, "value")
+            for row in policy if row.key == "ai_strategy" and scalar(row.value, "type") == kind
+        }
+
+    def test_coalition_sea_lanes_follow_the_live_route_from_each_port(self):
+        policies = entries("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt")
+        for row in policies:
+            for strategy in row.value:
+                if strategy.key == "ai_strategy" and scalar(strategy.value, "type").startswith("naval_"):
+                    self.assertNotEqual([field.value for field in strategy.value if field.key == "id"], ["38"], row.key)
+        types, adjacency, regions = self.coalition_route_regions()
+        # Read physical borders independently of the authored region priority.
+        targets = {16716, 689}
+        for tag, port, route in (("EFL", 6495, ["238", "239"]), ("AZH", 493, ["241", "240", "239"])):
+            with self.subTest(tag=tag):
+                policy = block(policies, f"NAM_rw_{tag.lower()}_sea_lanes")
+                self.assertEqual(scalar(block(policy, "allowed"), "tag"), tag)
+                self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+                gate = block(policy, "enable")
+                for key in ("is_ai", "ADISCORD_has_operational_naval_base"):
+                    self.assertEqual(scalar(gate, key), "yes")
+                self.assertEqual(scalar(gate, "has_capitulated"), "no")
+                self.assertEqual(scalar(block(gate, "NAM"), "has_capitulated"), "no")
+                self.assertEqual({(row.key, row.value) for row in block(gate, "OR")},
+                                 {("has_war_with", "NAM"), ("NAM_rw_coalition_landing_planned", "yes")})
+                self.assertEqual(self.naval_region_strategies(policy, "naval_dominance"), dict.fromkeys(route, "100"))
+                self.assertEqual(self.naval_region_strategies(policy, "naval_invasion_support_priority"),
+                                 dict.fromkeys(route, "200"))
+                for region in route:
+                    self.assertTrue(all(types[province] == "sea" for province in regions[region]), region)
+                self.assertTrue(any(regions[route[0]] & adjacency[port]), "home port must open on the first lane")
+                for current, following in zip(route, route[1:]):
+                    self.assertTrue(any(adjacency[p] & regions[following] for p in regions[current]),
+                                    (current, following))
+                self.assertTrue(any(regions[route[-1]] & adjacency[target] for target in targets),
+                                "the last lane must reach a Svetlogorye harbour")
+
+    def test_war_of_return_coalition_lands_on_the_islands_only_while_it_can_cross(self):
+        policies = entries("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt")
+        policy = block(policies, "NAM_wor_coalition_island_landing")
+        self.assertEqual({row.value for row in block(block(policy, "allowed"), "OR")}, {"EFL", "AZH"})
+        self.assertEqual([(row.key, row.value) for row in block(policy, "enable")], [("NAM_wor_coalition_can_cross", "yes")])
+        self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+        invade, = (row.value for row in policy if row.key == "ai_strategy" and scalar(row.value, "type") == "invade")
+        self.assertEqual(scalar(invade, "id"), "NAM")
+        self.assertGreater(int(scalar(invade, "value")), 0)
+        execute, = (row.value for row in policy if row.key == "ai_strategy"
+                    and scalar(row.value, "type") == "front_control")
+        self.assertEqual(scalar(execute, "tag"), "NAM")
+        self.assertEqual(scalar(execute, "ordertype"), "invasion")
+        self.assertEqual(scalar(execute, "execute_order"), "yes")
+        self.assertTrue(0 <= float(scalar(execute, "ratio")) < 1)
+        types, adjacency, regions = self.coalition_route_regions()
+        islands = set()
+        for state_id in range(225, 232):
+            path, = (ROOT / "history/states").glob(f"{state_id}-*.txt")
+            state = block(entries(path), "state")
+            islands |= {int(row.value) for row in block(state, "provinces")}
+        support = self.naval_region_strategies(policy, "naval_invasion_support_priority")
+        self.assertEqual(support, {"243": "200", "244": "200"})
+        self.assertEqual(set(self.naval_region_strategies(policy, "naval_dominance")), set(support))
+        for region in support:
+            self.assertTrue(all(types[province] == "sea" for province in regions[region]), region)
+            self.assertTrue(any(adjacency[province] & islands for province in regions[region]), region)
+        gate = block(entries("common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt"), "NAM_wor_coalition_can_cross")
+        for tag in ("EFL", "AZH"):
+            facts = {
+                (tag, "is_ai", "yes"): True,
+                (tag, "has_capitulated", "no"): True,
+                (tag, "numeric", "surrender_progress"): 0.2499,
+                (tag, "NAM_war_of_return_active", "yes"): True,
+                (tag, "has_war_with", "NAM"): True,
+                ("NAM", "has_capitulated", "no"): True,
+                (tag, "NAM_rw_coalition_sealift_ready", "yes"): True,
+                (tag, "ADISCORD_has_operational_naval_base", "yes"): True,
+                (tag, "numeric", "num_divisions"): 8,
+            }
+            self.assertTrue(matches_conditions(gate, facts, tag))
+            failures = {
+                (tag, "numeric", "surrender_progress"): 0.25,
+                (tag, "numeric", "num_divisions"): 7,
+            }
+            for key in facts:
+                with self.subTest(tag=tag, condition=key):
+                    self.assertFalse(matches_conditions(gate, {**facts, key: failures.get(key, False)}, tag))
+
+    def test_war_of_return_reserves_gather_only_in_ports_their_country_can_hold(self):
+        effects = entries("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
+        cession = block(block(effects, "NAM_rw_cede_mainland_state"), "if")
+        southern = {row.value for row in walk(block(cession, "limit")) if row.key == "state"}
+        self.assertEqual(scalar(block(cession, "AZH"), "transfer_state"), "PREV")
+        settlement = block(effects, "ADISCORD_nam_resource_war_resolve_coalition_victory")
+        ceded = {
+            row.key for row in walk(settlement)
+            if row.key.isdigit() and isinstance(row.value, list)
+            and any(field.key == "NAM_rw_cede_mainland_state" for field in row.value)
+        }
+        self.assertTrue(southern <= ceded)
+        transferred = {"EFL": ceded - southern, "AZH": southern}
+        policies = entries("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt")
+        for tag, ratio, home in (("EFL", "0.14", "723"), ("AZH", "0.20", "692")):
+            with self.subTest(tag=tag):
+                policy = block(policies, f"NAM_wor_{tag.lower()}_landing_reserve")
+                self.assertEqual(scalar(block(policy, "allowed"), "tag"), tag)
+                self.assertEqual(scalar(block(policy, "enable"), "NAM_wor_coalition_can_cross"), "yes")
+                self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+                reserve = block(policy, "ai_strategy")
+                self.assertEqual(scalar(reserve, "type"), "put_unit_buffers")
+                self.assertEqual(scalar(reserve, "ratio"), ratio)
+                self.assertEqual(scalar(reserve, "subtract_invasions_from_need"), "yes")
+                self.assertEqual(scalar(reserve, "subtract_fronts_from_need"), "no")
+                states = [row.value for row in block(reserve, "states")]
+                self.assertIn(home, states)
+                self.assertTrue(set(states) - {home} <= ceded and len(states) > 1)
+                for state_id in states:
+                    path, = (ROOT / "history/states").glob(f"{state_id}-*.txt")
+                    history = block(block(entries(path), "state"), "history")
+                    # A starting home state or a district the treaty hands to this country.
+                    self.assertTrue(scalar(history, "owner") == tag or state_id in transferred[tag], state_id)
+                    ports = [row.value for row in block(history, "buildings")
+                             if isinstance(row.value, list) and any(field.key == "naval_base" for field in row.value)]
+                    self.assertTrue(ports, f"state {state_id} needs a harbour")
+
+    def test_coalition_researches_amphibious_capacity_while_it_has_a_port(self):
+        policy = block(entries("common/ai_strategy/ADISCORD_nam_resource_war_ai.txt"), "NAM_rw_coalition_amphibious_research")
+        self.assertEqual({row.value for row in block(block(policy, "allowed"), "OR")}, {"EFL", "AZH"})
+        self.assertEqual(scalar(block(policy, "enable"), "ADISCORD_has_operational_naval_base"), "yes")
+        self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+        techs = block(entries("common/technologies/ADISCORD_naval.txt"), "technologies")
+        weights = self.naval_region_strategies(policy, "research_weight_factor")
+        self.assertEqual(weights, {
+            "ADISCORD_tech_amphibious_formation_organization": "80",
+            "ADISCORD_tech_amphibious_staff_sections": "60",
+            "ADISCORD_tech_amphibious_embarkation_schedules": "50",
+        })
+        for tech in weights:
+            self.assertTrue(block(techs, tech), tech)
 
     def test_generic_naval_categories_require_port_and_cleanup(self):
         for category in ("capital_ship", "screen_ship", "submarine"):

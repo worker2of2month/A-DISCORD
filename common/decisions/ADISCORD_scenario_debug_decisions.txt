@@ -344,6 +344,24 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	ADISCORD_nam_debug_tree_return_war = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_return_war_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_return_war_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	ADISCORD_nam_debug_start_resource_war = {
 		allowed = {
 			OR = {

@@ -90,6 +90,7 @@ add_ideas = {
 
 	#ministers
 	minister_STP_Ernest_Derlich
+	minister_STP_Adrian_Vels
 	minister_STP_Tarik_Menebhi
 	minister_STP_Camus_Onyx
 	minister_STP_Lorian_Vell

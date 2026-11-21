@@ -664,10 +664,10 @@ Python-модель проверяет исходные скрипты, но н�
 
 - After recognition, verify the exclusive 35-day normalisation/border choice.
   Normalisation returns 4000 manpower and opens ordinary fuel contracts if
-  needed. Armed Border grants 80 artillery, 20 army XP and permanent-line orders.
-- Order a line after peace in an owned, controlled border district. Verify
-  30 PP and 100 treasury payment, 35-day delivery, occupied slots and loss
-  cancellation. Treasury returns once; PP does not. Forward depots stay closed.
+  needed. Armed Border grants 80 artillery and 20 army XP.
+- Order a line shortly before peace for 100 treasury. Verify that it finishes
+  in 35 days on a retained border or refunds the deposit once if the site is
+  lost. New line orders stay closed under both postwar border policies.
 - After compromise, finish oil union and road-south, then choose oil peace.
   Verify the 25 PP / 5000 fuel export, 450 treasury delivery after 21 days,
   cancellation/refund on subjugation and exclusion of the southern charter.

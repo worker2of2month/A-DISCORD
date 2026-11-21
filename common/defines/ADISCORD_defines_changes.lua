@@ -250,6 +250,9 @@ NDefines.NNavy.ALL_SHIPS_ACTIVATE_TIME = 8
 NDefines.NNavy.NAVAL_MINES_DECAY_AT_PEACE_TIME = 0.05
 -- Reserve one escort's base dominance above a landing threshold.
 NDefines.NAI.AI_MIN_DOMINANCE_MARGIN = 20
+-- Capital hull factors here are 60-150 against the native 100-450, so a
+-- cruiser strike group of about 200 points needs a larger share per point.
+NDefines.NNavy.NAVAL_DOMINANCE_STRIKE_FORCE_FRACTION = 0.003
 NDefines.NNavy.ATTRITION_WHILE_MOVING_FACTOR = 2.5
 NDefines.NNavy.ATTRITION_DAMAGE_ORG = 0.03
 NDefines.NNavy.ATTRITION_DAMAGE_STR = 0.09
@@ -358,7 +361,12 @@ NDefines.NAI.FRONT_TERRAIN_ATTACK_FACTOR = 8.0
 NDefines.NAI.BASE_DISTANCE_TO_CARE = 200.0
 NDefines.NAI.MIN_FORCE_RATIO_TO_PROTECT = 1.5
 NDefines.NAI.UPGRADE_DIVISION_RELUCTANCE = 30
-NDefines.NAI.ENEMY_NAVY_STRENGTH_DONT_BOTHER = 1.75
+-- Admits a regional fleet of 15 hulls against an enemy of about 45, the
+-- smaller partner's position in the southern coalition.
+NDefines.NAI.ENEMY_NAVY_STRENGTH_DONT_BOTHER = 3.5
+-- Covers the main island ports (states 225-229) from Eflor's harbour or the
+-- mainland harbours; the western islands and Azhar's home port lie farther.
+NDefines.NAI.MAX_DISTANCE_NAVAL_INVASION = 350
 NDefines.NAI.STATE_CONTROL_FOR_AREA_DEFENSE = 0.2
 NDefines.NAI.NAVAL_MISSION_INVASION_BASE = 5000
 NDefines.NAI.SCARY_LEVEL_AVERAGE_DEFENSE = -0.6

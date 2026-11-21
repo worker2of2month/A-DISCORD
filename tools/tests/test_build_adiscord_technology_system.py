@@ -900,6 +900,104 @@ class CivilTechnologyRedesignTests(unittest.TestCase):
         for name, technologies in generator.STARTING_TECH_PROFILES.items():
             self.assertNotIn(root, technologies, name)
 
+    def test_each_electronics_folder_technology_has_distinct_research_art(self):
+        self.check_tab_artwork("electronics")
+
+    def test_each_industry_folder_technology_has_distinct_research_art(self):
+        self.check_tab_artwork("industry")
+
+    def test_infantry_tab_keeps_existing_cards_and_loads_new_research_art(self):
+        self.check_tab_artwork("infantry")
+
+    def test_rifle_improvements_use_individual_art_in_the_small_infantry_tile(self):
+        from PIL import Image
+
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8")
+        tile = validator.extract_named_container(gui, "techtree_infantry_folder_small_item")
+        size = re.search(r"size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)", tile)
+        origin = re.search(r'name\s*=\s*"Icon"\s+position\s*=\s*\{\s*x\s*=\s*(\d+)\s+y\s*=\s*(\d+)', tile)
+        width, height = map(int, size.groups())
+        x, y = map(int, origin.groups())
+        sprites = validator.collect_sprite_names()
+        for key in ("electrothermal_ignition", "biometric_trigger_locks"):
+            path = ROOT / "gfx/interface/technologies/infantry" / f"{key}.png"
+            self.assertEqual(ROOT / sprites[f"GFX_ADISCORD_tech_{key}_medium"], path)
+            with self.subTest(technology=key), Image.open(path) as card:
+                self.assertEqual(card.size, (width, height))
+                left, top, right, bottom = card.convert("RGBA").getchannel("A").getbbox()
+                self.assertLessEqual(abs(2 * x + left + right - width), 2)
+                self.assertLessEqual(abs(2 * y + top + bottom - height), 2)
+
+    def test_each_support_technology_has_distinct_research_art(self):
+        self.check_tab_artwork("support")
+
+    def test_equipment_art_is_centered_under_the_title_in_wide_templates(self):
+        from PIL import Image
+
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8")
+        with Image.open(ROOT / "gfx/interface/technology/ui/ADISCORD_technology_node_available.dds") as frame:
+            width, height = frame.size
+        for folders in generator.EQUIPMENT_CARD_FOLDERS.values():
+            for folder in folders:
+                with self.subTest(folder=folder):
+                    card = validator.extract_named_container(gui, f"techtree_{folder}_item")
+                    self.assertRegex(card, rf"size\s*=\s*\{{\s*width\s*=\s*{width}\s+height\s*=\s*{height}\s*\}}")
+                    icon = re.search(r'iconType\s*=\s*\{\s*name\s*=\s*"Icon"(.*?)\n\s*\}', card, re.S)[1]
+                    self.assertIn("centerposition = yes", icon)
+                    self.assertRegex(icon, rf"position\s*=\s*\{{\s*x\s*=\s*{width // 2}\s+y\s*=\s*50\s*\}}")
+
+    def test_remaining_research_tab_artwork(self):
+        for tab in ("air", "armor", "artillery", "naval", "special"):
+            with self.subTest(tab=tab):
+                self.check_tab_artwork(tab)
+
+    def check_tab_artwork(self, tab):
+        from PIL import Image
+
+        _, blocks = validator.collect_technologies()
+        sprites = validator.collect_sprite_names()
+        tab_textures = generator.tab_technology_textures(tab)
+        artwork = set()
+        folder = generator.RESEARCH_ART_FOLDERS[tab]
+        for tech_id, block in blocks.items():
+            if not re.search(rf"\bfolder\s*=\s*\{{\s*name\s*=\s*{folder}\b", block):
+                continue
+            with self.subTest(technology=tech_id):
+                key = tech_id.removeprefix("ADISCORD_tech_")
+                if key not in tab_textures:
+                    texture = sprites[f"GFX_{tech_id}_medium"]
+                    if tab == "armor":
+                        self.assertEqual(texture, generator.tank_card_texture(generator.TANK_CARD_UNLOCKS[tech_id]))
+                    elif tab == "naval":
+                        self.assertIn(Path(texture).stem, generator.NAVAL_HULL_ART)
+                    elif tab == "special":
+                        self.assertIn(key, generator.SHARED_SHIELD_ART)
+                        self.assertEqual(Path(texture).name, "ADISCORD_power_shield_equipment.dds")
+                    else:
+                        self.assertEqual(tab, "infantry")
+                    self.assertTrue((ROOT / texture).is_file(), texture)
+                    if tab == "infantry":
+                        self.assertFalse(texture.startswith(f"gfx/interface/technologies/{tab}/"))
+                    continue
+                path = f"gfx/interface/technologies/{tab}/{key}.png"
+                self.assertEqual(sprites[f"GFX_{tech_id}_medium"], path)
+                with Image.open(ROOT / path) as image:
+                    equipment_card = tab in {"support", "artillery"} and re.search(r"\benable_equipments\s*=\s*\{", block)
+                    size = (176, 72) if equipment_card else (72, 72)
+                    self.assertEqual((image.format, image.mode, image.size), ("PNG", "RGBA", size))
+                    if equipment_card:
+                        alpha = image.getchannel("A").point(lambda value: 255 if value >= 32 else 0)
+                        left, top, right, bottom = alpha.getbbox()
+                        self.assertGreater(right - left, 72, key)
+                        self.assertLessEqual(abs((left + right) / 2 - 89.5), 2, key)
+                        self.assertLessEqual(abs((top + bottom) / 2 - 36), 2, key)
+                    self.assertEqual(image.getchannel("A").getextrema(), (0, 255))
+                    pixels = image.tobytes()
+                self.assertNotIn(pixels, artwork, tech_id)
+                artwork.add(pixels)
+        self.assertGreater(len(artwork), 0)
+        self.assertEqual(len(artwork), len(tab_textures))
+
     def test_civil_output_scope_and_pure_rendering(self):
         with patch.object(generator, "aircraft_icon_outputs", side_effect=AssertionError("unrelated artwork")):
             outputs = generator.civil_technology_outputs()
@@ -2049,6 +2147,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         )
         for taskforce, unit in (
             ("ADISCORD_cruiser_strike", "heavy_cruiser"),
+            ("ADISCORD_cruiser_patrol", "light_cruiser"),
             ("ADISCORD_submarine_raiding", "submarine"),
         ):
             match = re.search(rf"\b{taskforce}\s*=\s*\{{", taskforces)

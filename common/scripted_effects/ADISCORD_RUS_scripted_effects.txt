@@ -4444,14 +4444,8 @@ RUS_bunker_refresh = {
 		}
 	}
 	else = {
-		if = {
-			limit = { has_idea = RUS_bunker_hunger }
-			remove_ideas = RUS_bunker_hunger
-		}
-		if = {
-			limit = { has_idea = RUS_bunker_hunger_rationed }
-			remove_ideas = RUS_bunker_hunger_rationed
-		}
+		remove_ideas = RUS_bunker_hunger
+		remove_ideas = RUS_bunker_hunger_rationed
 	}
 	if = {
 		limit = { check_variable = { var = RUS_bunker_food_state value = 2 compare = equals } }
@@ -4677,7 +4671,7 @@ RUS_campaign_initialize = {
 		set_country_flag = RUS_vorkerland_airlift_active
 		set_variable = { var = RUS_vorkerland_airlift_stage value = 1 }
 		activate_mission = RUS_vorkerland_airlift
-		ADISCORD_vorkerland_ensure_limited_conscription = yes
+		add_ideas = limited_conscription
 		ADISCORD_vorkerland_rus_core_dirty_sla = yes
 		ADISCORD_vorkerland_rus_core_dirty_rza = yes
 		ADISCORD_vorkerland_rus_core_dirty_mlr = yes

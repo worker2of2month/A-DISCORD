@@ -2974,7 +2974,7 @@ focus_tree = {
 			army_experience = 10
 		}
 		ai_will_do = {
-			base = 100
+			base = 30
 		}
 	}
 
@@ -13842,7 +13842,7 @@ focus_tree = {
 			}
 		}
 		ai_will_do = {
-			base = 100
+			base = 30
 		}
 	}
 

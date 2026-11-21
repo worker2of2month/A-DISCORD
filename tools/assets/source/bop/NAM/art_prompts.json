@@ -26,6 +26,26 @@
         "gfx/interface/bop/VAL_bop_general_staff.png"
       ],
       "prompt": "Use case: stylized-concept. Create ONE finished Hearts of Iron IV balance-of-power UI icon for fictional Svetlogorye. Transparent background, isolated circular metal medallion centered in portrait 72:88 aspect ratio, fills 88% width, entire outer edge visible. Designed to stay readable at 72x88 pixels. Antique brass narrow circular rim with two restrained laurel sprigs at bottom sides; dark charcoal inset; raised bright silver main symbol with subtle worn metal highlights. Strong silhouettes, few broad details, no letters, numbers, flags, stars, portraits, geographical maps or invented party emblems. No glow, no outer shadow, no checkerboard, genuine alpha outside emblem. Match the attached reference's material and visual density, not its weapon symbols. Subject: THREE equal-sized silver circular seals linked together by three broad brass connectors into a balanced triangular council arrangement. Each silver seal has one plain recessed center, no lettering. All three seals equal in visual weight. This depicts district councils sharing authority, no dominant central seal and no weapons."
+    },
+    {
+      "runtime": "gfx/interface/bop/NAM_bop_hawks.png",
+      "runtime_size": [
+        78,
+        88
+      ],
+      "tool": "image_gen",
+      "transparent_background": true,
+      "prompt": "Create one polished Hearts of Iron IV political balance-of-power UI medallion. Frontal circular badge, dark gunmetal inset, narrow antique gold brass rim, two small laurel sprigs hugging the lower inner rim. Raised bold silver device, high contrast, broad relief, readable at 72 pixels. Full circular object isolated on genuine transparent alpha, no label, typography, external shadow or other objects. Imperial restoration hawks of Svetlogorye: one dominant heraldic hawk head in profile facing left, sharply hooked beak, swept feathers, and a small simple three-point imperial crown above its brow. Make the profile instantly identifiable."
+    },
+    {
+      "runtime": "gfx/interface/bop/NAM_bop_conservatives.png",
+      "runtime_size": [
+        78,
+        88
+      ],
+      "tool": "image_gen",
+      "transparent_background": true,
+      "prompt": "Create one polished Hearts of Iron IV political balance-of-power UI medallion. Frontal circular badge, dark gunmetal inset, narrow antique gold brass rim, two small laurel sprigs hugging the lower inner rim. Raised bold silver device, high contrast, broad relief, readable at 72 pixels. Full circular object isolated on genuine transparent alpha, no label, typography, external shadow or other objects. Sovereign Svetlogorye conservatives: one large, front-facing, simple broad silver heater shield with a single embattled fortress gate embossed on its face, two crenellations and one broad dark arch. Solid grounded silhouette, without wings, birds or crown."
     }
   ],
   "export": {

@@ -4374,10 +4374,12 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if (
         tva_oob.count("division = {") != 19
         or tva_oob.count('division_template = "Mobile Test Group"') != 1
+        or tva_oob.count('division_template = "Line Infantry Brigade"') != 6
         or "Infiltration Cell" not in tva_oob
     ):
         issues.append(
-            "TVA must start with eighteen militia formations, one mobile group and an infiltration template"
+            "TVA must start with nineteen formations: six line brigades, twelve militia,"
+            " one mobile group, and keep its infiltration template"
         )
     for tag in ("VAD",):
         oob = read(root, f"history/units/{tag}.txt", issues)

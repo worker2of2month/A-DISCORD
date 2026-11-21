@@ -84,11 +84,13 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_bop_NAM_imperial_flag"
-		texturefile = "gfx/flags/medium/NAM_veyran_union.tga"
+		texturefile = "gfx/interface/bop/NAM_bop_hawks.png"
+		legacy_lazy_load = no
 	}
 
 	spriteType = {
 		name = "GFX_bop_NAM_sovereign_flag"
-		texturefile = "gfx/flags/medium/NAM_svetlogorye_derzhava.tga"
+		texturefile = "gfx/interface/bop/NAM_bop_conservatives.png"
+		legacy_lazy_load = no
 	}
 }

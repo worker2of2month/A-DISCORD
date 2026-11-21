@@ -503,8 +503,8 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
                 'NAM_nationalisation_free_tt',
                 'NAM_nationalisation_free_tt_not',
                 'NAM_nationalisation_slot_tt',
-                'NAM_nationalisation_start_resistance_tt',
-                'NAM_nationalisation_thresholds_tt',
+                'NAM_nationalisation_compliance_tt',
+                'NAM_nationalisation_resistance_tt',
                 'NAM_nationalisation_thresholds_lost_tt',
                 'NAM_nationalisation_result_tt',
                 'NAM_nationalisation_complete_tt',
@@ -726,7 +726,8 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
         f['NAM', 'has_completed_focus', 'NAM_border_citizenship'] = True
         self.assertTrue(matches_conditions(visible, f, 'NAM'))
         for compliance, resistance, may_start, may_finish in (
-            (80, 20, True, True), (80, 0.01, True, True), (100, 0, False, True),
+            (80, 20, True, True), (80, 0.01, True, True), (80, 0, True, True),
+            (100, 0, True, True), (79.99, 0, False, False),
             (79.99, 10, False, False), (100, 20.01, False, False),
         ):
             with self.subTest(compliance=compliance, resistance=resistance):

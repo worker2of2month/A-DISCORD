@@ -135,6 +135,39 @@ ideas = {
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
+
+		# Council of boards: war laws. Enacted by the war tree of the return; stays after the war.
+		NAM_board_law_field_courts = {
+			picture = PRC_three_rules_of_discipline_idea
+			cost = 0
+			removal_cost = -1
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			visible = { has_idea = NAM_board_law_field_courts }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_field_courts_source_tt
+					always = no
+				}
+			}
+			allowed_to_remove = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_locked_tt
+					always = no
+				}
+			}
+			modifier = {
+				required_garrison_factor = -0.25
+				war_support_factor = 0.04
+				army_org_factor = 0.05
+				stability_factor = -0.05
+				ADISCORD_economy_investment_confidence_factor = -0.10
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
 	}
 
 	trade_laws = {
@@ -273,6 +306,41 @@ ideas = {
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
+
+		# Council of boards: war laws.
+		NAM_board_law_martial_rule = {
+			picture = ADISCORD_south_nam_emergency_writs
+			cost = 0
+			removal_cost = -1
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			visible = { has_idea = NAM_board_law_martial_rule }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_martial_rule_source_tt
+					always = no
+				}
+			}
+			allowed_to_remove = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_locked_tt
+					always = no
+				}
+			}
+			modifier = {
+				stability_factor = 0.06
+				war_support_factor = 0.05
+				command_power_gain_mult = 0.15
+				drift_defence_factor = 0.10
+				political_power_gain = -0.10
+				ADISCORD_economy_investment_confidence_factor = -0.15
+				ADISCORD_economy_admin_expense_factor = 0.10
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
 	}
 
 	ADISCORD_cultural_policy_laws = {
@@ -364,6 +432,39 @@ ideas = {
 				ADISCORD_economy_military_industry_income_factor = 0.12
 				production_speed_buildings_factor = -0.05
 				ADISCORD_economy_civilian_factory_income_factor = -0.08
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		# Council of boards: war laws.
+		NAM_board_law_holders_contracts = {
+			picture = ADISCORD_law_military_contract_brigades
+			cost = 0
+			removal_cost = -1
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			visible = { has_idea = NAM_board_law_holders_contracts }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_holders_contracts_source_tt
+					always = no
+				}
+			}
+			allowed_to_remove = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_locked_tt
+					always = no
+				}
+			}
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.15
+				industrial_capacity_factory = 0.08
+				consumer_goods_factor = 0.03
+				ADISCORD_economy_civilian_factory_income_factor = -0.10
+				political_power_gain = -0.05
 			}
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
@@ -463,6 +564,75 @@ ideas = {
 				ADISCORD_economy_social_expense_factor = -0.08
 				ADISCORD_economy_demographic_fatigue_gain_factor = 0.12
 				monthly_population = -0.03
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+	}
+
+	# Council of boards: war laws.
+	ADISCORD_infrastructure_laws = {
+		NAM_board_law_strait_requisition = {
+			picture = generic_convoys
+			cost = 0
+			removal_cost = -1
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			visible = { has_idea = NAM_board_law_strait_requisition }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_strait_requisition_source_tt
+					always = no
+				}
+			}
+			allowed_to_remove = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_locked_tt
+					always = no
+				}
+			}
+			modifier = {
+				supply_consumption_factor = -0.08
+				attrition = -0.05
+				army_fuel_consumption_factor = -0.10
+				ADISCORD_economy_trade_income_factor = -0.15
+				consumer_goods_factor = 0.03
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+	}
+
+	ADISCORD_training_laws = {
+		NAM_board_law_veteran_reserve = {
+			picture = generic_reserve_divisions
+			cost = 0
+			removal_cost = -1
+			allowed = { tag = NAM }
+			allowed_civil_war = { always = no }
+			visible = { has_idea = NAM_board_law_veteran_reserve }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_veteran_reserve_source_tt
+					always = no
+				}
+			}
+			allowed_to_remove = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_board_law_locked_tt
+					always = no
+				}
+			}
+			modifier = {
+				training_time_factor = -0.10
+				experience_gain_army_factor = 0.10
+				land_reinforce_rate = 0.02
+				ADISCORD_economy_army_expense_factor = 0.10
+				monthly_population = -0.02
 			}
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
@@ -2281,6 +2451,49 @@ ideas = {
 			}
 		}
 
+		# War of return: the council's costs of the war. The home front pays for the
+		# war trade when both social tracks are already at level 1 (180 days, ends
+		# with the war); the dictated peace adds the indemnity (365 or 540 days); a
+		# victory that cannot redeem the bonds adds the default (180 days). The last
+		# two outlive the war.
+		NAM_rtw_home_front_strain = {
+			picture = generic_economic_crisis
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				stability_factor = -0.05
+				political_power_factor = -0.10
+			}
+		}
+
+		NAM_rtw_reparations = {
+			picture = generic_devalue_currency
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				industrial_capacity_factory = -0.10
+				political_power_gain = -0.20
+				stability_factor = -0.10
+			}
+		}
+
+		NAM_rtw_bond_default = {
+			picture = AST_liberty_loans
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				political_power_factor = -0.15
+				stability_factor = -0.05
+				consumer_goods_factor = 0.03
+			}
+		}
+
 		# Timed invasion spirits of the lower branch, granted with add_timed_idea by focuses,
 		# the upgraded landing drill and event 104. None is read by a trigger.
 
@@ -2525,6 +2738,356 @@ ideas = {
 			modifier = {
 				stability_factor = -0.05
 				war_support_factor = -0.05
+			}
+		}
+
+		# Subversive operations: timed spirits on Eflor and Azhar, granted by the
+		# council's operations; removed at the return's victory or defeat.
+		NAM_sub_dry_tanks = {
+			picture = NAM_agreement_oil_failure
+			allowed = { always = yes }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				fuel_gain_factor = -0.30
+				max_fuel_factor = -0.20
+			}
+		}
+
+		NAM_sub_bad_castings = {
+			picture = FRA_factory_strikes
+			allowed = { always = yes }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				industrial_capacity_factory = -0.08
+				production_factory_max_efficiency_factor = -0.05
+			}
+		}
+
+		NAM_sub_dock_fire = {
+			picture = NAM_judas_dock_strike
+			allowed = { always = yes }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				industrial_capacity_dockyard = -0.15
+				navy_org_factor = -0.10
+			}
+		}
+
+		NAM_sub_bad_sights = {
+			picture = tur_disorganised_armed_forces
+			allowed = { always = yes }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				army_org_factor = -0.08
+				army_defence_factor = -0.08
+			}
+		}
+
+		NAM_sub_labour_strike = {
+			picture = NAM_judas_general_strike
+			allowed = { always = yes }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				conscription_factor = -0.10
+				mobilization_speed = -0.15
+				production_speed_buildings_factor = -0.10
+			}
+		}
+
+		NAM_sub_bond_crash = {
+			picture = ETH_corrupt_bureaucracy
+			allowed = { always = yes }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				political_power_factor = -0.20
+				consumer_goods_factor = 0.03
+			}
+		}
+
+		NAM_sub_leaflets = {
+			picture = ARG_anti_american_propaganda
+			allowed = { always = yes }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				war_support_factor = -0.10
+			}
+		}
+
+		NAM_sub_trophy_quarrel = {
+			picture = RAJ_widespread_turmoil
+			allowed = { always = yes }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				army_attack_factor = -0.05
+				supply_consumption_factor = 0.10
+			}
+		}
+
+		# ----- Council of boards: war of return -----
+		# Timed spirits of the war tree NAM_return_war_focus, granted with
+		# add_timed_idea by its focuses, decisions and order missions. NAM_rtw_close
+		# removes every one of them on both sides except the reparations and the
+		# bond default, which outlive the war.
+
+		NAM_rtw_front_school = {
+			picture = general_staff
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				experience_gain_army_factor = 0.10
+				army_org_regain = 0.05
+			}
+		}
+
+		NAM_rtw_capital_assault = {
+			picture = PRC_hundred_regiments_offensive
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				army_attack_factor = 0.15
+				breakthrough_factor = 0.10
+				supply_consumption_factor = -0.10
+			}
+		}
+
+		NAM_rtw_field_oil = {
+			picture = generic_stockpile_fuel
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				fuel_gain_factor = 0.25
+				army_fuel_consumption_factor = -0.10
+			}
+		}
+
+		NAM_rtw_harbour_spirit = {
+			picture = FIN_coastal_batteries_effort
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				army_defence_factor = 0.10
+				naval_invasion_prep_speed = 0.20
+			}
+		}
+
+		NAM_rtw_hill_spirit = {
+			picture = generic_mountain_defensive_training
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				army_defence_factor = 0.10
+				attrition = -0.10
+			}
+		}
+
+		NAM_rtw_last_storm = {
+			picture = ARG_war_division
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				army_attack_factor = 0.10
+				army_org_regain = 0.10
+				war_support_factor = 0.05
+			}
+		}
+
+		NAM_rtw_convoy_line = {
+			picture = generic_convoys
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				supply_consumption_factor = -0.10
+				attrition = -0.05
+			}
+		}
+
+		NAM_rtw_order_failed = {
+			picture = prc_low_popular_support
+			allowed = { tag = NAM }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				war_support_factor = -0.05
+				political_power_gain = -0.15
+			}
+		}
+
+		# Penalties on Eflor.
+		NAM_rtw_svetlogorsk_strike = {
+			picture = ICE_general_strike
+			allowed = { tag = EFL }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				industrial_capacity_factory = -0.10
+				stability_factor = -0.05
+			}
+		}
+
+		NAM_rtw_fields_lost = {
+			picture = generic_refining_concern_1
+			allowed = { tag = EFL }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				fuel_gain_factor = -0.30
+				max_fuel_factor = -0.20
+			}
+		}
+
+		NAM_rtw_loren_crisis = {
+			picture = great_depression
+			allowed = { tag = EFL }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				stability_factor = -0.10
+				political_power_factor = -0.20
+				surrender_limit = -0.05
+			}
+		}
+
+		NAM_rtw_bought_colonels = {
+			picture = chi_army_corruption2
+			allowed = { tag = EFL }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				army_org_factor = -0.10
+				planning_speed = -0.20
+				surrender_limit = -0.05
+			}
+		}
+
+		# Penalties on Azhar.
+		NAM_rtw_hill_villages = {
+			picture = POL_looming_peasants_strike
+			allowed = { tag = AZH }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				war_support_factor = -0.08
+				conscription_factor = -0.05
+			}
+		}
+
+		NAM_rtw_coal_blockade = {
+			picture = SOV_shipyard_staff_purged
+			allowed = { tag = AZH }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				navy_org_factor = -0.15
+				naval_speed_factor = -0.15
+			}
+		}
+
+		NAM_rtw_families_turn = {
+			picture = BEL_traditional_family_values
+			allowed = { tag = AZH }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				surrender_limit = -0.10
+				war_support_factor = -0.10
+				mobilization_speed = -0.10
+			}
+		}
+
+		NAM_rtw_levy_drained = {
+			picture = tfv_can_conscription_crisis
+			allowed = { tag = AZH }
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				conscription_factor = -0.10
+				war_support_factor = -0.05
+				surrender_limit = -0.05
+			}
+		}
+
+		# Penalties on either principal.
+		NAM_rtw_capital_fallen = {
+			picture = RAJ_partition_chaos_bad
+			allowed = {
+				OR = {
+					tag = EFL
+					tag = AZH
+				}
+			}
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				surrender_limit = -0.15
+				stability_factor = -0.10
+			}
+		}
+
+		NAM_rtw_terms_published = {
+			picture = HUN_treaty_of_triannon
+			allowed = {
+				OR = {
+					tag = EFL
+					tag = AZH
+				}
+			}
+			removal_cost = -1
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			modifier = {
+				surrender_limit = -0.15
+				stability_factor = -0.05
+			}
+		}
+
+		# Exact preview of the island arsenals' share of the council's focus
+		# output aggregate; shown by effect_tooltip, never installed.
+		NAM_board_preview_rtw_arsenals = {
+			name = NAM_board_industrial_policy
+			picture = GFX_idea_NAM_board_island_industry
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
 			}
 		}
 

@@ -7817,6 +7817,11 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		ai_will_do = { factor = 1000 }
 	}
 
+	# A district treaty belongs to the claimant whose sphere holds the district:
+	# before the split only the apparatus whose heir owns that sphere may offer
+	# it, afterwards only the sphere's live claimant, or any claimant once that
+	# sphere has opened (ADISCORD_vorkerland_central_minor_is_open_to_ROOT, FROM
+	# is the district). WKR holds RIV, VAD holds EYR and YOR, TVA holds EGC.
 	ADISCORD_vorkerland_prep_offer_eyr = {
 		icon = ADISCORD_deal
 		allowed = {
@@ -7836,6 +7841,16 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 			FROM = {
 				NOT = { has_country_flag = ADISCORD_vorkerland_prep_treaty_signed }
 			}
+			OR = {
+				AND = {
+					ADISCORD_vorkerland_prep_open = yes
+					ADISCORD_vorkerland_prewar_patron_staff = yes
+				}
+				AND = {
+					ADISCORD_vorkerland_is_main_claimant = yes
+					FROM = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -7848,7 +7863,7 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		custom_cost_trigger = {
 			NOT = { has_political_power < 35 }
 			NOT = {
-				has_equipment = { infantry_equipment < 13500 }
+				has_equipment = { infantry_equipment < 6000 }
 			}
 		}
 		days_re_enable = 30
@@ -7889,6 +7904,16 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 			ADISCORD_vorkerland_prep_diplomacy_open = yes
 			FROM = {
 				NOT = { has_country_flag = ADISCORD_vorkerland_prep_treaty_signed }
+			}
+			OR = {
+				AND = {
+					ADISCORD_vorkerland_prep_open = yes
+					ADISCORD_vorkerland_prewar_patron_network = yes
+				}
+				AND = {
+					ADISCORD_vorkerland_is_main_claimant = yes
+					FROM = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes }
+				}
 			}
 		}
 		available = {
@@ -7944,6 +7969,16 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 			FROM = {
 				NOT = { has_country_flag = ADISCORD_vorkerland_prep_treaty_signed }
 			}
+			OR = {
+				AND = {
+					ADISCORD_vorkerland_prep_open = yes
+					ADISCORD_vorkerland_prewar_patron_committees = yes
+				}
+				AND = {
+					ADISCORD_vorkerland_is_main_claimant = yes
+					FROM = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -7998,6 +8033,16 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 			FROM = {
 				NOT = { has_country_flag = ADISCORD_vorkerland_prep_treaty_signed }
 			}
+			OR = {
+				AND = {
+					ADISCORD_vorkerland_prep_open = yes
+					ADISCORD_vorkerland_prewar_patron_staff = yes
+				}
+				AND = {
+					ADISCORD_vorkerland_is_main_claimant = yes
+					FROM = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes }
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8010,7 +8055,7 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		custom_cost_trigger = {
 			NOT = { has_political_power < 35 }
 			NOT = {
-				has_equipment = { infantry_equipment < 2000 }
+				has_equipment = { infantry_equipment < 8000 }
 			}
 		}
 		days_re_enable = 30

@@ -6960,12 +6960,25 @@ NAM_war_of_return_close = {
 	719 = { NAM_board_rising_sabotage_clear = yes }
 	NAM = {
 		clr_country_flag = NAM_return_yard_warrant
+		# An armistice offer still out is withdrawn by any ending, also one
+		# reached without the war tree.
+		clear_variable = NAM_board_armistice_terms
+		clr_country_flag = NAM_board_armistice_sent
 		ADISCORD_nam_resource_war_release_major = yes
 		if = {
 			limit = { has_active_mission = NAM_board_poseidon_beachhead }
 			remove_mission = NAM_board_poseidon_beachhead
 		}
 		mark_focus_tree_layout_dirty = yes
+	}
+	if = {
+		limit = {
+			NAM = {
+				exists = yes
+				has_country_flag = NAM_rtw_at_war
+			}
+		}
+		NAM = { NAM_rtw_close = yes }
 	}
 }
 
@@ -7032,11 +7045,30 @@ NAM_war_of_return_resolve_victory = {
 		690 = { NAM_wor_return_field = yes }
 		719 = { NAM_wor_return_field = yes }
 		700 = { NAM_wor_return_field = yes }
+		# The partition belt passes while its owners are still participants.
+		NAM_board_partition_take_belt = yes
+		# Islands ceded by a dictated peace return from Eflor or Azhar.
+		set_temp_variable = { var = NAM_rtw_cede_from value = 0 }
+		NAM = { NAM_rtw_return_ceded_states = yes }
 		if = {
 			limit = { has_global_flag = NAM_wor_exile_war }
+			# The council's victory settles every remaining principal by the
+			# form of rule chosen in the war tree (NAM_rtw_settle_country).
+			if = {
+				limit = { NAM = { has_country_flag = NAM_corp_takeover } }
+				set_temp_variable = { var = NAM_rtw_settling_return value = 1 }
+			}
 			NAM_wor_copy_participants = yes
 			NAM_war_of_return_close = yes
+			EFL = { NAM_sub_clear_target = yes }
+			AZH = { NAM_sub_clear_target = yes }
+			NAM = { NAM_sub_close = yes }
 			NAM_wor_settle_list_by_route = yes
+			set_temp_variable = { var = NAM_rtw_settling_return value = 0 }
+			if = {
+				limit = { NAM = { has_country_flag = NAM_corp_takeover } }
+				NAM = { NAM_rtw_settle_victory = yes }
+			}
 			NAM = {
 				# A won return ends the council's mainland cells; an armistice keeps them.
 				if = {
@@ -7077,6 +7109,8 @@ NAM_war_of_return_resolve_defeat = {
 		NAM = { clear_variable = NAM_board_loren_debt }
 		NAM_wor_pick_annexer = yes
 		NAM_war_of_return_close = yes
+		EFL = { NAM_sub_clear_target = yes }
+		AZH = { NAM_sub_clear_target = yes }
 		NAM_wor_annex_svetlogorye = yes
 	}
 	else = {
@@ -7107,9 +7141,24 @@ NAM_war_of_return_close_external = {
 		limit = {
 			NAM_war_of_return_active = yes
 			NAM_wor_campaign_lost_outside_treaty = yes
+			# Eflor's surrender routes the campaign itself once it has settled.
+			NOT = { has_global_flag = NAM_rtw_surrender_settling }
 		}
 		NAM = { clear_variable = NAM_board_loren_debt }
 		NAM_war_of_return_close = yes
+		# A provisional subject of direct rule waits for the victory. When no
+		# principal is left to renew the war, no victory can follow: it is
+		# annexed now. While one stands, the pause keeps it for the renewal.
+		if = {
+			limit = {
+				NAM = {
+					exists = yes
+					has_country_flag = NAM_rtw_annex_pending
+				}
+				NOT = { NAM_wor_principal_standing = yes }
+			}
+			NAM = { NAM_rtw_annex_surrendered = yes }
+		}
 	}
 }
 
@@ -7166,7 +7215,12 @@ NAM_wor_settle_list_by_route = {
 		array = NAM_wor_settle_list
 		if = {
 			limit = { exists = yes }
+			# Only the council's won return sets the temp; the great war never does.
 			if = {
+				limit = { check_variable = { NAM_rtw_settling_return > 0 } }
+				NAM_rtw_settle_country = yes
+			}
+			else_if = {
 				limit = { NAM = { has_country_flag = NAM_exile_radical } }
 				NAM_wor_radical_annex = yes
 			}
@@ -8233,7 +8287,7 @@ NAM_board_complete_harbour_works = {
 	else = {
 		NAM = {
 			add_equipment_to_stockpile = {
-				type = convoy
+				type = convoy_1
 				amount = 6
 				producer = NAM
 			}
@@ -8657,6 +8711,8 @@ NAM_corp_labour_return = {
 }
 
 # STATE. The board develops the selected plot only if the national limit permits it.
+# Parked for the post-return tree: its focus, admitted_owners_register, waits
+# for the mainland cadastre after the return.
 NAM_board_build_company_offices = {
 	if = {
 		limit = { NOT = { free_building_slots = { building = ADISCORD_business_center size > 0 include_locked = no } } }
@@ -8770,7 +8826,7 @@ NAM_corp_monthly = {
 		}
 		if = {
 			limit = {
-				has_completed_focus = NAM_board_future_output_pledge
+				has_completed_focus = NAM_board_private_gospel
 				NOT = { has_global_flag = NAM_war_of_return_won }
 			}
 			add_to_temp_variable = { var = NAM_corp_capital_change value = 15 }
@@ -8831,6 +8887,7 @@ NAM_corp_monthly = {
 		round_temp_variable = NAM_corp_capital_change
 		set_variable = { var = NAM_corp_last_income value = NAM_corp_capital_change }
 		NAM_corp_capital_add = yes
+		NAM_rtw_dictate_check = yes
 		NAM_isl_monthly = yes
 		NAM_board_cells_monthly = yes
 		if = {
@@ -9627,6 +9684,13 @@ NAM_board_check_no_confidence = {
 			check_variable = { NAM_board_no_confidence_day < 0 }
 			NOT = { has_country_flag = NAM_board_no_confidence_immunity }
 			NOT = { has_country_flag = NAM_board_meeting_open }
+			# Emergency powers of the war tree hold while a war of return runs, renewals included.
+			NOT = {
+				AND = {
+					has_completed_focus = NAM_rtw_chairmans_war
+					NAM_war_of_return_active = yes
+				}
+			}
 		}
 		NAM_board_arm_no_confidence = yes
 	}
@@ -11831,7 +11895,7 @@ NAM_board_close_tender = {
 	}
 	if = {
 		limit = {
-			has_completed_focus = NAM_board_lawyers_of_both_shores
+			has_completed_focus = NAM_board_chairmans_copy
 			check_variable = { var = NAM_board_bid_winner value = 0 compare = greater_than }
 		}
 		set_temp_variable = { var = NAM_corp_capital_change value = 10 }
@@ -11879,7 +11943,7 @@ NAM_board_sanction_company = {
 			remove_ideas = NAM_board_sanction_loren
 		}
 		if = {
-			limit = { has_completed_focus = NAM_board_political_debt_register }
+			limit = { has_completed_focus = NAM_board_subsidised_opposition }
 			add_timed_idea = { idea = NAM_board_sanction_loren days = 30 }
 		}
 		else = {
@@ -11897,7 +11961,7 @@ NAM_board_sanction_company = {
 			remove_ideas = NAM_board_sanction_ferrant
 		}
 		if = {
-			limit = { has_completed_focus = NAM_board_political_debt_register }
+			limit = { has_completed_focus = NAM_board_subsidised_opposition }
 			add_timed_idea = { idea = NAM_board_sanction_ferrant days = 30 }
 		}
 		else = {
@@ -11915,7 +11979,7 @@ NAM_board_sanction_company = {
 			remove_ideas = NAM_board_sanction_navis
 		}
 		if = {
-			limit = { has_completed_focus = NAM_board_political_debt_register }
+			limit = { has_completed_focus = NAM_board_subsidised_opposition }
 			add_timed_idea = { idea = NAM_board_sanction_navis days = 30 }
 		}
 		else = {
@@ -11933,7 +11997,7 @@ NAM_board_sanction_company = {
 			remove_ideas = NAM_board_sanction_arktur
 		}
 		if = {
-			limit = { has_completed_focus = NAM_board_political_debt_register }
+			limit = { has_completed_focus = NAM_board_subsidised_opposition }
 			add_timed_idea = { idea = NAM_board_sanction_arktur days = 30 }
 		}
 		else = {
@@ -11951,7 +12015,7 @@ NAM_board_sanction_company = {
 			remove_ideas = NAM_board_sanction_smenkom
 		}
 		if = {
-			limit = { has_completed_focus = NAM_board_political_debt_register }
+			limit = { has_completed_focus = NAM_board_subsidised_opposition }
 			add_timed_idea = { idea = NAM_board_sanction_smenkom days = 30 }
 		}
 		else = {
@@ -11969,7 +12033,7 @@ NAM_board_sanction_company = {
 			remove_ideas = NAM_board_sanction_reidbank
 		}
 		if = {
-			limit = { has_completed_focus = NAM_board_political_debt_register }
+			limit = { has_completed_focus = NAM_board_subsidised_opposition }
 			add_timed_idea = { idea = NAM_board_sanction_reidbank days = 30 }
 		}
 		else = {
@@ -14574,6 +14638,8 @@ NAM_board_finish_dismissal = {
 # COUNTRY NAM. One enactment per council law, called once by its focus. The law the slot
 # holds is swapped out visibly, whichever law the player kept from the mainland, so the
 # native line shows what the council gives up; the else branch covers an empty slot.
+# A slot holds one law: the later enactment replaces whatever is there. A war law left by an
+# armistice is swapped out first and is not restored when the council law is repealed.
 NAM_board_enact_property_census = {
 	if = {
 		limit = { has_idea = ADISCORD_taxation_light_dues }
@@ -14667,6 +14733,13 @@ NAM_board_enact_paid_publicity = {
 
 NAM_board_enact_concession_courts = {
 	if = {
+		limit = { has_idea = NAM_board_law_field_courts }
+		swap_ideas = {
+			remove_idea = NAM_board_law_field_courts
+			add_idea = NAM_board_law_concession_courts
+		}
+	}
+	else_if = {
 		limit = { has_idea = ADISCORD_justice_regular_tribunals }
 		swap_ideas = {
 			remove_idea = ADISCORD_justice_regular_tribunals
@@ -14842,6 +14915,13 @@ NAM_board_enact_sworn_commanders = {
 
 NAM_board_enact_district_wardens = {
 	if = {
+		limit = { has_idea = NAM_board_law_martial_rule }
+		swap_ideas = {
+			remove_idea = NAM_board_law_martial_rule
+			add_idea = NAM_board_law_district_wardens
+		}
+	}
+	else_if = {
 		limit = { has_idea = ADISCORD_internal_security_neighborhood_watch }
 		swap_ideas = {
 			remove_idea = ADISCORD_internal_security_neighborhood_watch
@@ -15066,6 +15146,13 @@ NAM_board_enact_permitted_dissent = {
 
 NAM_board_enact_arsenal_monopoly = {
 	if = {
+		limit = { has_idea = NAM_board_law_holders_contracts }
+		swap_ideas = {
+			remove_idea = NAM_board_law_holders_contracts
+			add_idea = NAM_board_law_arsenal_monopoly
+		}
+	}
+	else_if = {
 		limit = { has_idea = ADISCORD_industrial_policy_artisan_markets }
 		swap_ideas = {
 			remove_idea = ADISCORD_industrial_policy_artisan_markets
@@ -15267,6 +15354,262 @@ NAM_board_enact_residency_for_hire = {
 	custom_effect_tooltip = NAM_board_law_lock_tt
 }
 
+# ----- Council of boards: war laws -----
+# COUNTRY NAM. Enacted once by the war tree of the return. A succession names the council
+# law of its slot first, so the native line shows which council law the war replaces.
+# The council law of the slot swaps a war law back out the same way (see the council laws).
+NAM_board_enact_holders_contracts = {
+	if = {
+		limit = { has_idea = NAM_board_law_arsenal_monopoly }
+		swap_ideas = {
+			remove_idea = NAM_board_law_arsenal_monopoly
+			add_idea = NAM_board_law_holders_contracts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_artisan_markets }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_artisan_markets
+			add_idea = NAM_board_law_holders_contracts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_balanced_workshops }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_balanced_workshops
+			add_idea = NAM_board_law_holders_contracts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_civilian_expansion
+			add_idea = NAM_board_law_holders_contracts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_military_prioritization
+			add_idea = NAM_board_law_holders_contracts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_state_planning_boards }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_state_planning_boards
+			add_idea = NAM_board_law_holders_contracts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_export_contracts }
+		swap_ideas = {
+			remove_idea = ADISCORD_industrial_policy_export_contracts
+			add_idea = NAM_board_law_holders_contracts
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_holders_contracts
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_martial_rule = {
+	if = {
+		limit = { has_idea = NAM_board_law_district_wardens }
+		swap_ideas = {
+			remove_idea = NAM_board_law_district_wardens
+			add_idea = NAM_board_law_martial_rule
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_neighborhood_watch }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_neighborhood_watch
+			add_idea = NAM_board_law_martial_rule
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_local_garrisons }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_local_garrisons
+			add_idea = NAM_board_law_martial_rule
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_investigative_bureaus }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_investigative_bureaus
+			add_idea = NAM_board_law_martial_rule
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_emergency_patrols }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_emergency_patrols
+			add_idea = NAM_board_law_martial_rule
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_internal_directorate }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_internal_directorate
+			add_idea = NAM_board_law_martial_rule
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_civilian_oversight }
+		swap_ideas = {
+			remove_idea = ADISCORD_internal_security_civilian_oversight
+			add_idea = NAM_board_law_martial_rule
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_martial_rule
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_strait_requisition = {
+	if = {
+		limit = { has_idea = ADISCORD_infrastructure_patchwork_roads }
+		swap_ideas = {
+			remove_idea = ADISCORD_infrastructure_patchwork_roads
+			add_idea = NAM_board_law_strait_requisition
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_regional_roadworks }
+		swap_ideas = {
+			remove_idea = ADISCORD_infrastructure_regional_roadworks
+			add_idea = NAM_board_law_strait_requisition
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_rail_corridors }
+		swap_ideas = {
+			remove_idea = ADISCORD_infrastructure_rail_corridors
+			add_idea = NAM_board_law_strait_requisition
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_strategic_highways }
+		swap_ideas = {
+			remove_idea = ADISCORD_infrastructure_strategic_highways
+			add_idea = NAM_board_law_strait_requisition
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_military_depots }
+		swap_ideas = {
+			remove_idea = ADISCORD_infrastructure_military_depots
+			add_idea = NAM_board_law_strait_requisition
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_port_network }
+		swap_ideas = {
+			remove_idea = ADISCORD_infrastructure_port_network
+			add_idea = NAM_board_law_strait_requisition
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_strait_requisition
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_field_courts = {
+	if = {
+		limit = { has_idea = NAM_board_law_concession_courts }
+		swap_ideas = {
+			remove_idea = NAM_board_law_concession_courts
+			add_idea = NAM_board_law_field_courts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_regular_tribunals }
+		swap_ideas = {
+			remove_idea = ADISCORD_justice_regular_tribunals
+			add_idea = NAM_board_law_field_courts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_field_courts }
+		swap_ideas = {
+			remove_idea = ADISCORD_justice_field_courts
+			add_idea = NAM_board_law_field_courts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_military_immunity }
+		swap_ideas = {
+			remove_idea = ADISCORD_justice_military_immunity
+			add_idea = NAM_board_law_field_courts
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_military_prosecution }
+		swap_ideas = {
+			remove_idea = ADISCORD_justice_military_prosecution
+			add_idea = NAM_board_law_field_courts
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_field_courts
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
+NAM_board_enact_veteran_reserve = {
+	if = {
+		limit = { has_idea = ADISCORD_training_irregular_exercises }
+		swap_ideas = {
+			remove_idea = ADISCORD_training_irregular_exercises
+			add_idea = NAM_board_law_veteran_reserve
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_basic_drills }
+		swap_ideas = {
+			remove_idea = ADISCORD_training_basic_drills
+			add_idea = NAM_board_law_veteran_reserve
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_standardized_program }
+		swap_ideas = {
+			remove_idea = ADISCORD_training_standardized_program
+			add_idea = NAM_board_law_veteran_reserve
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_officer_led_wargames }
+		swap_ideas = {
+			remove_idea = ADISCORD_training_officer_led_wargames
+			add_idea = NAM_board_law_veteran_reserve
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_accelerated_bootcamps }
+		swap_ideas = {
+			remove_idea = ADISCORD_training_accelerated_bootcamps
+			add_idea = NAM_board_law_veteran_reserve
+		}
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_reserve_cycles }
+		swap_ideas = {
+			remove_idea = ADISCORD_training_reserve_cycles
+			add_idea = NAM_board_law_veteran_reserve
+		}
+	}
+	else = {
+		add_ideas = NAM_board_law_veteran_reserve
+	}
+	custom_effect_tooltip = NAM_board_law_lock_tt
+}
+
 # COUNTRY NAM. Called from nam:on_annex after NAM_board_end_operations.
 # NAM_board_end_operations keeps the laws, so a future stage-3 tree loader that calls it
 # leaves them in force. Each council law is swapped explicitly for the default law of its slot.
@@ -15369,6 +15712,41 @@ NAM_board_repeal_laws = {
 			add_idea = ADISCORD_labor_policy_loose_contracts
 		}
 	}
+	if = {
+		limit = { has_idea = NAM_board_law_holders_contracts }
+		swap_ideas = {
+			remove_idea = NAM_board_law_holders_contracts
+			add_idea = ADISCORD_industrial_policy_balanced_workshops
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_martial_rule }
+		swap_ideas = {
+			remove_idea = NAM_board_law_martial_rule
+			add_idea = ADISCORD_internal_security_local_garrisons
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_strait_requisition }
+		swap_ideas = {
+			remove_idea = NAM_board_law_strait_requisition
+			add_idea = ADISCORD_infrastructure_patchwork_roads
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_field_courts }
+		swap_ideas = {
+			remove_idea = NAM_board_law_field_courts
+			add_idea = ADISCORD_justice_regular_tribunals
+		}
+	}
+	if = {
+		limit = { has_idea = NAM_board_law_veteran_reserve }
+		swap_ideas = {
+			remove_idea = NAM_board_law_veteran_reserve
+			add_idea = ADISCORD_training_basic_drills
+		}
+	}
 }
 
 # ----- Council of boards: development trades -----
@@ -15434,6 +15812,60 @@ NAM_board_trade_society_for_state = {
 	}
 }
 
+# COUNTRY NAM. The war trade of the centre pair of the return: it lowers whichever social
+# track is above level 1 (society first), so it always costs a real level when one exists;
+# with both at level 1 the home front pays through NAM_rtw_home_front_strain instead.
+NAM_board_trade_war_lower_social = {
+	if = {
+		limit = { ADISCORD_society_development_at_least_2 = yes }
+		custom_effect_tooltip = NAM_board_trade_war_lower_society_tt
+		hidden_effect = { NAM_board_dev_lower_society = yes }
+	}
+	else_if = {
+		limit = { ADISCORD_social_system_development_at_least_2 = yes }
+		custom_effect_tooltip = NAM_board_trade_war_lower_social_system_tt
+		hidden_effect = { NAM_board_dev_lower_social_system = yes }
+	}
+	else = {
+		custom_effect_tooltip = NAM_board_trade_war_strain_tt
+		add_timed_idea = { idea = NAM_rtw_home_front_strain days = 180 }
+	}
+}
+
+NAM_board_trade_war_for_army = {
+	NAM_board_trade_war_lower_social = yes
+	if = {
+		limit = { ADISCORD_army_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_board_trade_war_for_army_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+			NAM_corp_capital_add = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_board_trade_war_for_army_tt
+		hidden_effect = { NAM_board_dev_raise_army = yes }
+	}
+	hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+}
+
+NAM_board_trade_war_for_state = {
+	NAM_board_trade_war_lower_social = yes
+	if = {
+		limit = { ADISCORD_state_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_board_trade_war_for_state_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+			NAM_corp_capital_add = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_board_trade_war_for_state_tt
+		hidden_effect = { NAM_board_dev_raise_state = yes }
+	}
+	hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+}
+
 # The level waits for the economic gate; banked progress is retried by the monthly tick.
 NAM_board_dev_raise_economic = {
 	ADISCORD_initialize_society_development_variables = yes
@@ -15457,6 +15889,25 @@ NAM_board_dev_raise_state = {
 	if = {
 		limit = { ADISCORD_state_development_at_least_5 = yes }
 		set_variable = { var = ADISCORD_state_development_progress value = 0 }
+	}
+}
+
+NAM_board_dev_raise_army = {
+	ADISCORD_initialize_society_development_variables = yes
+	add_to_variable = { var = ADISCORD_army_development_progress value = 100 }
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_army_development_progress value = 100 compare = greater_than_or_equals }
+			NOT = { ADISCORD_army_development_at_least_5 = yes }
+		}
+		set_temp_variable = { var = ADISCORD_development_remainder value = ADISCORD_army_development_progress }
+		add_to_temp_variable = { var = ADISCORD_development_remainder value = -100 }
+		ADISCORD_increase_army_development = yes
+		set_variable = { var = ADISCORD_army_development_progress value = ADISCORD_development_remainder }
+	}
+	if = {
+		limit = { ADISCORD_army_development_at_least_5 = yes }
+		set_variable = { var = ADISCORD_army_development_progress value = 0 }
 	}
 }
 
@@ -15677,8 +16128,18 @@ NAM_board_end_operations = {
 	remove_ideas = NAM_board_smenkom_brigades
 	remove_ideas = NAM_board_reidbank_bills
 	NAM_board_inv_close = yes
+	clear_variable = NAM_board_inv_backing
 	NAM_isl_close_all = yes
 	NAM_board_cells_close = yes
+	NAM_sub_close = yes
+	if = {
+		limit = { has_country_flag = NAM_rtw_at_war }
+		NAM_rtw_close = yes
+	}
+	NAM_rtw_bonds_default = yes
+	clear_array = NAM_rtw_ceded_states
+	clear_array = NAM_rtw_ceded_status
+	clear_array = NAM_rtw_ceded_owner
 	NAM_dir_campaigns_close = yes
 }
 
@@ -15904,6 +16365,24 @@ NAM_board_recount = {
 		else = {
 			add_to_temp_variable = { var = NAM_board_holdings^NAM_board_isl_owner_input value = 1 }
 		}
+	}
+	# The partition holders administer the belt land NAM holds for the
+	# Directory: half a holding, one vote, to each share's holder.
+	if = {
+		limit = {
+			check_variable = { NAM_board_partition_efl > 0 }
+			NAM_board_belt_held_efl = yes
+		}
+		set_temp_variable = { var = NAM_board_belt_owner_input value = NAM_board_partition_efl }
+		add_to_temp_variable = { var = NAM_board_holdings^NAM_board_belt_owner_input value = 0.5 }
+	}
+	if = {
+		limit = {
+			check_variable = { NAM_board_partition_azh > 0 }
+			NAM_board_belt_held_azh = yes
+		}
+		set_temp_variable = { var = NAM_board_belt_owner_input value = NAM_board_partition_azh }
+		add_to_temp_variable = { var = NAM_board_holdings^NAM_board_belt_owner_input value = 0.5 }
 	}
 	clear_temp_array = NAM_board_ballots
 	clear_temp_array = NAM_board_order
@@ -16994,7 +17473,7 @@ NAM_board_cells_add = {
 	set_variable = { var = NAM_cells value = NAM_board_cells_value }
 }
 
-# COUNTRY NAM. NAM_board_mainland_contacts: ten cells in every district.
+# COUNTRY NAM. NAM_board_mainland_inventory: ten cells in every district.
 NAM_board_cells_seed = {
 	set_temp_variable = { var = NAM_board_cells_change value = 10 }
 	67 = { NAM_board_cells_add = yes }
@@ -17012,7 +17491,7 @@ NAM_board_cells_pay_run = {
 	set_temp_variable = { var = NAM_corp_capital_change value = -40 }
 	NAM_corp_capital_add = yes
 	if = {
-		limit = { has_completed_focus = NAM_board_holders_underwrite }
+		limit = { check_variable = { NAM_board_inv_backing = 1 } }
 		add_equipment_to_stockpile = {
 			type = infantry_equipment
 			amount = -750
@@ -17132,6 +17611,11 @@ NAM_board_cells_raid_settle = {
 		limit = { NAM_board_cells_safehouse_cover = yes }
 		set_temp_variable = { var = NAM_board_cells_change value = -15 }
 	}
+	# The council's leaflets protect ten cells from the raid.
+	if = {
+		limit = { owner = { has_idea = NAM_sub_leaflets } }
+		add_to_temp_variable = { var = NAM_board_cells_change value = 10 }
+	}
 	NAM_board_cells_add = yes
 	set_state_flag = {
 		flag = NAM_cells_raided
@@ -17162,6 +17646,11 @@ NAM_board_cells_grow = {
 			check_variable = { NAM_cells < 60 }
 		}
 		set_temp_variable = { var = NAM_board_cells_change value = 1 }
+		# The council's leaflets on the owner recruit three a month.
+		if = {
+			limit = { owner = { has_idea = NAM_sub_leaflets } }
+			set_temp_variable = { var = NAM_board_cells_change value = 3 }
+		}
 		NAM_board_cells_add = yes
 	}
 }
@@ -17211,6 +17700,7 @@ NAM_board_partisan_template = {
 			name = "Mainland Partisans"
 			division_names_group = ADISCORD_INF_01
 			is_locked = yes
+			template_counter = 3
 			regiments = {
 				ADISCORD_militia = { x = 0 y = 0 }
 				ADISCORD_militia = { x = 0 y = 1 }
@@ -17312,8 +17802,8 @@ NAM_board_cells_raise_partisan = {
 # STATE district. Rising by the district's cells: sabotage from 30; from 50
 # the hostile armies there fall back to their capitals, NAM takes the rising
 # province and one partisan division forms on it; from 70 a second division,
-# and Svetlogorsk also gives up its port province 689 with the northern
-# safehouses. The cap of eight divisions holds across the six districts. Only
+# and Svetlogorsk also gives up its port province 689 once the partition night
+# has set up the holders' safehouses. The cap of eight divisions holds across the six districts. Only
 # a district held by the enemy, or already by NAM, rises.
 NAM_board_cells_rise_state = {
 	if = {
@@ -17367,7 +17857,7 @@ NAM_board_cells_rise_state = {
 				limit = {
 					state = 688
 					check_variable = { NAM_cells > 69 }
-					NAM = { has_completed_focus = NAM_board_northern_safehouses }
+					NAM = { has_country_flag = NAM_board_partition_fixed }
 				}
 				NAM = { set_province_controller = 689 }
 			}
@@ -17470,10 +17960,17 @@ NAM_board_poseidon_launch = {
 			idea = NAM_board_poseidon_spirit
 			days = 120
 		}
+		add_timed_idea = {
+			idea = NAM_board_invasion_fleet_spirit
+			days = 365
+		}
+		NAM_sub_apply_landing_charges = yes
 		set_temp_variable = { var = NAM_board_holders_gain value = 5 }
 		set_temp_variable = { var = NAM_board_others_gain value = 0 }
 		set_temp_variable = { var = NAM_board_chair_gain value = 5 }
 		NAM_board_holders_package = yes
+		NAM_rtw_begin = yes
+		country_event = { id = ADISCORD_nam_story.168 days = 1 }
 		activate_mission = NAM_board_poseidon_beachhead
 		log = "[ADISCORD][NAM][POSEIDON] Operation Poseidon began the war of return."
 	}
@@ -17563,6 +18060,40 @@ NAM_board_poseidon_island_brigade_3 = {
 	}
 }
 
+# COUNTRY NAM, from event 131 a (temp NAM_board_armistice_offer 1) and c (2). The offer
+# goes to the principal that can still decide, in the order of NAM_rtw_pick_decider
+# (the primary, Eflor, Azhar), without saving NAM_rtw_decider, so a line or dictate
+# offer keeps its own decider. With no principal left the war is won and no offer
+# goes out; the paid answers of event 131 share the limit, so no price is charged
+# for an offer that cannot go out or would cross another pending one. An offer whose event 133 never fires lapses in NAM_rtw_expire_offers.
+NAM_board_send_armistice_offer = {
+	if = {
+		limit = { NAM_board_armistice_offer_possible = yes }
+		set_variable = { var = NAM_board_armistice_terms value = NAM_board_armistice_offer }
+		set_country_flag = NAM_board_armistice_sent
+		if = {
+			limit = {
+				has_global_flag = NAM_wor_primary_saved
+				event_target:NAM_wor_primary = { NAM_rtw_can_decide = yes }
+			}
+			event_target:NAM_wor_primary = {
+				country_event = { id = ADISCORD_nam_story.133 days = 1 }
+			}
+		}
+		else_if = {
+			limit = { EFL = { NAM_rtw_can_decide = yes } }
+			EFL = {
+				country_event = { id = ADISCORD_nam_story.133 days = 1 }
+			}
+		}
+		else = {
+			AZH = {
+				country_event = { id = ADISCORD_nam_story.133 days = 1 }
+			}
+		}
+	}
+}
+
 # COUNTRY NAM, from event 133 a: the coalition's leader accepted the council's
 # armistice. Terms from event 131: 1 - the "Отлив" spirit and the holders -5,
 # 2 - the holders -12. NAM_war_of_return_close sets the resolved flag first,
@@ -17584,16 +18115,24 @@ NAM_board_poseidon_armistice = {
 				days = 180
 			}
 			set_temp_variable = { var = NAM_board_holders_gain value = -5 }
+			# The council's terms give up the partition belt.
+			NAM_board_partition_drop_claims = yes
+		}
+		# The holders' terms keep the claimed belt land NAM controls; the white
+		# peace of NAM_war_of_return_close follows the transfer.
+		if = {
+			limit = { check_variable = { NAM_board_armistice_terms > 1 } }
+			NAM_board_partition_keep_belt = yes
 		}
 		set_temp_variable = { var = NAM_board_others_gain value = 0 }
 		set_temp_variable = { var = NAM_board_chair_gain value = 0 }
 		NAM_board_holders_package = yes
-		# The price passes to the leader that accepted, before the close clears
-		# the target; send_equipment moves only rifles NAM actually holds.
+		# The price passes to the principal that accepted (saved by event 133 a);
+		# send_equipment moves only rifles NAM actually holds.
 		send_equipment = {
 			equipment = infantry_equipment
 			amount = 3000
-			target = event_target:NAM_wor_primary
+			target = event_target:NAM_board_armistice_acceptor
 		}
 		set_country_flag = {
 			flag = NAM_board_poseidon_truce
@@ -17605,8 +18144,3213 @@ NAM_board_poseidon_armistice = {
 			remove_mission = NAM_board_poseidon_beachhead
 		}
 		clear_variable = NAM_board_armistice_terms
+		clr_country_flag = NAM_board_armistice_sent
 		NAM_war_of_return_close = yes
 		log = "[ADISCORD][NAM][POSEIDON] Armistice: the war of return closed, renewal after 180 days."
+	}
+}
+
+# ----- Council of boards: subversive operations -----
+# The partition night opens eight operations against Eflor and Azhar (category
+# NAM_board_subversion) and claims the border belt. Residency operations 1-6
+# keep one receipt per target country: NAM_sub_op_kind (the operation) and
+# NAM_sub_op_capital (the capital paid). The council operations keep theirs
+# on NAM: the leaflets NAM_sub_leaflets_receipt with NAM_sub_leaflets_target
+# (1 Eflor, 2 Azhar), the quarrel NAM_sub_quarrel_receipt. Settlement, refund
+# and exposure clear a receipt exactly once; political power and trust are
+# never refunded. No operation writes the mainland cells or moves a resource
+# to NAM. Temp inputs: NAM_sub_k (1-6 residency, 7 leaflets, 8 quarrel) and
+# NAM_sub_target_index (1 Eflor, 2 Azhar).
+
+# COUNTRY NAM, partition night. Claims on the belt beyond the old border:
+# Eflor's share 720, 721, 723 and Azhar's share 722, 727.
+NAM_board_partition_claims = {
+	720 = {
+		if = {
+			limit = {
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			add_claim_by = NAM
+		}
+	}
+	721 = {
+		if = {
+			limit = {
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			add_claim_by = NAM
+		}
+	}
+	723 = {
+		if = {
+			limit = {
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			add_claim_by = NAM
+		}
+	}
+	722 = {
+		if = {
+			limit = {
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			add_claim_by = NAM
+		}
+	}
+	727 = {
+		if = {
+			limit = {
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			add_claim_by = NAM
+		}
+	}
+}
+
+# COUNTRY NAM, armistice on the council's terms (NAM_board_poseidon_armistice).
+NAM_board_partition_drop_claims = {
+	720 = { remove_claim_by = NAM }
+	721 = { remove_claim_by = NAM }
+	723 = { remove_claim_by = NAM }
+	722 = { remove_claim_by = NAM }
+	727 = { remove_claim_by = NAM }
+}
+
+# STATE of the belt. Passes to NAM as conquered land; the old cores stay.
+NAM_board_partition_transfer_state = {
+	NAM = { transfer_state = PREV }
+	set_state_controller_to = NAM
+	NAM_wor_take_state = yes
+}
+
+# COUNTRY NAM, armistice on the holders' terms: every claimed belt state NAM
+# controls and Eflor or Azhar still owns. Runs before the white peace.
+NAM_board_partition_keep_belt = {
+	720 = {
+		if = {
+			limit = {
+				is_claimed_by = NAM
+				is_controlled_by = NAM
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			NAM_board_partition_transfer_state = yes
+		}
+	}
+	721 = {
+		if = {
+			limit = {
+				is_claimed_by = NAM
+				is_controlled_by = NAM
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			NAM_board_partition_transfer_state = yes
+		}
+	}
+	723 = {
+		if = {
+			limit = {
+				is_claimed_by = NAM
+				is_controlled_by = NAM
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			NAM_board_partition_transfer_state = yes
+		}
+	}
+	722 = {
+		if = {
+			limit = {
+				is_claimed_by = NAM
+				is_controlled_by = NAM
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			NAM_board_partition_transfer_state = yes
+		}
+	}
+	727 = {
+		if = {
+			limit = {
+				is_claimed_by = NAM
+				is_controlled_by = NAM
+				OR = {
+					is_owned_by = EFL
+					is_owned_by = AZH
+				}
+			}
+			NAM_board_partition_transfer_state = yes
+		}
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# GLOBAL, NAM_war_of_return_resolve_victory between the homeland fields and
+# the copy of the participants (owners are still at war). The corporate
+# victory takes every claimed belt state of a participant; the holders gain.
+NAM_board_partition_take_belt = {
+	if = {
+		limit = {
+			has_global_flag = NAM_wor_exile_war
+			NAM = {
+				has_country_flag = NAM_corp_takeover
+				has_country_flag = NAM_board_partition_fixed
+			}
+		}
+		set_temp_variable = { var = NAM_sub_belt_taken value = 0 }
+		720 = {
+			if = {
+				limit = {
+					is_claimed_by = NAM
+					owner = { has_country_flag = NAM_wor_participant }
+				}
+				NAM_board_partition_transfer_state = yes
+				set_temp_variable = { var = NAM_sub_belt_taken value = 1 }
+			}
+		}
+		721 = {
+			if = {
+				limit = {
+					is_claimed_by = NAM
+					owner = { has_country_flag = NAM_wor_participant }
+				}
+				NAM_board_partition_transfer_state = yes
+				set_temp_variable = { var = NAM_sub_belt_taken value = 1 }
+			}
+		}
+		723 = {
+			if = {
+				limit = {
+					is_claimed_by = NAM
+					owner = { has_country_flag = NAM_wor_participant }
+				}
+				NAM_board_partition_transfer_state = yes
+				set_temp_variable = { var = NAM_sub_belt_taken value = 1 }
+			}
+		}
+		722 = {
+			if = {
+				limit = {
+					is_claimed_by = NAM
+					owner = { has_country_flag = NAM_wor_participant }
+				}
+				NAM_board_partition_transfer_state = yes
+				set_temp_variable = { var = NAM_sub_belt_taken value = 1 }
+			}
+		}
+		727 = {
+			if = {
+				limit = {
+					is_claimed_by = NAM
+					owner = { has_country_flag = NAM_wor_participant }
+				}
+				NAM_board_partition_transfer_state = yes
+				set_temp_variable = { var = NAM_sub_belt_taken value = 1 }
+			}
+		}
+		if = {
+			limit = { check_variable = { NAM_sub_belt_taken = 1 } }
+			NAM = {
+				set_temp_variable = { var = NAM_board_holders_gain value = 5 }
+				set_temp_variable = { var = NAM_board_others_gain value = 0 }
+				set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+				NAM_board_holders_package = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
+}
+
+# COUNTRY EFL or AZH, from a residency decision of NAM. Writes the receipt
+# and lets the target's political police smell the operation.
+NAM_sub_launch_residency = {
+	set_variable = { var = NAM_sub_op_kind value = NAM_sub_k }
+	set_variable = { var = NAM_sub_op_capital value = 80 }
+	random = {
+		chance = 50
+		set_country_flag = NAM_sub_hunch_residency
+	}
+}
+
+# COUNTRY EFL or AZH. Capital back to NAM, receipt and police flags cleared.
+NAM_sub_residency_refund = {
+	if = {
+		limit = { has_variable = NAM_sub_op_kind }
+		set_temp_variable = { var = NAM_sub_refund value = NAM_sub_op_capital }
+		NAM = {
+			set_temp_variable = { var = NAM_corp_capital_change value = NAM_sub_refund }
+			NAM_corp_capital_add = yes
+		}
+		clear_variable = NAM_sub_op_kind
+		clear_variable = NAM_sub_op_capital
+		clr_country_flag = NAM_sub_hunch_residency
+		clr_country_flag = NAM_sub_hunted
+	}
+}
+
+# COUNTRY NAM. The leaflets' capital and chancery slot back.
+NAM_sub_leaflets_refund = {
+	if = {
+		limit = { has_variable = NAM_sub_leaflets_receipt }
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_sub_leaflets_receipt }
+		NAM_corp_capital_add = yes
+		if = {
+			limit = { check_variable = { NAM_sub_leaflets_target = 1 } }
+			EFL = {
+				clr_country_flag = NAM_sub_hunch_leaflets
+				clr_country_flag = NAM_sub_hunted
+			}
+		}
+		else = {
+			AZH = {
+				clr_country_flag = NAM_sub_hunch_leaflets
+				clr_country_flag = NAM_sub_hunted
+			}
+		}
+		clear_variable = NAM_sub_leaflets_receipt
+		clear_variable = NAM_sub_leaflets_target
+		NAM_board_release_action_slot = yes
+	}
+}
+
+# COUNTRY NAM. The quarrel's capital and chancery slot back.
+NAM_sub_quarrel_refund = {
+	if = {
+		limit = { has_variable = NAM_sub_quarrel_receipt }
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_sub_quarrel_receipt }
+		NAM_corp_capital_add = yes
+		EFL = {
+			clr_country_flag = NAM_sub_hunch_quarrel
+			clr_country_flag = NAM_sub_hunted
+		}
+		AZH = {
+			clr_country_flag = NAM_sub_hunch_quarrel
+			clr_country_flag = NAM_sub_hunted
+		}
+		clear_variable = NAM_sub_quarrel_receipt
+		NAM_board_release_action_slot = yes
+	}
+}
+
+# COUNTRY EFL or AZH. The exposure roll of operation NAM_sub_k against this
+# country: temp NAM_sub_failed = 1 when the operation is exposed. The failure
+# weight is the risk of NAM_sub_risk_compute in literal steps of 5.
+NAM_sub_roll = {
+	set_temp_variable = { var = NAM_sub_failed value = 0 }
+	if = {
+		limit = { NAM_sub_risk_compute = yes }
+		random_list = {
+			100 = {
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 4 }
+				}
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 9 }
+				}
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 14 }
+				}
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 19 }
+				}
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 24 }
+				}
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 29 }
+				}
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 34 }
+				}
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 39 }
+				}
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 44 }
+				}
+				modifier = {
+					add = -5
+					check_variable = { NAM_sub_risk > 49 }
+				}
+				set_temp_variable = { var = NAM_sub_failed value = 0 }
+			}
+			0 = {
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 4 }
+				}
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 9 }
+				}
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 14 }
+				}
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 19 }
+				}
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 24 }
+				}
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 29 }
+				}
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 34 }
+				}
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 39 }
+				}
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 44 }
+				}
+				modifier = {
+					add = 5
+					check_variable = { NAM_sub_risk > 49 }
+				}
+				set_temp_variable = { var = NAM_sub_failed value = 1 }
+			}
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. The immediate hit and the spirit of each residency
+# operation; the holder running its own trade keeps the spirit 30 days longer.
+NAM_sub_apply_1 = {
+	add_fuel = -5000
+	if = {
+		limit = { NAM_sub_profile_is_1 = yes }
+		add_timed_idea = {
+			idea = NAM_sub_dry_tanks
+			days = 120
+		}
+	}
+	else = {
+		add_timed_idea = {
+			idea = NAM_sub_dry_tanks
+			days = 90
+		}
+	}
+}
+
+NAM_sub_apply_2 = {
+	add_equipment_to_stockpile = {
+		type = infantry_equipment
+		amount = -2500
+	}
+	if = {
+		limit = { NAM_sub_profile_is_2 = yes }
+		add_timed_idea = {
+			idea = NAM_sub_bad_castings
+			days = 120
+		}
+	}
+	else = {
+		add_timed_idea = {
+			idea = NAM_sub_bad_castings
+			days = 90
+		}
+	}
+}
+
+NAM_sub_apply_3 = {
+	add_equipment_to_stockpile = {
+		type = convoy_1
+		amount = -4
+	}
+	if = {
+		limit = { NAM_sub_profile_is_3 = yes }
+		add_timed_idea = {
+			idea = NAM_sub_dock_fire
+			days = 120
+		}
+	}
+	else = {
+		add_timed_idea = {
+			idea = NAM_sub_dock_fire
+			days = 90
+		}
+	}
+}
+
+# Operation 4 leaves a landing-hour charge: its days are applied by
+# NAM_sub_apply_landing_charges at the start of the war of return.
+NAM_sub_apply_4 = {
+	if = {
+		limit = { NAM_sub_profile_is_4 = yes }
+		set_variable = { var = NAM_sub_sights_days value = 90 }
+	}
+	else = {
+		set_variable = { var = NAM_sub_sights_days value = 60 }
+	}
+}
+
+NAM_sub_apply_5 = {
+	add_manpower = -4000
+	if = {
+		limit = { NAM_sub_profile_is_5 = yes }
+		add_timed_idea = {
+			idea = NAM_sub_labour_strike
+			days = 120
+		}
+	}
+	else = {
+		add_timed_idea = {
+			idea = NAM_sub_labour_strike
+			days = 90
+		}
+	}
+}
+
+NAM_sub_apply_6 = {
+	add_political_power = -40
+	if = {
+		limit = { NAM_sub_profile_is_6 = yes }
+		add_timed_idea = {
+			idea = NAM_sub_bond_crash
+			days = 120
+		}
+	}
+	else = {
+		add_timed_idea = {
+			idea = NAM_sub_bond_crash
+			days = 90
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. One network level per success, at most two.
+NAM_sub_network_grow = {
+	add_to_variable = { var = NAM_sub_network value = 1 }
+	clamp_variable = {
+		var = NAM_sub_network
+		min = 0
+		max = 2
+	}
+}
+
+# COUNTRY EFL or AZH. Writes temp NAM_sub_target_index from the tag.
+NAM_sub_set_target_index = {
+	set_temp_variable = { var = NAM_sub_target_index value = 1 }
+	if = {
+		limit = { tag = AZH }
+		set_temp_variable = { var = NAM_sub_target_index value = 2 }
+	}
+}
+
+# COUNTRY NAM. Temp NAM_sub_holder: the holder of the share of target
+# NAM_sub_target_index, 0 before the partition.
+NAM_sub_find_holder = {
+	set_temp_variable = { var = NAM_sub_holder value = 0 }
+	if = {
+		limit = { check_variable = { NAM_sub_target_index = 1 } }
+		set_temp_variable = { var = NAM_sub_holder value = NAM_board_partition_efl }
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_target_index = 2 } }
+		set_temp_variable = { var = NAM_sub_holder value = NAM_board_partition_azh }
+	}
+}
+
+# COUNTRY NAM. Trust after a success: a residency operation gives its company
+# +2 and the holder of the share +1 (both land on one company when it is the
+# holder); the leaflets give the chairing company +2. The quarrel pays its
+# trust through NAM_board_holders_package in NAM_sub_settle_quarrel.
+NAM_sub_trust_success = {
+	if = {
+		limit = {
+			check_variable = { NAM_sub_k > 0 }
+			check_variable = { NAM_sub_k < 7 }
+		}
+		set_temp_variable = { var = NAM_board_company_input value = NAM_sub_k }
+		set_temp_variable = { var = NAM_board_delta_input value = 2 }
+		NAM_board_support_change = yes
+		NAM_sub_find_holder = yes
+		if = {
+			limit = { check_variable = { NAM_sub_holder > 0 } }
+			set_temp_variable = { var = NAM_board_company_input value = NAM_sub_holder }
+			set_temp_variable = { var = NAM_board_delta_input value = 1 }
+			NAM_board_support_change = yes
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_board_chair > 0 } }
+		set_temp_variable = { var = NAM_board_company_input value = NAM_board_chair }
+		set_temp_variable = { var = NAM_board_delta_input value = 2 }
+		NAM_board_support_change = yes
+	}
+	NAM_board_queue_recount = yes
+}
+
+# COUNTRY NAM. Trust after an exposure: the company -4 and the holder -2 for
+# a residency operation, the chairing company -4 for the leaflets or quarrel.
+NAM_sub_trust_failure = {
+	if = {
+		limit = {
+			check_variable = { NAM_sub_k > 0 }
+			check_variable = { NAM_sub_k < 7 }
+		}
+		set_temp_variable = { var = NAM_board_company_input value = NAM_sub_k }
+		set_temp_variable = { var = NAM_board_delta_input value = -4 }
+		NAM_board_support_change = yes
+		NAM_sub_find_holder = yes
+		if = {
+			limit = { check_variable = { NAM_sub_holder > 0 } }
+			set_temp_variable = { var = NAM_board_company_input value = NAM_sub_holder }
+			set_temp_variable = { var = NAM_board_delta_input value = -2 }
+			NAM_board_support_change = yes
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_board_chair > 0 } }
+		set_temp_variable = { var = NAM_board_company_input value = NAM_board_chair }
+		set_temp_variable = { var = NAM_board_delta_input value = -4 }
+		NAM_board_support_change = yes
+	}
+	NAM_board_queue_recount = yes
+}
+
+# COUNTRY EFL or AZH, remove_effect of a residency decision (temp NAM_sub_k,
+# ROOT NAM). A receipt cleared by an exposure settles nothing; a target lost
+# meanwhile, a full strike cap or a result already in place refunds the
+# capital; otherwise the roll decides between the strike and the exposure.
+NAM_sub_settle_residency = {
+	if = {
+		limit = { check_variable = { var = NAM_sub_op_kind value = NAM_sub_k compare = equals } }
+		set_temp_variable = { var = NAM_sub_cap_self value = 1 }
+		if = {
+			limit = {
+				OR = {
+					NAM_sub_target_valid = no
+					NAM_sub_has_profile_spirit = yes
+					AND = {
+						NOT = { check_variable = { NAM_sub_k = 4 } }
+						NAM_sub_below_cap = no
+					}
+				}
+			}
+			NAM_sub_residency_refund = yes
+		}
+		else = {
+			NAM_sub_roll = yes
+			if = {
+				limit = { check_variable = { NAM_sub_failed = 1 } }
+				NAM_sub_expose_from_target = yes
+			}
+			else = {
+				if = {
+					limit = { check_variable = { NAM_sub_k = 1 } }
+					NAM_sub_apply_1 = yes
+				}
+				if = {
+					limit = { check_variable = { NAM_sub_k = 2 } }
+					NAM_sub_apply_2 = yes
+				}
+				if = {
+					limit = { check_variable = { NAM_sub_k = 3 } }
+					NAM_sub_apply_3 = yes
+				}
+				if = {
+					limit = { check_variable = { NAM_sub_k = 4 } }
+					NAM_sub_apply_4 = yes
+				}
+				if = {
+					limit = { check_variable = { NAM_sub_k = 5 } }
+					NAM_sub_apply_5 = yes
+				}
+				if = {
+					limit = { check_variable = { NAM_sub_k = 6 } }
+					NAM_sub_apply_6 = yes
+				}
+				NAM_sub_network_grow = yes
+				clear_variable = NAM_sub_op_kind
+				clear_variable = NAM_sub_op_capital
+				clr_country_flag = NAM_sub_hunch_residency
+				clr_country_flag = NAM_sub_hunted
+				NAM_sub_set_target_index = yes
+				NAM = {
+					NAM_sub_trust_success = yes
+					if = {
+						limit = {
+							NOT = { has_variable = NAM_sub_files }
+							NAM_sub_both_networks = yes
+						}
+						country_event = { id = ADISCORD_nam_story.137 days = 3 }
+					}
+				}
+			}
+		}
+		set_temp_variable = { var = NAM_sub_cap_self value = 0 }
+	}
+}
+
+# COUNTRY NAM, remove_effect of the leaflets (temp NAM_sub_k = 7 is set here).
+NAM_sub_settle_leaflets = {
+	if = {
+		limit = { has_variable = NAM_sub_leaflets_receipt }
+		set_temp_variable = { var = NAM_sub_k value = 7 }
+		if = {
+			limit = { check_variable = { NAM_sub_leaflets_target = 1 } }
+			EFL = { NAM_sub_settle_leaflets_target = yes }
+		}
+		else = {
+			AZH = { NAM_sub_settle_leaflets_target = yes }
+		}
+	}
+}
+
+# COUNTRY EFL or AZH, the leaflets' target.
+NAM_sub_settle_leaflets_target = {
+	set_temp_variable = { var = NAM_sub_cap_self value = 2 }
+	if = {
+		limit = {
+			OR = {
+				NAM_sub_target_valid = no
+				has_idea = NAM_sub_leaflets
+				NAM_sub_below_cap = no
+			}
+		}
+		NAM = { NAM_sub_leaflets_refund = yes }
+	}
+	else = {
+		NAM_sub_roll = yes
+		if = {
+			limit = { check_variable = { NAM_sub_failed = 1 } }
+			NAM_sub_expose_from_target = yes
+		}
+		else = {
+			add_timed_idea = {
+				idea = NAM_sub_leaflets
+				days = 120
+			}
+			NAM_sub_network_grow = yes
+			clr_country_flag = NAM_sub_hunch_leaflets
+			clr_country_flag = NAM_sub_hunted
+			NAM = {
+				clear_variable = NAM_sub_leaflets_receipt
+				clear_variable = NAM_sub_leaflets_target
+				NAM_board_release_action_slot = yes
+				NAM_sub_trust_success = yes
+			}
+		}
+	}
+	set_temp_variable = { var = NAM_sub_cap_self value = 0 }
+}
+
+# COUNTRY NAM, remove_effect of the quarrel. Both members must still be
+# targets; Eflor then leads the coalition and carries the roll.
+NAM_sub_settle_quarrel = {
+	if = {
+		limit = { has_variable = NAM_sub_quarrel_receipt }
+		if = {
+			limit = { NAM_sub_quarrel_targets = no }
+			NAM_sub_quarrel_refund = yes
+		}
+		else = {
+			set_temp_variable = { var = NAM_sub_k value = 8 }
+			EFL = {
+				NAM_sub_roll = yes
+				if = {
+					limit = { check_variable = { NAM_sub_failed = 1 } }
+					NAM_sub_expose_from_target = yes
+				}
+			}
+			if = {
+				limit = { check_variable = { NAM_sub_failed = 0 } }
+				set_country_flag = NAM_sub_quarrel_ready
+				clear_variable = NAM_sub_quarrel_receipt
+				NAM_board_release_action_slot = yes
+				EFL = {
+					clr_country_flag = NAM_sub_hunch_quarrel
+					clr_country_flag = NAM_sub_hunted
+				}
+				set_temp_variable = { var = NAM_board_holders_gain value = 3 }
+				set_temp_variable = { var = NAM_board_others_gain value = -2 }
+				set_temp_variable = { var = NAM_board_chair_gain value = 2 }
+				NAM_board_holders_package = yes
+			}
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. Exposure of operation NAM_sub_k against this country.
+NAM_sub_expose_from_target = {
+	NAM_sub_set_target_index = yes
+	NAM = { NAM_sub_expose = yes }
+}
+
+# COUNTRY NAM. Temps NAM_sub_target_index and NAM_sub_k, set by every caller
+# (residency settlement, leaflets, quarrel, the enemy's counter-intelligence).
+# No strike or charge, the price is lost; trust and readiness fall; the target
+# goes on alert, loses a network level and hears of it (event 136); the
+# council hears of it in event 135. Each receipt is cleared exactly once.
+NAM_sub_expose = {
+	NAM_sub_trust_failure = yes
+	add_to_variable = { var = NAM_revenge_readiness value = -3 }
+	NAM_revenge_readiness_clamp = yes
+	# One council hearing at a time: event 135 reads and its answers clear the
+	# exposed_* record, so a second exposure before the answer pays every cost
+	# below but does not overwrite the pending record or queue another hearing.
+	if = {
+		limit = {
+			NOT = { has_variable = NAM_sub_exposed_target }
+		}
+		set_variable = { var = NAM_sub_exposed_target value = NAM_sub_target_index }
+		set_variable = { var = NAM_sub_exposed_runner value = 0 }
+		if = {
+			limit = { check_variable = { NAM_sub_k < 7 } }
+			set_variable = { var = NAM_sub_exposed_runner value = NAM_sub_k }
+		}
+		else_if = {
+			limit = { check_variable = { NAM_board_chair > 0 } }
+			set_variable = { var = NAM_sub_exposed_runner value = NAM_board_chair }
+		}
+		country_event = { id = ADISCORD_nam_story.135 days = 1 }
+	}
+	if = {
+		limit = { check_variable = { NAM_sub_target_index = 1 } }
+		EFL = { NAM_sub_expose_target_side = yes }
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_target_index = 2 } }
+		AZH = { NAM_sub_expose_target_side = yes }
+	}
+	if = {
+		limit = {
+			check_variable = { NAM_sub_k = 7 }
+			has_variable = NAM_sub_leaflets_receipt
+		}
+		clear_variable = NAM_sub_leaflets_receipt
+		clear_variable = NAM_sub_leaflets_target
+		NAM_board_release_action_slot = yes
+	}
+	if = {
+		limit = {
+			check_variable = { NAM_sub_k = 8 }
+			has_variable = NAM_sub_quarrel_receipt
+		}
+		clear_variable = NAM_sub_quarrel_receipt
+		NAM_board_release_action_slot = yes
+	}
+}
+
+# COUNTRY EFL or AZH, the exposed target (temp NAM_sub_k).
+NAM_sub_expose_target_side = {
+	set_country_flag = {
+		flag = NAM_sub_vigilant
+		value = 1
+		days = 120
+	}
+	if = {
+		limit = { check_variable = { NAM_sub_network > 0 } }
+		add_to_variable = { var = NAM_sub_network value = -1 }
+	}
+	clr_country_flag = NAM_sub_hunted
+	if = {
+		limit = { check_variable = { NAM_sub_k < 7 } }
+		clear_variable = NAM_sub_op_kind
+		clear_variable = NAM_sub_op_capital
+		clr_country_flag = NAM_sub_hunch_residency
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_k = 7 } }
+		clr_country_flag = NAM_sub_hunch_leaflets
+	}
+	else = {
+		clr_country_flag = NAM_sub_hunch_quarrel
+	}
+	country_event = { id = ADISCORD_nam_story.136 days = 1 }
+}
+
+# COUNTRY EFL or AZH, remove_effect of NAM_sub_counter. The operation is chosen
+# among those the police smelled and that still run (NAM_sub_counter_lead), in
+# the order residency, leaflets, quarrel; the catch chance is 30% +10 against a
+# landing preparation (4 or the quarrel), -10 under cell cover, -10 when the
+# holder runs its own trade. A miss sets the shared NAM_sub_hunted, which adds
+# its risk to whichever operation against the country settles next; the alert
+# follows either way.
+NAM_sub_counter_settle = {
+	set_temp_variable = { var = NAM_sub_k value = 0 }
+	if = {
+		limit = {
+			has_country_flag = NAM_sub_hunch_residency
+			has_variable = NAM_sub_op_kind
+		}
+		set_temp_variable = { var = NAM_sub_k value = NAM_sub_op_kind }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = NAM_sub_hunch_leaflets
+			NAM_sub_leaflets_against_this = yes
+		}
+		set_temp_variable = { var = NAM_sub_k value = 7 }
+	}
+	else_if = {
+		limit = {
+			has_country_flag = NAM_sub_hunch_quarrel
+			NAM_sub_quarrel_against_this = yes
+		}
+		set_temp_variable = { var = NAM_sub_k value = 8 }
+	}
+	if = {
+		limit = { check_variable = { NAM_sub_k > 0 } }
+		random_list = {
+			70 = {
+				modifier = {
+					add = -10
+					OR = {
+						check_variable = { NAM_sub_k = 4 }
+						check_variable = { NAM_sub_k = 8 }
+					}
+				}
+				modifier = {
+					add = 10
+					NAM_sub_cells_cover = yes
+				}
+				modifier = {
+					add = 10
+					check_variable = { NAM_sub_k < 7 }
+					NAM_sub_holder_runs = yes
+				}
+				set_country_flag = NAM_sub_hunted
+			}
+			30 = {
+				modifier = {
+					add = 10
+					OR = {
+						check_variable = { NAM_sub_k = 4 }
+						check_variable = { NAM_sub_k = 8 }
+					}
+				}
+				modifier = {
+					add = -10
+					NAM_sub_cells_cover = yes
+				}
+				modifier = {
+					add = -10
+					check_variable = { NAM_sub_k < 7 }
+					NAM_sub_holder_runs = yes
+				}
+				NAM_sub_counter_catch = yes
+			}
+		}
+	}
+	set_country_flag = {
+		flag = NAM_sub_vigilant
+		value = 1
+		days = 120
+	}
+}
+
+# COUNTRY EFL or AZH (ROOT of NAM_sub_counter), temp NAM_sub_k. The exposure
+# clears the receipt before NAM's decision is removed, so a settlement that
+# the removal may still run finds nothing to settle.
+NAM_sub_counter_catch = {
+	set_temp_variable = { var = NAM_sub_caught value = NAM_sub_k }
+	NAM_sub_set_target_index = yes
+	NAM = { NAM_sub_expose = yes }
+	if = {
+		limit = { check_variable = { NAM_sub_caught = 1 } }
+		NAM = {
+			remove_targeted_decision = {
+				target = ROOT
+				decision = NAM_sub_sand_in_tanks_op
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_caught = 2 } }
+		NAM = {
+			remove_targeted_decision = {
+				target = ROOT
+				decision = NAM_sub_bad_castings_op
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_caught = 3 } }
+		NAM = {
+			remove_targeted_decision = {
+				target = ROOT
+				decision = NAM_sub_dock_fire_op
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_caught = 4 } }
+		NAM = {
+			remove_targeted_decision = {
+				target = ROOT
+				decision = NAM_sub_bad_sights_op
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_caught = 5 } }
+		NAM = {
+			remove_targeted_decision = {
+				target = ROOT
+				decision = NAM_sub_labour_strike_op
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_caught = 6 } }
+		NAM = {
+			remove_targeted_decision = {
+				target = ROOT
+				decision = NAM_sub_bond_crash_op
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_caught = 7 } }
+		NAM = {
+			remove_targeted_decision = {
+				target = ROOT
+				decision = NAM_sub_leaflets_op
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_sub_caught = 8 } }
+		NAM = { remove_decision = NAM_sub_trophy_quarrel_op }
+	}
+}
+
+# COUNTRY NAM. Landing-hour charges at the actual start of the war of return:
+# operation 4 on each country that carries it, the quarrel on both members.
+NAM_sub_apply_landing_charges = {
+	if = {
+		limit = { country_exists = EFL }
+		EFL = { NAM_sub_apply_sights_charge = yes }
+	}
+	if = {
+		limit = { country_exists = AZH }
+		AZH = { NAM_sub_apply_sights_charge = yes }
+	}
+	if = {
+		limit = { has_country_flag = NAM_sub_quarrel_ready }
+		clr_country_flag = NAM_sub_quarrel_ready
+		if = {
+			limit = { country_exists = EFL }
+			EFL = {
+				add_timed_idea = {
+					idea = NAM_sub_trophy_quarrel
+					days = 120
+				}
+			}
+		}
+		if = {
+			limit = { country_exists = AZH }
+			AZH = {
+				add_timed_idea = {
+					idea = NAM_sub_trophy_quarrel
+					days = 120
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. Applies and clears the charge of operation 4.
+NAM_sub_apply_sights_charge = {
+	if = {
+		limit = { check_variable = { NAM_sub_sights_days = 90 } }
+		add_timed_idea = {
+			idea = NAM_sub_bad_sights
+			days = 90
+		}
+	}
+	else_if = {
+		limit = { has_variable = NAM_sub_sights_days }
+		add_timed_idea = {
+			idea = NAM_sub_bad_sights
+			days = 60
+		}
+	}
+	clear_variable = NAM_sub_sights_days
+}
+
+# COUNTRY EFL or AZH. Victory or defeat in the war of return: every subversion
+# spirit, charge, receipt and police state of the operations ends.
+NAM_sub_clear_target = {
+	if = {
+		limit = { has_idea = NAM_sub_dry_tanks }
+		remove_ideas = NAM_sub_dry_tanks
+	}
+	if = {
+		limit = { has_idea = NAM_sub_bad_castings }
+		remove_ideas = NAM_sub_bad_castings
+	}
+	if = {
+		limit = { has_idea = NAM_sub_dock_fire }
+		remove_ideas = NAM_sub_dock_fire
+	}
+	if = {
+		limit = { has_idea = NAM_sub_bad_sights }
+		remove_ideas = NAM_sub_bad_sights
+	}
+	if = {
+		limit = { has_idea = NAM_sub_labour_strike }
+		remove_ideas = NAM_sub_labour_strike
+	}
+	if = {
+		limit = { has_idea = NAM_sub_bond_crash }
+		remove_ideas = NAM_sub_bond_crash
+	}
+	if = {
+		limit = { has_idea = NAM_sub_leaflets }
+		remove_ideas = NAM_sub_leaflets
+	}
+	if = {
+		limit = { has_idea = NAM_sub_trophy_quarrel }
+		remove_ideas = NAM_sub_trophy_quarrel
+	}
+	clear_variable = NAM_sub_op_kind
+	clear_variable = NAM_sub_op_capital
+	clear_variable = NAM_sub_sights_days
+	clear_variable = NAM_sub_network
+	clr_country_flag = NAM_sub_vigilant
+	clr_country_flag = NAM_sub_hunch_residency
+	clr_country_flag = NAM_sub_hunch_leaflets
+	clr_country_flag = NAM_sub_hunch_quarrel
+	clr_country_flag = NAM_sub_hunted
+}
+
+# COUNTRY NAM. Route end or a won return: every running operation returns its
+# capital and slot; the landing-hour charges lapse.
+NAM_sub_close = {
+	EFL = {
+		NAM_sub_residency_refund = yes
+		clear_variable = NAM_sub_sights_days
+	}
+	AZH = {
+		NAM_sub_residency_refund = yes
+		clear_variable = NAM_sub_sights_days
+	}
+	NAM_sub_leaflets_refund = yes
+	NAM_sub_quarrel_refund = yes
+	clr_country_flag = NAM_sub_quarrel_ready
+	clear_variable = NAM_sub_exposed_target
+	clear_variable = NAM_sub_exposed_runner
+}
+
+# COUNTRY NAM. Every answer of event 135 clears the exposure record.
+NAM_sub_exposed_clear = {
+	clear_variable = NAM_sub_exposed_target
+	clear_variable = NAM_sub_exposed_runner
+}
+
+# ----- Council of boards: war of return -----
+# The tree NAM_return_war_focus replaces the corporate tree for the war of
+# return. NAM_board_poseidon_launch and the renewal start it with NAM_rtw_begin;
+# NAM_war_of_return_close runs NAM_rtw_close on every terminal path, and the
+# route end runs it when the council falls during the war.
+
+# COUNTRY NAM. Called after the rising of the landing or of the renewal in the
+# same effect. The age of NAM_rtw_at_war is the war's day count; the temp
+# NAM_board_partisans_raised left by NAM_board_cells_rise counts the landing's
+# partisans against the cap of eight per war.
+NAM_rtw_begin = {
+	set_country_flag = NAM_rtw_at_war
+	set_variable = { var = NAM_rtw_partisans value = NAM_board_partisans_raised }
+	clr_country_flag = NAM_rtw_renewed
+}
+
+# COUNTRY NAM. Event 168 loads the war tree one day after operation Poseidon,
+# so Poseidon's own completion does not depend on the engine order inside its
+# reward. The renewal loads it directly.
+NAM_rtw_load_tree = {
+	if = {
+		limit = {
+			NAM_war_of_return_active = yes
+			has_focus_tree = NAM_exile_corporate_focus
+		}
+		load_focus_tree = {
+			tree = NAM_return_war_focus
+			keep_completed = yes
+		}
+	}
+	mark_focus_tree_layout_dirty = yes
+}
+
+# COUNTRY NAM. The reload is skipped only when the annexation is certain:
+# NAM_war_of_return_resolve_defeat runs NAM_wor_pick_annexer before the close,
+# and its temp NAM_wor_annexer_found reads 1 only when an annexer exists. A
+# capitulated Directory without an annexer survives the white peace and gets
+# the corporate tree back.
+NAM_rtw_restore_tree = {
+	if = {
+		limit = {
+			has_focus_tree = NAM_return_war_focus
+			NOT = {
+				AND = {
+					has_capitulated = yes
+					check_variable = { NAM_wor_annexer_found = 1 }
+				}
+			}
+		}
+		load_focus_tree = {
+			tree = NAM_exile_corporate_focus
+			keep_completed = yes
+		}
+	}
+	mark_focus_tree_layout_dirty = yes
+}
+
+# COUNTRY NAM. The single exit of the war tree, behind NAM_rtw_at_war. Receipts
+# are refunded by their holders before the markers are cleared; the tree swap
+# comes last.
+NAM_rtw_close = {
+	NAM_rtw_fronts_close = yes
+	clr_country_flag = NAM_rtw_at_war
+	clear_variable = NAM_rtw_partisans
+	clr_country_flag = NAM_rtw_renewed
+	clear_variable = NAM_rtw_requisitions
+	NAM_rtw_restore_tree = yes
+}
+
+# War of return: fronts, operations and the peace. The decisions of the
+# category NAM_rtw_war keep each paid run's receipt in the scope it belongs to:
+# a district's state flag (administration, rising, militia) or a NAM variable
+# (landing, raid, colonel, levy, the surrender escrow). cancel_effect, the
+# remove-time recheck and NAM_rtw_fronts_close refund only while the receipt
+# exists and clear it in the same block, so a run is returned at most once.
+
+# COUNTRY NAM, first row of NAM_rtw_close: every running receipt is refunded,
+# the orders and offers are withdrawn and the war spirits leave both sides.
+# The administered and militia flags of the districts end here too; the line
+# armistice has already transferred the administered districts.
+NAM_rtw_fronts_close = {
+	67 = { NAM_rtw_district_close = yes }
+	688 = { NAM_rtw_district_close = yes }
+	689 = { NAM_rtw_district_close = yes }
+	690 = { NAM_rtw_district_close = yes }
+	700 = { NAM_rtw_district_close = yes }
+	719 = { NAM_rtw_district_close = yes }
+	692 = { clr_state_flag = NAM_rtw_raided }
+	NAM_rtw_landing_refund = yes
+	NAM_rtw_raid_refund = yes
+	NAM_rtw_colonel_refund = yes
+	NAM_rtw_levy_refund = yes
+	if = {
+		limit = { has_variable = NAM_rtw_surrender_escrow }
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_rtw_surrender_escrow }
+		NAM_corp_capital_add = yes
+		clear_variable = NAM_rtw_surrender_escrow
+	}
+	if = {
+		limit = { has_active_mission = NAM_rtw_order_mission }
+		remove_mission = NAM_rtw_order_mission
+	}
+	if = {
+		limit = { has_active_mission = NAM_rtw_capital_order_mission }
+		remove_mission = NAM_rtw_capital_order_mission
+	}
+	clear_variable = NAM_rtw_order_target
+	clr_country_flag = NAM_rtw_order_extra_days
+	clr_country_flag = NAM_rtw_order_cooldown
+	set_variable = { var = NAM_rtw_admin_running value = 0 }
+	set_variable = { var = NAM_rtw_rising_running value = 0 }
+	clear_variable = NAM_rtw_bought_efl
+	clear_variable = NAM_rtw_lured_azh
+	clr_country_flag = NAM_rtw_renewed_landed
+	clr_country_flag = NAM_rtw_surrender_pending
+	clr_country_flag = NAM_rtw_surrender_cooldown_efl
+	clr_country_flag = NAM_rtw_surrender_bonus_efl
+	clr_country_flag = NAM_rtw_surrender_malus_efl
+	clr_country_flag = NAM_rtw_line_pending
+	clr_country_flag = NAM_rtw_armistice_cooldown
+	clr_country_flag = NAM_rtw_dictate_pending
+	clr_country_flag = NAM_rtw_dictate_cooldown
+	clear_variable = NAM_rtw_dictate_refusals
+	clear_variable = NAM_board_armistice_terms
+	clr_country_flag = NAM_board_armistice_sent
+	clr_country_flag = NAM_rtw_off_mainland
+	clr_global_flag = NAM_rtw_surrender_settling
+	NAM_rtw_clear_decider = yes
+	NAM_rtw_clear_war_spirits = yes
+	if = {
+		limit = { country_exists = EFL }
+		EFL = { NAM_rtw_clear_enemy_ideas = yes }
+	}
+	if = {
+		limit = { country_exists = AZH }
+		AZH = { NAM_rtw_clear_enemy_ideas = yes }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# STATE homeland district, from NAM_rtw_fronts_close.
+NAM_rtw_district_close = {
+	NAM_rtw_admin_refund = yes
+	NAM_rtw_rising_refund = yes
+	NAM_rtw_militia_refund = yes
+	clr_state_flag = NAM_rtw_administered
+	clr_state_flag = NAM_rtw_militia_raised
+	clr_state_flag = NAM_rtw_rose
+}
+
+# COUNTRY NAM. The war spirits of this tree; the reparations and the bond
+# default outlive the war.
+NAM_rtw_clear_war_spirits = {
+	if = {
+		limit = { has_idea = NAM_rtw_front_school }
+		remove_ideas = NAM_rtw_front_school
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_capital_assault }
+		remove_ideas = NAM_rtw_capital_assault
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_field_oil }
+		remove_ideas = NAM_rtw_field_oil
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_harbour_spirit }
+		remove_ideas = NAM_rtw_harbour_spirit
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_hill_spirit }
+		remove_ideas = NAM_rtw_hill_spirit
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_last_storm }
+		remove_ideas = NAM_rtw_last_storm
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_convoy_line }
+		remove_ideas = NAM_rtw_convoy_line
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_order_failed }
+		remove_ideas = NAM_rtw_order_failed
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_home_front_strain }
+		remove_ideas = NAM_rtw_home_front_strain
+	}
+}
+
+# COUNTRY Eflor or Azhar. The war tree's penalties leave with the war, at
+# Eflor's surrender and on every terminal path.
+NAM_rtw_clear_enemy_ideas = {
+	if = {
+		limit = { has_idea = NAM_rtw_svetlogorsk_strike }
+		remove_ideas = NAM_rtw_svetlogorsk_strike
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_fields_lost }
+		remove_ideas = NAM_rtw_fields_lost
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_loren_crisis }
+		remove_ideas = NAM_rtw_loren_crisis
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_bought_colonels }
+		remove_ideas = NAM_rtw_bought_colonels
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_hill_villages }
+		remove_ideas = NAM_rtw_hill_villages
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_coal_blockade }
+		remove_ideas = NAM_rtw_coal_blockade
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_families_turn }
+		remove_ideas = NAM_rtw_families_turn
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_levy_drained }
+		remove_ideas = NAM_rtw_levy_drained
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_capital_fallen }
+		remove_ideas = NAM_rtw_capital_fallen
+	}
+	if = {
+		limit = { has_idea = NAM_rtw_terms_published }
+		remove_ideas = NAM_rtw_terms_published
+	}
+}
+
+# COUNTRY NAM. Temps NAM_rtw_holder_share (1 Eflor's share, 2 Azhar's) and
+# NAM_rtw_holder_delta: the trust of that share's holder, frozen at the
+# partition night.
+NAM_rtw_holder_trust = {
+	if = {
+		limit = {
+			check_variable = { NAM_rtw_holder_share = 1 }
+			check_variable = { NAM_board_partition_efl > 0 }
+		}
+		set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_efl }
+		set_temp_variable = { var = NAM_board_delta_input value = NAM_rtw_holder_delta }
+		NAM_board_support_change = yes
+		NAM_board_queue_recount = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = { NAM_rtw_holder_share = 2 }
+			check_variable = { NAM_board_partition_azh > 0 }
+		}
+		set_temp_variable = { var = NAM_board_company_input value = NAM_board_partition_azh }
+		set_temp_variable = { var = NAM_board_delta_input value = NAM_rtw_holder_delta }
+		NAM_board_support_change = yes
+		NAM_board_queue_recount = yes
+	}
+	set_temp_variable = { var = NAM_rtw_holder_share value = 0 }
+	set_temp_variable = { var = NAM_rtw_holder_delta value = 0 }
+}
+
+# ----- War of return: placement of formations -----
+# COUNTRY NAM. The province rule of every placement: the preferred province
+# while NAM controls it, else the South Harbour (16716), else the capital.
+
+# One partisan division; preferred Svetlogorsk (16721).
+NAM_rtw_place_partisans = {
+	NAM_board_partisan_template = yes
+	if = {
+		limit = { controls_province = 16721 }
+		688 = {
+			create_unit = {
+				division = "division_template = \"Mainland Partisans\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 16721
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else_if = {
+		limit = { controls_province = 16716 }
+		700 = {
+			create_unit = {
+				division = "division_template = \"Mainland Partisans\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 16716
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		capital_scope = {
+			create_unit = {
+				division = "division_template = \"Mainland Partisans\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+}
+
+# Arktur's harbour company of marines; preferred the harbour (16716).
+NAM_rtw_place_marines = {
+	NAM_marine_ensure_template = yes
+	if = {
+		limit = { controls_province = 16716 }
+		700 = {
+			create_unit = {
+				division = "name = \"Гаванская рота Арктура\" division_template = \"Island Marines\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 16716
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		capital_scope = {
+			create_unit = {
+				division = "name = \"Гаванская рота Арктура\" division_template = \"Island Marines\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+}
+
+# One "Old Settlers Militia"; preferred the harbour (16716).
+NAM_rtw_place_militia = {
+	NAM_board_militia_ensure_template = yes
+	if = {
+		limit = { controls_province = 16716 }
+		700 = {
+			create_unit = {
+				division = "division_template = \"Old Settlers Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 16716
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		capital_scope = {
+			create_unit = {
+				division = "division_template = \"Old Settlers Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+}
+
+# STATE administered district (NAM_rtw_district_militia). Its company forms on the district's
+# rising province, the same six provinces as NAM_board_cells_take_rising_province.
+NAM_rtw_place_militia_in_state = {
+	NAM = { NAM_board_militia_ensure_template = yes }
+	if = {
+		limit = { state = 67 }
+		create_unit = {
+			division = "division_template = \"Old Settlers Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 4287
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else_if = {
+		limit = { state = 688 }
+		create_unit = {
+			division = "division_template = \"Old Settlers Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 3127
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else_if = {
+		limit = { state = 689 }
+		create_unit = {
+			division = "division_template = \"Old Settlers Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 176
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else_if = {
+		limit = { state = 690 }
+		create_unit = {
+			division = "division_template = \"Old Settlers Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 2935
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else_if = {
+		limit = { state = 700 }
+		create_unit = {
+			division = "division_template = \"Old Settlers Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 16881
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	else = {
+		create_unit = {
+			division = "division_template = \"Old Settlers Militia\" start_experience_factor = 0.10 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 461
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+}
+
+# COUNTRY NAM. One "Line Infantry Brigade"; temp NAM_rtw_unit_name: 1 the
+# northern volunteers (preferred Svetlogorsk, 16721), 2 Eflor's bought
+# regiment (preferred the harbour). Without the template its men join the pool.
+NAM_rtw_place_brigade = {
+	if = {
+		limit = { has_template = "Line Infantry Brigade" }
+		if = {
+			limit = { check_variable = { NAM_rtw_unit_name = 2 } }
+			NAM_rtw_place_defectors_brigade = yes
+		}
+		else = {
+			NAM_rtw_place_north_brigade = yes
+		}
+	}
+	else = {
+		add_manpower = 6300
+	}
+	set_temp_variable = { var = NAM_rtw_unit_name value = 0 }
+}
+
+NAM_rtw_place_north_brigade = {
+	if = {
+		limit = { controls_province = 16721 }
+		688 = {
+			create_unit = {
+				division = "name = \"Северная добровольческая\" division_template = \"Line Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 16721
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else_if = {
+		limit = { controls_province = 16716 }
+		700 = {
+			create_unit = {
+				division = "name = \"Северная добровольческая\" division_template = \"Line Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 16716
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		capital_scope = {
+			create_unit = {
+				division = "name = \"Северная добровольческая\" division_template = \"Line Infantry Brigade\" start_experience_factor = 0.20 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+}
+
+NAM_rtw_place_defectors_brigade = {
+	if = {
+		limit = { controls_province = 16716 }
+		700 = {
+			create_unit = {
+				division = "name = \"Перебежчики\" division_template = \"Line Infantry Brigade\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				prioritize_location = 16716
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+	else = {
+		capital_scope = {
+			create_unit = {
+				division = "name = \"Перебежчики\" division_template = \"Line Infantry Brigade\" start_experience_factor = 0.25 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = NAM
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. Two escorts from the harbour slip, as NAM_board_launch_escorts.
+NAM_rtw_launch_harbour_escorts = {
+	create_ship = {
+		type = ADISCORD_escort_ship_2155
+		equipment_variant = "ADISCORD_escort_ship_2155"
+	}
+	create_ship = {
+		type = ADISCORD_escort_ship_2155
+		equipment_variant = "ADISCORD_escort_ship_2155"
+	}
+}
+
+# ----- War of return: risings, orders and administration -----
+
+# STATE homeland district held by the enemy; temp NAM_rtw_rise_count (1 or 2).
+# The rising of the landing without the cell threshold: hostile armies leave
+# the district, NAM takes the rising province and raises partisans against
+# the war's cap of eight in NAM_rtw_partisans.
+NAM_rtw_rise_state = {
+	NAM = {
+		set_temp_variable = { var = NAM_board_partisans_raised value = NAM_rtw_partisans }
+		NAM_board_partisan_template = yes
+	}
+	add_dynamic_modifier = {
+		modifier = NAM_board_rising_sabotage
+		days = 120
+	}
+	teleport_armies = {
+		limit = {
+			OR = {
+				has_war_with = NAM
+				has_country_flag = NAM_wor_participant
+			}
+		}
+	}
+	NAM_board_cells_take_rising_province = yes
+	if = {
+		limit = { check_variable = { NAM_board_partisans_raised < 8 } }
+		NAM_board_cells_raise_partisan = yes
+	}
+	if = {
+		limit = {
+			check_variable = { NAM_rtw_rise_count > 1 }
+			check_variable = { NAM_board_partisans_raised < 8 }
+		}
+		NAM_board_cells_raise_partisan = yes
+	}
+	NAM = { set_variable = { var = NAM_rtw_partisans value = NAM_board_partisans_raised } }
+	set_state_flag = NAM_rtw_rose
+	set_temp_variable = { var = NAM_rtw_rise_count value = 0 }
+}
+
+# STATE district, receipt of NAM_rtw_raise_district: 60 capital and 3000 rifles.
+NAM_rtw_rising_refund = {
+	if = {
+		limit = { has_state_flag = NAM_rtw_rising_work }
+		clr_state_flag = NAM_rtw_rising_work
+		NAM = {
+			set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+			NAM_corp_capital_add = yes
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = NAM }
+			set_variable = { var = NAM_rtw_rising_running value = 0 }
+		}
+	}
+}
+
+# STATE district (NAM_rtw_raise_district remove_effect). The rising happens while the district is
+# still held by a country at war with the Directory, otherwise the price returns.
+NAM_rtw_rising_settle = {
+	if = {
+		limit = { has_state_flag = NAM_rtw_rising_work }
+		if = {
+			limit = {
+				NOT = { is_controlled_by = NAM }
+				controller = { has_war_with = NAM }
+				NAM = { check_variable = { NAM_rtw_partisans < 8 } }
+			}
+			clr_state_flag = NAM_rtw_rising_work
+			NAM = { set_variable = { var = NAM_rtw_rising_running value = 0 } }
+			set_temp_variable = { var = NAM_rtw_rise_count value = 1 }
+			NAM_rtw_rise_state = yes
+		}
+		else = {
+			NAM_rtw_rising_refund = yes
+		}
+	}
+}
+
+# STATE district, receipt of NAM_rtw_provisional_admin: the capital paid
+# is kept in NAM_rtw_admin_paid; political power is never refunded.
+NAM_rtw_admin_refund = {
+	if = {
+		limit = { has_state_flag = NAM_rtw_admin_work }
+		clr_state_flag = NAM_rtw_admin_work
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_rtw_admin_paid }
+		clear_variable = NAM_rtw_admin_paid
+		NAM = {
+			NAM_corp_capital_add = yes
+			subtract_from_variable = { var = NAM_rtw_admin_running value = 1 }
+			clamp_variable = {
+				var = NAM_rtw_admin_running
+				min = 0
+			}
+		}
+	}
+}
+
+# STATE district (NAM_rtw_provisional_admin remove_effect): still held by the Directory and still
+# owned by a principal at war, the district accepts the council's administration.
+NAM_rtw_admin_settle = {
+	if = {
+		limit = { has_state_flag = NAM_rtw_admin_work }
+		if = {
+			limit = {
+				is_controlled_by = NAM
+				NAM_rtw_owner_fighting = yes
+			}
+			clr_state_flag = NAM_rtw_admin_work
+			clear_variable = NAM_rtw_admin_paid
+			NAM = {
+				subtract_from_variable = { var = NAM_rtw_admin_running value = 1 }
+				clamp_variable = {
+					var = NAM_rtw_admin_running
+					min = 0
+				}
+			}
+			NAM_rtw_administer_state = yes
+		}
+		else = {
+			NAM_rtw_admin_refund = yes
+		}
+	}
+}
+
+# STATE district. Provisional administration: the district's men serve the
+# Directory and its people comply; ownership does not change before a
+# terminal path.
+NAM_rtw_administer_state = {
+	set_state_flag = NAM_rtw_administered
+	add_compliance = 15
+	NAM = {
+		add_manpower = 2000
+		if = {
+			limit = { has_completed_focus = NAM_rtw_reprisals }
+			add_manpower = 3000
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# STATE district, receipt of NAM_rtw_district_militia: 4000 men and 3600 rifles.
+NAM_rtw_militia_refund = {
+	if = {
+		limit = { has_state_flag = NAM_rtw_militia_work }
+		clr_state_flag = NAM_rtw_militia_work
+		NAM = {
+			add_manpower = 4000
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3600 producer = NAM }
+		}
+	}
+}
+
+# STATE district (NAM_rtw_district_militia remove_effect).
+NAM_rtw_militia_settle = {
+	if = {
+		limit = { has_state_flag = NAM_rtw_militia_work }
+		if = {
+			limit = { is_controlled_by = NAM }
+			clr_state_flag = NAM_rtw_militia_work
+			set_state_flag = NAM_rtw_militia_raised
+			NAM_rtw_place_militia_in_state = yes
+		}
+		else = {
+			NAM_rtw_militia_refund = yes
+		}
+	}
+}
+
+# COUNTRY NAM, from NAM_rtw_order (FROM = the target state). One order at a
+# time: the district orders run 75 days, the capital orders 120 with the
+# assault spirit. The Middle Loren order (701) runs 30 more after the bridge
+# stormed from the march (event 147 b); the Black Basin order (69) never takes
+# that bonus, which stays reserved for 701.
+NAM_rtw_order_activate = {
+	set_variable = { var = NAM_rtw_order_target value = FROM }
+	if = {
+		limit = {
+			FROM = {
+				OR = {
+					state = 701
+					state = 69
+				}
+			}
+		}
+		activate_mission = NAM_rtw_capital_order_mission
+		if = {
+			limit = {
+				has_country_flag = NAM_rtw_order_extra_days
+				FROM = { state = 701 }
+			}
+			clr_country_flag = NAM_rtw_order_extra_days
+			add_days_mission_timeout = {
+				mission = NAM_rtw_capital_order_mission
+				days = 30
+			}
+			add_timed_idea = {
+				idea = NAM_rtw_capital_assault
+				days = 150
+			}
+		}
+		else = {
+			add_timed_idea = {
+				idea = NAM_rtw_capital_assault
+				days = 120
+			}
+		}
+	}
+	else = {
+		activate_mission = NAM_rtw_order_mission
+	}
+}
+
+# COUNTRY NAM. Temp NAM_rtw_holder_share from the order's target: 688, 67 and
+# 701 are Eflor's share, 700, 690 and 69 Azhar's.
+NAM_rtw_order_share = {
+	set_temp_variable = { var = NAM_rtw_holder_share value = 2 }
+	if = {
+		limit = {
+			OR = {
+				check_variable = { NAM_rtw_order_target = 688 }
+				check_variable = { NAM_rtw_order_target = 67 }
+				check_variable = { NAM_rtw_order_target = 701 }
+			}
+		}
+		set_temp_variable = { var = NAM_rtw_holder_share value = 1 }
+	}
+}
+
+# COUNTRY NAM, the order missions' complete_effect: the district or capital is taken.
+NAM_rtw_order_success = {
+	add_political_power = 40
+	add_war_support = 0.03
+	NAM_rtw_order_share = yes
+	set_temp_variable = { var = NAM_rtw_holder_delta value = 5 }
+	NAM_rtw_holder_trust = yes
+	if = {
+		limit = { check_variable = { NAM_rtw_order_target = 688 } }
+		add_manpower = 4000
+		if = {
+			limit = {
+				EFL = {
+					exists = yes
+					has_war_with = NAM
+				}
+			}
+			EFL = {
+				add_timed_idea = {
+					idea = NAM_rtw_svetlogorsk_strike
+					days = 120
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { NAM_rtw_order_target = 67 } }
+		add_to_variable = { var = NAM_open_fuel_reserve value = 8000 }
+		NAM_open_fuel_release = yes
+		set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+		NAM_board_trust_package = yes
+	}
+	else_if = {
+		limit = { check_variable = { NAM_rtw_order_target = 700 } }
+		add_manpower = 4000
+		set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+		NAM_board_trust_package = yes
+	}
+	else_if = {
+		limit = { check_variable = { NAM_rtw_order_target = 690 } }
+		army_experience = 20
+		if = {
+			limit = {
+				AZH = {
+					exists = yes
+					has_war_with = NAM
+				}
+			}
+			AZH = {
+				add_timed_idea = {
+					idea = NAM_rtw_hill_villages
+					days = 120
+				}
+			}
+		}
+	}
+	else = {
+		add_political_power = 75
+		var:NAM_rtw_order_target = {
+			owner = {
+				if = {
+					limit = {
+						OR = {
+							tag = EFL
+							tag = AZH
+						}
+					}
+					add_timed_idea = {
+						idea = NAM_rtw_capital_fallen
+						days = 180
+					}
+				}
+			}
+		}
+	}
+	set_variable = { var = NAM_rtw_order_last value = NAM_rtw_order_target }
+	clear_variable = NAM_rtw_order_target
+	set_country_flag = {
+		flag = NAM_rtw_order_cooldown
+		value = 1
+		days = 30
+	}
+	country_event = { id = ADISCORD_nam_story.166 hours = 1 }
+}
+
+# COUNTRY NAM, the order missions' timeout_effect.
+NAM_rtw_order_fail = {
+	add_timed_idea = {
+		idea = NAM_rtw_order_failed
+		days = 60
+	}
+	NAM_rtw_order_share = yes
+	set_temp_variable = { var = NAM_rtw_holder_delta value = -5 }
+	NAM_rtw_holder_trust = yes
+	set_variable = { var = NAM_rtw_order_last value = NAM_rtw_order_target }
+	clear_variable = NAM_rtw_order_target
+	set_country_flag = {
+		flag = NAM_rtw_order_cooldown
+		value = 1
+		days = 30
+	}
+	country_event = { id = ADISCORD_nam_story.167 hours = 1 }
+}
+
+# COUNTRY NAM, the order missions' cancel_effect: the target's owner left the
+# war or the war ended. No penalty and no cooldown.
+NAM_rtw_order_cancel = {
+	clear_variable = NAM_rtw_order_target
+	clr_country_flag = NAM_rtw_order_extra_days
+}
+
+# ----- War of return: landing, raid and the bought enemy -----
+
+# COUNTRY NAM, receipt of NAM_rtw_landing_loren_coast: 60 capital, 4300 men and 3870 rifles.
+NAM_rtw_landing_refund = {
+	if = {
+		limit = { has_variable = NAM_rtw_landing_paid }
+		clear_variable = NAM_rtw_landing_paid
+		set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+		NAM_corp_capital_add = yes
+		add_manpower = 4300
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 3870 producer = NAM }
+	}
+}
+
+# COUNTRY NAM (NAM_rtw_landing_loren_coast remove_effect). The Loren coast port 6495 is seized and
+# held by one marine division while its owner still fights the Directory.
+NAM_rtw_landing_settle = {
+	if = {
+		limit = { has_variable = NAM_rtw_landing_paid }
+		if = {
+			limit = {
+				723 = { NAM_rtw_owner_fighting = yes }
+				NOT = { controls_province = 6495 }
+			}
+			clear_variable = NAM_rtw_landing_paid
+			NAM_marine_ensure_template = yes
+			723 = {
+				teleport_armies = {
+					limit = {
+						OR = {
+							has_war_with = NAM
+							has_country_flag = NAM_wor_participant
+						}
+					}
+				}
+			}
+			set_province_controller = 6495
+			723 = {
+				create_unit = {
+					division = "name = \"Лоренский десант\" division_template = \"Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = NAM
+					prioritize_location = 6495
+					allow_spawning_on_enemy_provs = no
+				}
+				set_state_flag = NAM_rtw_landed
+			}
+		}
+		else = {
+			NAM_rtw_landing_refund = yes
+		}
+	}
+}
+
+# COUNTRY NAM, receipt of NAM_rtw_coal_raid: 50 capital and 1500 fuel.
+NAM_rtw_raid_refund = {
+	if = {
+		limit = { has_variable = NAM_rtw_raid_paid }
+		clear_variable = NAM_rtw_raid_paid
+		set_temp_variable = { var = NAM_corp_capital_change value = 50 }
+		NAM_corp_capital_add = yes
+		add_to_variable = { var = NAM_open_fuel_reserve value = 1500 }
+		NAM_open_fuel_release = yes
+	}
+}
+
+# COUNTRY NAM (NAM_rtw_coal_raid remove_effect). The coal piers of the Black Coast burn while
+# their port 493 is still the enemy's.
+NAM_rtw_raid_settle = {
+	if = {
+		limit = { has_variable = NAM_rtw_raid_paid }
+		if = {
+			limit = {
+				692 = { NAM_rtw_owner_fighting = yes }
+				NOT = { controls_province = 493 }
+			}
+			clear_variable = NAM_rtw_raid_paid
+			692 = {
+				damage_building = {
+					type = naval_base
+					province = 493
+					damage = 3
+				}
+				set_state_flag = NAM_rtw_raided
+				owner = {
+					if = {
+						limit = { tag = AZH }
+						add_timed_idea = {
+							idea = NAM_rtw_coal_blockade
+							days = 120
+						}
+					}
+				}
+			}
+		}
+		else = {
+			NAM_rtw_raid_refund = yes
+		}
+	}
+}
+
+# COUNTRY NAM, receipt of NAM_rtw_buy_colonel: 80 capital.
+NAM_rtw_colonel_refund = {
+	if = {
+		limit = { has_variable = NAM_rtw_colonel_paid }
+		clear_variable = NAM_rtw_colonel_paid
+		set_temp_variable = { var = NAM_corp_capital_change value = 80 }
+		NAM_corp_capital_add = yes
+	}
+}
+
+# COUNTRY NAM (NAM_rtw_buy_colonel remove_effect). An unpaid regiment of Eflor walks over with
+# its colonel; Eflor's staff is shaken.
+NAM_rtw_colonel_settle = {
+	if = {
+		limit = { has_variable = NAM_rtw_colonel_paid }
+		if = {
+			limit = { EFL = { NAM_rtw_can_decide = yes } }
+			clear_variable = NAM_rtw_colonel_paid
+			EFL = {
+				add_timed_idea = {
+					idea = NAM_rtw_bought_colonels
+					days = 90
+				}
+				add_manpower = -6300
+			}
+			set_temp_variable = { var = NAM_rtw_unit_name value = 2 }
+			NAM_rtw_place_brigade = yes
+			add_to_variable = { var = NAM_rtw_bought_efl value = 1 }
+		}
+		else = {
+			NAM_rtw_colonel_refund = yes
+		}
+	}
+}
+
+# COUNTRY NAM, receipt of NAM_rtw_lure_levy: 60 capital.
+NAM_rtw_levy_refund = {
+	if = {
+		limit = { has_variable = NAM_rtw_levy_paid }
+		clear_variable = NAM_rtw_levy_paid
+		set_temp_variable = { var = NAM_corp_capital_change value = 60 }
+		NAM_corp_capital_add = yes
+	}
+}
+
+# COUNTRY NAM (NAM_rtw_lure_levy remove_effect). The Basin's conscripted villagers walk over
+# to the labour exchange.
+NAM_rtw_levy_settle = {
+	if = {
+		limit = { has_variable = NAM_rtw_levy_paid }
+		if = {
+			limit = { AZH = { NAM_rtw_can_decide = yes } }
+			clear_variable = NAM_rtw_levy_paid
+			AZH = {
+				add_timed_idea = {
+					idea = NAM_rtw_levy_drained
+					days = 120
+				}
+				add_manpower = -8000
+			}
+			add_manpower = 6000
+			add_to_variable = { var = NAM_rtw_lured_azh value = 1 }
+		}
+		else = {
+			NAM_rtw_levy_refund = yes
+		}
+	}
+}
+
+# COUNTRY NAM (NAM_rtw_renewed_landing). The second landing at the harbour after a renewal.
+NAM_rtw_renewed_landing_run = {
+	NAM_marine_ensure_template = yes
+	700 = {
+		teleport_armies = {
+			limit = {
+				OR = {
+					has_war_with = NAM
+					has_country_flag = NAM_wor_participant
+				}
+			}
+		}
+	}
+	set_province_controller = 16716
+	700 = {
+		create_unit = {
+			division = "name = \"Второй десант\" division_template = \"Island Marines\" start_experience_factor = 0.30 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = NAM
+			prioritize_location = 16716
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+	set_country_flag = NAM_rtw_renewed_landed
+}
+
+# ----- War of return: Eflor's surrender -----
+
+# COUNTRY NAM, refusal of event 157 or a lapsed offer: the escrow returns,
+# political power does not, and the demand waits 60 days.
+NAM_rtw_surrender_refused = {
+	if = {
+		limit = { has_variable = NAM_rtw_surrender_escrow }
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_rtw_surrender_escrow }
+		NAM_corp_capital_add = yes
+		clear_variable = NAM_rtw_surrender_escrow
+	}
+	clr_country_flag = NAM_rtw_surrender_pending
+	set_country_flag = {
+		flag = NAM_rtw_surrender_cooldown_efl
+		value = 1
+		days = 60
+	}
+	country_event = { id = ADISCORD_nam_story.160 hours = 1 }
+}
+
+# STATE homeland district owned by Eflor at its surrender: returned to the
+# Directory now; the NAM core follows at the victory (NAM_rtw_core_owned_homeland),
+# so the Directory's recruitment stays as it was for the rest of the war.
+NAM_rtw_return_share_state = {
+	NAM = { transfer_state = PREV }
+	remove_core_of = EFL
+	set_state_controller_to = NAM
+	clr_state_flag = NAM_rtw_administered
+}
+
+# COUNTRY NAM, from event 157 a. Eflor leaves the coalition before anything
+# ends its war, so the peace callbacks this effect causes find no Eflor in the
+# campaign; the guard flag keeps NAM_war_of_return_close_external away until
+# the routing at the end. Azhar stays in the participant list in every case,
+# so the victory's field, belt and settlement rows still reach it.
+NAM_rtw_accept_surrender_efl = {
+	if = {
+		limit = {
+			NAM_war_of_return_active = yes
+			has_variable = NAM_rtw_surrender_escrow
+			EFL = { NAM_rtw_can_decide = yes }
+		}
+		set_global_flag = NAM_rtw_surrender_settling
+		# Whether Azhar is already beaten is read before anything changes the war.
+		set_temp_variable = { var = NAM_rtw_azh_down value = 0 }
+		if = {
+			limit = {
+				OR = {
+					NOT = { country_exists = AZH }
+					AZH = { NOT = { has_country_flag = NAM_wor_participant } }
+					AZH = { has_capitulated = yes }
+				}
+			}
+			set_temp_variable = { var = NAM_rtw_azh_down value = 1 }
+		}
+		EFL = {
+			remove_from_array = {
+				array = global.NAM_wor_participants
+				value = THIS
+			}
+			clr_country_flag = NAM_wor_participant
+			ADISCORD_nam_resource_war_release_major = yes
+			if = {
+				limit = { has_country_flag = NAM_wor_coalition_founder }
+				clr_country_flag = NAM_wor_coalition_founder
+				if = {
+					limit = { is_faction_leader = yes }
+					dismantle_faction = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = NAM_wor_primary_saved
+				event_target:NAM_wor_primary = { tag = EFL }
+			}
+			if = {
+				limit = {
+					AZH = {
+						exists = yes
+						has_country_flag = NAM_wor_participant
+					}
+				}
+				AZH = { save_global_event_target_as = NAM_wor_primary }
+			}
+			else = {
+				clear_global_event_target = NAM_wor_primary
+				clr_global_flag = NAM_wor_primary_saved
+			}
+		}
+		# The bankers' fee goes to the cabinet that signs.
+		clear_variable = NAM_rtw_surrender_escrow
+		clr_country_flag = NAM_rtw_surrender_pending
+		clr_country_flag = NAM_rtw_surrender_bonus_efl
+		clr_country_flag = NAM_rtw_surrender_malus_efl
+		# Eflor's homeland districts, its belt and any island ceded to it.
+		67 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_rtw_return_share_state = yes
+			}
+		}
+		688 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_rtw_return_share_state = yes
+			}
+		}
+		689 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_rtw_return_share_state = yes
+			}
+		}
+		690 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_rtw_return_share_state = yes
+			}
+		}
+		700 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_rtw_return_share_state = yes
+			}
+		}
+		719 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_rtw_return_share_state = yes
+			}
+		}
+		720 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_board_partition_transfer_state = yes
+			}
+		}
+		721 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_board_partition_transfer_state = yes
+			}
+		}
+		722 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_board_partition_transfer_state = yes
+			}
+		}
+		723 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_board_partition_transfer_state = yes
+			}
+		}
+		727 = {
+			if = {
+				limit = { is_owned_by = EFL }
+				NAM_board_partition_transfer_state = yes
+			}
+		}
+		set_temp_variable = { var = NAM_rtw_cede_from value = 1 }
+		NAM_rtw_return_ceded_states = yes
+		NAM_board_queue_recount = yes
+		ADISCORD_economy_mark_dirty = yes
+		# The field army is dissolved without refund before the peace.
+		EFL = { delete_unit = { } }
+		EFL = {
+			white_peace = NAM
+			NAM_rtw_clear_enemy_ideas = yes
+			NAM_sub_clear_target = yes
+		}
+		# The form of rule: the holder's district, or under direct rule a
+		# provisional subject annexed at the victory.
+		set_temp_variable = { var = NAM_rtw_settling_return value = 2 }
+		EFL = { NAM_rtw_settle_country = yes }
+		set_temp_variable = { var = NAM_rtw_settling_return value = 0 }
+		# A white peace may have ended Azhar's war with its leader; a beaten
+		# Azhar is never attacked again.
+		if = {
+			limit = {
+				check_variable = { NAM_rtw_azh_down = 0 }
+				AZH = {
+					exists = yes
+					has_country_flag = NAM_wor_participant
+					has_capitulated = no
+					NOT = { has_war_with = NAM }
+				}
+			}
+			declare_war_on = {
+				target = AZH
+				type = annex_everything
+			}
+		}
+		clr_global_flag = NAM_rtw_surrender_settling
+		if = {
+			limit = {
+				NAM_war_of_return_active = yes
+				OR = {
+					check_variable = { NAM_rtw_azh_down = 1 }
+					NAM_wor_all_defeated = yes
+				}
+			}
+			NAM_war_of_return_resolve_victory = yes
+		}
+		else = {
+			NAM_war_of_return_close_external = yes
+		}
+		set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+		set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+		NAM_board_trust_package = yes
+		country_event = { id = ADISCORD_nam_story.159 hours = 1 }
+		log = "[ADISCORD][NAM][RTW] Eflor surrendered to the Directory."
+	}
+	else = {
+		NAM_rtw_surrender_refused = yes
+	}
+}
+
+# COUNTRY principal defeated at the victory (temp NAM_rtw_settling_return 1)
+# or Eflor at its surrender (temp 2). Its subjects become the Directory's
+# puppets first; then exactly one form of rule.
+NAM_rtw_settle_country = {
+	NAM_rtw_take_subjects = yes
+	if = {
+		limit = {
+			NAM = { NAM_rtw_direct_rule = yes }
+			check_variable = { NAM_rtw_settling_return = 1 }
+		}
+		NAM_wor_radical_annex = yes
+	}
+	else_if = {
+		limit = { NAM = { NAM_rtw_direct_rule = yes } }
+		NAM_rtw_hold_surrendered = yes
+	}
+	else = {
+		NAM_wor_federal_district_join = yes
+		NAM_rtw_restore_district_control = yes
+	}
+	NAM = { ADISCORD_economy_mark_dirty = yes }
+}
+
+# COUNTRY defeated principal. A native iterator inside the principal; its
+# subjects keep their tags and land as ordinary puppets of the Directory.
+NAM_rtw_take_subjects = {
+	every_subject_country = {
+		NAM = { puppet = PREV }
+	}
+}
+
+# COUNTRY district. A subject made in the tick of its defeat keeps the
+# overlord's occupation; the district controls all of its own land.
+NAM_rtw_restore_district_control = {
+	every_owned_state = {
+		limit = { NOT = { is_controlled_by = PREV } }
+		set_state_controller_to = PREV
+	}
+}
+
+# COUNTRY Eflor surrendered under direct rule. A provisional subject until the
+# victory: no federal-district flag, no entry in NAM_federal_districts and no
+# concession, so it pays no dividend, gives no votes and keeps its land out
+# of the Directory's own surrender base, as the holders' district does.
+NAM_rtw_hold_surrendered = {
+	if = {
+		limit = {
+			is_subject = no
+			is_in_faction = yes
+		}
+		leave_faction = yes
+	}
+	NAM_rw_clear_punishment = yes
+	NAM = { puppet = PREV }
+	NAM = {
+		set_autonomy = {
+			target = PREV
+			autonomy_state = autonomy_NAM_federal_district
+			end_wars = no
+			end_civil_wars = no
+		}
+		set_country_flag = NAM_rtw_annex_pending
+	}
+	NAM_rtw_restore_district_control = yes
+}
+
+# COUNTRY NAM, first row of NAM_rtw_settle_victory: the provisional subject is
+# annexed only now.
+NAM_rtw_annex_surrendered = {
+	if = {
+		limit = {
+			has_country_flag = NAM_rtw_annex_pending
+			EFL = {
+				exists = yes
+				is_subject_of = NAM
+			}
+		}
+		EFL = { NAM_wor_radical_annex = yes }
+	}
+	clr_country_flag = NAM_rtw_annex_pending
+}
+
+# COUNTRY NAM. The homeland share taken at Eflor's surrender gets its core at
+# the victory.
+NAM_rtw_core_owned_homeland = {
+	67 = {
+		if = {
+			limit = {
+				is_owned_by = NAM
+				NOT = { is_core_of = NAM }
+			}
+			add_core_of = NAM
+		}
+	}
+	688 = {
+		if = {
+			limit = {
+				is_owned_by = NAM
+				NOT = { is_core_of = NAM }
+			}
+			add_core_of = NAM
+		}
+	}
+	689 = {
+		if = {
+			limit = {
+				is_owned_by = NAM
+				NOT = { is_core_of = NAM }
+			}
+			add_core_of = NAM
+		}
+	}
+	690 = {
+		if = {
+			limit = {
+				is_owned_by = NAM
+				NOT = { is_core_of = NAM }
+			}
+			add_core_of = NAM
+		}
+	}
+	700 = {
+		if = {
+			limit = {
+				is_owned_by = NAM
+				NOT = { is_core_of = NAM }
+			}
+			add_core_of = NAM
+		}
+	}
+	719 = {
+		if = {
+			limit = {
+				is_owned_by = NAM
+				NOT = { is_core_of = NAM }
+			}
+			add_core_of = NAM
+		}
+	}
+}
+
+# COUNTRY NAM, after the settlement list of a won return on the corporate
+# route. The council's accounts follow these rows.
+NAM_rtw_settle_victory = {
+	NAM_rtw_annex_surrendered = yes
+	NAM_rtw_core_owned_homeland = yes
+	NAM_rtw_bonds_repay = yes
+	if = {
+		limit = { has_completed_focus = NAM_rtw_left_behind_registry }
+		NAM_rtw_settle_restitution = yes
+	}
+	if = {
+		limit = { NAM_board_operable = yes }
+		NAM_rtw_victory_trust = yes
+	}
+	if = {
+		limit = { has_completed_focus = NAM_rtw_return_treaty }
+		country_event = { id = ADISCORD_nam_story.169 days = 1 }
+	}
+}
+
+# ----- War of return: ceded islands -----
+# NAM_rtw_ceded_states lists every state the dictated peace ceded;
+# NAM_rtw_ceded_status^k and NAM_rtw_ceded_owner^k keep the island's status and
+# concession owner (k 1 Ulven, 2 Luren, 3 Sharden). Island cores are never
+# removed, so a nationalised island is national again when it returns.
+
+# COUNTRY NAM; temp NAM_rtw_cede_from: 0 returns the states Eflor or Azhar
+# owns (victory), 1 only Eflor's (its surrender). Each entry is cleared when
+# returned; the temp is reset to 0.
+NAM_rtw_return_ceded_states = {
+	if = {
+		limit = {
+			has_country_flag = NAM_corp_takeover
+			check_variable = { NAM_rtw_ceded_states^num > 0 }
+		}
+		clear_temp_array = NAM_rtw_cede_list
+		for_each_loop = {
+			array = NAM_rtw_ceded_states
+			value = v
+			add_to_temp_array = { array = NAM_rtw_cede_list value = v }
+		}
+		for_each_scope_loop = {
+			array = NAM_rtw_cede_list
+			if = {
+				limit = {
+					OR = {
+						is_owned_by = EFL
+						AND = {
+							is_owned_by = AZH
+							check_variable = { NAM_rtw_cede_from = 0 }
+						}
+					}
+				}
+				NAM = { transfer_state = PREV }
+				set_state_controller_to = NAM
+				NAM = {
+					remove_from_array = {
+						array = NAM_rtw_ceded_states
+						value = PREV
+					}
+				}
+			}
+		}
+		set_temp_variable = { var = NAM_rtw_isl_k value = 1 }
+		NAM_rtw_restore_island_status = yes
+		set_temp_variable = { var = NAM_rtw_isl_k value = 2 }
+		NAM_rtw_restore_island_status = yes
+		set_temp_variable = { var = NAM_rtw_isl_k value = 3 }
+		NAM_rtw_restore_island_status = yes
+		NAM_board_queue_recount = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+	set_temp_variable = { var = NAM_rtw_cede_from value = 0 }
+}
+
+# COUNTRY NAM; temp NAM_rtw_isl_k. A ceded island whose capital is the
+# Directory's again regains its status and concession owner.
+NAM_rtw_restore_island_status = {
+	if = {
+		limit = {
+			check_variable = { var = NAM_rtw_ceded_status^NAM_rtw_isl_k value = 0 compare = greater_than }
+			OR = {
+				AND = {
+					check_variable = { NAM_rtw_isl_k = 1 }
+					648 = { is_owned_by = NAM }
+				}
+				AND = {
+					check_variable = { NAM_rtw_isl_k = 2 }
+					651 = { is_owned_by = NAM }
+				}
+				AND = {
+					check_variable = { NAM_rtw_isl_k = 3 }
+					680 = { is_owned_by = NAM }
+				}
+			}
+		}
+		set_variable = { var = NAM_isl_status^NAM_rtw_isl_k value = NAM_rtw_ceded_status^NAM_rtw_isl_k }
+		set_variable = { var = NAM_board_isl_owner^NAM_rtw_isl_k value = NAM_rtw_ceded_owner^NAM_rtw_isl_k }
+		set_variable = { var = NAM_rtw_ceded_status^NAM_rtw_isl_k value = 0 }
+		set_variable = { var = NAM_rtw_ceded_owner^NAM_rtw_isl_k value = 0 }
+	}
+}
+
+# COUNTRY NAM, dictated peace on terms 1. The most recently nationalised
+# island (Sharden, Luren, Ulven), else an annexed one, else state 230 unless it
+# is the capital, passes to the decider. Leaves the temp NAM_rtw_ceded_ok at 1
+# when land passed; at 0 the caller applies terms 2.
+NAM_rtw_cede_island = {
+	set_temp_variable = { var = NAM_rtw_ceded_ok value = 0 }
+	set_temp_variable = { var = NAM_rtw_isl_k value = 0 }
+	if = {
+		limit = {
+			NAM_rtw_island_cedable_3 = yes
+			check_variable = { var = NAM_isl_status^3 value = 3 compare = equals }
+		}
+		set_temp_variable = { var = NAM_rtw_isl_k value = 3 }
+	}
+	else_if = {
+		limit = {
+			NAM_rtw_island_cedable_2 = yes
+			check_variable = { var = NAM_isl_status^2 value = 3 compare = equals }
+		}
+		set_temp_variable = { var = NAM_rtw_isl_k value = 2 }
+	}
+	else_if = {
+		limit = {
+			NAM_rtw_island_cedable_1 = yes
+			check_variable = { var = NAM_isl_status^1 value = 3 compare = equals }
+		}
+		set_temp_variable = { var = NAM_rtw_isl_k value = 1 }
+	}
+	else_if = {
+		limit = {
+			NAM_rtw_island_cedable_3 = yes
+			check_variable = { var = NAM_isl_status^3 value = 2 compare = equals }
+		}
+		set_temp_variable = { var = NAM_rtw_isl_k value = 3 }
+	}
+	else_if = {
+		limit = {
+			NAM_rtw_island_cedable_2 = yes
+			check_variable = { var = NAM_isl_status^2 value = 2 compare = equals }
+		}
+		set_temp_variable = { var = NAM_rtw_isl_k value = 2 }
+	}
+	else_if = {
+		limit = {
+			NAM_rtw_island_cedable_1 = yes
+			check_variable = { var = NAM_isl_status^1 value = 2 compare = equals }
+		}
+		set_temp_variable = { var = NAM_rtw_isl_k value = 1 }
+	}
+	if = {
+		limit = { check_variable = { NAM_rtw_isl_k > 0 } }
+		# The island-indexed cells exist only in a sized array.
+		if = {
+			limit = { check_variable = { NAM_rtw_ceded_status^num < 4 } }
+			resize_array = {
+				array = NAM_rtw_ceded_status
+				size = 4
+				value = 0
+			}
+		}
+		if = {
+			limit = { check_variable = { NAM_rtw_ceded_owner^num < 4 } }
+			resize_array = {
+				array = NAM_rtw_ceded_owner
+				size = 4
+				value = 0
+			}
+		}
+		set_variable = { var = NAM_rtw_ceded_status^NAM_rtw_isl_k value = NAM_isl_status^NAM_rtw_isl_k }
+		set_variable = { var = NAM_rtw_ceded_owner^NAM_rtw_isl_k value = NAM_board_isl_owner^NAM_rtw_isl_k }
+		NAM_rtw_cede_island_rows = yes
+		set_variable = { var = NAM_isl_status^NAM_rtw_isl_k value = 0 }
+		set_variable = { var = NAM_board_isl_owner^NAM_rtw_isl_k value = 0 }
+		set_temp_variable = { var = NAM_rtw_ceded_ok value = 1 }
+	}
+	else_if = {
+		limit = {
+			230 = { is_owned_by = NAM }
+			NOT = { capital_scope = { state = 230 } }
+		}
+		230 = { NAM_rtw_cede_state = yes }
+		set_temp_variable = { var = NAM_rtw_ceded_ok value = 1 }
+	}
+	NAM_board_queue_recount = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY NAM; temp NAM_rtw_isl_k. Every state of the island's explicit list.
+NAM_rtw_cede_island_rows = {
+	if = {
+		limit = { check_variable = { NAM_rtw_isl_k = 1 } }
+		643 = { NAM_rtw_cede_state = yes }
+		644 = { NAM_rtw_cede_state = yes }
+		645 = { NAM_rtw_cede_state = yes }
+		646 = { NAM_rtw_cede_state = yes }
+		647 = { NAM_rtw_cede_state = yes }
+		648 = { NAM_rtw_cede_state = yes }
+	}
+	else_if = {
+		limit = { check_variable = { NAM_rtw_isl_k = 2 } }
+		649 = { NAM_rtw_cede_state = yes }
+		650 = { NAM_rtw_cede_state = yes }
+		651 = { NAM_rtw_cede_state = yes }
+		652 = { NAM_rtw_cede_state = yes }
+	}
+	else = {
+		672 = { NAM_rtw_cede_state = yes }
+		673 = { NAM_rtw_cede_state = yes }
+		674 = { NAM_rtw_cede_state = yes }
+		675 = { NAM_rtw_cede_state = yes }
+		676 = { NAM_rtw_cede_state = yes }
+		677 = { NAM_rtw_cede_state = yes }
+		678 = { NAM_rtw_cede_state = yes }
+		679 = { NAM_rtw_cede_state = yes }
+		680 = { NAM_rtw_cede_state = yes }
+	}
+}
+
+# STATE owned by NAM: recorded, then passed to the decider of the dictated peace.
+NAM_rtw_cede_state = {
+	if = {
+		limit = { is_owned_by = NAM }
+		NAM = { add_to_array = { array = NAM_rtw_ceded_states value = PREV } }
+		event_target:NAM_rtw_decider = { transfer_state = PREV }
+		set_state_controller_to = event_target:NAM_rtw_decider
+	}
+}
+
+# ----- War of return: the coalition's decider, armistice and dictated peace -----
+
+# GLOBAL. Who answers for the coalition, in explicit order: the primary, then
+# Eflor, then Azhar, each only while at war with the Directory and not
+# capitulated. A capitulated principal never chooses a peace.
+NAM_rtw_pick_decider = {
+	NAM_rtw_clear_decider = yes
+	if = {
+		limit = {
+			has_global_flag = NAM_wor_primary_saved
+			event_target:NAM_wor_primary = { NAM_rtw_can_decide = yes }
+		}
+		event_target:NAM_wor_primary = { save_global_event_target_as = NAM_rtw_decider }
+		set_global_flag = NAM_rtw_decider_saved
+	}
+	else_if = {
+		limit = { EFL = { NAM_rtw_can_decide = yes } }
+		EFL = { save_global_event_target_as = NAM_rtw_decider }
+		set_global_flag = NAM_rtw_decider_saved
+	}
+	else_if = {
+		limit = { AZH = { NAM_rtw_can_decide = yes } }
+		AZH = { save_global_event_target_as = NAM_rtw_decider }
+		set_global_flag = NAM_rtw_decider_saved
+	}
+}
+
+# GLOBAL. Clears the decider with its marker flag.
+NAM_rtw_clear_decider = {
+	clear_global_event_target = NAM_rtw_decider
+	clr_global_flag = NAM_rtw_decider_saved
+}
+
+# STATE homeland district at the line armistice: an administered district
+# still owned by a principal passes to the Directory with its core.
+NAM_rtw_keep_administered = {
+	if = {
+		limit = {
+			has_state_flag = NAM_rtw_administered
+			owner = { has_country_flag = NAM_wor_participant }
+		}
+		owner = { save_event_target_as = NAM_rtw_old_owner }
+		NAM = { transfer_state = PREV }
+		remove_core_of = event_target:NAM_rtw_old_owner
+		add_core_of = NAM
+		set_state_controller_to = NAM
+	}
+	clr_state_flag = NAM_rtw_administered
+	clr_state_flag = NAM_rtw_militia_raised
+}
+
+# COUNTRY NAM, from event 161 a: the coalition accepted the line of contact.
+# A pause: the claims stay, the truce lasts 180 days and the renewal resumes
+# the war against every principal still standing.
+NAM_rtw_line_armistice = {
+	clr_country_flag = NAM_rtw_line_pending
+	if = {
+		limit = {
+			NAM_war_of_return_active = yes
+			has_country_flag = NAM_rtw_at_war
+		}
+		67 = { NAM_rtw_keep_administered = yes }
+		688 = { NAM_rtw_keep_administered = yes }
+		689 = { NAM_rtw_keep_administered = yes }
+		690 = { NAM_rtw_keep_administered = yes }
+		700 = { NAM_rtw_keep_administered = yes }
+		719 = { NAM_rtw_keep_administered = yes }
+		set_temp_variable = { var = NAM_board_holders_gain value = -5 }
+		set_temp_variable = { var = NAM_board_others_gain value = 0 }
+		set_temp_variable = { var = NAM_board_chair_gain value = 3 }
+		NAM_board_holders_package = yes
+		set_country_flag = {
+			flag = NAM_board_poseidon_truce
+			value = 1
+			days = 180
+		}
+		NAM_rtw_clear_decider = yes
+		ADISCORD_economy_mark_dirty = yes
+		NAM_war_of_return_close = yes
+		log = "[ADISCORD][NAM][RTW] Armistice on the line of contact; renewal after 180 days."
+	}
+	else = {
+		NAM_rtw_clear_decider = yes
+	}
+}
+
+# COUNTRY NAM. An offer whose event never fired (its trigger failed in the
+# meantime) lapses after 30 days, so it cannot block every later offer; the
+# surrender escrow returns as on a refusal.
+NAM_rtw_expire_offers = {
+	if = {
+		limit = {
+			has_country_flag = {
+				flag = NAM_rtw_surrender_pending
+				days > 30
+			}
+		}
+		NAM_rtw_surrender_refused = yes
+	}
+	if = {
+		limit = {
+			has_country_flag = {
+				flag = NAM_rtw_line_pending
+				days > 30
+			}
+		}
+		clr_country_flag = NAM_rtw_line_pending
+		NAM_rtw_clear_decider = yes
+	}
+	if = {
+		limit = {
+			has_country_flag = {
+				flag = NAM_rtw_dictate_pending
+				days > 30
+			}
+		}
+		clr_country_flag = NAM_rtw_dictate_pending
+		NAM_rtw_clear_decider = yes
+	}
+	if = {
+		limit = {
+			has_country_flag = {
+				flag = NAM_board_armistice_sent
+				days > 30
+			}
+		}
+		clr_country_flag = NAM_board_armistice_sent
+		clear_variable = NAM_board_armistice_terms
+	}
+}
+
+# COUNTRY NAM, monthly from NAM_corp_monthly. Keeps the off-mainland timer and
+# lets the coalition decide whether to dictate terms: surrender progress above
+# the threshold, or the Directory off the mainland for 60 days after day 90.
+NAM_rtw_dictate_check = {
+	if = {
+		limit = {
+			has_country_flag = NAM_rtw_at_war
+			NAM_war_of_return_active = yes
+		}
+		if = {
+			limit = { NAM_board_poseidon_no_homeland_held = yes }
+			if = {
+				limit = { NOT = { has_country_flag = NAM_rtw_off_mainland } }
+				set_country_flag = NAM_rtw_off_mainland
+			}
+		}
+		else = {
+			clr_country_flag = NAM_rtw_off_mainland
+		}
+		NAM_rtw_expire_offers = yes
+		if = {
+			limit = {
+				NAM_rtw_offer_pending = no
+				NOT = { has_country_flag = NAM_rtw_dictate_cooldown }
+				check_variable = { NAM_rtw_dictate_refusals < 2 }
+				NAM_rtw_decider_available = yes
+				OR = {
+					NAM_rtw_dictate_threshold_met = yes
+					AND = {
+						has_country_flag = {
+							flag = NAM_rtw_at_war
+							days > 90
+						}
+						has_country_flag = {
+							flag = NAM_rtw_off_mainland
+							days > 59
+						}
+					}
+				}
+			}
+			set_country_flag = NAM_rtw_dictate_pending
+			NAM_rtw_pick_decider = yes
+			event_target:NAM_rtw_decider = {
+				country_event = { id = ADISCORD_nam_story.158 days = 1 }
+			}
+		}
+	}
+}
+
+# COUNTRY NAM, from event 164 a (temp NAM_rtw_terms 1) or b (2). A lost pause:
+# the Directory pays, the war closes and the renewal waits 360 days. Rifles
+# and convoys go to the decider by send_equipment, so only stock NAM holds
+# moves; the bankers' indemnity is a debit of the Directory only.
+NAM_rtw_dictated_peace = {
+	clr_country_flag = NAM_rtw_dictate_pending
+	if = {
+		limit = {
+			NAM_war_of_return_active = yes
+			has_country_flag = NAM_rtw_at_war
+			has_global_flag = NAM_rtw_decider_saved
+			event_target:NAM_rtw_decider = {
+				exists = yes
+				has_war_with = NAM
+			}
+		}
+		67 = { clr_state_flag = NAM_rtw_administered }
+		688 = { clr_state_flag = NAM_rtw_administered }
+		689 = { clr_state_flag = NAM_rtw_administered }
+		690 = { clr_state_flag = NAM_rtw_administered }
+		700 = { clr_state_flag = NAM_rtw_administered }
+		719 = { clr_state_flag = NAM_rtw_administered }
+		set_temp_variable = { var = NAM_rtw_ceded_ok value = 0 }
+		if = {
+			limit = { check_variable = { NAM_rtw_terms = 1 } }
+			NAM_rtw_cede_island = yes
+		}
+		if = {
+			limit = { check_variable = { NAM_rtw_ceded_ok = 1 } }
+			send_equipment = {
+				equipment = infantry_equipment
+				amount = 10000
+				target = event_target:NAM_rtw_decider
+			}
+			set_temp_variable = { var = NAM_rtw_indemnity value = 300 }
+			add_timed_idea = {
+				idea = NAM_rtw_reparations
+				days = 365
+			}
+			set_temp_variable = { var = NAM_board_holders_gain value = -15 }
+			set_temp_variable = { var = NAM_board_others_gain value = 0 }
+			set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+			NAM_board_holders_package = yes
+		}
+		else = {
+			send_equipment = {
+				equipment = infantry_equipment
+				amount = 20000
+				target = event_target:NAM_rtw_decider
+			}
+			send_equipment = {
+				equipment = convoy_1
+				amount = 10
+				target = event_target:NAM_rtw_decider
+			}
+			set_temp_variable = { var = NAM_rtw_indemnity value = 500 }
+			add_timed_idea = {
+				idea = NAM_rtw_reparations
+				days = 540
+			}
+			set_temp_variable = { var = NAM_board_holders_gain value = -10 }
+			set_temp_variable = { var = NAM_board_others_gain value = 0 }
+			set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+			NAM_board_holders_package = yes
+			set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
+			NAM_board_trust_package = yes
+		}
+		set_temp_variable = { var = NAM_corp_capital_change value = NAM_corp_capital }
+		clamp_temp_variable = {
+			var = NAM_corp_capital_change
+			min = 0
+			max = NAM_rtw_indemnity
+		}
+		multiply_temp_variable = { var = NAM_corp_capital_change value = -1 }
+		NAM_corp_capital_add = yes
+		NAM_rtw_bonds_default = yes
+		NAM_board_cells_close = yes
+		set_country_flag = {
+			flag = NAM_rtw_dictated_truce
+			value = 1
+			days = 360
+		}
+		NAM_rtw_clear_decider = yes
+		ADISCORD_economy_mark_dirty = yes
+		NAM_war_of_return_close = yes
+		log = "[ADISCORD][NAM][RTW] Dictated peace on terms [?NAM_rtw_terms]; renewal after 360 days."
+	}
+	else = {
+		NAM_rtw_clear_decider = yes
+	}
+	set_temp_variable = { var = NAM_rtw_terms value = 0 }
+}
+
+# War of return: the council's own accounts (bonds, the boycott measure, the
+# restitution of the harbour list and the victory shares of the companies).
+
+# COUNTRY NAM. Victory: every issue of NAM_rtw_bonds costs 150 capital. A treasury
+# that cannot pay the whole sum pays nothing; the default spirit and Reidbank's
+# loss of trust follow instead. The counter is cleared either way.
+NAM_rtw_bonds_repay = {
+	if = {
+		limit = { check_variable = { NAM_rtw_bonds > 0 } }
+		set_temp_variable = { var = NAM_rtw_bonds_due value = NAM_rtw_bonds }
+		multiply_temp_variable = { var = NAM_rtw_bonds_due value = 150 }
+		if = {
+			limit = { check_variable = { var = NAM_corp_capital value = NAM_rtw_bonds_due compare = greater_than_or_equals } }
+			set_temp_variable = { var = NAM_corp_capital_change value = NAM_rtw_bonds_due }
+			multiply_temp_variable = { var = NAM_corp_capital_change value = -1 }
+			NAM_corp_capital_add = yes
+		}
+		else = {
+			add_timed_idea = { idea = NAM_rtw_bond_default days = 180 }
+			set_temp_variable = { var = NAM_board_trust_input_6 value = -5 }
+			NAM_board_trust_package = yes
+		}
+	}
+	clear_variable = NAM_rtw_bonds
+}
+
+# COUNTRY NAM. Dictated peace and route end: the bonds are not repaid. Every
+# company loses 3 trust per issue while the council still sits.
+NAM_rtw_bonds_default = {
+	if = {
+		limit = {
+			check_variable = { NAM_rtw_bonds > 0 }
+			NAM_board_operable = yes
+		}
+		set_temp_variable = { var = NAM_rtw_bonds_cut value = NAM_rtw_bonds }
+		multiply_temp_variable = { var = NAM_rtw_bonds_cut value = -3 }
+		set_temp_variable = { var = NAM_board_trust_input_1 value = NAM_rtw_bonds_cut }
+		set_temp_variable = { var = NAM_board_trust_input_2 value = NAM_rtw_bonds_cut }
+		set_temp_variable = { var = NAM_board_trust_input_3 value = NAM_rtw_bonds_cut }
+		set_temp_variable = { var = NAM_board_trust_input_4 value = NAM_rtw_bonds_cut }
+		set_temp_variable = { var = NAM_board_trust_input_5 value = NAM_rtw_bonds_cut }
+		set_temp_variable = { var = NAM_board_trust_input_6 value = NAM_rtw_bonds_cut }
+		NAM_board_trust_package = yes
+		add_stability = -0.05
+	}
+	clear_variable = NAM_rtw_bonds
+}
+
+# COUNTRY NAM. Victory with NAM_rtw_left_behind_registry: the evacuated return to
+# the harbour and the society track gains the 100 progress the focus promised;
+# the monthly development tick raises the level when the progress allows.
+NAM_rtw_settle_restitution = {
+	add_manpower = 10000
+	ADISCORD_initialize_society_development_variables = yes
+	add_to_variable = { var = ADISCORD_society_development_progress value = 100 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY NAM. Victory: the companies' trust follows the form of rule chosen by
+# the centre pair (NAM_rtw_direct_rule). Holders' districts reward both partition
+# holders; the council's direct rule rewards the chair and costs the holders
+# their concessions.
+NAM_rtw_victory_trust = {
+	if = {
+		limit = { NAM_rtw_direct_rule = yes }
+		set_temp_variable = { var = NAM_board_holders_gain value = -12 }
+		set_temp_variable = { var = NAM_board_others_gain value = 0 }
+		set_temp_variable = { var = NAM_board_chair_gain value = 10 }
+	}
+	else = {
+		set_temp_variable = { var = NAM_board_holders_gain value = 10 }
+		set_temp_variable = { var = NAM_board_others_gain value = -3 }
+		set_temp_variable = { var = NAM_board_chair_gain value = 0 }
+	}
+	NAM_board_holders_package = yes
+}
+
+# COUNTRY NAM. Leaves the lowest-numbered boycotting company (stance -1) in
+# NAM_rtw_boycott_target, or 0. The measure and event 165 read it; every answer
+# of 165 clears it.
+NAM_rtw_find_boycott = {
+	set_variable = { var = NAM_rtw_boycott_target value = 0 }
+	if = {
+		limit = { check_variable = { var = NAM_board_stance^1 value = -1 compare = equals } }
+		set_variable = { var = NAM_rtw_boycott_target value = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_board_stance^2 value = -1 compare = equals } }
+		set_variable = { var = NAM_rtw_boycott_target value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_board_stance^3 value = -1 compare = equals } }
+		set_variable = { var = NAM_rtw_boycott_target value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_board_stance^4 value = -1 compare = equals } }
+		set_variable = { var = NAM_rtw_boycott_target value = 4 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_board_stance^5 value = -1 compare = equals } }
+		set_variable = { var = NAM_rtw_boycott_target value = 5 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_board_stance^6 value = -1 compare = equals } }
+		set_variable = { var = NAM_rtw_boycott_target value = 6 }
+	}
+}
+
+# COUNTRY NAM. Input: temp NAM_rtw_boycott_delta. Changes the trust of the company
+# in NAM_rtw_boycott_target and recounts once.
+NAM_rtw_boycott_trust = {
+	if = {
+		limit = { check_variable = { NAM_rtw_boycott_target > 0 } }
+		set_temp_variable = { var = NAM_board_company_input value = NAM_rtw_boycott_target }
+		set_temp_variable = { var = NAM_board_delta_input value = NAM_rtw_boycott_delta }
+		NAM_board_support_change = yes
+		NAM_board_recount = yes
+	}
+}
+
+# COUNTRY NAM. The measure of NAM_rtw_boycott_measure after its price is paid.
+# Under emergency powers the council requisitions the company's depots (twice per
+# war at most); otherwise it buys the company back. Event 165 is its answer.
+NAM_rtw_boycott_apply = {
+	NAM_rtw_find_boycott = yes
+	if = {
+		limit = { check_variable = { NAM_rtw_boycott_target > 0 } }
+		if = {
+			limit = { NAM_rtw_direct_rule = yes }
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6000
+				producer = NAM
+			}
+			set_temp_variable = { var = NAM_board_trust_input_1 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_2 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_3 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_4 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_5 value = -2 }
+			set_temp_variable = { var = NAM_board_trust_input_6 value = -2 }
+			if = {
+				limit = { check_variable = { NAM_rtw_boycott_target = 1 } }
+				set_temp_variable = { var = NAM_board_trust_input_1 value = -15 }
+			}
+			else_if = {
+				limit = { check_variable = { NAM_rtw_boycott_target = 2 } }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = -15 }
+			}
+			else_if = {
+				limit = { check_variable = { NAM_rtw_boycott_target = 3 } }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -15 }
+			}
+			else_if = {
+				limit = { check_variable = { NAM_rtw_boycott_target = 4 } }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -15 }
+			}
+			else_if = {
+				limit = { check_variable = { NAM_rtw_boycott_target = 5 } }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -15 }
+			}
+			else = {
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -15 }
+			}
+			NAM_board_trust_package = yes
+			add_to_variable = { var = NAM_rtw_requisitions value = 1 }
+		}
+		else = {
+			set_temp_variable = { var = NAM_rtw_boycott_delta value = 15 }
+			NAM_rtw_boycott_trust = yes
+		}
+		country_event = { id = ADISCORD_nam_story.165 }
 	}
 }
 
@@ -18640,10 +22384,10 @@ NAM_isl_add_readiness_k = {
 
 # COUNTRY NAM; temps NAM_isl_k and NAM_isl_gain (the focus's readiness).
 # Called by the three operation focuses: the island keeps status 0 and its
-# readiness starts 10 higher after the assembly roads.
+# readiness starts 10 higher once the companies' fleet is formed.
 NAM_isl_open_target = {
 	if = {
-		limit = { has_completed_focus = NAM_board_assembly_roads }
+		limit = { has_completed_focus = NAM_board_private_navy }
 		add_to_temp_variable = { var = NAM_isl_gain value = 10 }
 	}
 	NAM_isl_add_readiness_k = yes
@@ -19354,6 +23098,9 @@ NAM_isl_op_launch = {
 		set_variable = { var = NAM_isl_echelon_day value = global.num_days }
 		add_to_variable = { var = NAM_isl_echelon_day value = 10 }
 		country_event = { id = ADISCORD_nam_story.132 days = 10 }
+		# The flagship's flag (fire_only_once) is chosen at the first launch,
+		# before any island concession tender reads it.
+		country_event = { id = ADISCORD_nam_story.101 days = 1 }
 		FROM = { clr_state_flag = NAM_isl_bribed }
 		log = "[ADISCORD][NAM][ISLANDS] Landing on island [?NAM_isl_launch_k], pact member [?NAM_isl_pact_member], spirit tier [?NAM_isl_tier]."
 	}
@@ -19719,7 +23466,7 @@ NAM_isl_settle_failed = {
 		}
 		NAM_isl_blame_bidders = yes
 		if = {
-			limit = { has_completed_focus = NAM_board_expedition_rear }
+			limit = { has_completed_focus = NAM_board_supply_overseas }
 			if = {
 				limit = { check_variable = { var = NAM_isl_settle_k value = 3 compare = equals } }
 				add_equipment_to_stockpile = {
@@ -20220,7 +23967,7 @@ NAM_isl_nationalise_finish = {
 			NAM_board_support_change = yes
 		}
 		if = {
-			limit = { has_completed_focus = NAM_board_expedition_rear }
+			limit = { has_completed_focus = NAM_board_supply_overseas }
 			if = {
 				limit = { check_variable = { var = NAM_isl_k value = 1 compare = equals } }
 				648 = {
@@ -26708,6 +30455,72 @@ NAM_neighbour_recognise_signatory = {
 	}
 }
 
+# COUNTRY NAM. The founding treaty follows the government in power when the first ally joins or war begins.
+NAM_form_campaign_alliance = {
+	if = {
+		limit = { has_country_flag = NAM_corp_takeover }
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = NAM_alliance_directory
+		}
+	}
+	else_if = {
+		limit = { has_country_flag = NAM_exile_radical }
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = NAM_alliance_admiralty
+		}
+	}
+	else_if = {
+		limit = { has_country_flag = NAM_exile_humanist }
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = NAM_alliance_havens
+		}
+	}
+	else_if = {
+		limit = { has_completed_focus = NAM_defeat_revenge }
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = NAM_alliance_return
+		}
+	}
+	else_if = {
+		limit = { has_global_flag = ADISCORD_nam_resource_war_compromise }
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = NAM_alliance_loren
+		}
+	}
+	else_if = {
+		limit = { NAM_prewar_service_mandate = yes }
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = NAM_alliance_governors
+		}
+	}
+	else_if = {
+		limit = { NAM_prewar_district_mandate = yes }
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = NAM_alliance_districts
+		}
+	}
+	else_if = {
+		limit = { NAM_prewar_pragmatic_mandate = yes }
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = NAM_alliance_compact
+		}
+	}
+	else = {
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = ADISCORD_south_north_faction
+		}
+	}
+}
+
 NAM_neighbour_offer_alliance = {
 	if = {
 		limit = { NAM_neighbour_alliance_offer_open = yes }
@@ -26990,7 +30803,10 @@ NAM_open_postwar_future = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 	if = {
-		limit = { NOT = { has_power_balance = { id = NAM_postwar_future_bop } } }
+		limit = {
+			NAM_prewar_service_mandate = yes
+			NOT = { has_power_balance = { id = NAM_postwar_future_bop } }
+		}
 		set_power_balance = { id = NAM_postwar_future_bop set_value = 0 }
 	}
 }

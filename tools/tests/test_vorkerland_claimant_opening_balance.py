@@ -73,8 +73,54 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
 
     def test_tva_has_one_mobile_group_without_losing_front_coverage(self):
         oob = read("history/units/TVA_vorkerland_collapse.txt")
+        self.assertEqual(oob.count("division = {"), 19)
         self.assertEqual(oob.count('division_template = "Mobile Test Group"'), 1)
-        self.assertEqual(oob.count('division_template = "Collapse Militia"'), 18)
+        self.assertEqual(oob.count('division_template = "Line Infantry Brigade"'), 6)
+        self.assertEqual(oob.count('division_template = "Collapse Militia"'), 12)
+        self.assertIn('name = "Line Infantry Brigade"', oob)
+
+    def test_wrk_arsenal_is_split_in_equal_thirds_without_its_divisions(self):
+        events = read("events/ADISCORD_vorkerland_events.txt")
+        collapse = events[events.index("id = ADISCORD_vorkerland_collapse.1\n"):]
+        collapse = collapse[: collapse.index("id = ADISCORD_vorkerland_collapse.3\n")]
+        partition = collapse.index("ADISCORD_vorkerland_partition_wrk_arsenal = yes")
+        annex = collapse.index(f"annex_country = {{ target = {NATION} transfer_troops = yes }}")
+        equalize = collapse.index("ADISCORD_vorkerland_equalize_claimant_inheritance = yes")
+        self.assertLess(partition, annex)
+        self.assertLess(annex, equalize)
+        split = named_block(self.effects, "ADISCORD_vorkerland_partition_wrk_arsenal")
+        self.assertIn(f"{NATION} = {{", split)
+        self.assertLess(split.index("delete_unit = { disband = yes }"),
+                        split.index("transfer_units_fraction"))
+        shares = dict(re.findall(
+            r"transfer_units_fraction = \{\s*target = (\w+)\s*size = 0\s*"
+            r"stockpile_ratio = ([\d.]+)\s*army_ratio = 0\s*navy_ratio = 0\s*"
+            r"air_ratio = \2\s*keep_unit_leaders_trigger = \{ always = yes \}",
+            split,
+        ))
+        self.assertEqual(set(shares), {"VAD", "TVA"})
+        vad = float(shares["VAD"])
+        tva = (1 - vad) * float(shares["TVA"])
+        wkr = 1 - vad - tva
+        self.assertLessEqual(max(vad, tva, wkr) - min(vad, tva, wkr), 0.005)
+
+    def test_claimants_share_wrk_technology_slots_and_fuel_ceiling(self):
+        vad = named_block(self.initial, "VAD")
+        tva = named_block(self.effects, "ADISCORD_vorkerland_setup_tva")
+        for name, block in (("VAD", vad), ("TVA", tva)):
+            with self.subTest(claimant=name):
+                self.assertLess(block.index("inherit_technology = WRK"),
+                                block.index("ADISCORD_grant_2150_technology_baseline = yes"))
+        self.assertLess(tva.index("inherit_technology = WRK"), tva.index("load_oob"))
+        equalize = named_block(self.effects, "ADISCORD_vorkerland_equalize_claimant_inheritance")
+        packages = {
+            tag: " ".join(named_block(equalize, tag).split()).removeprefix(f"{tag} = ")
+            for tag in ("WKR", "VAD", "TVA")
+        }
+        self.assertEqual(len(set(packages.values())), 1, packages)
+        self.assertIn("set_research_slots = 5", packages["WKR"])
+        self.assertIn("limit = { has_fuel > 50000 } set_fuel = 50000", packages["WKR"])
+        self.assertIn("ADISCORD_economy_mark_dirty = yes", packages["WKR"])
 
     def test_initiative_roll_covers_all_claimants_equally_and_only_once(self):
         effect = named_block(self.effects, "ADISCORD_vorkerland_roll_central_initiative")
@@ -137,6 +183,26 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
             )
             self.assertIsNotNone(branch, function)
             self.assertNotIn("ADISCORD_vorkerland_mobilized_periphery", branch.group(1))
+
+    def test_regional_breakaways_start_on_the_incumbents_footing(self):
+        for function in ("ADISCORD_vorkerland_prepare_conflict_country",
+                         "ADISCORD_vorkerland_finalize_conflict_spirits"):
+            block = named_block(self.effects, function)
+            periphery = re.search(
+                r"limit = \{ OR = \{ ((?:tag = \w+ )+)\} \}\s*add_ideas = ADISCORD_vorkerland_mobilized_periphery",
+                block,
+            )
+            self.assertIsNotNone(periphery, function)
+            for tag in ("EBA", "ZTA", "DVA", "SRA"):
+                with self.subTest(function=function, tag=tag):
+                    self.assertNotIn(f"tag = {tag}", periphery.group(1))
+            for tag in ("EBA", "ZTA"):
+                branch = re.search(rf"limit = \{{ tag = {tag} \}}(.*?)\n\t\}}", block, re.S)
+                self.assertIsNotNone(branch, (function, tag))
+                self.assertIn("add_ideas = ADISCORD_vorkerland_republics_from_the_ruins", branch.group(1))
+            pair = re.search(r"limit = \{ OR = \{ tag = DVA tag = SRA \} \}\s*add_ideas = (\w+)", block)
+            self.assertIsNotNone(pair, function)
+            self.assertEqual(pair.group(1), "ADISCORD_vorkerland_republics_from_the_ruins")
 
     def test_tva_repeatable_war_decisions_match_peer_cadence(self):
         decisions = read("common/decisions/ADISCORD_vorkerland_decisions.txt")

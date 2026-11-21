@@ -186,6 +186,8 @@ NAM_board_resolution_reidbank
 
 NAM_board_no_confidence
 NAM_board_poseidon_beachhead
+NAM_rtw_order_mission
+NAM_rtw_capital_order_mission
 NAM_isl_beachhead_strait
 NAM_isl_beachhead_sharden
 NAM_isl_campaign_strait

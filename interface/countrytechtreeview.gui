@@ -6481,7 +6481,7 @@ guiTypes = {
 
 		iconType = {
 			name = "Icon"
-			position = { x=74 y=50 }
+			position = { x=91 y=50 }
 			spriteType = "GFX_technology_medium"
 			centerposition = yes
 			alwaystransparent = yes
@@ -6647,7 +6647,7 @@ guiTypes = {
 
 		iconType = {
 			name = "Icon"
-			position = { x=74 y=50 }
+			position = { x=91 y=50 }
 			spriteType = "GFX_technology_medium"
 			centerposition = yes
 			alwaystransparent = yes
@@ -6843,7 +6843,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "techtree_artillery_folder_item"
 		position = { x=-55 y=0 }
-		size = { width = 204 height = 72 }
+		size = { width = 183 height = 84 }
 		clipping = no
 
 		background = {
@@ -6871,7 +6871,7 @@ guiTypes = {
 
 		iconType = {
 			name = "Icon"
-			position = { x=85 y=50 }
+			position = { x=91 y=50 }
 			spriteType = "GFX_technology_medium"
 			centerposition = yes
 			alwaystransparent = yes
@@ -6981,7 +6981,7 @@ guiTypes = {
 
 		iconType = {
 			name = "Icon"
-			position = { x=89 y=50 }
+			position = { x=91 y=50 }
 			spriteType = "GFX_technology_medium"
 			centerposition = yes
 			alwaystransparent = yes
@@ -7182,7 +7182,7 @@ guiTypes = {
 
 		iconType = {
 			name = "Icon"
-			position = { x=89 y=50 }
+			position = { x=91 y=50 }
 			spriteType = "GFX_technology_medium"
 			centerposition = yes
 			alwaystransparent = yes

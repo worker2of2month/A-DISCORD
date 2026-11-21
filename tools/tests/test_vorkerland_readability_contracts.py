@@ -367,7 +367,8 @@ class ImperialReclamationContracts(unittest.TestCase):
                 self.assertEqual(one(modifiers, key).value, "0.40")
         for tag in ("wkr", "vad", "tva"):
             coalition = body(hidden, PREFIX + "coalition_against_" + tag)
-            self.assertEqual(one(body(coalition, "available"), "is_ai").value, "yes")
+            available = body(coalition, "available")
+            self.assertFalse([e for e in available if e.key == "is_ai"])
             modifiers = body(coalition, "targeted_modifier")
             self.assertEqual(one(modifiers, "tag").value, tag.upper())
             for key in ("attack_bonus_against", "defense_bonus_against"):
@@ -390,6 +391,7 @@ class ImperialReclamationContracts(unittest.TestCase):
             and one(e.value, "var").value == PREFIX + "central_control_score"
         ]
         self.assertEqual(len(thresholds), 3)
+        self.assertFalse([e for e in walk(coalition) if e.key == "is_ai"])
         for check in thresholds:
             self.assertEqual(one(check, "value").value, "8")
             self.assertEqual(one(check, "compare").value, "greater_than")

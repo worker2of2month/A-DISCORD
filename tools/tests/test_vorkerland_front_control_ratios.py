@@ -116,7 +116,7 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
                 "1.15",
             ),
             ("solarino", ("SRA", "CSL"), "0.05", "1.15"),
-            ("claimant", ("WKR", "VAD", "TVA"), "0.02", "0.9"),
+            ("claimant", ("WKR", "VAD", "TVA"), "0.02", "0.65"),
         ):
             for target in targets:
                 front = named_block(
@@ -140,6 +140,53 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
                     self.assertIn("execution_type = rush_weak", front)
                     self.assertIn("manual_attack = no", front)
                     self.assertIn("abort_when_not_enabled = yes", front)
+
+    def test_peer_overlays_do_not_reward_the_stronger_claimant(self) -> None:
+        """The weaker claimant keeps its plan, its push and its window."""
+        from tools.tests.test_adiscord_vorkerland_vad_behavior import named_block
+
+        source = AI_FILES[0].read_text(encoding="utf-8-sig")
+        triggers = (ROOT / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt").read_text(
+            encoding="utf-8-sig"
+        )
+
+        def bound(block: str, comparison: str) -> float:
+            match = re.search(
+                rf"fighting_army_strength_ratio = \{{ tag = FROM ratio {comparison} ([0-9.]+) \}}", block
+            )
+            self.assertIsNotNone(match, block)
+            return float(match.group(1))
+
+        outmatches = named_block(triggers, "ADISCORD_vorkerland_peer_enemy_outmatches")
+        push = named_block(triggers, "ADISCORD_vorkerland_peer_enemy_allows_push")
+        readiness = named_block(triggers, "ADISCORD_vorkerland_claimant_field_army_can_attack")
+        caution = bound(outmatches, ">")
+        self.assertGreaterEqual(caution, 1.5)
+        self.assertLess(bound(push, "<"), 1)
+        self.assertIn("ADISCORD_vorkerland_claimant_field_army_can_attack = yes", push)
+        self.assertNotIn("ADISCORD_difficulty_ai_offensive_ready", push)
+        self.assertEqual(readiness.count("ADISCORD_ai_equipment_threshold = 0.70"), 2)
+        for name in (
+            "ADISCORD_vorkerland_front_central_against_wrk",
+            "ADISCORD_vorkerland_front_central_against_vad",
+            "ADISCORD_vorkerland_front_central_against_tva",
+            "ADISCORD_vorkerland_claimant_breakthrough_wkr",
+            "ADISCORD_vorkerland_claimant_breakthrough_vad",
+            "ADISCORD_vorkerland_claimant_breakthrough_tva",
+        ):
+            profile = named_block(source, name)
+            with self.subTest(profile=name):
+                self.assertIn("ADISCORD_vorkerland_peer_enemy_outmatches = yes", profile)
+                self.assertIn("ADISCORD_vorkerland_peer_enemy_allows_push = yes", profile)
+                self.assertNotIn("ADISCORD_difficulty_enemy_", profile)
+                window = re.search(r"fighting_army_strength_ratio = \{ tag = [A-Z]{3} ratio > ([0-9.]+) \}", profile)
+                if "_breakthrough_" in name:
+                    # Open below parity, but not so low that the caution overlay
+                    # would immediately countermand the window's rush order.
+                    self.assertLess(float(window.group(1)), 0.9)
+                    self.assertGreater(float(window.group(1)), 1 / caution)
+                else:
+                    self.assertIsNone(window)
 
     def test_collapse_offensives_do_not_use_careful_stare_or_high_coverage(
         self,

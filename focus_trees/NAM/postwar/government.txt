@@ -672,8 +672,6 @@
 				amount = 80
 				producer = NAM
 			}
-			unlock_decision_tooltip = NAM_prepare_line
-			custom_effect_tooltip = NAM_prepare_line_unlock_tt
 			country_event = {
 				id = ADISCORD_nam_archive.6
 				hours = 2
@@ -1116,6 +1114,50 @@
 		ai_will_do = {
 			base = 5
 		}
+	}
+
+	focus = {
+		id = NAM_kadir_oil_charter
+		relative_position_id = NAM_federal_charter
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_south_desert_offices
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_federal_charter }
+		bypass = {
+			KDR = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
+					ADISCORD_south_campaign_target_settled = yes
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_kadir_oil_charter_available_tt
+				KDR = { ADISCORD_south_campaign_target_valid = yes }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_kadir_oil_charter_tt
+			hidden_effect = {
+				KDR = { ADISCORD_south_demand_submission = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
 	}
 
 	focus = {

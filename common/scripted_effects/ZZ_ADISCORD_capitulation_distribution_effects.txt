@@ -1,8 +1,12 @@
-# Central Vorkerland outcomes require all central states to remain reachable by
-# the claimant war graph. Before the defeated shell is reserved, every
-# independent main claimant fighting beside FROM keeps the states it controls.
-# Subjects leave their gains to their overlord, and an unrelated regional
-# intervention cannot strand a required victory state.
+# COUNTRY whose states are distributed: the capitulating claimant, a released
+# claimant shell or its last ally; FROM is the native victor. Central outcomes
+# require all central states to remain reachable by the claimant war graph.
+# Before FROM absorbs the rest, every independent main claimant fighting this
+# country keeps the states it controls, including a third claimant in its own
+# war, so the native victor does not take all. PREV.PREV is that country even
+# where the caller's ROOT is the capitulating ally. Subjects leave their gains
+# to their overlord, and an unrelated regional intervention cannot strand a
+# required victory state.
 ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = {
 	every_owned_state = {
 		limit = {
@@ -11,7 +15,10 @@ ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = {
 				is_subject = no
 				NOT = { has_capitulated = yes }
 				NOT = { tag = FROM }
-				has_war_together_with = FROM
+				OR = {
+					has_war_together_with = FROM
+					has_war_with = PREV.PREV
+				}
 				ADISCORD_vorkerland_is_main_claimant = yes
 			}
 		}

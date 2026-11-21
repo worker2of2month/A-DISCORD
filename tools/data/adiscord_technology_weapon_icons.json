@@ -706,26 +706,6 @@
       "source_uuid": "exec-20d6ac0c-539e-49e1-a05b-c5b7c4cf8411.png"
     },
     {
-      "key": "medical_drone",
-      "tier": 11,
-      "kind": "compact",
-      "family": "equipment",
-      "output": "ADISCORD_equipment_medical_drone.dds",
-      "crop": [
-        0,
-        540,
-        512,
-        1024
-      ],
-      "source": "infantry_special_equipment_generated_sheet.png",
-      "source_sha256": "a02d1a126b5895183d179644a3b759a38fe79837200b5188b47b0118ddd79039",
-      "source_size": [
-        1024,
-        1536
-      ],
-      "source_uuid": "exec-20d6ac0c-539e-49e1-a05b-c5b7c4cf8411.png"
-    },
-    {
       "key": "insertion_pod",
       "tier": 12,
       "kind": "compact",
@@ -1072,21 +1052,6 @@
       "source_sha256": "9ce08d38f5d6e0692339551a9f800ebc3accdb0f513d1d0560390d2be83db286",
       "source_uuid": "exec-54bc692a-c8bc-4da3-8f98-8e38f89f239d.png",
       "source_prompt": "Create ONE compact inventory icon for the A-Discord grounded science-fiction strategy game. Match the reference's painted realistic game-asset rendering, muted olive/khaki cloth, dark charcoal metal, small warm metal accents, fine fabric texture, practical construction. Single clearly readable object grouping centered, 3/4 view, soft upper-left light, distinct thin near-black outline. Occupy 80% of a square canvas with ample empty margins. Designed to remain clear at 72x72 pixels. No person, no mannequin, no lettering, no logo, no frame, no floor or cast ground shadow. Genuine transparent background; if alpha is unavailable use perfectly flat pure magenta #ff00ff background, never a checkerboard or white background. Do not reproduce the whole reference sheet. Subject: a compact assault engineer breaching kit: a stout hydraulic door spreader with two clear wedge jaws, short insulated handle and rugged little battery pack, resting across a folded canvas tool roll with one short pry bar. Three large readable shapes, no ropes or grappling hooks, no bomb wiring, believable worn metal."
-    },
-    {
-      "key": "casualty_monitor",
-      "family": "equipment",
-      "source": "infantry_equipment_casualty_monitor.png",
-      "tier": 17,
-      "kind": "compact",
-      "output": "ADISCORD_equipment_casualty_monitor.dds",
-      "source_size": [
-        1254,
-        1254
-      ],
-      "source_sha256": "0df0e6b959d5b22978d954a7355b048f2efc4a8fa9aa522402388872cc087193",
-      "source_uuid": "exec-572d0f7c-eb0a-4b5a-8beb-bf9c1e2ce2a3.png",
-      "source_prompt": "Create ONE compact inventory icon for the A-Discord grounded science-fiction strategy game. Match the reference's painted realistic game-asset rendering, muted olive/khaki cloth, dark charcoal metal, small warm metal accents, fine fabric texture, practical construction. Single clearly readable object grouping centered, 3/4 view, soft upper-left light, distinct thin near-black outline. Occupy 80% of a square canvas with ample empty margins. Designed to remain clear at 72x72 pixels. No person, no mannequin, no lettering, no logo, no frame, no floor or cast ground shadow. Genuine transparent background; if alpha is unavailable use perfectly flat pure magenta #ff00ff background, never a checkerboard or white background. Do not reproduce the whole reference sheet. Subject: a rugged palm-sized field medical monitor in an olive rubberized rectangular housing with a folded fabric blood-pressure cuff and one short cable leading to a finger sensor. Screen shows only a restrained pale-green ECG waveform, no text or numbers. Clearly a medical instrument rather than radio, no antenna."
     },
     {
       "key": "life_support",

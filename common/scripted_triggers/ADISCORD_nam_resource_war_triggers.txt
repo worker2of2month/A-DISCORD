@@ -312,7 +312,7 @@ NAM_convoy_service_authorised = {
 	OR = {
 		has_completed_focus = NAM_harbour_service
 		has_completed_focus = NAM_defeat_harbour_economy
-		has_completed_focus = NAM_board_island_fleet_shares
+		has_completed_focus = NAM_board_arsenal_monopoly
 	}
 }
 
@@ -614,18 +614,9 @@ NAM_line_programme_open = {
 	}
 }
 
-# COUNTRY NAM. Permanent works can also be commissioned by the postwar border course.
 NAM_permanent_lines_authorized = {
-	OR = {
-		AND = {
-			has_completed_focus = NAM_line_survey
-			NAM_line_programme_open = yes
-		}
-		AND = {
-			has_completed_focus = NAM_border_revenge
-			NAM_independent_programmes_operable = yes
-		}
-	}
+	has_completed_focus = NAM_line_survey
+	NAM_line_programme_open = yes
 }
 
 # COUNTRY owner of a state bordering a Svetlogorye district; ROOT is NAM. A
@@ -703,7 +694,7 @@ NAM_admin_programme_operable = {
 	NAM_independent_programmes_operable = yes
 	OR = {
 		NAM_ladder_formed = yes
-		has_power_balance = { id = NAM_postwar_future_bop }
+		has_global_flag = ADISCORD_nam_resource_war_nam_victory
 	}
 }
 
@@ -1275,7 +1266,7 @@ NAM_rival_can_rally_districts = {
 			power_balance_value = { id = NAM_ladder_bop value > 0 }
 		}
 		AND = {
-			has_power_balance = { id = NAM_postwar_future_bop }
+			has_global_flag = ADISCORD_nam_resource_war_nam_victory
 			check_variable = { NAM_prewar_balance > 0 }
 		}
 	}
@@ -1294,7 +1285,7 @@ NAM_underground_vertical_pressure = {
 			power_balance_value = { id = NAM_ladder_bop value < -0.10 }
 		}
 		AND = {
-			has_power_balance = { id = NAM_postwar_future_bop }
+			has_global_flag = ADISCORD_nam_resource_war_nam_victory
 			check_variable = { NAM_prewar_balance < -0.10 }
 		}
 	}
@@ -2111,7 +2102,7 @@ NAM_judas_buy_notes_eligible = {
 NAM_judas_unseat_proxies_eligible = {
 	NAM_board_operable = yes
 	has_idea = NAM_judas_weber_committees
-	has_completed_focus = NAM_board_elected_in_absentia
+	has_completed_focus = NAM_board_society_99_1
 	NOT = { has_variable = NAM_judas_unseat_proxies_receipt }
 	NOT = { has_country_flag = NAM_judas_unseat_proxies_done }
 	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
@@ -2121,7 +2112,7 @@ NAM_judas_unseat_proxies_eligible = {
 NAM_judas_exchange_hiring_eligible = {
 	NAM_board_operable = yes
 	has_idea = NAM_judas_weber_committees
-	has_completed_focus = NAM_board_widows_share
+	has_completed_focus = NAM_board_society_99_1
 	NOT = { has_variable = NAM_judas_exchange_hiring_receipt }
 	NOT = { has_country_flag = NAM_judas_exchange_hiring_done }
 	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
@@ -2141,7 +2132,7 @@ NAM_judas_pay_moderates_eligible = {
 NAM_judas_disperse_mourners_eligible = {
 	NAM_board_operable = yes
 	has_idea = NAM_judas_weber_committees
-	has_completed_focus = NAM_board_mourning_licence
+	has_completed_focus = NAM_board_incumbents_credit
 	NOT = { has_variable = NAM_judas_disperse_mourners_receipt }
 	NOT = { has_country_flag = NAM_judas_disperse_mourners_done }
 	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
@@ -2162,7 +2153,7 @@ NAM_judas_register_patents_eligible = {
 NAM_judas_appoint_masters_eligible = {
 	NAM_board_operable = yes
 	has_idea = NAM_judas_karamyshev_watch
-	has_completed_focus = NAM_board_inheritance_without_empire
+	has_completed_focus = NAM_board_privatise_governorate
 	NOT = { has_variable = NAM_judas_appoint_masters_receipt }
 	NOT = { has_country_flag = NAM_judas_appoint_masters_done }
 	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
@@ -2172,7 +2163,7 @@ NAM_judas_appoint_masters_eligible = {
 NAM_judas_buy_mortgages_eligible = {
 	NAM_board_operable = yes
 	has_idea = NAM_judas_karamyshev_watch
-	has_completed_focus = NAM_board_uncrested_buyers
+	has_completed_focus = NAM_board_privatise_governorate
 	NOT = { has_variable = NAM_judas_buy_mortgages_receipt }
 	NOT = { has_country_flag = NAM_judas_buy_mortgages_done }
 	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
@@ -2182,7 +2173,7 @@ NAM_judas_buy_mortgages_eligible = {
 NAM_judas_pay_captains_eligible = {
 	NAM_board_operable = yes
 	has_idea = NAM_judas_karamyshev_watch
-	has_completed_focus = NAM_board_district_buyout
+	has_completed_focus = NAM_board_hereditary_roll
 	NOT = { has_variable = NAM_judas_pay_captains_receipt }
 	NOT = { has_country_flag = NAM_judas_pay_captains_done }
 	check_variable = { var = NAM_board_action_used value = NAM_board_action_slots compare = less_than }
@@ -3683,12 +3674,13 @@ NAM_board_inv_count_boycotts = {
 	}
 }
 
-# COUNTRY NAM. Condition of NAM_board_operation_poseidon, not of the gate. The
-# holders' underwriting needs both holders; the six-share pool, or neither
-# side of the pair, tolerates one boycotting company.
+# COUNTRY NAM. Condition of NAM_board_operation_poseidon. The backers' choice
+# of event ADISCORD_nam_story.180 is NAM_board_inv_backing (1 holders, 2 pool,
+# 0 none): the holders' underwriting needs both holders; the six-share pool, or
+# no subscription, tolerates one boycotting company.
 NAM_board_invasion_backers_ready = {
 	if = {
-		limit = { has_completed_focus = NAM_board_holders_underwrite }
+		limit = { check_variable = { NAM_board_inv_backing = 1 } }
 		custom_trigger_tooltip = {
 			tooltip = NAM_board_inv_backers_holders_tt
 			NAM_board_holders_backing = yes
@@ -3718,7 +3710,7 @@ NAM_board_cells_price_ready = {
 	check_variable = { var = NAM_corp_capital value = 40 compare = greater_than_or_equals }
 	OR = {
 		AND = {
-			has_completed_focus = NAM_board_holders_underwrite
+			check_variable = { NAM_board_inv_backing = 1 }
 			NOT = { has_equipment = { infantry_equipment < 750 } }
 		}
 		NOT = { has_equipment = { infantry_equipment < 1500 } }
@@ -3736,27 +3728,19 @@ NAM_board_poseidon_no_homeland_held = {
 	NOT = { controls_state = 719 }
 }
 
-# STATE mainland district. A safehouse focus covers its half of the districts:
-# runs give 25 cells instead of 20 and raids take 15 instead of 25.
+# STATE mainland district. The holders' safehouses, set up on the partition
+# night, cover all six districts: runs give 25 cells instead of 20 and raids
+# take 15 instead of 25. The flag survives the swap to the wartime tree.
 NAM_board_cells_safehouse_cover = {
 	OR = {
-		AND = {
-			OR = {
-				state = 67
-				state = 688
-			}
-			NAM = { has_completed_focus = NAM_board_northern_safehouses }
-		}
-		AND = {
-			OR = {
-				state = 689
-				state = 690
-				state = 700
-				state = 719
-			}
-			NAM = { has_completed_focus = NAM_board_southern_safehouses }
-		}
+		state = 67
+		state = 688
+		state = 689
+		state = 690
+		state = 700
+		state = 719
 	}
+	NAM = { has_country_flag = NAM_board_partition_fixed }
 }
 
 # STATE district. Always true. Adds the district to the temp counts of
@@ -3794,7 +3778,7 @@ NAM_board_cells_count_rising = {
 # COUNTRY NAM. The southern tier-3 rising holds the harbour. Read inside
 # NAM_wor_revenge_landing before NAM_board_cells_rise spends the cells.
 NAM_board_harbour_rising_ready = {
-	has_completed_focus = NAM_board_southern_safehouses
+	has_country_flag = NAM_board_partition_fixed
 	700 = { check_variable = { NAM_cells > 69 } }
 }
 
@@ -3820,6 +3804,959 @@ NAM_board_poseidon_marines_ready = {
 				}
 			}
 		}
+	}
+}
+
+# ----- Council of boards: subversive operations -----
+# Operation index k (temp NAM_sub_k): 1-6 residency operations run by company
+# k, 7 the leaflets, 8 the quarrel over the spoils. Target index (temp
+# NAM_sub_target_index): 1 Eflor, 2 Azhar.
+
+# COUNTRY NAM. The council runs operations while it governs after the
+# partition night, outside the war of return and before its victory. The flag
+# survives a tree swap, the completed focus does not.
+NAM_sub_open = {
+	NAM_board_operable = yes
+	has_country_flag = NAM_corp_takeover
+	has_country_flag = NAM_board_partition_fixed
+	NOT = { NAM_war_of_return_active = yes }
+	NOT = { has_global_flag = NAM_war_of_return_won }
+}
+
+# COUNTRY EFL or AZH. An independent country that holds its capital and is
+# not at war with Svetlogorye.
+NAM_sub_target_valid = {
+	OR = {
+		tag = EFL
+		tag = AZH
+	}
+	exists = yes
+	NOT = { is_subject_of = NAM }
+	NOT = { has_war_with = NAM }
+	capital_scope = {
+		is_owned_by = PREV
+		is_controlled_by = PREV
+	}
+}
+
+NAM_sub_any_target = {
+	OR = {
+		AND = {
+			country_exists = EFL
+			EFL = { NAM_sub_target_valid = yes }
+		}
+		AND = {
+			country_exists = AZH
+			AZH = { NAM_sub_target_valid = yes }
+		}
+	}
+}
+
+# COUNTRY NAM. The quarrel needs both members of the coalition.
+NAM_sub_quarrel_targets = {
+	country_exists = EFL
+	country_exists = AZH
+	EFL = { NAM_sub_target_valid = yes }
+	AZH = { NAM_sub_target_valid = yes }
+}
+
+# COUNTRY EFL or AZH. The holder of its partition share does not boycott.
+NAM_sub_holder_backing = {
+	if = {
+		limit = { tag = EFL }
+		NAM = {
+			NOT = { check_variable = { var = NAM_board_stance^NAM_board_partition_efl value = -1 compare = equals } }
+		}
+	}
+	else = {
+		NAM = {
+			NOT = { check_variable = { var = NAM_board_stance^NAM_board_partition_azh value = -1 compare = equals } }
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. The holder of its share is the company of operation
+# NAM_sub_k (1-6): trade and residency are one company.
+NAM_sub_holder_runs = {
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { check_variable = { var = NAM_board_partition_efl value = NAM_sub_k compare = equals } }
+		}
+		AND = {
+			tag = AZH
+			NAM = { check_variable = { var = NAM_board_partition_azh value = NAM_sub_k compare = equals } }
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. Literal forms of NAM_sub_holder_runs for the duration
+# branches and their tooltips.
+NAM_sub_profile_is_1 = {
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { check_variable = { NAM_board_partition_efl = 1 } }
+		}
+		AND = {
+			tag = AZH
+			NAM = { check_variable = { NAM_board_partition_azh = 1 } }
+		}
+	}
+}
+
+NAM_sub_profile_is_2 = {
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { check_variable = { NAM_board_partition_efl = 2 } }
+		}
+		AND = {
+			tag = AZH
+			NAM = { check_variable = { NAM_board_partition_azh = 2 } }
+		}
+	}
+}
+
+NAM_sub_profile_is_3 = {
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { check_variable = { NAM_board_partition_efl = 3 } }
+		}
+		AND = {
+			tag = AZH
+			NAM = { check_variable = { NAM_board_partition_azh = 3 } }
+		}
+	}
+}
+
+NAM_sub_profile_is_4 = {
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { check_variable = { NAM_board_partition_efl = 4 } }
+		}
+		AND = {
+			tag = AZH
+			NAM = { check_variable = { NAM_board_partition_azh = 4 } }
+		}
+	}
+}
+
+NAM_sub_profile_is_5 = {
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { check_variable = { NAM_board_partition_efl = 5 } }
+		}
+		AND = {
+			tag = AZH
+			NAM = { check_variable = { NAM_board_partition_azh = 5 } }
+		}
+	}
+}
+
+NAM_sub_profile_is_6 = {
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { check_variable = { NAM_board_partition_efl = 6 } }
+		}
+		AND = {
+			tag = AZH
+			NAM = { check_variable = { NAM_board_partition_azh = 6 } }
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. The result of operation NAM_sub_k (1-6) is already on
+# the country: its spirit, or for operation 4 the landing-hour charge.
+NAM_sub_has_profile_spirit = {
+	OR = {
+		AND = {
+			check_variable = { NAM_sub_k = 1 }
+			has_idea = NAM_sub_dry_tanks
+		}
+		AND = {
+			check_variable = { NAM_sub_k = 2 }
+			has_idea = NAM_sub_bad_castings
+		}
+		AND = {
+			check_variable = { NAM_sub_k = 3 }
+			has_idea = NAM_sub_dock_fire
+		}
+		AND = {
+			check_variable = { NAM_sub_k = 4 }
+			has_variable = NAM_sub_sights_days
+		}
+		AND = {
+			check_variable = { NAM_sub_k = 5 }
+			has_idea = NAM_sub_labour_strike
+		}
+		AND = {
+			check_variable = { NAM_sub_k = 6 }
+			has_idea = NAM_sub_bond_crash
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. The council's leaflets are printed for this country.
+NAM_sub_leaflets_against_this = {
+	NAM = { has_variable = NAM_sub_leaflets_receipt }
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { check_variable = { NAM_sub_leaflets_target = 1 } }
+		}
+		AND = {
+			tag = AZH
+			NAM = { check_variable = { NAM_sub_leaflets_target = 2 } }
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. The quarrel is running and this country leads the
+# coalition: Eflor while it is a valid target, otherwise Azhar.
+NAM_sub_quarrel_against_this = {
+	NAM = { has_variable = NAM_sub_quarrel_receipt }
+	OR = {
+		AND = {
+			tag = EFL
+			NAM_sub_target_valid = yes
+		}
+		AND = {
+			tag = AZH
+			NOT = {
+				AND = {
+					country_exists = EFL
+					EFL = { NAM_sub_target_valid = yes }
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. Some operation of the council works against it.
+NAM_sub_op_against_root = {
+	OR = {
+		has_variable = NAM_sub_op_kind
+		NAM_sub_leaflets_against_this = yes
+		NAM_sub_quarrel_against_this = yes
+	}
+}
+
+# COUNTRY EFL or AZH. The political police smelled an operation at its launch
+# and it still runs against this country. Each operation keeps its own hunch
+# (residency, leaflets, quarrel), so settling one never hides another.
+NAM_sub_counter_lead = {
+	OR = {
+		AND = {
+			has_country_flag = NAM_sub_hunch_residency
+			has_variable = NAM_sub_op_kind
+		}
+		AND = {
+			has_country_flag = NAM_sub_hunch_leaflets
+			NAM_sub_leaflets_against_this = yes
+		}
+		AND = {
+			has_country_flag = NAM_sub_hunch_quarrel
+			NAM_sub_quarrel_against_this = yes
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. Always true. Leaves in temp NAM_sub_count the strikes
+# on the country: its six subversion spirits, its running residency operation
+# unless temp NAM_sub_cap_self = 1 (that operation's own settlement) and the
+# leaflets printed for it unless NAM_sub_cap_self = 2. The landing-hour charge
+# of operation 4 stays outside the count. Resets NAM_sub_cap_self after reading.
+NAM_sub_count_strikes = {
+	set_temp_variable = { var = NAM_sub_count value = 0 }
+	if = {
+		limit = { has_idea = NAM_sub_dry_tanks }
+		add_to_temp_variable = { var = NAM_sub_count value = 1 }
+	}
+	if = {
+		limit = { has_idea = NAM_sub_bad_castings }
+		add_to_temp_variable = { var = NAM_sub_count value = 1 }
+	}
+	if = {
+		limit = { has_idea = NAM_sub_dock_fire }
+		add_to_temp_variable = { var = NAM_sub_count value = 1 }
+	}
+	if = {
+		limit = { has_idea = NAM_sub_labour_strike }
+		add_to_temp_variable = { var = NAM_sub_count value = 1 }
+	}
+	if = {
+		limit = { has_idea = NAM_sub_bond_crash }
+		add_to_temp_variable = { var = NAM_sub_count value = 1 }
+	}
+	if = {
+		limit = { has_idea = NAM_sub_leaflets }
+		add_to_temp_variable = { var = NAM_sub_count value = 1 }
+	}
+	if = {
+		limit = {
+			has_variable = NAM_sub_op_kind
+			NOT = { check_variable = { NAM_sub_op_kind = 4 } }
+			NOT = { check_variable = { NAM_sub_cap_self = 1 } }
+		}
+		add_to_temp_variable = { var = NAM_sub_count value = 1 }
+	}
+	if = {
+		limit = {
+			NOT = { check_variable = { NAM_sub_cap_self = 2 } }
+			NAM_sub_leaflets_against_this = yes
+		}
+		add_to_temp_variable = { var = NAM_sub_count value = 1 }
+	}
+	set_temp_variable = { var = NAM_sub_cap_self value = 0 }
+}
+
+# COUNTRY EFL or AZH. Fewer than three strikes, counting running operations.
+NAM_sub_below_cap = {
+	NAM_sub_count_strikes = yes
+	check_variable = { NAM_sub_count < 3 }
+}
+
+# COUNTRY EFL or AZH. A mainland district it owns holds 30 or more cells.
+NAM_sub_cells_cover = {
+	OR = {
+		67 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 29 }
+		}
+		688 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 29 }
+		}
+		689 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 29 }
+		}
+		690 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 29 }
+		}
+		700 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 29 }
+		}
+		719 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 29 }
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. A mainland district it owns holds ten or more cells:
+# the leaflets recruit there (AI weight only).
+NAM_sub_cells_seeded = {
+	OR = {
+		67 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 9 }
+		}
+		688 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 9 }
+		}
+		689 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 9 }
+		}
+		690 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 9 }
+		}
+		700 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 9 }
+		}
+		719 = {
+			is_owned_by = PREV
+			check_variable = { NAM_cells > 9 }
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. Always true. The one exposure formula of every
+# operation: input temp NAM_sub_k, output temp NAM_sub_risk (5-50, steps of
+# 5). The roll, the decision tooltips and the category report all read it.
+NAM_sub_risk_compute = {
+	set_temp_variable = { var = NAM_sub_risk value = 20 }
+	if = {
+		limit = {
+			check_variable = { NAM_sub_k < 7 }
+			NAM_sub_holder_runs = yes
+		}
+		subtract_from_temp_variable = { var = NAM_sub_risk value = 10 }
+		if = {
+			limit = { NAM = { check_variable = { NAM_sub_files = 1 } } }
+			subtract_from_temp_variable = { var = NAM_sub_risk value = 5 }
+		}
+	}
+	if = {
+		limit = { NAM_sub_cells_cover = yes }
+		subtract_from_temp_variable = { var = NAM_sub_risk value = 5 }
+	}
+	if = {
+		limit = { check_variable = { NAM_sub_network > 0 } }
+		subtract_from_temp_variable = { var = NAM_sub_risk value = 5 }
+	}
+	if = {
+		limit = { check_variable = { NAM_sub_network > 1 } }
+		subtract_from_temp_variable = { var = NAM_sub_risk value = 5 }
+	}
+	if = {
+		limit = { NAM = { check_variable = { NAM_sub_files = 2 } } }
+		subtract_from_temp_variable = { var = NAM_sub_risk value = 5 }
+	}
+	if = {
+		limit = {
+			tag = EFL
+			NAM = { check_variable = { NAM_sub_files = 3 } }
+		}
+		subtract_from_temp_variable = { var = NAM_sub_risk value = 10 }
+	}
+	if = {
+		limit = {
+			tag = AZH
+			NAM = { check_variable = { NAM_sub_files = 3 } }
+		}
+		add_to_temp_variable = { var = NAM_sub_risk value = 5 }
+	}
+	if = {
+		limit = { has_country_flag = NAM_sub_vigilant }
+		add_to_temp_variable = { var = NAM_sub_risk value = 15 }
+	}
+	if = {
+		limit = { has_country_flag = NAM_sub_hunted }
+		add_to_temp_variable = { var = NAM_sub_risk value = 10 }
+	}
+	clamp_temp_variable = {
+		var = NAM_sub_risk
+		min = 5
+		max = 50
+	}
+}
+
+# COUNTRY NAM. Always true. The quarrel's risk, read on the coalition leader.
+NAM_sub_quarrel_risk = {
+	set_temp_variable = { var = NAM_sub_k value = 8 }
+	if = {
+		limit = {
+			country_exists = EFL
+			EFL = { NAM_sub_target_valid = yes }
+		}
+		EFL = { NAM_sub_risk_compute = yes }
+	}
+	else = {
+		AZH = { NAM_sub_risk_compute = yes }
+	}
+}
+
+# COUNTRY NAM. Both residencies have a network: event 137.
+NAM_sub_both_networks = {
+	EFL = { check_variable = { NAM_sub_network > 0 } }
+	AZH = { check_variable = { NAM_sub_network > 0 } }
+}
+
+# COUNTRY NAM. NAM owns and controls a belt state of Eflor's share (720, 721,
+# 723) or of Azhar's share (722, 727): its holder leads that land in the council.
+NAM_board_belt_held_efl = {
+	OR = {
+		720 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
+		721 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
+		723 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
+	}
+}
+
+NAM_board_belt_held_azh = {
+	OR = {
+		722 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
+		727 = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
+	}
+}
+
+# Any scope. NAM holds a partition claim on a belt state; the armistice answers
+# of events 131 and 133 name the claim outcome only while one exists.
+NAM_board_belt_claimed = {
+	OR = {
+		720 = { is_claimed_by = NAM }
+		721 = { is_claimed_by = NAM }
+		723 = { is_claimed_by = NAM }
+		722 = { is_claimed_by = NAM }
+		727 = { is_claimed_by = NAM }
+	}
+}
+
+# Any scope. NAM controls a claimed belt state still owned by Eflor or Azhar:
+# an armistice on the holders' terms would keep it.
+NAM_board_belt_controlled = {
+	OR = {
+		720 = {
+			is_claimed_by = NAM
+			is_controlled_by = NAM
+			OR = {
+				is_owned_by = EFL
+				is_owned_by = AZH
+			}
+		}
+		721 = {
+			is_claimed_by = NAM
+			is_controlled_by = NAM
+			OR = {
+				is_owned_by = EFL
+				is_owned_by = AZH
+			}
+		}
+		723 = {
+			is_claimed_by = NAM
+			is_controlled_by = NAM
+			OR = {
+				is_owned_by = EFL
+				is_owned_by = AZH
+			}
+		}
+		722 = {
+			is_claimed_by = NAM
+			is_controlled_by = NAM
+			OR = {
+				is_owned_by = EFL
+				is_owned_by = AZH
+			}
+		}
+		727 = {
+			is_claimed_by = NAM
+			is_controlled_by = NAM
+			OR = {
+				is_owned_by = EFL
+				is_owned_by = AZH
+			}
+		}
+	}
+}
+
+# ----- Council of boards: war of return -----
+
+# ANY scope. Eflor's wing of the war tree bypasses itself once Eflor has left
+# the war: gone, capitulated, surrendered or at peace with the Directory.
+NAM_rtw_front_closed_efl = {
+	EFL = {
+		OR = {
+			exists = no
+			has_capitulated = yes
+			NOT = { has_war_with = NAM }
+		}
+	}
+}
+
+# ANY scope. Azhar's wing, on the same terms.
+NAM_rtw_front_closed_azh = {
+	AZH = {
+		OR = {
+			exists = no
+			has_capitulated = yes
+			NOT = { has_war_with = NAM }
+		}
+	}
+}
+
+# ----- Council of boards: war of return - fronts and the peace -----
+
+# ANY scope. One enemy has left the war.
+NAM_rtw_one_front_closed = {
+	OR = {
+		NAM_rtw_front_closed_efl = yes
+		NAM_rtw_front_closed_azh = yes
+	}
+}
+
+# ANY scope. Gate of the final focus NAM_rtw_return_treaty: one front closed,
+# or a principal near surrender or without its capital.
+NAM_rtw_treaty_ready = {
+	OR = {
+		NAM_rtw_one_front_closed = yes
+		EFL = {
+			exists = yes
+			OR = {
+				surrender_progress > 0.4
+				has_idea = NAM_rtw_capital_fallen
+			}
+		}
+		AZH = {
+			exists = yes
+			OR = {
+				surrender_progress > 0.4
+				has_idea = NAM_rtw_capital_fallen
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. Map gates of the front focuses; explicit states, no scan.
+NAM_rtw_near_svetlogorsk = {
+	OR = {
+		controls_state = 688
+		controls_state = 689
+		controls_state = 690
+		controls_state = 67
+	}
+}
+
+NAM_rtw_near_fields = {
+	OR = {
+		controls_state = 67
+		controls_state = 688
+		controls_state = 690
+	}
+}
+
+# The only neighbours of Middle Loren (701).
+NAM_rtw_near_loren = {
+	OR = {
+		controls_state = 720
+		controls_state = 691
+	}
+}
+
+NAM_rtw_in_harbour = {
+	controls_province = 16716
+}
+
+NAM_rtw_near_dry_river = {
+	OR = {
+		controls_state = 689
+		controls_state = 690
+		controls_state = 719
+	}
+}
+
+# The neighbours of the Black Basin (69).
+NAM_rtw_near_basin = {
+	OR = {
+		controls_state = 727
+		controls_state = 691
+		controls_state = 692
+		controls_state = 726
+		controls_state = 728
+		controls_state = 729
+	}
+}
+
+# COUNTRY NAM. The single reader of the form of rule: the emergency powers
+# mean the council's direct rule, anything else the holders' districts.
+NAM_rtw_direct_rule = {
+	has_completed_focus = NAM_rtw_chairmans_war
+}
+
+# COUNTRY. A principal that can still answer an offer or dictate terms.
+NAM_rtw_can_decide = {
+	exists = yes
+	has_country_flag = NAM_wor_participant
+	has_war_with = NAM
+	has_capitulated = no
+}
+
+# ANY scope. Some principal can answer the line armistice or the terms.
+NAM_rtw_decider_available = {
+	OR = {
+		EFL = { NAM_rtw_can_decide = yes }
+		AZH = { NAM_rtw_can_decide = yes }
+	}
+}
+
+# ANY scope. Eflor can still sign a surrender.
+NAM_rtw_surrender_open_efl = {
+	NAM_war_of_return_active = yes
+	EFL = { NAM_rtw_can_decide = yes }
+}
+
+# ANY scope. Eflor is on the brink: both of its homeland districts held,
+# real surrender progress, its capital fallen or its ally beaten.
+NAM_rtw_surrender_leverage_efl = {
+	OR = {
+		NAM = {
+			controls_state = 67
+			controls_state = 688
+		}
+		EFL = {
+			exists = yes
+			OR = {
+				surrender_progress > 0.25
+				has_idea = NAM_rtw_capital_fallen
+			}
+		}
+		AZH = {
+			exists = yes
+			has_capitulated = yes
+		}
+	}
+}
+
+# COUNTRY NAM. An offer of any kind is waiting for an answer.
+NAM_rtw_offer_pending = {
+	OR = {
+		has_country_flag = NAM_rtw_surrender_pending
+		has_country_flag = NAM_rtw_line_pending
+		has_country_flag = NAM_rtw_dictate_pending
+		check_variable = { NAM_board_armistice_terms > 0 }
+	}
+}
+
+# COUNTRY NAM. The council's armistice of event 131 can go out: no offer waits
+# and a principal (the primary first) can still answer it. Read by the paid
+# answers of event 131 and by NAM_board_send_armistice_offer.
+NAM_board_armistice_offer_possible = {
+	NAM_rtw_offer_pending = no
+	OR = {
+		AND = {
+			has_global_flag = NAM_wor_primary_saved
+			event_target:NAM_wor_primary = { NAM_rtw_can_decide = yes }
+		}
+		NAM_rtw_decider_available = yes
+	}
+}
+
+# COUNTRY NAM. The Directory owns a core of its own: a nationalised island or
+# a cored homeland district. Its surrender limit is 80% instead of 56%.
+NAM_rtw_holds_own_core = {
+	OR = {
+		check_variable = { var = NAM_isl_status^1 value = 3 compare = equals }
+		check_variable = { var = NAM_isl_status^2 value = 3 compare = equals }
+		check_variable = { var = NAM_isl_status^3 value = 3 compare = equals }
+		67 = {
+			is_owned_by = NAM
+			is_core_of = NAM
+		}
+		688 = {
+			is_owned_by = NAM
+			is_core_of = NAM
+		}
+		689 = {
+			is_owned_by = NAM
+			is_core_of = NAM
+		}
+		690 = {
+			is_owned_by = NAM
+			is_core_of = NAM
+		}
+		700 = {
+			is_owned_by = NAM
+			is_core_of = NAM
+		}
+		719 = {
+			is_owned_by = NAM
+			is_core_of = NAM
+		}
+	}
+}
+
+# COUNTRY NAM. The coalition may dictate terms: surrender progress above the
+# threshold of the Directory's limit, raised after one refusal.
+NAM_rtw_dictate_threshold_met = {
+	OR = {
+		AND = {
+			NAM_rtw_holds_own_core = no
+			check_variable = { NAM_rtw_dictate_refusals < 1 }
+			surrender_progress > 0.35
+		}
+		AND = {
+			NAM_rtw_holds_own_core = no
+			check_variable = { NAM_rtw_dictate_refusals > 0 }
+			surrender_progress > 0.45
+		}
+		AND = {
+			NAM_rtw_holds_own_core = yes
+			check_variable = { NAM_rtw_dictate_refusals < 1 }
+			surrender_progress > 0.5
+		}
+		AND = {
+			NAM_rtw_holds_own_core = yes
+			check_variable = { NAM_rtw_dictate_refusals > 0 }
+			surrender_progress > 0.65
+		}
+	}
+}
+
+# COUNTRY NAM. Always true. Leaves the number of homeland districts NAM
+# controls in the temp variable NAM_rtw_homeland_held.
+NAM_rtw_homeland_held_count = {
+	set_temp_variable = { var = NAM_rtw_homeland_held value = 0 }
+	if = {
+		limit = { controls_state = 67 }
+		add_to_temp_variable = { var = NAM_rtw_homeland_held value = 1 }
+	}
+	if = {
+		limit = { controls_state = 688 }
+		add_to_temp_variable = { var = NAM_rtw_homeland_held value = 1 }
+	}
+	if = {
+		limit = { controls_state = 689 }
+		add_to_temp_variable = { var = NAM_rtw_homeland_held value = 1 }
+	}
+	if = {
+		limit = { controls_state = 690 }
+		add_to_temp_variable = { var = NAM_rtw_homeland_held value = 1 }
+	}
+	if = {
+		limit = { controls_state = 700 }
+		add_to_temp_variable = { var = NAM_rtw_homeland_held value = 1 }
+	}
+	if = {
+		limit = { controls_state = 719 }
+		add_to_temp_variable = { var = NAM_rtw_homeland_held value = 1 }
+	}
+}
+
+# STATE order target (FROM of NAM_rtw_order). The council's army stands next
+# to it; explicit neighbour rows, no scan.
+NAM_rtw_order_adjacent = {
+	OR = {
+		AND = {
+			state = 688
+			NAM = {
+				OR = {
+					controls_state = 67
+					controls_state = 689
+					controls_state = 690
+					controls_state = 721
+					controls_state = 723
+				}
+			}
+		}
+		AND = {
+			state = 67
+			NAM = {
+				OR = {
+					controls_state = 688
+					controls_state = 690
+					controls_state = 720
+					controls_state = 721
+				}
+			}
+		}
+		AND = {
+			state = 701
+			NAM = {
+				OR = {
+					controls_state = 720
+					controls_state = 691
+				}
+			}
+		}
+		AND = {
+			state = 700
+			NAM = {
+				OR = {
+					controls_province = 16716
+					controls_state = 689
+				}
+			}
+		}
+		AND = {
+			state = 690
+			NAM = {
+				OR = {
+					controls_state = 67
+					controls_state = 688
+					controls_state = 689
+					controls_state = 719
+					controls_state = 720
+					controls_state = 727
+				}
+			}
+		}
+		AND = {
+			state = 69
+			NAM = {
+				OR = {
+					controls_state = 691
+					controls_state = 692
+					controls_state = 726
+					controls_state = 727
+					controls_state = 728
+					controls_state = 729
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. An island the dictated peace can cede: the Directory owns its
+# capital and its own capital lies elsewhere.
+NAM_rtw_island_cedable_1 = {
+	648 = { is_owned_by = NAM }
+	capital_scope = {
+		NOT = {
+			OR = {
+				state = 643
+				state = 644
+				state = 645
+				state = 646
+				state = 647
+				state = 648
+			}
+		}
+	}
+}
+
+NAM_rtw_island_cedable_2 = {
+	651 = { is_owned_by = NAM }
+	capital_scope = {
+		NOT = {
+			OR = {
+				state = 649
+				state = 650
+				state = 651
+				state = 652
+			}
+		}
+	}
+}
+
+NAM_rtw_island_cedable_3 = {
+	680 = { is_owned_by = NAM }
+	capital_scope = {
+		NOT = {
+			OR = {
+				state = 672
+				state = 673
+				state = 674
+				state = 675
+				state = 676
+				state = 677
+				state = 678
+				state = 679
+				state = 680
+			}
+		}
+	}
+}
+
+# STATE. Its owner is a principal still fighting the Directory.
+NAM_rtw_owner_fighting = {
+	owner = {
+		has_country_flag = NAM_wor_participant
+		has_war_with = NAM
 	}
 }
 
@@ -5159,11 +6096,15 @@ NAM_rw_coalition_landing_ready = {
 	NAM_rw_coalition_can_embark = yes
 }
 
+# COUNTRY EFL or AZH. Peacetime planning starts with the muster, so both
+# members prepare from the same day and the starting army does not sit on
+# the division threshold for the whole preparation.
 NAM_rw_coalition_landing_planned = {
 	NAM_rw_coalition_can_embark = yes
 	OR = {
 		AND = {
 			ADISCORD_nam_resource_war_preparation = yes
+			has_country_flag = NAM_rw_coalition_mobilised
 			NOT = { is_in_faction_with = NAM }
 		}
 		AND = {
@@ -5178,24 +6119,11 @@ NAM_rw_coalition_can_embark = {
 	has_capitulated = no
 	surrender_progress < 0.25
 	NAM = { has_capitulated = no }
-	has_tech = ADISCORD_tech_restored_dockyards
-	has_navy_size = { size > 39 type = convoy }
-	has_navy_size = { size > 0 unit = ADISCORD_coastal_patrol_vessel }
-	NOT = { has_fuel < 1000 }
-	OR = {
-		difficulty < 3
-		AND = {
-			ADISCORD_ai_field_army_can_attack = yes
-			OR = {
-				ADISCORD_nam_resource_war_active = no
-				ADISCORD_ai_supply_transport_shortage = no
-			}
-		}
-	}
+	NAM_rw_coalition_sealift_ready = yes
 	OR = {
 		AND = {
 			tag = EFL
-			num_divisions > 14
+			num_divisions > 11
 			controls_province = 6495
 			723 = {
 				is_owned_by = EFL
@@ -5204,12 +6132,140 @@ NAM_rw_coalition_can_embark = {
 		}
 		AND = {
 			tag = AZH
-			num_divisions > 9
+			num_divisions > 7
 			controls_province = 493
 			692 = {
 				is_owned_by = AZH
 				naval_base > 0
 			}
+		}
+	}
+}
+
+# COUNTRY EFL or AZH. The landing reserve is judged by its sealift: four
+# divisions at six convoys each, an escort and fuel for the crossing.
+NAM_rw_coalition_sealift_ready = {
+	has_tech = ADISCORD_tech_restored_dockyards
+	has_navy_size = { size > 23 type = convoy }
+	has_navy_size = { size > 0 unit = ADISCORD_coastal_patrol_vessel }
+	NOT = { has_fuel < 1000 }
+}
+
+# COUNTRY EFL or AZH. In the war of return Svetlogorye fights from its islands;
+# the war ends only by capitulation, so the coalition must be able to cross.
+NAM_wor_coalition_can_cross = {
+	is_ai = yes
+	has_capitulated = no
+	surrender_progress < 0.25
+	NAM_war_of_return_active = yes
+	has_war_with = NAM
+	NAM = { has_capitulated = no }
+	NAM_rw_coalition_sealift_ready = yes
+	ADISCORD_has_operational_naval_base = yes
+	num_divisions > 7
+}
+
+# ----- Coalition land fronts -----
+# Enemy scope NAM in a coalition front country_trigger; FROM is the allocating
+# member. Svetlogorye fights both principals at once, so its fighting army is
+# measured against their combined strength. With r the ratio against one member,
+# 1/r(EFL) + 1/r(AZH) is the coalition's strength relative to Svetlogorye. Each
+# pair of bounds below lies on or inside the exact 0.8 and 1.25 limits, so a
+# borderline front keeps the balanced base order.
+ADISCORD_difficulty_coalition_outnumbers_nam = {
+	OR = {
+		fighting_army_strength_ratio = { tag = FROM ratio < 0.8 }
+		AND = {
+			has_war_with = EFL
+			has_war_with = AZH
+			OR = {
+				fighting_army_strength_ratio = { tag = EFL ratio < 0.8 }
+				fighting_army_strength_ratio = { tag = AZH ratio < 0.8 }
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio < 1.6 }
+					fighting_army_strength_ratio = { tag = AZH ratio < 1.6 }
+				}
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio < 1.2 }
+					fighting_army_strength_ratio = { tag = AZH ratio < 2.4 }
+				}
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio < 2.4 }
+					fighting_army_strength_ratio = { tag = AZH ratio < 1.2 }
+				}
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio < 1 }
+					fighting_army_strength_ratio = { tag = AZH ratio < 4 }
+				}
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio < 4 }
+					fighting_army_strength_ratio = { tag = AZH ratio < 1 }
+				}
+			}
+		}
+	}
+}
+
+ADISCORD_difficulty_nam_outmatches_coalition = {
+	OR = {
+		AND = {
+			OR = {
+				NOT = { has_war_with = EFL }
+				NOT = { has_war_with = AZH }
+			}
+			fighting_army_strength_ratio = { tag = FROM ratio > 1.25 }
+		}
+		AND = {
+			has_war_with = EFL
+			has_war_with = AZH
+			OR = {
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio > 2.5 }
+					fighting_army_strength_ratio = { tag = AZH ratio > 2.5 }
+				}
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio > 2 }
+					fighting_army_strength_ratio = { tag = AZH ratio > 3.4 }
+				}
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio > 3.4 }
+					fighting_army_strength_ratio = { tag = AZH ratio > 2 }
+				}
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio > 1.5 }
+					fighting_army_strength_ratio = { tag = AZH ratio > 8 }
+				}
+				AND = {
+					fighting_army_strength_ratio = { tag = EFL ratio > 8 }
+					fighting_army_strength_ratio = { tag = AZH ratio > 1.5 }
+				}
+			}
+		}
+	}
+}
+
+# A ready member pushes when the coalition clearly outnumbers Svetlogorye.
+ADISCORD_difficulty_coalition_enemy_allows_push = {
+	has_war_with = FROM
+	FROM = {
+		ADISCORD_difficulty_southern_front = yes
+		ADISCORD_difficulty_southern_offensive_ready = yes
+	}
+	ADISCORD_difficulty_coalition_outnumbers_nam = yes
+}
+
+# Careful defence only against a clearly stronger Svetlogorye, or with an
+# unready army that does not clearly outnumber it; otherwise the base order
+# attacks.
+ADISCORD_difficulty_coalition_enemy_requires_caution = {
+	has_war_with = FROM
+	FROM = { ADISCORD_difficulty_southern_front = yes }
+	NOT = { ADISCORD_difficulty_coalition_enemy_allows_push = yes }
+	OR = {
+		ADISCORD_difficulty_nam_outmatches_coalition = yes
+		AND = {
+			FROM = { ADISCORD_difficulty_southern_offensive_ready = no }
+			NOT = { ADISCORD_difficulty_coalition_outnumbers_nam = yes }
 		}
 	}
 }
@@ -5589,8 +6645,14 @@ NAM_pw_central_civil_district = {
 }
 
 NAM_district_integration_thresholds_met = {
-	NOT = { compliance < 80 }
-	NOT = { resistance > 20 }
+	custom_trigger_tooltip = {
+		tooltip = NAM_nationalisation_compliance_tt
+		NOT = { compliance < 80 }
+	}
+	custom_trigger_tooltip = {
+		tooltip = NAM_nationalisation_resistance_tt
+		NOT = { resistance > 20 }
+	}
 }
 
 NAM_border_citizenship_ready = {

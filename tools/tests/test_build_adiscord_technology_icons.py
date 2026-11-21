@@ -164,13 +164,13 @@ class TechnologyIconSourceTests(unittest.TestCase):
                 )
                 self.assertTrue(all(entry["kind"] == "wide" for entry in regional))
 
-    def test_infantry_equipment_has_twenty_distinct_compact_icons(self) -> None:
+    def test_infantry_equipment_has_eighteen_distinct_compact_icons(self) -> None:
         manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
         equipment = [
             entry for entry in manifest["icons"] if entry.get("family") == "equipment"
         ]
-        self.assertEqual(len(equipment), 20)
-        self.assertEqual(len({entry["output"] for entry in equipment}), 20)
+        self.assertEqual(len(equipment), 18)
+        self.assertEqual(len({entry["output"] for entry in equipment}), 18)
         self.assertTrue(all(entry["kind"] == "compact" for entry in equipment))
 
     def test_manifest_sources_preserve_rgba_geometry_and_hashes(self) -> None:

@@ -63,8 +63,8 @@ on_actions = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
 					NOT = { has_global_flag = ADISCORD_starting_technology_profiles_applied }
 				}
+				ADISCORD_initialize_foreign_minister = yes
 				every_country = {
-					ADISCORD_initialize_foreign_minister = yes
 					ADISCORD_initialize_intelligence_agency = yes
 					ADISCORD_grant_starting_technology_profile = yes
 					if = {

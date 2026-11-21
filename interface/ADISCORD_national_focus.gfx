@@ -9985,4 +9985,132 @@ spriteTypes = {
 		name = "GFX_focus_NAM_board_operation_poseidon"
 		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_board_operation_poseidon.png"
 	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_war_cabinet"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_war_cabinet.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_holders_war"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_holders_war.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_chairmans_war"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_chairmans_war.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_war_bonds"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_war_bonds.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_officers_at_front"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_officers_at_front.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_docks_at_war"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_docks_at_war.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_left_behind_registry"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_left_behind_registry.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_return_treaty"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_return_treaty.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_north_front"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_north_front.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_svetlogorsk_rising"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_svetlogorsk_rising.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_northern_fields"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_northern_fields.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_loren_coast_landing"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_loren_coast_landing.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_loren_regime_crisis"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_loren_regime_crisis.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_march_on_loren"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_march_on_loren.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_loren_colonels"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_loren_colonels.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_north_border"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_north_border.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_south_front"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_south_front.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_harbour_fortress"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_harbour_fortress.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_dry_river"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_dry_river.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_black_coast_raid"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_black_coast_raid.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_basin_concession"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_basin_concession.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_storm_black_basin"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_storm_black_basin.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_basin_defectors"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_basin_defectors.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_south_border"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_south_border.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_strait_convoys"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_strait_convoys.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_company_tankers"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_company_tankers.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_strait_requisition"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_strait_requisition.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_island_arsenals"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_island_arsenals.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_districts_rise"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_districts_rise.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_amnesty"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_amnesty.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_reprisals"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_reprisals.png"
+	}
+	spriteType = {
+		name = "GFX_focus_NAM_rtw_district_militias"
+		texturefile = "gfx/interface/goals/NAM/GFX_focus_NAM_rtw_district_militias.png"
+	}
 }

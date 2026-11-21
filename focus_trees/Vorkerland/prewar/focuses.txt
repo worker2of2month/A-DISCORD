@@ -753,7 +753,8 @@ focus_tree = {
 
 	# --- Politics of the districts ---
 	# The council or the stores, continuity orders, the evacuation of the Tower
-	# and the course toward the districts.
+	# and the course toward the districts. The council's treaty offer goes to
+	# Riven, the district of the committees' sphere.
 
 	focus = {
 		id = WRK_convene_council_of_republics
@@ -775,11 +776,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_vorkerland_prep_offer_eyr
-			unlock_decision_tooltip = ADISCORD_vorkerland_prep_offer_egc
 			unlock_decision_tooltip = ADISCORD_vorkerland_prep_offer_riv
-			unlock_decision_tooltip = ADISCORD_vorkerland_prep_offer_yor
-
 			unlock_decision_tooltip = ADISCORD_vorkerland_prep_public_charter
 			add_political_power = 50
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_council_mandate_tt
@@ -1266,7 +1263,8 @@ focus_tree = {
 	# A focus here changes numbers of the court mechanic: how fast loyalty
 	# decays, what the staff can prepare for a conversation, or what an ally
 	# brings the heir. WRK holds the numbers its texts print; the heir's package
-	# is read from the copied focus record.
+	# is read from the copied focus record. The adjutants also open the staff's
+	# treaty offers to Eyrmi and Yor, the districts of Petrichev's sphere.
 
 	focus = {
 		id = WRK_staff_standing_invitations
@@ -1321,6 +1319,8 @@ focus_tree = {
 			hidden_effect = {
 				set_variable = { var = WRK_intrigue_decay_crisis value = 3 }
 			}
+			unlock_decision_tooltip = ADISCORD_vorkerland_prep_offer_eyr
+			unlock_decision_tooltip = ADISCORD_vorkerland_prep_offer_yor
 			add_command_power = 10
 			add_manpower = 1000
 		}
@@ -2089,6 +2089,8 @@ focus_tree = {
 	# How Worx pays for a preparation the common budget will not fund: the
 	# workshop accounts sell the cells' parts, and the shadow budget opens the
 	# third project slot the committees reach through the last common budget.
+	# The district banks' credit opens the treaty offer to Zshat, the district
+	# of Worx's sphere.
 
 	focus = {
 		id = WRK_network_workshop_accounts
@@ -2208,6 +2210,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_vorkerland_prep_offer_egc
 			add_political_power = 60
 			add_power_balance_value = {
 				id = ADISCORD_vorkerland_prewar_bop

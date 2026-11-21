@@ -472,7 +472,7 @@ characters = {
 		name = ADISCORD_staff_STP_Boris_Gradov
 		portraits = {
 			army = {
-				small = GFX_portrait_STP_staff_04_small
+				small = GFX_portrait_STP_staff_13_small
 			}
 		}
 		advisor = {
@@ -535,7 +535,7 @@ characters = {
 		name = ADISCORD_staff_STP_Viktor_Kurbatov
 		portraits = {
 			army = {
-				small = GFX_portrait_STP_staff_03_small
+				small = GFX_portrait_STP_staff_14_small
 			}
 		}
 		advisor = {
@@ -641,7 +641,7 @@ characters = {
 		name = ADISCORD_staff_STP_Denis_Malinin
 		portraits = {
 			army = {
-				small = GFX_portrait_STP_staff_06_small
+				small = GFX_portrait_STP_staff_15_small
 			}
 		}
 		advisor = {
@@ -663,7 +663,7 @@ characters = {
 		name = ADISCORD_staff_STP_Yevgeny_Nekrasov
 		portraits = {
 			army = {
-				small = GFX_portrait_STP_staff_07_small
+				small = GFX_portrait_STP_staff_16_small
 			}
 		}
 		advisor = {
@@ -729,7 +729,7 @@ characters = {
 		name = ADISCORD_staff_STP_Pavel_Frolov
 		portraits = {
 			army = {
-				small = GFX_portrait_STP_staff_08_small
+				small = GFX_portrait_STP_staff_17_small
 			}
 		}
 		advisor = {
@@ -751,7 +751,7 @@ characters = {
 		name = ADISCORD_staff_STP_Igor_Ostretsov
 		portraits = {
 			army = {
-				small = GFX_portrait_STP_staff_10_small
+				small = GFX_portrait_STP_staff_18_small
 			}
 		}
 		advisor = {
@@ -772,7 +772,7 @@ characters = {
 		name = ADISCORD_staff_STP_Roman_Chernov
 		portraits = {
 			army = {
-				small = GFX_portrait_STP_staff_11_small
+				small = GFX_portrait_STP_staff_19_small
 			}
 		}
 		advisor = {
@@ -793,7 +793,7 @@ characters = {
 		name = ADISCORD_staff_STP_Erhard_Kleist
 		portraits = {
 			army = {
-				small = GFX_portrait_STP_staff_12_small
+				small = GFX_portrait_STP_staff_20_small
 			}
 		}
 		advisor = {
@@ -1176,7 +1176,7 @@ characters = {
 		name = ADISCORD_staff_STS_Stanislav_Frolov
 		portraits = {
 			army = {
-				small = GFX_portrait_STS_staff_01_small
+				small = GFX_portrait_STS_staff_17_small
 			}
 		}
 		advisor = {
@@ -1198,7 +1198,7 @@ characters = {
 		name = ADISCORD_staff_STS_Ilya_Ostretsov
 		portraits = {
 			army = {
-				small = GFX_portrait_STS_staff_06_small
+				small = GFX_portrait_STS_staff_18_small
 			}
 		}
 		advisor = {
@@ -1219,7 +1219,7 @@ characters = {
 		name = ADISCORD_staff_STS_Aleksei_Chernov
 		portraits = {
 			army = {
-				small = GFX_portrait_STS_staff_10_small
+				small = GFX_portrait_STS_staff_19_small
 			}
 		}
 		advisor = {
@@ -1240,7 +1240,7 @@ characters = {
 		name = ADISCORD_staff_STS_Mikhail_Rakitin
 		portraits = {
 			army = {
-				small = GFX_portrait_STS_staff_14_small
+				small = GFX_portrait_STS_staff_20_small
 			}
 		}
 		advisor = {

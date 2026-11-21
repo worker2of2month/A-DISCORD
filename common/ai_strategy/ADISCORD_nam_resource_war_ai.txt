@@ -2,24 +2,25 @@ ADISCORD_nam_resource_war_eflor_offensive = {
 	allowed = { tag = EFL }
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = yes }
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_southern_enemy_requires_caution = yes
+			ADISCORD_difficulty_coalition_enemy_requires_caution = yes
 		}
 		ratio = 0.01
 		priority = 1501
 		ordertype = front
 		execution_type = careful
+		execute_order = yes
 		manual_attack = no
 	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_southern_enemy_allows_push = yes
+			ADISCORD_difficulty_coalition_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
@@ -34,24 +35,25 @@ ADISCORD_nam_resource_war_azhar_offensive = {
 	allowed = { tag = AZH }
 	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = yes }
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_southern_enemy_requires_caution = yes
+			ADISCORD_difficulty_coalition_enemy_requires_caution = yes
 		}
 		ratio = 0.01
 		priority = 1501
 		ordertype = front
 		execution_type = careful
+		execute_order = yes
 		manual_attack = no
 	}
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_southern_enemy_allows_push = yes
+			ADISCORD_difficulty_coalition_enemy_allows_push = yes
 		}
 		ratio = 0.01
 		priority = 1501
@@ -503,22 +505,66 @@ NAM_board_poseidon_ai = {
 	}
 }
 
+# The war tree's AI plan fights Azhar and breaks Eflor politically. Added to the
+# equal front requests of the war of return, the split becomes 40:160 while
+# both are still participants; after Eflor leaves the war nothing is added.
+NAM_rtw_ai_fronts = {
+	allowed = { original_tag = NAM }
+	enable = {
+		has_focus_tree = NAM_return_war_focus
+		EFL = {
+			has_country_flag = NAM_wor_participant
+			has_war_with = NAM
+		}
+		AZH = {
+			has_country_flag = NAM_wor_participant
+			has_war_with = NAM
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		tag = EFL
+		value = -60
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = AZH
+		value = 60
+	}
+}
+
+# A landing on the mainland is cleared by counterattack; caution and the push
+# follow the coalition's combined strength, as in the resource war.
 ADISCORD_nam_war_of_return_coalition_defence = {
 	allowed = { OR = { tag = EFL tag = AZH } }
 	enable = { NAM_war_of_return_active = yes has_war_with = NAM }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1200 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = yes }
 	ai_strategy = {
 		type = front_control
 		country_trigger = {
 			tag = NAM
-			ADISCORD_difficulty_enemy_allows_push = yes
+			ADISCORD_difficulty_coalition_enemy_requires_caution = yes
 		}
 		ratio = 0.01
 		priority = 1201
 		ordertype = front
 		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			tag = NAM
+			ADISCORD_difficulty_coalition_enemy_allows_push = yes
+		}
+		ratio = 0.01
+		priority = 1201
+		ordertype = front
+		execution_type = rush_weak
 		execute_order = yes
 		manual_attack = yes
 	}
@@ -609,6 +655,10 @@ NAM_rw_coalition_prepare_landing = {
 		tag = NAM
 		value = 50
 	}
+	ai_strategy = {
+		type = naval_invasion_dominance_weight
+		value = 100
+	}
 }
 
 NAM_rw_coalition_naval_invasion = {
@@ -628,7 +678,6 @@ NAM_rw_coalition_naval_invasion = {
 		ordertype = invasion
 		execute_order = yes
 	}
-	ai_strategy = { type = naval_invasion_support_priority id = 38 value = 200 }
 }
 
 NAM_rw_efl_landing_reserve = {
@@ -654,6 +703,209 @@ NAM_rw_azh_landing_reserve = {
 		states = { 692 }
 		subtract_invasions_from_need = yes
 		subtract_fronts_from_need = no
+	}
+}
+
+# A landing needs control of every sea region on its path. Eflor sails from the
+# Svetlogorye gulf through the approaches; Azhar from the Black Coast sea through
+# the Azhar sea into the approaches. Holding the same lanes denies Svetlogorye
+# its own crossings toward the coalition's ports.
+NAM_rw_efl_sea_lanes = {
+	allowed = { tag = EFL }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_has_operational_naval_base = yes
+		NAM = { has_capitulated = no }
+		OR = {
+			has_war_with = NAM
+			NAM_rw_coalition_landing_planned = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = naval_dominance
+		id = 238
+		value = 100
+	}
+	ai_strategy = {
+		type = naval_dominance
+		id = 239
+		value = 100
+	}
+	ai_strategy = {
+		type = naval_invasion_support_priority
+		id = 238
+		value = 200
+	}
+	ai_strategy = {
+		type = naval_invasion_support_priority
+		id = 239
+		value = 200
+	}
+}
+
+NAM_rw_azh_sea_lanes = {
+	allowed = { tag = AZH }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_has_operational_naval_base = yes
+		NAM = { has_capitulated = no }
+		OR = {
+			has_war_with = NAM
+			NAM_rw_coalition_landing_planned = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = naval_dominance
+		id = 241
+		value = 100
+	}
+	ai_strategy = {
+		type = naval_dominance
+		id = 240
+		value = 100
+	}
+	ai_strategy = {
+		type = naval_dominance
+		id = 239
+		value = 100
+	}
+	ai_strategy = {
+		type = naval_invasion_support_priority
+		id = 241
+		value = 200
+	}
+	ai_strategy = {
+		type = naval_invasion_support_priority
+		id = 240
+		value = 200
+	}
+	ai_strategy = {
+		type = naval_invasion_support_priority
+		id = 239
+		value = 200
+	}
+}
+
+# The war of return ends only by capitulation, and Svetlogorye's own victory
+# points lie on its islands: the coalition has to land there. The island straits
+# and the southern islands sea carry the routes to the main islands (states
+# 225-229); the western islands 230-231 lie behind the western islands sea.
+NAM_wor_coalition_island_landing = {
+	allowed = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+	}
+	enable = { NAM_wor_coalition_can_cross = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = invade
+		id = NAM
+		value = 100
+	}
+	ai_strategy = {
+		type = invasion_unit_request
+		tag = NAM
+		value = 50
+	}
+	ai_strategy = {
+		type = front_control
+		tag = NAM
+		ratio = 0.01
+		priority = 1200
+		ordertype = invasion
+		execute_order = yes
+	}
+	ai_strategy = {
+		type = naval_invasion_focus
+		value = 40
+	}
+	ai_strategy = {
+		type = naval_invasion_dominance_weight
+		value = 100
+	}
+	ai_strategy = {
+		type = naval_dominance
+		id = 243
+		value = 100
+	}
+	ai_strategy = {
+		type = naval_dominance
+		id = 244
+		value = 60
+	}
+	ai_strategy = {
+		type = naval_invasion_support_priority
+		id = 243
+		value = 200
+	}
+	ai_strategy = {
+		type = naval_invasion_support_priority
+		id = 244
+		value = 200
+	}
+}
+
+# The island reserve gathers at the nearest held port: the home harbour or the
+# mainland harbour the coalition treaty transferred to the same country.
+NAM_wor_efl_landing_reserve = {
+	allowed = { tag = EFL }
+	enable = { NAM_wor_coalition_can_cross = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.14
+		states = { 723 688 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = no
+	}
+}
+
+NAM_wor_azh_landing_reserve = {
+	allowed = { tag = AZH }
+	enable = { NAM_wor_coalition_can_cross = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.20
+		states = { 692 700 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = no
+	}
+}
+
+NAM_rw_coalition_amphibious_research = {
+	allowed = {
+		OR = {
+			tag = EFL
+			tag = AZH
+		}
+	}
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_has_operational_naval_base = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_amphibious_formation_organization
+		value = 80
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_amphibious_staff_sections
+		value = 60
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_amphibious_embarkation_schedules
+		value = 50
 	}
 }
 

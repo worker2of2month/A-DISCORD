@@ -319,6 +319,22 @@ class StaffPortraitTests(unittest.TestCase):
                 with self.subTest(character=character, role=role.key):
                     self.assert_compact_portrait(scalar(role.value, 'small'))
 
+    def test_stelander_staff_members_have_distinct_portraits(self):
+        from PIL import Image
+
+        owners = {}
+        for tag in ('STP', 'STS'):
+            roster = [name for name in self.staff if name.startswith(f'ADISCORD_staff_{tag}_')]
+            self.assertTrue(roster, tag)
+            for character in roster:
+                for role in self.staff[character]:
+                    sprite = scalar(role.value, 'small')
+                    definition, = self.sprites[sprite]
+                    texture = ROOT / scalar(definition.value, 'texturefile')
+                    with Image.open(texture) as image:
+                        pixels = image.convert('RGBA').tobytes()
+                    self.assertEqual(owners.setdefault(pixels, character), character, sprite)
+
     def test_random_pools_and_small_aliases_do_not_use_full_size_sprites(self):
         names = {
             name for name in self.sprites

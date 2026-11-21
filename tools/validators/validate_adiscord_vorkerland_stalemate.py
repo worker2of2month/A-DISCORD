@@ -65,6 +65,9 @@ CLAIMANT_SCHEDULER = "ADISCORD_vorkerland_schedule_claimant_stalemate_deadline"
 CLAIMANT_RESOLVER = "ADISCORD_vorkerland_resolve_claimant_stalemate_deadline"
 IDEA_CALL = "add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }"
 IDEA_CALLERS = 3
+# The weaker claimant may use its window too; the lower bound sits just above
+# the inverse of the 1.6 peer caution threshold so a routed side does not rush.
+CLAIMANT_BREAKTHROUGH_RATIO = "0.65"
 
 
 def _read(root: Path, relative: str) -> str:
@@ -196,14 +199,19 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         if token not in triggers:
             issues.append(f"stalemate phase/AI trigger is missing: {token}")
 
-    for trigger_name in (
-        "ADISCORD_vorkerland_has_live_central_minor_war",
-        "ADISCORD_vorkerland_has_live_solarino_war",
-        "ADISCORD_vorkerland_has_live_claimant_war",
+    # District and Solarino windows are AI-only stalemate breakers. The claimant
+    # showdown window is a parity mechanic: every live claimant, human or AI,
+    # receives the spirit, and only its AI orders read the active flag.
+    for trigger_name, ai_only in (
+        ("ADISCORD_vorkerland_has_live_central_minor_war", True),
+        ("ADISCORD_vorkerland_has_live_solarino_war", True),
+        ("ADISCORD_vorkerland_has_live_claimant_war", False),
     ):
         block = _named_block(triggers, trigger_name)
-        if "is_ai = yes" not in block:
+        if ai_only and "is_ai = yes" not in block:
             issues.append(f"{trigger_name} must be AI-only")
+        if not ai_only and re.search(r"\bis_ai\s*=", block):
+            issues.append(f"{trigger_name} must admit a human claimant")
         if "NOT = { has_capitulated = yes }" not in block:
             issues.append(f"{trigger_name} must reject a capitulated attacker")
 
@@ -326,6 +334,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         r"(?m)^(ADISCORD_vorkerland_(?:central|solarino|claimant)_breakthrough_\w+)\s*=\s*\{",
         ai,
     )
+    for name in plan_names:
+        if "is_ai = yes" not in _named_block(_named_block(ai, name), "enable"):
+            issues.append(f"{name} must enable only for an AI country")
     ai = "\n".join(_named_block(ai, name) for name in plan_names)
     expected_plan_count = len(CENTRAL_TARGETS) + len(SOLAR_TARGETS) + len(CLAIMANT_TARGETS)
     if ai.count("abort_when_not_enabled = yes") != expected_plan_count:
@@ -350,7 +361,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         for token in (
             f"has_war_with = {tag}",
             f"type = front_control tag = {tag} ratio = 0.01",
-            f"fighting_army_strength_ratio = {{ tag = {tag} ratio > 0.9 }}",
+            f"fighting_army_strength_ratio = {{ tag = {tag} ratio > {CLAIMANT_BREAKTHROUGH_RATIO} }}",
             f"type = conquer id = {tag}",
         ):
             if token not in ai:

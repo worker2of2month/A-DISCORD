@@ -144,6 +144,7 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_research_slot = 1
 			add_tech_bonus = {
 				name = NAM_national_university
 				bonus = 1
@@ -183,6 +184,13 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			if = {
+				limit = { has_idea = ADISCORD_society_type_industrial }
+				swap_ideas = {
+					remove_idea = ADISCORD_society_type_industrial
+					add_idea = ADISCORD_society_type_post_industrial
+				}
+			}
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
