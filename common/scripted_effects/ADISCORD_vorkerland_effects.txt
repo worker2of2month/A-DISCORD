@@ -3437,6 +3437,23 @@ ADISCORD_vorkerland_activate_ivanland_intervention_mission = {
 		add_timed_idea = { idea = ADISCORD_vorkerland_ivanland_expeditionary_command days = 260 }
 		activate_mission = ADISCORD_ivanland_limited_intervention
 		ADISCORD_vorkerland_begin_ivanland_intervention = yes
+		# The marches revolt follows only a failed expedition, so an AI Itora draws
+		# its outcome here; a human Itora always fights the mission out.
+		hidden_effect = {
+			if = {
+				limit = { is_ai = yes }
+				random_list = {
+					60 = {
+						set_country_flag = ADISCORD_vorkerland_ivanland_ai_expedition_falters
+						country_event = { id = ADISCORD_ivn.13 days = 30 random_days = 30 }
+						log = "[ADISCORD][VORKERLAND] AI Ivanland expedition will falter."
+					}
+					40 = {
+						log = "[ADISCORD][VORKERLAND] AI Ivanland expedition fights normally."
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -3725,6 +3742,7 @@ ADISCORD_vorkerland_ivanland_intervention_success = {
 		IVN = {
 			remove_mission = ADISCORD_ivanland_limited_intervention
 			remove_ideas = ADISCORD_vorkerland_ivanland_expeditionary_command
+			clr_country_flag = ADISCORD_vorkerland_ivanland_ai_expedition_falters
 		}
 		log = "[ADISCORD][VORKERLAND] Ivanland intervention resolved: SUCCESS; IBA receives states 90-91 first, then IBL receives states 93-94."
 		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
@@ -3763,6 +3781,7 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 		IVN = {
 			remove_mission = ADISCORD_ivanland_limited_intervention
 			remove_ideas = ADISCORD_vorkerland_ivanland_expeditionary_command
+			clr_country_flag = ADISCORD_vorkerland_ivanland_ai_expedition_falters
 		}
 		log = "[ADISCORD][VORKERLAND] Ivanland intervention resolved: FAILURE; no postwar clients survive and states 90-94 return to the northern republics."
 		if = {

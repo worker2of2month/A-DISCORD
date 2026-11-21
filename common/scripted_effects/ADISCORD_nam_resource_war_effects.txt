@@ -2422,7 +2422,7 @@ NAM_groups_initialize = {
 			set_variable = { var = NAM_wrk_trade_level value = 0 }
 		}
 		NAM_wrk_trade_refresh = yes
-		# Rom's notes reach a human ruler every 90 days from the fourth day.
+		# Rom's notes reach a human player every 90 days from the fourth day while Rom lives.
 		set_variable = { var = NAM_memoir_next value = 1 }
 		country_event = { id = ADISCORD_nam_memoir.99 days = 4 }
 	}
@@ -2633,11 +2633,11 @@ NAM_crisis_draw = {
 			add_days_mission_timeout = { mission = NAM_incident_countdown days = 60 }
 		}
 		if = {
-			limit = { has_completed_focus = NAM_pw_reservoir_survey }
+			limit = { has_completed_focus = NAM_pw_water_intakes }
 			add_days_mission_timeout = { mission = NAM_incident_countdown days = 15 }
 		}
 		if = {
-			limit = { has_completed_focus = NAM_pw_grid_dispatch }
+			limit = { has_completed_focus = NAM_pw_power_grid }
 			add_days_mission_timeout = { mission = NAM_incident_countdown days = 15 }
 		}
 		if = {
@@ -4666,8 +4666,10 @@ NAM_certify_shipping_manifest = {
 	clr_country_flag = NAM_certified_export
 	if = {
 		limit = {
-			has_completed_focus = NAM_municipal_bonds
-			has_completed_focus = NAM_prag_ending_directorate
+			OR = {
+				has_completed_focus = NAM_commercial_commonwealth
+				has_completed_focus = NAM_export_clearing
+			}
 		}
 		set_country_flag = {
 			flag = NAM_certified_export
@@ -4689,7 +4691,7 @@ NAM_settle_harbour_sale = {
 		limit = {
 			hidden_trigger = {
 				OR = {
-					has_completed_focus = NAM_customs_clearinghouse
+					has_completed_focus = NAM_municipal_bonds
 					has_completed_focus = NAM_prag_ending_directorate
 				}
 			}
@@ -24273,11 +24275,12 @@ NAM_radical_strip = {
 
 # ----- Notes of Egor Rom -----
 # COUNTRY NAM. Hidden dispatcher .99: one chapter every 90 days for a human
-# ruler; an AI-held Svetlogorye skips the chapter. Five chapters at most.
-# The notes are Rom's own voice: the chain ends for good once he no longer rules.
+# player; an AI-held Svetlogorye skips the chapter. Five chapters at most.
+# The notes are Rom's own voice: the chain runs while he lives as a character of
+# Svetlogorye, whoever rules. Stepping down keeps him; death or retirement ends it.
 NAM_memoir_dispatch = {
 	if = {
-		limit = { has_country_leader = { character = NAM_Egor_Rom ruling_only = yes } }
+		limit = { has_character = NAM_Egor_Rom }
 		if = {
 			limit = {
 				is_ai = no
@@ -25015,6 +25018,1348 @@ NAM_wor_revenge_landing = {
 	}
 }
 
+# ----- Post-war republic: laws -----
+# COUNTRY NAM. One enactment per post-war law, called once by its focus as the first native row
+# of the reward. The law the slot holds is swapped out visibly, whichever law the campaign left
+# there (the history law, another post-war law of the slot or a council law), so the native line
+# shows what the republic gives up; the else branch covers an empty slot.
+# The economic-system laws also set ADISCORD_economy_model: the economy reads only the listed
+# system laws and keeps the last model otherwise (3 state-coordinated, 2 mixed).
+NAM_pw_enact_rail_echelons = {
+	if = {
+		limit = { has_idea = ADISCORD_logistics_centralized_depots }
+		swap_ideas = { remove_idea = ADISCORD_logistics_centralized_depots add_idea = NAM_pw_law_rail_echelons }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_local_foraging }
+		swap_ideas = { remove_idea = ADISCORD_logistics_local_foraging add_idea = NAM_pw_law_rail_echelons }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_civilian_contracts }
+		swap_ideas = { remove_idea = ADISCORD_logistics_civilian_contracts add_idea = NAM_pw_law_rail_echelons }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_motorized_supply }
+		swap_ideas = { remove_idea = ADISCORD_logistics_motorized_supply add_idea = NAM_pw_law_rail_echelons }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_emergency_requisitioning }
+		swap_ideas = { remove_idea = ADISCORD_logistics_emergency_requisitioning add_idea = NAM_pw_law_rail_echelons }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_regional_warehouses }
+		swap_ideas = { remove_idea = ADISCORD_logistics_regional_warehouses add_idea = NAM_pw_law_rail_echelons }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_captains_share }
+		swap_ideas = { remove_idea = NAM_board_law_captains_share add_idea = NAM_pw_law_rail_echelons }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_motor_columns }
+		swap_ideas = { remove_idea = NAM_pw_law_motor_columns add_idea = NAM_pw_law_rail_echelons }
+	}
+	else = {
+		add_ideas = NAM_pw_law_rail_echelons
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_motor_columns = {
+	if = {
+		limit = { has_idea = ADISCORD_logistics_centralized_depots }
+		swap_ideas = { remove_idea = ADISCORD_logistics_centralized_depots add_idea = NAM_pw_law_motor_columns }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_local_foraging }
+		swap_ideas = { remove_idea = ADISCORD_logistics_local_foraging add_idea = NAM_pw_law_motor_columns }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_civilian_contracts }
+		swap_ideas = { remove_idea = ADISCORD_logistics_civilian_contracts add_idea = NAM_pw_law_motor_columns }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_motorized_supply }
+		swap_ideas = { remove_idea = ADISCORD_logistics_motorized_supply add_idea = NAM_pw_law_motor_columns }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_emergency_requisitioning }
+		swap_ideas = { remove_idea = ADISCORD_logistics_emergency_requisitioning add_idea = NAM_pw_law_motor_columns }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_logistics_regional_warehouses }
+		swap_ideas = { remove_idea = ADISCORD_logistics_regional_warehouses add_idea = NAM_pw_law_motor_columns }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_captains_share }
+		swap_ideas = { remove_idea = NAM_board_law_captains_share add_idea = NAM_pw_law_motor_columns }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_rail_echelons }
+		swap_ideas = { remove_idea = NAM_pw_law_rail_echelons add_idea = NAM_pw_law_motor_columns }
+	}
+	else = {
+		add_ideas = NAM_pw_law_motor_columns
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_sea_training = {
+	if = {
+		limit = { has_idea = ADISCORD_training_basic_drills }
+		swap_ideas = { remove_idea = ADISCORD_training_basic_drills add_idea = NAM_pw_law_sea_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_irregular_exercises }
+		swap_ideas = { remove_idea = ADISCORD_training_irregular_exercises add_idea = NAM_pw_law_sea_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_standardized_program }
+		swap_ideas = { remove_idea = ADISCORD_training_standardized_program add_idea = NAM_pw_law_sea_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_officer_led_wargames }
+		swap_ideas = { remove_idea = ADISCORD_training_officer_led_wargames add_idea = NAM_pw_law_sea_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_accelerated_bootcamps }
+		swap_ideas = { remove_idea = ADISCORD_training_accelerated_bootcamps add_idea = NAM_pw_law_sea_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_reserve_cycles }
+		swap_ideas = { remove_idea = ADISCORD_training_reserve_cycles add_idea = NAM_pw_law_sea_training }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_veteran_reserve }
+		swap_ideas = { remove_idea = NAM_board_law_veteran_reserve add_idea = NAM_pw_law_sea_training }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_flight_training }
+		swap_ideas = { remove_idea = NAM_pw_law_flight_training add_idea = NAM_pw_law_sea_training }
+	}
+	else = {
+		add_ideas = NAM_pw_law_sea_training
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_flight_training = {
+	if = {
+		limit = { has_idea = ADISCORD_training_basic_drills }
+		swap_ideas = { remove_idea = ADISCORD_training_basic_drills add_idea = NAM_pw_law_flight_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_irregular_exercises }
+		swap_ideas = { remove_idea = ADISCORD_training_irregular_exercises add_idea = NAM_pw_law_flight_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_standardized_program }
+		swap_ideas = { remove_idea = ADISCORD_training_standardized_program add_idea = NAM_pw_law_flight_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_officer_led_wargames }
+		swap_ideas = { remove_idea = ADISCORD_training_officer_led_wargames add_idea = NAM_pw_law_flight_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_accelerated_bootcamps }
+		swap_ideas = { remove_idea = ADISCORD_training_accelerated_bootcamps add_idea = NAM_pw_law_flight_training }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_training_reserve_cycles }
+		swap_ideas = { remove_idea = ADISCORD_training_reserve_cycles add_idea = NAM_pw_law_flight_training }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_veteran_reserve }
+		swap_ideas = { remove_idea = NAM_board_law_veteran_reserve add_idea = NAM_pw_law_flight_training }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_sea_training }
+		swap_ideas = { remove_idea = NAM_pw_law_sea_training add_idea = NAM_pw_law_flight_training }
+	}
+	else = {
+		add_ideas = NAM_pw_law_flight_training
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_civil_contracts = {
+	if = {
+		limit = { has_idea = ADISCORD_infrastructure_regional_roadworks }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_regional_roadworks add_idea = NAM_pw_law_civil_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_patchwork_roads }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_patchwork_roads add_idea = NAM_pw_law_civil_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_rail_corridors }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_rail_corridors add_idea = NAM_pw_law_civil_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_strategic_highways }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_strategic_highways add_idea = NAM_pw_law_civil_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_military_depots }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_military_depots add_idea = NAM_pw_law_civil_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_port_network }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_port_network add_idea = NAM_pw_law_civil_contracts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_strait_requisition }
+		swap_ideas = { remove_idea = NAM_board_law_strait_requisition add_idea = NAM_pw_law_civil_contracts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_defence_depots }
+		swap_ideas = { remove_idea = NAM_pw_law_defence_depots add_idea = NAM_pw_law_civil_contracts }
+	}
+	else = {
+		add_ideas = NAM_pw_law_civil_contracts
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_defence_depots = {
+	if = {
+		limit = { has_idea = ADISCORD_infrastructure_regional_roadworks }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_regional_roadworks add_idea = NAM_pw_law_defence_depots }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_patchwork_roads }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_patchwork_roads add_idea = NAM_pw_law_defence_depots }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_rail_corridors }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_rail_corridors add_idea = NAM_pw_law_defence_depots }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_strategic_highways }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_strategic_highways add_idea = NAM_pw_law_defence_depots }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_military_depots }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_military_depots add_idea = NAM_pw_law_defence_depots }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_infrastructure_port_network }
+		swap_ideas = { remove_idea = ADISCORD_infrastructure_port_network add_idea = NAM_pw_law_defence_depots }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_strait_requisition }
+		swap_ideas = { remove_idea = NAM_board_law_strait_requisition add_idea = NAM_pw_law_defence_depots }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_civil_contracts }
+		swap_ideas = { remove_idea = NAM_pw_law_civil_contracts add_idea = NAM_pw_law_defence_depots }
+	}
+	else = {
+		add_ideas = NAM_pw_law_defence_depots
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_namestnik_rule = {
+	if = {
+		limit = { has_idea = ADISCORD_internal_security_internal_directorate }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_internal_directorate add_idea = NAM_pw_law_namestnik_rule }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_neighborhood_watch }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_neighborhood_watch add_idea = NAM_pw_law_namestnik_rule }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_local_garrisons }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_local_garrisons add_idea = NAM_pw_law_namestnik_rule }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_investigative_bureaus }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_investigative_bureaus add_idea = NAM_pw_law_namestnik_rule }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_emergency_patrols }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_emergency_patrols add_idea = NAM_pw_law_namestnik_rule }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_civilian_oversight }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_civilian_oversight add_idea = NAM_pw_law_namestnik_rule }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_district_wardens }
+		swap_ideas = { remove_idea = NAM_board_law_district_wardens add_idea = NAM_pw_law_namestnik_rule }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_martial_rule }
+		swap_ideas = { remove_idea = NAM_board_law_martial_rule add_idea = NAM_pw_law_namestnik_rule }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_civil_service }
+		swap_ideas = { remove_idea = NAM_pw_law_civil_service add_idea = NAM_pw_law_namestnik_rule }
+	}
+	else = {
+		add_ideas = NAM_pw_law_namestnik_rule
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_civil_service = {
+	if = {
+		limit = { has_idea = ADISCORD_internal_security_internal_directorate }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_internal_directorate add_idea = NAM_pw_law_civil_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_neighborhood_watch }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_neighborhood_watch add_idea = NAM_pw_law_civil_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_local_garrisons }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_local_garrisons add_idea = NAM_pw_law_civil_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_investigative_bureaus }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_investigative_bureaus add_idea = NAM_pw_law_civil_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_emergency_patrols }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_emergency_patrols add_idea = NAM_pw_law_civil_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_internal_security_civilian_oversight }
+		swap_ideas = { remove_idea = ADISCORD_internal_security_civilian_oversight add_idea = NAM_pw_law_civil_service }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_district_wardens }
+		swap_ideas = { remove_idea = NAM_board_law_district_wardens add_idea = NAM_pw_law_civil_service }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_martial_rule }
+		swap_ideas = { remove_idea = NAM_board_law_martial_rule add_idea = NAM_pw_law_civil_service }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_namestnik_rule }
+		swap_ideas = { remove_idea = NAM_pw_law_namestnik_rule add_idea = NAM_pw_law_civil_service }
+	}
+	else = {
+		add_ideas = NAM_pw_law_civil_service
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_central_plan = {
+	if = {
+		limit = { has_idea = ADISCORD_industrial_policy_state_planning_boards }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_state_planning_boards add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_artisan_markets }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_artisan_markets add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_balanced_workshops }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_balanced_workshops add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_civilian_expansion add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_military_prioritization add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_export_contracts }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_export_contracts add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_arsenal_monopoly }
+		swap_ideas = { remove_idea = NAM_board_law_arsenal_monopoly add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_holders_contracts }
+		swap_ideas = { remove_idea = NAM_board_law_holders_contracts add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_regional_trusts }
+		swap_ideas = { remove_idea = NAM_pw_law_regional_trusts add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_licence_industry }
+		swap_ideas = { remove_idea = NAM_pw_law_licence_industry add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_design_bureaus }
+		swap_ideas = { remove_idea = NAM_pw_law_design_bureaus add_idea = NAM_pw_law_central_plan }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_municipal_land }
+		swap_ideas = { remove_idea = NAM_pw_law_municipal_land add_idea = NAM_pw_law_central_plan }
+	}
+	else = {
+		add_ideas = NAM_pw_law_central_plan
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_regional_trusts = {
+	if = {
+		limit = { has_idea = ADISCORD_industrial_policy_state_planning_boards }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_state_planning_boards add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_artisan_markets }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_artisan_markets add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_balanced_workshops }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_balanced_workshops add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_civilian_expansion add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_military_prioritization add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_export_contracts }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_export_contracts add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_arsenal_monopoly }
+		swap_ideas = { remove_idea = NAM_board_law_arsenal_monopoly add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_holders_contracts }
+		swap_ideas = { remove_idea = NAM_board_law_holders_contracts add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_central_plan }
+		swap_ideas = { remove_idea = NAM_pw_law_central_plan add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_licence_industry }
+		swap_ideas = { remove_idea = NAM_pw_law_licence_industry add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_design_bureaus }
+		swap_ideas = { remove_idea = NAM_pw_law_design_bureaus add_idea = NAM_pw_law_regional_trusts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_municipal_land }
+		swap_ideas = { remove_idea = NAM_pw_law_municipal_land add_idea = NAM_pw_law_regional_trusts }
+	}
+	else = {
+		add_ideas = NAM_pw_law_regional_trusts
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_labour_service = {
+	if = {
+		limit = { has_idea = ADISCORD_labor_policy_regulated_shifts }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_regulated_shifts add_idea = NAM_pw_law_labour_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_loose_contracts }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_loose_contracts add_idea = NAM_pw_law_labour_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_guild_protections }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_guild_protections add_idea = NAM_pw_law_labour_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_technocratic_work_norms }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_technocratic_work_norms add_idea = NAM_pw_law_labour_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_mobilized_labor }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_mobilized_labor add_idea = NAM_pw_law_labour_service }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_collective_bargaining }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_collective_bargaining add_idea = NAM_pw_law_labour_service }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_residency_for_hire }
+		swap_ideas = { remove_idea = NAM_board_law_residency_for_hire add_idea = NAM_pw_law_labour_service }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_artel_contracts }
+		swap_ideas = { remove_idea = NAM_pw_law_artel_contracts add_idea = NAM_pw_law_labour_service }
+	}
+	else = {
+		add_ideas = NAM_pw_law_labour_service
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_state_insurance = {
+	if = {
+		limit = { has_idea = ADISCORD_welfare_basic_services }
+		swap_ideas = { remove_idea = ADISCORD_welfare_basic_services add_idea = NAM_pw_law_state_insurance }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_charity_relief }
+		swap_ideas = { remove_idea = ADISCORD_welfare_charity_relief add_idea = NAM_pw_law_state_insurance }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_social_insurance }
+		swap_ideas = { remove_idea = ADISCORD_welfare_social_insurance add_idea = NAM_pw_law_state_insurance }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_universal_provision }
+		swap_ideas = { remove_idea = ADISCORD_welfare_universal_provision add_idea = NAM_pw_law_state_insurance }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_rationed_support }
+		swap_ideas = { remove_idea = ADISCORD_welfare_rationed_support add_idea = NAM_pw_law_state_insurance }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_employer_insurance }
+		swap_ideas = { remove_idea = ADISCORD_welfare_employer_insurance add_idea = NAM_pw_law_state_insurance }
+	}
+	else_if = {
+		limit = { has_idea = NAM_welfare_society_99_1 }
+		swap_ideas = { remove_idea = NAM_welfare_society_99_1 add_idea = NAM_pw_law_state_insurance }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_district_welfare }
+		swap_ideas = { remove_idea = NAM_pw_law_district_welfare add_idea = NAM_pw_law_state_insurance }
+	}
+	else = {
+		add_ideas = NAM_pw_law_state_insurance
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_public_estimate = {
+	if = {
+		limit = { has_idea = ADISCORD_taxation_balanced_register }
+		swap_ideas = { remove_idea = ADISCORD_taxation_balanced_register add_idea = NAM_pw_law_public_estimate }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_light_dues }
+		swap_ideas = { remove_idea = ADISCORD_taxation_light_dues add_idea = NAM_pw_law_public_estimate }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_progressive_brackets }
+		swap_ideas = { remove_idea = ADISCORD_taxation_progressive_brackets add_idea = NAM_pw_law_public_estimate }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_industrial_tariffs }
+		swap_ideas = { remove_idea = ADISCORD_taxation_industrial_tariffs add_idea = NAM_pw_law_public_estimate }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_extraction_quotas }
+		swap_ideas = { remove_idea = ADISCORD_taxation_extraction_quotas add_idea = NAM_pw_law_public_estimate }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_taxation_corporate_assessment }
+		swap_ideas = { remove_idea = ADISCORD_taxation_corporate_assessment add_idea = NAM_pw_law_public_estimate }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_property_census }
+		swap_ideas = { remove_idea = NAM_board_law_property_census add_idea = NAM_pw_law_public_estimate }
+	}
+	else = {
+		add_ideas = NAM_pw_law_public_estimate
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_board_exchange = {
+	if = {
+		limit = { has_idea = export_focus }
+		swap_ideas = { remove_idea = export_focus add_idea = NAM_pw_law_board_exchange }
+	}
+	else_if = {
+		limit = { has_idea = free_trade }
+		swap_ideas = { remove_idea = free_trade add_idea = NAM_pw_law_board_exchange }
+	}
+	else_if = {
+		limit = { has_idea = limited_exports }
+		swap_ideas = { remove_idea = limited_exports add_idea = NAM_pw_law_board_exchange }
+	}
+	else_if = {
+		limit = { has_idea = closed_economy }
+		swap_ideas = { remove_idea = closed_economy add_idea = NAM_pw_law_board_exchange }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_trade_policy_autarky }
+		swap_ideas = { remove_idea = ADISCORD_trade_policy_autarky add_idea = NAM_pw_law_board_exchange }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_harbour_exchange }
+		swap_ideas = { remove_idea = NAM_board_law_harbour_exchange add_idea = NAM_pw_law_board_exchange }
+	}
+	else = {
+		add_ideas = NAM_pw_law_board_exchange
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_licence_industry = {
+	if = {
+		limit = { has_idea = ADISCORD_industrial_policy_state_planning_boards }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_state_planning_boards add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_artisan_markets }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_artisan_markets add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_balanced_workshops }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_balanced_workshops add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_civilian_expansion add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_military_prioritization add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_export_contracts }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_export_contracts add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_arsenal_monopoly }
+		swap_ideas = { remove_idea = NAM_board_law_arsenal_monopoly add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_holders_contracts }
+		swap_ideas = { remove_idea = NAM_board_law_holders_contracts add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_central_plan }
+		swap_ideas = { remove_idea = NAM_pw_law_central_plan add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_regional_trusts }
+		swap_ideas = { remove_idea = NAM_pw_law_regional_trusts add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_design_bureaus }
+		swap_ideas = { remove_idea = NAM_pw_law_design_bureaus add_idea = NAM_pw_law_licence_industry }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_municipal_land }
+		swap_ideas = { remove_idea = NAM_pw_law_municipal_land add_idea = NAM_pw_law_licence_industry }
+	}
+	else = {
+		add_ideas = NAM_pw_law_licence_industry
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_design_bureaus = {
+	if = {
+		limit = { has_idea = ADISCORD_industrial_policy_state_planning_boards }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_state_planning_boards add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_artisan_markets }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_artisan_markets add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_balanced_workshops }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_balanced_workshops add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_civilian_expansion add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_military_prioritization add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_export_contracts }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_export_contracts add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_arsenal_monopoly }
+		swap_ideas = { remove_idea = NAM_board_law_arsenal_monopoly add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_holders_contracts }
+		swap_ideas = { remove_idea = NAM_board_law_holders_contracts add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_central_plan }
+		swap_ideas = { remove_idea = NAM_pw_law_central_plan add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_regional_trusts }
+		swap_ideas = { remove_idea = NAM_pw_law_regional_trusts add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_licence_industry }
+		swap_ideas = { remove_idea = NAM_pw_law_licence_industry add_idea = NAM_pw_law_design_bureaus }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_municipal_land }
+		swap_ideas = { remove_idea = NAM_pw_law_municipal_land add_idea = NAM_pw_law_design_bureaus }
+	}
+	else = {
+		add_ideas = NAM_pw_law_design_bureaus
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_treasury_guarantee = {
+	if = {
+		limit = { has_idea = ADISCORD_economic_system_planned_bureaucratic }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_planned_bureaucratic add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_agrarian }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_agrarian add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_industrializing }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_industrializing add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_free_market }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_free_market add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_mixed }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_mixed add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_state_coordinated }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_state_coordinated add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_syndicalist }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_syndicalist add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_oligarchic_clan }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_oligarchic_clan add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_technocratic }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_technocratic add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_private_underwriting }
+		swap_ideas = { remove_idea = NAM_pw_law_private_underwriting add_idea = NAM_pw_law_treasury_guarantee }
+	}
+	else = {
+		add_ideas = NAM_pw_law_treasury_guarantee
+	}
+	hidden_effect = {
+		set_variable = { var = ADISCORD_economy_model value = 3 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_private_underwriting = {
+	if = {
+		limit = { has_idea = ADISCORD_economic_system_planned_bureaucratic }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_planned_bureaucratic add_idea = NAM_pw_law_private_underwriting }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_agrarian }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_agrarian add_idea = NAM_pw_law_private_underwriting }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_industrializing }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_industrializing add_idea = NAM_pw_law_private_underwriting }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_free_market }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_free_market add_idea = NAM_pw_law_private_underwriting }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_mixed }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_mixed add_idea = NAM_pw_law_private_underwriting }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_state_coordinated }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_state_coordinated add_idea = NAM_pw_law_private_underwriting }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_syndicalist }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_syndicalist add_idea = NAM_pw_law_private_underwriting }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_oligarchic_clan }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_oligarchic_clan add_idea = NAM_pw_law_private_underwriting }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_economic_system_technocratic }
+		swap_ideas = { remove_idea = ADISCORD_economic_system_technocratic add_idea = NAM_pw_law_private_underwriting }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_treasury_guarantee }
+		swap_ideas = { remove_idea = NAM_pw_law_treasury_guarantee add_idea = NAM_pw_law_private_underwriting }
+	}
+	else = {
+		add_ideas = NAM_pw_law_private_underwriting
+	}
+	hidden_effect = {
+		set_variable = { var = ADISCORD_economy_model value = 2 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_district_welfare = {
+	if = {
+		limit = { has_idea = ADISCORD_welfare_basic_services }
+		swap_ideas = { remove_idea = ADISCORD_welfare_basic_services add_idea = NAM_pw_law_district_welfare }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_charity_relief }
+		swap_ideas = { remove_idea = ADISCORD_welfare_charity_relief add_idea = NAM_pw_law_district_welfare }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_social_insurance }
+		swap_ideas = { remove_idea = ADISCORD_welfare_social_insurance add_idea = NAM_pw_law_district_welfare }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_universal_provision }
+		swap_ideas = { remove_idea = ADISCORD_welfare_universal_provision add_idea = NAM_pw_law_district_welfare }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_rationed_support }
+		swap_ideas = { remove_idea = ADISCORD_welfare_rationed_support add_idea = NAM_pw_law_district_welfare }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_welfare_employer_insurance }
+		swap_ideas = { remove_idea = ADISCORD_welfare_employer_insurance add_idea = NAM_pw_law_district_welfare }
+	}
+	else_if = {
+		limit = { has_idea = NAM_welfare_society_99_1 }
+		swap_ideas = { remove_idea = NAM_welfare_society_99_1 add_idea = NAM_pw_law_district_welfare }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_state_insurance }
+		swap_ideas = { remove_idea = NAM_pw_law_state_insurance add_idea = NAM_pw_law_district_welfare }
+	}
+	else = {
+		add_ideas = NAM_pw_law_district_welfare
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_artel_contracts = {
+	if = {
+		limit = { has_idea = ADISCORD_labor_policy_regulated_shifts }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_regulated_shifts add_idea = NAM_pw_law_artel_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_loose_contracts }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_loose_contracts add_idea = NAM_pw_law_artel_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_guild_protections }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_guild_protections add_idea = NAM_pw_law_artel_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_technocratic_work_norms }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_technocratic_work_norms add_idea = NAM_pw_law_artel_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_mobilized_labor }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_mobilized_labor add_idea = NAM_pw_law_artel_contracts }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_labor_policy_collective_bargaining }
+		swap_ideas = { remove_idea = ADISCORD_labor_policy_collective_bargaining add_idea = NAM_pw_law_artel_contracts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_residency_for_hire }
+		swap_ideas = { remove_idea = NAM_board_law_residency_for_hire add_idea = NAM_pw_law_artel_contracts }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_labour_service }
+		swap_ideas = { remove_idea = NAM_pw_law_labour_service add_idea = NAM_pw_law_artel_contracts }
+	}
+	else = {
+		add_ideas = NAM_pw_law_artel_contracts
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_district_oath = {
+	if = {
+		limit = { has_idea = ADISCORD_justice_regular_tribunals }
+		swap_ideas = { remove_idea = ADISCORD_justice_regular_tribunals add_idea = NAM_pw_law_district_oath }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_field_courts }
+		swap_ideas = { remove_idea = ADISCORD_justice_field_courts add_idea = NAM_pw_law_district_oath }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_military_immunity }
+		swap_ideas = { remove_idea = ADISCORD_justice_military_immunity add_idea = NAM_pw_law_district_oath }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_justice_military_prosecution }
+		swap_ideas = { remove_idea = ADISCORD_justice_military_prosecution add_idea = NAM_pw_law_district_oath }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_concession_courts }
+		swap_ideas = { remove_idea = NAM_board_law_concession_courts add_idea = NAM_pw_law_district_oath }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_field_courts }
+		swap_ideas = { remove_idea = NAM_board_law_field_courts add_idea = NAM_pw_law_district_oath }
+	}
+	else = {
+		add_ideas = NAM_pw_law_district_oath
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_district_medicine = {
+	if = {
+		limit = { has_idea = ADISCORD_healthcare_basic_clinics }
+		swap_ideas = { remove_idea = ADISCORD_healthcare_basic_clinics add_idea = NAM_pw_law_district_medicine }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_healthcare_private_care }
+		swap_ideas = { remove_idea = ADISCORD_healthcare_private_care add_idea = NAM_pw_law_district_medicine }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_healthcare_public_hospitals }
+		swap_ideas = { remove_idea = ADISCORD_healthcare_public_hospitals add_idea = NAM_pw_law_district_medicine }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_healthcare_preventive_medicine }
+		swap_ideas = { remove_idea = ADISCORD_healthcare_preventive_medicine add_idea = NAM_pw_law_district_medicine }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_healthcare_military_medical_service }
+		swap_ideas = { remove_idea = ADISCORD_healthcare_military_medical_service add_idea = NAM_pw_law_district_medicine }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_healthcare_mutual_insurance }
+		swap_ideas = { remove_idea = ADISCORD_healthcare_mutual_insurance add_idea = NAM_pw_law_district_medicine }
+	}
+	else = {
+		add_ideas = NAM_pw_law_district_medicine
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_municipal_land = {
+	if = {
+		limit = { has_idea = ADISCORD_industrial_policy_state_planning_boards }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_state_planning_boards add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_artisan_markets }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_artisan_markets add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_balanced_workshops }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_balanced_workshops add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_civilian_expansion }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_civilian_expansion add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_military_prioritization }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_military_prioritization add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_industrial_policy_export_contracts }
+		swap_ideas = { remove_idea = ADISCORD_industrial_policy_export_contracts add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_arsenal_monopoly }
+		swap_ideas = { remove_idea = NAM_board_law_arsenal_monopoly add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_holders_contracts }
+		swap_ideas = { remove_idea = NAM_board_law_holders_contracts add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_central_plan }
+		swap_ideas = { remove_idea = NAM_pw_law_central_plan add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_regional_trusts }
+		swap_ideas = { remove_idea = NAM_pw_law_regional_trusts add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_licence_industry }
+		swap_ideas = { remove_idea = NAM_pw_law_licence_industry add_idea = NAM_pw_law_municipal_land }
+	}
+	else_if = {
+		limit = { has_idea = NAM_pw_law_design_bureaus }
+		swap_ideas = { remove_idea = NAM_pw_law_design_bureaus add_idea = NAM_pw_law_municipal_land }
+	}
+	else = {
+		add_ideas = NAM_pw_law_municipal_land
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_open_minutes = {
+	if = {
+		limit = { has_idea = ADISCORD_information_state_bulletins }
+		swap_ideas = { remove_idea = ADISCORD_information_state_bulletins add_idea = NAM_pw_law_open_minutes }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_information_open_press }
+		swap_ideas = { remove_idea = ADISCORD_information_open_press add_idea = NAM_pw_law_open_minutes }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_information_licensed_press }
+		swap_ideas = { remove_idea = ADISCORD_information_licensed_press add_idea = NAM_pw_law_open_minutes }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_information_wartime_censorship }
+		swap_ideas = { remove_idea = ADISCORD_information_wartime_censorship add_idea = NAM_pw_law_open_minutes }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_information_sealed_networks }
+		swap_ideas = { remove_idea = ADISCORD_information_sealed_networks add_idea = NAM_pw_law_open_minutes }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_paid_publicity }
+		swap_ideas = { remove_idea = NAM_board_law_paid_publicity add_idea = NAM_pw_law_open_minutes }
+	}
+	else = {
+		add_ideas = NAM_pw_law_open_minutes
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+
+NAM_pw_enact_community_rights = {
+	if = {
+		limit = { has_idea = ADISCORD_cultural_policy_heritage_protection }
+		swap_ideas = { remove_idea = ADISCORD_cultural_policy_heritage_protection add_idea = NAM_pw_law_community_rights }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_tolerated_subcultures }
+		swap_ideas = { remove_idea = ADISCORD_cultural_policy_tolerated_subcultures add_idea = NAM_pw_law_community_rights }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_public_entertainment }
+		swap_ideas = { remove_idea = ADISCORD_cultural_policy_public_entertainment add_idea = NAM_pw_law_community_rights }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_civic_festivals }
+		swap_ideas = { remove_idea = ADISCORD_cultural_policy_civic_festivals add_idea = NAM_pw_law_community_rights }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_avant_garde_patronage }
+		swap_ideas = { remove_idea = ADISCORD_cultural_policy_avant_garde_patronage add_idea = NAM_pw_law_community_rights }
+	}
+	else_if = {
+		limit = { has_idea = ADISCORD_cultural_policy_national_mythmaking }
+		swap_ideas = { remove_idea = ADISCORD_cultural_policy_national_mythmaking add_idea = NAM_pw_law_community_rights }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_mourning_licence }
+		swap_ideas = { remove_idea = NAM_board_law_mourning_licence add_idea = NAM_pw_law_community_rights }
+	}
+	else_if = {
+		limit = { has_idea = NAM_board_law_permitted_dissent }
+		swap_ideas = { remove_idea = NAM_board_law_permitted_dissent add_idea = NAM_pw_law_community_rights }
+	}
+	else = {
+		add_ideas = NAM_pw_law_community_rights
+	}
+	custom_effect_tooltip = NAM_pw_law_lock_tt
+}
+# ----- Post-war republic: laws (end) -----
+
+# ----- Post-war republic: development trades -----
+# COUNTRY NAM. A trade of the post-war tree moves 100 progress from one development track to
+# another; each key is called by exactly one focus. The raised track checks its level at once
+# (economic through the shared economy upgrade gate); at level 5 the republic takes 250
+# treasury instead. The lowered track drops one level and keeps its progress; at level 1 it
+# loses its progress and, once per campaign and track, one point of monthly growth.
+# Society and social system reuse the council's lowering primitives and their cut flags: the
+# corporate council and the post-war republic never share a campaign.
+NAM_pw_trade_social_system_for_army = {
+	if = {
+		limit = { ADISCORD_army_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_social_system_for_army_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_social_system_for_army_tt
+		hidden_effect = { NAM_board_dev_raise_army = yes }
+	}
+	hidden_effect = {
+		NAM_board_dev_lower_social_system = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_trade_society_for_army = {
+	if = {
+		limit = { ADISCORD_army_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_society_for_army_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_society_for_army_tt
+		hidden_effect = { NAM_board_dev_raise_army = yes }
+	}
+	hidden_effect = {
+		NAM_board_dev_lower_society = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_trade_social_system_for_economic = {
+	if = {
+		limit = { ADISCORD_economic_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_social_system_for_economic_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_social_system_for_economic_tt
+		hidden_effect = { NAM_board_dev_raise_economic = yes }
+	}
+	hidden_effect = {
+		NAM_board_dev_lower_social_system = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_trade_society_for_state = {
+	if = {
+		limit = { ADISCORD_state_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_society_for_state_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_society_for_state_tt
+		hidden_effect = { NAM_board_dev_raise_state = yes }
+	}
+	hidden_effect = {
+		NAM_board_dev_lower_society = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_trade_economic_for_state = {
+	if = {
+		limit = { ADISCORD_state_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_economic_for_state_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_economic_for_state_tt
+		hidden_effect = { NAM_board_dev_raise_state = yes }
+	}
+	hidden_effect = {
+		NAM_pw_dev_lower_economic = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_trade_state_for_economic = {
+	if = {
+		limit = { ADISCORD_economic_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_state_for_economic_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_state_for_economic_tt
+		hidden_effect = { NAM_board_dev_raise_economic = yes }
+	}
+	hidden_effect = {
+		NAM_pw_dev_lower_state = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_trade_science_for_economic = {
+	if = {
+		limit = { ADISCORD_economic_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_science_for_economic_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_science_for_economic_tt
+		hidden_effect = { NAM_board_dev_raise_economic = yes }
+	}
+	hidden_effect = {
+		NAM_pw_dev_lower_science = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_trade_state_for_social_system = {
+	if = {
+		limit = { ADISCORD_social_system_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_state_for_social_system_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_state_for_social_system_tt
+		hidden_effect = { NAM_pw_dev_raise_social_system = yes }
+	}
+	hidden_effect = {
+		NAM_pw_dev_lower_state = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_trade_society_for_economic = {
+	if = {
+		limit = { ADISCORD_economic_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_society_for_economic_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_society_for_economic_tt
+		hidden_effect = { NAM_board_dev_raise_economic = yes }
+	}
+	hidden_effect = {
+		NAM_board_dev_lower_society = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_trade_state_for_army = {
+	if = {
+		limit = { ADISCORD_army_development_at_least_5 = yes }
+		custom_effect_tooltip = NAM_pw_trade_state_for_army_capped_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_add_treasury = yes
+		}
+	}
+	else = {
+		custom_effect_tooltip = NAM_pw_trade_state_for_army_tt
+		hidden_effect = { NAM_board_dev_raise_army = yes }
+	}
+	hidden_effect = {
+		NAM_pw_dev_lower_state = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+NAM_pw_dev_raise_social_system = {
+	ADISCORD_initialize_society_development_variables = yes
+	add_to_variable = { var = ADISCORD_social_system_development_progress value = 100 }
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_social_system_development_progress value = 100 compare = greater_than_or_equals }
+			NOT = { ADISCORD_social_system_development_at_least_5 = yes }
+		}
+		set_temp_variable = { var = ADISCORD_development_remainder value = ADISCORD_social_system_development_progress }
+		add_to_temp_variable = { var = ADISCORD_development_remainder value = -100 }
+		ADISCORD_increase_social_system_development = yes
+		set_variable = { var = ADISCORD_social_system_development_progress value = ADISCORD_development_remainder }
+	}
+	if = {
+		limit = { ADISCORD_social_system_development_at_least_5 = yes }
+		set_variable = { var = ADISCORD_social_system_development_progress value = 0 }
+	}
+}
+
+# The level setter clears progress, so the kept progress is restored after the drop.
+NAM_pw_dev_lower_state = {
+	ADISCORD_initialize_society_development_variables = yes
+	if = {
+		limit = { ADISCORD_state_development_at_least_2 = yes }
+		set_temp_variable = { var = NAM_board_dev_kept value = ADISCORD_state_development_progress }
+		ADISCORD_decrease_state_development = yes
+		set_variable = { var = ADISCORD_state_development_progress value = NAM_board_dev_kept }
+	}
+	else = {
+		set_variable = { var = ADISCORD_state_development_progress value = 0 }
+		if = {
+			limit = {
+				NOT = { has_country_flag = NAM_pw_dev_cut_state }
+				check_variable = { var = ADISCORD_state_development_monthly_growth value = 0 compare = greater_than }
+			}
+			add_to_variable = { var = ADISCORD_state_development_monthly_growth value = -1 }
+			set_country_flag = NAM_pw_dev_cut_state
+		}
+	}
+}
+
+NAM_pw_dev_lower_economic = {
+	ADISCORD_initialize_society_development_variables = yes
+	if = {
+		limit = { ADISCORD_economic_development_at_least_2 = yes }
+		set_temp_variable = { var = NAM_board_dev_kept value = ADISCORD_economic_development_progress }
+		ADISCORD_decrease_economic_development = yes
+		set_variable = { var = ADISCORD_economic_development_progress value = NAM_board_dev_kept }
+	}
+	else = {
+		set_variable = { var = ADISCORD_economic_development_progress value = 0 }
+		if = {
+			limit = {
+				NOT = { has_country_flag = NAM_pw_dev_cut_economic }
+				check_variable = { var = ADISCORD_economic_development_monthly_growth value = 0 compare = greater_than }
+			}
+			add_to_variable = { var = ADISCORD_economic_development_monthly_growth value = -1 }
+			set_country_flag = NAM_pw_dev_cut_economic
+		}
+	}
+}
+
+# The shared triggers have no science at_least_2; at_most_1 is its exact complement.
+NAM_pw_dev_lower_science = {
+	ADISCORD_initialize_society_development_variables = yes
+	if = {
+		limit = { NOT = { ADISCORD_science_development_at_most_1 = yes } }
+		set_temp_variable = { var = NAM_board_dev_kept value = ADISCORD_science_development_progress }
+		ADISCORD_decrease_science_development = yes
+		set_variable = { var = ADISCORD_science_development_progress value = NAM_board_dev_kept }
+	}
+	else = {
+		set_variable = { var = ADISCORD_science_development_progress value = 0 }
+		if = {
+			limit = {
+				NOT = { has_country_flag = NAM_pw_dev_cut_science }
+				check_variable = { var = ADISCORD_science_development_monthly_growth value = 0 compare = greater_than }
+			}
+			add_to_variable = { var = ADISCORD_science_development_monthly_growth value = -1 }
+			set_country_flag = NAM_pw_dev_cut_science
+		}
+	}
+}
+# ----- Post-war republic: development trades (end) -----
+
 # ----- Postwar paid orders -----
 # Receipts own each payment and channel; callbacks clear them before delivery or refund.
 NAM_veteran_housing_refund = {
@@ -25138,7 +26483,7 @@ NAM_pw_district_allotment_settle = {
 			}
 			hidden_effect = { NAM_pw_district_allotment_close = yes }
 			if = {
-				limit = { hidden_trigger = { NAM = { has_completed_focus = NAM_civil_service_exam } } }
+				limit = { hidden_trigger = { NAM = { has_completed_focus = NAM_ladder_ending_service } } }
 				if = {
 					limit = {
 						hidden_trigger = {
@@ -25182,7 +26527,7 @@ NAM_pw_district_allotment_settle = {
 					}
 				}
 				if = {
-					limit = { hidden_trigger = { NAM = { has_completed_focus = NAM_district_inspectorate } } }
+					limit = { hidden_trigger = { NAM = { has_completed_focus = NAM_pw_armament_inspectorate } } }
 					add_dynamic_modifier = {
 						modifier = NAM_pw_district_fleet_called
 						days = 90
@@ -25238,7 +26583,7 @@ NAM_pw_veteran_course_settle = {
 		army_experience = 25
 		add_command_power = 15
 		if = {
-			limit = { has_completed_focus = NAM_pw_army_review }
+			limit = { has_completed_focus = NAM_veterans_return }
 			add_manpower = 2000
 		}
 	}
@@ -25500,7 +26845,7 @@ NAM_pw_district_congress_settle = {
 			clear_global_event_target = NAM_tenant_petition_site
 		}
 		if = {
-			limit = { has_completed_focus = NAM_workers_inspection }
+			limit = { has_completed_focus = NAM_public_utilities }
 			NAM_workers_inspection_dispatch = yes
 		}
 	}
@@ -25718,27 +27063,10 @@ NAM_pw_district_cooperative_settle = {
 			limit = {
 				has_completed_focus = NAM_district_fair
 			}
-			if = {
-				limit = {
-					has_completed_focus = NAM_haulage_cooperatives
-				}
-				add_equipment_to_stockpile = {
-					type = train_equipment
-					amount = 24
-					producer = NAM
-				}
-			}
-			else = {
-				add_equipment_to_stockpile = {
-					type = artillery_equipment
-					amount = 120
-					producer = NAM
-				}
-			}
-		}
-		if = {
-			limit = {
-				has_completed_focus = NAM_public_credit
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 24
+				producer = NAM
 			}
 			set_temp_variable = { var = NAM_treasury_amount value = 200 }
 			NAM_add_treasury = yes
@@ -25763,15 +27091,12 @@ NAM_pw_district_cooperative_settle = {
 		add_to_variable = { var = NAM_grp_dist_support value = 5 }
 		NAM_groups_refresh = yes
 		if = {
-			limit = { has_completed_focus = NAM_haulage_cooperatives }
+			limit = { has_completed_focus = NAM_cooperative_congress }
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
 				amount = 150
 				producer = NAM
 			}
-		}
-		if = {
-			limit = { has_completed_focus = NAM_tool_cooperatives }
 			add_equipment_to_stockpile = {
 				type = support_equipment
 				amount = 180
@@ -26587,7 +27912,7 @@ NAM_pw_industrial_schedule_settle = {
 		clr_country_flag = NAM_pw_industrial_schedule_paid
 		if = {
 			limit = {
-				has_completed_focus = NAM_unified_standards
+				has_completed_focus = NAM_pw_industrial_commission
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
@@ -26597,7 +27922,7 @@ NAM_pw_industrial_schedule_settle = {
 		}
 		clr_country_flag = NAM_pw_civil_busy
 		if = {
-			limit = { has_completed_focus = NAM_pw_cabinet_statute }
+			limit = { has_completed_focus = NAM_ladder_of_seals }
 			add_timed_idea = { idea = NAM_pw_industrial_schedule_idea days = 270 }
 		}
 		else = {
@@ -26654,17 +27979,12 @@ NAM_pw_regional_contracts_settle = {
 		}
 		if = {
 			limit = {
-				has_completed_focus = NAM_pw_industrial_commission
+				has_completed_focus = NAM_development_bank
 			}
 			add_equipment_to_stockpile = {
 				type = train_equipment
 				amount = 20
 				producer = NAM
-			}
-		}
-		if = {
-			limit = {
-				has_completed_focus = NAM_unified_standards
 			}
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
@@ -26674,7 +27994,7 @@ NAM_pw_regional_contracts_settle = {
 		}
 		clr_country_flag = NAM_pw_civil_busy
 		if = {
-			limit = { has_completed_focus = NAM_pw_state_chamber }
+			limit = { has_completed_focus = NAM_ladder_of_seals }
 			add_timed_idea = { idea = NAM_pw_regional_contracts_idea days = 270 }
 		}
 		else = {
@@ -26921,27 +28241,15 @@ NAM_pw_development_works_settle = {
 				}
 			}
 		}
-		if = {
-			limit = {
-				has_completed_focus = NAM_state_plan
-			}
-			add_equipment_to_stockpile = {
-				type = ADISCORD_armored_carrier_2163
-				amount = 90
-				producer = NAM
-			}
+		add_equipment_to_stockpile = {
+			type = train_equipment
+			amount = 25
+			producer = NAM
 		}
-		else = {
-			add_equipment_to_stockpile = {
-				type = train_equipment
-				amount = 25
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 180
-				producer = NAM
-			}
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = 180
+			producer = NAM
 		}
 	}
 	else = { NAM_pw_development_works_refund = yes }
@@ -28647,7 +29955,7 @@ NAM_program_civil_engineering_settle = {
 			clr_country_flag = NAM_program_civil_engineering_paid
 			if = {
 				limit = {
-					has_completed_focus = NAM_pw_industrial_recovery
+					has_completed_focus = NAM_civil_repair
 				}
 				add_equipment_to_stockpile = {
 					type = support_equipment
@@ -28726,7 +30034,7 @@ NAM_program_arms_engineering_settle = {
 			clr_country_flag = NAM_program_arms_engineering_paid
 			if = {
 				limit = {
-					has_completed_focus = NAM_pw_industrial_recovery
+					has_completed_focus = NAM_civil_repair
 				}
 				add_equipment_to_stockpile = {
 					type = train_equipment
@@ -28818,7 +30126,7 @@ NAM_program_rail_priority_settle = {
 				producer = NAM
 			}
 			if = {
-				limit = { has_completed_focus = NAM_pw_rail_workshops }
+				limit = { has_completed_focus = NAM_pw_freight_schedule }
 				add_equipment_to_stockpile = {
 					type = train_equipment
 					amount = 15
@@ -28884,7 +30192,7 @@ NAM_program_road_priority_settle = {
 				producer = NAM
 			}
 			if = {
-				limit = { has_completed_focus = NAM_pw_rail_workshops }
+				limit = { has_completed_focus = NAM_pw_freight_schedule }
 				add_equipment_to_stockpile = {
 					type = motorized_equipment
 					amount = 200
@@ -29164,7 +30472,7 @@ NAM_program_reserve_centres_settle = {
 				producer = NAM
 			}
 			if = {
-				limit = { has_completed_focus = NAM_pw_reserve_centres }
+				limit = { has_completed_focus = NAM_veterans_return }
 				add_equipment_to_stockpile = {
 					type = infantry_equipment
 					amount = 9000
@@ -29222,7 +30530,7 @@ NAM_program_engineer_units_settle = {
 				producer = NAM
 			}
 			if = {
-				limit = { has_completed_focus = NAM_pw_combined_arms }
+				limit = { has_completed_focus = NAM_pw_southern_army }
 				add_equipment_to_stockpile = {
 					type = artillery_equipment
 					amount = 120
@@ -29571,7 +30879,7 @@ NAM_air_deliver_fighter_batch = {
 
 NAM_air_deliver_cas_batch = {
 	if = {
-		limit = { hidden_trigger = { has_completed_focus = NAM_pw_frontline_air } }
+		limit = { hidden_trigger = { has_completed_focus = NAM_pw_air_defence } }
 		if = {
 			limit = { hidden_trigger = { has_completed_focus = NAM_pw_southern_air_command } }
 			add_equipment_to_stockpile = {
@@ -30329,7 +31637,7 @@ NAM_export_office_monthly = {
 			if = {
 				limit = {
 					OR = {
-						has_completed_focus = NAM_customs_clearinghouse
+						has_completed_focus = NAM_municipal_bonds
 						has_completed_focus = NAM_prag_ending_directorate
 					}
 				}
@@ -30648,7 +31956,7 @@ NAM_neighbour_establish_command = {
 		NAM = {
 			if = {
 				limit = {
-					NOT = { has_completed_focus = NAM_neighbour_national_charters }
+					NOT = { has_completed_focus = NAM_neighbour_local_commands }
 					NOT = { has_idea = NAM_neighbour_nationalists }
 				}
 				add_ideas = NAM_neighbour_nationalists
@@ -30749,13 +32057,7 @@ NAM_neighbour_apply_completed_charters = {
 NAM_neighbour_apply_district_charter = {
 	if = {
 		limit = {
-			OR = {
-				NAM = { has_completed_focus = NAM_neighbour_national_charters }
-				AND = {
-					is_capital = yes
-					NAM = { has_completed_focus = NAM_neighbour_local_commands }
-				}
-			}
+			NAM = { has_completed_focus = NAM_neighbour_local_commands }
 		}
 		NAM_neighbour_restore_local_core = yes
 	}

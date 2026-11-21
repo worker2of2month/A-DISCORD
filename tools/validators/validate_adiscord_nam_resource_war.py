@@ -223,7 +223,7 @@ DECISION_FOCUS_GATES = {
     "NAM_island_concession_231": "NAM_island_concession",
     "NAM_island_convoy_service": "NAM_harbour_service",
     "NAM_cabinet_install_machine_tools": "NAM_defeat_rump_cabinet",
-    "NAM_renegotiate_val_concession": "NAM_reclaim_230",
+    "NAM_renegotiate_val_concession": "NAM_civil_repair",
     "NAM_south_allied_fuel": "NAM_south_allied_fuel_office",
     "NAM_south_convoy_interdiction": "NAM_south_convoy_hunters",
 }

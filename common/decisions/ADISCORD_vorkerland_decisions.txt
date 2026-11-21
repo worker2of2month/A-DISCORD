@@ -669,6 +669,7 @@ ADISCORD_vorkerland_collapse_category = {
 					controls_state = 91
 					controls_state = 93
 					controls_state = 94
+					hidden_trigger = { ADISCORD_vorkerland_ivanland_ai_expedition_falters = no }
 				}
 				has_capitulated = yes
 			}
@@ -680,6 +681,7 @@ ADISCORD_vorkerland_collapse_category = {
 					controls_state = 91
 					controls_state = 93
 					controls_state = 94
+					ADISCORD_vorkerland_ivanland_ai_expedition_falters = no
 				}
 				ADISCORD_vorkerland_ivanland_intervention_success = yes
 			}

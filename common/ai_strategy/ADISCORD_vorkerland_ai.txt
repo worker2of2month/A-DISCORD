@@ -336,6 +336,29 @@ ADISCORD_vorkerland_ivanland_front_against_pwr = {
 	ai_strategy = { type = conquer id = PWR value = 250 }
 }
 
+# A faltering AI expedition (see ADISCORD_vorkerland_activate_ivanland_intervention_mission)
+# holds its line on both settlement fronts until ADISCORD_ivn.13 breaks it off.
+ADISCORD_vorkerland_ivanland_ai_expedition_stalls_pwr = {
+	allowed = { tag = IVN }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+		has_country_flag = ADISCORD_vorkerland_ivanland_ai_expedition_falters
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = PWR ratio = 0.01 priority = 1600 ordertype = front execution_type = careful execute_order = no manual_attack = no }
+	ai_strategy = { type = conquer id = PWR value = -250 }
+}
+
+ADISCORD_vorkerland_ivanland_ai_expedition_stalls_psd = {
+	allowed = { tag = IVN }
+	enable = {
+		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+		has_country_flag = ADISCORD_vorkerland_ivanland_ai_expedition_falters
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_control tag = PSD ratio = 0.01 priority = 1600 ordertype = front execution_type = careful execute_order = no manual_attack = no }
+}
+
 ADISCORD_vorkerland_northern_defense_against_ivanland = {
 	allowed = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
 	enable = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active country_exists = IVN has_war_with = IVN }

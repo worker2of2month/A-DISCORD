@@ -3611,68 +3611,6 @@ country_event = {
 
 add_namespace = ADISCORD_nam_groups
 
-country_event = {
-	id = ADISCORD_nam_groups.11
-	title = ADISCORD_nam_groups.11.t
-	desc = {
-		text = ADISCORD_nam_groups.11.d_iron
-		trigger = { check_variable = { var = NAM_prog_ending value = 1 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.11.d_service
-		trigger = { check_variable = { var = NAM_prog_ending value = 2 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.11.d_federation
-		trigger = { check_variable = { var = NAM_prog_ending value = 3 compare = equals } }
-	}
-	# Without a coup, NAM_apply_ending_oil_union has already retired Rom.
-	desc = {
-		text = ADISCORD_nam_groups.11.d_oil_union_rom
-		trigger = {
-			check_variable = { var = NAM_prog_ending value = 4 compare = equals }
-			NOT = { has_country_flag = NAM_coup_succeeded }
-		}
-	}
-	desc = {
-		text = ADISCORD_nam_groups.11.d_oil_union
-		trigger = {
-			check_variable = { var = NAM_prog_ending value = 4 compare = equals }
-			has_country_flag = NAM_coup_succeeded
-		}
-	}
-	desc = {
-		text = ADISCORD_nam_groups.11.d_prag_republic
-		trigger = { check_variable = { var = NAM_prog_ending value = 5 compare = equals } }
-	}
-	desc = {
-		text = ADISCORD_nam_groups.11.d_prag_directorate
-		trigger = { check_variable = { var = NAM_prog_ending value = 6 compare = equals } }
-	}
-	picture = GFX_event_adiscord_parliament_chamber
-	is_triggered_only = yes
-
-	option = {
-		name = ADISCORD_nam_groups.11.a
-		hidden_effect = {
-			# Only the ladder (1, 2) and compact (5, 6) endings leave Rom in office.
-			if = {
-				limit = {
-					has_country_leader = {
-						character = NAM_Egor_Rom
-						ruling_only = yes
-					}
-					OR = {
-						check_variable = { var = NAM_prog_ending value = 3 compare = less_than }
-						check_variable = { var = NAM_prog_ending value = 4 compare = greater_than }
-					}
-				}
-				country_event = { id = ADISCORD_nam_story.40 days = 60 }
-			}
-		}
-	}
-}
-
 # ----- Ladder of seals -----
 # The collapse edge: Svetlogorye proclaims independence. The ladder already
 # exists when this opens; each answer only tilts it.
@@ -5308,10 +5246,10 @@ country_event = {
 
 # Notes of Egor Rom: five chapters, each with an optional second page.
 # Every page closes completely; nothing in gameplay depends on reading them.
-# The chapters arrive only while Rom rules; the hour between dispatch and delivery is rechecked.
+# The chapters arrive while Rom lives, in office or not; the hour between dispatch and delivery is rechecked.
 add_namespace = ADISCORD_nam_memoir
 
-# Hidden dispatcher: one chapter every 90 days for a human ruler.
+# Hidden dispatcher: one chapter every 90 days for a human player.
 country_event = {
 	id = ADISCORD_nam_memoir.99
 	hidden = yes
@@ -5331,7 +5269,7 @@ country_event = {
 	trigger = {
 		tag = NAM
 		is_ai = no
-		has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+		has_character = NAM_Egor_Rom
 	}
 
 	option = {
@@ -5366,7 +5304,7 @@ country_event = {
 	trigger = {
 		tag = NAM
 		is_ai = no
-		has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+		has_character = NAM_Egor_Rom
 	}
 
 	option = {
@@ -5401,7 +5339,7 @@ country_event = {
 	trigger = {
 		tag = NAM
 		is_ai = no
-		has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+		has_character = NAM_Egor_Rom
 	}
 
 	option = {
@@ -5436,7 +5374,7 @@ country_event = {
 	trigger = {
 		tag = NAM
 		is_ai = no
-		has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+		has_character = NAM_Egor_Rom
 	}
 
 	option = {
@@ -5471,7 +5409,7 @@ country_event = {
 	trigger = {
 		tag = NAM
 		is_ai = no
-		has_country_leader = { character = NAM_Egor_Rom ruling_only = yes }
+		has_character = NAM_Egor_Rom
 	}
 
 	option = {
@@ -13540,8 +13478,8 @@ country_event = {
 	option = { name = ADISCORD_nam_story.34.a }
 }
 
-# Rom's last note: ADISCORD_nam_groups.11 queues it for the ladder and compact
-# endings while Rom still rules.
+# Rom's last note: the ladder hub event ADISCORD_nam_story.327 and the compact hub
+# event ADISCORD_nam_story.349 queue it while Rom still rules.
 country_event = {
 	id = ADISCORD_nam_story.40
 	title = ADISCORD_nam_story.40.t
@@ -13578,6 +13516,1282 @@ country_event = {
 		}
 	}
 	option = { name = ADISCORD_nam_memoir.close }
+}
+
+# ----- Post-war republic, etatist course: story events 320-337 -----
+# Path focuses of NAM_postwar_focus (320-329) and the etatist heritage lanes of
+# NAM_south_heritage_focus (336, 337) fire these scenes as the last line of
+# their hidden_effect. The first option is the one an unattended event takes
+# on timeout and always costs political power, treasury or group support.
+
+# service_state: who signs the first orders of the republic.
+country_event = {
+	id = ADISCORD_nam_story.320
+	title = ADISCORD_nam_story.320.t
+	desc = ADISCORD_nam_story.320.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.320.a
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_320_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 6 }
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.320.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_story_320_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			add_to_variable = { var = NAM_grp_nam_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.320.c
+		add_political_power = -40
+		custom_effect_tooltip = NAM_story_320_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# ladder_ending_iron: the executive takes office on the parade ground.
+country_event = {
+	id = ADISCORD_nam_story.321
+	title = ADISCORD_nam_story.321.t
+	desc = ADISCORD_nam_story.321.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.321.a
+		add_war_support = 0.05
+		custom_effect_tooltip = NAM_story_321_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 100 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_garr_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.321.b
+		add_political_power = 75
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_321_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -8 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.321.c
+		add_political_power = -50
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_321_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# ladder_ending_service: the first civil service examination.
+country_event = {
+	id = ADISCORD_nam_story.322
+	title = ADISCORD_nam_story.322.t
+	desc = ADISCORD_nam_story.322.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.322.a
+		add_political_power = -50
+		custom_effect_tooltip = NAM_story_322_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			add_to_variable = { var = NAM_grp_nam_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.322.b
+		add_political_power = 50
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_322_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.322.c
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		add_tech_bonus = {
+			name = NAM_story_322_exam
+			bonus = 0.5
+			uses = 1
+			category = industry
+		}
+		custom_effect_tooltip = NAM_story_322_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 8 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# state_plan: the plan commission divides the evacuated machine tools.
+country_event = {
+	id = ADISCORD_nam_story.323
+	title = ADISCORD_nam_story.323.t
+	desc = ADISCORD_nam_story.323.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.323.a
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 3000
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_323_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.323.b
+		add_political_power = -40
+		add_stability = 0.03
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.323.c
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		add_equipment_to_stockpile = {
+			type = artillery_equipment
+			amount = 72
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_323_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# regional_trusts: the trust directors ask for their own prices.
+country_event = {
+	id = ADISCORD_nam_story.324
+	title = ADISCORD_nam_story.324.t
+	desc = ADISCORD_nam_story.324.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.324.a
+		custom_effect_tooltip = NAM_story_324_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.324.b
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_324_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = 8 }
+			add_to_variable = { var = NAM_grp_nam_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.324.c
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_324_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# pw_labour_code: the first columns of the labour duty leave the districts.
+country_event = {
+	id = ADISCORD_nam_story.325
+	title = ADISCORD_nam_story.325.t
+	desc = ADISCORD_nam_story.325.d
+	picture = GFX_event_adiscord_pipeline_welding
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.325.a
+		add_manpower = 3000
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_325_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.325.b
+		add_political_power = -50
+		add_war_support = 0.05
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.325.c
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = NAM_story_325_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# pw_insurance_fund: the first day of the insurance fund.
+country_event = {
+	id = ADISCORD_nam_story.326
+	title = ADISCORD_nam_story.326.t
+	desc = ADISCORD_nam_story.326.d
+	picture = GFX_event_adiscord_registry_office_keys
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.326.a
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_326_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.326.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_326_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.326.c
+		add_war_support = 0.03
+		custom_effect_tooltip = NAM_story_326_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 6 }
+			add_to_variable = { var = NAM_grp_dist_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# ladder_of_seals: the oath of the finished administration. Every answer queues
+# Rom's last note, which needs Rom in office and a ladder ending (1 or 2).
+country_event = {
+	id = ADISCORD_nam_story.327
+	title = ADISCORD_nam_story.327.t
+	desc = ADISCORD_nam_story.327.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.327.a
+		add_political_power = -50
+		add_stability = 0.03
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_leader = {
+						character = NAM_Egor_Rom
+						ruling_only = yes
+					}
+					OR = {
+						check_variable = { var = NAM_prog_ending value = 1 compare = equals }
+						check_variable = { var = NAM_prog_ending value = 2 compare = equals }
+					}
+				}
+				country_event = { id = ADISCORD_nam_story.40 days = 30 }
+			}
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.327.b
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_327_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+			if = {
+				limit = {
+					has_country_leader = {
+						character = NAM_Egor_Rom
+						ruling_only = yes
+					}
+					OR = {
+						check_variable = { var = NAM_prog_ending value = 1 compare = equals }
+						check_variable = { var = NAM_prog_ending value = 2 compare = equals }
+					}
+				}
+				country_event = { id = ADISCORD_nam_story.40 days = 30 }
+			}
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.327.c
+		add_war_support = 0.05
+		custom_effect_tooltip = NAM_story_327_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 8 }
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+			if = {
+				limit = {
+					has_country_leader = {
+						character = NAM_Egor_Rom
+						ruling_only = yes
+					}
+					OR = {
+						check_variable = { var = NAM_prog_ending value = 1 compare = equals }
+						check_variable = { var = NAM_prog_ending value = 2 compare = equals }
+					}
+				}
+				country_event = { id = ADISCORD_nam_story.40 days = 30 }
+			}
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# pw_armament_inspectorate: empty rifle crates in the Loren depots.
+country_event = {
+	id = ADISCORD_nam_story.328
+	title = ADISCORD_nam_story.328.t
+	desc = ADISCORD_nam_story.328.d
+	picture = GFX_event_adiscord_nam_arktur_arsenal
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.328.a
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = -1500
+		}
+		custom_effect_tooltip = NAM_story_328_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.328.b
+		army_experience = 15
+		custom_effect_tooltip = NAM_story_328_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.328.c
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 3000
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_328_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# district_inspectorate: two estimates for one district road.
+country_event = {
+	id = ADISCORD_nam_story.329
+	title = ADISCORD_nam_story.329.t
+	desc = ADISCORD_nam_story.329.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.329.a
+		custom_effect_tooltip = NAM_story_329_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.329.b
+		add_political_power = -40
+		custom_effect_tooltip = NAM_story_329_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.329.c
+		custom_effect_tooltip = NAM_story_329_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_nam_support value = 5 }
+			add_to_variable = { var = NAM_grp_dist_support value = -3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Heritage, svetlogorsk_settlement: the southern districts swear to Svetlogorsk.
+country_event = {
+	id = ADISCORD_nam_story.336
+	title = ADISCORD_nam_story.336.t
+	desc = ADISCORD_nam_story.336.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.336.a
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_336_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.336.b
+		add_political_power = -50
+		custom_effect_tooltip = NAM_story_336_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.336.c
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		add_war_support = 0.05
+		custom_effect_tooltip = NAM_story_336_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Heritage, pw_postwar_commission: the southern army and the new district offices.
+country_event = {
+	id = ADISCORD_nam_story.337
+	title = ADISCORD_nam_story.337.t
+	desc = ADISCORD_nam_story.337.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.337.a
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_337_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.337.b
+		add_political_power = -40
+		add_war_support = 0.05
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.337.c
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 6000
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_337_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# ----- Post-war republic, pragmatic course: story events 340-353 -----
+# Focus rewards of the pragmatic course (340-350) and of its southern heritage
+# lanes (351-353) dispatch these scenes from their hidden_effect. The first
+# option is the one an unattended event takes on timeout; it always costs.
+
+# pragmatic_compact: the table without a chairman in the South Harbour warehouse.
+country_event = {
+	id = ADISCORD_nam_story.340
+	title = ADISCORD_nam_story.340.t
+	desc = ADISCORD_nam_story.340.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.340.a
+		add_political_power = -50
+		custom_effect_tooltip = NAM_story_340_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 3 }
+			add_to_variable = { var = NAM_grp_oil_support value = 3 }
+			add_to_variable = { var = NAM_grp_dist_support value = 3 }
+			add_to_variable = { var = NAM_grp_garr_support value = 3 }
+			add_to_variable = { var = NAM_grp_trade_support value = 3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.340.b
+		custom_effect_tooltip = NAM_story_340_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = 8 }
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			add_to_variable = { var = NAM_grp_nam_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.340.c
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_340_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 8 }
+			add_to_variable = { var = NAM_grp_trade_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# prag_ending_republic: the signatures in one column and a district board's first claim.
+country_event = {
+	id = ADISCORD_nam_story.341
+	title = ADISCORD_nam_story.341.t
+	desc = ADISCORD_nam_story.341.d
+	picture = GFX_event_adiscord_nam_smenkom_exchange
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.341.a
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_341_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.341.b
+		add_political_power = -30
+		custom_effect_tooltip = NAM_story_341_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 8 }
+			add_to_variable = { var = NAM_grp_nam_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.341.c
+		custom_effect_tooltip = NAM_story_341_c_tt
+		hidden_effect = {
+			if = {
+				limit = { NAM_prag_court_can_register = yes }
+				add_to_variable = { var = NAM_prag_warrants value = 1 }
+			}
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			add_to_variable = { var = NAM_grp_dist_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# prag_ending_directorate: the business council's ledger and the chairs along the wall.
+country_event = {
+	id = ADISCORD_nam_story.342
+	title = ADISCORD_nam_story.342.t
+	desc = ADISCORD_nam_story.342.d
+	picture = GFX_event_adiscord_nam_reidbank_credit
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.342.a
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_342_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -8 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.342.b
+		add_political_power = -40
+		custom_effect_tooltip = NAM_story_342_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			add_to_variable = { var = NAM_grp_trade_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.342.c
+		add_command_power = 25
+		custom_effect_tooltip = NAM_story_342_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 8 }
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# foreign_patents: royalties per machine or the whole licence.
+country_event = {
+	id = ADISCORD_nam_story.343
+	title = ADISCORD_nam_story.343.t
+	desc = ADISCORD_nam_story.343.d
+	picture = GFX_event_adiscord_nam_arktur_arsenal
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.343.a
+		add_equipment_to_stockpile = {
+			type = ADISCORD_armored_carrier_2163
+			amount = 40
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_343_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.343.b
+		add_political_power = -60
+		add_tech_bonus = {
+			name = NAM_story_343_licence
+			bonus = 0.5
+			uses = 1
+			category = armor
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.343.c
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 100
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_343_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = -8 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# domestic_designs: the first prototype tractor breaks down on trial.
+country_event = {
+	id = ADISCORD_nam_story.344
+	title = ADISCORD_nam_story.344.t
+	desc = ADISCORD_nam_story.344.d
+	picture = GFX_event_adiscord_nam_arktur_arsenal
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.344.a
+		add_tech_bonus = {
+			name = NAM_story_344_prototype
+			bonus = 0.5
+			uses = 1
+			category = armor
+		}
+		custom_effect_tooltip = NAM_story_344_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.344.b
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_344_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.344.c
+		add_political_power = -40
+		army_experience = 25
+		ai_chance = { base = 30 }
+	}
+}
+
+# chartered_tonnage: tankers on a year's charter and the insurers' rates.
+country_event = {
+	id = ADISCORD_nam_story.345
+	title = ADISCORD_nam_story.345.t
+	desc = ADISCORD_nam_story.345.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.345.a
+		add_equipment_to_stockpile = {
+			type = convoy
+			amount = 10
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_345_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.345.b
+		add_fuel = -15000
+		navy_experience = 15
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.345.c
+		add_fuel = -25000
+		custom_effect_tooltip = NAM_story_345_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# tractor_leasing: tractors off the pier, the drivers' share and the railway queue.
+country_event = {
+	id = ADISCORD_nam_story.346
+	title = ADISCORD_nam_story.346.t
+	desc = ADISCORD_nam_story.346.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.346.a
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = 120
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_346_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.346.b
+		add_equipment_to_stockpile = {
+			type = train_equipment
+			amount = 10
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_346_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.346.c
+		add_political_power = -40
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_346_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# prag_treasury_guarantee: the first supplier defaults and the treasury pays.
+country_event = {
+	id = ADISCORD_nam_story.347
+	title = ADISCORD_nam_story.347.t
+	desc = ADISCORD_nam_story.347.d
+	picture = GFX_event_adiscord_nam_reidbank_credit
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.347.a
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_347_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.347.b
+		add_political_power = -40
+		custom_effect_tooltip = NAM_story_347_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = -5 }
+			add_to_variable = { var = NAM_grp_dist_support value = 4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.347.c
+		custom_effect_tooltip = NAM_story_347_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = -8 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# prag_private_underwriting: the underwriters' rates at the exchange door.
+country_event = {
+	id = ADISCORD_nam_story.348
+	title = ADISCORD_nam_story.348.t
+	desc = ADISCORD_nam_story.348.d
+	picture = GFX_event_adiscord_nam_smenkom_exchange
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.348.a
+		custom_effect_tooltip = NAM_story_348_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.348.b
+		add_political_power = -40
+		custom_effect_tooltip = NAM_story_348_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			add_to_variable = { var = NAM_grp_trade_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.348.c
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_348_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# balanced_accounts: the treasury opens its books and stands surety. Every answer
+# queues Rom's last note while he rules after a compact ending.
+country_event = {
+	id = ADISCORD_nam_story.349
+	title = ADISCORD_nam_story.349.t
+	desc = ADISCORD_nam_story.349.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.349.a
+		custom_effect_tooltip = NAM_story_349_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 400 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_nam_support value = 3 }
+			add_to_variable = { var = NAM_grp_oil_support value = 3 }
+			add_to_variable = { var = NAM_grp_dist_support value = 3 }
+			add_to_variable = { var = NAM_grp_garr_support value = 3 }
+			add_to_variable = { var = NAM_grp_trade_support value = 3 }
+			NAM_groups_refresh = yes
+			if = {
+				limit = {
+					has_country_leader = {
+						character = NAM_Egor_Rom
+						ruling_only = yes
+					}
+					OR = {
+						check_variable = { var = NAM_prog_ending value = 5 compare = equals }
+						check_variable = { var = NAM_prog_ending value = 6 compare = equals }
+					}
+				}
+				country_event = { id = ADISCORD_nam_story.40 days = 30 }
+			}
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.349.b
+		add_political_power = 40
+		custom_effect_tooltip = NAM_story_349_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = 8 }
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+			if = {
+				limit = {
+					has_country_leader = {
+						character = NAM_Egor_Rom
+						ruling_only = yes
+					}
+					OR = {
+						check_variable = { var = NAM_prog_ending value = 5 compare = equals }
+						check_variable = { var = NAM_prog_ending value = 6 compare = equals }
+					}
+				}
+				country_event = { id = ADISCORD_nam_story.40 days = 30 }
+			}
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.349.c
+		add_political_power = -60
+		add_war_support = 0.05
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_leader = {
+						character = NAM_Egor_Rom
+						ruling_only = yes
+					}
+					OR = {
+						check_variable = { var = NAM_prog_ending value = 5 compare = equals }
+						check_variable = { var = NAM_prog_ending value = 6 compare = equals }
+					}
+				}
+				country_event = { id = ADISCORD_nam_story.40 days = 30 }
+			}
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# insured_caravans: the storm log and the Kadir caravan agents in the waiting room.
+country_event = {
+	id = ADISCORD_nam_story.350
+	title = ADISCORD_nam_story.350.t
+	desc = ADISCORD_nam_story.350.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.350.a
+		custom_effect_tooltip = NAM_story_350_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 250 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.350.b
+		add_political_power = -30
+		add_stability = -0.02
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.350.c
+		custom_effect_tooltip = NAM_story_350_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = 8 }
+			add_to_variable = { var = NAM_grp_garr_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Heritage, south_safir_line: the first liner in Safir and the pilots' share.
+country_event = {
+	id = ADISCORD_nam_story.351
+	title = ADISCORD_nam_story.351.t
+	desc = ADISCORD_nam_story.351.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.351.a
+		custom_effect_tooltip = NAM_story_351_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.351.b
+		add_political_power = -40
+		add_equipment_to_stockpile = {
+			type = convoy_1
+			amount = 10
+			producer = NAM
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.351.c
+		navy_experience = 15
+		custom_effect_tooltip = NAM_story_351_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Heritage, south_bayrat_lease: the Bayrat elders' terms for the mines.
+country_event = {
+	id = ADISCORD_nam_story.352
+	title = ADISCORD_nam_story.352.t
+	desc = ADISCORD_nam_story.352.d
+	picture = GFX_event_adiscord_nam_ferrant_steel
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.352.a
+		custom_effect_tooltip = NAM_story_352_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_oil_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.352.b
+		add_political_power = -40
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 150
+			producer = NAM
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.352.c
+		add_stability = -0.03
+		if = {
+			limit = { owns_state = 732 }
+			732 = {
+				add_resource = {
+					type = steel
+					amount = 2
+				}
+			}
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Heritage, south_trade_hearing: which contracts of the former masters stand.
+country_event = {
+	id = ADISCORD_nam_story.353
+	title = ADISCORD_nam_story.353.t
+	desc = ADISCORD_nam_story.353.d
+	picture = GFX_event_adiscord_nam_board_session
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.353.a
+		add_political_power = -60
+		add_stability = 0.05
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.353.b
+		custom_effect_tooltip = NAM_story_353_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 400 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_nam_support value = 3 }
+			add_to_variable = { var = NAM_grp_oil_support value = 3 }
+			add_to_variable = { var = NAM_grp_dist_support value = 3 }
+			add_to_variable = { var = NAM_grp_garr_support value = 3 }
+			add_to_variable = { var = NAM_grp_trade_support value = 3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.353.c
+		add_war_support = 0.05
+		custom_effect_tooltip = NAM_story_353_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = -8 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
 }
 
 country_event = {
@@ -13683,6 +14897,650 @@ country_event = {
 
 	option = {
 		name = ADISCORD_nam_resource_war.413.a
+	}
+}
+
+# ----- Post-war republic, district course: story events 360-375 -----
+# The district course of NAM_postwar_focus and its heritage lanes fire these
+# scenes as the last line of a focus reward's hidden_effect (363 and 371 are not
+# used). The first option is the one an unattended event takes and always
+# carries a price. 361 and 362 switch their description after a coup, because
+# the coup leader keeps power and neither Ladygina nor Mezentsev takes office.
+
+# District course: the charter read in the hall of the former viceroyalty (federal_charter).
+country_event = {
+	id = ADISCORD_nam_story.360
+	title = ADISCORD_nam_story.360.t
+	desc = ADISCORD_nam_story.360.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.360.a
+		add_political_power = -40
+		add_stability = 0.05
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.360.b
+		custom_effect_tooltip = NAM_story_360_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			add_to_variable = { var = NAM_grp_nam_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.360.c
+		custom_effect_tooltip = NAM_story_360_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_oil_support value = 6 }
+			add_to_variable = { var = NAM_grp_dist_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# District course: the seal handed to the council of districts (charter_ending_federation).
+country_event = {
+	id = ADISCORD_nam_story.361
+	title = ADISCORD_nam_story.361.t
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = NAM_coup_succeeded }
+		}
+		text = ADISCORD_nam_story.361.d
+	}
+	desc = {
+		trigger = { has_country_flag = NAM_coup_succeeded }
+		text = ADISCORD_nam_story.361.d_coup
+	}
+	picture = GFX_event_adiscord_nam_chair_handover
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.361.a
+		add_political_power = -50
+		custom_effect_tooltip = NAM_story_361_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.361.b
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_361_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.361.c
+		add_political_power = 60
+		add_timed_idea = {
+			idea = NAM_pw_chanceries_dissolved
+			days = 180
+		}
+		custom_effect_tooltip = NAM_story_361_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = -10 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# District course: the first treaty of the Union with the oilfield artels (charter_ending_oil_union).
+country_event = {
+	id = ADISCORD_nam_story.362
+	title = ADISCORD_nam_story.362.t
+	desc = {
+		trigger = {
+			NOT = { has_country_flag = NAM_coup_succeeded }
+		}
+		text = ADISCORD_nam_story.362.d
+	}
+	desc = {
+		trigger = { has_country_flag = NAM_coup_succeeded }
+		text = ADISCORD_nam_story.362.d_coup
+	}
+	picture = GFX_event_adiscord_nam_loren_oil
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.362.a
+		custom_effect_tooltip = NAM_story_362_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.362.b
+		custom_effect_tooltip = NAM_story_362_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			add_to_variable = { var = NAM_grp_oil_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.362.c
+		add_fuel = 15000
+		add_stability = -0.05
+		ai_chance = { base = 30 }
+	}
+}
+
+# District course: the militia swears to its district council (district_militia).
+country_event = {
+	id = ADISCORD_nam_story.364
+	title = ADISCORD_nam_story.364.t
+	desc = ADISCORD_nam_story.364.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.364.a
+		add_political_power = -50
+		custom_effect_tooltip = NAM_story_364_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.364.b
+		add_manpower = 3000
+		custom_effect_tooltip = NAM_story_364_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_garr_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.364.c
+		add_war_support = 0.05
+		custom_effect_tooltip = NAM_story_364_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -8 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# District course: doctors and orderlies sign into one relief service (relief_register).
+country_event = {
+	id = ADISCORD_nam_story.365
+	title = ADISCORD_nam_story.365.t
+	desc = ADISCORD_nam_story.365.d
+	picture = GFX_event_adiscord_pier_evacuation
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.365.a
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_365_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.365.b
+		add_manpower = -2000
+		custom_effect_tooltip = NAM_story_365_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_oil_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.365.c
+		add_political_power = -40
+		add_manpower = 4000
+		ai_chance = { base = 30 }
+	}
+}
+
+# District course: the city buys out its waste lots and burned warehouses (municipal_land).
+country_event = {
+	id = ADISCORD_nam_story.366
+	title = ADISCORD_nam_story.366.t
+	desc = ADISCORD_nam_story.366.d
+	picture = GFX_event_adiscord_registry_office_keys
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.366.a
+		custom_effect_tooltip = NAM_story_366_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.366.b
+		add_political_power = -40
+		688 = {
+			if = {
+				limit = {
+					is_owned_by = ROOT
+					is_controlled_by = ROOT
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		custom_effect_tooltip = NAM_story_366_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = 3 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.366.c
+		add_stability = -0.05
+		custom_effect_tooltip = NAM_story_366_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = -10 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# District course: the residents vote on the repair of their quarter (tenant_councils).
+country_event = {
+	id = ADISCORD_nam_story.367
+	title = ADISCORD_nam_story.367.t
+	desc = ADISCORD_nam_story.367.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.367.a
+		add_political_power = -40
+		custom_effect_tooltip = NAM_story_367_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = 4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.367.b
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_367_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.367.c
+		add_political_power = 40
+		custom_effect_tooltip = NAM_story_367_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_nam_support value = -8 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# District course: the first passports of common citizenship (common_citizenship).
+country_event = {
+	id = ADISCORD_nam_story.368
+	title = ADISCORD_nam_story.368.t
+	desc = ADISCORD_nam_story.368.d
+	picture = GFX_event_adiscord_registry_office_keys
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.368.a
+		add_stability = 0.03
+		custom_effect_tooltip = NAM_story_368_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.368.b
+		add_political_power = -40
+		add_manpower = 5000
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.368.c
+		add_political_power = 60
+		custom_effect_tooltip = NAM_story_368_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# District course: the artels bring their wares to Svetlogorsk (district_fair).
+country_event = {
+	id = ADISCORD_nam_story.369
+	title = ADISCORD_nam_story.369.t
+	desc = ADISCORD_nam_story.369.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.369.a
+		add_political_power = -30
+		custom_effect_tooltip = NAM_story_369_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.369.b
+		add_fuel = 10000
+		custom_effect_tooltip = NAM_story_369_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.369.c
+		custom_effect_tooltip = NAM_story_369_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# District course: the first graduates of the districts' university (regional_university).
+country_event = {
+	id = ADISCORD_nam_story.370
+	title = ADISCORD_nam_story.370.t
+	desc = ADISCORD_nam_story.370.d
+	picture = GFX_event_adiscord_school_classroom
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.370.a
+		add_political_power = -40
+		army_experience = 15
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.370.b
+		army_experience = 25
+		custom_effect_tooltip = NAM_story_370_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.370.c
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_370_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# District course: the common fuel market opens at one price for every buyer (common_fuel_market).
+country_event = {
+	id = ADISCORD_nam_story.372
+	title = ADISCORD_nam_story.372.t
+	desc = ADISCORD_nam_story.372.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.372.a
+		add_political_power = -50
+		add_war_support = 0.05
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.372.b
+		add_fuel = -10000
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_372_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.372.c
+		add_fuel = 15000
+		add_stability = -0.05
+		ai_chance = { base = 30 }
+	}
+}
+
+# District heritage: the Zarkhan builders ask for a share of every new house (south_builders).
+country_event = {
+	id = ADISCORD_nam_story.373
+	title = ADISCORD_nam_story.373.t
+	desc = ADISCORD_nam_story.373.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.373.a
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_373_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.373.b
+		add_political_power = -40
+		add_manpower = 2000
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.373.c
+		add_political_power = 40
+		add_timed_idea = {
+			idea = NAM_south_supervised_building
+			days = 180
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# District heritage: the quarters of Khazar elect their watch chiefs (south_elected_watch).
+country_event = {
+	id = ADISCORD_nam_story.374
+	title = ADISCORD_nam_story.374.t
+	desc = ADISCORD_nam_story.374.d
+	picture = GFX_event_adiscord_perimeter_checkpoint
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.374.a
+		add_political_power = -40
+		custom_effect_tooltip = NAM_story_374_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 4 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.374.b
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_374_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.374.c
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 3000
+			producer = NAM
+		}
+		add_timed_idea = {
+			idea = NAM_south_appointed_watch
+			days = 180
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+# District heritage: the congress of the southern communities asks for a common charter (south_delegates).
+country_event = {
+	id = ADISCORD_nam_story.375
+	title = ADISCORD_nam_story.375.t
+	desc = ADISCORD_nam_story.375.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		has_capitulated = no
+	}
+	option = {
+		name = ADISCORD_nam_story.375.a
+		add_political_power = -60
+		custom_effect_tooltip = NAM_story_375_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.375.b
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_375_b_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.375.c
+		add_political_power = 60
+		custom_effect_tooltip = NAM_story_375_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -8 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 20 }
 	}
 }
 
@@ -14018,5 +15876,544 @@ country_event = {
 
 	option = {
 		name = ADISCORD_nam_resource_war.414.a
+	}
+}
+
+# ----- Post-war republic: shared branches and the heritage tree -----
+# Focus rewards of the shared post-war branches and of the heritage root fire
+# these scenes from the last line of their hidden_effect; the heritage lanes of
+# each course fire the events of that course's section. The first option is
+# the one an unattended event takes on timeout; it always costs something.
+
+# Shared: the artillery train reaches Sukhorechye before the bridge is ready (pw_breakthrough_army).
+country_event = {
+	id = ADISCORD_nam_story.301
+	title = ADISCORD_nam_story.301.t
+	desc = ADISCORD_nam_story.301.d
+	picture = GFX_event_adiscord_rail_yard_waybills
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.301.a
+		army_experience = 15
+		custom_effect_tooltip = NAM_story_301_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.301.b
+		add_political_power = -40
+		add_equipment_to_stockpile = {
+			type = artillery_equipment
+			amount = 36
+			producer = NAM
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.301.c
+		army_experience = -10
+		690 = {
+			if = {
+				limit = {
+					is_owned_by = ROOT
+					is_controlled_by = ROOT
+					infrastructure < 5
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		custom_effect_tooltip = NAM_story_301_c_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						690 = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+							infrastructure < 5
+						}
+					}
+				}
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
+			}
+			add_to_variable = { var = NAM_grp_dist_support value = 5 }
+			add_to_variable = { var = NAM_grp_garr_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shared: the first march of the motor columns loses a third of its lorries (pw_mobile_army).
+country_event = {
+	id = ADISCORD_nam_story.302
+	title = ADISCORD_nam_story.302.t
+	desc = ADISCORD_nam_story.302.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.302.a
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = 120
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_302_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 200 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.302.b
+		add_stability = -0.03
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = 200
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_302_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.302.c
+		add_political_power = -40
+		army_experience = 20
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shared: the admiralty can lay down only one type of ship (pw_naval_review).
+country_event = {
+	id = ADISCORD_nam_story.303
+	title = ADISCORD_nam_story.303.t
+	desc = ADISCORD_nam_story.303.d
+	picture = GFX_event_adiscord_nam_navis_shipping
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.303.a
+		add_equipment_to_stockpile = {
+			type = convoy
+			amount = 10
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_303_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = 5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.303.b
+		trigger = { NAM_naval_shipyard_ready = yes }
+		add_political_power = -50
+		create_ship = {
+			type = ADISCORD_escort_ship_2155
+			equipment_variant = "ADISCORD_escort_ship_2155"
+			amount = 2
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.303.c
+		trigger = { NAM_naval_shipyard_ready = yes }
+		add_political_power = -50
+		create_ship = {
+			type = ADISCORD_submarine_2155
+			equipment_variant = "ADISCORD_submarine_2155"
+			amount = 2
+		}
+		custom_effect_tooltip = NAM_story_303_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_trade_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shared: two prototypes, one hangar and one shift of mechanics (pw_air_review).
+country_event = {
+	id = ADISCORD_nam_story.304
+	title = ADISCORD_nam_story.304.t
+	desc = ADISCORD_nam_story.304.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.304.a
+		air_experience = 15
+		custom_effect_tooltip = NAM_story_304_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.304.b
+		add_political_power = -40
+		add_equipment_to_stockpile = {
+			type = ADISCORD_fighter_airframe_2161
+			amount = 12
+			producer = NAM
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.304.c
+		add_political_power = -40
+		add_equipment_to_stockpile = {
+			type = ADISCORD_attack_airframe_2163
+			amount = 12
+			producer = NAM
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shared: the order for the new army names no commander yet (pw_southern_army).
+country_event = {
+	id = ADISCORD_nam_story.305
+	title = ADISCORD_nam_story.305.t
+	desc = ADISCORD_nam_story.305.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.305.a
+		add_political_power = -50
+		add_command_power = 40
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.305.b
+		add_manpower = 6000
+		add_stability = -0.03
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.305.c
+		army_experience = 40
+		custom_effect_tooltip = NAM_story_305_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 8 }
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shared: the first money from civilian orders reaches the district tills (civil_dividend).
+country_event = {
+	id = ADISCORD_nam_story.306
+	title = ADISCORD_nam_story.306.t
+	desc = ADISCORD_nam_story.306.d
+	picture = GFX_event_adiscord_factory_workshop
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.306.a
+		add_political_power = -40
+		add_stability = 0.03
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.306.b
+		700 = {
+			if = {
+				limit = {
+					is_owned_by = ROOT
+					is_controlled_by = ROOT
+				}
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		custom_effect_tooltip = NAM_story_306_b_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						700 = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+						}
+					}
+				}
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+			}
+			ADISCORD_economy_mark_dirty = yes
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.306.c
+		add_stability = 0.05
+		add_manpower = 4000
+		custom_effect_tooltip = NAM_story_306_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shared: the arsenal director asks for a three-year order (armed_peace).
+country_event = {
+	id = ADISCORD_nam_story.307
+	title = ADISCORD_nam_story.307.t
+	desc = ADISCORD_nam_story.307.d
+	picture = GFX_event_adiscord_nam_arktur_arsenal
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.307.a
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 6000
+			producer = NAM
+		}
+		custom_effect_tooltip = NAM_story_307_a_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.307.b
+		add_political_power = 60
+		custom_effect_tooltip = NAM_story_307_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.307.c
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_307_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = -8 }
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shared: the trial well goes deeper than the old rules allowed (pw_oil_laboratories).
+country_event = {
+	id = ADISCORD_nam_story.308
+	title = ADISCORD_nam_story.308.t
+	desc = ADISCORD_nam_story.308.d
+	picture = GFX_event_adiscord_nam_loren_oil
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.308.a
+		add_fuel = 20000
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_308_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.308.b
+		add_political_power = -40
+		add_tech_bonus = {
+			name = NAM_pw_oil_laboratories
+			bonus = 0.5
+			uses = 1
+			category = industry
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.308.c
+		custom_effect_tooltip = NAM_story_308_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 300 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_oil_support value = -6 }
+			add_to_variable = { var = NAM_grp_trade_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shared: the first substation overloads the harbour grid (pw_energy_commission).
+country_event = {
+	id = ADISCORD_nam_story.309
+	title = ADISCORD_nam_story.309.t
+	desc = ADISCORD_nam_story.309.d
+	picture = GFX_event_adiscord_pipeline_welding
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.309.a
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_309_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.309.b
+		add_fuel = 20000
+		custom_effect_tooltip = NAM_story_309_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.309.c
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_309_c_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_oil_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shared: the district college opens in a former barracks (pw_school_network).
+country_event = {
+	id = ADISCORD_nam_story.310
+	title = ADISCORD_nam_story.310.t
+	desc = ADISCORD_nam_story.310.d
+	picture = GFX_event_adiscord_administrative_office
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.310.a
+		add_political_power = 40
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_310_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = -5 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.310.b
+		add_tech_bonus = {
+			name = NAM_pw_school_network
+			bonus = 0.5
+			uses = 1
+			category = electronics
+		}
+		custom_effect_tooltip = NAM_story_310_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 6 }
+			add_to_variable = { var = NAM_grp_nam_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.310.c
+		ADISCORD_reform_economic_development = yes
+		custom_effect_tooltip = NAM_story_310_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 150 }
+			NAM_spend_treasury = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Heritage, shared root: the staff receives the lists of the southern towns (south_heritage).
+country_event = {
+	id = ADISCORD_nam_story.311
+	title = ADISCORD_nam_story.311.t
+	desc = ADISCORD_nam_story.311.d
+	picture = GFX_event_adiscord_expedition_camp
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { has_capitulated = no }
+	option = {
+		name = ADISCORD_nam_story.311.a
+		add_political_power = -50
+		add_stability = -0.03
+		custom_effect_tooltip = NAM_story_311_a_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_garr_support value = 6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_nam_story.311.b
+		add_stability = 0.05
+		custom_effect_tooltip = NAM_story_311_b_tt
+		hidden_effect = {
+			add_to_variable = { var = NAM_grp_dist_support value = 8 }
+			add_to_variable = { var = NAM_grp_garr_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_story.311.c
+		custom_effect_tooltip = NAM_story_311_c_tt
+		hidden_effect = {
+			set_temp_variable = { var = NAM_treasury_amount value = 500 }
+			NAM_add_treasury = yes
+			add_to_variable = { var = NAM_grp_trade_support value = 8 }
+			add_to_variable = { var = NAM_grp_dist_support value = -6 }
+			NAM_groups_refresh = yes
+		}
+		ai_chance = { base = 30 }
 	}
 }

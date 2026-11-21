@@ -1,0 +1,1750 @@
+# @section pragmatic_compact
+	# Pragmatic course: the axis, the two opening sides and their wings, the
+	# guarantee fork and the hub. Positions are relative to NAM_law_after_war
+	# (36,1 of the post-war grid); the path mirrors about its column.
+	focus = {
+		id = NAM_pragmatic_compact
+		relative_position_id = NAM_law_after_war
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_pragmatic_compact
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		mutually_exclusive = {
+			focus = NAM_service_state
+			focus = NAM_federal_charter
+		}
+		prerequisite = {
+			focus = NAM_law_after_war
+		}
+		available = {
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_prag_collect_award
+			custom_effect_tooltip = NAM_prag_collect_award_unlock_tt
+			unlock_decision_tooltip = NAM_pw_contract_arbitration
+			custom_effect_tooltip = NAM_pw_contract_arbitration_unlock_tt
+			add_political_power = 110
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pragmatic_compact_idea
+				}
+			}
+			custom_effect_tooltip = NAM_pragmatic_compact_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.06 }
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.08 }
+				add_to_variable = { var = NAM_adm_political_power_gain value = -0.05 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_prag_warrants value = 1 }
+				set_temp_variable = { var = NAM_treasury_amount value = 500 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.340 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_ending_republic
+		relative_position_id = NAM_law_after_war
+		x = -3
+		y = 2
+		icon = GFX_focus_NAM_prag_ending_republic
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pragmatic_compact
+		}
+		mutually_exclusive = { focus = NAM_prag_ending_directorate }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_prag_municipal_delivery
+			custom_effect_tooltip = NAM_prag_municipal_delivery_unlock_tt
+			NAM_pw_enact_public_estimate = yes
+			NAM_apply_ending_prag_republic = yes
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_prag_ending_republic_idea
+				}
+			}
+			custom_effect_tooltip = NAM_prag_ending_republic_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.10 }
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.10 }
+				add_to_variable = { var = NAM_adm_trade_income value = -0.05 }
+				NAM_refresh_administration = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 700 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 15 }
+				add_to_variable = { var = NAM_grp_nam_support value = -8 }
+				NAM_groups_refresh = yes
+				set_variable = { var = NAM_prog_ending value = 5 }
+				country_event = { id = ADISCORD_nam_story.341 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_ending_directorate
+		relative_position_id = NAM_law_after_war
+		x = 3
+		y = 2
+		icon = GFX_focus_NAM_prag_ending_directorate
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pragmatic_compact
+		}
+		mutually_exclusive = { focus = NAM_prag_ending_republic }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_prag_redeem_debentures
+			custom_effect_tooltip = NAM_prag_redeem_debentures_unlock_tt
+			unlock_decision_tooltip = NAM_issue_harbour_bonds
+			custom_effect_tooltip = NAM_issue_harbour_bonds_unlock_tt
+			NAM_pw_enact_board_exchange = yes
+			NAM_apply_ending_prag_directorate = yes
+			# Each factory brings its own shared slot; the treasury pays for a
+			# district that is not held or has no room left on completion.
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = yes
+						}
+					}
+				}
+				700 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
+				}
+			}
+			if = {
+				limit = {
+					owns_state = 688
+					controls_state = 688
+					688 = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = yes
+						}
+					}
+				}
+				688 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_prag_ending_directorate_idea
+				}
+			}
+			custom_effect_tooltip = NAM_prag_director_stamp_tt
+			custom_effect_tooltip = NAM_prag_ending_directorate_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.12 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.10 }
+				add_to_variable = { var = NAM_adm_stability_factor value = -0.06 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 15 }
+				add_to_variable = { var = NAM_grp_dist_support value = -8 }
+				NAM_groups_refresh = yes
+				set_variable = { var = NAM_prog_ending value = 6 }
+				country_event = { id = ADISCORD_nam_story.342 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Republic wing: city works and the municipal bonds, joined by the commonwealth.
+	focus = {
+		id = NAM_prag_city_works
+		relative_position_id = NAM_law_after_war
+		x = -5
+		y = 4
+		icon = GFX_focus_NAM_building_code
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_prag_ending_republic
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 688
+					controls_state = 688
+					688 = { infrastructure < 5 }
+				}
+				688 = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+			}
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = { infrastructure < 5 }
+				}
+				700 = {
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+			}
+			add_stability = 0.05
+			add_political_power = 60
+			ADISCORD_reform_social_system_development = yes
+			custom_effect_tooltip = NAM_prag_city_works_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_municipal_bonds
+		relative_position_id = NAM_law_after_war
+		x = -1
+		y = 4
+		icon = GFX_focus_NAM_municipal_bonds
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_prag_ending_republic
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_issue_harbour_bonds
+			custom_effect_tooltip = NAM_issue_harbour_bonds_unlock_tt
+			if = {
+				limit = {
+					owns_state = 688
+					controls_state = 688
+					688 = { infrastructure < 4 }
+				}
+				688 = {
+					add_building_construction = {
+						type = infrastructure
+						level = 2
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				custom_effect_tooltip = NAM_municipal_bonds_reward_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+			}
+			add_stability = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_municipal_bonds_idea
+				}
+			}
+			custom_effect_tooltip = NAM_bond_stamp_tt
+			hidden_effect = {
+				set_variable = { var = NAM_bond_balance value = 0 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.08 }
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.08 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_commercial_commonwealth
+		relative_position_id = NAM_law_after_war
+		x = -3
+		y = 6
+		icon = GFX_focus_NAM_commercial_commonwealth
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_prag_city_works
+		}
+		prerequisite = {
+			focus = NAM_municipal_bonds
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 70
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_commercial_commonwealth_idea
+				}
+			}
+			custom_effect_tooltip = NAM_bond_second_issue_tt
+			custom_effect_tooltip = NAM_commercial_commonwealth_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.08 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.06 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Directorate wing: the export clearing and licensed assembly, joined by the
+	# machine-tool contracts.
+	focus = {
+		id = NAM_export_clearing
+		relative_position_id = NAM_law_after_war
+		x = 1
+		y = 4
+		icon = GFX_focus_NAM_export_clearing
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_prag_ending_directorate
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_export_clearing
+			custom_effect_tooltip = NAM_pw_export_clearing_unlock_tt
+			add_fuel = 20000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_export_clearing_idea
+				}
+			}
+			custom_effect_tooltip = NAM_export_clearing_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.06 }
+				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.06 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_oil_support value = 8 }
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_licensed_assembly
+		relative_position_id = NAM_law_after_war
+		x = 5
+		y = 4
+		icon = GFX_focus_NAM_licensed_assembly
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_prag_ending_directorate
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = yes
+						}
+					}
+				}
+				700 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				custom_effect_tooltip = NAM_licensed_assembly_reward_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_armored_carrier_2163
+				amount = 80
+				producer = NAM
+			}
+			add_tech_bonus = {
+				name = NAM_licensed_assembly
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			custom_effect_tooltip = NAM_licensed_assembly_delivery_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_machine_tool_contracts
+		relative_position_id = NAM_law_after_war
+		x = 3
+		y = 6
+		icon = GFX_focus_NAM_machine_tool_contracts
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_export_clearing
+		}
+		prerequisite = {
+			focus = NAM_licensed_assembly
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_import_machine_tools
+			custom_effect_tooltip = NAM_pw_import_machine_tools_unlock_tt
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = NAM
+			}
+			add_tech_bonus = {
+				name = NAM_machine_tool_contracts
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_machine_tool_contracts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.08 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.06 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# The wings rejoin at the register.
+	focus = {
+		id = NAM_contract_register
+		relative_position_id = NAM_law_after_war
+		x = 0
+		y = 7
+		icon = GFX_focus_NAM_contract_register
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_municipal_bonds
+			focus = NAM_export_clearing
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_barter_charter
+			custom_effect_tooltip = NAM_pw_barter_charter_unlock_tt
+			add_political_power = 70
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 10
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_prag_endorsement_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_partner_supply
+		relative_position_id = NAM_law_after_war
+		x = 0
+		y = 10
+		icon = GFX_focus_NAM_prag_partner_supply
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_contract_register }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = NAM_pw_charter_ally_available_focus_condition_tt
+						NAM_pw_charter_ally_available = yes
+					}
+				}
+				unlock_decision_tooltip = NAM_charter_fuel_aid
+				custom_effect_tooltip = NAM_charter_fuel_aid_unlock_tt
+			}
+			else = { custom_effect_tooltip = NAM_charter_fuel_aid_future_tt }
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 10
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 12
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 250
+				producer = NAM
+			}
+			add_political_power = 60
+			custom_effect_tooltip = NAM_prag_partner_supply_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Guarantee fork: who stands behind a contract, the treasury or private houses.
+	focus = {
+		id = NAM_prag_treasury_guarantee
+		relative_position_id = NAM_law_after_war
+		x = -2
+		y = 12
+		icon = GFX_focus_NAM_commercial_reserve
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_prag_partner_supply
+		}
+		mutually_exclusive = { focus = NAM_prag_private_underwriting }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_pw_enact_treasury_guarantee = yes
+			NAM_pw_trade_economic_for_state = yes
+			add_stability = 0.08
+			add_political_power = 100
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_prag_treasury_guarantee_idea
+				}
+			}
+			custom_effect_tooltip = NAM_prag_treasury_guarantee_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.06 }
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.04 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_nam_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.347 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_private_underwriting
+		relative_position_id = NAM_law_after_war
+		x = 2
+		y = 12
+		icon = GFX_focus_NAM_prag_settlement_agreements
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_prag_partner_supply
+		}
+		mutually_exclusive = { focus = NAM_prag_treasury_guarantee }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_pw_enact_private_underwriting = yes
+			NAM_pw_trade_state_for_economic = yes
+			# Each factory brings its own shared slot; the treasury pays for a
+			# district that is not held or has no room left on completion.
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = {
+						free_building_slots = {
+							building = industrial_complex
+							size = 1
+							include_locked = yes
+						}
+					}
+				}
+				700 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
+				}
+			}
+			if = {
+				limit = {
+					owns_state = 688
+					controls_state = 688
+					688 = {
+						free_building_slots = {
+							building = arms_factory
+							size = 1
+							include_locked = yes
+						}
+					}
+				}
+				688 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
+				}
+			}
+			custom_effect_tooltip = NAM_prag_private_underwriting_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 500 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.348 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_balanced_accounts
+		relative_position_id = NAM_law_after_war
+		x = 0
+		y = 15
+		icon = GFX_focus_NAM_balanced_accounts
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_prag_treasury_guarantee
+			focus = NAM_prag_private_underwriting
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 40
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_balanced_accounts_idea
+				}
+			}
+			custom_effect_tooltip = NAM_prag_guarantee_book_tt
+			custom_effect_tooltip = NAM_commercial_reserve_tt
+			custom_effect_tooltip = NAM_balanced_accounts_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.08 }
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.10 }
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.06 }
+				NAM_refresh_administration = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 700 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 15 }
+				add_to_variable = { var = NAM_grp_nam_support value = -8 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.349 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_prag_south_guarantees
+		relative_position_id = NAM_law_after_war
+		x = 0
+		y = 16
+		icon = GFX_focus_NAM_prag_south_guarantees
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 6
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		bypass = {
+			has_completed_focus = NAM_svetlogorye
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_started_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_started
+				}
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_resolved_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_resolved
+				}
+			}
+		}
+		prerequisite = { focus = NAM_balanced_accounts }
+		available = {
+			has_completed_focus = NAM_svetlogorye
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_ready_tt
+				ADISCORD_south_final_focus_available = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_south_nam_contract_logistics }
+			custom_effect_tooltip = NAM_prag_south_guarantees_tt
+			hidden_effect = { ADISCORD_south_prepare_offensive = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+# @section pragmatic_industry
+	# Industry lane: repair depots, the testing office, the port polytechnic
+	# (the path's research-slot keeper) and the licence or design fork.
+	focus = {
+		id = NAM_repair_depots
+		relative_position_id = NAM_law_after_war
+		x = 6
+		y = 9
+		icon = GFX_focus_NAM_repair_depots
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_contract_register
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = { has_completed_focus = NAM_second_drilling_crew }
+					NOT = { has_completed_focus = NAM_pw_energy_commission }
+				}
+				unlock_decision_tooltip = NAM_econ_emergency_service
+				custom_effect_tooltip = NAM_econ_emergency_service_unlock_tt
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 300
+				producer = NAM
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_repair_depots_idea
+				}
+			}
+			custom_effect_tooltip = NAM_repair_depots_service_tt
+			custom_effect_tooltip = NAM_repair_depots_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.08 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.06 }
+				add_to_variable = { var = NAM_adm_tax_collection value = -0.04 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 12 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_testing_office
+		relative_position_id = NAM_law_after_war
+		x = 4
+		y = 11
+		icon = GFX_focus_NAM_testing_office
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_repair_depots }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = {
+						any_owned_state = {
+							land_facility > 0
+						}
+					}
+				}
+				if = {
+					limit = {
+						owns_state = 688
+						controls_state = 688
+						688 = {
+							free_building_slots = {
+								building = land_facility
+								size > 0
+								include_locked = no
+								province = 689
+							}
+						}
+					}
+					688 = {
+						add_building_construction = {
+							type = land_facility
+							level = 1
+							instant_build = yes
+							province = 689
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						owns_state = 700
+						controls_state = 700
+						700 = {
+							free_building_slots = {
+								building = land_facility
+								size > 0
+								include_locked = no
+								province = 16716
+							}
+						}
+					}
+					700 = {
+						add_building_construction = {
+							type = land_facility
+							level = 1
+							instant_build = yes
+							province = 16716
+						}
+					}
+				}
+			}
+			generate_scientist_character = {
+				skills = {
+					specialization_land = 2
+				}
+			}
+			add_breakthrough_points = {
+				specialization = specialization_land
+				value = 1
+			}
+			army_experience = 25
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_port_polytechnic
+		relative_position_id = NAM_law_after_war
+		x = 10
+		y = 11
+		icon = GFX_focus_NAM_port_polytechnic
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 9
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_repair_depots
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_research_slot = 1
+			add_tech_bonus = {
+				name = NAM_port_polytechnic
+				bonus = 1
+				uses = 2
+				category = electronics
+			}
+			add_tech_bonus = {
+				name = NAM_port_polytechnic_naval
+				bonus = 1
+				uses = 1
+				category = naval_equipment
+			}
+			add_political_power = 100
+			ADISCORD_reform_society_development = yes
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_port_polytechnic_slot_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.06 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.06 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_foreign_patents
+		relative_position_id = NAM_law_after_war
+		x = 8
+		y = 13
+		icon = GFX_focus_NAM_foreign_patents
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_port_polytechnic
+		}
+		mutually_exclusive = { focus = NAM_domestic_designs }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_pw_enact_licence_industry = yes
+			NAM_pw_trade_science_for_economic = yes
+			NAM_order_grant_motor_technology = yes
+			add_equipment_to_stockpile = {
+				type = ADISCORD_armored_carrier_2163
+				amount = 120
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 400
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_foreign_patents_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.343 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_domestic_designs
+		relative_position_id = NAM_law_after_war
+		x = 12
+		y = 13
+		icon = GFX_focus_NAM_domestic_designs
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_port_polytechnic
+		}
+		mutually_exclusive = { focus = NAM_foreign_patents }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_exchange_chassis
+			custom_effect_tooltip = NAM_exchange_chassis_unlock_tt
+			NAM_pw_enact_design_bureaus = yes
+			add_breakthrough_points = {
+				specialization = specialization_land
+				value = 1
+			}
+			add_political_power = 100
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_domestic_designs_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.08 }
+				NAM_refresh_administration = yes
+				country_event = { id = ADISCORD_nam_story.344 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_licensed_workshop
+		relative_position_id = NAM_law_after_war
+		x = 10
+		y = 15
+		icon = GFX_focus_NAM_licensed_workshop
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_foreign_patents
+			focus = NAM_domestic_designs
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 688
+					controls_state = 688
+					688 = {
+						free_building_slots = {
+							building = arms_factory
+							size = 1
+							include_locked = yes
+						}
+					}
+				}
+				688 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				custom_effect_tooltip = NAM_licensed_workshop_reward_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = NAM
+			}
+			# The licence side builds guns on the bought line; the design side
+			# turns its own bureau to air defence and field electronics.
+			if = {
+				limit = {
+					has_completed_focus = NAM_foreign_patents
+				}
+				add_equipment_to_stockpile = {
+					type = artillery_equipment
+					amount = 120
+					producer = NAM
+				}
+				set_technology = {
+					ADISCORD_tech_automated_assembly = 1
+					popup = no
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = anti_air_equipment
+					amount = 120
+					producer = NAM
+				}
+				set_technology = {
+					ADISCORD_tech_hardened_computers = 1
+					popup = no
+				}
+				add_breakthrough_points = {
+					specialization = specialization_land
+					value = 1
+				}
+			}
+			add_war_support = 0.05
+		}
+		ai_will_do = { base = 5 }
+	}
+
+# @section pragmatic_freight
+	# Sea lane: insured caravans, the port agreement and the freight office,
+	# the sea or land supply fork and the warehouse receipts.
+	focus = {
+		id = NAM_insured_caravans
+		relative_position_id = NAM_law_after_war
+		x = -6
+		y = 9
+		icon = GFX_focus_NAM_insured_caravans
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_contract_register
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 15
+				producer = NAM
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_navy_dummy_idea
+					add_idea = NAM_prag_convoy_insurance_idea
+				}
+			}
+			custom_effect_tooltip = ADISCORD_south_contact_kdr_tt
+			custom_effect_tooltip = NAM_insured_caravans_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_convoy_escort value = 0.10 }
+				add_to_variable = { var = NAM_navy_repair_speed value = 0.10 }
+				NAM_refresh_navy = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.350 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_port_agreement
+		relative_position_id = NAM_law_after_war
+		x = -10
+		y = 11
+		icon = GFX_focus_NAM_port_agreement
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_insured_caravans
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_merchant_order
+			custom_effect_tooltip = NAM_pw_merchant_order_unlock_tt
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 40
+				producer = NAM
+			}
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = {
+						free_building_slots = {
+							building = naval_base
+							size > 1
+							include_locked = no
+							province = 16716
+						}
+					}
+				}
+				700 = {
+					add_building_construction = {
+						type = naval_base
+						level = 2
+						instant_build = yes
+						province = 16716
+					}
+				}
+			}
+			else = {
+				custom_effect_tooltip = NAM_port_agreement_reward_tt
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+			}
+			navy_experience = 25
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_freight_brokerage
+		relative_position_id = NAM_law_after_war
+		x = -4
+		y = 11
+		icon = GFX_focus_NAM_freight_brokerage
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_insured_caravans
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					NOT = {
+						has_completed_focus = NAM_oil_ministry
+						has_completed_focus = NAM_oil_exchange
+						has_completed_focus = NAM_defeat_oil_peace
+					}
+				}
+				unlock_decision_tooltip = NAM_export_office_expand
+				custom_effect_tooltip = NAM_export_office_expand_unlock_tt
+			}
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 20
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_return_freight_tt
+			custom_effect_tooltip = NAM_freight_brokerage_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_export_office_price_bonus value = 0.075 }
+				NAM_export_office_refresh_all = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_chartered_tonnage
+		relative_position_id = NAM_law_after_war
+		x = -12
+		y = 13
+		icon = GFX_focus_NAM_chartered_tonnage
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_port_agreement }
+		mutually_exclusive = { focus = NAM_tractor_leasing }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = {
+						free_building_slots = {
+							building = fuel_silo
+							size > 0
+							include_locked = no
+						}
+					}
+				}
+				700 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = fuel_silo
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				add_equipment_to_stockpile = {
+					type = convoy
+					amount = 18
+					producer = NAM
+				}
+			}
+			add_fuel = 45000
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 15
+				producer = NAM
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_navy_dummy_idea
+					add_idea = NAM_navy_chartered_tonnage_idea
+				}
+			}
+			custom_effect_tooltip = NAM_chartered_tonnage_delivery_tt
+			custom_effect_tooltip = NAM_chartered_tonnage_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_navy_landing_speed value = 0.10 }
+				add_to_variable = { var = NAM_navy_coordination value = 0.08 }
+				NAM_refresh_navy = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.345 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_tractor_leasing
+		relative_position_id = NAM_law_after_war
+		x = -8
+		y = 13
+		icon = GFX_focus_NAM_tractor_leasing
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_port_agreement }
+		mutually_exclusive = { focus = NAM_chartered_tonnage }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 20
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 400
+				producer = NAM
+			}
+			if = {
+				limit = {
+					owns_state = 690
+					controls_state = 690
+					690 = { infrastructure < 4 }
+				}
+				690 = {
+					add_building_construction = {
+						type = infrastructure
+						level = 2
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_tractor_leasing_idea
+				}
+			}
+			custom_effect_tooltip = NAM_tractor_leasing_delivery_tt
+			custom_effect_tooltip = NAM_tractor_leasing_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_supply_consumption value = -0.08 }
+				add_to_variable = { var = NAM_gar_army_speed value = 0.06 }
+				NAM_refresh_garrison = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.346 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_warehouse_receipts
+		relative_position_id = NAM_law_after_war
+		x = -10
+		y = 15
+		icon = GFX_focus_NAM_warehouse_receipts
+		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_chartered_tonnage
+			focus = NAM_tractor_leasing
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_pragmatic_mandate_tt
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = {
+					owns_state = 700
+					controls_state = 700
+					700 = {
+						free_building_slots = {
+							building = fuel_silo
+							size = 1
+							include_locked = yes
+						}
+					}
+				}
+				700 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = fuel_silo
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+			}
+			add_fuel = 20000
+			custom_effect_tooltip = NAM_warehouse_relief_port_tt
+			custom_effect_tooltip = NAM_warehouse_receipts_reward_tt
+			hidden_effect = {
+				# The court registers a warrant only below the register limit;
+				# otherwise the receipt is sold for its treasury value.
+				if = {
+					limit = { NAM_prag_court_can_register = yes }
+					add_to_variable = { var = NAM_prag_warrants value = 1 }
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				}
+				else = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				}
+				NAM_add_treasury = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}

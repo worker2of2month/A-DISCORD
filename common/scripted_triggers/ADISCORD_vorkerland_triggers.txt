@@ -514,6 +514,16 @@ ADISCORD_vorkerland_ivanland_intervention_front_verified = {
 	94 = { controller = { OR = { tag = IVN has_war_with = IVN } } }
 }
 
+# ANY SCOPE. An AI expedition that drew the faltering outcome at activation
+# cannot be won: its success detectors stay closed until ADISCORD_ivn.13 ends
+# the operation as a failure. A player who takes over IVN reopens them at once.
+ADISCORD_vorkerland_ivanland_ai_expedition_falters = {
+	IVN = {
+		is_ai = yes
+		has_country_flag = ADISCORD_vorkerland_ivanland_ai_expedition_falters
+	}
+}
+
 # State levies are restricted to listed regional combatants, excluding
 # the three main claimants and non-combatant administrations.
 ADISCORD_vorkerland_is_minor_combatant = {

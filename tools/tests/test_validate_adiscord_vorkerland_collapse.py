@@ -4359,6 +4359,49 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("character = IBA_Matvey_Mateusk", repair.group(1))
         self.assertIn("ruling_only = yes", repair.group(1))
 
+    def test_faltering_ai_expedition_cannot_be_won_before_its_breakdown(self) -> None:
+        sources = {
+            "mission": collapse_validator.named_block(
+                read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+                "ADISCORD_ivanland_limited_intervention",
+            ),
+            "effects": read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "collapse_on_actions": read(
+                "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
+            ),
+            "peace_on_actions": read(
+                "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
+            ),
+            "ivn_events": read("events/ADISCORD_IVN_events.txt"),
+            "triggers": read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+        }
+        self.assertEqual(collapse_validator.ivanland_ai_falter_issues(**sources), [])
+
+        guard = collapse_validator.IVANLAND_AI_FALTER_GUARD
+        for key in ("mission", "collapse_on_actions", "peace_on_actions"):
+            with self.subTest(detector=key):
+                stripped = dict(sources)
+                stripped[key] = re.sub(
+                    rf"\n[ \t]*{re.escape(guard)}[ \t]*(?=\n)", "", sources[key]
+                )
+                self.assertNotEqual(stripped[key], sources[key])
+                self.assertTrue(
+                    any(
+                        "ignores a faltering AI expedition" in issue
+                        for issue in collapse_validator.ivanland_ai_falter_issues(**stripped)
+                    )
+                )
+
+        human = dict(sources)
+        human["effects"] = sources["effects"].replace(
+            "limit = { is_ai = yes }\n\t\t\t\trandom_list", "random_list", 1
+        ).replace("limit = { is_ai = yes }\r\n\t\t\t\trandom_list", "random_list", 1)
+        self.assertNotEqual(human["effects"], sources["effects"])
+        self.assertIn(
+            "Ivanland AI expedition roll is missing limit = { is_ai = yes }",
+            collapse_validator.ivanland_ai_falter_issues(**human),
+        )
+
     def test_ivanland_front_launch_is_postcondition_verified_and_bounded(self) -> None:
         events = source_section(
             read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'

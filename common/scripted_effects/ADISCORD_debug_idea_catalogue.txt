@@ -558,28 +558,23 @@ NAM_clear_mainland_national_spirits = {
 		MON_imperial_general_staff
 		MON_throne_of_fifteen_crowns
 		MZR_common_water_charter
-		NAM_adm_appointed_prefects_idea
 		NAM_adm_armed_peace_idea
-		NAM_adm_building_code_idea
+		NAM_adm_balanced_accounts_idea
 		NAM_adm_charter_ending_federation_idea
 		NAM_adm_charter_ending_oil_union_idea
 		NAM_adm_civic_audit_idea
 		NAM_adm_civil_dividend_idea
-		NAM_adm_civil_service_exam_idea
 		NAM_adm_commercial_commonwealth_idea
 		NAM_adm_common_citizenship_idea
 		NAM_adm_common_fuel_market_idea
 		NAM_adm_crisis_office_idea
-		NAM_adm_customs_clearinghouse_idea
-		NAM_adm_distribution_board_idea
-		NAM_adm_district_council_idea
+		NAM_adm_development_bank_idea
 		NAM_adm_district_guarantees_idea
 		NAM_adm_district_inspectorate_idea
-		NAM_adm_district_scholarships_slot_idea
 		NAM_adm_districts_idea
 		NAM_adm_domestic_designs_idea
 		NAM_adm_domestic_refining_idea
-		NAM_adm_engineering_collegium_slot_idea
+		NAM_adm_export_clearing_idea
 		NAM_adm_export_quays_idea
 		NAM_adm_federal_charter_idea
 		NAM_adm_hum_union_accepted_slot_idea
@@ -588,6 +583,7 @@ NAM_clear_mainland_national_spirits = {
 		NAM_adm_ladder_of_seals_idea
 		NAM_adm_law_after_war_idea
 		NAM_adm_machine_shops_idea
+		NAM_adm_machine_tool_contracts_idea
 		NAM_adm_municipal_bonds_idea
 		NAM_adm_municipal_land_idea
 		NAM_adm_national_university_slot_idea
@@ -598,22 +594,39 @@ NAM_clear_mainland_national_spirits = {
 		NAM_adm_port_polytechnic_slot_idea
 		NAM_adm_prag_ending_directorate_idea
 		NAM_adm_prag_ending_republic_idea
+		NAM_adm_prag_treasury_guarantee_idea
+		NAM_adm_pragmatic_compact_idea
+		NAM_adm_pw_armament_inspectorate_idea
+		NAM_adm_pw_central_treasury_idea
+		NAM_adm_pw_constitutional_committee_idea
+		NAM_adm_pw_development_fund_idea
 		NAM_adm_pw_district_hospitals_idea
 		NAM_adm_pw_employment_offices_idea
+		NAM_adm_pw_export_guarantees_idea
+		NAM_adm_pw_family_pensions_idea
+		NAM_adm_pw_industrial_commission_idea
+		NAM_adm_pw_insurance_fund_idea
+		NAM_adm_pw_postwar_commission_idea
 		NAM_adm_pw_returnee_registration_idea
-		NAM_adm_reconstruction_statute_idea
+		NAM_adm_pw_southern_schools_idea
+		NAM_adm_regional_trusts_idea
 		NAM_adm_regional_university_idea
 		NAM_adm_repair_depots_idea
-		NAM_adm_seal_registry_idea
 		NAM_adm_service_state_idea
+		NAM_adm_south_contract_court_idea
+		NAM_adm_south_delegates_idea
 		NAM_adm_south_heritage_idea
+		NAM_adm_south_safir_customs_idea
+		NAM_adm_south_ward_magistrates_idea
+		NAM_adm_state_project_bureaus_idea
 		NAM_adm_supports_balance_idea
 		NAM_adm_svetlogorye_idea
 		NAM_adm_tax_rolls_slot_idea
 		NAM_adm_tenant_councils_idea
 		NAM_adm_vertical_idea
+		NAM_adm_water_boards_idea
 		NAM_adm_well_register_idea
-		NAM_adm_workers_inspection_idea
+		NAM_adm_works_commission_idea
 		NAM_administration_dummy_idea
 		NAM_agreement_dist_failure
 		NAM_agreement_dist_reward
@@ -712,6 +725,10 @@ NAM_clear_mainland_national_spirits = {
 		NAM_gar_ladder_ending_iron_idea
 		NAM_gar_mobile_columns_idea
 		NAM_gar_namestnik_garrisons_idea
+		NAM_gar_pw_armament_inspectorate_idea
+		NAM_gar_south_black_basin_idea
+		NAM_gar_state_logistics_grid_idea
+		NAM_gar_tractor_leasing_idea
 		NAM_garrison_dummy_idea
 		NAM_housing_programme
 		NAM_interregnum_power_vacuum
@@ -743,6 +760,7 @@ NAM_clear_mainland_national_spirits = {
 		NAM_national_spirit
 		NAM_navy_active_squadron_idea
 		NAM_navy_basin_reconnaissance_idea
+		NAM_navy_chartered_tonnage_idea
 		NAM_navy_construction_idea
 		NAM_navy_dummy_idea
 		NAM_navy_harbour_service_idea
@@ -755,50 +773,25 @@ NAM_clear_mainland_national_spirits = {
 		NAM_prag_convoy_insurance_idea
 		NAM_private_tank_farms
 		NAM_pw_breakthrough_army_garrison_preview
-		NAM_pw_central_treasury_administration_preview
-		NAM_pw_chemical_works_administration_preview
-		NAM_pw_civil_administration_administration_preview
-		NAM_pw_civil_payroll_administration_preview
-		NAM_pw_civil_police_administration_preview
-		NAM_pw_constitutional_committee_administration_preview
+		NAM_pw_chanceries_dissolved
 		NAM_pw_contract_arbitration_idea
-		NAM_pw_defence_accounts_administration_preview
-		NAM_pw_export_guarantees_administration_preview
-		NAM_pw_family_pensions_administration_preview
-		NAM_pw_grid_dispatch_administration_preview
-		NAM_pw_ground_control_air_preview
+		NAM_pw_freight_schedule_garrison_preview
 		NAM_pw_import_machine_tools_idea
-		NAM_pw_industrial_credit_administration_preview
 		NAM_pw_industrial_schedule_idea
-		NAM_pw_industrial_sites_administration_preview
-		NAM_pw_insurance_fund_administration_preview
-		NAM_pw_military_governors_administration_preview
+		NAM_pw_landing_supply_navy_preview
 		NAM_pw_mobile_army_garrison_preview
 		NAM_pw_municipal_services_idea
-		NAM_pw_naval_service_navy_preview
-		NAM_pw_officer_appointments_garrison_preview
-		NAM_pw_oil_equipment_administration_preview
-		NAM_pw_permanent_institutions_administration_preview
-		NAM_pw_postwar_commission_administration_preview
+		NAM_pw_naval_review_navy_preview
+		NAM_pw_oil_laboratories_administration_preview
 		NAM_pw_power_grid_administration_preview
-		NAM_pw_public_procurement_administration_preview
-		NAM_pw_public_supply_garrison_preview
 		NAM_pw_public_utilities_idea
 		NAM_pw_regional_contracts_idea
-		NAM_pw_reserve_centres_garrison_preview
 		NAM_pw_school_network_administration_preview
 		NAM_pw_southern_air_command_air_preview
 		NAM_pw_southern_army_garrison_preview
 		NAM_pw_southern_civil_service_administration_preview
-		NAM_pw_southern_industrial_repair_administration_preview
 		NAM_pw_southern_intelligence_garrison_preview
-		NAM_pw_southern_schools_administration_preview
 		NAM_pw_southern_supply_plan_garrison_preview
-		NAM_pw_staff_exercises_garrison_preview
-		NAM_pw_strategic_guard_garrison_preview
-		NAM_pw_toolmaking_administration_preview
-		NAM_pw_transport_maintenance_garrison_preview
-		NAM_pw_unified_budget_administration_preview
 		NAM_pw_water_intakes_administration_preview
 		NAM_rebel_depot_maps
 		NAM_reparations_to_svetlogorye
@@ -825,8 +818,10 @@ NAM_clear_mainland_national_spirits = {
 		NAM_rtw_terms_published
 		NAM_ruined_economy
 		NAM_seal_junta
+		NAM_south_appointed_watch
 		NAM_south_convoy_blockade
 		NAM_south_counteroffensive_idea
+		NAM_south_supervised_building
 		NAM_south_war_council_idea
 		NAM_south_war_dummy_idea
 		NAM_spirit_federation

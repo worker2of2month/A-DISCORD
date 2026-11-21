@@ -39,20 +39,21 @@ NAM_depot_settlement_open = {
 	has_country_flag = { flag = NAM_depot_case value > 3 }
 }
 
+# Either ruling closes the case through NAM_depot_concessions_settled, so the two
+# decisions exclude each other without a focus marker; the post-war tree gates both
+# on the oil exchange.
 NAM_depot_revocation_authorised = {
 	NAM_depot_settlement_open = yes
-	NOT = { has_completed_focus = NAM_depot_reserve_charter }
 	OR = {
-		has_completed_focus = NAM_depot_revoke
+		has_completed_focus = NAM_oil_exchange
 		NOT = { has_focus_tree = NAM_postwar_focus }
 	}
 }
 
 NAM_depot_reserve_authorised = {
 	NAM_depot_settlement_open = yes
-	NOT = { has_completed_focus = NAM_depot_revoke }
 	OR = {
-		has_completed_focus = NAM_depot_reserve_charter
+		has_completed_focus = NAM_oil_exchange
 		NOT = { has_focus_tree = NAM_postwar_focus }
 	}
 }
@@ -818,7 +819,7 @@ NAM_project_slot_free = {
 }
 
 NAM_labour_shift_can_draw_fund = {
-	has_completed_focus = NAM_pw_social_budget
+	has_completed_focus = NAM_pw_employment_offices
 	has_country_flag = NAM_crisis_fund
 	check_variable = { ADISCORD_economy_treasury < 300 }
 }
@@ -832,7 +833,7 @@ NAM_labour_shift_affordable = {
 }
 
 NAM_labour_mediation_pending = {
-	has_completed_focus = NAM_pw_arbitration_commissions
+	has_completed_focus = NAM_pw_employment_offices
 	OR = {
 		has_idea = NAM_agreement_oil_failure
 		has_idea = NAM_agreement_dist_failure
@@ -1131,7 +1132,7 @@ NAM_exchange_can_write_receipt = {
 	OR = {
 		check_variable = { var = NAM_exchange_receipts value = 1 compare = less_than }
 		AND = {
-			has_completed_focus = NAM_state_refineries
+			has_completed_focus = NAM_armed_peace
 			check_variable = { var = NAM_exchange_receipts value = 2 compare = less_than }
 		}
 	}
@@ -5621,7 +5622,7 @@ NAM_air_bridge_affordable = {
 
 NAM_air_bridge_departure = {
 	NAM_pw_operable = yes
-	has_completed_focus = NAM_pw_air_supply
+	has_completed_focus = NAM_pw_southern_air_command
 	owns_state = 700
 	controls_state = 700
 	700 = { air_base > 0 }
@@ -5631,7 +5632,7 @@ NAM_air_bridge_destination = {
 	is_controlled_by = NAM
 	OR = {
 		is_owned_by = NAM
-		NAM = { has_completed_focus = NAM_pw_ground_control }
+		NAM = { has_completed_focus = NAM_pw_southern_air_command }
 	}
 }
 
@@ -5688,7 +5689,7 @@ NAM_veteran_housing_ready = {
 
 # The signed order reserves the district copy only when both sites can take it.
 NAM_housing_series_available = {
-	has_completed_focus = NAM_pw_standard_projects
+	has_completed_focus = NAM_development_bank
 	has_country_flag = NAM_veteran_housing_blueprint
 	NAM_pw_district_civil_site = yes
 }
@@ -5696,8 +5697,8 @@ NAM_housing_series_available = {
 NAM_veteran_housing_authorised = {
 	OR = {
 		has_completed_focus = NAM_civil_dividend
+		has_completed_focus = NAM_armed_peace
 		has_completed_focus = NAM_south_heritage
-		has_completed_focus = NAM_pw_standard_projects
 	}
 }
 
@@ -5714,14 +5715,14 @@ NAM_pw_district_allotment_site = {
 	NAM_pw_central_civil_district = yes
 	OR = {
 		AND = {
-			NAM = { has_completed_focus = NAM_civil_service_exam }
+			NAM = { has_completed_focus = NAM_ladder_ending_service }
 			OR = {
 				infrastructure < 5
 				NOT = { has_state_flag = NAM_pw_allotment_site_opened }
 			}
 		}
 		AND = {
-			NAM = { has_completed_focus = NAM_appointed_prefects }
+			NAM = { has_completed_focus = NAM_ladder_ending_iron }
 			infrastructure > 0
 			NOT = { has_dynamic_modifier = { modifier = NAM_pw_district_fleet_called } }
 		}
@@ -5729,10 +5730,7 @@ NAM_pw_district_allotment_site = {
 }
 
 NAM_pw_veteran_course_authorised = {
-	OR = {
-		has_completed_focus = NAM_veterans_return
-		has_completed_focus = NAM_pw_family_pensions
-	}
+	has_completed_focus = NAM_veterans_return
 }
 
 NAM_pw_veteran_course_ready = {
@@ -5790,7 +5788,7 @@ NAM_plant_conversion_site = {
 NAM_plant_conversion_authorised = {
 	NAM_pw_operable = yes
 	has_global_flag = ADISCORD_south_hegemon_NAM
-	has_completed_focus = NAM_pw_demobilisation_board
+	has_completed_focus = NAM_pw_postwar_commission
 	has_war = no
 }
 
@@ -5803,9 +5801,7 @@ NAM_tenant_petition_open = {
 
 NAM_pw_district_schools_unlocked = {
 	OR = {
-		has_completed_focus = NAM_oil_fund
-		has_completed_focus = NAM_relief_register
-		has_completed_focus = NAM_regional_university
+		has_completed_focus = NAM_rescue_college
 		has_completed_focus = NAM_pw_southern_schools
 	}
 }
@@ -5873,7 +5869,7 @@ NAM_field_repair_unlocked = {
 	OR = {
 		NAM_field_repair_trained = yes
 		has_completed_focus = NAM_rescue_college
-		has_completed_focus = NAM_pw_labour_inspection
+		has_completed_focus = NAM_works_commission
 	}
 }
 
@@ -5976,14 +5972,11 @@ NAM_crisis_drought_possible = {
 	NAM_pw_operable = yes
 	has_war = no
 	controls_state = 688
-	NOT = { has_completed_focus = NAM_pw_reservoir_survey }
+	NOT = { has_completed_focus = NAM_pw_water_intakes }
 }
 
 NAM_crisis_drought_mitigated = {
-	OR = {
-		has_completed_focus = NAM_pw_water_intakes
-		has_completed_focus = NAM_pw_irrigation_works
-	}
+	has_completed_focus = NAM_pw_water_intakes
 }
 
 NAM_crisis_pending_6 = {
@@ -6000,7 +5993,7 @@ NAM_crisis_blackout_possible = {
 	NAM_pw_operable = yes
 	has_war = no
 	controls_state = 700
-	NOT = { has_completed_focus = NAM_pw_grid_dispatch }
+	NOT = { has_completed_focus = NAM_pw_power_grid }
 }
 
 NAM_crisis_blackout_mitigated = {
@@ -6056,8 +6049,8 @@ NAM_crisis_delivery_disruption_possible = {
 
 NAM_crisis_delivery_disruption_mitigated = {
 	OR = {
-		has_completed_focus = NAM_pw_rail_priority
-		has_completed_focus = NAM_pw_road_priority
+		has_completed_focus = NAM_pw_breakthrough_army
+		has_completed_focus = NAM_pw_mobile_army
 	}
 }
 
@@ -6351,7 +6344,7 @@ NAM_steel_survey_authorised = {
 		}
 		AND = {
 			state = 690
-			NAM = { has_completed_focus = NAM_pw_local_design_offices }
+			NAM = { has_completed_focus = NAM_basin_reservoirs }
 		}
 	}
 }
@@ -6381,7 +6374,7 @@ NAM_bw_hydroelectric_startable = {
 	NAM_hydroelectric_site = yes
 	NAM_project_state_ready = yes
 	NAM = {
-		has_completed_focus = NAM_svetlogorsk_dam
+		has_completed_focus = NAM_pw_energy_commission
 		NAM_project_slot_free = yes
 		NOT = { has_political_power < 50 }
 		check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
@@ -6565,6 +6558,7 @@ NAM_pw_contract_arbitration_ready = {
 NAM_pw_fuel_aid_unlocked = {
 	OR = {
 		has_completed_focus = NAM_oil_fund
+		has_completed_focus = NAM_common_fuel_market
 		has_completed_focus = NAM_prag_partner_supply
 	}
 }
@@ -6657,7 +6651,7 @@ NAM_district_integration_thresholds_met = {
 
 NAM_border_citizenship_ready = {
 	NAM_border_integration_site = yes
-	NAM = { has_completed_focus = NAM_border_security }
+	NAM = { has_completed_focus = NAM_border_revenge }
 	NAM_district_integration_thresholds_met = yes
 }
 
@@ -7458,7 +7452,6 @@ NAM_program_development_fund_ready = {
 
 NAM_pw_reserve_advance_ready = {
 	NAM_pw_operable = yes
-	has_completed_focus = NAM_pw_war_accounts
 	has_completed_focus = NAM_pw_strategic_reserve
 	has_country_flag = {
 		flag = NAM_program_strategic_reserve_paid
@@ -7468,7 +7461,6 @@ NAM_pw_reserve_advance_ready = {
 
 NAM_pw_harbour_slipway_site = {
 	NAM_pw_operable = yes
-	has_completed_focus = NAM_pw_war_accounts
 	has_completed_focus = NAM_pw_development_fund
 	has_country_flag = NAM_program_development_fund_commissioned
 	owns_state = 700
@@ -7568,10 +7560,7 @@ NAM_postwar_refinery_authorized = {
 }
 
 NAM_pw_state_arsenal_unlocked = {
-	OR = {
-		has_completed_focus = NAM_ladder_of_seals
-		has_completed_focus = NAM_pw_industrial_commission
-	}
+	has_completed_focus = NAM_pw_industrial_commission
 }
 
 NAM_pw_barter_charter_unlocked = {
@@ -7579,8 +7568,6 @@ NAM_pw_barter_charter_unlocked = {
 		NAM_prag_charter_uses_warrant = yes
 		has_country_flag = NAM_prag_warrant_pledged
 		has_completed_focus = NAM_rus_expedition_staff
-		has_completed_focus = NAM_warehouse_receipts
-		has_completed_focus = NAM_commercial_reserve
 	}
 }
 
@@ -7603,7 +7590,7 @@ NAM_pw_barter_charter_ready = {
 
 NAM_pw_barter_charter_slot_free = {
 	OR = {
-		has_completed_focus = NAM_commercial_reserve
+		has_completed_focus = NAM_balanced_accounts
 		NOT = { has_country_flag = NAM_pw_civil_busy }
 	}
 	NOT = { has_country_flag = NAM_pw_barter_charter_paid }
@@ -7783,7 +7770,6 @@ NAM_export_office_unlocked = {
 	OR = {
 		has_completed_focus = NAM_freight_brokerage
 		has_completed_focus = NAM_defeat_oil_peace
-		has_completed_focus = NAM_customs_clearinghouse
 		has_completed_focus = NAM_oil_exchange
 		has_completed_focus = NAM_oil_ministry
 	}

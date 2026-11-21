@@ -14,9 +14,10 @@ focus_tree = {
 		y = 2000
 	}
 
+	# ----- Shared root -----
 	focus = {
 		id = NAM_south_heritage
-		x = 12
+		x = 15
 		y = 0
 		icon = GFX_focus_NAM_south_heritage
 		cost = 3
@@ -33,22 +34,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_adm_south_heritage_idea
-				}
-			}
-			hidden_effect = {
-				add_to_variable = { var = NAM_adm_compliance_gain value = 0.05 }
-				add_to_variable = { var = NAM_adm_resistance_growth value = -0.05 }
-				NAM_refresh_administration = yes
-			}
+			# Either model side of the post-war economy already opened these.
 			if = {
 				limit = {
 					hidden_trigger = {
 						NOT = { has_completed_focus = NAM_civil_dividend }
-						NOT = { has_completed_focus = NAM_pw_standard_projects }
+						NOT = { has_completed_focus = NAM_armed_peace }
 					}
 				}
 				unlock_decision_tooltip = NAM_veteran_housing
@@ -59,752 +50,33 @@ focus_tree = {
 				unlock_decision_tooltip = NAM_postwar_rearmament
 				custom_effect_tooltip = NAM_postwar_rearmament_unlock_tt
 			}
+			add_political_power = 100
+			add_stability = 0.05
+			add_manpower = 10000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_south_heritage_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.05 }
+				add_to_variable = { var = NAM_adm_resistance_growth value = -0.05 }
+				NAM_refresh_administration = yes
+				country_event = { id = ADISCORD_nam_story.311 days = 2 }
+			}
 		}
 		ai_will_do = {
 			base = 50
 		}
 	}
 
-	focus = {
-		id = NAM_svetlogorsk_settlement
-		relative_position_id = NAM_south_heritage
-		x = 3
-		y = 2
-		icon = GFX_focus_NAM_svetlogorsk_settlement
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		allow_branch = { NAM_veyran_southern_route = yes }
-		prerequisite = { focus = NAM_south_heritage }
-		mutually_exclusive = { focus = NAM_veyran_union_charter }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_rom_mandate_tt
-				NAM_veyran_rom_mandate = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_conservative_mandate_tt
-				power_balance_value = { id = NAM_postwar_future_bop value > 0 }
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			if = {
-				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
-				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.55 }
-			}
-			custom_effect_tooltip = NAM_svetlogorsk_settlement_tt
-			hidden_effect = {
-				set_cosmetic_tag = NAM_svetlogorye_derzhava
-				NAM_refresh_subject_identities = yes
-			}
-			if = {
-				limit = {
-					hidden_trigger = {
-						NOT = { has_completed_focus = NAM_regional_trusts }
-						NOT = { has_completed_focus = NAM_pw_state_chamber }
-					}
-				}
-				unlock_decision_tooltip = NAM_pw_regional_contracts
-				custom_effect_tooltip = NAM_pw_regional_contracts_unlock_tt
-			}
-			custom_effect_tooltip = NAM_svetlogorsk_trust_works_tt
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_veyran_union_charter
-		relative_position_id = NAM_south_heritage
-		x = 6
-		y = 2
-		icon = GFX_focus_NAM_veyran_union_charter
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		allow_branch = { NAM_veyran_southern_route = yes }
-		prerequisite = { focus = NAM_south_heritage }
-		mutually_exclusive = { focus = NAM_svetlogorsk_settlement }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_rom_mandate_tt
-				NAM_veyran_rom_mandate = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_imperial_mandate_tt
-				power_balance_value = { id = NAM_postwar_future_bop value < 0 }
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			if = {
-				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
-				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.55 }
-			}
-			custom_effect_tooltip = NAM_veyran_union_charter_tt
-			hidden_effect = {
-				set_cosmetic_tag = NAM_veyran_union
-				NAM_refresh_subject_identities = yes
-				set_temp_variable = { ADISCORD_superevent_request = 71 }
-				ADISCORD_superevent_enqueue = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_veyran_embarkation_staff
-		relative_position_id = NAM_south_heritage
-		x = 6
-		y = 3
-		icon = GFX_focus_NAM_veyran_embarkation_staff
-		cost = 2
-		search_filters = { FOCUS_FILTER_NAVY_XP }
-		allow_branch = { NAM_veyran_southern_route = yes }
-		prerequisite = { focus = NAM_veyran_union_charter }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_rom_mandate_tt
-				NAM_veyran_rom_mandate = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			if = {
-				limit = { NOT = { has_tech = ADISCORD_tech_restored_dockyards } }
-				set_technology = { ADISCORD_tech_restored_dockyards = 1 }
-			}
-			add_equipment_to_stockpile = {
-				type = convoy
-				amount = 20
-				producer = NAM
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_veyran_convoy_charter
-		relative_position_id = NAM_south_heritage
-		x = 4
-		y = 5
-		icon = GFX_focus_NAM_veyran_convoy_charter
-		cost = 4
-		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_veyran_southern_route = yes }
-		prerequisite = { focus = NAM_veyran_embarkation_staff }
-		mutually_exclusive = { focus = NAM_veyran_arsenal_contract }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_rom_mandate_tt
-				NAM_veyran_rom_mandate = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_contract_funds_tt
-				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = NAM_veyran_contract_price_tt
-			hidden_effect = {
-				set_temp_variable = { var = NAM_treasury_amount value = 300 }
-				NAM_spend_treasury = yes
-			}
-			add_equipment_to_stockpile = {
-				type = convoy
-				amount = 45
-				producer = NAM
-			}
-			add_fuel = 35000
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_veyran_arsenal_contract
-		relative_position_id = NAM_south_heritage
-		x = 8
-		y = 5
-		icon = GFX_focus_NAM_veyran_arsenal_contract
-		cost = 4
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
-		allow_branch = { NAM_veyran_southern_route = yes }
-		prerequisite = { focus = NAM_veyran_embarkation_staff }
-		mutually_exclusive = { focus = NAM_veyran_convoy_charter }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_rom_mandate_tt
-				NAM_veyran_rom_mandate = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_contract_funds_tt
-				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = NAM_veyran_contract_price_tt
-			hidden_effect = {
-				set_temp_variable = { var = NAM_treasury_amount value = 300 }
-				NAM_spend_treasury = yes
-			}
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 1600
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = artillery_equipment
-				amount = 72
-				producer = NAM
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_veyran_counterplan
-		relative_position_id = NAM_south_heritage
-		x = 6
-		y = 6
-		icon = GFX_focus_NAM_veyran_counterplan
-		cost = 2
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_NAVY_XP }
-		allow_branch = { NAM_veyran_southern_route = yes }
-		prerequisite = {
-			focus = NAM_veyran_convoy_charter
-			focus = NAM_veyran_arsenal_contract
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_rom_mandate_tt
-				NAM_veyran_rom_mandate = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_unifier_tt
-				has_global_flag = ADISCORD_vorkerland_reunification_verified
-				ADISCORD_west_wrk_reunified = yes
-				event_target:ADISCORD_vorkerland_nation = {
-					is_subject = no
-					has_capitulated = no
-					OR = {
-						has_country_flag = ADISCORD_vorkerland_route_worker
-						has_country_flag = ADISCORD_vorkerland_route_joint
-						has_country_flag = ADISCORD_vorkerland_route_utilitarian
-					}
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			if = {
-				limit = { hidden_trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_worker } } }
-				custom_effect_tooltip = NAM_veyran_plan_ports_tt
-				add_intel = {
-					target = event_target:ADISCORD_vorkerland_nation
-					navy_intel = 25
-				}
-			}
-			else_if = {
-				limit = { hidden_trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_joint } } }
-				custom_effect_tooltip = NAM_veyran_plan_sappers_tt
-				add_equipment_to_stockpile = {
-					type = support_equipment
-					amount = 240
-					producer = NAM
-				}
-			}
-			else_if = {
-				limit = { hidden_trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_utilitarian } } }
-				custom_effect_tooltip = NAM_veyran_plan_columns_tt
-				add_equipment_to_stockpile = {
-					type = motorized_equipment
-					amount = 180
-					producer = NAM
-				}
-			}
-			else = { custom_effect_tooltip = NAM_veyran_counterplan_preview_tt }
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_veyran_invasion
-		relative_position_id = NAM_south_heritage
-		x = 6
-		y = 8
-		icon = GFX_focus_NAM_veyran_invasion
-		cost = 2
-		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
-		allow_branch = { NAM_veyran_southern_route = yes }
-		prerequisite = { focus = NAM_veyran_counterplan }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_veyran_can_invade_tt
-				NAM_veyran_can_invade = yes
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = NAM_veyran_invasion_tt
-			hidden_effect = { NAM_veyran_start_invasion = yes }
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_trade_hearing
-		relative_position_id = NAM_south_heritage
-		x = -5
-		y = 2
-		icon = GFX_focus_NAM_south_trade_hearing
-		cost = 1
-		search_filters = { FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_south_heritage }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_pragmatic_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_political_power = 40
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_safir_line
-		relative_position_id = NAM_south_heritage
-		x = -8
-		y = 3
-		icon = GFX_focus_NAM_south_safir_line
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_south_trade_hearing }
-		mutually_exclusive = { focus = NAM_south_bayrat_lease }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_pragmatic_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-			730 = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_south_held_partner_site_tt
-					NAM_south_held_partner_site = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			custom_effect_tooltip = NAM_port_extra_slot_tt
-			hidden_effect = {
-				add_to_variable = { var = NAM_port_general_slots value = 1 }
-				NAM_port_refresh_capacity = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_bayrat_lease
-		relative_position_id = NAM_south_heritage
-		x = -5
-		y = 3
-		icon = GFX_focus_NAM_south_bayrat_lease
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_south_trade_hearing }
-		mutually_exclusive = { focus = NAM_south_safir_line }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_pragmatic_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-			732 = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_south_held_partner_site_tt
-					NAM_south_held_partner_site = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			732 = {
-				add_resource = { type = steel amount = 4 }
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_safir_charter
-		relative_position_id = NAM_south_heritage
-		x = -8
-		y = 5
-		icon = GFX_focus_NAM_south_safir_charter
-		cost = 3
-		search_filters = { FOCUS_FILTER_NAVY_XP }
-		prerequisite = { focus = NAM_south_safir_line }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_pragmatic_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-			730 = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_south_held_partner_site_tt
-					NAM_south_held_partner_site = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			unlock_decision_tooltip = NAM_charter_safir_freighters
-			custom_effect_tooltip = NAM_charter_safir_freighters_unlock_tt
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_bayrat_foundry
-		relative_position_id = NAM_south_heritage
-		x = -5
-		y = 5
-		icon = GFX_focus_NAM_south_bayrat_foundry
-		cost = 4
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_south_bayrat_lease }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_pragmatic_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-			732 = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_south_held_partner_site_tt
-					NAM_south_held_partner_site = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			732 = {
-				if = {
-					limit = { free_building_slots = { building = industrial_complex size > 0 include_locked = yes } }
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
-					}
-					hidden_effect = {
-						owner = { ADISCORD_economy_mark_dirty = yes }
-					}
-				}
-				else = {
-					owner = {
-						add_equipment_to_stockpile = {
-							type = support_equipment
-							amount = 250
-							producer = NAM
-						}
-					}
-				}
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_delegates
-		relative_position_id = NAM_south_heritage
-		x = -5
-		y = 2
-		icon = GFX_focus_NAM_south_delegates
-		cost = 1
-		search_filters = { FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_south_heritage }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_district_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_stability = 0.03
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_builders
-		relative_position_id = NAM_south_heritage
-		x = -8
-		y = 3
-		icon = GFX_focus_NAM_south_builders
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_south_delegates }
-		mutually_exclusive = { focus = NAM_south_elected_watch }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_district_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-			707 = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_south_held_partner_site_tt
-					NAM_south_held_partner_site = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			707 = {
-				if = {
-					limit = { free_building_slots = { building = industrial_complex size > 0 include_locked = yes } }
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
-					}
-					hidden_effect = {
-						owner = { ADISCORD_economy_mark_dirty = yes }
-					}
-				}
-				else = {
-					owner = {
-						add_equipment_to_stockpile = {
-							type = motorized_equipment
-							amount = 100
-							producer = NAM
-						}
-					}
-				}
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_elected_watch
-		relative_position_id = NAM_south_heritage
-		x = -5
-		y = 3
-		icon = GFX_focus_NAM_south_elected_watch
-		cost = 3
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_south_delegates }
-		mutually_exclusive = { focus = NAM_south_builders }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_district_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-			699 = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_south_held_partner_site_tt
-					NAM_south_held_partner_site = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			699 = {
-				owner = {
-					add_equipment_to_stockpile = {
-						type = infantry_equipment
-						amount = 800
-						producer = NAM
-					}
-					add_equipment_to_stockpile = {
-						type = support_equipment
-						amount = 80
-						producer = NAM
-					}
-				}
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_road_crews
-		relative_position_id = NAM_south_heritage
-		x = -8
-		y = 5
-		icon = GFX_focus_NAM_south_road_crews
-		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_south_builders }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_district_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-			707 = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_south_held_partner_site_tt
-					NAM_south_held_partner_site = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			707 = {
-				owner = {
-					add_equipment_to_stockpile = {
-						type = motorized_equipment
-						amount = 60
-						producer = NAM
-					}
-				}
-			}
-			unlock_decision_tooltip = NAM_fund_southern_roads
-			custom_effect_tooltip = NAM_fund_southern_roads_unlock_tt
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_south_ward_armoury
-		relative_position_id = NAM_south_heritage
-		x = -5
-		y = 5
-		icon = GFX_focus_NAM_south_ward_armoury
-		cost = 4
-		search_filters = { FOCUS_FILTER_ARMY_XP }
-		prerequisite = { focus = NAM_south_elected_watch }
-		allow_branch = {
-			NAM_won_final_southern_war = yes
-			NAM_prewar_district_mandate = yes
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pirate_country_operable_tt
-				NAM_country_operable = yes
-			}
-			is_subject = no
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-			699 = {
-				custom_trigger_tooltip = {
-					tooltip = NAM_south_held_partner_site_tt
-					NAM_south_held_partner_site = yes
-				}
-			}
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			699 = {
-				if = {
-					limit = { free_building_slots = { building = arms_factory size > 0 include_locked = yes } }
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = arms_factory
-						level = 1
-						instant_build = yes
-					}
-					hidden_effect = {
-						owner = { ADISCORD_economy_mark_dirty = yes }
-					}
-				}
-				else = {
-					owner = {
-						add_equipment_to_stockpile = {
-							type = infantry_equipment
-							amount = 1000
-							producer = NAM
-						}
-					}
-				}
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
+	# ----- Khan crisis lane (every course) -----
 	focus = {
 		id = NAM_rus_crisis_watch
 		relative_position_id = NAM_south_heritage
-		x = 11
-		y = 2
-		offset = {
-			x = -11
-			trigger = { NAM_prewar_service_mandate = no }
-		}
+		x = 0
+		y = 1
 		icon = GFX_focus_NAM_rus_crisis_watch
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
@@ -834,11 +106,15 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			add_political_power = 60
+			add_war_support = 0.05
+			custom_effect_tooltip = NAM_rus_crisis_watch_reward_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_port_general_slots value = 1 }
 				NAM_port_refresh_capacity = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
 			}
-			custom_effect_tooltip = NAM_port_extra_slot_tt
 		}
 		ai_will_do = {
 			base = 30
@@ -882,6 +158,14 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_rus_send_relief
 			custom_effect_tooltip = NAM_rus_send_relief_unlock_tt
+			add_political_power = 100
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_grp_rus_fuel_for_coalition_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 12 }
+				add_to_variable = { var = NAM_grp_oil_support value = -6 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 20
@@ -895,7 +179,7 @@ focus_tree = {
 		y = 1
 		icon = GFX_focus_NAM_rus_demand_share
 		cost = 3
-		search_filters = { FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_rus_crisis_watch }
 		mutually_exclusive = { focus = NAM_rus_fuel_for_coalition }
 		allow_branch = {
@@ -925,6 +209,15 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_rus_offer_barter
 			custom_effect_tooltip = NAM_rus_offer_barter_unlock_tt
+			add_war_support = 0.05
+			custom_effect_tooltip = NAM_rus_demand_share_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 500 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_oil_support value = 12 }
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 20
@@ -933,9 +226,9 @@ focus_tree = {
 
 	focus = {
 		id = NAM_rus_expedition_staff
-		relative_position_id = NAM_rus_crisis_watch
-		x = 0
-		y = 3
+		relative_position_id = NAM_rus_fuel_for_coalition
+		x = 2
+		y = 1
 		icon = GFX_focus_NAM_rus_expedition_staff
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
@@ -964,20 +257,19 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			army_experience = 15
 			unlock_decision_tooltip = NAM_rus_send_column
 			custom_effect_tooltip = NAM_rus_send_column_unlock_tt
 			if = {
-				limit = {
-					hidden_trigger = {
-						NOT = {
-							has_completed_focus = NAM_commercial_reserve
-							has_completed_focus = NAM_warehouse_receipts
-						}
-					}
-				}
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_contract_register } } }
 				unlock_decision_tooltip = NAM_pw_barter_charter
 				custom_effect_tooltip = NAM_pw_barter_charter_unlock_tt
+			}
+			army_experience = 40
+			add_command_power = 40
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 3000
+				producer = NAM
 			}
 		}
 		ai_will_do = {
@@ -985,60 +277,15 @@ focus_tree = {
 		}
 	}
 
-	focus = {
-		id = NAM_pw_postwar_commission
-		relative_position_id = NAM_south_heritage
-		x = -9
-		y = 2
-		icon = GFX_focus_NAM_pw_postwar_commission
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
-			NAM_prewar_service_mandate = yes
-			NAM_won_final_southern_war = yes
-		}
-		prerequisite = {
-			focus = NAM_south_heritage
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_prewar_service_mandate_tt
-				NAM_prewar_service_mandate = yes
-			}
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_postwar_commission_administration_preview
-				}
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_political_power_gain
-					value = 0.05
-				}
-				NAM_refresh_administration = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
+	# ----- Etatist heritage: the post-war commission -----
 	focus = {
 		id = NAM_pw_strategic_reserve
 		relative_position_id = NAM_south_heritage
-		x = -5
-		y = 2
+		x = -8
+		y = 1
 		icon = GFX_focus_NAM_pw_strategic_reserve
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
 		allow_branch = {
 			NAM_prewar_service_mandate = yes
 			NAM_won_final_southern_war = yes
@@ -1065,6 +312,21 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_program_strategic_reserve
 			custom_effect_tooltip = NAM_program_strategic_reserve_unlock_tt
+			unlock_decision_tooltip = NAM_pw_release_reserve
+			custom_effect_tooltip = NAM_pw_release_reserve_unlock_tt
+			add_manpower = 10000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 9000
+				producer = NAM
+			}
+			army_experience = 40
+			custom_effect_tooltip = NAM_grp_pw_strategic_reserve_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -1072,8 +334,8 @@ focus_tree = {
 	focus = {
 		id = NAM_pw_development_fund
 		relative_position_id = NAM_south_heritage
-		x = 0
-		y = 2
+		x = -4
+		y = 1
 		icon = GFX_focus_NAM_pw_development_fund
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -1097,133 +359,75 @@ focus_tree = {
 				NAM_prewar_service_mandate = yes
 			}
 			hidden_trigger = { NAM_won_final_southern_war = yes }
-			owns_state = 700
-			controls_state = 700
 		}
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
 			unlock_decision_tooltip = NAM_program_development_fund
 			custom_effect_tooltip = NAM_program_development_fund_unlock_tt
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_pw_war_accounts
-		relative_position_id = NAM_south_heritage
-		x = -5
-		y = 3
-		icon = GFX_focus_NAM_pw_war_accounts
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
-			NAM_prewar_service_mandate = yes
-			NAM_won_final_southern_war = yes
-		}
-		prerequisite = {
-			focus = NAM_pw_strategic_reserve
-			focus = NAM_pw_development_fund
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_prewar_service_mandate_tt
-				NAM_prewar_service_mandate = yes
-			}
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			if = {
-				limit = { NOT = { has_completed_focus = NAM_pw_development_fund } }
-				unlock_decision_tooltip = NAM_pw_release_reserve
-				custom_effect_tooltip = NAM_pw_release_reserve_unlock_tt
-			}
-			if = {
-				limit = { NOT = { has_completed_focus = NAM_pw_strategic_reserve } }
-				unlock_decision_tooltip = NAM_pw_harbour_slipway
-				custom_effect_tooltip = NAM_pw_harbour_slipway_unlock_tt
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_pw_southern_schools
-		relative_position_id = NAM_south_heritage
-		x = -8
-		y = 3
-		icon = GFX_focus_NAM_pw_southern_schools
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
-			NAM_prewar_service_mandate = yes
-			NAM_won_final_southern_war = yes
-		}
-		prerequisite = {
-			focus = NAM_pw_strategic_reserve
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_prewar_service_mandate_tt
-				NAM_prewar_service_mandate = yes
-			}
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			if = {
-				limit = {
-					hidden_trigger = {
-						NOT = { has_completed_focus = NAM_oil_fund }
-						NOT = { has_completed_focus = NAM_relief_register }
-						NOT = { has_completed_focus = NAM_regional_university }
+			unlock_decision_tooltip = NAM_pw_harbour_slipway
+			custom_effect_tooltip = NAM_pw_harbour_slipway_unlock_tt
+			700 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
 					}
 				}
-				unlock_decision_tooltip = NAM_pw_district_schools
-				custom_effect_tooltip = NAM_pw_district_schools_unlock_tt
 			}
-			custom_effect_tooltip = NAM_khazar_school_exchange_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_southern_schools_administration_preview
+					add_idea = NAM_adm_pw_development_fund_idea
 				}
 			}
+			custom_effect_tooltip = NAM_pw_development_fund_reward_tt
 			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_research_speed_factor
-					value = 0.025
+				if = {
+					limit = {
+						NOT = {
+							700 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
 				}
+				set_temp_variable = { var = NAM_treasury_amount value = 500 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.06 }
+				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.06 }
 				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 	focus = {
-		id = NAM_pw_unified_budget
-		relative_position_id = NAM_south_heritage
-		x = 0
-		y = 3
-		icon = GFX_focus_NAM_pw_unified_budget
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		id = NAM_pw_postwar_commission
+		relative_position_id = NAM_pw_strategic_reserve
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_pw_postwar_commission
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		allow_branch = {
 			NAM_prewar_service_mandate = yes
 			NAM_won_final_southern_war = yes
 		}
 		prerequisite = {
+			focus = NAM_pw_strategic_reserve
 			focus = NAM_pw_development_fund
 		}
 		available = {
@@ -1240,201 +444,28 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_unified_budget_administration_preview
-				}
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_tax_collection
-					value = 0.04
-				}
-				NAM_refresh_administration = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_pw_demobilisation_board
-		relative_position_id = NAM_south_heritage
-		x = -11
-		y = 3
-		icon = GFX_focus_NAM_pw_demobilisation_board
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
-			NAM_prewar_service_mandate = yes
-			NAM_won_final_southern_war = yes
-		}
-		prerequisite = {
-			focus = NAM_pw_postwar_commission
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_prewar_service_mandate_tt
-				NAM_prewar_service_mandate = yes
-			}
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			add_manpower = 4000
 			unlock_decision_tooltip = NAM_convert_wartime_plant
 			custom_effect_tooltip = NAM_convert_wartime_plant_unlock_tt
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_pw_southern_industrial_repair
-		relative_position_id = NAM_south_heritage
-		x = -7
-		y = 5
-		icon = GFX_focus_NAM_pw_southern_industrial_repair
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
-			NAM_prewar_service_mandate = yes
-			NAM_won_final_southern_war = yes
-		}
-		prerequisite = {
-			focus = NAM_pw_war_accounts
-			focus = NAM_pw_southern_schools
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
+			add_manpower = 14000
+			add_stability = 0.10
+			add_tech_bonus = {
+				name = NAM_pw_postwar_commission
+				bonus = 0.5
+				uses = 1
+				category = industry
 			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_prewar_service_mandate_tt
-				NAM_prewar_service_mandate = yes
-			}
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_southern_industrial_repair_administration_preview
+					add_idea = NAM_adm_pw_postwar_commission_idea
 				}
 			}
 			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_efficiency_gain
-					value = 0.05
-				}
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.08 }
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.08 }
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.03 }
 				NAM_refresh_administration = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_pw_civil_administration
-		relative_position_id = NAM_south_heritage
-		x = 0
-		y = 5
-		icon = GFX_focus_NAM_pw_civil_administration
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
-			NAM_prewar_service_mandate = yes
-			NAM_won_final_southern_war = yes
-		}
-		prerequisite = {
-			focus = NAM_pw_unified_budget
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_prewar_service_mandate_tt
-				NAM_prewar_service_mandate = yes
-			}
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_civil_administration_administration_preview
-				}
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_compliance_gain
-					value = 0.04
-				}
-				add_to_variable = {
-					var = NAM_adm_stability_factor
-					value = 0.03
-				}
-				NAM_refresh_administration = yes
-			}
-		}
-		ai_will_do = { base = 5 }
-	}
-
-	focus = {
-		id = NAM_pw_permanent_institutions
-		relative_position_id = NAM_south_heritage
-		x = -11
-		y = 5
-		icon = GFX_focus_NAM_pw_permanent_institutions
-		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		allow_branch = {
-			NAM_prewar_service_mandate = yes
-			NAM_won_final_southern_war = yes
-		}
-		prerequisite = {
-			focus = NAM_pw_demobilisation_board
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = NAM_pw_operable_tt
-				NAM_pw_operable = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = NAM_prewar_service_mandate_tt
-				NAM_prewar_service_mandate = yes
-			}
-			hidden_trigger = { NAM_won_final_southern_war = yes }
-		}
-		cancel_if_invalid = yes
-		continue_if_invalid = no
-		completion_reward = {
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_pw_permanent_institutions_administration_preview
-				}
-			}
-			hidden_effect = {
-				add_to_variable = {
-					var = NAM_adm_admin_expense
-					value = -0.03
-				}
-				add_to_variable = {
-					var = NAM_adm_political_power_gain
-					value = 0.05
-				}
-				NAM_refresh_administration = yes
+				country_event = { id = ADISCORD_nam_story.337 days = 2 }
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -1442,17 +473,17 @@ focus_tree = {
 
 	focus = {
 		id = NAM_pw_southern_military_rule
-		relative_position_id = NAM_pw_permanent_institutions
-		x = -1
-		y = 1
+		relative_position_id = NAM_pw_postwar_commission
+		x = -2
+		y = 2
 		icon = GFX_focus_NAM_pw_southern_military_rule
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_WAR_SUPPORT }
 		allow_branch = {
 			NAM_prewar_service_mandate = yes
 			NAM_won_final_southern_war = yes
 		}
-		prerequisite = { focus = NAM_pw_permanent_institutions }
+		prerequisite = { focus = NAM_pw_postwar_commission }
 		mutually_exclusive = {
 			focus = NAM_pw_southern_local_offices
 		}
@@ -1475,24 +506,33 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_program_southern_reserve
 			custom_effect_tooltip = NAM_program_southern_reserve_unlock_tt
+			add_manpower = 10000
+			add_war_support = 0.08
+			add_command_power = 40
 			custom_effect_tooltip = NAM_pw_southern_military_programme_tt
+			custom_effect_tooltip = NAM_grp_pw_southern_military_rule_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 12 }
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 	focus = {
 		id = NAM_pw_southern_local_offices
-		relative_position_id = NAM_pw_permanent_institutions
-		x = 1
-		y = 1
+		relative_position_id = NAM_pw_postwar_commission
+		x = 2
+		y = 2
 		icon = GFX_focus_NAM_pw_southern_local_offices
 		cost = 3
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		allow_branch = {
 			NAM_prewar_service_mandate = yes
 			NAM_won_final_southern_war = yes
 		}
-		prerequisite = { focus = NAM_pw_permanent_institutions }
+		prerequisite = { focus = NAM_pw_postwar_commission }
 		mutually_exclusive = {
 			focus = NAM_pw_southern_military_rule
 		}
@@ -1515,6 +555,1164 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = NAM_program_southern_local_offices
 			custom_effect_tooltip = NAM_program_southern_local_offices_unlock_tt
+			add_political_power = 100
+			add_stability = 0.08
+			custom_effect_tooltip = NAM_pw_southern_local_offices_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 500 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 12 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_schools
+		relative_position_id = NAM_pw_southern_military_rule
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_pw_southern_schools
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_RESEARCH }
+		allow_branch = {
+			NAM_prewar_service_mandate = yes
+			NAM_won_final_southern_war = yes
+		}
+		prerequisite = {
+			focus = NAM_pw_southern_military_rule
+			focus = NAM_pw_southern_local_offices
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_district_schools
+			custom_effect_tooltip = NAM_pw_district_schools_unlock_tt
+			add_political_power = 60
+			ADISCORD_reform_society_development = yes
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_southern_schools_idea
+				}
+			}
+			custom_effect_tooltip = NAM_khazar_school_exchange_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# ----- Etatist heritage: Veyran union or the Svetlogorsk dominion -----
+	focus = {
+		id = NAM_veyran_union_charter
+		relative_position_id = NAM_south_heritage
+		x = 4
+		y = 1
+		icon = GFX_focus_NAM_veyran_union_charter
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_NAVY_XP }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_south_heritage }
+		mutually_exclusive = { focus = NAM_svetlogorsk_settlement }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_imperial_mandate_tt
+				power_balance_value = { id = NAM_postwar_future_bop value < 0 }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.08
+			add_command_power = 40
+			navy_experience = 40
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.55 }
+			}
+			custom_effect_tooltip = NAM_veyran_union_charter_tt
+			hidden_effect = {
+				set_cosmetic_tag = NAM_veyran_union
+				NAM_refresh_subject_identities = yes
+				set_temp_variable = { ADISCORD_superevent_request = 71 }
+				ADISCORD_superevent_enqueue = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_svetlogorsk_settlement
+		relative_position_id = NAM_south_heritage
+		x = 8
+		y = 1
+		icon = GFX_focus_NAM_svetlogorsk_settlement
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_south_heritage }
+		mutually_exclusive = { focus = NAM_veyran_union_charter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_conservative_mandate_tt
+				power_balance_value = { id = NAM_postwar_future_bop value > 0 }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_regional_trusts } } }
+				unlock_decision_tooltip = NAM_pw_regional_contracts
+				custom_effect_tooltip = NAM_pw_regional_contracts_unlock_tt
+			}
+			add_political_power = 100
+			add_stability = 0.08
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.55 }
+			}
+			custom_effect_tooltip = NAM_svetlogorsk_settlement_tt
+			custom_effect_tooltip = NAM_svetlogorsk_trust_works_tt
+			hidden_effect = {
+				set_cosmetic_tag = NAM_svetlogorye_derzhava
+				NAM_refresh_subject_identities = yes
+				country_event = { id = ADISCORD_nam_story.336 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_embarkation_staff
+		relative_position_id = NAM_veyran_union_charter
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_veyran_embarkation_staff
+		cost = 2
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_veyran_union_charter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			navy_experience = 25
+			if = {
+				limit = { NOT = { has_tech = ADISCORD_tech_restored_dockyards } }
+				set_technology = { ADISCORD_tech_restored_dockyards = 1 }
+			}
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 20
+				producer = NAM
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_arsenal_contract
+		relative_position_id = NAM_veyran_embarkation_staff
+		x = -2
+		y = 2
+		icon = GFX_focus_NAM_veyran_arsenal_contract
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_veyran_embarkation_staff }
+		mutually_exclusive = { focus = NAM_veyran_convoy_charter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_contract_funds_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 9000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 120
+				producer = NAM
+			}
+			army_experience = 40
+			custom_effect_tooltip = NAM_veyran_contract_price_tt
+			custom_effect_tooltip = NAM_grp_veyran_arsenal_contract_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_spend_treasury = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_convoy_charter
+		relative_position_id = NAM_veyran_embarkation_staff
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_veyran_convoy_charter
+		cost = 3
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = { focus = NAM_veyran_embarkation_staff }
+		mutually_exclusive = { focus = NAM_veyran_arsenal_contract }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_contract_funds_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 45
+				producer = NAM
+			}
+			add_fuel = 35000
+			navy_experience = 40
+			custom_effect_tooltip = NAM_veyran_contract_price_tt
+			custom_effect_tooltip = NAM_grp_veyran_convoy_charter_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_spend_treasury = yes
+				add_to_variable = { var = NAM_grp_oil_support value = 12 }
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_veyran_invasion
+		relative_position_id = NAM_veyran_arsenal_contract
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_veyran_invasion
+		cost = 3
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		allow_branch = { NAM_veyran_southern_route = yes }
+		prerequisite = {
+			focus = NAM_veyran_arsenal_contract
+			focus = NAM_veyran_convoy_charter
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_rom_mandate_tt
+				NAM_veyran_rom_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_unifier_tt
+				has_global_flag = ADISCORD_vorkerland_reunification_verified
+				ADISCORD_west_wrk_reunified = yes
+				event_target:ADISCORD_vorkerland_nation = {
+					is_subject = no
+					has_capitulated = no
+					OR = {
+						has_country_flag = ADISCORD_vorkerland_route_worker
+						has_country_flag = ADISCORD_vorkerland_route_joint
+						has_country_flag = ADISCORD_vorkerland_route_utilitarian
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_veyran_can_invade_tt
+				NAM_veyran_can_invade = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			# The plan follows the unifier's route; the war order is the same on every route.
+			if = {
+				limit = { hidden_trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_worker } } }
+				custom_effect_tooltip = NAM_veyran_plan_ports_tt
+				add_intel = {
+					target = event_target:ADISCORD_vorkerland_nation
+					navy_intel = 25
+				}
+			}
+			else_if = {
+				limit = { hidden_trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_joint } } }
+				custom_effect_tooltip = NAM_veyran_plan_sappers_tt
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 200
+					producer = NAM
+				}
+			}
+			else_if = {
+				limit = { hidden_trigger = { event_target:ADISCORD_vorkerland_nation = { has_country_flag = ADISCORD_vorkerland_route_utilitarian } } }
+				custom_effect_tooltip = NAM_veyran_plan_columns_tt
+				add_equipment_to_stockpile = {
+					type = motorized_equipment
+					amount = 250
+					producer = NAM
+				}
+			}
+			else = {
+				custom_effect_tooltip = NAM_veyran_counterplan_preview_tt
+			}
+			custom_effect_tooltip = NAM_veyran_invasion_tt
+			hidden_effect = { NAM_veyran_start_invasion = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# ----- Pragmatic heritage: the sea line or the mines -----
+	focus = {
+		id = NAM_south_safir_line
+		relative_position_id = NAM_south_heritage
+		x = -6
+		y = 1
+		icon = GFX_focus_NAM_south_safir_line
+		cost = 3
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_south_heritage }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+			# The two lanes exclude each other here: a drawn line would cross the
+			# Khan lane between them.
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_bayrat_lease_taken_tt
+				NOT = { has_completed_focus = NAM_south_bayrat_lease }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 15
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_south_safir_line_reward_tt
+			hidden_effect = {
+				if = {
+					limit = { 730 = { NAM_south_held_partner_site = yes } }
+					add_to_variable = { var = NAM_port_general_slots value = 1 }
+					NAM_port_refresh_capacity = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_treasury_amount value = 500 }
+					NAM_add_treasury = yes
+				}
+				set_temp_variable = { var = NAM_treasury_amount value = 500 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.351 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_bayrat_lease
+		relative_position_id = NAM_south_heritage
+		x = 6
+		y = 1
+		icon = GFX_focus_NAM_south_bayrat_lease
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_south_heritage }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_safir_line_taken_tt
+				NOT = { has_completed_focus = NAM_south_safir_line }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 100
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 300
+				producer = NAM
+			}
+			732 = {
+				if = {
+					limit = { NAM_south_held_partner_site = yes }
+					add_resource = { type = steel amount = 4 }
+				}
+			}
+			custom_effect_tooltip = NAM_south_bayrat_lease_reward_tt
+			hidden_effect = {
+				if = {
+					limit = { NOT = { 732 = { NAM_south_held_partner_site = yes } } }
+					set_temp_variable = { var = NAM_treasury_amount value = 500 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_grp_oil_support value = 12 }
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.352 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_safir_charter
+		relative_position_id = NAM_south_safir_line
+		x = -2
+		y = 2
+		icon = GFX_focus_NAM_south_safir_charter
+		cost = 2
+		search_filters = { FOCUS_FILTER_NAVY_XP }
+		prerequisite = { focus = NAM_south_safir_line }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_charter_safir_freighters
+			custom_effect_tooltip = NAM_charter_safir_freighters_unlock_tt
+			add_political_power = 60
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 10
+				producer = NAM
+			}
+			navy_experience = 25
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_safir_customs
+		relative_position_id = NAM_south_safir_line
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_customs_clearinghouse
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_south_safir_line }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_south_safir_customs_idea
+				}
+			}
+			custom_effect_tooltip = NAM_south_safir_customs_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.08 }
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.06 }
+				NAM_refresh_administration = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_bayrat_rail
+		relative_position_id = NAM_south_bayrat_lease
+		x = -2
+		y = 2
+		icon = GFX_focus_NAM_pw_rail_priority
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_south_bayrat_lease }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 20
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 250
+				producer = NAM
+			}
+			732 = {
+				if = {
+					limit = {
+						NAM_south_held_partner_site = yes
+						infrastructure < 4
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 2
+						instant_build = yes
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_south_bayrat_rail_reward_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = {
+							732 = {
+								NAM_south_held_partner_site = yes
+								infrastructure < 4
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_bayrat_foundry
+		relative_position_id = NAM_south_bayrat_lease
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_south_bayrat_foundry
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_south_bayrat_lease }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = NAM
+			}
+			army_experience = 25
+			732 = {
+				if = {
+					limit = {
+						NAM_south_held_partner_site = yes
+						free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+				else = {
+					ROOT = {
+						add_equipment_to_stockpile = {
+							type = support_equipment
+							amount = 250
+							producer = NAM
+						}
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_south_bayrat_foundry_reward_tt
+			hidden_effect = {
+				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_trade_hearing
+		relative_position_id = NAM_south_safir_customs
+		x = 4
+		y = 2
+		icon = GFX_focus_NAM_south_trade_hearing
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_south_safir_customs
+			focus = NAM_south_bayrat_rail
+		}
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 150
+			add_stability = 0.10
+			custom_effect_tooltip = NAM_south_trade_hearing_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 700 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_nam_support value = 5 }
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				add_to_variable = { var = NAM_grp_garr_support value = 5 }
+				add_to_variable = { var = NAM_grp_trade_support value = 5 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.353 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_contract_court
+		relative_position_id = NAM_south_trade_hearing
+		x = 0
+		y = 2
+		icon = GFX_focus_NAM_commercial_courts
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_south_trade_hearing }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_pragmatic_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 70
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_south_contract_court_idea
+				}
+			}
+			custom_effect_tooltip = NAM_south_contract_court_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.06 }
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.06 }
+				NAM_refresh_administration = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# ----- District heritage: the builders or the elected watch -----
+	focus = {
+		id = NAM_south_builders
+		relative_position_id = NAM_south_heritage
+		x = -6
+		y = 1
+		icon = GFX_focus_NAM_south_builders
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_south_heritage }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_district_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+			# The two lanes exclude each other here: a drawn line would cross the
+			# Khan lane between them.
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_elected_watch_taken_tt
+				NOT = { has_completed_focus = NAM_south_elected_watch }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 400
+				producer = NAM
+			}
+			add_stability = 0.05
+			707 = {
+				if = {
+					limit = { NAM_south_held_partner_site = yes }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_south_builders_reward_tt
+			hidden_effect = {
+				if = {
+					limit = { NOT = { 707 = { NAM_south_held_partner_site = yes } } }
+					set_temp_variable = { var = NAM_treasury_amount value = 450 }
+					NAM_add_treasury = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 12 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.373 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_elected_watch
+		relative_position_id = NAM_south_heritage
+		x = 6
+		y = 1
+		icon = GFX_focus_NAM_south_elected_watch
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_south_heritage }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_district_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_builders_taken_tt
+				NOT = { has_completed_focus = NAM_south_builders }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 9000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 300
+				producer = NAM
+			}
+			add_manpower = 4000
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_grp_south_elected_watch_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 12 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.374 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_road_crews
+		relative_position_id = NAM_south_builders
+		x = -2
+		y = 2
+		icon = GFX_focus_NAM_south_road_crews
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_south_builders }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_district_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+			707 = {
+				custom_trigger_tooltip = {
+					tooltip = NAM_south_held_partner_site_tt
+					NAM_south_held_partner_site = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_fund_southern_roads
+			custom_effect_tooltip = NAM_fund_southern_roads_unlock_tt
+			add_political_power = 60
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 250
+				producer = NAM
+			}
+			707 = {
+				if = {
+					limit = { infrastructure < 4 }
+					add_building_construction = {
+						type = infrastructure
+						level = 2
+						instant_build = yes
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_water_councils
+		relative_position_id = NAM_south_builders
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_pw_irrigation_works
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_south_builders }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_district_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			ADISCORD_reform_society_development = yes
+			custom_effect_tooltip = NAM_south_water_councils_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_ward_magistrates
+		relative_position_id = NAM_south_elected_watch
+		x = -2
+		y = 2
+		icon = GFX_focus_NAM_pw_administrative_courts
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_south_elected_watch }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_district_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			add_war_support = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_south_ward_magistrates_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.08 }
+				add_to_variable = { var = NAM_adm_resistance_growth value = -0.08 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_ward_armoury
+		relative_position_id = NAM_south_elected_watch
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_south_ward_armoury
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_south_elected_watch }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_district_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6000
+				producer = NAM
+			}
+			army_experience = 25
+			add_command_power = 25
+			699 = {
+				if = {
+					limit = { NAM_south_held_partner_site = yes }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_south_ward_armoury_reward_tt
+			hidden_effect = {
+				if = {
+					limit = { NOT = { 699 = { NAM_south_held_partner_site = yes } } }
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_delegates
+		relative_position_id = NAM_south_water_councils
+		x = 4
+		y = 2
+		icon = GFX_focus_NAM_south_delegates
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = NAM_south_water_councils
+			focus = NAM_south_ward_magistrates
+		}
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_district_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 150
+			add_manpower = 14000
+			ADISCORD_programme_society_development = yes
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_south_delegates_idea
+				}
+			}
+			custom_effect_tooltip = NAM_grp_south_delegates_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.08 }
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.10 }
+				add_to_variable = { var = NAM_adm_political_power_gain value = -0.06 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 15 }
+				add_to_variable = { var = NAM_grp_nam_support value = -8 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.375 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_free_communities
+		relative_position_id = NAM_south_delegates
+		x = 0
+		y = 2
+		icon = GFX_focus_NAM_district_council
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_south_delegates }
+		allow_branch = {
+			NAM_won_final_southern_war = yes
+			NAM_prewar_district_mandate = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			is_subject = no
+			hidden_trigger = { NAM_won_final_southern_war = yes }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_pw_enact_community_rights = yes
+			add_political_power = 100
+			ADISCORD_reform_cultural_development = yes
+			custom_effect_tooltip = NAM_south_free_communities_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 500 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 12 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}

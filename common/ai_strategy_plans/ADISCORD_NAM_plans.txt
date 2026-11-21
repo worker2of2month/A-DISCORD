@@ -511,101 +511,32 @@ NAM_postwar_plan = {
 		NAM_recognition
 		NAM_law_after_war
 		NAM_federal_charter
-		NAM_foreign_office
-		NAM_normalisation
-		NAM_south_fenn_guarantee
-		NAM_eflor_accord
-		NAM_azhar_accord
-		NAM_public_utilities
-		NAM_civic_audit
-		NAM_district_council
-		NAM_civil_repair
-		NAM_armed_peace
-		NAM_oil_fund
-		NAM_district_militia
-		NAM_district_workshops
-		NAM_common_fuel_market
-		NAM_open_libraries
-		NAM_oil_ministry
-		NAM_export_consortium
-		NAM_pw_oil_laboratories
-		NAM_middle_loren_wells
-		NAM_reclaim_230
-		NAM_oil_exchange
-		NAM_border_administration
-		NAM_border_compacts
-		NAM_national_university
-		NAM_svetlogorsk_dam
-		NAM_charter_ending_federation
 		NAM_veterans_return
-		NAM_south_oil_for_water
-		NAM_svetlogorye
+		NAM_charter_ending_federation
+		NAM_civil_repair
 		NAM_pw_transport_commission
-		NAM_pw_road_priority
-		NAM_pw_logistics_depots
-		NAM_pw_army_review
-		NAM_pw_artillery_observers
-		NAM_pw_breakthrough_army
-		NAM_pw_staff_exercises
-		NAM_pw_reserve_centres
-		NAM_pw_transport_maintenance
-		NAM_pw_freight_schedule
-		NAM_pw_southern_army
-		NAM_south_oil_charter
-		NAM_depot_inquiry
-		NAM_depot_revoke
-		NAM_rural_grid
-		NAM_returnee_offices
-		NAM_district_scholarships
-		NAM_municipal_land
-		NAM_water_boards
-		NAM_public_credit
-		NAM_workers_inspection
-		NAM_regional_university
-		NAM_common_citizenship
-		NAM_pw_oil_equipment
-		NAM_cooperative_congress
-		NAM_haulage_cooperatives
-		NAM_district_fair
-		NAM_relief_register
-		NAM_relief_trains
+		NAM_civic_audit
+		NAM_oil_ministry
+		NAM_pw_mobile_army
+		NAM_public_utilities
+		NAM_civil_dividend
 		NAM_rescue_college
+		NAM_pw_freight_schedule
+		NAM_district_militia
 		NAM_relief_reserves
-		NAM_pw_naval_review
-		NAM_svetlogorsk_shipyards
-		NAM_pw_municipal_repair
-		NAM_pw_returnee_registration
-		NAM_pw_refinery_engineering
-		NAM_pw_fuel_reservoirs
-		NAM_pw_energy_commission
-		NAM_pw_regional_power
-		NAM_pw_power_grid
-		NAM_pw_water_intakes
-		NAM_pw_reservoir_survey
-		NAM_pw_air_review
-		NAM_pw_airfield_network
-		NAM_pw_air_defence
-		NAM_pw_power_reserve
-		NAM_pw_industrial_recovery
-		NAM_pw_civil_engineering
-		NAM_pw_toolmaking
-		NAM_pw_industrial_sites
-		NAM_pw_rail_workshops
-		NAM_pw_southern_corridor
-		NAM_pw_district_hospitals
-		NAM_pw_school_network
-		NAM_pw_regional_reconstruction
-		NAM_pw_engineer_units
-		NAM_pw_combined_arms
-		NAM_pw_naval_workshops
-		NAM_pw_escort_fleet
-		NAM_pw_crew_schools
-		NAM_pw_landing_supply
-		NAM_pw_naval_service
-		NAM_pw_flight_schools
-		NAM_pw_engine_workshops
-		NAM_pw_air_supply
-		NAM_pw_southern_air_command
+		NAM_regional_university
+		NAM_oil_exchange
+		NAM_south_fenn_guarantee
+		NAM_foreign_office
+		NAM_pw_southern_army
+		NAM_south_oil_for_water
+		NAM_normalisation
+		NAM_kadir_oil_charter
+		NAM_svetlogorye
+		NAM_eflor_accord
+		NAM_common_fuel_market
+		NAM_azhar_accord
+		NAM_south_oil_charter
 	}
 	weight = { factor = 20 }
 }
@@ -631,9 +562,10 @@ NAM_south_heritage_plan = {
 	}
 	ai_national_focuses = {
 		NAM_south_heritage
+		NAM_south_elected_watch
+		NAM_south_ward_magistrates
 		NAM_south_delegates
-		NAM_south_builders
-		NAM_south_road_crews
+		NAM_south_free_communities
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition
 		NAM_rus_expedition_staff
@@ -662,120 +594,29 @@ NAM_postwar_vertical_plan = {
 		NAM_recognition
 		NAM_law_after_war
 		NAM_service_state
-		NAM_foreign_office
-		NAM_border_revenge
-		NAM_south_black_basin
-		NAM_neighbour_local_commands
-		NAM_neighbour_national_charters
-		NAM_state_plan
-		NAM_unified_standards
-		NAM_seal_registry
-		NAM_civil_repair
-		NAM_armed_peace
-		NAM_oil_quotas
-		NAM_namestnik_garrisons
-		NAM_state_logistics_grid
-		NAM_ladder_of_seals
-		NAM_state_project_bureaus
-		NAM_oil_ministry
-		NAM_state_refineries
-		NAM_pw_oil_laboratories
-		NAM_middle_loren_wells
-		NAM_reclaim_230
-		NAM_oil_exchange
-		NAM_border_administration
-		NAM_border_security
-		NAM_border_citizenship
-		NAM_national_university
-		NAM_svetlogorsk_dam
-		NAM_ladder_ending_service
 		NAM_veterans_return
-		NAM_south_desert_offices
-		NAM_svetlogorye
+		NAM_ladder_ending_iron
+		NAM_south_black_basin
+		NAM_state_project_bureaus
+		NAM_civil_repair
 		NAM_pw_transport_commission
-		NAM_pw_road_priority
-		NAM_pw_logistics_depots
-		NAM_pw_army_review
-		NAM_pw_artillery_observers
+		NAM_oil_ministry
 		NAM_pw_breakthrough_army
-		NAM_pw_staff_exercises
-		NAM_pw_reserve_centres
-		NAM_pw_transport_maintenance
+		NAM_armed_peace
+		NAM_state_plan
 		NAM_pw_freight_schedule
-		NAM_pw_southern_army
-		NAM_south_seal_over_furnaces
-		NAM_depot_inquiry
-		NAM_depot_reserve_charter
-		NAM_civil_service_exam
-		NAM_building_code
-		NAM_works_commission
-		NAM_development_bank
-		NAM_basin_reservoirs
-		NAM_engineering_collegium
-		NAM_district_inspectorate
-		NAM_reconstruction_statute
-		NAM_pw_naval_review
-		NAM_svetlogorsk_shipyards
-		NAM_pw_constitutional_committee
-		NAM_pw_cabinet_statute
-		NAM_pw_cadastre
-		NAM_pw_civil_payroll
-		NAM_pw_administrative_courts
-		NAM_pw_public_procurement
-		NAM_pw_central_treasury
-		NAM_pw_industrial_recovery
-		NAM_pw_civil_engineering
-		NAM_pw_toolmaking
-		NAM_pw_industrial_sites
-		NAM_pw_industrial_commission
-		NAM_pw_tool_reserve
-		NAM_pw_public_supply
-		NAM_pw_industrial_credit
+		NAM_south_desert_offices
+		NAM_oil_exchange
+		NAM_foreign_office
 		NAM_pw_labour_code
-		NAM_pw_company_housing
-		NAM_pw_technical_training
-		NAM_pw_family_pensions
-		NAM_pw_employment_offices
-		NAM_pw_arbitration_commissions
-		NAM_pw_social_budget
-		NAM_pw_military_governors
-		NAM_pw_mobilisation_register
-		NAM_pw_armament_inspectorate
-		NAM_pw_strategic_guard
-		NAM_pw_defence_accounts
-		NAM_pw_survey_corps
-		NAM_pw_state_warehouses
-		NAM_pw_standard_projects
-		NAM_pw_municipal_repair
-		NAM_pw_returnee_registration
-		NAM_pw_oil_equipment
-		NAM_pw_refinery_engineering
-		NAM_pw_fuel_reservoirs
-		NAM_pw_energy_commission
-		NAM_pw_regional_power
-		NAM_pw_power_grid
-		NAM_pw_irrigation_works
-		NAM_pw_reservoir_survey
-		NAM_pw_air_review
-		NAM_pw_airfield_network
-		NAM_pw_air_defence
-		NAM_pw_power_reserve
-		NAM_pw_rail_workshops
-		NAM_pw_southern_corridor
-		NAM_pw_district_hospitals
-		NAM_pw_school_network
-		NAM_pw_regional_reconstruction
-		NAM_pw_engineer_units
-		NAM_pw_combined_arms
-		NAM_pw_naval_workshops
-		NAM_pw_escort_fleet
-		NAM_pw_crew_schools
-		NAM_pw_landing_supply
-		NAM_pw_naval_service
-		NAM_pw_flight_schools
-		NAM_pw_engine_workshops
-		NAM_pw_air_supply
-		NAM_pw_southern_air_command
+		NAM_pw_southern_army
+		NAM_border_revenge
+		NAM_namestnik_garrisons
+		NAM_svetlogorye
+		NAM_pw_export_guarantees
+		NAM_neighbour_local_commands
+		NAM_ladder_of_seals
+		NAM_south_seal_over_furnaces
 	}
 	weight = { factor = 20 }
 }
@@ -799,22 +640,18 @@ NAM_south_heritage_vertical_plan = {
 	}
 	ai_national_focuses = {
 		NAM_south_heritage
-		NAM_veyran_union_charter
-		NAM_veyran_embarkation_staff
-		NAM_veyran_convoy_charter
-		NAM_veyran_counterplan
-		NAM_veyran_invasion
-		NAM_rus_crisis_watch
-		NAM_rus_fuel_for_coalition
-		NAM_rus_expedition_staff
-		NAM_pw_postwar_commission
 		NAM_pw_strategic_reserve
-		NAM_pw_war_accounts
+		NAM_veyran_union_charter
+		NAM_svetlogorsk_settlement
+		NAM_pw_postwar_commission
+		NAM_veyran_embarkation_staff
+		NAM_veyran_arsenal_contract
+		NAM_pw_southern_local_offices
+		NAM_veyran_invasion
 		NAM_pw_southern_schools
-		NAM_pw_demobilisation_board
-		NAM_pw_southern_industrial_repair
-		NAM_pw_permanent_institutions
-		NAM_pw_southern_military_rule
+		NAM_rus_crisis_watch
+		NAM_rus_demand_share
+		NAM_rus_expedition_staff
 	}
 	weight = { factor = 20 }
 }
@@ -1010,99 +847,30 @@ NAM_postwar_pragmatic_plan = {
 		NAM_recognition
 		NAM_law_after_war
 		NAM_pragmatic_compact
-		NAM_foreign_office
-		NAM_normalisation
-		NAM_prag_settlement_agreements
-		NAM_eflor_accord
-		NAM_azhar_accord
-		NAM_commercial_courts
-		NAM_export_clearing
-		NAM_contract_register
-		NAM_port_agreement
-		NAM_warehouse_receipts
-		NAM_insured_caravans
-		NAM_commercial_reserve
-		NAM_prag_partner_supply
-		NAM_balanced_accounts
-		NAM_civil_repair
-		NAM_civil_dividend
-		NAM_national_university
-		NAM_oil_ministry
-		NAM_export_consortium
-		NAM_oil_exchange
-		NAM_depot_inquiry
-		NAM_depot_revoke
-		NAM_border_administration
-		NAM_border_compacts
-		NAM_svetlogorye
-		NAM_pw_transport_commission
-		NAM_pw_road_priority
-		NAM_pw_logistics_depots
 		NAM_veterans_return
-		NAM_pw_army_review
-		NAM_pw_artillery_observers
-		NAM_pw_mobile_army
-		NAM_pw_staff_exercises
-		NAM_pw_reserve_centres
-		NAM_pw_transport_maintenance
-		NAM_pw_freight_schedule
-		NAM_pw_southern_army
 		NAM_prag_ending_republic
-		NAM_svetlogorsk_dam
-		NAM_prag_south_guarantees
-		NAM_merchant_charter
-		NAM_domestic_designs
-		NAM_pw_naval_review
-		NAM_pw_naval_fuel_depots
-		NAM_freight_brokerage
-		NAM_chartered_tonnage
-		NAM_bonded_terminal
-		NAM_through_waybill
-		NAM_customs_clearinghouse
-		NAM_freight_exchange
-		NAM_repair_depots
-		NAM_port_polytechnic
+		NAM_civil_repair
+		NAM_pw_transport_commission
 		NAM_municipal_bonds
-		NAM_commercial_commonwealth
-		NAM_testing_office
-		NAM_precision_gauges
-		NAM_licensed_workshop
-		NAM_svetlogorsk_shipyards
-		NAM_pw_municipal_repair
-		NAM_pw_returnee_registration
-		NAM_pw_oil_laboratories
-		NAM_pw_oil_equipment
-		NAM_pw_refinery_engineering
-		NAM_pw_fuel_reservoirs
-		NAM_pw_energy_commission
-		NAM_pw_regional_power
-		NAM_pw_power_grid
-		NAM_pw_water_intakes
-		NAM_pw_reservoir_survey
-		NAM_pw_air_review
-		NAM_pw_airfield_network
-		NAM_pw_air_defence
-		NAM_pw_power_reserve
-		NAM_pw_industrial_recovery
-		NAM_pw_civil_engineering
-		NAM_pw_toolmaking
-		NAM_pw_industrial_sites
-		NAM_pw_rail_workshops
-		NAM_pw_southern_corridor
-		NAM_pw_district_hospitals
-		NAM_pw_school_network
-		NAM_pw_regional_reconstruction
-		NAM_pw_field_workshops
-		NAM_pw_combined_arms
-		NAM_pw_naval_workshops
-		NAM_pw_escort_fleet
-		NAM_pw_crew_schools
-		NAM_pw_landing_supply
-		NAM_pw_naval_service
-		NAM_pw_flight_schools
-		NAM_pw_engine_workshops
-		NAM_pw_air_supply
-		NAM_pw_southern_air_command
+		NAM_oil_ministry
+		NAM_pw_mobile_army
+		NAM_contract_register
+		NAM_repair_depots
+		NAM_civil_dividend
+		NAM_port_polytechnic
+		NAM_pw_freight_schedule
+		NAM_insured_caravans
+		NAM_prag_partner_supply
+		NAM_oil_exchange
+		NAM_foreign_office
+		NAM_prag_treasury_guarantee
+		NAM_pw_southern_army
+		NAM_normalisation
+		NAM_svetlogorye
+		NAM_eflor_accord
+		NAM_balanced_accounts
+		NAM_azhar_accord
+		NAM_prag_south_guarantees
 	}
 	weight = { factor = 20 }
 }
@@ -1126,8 +894,10 @@ NAM_south_heritage_pragmatic_plan = {
 	}
 	ai_national_focuses = {
 		NAM_south_heritage
-		NAM_south_trade_hearing
 		NAM_south_safir_line
+		NAM_south_safir_customs
+		NAM_south_trade_hearing
+		NAM_south_contract_court
 		NAM_south_safir_charter
 		NAM_rus_crisis_watch
 		NAM_rus_fuel_for_coalition

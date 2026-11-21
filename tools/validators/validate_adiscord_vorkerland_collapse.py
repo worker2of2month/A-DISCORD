@@ -5321,7 +5321,94 @@ def validate_ai(root: Path, issues: list[str]) -> None:
                 )
 
 
+IVANLAND_AI_FALTER_FLAG = "ADISCORD_vorkerland_ivanland_ai_expedition_falters"
+IVANLAND_AI_FALTER_GUARD = f"{IVANLAND_AI_FALTER_FLAG} = no"
+IVANLAND_SUCCESS_CALL = "ADISCORD_vorkerland_ivanland_intervention_success = yes"
+
+
+def ivanland_objective_success_branches(source: str) -> list[str]:
+    """Return every `if` whose own limit awards success for the 90-94 objective."""
+    return [
+        branch
+        for branch in named_blocks(source, "if")
+        if "controls_state = 94" in named_block(branch, "limit")
+        and IVANLAND_SUCCESS_CALL in branch
+    ]
+
+
+def ivanland_ai_falter_issues(
+    mission: str,
+    effects: str,
+    collapse_on_actions: str,
+    peace_on_actions: str,
+    ivn_events: str,
+    triggers: str,
+) -> list[str]:
+    """A faltering AI expedition must stay unwinnable until ADISCORD_ivn.13 fails it."""
+    issues: list[str] = []
+    detectors = (
+        ("mission cancel_effect", named_block(mission, "cancel_effect")),
+        ("on_state_control_changed", named_block(collapse_on_actions, "on_state_control_changed")),
+        ("on_capitulation", named_block(peace_on_actions, "on_capitulation")),
+    )
+    for label, source in detectors:
+        branches = ivanland_objective_success_branches(source)
+        if not branches:
+            issues.append(f"Ivanland {label} no longer awards the objective success")
+        for branch in branches:
+            if IVANLAND_AI_FALTER_GUARD not in named_block(branch, "limit"):
+                issues.append(f"Ivanland {label} success ignores a faltering AI expedition")
+    if f"hidden_trigger = {{ {IVANLAND_AI_FALTER_GUARD} }}" not in named_block(mission, "cancel_trigger"):
+        issues.append("Ivanland mission cancel_trigger can win a faltering AI expedition")
+
+    activation = named_block(effects, "ADISCORD_vorkerland_activate_ivanland_intervention_mission")
+    roll = named_block(activation, "hidden_effect")
+    for token in (
+        "limit = { is_ai = yes }",
+        f"set_country_flag = {IVANLAND_AI_FALTER_FLAG}",
+        "country_event = { id = ADISCORD_ivn.13",
+    ):
+        if token not in roll:
+            issues.append(f"Ivanland AI expedition roll is missing {token}")
+    for name in (
+        "ADISCORD_vorkerland_ivanland_intervention_success",
+        "ADISCORD_vorkerland_ivanland_intervention_failure",
+    ):
+        if f"clr_country_flag = {IVANLAND_AI_FALTER_FLAG}" not in named_block(effects, name):
+            issues.append(f"{name} leaves the AI expedition falter flag behind")
+
+    breakdown = named_block(event_block(ivn_events, "ADISCORD_ivn.13"), "if")
+    for token in (
+        "has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }",
+        f"{IVANLAND_AI_FALTER_FLAG} = yes",
+        "ADISCORD_vorkerland_ivanland_intervention_failure = yes",
+    ):
+        if token not in breakdown:
+            issues.append(f"ADISCORD_ivn.13 breakdown is missing {token}")
+    if "is_ai = yes" not in named_block(triggers, IVANLAND_AI_FALTER_FLAG):
+        issues.append("Ivanland AI expedition falter trigger also binds a human Itora")
+    return issues
+
+
+def validate_ivanland_ai_falter(root: Path, issues: list[str]) -> None:
+    issues.extend(
+        ivanland_ai_falter_issues(
+            named_block(
+                read(root, "common/decisions/ADISCORD_vorkerland_decisions.txt", issues),
+                "ADISCORD_ivanland_limited_intervention",
+            ),
+            read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+            read(root, "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", issues),
+            read(root, "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt", issues),
+            read(root, "events/ADISCORD_IVN_events.txt", issues),
+            read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues),
+        )
+    )
+
+
 def validate_outcomes(root: Path, issues: list[str]) -> None:
+    validate_ivanland_ai_falter(root, issues)
     maps = source_section(
         read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
         'collapse_map_effects',

@@ -2151,7 +2151,11 @@ PNG 150x150 с прозрачными полями. Для экспорта ис
 `ADISCORD_nam_groups.11` выбирается по `NAM_prog_ending`.
 
 Послевоенное дерево NAM начинается с `NAM_recognition`. Его разделы находятся в
-`focus_trees/NAM/postwar/government.txt`, `armed_forces.txt` и `economy.txt`.
+`focus_trees/NAM/postwar/`: ствол, соседи и гражданские службы - в `government.txt`,
+этатистский курс - в `etatist.txt`, прагматический - в `pragmatic.txt`, окружной -
+в `districts.txt`, армия и экономика - в `armed_forces.txt` и `economy.txt`. Порядок
+строк `# @include` в `focuses.txt` повторяет порядок фокусов в сгенерированном файле;
+у файлов путей несколько разделов, чтобы перенос не менял игровой вывод.
 При победе Светлогорья в финальной войне за Юг загружается `NAM_south_heritage_focus`
 из общего игрового файла `ADISCORD_NAM_postwar.txt`. Единственный корень этого дерева -
 `NAM_south_heritage`. При другом исходе войны восстанавливается прежнее дерево.

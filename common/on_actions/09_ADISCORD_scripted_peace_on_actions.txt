@@ -1229,6 +1229,7 @@ on_actions = {
 								controls_state = 93
 								controls_state = 94
 							}
+							ADISCORD_vorkerland_ivanland_ai_expedition_falters = no
 						}
 						IVN = { ADISCORD_vorkerland_ivanland_intervention_success = yes }
 					}

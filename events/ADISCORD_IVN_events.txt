@@ -339,3 +339,26 @@ news_event = {
 	is_triggered_only = yes
 	option = { name = ADISCORD_ivn.12.a }
 }
+
+# A faltering AI expedition breaks off; the ordinary failure then returns the
+# army home and queues the marches revolt. A player who took over IVN in the
+# meantime keeps fighting the mission under the normal rules.
+country_event = {
+	id = ADISCORD_ivn.13
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = IVN }
+
+	immediate = {
+		if = {
+			limit = {
+				has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+				NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }
+				ADISCORD_vorkerland_ivanland_ai_expedition_falters = yes
+			}
+			log = "[ADISCORD][VORKERLAND] AI Ivanland expedition faltered."
+			ADISCORD_vorkerland_ivanland_intervention_failure = yes
+		}
+		clr_country_flag = ADISCORD_vorkerland_ivanland_ai_expedition_falters
+	}
+}

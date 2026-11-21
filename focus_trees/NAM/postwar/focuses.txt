@@ -18,6 +18,23 @@ focus_tree = {
 	# its completed focuses remain readable through has_completed_focus.
 
 # @include NAM/postwar/government.txt#government
+# @include NAM/postwar/etatist.txt#etatist_ladder
+# @include NAM/postwar/government.txt#government_border
+# @include NAM/postwar/districts.txt#districts_charter
+# @include NAM/postwar/etatist.txt#etatist_plan
+# @include NAM/postwar/districts.txt#districts_services
+# @include NAM/postwar/pragmatic.txt#pragmatic_compact
+# @include NAM/postwar/etatist.txt#etatist_works
+# @include NAM/postwar/pragmatic.txt#pragmatic_industry
+# @include NAM/postwar/districts.txt#districts_municipal
+# @include NAM/postwar/etatist.txt#etatist_constitution
+
+# @include NAM/postwar/government.txt#government_civil_services
+# @include NAM/postwar/districts.txt#districts_cooperatives
+
+# @include NAM/postwar/pragmatic.txt#pragmatic_freight
+
+# @include NAM/postwar/government.txt#government_neighbours
 # @include NAM/postwar/armed_forces.txt#armed_forces
 # @include NAM/postwar/economy.txt#economy
 }
