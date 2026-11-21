@@ -1,6 +1,7 @@
 # @section districts_charter
 	# District course: the charter, the opening pair, the public utilities and the
-	# southern spine to the fuel market. Cells are relative to law_after_war (36,1).
+	# southern spine to the fuel market. The charter sits under law_after_war
+	# (14,1, the post-war axis); the other cards anchor on path cards only.
 	focus = {
 		id = NAM_federal_charter
 		relative_position_id = NAM_law_after_war
@@ -59,9 +60,9 @@
 
 	focus = {
 		id = NAM_charter_ending_federation
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_federal_charter
 		x = -3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_charter_ending_federation
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -116,9 +117,9 @@
 
 	focus = {
 		id = NAM_charter_ending_oil_union
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_federal_charter
 		x = 3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_charter_ending_oil_union
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -200,9 +201,9 @@
 
 	focus = {
 		id = NAM_public_utilities
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_federal_charter
 		x = 0
-		y = 4
+		y = 3
 		icon = GFX_focus_NAM_public_utilities
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -330,9 +331,9 @@
 
 	focus = {
 		id = NAM_south_fenn_guarantee
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_public_utilities
 		x = 2
-		y = 7
+		y = 2
 		icon = GFX_focus_NAM_relay_trials
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -392,9 +393,9 @@
 
 	focus = {
 		id = NAM_kadir_oil_charter
-		relative_position_id = NAM_federal_charter
-		x = -4
-		y = 8
+		relative_position_id = NAM_south_fenn_guarantee
+		x = -3
+		y = 3
 		icon = GFX_focus_NAM_south_desert_offices
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -436,9 +437,9 @@
 
 	focus = {
 		id = NAM_south_oil_for_water
-		relative_position_id = NAM_law_after_war
-		x = 4
-		y = 9
+		relative_position_id = NAM_south_fenn_guarantee
+		x = -1
+		y = 3
 		icon = GFX_focus_NAM_south_oil_for_water
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -499,9 +500,9 @@
 	# districts' university.
 	focus = {
 		id = NAM_district_militia
-		relative_position_id = NAM_law_after_war
-		x = -6
-		y = 5
+		relative_position_id = NAM_public_utilities
+		x = -8
+		y = 3
 		icon = GFX_focus_NAM_district_militia
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -558,9 +559,9 @@
 
 	focus = {
 		id = NAM_relief_register
-		relative_position_id = NAM_law_after_war
-		x = -3
-		y = 5
+		relative_position_id = NAM_public_utilities
+		x = -4
+		y = 3
 		icon = GFX_focus_NAM_relief_register
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -612,9 +613,9 @@
 
 	focus = {
 		id = NAM_regional_university
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_public_utilities
 		x = -2
-		y = 7
+		y = 2
 		icon = GFX_focus_NAM_regional_university
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 9
@@ -685,9 +686,9 @@
 	# either side builds the district workshops.
 	focus = {
 		id = NAM_municipal_land
-		relative_position_id = NAM_law_after_war
-		x = 3
-		y = 5
+		relative_position_id = NAM_public_utilities
+		x = 4
+		y = 3
 		icon = GFX_focus_NAM_municipal_land
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -790,9 +791,9 @@
 
 	focus = {
 		id = NAM_tenant_councils
-		relative_position_id = NAM_law_after_war
-		x = 6
-		y = 5
+		relative_position_id = NAM_public_utilities
+		x = 8
+		y = 3
 		icon = GFX_focus_NAM_tenant_councils
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -953,9 +954,9 @@
 	# cooperative and the union's fair factories, then the southern offensive.
 	focus = {
 		id = NAM_common_fuel_market
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_public_utilities
 		x = 0
-		y = 12
+		y = 8
 		icon = GFX_focus_NAM_common_fuel_market
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -1100,9 +1101,9 @@
 
 	focus = {
 		id = NAM_south_oil_charter
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_common_fuel_market
 		x = 0
-		y = 13
+		y = 1
 		icon = GFX_focus_NAM_south_oil_charter
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 6

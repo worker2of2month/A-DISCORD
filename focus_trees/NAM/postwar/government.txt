@@ -1,7 +1,7 @@
 # @section government
 	focus = {
 		id = NAM_recognition
-		x = 36
+		x = 14
 		y = 0
 		icon = GFX_focus_NAM_recognition
 		cost = 3
@@ -131,7 +131,7 @@
 	focus = {
 		id = NAM_normalisation
 		relative_position_id = NAM_law_after_war
-		x = -16
+		x = -8
 		y = 1
 		icon = GFX_focus_NAM_normalisation
 		cost = 3
@@ -199,7 +199,7 @@
 	focus = {
 		id = NAM_border_revenge
 		relative_position_id = NAM_law_after_war
-		x = -12
+		x = -5
 		y = 1
 		icon = GFX_focus_NAM_border_revenge
 		cost = 3
@@ -283,7 +283,7 @@
 	focus = {
 		id = NAM_pw_school_network
 		relative_position_id = NAM_law_after_war
-		x = 12
+		x = 5
 		y = 1
 		icon = GFX_focus_NAM_pw_school_network
 		cost = 3
@@ -370,7 +370,7 @@
 	focus = {
 		id = NAM_pw_district_hospitals
 		relative_position_id = NAM_law_after_war
-		x = 16
+		x = 8
 		y = 1
 		icon = GFX_focus_NAM_pw_district_hospitals
 		cost = 3

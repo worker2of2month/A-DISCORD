@@ -2,8 +2,8 @@
 	focus = {
 		id = NAM_civil_repair
 		relative_position_id = NAM_recognition
-		x = 28
-		y = 1
+		x = 12
+		y = 2
 		icon = GFX_focus_NAM_civil_repair
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -458,7 +458,7 @@
 	focus = {
 		id = NAM_pw_energy_commission
 		relative_position_id = NAM_svetlogorye
-		x = -3
+		x = -2
 		y = 2
 		icon = GFX_focus_NAM_pw_energy_commission
 		cost = 3
@@ -534,7 +534,7 @@
 	focus = {
 		id = NAM_pw_oil_laboratories
 		relative_position_id = NAM_svetlogorye
-		x = 3
+		x = 2
 		y = 2
 		icon = GFX_focus_NAM_pw_oil_laboratories
 		cost = 3

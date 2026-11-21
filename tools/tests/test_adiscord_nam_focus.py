@@ -14315,25 +14315,25 @@ class NamCampaignTests(unittest.TestCase):
                 self.assertLess(overlap, 0, (route, first, second))
 
     def test_postwar_layout_is_visible_before_progress_and_mandate_specific(self):
-        # Grid of the post-war design: x 0..72 around the axis x = 36. The shared
+        # Grid of the post-war design: x 0..28 around the axis x = 14. The shared
         # trunk and wings are drawn for every mandate, each view adds one course,
         # and every view is mirrored about the axis.
-        axis = 36
+        axis = 14
         main = reachable(self.postwar, set())
         self.assertEqual(main, set(self.postwar))
         self.assertTrue(main.isdisjoint(self.heritage))
         cells = {
-            "NAM_recognition": (36, 0), "NAM_law_after_war": (36, 1),
-            "NAM_veterans_return": (8, 1), "NAM_civil_repair": (64, 1),
-            "NAM_normalisation": (20, 2), "NAM_border_revenge": (24, 2),
-            "NAM_pw_school_network": (48, 2), "NAM_pw_district_hospitals": (52, 2),
-            "NAM_pw_transport_commission": (8, 3), "NAM_oil_ministry": (64, 3),
-            "NAM_national_university": (48, 4),
-            "NAM_pw_breakthrough_army": (6, 5), "NAM_pw_mobile_army": (10, 5),
-            "NAM_civil_dividend": (62, 5), "NAM_armed_peace": (66, 5),
-            "NAM_pw_freight_schedule": (8, 7),
-            "NAM_oil_exchange": (64, 7), "NAM_pw_southern_army": (8, 9), "NAM_svetlogorye": (64, 9),
-            "NAM_svetlogorsk_shipyards": (5, 11), "NAM_pw_air_review": (11, 11),
+            "NAM_recognition": (14, 0), "NAM_law_after_war": (14, 1),
+            "NAM_veterans_return": (2, 2), "NAM_civil_repair": (26, 2),
+            "NAM_normalisation": (6, 2), "NAM_border_revenge": (9, 2),
+            "NAM_pw_school_network": (19, 2), "NAM_pw_district_hospitals": (22, 2),
+            "NAM_pw_transport_commission": (2, 4), "NAM_oil_ministry": (26, 4),
+            "NAM_national_university": (19, 4),
+            "NAM_pw_breakthrough_army": (0, 6), "NAM_pw_mobile_army": (4, 6),
+            "NAM_civil_dividend": (24, 6), "NAM_armed_peace": (28, 6),
+            "NAM_pw_freight_schedule": (2, 8),
+            "NAM_oil_exchange": (26, 8), "NAM_pw_southern_army": (2, 10), "NAM_svetlogorye": (26, 10),
+            "NAM_svetlogorsk_shipyards": (0, 12), "NAM_pw_air_review": (4, 12),
         }
         openers = {"service_state": (-0.5, 48, ("NAM_ladder_of_seals", "NAM_south_seal_over_furnaces")),
                    "pragmatic_compact": (0, 47, ("NAM_balanced_accounts", "NAM_prag_south_guarantees")),
@@ -14370,7 +14370,8 @@ class NamCampaignTests(unittest.TestCase):
             for name in ("eflor_accord", "azhar_accord", "normalisation", "border_revenge", "border_citizenship"):
                 self.assertIn("NAM_" + name, points)
             xs = [x for x, _ in points.values()]
-            self.assertLessEqual(max(xs) - min(xs), 115)
+            # A view spans at most 29 columns, so the tree cannot quietly spread again.
+            self.assertLessEqual(max(xs) - min(xs) + 1, 29, course)
             self.assertTrue(all(0 <= x <= 2 * axis and 0 <= y <= 14 for x, y in points.values()), course)
             occupied = set(points.values())
             self.assertEqual(len(occupied), len(points), course)
@@ -25004,11 +25005,12 @@ class NamPostwarDesignTests(unittest.TestCase):
     def test_postwar_and_heritage_views_are_wired_cleanly_and_mirrored(self):
         # Breaks when a card of one mandate view sits on another's wire or exclusive connector, two
         # wires cross, neighbours on a row touch, exclusive partners leave one row, or a card has
-        # no mirrored twin about x = 36 (heritage 15) in its view and inside its own part.
+        # no mirrored twin about x = 14 (heritage 8) in its view and inside its own part, or a view
+        # grows wider than columns 0..2 * axis (29 post-war, 17 heritage).
         expected = {"path1": (48, 17), "path2": (47, 13), "path3": (46, 13)}
         views = {path: (self.view(path), self.view(path, heritage=True)) for path in POSTWAR_PATHS}
         self.assertEqual({path: tuple(map(len, pair)) for path, pair in views.items()}, expected)
-        for index, axis in ((0, 36), (1, 15)):
+        for index, axis in ((0, 14), (1, 8)):
             members = Counter(name for pair in views.values() for name in pair[index])
             for path, pair in views.items():
                 view = pair[index]
@@ -25018,6 +25020,7 @@ class NamPostwarDesignTests(unittest.TestCase):
                          for group in focus if group.key == "prerequisite"
                          for parent in group.value if parent.value in view]
                 with self.subTest(path=path, heritage=bool(index)):
+                    self.assertTrue(all(0 <= x <= 2 * axis for x, _ in positions.values()))
                     for kind, conflicts in corporate_focus_wiring(positions, edges, self.exclusive_pairs(view)).items():
                         self.assertEqual(conflicts, [], kind)
                     for part in ("shared", path):

@@ -1,6 +1,7 @@
 # @section etatist_ladder
-	# Etatist course: the opener, the two state models and their wings. Every
-	# card sits relative to NAM_law_after_war (36,1 on the post-war grid).
+	# Etatist course: the opener, the two state models and their wings. The
+	# opener sits under NAM_law_after_war (14,1, the post-war axis); the other
+	# cards anchor on path cards only.
 	focus = {
 		id = NAM_service_state
 		relative_position_id = NAM_law_after_war
@@ -59,9 +60,9 @@
 
 	focus = {
 		id = NAM_ladder_ending_iron
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_service_state
 		x = -3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_ladder_ending_iron
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
@@ -132,9 +133,9 @@
 
 	focus = {
 		id = NAM_ladder_ending_service
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_service_state
 		x = 3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_ladder_ending_service
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
@@ -207,9 +208,9 @@
 
 	focus = {
 		id = NAM_namestnik_garrisons
-		relative_position_id = NAM_law_after_war
-		x = -5
-		y = 4
+		relative_position_id = NAM_ladder_ending_iron
+		x = 0
+		y = 2
 		icon = GFX_focus_NAM_namestnik_garrisons
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -282,9 +283,9 @@
 
 	focus = {
 		id = NAM_south_black_basin
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_service_state
 		x = 0
-		y = 4
+		y = 3
 		icon = GFX_focus_NAM_metropolitan_depots
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -409,9 +410,9 @@
 
 	focus = {
 		id = NAM_pw_cadastre
-		relative_position_id = NAM_law_after_war
-		x = 5
-		y = 4
+		relative_position_id = NAM_ladder_ending_service
+		x = 0
+		y = 2
 		icon = GFX_focus_NAM_pw_cadastre
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -468,9 +469,9 @@
 
 	focus = {
 		id = NAM_state_project_bureaus
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_black_basin
 		x = 0
-		y = 6
+		y = 1
 		icon = GFX_focus_NAM_state_project_bureaus
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 9
@@ -549,9 +550,9 @@
 	# Kadir embassy on the axis.
 	focus = {
 		id = NAM_state_plan
-		relative_position_id = NAM_law_after_war
-		x = -3
-		y = 7
+		relative_position_id = NAM_south_black_basin
+		x = -2
+		y = 3
 		icon = GFX_focus_NAM_state_plan
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -658,9 +659,9 @@
 
 	focus = {
 		id = NAM_regional_trusts
-		relative_position_id = NAM_law_after_war
-		x = 3
-		y = 7
+		relative_position_id = NAM_south_black_basin
+		x = 2
+		y = 3
 		icon = GFX_focus_NAM_regional_trusts
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -797,9 +798,9 @@
 
 	focus = {
 		id = NAM_south_desert_offices
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_black_basin
 		x = 0
-		y = 9
+		y = 5
 		icon = GFX_focus_NAM_south_desert_offices
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -858,9 +859,9 @@
 	# constitution on the right.
 	focus = {
 		id = NAM_pw_export_guarantees
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = -5
-		y = 10
+		y = 1
 		icon = GFX_focus_NAM_pw_export_guarantees
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -926,9 +927,9 @@
 
 	focus = {
 		id = NAM_pw_constitutional_committee
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = 5
-		y = 10
+		y = 1
 		icon = GFX_focus_NAM_pw_constitutional_committee
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -991,9 +992,9 @@
 	# the southern campaign.
 	focus = {
 		id = NAM_pw_labour_code
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = -3
-		y = 11
+		y = 2
 		icon = GFX_focus_NAM_pw_labour_code
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
@@ -1049,9 +1050,9 @@
 
 	focus = {
 		id = NAM_pw_insurance_fund
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = 3
-		y = 11
+		y = 2
 		icon = GFX_focus_NAM_pw_insurance_fund
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -1103,9 +1104,9 @@
 
 	focus = {
 		id = NAM_ladder_of_seals
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = 0
-		y = 12
+		y = 3
 		icon = GFX_focus_NAM_ladder_of_seals
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
@@ -1177,9 +1178,9 @@
 
 	focus = {
 		id = NAM_south_seal_over_furnaces
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_ladder_of_seals
 		x = 0
-		y = 13
+		y = 1
 		icon = GFX_focus_NAM_south_seal_over_furnaces
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 6

@@ -15,7 +15,7 @@ focus_tree = {
 	default = no
 	continuous_focus_position = {
 		x = 50
-		y = 4200
+		y = 2300
 	}
 
 	# Loaded by the victory settlement. The pre-war tree is shared history, so
@@ -23,11 +23,13 @@ focus_tree = {
 
 	shared_focus = NAM_recognition
 
-	# Etatist course: the opener, the two state models and their wings. Every
-	# card sits relative to NAM_law_after_war (36,1 on the post-war grid).
+	# Etatist course: the opener, the two state models and their wings. The
+	# opener sits under NAM_law_after_war (14,1, the post-war axis); the other
+	# cards anchor on path cards only.
 
 	# District course: the charter, the opening pair, the public utilities and the
-	# southern spine to the fuel market. Cells are relative to law_after_war (36,1).
+	# southern spine to the fuel market. The charter sits under law_after_war
+	# (14,1, the post-war axis); the other cards anchor on path cards only.
 
 	# Plan or trusts: the industrial fork under the basin card, rejoined by the
 	# Kadir embassy on the axis.
@@ -36,8 +38,9 @@ focus_tree = {
 	# districts' university.
 
 	# Pragmatic course: the axis, the two opening sides and their wings, the
-	# guarantee fork and the hub. Positions are relative to NAM_law_after_war
-	# (36,1 of the post-war grid); the path mirrors about its column.
+	# guarantee fork and the hub. The opener sits under NAM_law_after_war
+	# (14,1, the post-war axis); the other cards anchor on path cards only and
+	# the path mirrors about that column.
 
 	# Republic wing: the municipal bonds fund the city works and the second
 	# bond issue.
@@ -79,7 +82,7 @@ focus_tree = {
 
 shared_focus = {
 		id = NAM_recognition
-		x = 36
+		x = 14
 		y = 0
 		icon = GFX_focus_NAM_recognition
 		cost = 3
@@ -263,9 +266,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_ladder_ending_iron
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_service_state
 		x = -3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_ladder_ending_iron
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
@@ -336,9 +339,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_ladder_ending_service
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_service_state
 		x = 3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_ladder_ending_service
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
@@ -411,9 +414,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_namestnik_garrisons
-		relative_position_id = NAM_law_after_war
-		x = -5
-		y = 4
+		relative_position_id = NAM_ladder_ending_iron
+		x = 0
+		y = 2
 		icon = GFX_focus_NAM_namestnik_garrisons
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -486,9 +489,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_black_basin
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_service_state
 		x = 0
-		y = 4
+		y = 3
 		icon = GFX_focus_NAM_metropolitan_depots
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -613,9 +616,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_pw_cadastre
-		relative_position_id = NAM_law_after_war
-		x = 5
-		y = 4
+		relative_position_id = NAM_ladder_ending_service
+		x = 0
+		y = 2
 		icon = GFX_focus_NAM_pw_cadastre
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -672,9 +675,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_state_project_bureaus
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_black_basin
 		x = 0
-		y = 6
+		y = 1
 		icon = GFX_focus_NAM_state_project_bureaus
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 9
@@ -751,7 +754,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_normalisation
 		relative_position_id = NAM_law_after_war
-		x = -16
+		x = -8
 		y = 1
 		icon = GFX_focus_NAM_normalisation
 		cost = 3
@@ -819,7 +822,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_border_revenge
 		relative_position_id = NAM_law_after_war
-		x = -12
+		x = -5
 		y = 1
 		icon = GFX_focus_NAM_border_revenge
 		cost = 3
@@ -957,9 +960,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_charter_ending_federation
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_federal_charter
 		x = -3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_charter_ending_federation
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -1014,9 +1017,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_charter_ending_oil_union
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_federal_charter
 		x = 3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_charter_ending_oil_union
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -1098,9 +1101,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_public_utilities
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_federal_charter
 		x = 0
-		y = 4
+		y = 3
 		icon = GFX_focus_NAM_public_utilities
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -1228,9 +1231,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_fenn_guarantee
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_public_utilities
 		x = 2
-		y = 7
+		y = 2
 		icon = GFX_focus_NAM_relay_trials
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -1290,9 +1293,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_kadir_oil_charter
-		relative_position_id = NAM_federal_charter
-		x = -4
-		y = 8
+		relative_position_id = NAM_south_fenn_guarantee
+		x = -3
+		y = 3
 		icon = GFX_focus_NAM_south_desert_offices
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -1334,9 +1337,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_oil_for_water
-		relative_position_id = NAM_law_after_war
-		x = 4
-		y = 9
+		relative_position_id = NAM_south_fenn_guarantee
+		x = -1
+		y = 3
 		icon = GFX_focus_NAM_south_oil_for_water
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -1394,9 +1397,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_state_plan
-		relative_position_id = NAM_law_after_war
-		x = -3
-		y = 7
+		relative_position_id = NAM_south_black_basin
+		x = -2
+		y = 3
 		icon = GFX_focus_NAM_state_plan
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -1503,9 +1506,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_regional_trusts
-		relative_position_id = NAM_law_after_war
-		x = 3
-		y = 7
+		relative_position_id = NAM_south_black_basin
+		x = 2
+		y = 3
 		icon = GFX_focus_NAM_regional_trusts
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
@@ -1642,9 +1645,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_desert_offices
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_black_basin
 		x = 0
-		y = 9
+		y = 5
 		icon = GFX_focus_NAM_south_desert_offices
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -1700,9 +1703,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_district_militia
-		relative_position_id = NAM_law_after_war
-		x = -6
-		y = 5
+		relative_position_id = NAM_public_utilities
+		x = -8
+		y = 3
 		icon = GFX_focus_NAM_district_militia
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -1759,9 +1762,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_relief_register
-		relative_position_id = NAM_law_after_war
-		x = -3
-		y = 5
+		relative_position_id = NAM_public_utilities
+		x = -4
+		y = 3
 		icon = GFX_focus_NAM_relief_register
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -1813,9 +1816,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_regional_university
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_public_utilities
 		x = -2
-		y = 7
+		y = 2
 		icon = GFX_focus_NAM_regional_university
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 9
@@ -1942,9 +1945,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_prag_ending_republic
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_pragmatic_compact
 		x = -3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_prag_ending_republic
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
@@ -1996,9 +1999,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_prag_ending_directorate
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_pragmatic_compact
 		x = 3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_prag_ending_directorate
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
@@ -2107,9 +2110,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_municipal_bonds
-		relative_position_id = NAM_law_after_war
-		x = -3
-		y = 4
+		relative_position_id = NAM_prag_ending_republic
+		x = 0
+		y = 2
 		icon = GFX_focus_NAM_municipal_bonds
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -2197,9 +2200,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_export_clearing
-		relative_position_id = NAM_law_after_war
-		x = 3
-		y = 4
+		relative_position_id = NAM_prag_ending_directorate
+		x = 0
+		y = 2
 		icon = GFX_focus_NAM_export_clearing
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -2281,9 +2284,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_contract_register
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_pragmatic_compact
 		x = 0
-		y = 6
+		y = 5
 		icon = GFX_focus_NAM_contract_register
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -2350,9 +2353,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_prag_partner_supply
-		relative_position_id = NAM_law_after_war
-		x = -6
-		y = 8
+		relative_position_id = NAM_contract_register
+		x = -4
+		y = 2
 		icon = GFX_focus_NAM_prag_partner_supply
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -2452,9 +2455,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_prag_treasury_guarantee
-		relative_position_id = NAM_law_after_war
-		x = -9
-		y = 10
+		relative_position_id = NAM_prag_partner_supply
+		x = -2
+		y = 2
 		icon = GFX_focus_NAM_commercial_reserve
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -2502,9 +2505,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_prag_private_underwriting
-		relative_position_id = NAM_law_after_war
-		x = -3
-		y = 10
+		relative_position_id = NAM_prag_partner_supply
+		x = 2
+		y = 2
 		icon = GFX_focus_NAM_prag_settlement_agreements
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -2599,9 +2602,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_balanced_accounts
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_contract_register
 		x = 0
-		y = 12
+		y = 6
 		icon = GFX_focus_NAM_balanced_accounts
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
@@ -2694,9 +2697,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_prag_south_guarantees
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_balanced_accounts
 		x = 0
-		y = 13
+		y = 1
 		icon = GFX_focus_NAM_prag_south_guarantees
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 6
@@ -2739,9 +2742,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_pw_export_guarantees
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = -5
-		y = 10
+		y = 1
 		icon = GFX_focus_NAM_pw_export_guarantees
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -2807,9 +2810,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_pw_constitutional_committee
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = 5
-		y = 10
+		y = 1
 		icon = GFX_focus_NAM_pw_constitutional_committee
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -2869,9 +2872,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_port_polytechnic
-		relative_position_id = NAM_law_after_war
-		x = 6
-		y = 8
+		relative_position_id = NAM_contract_register
+		x = 4
+		y = 2
 		icon = GFX_focus_NAM_port_polytechnic
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 9
@@ -2988,9 +2991,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_foreign_patents
-		relative_position_id = NAM_law_after_war
-		x = 3
-		y = 10
+		relative_position_id = NAM_port_polytechnic
+		x = -2
+		y = 2
 		icon = GFX_focus_NAM_foreign_patents
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -3077,9 +3080,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_domestic_designs
-		relative_position_id = NAM_law_after_war
-		x = 9
-		y = 10
+		relative_position_id = NAM_port_polytechnic
+		x = 2
+		y = 2
 		icon = GFX_focus_NAM_domestic_designs
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -3166,9 +3169,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_municipal_land
-		relative_position_id = NAM_law_after_war
-		x = 3
-		y = 5
+		relative_position_id = NAM_public_utilities
+		x = 4
+		y = 3
 		icon = GFX_focus_NAM_municipal_land
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -3271,9 +3274,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_tenant_councils
-		relative_position_id = NAM_law_after_war
-		x = 6
-		y = 5
+		relative_position_id = NAM_public_utilities
+		x = 8
+		y = 3
 		icon = GFX_focus_NAM_tenant_councils
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
@@ -3431,9 +3434,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_pw_labour_code
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = -3
-		y = 11
+		y = 2
 		icon = GFX_focus_NAM_pw_labour_code
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
@@ -3489,9 +3492,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_pw_insurance_fund
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = 3
-		y = 11
+		y = 2
 		icon = GFX_focus_NAM_pw_insurance_fund
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -3543,9 +3546,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_ladder_of_seals
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_south_desert_offices
 		x = 0
-		y = 12
+		y = 3
 		icon = GFX_focus_NAM_ladder_of_seals
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
@@ -3617,9 +3620,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_seal_over_furnaces
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_ladder_of_seals
 		x = 0
-		y = 13
+		y = 1
 		icon = GFX_focus_NAM_south_seal_over_furnaces
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 6
@@ -3668,7 +3671,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_school_network
 		relative_position_id = NAM_law_after_war
-		x = 12
+		x = 5
 		y = 1
 		icon = GFX_focus_NAM_pw_school_network
 		cost = 3
@@ -3755,7 +3758,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_district_hospitals
 		relative_position_id = NAM_law_after_war
-		x = 16
+		x = 8
 		y = 1
 		icon = GFX_focus_NAM_pw_district_hospitals
 		cost = 3
@@ -4029,9 +4032,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_common_fuel_market
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_public_utilities
 		x = 0
-		y = 12
+		y = 8
 		icon = GFX_focus_NAM_common_fuel_market
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
@@ -4176,9 +4179,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_oil_charter
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_common_fuel_market
 		x = 0
-		y = 13
+		y = 1
 		icon = GFX_focus_NAM_south_oil_charter
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 6
@@ -4226,9 +4229,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_insured_caravans
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_contract_register
 		x = 0
-		y = 8
+		y = 2
 		icon = GFX_focus_NAM_insured_caravans
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -4461,8 +4464,8 @@ shared_focus = {
 shared_focus = {
 		id = NAM_veterans_return
 		relative_position_id = NAM_recognition
-		x = -28
-		y = 1
+		x = -12
+		y = 2
 		icon = GFX_focus_NAM_veterans_return
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
@@ -4884,7 +4887,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_svetlogorsk_shipyards
 		relative_position_id = NAM_pw_southern_army
-		x = -3
+		x = -2
 		y = 2
 		icon = GFX_focus_NAM_svetlogorsk_shipyards
 		cost = 3
@@ -5143,7 +5146,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_air_review
 		relative_position_id = NAM_pw_southern_army
-		x = 3
+		x = 2
 		y = 2
 		icon = GFX_focus_NAM_pw_air_review
 		cost = 3
@@ -5277,8 +5280,8 @@ shared_focus = {
 shared_focus = {
 		id = NAM_civil_repair
 		relative_position_id = NAM_recognition
-		x = 28
-		y = 1
+		x = 12
+		y = 2
 		icon = GFX_focus_NAM_civil_repair
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -5733,7 +5736,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_energy_commission
 		relative_position_id = NAM_svetlogorye
-		x = -3
+		x = -2
 		y = 2
 		icon = GFX_focus_NAM_pw_energy_commission
 		cost = 3
@@ -5809,7 +5812,7 @@ shared_focus = {
 shared_focus = {
 		id = NAM_pw_oil_laboratories
 		relative_position_id = NAM_svetlogorye
-		x = 3
+		x = 2
 		y = 2
 		icon = GFX_focus_NAM_pw_oil_laboratories
 		cost = 3
@@ -6078,7 +6081,7 @@ focus_tree = {
 
 shared_focus = {
 		id = NAM_south_heritage
-		x = 15
+		x = 8
 		y = 0
 		icon = GFX_focus_NAM_south_heritage
 		cost = 3
@@ -6286,9 +6289,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_rus_expedition_staff
-		relative_position_id = NAM_rus_fuel_for_coalition
-		x = 2
-		y = 1
+		relative_position_id = NAM_rus_crisis_watch
+		x = 0
+		y = 2
 		icon = GFX_focus_NAM_rus_expedition_staff
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP }
@@ -6972,7 +6975,7 @@ shared_focus = {
 		id = NAM_south_safir_line
 		relative_position_id = NAM_south_heritage
 		x = -6
-		y = 1
+		y = 2
 		icon = GFX_focus_NAM_south_safir_line
 		cost = 3
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_INDUSTRY }
@@ -7029,7 +7032,7 @@ shared_focus = {
 		id = NAM_south_bayrat_lease
 		relative_position_id = NAM_south_heritage
 		x = 6
-		y = 1
+		y = 2
 		icon = GFX_focus_NAM_south_bayrat_lease
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -7085,7 +7088,7 @@ shared_focus = {
 		id = NAM_south_safir_charter
 		relative_position_id = NAM_south_safir_line
 		x = -2
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_south_safir_charter
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP }
@@ -7122,7 +7125,7 @@ shared_focus = {
 		id = NAM_south_safir_customs
 		relative_position_id = NAM_south_safir_line
 		x = 2
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_customs_clearinghouse
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -7168,7 +7171,7 @@ shared_focus = {
 		id = NAM_south_bayrat_rail
 		relative_position_id = NAM_south_bayrat_lease
 		x = -2
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_pw_rail_priority
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -7235,7 +7238,7 @@ shared_focus = {
 		id = NAM_south_bayrat_foundry
 		relative_position_id = NAM_south_bayrat_lease
 		x = 2
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_south_bayrat_foundry
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -7296,9 +7299,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_trade_hearing
-		relative_position_id = NAM_south_safir_customs
-		x = 4
-		y = 2
+		relative_position_id = NAM_south_heritage
+		x = 0
+		y = 6
 		icon = GFX_focus_NAM_south_trade_hearing
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -7343,7 +7346,7 @@ shared_focus = {
 		id = NAM_south_contract_court
 		relative_position_id = NAM_south_trade_hearing
 		x = 0
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_commercial_courts
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -7386,7 +7389,7 @@ shared_focus = {
 		id = NAM_south_builders
 		relative_position_id = NAM_south_heritage
 		x = -6
-		y = 1
+		y = 2
 		icon = GFX_focus_NAM_south_builders
 		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
@@ -7450,7 +7453,7 @@ shared_focus = {
 		id = NAM_south_elected_watch
 		relative_position_id = NAM_south_heritage
 		x = 6
-		y = 1
+		y = 2
 		icon = GFX_focus_NAM_south_elected_watch
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
@@ -7501,7 +7504,7 @@ shared_focus = {
 		id = NAM_south_road_crews
 		relative_position_id = NAM_south_builders
 		x = -2
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_south_road_crews
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -7553,7 +7556,7 @@ shared_focus = {
 		id = NAM_south_water_councils
 		relative_position_id = NAM_south_builders
 		x = 2
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_pw_irrigation_works
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
@@ -7591,7 +7594,7 @@ shared_focus = {
 		id = NAM_south_ward_magistrates
 		relative_position_id = NAM_south_elected_watch
 		x = -2
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_pw_administrative_courts
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
@@ -7632,7 +7635,7 @@ shared_focus = {
 		id = NAM_south_ward_armoury
 		relative_position_id = NAM_south_elected_watch
 		x = 2
-		y = 2
+		y = 3
 		icon = GFX_focus_NAM_south_ward_armoury
 		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP }
@@ -7685,9 +7688,9 @@ shared_focus = {
 
 shared_focus = {
 		id = NAM_south_delegates
-		relative_position_id = NAM_south_water_councils
-		x = 4
-		y = 2
+		relative_position_id = NAM_south_heritage
+		x = 0
+		y = 6
 		icon = GFX_focus_NAM_south_delegates
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
@@ -7738,7 +7741,7 @@ shared_focus = {
 		id = NAM_south_free_communities
 		relative_position_id = NAM_south_delegates
 		x = 0
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_district_council
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }

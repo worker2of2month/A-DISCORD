@@ -62,19 +62,20 @@ would need a full route of about 780 days (section 12).
 
 ## 3. Shape of the post-war tree
 
-Grid x 0..72, y 0..14, axis x = 36. Every card at (x, y) off the axis has a twin
-at (72 - x, y) inside its own part and view.
+Grid x 0..28, y 0..14, axis x = 14: every view is 29 columns by 15 rows and
+never wider than 29 columns. Every card at (x, y) off the axis has a twin cell
+at (28 - x, y) inside its own part and view.
 
 | Zone | Columns | Rows | Fixed cells |
 |---|---|---|---|
-| Trunk | 36 | 0-1 | `NAM_recognition` (36,0), `NAM_law_after_war` (36,1) |
-| Armed forces (outer left) | 2-14 | 1-13 | head `NAM_veterans_return` (8,1) |
-| Neighbours and border (inner left) | 18-26 | 2-4 | pair (20,2) / (24,2) |
-| Path funnel | 29-43 | 2-5 | opener (36,2), opening pair (33,3) / (39,3) |
-| Civil services (inner right) | 46-54 | 2-4 | pair (48,2) / (52,2) |
-| Economy (outer right) | 58-70 | 1-13 | head `NAM_civil_repair` (64,1) |
-| Path body | 18-54 | 6-12 | - |
-| Path hub and offensive | 36 | 13-14 | hub (36,13), offensive (36,14) |
+| Trunk | 14 | 0-1 | `NAM_recognition` (14,0), `NAM_law_after_war` (14,1) |
+| Armed forces (outer left) | 0-4 | 2-14 | head `NAM_veterans_return` (2,2) |
+| Neighbours and border (inner left) | 5-9 | 2-4 | pair (6,2) / (9,2) |
+| Path funnel | 11-17 | 2-5 | opener (14,2), opening pair (11,3) / (17,3) |
+| Civil services (inner right) | 19-23 | 2-4 | pair (19,2) / (22,2) |
+| Economy (outer right) | 24-28 | 2-14 | head `NAM_civil_repair` (26,2) |
+| Path body | 6-22 | 5-12 | - |
+| Path hub and offensive | 14 | 13-14 | hub (14,13), offensive (14,14) |
 
 - The three paths occupy the same cells. Each path card carries `allow_branch`
   with its frozen mandate (`NAM_prewar_service_mandate`,
@@ -82,11 +83,11 @@ at (72 - x, y) inside its own part and view.
   `NAM_prewar_balance` below -0.30, between, or above +0.30), so one view shows
   the shared cards and one path. No shared card has `allow_branch`.
 - Drawn lines cross a zone border only from `NAM_recognition` to the three
-  heads (8,1), (36,1), (64,1) and from `NAM_law_after_war` to (20,2), (24,2),
-  (36,2), (48,2), (52,2) on the half-row bus. Every other dependency between
+  heads (2,2), (14,1), (26,2) and from `NAM_law_after_war` to (6,2), (9,2),
+  (14,2), (19,2), (22,2) on the half-row bus. Every other dependency between
   parts is an `available` condition inside a `custom_trigger_tooltip`.
 - Layout rules, all pinned per view: unique cells; at least one free column
-  between horizontal neighbours; a child strictly below its parents; exclusive
+  between horizontal neighbours; a child 1-3 rows below its parents; exclusive
   partners on one row, 3-6 columns apart, with nothing on the connector; no
   wire through a card and no crossing; no single-parent straight chain longer
   than two (the trunk `NAM_recognition` -> `NAM_law_after_war` -> opener is the
@@ -95,11 +96,13 @@ at (72 - x, y) inside its own part and view.
 
 ### 3.1 Heritage tree
 
-Grid x 0..30, y 0..7, axis x = 15. Root `NAM_south_heritage` (15,0). The Khan
-crisis lane is shared by all paths: `NAM_rus_crisis_watch` (15,1), the pair
-`NAM_rus_fuel_for_coalition` / `NAM_rus_demand_share` (13,2) / (17,2),
-`NAM_rus_expedition_staff` (15,3). Each path has two mirrored wings with their
-root children on row 1 inside x 1-11 and 19-29. A drawn root pair never
+Grid x 0..16, y 0..7, axis x = 8: every view is 17 columns by 8 rows and never
+wider than 17 columns; every card off the axis has a twin cell at (16 - x, y)
+inside its own part and view. Root `NAM_south_heritage` (8,0). The Khan
+crisis lane is shared by all paths: `NAM_rus_crisis_watch` (8,1), the pair
+`NAM_rus_fuel_for_coalition` / `NAM_rus_demand_share` (6,2) / (10,2),
+`NAM_rus_expedition_staff` (8,3). Each path has two mirrored wings with their
+root children on rows 1-2 inside x 0-4 and 12-16. A drawn root pair never
 straddles the Khan lane: the etatist path uses two drawn pairs inside its wings
 (`NAM_pw_strategic_reserve` / `NAM_pw_development_fund` and
 `NAM_veyran_union_charter` / `NAM_svetlogorsk_settlement`); the pragmatic and
@@ -306,9 +309,9 @@ event call last. Custom values: one fact per line, number before its texticon,
 
 ## 7. The three paths
 
-Each path has an opener at (36,2), an opening pair at (33,3) / (39,3) that
+Each path has an opener at (14,2), an opening pair at (11,3) / (17,3) that
 installs a leader course, a permanent spirit and a locked law, one wing card
-under each side, a spine to the hub (36,13) and the offensive (36,14), one
+under each side, a spine to the hub (14,13) and the offensive (14,14), one
 research-slot keeper off the readiness spine, and two further real forks.
 
 ### 7.1 Etatist course (`etatist.txt`)

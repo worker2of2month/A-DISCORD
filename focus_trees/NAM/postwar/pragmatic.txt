@@ -1,7 +1,8 @@
 # @section pragmatic_compact
 	# Pragmatic course: the axis, the two opening sides and their wings, the
-	# guarantee fork and the hub. Positions are relative to NAM_law_after_war
-	# (36,1 of the post-war grid); the path mirrors about its column.
+	# guarantee fork and the hub. The opener sits under NAM_law_after_war
+	# (14,1, the post-war axis); the other cards anchor on path cards only and
+	# the path mirrors about that column.
 	focus = {
 		id = NAM_pragmatic_compact
 		relative_position_id = NAM_law_after_war
@@ -63,9 +64,9 @@
 
 	focus = {
 		id = NAM_prag_ending_republic
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_pragmatic_compact
 		x = -3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_prag_ending_republic
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
@@ -117,9 +118,9 @@
 
 	focus = {
 		id = NAM_prag_ending_directorate
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_pragmatic_compact
 		x = 3
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_prag_ending_directorate
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
@@ -230,9 +231,9 @@
 	# bond issue.
 	focus = {
 		id = NAM_municipal_bonds
-		relative_position_id = NAM_law_after_war
-		x = -3
-		y = 4
+		relative_position_id = NAM_prag_ending_republic
+		x = 0
+		y = 2
 		icon = GFX_focus_NAM_municipal_bonds
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -322,9 +323,9 @@
 	# machine-tool programme.
 	focus = {
 		id = NAM_export_clearing
-		relative_position_id = NAM_law_after_war
-		x = 3
-		y = 4
+		relative_position_id = NAM_prag_ending_directorate
+		x = 0
+		y = 2
 		icon = GFX_focus_NAM_export_clearing
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -408,9 +409,9 @@
 	# associations and opens the relief port for registered barter freight.
 	focus = {
 		id = NAM_contract_register
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_pragmatic_compact
 		x = 0
-		y = 6
+		y = 5
 		icon = GFX_focus_NAM_contract_register
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -477,9 +478,9 @@
 
 	focus = {
 		id = NAM_prag_partner_supply
-		relative_position_id = NAM_law_after_war
-		x = -6
-		y = 8
+		relative_position_id = NAM_contract_register
+		x = -4
+		y = 2
 		icon = GFX_focus_NAM_prag_partner_supply
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 2
@@ -580,9 +581,9 @@
 	# Guarantee fork: who stands behind a contract, the treasury or private houses.
 	focus = {
 		id = NAM_prag_treasury_guarantee
-		relative_position_id = NAM_law_after_war
-		x = -9
-		y = 10
+		relative_position_id = NAM_prag_partner_supply
+		x = -2
+		y = 2
 		icon = GFX_focus_NAM_commercial_reserve
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -630,9 +631,9 @@
 
 	focus = {
 		id = NAM_prag_private_underwriting
-		relative_position_id = NAM_law_after_war
-		x = -3
-		y = 10
+		relative_position_id = NAM_prag_partner_supply
+		x = 2
+		y = 2
 		icon = GFX_focus_NAM_prag_settlement_agreements
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -729,9 +730,9 @@
 	# return-freight margin of the export offices.
 	focus = {
 		id = NAM_balanced_accounts
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_contract_register
 		x = 0
-		y = 12
+		y = 6
 		icon = GFX_focus_NAM_balanced_accounts
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 4
@@ -824,9 +825,9 @@
 
 	focus = {
 		id = NAM_prag_south_guarantees
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_balanced_accounts
 		x = 0
-		y = 13
+		y = 1
 		icon = GFX_focus_NAM_prag_south_guarantees
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 6
@@ -872,9 +873,9 @@
 	# with the acceptance office's test bench) and the licence or design fork.
 	focus = {
 		id = NAM_port_polytechnic
-		relative_position_id = NAM_law_after_war
-		x = 6
-		y = 8
+		relative_position_id = NAM_contract_register
+		x = 4
+		y = 2
 		icon = GFX_focus_NAM_port_polytechnic
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 9
@@ -994,9 +995,9 @@
 	# its own bureau's work.
 	focus = {
 		id = NAM_foreign_patents
-		relative_position_id = NAM_law_after_war
-		x = 3
-		y = 10
+		relative_position_id = NAM_port_polytechnic
+		x = -2
+		y = 2
 		icon = GFX_focus_NAM_foreign_patents
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -1083,9 +1084,9 @@
 
 	focus = {
 		id = NAM_domestic_designs
-		relative_position_id = NAM_law_after_war
-		x = 9
-		y = 10
+		relative_position_id = NAM_port_polytechnic
+		x = 2
+		y = 2
 		icon = GFX_focus_NAM_domestic_designs
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
@@ -1175,9 +1176,9 @@
 	# order and the export office.
 	focus = {
 		id = NAM_insured_caravans
-		relative_position_id = NAM_law_after_war
+		relative_position_id = NAM_contract_register
 		x = 0
-		y = 8
+		y = 2
 		icon = GFX_focus_NAM_insured_caravans
 		allow_branch = { NAM_prewar_pragmatic_mandate = yes }
 		cost = 3
