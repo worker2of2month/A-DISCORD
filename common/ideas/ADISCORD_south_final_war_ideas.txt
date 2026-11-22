@@ -126,6 +126,43 @@ ideas = {
 			}
 		}
 
+		# The council of boards: the union course or the shares course.
+		ADISCORD_south_path_NAM_boards = {
+			picture = generic_morale_bonus
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				war_support_factor = 0.05
+				army_morale_factor = 0.05
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		ADISCORD_south_path_NAM_shares = {
+			picture = generic_manpower_bonus
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			modifier = {
+				conscription = 0.01
+				war_support_factor = 0.08
+				consumer_goods_factor = 0.03
+			}
+		}
+
 		# Both champions: a district order that ran out of time.
 		ADISCORD_south_order_failed = {
 			picture = generic_war_preparation

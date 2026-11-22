@@ -723,6 +723,13 @@
       "sample": "superevent_south_boards_sound",
       "audio_file": "superevents/superevent_south_boards_sound.wav",
       "theme_note": "Schwefelgelb - Es zieht mich, 3:00-3:56. Catalogue pages, three auction hammer strikes and a shop door locked with keys."
+    },
+    "superevent_south_partition": {
+      "texture": "gfx/interface/superevents/NAM/superevent_south_boards.png",
+      "effect": "superevent_south_partition_sound_e",
+      "sample": "superevent_south_boards_sound",
+      "audio_file": "superevents/superevent_south_boards_sound.wav",
+      "theme_note": "Reuses the board auction theme of superevent_south_boards: the companies sign the partition of the South."
     }
   }
 }

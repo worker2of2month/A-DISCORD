@@ -4438,7 +4438,17 @@ SHL_glp_raise_prismatic_guard = {
 }
 
 SHL_start_glp_war = {
+	# A Veyr leaning to Svetlogorye appeals to it instead; see
+	# ADISCORD_south_shl_strike_or_appeal.
 	if = {
+		limit = {
+			SHL_can_strike_veyr = yes
+			GLP = { ADISCORD_south_shl_strike_open = no }
+		}
+		set_temp_variable = { var = ADISCORD_south_strike_target value = 2 }
+		ADISCORD_south_shl_strike_or_appeal = yes
+	}
+	else_if = {
 		limit = { SHL_can_strike_veyr = yes }
 		GLP = {
 			set_country_flag = SHL_kyz_border_grievance
@@ -4870,7 +4880,19 @@ SHL_kyz_raise_cistern_watch = {
 # Deadline timeout. A busy or vanished Keizan postpones the demand instead of
 # discarding it.
 SHL_start_kyz_war = {
+	# A Keizan leaning to Svetlogorye appeals to it instead; the demand stays
+	# at state 5 until the appeal's callback starts the war or lets it lapse.
 	if = {
+		limit = {
+			check_variable = { var = SHL_keizan_state value = 5 compare = equals }
+			SHL_country_operable = yes
+			SHL_keizan_can_threaten = yes
+			KYZ = { ADISCORD_south_shl_strike_open = no }
+		}
+		set_temp_variable = { var = ADISCORD_south_strike_target value = 1 }
+		ADISCORD_south_shl_strike_or_appeal = yes
+	}
+	else_if = {
 		limit = {
 			check_variable = { var = SHL_keizan_state value = 5 compare = equals }
 			SHL_country_operable = yes
@@ -10331,6 +10353,8 @@ SHL_start_cons_councils = {
 SHL_cons_campaign_won = {
 	add_political_power = 25
 	ADISCORD_south_pull_clock_campaign = yes
+	set_temp_variable = { var = ADISCORD_south_power_delta value = 2 }
+	ADISCORD_south_add_influence_power = yes
 }
 
 # ----- Council elections (cities) -----
@@ -14144,7 +14168,8 @@ SHL_cold_grow_heat = {
 
 # The modifiers scale only the raid weight against a fixed 85: about 15% per
 # cycle from 30 heat, 23% from 50 and 29% from 70 under an ordinary overlord.
-# Svetlogorye's military rule raises it and its local offices lower it. The
+# Svetlogorye's hard course (military rule, extraction) raises it and its soft
+# course (local offices, a province) lowers it. The
 # martyrs focus spares 40 of every 100 raids in a second roll, so its -40% is
 # exact at every heat. ADISCORD_SHL.203 sets the 84-day cooldown in its
 # immediate block.

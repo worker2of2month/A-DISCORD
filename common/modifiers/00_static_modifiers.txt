@@ -763,3 +763,13 @@ NAM_subject_resource_tariff = {
 	}
 	trade_cost_for_target_factor = -0.50
 }
+
+# Static modifiers load before autonomy states: a scripted trigger with
+# has_autonomy_state here crashes the game at startup. The governorate check
+# lives in the NAM tariff sync effect that adds and removes this modifier.
+NAM_governorate_resource_tariff = {
+	valid_relation_trigger = {
+		FROM = { is_subject_of = NAM }
+	}
+	trade_cost_for_target_factor = -0.50
+}

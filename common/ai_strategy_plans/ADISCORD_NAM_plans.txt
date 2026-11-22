@@ -512,28 +512,63 @@ NAM_postwar_plan = {
 		NAM_law_after_war
 		NAM_federal_charter
 		NAM_veterans_return
-		NAM_charter_ending_federation
-		NAM_public_utilities
 		NAM_civil_repair
+		NAM_charter_ending_federation
+		NAM_foreign_office
+		NAM_depot_inquiry
+		NAM_public_utilities
 		NAM_pw_transport_commission
-		NAM_oil_ministry
-		NAM_pw_mobile_army
-		NAM_pw_freight_schedule
-		NAM_district_militia
 		NAM_civil_dividend
-		NAM_regional_university
-		NAM_oil_exchange
 		NAM_south_fenn_guarantee
-		NAM_pw_southern_army
-		NAM_south_oil_for_water
+		NAM_south_legations
+		NAM_depot_double_invoices
+		NAM_municipal_services
+		NAM_pw_mobile_army
+		NAM_oil_ministry
+		NAM_community_charter
 		NAM_normalisation
-		NAM_tenant_councils
-		NAM_kadir_oil_charter
-		NAM_svetlogorye
+		NAM_depot_boiler_houses
+		NAM_district_council
+		NAM_pw_rail_priority
+		NAM_pw_district_hospitals
+		NAM_district_militia
 		NAM_eflor_accord
+		NAM_depot_town_receipts
+		NAM_south_aid_caravans
+		NAM_pw_field_workshops
+		NAM_state_refineries
+		NAM_oasis_voices
+		NAM_south_desert_envoys
+		NAM_depot_export_ban
+		NAM_regional_university
+		NAM_pw_freight_schedule
+		NAM_national_university
+		NAM_south_oil_for_water
+		NAM_south_congress
+		NAM_depot_open_hearing
+		NAM_district_workshops
+		NAM_pw_staff_exercises
+		NAM_oil_exchange
+		NAM_municipal_land
+		NAM_south_coalition_council
+		NAM_depot_station_committees
+		NAM_town_fuel_cooperatives
+		NAM_pw_southern_army
+		NAM_svetlogorye
+		NAM_rural_grid
+		NAM_south_league_of_guarantees
+		NAM_depot_trial
 		NAM_common_fuel_market
-		NAM_azhar_accord
+		NAM_svetlogorsk_shipyards
+		NAM_pw_energy_commission
+		NAM_south_communities_compact
+		NAM_depot_revoke
+		NAM_pw_southern_operations
+		NAM_depot_cooperative_fuel_service
+		# The offensive opens only with the warning; listed before the last row, it is
+		# taken at the first pick after the warning opens.
 		NAM_south_oil_charter
+		NAM_pw_power_grid
 	}
 	weight = { factor = 20 }
 }
@@ -592,28 +627,62 @@ NAM_postwar_vertical_plan = {
 		NAM_law_after_war
 		NAM_service_state
 		NAM_veterans_return
-		NAM_ladder_ending_iron
-		NAM_south_black_basin
-		NAM_namestnik_garrisons
-		NAM_state_project_bureaus
 		NAM_civil_repair
+		NAM_ladder_ending_iron
+		NAM_foreign_office
+		NAM_depot_inquiry
+		NAM_namestnik_garrisons
 		NAM_pw_transport_commission
 		NAM_oil_ministry
+		NAM_south_black_basin
+		NAM_south_legations
+		NAM_depot_double_invoices
+		NAM_pw_armament_inspectorate
 		NAM_pw_breakthrough_army
 		NAM_armed_peace
+		NAM_state_project_bureaus
+		NAM_normalisation
+		NAM_depot_dispatchers_strike
+		NAM_pw_constitutional_committee
+		NAM_pw_rail_priority
+		NAM_state_refineries
+		NAM_pw_mobilisation_register
+		NAM_eflor_accord
+		NAM_depot_export_ban
 		NAM_state_plan
+		NAM_pw_engineer_units
+		NAM_pw_arms_engineering
+		NAM_pw_administrative_courts
+		NAM_south_desert_envoys
+		NAM_depot_rail_crews
+		NAM_pw_officer_appointments
 		NAM_pw_freight_schedule
-		NAM_south_desert_offices
 		NAM_oil_exchange
-		NAM_pw_labour_code
+		NAM_south_desert_offices
+		NAM_south_congress
+		NAM_depot_open_hearing
+		NAM_pw_staff_exercises
+		NAM_national_university
+		NAM_south_coalition_council
+		NAM_depot_station_committees
+		NAM_pw_council_of_seals
 		NAM_pw_southern_army
 		NAM_svetlogorye
-		NAM_border_revenge
-		NAM_pw_export_guarantees
-		NAM_pw_constitutional_committee
-		NAM_border_citizenship
+		NAM_pw_labour_code
+		NAM_south_league_of_guarantees
+		NAM_depot_trial
+		NAM_pw_forward_bases
+		NAM_pw_air_review
+		NAM_pw_energy_commission
+		NAM_south_namestnik_pact
+		NAM_depot_revoke
 		NAM_ladder_of_seals
+		NAM_pw_southern_air_command
+		NAM_depot_state_fuel_service
+		# The offensive opens only with the warning; listed before the last row, it is
+		# taken at the first pick after the warning opens.
 		NAM_south_seal_over_furnaces
+		NAM_pw_power_grid
 	}
 	weight = { factor = 20 }
 }
@@ -822,6 +891,245 @@ NAM_return_war_plan = {
 	weight = { factor = 20 }
 }
 
+# The mainland Directory tree follows the won return in both forms of rule. The
+# form never changes once the war tree chose it: under direct rule the AI cores
+# Eflor's land, under the holders it keeps the district's charter and recruits.
+# Both plans take the desert march, the union of boards and the Mazar alliance.
+NAM_mainland_directory_plan_direct = {
+	name = "NAM mainland Directory - direct rule"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_mainland_directory_focus
+		NAM_rtw_direct_rule = yes
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_mainland_directory_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_mdr_flag_over_harbour
+		NAM_mdr_basin_wells
+		NAM_mdr_loren_governors
+		NAM_mdr_back_to_homes
+		NAM_mdr_union_of_boards
+		NAM_mdr_first_mainland_meeting
+		NAM_mdr_desert_question
+		NAM_mdr_desert_march
+		NAM_mdr_loren_aluminium
+		NAM_mdr_dextung_files
+		NAM_mdr_hill_villages
+		NAM_mdr_basin_refineries
+		NAM_mdr_svetlogorsk_rebuilt
+		NAM_mdr_collaborators_lists
+		NAM_mdr_owners_register
+		NAM_mdr_eflor_province
+		NAM_mdr_act_of_oblivion
+		NAM_mdr_company_regiments
+		NAM_mdr_basin_oil_concession
+		NAM_mdr_home_districts
+		NAM_mdr_division_of_continent
+		NAM_mdr_boards_constitution
+		NAM_mdr_heirs_treaty
+		NAM_mdr_directory_of_six
+		NAM_mdr_southern_chancery
+		NAM_mdr_furnace_agents
+		NAM_mdr_mazar_question
+		NAM_mdr_southern_districts
+		NAM_mdr_mazar_alliance
+		NAM_mdr_eflor_legions
+		NAM_mdr_black_coast
+		NAM_mdr_general_staff
+		NAM_mdr_war_charter
+		NAM_mdr_damir_road
+		NAM_mdr_loren_war_school
+		NAM_mdr_field_armies
+		NAM_mdr_black_coast_yards
+		NAM_mdr_southern_arsenal
+		NAM_mdr_southern_railway
+		NAM_mdr_damir_line
+		NAM_mdr_infantry_corps
+		NAM_mdr_tanker_armada
+		NAM_mdr_road_contracts
+		NAM_mdr_army_of_the_south
+		NAM_mdr_arsenal_of_the_directory
+		NAM_mdr_southern_charter
+		NAM_mdr_rear_of_the_south
+		NAM_mdr_northern_charter
+		NAM_mdr_hour_of_the_south
+		NAM_mdr_continental_exchange
+	}
+	weight = { factor = 20 }
+}
+
+NAM_mainland_directory_plan_holders = {
+	name = "NAM mainland Directory - holders"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_mainland_directory_focus
+		NAM_rtw_direct_rule = no
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_mainland_directory_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_mdr_flag_over_harbour
+		NAM_mdr_basin_wells
+		NAM_mdr_loren_governors
+		NAM_mdr_back_to_homes
+		NAM_mdr_union_of_boards
+		NAM_mdr_first_mainland_meeting
+		NAM_mdr_desert_question
+		NAM_mdr_desert_march
+		NAM_mdr_loren_aluminium
+		NAM_mdr_dextung_files
+		NAM_mdr_hill_villages
+		NAM_mdr_basin_refineries
+		NAM_mdr_svetlogorsk_rebuilt
+		NAM_mdr_collaborators_lists
+		NAM_mdr_owners_register
+		NAM_mdr_eflor_concession
+		NAM_mdr_act_of_oblivion
+		NAM_mdr_company_regiments
+		NAM_mdr_basin_oil_concession
+		NAM_mdr_home_districts
+		NAM_mdr_division_of_continent
+		NAM_mdr_boards_constitution
+		NAM_mdr_heirs_treaty
+		NAM_mdr_directory_of_six
+		NAM_mdr_southern_chancery
+		NAM_mdr_furnace_agents
+		NAM_mdr_mazar_question
+		NAM_mdr_southern_districts
+		NAM_mdr_mazar_alliance
+		NAM_mdr_eflor_legions
+		NAM_mdr_black_coast
+		NAM_mdr_general_staff
+		NAM_mdr_war_charter
+		NAM_mdr_damir_road
+		NAM_mdr_loren_war_school
+		NAM_mdr_field_armies
+		NAM_mdr_black_coast_yards
+		NAM_mdr_southern_arsenal
+		NAM_mdr_southern_railway
+		NAM_mdr_damir_line
+		NAM_mdr_infantry_corps
+		NAM_mdr_tanker_armada
+		NAM_mdr_road_contracts
+		NAM_mdr_army_of_the_south
+		NAM_mdr_arsenal_of_the_directory
+		NAM_mdr_southern_charter
+		NAM_mdr_rear_of_the_south
+		NAM_mdr_northern_charter
+		NAM_mdr_hour_of_the_south
+		NAM_mdr_continental_exchange
+	}
+	weight = { factor = 20 }
+}
+
+# The dominion tree follows the council's victory in the War for the South.
+# Each plan takes one side of every pair by the mainland course; the last
+# entry is the fallback final, taken only when the first final is closed.
+NAM_southern_dominion_plan_union = {
+	name = "NAM southern dominion - union of boards"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_southern_dominion_focus
+		NAM_ptn_union_rules = yes
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_southern_dominion_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_hgm_south_under_sequestration
+		NAM_hgm_furnace_trust
+		NAM_hgm_night_of_the_south
+		NAM_hgm_nothing_left_to_divide
+		NAM_hgm_furnace_dividends
+		NAM_hgm_southern_offices
+		NAM_hgm_order_of_the_one
+		NAM_hgm_continental_garrison
+		NAM_hgm_chairs_seal
+		NAM_hgm_furnace_houses
+		NAM_hgm_southern_cadastre
+		NAM_hgm_southern_extraction
+		NAM_hgm_charter_of_dominion
+		NAM_hgm_count_of_six
+		NAM_hgm_covenant_of_six
+		NAM_hgm_steel_quotas
+		NAM_hgm_army_of_dominion
+		NAM_hgm_cities_of_the_continent
+		NAM_hgm_south_under_the_boards
+		NAM_hgm_southern_exchange
+		NAM_hgm_charter_of_the_directory
+		NAM_hgm_last_meeting
+		NAM_hgm_league_of_districts
+		NAM_hgm_perpetual_council
+	}
+	weight = { factor = 20 }
+}
+
+NAM_southern_dominion_plan_shares = {
+	name = "NAM southern dominion - mainland shares"
+	desc = ""
+	allowed = { original_tag = NAM }
+	enable = {
+		tag = NAM
+		is_ai = yes
+		has_focus_tree = NAM_southern_dominion_focus
+		has_completed_focus = NAM_mdr_mainland_shares
+	}
+	abort = {
+		OR = {
+			NOT = { tag = NAM }
+			NOT = { has_focus_tree = NAM_southern_dominion_focus }
+		}
+	}
+	ai_national_focuses = {
+		NAM_hgm_south_under_sequestration
+		NAM_hgm_khazar_inventory
+		NAM_hgm_night_of_the_south
+		NAM_hgm_nothing_left_to_divide
+		NAM_hgm_khazar_leases
+		NAM_hgm_southern_offices
+		NAM_hgm_share_for_the_ninety_nine
+		NAM_hgm_demobilisation
+		NAM_hgm_chairs_seal
+		NAM_hgm_furnace_houses
+		NAM_hgm_southern_cadastre
+		NAM_hgm_southern_province
+		NAM_hgm_charter_of_dominion
+		NAM_hgm_count_of_six
+		NAM_hgm_covenant_of_six
+		NAM_hgm_khazar_lyceums
+		NAM_hgm_army_of_dominion
+		NAM_hgm_cities_of_the_continent
+		NAM_hgm_south_under_the_boards
+		NAM_hgm_southern_exchange
+		NAM_hgm_charter_of_the_directory
+		NAM_hgm_last_meeting
+		NAM_hgm_perpetual_council
+		NAM_hgm_shares_of_the_ninety_nine
+	}
+	weight = { factor = 20 }
+}
+
 NAM_postwar_pragmatic_plan = {
 	name = "NAM pragmatic compact"
 	desc = ""
@@ -844,27 +1152,59 @@ NAM_postwar_pragmatic_plan = {
 		NAM_law_after_war
 		NAM_pragmatic_compact
 		NAM_veterans_return
-		NAM_prag_ending_republic
 		NAM_civil_repair
-		NAM_pw_transport_commission
+		NAM_prag_ending_republic
+		NAM_foreign_office
+		NAM_depot_inquiry
 		NAM_municipal_bonds
+		NAM_pw_transport_commission
 		NAM_oil_ministry
-		NAM_pw_mobile_army
+		NAM_commercial_courts
+		NAM_south_legations
+		NAM_depot_double_invoices
 		NAM_contract_register
+		NAM_pw_mobile_army
 		NAM_civil_dividend
-		NAM_port_polytechnic
-		NAM_domestic_designs
-		NAM_pw_freight_schedule
-		NAM_insured_caravans
+		NAM_prag_settlement_agreements
+		NAM_normalisation
+		NAM_depot_dispatchers_strike
+		NAM_commercial_reserve
+		NAM_pw_road_priority
+		NAM_export_consortium
 		NAM_prag_partner_supply
-		NAM_oil_exchange
+		NAM_eflor_accord
+		NAM_depot_audit
 		NAM_prag_treasury_guarantee
+		NAM_pw_field_workshops
+		NAM_pw_district_hospitals
+		NAM_customs_clearinghouse
+		NAM_south_desert_envoys
+		NAM_depot_rail_crews
+		NAM_prag_credit_supplies
+		NAM_pw_freight_schedule
+		NAM_oil_exchange
+		NAM_machine_tool_contracts
+		NAM_south_congress
+		NAM_depot_open_hearing
+		NAM_domestic_designs
+		NAM_pw_staff_exercises
+		NAM_national_university
+		NAM_tractor_leasing
+		NAM_south_coalition_council
+		NAM_depot_station_committees
+		NAM_balanced_accounts
 		NAM_pw_southern_army
 		NAM_svetlogorye
-		NAM_normalisation
-		NAM_eflor_accord
-		NAM_balanced_accounts
-		NAM_azhar_accord
+		NAM_port_polytechnic
+		NAM_south_league_of_guarantees
+		NAM_depot_trial
+		NAM_svetlogorsk_shipyards
+		NAM_pw_oil_laboratories
+		NAM_south_trade_coalition
+		NAM_depot_reserve_charter
+		NAM_pw_southern_operations
+		NAM_pw_industrial_sites
+		NAM_depot_fuel_service_shares
 		NAM_prag_south_guarantees
 	}
 	weight = { factor = 20 }

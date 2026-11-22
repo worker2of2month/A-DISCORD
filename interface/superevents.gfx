@@ -329,6 +329,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_superevent_south_partition"
+		textureFile = "gfx/interface/superevents/NAM/superevent_south_boards.png"
+	}
+
+	spriteType = {
 		name = "GFX_superevent_south_contract_republic"
 		textureFile = "gfx/interface/superevents/SHL/superevent_south_cities.png"
 	}

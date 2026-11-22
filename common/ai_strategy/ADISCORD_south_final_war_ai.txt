@@ -239,12 +239,90 @@ ADISCORD_south_nam_staging_reserve = {
 			is_controlled_by = NAM
 			supply_node > 0
 		}
-		NOT = { is_neighbor_of = SHL }
+		# The council of boards stages on the mainland road instead.
+		NOT = {
+			is_neighbor_of = SHL
+			has_country_flag = NAM_corp_takeover
+		}
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = put_unit_buffers
 		states = { 689 }
+		ratio = 0.15
+		subtract_fronts_from_need = yes
+		subtract_invasions_from_need = yes
+	}
+}
+
+# The Directory's road south runs through Damir; its supply node comes from
+# the mainland tree.
+ADISCORD_south_nam_directory_staging = {
+	allowed = { tag = NAM }
+	enable = {
+		difficulty > 2
+		ADISCORD_south_ai_border_preparation = yes
+		has_country_flag = NAM_corp_takeover
+		240 = {
+			controller = {
+				OR = {
+					tag = NAM
+					is_subject_of = NAM
+				}
+			}
+			supply_node > 0
+		}
+		NOT = {
+			269 = {
+				controller = {
+					OR = {
+						tag = NAM
+						is_subject_of = NAM
+					}
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		states = { 240 }
+		ratio = 0.15
+		subtract_fronts_from_need = yes
+		subtract_invasions_from_need = yes
+	}
+}
+
+# Resan faces Zarkhan once Mazar has entered the Directory's camp; the same
+# reserve is then shared between Damir and Resan.
+ADISCORD_south_nam_directory_resan_staging = {
+	allowed = { tag = NAM }
+	enable = {
+		difficulty > 2
+		ADISCORD_south_ai_border_preparation = yes
+		has_country_flag = NAM_corp_takeover
+		240 = {
+			controller = {
+				OR = {
+					tag = NAM
+					is_subject_of = NAM
+				}
+			}
+			supply_node > 0
+		}
+		269 = {
+			controller = {
+				OR = {
+					tag = NAM
+					is_subject_of = NAM
+				}
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		states = { 240 269 }
 		ratio = 0.15
 		subtract_fronts_from_need = yes
 		subtract_invasions_from_need = yes

@@ -26,6 +26,14 @@ BEGIN = "# BEGIN GENERATED NAM BASIN MAP"
 END = "# END GENERATED NAM BASIN MAP"
 COLOURS = ((60, 150, 143, 68), (190, 78, 65, 115), (110, 116, 121, 110))
 CATEGORY_PICTURE_GAP = 12
+# Post-war depot board: mainland sites drawn beside their district marker, the
+# island site on a strip below the map in place of the colour legend.
+DEPOT_SITES = (700, 67, 689, 690)
+DEPOT_ISLAND = 225
+GAUGE_WIDTH, GAUGE_HEIGHT = 14, 26
+GAUGE_FRAMES = 12
+GAUGE_MARGIN = 3
+LEGEND_TOP = 318
 
 
 def pack_rgb(rgb: np.ndarray) -> np.ndarray:
@@ -295,6 +303,92 @@ def ui_images() -> dict[str, Image.Image]:
     return images
 
 
+def depot_images() -> dict[str, Image.Image]:
+    """Twelve-frame tank gauge: frames 1-11 fill by tenths of the private share, 12 marks a sold share."""
+    ink, shell, empty, oil, sold = "#171e20", "#9f9a7c", "#2b3537", "#d39a45", "#8f3b30"
+    strip = Image.new("RGBA", (GAUGE_WIDTH * GAUGE_FRAMES, GAUGE_HEIGHT))
+    for frame in range(GAUGE_FRAMES):
+        tank = Image.new("RGBA", (GAUGE_WIDTH, GAUGE_HEIGHT))
+        draw = ImageDraw.Draw(tank)
+        draw.rounded_rectangle((0, 0, GAUGE_WIDTH - 1, GAUGE_HEIGHT - 1), radius=4, fill=shell, outline=ink, width=1)
+        draw.rectangle((3, 3, GAUGE_WIDTH - 4, GAUGE_HEIGHT - 4), fill=empty)
+        inner = GAUGE_HEIGHT - 7
+        if frame == GAUGE_FRAMES - 1:
+            draw.rectangle((3, 3, GAUGE_WIDTH - 4, GAUGE_HEIGHT - 4), fill=sold)
+            # A crossed tank stays readable without relying on colour.
+            draw.line((3, 3, GAUGE_WIDTH - 4, GAUGE_HEIGHT - 4), fill="#f2e3c0", width=2)
+            draw.line((GAUGE_WIDTH - 4, 3, 3, GAUGE_HEIGHT - 4), fill="#f2e3c0", width=2)
+        elif frame:
+            level = round(inner * frame / 10)
+            draw.rectangle((3, GAUGE_HEIGHT - 4 - level + 1, GAUGE_WIDTH - 4, GAUGE_HEIGHT - 4), fill=oil)
+        for tick in (0.25, 0.5, 0.75):
+            y = 3 + round(inner * tick)
+            draw.line((GAUGE_WIDTH - 6, y, GAUGE_WIDTH - 4, y), fill=ink)
+        strip.paste(tank, (frame * GAUGE_WIDTH, 0))
+    outline = Image.new("RGBA", (GAUGE_WIDTH + 4, GAUGE_HEIGHT + 4))
+    ImageDraw.Draw(outline).rectangle((0, 0, GAUGE_WIDTH + 3, GAUGE_HEIGHT + 3), outline=(241, 204, 120, 255), width=2)
+    return {"depot_gauge.png": strip, "depot_gauge_selected.png": outline}
+
+
+def depot_positions(geometry: dict[int, dict]) -> dict[int, tuple[int, int]]:
+    """Place each gauge beside its district marker without covering another marker or gauge."""
+    half = MARKER_SIZE // 2
+    taken = [(x - half, y - half, x + half, y + half) for x, y in (node["anchor"] for node in geometry.values())]
+    positions = {}
+    for state in DEPOT_SITES:
+        x, y = geometry[state]["anchor"]
+        gap = half + GAUGE_MARGIN
+        candidates = ((x + gap, y - half), (x - gap - GAUGE_WIDTH, y - half),
+                      (x - GAUGE_WIDTH // 2, y + gap), (x - GAUGE_WIDTH // 2, y - gap - GAUGE_HEIGHT))
+        for left, top in candidates:
+            box = (left - GAUGE_MARGIN, top - GAUGE_MARGIN,
+                   left + GAUGE_WIDTH + GAUGE_MARGIN, top + GAUGE_HEIGHT + GAUGE_MARGIN)
+            inside = box[0] >= 0 and box[1] >= 0 and box[2] <= WIDTH and box[3] <= HEIGHT
+            clear = all(box[2] <= other[0] or other[2] <= box[0] or box[3] <= other[1] or other[3] <= box[1]
+                        for other in taken)
+            if inside and clear:
+                positions[state] = (left, top)
+                taken.append(box)
+                break
+        else:
+            raise ValueError(f"No free depot gauge position near state {state}")
+    return positions
+
+
+def depot_gauge_widgets(state: int, x: int, y: int) -> list[str]:
+    return [
+        "\t\ticonType = {", f'\t\t\tname = "NAM_depot_selected_{state}"',
+        f"\t\t\tposition = {{ x = {x - 2} y = {y - 2} }}", '\t\t\tspriteType = "GFX_NAM_depot_gauge_selected"',
+        "\t\t\talwaystransparent = yes", "\t\t}", "",
+        "\t\ticonType = {", f'\t\t\tname = "NAM_depot_gauge_{state}"',
+        f"\t\t\tposition = {{ x = {x} y = {y} }}", '\t\t\tspriteType = "GFX_NAM_depot_gauge"',
+        "\t\t\talwaystransparent = yes", "\t\t}", "",
+        "\t\tbuttonType = {", f'\t\t\tname = "NAM_depot_target_{state}"',
+        f"\t\t\tposition = {{ x = {x} y = {y} }}", f"\t\t\tsize = {{ x = {GAUGE_WIDTH} y = {GAUGE_HEIGHT} }}",
+        '\t\t\tquadTextureSprite = "GFX_tiled_window_transparent"', "\t\t\tclicksound = click_default",
+        f'\t\t\tpdx_tooltip = "NAM_depot_marker_{state}_tt"', "\t\t}", "",
+    ]
+
+
+def depot_block(geometry: dict[int, dict]) -> list[str]:
+    # The scripted GUI shows every depot widget only while the board is open.
+    lines = []
+    for state, (x, y) in depot_positions(geometry).items():
+        lines.extend(depot_gauge_widgets(state, 12 + x, 66 + y))
+    lines.extend(depot_gauge_widgets(DEPOT_ISLAND, 14, LEGEND_TOP + 2))
+    lines.extend((
+        "\t\tinstantTextBoxType = {", '\t\t\tname = "NAM_depot_island_label"',
+        f"\t\t\tposition = {{ x = 36 y = {LEGEND_TOP + 7} }}", '\t\t\ttext = "NAM_depot_island_label"',
+        '\t\t\tfont = "hoi_16mbs"', "\t\t\tmaxWidth = 252", "\t\t\tmaxHeight = 22", "\t\t\tfixedsize = yes",
+        f'\t\t\tpdx_tooltip = "NAM_depot_marker_{DEPOT_ISLAND}_tt"', "\t\t}", "",
+        "\t\tbuttonType = {", '\t\t\tname = "NAM_depot_press"',
+        f"\t\t\tposition = {{ x = 298 y = {LEGEND_TOP - 1} }}", '\t\t\tquadTextureSprite = "GFX_button_148x34"',
+        '\t\t\tbuttonText = "NAM_depot_press_button"', '\t\t\tbuttonFont = "hoi_16mbs"',
+        "\t\t\tclicksound = click_default", '\t\t\tpdx_tooltip = "NAM_depot_press_tt"', "\t\t}", "",
+    ))
+    return lines
+
+
 def gui_block(geometry: dict[int, dict]) -> str:
     lines = []
     for state in STATES:
@@ -319,6 +413,7 @@ def gui_block(geometry: dict[int, dict]) -> str:
             '\t\t\tmaxWidth = 104', '\t\t\tmaxHeight = 40', '\t\t\tfixedsize = yes',
             '\t\t\talwaystransparent = yes', f'\t\t\tpdx_tooltip = "NAM_bw_map_{state}_tt"', '\t\t}', '',
         ))
+    lines.extend(depot_block(geometry))
     return "\n".join(lines).rstrip()
 
 
@@ -331,15 +426,22 @@ def gfx_block(images: dict[str, Image.Image]) -> str:
                           "\t\tsize = { x = 64 y = 64 }", f'\t\ttextureFile = "{(OUT / filename).as_posix()}"',
                           "\t\tborderSize = { x = 3 y = 3 }", "\t\ttilingCenter = yes", "\t}", ""))
         else:
+            frames = 1
+            if name.startswith("state_") or name == "board_stance_texticon":
+                frames = 4
+            elif name == "depot_gauge":
+                frames = GAUGE_FRAMES
             if name.startswith("texticon_"):
                 sprite_name = f"GFX_NAM_support_{name.removeprefix('texticon_')}_texticon"
+            elif name.startswith("depot_"):
+                sprite_name = f"GFX_NAM_{name}"
             elif name.endswith("_texticon"):
                 sprite_name = f"GFX_NAM_{name}"
             else:
                 sprite_name = f"GFX_NAM_bw_{name}"
             lines.extend(("\tspriteType = {", f'\t\tname = "{sprite_name}"',
                           f'\t\ttexturefile = "{(OUT / filename).as_posix()}"',
-                          f'\t\tnoOfFrames = {4 if name.startswith("state_") or name == "board_stance_texticon" else 1}'))
+                          f"\t\tnoOfFrames = {frames}"))
             if name == "marker":
                 lines.append('\t\teffectFile = "gfx/FX/buttonstate.lua"')
             if sprite_name.endswith("_texticon"):
@@ -620,6 +722,7 @@ def mainland_reports(source: bytes) -> bytes:
 def build_outputs() -> tuple[dict[Path, bytes], dict[int, dict]]:
     images, geometry = map_images()
     images.update(ui_images())
+    images.update(depot_images())
     outputs = {}
     for filename, image in images.items():
         buffer = io.BytesIO()

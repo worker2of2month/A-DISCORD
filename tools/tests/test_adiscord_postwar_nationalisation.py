@@ -489,7 +489,7 @@ class SouthernNationalisationTests(NationalisationHarness, unittest.TestCase):
             'shared_triggers': 'common/scripted_triggers/ADISCORD_south_final_war_triggers.txt',
             'receipt': 'NAM_nationalisation_pending',
             'unlocks': {
-                'NAM_border_citizenship': 'focus_trees/NAM/postwar/government.txt',
+                'NAM_border_citizenship': 'focus_trees/NAM/postwar/influence.txt',
                 'NAM_defeat_second_chapter': 'focus_trees/NAM/defeated/focuses.txt',
                 'NAM_hum_federal_districts': 'focus_trees/NAM/exile_humanist/focuses.txt',
                 'NAM_rad_pacification': 'focus_trees/NAM/exile_radical/focuses.txt',

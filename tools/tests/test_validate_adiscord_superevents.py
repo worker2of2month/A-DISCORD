@@ -1449,6 +1449,7 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_south_federation",
                 "superevent_south_oil_union",
                 "superevent_nam_mainland_inventory",
+                "superevent_south_partition",
                 "superevent_south_contract_republic",
                 "superevent_south_directorate",
                 "superevent_south_nam",

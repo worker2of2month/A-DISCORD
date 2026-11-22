@@ -67,12 +67,17 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_autonomy_NAM_namestnik_office_icon"
-		textureFile = "gfx/interface/autonomy/autonomy_district_in_Vorkerland_icon.dds"
+		textureFile = "gfx/interface/autonomy/autonomy_NAM_namestnik_office_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_NAM_federal_district_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_NAM_federal_district_icon.png"
 	}
 
 	spriteType = {
 		name = "GFX_autonomy_NAM_oil_charter_icon"
-		textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+		textureFile = "gfx/interface/autonomy/autonomy_NAM_oil_charter_icon.png"
 	}
 
 	spriteType = {

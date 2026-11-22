@@ -1,0 +1,2466 @@
+focus_tree = {
+	id = NAM_southern_dominion_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 160
+			original_tag = NAM
+			has_country_flag = NAM_corp_takeover
+			has_global_flag = ADISCORD_south_hegemon_NAM
+			has_global_flag = ADISCORD_south_final_resolved
+		}
+	}
+	default = no
+	continuous_focus_position = {
+		x = 50
+		y = 1800
+	}
+
+	# Loaded by NAM_hgm_begin when the council of boards wins the War for the
+	# South. Never swapped: the South war is over. Shared history keeps every
+	# earlier tree's completions.
+	# The four finals exclude each other through NAM_hgm_no_final_taken in
+	# available: an exclusion line between x 16 and x 28 would cross the two
+	# finals between them.
+
+	# ----- Centre: the partition of the South and the fates of the council -----
+
+	focus = {
+		id = NAM_hgm_south_under_sequestration
+		icon = GFX_focus_NAM_board_land_under_seal
+		x = 22
+		y = 0
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			is_subject = no
+			hidden_trigger = { NAM_hgm_tree_live = yes }
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_category_tooltip = NAM_hgm_dominion
+			custom_effect_tooltip = NAM_ptn_lot_tender_unlock_tt
+			add_political_power = 75
+			add_stability = 0.05
+			add_command_power = 30
+			custom_effect_tooltip = NAM_hgm_south_under_sequestration_reward_tt
+			hidden_effect = {
+				# The dominion category is visible from NAM_hgm_started; the tenders
+				# NAM_ptn_tender_1..11 read this completion in their visible.
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.230 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_furnace_trust
+		icon = GFX_focus_NAM_board_foundry_mark
+		x = 20
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_south_under_sequestration }
+		mutually_exclusive = { focus = NAM_hgm_khazar_inventory }
+		available = {
+			hidden_trigger = { NAM_ptn_shl_on_table = yes }
+		}
+		bypass = {
+			hidden_trigger = { check_variable = { var = NAM_ptn_shl_form value = 1 compare = equals } }
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_furnace_levy = yes
+			NAM_board_trade_war_for_economic = yes
+			add_political_power = 100
+			custom_effect_tooltip = NAM_hgm_furnace_trust_reward_tt
+			hidden_effect = {
+				# Writes NAM_ptn_shl_form = 1, keeps Shahrabad in the namestnik office,
+				# clears its sequestration and opens its seal chapter once.
+				NAM_ptn_furnace_trust = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.231 days = 2 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_ptn_union_rules = no
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_hgm_khazar_inventory
+		icon = GFX_focus_NAM_board_escheated_land_auction
+		x = 24
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_south_under_sequestration }
+		mutually_exclusive = { focus = NAM_hgm_furnace_trust }
+		available = {
+			hidden_trigger = { NAM_ptn_shl_on_table = yes }
+		}
+		bypass = {
+			hidden_trigger = { check_variable = { var = NAM_ptn_shl_form value = 2 compare = equals } }
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_inventory_tax = yes
+			NAM_board_trade_war_for_state = yes
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 20000
+				producer = NAM
+			}
+			add_command_power = 40
+			custom_effect_tooltip = NAM_hgm_khazar_inventory_reward_tt
+			hidden_effect = {
+				# Writes NAM_ptn_shl_form = 2, annexes Shahrabad through
+				# NAM_wor_radical_annex and raises resistance on its states by 15.
+				NAM_ptn_khazar_inventory = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = -6 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.232 days = 2 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_ptn_union_rules = yes
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_hgm_furnace_dividends
+		icon = GFX_focus_NAM_south_seal_over_furnaces
+		x = 18
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_furnace_trust }
+		allow_branch = { check_variable = { var = NAM_ptn_shl_form value = 1 compare = equals } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_furnace_contracts
+			custom_effect_tooltip = NAM_hgm_furnace_contracts_unlock_tt
+			add_political_power = 75
+			custom_effect_tooltip = NAM_hgm_furnace_dividends_reward_tt
+			hidden_effect = {
+				# The monthly furnace dividend is read by NAM_ptn_monthly through this
+				# completion.
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+				NAM_corp_capital_add = yes
+				# Every company that owns one of the furnace lots 1-4 at completion.
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 1 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 1 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 1 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 1 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 2 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 2 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 2 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 2 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 3 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 3 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 3 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 3 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 4 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 4 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 4 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 4 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 5 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 5 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 5 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 5 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 6 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 6 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 6 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 6 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				}
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_night_of_the_south
+		icon = GFX_focus_NAM_board_partition_night
+		x = 22
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_hgm_furnace_trust
+			focus = NAM_hgm_khazar_inventory
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_ptn_protocol_signed_tt
+				has_country_flag = NAM_ptn_protocol_signed
+			}
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 100
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_hgm_night_of_the_south_reward_tt
+			hidden_effect = {
+				# Dispatcher 246 sells one open lot an hour at night values. The
+				# protocol (NAM_ptn_sign_protocol) grants NAM_hgm_partition_charter,
+				# +4 trust to every company with a lot, event 245 and superevent 79.
+				NAM_ptn_run_night = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_khazar_leases
+		icon = GFX_focus_NAM_board_escheated_land_auction
+		x = 26
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_khazar_inventory }
+		allow_branch = { check_variable = { var = NAM_ptn_shl_form value = 2 compare = equals } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 15000
+			custom_effect_tooltip = NAM_hgm_khazar_leases_reward_tt
+			hidden_effect = {
+				# The monthly lease bonus is read by NAM_ptn_monthly through this
+				# completion.
+				set_temp_variable = { var = NAM_mdr_compliance_add value = 10 }
+				set_temp_variable = { var = NAM_mdr_core_filter value = 4 }
+				NAM_mdr_conquered_compliance = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+				NAM_corp_capital_add = yes
+				# Every company that owns one of Shahrabad's lots 1-4 at completion.
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 1 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 1 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 1 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 1 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 2 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 2 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 2 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 2 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 3 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 3 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 3 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 3 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 4 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 4 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 4 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 4 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 5 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 5 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 5 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 5 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				}
+				if = {
+					limit = {
+						OR = {
+							check_variable = { var = NAM_ptn_lot_owner^1 value = 6 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^2 value = 6 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^3 value = 6 compare = equals }
+							check_variable = { var = NAM_ptn_lot_owner^4 value = 6 compare = equals }
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				}
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_charter_of_dominion
+		icon = GFX_focus_NAM_board_silence_after_settlement
+		x = 20
+		y = 6
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_night_of_the_south }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_hgm_charter_of_dominion_reward_tt
+			hidden_effect = {
+				# NAM_corp_districts_monthly halves its dispute roll while this focus is
+				# completed. Each charter adds its own place above the mainland's four.
+				add_to_variable = { var = NAM_dir_campaign_slots value = 1 }
+				clamp_variable = {
+					var = NAM_dir_campaign_slots
+					max = 6
+				}
+				set_temp_variable = { var = NAM_mdr_compliance_add value = 10 }
+				set_temp_variable = { var = NAM_mdr_core_filter value = 0 }
+				NAM_mdr_conquered_compliance = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.266 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_southern_exchange
+		icon = GFX_focus_NAM_board_harbour_exchange
+		x = 24
+		y = 6
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_night_of_the_south }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_ptn_retender
+			custom_effect_tooltip = NAM_ptn_retender_unlock_tt
+			custom_effect_tooltip = NAM_hgm_southern_exchange_reward_tt
+			hidden_effect = {
+				# Two civilian factory levels in the first qualifying state; Khazar under
+				# the furnace trust is Shahrabad's and does not qualify.
+				set_temp_variable = { var = NAM_mdr_build_kind value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 699 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 283 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_last_meeting
+		icon = GFX_focus_NAM_board_table_six
+		x = 22
+		y = 8
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_hgm_charter_of_dominion
+			focus = NAM_hgm_southern_exchange
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_last_meeting_ready_tt
+				NAM_hgm_last_meeting_ready = yes
+			}
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 100
+			add_stability = 0.05
+			add_command_power = 30
+			custom_effect_tooltip = NAM_hgm_last_meeting_reward_tt
+			hidden_effect = {
+				# Brings the annual meeting forward to 7 days, as the debug decision
+				# does; NAM_board_arm_meeting itself expects no running mission. An open
+				# meeting is left to finish on its own clock.
+				if = {
+					limit = { NOT = { has_country_flag = NAM_board_meeting_open } }
+					if = {
+						limit = { has_active_mission = NAM_board_annual_meeting }
+						remove_mission = NAM_board_annual_meeting
+					}
+					set_temp_variable = { var = NAM_board_interval_input value = 7 }
+					NAM_board_arm_meeting = yes
+				}
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.267 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_league_of_districts
+		icon = GFX_focus_NAM_rtw_districts_rise
+		x = 16
+		y = 10
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_last_meeting }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_league_ready_tt
+				NAM_hgm_league_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_no_final_taken_tt
+				NAM_hgm_no_final_taken = yes
+			}
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_league_charter = yes
+			add_ideas = NAM_hgm_spirit_league
+			NAM_board_trade_war_for_economic = yes
+			custom_effect_tooltip = NAM_hgm_league_of_districts_reward_tt
+			hidden_effect = {
+				# Fixes every operating district's owner, moves it to the oil charter,
+				# renames the ruling party and gives the chair the arbiter's trait.
+				NAM_hgm_apply_league = yes
+				# Owners of an operating district +10, every other company -5.
+				set_temp_variable = { var = NAM_board_trust_input_1 value = -5 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = -5 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -5 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -5 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -5 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -5 }
+				for_each_scope_loop = {
+					array = NAM_federal_districts
+					if = {
+						limit = {
+							NAM_board_operating_district = yes
+							has_variable = NAM_corp_district_owner
+						}
+						if = {
+							limit = { check_variable = { NAM_corp_district_owner = 1 } }
+							set_temp_variable = { var = NAM_board_trust_input_1 value = 10 }
+						}
+						if = {
+							limit = { check_variable = { NAM_corp_district_owner = 2 } }
+							set_temp_variable = { var = NAM_board_trust_input_2 value = 10 }
+						}
+						if = {
+							limit = { check_variable = { NAM_corp_district_owner = 3 } }
+							set_temp_variable = { var = NAM_board_trust_input_3 value = 10 }
+						}
+						if = {
+							limit = { check_variable = { NAM_corp_district_owner = 4 } }
+							set_temp_variable = { var = NAM_board_trust_input_4 value = 10 }
+						}
+						if = {
+							limit = { check_variable = { NAM_corp_district_owner = 5 } }
+							set_temp_variable = { var = NAM_board_trust_input_5 value = 10 }
+						}
+						if = {
+							limit = { check_variable = { NAM_corp_district_owner = 6 } }
+							set_temp_variable = { var = NAM_board_trust_input_6 value = 10 }
+						}
+					}
+				}
+				NAM_board_trust_package = yes
+				# The queued recount runs after the completion and reads the league.
+				NAM_board_queue_recount = yes
+				country_event = { id = ADISCORD_nam_story.268 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 100 }
+	}
+
+	focus = {
+		id = NAM_hgm_shares_of_the_ninety_nine
+		icon = GFX_focus_NAM_board_society_99_1
+		x = 20
+		y = 10
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_last_meeting }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_people_ready_tt
+				NAM_hgm_people_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_no_final_taken_tt
+				NAM_hgm_no_final_taken = yes
+			}
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_people_register = yes
+			add_ideas = NAM_hgm_spirit_people_share
+			NAM_hgm_trade_economic_for_society = yes
+			add_stability = 0.10
+			add_war_support = 0.05
+			custom_effect_tooltip = NAM_hgm_shares_of_the_ninety_nine_reward_tt
+			hidden_effect = {
+				# Renames the ruling party and gives the chair the trustee's trait; the
+				# people's 4 votes are read by NAM_board_update_industrial_policy through
+				# this completion.
+				NAM_hgm_apply_people = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = -8 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = -8 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -8 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -8 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -8 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -8 }
+				NAM_board_trust_package = yes
+				# The queued recount runs after the completion and counts the people's share.
+				NAM_board_queue_recount = yes
+				country_event = { id = ADISCORD_nam_story.269 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 100 }
+	}
+
+	focus = {
+		id = NAM_hgm_perpetual_council
+		icon = GFX_focus_NAM_board_six_share_pool
+		x = 24
+		y = 10
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_last_meeting }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_six_ready_tt
+				NAM_hgm_six_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_no_final_taken_tt
+				NAM_hgm_no_final_taken = yes
+			}
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_perpetual_covenant = yes
+			add_ideas = NAM_hgm_spirit_six
+			add_command_power = 50
+			add_political_power = 100
+			custom_effect_tooltip = NAM_hgm_perpetual_council_reward_tt
+			hidden_effect = {
+				# Freezes every holding, closes the re-tender, the buy-out and the
+				# district auction, renames the ruling party and gives the chair the
+				# perpetual council's trait.
+				NAM_hgm_apply_six = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				NAM_board_trust_package = yes
+				NAM_board_queue_recount = yes
+				country_event = { id = ADISCORD_nam_story.270 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 100 }
+	}
+
+	focus = {
+		id = NAM_hgm_one_board
+		icon = GFX_focus_NAM_board_sole_vote_holder
+		x = 28
+		y = 10
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_last_meeting }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_one_board_ready_tt
+				NAM_hgm_one_board_ready = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_no_final_taken_tt
+				NAM_hgm_no_final_taken = yes
+			}
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_sole_charter = yes
+			add_ideas = NAM_hgm_spirit_one_board
+			NAM_board_trade_war_for_army = yes
+			custom_effect_tooltip = NAM_hgm_one_board_reward_tt
+			hidden_effect = {
+				# The focus pauses while NAM_hgm_one_board_ready fails
+				# (continue_if_invalid = no), so the 300 capital are held at completion.
+				set_temp_variable = { var = NAM_corp_capital_change value = -300 }
+				NAM_corp_capital_add = yes
+				# Writes NAM_hgm_holding from NAM_board_rank_1, renames the ruling party
+				# after the holding and seats the owner's trait while the holding chairs.
+				NAM_hgm_apply_one_board = yes
+				set_temp_variable = { var = NAM_mdr_build_kind value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 699 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 688 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_mdr_build_kind value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 688 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 67 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				# The five companies other than the holding -6 each.
+				set_temp_variable = { var = NAM_board_trust_input_1 value = -6 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = -6 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -6 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -6 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -6 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -6 }
+				if = {
+					limit = { check_variable = { NAM_hgm_holding = 1 } }
+					set_temp_variable = { var = NAM_board_trust_input_1 value = 0 }
+				}
+				if = {
+					limit = { check_variable = { NAM_hgm_holding = 2 } }
+					set_temp_variable = { var = NAM_board_trust_input_2 value = 0 }
+				}
+				if = {
+					limit = { check_variable = { NAM_hgm_holding = 3 } }
+					set_temp_variable = { var = NAM_board_trust_input_3 value = 0 }
+				}
+				if = {
+					limit = { check_variable = { NAM_hgm_holding = 4 } }
+					set_temp_variable = { var = NAM_board_trust_input_4 value = 0 }
+				}
+				if = {
+					limit = { check_variable = { NAM_hgm_holding = 5 } }
+					set_temp_variable = { var = NAM_board_trust_input_5 value = 0 }
+				}
+				if = {
+					limit = { check_variable = { NAM_hgm_holding = 6 } }
+					set_temp_variable = { var = NAM_board_trust_input_6 value = 0 }
+				}
+				NAM_board_trust_package = yes
+				# The queued recount runs after the completion and counts the holding's proxies.
+				NAM_board_queue_recount = yes
+				country_event = { id = ADISCORD_nam_story.271 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 100 }
+	}
+
+	# ----- The partitioned South -----
+
+	focus = {
+		id = NAM_hgm_southern_offices
+		icon = GFX_focus_NAM_board_ministries_in_concession
+		x = 4
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_south_under_sequestration }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_ptn_protocol_signed_tt
+				has_country_flag = NAM_ptn_protocol_signed
+			}
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			add_manpower = 15000
+			custom_effect_tooltip = NAM_hgm_southern_offices_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_mdr_compliance_add value = 10 }
+				set_temp_variable = { var = NAM_mdr_core_filter value = 3 }
+				NAM_mdr_conquered_compliance = yes
+				# The supply node goes to Damir's city province, else to the South Harbour;
+				# kind 7 qualifies only on 240, 700, 729, 692 and 689.
+				set_temp_variable = { var = NAM_mdr_build_kind value = 7 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 240 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 0 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 0 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_board_petitioner value = 0 }
+				for_loop_effect = {
+					start = 1
+					end = 12
+					value = NAM_board_loop_step
+					add_to_temp_variable = { var = NAM_board_petitioner value = 1 }
+					if = {
+						limit = { check_variable = { var = NAM_ptn_lot_state^NAM_board_petitioner value = 2 compare = equals } }
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 1 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 2 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 3 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 4 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 5 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 6 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+						}
+					}
+				}
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_furnace_houses
+		icon = GFX_focus_NAM_board_foundry_mark
+		x = 2
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_southern_offices }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			add_manpower = 10000
+			if = {
+				limit = { check_variable = { NAM_ptn_shl_form = 1 } }
+				custom_effect_tooltip = NAM_hgm_furnace_houses_trust_tt
+			}
+			else_if = {
+				limit = { check_variable = { NAM_ptn_shl_form = 2 } }
+				custom_effect_tooltip = NAM_hgm_furnace_houses_inventory_tt
+			}
+			custom_effect_tooltip = NAM_hgm_furnace_houses_reward_tt
+			hidden_effect = {
+				# Trust form: the houses' heirs sit on the boards of the furnace lots (1-4).
+				# Inventory form: the houses' men go on the council's books and one factory
+				# opens at the Nine-Furnace city, else at the South Harbour.
+				if = {
+					limit = { check_variable = { NAM_ptn_shl_form = 1 } }
+					if = {
+						limit = { country_exists = SHL }
+						SHL = {
+							set_temp_variable = { var = SHL_cold_heat_delta value = -15 }
+							SHL_cold_add_heat = yes
+						}
+					}
+					set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+					set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+					set_temp_variable = { var = NAM_board_petitioner value = 0 }
+					for_loop_effect = {
+						start = 1
+						end = 5
+						value = NAM_board_loop_step
+						add_to_temp_variable = { var = NAM_board_petitioner value = 1 }
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_state^NAM_board_petitioner value = 2 compare = equals } }
+							if = {
+								limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 1 compare = equals } }
+								set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+							}
+							if = {
+								limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 2 compare = equals } }
+								set_temp_variable = { var = NAM_board_trust_input_2 value = 7 }
+							}
+							if = {
+								limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 3 compare = equals } }
+								set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+							}
+							if = {
+								limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 4 compare = equals } }
+								set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+							}
+							if = {
+								limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 5 compare = equals } }
+								set_temp_variable = { var = NAM_board_trust_input_5 value = 6 }
+							}
+							if = {
+								limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 6 compare = equals } }
+								set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+							}
+						}
+					}
+					NAM_board_trust_package = yes
+				}
+				else_if = {
+					limit = { check_variable = { NAM_ptn_shl_form = 2 } }
+					set_temp_variable = { var = NAM_mdr_compliance_add value = 10 }
+					set_temp_variable = { var = NAM_mdr_core_filter value = 4 }
+					NAM_mdr_conquered_compliance = yes
+					set_temp_variable = { var = NAM_mdr_build_kind value = 1 }
+					set_temp_variable = { var = NAM_mdr_build_levels value = 1 }
+					set_temp_variable = { var = NAM_mdr_build_state_1 value = 294 }
+					set_temp_variable = { var = NAM_mdr_build_state_2 value = 700 }
+					set_temp_variable = { var = NAM_mdr_build_state_3 value = 0 }
+					set_temp_variable = { var = NAM_mdr_build_fallback value = 0 }
+					NAM_mdr_build = yes
+					set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+					set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+					NAM_board_trust_package = yes
+				}
+				country_event = { id = ADISCORD_nam_story.248 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_cold_fire_watch
+		icon = GFX_focus_NAM_board_factory_guard
+		x = 6
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_southern_offices }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 8000
+				producer = NAM
+			}
+			if = {
+				limit = { check_variable = { NAM_ptn_shl_form = 1 } }
+				custom_effect_tooltip = NAM_hgm_cold_fire_watch_trust_tt
+			}
+			else_if = {
+				limit = { check_variable = { NAM_ptn_shl_form = 2 } }
+				custom_effect_tooltip = NAM_hgm_cold_fire_watch_inventory_tt
+			}
+			custom_effect_tooltip = NAM_hgm_cold_fire_watch_reward_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { NAM_ptn_shl_form = 1 } }
+					if = {
+						limit = { country_exists = SHL }
+						SHL = {
+							set_temp_variable = { var = SHL_cold_heat_delta value = -10 }
+							SHL_cold_add_heat = yes
+						}
+					}
+				}
+				else_if = {
+					limit = { check_variable = { NAM_ptn_shl_form = 2 } }
+					# The watch covers Shahrabad's land the Directory holds after the inventory.
+					for_each_scope_loop = {
+						array = NAM_conquered_states
+						if = {
+							limit = {
+								is_owned_and_controlled_by = ROOT
+								is_core_of = SHL
+								NOT = { has_dynamic_modifier = { modifier = NAM_hgm_southern_watch } }
+							}
+							add_dynamic_modifier = {
+								modifier = NAM_hgm_southern_watch
+								days = 730
+							}
+						}
+					}
+				}
+				# Two militia brigades in Khazar, else at the harbour; without the template
+				# each pays its men.
+				set_temp_variable = { var = NAM_mdr_unit_kind value = 6 }
+				set_temp_variable = { var = NAM_mdr_unit_count value = 2 }
+				set_temp_variable = { var = NAM_mdr_unit_state value = 699 }
+				NAM_mdr_place_division = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_southern_cadastre
+		icon = GFX_focus_NAM_board_boundary_notches
+		x = 4
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_hgm_furnace_houses
+			focus = NAM_hgm_cold_fire_watch
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			custom_effect_tooltip = NAM_hgm_southern_cadastre_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_mdr_compliance_add value = 5 }
+				set_temp_variable = { var = NAM_mdr_core_filter value = 3 }
+				NAM_mdr_conquered_compliance = yes
+				set_temp_variable = { var = NAM_mdr_build_kind value = 6 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 699 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 283 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 240 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_board_petitioner value = 0 }
+				for_loop_effect = {
+					start = 1
+					end = 12
+					value = NAM_board_loop_step
+					add_to_temp_variable = { var = NAM_board_petitioner value = 1 }
+					if = {
+						limit = { check_variable = { var = NAM_ptn_lot_state^NAM_board_petitioner value = 2 compare = equals } }
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 1 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 2 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 3 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 4 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 5 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 6 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+						}
+					}
+				}
+				NAM_board_trust_package = yes
+				# The boundary dispute of the two largest lot holders; its answer writes the
+				# winner's NAM_ptn_lot_bonus.
+				country_event = { id = ADISCORD_nam_story.280 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_southern_extraction
+		icon = GFX_focus_NAM_board_future_output_pledge
+		x = 2
+		y = 6
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_southern_cadastre }
+		mutually_exclusive = { focus = NAM_hgm_southern_province }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_extraction_quota
+			custom_effect_tooltip = NAM_hgm_extraction_quota_unlock_tt
+			NAM_hgm_enact_extraction_charter = yes
+			NAM_board_trade_war_for_army = yes
+			custom_effect_tooltip = NAM_hgm_southern_extraction_reward_tt
+			hidden_effect = {
+				# The lot income bonus is read by NAM_ptn_monthly through has_completed_focus.
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.249 days = 2 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_ptn_union_rules = no
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_hgm_southern_province
+		icon = GFX_focus_NAM_board_privatise_governorate
+		x = 6
+		y = 6
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_southern_cadastre }
+		mutually_exclusive = { focus = NAM_hgm_southern_extraction }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_southern_subjects = yes
+			NAM_board_trade_war_for_economic = yes
+			add_manpower = 25000
+			custom_effect_tooltip = NAM_hgm_southern_province_reward_tt
+			hidden_effect = {
+				# The South row of the land nationalisation and its threshold of 30 read this
+				# completion; nothing is written here.
+				set_temp_variable = { var = NAM_mdr_compliance_add value = 10 }
+				set_temp_variable = { var = NAM_mdr_core_filter value = 3 }
+				NAM_mdr_conquered_compliance = yes
+				set_temp_variable = { var = NAM_mdr_compliance_add value = 5 }
+				set_temp_variable = { var = NAM_mdr_core_filter value = 3 }
+				NAM_mdr_conquered_compliance = yes
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = -5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.250 days = 2 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_ptn_union_rules = yes
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_hgm_steel_quotas
+		icon = GFX_focus_NAM_board_foundry_mark
+		x = 0
+		y = 8
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_southern_extraction }
+		allow_branch = { NOT = { has_completed_focus = NAM_hgm_southern_province } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 15000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 96
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_hgm_steel_quotas_reward_tt
+			hidden_effect = {
+				# Under the trust 707 and 294 stay Shahrabad's and never qualify, so Azer or
+				# the South Harbour takes the levels.
+				set_temp_variable = { var = NAM_mdr_build_kind value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 707 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 265 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 0 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_mdr_build_kind value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 294 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 265 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 0 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.272 days = 90 random_days = 30 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_south_under_the_boards
+		icon = GFX_focus_NAM_board_escheated_throne
+		x = 4
+		y = 8
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_hgm_southern_extraction
+			focus = NAM_hgm_southern_province
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_hgm_southern_dominion
+				days = 730
+			}
+			add_manpower = 20000
+			army_experience = 30
+			add_political_power = 100
+			custom_effect_tooltip = NAM_hgm_south_under_the_boards_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_mdr_build_kind value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 283 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 240 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 699 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_board_petitioner value = 0 }
+				for_loop_effect = {
+					start = 1
+					end = 12
+					value = NAM_board_loop_step
+					add_to_temp_variable = { var = NAM_board_petitioner value = 1 }
+					if = {
+						limit = { check_variable = { var = NAM_ptn_lot_state^NAM_board_petitioner value = 2 compare = equals } }
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 1 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 2 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 3 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 4 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 5 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+						}
+						if = {
+							limit = { check_variable = { var = NAM_ptn_lot_owner^NAM_board_petitioner value = 6 compare = equals } }
+							set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+						}
+					}
+				}
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.251 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_khazar_lyceums
+		icon = GFX_focus_NAM_board_private_gospel
+		x = 8
+		y = 8
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_southern_province }
+		allow_branch = { NOT = { has_completed_focus = NAM_hgm_southern_extraction } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_tech_bonus = {
+				name = NAM_hgm_khazar_lyceums
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			add_stability = 0.03
+			add_political_power = 50
+			custom_effect_tooltip = NAM_hgm_khazar_lyceums_reward_tt
+			hidden_effect = {
+				# The first school city the council holds receives the Directory's core; a
+				# cored lot state leaves its lot while the rest of the lot keeps its owner.
+				if = {
+					limit = {
+						699 = {
+							is_owned_and_controlled_by = ROOT
+							NOT = { is_core_of = ROOT }
+						}
+					}
+					699 = {
+						add_core_of = ROOT
+						if = {
+							limit = { has_variable = NAM_ptn_lot }
+							NAM_ptn_lot_state_cored = yes
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						283 = {
+							is_owned_and_controlled_by = ROOT
+							NOT = { is_core_of = ROOT }
+						}
+					}
+					283 = {
+						add_core_of = ROOT
+						if = {
+							limit = { has_variable = NAM_ptn_lot }
+							NAM_ptn_lot_state_cored = yes
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						300 = {
+							is_owned_and_controlled_by = ROOT
+							NOT = { is_core_of = ROOT }
+						}
+					}
+					300 = {
+						add_core_of = ROOT
+						if = {
+							limit = { has_variable = NAM_ptn_lot }
+							NAM_ptn_lot_state_cored = yes
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						275 = {
+							is_owned_and_controlled_by = ROOT
+							NOT = { is_core_of = ROOT }
+						}
+					}
+					275 = {
+						add_core_of = ROOT
+						if = {
+							limit = { has_variable = NAM_ptn_lot }
+							NAM_ptn_lot_state_cored = yes
+						}
+					}
+				}
+				else = {
+					set_temp_variable = { var = NAM_corp_capital_change value = 250 }
+					NAM_corp_capital_add = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.273 days = 90 random_days = 30 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	# ----- The council after the last enemy -----
+
+	focus = {
+		id = NAM_hgm_nothing_left_to_divide
+		icon = GFX_focus_NAM_board_war_bonds
+		x = 40
+		y = 1
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_south_under_sequestration }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_ptn_compensate
+			custom_effect_tooltip = NAM_ptn_compensate_unlock_tt
+			add_political_power = 100
+			add_stability = 0.03
+			add_command_power = 30
+			custom_effect_tooltip = NAM_hgm_nothing_left_to_divide_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.252 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_chairs_seal
+		icon = GFX_focus_NAM_board_chairmans_copy
+		x = 42
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_nothing_left_to_divide }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_command_power = 40
+			add_political_power = 75
+			add_timed_idea = {
+				idea = NAM_hgm_chairs_seal
+				days = 365
+			}
+			custom_effect_tooltip = NAM_hgm_chairs_seal_reward_tt
+			hidden_effect = {
+				# The chair's vote is counted for whichever company holds the chair.
+				add_to_variable = { var = NAM_board_chair_vote value = 1 }
+				# +8 here and -2 in the package below leave the chair's company at +6.
+				if = {
+					limit = { check_variable = { NAM_board_chair > 0 } }
+					set_temp_variable = { var = NAM_board_company_input value = NAM_board_chair }
+					set_temp_variable = { var = NAM_board_delta_input value = 8 }
+					NAM_board_support_change = yes
+				}
+				set_temp_variable = { var = NAM_board_trust_input_1 value = -2 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = -2 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -2 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -2 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -2 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -2 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_heirs_of_the_founders
+		icon = GFX_focus_NAM_board_proxy_parliament
+		x = 38
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_nothing_left_to_divide }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 25
+			add_political_power = 75
+			custom_effect_tooltip = NAM_hgm_heirs_of_the_founders_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 2 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 2 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 2 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 2 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 2 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 2 }
+				NAM_board_trust_package = yes
+				# The council names the heirs' company in event 278.
+				country_event = { id = ADISCORD_nam_story.278 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_count_of_six
+		icon = GFX_focus_NAM_board_table_six
+		x = 40
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_hgm_chairs_seal
+			focus = NAM_hgm_heirs_of_the_founders
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			custom_effect_tooltip = NAM_hgm_count_of_six_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_hgm_first_input value = NAM_board_rank_1 }
+				set_temp_variable = { var = NAM_hgm_last_input value = NAM_board_rank_6 }
+				if = {
+					limit = { check_variable = { NAM_hgm_last_input > 0 } }
+					set_temp_variable = { var = NAM_board_company_input value = NAM_hgm_last_input }
+					set_temp_variable = { var = NAM_board_delta_input value = 6 }
+					NAM_board_support_change = yes
+				}
+				if = {
+					limit = { check_variable = { NAM_hgm_first_input > 0 } }
+					set_temp_variable = { var = NAM_board_company_input value = NAM_hgm_first_input }
+					set_temp_variable = { var = NAM_board_delta_input value = -3 }
+					NAM_board_support_change = yes
+				}
+				NAM_board_recount = yes
+				# Event 279 compares the companies' holdings after this recount.
+				country_event = { id = ADISCORD_nam_story.279 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_mergers_and_buyouts
+		icon = GFX_focus_NAM_board_sole_vote_holder
+		x = 42
+		y = 6
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_count_of_six }
+		mutually_exclusive = { focus = NAM_hgm_covenant_of_six }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_buyout
+			custom_effect_tooltip = NAM_hgm_buyout_unlock_tt
+			NAM_hgm_enact_merger_code = yes
+			NAM_board_trade_war_for_economic = yes
+			custom_effect_tooltip = NAM_hgm_mergers_and_buyouts_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 200 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_hgm_first_input value = NAM_board_rank_1 }
+				set_temp_variable = { var = NAM_hgm_last_input value = NAM_board_rank_6 }
+				if = {
+					limit = { check_variable = { NAM_hgm_first_input > 0 } }
+					set_temp_variable = { var = NAM_board_company_input value = NAM_hgm_first_input }
+					set_temp_variable = { var = NAM_board_delta_input value = 8 }
+					NAM_board_support_change = yes
+				}
+				if = {
+					limit = { check_variable = { NAM_hgm_last_input > 0 } }
+					set_temp_variable = { var = NAM_board_company_input value = NAM_hgm_last_input }
+					set_temp_variable = { var = NAM_board_delta_input value = -6 }
+					NAM_board_support_change = yes
+				}
+				NAM_board_recount = yes
+				country_event = { id = ADISCORD_nam_story.254 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	focus = {
+		id = NAM_hgm_covenant_of_six
+		icon = GFX_focus_NAM_board_six_share_pool
+		x = 38
+		y = 6
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_count_of_six }
+		mutually_exclusive = { focus = NAM_hgm_mergers_and_buyouts }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_covenant_of_six = yes
+			add_political_power = 100
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_hgm_covenant_of_six_reward_tt
+			hidden_effect = {
+				# NAM_board_update_industrial_policy reads this completion for the
+				# resting trust of the two last companies; no marker is written.
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.253 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_southern_holding
+		icon = GFX_focus_NAM_board_holders_underwrite
+		x = 44
+		y = 8
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_mergers_and_buyouts }
+		allow_branch = { NOT = { has_completed_focus = NAM_hgm_covenant_of_six } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_hgm_southern_holding_reward_tt
+			hidden_effect = {
+				# The holder is fixed at completion; the queued recount runs after the
+				# completion and adds half a holding for each awarded South lot of
+				# this company.
+				set_variable = { var = NAM_hgm_southern_holder value = NAM_board_rank_1 }
+				set_temp_variable = { var = NAM_hgm_first_input value = NAM_board_rank_1 }
+				set_temp_variable = { var = NAM_hgm_second_input value = NAM_board_rank_2 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+				NAM_corp_capital_add = yes
+				# Both levels go to the South Harbour, else Svetlogorsk; the 200
+				# capital is paid only when neither state qualifies.
+				set_temp_variable = { var = NAM_mdr_build_kind value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 688 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 0 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				if = {
+					limit = { check_variable = { NAM_hgm_first_input > 0 } }
+					set_temp_variable = { var = NAM_board_company_input value = NAM_hgm_first_input }
+					set_temp_variable = { var = NAM_board_delta_input value = 5 }
+					NAM_board_support_change = yes
+				}
+				if = {
+					limit = { check_variable = { NAM_hgm_second_input > 0 } }
+					set_temp_variable = { var = NAM_board_company_input value = NAM_hgm_second_input }
+					set_temp_variable = { var = NAM_board_delta_input value = -4 }
+					NAM_board_support_change = yes
+				}
+				NAM_board_queue_recount = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_charter_of_the_directory
+		icon = GFX_focus_NAM_board_hereditary_roll
+		x = 40
+		y = 8
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_hgm_mergers_and_buyouts
+			focus = NAM_hgm_covenant_of_six
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_hgm_directory_charter
+				days = 730
+			}
+			add_political_power = 150
+			custom_effect_tooltip = NAM_hgm_charter_of_the_directory_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_dir_campaign_slots value = 1 }
+				clamp_variable = {
+					var = NAM_dir_campaign_slots
+					max = 6
+				}
+				set_temp_variable = { var = NAM_mdr_compliance_add value = 5 }
+				set_temp_variable = { var = NAM_mdr_core_filter value = 0 }
+				NAM_mdr_conquered_compliance = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.255 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_founders_fund
+		icon = GFX_focus_NAM_board_family_relief_fund
+		x = 36
+		y = 8
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_hgm_covenant_of_six }
+		allow_branch = { NOT = { has_completed_focus = NAM_hgm_mergers_and_buyouts } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_founders_dividend
+			custom_effect_tooltip = NAM_hgm_founders_dividend_unlock_tt
+			add_stability = 0.05
+			add_political_power = 75
+			custom_effect_tooltip = NAM_hgm_founders_fund_reward_tt
+			hidden_effect = {
+				# Every grudge of the partition is forgiven; walk-outs and the
+				# compensation decision read the cleared rows.
+				set_variable = { var = NAM_ptn_grievance^1 value = 0 }
+				set_variable = { var = NAM_ptn_grievance^2 value = 0 }
+				set_variable = { var = NAM_ptn_grievance^3 value = 0 }
+				set_variable = { var = NAM_ptn_grievance^4 value = 0 }
+				set_variable = { var = NAM_ptn_grievance^5 value = 0 }
+				set_variable = { var = NAM_ptn_grievance^6 value = 0 }
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	# ----- The ninety-nine -----
+
+	focus = {
+		id = NAM_hgm_share_for_the_ninety_nine
+		icon = GFX_focus_NAM_board_society_99_1
+		x = 10
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_south_under_sequestration }
+		mutually_exclusive = { focus = NAM_hgm_order_of_the_one }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_rations
+			custom_effect_tooltip = NAM_hgm_rations_unlock_tt
+			NAM_hgm_enact_wage_register = yes
+			add_stability = 0.08
+			add_manpower = 15000
+			custom_effect_tooltip = NAM_hgm_share_for_the_ninety_nine_reward_tt
+			hidden_effect = {
+				# NAM_ptn_monthly withholds a tenth of the lot rents for the register
+				# while this focus is completed; nothing is stored here.
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -6 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = -4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.256 days = 2 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_ptn_union_rules = yes
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_hgm_order_of_the_one
+		icon = GFX_focus_NAM_board_residency_for_hire
+		x = 14
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_south_under_sequestration }
+		mutually_exclusive = { focus = NAM_hgm_share_for_the_ninety_nine }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_indenture = yes
+			NAM_board_trade_war_for_state = yes
+			custom_effect_tooltip = NAM_hgm_order_of_the_one_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_mdr_build_kind value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 67 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 0 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = -6 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.257 days = 2 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_ptn_union_rules = no
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_hgm_people_shops
+		icon = GFX_focus_NAM_board_ration_lists
+		x = 10
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_share_for_the_ninety_nine }
+		allow_branch = { NOT = { has_completed_focus = NAM_hgm_order_of_the_one } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			ADISCORD_programme_society_development = yes
+			custom_effect_tooltip = NAM_hgm_people_shops_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_mdr_build_kind value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 688 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 690 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 0 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_cities_of_the_continent
+		icon = GFX_focus_NAM_board_both_squares_bought
+		x = 12
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_hgm_share_for_the_ninety_nine
+			focus = NAM_hgm_order_of_the_one
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_hgm_cities
+				days = 730
+			}
+			add_manpower = 20000
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_hgm_cities_of_the_continent_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_mdr_build_kind value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 699 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 701 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				# The factory row's fallback covers the whole site, so the road row
+				# pays nothing when neither of its states qualifies.
+				set_temp_variable = { var = NAM_mdr_build_kind value = 6 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 701 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 692 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 0 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 0 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.258 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_factory_towns
+		icon = GFX_focus_NAM_board_corporate_mass_housing
+		x = 14
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_hgm_order_of_the_one }
+		allow_branch = { NOT = { has_completed_focus = NAM_hgm_share_for_the_ninety_nine } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_company_towns
+			custom_effect_tooltip = NAM_hgm_company_towns_unlock_tt
+			add_manpower = 15000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 10000
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_hgm_factory_towns_reward_tt
+			hidden_effect = {
+				# The first town: one military factory with its own slot.
+				set_temp_variable = { var = NAM_mdr_build_kind value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 699 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 283 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 300 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+				NAM_board_trust_package = yes
+				# The trigger of event 274 drops it when the South is no longer held.
+				country_event = { id = ADISCORD_nam_story.274 days = 90 random_days = 30 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	# ----- Army and fleet of the dominion -----
+
+	focus = {
+		id = NAM_hgm_continental_garrison
+		icon = GFX_focus_NAM_board_steel_for_guns
+		x = 34
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hgm_south_under_sequestration }
+		mutually_exclusive = { focus = NAM_hgm_demobilisation }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_garrison_service = yes
+			add_timed_idea = {
+				idea = NAM_hgm_garrison_spirit
+				days = 365
+			}
+			army_experience = 25
+			# The first Company Guard Regiment brings its support technology with
+			# the template; the row disappears once the template exists.
+			if = {
+				limit = {
+					NOT = { has_template = "Company Guard Regiment" }
+					NOT = { has_tech = ADISCORD_tech_garrison_police_sections }
+				}
+				effect_tooltip = {
+					set_technology = {
+						ADISCORD_tech_garrison_police_sections = 1
+						popup = no
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_hgm_continental_garrison_reward_tt
+			hidden_effect = {
+				# Two regiments in Khazar while the Directory controls it, else at
+				# the harbour, else at the capital.
+				set_temp_variable = { var = NAM_mdr_unit_kind value = 2 }
+				set_temp_variable = { var = NAM_mdr_unit_count value = 2 }
+				set_temp_variable = { var = NAM_mdr_unit_state value = 699 }
+				set_temp_variable = { var = NAM_mdr_unit_company value = 0 }
+				NAM_mdr_place_division = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.260 days = 2 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_ptn_union_rules = no
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_hgm_demobilisation
+		icon = GFX_focus_NAM_board_marine_kit
+		x = 30
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hgm_south_under_sequestration }
+		mutually_exclusive = { focus = NAM_hgm_continental_garrison }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_hgm_enact_reserve_register = yes
+			add_manpower = 30000
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_hgm_demobilisation_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_mdr_build_kind value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 688 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 67 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 0 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = -8 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.259 days = 2 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NAM_ptn_union_rules = yes
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_hgm_company_garrisons
+		icon = GFX_focus_NAM_board_mercenary_battalions
+		x = 34
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hgm_continental_garrison }
+		allow_branch = { NOT = { has_completed_focus = NAM_hgm_demobilisation } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_lot_regiment
+			custom_effect_tooltip = NAM_hgm_lot_regiment_unlock_tt
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 12000
+				producer = NAM
+			}
+			add_command_power = 30
+			# The first Company Guard Regiment brings its support technology with
+			# the template; the row disappears once the template exists.
+			if = {
+				limit = {
+					NOT = { has_template = "Company Guard Regiment" }
+					NOT = { has_tech = ADISCORD_tech_garrison_police_sections }
+				}
+				effect_tooltip = {
+					set_technology = {
+						ADISCORD_tech_garrison_police_sections = 1
+						popup = no
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_hgm_company_garrisons_reward_tt
+			hidden_effect = {
+				NAM_hgm_raise_lot_regiments = yes
+				# Every company that holds an awarded South lot, once, however many
+				# lots it holds.
+				set_temp_variable = { var = NAM_board_petitioner value = 0 }
+				for_loop_effect = {
+					start = 1
+					end = 12
+					value = NAM_board_loop_step
+					add_to_temp_variable = { var = NAM_board_petitioner value = 1 }
+					if = {
+						limit = {
+							check_variable = { var = NAM_ptn_lot_state^NAM_board_petitioner value = 2 compare = equals }
+						}
+						set_temp_variable = { var = NAM_hgm_lot_holder value = NAM_ptn_lot_owner^NAM_board_petitioner }
+						if = {
+							limit = { check_variable = { NAM_hgm_lot_holder = 1 } }
+							set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+						}
+						else_if = {
+							limit = { check_variable = { NAM_hgm_lot_holder = 2 } }
+							set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+						}
+						else_if = {
+							limit = { check_variable = { NAM_hgm_lot_holder = 3 } }
+							set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+						}
+						else_if = {
+							limit = { check_variable = { NAM_hgm_lot_holder = 4 } }
+							set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+						}
+						else_if = {
+							limit = { check_variable = { NAM_hgm_lot_holder = 5 } }
+							set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+						}
+						else_if = {
+							limit = { check_variable = { NAM_hgm_lot_holder = 6 } }
+							set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+						}
+					}
+				}
+				NAM_board_trust_package = yes
+				# The trigger of event 275 drops it when no lot regiment was raised
+				# or the South is no longer held.
+				country_event = { id = ADISCORD_nam_story.275 days = 90 random_days = 30 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_army_of_dominion
+		icon = GFX_focus_NAM_board_arsenal_of_the_boards
+		x = 32
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_NAVY_XP }
+		prerequisite = {
+			focus = NAM_hgm_continental_garrison
+			focus = NAM_hgm_demobilisation
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_hgm_army_of_dominion
+				days = 730
+			}
+			add_tech_bonus = {
+				name = NAM_hgm_army_of_dominion_bonus
+				bonus = 0.5
+				uses = 1
+				category = land_doctrine
+			}
+			army_experience = 40
+			navy_experience = 25
+			custom_effect_tooltip = NAM_hgm_army_of_dominion_reward_tt
+			hidden_effect = {
+				# Launched while the Directory owns and controls the harbour, else five
+				# convoys a hull.
+				set_temp_variable = { var = NAM_mdr_ship_cruiser value = 0 }
+				set_temp_variable = { var = NAM_mdr_ship_escorts value = 2 }
+				NAM_mdr_launch_ships = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.261 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_veteran_artels
+		icon = GFX_focus_NAM_rtw_docks_at_war
+		x = 30
+		y = 3
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_hgm_demobilisation }
+		allow_branch = { NOT = { has_completed_focus = NAM_hgm_continental_garrison } }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_veteran_artel
+			custom_effect_tooltip = NAM_hgm_veteran_artel_unlock_tt
+			add_manpower = 10000
+			custom_effect_tooltip = NAM_hgm_veteran_artels_reward_tt
+			hidden_effect = {
+				# Filter 3: the conquered states of the South.
+				set_temp_variable = { var = NAM_mdr_compliance_add value = 5 }
+				set_temp_variable = { var = NAM_mdr_core_filter value = 3 }
+				NAM_mdr_conquered_compliance = yes
+				set_temp_variable = { var = NAM_mdr_build_kind value = 6 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 707 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 269 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 240 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 4 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	# ----- The world: a hegemon's deals -----
+
+	focus = {
+		id = NAM_hgm_hegemons_ledger
+		icon = GFX_focus_NAM_board_political_debt_register
+		x = 12
+		y = 5
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_hgm_people_shops
+			focus = NAM_hgm_cities_of_the_continent
+			focus = NAM_hgm_factory_towns
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_foreign_loan
+			custom_effect_tooltip = NAM_hgm_foreign_loan_unlock_tt
+			add_political_power = 75
+			custom_effect_tooltip = NAM_hgm_hegemons_ledger_reward_tt
+			hidden_effect = {
+				# Shahrabad's foreign bonds pay 12 a month through NAM_hgm_loans_monthly
+				# until this day.
+				set_variable = { var = NAM_hgm_bonds_until value = global.num_days }
+				add_to_variable = { var = NAM_hgm_bonds_until value = 365 }
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_steel_and_oil_cartel
+		icon = GFX_focus_NAM_board_cartel_prices
+		x = 10
+		y = 7
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hgm_hegemons_ledger }
+		mutually_exclusive = { focus = NAM_hgm_open_sea_lanes }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_export_contract
+			custom_effect_tooltip = NAM_hgm_export_contract_unlock_tt
+			add_timed_idea = {
+				idea = NAM_hgm_cartel_prices
+				days = 365
+			}
+			custom_effect_tooltip = NAM_hgm_steel_and_oil_cartel_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 5 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -4 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.262 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_open_sea_lanes
+		icon = GFX_focus_NAM_board_private_navy
+		x = 14
+		y = 7
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_hgm_hegemons_ledger }
+		mutually_exclusive = { focus = NAM_hgm_steel_and_oil_cartel }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 15
+				producer = NAM
+			}
+			add_timed_idea = {
+				idea = NAM_hgm_open_lanes
+				days = 365
+			}
+			custom_effect_tooltip = NAM_hgm_open_sea_lanes_reward_tt
+			hidden_effect = {
+				# Two dockyard levels on the Safir coast, else the South Harbour, else the
+				# Black Coast; the 200 capital is paid only when no listed state qualifies.
+				set_temp_variable = { var = NAM_mdr_build_kind value = 3 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 730 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 692 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_1 value = -3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.263 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_bank_of_the_south
+		icon = GFX_focus_NAM_board_bought_century
+		x = 12
+		y = 9
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_hgm_steel_and_oil_cartel
+			focus = NAM_hgm_open_sea_lanes
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 100
+			add_timed_idea = {
+				idea = NAM_hgm_world_bank
+				days = 730
+			}
+			custom_effect_tooltip = NAM_hgm_bank_of_the_south_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_corp_capital_change value = 250 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 6 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	# ----- The world: the last empire -----
+
+	focus = {
+		id = NAM_hgm_envoys_beyond_the_desert
+		icon = GFX_focus_NAM_board_lawyers_of_both_shores
+		x = 32
+		y = 5
+		cost = 2
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = NAM_hgm_company_garrisons
+			focus = NAM_hgm_army_of_dominion
+			focus = NAM_hgm_veteran_artels
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_coalition_supply
+			custom_effect_tooltip = NAM_hgm_coalition_supply_unlock_tt
+			add_political_power = 75
+			add_command_power = 30
+			add_war_support = 0.03
+			custom_effect_tooltip = NAM_hgm_envoys_beyond_the_desert_reward_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+				NAM_board_trust_package = yes
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_against_the_last_empire
+		icon = GFX_focus_NAM_board_storm_companies
+		x = 34
+		y = 7
+		cost = 2
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_hgm_envoys_beyond_the_desert }
+		mutually_exclusive = { focus = NAM_hgm_arms_on_credit }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_hgm_khan_entry_tt
+				NAM_hgm_khan_war_open = yes
+			}
+		}
+		bypass = {
+			hidden_trigger = { NAM_hgm_khan_war_closed = yes }
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_hgm_crusade_spirit
+				days = 180
+			}
+			army_experience = 30
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 15000
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_hgm_against_the_last_empire_reward_tt
+			hidden_effect = {
+				# The Khan's own second-wave entry, the same call as answer a of
+				# ADISCORD_rus_crisis.15; the focus's available repeats its limit, and
+				# continue_if_invalid = no cancels the focus if the offer closes.
+				RUS_crisis_enter_second_wave = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 8 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = -5 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.265 days = 2 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { has_war_support > 0.5 }
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_hgm_arms_on_credit
+		icon = GFX_focus_NAM_board_arsenal_of_the_boards
+		x = 30
+		y = 7
+		cost = 2
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_hgm_envoys_beyond_the_desert }
+		mutually_exclusive = { focus = NAM_hgm_against_the_last_empire }
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_hgm_arms_credit_sale
+			custom_effect_tooltip = NAM_hgm_arms_on_credit_unlock_tt
+			custom_effect_tooltip = NAM_hgm_arms_on_credit_reward_tt
+			hidden_effect = {
+				# Two military factory levels in the South Harbour, else Khazar, else the
+				# Svetlogorsk district; the 200 capital is paid only when no listed state
+				# qualifies.
+				set_temp_variable = { var = NAM_mdr_build_kind value = 1 }
+				set_temp_variable = { var = NAM_mdr_build_levels value = 2 }
+				set_temp_variable = { var = NAM_mdr_build_state_1 value = 700 }
+				set_temp_variable = { var = NAM_mdr_build_state_2 value = 699 }
+				set_temp_variable = { var = NAM_mdr_build_state_3 value = 688 }
+				set_temp_variable = { var = NAM_mdr_build_fallback value = 200 }
+				NAM_mdr_build = yes
+				set_temp_variable = { var = NAM_corp_capital_change value = 100 }
+				NAM_corp_capital_add = yes
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 6 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 4 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = -3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.264 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+
+	focus = {
+		id = NAM_hgm_hegemons_price
+		icon = GFX_focus_NAM_board_last_debtor
+		x = 32
+		y = 9
+		cost = 3
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = NAM_hgm_against_the_last_empire
+			focus = NAM_hgm_arms_on_credit
+		}
+		cancel_if_invalid = no
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 100
+			add_command_power = 50
+			add_timed_idea = {
+				idea = NAM_hgm_hegemons_price
+				days = 730
+			}
+			custom_effect_tooltip = NAM_hgm_hegemons_price_reward_tt
+			hidden_effect = {
+				# The debtor is chosen now; event 276 lets the council name the demand
+				# and its trigger drops it when no debtor was found, in which case the
+				# council takes 150 capital instead.
+				NAM_hgm_pick_debtor = yes
+				if = {
+					limit = { NOT = { has_variable = NAM_hgm_price_debtor } }
+					set_temp_variable = { var = NAM_corp_capital_change value = 150 }
+					NAM_corp_capital_add = yes
+				}
+				set_temp_variable = { var = NAM_board_trust_input_1 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_2 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_3 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_4 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_5 value = 3 }
+				set_temp_variable = { var = NAM_board_trust_input_6 value = 3 }
+				NAM_board_trust_package = yes
+				country_event = { id = ADISCORD_nam_story.276 days = 2 }
+			}
+		}
+		ai_will_do = { factor = 1 }
+	}
+}

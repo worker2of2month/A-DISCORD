@@ -1,0 +1,823 @@
+# @section influence
+	focus = {
+		id = NAM_foreign_office
+		relative_position_id = NAM_law_after_war
+		x = -10
+		y = 1
+		icon = GFX_focus_NAM_foreign_office
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_law_after_war }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_south_build_coalition_influence
+			custom_effect_tooltip = ADISCORD_south_build_coalition_influence_unlock_tt
+			add_political_power = 100
+			if = {
+				limit = { country_exists = EFL }
+				add_intel = { target = EFL civilian_intel = 30 }
+			}
+			if = {
+				limit = { country_exists = AZH }
+				add_intel = { target = AZH civilian_intel = 30 }
+			}
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = ADISCORD_south_power_gain_3_tt
+			}
+			custom_effect_tooltip = NAM_grp_foreign_office_tt
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_power_delta value = 3 }
+				ADISCORD_south_add_influence_power = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_garr_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = {
+					id = ADISCORD_nam_story.380
+					hours = 2
+				}
+			}
+		}
+		ai_will_do = { base = 40 }
+	}
+
+	focus = {
+		id = NAM_normalisation
+		relative_position_id = NAM_foreign_office
+		x = -3
+		y = 1
+		icon = GFX_focus_NAM_normalisation
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER FOCUS_FILTER_BALANCE_OF_POWER }
+		mutually_exclusive = { focus = NAM_border_revenge }
+		prerequisite = { focus = NAM_foreign_office }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_peace_course_open_tt
+				NAM_neighbour_peace_course_open = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_border_autonomy_agreement
+			custom_effect_tooltip = NAM_border_autonomy_agreement_unlock_tt
+			unlock_decision_tooltip = NAM_border_reconstruction_eflor
+			custom_effect_tooltip = NAM_border_reconstruction_eflor_unlock_tt
+			unlock_decision_tooltip = NAM_border_reconstruction_azhar
+			custom_effect_tooltip = NAM_border_reconstruction_azhar_unlock_tt
+			add_manpower = 10000
+			add_stability = 0.05
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.20 }
+			}
+			69 = { remove_claim_by = NAM }
+			727 = { remove_claim_by = NAM }
+			728 = { remove_claim_by = NAM }
+			custom_effect_tooltip = NAM_normalisation_result_tt
+			custom_effect_tooltip = NAM_port_extra_slot_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_normalisation_ledger_tt
+			}
+			hidden_effect = {
+				NAM_neighbour_recognise_republics = yes
+				add_to_variable = { var = NAM_port_general_slots value = 1 }
+				NAM_port_refresh_capacity = yes
+				# Recognised neighbours stop drifting back towards Shahrabad.
+				set_temp_variable = { var = ADISCORD_south_push_delta value = 15 }
+				set_temp_variable = { var = ADISCORD_south_home_delta value = 10 }
+				EFL = {
+					ADISCORD_south_push_influence_north = yes
+					ADISCORD_south_shift_home_lean = yes
+				}
+				AZH = {
+					ADISCORD_south_push_influence_north = yes
+					ADISCORD_south_shift_home_lean = yes
+				}
+				country_event = {
+					id = ADISCORD_nam_archive.6
+					hours = 2
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = NAM_border_revenge
+		relative_position_id = NAM_foreign_office
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_border_revenge
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY_XP FOCUS_FILTER_BALANCE_OF_POWER }
+		mutually_exclusive = { focus = NAM_normalisation }
+		prerequisite = { focus = NAM_foreign_office }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_military_course_open_tt
+				NAM_neighbour_military_course_open = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_border_reconstruction_eflor
+			custom_effect_tooltip = NAM_border_reconstruction_eflor_unlock_tt
+			unlock_decision_tooltip = NAM_border_reconstruction_azhar
+			custom_effect_tooltip = NAM_border_reconstruction_azhar_unlock_tt
+			army_experience = 40
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 120
+				producer = NAM
+			}
+			NAM_pw_trade_society_for_army = yes
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.20 }
+			}
+			every_owned_state = {
+				limit = {
+					custom_trigger_tooltip = {
+						tooltip = NAM_border_integration_site_tt
+						NAM_border_integration_site = yes
+					}
+				}
+				add_resistance = -30
+				add_compliance = 5
+			}
+			if = {
+				limit = {
+					hidden_trigger = {
+						NOT = { any_owned_state = { NAM_border_integration_site = yes } }
+					}
+				}
+				custom_effect_tooltip = NAM_border_security_preview_tt
+			}
+			custom_effect_tooltip = NAM_border_revenge_result_tt
+			custom_effect_tooltip = NAM_grp_border_revenge_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_border_revenge_ledger_tt
+			}
+			hidden_effect = {
+				NAM_neighbour_install_commands = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
+				# Called after the commands: a governorate is bound and leaves the
+				# contest, a neighbour that refused remembers the threat.
+				set_temp_variable = { var = ADISCORD_south_home_delta value = -10 }
+				EFL = { ADISCORD_south_shift_home_lean = yes }
+				AZH = { ADISCORD_south_shift_home_lean = yes }
+				country_event = {
+					id = ADISCORD_nam_archive.6
+					hours = 2
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = NAM_south_legations
+		relative_position_id = NAM_foreign_office
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_neighbour_local_commands
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_foreign_office }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_south_send_advisers
+			custom_effect_tooltip = ADISCORD_south_send_advisers_unlock_tt
+			add_political_power = 35
+			if = {
+				limit = { country_exists = WEF }
+				add_intel = { target = WEF civilian_intel = 15 }
+			}
+			if = {
+				limit = { country_exists = KDR }
+				add_intel = { target = KDR civilian_intel = 15 }
+			}
+			if = {
+				limit = { country_exists = RHM }
+				add_intel = { target = RHM civilian_intel = 15 }
+			}
+			if = {
+				limit = { country_exists = SDR }
+				add_intel = { target = SDR civilian_intel = 15 }
+			}
+			if = {
+				limit = { country_exists = KYZ }
+				add_intel = { target = KYZ civilian_intel = 15 }
+			}
+			if = {
+				limit = { country_exists = MZR }
+				add_intel = { target = MZR civilian_intel = 15 }
+			}
+			if = {
+				limit = { country_exists = GLP }
+				add_intel = { target = GLP civilian_intel = 15 }
+			}
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = ADISCORD_south_power_gain_1_tt
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_power_delta value = 1 }
+				ADISCORD_south_add_influence_power = yes
+			}
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	focus = {
+		id = NAM_eflor_accord
+		relative_position_id = NAM_normalisation
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_eflor_accord
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_normalisation }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_neighbour_alliance_offer_open_tt
+				OR = {
+					EFL = { NAM_neighbour_accord_available = yes }
+					AZH = { NAM_neighbour_accord_available = yes }
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			add_war_support = 0.05
+			if = {
+				limit = { hidden_trigger = { EFL = { NAM_neighbour_alliance_offer_open = no } } }
+				custom_effect_tooltip = ADISCORD_south_contact_efl_tt
+			}
+			if = {
+				limit = { hidden_trigger = { AZH = { NAM_neighbour_alliance_offer_open = no } } }
+				custom_effect_tooltip = ADISCORD_south_contact_azh_tt
+			}
+			custom_effect_tooltip = NAM_eflor_accord_result_tt
+			custom_effect_tooltip = NAM_eflor_accord_reward_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_eflor_accord_ledger_tt
+			}
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
+				# Each offer checks its own neighbour; the accord covers both.
+				set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+				EFL = {
+					NAM_neighbour_offer_alliance = yes
+					ADISCORD_south_push_influence_north = yes
+				}
+				AZH = {
+					NAM_neighbour_offer_alliance = yes
+					ADISCORD_south_push_influence_north = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_border_citizenship
+		relative_position_id = NAM_border_revenge
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_border_citizenship
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_border_revenge }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_border_citizenship_ground_tt
+				OR = {
+					NAM_border_acquisitions_held = yes
+					NAM_neighbour_has_command = yes
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_nationalise_region
+			custom_effect_tooltip = NAM_nationalise_region_unlock_tt
+			unlock_decision_tooltip = NAM_border_incorporation_eflor
+			custom_effect_tooltip = NAM_border_incorporation_eflor_unlock_tt
+			unlock_decision_tooltip = NAM_border_incorporation_azhar
+			custom_effect_tooltip = NAM_border_incorporation_azhar_unlock_tt
+			add_political_power = 60
+			add_manpower = 4000
+			add_command_power = 15
+			custom_effect_tooltip = NAM_border_citizenship_reward_tt
+			if = {
+				limit = { hidden_trigger = { NAM_neighbour_has_command = yes } }
+				custom_effect_tooltip = NAM_border_citizenship_charters_tt
+			}
+			custom_effect_tooltip = ADISCORD_south_contact_efl_tt
+			custom_effect_tooltip = ADISCORD_south_contact_azh_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+				every_owned_state = {
+					limit = { NAM_border_integration_site = yes }
+					add_compliance = 5
+				}
+				# The centres first, then the provinces: the capital of each command
+				# becomes national territory before its home districts. Both do
+				# nothing while no governorate exists.
+				NAM_neighbour_integrate_centres = yes
+				NAM_neighbour_integrate_provinces = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_desert_envoys
+		relative_position_id = NAM_south_legations
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_cooperative_congress
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		mutually_exclusive = { focus = NAM_south_coast_envoys }
+		prerequisite = { focus = NAM_south_legations }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 30
+			custom_effect_tooltip = ADISCORD_south_contact_wef_tt
+			custom_effect_tooltip = ADISCORD_south_contact_kdr_tt
+			custom_effect_tooltip = ADISCORD_south_contact_rhm_tt
+			custom_effect_tooltip = ADISCORD_south_contact_sdr_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = ADISCORD_south_desert_envoys_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+				set_temp_variable = { var = ADISCORD_south_tie_value value = 1 }
+				WEF = {
+					ADISCORD_south_push_influence_north = yes
+					ADISCORD_south_set_north_tie = yes
+				}
+				KDR = {
+					ADISCORD_south_push_influence_north = yes
+					ADISCORD_south_set_north_tie = yes
+				}
+				RHM = {
+					ADISCORD_south_push_influence_north = yes
+					ADISCORD_south_set_north_tie = yes
+				}
+				SDR = {
+					ADISCORD_south_push_influence_north = yes
+					ADISCORD_south_set_north_tie = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 10
+				OR = {
+					KDR = { ADISCORD_south_lean_shl_20 = yes }
+					RHM = { ADISCORD_south_lean_shl_20 = yes }
+					SDR = { ADISCORD_south_lean_shl_20 = yes }
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_south_coast_envoys
+		relative_position_id = NAM_south_legations
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_azhar_accord
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		mutually_exclusive = { focus = NAM_south_desert_envoys }
+		prerequisite = { focus = NAM_south_legations }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = convoy
+				amount = 10
+				producer = NAM
+			}
+			custom_effect_tooltip = ADISCORD_south_contact_kyz_tt
+			custom_effect_tooltip = ADISCORD_south_contact_mzr_tt
+			custom_effect_tooltip = ADISCORD_south_contact_glp_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = ADISCORD_south_coast_envoys_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_push_delta value = 8 }
+				set_temp_variable = { var = ADISCORD_south_tie_value value = 1 }
+				KYZ = {
+					ADISCORD_south_push_influence_north = yes
+					ADISCORD_south_set_north_tie = yes
+				}
+				MZR = {
+					ADISCORD_south_push_influence_north = yes
+					ADISCORD_south_set_north_tie = yes
+				}
+				GLP = {
+					ADISCORD_south_push_influence_north = yes
+					ADISCORD_south_set_north_tie = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 10
+				SHL = {
+					OR = {
+						has_war_with = KYZ
+						has_war_with = GLP
+					}
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_border_administration
+		relative_position_id = NAM_eflor_accord
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_border_administration
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_eflor_accord
+			focus = NAM_border_citizenship
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.03
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 250
+				producer = NAM
+			}
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = ADISCORD_south_power_gain_2_tt
+			}
+			# The open border after the accord; local levies after the commands.
+			if = {
+				limit = { has_completed_focus = NAM_normalisation }
+				if = {
+					limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+					custom_effect_tooltip = NAM_border_administration_open_tt
+				}
+			}
+			else_if = {
+				limit = { has_completed_focus = NAM_border_revenge }
+				add_manpower = 5000
+				custom_effect_tooltip = NAM_border_administration_command_tt
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_power_delta value = 2 }
+				ADISCORD_south_add_influence_power = yes
+				if = {
+					limit = { has_completed_focus = NAM_normalisation }
+					set_temp_variable = { var = ADISCORD_south_push_delta value = 8 }
+					set_temp_variable = { var = ADISCORD_south_tie_value value = 2 }
+					EFL = {
+						ADISCORD_south_push_influence_north = yes
+						ADISCORD_south_set_north_tie = yes
+					}
+					AZH = {
+						ADISCORD_south_push_influence_north = yes
+						ADISCORD_south_set_north_tie = yes
+					}
+				}
+				else_if = {
+					limit = { has_completed_focus = NAM_border_revenge }
+					every_owned_state = {
+						limit = { NAM_border_integration_site = yes }
+						add_compliance = 10
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_congress
+		relative_position_id = NAM_south_desert_envoys
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_border_compacts
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_south_desert_envoys
+			focus = NAM_south_coast_envoys
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			# The congress opens the group the envoys of row 4 did not reach.
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_south_desert_envoys } } }
+				custom_effect_tooltip = ADISCORD_south_contact_wef_tt
+				custom_effect_tooltip = ADISCORD_south_contact_kdr_tt
+				custom_effect_tooltip = ADISCORD_south_contact_rhm_tt
+				custom_effect_tooltip = ADISCORD_south_contact_sdr_tt
+			}
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_south_coast_envoys } } }
+				custom_effect_tooltip = ADISCORD_south_contact_kyz_tt
+				custom_effect_tooltip = ADISCORD_south_contact_mzr_tt
+				custom_effect_tooltip = ADISCORD_south_contact_glp_tt
+			}
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = ADISCORD_south_power_gain_2_tt
+				custom_effect_tooltip = ADISCORD_south_congress_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_power_delta value = 2 }
+				ADISCORD_south_add_influence_power = yes
+				set_temp_variable = { var = ADISCORD_south_push_delta value = 4 }
+				WEF = { ADISCORD_south_push_influence_north = yes }
+				KDR = { ADISCORD_south_push_influence_north = yes }
+				RHM = { ADISCORD_south_push_influence_north = yes }
+				SDR = { ADISCORD_south_push_influence_north = yes }
+				KYZ = { ADISCORD_south_push_influence_north = yes }
+				MZR = { ADISCORD_south_push_influence_north = yes }
+				GLP = { ADISCORD_south_push_influence_north = yes }
+				country_event = {
+					id = ADISCORD_nam_story.381
+					hours = 2
+				}
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	# The lane's settlement with the rival: Shahrabad decides, and either answer
+	# closes the rest of the lane.
+	focus = {
+		id = NAM_south_spheres_deal
+		relative_position_id = NAM_border_administration
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_neighbour_national_charters
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		mutually_exclusive = { focus = NAM_south_coalition_council }
+		prerequisite = { focus = NAM_border_administration }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			ADISCORD_south_contest_open = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_spheres_partner_tt
+				SHL = {
+					ADISCORD_south_champion_viable = yes
+					NOT = { has_war_with = NAM }
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 40
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_south_spheres_deal_reward_tt
+			custom_effect_tooltip = NAM_south_spheres_offer_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
+				ADISCORD_south_offer_spheres = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	focus = {
+		id = NAM_south_coalition_council
+		relative_position_id = NAM_border_administration
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_veyran_counterplan
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		mutually_exclusive = { focus = NAM_south_spheres_deal }
+		prerequisite = {
+			focus = NAM_border_administration
+			focus = NAM_south_congress
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_south_council_session
+			custom_effect_tooltip = ADISCORD_south_council_session_unlock_tt
+			add_war_support = 0.05
+			add_command_power = 25
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = ADISCORD_south_power_gain_1_tt
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_power_delta value = 1 }
+				ADISCORD_south_add_influence_power = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = NAM_south_league_of_guarantees
+		relative_position_id = NAM_south_coalition_council
+		x = -2
+		y = 1
+		icon = GFX_focus_NAM_border_security
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		mutually_exclusive = { focus = NAM_south_press_shahrabad }
+		prerequisite = { focus = NAM_south_coalition_council }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 7000
+			add_war_support = 0.03
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_south_league_tt
+			}
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_south_tie_value value = 2 }
+				set_temp_variable = { var = ADISCORD_south_guarantee_north value = 1 }
+				ADISCORD_south_tie_north_leaning_40 = yes
+				country_event = {
+					id = ADISCORD_nam_story.383
+					hours = 2
+				}
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	focus = {
+		id = NAM_south_press_shahrabad
+		relative_position_id = NAM_south_coalition_council
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_board_southern_safehouses
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_WAR_SUPPORT }
+		mutually_exclusive = { focus = NAM_south_league_of_guarantees }
+		prerequisite = { focus = NAM_south_coalition_council }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			add_war_support = 0.05
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_south_press_tt
+			}
+			hidden_effect = {
+				SHL = {
+					set_temp_variable = { var = ADISCORD_south_power_delta value = -3 }
+					ADISCORD_south_add_influence_power = yes
+				}
+				set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+				ADISCORD_south_push_north_shl_band = yes
+				country_event = {
+					id = ADISCORD_nam_story.383
+					hours = 2
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				add = 10
+				check_variable = { var = SHL.ADISCORD_south_influence_power value = ADISCORD_south_influence_power compare = greater_than }
+			}
+		}
+	}

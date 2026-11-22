@@ -3,9 +3,11 @@
 Status: M0-M8, the reward layer (appendix C), the compact corporate tree of
 68 focuses with its invasion lanes, island wars, mainland cells and
 "Операция \"Посейдон\"" (appendix D), the subversive operations and the
-partition claims (appendix F) and the wartime tree of the return (appendix G)
-are implemented in the script. The tree after the return (stage 3) is not
-(appendix D15). Nothing was checked in the running game. Line numbers are
+partition claims (appendix F), the wartime tree of the return (appendix G)
+the tree of the Directory on the mainland that follows a won return
+(appendix H), and the partition of the South with the Directory's last tree
+that follow a won War for the South (appendix I) are implemented in the
+script. Nothing was checked in the running game. Line numbers are
 hints; the NAM files are edited in parallel, so re-read every target before
 inserting and splice by section, never by line.
 
@@ -100,6 +102,10 @@ are dealt with. Changing the chairman is a tool and a risk, never a game over.
     развития, но повышает другое"). A focus may carry more than five reward
     kinds, up to seven, when its story asks for it ("пусть даёт не только эти
     награды"); C.1 and C.12.
+15. The great war against Rahma, Sardan and Kadir stays its own stage
+    between the return and the War for the South. Asked whether it must
+    remain, the user answered: "Да, должна". Every playthrough passes it;
+    treaties may make it smaller but never replace it (appendix H.4).
 
 ## Design principles taken from the three references
 
@@ -352,8 +358,10 @@ event sets it in `immediate` and clears it in every option), or while
   timeout re-arms silently without its event, and every operation is cancelled
   through its `cancel_trigger` with a refund and the release of its slot.
 - Clocks, slots and trust keep running across the swap to
-  `NAM_south_war_focus` and back and through the return war. The council
-  mechanic ends when the stage-3 tree is loaded.
+  `NAM_south_war_focus` and back, through the return war and on the
+  mainland: loading `NAM_mainland_directory_focus` does not end the council.
+  The council ends only with the route (`NAM_board_end_operations`, from
+  `nam:on_annex`); appendix H.6 lists what changes scale on the mainland.
 - `remove_mission` runs no effect: whoever removes a mission by script also
   releases its slot and settles its deposit.
 - New arrays and variables are created inside the existing one-time guard of
@@ -783,10 +791,16 @@ locked war laws, two development trades, the form of rule after victory, and
 the endings (victory, Eflor's surrender, three pauses, defeat). Contract in
 appendix G.
 
-### After the return (stage 3)
+### The Directory on the mainland (82 focuses)
 
-A separate tree for the corporate winner, loaded in the victory path of the
-return war; not in the script yet (appendix D15).
+`NAM_mainland_directory_focus` "Континент правлений"
+(`focus_trees/NAM/mainland_directory/focuses.txt`) loads at the victory of
+the war of return in both forms of rule and keeps the council running at
+the scale of a continent: the form of the joint state, the conquered land of
+Eflor and Azhar, the home districts, the council of six, the desert war
+against Kadir, Sardan and Rahma as its own stage, four southern lanes and
+"Час юга", which gives the order of the War for the South. Contract in
+appendix H.
 
 ## Tests and tools this design breaks
 
@@ -858,9 +872,11 @@ events `ADISCORD_nam_resource_war.430-.437`, one resolution mission
 `NAM_board_resolution_<company>` per company, the sanction spirits
 `NAM_board_sanction_<company>`, the chancery (`NAM_board_action_slots`,
 `NAM_board_action_used`, the company selection (now the six seat buttons), `NAM_board_lobby_company`,
-`NAM_board_prepare_dismissal`) and `NAM_board_end_operations`, which the
-future stage-3 tree loader must call; it keeps the council laws of C.12, which
-only the annexation repeals (`NAM_board_repeal_laws`). The Judas motions read
+`NAM_board_prepare_dismissal`) and `NAM_board_end_operations`, which runs
+only at the end of the route (`nam:on_annex`), not at the return: the
+mainland tree's loader `NAM_mdr_begin` keeps the council running. It keeps
+the council laws of C.12, which the mainland tree succeeds or repeals by name
+(appendix H.5) and the annexation repeals (`NAM_board_repeal_laws`). The Judas motions read
 `NAM_judas_weber`, `NAM_judas_karamyshev` and `NAM_judas_last_op_weber` /
 `NAM_judas_last_op_karamyshev` and cannot be tabled until those exist. The
 operation dates are day numbers: two writes on one day cannot be told apart,
@@ -894,7 +910,7 @@ the flight or the takeover. The focus-effects guide section "Корпорати�
 Status: the corporate tree is the compact tree of appendix D: 68 focuses in
 one mirrored tree with 11 exclusive pairs; 45 focuses of the former upper tree
 and lower branch are folded into the focuses that stay, two moved to the
-wartime tree and one parked for stage 3 (table in D3). The invasion
+wartime tree and one moved to the mainland tree (table in D3). The invasion
 programmes of `NAM_board_invasion`, the island wars of `NAM_board_islands`,
 the mainland cells with the enemy's `NAM_cells_counter`, the backers' choice
 (event `ADISCORD_nam_story.180`) and "Операция \"Посейдон\"" with its 90-day
@@ -907,7 +923,13 @@ Status: the wartime tree of the return is implemented as appendix G
 describes: `NAM_return_war_focus` with 32 focuses, the category `NAM_rtw_war`
 with decisions W1-W12, five locked war laws, two development trades, the
 endings with their transfers, and events `ADISCORD_nam_story.138-169`.
-Stage 3, the tree after the return, remains open (D15).
+
+Status: the tree after the return is implemented as appendix H describes:
+`NAM_mainland_directory_focus` with 82 focuses, thirteen locked laws of the
+continent, the desert stage with its treaties and lapse, the categories
+`NAM_mdr_army` and `NAM_mdr_south_office` beside the existing
+`NAM_consolidation` and `NAM_free_zones`, and events
+`ADISCORD_nam_story.181-222`.
 
 Notes for every package:
 
@@ -988,7 +1010,8 @@ Appendices A, B and E were drafted against an earlier version of the core.
 Where they differ, sections M1-M10 win. Appendix C is the maintained contract
 of the reward rules, appendix D of the compact corporate tree, appendix F of
 the subversive operations and the partition claims, appendix G of the wartime
-tree of the return. Appendix C still names focuses by the ids they had before
+tree of the return, appendix H of the mainland tree, appendix I of the
+partition of the South and the dominion tree. Appendix C still names focuses by the ids they had before
 the compaction; a folded id stands for its absorber in the D3 table, and its
 rows, laws, unlocks and events are those of the absorber. Known differences:
 
@@ -2124,9 +2147,10 @@ explicit `swap_ideas` in script replaces a council law.
 `NAM_board_end_operations` does not touch the laws.
 `NAM_board_repeal_laws` swaps every held council law for the slot's
 `default = yes` law (column "Repealed to") and is called once, from
-`nam:on_annex` right after `NAM_board_end_operations`. No stage-3 loader exists
-yet; a future one is to call `NAM_board_end_operations` only, so the return
-keeps the laws for the stage-3 tree to decide. The debug idea reset keeps law
+`nam:on_annex` right after `NAM_board_end_operations`. The return keeps the
+laws: the mainland tree succeeds or repeals each one by name through its
+own enactments (appendix H.5), and its thirteen laws of the continent join
+the repeal list. The debug idea reset keeps law
 slots. Every enactment and repeal refreshes the economy through the laws'
 `on_add`/`on_remove`.
 
@@ -2458,8 +2482,9 @@ Moved to the wartime tree of the return (appendix G): `hospital_ships` into
 `NAM_rtw_districts_rise` (the spirit `NAM_board_hospital_ships_spirit`, the
 social-system programme and its men) and `beach_masters` into
 `NAM_rtw_war_cabinet` (its rifles, support equipment, squad weapons, army
-experience and trust). Parked for the tree after the return:
-`admitted_owners_register` (section D15).
+experience and trust). Moved to the mainland tree:
+`admitted_owners_register`, now `NAM_mdr_owners_register` "Реестр
+допущенных собственников" (appendix H.3).
 
 `tools/tests/test_adiscord_nam_focus.py` lists the 48 removed ids in
 `COMPACT_REMOVED` and checks that none of them is left in the source.
@@ -3059,7 +3084,8 @@ raid.
 - The cells end at the rising, at the end of the council, at a won return and
   at the dictated peace, never at an armistice.
 - "Посейдон" hands the war to the wartime tree one day later; every terminal
-  path of the war restores this tree (appendix G).
+  path of the war short of a won return restores this tree; the victory loads
+  the mainland tree instead (appendices G and H).
 
 ### D12. AI
 
@@ -3115,24 +3141,28 @@ checks the wiring.
 
 ### D15. What waits for the tree after the return
 
-After a won return the corporate tree is restored with "Посейдон" and the war
-focuses completed; there is no stage-3 tree in the script yet. Waiting for it:
+A won return no longer restores this tree: `NAM_rtw_restore_tree` skips the
+reload when `NAM_war_of_return_won` is set, and `NAM_mdr_begin` loads
+`NAM_mainland_directory_focus` (appendix H). An armistice, a dictated peace
+or an external close still restores this tree. What the earlier versions of
+this section listed as waiting is now in the script:
 
-- the tree of the Directory on the mainland and its preparation for the war
-  for the South, two to three years of focus time, with the great war against
-  Rahma, Sardan and Kadir as its own stage before the war against Shahrabad;
-  its loader calls `NAM_board_end_operations` (status note of package 3), which
-  settles every receipt of this tree and of the wartime tree;
-- `admitted_owners_register` "Реестр допущенных собственников", parked: block
-  and AI-plan entry removed; its Russian and English keys and the icon sprite
-  stay under the comment "Parked for the post-return tree", and
-  `NAM_board_build_company_offices` / `NAM_board_office_site` stay without a
-  caller;
-- the trunk pair `mainland_shares` / `union_of_boards` and the snapshots it
-  needs (`NAM_board_return_chair`, the district owners, the course), not
-  written yet;
-- the succession of the council laws and war laws (appendix G.5); today only
-  the annexation repeals them (`NAM_board_repeal_laws`).
+- the tree of the Directory on the mainland and its preparation for the War
+  for the South (two to three years of focus time), with the great war against
+  Rahma, Sardan and Kadir as its own stage (user decision 15); its loader does
+  not call `NAM_board_end_operations`: the council runs on, and the route's
+  end calls `NAM_mdr_close` before `NAM_dir_campaigns_close` (H.10);
+- `admitted_owners_register` is the mainland focus `NAM_mdr_owners_register`
+  with its old name, description and icon `GFX_focus_NAM_board_admitted_owners_register`;
+  it calls `NAM_board_build_company_offices` on 700 behind
+  `NAM_board_office_site`;
+- the trunk pair is `NAM_mdr_union_of_boards` / `NAM_mdr_mainland_shares`;
+  `NAM_mdr_begin` writes the snapshot `NAM_board_return_chair`; the course and
+  the form of rule are read from completed focuses and `NAM_rtw_direct_rule`,
+  never copied;
+- the succession of every council and war law is the table of H.5.
+
+What still waits is listed in H.13.
 
 Runtime checks, all by the user after a full restart: the scripted landings
 on 3094, 3313 and 3224 and `teleport_armies` inside a capital state;
@@ -3514,10 +3544,13 @@ events.
   `NAM_rtw_clear_enemy_ideas`, administered and militia flags cleared), clears
   the war's counters and calls `NAM_rtw_restore_tree`: the corporate tree is
   loaded back with `keep_completed = yes` unless NAM has capitulated and
-  `NAM_wor_pick_annexer` left `NAM_wor_annexer_found = 1`.
+  `NAM_wor_pick_annexer` left `NAM_wor_annexer_found = 1`, or the return was
+  won (`NAM_war_of_return_won`): then the war tree stays until
+  `NAM_mdr_begin`, at the end of the victory's settlement, loads the mainland
+  tree (appendix H.2).
 - **Route end.** `NAM_board_end_operations` runs `NAM_rtw_close` while
-  `NAM_rtw_at_war` is set, then `NAM_rtw_bonds_default`, before
-  `NAM_dir_campaigns_close`.
+  `NAM_rtw_at_war` is set, then `NAM_rtw_bonds_default`, then `NAM_mdr_close`,
+  before `NAM_dir_campaigns_close`.
 - **What the swap keeps.** Both trees are shared history, so completed
   corporate focuses and war focuses stay completed across every swap;
   running decisions (programmes, island pacification and nationalisation,
@@ -3676,10 +3709,13 @@ per law the slot can hold:
 | `NAM_board_law_field_courts` "Военно-полевые суды" | `ADISCORD_military_justice_laws` | `reprisals` | the concession courts | `ADISCORD_justice_regular_tribunals` |
 | `NAM_board_law_veteran_reserve` "Резерв ветеранов возвращения" | `ADISCORD_training_laws` | `return_treaty` | whatever the slot holds | `ADISCORD_training_basic_drills` |
 
-Only `NAM_board_repeal_laws` (the annexation) repeals them. A route takes two
-or three of them. A slot holds one law (C.12): a council focus completed after
-an armistice swaps the war law of its slot out by name, and the war law does
-not return when the council law is repealed.
+During the war only `NAM_board_repeal_laws` (the annexation) repeals them. A
+route takes two or three of them. A slot holds one law (C.12): a council focus
+completed after an armistice swaps the war law of its slot out by name, and
+the war law does not return when the council law is repealed. After a won
+return the mainland tree gives each of them its fate (appendix H.5): martial
+rule is repealed at the first meeting on the mainland, the others are
+succeeded by a law of the continent or kept.
 
 Both sides of the centre pair carry one development trade
 (`NAM_board_trade_war_for_army`, `NAM_board_trade_war_for_state`): the shared
@@ -3698,7 +3734,7 @@ decides how the Directory rules, never how much.
 
 | Ending | Kind | Trigger | Transfers | Way back |
 | --- | --- | --- | --- | --- |
-| Victory | end of the war, won | every principal capitulated or gone (the capitulation callbacks), or Eflor's surrender with Azhar already down | see below | done: both are finished |
+| Victory | end of the war, won | every principal capitulated or gone (the capitulation callbacks), or Eflor's surrender with Azhar already down | see below | done: both are finished; the mainland tree loads (appendix H) |
 | Eflor's surrender | Eflor finished, the war goes on | event 157 a after W5 | see below | Azhar by the war, or after a pause by the renewal |
 | Armistice on the line | pause | event 161 a after W8 | every administered district still owned by a principal passes to NAM with its core; holders -5, the chair +3; 180-day `NAM_board_poseidon_truce`; claims kept | the renewal after 180 days |
 | Stalled-landing armistice | pause | event 133 a of the first principal that can still decide (appendix D8) | 3000 rifles to the acceptor (terms 2 keep claimed belt land NAM controls); 180-day truce | the renewal after 180 days; it restores dropped belt claims |
@@ -3725,7 +3761,8 @@ surrender is cored, bonds are repaid at 150 capital per issue (or defaulted:
 restitution (10 000 men and 100 society progress), trust follows the form
 (holders +10 and the other four -3, or the chair +10 and the holders -12),
 and `return_treaty` fires event 169 "Доли материка". Nothing of Eflor or Azhar
-stays independent.
+stays independent. The same corporate block then calls `NAM_mdr_begin`
+(appendix H.2).
 
 **Eflor's surrender** (`NAM_rtw_accept_surrender_efl`, from 157 a), committed
 before the white peace under the global flag `NAM_rtw_surrender_settling`:
@@ -3809,3 +3846,1222 @@ surrender; `send_equipment` of convoys in the dictated peace; the
 subject-of-an-annexed-overlord case at defeat; the map gates and bypasses on a
 live front; the war results of two AI runs and one player run in recent text
 saves.
+
+## Appendix H. The Directory on the mainland
+
+Maintained contract of `NAM_mainland_directory_focus` "Континент правлений",
+the tree the council plays after a won war of return until the War for the
+South. The script holds the values: source
+`focus_trees/NAM/mainland_directory/focuses.txt` (generated output
+`common/national_focus/ADISCORD_NAM_mainland_directory.txt`, owner
+`tools/builders/build_adiscord_focus_trees.py`), the sections "Council of
+boards: the continent" of the NAM effects, triggers, decisions, scripted
+localisation and events, "Council of boards: laws of the continent" of
+`common/ideas/ADISCORD_nam_resource_war_ideas.txt`, the categories
+`NAM_mdr_army` and `NAM_mdr_south_office`, events
+`ADISCORD_nam_story.181`-`222` (223-229 reserved in
+`tools/data/adiscord_event_ids.json`), the AI plans
+`NAM_mainland_directory_plan_holders` and `NAM_mainland_directory_plan_direct`,
+tests `NamMainlandDirectoryTreeTests` and the `test_directory_*` tests of
+`tools/tests/test_adiscord_south_final_war.py`. Nothing here was checked in
+the running game.
+
+**Author's orders (binding, his words):**
+
+- "Сделай теперь ветку после возвращения и подготовке к войне за юг (фокус на
+  2-3 года)": a separate tree loaded by the won war of return; the Directory on
+  the mainland prepares the War for the South.
+- Asked whether the great war against Rahma, Sardan and Kadir must remain its
+  own stage between the return and the South: "Да, должна" (user decision 15).
+  The desert war is a stage every playthrough passes; treaties may make it
+  smaller but never replace it.
+- Victory in the return is "получение полностью владычества над Эфлором и
+  Ажаром, ну и территории своей, конечно": the tree starts with the homeland,
+  the belt and the whole of Eflor and Azhar under the form of rule the wartime
+  tree chose.
+- "Ветка должна быть такая же симметричная" (mirror around the centre column,
+  a free cell between neighbours, no straight chain longer than two); "по
+  горизонтали можно расширить"; "пусть не всё обязательно выполнять будет".
+- Rewards "как в the fire rises": several felt rewards of different kinds per
+  focus, important focuses fire story events with three answers; "баффни
+  фокусы. 300 людей условные - ни о чём"; "Пусть даёт не только эти награды
+  просто! Также пусть дают законы разные, которые сменить нельзя. А ещё
+  понижает уровень соц. развития, но повышает другое".
+- Standing decisions 1-14 hold: the player is the council of six companies,
+  not a chairman; the chair changes only by a vote of no confidence or the
+  annual meeting; tenders are the player's choice; "99 на 1" is 99 percent
+  poor and 1 percent rich; the state is "Светлогорская директория"; no
+  mechanics in descriptions; wars, alliances and peace only through scripted
+  focuses, decisions and events.
+
+### H.1 Identity and size
+
+| Item | Value |
+| --- | --- |
+| Tree | `NAM_mainland_directory_focus`, prefix `NAM_mdr_`, shared history (`SHARED_HISTORY_SOURCES`), `default = no`, continuous focus position x 50, y 1700 |
+| Weight | `factor = 0`; +150 for `original_tag = NAM` with `NAM_corp_takeover`, the global flag `NAM_war_of_return_won`, `NOT = { ADISCORD_south_final_active = yes }` and `NOT = { has_global_flag = ADISCORD_south_hegemon_NAM }` (below the South war tree's 200 and the wartime tree's 300; after a won War for the South this modifier is off and the dominion tree's 160 wins a re-selection) |
+| Focuses | 82 on rows 0-14 and columns 0-44 in nine branches, 154 points; ten exclusive pairs; every route (one side of each pair) is 64 focuses, 122 points, 854 days |
+| Shortest path to "Час юга" | 8 focuses, 18 points by prerequisites; the real floor is the calendar of H.9 |
+| Icons | every focus binds an existing corporate or wartime sprite (`GFX_focus_NAM_board_*`, `GFX_focus_NAM_rtw_*`), each used once; no `GFX_focus_NAM_mdr_*` sprite exists yet |
+| AI plans | two plans of 50 focuses and 105 points (735 days), chosen by the form of rule (H.11) |
+| Debug | `ADISCORD_nam_debug_tree_mainland_directory` in `common/decisions/ADISCORD_scenario_debug_decisions.txt` |
+
+The title "Континент правлений" appears in the debug switch; like the other
+NAM trees the tree id has no localisation key of its own.
+
+### H.2 Attachment and loading
+
+- **Entry.** `NAM_war_of_return_resolve_victory`, in its corporate block
+  after `NAM_rtw_settle_victory`, calls `NAM = { NAM_mdr_begin = yes }`. The
+  block runs only on the council's exile return. `NAM_mdr_begin` has its own
+  limit (`tag = NAM`, `NAM_corp_takeover`, the global flags
+  `NAM_wor_exile_war` and `NAM_war_of_return_won`, no `NAM_mdr_started`) and
+  then: sets `NAM_mdr_started` (its age times the desert lapse), writes the
+  snapshot `NAM_board_return_chair`, the display variables `NAM_mdr_lapse_day`
+  and `NAM_mdr_lapse_left`, removes `NAM_metropolitan_garrison_charter` behind
+  `has_idea` (the native mobilisation laws are free until a course locks the
+  slot), creates the arrays `NAM_mdr_regiments` and `NAM_mdr_leases` (size 7),
+  resizes `NAM_board_lot_awarded` to 7 (lots 4-6 are the mainland lots), creates
+  the desert arrays
+  `NAM_mdr_desert_escrow`, `NAM_mdr_offer_target`, `NAM_mdr_offer_dispatched`
+  (size 4), sets the lot variables `NAM_mdr_lot_wells`, `_smelters`, `_yards`
+  to 0, then `load_focus_tree = { tree = NAM_mainland_directory_focus
+  keep_completed = yes }`, `mark_focus_tree_layout_dirty` and
+  `ADISCORD_economy_mark_dirty`.
+- **No corporate reload after a won return.** `NAM_rtw_restore_tree` reloads
+  the corporate tree only without `NAM_war_of_return_won`; the victory sets the
+  flag before `NAM_war_of_return_close` reaches the restore. Every armistice,
+  the dictated peace and an external close still restore the corporate tree,
+  and the victory of a renewed war loads this one.
+- **The root.** Only `flag_over_harbour` carries `NAM_mdr_tree_live` (hidden:
+  `NAM_corp_takeover`, `NAM_war_of_return_won`, `is_subject = no`); the other
+  focuses have no common `available`. Every focus has `cancel_if_invalid = no`
+  and `continue_if_invalid = no`.
+
+Both forms of rule load the same tree; the form is never copied. Every reader
+uses `NAM_rtw_direct_rule` (the completed `NAM_rtw_chairmans_war`):
+
+| | Holders' company districts (`NAM_rtw_direct_rule = no`) | Council's direct rule (`NAM_rtw_direct_rule = yes`) |
+| --- | --- | --- |
+| Eflor and Azhar at the load | EFL and AZH are company districts (`autonomy_NAM_federal_district`) with armies, cores, dividends and disputes | annexed, non-core, in `NAM_conquered_states` |
+| Integration side of a wing | `NAM_mdr_absorb_district`: the district is annexed with its army, its concession, recruits and dividend end, its land becomes conquered land (`NAM_wor_take_state`) and its capital state is cored; then nationalisation from compliance 20 | nationalisation from compliance 40 (30 on Eflor's land after "Лицеи Лорена") |
+| Extraction side of a wing | the district's charter (`NAM_mdr_chartered_district`: dividend x1.5 in `NAM_corp_districts_monthly`) and the district regiments (D5) | state leases to companies (D4, event 213) |
+| Building rows | on NAM land or on a company district's land (`NAM_mdr_owned_by_directory`) | on NAM land |
+| Incidents below consolidation 70 | from `NAM_federal_districts` | the incident picker also reads `NAM_conquered_states` |
+| AI plan | both extraction sides | Eflor's integration, Azhar's extraction |
+
+The form decides how the wings play, never their extent: both forms reach
+every focus.
+
+What the tree keeps: completed corporate and war focuses (shared history);
+every council and war law until a focus of this tree succeeds or repeals it
+(H.5); the timed spirits of earlier trees to expiry; trust, stance, votes,
+the chair, the chancery, campaign places, island status and owners, district
+owners, the frozen partition holders `NAM_board_partition_efl` / `_azh` and
+consolidation; the landing army, the war's formations and the partisan
+divisions ("Mainland Partisans"), whose fate the home-district pair decides.
+
+### H.3 Branches and pairs
+
+Columns: Eflor's land and the army x 0-8, the home districts and the rear
+x 10-16, the centre x 18-26, the council and the chancery x 28-34, Azhar's
+land and oil, arsenal and fleet x 36-44. Upper stage rows 0-8 (ruling the
+continent), lower stage rows 9-14 (the road south). Ids without `NAM_mdr_`:
+
+```
+row 0                                              [flag 22]
+row 1  [governors 4]        [homes 13]                                   [register 31]        [wells 40]
+row 2                                     [union 20]x[shares 24]
+row 3 [colonels 2][alum 6] [harbour 11][svetl 15]                 [division 29][exchange 33] [hills 38][families 42]
+row 4  [dextung 4]          [lists 13]   [regim 18] [meeting 22] [levy 26]  [constit 31]   [refin 40]
+row 6 [prov 2]x[conc 6]    [trials 11]x[oblivion 15]  [desert_q 22]   [heirs 29]x[escheat 33] [oilconc 38]x[nation 42]
+row 7 [lyc 0][legions 4][smelt 8] [home_distr 13]                        [six 31]   [divid 36][coast 40][levy 44]
+row 8                      [gendarm 11][guards 15] [march 20]x[concess 24] [committees 29][garrisons 33]
+row 9  [staff 4]            [damir 13]                                    [chancery 31]        [charter 40]
+row 10                                           [south_distr 22]
+row 11 [marines 2][school 6] [rail 11][depots 15]                 [agents 29][fenn 33]     [yards 38][crack 42]
+row 12 [armies 4]           [line 13]   [s_charter 18][s_staff 22][nat_war 26] [mazar_q 31]  [arsenal 40]
+row 13 [armour 2]x[infantry 6] [duty 11]x[contracts 15]          [protect 29]x[alliance 33] [tankers 38]x[fleet 42]
+row 14 [mech 0][army_south 4][water 8] [rear 13]   [HOUR 22]   [north_charter 31] [fuel_tr 36][arsenal_dir 40][marines 44]
+```
+
+**Mirror rule.** Every cell (x, y) has its mirror at (44 - x, y) with
+mirrored prerequisite groups, exclusive partner and equal cost; the root
+stands on x 22; same-row cards are at least two columns apart; the longest
+single-prerequisite chain is two links (the third step is an OR merge or a
+pair); every exclusive pair stands on one row with no card between its cells.
+Mirror of cells, not of content: Eflor (a fragile regime: governors, colonels,
+Dekhtung's archive, aluminium) faces Azhar (a mobilised oil state: wells, the
+Basin families, the hill levy, refineries, the coast); the home districts
+(people) face the council (owners); the army faces oil, arsenal and fleet; the
+rear faces the chancery.
+
+| Branch | Focuses / points | Pair (row) | Side A | Side B | Rejoin |
+| --- | --- | --- | --- | --- | --- |
+| Centre: the state | 14 / 32 (with the desert) | `union_of_boards` "Союз правлений" / `mainland_shares` "Материковые акции" (2) | a federation of company domains: law `NAM_mdr_law_company_tithes`, trade `NAM_board_trade_war_for_economic`, domain votes, then `company_regiments` (law `NAM_mdr_law_company_levy`, D7) and `southern_charter` (D11; the South divided into company districts) | one joint-stock state: law `NAM_mdr_law_share_register`, trade `NAM_board_trade_war_for_state`, the golden share, then `shareholders_levy` (law `NAM_mdr_law_register_levy`, D8) and `national_war` (D12, D3 on desert land; the South annexed) | `first_mainland_meeting`; "Час юга" takes either course capstone |
+| Centre: the desert | (same) | `desert_march` "Поход в пустыню" / `desert_concessions` "Пустынные концессии" (8) | the great war at once on Kadir, Sardan and Rahma: command power, experience, rifles, lorries, `NAM_mdr_desert_march_spirit` 180 days | treaties first (D13), then "Последний довод" (D14) on every emirate left; capital, Reidbank's trust; `ai_will_do = 0` | `southern_districts` |
+| Eflor's land | 9 / 15 | `eflor_province` "Эфлорская губерния" / `eflor_concession` "Концессия Эфлор" (6) | integration (H.2), state programme, D3 on Eflor's land; event 217 later | extraction (H.2), economic trade, D5 or D4; event 218 later | `eflor_legions` |
+| Azhar's land | 9 / 15 | `wells_nationalised` "Национализация скважин" / `basin_oil_concession` "Нефтяная концессия Бассейна" (6) | integration, `NAM_mdr_state_wells`, D3 on Azhar's land, then `basin_levy_reform` (`NAM_mdr_basin_levy`); event 219 later | extraction, `NAM_mdr_basin_lease`, economic trade, D5 or D4, then `oil_bonds`; event 220 later | `black_coast` |
+| Home districts | 9 / 15 | `collaborator_trials` "Суд над пособниками" / `act_of_oblivion` "Акт о забвении" (6) | law `NAM_mdr_law_district_tribunals`, D2 purges, then `partisan_gendarmes` (partisans disbanded, law `NAM_mdr_law_gendarmerie`) | the regular courts back (`NAM_mdr_restore_regular_courts`), society programme, cheaper restitution, then `partisan_guards` (two line brigades) | `home_districts` |
+| Council of six | 9 / 15 | `heirs_treaty` "Договор с наследниками" / `escheated_estates` "Выморочное наследство" (6) | the Judases' heirs sign: D9 veterans, then `exchange_committees` (society programme) | the council takes the estates (`NAM_mdr_grant_estates`: two holdings for the chair's company), then `estate_garrisons` (`NAM_mdr_estate_guards`) | `directory_of_six` |
+| Army | 9 / 16 | `armoured_fist` "Бронированный кулак" / `infantry_corps` "Пехотные корпуса" (13) | armour research bonus, `NAM_mdr_armoured_doctrine`, D19 armoured columns, then `desert_mechanics` | artillery research bonus for the field divisions, then `desert_water` (`NAM_mdr_desert_water`) | `army_of_the_south` |
+| Oil, arsenal, fleet | 9 / 16 | `fleet_of_the_coast` "Флот Чёрного берега" / `tanker_armada` "Танкерная армада" (13) | a cruiser (`ADISCORD_cruiser_2163`) and two escorts, then `coastal_marines` (marines, `NAM_mdr_coastal_landing`) | fuel, a silo, `NAM_mdr_fuel_logistics`, then `fuel_trains` (D21) | `arsenal_of_the_directory` |
+| Rear and roads | 7 / 15 | `road_duty` "Дорожная повинность" / `road_contracts` "Дорожные подряды" (13) | law `NAM_mdr_law_road_duty`, state trade, infrastructure | law `NAM_mdr_law_road_contracts`, cheaper D6 (and D6 itself when the railway was not taken) | `rear_of_the_south` |
+| Southern chancery | 7 / 15 | `mazar_protectorate` "Опека над Мазаром" / `mazar_alliance` "Союз с Мазаром" (13) | `MZR = { ADISCORD_south_demand_submission = yes }` through the shared South queue | `MZR = { ADISCORD_south_offer_alliance = yes }`, D23 after a refusal | `northern_charter` |
+
+Other material rows by branch, all through the shared effects of H.8:
+the centre's `flag_over_harbour` (political power, stability, command power,
+consolidation, trust), `first_mainland_meeting` (martial rule repealed, a
+fourth Directory campaign place, `NAM_dir_campaign_slots` clamped to 4),
+`desert_question`, `southern_districts` (manpower, compliance +10 on every
+conquered state, a supply node at 240 or 700), `southern_staff`
+(`NAM_mdr_staff_spirit`, D10) and `hour_of_the_south` (H.9). Eflor: `loren_colonels`,
+`loren_aluminium` (Ferrant's charter grant, a military factory),
+`dextung_files` (`NAM_mdr_dextung_lists`), `loren_lyceums` (cultural
+programme), `eflor_legions` (two field divisions), `smelter_shares` (a
+military factory). Azhar: `basin_wells` (fuel reserve), `hill_villages`
+(infrastructure), `basin_families`, `basin_refineries` (Loren's charter grant,
+a synthetic refinery and a silo), `black_coast` (a dockyard, a cruiser
+`ADISCORD_cruiser_2155` and two escorts). Home: `back_to_homes` (D1, society
+programme), `harbour_rebuilt` (a civilian factory at 700 and a naval base level
+on province 16716), `svetlogorsk_rebuilt` (civilian factories and
+infrastructure, social-system programme), `collaborators_lists`,
+`home_districts` (infrastructure). Council: `owners_register` (the former
+corporate `admitted_owners_register`: state programme and the company offices
+on 700 through `NAM_board_build_company_offices` behind `NAM_board_office_site`),
+`division_of_continent` (D18), `continental_exchange` (law
+`NAM_mdr_law_continental_exchange`), `boards_constitution`, `directory_of_six`.
+Army: `general_staff` (law `NAM_mdr_law_general_staff`), `marines_to_line`
+(D20), `loren_war_school` (`NAM_mdr_war_school`, army programme),
+`field_armies` (law `NAM_mdr_law_field_armies`, two field divisions),
+`army_of_the_south` (`NAM_mdr_army_of_south`, two field divisions). Oil:
+`war_charter` (law `NAM_mdr_law_war_charter`, a military factory),
+`black_coast_yards` (a dockyard), `cracking_plants` (a synthetic refinery),
+`southern_arsenal` (Arktur's charter grant, the arsenal preview
+`NAM_board_preview_mdr_arsenal`), `arsenal_of_the_directory` (a military
+factory). Rear: `damir_road` (infrastructure), `southern_railway`
+(infrastructure, a supply node, D6), `fuel_depots_south` (a silo,
+`NAM_mdr_desert_depots`), `damir_line` (`NAM_mdr_build_line`: bunkers on
+provinces 16722, 16743, 6193 and 2804), `rear_of_the_south`
+(`NAM_mdr_rear_spirit`, a supply node, fuel). Chancery: `southern_chancery`,
+`furnace_agents` (D15-D17, `NAM_mdr_furnace_rumours` on SHL), `fenn_guarantee`
+(WEF: opinion `NAM_mdr_fenn_protection` +30 and 6000 rifles by
+`send_equipment`; bypassed when WEF does not exist or is a subject),
+`mazar_question` (Mazar's acceptance +25 in `ADISCORD_south.40`),
+`northern_charter` (law `NAM_mdr_law_southern_mandate`,
+`NAM_mdr_charter_published` on SHL).
+
+Course gates: `company_regiments` and `southern_charter` carry `allow_branch =
+{ NOT = { has_completed_focus = NAM_mdr_mainland_shares } }`,
+`shareholders_levy` and `national_war` the mirror; `southern_charter` and
+`national_war` also need their course focus in `available`. Bypasses: the
+desert pair on `NAM_mdr_south_open` (both sides bypass and
+`southern_districts` takes the OR); `fenn_guarantee` on WEF gone or a subject;
+the Mazar pair on `NAM_mdr_mazar_settled`; "Час юга" on
+`ADISCORD_south_final_started` or `ADISCORD_south_final_resolved`.
+
+Reader order: a reward that changes the vote count queues the recount
+(`NAM_board_queue_recount`) instead of recounting inline, so readers of
+`has_completed_focus` already see the focus. No flag mirrors a completion:
+the course, the domain votes, the golden share, the constitution, the
+development caps, the oblivion price, the road contracts, the charter
+dividend, the nationalisation and lease openings and the SLF condition read
+`has_completed_focus`.
+
+### H.4 The desert stage
+
+- **The stage.** The desert closes only by the existing great war
+  (`NAM_great_war_start`), on both sides of the centre pair. "Поход в
+  пустыню" declares it on all three emirates in its reward; its `available`
+  is `NAM_great_war_can_start` with the consolidation-70 and target tooltips.
+  On "Пустынные концессии" the council first offers treaties (D13) to at most
+  two emirates of its choice: `NAM_mdr_desert_treaty_room` is false once two
+  of KDR, SDR and RHM are NAM's subjects or hold `NAM_mdr_offer_pending`. Then
+  "Последний довод" (D14) declares the same great war on every emirate that is
+  still a `NAM_wor_independent_target`. No third treaty can be offered, so at
+  least one emirate is always left for the war; no route buys the whole desert.
+- **The treaty.** D13 debits 50 political power and a 60 capital escrow
+  (inside the decision: escrow `NAM_mdr_desert_escrow^<1 KDR, 2 SDR, 3
+  RHM>`, timed flag `NAM_mdr_offer_pending` 30 days on the emirate, hidden event
+  214 one day later). Event 214 runs `NAM_mdr_desert_dispatch`: each escrow not
+  yet dispatched goes to its emirate as event 209 while
+  `NAM_mdr_desert_offer_live` holds, otherwise it is refunded. Answer a
+  (`NAM_mdr_desert_sign`) spends the escrow and makes the emirate a company
+  district through `NAM_wor_federal_district_join` (temp
+  `NAM_mdr_skip_tender_queue = 1`: the treaty has its own tender, event 210);
+  answer b (`NAM_mdr_desert_refuse`) returns the escrow and sets
+  `NAM_mdr_offer_refused` for 90 days, after which the emirate may be offered
+  again while room remains; answer c (`NAM_mdr_desert_void`), shown only when
+  the offer lapsed or a great war is active, refunds and makes no district.
+  Acceptance AI: base 40, +20 when NAM is more than twice as strong, +15 with
+  two neighbours that are NAM or its subjects, +15 when another emirate already
+  signed, +10 after event 186 c (`NAM_mdr_council_seat_promised`), -30 in SHL's
+  faction or SHL's subject; refusal 60.
+- **The war with treaty districts.** `NAM_wor_register_target` registers only
+  `NAM_wor_target_valid` countries, which excludes NAM's subjects: a treaty
+  district is never a participant or the primary, enters the war as NAM's
+  subject (`can_decline_call_to_war = no`) and is not settled again at the
+  victory. D14 waits for every pending answer
+  (`NAM_mdr_desert_no_offer_pending`) and event 209 refuses to act during an
+  active great war, so no participant becomes a district mid-war.
+- **Settlement by course.** `NAM_wor_settle_list_by_route` has, after the
+  return temp and the radical branch, `else_if` NAM has `NAM_corp_takeover` and
+  `NAM_mdr_mainland_shares`: `NAM_wor_radical_annex` (annexed, non-core,
+  conquered array); the final `else` (`NAM_wor_federal_district_join`) serves
+  "Союз правлений" and, on the corporate route after `NAM_mdr_started`, queues
+  the district for event 212 (`NAM_mdr_queue_district_tender`). On the
+  concession side only the emirates fought are settled.
+- **The lapse (failure path).** `NAM_mdr_desert_lapse_check`, called at the end
+  of `NAM_consolidation_monthly`: 540 days after `NAM_mdr_started`, with no
+  great war in progress and `NAM_mdr_desert_closed` false, it sets the global
+  flag `NAM_mdr_desert_lapsed`, refunds every open escrow, fires event 216
+  (stability -0.05, war support -0.05, consolidation -10, Arktur -6, Loren -4)
+  and calls `ADISCORD_south_begin_preparation`. `NAM_south_story_pending`
+  reads the flag, so the South freeze ends; the desert pair is bypassed
+  through `NAM_mdr_south_open`, D13 and D14 hide, and `NAM_renew_great_war`
+  hides after the lapse, so a Mazar alliance made later is never broken by the
+  great war's `leave_faction`. The emirates not bought stay independent and
+  open to Shahrabad: the lasting cost of skipping the stage. No date row: the
+  South deadline counts from contact.
+- **Triggers.** `NAM_mdr_desert_closed` (no great war active, and the war won
+  or no target left), `NAM_mdr_south_open` (no great war active, and the desert
+  closed or lapsed; carries `NAM_mdr_south_open_tt`). The category text of
+  `NAM_consolidation` ends with `[NAMMdrDesertStatus]` (not started, open with
+  the lapse date, at war, closed, lapsed).
+
+### H.5 Fate of every exile and war law
+
+"Succeeded" means `NAM_mdr_enact_<law>` swaps the named law out first, then
+every other law the slot can hold, `add_ideas` only for an empty slot, then
+`NAM_board_law_lock_tt`. "Repealed" means a visible swap to the slot default.
+
+| Slot | Held at the hand-over | Fate | By |
+| --- | --- | --- | --- |
+| taxation | `NAM_board_law_property_census` or a native tax law | succeeded by `NAM_mdr_law_company_tithes` "Десятина правлений" or `NAM_mdr_law_share_register` "Акционерный реестр" | the centre pair |
+| information | `NAM_board_law_paid_publicity` or a native law | succeeded by `NAM_mdr_law_southern_mandate` "Южный мандат"; kept when the capstone is skipped | `northern_charter` |
+| military justice | war `NAM_board_law_field_courts`, else `NAM_board_law_concession_courts` or the default | succeeded by `NAM_mdr_law_district_tribunals` "Окружные трибуналы", or repealed to `ADISCORD_justice_regular_tribunals` (`NAM_mdr_restore_regular_courts`) | the home-district pair |
+| trade | `NAM_board_law_harbour_exchange` or a native trade law | succeeded by `NAM_mdr_law_continental_exchange` "Континентальная биржа" | `continental_exchange` |
+| officer corps | `NAM_board_law_hereditary_patents`, `NAM_board_law_sworn_commanders` or a native law | succeeded by `NAM_mdr_law_general_staff` "Генеральный штаб Директории" | `general_staff` |
+| internal security | direct rule: war `NAM_board_law_martial_rule`; holders: `NAM_board_law_district_wardens` or a native law | martial rule repealed to `ADISCORD_internal_security_local_garrisons` (`NAM_mdr_end_martial_rule`); the slot then succeeded by `NAM_mdr_law_gendarmerie` "Окружная жандармерия" on the trials route, kept on the oblivion route | `first_mainland_meeting`; `partisan_gendarmes` |
+| industrial policy | holders: war `NAM_board_law_holders_contracts`; direct rule: `NAM_board_law_arsenal_monopoly` or a native law | succeeded by `NAM_mdr_law_war_charter` "Военный устав континента" | `war_charter` |
+| military organisation | `NAM_board_law_factory_guard` or a native law | succeeded by `NAM_mdr_law_field_armies` "Полевые армии" | `field_armies` |
+| infrastructure | war `NAM_board_law_strait_requisition` or a native law | succeeded by `NAM_mdr_law_road_duty` "Дорожная повинность" or `NAM_mdr_law_road_contracts` "Дорожные подряды" | the rear pair |
+| mobilisation (`mobilization_laws`) | `disarmed_nation` (the garrison charter removed by `NAM_mdr_begin`) | locked by `NAM_mdr_law_company_levy` "Наём правлений" (union) or `NAM_mdr_law_register_levy` "Номер в реестре" (shares); the native choice stays free while the leaf is not taken | `company_regiments` / `shareholders_levy` |
+| welfare | `NAM_welfare_society_99_1` | kept: the society of 99 to 1 is the Directory's own; the trades carry its price | - |
+| cultural policy | `NAM_board_law_mourning_licence` or `NAM_board_law_permitted_dissent` | kept | - |
+| labour policy | `NAM_board_law_residency_for_hire` or its default | kept | - |
+| logistics | `NAM_board_law_captains_share` or its default | kept | - |
+| training | war `NAM_board_law_veteran_reserve` or a native law | kept | - |
+
+The thirteen laws follow the council-law template (`cost = 0`, `removal_cost =
+-1`, `allowed = { tag = NAM }`, `visible` self, scripted-only `available`
+behind `NAM_mdr_law_<x>_source_tt`, `allowed_to_remove` false behind
+`NAM_board_law_locked_tt`, `cancel_if_invalid = no`, `ai_will_do = 0`, economy
+refresh in `on_add` / `on_remove`). `NAM_board_repeal_laws` (annexation only)
+repeals each to the slot default (`export_focus` for trade, `disarmed_nation`
+for both mobilisation laws). A route enacts eight to ten of them.
+
+**Development trades.** The centre pair carries one trade on each side
+(`union_of_boards`: `NAM_board_trade_war_for_economic`; `mainland_shares`:
+`NAM_board_trade_war_for_state`); both wing extraction sides carry
+`NAM_board_trade_war_for_economic`; `road_duty` carries
+`NAM_board_trade_war_for_state`. Each lowers a social track through the shared
+`NAM_board_trade_war_lower_social` (society first, then the social system, or
+`NAM_rtw_home_front_strain` for 180 days when both are at 1) and raises the
+other track, or pays 100 capital when that track is already at level 5. The
+economic raise passes `ADISCORD_economy_check_economic_development_upgrade`;
+banked progress waits for the monthly tick. A route takes up to four trades.
+
+### H.6 The council at the scale of a continent
+
+The council continues unchanged: trust, stance, the recount and the majority,
+blocked products, the annual meeting (the chair strictly to the top company,
+decision 11), the vote of no confidence, the chancery, the cabinet and company
+traits, tenders as the player's choice, the Directory campaigns, development
+programmes, islands, free zones, the holders' dividends and disputes,
+consolidation. What changes scale:
+
+| Item | Mainland rule | Where |
+| --- | --- | --- |
+| Mainland lots | wells (Loren / Reidbank), smelters (Ferrant / Smenkom), yards (Navis / Arktur), one at a time by D18 and event 215 through `NAM_board_close_tender` with `NAM_board_lot_input` 4-6, in the cycle wells -> smelters -> yards -> wells from the first lot `NAM_mdr_lot_order` (1 wells, 2 smelters, 3 yards; unset reads 1) that event 200 writes (a drawn, b wells, c yards); the triggers `NAM_mdr_tender_next_wells`, `_smelters`, `_yards` pick the next open lot for event 215 and D18; an awarded lot stores the company and counts 3 votes as an industry; a lot kept in the treasury stores -1, counts nowhere and pays 10 capital a month | `NAM_board_count_industries`, `NAM_corp_monthly` |
+| Domain votes ("Союз правлений") | one more vote for each district concession and each awarded mainland lot, two more for the estates (one holding = two votes) | `NAM_mdr_count_holdings` in `NAM_board_recount` |
+| Golden share ("Материковые акции") | 4 votes on the council's side while the chair's company stands for the council | `NAM_board_recount` |
+| Leases | one vote per two leases (one per lease on the union); rent 8 capital a month, 12 on the shares course, none while the tenant boycotts on the union | `NAM_mdr_count_holdings`, `NAM_mdr_conquered_monthly` |
+| Estates | two holdings (4 votes) for `NAM_mdr_estates_owner`, three (6 votes) on the union | `NAM_mdr_count_holdings` |
+| District tenders | treaty emirates: event 210 (Kadir Loren / Reidbank, Sardan Ferrant / Smenkom, Rahma Navis / Arktur); districts made by the great war on the union course and countries that submit to the Directory: the queue `NAM_mdr_tender_queue` and event 212 (Mazar Ferrant / Smenkom, any other keeps its rotation owner); winner +8, loser -5 (`NAM_mdr_tender_set_owner`) | events 210, 212 |
+| Charter dividend | x1.5 for EFL or AZH with its concession focus (`NAM_mdr_chartered_district`) | `NAM_corp_districts_monthly` |
+| Directory campaigns | a fourth place from `first_mainland_meeting` | focus reward |
+| Development programmes | a third run of each `NAM_dev_runs` programme after `directory_of_six` | the `NAM_dev_*` decisions |
+| No-confidence immunity | 270 days with one of `NAM_board_original_stays_home` and `NAM_mdr_boards_constitution`, 360 with both, else 180 | `NAM_board_settle_no_confidence` |
+| Names | MZR as a company district takes `MZR_NAM_corp_1`-`_6`; other tags keep their names | `NAM_corp_district_set_name`, `common/countries/cosmetic.txt` |
+
+Ended by code at the victory: the cells, subversion against Eflor and Azhar,
+the beachhead mission, the exile drills and the garrison charter.
+
+### H.7 Conquered land and the home districts
+
+- **Conquered land** is the array `NAM_conquered_states` (owned states with
+  `NAM_conquered_state`, old cores kept, no NAM core). One bounded monthly pass,
+  `NAM_mdr_conquered_monthly` from `NAM_corp_monthly`, ends leases on land lost
+  or cored, pays the rent and removes the tree's state modifiers
+  (`NAM_mdr_basin_levy`, `NAM_mdr_estate_guards`, `NAM_mdr_company_guards`)
+  from such land behind `has_dynamic_modifier`; no world scan.
+- **Nationalisation (D3)** cores a conquered state: owned and controlled by
+  NAM, not leased and not in work, on the land the focus opened
+  (`NAM_mdr_nationalisation_land`: Eflor's after `eflor_province`, Azhar's
+  after `wells_nationalised`, the desert's after `national_war`, the South's
+  after `NAM_hgm_southern_province` through `NAM_hgm_southern_province_land`),
+  from the compliance of `NAM_mdr_nationalisation_compliance` (30 on the South).
+  `NAM_mdr_nationalise_settle` takes a lot state out of its lot
+  (`NAM_ptn_lot_state_cored`, appendix I).
+- **Leases (D4)** give a conquered state to a company chosen in event 213
+  (Eflor's land Ferrant / Arktur, Azhar's Loren / Reidbank), only under direct
+  rule after the wing's concession focus: `NAM_mdr_lease_state` writes
+  `NAM_mdr_lease_owner`, counts in `NAM_mdr_leases` and adds
+  `NAM_mdr_company_guards`. One lease is prepared at a time. The desert has no
+  lease row: the union's great war makes districts, never conquered land.
+  `NAM_mdr_leasable` and D4's `target_trigger` exclude every state that carries
+  `NAM_ptn_lot` (a lot of the South's partition, appendix I).
+- **Compliance and resistance** rows loop the same array through
+  `NAM_mdr_conquered_compliance` / `NAM_mdr_conquered_resistance` with a land
+  filter (0 all, 1 Eflor's land, 2 Azhar's land).
+- **Home districts** are the six homeland states 67, 688, 689, 690, 700 and
+  719: restitution (D1, the society programme on the first three runs), purges
+  after the trials (D2), the rebuilt harbour and Svetlogorsk.
+  `home_districts` is read by the War for the South: no SLF rising
+  (`ADISCORD_south_raise_oil_uprising` rows) and the description
+  `ADISCORD_south.44.d_directory`.
+
+### H.8 Shared script
+
+Effects (NAM scope unless named; temps are reset by the effect):
+
+| Effect | Inputs |
+| --- | --- |
+| `NAM_mdr_build` | `NAM_mdr_build_kind` (1 military factory, 2 civilian factory, 3 dockyard, 4 synthetic refinery, 5 fuel silo, 6 infrastructure, 7 supply node), `NAM_mdr_build_levels` (1 or 2), `NAM_mdr_build_state_1`..`_3` (preference order, 0 unused), `NAM_mdr_build_fallback` (capital paid only when no listed state qualifies); the site is `NAM_mdr_build_site` (NAM or a company district owns and controls it; coastal for dockyards; infrastructure room; supply nodes once per state on 240, 700, 729, 692 or 689); shared-slot kinds bring their own slots; called inside the reward's `hidden_effect` |
+| `NAM_mdr_build_line` | `NAM_mdr_build_fallback`; bunkers 2 on 16722, 16743, 6193, 2804 |
+| `NAM_mdr_place_division` | `NAM_mdr_unit_kind` (1 "Directory Field Division" 7650 men, 2 "Company Guard Regiment" 4900, 3 "Desert Armoured Column" 4150, 4 "Line Infantry Brigade" 6300, 5 "Island Marines" 4300, 6 "Old Settlers Militia" 4000), `NAM_mdr_unit_count`, `NAM_mdr_unit_state` (0 the harbour), `NAM_mdr_unit_company` (kind 2 colours), `NAM_mdr_unit_district` (kind 4: 1 Eflor, 2 Azhar); the unit forms in the state while NAM controls it, else at 16716, else at the capital; without the template it pays the template's men. The first template of kinds 1-3 grants its support technology (`ADISCORD_tech_desert_water_columns`, `ADISCORD_tech_garrison_police_sections`; the column also `ADISCORD_tech_restored_armored_chassis` and `ADISCORD_tech_armored_carrier_program`); every caller that can still grant one shows it as native output (`effect_tooltip = { set_technology = { ... popup = no } }` behind `NOT = { has_template }` and `NOT = { has_tech }`) |
+| `NAM_mdr_launch_ships` | `NAM_mdr_ship_cruiser` (1 `ADISCORD_cruiser_2155`, 2 `ADISCORD_cruiser_2163`), `NAM_mdr_ship_escorts` (0-3); launched while NAM owns and controls 700, else five `convoy_1` a hull |
+| `NAM_mdr_conquered_compliance`, `NAM_mdr_conquered_resistance` | `NAM_mdr_compliance_add` / `NAM_mdr_resistance_add` (5 or 10), `NAM_mdr_core_filter` (0, 1, 2) |
+| `NAM_mdr_absorb_district`, `NAM_mdr_charter_district` | scope EFL or AZH as NAM's district; no temp |
+| `NAM_mdr_lease_state` / `NAM_mdr_lease_end` | state scope; `NAM_mdr_lease_company` (1-6) for the lease |
+| `NAM_mdr_grant_estates` | `NAM_mdr_estates_to_rank_1` (1 sells to the first company by votes, event 201 c) |
+| `NAM_mdr_tender_set_owner` | district scope; `NAM_mdr_tender_winner`, `NAM_mdr_tender_loser` |
+| `NAM_mdr_desert_refund` | `NAM_mdr_offer_index` (1 KDR, 2 SDR, 3 RHM) |
+| `NAM_mdr_state_work_open` / `_refund` and the three settles | state scope; `NAM_mdr_work_kind` (1 restitution, 2 nationalisation, 3 rail), `NAM_mdr_work_cap`, `NAM_mdr_work_men` |
+| `NAM_mdr_enact_<law>` (13), `NAM_mdr_end_martial_rule`, `NAM_mdr_restore_regular_courts`, `NAM_board_trade_war_for_economic` | none |
+| `NAM_board_trust_package`, `NAM_board_holders_package`, `NAM_board_support_change`, `NAM_consolidation_add`, `NAM_corp_capital_add` | as in the corporate tree; one package per reward or answer |
+
+Every convoy row is `add_equipment_to_stockpile = { type = convoy_1 ... }`
+(`convoy` is the archetype). Triggers: `NAM_mdr_tree_live`,
+`NAM_mdr_unitary`, `NAM_mdr_union`, `NAM_mdr_desert_closed`,
+`NAM_mdr_south_open`, `NAM_mdr_south_ready`, `NAM_mdr_desert_treaty_room`,
+`NAM_mdr_desert_no_offer_pending`, `NAM_mdr_desert_offer_live`,
+`NAM_mdr_mazar_settled`,
+`NAM_mdr_owned_by_directory`, `NAM_mdr_build_site`,
+`NAM_mdr_unit_template_ready`, `NAM_mdr_filtered_conquered_state`,
+`NAM_mdr_chartered_district`, `NAM_mdr_nationalisation_land`,
+`NAM_mdr_absorbed_land`, `NAM_mdr_nationalisable`,
+`NAM_mdr_nationalisation_compliance`, `NAM_mdr_leasable`,
+`NAM_mdr_restitution_site`, `NAM_mdr_purge_site`, `NAM_mdr_rail_site`,
+`NAM_mdr_shl_penalised` (SHL scope: at most one of the tree's penalties at a
+time), `NAM_mdr_tender_next_wells`, `NAM_mdr_tender_next_smelters`,
+`NAM_mdr_tender_next_yards`.
+
+### H.9 The southern lanes and the hand-over into the War for the South
+
+- **Side.** The Directory is the northern champion and the north leader: after
+  the return it is the only sovereign northern power, and its districts and
+  emirates fight as its subjects.
+- **Contact.** After the desert the Directory borders Mazar and Veyr, never
+  Shahrabad, so the preparation (`ADISCORD_south_begin_preparation`, retried by
+  the SHL cycle) starts only when the camps touch: Mazar joins the north camp
+  (the alliance or the protectorate accepted, or the refusal war of the
+  submission), or SHL's own course takes Mazar or Veyr. The Mazar pair is
+  `available` only with `NAM_mdr_south_open`, so no faction is made while the
+  desert is open. A country that submits to the Directory becomes a company
+  district (`ADISCORD_south_finalize_submission`: a first corporate row
+  `PREV = { NAM_wor_federal_district_join = yes }`).
+- **Readiness.** `ADISCORD_south_nam_focus_ready` has the Directory branch:
+  `southern_districts`, one course capstone (`southern_charter` or
+  `national_war`) and any two of `army_of_the_south`,
+  `arsenal_of_the_directory`, `rear_of_the_south`, `northern_charter` (the same
+  rows as `NAM_mdr_south_ready`). The chancery opens the coalition decisions
+  (`ADISCORD_south_north_invitation_unlocked`: `southern_chancery` for any
+  target, plus `fenn_guarantee` for WEF).
+- **The war order.** "Час юга" (3 points, 21 days): `available` is
+  `ADISCORD_south_final_focus_available`, no war, not a subject; the hidden
+  `ADISCORD_south_prepare_offensive` declares at once when the warning is older
+  than 55 days, otherwise the order waits for the SHL cycle; political power,
+  war support, `NAM_mdr_hour_spirit` for 120 days, trust to all six, event 190.
+  If Shahrabad strikes first the focus is bypassed. D22 "Новый приказ на юг"
+  gives the next order after a repel.
+- **The swap.** `ADISCORD_south_load_war_tree` records
+  `ADISCORD_south_prior_tree = 7` for `NAM_mainland_directory_focus` and loads
+  `NAM_south_war_focus`; `ADISCORD_south_restore_prior_tree` loads this tree
+  back for value 7 before its `else` (which still sends unknown values to the
+  corporate tree). In the war the Directory plays the no-course branch
+  `NAM_sw_n_*` of `NAM_south_war_focus`.
+- **What the tree hands over.** Formations from focuses and decisions, eight
+  to ten locked laws, the districts and emirates as subjects, Mazar (faction
+  member or district), Fenn (invitation open), and values the war reads:
+  the course (path spirit `ADISCORD_south_path_NAM_boards` "Поход правлений"
+  or `ADISCORD_south_path_NAM_shares` "Народная война акционеров", added in
+  the `NAM_corp_takeover` branch of `ADISCORD_south_add_path_spirit` and
+  removed by `ADISCORD_south_remove_path_spirit`), `home_districts` (no SLF
+  rising), `northern_charter` (one point off the strain base in
+  `ADISCORD_south_strain_cycle_member`, as `NAM_sw_district_compact_at_war`).
+- **Outcomes.** North victory: `ADISCORD_south_final_resolve_north_victory`
+  sets subject type 7 on `NAM_corp_takeover` on both courses (terms stay 2:
+  every loser is puppeted, then sequestered); superevent 50 follows, and
+  `NAM_hgm_begin` loads `NAM_southern_dominion_focus` in place of the
+  republic's heritage tree before `ADISCORD_south_close_campaign_state`, so the
+  prior-tree restore finds no war tree and only clears value 7. The heritage
+  tree's weight in `focus_trees/NAM/postwar/southern_settlement.txt` carries
+  `NOT = { has_country_flag = NAM_corp_takeover }`, and this tree's weight
+  carries `NOT = { has_global_flag = ADISCORD_south_hegemon_NAM }`, so a
+  re-selection keeps the dominion tree. On day 1 the settlement sequesters the
+  losers and lays the table of the partition; the course of this tree decides
+  what a country lot becomes (appendix I). The reward tooltips of
+  `southern_charter` and `national_war` promise the allies' fate by course and
+  say that the partition decides Shahrabad's. Shahrabad's
+  victory: the code's terms by SHL course; an annexation runs `nam:on_annex`
+  (`NAM_board_end_operations` with `NAM_hgm_close` and `NAM_mdr_close`, then
+  `NAM_board_repeal_laws`); a puppet Directory keeps this tree with the
+  council paralysed (`NAM_board_operable` false). Repel or external close: this
+  tree returns (value 7) and D22 gives the next order.
+- **Calendar.** The South deadline is a day number set at the first
+  preparation start (540 days later, 15 days less per pull of
+  `global.ADISCORD_south_crisis_pull`, never under 180); the warning needs 180
+  days of preparation, both champions ready and the early window (180 days
+  before the deadline), so the hour comes about 360 days after contact (270
+  with six pulls) whatever the Directory's readiness. Planned estimates: war
+  about 2.2-2.6 years after the victory of the return on the AI routes, about
+  three years in the worst combinations; the AI plans start the desert war long
+  before the lapse. These are estimates from the code's rules, not results of
+  a run.
+
+### H.10 Events, decisions and lifecycle
+
+Events (section "Council of boards: the continent" of
+`events/ADISCORD_nam_resource_war_events.txt`). Story events follow C.5:
+`is_triggered_only`, `fire_only_once`, trigger `NAM_board_opened` with
+`NAM_board_ended = 0`, the first answer is the timeout answer and never a pure
+gain, three answers, the chair named through `[NAMBoardChairLeader]`; AI a 60,
+b and c 20, except 186 c, 194 c and 204 a at 60:
+
+| Event | Source | Title |
+| --- | --- | --- |
+| 181-190 | centre: `flag_over_harbour`, `union_of_boards`, `mainland_shares`, `first_mainland_meeting`, `desert_march`, `desert_concessions`, `southern_districts`, `southern_charter`, `national_war`, `hour_of_the_south` | "Флаг над гаванью", "Шесть уставов", "Золотая акция", "Собрание в бирже", "Голосование о походе", "Два договора и пример", "Печать на пустыне" (`.d_lapsed` after the lapse), "Раздел юга на бумаге", "Речь на площади", "Последнее заседание" |
+| 191-196 | wings: `loren_governors`, `eflor_province`, `eflor_concession`, `basin_wells`, `wells_nationalised`, `basin_oil_concession` | "Канцелярия Дехтунга", "Губернский устав", "Договор с держателем", "Первый танкер", "Скважины без хозяина", "Аренда на полвека" |
+| 197-202 | home and council: `back_to_homes`, `collaborator_trials`, `act_of_oblivion`, `division_of_continent`, `escheated_estates`, `heirs_treaty` | "Чужие ключи", "Скамья в рыночном зале", "Костёр на причале", "Торговый зал", "Ключи от поместий", "Подписи наследников" |
+| 203-208 | southern lanes: `general_staff`, `field_armies`, `war_charter`, `damir_road`, `southern_chancery`, `northern_charter` | "Карты Лорена", "Первый штаб армии", "Квоты", "Караванщики", "Досье на печи", "Подписи хартии" |
+| 209 | to KDR, SDR or RHM from event 214 | "Договор о концессии": sign, refuse, or the fallback c (H.4) |
+| 210 | NAM from 209 a | "Торги за эмират": the emirate's tender pair |
+| 211 | NAM from 209 b | "Договор вернулся без подписи": notice with the refund line |
+| 212 | NAM from the tender queue | "Округ на торгах" |
+| 213 | NAM from D4 | "Арендатор для новой земли" |
+| 214 | NAM, hidden, from D13 | dispatcher of the treaty offers |
+| 215 | NAM from D18 | "Материковый лот": the open lot's rival pair, or c "Оставить в казне" |
+| 216 | NAM from the lapse | "Срок пустынного вопроса": the price of the failure path |
+| 217-220 | 90-120 days after `eflor_province`, `eflor_concession`, `wells_nationalised`, `basin_oil_concession`; dropped when the land or the concession is gone | "Подполье Дехтунга", "Забастовка плавилен", "Огонь на промыслах", "Стачка семей" |
+| 221, 222 | `collaborators_lists`, `basin_families` | "Чьи имена в списке", "Доля семей" |
+
+Event 200's answers set the order of the mainland tenders besides their
+trust: a "По жребию" draws `NAM_mdr_lot_order` (1, 2 or 3 with equal weights:
+the order is drawn, never the winner), b "Сначала скважины" sets 1, c
+"Сначала верфи" sets 3; event 215 and D18 follow the cycle from that lot
+(H.6), and D18 names the next lot in its launch key. Event 213 offers only
+the two tenants of Eflor's or Azhar's land.
+
+Decisions. Every paid decision follows the custom-cost contract and refunds
+only through its receipt (a state flag with its paid variables, or a NAM
+variable of that decision), cleared in the same block; `cancel_trigger`
+includes `NAM_board_operable = no`. Prices are the values of the script:
+
+| # | Decision | Category | Opened by | Price | Run | Result |
+| --- | --- | --- | --- | --- | --- | --- |
+| D1 | `NAM_mdr_restitution` "Реституция округа" | `NAM_consolidation` | `back_to_homes` | 40 capital (25 after `act_of_oblivion`) | 60 days, two at once | men, stability, Smenkom's trust; society programme on the first three runs; `NAM_mdr_restituted` |
+| D2 | `NAM_mdr_purge_district` "Чистка округа" | `NAM_consolidation` | `collaborator_trials` | 20 PP | 30 days | capital, consolidation, Reidbank's trust; `NAM_mdr_purged` |
+| D3 | `NAM_mdr_nationalise_land` "Национализация земли" | `NAM_consolidation` | the integration sides, `national_war` (with its unlock line), and after the South war `NAM_hgm_southern_province` | 50 PP, 80 capital | 90 days, two at once | NAM core, consolidation; the state modifiers removed; a lot state leaves its lot |
+| D4 | `NAM_mdr_lease_land` "Аренда земли" | `NAM_consolidation` | the extraction sides under direct rule | 25 PP | 30 days, one at a time | event 213 |
+| D6 | `NAM_mdr_rail_brigades` "Путевые бригады" | `NAM_consolidation` | `southern_railway`, or `road_contracts` | 50 capital and 3000 men (40 capital after `road_contracts`) | 60 days, two at once | infrastructure on 240, 68, 70, 692, 724, 725, 726, 729, once each |
+| D13 | `NAM_mdr_desert_offer` "Договор о концессии" | `NAM_consolidation` | `desert_concessions` | 50 PP, 60 capital escrow | instant | H.4 |
+| D14 | `NAM_mdr_desert_last_argument` "Последний довод" | `NAM_consolidation` | `desert_concessions` | 50 PP | instant | the great war on every emirate left |
+| D18 | `NAM_mdr_mainland_tender` "Материковые торги" | `NAM_free_zones` | `division_of_continent` | 25 PP | 30 days | event 215 for the open lot |
+| D5 | `NAM_mdr_hire_district_regiments` "Полки округа" | `NAM_mdr_army` | the extraction sides under the holders | 30 capital, 6300 men | 45 days, three per district | a line brigade named after the district |
+| D7 | `NAM_mdr_raise_company_regiment` "Полк правления" | `NAM_mdr_army` | `company_regiments` | 40 capital, 4900 men (3700 under `NAM_mdr_law_company_levy`), 4410 rifles | 45 days | a company regiment in the selected company's colours; one per company |
+| D8 | `NAM_mdr_shareholder_battalions` "Батальоны реестра" | `NAM_mdr_army` | `shareholders_levy` | 30 PP, 7650 men, 6885 rifles | 60 days, cap 4 | a field division |
+| D9 | `NAM_mdr_karamyshev_veterans` "Ветераны побережья" | `NAM_mdr_army` | `heirs_treaty` | 25 PP, 4000 men, 3600 rifles | 45 days, cap 2 | a militia division "Ветераны побережья" |
+| D10 | `NAM_mdr_staff_exercises` "Штабные игры" | `NAM_mdr_army` | `southern_staff` | 50 PP | 60 days, re-enable 120 | army experience, `NAM_mdr_exercises_spirit` |
+| D11 | `NAM_mdr_south_war_shares` "Акции южного похода" | `NAM_mdr_army` | `southern_charter` | 40 capital | 30 days, three runs | rifles, convoys, Reidbank's trust |
+| D12 | `NAM_mdr_shareholder_mobilisation` "Мобилизация реестра" | `NAM_mdr_army` | `national_war` | 75 PP | instant, re-enable 240 | `NAM_mdr_shareholder_mobilisation_spirit` |
+| D19 | `NAM_mdr_armoured_columns` "Бронеколонны пустыни" | `NAM_mdr_army` | `armoured_fist` | 40 capital, 25 PP, 4150 men, 400 motorized | 60 days, cap 3 | an armoured column |
+| D20 | `NAM_mdr_training_camps` "Учебные лагеря" | `NAM_mdr_army` | `marines_to_line` | 30 PP | 60 days, re-enable 120 | army experience, `NAM_mdr_training_spirit` |
+| D21 | `NAM_mdr_fuel_convoys` "Топливный эшелон" | `NAM_mdr_army` | `fuel_trains` | 30 capital | 30 days, cap 4 | fuel |
+| D15 | `NAM_mdr_op_furnace_contracts` "Скупка печных подрядов" | `NAM_mdr_south_office` | `furnace_agents` | 25 PP, 60 capital | 60 days, re-enable 180 | `NAM_mdr_op_furnace_contracts_idea` on SHL, or exposure (`NAM_mdr_exposed_plot`) |
+| D16 | `NAM_mdr_op_zarkhan_agents` "Агенты в Зархане" | `NAM_mdr_south_office` | `furnace_agents` | 30 PP, 40 capital | 90 days, re-enable 180 | `NAM_mdr_op_zarkhan_idea`, or exposure |
+| D17 | `NAM_mdr_op_shortage_rumours` "Слухи о дефиците" | `NAM_mdr_south_office` | `furnace_agents` | 20 PP, 30 capital | 45 days, re-enable 120 | `NAM_mdr_op_rumours_idea`, or exposure |
+| D22 | `NAM_mdr_new_south_order` "Новый приказ на юг" | `NAM_mdr_south_office` | `hour_of_the_south` | 50 PP | instant, re-enable 180 | `ADISCORD_south_prepare_offensive` |
+| D23 | `NAM_mdr_mazar_retry` "Снова к Мазару" | `NAM_mdr_south_office` | `mazar_alliance` | 50 PP | instant | a new alliance offer, `NAM_mdr_mazar_offer_cooldown` 90 days |
+
+The operations D15-D17 run one at a time (one receipt
+`NAM_mdr_south_op_paid`) and need `SHL = { NAM_mdr_shl_penalised = no }`.
+D15-D17, D22 and D23 are hidden once `ADISCORD_south_final_resolved` is set,
+so none of them reappears against a sequestered Shahrabad after the war. The
+army orders have their own category `NAM_mdr_army` "Армия континента"
+(visible on the corporate route after `NAM_mdr_started` until
+`NAM_board_ended`), because the republic's `NAM_mobilisation` stays closed on
+the corporate route. `NAM_mdr_south_office` "Южная канцелярия" is visible from
+`southern_chancery` (or `hour_of_the_south`) until `NAM_board_ended`.
+
+**Lifecycle.** `NAM_mdr_begin` is the single entry and `NAM_mdr_close` the
+single exit, called by `NAM_board_end_operations` after `NAM_hgm_close`
+(appendix I) and before `NAM_dir_campaigns_close`. `NAM_mdr_close` refunds every running state work on
+the home, rail and conquered states, ends every lease, removes the state
+modifiers, refunds the NAM receipts of D5, D7-D9, D11, D15-D17, D19, D21 and
+every open desert escrow (political power is never refunded), removes the NAM
+spirits of the tree behind `has_idea`, clears `NAM_mdr_tender_queue`,
+`NAM_mdr_council_seat_promised`, `NAM_mdr_mazar_offer_cooldown` and the estates
+owner, and marks the economy dirty. It touches no law. Kept for the campaign:
+`NAM_mdr_started`, `NAM_board_return_chair`, the global flag
+`NAM_mdr_desert_lapsed`, the state flags `NAM_mdr_restituted`,
+`NAM_mdr_purged`, `NAM_mdr_nationalised`, `NAM_mdr_rail_done`, the caps of the
+decisions, the mainland lot variables. `NAM_mdr_council_seat_promised` (event
+186 c) is cleared by `southern_districts`. The SHL spirits expire on SHL; no
+effect removes them from another country. Prior-tree value 7 lives from the
+swap to the restore.
+
+### H.11 AI
+
+`NAM_mainland_directory_plan_holders` (enable `NAM_rtw_direct_rule = no`) and
+`NAM_mainland_directory_plan_direct` (`= yes`), each 50 focuses and 105
+points: the union course, the desert march, the act of oblivion, the heirs'
+treaty, the Mazar alliance, the infantry corps, the tanker armada and the road
+contracts; the holders take both extraction sides, direct rule takes Eflor's
+integration and Azhar's extraction. `NAM_mdr_ai_desert` (in
+`common/ai_strategy/ADISCORD_nam_resource_war_ai.txt`) asks for front units
+against KDR, SDR and RHM while the great war is active. `desert_concessions`
+has `ai_will_do = 0`.
+
+### H.12 Tests
+
+`NamMainlandDirectoryTreeTests` in `tools/tests/test_adiscord_nam_focus.py`:
+selection and owner, shared history, the load at the return's victory, the
+South swap with value 7, the layout and mirror, rewards, wings that are not
+clones, the tooltip layout standard, laws, trades, the custom-cost contract,
+formations and fallbacks, receipts refunded once, the lifecycle, and the
+events; `NamSouthernDominionTreeTests.test_mainland_leftovers_are_closed` pins
+the lease rows, the removed receipt rows, the lot order of events 200 and 215,
+the D3 unlock of `national_war`, the technology lines of the template callers
+and the reworded Shahrabad lines of `southern_charter` and `national_war`.
+`tools/tests/test_adiscord_south_final_war.py`:
+`test_directory_mazar_uses_the_shared_queue`,
+`test_directory_path_spirit_and_terms`,
+`test_north_victory_partitions_for_the_council`,
+`test_directory_readiness_invitations_and_rising`,
+`test_directory_stages_on_the_mainland_road` and the lapse phase of
+`test_exile_return_and_great_war_block_every_clock_and_first_strike`.
+
+### H.13 Open items and what only a run of the game can prove
+
+Not built yet: a Directory course in `NAM_south_war_focus` (today the
+no-course `NAM_sw_n_*` branch) and dedicated `GFX_focus_NAM_mdr_*` artwork.
+The Directory's tree after a won War for the South is appendix I.
+
+Runtime checks, all by the user after a full restart: the load one step after
+the victory's settlement in both forms of rule and `keep_completed` with three
+shared-history trees; `annex_country` with `transfer_troops` on a district
+and the coring of its capital; `remove_ideas` of the garrison charter and the
+locked mobilisation laws; the treaty chain 214 -> 209 -> 210 / 211 with a
+human and an AI emirate, and its timeout; the great war with one or two
+treaty districts beside the Directory; the lapse on day 540 and the South
+clock after it; the tender queue of event 212 with several districts;
+`create_unit` of the new templates and their fallbacks; `create_ship` of both
+cruisers at 700; the bunker provinces of `NAM_mdr_build_line`; the swap to
+`NAM_south_war_focus` and back with value 7; the north victory's load of the
+dominion tree on both courses (appendix I); the war dates in recent text saves.
+
+## Appendix I. The partition of the South and "Владычество правлений"
+
+Maintained contract of what follows a council of boards that wins the War for
+the South: the partition of the South among the six companies (script prefix
+`NAM_ptn_`) and the tree `NAM_southern_dominion_focus` "Владычество правлений"
+(prefix `NAM_hgm_`), loaded in place of the republic's heritage tree. The
+script holds the values: source `focus_trees/NAM/southern_dominion/focuses.txt`
+(generated output `common/national_focus/ADISCORD_NAM_southern_dominion.txt`,
+owner `tools/builders/build_adiscord_focus_trees.py`), the sections "Council of
+boards: the South after the war" of
+`common/scripted_effects/ADISCORD_nam_resource_war_effects.txt` and of the NAM
+triggers, the category `NAM_hgm_dominion` with its decisions, the laws and
+spirits in `common/ideas/ADISCORD_nam_resource_war_ideas.txt`, events
+`ADISCORD_nam_story.230`-`287` (288-289 reserved in
+`tools/data/adiscord_event_ids.json`), superevent request 79, the AI plans
+`NAM_southern_dominion_plan_union` and `NAM_southern_dominion_plan_shares`, and
+the tests of I.17. Nothing here was checked in the running game.
+
+**Author's orders (binding, his words):**
+
+- "Cделай уникальный раздел после войны за юг за корпоратов". On this route
+  "раздел" carries two meanings and both are delivered: a unique partition of
+  the South by the six companies when the Directory wins, in the line of
+  "Одна ночь на раздел мира" (I.2-I.8), and a unique section of content after
+  that war: the Directory's own tree with the route's finals instead of the
+  republic's heritage tree (I.9-I.16).
+- "Ветка должна быть такая же симметричная" (mirror around the centre column,
+  a free cell between neighbours, no straight chain longer than two); "по
+  горизонтали можно расширить"; "пусть не всё обязательно выполнять будет".
+- Rewards "как в the fire rises": several felt rewards of different kinds per
+  focus, important focuses fire story events with three answers; "баффни
+  фокусы. 300 людей условные - ни о чём"; "Пусть даёт не только эти награды
+  просто! Также пусть дают законы разные, которые сменить нельзя. А ещё
+  понижает уровень соц. развития, но повышает другое".
+- Standing decisions hold: the player is the council of six companies, not a
+  chairman; the chair changes only by a no-confidence vote or the annual
+  meeting; tenders are the player's choice; "99 на 1" is 99 percent poor and 1
+  percent rich; the state is "Светлогорская директория"; no mechanics in
+  descriptions; wars, alliances and peace only through scripted focuses,
+  decisions and events.
+
+**Working decisions of the lead, not the author's.** The author gave no size
+and did not answer the open questions put to him with recommended answers;
+until he answers, these stand and the rows that cite them follow:
+
+| # | Working decision |
+| --- | --- |
+| W1 | 49 focuses; a normal playthrough takes about a year of focus time (the AI plans: 23 focuses, 52 points, 364 days); one whole route is 34 focuses, 76 points, 532 days from the root |
+| W2 | all four finals: "Вечный совет шести", "Одно правление", "Лига округов", "Акции девяноста девяти" |
+| W3 | Shahrabad's fate is the player's choice between "Печной трест" and "Хазар по описи"; no release tag |
+| W4 | the game goes on after a final: council, districts, leases, the Cold Fire and the Khan's crisis keep running |
+| W5 | the partition's superevent uses the existing unused picture; the finals fire their closing events without superevents until pictures exist |
+| W6 | no new country names or flags: the finals rename the ruling party; South districts other than Mazar keep their own names |
+| W7 | "Одно правление" is the holding model, never a life chairman |
+| W8 | "Акции девяноста девяти" succeeds the law "99 на 1" |
+| W9 | an unsigned protocol is settled at the deadline: Shahrabad's form by course, every open lot kept by the council, no bids, no grudges, no walk-outs |
+| W10 | when Mazar is the Directory's sovereign ally, the Zarkhan lot may give 707 to Mazar |
+
+### I.1 Identity and size
+
+| Item | Value |
+| --- | --- |
+| Tree | `NAM_southern_dominion_focus`, prefix `NAM_hgm_`, shared history (`SHARED_HISTORY_SOURCES`), `default = no`, continuous focus position x 50, y 1800 |
+| Weight | `factor = 0`; +160 for `original_tag = NAM` with `NAM_corp_takeover`, `ADISCORD_south_hegemon_NAM` and `ADISCORD_south_final_resolved`; the heritage tree's weight carries `NOT = { has_country_flag = NAM_corp_takeover }` and the mainland tree's `NOT = { has_global_flag = ADISCORD_south_hegemon_NAM }`, so a re-selection keeps this tree |
+| Focuses | 49 on rows 0-10 and columns 0-44, 114 points; seven exclusive pairs and four finals of which one can be taken |
+| Icons | every focus binds an existing corporate, wartime or mainland sprite (`GFX_focus_NAM_board_*` and others); no `GFX_focus_NAM_hgm_*` sprite exists yet |
+| AI plans | two plans of 24 entries (23 focuses taken, 52 points; the last entry is the fallback final), chosen by the mainland course (I.16) |
+| Debug | `ADISCORD_nam_debug_tree_southern_dominion` in `common/decisions/ADISCORD_scenario_debug_decisions.txt` |
+
+### I.2 Settlement order and loading
+
+1. `ADISCORD_south_final_resolve_north_victory`: after the republic's subject
+   types, `NAM_corp_takeover` sets `global.ADISCORD_south_subject_type = 7` on
+   both courses (terms stay 2). Then `ADISCORD_south_end_final_wars`,
+   `ADISCORD_south_mark_losers` (each loser freed by its overlord, its faction
+   dismantled or left), superevent 50, and in the NAM block the heritage load
+   for the republic or `NAM_hgm_begin` for the council, both before
+   `ADISCORD_south_close_campaign_state`: the prior-tree restore then finds no
+   war tree and only clears `ADISCORD_south_prior_tree`. `ADISCORD_south.30`
+   follows in a day and the news `ADISCORD_south.31` in two hours (desc
+   `ADISCORD_south.31.d_nam_partition` on type 7; its option shows
+   `NAM_hgm_dominion_unlocked_tt` behind this tree).
+2. `NAM_hgm_begin` (NAM; `tag = NAM`, `NAM_corp_takeover`, the hegemon flag, no
+   `NAM_hgm_started`): sets `NAM_hgm_started`, sizes the lot arrays (12) and
+   the company arrays (7), loads the tree with `keep_completed = yes`, marks
+   the layout and the economy dirty.
+3. Day 1, `ADISCORD_south_apply_settlement`: each loser of the roster is
+   settled once; `ADISCORD_south_apply_subject_type` row 7 calls
+   `NAM_ptn_sequester` (puppet if needed, `autonomy_NAM_namestnik_office` at
+   freedom 0.05, flag `NAM_ptn_sequestered`, control of its owned states
+   restored to it, listed in `NAM_ptn_sequestered_tags`). The seal call
+   `SHL = { SHL_seal_open_chapter = yes }` is skipped for a sequestered
+   Shahrabad (the furnace trust opens it). After the SLF annexation and the
+   terms-3 block, type 7 calls `NAM_ptn_open_table` with NAM as scope and
+   ROOT, before `ADISCORD_south_clear_participants`.
+4. The root's `available` is `NAM_hgm_tree_live` (`NAM_ptn_table_open`, not a
+   subject), so nothing is taken before the table exists.
+
+The tree keeps the completions of the corporate, wartime and mainland trees,
+every locked law until a focus of this tree succeeds it, the timed spirits to
+expiry, trust, votes, the chair, the chancery, districts and their owners,
+mainland leases and lots, island concessions and consolidation. The course
+is read, never copied: `NAM_ptn_union_rules` is
+`NOT = { has_completed_focus = NAM_mdr_mainland_shares }`, so "Союз правлений"
+and a South war begun before the mainland pair follow the same rules. The
+chancery's D15-D17, D22 and D23 hide after `ADISCORD_south_final_resolved`.
+The council's annual meeting and no-confidence vote continue through every
+final.
+
+Other outcomes of the War for the South are unchanged: a repel or an external
+close restores the mainland tree (value 7); Shahrabad's victory ends the
+route as coded (an annexation runs `NAM_board_end_operations`, which calls
+`NAM_hgm_close`); a non-corporate NAM loads the heritage tree.
+
+### I.3 The table
+
+A lot is a set of states and a pair of bidding companies. `NAM_ptn_open_table`
+opens lots 5-11 for each sequestered country of the roster and lots 1-4 when
+Shahrabad is sequestered (otherwise it writes `NAM_ptn_shl_form = 2` at once).
+A state with the core of a lot's country that no longer exists opens that lot
+as a state lot. The deadline is set 179 days after the table.
+
+| Lot | Name | States | Bidders (answer b / c) | Base bid |
+| --- | --- | --- | --- | --- |
+| 1 | "Зарханский пояс" | 707, 289, 731, 294 (furnaces 289, 294) | Ferrant / Arktur | 120 |
+| 2 | "Сафирское взморье" | 288, 730 (the South's port; furnace 288) | Navis / Loren | 80 |
+| 3 | "Хазар" | 699, 287, 290, 291 (furnaces 287, 290, 291) | Smenkom / Reidbank | 140 |
+| 4 | "Байратские копи" | 732, 292, 293, 296, 733, 295 (furnaces 292, 293, 295) | Arktur / Smenkom | 100 |
+| 5 | "Кейзан" | KYZ | Loren / Reidbank | 90 |
+| 6 | "Вейр" | GLP | Navis / Arktur | 80 |
+| 7 | "Мазар" | MZR | Ferrant / Smenkom | 110 |
+| 8 | "Фенн" | WEF (states 174, 175, Eflor's cores) | the holder of Eflor's share `NAM_board_partition_efl` (Loren when unset) / Reidbank; when the first is Reidbank, the holder of Azhar's share `NAM_board_partition_azh`, or Smenkom when that is unset or Reidbank too | 40 |
+| 9 | "Кадир" | KDR | Loren / Reidbank | 50 |
+| 10 | "Сардан" | SDR | Ferrant / Smenkom | 50 |
+| 11 | "Рахма" | RHM | Navis / Arktur | 50 |
+
+Lots 9-11 appear only when the emirate fought for Shahrabad (the desert
+lapsed on the mainland). Not on the table: the Directory's allies and
+districts, countries that stayed out of the war, the SLF (annexed on day 1;
+its core on 688 is removed), the furnace administrations as tags. The land
+of every sequestered country is collected once into a temporary array and
+sorted by `NAM_ptn_sort_state`:
+
+- Shahrabad's sixteen states belong to lots 1-4 by the map; other land to the
+  lot of its core (`NAM_ptn_state_lot_index`); such a state joins its lot
+  (state variable `NAM_ptn_lot`, array `NAM_ptn_states`) and, for a country
+  lot, moves to that country;
+- a NAM core goes to NAM (`NAM_wor_take_state`: homeland);
+- a core of a friendly country (NAM's subject or faction member, not
+  sequestered: EFL, AZH, MZR, WEF, KYZ, GLP) goes to that country;
+- land of a sequestered country lot without another lot's core stays in its
+  lot;
+- the rest becomes council land (`transfer_state`, `NAM_wor_take_state`).
+
+A furnace administration (SFD, SCD, SMD, SOD, SDA) without lot land is
+annexed at once; one with lot land at its last lot's award or at the deadline.
+
+### I.4 The sequence
+
+| Step | When | What happens |
+| --- | --- | --- |
+| Victory | day 0 | wars end, losers freed, superevent 50, `NAM_hgm_begin` |
+| Sequestration | day 1 | every loser sequestered, the table laid, `NAM_ptn_table_open`, the deadline |
+| "Юг под секвестром" | the root | opens the category `NAM_hgm_dominion` "Раздел и владычество" and the private tenders; event 230 |
+| Shahrabad's fate | the centre pair | "Печной трест" or "Хазар по описи" writes `NAM_ptn_shl_form` once; the tenders of lots 1-4 wait for it |
+| Private tenders | any time before the night | `NAM_ptn_tender_<n>` (25 PP, 7 days), the lot's event in tender mode |
+| "Ночь раздела юга" | after the pair (bypassed once the protocol is signed) | `NAM_ptn_run_night`: dispatcher event 246 gives the open lot with the lowest index and no running tender its event, one an hour; while only tenders remain it waits a day |
+| Walk-outs | after the last lot | each company with two grudges or more gets event 244 |
+| Protocol | dawn | `NAM_ptn_sign_protocol`: flag `NAM_ptn_protocol_signed`, spirit `NAM_hgm_partition_charter` "Протокол раздела юга" for 365 days, +4 trust to every company that took a lot, superevent request 79, event 245 two hours later |
+| Deadline | the first monthly tick on or after the deadline day, while no night runs | `NAM_ptn_deadline_settle`: Shahrabad's form by course (`NAM_ptn_settle_shl_default`: the inventory on "Материковые акции", otherwise the trust), running tenders closed with their 25 PP returned, every open lot kept in mode 4, the remaining administrations annexed, notice 247, the protocol |
+
+A night left without an answer for 30 days is resumed by the monthly check.
+The South branch opens at the protocol ("Конторы на юге"). The levers are the
+order and the moment: early tenders bring less money and no grudges, the
+night more money and more anger, and each award moves the ranks that decide
+the next chair and the finals.
+
+### I.5 How a lot is awarded
+
+Lot events 233-243 read the mode stored for the lot (1 tender, 2 night, 3
+re-tender) and call `NAM_ptn_award`; every answer of the night calls the
+dispatcher again. Answers:
+
+| Answer | Effect |
+| --- | --- |
+| a "Оставить совету" (lot 2 under the inventory: "Вольный порт"; lot 1 under the inventory while Mazar is the Directory's sovereign ally: "Доля Мазара") | the lot is kept: both bidders -3 trust (-1 on "Материковые акции") |
+| "Снять с торгов" (re-tender only) | the lot stays kept; no trust change |
+| b, c "Продать <компания>" | the bidder pays its bid into `NAM_corp_capital`; winner +6 / loser -3 at tender and re-tender, +8 / -5 at night with one grudge `NAM_ptn_grievance^<loser>`; `NAM_ptn_lots_won^<winner>` +1, owner `NAM_ptn_lot_owner^<lot>`; recount queued |
+
+- **Bid** (`NAM_ptn_compute_bid`): base bid x0.75 at tender, x1.25 at night,
+  x1.0 at re-tender; x0.5 when the winner already took a lot; x0.75 for lots
+  1-4 under the furnace trust; rounded. `NAM_ptn_prepare_bids` writes the shown
+  values in the event's immediate block; the award recomputes them.
+- **Veto of the five.** A company's third lot costs 40 PP (the answer's native
+  row) and -3 trust to each of the four companies that neither win nor lose.
+- **Once.** A lot is settled from state 1, or from state 3 in re-tender mode
+  while `NAM_ptn_retendered^<lot>` is 0; states 2 and 4 are final, so a stale
+  or repeated answer changes nothing.
+- **Re-tender** (`NAM_ptn_retender` after "Южная биржа": 40 PP, 14 days,
+  re-enable 60): the lowest kept lot that is not the free port, not Mazar's
+  share, not yet re-tendered, and not under "Вечный совет шести".
+- **Walk-out** (event 244 for `NAM_ptn_walkout_company`): "Отпустить" sets its
+  trust to 20 and its objection deadline to today, so it boycotts from the next
+  recount; "Отступные" 60 capital, trust +10, grudges cleared; "Грамота" 50 PP,
+  a charter line and trust +6.
+- **AI** (lot events): a 10, b and c 40, +30 for the bidder with fewer lots,
+  +20 for the bidder with lower trust, 0 when the answer needs the veto and
+  the other bidder's does not.
+
+### I.6 What each lot becomes
+
+"Union" means `NAM_ptn_union_rules` ("Союз правлений" or neither course);
+"shares" means "Материковые акции". `NAM_ptn_apply_lot` moves the lot to
+state 2 (awarded) or 3 (kept) with `NAM_ptn_kept_form` (1 rotation district, 2
+council land, 3 furnaces to the treasury, 4 free port, 5 Mazar's share) and
+`NAM_ptn_lot_kind` (1 Shahrabad, 2 country lot, 3 state lot, 4 Fenn merged
+into Eflor).
+
+| Lot kind | Course / form | Awarded | Kept |
+| --- | --- | --- | --- |
+| country lot | union | company district (`NAM_ptn_make_district`): owner set to the winner, flag `NAM_hgm_owner_fixed`, temp `NAM_mdr_skip_tender_queue = 1`, then `NAM_wor_federal_district_join`; the army stays | district with the rotation owner, not fixed |
+| country lot | shares | `NAM_wor_radical_annex`: conquered land owned by the winner as a lot | conquered council land, owner 0; +10 compliance under direct rule |
+| state lot | either | NAM takes the lot's states from their holder (`NAM_ptn_take_state_lot`), owned by the winner | council land; +10 compliance under direct rule |
+| lots 1-4 | "Печной трест" | furnace lease: the land stays Shahrabad's, the winner holds the lot while a furnace of it stays leased by the seal | the furnaces pay only the treasury |
+| lots 1-4 | "Хазар по описи" | land owned by the winner as a lot | council land; lot 2 becomes "Вольный порт" (state flag and dynamic modifier `NAM_ptn_free_port` on 288 and 730, +10 capital a month); lot 1 with Mazar as sovereign ally and outside the deadline: 707 to MZR (`NAM_ptn_give_mazar_share`, opinion `NAM_hgm_mazar_share`), the rest kept |
+| lot 8 "Фенн", first bidder | Eflor is NAM's district | Fenn's states go to EFL (`NAM_ptn_fenn_to_eflor`), WEF ends with its last state, kind 4: the holding counts through Eflor's district | - |
+| lot 8 otherwise | either | the country-lot row of the course | the country-lot row |
+
+Every award marks the economy dirty on NAM and on the lot's country; no
+faction call and no claim. A country lot (5-11) queues its people's event
+(281-287) 60-120 days after it is settled; the event rechecks its lot and land.
+
+A land lot loses a state that NAM no longer owns or has cored
+(`NAM_ptn_lot_state_cored`, also called by the mainland nationalisation and by
+"Хазарские лицеи"); a lot without states closes (state 4: no holding, no rent,
+no re-tender); a district lot closes when its country stops being NAM's
+district. The winner keeps what it paid.
+
+### I.7 Shahrabad's two fates
+
+- **"Печной трест"** (`NAM_ptn_furnace_trust`): form 1, Shahrabad stays NAM's
+  subject in the namestnik office, its sequestration flag is cleared and its
+  seal chapter opens once (`SHL_seal_open_chapter`: all nine furnaces leased,
+  share 80%, buy-backs, the Cold Fire). Shahrabad keeps its tree and its
+  courses; a buy-back takes a furnace out of a company's lot. Law "Печной сбор",
+  a social level traded for the economy, event 231; leaf "Печные дивиденды"
+  (`allow_branch` on form 1).
+- **"Хазар по описи"** (`NAM_ptn_khazar_inventory`): form 2, Shahrabad is
+  annexed through `NAM_wor_radical_annex` (army disbanded, conquered land, the
+  furnace mechanic ends) and its states take +15 resistance. Law "Подушная
+  опись", a social level traded for the state, 20 000 rifles, event 232; leaf
+  "Хазарская аренда" (`allow_branch` on form 2).
+
+Each side is bypassed only on its own form (written by the deadline or by a
+table without Shahrabad), so at most one side is bypassed and the exclusion
+closes the other. Shahrabad's raid odds and petition weights in the SHL files
+still read only the republic's post-war focuses (I.18).
+
+### I.8 Holdings and rents
+
+- **Recount** (`NAM_ptn_count_holdings` inside `NAM_board_recount`): an awarded
+  lot counted by its lot row (`NAM_ptn_lot_counts_as_holding`: not a district
+  lot, not kind 4, a furnace lot only while one of its furnaces is leased) is
+  one holding (two votes) on the union and half a holding on shares;
+  "Южный холдинг" adds half a holding per lot of `NAM_hgm_southern_holder`. On
+  shares the kept lots give the council `NAM_ptn_kept_votes` (2-3 kept lots 1
+  vote, 4-5 kept lots 2), added in `NAM_board_update_industrial_policy`.
+- **Rent** (`NAM_ptn_monthly` from `NAM_corp_monthly`, with
+  `NAM_ptn_deadline_check` and `NAM_hgm_loans_monthly`): per awarded land lot 6
+  capital a month on the union and 8 on shares, plus the cadastre bonus of its
+  owner (`NAM_ptn_lot_bonus`, +3 per award of event 280) and +4 for a Shahrabad
+  lot after "Хазарская аренда"; per awarded furnace lot 4 for each leased
+  furnace after "Печные дивиденды"; the sum x1.5 after "Юг как промысел" and
+  x0.9 after "Доля девяноста девяти", then +10 for the free port. Nothing is
+  paid for a lot whose owner boycotts on the union. The last sum is kept in
+  `NAM_ptn_last_rent`.
+- **Districts bought at the partition** carry `NAM_hgm_owner_fixed`: the
+  dispute of `NAM_corp_open_dispute` and the auction `NAM_corp_auction_district`
+  skip them. "Хартия владычества" halves the monthly dispute roll.
+- **Category text** `NAM_hgm_dominion_desc` is `[NAMPtnTable]`: every lot with
+  its states, bidders, base bid, state and owner, and the deadline.
+
+### I.9 The tree
+
+Columns: the partitioned South x 0-8, the ninety-nine and a hegemon's deals x
+10-14, the centre x 16-28, the army and the last empire x 30-34, the council
+after the last enemy x 36-44. Mirror x -> 44 - x. Ids without `NAM_hgm_`:
+
+```
+row 0                                               [sequestration 22]
+row 1  [offices 4]   [share99 10]x[order 14]                              [demob 30]x[garrison 34]   [nothing_left 40]
+row 2                                         [trust 20]x[inventory 24]
+row 3 [houses 2][watch 6] [shops 10][cities 12][towns 14]       [artels 30][army 32][co_garr 34] [heirs 38][seal 42]
+row 4  [cadastre 4]                    [dividends 18][night 22][leases 26]                         [count 40]
+row 5                     [ledger 12]                                        [envoys 32]
+row 6 [extract 2]x[prov 6]               [dominion 20]  [exchange 24]                    [covenant 38]x[mergers 42]
+row 7                  [cartel 10]x[lanes 14]                          [arms 30]x[last_empire 34]
+row 8 [quotas 0][boards 4][lyceums 8]          [last_meeting 22]                  [fund 36][charter 40][holding 44]
+row 9                        [bank 12]                                      [price 32]
+row 10                              [league 16][people 20]  [six 24][one_board 28]
+```
+
+Every cell has its mirror with mirrored prerequisite groups, partner and
+cost; same-row cards are at least two columns apart; the longest
+single-prerequisite chain is two links; every pair stands on one row with no
+card between its cells. The four finals exclude each other through
+`NAM_hgm_no_final_taken` in `available`, not `mutually_exclusive`, because an
+exclusion line between x 16 and x 28 would cross the two finals between them.
+Mirror of cells, not of content.
+
+| Branch | Focuses | Pair (row) | Side A | Side B | Rejoin |
+| --- | --- | --- | --- | --- | --- |
+| Centre: the partition | 9 + 4 finals | `furnace_trust` "Печной трест" / `khazar_inventory` "Хазар по описи" (2) | I.7; leaf `furnace_dividends` "Печные дивиденды" (D2, a 150 advance) | I.7; leaf `khazar_leases` "Хазарская аренда" (+10 compliance, a 150 advance) | `night_of_the_south` "Ночь раздела юга", then `charter_of_dominion` "Хартия владычества" or `southern_exchange` "Южная биржа" (D1 re-tender, two civilian factories), then `last_meeting` "Последнее собрание" |
+| Partitioned South | 9 | `southern_extraction` "Юг как промысел" / `southern_province` "Юг как провинция" (6) | law "Устав промысла", rent x1.5, a 150 advance, a social level traded for the army, D5 quotas; leaf `steel_quotas` "Стальные квоты" (military factories) | law "Южное подданство", D3 nationalisation of South land from compliance 30, +15 compliance, a social level traded for the economy; leaf `khazar_lyceums` "Хазарские лицеи" (a NAM core on Khazar, else Keyzan, Veyr or Mazar) | `south_under_the_boards` "Юг под правлениями" (spirit "Владычество на юге" 730 days, civilian factories) |
+| Council after the last enemy | 9 | `mergers_and_buyouts` "Слияния и выкупы" / `covenant_of_six` "Устав шести" (6) | law "Кодекс слияний", a social level traded for the economy, D7 buy-outs; leaf `southern_holding` "Южный холдинг"; opens "Одно правление", closes "Вечный совет шести" | law "Устав шести" (the two last companies' resting trust +10); leaf `founders_fund` "Фонд основателей" (every grudge cleared, D8) | `charter_of_the_directory` "Устав Директории" (spirit 730 days, a campaign place) |
+| The ninety-nine | 5 | `share_for_the_ninety_nine` "Доля девяноста девяти" / `order_of_the_one` "Порядок одного" (1) | law "Реестр жалованья", rent x0.9, D9 rations; leaf `people_shops` "Народные лавки"; opens "Акции девяноста девяти" | law "Кабальный найм", a social level traded for the state, military factories; leaf `factory_towns` "Посёлки при заводах" (D10) | `cities_of_the_continent` "Города континента" (spirit "Кварталы континента" 730 days) |
+| Army | 5 | `demobilisation` "Демобилизация" / `continental_garrison` "Гарнизон континента" (1) | law "Резервный реестр", civilian factories; leaf `veteran_artels` "Ветеранские артели" (D11) | law "Гарнизонная служба", two company regiments, spirit 365 days; leaf `company_garrisons` "Полки правлений на юге" (a regiment for each of the three largest lot holders, D12) | `army_of_dominion` "Армия владычества" (spirit 730 days, two escorts) |
+| A hegemon's deals | 4 | `steel_and_oil_cartel` "Картель стали и нефти" / `open_sea_lanes` "Открытые морские линии" (7) | spirit "Цены картеля", D14 export | spirit "Открытые линии", dockyards | `bank_of_the_south` "Хазарский банк" (spirit 730 days, loans repay 125) |
+| The last empire | 4 | `against_the_last_empire` "Против последней империи" / `arms_on_credit` "Оружие в долг" (7) | `RUS_crisis_enter_second_wave` (open only through `NAM_hgm_khan_war_open`, the effect's whole gate; bypassed on `NAM_hgm_khan_war_closed`), spirit 180 days | D15 arms on credit, military factories | `hegemons_price` "Цена гегемона" (spirit 730 days, event 276) |
+
+Focuses before the pairs: `southern_offices` "Конторы на юге" (`available`
+on the signed protocol), `furnace_houses` "Печные дома", `cold_fire_watch`
+"Дозор холодного огня" (two militia brigades), `southern_cadastre` "Кадастр
+юга" (event 280); `nothing_left_to_divide` "Нечего больше делить" (D6),
+`chairs_seal` "Печать председателя" (a chair vote, spirit 365 days),
+`heirs_of_the_founders` "Наследники основателей" (event 278: heir votes for
+good), `count_of_six` "Счёт шести" (event 279); `hegemons_ledger` "Гроссбух
+гегемона" (Shahrabad's bonds 12 a month for 365 days, D13), the merge of the
+ninety-nine lane; `envoys_beyond_the_desert` "Послы за пустыней" (D16), the
+merge of the army lane. `charter_of_dominion` and `charter_of_the_directory`
+each add a Directory campaign place (clamp 6) and compliance on conquered
+land. Pair-only leaves carry `allow_branch` on the other side, the Shahrabad
+leaves on the form. Every focus has `cancel_if_invalid = no` and
+`continue_if_invalid = no`.
+
+"Последнее собрание" needs either centre row-6 focus and any two of the six
+closers (`south_under_the_boards`, `charter_of_the_directory`,
+`cities_of_the_continent`, `army_of_dominion`, `bank_of_the_south`,
+`hegemons_price`); it brings the annual meeting forward to 7 days when no
+meeting is open. Every completion read elsewhere is read after its reward:
+rewards queue the recount; no flag mirrors a completion.
+
+### I.10 The four finals
+
+| Final | Condition (`available`, with `NAM_hgm_no_final_taken`) | Law | Spirit | Result |
+| --- | --- | --- | --- | --- |
+| "Лига округов" (x 16) | `NAM_hgm_league_ready`: union rules, `southern_extraction`, `NAM_hgm_district_count` above 4 (operating districts, written monthly) | "Устав лиги" (trade, succeeds "Устав промысла") | "Лига правлений" | economic trade; every operating district keeps its owner for good and moves to `autonomy_NAM_oil_charter` (freedom 0.40); district dividends x2; party "Лига правлений"; trait `NAM_trait_arbiter_of_the_league`; district owners +10, the rest -5; event 268 |
+| "Акции девяноста девяти" (x 20) | `NAM_hgm_people_ready`: `share_for_the_ninety_nine`, the law `NAM_welfare_society_99_1` held, stability above 59%, votes for above votes against | "Народный реестр" (welfare, succeeds "99 на 1") | "Купон на каждый номер" | `NAM_hgm_trade_economic_for_society` (the economy one level down, the society one up or a programme run at its cap), stability +10%, war support +5%; four votes on the council's side; party renamed; trait `NAM_trait_trustee_of_the_register`; all six -8; event 269 |
+| "Вечный совет шести" (x 24) | `NAM_hgm_six_ready`: "Слияния и выкупы" not taken, no company boycotting, every company with a holding (`NAM_board_districts_<k>`) | "Вечный устав" (information, succeeds "Устав шести") | "Шесть имён" | 100 PP, 50 command power; every district owner fixed; re-tender, buy-out and auction closed; district dividends -25%; a boycott needs 60 days of distrust; immunity after a vote 360 days; party renamed; trait `NAM_trait_chair_of_the_perpetual_council`; all six +4; event 270 |
+| "Одно правление" (x 28) | `NAM_hgm_one_board_ready`: "Слияния и выкупы", the first company's ballot at least one and a half times the second's or two buy-outs, its trust above 59, 300 capital | "Единоличный устав" (industrial policy, succeeds "Кодекс слияний") | "Одно правление" | -300 capital (held by `continue_if_invalid = no`); army trade; `NAM_hgm_holding` = the first company; party named after it; `NAM_trait_owner_of_the_directory` only while the holding chairs; military factories (two on 699, else 700 or 688; one on 700, else 688 or 67); while the holding's trust is above 59 (`NAM_hgm_holding_commands`) the five vote for the council and the holding casts ten more votes; the five -6; event 271 |
+
+No route is left without a final: "Слияния и выкупы" always reaches "Одно
+правление" through two buy-outs; "Устав шести" or neither side keeps "Вечный
+совет шести" open; the share and the union with extraction add theirs. The
+chair keeps changing only by the annual meeting or a no-confidence vote;
+`NAM_hgm_sync_chair_traits` (from the finals and `NAM_board_install_chairman`)
+seats the final's trait on each new chair. The game goes on after a final
+(W4); its closing event ends the route's story.
+
+### I.11 Laws
+
+The fourteen laws follow the council-law template (`cost = 0`,
+`removal_cost = -1`, scripted-only `available` behind
+`NAM_hgm_law_<x>_source_tt`, `allowed_to_remove` false behind
+`NAM_board_law_locked_tt`, economy refresh in `on_add` / `on_remove`).
+`NAM_hgm_enact_<law>` swaps the named predecessor first, then every other law
+the slot can hold (council, war, mainland, dominion and the republic's
+`NAM_pw_law_*`), `add_ideas` only for an empty slot. `NAM_board_repeal_laws`
+repeals them at an annexation.
+
+| Slot | Law | By |
+| --- | --- | --- |
+| taxation | "Печной сбор" `NAM_hgm_law_furnace_levy` / "Подушная опись" `NAM_hgm_law_inventory_tax` (succeed the mainland tithes or register) | the Shahrabad pair |
+| trade | "Устав промысла" `NAM_hgm_law_extraction_charter` (succeeds the continental exchange); "Устав лиги" `NAM_hgm_law_league_charter` | `southern_extraction`; "Лига округов" |
+| cultural policy | "Южное подданство" `NAM_hgm_law_southern_subjects` | `southern_province` |
+| industrial policy | "Кодекс слияний" `NAM_hgm_law_merger_code` (succeeds the war charter); "Единоличный устав" `NAM_hgm_law_sole_charter` | `mergers_and_buyouts`; "Одно правление" |
+| information | "Устав шести" `NAM_hgm_law_covenant_of_six` (succeeds the southern mandate); "Вечный устав" `NAM_hgm_law_perpetual_covenant` | `covenant_of_six`; "Вечный совет шести" |
+| labour policy | "Реестр жалованья" `NAM_hgm_law_wage_register` / "Кабальный найм" `NAM_hgm_law_indenture` | the ninety-nine pair |
+| welfare | "Народный реестр" `NAM_hgm_law_people_register` | "Акции девяноста девяти" |
+| mobilisation | "Гарнизонная служба" `NAM_hgm_law_garrison_service` / "Резервный реестр" `NAM_hgm_law_reserve_register` (succeed the mainland levies) | the army pair |
+
+Development trades: `NAM_board_trade_war_for_economic` (furnace trust,
+province, mergers, league), `NAM_board_trade_war_for_state` (inventory,
+order of the one), `NAM_board_trade_war_for_army` (extraction, one board),
+each lowering a social track; "Акции девяноста девяти" trades the economy for
+the society instead.
+
+### I.12 Spirits, traits, events
+
+Timed spirits: "Протокол раздела юга" 365 days (protocol), "Владычество на
+юге" 730, "Печать председателя" 365, "Устав Директории" 730, "Кварталы
+континента" 730, "Гарнизон континента" 365, "Армия владычества" 730, "Цены
+картеля" 365, "Открытые линии" 365, "Хазарский банк" 730, "Поход на последнюю
+империю" 180, "Цена гегемона" 730. The four final spirits are permanent.
+Traits: `NAM_trait_arbiter_of_the_league`, `NAM_trait_trustee_of_the_register`,
+`NAM_trait_chair_of_the_perpetual_council`, `NAM_trait_owner_of_the_directory`
+(`common/country_leader/ADISCORD_traits_NAM.txt`). Dynamic modifiers
+`NAM_ptn_free_port`, `NAM_hgm_southern_watch`; opinion modifiers
+`NAM_hgm_mazar_share`, `NAM_hgm_loan_goodwill`, `NAM_hgm_credit_goodwill`,
+`NAM_hgm_supply_goodwill`, `NAM_hgm_price_refused`.
+
+Events (section "Council of boards: the South after the war" of
+`events/ADISCORD_nam_resource_war_events.txt`). Story events follow C.5 with
+three answers, the first the timeout answer:
+
+| Event | Source | Title |
+| --- | --- | --- |
+| 230-232 | root, `furnace_trust`, `khazar_inventory` | "Две описи", "Ключи от печей", "Гербы с ворот" |
+| 233-243 | lots 1-11 (tender, night or re-tender) | "Лот: <name>" (I.5) |
+| 244 | walk-out | "Пустое кресло" |
+| 245 | protocol | "Протокол на рассвете" |
+| 246 | hidden dispatcher of the night | - |
+| 247 | deadline | "Протокол без ночи" (one answer) |
+| 248-265 | `furnace_houses`, `southern_extraction`, `southern_province`, `south_under_the_boards`, `nothing_left_to_divide`, `covenant_of_six`, `mergers_and_buyouts`, `charter_of_the_directory`, `share_for_the_ninety_nine`, `order_of_the_one`, `cities_of_the_continent`, `demobilisation`, `continental_garrison`, `army_of_dominion`, `steel_and_oil_cartel`, `open_sea_lanes`, `arms_on_credit`, `against_the_last_empire` | "Девять домов", "Первая квота", "Губернаторы юга", "Отчёт из Хазара", "Облигации войны", "Подписи под уставом", "Первый холдинг", "Устав в типографии", "Купон на номер", "Кабальный договор", "Новые кварталы", "Последний парад", "Казармы в Хазаре", "Флаг на верфи", "Цена за тонну", "Портовые сборы", "Первый покупатель", "Поход на последнюю империю" |
+| 266-271 | `charter_of_dominion`, `last_meeting`, the four finals | "Суд хартии", "Повестка из одного пункта", "Лига правлений", "Купон на каждый номер", "Шесть имён", "Одно правление" |
+| 272-276 | `steel_quotas`, `khazar_lyceums`, `factory_towns`, `company_garrisons`, `hegemons_price` | "Забастовка в Девятипечье", "Первый выпуск", "Беглые номера", "Чужой полк", "Письмо в одну строку" |
+| 277 | to the debtor of 276 | "Письмо из Директории": accept (tribute 10 a month for a year, 15 for Loren's concession) or refuse (its arms credit forfeited, opinion -50); with no debtor 150 capital |
+| 278-280 | `heirs_of_the_founders`, `count_of_six`, `southern_cadastre` | "Места наследников", "Недоимки", "Межевые камни" |
+| 281-287 | the people of lots 5-11, 60-120 days after the lot is settled | title by the lot's form; answers "Твёрдая рука", "Уступить через владельца", "Купить старшин" |
+
+Superevent request 79 "Юг на шесть долей" (event `ADISCORD_superevent.77`,
+window `superevent_south_partition` with its sound, sprite
+`GFX_superevent_south_partition` on
+`gfx/interface/superevents/NAM/superevent_south_boards.png`) at the protocol.
+No superevent for the finals (W5).
+
+### I.13 Decisions
+
+Every paid decision follows the custom-cost contract, keeps its receipt
+where it belongs (a NAM variable or a state flag), refunds only through it
+and clears it in the same block; political power is never refunded, except
+the native price of a tender closed by the deadline.
+
+| # | Decision | Category | Opened by | Price | Run | Result |
+| --- | --- | --- | --- | --- | --- | --- |
+| T1-T11 | `NAM_ptn_tender_1`..`_11` "Торги: <лот>" | `NAM_hgm_dominion` | the root (lots 1-4 after the form) | 25 PP | 7 days | the lot's event in tender mode |
+| D1 | `NAM_ptn_retender` "Повторные торги" | `NAM_hgm_dominion` | `southern_exchange` | 40 PP | 14 days, re-enable 60 | I.5 |
+| D2 | `NAM_hgm_furnace_contracts` "Подряды печных домов" | `NAM_hgm_dominion` | `furnace_dividends` | 40 capital | 60 days, re-enable 90 | Shahrabad's heat -10, Ferrant +2 |
+| D5 | `NAM_hgm_extraction_quota` "Квота добычи" | `NAM_hgm_dominion` | `southern_extraction` | 25 PP | 30 days | on a South state: capital +80, 5000 rifles, resistance +10, worked for 180 days |
+| D6 | `NAM_ptn_compensate` "Отступные" | `NAM_hgm_dominion` | `nothing_left_to_divide` | 60 capital | instant, re-enable 30 | the selected company with a grudge or trust below 35: trust +10, one grudge off |
+| D7 | `NAM_hgm_buyout` "Выкуп доли" | `NAM_hgm_dominion` | `mergers_and_buyouts` | 50 PP | 30 days, at most three | the seller's lowest awarded lot (a district lot with its district) or else its first district passes to the first company, owner fixed; capital +80, buyer +6, seller -15 |
+| D8 | `NAM_hgm_founders_dividend` "Дивиденд основателей" | `NAM_hgm_dominion` | `founders_fund` | 100 capital | instant, re-enable 180 | all six +3 |
+| D9 | `NAM_hgm_rations` "Пайки Директории" | `NAM_hgm_dominion` | `share_for_the_ninety_nine` | 40 capital | 60 days, re-enable 120 | stability +2%; society programme on the first two runs |
+| D10 | `NAM_hgm_company_towns` "Заводской посёлок" | `NAM_hgm_dominion` | `factory_towns` | 60 capital, 4000 men | 60 days | on a state: a shared slot and a military factory |
+| D11 | `NAM_hgm_veteran_artel` "Артель ветеранов" | `NAM_hgm_dominion` | `veteran_artels` | 30 capital, 3000 men | 45 days | on a state: compliance +8, infrastructure |
+| D12 | `NAM_hgm_lot_regiment` "Полк лота" | `NAM_mdr_army` | `company_garrisons` | 40 capital, 4900 men, 4410 rifles | 45 days | a Company Guard Regiment at the company's lots, else the harbour |
+| D13 | `NAM_hgm_foreign_loan` "Заём за морем" | `NAM_mdr_south_office` | `hegemons_ledger` | 80 capital | instant | 100 back after 365 days (125 after "Хазарский банк") while the debtor exists and is at peace with NAM |
+| D14 | `NAM_hgm_export_contract` "Экспорт по цене картеля" | `NAM_mdr_south_office` | `steel_and_oil_cartel` | 15000 fuel | 60 days, re-enable 90 | capital +70, Loren and Ferrant +2 |
+| D15 | `NAM_hgm_arms_credit_sale` "Продать оружие в долг" | `NAM_mdr_south_office` | `arms_on_credit` | 6000 rifles, 48 guns | instant | 120 capital back after 180 days while the buyer exists |
+| D16 | `NAM_hgm_coalition_supply` "Поставки коалиции" | `NAM_mdr_south_office` | `envoys_beyond_the_desert` | 10000 fuel or 5000 rifles | 30 days, re-enable 60 | to a coalition member at war with the Khan: capital +90, opinion +20, Loren or Arktur +2 |
+
+The category `NAM_hgm_dominion` "Раздел и владычество" is visible from
+`NAM_hgm_started` until `NAM_board_ended`. Loans and arms credits come due in
+`NAM_hgm_loans_monthly`, one of each a month, oldest first.
+
+### I.14 Shared script
+
+Effects (NAM scope unless named; temps are reset by the effect):
+
+| Effect | Inputs |
+| --- | --- |
+| `NAM_ptn_award` | temps `NAM_ptn_lot_input`, `NAM_ptn_company_input` (1-6, 0 kept), `NAM_ptn_mode` (1 tender, 2 night, 3 re-tender, 4 deadline; 0 the mode stored for the lot) |
+| `NAM_ptn_apply_lot` | the same temps, from the award only |
+| `NAM_ptn_compute_bid` | `NAM_ptn_lot_input`, `NAM_ptn_bid_company` (0 the base bid), `NAM_ptn_bid_mode`; output temp `NAM_ptn_bid_value` |
+| `NAM_ptn_prepare_bids` | `NAM_ptn_lot_input`; writes the shown values `NAM_ptn_bid_a` / `_b`, trust, veto markers and forms for the scripted localisation |
+| `NAM_ptn_fire_lot_event` | `NAM_ptn_lot_input`; the lot's event one hour later |
+| `NAM_ptn_start_tender`, `_finish_tender`, `_cancel_tender` | `NAM_ptn_lot_input` |
+| `NAM_ptn_start_retender`, `_finish_retender` | none; the lot is fixed when the decision is taken (`NAM_ptn_retender_open`) |
+| `NAM_ptn_lot_state_cored` | STATE scope; takes the state out of its lot and closes an empty lot |
+| `NAM_ptn_sequester` | COUNTRY loser, ROOT NAM |
+| `NAM_ptn_open_table`, `NAM_ptn_run_night`, `NAM_ptn_night_next`, `NAM_ptn_sign_protocol`, `NAM_ptn_deadline_check`, `NAM_ptn_deadline_settle`, `NAM_ptn_monthly`, `NAM_ptn_count_holdings` | none |
+| `NAM_ptn_walkout_leave` / `_pay` / `_charter` | `NAM_ptn_walkout_company` |
+| `NAM_ptn_cadastre_pick`, `NAM_ptn_cadastre_award` | award: temp `NAM_ptn_cadastre_winner` (1 the first, 2 the second) |
+| `NAM_ptn_compensate_deliver`, `NAM_hgm_buyout_deliver` | `NAM_board_company_input` |
+| `NAM_hgm_apply_league`, `_people`, `_six`, `_one_board`, `NAM_hgm_sync_chair_traits` | none |
+| `NAM_hgm_enact_<law>` (14), `NAM_hgm_trade_economic_for_society` | none |
+| `NAM_hgm_raise_lot_regiments`, `NAM_hgm_pick_debtor`, `NAM_hgm_send_price`, `NAM_hgm_forfeit_credit` | none |
+
+Building, formation and ship rows reuse `NAM_mdr_build`,
+`NAM_mdr_place_division` and `NAM_mdr_launch_ships` (H.8). Triggers:
+`NAM_hgm_tree_live`, `NAM_ptn_shl_on_table`, `NAM_ptn_table_cleared`,
+`NAM_ptn_lot_open`, `NAM_ptn_union_rules`, `NAM_hgm_mazar_ally`,
+`NAM_ptn_furnace_administration`, `NAM_ptn_friendly_country`,
+`NAM_ptn_friendly_core_state`, `NAM_ptn_country_lot_owner`, `NAM_ptn_land_lot`,
+`NAM_ptn_district_lot_lost`, `NAM_ptn_lot_furnace_live`,
+`NAM_ptn_lot_counts_as_holding`, `NAM_ptn_retender_candidate`,
+`NAM_ptn_retender_available`, `NAM_hgm_south_land`,
+`NAM_hgm_southern_province_land`, `NAM_hgm_holding_commands`,
+`NAM_hgm_last_meeting_ready`, `NAM_hgm_no_final_taken`, `NAM_hgm_league_ready`,
+`NAM_hgm_people_ready`, `NAM_hgm_six_ready`, `NAM_hgm_one_board_ready`,
+`NAM_hgm_khan_war_open`, `NAM_hgm_khan_war_closed`, `NAM_hgm_debtor_eligible`.
+No loop of the partition scans the world: lot states are listed once in
+`NAM_ptn_states`, losers in `NAM_ptn_sequestered_tags`.
+
+### I.15 Lifecycle
+
+`NAM_hgm_begin` is the single entry and `NAM_hgm_close` the single exit,
+called by `NAM_board_end_operations` before `NAM_mdr_close`. `NAM_hgm_close`
+refunds the receipts of D2, D9, D12, D14, D16 and the state works of D10 and
+D11, clears the buy-out, the lot marks and modifiers of the South states, the
+sequestration flags, the timed spirits of the tree behind `has_idea`, the lot,
+company, loan and credit arrays and the deadline and tribute variables, and
+marks the economy dirty. It keeps the laws, the final spirits, traits and
+party names and the owners of districts. Kept for the campaign:
+`NAM_hgm_started`, `NAM_ptn_table_open`, `NAM_ptn_protocol_signed`,
+`NAM_ptn_shl_form`, `NAM_hgm_owner_fixed` on districts, `NAM_hgm_holding`,
+`NAM_hgm_heir_votes`.
+
+### I.16 AI
+
+`NAM_southern_dominion_plan_union` (enable `NAM_ptn_union_rules = yes`):
+the furnace trust, extraction, covenant, order of the one, garrison, then
+"Лига округов" or else "Вечный совет шести".
+`NAM_southern_dominion_plan_shares` (enable `NAM_mdr_mainland_shares`): the
+inventory, province, covenant, share for the ninety-nine, demobilisation, then
+"Вечный совет шести" or else "Акции девяноста девяти". `furnace_trust` has
+AI factor 0 off the union rules; the finals have AI factor 100.
+
+### I.17 Tests
+
+`NamSouthernDominionTreeTests` in `tools/tests/test_adiscord_nam_focus.py`:
+selection and owner, shared history, layout and mirror, rewards, branches
+that are not clones, the tooltip layout standard, the partition from tenders
+through the night to the protocol, each lot settled once, the deadline by
+course, bids and the veto, recount rows, rents and owner fixing, the finals,
+laws, receipts refunded once, the world lane, the lifecycle, the events, and
+the mainland leftovers. `tools/tests/test_adiscord_south_final_war.py`:
+`test_north_victory_partitions_for_the_council`. The superevent window is in
+`tools/validators/validate_adiscord_superevents.py` and its test.
+
+### I.18 What stays outside
+
+1. **The Directory's own course inside the War for the South**
+   (`NAM_south_war_focus`): the Directory still plays the no-course branch
+   `NAM_sw_n_*`, which pays the state treasury, not the council's capital, and
+   knows nothing of companies. A Directory lane there (war shares of future
+   lots that make a company a fixed bidder, company war contracts in
+   `NAM_corp_capital`) would need one more row in `NAM_ptn_prepare_bids`.
+2. **Shahrabad's side.** `SHL_seal_overlord_hardline` and
+   `SHL_seal_overlord_conciliatory` read only `NAM_pw_southern_military_rule`
+   and `NAM_pw_southern_local_offices`; the OR rows for
+   `NAM_hgm_southern_extraction` (hardline) and `NAM_hgm_southern_province`
+   (conciliatory) and a Directory weight for the buy-back petition
+   `ADISCORD_SHL.202` belong to the SHL files' owner. Until then the extraction
+   and province tooltips say nothing about the Cold Fire.
+3. **Names and flags.** Keyzan, Veyr and Fenn as company districts keep their
+   own names; Mazar takes `MZR_NAM_corp_1`-`_6`. New cosmetic names for the
+   finals and districts are an art package (W6).
+4. **The radical and humanist exiles' South victory** still loads the
+   republic's heritage tree.
+5. **Old republic data** (`NAM_prewar_balance`, `NAM_pw_operable`) still
+   decides the autonomy of a later submission to the Directory; the audit
+   belongs to the republic's rework.
+
+### I.19 Art still needed
+
+- 49 focus icons `GFX_focus_NAM_hgm_<id>` in the board style (the tree binds
+  existing sprites until they exist).
+- A partition superevent picture (six heads at the Khazar exchange at dawn):
+  the current one shows company men testing oil at a desert refinery, while
+  this South is a steel and furnace prize.
+- Four final superevent pictures for requests 80-83 (W5).
+- Cosmetic names and flags of the finals and of South districts (W6).
+
+The author saves the originals himself.
+
+### I.20 What only a run of the game can prove
+
+All by the user after a full restart: the load of the dominion tree one step
+before the campaign close and the restore that then only clears value 7;
+`set_autonomy` to the namestnik office on a freshly freed loser and the
+control restored to it; the sort of the administrations' land and the
+annexation of an empty administration; the tender, night and re-tender chain
+with its dispatcher (one lot an hour, the wait while tenders run, a stalled
+night resumed after 30 days) and its timeout answers; the walk-out boycott at
+the next recount; the deadline on the first monthly tick after day 179;
+`NAM_wor_federal_district_join` on a sequestered subject and `NAM_wor_radical_annex`
+on a lot country; Fenn's merger into Eflor; `SHL_seal_open_chapter` from the
+furnace trust and the furnace dividends while buy-backs run; the free port
+modifier; the recount rows and rents against the pyramid; `set_party_name`
+of the finals and the traits through later chairs; the Khan's second-wave
+entry from the focus; superevent 79 with its window and sound; the war,
+partition and final dates and the AI's finals in recent text saves.

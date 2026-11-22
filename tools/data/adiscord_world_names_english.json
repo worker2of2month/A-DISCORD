@@ -1721,10 +1721,181 @@
           "russian": "Аркен",
           "english": "Arken"
         },
+        "VICTORY_POINTS_4018": {
+          "russian": "Кронау",
+          "english": "Kronau"
+        },
         "VICTORY_POINTS_6748": {
           "russian": "Валтор",
           "english": "Valtor"
+        },
+        "VICTORY_POINTS_10815": {
+          "russian": "Зольден",
+          "english": "Solden"
+        },
+        "VICTORY_POINTS_212": {
+          "russian": "Келвор",
+          "english": "Kelvor"
+        },
+        "VICTORY_POINTS_8865": {
+          "russian": "Салвен",
+          "english": "Salven"
+        },
+        "VICTORY_POINTS_3859": {
+          "russian": "Брейден",
+          "english": "Breiden"
+        },
+        "VICTORY_POINTS_10541": {
+          "russian": "Гельмар",
+          "english": "Gelmar"
+        },
+        "VICTORY_POINTS_2090": {
+          "russian": "Ольдерн",
+          "english": "Oldern"
+        },
+        "VICTORY_POINTS_7404": {
+          "russian": "Рендар",
+          "english": "Rendar"
+        },
+        "VICTORY_POINTS_6835": {
+          "russian": "Таллер",
+          "english": "Taller"
+        },
+        "VICTORY_POINTS_10504": {
+          "russian": "Ульвар",
+          "english": "Ulvar"
+        },
+        "VICTORY_POINTS_418": {
+          "russian": "Эрдин",
+          "english": "Erdin"
+        },
+        "VICTORY_POINTS_8729": {
+          "russian": "Вирен",
+          "english": "Viren"
+        },
+        "VICTORY_POINTS_10095": {
+          "russian": "Фейвар",
+          "english": "Feyvar"
+        },
+        "VICTORY_POINTS_9322": {
+          "russian": "Лирен",
+          "english": "Liren"
+        },
+        "VICTORY_POINTS_11365": {
+          "russian": "Терлан",
+          "english": "Terlan"
+        },
+        "VICTORY_POINTS_8159": {
+          "russian": "Хальден",
+          "english": "Halden"
+        },
+        "VICTORY_POINTS_1674": {
+          "russian": "Верхний Келвор",
+          "english": "Upper Kelvor"
+        },
+        "VICTORY_POINTS_1024": {
+          "russian": "Гельмарский рудник",
+          "english": "Gelmar Mine"
+        },
+        "VICTORY_POINTS_9741": {
+          "russian": "Лиренский брод",
+          "english": "Liren Ford"
+        },
+        "VICTORY_POINTS_5391": {
+          "russian": "Хорн",
+          "english": "Horn"
+        },
+        "VICTORY_POINTS_6873": {
+          "russian": "Таннвальд",
+          "english": "Tannwald"
+        },
+        "VICTORY_POINTS_3190": {
+          "russian": "Брайтгоф",
+          "english": "Breithof"
+        },
+        "VICTORY_POINTS_16302": {
+          "russian": "Тихая Гать",
+          "english": "Tikhaya Gat"
+        },
+        "VICTORY_POINTS_5474": {
+          "russian": "Ормен",
+          "english": "Ormen"
+        },
+        "VICTORY_POINTS_4432": {
+          "russian": "Старый Аркен",
+          "english": "Old Arken"
+        },
+        "VICTORY_POINTS_8148": {
+          "russian": "Корвель",
+          "english": "Korvel"
+        },
+        "VICTORY_POINTS_578": {
+          "russian": "Стейнау",
+          "english": "Steinau"
+        },
+        "VICTORY_POINTS_1993": {
+          "russian": "Ульварский брод",
+          "english": "Ulvar Ford"
+        },
+        "VICTORY_POINTS_5093": {
+          "russian": "Хальденский перевал",
+          "english": "Halden Pass"
+        },
+        "VICTORY_POINTS_7045": {
+          "russian": "Гердау",
+          "english": "Gerdau"
+        },
+        "VICTORY_POINTS_1847": {
+          "russian": "Кронауские шахты",
+          "english": "Kronau Pits"
+        },
+        "VICTORY_POINTS_11261": {
+          "russian": "Фаллен",
+          "english": "Fallen"
+        },
+        "VICTORY_POINTS_2436": {
+          "russian": "Коронный тракт",
+          "english": "Crown Road"
+        },
+        "VICTORY_POINTS_11346": {
+          "russian": "Дравенская сторожка",
+          "english": "Draven Lodge"
+        },
+        "VICTORY_POINTS_10033": {
+          "russian": "Ланнау",
+          "english": "Lannau"
+        },
+        "VICTORY_POINTS_5506": {
+          "russian": "Фейварская мельница",
+          "english": "Feyvar Mill"
+        },
+        "VICTORY_POINTS_6864": {
+          "russian": "Зольденские промыслы",
+          "english": "Solden Oilfields"
         }
+      },
+      "village_names": {
+        "Верхний Келвор": "Upper Kelvor",
+        "Гельмарский рудник": "Gelmar Mine",
+        "Лиренский брод": "Liren Ford",
+        "Хорн": "Horn",
+        "Таннвальд": "Tannwald",
+        "Брайтгоф": "Breithof",
+        "Тихая Гать": "Tikhaya Gat",
+        "Ормен": "Ormen",
+        "Старый Аркен": "Old Arken",
+        "Корвель": "Korvel",
+        "Стейнау": "Steinau",
+        "Ульварский брод": "Ulvar Ford",
+        "Хальденский перевал": "Halden Pass",
+        "Гердау": "Gerdau",
+        "Кронауские шахты": "Kronau Pits",
+        "Фаллен": "Fallen",
+        "Коронный тракт": "Crown Road",
+        "Дравенская сторожка": "Draven Lodge",
+        "Ланнау": "Lannau",
+        "Фейварская мельница": "Feyvar Mill",
+        "Зольденские промыслы": "Solden Oilfields"
       }
     }
   ],

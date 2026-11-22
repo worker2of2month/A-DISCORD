@@ -10,7 +10,8 @@ state = {
 		owner = MON
 		add_core_of = MON
 		add_core_of = VLD
-		victory_points = { 6028 5 }
+		victory_points = { 6028 8 }
+		victory_points = { 8148 1 }
 		buildings = {
 			infrastructure = 4
 			industrial_complex = 3
@@ -20,7 +21,7 @@ state = {
 	}
 	provinces = {
 		268 794 1472 1909 2210 2429 2763 3102 3522 3827 4633 5475 6028 6168 6188 8148
-		8509 8798 9410 9577 9789 9940 10253 10282 10933 11298 11831 12563 12975 16308 16318
+		8509 8798 9410 9577 9789 9940 10253 10282 10933 11298 11831 12563 12975 16308 16318 19288
 	}
 	resources = {
 		steel = 9

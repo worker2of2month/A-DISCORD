@@ -146,6 +146,7 @@ ideas = {
 						limit = {
 							tag = NAM
 							NOT = { has_country_flag = NAM_depot_concessions_settled }
+							NOT = { has_country_flag = NAM_depot_board_seeded }
 						}
 						add_ideas = NAM_private_tank_farms
 					}

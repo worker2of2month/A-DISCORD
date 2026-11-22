@@ -255,8 +255,8 @@ def localisation(geometry, language):
                 "\\n\\nКаждые 28 дней базовый прирост составляет 3 пункта. Враг добавляет ещё 2 за каждый наш ключевой район под его контролем."
                 " Успешный приказ о взятии района снимает 8 пунктов. При 100 пунктах начинается кризис тыла."
             ),
-            "gap_heading": "До порога приглашения: §OСевер (Шахрабад)§! / §CЮг§!",
-            "gap_help": "Метка сдвигается влево при росте влияния §Oсеверного лагеря Шахрабада§! и вправо при росте влияния §Cюжного лагеря§!. Средняя риска означает равновесие, две крайние отмечают порог приглашения: §Y60§! пунктов перевеса. Числа у флага показывают, сколько влияния осталось набрать каждому лагерю. При нуле по-прежнему нужны соответствующий фокус и согласие страны.",
+            "gap_heading": "Перевес: §OШахрабад§! / §CСветлогорье§!   Сила влияния: §O[?SHL.ADISCORD_south_influence_power|0]§! / §C[?NAM.ADISCORD_south_influence_power|0]§!",
+            "gap_help": "Метка сдвигается влево, когда перевес растёт в пользу §OШахрабада§!, и вправо, когда он растёт в пользу §CСветлогорья§!. Средняя риска означает равновесие, две крайние отмечают порог приглашения в союз: перевес §Y60§!. Числа у флага показывают, сколько осталось до этого порога каждой стороне. Каждые 28 дней перевес возвращается на §Y3§! к собственному крену страны, а постоянные связи сдвигают его дальше.\\nСила влияния: Светлогорье §Y[?NAM.ADISCORD_south_influence_power|0]§! / Шахрабад §Y[?SHL.ADISCORD_south_influence_power|0]§!. От неё зависит, насколько сдвигают перевес делегации и советники.",
             "gap_absent": "Нет страны",
             "gap_leader": "Лидер",
             "gap_subject": "Зависима",
@@ -292,8 +292,8 @@ def localisation(geometry, language):
                 "\\n\\nThe base increase every 28 days is 3 points. Each of our key districts held by the enemy adds 2 more."
                 " Completing an order to take a district relieves 8 points. At 100 points a home front crisis begins."
             ),
-            "gap_heading": "Points to invite: §ONorth (Shahrabad)§! / §CSouth§!",
-            "gap_help": "The marker moves left as §OShahrabad's northern camp§! gains influence and right as the §Csouthern camp§! gains influence. The middle tick marks a tie. The two outer ticks mark the §Y60§!-point lead required for an invitation. The numbers beside each flag show how many more points each camp needs. At zero, the camp still needs the relevant focus and the country's consent.",
+            "gap_heading": "Balance: §OShahrabad§! / §CSvetlogorye§!   Influence power: §O[?SHL.ADISCORD_south_influence_power|0]§! / §C[?NAM.ADISCORD_south_influence_power|0]§!",
+            "gap_help": "The marker moves left as the balance grows in §OShahrabad's§! favour and right as it grows in §CSvetlogorye's§! favour. The middle tick marks an even balance, the two outer ticks the alliance invitation threshold: a balance of §Y60§!. The numbers beside each flag show how far each side is from that threshold. Every 28 days the balance returns §Y3§! towards the country's own lean, and standing ties move it further.\\nInfluence power: Svetlogorye §Y[?NAM.ADISCORD_south_influence_power|0]§! / Shahrabad §Y[?SHL.ADISCORD_south_influence_power|0]§!. It sets how far delegations and advisers move the balance.",
             "gap_absent": "Absent",
             "gap_leader": "Leader",
             "gap_subject": "Subject",

@@ -18,6 +18,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+import numpy as np
 from PIL import Image
 from tools.lib.paths import repository_root
 
@@ -28,6 +29,9 @@ PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
 DEFINITION_PATH = ROOT / "map" / "definition.csv"
 STATE_DIR = ROOT / "history" / "states"
 SEA_POSITIONED_TYPES = {"floating_harbor"}
+# Province-scoped building models, positioned per province rather than per state.
+PROVINCE_ANCHOR_TYPES = ("supply_node", "bunker", "special_project_facility_spawn")
+MON_GEOGRAPHY_PATH = Path("tools/data/adiscord_mon_geography.json")
 # Each state needs a spawn on its own side of the pixel boundary. Keep the
 # two models at each crossing within a few hundredths of a map unit.
 BORDER_DAM_ANCHORS = {
@@ -325,6 +329,7 @@ def mountain_building_heights(
         | frozenset(ISLAND_PROVINCE_TERRAIN)
     )
     province_by_color = load_province_by_color(root)
+    surface_provinces |= mon_relief_provinces(root, province_by_color)
     result = list(lines)
     changed = []
     with (
@@ -350,6 +355,168 @@ def mountain_building_heights(
     return result, changed
 
 
+def applied_mon_plan(
+    root: Path, province_by_color: dict[tuple[int, int, int], int]
+) -> dict | None:
+    """Return the planned MON geometry once its provinces exist on the map.
+
+    Before the geography apply the map still holds the uncarved provinces and
+    the old relief, so neither building heights nor anchor rows change.
+    """
+    path = root / MON_GEOGRAPHY_PATH
+    if not path.exists():
+        return None
+    geography = json.loads(path.read_text(encoding="utf-8"))
+    plan = geography.get("planned", {})
+    planned_ids = {int(entry["province"]) for entry in plan.get("provinces", ())}
+    if not planned_ids or not planned_ids <= set(province_by_color.values()):
+        return None
+    return {**plan, "states": geography["states"]}
+
+
+def mon_scope_provinces(root: Path, plan: dict) -> frozenset[int]:
+    states = set(map(int, plan["states"]))
+    return frozenset(
+        province
+        for province, state in load_state_by_province(root).items()
+        if state in states
+    ) | {int(entry["province"]) for entry in plan["provinces"]}
+
+
+def mon_relief_provinces(
+    root: Path, province_by_color: dict[tuple[int, int, int], int]
+) -> frozenset[int]:
+    plan = applied_mon_plan(root, province_by_color)
+    return frozenset() if plan is None else mon_scope_provinces(root, plan)
+
+
+def _province_anchor_pixel(
+    province: int,
+    slot_zero: tuple[str, str, str] | None,
+    province_at,
+    packed_pixels: np.ndarray,
+    colour: int,
+) -> tuple[str, str]:
+    """Slot 0 when native truncation and rounding both resolve to the province.
+
+    Otherwise the interior pixel nearest the province centroid, so the anchor
+    stays inside a carved province even without a usable unit stack.
+    """
+    if slot_zero is not None:
+        x, _height, z = map(float, slot_zero)
+        if all(
+            province_at(convert(x), convert(z)) == province for convert in (int, round)
+        ):
+            return f"{x:.2f}", f"{z:.2f}"
+    rows, columns = np.nonzero(packed_pixels == colour)
+    if not len(rows):
+        raise RuntimeError(f"province {province} has no pixels for its anchor rows")
+    same = packed_pixels[
+        np.clip(rows[:, None] + (-1, 1, 0, 0), 0, packed_pixels.shape[0] - 1),
+        np.clip(columns[:, None] + (0, 0, -1, 1), 0, packed_pixels.shape[1] - 1),
+    ] == colour
+    interior = same.all(axis=1)
+    if interior.any():
+        rows, columns = rows[interior], columns[interior]
+    distance = (rows - rows.mean()) ** 2 + (columns - columns.mean()) ** 2
+    best = int(np.lexsort((columns, rows, distance))[0])
+    z = packed_pixels.shape[0] - 1 - int(rows[best])
+    return f"{int(columns[best]):.2f}", f"{z:.2f}"
+
+
+def mon_province_rows_plan(root: Path, lines: list[str]) -> tuple[list[str], list[int]]:
+    """Give every MON province one row of each province-scoped building type.
+
+    Carving keeps the parent id on the small city, so a parent's old rows may
+    now lie in its remainder and a donor's in the city. Cities and planned
+    children take their rows at slot 0; a province left without a row receives
+    a surplus row of the same type from the scope, or a new one.
+    """
+    colors = load_province_by_color(root)
+    plan = applied_mon_plan(root, colors)
+    result = list(lines)
+    if plan is None:
+        return result, []
+    scope = mon_scope_provinces(root, plan)
+    planned_state = {int(entry["province"]): int(entry["state"]) for entry in plan["provinces"]}
+    state_by_province = {**planned_state, **load_state_by_province(root)}
+    placed = {int(city) for city in plan["cities"]} | set(planned_state)
+    slots = load_unitstack_positions(root)
+    colour_of = {province: colour for colour, province in colors.items()}
+    anchors: dict[int, tuple[str, str]] = {}
+    changed: set[int] = set()
+    with (
+        Image.open(root / "map/provinces.bmp") as source,
+        Image.open(root / "map/heightmap.bmp") as heights,
+    ):
+        provinces = source.convert("RGB")
+        rgb = np.asarray(provinces, dtype=np.int32)
+        packed_pixels = (rgb[..., 0] << 16) | (rgb[..., 1] << 8) | rgb[..., 2]
+
+        def province_at(px: int, pz: int) -> int | None:
+            return colors.get(provinces.getpixel((px, provinces.height - 1 - pz)))
+
+        def anchor(province: int) -> tuple[str, str]:
+            if province not in anchors:
+                red, green, blue = colour_of[province]
+                anchors[province] = _province_anchor_pixel(
+                    province,
+                    slots.get(province),
+                    province_at,
+                    packed_pixels,
+                    (red << 16) | (green << 8) | blue,
+                )
+            return anchors[province]
+
+        def place(index: int, province: int) -> None:
+            fields = result[index].split(";")
+            x, z = anchor(province)
+            row = provinces.height - 1 - round(float(z))
+            fields[0] = str(state_by_province[province])
+            fields[2] = x
+            fields[3] = f"{heights.getpixel((round(float(x)), row)) / 10:.2f}"
+            fields[4] = z
+            placed_line = ";".join(fields)
+            if placed_line != result[index]:
+                result[index] = placed_line
+                changed.add(index + 1)
+
+        for building_type in PROVINCE_ANCHOR_TYPES:
+            rows_by_province: dict[int, list[int]] = {}
+            for index, line in enumerate(result):
+                fields = line.split(";")
+                if fields[1] != building_type:
+                    continue
+                province = province_at(
+                    _pixel_coordinate(fields[2], provinces.width),
+                    _pixel_coordinate(fields[4], provinces.height),
+                )
+                if province in scope:
+                    rows_by_province.setdefault(province, []).append(index)
+            surplus: list[int] = []
+            missing: list[int] = []
+            for province in sorted(scope):
+                indices = rows_by_province.get(province)
+                if not indices:
+                    missing.append(province)
+                    continue
+                surplus.extend(indices[1:])
+                if province in placed:
+                    place(indices[0], province)
+            surplus.sort()
+            for province in missing:
+                if surplus:
+                    index = surplus.pop(0)
+                else:
+                    state = state_by_province[province]
+                    rotation = ((state * 37 + province * 53) % 628) / 100.0
+                    result.append(f"{state};{building_type};0;0;0;{rotation:.2f};0")
+                    index = len(result) - 1
+                place(index, province)
+                changed.add(index + 1)
+    return result, sorted(changed)
+
+
 def synchronize_buildings(
     root: Path = ROOT, *, apply: bool = False
 ) -> list[BuildingMismatch]:
@@ -364,6 +531,7 @@ def synchronize_buildings(
             fields = lines[mismatch.line - 1].split(";")
             fields[0] = str(mismatch.actual_state)
             lines[mismatch.line - 1] = ";".join(fields)
+        lines, _anchor_changes = mon_province_rows_plan(root, lines)
         lines, _height_changes = mountain_building_heights(root, lines)
         lines, _dam_changes = dam_province_plan(root, lines)
         lines = bezhaysk_castle_clearance(lines)
@@ -827,6 +995,11 @@ def validate(root: Path = ROOT) -> list[str]:
         issues.append("state 66 generic fort overlaps the Khan bunker footprint")
     if permanent_landmark_clearance(lines) != lines:
         issues.append("vanilla building visuals overlap a permanent landmark footprint")
+    _planned_rows, anchor_changes = mon_province_rows_plan(root, lines)
+    issues.extend(
+        f"map/buildings.txt:{line}: MON province anchor row is missing or off its province anchor"
+        for line in anchor_changes
+    )
     _planned_heights, height_changes = mountain_building_heights(root, lines)
     issues.extend(
         f"map/buildings.txt:{line}: building height differs from the mountain surface"

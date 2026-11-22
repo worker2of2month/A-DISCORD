@@ -9,6 +9,8 @@ state = {
 	history = {
 		owner = MON
 		add_core_of = MON
+		victory_points = { 10541 4 }
+		victory_points = { 1024 1 }
 		buildings = {
 			infrastructure = 4
 			industrial_complex = 3
@@ -17,7 +19,7 @@ state = {
 	}
 	provinces = {
 		506 969 1024 1786 2554 3766 4882 5346 6108 6976 7210 7980 7988 8226 8576 8794
-		8809 9059 9420 9710 10541 10982 12168 12242 12693
+		8809 9059 9420 9710 10541 10982 12168 12242 12693 19295
 	}
 	resources = {
 		aluminium = 4

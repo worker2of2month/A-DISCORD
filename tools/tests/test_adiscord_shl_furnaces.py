@@ -6930,15 +6930,21 @@ class CourseProgrammeTests(unittest.TestCase):
         self.m.triggers["NAM_south_story_pending"] = parse_clausewitz("always = no")
         self.m.effects.update(shared_definitions(
             "common/scripted_effects/ADISCORD_south_final_war_effects.txt",
-            ("ADISCORD_south_shift_influence_to_shl",),
+            (
+                "ADISCORD_south_shift_influence_to_shl",
+                "ADISCORD_south_push_influence_shl",
+                "ADISCORD_south_note_threshold_shl",
+            ),
         ))
+        # The contest window itself is pinned in the south final war tests.
+        self.m.triggers["ADISCORD_south_in_contest"] = parse_clausewitz("always = yes")
         self.m.focuses.add("SHL_k_councils_term")
         for _ in range(3):
             self.m.run("SHL_begin_strike_support", target="GLP")
             self.m.run("SHL_finish_strike_support", target="GLP")
         self.assertEqual(self.m.variables["GLP"]["SHL_cons_councils_support"], 75)
         self.assertIn("SHL_cons_councils_backed", self.m.flags["GLP"])
-        self.assertEqual(self.m.variables["GLP"]["ADISCORD_south_coalition_influence"], -20)
+        self.assertEqual(self.m.variables["GLP"]["ADISCORD_south_coalition_influence"], -12)
         self.assertEqual(self.c["ADISCORD_economy_treasury"], 850)
         self.assertEqual(self.m.values["political_power"], 140)
         self.m.run("SHL_begin_strike_support", target="GLP")

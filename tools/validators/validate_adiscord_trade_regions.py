@@ -91,6 +91,16 @@ def expected_province_counts(root: Path, plan: TradeRegionPlan, issues: list[str
             counts[continent] += 1
             if plan.province_continents.get(part["province"]) != continent:
                 issues.append(f"province {part['province']}: must inherit trade region {continent} from {home}")
+    montar = json.loads((root / "tools/data/adiscord_mon_geography.json").read_bytes())
+    for entry in montar["planned"]["provinces"]:
+        parent, province = entry["parent"], entry["province"]
+        continent = plan.province_continents.get(parent)
+        if continent is None:
+            issues.append(f"province {parent}: MON parent has no trade region")
+            continue
+        counts[continent] += 1
+        if plan.province_continents.get(province) != continent:
+            issues.append(f"province {province}: must inherit trade region {continent} from {parent}")
     return counts
 
 

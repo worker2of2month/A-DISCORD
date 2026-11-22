@@ -6,6 +6,7 @@ focus_tree = {
 			add = 250
 			tag = NAM
 			NAM_won_final_southern_war = yes
+			NOT = { has_country_flag = NAM_corp_takeover }
 		}
 	}
 	default = no

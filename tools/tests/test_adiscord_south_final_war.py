@@ -26,6 +26,12 @@ CHAMPIONS = ("NAM", "SHL")
 CANDIDATES = ("NAM", "SHL", "EFL", "AZH")
 # Crisis deadline by pull level: 1 March 2166, 15 days earlier per unit.
 DEADLINES = ("2166.3.1", "2166.2.14", "2166.1.30", "2166.1.15", "2165.12.31", "2165.12.16", "2165.12.1")
+# A preparation opened on OPENED without an earlier anchor gets the 540-day
+# window, so DEADLINES[level] is its deadline after `level` pulls counted
+# before the opening. Svetlogorye's victory sets 1095 days instead.
+OPENED = "2164.9.7"
+SHORT_WINDOW = 540
+VICTORY_WINDOW = 1095
 MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 FURNACE_ADMINISTRATIONS = {"SFD", "SCD", "SMD", "SOD", "SDA"}
 FURNACE_DIRECT_TERRITORY = {
@@ -338,6 +344,48 @@ def script_date(number):
 def numeric_date(date):
     year, month, day = (int(part) for part in date.split("."))
     return year * 10000 + month * 100 + day
+
+
+# Engine variable effects; division and modulo work on the integral day counts
+# of the calendar code.
+VARIABLE_OPERATIONS = {
+    "set": lambda old, value: value,
+    "add_to": lambda old, value: old + value,
+    "subtract_from": lambda old, value: old - value,
+    "multiply": lambda old, value: old * value,
+    "divide": lambda old, value: old / value,
+    "modulo": lambda old, value: old % value,
+    "clamp": None,
+}
+
+
+def field_value(entry, name):
+    """A named field of a block entry, or None for short forms such as `check_variable = { x > 1 }`."""
+    if not isinstance(entry.value, list):
+        return None
+    return next((field.value for field in entry.value if field.key == name), None)
+
+
+class ScenarioFacts(dict):
+    """Scenario facts whose variable reads also see temp and cross-scope values.
+
+    Temp variables of one effect execution are visible in every scope, as in
+    the engine; a reference such as global.X or NAM.X names its holder.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.temps = {}
+
+    def get(self, key, default=None):
+        if isinstance(key, tuple) and len(key) == 3 and key[1] in ("variable", "has_variable"):
+            name = key[2]
+            if name in self.temps:
+                return True if key[1] == "has_variable" else self.temps[name]
+            if "." in name:
+                holder, name = name.split(".", 1)
+                return super().get(("GLB" if holder == "global" else holder, key[1], name), default)
+        return super().get(key, default)
 
 
 class SouthFinalWarContractTests(unittest.TestCase):
@@ -733,7 +781,8 @@ class SouthFinalWarContractTests(unittest.TestCase):
         effects = definitions(EFFECTS)
         hostilities = flatten(effects["ADISCORD_south_begin_hostilities"])
         delayed = [e for e in hostilities if e.key == "country_event" and any(item.key == "days" for item in e.value)]
-        self.assertEqual(delayed, [])
+        # The only delayed call is the next-day contest cleanup after the side choice.
+        self.assertEqual([(scalar(e.value, "id"), scalar(e.value, "days")) for e in delayed], [("ADISCORD_south.75", "1")])
         events = EVENTS.read_text(encoding="utf-8")
         self.assertNotIn("ADISCORD_south_final_resolve_by_control", events)
         for language in ("russian", "english"):
@@ -805,7 +854,7 @@ class SouthLifecycleTests(unittest.TestCase):
         self.triggers = definitions(TRIGGERS)
         self.triggers.update(definitions(ROOT / "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt"))
         self.effects = definitions(EFFECTS)
-        self.facts = {}
+        self.facts = ScenarioFacts()
         self.arrays = {}
         self.calls = []
         self.start_scopes = []
@@ -821,7 +870,9 @@ class SouthLifecycleTests(unittest.TestCase):
             self.facts.update({(tag, "exists", "yes"): True, (tag, "is_subject", "no"): True,
                                (tag, "has_capitulated", "no"): True, (tag, "has_war", "no"): True,
                                (tag, "is_in_faction", "no"): True})
-            self.facts[(tag, "numeric", "date")] = 21650101
+        self.set_date(OPENED)
+        # on_startup stores the day number of 1 January 2160.
+        self.variable("ADISCORD_south_day0", day_number("2160.1.1"))
         for tag, names in {
             "SHL": ("SHL_conclave_army", "SHL_metal_market", "SHL_conclave_rules"),
             "NAM": ("NAM_svetlogorye", "NAM_oil_exchange", "NAM_ladder_of_seals", "NAM_south_desert_offices",
@@ -835,14 +886,35 @@ class SouthLifecycleTests(unittest.TestCase):
         self.scheduled = []
 
     def open_preparation(self, age=180):
-        """Open the preparation and age it past the minimum before an early start."""
+        """Open the preparation, age it and enter the early window of its deadline."""
         self.execute("ADISCORD_south_begin_preparation")
         self.assertTrue(self.facts.get(("GLB", "has_global_flag", "ADISCORD_south_preparation_started")))
         self.flag("ADISCORD_south_preparation_started", age=age)
+        self.enter_early_window()
+
+    def deadline_day(self, suffix=""):
+        return self.facts.get(("GLB", "variable", f"ADISCORD_south_deadline{suffix}_day"))
+
+    def enter_early_window(self):
+        """Move the calendar to the first day an early start may open its warning."""
+        self.set_date(script_date(int(self.deadline_day("_warning"))))
+
+    def anchor(self, window):
+        """Set the deadline anchor as a settlement does before it opens the preparation."""
+        self.facts.temps["ADISCORD_south_deadline_window"] = window
+        self.execute("ADISCORD_south_set_deadline")
+        self.facts.temps.clear()
+
+    def ensure_early_window(self):
+        """Fixtures that set the preparation flags directly still need an anchor."""
+        if self.deadline_day() is None:
+            self.anchor(0)
+        self.enter_early_window()
 
     def set_date(self, date):
         for tag in CANDIDATES:
             self.facts[(tag, "numeric", "date")] = numeric_date(date)
+        self.variable("num_days", day_number(date))
 
     def today(self):
         value = self.facts[("SHL", "numeric", "date")]
@@ -878,23 +950,16 @@ class SouthLifecycleTests(unittest.TestCase):
                 result.append(predicate if entry.value == "yes" else replace(entry, key="NOT", value=[predicate]))
             elif entry.key == "has_global_flag":
                 result.append(replace(entry, key="GLB", value=[entry]))
-            elif entry.key in ("set_variable", "check_variable") and scalar(entry.value, "value") in ("ROOT", "FROM"):
+            elif entry.key in ("set_variable", "check_variable") and field_value(entry, "value") in ("ROOT", "FROM"):
                 # HOI4 stores country scope references in variables as numeric tag IDs.
                 country = self.event_root if scalar(entry.value, "value") == "ROOT" else self.event_sender
                 tag_id = str((*CHAMPIONS, *REGIONAL).index(country) + 1)
                 fields = [replace(field, value=tag_id) if field.key == "value" else field for field in entry.value]
                 result.append(replace(entry, value=fields))
-            elif entry.key == "check_variable" and scalar(entry.value, "var").startswith("global."):
+            elif entry.key == "check_variable" and (field_value(entry, "var") or "").startswith("global."):
                 fields = [replace(e, value=e.value.removeprefix("global.")) if isinstance(e.value, str) else e
                           for e in entry.value]
                 result.append(replace(entry, key="GLB", value=[replace(entry, value=fields)]))
-            elif entry.key == "check_variable" and scalar(entry.value, "value").startswith("global."):
-                fields = [
-                    replace(field, value=str(self.facts.get(("GLB", "variable", field.value.removeprefix("global.")), 0)))
-                    if field.key == "value" else field
-                    for field in entry.value
-                ]
-                result.append(replace(entry, value=fields))
             elif entry.key in ("ROOT", "FROM") or entry.key.startswith("event_target:"):
                 target = (self.event_root if entry.key == "ROOT" else self.event_sender if entry.key == "FROM"
                           else self.targets[entry.key.split(":", 1)[1]])
@@ -1051,10 +1116,15 @@ class SouthLifecycleTests(unittest.TestCase):
         decisions = south_decisions()
         invitation = decisions["ADISCORD_south_invite_to_coalition"]
         influence = decisions["ADISCORD_south_build_coalition_influence"]
-        for decision in (invitation, influence):
+        advisers = decisions["ADISCORD_south_send_advisers"]
+        protection = decisions["ADISCORD_south_offer_protectorate"]
+        for decision in (invitation, influence, advisers, protection):
             self.assertEqual({node.value for node in block(decision, "targets")}, set(REGIONAL))
         self.regional_country("KDR")
         self.regional_country("WEF")
+        # The fixture's etatist desert offices would already address Kadir.
+        self.facts[("NAM", "has_completed_focus", "NAM_south_desert_offices")] = False
+        self.execute("ADISCORD_south_begin_preparation")
         for leader, ally, focus, sign in (("NAM", "RHM", "NAM_insured_caravans", 1),
                                          ("SHL", "MZR", "SHL_south_throne_and_crests", -1)):
             self.regional_country(ally, leader)
@@ -1065,53 +1135,94 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.facts[(leader, "has_completed_focus", focus)] = completed
                 for envoy in (leader, ally):
                     self.event_root = envoy
-                    for decision in (influence, invitation):
-                        self.assertEqual(self.matches(block(decision, "visible"), envoy), completed,
-                                         (leader, envoy, completed))
-            self.event_sender = "WEF"
-            self.assertFalse(self.matches(block(influence, "visible"), ally))
+                    # The invitation keeps the leader's addressed focus.
+                    self.assertEqual(self.matches(block(invitation, "visible"), envoy), completed,
+                                     (leader, envoy, completed))
+                    # Delegations need only the open contest, and only the champion sends them.
+                    self.assertEqual(self.matches(block(influence, "visible"), envoy), envoy == leader,
+                                     (leader, envoy, completed))
             self.facts[(leader, "has_completed_focus", focus)] = False
+
+        # On its post-war tree Svetlogorye sends delegations after its foreign
+        # office and advisers after its legations.
+        self.event_root = "NAM"
+        self.event_sender = "KDR"
+        self.facts[("NAM", "has_focus_tree", "NAM_postwar_focus")] = True
+        for office, legations in ((False, False), (True, False), (True, True)):
+            with self.subTest(office=office, legations=legations):
+                self.facts[("NAM", "has_completed_focus", "NAM_foreign_office")] = office
+                self.facts[("NAM", "has_completed_focus", "NAM_south_legations")] = legations
+                self.assertEqual(self.matches(block(influence, "visible"), "NAM"), office)
+                self.assertEqual(self.matches(block(advisers, "visible"), "NAM"), legations)
+        # Outside the contest window nobody sends them.
+        self.flag("ADISCORD_south_preparation_started", False)
+        for champion in ("NAM", "SHL"):
+            self.event_root = champion
+            self.assertFalse(self.matches(block(influence, "visible"), champion), champion)
+        self.flag("ADISCORD_south_preparation_started")
 
         self.event_sender = "KDR"
         self.facts[("NAM", "has_completed_focus", "NAM_insured_caravans")] = True
+        self.variable("ADISCORD_south_coalition_influence", 60, "KDR")
         for predecessor, leader in (("NAM", "EFL"), ("EFL", "AZH")):
             self.facts[(predecessor, "is_subject", "no")] = False
             self.facts[(predecessor, "is_subject_of", leader)] = True
             self.event_root = leader
-            self.assertFalse(self.matches(block(influence, "visible"), leader))
+            self.assertFalse(self.matches(block(invitation, "visible"), leader))
             self.facts[(leader, "has_completed_focus", "ADISCORD_south_restitution_contact_kdr")] = True
-            self.assertTrue(self.matches(block(influence, "visible"), leader))
+            self.assertTrue(self.matches(block(invitation, "visible"), leader))
 
     def test_northern_contacts_unlock_exactly_the_addressed_country(self):
+        desert = {"WEF", "KDR", "RHM", "SDR"}
+        coast = {"MZR", "KYZ", "GLP"}
         contacts = {
-            "EFL": ("NAM_eflor_accord", "NAM_defeat_open_border"),
-            "AZH": ("NAM_azhar_accord", "NAM_defeat_road_south"),
-            "KDR": ("NAM_insured_caravans",),
-            "WEF": ("NAM_south_fenn_guarantee",),
-            "RHM": ("NAM_south_oil_for_water",),
-            "MZR": ("NAM_contract_bureau",),
-            "SDR": ("NAM_common_fuel_market",),
-            "KYZ": ("NAM_pw_export_guarantees",),
-            "GLP": ("NAM_island_concession",),
+            "NAM_eflor_accord": {"EFL", "AZH"},
+            "NAM_border_citizenship": {"EFL", "AZH"},
+            "NAM_defeat_open_border": {"EFL"},
+            "NAM_defeat_road_south": {"AZH"},
+            "NAM_south_desert_envoys": desert,
+            "NAM_south_coast_envoys": coast,
+            "NAM_south_congress": desert | coast,
+            "NAM_south_fenn_guarantee": {"WEF"},
+            "NAM_insured_caravans": {"KDR"},
+            "NAM_south_desert_offices": {"KDR"},
+            "NAM_kadir_oil_charter": {"KDR"},
+            "NAM_south_oil_for_water": {"RHM"},
+            "NAM_common_fuel_market": {"SDR"},
+            "NAM_pw_export_guarantees": {"KYZ"},
+            "NAM_contract_bureau": {"KYZ"},
+            "NAM_common_citizenship": coast,
+            "NAM_island_concession": {"GLP"},
+            "NAM_pw_veyr_convoys": {"GLP"},
         }
-        self.assertEqual(set(contacts), set(REGIONAL))
+        self.assertEqual(set().union(*contacts.values()), set(REGIONAL))
+        sources = "".join(path.read_text(encoding="utf-8") for path in (ROOT / "focus_trees/NAM").rglob("*.txt"))
+        for focus in contacts:
+            self.assertRegex(sources, rf"\bid = {focus}\b", focus)
+        for key in list(self.facts):
+            if key[0] == "NAM" and key[1] == "has_completed_focus":
+                self.facts[key] = False
         trigger = "ADISCORD_south_north_invitation_unlocked"
-        for leader in ("NAM", "EFL", "AZH"):
-            if leader != "NAM":
-                predecessor = "NAM" if leader == "EFL" else "EFL"
-                self.facts[(predecessor, "is_subject", "no")] = False
-                self.facts[(predecessor, "is_subject_of", leader)] = True
-            for target, focuses in contacts.items():
+        for focus, targets in contacts.items():
+            with self.subTest(leader="NAM", focus=focus):
+                self.facts[("NAM", "has_completed_focus", focus)] = True
+                opened = {tag for tag in REGIONAL if self.trigger_matches(trigger, tag)}
+                self.assertEqual(opened, targets)
+                self.facts[("NAM", "has_completed_focus", focus)] = False
+        for leader in ("EFL", "AZH"):
+            predecessor = "NAM" if leader == "EFL" else "EFL"
+            self.facts[(predecessor, "is_subject", "no")] = False
+            self.facts[(predecessor, "is_subject_of", leader)] = True
+            self.facts[("NAM", "has_completed_focus", "NAM_south_congress")] = True
+            for target in REGIONAL:
                 if leader == target:
                     continue
-                if leader != "NAM":
-                    focuses = (f"ADISCORD_south_restitution_contact_{target.lower()}",)
-                for focus in focuses:
-                    with self.subTest(leader=leader, target=target, focus=focus):
-                        self.facts[(leader, "has_completed_focus", focus)] = True
-                        opened = {tag for tag in REGIONAL if self.trigger_matches(trigger, tag)}
-                        self.assertEqual(opened, {target})
-                        self.facts[(leader, "has_completed_focus", focus)] = False
+                focus = f"ADISCORD_south_restitution_contact_{target.lower()}"
+                with self.subTest(leader=leader, target=target, focus=focus):
+                    self.facts[(leader, "has_completed_focus", focus)] = True
+                    opened = {tag for tag in REGIONAL if self.trigger_matches(trigger, tag)}
+                    self.assertEqual(opened, {target})
+                    self.facts[(leader, "has_completed_focus", focus)] = False
 
     def test_focus_alliance_cannot_import_a_war_with_either_camp(self):
         self.regional_country("KDR")
@@ -1302,11 +1413,15 @@ class SouthLifecycleTests(unittest.TestCase):
         self.assertEqual(scalar(decision, "days_remove"), "40")
         self.assertEqual(scalar(decision, "days_re_enable"), "35")
         self.regional_country("KDR")
-        self.facts[("NAM", "has_completed_focus", "NAM_insured_caravans")] = True
-        self.facts[("SHL", "has_completed_focus", "SHL_south_throne_and_crests")] = True
+        # No champion has addressed Kadir: the mission needs only the open contest.
+        self.facts[("NAM", "has_completed_focus", "NAM_south_desert_offices")] = False
+        self.execute("ADISCORD_south_begin_preparation")
         self.event_sender = "KDR"
         score = ("KDR", "variable", "ADISCORD_south_coalition_influence")
         experience = ("KDR", "army_experience")
+        seeded = self.facts[score]
+        self.assertEqual(seeded, -10, "Kadir's home lean")
+        self.assertEqual(self.facts[("SHL", "variable", "ADISCORD_south_adviser_push")], 5)
         for sender in ("NAM", "SHL"):
             self.event_root = sender
             power = (sender, "numeric", "has_political_power")
@@ -1320,17 +1435,17 @@ class SouthLifecycleTests(unittest.TestCase):
             self.assertEqual(self.facts[power], 20)
             self.assertFalse(self.matches(block(decision, "available"), sender))
             self.assertFalse(self.matches(block(decision, "cancel_trigger"), sender))
-        self.assertNotIn(score, self.facts)
+        self.assertEqual(self.facts[score], seeded)
         self.assertNotIn(experience, self.facts)
         self.execute_entries(block(decision, "remove_effect"), "SHL")
-        self.assertEqual(self.facts[score], -15)
+        self.assertEqual(self.facts[score], seeded - 5)
         self.assertEqual(self.facts[experience], 5)
         self.event_root = "NAM"
         self.facts[("KDR", "has_war_with", "SHL")] = True
         self.assertTrue(self.matches(block(decision, "cancel_trigger"), "NAM"))
         self.execute_entries(block(decision, "cancel_effect"), "NAM")
         self.execute_entries(block(decision, "remove_effect"), "NAM")
-        self.assertEqual(self.facts[score], -15)
+        self.assertEqual(self.facts[score], seeded - 5)
         self.assertEqual(self.facts[experience], 5)
         self.assertFalse(self.facts[("KDR", "has_variable", "ADISCORD_south_north_advisers")])
 
@@ -1344,6 +1459,7 @@ class SouthLifecycleTests(unittest.TestCase):
         self.regional_country("RHM", "NAM")
         self.facts[("NAM", "has_completed_focus", "NAM_insured_caravans")] = True
         self.facts[("SHL", "has_completed_focus", "SHL_south_throne_and_crests")] = True
+        self.execute("ADISCORD_south_begin_preparation")
         self.event_sender = "KDR"
         influence = ("KDR", "variable", "ADISCORD_south_coalition_influence")
         for leader, side, sign in (("NAM", "north", 1), ("SHL", "shl", -1)):
@@ -1351,20 +1467,21 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.event_root = leader
                 treasury = (leader, "numeric", "has_political_power")
                 cooldown = ("KDR", "has_country_flag", f"ADISCORD_south_{side}_envoys_recent")
-                self.variable(influence[-1], 40 * sign, "KDR")
+                self.assertEqual(self.facts[(leader, "variable", "ADISCORD_south_envoy_push")], 10)
+                self.variable(influence[-1], 50 * sign, "KDR")
                 self.assertFalse(self.matches(block(invitation, "available"), leader))
                 self.facts[treasury] = 24.99
                 self.assertFalse(self.matches(block(delegates, "custom_cost_trigger"), leader))
                 self.execute_entries(campaign, leader)
                 self.assertEqual(self.facts[treasury], 24.99)
-                self.assertEqual(self.facts[influence], 40 * sign)
+                self.assertEqual(self.facts[influence], 50 * sign)
                 self.facts[treasury] = 25
                 self.assertTrue(self.matches(block(delegates, "custom_cost_trigger"), leader))
                 self.execute_entries(campaign, leader)
                 self.assertEqual(self.facts[treasury], 0)
                 self.assertEqual(self.facts[influence], 60 * sign)
                 self.assertTrue(self.facts[cooldown])
-                self.assertEqual(self.facts[("KDR", "flag_duration", cooldown[-1])], 30)
+                self.assertEqual(self.facts[("KDR", "flag_duration", cooldown[-1])], 56)
                 self.assertTrue(self.matches(block(invitation, "available"), leader))
 
                 self.facts[treasury] = 25
@@ -1373,18 +1490,19 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.assertEqual(self.facts[treasury], 25)
                 self.assertEqual(self.facts[influence], 60 * sign)
                 if leader == "NAM":
+                    # A faction partner acts through its champion.
                     self.event_root = "RHM"
-                    self.assertFalse(self.matches(block(delegates, "available"), "RHM"))
+                    self.assertFalse(self.matches(block(delegates, "visible"), "RHM"))
                 opponent = "SHL" if leader == "NAM" else "NAM"
                 self.event_root = opponent
                 self.facts[(opponent, "numeric", "has_political_power")] = 25
                 self.assertTrue(self.matches(block(delegates, "available"), opponent))
                 self.execute_entries(campaign, opponent)
-                self.assertEqual(self.facts[influence], 40 * sign)
+                self.assertEqual(self.facts[influence], 50 * sign)
                 self.event_root = leader
                 self.assertFalse(self.matches(block(invitation, "available"), leader))
 
-                self.variable(influence[-1], 90 * sign, "KDR")
+                self.variable(influence[-1], 95 * sign, "KDR")
                 self.facts[cooldown] = False
                 self.execute_entries(campaign, leader)
                 self.assertEqual(self.facts[influence], 100 * sign)
@@ -1398,6 +1516,8 @@ class SouthLifecycleTests(unittest.TestCase):
 
     def test_envoy_reserves_one_recipient_and_consent_names_the_actual_leader(self):
         invitation = south_decisions()["ADISCORD_south_invite_to_coalition"]
+        self.execute("ADISCORD_south_begin_preparation")
+        self.calls.clear()
         self.event_root, self.event_sender = "WEF", "KDR"
         for tag in ("WEF", "KDR"):
             for key, value in (("exists", "yes"), ("is_subject", "no"), ("has_capitulated", "no")):
@@ -1431,7 +1551,7 @@ class SouthLifecycleTests(unittest.TestCase):
         delegates = south_decisions()["ADISCORD_south_build_coalition_influence"]
         self.assertTrue(self.matches(block(delegates, "available"), "NAM"))
         self.execute_entries(block(delegates, "complete_effect"), "NAM")
-        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_coalition_influence")], -40)
+        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_coalition_influence")], -50)
         self.event_root, self.event_sender = "KDR", "WEF"
         self.assertFalse(self.matches(guard, "KDR"))
         self.assertEqual(join_orders(), [])
@@ -1539,6 +1659,35 @@ class SouthLifecycleTests(unittest.TestCase):
     def execute(self, name, scope="SHL"):
         self.execute_entries(self.effects[name], scope)
 
+    def resolve(self, reference, scope):
+        """Numeric value of a literal, temp, global, scoped or own variable reference."""
+        try:
+            return float(reference)
+        except ValueError:
+            holder, _, name = reference.partition(".")
+            if name and holder in ("ROOT", "FROM"):
+                reference = f"{self.event_root if holder == 'ROOT' else self.event_sender}.{name}"
+            return self.facts.get((scope, "variable", reference), 0)
+
+    def change_variable(self, entry, scope):
+        operation = entry.key.removesuffix("_variable").removesuffix("_temp")
+        name = scalar(entry.value, "var")
+        if entry.key.endswith("_temp_variable"):
+            old = self.facts.temps.get(name, 0)
+        else:
+            holder = "GLB" if name.startswith("global.") else scope
+            name = name.removeprefix("global.")
+            old = self.facts.get((holder, "variable", name), 0)
+        if operation == "clamp":
+            bounds = {e.key: self.resolve(e.value, scope) for e in entry.value if e.key in ("min", "max")}
+            value = min(bounds.get("max", old), max(bounds.get("min", old), old))
+        else:
+            value = VARIABLE_OPERATIONS[operation](old, self.resolve(scalar(entry.value, "value"), scope))
+        if entry.key.endswith("_temp_variable"):
+            self.facts.temps[name] = value
+        else:
+            self.variable(name, value, holder)
+
     def execute_entries(self, entries, scope):
         terminals = {"ADISCORD_south_final_resolve_shl_victory", "ADISCORD_south_final_resolve_north_victory",
                      "ADISCORD_south_final_resolve_without_hegemon", "ADISCORD_south_final_repel",
@@ -1565,18 +1714,12 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.facts[(current, "numeric", "has_political_power")] += float(entry.value)
             elif entry.key == "army_experience":
                 self.facts[(current, "army_experience")] = self.facts.get((current, "army_experience"), 0) + int(entry.value)
-            elif entry.key in ("set_variable", "add_to_variable", "clamp_variable"):
-                name = scalar(entry.value, "var")
-                holder = "GLB" if name.startswith("global.") else current
-                name = name.removeprefix("global.")
-                old = self.facts.get((holder, "variable", name), 0)
-                if entry.key == "clamp_variable":
-                    value = min(float(scalar(entry.value, "max")), max(float(scalar(entry.value, "min")), old))
-                else:
-                    value = float(scalar(entry.value, "value"))
-                    if entry.key == "add_to_variable":
-                        value += old
-                self.variable(name, value, holder)
+            elif entry.key.removesuffix("_variable").removesuffix("_temp") in VARIABLE_OPERATIONS:
+                self.change_variable(entry, current)
+            elif entry.key == "round_variable":
+                holder = "GLB" if entry.value.startswith("global.") else current
+                name = entry.value.removeprefix("global.")
+                self.variable(name, float(int(self.facts.get((holder, "variable", name), 0) + 0.5)), holder)
             elif entry.key == "clear_variable":
                 holder = "GLB" if entry.value.startswith("global.") else current
                 name = entry.value.removeprefix("global.")
@@ -1610,6 +1753,13 @@ class SouthLifecycleTests(unittest.TestCase):
             elif entry.key == "add_to_war":
                 self.calls.append((current, "add_to_war", scalar(entry.value, "targeted_alliance"), scalar(entry.value, "enemy")))
             elif entry.key == "ADISCORD_economy_mark_dirty":
+                self.calls.append((current, entry.key))
+            elif entry.key == "add_equipment_to_stockpile":
+                stock = (current, "equipment", scalar(entry.value, "type"))
+                self.facts[stock] = self.facts.get(stock, 0) + float(scalar(entry.value, "amount"))
+            elif entry.key in ("add_fuel", "add_stability", "add_war_support", "add_command_power"):
+                self.facts[(current, entry.key)] = self.facts.get((current, entry.key), 0) + float(entry.value)
+            elif entry.key == "add_power_balance_value":
                 self.calls.append((current, entry.key))
             elif entry.key == "custom_effect_tooltip":
                 continue
@@ -1669,6 +1819,7 @@ class SouthLifecycleTests(unittest.TestCase):
     def test_preparation_age_and_focus_readiness_block_every_starter(self):
         self.variable("ADISCORD_south_crisis", 100)
         self.execute("ADISCORD_south_begin_preparation")
+        self.ensure_early_window()
         self.flag("ADISCORD_south_crisis_warned", age=84)
         for age, expected in ((179, False), (180, True)):
             self.flag("ADISCORD_south_preparation_started", age=age)
@@ -1707,7 +1858,8 @@ class SouthLifecycleTests(unittest.TestCase):
     def test_offensive_focus_fits_warning_and_selects_northern_declarer(self):
         self.open_preparation()
         self.execute("ADISCORD_south_crisis_cycle")
-        for path in (ROOT / "focus_trees/NAM/postwar/focuses.txt", ROOT / "focus_trees/NAM/defeated/focuses.txt", *SHL_TREES):
+        for path in (ROOT / "focus_trees/NAM/postwar/focuses.txt", ROOT / "focus_trees/NAM/defeated/focuses.txt",
+                     ROOT / "focus_trees/NAM/mainland_directory/focuses.txt", *SHL_TREES):
             for name, focus in focus_blocks(path).items():
                 if "ADISCORD_south_prepare_offensive" not in repr(block(focus, "completion_reward")):
                     continue
@@ -1867,6 +2019,7 @@ class SouthLifecycleTests(unittest.TestCase):
     def test_northern_successors_wait_for_minimum_preparation_and_every_shl_milestone(self):
         self.facts[("NAM", "exists", "yes")] = False
         self.execute("ADISCORD_south_begin_preparation")
+        self.ensure_early_window()
         self.flag("ADISCORD_south_crisis_warned", age=84)
         for leader in ("EFL", "AZH"):
             with self.subTest(leader=leader):
@@ -1904,6 +2057,9 @@ class SouthLifecycleTests(unittest.TestCase):
 
     def test_first_land_contact_starts_one_clock_for_both_coalitions(self):
         clock = "ADISCORD_south_preparation_started"
+        # Svetlogorye's victory anchored the deadline; it passed before the first contact.
+        self.set_date("2163.1.1")
+        self.anchor(VICTORY_WINDOW)
         self.set_date("2167.1.1")
         for state, controller in (("700", "KDR"), ("699", "WEF")):
             self.facts[(state, "controller")] = controller
@@ -1977,16 +2133,310 @@ class SouthLifecycleTests(unittest.TestCase):
             self.flag("NAM_war_of_return_won", phase in ("consolidation", "great_war", "complete"))
             self.flag("NAM_great_war_started", phase == "great_war")
             self.flag("NAM_great_war_won", phase == "complete")
+            if phase == "complete":
+                self.ensure_early_window()
             self.calls.clear()
             for tag in ("NAM", "SHL"):
                 self.assertEqual(self.trigger_matches("ADISCORD_south_final_can_start", tag), phase == "complete", phase)
             self.execute("ADISCORD_south_crisis_cycle")
             self.assertEqual("ADISCORD_south_final_war_start" in self.calls, phase == "complete", phase)
+        # The council's desert question lapsed: the freeze ends with an emirate still independent.
         self.flag("NAM_great_war_won", False)
+        self.assertTrue(self.trigger_matches("NAM_great_war_target_left", "NAM"))
+        for lapsed in (False, True):
+            self.flag("NAM_mdr_desert_lapsed", lapsed)
+            self.calls.clear()
+            for tag in ("NAM", "SHL"):
+                self.assertEqual(self.trigger_matches("ADISCORD_south_final_can_start", tag), lapsed, ("lapsed", lapsed))
+            self.execute("ADISCORD_south_crisis_cycle")
+            self.assertEqual("ADISCORD_south_final_war_start" in self.calls, lapsed, ("lapsed", lapsed))
+        self.flag("NAM_mdr_desert_lapsed", False)
         self.facts[("RHM", "exists", "yes")] = False
         self.facts[("EFL", "exists", "yes")] = False
         self.facts[("AZH", "exists", "yes")] = False
         self.assertTrue(self.trigger_matches("ADISCORD_south_crisis_open"), "No remaining great-war opponents")
+
+    def test_directory_mazar_uses_the_shared_queue(self):
+        tree = focus_blocks(ROOT / "focus_trees/NAM/mainland_directory/focuses.txt")
+        effects = definitions(EFFECTS)
+        for name, shared in (("NAM_mdr_mazar_alliance", "ADISCORD_south_offer_alliance"),
+                             ("NAM_mdr_mazar_protectorate", "ADISCORD_south_demand_submission")):
+            with self.subTest(focus=name):
+                self.assertIn(shared, effects)
+                focus = tree[name]
+                self.assertIn("NAM_mdr_south_open", [e.key for e in walk(block(focus, "available"))])
+                # MZR blocks inside a limit (MZR = { exists = yes }) are conditions, not calls.
+                calls = [e.value for e in walk(block(focus, "completion_reward"))
+                         if e.key == "MZR" and isinstance(e.value, list)
+                         and shared in [row.key for row in e.value]]
+                self.assertIn("yes", [scalar(call, shared) for call in calls])
+        # The Directory's chancery spent a season with the khan: Mazar answers both offers more readily.
+        events = {scalar(e.value, "id"): e.value for e in parse_clausewitz(EVENTS.read_text(encoding="utf-8"))
+                  if e.key == "country_event"}
+        accept = next(e.value for e in events["ADISCORD_south.40"]
+                      if e.key == "option" and scalar(e.value, "name") == "ADISCORD_south.40.a")
+        courted = [row.value for row in block(accept, "ai_chance") if row.key == "modifier"
+                   and ("tag", "MZR") in [(e.key, e.value) for e in row.value]]
+        self.assertEqual(len(courted), 1)
+        self.assertEqual(scalar(courted[0], "add"), "25")
+        self.assertEqual(scalar(block(courted[0], "FROM"), "has_completed_focus"), "NAM_mdr_mazar_question")
+        self.assertEqual(scalar(block(courted[0], "FROM"), "tag"), "NAM")
+        # A country that submits to the council of boards becomes a company district, whatever mandate flag is set.
+        for mandate in ("service", "pragmatic", "district"):
+            self.triggers[f"NAM_prewar_{mandate}_mandate"] = parse_clausewitz(f"has_country_flag = test_{mandate}_mandate")
+            self.facts[("NAM", "has_country_flag", f"test_{mandate}_mandate")] = True
+        self.facts[("EFL", "tag", "EFL")] = True
+        self.facts[("EFL", "has_country_flag", "ADISCORD_south_submits_to_NAM")] = True
+        for corporate in (False, True):
+            with self.subTest(corporate=corporate):
+                self.facts[("NAM", "has_country_flag", "NAM_corp_takeover")] = corporate
+                chosen = [(scope, e.key) for scope, e in self.submission_effects("EFL")]
+                self.assertEqual(("EFL", "NAM_wor_federal_district_join") in chosen, corporate)
+                self.assertEqual(any(key == "set_autonomy" for _, key in chosen), not corporate)
+                self.assertIn(("NAM", "puppet"), chosen)
+                if corporate:
+                    self.assertLess(chosen.index(("NAM", "puppet")), chosen.index(("EFL", "NAM_wor_federal_district_join")))
+        for language in ("russian", "english"):
+            keys = loc_keys(language)
+            for key in ("ADISCORD_south.40.d_submit_directory", "ADISCORD_south.40.d_alliance_directory",
+                        "ADISCORD_south.40.t_directory_protection", "ADISCORD_south.40.d_directory_protection"):
+                self.assertIn(key, keys, (language, key))
+
+    def test_directory_path_spirit_and_terms(self):
+        effects = definitions(EFFECTS)
+        self.facts[("NAM", "has_country_flag", "NAM_corp_takeover")] = True
+        for shares, spirit in ((True, "ADISCORD_south_path_NAM_shares"), (False, "ADISCORD_south_path_NAM_boards")):
+            with self.subTest(shares=shares):
+                self.facts[("NAM", "has_completed_focus", "NAM_mdr_mainland_shares")] = shares
+                chosen = [e.value for _, e in selected_effects(self.expand(effects["ADISCORD_south_add_path_spirit"]),
+                                                               self.facts, "NAM") if e.key == "add_ideas"]
+                self.assertEqual(chosen, [spirit])
+        self.facts[("NAM", "has_country_flag", "NAM_corp_takeover")] = False
+        chosen = [e.value for _, e in selected_effects(self.expand(effects["ADISCORD_south_add_path_spirit"]),
+                                                       self.facts, "NAM") if e.key == "add_ideas"]
+        self.assertEqual(chosen, [], "Only the council of boards takes the Directory's spirits")
+        removed = [e.value for e in effects["ADISCORD_south_remove_path_spirit"] if e.key == "remove_ideas"]
+        ideas = definitions(ROOT / "common/ideas/ADISCORD_south_final_war_ideas.txt")
+        country = block(ideas["ideas"], "country")
+        for spirit in ("ADISCORD_south_path_NAM_boards", "ADISCORD_south_path_NAM_shares"):
+            self.assertIn(spirit, removed)
+            idea = block(country, spirit)
+            self.assertEqual(scalar(block(idea, "allowed"), "original_tag"), "NAM")
+            for hook in ("on_add", "on_remove"):
+                self.assertIn("ADISCORD_economy_mark_dirty", [e.key for e in walk(block(idea, hook))], (spirit, hook))
+            for language in ("russian", "english"):
+                self.assertTrue({spirit, spirit + "_desc"} <= loc_keys(language), (spirit, language))
+
+        # North victory: the council sequesters every loser on both courses and loads its
+        # dominion tree; the republic keeps its terms and loads the heritage tree.
+        victory = block(effects["ADISCORD_south_final_resolve_north_victory"], "if")
+        settlement = [e for e in victory if e.key != "limit"]
+        self.flag("ADISCORD_south_hegemon_NAM")
+        for corporate, shares in ((False, False), (True, True), (True, False)):
+            with self.subTest(corporate=corporate, shares=shares):
+                self.facts[("NAM", "has_country_flag", "NAM_corp_takeover")] = corporate
+                self.facts[("NAM", "has_completed_focus", "NAM_mdr_mainland_shares")] = shares
+                chosen = list(selected_effects(self.expand(settlement), self.facts, "GLB"))
+                values = {}
+                for _, entry in chosen:
+                    if entry.key == "set_variable":
+                        values[scalar(entry.value, "var")] = scalar(entry.value, "value")
+                terms = values["global.ADISCORD_south_terms"]
+                subject_type = values["global.ADISCORD_south_subject_type"]
+                self.assertEqual((terms, subject_type), ("2", "7") if corporate else ("2", "0"))
+                loads = [scalar(e.value, "tree") for scope, e in chosen if e.key == "load_focus_tree"]
+                self.assertEqual(loads, [] if corporate else ["NAM_south_heritage_focus"])
+                keys = [e.key for _, e in chosen]
+                self.assertEqual("NAM_hgm_begin" in keys, corporate)
+                if corporate:
+                    self.assertIn(("NAM", "NAM_hgm_begin"), [(scope, e.key) for scope, e in chosen])
+                    self.assertLess(keys.index("NAM_hgm_begin"), keys.index("ADISCORD_south_close_campaign_state"))
+                self.assertLess(keys.index("ADISCORD_south_show_svetlogorye_victory"), keys.index("ADISCORD_south_close_campaign_state"))
+        # Terms 1 annexes every loser; subject type 7 sequesters each for the partition.
+        self.variable("ADISCORD_south_subject_type", 7)
+        chosen = [e.key for _, e in selected_effects(self.expand(effects["ADISCORD_south_apply_subject_type"]), self.facts, "SHL")]
+        self.assertEqual(chosen, ["NAM_ptn_sequester"])
+        self.variable("ADISCORD_south_terms", 1)
+        self.event_root = "NAM"
+        self.facts[("SHL", "has_country_flag", "ADISCORD_south_settlement_pending")] = True
+        chosen = [e.key for _, e in selected_effects(self.expand(effects["ADISCORD_south_settle_member"]), self.facts, "SHL")]
+        self.assertIn("annex_country", chosen)
+        self.assertNotIn("ADISCORD_south_apply_subject_type", chosen)
+        for key in ("ADISCORD_south.31.d_nam_partition",):
+            for language in ("russian", "english"):
+                self.assertIn(key, loc_keys(language), (language, key))
+            self.assertIn(f"text = {key}", EVENTS.read_text(encoding="utf-8"))
+        for key in ("ADISCORD_south.31.d_nam_directory_shares", "ADISCORD_south.31.d_nam_directory_union"):
+            for language in ("russian", "english"):
+                self.assertNotIn(key, loc_keys(language), (language, key))
+            self.assertNotIn(key, EVENTS.read_text(encoding="utf-8"))
+
+    def test_north_victory_partitions_for_the_council(self):
+        effects = definitions(EFFECTS)
+        victory = block(effects["ADISCORD_south_final_resolve_north_victory"], "if")
+        steps = [e for e in victory if e.key != "limit"]
+        keys = [e.key for e in steps]
+        # The resolved flag precedes every peace; the losers are marked and the campaign
+        # closes only after the NAM block that loads the next tree.
+        self.assertLess(keys.index("set_global_flag"), keys.index("ADISCORD_south_end_final_wars"))
+        nam_blocks = [index for index, e in enumerate(steps) if e.key == "NAM"]
+        load_block = next(index for index in nam_blocks
+                          if "ADISCORD_south_show_svetlogorye_victory" in [e.key for e in steps[index].value])
+        self.assertLess(keys.index("ADISCORD_south_mark_losers"), load_block)
+        self.assertLess(load_block, keys.index("ADISCORD_south_close_campaign_state"))
+        branches = [e for e in steps[load_block].value if e.key in ("if", "else_if", "else")]
+        self.assertEqual([e.key for e in branches], ["if", "else"])
+        guard, = block(branches[0].value, "limit")
+        self.assertEqual(guard.key, "NOT")
+        self.assertEqual([(e.key, e.value) for e in guard.value], [("has_country_flag", "NAM_corp_takeover")])
+        self.assertEqual(scalar(block(branches[0].value, "load_focus_tree"), "tree"), "NAM_south_heritage_focus")
+        self.assertEqual([(e.key, e.value) for e in branches[1].value], [("NAM_hgm_begin", "yes")])
+        # One subject type row for the council on both courses; the terms stay at puppets.
+        council = [e.value for e in steps if e.key == "if"
+                   and "NAM_corp_takeover" in repr(block(e.value, "limit"))]
+        self.assertEqual(len(council), 1)
+        self.assertEqual([(e.key, scalar(e.value, "var"), scalar(e.value, "value")) for e in council[0] if e.key != "limit"],
+                         [("set_variable", "global.ADISCORD_south_subject_type", "7")])
+        self.assertNotIn("NAM_mdr_mainland_shares", repr(victory))
+        self.assertNotIn("subject_type value = 6", body(EFFECTS, "ADISCORD_south_apply_subject_type"))
+        # Day 1: each loser is sequestered; a sequestered Shahrabad skips the seal and the
+        # table opens after the Svetlogorsk annexation and the administrations, before the
+        # participants are cleared.
+        settle = effects["ADISCORD_south_apply_settlement"]
+        settle_keys = [e.key for e in settle]
+        seal = [e.value for e in settle if e.key == "if" and "SHL_seal_open_chapter" in repr(e.value)]
+        self.assertEqual(len(seal), 1)
+        self.assertIn("SHL = { NOT = { has_country_flag = NAM_ptn_sequestered } }",
+                      body(EFFECTS, "ADISCORD_south_apply_settlement"))
+        self.assertEqual(scalar(block(seal[0], "SHL"), "SHL_seal_open_chapter"), "yes")
+        table = [index for index, e in enumerate(settle) if e.key == "if" and "NAM_ptn_open_table" in repr(e.value)]
+        self.assertEqual(len(table), 1)
+        slf = next(index for index, e in enumerate(settle) if e.key == "if" and "SLF" in repr(block(e.value, "limit")))
+        furnaces = next(index for index, e in enumerate(settle) if e.key == "if"
+                        and "SHL_form_furnace_administrations" in repr(e.value))
+        self.assertLess(slf, table[0])
+        self.assertLess(furnaces, table[0])
+        self.assertLess(table[0], settle_keys.index("ADISCORD_south_clear_participants"))
+        self.variable("ADISCORD_south_subject_type", 7)
+        self.assertEqual([e.key for _, e in selected_effects(self.expand([settle[table[0]]]), self.facts, "NAM")],
+                         ["NAM_ptn_open_table"])
+        self.variable("ADISCORD_south_subject_type", 0)
+        self.assertEqual(list(selected_effects(self.expand([settle[table[0]]]), self.facts, "NAM")), [])
+        for sequestered in (False, True):
+            self.facts[("SHL", "has_country_flag", "NAM_ptn_sequestered")] = sequestered
+            opened = [e.key for _, e in selected_effects(self.expand(settle), self.facts, "NAM")
+                      if e.key == "SHL_seal_open_chapter"]
+            self.assertEqual(opened, [] if sequestered else ["SHL_seal_open_chapter"], sequestered)
+        # The news names the partition and the dominion tree.
+        news, = [e.value for e in parse_clausewitz(EVENTS.read_text(encoding="utf-8"))
+                 if e.key == "news_event" and scalar(e.value, "id") == "ADISCORD_south.31"]
+        partition = [d for d in news if d.key == "desc" and scalar(d.value, "text") == "ADISCORD_south.31.d_nam_partition"]
+        self.assertEqual(len(partition), 1)
+        self.facts[("GLB", "has_global_flag", "ADISCORD_south_hegemon_NAM")] = True
+        for subject_type in (0, 3, 7):
+            self.variable("ADISCORD_south_subject_type", subject_type)
+            self.assertEqual(self.matches(block(partition[0].value, "trigger"), "NAM"), subject_type == 7, subject_type)
+        option = block(news, "option")
+        rows = [e for e in option if e.key in ("if", "else_if", "else")]
+        self.assertEqual([e.key for e in rows], ["if", "else_if"])
+        self.assertEqual(scalar(block(block(rows[1].value, "limit"), "hidden_trigger"), "has_focus_tree"),
+                         "NAM_southern_dominion_focus")
+        self.assertEqual(scalar(rows[1].value, "custom_effect_tooltip"), "NAM_hgm_dominion_unlocked_tt")
+
+    def test_charter_relieves_strain(self):
+        member = definitions(EFFECTS)["ADISCORD_south_strain_cycle_member"]
+        relief = next(e.value for e in walk(member) if e.key == "if"
+                      and any(row.key == "subtract_from_temp_variable" for row in e.value))
+        limit = block(relief, "limit")
+        for tag, focus, expected in (("NAM", "NAM_mdr_northern_charter", True),
+                                     ("NAM", "NAM_sw_district_compact_at_war", True),
+                                     ("SHL", "NAM_mdr_northern_charter", False),
+                                     ("NAM", None, False)):
+            with self.subTest(tag=tag, focus=focus):
+                self.setUp()
+                for key in list(self.facts):
+                    if key[1] == "has_completed_focus":
+                        self.facts[key] = False
+                if focus:
+                    self.facts[(tag, "has_completed_focus", focus)] = True
+                self.assertEqual(self.matches(limit, tag), expected)
+        self.assertEqual([e.value for e in relief if e.key == "subtract_from_temp_variable"
+                          and scalar(e.value, "var") == "ADISCORD_south_strain_delta"], [relief[-1].value])
+        self.assertEqual(scalar(relief[-1].value, "value"), "1")
+
+    def test_directory_readiness_invitations_and_rising(self):
+        triggers = definitions(TRIGGERS)
+        readiness = block(triggers["ADISCORD_south_nam_focus_ready"], "OR")
+        branch, = [e.value for e in readiness if e.key == "AND"
+                   and ("has_completed_focus", "NAM_mdr_southern_districts") in [(row.key, row.value) for row in e.value]]
+        self.assertEqual(sorted(e.value for e in block(branch, "OR")),
+                         ["NAM_mdr_national_war", "NAM_mdr_southern_charter"])
+        counted = block(branch, "calc_true_if")
+        self.assertEqual(scalar(counted, "amount"), "2")
+        self.assertEqual(sorted(e.value for e in counted if e.key == "has_completed_focus"),
+                         ["NAM_mdr_army_of_the_south", "NAM_mdr_arsenal_of_the_directory",
+                          "NAM_mdr_northern_charter", "NAM_mdr_rear_of_the_south"])
+        tree = focus_blocks(ROOT / "focus_trees/NAM/mainland_directory/focuses.txt")
+        named = {e.value for e in walk(branch) if e.key == "has_completed_focus"}
+        self.assertLessEqual(named, set(tree))
+        for key in list(self.facts):
+            if key[0] == "NAM" and key[1] == "has_completed_focus":
+                self.facts[key] = False
+        self.facts[("NAM", "has_completed_focus", "NAM_mdr_southern_charter")] = True
+        self.assertFalse(self.trigger_matches("ADISCORD_south_nam_focus_ready", "NAM"),
+                         "Without the South open no capstone makes the Directory ready")
+        # The chancery opens every contact; Fenn also needs the guarantee.
+        trigger = "ADISCORD_south_north_invitation_unlocked"
+        self.facts[("NAM", "has_completed_focus", "NAM_mdr_southern_chancery")] = True
+        self.assertEqual({tag for tag in REGIONAL if self.trigger_matches(trigger, tag)}, set(REGIONAL) - {"WEF"})
+        self.facts[("NAM", "has_completed_focus", "NAM_mdr_fenn_guarantee")] = True
+        self.assertEqual({tag for tag in REGIONAL if self.trigger_matches(trigger, tag)}, set(REGIONAL))
+        self.facts[("NAM", "has_completed_focus", "NAM_mdr_southern_chancery")] = False
+        self.assertEqual({tag for tag in REGIONAL if self.trigger_matches(trigger, tag)}, set())
+        # The elected home districts deny the underground its rising, as the district compact does.
+        uprising = definitions(EFFECTS)["ADISCORD_south_raise_oil_uprising"]
+        outer = block(uprising, "if")
+        compact = next(e.value for e in outer if e.key == "if")
+        for flag, focus, expected in ((False, False, False), (True, False, True), (False, True, True)):
+            self.facts[("NAM", "has_country_flag", "NAM_district_compact")] = flag
+            self.facts[("NAM", "has_completed_focus", "NAM_mdr_home_districts")] = focus
+            self.assertEqual(self.matches(block(compact, "limit"), "GLB"), expected, (flag, focus))
+        for language in ("russian", "english"):
+            self.assertIn("ADISCORD_south.44.d_directory", loc_keys(language))
+
+    def test_directory_stages_on_the_mainland_road(self):
+        policies = definitions(ROOT / "common/ai_strategy/ADISCORD_south_final_war_ai.txt")
+        island = block(policies["ADISCORD_south_nam_staging_reserve"], "enable")
+        self.assertIn("NAM_corp_takeover", [e.value for e in block(island, "NOT") if e.key == "has_country_flag"])
+        enabled = {}
+        for name, states in (("ADISCORD_south_nam_directory_staging", ["240"]),
+                             ("ADISCORD_south_nam_directory_resan_staging", ["240", "269"])):
+            policy = policies[name]
+            self.assertEqual(scalar(block(policy, "allowed"), "tag"), "NAM")
+            self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+            enable = block(policy, "enable")
+            self.assertEqual([e.value for e in enable if not e.key], ["difficulty", ">", "2"])
+            self.assertEqual(scalar(enable, "ADISCORD_south_ai_border_preparation"), "yes")
+            self.assertEqual(scalar(enable, "has_country_flag"), "NAM_corp_takeover")
+            reserve = block(policy, "ai_strategy")
+            self.assertEqual(scalar(reserve, "type"), "put_unit_buffers")
+            self.assertEqual([e.value for e in block(reserve, "states")], states)
+            self.assertEqual(float(scalar(reserve, "ratio")), 0.15)
+            enabled[name] = [e for e in enable if e.key in ("240", "269", "NOT")]
+        # Exactly one of the two reserves holds, so the Directory never buffers twice.
+        # EFL and MZR are the Directory's districts here; GLP and SHL are not.
+        for damir in ("NAM", "EFL", "GLP"):
+            for resan in ("NAM", "MZR", "SHL"):
+                for node in (0, 1):
+                    facts = {("fixture", "resolve_previous_scope"): True, ("240", "controller"): damir,
+                             ("269", "controller"): resan, ("240", "numeric", "supply_node"): node,
+                             ("EFL", "is_subject_of", "NAM"): True, ("MZR", "is_subject_of", "NAM"): True}
+                    held = [name for name, rows in enabled.items() if matches_conditions(rows, facts, "NAM")]
+                    damir_ours = damir in ("NAM", "EFL")
+                    resan_ours = resan in ("NAM", "MZR")
+                    expected = [] if not (damir_ours and node) else (
+                        ["ADISCORD_south_nam_directory_resan_staging"] if resan_ours else ["ADISCORD_south_nam_directory_staging"])
+                    self.assertEqual(held, expected, (damir, resan, node))
 
     def test_dead_exile_releases_fallback_but_living_capitulated_exile_does_not(self):
         self.flag("ADISCORD_nam_resource_war_island_exile")
@@ -2001,6 +2451,7 @@ class SouthLifecycleTests(unittest.TestCase):
         self.assertFalse(self.trigger_matches("ADISCORD_south_final_can_start"))
         self.flag("ADISCORD_south_preparation_started", age=1460)
         self.flag("ADISCORD_south_crisis_warned", age=56)
+        self.ensure_early_window()
         self.assertTrue(self.trigger_matches("ADISCORD_south_final_can_start"))
 
     def objectives(self, north="NAM", capital="700"):
@@ -2220,6 +2671,12 @@ class SouthLifecycleTests(unittest.TestCase):
             self.facts[partner, "is_in_faction_with", recipient] = False
             self.facts[recipient, "is_in_faction_with", partner] = False
 
+    @staticmethod
+    def war_branch(effect):
+        """The branch that starts the war; a branch handing the strike to the appeal comes first."""
+        return next(e.value for e in effect if e.key in ("if", "else_if")
+                    and not any(child.key == "ADISCORD_south_shl_strike_or_appeal" for child in e.value))
+
     def test_shl_border_war_starts_require_reachable_opponents(self):
         shl = definitions(ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt")
         effects = definitions(ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt")
@@ -2237,13 +2694,13 @@ class SouthLifecycleTests(unittest.TestCase):
             self.facts[tag, "has_war", "no"] = True
             self.facts["SHL", "has_completed_focus", focus] = True
             self.facts["SHL", "is_ai", "yes"] = True
-            limit = block(block(effects[effect], "if"), "limit")
+            limit = block(self.war_branch(effects[effect]), "limit")
             for reachable in (False, True):
                 self.facts[tag, "SHL_regional_front_reachable", "no"] = not reachable
                 self.assertEqual(self.matches(limit), reachable, tag)
 
         self.variable("SHL_keizan_state", 5, "SHL")
-        limit = block(block(effects["SHL_start_kyz_war"], "if"), "limit")
+        limit = block(self.war_branch(effects["SHL_start_kyz_war"]), "limit")
         self.facts["GLP", "has_country_flag", "SHL_kyz_pact_signed"] = True
         self.facts["GLP", "SHL_kyz_partner_eligible", "yes"] = True
         for offensive, keizan_open, veyr_open, expected in (
@@ -2433,30 +2890,55 @@ class SouthLifecycleTests(unittest.TestCase):
                     self.execute(effect, "EFL")
                     self.assertEqual(self.calls, [], (effect, invalid, kind))
 
-    def test_economic_offer_requires_pragmatic_sender_and_refusal_stays_peaceful(self):
+    def test_protection_offer_follows_the_mandate_and_refusal_stays_peaceful(self):
+        decision = south_decisions()["ADISCORD_south_offer_protectorate"]
+        self.assertNotIn("ADISCORD_south_offer_economic_contract", south_decisions())
+        self.assertEqual(scalar(decision, "cost"), "0")
+        self.assertEqual(scalar(decision, "custom_cost_text"), "ADISCORD_south_cost_protectorate")
+        self.assertEqual(body(DECISIONS, "\tADISCORD_south_offer_protectorate").count("add_political_power = -50"), 1)
         self.event_root = "EFL"
         self.event_sender = "NAM"
         self.facts[("NAM", "tag", "NAM")] = True
         self.variable("ADISCORD_south_offer_kind", 4, "EFL")
-        self.assertFalse(self.trigger_matches("ADISCORD_south_offer_answer_valid", "EFL"))
-        self.facts[("NAM", "has_completed_focus", "NAM_pragmatic_compact")] = True
+        # Svetlogorye as the champion offers protection on any mandate.
         self.assertTrue(self.trigger_matches("ADISCORD_south_offer_answer_valid", "EFL"))
+        self.facts[("NAM", "is_subject", "no")] = False
+        self.facts[("NAM", "is_subject_of", "AZH")] = True
+        self.event_root, self.event_sender = "KDR", "AZH"
+        self.regional_country("KDR")
+        self.variable("ADISCORD_south_offer_kind", 4, "KDR")
+        self.assertFalse(self.trigger_matches("ADISCORD_south_offer_answer_valid", "KDR"), "Azhar cannot offer protection")
+        self.facts[("NAM", "is_subject", "no")] = True
+        self.facts[("NAM", "is_subject_of", "AZH")] = False
+        self.event_root, self.event_sender = "EFL", "NAM"
         self.execute("ADISCORD_south_refuse_offer", "EFL")
-        self.assertEqual(self.calls, [])
+        self.assertEqual([call for call in self.calls if call[1] in ("country_event", "add_to_war")], [])
         for champion in ("SHL", "NAM"):
             self.assertFalse(self.facts.get(("EFL", "has_country_flag", "ADISCORD_south_refused_" + champion), False))
         self.assertFalse(self.facts[("EFL", "has_variable", "ADISCORD_south_offer_kind")])
         self.variable("ADISCORD_south_offer_kind", 4, "EFL")
+        self.calls.clear()
         self.execute("ADISCORD_south_accept_offer", "EFL")
         self.assertTrue(self.facts[("EFL", "has_country_flag", "ADISCORD_south_submits_to_NAM")])
-        self.assertEqual([call[:3] for call in self.calls], [("EFL", "country_event", "ADISCORD_south.41")])
-        chosen = list(selected_effects(self.expand(self.effects["ADISCORD_south_finalize_submission"]), self.facts, "EFL"))
-        autonomy = [scalar(e.value, "autonomy_state") for scope, e in chosen if e.key == "set_autonomy"]
-        self.assertEqual(autonomy, ["autonomy_NAM_economic_contract"])
-        keys = [e.key for _, e in chosen]
-        self.assertLess(keys.index("set_autonomy"), keys.index("country_event"))
-        self.assertEqual([(scope, scalar(e.value, "id")) for scope, e in chosen if e.key == "country_event"],
-                         [("NAM", "ADISCORD_south.42")])
+        self.assertFalse(self.facts.get(("EFL", "has_country_flag", "ADISCORD_south_submits_to_SHL"), False))
+        self.assertEqual([call[:3] for call in self.calls if call[1] == "country_event"],
+                         [("EFL", "country_event", "ADISCORD_south.41")])
+        # The finalizer gives the subject type of the current mandate.
+        for mandate in ("service", "pragmatic", "district"):
+            self.triggers[f"NAM_prewar_{mandate}_mandate"] = parse_clausewitz(f"has_country_flag = test_{mandate}_mandate")
+        for mandate, autonomy, notice in (("service", "autonomy_NAM_namestnik_office", []),
+                                          ("pragmatic", "autonomy_NAM_economic_contract", [("NAM", "ADISCORD_south.42")]),
+                                          ("district", "autonomy_NAM_oil_charter", []),
+                                          (None, "autonomy_puppet", [])):
+            with self.subTest(mandate=mandate):
+                for other in ("service", "pragmatic", "district"):
+                    self.facts[("NAM", "has_country_flag", f"test_{other}_mandate")] = other == mandate
+                chosen = list(selected_effects(self.expand(self.effects["ADISCORD_south_finalize_submission"]), self.facts, "EFL"))
+                self.assertEqual([scalar(e.value, "autonomy_state") for _, e in chosen if e.key == "set_autonomy"], [autonomy])
+                keys = [e.key for _, e in chosen]
+                self.assertEqual([(scope, scalar(e.value, "id")) for scope, e in chosen if e.key == "country_event"], notice)
+                if notice:
+                    self.assertLess(keys.index("set_autonomy"), keys.index("country_event"))
 
     def test_economic_offer_answer_waits_to_announce_the_signed_contract(self):
         events = {scalar(e.value, "id"): e.value for e in parse_clausewitz(EVENTS.read_text(encoding="utf-8"))
@@ -2472,7 +2954,14 @@ class SouthLifecycleTests(unittest.TestCase):
 
     def submission_effects(self, recipient):
         self.event_root = recipient
-        finalizer = self.expand(self.effects["ADISCORD_south_finalize_submission"])
+
+        def recipient_for_prev(items):
+            # The finalizer runs in the recipient's scope, so PREV inside a champion block is ROOT.
+            return [replace(e, key="ROOT" if e.key == "PREV" else e.key,
+                            value=recipient_for_prev(e.value) if isinstance(e.value, list) else e.value)
+                    for e in items]
+
+        finalizer = self.expand(recipient_for_prev(self.effects["ADISCORD_south_finalize_submission"]))
         return list(selected_effects(finalizer, self.facts, recipient))
 
     def test_submission_finalizer_uses_the_same_current_contract_guard(self):
@@ -2489,10 +2978,38 @@ class SouthLifecycleTests(unittest.TestCase):
                 keys = [e.key for _, e in chosen]
                 self.assertLess(keys.index("set_autonomy"), keys.index("NAM_board_sync_district_status"))
                 self.assertEqual([(scope, e.value) for scope, e in chosen if e.key == "clr_country_flag"],
-                                 [("EFL", "ADISCORD_south_submits_to_SHL"), ("EFL", "ADISCORD_south_submits_to_NAM")])
+                                 [("EFL", "ADISCORD_south_submits_to_SHL"), ("EFL", "ADISCORD_south_submits_to_NAM"),
+                                  ("EFL", "ADISCORD_south_protectorate_terms")])
                 self.facts[("EFL", "has_war_with", sender)] = True
                 self.assertFalse(any(e.key in ("puppet", "set_autonomy", "NAM_apply_border_protocol")
                                      for _, e in self.submission_effects("EFL")))
+
+    def test_offer_texts_name_the_subject_type_the_finalizer_applies(self):
+        finalizer = body(EFFECTS, "ADISCORD_south_finalize_submission")
+        for mandate in ("NAM_prewar_service_mandate", "NAM_prewar_district_mandate"):
+            self.assertIn(f"limit = {{ {mandate} = yes }}", finalizer)
+        offer = self.event(40)
+        expected = {
+            "ADISCORD_south.40.d_submit_nam_namestnik": [("NAM_prewar_district_mandate", "no")],
+            "ADISCORD_south.40.d_submit_nam_charter": [("NAM_prewar_district_mandate", "yes")],
+            "ADISCORD_south.40.t_contract": [("NAM_prewar_service_mandate", "no"), ("NAM_prewar_district_mandate", "no")],
+            "ADISCORD_south.40.d_contract": [("NAM_prewar_service_mandate", "no"), ("NAM_prewar_district_mandate", "no")],
+            "ADISCORD_south.40.t_writ": [("NAM_prewar_service_mandate", "yes")],
+            "ADISCORD_south.40.d_writ": [("NAM_prewar_service_mandate", "yes")],
+            "ADISCORD_south.40.t_charter": [("NAM_prewar_district_mandate", "yes")],
+            "ADISCORD_south.40.d_charter": [("NAM_prewar_district_mandate", "yes")],
+        }
+        for entry in offer:
+            if entry.key in ("title", "desc") and scalar(entry.value, "text") in expected:
+                text = scalar(entry.value, "text")
+                scope = block(block(entry.value, "trigger"), "FROM")
+                self.assertEqual([(e.key, e.value) for e in scope if e.key.startswith("NAM_prewar")],
+                                 expected.pop(text), text)
+        self.assertEqual(expected, {})
+        source = EVENTS.read_text(encoding="utf-8")
+        start = source.index("\tid = ADISCORD_south.40\n")
+        self.assertNotIn("has_completed_focus = NAM_service_state", source[start:source.index("\n}\n", start)])
+        self.assertNotIn("has_completed_focus = NAM_federal_charter", source[start:source.index("\n}\n", start)])
 
     def test_military_offer_rechecks_the_recipient_after_leaving_its_faction(self):
         effects = definitions(ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt")
@@ -2545,50 +3062,108 @@ class SouthLifecycleTests(unittest.TestCase):
     def deadline_passed(self):
         return self.facts.get(("GLB", "has_global_flag", "ADISCORD_south_crisis_deadline_passed"), False)
 
-    def test_deadline_dates_and_offsets_follow_the_pull_levels(self):
-        triggers = definitions(TRIGGERS)
-        offsets = {"ADISCORD_south_deadline_reached": 0, "ADISCORD_south_deadline_date_near": 31,
-                   "ADISCORD_south_deadline_date_in_ai_window": 120, "ADISCORD_south_deadline_can_pull": 135}
-        for name, offset in offsets.items():
-            branches = [e.value for e in block(triggers[name], "OR")]
-            # A sixth unit can never be added, so the pull guard has no level 6.
-            self.assertEqual(len(branches), 6 if name == "ADISCORD_south_deadline_can_pull" else 7, name)
-            for level, branch in enumerate(branches):
-                guard = block(branch, "check_variable")
-                compare = "less_than" if level == 0 else "greater_than_or_equals" if level == 6 else "equals"
-                self.assertEqual((scalar(guard, "var"), scalar(guard, "value"), scalar(guard, "compare")),
-                                 ("global.ADISCORD_south_crisis_pull", str(max(level, 1)), compare), (name, level))
-                literal = [e.value for e in flatten(branch) if not e.key][-1]
-                self.assertEqual(literal, script_date(day_number(DEADLINES[level]) - offset), (name, level))
-        for level in range(1, 7):
-            self.assertEqual(day_number(DEADLINES[level - 1]) - day_number(DEADLINES[level]), 15, level)
-        # The latest observed opening (2164.1.15) plus the postwar route's 651
-        # readiness days still fits before the earliest possible deadline.
-        self.assertGreater(day_number(DEADLINES[-1]), day_number("2164.1.15") + 651)
+    def shown_deadline(self, language):
+        """The deadline text as the scripted localisation renders it now."""
+        shown = {scalar(e.value, "name"): e.value for e in parse_clausewitz(SCRIPTED_LOC.read_text(encoding="utf-8"))
+                 if e.key == "defined_text"}
 
-    def test_deadline_is_reached_on_its_date_and_shown_for_its_level(self):
-        self.assertFalse(self.trigger_matches("ADISCORD_south_deadline_reached"), "2165.1.1 is before every level")
-        self.set_date("2166.2.28")
-        self.assertFalse(self.trigger_matches("ADISCORD_south_deadline_reached"), "An unset counter is level 0")
-        self.set_date("2166.3.1")
-        self.assertTrue(self.trigger_matches("ADISCORD_south_deadline_reached"))
-        shown = next(e.value for e in parse_clausewitz(SCRIPTED_LOC.read_text(encoding="utf-8"))
-                     if e.key == "defined_text" and scalar(e.value, "name") == "ADISCORDSouthDeadlineDate")
-        texts = [e.value for e in shown if e.key == "text"]
+        def pick(name):
+            texts = [e.value for e in shown[name] if e.key == "text"]
+            chosen = next(text for text in texts
+                          if not any(e.key == "trigger" for e in text) or self.matches(block(text, "trigger")))
+            return loc_value(language, scalar(chosen, "localization_key"))
+
+        text = pick("ADISCORDSouthDeadlineDate").replace("[ADISCORDSouthDeadlineMonth]", pick("ADISCORDSouthDeadlineMonth"))
+        for field in ("d", "y"):
+            value = self.facts.get(("GLB", "variable", f"ADISCORD_south_deadline_{field}"), 0)
+            text = text.replace(f"[?global.ADISCORD_south_deadline_{field}|0]", str(int(value)))
+        return text
+
+    def test_deadline_anchor_follows_the_window_counted_pulls_and_floor(self):
+        # Every check compares today with one stored day; no date tables remain.
+        for name in ("ADISCORD_south_deadline_reached", "ADISCORD_south_deadline_date_near",
+                     "ADISCORD_south_deadline_date_in_ai_window", "ADISCORD_south_early_window_open"):
+            source = body(TRIGGERS, name)
+            self.assertNotRegex(source, r"\b\d{4}\.\d+\.\d+\b", name)
+            self.assertIn("var = global.num_days", source, name)
+        offsets = {"": 0, "_near": 31, "_ai": 120, "_pull_guard": 135, "_warning": 180}
+        # Without an anchor the opening sets 540 days, less 15 for every pull counted before.
         for level, deadline in enumerate(DEADLINES):
             with self.subTest(level=level):
+                self.setUp()
                 self.variable("ADISCORD_south_crisis_pull", level)
-                self.set_date(script_date(day_number(deadline) - 1))
-                self.assertFalse(self.trigger_matches("ADISCORD_south_deadline_reached"))
-                self.set_date(deadline)
-                self.assertTrue(self.trigger_matches("ADISCORD_south_deadline_reached"))
-                chosen = next(text for text in texts
-                              if not any(e.key == "trigger" for e in text) or self.matches(block(text, "trigger")))
-                self.assertEqual(scalar(chosen, "localization_key"), f"ADISCORD_south_deadline_date_{level}")
-                for language, expected in (("russian", DEADLINE_TEXT_RU[level]), ("english", DEADLINE_TEXT_EN[level])):
-                    self.assertEqual(loc_value(language, f"ADISCORD_south_deadline_date_{level}"), expected, language)
+                self.execute("ADISCORD_south_begin_preparation")
+                self.assertEqual(self.deadline_day(), day_number(deadline))
+                self.assertEqual(day_number(DEADLINES[0]) - day_number(OPENED), SHORT_WINDOW)
+                for suffix, offset in offsets.items():
+                    self.assertEqual(self.deadline_day(suffix), day_number(deadline) - offset, suffix)
+        # Svetlogorye's victory anchors 1095 days before it opens the preparation; the opening keeps it.
+        self.setUp()
+        self.anchor(VICTORY_WINDOW)
+        self.execute("ADISCORD_south_begin_preparation")
+        self.assertEqual(self.deadline_day(), day_number(OPENED) + VICTORY_WINDOW)
+        self.anchor(SHORT_WINDOW)
+        self.assertEqual(self.deadline_day(), day_number(OPENED) + VICTORY_WINDOW, "One anchor per story campaign")
+        self.setUp()
+        self.variable("ADISCORD_south_crisis_pull", 6)
+        self.anchor(VICTORY_WINDOW)
+        self.assertEqual(self.deadline_day(), day_number(OPENED) + VICTORY_WINDOW - 90)
+        # Never closer than 180 days from the day the anchor is set.
+        self.setUp()
+        self.variable("ADISCORD_south_crisis_pull", 6)
+        self.anchor(200)
+        self.assertEqual(self.deadline_day(), day_number(OPENED) + 180)
+        # The settlements set the long window themselves, before their opening call.
+        nam = (ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8")
+        for settlement in ("ADISCORD_nam_resource_war_resolve_nam_victory", "ADISCORD_nam_resource_war_resolve_standoff"):
+            with self.subTest(settlement=settlement):
+                source = body(ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt", settlement)
+                window = source.index("var = ADISCORD_south_deadline_window value = 1095")
+                self.assertLess(window, source.index("ADISCORD_south_set_deadline = yes"))
+                self.assertLess(source.index("ADISCORD_south_set_deadline = yes"), source.index("ADISCORD_south_begin_preparation = yes"))
+        self.assertEqual(nam.count("ADISCORD_south_deadline_window value = 1095"), 2)
 
-    def test_pull_counts_from_game_start_with_cap_and_guard(self):
+    def test_early_window_is_the_same_floor_for_both_champions(self):
+        self.open_preparation(age=400)
+        self.flag("ADISCORD_south_crisis_warned", age=84)
+        self.set_date(script_date(int(self.deadline_day("_warning")) - 1))
+        for tag in ("NAM", "SHL"):
+            self.assertFalse(self.trigger_matches("ADISCORD_south_final_can_start", tag), tag)
+        self.enter_early_window()
+        for tag in ("NAM", "SHL"):
+            self.assertTrue(self.trigger_matches("ADISCORD_south_final_can_start", tag), tag)
+        self.assertIn("ADISCORD_south_early_window_open = yes", body(TRIGGERS, "ADISCORD_south_preparation_can_finish"))
+
+    def test_deadline_is_reached_on_its_day_and_shown_as_a_calendar_date(self):
+        self.assertFalse(self.trigger_matches("ADISCORD_south_deadline_reached"), "No anchor, no deadline")
+        for language, expected in (("russian", "примерно через три года после мира Светлогорья"),
+                                   ("english", "about three years after Svetlogorye's peace")):
+            self.assertEqual(self.shown_deadline(language), expected, language)
+        self.execute("ADISCORD_south_begin_preparation")
+        deadline = self.deadline_day()
+        self.set_date(script_date(int(deadline) - 1))
+        self.assertFalse(self.trigger_matches("ADISCORD_south_deadline_reached"))
+        self.set_date(script_date(int(deadline)))
+        self.assertTrue(self.trigger_matches("ADISCORD_south_deadline_reached"))
+        self.assertEqual(self.shown_deadline("russian"), "1 марта 2166 г.")
+        self.assertEqual(self.shown_deadline("english"), "1 March 2166")
+        # Year and month boundaries of the 365-day calendar.
+        for date, russian, english in (("2166.12.31", "31 декабря 2166 г.", "31 December 2166"),
+                                       ("2167.1.1", "1 января 2167 г.", "1 January 2167"),
+                                       ("2167.2.28", "28 февраля 2167 г.", "28 February 2167"),
+                                       ("2167.3.1", "1 марта 2167 г.", "1 March 2167")):
+            with self.subTest(date=date):
+                self.setUp()
+                self.set_date(script_date(day_number(date) - SHORT_WINDOW))
+                self.execute("ADISCORD_south_begin_preparation")
+                self.assertEqual(self.deadline_day(), day_number(date))
+                self.assertEqual(self.shown_deadline("russian"), russian)
+                self.assertEqual(self.shown_deadline("english"), english)
+        startup = (ROOT / "common/on_actions/00_ADISCORD_on_actions.txt").read_text(encoding="utf-8")
+        self.assertEqual(startup.count("set_variable = { var = global.ADISCORD_south_day0 value = global.num_days }"), 1)
+        self.assertIn("NOT = { has_variable = global.ADISCORD_south_day0 }", startup)
+
+    def test_pull_counts_before_the_anchor_and_respects_the_cap_guard_and_spheres(self):
         # The crisis is not open yet; Shahrabad's earlier victories still count.
         self.flag("ADISCORD_nam_resource_war_resolved", False)
         self.execute("ADISCORD_south_pull_clock_war")
@@ -2599,22 +3174,34 @@ class SouthLifecycleTests(unittest.TestCase):
         self.assertEqual(self.pull(), 6, "The cap is six units, 90 days")
         self.execute("ADISCORD_south_pull_clock_campaign")
         self.assertEqual(self.pull(), 6)
-        # A unit applies only while the current deadline is more than 135 days away.
-        for level, deadline in enumerate(DEADLINES[:-1]):
+        self.assertIsNone(self.deadline_day(), "A counted unit sets no anchor")
+        # With an anchor a unit moves it by 15 days while more than 135 days remain.
+        for level in range(6):
             with self.subTest(level=level):
+                self.setUp()
+                self.execute("ADISCORD_south_begin_preparation")
                 self.variable("ADISCORD_south_crisis_pull", level)
-                self.set_date(script_date(day_number(deadline) - 135))
+                deadline = self.deadline_day()
+                self.set_date(script_date(int(deadline) - 135))
                 self.execute("ADISCORD_south_pull_clock_unit")
-                self.assertEqual(self.pull(), level)
-                self.set_date(script_date(day_number(deadline) - 136))
+                self.assertEqual((self.pull(), self.deadline_day()), (level, deadline))
+                self.set_date(script_date(int(deadline) - 136))
                 self.execute("ADISCORD_south_pull_clock_unit")
-                self.assertEqual(self.pull(), level + 1)
-                self.assertGreater(day_number(DEADLINES[level + 1]) - day_number(self.today()), 120)
+                self.assertEqual((self.pull(), self.deadline_day()), (level + 1, deadline - 15))
+                self.assertEqual(self.deadline_day("_warning"), deadline - 15 - 180)
+                self.assertGreater(self.deadline_day() - day_number(self.today()), 120)
         # A campaign meeting the guard partway keeps only the units that fit.
-        self.variable("ADISCORD_south_crisis_pull", 0)
-        self.set_date("2165.10.1")
+        self.setUp()
+        self.execute("ADISCORD_south_begin_preparation")
+        deadline = self.deadline_day()
+        self.set_date(script_date(int(deadline) - 165))
         self.execute("ADISCORD_south_pull_clock_campaign")
-        self.assertEqual(self.pull(), 2)
+        self.assertEqual((self.pull(), self.deadline_day()), (2, deadline - 30))
+        # The spheres agreement freezes the deadline.
+        self.flag("ADISCORD_south_spheres_agreed")
+        self.set_date(OPENED)
+        self.execute("ADISCORD_south_pull_clock_war")
+        self.assertEqual((self.pull(), self.deadline_day()), (2, deadline - 30))
 
     def test_no_pull_after_the_war_starts_or_the_south_is_settled(self):
         for flag in ("ADISCORD_south_final_started", "ADISCORD_south_final_resolved"):
@@ -2750,19 +3337,37 @@ class SouthLifecycleTests(unittest.TestCase):
         start = body(EFFECTS, "ADISCORD_south_begin_hostilities")
         self.assertEqual(start.count("ADISCORD_south_mark_unprepared = yes"), 1)
 
-    def test_suspension_clears_the_deadline_and_reopening_restarts_the_minimum(self):
+    def test_suspension_keeps_the_anchor_and_only_story_campaigns_clear_it(self):
         self.pass_deadline()
+        deadline = self.deadline_day()
         self.execute("ADISCORD_south_suspend_preparation")
         self.assertFalse(self.deadline_passed())
+        self.assertEqual(self.deadline_day(), deadline, "A repelled war keeps the deadline it reached")
         self.calls.clear()
         self.execute("ADISCORD_south_check_deadline")
         self.assertEqual(self.calls, [], "No deadline without a running preparation")
         self.execute("ADISCORD_south_begin_preparation")
+        self.assertEqual(self.deadline_day(), deadline)
         self.execute("ADISCORD_south_check_deadline")
         self.assertFalse(self.deadline_passed(), "A reopened preparation receives its own 180 days")
         self.flag("ADISCORD_south_preparation_started", age=180)
         self.execute("ADISCORD_south_check_deadline")
         self.assertTrue(self.deadline_passed())
+        # A new story campaign starts a new calendar and a fresh contest.
+        self.execute("ADISCORD_south_suspend_preparation")
+        self.flag("ADISCORD_south_influence_seeded")
+        self.execute("ADISCORD_south_clear_deadline")
+        for suffix in ("", "_near", "_ai", "_pull_guard", "_warning"):
+            self.assertIsNone(self.deadline_day(suffix), suffix)
+        self.assertFalse(self.facts[("GLB", "has_global_flag", "ADISCORD_south_influence_seeded")])
+        self.execute("ADISCORD_south_begin_preparation")
+        self.assertEqual(self.deadline_day(), day_number(self.today()) + SHORT_WINDOW)
+        self.assertNotIn("ADISCORD_south_clear_deadline", body(EFFECTS, "ADISCORD_south_suspend_preparation"))
+        effects = EFFECTS.read_text(encoding="utf-8")
+        self.assertEqual(effects.count("ADISCORD_south_clear_deadline = yes"), 0)
+        nam = (ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8")
+        # The island-exile settlement, the return-war start and the great-war start.
+        self.assertEqual(nam.count("ADISCORD_south_clear_deadline = yes"), 3)
 
     def test_deadline_watch_is_one_bounded_chain_that_hits_the_date(self):
         watch = self.event(5)
@@ -2777,9 +3382,15 @@ class SouthLifecycleTests(unittest.TestCase):
             self.assertNotRegex(body(TRIGGERS, name), r"\b(every|any|random)_\w+ = \{", name)
         for name in ("ADISCORD_south_suspend_preparation", "ADISCORD_south_begin_hostilities", "ADISCORD_south_clear_preparation"):
             self.assertNotIn("ADISCORD_south_deadline_watch", body(EFFECTS, name), "Only the chain clears its flag")
-        for opened, fired in (("2163.6.13", DEADLINES[0]), ("2166.1.1", script_date(day_number("2166.1.1") + 180))):
+        # The 540-day window, then a victory anchor that is close when the border is
+        # first reached: the 180-day minimum decides.
+        late = script_date(day_number("2165.10.1") + 180)
+        for opened, anchored, fired in ((OPENED, None, DEADLINES[0]), ("2165.10.1", "2163.1.1", late)):
             with self.subTest(opened=opened):
                 self.setUp()
+                if anchored:
+                    self.set_date(anchored)
+                    self.anchor(VICTORY_WINDOW)
                 self.set_date(opened)
                 self.execute("ADISCORD_south_begin_preparation")
                 self.assertEqual([entry for entry in self.scheduled if entry[1] == "ADISCORD_south.5"],
@@ -2915,14 +3526,16 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.assertIn(("ADISCORD_south_ai_border_preparation", "yes"), [(e.key, e.value) for e in block(strategy, "enable")])
                 order = block(strategy, "ai_strategy")
                 self.assertEqual((scalar(order, "type"), scalar(order, "id")), ("prepare_for_war", target))
-        self.execute("ADISCORD_south_begin_preparation")
-        self.facts[("NAM", "is_ai", "yes")] = True
         for level in (0, 6):
+            self.setUp()
             self.variable("ADISCORD_south_crisis_pull", level)
+            self.execute("ADISCORD_south_begin_preparation")
+            self.facts[("NAM", "is_ai", "yes")] = True
+            self.assertEqual(self.deadline_day(), day_number(DEADLINES[level]))
             for age, before, expected in ((60, 121, False), (60, 120, True), (59, 120, False), (60, -30, True)):
                 with self.subTest(level=level, age=age, before=before):
                     self.flag("ADISCORD_south_preparation_started", age=age)
-                    self.set_date(script_date(day_number(DEADLINES[level]) - before))
+                    self.set_date(script_date(int(self.deadline_day()) - before))
                     self.assertEqual(self.trigger_matches("ADISCORD_south_ai_border_preparation", "NAM"), expected)
         self.flag("ADISCORD_south_final_started")
         self.assertFalse(self.trigger_matches("ADISCORD_south_ai_border_preparation", "NAM"))
@@ -2930,9 +3543,14 @@ class SouthLifecycleTests(unittest.TestCase):
     def test_focus_route_stages_both_current_champions_before_the_calendar_window(self):
         gate = "ADISCORD_south_ai_border_preparation"
         self.open_preparation(age=60)
-        self.set_date("2165.1.1")
         for tag in CANDIDATES:
             self.facts[(tag, "is_ai", "yes")] = True
+            self.facts[(tag, "numeric", "difficulty")] = 4
+        # Ready champions on higher difficulty stage from the early window, not before it.
+        self.set_date(script_date(int(self.deadline_day("_warning")) - 1))
+        self.assertFalse(self.trigger_matches(gate, "NAM"))
+        self.assertFalse(self.trigger_matches(gate, "SHL"))
+        self.enter_early_window()
         for level in range(5):
             for tag in CANDIDATES:
                 self.facts[(tag, "numeric", "difficulty")] = level
@@ -2953,6 +3571,261 @@ class SouthLifecycleTests(unittest.TestCase):
         self.assertFalse(self.trigger_matches(gate, "AZH"))
         self.flag("ADISCORD_south_final_resolved")
         self.assertFalse(self.trigger_matches(gate, "SHL"))
+
+    # ----- Influence contest -----
+
+    def contest_country(self, tag, lean=0):
+        self.regional_country(tag)
+        self.variable("ADISCORD_south_coalition_influence", lean, tag)
+
+    def ledger(self, tag):
+        return self.facts.get((tag, "variable", "ADISCORD_south_coalition_influence"))
+
+    def push(self, tag, delta, toward="north"):
+        self.facts.temps["ADISCORD_south_push_delta"] = delta
+        self.execute(f"ADISCORD_south_push_influence_{toward}", tag)
+        self.facts.temps.clear()
+
+    def test_seeds_add_to_the_ledger_once_and_redeem_returns_the_seeded_debt(self):
+        self.contest_country("KDR", 5)
+        self.facts[("KDR", "has_country_flag", "ADISCORD_south_indebted_to_SHL")] = True
+        self.contest_country("WEF")
+        self.execute("ADISCORD_south_begin_preparation")
+        # Kadir: home -10 and Shahrabad's credit -15, added to the existing 5.
+        self.assertEqual(self.ledger("KDR"), -20)
+        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_home_lean")], -25)
+        self.assertTrue(self.facts[("KDR", "has_country_flag", "ADISCORD_south_seed_debt")])
+        self.assertEqual(self.ledger("WEF"), 10)
+        for champion in ("NAM", "SHL"):
+            self.assertEqual(self.facts[(champion, "variable", "ADISCORD_south_influence_power")], 10)
+            self.assertEqual(self.facts[(champion, "variable", "ADISCORD_south_envoy_push")], 10)
+            self.assertEqual(self.facts[(champion, "variable", "ADISCORD_south_adviser_push")], 5)
+        self.assertTrue(self.facts[("GLB", "has_global_flag", "ADISCORD_south_influence_seeded")])
+        self.execute("ADISCORD_south_seed_influence")
+        self.assertEqual(self.ledger("KDR"), -45, "A direct second seed adds again")
+        self.variable("ADISCORD_south_coalition_influence", -20, "KDR")
+        self.flag("ADISCORD_south_preparation_started", False)
+        self.execute("ADISCORD_south_begin_preparation")
+        self.assertEqual(self.ledger("KDR"), -20, "A reopened preparation of the same contest does not seed")
+        self.execute("ADISCORD_south_redeem_shl_debt", "KDR")
+        self.assertFalse(self.facts[("KDR", "has_country_flag", "ADISCORD_south_indebted_to_SHL")])
+        self.assertFalse(self.facts[("KDR", "has_country_flag", "ADISCORD_south_seed_debt")])
+        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_home_lean")], -10)
+        self.execute("ADISCORD_south_redeem_shl_debt", "KDR")
+        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_home_lean")], -10)
+        callers = [path for path in (ROOT / "focus_trees").rglob("*.txt")
+                   if "ADISCORD_south_redeem_shl_debt" in path.read_text(encoding="utf-8")]
+        self.assertEqual([path.name for path in callers], ["pragmatic.txt"])
+
+    def test_contest_cycle_drifts_and_ties_in_one_fixed_tag_pass(self):
+        cycle = body(EFFECTS, "ADISCORD_south_contest_cycle")
+        for source in (cycle, body(EFFECTS, "ADISCORD_south_contest_drift")):
+            self.assertNotRegex(source, r"\b(every|any|random)_\w+ = \{")
+        self.assertEqual({tag for tag in REGIONAL if f"{tag} = {{ ADISCORD_south_contest_drift = yes }}" in cycle}, set(REGIONAL))
+        self.assertEqual(body(EFFECTS, "ADISCORD_south_crisis_cycle").count("ADISCORD_south_contest_cycle = yes"), 1)
+        self.effects["NAM_add_treasury"] = parse_clausewitz(
+            "add_to_variable = { var = test_treasury value = NAM_treasury_amount }")
+        self.contest_country("KDR")
+        self.execute("ADISCORD_south_begin_preparation")
+        self.assertEqual(self.ledger("KDR"), -10)
+        for start, expected in ((20, 17), (-8, -10), (-30, -27)):
+            self.variable("ADISCORD_south_coalition_influence", start, "KDR")
+            self.execute("ADISCORD_south_contest_drift", "KDR")
+            self.assertEqual(self.ledger("KDR"), expected, start)
+        # Ties after the drift: Svetlogorye's tie and an oil client against Shahrabad's embassy.
+        self.variable("ADISCORD_south_coalition_influence", -10, "KDR")
+        self.variable("ADISCORD_south_north_tie", 2, "KDR")
+        self.facts[("KDR", "has_country_flag", "NAM_oil_client")] = True
+        self.facts[("KDR", "has_country_flag", "SHL_embassy")] = True
+        self.execute("ADISCORD_south_contest_drift", "KDR")
+        self.assertEqual(self.ledger("KDR"), -8)
+        # A held economic contract pays every cycle, twice as much under the trade coalition.
+        self.variable("ADISCORD_south_tool_kind", 2, "KDR")
+        self.execute("ADISCORD_south_contest_drift", "KDR")
+        self.assertEqual(self.facts[("NAM", "variable", "test_treasury")], 20)
+        self.facts[("NAM", "has_completed_focus", "NAM_south_trade_coalition")] = True
+        self.execute("ADISCORD_south_contest_drift", "KDR")
+        self.assertEqual(self.facts[("NAM", "variable", "test_treasury")], 60)
+        # Shahrabad gains one point of power every second cycle.
+        power = ("SHL", "variable", "ADISCORD_south_influence_power")
+        self.execute("ADISCORD_south_contest_cycle")
+        self.execute("ADISCORD_south_contest_cycle")
+        self.assertEqual(self.facts[power], 11)
+
+    def test_push_helpers_need_the_window_a_free_country_and_an_open_sphere(self):
+        self.contest_country("KDR")
+        self.push("KDR", 10)
+        self.assertEqual(self.ledger("KDR"), 0, "No contest before the preparation")
+        self.execute("ADISCORD_south_begin_preparation")
+        self.push("KDR", 10)
+        self.assertEqual(self.ledger("KDR"), 0)
+        self.push("KDR", 200)
+        self.assertEqual(self.ledger("KDR"), 100)
+        self.push("KDR", 120, "shl")
+        self.assertEqual(self.ledger("KDR"), -20)
+        self.facts[("KDR", "is_subject_of", "SHL")] = True
+        self.push("KDR", 10)
+        self.assertEqual(self.ledger("KDR"), -20, "A bound country is out of the contest")
+        self.facts[("KDR", "is_subject_of", "SHL")] = False
+        self.execute("ADISCORD_south_accept_spheres")
+        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_sphere")], 1)
+        self.push("KDR", 10)
+        self.assertEqual(self.ledger("KDR"), -20, "Shahrabad's agreed sphere does not move")
+        self.push("KDR", 10, "shl")
+        self.assertEqual(self.ledger("KDR"), -30)
+        self.flag("ADISCORD_south_final_started")
+        self.push("KDR", 10, "shl")
+        self.assertEqual(self.ledger("KDR"), -30, "The war closes the contest")
+
+    def test_path_tool_escrow_settles_exactly_once(self):
+        decisions = south_decisions()
+        self.effects["NAM_add_treasury"] = parse_clausewitz(
+            "add_to_variable = { var = test_treasury value = NAM_treasury_amount }")
+        self.effects["NAM_groups_refresh"] = []
+        for name, kind in (("ADISCORD_south_nam_writ", 1), ("ADISCORD_south_nam_contract", 2),
+                           ("ADISCORD_south_nam_charter", 3)):
+            decision = decisions[name]
+            self.assertEqual((scalar(decision, "cost"), scalar(decision, "days_remove")), ("0", "30"), name)
+            self.assertEqual(body(DECISIONS, "\t" + name).count("add_political_power = -"), 1, name)
+            self.assertEqual(body(DECISIONS, "\t" + name).count(f"var = ADISCORD_south_tool_escrow value = {kind} }}"), 1, name)
+        writ = decisions["ADISCORD_south_nam_writ"]
+        self.contest_country("KDR")
+        self.execute("ADISCORD_south_begin_preparation")
+        self.variable("ADISCORD_south_coalition_influence", 39, "KDR")
+        self.event_root, self.event_sender = "NAM", "KDR"
+        self.facts[("NAM", "numeric", "has_political_power")] = 100
+        self.facts[("NAM", "equipment", "infantry_equipment")] = 6000
+        self.assertFalse(self.matches(block(writ, "available"), "NAM"), "Lean below 40")
+        self.variable("ADISCORD_south_coalition_influence", 40, "KDR")
+        self.assertTrue(self.matches(block(writ, "available"), "NAM"))
+        self.execute_entries(block(writ, "complete_effect"), "NAM")
+        self.execute_entries(block(writ, "complete_effect"), "NAM")
+        self.assertEqual(self.facts[("NAM", "numeric", "has_political_power")], 50, "One debit per offer")
+        self.assertEqual(self.facts[("NAM", "equipment", "infantry_equipment")], 3000)
+        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_tool_escrow")], 1)
+        self.assertFalse(self.matches(block(writ, "available"), "NAM"), "A pending escrow blocks a second offer")
+        # Acceptance delivers the guard's rifles, the push and the tie once.
+        self.execute("ADISCORD_south_deliver_tool", "KDR")
+        self.execute("ADISCORD_south_deliver_tool", "KDR")
+        self.assertEqual(self.facts[("KDR", "equipment", "infantry_equipment")], 3000)
+        self.assertEqual(self.ledger("KDR"), 48)
+        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_tool_kind")], 1)
+        self.assertEqual(self.facts[("KDR", "variable", "ADISCORD_south_north_tie")], 2)
+        self.assertFalse(self.facts[("KDR", "has_variable", "ADISCORD_south_tool_escrow")])
+        # A refusal returns everything except political power and turns the country away.
+        for settle in ("refuse", "cancel", "close"):
+            with self.subTest(settle=settle):
+                self.contest_country("WEF", 50)
+                self.variable("ADISCORD_south_tool_escrow", 2, "WEF")
+                self.facts[("NAM", "variable", "test_treasury")] = 0
+                if settle == "refuse":
+                    self.execute("ADISCORD_south_refuse_tool", "WEF")
+                    self.assertEqual(self.ledger("WEF"), 45)
+                    self.assertEqual(self.facts[("WEF", "flag_duration", "ADISCORD_south_tool_refused")], 56)
+                elif settle == "cancel":
+                    self.event_sender = "WEF"
+                    contract = decisions["ADISCORD_south_nam_contract"]
+                    self.execute_entries(block(contract, "cancel_effect"), "NAM")
+                else:
+                    self.execute("ADISCORD_south_close_coalition_diplomacy", "WEF")
+                self.assertEqual(self.facts[("NAM", "variable", "test_treasury")], 300)
+                self.assertFalse(self.facts[("WEF", "has_variable", "ADISCORD_south_tool_escrow")])
+                self.execute("ADISCORD_south_refund_tool_escrow", "WEF")
+                self.assertEqual(self.facts[("NAM", "variable", "test_treasury")], 300, "Refunded once")
+
+    def test_war_start_clears_the_ledger_only_after_the_side_choice(self):
+        self.assertNotIn("ADISCORD_south_close_coalition_diplomacy", body(EFFECTS, "ADISCORD_south_bind_to_champion"))
+        for join in ("ADISCORD_south_join_shl_side", "ADISCORD_south_join_north_side"):
+            source = body(EFFECTS, join)
+            self.assertLess(source.index("var = ADISCORD_south_side"), source.index("ADISCORD_south_close_coalition_diplomacy = yes"), join)
+        hostilities = body(EFFECTS, "ADISCORD_south_begin_hostilities")
+        self.assertLess(hostilities.index("ADISCORD_south_offer_side_choices = yes"), hostilities.index("id = ADISCORD_south.75 days = 1"))
+        self.assertEqual([(e.key, e.value) for e in block(self.event(75), "immediate")],
+                         [("ADISCORD_south_close_unchosen_contests", "yes")])
+        self.contest_country("KDR", 30)
+        self.contest_country("WEF", -30)
+        self.variable("ADISCORD_south_side", 2, "WEF")
+        self.flag("ADISCORD_south_influence_seeded")
+        self.flag("ADISCORD_south_spheres_agreed")
+        self.execute("ADISCORD_south_close_unchosen_contests")
+        self.assertIsNone(self.ledger("KDR"))
+        self.assertEqual(self.ledger("WEF"), -30, "A country that chose keeps its record until its join effect")
+        for flag in ("ADISCORD_south_influence_seeded", "ADISCORD_south_spheres_agreed"):
+            self.assertFalse(self.facts[("GLB", "has_global_flag", flag)], flag)
+
+    def test_a_demand_on_a_country_leaning_away_becomes_a_push(self):
+        for demand in ("ADISCORD_south_demand_submission", "ADISCORD_south_demand_annexation"):
+            branch = block(self.effects[demand], "if")
+            self.assertIn(("ADISCORD_south_leans_away_from_root", "yes"), [(e.key, e.value) for e in block(branch, "limit")], demand)
+            self.assertEqual([(e.key, e.value) for e in branch if e.key != "limit"],
+                             [("ADISCORD_south_court_instead_of_demand", "yes")], demand)
+        leaning = body(TRIGGERS, "ADISCORD_south_leans_away_from_root")
+        self.assertIn("ADISCORD_south_lean_north_40 = yes", leaning)
+        self.assertIn("ADISCORD_south_lean_shl_40 = yes", leaning)
+        court = body(EFFECTS, "ADISCORD_south_court_instead_of_demand")
+        self.assertIn("value = 10", court)
+
+    def test_keizan_and_veyr_appeal_blocks_the_war_and_rearms_it(self):
+        shl = (ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt").read_text(encoding="utf-8")
+        for starter, target in (("SHL_start_kyz_war", 1), ("SHL_start_glp_war", 2)):
+            source = body(ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt", starter)
+            first = source.index("ADISCORD_south_shl_strike_open = no")
+            self.assertLess(first, source.index("ADISCORD_south_shl_strike_or_appeal = yes"), starter)
+            self.assertIn(f"var = ADISCORD_south_strike_target value = {target} }}", source, starter)
+        self.assertEqual(shl.count("ADISCORD_south_shl_strike_or_appeal = yes"), 2)
+        self.contest_country("KYZ")
+        self.execute("ADISCORD_south_begin_preparation")
+        self.variable("ADISCORD_south_coalition_influence", 21, "KYZ")
+        self.assertFalse(self.trigger_matches("ADISCORD_south_shl_strike_open", "KYZ"))
+        self.variable("ADISCORD_south_coalition_influence", 20, "KYZ")
+        self.assertTrue(self.trigger_matches("ADISCORD_south_shl_strike_open", "KYZ"))
+        self.variable("ADISCORD_south_coalition_influence", 21, "KYZ")
+        self.scheduled.clear()
+        # The fixture expands event targets before execution; the effect saves the same one.
+        self.targets["ADISCORD_south_strike_country"] = "KYZ"
+        self.facts.temps["ADISCORD_south_strike_target"] = 1
+        self.execute("ADISCORD_south_shl_strike_or_appeal")
+        self.facts.temps.clear()
+        self.assertTrue(self.facts[("KYZ", "has_country_flag", "ADISCORD_south_appeal_open")])
+        self.assertEqual([entry[:2] for entry in self.scheduled], [("NAM", "ADISCORD_south.70")])
+        self.scheduled.clear()
+        self.facts.temps["ADISCORD_south_strike_target"] = 1
+        self.execute("ADISCORD_south_shl_strike_or_appeal")
+        self.facts.temps.clear()
+        self.assertEqual(self.scheduled, [], "A pending appeal owns its callback")
+        self.assertTrue(self.trigger_matches("ADISCORD_south_shl_strike_deferred", "KYZ"))
+        # A sphere block schedules one re-check; a repeated ultimatum adds none.
+        self.facts[("KYZ", "has_country_flag", "ADISCORD_south_appeal_open")] = False
+        self.assertFalse(self.trigger_matches("ADISCORD_south_shl_strike_deferred", "KYZ"))
+        self.flag("ADISCORD_south_spheres_agreed")
+        self.variable("ADISCORD_south_sphere", 2, "KYZ")
+        for _ in range(2):
+            self.facts.temps["ADISCORD_south_strike_target"] = 1
+            self.execute("ADISCORD_south_shl_strike_or_appeal")
+            self.facts.temps.clear()
+        self.assertEqual([entry[:2] for entry in self.scheduled], [("SHL", "ADISCORD_south.76")])
+        self.assertTrue(self.facts[("KYZ", "has_country_flag", "ADISCORD_south_strike_recheck_pending")])
+        self.assertTrue(self.trigger_matches("ADISCORD_south_shl_strike_deferred", "KYZ"))
+        self.assertIn("clr_country_flag = ADISCORD_south_strike_recheck_pending",
+                      EVENTS.read_text(encoding="utf-8").split("id = ADISCORD_south.76\n", 1)[1].split("country_event", 1)[0])
+        self.facts[("KYZ", "has_country_flag", "ADISCORD_south_strike_recheck_pending")] = False
+        self.facts[("GLB", "has_global_flag", "ADISCORD_south_spheres_agreed")] = False
+        self.variable("ADISCORD_south_sphere", 0, "KYZ")
+        self.scheduled.clear()
+        veyr = (ROOT / "common/decisions/ADISCORD_SHL_decisions.txt").read_text(encoding="utf-8")
+        veyr = veyr.split("\tSHL_ultimatum_veyr = {", 1)[1].split("\n\t}\n", 1)[0]
+        self.assertIn("GLP = { ADISCORD_south_shl_strike_deferred = no }", veyr.split("cost = 50", 1)[0])
+        self.assertNotIn("hidden_effect = {\n", veyr, "The returned price stays visible")
+        # A declined appeal lets the war go on; an answered one defers it.
+        self.facts[("KYZ", "has_country_flag", "ADISCORD_south_appeal_declined")] = True
+        self.assertTrue(self.trigger_matches("ADISCORD_south_shl_strike_open", "KYZ"))
+        self.facts[("KYZ", "has_country_flag", "ADISCORD_south_appeal_answered")] = True
+        self.assertFalse(self.trigger_matches("ADISCORD_south_shl_strike_open", "KYZ"))
+        rearm = self.event(76)
+        self.assertEqual((scalar(rearm, "hidden"), scalar(rearm, "is_triggered_only")), ("yes", "yes"))
+        events = EVENTS.read_text(encoding="utf-8")
+        for days in (180, 90):
+            self.assertIn(f"id = ADISCORD_south.76 days = {days}", events)
 
     def test_staging_reserves_use_home_supply_nodes_and_release_existing_assignments(self):
         policies = definitions(ROOT / "common/ai_strategy/ADISCORD_south_final_war_ai.txt")
@@ -2988,10 +3861,6 @@ class SouthLifecycleTests(unittest.TestCase):
 
 DECISIONS = ROOT / "common/decisions/ADISCORD_south_final_war_decisions.txt"
 SCRIPTED_LOC = ROOT / "common/scripted_localisation/ADISCORD_south_final_war_scripted_loc.txt"
-DEADLINE_TEXT_RU = ("1 марта 2166 г.", "14 февраля 2166 г.", "30 января 2166 г.", "15 января 2166 г.",
-                    "31 декабря 2165 г.", "16 декабря 2165 г.", "1 декабря 2165 г.")
-DEADLINE_TEXT_EN = ("1 March 2166", "14 February 2166", "30 January 2166", "15 January 2166",
-                    "31 December 2165", "16 December 2165", "1 December 2165")
 STRAIN_MODIFIER = ROOT / "common/dynamic_modifiers/ADISCORD_south_final_war_dynamic_modifiers.txt"
 STRAIN_FIELDS = ("ADISCORD_south_strain_stability", "ADISCORD_south_strain_war_support", "ADISCORD_south_strain_factory")
 
@@ -3391,6 +4260,10 @@ class FocusAggregateTests(unittest.TestCase):
                             self.assertNotIn(name, previewed, identifier)
                             previewed[name] = delta
                 hidden = [part for entry in reward if entry.key == "hidden_effect" for part in entry.value]
+                # A lane-end variant shows the aggregate its shared lane core applies.
+                for core in (entry.key for entry in reward if entry.key.endswith("_core") and entry.value == "yes"):
+                    effect = parse_clausewitz(body(ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt", core))
+                    hidden += [part for entry in effect if entry.key == "hidden_effect" for part in entry.value]
                 for entry in (part for part in hidden if part.key == "add_to_variable"):
                     change = {part.key: part.value for part in entry.value}
                     if change.get("var") in owners:

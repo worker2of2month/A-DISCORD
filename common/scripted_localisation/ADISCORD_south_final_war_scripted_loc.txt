@@ -14,6 +14,42 @@ defined_text = {
 	text = { localization_key = ADISCORD_south_influence_blank }
 }
 
+# COUNTRY. Svetlogorye's path tool held or awaiting an answer.
+defined_text = {
+	name = ADISCORDSouthToolHeld
+	text = {
+		trigger = { check_variable = { var = ADISCORD_south_tool_kind value = 1 compare = equals } }
+		localization_key = ADISCORD_south_map_tool_writ
+	}
+	text = {
+		trigger = { check_variable = { var = ADISCORD_south_tool_kind value = 2 compare = equals } }
+		localization_key = ADISCORD_south_map_tool_contract
+	}
+	text = {
+		trigger = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+		localization_key = ADISCORD_south_map_tool_charter
+	}
+	text = {
+		trigger = { has_variable = ADISCORD_south_tool_escrow }
+		localization_key = ADISCORD_south_map_tool_pending
+	}
+	text = { localization_key = ADISCORD_south_influence_blank }
+}
+
+# COUNTRY. Sphere of the spheres agreement while it holds.
+defined_text = {
+	name = ADISCORDSouthSphere
+	text = {
+		trigger = { ADISCORD_south_in_shl_sphere = yes }
+		localization_key = ADISCORD_south_map_sphere_shl
+	}
+	text = {
+		trigger = { ADISCORD_south_in_nam_sphere = yes }
+		localization_key = ADISCORD_south_map_sphere_nam
+	}
+	text = { localization_key = ADISCORD_south_influence_blank }
+}
+
 defined_text = {
 	name = ADISCORDSouthDiplomaticBalance
 	text = {
@@ -275,35 +311,68 @@ defined_text = {
 	}
 }
 
-# GLOBAL. The current crisis deadline; ADISCORD_south_deadline_reached uses the same levels.
+# GLOBAL. The current crisis deadline. The day, month and year are written by
+# ADISCORD_south_store_deadline_date whenever the anchor is set or pulled;
+# before an anchor exists the text gives the rule instead of a date.
 defined_text = {
 	name = ADISCORDSouthDeadlineDate
 	text = {
-		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 6 compare = greater_than_or_equals } }
-		localization_key = ADISCORD_south_deadline_date_6
+		trigger = { ADISCORD_south_deadline_set = yes }
+		localization_key = ADISCORD_south_deadline_date_set
 	}
 	text = {
-		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals } }
-		localization_key = ADISCORD_south_deadline_date_5
+		localization_key = ADISCORD_south_deadline_date_pending
+	}
+}
+
+defined_text = {
+	name = ADISCORDSouthDeadlineMonth
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 2 compare = equals } }
+		localization_key = ADISCORD_south_month_2
 	}
 	text = {
-		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals } }
-		localization_key = ADISCORD_south_deadline_date_4
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 3 compare = equals } }
+		localization_key = ADISCORD_south_month_3
 	}
 	text = {
-		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals } }
-		localization_key = ADISCORD_south_deadline_date_3
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 4 compare = equals } }
+		localization_key = ADISCORD_south_month_4
 	}
 	text = {
-		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals } }
-		localization_key = ADISCORD_south_deadline_date_2
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 5 compare = equals } }
+		localization_key = ADISCORD_south_month_5
 	}
 	text = {
-		trigger = { check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals } }
-		localization_key = ADISCORD_south_deadline_date_1
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 6 compare = equals } }
+		localization_key = ADISCORD_south_month_6
 	}
 	text = {
-		localization_key = ADISCORD_south_deadline_date_0
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 7 compare = equals } }
+		localization_key = ADISCORD_south_month_7
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 8 compare = equals } }
+		localization_key = ADISCORD_south_month_8
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 9 compare = equals } }
+		localization_key = ADISCORD_south_month_9
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 10 compare = equals } }
+		localization_key = ADISCORD_south_month_10
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 11 compare = equals } }
+		localization_key = ADISCORD_south_month_11
+	}
+	text = {
+		trigger = { check_variable = { var = global.ADISCORD_south_deadline_m value = 12 compare = equals } }
+		localization_key = ADISCORD_south_month_12
+	}
+	text = {
+		localization_key = ADISCORD_south_month_1
 	}
 }
 

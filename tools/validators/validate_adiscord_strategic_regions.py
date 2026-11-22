@@ -23,6 +23,7 @@ try:
         OUTER_STATE_MARKER,
         ALL_SEA_REGIONS,
         DEDICATED_SEA_PROVINCES,
+        MON_PLANNED_PARENT,
         REGIONS,
         REMAINDER_STATE_MARKER,
         SEA_CLIMATES,
@@ -46,6 +47,7 @@ except ModuleNotFoundError:
         OUTER_STATE_MARKER,
         ALL_SEA_REGIONS,
         DEDICATED_SEA_PROVINCES,
+        MON_PLANNED_PARENT,
         REGIONS,
         REMAINDER_STATE_MARKER,
         SEA_CLIMATES,
@@ -358,6 +360,21 @@ def validate_naval_dominance_thresholds(source: str, errors: list[str]) -> None:
             )
 
 
+def planned_parent_region_issues(
+    province_regions: dict[int, list[int]], planned_parent: dict[int, int]
+) -> list[str]:
+    """A planned province shares its parent's region once both are on the map."""
+    issues = []
+    for province_id, parent_id in sorted(planned_parent.items()):
+        regions = province_regions.get(province_id)
+        if regions is not None and regions != province_regions.get(parent_id):
+            issues.append(
+                f"planned province {province_id}: regions {regions} differ from "
+                f"parent {parent_id} regions {province_regions.get(parent_id)}"
+            )
+    return issues
+
+
 def main() -> int:
     errors: list[str] = []
     validate_naval_dominance_thresholds(
@@ -425,6 +442,7 @@ def main() -> int:
             ):
                 errors.append(f"land region {region_id}: ocean province {province_id}")
 
+    errors.extend(planned_parent_region_issues(province_regions, MON_PLANNED_PARENT))
     naval_provinces = set().union(
         *(
             set(regions[region_id]["provinces"])

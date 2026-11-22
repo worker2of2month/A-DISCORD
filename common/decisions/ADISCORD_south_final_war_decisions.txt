@@ -3,13 +3,18 @@
 
 ADISCORD_south_final_war_category = {
 
+	# ----- Influence contest -----
+	# Only the two champions send delegations, advisers and protection; their
+	# faction partners and subjects act through them.
+
 	ADISCORD_south_build_coalition_influence = {
 		icon = generic_political_discourse
 		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
 		target_trigger = { FROM = { exists = yes } }
 		visible = {
-			ADISCORD_south_coalition_inviter = yes
-			FROM = { ADISCORD_south_coalition_diplomacy_open = yes }
+			ADISCORD_south_is_contest_champion = yes
+			ADISCORD_south_champion_contest_ready = yes
+			FROM = { ADISCORD_south_contest_target_open = yes }
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -25,23 +30,39 @@ ADISCORD_south_final_war_category = {
 			hidden_effect = {
 				if = {
 					limit = {
-						ADISCORD_south_coalition_inviter = yes
+						ADISCORD_south_is_contest_champion = yes
 						NOT = { has_political_power < 25 }
 						FROM = {
-							ADISCORD_south_coalition_diplomacy_open = yes
+							ADISCORD_south_contest_target_open = yes
 							ADISCORD_south_coalition_influence_available = yes
 						}
 					}
 					add_political_power = -25
+					set_country_flag = { flag = ADISCORD_south_envoy_sent days = 28 }
 					FROM = { ADISCORD_south_gain_coalition_influence = yes }
 				}
 			}
 		}
 		ai_will_do = {
-			base = 1
+			base = 5
 			modifier = {
-				factor = 0.1
-				FROM = { ADISCORD_south_coalition_invitation_ready = yes }
+				add = 15
+				FROM = { has_country_flag = ADISCORD_south_key_owner }
+			}
+			modifier = {
+				add = 10
+				FROM = { ADISCORD_south_ai_own_reachable = yes }
+			}
+			modifier = {
+				add = 10
+				FROM = { ADISCORD_south_ai_rival_rising = yes }
+			}
+			modifier = {
+				factor = 0
+				OR = {
+					has_country_flag = ADISCORD_south_envoy_sent
+					FROM = { ADISCORD_south_ai_contest_settled = yes }
+				}
 			}
 		}
 	}
@@ -51,8 +72,9 @@ ADISCORD_south_final_war_category = {
 		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
 		target_trigger = { FROM = { exists = yes } }
 		visible = {
-			ADISCORD_south_coalition_inviter = yes
-			FROM = { ADISCORD_south_coalition_diplomacy_open = yes }
+			ADISCORD_south_is_contest_champion = yes
+			ADISCORD_south_champion_advisers_ready = yes
+			FROM = { ADISCORD_south_contest_target_open = yes }
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -76,10 +98,10 @@ ADISCORD_south_final_war_category = {
 			hidden_effect = {
 				if = {
 					limit = {
-						ADISCORD_south_coalition_inviter = yes
+						ADISCORD_south_is_contest_champion = yes
 						NOT = { has_political_power < 20 }
 						FROM = {
-							ADISCORD_south_coalition_diplomacy_open = yes
+							ADISCORD_south_contest_target_open = yes
 							ADISCORD_south_adviser_post_free = yes
 						}
 					}
@@ -98,14 +120,16 @@ ADISCORD_south_final_war_category = {
 			hidden_effect = {
 				if = {
 					limit = { FROM = { ADISCORD_south_adviser_mission_valid = yes } }
+					set_temp_variable = { var = ADISCORD_south_push_delta value = ROOT.ADISCORD_south_adviser_push }
 					FROM = {
 						army_experience = 5
 						if = {
-							limit = { ROOT = { ADISCORD_south_map_country_north = yes } }
-							add_to_variable = { var = ADISCORD_south_coalition_influence value = 15 }
+							limit = { ROOT = { tag = SHL } }
+							ADISCORD_south_push_influence_shl = yes
 						}
-						else = { add_to_variable = { var = ADISCORD_south_coalition_influence value = -15 } }
-						clamp_variable = { var = ADISCORD_south_coalition_influence min = -100 max = 100 }
+						else = {
+							ADISCORD_south_push_influence_north = yes
+						}
 					}
 				}
 				FROM = { ADISCORD_south_withdraw_advisers = yes }
@@ -116,10 +140,22 @@ ADISCORD_south_final_war_category = {
 			hidden_effect = { FROM = { ADISCORD_south_withdraw_advisers = yes } }
 		}
 		ai_will_do = {
-			base = 0.7
+			base = 5
+			modifier = {
+				add = 15
+				FROM = { has_country_flag = ADISCORD_south_key_owner }
+			}
+			modifier = {
+				add = 10
+				FROM = { ADISCORD_south_ai_own_reachable = yes }
+			}
+			modifier = {
+				add = 10
+				FROM = { ADISCORD_south_ai_rival_rising = yes }
+			}
 			modifier = {
 				factor = 0
-				FROM = { ADISCORD_south_coalition_invitation_ready = yes }
+				FROM = { ADISCORD_south_ai_contest_settled = yes }
 			}
 		}
 	}
@@ -190,10 +226,333 @@ ADISCORD_south_final_war_category = {
 			}
 		}
 		ai_will_do = {
-			base = 1
+			base = 10
 			modifier = {
 				factor = 0.25
 				FROM = { is_in_faction = yes }
+			}
+		}
+	}
+
+	# Protection is a voluntary subject offer (kind 4 of ADISCORD_south.40); a
+	# refusal turns the country away from the sender and never starts a war.
+	ADISCORD_south_offer_protectorate = {
+		icon = generic_political_discourse
+		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			OR = {
+				tag = SHL
+				tag = NAM
+			}
+			ADISCORD_south_is_contest_champion = yes
+			ADISCORD_south_champion_contest_ready = yes
+			FROM = { ADISCORD_south_contest_target_open = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_protection_level_tt
+				FROM = { ADISCORD_south_protection_level_reached = yes }
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_coalition_talks_free_tt
+				FROM = {
+					ADISCORD_south_campaign_target_valid = yes
+					ADISCORD_south_coalition_talks_free = yes
+				}
+			}
+			if = {
+				limit = { tag = NAM }
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_protection_sovereignty_tt
+					FROM = { NAM_neighbour_sovereignty_recognised = no }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = ADISCORD_south_cost_protectorate
+		custom_cost_trigger = { NOT = { has_political_power < 50 } }
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_offer_protectorate_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_political_power < 50 }
+						FROM = {
+							ADISCORD_south_contest_target_open = yes
+							ADISCORD_south_protection_level_reached = yes
+							ADISCORD_south_campaign_target_valid = yes
+							ADISCORD_south_coalition_talks_free = yes
+						}
+					}
+					add_political_power = -50
+					FROM = {
+						ADISCORD_release_non_participating_minor_optimization = yes
+						set_variable = { var = ADISCORD_south_offer_kind value = 4 }
+						ADISCORD_south_queue_offer = yes
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_political_power < 100
+			}
+		}
+	}
+
+	ADISCORD_south_council_session = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		visible = {
+			has_completed_focus = NAM_south_coalition_council
+			ADISCORD_south_contest_open = yes
+		}
+		cost = 0
+		custom_cost_text = ADISCORD_south_cost_council_session
+		custom_cost_trigger = { NOT = { has_political_power < 50 } }
+		days_remove = 30
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = { NOT = { has_political_power < 50 } }
+					add_political_power = -50
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = ADISCORD_south_council_session_tt
+			hidden_effect = { ADISCORD_south_council_session_push = yes }
+		}
+		# The war for the South closes the contest; the session's price is not returned.
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_campaign_over_tt
+				ADISCORD_south_contest_open = no
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_political_power < 120
+			}
+		}
+	}
+
+	# ----- Svetlogorye's path tools -----
+	# One tool per mandate. The price waits in ADISCORD_south_tool_escrow on the
+	# target for 30 days; ADISCORD_south.68 then delivers or refunds it once.
+
+	ADISCORD_south_nam_writ = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			NAM_prewar_service_mandate = yes
+			has_completed_focus = NAM_south_desert_offices
+			FROM = { ADISCORD_south_in_contest = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_tool_offer_open_tt
+				FROM = { ADISCORD_south_tool_offer_open = yes }
+			}
+		}
+		cost = 0
+		custom_cost_text = ADISCORD_south_cost_writ
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			NOT = { has_equipment = { infantry_equipment < 3000 } }
+		}
+		days_remove = 30
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_nam_writ_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_political_power < 50 }
+						NOT = { has_equipment = { infantry_equipment < 3000 } }
+						FROM = { ADISCORD_south_tool_offer_open = yes }
+					}
+					add_political_power = -50
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = -3000
+					}
+					FROM = { set_variable = { var = ADISCORD_south_tool_escrow value = 1 } }
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { FROM = { check_variable = { var = ADISCORD_south_tool_escrow value = 1 compare = equals } } }
+					FROM = { country_event = { id = ADISCORD_south.68 hours = 6 } }
+				}
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_tool_offer_lapsed_tt
+				FROM = {
+					check_variable = { var = ADISCORD_south_tool_escrow value = 1 compare = equals }
+					ADISCORD_south_tool_offer_valid = no
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = ADISCORD_south_tool_cancelled_tt
+			hidden_effect = { FROM = { ADISCORD_south_refund_tool_escrow = yes } }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 15
+				FROM = { has_country_flag = ADISCORD_south_key_owner }
+			}
+		}
+	}
+
+	ADISCORD_south_nam_contract = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			NAM_prewar_pragmatic_mandate = yes
+			has_completed_focus = NAM_prag_partner_supply
+			FROM = { ADISCORD_south_in_contest = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_tool_offer_open_tt
+				FROM = { ADISCORD_south_tool_offer_open = yes }
+			}
+		}
+		cost = 0
+		custom_cost_text = ADISCORD_south_cost_contract
+		custom_cost_trigger = {
+			NOT = { has_political_power < 30 }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		days_remove = 30
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_nam_contract_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_political_power < 30 }
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+						FROM = { ADISCORD_south_tool_offer_open = yes }
+					}
+					add_political_power = -30
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_spend_treasury = yes
+					FROM = { set_variable = { var = ADISCORD_south_tool_escrow value = 2 } }
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { FROM = { check_variable = { var = ADISCORD_south_tool_escrow value = 2 compare = equals } } }
+					FROM = { country_event = { id = ADISCORD_south.68 hours = 6 } }
+				}
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_tool_offer_lapsed_tt
+				FROM = {
+					check_variable = { var = ADISCORD_south_tool_escrow value = 2 compare = equals }
+					ADISCORD_south_tool_offer_valid = no
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = ADISCORD_south_tool_cancelled_tt
+			hidden_effect = { FROM = { ADISCORD_south_refund_tool_escrow = yes } }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 15
+				FROM = { has_country_flag = ADISCORD_south_key_owner }
+			}
+		}
+	}
+
+	ADISCORD_south_nam_charter = {
+		icon = generic_political_discourse
+		allowed = { tag = NAM }
+		targets = { EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = { FROM = { exists = yes } }
+		visible = {
+			NAM_prewar_district_mandate = yes
+			has_completed_focus = NAM_community_charter
+			FROM = { ADISCORD_south_in_contest = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_tool_offer_open_tt
+				FROM = { ADISCORD_south_tool_offer_open = yes }
+			}
+		}
+		cost = 0
+		custom_cost_text = ADISCORD_south_cost_charter
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			NOT = { has_fuel < 10000 }
+		}
+		days_remove = 30
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_south_nam_charter_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_political_power < 50 }
+						NOT = { has_fuel < 10000 }
+						FROM = { ADISCORD_south_tool_offer_open = yes }
+					}
+					add_political_power = -50
+					add_fuel = -10000
+					FROM = { set_variable = { var = ADISCORD_south_tool_escrow value = 3 } }
+				}
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { FROM = { check_variable = { var = ADISCORD_south_tool_escrow value = 3 compare = equals } } }
+					FROM = { country_event = { id = ADISCORD_south.68 hours = 6 } }
+				}
+			}
+		}
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_tool_offer_lapsed_tt
+				FROM = {
+					check_variable = { var = ADISCORD_south_tool_escrow value = 3 compare = equals }
+					ADISCORD_south_tool_offer_valid = no
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = ADISCORD_south_tool_cancelled_tt
+			hidden_effect = { FROM = { ADISCORD_south_refund_tool_escrow = yes } }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				add = 15
+				FROM = { has_country_flag = ADISCORD_south_key_owner }
 			}
 		}
 	}

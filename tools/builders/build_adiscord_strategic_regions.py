@@ -1879,6 +1879,39 @@ def sea_minimum_snow_level(climate: str, month: int) -> float:
     return 0.0
 
 
+# A carved Montar city keeps its parent's id, so only the remainders and
+# districts are new. They count as the parent for weather samples and for the
+# state weights and centres of region grouping; adjacency keeps them, because
+# the state's pixels are unchanged.
+MON_PLANNED_PARENT = {
+    entry["province"]: entry["parent"]
+    for entry in json.loads((ROOT / "tools/data/adiscord_mon_geography.json").read_bytes())["planned"]["provinces"]
+}
+# Region grouping flips on sub-pixel shifts of state centres. Carving moves
+# slot 0 of the Montar cities and donors while every state keeps its pixels,
+# so these states keep their centres measured on the uncarved map.
+MON_GROUPING_CENTRES = {
+    425: (3374.423076923077, 1184.6923076923076),
+    438: (3358.88, 1135.72),
+    439: (3306.0384615384614, 1134.7307692307693),
+    444: (3409.269230769231, 1125.8461538461538),
+    445: (3249.32, 1113.64),
+    448: (3172.84, 1101.36),
+    453: (3304.1052631578946, 1083.0526315789473),
+    456: (3226.653846153846, 1074.8846153846155),
+    459: (3337.04, 1049.16),
+    460: (3394.7419354838707, 1057.3548387096773),
+    462: (3195.782608695652, 1035.3478260869565),
+    464: (3137.1153846153848, 1012.6538461538462),
+    466: (3224.88, 1004.12),
+    467: (3352.6666666666665, 993.8666666666667),
+    468: (3270.3703703703704, 987.7037037037037),
+    469: (3317.1923076923076, 978.3076923076923),
+    470: (3075.8888888888887, 974.3703703703703),
+    471: (3184.25, 968.7083333333334),
+    472: (3358.8, 929.6666666666666),
+    473: (3302.1923076923076, 928.1153846153846),
+}
 # Weather envelopes use one geographic sample per original province. Splitting
 # a tactical district must not increase the weight of its latitude.
 DISTRICT_PARENT = {
@@ -1895,6 +1928,7 @@ DISTRICT_PARENT = {
     },
     # Island districts weigh as the surveyed province they were cut from.
     **{district["province"]: district["parent"] for district in ISLAND_DISTRICTS},
+    **MON_PLANNED_PARENT,
 }
 # Raised archipelago islands follow their state: weather and region grouping
 # keep the original geography, so an added islet never shifts either.
@@ -2377,6 +2411,14 @@ def _roman(value: int) -> str:
     return result
 
 
+def grouping_states(states: dict[int, set[int]]) -> dict[int, set[int]]:
+    """State provinces that weigh in region grouping; planned children count as their parent."""
+    return {
+        state_id: provinces - MON_PLANNED_PARENT.keys()
+        for state_id, provinces in states.items()
+    }
+
+
 def load_generated_outer_regions() -> tuple[Region, ...]:
     western_manifest = json.loads(
         (ROOT / "tools/data/adiscord_western_states.json").read_text(encoding="utf-8")
@@ -2436,11 +2478,12 @@ def load_generated_outer_regions() -> tuple[Region, ...]:
     )
     state_adjacency = build_state_adjacency(generated_states, physical_adjacency)
     province_positions = load_province_positions()
+    grouping = grouping_states(generated_states)
     province_weights = {
-        state_id: len(provinces) for state_id, provinces in generated_states.items()
+        state_id: len(provinces) for state_id, provinces in grouping.items()
     }
     centers: dict[int, tuple[float, float]] = {}
-    for state_id, provinces in generated_states.items():
+    for state_id, provinces in grouping.items():
         available = [
             province_positions[province_id]
             for province_id in provinces
@@ -2448,7 +2491,7 @@ def load_generated_outer_regions() -> tuple[Region, ...]:
         ]
         if not available:
             raise ValueError(f"generated state {state_id} has no map positions")
-        centers[state_id] = (
+        centers[state_id] = MON_GROUPING_CENTRES.get(state_id) or (
             sum(position[0] for position in available) / len(available),
             sum(position[2] for position in available) / len(available),
         )

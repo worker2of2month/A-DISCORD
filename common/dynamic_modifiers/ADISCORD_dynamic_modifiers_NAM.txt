@@ -102,6 +102,16 @@ NAM_seal_discipline_dynamic = {
 	army_org_factor = NAM_seal_org_factor
 }
 
+# COUNTRY NAM on the post-war depot board. NAM_depot_recompute derives the value
+# from the private total (-total / 2000); endings 4 and 5 freeze it, the other
+# endings remove the modifier.
+NAM_depot_board_dynamic = {
+	icon = GFX_idea_NAM_private_tank_farms
+	enable = { tag = NAM }
+	max_fuel_factor = NAM_depot_max_fuel_mod
+	custom_modifier_tooltip = NAM_depot_board_dynamic_draw_tt
+}
+
 # STATE. Scorched wells yield nothing to any owner or occupier for 180 days.
 NAM_scorched_wells_modifier = {
 	icon = GFX_modifiers_ADISCORD_scorched_wells
@@ -631,6 +641,35 @@ NAM_export_office_5 = {
 	NAM_export_office_projected_revenue = NAM_export_office_month_estimate
 }
 
+# STATE conquered, leased to a company by the mainland tree (D4, event 213). The
+# lease ends in NAM_mdr_lease_end when the land is lost, cored or the route closes.
+NAM_mdr_company_guards = {
+	icon = GFX_modifiers_ADISCORD_corporate_board
+	enable = { always = yes }
+	remove_trigger = { NOT = { is_owned_by = NAM } }
+	resistance_target = -0.25
+	compliance_growth = -0.10
+}
+
+# STATE conquered with an Azhar core ("Бассейновый набор"). Removed by the
+# monthly pass of NAM_mdr_conquered_monthly once the state is lost or cored.
+NAM_mdr_basin_levy = {
+	icon = GFX_modifiers_ADISCORD_local_militia
+	enable = { always = yes }
+	remove_trigger = { NOT = { is_owned_by = NAM } }
+	local_manpower = 0.50
+	resistance_target = 0.10
+}
+
+# STATE conquered ("Стража поместий"). Removed with the basin levy.
+NAM_mdr_estate_guards = {
+	icon = GFX_modifiers_ADISCORD_officer_estate
+	enable = { always = yes }
+	remove_trigger = { NOT = { is_owned_by = NAM } }
+	resistance_growth = -0.15
+	required_garrison_factor = -0.10
+}
+
 NAM_neighbour_command_resistance = {
 	icon = GFX_modifiers_ADISCORD_border_autonomy
 	enable = {
@@ -638,4 +677,25 @@ NAM_neighbour_command_resistance = {
 		is_owned_by = CONTROLLER
 	}
 	resistance_target = 0.20
+}
+
+# STATE of Shahrabad's conquered land ("Дозор холодного огня", 730 days). NAM_hgm_close
+# removes it with the dominion.
+NAM_hgm_southern_watch = {
+	icon = GFX_modifiers_ADISCORD_local_militia
+	enable = { always = yes }
+	remove_trigger = { NOT = { is_owned_by = NAM } }
+	resistance_target = -0.20
+	resistance_growth = -0.15
+}
+
+# STATE 288 and 730, the free port of the South (lot 2 kept under "Хазар по описи").
+# NAM_ptn_monthly removes it where NAM no longer owns the state.
+NAM_ptn_free_port = {
+	icon = GFX_modifiers_ADISCORD_officer_estate
+	enable = { always = yes }
+	remove_trigger = { NOT = { is_owned_by = NAM } }
+	state_production_speed_buildings_factor = 0.20
+	local_resources_factor = 0.15
+	compliance_growth = 0.10
 }

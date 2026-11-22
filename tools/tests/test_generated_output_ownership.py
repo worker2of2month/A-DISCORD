@@ -73,6 +73,7 @@ REQUIRED_FAMILIES = {
     "logistics_ui_assets",
     "market_ui_assets",
     "minimap",
+    "mon_geography",
     "map_buildings",
     "state_history",
     "starting_navies",

@@ -585,4 +585,27 @@ opinion_modifiers = {
 	VAL_different_views_on_freedom = {
 		value = -25
 	}
+
+	##### NAM RELATIONS
+	NAM_mdr_fenn_protection = {
+		value = 30
+	}
+	NAM_hgm_mazar_share = {
+		value = 50
+	}
+	NAM_hgm_loan_goodwill = {
+		value = 25
+		decay = 1
+	}
+	NAM_hgm_credit_goodwill = {
+		value = 25
+		decay = 1
+	}
+	NAM_hgm_supply_goodwill = {
+		value = 20
+		decay = 1
+	}
+	NAM_hgm_price_refused = {
+		value = -50
+	}
 }

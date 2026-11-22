@@ -362,6 +362,42 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	ADISCORD_nam_debug_tree_mainland_directory = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_mainland_directory_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_mainland_directory_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_nam_debug_tree_southern_dominion = {
+		allowed = { tag = NAM }
+		visible = { NOT = { has_focus_tree = NAM_southern_dominion_focus } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_nam_debug_tree_load_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = NAM_southern_dominion_focus
+					keep_completed = yes
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	ADISCORD_nam_debug_start_resource_war = {
 		allowed = {
 			OR = {
@@ -1128,6 +1164,7 @@ ADISCORD_scenario_debug_category = {
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_shl_debug_south_hegemon_description_rules_tt
 			set_global_flag = ADISCORD_south_final_resolved
+			hidden_effect = { ADISCORD_south_close_nam_depot_board = yes }
 			set_global_flag = ADISCORD_south_hegemon_SHL
 			mark_focus_tree_layout_dirty = yes
 		}

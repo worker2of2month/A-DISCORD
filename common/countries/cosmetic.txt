@@ -473,6 +473,36 @@ KDR_NAM_corp_6 = {
 	color_ui = rgb { 92 134 144 }
 }
 
+MZR_NAM_corp_1 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+MZR_NAM_corp_2 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+MZR_NAM_corp_3 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+MZR_NAM_corp_4 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+MZR_NAM_corp_5 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
+MZR_NAM_corp_6 = {
+	color = rgb { 52 88 96 }
+	color_ui = rgb { 92 134 144 }
+}
+
 # National colours of the signatories to the western settlement.
 
 IVN_cw_committee_west_victory = {

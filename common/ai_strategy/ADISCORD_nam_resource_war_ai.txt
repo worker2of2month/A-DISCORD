@@ -534,6 +534,33 @@ NAM_rtw_ai_fronts = {
 	}
 }
 
+# The Directory's desert war after the won return: the front units go to the
+# emirates. A treaty district fights beside the Directory and is never an
+# enemy, so a request against it has no front to fill.
+NAM_mdr_ai_desert = {
+	allowed = { original_tag = NAM }
+	enable = {
+		has_country_flag = NAM_corp_takeover
+		NAM_great_war_active = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		tag = KDR
+		value = 50
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = SDR
+		value = 50
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = RHM
+		value = 50
+	}
+}
+
 # A landing on the mainland is cleared by counterattack; caution and the push
 # follow the coalition's combined strength, as in the resource war.
 ADISCORD_nam_war_of_return_coalition_defence = {

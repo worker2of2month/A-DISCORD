@@ -659,6 +659,13 @@
       "source_passage": "Capital is thus the governing power over labour and its products.",
       "russian": "Итак, капитал есть командная власть над трудом и его продуктами.\n\n- Карл Маркс, \"Экономическо-философские рукописи 1844 года\"",
       "english": "Capital is thus the governing power over labour and its products.\n\n- Karl Marx, \"Economic and Philosophic Manuscripts of 1844\""
+    },
+    "superevent_south_partition_quote": {
+      "source": "rousseau",
+      "location": "A Discourse on the Origin of Inequality, Part II; G. D. H. Cole translation",
+      "source_passage": "The first man who, having enclosed a piece of ground, bethought himself of saying This is mine, and found people simple enough to believe him, was the real founder of civil society.",
+      "russian": "Первый, кто, огородив участок земли, придумал заявить: \"Это моё\" - и нашёл людей достаточно простодушных, чтобы этому поверить, был истинным основателем гражданского общества.\n\n- Жан-Жак Руссо, \"Рассуждение о происхождении и основаниях неравенства между людьми\", II",
+      "english": "The first man who, having enclosed a piece of ground, bethought himself of saying \"This is mine\", and found people simple enough to believe him, was the real founder of civil society.\n\n- Jean-Jacques Rousseau, \"A Discourse on the Origin of Inequality\", II"
     }
   },
   "aliases": {

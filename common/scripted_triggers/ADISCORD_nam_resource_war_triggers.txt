@@ -40,21 +40,145 @@ NAM_depot_settlement_open = {
 }
 
 # Either ruling closes the case through NAM_depot_concessions_settled, so the two
-# decisions exclude each other without a focus marker; the post-war tree gates both
-# on the oil exchange.
+# decisions exclude each other without a focus marker. The post-war depot board
+# replaces the decision ladder once it is seeded.
 NAM_depot_revocation_authorised = {
 	NAM_depot_settlement_open = yes
-	OR = {
-		has_completed_focus = NAM_oil_exchange
-		NOT = { has_focus_tree = NAM_postwar_focus }
-	}
+	NOT = { has_country_flag = NAM_depot_board_seeded }
 }
 
 NAM_depot_reserve_authorised = {
 	NAM_depot_settlement_open = yes
+	NOT = { has_country_flag = NAM_depot_board_seeded }
+}
+
+# ----- Post-war depot board -----
+# COUNTRY NAM unless stated. Pending: seeded, not opened. Open: the head card
+# has opened the case. Ended: a settlement variant is stored. A pending board is
+# never ended, so no bypass reads it as decided.
+NAM_depot_board_seeded = {
+	has_country_flag = NAM_depot_board_seeded
+}
+
+NAM_depot_board_pending = {
+	has_country_flag = NAM_depot_board_seeded
+	NOT = { has_country_flag = NAM_depot_board_open }
+	NOT = { has_variable = NAM_depot_settlement_variant }
+}
+
+NAM_depot_board_open = {
+	has_country_flag = NAM_depot_board_open
+}
+
+NAM_depot_board_ended = {
+	has_variable = NAM_depot_settlement_variant
+}
+
+NAM_depot_board_not_ended = {
+	has_country_flag = NAM_depot_board_seeded
+	NOT = { has_variable = NAM_depot_settlement_variant }
+}
+
+# Won: a private total of 100 or less, or no counted site above 30. Rounds go on
+# until the ending pair is taken, so a won board can slip back.
+NAM_depot_board_won = {
+	has_country_flag = NAM_depot_board_open
 	OR = {
-		has_completed_focus = NAM_oil_exchange
-		NOT = { has_focus_tree = NAM_postwar_focus }
+		NOT = { check_variable = { NAM_depot_hold_total > 100 } }
+		AND = {
+			700 = { NAM_depot_site_settled_low = yes }
+			67 = { NAM_depot_site_settled_low = yes }
+			689 = { NAM_depot_site_settled_low = yes }
+			690 = { NAM_depot_site_settled_low = yes }
+			225 = { NAM_depot_site_settled_low = yes }
+		}
+	}
+}
+
+NAM_depot_board_conceded = {
+	OR = {
+		check_variable = { NAM_depot_settlement_variant = 4 }
+		check_variable = { NAM_depot_settlement_variant = 5 }
+	}
+}
+
+NAM_depot_buyout_affordable = {
+	NOT = { check_variable = { ADISCORD_economy_treasury < NAM_depot_buyout_price } }
+}
+
+NAM_depot_front_active = {
+	OR = {
+		check_variable = { NAM_depot_front_court > 0 }
+		check_variable = { NAM_depot_front_street > 0 }
+		check_variable = { NAM_depot_front_buyback > 0 }
+	}
+}
+
+NAM_depot_press_available = {
+	has_country_flag = NAM_depot_board_open
+	NAM_depot_front_active = yes
+	NOT = { has_country_flag = NAM_depot_press_next_round }
+}
+
+NAM_depot_sale_possible = {
+	NOT = { has_country_flag = NAM_depot_sale_banned }
+	NOT = { check_variable = { NAM_depot_owner_funds < 50 } }
+	check_variable = { NAM_depot_sold_count < 3 }
+	country_exists = SHL
+	NOT = { has_war_with = SHL }
+	OR = {
+		700 = { NAM_depot_site_saleable = yes }
+		67 = { NAM_depot_site_saleable = yes }
+		689 = { NAM_depot_site_saleable = yes }
+		690 = { NAM_depot_site_saleable = yes }
+		225 = { NAM_depot_site_saleable = yes }
+	}
+}
+
+NAM_depot_fuel_service_founded = {
+	OR = {
+		has_completed_focus = NAM_depot_state_fuel_service
+		has_completed_focus = NAM_depot_fuel_service_shares
+		has_completed_focus = NAM_depot_cooperative_fuel_service
+	}
+}
+
+# STATE site. Dormant sites (not owned and controlled by NAM) leave the total.
+NAM_depot_site_counted = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+}
+
+# STATE site.
+NAM_depot_site_unsold = {
+	has_variable = NAM_depot_hold
+	NAM_depot_site_counted = yes
+	NOT = { has_state_flag = NAM_depot_site_sold }
+}
+
+# STATE site. A front can still push it.
+NAM_depot_site_targetable = {
+	NAM_depot_site_unsold = yes
+	check_variable = { NAM_depot_hold > 0 }
+}
+
+# STATE site.
+NAM_depot_site_saleable = {
+	NAM_depot_site_unsold = yes
+	NOT = { check_variable = { NAM_depot_hold < 70 } }
+}
+
+# STATE site. Back in public hands: the local yield of the round.
+NAM_depot_site_yields = {
+	NAM_depot_site_counted = yes
+	has_state_flag = NAM_depot_site_public
+}
+
+# STATE site. Dormant, or counted at a share of 30 or less.
+NAM_depot_site_settled_low = {
+	OR = {
+		NAM_depot_site_counted = no
+		NOT = { check_variable = { NAM_depot_hold > 30 } }
 	}
 }
 
@@ -1132,7 +1256,7 @@ NAM_exchange_can_write_receipt = {
 	OR = {
 		check_variable = { var = NAM_exchange_receipts value = 1 compare = less_than }
 		AND = {
-			has_completed_focus = NAM_armed_peace
+			has_completed_focus = NAM_state_refineries
 			check_variable = { var = NAM_exchange_receipts value = 2 compare = less_than }
 		}
 	}
@@ -1595,6 +1719,8 @@ NAM_wor_campaign_active = {
 
 # COUNTRY NAM. Its return and southern consolidation own the region's alliances.
 # Annexation or subjugation ends that claim; liberation restores the same route.
+# The council's desert question that lapsed (NAM_mdr_desert_lapse_check) also
+# releases the South.
 NAM_south_story_pending = {
 	exists = yes
 	is_subject = no
@@ -1608,6 +1734,7 @@ NAM_south_story_pending = {
 					OR = {
 						has_global_flag = NAM_great_war_won
 						NOT = { NAM_great_war_target_left = yes }
+						has_global_flag = NAM_mdr_desert_lapsed
 					}
 				}
 			}
@@ -3386,6 +3513,23 @@ NAM_has_subject_resource_tariff = {
 	}
 }
 
+NAM_qualifies_for_governorate_tariff = {
+	is_subject_of = NAM
+	OR = {
+		has_autonomy_state = autonomy_NAM_namestnik_office
+		has_autonomy_state = autonomy_NAM_imperial_governorate
+	}
+}
+
+NAM_has_governorate_resource_tariff = {
+	NAM = {
+		has_relation_modifier = {
+			target = PREV
+			modifier = NAM_governorate_resource_tariff
+		}
+	}
+}
+
 NAM_subject_identity_participant = {
 	OR = {
 		tag = EFL
@@ -3474,6 +3618,12 @@ NAM_board_has_charter_cosmetic = {
 		has_cosmetic_tag = KDR_NAM_corp_4
 		has_cosmetic_tag = KDR_NAM_corp_5
 		has_cosmetic_tag = KDR_NAM_corp_6
+		has_cosmetic_tag = MZR_NAM_corp_1
+		has_cosmetic_tag = MZR_NAM_corp_2
+		has_cosmetic_tag = MZR_NAM_corp_3
+		has_cosmetic_tag = MZR_NAM_corp_4
+		has_cosmetic_tag = MZR_NAM_corp_5
+		has_cosmetic_tag = MZR_NAM_corp_6
 	}
 }
 
@@ -5713,6 +5863,39 @@ NAM_mil_mobile_operation_open = {
 	has_war = yes
 }
 
+# ----- Post-war influence lane -----
+
+# COUNTRY NAM. The influence lane end was signed in one of its three mandate
+# variants. Later readers use this trigger, never one variant id.
+NAM_south_compact_signed = {
+	OR = {
+		has_completed_focus = NAM_south_namestnik_pact
+		has_completed_focus = NAM_south_trade_coalition
+		has_completed_focus = NAM_south_communities_compact
+	}
+}
+
+# COUNTRY contest country: holds Svetlogorye's namestnik writ (path tool kind 1).
+NAM_south_holds_writ = {
+	ADISCORD_south_in_contest = yes
+	check_variable = { ADISCORD_south_tool_kind = 1 }
+}
+
+# COUNTRY any: one of the nine fixed contest tags holds the writ.
+NAM_south_writ_holder_exists = {
+	OR = {
+		EFL = { NAM_south_holds_writ = yes }
+		AZH = { NAM_south_holds_writ = yes }
+		WEF = { NAM_south_holds_writ = yes }
+		KDR = { NAM_south_holds_writ = yes }
+		RHM = { NAM_south_holds_writ = yes }
+		SDR = { NAM_south_holds_writ = yes }
+		KYZ = { NAM_south_holds_writ = yes }
+		MZR = { NAM_south_holds_writ = yes }
+		GLP = { NAM_south_holds_writ = yes }
+	}
+}
+
 # ----- Postwar investment -----
 # Paid work survives renewed war; lost sovereignty or a lost building site refunds it.
 NAM_pw_operable = {
@@ -5867,6 +6050,80 @@ NAM_pw_veteran_course_ready = {
 NAM_pw_garrison_order_ready = {
 	NAM_pw_operable = yes
 	check_variable = { var = NAM_grp_dist_support value = 30 compare = greater_than_or_equals }
+}
+
+# STATE. A border district that still takes a forward base: owned and controlled, with fewer
+# than five forts on its southern crossing (the provinces of the war-for-the-South forts).
+NAM_pw_forward_base_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	OR = {
+		AND = {
+			state = 700
+			any_province_building_level = {
+				province = { id = 16716 }
+				building = bunker
+				level < 5
+			}
+		}
+		AND = {
+			state = 688
+			any_province_building_level = {
+				province = { id = 16721 }
+				building = bunker
+				level < 5
+			}
+		}
+		AND = {
+			state = 67
+			any_province_building_level = {
+				province = { id = 6099 }
+				building = bunker
+				level < 5
+			}
+		}
+	}
+}
+
+NAM_pw_forward_base_site_exists = {
+	OR = {
+		700 = { NAM_pw_forward_base_site = yes }
+		688 = { NAM_pw_forward_base_site = yes }
+		67 = { NAM_pw_forward_base_site = yes }
+	}
+}
+
+NAM_pw_forward_base_order_ready = {
+	NAM_pw_operable = yes
+	has_war = no
+	NOT = { has_global_flag = ADISCORD_south_final_started }
+	NOT = { check_variable = { NAM_pw_forward_bases_built > 2 } }
+	NAM_pw_forward_base_site_exists = yes
+}
+
+# STATE. A held site for a peace-statute civilian factory.
+NAM_pw_statute_works_site = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	OR = {
+		state = 689
+		state = 719
+		state = 688
+	}
+}
+
+NAM_pw_statute_works_site_exists = {
+	OR = {
+		689 = { NAM_pw_statute_works_site = yes }
+		719 = { NAM_pw_statute_works_site = yes }
+		688 = { NAM_pw_statute_works_site = yes }
+	}
+}
+
+NAM_pw_statute_works_ready = {
+	NAM_pw_operable = yes
+	NOT = { check_variable = { NAM_pw_statute_works_built > 1 } }
+	NAM_pw_statute_works_site_exists = yes
 }
 
 NAM_pw_fuel_quota_ready = {
@@ -6176,8 +6433,8 @@ NAM_crisis_delivery_disruption_possible = {
 
 NAM_crisis_delivery_disruption_mitigated = {
 	OR = {
-		has_completed_focus = NAM_pw_breakthrough_army
-		has_completed_focus = NAM_pw_mobile_army
+		has_completed_focus = NAM_pw_road_priority
+		has_completed_focus = NAM_pw_rail_priority
 	}
 }
 
@@ -6608,10 +6865,7 @@ NAM_returnee_region = {
 		state = 700
 		AND = {
 			NAM_border_integration_region = yes
-			NAM = {
-				has_completed_focus = NAM_public_utilities
-				has_completed_focus = NAM_charter_ending_federation
-			}
+			NAM = { has_completed_focus = NAM_common_citizenship }
 		}
 	}
 }
@@ -6694,6 +6948,29 @@ NAM_pw_fuel_aid_unlocked = {
 		has_completed_focus = NAM_common_fuel_market
 		has_completed_focus = NAM_prag_partner_supply
 	}
+}
+
+# COUNTRY NAM. Some contest country holds Svetlogorye's community charter
+# (tool kind 3); read by NAM_south_communities_compact.
+NAM_south_any_charter_holder = {
+	OR = {
+		EFL = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+		AZH = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+		WEF = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+		KDR = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+		RHM = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+		SDR = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+		KYZ = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+		MZR = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+		GLP = { check_variable = { var = ADISCORD_south_tool_kind value = 3 compare = equals } }
+	}
+}
+
+# COUNTRY desert tag, from NAM_well_land_buyout_push: in the contest and leaning
+# further toward Shahrabad than the pick recorded so far.
+NAM_south_desert_pick_candidate = {
+	ADISCORD_south_in_contest = yes
+	check_variable = { var = ADISCORD_south_coalition_influence value = NAM.NAM_pick_desert_lean compare = less_than }
 }
 
 # COUNTRY NAM. Debug presets edit the live balance only before its war snapshot.
@@ -7748,7 +8025,7 @@ NAM_pw_barter_charter_ready = {
 
 NAM_pw_barter_charter_slot_free = {
 	OR = {
-		has_completed_focus = NAM_balanced_accounts
+		has_completed_focus = NAM_commercial_reserve
 		NOT = { has_country_flag = NAM_pw_civil_busy }
 	}
 	NOT = { has_country_flag = NAM_pw_barter_charter_paid }
@@ -8282,4 +8559,992 @@ NAM_board_inv_share_open = {
 			NAM_board_product_blocked_6 = no
 		}
 	}
+}
+
+# ----- Council of boards: the continent -----
+# COUNTRY NAM. The mainland tree's root: the council's won return, sovereign.
+NAM_mdr_tree_live = {
+	tag = NAM
+	has_country_flag = NAM_corp_takeover
+	has_global_flag = NAM_war_of_return_won
+	is_subject = no
+}
+
+# COUNTRY NAM. The two courses of the centre pair.
+NAM_mdr_unitary = {
+	has_completed_focus = NAM_mdr_mainland_shares
+}
+
+NAM_mdr_union = {
+	has_completed_focus = NAM_mdr_union_of_boards
+}
+
+# Any scope. The desert is settled by the great war: it was won, or no southern
+# state is left for it (the same rows as NAM_south_story_pending).
+NAM_mdr_desert_closed = {
+	NOT = { NAM_great_war_active = yes }
+	OR = {
+		has_global_flag = NAM_great_war_won
+		NOT = { NAM_great_war_target_left = yes }
+	}
+}
+
+# Any scope. The South is open to the Directory: the desert closed, or its
+# question lapsed (the failure path).
+NAM_mdr_south_open = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_mdr_south_open_tt
+		NOT = { NAM_great_war_active = yes }
+		OR = {
+			NAM_mdr_desert_closed = yes
+			has_global_flag = NAM_mdr_desert_lapsed
+		}
+	}
+}
+
+# COUNTRY NAM. The Directory's readiness for the War for the South: the South
+# open, a course capstone and any two of the four southern capstones.
+NAM_mdr_south_ready = {
+	has_completed_focus = NAM_mdr_southern_districts
+	OR = {
+		has_completed_focus = NAM_mdr_southern_charter
+		has_completed_focus = NAM_mdr_national_war
+	}
+	calc_true_if = {
+		amount = 2
+		has_completed_focus = NAM_mdr_army_of_the_south
+		has_completed_focus = NAM_mdr_arsenal_of_the_directory
+		has_completed_focus = NAM_mdr_rear_of_the_south
+		has_completed_focus = NAM_mdr_northern_charter
+	}
+}
+
+# Any scope. A third treaty is never offered: fewer than two of Kadir, Sardan
+# and Rahma are the Directory's subjects or hold a pending offer.
+NAM_mdr_desert_treaty_room = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_mdr_desert_treaty_room_tt
+		NOT = {
+			calc_true_if = {
+				amount = 2
+				KDR = {
+					exists = yes
+					OR = {
+						is_subject_of = NAM
+						has_country_flag = NAM_mdr_offer_pending
+					}
+				}
+				SDR = {
+					exists = yes
+					OR = {
+						is_subject_of = NAM
+						has_country_flag = NAM_mdr_offer_pending
+					}
+				}
+				RHM = {
+					exists = yes
+					OR = {
+						is_subject_of = NAM
+						has_country_flag = NAM_mdr_offer_pending
+					}
+				}
+			}
+		}
+	}
+}
+
+# Any scope. "Последний довод" waits for every emir's answer.
+NAM_mdr_desert_no_offer_pending = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_mdr_desert_no_offer_pending_tt
+		NOT = { KDR = { has_country_flag = NAM_mdr_offer_pending } }
+		NOT = { SDR = { has_country_flag = NAM_mdr_offer_pending } }
+		NOT = { RHM = { has_country_flag = NAM_mdr_offer_pending } }
+	}
+}
+
+# COUNTRY emirate. A treaty offer still stands and can be answered.
+NAM_mdr_desert_offer_live = {
+	exists = yes
+	has_country_flag = NAM_mdr_offer_pending
+	NAM_wor_independent_target = yes
+	NOT = { has_war_with = NAM }
+}
+
+# Any scope. Mazar is no longer open to either champion's offer.
+NAM_mdr_mazar_settled = {
+	OR = {
+		MZR = { exists = no }
+		MZR = { is_subject_of = NAM }
+		MZR = { is_in_faction_with = NAM }
+		MZR = { is_subject_of = SHL }
+		AND = {
+			SHL = { exists = yes }
+			MZR = { is_in_faction_with = SHL }
+		}
+	}
+}
+
+# STATE. NAM, or a company district of the Directory, owns and controls it.
+NAM_mdr_owned_by_directory = {
+	OR = {
+		AND = {
+			is_owned_by = NAM
+			is_controlled_by = NAM
+		}
+		AND = {
+			controller = { NAM_board_federal_subject = yes }
+			is_owned_by = CONTROLLER
+		}
+	}
+}
+
+# STATE. A building site of NAM_mdr_build for the kind in temp NAM_mdr_build_kind.
+NAM_mdr_build_site = {
+	NAM_mdr_owned_by_directory = yes
+	OR = {
+		NOT = { check_variable = { NAM_mdr_build_kind = 3 } }
+		is_coastal = yes
+	}
+	OR = {
+		NOT = { check_variable = { NAM_mdr_build_kind = 6 } }
+		AND = {
+			check_variable = { NAM_mdr_build_levels > 1 }
+			infrastructure < 4
+		}
+		AND = {
+			NOT = { check_variable = { NAM_mdr_build_levels > 1 } }
+			infrastructure < 5
+		}
+	}
+	OR = {
+		NOT = { check_variable = { NAM_mdr_build_kind = 7 } }
+		AND = {
+			NOT = { has_state_flag = NAM_mdr_supply_node_built }
+			OR = {
+				state = 240
+				state = 700
+				state = 729
+				state = 692
+				state = 689
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. The template of the kind in temp NAM_mdr_unit_kind exists.
+NAM_mdr_unit_template_ready = {
+	OR = {
+		AND = {
+			check_variable = { NAM_mdr_unit_kind = 1 }
+			has_template = "Directory Field Division"
+		}
+		AND = {
+			check_variable = { NAM_mdr_unit_kind = 2 }
+			has_template = "Company Guard Regiment"
+		}
+		AND = {
+			check_variable = { NAM_mdr_unit_kind = 3 }
+			has_template = "Desert Armoured Column"
+		}
+		AND = {
+			check_variable = { NAM_mdr_unit_kind = 4 }
+			has_template = "Line Infantry Brigade"
+		}
+		AND = {
+			check_variable = { NAM_mdr_unit_kind = 5 }
+			has_template = "Island Marines"
+		}
+		AND = {
+			check_variable = { NAM_mdr_unit_kind = 6 }
+			has_template = "Old Settlers Militia"
+		}
+	}
+}
+
+# STATE conquered. NAM owns and controls it without a core; temp
+# NAM_mdr_core_filter narrows it to Eflor's land (1), Azhar's land (2), the
+# South of the partition (3) or Shahrabad's own land (4).
+NAM_mdr_filtered_conquered_state = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	NOT = { is_core_of = NAM }
+	OR = {
+		check_variable = { NAM_mdr_core_filter = 0 }
+		AND = {
+			check_variable = { NAM_mdr_core_filter = 1 }
+			is_core_of = EFL
+		}
+		AND = {
+			check_variable = { NAM_mdr_core_filter = 2 }
+			is_core_of = AZH
+		}
+		AND = {
+			check_variable = { NAM_mdr_core_filter = 3 }
+			NAM_hgm_south_land = yes
+		}
+		AND = {
+			check_variable = { NAM_mdr_core_filter = 4 }
+			is_core_of = SHL
+		}
+	}
+}
+
+# COUNTRY district. The charter of "Концессия Эфлор" or "Нефтяная концессия
+# Бассейна" raises this district's dividend by half.
+NAM_mdr_chartered_district = {
+	OR = {
+		AND = {
+			tag = EFL
+			NAM = { has_completed_focus = NAM_mdr_eflor_concession }
+		}
+		AND = {
+			tag = AZH
+			NAM = { has_completed_focus = NAM_mdr_basin_oil_concession }
+		}
+	}
+}
+
+# STATE. Land of the opened nationalisation (NAM_mdr_nationalise_land): Eflor's land after "Эфлорская
+# губерния", Azhar's after "Национализация скважин", the desert's after
+# "Народная война Директории", the South's after "Юг как провинция".
+NAM_mdr_nationalisation_land = {
+	OR = {
+		AND = {
+			is_core_of = EFL
+			NAM = { has_completed_focus = NAM_mdr_eflor_province }
+		}
+		AND = {
+			is_core_of = AZH
+			NAM = { has_completed_focus = NAM_mdr_wells_nationalised }
+		}
+		AND = {
+			OR = {
+				is_core_of = KDR
+				is_core_of = SDR
+				is_core_of = RHM
+			}
+			NAM = { has_completed_focus = NAM_mdr_national_war }
+		}
+		NAM_hgm_southern_province_land = yes
+	}
+}
+
+# STATE. Land absorbed from a district under the holders' form qualifies from
+# compliance 20.
+NAM_mdr_absorbed_land = {
+	NAM = { NAM_rtw_direct_rule = no }
+	OR = {
+		AND = {
+			is_core_of = EFL
+			NAM = { has_completed_focus = NAM_mdr_eflor_province }
+		}
+		AND = {
+			is_core_of = AZH
+			NAM = { has_completed_focus = NAM_mdr_wells_nationalised }
+		}
+	}
+}
+
+# STATE target of "Национализация земли" (NAM_mdr_nationalise_land).
+NAM_mdr_nationalisable = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	has_state_flag = NAM_conquered_state
+	NOT = { is_core_of = NAM }
+	NAM_mdr_nationalisation_land = yes
+	hidden_trigger = {
+		NOT = { has_variable = NAM_mdr_lease_owner }
+		NOT = { has_state_flag = NAM_mdr_nationalising }
+	}
+	NAM_mdr_nationalisation_compliance = yes
+}
+
+# STATE. The compliance threshold of the land nationalisation: 20 on land absorbed from a district,
+# 30 on Eflor's land after "Лицеи Лорена" and on the South after "Юг как
+# провинция", 40 elsewhere.
+NAM_mdr_nationalisation_compliance = {
+	OR = {
+		AND = {
+			NAM_mdr_absorbed_land = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_mdr_nat_compliance_20_tt
+				compliance > 19
+			}
+		}
+		AND = {
+			NOT = { NAM_mdr_absorbed_land = yes }
+			NOT = { NAM_hgm_southern_province_land = yes }
+			is_core_of = EFL
+			NAM = { has_completed_focus = NAM_mdr_loren_lyceums }
+			custom_trigger_tooltip = {
+				tooltip = NAM_mdr_nat_compliance_30_tt
+				compliance > 29
+			}
+		}
+		AND = {
+			NOT = { NAM_mdr_absorbed_land = yes }
+			NAM_hgm_southern_province_land = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_mdr_nat_compliance_30_tt
+				compliance > 29
+			}
+		}
+		AND = {
+			NOT = { NAM_mdr_absorbed_land = yes }
+			NOT = { NAM_hgm_southern_province_land = yes }
+			NOT = {
+				AND = {
+					is_core_of = EFL
+					NAM = { has_completed_focus = NAM_mdr_loren_lyceums }
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_mdr_nat_compliance_40_tt
+				compliance > 39
+			}
+		}
+	}
+}
+
+# STATE target of "Аренда земли": Eflor's or Azhar's conquered land under
+# direct rule after its extraction focus. A lot of the partition of the South
+# is owned as a whole and never leased state by state.
+NAM_mdr_leasable = {
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	has_state_flag = NAM_conquered_state
+	NOT = { is_core_of = NAM }
+	hidden_trigger = {
+		NOT = { has_variable = NAM_mdr_lease_owner }
+		NOT = { has_state_flag = NAM_mdr_nationalising }
+		NOT = { has_variable = NAM_ptn_lot }
+	}
+	OR = {
+		AND = {
+			is_core_of = EFL
+			NAM = {
+				has_completed_focus = NAM_mdr_eflor_concession
+				NAM_rtw_direct_rule = yes
+			}
+		}
+		AND = {
+			is_core_of = AZH
+			NAM = {
+				has_completed_focus = NAM_mdr_basin_oil_concession
+				NAM_rtw_direct_rule = yes
+			}
+		}
+	}
+}
+
+# STATE target of "Реституция округа": a home district held by NAM, not yet
+# restored and not under restitution.
+NAM_mdr_restitution_site = {
+	OR = {
+		state = 67
+		state = 688
+		state = 689
+		state = 690
+		state = 700
+		state = 719
+	}
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	hidden_trigger = {
+		NOT = { has_state_flag = NAM_mdr_restituted }
+		NOT = { has_state_flag = NAM_mdr_restitution_work }
+	}
+}
+
+# STATE target of "Чистка округа".
+NAM_mdr_purge_site = {
+	OR = {
+		state = 67
+		state = 688
+		state = 689
+		state = 690
+		state = 700
+		state = 719
+	}
+	is_owned_by = NAM
+	is_controlled_by = NAM
+	hidden_trigger = { NOT = { has_state_flag = NAM_mdr_purged } }
+}
+
+# STATE target of "Путевые бригады": one of the eight southern states, held by
+# NAM or a company district, once each.
+NAM_mdr_rail_site = {
+	OR = {
+		state = 240
+		state = 68
+		state = 70
+		state = 692
+		state = 724
+		state = 725
+		state = 726
+		state = 729
+	}
+	NAM_mdr_owned_by_directory = yes
+	infrastructure < 5
+	hidden_trigger = {
+		NOT = { has_state_flag = NAM_mdr_rail_done }
+		NOT = { has_state_flag = NAM_mdr_rail_work }
+	}
+}
+
+# COUNTRY SHL. At most one penalty of the mainland tree holds at a time.
+NAM_mdr_shl_penalised = {
+	OR = {
+		has_idea = NAM_mdr_furnace_rumours
+		has_idea = NAM_mdr_charter_published
+		has_idea = NAM_mdr_op_furnace_contracts_idea
+		has_idea = NAM_mdr_op_zarkhan_idea
+		has_idea = NAM_mdr_op_rumours_idea
+		has_idea = NAM_mdr_exposed_plot
+	}
+}
+
+# COUNTRY NAM. The next mainland lot of the tender cycle wells -> smelters -> yards
+# -> wells, starting at NAM_mdr_lot_order (1 wells, 2 smelters, 3 yards; unset reads
+# as 1, the order of event 200's draw or its answers): that lot is open and every lot
+# before it in the cycle is closed.
+NAM_mdr_tender_next_wells = {
+	check_variable = { NAM_mdr_lot_wells = 0 }
+	OR = {
+		NOT = { check_variable = { NAM_mdr_lot_order > 1 } }
+		AND = {
+			check_variable = { NAM_mdr_lot_order = 2 }
+			NOT = { check_variable = { NAM_mdr_lot_smelters = 0 } }
+			NOT = { check_variable = { NAM_mdr_lot_yards = 0 } }
+		}
+		AND = {
+			check_variable = { NAM_mdr_lot_order = 3 }
+			NOT = { check_variable = { NAM_mdr_lot_yards = 0 } }
+		}
+	}
+}
+
+NAM_mdr_tender_next_smelters = {
+	check_variable = { NAM_mdr_lot_smelters = 0 }
+	OR = {
+		check_variable = { NAM_mdr_lot_order = 2 }
+		AND = {
+			NOT = { check_variable = { NAM_mdr_lot_order > 1 } }
+			NOT = { check_variable = { NAM_mdr_lot_wells = 0 } }
+		}
+		AND = {
+			check_variable = { NAM_mdr_lot_order = 3 }
+			NOT = { check_variable = { NAM_mdr_lot_yards = 0 } }
+			NOT = { check_variable = { NAM_mdr_lot_wells = 0 } }
+		}
+	}
+}
+
+NAM_mdr_tender_next_yards = {
+	check_variable = { NAM_mdr_lot_yards = 0 }
+	OR = {
+		check_variable = { NAM_mdr_lot_order = 3 }
+		AND = {
+			NOT = { check_variable = { NAM_mdr_lot_order > 1 } }
+			NOT = { check_variable = { NAM_mdr_lot_wells = 0 } }
+			NOT = { check_variable = { NAM_mdr_lot_smelters = 0 } }
+		}
+		AND = {
+			check_variable = { NAM_mdr_lot_order = 2 }
+			NOT = { check_variable = { NAM_mdr_lot_smelters = 0 } }
+		}
+	}
+}
+
+# ----- Council of boards: the South after the war -----
+# Triggers of the partition of the South (NAM_ptn_*) and of the tree
+# NAM_southern_dominion_focus (NAM_hgm_*); the arrays are described in the effects.
+
+# STATE. Land of the South of the partition: a core of Shahrabad or of a lot's country.
+NAM_hgm_south_land = {
+	OR = {
+		is_core_of = SHL
+		is_core_of = KYZ
+		is_core_of = GLP
+		is_core_of = MZR
+		is_core_of = WEF
+		is_core_of = KDR
+		is_core_of = SDR
+		is_core_of = RHM
+	}
+}
+
+# STATE. South land opened to the land nationalisation by "Юг как провинция".
+NAM_hgm_southern_province_land = {
+	NAM = { has_completed_focus = NAM_hgm_southern_province }
+	NAM_hgm_south_land = yes
+}
+
+# COUNTRY NAM. The root of the tree waits for the table of the partition.
+NAM_hgm_tree_live = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_hgm_tree_live_tt
+		tag = NAM
+		has_country_flag = NAM_corp_takeover
+		has_global_flag = ADISCORD_south_hegemon_NAM
+		has_country_flag = NAM_ptn_table_open
+		is_subject = no
+	}
+}
+
+# COUNTRY NAM. Shahrabad is sequestered and its fate is not decided yet.
+NAM_ptn_shl_on_table = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_ptn_shl_on_table_tt
+		SHL = {
+			exists = yes
+			has_country_flag = NAM_ptn_sequestered
+		}
+		NOT = { has_variable = NAM_ptn_shl_form }
+	}
+}
+
+# COUNTRY NAM. No lot is open any more.
+NAM_ptn_table_cleared = {
+	NOT = { check_variable = { NAM_ptn_lot_state^1 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^2 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^3 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^4 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^5 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^6 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^7 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^8 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^9 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^10 = 1 } }
+	NOT = { check_variable = { NAM_ptn_lot_state^11 = 1 } }
+}
+
+# COUNTRY NAM. Input: temp NAM_ptn_lot_input. The lot is open.
+NAM_ptn_lot_open = {
+	check_variable = { NAM_ptn_lot_state^NAM_ptn_lot_input = 1 }
+}
+
+# COUNTRY NAM. The partition follows the union course unless "Материковые акции"
+# was taken; a war begun before the mainland pair counts as the union.
+NAM_ptn_union_rules = {
+	NOT = { has_completed_focus = NAM_mdr_mainland_shares }
+}
+
+# COUNTRY NAM. Mazar is the Directory's sovereign ally.
+NAM_hgm_mazar_ally = {
+	MZR = {
+		exists = yes
+		is_subject = no
+		is_in_faction_with = NAM
+	}
+}
+
+# COUNTRY. A furnace administration of Shahrabad.
+NAM_ptn_furnace_administration = {
+	OR = {
+		tag = SFD
+		tag = SCD
+		tag = SMD
+		tag = SOD
+		tag = SDA
+	}
+}
+
+# COUNTRY. A country that keeps its own cores at the partition: NAM's subject or a
+# member of its faction, not under sequestration.
+NAM_ptn_friendly_country = {
+	exists = yes
+	NOT = { has_country_flag = NAM_ptn_sequestered }
+	OR = {
+		is_subject_of = NAM
+		is_in_faction_with = NAM
+	}
+}
+
+# STATE. Its core country is friendly to NAM (NAM_ptn_return_to_friend).
+NAM_ptn_friendly_core_state = {
+	OR = {
+		AND = {
+			is_core_of = EFL
+			EFL = { NAM_ptn_friendly_country = yes }
+		}
+		AND = {
+			is_core_of = AZH
+			AZH = { NAM_ptn_friendly_country = yes }
+		}
+		AND = {
+			is_core_of = MZR
+			MZR = { NAM_ptn_friendly_country = yes }
+		}
+		AND = {
+			is_core_of = WEF
+			WEF = { NAM_ptn_friendly_country = yes }
+		}
+		AND = {
+			is_core_of = KYZ
+			KYZ = { NAM_ptn_friendly_country = yes }
+		}
+		AND = {
+			is_core_of = GLP
+			GLP = { NAM_ptn_friendly_country = yes }
+		}
+	}
+}
+
+# STATE. Owned by a sequestered loser that is a country lot.
+NAM_ptn_country_lot_owner = {
+	owner = {
+		has_country_flag = NAM_ptn_sequestered
+		NOT = { tag = SHL }
+		NOT = { NAM_ptn_furnace_administration = yes }
+	}
+}
+
+# COUNTRY NAM. Input: temp NAM_ptn_check_lot. An awarded or kept lot whose land NAM
+# owns: a state lot, a country lot on "Материковые акции" or a Shahrabad lot of the
+# inventory.
+NAM_ptn_land_lot = {
+	OR = {
+		check_variable = { NAM_ptn_lot_state^NAM_ptn_check_lot = 2 }
+		check_variable = { NAM_ptn_lot_state^NAM_ptn_check_lot = 3 }
+	}
+	OR = {
+		check_variable = { NAM_ptn_lot_kind^NAM_ptn_check_lot = 3 }
+		AND = {
+			check_variable = { NAM_ptn_lot_kind^NAM_ptn_check_lot = 2 }
+			NAM_ptn_union_rules = no
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_kind^NAM_ptn_check_lot = 1 }
+			check_variable = { NAM_ptn_shl_form = 2 }
+		}
+	}
+}
+
+# COUNTRY NAM. Input: temp NAM_ptn_check_lot. A district lot whose country is no
+# longer NAM's district.
+NAM_ptn_district_lot_lost = {
+	OR = {
+		AND = {
+			check_variable = { NAM_ptn_lot_kind^NAM_ptn_check_lot = 4 }
+			EFL = { NAM_board_federal_subject = no }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_kind^NAM_ptn_check_lot = 2 }
+			NAM_ptn_union_rules = yes
+			OR = {
+				AND = {
+					check_variable = { NAM_ptn_check_lot = 5 }
+					KYZ = { NAM_board_federal_subject = no }
+				}
+				AND = {
+					check_variable = { NAM_ptn_check_lot = 6 }
+					GLP = { NAM_board_federal_subject = no }
+				}
+				AND = {
+					check_variable = { NAM_ptn_check_lot = 7 }
+					MZR = { NAM_board_federal_subject = no }
+				}
+				AND = {
+					check_variable = { NAM_ptn_check_lot = 8 }
+					WEF = { NAM_board_federal_subject = no }
+				}
+				AND = {
+					check_variable = { NAM_ptn_check_lot = 9 }
+					KDR = { NAM_board_federal_subject = no }
+				}
+				AND = {
+					check_variable = { NAM_ptn_check_lot = 10 }
+					SDR = { NAM_board_federal_subject = no }
+				}
+				AND = {
+					check_variable = { NAM_ptn_check_lot = 11 }
+					RHM = { NAM_board_federal_subject = no }
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. Input: temp NAM_ptn_loop_lot. One of the lot's furnaces stays leased
+# by Shahrabad's seal.
+NAM_ptn_lot_furnace_live = {
+	SHL = {
+		exists = yes
+		is_subject_of = NAM
+	}
+	OR = {
+		AND = {
+			check_variable = { NAM_ptn_loop_lot = 1 }
+			OR = {
+				289 = {
+					is_owned_by = SHL
+					SHL_seal_site_leased = yes
+				}
+				294 = {
+					is_owned_by = SHL
+					SHL_seal_site_leased = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { NAM_ptn_loop_lot = 2 }
+			288 = {
+				is_owned_by = SHL
+				SHL_seal_site_leased = yes
+			}
+		}
+		AND = {
+			check_variable = { NAM_ptn_loop_lot = 3 }
+			OR = {
+				287 = {
+					is_owned_by = SHL
+					SHL_seal_site_leased = yes
+				}
+				290 = {
+					is_owned_by = SHL
+					SHL_seal_site_leased = yes
+				}
+				291 = {
+					is_owned_by = SHL
+					SHL_seal_site_leased = yes
+				}
+			}
+		}
+		AND = {
+			check_variable = { NAM_ptn_loop_lot = 4 }
+			OR = {
+				292 = {
+					is_owned_by = SHL
+					SHL_seal_site_leased = yes
+				}
+				293 = {
+					is_owned_by = SHL
+					SHL_seal_site_leased = yes
+				}
+				295 = {
+					is_owned_by = SHL
+					SHL_seal_site_leased = yes
+				}
+			}
+		}
+	}
+}
+
+# COUNTRY NAM. Input: temp NAM_ptn_loop_lot. An awarded lot counted by the lot row
+# of the recount: a district lot counts through its district, a furnace lot only
+# while one of its furnaces stays leased.
+NAM_ptn_lot_counts_as_holding = {
+	check_variable = { NAM_ptn_lot_owner^NAM_ptn_loop_lot > 0 }
+	NOT = { check_variable = { NAM_ptn_lot_kind^NAM_ptn_loop_lot = 4 } }
+	NOT = {
+		AND = {
+			check_variable = { NAM_ptn_lot_kind^NAM_ptn_loop_lot = 2 }
+			NAM_ptn_union_rules = yes
+		}
+	}
+	OR = {
+		NOT = {
+			AND = {
+				check_variable = { NAM_ptn_lot_kind^NAM_ptn_loop_lot = 1 }
+				check_variable = { NAM_ptn_shl_form = 1 }
+			}
+		}
+		NAM_ptn_lot_furnace_live = yes
+	}
+}
+
+# COUNTRY NAM. Input: temp NAM_ptn_loop_lot. A kept lot that "Повторные торги" may
+# sell once: not the free port, not Mazar's share, not under "Вечный совет шести".
+NAM_ptn_retender_candidate = {
+	check_variable = { NAM_ptn_lot_state^NAM_ptn_loop_lot = 3 }
+	check_variable = { NAM_ptn_retendered^NAM_ptn_loop_lot = 0 }
+	NOT = { check_variable = { NAM_ptn_kept_form^NAM_ptn_loop_lot = 4 } }
+	NOT = { check_variable = { NAM_ptn_kept_form^NAM_ptn_loop_lot = 5 } }
+	NOT = { has_completed_focus = NAM_hgm_perpetual_council }
+}
+
+# COUNTRY NAM. Some kept lot may be re-tendered (NAM_ptn_retender).
+NAM_ptn_retender_available = {
+	NOT = { has_completed_focus = NAM_hgm_perpetual_council }
+	OR = {
+		AND = {
+			check_variable = { NAM_ptn_lot_state^1 = 3 }
+			check_variable = { NAM_ptn_retendered^1 = 0 }
+			NOT = { check_variable = { NAM_ptn_kept_form^1 = 5 } }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^2 = 3 }
+			check_variable = { NAM_ptn_retendered^2 = 0 }
+			NOT = { check_variable = { NAM_ptn_kept_form^2 = 4 } }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^3 = 3 }
+			check_variable = { NAM_ptn_retendered^3 = 0 }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^4 = 3 }
+			check_variable = { NAM_ptn_retendered^4 = 0 }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^5 = 3 }
+			check_variable = { NAM_ptn_retendered^5 = 0 }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^6 = 3 }
+			check_variable = { NAM_ptn_retendered^6 = 0 }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^7 = 3 }
+			check_variable = { NAM_ptn_retendered^7 = 0 }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^8 = 3 }
+			check_variable = { NAM_ptn_retendered^8 = 0 }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^9 = 3 }
+			check_variable = { NAM_ptn_retendered^9 = 0 }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^10 = 3 }
+			check_variable = { NAM_ptn_retendered^10 = 0 }
+		}
+		AND = {
+			check_variable = { NAM_ptn_lot_state^11 = 3 }
+			check_variable = { NAM_ptn_retendered^11 = 0 }
+		}
+	}
+}
+
+# COUNTRY NAM. Under "Одно правление" the holding commands the five while its own
+# trust in the council is above 59.
+NAM_hgm_holding_commands = {
+	has_completed_focus = NAM_hgm_one_board
+	check_variable = { NAM_hgm_holding > 0 }
+	check_variable = { var = NAM_board_support^NAM_hgm_holding value = 59 compare = greater_than }
+}
+
+# COUNTRY NAM. "Последнее собрание": two of the six closers of the branches.
+NAM_hgm_last_meeting_ready = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_hgm_last_meeting_ready_tt
+		calc_true_if = {
+			amount = 2
+			has_completed_focus = NAM_hgm_south_under_the_boards
+			has_completed_focus = NAM_hgm_charter_of_the_directory
+			has_completed_focus = NAM_hgm_cities_of_the_continent
+			has_completed_focus = NAM_hgm_army_of_dominion
+			has_completed_focus = NAM_hgm_bank_of_the_south
+			has_completed_focus = NAM_hgm_hegemons_price
+		}
+	}
+}
+
+# COUNTRY NAM. None of the four finals has been taken.
+NAM_hgm_no_final_taken = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_hgm_no_final_taken_tt
+		NOT = { has_completed_focus = NAM_hgm_league_of_districts }
+		NOT = { has_completed_focus = NAM_hgm_shares_of_the_ninety_nine }
+		NOT = { has_completed_focus = NAM_hgm_perpetual_council }
+		NOT = { has_completed_focus = NAM_hgm_one_board }
+	}
+}
+
+# COUNTRY NAM. "Лига округов": the union course (or neither), "Юг как промысел" and
+# at least five operating company districts (NAM_hgm_district_count, monthly).
+NAM_hgm_league_ready = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_hgm_league_ready_tt
+		NAM_ptn_union_rules = yes
+		has_completed_focus = NAM_hgm_southern_extraction
+		check_variable = { NAM_hgm_district_count > 4 }
+	}
+}
+
+# COUNTRY NAM. "Акции девяноста девяти".
+NAM_hgm_people_ready = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_hgm_people_ready_tt
+		has_completed_focus = NAM_hgm_share_for_the_ninety_nine
+		has_idea = NAM_welfare_society_99_1
+		has_stability > 0.59
+		check_variable = { var = NAM_board_votes_for value = NAM_board_votes_against compare = greater_than }
+	}
+}
+
+# COUNTRY NAM. "Вечный совет шести": no buy-outs, no boycott, a holding for each
+# company (the recount's holdings by company number).
+NAM_hgm_six_ready = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_hgm_six_ready_tt
+		NOT = { has_completed_focus = NAM_hgm_mergers_and_buyouts }
+		NOT = { check_variable = { NAM_board_stance^1 = -1 } }
+		NOT = { check_variable = { NAM_board_stance^2 = -1 } }
+		NOT = { check_variable = { NAM_board_stance^3 = -1 } }
+		NOT = { check_variable = { NAM_board_stance^4 = -1 } }
+		NOT = { check_variable = { NAM_board_stance^5 = -1 } }
+		NOT = { check_variable = { NAM_board_stance^6 = -1 } }
+		check_variable = { NAM_board_districts_1 > 0 }
+		check_variable = { NAM_board_districts_2 > 0 }
+		check_variable = { NAM_board_districts_3 > 0 }
+		check_variable = { NAM_board_districts_4 > 0 }
+		check_variable = { NAM_board_districts_5 > 0 }
+		check_variable = { NAM_board_districts_6 > 0 }
+	}
+}
+
+# COUNTRY NAM. "Одно правление": the first company's ballot at least one and a half
+# times the second's (the ranked copies of the recount) or two buy-outs, its trust
+# above 59 and 300 capital.
+NAM_hgm_one_board_ready = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_hgm_one_board_ready_tt
+		has_completed_focus = NAM_hgm_mergers_and_buyouts
+		OR = {
+			check_variable = { var = NAM_board_rank_1_ballot value = NAM_board_rank_2_quota compare = greater_than_or_equals }
+			check_variable = { NAM_hgm_buyouts_done > 1 }
+		}
+		check_variable = { var = NAM_board_support^NAM_board_rank_1 value = 59 compare = greater_than }
+		check_variable = { var = NAM_corp_capital value = 300 compare = greater_than_or_equals }
+	}
+}
+
+# COUNTRY NAM. "Против последней империи": the whole gate of
+# RUS_crisis_enter_second_wave, so the entry fires when the focus completes.
+NAM_hgm_khan_war_open = {
+	custom_trigger_tooltip = {
+		tooltip = NAM_hgm_khan_entry_tt
+		RUS_crisis_second_wave_candidate = yes
+		RUS_crisis_can_enter_common_war = yes
+		RUS = {
+			RUS_crisis_project_active = yes
+			OR = {
+				check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+			}
+		}
+		NOT = { has_global_flag = RUS_crisis_world_ended }
+	}
+}
+
+# COUNTRY NAM. The Khan's war can no longer be entered by the focus: NAM already
+# defends against him, his world has ended, or RUS no longer exists.
+NAM_hgm_khan_war_closed = {
+	OR = {
+		has_country_flag = RUS_crisis_defender
+		has_global_flag = RUS_crisis_world_ended
+		NOT = { country_exists = RUS }
+	}
+}
+
+# COUNTRY. A debtor that can still receive the hegemon's letter and answer it.
+NAM_hgm_debtor_eligible = {
+	exists = yes
+	NOT = { tag = NAM }
+	NOT = { has_war_with = NAM }
+	NOT = { is_subject_of = NAM }
+	NOT = { is_in_faction_with = NAM }
 }

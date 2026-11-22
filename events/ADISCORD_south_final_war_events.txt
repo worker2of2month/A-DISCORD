@@ -255,6 +255,18 @@ country_event = {
 				add = 15
 				is_neighbor_of = SHL
 			}
+			# The ledger is read before the join effects close it; at 40 or
+			# more a country is bound before this event.
+			modifier = {
+				add = 20
+				ADISCORD_south_lean_shl_20 = yes
+				check_variable = { var = ADISCORD_south_coalition_influence value = -30 compare = greater_than }
+			}
+			modifier = {
+				add = 40
+				check_variable = { var = ADISCORD_south_coalition_influence value = -30 compare = less_than_or_equals }
+				ADISCORD_south_lean_shl_40 = no
+			}
 		}
 	}
 
@@ -313,6 +325,16 @@ country_event = {
 						is_neighbor_of = AZH
 					}
 				}
+			}
+			modifier = {
+				add = 20
+				ADISCORD_south_lean_north_20 = yes
+				check_variable = { var = ADISCORD_south_coalition_influence value = 30 compare = less_than }
+			}
+			modifier = {
+				add = 40
+				check_variable = { var = ADISCORD_south_coalition_influence value = 30 compare = greater_than_or_equals }
+				ADISCORD_south_lean_north_40 = no
 			}
 		}
 	}
@@ -392,6 +414,13 @@ news_event = {
 		}
 	}
 	desc = {
+		text = ADISCORD_south.31.d_nam_partition
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_NAM
+			check_variable = { var = global.ADISCORD_south_subject_type value = 7 compare = equals }
+		}
+	}
+	desc = {
 		text = ADISCORD_south.31.d_nam_namestniks
 		trigger = {
 			has_global_flag = ADISCORD_south_hegemon_NAM
@@ -434,6 +463,15 @@ news_event = {
 				}
 			}
 			custom_effect_tooltip = NAM_south_heritage_unlocked_tt
+		}
+		else_if = {
+			limit = {
+				hidden_trigger = {
+					tag = NAM
+					has_focus_tree = NAM_southern_dominion_focus
+				}
+			}
+			custom_effect_tooltip = NAM_hgm_dominion_unlocked_tt
 		}
 	}
 }
@@ -501,13 +539,24 @@ country_event = {
 			}
 		}
 	}
+	# The council of boards: the first matching description wins.
+	desc = {
+		text = ADISCORD_south.40.d_submit_directory
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
+			FROM = {
+				tag = NAM
+				has_country_flag = NAM_corp_takeover
+			}
+		}
+	}
 	desc = {
 		text = ADISCORD_south.40.d_submit_nam_namestnik
 		trigger = {
 			check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
 			FROM = {
 				tag = NAM
-				NOT = { has_completed_focus = NAM_federal_charter }
+				NAM_prewar_district_mandate = no
 			}
 		}
 	}
@@ -517,7 +566,7 @@ country_event = {
 			check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
 			FROM = {
 				tag = NAM
-				has_completed_focus = NAM_federal_charter
+				NAM_prewar_district_mandate = yes
 			}
 		}
 	}
@@ -550,19 +599,118 @@ country_event = {
 		}
 	}
 	desc = {
+		text = ADISCORD_south.40.d_alliance_directory
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+			FROM = {
+				tag = NAM
+				has_country_flag = NAM_corp_takeover
+			}
+		}
+	}
+	desc = {
 		text = ADISCORD_south.40.d_alliance_nam
 		trigger = {
 			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
 			FROM = { tag = NAM }
 		}
 	}
+	# Protection (kind 4) follows the sender's course.
+	title = {
+		text = ADISCORD_south.40.t_directory_protection
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = {
+				tag = NAM
+				has_country_flag = NAM_corp_takeover
+			}
+		}
+	}
 	title = {
 		text = ADISCORD_south.40.t_contract
-		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = {
+				tag = NAM
+				NAM_prewar_service_mandate = no
+				NAM_prewar_district_mandate = no
+			}
+		}
+	}
+	title = {
+		text = ADISCORD_south.40.t_writ
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = {
+				tag = NAM
+				NAM_prewar_service_mandate = yes
+			}
+		}
+	}
+	title = {
+		text = ADISCORD_south.40.t_charter
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = {
+				tag = NAM
+				NAM_prewar_district_mandate = yes
+			}
+		}
+	}
+	title = {
+		text = ADISCORD_south.40.t_shl_protection
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = { tag = SHL }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.40.d_directory_protection
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = {
+				tag = NAM
+				has_country_flag = NAM_corp_takeover
+			}
+		}
 	}
 	desc = {
 		text = ADISCORD_south.40.d_contract
-		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = {
+				tag = NAM
+				NAM_prewar_service_mandate = no
+				NAM_prewar_district_mandate = no
+			}
+		}
+	}
+	desc = {
+		text = ADISCORD_south.40.d_writ
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = {
+				tag = NAM
+				NAM_prewar_service_mandate = yes
+			}
+		}
+	}
+	desc = {
+		text = ADISCORD_south.40.d_charter
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = {
+				tag = NAM
+				NAM_prewar_district_mandate = yes
+			}
+		}
+	}
+	desc = {
+		text = ADISCORD_south.40.d_shl_protection
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			FROM = { tag = SHL }
+		}
 	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
@@ -606,7 +754,22 @@ country_event = {
 		}
 		else_if = {
 			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } } }
-			custom_effect_tooltip = ADISCORD_south_offer_contract_accept_tt
+			if = {
+				limit = {
+					hidden_trigger = {
+						FROM = {
+							tag = NAM
+							NAM_prewar_service_mandate = no
+							NAM_prewar_district_mandate = no
+							NOT = { has_country_flag = NAM_corp_takeover }
+						}
+					}
+				}
+				custom_effect_tooltip = ADISCORD_south_offer_contract_accept_tt
+			}
+			else = {
+				custom_effect_tooltip = ADISCORD_south_offer_protection_accept_tt
+			}
 		}
 		else = {
 			custom_effect_tooltip = ADISCORD_south_offer_submit_accept_tt
@@ -623,6 +786,33 @@ country_event = {
 			modifier = {
 				add = 30
 				check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			}
+			modifier = {
+				add = 30
+				check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+				OR = {
+					AND = {
+						FROM = { tag = SHL }
+						ADISCORD_south_lean_shl_80 = yes
+					}
+					AND = {
+						FROM = { tag = NAM }
+						ADISCORD_south_lean_north_80 = yes
+					}
+				}
+			}
+			modifier = {
+				add = 20
+				OR = {
+					AND = {
+						FROM = { tag = SHL }
+						ADISCORD_south_lean_shl_20 = yes
+					}
+					AND = {
+						FROM = { tag = NAM }
+						ADISCORD_south_lean_north_20 = yes
+					}
+				}
 			}
 			modifier = {
 				add = 40
@@ -658,6 +848,15 @@ country_event = {
 					has_completed_focus = NAM_civil_dividend
 				}
 			}
+			# Mazar accepts the Directory's offers more readily after its Mazar question.
+			modifier = {
+				add = 25
+				tag = MZR
+				FROM = {
+					tag = NAM
+					has_completed_focus = NAM_mdr_mazar_question
+				}
+			}
 			modifier = {
 				factor = 0.5
 				check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
@@ -683,7 +882,7 @@ country_event = {
 		}
 		else_if = {
 			limit = { hidden_trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } } }
-			custom_effect_tooltip = ADISCORD_south_offer_contract_refuse_tt
+			custom_effect_tooltip = ADISCORD_south_offer_protection_refuse_tt
 		}
 		else_if = {
 			limit = {
@@ -809,6 +1008,10 @@ country_event = {
 country_event = {
 	id = ADISCORD_south.44
 	title = ADISCORD_south.44.t
+	desc = {
+		text = ADISCORD_south.44.d_directory
+		trigger = { NAM = { has_completed_focus = NAM_mdr_home_districts } }
+	}
 	desc = ADISCORD_south.44.d
 	picture = GFX_event_adiscord_military_planning
 	is_triggered_only = yes
@@ -1221,6 +1424,351 @@ country_event = {
 				factor = 0.5
 				is_in_faction = yes
 			}
+		}
+	}
+}
+
+# ----- Influence contest -----
+
+# ROOT decides on Svetlogorye's path tool; FROM is Svetlogorye. The escrow is
+# settled exactly once: delivered, refunded on refusal, or refunded when the
+# offer has lapsed.
+country_event = {
+	id = ADISCORD_south.68
+	title = ADISCORD_south.68.t
+	desc = {
+		text = ADISCORD_south.68.d_writ
+		trigger = { check_variable = { var = ADISCORD_south_tool_escrow value = 1 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_south.68.d_contract
+		trigger = { check_variable = { var = ADISCORD_south_tool_escrow value = 2 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_south.68.d_charter
+		trigger = { check_variable = { var = ADISCORD_south_tool_escrow value = 3 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_south.68.d_lapsed
+		trigger = { NOT = { has_variable = ADISCORD_south_tool_escrow } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.68.a
+		trigger = { ADISCORD_south_tool_offer_valid = yes }
+		custom_effect_tooltip = ADISCORD_south.68.a_tt
+		hidden_effect = {
+			ADISCORD_south_deliver_tool = yes
+			FROM = { country_event = { id = ADISCORD_south.69 hours = 1 } }
+		}
+		ai_chance = {
+			base = 30
+			modifier = {
+				add = 30
+				ADISCORD_south_lean_north_40 = yes
+			}
+			modifier = {
+				add = 20
+				ADISCORD_south_lean_north_60 = yes
+			}
+			modifier = {
+				add = 20
+				check_variable = { var = ADISCORD_south_tool_escrow value = 2 compare = equals }
+				FROM = { has_completed_focus = NAM_prag_contract_union }
+			}
+			modifier = {
+				factor = 0.5
+				has_country_flag = ADISCORD_south_indebted_to_SHL
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_south.68.b
+		trigger = { ADISCORD_south_tool_offer_valid = yes }
+		custom_effect_tooltip = ADISCORD_south.68.b_tt
+		hidden_effect = {
+			ADISCORD_south_refuse_tool = yes
+			FROM = { country_event = { id = ADISCORD_south.69 hours = 1 } }
+		}
+		ai_chance = { base = 30 }
+	}
+
+	option = {
+		name = ADISCORD_south.68.closed
+		trigger = { ADISCORD_south_tool_offer_valid = no }
+		custom_effect_tooltip = ADISCORD_south.68.closed_tt
+		hidden_effect = { ADISCORD_south_refund_tool_escrow = yes }
+		ai_chance = { base = 100 }
+	}
+}
+
+# Svetlogorye learns the answer; FROM is the country that answered.
+country_event = {
+	id = ADISCORD_south.69
+	title = ADISCORD_south.69.t
+	desc = {
+		text = ADISCORD_south.69.d_accepted
+		trigger = { FROM = { has_variable = ADISCORD_south_tool_kind } }
+	}
+	desc = {
+		text = ADISCORD_south.69.d_declined
+		trigger = { FROM = { NOT = { has_variable = ADISCORD_south_tool_kind } } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.69.a
+	}
+}
+
+# Svetlogorye answers the appeal of event_target:ADISCORD_south_strike_country,
+# which Shahrabad threatened with a limited war. The war is deferred, never
+# joined: Svetlogorye enters no war before the war for the South.
+country_event = {
+	id = ADISCORD_south.70
+	title = ADISCORD_south.70.t
+	desc = ADISCORD_south.70.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.70.a
+		custom_effect_tooltip = ADISCORD_south_appeal_a_tt
+		hidden_effect = {
+			event_target:ADISCORD_south_strike_country = {
+				clr_country_flag = ADISCORD_south_appeal_open
+				set_country_flag = { flag = ADISCORD_south_appeal_declined days = 30 }
+				set_temp_variable = { var = ADISCORD_south_push_delta value = 10 }
+				ADISCORD_south_push_influence_shl = yes
+			}
+			# The starter runs in Shahrabad's own event scope.
+			SHL = {
+				country_event = { id = ADISCORD_south.71 hours = 1 }
+				country_event = { id = ADISCORD_south.76 hours = 1 }
+			}
+		}
+		ai_chance = { base = 20 }
+	}
+
+	option = {
+		name = ADISCORD_south.70.b
+		trigger = {
+			NOT = { has_equipment = { infantry_equipment < 3000 } }
+			NOT = { has_political_power < 25 }
+		}
+		add_political_power = -25
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = -3000
+		}
+		custom_effect_tooltip = ADISCORD_south_appeal_b_tt
+		hidden_effect = {
+			event_target:ADISCORD_south_strike_country = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 3000
+					producer = NAM
+				}
+				clr_country_flag = ADISCORD_south_appeal_open
+				set_country_flag = { flag = ADISCORD_south_appeal_answered days = 180 }
+				set_temp_variable = { var = ADISCORD_south_push_delta value = 15 }
+				ADISCORD_south_push_influence_north = yes
+			}
+			SHL = {
+				country_event = { id = ADISCORD_south.71 hours = 1 }
+				country_event = { id = ADISCORD_south.76 days = 180 }
+			}
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0
+				has_equipment = { infantry_equipment < 6000 }
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_south.70.c
+		trigger = { NOT = { command_power < 50 } }
+		add_command_power = -50
+		custom_effect_tooltip = ADISCORD_south_appeal_c_tt
+		hidden_effect = {
+			event_target:ADISCORD_south_strike_country = {
+				clr_country_flag = ADISCORD_south_appeal_open
+				set_country_flag = { flag = ADISCORD_south_appeal_answered days = 90 }
+				set_temp_variable = { var = ADISCORD_south_push_delta value = 8 }
+				ADISCORD_south_push_influence_north = yes
+			}
+			SHL = {
+				country_event = { id = ADISCORD_south.71 hours = 1 }
+				country_event = { id = ADISCORD_south.76 days = 90 }
+			}
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# Shahrabad learns how Svetlogorye answered the appeal.
+country_event = {
+	id = ADISCORD_south.71
+	title = ADISCORD_south.71.t
+	desc = {
+		text = ADISCORD_south.71.d_declined
+		trigger = { event_target:ADISCORD_south_strike_country = { has_country_flag = ADISCORD_south_appeal_declined } }
+	}
+	desc = {
+		text = ADISCORD_south.71.d_answered
+		trigger = { event_target:ADISCORD_south_strike_country = { NOT = { has_country_flag = ADISCORD_south_appeal_declined } } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.71.a
+	}
+}
+
+# Shahrabad decides on the division of the South; FROM is Svetlogorye.
+country_event = {
+	id = ADISCORD_south.72
+	title = ADISCORD_south.72.t
+	desc = ADISCORD_south.72.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.72.a
+		trigger = { ADISCORD_south_contest_open = yes }
+		custom_effect_tooltip = ADISCORD_south.72.a_tt
+		hidden_effect = {
+			ADISCORD_south_accept_spheres = yes
+			FROM = { country_event = { id = ADISCORD_south.73 hours = 1 } }
+		}
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 30
+				count_triggers = {
+					amount = 5
+					EFL = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+					AZH = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+					WEF = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+					KDR = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+					RHM = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+					SDR = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+					MZR = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+					KYZ = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+					GLP = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+				}
+			}
+			modifier = {
+				factor = 0.3
+				count_triggers = {
+					amount = 5
+					EFL = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than } }
+					AZH = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than } }
+					WEF = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than } }
+					KDR = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than } }
+					RHM = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than } }
+					SDR = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than } }
+					MZR = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than } }
+					KYZ = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than } }
+					GLP = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than } }
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_south.72.b
+		trigger = { ADISCORD_south_contest_open = yes }
+		custom_effect_tooltip = ADISCORD_south.72.b_tt
+		hidden_effect = {
+			ADISCORD_south_refuse_spheres = yes
+			FROM = { country_event = { id = ADISCORD_south.73 hours = 1 } }
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_south.72.closed
+		trigger = { ADISCORD_south_contest_open = no }
+		ai_chance = { base = 100 }
+	}
+}
+
+# Svetlogorye learns Shahrabad's answer on the division of the South.
+country_event = {
+	id = ADISCORD_south.73
+	title = ADISCORD_south.73.t
+	desc = {
+		text = ADISCORD_south.73.d_accepted
+		trigger = { has_global_flag = ADISCORD_south_spheres_agreed }
+	}
+	desc = {
+		text = ADISCORD_south.73.d_refused
+		trigger = { NOT = { has_global_flag = ADISCORD_south_spheres_agreed } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.73.a
+	}
+}
+
+# A human champion hears that event_target:ADISCORD_south_threshold_country
+# crossed 40 or 60 in its direction.
+country_event = {
+	id = ADISCORD_south.74
+	title = ADISCORD_south.74.t
+	desc = ADISCORD_south.74.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { is_ai = no }
+
+	option = {
+		name = ADISCORD_south.74.a
+		custom_effect_tooltip = ADISCORD_south.74.a_tt
+	}
+}
+
+# SHL, one day after the war starts and after the side choices (.10, 6 hours).
+country_event = {
+	id = ADISCORD_south.75
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_south_close_unchosen_contests = yes
+	}
+}
+
+# SHL. Re-checks a limited war deferred by an appeal or by Svetlogorye's
+# agreed sphere; the starter runs the appeal check again with the lean of
+# that day.
+country_event = {
+	id = ADISCORD_south.76
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		event_target:ADISCORD_south_strike_country = {
+			clr_country_flag = ADISCORD_south_appeal_answered
+			clr_country_flag = ADISCORD_south_strike_recheck_pending
+		}
+		if = {
+			limit = { event_target:ADISCORD_south_strike_country = { tag = KYZ } }
+			SHL_start_kyz_war = yes
+		}
+		else_if = {
+			limit = { event_target:ADISCORD_south_strike_country = { tag = GLP } }
+			SHL_start_glp_war = yes
 		}
 	}
 }

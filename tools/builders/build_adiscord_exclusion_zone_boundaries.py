@@ -20,6 +20,8 @@ from pathlib import Path
 from tools.builders.build_adiscord_northern_countries import (
     format_provinces,
     load_definition,
+    load_mon_geography,
+    mon_planned_provinces,
 )
 from tools.builders.build_adiscord_new_states import (
     DIRTY_ZONE_VICTORY_POINTS,
@@ -130,10 +132,17 @@ def load_source() -> dict[int, set[int]]:
     payload = json.loads(SOURCE_PATH.read_text(encoding="utf-8"))
     if payload.get("schema") != 1:
         raise RuntimeError("unsupported Exclusion Zone boundary source schema")
-    return {
+    states = {
         int(state_id): set(provinces)
         for state_id, provinces in payload["states"].items()
     }
+    # Provinces carved from MON parents postdate the snapshot. They join the
+    # snapshot entry of their MON state, so the snapshot itself stays frozen.
+    _colors, details = load_definition()
+    for state_id, provinces in mon_planned_provinces(load_mon_geography(), details).items():
+        if state_id in states:
+            states[state_id].update(provinces)
+    return states
 
 
 def load_current_owners() -> dict[int, str]:

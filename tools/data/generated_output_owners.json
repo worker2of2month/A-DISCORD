@@ -5,6 +5,7 @@
     "southern_marines",
     "state_history",
     "outer_states",
+    "mon_geography",
     "northern_countries",
     "exclusion_zone_boundaries",
     "northern_countries",
@@ -1042,6 +1043,58 @@
       "may_delete_outputs": true,
       "ownership_mode": "layered",
       "overlap_explanation": "Outer state shells are later populated by northern and exclusion passes; their generated name block shares the canonical state localisation, and the builder invokes the shared building synchronizer after repartitioning. A western state with a settlement entry also receives its population, buildings and deposits here, and the names of its island towns go into the shared victory-point localisation."
+    },
+    {
+      "id": "mon_geography",
+      "owner_module": "tools.builders.build_adiscord_mon_geography",
+      "output_globs": [
+        "map/provinces.bmp",
+        "map/definition.csv",
+        "map/heightmap.bmp",
+        "map/world_normal.bmp",
+        "map/terrain.bmp",
+        "map/trees.bmp",
+        "map/rivers.bmp",
+        "map/cities.bmp",
+        "map/unitstacks.txt"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_mon_geography.py",
+        "tools/data/adiscord_mon_geography.json",
+        "tools/data/adiscord_mon_province_geometry.png",
+        "tools/builders/build_adiscord_ivn_geography.py",
+        "tools/builders/build_adiscord_coastal_geography.py",
+        "tools/lib/coastal_clearance.py",
+        "history/states/*.txt",
+        "localisation/russian/state_names_l_russian.yml",
+        "common/terrain/00_terrain.txt",
+        "map/provinces.bmp",
+        "map/definition.csv",
+        "map/heightmap.bmp",
+        "map/world_normal.bmp",
+        "map/terrain.bmp",
+        "map/trees.bmp",
+        "map/rivers.bmp",
+        "map/cities.bmp",
+        "map/unitstacks.txt",
+        "map/railways.txt"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_mon_geography"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_mon_geography",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns the Montar Empire layers inside the province set of its 20 states and the planned provinces listed in tools/data/adiscord_mon_geography.json: the reviewed city geometry stamped from tools/data/adiscord_mon_province_geometry.png into provinces.bmp, the appended definition.csv rows and field 6 of every MON province, heightmap, terrain, tree, river and city-mask pixels of MON, the far wall of each authored canyon in a band of foreign heightmap pixels beside the MON border, world_normal cells under those pixels plus their one-cell feather, native unit anchors of carved, remainder, district and donor provinces and of any province whose borders the carving changed, and the anchor heights of every MON row. Every other byte stays as it is; trade regions own continent field 7, coastal geography owns the night-light alpha and terrain_snow owns snow conversion."
     },
     {
       "id": "remainder_states",
@@ -3435,6 +3488,8 @@
         "common/national_focus/ADISCORD_NAM_exile_interregnum.txt",
         "common/national_focus/ADISCORD_NAM_south_war.txt",
         "common/national_focus/ADISCORD_NAM_return_war.txt",
+        "common/national_focus/ADISCORD_NAM_mainland_directory.txt",
+        "common/national_focus/ADISCORD_NAM_southern_dominion.txt",
         "common/national_focus/ADISCORD_SHL_focus.txt",
         "common/national_focus/ADISCORD_SHL_shared.txt",
         "common/national_focus/ADISCORD_SHL_south_war.txt",

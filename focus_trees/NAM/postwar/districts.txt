@@ -1,7 +1,9 @@
 # @section districts_charter
 	# District course: the charter, the opening pair, the public utilities and the
-	# southern spine to the fuel market. The charter sits under law_after_war
-	# (14,1, the post-war axis); the other cards anchor on path cards only.
+	# southern sub-lane (citizenship, community charter, caravans or mutual-aid
+	# funds, oasis voices or well partnerships, Kadir and oil for water). The
+	# charter sits under law_after_war (21,1, the post-war axis); every other card
+	# anchors on path cards only.
 	focus = {
 		id = NAM_federal_charter
 		relative_position_id = NAM_law_after_war
@@ -31,8 +33,6 @@
 		completion_reward = {
 			unlock_decision_tooltip = NAM_campaign_charter_of_districts
 			custom_effect_tooltip = NAM_campaign_charter_of_districts_unlock_tt
-			unlock_decision_tooltip = NAM_pw_district_congress
-			custom_effect_tooltip = NAM_pw_district_congress_unlock_tt
 			add_political_power = 100
 			add_stability = 0.08
 			effect_tooltip = {
@@ -203,7 +203,7 @@
 		id = NAM_public_utilities
 		relative_position_id = NAM_federal_charter
 		x = 0
-		y = 3
+		y = 2
 		icon = GFX_focus_NAM_public_utilities
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -227,18 +227,10 @@
 		completion_reward = {
 			unlock_decision_tooltip = NAM_pw_public_utilities
 			custom_effect_tooltip = NAM_pw_public_utilities_unlock_tt
-			unlock_decision_tooltip = NAM_pw_municipal_services
-			custom_effect_tooltip = NAM_pw_municipal_services_unlock_tt
-			unlock_decision_tooltip = NAM_pw_rural_electrification
-			custom_effect_tooltip = NAM_pw_rural_electrification_unlock_tt
-			# The federation houses the returnees; the union receives the fuel aid
-			# here and the federation receives it with the common fuel market.
+			# The union receives the fuel aid here; the federation receives it with
+			# the common fuel market.
 			if = {
-				limit = { has_completed_focus = NAM_charter_ending_federation }
-				unlock_decision_tooltip = NAM_house_returnees
-				custom_effect_tooltip = NAM_house_returnees_unlock_tt
-			}
-			else = {
+				limit = { has_completed_focus = NAM_charter_ending_oil_union }
 				if = {
 					limit = { hidden_trigger = { NAM_pw_charter_ally_available = yes } }
 					unlock_decision_tooltip = NAM_charter_fuel_aid
@@ -247,6 +239,7 @@
 				else = { custom_effect_tooltip = NAM_charter_fuel_aid_future_tt }
 			}
 			ADISCORD_reform_social_system_development = yes
+			add_stability = 0.05
 			if = {
 				limit = { has_completed_focus = NAM_charter_ending_federation }
 				add_manpower = 7000
@@ -254,76 +247,81 @@
 			else = {
 				add_fuel = 20000
 			}
-			690 = {
-				if = {
-					limit = {
-						is_owned_by = ROOT
-						is_controlled_by = ROOT
-						infrastructure < 5
-					}
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
-					}
-				}
-			}
-			700 = {
-				if = {
-					limit = {
-						is_owned_by = ROOT
-						is_controlled_by = ROOT
-						infrastructure < 5
-					}
-					add_building_construction = {
-						type = infrastructure
-						level = 1
-						instant_build = yes
-					}
-				}
-			}
 			custom_effect_tooltip = NAM_public_utilities_reward_tt
 			hidden_effect = {
-				set_temp_variable = { var = NAM_treasury_amount value = 500 }
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
 				NAM_add_treasury = yes
-				# A road level that cannot be built (lost state or the level-5 cap)
-				# is paid in treasury.
-				if = {
-					limit = {
-						NOT = {
-							690 = {
-								is_owned_by = ROOT
-								is_controlled_by = ROOT
-								infrastructure < 5
-							}
-						}
-					}
-					set_temp_variable = { var = NAM_treasury_amount value = 150 }
-					NAM_add_treasury = yes
-				}
-				if = {
-					limit = {
-						NOT = {
-							700 = {
-								is_owned_by = ROOT
-								is_controlled_by = ROOT
-								infrastructure < 5
-							}
-						}
-					}
-					set_temp_variable = { var = NAM_treasury_amount value = 150 }
-					NAM_add_treasury = yes
-				}
-				if = {
-					limit = { has_completed_focus = NAM_charter_ending_federation }
-					add_to_variable = { var = NAM_returnee_register value = 10000 }
-				}
 				# The inspection starts at once; every paid district congress repeats it.
 				NAM_workers_inspection_dispatch = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_common_citizenship
+		relative_position_id = NAM_charter_ending_federation
+		x = -2
+		y = 2
+		icon = GFX_focus_NAM_common_citizenship
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_POLITICAL }
+		# The union reaches the register only through the coast envoys of the
+		# influence lane: the envoys bring the coastal families back.
+		prerequisite = {
+			focus = NAM_charter_ending_federation
+			focus = NAM_south_coast_envoys
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_house_returnees
+			custom_effect_tooltip = NAM_house_returnees_unlock_tt
+			add_war_support = 0.05
+			add_political_power = 75
+			custom_effect_tooltip = NAM_common_citizenship_reward_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_common_citizenship_south_tt
 				if = {
-					limit = { has_completed_focus = NAM_charter_ending_federation }
-					country_event = { id = ADISCORD_nam_story.368 days = 50 }
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
 				}
+			}
+			custom_effect_tooltip = ADISCORD_south_contact_kyz_tt
+			custom_effect_tooltip = ADISCORD_south_contact_mzr_tt
+			custom_effect_tooltip = ADISCORD_south_contact_glp_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_returnee_register value = 10000 }
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					KYZ = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+					}
+					MZR = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+					}
+					GLP = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+					}
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 1 }
+					ADISCORD_south_add_influence_power = yes
+				}
+				country_event = { id = ADISCORD_nam_story.368 days = 1 }
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -332,8 +330,8 @@
 	focus = {
 		id = NAM_south_fenn_guarantee
 		relative_position_id = NAM_public_utilities
-		x = 2
-		y = 2
+		x = -2
+		y = 1
 		icon = GFX_focus_NAM_relay_trials
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
@@ -365,7 +363,6 @@
 				custom_effect_tooltip = NAM_rescue_college_service_tt
 			}
 			else = { custom_effect_tooltip = NAM_rescue_college_service_tt }
-			custom_effect_tooltip = ADISCORD_south_contact_wef_tt
 			add_command_power = 25
 			add_equipment_to_stockpile = {
 				type = support_equipment
@@ -379,11 +376,27 @@
 				category = electronics
 			}
 			ADISCORD_reform_society_development = yes
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_south_fenn_guarantee_south_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
 			custom_effect_tooltip = NAM_water_board_network_tt
+			custom_effect_tooltip = ADISCORD_south_contact_wef_tt
 			hidden_effect = {
 				67 = { NAM_water_board_dispatch = yes }
 				690 = { NAM_water_board_dispatch = yes }
 				NAM_oil_refresh = yes
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					WEF = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+						ADISCORD_south_push_influence_north = yes
+					}
+				}
 			}
 		}
 		ai_will_do = {
@@ -392,15 +405,483 @@
 	}
 
 	focus = {
+		id = NAM_community_charter
+		relative_position_id = NAM_common_citizenship
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_board_eflor_petition
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ANNEXATION }
+		prerequisite = {
+			focus = NAM_common_citizenship
+			focus = NAM_south_fenn_guarantee
+		}
+		bypass = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_started_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_started
+				}
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_resolved_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_resolved
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_south_nam_charter
+			custom_effect_tooltip = ADISCORD_south_nam_charter_unlock_tt
+			add_political_power = 60
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_community_charter_reward_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
+			custom_effect_tooltip = NAM_grp_community_charter_tt
+			hidden_effect = {
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 3 }
+					ADISCORD_south_add_influence_power = yes
+					RHM = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 8 }
+						ADISCORD_south_push_influence_north = yes
+					}
+					SDR = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 8 }
+						ADISCORD_south_push_influence_north = yes
+					}
+				}
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = -5 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.363 days = 1 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_south_aid_caravans
+		relative_position_id = NAM_community_charter
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_freight_brokerage
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 1
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_community_charter }
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_final_started_focus_condition_tt
+				has_global_flag = ADISCORD_south_final_started
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = -10000
+			add_manpower = 3500
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_south_aid_caravans_reward_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
+			custom_effect_tooltip = NAM_grp_south_aid_caravans_tt
+			hidden_effect = {
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					WEF = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+					}
+					RHM = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+						if = {
+							limit = { ADISCORD_south_in_contest = yes }
+							set_temp_variable = { var = ADISCORD_south_tie_value value = 1 }
+							ADISCORD_south_set_north_tie = yes
+						}
+					}
+					SDR = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+						if = {
+							limit = { ADISCORD_south_in_contest = yes }
+							set_temp_variable = { var = ADISCORD_south_tie_value value = 1 }
+							ADISCORD_south_set_north_tie = yes
+						}
+					}
+				}
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				add_to_variable = { var = NAM_grp_oil_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_mutual_aid_funds
+		relative_position_id = NAM_community_charter
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_board_family_relief_fund
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_community_charter }
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_final_started_focus_condition_tt
+				has_global_flag = ADISCORD_south_final_started
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 35
+			custom_effect_tooltip = NAM_mutual_aid_funds_reward_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_mutual_aid_funds_south_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
+			custom_effect_tooltip = NAM_grp_mutual_aid_funds_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					KYZ = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+						if = {
+							limit = { ADISCORD_south_in_contest = yes }
+							set_temp_variable = { var = ADISCORD_south_tie_value value = 1 }
+							ADISCORD_south_set_north_tie = yes
+						}
+					}
+					MZR = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+						if = {
+							limit = { ADISCORD_south_in_contest = yes }
+							set_temp_variable = { var = ADISCORD_south_tie_value value = 1 }
+							ADISCORD_south_set_north_tie = yes
+						}
+					}
+					GLP = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+						if = {
+							limit = { ADISCORD_south_in_contest = yes }
+							set_temp_variable = { var = ADISCORD_south_tie_value value = 1 }
+							ADISCORD_south_set_north_tie = yes
+						}
+					}
+				}
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				add_to_variable = { var = NAM_grp_trade_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_oasis_voices
+		relative_position_id = NAM_south_aid_caravans
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_pw_family_pensions
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_WAR_SUPPORT FOCUS_FILTER_ANNEXATION }
+		prerequisite = {
+			focus = NAM_south_aid_caravans
+			focus = NAM_south_press_shahrabad
+		}
+		mutually_exclusive = { focus = NAM_well_partnerships }
+		bypass = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_started_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_started
+				}
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_resolved_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_resolved
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_war_support = 0.05
+			custom_effect_tooltip = NAM_oasis_voices_reward_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_oasis_voices_south_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					# The testimonies name the Shahrabad embassy houses: every
+					# contest country hosting one is pushed (fixed nine-tag pass).
+					EFL = {
+						if = {
+							limit = { has_country_flag = SHL_embassy }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+							ADISCORD_south_push_influence_north = yes
+						}
+					}
+					AZH = {
+						if = {
+							limit = { has_country_flag = SHL_embassy }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+							ADISCORD_south_push_influence_north = yes
+						}
+					}
+					WEF = {
+						if = {
+							limit = { has_country_flag = SHL_embassy }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+							ADISCORD_south_push_influence_north = yes
+						}
+					}
+					KDR = {
+						if = {
+							limit = { has_country_flag = SHL_embassy }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+							ADISCORD_south_push_influence_north = yes
+						}
+					}
+					RHM = {
+						if = {
+							limit = { has_country_flag = SHL_embassy }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+							ADISCORD_south_push_influence_north = yes
+						}
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+					}
+					SDR = {
+						if = {
+							limit = { has_country_flag = SHL_embassy }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+							ADISCORD_south_push_influence_north = yes
+						}
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+						ADISCORD_south_push_influence_north = yes
+					}
+					KYZ = {
+						if = {
+							limit = { has_country_flag = SHL_embassy }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+							ADISCORD_south_push_influence_north = yes
+						}
+					}
+					MZR = {
+						if = {
+							limit = { has_country_flag = SHL_embassy }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+							ADISCORD_south_push_influence_north = yes
+						}
+					}
+					GLP = {
+						if = {
+							limit = { has_country_flag = SHL_embassy }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+							ADISCORD_south_push_influence_north = yes
+						}
+					}
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 2 }
+					ADISCORD_south_add_influence_power = yes
+				}
+				country_event = { id = ADISCORD_nam_story.376 days = 1 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_well_partnerships
+		relative_position_id = NAM_mutual_aid_funds
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_svetlogorsk_dam
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ANNEXATION }
+		prerequisite = { focus = NAM_mutual_aid_funds }
+		mutually_exclusive = { focus = NAM_oasis_voices }
+		bypass = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_started_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_started
+				}
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_resolved_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_resolved
+				}
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_south_story_ready_tt
+				ADISCORD_south_nam_story_clear = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 5000
+			add_fuel = -10000
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_well_partnerships_reward_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
+			custom_effect_tooltip = NAM_grp_well_partnerships_tt
+			hidden_effect = {
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					# Desert countries only: a standing tie where the lean is not
+					# toward Shahrabad, a push where a Shahrabad embassy sits.
+					WEF = { NAM_well_partnerships_desert_rows = yes }
+					KDR = { NAM_well_partnerships_desert_rows = yes }
+					RHM = { NAM_well_partnerships_desert_rows = yes }
+					SDR = { NAM_well_partnerships_desert_rows = yes }
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 2 }
+					ADISCORD_south_add_influence_power = yes
+				}
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = -5 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.377 days = 1 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
 		id = NAM_kadir_oil_charter
-		relative_position_id = NAM_south_fenn_guarantee
-		x = -3
-		y = 3
+		relative_position_id = NAM_oasis_voices
+		x = 1
+		y = 1
 		icon = GFX_focus_NAM_south_desert_offices
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ANNEXATION }
-		prerequisite = { focus = NAM_south_fenn_guarantee }
+		prerequisite = { focus = NAM_oasis_voices }
 		bypass = {
 			KDR = {
 				custom_trigger_tooltip = {
@@ -428,6 +909,7 @@
 		continue_if_invalid = no
 		completion_reward = {
 			custom_effect_tooltip = NAM_kadir_oil_charter_tt
+			custom_effect_tooltip = ADISCORD_south_contact_kdr_tt
 			hidden_effect = {
 				KDR = { ADISCORD_south_demand_submission = yes }
 			}
@@ -437,19 +919,32 @@
 
 	focus = {
 		id = NAM_south_oil_for_water
-		relative_position_id = NAM_south_fenn_guarantee
-		x = -1
-		y = 3
+		relative_position_id = NAM_well_partnerships
+		x = 1
+		y = 1
 		icon = GFX_focus_NAM_south_oil_for_water
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_south_fenn_guarantee }
+		prerequisite = {
+			focus = NAM_oasis_voices
+			focus = NAM_well_partnerships
+		}
 		bypass = {
-			RHM = {
+			OR = {
+				RHM = {
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
+						ADISCORD_south_campaign_target_settled = yes
+					}
+				}
 				custom_trigger_tooltip = {
-					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
-					ADISCORD_south_campaign_target_settled = yes
+					tooltip = ADISCORD_south_final_started_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_started
+				}
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_resolved_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_resolved
 				}
 			}
 		}
@@ -477,14 +972,29 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			custom_effect_tooltip = ADISCORD_south_contact_rhm_tt
 			add_fuel = -10000
 			add_stability = 0.05
 			custom_effect_tooltip = NAM_south_oil_for_water_reward_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_south_oil_for_water_south_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
 			custom_effect_tooltip = NAM_grp_south_oil_for_water_tt
+			custom_effect_tooltip = ADISCORD_south_contact_rhm_tt
 			hidden_effect = {
 				set_temp_variable = { var = NAM_treasury_amount value = 300 }
 				NAM_add_treasury = yes
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					RHM = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+						ADISCORD_south_push_influence_north = yes
+					}
+				}
 				add_to_variable = { var = NAM_grp_dist_support value = 8 }
 				add_to_variable = { var = NAM_grp_oil_support value = -5 }
 				NAM_groups_refresh = yes
@@ -496,18 +1006,67 @@
 	}
 
 # @section districts_services
-	# District course, service lane: the militia or relief fork and the
-	# districts' university.
+	# District course, axis lane: the council of districts, the militia or relief
+	# fork and the districts' university. The council is the AND merge of the
+	# southern and municipal sub-lanes.
+	focus = {
+		id = NAM_district_council
+		relative_position_id = NAM_public_utilities
+		x = 0
+		y = 2
+		icon = GFX_focus_NAM_district_council
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_south_fenn_guarantee }
+		prerequisite = { focus = NAM_municipal_services }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_district_congress
+			custom_effect_tooltip = NAM_pw_district_congress_unlock_tt
+			add_political_power = 100
+			add_command_power = 40
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_district_council_idea
+				}
+			}
+			custom_effect_tooltip = NAM_grp_district_council_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.04 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.03 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 12 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	focus = {
 		id = NAM_district_militia
-		relative_position_id = NAM_public_utilities
-		x = -8
-		y = 3
+		relative_position_id = NAM_district_council
+		x = -1
+		y = 1
 		icon = GFX_focus_NAM_district_militia
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
-		prerequisite = { focus = NAM_public_utilities }
+		prerequisite = { focus = NAM_district_council }
 		mutually_exclusive = { focus = NAM_relief_register }
 		available = {
 			has_capitulated = no
@@ -559,14 +1118,14 @@
 
 	focus = {
 		id = NAM_relief_register
-		relative_position_id = NAM_public_utilities
-		x = -4
-		y = 3
+		relative_position_id = NAM_district_council
+		x = 1
+		y = 1
 		icon = GFX_focus_NAM_relief_register
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_public_utilities }
+		prerequisite = { focus = NAM_district_council }
 		mutually_exclusive = { focus = NAM_district_militia }
 		available = {
 			custom_trigger_tooltip = {
@@ -599,6 +1158,7 @@
 			}
 			add_manpower = 4000
 			ADISCORD_programme_social_system_development = yes
+			NAM_pw_trade_economic_for_social_system = yes
 			custom_effect_tooltip = NAM_registered_volunteers_tt
 			custom_effect_tooltip = NAM_grp_relief_register_tt
 			hidden_effect = {
@@ -613,14 +1173,17 @@
 
 	focus = {
 		id = NAM_regional_university
-		relative_position_id = NAM_public_utilities
-		x = -2
+		relative_position_id = NAM_district_council
+		x = 0
 		y = 2
 		icon = GFX_focus_NAM_regional_university
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 9
 		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_POLITICAL }
-		prerequisite = { focus = NAM_public_utilities }
+		prerequisite = {
+			focus = NAM_district_militia
+			focus = NAM_relief_register
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
@@ -629,15 +1192,6 @@
 			custom_trigger_tooltip = {
 				tooltip = NAM_prewar_district_mandate_tt
 				NAM_prewar_district_mandate = yes
-			}
-			# The university follows the district service chosen beside it; the
-			# choice is read without a drawn line across the fork.
-			custom_trigger_tooltip = {
-				tooltip = NAM_common_fuel_market_service_tt
-				OR = {
-					has_completed_focus = NAM_district_militia
-					has_completed_focus = NAM_relief_register
-				}
 			}
 		}
 		cancel_if_invalid = yes
@@ -682,18 +1236,196 @@
 	}
 
 # @section districts_municipal
-	# District course, municipal lane: the city land or residents' councils fork;
-	# either side builds the district workshops.
+	# District course, towns sub-lane: public services, the depot hook, the district
+	# workshops, the city land or residents' councils fork, the fair, the town fuel
+	# cooperatives and the light-or-credit pair. Every factory brings its own
+	# shared slot; owner and controller are checked on the completion day and a
+	# lost state pays the treasury.
+	focus = {
+		id = NAM_municipal_services
+		relative_position_id = NAM_public_utilities
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_municipal_services
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_public_utilities }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_municipal_services
+			custom_effect_tooltip = NAM_pw_municipal_services_unlock_tt
+			add_stability = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_municipal_services_idea
+				}
+			}
+			custom_effect_tooltip = NAM_municipal_services_reward_tt
+			custom_effect_tooltip = NAM_grp_municipal_services_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.06 }
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.06 }
+				NAM_refresh_administration = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+				# The audit pays the earlier settlements of an active city contract
+				# now; every settled services programme repeats it.
+				NAM_returnee_audit_rolls = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_schools_hospitals_fuel
+		relative_position_id = NAM_charter_ending_oil_union
+		x = 2
+		y = 2
+		icon = GFX_focus_NAM_haulage_cooperatives
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_charter_ending_oil_union
+			focus = NAM_depot_audit
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_not_ended_tt
+				NOT = { NAM_depot_board_ended = yes }
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = -5000
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 120
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_schools_hospitals_fuel_reward_tt
+			custom_effect_tooltip = NAM_grp_schools_hospitals_fuel_tt
+			hidden_effect = {
+				# The street front is stored before the head card and acts from the
+				# owners' first round.
+				NAM_depot_raise_front_street = yes
+				set_temp_variable = { var = NAM_depot_push_delta value = -8 }
+				NAM_depot_push_target = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				add_to_variable = { var = NAM_grp_oil_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_district_workshops
+		relative_position_id = NAM_municipal_services
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_district_workshops
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_municipal_services }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			689 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 250
+				producer = NAM
+			}
+			ADISCORD_programme_economic_development = yes
+			custom_effect_tooltip = NAM_district_workshops_reward_tt
+			custom_effect_tooltip = NAM_grp_district_workshops_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = {
+							689 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	focus = {
 		id = NAM_municipal_land
-		relative_position_id = NAM_public_utilities
-		x = 4
-		y = 3
+		relative_position_id = NAM_district_workshops
+		x = -1
+		y = 1
 		icon = GFX_focus_NAM_municipal_land
 		allow_branch = { NAM_prewar_district_mandate = yes }
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		prerequisite = { focus = NAM_public_utilities }
+		prerequisite = { focus = NAM_district_workshops }
 		mutually_exclusive = { focus = NAM_tenant_councils }
 		available = {
 			custom_trigger_tooltip = {
@@ -711,22 +1443,6 @@
 			unlock_decision_tooltip = NAM_pw_municipal_workshop
 			custom_effect_tooltip = NAM_pw_municipal_workshop_unlock_tt
 			NAM_pw_enact_municipal_land = yes
-			# Each workshop brings its own shared slot; owner and controller are
-			# checked on the completion day, and a lost state pays the treasury.
-			689 = {
-				if = {
-					limit = {
-						is_owned_by = ROOT
-						is_controlled_by = ROOT
-					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
-					}
-				}
-			}
 			690 = {
 				if = {
 					limit = {
@@ -754,20 +1470,6 @@
 				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.05 }
 				add_to_variable = { var = NAM_adm_stability_factor value = -0.04 }
 				NAM_refresh_administration = yes
-				set_temp_variable = { var = NAM_treasury_amount value = 500 }
-				NAM_add_treasury = yes
-				if = {
-					limit = {
-						NOT = {
-							689 = {
-								is_owned_by = ROOT
-								is_controlled_by = ROOT
-							}
-						}
-					}
-					set_temp_variable = { var = NAM_treasury_amount value = 300 }
-					NAM_add_treasury = yes
-				}
 				if = {
 					limit = {
 						NOT = {
@@ -791,14 +1493,14 @@
 
 	focus = {
 		id = NAM_tenant_councils
-		relative_position_id = NAM_public_utilities
-		x = 8
-		y = 3
+		relative_position_id = NAM_district_workshops
+		x = 1
+		y = 1
 		icon = GFX_focus_NAM_tenant_councils
 		allow_branch = { NAM_prewar_district_mandate = yes }
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		prerequisite = { focus = NAM_public_utilities }
+		prerequisite = { focus = NAM_district_workshops }
 		mutually_exclusive = { focus = NAM_municipal_land }
 		available = {
 			custom_trigger_tooltip = {
@@ -844,37 +1546,6 @@
 					}
 				}
 			}
-			# Each workshop brings its own shared slot; owner and controller are
-			# checked on the completion day, and a lost state pays the treasury.
-			689 = {
-				if = {
-					limit = {
-						is_owned_by = ROOT
-						is_controlled_by = ROOT
-					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
-					}
-				}
-			}
-			690 = {
-				if = {
-					limit = {
-						is_owned_by = ROOT
-						is_controlled_by = ROOT
-					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = {
-						type = industrial_complex
-						level = 1
-						instant_build = yes
-					}
-				}
-			}
-			ADISCORD_programme_economic_development = yes
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
@@ -912,30 +1583,6 @@
 					set_temp_variable = { var = NAM_treasury_amount value = 150 }
 					NAM_add_treasury = yes
 				}
-				if = {
-					limit = {
-						NOT = {
-							689 = {
-								is_owned_by = ROOT
-								is_controlled_by = ROOT
-							}
-						}
-					}
-					set_temp_variable = { var = NAM_treasury_amount value = 300 }
-					NAM_add_treasury = yes
-				}
-				if = {
-					limit = {
-						NOT = {
-							690 = {
-								is_owned_by = ROOT
-								is_controlled_by = ROOT
-							}
-						}
-					}
-					set_temp_variable = { var = NAM_treasury_amount value = 300 }
-					NAM_add_treasury = yes
-				}
 				add_to_variable = { var = NAM_adm_stability_factor value = 0.06 }
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.06 }
 				add_to_variable = { var = NAM_adm_political_power_gain value = -0.04 }
@@ -949,19 +1596,306 @@
 		ai_will_do = { base = 5 }
 	}
 
+	focus = {
+		id = NAM_district_fair
+		relative_position_id = NAM_municipal_land
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_district_fair
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_municipal_land }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			688 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			add_political_power = 60
+			custom_effect_tooltip = NAM_district_fair_reward_tt
+			custom_effect_tooltip = NAM_grp_district_fair_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = {
+							688 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_grp_trade_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.369 days = 1 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_town_fuel_cooperatives
+		relative_position_id = NAM_tenant_councils
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_pw_naval_fuel_depots
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_municipal_land
+			focus = NAM_tenant_councils
+			focus = NAM_depot_reserve_charter
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = 20000
+			add_stability = 0.05
+			# The depot ending variant is written only by the ending pair: a later
+			# revocation reads the route flag and hands the depots to the towns.
+			if = {
+				limit = { NOT = { NAM_depot_board_ended = yes } }
+				custom_effect_tooltip = NAM_town_fuel_cooperatives_reward_tt
+			}
+			else_if = {
+				limit = { NAM_depot_board_conceded = no }
+				add_fuel = 20000
+				custom_effect_tooltip = NAM_town_fuel_cooperatives_lease_tt
+			}
+			custom_effect_tooltip = NAM_grp_town_fuel_cooperatives_tt
+			hidden_effect = {
+				if = {
+					limit = { NOT = { NAM_depot_board_ended = yes } }
+					set_country_flag = NAM_depot_cooperative_route
+					set_temp_variable = { var = NAM_depot_push_delta value = -12 }
+					NAM_depot_push_target = yes
+				}
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_rural_grid
+		relative_position_id = NAM_district_fair
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_rural_grid
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_district_fair
+			focus = NAM_town_fuel_cooperatives
+		}
+		mutually_exclusive = { focus = NAM_public_credit }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_rural_electrification
+			custom_effect_tooltip = NAM_pw_rural_electrification_unlock_tt
+			690 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						infrastructure < 5
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			700 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						infrastructure < 5
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			add_political_power = 60
+			ADISCORD_reform_economic_development = yes
+			custom_effect_tooltip = NAM_rural_grid_reward_tt
+			custom_effect_tooltip = NAM_grp_rural_grid_tt
+			hidden_effect = {
+				# A road level that cannot be built (lost state or the level-5 cap)
+				# is paid in treasury.
+				if = {
+					limit = {
+						NOT = {
+							690 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+								infrastructure < 5
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+				if = {
+					limit = {
+						NOT = {
+							700 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+								infrastructure < 5
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_public_credit
+		relative_position_id = NAM_town_fuel_cooperatives
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_public_credit
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = NAM_town_fuel_cooperatives }
+		mutually_exclusive = { focus = NAM_rural_grid }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			719 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			add_tech_bonus = {
+				name = NAM_public_credit
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			custom_effect_tooltip = NAM_public_credit_reward_tt
+			custom_effect_tooltip = NAM_grp_public_credit_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = {
+							719 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_grp_oil_support value = 8 }
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 # @section districts_cooperatives
-	# District course, end of the spine: the common fuel market with the district
-	# cooperative and the union's fair factories, then the southern offensive.
+	# District course, end of the spine: the common fuel market (AND of the
+	# southern lane end and the light-or-credit pair), then the southern offensive.
 	focus = {
 		id = NAM_common_fuel_market
 		relative_position_id = NAM_public_utilities
 		x = 0
-		y = 8
+		y = 6
 		icon = GFX_focus_NAM_common_fuel_market
 		allow_branch = { NAM_prewar_district_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
 		prerequisite = { focus = NAM_south_oil_for_water }
+		prerequisite = {
+			focus = NAM_rural_grid
+			focus = NAM_public_credit
+		}
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -973,7 +1907,7 @@
 				tooltip = NAM_prewar_district_mandate_tt
 				NAM_prewar_district_mandate = yes
 			}
-			# The district service is chosen in its own lane; the hub reads the
+			# The district service is chosen in the axis lane; the hub reads the
 			# choice without a drawn line across the lanes.
 			custom_trigger_tooltip = {
 				tooltip = NAM_common_fuel_market_service_tt
@@ -1003,7 +1937,6 @@
 				}
 				else = { custom_effect_tooltip = NAM_charter_fuel_aid_future_tt }
 			}
-			custom_effect_tooltip = ADISCORD_south_contact_sdr_tt
 			add_fuel = 50000
 			if = {
 				limit = { has_completed_focus = NAM_charter_ending_federation }
@@ -1016,7 +1949,16 @@
 				}
 			}
 			custom_effect_tooltip = NAM_common_fuel_market_reward_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = NAM_common_fuel_market_south_tt
+				if = {
+					limit = { hidden_trigger = { has_global_flag = ADISCORD_south_spheres_agreed } }
+					custom_effect_tooltip = ADISCORD_south_spheres_note_tt
+				}
+			}
 			custom_effect_tooltip = NAM_grp_common_fuel_market_tt
+			custom_effect_tooltip = ADISCORD_south_contact_sdr_tt
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_stability_factor value = 0.06 }
 				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.08 }
@@ -1024,60 +1966,8 @@
 				NAM_refresh_administration = yes
 				if = {
 					limit = { has_completed_focus = NAM_charter_ending_oil_union }
-					# Each fair factory brings its own shared slot; owner and controller
-					# are checked on the completion day, and a lost state pays the treasury.
-					688 = {
-						if = {
-							limit = {
-								is_owned_by = ROOT
-								is_controlled_by = ROOT
-							}
-							add_extra_state_shared_building_slots = 1
-							add_building_construction = {
-								type = industrial_complex
-								level = 1
-								instant_build = yes
-							}
-						}
-					}
-					if = {
-						limit = {
-							NOT = {
-								688 = {
-									is_owned_by = ROOT
-									is_controlled_by = ROOT
-								}
-							}
-						}
-						set_temp_variable = { var = NAM_treasury_amount value = 300 }
-						NAM_add_treasury = yes
-					}
-					719 = {
-						if = {
-							limit = {
-								is_owned_by = ROOT
-								is_controlled_by = ROOT
-							}
-							add_extra_state_shared_building_slots = 1
-							add_building_construction = {
-								type = industrial_complex
-								level = 1
-								instant_build = yes
-							}
-						}
-					}
-					if = {
-						limit = {
-							NOT = {
-								719 = {
-									is_owned_by = ROOT
-									is_controlled_by = ROOT
-								}
-							}
-						}
-						set_temp_variable = { var = NAM_treasury_amount value = 300 }
-						NAM_add_treasury = yes
-					}
+					set_temp_variable = { var = NAM_treasury_amount value = 700 }
+					NAM_add_treasury = yes
 					add_to_variable = { var = NAM_grp_oil_support value = 15 }
 					add_to_variable = { var = NAM_grp_dist_support value = -8 }
 				}
@@ -1086,12 +1976,16 @@
 					add_to_variable = { var = NAM_grp_oil_support value = -8 }
 				}
 				NAM_groups_refresh = yes
-				country_event = { id = ADISCORD_nam_story.372 days = 1 }
-				# The artels' fair is a separate scene after the market opens.
 				if = {
-					limit = { has_completed_focus = NAM_charter_ending_oil_union }
-					country_event = { id = ADISCORD_nam_story.369 days = 30 }
+					limit = { ADISCORD_south_contest_open = yes }
+					SDR = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 20 }
+						ADISCORD_south_push_influence_north = yes
+					}
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 2 }
+					ADISCORD_south_add_influence_power = yes
 				}
+				country_event = { id = ADISCORD_nam_story.372 days = 1 }
 			}
 		}
 		ai_will_do = {
@@ -1147,4 +2041,115 @@
 		ai_will_do = {
 			base = 5
 		}
+	}
+
+# @section districts_lane_ends
+	# District variants of the two inner lane ends. Each path draws its own card at
+	# 11,8 and 31,8 through allow_branch; the shared core effect carries the lane's
+	# common rewards and each variant adds one district result. Readers of the
+	# lane end use NAM_south_compact_signed / NAM_depot_fuel_service_founded, never
+	# one variant id.
+	focus = {
+		id = NAM_south_communities_compact
+		relative_position_id = NAM_south_league_of_guarantees
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_pw_reserve_centres
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = NAM_south_league_of_guarantees
+			focus = NAM_south_press_shahrabad
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_south_coalition_compact_core = yes
+			custom_effect_tooltip = NAM_south_communities_compact_reward_tt
+			hidden_effect = {
+				# Volunteers come from every charter community; with none (or after
+				# the contest closed) the communities of the border districts send
+				# one contingent.
+				if = {
+					limit = { NAM_south_any_charter_holder = no }
+					add_manpower = 2500
+				}
+				EFL = { NAM_charter_holder_volunteers = yes }
+				AZH = { NAM_charter_holder_volunteers = yes }
+				WEF = { NAM_charter_holder_volunteers = yes }
+				KDR = { NAM_charter_holder_volunteers = yes }
+				RHM = { NAM_charter_holder_volunteers = yes }
+				SDR = { NAM_charter_holder_volunteers = yes }
+				KYZ = { NAM_charter_holder_volunteers = yes }
+				MZR = { NAM_charter_holder_volunteers = yes }
+				GLP = { NAM_charter_holder_volunteers = yes }
+				country_event = { id = ADISCORD_nam_story.382 days = 2 }
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = NAM_depot_cooperative_fuel_service
+		relative_position_id = NAM_depot_revoke
+		x = -2
+		y = 1
+		icon = GFX_focus_NAM_pw_regional_power
+		allow_branch = { NAM_prewar_district_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_depot_revoke
+			focus = NAM_depot_reserve_charter
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_conceded_tt
+				NAM_depot_board_conceded = yes
+			}
+		}
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_district_mandate_tt
+				NAM_prewar_district_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_depot_fuel_service_core = yes
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_depot_fuel_service_idea
+				}
+			}
+			# The cooperative revocation (variant 3) keeps the boiler houses with
+			# the town cooperatives for a full year.
+			if = {
+				limit = { check_variable = { var = NAM_depot_settlement_variant value = 3 compare = equals } }
+				add_timed_idea = { idea = NAM_town_boiler_cooperatives days = 365 }
+			}
+			else = {
+				add_timed_idea = { idea = NAM_town_boiler_cooperatives days = 180 }
+			}
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.392 days = 2 }
+			}
+		}
+		ai_will_do = { base = 10 }
 	}

@@ -8249,6 +8249,38 @@ defined_text = {
 defined_text = {
 	name = NAMDepotCaseReport
 	text = {
+		trigger = { check_variable = { NAM_depot_settlement_variant = 1 } }
+		localization_key = NAM_depot_board_report_revoked
+	}
+	text = {
+		trigger = { check_variable = { NAM_depot_settlement_variant = 2 } }
+		localization_key = NAM_depot_board_report_reserve
+	}
+	text = {
+		trigger = { check_variable = { NAM_depot_settlement_variant = 3 } }
+		localization_key = NAM_depot_board_report_coop
+	}
+	text = {
+		trigger = { check_variable = { NAM_depot_settlement_variant = 4 } }
+		localization_key = NAM_depot_board_report_settled
+	}
+	text = {
+		trigger = { check_variable = { NAM_depot_settlement_variant = 5 } }
+		localization_key = NAM_depot_board_report_lost
+	}
+	text = {
+		trigger = { NAM_depot_board_won = yes }
+		localization_key = NAM_depot_board_report_won
+	}
+	text = {
+		trigger = { NAM_depot_board_open = yes }
+		localization_key = NAM_depot_board_report_open
+	}
+	text = {
+		trigger = { NAM_depot_board_pending = yes }
+		localization_key = NAM_depot_board_report_waiting
+	}
+	text = {
 		trigger = { NAM_depot_settlement_open = yes }
 		localization_key = NAM_depot_report_ruling
 	}
@@ -8265,6 +8297,40 @@ defined_text = {
 		localization_key = NAM_depot_report_filed
 	}
 	text = { localization_key = NAM_depot_report_start }
+}
+
+defined_text = {
+	name = NAMDepotNextRoundText
+	text = {
+		trigger = { has_war = yes }
+		localization_key = NAM_depot_next_round_paused
+	}
+	text = { localization_key = NAM_depot_next_round_days }
+}
+
+defined_text = {
+	name = NAMDepotEventSite
+	text = {
+		trigger = { check_variable = { NAM_depot_event_site = 700 } }
+		localization_key = STATE_700
+	}
+	text = {
+		trigger = { check_variable = { NAM_depot_event_site = 67 } }
+		localization_key = STATE_67
+	}
+	text = {
+		trigger = { check_variable = { NAM_depot_event_site = 689 } }
+		localization_key = STATE_689
+	}
+	text = {
+		trigger = { check_variable = { NAM_depot_event_site = 690 } }
+		localization_key = STATE_690
+	}
+	text = {
+		trigger = { check_variable = { NAM_depot_event_site = 225 } }
+		localization_key = STATE_225
+	}
+	text = { localization_key = NAM_depot_site_unknown }
 }
 
 defined_text = {
@@ -9394,4 +9460,1064 @@ defined_text = {
 		localization_key = NAM_isl_gain_20
 	}
 	text = { localization_key = NAM_isl_gain_15 }
+}
+
+# ----- Council of boards: the continent -----
+# COUNTRY NAM. The desert line of the category NAM_consolidation: the stage, each
+# emirate's status and the days left before the desert question lapses.
+defined_text = {
+	name = NAMMdrDesertStatus
+	text = {
+		trigger = { NOT = { has_country_flag = NAM_mdr_started } }
+		localization_key = NAM_mdr_desert_status_none
+	}
+	text = {
+		trigger = { has_global_flag = NAM_mdr_desert_lapsed }
+		localization_key = NAM_mdr_desert_status_lapsed
+	}
+	text = {
+		trigger = { NAM_great_war_active = yes }
+		localization_key = NAM_mdr_desert_status_war
+	}
+	text = {
+		trigger = { NAM_mdr_desert_closed = yes }
+		localization_key = NAM_mdr_desert_status_closed
+	}
+	text = { localization_key = NAM_mdr_desert_status_open }
+}
+
+# COUNTRY NAM. Custom prices of three continent decisions; each variant follows
+# the condition that lowers the price in the decision's own cost check.
+defined_text = {
+	name = NAMMdrRestitutionCost
+	text = {
+		trigger = { has_completed_focus = NAM_mdr_act_of_oblivion }
+		localization_key = NAM_mdr_restitution_cost_oblivion
+	}
+	text = { localization_key = NAM_mdr_restitution_cost_base }
+}
+
+defined_text = {
+	name = NAMMdrRestitutionCostBlocked
+	text = {
+		trigger = { has_completed_focus = NAM_mdr_act_of_oblivion }
+		localization_key = NAM_mdr_restitution_cost_oblivion_blocked
+	}
+	text = { localization_key = NAM_mdr_restitution_cost_base_blocked }
+}
+
+defined_text = {
+	name = NAMMdrRestitutionCostTooltip
+	text = {
+		trigger = { has_completed_focus = NAM_mdr_act_of_oblivion }
+		localization_key = NAM_mdr_restitution_cost_oblivion_tooltip
+	}
+	text = { localization_key = NAM_mdr_restitution_cost_base_tooltip }
+}
+
+defined_text = {
+	name = NAMMdrRailBrigadesCost
+	text = {
+		trigger = { has_completed_focus = NAM_mdr_road_contracts }
+		localization_key = NAM_mdr_rail_brigades_cost_contracts
+	}
+	text = { localization_key = NAM_mdr_rail_brigades_cost_base }
+}
+
+defined_text = {
+	name = NAMMdrRailBrigadesCostBlocked
+	text = {
+		trigger = { has_completed_focus = NAM_mdr_road_contracts }
+		localization_key = NAM_mdr_rail_brigades_cost_contracts_blocked
+	}
+	text = { localization_key = NAM_mdr_rail_brigades_cost_base_blocked }
+}
+
+defined_text = {
+	name = NAMMdrRailBrigadesCostTooltip
+	text = {
+		trigger = { has_completed_focus = NAM_mdr_road_contracts }
+		localization_key = NAM_mdr_rail_brigades_cost_contracts_tooltip
+	}
+	text = { localization_key = NAM_mdr_rail_brigades_cost_base_tooltip }
+}
+
+defined_text = {
+	name = NAMMdrCompanyRegimentCost
+	text = {
+		trigger = { has_idea = NAM_mdr_law_company_levy }
+		localization_key = NAM_mdr_raise_company_regiment_cost_levy
+	}
+	text = { localization_key = NAM_mdr_raise_company_regiment_cost_base }
+}
+
+defined_text = {
+	name = NAMMdrCompanyRegimentCostBlocked
+	text = {
+		trigger = { has_idea = NAM_mdr_law_company_levy }
+		localization_key = NAM_mdr_raise_company_regiment_cost_levy_blocked
+	}
+	text = { localization_key = NAM_mdr_raise_company_regiment_cost_base_blocked }
+}
+
+defined_text = {
+	name = NAMMdrCompanyRegimentCostTooltip
+	text = {
+		trigger = { has_idea = NAM_mdr_law_company_levy }
+		localization_key = NAM_mdr_raise_company_regiment_cost_levy_tooltip
+	}
+	text = { localization_key = NAM_mdr_raise_company_regiment_cost_base_tooltip }
+}
+
+defined_text = {
+	name = NAMMdrEmirateKdr
+	text = {
+		trigger = { KDR = { exists = no } }
+		localization_key = NAM_mdr_emirate_gone
+	}
+	text = {
+		trigger = { KDR = { is_subject_of = NAM } }
+		localization_key = NAM_mdr_emirate_district
+	}
+	text = {
+		trigger = { KDR = { has_country_flag = NAM_mdr_offer_pending } }
+		localization_key = NAM_mdr_emirate_pending
+	}
+	text = {
+		trigger = { KDR = { has_war_with = NAM } }
+		localization_key = NAM_mdr_emirate_war
+	}
+	text = {
+		trigger = { KDR = { has_country_flag = NAM_mdr_offer_refused } }
+		localization_key = NAM_mdr_emirate_refused
+	}
+	text = {
+		trigger = { KDR = { NAM_wor_independent_target = yes } }
+		localization_key = NAM_mdr_emirate_target
+	}
+	text = { localization_key = NAM_mdr_emirate_other }
+}
+
+defined_text = {
+	name = NAMMdrEmirateSdr
+	text = {
+		trigger = { SDR = { exists = no } }
+		localization_key = NAM_mdr_emirate_gone
+	}
+	text = {
+		trigger = { SDR = { is_subject_of = NAM } }
+		localization_key = NAM_mdr_emirate_district
+	}
+	text = {
+		trigger = { SDR = { has_country_flag = NAM_mdr_offer_pending } }
+		localization_key = NAM_mdr_emirate_pending
+	}
+	text = {
+		trigger = { SDR = { has_war_with = NAM } }
+		localization_key = NAM_mdr_emirate_war
+	}
+	text = {
+		trigger = { SDR = { has_country_flag = NAM_mdr_offer_refused } }
+		localization_key = NAM_mdr_emirate_refused
+	}
+	text = {
+		trigger = { SDR = { NAM_wor_independent_target = yes } }
+		localization_key = NAM_mdr_emirate_target
+	}
+	text = { localization_key = NAM_mdr_emirate_other }
+}
+
+defined_text = {
+	name = NAMMdrEmirateRhm
+	text = {
+		trigger = { RHM = { exists = no } }
+		localization_key = NAM_mdr_emirate_gone
+	}
+	text = {
+		trigger = { RHM = { is_subject_of = NAM } }
+		localization_key = NAM_mdr_emirate_district
+	}
+	text = {
+		trigger = { RHM = { has_country_flag = NAM_mdr_offer_pending } }
+		localization_key = NAM_mdr_emirate_pending
+	}
+	text = {
+		trigger = { RHM = { has_war_with = NAM } }
+		localization_key = NAM_mdr_emirate_war
+	}
+	text = {
+		trigger = { RHM = { has_country_flag = NAM_mdr_offer_refused } }
+		localization_key = NAM_mdr_emirate_refused
+	}
+	text = {
+		trigger = { RHM = { NAM_wor_independent_target = yes } }
+		localization_key = NAM_mdr_emirate_target
+	}
+	text = { localization_key = NAM_mdr_emirate_other }
+}
+
+# ----- Council of boards: the South after the war -----
+# The table of the partition in the category NAM_hgm_dominion and the names
+# and forms shown by the lot events, the walk-outs, the cadastre and the peoples.
+defined_text = {
+	name = NAMPtnTable
+	text = { localization_key = NAM_ptn_table }
+}
+
+defined_text = {
+	name = NAMPtnRow1
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^1 = 1 } }
+		localization_key = NAM_ptn_row_open_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^1 = 2 } }
+		localization_key = NAM_ptn_row_sold_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^1 = 3 } }
+		localization_key = NAM_ptn_row_kept_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^1 = 4 } }
+		localization_key = NAM_ptn_row_closed_1
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow2
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^2 = 1 } }
+		localization_key = NAM_ptn_row_open_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^2 = 2 } }
+		localization_key = NAM_ptn_row_sold_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^2 = 3 } }
+		localization_key = NAM_ptn_row_kept_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^2 = 4 } }
+		localization_key = NAM_ptn_row_closed_2
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow3
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^3 = 1 } }
+		localization_key = NAM_ptn_row_open_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^3 = 2 } }
+		localization_key = NAM_ptn_row_sold_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^3 = 3 } }
+		localization_key = NAM_ptn_row_kept_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^3 = 4 } }
+		localization_key = NAM_ptn_row_closed_3
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow4
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^4 = 1 } }
+		localization_key = NAM_ptn_row_open_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^4 = 2 } }
+		localization_key = NAM_ptn_row_sold_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^4 = 3 } }
+		localization_key = NAM_ptn_row_kept_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^4 = 4 } }
+		localization_key = NAM_ptn_row_closed_4
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow5
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^5 = 1 } }
+		localization_key = NAM_ptn_row_open_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^5 = 2 } }
+		localization_key = NAM_ptn_row_sold_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^5 = 3 } }
+		localization_key = NAM_ptn_row_kept_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^5 = 4 } }
+		localization_key = NAM_ptn_row_closed_5
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow6
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^6 = 1 } }
+		localization_key = NAM_ptn_row_open_6
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^6 = 2 } }
+		localization_key = NAM_ptn_row_sold_6
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^6 = 3 } }
+		localization_key = NAM_ptn_row_kept_6
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^6 = 4 } }
+		localization_key = NAM_ptn_row_closed_6
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow7
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^7 = 1 } }
+		localization_key = NAM_ptn_row_open_7
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^7 = 2 } }
+		localization_key = NAM_ptn_row_sold_7
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^7 = 3 } }
+		localization_key = NAM_ptn_row_kept_7
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^7 = 4 } }
+		localization_key = NAM_ptn_row_closed_7
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow8
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^8 = 1 } }
+		localization_key = NAM_ptn_row_open_8
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^8 = 2 } }
+		localization_key = NAM_ptn_row_sold_8
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^8 = 3 } }
+		localization_key = NAM_ptn_row_kept_8
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^8 = 4 } }
+		localization_key = NAM_ptn_row_closed_8
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow9
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^9 = 1 } }
+		localization_key = NAM_ptn_row_open_9
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^9 = 2 } }
+		localization_key = NAM_ptn_row_sold_9
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^9 = 3 } }
+		localization_key = NAM_ptn_row_kept_9
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^9 = 4 } }
+		localization_key = NAM_ptn_row_closed_9
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow10
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^10 = 1 } }
+		localization_key = NAM_ptn_row_open_10
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^10 = 2 } }
+		localization_key = NAM_ptn_row_sold_10
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^10 = 3 } }
+		localization_key = NAM_ptn_row_kept_10
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^10 = 4 } }
+		localization_key = NAM_ptn_row_closed_10
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+defined_text = {
+	name = NAMPtnRow11
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^11 = 1 } }
+		localization_key = NAM_ptn_row_open_11
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^11 = 2 } }
+		localization_key = NAM_ptn_row_sold_11
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^11 = 3 } }
+		localization_key = NAM_ptn_row_kept_11
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_state^11 = 4 } }
+		localization_key = NAM_ptn_row_closed_11
+	}
+	text = { localization_key = NAM_ptn_row_none }
+}
+
+# Owner of lot n: NAMPtnOwner1 .. NAMPtnOwner11.
+defined_text = {
+	name = NAMPtnOwner1
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^1 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^1 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^1 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^1 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^1 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^1 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner2
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^2 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^2 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^2 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^2 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^2 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^2 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner3
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^3 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^3 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^3 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^3 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^3 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^3 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner4
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^4 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^4 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^4 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^4 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^4 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^4 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner5
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^5 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^5 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^5 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^5 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^5 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^5 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner6
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^6 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^6 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^6 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^6 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^6 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^6 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner7
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^7 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^7 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^7 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^7 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^7 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^7 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner8
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^8 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^8 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^8 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^8 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^8 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^8 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner9
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^9 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^9 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^9 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^9 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^9 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^9 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner10
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^10 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^10 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^10 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^10 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^10 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^10 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnOwner11
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^11 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^11 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^11 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^11 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^11 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_lot_owner^11 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnDeadline
+	text = {
+		trigger = { has_country_flag = NAM_ptn_protocol_signed }
+		localization_key = NAM_ptn_deadline_signed
+	}
+	text = { localization_key = NAM_ptn_deadline_open }
+}
+
+defined_text = {
+	name = NAMPtnAwardForm
+	text = {
+		trigger = { check_variable = { NAM_ptn_award_form = 1 } }
+		localization_key = NAM_ptn_form_award_district
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_award_form = 3 } }
+		localization_key = NAM_ptn_form_award_furnace
+	}
+	text = { localization_key = NAM_ptn_form_award_land }
+}
+
+# Answer b of Fenn's lot: the first bidder merges Fenn into the Eflor district.
+defined_text = {
+	name = NAMPtnFennAwardForm
+	text = {
+		trigger = { check_variable = { NAM_ptn_fenn_to_eflor_now = 1 } }
+		localization_key = NAM_ptn_form_award_eflor
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_award_form = 1 } }
+		localization_key = NAM_ptn_form_award_district
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_award_form = 3 } }
+		localization_key = NAM_ptn_form_award_furnace
+	}
+	text = { localization_key = NAM_ptn_form_award_land }
+}
+
+defined_text = {
+	name = NAMPtnKeptForm
+	text = {
+		trigger = { check_variable = { NAM_ptn_kept_form_now = 1 } }
+		localization_key = NAM_ptn_form_kept_rotation
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_kept_form_now = 3 } }
+		localization_key = NAM_ptn_form_kept_furnace
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_kept_form_now = 4 } }
+		localization_key = NAM_ptn_form_kept_free_port
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_kept_form_now = 5 } }
+		localization_key = NAM_ptn_form_kept_mazar
+	}
+	text = { localization_key = NAM_ptn_form_kept_land }
+}
+
+# A company named by a NAM variable: Fenn's second bidder, the bidders of the open
+# lot event, the walking-out company, the two companies of the cadastre, the owner
+# of the lot of an event of the peoples.
+defined_text = {
+	name = NAMPtnFennRival
+	text = {
+		trigger = { check_variable = { NAM_ptn_bidder_b^8 = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_bidder_b^8 = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_bidder_b^8 = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_bidder_b^8 = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_bidder_b^8 = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_bidder_b^8 = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnBidderA
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_a = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_a = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_a = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_a = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_a = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_a = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnBidderB
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_b = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_b = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_b = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_b = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_b = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_b = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnWalkoutName
+	text = {
+		trigger = { check_variable = { NAM_ptn_walkout_company = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_walkout_company = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_walkout_company = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_walkout_company = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_walkout_company = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_walkout_company = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnCadastreFirst
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_first = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_first = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_first = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_first = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_first = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_first = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnCadastreSecond
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_second = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_second = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_second = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_second = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_second = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_cadastre_second = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnLotOwner
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_owner = 1 } }
+		localization_key = NAM_board_short_1
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_owner = 2 } }
+		localization_key = NAM_board_short_2
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_owner = 3 } }
+		localization_key = NAM_board_short_3
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_owner = 4 } }
+		localization_key = NAM_board_short_4
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_owner = 5 } }
+		localization_key = NAM_board_short_5
+	}
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_owner = 6 } }
+		localization_key = NAM_board_short_6
+	}
+	text = { localization_key = NAM_ptn_owner_council }
+}
+
+defined_text = {
+	name = NAMPtnLotForm
+	text = {
+		trigger = { check_variable = { NAM_ptn_current_district = 1 } }
+		localization_key = NAM_ptn_lot_form_district
+	}
+	text = { localization_key = NAM_ptn_lot_form_land }
+}
+
+# The Khan's crisis in the text of the category NAM_mdr_south_office.
+defined_text = {
+	name = NAMHgmWorldStatus
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = RUS_crisis_world_ended
+				NOT = { country_exists = RUS }
+			}
+		}
+		localization_key = NAM_hgm_world_ended
+	}
+	text = {
+		trigger = { has_country_flag = RUS_crisis_defender }
+		localization_key = NAM_hgm_world_at_war
+	}
+	text = {
+		trigger = {
+			RUS = {
+				RUS_crisis_project_active = yes
+				OR = {
+					check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+					check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+				}
+			}
+		}
+		localization_key = NAM_hgm_world_offer
+	}
+	text = { localization_key = NAM_hgm_world_quiet }
 }

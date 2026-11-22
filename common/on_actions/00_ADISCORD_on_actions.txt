@@ -17,6 +17,12 @@ on_actions = {
 				WRK = { save_global_event_target_as = ADISCORD_vorkerland_nation }
 			}
 			723 = { NAM_combine_sync_visual = yes }
+			# Day number of 1 January 2160 for the displayed date of the war for
+			# the South; the guard keeps a later run of the hook from moving it.
+			if = {
+				limit = { NOT = { has_variable = global.ADISCORD_south_day0 } }
+				set_variable = { var = global.ADISCORD_south_day0 value = global.num_days }
+			}
 			# Map safety invariant: every state must have at least one level of
 			# infrastructure. The global flag limits the pass to the first startup of
 			# a campaign and prevents AI fronts from stalling in zero-infrastructure

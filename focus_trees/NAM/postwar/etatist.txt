@@ -1,7 +1,10 @@
 # @section etatist_ladder
-	# Etatist course: the opener, the two state models and their wings. The
-	# opener sits under NAM_law_after_war (14,1, the post-war axis); the other
-	# cards anchor on path cards only.
+	# Etatist course: the opener, the two state models, the funnel and row 5.
+	# The opener sits under NAM_law_after_war (21,1, the post-war axis); the
+	# other cards anchor on path cards only, except the two cards of
+	# etatist_lane_ends. The left lane (x 16-19) pushes the
+	# post-war balance toward the hawks, the right lane (x 23-26) toward the
+	# conservatives.
 	focus = {
 		id = NAM_service_state
 		relative_position_id = NAM_law_after_war
@@ -92,7 +95,7 @@
 			add_command_power = 55
 			if = {
 				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
-				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.15 }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.30 }
 			}
 			effect_tooltip = {
 				swap_ideas = {
@@ -176,7 +179,7 @@
 			}
 			if = {
 				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
-				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.15 }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.30 }
 			}
 			effect_tooltip = {
 				swap_ideas = {
@@ -209,8 +212,8 @@
 	focus = {
 		id = NAM_namestnik_garrisons
 		relative_position_id = NAM_ladder_ending_iron
-		x = 0
-		y = 2
+		x = -1
+		y = 1
 		icon = GFX_focus_NAM_namestnik_garrisons
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -237,18 +240,12 @@
 			custom_effect_tooltip = NAM_pw_fuel_quota_unlock_tt
 			unlock_decision_tooltip = NAM_program_state_warehouses
 			custom_effect_tooltip = NAM_program_state_warehouses_unlock_tt
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.15 }
+			}
 			add_manpower = 7000
-			army_experience = 40
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 3000
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 100
-				producer = NAM
-			}
+			army_experience = 25
 			add_fuel = 8000
 			effect_tooltip = {
 				swap_ideas = {
@@ -273,7 +270,6 @@
 				add_to_variable = { var = NAM_grp_garr_support value = 12 }
 				add_to_variable = { var = NAM_grp_dist_support value = -6 }
 				NAM_groups_refresh = yes
-				country_event = { id = ADISCORD_nam_story.328 days = 2 }
 			}
 		}
 		ai_will_do = {
@@ -285,7 +281,7 @@
 		id = NAM_south_black_basin
 		relative_position_id = NAM_service_state
 		x = 0
-		y = 3
+		y = 2
 		icon = GFX_focus_NAM_metropolitan_depots
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -411,8 +407,8 @@
 	focus = {
 		id = NAM_pw_cadastre
 		relative_position_id = NAM_ladder_ending_service
-		x = 0
-		y = 2
+		x = 1
+		y = 1
 		icon = GFX_focus_NAM_pw_cadastre
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
@@ -439,8 +435,10 @@
 			custom_effect_tooltip = NAM_program_cadastre_unlock_tt
 			unlock_decision_tooltip = NAM_program_land_allotments
 			custom_effect_tooltip = NAM_program_land_allotments_unlock_tt
-			unlock_decision_tooltip = NAM_pw_hear_district_appeals
-			custom_effect_tooltip = NAM_pw_hear_district_appeals_unlock_tt
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.15 }
+			}
 			add_political_power = 40
 			ADISCORD_reform_economic_development = yes
 			effect_tooltip = {
@@ -462,6 +460,155 @@
 				add_to_variable = { var = NAM_grp_nam_support value = -6 }
 				NAM_groups_refresh = yes
 				country_event = { id = ADISCORD_nam_story.329 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Hawk port: the coast envoys of the influence lane open the export
+	# guarantees for either opening side.
+	focus = {
+		id = NAM_pw_export_guarantees
+		relative_position_id = NAM_namestnik_garrisons
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_pw_export_guarantees
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_namestnik_garrisons
+			focus = NAM_south_coast_envoys
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_island_accounts } } }
+				unlock_decision_tooltip = NAM_project_steel
+				custom_effect_tooltip = NAM_project_steel_unlock_tt
+			}
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.05 }
+			}
+			add_fuel = 8000
+			custom_effect_tooltip = ADISCORD_south_contact_kyz_tt
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_export_guarantees_idea
+				}
+			}
+			custom_effect_tooltip = NAM_local_design_steel_tt
+			custom_effect_tooltip = NAM_pw_export_guarantees_reward_tt
+			custom_effect_tooltip = NAM_grp_pw_export_guarantees_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.08 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = -0.02 }
+				NAM_refresh_administration = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+				# The opening side is fixed before this card: the executive ships
+				# its cargo under escort, the service republic takes the export share.
+				if = {
+					limit = { has_completed_focus = NAM_ladder_ending_iron }
+					add_equipment_to_stockpile = {
+						type = convoy
+						amount = 10
+						producer = NAM
+					}
+				}
+				else = {
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					KYZ = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+						ADISCORD_south_push_influence_north = yes
+					}
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 1 }
+					ADISCORD_south_add_influence_power = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_grp_trade_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_armament_inspectorate
+		relative_position_id = NAM_south_black_basin
+		x = -2
+		y = 1
+		icon = GFX_focus_NAM_pw_armament_inspectorate
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_south_black_basin
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.10 }
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 36
+				producer = NAM
+			}
+			army_experience = 15
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_pw_armament_inspectorate_idea
+				}
+			}
+			custom_effect_tooltip = NAM_grp_pw_armament_inspectorate_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_org value = 0.05 }
+				NAM_refresh_garrison = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = -5 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.328 days = 2 }
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -545,20 +692,203 @@
 		ai_will_do = { base = 5 }
 	}
 
+	focus = {
+		id = NAM_pw_constitutional_committee
+		relative_position_id = NAM_south_black_basin
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_pw_constitutional_committee
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_south_black_basin
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			# The party decree stays the first if of the reward and keeps its scene
+			# inside the etatism branch.
+			if = {
+				limit = { has_government = etatism }
+				custom_effect_tooltip = NAM_etatist_party_register_tt
+				hidden_effect = {
+					set_temp_variable = { ADISCORD_party = token:anarchism }
+					ADISCORD_ban_party = yes
+					set_temp_variable = { ADISCORD_party = token:pragmatism }
+					ADISCORD_ban_party = yes
+				}
+				country_event = { id = ADISCORD_nam_resource_war.413 }
+			}
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.10 }
+			}
+			if = {
+				limit = { has_completed_focus = NAM_ladder_ending_iron }
+				add_war_support = 0.05
+			}
+			else = {
+				add_stability = 0.05
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_constitutional_committee_idea
+				}
+			}
+			custom_effect_tooltip = NAM_pw_local_allotment_tt
+			custom_effect_tooltip = NAM_grp_pw_constitutional_committee_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.06 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Conservative port and the etatist depot hook: a court front stored before
+	# the board opens acts from the owners' first round.
+	focus = {
+		id = NAM_pw_concession_prosecutor
+		relative_position_id = NAM_pw_cadastre
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_district_inspectorate
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_cadastre
+			focus = NAM_depot_audit
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.10 }
+			}
+			add_political_power = 60
+			custom_effect_tooltip = NAM_pw_concession_prosecutor_reward_tt
+			custom_effect_tooltip = NAM_grp_pw_concession_prosecutor_tt
+			hidden_effect = {
+				if = {
+					limit = { NOT = { NAM_depot_board_ended = yes } }
+					NAM_depot_raise_front_court = yes
+					set_temp_variable = { var = NAM_depot_evidence_delta value = 3 }
+					NAM_depot_add_evidence = yes
+					set_temp_variable = { var = NAM_depot_push_delta value = -12 }
+					NAM_depot_push_target = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_grp_oil_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 # @section etatist_plan
-	# Plan or trusts: the industrial fork under the basin card, rejoined by the
-	# Kadir embassy on the axis.
+	# Rows 6 and 7: the second card of each faction lane, the plan or trusts
+	# pair under the lane heads, the officer-corps and information law pairs
+	# and the Kadir embassy that rejoins the pair on the axis.
+	focus = {
+		id = NAM_pw_mobilisation_register
+		relative_position_id = NAM_pw_armament_inspectorate
+		x = -2
+		y = 1
+		icon = GFX_focus_NAM_pw_mobilisation_register
+		cost = 2
+		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_armament_inspectorate
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.10 }
+			}
+			add_manpower = 7000
+			add_command_power = 15
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_pw_mobilisation_register_idea
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_mobilisation_register_idea
+				}
+			}
+			custom_effect_tooltip = NAM_grp_pw_mobilisation_register_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_conscription value = 0.005 }
+				NAM_refresh_garrison = yes
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.02 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	focus = {
 		id = NAM_state_plan
-		relative_position_id = NAM_south_black_basin
-		x = -2
-		y = 3
+		relative_position_id = NAM_pw_armament_inspectorate
+		x = 0
+		y = 1
 		icon = GFX_focus_NAM_state_plan
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
-			focus = NAM_south_black_basin
+			focus = NAM_pw_armament_inspectorate
 		}
 		mutually_exclusive = { focus = NAM_regional_trusts }
 		available = {
@@ -580,6 +910,10 @@
 			custom_effect_tooltip = NAM_pw_state_arsenal_unlock_tt
 			unlock_decision_tooltip = NAM_program_tool_reserve
 			custom_effect_tooltip = NAM_program_tool_reserve_unlock_tt
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.15 }
+			}
 			NAM_pw_enact_central_plan = yes
 			# Each factory brings its own shared slot, so ownership and control are
 			# the only site conditions left to recheck at completion.
@@ -659,15 +993,15 @@
 
 	focus = {
 		id = NAM_regional_trusts
-		relative_position_id = NAM_south_black_basin
-		x = 2
-		y = 3
+		relative_position_id = NAM_pw_constitutional_committee
+		x = 0
+		y = 1
 		icon = GFX_focus_NAM_regional_trusts
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
-			focus = NAM_south_black_basin
+			focus = NAM_pw_constitutional_committee
 		}
 		mutually_exclusive = { focus = NAM_state_plan }
 		available = {
@@ -688,6 +1022,10 @@
 			unlock_decision_tooltip = NAM_pw_development_works
 			custom_effect_tooltip = NAM_pw_development_works_unlock_tt
 			NAM_pw_enact_regional_trusts = yes
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.15 }
+			}
 			if = {
 				limit = {
 					owns_state = 689
@@ -797,10 +1135,179 @@
 	}
 
 	focus = {
+		id = NAM_pw_administrative_courts
+		relative_position_id = NAM_pw_constitutional_committee
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_pw_administrative_courts
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_constitutional_committee
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_hear_district_appeals
+			custom_effect_tooltip = NAM_pw_hear_district_appeals_unlock_tt
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.10 }
+			}
+			add_political_power = 60
+			add_stability = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_administrative_courts_idea
+				}
+			}
+			custom_effect_tooltip = NAM_grp_pw_administrative_courts_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.05 }
+				add_to_variable = { var = NAM_adm_resistance_growth value = -0.03 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Hard hawk line: the commandants' law also strengthens every namestnik
+	# writ; the influence cycle reads this focus through has_completed_focus.
+	focus = {
+		id = NAM_pw_military_governors
+		relative_position_id = NAM_pw_mobilisation_register
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_pw_military_governors
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_BALANCE_OF_POWER }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_mobilisation_register
+		}
+		mutually_exclusive = { focus = NAM_pw_officer_appointments }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_pw_enact_commandant_corps = yes
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.15 }
+			}
+			add_command_power = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_pw_military_governors_idea
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_military_governors_idea
+				}
+			}
+			custom_effect_tooltip = NAM_pw_military_governors_reward_tt
+			custom_effect_tooltip = NAM_grp_pw_military_governors_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_defence value = 0.04 }
+				NAM_refresh_garrison = yes
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.04 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.331 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_officer_appointments
+		relative_position_id = NAM_pw_mobilisation_register
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_pw_officer_appointments
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_BALANCE_OF_POWER }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_mobilisation_register
+		}
+		mutually_exclusive = { focus = NAM_pw_military_governors }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_pw_enact_attested_officers = yes
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.05 }
+			}
+			army_experience = 25
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_pw_officer_appointments_idea
+				}
+			}
+			custom_effect_tooltip = NAM_grp_pw_officer_appointments_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_planning_speed value = 0.05 }
+				add_to_variable = { var = NAM_gar_army_attack value = 0.03 }
+				NAM_refresh_garrison = yes
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.332 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Readiness card. Once the war for the South has started or been resolved
+	# the writ no longer matters, so the bypass keeps the council, the labour
+	# pair and the hub reachable.
+	focus = {
 		id = NAM_south_desert_offices
 		relative_position_id = NAM_south_black_basin
 		x = 0
-		y = 5
+		y = 3
 		icon = GFX_focus_NAM_south_desert_offices
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 2
@@ -810,10 +1317,20 @@
 			focus = NAM_regional_trusts
 		}
 		bypass = {
-			KDR = {
+			OR = {
+				KDR = {
+					custom_trigger_tooltip = {
+						tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
+						ADISCORD_south_campaign_target_settled = yes
+					}
+				}
 				custom_trigger_tooltip = {
-					tooltip = ADISCORD_south_campaign_target_settled_focus_condition_tt
-					ADISCORD_south_campaign_target_settled = yes
+					tooltip = ADISCORD_south_final_started_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_started
+				}
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_south_final_resolved_focus_condition_tt
+					has_global_flag = ADISCORD_south_final_resolved
 				}
 			}
 		}
@@ -841,12 +1358,40 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			unlock_decision_tooltip = ADISCORD_south_nam_writ
+			custom_effect_tooltip = ADISCORD_south_nam_writ_unlock_tt
 			add_war_support = 0.05
 			army_experience = 25
 			add_political_power = 60
 			custom_effect_tooltip = NAM_south_desert_offices_tt
+			custom_effect_tooltip = ADISCORD_south_contact_kdr_tt
 			hidden_effect = {
-				KDR = { ADISCORD_south_demand_submission = yes }
+				# The coercive demand only reaches a Kadir that is still contested:
+				# at 40 or more toward Svetlogorye it becomes a further push.
+				if = {
+					limit = { KDR = { ADISCORD_south_in_contest = yes } }
+					KDR = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+						ADISCORD_south_push_influence_north = yes
+						if = {
+							limit = { ADISCORD_south_lean_north_40 = yes }
+							set_temp_variable = { var = ADISCORD_south_push_delta value = 8 }
+							ADISCORD_south_push_influence_north = yes
+						}
+						else_if = {
+							limit = { ADISCORD_south_lean_shl_40 = no }
+							ADISCORD_south_demand_submission = yes
+						}
+					}
+				}
+				else = {
+					RHM = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+						ADISCORD_south_push_influence_north = yes
+					}
+				}
+				set_temp_variable = { var = ADISCORD_south_power_delta value = 3 }
+				ADISCORD_south_add_influence_power = yes
 			}
 		}
 		ai_will_do = {
@@ -854,21 +1399,19 @@
 		}
 	}
 
-# @section etatist_works
-	# Body under the embassy: the northern export guarantees on the left and the
-	# constitution on the right.
 	focus = {
-		id = NAM_pw_export_guarantees
-		relative_position_id = NAM_south_desert_offices
-		x = -5
+		id = NAM_pw_cabinet_statute
+		relative_position_id = NAM_pw_administrative_courts
+		x = -1
 		y = 1
-		icon = GFX_focus_NAM_pw_export_guarantees
+		icon = GFX_focus_NAM_pw_cabinet_statute
 		cost = 2
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		prerequisite = {
-			focus = NAM_south_desert_offices
+			focus = NAM_pw_administrative_courts
 		}
+		mutually_exclusive = { focus = NAM_pw_state_chamber }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
@@ -882,60 +1425,285 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
+			NAM_pw_enact_cabinet_decrees = yes
 			if = {
-				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_island_accounts } } }
-				unlock_decision_tooltip = NAM_project_steel
-				custom_effect_tooltip = NAM_project_steel_unlock_tt
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.05 }
 			}
-			add_fuel = 8000
-			custom_effect_tooltip = ADISCORD_south_contact_kyz_tt
+			add_political_power = 75
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_adm_pw_export_guarantees_idea
+					add_idea = NAM_adm_pw_cabinet_statute_idea
 				}
 			}
-			custom_effect_tooltip = NAM_local_design_steel_tt
-			custom_effect_tooltip = NAM_pw_export_guarantees_reward_tt
-			custom_effect_tooltip = NAM_grp_pw_export_guarantees_tt
+			custom_effect_tooltip = NAM_grp_pw_cabinet_statute_tt
 			hidden_effect = {
-				add_to_variable = { var = NAM_adm_trade_income value = 0.08 }
-				add_to_variable = { var = NAM_adm_civilian_speed value = -0.02 }
+				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.05 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.03 }
 				NAM_refresh_administration = yes
-				set_temp_variable = { var = NAM_treasury_amount value = 300 }
-				NAM_add_treasury = yes
-				# The plan ships its arms by sea; the trusts take a larger export share.
-				if = {
-					limit = { has_completed_focus = NAM_state_plan }
-					add_equipment_to_stockpile = {
-						type = convoy
-						amount = 10
-						producer = NAM
-					}
-				}
-				else = {
-					set_temp_variable = { var = NAM_treasury_amount value = 150 }
-					NAM_add_treasury = yes
-				}
-				add_to_variable = { var = NAM_grp_trade_support value = 8 }
-				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				add_to_variable = { var = NAM_grp_nam_support value = 8 }
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
 				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.334 days = 2 }
 			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 	focus = {
-		id = NAM_pw_constitutional_committee
-		relative_position_id = NAM_south_desert_offices
-		x = 5
+		id = NAM_pw_state_chamber
+		relative_position_id = NAM_pw_administrative_courts
+		x = 1
 		y = 1
-		icon = GFX_focus_NAM_pw_constitutional_committee
+		icon = GFX_focus_NAM_pw_state_chamber
 		cost = 2
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_administrative_courts
+		}
+		mutually_exclusive = { focus = NAM_pw_cabinet_statute }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_pw_enact_public_accounts = yes
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.15 }
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_state_chamber_idea
+				}
+			}
+			custom_effect_tooltip = NAM_pw_state_chamber_reward_tt
+			custom_effect_tooltip = NAM_grp_pw_state_chamber_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.05 }
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.03 }
+				NAM_refresh_administration = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+				if = {
+					limit = { NOT = { NAM_depot_board_ended = yes } }
+					set_temp_variable = { var = NAM_depot_push_delta value = -12 }
+					NAM_depot_push_target = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.333 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+# @section etatist_works
+	# Row 8 and the faction lane ends: the two ports from the shared inner
+	# lanes, the council of seals on the axis and the deeper card of each
+	# faction lane that the hub accepts.
+	focus = {
+		id = NAM_pw_veyr_convoys
+		relative_position_id = NAM_pw_military_governors
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_pw_escort_fleet
+		cost = 1
+		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_POLITICAL }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_military_governors
+			focus = NAM_south_press_shahrabad
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_not_started_tt
+				NOT = { has_global_flag = ADISCORD_south_final_started }
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.05 }
+			}
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 10
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_pw_veyr_convoys_reward_tt
+			custom_effect_tooltip = ADISCORD_south_contact_glp_tt
+			hidden_effect = {
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					GLP = {
+						set_temp_variable = { var = ADISCORD_south_push_delta value = 8 }
+						ADISCORD_south_push_influence_north = yes
+						if = {
+							limit = { ADISCORD_south_in_contest = yes }
+							set_temp_variable = { var = ADISCORD_south_tie_value value = 2 }
+							ADISCORD_south_set_north_tie = yes
+						}
+					}
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 1 }
+					ADISCORD_south_add_influence_power = yes
+				}
+				else = {
+					add_equipment_to_stockpile = {
+						type = infantry_equipment
+						amount = 3000
+						producer = NAM
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# The council pays by the hawks-conservatives balance that the deeper
+	# faction lane has set; its available asks for a card of each faction.
+	focus = {
+		id = NAM_pw_council_of_seals
+		relative_position_id = NAM_south_desert_offices
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_pw_civil_administration
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_BALANCE_OF_POWER }
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		prerequisite = {
 			focus = NAM_south_desert_offices
+			focus = NAM_pw_officer_appointments
+			focus = NAM_pw_cabinet_statute
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_pirate_country_operable_tt
+				NAM_country_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_council_sides_tt
+				has_completed_focus = NAM_pw_mobilisation_register
+				has_completed_focus = NAM_pw_administrative_courts
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 100
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_power_balance = { id = NAM_postwar_future_bop }
+						power_balance_value = { id = NAM_postwar_future_bop value < -0.15 }
+					}
+				}
+				add_command_power = 40
+				add_war_support = 0.08
+			}
+			else_if = {
+				limit = {
+					hidden_trigger = {
+						has_power_balance = { id = NAM_postwar_future_bop }
+						power_balance_value = { id = NAM_postwar_future_bop value > 0.15 }
+					}
+				}
+				add_stability = 0.08
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_pw_council_of_seals_idea
+				}
+			}
+			custom_effect_tooltip = NAM_pw_council_of_seals_reward_tt
+			custom_effect_tooltip = NAM_grp_pw_council_of_seals_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.04 }
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.04 }
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.02 }
+				NAM_refresh_administration = yes
+				add_to_variable = { var = NAM_grp_nam_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
+				# Without the balance the contested row applies.
+				if = {
+					limit = {
+						has_power_balance = { id = NAM_postwar_future_bop }
+						power_balance_value = { id = NAM_postwar_future_bop value < -0.15 }
+					}
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 1 }
+					ADISCORD_south_add_influence_power = yes
+				}
+				else_if = {
+					limit = {
+						has_power_balance = { id = NAM_postwar_future_bop }
+						power_balance_value = { id = NAM_postwar_future_bop value > 0.15 }
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 500 }
+					NAM_add_treasury = yes
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 1 }
+					ADISCORD_south_add_influence_power = yes
+				}
+				else = {
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+					set_temp_variable = { var = ADISCORD_south_power_delta value = 3 }
+					ADISCORD_south_add_influence_power = yes
+				}
+				country_event = { id = ADISCORD_nam_story.330 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Conservative port from the depot reserve: the reserve ending doubles the
+	# stores' fuel gain and adds the reserve's first transfer.
+	focus = {
+		id = NAM_pw_treasury_fuel_stores
+		relative_position_id = NAM_pw_state_chamber
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_oil_fund
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_state_chamber
+			focus = NAM_depot_reserve_charter
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -950,57 +1718,268 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_political_power = 75
-			# The party decree stays the first if of the reward and keeps its scene
-			# inside the etatism branch.
 			if = {
-				limit = { has_government = etatism }
-				custom_effect_tooltip = NAM_etatist_party_register_tt
-				hidden_effect = {
-					set_temp_variable = { ADISCORD_party = token:anarchism }
-					ADISCORD_ban_party = yes
-					set_temp_variable = { ADISCORD_party = token:pragmatism }
-					ADISCORD_ban_party = yes
-				}
-				country_event = { id = ADISCORD_nam_resource_war.413 }
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.05 }
 			}
+			add_fuel = 10000
 			if = {
-				limit = { has_completed_focus = NAM_ladder_ending_iron }
-				add_war_support = 0.05
+				limit = { hidden_trigger = { check_variable = { NAM_depot_settlement_variant = 2 } } }
+				add_fuel = 10000
+				effect_tooltip = {
+					swap_ideas = {
+						remove_idea = NAM_administration_dummy_idea
+						add_idea = NAM_adm_pw_treasury_fuel_stores_reserve_idea
+					}
+				}
 			}
 			else = {
-				add_stability = 0.05
+				effect_tooltip = {
+					swap_ideas = {
+						remove_idea = NAM_administration_dummy_idea
+						add_idea = NAM_adm_pw_treasury_fuel_stores_idea
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_pw_treasury_fuel_stores_reward_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { NAM_depot_settlement_variant = 2 } }
+					add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.08 }
+				}
+				else = {
+					add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.04 }
+					if = {
+						limit = { NOT = { NAM_depot_board_ended = yes } }
+						700 = {
+							set_temp_variable = { var = NAM_depot_push_delta value = -8 }
+							NAM_depot_push_site = yes
+						}
+					}
+					else = {
+						set_temp_variable = { var = NAM_treasury_amount value = 150 }
+						NAM_add_treasury = yes
+					}
+				}
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Hawk lane end: collects the convoys and the attestation side.
+	focus = {
+		id = NAM_pw_forward_bases
+		relative_position_id = NAM_pw_veyr_convoys
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_pw_strategic_guard
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_veyr_convoys
+			focus = NAM_pw_officer_appointments
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_forward_base_order
+			custom_effect_tooltip = NAM_pw_forward_base_order_unlock_tt
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.10 }
+			}
+			# The southern crossings of both border districts; the same provinces
+			# carry the forts of the war for the South.
+			67 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						any_province_building_level = {
+							province = { id = 6099 }
+							building = bunker
+							level < 5
+						}
+					}
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = 6099
+						instant_build = yes
+					}
+				}
+			}
+			688 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						any_province_building_level = {
+							province = { id = 16721 }
+							building = bunker
+							level < 5
+						}
+					}
+					add_building_construction = {
+						type = bunker
+						level = 1
+						province = 16721
+						instant_build = yes
+					}
+				}
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_pw_forward_bases_idea
+				}
+			}
+			custom_effect_tooltip = NAM_pw_forward_bases_reward_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_max_dig_in value = 1 }
+				NAM_refresh_garrison = yes
+				if = {
+					limit = {
+						NOT = {
+							67 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+								any_province_building_level = {
+									province = { id = 6099 }
+									building = bunker
+									level < 5
+								}
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+				if = {
+					limit = {
+						NOT = {
+							688 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+								any_province_building_level = {
+									province = { id = 16721 }
+									building = bunker
+									level < 5
+								}
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# Conservative lane end: collects the fuel stores and the cabinet side.
+	focus = {
+		id = NAM_reconstruction_statute
+		relative_position_id = NAM_pw_treasury_fuel_stores
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_reconstruction_statute
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		prerequisite = {
+			focus = NAM_pw_treasury_fuel_stores
+			focus = NAM_pw_cabinet_statute
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_pw_statute_works
+			custom_effect_tooltip = NAM_pw_statute_works_unlock_tt
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.10 }
+			}
+			if = {
+				limit = {
+					owns_state = 688
+					controls_state = 688
+				}
+				688 = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
 			}
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_administration_dummy_idea
-					add_idea = NAM_adm_pw_constitutional_committee_idea
+					add_idea = NAM_adm_reconstruction_statute_idea
 				}
 			}
-			custom_effect_tooltip = NAM_pw_local_allotment_tt
+			custom_effect_tooltip = NAM_reconstruction_statute_reward_tt
 			hidden_effect = {
-				add_to_variable = { var = NAM_adm_political_power_gain value = 0.06 }
 				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.05 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.03 }
 				NAM_refresh_administration = yes
+				if = {
+					limit = {
+						NOT = {
+							AND = {
+								owns_state = 688
+								controls_state = 688
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 300 }
+					NAM_add_treasury = yes
+				}
 			}
 		}
 		ai_will_do = { base = 5 }
 	}
 
 # @section etatist_constitution
-	# Labour duty or state insurance and the hub that closes the course before
-	# the southern campaign.
+	# Labour duty or state insurance under the council and the hub that
+	# closes the course before the southern campaign. The hub takes one
+	# faction lane end and one side of the labour pair.
 	focus = {
 		id = NAM_pw_labour_code
-		relative_position_id = NAM_south_desert_offices
-		x = -3
-		y = 2
+		relative_position_id = NAM_pw_council_of_seals
+		x = -2
+		y = 1
 		icon = GFX_focus_NAM_pw_labour_code
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_MANPOWER }
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		prerequisite = {
-			focus = NAM_south_desert_offices
+			focus = NAM_pw_council_of_seals
 		}
 		mutually_exclusive = { focus = NAM_pw_insurance_fund }
 		available = {
@@ -1024,6 +2003,10 @@
 				custom_effect_tooltip = NAM_crisis_fund_unlock_tt
 			}
 			NAM_pw_enact_labour_service = yes
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.15 }
+			}
 			NAM_pw_trade_social_system_for_economic = yes
 			add_manpower = 14000
 			effect_tooltip = {
@@ -1050,15 +2033,15 @@
 
 	focus = {
 		id = NAM_pw_insurance_fund
-		relative_position_id = NAM_south_desert_offices
-		x = 3
-		y = 2
+		relative_position_id = NAM_pw_council_of_seals
+		x = 2
+		y = 1
 		icon = GFX_focus_NAM_pw_insurance_fund
 		cost = 3
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		prerequisite = {
-			focus = NAM_south_desert_offices
+			focus = NAM_pw_council_of_seals
 		}
 		mutually_exclusive = { focus = NAM_pw_labour_code }
 		available = {
@@ -1077,7 +2060,11 @@
 			unlock_decision_tooltip = NAM_program_company_housing
 			custom_effect_tooltip = NAM_program_company_housing_unlock_tt
 			NAM_pw_enact_state_insurance = yes
-			ADISCORD_reform_social_system_development = yes
+			NAM_pw_trade_economic_for_social_system = yes
+			if = {
+				limit = { hidden_trigger = { has_power_balance = { id = NAM_postwar_future_bop } } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = 0.15 }
+			}
 			add_stability = 0.08
 			add_war_support = 0.03
 			effect_tooltip = {
@@ -1104,13 +2091,17 @@
 
 	focus = {
 		id = NAM_ladder_of_seals
-		relative_position_id = NAM_south_desert_offices
+		relative_position_id = NAM_pw_council_of_seals
 		x = 0
-		y = 3
+		y = 2
 		icon = GFX_focus_NAM_ladder_of_seals
 		allow_branch = { NAM_prewar_service_mandate = yes }
 		cost = 4
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY FOCUS_FILTER_BALANCE_OF_POWER }
+		prerequisite = {
+			focus = NAM_pw_forward_bases
+			focus = NAM_reconstruction_statute
+		}
 		prerequisite = {
 			focus = NAM_pw_labour_code
 			focus = NAM_pw_insurance_fund
@@ -1163,11 +2154,17 @@
 				}
 			}
 			custom_effect_tooltip = NAM_ladder_of_seals_reward_tt
+			if = {
+				limit = { hidden_trigger = { ADISCORD_south_contest_open = yes } }
+				custom_effect_tooltip = ADISCORD_south_power_gain_2_tt
+			}
 			hidden_effect = {
 				add_to_variable = { var = NAM_adm_compliance_gain value = 0.10 }
 				add_to_variable = { var = NAM_adm_stability_factor value = 0.06 }
 				add_to_variable = { var = NAM_adm_admin_expense value = 0.03 }
 				NAM_refresh_administration = yes
+				set_temp_variable = { var = ADISCORD_south_power_delta value = 2 }
+				ADISCORD_south_add_influence_power = yes
 				country_event = { id = ADISCORD_nam_story.327 days = 2 }
 			}
 		}
@@ -1223,5 +2220,131 @@
 		}
 		ai_will_do = {
 			base = 5
+		}
+	}
+
+# @section etatist_lane_ends
+	# The etatist variants of the influence lane end (11,8) and the depot lane
+	# end (31,8). Each anchors on its lane like the shared card it replaces;
+	# the other mandates draw their own variant in the same cell.
+	# The lane mechanics live in the shared core effect; a later reader of the
+	# old lane end uses NAM_south_compact_signed / NAM_depot_fuel_service_founded.
+	focus = {
+		id = NAM_south_namestnik_pact
+		relative_position_id = NAM_south_league_of_guarantees
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_appointed_prefects
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ANNEXATION }
+		prerequisite = {
+			focus = NAM_south_league_of_guarantees
+			focus = NAM_south_press_shahrabad
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_south_coalition_compact_core = yes
+			if = {
+				limit = {
+					hidden_trigger = {
+						ADISCORD_south_contest_open = yes
+						NAM_south_writ_holder_exists = yes
+					}
+				}
+				custom_effect_tooltip = NAM_south_namestnik_pact_reward_tt
+			}
+			else = {
+				add_command_power = 25
+			}
+			hidden_effect = {
+				if = {
+					limit = { ADISCORD_south_contest_open = yes }
+					EFL = { NAM_south_pact_bind_writ_holder = yes }
+					AZH = { NAM_south_pact_bind_writ_holder = yes }
+					WEF = { NAM_south_pact_bind_writ_holder = yes }
+					KDR = { NAM_south_pact_bind_writ_holder = yes }
+					RHM = { NAM_south_pact_bind_writ_holder = yes }
+					SDR = { NAM_south_pact_bind_writ_holder = yes }
+					KYZ = { NAM_south_pact_bind_writ_holder = yes }
+					MZR = { NAM_south_pact_bind_writ_holder = yes }
+					GLP = { NAM_south_pact_bind_writ_holder = yes }
+				}
+				country_event = { id = ADISCORD_nam_story.382 days = 2 }
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	focus = {
+		id = NAM_depot_state_fuel_service
+		relative_position_id = NAM_depot_revoke
+		x = -2
+		y = 1
+		icon = GFX_focus_NAM_civic_audit
+		allow_branch = { NAM_prewar_service_mandate = yes }
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_depot_revoke
+			focus = NAM_depot_reserve_charter
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_conceded_tt
+				NAM_depot_board_conceded = yes
+			}
+		}
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_prewar_service_mandate_tt
+				NAM_prewar_service_mandate = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_depot_fuel_service_core = yes
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_depot_fuel_service_idea
+				}
+			}
+			custom_effect_tooltip = NAM_depot_state_fuel_service_reward_tt
+			hidden_effect = {
+				# The board close keeps the evidence of the tank-car case; the fines
+				# are its only reader and clear it.
+				set_temp_variable = { var = NAM_treasury_amount value = 0 }
+				if = {
+					limit = { has_variable = NAM_depot_evidence }
+					set_temp_variable = { var = NAM_treasury_amount value = NAM_depot_evidence }
+				}
+				multiply_temp_variable = { var = NAM_treasury_amount value = 25 }
+				add_to_temp_variable = { var = NAM_treasury_amount value = 100 }
+				clamp_temp_variable = { var = NAM_treasury_amount min = 100 max = 400 }
+				NAM_add_treasury = yes
+				clear_variable = NAM_depot_evidence
+				country_event = { id = ADISCORD_nam_story.392 days = 2 }
+			}
+		}
+		ai_will_do = {
+			base = 10
 		}
 	}

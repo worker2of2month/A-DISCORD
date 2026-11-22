@@ -22,7 +22,30 @@ on_actions = {
 
 	on_daily_NAM = {
 		effect = {
+			# The post-war depot board replaces the spirit: its drain follows the
+			# private share and never takes more than the stock. The countdown of
+			# the owners' round is refreshed here for the board report only.
 			if = {
+				limit = { has_country_flag = NAM_depot_board_seeded }
+				if = {
+					limit = { has_country_flag = NAM_depot_board_open }
+					set_variable = { var = NAM_depot_days_left value = NAM_depot_next_round_day }
+					subtract_from_variable = { var = NAM_depot_days_left value = global.num_days }
+				}
+				if = {
+					limit = { check_variable = { NAM_depot_daily_drain > 0 } }
+					set_temp_variable = { var = NAM_depot_drain_today value = fuel_k }
+					multiply_temp_variable = { var = NAM_depot_drain_today value = 1000 }
+					clamp_temp_variable = {
+						var = NAM_depot_drain_today
+						min = 0
+						max = NAM_depot_daily_drain
+					}
+					multiply_temp_variable = { var = NAM_depot_drain_today value = -1 }
+					add_fuel = NAM_depot_drain_today
+				}
+			}
+			else_if = {
 				limit = { has_idea = NAM_private_tank_farms }
 				if = {
 					limit = { has_country_flag = { flag = NAM_depot_case value > 1 } }

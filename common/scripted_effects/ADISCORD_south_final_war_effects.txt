@@ -23,6 +23,18 @@ ADISCORD_south_begin_preparation = {
 			if = {
 				limit = { ADISCORD_south_sides_share_border = yes }
 				set_global_flag = ADISCORD_south_preparation_started
+				# Svetlogorye's victory and the standoff set a 1095-day window
+				# before this call; every other route opens with 540 days.
+				if = {
+					limit = { ADISCORD_south_deadline_set = no }
+					set_temp_variable = { var = ADISCORD_south_deadline_window value = 540 }
+					ADISCORD_south_set_deadline = yes
+				}
+				# A preparation reopened after a repelled war seeds a fresh contest.
+				if = {
+					limit = { NOT = { has_global_flag = ADISCORD_south_influence_seeded } }
+					ADISCORD_south_seed_influence = yes
+				}
 				ADISCORD_south_wake_regional_countries = yes
 				hidden_effect = {
 					ADISCORD_south_watch_deadline = yes
@@ -51,8 +63,8 @@ ADISCORD_south_announce_deadline = {
 	}
 }
 
-# Shahrabad's victories bring the deadline date closer in 15-day units, at
-# most six per campaign, counted from the start of the game.
+# Shahrabad's victories bring the deadline closer in 15-day units, at most six,
+# counted from the start of the game.
 ADISCORD_south_pull_clock_campaign = {
 	ADISCORD_south_pull_clock_unit = yes
 	ADISCORD_south_pull_clock_unit = yes
@@ -64,9 +76,10 @@ ADISCORD_south_pull_clock_war = {
 	ADISCORD_south_pull_clock_unit = yes
 }
 
-# GLOBAL. Each unit is checked against the date it would move, so a deadline
-# closer than 136 days stays where it is. The counter is never cleared: a
-# repelled campaign keeps the date it already reached.
+# GLOBAL. Before the anchor a unit is only counted; ADISCORD_south_set_deadline
+# subtracts every counted unit. With an anchor a deadline closer than 136 days
+# stays where it is. The counter is never cleared: a repelled campaign keeps
+# the deadline it already reached.
 ADISCORD_south_pull_clock_unit = {
 	if = {
 		limit = {
@@ -76,7 +89,138 @@ ADISCORD_south_pull_clock_unit = {
 			ADISCORD_south_deadline_can_pull = yes
 		}
 		add_to_variable = { var = global.ADISCORD_south_crisis_pull value = 1 }
+		if = {
+			limit = { ADISCORD_south_deadline_set = yes }
+			subtract_from_variable = { var = global.ADISCORD_south_deadline_day value = 15 }
+			ADISCORD_south_refresh_deadline_days = yes
+		}
 	}
+}
+
+# GLOBAL; temp ADISCORD_south_deadline_window in days. Sets the anchor once per
+# story campaign: today plus the window, 15 days earlier for every pull counted
+# so far, and never closer than 180 days.
+ADISCORD_south_set_deadline = {
+	if = {
+		limit = { ADISCORD_south_deadline_set = no }
+		set_variable = { var = global.ADISCORD_south_deadline_day value = global.num_days }
+		add_to_variable = { var = global.ADISCORD_south_deadline_day value = ADISCORD_south_deadline_window }
+		set_temp_variable = { var = ADISCORD_south_deadline_pull_days value = global.ADISCORD_south_crisis_pull }
+		multiply_temp_variable = { var = ADISCORD_south_deadline_pull_days value = 15 }
+		subtract_from_variable = { var = global.ADISCORD_south_deadline_day value = ADISCORD_south_deadline_pull_days }
+		set_temp_variable = { var = ADISCORD_south_deadline_floor value = global.num_days }
+		add_to_temp_variable = { var = ADISCORD_south_deadline_floor value = 180 }
+		if = {
+			limit = { check_variable = { var = global.ADISCORD_south_deadline_day value = ADISCORD_south_deadline_floor compare = less_than } }
+			set_variable = { var = global.ADISCORD_south_deadline_day value = ADISCORD_south_deadline_floor }
+		}
+		ADISCORD_south_refresh_deadline_days = yes
+	}
+}
+
+# GLOBAL. Derived days are written only when the anchor is set or pulled.
+ADISCORD_south_refresh_deadline_days = {
+	set_variable = { var = global.ADISCORD_south_deadline_near_day value = global.ADISCORD_south_deadline_day }
+	subtract_from_variable = { var = global.ADISCORD_south_deadline_near_day value = 31 }
+	set_variable = { var = global.ADISCORD_south_deadline_ai_day value = global.ADISCORD_south_deadline_day }
+	subtract_from_variable = { var = global.ADISCORD_south_deadline_ai_day value = 120 }
+	set_variable = { var = global.ADISCORD_south_deadline_pull_guard_day value = global.ADISCORD_south_deadline_day }
+	subtract_from_variable = { var = global.ADISCORD_south_deadline_pull_guard_day value = 135 }
+	set_variable = { var = global.ADISCORD_south_deadline_warning_day value = global.ADISCORD_south_deadline_day }
+	subtract_from_variable = { var = global.ADISCORD_south_deadline_warning_day value = 180 }
+	ADISCORD_south_store_deadline_date = yes
+}
+
+# GLOBAL. Display date of the anchor. global.ADISCORD_south_day0 is the
+# num_days value of 1 January 2160; the calendar has 365 days and no leap
+# years, so the offset splits exactly into years and a day of the year.
+ADISCORD_south_store_deadline_date = {
+	set_temp_variable = { var = ADISCORD_south_date_offset value = global.ADISCORD_south_deadline_day }
+	subtract_from_temp_variable = { var = ADISCORD_south_date_offset value = global.ADISCORD_south_day0 }
+	set_temp_variable = { var = ADISCORD_south_date_doy value = ADISCORD_south_date_offset }
+	modulo_temp_variable = { var = ADISCORD_south_date_doy value = 365 }
+	set_variable = { var = global.ADISCORD_south_deadline_y value = ADISCORD_south_date_offset }
+	subtract_from_variable = { var = global.ADISCORD_south_deadline_y value = ADISCORD_south_date_doy }
+	divide_variable = { var = global.ADISCORD_south_deadline_y value = 365 }
+	add_to_variable = { var = global.ADISCORD_south_deadline_y value = 2160 }
+	# Month starts on days 0 31 59 90 120 151 181 212 243 273 304 334.
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 334 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 12 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 334 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 304 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 11 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 304 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 273 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 10 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 273 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 243 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 9 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 243 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 212 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 8 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 212 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 181 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 7 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 181 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 151 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 6 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 151 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 120 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 5 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 120 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 90 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 4 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 90 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 59 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 3 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 59 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_date_doy value = 31 compare = greater_than_or_equals } }
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 2 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 31 }
+	}
+	else = {
+		set_variable = { var = global.ADISCORD_south_deadline_m value = 1 }
+		set_temp_variable = { var = ADISCORD_south_date_month_start value = 0 }
+	}
+	set_variable = { var = global.ADISCORD_south_deadline_d value = ADISCORD_south_date_doy }
+	subtract_from_variable = { var = global.ADISCORD_south_deadline_d value = ADISCORD_south_date_month_start }
+	add_to_variable = { var = global.ADISCORD_south_deadline_d value = 1 }
+}
+
+# GLOBAL. A new story campaign (the island-exile settlement, the return war or
+# the great war) starts a new calendar. A suspended or repelled preparation
+# keeps its anchor; only these campaign starts call this.
+ADISCORD_south_clear_deadline = {
+	clear_variable = global.ADISCORD_south_deadline_day
+	clear_variable = global.ADISCORD_south_deadline_near_day
+	clear_variable = global.ADISCORD_south_deadline_ai_day
+	clear_variable = global.ADISCORD_south_deadline_pull_guard_day
+	clear_variable = global.ADISCORD_south_deadline_warning_day
+	clear_variable = global.ADISCORD_south_deadline_d
+	clear_variable = global.ADISCORD_south_deadline_m
+	clear_variable = global.ADISCORD_south_deadline_y
+	clr_global_flag = ADISCORD_south_influence_seeded
 }
 
 # GLOBAL, from hidden contexts. Starts the deadline watch unless one is
@@ -216,6 +360,7 @@ ADISCORD_south_crisis_cycle = {
 	ADISCORD_south_begin_preparation = yes
 	ADISCORD_south_check_deadline = yes
 	ADISCORD_south_watch_deadline = yes
+	ADISCORD_south_contest_cycle = yes
 	if = {
 		limit = {
 			ADISCORD_south_crisis_open = yes
@@ -231,6 +376,7 @@ ADISCORD_south_crisis_cycle = {
 		}
 		set_global_flag = ADISCORD_south_final_resolved
 		ADISCORD_south_suspend_preparation = yes
+		ADISCORD_south_close_nam_depot_board = yes
 		set_global_flag = ADISCORD_south_hegemon_SHL
 		SHL = { SHL_announce_crown_of_the_south = yes }
 		set_global_flag = ADISCORD_south_unopposed
@@ -378,6 +524,8 @@ ADISCORD_south_begin_hostilities = {
 				limit = { has_country_flag = ADISCORD_south_north_leader }
 				ADISCORD_south_prepare_champion = yes
 				set_variable = { var = ADISCORD_south_side value = 2 }
+				# The post-war plans are read before the war tree replaces the post-war tree.
+				NAM_pw_south_war_handover = yes
 				ADISCORD_south_load_war_tree = yes
 			}
 		}
@@ -407,6 +555,11 @@ ADISCORD_south_begin_hostilities = {
 		ADISCORD_south_assign_bound_sides = yes
 		ADISCORD_south_record_key_states = yes
 		ADISCORD_south_offer_side_choices = yes
+		# The side choices (.10, 6 hours) read the ledger; the contest of the
+		# countries that never choose is closed one day later.
+		hidden_effect = {
+			SHL = { country_event = { id = ADISCORD_south.75 days = 1 } }
+		}
 		ADISCORD_south_raise_oil_uprising = yes
 
 		set_temp_variable = { ADISCORD_superevent_request = 76 }
@@ -651,9 +804,10 @@ ADISCORD_south_assign_bound_sides = {
 	SDA = { ADISCORD_south_bind_to_champion = yes }
 }
 
-# COUNTRY regional participant.
+# COUNTRY regional participant. The ledger is still open here: a country won
+# over to 40 or more (30 under the league's guarantee) enters that side
+# without a choice. The join effects close its contest.
 ADISCORD_south_bind_to_champion = {
-	ADISCORD_south_close_coalition_diplomacy = yes
 	if = {
 		limit = {
 			exists = yes
@@ -676,6 +830,32 @@ ADISCORD_south_bind_to_champion = {
 			}
 		}
 		ADISCORD_south_join_north_side = yes
+	}
+	else_if = {
+		limit = {
+			exists = yes
+			is_subject = no
+			ADISCORD_south_regional_country = yes
+			NOT = { has_variable = ADISCORD_south_side }
+			OR = {
+				ADISCORD_south_lean_north_40 = yes
+				AND = {
+					has_country_flag = ADISCORD_south_guaranteed_by_north
+					check_variable = { var = ADISCORD_south_coalition_influence value = 30 compare = greater_than_or_equals }
+				}
+			}
+		}
+		ADISCORD_south_join_north_side = yes
+	}
+	else_if = {
+		limit = {
+			exists = yes
+			is_subject = no
+			ADISCORD_south_regional_country = yes
+			NOT = { has_variable = ADISCORD_south_side }
+			ADISCORD_south_lean_shl_40 = yes
+		}
+		ADISCORD_south_join_shl_side = yes
 	}
 }
 
@@ -705,6 +885,7 @@ ADISCORD_south_offer_side_choice = {
 ADISCORD_south_join_shl_side = {
 	ADISCORD_release_non_participating_minor_optimization = yes
 	set_variable = { var = ADISCORD_south_side value = 1 }
+	ADISCORD_south_close_coalition_diplomacy = yes
 	if = {
 		limit = {
 			is_in_faction = no
@@ -751,6 +932,7 @@ ADISCORD_south_join_shl_side = {
 ADISCORD_south_join_north_side = {
 	ADISCORD_release_non_participating_minor_optimization = yes
 	set_variable = { var = ADISCORD_south_side value = 2 }
+	ADISCORD_south_close_coalition_diplomacy = yes
 	if = {
 		limit = { NAM = { has_country_flag = ADISCORD_south_north_leader } }
 		if = {
@@ -880,6 +1062,17 @@ ADISCORD_south_add_path_spirit = {
 			limit = { has_completed_focus = NAM_pragmatic_compact }
 			add_ideas = ADISCORD_south_nam_contract_logistics
 		}
+		else_if = {
+			limit = { has_country_flag = NAM_corp_takeover }
+			# The council of boards marches under the course its mainland tree chose.
+			if = {
+				limit = { has_completed_focus = NAM_mdr_mainland_shares }
+				add_ideas = ADISCORD_south_path_NAM_shares
+			}
+			else = {
+				add_ideas = ADISCORD_south_path_NAM_boards
+			}
+		}
 	}
 	else = {
 		add_ideas = ADISCORD_south_restitution_line
@@ -897,6 +1090,8 @@ ADISCORD_south_remove_path_spirit = {
 	remove_ideas = ADISCORD_south_nam_emergency_writs
 	remove_ideas = ADISCORD_south_nam_charter_levies
 	remove_ideas = ADISCORD_south_nam_contract_logistics
+	remove_ideas = ADISCORD_south_path_NAM_boards
+	remove_ideas = ADISCORD_south_path_NAM_shares
 	remove_ideas = ADISCORD_south_restitution_line
 	remove_ideas = ADISCORD_south_unprepared_war
 	ADISCORD_economy_mark_dirty = yes
@@ -1007,6 +1202,7 @@ ADISCORD_south_final_resolve_shl_victory = {
 		# The resolved flag precedes white peace so on_peace cannot re-enter.
 		set_global_flag = ADISCORD_south_final_resolved
 		ADISCORD_south_suspend_preparation = yes
+		ADISCORD_south_close_nam_depot_board = yes
 		set_global_flag = ADISCORD_south_hegemon_SHL
 		SHL = { SHL_announce_crown_of_the_south = yes }
 		set_variable = { var = global.ADISCORD_south_winner_side value = 1 }
@@ -1049,6 +1245,7 @@ ADISCORD_south_final_resolve_north_victory = {
 		}
 		set_global_flag = ADISCORD_south_final_resolved
 		ADISCORD_south_suspend_preparation = yes
+		ADISCORD_south_close_nam_depot_board = yes
 		set_global_flag = ADISCORD_south_hegemon_NAM
 		set_variable = { var = global.ADISCORD_south_winner_side value = 2 }
 		set_variable = { var = global.ADISCORD_south_terms value = 2 }
@@ -1065,13 +1262,27 @@ ADISCORD_south_final_resolve_north_victory = {
 			limit = { NAM = { has_completed_focus = NAM_pragmatic_compact } }
 			set_variable = { var = global.ADISCORD_south_subject_type value = 5 }
 		}
+		# The council of boards sequesters every loser for the partition of the South.
+		if = {
+			limit = { NAM = { has_country_flag = NAM_corp_takeover } }
+			set_variable = { var = global.ADISCORD_south_subject_type value = 7 }
+		}
 		ADISCORD_south_end_final_wars = yes
 		ADISCORD_south_mark_losers = yes
 		NAM = {
 			ADISCORD_south_show_svetlogorye_victory = yes
-			load_focus_tree = {
-				tree = NAM_south_heritage_focus
-				keep_completed = yes
+			# The council of boards loads its own tree for the partition; the
+			# republic loads the heritage tree. Both load before the campaign
+			# close, so the prior-tree restore finds no war tree to replace.
+			if = {
+				limit = { NOT = { has_country_flag = NAM_corp_takeover } }
+				load_focus_tree = {
+					tree = NAM_south_heritage_focus
+					keep_completed = yes
+				}
+			}
+			else = {
+				NAM_hgm_begin = yes
 			}
 		}
 		ADISCORD_south_close_campaign_state = yes
@@ -1113,6 +1324,7 @@ ADISCORD_south_final_repel = {
 # GLOBAL. Neither champion survives as a sovereign leader.
 ADISCORD_south_final_resolve_without_hegemon = {
 	set_global_flag = ADISCORD_south_final_resolved
+	ADISCORD_south_close_nam_depot_board = yes
 	ADISCORD_south_end_final_wars = yes
 	ADISCORD_south_close_campaign_state = yes
 	ADISCORD_south_clear_participants = yes
@@ -1338,6 +1550,17 @@ ADISCORD_south_mark_loser = {
 	}
 }
 
+# GLOBAL. Called right after ADISCORD_south_final_resolved is set, before any
+# peace or annexation: Svetlogorye's depot dispute, opened or still pending,
+# is decided by its total. The NAM victory loads a tree without the depot lane,
+# so a pending board would otherwise keep its drain for the rest of the game.
+ADISCORD_south_close_nam_depot_board = {
+	if = {
+		limit = { country_exists = NAM }
+		NAM = { NAM_depot_board_resolve_by_total = yes }
+	}
+}
+
 # GLOBAL. Campaign-only status ends on every terminal path.
 ADISCORD_south_close_campaign_state = {
 	ADISCORD_south_suspend_preparation = yes
@@ -1376,6 +1599,24 @@ ADISCORD_south_close_member_state = {
 		ADISCORD_south_close_champion_front = yes
 		ADISCORD_south_restore_prior_tree = yes
 	}
+	# Svetlogorye's post-war hand-over spirits end with the war on every path;
+	# none of them changes the scripted economy.
+	if = {
+		limit = { has_idea = NAM_pw_south_plan_furnaces }
+		remove_ideas = NAM_pw_south_plan_furnaces
+	}
+	if = {
+		limit = { has_idea = NAM_pw_south_plan_coast }
+		remove_ideas = NAM_pw_south_plan_coast
+	}
+	if = {
+		limit = { has_idea = NAM_pw_south_plan_line }
+		remove_ideas = NAM_pw_south_plan_line
+	}
+	if = {
+		limit = { has_idea = NAM_pw_war_conversion }
+		remove_ideas = NAM_pw_war_conversion
+	}
 }
 
 # COUNTRY SHL or the NAM champion. Restore the recorded tree after the war.
@@ -1410,6 +1651,10 @@ ADISCORD_south_load_war_tree = {
 		else_if = {
 			limit = { has_focus_tree = NAM_exile_corporate_focus }
 			set_variable = { var = ADISCORD_south_prior_tree value = 6 }
+		}
+		else_if = {
+			limit = { has_focus_tree = NAM_mainland_directory_focus }
+			set_variable = { var = ADISCORD_south_prior_tree value = 7 }
 		}
 		if = {
 			limit = { has_variable = ADISCORD_south_prior_tree }
@@ -1459,6 +1704,13 @@ ADISCORD_south_restore_prior_tree = {
 			limit = { check_variable = { var = ADISCORD_south_prior_tree value = 3 compare = equals } }
 			load_focus_tree = {
 				tree = NAM_defeated_focus
+				keep_completed = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_prior_tree value = 7 compare = equals } }
+			load_focus_tree = {
+				tree = NAM_mainland_directory_focus
 				keep_completed = yes
 			}
 		}
@@ -1523,8 +1775,12 @@ ADISCORD_south_apply_settlement = {
 	SOD = { ADISCORD_south_settle_member = yes }
 	SDA = { ADISCORD_south_settle_member = yes }
 	# A Shahrabad subjugated by Svetlogorye opens its defeat chapter; the
-	# effect guards itself on every other result.
-	SHL = { SHL_seal_open_chapter = yes }
+	# effect guards itself on every other result. A Shahrabad sequestered for
+	# the partition opens it from the furnace trust instead.
+	if = {
+		limit = { SHL = { NOT = { has_country_flag = NAM_ptn_sequestered } } }
+		SHL = { SHL_seal_open_chapter = yes }
+	}
 	# The Svetlogorsk uprising never survives as a country.
 	if = {
 		limit = { SLF = { exists = yes } }
@@ -1533,6 +1789,12 @@ ADISCORD_south_apply_settlement = {
 	if = {
 		limit = { check_variable = { var = global.ADISCORD_south_terms value = 3 compare = equals } }
 		SHL_form_furnace_administrations = yes
+	}
+	# The council of boards lays the lots of the partition on the sequestered
+	# land; ROOT and this scope are NAM.
+	if = {
+		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 7 compare = equals } }
+		NAM_ptn_open_table = yes
 	}
 	ADISCORD_south_clear_participants = yes
 	ADISCORD_economy_mark_dirty = yes
@@ -1637,6 +1899,11 @@ ADISCORD_south_apply_subject_type = {
 			}
 		}
 	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 7 compare = equals } }
+		# The council of boards: every loser is sequestered for the partition.
+		NAM_ptn_sequester = yes
+	}
 	else = {
 		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no } }
 	}
@@ -1654,21 +1921,28 @@ ADISCORD_south_queue_offer = {
 	ROOT = { country_event = { id = ADISCORD_south.46 hours = 6 } }
 }
 
-# COUNTRY participant. A new campaign starts with a fresh negotiation table.
+# COUNTRY participant. Closes its contest: from the join effects once it has a
+# side, and from the start cleanup (ADISCORD_south.75) for a country that never
+# chose. A pending tool offer returns its price to Svetlogorye except the
+# political power.
 ADISCORD_south_close_coalition_diplomacy = {
+	ADISCORD_south_refund_tool_escrow = yes
 	clear_variable = ADISCORD_south_coalition_envoy
 	clear_variable = ADISCORD_south_coalition_influence
+	clear_variable = ADISCORD_south_home_lean
+	clear_variable = ADISCORD_south_north_tie
+	clear_variable = ADISCORD_south_tool_kind
+	clear_variable = ADISCORD_south_sphere
+	clr_country_flag = ADISCORD_south_seed_debt
+	clr_country_flag = ADISCORD_south_key_owner
+	clr_country_flag = ADISCORD_south_guaranteed_by_north
+	clr_country_flag = ADISCORD_south_appeal_open
 	clr_country_flag = ADISCORD_south_shl_envoys_recent
 	clr_country_flag = ADISCORD_south_north_envoys_recent
 	clr_country_flag = ADISCORD_south_shl_offer_declined
 	clr_country_flag = ADISCORD_south_north_offer_declined
 	clear_variable = ADISCORD_south_north_advisers
 	clear_variable = ADISCORD_south_shl_advisers
-}
-
-ADISCORD_south_shift_influence_to_north = {
-	add_to_variable = { var = ADISCORD_south_coalition_influence value = 20 }
-	clamp_variable = { var = ADISCORD_south_coalition_influence min = -100 max = 100 }
 }
 
 # The sponsor may have switched camps or the post may already have been released.
@@ -1683,21 +1957,26 @@ ADISCORD_south_withdraw_advisers = {
 	}
 }
 
+# COUNTRY target. Shahrabad's coalition delegation and the regency's Kadir
+# push: 12 towards Shahrabad through the contest helper.
 ADISCORD_south_shift_influence_to_shl = {
-	add_to_variable = { var = ADISCORD_south_coalition_influence value = -20 }
-	clamp_variable = { var = ADISCORD_south_coalition_influence min = -100 max = 100 }
+	set_temp_variable = { var = ADISCORD_south_push_delta value = 12 }
+	ADISCORD_south_push_influence_shl = yes
 }
 
-# COUNTRY target. ROOT sends the delegation. The cooldown belongs to its camp.
+# COUNTRY target. ROOT is the champion sending the delegation; its strength
+# follows the champion's influence power. The cooldown belongs to its camp.
 ADISCORD_south_gain_coalition_influence = {
 	if = {
-		limit = { ROOT = { ADISCORD_south_map_country_shl = yes } }
-		ADISCORD_south_shift_influence_to_shl = yes
-		set_country_flag = { flag = ADISCORD_south_shl_envoys_recent days = 30 }
+		limit = { ROOT = { tag = SHL } }
+		set_temp_variable = { var = ADISCORD_south_push_delta value = ROOT.ADISCORD_south_envoy_push }
+		ADISCORD_south_push_influence_shl = yes
+		set_country_flag = { flag = ADISCORD_south_shl_envoys_recent days = 56 }
 	}
 	else = {
-		ADISCORD_south_shift_influence_to_north = yes
-		set_country_flag = { flag = ADISCORD_south_north_envoys_recent days = 30 }
+		set_temp_variable = { var = ADISCORD_south_push_delta value = ROOT.ADISCORD_south_envoy_push }
+		ADISCORD_south_push_influence_north = yes
+		set_country_flag = { flag = ADISCORD_south_north_envoys_recent days = 56 }
 	}
 }
 
@@ -1737,11 +2016,21 @@ ADISCORD_south_leave_coalition = {
 }
 
 # COUNTRY target; ROOT is the demanding champion (the focus owner), which
-# becomes FROM of the offer event.
+# becomes FROM of the offer event. The rival's agreed sphere is closed to the
+# demand; a country leaning 40 or more towards the rival is courted instead.
 ADISCORD_south_demand_submission = {
 	if = {
 		limit = {
 			ADISCORD_south_campaign_target_valid = yes
+			ADISCORD_south_closed_to_root_by_spheres = no
+			ADISCORD_south_leans_away_from_root = yes
+		}
+		ADISCORD_south_court_instead_of_demand = yes
+	}
+	else_if = {
+		limit = {
+			ADISCORD_south_campaign_target_valid = yes
+			ADISCORD_south_closed_to_root_by_spheres = no
 			OR = {
 				ROOT = { NOT = { tag = NAM } }
 				NAM_neighbour_sovereignty_recognised = no
@@ -1757,6 +2046,15 @@ ADISCORD_south_demand_annexation = {
 	if = {
 		limit = {
 			ADISCORD_south_campaign_target_valid = yes
+			ADISCORD_south_closed_to_root_by_spheres = no
+			ADISCORD_south_leans_away_from_root = yes
+		}
+		ADISCORD_south_court_instead_of_demand = yes
+	}
+	else_if = {
+		limit = {
+			ADISCORD_south_campaign_target_valid = yes
+			ADISCORD_south_closed_to_root_by_spheres = no
 			OR = {
 				ROOT = { NOT = { tag = NAM } }
 				NAM_neighbour_sovereignty_recognised = no
@@ -1765,6 +2063,18 @@ ADISCORD_south_demand_annexation = {
 		ADISCORD_release_non_participating_minor_optimization = yes
 		set_variable = { var = ADISCORD_south_offer_kind value = 2 }
 		ADISCORD_south_queue_offer = yes
+	}
+}
+
+# COUNTRY target; ROOT is the champion whose demand turned into courting.
+ADISCORD_south_court_instead_of_demand = {
+	set_temp_variable = { var = ADISCORD_south_push_delta value = 10 }
+	if = {
+		limit = { ROOT = { tag = SHL } }
+		ADISCORD_south_push_influence_shl = yes
+	}
+	else = {
+		ADISCORD_south_push_influence_north = yes
 	}
 }
 
@@ -1834,6 +2144,10 @@ ADISCORD_south_accept_offer = {
 			# Subjugation waits one day after the faction exit for the native faction cache.
 			ADISCORD_south_leave_previous_alliance = yes
 			if = {
+				limit = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
+				set_country_flag = ADISCORD_south_protectorate_terms
+			}
+			if = {
 				limit = { FROM = { tag = SHL } }
 				set_country_flag = ADISCORD_south_submits_to_SHL
 			}
@@ -1883,6 +2197,21 @@ ADISCORD_south_refuse_offer = {
 		if = {
 			limit = { is_in_faction = yes }
 			ADISCORD_south_refusal_partners_defend = yes
+		}
+	}
+	# A refused protection never means war; the country turns away from the sender.
+	else_if = {
+		limit = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
+			ADISCORD_south_offer_answer_valid = yes
+		}
+		set_temp_variable = { var = ADISCORD_south_push_delta value = 10 }
+		if = {
+			limit = { FROM = { tag = SHL } }
+			ADISCORD_south_push_influence_north = yes
+		}
+		else = {
+			ADISCORD_south_push_influence_shl = yes
 		}
 	}
 	clear_variable = ADISCORD_south_offer_kind
@@ -1943,8 +2272,14 @@ ADISCORD_south_finalize_submission = {
 				end_wars = no
 				end_civil_wars = no
 			}
+			# Accepted protection always takes the compact charter.
 			if = {
-				limit = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+				limit = {
+					OR = {
+						check_variable = { var = SHL_political_course value = 2 compare = equals }
+						PREV = { has_country_flag = ADISCORD_south_protectorate_terms }
+					}
+				}
 				set_autonomy = {
 					target = PREV
 					autonomy_state = autonomy_SHL_compact_charter
@@ -1969,8 +2304,15 @@ ADISCORD_south_finalize_submission = {
 				end_wars = no
 				end_civil_wars = no
 			}
+			# The council of boards makes every submitted country a company
+			# district; otherwise the subject type follows the post-war mandate,
+			# so it is the same before and after the path's opening focus.
 			if = {
-				limit = { has_completed_focus = NAM_service_state }
+				limit = { has_country_flag = NAM_corp_takeover }
+				PREV = { NAM_wor_federal_district_join = yes }
+			}
+			else_if = {
+				limit = { NAM_prewar_service_mandate = yes }
 				set_autonomy = {
 					target = PREV
 					autonomy_state = autonomy_NAM_namestnik_office
@@ -1980,7 +2322,7 @@ ADISCORD_south_finalize_submission = {
 				}
 			}
 			else_if = {
-				limit = { has_completed_focus = NAM_federal_charter }
+				limit = { NAM_prewar_district_mandate = yes }
 				set_autonomy = {
 					target = PREV
 					autonomy_state = autonomy_NAM_oil_charter
@@ -1990,7 +2332,7 @@ ADISCORD_south_finalize_submission = {
 				}
 			}
 			else_if = {
-				limit = { has_completed_focus = NAM_pragmatic_compact }
+				limit = { NAM_prewar_pragmatic_mandate = yes }
 				set_autonomy = {
 					target = PREV
 					autonomy_state = autonomy_NAM_economic_contract
@@ -2011,6 +2353,7 @@ ADISCORD_south_finalize_submission = {
 	}
 	clr_country_flag = ADISCORD_south_submits_to_SHL
 	clr_country_flag = ADISCORD_south_submits_to_NAM
+	clr_country_flag = ADISCORD_south_protectorate_terms
 	ADISCORD_economy_mark_dirty = yes
 }
 
@@ -2072,6 +2415,709 @@ ADISCORD_south_recall_annexed_envoy = {
 	if = {
 		limit = { check_variable = { var = ADISCORD_south_shl_advisers value = FROM compare = equals } }
 		clear_variable = ADISCORD_south_shl_advisers
+	}
+}
+
+# ----- Influence contest -----
+# Each of the nine regional countries carries the ledger
+# ADISCORD_south_coalition_influence (-100 Shahrabad .. +100 Svetlogorye) and a
+# home lean it drifts back to every 28 days. Champions carry
+# ADISCORD_south_influence_power (floor 10; cap 40 for Svetlogorye, 30 for the
+# others), which sets the strength of their delegations and advisers. Numeric
+# inputs travel in temp variables; every helper does nothing outside the
+# contest window, so a reward row never promises a push that cannot happen.
+
+# GLOBAL, from ADISCORD_south_begin_preparation once per opened contest.
+ADISCORD_south_seed_influence = {
+	set_global_flag = ADISCORD_south_influence_seeded
+	SHL = { ADISCORD_south_seed_champion_power = yes }
+	NAM = { ADISCORD_south_seed_champion_power = yes }
+	EFL = { ADISCORD_south_seed_champion_power = yes }
+	AZH = { ADISCORD_south_seed_champion_power = yes }
+	# A later northern leader starts from the power its predecessor reached.
+	EFL = { ADISCORD_south_inherit_north_power = yes }
+	AZH = { ADISCORD_south_inherit_north_power = yes }
+	EFL = { ADISCORD_south_seed_country = yes }
+	AZH = { ADISCORD_south_seed_country = yes }
+	WEF = { ADISCORD_south_seed_country = yes }
+	KDR = { ADISCORD_south_seed_country = yes }
+	RHM = { ADISCORD_south_seed_country = yes }
+	SDR = { ADISCORD_south_seed_country = yes }
+	MZR = { ADISCORD_south_seed_country = yes }
+	KYZ = { ADISCORD_south_seed_country = yes }
+	GLP = { ADISCORD_south_seed_country = yes }
+}
+
+# COUNTRY champion candidate.
+ADISCORD_south_seed_champion_power = {
+	if = {
+		limit = {
+			exists = yes
+			NOT = { has_variable = ADISCORD_south_influence_power }
+		}
+		set_variable = { var = ADISCORD_south_influence_power value = 10 }
+		ADISCORD_south_refresh_champion_pushes = yes
+	}
+}
+
+# COUNTRY EFL or AZH leading the north after Svetlogorye.
+ADISCORD_south_inherit_north_power = {
+	if = {
+		limit = {
+			ADISCORD_south_declarer_valid = yes
+			ADISCORD_south_champion_viable = yes
+			check_variable = { var = ADISCORD_south_influence_power value = NAM.ADISCORD_south_influence_power compare = less_than }
+		}
+		set_variable = { var = ADISCORD_south_influence_power value = NAM.ADISCORD_south_influence_power }
+		clamp_variable = { var = ADISCORD_south_influence_power min = 10 max = 30 }
+		ADISCORD_south_refresh_champion_pushes = yes
+	}
+}
+
+# COUNTRY regional. The home lean is the geography plus the ties of the day;
+# it is added to any ledger value already there.
+ADISCORD_south_seed_country = {
+	if = {
+		limit = { exists = yes }
+		set_temp_variable = { var = ADISCORD_south_seed_lean value = 0 }
+		if = {
+			limit = {
+				OR = {
+					tag = EFL
+					tag = AZH
+				}
+			}
+			set_temp_variable = { var = ADISCORD_south_seed_lean value = -15 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					tag = WEF
+					tag = KYZ
+					tag = MZR
+				}
+			}
+			set_temp_variable = { var = ADISCORD_south_seed_lean value = 10 }
+		}
+		else_if = {
+			limit = { tag = KDR }
+			set_temp_variable = { var = ADISCORD_south_seed_lean value = -10 }
+		}
+		else_if = {
+			limit = { tag = GLP }
+			set_temp_variable = { var = ADISCORD_south_seed_lean value = -5 }
+		}
+		if = {
+			limit = { has_country_flag = NAM_oil_client }
+			add_to_temp_variable = { var = ADISCORD_south_seed_lean value = 10 }
+		}
+		if = {
+			limit = { has_country_flag = ADISCORD_south_indebted_to_SHL }
+			add_to_temp_variable = { var = ADISCORD_south_seed_lean value = -15 }
+			set_country_flag = ADISCORD_south_seed_debt
+		}
+		if = {
+			limit = { has_country_flag = SHL_embassy }
+			add_to_temp_variable = { var = ADISCORD_south_seed_lean value = -10 }
+		}
+		if = {
+			limit = { is_in_faction_with = SHL }
+			add_to_temp_variable = { var = ADISCORD_south_seed_lean value = -30 }
+		}
+		if = {
+			limit = { has_war_with = SHL }
+			add_to_temp_variable = { var = ADISCORD_south_seed_lean value = 20 }
+		}
+		set_variable = { var = ADISCORD_south_home_lean value = ADISCORD_south_seed_lean }
+		clamp_variable = { var = ADISCORD_south_home_lean min = -100 max = 100 }
+		add_to_variable = { var = ADISCORD_south_coalition_influence value = ADISCORD_south_seed_lean }
+		clamp_variable = { var = ADISCORD_south_coalition_influence min = -100 max = 100 }
+		ADISCORD_south_refresh_key_owner = yes
+	}
+}
+
+# COUNTRY regional.
+ADISCORD_south_refresh_key_owner = {
+	if = {
+		limit = { ADISCORD_south_owns_key_state = yes }
+		set_country_flag = ADISCORD_south_key_owner
+	}
+	else = {
+		clr_country_flag = ADISCORD_south_key_owner
+	}
+}
+
+# COUNTRY target; temp ADISCORD_south_push_delta > 0. Moves the ledger towards
+# Svetlogorye; Shahrabad's agreed sphere does not move.
+ADISCORD_south_push_influence_north = {
+	if = {
+		limit = {
+			ADISCORD_south_in_contest = yes
+			ADISCORD_south_in_shl_sphere = no
+			check_variable = { var = ADISCORD_south_push_delta value = 0 compare = greater_than }
+		}
+		set_temp_variable = { var = ADISCORD_south_lean_before value = ADISCORD_south_coalition_influence }
+		add_to_variable = { var = ADISCORD_south_coalition_influence value = ADISCORD_south_push_delta }
+		clamp_variable = { var = ADISCORD_south_coalition_influence min = -100 max = 100 }
+		ADISCORD_south_note_threshold_north = yes
+	}
+}
+
+# COUNTRY target; temp ADISCORD_south_push_delta > 0. Moves the ledger towards
+# Shahrabad; Svetlogorye's agreed sphere does not move.
+ADISCORD_south_push_influence_shl = {
+	if = {
+		limit = {
+			ADISCORD_south_in_contest = yes
+			ADISCORD_south_in_nam_sphere = no
+			check_variable = { var = ADISCORD_south_push_delta value = 0 compare = greater_than }
+		}
+		set_temp_variable = { var = ADISCORD_south_lean_before value = ADISCORD_south_coalition_influence }
+		subtract_from_variable = { var = ADISCORD_south_coalition_influence value = ADISCORD_south_push_delta }
+		clamp_variable = { var = ADISCORD_south_coalition_influence min = -100 max = 100 }
+		ADISCORD_south_note_threshold_shl = yes
+	}
+}
+
+# COUNTRY target after a push. A human champion hears when 40 or 60 is
+# crossed in its direction.
+ADISCORD_south_note_threshold_north = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					check_variable = { var = ADISCORD_south_lean_before value = 40 compare = less_than }
+					ADISCORD_south_lean_north_40 = yes
+				}
+				AND = {
+					check_variable = { var = ADISCORD_south_lean_before value = 60 compare = less_than }
+					ADISCORD_south_lean_north_60 = yes
+				}
+			}
+		}
+		save_event_target_as = ADISCORD_south_threshold_country
+		NAM = { ADISCORD_south_notify_champion = yes }
+		EFL = { ADISCORD_south_notify_champion = yes }
+		AZH = { ADISCORD_south_notify_champion = yes }
+	}
+}
+
+ADISCORD_south_note_threshold_shl = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					check_variable = { var = ADISCORD_south_lean_before value = -40 compare = greater_than }
+					ADISCORD_south_lean_shl_40 = yes
+				}
+				AND = {
+					check_variable = { var = ADISCORD_south_lean_before value = -60 compare = greater_than }
+					ADISCORD_south_lean_shl_60 = yes
+				}
+			}
+		}
+		save_event_target_as = ADISCORD_south_threshold_country
+		SHL = { ADISCORD_south_notify_champion = yes }
+	}
+}
+
+# COUNTRY champion candidate.
+ADISCORD_south_notify_champion = {
+	if = {
+		limit = {
+			is_ai = no
+			ADISCORD_south_is_contest_champion = yes
+		}
+		country_event = { id = ADISCORD_south.74 hours = 1 }
+	}
+}
+
+# COUNTRY target; temp ADISCORD_south_home_delta (+ Svetlogorye).
+ADISCORD_south_shift_home_lean = {
+	if = {
+		limit = { ADISCORD_south_in_contest = yes }
+		add_to_variable = { var = ADISCORD_south_home_lean value = ADISCORD_south_home_delta }
+		clamp_variable = { var = ADISCORD_south_home_lean min = -100 max = 100 }
+	}
+}
+
+# COUNTRY target. Buying out Shahrabad's credit also returns the -15 that
+# the seed counted for it.
+ADISCORD_south_redeem_shl_debt = {
+	if = {
+		limit = { has_country_flag = ADISCORD_south_indebted_to_SHL }
+		clr_country_flag = ADISCORD_south_indebted_to_SHL
+	}
+	if = {
+		limit = { has_country_flag = ADISCORD_south_seed_debt }
+		clr_country_flag = ADISCORD_south_seed_debt
+		add_to_variable = { var = ADISCORD_south_home_lean value = 15 }
+		clamp_variable = { var = ADISCORD_south_home_lean min = -100 max = 100 }
+	}
+}
+
+# COUNTRY champion; temp ADISCORD_south_power_delta, may be negative. Callable
+# as SHL = { ... } or NAM = { ... } from any scope.
+ADISCORD_south_add_influence_power = {
+	if = {
+		limit = {
+			exists = yes
+			ADISCORD_south_contest_open = yes
+		}
+		if = {
+			limit = { NOT = { has_variable = ADISCORD_south_influence_power } }
+			set_variable = { var = ADISCORD_south_influence_power value = 10 }
+		}
+		add_to_variable = { var = ADISCORD_south_influence_power value = ADISCORD_south_power_delta }
+		if = {
+			limit = { tag = NAM }
+			clamp_variable = { var = ADISCORD_south_influence_power min = 10 max = 40 }
+		}
+		else = {
+			clamp_variable = { var = ADISCORD_south_influence_power min = 10 max = 30 }
+		}
+		ADISCORD_south_refresh_champion_pushes = yes
+	}
+}
+
+# COUNTRY champion. Delegation 5 + power / 2, advisers power / 2.
+ADISCORD_south_refresh_champion_pushes = {
+	set_variable = { var = ADISCORD_south_adviser_push value = ADISCORD_south_influence_power }
+	divide_variable = { var = ADISCORD_south_adviser_push value = 2 }
+	round_variable = ADISCORD_south_adviser_push
+	set_variable = { var = ADISCORD_south_envoy_push value = ADISCORD_south_adviser_push }
+	add_to_variable = { var = ADISCORD_south_envoy_push value = 5 }
+}
+
+# COUNTRY target; temp ADISCORD_south_tie_value (1-3). The largest tie stays.
+ADISCORD_south_set_north_tie = {
+	if = {
+		limit = {
+			ADISCORD_south_in_contest = yes
+			NOT = { check_variable = { var = ADISCORD_south_north_tie value = ADISCORD_south_tie_value compare = greater_than_or_equals } }
+		}
+		set_variable = { var = ADISCORD_south_north_tie value = ADISCORD_south_tie_value }
+	}
+}
+
+# GLOBAL lists over the nine fixed tags. Temp ADISCORD_south_push_delta or
+# ADISCORD_south_tie_value as in the single-country helpers.
+ADISCORD_south_push_north_all = {
+	EFL = { ADISCORD_south_push_influence_north = yes }
+	AZH = { ADISCORD_south_push_influence_north = yes }
+	WEF = { ADISCORD_south_push_influence_north = yes }
+	KDR = { ADISCORD_south_push_influence_north = yes }
+	RHM = { ADISCORD_south_push_influence_north = yes }
+	SDR = { ADISCORD_south_push_influence_north = yes }
+	MZR = { ADISCORD_south_push_influence_north = yes }
+	KYZ = { ADISCORD_south_push_influence_north = yes }
+	GLP = { ADISCORD_south_push_influence_north = yes }
+}
+
+# Countries leaning 20 or more towards Svetlogorye.
+ADISCORD_south_push_north_leaning_20 = {
+	EFL = { ADISCORD_south_push_north_if_leaning_20 = yes }
+	AZH = { ADISCORD_south_push_north_if_leaning_20 = yes }
+	WEF = { ADISCORD_south_push_north_if_leaning_20 = yes }
+	KDR = { ADISCORD_south_push_north_if_leaning_20 = yes }
+	RHM = { ADISCORD_south_push_north_if_leaning_20 = yes }
+	SDR = { ADISCORD_south_push_north_if_leaning_20 = yes }
+	MZR = { ADISCORD_south_push_north_if_leaning_20 = yes }
+	KYZ = { ADISCORD_south_push_north_if_leaning_20 = yes }
+	GLP = { ADISCORD_south_push_north_if_leaning_20 = yes }
+}
+
+ADISCORD_south_push_north_if_leaning_20 = {
+	if = {
+		limit = { ADISCORD_south_lean_north_20 = yes }
+		ADISCORD_south_push_influence_north = yes
+	}
+}
+
+# Countries leaning towards Shahrabad by less than 60.
+ADISCORD_south_push_north_shl_band = {
+	EFL = { ADISCORD_south_push_north_if_shl_band = yes }
+	AZH = { ADISCORD_south_push_north_if_shl_band = yes }
+	WEF = { ADISCORD_south_push_north_if_shl_band = yes }
+	KDR = { ADISCORD_south_push_north_if_shl_band = yes }
+	RHM = { ADISCORD_south_push_north_if_shl_band = yes }
+	SDR = { ADISCORD_south_push_north_if_shl_band = yes }
+	MZR = { ADISCORD_south_push_north_if_shl_band = yes }
+	KYZ = { ADISCORD_south_push_north_if_shl_band = yes }
+	GLP = { ADISCORD_south_push_north_if_shl_band = yes }
+}
+
+ADISCORD_south_push_north_if_shl_band = {
+	if = {
+		limit = {
+			check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than }
+			check_variable = { var = ADISCORD_south_coalition_influence value = -59 compare = greater_than_or_equals }
+		}
+		ADISCORD_south_push_influence_north = yes
+	}
+}
+
+# COUNTRY target leaning towards Shahrabad by any amount.
+ADISCORD_south_push_north_if_leaning_shl = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than } }
+		ADISCORD_south_push_influence_north = yes
+	}
+}
+
+# Countries leaning 40 or more towards Svetlogorye; with
+# ADISCORD_south_guarantee_north set they also receive the league's guarantee.
+ADISCORD_south_tie_north_leaning_40 = {
+	EFL = { ADISCORD_south_tie_north_if_leaning_40 = yes }
+	AZH = { ADISCORD_south_tie_north_if_leaning_40 = yes }
+	WEF = { ADISCORD_south_tie_north_if_leaning_40 = yes }
+	KDR = { ADISCORD_south_tie_north_if_leaning_40 = yes }
+	RHM = { ADISCORD_south_tie_north_if_leaning_40 = yes }
+	SDR = { ADISCORD_south_tie_north_if_leaning_40 = yes }
+	MZR = { ADISCORD_south_tie_north_if_leaning_40 = yes }
+	KYZ = { ADISCORD_south_tie_north_if_leaning_40 = yes }
+	GLP = { ADISCORD_south_tie_north_if_leaning_40 = yes }
+}
+
+ADISCORD_south_tie_north_if_leaning_40 = {
+	if = {
+		limit = {
+			ADISCORD_south_in_contest = yes
+			ADISCORD_south_lean_north_40 = yes
+		}
+		ADISCORD_south_set_north_tie = yes
+		if = {
+			limit = { check_variable = { var = ADISCORD_south_guarantee_north value = 1 compare = equals } }
+			set_country_flag = ADISCORD_south_guaranteed_by_north
+		}
+	}
+}
+
+# COUNTRY SHL, once per 28-day furnace cycle while the contest is open. One
+# pass over the nine fixed tags; no world scan and no on_action of its own.
+ADISCORD_south_contest_cycle = {
+	if = {
+		limit = { ADISCORD_south_contest_open = yes }
+		if = {
+			limit = { has_global_flag = ADISCORD_south_contest_even_cycle }
+			clr_global_flag = ADISCORD_south_contest_even_cycle
+			SHL = {
+				set_temp_variable = { var = ADISCORD_south_power_delta value = 1 }
+				ADISCORD_south_add_influence_power = yes
+			}
+		}
+		else = {
+			set_global_flag = ADISCORD_south_contest_even_cycle
+		}
+		EFL = { ADISCORD_south_contest_drift = yes }
+		AZH = { ADISCORD_south_contest_drift = yes }
+		WEF = { ADISCORD_south_contest_drift = yes }
+		KDR = { ADISCORD_south_contest_drift = yes }
+		RHM = { ADISCORD_south_contest_drift = yes }
+		SDR = { ADISCORD_south_contest_drift = yes }
+		MZR = { ADISCORD_south_contest_drift = yes }
+		KYZ = { ADISCORD_south_contest_drift = yes }
+		GLP = { ADISCORD_south_contest_drift = yes }
+	}
+}
+
+# COUNTRY regional. The lean returns 3 towards home (snapping within 3), then
+# the standing ties push, then trade returns are paid.
+ADISCORD_south_contest_drift = {
+	if = {
+		limit = { has_war_with = NAM }
+		clear_variable = ADISCORD_south_north_tie
+	}
+	if = {
+		limit = { ADISCORD_south_in_contest = yes }
+		set_temp_variable = { var = ADISCORD_south_drift_step value = ADISCORD_south_home_lean }
+		subtract_from_temp_variable = { var = ADISCORD_south_drift_step value = ADISCORD_south_coalition_influence }
+		clamp_temp_variable = { var = ADISCORD_south_drift_step min = -3 max = 3 }
+		add_to_variable = { var = ADISCORD_south_coalition_influence value = ADISCORD_south_drift_step }
+		set_temp_variable = { var = ADISCORD_south_tie_sum value = ADISCORD_south_north_tie }
+		# Svetlogorye's writ holds tie 3 under the military governors; its
+		# contract holds tie 3 at 60 or more under the contract union.
+		if = {
+			limit = {
+				check_variable = { var = ADISCORD_south_tool_kind value = 1 compare = equals }
+				NAM = { has_completed_focus = NAM_pw_military_governors }
+			}
+			set_temp_variable = { var = ADISCORD_south_tie_sum value = 3 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_south_tool_kind value = 2 compare = equals }
+				ADISCORD_south_lean_north_60 = yes
+				NAM = { has_completed_focus = NAM_prag_contract_union }
+			}
+			set_temp_variable = { var = ADISCORD_south_tie_sum value = 3 }
+		}
+		if = {
+			limit = { has_country_flag = NAM_oil_client }
+			add_to_temp_variable = { var = ADISCORD_south_tie_sum value = 2 }
+		}
+		if = {
+			limit = { has_country_flag = ADISCORD_south_indebted_to_SHL }
+			add_to_temp_variable = { var = ADISCORD_south_tie_sum value = -2 }
+		}
+		if = {
+			limit = { has_country_flag = SHL_embassy }
+			add_to_temp_variable = { var = ADISCORD_south_tie_sum value = -2 }
+		}
+		if = {
+			limit = { is_in_faction_with = NAM }
+			add_to_temp_variable = { var = ADISCORD_south_tie_sum value = 3 }
+		}
+		if = {
+			limit = { is_in_faction_with = SHL }
+			add_to_temp_variable = { var = ADISCORD_south_tie_sum value = -3 }
+		}
+		if = {
+			limit = { check_variable = { var = ADISCORD_south_tie_sum value = 0 compare = greater_than } }
+			set_temp_variable = { var = ADISCORD_south_push_delta value = ADISCORD_south_tie_sum }
+			ADISCORD_south_push_influence_north = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_tie_sum value = 0 compare = less_than } }
+			set_temp_variable = { var = ADISCORD_south_push_delta value = ADISCORD_south_tie_sum }
+			multiply_temp_variable = { var = ADISCORD_south_push_delta value = -1 }
+			ADISCORD_south_push_influence_shl = yes
+		}
+		# A held economic contract pays 20 (40 under the trade coalition); the
+		# customs clearinghouse earns 15 from every country leaning to Shahrabad.
+		if = {
+			limit = {
+				check_variable = { var = ADISCORD_south_tool_kind value = 2 compare = equals }
+				NAM = { exists = yes }
+			}
+			NAM = {
+				if = {
+					limit = { has_completed_focus = NAM_south_trade_coalition }
+					set_temp_variable = { var = NAM_treasury_amount value = 40 }
+				}
+				else = {
+					set_temp_variable = { var = NAM_treasury_amount value = 20 }
+				}
+				NAM_add_treasury = yes
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than }
+				NAM = {
+					exists = yes
+					has_completed_focus = NAM_customs_clearinghouse
+				}
+			}
+			NAM = {
+				set_temp_variable = { var = NAM_treasury_amount value = 15 }
+				NAM_add_treasury = yes
+			}
+		}
+		ADISCORD_south_refresh_key_owner = yes
+	}
+}
+
+# COUNTRY NAM, from the spheres focus. Shahrabad answers in ADISCORD_south.72
+# with FROM = NAM.
+ADISCORD_south_offer_spheres = {
+	SHL = { country_event = { id = ADISCORD_south.72 hours = 6 } }
+}
+
+# GLOBAL. Lean 0 or more is Svetlogorye's sphere, below 0 Shahrabad's. Until
+# the war for the South neither side's helpers move the other's sphere.
+ADISCORD_south_accept_spheres = {
+	set_global_flag = ADISCORD_south_spheres_agreed
+	EFL = { ADISCORD_south_assign_sphere = yes }
+	AZH = { ADISCORD_south_assign_sphere = yes }
+	WEF = { ADISCORD_south_assign_sphere = yes }
+	KDR = { ADISCORD_south_assign_sphere = yes }
+	RHM = { ADISCORD_south_assign_sphere = yes }
+	SDR = { ADISCORD_south_assign_sphere = yes }
+	MZR = { ADISCORD_south_assign_sphere = yes }
+	KYZ = { ADISCORD_south_assign_sphere = yes }
+	GLP = { ADISCORD_south_assign_sphere = yes }
+}
+
+ADISCORD_south_assign_sphere = {
+	if = {
+		limit = { ADISCORD_south_in_contest = yes }
+		if = {
+			limit = { check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than_or_equals } }
+			set_variable = { var = ADISCORD_south_sphere value = 2 }
+		}
+		else = {
+			set_variable = { var = ADISCORD_south_sphere value = 1 }
+		}
+	}
+}
+
+# GLOBAL. A refused division turns the South towards Svetlogorye.
+ADISCORD_south_refuse_spheres = {
+	set_temp_variable = { var = ADISCORD_south_push_delta value = 5 }
+	ADISCORD_south_push_north_all = yes
+	NAM = { add_war_support = 0.05 }
+}
+
+# GLOBAL, from ADISCORD_south.75 one day after the war starts.
+ADISCORD_south_close_unchosen_contests = {
+	EFL = { ADISCORD_south_close_unchosen_contest = yes }
+	AZH = { ADISCORD_south_close_unchosen_contest = yes }
+	WEF = { ADISCORD_south_close_unchosen_contest = yes }
+	KDR = { ADISCORD_south_close_unchosen_contest = yes }
+	RHM = { ADISCORD_south_close_unchosen_contest = yes }
+	SDR = { ADISCORD_south_close_unchosen_contest = yes }
+	MZR = { ADISCORD_south_close_unchosen_contest = yes }
+	KYZ = { ADISCORD_south_close_unchosen_contest = yes }
+	GLP = { ADISCORD_south_close_unchosen_contest = yes }
+	clr_global_flag = ADISCORD_south_influence_seeded
+	clr_global_flag = ADISCORD_south_spheres_agreed
+}
+
+ADISCORD_south_close_unchosen_contest = {
+	if = {
+		limit = { NOT = { has_variable = ADISCORD_south_side } }
+		ADISCORD_south_close_coalition_diplomacy = yes
+	}
+}
+
+# GLOBAL, from the council session's completion.
+ADISCORD_south_council_session_push = {
+	set_temp_variable = { var = ADISCORD_south_push_delta value = 6 }
+	ADISCORD_south_push_north_leaning_20 = yes
+}
+
+# ----- Svetlogorye's path tools -----
+# ADISCORD_south_tool_escrow on the target holds a paid offer until its
+# answer (1 writ, 2 economic contract, 3 community charter);
+# ADISCORD_south_tool_kind records the accepted tool. Political power is never
+# returned.
+
+# COUNTRY target.
+ADISCORD_south_refund_tool_escrow = {
+	if = {
+		limit = { has_variable = ADISCORD_south_tool_escrow }
+		if = {
+			limit = {
+				check_variable = { var = ADISCORD_south_tool_escrow value = 1 compare = equals }
+				NAM = { exists = yes }
+			}
+			NAM = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 3000
+					producer = NAM
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_south_tool_escrow value = 2 compare = equals }
+				NAM = { exists = yes }
+			}
+			NAM = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_south_tool_escrow value = 3 compare = equals }
+				NAM = { exists = yes }
+			}
+			NAM = { add_fuel = 10000 }
+		}
+		clear_variable = ADISCORD_south_tool_escrow
+	}
+}
+
+# COUNTRY target, ADISCORD_south.68 accepted. Delivers the escrow once.
+ADISCORD_south_deliver_tool = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_tool_escrow value = 1 compare = equals } }
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 3000
+			producer = NAM
+		}
+		set_temp_variable = { var = ADISCORD_south_push_delta value = 8 }
+		ADISCORD_south_push_influence_north = yes
+		NAM = {
+			if = {
+				limit = { has_power_balance = { id = NAM_postwar_future_bop } }
+				add_power_balance_value = { id = NAM_postwar_future_bop value = -0.05 }
+			}
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_tool_escrow value = 2 compare = equals } }
+		add_stability = 0.05
+		if = {
+			limit = { has_variable = ADISCORD_economy_initialized }
+			add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_south_tool_escrow value = 3 compare = equals } }
+		add_fuel = 10000
+		NAM = {
+			add_to_variable = { var = NAM_grp_dist_support value = 4 }
+			NAM_groups_refresh = yes
+		}
+	}
+	if = {
+		limit = { has_variable = ADISCORD_south_tool_escrow }
+		set_variable = { var = ADISCORD_south_tool_kind value = ADISCORD_south_tool_escrow }
+		clear_variable = ADISCORD_south_tool_escrow
+		set_temp_variable = { var = ADISCORD_south_tie_value value = 2 }
+		ADISCORD_south_set_north_tie = yes
+	}
+}
+
+# COUNTRY target, ADISCORD_south.68 refused.
+ADISCORD_south_refuse_tool = {
+	ADISCORD_south_refund_tool_escrow = yes
+	set_temp_variable = { var = ADISCORD_south_push_delta value = 5 }
+	ADISCORD_south_push_influence_shl = yes
+	set_country_flag = { flag = ADISCORD_south_tool_refused days = 56 }
+}
+
+# ----- Shahrabad's limited wars and the appeal -----
+
+# COUNTRY SHL; temp ADISCORD_south_strike_target (1 Keizan, 2 Veyr). The
+# limited-war starters call this when ADISCORD_south_shl_strike_open fails for
+# the target; the war does not start. A first block sends the appeal
+# (ADISCORD_south.70); a block by Svetlogorye's agreed sphere re-checks the
+# war after 90 days (ADISCORD_south.76). A pending or answered appeal already
+# owns its callback; the target's ADISCORD_south_strike_recheck_pending keeps
+# the sphere re-check single until .76 clears it.
+ADISCORD_south_shl_strike_or_appeal = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_south_strike_target value = 1 compare = equals } }
+		KYZ = { save_event_target_as = ADISCORD_south_strike_country }
+	}
+	else = {
+		GLP = { save_event_target_as = ADISCORD_south_strike_country }
+	}
+	event_target:ADISCORD_south_strike_country = {
+		if = {
+			limit = {
+				ADISCORD_south_in_nam_sphere = no
+				NOT = { has_country_flag = ADISCORD_south_appeal_open }
+				NOT = { has_country_flag = ADISCORD_south_appeal_answered }
+			}
+			set_country_flag = ADISCORD_south_appeal_open
+			NAM = { country_event = { id = ADISCORD_south.70 hours = 6 } }
+		}
+		else_if = {
+			limit = {
+				ADISCORD_south_in_nam_sphere = yes
+				NOT = { has_country_flag = ADISCORD_south_strike_recheck_pending }
+			}
+			set_country_flag = ADISCORD_south_strike_recheck_pending
+			SHL = { country_event = { id = ADISCORD_south.76 days = 90 } }
+		}
 	}
 }
 
@@ -2343,8 +3389,9 @@ ADISCORD_south_recheck_held_refusal = {
 
 # ----- Commune underground -----
 
-# GLOBAL. Called at the final war start. A signed Svetlogorsk district compact
-# leaves the underground without support; half of the delivered rifles return.
+# GLOBAL. Called at the final war start. A signed Svetlogorsk district compact,
+# or the Directory's elected home districts, leaves the underground without
+# support; half of the delivered rifles return.
 ADISCORD_south_raise_oil_uprising = {
 	if = {
 		limit = {
@@ -2359,7 +3406,14 @@ ADISCORD_south_raise_oil_uprising = {
 		SHL = { clr_country_flag = ADISCORD_south_underground_armed }
 		# The Weber contact's early rifles follow the main delivery on both paths.
 		if = {
-			limit = { NAM = { has_country_flag = NAM_district_compact } }
+			limit = {
+				NAM = {
+					OR = {
+						has_country_flag = NAM_district_compact
+						has_completed_focus = NAM_mdr_home_districts
+					}
+				}
+			}
 			SHL = {
 				add_equipment_to_stockpile = { type = infantry_equipment amount = 4500 producer = SHL }
 				if = {
@@ -2437,23 +3491,6 @@ ADISCORD_south_raid_north_fuel = {
 	}
 }
 
-# COUNTRY target, ROOT NAM. Refusal of this contract never declares a war.
-ADISCORD_south_offer_economic_contract = {
-	if = {
-		limit = {
-			ADISCORD_south_campaign_target_valid = yes
-			NAM_neighbour_sovereignty_recognised = no
-			ROOT = {
-				tag = NAM
-				has_completed_focus = NAM_pragmatic_compact
-			}
-		}
-		ADISCORD_release_non_participating_minor_optimization = yes
-		set_variable = { var = ADISCORD_south_offer_kind value = 4 }
-		ADISCORD_south_queue_offer = yes
-	}
-}
-
 # ----- Home front strain -----
 # ADISCORD_south_war_strain (0-100) belongs to each champion. The furnace cycle
 # raises it; ADISCORD_south_war_strain_dynamic reads the derived field variables.
@@ -2496,8 +3533,8 @@ ADISCORD_south_strain_cycle = {
 }
 
 # COUNTRY. +3 per cycle and +2 for each own key state held by the enemy side;
-# Shahrabad's ration cards and Svetlogorye's district compact take one point
-# off the base.
+# Shahrabad's ration cards and Svetlogorye's district compact or northern
+# charter take one point off the base.
 # A hold period that has ended starts again with the cycle.
 ADISCORD_south_strain_cycle_member = {
 	if = {
@@ -2520,6 +3557,10 @@ ADISCORD_south_strain_cycle_member = {
 					AND = {
 						tag = NAM
 						has_completed_focus = NAM_sw_district_compact_at_war
+					}
+					AND = {
+						tag = NAM
+						has_completed_focus = NAM_mdr_northern_charter
 					}
 				}
 			}

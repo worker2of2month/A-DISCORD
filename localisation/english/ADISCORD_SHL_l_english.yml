@@ -792,6 +792,7 @@
  SHL_ultimatum_veyr_desc: "Veyr's chamber has received a demand to abolish the levy. Our envoys await a reply while headquarters studies the roads to the mines."
  SHL_ultimatum_veyr_tt: "§RShahrabad declares war on Veyr§! to take Noran and Kassen, and after \"Key to the Sea\" also Tirva and the Veyr District. Veyr receives 3 prismatic guard divisions. After 270 days without capitulation an armistice follows. The attack gives Veyr grounds to join Keyzan until the grievance is settled."
  SHL_ultimatum_veyr_ready_tt: "The Veyr duty applies, Shahrabad and Veyr are at peace, Veyr holds Noran or Kassen"
+ SHL_ultimatum_veyr_not_deferred_tt: "Veyr is not awaiting Svetlogorye's answer to the last ultimatum, and the deferred check of the war with it has passed"
  SHL_keizan_deadline: "Keyzan's Ultimatum"
  SHL_keizan_deadline_desc: "The assembly of irrigation communities demands an answer. Armed detachments are seen increasingly often on the roads from Tabar."
  SHL_keizan_deadline_timeout_tt: "§RKeyzan declares war over the Zarkhan District§! unless it is fighting elsewhere. Otherwise the demand is postponed for 4 cycles. A neighbour that signed the border pact joins Keyzan. [SHLGetKeizanFlankStatus]"

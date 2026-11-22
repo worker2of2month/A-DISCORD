@@ -17,24 +17,27 @@ focus_tree = {
 	# Loaded by the victory settlement. The pre-war tree is shared history, so
 	# its completed focuses remain readable through has_completed_focus.
 
+	# Shared lanes come first: every lane card anchors on the trunk, and the mandate
+	# variants at the inner lane ends anchor on influence and depot cards.
 # @include NAM/postwar/government.txt#government
+# @include NAM/postwar/armed_forces.txt#armed_forces
+# @include NAM/postwar/economy.txt#economy
+# @include NAM/postwar/influence.txt#influence
+# @include NAM/postwar/depots.txt#depots
+
 # @include NAM/postwar/etatist.txt#etatist_ladder
-# @include NAM/postwar/government.txt#government_border
 # @include NAM/postwar/districts.txt#districts_charter
 # @include NAM/postwar/etatist.txt#etatist_plan
 # @include NAM/postwar/districts.txt#districts_services
 # @include NAM/postwar/pragmatic.txt#pragmatic_compact
+# @include NAM/postwar/pragmatic.txt#pragmatic_south
 # @include NAM/postwar/etatist.txt#etatist_works
 # @include NAM/postwar/pragmatic.txt#pragmatic_industry
 # @include NAM/postwar/districts.txt#districts_municipal
 # @include NAM/postwar/etatist.txt#etatist_constitution
-
-# @include NAM/postwar/government.txt#government_civil_services
 # @include NAM/postwar/districts.txt#districts_cooperatives
 
-# @include NAM/postwar/pragmatic.txt#pragmatic_freight
-
-# @include NAM/postwar/government.txt#government_neighbours
-# @include NAM/postwar/armed_forces.txt#armed_forces
-# @include NAM/postwar/economy.txt#economy
+# @include NAM/postwar/etatist.txt#etatist_lane_ends
+# @include NAM/postwar/pragmatic.txt#pragmatic_lane_ends
+# @include NAM/postwar/districts.txt#districts_lane_ends
 }

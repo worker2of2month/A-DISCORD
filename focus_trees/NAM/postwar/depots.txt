@@ -1,0 +1,753 @@
+# @section depots
+	# Depot lane: the post-war dispute over the private tank farms. Board rows go
+	# through the NAM_depot_* helpers, which act in the pending and open states
+	# and do nothing once the board has ended. The lane end at 31,8 is drawn by
+	# the three mandate variants in the path files.
+	focus = {
+		id = NAM_depot_inquiry
+		relative_position_id = NAM_law_after_war
+		x = 10
+		y = 1
+		icon = GFX_focus_NAM_depot_inquiry
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_law_after_war }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_seeded_tt
+				NAM_depot_board_seeded = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_concessions_settled_tt
+				has_country_flag = NAM_depot_concessions_settled
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 100
+			add_fuel = 35000
+			custom_effect_tooltip = NAM_depot_inquiry_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_inquiry_tt
+			hidden_effect = {
+				NAM_depot_board_open_case = yes
+				set_temp_variable = { var = NAM_depot_push_delta value = -15 }
+				700 = { NAM_depot_push_site = yes }
+				add_to_variable = { var = NAM_grp_oil_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.390 days = 1 }
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_depot_double_invoices
+		relative_position_id = NAM_depot_inquiry
+		x = -2
+		y = 1
+		icon = GFX_focus_NAM_through_waybill
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_depot_inquiry }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			custom_effect_tooltip = NAM_depot_double_invoices_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_double_invoices_tt
+			hidden_effect = {
+				NAM_depot_raise_front_court = yes
+				set_temp_variable = { var = NAM_depot_evidence_delta value = 3 }
+				NAM_depot_add_evidence = yes
+				set_temp_variable = { var = NAM_depot_push_delta value = -12 }
+				NAM_depot_push_target = yes
+				set_temp_variable = { var = NAM_depot_funds_delta value = -10 }
+				NAM_depot_change_owner_funds = yes
+				add_to_variable = { var = NAM_grp_nam_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_depot_boiler_houses
+		relative_position_id = NAM_depot_inquiry
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_pw_fuel_reservoirs
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_depot_inquiry }
+		mutually_exclusive = { focus = NAM_depot_dispatchers_strike }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.03
+			custom_effect_tooltip = NAM_depot_boiler_houses_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_boiler_houses_tt
+			hidden_effect = {
+				# Read by NAM_depot_owner_move_lockout until the board closes.
+				set_country_flag = NAM_depot_towns_direct
+				set_temp_variable = { var = NAM_depot_push_delta value = -8 }
+				NAM_depot_push_target = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				add_to_variable = { var = NAM_grp_trade_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 3
+				NAM_prewar_district_mandate = yes
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_depot_dispatchers_strike
+		relative_position_id = NAM_depot_inquiry
+		x = 3
+		y = 1
+		icon = GFX_focus_NAM_pw_grid_dispatch
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_depot_inquiry }
+		mutually_exclusive = { focus = NAM_depot_boiler_houses }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 35
+			custom_effect_tooltip = NAM_depot_dispatchers_strike_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_dispatchers_strike_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_depot_funds_delta value = -15 }
+				NAM_depot_change_owner_funds = yes
+				set_temp_variable = { var = NAM_depot_push_delta value = -8 }
+				700 = { NAM_depot_push_site = yes }
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				add_to_variable = { var = NAM_grp_trade_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 3
+				OR = {
+					NAM_prewar_service_mandate = yes
+					NAM_prewar_pragmatic_mandate = yes
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_depot_audit
+		relative_position_id = NAM_depot_double_invoices
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_pw_war_accounts
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_depot_double_invoices }
+		mutually_exclusive = { focus = NAM_depot_export_ban }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_depot_audit_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_audit_tt
+			hidden_effect = {
+				NAM_depot_raise_front_buyback = yes
+				set_temp_variable = { var = NAM_depot_funds_delta value = -15 }
+				NAM_depot_change_owner_funds = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				add_to_variable = { var = NAM_grp_trade_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 3
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_depot_export_ban
+		relative_position_id = NAM_depot_double_invoices
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_pw_labour_inspection
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_depot_double_invoices }
+		mutually_exclusive = { focus = NAM_depot_audit }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 35
+			custom_effect_tooltip = NAM_depot_export_ban_reward_tt
+			hidden_effect = {
+				# Removes the sale from the owners' moves until the board closes.
+				set_country_flag = NAM_depot_sale_banned
+				set_temp_variable = { var = NAM_depot_evidence_delta value = 2 }
+				NAM_depot_add_evidence = yes
+				set_temp_variable = { var = NAM_depot_push_delta value = -8 }
+				NAM_depot_push_target = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 3
+				OR = {
+					NAM_prewar_service_mandate = yes
+					NAM_prewar_district_mandate = yes
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_depot_town_receipts
+		relative_position_id = NAM_depot_boiler_houses
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_pw_civil_payroll
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_depot_boiler_houses
+			focus = NAM_depot_double_invoices
+		}
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_depot_town_receipts_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_town_receipts_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_depot_evidence_delta value = 2 }
+				NAM_depot_add_evidence = yes
+				set_temp_variable = { var = NAM_depot_push_delta value = -8 }
+				NAM_depot_push_target = yes
+				set_temp_variable = { var = NAM_treasury_amount value = 150 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				add_to_variable = { var = NAM_grp_nam_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_depot_rail_crews
+		relative_position_id = NAM_depot_dispatchers_strike
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_pw_transport_maintenance
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_depot_dispatchers_strike }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 120
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_depot_rail_crews_reward_tt
+			hidden_effect = {
+				# Halves the lockout weight and frees the first answer of .396.
+				set_country_flag = NAM_depot_rail_crews_ready
+				set_temp_variable = { var = NAM_depot_push_delta value = -8 }
+				NAM_depot_push_target = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_depot_open_hearing
+		relative_position_id = NAM_depot_export_ban
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_pw_defence_accounts
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_depot_export_ban
+			focus = NAM_depot_audit
+		}
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 60
+			add_stability = 0.05
+			custom_effect_tooltip = NAM_depot_open_hearing_reward_tt
+			hidden_effect = {
+				NAM_depot_raise_front_court = yes
+				set_temp_variable = { var = NAM_depot_evidence_delta value = 2 }
+				NAM_depot_add_evidence = yes
+				set_temp_variable = { var = NAM_depot_push_delta value = -12 }
+				NAM_depot_push_target = yes
+				set_temp_variable = { var = NAM_depot_funds_delta value = -10 }
+				NAM_depot_change_owner_funds = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_depot_station_committees
+		relative_position_id = NAM_depot_rail_crews
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_workers_inspection
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		prerequisite = {
+			focus = NAM_depot_rail_crews
+			focus = NAM_depot_town_receipts
+		}
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			689 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						infrastructure < 5
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			690 = {
+				if = {
+					limit = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						infrastructure < 5
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_depot_station_committees_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_station_committees_tt
+			hidden_effect = {
+				# Each district not held at delivery, or already at full
+				# infrastructure, pays its share to the treasury instead.
+				if = {
+					limit = {
+						NOT = {
+							689 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+								infrastructure < 5
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+				if = {
+					limit = {
+						NOT = {
+							690 = {
+								is_owned_by = ROOT
+								is_controlled_by = ROOT
+								infrastructure < 5
+							}
+						}
+					}
+					set_temp_variable = { var = NAM_treasury_amount value = 150 }
+					NAM_add_treasury = yes
+				}
+				NAM_depot_raise_front_street = yes
+				set_temp_variable = { var = NAM_depot_push_delta value = -12 }
+				NAM_depot_push_target = yes
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = -5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_depot_trial
+		relative_position_id = NAM_depot_open_hearing
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_seal_registry
+		cost = 2
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_depot_open_hearing }
+		prerequisite = { focus = NAM_depot_station_committees }
+		mutually_exclusive = { focus = NAM_depot_owners_settlement }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_political_power = 75
+			custom_effect_tooltip = NAM_depot_trial_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_trial_tt
+			hidden_effect = {
+				NAM_depot_raise_front_court = yes
+				set_temp_variable = { var = NAM_depot_evidence_delta value = 3 }
+				NAM_depot_add_evidence = yes
+				NAM_depot_annul_one_sale = yes
+				set_temp_variable = { var = NAM_depot_push_delta value = -15 }
+				NAM_depot_push_two_highest = yes
+				set_temp_variable = { var = NAM_depot_funds_delta value = -20 }
+				NAM_depot_change_owner_funds = yes
+				add_to_variable = { var = NAM_grp_oil_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = -5 }
+				NAM_groups_refresh = yes
+				country_event = { id = ADISCORD_nam_story.391 days = 2 }
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	focus = {
+		id = NAM_depot_owners_settlement
+		relative_position_id = NAM_depot_station_committees
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_pw_reservoir_survey
+		cost = 1
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_depot_station_committees }
+		mutually_exclusive = { focus = NAM_depot_trial }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_open_tt
+				NAM_depot_board_open = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_depot_owners_settlement_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_owners_settlement_tt
+			hidden_effect = {
+				set_temp_variable = { var = NAM_treasury_amount value = 300 }
+				NAM_add_treasury = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = -8 }
+				NAM_groups_refresh = yes
+				set_temp_variable = { var = NAM_depot_variant value = 4 }
+				NAM_depot_board_settle_variant = yes
+				country_event = { id = ADISCORD_nam_story.393 days = 1 }
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	focus = {
+		id = NAM_depot_reserve_charter
+		relative_position_id = NAM_depot_trial
+		x = -2
+		y = 1
+		icon = GFX_focus_NAM_depot_reserve_charter
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_depot_trial }
+		mutually_exclusive = { focus = NAM_depot_revoke }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_won_tt
+				NAM_depot_board_won = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_buyout_price_tt
+				NAM_depot_buyout_affordable = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_ideas = NAM_state_fuel_reserve
+			add_fuel = 20000
+			custom_effect_tooltip = NAM_depot_reserve_charter_reward_tt
+			custom_effect_tooltip = NAM_grp_depot_reserve_charter_tt
+			hidden_effect = {
+				# The price is read before the buy-out zeroes the shares.
+				set_temp_variable = { var = NAM_treasury_amount value = NAM_depot_buyout_price }
+				NAM_spend_treasury = yes
+				add_to_variable = { var = NAM_grp_trade_support value = 5 }
+				add_to_variable = { var = NAM_grp_oil_support value = -3 }
+				NAM_groups_refresh = yes
+				set_temp_variable = { var = NAM_depot_variant value = 2 }
+				NAM_depot_board_settle_variant = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 3
+				NAM_prewar_pragmatic_mandate = yes
+			}
+		}
+	}
+
+	focus = {
+		id = NAM_depot_revoke
+		relative_position_id = NAM_depot_trial
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_depot_revoke
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_depot_trial }
+		mutually_exclusive = { focus = NAM_depot_reserve_charter }
+		available = {
+			has_capitulated = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_won_tt
+				NAM_depot_board_won = yes
+			}
+		}
+		bypass = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_depot_board_ended_tt
+				NAM_depot_board_ended = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_stability = 0.05
+			add_fuel = 20000
+			if = {
+				limit = { hidden_trigger = { has_country_flag = NAM_depot_cooperative_route } }
+				custom_effect_tooltip = NAM_depot_revoke_coop_reward_tt
+				custom_effect_tooltip = NAM_grp_depot_revoke_coop_tt
+			}
+			else = {
+				custom_effect_tooltip = NAM_depot_revoke_reward_tt
+				custom_effect_tooltip = NAM_grp_depot_revoke_tt
+			}
+			hidden_effect = {
+				# The district route flag is read here, before the close clears it.
+				if = {
+					limit = { has_country_flag = NAM_depot_cooperative_route }
+					add_to_variable = { var = NAM_grp_dist_support value = 8 }
+					set_temp_variable = { var = NAM_depot_variant value = 3 }
+				}
+				else = {
+					add_to_variable = { var = NAM_grp_oil_support value = 8 }
+					set_temp_variable = { var = NAM_depot_variant value = 1 }
+				}
+				add_to_variable = { var = NAM_grp_trade_support value = -5 }
+				NAM_groups_refresh = yes
+				NAM_depot_board_settle_variant = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 3
+				OR = {
+					NAM_prewar_service_mandate = yes
+					NAM_prewar_district_mandate = yes
+				}
+			}
+		}
+	}

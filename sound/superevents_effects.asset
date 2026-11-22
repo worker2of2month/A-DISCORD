@@ -767,6 +767,18 @@ soundeffect = {
 }
 
 soundeffect = {
+	name = superevent_south_partition_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_south_boards_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
 	name = superevent_south_contract_republic_sound_e
 	loop = no
 	sounds = {

@@ -2,8 +2,8 @@
 	focus = {
 		id = NAM_veterans_return
 		relative_position_id = NAM_recognition
-		x = -12
-		y = 2
+		x = -18
+		y = 1
 		icon = GFX_focus_NAM_veterans_return
 		cost = 3
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
@@ -46,8 +46,8 @@
 	focus = {
 		id = NAM_pw_transport_commission
 		relative_position_id = NAM_veterans_return
-		x = 0
-		y = 2
+		x = -2
+		y = 1
 		icon = GFX_focus_NAM_pw_transport_commission
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
@@ -67,18 +67,12 @@
 			custom_effect_tooltip = NAM_program_freight_depots_unlock_tt
 			unlock_decision_tooltip = NAM_program_logistics_depots
 			custom_effect_tooltip = NAM_program_logistics_depots_unlock_tt
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 250
-				producer = NAM
-			}
-			add_equipment_to_stockpile = {
-				type = train_equipment
-				amount = 10
-				producer = NAM
-			}
-			add_manpower = 3000
 			add_political_power = 60
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 200
+				producer = NAM
+			}
 			add_tech_bonus = {
 				name = NAM_pw_transport_commission
 				bonus = 0.75
@@ -148,14 +142,14 @@
 
 	focus = {
 		id = NAM_pw_breakthrough_army
-		relative_position_id = NAM_pw_transport_commission
-		x = -2
-		y = 2
+		relative_position_id = NAM_veterans_return
+		x = 1
+		y = 1
 		icon = GFX_focus_NAM_pw_breakthrough_army
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
-			focus = NAM_pw_transport_commission
+			focus = NAM_veterans_return
 		}
 		mutually_exclusive = {
 			focus = NAM_pw_mobile_army
@@ -169,44 +163,25 @@
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			unlock_decision_tooltip = NAM_program_rail_priority
-			custom_effect_tooltip = NAM_program_rail_priority_unlock_tt
-			unlock_decision_tooltip = NAM_program_engineer_units
-			custom_effect_tooltip = NAM_program_engineer_units_unlock_tt
-			unlock_decision_tooltip = NAM_program_river_crossings
-			custom_effect_tooltip = NAM_program_river_crossings_unlock_tt
-			NAM_pw_enact_rail_echelons = yes
+			NAM_pw_enact_shock_corps = yes
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 9000
+				amount = 6000
 				producer = NAM
 			}
 			add_equipment_to_stockpile = {
 				type = artillery_equipment
-				amount = 36
+				amount = 72
 				producer = NAM
 			}
-			add_manpower = 4000
 			add_tech_bonus = {
 				name = NAM_pw_breakthrough_army
 				bonus = 0.75
 				uses = 1
 				category = artillery
 			}
-			custom_effect_tooltip = NAM_crisis_delivery_disruption_mitigation_tt
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_garrison_dummy_idea
-					add_idea = NAM_pw_breakthrough_army_garrison_preview
-				}
-			}
 			custom_effect_tooltip = NAM_pw_breakthrough_issue_tt
 			hidden_effect = {
-				NAM_crisis_apply_interval_bonus = yes
-				add_to_variable = { var = NAM_gar_army_org value = 0.05 }
-				add_to_variable = { var = NAM_gar_army_attack value = 0.04 }
-				add_to_variable = { var = NAM_gar_army_speed value = -0.03 }
-				NAM_refresh_garrison = yes
 				country_event = { id = ADISCORD_nam_story.301 days = 2 }
 			}
 		}
@@ -215,17 +190,60 @@
 
 	focus = {
 		id = NAM_pw_mobile_army
-		relative_position_id = NAM_pw_transport_commission
-		x = 2
-		y = 2
+		relative_position_id = NAM_veterans_return
+		x = 3
+		y = 1
 		icon = GFX_focus_NAM_pw_mobile_army
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_veterans_return
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_breakthrough_army
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			NAM_pw_enact_mobile_groups = yes
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6000
+				producer = NAM
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 120
+				producer = NAM
+			}
+			NAM_order_grant_motor_technology = yes
+			custom_effect_tooltip = NAM_pw_mobile_issue_tt
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.302 days = 2 }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_road_priority
+		relative_position_id = NAM_pw_transport_commission
+		x = -1
+		y = 1
+		icon = GFX_focus_NAM_pw_road_priority
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
 		prerequisite = {
 			focus = NAM_pw_transport_commission
 		}
 		mutually_exclusive = {
-			focus = NAM_pw_breakthrough_army
+			focus = NAM_pw_rail_priority
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -240,44 +258,145 @@
 			custom_effect_tooltip = NAM_program_road_priority_unlock_tt
 			unlock_decision_tooltip = NAM_program_southern_corridor
 			custom_effect_tooltip = NAM_program_southern_corridor_unlock_tt
+			NAM_pw_enact_motor_columns = yes
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 250
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_crisis_delivery_disruption_mitigation_tt
+			hidden_effect = {
+				NAM_crisis_apply_interval_bonus = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_rail_priority
+		relative_position_id = NAM_pw_transport_commission
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_pw_rail_priority
+		cost = 2
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = NAM_pw_transport_commission
+		}
+		mutually_exclusive = {
+			focus = NAM_pw_road_priority
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_rail_priority
+			custom_effect_tooltip = NAM_program_rail_priority_unlock_tt
+			NAM_pw_enact_rail_echelons = yes
+			add_equipment_to_stockpile = {
+				type = train_equipment
+				amount = 20
+				producer = NAM
+			}
+			add_political_power = 60
+			custom_effect_tooltip = NAM_crisis_delivery_disruption_mitigation_tt
+			hidden_effect = {
+				NAM_crisis_apply_interval_bonus = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_engineer_units
+		relative_position_id = NAM_pw_breakthrough_army
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_pw_engineer_units
+		cost = 1
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_breakthrough_army
+		}
+		prerequisite = {
+			focus = NAM_pw_transport_commission
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_program_engineer_units
+			custom_effect_tooltip = NAM_program_engineer_units_unlock_tt
+			unlock_decision_tooltip = NAM_program_river_crossings
+			custom_effect_tooltip = NAM_program_river_crossings_unlock_tt
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = NAM
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_engineer_units_garrison_preview
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_org value = 0.04 }
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_field_workshops
+		relative_position_id = NAM_pw_mobile_army
+		x = 0
+		y = 1
+		icon = GFX_focus_NAM_pw_field_workshops
+		cost = 1
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = NAM_pw_mobile_army
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
 			if = {
 				limit = { hidden_trigger = { NOT = { has_completed_focus = NAM_motor_pool } } }
 				unlock_decision_tooltip = NAM_mil_carrier_contract
 				custom_effect_tooltip = NAM_mil_carrier_contract_unlock_tt
 			}
-			NAM_pw_enact_motor_columns = yes
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 9000
-				producer = NAM
-			}
 			add_equipment_to_stockpile = {
 				type = ADISCORD_armored_carrier_2163
-				amount = 120
+				amount = 40
 				producer = NAM
 			}
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 120
-				producer = NAM
-			}
-			add_manpower = 4000
-			NAM_order_grant_motor_technology = yes
-			custom_effect_tooltip = NAM_crisis_delivery_disruption_mitigation_tt
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_garrison_dummy_idea
-					add_idea = NAM_pw_mobile_army_garrison_preview
+					add_idea = NAM_pw_field_workshops_garrison_preview
 				}
 			}
-			custom_effect_tooltip = NAM_pw_mobile_issue_tt
 			hidden_effect = {
-				NAM_crisis_apply_interval_bonus = yes
-				add_to_variable = { var = NAM_gar_army_speed value = 0.08 }
-				add_to_variable = { var = NAM_gar_army_attack value = 0.03 }
-				add_to_variable = { var = NAM_gar_supply_consumption value = 0.04 }
+				add_to_variable = { var = NAM_gar_army_speed value = 0.05 }
 				NAM_refresh_garrison = yes
-				country_event = { id = ADISCORD_nam_story.302 days = 2 }
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -285,15 +404,15 @@
 
 	focus = {
 		id = NAM_pw_freight_schedule
-		relative_position_id = NAM_pw_breakthrough_army
-		x = 2
-		y = 2
+		relative_position_id = NAM_pw_road_priority
+		x = 1
+		y = 1
 		icon = GFX_focus_NAM_pw_freight_schedule
 		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_MANPOWER }
 		prerequisite = {
-			focus = NAM_pw_breakthrough_army
-			focus = NAM_pw_mobile_army
+			focus = NAM_pw_road_priority
+			focus = NAM_pw_rail_priority
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -304,11 +423,11 @@
 				tooltip = NAM_pw_transport_assets_tt
 				OR = {
 					AND = {
-						has_completed_focus = NAM_pw_breakthrough_army
+						has_completed_focus = NAM_pw_rail_priority
 						NOT = { has_equipment = { train_equipment < 20 } }
 					}
 					AND = {
-						has_completed_focus = NAM_pw_mobile_army
+						has_completed_focus = NAM_pw_road_priority
 						NOT = { has_equipment = { motorized_equipment < 200 } }
 					}
 				}
@@ -368,14 +487,17 @@
 	}
 
 	focus = {
-		id = NAM_pw_southern_army
-		relative_position_id = NAM_pw_freight_schedule
-		x = 0
-		y = 2
-		icon = GFX_focus_NAM_pw_southern_army
-		cost = 4
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		prerequisite = { focus = NAM_pw_freight_schedule }
+		id = NAM_pw_staff_exercises
+		relative_position_id = NAM_pw_engineer_units
+		x = 1
+		y = 1
+		icon = GFX_focus_NAM_pw_staff_exercises
+		cost = 1
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = {
+			focus = NAM_pw_engineer_units
+			focus = NAM_pw_field_workshops
+		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = NAM_pw_operable_tt
@@ -400,9 +522,55 @@
 				unlock_decision_tooltip = NAM_mil_mobile_surge
 				custom_effect_tooltip = NAM_mil_mobile_surge_unlock_tt
 			}
+			army_experience = 15
+			add_command_power = 15
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_pw_staff_exercises_garrison_preview
+				}
+			}
+			custom_effect_tooltip = NAM_pw_staff_operations_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_planning_speed value = 0.05 }
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = NAM_pw_southern_army
+		relative_position_id = NAM_pw_freight_schedule
+		x = 2
+		y = 1
+		icon = GFX_focus_NAM_pw_southern_army
+		cost = 4
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = NAM_pw_freight_schedule
+		}
+		prerequisite = {
+			focus = NAM_pw_staff_exercises
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_manpower = 14000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 6000
+				producer = NAM
+			}
+			add_war_support = 0.10
 			army_experience = 55
 			add_command_power = 55
-			add_war_support = 0.10
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = NAM_garrison_dummy_idea
@@ -411,9 +579,8 @@
 			}
 			custom_effect_tooltip = NAM_pw_southern_army_reward_tt
 			hidden_effect = {
-				add_to_variable = { var = NAM_gar_army_attack value = 0.08 }
+				add_to_variable = { var = NAM_gar_army_attack value = 0.06 }
 				add_to_variable = { var = NAM_gar_army_defence value = 0.06 }
-				add_to_variable = { var = NAM_gar_max_dig_in value = 3 }
 				add_to_variable = { var = NAM_gar_supply_consumption value = 0.04 }
 				NAM_refresh_garrison = yes
 				country_event = { id = ADISCORD_nam_story.305 days = 2 }
@@ -426,9 +593,9 @@
 		id = NAM_svetlogorsk_shipyards
 		relative_position_id = NAM_pw_southern_army
 		x = -2
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_svetlogorsk_shipyards
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
 		prerequisite = {
 			focus = NAM_pw_southern_army
@@ -475,8 +642,6 @@
 				unlock_decision_tooltip = NAM_submarine_order
 				custom_effect_tooltip = NAM_submarine_order_unlock_tt
 			}
-			unlock_decision_tooltip = NAM_program_naval_workshops
-			custom_effect_tooltip = NAM_program_naval_workshops_unlock_tt
 			NAM_pw_enact_sea_training = yes
 			688 = {
 				if = {
@@ -495,17 +660,11 @@
 			}
 			add_equipment_to_stockpile = {
 				type = convoy
-				amount = 20
+				amount = 10
 				producer = NAM
 			}
 			set_technology = { ADISCORD_tech_destroyer_hull_2155 = 1 }
 			set_technology = { ADISCORD_tech_submarine_hull_2155 = 1 }
-			add_tech_bonus = {
-				name = NAM_svetlogorsk_shipyards
-				bonus = 0.75
-				uses = 1
-				category = naval_equipment
-			}
 			if = {
 				limit = {
 					NOT = {
@@ -558,12 +717,6 @@
 			add_breakthrough_points = {
 				specialization = specialization_naval
 				value = 1
-			}
-			effect_tooltip = {
-				swap_ideas = {
-					remove_idea = NAM_navy_dummy_idea
-					add_idea = NAM_svetlogorsk_shipyards_navy_preview
-				}
 			}
 			custom_effect_tooltip = NAM_barge_project_tt
 			custom_effect_tooltip = NAM_svetlogorsk_shipyards_reward_tt
@@ -620,9 +773,7 @@
 					set_temp_variable = { var = NAM_treasury_amount value = 450 }
 					NAM_add_treasury = yes
 				}
-				add_to_variable = { var = NAM_navy_repair_speed value = 0.10 }
-				NAM_refresh_navy = yes
-				country_event = { id = ADISCORD_nam_story.303 days = 2 }
+				country_event = { id = ADISCORD_nam_story.303 days = 16 }
 			}
 		}
 		ai_will_do = {
@@ -634,7 +785,7 @@
 		id = NAM_pw_landing_supply
 		relative_position_id = NAM_svetlogorsk_shipyards
 		x = 0
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_pw_landing_supply
 		cost = 2
 		search_filters = { FOCUS_FILTER_NAVY_XP FOCUS_FILTER_MANPOWER }
@@ -663,6 +814,8 @@
 			custom_effect_tooltip = NAM_marine_detachment_order_unlock_tt
 			unlock_decision_tooltip = NAM_program_naval_fuel_depots
 			custom_effect_tooltip = NAM_program_naval_fuel_depots_unlock_tt
+			unlock_decision_tooltip = NAM_program_naval_workshops
+			custom_effect_tooltip = NAM_program_naval_workshops_unlock_tt
 			set_technology = { ADISCORD_tech_svetlogorsk_marine_corps = 1 }
 			add_manpower = 7000
 			effect_tooltip = {
@@ -675,6 +828,7 @@
 			hidden_effect = {
 				add_to_variable = { var = NAM_navy_landing_speed value = 0.08 }
 				add_to_variable = { var = NAM_navy_coordination value = 0.20 }
+				add_to_variable = { var = NAM_navy_repair_speed value = 0.10 }
 				NAM_refresh_navy = yes
 			}
 		}
@@ -685,9 +839,9 @@
 		id = NAM_pw_air_review
 		relative_position_id = NAM_pw_southern_army
 		x = 2
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_pw_air_review
-		cost = 3
+		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
 		prerequisite = {
 			focus = NAM_pw_southern_army
@@ -719,8 +873,8 @@
 			unlock_decision_tooltip = NAM_program_airfield_network
 			custom_effect_tooltip = NAM_program_airfield_network_unlock_tt
 			NAM_pw_enact_flight_training = yes
-			add_fuel = 35000
-			air_experience = 40
+			add_fuel = 20000
+			air_experience = 25
 			700 = {
 				if = {
 					limit = {
@@ -751,7 +905,7 @@
 					set_temp_variable = { var = NAM_treasury_amount value = 450 }
 					NAM_add_treasury = yes
 				}
-				country_event = { id = ADISCORD_nam_story.304 days = 2 }
+				country_event = { id = ADISCORD_nam_story.304 days = 16 }
 			}
 		}
 		ai_will_do = { base = 5 }
@@ -761,7 +915,7 @@
 		id = NAM_pw_southern_air_command
 		relative_position_id = NAM_pw_air_review
 		x = 0
-		y = 2
+		y = 1
 		icon = GFX_focus_NAM_pw_southern_air_command
 		cost = 2
 		search_filters = { FOCUS_FILTER_AIR_XP FOCUS_FILTER_INDUSTRY }
@@ -810,6 +964,46 @@
 				add_to_variable = { var = NAM_air_mission_efficiency value = 0.12 }
 				add_to_variable = { var = NAM_air_accidents value = -0.12 }
 				NAM_refresh_air = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	# The plan is chosen in peace through ADISCORD_nam_story.312; NAM_pw_south_war_handover
+	# installs it when the war for the South starts.
+	focus = {
+		id = NAM_pw_southern_operations
+		relative_position_id = NAM_pw_southern_air_command
+		x = -2
+		y = 1
+		icon = GFX_focus_NAM_works_commission
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = NAM_svetlogorsk_shipyards
+			focus = NAM_pw_southern_air_command
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = NAM_pw_operable_tt
+				NAM_pw_operable = yes
+			}
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 25
+			add_war_support = 0.05
+			add_equipment_to_stockpile = {
+				type = artillery_equipment
+				amount = 72
+				producer = NAM
+			}
+			custom_effect_tooltip = NAM_pw_southern_operations_reward_tt
+			hidden_effect = {
+				country_event = { id = ADISCORD_nam_story.312 days = 2 }
 			}
 		}
 		ai_will_do = { base = 5 }

@@ -174,18 +174,30 @@ NAM_administration = {
 	priority = 22
 }
 
+# Decisions of the depot case on routes without the post-war board. With the
+# board seeded the category holds no decisions and reports the board until the
+# island exile.
 NAM_depot_concessions = {
 	icon = generic_industry
 	allowed = { tag = NAM }
 	visible = {
 		NOT = { has_country_flag = NAM_corp_takeover }
-		NAM_depot_case_available = yes
 		OR = {
-			has_country_flag = NAM_depot_case
-			NOT = { has_focus_tree = NAM_postwar_focus }
+			AND = {
+				has_country_flag = NAM_depot_board_seeded
+				NOT = { has_global_flag = ADISCORD_nam_resource_war_island_exile }
+			}
+			AND = {
+				NAM_depot_case_available = yes
+				OR = {
+					has_country_flag = NAM_depot_case
+					NOT = { has_focus_tree = NAM_postwar_focus }
+				}
+			}
 		}
 	}
 	priority = 23
+	visible_when_empty = yes
 }
 
 NAM_postwar_orders = {
@@ -419,4 +431,53 @@ NAM_board_islands = {
 		}
 	}
 	priority = 24
+}
+
+# Formation orders and army programmes of the mainland Directory. The
+# republic's NAM_mobilisation stays closed on the corporate route, so the
+# council's orders have their own category; each opens through its focus.
+NAM_mdr_army = {
+	icon = army_reform
+	allowed = { tag = NAM }
+	visible = {
+		has_country_flag = NAM_corp_takeover
+		has_country_flag = NAM_mdr_started
+		NOT = { check_variable = { NAM_board_ended = 1 } }
+	}
+	priority = 23
+}
+
+# The southern chancery: operations against Shahrabad, the orders of the War
+# for the South and the Mazar retry, from the chancery to the end of the route.
+# After the War for the South it also holds the dominion's foreign deals
+# (loans, cartel exports, arms on credit, coalition supplies).
+NAM_mdr_south_office = {
+	icon = generic_foreign_policy
+	allowed = { tag = NAM }
+	visible = {
+		OR = {
+			has_completed_focus = NAM_mdr_southern_chancery
+			has_completed_focus = NAM_mdr_hour_of_the_south
+			has_completed_focus = NAM_hgm_hegemons_ledger
+			has_completed_focus = NAM_hgm_envoys_beyond_the_desert
+		}
+		NOT = { check_variable = { NAM_board_ended = 1 } }
+	}
+	priority = 25
+}
+
+# The partition of the South and everything that moves the holdings after it:
+# private tenders, re-tenders, compensation, the furnace contracts, quotas,
+# buy-outs and the Directory's southern programmes. Army orders stay in
+# NAM_mdr_army and foreign deals in NAM_mdr_south_office. The description
+# lists the table while it is open, then the holdings.
+NAM_hgm_dominion = {
+	icon = generic_political_discourse
+	picture = GFX_decision_picture_NAM_board_quay
+	allowed = { tag = NAM }
+	visible = {
+		has_country_flag = NAM_hgm_started
+		NOT = { check_variable = { NAM_board_ended = 1 } }
+	}
+	priority = 26
 }

@@ -150,4 +150,35 @@ leader_traits = {
 		ADISCORD_economy_admin_expense_factor = -0.05
 		war_support_factor = -0.10
 	}
+
+	# Chairs under the finals of the dominion, given by NAM_hgm_sync_chair_traits.
+	NAM_trait_arbiter_of_the_league = {
+		random = no
+		sprite = 1
+		stability_factor = 0.05
+		ADISCORD_economy_trade_income_factor = 0.05
+	}
+
+	NAM_trait_trustee_of_the_register = {
+		random = no
+		sprite = 1
+		stability_factor = 0.05
+		monthly_population = 0.05
+	}
+
+	NAM_trait_chair_of_the_perpetual_council = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.10
+		stability_factor = 0.03
+	}
+
+	# Only while the head of the holding of NAM_hgm_one_board chairs.
+	NAM_trait_owner_of_the_directory = {
+		random = no
+		sprite = 1
+		political_power_gain = 0.10
+		production_factory_efficiency_gain_factor = 0.05
+		stability_factor = -0.03
+	}
 }

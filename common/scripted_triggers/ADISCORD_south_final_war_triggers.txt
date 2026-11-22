@@ -253,144 +253,52 @@ ADISCORD_south_preparation_elapsed = {
 }
 
 # ----- Crisis deadline -----
-# The war starts no later than 1 March 2166. Each unit of
-# global.ADISCORD_south_crisis_pull (0-6) moves that date 15 days earlier:
-# 2166.3.1, 2166.2.14, 2166.1.30, 2166.1.15, 2165.12.31, 2165.12.16, 2165.12.1.
-# The calendar has no leap years. NOT = { date < D } holds on D and later but
-# never on the previous day, unlike date > D, which can miss the first hours
-# of D. The offset dates below are precomputed from the same levels.
+# The deadline is a day number in global.num_days units,
+# global.ADISCORD_south_deadline_day. ADISCORD_south_set_deadline writes it once
+# per story campaign and only Shahrabad's pulls move it; every derived day is
+# rewritten together with it, so these checks compare two variables and never
+# recompute a date.
 
-# GLOBAL. The current deadline date has come.
+# GLOBAL. The current story campaign has its deadline.
+ADISCORD_south_deadline_set = {
+	has_variable = global.ADISCORD_south_deadline_day
+}
+
+# GLOBAL. The current deadline day has come.
 ADISCORD_south_deadline_reached = {
-	OR = {
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = less_than }
-			NOT = { date < 2166.3.1 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals }
-			NOT = { date < 2166.2.14 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals }
-			NOT = { date < 2166.1.30 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals }
-			NOT = { date < 2166.1.15 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals }
-			NOT = { date < 2165.12.31 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals }
-			NOT = { date < 2165.12.16 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 6 compare = greater_than_or_equals }
-			NOT = { date < 2165.12.1 }
-		}
-	}
+	ADISCORD_south_deadline_set = yes
+	check_variable = { var = global.num_days value = global.ADISCORD_south_deadline_day compare = greater_than_or_equals }
 }
 
-# GLOBAL. At most 31 days remain before the current deadline date.
+# GLOBAL. At most 31 days remain before the current deadline day.
 ADISCORD_south_deadline_date_near = {
-	OR = {
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = less_than }
-			NOT = { date < 2166.1.29 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals }
-			NOT = { date < 2166.1.14 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals }
-			NOT = { date < 2165.12.30 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals }
-			NOT = { date < 2165.12.15 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals }
-			NOT = { date < 2165.11.30 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals }
-			NOT = { date < 2165.11.15 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 6 compare = greater_than_or_equals }
-			NOT = { date < 2165.10.31 }
-		}
-	}
+	ADISCORD_south_deadline_set = yes
+	check_variable = { var = global.num_days value = global.ADISCORD_south_deadline_near_day compare = greater_than_or_equals }
 }
 
-# GLOBAL. At most 120 days remain before the current deadline date.
+# GLOBAL. At most 120 days remain before the current deadline day.
 ADISCORD_south_deadline_date_in_ai_window = {
+	ADISCORD_south_deadline_set = yes
+	check_variable = { var = global.num_days value = global.ADISCORD_south_deadline_ai_day compare = greater_than_or_equals }
+}
+
+# GLOBAL. Before the anchor every pull is counted and subtracted when the
+# anchor is set. With an anchor more than 135 days must remain, so one 15-day
+# pull still leaves the 42-day declaration focus and the 56-day warning. The
+# spheres agreement stops the pulls.
+ADISCORD_south_deadline_can_pull = {
+	NOT = { has_global_flag = ADISCORD_south_spheres_agreed }
 	OR = {
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = less_than }
-			NOT = { date < 2165.11.1 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals }
-			NOT = { date < 2165.10.17 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals }
-			NOT = { date < 2165.10.2 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals }
-			NOT = { date < 2165.9.17 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals }
-			NOT = { date < 2165.9.2 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals }
-			NOT = { date < 2165.8.18 }
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 6 compare = greater_than_or_equals }
-			NOT = { date < 2165.8.3 }
-		}
+		ADISCORD_south_deadline_set = no
+		check_variable = { var = global.num_days value = global.ADISCORD_south_deadline_pull_guard_day compare = less_than }
 	}
 }
 
-# GLOBAL. More than 135 days remain before the current deadline date, so one
-# 15-day pull still leaves the 42-day declaration focus and the 56-day warning.
-ADISCORD_south_deadline_can_pull = {
-	OR = {
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = less_than }
-			date < 2165.10.17
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 1 compare = equals }
-			date < 2165.10.2
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 2 compare = equals }
-			date < 2165.9.17
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 3 compare = equals }
-			date < 2165.9.2
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 4 compare = equals }
-			date < 2165.8.18
-		}
-		AND = {
-			check_variable = { var = global.ADISCORD_south_crisis_pull value = 5 compare = equals }
-			date < 2165.8.3
-		}
-	}
+# GLOBAL. Mutual readiness may open the warning from 180 days before the
+# deadline; the same floor applies to both champions.
+ADISCORD_south_early_window_open = {
+	ADISCORD_south_deadline_set = yes
+	check_variable = { var = global.num_days value = global.ADISCORD_south_deadline_warning_day compare = greater_than_or_equals }
 }
 
 # GLOBAL. The deadline applies only after the minimum preparation, so a
@@ -413,7 +321,8 @@ ADISCORD_south_deadline_watch_daily = {
 }
 
 # COUNTRY. A focus warning can precede the calendar window. On higher
-# difficulties the two ready armies can stage before the warning is issued.
+# difficulties the two ready armies can stage before the warning is issued,
+# but not before the early window of the deadline opens.
 ADISCORD_south_ai_border_preparation = {
 	is_ai = yes
 	ADISCORD_south_crisis_open = yes
@@ -426,6 +335,7 @@ ADISCORD_south_ai_border_preparation = {
 		ADISCORD_south_deadline_date_in_ai_window = yes
 		AND = {
 			difficulty > 2
+			ADISCORD_south_early_window_open = yes
 			ADISCORD_south_both_focus_ready = yes
 		}
 	}
@@ -485,6 +395,22 @@ ADISCORD_south_nam_focus_ready = {
 		}
 		has_completed_focus = NAM_rad_great_war_plan
 		has_completed_focus = NAM_hum_union_call
+		# The council of boards on the mainland: the South open, its course
+		# capstone and any two of the four southern capstones.
+		AND = {
+			has_completed_focus = NAM_mdr_southern_districts
+			OR = {
+				has_completed_focus = NAM_mdr_southern_charter
+				has_completed_focus = NAM_mdr_national_war
+			}
+			calc_true_if = {
+				amount = 2
+				has_completed_focus = NAM_mdr_army_of_the_south
+				has_completed_focus = NAM_mdr_arsenal_of_the_directory
+				has_completed_focus = NAM_mdr_rear_of_the_south
+				has_completed_focus = NAM_mdr_northern_charter
+			}
+		}
 	}
 }
 
@@ -640,6 +566,10 @@ ADISCORD_south_preparation_can_finish = {
 		tooltip = ADISCORD_south_preparation_ready_tt
 		ADISCORD_south_preparation_elapsed = yes
 		ADISCORD_south_both_focus_ready = yes
+	}
+	custom_trigger_tooltip = {
+		tooltip = ADISCORD_south_early_window_tt
+		ADISCORD_south_early_window_open = yes
 	}
 	ADISCORD_south_participants_ready = yes
 }
@@ -928,10 +858,8 @@ ADISCORD_south_offer_terms_valid = {
 	OR = {
 		check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
 		check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
-		AND = {
-			check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
-			NAM = { has_completed_focus = NAM_pragmatic_compact }
-		}
+		# Protection: the sender is checked by the answer (FROM) and the decision.
+		check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals }
 		AND = {
 			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
 			ADISCORD_south_coalition_target_war_clear = yes
@@ -960,11 +888,16 @@ ADISCORD_south_offer_answer_valid = {
 		}
 	}
 
+	# Only the two champions offer protection; Eflor and Azhar leading the
+	# north do not.
 	OR = {
 		NOT = { check_variable = { var = ADISCORD_south_offer_kind value = 4 compare = equals } }
 		FROM = {
-			tag = NAM
-			has_completed_focus = NAM_pragmatic_compact
+			ADISCORD_south_is_contest_champion = yes
+			OR = {
+				tag = SHL
+				tag = NAM
+			}
 		}
 	}
 }
@@ -1157,43 +1090,88 @@ ADISCORD_south_north_invitation_unlocked = {
 					PREV = { tag = EFL }
 					OR = {
 						has_completed_focus = NAM_eflor_accord
+						has_completed_focus = NAM_border_citizenship
 						has_completed_focus = NAM_defeat_open_border
 					}
 				}
 				AND = {
 					PREV = { tag = AZH }
 					OR = {
-						has_completed_focus = NAM_azhar_accord
+						has_completed_focus = NAM_eflor_accord
+						has_completed_focus = NAM_border_citizenship
 						has_completed_focus = NAM_defeat_road_south
 					}
 				}
 				AND = {
 					PREV = { tag = WEF }
-					has_completed_focus = NAM_south_fenn_guarantee
+					OR = {
+						has_completed_focus = NAM_south_desert_envoys
+						has_completed_focus = NAM_south_congress
+						has_completed_focus = NAM_south_fenn_guarantee
+					}
 				}
 				AND = {
 					PREV = { tag = KDR }
-					has_completed_focus = NAM_insured_caravans
+					OR = {
+						has_completed_focus = NAM_south_desert_envoys
+						has_completed_focus = NAM_south_congress
+						has_completed_focus = NAM_insured_caravans
+						has_completed_focus = NAM_south_desert_offices
+						has_completed_focus = NAM_kadir_oil_charter
+					}
 				}
 				AND = {
 					PREV = { tag = RHM }
-					has_completed_focus = NAM_south_oil_for_water
+					OR = {
+						has_completed_focus = NAM_south_desert_envoys
+						has_completed_focus = NAM_south_congress
+						has_completed_focus = NAM_south_oil_for_water
+					}
 				}
 				AND = {
 					PREV = { tag = SDR }
-					has_completed_focus = NAM_common_fuel_market
+					OR = {
+						has_completed_focus = NAM_south_desert_envoys
+						has_completed_focus = NAM_south_congress
+						has_completed_focus = NAM_common_fuel_market
+					}
 				}
 				AND = {
 					PREV = { tag = MZR }
-					has_completed_focus = NAM_contract_bureau
+					OR = {
+						has_completed_focus = NAM_south_coast_envoys
+						has_completed_focus = NAM_south_congress
+						has_completed_focus = NAM_common_citizenship
+					}
 				}
 				AND = {
 					PREV = { tag = KYZ }
-					has_completed_focus = NAM_pw_export_guarantees
+					OR = {
+						has_completed_focus = NAM_south_coast_envoys
+						has_completed_focus = NAM_south_congress
+						has_completed_focus = NAM_pw_export_guarantees
+						has_completed_focus = NAM_contract_bureau
+						has_completed_focus = NAM_common_citizenship
+					}
 				}
 				AND = {
 					PREV = { tag = GLP }
-					has_completed_focus = NAM_island_concession
+					OR = {
+						has_completed_focus = NAM_south_coast_envoys
+						has_completed_focus = NAM_south_congress
+						has_completed_focus = NAM_island_concession
+						has_completed_focus = NAM_pw_veyr_convoys
+						has_completed_focus = NAM_common_citizenship
+					}
+				}
+				# The Directory's southern chancery opens every contact; Fenn also
+				# needs the Directory's guarantee.
+				AND = {
+					has_completed_focus = NAM_mdr_southern_chancery
+					OR = {
+						PREV = { NOT = { tag = WEF } }
+						has_completed_focus = NAM_mdr_fenn_guarantee
+					}
 				}
 			}
 		}
@@ -1329,7 +1307,7 @@ ADISCORD_south_north_neighbour_recruitable = {
 		}
 		AND = {
 			tag = AZH
-			NAM = { has_completed_focus = NAM_azhar_accord }
+			NAM = { has_completed_focus = NAM_eflor_accord }
 		}
 	}
 }
@@ -1408,9 +1386,11 @@ ADISCORD_south_adviser_post_free = {
 	}
 }
 
+# COUNTRY host; PREV and ROOT are the sponsor. The mission needs the open
+# contest, not the invitation gate.
 ADISCORD_south_adviser_mission_valid = {
-	ADISCORD_south_coalition_diplomacy_open = yes
-	ROOT = { ADISCORD_south_coalition_inviter = yes }
+	ADISCORD_south_contest_target_open = yes
+	ROOT = { ADISCORD_south_is_contest_champion = yes }
 	OR = {
 		AND = {
 			ROOT = { ADISCORD_south_map_country_north = yes }
@@ -1690,6 +1670,276 @@ ADISCORD_south_shl_invitation_unlocked = {
 		AND = {
 			tag = SDR
 			SHL = { has_completed_focus = SHL_c_charter_round }
+		}
+	}
+}
+
+# ----- Influence contest -----
+# The ledger ADISCORD_south_coalition_influence of each of the nine regional
+# countries runs from -100 (Shahrabad) to +100 (Svetlogorye).
+
+# GLOBAL. From the opened preparation to the start of the war for the South.
+ADISCORD_south_contest_open = {
+	ADISCORD_south_crisis_open = yes
+	has_global_flag = ADISCORD_south_preparation_started
+}
+
+# COUNTRY. A contested government: one of the nine, sovereign towards both
+# champions and not itself leading the north.
+ADISCORD_south_in_contest = {
+	ADISCORD_south_regional_country = yes
+	exists = yes
+	ADISCORD_south_contest_open = yes
+	ADISCORD_south_declarer_valid = no
+	NOT = { is_subject_of = SHL }
+	NOT = { is_subject_of = NAM }
+}
+
+# COUNTRY. Spheres of the agreement; the variable exists only while it holds.
+ADISCORD_south_in_shl_sphere = {
+	has_global_flag = ADISCORD_south_spheres_agreed
+	check_variable = { var = ADISCORD_south_sphere value = 1 compare = equals }
+}
+
+ADISCORD_south_in_nam_sphere = {
+	has_global_flag = ADISCORD_south_spheres_agreed
+	check_variable = { var = ADISCORD_south_sphere value = 2 compare = equals }
+}
+
+# COUNTRY target; PREV is the sending champion. Delegations, advisers, tools
+# and protection need the open contest, not the invitation gate.
+ADISCORD_south_contest_target_open = {
+	NOT = { tag = PREV }
+	ADISCORD_south_in_contest = yes
+	ADISCORD_south_coalition_invitee = yes
+	OR = {
+		AND = {
+			PREV = { tag = SHL }
+			ADISCORD_south_in_nam_sphere = no
+		}
+		AND = {
+			PREV = { NOT = { tag = SHL } }
+			ADISCORD_south_in_shl_sphere = no
+		}
+	}
+}
+
+# COUNTRY target; ROOT is the demanding champion. The agreed sphere of its
+# rival is closed to its demands.
+ADISCORD_south_closed_to_root_by_spheres = {
+	OR = {
+		AND = {
+			ROOT = { tag = SHL }
+			ADISCORD_south_in_nam_sphere = yes
+		}
+		AND = {
+			ROOT = { NOT = { tag = SHL } }
+			ADISCORD_south_in_shl_sphere = yes
+		}
+	}
+}
+
+# COUNTRY target; ROOT is the demanding champion. Such a country is courted,
+# not threatened.
+ADISCORD_south_leans_away_from_root = {
+	OR = {
+		AND = {
+			ROOT = { tag = SHL }
+			ADISCORD_south_lean_north_40 = yes
+		}
+		AND = {
+			ROOT = { NOT = { tag = SHL } }
+			ADISCORD_south_lean_shl_40 = yes
+		}
+	}
+}
+
+# COUNTRY. Lean thresholds.
+ADISCORD_south_lean_north_20 = {
+	check_variable = { var = ADISCORD_south_coalition_influence value = 20 compare = greater_than_or_equals }
+}
+
+ADISCORD_south_lean_north_40 = {
+	check_variable = { var = ADISCORD_south_coalition_influence value = 40 compare = greater_than_or_equals }
+}
+
+ADISCORD_south_lean_north_60 = {
+	check_variable = { var = ADISCORD_south_coalition_influence value = 60 compare = greater_than_or_equals }
+}
+
+ADISCORD_south_lean_north_80 = {
+	check_variable = { var = ADISCORD_south_coalition_influence value = 80 compare = greater_than_or_equals }
+}
+
+ADISCORD_south_lean_shl_20 = {
+	check_variable = { var = ADISCORD_south_coalition_influence value = -20 compare = less_than_or_equals }
+}
+
+ADISCORD_south_lean_shl_40 = {
+	check_variable = { var = ADISCORD_south_coalition_influence value = -40 compare = less_than_or_equals }
+}
+
+ADISCORD_south_lean_shl_60 = {
+	check_variable = { var = ADISCORD_south_coalition_influence value = -60 compare = less_than_or_equals }
+}
+
+ADISCORD_south_lean_shl_80 = {
+	check_variable = { var = ADISCORD_south_coalition_influence value = -80 compare = less_than_or_equals }
+}
+
+# COUNTRY. Shahrabad and the north leader of the day are the two champions;
+# faction members and subjects act through them.
+ADISCORD_south_is_contest_champion = {
+	OR = {
+		ADISCORD_south_map_country_shl_leader = yes
+		ADISCORD_south_map_country_north_leader = yes
+	}
+}
+
+# COUNTRY champion. Svetlogorye's post-war tree opens delegations with its
+# foreign office and advisers with its legations.
+ADISCORD_south_champion_contest_ready = {
+	OR = {
+		NOT = { tag = NAM }
+		NOT = { has_focus_tree = NAM_postwar_focus }
+		has_completed_focus = NAM_foreign_office
+	}
+}
+
+ADISCORD_south_champion_advisers_ready = {
+	OR = {
+		NOT = { tag = NAM }
+		NOT = { has_focus_tree = NAM_postwar_focus }
+		has_completed_focus = NAM_south_legations
+	}
+}
+
+# COUNTRY. Owns one of the seven key states of the war for the South.
+ADISCORD_south_owns_key_state = {
+	OR = {
+		67 = { is_owned_by = PREV }
+		688 = { is_owned_by = PREV }
+		699 = { is_owned_by = PREV }
+		707 = { is_owned_by = PREV }
+		700 = { is_owned_by = PREV }
+		701 = { is_owned_by = PREV }
+		69 = { is_owned_by = PREV }
+	}
+}
+
+# COUNTRY target; ROOT is the AI champion. Its own lean is -5..59.
+ADISCORD_south_ai_own_reachable = {
+	OR = {
+		AND = {
+			ROOT = { tag = SHL }
+			check_variable = { var = ADISCORD_south_coalition_influence value = 5 compare = less_than_or_equals }
+			check_variable = { var = ADISCORD_south_coalition_influence value = -59 compare = greater_than_or_equals }
+		}
+		AND = {
+			ROOT = { NOT = { tag = SHL } }
+			check_variable = { var = ADISCORD_south_coalition_influence value = -5 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_south_coalition_influence value = 59 compare = less_than_or_equals }
+		}
+	}
+}
+
+# COUNTRY target; ROOT is the AI champion. The rival leads by 1..59.
+ADISCORD_south_ai_rival_rising = {
+	OR = {
+		AND = {
+			ROOT = { tag = SHL }
+			check_variable = { var = ADISCORD_south_coalition_influence value = 1 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_south_coalition_influence value = 59 compare = less_than_or_equals }
+		}
+		AND = {
+			ROOT = { NOT = { tag = SHL } }
+			check_variable = { var = ADISCORD_south_coalition_influence value = -1 compare = less_than_or_equals }
+			check_variable = { var = ADISCORD_south_coalition_influence value = -59 compare = greater_than_or_equals }
+		}
+	}
+}
+
+# COUNTRY target. Either champion has won it over far enough for the AI to
+# stop sending delegations.
+ADISCORD_south_ai_contest_settled = {
+	OR = {
+		ADISCORD_south_lean_north_60 = yes
+		ADISCORD_south_lean_shl_60 = yes
+	}
+}
+
+# COUNTRY KYZ or GLP. Shahrabad's limited war may start: no appeal to
+# Svetlogorye is pending or answered, the country is outside Svetlogorye's
+# agreed sphere, and it does not lean more than 20 towards Svetlogorye while
+# the contest is open, unless Svetlogorye already refused it.
+ADISCORD_south_shl_strike_open = {
+	NOT = { has_country_flag = ADISCORD_south_appeal_open }
+	NOT = { has_country_flag = ADISCORD_south_appeal_answered }
+	ADISCORD_south_in_nam_sphere = no
+	OR = {
+		NOT = { check_variable = { var = ADISCORD_south_coalition_influence value = 20 compare = greater_than } }
+		has_country_flag = ADISCORD_south_appeal_declined
+		ADISCORD_south_contest_open = no
+		NOT = {
+			NAM = {
+				ADISCORD_south_champion_viable = yes
+				ADISCORD_south_is_contest_champion = yes
+			}
+		}
+	}
+}
+
+# COUNTRY KYZ or GLP. A blocked limited war already waits on its appeal or on
+# the scheduled re-check (ADISCORD_south.76); a repeatable ultimatum stays
+# closed until that callback runs.
+ADISCORD_south_shl_strike_deferred = {
+	OR = {
+		has_country_flag = ADISCORD_south_appeal_open
+		has_country_flag = ADISCORD_south_appeal_answered
+		has_country_flag = ADISCORD_south_strike_recheck_pending
+	}
+}
+
+# COUNTRY target; ROOT is NAM. Svetlogorye's path tool can be offered.
+ADISCORD_south_tool_offer_open = {
+	ADISCORD_south_in_contest = yes
+	ADISCORD_south_lean_north_40 = yes
+	NOT = { has_variable = ADISCORD_south_tool_kind }
+	NOT = { has_variable = ADISCORD_south_tool_escrow }
+	NOT = { has_country_flag = ADISCORD_south_tool_refused }
+	NOT = { has_war_with = NAM }
+	NOT = { has_war_with = SHL }
+	ADISCORD_south_in_shl_sphere = no
+}
+
+# COUNTRY target. A pending tool offer still meets the terms of its delivery.
+ADISCORD_south_tool_offer_valid = {
+	has_variable = ADISCORD_south_tool_escrow
+	ADISCORD_south_in_contest = yes
+	ADISCORD_south_lean_north_40 = yes
+	NOT = { has_war_with = NAM }
+	NOT = { has_war_with = SHL }
+	NAM = { ADISCORD_south_champion_viable = yes }
+}
+
+# COUNTRY target; ROOT is the champion offering protection.
+ADISCORD_south_protection_level_reached = {
+	OR = {
+		AND = {
+			ROOT = { tag = SHL }
+			ADISCORD_south_lean_shl_80 = yes
+		}
+		AND = {
+			ROOT = { tag = NAM }
+			ADISCORD_south_lean_north_80 = yes
+		}
+		AND = {
+			ROOT = {
+				tag = NAM
+				has_completed_focus = NAM_prag_contract_union
+			}
+			check_variable = { var = ADISCORD_south_tool_kind value = 2 compare = equals }
+			check_variable = { var = ADISCORD_south_coalition_influence value = 70 compare = greater_than_or_equals }
 		}
 	}
 }

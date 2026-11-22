@@ -9,7 +9,9 @@ state = {
 	history = {
 		owner = MON
 		add_core_of = MON
-		victory_points = { 2845 10 }
+		victory_points = { 2845 20 }
+		victory_points = { 11261 2 }
+		victory_points = { 2436 1 }
 		buildings = {
 			infrastructure = 5
 			industrial_complex = 3
@@ -19,7 +21,7 @@ state = {
 	}
 	provinces = {
 		693 715 1325 2436 2845 6130 6992 7088 7970 8270 8790 9039 9121 9915 10310 10317
-		10983 11145 11261 11523 11973 12044 12285 12396 12806 12891
+		10983 11145 11261 11523 11973 12044 12285 12396 12806 12891 19285 19286
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 4.4

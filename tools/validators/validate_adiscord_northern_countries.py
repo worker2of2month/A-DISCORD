@@ -22,9 +22,15 @@ try:
         ROOT,
         VP_LOCALISATION,
         build_profiles,
+        generated_block_entries,
+        load_definition,
+        load_mon_geography,
+        mon_planned_ids,
+        mon_settlement_points,
         render_oob,
         render_state,
         state_path,
+        victory_point_localisation,
     )
 except ModuleNotFoundError:
     from builders.build_adiscord_northern_countries import (
@@ -34,9 +40,15 @@ except ModuleNotFoundError:
         ROOT,
         VP_LOCALISATION,
         build_profiles,
+        generated_block_entries,
+        load_definition,
+        load_mon_geography,
+        mon_planned_ids,
+        mon_settlement_points,
         render_oob,
         render_state,
         state_path,
+        victory_point_localisation,
     )
 
 
@@ -119,6 +131,25 @@ def owner_totals(tag: str) -> tuple[int, int, int]:
             elif match:
                 military += int(match.group(1))
     return population, civilian, military
+
+
+def validate_mon_geography(principal_provinces: dict[int, int], vp_loc: str) -> list[str]:
+    issues: list[str] = []
+    geography = load_mon_geography()
+    _colors, details = load_definition()
+    pending = sorted(set(mon_planned_ids(geography)) - set(details))
+    if pending:
+        issues.append(
+            f"MON province plan is not on the map yet ({len(pending)} ids from {pending[0]}); "
+            "apply build_adiscord_mon_geography before the northern states"
+        )
+    points = mon_settlement_points(geography)
+    expected_loc = list(victory_point_localisation(principal_provinces, points).items())
+    if generated_block_entries(vp_loc) != expected_loc:
+        issues.append(
+            f"{VP_LOCALISATION.relative_to(ROOT)} northern block is not synchronized with the northern builder"
+        )
+    return issues
 
 
 def validate() -> list[str]:
@@ -372,6 +403,7 @@ def validate() -> list[str]:
         key = f"VICTORY_POINTS_{principal_provinces[capital_state]}"
         if key not in vp_loc:
             issues.append(f"missing generated victory-point localisation {key}")
+    issues.extend(validate_mon_geography(principal_provinces, vp_loc))
 
     mon_population, mon_civilian, mon_military = owner_totals("MON")
     if mon_population != int(COUNTRIES["MON"]["population"]) or (

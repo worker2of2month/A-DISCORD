@@ -26,6 +26,8 @@ SOURCES = {
     "NAM/exile_interregnum/focuses.txt": "ADISCORD_NAM_exile_interregnum.txt",
     "NAM/south_war/focuses.txt": "ADISCORD_NAM_south_war.txt",
     "NAM/return_war/focuses.txt": "ADISCORD_NAM_return_war.txt",
+    "NAM/mainland_directory/focuses.txt": "ADISCORD_NAM_mainland_directory.txt",
+    "NAM/southern_dominion/focuses.txt": "ADISCORD_NAM_southern_dominion.txt",
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
     "SHL/shared/focuses.txt": "ADISCORD_SHL_shared.txt",
     "SHL/south_war/focuses.txt": "ADISCORD_SHL_south_war.txt",
@@ -70,6 +72,10 @@ UNASSIGNED_FOCUS_SOURCES = frozenset({
 # keep their completions across both swaps.
 # The corporate tree and the war-of-return tree keep their completions across
 # the swap at operation Poseidon, the renewal and every terminal path.
+# The mainland Directory tree loaded by the won return keeps them as well and
+# its own completions across the swap into the war for the South and back.
+# The dominion tree loaded by the council's victory in the war for the South
+# is never swapped and keeps every earlier tree's completions.
 SHARED_HISTORY_SOURCES = frozenset({
     "VAL/main/focuses.txt",
     "NAM/main/focuses.txt",
@@ -83,6 +89,8 @@ SHARED_HISTORY_SOURCES = frozenset({
     "NAM/exile_interregnum/focuses.txt",
     "NAM/south_war/focuses.txt",
     "NAM/return_war/focuses.txt",
+    "NAM/mainland_directory/focuses.txt",
+    "NAM/southern_dominion/focuses.txt",
     "SHL/main/focuses.txt",
     "SHL/south_war/focuses.txt",
     "Vorkerland/prewar/focuses.txt",

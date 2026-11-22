@@ -963,8 +963,35 @@ CUSTOM_COST_DECISIONS = {
     "NAM_rtw_district_militia": "NAM_rtw_district_militia_cost",
     "NAM_rtw_convoy_run": "NAM_rtw_convoy_run_cost",
     "NAM_rtw_raise_district": "NAM_rtw_raise_district_cost",
+    # The council's paid decisions on the continent.
+    "NAM_mdr_restitution": "NAM_mdr_restitution_cost",
+    "NAM_mdr_nationalise_land": "NAM_mdr_nationalise_land_cost",
+    "NAM_mdr_rail_brigades": "NAM_mdr_rail_brigades_cost",
+    "NAM_mdr_desert_offer": "NAM_mdr_desert_offer_cost",
+    "NAM_mdr_hire_district_regiments": "NAM_mdr_hire_district_regiments_cost",
+    "NAM_mdr_raise_company_regiment": "NAM_mdr_raise_company_regiment_cost",
+    "NAM_mdr_shareholder_battalions": "NAM_mdr_shareholder_battalions_cost",
+    "NAM_mdr_karamyshev_veterans": "NAM_mdr_karamyshev_veterans_cost",
+    "NAM_mdr_south_war_shares": "NAM_mdr_south_war_shares_cost",
+    "NAM_mdr_armoured_columns": "NAM_mdr_armoured_columns_cost",
+    "NAM_mdr_fuel_convoys": "NAM_mdr_fuel_convoys_cost",
+    "NAM_mdr_op_furnace_contracts": "NAM_mdr_op_furnace_contracts_cost",
+    "NAM_mdr_op_zarkhan_agents": "NAM_mdr_op_zarkhan_agents_cost",
+    "NAM_mdr_op_shortage_rumours": "NAM_mdr_op_shortage_rumours_cost",
+    # The partition of the South and the dominion's programmes.
+    "NAM_ptn_compensate": "NAM_ptn_compensate_cost",
+    "NAM_hgm_furnace_contracts": "NAM_hgm_furnace_contracts_cost",
+    "NAM_hgm_founders_dividend": "NAM_hgm_founders_dividend_cost",
+    "NAM_hgm_rations": "NAM_hgm_rations_cost",
+    "NAM_hgm_company_towns": "NAM_hgm_company_towns_cost",
+    "NAM_hgm_veteran_artel": "NAM_hgm_veteran_artel_cost",
+    "NAM_hgm_lot_regiment": "NAM_hgm_lot_regiment_cost",
+    "NAM_hgm_foreign_loan": "NAM_hgm_foreign_loan_cost",
+    "NAM_hgm_export_contract": "NAM_hgm_export_contract_cost",
+    "NAM_hgm_arms_credit_sale": "NAM_hgm_arms_credit_sale_cost",
+    "NAM_hgm_coalition_supply": "NAM_hgm_coalition_supply_cost",
 }
-GREAT_WAR_TARGETS = ("EFL", "AZH", "RHM", "SDR", "KDR")
+GREAT_WAR_TARGETS =("EFL", "AZH", "RHM", "SDR", "KDR")
 # The war of return and the great war end only by full capitulation; none of
 # the former deadline, front-settlement or recovery machinery may return.
 NO_DEADLINE_TOKENS = (
@@ -2487,8 +2514,16 @@ def main() -> int:
         and "id = AZH" in ai,
         "the two profitable volunteer routes are incomplete",
     )
+    # The council's desert war requests fronts against the emirates it fights;
+    # every other strategy keeps Kadir and Sardan out of the volunteer routes.
+    desert_war = named_block(ai, "NAM_mdr_ai_desert")
     check(
-        "tag = KDR" not in ai and "tag = SDR" not in ai,
+        "NAM_great_war_active = yes" in desert_war and "has_country_flag = NAM_corp_takeover" in desert_war,
+        "the council's desert-war fronts must follow its great war",
+    )
+    volunteer_ai = ai.replace(desert_war, "")
+    check(
+        "tag = KDR" not in volunteer_ai and "tag = SDR" not in volunteer_ai,
         "non-beneficiary southern states were incorrectly mobilised",
     )
     check(

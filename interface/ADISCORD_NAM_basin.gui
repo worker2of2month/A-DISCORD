@@ -801,6 +801,142 @@ guiTypes = {
 			alwaystransparent = yes
 			pdx_tooltip = "NAM_bw_map_727_tt"
 		}
+
+		iconType = {
+			name = "NAM_depot_selected_700"
+			position = { x = 151 y = 224 }
+			spriteType = "GFX_NAM_depot_gauge_selected"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_depot_gauge_700"
+			position = { x = 153 y = 226 }
+			spriteType = "GFX_NAM_depot_gauge"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_depot_target_700"
+			position = { x = 153 y = 226 }
+			size = { x = 14 y = 26 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_depot_marker_700_tt"
+		}
+
+		iconType = {
+			name = "NAM_depot_selected_67"
+			position = { x = 238 y = 142 }
+			spriteType = "GFX_NAM_depot_gauge_selected"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_depot_gauge_67"
+			position = { x = 240 y = 144 }
+			spriteType = "GFX_NAM_depot_gauge"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_depot_target_67"
+			position = { x = 240 y = 144 }
+			size = { x = 14 y = 26 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_depot_marker_67_tt"
+		}
+
+		iconType = {
+			name = "NAM_depot_selected_689"
+			position = { x = 201 y = 251 }
+			spriteType = "GFX_NAM_depot_gauge_selected"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_depot_gauge_689"
+			position = { x = 203 y = 253 }
+			spriteType = "GFX_NAM_depot_gauge"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_depot_target_689"
+			position = { x = 203 y = 253 }
+			size = { x = 14 y = 26 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_depot_marker_689_tt"
+		}
+
+		iconType = {
+			name = "NAM_depot_selected_690"
+			position = { x = 218 y = 188 }
+			spriteType = "GFX_NAM_depot_gauge_selected"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_depot_gauge_690"
+			position = { x = 220 y = 190 }
+			spriteType = "GFX_NAM_depot_gauge"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_depot_target_690"
+			position = { x = 220 y = 190 }
+			size = { x = 14 y = 26 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_depot_marker_690_tt"
+		}
+
+		iconType = {
+			name = "NAM_depot_selected_225"
+			position = { x = 12 y = 318 }
+			spriteType = "GFX_NAM_depot_gauge_selected"
+			alwaystransparent = yes
+		}
+
+		iconType = {
+			name = "NAM_depot_gauge_225"
+			position = { x = 14 y = 320 }
+			spriteType = "GFX_NAM_depot_gauge"
+			alwaystransparent = yes
+		}
+
+		buttonType = {
+			name = "NAM_depot_target_225"
+			position = { x = 14 y = 320 }
+			size = { x = 14 y = 26 }
+			quadTextureSprite = "GFX_tiled_window_transparent"
+			clicksound = click_default
+			pdx_tooltip = "NAM_depot_marker_225_tt"
+		}
+
+		instantTextBoxType = {
+			name = "NAM_depot_island_label"
+			position = { x = 36 y = 325 }
+			text = "NAM_depot_island_label"
+			font = "hoi_16mbs"
+			maxWidth = 252
+			maxHeight = 22
+			fixedsize = yes
+			pdx_tooltip = "NAM_depot_marker_225_tt"
+		}
+
+		buttonType = {
+			name = "NAM_depot_press"
+			position = { x = 298 y = 317 }
+			quadTextureSprite = "GFX_button_148x34"
+			buttonText = "NAM_depot_press_button"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+			pdx_tooltip = "NAM_depot_press_tt"
+		}
 		# END GENERATED NAM BASIN MAP
 		instantTextBoxType = {
 			name = "NAM_bw_map_label_67"

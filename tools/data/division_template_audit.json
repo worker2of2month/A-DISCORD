@@ -14811,6 +14811,252 @@
         "kind": "retain",
         "target": "script_ivn_emergency_brigade"
       }
+    },
+    {
+      "key": "script_adiscord_nam_resource_war_effects_directory_field_division",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Directory Field Division",
+      "definition_metadata": {
+        "is_locked": true
+      },
+      "display_name": "Directory Field Division",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 1
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "recon",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_desert_support_company",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "computed": {
+        "organization": 36.772727,
+        "manpower": 7650,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 48,
+          "infantry_equipment": 6885,
+          "motorized_equipment": 10,
+          "support_equipment": 65
+        },
+        "supply": 0.91
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "motorized_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_nam_resource_war_effects_directory_field_division"
+      }
+    },
+    {
+      "key": "script_adiscord_nam_resource_war_effects_company_guard_regiment",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Company Guard Regiment",
+      "definition_metadata": {
+        "is_locked": true
+      },
+      "display_name": "Company Guard Regiment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [
+        {
+          "type": "military_police",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 39.666667,
+        "manpower": 4900,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32,
+          "artillery_equipment": 24,
+          "infantry_equipment": 4410,
+          "support_equipment": 10
+        },
+        "supply": 0.5
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_nam_resource_war_effects_company_guard_regiment"
+      }
+    },
+    {
+      "key": "script_adiscord_nam_resource_war_effects_desert_armoured_column",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Desert Armoured Column",
+      "definition_metadata": {
+        "is_locked": true
+      },
+      "display_name": "Desert Armoured Column",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_mechanized_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_mechanized_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_mechanized_infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_light_tank",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_light_tank",
+          "x": 1,
+          "y": 1
+        }
+      ],
+      "support": [
+        {
+          "type": "recon",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_desert_support_company",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "computed": {
+        "organization": 31.75,
+        "manpower": 4150,
+        "equipment": {
+          "ADISCORD_armored_carrier_archetype": 120,
+          "ADISCORD_recon_platform_archetype": 80,
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 3735,
+          "motorized_equipment": 10,
+          "support_equipment": 35
+        },
+        "supply": 0.85
+      },
+      "equipment_availability": {
+        "ADISCORD_armored_carrier_archetype": true,
+        "ADISCORD_recon_platform_archetype": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "motorized_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_adiscord_nam_resource_war_effects_desert_armoured_column"
+      }
     }
   ],
   "references": [
@@ -15021,7 +15267,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 4
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_2_eq_1_0",
@@ -15193,7 +15439,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1,
-      "count": 1
+      "count": 2
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_line_infantry_brigade_xp_0_5_eq_1_0",
@@ -17879,6 +18125,54 @@
       "legacy_names": [],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_company_guard_regiment_xp_0_15_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Company Guard Regiment",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 1,
+      "count": 7
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_desert_armoured_column_xp_0_15_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Desert Armoured Column",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_directory_field_division_xp_0_15_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Directory Field Division",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_create_unit_old_settlers_militia_xp_0_3_eq_1_0",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Old Settlers Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "adiscord_nam_resource_war_effects_technical_reference_mainland_partisans",
+      "path": "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Mainland Partisans",
+      "legacy_names": [],
       "count": 1
     }
   ]

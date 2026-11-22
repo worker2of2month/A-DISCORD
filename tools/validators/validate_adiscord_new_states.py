@@ -63,6 +63,7 @@ from tools.builders.build_adiscord_ainholm_mandate import (
 from tools.builders.build_adiscord_northern_countries import (
     COUNTRIES as NORTHERN_COUNTRIES,
     build_profiles as build_northern_profiles,
+    load_mon_settlement_points,
 )
 from tools.builders.build_adiscord_inner_frontier_countries import (
     COUNTRIES as INNER_FRONTIER_COUNTRIES,
@@ -86,6 +87,11 @@ NORTHERN_SETTLEMENT_STATES = {
     for country in NORTHERN_COUNTRIES.values()
     for state_id, _name, _value in country.get("secondary_vps", ())
 }
+# MON villages keep their rural declared terrain by design; the MON geography
+# tests hold the carved cities urban. Both are approved by province only.
+MON_SETTLEMENT_VPS = frozenset(
+    province_id for _state_id, province_id, _value, _name in load_mon_settlement_points()
+)
 INNER_FRONTIER_SETTLEMENT_STATES = {
     int(country["capital"]) for country in INNER_FRONTIER_COUNTRIES.values()
 } | {
@@ -118,6 +124,7 @@ APPROVED_NON_URBAN_SETTLEMENT_VPS = (
         _NORTHERN_PRINCIPAL_PROVINCES[state_id]
         for state_id in NORTHERN_SETTLEMENT_STATES
     )
+    | MON_SETTLEMENT_VPS
     | frozenset(
         _INNER_FRONTIER_PRINCIPAL_PROVINCES[state_id]
         for state_id in INNER_FRONTIER_SETTLEMENT_STATES

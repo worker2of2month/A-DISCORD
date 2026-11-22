@@ -32,6 +32,22 @@ class ExclusionZoneBoundaryContractsTest(unittest.TestCase):
                     y = raster.height - 1 - convert(float(fields[4]))
                     self.assertEqual(colors[raster.getpixel((x, y))], int(fields[0]), line)
 
+    def test_carved_mon_provinces_join_their_snapshot_state(self):
+        from unittest.mock import patch
+
+        from tools.builders import build_adiscord_exclusion_zone_boundaries as boundaries
+
+        with patch.object(boundaries, "mon_planned_provinces", return_value={}):
+            baseline = boundaries.load_source()
+        planned = {460: frozenset({90001}), 472: frozenset({90002}), 469: frozenset({90003})}
+        with patch.object(boundaries, "mon_planned_provinces", return_value=planned):
+            extended = boundaries.load_source()
+        self.assertEqual(baseline[460] | {90001}, extended[460])
+        self.assertEqual(baseline[472] | {90002}, extended[472])
+        self.assertNotIn(469, extended)
+        for state_id in set(baseline) - {460, 472}:
+            self.assertEqual(baseline[state_id], extended[state_id])
+
     def test_exclusion_zone_boundary_contract(self):
         self.assertEqual([], validate())
 

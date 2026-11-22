@@ -2312,12 +2312,24 @@ SHL_quarters_and_borders = {
 				tooltip = SHL_ultimatum_veyr_ready_tt
 				SHL_can_strike_veyr = yes
 			}
+			custom_trigger_tooltip = {
+				tooltip = SHL_ultimatum_veyr_not_deferred_tt
+				GLP = { ADISCORD_south_shl_strike_deferred = no }
+			}
 		}
 		cost = 50
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = SHL_ultimatum_veyr_description_rules_tt
 			custom_effect_tooltip = SHL_ultimatum_veyr_tt
+			# SHL_start_glp_war below reads the same check and sends the appeal
+			# or schedules the re-check instead of the war; the price returns
+			# (equal to cost).
+			if = {
+				limit = { hidden_trigger = { GLP = { ADISCORD_south_shl_strike_open = no } } }
+				custom_effect_tooltip = ADISCORD_south_shl_strike_blocked_tt
+				add_political_power = 50
+			}
 			hidden_effect = { SHL_start_glp_war = yes }
 		}
 		ai_will_do = {
@@ -2376,6 +2388,10 @@ SHL_quarters_and_borders = {
 		timeout_effect = {
 			custom_effect_tooltip = SHL_keizan_deadline_description_rules_tt
 			custom_effect_tooltip = SHL_keizan_deadline_timeout_tt
+			if = {
+				limit = { hidden_trigger = { KYZ = { ADISCORD_south_shl_strike_open = no } } }
+				custom_effect_tooltip = ADISCORD_south_shl_strike_blocked_tt
+			}
 			hidden_effect = { SHL_start_kyz_war = yes }
 		}
 	}
@@ -2967,6 +2983,10 @@ SHL_quarters_and_borders = {
 		complete_effect = {
 			custom_effect_tooltip = SHL_march_on_keizan_description_rules_tt
 			custom_effect_tooltip = SHL_march_on_keizan_tt
+			if = {
+				limit = { hidden_trigger = { KYZ = { ADISCORD_south_shl_strike_open = no } } }
+				custom_effect_tooltip = ADISCORD_south_shl_strike_blocked_tt
+			}
 			hidden_effect = { SHL_begin_kyz_mobilization = yes }
 		}
 		remove_effect = { hidden_effect = { SHL_finish_kyz_mobilization = yes } }

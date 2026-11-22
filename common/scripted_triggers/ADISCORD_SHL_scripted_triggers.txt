@@ -2839,13 +2839,24 @@ SHL_seal_petition_possible = {
 	}
 }
 
-# COUNTRY. Svetlogorye's postwar course in the South.
+# COUNTRY. Svetlogorye's postwar course in the South: the republic's southern
+# rule, or the Directory's choice between extraction and a province.
 SHL_seal_overlord_hardline = {
-	NAM = { has_completed_focus = NAM_pw_southern_military_rule }
+	NAM = {
+		OR = {
+			has_completed_focus = NAM_pw_southern_military_rule
+			has_completed_focus = NAM_hgm_southern_extraction
+		}
+	}
 }
 
 SHL_seal_overlord_conciliatory = {
-	NAM = { has_completed_focus = NAM_pw_southern_local_offices }
+	NAM = {
+		OR = {
+			has_completed_focus = NAM_pw_southern_local_offices
+			has_completed_focus = NAM_hgm_southern_province
+		}
+	}
 }
 
 # STATE furnace site. A lit leased furnace whose next pour can still be cooled.

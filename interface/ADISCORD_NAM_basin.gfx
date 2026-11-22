@@ -356,5 +356,17 @@ spriteTypes = {
 		noOfFrames = 4
 		legacy_lazy_load = no
 	}
+
+	spriteType = {
+		name = "GFX_NAM_depot_gauge"
+		texturefile = "gfx/interface/NAM_basin/depot_gauge.png"
+		noOfFrames = 12
+	}
+
+	spriteType = {
+		name = "GFX_NAM_depot_gauge_selected"
+		texturefile = "gfx/interface/NAM_basin/depot_gauge_selected.png"
+		noOfFrames = 1
+	}
 	# END GENERATED NAM BASIN MAP
 }

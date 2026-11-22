@@ -165,6 +165,14 @@ scripted_gui = {
 			NAM_mainland_programmes_active = yes
 		}
 		ai_enabled = { always = no }
+		# Depot gauges read the frames written by NAM_depot_recompute.
+		properties = {
+			NAM_depot_gauge_700 = { frame = NAM_depot_frame_700 }
+			NAM_depot_gauge_67 = { frame = NAM_depot_frame_67 }
+			NAM_depot_gauge_689 = { frame = NAM_depot_frame_689 }
+			NAM_depot_gauge_690 = { frame = NAM_depot_frame_690 }
+			NAM_depot_gauge_225 = { frame = NAM_depot_frame_225 }
+		}
 		effects = {
 			NAM_bw_select_67_click = {
 				set_variable = { NAM_bw_selected_state = 67 }
@@ -201,6 +209,26 @@ scripted_gui = {
 			}
 			NAM_bw_select_727_click = {
 				set_variable = { NAM_bw_selected_state = 727 }
+			}
+			# Depot board: the marked site takes the fronts; the press is the
+			# only paid action of the panel and pays inside NAM_depot_press_target.
+			NAM_depot_target_700_click = {
+				set_variable = { NAM_depot_target = 700 }
+			}
+			NAM_depot_target_67_click = {
+				set_variable = { NAM_depot_target = 67 }
+			}
+			NAM_depot_target_689_click = {
+				set_variable = { NAM_depot_target = 689 }
+			}
+			NAM_depot_target_690_click = {
+				set_variable = { NAM_depot_target = 690 }
+			}
+			NAM_depot_target_225_click = {
+				set_variable = { NAM_depot_target = 225 }
+			}
+			NAM_depot_press_click = {
+				NAM_depot_press_target = yes
 			}
 		}
 		triggers = {
@@ -535,6 +563,82 @@ scripted_gui = {
 				727 = {
 					NOT = { is_owned_by = NAM }
 				}
+			}
+
+			# Depot board: every widget shows only while the board is open; a
+			# dormant site (frame 0) hides its gauge. The island strip replaces the
+			# colour legend while the board is open.
+			NAM_bw_map_legend_visible = {
+				NOT = { has_country_flag = NAM_depot_board_open }
+			}
+			NAM_depot_gauge_700_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_700 > 0 }
+			}
+			NAM_depot_target_700_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_700 > 0 }
+			}
+			NAM_depot_selected_700_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_target = 700 }
+			}
+			NAM_depot_gauge_67_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_67 > 0 }
+			}
+			NAM_depot_target_67_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_67 > 0 }
+			}
+			NAM_depot_selected_67_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_target = 67 }
+			}
+			NAM_depot_gauge_689_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_689 > 0 }
+			}
+			NAM_depot_target_689_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_689 > 0 }
+			}
+			NAM_depot_selected_689_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_target = 689 }
+			}
+			NAM_depot_gauge_690_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_690 > 0 }
+			}
+			NAM_depot_target_690_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_690 > 0 }
+			}
+			NAM_depot_selected_690_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_target = 690 }
+			}
+			NAM_depot_gauge_225_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_225 > 0 }
+			}
+			NAM_depot_target_225_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_frame_225 > 0 }
+			}
+			NAM_depot_selected_225_visible = {
+				has_country_flag = NAM_depot_board_open
+				check_variable = { NAM_depot_target = 225 }
+			}
+			NAM_depot_island_label_visible = {
+				has_country_flag = NAM_depot_board_open
+			}
+			NAM_depot_press_visible = {
+				NAM_depot_press_available = yes
+			}
+			NAM_depot_press_click_enabled = {
+				NOT = { has_political_power < 50 }
 			}
 
 			NAM_bw_underground_visible = {
