@@ -745,9 +745,12 @@ class ShabratUniformIconTests(unittest.TestCase):
             self.assertEqual(path.read_bytes(), content, str(path))
             if path.suffix == ".dds":
                 source = ROOT / "tools/assets/source/country_uniforms" / (path.stem + ".png")
-                with Image.open(source) as original, Image.open(BytesIO(content)) as decoded:
+                with Image.open(BytesIO(content)) as decoded:
                     self.assertEqual(decoded.size, (176, 72))
-                    self.assertEqual(original.tobytes(), decoded.convert("RGBA").tobytes())
+                    self.assertEqual(decoded.mode, "RGBA")
+                    if source.is_file():
+                        with Image.open(source) as original:
+                            self.assertEqual(original.tobytes(), decoded.tobytes())
             else:
                 text = content.decode("utf-8")
                 for block in re.findall(r'[Ss]priteType\s*=\s*\{[^{}]*\}', text):
@@ -1107,6 +1110,27 @@ class CivilTechnologyRedesignTests(unittest.TestCase):
 
 
 class AircraftTechnologyIconTests(unittest.TestCase):
+    def test_optional_card_original_refreshes_the_export_and_missing_inputs_fail(self):
+        from io import BytesIO
+        from PIL import Image
+
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "card.png"
+            target = Path(directory) / "card.dds"
+            with self.assertRaises(FileNotFoundError):
+                generator.card_dds_bytes(source, target)
+            Image.new("RGBA", (1, 1)).save(target)
+            with self.assertRaises(ValueError):
+                generator.card_dds_bytes(source, target)
+            original = Image.new("RGBA", (176, 72), (18, 25, 139, 217))
+            original.save(source)
+            data = generator.card_dds_bytes(source, target)
+            with Image.open(BytesIO(data)) as card:
+                self.assertEqual(card.tobytes(), original.tobytes())
+            target.write_bytes(data)
+            source.unlink()
+            self.assertEqual(generator.card_dds_bytes(source, target), data)
+
     def test_model_based_aircraft_cards_match_native_visual_levels(self):
         from PIL import Image
 
@@ -1142,9 +1166,13 @@ class AircraftTechnologyIconTests(unittest.TestCase):
         for path, content in textures.items():
             self.assertTrue(path.name.startswith("ADISCORD_aircraft_cas_"))
             source = ROOT / "tools/assets/source/country_cas" / (path.stem.removeprefix("ADISCORD_") + ".png")
-            with Image.open(source) as original, Image.open(BytesIO(content)) as decoded:
+            self.assertEqual(path.read_bytes(), content)
+            with Image.open(BytesIO(content)) as decoded:
                 self.assertEqual(decoded.size, (176, 72))
-                self.assertEqual(decoded.convert("RGBA").tobytes(), original.tobytes())
+                self.assertEqual(decoded.mode, "RGBA")
+                if source.is_file():
+                    with Image.open(source) as original:
+                        self.assertEqual(decoded.tobytes(), original.tobytes())
 
     def test_quote_serialization_preserves_apostrophes_and_existing_escapes(self):
         value = 'UCAV-83 \'Magpie\': the crew\'s "aircraft".\\nNext line.'

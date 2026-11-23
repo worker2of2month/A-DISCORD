@@ -71,6 +71,20 @@ class CanonicalCountryNameTests(unittest.TestCase):
             failures, [], "legacy country aliases remain in effective localisation"
         )
 
+    def test_russian_localisation_uses_consistent_vorkerland_names(self) -> None:
+        obsolete = re.compile(
+            r"Петрич[её]в|Уоркс|Бэгли|Воркерленд|Воркеланд|"
+            r"(?<![а-яё])Воркер(?:а|у|ом|е)?(?![а-яё])",
+            re.IGNORECASE,
+        )
+        failures = []
+        for path in (ROOT / "localisation").rglob("*_l_russian.yml"):
+            for line in path.read_text(encoding="utf-8-sig").splitlines():
+                entry = LOCALISATION_LINE.match(line)
+                if entry and (match := obsolete.search(entry[2])):
+                    failures.append(f"{path.name}: {entry[1]}: {match[0]}")
+        self.assertEqual([], failures)
+
     def test_dan_is_explicitly_expeditionary_group_42(self) -> None:
         tag_map = (ROOT / "common/country_tags/00_countries.txt").read_text(
             encoding="utf-8-sig"
@@ -108,6 +122,8 @@ class CanonicalCountryNameTests(unittest.TestCase):
             for line in text.splitlines()
             if (match := LOCALISATION_LINE.match(line))
         )
+        # A country scope inside a substitution resolves before the player sees the text.
+        visible_values = re.sub(r"\[\??NAM\.[\w@.]+(?:\|[^\[\]]*)?\]", "", visible_values)
         self.assertNotRegex(visible_values, r"\bNAM\b")
 
 

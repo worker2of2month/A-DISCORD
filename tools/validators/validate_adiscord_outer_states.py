@@ -24,6 +24,7 @@ try:
         load_province_adjacency,
         load_province_definitions,
         load_source_pool,
+        northern_states,
         parse_state,
         select_landmasses,
         western_source,
@@ -46,6 +47,7 @@ except ModuleNotFoundError:
         load_province_adjacency,
         load_province_definitions,
         load_source_pool,
+        northern_states,
         parse_state,
         select_landmasses,
         western_source,
@@ -57,6 +59,7 @@ except ModuleNotFoundError:
     )
     from builders.build_adiscord_northern_countries import POPULATION_MARKER
 from tools.builders.build_adiscord_new_states import island_district_provinces
+from tools.builders.build_adiscord_exclusion_zone_boundaries import load_source as exclusion_boundary_source
 from tools.validators.validate_adiscord_northern_countries import (
     validate as validate_northern_countries,
 )
@@ -147,6 +150,9 @@ def main() -> int:
     errors: list[str] = []
     source_pool, _outer, _source, generated_paths = load_source_pool()
     province_types, color_to_province = load_province_definitions()
+    northern = {state.state_id: state for state in northern_states(province_types)}
+    # Boundary realignment owns the final assignment of its surveyed provinces.
+    boundary = set().union(*exclusion_boundary_source().values())
     data = build_province_data(province_types, color_to_province)
     adjacency = load_province_adjacency(province_types, color_to_province)
     left, right, _right_components = select_landmasses(source_pool, adjacency, data)
@@ -184,6 +190,9 @@ def main() -> int:
         if not source.startswith(GENERATED_MARKER):
             errors.append(f"state {state_id}: missing generated marker")
         if landmass == "right":
+            shell = northern.get(state_id)
+            if shell is None or shell.climate_region != climate or (provinces ^ shell.provinces) - boundary:
+                errors.append(f"state {state_id}: northern shell membership or climate differs from the manifest")
             if POPULATION_MARKER not in source:
                 errors.append(
                     f"state {state_id}: northern-right shell is not populated"
@@ -266,6 +275,10 @@ def main() -> int:
         for state_id in ids:
             if keys[state_id] != 1:
                 errors.append(f"STATE_{state_id}: expected one generated Russian name")
+        for state_id, name in name_rows:
+            shell = northern.get(int(state_id))
+            if shell is not None and name != shell.name:
+                errors.append(f"STATE_{state_id}: name differs from the northern shell manifest")
         names = Counter(name for _state_id, name in name_rows)
         duplicate_names = sorted(name for name, count in names.items() if count > 1)
         if duplicate_names:

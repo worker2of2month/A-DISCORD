@@ -7,7 +7,7 @@ import unittest
 
 from tools.builders.build_adiscord_focus_trees import SOURCES
 from tools.lib.focus_sources import read_focus_source
-from tools.tests.test_adiscord_stp_preparation import block, entries, scalar, walk
+from tools.tests.test_adiscord_stp_preparation import block, entries, matches_conditions, scalar, walk
 from tools.validators.validate_adiscord_val_rework import focus_layout_coordinates, named_blocks
 
 
@@ -344,7 +344,7 @@ class NewWorldAccountingTests(unittest.TestCase):
                 world.run(base + "_finish")
                 world.run(expanded + "_begin")
                 world.run(base + "_finish")
-                category = block(entries(DECISIONS), "VAL_new_world_category")
+                category = block(entries(DECISIONS), "VAL_khan_preparations")
                 world.execute(block(block(category, base), "cancel_effect"))
                 self.assertEqual(country["vars"][base + "_deposit"], expanded_price)
                 world.run(expanded + "_finish")
@@ -459,7 +459,8 @@ class NewWorldAccountingTests(unittest.TestCase):
         self.assertEqual(world.dirty, {"VAL"})
 
     def test_cancelled_one_time_orders_can_retry_after_liberation(self):
-        decisions = block(entries(DECISIONS), "VAL_new_world_category")
+        source = entries(DECISIONS)
+        decisions = block(source, "VAL_new_world_category") + block(source, "VAL_khan_preparations")
         names = ("survey", "salvage_archives", "emergency_arsenals", "emergency_reserve",
                  "expanded_arsenals", "expanded_reserve")
         for name in names:
@@ -852,7 +853,7 @@ class NewWorldRouteTests(unittest.TestCase):
             if name == "VAL_nw_khan":
                 break
         self.assertEqual(days, 14)
-        decisions = block(entries(DECISIONS), "VAL_new_world_category")
+        decisions = block(entries(DECISIONS), "VAL_khan_preparations")
         # The expanded order reuses the emergency deposit, so each pair runs in sequence.
         finishes = {kind: days + 2 * int(scalar(block(decisions, "VAL_nw_emergency_" + kind), "days_remove"))
                     for kind in ("arsenals", "reserve")}
@@ -922,7 +923,8 @@ class NewWorldRouteTests(unittest.TestCase):
                         self.assertLessEqual(len(rendered.encode("utf-8")), 5500, match[1])
             languages[language] = rows
         self.assertEqual(languages["russian"].keys(), languages["english"].keys())
-        for decision in block(entries(DECISIONS), "VAL_new_world_category"):
+        source = entries(DECISIONS)
+        for decision in block(source, "VAL_new_world_category") + block(source, "VAL_khan_preparations"):
             costs = [e.value for e in decision.value if e.key == "custom_cost_text"]
             for key in costs:
                 self.assertEqual(scalar(decision.value, "cost"), "0")
@@ -1308,7 +1310,19 @@ class NewWorldSettlementTests(unittest.TestCase):
         self.assertFalse(world.matches(world.triggers["VAL_nw_partner_eligible"], "SLA"))
 
     def test_emergency_preparation_does_not_require_late_tree(self):
-        decisions = block(entries(DECISIONS), "VAL_new_world_category")
+        categories = entries("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+        defence = block(block(categories, "VAL_khan_preparations"), "visible")
+        contracts = block(block(categories, "VAL_new_world_category"), "visible")
+        for late_tree in (False, True):
+            for threat, deposit in ((False, False), (True, False), (False, True)):
+                facts = {
+                    ("VAL", "has_focus_tree", "VAL_new_world_focus"): late_tree,
+                    ("VAL", "VAL_nw_khan_threat", "yes"): threat,
+                    ("VAL", "has_variable", "VAL_nw_emergency_reserve_deposit"): deposit,
+                }
+                self.assertEqual(matches_conditions(defence, facts, "VAL"), threat or deposit)
+                self.assertEqual(matches_conditions(contracts, facts, "VAL"), late_tree)
+        decisions = block(entries(DECISIONS), "VAL_khan_preparations")
         for name in ("VAL_nw_emergency_arsenals", "VAL_nw_emergency_reserve"):
             decision = block(decisions, name)
             self.assertEqual(scalar(block(decision, "visible"), "VAL_nw_khan_threat"), "yes")

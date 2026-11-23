@@ -774,3 +774,16 @@
  VICTORY_POINTS_19113: "Гренна"
  VICTORY_POINTS_19114: "Тингвалл"
  VICTORY_POINTS_19115: "Эйден"
+ # BEGIN GENERATED: tools.builders.build_adiscord_remainder_states
+ VICTORY_POINTS_3129: "Северная гавань"
+ VICTORY_POINTS_915: "Морвен"
+ VICTORY_POINTS_10798: "Равенград"
+ VICTORY_POINTS_10738: "Фалорские Ворота"
+ VICTORY_POINTS_5178: "Фалор"
+ VICTORY_POINTS_12569: "Перрин"
+ VICTORY_POINTS_6452: "Ульвен"
+ VICTORY_POINTS_1894: "Лурен"
+ VICTORY_POINTS_1610: "Шарден"
+ VICTORY_POINTS_6545: "Эвенор"
+ VICTORY_POINTS_8399: "Ольрин"
+ # END GENERATED: tools.builders.build_adiscord_remainder_states

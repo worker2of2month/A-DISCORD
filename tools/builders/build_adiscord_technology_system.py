@@ -11119,7 +11119,8 @@ def collect_starting_country_profile_evidence() -> dict[str, dict[str, object]]:
                 )
             )
     for tag, row in evidence.items():
-        country_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
+        country_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} -*.txt"))
+        country_text = ""
         if country_paths:
             country_text = country_paths[0].read_text(encoding="utf-8-sig")
             slots = re.search(r"\bset_research_slots\s*=\s*(\d+)", country_text)
@@ -11130,11 +11131,7 @@ def collect_starting_country_profile_evidence() -> dict[str, dict[str, object]]:
                 r"\bset_grand_doctrine\s*=\s*([A-Za-z0-9_]+)",
                 country_text,
             )
-        history_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
-        history_text = (
-            history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
-        )
-        oob_match = re.search(r'(?m)^\s*oob\s*=\s*"([^"\n]+)"', history_text)
+        oob_match = re.search(r'(?m)^\s*oob\s*=\s*"([^"\n]+)"', country_text)
         oob_name = oob_match.group(1) if oob_match else tag
         oob_path = ROOT / "history" / "units" / f"{oob_name}.txt"
         if oob_path.exists():
@@ -11449,6 +11446,28 @@ def country_aircraft_gfx_entries() -> str:
     return "".join(entries)
 
 
+def card_dds_bytes(source: Path, target: Path) -> bytes:
+    """Export the original when supplied; an existing runtime card is also a valid input."""
+    if not source.is_file():
+        data = target.read_bytes()
+        with Image.open(BytesIO(data)) as card:
+            if card.format != "DDS" or card.mode != "RGBA" or card.size != (176, 72):
+                raise ValueError(f"Runtime card must be a 176x72 RGBA DDS: {target}")
+            card.load()
+        return data
+    with Image.open(source) as card:
+        if card.mode != "RGBA" or card.size != (176, 72):
+            raise ValueError(f"Card must be 176x72 RGBA: {source}")
+        pixels = card.tobytes()
+        stream = BytesIO()
+        card.save(stream, format="DDS")
+    data = stream.getvalue()
+    with Image.open(BytesIO(data)) as decoded:
+        if decoded.convert("RGBA").tobytes() != pixels:
+            raise ValueError(f"DDS encoding altered card artwork: {source}")
+    return data
+
+
 def aircraft_icon_outputs(role: str = "all") -> dict[Path, bytes]:
     outputs = {}
     if role == "bindings":
@@ -11462,18 +11481,8 @@ def aircraft_icon_outputs(role: str = "all") -> dict[Path, bytes]:
         for family in sorted(set(COUNTRY_AIRCRAFT_CARD_FAMILIES.values())):
             for tier in range(1, 4):
                 source = ROOT / "tools/assets/source" / directory / f"{prefix}_{family}_{tier}.png"
-                with Image.open(source) as image:
-                    if image.mode != "RGBA" or image.size != (176, 72):
-                        raise ValueError(f"Aircraft card must be 176x72 RGBA: {source}")
-                    pixels = image.tobytes()
-                    stream = BytesIO()
-                    image.save(stream, format="DDS")
-                content = stream.getvalue()
-                with Image.open(BytesIO(content)) as decoded:
-                    if decoded.convert("RGBA").tobytes() != pixels:
-                        raise ValueError(f"DDS encoding altered aircraft artwork: {source}")
                 target = ROOT / "gfx/interface/technologies" / f"ADISCORD_{prefix}_{family}_{tier}.dds"
-                outputs[target] = content
+                outputs[target] = card_dds_bytes(source, target)
     outputs[ROOT / "interface/ADISCORD_technologies.gfx"] = aircraft_gfx_output()
     return outputs
 
@@ -11657,17 +11666,8 @@ def infantry_card_outputs() -> dict[Path, bytes]:
     )
     for name in names:
         source = ROOT / "tools/assets/source/country_uniforms" / f"{name}.png"
-        with Image.open(source) as image:
-            if image.mode != "RGBA" or image.size != (176, 72):
-                raise ValueError(f"Infantry card must be 176x72 RGBA: {source}")
-            pixels = image.tobytes()
-            stream = BytesIO()
-            image.save(stream, format="DDS")
-        content = stream.getvalue()
-        with Image.open(BytesIO(content)) as decoded:
-            if decoded.convert("RGBA").tobytes() != pixels:
-                raise ValueError(f"DDS encoding altered infantry artwork: {source}")
-        outputs[ROOT / "gfx/interface/technologies" / f"{name}.dds"] = content
+        target = ROOT / "gfx/interface/technologies" / f"{name}.dds"
+        outputs[target] = card_dds_bytes(source, target)
     shield_texture = CUSTOM_TECH_TEXTURES["kefreyt_shield_special_forces"]
     routes = {
         ROOT / "interface/ADISCORD_technologies.gfx": {

@@ -63,6 +63,8 @@ SHL_public_campaigns = {
 	allowed = { tag = SHL }
 	visible = {
 		OR = {
+			has_completed_focus = SHL_written_fire
+			has_completed_focus = SHL_h_golden_gate_festival
 			has_completed_focus = SHL_quarter_listening
 			has_completed_focus = SHL_heralds_table
 			has_completed_focus = SHL_r_safir_cabinet

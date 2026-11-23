@@ -367,6 +367,14 @@ def building_block(text: str, name: str) -> list[Entry]:
 
 
 class StrategicResourcesUIContracts(unittest.TestCase):
+    def test_english_electricity_trait_labels_override_vanilla(self) -> None:
+        override = ROOT / "localisation/replace" / EN_RESOURCES.name
+        data = override.read_bytes()
+        self.assertTrue(data.startswith(b"\xef\xbb\xbfl_english:"))
+        lines = data.decode("utf-8-sig").splitlines()
+        self.assertIn(' country_resource_coal: "Electricity"', lines)
+        self.assertIn(' local_resources_coal_factor: "Electricity Generation Efficiency"', lines)
+
     def test_rare_resources_are_registered_after_electricity_and_localised(
         self,
     ) -> None:

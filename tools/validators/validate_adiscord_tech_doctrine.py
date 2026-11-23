@@ -2810,7 +2810,8 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
                 )
             )
     for tag, row in observed_evidence.items():
-        country_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
+        country_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} -*.txt"))
+        country_text = ""
         if country_paths:
             country_text = read_text(country_paths[0])
             slots = re.search(r"\bset_research_slots\s*=\s*(\d+)", country_text)
@@ -2821,11 +2822,7 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
                 r"\bset_grand_doctrine\s*=\s*([A-Za-z0-9_]+)",
                 country_text,
             )
-        history_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
-        history_text = (
-            history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
-        )
-        oob_match = re.search(r'(?m)^\s*oob\s*=\s*"([^"\n]+)"', history_text)
+        oob_match = re.search(r'(?m)^\s*oob\s*=\s*"([^"\n]+)"', country_text)
         oob_name = oob_match.group(1) if oob_match else tag
         oob_path = ROOT / "history" / "units" / f"{oob_name}.txt"
         if oob_path.exists():
@@ -2971,7 +2968,7 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
         granted = set(GENERATED_STARTING_TECH_PROFILES["common"])
         for profile in profiles:
             granted.update(GENERATED_STARTING_TECH_PROFILES[profile])
-        history_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
+        history_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} -*.txt"))
         history_text = (
             history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
         )
@@ -4072,7 +4069,7 @@ def main() -> int:
     # Effect-only technologies use compact technical symbols. Real equipment
     # unlocks deliberately use wide vanilla weapon/vehicle art, but never a
     # unrelated nuclear warhead. Service badges identify companies on the support tab.
-    unsuitable_prefixes = (
+    support_company_badges = {
         "engineers",
         "recon",
         "tech_field_hospital",
@@ -4080,7 +4077,7 @@ def main() -> int:
         "tech_maintenance_company",
         "tech_signal_company",
         "tech_special_forces",
-    )
+    }
     sprite_scales = {}
     sprite_frames = {}
     gfx_text = read_text(ROOT / "interface/ADISCORD_technologies.gfx")
@@ -4109,7 +4106,7 @@ def main() -> int:
                 issues.append(
                     f"{sprite} uses misleading nuclear-warhead texture {stem}"
                 )
-            if stem.startswith(unsuitable_prefixes) and "support_folder" not in branch.folders:
+            if stem.rstrip("0123456789") in support_company_badges and "support_folder" not in branch.folders:
                 issues.append(f"{sprite} uses support-company badge {stem}")
             if not dimensions:
                 continue

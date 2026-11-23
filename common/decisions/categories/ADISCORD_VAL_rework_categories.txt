@@ -1,11 +1,21 @@
+VAL_khan_preparations = {
+	icon = generic_prepare_civil_war
+	allowed = { tag = VAL }
+	visible = {
+		OR = {
+			VAL_nw_khan_threat = yes
+			has_variable = VAL_nw_emergency_arsenals_deposit
+			has_variable = VAL_nw_emergency_reserve_deposit
+		}
+	}
+	priority = 950
+}
+
 VAL_new_world_category = {
 	priority = 950
 	allowed = { tag = VAL }
 	visible = {
-		OR = {
-			has_focus_tree = VAL_new_world_focus
-			VAL_nw_khan_threat = yes
-		}
+		has_focus_tree = VAL_new_world_focus
 	}
 	visible_when_empty = yes
 }

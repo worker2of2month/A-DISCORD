@@ -14,7 +14,7 @@ ADISCORD_south_final_war_category = {
 		visible = {
 			ADISCORD_south_is_contest_champion = yes
 			ADISCORD_south_champion_contest_ready = yes
-			FROM = { ADISCORD_south_contest_target_open = yes }
+			FROM = { ADISCORD_south_influence_mission_target_open = yes }
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -33,7 +33,7 @@ ADISCORD_south_final_war_category = {
 						ADISCORD_south_is_contest_champion = yes
 						NOT = { has_political_power < 25 }
 						FROM = {
-							ADISCORD_south_contest_target_open = yes
+							ADISCORD_south_influence_mission_target_open = yes
 							ADISCORD_south_coalition_influence_available = yes
 						}
 					}
@@ -74,7 +74,12 @@ ADISCORD_south_final_war_category = {
 		visible = {
 			ADISCORD_south_is_contest_champion = yes
 			ADISCORD_south_champion_advisers_ready = yes
-			FROM = { ADISCORD_south_contest_target_open = yes }
+			FROM = {
+				OR = {
+					ADISCORD_south_influence_mission_target_open = yes
+					ADISCORD_south_adviser_mission_valid = yes
+				}
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -101,7 +106,7 @@ ADISCORD_south_final_war_category = {
 						ADISCORD_south_is_contest_champion = yes
 						NOT = { has_political_power < 20 }
 						FROM = {
-							ADISCORD_south_contest_target_open = yes
+							ADISCORD_south_influence_mission_target_open = yes
 							ADISCORD_south_adviser_post_free = yes
 						}
 					}

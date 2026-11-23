@@ -51,20 +51,24 @@ NAM_exile_politics = {
 	priority = 26
 }
 
-# Veter's humanists: foreign capital, free zones and corporate influence.
-NAM_free_zones = {
-	icon = NAM_free_zones
-	picture = GFX_decision_picture_NAM_board_quay
+NAM_overseas_districts = {
+	icon = generic_naval
 	allowed = { tag = NAM }
 	visible = {
 		OR = {
-			NAM_corp_open = yes
 			AND = {
-				NAM_mainland_programmes_active = yes
 				OR = {
+					NAM_mainland_programmes_active = yes
+					NAM_corp_open = yes
+				}
+				OR = {
+					NAM_convoy_service_authorised = yes
 					has_completed_focus = NAM_island_accounts
 					has_completed_focus = NAM_island_concession
-					NAM_convoy_service_authorised = yes
+					has_completed_focus = NAM_board_old_settlers_oath
+					has_completed_focus = NAM_board_concession_courts
+					has_completed_focus = NAM_board_last_voyage_rifles
+					check_variable = { NAM_marine_orders_paid > 0 }
 				}
 			}
 			AND = {
@@ -76,6 +80,14 @@ NAM_free_zones = {
 			}
 		}
 	}
+	priority = 22
+}
+
+NAM_free_zones = {
+	icon = NAM_free_zones
+	picture = GFX_decision_picture_NAM_board_quay
+	allowed = { tag = NAM }
+	visible = { NAM_corp_open = yes }
 	scripted_gui = ADISCORD_NAM_board_panel
 	visible_when_empty = yes
 	priority = 25
@@ -156,12 +168,7 @@ NAM_national_programmes = {
 NAM_basin_economy = {
 	icon = generic_industry
 	allowed = { tag = NAM }
-	visible = {
-		OR = {
-			NAM_mainland_programmes_active = yes
-			has_focus_tree = NAM_south_war_focus
-		}
-	}
+	visible = { NAM_mainland_programmes_active = yes }
 	priority = 22
 }
 
@@ -218,28 +225,24 @@ NAM_public_campaigns = {
 				NOT = { check_variable = { NAM_board_ended = 1 } }
 			}
 			AND = {
+				NAM_mainland_programmes_active = yes
+				OR = {
+					has_completed_focus = NAM_inventory
+					has_completed_focus = NAM_recognition
+				}
+				NAM_independent_programmes_operable = yes
+			}
+			AND = {
 				OR = {
 					NAM_mainland_programmes_active = yes
 					has_focus_tree = NAM_south_war_focus
 				}
 				OR = {
-					AND = {
-						OR = {
-							has_completed_focus = NAM_inventory
-							has_completed_focus = NAM_recognition
-						}
-						NAM_independent_programmes_operable = yes
-					}
-					# The war tree brings its own campaigns on every route.
-					AND = {
-						OR = {
-							has_completed_focus = NAM_sw_rear_of_svetlogorye
-							has_completed_focus = NAM_sw_drive_to_khazar
-						}
-						ADISCORD_south_final_active = yes
-						has_country_flag = ADISCORD_south_north_leader
-					}
+					has_completed_focus = NAM_sw_rear_of_svetlogorye
+					has_completed_focus = NAM_sw_drive_to_khazar
 				}
+				ADISCORD_south_final_active = yes
+				has_country_flag = ADISCORD_south_north_leader
 			}
 		}
 	}

@@ -9,7 +9,7 @@
 
   superevent_vorkerland_worker_victory_title: "Возрождение Конфедерации"
   superevent_vorkerland_worker_victory_quote: "Согласием малые государства возвышаются, раздором величайшие рушатся.\n\n- Саллюстий, \"Югуртинская война\""
-  superevent_vorkerland_worker_victory_comment: "Воркер собрал Конфедерацию заново"
+  superevent_vorkerland_worker_victory_comment: "Уоркер собрал Конфедерацию заново"
 
   superevent_vorkerland_utilitarian_victory_title: "Утилитарная республика"
   superevent_vorkerland_utilitarian_victory_quote: "Величайшее счастье величайшего числа - мера правильного и неправильного.\n\n- Иеремия Бентам"
@@ -17,9 +17,9 @@
 
   superevent_vorkerland_vlad_victory_title: "Имперская реставрация"
   superevent_vorkerland_vlad_victory_quote: "Где они создают пустыню, они называют это миром.\n\n- Тацит, \"Агрикола\", 30"
-  superevent_vorkerland_vlad_victory_comment: "Влад Петричев вернул единство на штыках"
+  superevent_vorkerland_vlad_victory_comment: "Влад Петрищев вернул единство на штыках"
 
-  superevent_vorkerland_dorian_victory_title: "Воркеландское поле экспериментов"
+  superevent_vorkerland_dorian_victory_title: "Воркерландское поле экспериментов"
   superevent_vorkerland_dorian_victory_quote: "Управление людьми заменяется управлением вещами и руководством процессами производства.\n\n- Фридрих Энгельс, \"Анти-Дюринг\""
   superevent_vorkerland_dorian_victory_comment: "Воркерланд передан тем, кто умеет считать, строить и управлять"
 

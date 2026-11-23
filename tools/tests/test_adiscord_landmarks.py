@@ -162,20 +162,25 @@ class AzharPalaceTests(unittest.TestCase):
         scale = float(re.search(r"scale\s*=\s*([\d.]+)", block)[1])
         state = (ROOT / "history/states/692-Black-Coast.txt").read_text()
         self.assertRegex(state, r"owner\s*=\s*AZH\b")
-        self.assertRegex(state, r"victory_points\s*=\s*\{\s*493\s+1\s*\}")
+        self.assertRegex(state, r"victory_points\s*=\s*\{\s*493\s+[1-9]\d*\s*\}")
         report = json.loads((ROOT / azhar.REPORT).read_text())
         self.assertEqual(report["placement"]["province"], 493)
         self.assertEqual(report["placement"]["position"], [x, y, z])
         self.assertEqual(report["placement"]["scale"], scale)
         bounds = report["bounds_blender_xyz"]
+        districts = json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_bytes())["country_districts"]
+        harbor_colors = {azhar.PROVINCE_RGB}
+        harbor_colors.update(tuple(row["rgb"]) for row in districts
+                             if row["parent"] == azhar.PROVINCE and row["state"] == 692)
         with Image.open(ROOT / "map/provinces.bmp") as provinces, Image.open(ROOT / "map/heightmap.bmp") as heightmap:
+            self.assertEqual(provinces.getpixel((round(x), provinces.height - 1 - round(z))), azhar.PROVINCE_RGB)
             # Check the complete projected footprint, including the approach paving.
             for ix in range(45):
                 px = x + scale * (bounds[0][0] + ix * (bounds[0][1] - bounds[0][0]) / 44)
                 for iz in range(36):
                     pz = z + scale * (bounds[1][0] + iz * (bounds[1][1] - bounds[1][0]) / 35)
                     point = (round(px), provinces.height - 1 - round(pz))
-                    self.assertEqual(provinces.getpixel(point), (254, 232, 65))
+                    self.assertIn(provinces.getpixel(point), harbor_colors)
                     ground = heightmap.getpixel(point) / 10
                     self.assertLessEqual(y + scale * bounds[2][0], ground)
                     self.assertGreaterEqual(y + scale * 1.36, ground)

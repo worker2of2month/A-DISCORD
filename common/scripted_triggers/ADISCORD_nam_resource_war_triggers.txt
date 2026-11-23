@@ -5907,6 +5907,18 @@ NAM_pw_operable = {
 	}
 }
 
+NAM_southern_supply_operable = {
+	OR = {
+		NAM_pw_operable = yes
+		AND = {
+			NAM_country_operable = yes
+			is_subject = no
+			ADISCORD_south_final_active = yes
+			has_country_flag = ADISCORD_south_north_leader
+		}
+	}
+}
+
 NAM_air_bridge_affordable = {
 	NOT = { has_equipment = { ADISCORD_transport_airframe_2162 < 12 } }
 	NOT = { has_fuel < 15000 }

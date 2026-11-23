@@ -67,7 +67,11 @@ class RemainderCountryTests(unittest.TestCase):
             provinces = set().union(*(countries.profiles()[s]["provinces"] for s in row["states"]))
             source = (ROOT / f"history/units/{tag}.txt").read_text(encoding="utf-8")
             locations = list(map(int, re.findall(r"\blocation\s*=\s*(\d+)", source)))
-            self.assertEqual(len(locations), row["divisions"])
+            units = next(entry.value for entry in parse_clausewitz(source) if entry.key == "units")
+            divisions = [entry.value for entry in units if entry.key == "division"]
+            self.assertEqual(len(divisions), row["divisions"])
+            for division in divisions:
+                self.assertEqual(sum(field.key == "location" for field in division), 1)
             self.assertTrue(set(locations) <= provinces)
             history = (ROOT / f"history/countries/{tag} - {tag}.txt").read_text(encoding="utf-8")
             self.assertRegex(history, r"set_convoys\s*=\s*[1-9]\d*")
@@ -80,6 +84,24 @@ class RemainderCountryTests(unittest.TestCase):
                 category = re.search(r"state_category\s*=\s*(\w+)", state)[1]
                 capacity = {"rural": 2, "town": 4, "city": 6}[category]
                 self.assertLessEqual(sum(profile[key] for key in ("civilian", "military", "dockyard")), capacity)
+
+    def test_capital_names_are_in_the_shared_victory_point_catalogues(self):
+        profiles = countries.profiles()
+        for language in ("russian", "english"):
+            directory = ROOT / "localisation" / language
+            catalogue = directory / f"victory_points_l_{language}.yml"
+            entries = re.findall(
+                r'^\s*(VICTORY_POINTS_\d+):\d*\s*"([^"\n]*)"',
+                catalogue.read_text(encoding="utf-8-sig"),
+                re.MULTILINE,
+            )
+            for tag, row in countries.COUNTRIES.items():
+                province = profiles[row["capital"]]["anchor"]
+                key = f"VICTORY_POINTS_{province}"
+                with self.subTest(tag=tag, language=language):
+                    self.assertEqual([v for k, v in entries if k == key], [row["city"][language]])
+            country_file = directory / f"ADISCORD_remainder_countries_l_{language}.yml"
+            self.assertNotRegex(country_file.read_text(encoding="utf-8-sig"), r"(?m)^\s*VICTORY_POINTS_\d+:")
 
     def test_generated_files_and_localisation_encodings_are_current(self):
         self.assertEqual(countries.synchronize(), [])

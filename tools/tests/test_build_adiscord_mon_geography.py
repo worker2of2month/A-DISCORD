@@ -185,6 +185,35 @@ class PureHelperTests(unittest.TestCase):
         self.assertTrue((cut[foreign] <= heights[foreign]).all())
         self.assertTrue(np.array_equal(cut[rows > 30], heights[rows > 30]))
 
+    def test_thinning_leaves_a_simple_line(self) -> None:
+        rivers = np.full((8, 8), mon.RIVER_LAND_PALETTE, np.uint8)
+        rivers[1:7, 3] = 6
+        rivers[3:5, 4] = 6
+        water = np.zeros((8, 8), bool)
+        editable = np.ones((8, 8), bool)
+        self.assertTrue(mon.river_blocks(rivers < 254).any())
+        mon.thin_courses(rivers, editable, water, np.zeros((8, 8), bool))
+        river = rivers < 254
+        self.assertFalse(mon.river_blocks(river).any())
+        self.assertTrue(river[1:7, 3].all())
+        self.assertEqual(mon.course_shape_issues(rivers, editable, water, (0, 0)), [])
+
+    def test_walks_draw_each_pixel_once(self) -> None:
+        rivers = np.full((12, 12), mon.RIVER_LAND_PALETTE, np.uint8)
+        rivers[1, 5] = mon.RIVER_SOURCE_PALETTE
+        rivers[2:10, 5] = 9
+        rivers[5, 6] = mon.RIVER_FLOW_IN_PALETTE
+        rivers[5, 7:10] = 4
+        water = np.zeros((12, 12), bool)
+        visits, forks, walks = mon.walk_courses(rivers, water)
+        self.assertEqual(forks, [])
+        self.assertTrue((visits[rivers < 254] == 1).all())
+        self.assertEqual(walks[(5, 1)][-1], (5, 9))
+        self.assertEqual(walks[(6, 5)][-1], (9, 5))
+        rivers[5, 6] = 4
+        _visits, forks, _walks = mon.walk_courses(rivers, water)
+        self.assertEqual(forks, [(5, 5)])
+
     def test_tributary_starts_lead_away_from_the_receiver(self) -> None:
         river = np.zeros((9, 9), bool)
         river[1:8, 4] = True
@@ -291,10 +320,14 @@ class PlanTests(unittest.TestCase):
         self.assertEqual(issues, [])
         owned = np.zeros(self.grid.shape, bool)
         owned[window.s] = reach
-        # Outside MON an owned reach only widens, takes over the flow-in marker
-        # on its course, gives the river it meets a flow-in pixel beside it and
-        # turns that river's source pixel into plain width.
-        widened = owned & (after >= before) & (before < mon.RIVER_SEA_PALETTE)
+        # Outside MON an owned reach only widens, closes its diagonal steps,
+        # applies its authored pixel edits, takes over the flow-in marker on its
+        # course, gives the river it meets a flow-in pixel beside it and turns
+        # that river's source pixel into plain width.
+        widened = owned & ((after >= before) | (before >= mon.RIVER_SEA_PALETTE))
+        for reach in self.data["owned_reaches"]:
+            for x, y in reach.get("drop", []):
+                widened[y, x] = after[y, x] == mon.RIVER_LAND_PALETTE
         flow_in = (after == mon.RIVER_FLOW_IN_PALETTE) & mon.neighbours_of(owned) & (before < mon.RIVER_SEA_PALETTE)
         sourceless = (before == mon.RIVER_SOURCE_PALETTE) & (after >= mon.WIDTH_STEPS[0]) & (after < mon.RIVER_SEA_PALETTE)
         self.assertFalse((outside & ~(widened | flow_in | sourceless)).any())
@@ -439,11 +472,8 @@ class PlanTests(unittest.TestCase):
         self.assertGreaterEqual(sum(width >= 9 for width in widths) / len(widths), 0.95)
 
     def test_markers_follow_the_native_drawing_rules(self) -> None:
-        markers = [
-            issue
-            for issue in self.plan.issues
-            if "source pixel" in issue or "junctions" in issue or "owned reach" in issue or "tributary" in issue
-        ]
+        words = ("source pixel", "junctions", "owned reach", "tributary", "2x2", "third course", "walk", "drawn")
+        markers = [issue for issue in self.plan.issues if any(word in issue for word in words)]
         self.assertEqual(markers, [])
         for river in self.data["rivers"]:
             path = self.plan.report["rivers"][river["name"]]

@@ -2883,6 +2883,47 @@ SHL_quarters_and_borders = {
 		ai_will_do = { base = 20 }
 	}
 
+	# The price follows SHL_guard_price; the interval is a timed flag that the
+	# wartime hiring contracts lift.
+	SHL_hire_desert_guard = {
+		icon = generic_army_support
+		visible = {
+			OR = {
+				has_completed_focus = SHL_desert_guard_contracts
+				has_completed_focus = SHL_h_conclave_mercenaries
+				has_completed_focus = SHL_h_hired_contracts
+				has_completed_focus = SHL_r_hire_armies
+				has_completed_focus = SHL_sw_guard_columns
+			}
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_guard_hired_tt
+				NOT = { has_country_flag = SHL_guard_hired }
+			}
+			699 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_guard_price compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_guard_hire
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = SHL_guard_price compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = SHL_hire_desert_guard_tt
+			hidden_effect = { SHL_hire_guard = yes }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
 	SHL_south_raid_oil = {
 		icon = generic_operation
 		visible = {
@@ -5489,68 +5530,6 @@ SHL_treasury = {
 		}
 	}
 
-	# The price follows SHL_guard_price; the interval is a timed flag that the
-	# wartime hiring contracts lift.
-	SHL_hire_desert_guard = {
-		icon = generic_army_support
-		visible = {
-			OR = {
-				has_completed_focus = SHL_desert_guard_contracts
-				has_completed_focus = SHL_h_conclave_mercenaries
-				has_completed_focus = SHL_h_hired_contracts
-				has_completed_focus = SHL_r_hire_armies
-				has_completed_focus = SHL_sw_guard_columns
-			}
-		}
-		available = {
-			SHL_country_operable = yes
-			custom_trigger_tooltip = {
-				tooltip = SHL_guard_hired_tt
-				NOT = { has_country_flag = SHL_guard_hired }
-			}
-			699 = {
-				is_owned_by = SHL
-				is_controlled_by = SHL
-			}
-			check_variable = { var = ADISCORD_economy_treasury value = SHL_guard_price compare = greater_than_or_equals }
-		}
-		cost = 0
-		custom_cost_text = SHL_cost_guard_hire
-		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = SHL_guard_price compare = greater_than_or_equals }
-		}
-		fire_only_once = no
-		days_re_enable = 1
-		complete_effect = {
-			custom_effect_tooltip = SHL_hire_desert_guard_tt
-			hidden_effect = { SHL_hire_guard = yes }
-		}
-		ai_will_do = {
-			base = 5
-		}
-	}
-
-	SHL_metal_dumping = {
-		icon = generic_industry
-		visible = { has_completed_focus = SHL_metal_market }
-		available = {
-			SHL_country_operable = yes
-			check_variable = { var = SHL_reserve_stock value = 2 compare = greater_than_or_equals }
-		}
-		cost = 0
-		days_re_enable = 90
-		complete_effect = {
-			custom_effect_tooltip = SHL_metal_dumping_description_rules_tt
-			custom_effect_tooltip = SHL_metal_dumping_tt
-			hidden_effect = {
-				subtract_from_variable = { var = SHL_reserve_stock value = 2 }
-				SHL_receive_250 = yes
-				SHL_refresh_furnaces = yes
-			}
-		}
-		ai_will_do = { base = 3 }
-	}
-
 	SHL_crisis_fund = {
 		icon = ADISCORD_treasury
 		visible = {
@@ -5928,6 +5907,27 @@ SHL_caravans = {
 				}
 			}
 		}
+	}
+
+	SHL_metal_dumping = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_metal_market }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_reserve_stock value = 2 compare = greater_than_or_equals }
+		}
+		cost = 0
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = SHL_metal_dumping_description_rules_tt
+			custom_effect_tooltip = SHL_metal_dumping_tt
+			hidden_effect = {
+				subtract_from_variable = { var = SHL_reserve_stock value = 2 }
+				SHL_receive_250 = yes
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 3 }
 	}
 
 	SHL_metal_contract_offer = {

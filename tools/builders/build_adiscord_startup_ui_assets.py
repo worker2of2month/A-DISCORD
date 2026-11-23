@@ -25,14 +25,7 @@ SIZES = {
     'close': (36, 36),
 }
 PORTRAIT = (220, 440)
-# Country portraits cut from existing campaign art at the briefing's 1:2 ratio:
-# the desert city of the southern superevent.
-PORTRAIT_CROPS = {
-    'shl': ('gfx/interface/superevents/NAM/superevent_resource_war.png', (290, 86, 542, 590)),
-}
-# Every briefing portrait in sprite order. Only PORTRAIT_CROPS are rendered; the
-# others are finished author art. The NAM portrait carries the CRT layer applied
-# after its crop, and a rebuild would strip it.
+# Finished country illustrations are bound in the order used by the briefing.
 PORTRAITS = ('stp', 'val', 'rus', 'shl', 'nam')
 
 BRASS_LIGHT = (230, 202, 144)
@@ -94,17 +87,6 @@ def brass_plate(size: tuple[int, int], selected: bool = False) -> Image.Image:
                    (left, bottom - cut), (left, top + cut)]
         draw.polygon(outline, fill=face, outline=edge)
     return plate
-
-
-def country_illustration(tag: str) -> Image.Image:
-    if tag in PORTRAIT_CROPS:
-        path, viewport = PORTRAIT_CROPS[tag]
-        with Image.open(ROOT / path) as source:
-            return source.convert('RGB').crop(viewport).resize(PORTRAIT, Image.Resampling.LANCZOS)
-    with Image.open(OUTPUT / f'{tag}.png') as source:
-        return source.convert('RGB')
-
-
 
 
 def selection_art(add, roster) -> None:
@@ -333,11 +315,11 @@ def expected_outputs(include_portraits: bool = True) -> dict[Path, bytes]:
     outputs.update(setup_images)
     definitions.extend(setup_definitions)
     if include_portraits:
-        for tag in PORTRAIT_CROPS:
-            portrait = country_illustration(tag)
-            stream = BytesIO()
-            portrait.save(stream, 'PNG')
-            outputs[OUTPUT / f'{tag}.png'] = stream.getvalue()
+        for tag in PORTRAITS:
+            path = OUTPUT / f'{tag}.png'
+            with Image.open(path) as portrait:
+                if portrait.size != PORTRAIT:
+                    raise ValueError(f'{path}: expected {PORTRAIT}, got {portrait.size}')
     for tag in PORTRAITS:
         definitions.extend(
             [
@@ -362,7 +344,7 @@ def main() -> int:
     parser.add_argument(
         '--skin-only',
         action='store_true',
-        help='Build interface surfaces and sprite definitions without rewriting country illustrations.',
+        help='Build interface surfaces and sprite definitions without checking country illustrations.',
     )
     args = parser.parse_args()
     outputs = expected_outputs(include_portraits=not args.skin_only)

@@ -13,6 +13,7 @@ import unittest
 from pathlib import Path
 
 from tools.lib import vorkerland_leader_branches as branches
+from tools.tests.test_adiscord_stp_preparation import block, entries, matches_conditions
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     _blocks,
     _mutually_exclusive_focuses,
@@ -86,6 +87,31 @@ class LeaderBranchTests(unittest.TestCase):
         cls.categories = top_level_blocks(read(CATEGORIES), "")
         cls.events = tail(read(EVENTS), "# --- leader_branch_events ---")
         cls.ideas = top_level_blocks(tail(read(IDEAS), "# --- leader_branch_ideas ---"), "\t\t")
+
+    def test_alternative_focuses_open_only_their_own_administrations_programmes(self):
+        categories = entries(CATEGORIES)
+        decisions = entries(DECISIONS)
+        triggers = entries("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
+        for tag, course, category, focus, decision in (
+            ("WKR", "WKR_presidential_course", "wkr_siege", "WKR_last_one_tongue_for_the_republic", "WKR_last_unispeech_registry"),
+            ("WKR", "WKR_executive_course", "wkr_contracts", "WKR_contract_form_the_shock_reserve", "WKR_contract_commit_the_shock_reserve"),
+            ("TVA", None, "tva_protocol", "TVA_endgame_archive_convoy", "TVA_endgame_pack_the_archive"),
+        ):
+            key = f"ADISCORD_vorkerland_{category}_category"
+            definition = block(categories, key)
+            programmes = [e for section in decisions if section.key == key for e in section.value]
+            visible = block(block(programmes, decision), "visible")
+            facts = {(tag, tag + "_administration_active", "yes"): True}
+            if course:
+                facts[(tag, course, "yes")] = True
+                facts[(tag, "WKR_front_presidential_gate", "yes")] = matches_conditions(
+                    block(triggers, "WKR_front_presidential_gate"), facts, tag)
+            self.assertFalse(matches_conditions(visible, facts, tag), decision)
+            facts[(tag, "has_completed_focus", focus)] = True
+            self.assertTrue(matches_conditions(visible, facts, tag), decision)
+            self.assertTrue(matches_conditions(block(definition, "visible"), facts, tag), category)
+            facts[(tag, tag + "_administration_active", "yes")] = False
+            self.assertFalse(matches_conditions(block(definition, "visible"), facts, tag), category)
 
     def leader_view(self, leader: str) -> set[str]:
         """Focuses one campaign of a leader can see: one course or fate view."""

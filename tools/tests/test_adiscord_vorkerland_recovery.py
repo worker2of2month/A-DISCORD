@@ -620,7 +620,7 @@ class NewSaveMaterializationTests(unittest.TestCase):
         russian = russian_path.read_text(encoding="utf-8-sig")
         for fragment in (
             "country controlled by the player",
-            "Worcker's fate",
+            "Vorkcer's fate",
             "Vlad and Armi",
         ):
             self.assertIn(fragment, english)

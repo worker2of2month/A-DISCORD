@@ -383,8 +383,8 @@
  VICTORY_POINTS_16723: "Kadir"
  VICTORY_POINTS_16724: "Arsan"
  VICTORY_POINTS_16725: "Basiran"
- VICTORY_POINTS_16726: "Rahma"
- VICTORY_POINTS_443: "Rahma-Deh"
+ VICTORY_POINTS_16726: "Rakhma"
+ VICTORY_POINTS_443: "Rakhma-Deh"
  VICTORY_POINTS_16727: "Sardan"
  VICTORY_POINTS_16728: "Azer"
  VICTORY_POINTS_16729: "Barak"
@@ -773,3 +773,16 @@
  VICTORY_POINTS_19114: "Tingvall"
  VICTORY_POINTS_19115: "Eiden"
  # END GENERATED: tools.builders.build_adiscord_new_states
+ # BEGIN GENERATED: tools.builders.build_adiscord_remainder_states
+ VICTORY_POINTS_3129: "Northhaven"
+ VICTORY_POINTS_915: "Morven"
+ VICTORY_POINTS_10798: "Ravengrad"
+ VICTORY_POINTS_10738: "Falor Gate"
+ VICTORY_POINTS_5178: "Falor"
+ VICTORY_POINTS_12569: "Perrin"
+ VICTORY_POINTS_6452: "Ulven"
+ VICTORY_POINTS_1894: "Luren"
+ VICTORY_POINTS_1610: "Charden"
+ VICTORY_POINTS_6545: "Evenor"
+ VICTORY_POINTS_8399: "Olrin"
+ # END GENERATED: tools.builders.build_adiscord_remainder_states

@@ -53,14 +53,24 @@ defined_text = {
 defined_text = {
 	name = ADISCORDSouthDiplomaticBalance
 	text = {
-		trigger = { has_variable = ADISCORD_south_coalition_influence }
-		localization_key = ADISCORD_south_influence_value
+		trigger = {
+			has_variable = ADISCORD_south_coalition_influence
+			check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than }
+		}
+		localization_key = ADISCORD_south_influence_north
+	}
+	text = {
+		trigger = {
+			has_variable = ADISCORD_south_coalition_influence
+			check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than }
+		}
+		localization_key = ADISCORD_south_influence_shl
 	}
 	text = { localization_key = ADISCORD_south_influence_zero }
 }
 
 defined_text = {
-	name = ADISCORDSouthMapGaps
+	name = ADISCORDSouthMapStanding
 	text = {
 		trigger = { exists = no }
 		localization_key = ADISCORD_south_map_gap_absent
@@ -92,26 +102,16 @@ defined_text = {
 		localization_key = ADISCORD_south_map_gap_war
 	}
 	text = {
-		trigger = {
-			ADISCORD_south_map_influence_contested = yes
-			has_variable = ADISCORD_south_coalition_influence
-			set_temp_variable = { var = ADISCORD_south_map_shl_gap value = 60 }
-			add_to_temp_variable = { var = ADISCORD_south_map_shl_gap value = ADISCORD_south_coalition_influence }
-			clamp_temp_variable = { var = ADISCORD_south_map_shl_gap min = 0 max = 160 }
-			set_temp_variable = { var = ADISCORD_south_map_north_gap value = 60 }
-			subtract_from_temp_variable = { var = ADISCORD_south_map_north_gap value = ADISCORD_south_coalition_influence }
-			clamp_temp_variable = { var = ADISCORD_south_map_north_gap min = 0 max = 160 }
-		}
-		localization_key = ADISCORD_south_map_gaps
+		trigger = { ADISCORD_south_map_country_shl = yes }
+		localization_key = ADISCORD_south_map_ally_shl
 	}
 	text = {
-		trigger = {
-			ADISCORD_south_map_influence_contested = yes
-			NOT = { has_variable = ADISCORD_south_coalition_influence }
-			set_temp_variable = { var = ADISCORD_south_map_shl_gap value = 60 }
-			set_temp_variable = { var = ADISCORD_south_map_north_gap value = 60 }
-		}
-		localization_key = ADISCORD_south_map_gaps
+		trigger = { ADISCORD_south_map_country_north = yes }
+		localization_key = ADISCORD_south_map_ally_north
+	}
+	text = {
+		trigger = { ADISCORD_south_map_influence_contested = yes }
+		localization_key = ADISCORD_south_map_balance
 	}
 	text = { localization_key = ADISCORD_south_map_gap_closed }
 }

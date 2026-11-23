@@ -3407,6 +3407,8 @@ def expected_localisation_keys() -> set[str]:
         "WRK_mandate_of_the_network_heir_tt",
         "ADISCORD_vorkerland_prewar_category",
         "ADISCORD_vorkerland_prewar_category_desc",
+        "ADISCORD_vorkerland_district_reserves",
+        "ADISCORD_vorkerland_district_reserves_desc",
         "ADISCORD_vorkerland_prewar_hide_reserves",
         "ADISCORD_vorkerland_prewar_hide_reserves_desc",
         "ADISCORD_vorkerland_reserve_cache_cost",

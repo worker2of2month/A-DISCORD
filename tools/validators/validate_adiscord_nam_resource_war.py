@@ -528,13 +528,13 @@ def check_oil_monopoly(
             "cost = 0" in decision and "custom_cost_text" in decision and "hidden_trigger" in decision,
             f"{decision_name} must recheck its custom price before the single debit",
         )
+    districts = named_block(decisions, "NAM_overseas_districts")
+    for programme in ("NAM_island_convoy_service", "NAM_island_public_works", "NAM_island_concession_231"):
+        check(programme + " = {" in districts, f"{programme} must belong to the overseas districts")
     check(
-        "NAM_overseas_districts = {" not in categories
-        and all(name + " = {" in named_block(decisions, "NAM_free_zones")
-                for name in ("NAM_island_convoy_service", "NAM_island_public_works", "NAM_island_concession_231"))
-        and all(gate in named_block(categories, "NAM_free_zones")
-                for gate in ("NAM_mainland_programmes_active", "NAM_corp_open")),
-        "island programmes must be visible in the council for mainland and corporate routes",
+        "NAM_corp_open = yes" in named_block(categories, "NAM_free_zones")
+        and "NAM_mainland_programmes_active" not in named_block(categories, "NAM_free_zones"),
+        "the mainland must not open the council category",
     )
     for event_id in (
         "ADISCORD_nam_oil.1",
@@ -1323,6 +1323,7 @@ def check_exile_revolution(
     for key in (
         "NAM_exile_politics",
         "NAM_free_zones",
+        "NAM_overseas_districts",
         "NAM_southern_lands",
         "ADISCORD_nam_resource_war.100.d",
         "ADISCORD_nam_resource_war.60.d_exile",

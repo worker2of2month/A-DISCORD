@@ -54,6 +54,7 @@
       "source_sha256": "11ea49226f90e25990eb11e8f6eef29eea4b00c878c9361418611bb2261bea62",
       "tier": 4,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_weapon_04_transitional_modular_weapon.dds",
       "source_size": [
         1942,
@@ -67,6 +68,7 @@
       "source_sha256": "9aa363c94f6b216de5bf23c09c8a87aeb3b096a16fa3c326f4600a191309c809",
       "tier": 5,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_weapon_05_suppressed_assault_system.dds",
       "source_size": [
         1942,
@@ -80,6 +82,7 @@
       "source_sha256": "1e3c80de348493fb90a578caa34fb5c1e43b3a994819f3c346f4d886e682e4f5",
       "tier": 6,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_weapon_06_networked_smart_rifle.dds",
       "source_size": [
         1942,
@@ -93,6 +96,7 @@
       "source_sha256": "fdad73652dac02bbffdd06c7a116580958f82813352372de00ef0f3a7412c712",
       "tier": 7,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_weapon_07_programmable_munition_weapon.dds",
       "source_size": [
         1942,
@@ -106,6 +110,7 @@
       "source_sha256": "0ffb665d9f78fe1e05daf2504529062fd3de1ab2fef7b80c38e22065467d1813",
       "tier": 8,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_weapon_08_advanced_impulse_weapon.dds",
       "source_size": [
         1942,
@@ -119,6 +124,7 @@
       "source_sha256": "b1ad71184752dcea278da5d2cae36990fee5caca513548d0db08ada287169bf9",
       "tier": 9,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_weapon_09_resilient_combat_network_weapon.dds",
       "source_size": [
         1942,
@@ -148,6 +154,7 @@
       "source_sha256": "a90e1b797395d8e16f339cba188ac355177b92006735759259b26a6cc8a4165c",
       "tier": 2,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_squad_02_belt_fed_sections.dds",
       "source_size": [
         1942,
@@ -162,6 +169,7 @@
       "source_sha256": "3363d0541a3978ecaf92f5af829026c249dc7a20362061b2845aa2fa5f36363c",
       "tier": 3,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_squad_03_standardized_heavy_weapons.dds",
       "source_size": [
         1942,
@@ -176,6 +184,7 @@
       "source_sha256": "7b60cd3ba00b220725c6628999c9304df1403109c3b7d170042600cdd8ba1a56",
       "tier": 4,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_squad_04_modular_support_weapons.dds",
       "source_size": [
         1942,
@@ -190,6 +199,7 @@
       "source_sha256": "5be6929dd2f8202a6a9c9a83cb827882f5c20b309626f5eafee3916da7aec629",
       "tier": 5,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_squad_05_sensor_linked_fireteams.dds",
       "source_size": [
         1942,
@@ -204,6 +214,7 @@
       "source_sha256": "b868bdc469056b7021207dedcce74911c0a5c8d21d662564f32406111e9009ae",
       "tier": 6,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_squad_06_programmable_support_systems.dds",
       "source_size": [
         1942,
@@ -218,6 +229,7 @@
       "source_sha256": "9e573bad395fdc571c2f6cb38161d10d32f5ce73956c806b80aa5c5d15b03937",
       "tier": 7,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_squad_07_networked_precision_support.dds",
       "source_size": [
         1942,
@@ -232,6 +244,7 @@
       "source_sha256": "919fa717c0219ff20954dad25cf9515fd6876912a05d2d7925bbde0f81e8b3ee",
       "tier": 8,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_squad_08_autonomous_fire_control.dds",
       "source_size": [
         1942,
@@ -246,6 +259,7 @@
       "source_sha256": "25a1075aa3d233436bf3311a33aa4ec87022ad73c804cc73d33b9c55f1c154b8",
       "tier": 9,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_squad_09_swarm_coordinated_support.dds",
       "source_size": [
         1942,
@@ -530,6 +544,7 @@
       "tier": 2,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_mechanism.dds",
       "crop": [
         418,
@@ -550,6 +565,7 @@
       "tier": 3,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_armour.dds",
       "crop": [
         836,
@@ -570,6 +586,7 @@
       "tier": 4,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_medical.dds",
       "crop": [
         0,
@@ -590,6 +607,7 @@
       "tier": 5,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_respirator.dds",
       "crop": [
         418,
@@ -610,6 +628,7 @@
       "tier": 6,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_drone.dds",
       "crop": [
         812,
@@ -630,6 +649,7 @@
       "tier": 7,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_radio.dds",
       "crop": [
         0,
@@ -650,6 +670,7 @@
       "tier": 8,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_climbing.dds",
       "crop": [
         380,
@@ -670,6 +691,7 @@
       "tier": 9,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_exoskeleton.dds",
       "crop": [
         836,
@@ -690,6 +712,7 @@
       "tier": 10,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_mortar.dds",
       "crop": [
         548,
@@ -710,6 +733,7 @@
       "tier": 12,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_insertion_pod.dds",
       "crop": [
         512,
@@ -730,6 +754,7 @@
       "tier": 13,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_hearing_protection.dds",
       "crop": [
         0,
@@ -750,6 +775,7 @@
       "tier": 14,
       "kind": "compact",
       "family": "equipment",
+      "preview_only": true,
       "output": "ADISCORD_equipment_ballistic_sight.dds",
       "crop": [
         512,
@@ -816,6 +842,7 @@
       "source": "STP_04_transitional_modular_weapon.png",
       "tier": 4,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_STP_weapon_04_transitional_modular_weapon.dds",
       "source_size": [
         1942,
@@ -830,6 +857,7 @@
       "source": "STP_05_suppressed_assault_system.png",
       "tier": 5,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_STP_weapon_05_suppressed_assault_system.dds",
       "source_size": [
         1942,
@@ -844,6 +872,7 @@
       "source": "STP_06_networked_smart_rifle.png",
       "tier": 6,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_STP_weapon_06_networked_smart_rifle.dds",
       "source_size": [
         1942,
@@ -858,6 +887,7 @@
       "source": "STP_07_programmable_munition_weapon.png",
       "tier": 7,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_STP_weapon_07_programmable_munition_weapon.dds",
       "source_size": [
         1942,
@@ -872,6 +902,7 @@
       "source": "STP_08_advanced_impulse_weapon.png",
       "tier": 8,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_STP_weapon_08_advanced_impulse_weapon.dds",
       "source_size": [
         1942,
@@ -886,6 +917,7 @@
       "source": "STP_09_resilient_combat_network_weapon.png",
       "tier": 9,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_STP_weapon_09_resilient_combat_network_weapon.dds",
       "source_size": [
         1942,
@@ -945,6 +977,7 @@
       "source": "VAL_04_transitional_modular_weapon.png",
       "tier": 4,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_VAL_weapon_04_transitional_modular_weapon.dds",
       "source_size": [
         1942,
@@ -959,6 +992,7 @@
       "source": "VAL_05_suppressed_assault_system.png",
       "tier": 5,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_VAL_weapon_05_suppressed_assault_system.dds",
       "source_size": [
         1942,
@@ -973,6 +1007,7 @@
       "source": "VAL_06_networked_smart_rifle.png",
       "tier": 6,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_VAL_weapon_06_networked_smart_rifle.dds",
       "source_size": [
         1942,
@@ -987,6 +1022,7 @@
       "source": "VAL_07_programmable_munition_weapon.png",
       "tier": 7,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_VAL_weapon_07_programmable_munition_weapon.dds",
       "source_size": [
         1942,
@@ -1001,6 +1037,7 @@
       "source": "VAL_08_advanced_impulse_weapon.png",
       "tier": 8,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_VAL_weapon_08_advanced_impulse_weapon.dds",
       "source_size": [
         1942,
@@ -1015,6 +1052,7 @@
       "source": "VAL_09_resilient_combat_network_weapon.png",
       "tier": 9,
       "kind": "wide",
+      "preview_only": true,
       "output": "ADISCORD_VAL_weapon_09_resilient_combat_network_weapon.dds",
       "source_size": [
         1942,
@@ -1029,6 +1067,7 @@
       "source": "infantry_equipment_camouflage.png",
       "tier": 15,
       "kind": "compact",
+      "preview_only": true,
       "output": "ADISCORD_equipment_camouflage.dds",
       "source_size": [
         1254,
@@ -1044,6 +1083,7 @@
       "source": "infantry_equipment_breaching.png",
       "tier": 16,
       "kind": "compact",
+      "preview_only": true,
       "output": "ADISCORD_equipment_breaching.dds",
       "source_size": [
         1254,
@@ -1059,6 +1099,7 @@
       "source": "infantry_equipment_life_support.png",
       "tier": 18,
       "kind": "compact",
+      "preview_only": true,
       "output": "ADISCORD_equipment_life_support.dds",
       "source_size": [
         1254,
@@ -1074,6 +1115,7 @@
       "source": "infantry_equipment_ammunition_carrier.png",
       "tier": 19,
       "kind": "compact",
+      "preview_only": true,
       "output": "ADISCORD_equipment_ammunition_carrier.dds",
       "source_size": [
         1254,
@@ -1089,6 +1131,7 @@
       "source": "infantry_equipment_drone_jammer.png",
       "tier": 20,
       "kind": "compact",
+      "preview_only": true,
       "output": "ADISCORD_equipment_drone_jammer.dds",
       "source_size": [
         1254,

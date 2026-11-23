@@ -62,6 +62,7 @@ class IconSpec:
     source_size: tuple[int, int] = (1893, 831)
     family: str = "service"
     runtime_master: bool = False
+    preview_only: bool = False
 
 
 def load_manifest(path: Path = MANIFEST) -> tuple[IconSpec, ...]:
@@ -83,6 +84,7 @@ def load_manifest(path: Path = MANIFEST) -> tuple[IconSpec, ...]:
                     "family", "night" if entry["kind"] == "compact" else "service"
                 ),
                 runtime_master=bool(entry.get("runtime_master", False)),
+                preview_only=entry.get("preview_only", False),
             )
         )
     return tuple(icons)
@@ -253,6 +255,8 @@ def render_outputs(
     )
     outputs: dict[Path, bytes] = {}
     for spec, icon in rendered:
+        if spec.preview_only:
+            continue
         relative = Path("gfx") / "interface" / "technologies" / spec.output
         if spec.runtime_master:
             source_data = (

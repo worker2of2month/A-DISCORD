@@ -8859,34 +8859,26 @@ class CapitalUnrestTests(unittest.TestCase):
             self.assertEqual(script.conditions(TRIGGERS["WRK_capital_panel_visible"]), panel)
             script.globals.discard(V + "phase_prewar")
             self.assertFalse(script.conditions(category["visible"]))
-        # An autonomous district has exactly one decision here, the reserve cache.
-        decisions = fields(parse(read("common/decisions/ADISCORD_vorkerland_decisions.txt")))[V + "prewar_category"]
-        self.assertGreater(len(decisions), 30)
-        districts = ("EYR", "EGC", "RIV", "YOR")
-        shared = [name for name, _, decision in decisions
-                  if any(tag in str(fields(decision)["allowed"]) for tag in districts)]
-        self.assertEqual(shared, [V + "prewar_hide_reserves"])
-        cache = fields(dict((name, decision) for name, _, decision in decisions)[V + "prewar_hide_reserves"])
-        # It sees the category from the focus that opens the cache, while a region
-        # of its own can still take or is still hiding one, and never as an empty heading.
-        for district in districts:
+        decisions = fields(parse(read("common/decisions/ADISCORD_vorkerland_decisions.txt")))
+        cache = fields(fields(decisions[V + "district_reserves"])[V + "prewar_hide_reserves"])
+        self.assertNotIn(V + "prewar_hide_reserves", fields(decisions[V + "prewar_category"]))
+        reserves = fields(categories[V + "district_reserves"])
+        self.assertNotEqual(reserves.get("visible_when_empty"), "yes")
+        for tag in ("WRK", "EYR", "EGC", "RIV", "YOR"):
             script = Script()
-            script.root = district
-            country = script.scopes[district]
+            script.root = tag
+            country = script.scopes[tag]
             country.focuses.clear()
-            for state in ("75", "106"):
-                script.scopes[state].owner = script.scopes[state].controller = district
-            self.assertFalse(script.conditions(category["visible"]), district)
-            self.assertFalse(script.conditions(cache["visible"]), district)
-            country.focuses.add("VAD_review_district_obligations")
-            self.assertTrue(script.conditions(category["visible"]), district)
-            self.assertTrue(script.conditions(cache["visible"]), district)
-            self.assertFalse(script.conditions(TRIGGERS["WRK_capital_panel_visible"]), district)
-            script.scopes["75"].flags.update({V + "reserve_cache", V + "reserve_cache_ready"})
-            script.scopes["106"].flags.add(V + "reserve_cache")
-            self.assertTrue(script.conditions(category["visible"]), district)
-            script.scopes["106"].flags.add(V + "reserve_cache_ready")
-            self.assertFalse(script.conditions(category["visible"]), district)
+            self.assertEqual(script.conditions(category["allowed"]), tag == "WRK")
+            self.assertTrue(script.conditions(reserves["allowed"]))
+            self.assertFalse(script.conditions(reserves["visible"]))
+            focus = "WRK_measure_confederation_fault_lines" if tag == "WRK" else "VAD_review_district_obligations"
+            country.focuses.add(focus)
+            self.assertEqual(script.conditions(category["visible"]), tag == "WRK")
+            self.assertTrue(script.conditions(reserves["visible"]))
+            self.assertTrue(script.conditions(cache["visible"]))
+            script.globals.discard(V + "phase_prewar")
+            self.assertFalse(script.conditions(reserves["visible"]))
         # The court keeps its own category, open the same way.
         self.assertEqual(fields(categories[V + "court_category"])["visible_when_empty"], "yes")
 

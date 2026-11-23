@@ -42,6 +42,7 @@ from tools.lib.generated_outputs import (
 
 
 ROOT = Path(__file__).resolve().parents[2]
+FACILITY_PROTOTYPES = ("airfield", "bunker", "dockyard")
 REQUIRED_FAMILIES = {
     "debug_idea_catalogue",
     "ambient_audio",
@@ -86,9 +87,14 @@ REQUIRED_FAMILIES = {
     "stp_regions_map",
     "vorkerland_capital_map",
     "nam_basin_map",
+    "nam_combine",
+    "nam_export_office_icons",
+    "nam_export_offices",
+    "shl_administration_assets",
     "shl_furnace_map",
     "nam_piracy_map",
     "nam_naval_models",
+    "south_influence_map",
     "southern_marines",
     "support_company_icons",
     "nam_oilfields",
@@ -126,8 +132,12 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             for path in (ROOT / "tools" / "builders").glob("build_*.py")
         }
         registered_modules = {entry["owner_module"] for entry in self.entries.values()}
+        authoring_modules = {
+            f"tools.builders.build_adiscord_{name}_prototype" for name in FACILITY_PROTOTYPES
+        }
         self.assertEqual(set(self.entries), REQUIRED_FAMILIES)
-        self.assertEqual(registered_modules, builder_modules)
+        self.assertTrue(registered_modules.isdisjoint(authoring_modules))
+        self.assertEqual(registered_modules | authoring_modules, builder_modules)
 
         for entry in self.entries.values():
             with self.subTest(family=entry["id"]):
@@ -149,6 +159,20 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             <= set(self.entries["vorkerland_flags"]["source_inputs"]),
             "copied joint-government flags depend on all three base WRK TGA inputs",
         )
+
+    def test_facility_prototype_scenes_feed_the_registered_exporter(self) -> None:
+        inputs = self.entries["map_facility_models"]["source_inputs"]
+        for name in FACILITY_PROTOTYPES:
+            with self.subTest(prototype=name):
+                report_path = ROOT / "docs/development/model-verification" / f"{name}_prototype.json"
+                report = json.loads(report_path.read_text(encoding="utf-8"))
+                self.assertEqual(report["generator"], f"tools/builders/build_adiscord_{name}_prototype.py")
+                scenes = {
+                    Path(source).name for source in inputs
+                    if Path(source).match(f"{name}_*.blend")
+                }
+                self.assertIn(f"{name}_prototype.blend", scenes)
+                self.assertEqual(scenes, set(report["sources"]))
 
     def test_support_company_textures_and_sprite_bindings_match_their_sources(self) -> None:
         expected = support_company_icons.outputs()
@@ -315,7 +339,11 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         }
         self.assertEqual(
             declared,
-            {f"gfx/interface/technologies/{spec.output}" for spec in load_manifest()},
+            {
+                f"gfx/interface/technologies/{spec.output}"
+                for spec in load_manifest()
+                if not spec.preview_only
+            },
         )
         self.assertTrue(
             {"map/buildings.txt", "history/states/*.txt"}

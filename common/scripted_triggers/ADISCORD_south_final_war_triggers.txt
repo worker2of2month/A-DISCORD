@@ -1328,6 +1328,22 @@ ADISCORD_south_coalition_diplomacy_open = {
 	}
 }
 
+# COUNTRY target. PREV is the champion dispatching a delegation or military advisers.
+ADISCORD_south_influence_mission_target_open = {
+	ADISCORD_south_contest_target_open = yes
+	OR = {
+		NOT = { is_in_faction_with = PREV }
+		AND = {
+			PREV = { tag = SHL }
+			check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = greater_than }
+		}
+		AND = {
+			PREV = { NOT = { tag = SHL } }
+			check_variable = { var = ADISCORD_south_coalition_influence value = 0 compare = less_than }
+		}
+	}
+}
+
 ADISCORD_south_coalition_influence_available = {
 	OR = {
 		AND = {

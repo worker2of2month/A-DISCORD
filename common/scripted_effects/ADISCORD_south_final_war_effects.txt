@@ -763,7 +763,7 @@ ADISCORD_south_raise_second_wave = {
 	}
 	division_template = {
 		name = "Southern Reserve Militia"
-		template_counter = 80
+		template_counter = 7
 		division_names_group = ADISCORD_INF_01
 		regiments = {
 			ADISCORD_militia = { x = 0 y = 0 }

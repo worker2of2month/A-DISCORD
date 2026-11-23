@@ -2823,7 +2823,7 @@
         },
         "STRATEGICREGION_230": {
           "russian": "Кефрейтское побережье",
-          "english": "Kefreite Coast"
+          "english": "Kefreyt Coast"
         },
         "STRATEGICREGION_231": {
           "russian": "Стеландские морские подступы",
@@ -2943,7 +2943,7 @@
         },
         "STRATEGICREGION_260": {
           "russian": "Рахмское побережье",
-          "english": "Rahma Coast"
+          "english": "Rakhma Coast"
         },
         "STRATEGICREGION_261": {
           "russian": "Сарданское нагорье",
@@ -2951,7 +2951,7 @@
         },
         "STRATEGICREGION_262": {
           "russian": "Кейзанские предгорья",
-          "english": "Keizan Uplands"
+          "english": "Keyzan Uplands"
         }
       }
     }
@@ -3009,7 +3009,7 @@
         },
         "STATE_703": {
           "russian": "Рахмский округ",
-          "english": "Rahma District"
+          "english": "Rakhma District"
         },
         "STATE_704": {
           "russian": "Сарданский округ",
@@ -3273,11 +3273,11 @@
         },
         "VICTORY_POINTS_16726": {
           "russian": "Рахма",
-          "english": "Rahma"
+          "english": "Rakhma"
         },
         "VICTORY_POINTS_443": {
           "russian": "Рахма-дех",
-          "english": "Rahma-Deh"
+          "english": "Rakhma-Deh"
         },
         "VICTORY_POINTS_16727": {
           "russian": "Сардан",

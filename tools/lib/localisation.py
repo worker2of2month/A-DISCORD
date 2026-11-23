@@ -86,12 +86,12 @@ def sync_builder_english_localisation(root: Path, owner: str, *, apply: bool) ->
     return 0 if apply or not differences else 1
 
 
-def replace_generated_localisation_block(
+def render_generated_localisation_block(
     path: Path,
     marker: str,
     entries: Mapping[str, str],
-) -> None:
-    """Replace one generator-owned block while preserving the shared file."""
+) -> bytes:
+    """Render one generator-owned block while preserving the shared file."""
     if not path.exists():
         raise RuntimeError(f"shared localisation file is missing: {path}")
     if not path.read_bytes().startswith(b"\xef\xbb\xbf"):
@@ -129,4 +129,12 @@ def replace_generated_localisation_block(
     else:
         updated = source.rstrip() + "\n" + block + "\n"
 
-    path.write_text(updated.rstrip() + "\n", encoding="utf-8-sig", newline="\n")
+    return (updated.rstrip() + "\n").encode("utf-8-sig")
+
+
+def replace_generated_localisation_block(
+    path: Path,
+    marker: str,
+    entries: Mapping[str, str],
+) -> None:
+    path.write_bytes(render_generated_localisation_block(path, marker, entries))

@@ -3,11 +3,11 @@
     "tools/builders/build_adiscord_nam_models.py": "2b6d131e9a1984d8fc8621deabd72e2aa9bf2adc8300b0c998697da4c59342c8",
     "tools/assets/source/build_headquarters.py": "c42764b878d44b3e4b3d9c408305406fe8c1e68d27f66ad75c7895180c828369",
     "tools/assets/source/build_specialists.py": "8b40d2e95f21b4370735d61ec48e9dda2c5674ac1b27964563b800cec60b7487",
-    "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
+    "tools/assets/source/build_country_aircraft.py": "033c7d9b0c75c452c5a443adebc587df2a9eee1932e947ef3534d81a216713f6",
     "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
     "tools/assets/source/build_shl_palace.py": "e0e0aa58c2bb43a8a1eb36a4ccb4ce4d4b8966e763fa015190f1540a64c65d3a",
     "tools/assets/source/build_crimson_sentinel.py": "53d871802e725aa47d0500221a52aab57fd67f1771b2a125cabae3d35a5cba4e",
-    "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c",
+    "tools/assets/source/country_vehicles/package_vehicles.py": "a8d521e2b1336512f1dc27ad7f81324f7febaaf66ee8d9330b691c9f2eed90a9",
     "tools/assets/source/build_northern_infantry.py": "3080b1496a9a0ed213497ce5b1be42e6b2c392af4d420d3e24e699ae64a3e272",
     "tools/assets/source/infantry_polish.py": "e395f146746a100813845209d3a8082751b740366edbc832e261119cab38475e",
     "gfx/leaders/NAM/portrait_NAM_generic_land_01.png": "b45044eecaebb503426bf084fc84cf6295d4d98973c4b7c2af9d5bbda4ef5257",
@@ -29,7 +29,7 @@
     "gfx/models/units/ADISCORD_headquarters/NAM_hq_gear_diffuse.dds": "5fbc46495cab9b9e7c4531cef065c861bf890bd6a0140ef89ab14f8e8acca973",
     "gfx/models/units/ADISCORD_headquarters/NAM_hq_gear_normal.dds": "edfef093ad7908e2fa1783190c6bb7366fa647859157746e1979a278e3896453",
     "gfx/models/units/ADISCORD_headquarters/NAM_hq_gear_specular.dds": "199af671ba6f050b6d7caa9f3274cbdd4a2c9398e165a99564d6ca0c640e0413",
-    "gfx/models/units/ADISCORD_specialists/NAM_marine.mesh": "748ccf7dcbb4dedd70533104417c68827760860106c05d0180aff6f62873d7ab",
+    "gfx/models/units/ADISCORD_specialists/NAM_marine.mesh": "1d145a222316fb26592d14dedd221ad50d32928d3c23b287f0dc1e14a91edd35",
     "gfx/models/units/ADISCORD_specialists/NAM_marine_body_diffuse.dds": "3c8b71a6a3a6307978a5bbddb103fb7b8bb993dd5ac8b887d32def4382809c3f",
     "gfx/models/units/ADISCORD_specialists/NAM_marine_body_normal.dds": "0e1da3351cd0e20fae33216ee833d6fbeca2eb495fc96cf6e3ea9d6fef43f1d1",
     "gfx/models/units/ADISCORD_specialists/NAM_marine_body_specular.dds": "f6f3c85a6fc207fa61bb787711e1edea7dc38e757774384be3a3dd8dd054c5b8",
@@ -54,16 +54,16 @@
     "gfx/models/units/ADISCORD_country_vehicles/NAM_early_cas_idle.anim": "0b057c7f813dcce1bc13a4faf07df643d7b1bc89c7e82a99bc393499ee74efe7",
     "gfx/models/units/ADISCORD_country_vehicles/NAM_future_cas.mesh": "badfdb840776b4d015b6a7f41993c19051aedf0e236f3c80f814b08e63d5106a",
     "gfx/models/units/ADISCORD_country_vehicles/NAM_future_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
-    "tools/assets/source/country_vehicles/NAM_early_fighter.blend": "f5de5ad8d79047d28758b38a6af7028671d7924d2a800b3de9e70b6e52328625",
-    "tools/assets/source/country_vehicles/NAM_fighter.blend": "94e2a4aac5ae8b7ff39be19663be4826570011365d468584c6c685f58b8527b4",
-    "tools/assets/source/country_vehicles/NAM_future_fighter.blend": "d4a771a049ec81fd22bc75edb08964567c719d5508817b2d4fe115eb7c7aa227",
-    "tools/assets/source/country_vehicles/NAM_cas.blend": "c6b0b92ada22cb61b51188fc653ce2ba0fab05e2966095d3c38731e4d234ef5f",
-    "tools/assets/source/country_vehicles/NAM_early_cas.blend": "c62a1f80a40bbd9ef079eb0f08ef60dedf22a1311e9e11db8d2ad02717ceb76c",
-    "tools/assets/source/country_vehicles/NAM_future_cas.blend": "f8b05e28d1d4ad03c75f25e57780b8de8a3ab2421f6c4c33cb04715066c3d8fe",
-    "tools/assets/source/NAM_hq.blend": "a68898dee05889e37140c7671eb55ca387ccce7f726d5d954e3dc015372302e5",
-    "tools/assets/source/NAM_marine.blend": "ec9fb4e93de731225bee68d3269b2d90ec21962d8fd4cd954fd97ba5fd86ad88",
+    "tools/assets/source/country_vehicles/NAM_early_fighter.blend": "7a73bde2312720fa98b081a1e0ce2ac61b62f392753173b327096e5b130c68d0",
+    "tools/assets/source/country_vehicles/NAM_fighter.blend": "3b594f7bcaccf2631d77e178da115746c736d036fce3df747dab97b3d36d6fc1",
+    "tools/assets/source/country_vehicles/NAM_future_fighter.blend": "eb747b4511c60ad17ae0cd78f9970ce003ade37f3063d14b96b15e987218d84f",
+    "tools/assets/source/country_vehicles/NAM_cas.blend": "961fcf4a1c5993b22d6c0995cf4f7248802374f7c58c75d15abc57599e407adc",
+    "tools/assets/source/country_vehicles/NAM_early_cas.blend": "fe1af6c1c81bc3a18abddc4b2ffd5a86986f04eacba9b064ee0a96d6fcf89ca1",
+    "tools/assets/source/country_vehicles/NAM_future_cas.blend": "8252d3700ebcde62c5d8fa0b284403ec3bd09101441a2e3c442727950b114bd1",
+    "tools/assets/source/NAM_hq.blend": "3a4467ab7a68c5db38013cf2e653b2d8b1ebc7a86e7bd0dd2fdc32624ee1a4fb",
+    "tools/assets/source/NAM_marine.blend": "d1a81edf9df7b521fb22c7634583606d7b536b00132dfedbc277735a492647bf",
     "docs/development/model-verification/NAM_headquarters.json": "57fbf1d0eb3ecf8ac4c91a099d5a7f77c1ffdcbf27927159dfa271a4b7cabc1b",
-    "docs/development/model-verification/NAM_marines.json": "f9e681748bb3ae65b4e409f2d52dc6a9f1a1157e1426a7a19bfdf61f5705a616"
+    "docs/development/model-verification/NAM_marines.json": "54f6eabce93f8abd1216bffacb5908056d05d9a354675beffd99da65b2b67423"
   },
   "aircraft": {
     "NAM_early_fighter": {
@@ -96,11 +96,11 @@
         "NAM_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "NAM_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
       },
-      "blend_sha256": "f5de5ad8d79047d28758b38a6af7028671d7924d2a800b3de9e70b6e52328625",
+      "blend_sha256": "7a73bde2312720fa98b081a1e0ce2ac61b62f392753173b327096e5b130c68d0",
       "source_hashes": {
-        "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
+        "tools/assets/source/build_country_aircraft.py": "033c7d9b0c75c452c5a443adebc587df2a9eee1932e947ef3534d81a216713f6",
         "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-        "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
+        "tools/assets/source/country_vehicles/package_vehicles.py": "a8d521e2b1336512f1dc27ad7f81324f7febaaf66ee8d9330b691c9f2eed90a9"
       }
     },
     "NAM_early_cas": {
@@ -133,11 +133,11 @@
         "NAM_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "NAM_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
       },
-      "blend_sha256": "c62a1f80a40bbd9ef079eb0f08ef60dedf22a1311e9e11db8d2ad02717ceb76c",
+      "blend_sha256": "fe1af6c1c81bc3a18abddc4b2ffd5a86986f04eacba9b064ee0a96d6fcf89ca1",
       "source_hashes": {
-        "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
+        "tools/assets/source/build_country_aircraft.py": "033c7d9b0c75c452c5a443adebc587df2a9eee1932e947ef3534d81a216713f6",
         "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-        "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
+        "tools/assets/source/country_vehicles/package_vehicles.py": "a8d521e2b1336512f1dc27ad7f81324f7febaaf66ee8d9330b691c9f2eed90a9"
       }
     },
     "NAM_fighter": {
@@ -170,11 +170,11 @@
         "NAM_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "NAM_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
       },
-      "blend_sha256": "94e2a4aac5ae8b7ff39be19663be4826570011365d468584c6c685f58b8527b4",
+      "blend_sha256": "3b594f7bcaccf2631d77e178da115746c736d036fce3df747dab97b3d36d6fc1",
       "source_hashes": {
-        "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
+        "tools/assets/source/build_country_aircraft.py": "033c7d9b0c75c452c5a443adebc587df2a9eee1932e947ef3534d81a216713f6",
         "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-        "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
+        "tools/assets/source/country_vehicles/package_vehicles.py": "a8d521e2b1336512f1dc27ad7f81324f7febaaf66ee8d9330b691c9f2eed90a9"
       }
     },
     "NAM_cas": {
@@ -207,11 +207,11 @@
         "NAM_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "NAM_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
       },
-      "blend_sha256": "c6b0b92ada22cb61b51188fc653ce2ba0fab05e2966095d3c38731e4d234ef5f",
+      "blend_sha256": "961fcf4a1c5993b22d6c0995cf4f7248802374f7c58c75d15abc57599e407adc",
       "source_hashes": {
-        "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
+        "tools/assets/source/build_country_aircraft.py": "033c7d9b0c75c452c5a443adebc587df2a9eee1932e947ef3534d81a216713f6",
         "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-        "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
+        "tools/assets/source/country_vehicles/package_vehicles.py": "a8d521e2b1336512f1dc27ad7f81324f7febaaf66ee8d9330b691c9f2eed90a9"
       }
     },
     "NAM_future_fighter": {
@@ -244,11 +244,11 @@
         "NAM_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "NAM_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
       },
-      "blend_sha256": "d4a771a049ec81fd22bc75edb08964567c719d5508817b2d4fe115eb7c7aa227",
+      "blend_sha256": "eb747b4511c60ad17ae0cd78f9970ce003ade37f3063d14b96b15e987218d84f",
       "source_hashes": {
-        "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
+        "tools/assets/source/build_country_aircraft.py": "033c7d9b0c75c452c5a443adebc587df2a9eee1932e947ef3534d81a216713f6",
         "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-        "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
+        "tools/assets/source/country_vehicles/package_vehicles.py": "a8d521e2b1336512f1dc27ad7f81324f7febaaf66ee8d9330b691c9f2eed90a9"
       }
     },
     "NAM_future_cas": {
@@ -281,11 +281,11 @@
         "NAM_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
         "NAM_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
       },
-      "blend_sha256": "f8b05e28d1d4ad03c75f25e57780b8de8a3ab2421f6c4c33cb04715066c3d8fe",
+      "blend_sha256": "8252d3700ebcde62c5d8fa0b284403ec3bd09101441a2e3c442727950b114bd1",
       "source_hashes": {
-        "tools/assets/source/build_country_aircraft.py": "b19f6986386200ea73c5d76c8288cb2ed7ab603048601bd047c2fb2bbfa1ccc0",
+        "tools/assets/source/build_country_aircraft.py": "033c7d9b0c75c452c5a443adebc587df2a9eee1932e947ef3534d81a216713f6",
         "tools/assets/source/build_country_cas.py": "8093cb31d67432ddd5ef0f1d2b16f9f792d2f7ff290235bdddaffdb22bfcfabc",
-        "tools/assets/source/country_vehicles/package_vehicles.py": "69e61799564c9de7a2082c4674f4e83786109e0823858d5ff992aa9140369b3c"
+        "tools/assets/source/country_vehicles/package_vehicles.py": "a8d521e2b1336512f1dc27ad7f81324f7febaaf66ee8d9330b691c9f2eed90a9"
       }
     }
   },

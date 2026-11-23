@@ -29,6 +29,7 @@ try:
         LATITUDE_EDGES,
         LOCALISATION,
         band_for_y,
+        plan_states,
     )
     from tools.builders.build_adiscord_new_states import NAM_ARCHIPELAGO_ISLANDS
     from tools.builders.build_adiscord_strategic_regions import (
@@ -53,6 +54,7 @@ except ModuleNotFoundError:
         LATITUDE_EDGES,
         LOCALISATION,
         band_for_y,
+        plan_states,
     )
     from builders.build_adiscord_new_states import NAM_ARCHIPELAGO_ISLANDS
     from builders.build_adiscord_strategic_regions import (
@@ -209,6 +211,9 @@ def main() -> int:
         province_types, color_to_province, include_special_adjacencies=False
     )
     bridge_ends = island_bridge_ends()
+    surveyed = {state.state_id: state for state in plan_states()}
+    if surveyed.keys() != rows.keys():
+        errors.append("remainder state IDs differ from the surveyed partition")
     for state_id, (path, provinces, climate_key, strategic_name) in sorted(
         rows.items()
     ):
@@ -219,6 +224,13 @@ def main() -> int:
         )
         if str(state_id) in western_source()["states"]:
             continue
+        shell = surveyed.get(state_id)
+        if shell is None or (
+            provinces - all_raised != shell.provinces
+            or climate_key != shell.climate_region
+            or strategic_name != shell.strategic_name
+        ):
+            errors.append(f"state {state_id}: province membership, climate or name differs from its surveyed shell")
         if not provinces - all_raised:
             errors.append(f"state {state_id}: empty")
             continue

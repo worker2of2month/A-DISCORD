@@ -403,7 +403,10 @@ class TechnologyIconBuilderTests(unittest.TestCase):
             if path.suffix == ".dds" and path.parent.name == "technologies"
         }
 
-        self.assertEqual(len(dds_outputs), len(builder.load_manifest()))
+        self.assertEqual(
+            {path.name for path in dds_outputs},
+            {spec.output for spec in builder.load_manifest() if not spec.preview_only},
+        )
         for path, payload in dds_outputs.items():
             with Image.open(BytesIO(payload)) as image:
                 expected = (

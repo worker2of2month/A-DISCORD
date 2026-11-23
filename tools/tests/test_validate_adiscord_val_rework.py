@@ -373,6 +373,19 @@ class ValOrderLedgerTests(unittest.TestCase):
 
 
 class ValTradeMapTests(unittest.TestCase):
+    def test_only_stelander_operations_panel_contains_the_control_legend(self):
+        from tools.validators.validate_adiscord_val_rework import validate_operations_map_labels
+
+        gui = (ROOT / "interface/ADISCORD_VAL_operations.gui").read_text(encoding="utf-8")
+        self.assertEqual(validate_operations_map_labels(gui), [])
+        for changed in (
+            gui.replace('text = "STP_operations_map_legend"', 'text = "unexpected"'),
+            gui.replace('name = "ADISCORD_VAL_operations_panel_window"',
+                        'name = "ADISCORD_VAL_operations_panel_window" instantTextBoxType = { text = "unexpected" }'),
+            gui.replace('name = "ADISCORD_STP_operations_panel_window"', 'name = "wrong_window"'),
+        ):
+            self.assertTrue(validate_operations_map_labels(changed))
+
     def test_route_frames_preserve_all_statuses_with_one_availability_read(self):
         from collections import Counter
         from tools.builders import build_adiscord_val_operations_map as builder
@@ -1848,7 +1861,16 @@ class ValRewardValidatorTests(unittest.TestCase):
         del missing["new_world"]
         accepted, issues = self.preview_issues(sources=missing)
         self.assertTrue(issues)
-        self.assertTrue(previews.isdisjoint(accepted))
+        # These previews still have their own consumers in the settlement events.
+        self.assertEqual(previews & accepted, {
+            "VAL_nw_pensions_delta",
+            "VAL_nw_joint_staff_delta",
+            "VAL_nw_army_charter_delta",
+            "VAL_peace_throne_delta",
+            "VAL_peace_cabinet_delta",
+            "VAL_peace_charter_delta",
+            "VAL_peace_captains_delta",
+        })
 
     def test_new_world_direct_delta_requires_installation_refresh_and_budget_invalidation(self):
         sources = self.preview_sources()
@@ -1911,6 +1933,7 @@ class ValRewardValidatorTests(unittest.TestCase):
     def test_dummy_installation_is_rejected_even_in_hidden_effect(self):
         for effect in (
             "add_ideas = VAL_company_rosters_delta",
+            "add_ideas = { VAL_company_rosters_delta }",
             "hidden_effect = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_company_rosters_delta } }",
             "add_timed_idea = { idea = VAL_company_rosters_delta days = 30 }",
         ):
@@ -1918,7 +1941,19 @@ class ValRewardValidatorTests(unittest.TestCase):
                 "events/probe.txt": "country_event = { immediate = { " + effect + " } }"
             }
             with self.subTest(effect=effect):
-                self.assertTrue(self.preview_issues(sources=sources)[1])
+                accepted, issues = self.preview_issues(sources=sources)
+                self.assertTrue(issues)
+                self.assertNotIn("VAL_company_rosters_delta", accepted)
+                self.assertIn("VAL_nw_industry_delta", accepted)
+
+    def test_preview_removal_is_harmless_but_does_not_prove_a_tooltip(self):
+        candidate = "VAL_army_3_preview"
+        sources = self.preview_sources() | {
+            "cleanup": f"reset = {{ remove_ideas = {{ {candidate} }} remove_ideas = {candidate} }}"
+        }
+        self.assertEqual(self.preview_issues(sources=sources)[1], [])
+        _, issues = self.preview_issues(sources={"cleanup": sources["cleanup"]})
+        self.assertTrue(any(f"{candidate} has no validated tooltip" in issue for issue in issues))
 
     def test_preview_cannot_be_hidden_from_the_player(self):
         sources = self.preview_sources()
@@ -2243,7 +2278,8 @@ class ValNativePreviewTests(unittest.TestCase):
         sources = check.preview_sources()
         sources["effects"] = drifted
         accepted, issues = check.preview_issues(sources=sources)
-        self.assertEqual(accepted, set())
+        self.assertNotIn("VAL_army_3_preview", accepted)
+        self.assertIn("VAL_nw_industry_delta", accepted)
         self.assertTrue(
             any(
                 "VAL_contract_army_3 differs from VAL_contract_state" in issue
@@ -6871,6 +6907,15 @@ class ValNumericPreviewChainTests(unittest.TestCase):
         self.assertEqual(
             validate_supplemental_rewards(focus, effects, decisions_text=decision), []
         )
+        for op, amount, paid in (
+            ("add_to_variable", -400, True), ("subtract_from_variable", 400, True),
+            ("add_to_variable", 400, False), ("subtract_from_variable", -400, False),
+            ("add_to_variable", 0, False), ("subtract_from_variable", 0, False),
+        ):
+            payment = f"{op} = {{ var = ADISCORD_economy_treasury value = {amount} }}"
+            with self.subTest(payment=payment):
+                changed = effects.replace("ADISCORD_economy_spend_500 = yes", payment)
+                self.assertEqual(not validate_supplemental_rewards(focus, changed, decisions_text=decision), paid)
         for broken in (
             decision.replace("VAL_pay_order = yes", "VAL_pay_order = no"),
             decision.replace("VAL_deliver_order = yes", "add_manpower = -100"),

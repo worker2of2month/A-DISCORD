@@ -46,6 +46,7 @@ git diff --check
 Иконки оружейных технологий принадлежат `tools.builders.build_adiscord_technology_icons`.
 Их исходники и привязки задаёт `tools/data/adiscord_technology_weapon_icons.json`;
 поля `source`, `source_sha256`, `source_size` должны описывать выбранное изображение.
+Записи с `preview_only = true` попадают в лист предпросмотра. В игровую сборку входят записи без этого признака.
 Готовые изображения в `tools/assets/source/technology_weapons/*_runtime.dds`
 используют `runtime_master = true`: широкие карточки копируются побайтово,
 компактные изображения 70x70 получают прозрачную рамку до 72x72 без изменения

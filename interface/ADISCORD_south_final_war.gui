@@ -5531,7 +5531,7 @@ guiTypes = {
 			position = { x = 46 y = 363 }
 			text = "ADISCORD_south_map_name_SHL"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_SHL_tt"
@@ -5539,10 +5539,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_SHL"
-			position = { x = 141 y = 363 }
+			position = { x = 132 y = 363 }
 			text = "ADISCORD_south_map_gap_SHL"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5557,12 +5557,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_SHL_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_SHL"
-			position = { x = 0 y = 383 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_SHL_origin"
+			position = { x = 116 y = 383 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_SHL"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -5578,7 +5584,7 @@ guiTypes = {
 			position = { x = 270 y = 363 }
 			text = "ADISCORD_south_map_name_NAM"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_NAM_tt"
@@ -5586,10 +5592,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_NAM"
-			position = { x = 365 y = 363 }
+			position = { x = 356 y = 363 }
 			text = "ADISCORD_south_map_gap_NAM"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5604,12 +5610,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_NAM_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_NAM"
-			position = { x = 0 y = 383 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_NAM_origin"
+			position = { x = 340 y = 383 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_NAM"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -5625,7 +5637,7 @@ guiTypes = {
 			position = { x = 46 y = 401 }
 			text = "ADISCORD_south_map_name_EFL"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_EFL_tt"
@@ -5633,10 +5645,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_EFL"
-			position = { x = 141 y = 401 }
+			position = { x = 132 y = 401 }
 			text = "ADISCORD_south_map_gap_EFL"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5651,12 +5663,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_EFL_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_EFL"
-			position = { x = 0 y = 421 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_EFL_origin"
+			position = { x = 116 y = 421 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_EFL"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -5672,7 +5690,7 @@ guiTypes = {
 			position = { x = 270 y = 401 }
 			text = "ADISCORD_south_map_name_AZH"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_AZH_tt"
@@ -5680,10 +5698,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_AZH"
-			position = { x = 365 y = 401 }
+			position = { x = 356 y = 401 }
 			text = "ADISCORD_south_map_gap_AZH"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5698,12 +5716,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_AZH_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_AZH"
-			position = { x = 0 y = 421 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_AZH_origin"
+			position = { x = 340 y = 421 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_AZH"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -5719,7 +5743,7 @@ guiTypes = {
 			position = { x = 46 y = 439 }
 			text = "ADISCORD_south_map_name_WEF"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_WEF_tt"
@@ -5727,10 +5751,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_WEF"
-			position = { x = 141 y = 439 }
+			position = { x = 132 y = 439 }
 			text = "ADISCORD_south_map_gap_WEF"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5745,12 +5769,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_WEF_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_WEF"
-			position = { x = 0 y = 459 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_WEF_origin"
+			position = { x = 116 y = 459 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_WEF"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -5766,7 +5796,7 @@ guiTypes = {
 			position = { x = 270 y = 439 }
 			text = "ADISCORD_south_map_name_KDR"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_KDR_tt"
@@ -5774,10 +5804,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_KDR"
-			position = { x = 365 y = 439 }
+			position = { x = 356 y = 439 }
 			text = "ADISCORD_south_map_gap_KDR"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5792,12 +5822,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_KDR_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_KDR"
-			position = { x = 0 y = 459 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_KDR_origin"
+			position = { x = 340 y = 459 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_KDR"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -5813,7 +5849,7 @@ guiTypes = {
 			position = { x = 46 y = 477 }
 			text = "ADISCORD_south_map_name_RHM"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_RHM_tt"
@@ -5821,10 +5857,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_RHM"
-			position = { x = 141 y = 477 }
+			position = { x = 132 y = 477 }
 			text = "ADISCORD_south_map_gap_RHM"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5839,12 +5875,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_RHM_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_RHM"
-			position = { x = 0 y = 497 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_RHM_origin"
+			position = { x = 116 y = 497 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_RHM"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -5860,7 +5902,7 @@ guiTypes = {
 			position = { x = 270 y = 477 }
 			text = "ADISCORD_south_map_name_SDR"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_SDR_tt"
@@ -5868,10 +5910,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_SDR"
-			position = { x = 365 y = 477 }
+			position = { x = 356 y = 477 }
 			text = "ADISCORD_south_map_gap_SDR"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5886,12 +5928,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_SDR_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_SDR"
-			position = { x = 0 y = 497 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_SDR_origin"
+			position = { x = 340 y = 497 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_SDR"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -5907,7 +5955,7 @@ guiTypes = {
 			position = { x = 46 y = 515 }
 			text = "ADISCORD_south_map_name_KYZ"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_KYZ_tt"
@@ -5915,10 +5963,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_KYZ"
-			position = { x = 141 y = 515 }
+			position = { x = 132 y = 515 }
 			text = "ADISCORD_south_map_gap_KYZ"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5933,12 +5981,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_KYZ_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_KYZ"
-			position = { x = 0 y = 535 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_KYZ_origin"
+			position = { x = 116 y = 535 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_KYZ"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -5954,7 +6008,7 @@ guiTypes = {
 			position = { x = 270 y = 515 }
 			text = "ADISCORD_south_map_name_MZR"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_MZR_tt"
@@ -5962,10 +6016,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_MZR"
-			position = { x = 365 y = 515 }
+			position = { x = 356 y = 515 }
 			text = "ADISCORD_south_map_gap_MZR"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -5980,12 +6034,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_MZR_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_MZR"
-			position = { x = 0 y = 535 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_MZR_origin"
+			position = { x = 340 y = 535 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_MZR"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		iconType = {
@@ -6001,7 +6061,7 @@ guiTypes = {
 			position = { x = 46 y = 553 }
 			text = "ADISCORD_south_map_name_GLP"
 			font = "hoi_16mbs"
-			maxWidth = 94
+			maxWidth = 86
 			maxHeight = 20
 			fixedsize = yes
 			pdx_tooltip = "ADISCORD_south_map_GLP_tt"
@@ -6009,10 +6069,10 @@ guiTypes = {
 
 		instantTextBoxType = {
 			name = "ADISCORD_south_map_gap_GLP"
-			position = { x = 141 y = 553 }
+			position = { x = 132 y = 553 }
 			text = "ADISCORD_south_map_gap_GLP"
 			font = "hoi_16mbs"
-			maxWidth = 79
+			maxWidth = 88
 			maxHeight = 20
 			fixedsize = yes
 			format = right
@@ -6027,12 +6087,18 @@ guiTypes = {
 			pdx_tooltip = "ADISCORD_south_map_GLP_tt"
 		}
 
-		iconType = {
-			name = "ADISCORD_south_map_marker_GLP"
-			position = { x = 0 y = 573 }
-			quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
-			frame = 1
-			alwaystransparent = yes
+		containerWindowType = {
+			name = "ADISCORD_south_map_marker_GLP_origin"
+			position = { x = 116 y = 573 }
+			size = { width = 1 height = 12 }
+			clipping = no
+			iconType = {
+				name = "ADISCORD_south_map_marker_GLP"
+				position = { x = 0 y = 0 }
+				quadTextureSprite = "GFX_ADISCORD_south_map_influence_marker"
+				frame = 1
+				alwaystransparent = yes
+			}
 		}
 
 		instantTextBoxType = {

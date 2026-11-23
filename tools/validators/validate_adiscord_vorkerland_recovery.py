@@ -477,7 +477,7 @@ def validate_wkr_semantics() -> list[str]:
     claimant_choice_localisation = (
         (
             ENGLISH_LOCALISATION,
-            ("country controlled by the player", "Worcker's fate", "Vlad and Armi"),
+            ("country controlled by the player", "Vorkcer's fate", "Vlad and Armi"),
             "joint government",
         ),
         (

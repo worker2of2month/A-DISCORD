@@ -1584,7 +1584,7 @@ NAM_rw_coalition_second_wave = {
 	}
 	division_template = {
 		name = "Coalition Reserve Militia"
-		template_counter = 80
+		template_counter = 7
 		division_names_group = ADISCORD_INF_01
 		regiments = {
 			ADISCORD_militia = { x = 0 y = 0 }
@@ -38941,7 +38941,7 @@ NAM_program_southern_budget_settle = {
 		limit = { has_country_flag = NAM_program_southern_budget_paid }
 		if = {
 			limit = {
-				NAM_pw_operable = yes
+				NAM_southern_supply_operable = yes
 			}
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
@@ -38975,7 +38975,7 @@ NAM_program_southern_reserve_settle = {
 		limit = { has_country_flag = NAM_program_southern_reserve_paid }
 		if = {
 			limit = {
-				NAM_pw_operable = yes
+				NAM_southern_supply_operable = yes
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment

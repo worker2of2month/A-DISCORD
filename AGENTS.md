@@ -165,6 +165,9 @@ uniform. Fix authored sections and their generators instead.
 
 ## Gameplay rewards and UI
 
+Keep campaign difficulty descriptions brief. Summarize what the player will notice
+in one or two short sentences. Omit modifier lists, AI rules and scenario-specific rewards.
+
 Joining alliances, creating factions, and declaring wars are disabled diplomatic
 actions in this mod. Players may do these only through scripted focuses,
 decisions, and their events. Do not re-enable these actions in a focus reward

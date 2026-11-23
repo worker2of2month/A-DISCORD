@@ -538,8 +538,19 @@ def validate_supplemental_rewards(
         def debit(entry):
             if entry.key.startswith("ADISCORD_economy_spend_"):
                 return entry.value == "yes"
-            if entry.key == "subtract_from_variable":
-                return script_fields(entry.value).get("var") == "ADISCORD_economy_treasury"
+            if entry.key in {"add_to_variable", "subtract_from_variable"} and isinstance(
+                entry.value, list
+            ):
+                fields = script_fields(entry.value)
+                if fields.get("var") != "ADISCORD_economy_treasury":
+                    return False
+                try:
+                    amount = float(fields["value"])
+                except (KeyError, ValueError):
+                    return False
+                return math.isfinite(amount) and (
+                    amount < 0 if entry.key == "add_to_variable" else amount > 0
+                )
             if entry.key in {
                 "add_manpower", "add_political_power", "add_equipment_to_stockpile"
             }:
@@ -635,9 +646,15 @@ def validate_val_preview_ideas(
     Aggregate previews follow focus flags or numeric input additions through
     refresh into the native dynamic-modifier variable mapping.
     Industry previews instead compare the installed tier vectors at every tier.
-    Read-only has_idea probes are permitted; executable references are not.
+    Probes and cleanup do not install an idea or demonstrate a tooltip consumer.
     """
     issues: list[str] = []
+    invalid = set()
+
+    def reject(idea, message):
+        invalid.add(idea)
+        issues.append(message)
+
     ideas_root = script_children(parse_clausewitz(ideas_text), "ideas")
     declarations = [
         e
@@ -670,18 +687,18 @@ def validate_val_preview_ideas(
                 e.key: float(e.value) for e in script_children(ideas[idea], "modifier")
             }
         except (KeyError, ValueError, TypeError):
-            issues.append(f"preview {idea} must use a declared numeric modifier vector")
+            reject(idea, f"preview {idea} must use a declared numeric modifier vector")
             return {}
 
     vectors = {key: modifiers(key) for key in ideas}
     for idea in sorted(candidates):
         if sum(e.key == idea for e in declarations) != 1:
-            issues.append(f"preview {idea} must be declared exactly once")
+            reject(idea, f"preview {idea} must be declared exactly once")
         allowed = script_children(ideas[idea], "allowed")
         if len(allowed) != 1 or script_fields(allowed) != {"always": "no"}:
-            issues.append(f"preview {idea} must have allowed = {{ always = no }}")
+            reject(idea, f"preview {idea} must have allowed = {{ always = no }}")
         if names[idea] not in native_maps and names[idea] not in ideas:
-            issues.append(f"preview {idea} has unknown native name {names[idea]}")
+            reject(idea, f"preview {idea} has unknown native name {names[idea]}")
 
     effects = {
         entry.key: entry.value
@@ -744,11 +761,11 @@ def validate_val_preview_ideas(
             expected = vectors.get(template, {})
             actual = tier_vectors.get(tier)
             if actual is None:
-                issues.append(
+                reject(template,
                     f"specialization tier template {template} has no dynamic-modifier tier branch"
                 )
             elif actual != expected:
-                issues.append(
+                reject(template,
                     f"specialization tier template {template} differs from VAL_contract_state"
                 )
 
@@ -1103,7 +1120,7 @@ def validate_val_preview_ideas(
             or names[idea] != native
             or vectors[idea] != vectors.get(native)
         ):
-            issues.append(
+            reject(idea,
                 f"preview {idea} must mirror the full native country tier {native}"
             )
         checked.add(idea)
@@ -1111,7 +1128,7 @@ def validate_val_preview_ideas(
     def compare(idea, expected, context):
         keys = vectors[idea].keys() | expected.keys()
         if any(abs(vectors[idea].get(k, 0) - expected.get(k, 0)) > 1e-8 for k in keys):
-            issues.append(f"preview {idea} does not match actual {context} delta")
+            reject(idea, f"preview {idea} does not match actual {context} delta")
         checked.add(idea)
 
     def tier_previews(items, level, inside=False):
@@ -1176,6 +1193,8 @@ def validate_val_preview_ideas(
 
     def inspect(items, path, inside=False, reward=None, hidden=False):
         for entry in items:
+            if entry.key in {"remove_ideas", "has_idea"}:
+                continue
             if entry.key in {"focus", "shared_focus"} and isinstance(entry.value, list):
                 inspect(
                     entry.value,
@@ -1196,15 +1215,16 @@ def validate_val_preview_ideas(
                 )
                 continue
             if isinstance(entry.value, str) and entry.value in candidates:
-                referenced.add(entry.value)
-                if entry.key != "has_idea" and not inside:
-                    issues.append(
+                if not inside:
+                    reject(entry.value,
                         f"preview {entry.value} has executable/non-tooltip reference in {path}:{entry.line}"
                     )
-                elif entry.key != "has_idea" and hidden:
-                    issues.append(
+                elif hidden:
+                    reject(entry.value,
                         f"preview {entry.value} is hidden from the player in {path}:{entry.line}"
                     )
+                else:
+                    referenced.add(entry.value)
             if (
                 entry.key == "add_ideas"
                 and inside
@@ -1219,7 +1239,7 @@ def validate_val_preview_ideas(
                     else {}
                 )
                 if not expected:
-                    issues.append(
+                    reject(entry.value,
                         f"preview {entry.value} has no proven additive native-variable reward"
                     )
                 compare(entry.value, expected, native)
@@ -1232,7 +1252,7 @@ def validate_val_preview_ideas(
                             before not in mirrors
                             or before.rsplit("_", 2)[0] != after.rsplit("_", 2)[0]
                         ):
-                            issues.append(
+                            reject(after,
                                 f"preview {after} needs a mirror of the same tier family"
                             )
                     elif (
@@ -1240,7 +1260,7 @@ def validate_val_preview_ideas(
                         or names.get(before) != names[after]
                         or vectors.get(before)
                     ):
-                        issues.append(
+                        reject(after,
                             f"preview {after} needs an empty baseline with the same native name"
                         )
                     else:
@@ -1268,14 +1288,14 @@ def validate_val_preview_ideas(
                             and e.value == "yes"
                             for e in executable
                         ):
-                            issues.append(
+                            reject(after,
                                 f"preview {after} has no matching executed flag/numeric-input refresh reward"
                             )
                         compare(after, expected, native)
                     elif after not in mirrors and not native.startswith(
                         "VAL_contract_industry_"
                     ):
-                        issues.append(
+                        reject(after,
                             f"preview {after} has no proven native reward consumer"
                         )
             if isinstance(entry.value, list):
@@ -1322,14 +1342,17 @@ def validate_val_preview_ideas(
                 for e in walk_script(reward, executable=True)
             ):
                 issues.append(f"industry preview has no actual tier-{target} grant")
+                invalid.update(tier_ids)
             for level in (None, 0, 1, 2, 3):
                 try:
                     pairs = tier_previews(reward, level)
                 except (ValueError, KeyError) as error:
                     issues.append(str(error))
+                    invalid.update(tier_ids)
                     break
                 expected_count = int((level or 0) < target)
                 if len(pairs) != expected_count:
+                    invalid.update(tier_ids)
                     issues.append(
                         f"industry tier-{target} preview is wrong at current tier {level}"
                     )
@@ -1337,6 +1360,7 @@ def validate_val_preview_ideas(
                     idea = pair.get("add_idea")
                     if idea not in tier_ids:
                         issues.append("industry preview references an unexpected delta")
+                        invalid.update(tier_ids)
                         continue
                     full = vectors.get(names[idea], {})
                     previous = vectors.get(f"VAL_contract_industry_{level}", {})
@@ -1350,7 +1374,11 @@ def validate_val_preview_ideas(
                     )
     for idea in sorted(candidates - (referenced & checked)):
         issues.append(f"preview {idea} has no validated tooltip-only consumer")
-    return candidates if not issues else set(), issues
+    display_only = {
+        idea for idea in referenced & checked
+        if idea not in invalid and names[idea] not in invalid
+    }
+    return display_only, issues
 
 
 def validate_focus_durations(focuses: list[str]) -> list[str]:
@@ -1369,6 +1397,32 @@ def validate_focus_durations(focuses: list[str]) -> list[str]:
             issues.append(f"{name} has no cost")
         elif float(cost.group(1)) > (10 if name in long_programmes else 5):
             issues.append(f"{name} exceeds its authored duration ceiling")
+    return issues
+
+
+def validate_operations_map_labels(gui: str) -> list[str]:
+    expected = {
+        "ADISCORD_VAL_operations_panel_window": [],
+        "ADISCORD_STP_operations_panel_window": [
+            ("STP_operations_map_legend", "STP_operations_map_legend")
+        ],
+    }
+    windows = script_children(parse_clausewitz(gui), "guiTypes")
+    issues = []
+    for name, labels in expected.items():
+        panels = [
+            entry.value for entry in windows
+            if entry.key == "containerWindowType" and script_fields(entry.value).get("name") == name
+        ]
+        if len(panels) != 1:
+            issues.append(f"expected one operations-map window {name}")
+            continue
+        text_boxes = [
+            script_fields(entry.value) for entry in walk_script(panels[0])
+            if entry.key == "instantTextBoxType"
+        ]
+        if [(box.get("name"), box.get("text")) for box in text_boxes] != labels:
+            issues.append(f"unexpected or missing operations-map labels in {name}")
     return issues
 
 
@@ -2466,13 +2520,7 @@ def main() -> int:
                 issues.append(f"operations scripted-GUI panel is missing {token}")
     from tools.builders.build_adiscord_val_operations_map import STATE_IDS, FRAME_COUNT
 
-    operations_windows = [
-        body
-        for body in named_blocks(gui, "containerWindowType")
-        if re.search(r'name\s*=\s*"ADISCORD_(?:VAL|STP)_operations_panel_window"', body)
-    ]
-    if any("instantTextBoxType" in window for window in operations_windows):
-        issues.append("operations map must not contain visible text labels")
+    issues.extend(validate_operations_map_labels(gui))
     if "set_temp_variable" in scripted_gui:
         issues.append(
             "operations scripted GUI must not run effects from trigger blocks"

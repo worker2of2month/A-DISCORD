@@ -2716,10 +2716,9 @@ class StartupGuideContractTests(unittest.TestCase):
         from tools.builders.build_adiscord_startup_ui_assets import expected_outputs
 
         # Supplied country artwork is independent of the generated skin.
-        self.assertNotIn(
-            ROOT / 'gfx/interface/startup/rus.png',
-            expected_outputs(),
-        )
+        outputs = expected_outputs()
+        for tag in ('rus', 'shl', 'stp', 'val', 'nam'):
+            self.assertNotIn(ROOT / f'gfx/interface/startup/{tag}.png', outputs)
 
     def test_footer_tabs_fit_and_select_their_own_content(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions

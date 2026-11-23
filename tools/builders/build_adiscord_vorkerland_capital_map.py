@@ -691,7 +691,7 @@ def interaction_localisation(language):
                                         'Shield: patrol. Exclamation mark: unrest. No-entry sign: riot. Diagonal slash: exposed cell.')}
     texts['WRK_capital_tower_central'] = 'Центральный дистрикт' if russian else 'Central District'
     texts['WRK_capital_network_status'] = ('§YУвести Уоркера по линиям сети§!\\nКанал связи с Центром: ' if russian else
-                                         '§YExtract Worker through the network§!\\nCentral link: ') + '[GetVorkerlandNetworkRouteStatus]'
+                                         '§YExtract Vorkcer through the network§!\\nCentral link: ') + '[GetVorkerlandNetworkRouteStatus]'
     texts['WRK_capital_network_tt'] = (
         '§YБашня - Центральный дистрикт§!\\nСостояние проекта: [GetVorkerlandPrepCommunications]\\n'
         'Канал: [GetVorkerlandNetworkRouteStatus]. Нужна скрытая ячейка уровня 2 или выше в Центральном дистрикте. '
@@ -730,7 +730,7 @@ def interaction_localisation(language):
                 body = body[:-len(suffix)]
         if match[1].startswith(' WRK_capital_40_tt:'):
             body = '§Y[40.GetName]§!\\n[GetVorkerlandPrepCommunications]\\n' + (
-                'Судьба Уоркера: ' if russian else "Worker's fate: ") + '[GetVorkerlandWorkerFateForecast]'
+                'Судьба Уоркера: ' if russian else "Vorkcer's fate: ") + '[GetVorkerlandWorkerFateForecast]'
         # Export complete tooltip text, without a second localisation lookup.
         return match[1] + body + '\\n\\n' + texts['WRK_capital_symbols_tt'] + match[3]
 

@@ -8249,6 +8249,18 @@ defined_text = {
 defined_text = {
 	name = NAMDepotCaseReport
 	text = {
+		trigger = { NAM_depot_board_won = yes }
+		localization_key = NAM_depot_board_report_won
+	}
+	text = {
+		trigger = { NAM_depot_board_open = yes }
+		localization_key = NAM_depot_board_report_open
+	}
+	text = {
+		trigger = { NAM_depot_board_pending = yes }
+		localization_key = NAM_depot_board_report_waiting
+	}
+	text = {
 		trigger = { check_variable = { NAM_depot_settlement_variant = 1 } }
 		localization_key = NAM_depot_board_report_revoked
 	}
@@ -8269,18 +8281,6 @@ defined_text = {
 		localization_key = NAM_depot_board_report_lost
 	}
 	text = {
-		trigger = { NAM_depot_board_won = yes }
-		localization_key = NAM_depot_board_report_won
-	}
-	text = {
-		trigger = { NAM_depot_board_open = yes }
-		localization_key = NAM_depot_board_report_open
-	}
-	text = {
-		trigger = { NAM_depot_board_pending = yes }
-		localization_key = NAM_depot_board_report_waiting
-	}
-	text = {
 		trigger = { NAM_depot_settlement_open = yes }
 		localization_key = NAM_depot_report_ruling
 	}
@@ -8297,6 +8297,15 @@ defined_text = {
 		localization_key = NAM_depot_report_filed
 	}
 	text = { localization_key = NAM_depot_report_start }
+}
+
+defined_text = {
+	name = NAMDepotSiteShare
+	text = {
+		trigger = { has_variable = NAM_depot_hold }
+		localization_key = NAM_depot_site_share_value
+	}
+	text = { localization_key = NAM_bw_empty }
 }
 
 defined_text = {

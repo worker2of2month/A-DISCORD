@@ -2837,6 +2837,8 @@ MZR, GLP) несут перевес `ADISCORD_south_coalition_influence` от -1
 остатка. Их залежи задаёт карта `"resources": {"<область>": {...}}` страны в
 `tools/data/adiscord_remainder_countries.json`; блок `resources` пишет
 `build_adiscord_remainder_states --apply --countries-only`.
+Названия столиц берутся из поля `city` того же JSON и попадают в блок этого
+генератора в общих файлах `victory_points_l_russian.yml` и `victory_points_l_english.yml`.
 Поднятые из моря островки (`archipelago_islands`) входят в список провинций
 своей области, но не в исходный пул остатка: на вес населения, порт и якорь
 столицы они не влияют, военно-морской базы не получают и проверяются
@@ -3262,8 +3264,11 @@ MZR, GLP) несут перевес `ADISCORD_south_coalition_influence` от -1
 4096 пикселей, вместе они покрывают область 908x510 без уменьшения на
 холсте 1001x639. Размещение полос задано в `interface/superevents.gui`,
 число кадров, скорость и однократное воспроизведение - в
-`interface/superevents.gfx`. Исходники поддерживаются автором вне мода:
-параметры `--portal`, `--background`, `--masks` задают PNG портала,
+`interface/superevents.gfx`. Штатная сборка использует
+`tools/assets/source/superevents/IVN/portal_graded_frames.png`. Атлас содержит
+восемь гравюр, портал и шесть масок. Кадры размером 908x510 расположены в три столбца.
+Для обновления атласа из авторских материалов служит `--from-originals`.
+Параметры `--portal`, `--background`, `--masks` задают PNG портала,
 PNG фона и видео масок; значения по умолчанию указывают на `1.png`,
 `2.png`, `iRVtBI1ebR3cyPGW.mp4` на рабочем столе. Сборщик не архивирует
 исходники. Восемь широких картин задаются через `--paintings` или

@@ -2,10 +2,9 @@
 """Build northern state shells and the authored western country partition.
 
 The detailed southern/eastern state work (IDs 1-330) remains authoritative.
-This pass removes provinces from the catch-all state 23 and records a climate
-key for the strategic-region builder. Western membership and ownership come
-from tools/data/adiscord_western_states.json; northern shells are populated
-by the northern-country builder.
+The northern shell manifest fixes province membership, names and climates.
+The western manifest also supplies ownership. The northern-country builder
+populates its shells before and after the Exclusion Zone boundary pass.
 
 The split is deliberately asymmetric:
 
@@ -21,11 +20,9 @@ idempotent: a later run first folds the marked files back into the source pool.
 from __future__ import annotations
 
 import argparse
-import heapq
 import json
-import math
 import re
-from collections import Counter, defaultdict
+from collections import Counter
 from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
@@ -44,13 +41,16 @@ from tools.builders.build_adiscord_new_states import (
     with_island_districts,
     with_raised_island_provinces,
 )
+from tools.builders.build_adiscord_northern_countries import (
+    EXPECTED_STATES,
+    load_mon_geography,
+    mon_planned_provinces,
+)
 from tools.builders.build_adiscord_strategic_regions import (
     connected_components,
     load_province_adjacency,
     load_province_definitions,
     load_province_positions,
-    outer_macro_bounds,
-    outer_macro_toponym,
 )
 from tools.lib.paths import repository_root
 from tools.lib.localisation import replace_generated_localisation_block
@@ -69,6 +69,23 @@ WESTERN_SOURCE = ROOT / "tools/data/adiscord_western_states.json"
 @cache
 def western_source() -> dict[str, object]:
     return json.loads(WESTERN_SOURCE.read_text(encoding="utf-8"))
+
+
+def northern_states(defined_provinces: dict[int, str]) -> list[PlannedState]:
+    # Country capitals, settlements and borders depend on stable shell IDs.
+    # Carved MON provinces join their parent shells once the map defines them.
+    source = ROOT / "tools/data/adiscord_northern_state_shells.json"
+    shells = json.loads(source.read_text(encoding="utf-8"))
+    if set(map(int, shells)) != EXPECTED_STATES:
+        raise ValueError("northern state shells must cover every northern country state")
+    additions = mon_planned_provinces(load_mon_geography(), defined_provinces)
+    return [
+        PlannedState(
+            int(state_id), "right", set(row["provinces"]) | additions.get(int(state_id), set()),
+            row["climate"], row["name"],
+        )
+        for state_id, row in shells.items()
+    ]
 
 
 def western_states() -> list[PlannedState]:
@@ -266,277 +283,6 @@ def select_landmasses(
     return left, right, right_components
 
 
-def target_pixels(landmass: str, y: float) -> float:
-    if landmass == "right":
-        if y < 280:
-            return 18_000.0
-        if y < 520:
-            return 9_000.0
-        if y < 760:
-            return 5_000.0
-        return 3_500.0
-    if y < 300:
-        return 50_000.0
-    if y < 650:
-        return 35_000.0
-    if y < 1050:
-        return 25_000.0
-    if y < 1450:
-        return 18_000.0
-    return 14_000.0
-
-
-def province_mass(landmass: str, province: ProvinceData) -> float:
-    return province.pixels / target_pixels(landmass, province.y)
-
-
-def principal_axis(nodes: set[int], data: dict[int, ProvinceData]) -> str:
-    xs = [data[province_id].x for province_id in nodes]
-    ys = [data[province_id].y for province_id in nodes]
-    return "x" if max(xs) - min(xs) >= max(ys) - min(ys) else "y"
-
-
-def edge_cost(
-    first: int, second: int, data: dict[int, ProvinceData], scale: float
-) -> float:
-    a, b = data[first], data[second]
-    distance = math.hypot(a.x - b.x, a.y - b.y) / max(scale, 1.0)
-    terrain_penalty = 0.10 if a.terrain != b.terrain else 0.0
-    height_penalty = min(abs(a.height - b.height) / 20.0, 0.18)
-    return 0.05 + distance + terrain_penalty + height_penalty
-
-
-def bisect_connected(
-    nodes: set[int],
-    left_parts: int,
-    total_parts: int,
-    landmass: str,
-    adjacency: dict[int, set[int]],
-    data: dict[int, ProvinceData],
-) -> tuple[set[int], set[int]]:
-    axis = principal_axis(nodes, data)
-    key = (
-        (lambda province_id: (data[province_id].x, data[province_id].y, province_id))
-        if axis == "x"
-        else (
-            lambda province_id: (data[province_id].y, data[province_id].x, province_id)
-        )
-    )
-    seed_a = min(nodes, key=key)
-    seed_b = max(nodes, key=key)
-    if seed_a == seed_b:
-        raise RuntimeError("cannot bisect a one-province component")
-
-    mass = {
-        province_id: province_mass(landmass, data[province_id]) for province_id in nodes
-    }
-    total_mass = sum(mass.values())
-    target_a = total_mass * left_parts / total_parts
-    target_b = total_mass - target_a
-    groups = ({seed_a}, {seed_b})
-    group_mass = [mass[seed_a], mass[seed_b]]
-    assigned = {seed_a: 0, seed_b: 1}
-    spans = (
-        max(data[province_id].x for province_id in nodes)
-        - min(data[province_id].x for province_id in nodes),
-        max(data[province_id].y for province_id in nodes)
-        - min(data[province_id].y for province_id in nodes),
-    )
-    scale = max(spans)
-    frontiers: list[list[tuple[float, int, int]]] = [[], []]
-
-    def push_neighbours(side: int, province_id: int, base_cost: float) -> None:
-        for neighbour in adjacency[province_id]:
-            if neighbour not in nodes or neighbour in assigned:
-                continue
-            heapq.heappush(
-                frontiers[side],
-                (
-                    base_cost + edge_cost(province_id, neighbour, data, scale),
-                    neighbour,
-                    province_id,
-                ),
-            )
-
-    push_neighbours(0, seed_a, 0.0)
-    push_neighbours(1, seed_b, 0.0)
-    remaining = len(nodes) - 2
-    while remaining:
-        ratios = (
-            group_mass[0] / max(target_a, 1e-9),
-            group_mass[1] / max(target_b, 1e-9),
-        )
-        preferred = 0 if ratios[0] <= ratios[1] else 1
-        chosen: tuple[float, int, int] | None = None
-        side = preferred
-        for candidate_side in (preferred, 1 - preferred):
-            while (
-                frontiers[candidate_side]
-                and frontiers[candidate_side][0][1] in assigned
-            ):
-                heapq.heappop(frontiers[candidate_side])
-            if frontiers[candidate_side]:
-                side = candidate_side
-                chosen = heapq.heappop(frontiers[candidate_side])
-                break
-        if chosen is None:
-            raise RuntimeError("connected split exhausted both frontiers")
-        cost, province_id, _parent = chosen
-        if province_id in assigned:
-            continue
-        assigned[province_id] = side
-        groups[side].add(province_id)
-        group_mass[side] += mass[province_id]
-        remaining -= 1
-        push_neighbours(side, province_id, cost)
-
-    if len(groups[0]) < left_parts or len(groups[1]) < total_parts - left_parts:
-        raise RuntimeError(
-            f"unbalanced graph split cannot support {left_parts}+{total_parts-left_parts} parts: "
-            f"{len(groups[0])}+{len(groups[1])} provinces"
-        )
-    return groups
-
-
-def partition_connected(
-    nodes: set[int],
-    parts: int,
-    landmass: str,
-    adjacency: dict[int, set[int]],
-    data: dict[int, ProvinceData],
-) -> list[set[int]]:
-    if parts <= 1:
-        return [set(nodes)]
-    left_parts = parts // 2
-    first, second = bisect_connected(
-        nodes, left_parts, parts, landmass, adjacency, data
-    )
-    return partition_connected(
-        first, left_parts, landmass, adjacency, data
-    ) + partition_connected(second, parts - left_parts, landmass, adjacency, data)
-
-
-def partition_disconnected(
-    components: list[set[int]], landmass: str, data: dict[int, ProvinceData]
-) -> list[set[int]]:
-    if not components:
-        return []
-    items = []
-    for component in components:
-        center_x, center_y = component_center(component, data)
-        mass = sum(
-            province_mass(landmass, data[province_id]) for province_id in component
-        )
-        items.append((component, center_x, center_y, mass))
-    parts = max(1, round(sum(item[3] for item in items)))
-    parts = min(parts, len(items))
-
-    def split(
-        group: list[tuple[set[int], float, float, float]], count: int
-    ) -> list[list[tuple[set[int], float, float, float]]]:
-        if count <= 1:
-            return [group]
-        x_span = max(item[1] for item in group) - min(item[1] for item in group)
-        y_span = max(item[2] for item in group) - min(item[2] for item in group)
-        axis = 1 if x_span >= y_span else 2
-        ordered = sorted(
-            group,
-            key=lambda item: (item[axis], item[2 if axis == 1 else 1], min(item[0])),
-        )
-        left_count = count // 2
-        target = sum(item[3] for item in ordered) * left_count / count
-        running = 0.0
-        cut = 1
-        best = float("inf")
-        for index in range(1, len(ordered)):
-            running += ordered[index - 1][3]
-            difference = abs(running - target)
-            if (
-                difference < best
-                and index >= left_count
-                and len(ordered) - index >= count - left_count
-            ):
-                best = difference
-                cut = index
-        return split(ordered[:cut], left_count) + split(
-            ordered[cut:], count - left_count
-        )
-
-    return [set().union(*(item[0] for item in group)) for group in split(items, parts)]
-
-
-def plan_clusters(
-    left: set[int],
-    right_components: list[set[int]],
-    adjacency: dict[int, set[int]],
-    data: dict[int, ProvinceData],
-) -> list[tuple[str, set[int]]]:
-    clusters: list[tuple[str, set[int]]] = []
-
-    left_parts = max(1, round(sum(province_mass("left", data[p]) for p in left)))
-    left_parts = min(left_parts, max(1, len(left) // 18))
-    clusters.extend(
-        ("left", group)
-        for group in partition_connected(left, left_parts, "left", adjacency, data)
-    )
-
-    mainland = [component for component in right_components if len(component) >= 100]
-    islands = [component for component in right_components if len(component) < 100]
-    for component in mainland:
-        parts = max(1, round(sum(province_mass("right", data[p]) for p in component)))
-        parts = min(parts, max(1, len(component) // 4))
-        clusters.extend(
-            ("right", group)
-            for group in partition_connected(component, parts, "right", adjacency, data)
-        )
-    clusters.extend(
-        ("right", group) for group in partition_disconnected(islands, "right", data)
-    )
-    return merge_small_clusters(clusters, adjacency, data)
-
-
-def merge_small_clusters(
-    clusters: list[tuple[str, set[int]]],
-    adjacency: dict[int, set[int]],
-    data: dict[int, ProvinceData],
-) -> list[tuple[str, set[int]]]:
-    """Absorb accidental slivers into a neighbour or the nearest island group."""
-    working = [(landmass, set(provinces)) for landmass, provinces in clusters]
-    while True:
-        masses = [
-            sum(province_mass(landmass, data[province_id]) for province_id in provinces)
-            for landmass, provinces in working
-        ]
-        candidates = [index for index, mass in enumerate(masses) if mass < 0.45]
-        if not candidates:
-            break
-        source_index = min(
-            candidates, key=lambda index: (masses[index], min(working[index][1]))
-        )
-        landmass, source = working[source_index]
-        source_x, source_y = component_center(source, data)
-        choices: list[tuple[int, float, float, int]] = []
-        for target_index, (target_landmass, target) in enumerate(working):
-            if target_index == source_index or target_landmass != landmass:
-                continue
-            shared_edges = sum(
-                1
-                for province_id in source
-                for neighbour in adjacency[province_id]
-                if neighbour in target
-            )
-            target_x, target_y = component_center(target, data)
-            distance = math.hypot(source_x - target_x, source_y - target_y)
-            combined_mass = masses[source_index] + masses[target_index]
-            choices.append((-shared_edges, distance, combined_mass, target_index))
-        if not choices:
-            break
-        _shared, _distance, _combined, target_index = min(choices)
-        working[target_index][1].update(source)
-        del working[source_index]
-    return working
-
-
 def cluster_statistics(
     provinces: set[int], data: dict[int, ProvinceData]
 ) -> dict[str, object]:
@@ -568,252 +314,6 @@ def cluster_statistics(
         "wet_share": wet_share,
         "coastal_share": coastal_pixels / total_pixels,
     }
-
-
-def climate_region(landmass: str, stats: dict[str, object]) -> str:
-    y = float(stats["y"])
-    highland = float(stats["highland_share"]) >= 0.42 or float(stats["height"]) >= 13.5
-    maritime = float(stats["coastal_share"]) >= 0.35
-    wet = float(stats["wet_share"]) >= 0.52
-
-    if landmass == "right":
-        if y < 300:
-            return "right_polar"
-        if y < 520:
-            if highland:
-                return "right_cold_highlands"
-            return (
-                "right_subarctic_maritime"
-                if maritime
-                else "right_subarctic_continental"
-            )
-        if y < 780:
-            if highland:
-                return "right_cool_highlands"
-            if maritime:
-                return "right_cool_maritime"
-            return "right_boreal_wet" if wet else "right_cool_continental"
-        if highland:
-            return "right_temperate_highlands"
-        return "right_temperate_wet" if wet else "right_temperate_continental"
-
-    if y < 300:
-        return "left_polar"
-    if y < 650:
-        if highland:
-            return "left_cold_highlands"
-        return "left_subarctic_maritime" if maritime else "left_subarctic_continental"
-    if y < 900:
-        if highland:
-            return "left_cool_highlands"
-        return "left_cool_maritime" if maritime else "left_cool_continental"
-    if y < 1550:
-        if highland:
-            return "left_temperate_highlands"
-        return "left_temperate_wet" if wet else "left_temperate_continental"
-    return "left_southern_coast" if maritime else "left_warm_interior"
-
-
-DIRECTION_FORMS = {
-    (0, 0): (
-        "Северо-западный",
-        "Северо-западная",
-        "Северо-западное",
-        "Северо-западные",
-    ),
-    (0, 1): ("Северный", "Северная", "Северное", "Северные"),
-    (0, 2): (
-        "Северо-восточный",
-        "Северо-восточная",
-        "Северо-восточное",
-        "Северо-восточные",
-    ),
-    (1, 0): ("Западный", "Западная", "Западное", "Западные"),
-    (1, 1): ("Центральный", "Центральная", "Центральное", "Центральные"),
-    (1, 2): ("Восточный", "Восточная", "Восточное", "Восточные"),
-    (2, 0): ("Юго-западный", "Юго-западная", "Юго-западное", "Юго-западные"),
-    (2, 1): ("Южный", "Южная", "Южное", "Южные"),
-    (2, 2): ("Юго-восточный", "Юго-восточная", "Юго-восточное", "Юго-восточные"),
-}
-
-
-def state_name_parts(
-    climate_key: str, provinces: set[int], data: dict[int, ProvinceData]
-) -> tuple[str, int, str]:
-    stats = cluster_statistics(provinces, data)
-    dominant = str(stats["dominant"])
-    x = float(stats["x"])
-    y = float(stats["y"])
-    x_min, x_max, y_min, y_max = outer_macro_bounds(climate_key, x)
-    row = min(2, max(0, int(3.0 * (y - y_min) / max(1.0, y_max - y_min))))
-    column = min(2, max(0, int(3.0 * (x - x_min) / max(1.0, x_max - x_min))))
-    direction = DIRECTION_FORMS[(row, column)]
-    _root, topo_masculine, topo_feminine, topo_neuter, topo_plural = (
-        outer_macro_toponym(climate_key, x)
-    )
-
-    if float(stats["coastal_share"]) >= 0.70:
-        gender, feature, base_name = 3, "острова", f"{topo_plural} острова"
-    elif dominant == "mountain" or float(stats["highland_share"]) >= 0.55:
-        gender, feature, base_name = 2, "нагорье", f"{topo_neuter} нагорье"
-    elif dominant == "hills":
-        gender, feature, base_name = 3, "холмы", f"{topo_plural} холмы"
-    elif dominant == "forest":
-        gender, feature, base_name = 3, "леса", f"{topo_plural} леса"
-    elif dominant == "marsh":
-        gender, feature, base_name = 3, "топи", f"{topo_plural} топи"
-    elif float(stats["coastal_share"]) >= 0.35:
-        gender, feature, base_name = 2, "побережье", f"{topo_neuter} побережье"
-    elif dominant == "plains":
-        gender, feature, base_name = 1, "равнина", f"{topo_feminine} равнина"
-    else:
-        gender, feature, base_name = 0, "край", f"{topo_masculine} край"
-
-    if (row, column) == (1, 1):
-        return base_name, gender, feature
-    return f"{direction[gender]} {base_name}", gender, feature
-
-
-LOCAL_TOPONYM_ROOTS = (
-    "Аверн",
-    "Альдор",
-    "Арвек",
-    "Белран",
-    "Борден",
-    "Бревар",
-    "Вельтар",
-    "Гарлен",
-    "Гевран",
-    "Гольден",
-    "Дарвен",
-    "Дельвар",
-    "Дорген",
-    "Эльвар",
-    "Эрден",
-    "Жаврен",
-    "Зеллар",
-    "Зорвен",
-    "Иверан",
-    "Ильден",
-    "Каврен",
-    "Келлан",
-    "Кердор",
-    "Лаврен",
-    "Левард",
-    "Лирвен",
-    "Лорден",
-    "Маверн",
-    "Мейдар",
-    "Мелран",
-    "Невард",
-    "Нелвен",
-    "Нордар",
-    "Ольвен",
-    "Орлан",
-    "Пелдар",
-    "Перван",
-    "Равден",
-    "Рейвен",
-    "Рендар",
-    "Салвен",
-    "Севард",
-    "Селлан",
-    "Таврен",
-    "Таллер",
-    "Тейвар",
-    "Терлан",
-    "Ульвар",
-    "Фаллен",
-    "Фейвар",
-    "Хеллан",
-    "Целвар",
-    "Черден",
-    "Шаврен",
-    "Шелдар",
-    "Эвард",
-    "Эльден",
-    "Ярвен",
-    "Альвер",
-    "Бердан",
-    "Веглар",
-    "Гальвен",
-    "Дейран",
-    "Зейлар",
-    "Кольвен",
-    "Марден",
-    "Найвен",
-    "Пейлар",
-    "Росвен",
-    "Сайдар",
-    "Тейрен",
-    "Фольвар",
-    "Хейден",
-    "Эймар",
-    "Ялден",
-    "Бейвар",
-    "Гельден",
-    "Дальвен",
-    "Кейлар",
-    "Мордан",
-)
-
-
-def local_toponym_forms(root: str) -> tuple[str, str, str, str]:
-    return root + "ский", root + "ская", root + "ское", root + "ские"
-
-
-def assign_ids_and_metadata(
-    clusters: list[tuple[str, set[int]]], data: dict[int, ProvinceData]
-) -> list[PlannedState]:
-    ordered = sorted(
-        clusters,
-        key=lambda item: (
-            0 if item[0] == "right" else 1,
-            cluster_statistics(item[1], data)["y"],
-            cluster_statistics(item[1], data)["x"],
-            min(item[1]),
-        ),
-    )
-    statistics = [
-        cluster_statistics(provinces, data) for _landmass, provinces in ordered
-    ]
-    climate_keys = [
-        climate_region(landmass, stats)
-        for (landmass, _provinces), stats in zip(ordered, statistics)
-    ]
-    name_parts = [
-        state_name_parts(climate_key, provinces, data)
-        for (_landmass, provinces), climate_key in zip(ordered, climate_keys)
-    ]
-    base_names = [parts[0] for parts in name_parts]
-    name_totals = Counter(base_names)
-    local_toponym_index = 0
-    planned: list[PlannedState] = []
-    for index, ((landmass, provinces), stats, climate_key, parts) in enumerate(
-        zip(ordered, statistics, climate_keys, name_parts)
-    ):
-        state_id = FIRST_STATE_ID + index
-        base_name, gender, feature = parts
-        if name_totals[base_name] == 1:
-            name = base_name
-        else:
-            if local_toponym_index >= len(LOCAL_TOPONYM_ROOTS):
-                raise RuntimeError(
-                    "not enough local toponyms to disambiguate generated state names"
-                )
-            forms = local_toponym_forms(LOCAL_TOPONYM_ROOTS[local_toponym_index])
-            local_toponym_index += 1
-            name = f"{forms[gender]} {feature}"
-        planned.append(
-            PlannedState(
-                state_id=state_id,
-                landmass=landmass,
-                provinces=provinces,
-                climate_region=climate_key,
-                name=name,
-            )
-        )
-    return planned
 
 
 def format_provinces(provinces: set[int], indent: str = "\t\t", width: int = 16) -> str:
@@ -1037,7 +537,7 @@ def replace_outer_provinces(source: str, provinces: set[int]) -> str:
 
 
 def validate_plan(
-    planned: list[PlannedState], source_pool: set[int], left: set[int], right: set[int]
+    planned: list[PlannedState], source_pool: set[int], right: set[int]
 ) -> None:
     expected_west = set().union(*(state.provinces for state in western_states()))
     expected = expected_west | right
@@ -1179,11 +679,9 @@ def main() -> int:
     province_types, color_to_province = load_province_definitions()
     data = build_province_data(province_types, color_to_province)
     adjacency = load_province_adjacency(province_types, color_to_province)
-    left, right, right_components = select_landmasses(source_pool, adjacency, data)
-    clusters = plan_clusters(left, right_components, adjacency, data)
-    planned = assign_ids_and_metadata(clusters, data)
-    planned = [state for state in planned if state.landmass != "left"] + western_states()
-    validate_plan(planned, source_pool, left, right)
+    _left, right, _components = select_landmasses(source_pool, adjacency, data)
+    planned = northern_states(province_types) + western_states()
+    validate_plan(planned, source_pool, right)
     print_summary(planned, data)
     apply_plan(planned, data, original_outer, outer_source, generated_paths)
     mismatches = synchronize_buildings(ROOT, apply=True)

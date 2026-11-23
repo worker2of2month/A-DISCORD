@@ -1289,37 +1289,31 @@ class SouthLifecycleTests(unittest.TestCase):
                 self.assertEqual(scalar(widgets[flag], "pdx_tooltip"), f"ADISCORD_south_map_{tag}_tt")
                 marker = f"ADISCORD_south_map_marker_{tag}"
                 track = f"ADISCORD_south_map_track_{tag}"
-                self.assertIn(marker, widgets)
-                marker_pos = block(widgets[marker], "position")
+                origin = widgets[marker + "_origin"]
+                marker_widget = block(origin, "iconType")
+                self.assertEqual(scalar(marker_widget, "name"), marker)
+                marker_pos = block(marker_widget, "position")
                 track_pos = block(widgets[track], "position")
                 flag_pos = block(widgets[flag], "position")
                 self.assertEqual(scalar(flag_pos, "x"), scalar(track_pos, "x"))
                 self.assertLess(int(scalar(flag_pos, "y")), int(scalar(track_pos, "y")))
-                self.assertEqual(scalar(marker_pos, "y"), scalar(track_pos, "y"))
+                self.assertEqual(scalar(block(origin, "position"), "y"), scalar(track_pos, "y"))
+                self.assertEqual(scalar(marker_pos, "y"), "0")
                 self.assertEqual(scalar(marker_pos, "x"), "0")
                 for name in (track, marker):
                     scoped = block(block(triggers, name + "_visible"), tag)
                     self.assertEqual(scalar(scoped, "ADISCORD_south_map_influence_contested"), "yes")
 
                 position_var = scalar(block(properties, marker), "x")
-                self.assertEqual(position_var, marker + "_x")
-                refresh = block(triggers, marker + "_visible")
-                origin = block(refresh, "set_temp_variable")
-                self.assertEqual(scalar(origin, "var"), position_var)
-                shift = block(refresh, "if")
-                score = "ADISCORD_south_coalition_influence"
-                self.assertEqual(scalar(block(block(shift, "limit"), tag), "has_variable"), score)
-                delta = block(shift, "add_to_temp_variable")
-                self.assertEqual(scalar(delta, "var"), position_var)
-                self.assertEqual(scalar(delta, "value"), f"{tag}.{score}")
-                neutral_tip = int(scalar(origin, "value")) - int(scalar(track_pos, "x")) + tip_offset
+                self.assertEqual(position_var, f"{tag}.ADISCORD_south_coalition_influence?0")
+                neutral_tip = int(scalar(block(origin, "position"), "x")) - int(scalar(track_pos, "x")) + tip_offset
                 self.assertEqual([neutral_tip + offset for offset in (-60, 0, 60)], tick_positions)
-                for score_value in (-100, -20, 15, 100):
+                for score_value in (-100, -20, 15, 62, 74, 100):
                     color = rail.getpixel((neutral_tip + score_value, 5))
                     self.assertEqual(color, orange if score_value < 0 else blue)
                 caption = scalar(widgets[f"ADISCORD_south_map_gap_{tag}"], "text")
                 for lang in ("russian", "english"):
-                    self.assertIn(f"[{tag}.ADISCORDSouthMapGaps]", loc_value(lang, caption))
+                    self.assertIn(f"[{tag}.ADISCORDSouthMapStanding]", loc_value(lang, caption))
 
     def test_map_shows_home_front_strain_from_zero_until_the_front_closes(self):
         gui = definitions(ROOT / "interface/ADISCORD_south_final_war.gui")["guiTypes"]
@@ -1342,50 +1336,39 @@ class SouthLifecycleTests(unittest.TestCase):
             for field in ("stability", "war_support", "factory"):
                 self.assertIn(f"[?ADISCORD_south_strain_{field}|=+1%]", detail)
 
-    def test_map_shows_the_actual_points_missing_for_each_camps_invitation(self):
+    def test_map_reports_current_balance_and_existing_allies(self):
         scripted = parse_clausewitz(SCRIPTED_LOC.read_text(encoding="utf-8"))
-        display = next(e.value for e in scripted if scalar(e.value, "name") == "ADISCORDSouthMapGaps")
-        gap_variants = [block(e.value, "trigger") for e in display if e.key == "text"
-                        and scalar(e.value, "localization_key") == "ADISCORD_south_map_gaps"]
-        for lang in ("russian", "english"):
-            caption = loc_value(lang, "ADISCORD_south_map_gaps")
-            self.assertIn("[?ADISCORD_south_map_shl_gap", caption)
-            self.assertIn("[?ADISCORD_south_map_north_gap", caption)
-        score = "ADISCORD_south_coalition_influence"
-        invitation = block(south_decisions()["ADISCORD_south_invite_to_coalition"], "available")
+        displays = {scalar(e.value, "name"): e.value for e in scripted}
+
+        def selected(name):
+            return next(scalar(e.value, "localization_key") for e in displays[name]
+                        if e.key == "text" and all(self.matches(item.value, "KDR")
+                        for item in e.value if item.key == "trigger"))
+
         self.regional_country("KDR")
-        self.event_sender = "KDR"
-        for score_value in (None, -100, -61, -60, -59, 0, 59, 60, 61, 100):
-            values = {}
-            if score_value is not None:
-                self.variable(score, score_value, "KDR")
-                values[score] = score_value
-            balance = score_value or 0
-            variant = next(entries for entries in gap_variants if self.matches(
-                [e for e in entries if not e.key.endswith("_temp_variable")], "KDR"))
-            for entry in (e for e in variant if e.key.endswith("_temp_variable")):
-                var = scalar(entry.value, "var")
-                if entry.key == "clamp_temp_variable":
-                    low = int(scalar(entry.value, "min"))
-                    high = int(scalar(entry.value, "max"))
-                    values[var] = max(low, min(values[var], high))
-                    continue
-                operand = scalar(entry.value, "value")
-                amount = values[operand] if operand in values else int(operand)
-                if entry.key == "set_temp_variable":
-                    values[var] = amount
-                elif entry.key == "add_to_temp_variable":
-                    values[var] += amount
-                elif entry.key == "subtract_from_temp_variable":
-                    values[var] -= amount
-                else:
-                    self.fail(f"Unsupported display calculation {entry.key}")
-            for leader, camp, sign in (("SHL", "shl", -1), ("NAM", "north", 1)):
-                with self.subTest(balance=balance, camp=camp):
-                    gap = f"ADISCORD_south_map_{camp}_gap"
-                    self.assertEqual(values[gap], max(0, 60 - sign * balance))
-                    self.event_root = leader
-                    self.assertEqual(values[gap] == 0, self.matches(invitation, leader))
+        self.event_root, self.event_sender = "NAM", "KDR"
+        invitation = south_decisions()["ADISCORD_south_invite_to_coalition"]
+        for points, color in ((None, None), (-100, "O"), (-60, "O"), (0, None), (59, "C"),
+                              (60, "C"), (62, "C"), (74, "C"), (100, "C")):
+            if points is not None:
+                self.variable("ADISCORD_south_coalition_influence", points, "KDR")
+            for language in ("russian", "english"):
+                caption = loc_value(language, selected("ADISCORDSouthMapStanding"))
+                self.assertEqual(caption, "[ADISCORDSouthDiplomaticBalance]")
+                value = loc_value(language, selected("ADISCORDSouthDiplomaticBalance"))
+                expected = f"§{color}[?ADISCORD_south_coalition_influence|0]§!" if color else "0"
+                self.assertEqual(value, expected)
+            self.assertTrue(self.matches(block(invitation, "visible"), "NAM"))
+            self.assertEqual(self.matches(block(invitation, "available"), "NAM"), (points or 0) >= 60)
+        for leader, color in (("NAM", "C"), ("SHL", "O")):
+            self.regional_country("KDR", leader)
+            self.variable("ADISCORD_south_coalition_influence", 62, "KDR")
+            self.event_root = leader
+            self.assertFalse(self.matches(block(invitation, "visible"), leader))
+            for language, ally in (("russian", "Союзник"), ("english", "Ally")):
+                self.assertEqual(loc_value(language, selected("ADISCORDSouthMapStanding")),
+                                 f"§{color}{ally}§! [ADISCORDSouthDiplomaticBalance]")
+            self.facts[("KDR", "is_in_faction_with", leader)] = False
 
     def test_map_contested_status_follows_targets_and_campaign_lifecycle(self):
         trigger = "ADISCORD_south_map_influence_contested"
@@ -1448,6 +1431,59 @@ class SouthLifecycleTests(unittest.TestCase):
         self.assertEqual(self.facts[score], seeded - 5)
         self.assertEqual(self.facts[experience], 5)
         self.assertFalse(self.facts[("KDR", "has_variable", "ADISCORD_south_north_advisers")])
+
+    def test_allied_advisers_need_a_rival_lead_only_at_dispatch(self):
+        decision = south_decisions()["ADISCORD_south_send_advisers"]
+        self.execute("ADISCORD_south_begin_preparation")
+        for leader, ally, sign in (("NAM", "KDR", 1), ("SHL", "WEF", -1)):
+            with self.subTest(leader=leader, ally=ally):
+                self.regional_country(ally, leader)
+                self.event_root, self.event_sender = leader, ally
+                power = (leader, "numeric", "has_political_power")
+                self.facts[power] = 20
+                score = "ADISCORD_south_coalition_influence"
+                for balance in (1, 0):
+                    self.variable(score, balance * sign, ally)
+                    self.assertFalse(self.matches(block(decision, "visible"), leader))
+                    self.execute_entries(block(decision, "complete_effect"), leader)
+                    self.assertEqual(self.facts[power], 20)
+
+                self.variable(score, -sign, ally)
+                self.assertTrue(self.matches(block(decision, "visible"), leader))
+                self.execute_entries(block(decision, "complete_effect"), leader)
+                self.assertEqual(self.facts[power], 0)
+                self.variable(score, sign, ally)
+                self.assertTrue(self.matches(block(decision, "visible"), leader))
+                self.assertFalse(self.matches(block(decision, "cancel_trigger"), leader))
+                self.execute_entries(block(decision, "remove_effect"), leader)
+                self.assertEqual(self.facts[(ally, "army_experience")], 5)
+                self.assertEqual(self.facts[(ally, "variable", score)], 6 * sign)
+                self.assertFalse(self.matches(block(decision, "visible"), leader))
+
+    def test_delegations_to_allies_require_a_current_rival_lead(self):
+        decision = south_decisions()["ADISCORD_south_build_coalition_influence"]
+        self.execute("ADISCORD_south_begin_preparation")
+        for leader, ally, sign in (("NAM", "KDR", 1), ("SHL", "WEF", -1)):
+            self.regional_country(ally, leader)
+            self.event_root, self.event_sender = leader, ally
+            score = (ally, "variable", "ADISCORD_south_coalition_influence")
+            power = (leader, "numeric", "has_political_power")
+            self.facts[power] = 25
+            for balance in (62, 0, -1, 0, 1, -1):
+                with self.subTest(leader=leader, balance=balance):
+                    self.variable(score[-1], sign * balance, ally)
+                    self.assertEqual(self.matches(block(decision, "visible"), leader), balance < 0)
+                    if balance >= 0:
+                        self.execute_entries(block(decision, "complete_effect"), leader)
+                        self.assertEqual(self.facts[score], sign * balance)
+                        self.assertEqual(self.facts[power], 25)
+            self.execute_entries(block(decision, "complete_effect"), leader)
+            self.assertEqual(self.facts[power], 0)
+            self.assertGreater(self.facts[score] * sign, 0)
+            self.assertFalse(self.matches(block(decision, "visible"), leader))
+            self.facts[(ally, "is_in_faction_with", leader)] = False
+            self.regional_country(ally)
+            self.assertTrue(self.matches(block(decision, "visible"), leader))
 
     def test_delegations_compete_for_one_target_and_charge_only_valid_sends(self):
         decisions = south_decisions()

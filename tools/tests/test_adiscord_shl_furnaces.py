@@ -6718,6 +6718,23 @@ class CourseProgrammeTests(unittest.TestCase):
                 self.m.run("SHL_refresh_furnaces")
                 self.assertEqual(self.c["SHL_guard_price"], price)
 
+    def test_independent_focus_unlocks_do_not_need_the_treasury_branch(self):
+        categories = parse_clausewitz((ROOT / "common/decisions/categories/ADISCORD_decision_categories_SHL.txt").read_text(encoding="utf-8"))
+        orders = parse_clausewitz((ROOT / "common/decisions/ADISCORD_SHL_decisions.txt").read_text(encoding="utf-8"))
+        for focus, decision, category in (
+            ("SHL_sw_guard_columns", "SHL_hire_desert_guard", "SHL_quarters_and_borders"),
+            ("SHL_metal_market", "SHL_metal_dumping", "SHL_caravans"),
+            ("SHL_written_fire", "SHL_festival_of_fire", "SHL_public_campaigns"),
+            ("SHL_h_golden_gate_festival", "SHL_campaign_golden_gates_open", "SHL_public_campaigns"),
+        ):
+            with self.subTest(focus=focus):
+                self.m.focuses = {focus}
+                section = block(orders, category)
+                self.assertIn(decision, [e.key for e in section])
+                self.assertTrue(self.m.matches(block(block(section, decision), "visible"), "SHL"))
+                self.assertTrue(self.m.matches(block(block(categories, category), "visible"), "SHL"))
+                self.assertFalse(self.m.matches(block(block(categories, "SHL_treasury"), "visible"), "SHL"))
+
     def test_guard_hire_reads_the_discounted_quote_and_lifts_the_interval_only_in_the_south_war(self):
         self.m.focuses.add("SHL_h_conclave_mercenaries")
         self.m.run("SHL_refresh_furnaces")

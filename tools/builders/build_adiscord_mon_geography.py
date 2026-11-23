@@ -924,8 +924,9 @@ def confluence_approaches(
 ) -> dict[tuple[int, int], tuple[int, int]]:
     """Flow-in pixels near the last waypoint, each with the receiver pixel it touches.
 
-    A flow-in pixel touches the river at one side only, mid-course, and the
-    pixel behind it lies straight away from the receiver. Every other pixel
+    A flow-in pixel touches the river at one side only, beside a receiver
+    pixel whose course runs straight through it, and the pixel behind it
+    lies straight away from the receiver. Every other pixel
     beside a river is closed to the course, so the tributary arrives at a
     right angle. ``taken`` pixels lie too close to another junction.
     """
@@ -935,10 +936,13 @@ def confluence_approaches(
         touching += np.roll(current, shift, axis)
     clear = lane & ~current & ~neighbours_of(current)
     approaches = {}
-    for py, px in zip(*np.nonzero(mid_course(receiver))):
+    across = current & np.roll(current, 1, 1) & np.roll(current, -1, 1) & (touching == 2)
+    along = current & np.roll(current, 1, 0) & np.roll(current, -1, 0) & (touching == 2)
+    for py, px in zip(*np.nonzero(receiver & (across | along))):
         if max(abs(px - mx), abs(py - my)) > CONFLUENCE_RADIUS:
             continue
-        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        sides = ((0, 1), (0, -1)) if across[py, px] else ((1, 0), (-1, 0))
+        for dx, dy in sides:
             fx, fy = px + dx, py + dy
             if (
                 lane[fy, fx]
@@ -1182,8 +1186,10 @@ def mon_rivers(
     for canyon in canyons:
         slivers |= owned & neighbours_of(canyon.foreign)
     issues = repair_existing_rivers(rivers, existing, owned, line_pixels(packed), cities, heights, packed, origin, slivers)
+    edit_owned_reaches(data, window, rivers, water)
     issues.extend(widen_owned_reaches(data, window, rivers, labels, water))
-    issues.extend(bend_receivers(data, window, rivers, owned, border, water))
+    reach, _reach_issues = owned_reach_mask(data, window, rivers, labels, water)
+    thin_courses(rivers, owned | reach, water, line_pixels(packed))
     existing = river_masks(rivers, water)
     lakes = {lake: labels == lake for lake in lake_ids}
     courses = {canyon.feature["name"]: canyon.course for canyon in canyons}
@@ -1401,6 +1407,23 @@ def owned_reach_mask(
     return result, issues
 
 
+def edit_owned_reaches(data: dict, window: Window, rivers: np.ndarray, water: np.ndarray) -> None:
+    """Apply the authored pixel edits of every owned reach, in place.
+
+    Where the reach meets its tributaries the existing course may need one
+    pixel moved so that every junction is a plain T; ``drop`` pixels leave the
+    course and ``add`` pixels join it at the reach width.
+    """
+    for reach in data.get("owned_reaches", []):
+        for point in reach.get("drop", []):
+            x, y = window.local(point)
+            rivers[y, x] = RIVER_LAND_PALETTE
+        for point in reach.get("add", []):
+            x, y = window.local(point)
+            if not water[y, x]:
+                rivers[y, x] = int(reach["width"])
+
+
 def widen_owned_reaches(
     data: dict, window: Window, rivers: np.ndarray, labels: np.ndarray, water: np.ndarray
 ) -> list[str]:
@@ -1410,35 +1433,178 @@ def widen_owned_reaches(
     """
     issues = []
     for reach in data.get("owned_reaches", []):
+        try:
+            path = trace_reach(reach, window, river_masks(rivers, water), labels)
+        except RuntimeError as error:
+            issues.append(str(error))
+            continue
+        # The engine walks a course through side neighbours; a diagonal step
+        # of the existing course gets the corner pixel that closes it.
+        for (ax, ay), (bx, by) in zip(path, path[1:]):
+            if ax != bx and ay != by:
+                corners = [(bx, ay), (ax, by)]
+                free = [(x, y) for x, y in corners if not water[y, x]]
+                if free and not any(rivers[y, x] < RIVER_SEA_PALETTE for x, y in corners):
+                    x, y = free[0]
+                    rivers[y, x] = int(reach["width"])
         mask, reach_issues = owned_reach_mask({"owned_reaches": [reach]}, window, rivers, labels, water)
         issues.extend(reach_issues)
         rivers[mask] = np.maximum(rivers[mask], int(reach["width"]))
     return issues
 
 
-def bend_receivers(
-    data: dict, window: Window, rivers: np.ndarray, owned: np.ndarray, border: np.ndarray, water: np.ndarray
-) -> list[str]:
-    """Add the authored bend pixels of existing receivers, in place.
+def river_degree(river: np.ndarray) -> np.ndarray:
+    """Number of river pixels beside each pixel."""
+    count = np.zeros(river.shape, np.int8)
+    for axis, shift in ((0, 1), (0, -1), (1, 1), (1, -1)):
+        count += np.roll(river, shift, axis)
+    return count
 
-    Where an existing river turns a corner exactly at a join, a flow-in
-    pixel would touch it on two sides; one MON border pixel added at the
-    corner gives the join a single side to meet.
+
+def river_blocks(river: np.ndarray) -> np.ndarray:
+    """Pixels of every 2x2 square that is river throughout."""
+    square = river[:-1, :-1] & river[:-1, 1:] & river[1:, :-1] & river[1:, 1:]
+    result = np.zeros(river.shape, bool)
+    result[:-1, :-1] |= square
+    result[:-1, 1:] |= square
+    result[1:, :-1] |= square
+    result[1:, 1:] |= square
+    return result
+
+
+def _removable(river: np.ndarray, y: int, x: int) -> bool:
+    """A course pixel whose neighbours stay joined without it and that ends no course."""
+    sides = [(y + dy, x + dx) for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1)) if river[y + dy, x + dx]]
+    if len(sides) < 2:
+        return False
+    local = river[y - 1:y + 2, x - 1:x + 2].copy()
+    local[1, 1] = False
+    pieces, _count = label(local)
+    return len({int(pieces[sy - y + 1, sx - x + 1]) for sy, sx in sides}) == 1
+
+
+def thin_courses(rivers: np.ndarray, editable: np.ndarray, water: np.ndarray, lines: np.ndarray) -> None:
+    """Reduce every editable course to a simple line, in place.
+
+    The engine draws a river by walking from pixel to pixel; a 2x2 square or a
+    pixel with three course neighbours gives the walk a second way and it
+    stops or turns there. Such a pixel is removed when its neighbours stay
+    joined without it; pixels off a province border line go first. A
+    one-pixel spur left beside such a pixel goes too. Markers and the pixel a
+    flow-in marker touches stay.
     """
+    while True:
+        river = river_masks(rivers, water)
+        markers = river & (rivers < WIDTH_STEPS[0])
+        degree = river_degree(river & ~markers)
+        crowded = editable & river & ~markers & ~neighbours_of(markers) & (river_blocks(river) | (degree >= 3))
+        # A one-pixel spur beside a crowded pixel is no course of its own.
+        spurs = editable & river & ~markers & (degree == 1) & neighbours_of(river & (degree >= 3))
+        if spurs.any():
+            rivers[spurs] = RIVER_LAND_PALETTE
+            continue
+        removed = False
+        for preference in (crowded & ~lines, crowded & lines):
+            for y, x in zip(*np.nonzero(preference)):
+                if _removable(river, int(y), int(x)):
+                    rivers[y, x] = RIVER_LAND_PALETTE
+                    river[y, x] = False
+                    removed = True
+            if removed:
+                break
+        if not removed:
+            return
+
+
+def course_shape_issues(rivers: np.ndarray, scope: np.ndarray, water: np.ndarray, origin: tuple[int, int]) -> list[str]:
+    """Every course is a simple line; only a receiver pixel touches one flow-in pixel besides its course."""
+    river = river_masks(rivers, water)
+    red = river & (rivers == RIVER_FLOW_IN_PALETTE)
     issues = []
-    for river in data["rivers"]:
-        for point in river["mouth"].get("bend", []):
-            x, y = window.local(point)
-            current = river_masks(rivers, water)
-            beside = [
-                int(rivers[ny, nx]) for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)) if current[ny, nx]
+    blocks = river_blocks(river) & scope
+    if blocks.any():
+        issues.append(f"{int(blocks.sum())} river pixels form 2x2 blocks, first at {_map_point(blocks, origin)}")
+    plain = river_degree(river & ~red)
+    reds = river_degree(red)
+    crowded = scope & river & ~red & ((plain > 2) | (reds > 1))
+    if crowded.any():
+        issues.append(f"{int(crowded.sum())} river pixels have a third course neighbour, first at {_map_point(crowded, origin)}")
+    red_crowded = scope & red & (river_degree(river) > 2)
+    if red_crowded.any():
+        issues.append(f"flow-in pixels touch more than two course pixels, first at {_map_point(red_crowded, origin)}")
+    return issues
+
+
+def walk_courses(rivers: np.ndarray, water: np.ndarray) -> tuple[np.ndarray, list[tuple[int, int]], dict[tuple[int, int], list]]:
+    """Walk every river as the engine draws it: from each source pixel and each flow-in pixel.
+
+    A walk never enters another flow-in pixel. From a flow-in pixel it starts
+    into the tributary: the course pixel beside it with no other course
+    neighbour than the one it leads on to. Returns how often each pixel was
+    walked, the pixels where a walk had two ways on, and every walk by its start.
+    """
+    river = river_masks(rivers, water)
+    red = river & (rivers == RIVER_FLOW_IN_PALETTE)
+    visits = np.zeros(rivers.shape, np.int16)
+    forks = []
+    walks = {}
+    starts = [(int(x), int(y)) for y, x in zip(*np.nonzero(river & ((rivers == RIVER_SOURCE_PALETTE) | red)))]
+    for start in starts:
+        walk = [start]
+        seen = {start}
+        if red[start[1], start[0]]:
+            first = tributary_starts(river, start)
+            if len(first) != 1:
+                forks.append(start)
+                continue
+            walk.append(first[0])
+            seen.add(first[0])
+        while True:
+            x, y = walk[-1]
+            ways = [
+                (nx, ny)
+                for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))
+                if river[ny, nx] and not red[ny, nx] and (nx, ny) not in seen
             ]
-            if current[y, x]:
-                continue
-            if not (owned[y, x] and border[y, x] and beside):
-                issues.append(f"river {river['name']}: bend {point} is no MON border pixel beside its receiver")
-                continue
-            rivers[y, x] = max(beside)
+            if not ways:
+                break
+            if len(ways) > 1:
+                forks.append((x, y))
+                break
+            walk.append(ways[0])
+            seen.add(ways[0])
+        for x, y in walk:
+            visits[y, x] += 1
+        walks[start] = walk
+    return visits, forks, walks
+
+
+def drawing_issues(
+    data: dict, rivers: np.ndarray, labels: np.ndarray, water: np.ndarray, scope: np.ndarray
+) -> list[str]:
+    """Every river pixel in scope is drawn by exactly one walk; each owned reach reaches its lake."""
+    visits, forks, walks = walk_courses(rivers, water)
+    river = river_masks(rivers, water)
+    issues = []
+    in_scope = [point for point in forks if scope[point[1], point[0]]]
+    if in_scope:
+        issues.append(f"river walks fork at {in_scope[:3]}")
+    missed = scope & river & (visits == 0)
+    if missed.any():
+        issues.append(f"{int(missed.sum())} river pixels are drawn by no walk, first at {_map_point(missed, (0, 0))}")
+    twice = scope & river & (visits > 1)
+    if twice.any():
+        issues.append(f"{int(twice.sum())} river pixels are drawn twice, first at {_map_point(twice, (0, 0))}")
+    full = Window(0, rivers.shape[0], 0, rivers.shape[1])
+    for reach in data.get("owned_reaches", []):
+        path = trace_reach(reach, full, river, labels)
+        mouth = neighbours_of(labels == int(reach["mouth"]["lake"]))
+        stems = [
+            walk for start, walk in walks.items()
+            if rivers[start[1], start[0]] == RIVER_SOURCE_PALETTE and path[0] in walk
+        ]
+        if len(stems) != 1 or not mouth[stems[0][-1][1], stems[0][-1][0]] or not set(path) <= set(stems[0]):
+            issues.append(f"owned reach {reach['name']}: no single drawn course carries it into lake {reach['mouth']['lake']}")
     return issues
 
 
@@ -2039,6 +2205,12 @@ def build_plan(root: Path = ROOT) -> MonPlan:
     full_mon = np.zeros(grid.shape, bool)
     full_mon[window.s] = geography.mon
     issues.extend(marker_issues(data, rivers, grid, full_water, full_mon, geography.network.routes, window))
+    reach, _reach_issues = owned_reach_mask(data, window, rivers[window.s], geography.labels, geography.water)
+    shape_scope = geography.relief_scope | reach
+    issues.extend(course_shape_issues(rivers[window.s], shape_scope, geography.water, (window.x0, window.y0)))
+    drawn_scope = np.zeros(grid.shape, bool)
+    drawn_scope[window.s] = shape_scope
+    issues.extend(drawing_issues(data, rivers, grid, full_water, drawn_scope))
     terrain = sources["terrain"].copy()
     cities = sources["cities"].copy()
     paint_layers(geography, scope, terrain[window.s], cities[window.s])

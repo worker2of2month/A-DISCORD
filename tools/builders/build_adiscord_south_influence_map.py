@@ -10,6 +10,7 @@ import argparse
 import csv
 import io
 import re
+from textwrap import indent
 from pathlib import Path
 
 import numpy as np
@@ -176,12 +177,23 @@ def gui(geometry):
         x = CARD_LEFT + index % 2 * COLUMN_PITCH
         y = CARD_TOP + index // 2 * CARD_HEIGHT
         tip = f"{prefix}{tag}_tt"
+        marker = f"{prefix}marker_{tag}"
+        # The child reads a signed pixel offset relative to this card's neutral tick.
+        pointer = icon(marker, "GFX_" + prefix + "influence_marker", 0, 0, passive=True)
         parts.extend([
             icon(f"{prefix}flag_{tag}", f"GFX_{prefix}flag_{tag}", x, y, tooltip=tip),
-            textbox(f"{prefix}name_{tag}", f"{prefix}name_{tag}", x + 34, y, 94, 20, tip),
-            textbox(f"{prefix}gap_{tag}", f"{prefix}gap_{tag}", x + 129, y, GAUGE_WIDTH - 129, 20, tip, right=True),
+            textbox(f"{prefix}name_{tag}", f"{prefix}name_{tag}", x + 34, y, 86, 20, tip),
+            textbox(f"{prefix}gap_{tag}", f"{prefix}gap_{tag}", x + 120, y, GAUGE_WIDTH - 120, 20, tip, right=True),
             icon(f"{prefix}track_{tag}", "GFX_" + prefix + "influence_track", x, y + 20, tooltip=tip),
-            icon(f"{prefix}marker_{tag}", "GFX_" + prefix + "influence_marker", 0, y + 20, passive=True),
+            "\n".join([
+                "\t\tcontainerWindowType = {",
+                f'\t\t\tname = "{marker}_origin"',
+                f"\t\t\tposition = {{ x = {x + GAUGE_WIDTH // 2} y = {y + 20} }}",
+                "\t\t\tsize = { width = 1 height = 12 }",
+                "\t\t\tclipping = no",
+                indent(pointer, "\t"),
+                "\t\t}",
+            ]),
         ])
     parts.extend([
         textbox("ADISCORD_south_map_legend", "ADISCORD_south_map_legend", 12, cards_bottom, WIDTH, 54, "ADISCORD_south_map_rules_tt"),
@@ -215,29 +227,17 @@ def scripted_gui(geometry):
         for side in LAYERS[1:]:
             lines.extend([f'\t\t\t{name}_{side}_visible = {{',
                           f'\t\t\t\t{state} = {{ ADISCORD_south_map_state_{side} = yes }}', '\t\t\t}'])
-    for index, tag in enumerate(COUNTRIES):
-        marker = f"ADISCORD_south_map_marker_{tag}"
-        track = f"ADISCORD_south_map_track_{tag}"
-        contested = f"\t\t\t\t{tag} = {{ ADISCORD_south_map_influence_contested = yes }}"
-        neutral_x = CARD_LEFT + index % 2 * COLUMN_PITCH + GAUGE_WIDTH // 2
-        # Properties read in the panel's player scope. Compute each marker's pixel position there.
-        lines.extend([
-            f"\t\t\t{track}_visible = {{",
-            contested,
-            "\t\t\t}",
-            f"\t\t\t{marker}_visible = {{",
-            contested,
-            f"\t\t\t\tset_temp_variable = {{ var = {marker}_x value = {neutral_x} }}",
-            "\t\t\t\tif = {",
-            f"\t\t\t\t\tlimit = {{ {tag} = {{ has_variable = ADISCORD_south_coalition_influence }} }}",
-            f"\t\t\t\t\tadd_to_temp_variable = {{ var = {marker}_x value = {tag}.ADISCORD_south_coalition_influence }}",
-            "\t\t\t\t}",
-            "\t\t\t}",
-        ])
+    for tag in COUNTRIES:
+        for widget in ("track", "marker"):
+            lines.extend([
+                f"\t\t\tADISCORD_south_map_{widget}_{tag}_visible = {{",
+                f"\t\t\t\t{tag} = {{ ADISCORD_south_map_influence_contested = yes }}",
+                "\t\t\t}",
+            ])
     lines.extend(["\t\t}", "\t\tproperties = {"])
     for tag in COUNTRIES:
         marker = f"ADISCORD_south_map_marker_{tag}"
-        lines.append(f"\t\t\t{marker} = {{ x = {marker}_x }}")
+        lines.append(f"\t\t\t{marker} = {{ x = {tag}.ADISCORD_south_coalition_influence?0 }}")
     lines.extend(['\t\t}', '\t}', '}', ''])
     return "\n".join(lines)
 
@@ -256,7 +256,9 @@ def localisation(geometry, language):
                 " Успешный приказ о взятии района снимает 8 пунктов. При 100 пунктах начинается кризис тыла."
             ),
             "gap_heading": "Перевес: §OШахрабад§! / §CСветлогорье§!   Сила влияния: §O[?SHL.ADISCORD_south_influence_power|0]§! / §C[?NAM.ADISCORD_south_influence_power|0]§!",
-            "gap_help": "Метка сдвигается влево, когда перевес растёт в пользу §OШахрабада§!, и вправо, когда он растёт в пользу §CСветлогорья§!. Средняя риска означает равновесие, две крайние отмечают порог приглашения в союз: перевес §Y60§!. Числа у флага показывают, сколько осталось до этого порога каждой стороне. Каждые 28 дней перевес возвращается на §Y3§! к собственному крену страны, а постоянные связи сдвигают его дальше.\\nСила влияния: Светлогорье §Y[?NAM.ADISCORD_south_influence_power|0]§! / Шахрабад §Y[?SHL.ADISCORD_south_influence_power|0]§!. От неё зависит, насколько сдвигают перевес делегации и советники.",
+            "gap_help": "Метка сдвигается влево, когда перевес растёт в пользу §OШахрабада§!, и вправо, когда он растёт в пользу §CСветлогорья§!. Средняя риска означает равновесие, две крайние отмечают порог приглашения в союз: перевес §Y60§!. У флага показан текущий перевес цветом лидирующей стороны. Цвет пометки союзника показывает, в каком лагере уже состоит страна. Каждые 28 дней перевес возвращается на §Y3§! к собственному крену страны, а постоянные связи сдвигают его дальше.\\nСила влияния: Светлогорье §Y[?NAM.ADISCORD_south_influence_power|0]§! / Шахрабад §Y[?SHL.ADISCORD_south_influence_power|0]§!. От неё зависит, насколько сдвигают перевес делегации и советники.",
+            "ally_shl": "§OСоюзник§! [ADISCORDSouthDiplomaticBalance]",
+            "ally_north": "§CСоюзник§! [ADISCORDSouthDiplomaticBalance]",
             "gap_absent": "Нет страны",
             "gap_leader": "Лидер",
             "gap_subject": "Зависима",
@@ -293,7 +295,9 @@ def localisation(geometry, language):
                 " Completing an order to take a district relieves 8 points. At 100 points a home front crisis begins."
             ),
             "gap_heading": "Balance: §OShahrabad§! / §CSvetlogorye§!   Influence power: §O[?SHL.ADISCORD_south_influence_power|0]§! / §C[?NAM.ADISCORD_south_influence_power|0]§!",
-            "gap_help": "The marker moves left as the balance grows in §OShahrabad's§! favour and right as it grows in §CSvetlogorye's§! favour. The middle tick marks an even balance, the two outer ticks the alliance invitation threshold: a balance of §Y60§!. The numbers beside each flag show how far each side is from that threshold. Every 28 days the balance returns §Y3§! towards the country's own lean, and standing ties move it further.\\nInfluence power: Svetlogorye §Y[?NAM.ADISCORD_south_influence_power|0]§! / Shahrabad §Y[?SHL.ADISCORD_south_influence_power|0]§!. It sets how far delegations and advisers move the balance.",
+            "gap_help": "The marker moves left as the balance grows in §OShahrabad's§! favour and right as it grows in §CSvetlogorye's§! favour. The middle tick marks an even balance, the two outer ticks the alliance invitation threshold: a balance of §Y60§!. Each flag shows the current balance in the leading side's colour. The colour of the Ally label shows which alliance the country already belongs to. Every 28 days the balance returns §Y3§! towards the country's own lean, and standing ties move it further.\\nInfluence power: Svetlogorye §Y[?NAM.ADISCORD_south_influence_power|0]§! / Shahrabad §Y[?SHL.ADISCORD_south_influence_power|0]§!. It sets how far delegations and advisers move the balance.",
+            "ally_shl": "§OAlly§! [ADISCORDSouthDiplomaticBalance]",
+            "ally_north": "§CAlly§! [ADISCORDSouthDiplomaticBalance]",
             "gap_absent": "Absent",
             "gap_leader": "Leader",
             "gap_subject": "Subject",
@@ -317,7 +321,7 @@ def localisation(geometry, language):
             "phase_waiting": "Southern crisis",
         }
         state_text = "§Y[{state}.GetName]§!\\nOwner: [{state}.Owner.GetName]\\n[{state}.Owner.ADISCORDSouthMapAlignment]\\n\\nController: [{state}.Controller.GetName]\\n[{state}.Controller.ADISCORDSouthMapAlignment]"
-    texts["gaps"] = "§O[?ADISCORD_south_map_shl_gap|0]§! / §C[?ADISCORD_south_map_north_gap|0]§!"
+    texts["balance"] = "[ADISCORDSouthDiplomaticBalance]"
     lines = [f' ADISCORD_south_map_{key}:0 "{value}"' for key, value in texts.items()]
     for state in geometry["states"]:
         lines.append(f' ADISCORD_south_map_state_{state}_tt:0 "{state_text.format(state=state)}"')
@@ -326,7 +330,7 @@ def localisation(geometry, language):
         if tag == "EFL":
             name = "Эфлор" if language == "russian" else "Eflor"
         lines.append(f' ADISCORD_south_map_name_{tag}:0 "{name}"')
-        lines.append(f' ADISCORD_south_map_gap_{tag}:0 "[{tag}.ADISCORDSouthMapGaps]"')
+        lines.append(f' ADISCORD_south_map_gap_{tag}:0 "[{tag}.ADISCORDSouthMapStanding]"')
         lines.append(f' ADISCORD_south_map_{tag}_tt:0 "§Y[{tag}.GetName]§!\\n[{tag}.ADISCORDSouthMapAlignment][{tag}.ADISCORDSouthMapInfluence]"')
     return "\n".join(lines) + "\n"
 

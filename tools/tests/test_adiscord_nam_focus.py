@@ -2787,21 +2787,140 @@ class NamCampaignTests(unittest.TestCase):
 
     def island_decisions(self):
         source = parsed(f"common/decisions/{BASE}_decisions.txt")
-        return {e.key: e.value for category in ("NAM_national_programmes", "NAM_free_zones") for e in block(source, category)
+        return {e.key: e.value for category in ("NAM_national_programmes", "NAM_overseas_districts") for e in block(source, category)
                 if e.key.startswith("NAM_island_") or e.key == "NAM_renegotiate_val_concession"}
+
+    def test_playable_focus_rewards_point_to_categories_of_their_route(self):
+        shared_war = "ADISCORD_south_final_war_category"
+        mainland = {"NAM_administration", "NAM_basin_economy", "NAM_mobilisation", "NAM_national_programmes",
+                    "NAM_overseas_districts", "NAM_public_campaigns", "NAM_supports"}
+        permitted = {
+            "focus": mainland | {"NAM_colony", "NAM_colonial_campaigns", "NAM_restitution", "NAM_underground"},
+            "wartime": mainland,
+            "postwar": mainland | {"NAM_postwar_orders", "NAM_depot_concessions", shared_war},
+            "defeated": mainland | {shared_war},
+            "exile_interregnum": {"NAM_interregnum_quay"},
+            "exile_corporate": {"NAM_board_invasion", "NAM_board_islands", "NAM_board_subversion",
+                                "NAM_directory_development", "NAM_free_zones", "NAM_overseas_districts",
+                                "NAM_public_campaigns", "NAM_two_judases", "NAM_exile_politics"},
+            "return_war": {"NAM_rtw_war"},
+            "mainland_directory": {"NAM_consolidation", "NAM_free_zones", "NAM_mdr_army", "NAM_mdr_south_office"},
+            "south_war": {shared_war, "NAM_public_campaigns"},
+            "southern_dominion": {"NAM_hgm_dominion", "NAM_mdr_army", "NAM_mdr_south_office"},
+        }
+        owners = {}
+        for filename in (f"{BASE}_decisions.txt", "ADISCORD_south_final_war_decisions.txt"):
+            for category in parsed(f"common/decisions/{filename}"):
+                for decision in category.value:
+                    self.assertNotIn(decision.key, owners)
+                    owners[decision.key] = category.key
+        for path in (ROOT / "common/national_focus").glob("ADISCORD_NAM_*.txt"):
+            definitions = parsed(path)
+            if not any(row.key == "focus_tree" for row in definitions):
+                continue
+            route = path.stem.removeprefix("ADISCORD_NAM_")
+            for row in definitions:
+                if row.key != "shared_focus":
+                    continue
+                focus = scalar(row.value, "id")
+                pending = [entry.value for entry in row.value if entry.key == "completion_reward"]
+                seen = set()
+                while pending:
+                    for entry in walk(pending.pop()):
+                        if entry.key == "unlock_decision_tooltip":
+                            self.assertIn(owners[entry.value], permitted[route], (focus, entry.value))
+                        elif entry.key == "unlock_decision_category_tooltip":
+                            self.assertIn(entry.value, permitted[route], focus)
+                        elif entry.key in self.effects and entry.key not in seen:
+                            seen.add(entry.key)
+                            pending.append(self.effects[entry.key])
+
+    def test_exile_marine_contracts_do_not_open_the_council(self):
+        source = parsed(f"common/decisions/{BASE}_decisions.txt")
+        categories = parsed(f"common/decisions/categories/{BASE}_categories.txt")
+        districts = block(block(categories, "NAM_overseas_districts"), "visible")
+        council = block(block(categories, "NAM_free_zones"), "visible")
+        orders = block(source, "NAM_overseas_districts")
+        recruit = block(block(orders, "NAM_order_marines"), "visible")
+        release = block(block(orders, "NAM_order_marines_release"), "visible")
+        facts = self.marine_order_facts()
+        facts[("NAM", "has_country_flag", "NAM_corp_takeover")] = False
+        facts[("NAM", "has_country_flag", "NAM_exile_radical")] = True
+        focus = ("NAM", "has_completed_focus", "NAM_exile_marine_orders")
+        for completed, paid in ((False, 0), (True, 0), (False, 1)):
+            facts[focus] = completed
+            facts[("NAM", "variable", "NAM_marine_orders_paid")] = paid
+            self.assertFalse(self.matches(council, facts))
+            self.assertEqual(self.matches(districts, facts), completed or paid > 0)
+            self.assertEqual(self.matches(recruit, facts), completed)
+            self.assertEqual(self.matches(release, facts), paid > 0)
+
+    def test_southern_war_programmes_use_the_war_category_on_both_routes(self):
+        war = "ADISCORD_south_final_war_category"
+        section = block(parsed(f"common/decisions/{BASE}_decisions.txt"), war)
+        war_visible = block(block(parsed("common/decisions/categories/ADISCORD_south_final_war_categories.txt"), war), "visible")
+        categories = parsed(f"common/decisions/categories/{BASE}_categories.txt")
+        for directory in (False, True):
+            facts = self.economy_facts()
+            facts.update({
+                ("NAM", "has_country_flag", "NAM_corp_takeover"): directory,
+                ("NAM", "has_global_flag", BASE + "_island_exile"): directory,
+                ("NAM", "has_global_flag", BASE + "_nam_victory"): False,
+                ("NAM", "has_focus_tree", "NAM_south_war_focus"): True,
+                ("NAM", "has_country_flag", "ADISCORD_south_north_leader"): True,
+                ("NAM", "has_variable", "ADISCORD_south_side"): True,
+                ("NAM", "ADISCORD_south_final_active", "yes"): True,
+                ("NAM", "has_war_with", "SHL"): True,
+            })
+            self.assertTrue(self.matches(war_visible, facts))
+            for category in ("NAM_basin_economy", "NAM_national_programmes"):
+                self.assertEqual(self.matches(block(block(categories, category), "visible"), facts), not directory)
+            for focus, decision in (("NAM_south_oil_tap", "NAM_south_cut_fuel"),
+                                    ("NAM_pw_southern_budget", "NAM_program_southern_budget"),
+                                    ("NAM_pw_southern_reserve", "NAM_program_southern_reserve")):
+                body = block(section, decision)
+                self.assertIn(decision, [e.value for e in block(self.south_war[focus], "completion_reward")
+                                         if e.key == "unlock_decision_tooltip"])
+                facts[("NAM", "has_completed_focus", focus)] = True
+                self.assertTrue(self.matches(block(body, "visible"), facts), decision)
+                self.assertTrue(self.matches(block(body, "available"), facts), decision)
+                if decision.startswith("NAM_program_"):
+                    paid = dict(facts)
+                    self.apply(block(body, "complete_effect"), paid)
+                    self.assertTrue(paid[("NAM", "has_country_flag", decision + "_paid")])
+                    self.apply(block(body, "remove_effect"), paid)
+                    self.assertFalse(paid[("NAM", "has_country_flag", decision + "_paid")])
+                    item, count = ("motorized_equipment", 500) if decision.endswith("_budget") else ("support_equipment", 400)
+                    self.assertEqual(paid[("NAM", "equipment", item)], facts.get(("NAM", "equipment", item), 0) + count)
+            facts[("NAM", "ADISCORD_south_final_active", "yes")] = False
+            facts[("NAM", "has_focus_tree", "NAM_south_war_focus")] = False
+            facts[("NAM", "has_global_flag", "ADISCORD_south_final_resolved")] = True
+            facts[("NAM", "has_global_flag", BASE + "_nam_victory")] = not directory
+            self.assertEqual(self.matches(war_visible, facts), not directory)
+            facts[("NAM", "has_global_flag", "ADISCORD_south_hegemon_NAM")] = True
+            facts[("NAM", "has_global_flag", "NAM_war_of_return_won")] = directory
+            self.assertTrue(self.matches(war_visible, facts))
+            self.assertTrue(self.matches(self.triggers["NAM_southern_supply_operable"], facts))
 
     def test_island_reorganisation_opens_usable_programmes_from_their_focuses(self):
         overseas = self.island_decisions()
-        category = block(parsed(f"common/decisions/categories/{BASE}_categories.txt"), "NAM_free_zones")
+        categories = parsed(f"common/decisions/categories/{BASE}_categories.txt")
+        districts = block(block(categories, "NAM_overseas_districts"), "visible")
+        council = block(block(categories, "NAM_free_zones"), "visible")
         for focus, programme in (("NAM_harbour_service", "NAM_island_convoy_service"),
                                  ("NAM_island_accounts", "NAM_island_public_works")):
             facts = self.island_facts()
             for name in self.focuses:
-                facts[("NAM", "has_completed_focus", name)] = name in (focus, "NAM_harbour_service", "NAM_inventory")
+                facts[("NAM", "has_completed_focus", name)] = name == "NAM_inventory"
             body = overseas[programme]
+            self.assertFalse(self.matches(districts, facts))
+            self.assertFalse(self.matches(block(body, "visible"), facts))
+            facts[("NAM", "has_completed_focus", "NAM_harbour_service")] = True
+            facts[("NAM", "has_completed_focus", focus)] = True
             self.assertIn(programme, [e.value for e in walk(block(self.focuses[focus], "completion_reward"))
                                       if e.key == "unlock_decision_tooltip"])
-            self.assertTrue(self.matches(block(category, "visible"), facts))
+            self.assertFalse(self.matches(council, facts))
+            self.assertTrue(self.matches(districts, facts))
             self.assertTrue(self.matches(block(body, "visible"), facts))
             self.assertTrue(self.matches(block(self.bind_field(body, "230"), "available"), facts))
         for removed in ("NAM_island_convoys", "NAM_island_governors"):
@@ -7643,8 +7762,9 @@ class NamCampaignTests(unittest.TestCase):
         for path in (f"common/scripted_effects/{BASE}_effects.txt", "common/scripted_effects/ADISCORD_shared_action_effects.txt"):
             cls.effects.update({e.key: e.value for e in parsed(path)})
         cls.decisions = national_decisions()
-        cls.decisions.update({e.key: e.value for e in block(parsed(f"common/decisions/{BASE}_decisions.txt"), "NAM_free_zones")
-                              if e.key.startswith("NAM_island_")})
+        source = parsed(f"common/decisions/{BASE}_decisions.txt")
+        for section in ("NAM_overseas_districts", "ADISCORD_south_final_war_category"):
+            cls.decisions.update({e.key: e.value for e in block(source, section)})
         cls.missions = {decision.key: decision.value
                         for category in parsed(f"common/decisions/{BASE}_decisions.txt")
                         for decision in category.value
@@ -9120,9 +9240,9 @@ class NamCampaignTests(unittest.TestCase):
             self.assertEqual(preview, applied, name)
         self.assertEqual(len(seen), 12)
 
-    def test_upper_programmes_unlock_in_the_council_without_mainland_focuses(self):
-        council = block(parsed(f"common/decisions/{BASE}_decisions.txt"), "NAM_free_zones")
-        category = block(parsed(f"common/decisions/categories/{BASE}_categories.txt"), "NAM_free_zones")
+    def test_upper_programmes_unlock_without_mainland_focuses(self):
+        decisions = parsed(f"common/decisions/{BASE}_decisions.txt")
+        categories = parsed(f"common/decisions/categories/{BASE}_categories.txt")
         gates = (("private_gospel", "NAM_corp_sell_steel"), ("land_foreclosure", "NAM_corp_labour_contract"),
                  ("arsenal_monopoly", "NAM_island_convoy_service"), ("old_settlers_oath", "NAM_island_public_works"),
                  ("concession_courts", "NAM_island_concession_231"), ("last_voyage_rifles", "NAM_order_marines"),
@@ -9140,11 +9260,15 @@ class NamCampaignTests(unittest.TestCase):
             facts[("NAM", "is_subject", "no")] = True
             focus = self.exile_trees["exile_corporate"][1][name]
             self.assertIn(programme, [row.value for row in block(focus, "completion_reward") if row.key == "unlock_decision_tooltip"])
-            decision = self.bind_field(block(council, programme),
+            section = ("NAM_overseas_districts" if programme.startswith("NAM_island_") or programme == "NAM_order_marines"
+                       else "NAM_free_zones")
+            category = block(categories, section)
+            decision = self.bind_field(block(block(decisions, section), programme),
                                        "VAL" if programme == "NAM_island_concession_231" else "230")
-            self.assertTrue(self.matches(block(category, "visible"), facts), programme)
+            self.assertEqual(self.matches(block(category, "visible"), facts), section == "NAM_free_zones", programme)
             self.assertFalse(self.matches(block(decision, "visible"), facts), programme)
             facts[("NAM", "has_completed_focus", name)] = True
+            self.assertTrue(self.matches(block(category, "visible"), facts), programme)
             self.assertTrue(self.matches(block(decision, "visible"), facts), programme)
             if programme in {"NAM_island_convoy_service", "NAM_island_public_works", "NAM_island_concession_231",
                              "NAM_order_marines"}:
@@ -9446,9 +9570,9 @@ class NamCampaignTests(unittest.TestCase):
                 eligibility = next((e.value for e in category.value if e.key == "allowed"), [])
                 if self.matches(eligibility, facts):
                     allowed[category.key] = next((e.value for e in category.value if e.key == "visible"), [])
-        # Only the categories' own visible triggers are evaluated here; the engine
-        # still hides the development category until one of its programmes is visible.
-        expected = {"NAM_two_judases", "NAM_free_zones", "NAM_public_campaigns", "NAM_directory_development"}
+        # This takeover follows the mainland harbour focus, so the districts still offer convoys.
+        expected = {"NAM_two_judases", "NAM_free_zones", "NAM_public_campaigns", "NAM_directory_development",
+                    "NAM_overseas_districts"}
         for debug in (False, True):
             facts[flag] = debug
             self.assertEqual({key for key, visible in allowed.items() if self.matches(visible, facts)}, expected)
@@ -9463,9 +9587,7 @@ class NamCampaignTests(unittest.TestCase):
         self.assertFalse({row.key for row in board} &
                         {"NAM_board_tender_rail", "NAM_board_tender_yards", "NAM_board_tender_depots"})
         self.assertTrue({"NAM_board_bid_" + lot for lot in ("rail", "yards", "depots")} <= {row.key for row in board})
-        # 52 council decisions, the proxy purchase, the settlers' militia, the relief
-        # fund, the one retender decision and the continent's mainland tender.
-        self.assertEqual(len(board), 57)
+        self.assertEqual(len(board), 52)
         self.assertIn("NAM_mdr_mainland_tender", {row.key for row in board})
         self.assertFalse({row.key for row in board if row.key.startswith("NAM_dir_campaign_")})
         public_campaigns = block(parsed(f"common/decisions/{BASE}_decisions.txt"), "NAM_public_campaigns")
@@ -20017,7 +20139,8 @@ MAINLAND_CAMPAIGNS = (
     "NAM_campaign_reserve_roll", "NAM_campaign_our_own_word", "NAM_campaign_oil_is_ours",
     "NAM_campaign_charter_of_districts", "NAM_campaign_furnaces_threaten_the_desert", "NAM_radio_network",
 )
-ISLAND_CATEGORIES = {"NAM_two_judases", "NAM_free_zones", "NAM_public_campaigns", "NAM_directory_development"}
+ISLAND_CATEGORIES = {"NAM_two_judases", "NAM_free_zones", "NAM_public_campaigns", "NAM_directory_development",
+                     "NAM_overseas_districts"}
 
 
 class NamBoardFocusLayerTests(unittest.TestCase):
@@ -25826,6 +25949,22 @@ class NamDepotBoardTests(unittest.TestCase):
         cls.effects = {e.key: e.value for e in parsed(f"common/scripted_effects/{BASE}_effects.txt")}
         cls.triggers = {e.key: e.value for e in parsed(f"common/scripted_triggers/{BASE}_triggers.txt")}
         cls.postwar = tree_focuses("postwar")[1]
+
+    def test_depot_widgets_read_private_shares_in_their_own_state_scope(self):
+        sites = {f"NAM_depot_marker_{site}_tt": site for site in (700, 67, 689, 690, 225)}
+        sites["NAM_depot_island_label"] = 225
+        definitions = {scalar(entry.value, "name"): entry.value for entry in
+                       parsed(f"common/scripted_localisation/{BASE}_scripted_loc.txt")}
+        for language in ("russian", "english"):
+            source = read(f"localisation/{language}/{BASE}_l_{language}.yml")
+            loc = {m[1]: m[2] for line in source.splitlines() if (m := ENTRY.fullmatch(line))}
+            for key, site in sites.items():
+                with self.subTest(language=language, key=key):
+                    self.assertNotRegex(loc[key], r"\[\?\d+\.")
+                    getter, = re.findall(rf"\[{site}\.(?!GetName\])([A-Za-z]+)\]", loc[key])
+                    variants = [loc[scalar(row.value, "localization_key")] for row in definitions[getter]
+                                if row.key == "text"]
+                    self.assertIn("[?NAM_depot_hold|0]", variants)
 
     def test_board_has_three_states_and_no_bypass_reads_a_pending_board_as_ended(self):
         pending, opened, ended = (self.triggers["NAM_depot_board_" + name] for name in ("pending", "open", "ended"))

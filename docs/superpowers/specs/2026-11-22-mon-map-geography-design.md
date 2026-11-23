@@ -70,11 +70,10 @@ and `before_terrain.png` (delete with the other previews when the work ends).
 | Per-province rows in `buildings.txt`, building heights | `map_buildings` | Extended, see 7.3 |
 | Strategic-region membership, weather positions | `strategic_regions` | Re-applied |
 
-Never run `build_adiscord_outer_states --apply`: on 2026-11-22 its planner
-would repartition 19 of the 20 MON states and rename 120 states. The MON state
-shells, their climate markers and the state names in
-`state_names_l_russian.yml` are frozen. That is why the relief below is
-designed to agree with the existing state names instead of renaming states.
+The outer-state builder reads the frozen northern shell membership, climate
+markers and Russian names from `tools/data/adiscord_northern_state_shells.json`.
+MON's carved provinces join their specified shells once present on the map.
+The relief follows the existing state names.
 
 ## 4. Builder architecture
 

@@ -3140,7 +3140,10 @@ shared_focus = {
 				NAM_pw_operable = yes
 			}
 			has_war = no
-			ADISCORD_south_contest_open = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_spheres_contest_tt
+				ADISCORD_south_contest_open = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = NAM_south_spheres_partner_tt
 				SHL = {
