@@ -99,6 +99,7 @@
  MODIFIER_AIR_ACCIDENTS_FACTOR: "£air_accidents_texticon  Air Accidents Chance"
  MODIFIER_LOCAL_ORG_REGAIN: "£organization_gain_texticon  Organization Regain"
  MODIFIER_ARMY_ORG_REGAIN: "£organization_gain_texticon  Army Organization Regain"
+ MODIFIER_FACTORY_ENERGY_CONSUMPTION: "£energy_consumption_texticon Factory Energy Consumption"
  MODIFIER_LOCAL_FACTORY_ENERGY_CONSUMPTION: "£energy_consumption_texticon Local Factories Energy Consumption"
  MODIFIER_DEFENCE: "£defence_texticon  Defense"
  MODIFIER_OFFENCE: "£attack_texticon  Attack"
