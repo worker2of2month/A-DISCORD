@@ -2075,6 +2075,8 @@ def smooth_state_borders(
     rail_pairs: frozenset[tuple[int, int]] | set[tuple[int, int]] = frozenset(),
     min_pixels: Mapping[int, int] | None = None,
     min_roundness: Mapping[int, float] | None = None,
+    group_of: Mapping[int, int] | None = None,
+    area_limits: Mapping[int, tuple[int, int]] | None = None,
     radius: int = STATE_SMOOTHING_RADIUS,
     share: float = STATE_SMOOTHING_SHARE,
     passes: int = STATE_SMOOTHING_PASSES,
@@ -2094,7 +2096,9 @@ def smooth_state_borders(
     to the window edge. A move is refused when it would split its province
     or its land off the river, leave it under ``min_pixels`` (default
     STATE_SMOOTHING_MIN_PIXELS), make a ``min_roundness`` province less
-    round than its limit and than before, close a four-province 2x2 square,
+    round than its limit and than before, take a group of provinces
+    (``group_of``, a province is its own group by default) out of its
+    ``area_limits`` (least, most pixels), close a four-province 2x2 square,
     or remove the last contact of a ``rail_pairs`` segment or of two
     provinces of one state. Provinces never change state; only their
     pixels move.
@@ -2119,6 +2123,11 @@ def smooth_state_borders(
     rails = {(min(a, b), max(a, b)) for a, b in rail_pairs}
     minimum = min_pixels or {}
     shapes = min_roundness or {}
+    groups = group_of or {}
+    limits = area_limits or {}
+    group_area: Counter[int] = Counter()
+    for province, count in sizes.items():
+        group_area[groups.get(province, province)] += count
     edges_before = state_edge_length(states, scope_states)
     pairs_before = len(contacts)
     rail_checked = sorted(pair for pair in rails if contacts.get(pair))
@@ -2179,6 +2188,13 @@ def smooth_state_borders(
                     delta[(min(target, other), max(target, other))] += 1
             if any(change < 0 and contacts[pair] + change <= 0 and kept_contact(pair) for pair, change in delta.items()):
                 continue
+            losing = groups.get(source, source)
+            gaining = groups.get(target, target)
+            if losing != gaining and (
+                (losing in limits and group_area[losing] - 1 < limits[losing][0])
+                or (gaining in limits and group_area[gaining] + 1 > limits[gaining][1])
+            ):
+                continue
             if not committing:
                 changes += 1
                 break
@@ -2186,6 +2202,8 @@ def smooth_state_borders(
             states[y, x] = best
             sizes[source] -= 1
             sizes[target] += 1
+            group_area[losing] -= 1
+            group_area[gaining] += 1
             for pair, change in delta.items():
                 contacts[pair] += change
             changes += 1
@@ -4646,9 +4664,10 @@ def _build_expected() -> GeographyOutputs:
         for province_id in RELIEF_EXCLUDED_PROVINCES - SETTLEMENT_PROVINCES
         if desired.get(province_id) in UNIFORM_TERRAIN_PALETTES
     }
+    detached_mask = province_mask(packed, province_colors, frozenset(detached))
     paint_provinces(
         painted,
-        relief | province_mask(packed, province_colors, frozenset(detached)),
+        relief | detached_mask,
         province_ids,
         city_array,
         {
@@ -4752,8 +4771,9 @@ def _build_expected() -> GeographyOutputs:
     )
 
     outside_terrain_changes = 0
+    detached_pixels = detached_mask.reshape(-1)
     for index, (before, after) in enumerate(zip(terrain_pixels, generated_pixels)):
-        if before == after or masks.north[index] or relief_pixels[index]:
+        if before == after or masks.north[index] or relief_pixels[index] or detached_pixels[index]:
             continue
         if index in shore_cleared and before == URBAN_PALETTE:
             continue

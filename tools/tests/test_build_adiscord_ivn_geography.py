@@ -1116,6 +1116,18 @@ class StateBorderSmoothingTests(unittest.TestCase):
         larger = builder.smooth_state_borders(labels, states, SMOOTHING_SCOPE, land, river, min_pixels={5: 27})
         self.assertEqual(int((larger.labels == 5).sum()), 27)
 
+    def test_area_limits_hold_for_provinces_and_groups(self) -> None:
+        labels = smoothing_canvas()
+        labels[5:8, 12:15] = 3
+        size = int((labels == 1).sum())
+        capped = self.smooth(labels, area_limits={1: (0, size)})
+        self.assertLessEqual(int((capped.labels == 1).sum()), size)
+        # Provinces 3 and 4 as one group that may not shrink.
+        group = int(np.isin(labels, [3, 4]).sum())
+        kept = self.smooth(labels, group_of={3: 3, 4: 3}, area_limits={3: (group, 10_000)})
+        self.assertGreaterEqual(int(np.isin(kept.labels, [3, 4]).sum()), group)
+        self.assert_contracts(labels, kept)
+
     def test_a_province_is_never_cut_in_two(self) -> None:
         labels = smoothing_canvas()
         # A blob of province 3 inside state 10, held only by a one-pixel neck.

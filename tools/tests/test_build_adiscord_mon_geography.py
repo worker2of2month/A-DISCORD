@@ -1049,13 +1049,16 @@ class StageSmoothingTests(unittest.TestCase):
         scope.parts.update({21: 6, 22: 6})
         data = {
             "states": [],
-            "regions": {"PWR": {"states": [71], "stage": 3, "part_min_pixels": 70}},
+            "regions": {"PWR": {"states": [71], "stage": 3, "part_min_pixels": 70, "split_part": 100, "split_threshold": 180}},
             "planned": {"provinces": []},
             "stages": [{"stage": 3, "irregular_parts": [22]}],
         }
-        sizes, shapes = mon.smoothing_limits(scope, data)
-        self.assertEqual(sizes, {20: mon.REMAINDER_MIN_PIXELS, 21: 70, 6: 70, 22: 70})
-        self.assertEqual(shapes, {21: mon.PART_MIN_ROUNDNESS, 6: mon.PART_MIN_ROUNDNESS})
+        limits = mon.smoothing_limits(scope, data)
+        self.assertEqual(limits.sizes, {20: mon.REMAINDER_MIN_PIXELS, 21: 70, 6: 70, 22: 70})
+        self.assertEqual(limits.shapes, {21: mon.PART_MIN_ROUNDNESS, 6: mon.PART_MIN_ROUNDNESS})
+        # The family of 6 keeps two to four parts' worth of land; other rural provinces stay below the split threshold.
+        self.assertEqual(limits.group_of, {6: 6, 21: 6, 22: 6})
+        self.assertEqual(limits.areas, {6: (201, 400), 5: (0, 180), 20: (0, 180)})
 
     def test_the_latest_stage_smooths_without_losing_contracts(self) -> None:
         data, sheet, report, _arrays = mon.smooth_stage_plan(mon.ROOT)

@@ -5597,9 +5597,28 @@ def history_states(root: Path) -> dict[int, int]:
     return result
 
 
-def smoothing_limits(scope: Scope, data: dict) -> tuple[dict[int, int], dict[int, float]]:
-    """Least size and roundness of the planned provinces, as ``carve_issues`` checks them."""
+@dataclass(frozen=True)
+class SmoothingLimits:
+    """What the state-line smoothing keeps of the planned geometry."""
+
+    sizes: dict[int, int]
+    shapes: dict[int, float]
+    group_of: dict[int, int]
+    areas: dict[int, tuple[int, int]]
+
+
+def smoothing_limits(scope: Scope, data: dict) -> SmoothingLimits:
+    """Least size and roundness of the planned provinces, as ``carve_issues`` checks them, and area limits.
+
+    A split province and its parts stay a family of about ``split_part``
+    pixels each: its area stays above one part fewer and at most one part
+    more than it has. Every other rural province stays within the
+    ``split_threshold`` of its state, so the smoothing never makes a
+    province that the planner would have split.
+    """
     part_minimum = state_parameter(data, "part_min_pixels", PART_MIN_PIXELS)
+    split_part = state_parameter(data, "split_part", SPLIT_PART_PIXELS)
+    threshold = state_parameter(data, "split_threshold", SPLIT_THRESHOLD)
     exempt = {province for record in later_layers(data) for province in record.get("irregular_parts", [])}
     sizes: dict[int, int] = {}
     shapes: dict[int, float] = {}
@@ -5611,7 +5630,19 @@ def smoothing_limits(scope: Scope, data: dict) -> tuple[dict[int, int], dict[int
             sizes[province] = max(sizes.get(province, 0), int(part_minimum[scope.state_of[province]]))
             if province not in exempt:
                 shapes[province] = PART_MIN_ROUNDNESS
-    return sizes, shapes
+    families: dict[int, list[int]] = defaultdict(list)
+    for part, parent in scope.parts.items():
+        families[parent].append(part)
+    group_of = {province: parent for parent, parts in families.items() for province in (parent, *parts)}
+    areas = {}
+    for parent, parts in families.items():
+        count = len(parts) + 1
+        part = int(split_part[scope.state_of[parent]])
+        areas[parent] = ((count - 1) * part + 1, (count + 1) * part)
+    for province, state_id in scope.state_of.items():
+        if province not in group_of and province not in scope.urban:
+            areas[province] = (0, int(threshold[state_id]))
+    return SmoothingLimits(sizes, shapes, group_of, areas)
 
 
 def stage_smoothing_frozen(
@@ -5701,7 +5732,7 @@ def smooth_stage_plan(root: Path = ROOT) -> tuple[dict, np.ndarray, dict, dict]:
     frozen = stage_smoothing_frozen(root, view, scope, grid, window, rivers, reference, land)
     kept = kept_terrains(scope, definition)
     settlements = scope.urban | scope.adopted | {province for province, terrain in kept.items() if terrain == "urban"}
-    sizes, shapes = smoothing_limits(scope, active)
+    limits = smoothing_limits(scope, active)
     smoothing = smooth_state_borders(
         labels,
         state_of,
@@ -5711,8 +5742,10 @@ def smooth_stage_plan(root: Path = ROOT) -> tuple[dict, np.ndarray, dict, dict]:
         settlements=frozenset(settlements),
         frozen=frozen,
         rail_pairs=rail_pairs(root),
-        min_pixels=sizes,
-        min_roundness=shapes,
+        min_pixels=limits.sizes,
+        min_roundness=limits.shapes,
+        group_of=limits.group_of,
+        area_limits=limits.areas,
         passes=STAGE_SMOOTHING_PASSES,
     )
     full = grid.copy()
