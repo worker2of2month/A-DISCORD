@@ -221,7 +221,7 @@ def split_centres() -> dict[int, int]:
 
     A split half counts its centre, which that builder raises to a victory
     point of 3, as the city and the town of its state; nothing is carved
-    for it (spec 13.5).
+    for it.
     """
     from tools.builders.build_adiscord_new_states import STATE_SPLITS
 
@@ -336,7 +336,7 @@ RIVER_MOUTH_RADIUS = 14
 RIVER_SIDE_SWITCH_COST = 30.0
 # With ``route_rivers(states=...)`` a step onto a pixel of a line between
 # states costs this instead of 1, so a course takes a province border that is
-# also a state line where one runs beside it (spec 13.4). The map pass does not
+# also a state line where one runs beside it. The map pass does not
 # pass states: the preference would move the courses it already settled.
 RIVER_STATE_LINE_STEP = 0.5
 RIVER_SHORE_CLEARANCE = 3.0
@@ -3443,7 +3443,7 @@ def stage2_sheet_with_moves(
 
 
 def smooth_stage2_plan(manifest: dict | None = None) -> tuple[dict, np.ndarray, dict, dict]:
-    """Smooth the lines between the IVN/IIA states of the stored Stage 2 plan (spec 13.3).
+    """Smooth the lines between the IVN/IIA states of the stored Stage 2 plan.
 
     Returns the manifest, the raster, the report and the window arrays for
     previews. The moved pixels join the Stage 2 layer, so the map pass
@@ -4636,18 +4636,24 @@ def _build_expected() -> GeographyOutputs:
     desired.update(ISLAND_PROVINCE_TERRAIN)
 
     # Every IVN mainland province is painted in its one terrain type, so the
-    # map reads province by province and matches the declared terrain.
+    # map reads province by province and matches the declared terrain. The
+    # detached islands keep their authored relief, not their old textures.
     relief_ids = relief_province_ids(RELIEF_STATE_IDS) - SETTLEMENT_PROVINCES
     for province_id in relief_ids:
         desired[province_id] = province_terrain_type(counts[province_id])
+    detached = {
+        province_id
+        for province_id in RELIEF_EXCLUDED_PROVINCES - SETTLEMENT_PROVINCES
+        if desired.get(province_id) in UNIFORM_TERRAIN_PALETTES
+    }
     paint_provinces(
         painted,
-        relief,
+        relief | province_mask(packed, province_colors, frozenset(detached)),
         province_ids,
         city_array,
         {
             province_id: UNIFORM_TERRAIN_PALETTES[desired[province_id]]
-            for province_id in relief_ids
+            for province_id in relief_ids | detached
         },
         shore_array,
     )

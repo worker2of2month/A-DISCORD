@@ -574,6 +574,54 @@ scripted_gui = {
 				set_temp_variable = { var = ADISCORD_west_map_state_717_frame value = ADISCORD_west_map_frame }
 				always = yes
 			}
+			ADISCORD_west_map_state_734_visible = {
+				set_temp_variable = { var = ADISCORD_west_map_frame value = 1 }
+				734 = {
+					owner = { ADISCORD_west_map_set_country_frame = yes }
+				}
+				set_temp_variable = { var = ADISCORD_west_map_state_734_frame value = ADISCORD_west_map_frame }
+				always = yes
+			}
+			ADISCORD_west_map_state_735_visible = {
+				set_temp_variable = { var = ADISCORD_west_map_frame value = 1 }
+				735 = {
+					owner = { ADISCORD_west_map_set_country_frame = yes }
+				}
+				set_temp_variable = { var = ADISCORD_west_map_state_735_frame value = ADISCORD_west_map_frame }
+				always = yes
+			}
+			ADISCORD_west_map_state_736_visible = {
+				set_temp_variable = { var = ADISCORD_west_map_frame value = 1 }
+				736 = {
+					owner = { ADISCORD_west_map_set_country_frame = yes }
+				}
+				set_temp_variable = { var = ADISCORD_west_map_state_736_frame value = ADISCORD_west_map_frame }
+				always = yes
+			}
+			ADISCORD_west_map_state_737_visible = {
+				set_temp_variable = { var = ADISCORD_west_map_frame value = 1 }
+				737 = {
+					owner = { ADISCORD_west_map_set_country_frame = yes }
+				}
+				set_temp_variable = { var = ADISCORD_west_map_state_737_frame value = ADISCORD_west_map_frame }
+				always = yes
+			}
+			ADISCORD_west_map_state_738_visible = {
+				set_temp_variable = { var = ADISCORD_west_map_frame value = 1 }
+				738 = {
+					owner = { ADISCORD_west_map_set_country_frame = yes }
+				}
+				set_temp_variable = { var = ADISCORD_west_map_state_738_frame value = ADISCORD_west_map_frame }
+				always = yes
+			}
+			ADISCORD_west_map_state_739_visible = {
+				set_temp_variable = { var = ADISCORD_west_map_frame value = 1 }
+				739 = {
+					owner = { ADISCORD_west_map_set_country_frame = yes }
+				}
+				set_temp_variable = { var = ADISCORD_west_map_state_739_frame value = ADISCORD_west_map_frame }
+				always = yes
+			}
 			ADISCORD_west_map_country_PWR_visible = {
 				set_temp_variable = { var = ADISCORD_west_map_frame value = 1 }
 				PWR = { ADISCORD_west_map_set_country_frame = yes }
@@ -713,6 +761,12 @@ scripted_gui = {
 			ADISCORD_west_map_state_715 = { frame = ADISCORD_west_map_state_715_frame }
 			ADISCORD_west_map_state_716 = { frame = ADISCORD_west_map_state_716_frame }
 			ADISCORD_west_map_state_717 = { frame = ADISCORD_west_map_state_717_frame }
+			ADISCORD_west_map_state_734 = { frame = ADISCORD_west_map_state_734_frame }
+			ADISCORD_west_map_state_735 = { frame = ADISCORD_west_map_state_735_frame }
+			ADISCORD_west_map_state_736 = { frame = ADISCORD_west_map_state_736_frame }
+			ADISCORD_west_map_state_737 = { frame = ADISCORD_west_map_state_737_frame }
+			ADISCORD_west_map_state_738 = { frame = ADISCORD_west_map_state_738_frame }
+			ADISCORD_west_map_state_739 = { frame = ADISCORD_west_map_state_739_frame }
 			ADISCORD_west_map_country_PWR = { frame = ADISCORD_west_map_country_PWR_frame }
 			ADISCORD_west_map_country_PSD = { frame = ADISCORD_west_map_country_PSD_frame }
 			ADISCORD_west_map_country_ZAO = { frame = ADISCORD_west_map_country_ZAO_frame }

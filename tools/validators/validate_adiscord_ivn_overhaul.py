@@ -18,7 +18,7 @@ from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
-EXPECTED_IVN_GEOMETRY_SHA256 = "e9365448fde204f2116345d7d0a7e55a3771632811d3dd9b072a2c72e6516fae"
+EXPECTED_IVN_GEOMETRY_SHA256 = "d8a27327fc538ecd47e021d449ff59c29e6ec9d0f66d3f788ce948010ae9eaed"
 
 
 def province_geometry_digest(image: Image.Image, colors: dict[int, tuple[int, int, int]]) -> str:

@@ -20,10 +20,10 @@ from tools.lib import coastal_clearance as clearance
 
 
 HEIGHT_OUTSIDE_ISLAND_SHA256 = (
-    "517387B6EB8E4DA59AF01A029399EDCDE305CDDE30F9BC713236F8E0B259E842"
+    "3E54C54318E0F7E60B4D16DBF69D3B95C5E3A0531039D4396017DC8DEA99772D"
 )
 NORMAL_OUTSIDE_FEATHER_SHA256 = (
-    "D74F5F11E97E7DE7AA573BFFB6DA475025CD43A58123DE033478B311E18260DA"
+    "3E4AC178A9E07613AD7F16F2A5B77F590929844C73A76A34B33A0EA71E994518"
 )
 
 
@@ -941,7 +941,7 @@ class Stage2ManifestTests(unittest.TestCase):
                 low, high = (3, 5) if entry.kind == "city" else (1, 2)
                 self.assertTrue(low <= entry.value <= high)
                 self.assertTrue(entry.name_en.isascii())
-                self.assertNotIn("—", entry.name + entry.name_en)
+                self.assertNotIn("\u2014", entry.name + entry.name_en)
         self.assertEqual(
             builder.settlement_name_collisions(builder.REPOSITORY_ROOT, builder.STAGE2_SETTLEMENTS), []
         )

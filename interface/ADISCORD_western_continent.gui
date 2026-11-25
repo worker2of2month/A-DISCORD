@@ -216,7 +216,7 @@ guiTypes = {
 
 		iconType = {
 			name = "ADISCORD_west_map_state_27"
-			position = { x = 336 y = 229 }
+			position = { x = 336 y = 230 }
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_27"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_27_tt"
@@ -296,7 +296,7 @@ guiTypes = {
 
 		iconType = {
 			name = "ADISCORD_west_map_state_71"
-			position = { x = 211 y = 205 }
+			position = { x = 211 y = 216 }
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_71"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_71_tt"
@@ -304,7 +304,7 @@ guiTypes = {
 
 		iconType = {
 			name = "ADISCORD_west_map_state_72"
-			position = { x = 292 y = 179 }
+			position = { x = 293 y = 179 }
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_72"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_72_tt"
@@ -312,7 +312,7 @@ guiTypes = {
 
 		iconType = {
 			name = "ADISCORD_west_map_state_73"
-			position = { x = 305 y = 176 }
+			position = { x = 306 y = 187 }
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_73"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_73_tt"
@@ -552,7 +552,7 @@ guiTypes = {
 
 		iconType = {
 			name = "ADISCORD_west_map_state_199"
-			position = { x = 327 y = 201 }
+			position = { x = 327 y = 214 }
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_199"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_199_tt"
@@ -600,7 +600,7 @@ guiTypes = {
 
 		iconType = {
 			name = "ADISCORD_west_map_state_317"
-			position = { x = 349 y = 229 }
+			position = { x = 350 y = 230 }
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_317"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_317_tt"
@@ -672,7 +672,7 @@ guiTypes = {
 
 		iconType = {
 			name = "ADISCORD_west_map_state_328"
-			position = { x = 253 y = 219 }
+			position = { x = 254 y = 219 }
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_328"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_328_tt"
@@ -680,7 +680,7 @@ guiTypes = {
 
 		iconType = {
 			name = "ADISCORD_west_map_state_693"
-			position = { x = 130 y = 68 }
+			position = { x = 151 y = 71 }
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_693"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_693_tt"
@@ -764,6 +764,54 @@ guiTypes = {
 			quadTextureSprite = "GFX_ADISCORD_west_map_state_717"
 			frame = 1
 			pdx_tooltip = "ADISCORD_west_map_state_717_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_734"
+			position = { x = 233 y = 206 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_734"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_734_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_735"
+			position = { x = 265 y = 214 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_735"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_735_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_736"
+			position = { x = 306 y = 176 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_736"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_736_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_737"
+			position = { x = 365 y = 216 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_737"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_737_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_738"
+			position = { x = 342 y = 201 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_738"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_738_tt"
+		}
+
+		iconType = {
+			name = "ADISCORD_west_map_state_739"
+			position = { x = 130 y = 68 }
+			quadTextureSprite = "GFX_ADISCORD_west_map_state_739"
+			frame = 1
+			pdx_tooltip = "ADISCORD_west_map_state_739_tt"
 		}
 
 		iconType = {

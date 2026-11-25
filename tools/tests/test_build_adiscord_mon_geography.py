@@ -55,7 +55,7 @@ NEIGHBOUR_STATES = {
     "DRV": [440, 450, 451, 458, 463, 465],
 }
 CAPITAL_VP = {"BOR": 8, "DOL": 8, "RIN": 8, "TMR": 10, "VEL": 10, "DRV": 10}
-# definition.csv ended at 19305 when the Stage 2 plan was made.
+# The first Stage 2 id follows the last province of the map Stage 1 left.
 STAGE2_FIRST_ID = 19306
 # Course pixels that cannot reach a province border: each turns on a diagonal
 # step of the state line with an IVN province, whose pixels and rivers the IVN
@@ -973,7 +973,7 @@ class DataContractTests(unittest.TestCase):
             self.assertRegex(entry["name_en"], r"^[A-Za-z' -]+$")
         for _tag, entry in mon.all_settlements(self.data):
             for key in ("name", "name_en"):
-                self.assertFalse(set(entry.get(key, "")) & set("–—«»"), entry.get(key))
+                self.assertFalse(set(entry.get(key, "")) & set("\u2013\u2014\u00ab\u00bb"), entry.get(key))
 
     def test_stage2_plan_continues_the_ids(self) -> None:
         if not mon.has_stage2_plan(self.data):
@@ -1170,6 +1170,11 @@ class PlanTests(unittest.TestCase):
         cls.relief_scope[window.s] = ground.relief_scope
         cls.frozen = np.zeros(cls.grid.shape, bool)
         cls.frozen[window.s] = ground.frozen
+        held, _cities = mon.held_pixels(
+            cls.view, cls.scope, definition, ground.labels, ground.mon, ground.states, ground.frozen
+        )
+        cls.held = np.zeros(cls.grid.shape, bool)
+        cls.held[window.s] = held
         cls.rivers = decode(cls.plan.outputs[mon.RIVERS])
         cls.water = np.isin(cls.grid, [province for province, kind in cls.kinds.items() if kind != "land"])
         cls.declared = {
@@ -1181,7 +1186,15 @@ class PlanTests(unittest.TestCase):
         for path in (mon.TERRAIN, mon.CITIES):
             changed = current(path) != decode(self.plan.outputs[path])
             self.assertFalse((changed & ~self.mon).any(), path)
-            self.assertFalse((changed & self.frozen).any(), path)
+            self.assertFalse((changed & self.held).any(), path)
+        # A frozen pixel keeps its heights and takes only the terrain its province declares.
+        terrain = decode(self.plan.outputs[mon.TERRAIN])
+        changed = (current(mon.TERRAIN) != terrain) & self.frozen
+        shown = mon.palette_types()
+        for y, x in zip(*np.nonzero(changed)):
+            declared = self.declared[int(self.grid[y, x])]
+            expected = {"urban", "plains"} if declared == "urban" else {declared}
+            self.assertIn(shown[int(terrain[y, x])], expected, (int(x), int(y)))
         before = current(mon.RIVERS)
         after = self.rivers
         outside = (before != after) & ~self.mon
@@ -1216,7 +1229,7 @@ class PlanTests(unittest.TestCase):
 
     def test_frozen_band_keeps_the_ivn_geography_inputs(self) -> None:
         trees = current(mon.TREES) != decode(self.plan.outputs[mon.TREES])
-        cells = mon.tree_cells_touching(self.frozen, mon.Window(0, self.grid.shape[0], 0, self.grid.shape[1]), self.grid.shape, trees.shape)
+        cells = mon.tree_cells_touching(self.held, mon.Window(0, self.grid.shape[0], 0, self.grid.shape[1]), self.grid.shape, trees.shape)
         self.assertFalse((trees & cells).any())
         ivn = np.isin(self.grid, list(mon.scoped_provinces()))
         distance = distance_transform_edt(~ivn)
@@ -1287,40 +1300,28 @@ class PlanTests(unittest.TestCase):
                 minimum = mon.TOWN_REMAINDER_MIN_PIXELS if parent in self.scope.towns else mon.REMAINDER_MIN_PIXELS
                 self.assertGreaterEqual((self.grid == remainder).sum(), minimum, remainder)
 
-    def test_settlement_houses_follow_their_tier(self) -> None:
-        """A metropolis spans several provinces, a city has a ragged edge, a town is a small patch."""
+    def test_settlement_houses_fill_their_provinces(self) -> None:
+        """Every urban province is built up to its border and no further; its city group follows its tier."""
         cities_bmp = decode(self.plan.outputs[mon.CITIES])
         terrain = decode(self.plan.outputs[mon.TERRAIN])
-        houses = self.mon & (terrain == mon.URBAN_PALETTE) & ~mon.urban_blocked(self.water)
-        pieces = label(houses)[0]
+        shore = mon.urban_blocked(self.water)
+        urban = np.isin(self.grid, sorted(self.scope.urban))
         values = mon.settlement_values(self.data)
-        metropolises = 0
         for province in sorted(self.scope.urban):
-            mask = self.grid == province
-            if (mask & self.frozen).any():
-                continue
-            own = mask & houses
-            value = values.get(province, mon.LARGE_CITY_VALUE)
-            if province in self.scope.towns:
-                self.assertLessEqual(int(own.sum()), mon.TOWN_PATCH[1], province)
-                self.assertLess(int(own.sum()), int(mask.sum()), province)
-                self.assertTrue((cities_bmp[own] == mon.SMALL_CITY_INDEX).all(), province)
-                continue
-            large = value >= mon.LARGE_CITY_VALUE or province in self.scope.districts
+            mask = (self.grid == province) & ~self.held
+            inland = mask & ~shore
+            self.assertTrue((terrain[inland] == mon.URBAN_PALETTE).all(), province)
+            self.assertTrue((terrain[mask & shore] == mon.URBAN_FALLBACK_PALETTE).all(), province)
+            large = province in self.scope.districts or (
+                province not in self.scope.towns and values.get(province, 1) >= mon.LARGE_CITY_VALUE
+            )
             expected = mon.CITY_HOUSES_INDEX if large else mon.SMALL_CITY_INDEX
-            self.assertTrue((cities_bmp[own] == expected).all(), province)
-            if value >= mon.METRO_VALUE:
-                metropolises += 1
-                blob = np.isin(pieces, np.unique(pieces[own]))
-                covered = Counter(self.grid[blob].tolist())
-                spread = [other for other, count in covered.items() if count >= 15]
-                self.assertGreaterEqual(len(spread), 2, province)
-                self.assertGreaterEqual(int(blob.sum()), mon.metro_pixels(value) * 9 // 10, province)
-            elif not (mask & mon.urban_blocked(self.water)).any():
-                # A ragged edge: some houses stand past the province and some of it stays open.
-                outside = (houses & ~mask & (distance_transform_edt(~mask) <= mon.CITY_REACH)).any()
-                self.assertTrue(outside or own.sum() < mask.sum(), province)
-        self.assertGreaterEqual(metropolises, 10)
+            self.assertTrue((cities_bmp[inland] == expected).all(), province)
+            self.assertTrue((cities_bmp[mask & shore] == mon.CITY_BACKGROUND_INDEX).all(), province)
+        # No houses or urban ground in the rural provinces this pass paints.
+        rural = self.mon & ~urban & ~self.held & ~self.frozen
+        self.assertFalse((rural & (terrain == mon.URBAN_PALETTE)).any())
+        self.assertFalse((rural & (cities_bmp == mon.CITY_HOUSES_INDEX)).any())
 
     def test_settlements_stand_on_their_planned_provinces(self) -> None:
         self.assertEqual([issue for issue in self.plan.issues if "planned province" in issue or "is not urban" in issue], [])

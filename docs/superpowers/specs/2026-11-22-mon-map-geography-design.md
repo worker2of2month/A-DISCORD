@@ -695,16 +695,21 @@ Measured on 2026-11-25:
   per town stood as a terrace with cliffs.
 - City groups of `map/cities.txt`: index 15 draws the western houses, index 1
   the low blocks of a small town.
-- A settlement of VP 8 or more is a metropolis: about 90 + 5 x VP built
-  pixels spread over the provinces of its state around the city, index 15.
-- A city of VP 4-6 and every district fills about its own province with a
-  ragged edge that may reach 3 px past it, index 15. A city of VP 2-3 does
-  the same with index 1.
-- A town is a built patch of 10-16 px inside its province, index 1, like
-  the harbour of Steel Shield. The rest of an urban province takes the
-  palette of the nearest rural pixel.
-- Lobes and lattice noise shape every outline. Adopted and frozen provinces
-  keep their city masks.
+- Every city, district and town is built up to its province border and
+  never past it, with no open ground: terrain palette 13 and the houses of
+  its tier on every pixel. Only the shoreline band stays clear (fallback
+  palette, no houses), so no building stands over water. A metropolis does
+  not spread into its neighbours.
+- Cities of VP 4 and more and every district draw index 15; cities of VP
+  2-3 and the towns index 1.
+- Town relief eases over the whole urban province, feathered inward from
+  its edge, so a filled town meets its neighbours without a terrace.
+- Adopted cities, kept city terrains and the frozen ground of
+  `keep_provinces` and `no_split_states` keep their terrain, city masks and
+  trees. Every other frozen pixel (the IVN band, keep zones, `keep_above`)
+  keeps its heights only: where its palette shows another terrain than its
+  province declares, it takes the declared palette, and permanent snow
+  (palettes 16 and 19) stays. Trees follow the painted terrain there.
 
 ### 13.6 Ownership and ordering
 

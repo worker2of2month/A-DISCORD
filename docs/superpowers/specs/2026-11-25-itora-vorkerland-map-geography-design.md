@@ -320,7 +320,13 @@ buildings.
   - New cities: 3-5.
   - Towns: 1-2.
 - **Visuals.**
-  - City and town pixels get `cities.bmp` 15 and terrain 13.
+  - City and town pixels get `cities.bmp` 15 and terrain 13 over the whole
+    province, up to its border and never past it; only the shoreline band
+    stays clear. The east builder draws its tiers the same way (MON spec
+    13.5a).
+  - Frozen strips keep their heights, not stale textures: their pixels take
+    the declared palette of their province. The detached IVN islands keep
+    their authored relief and are painted in their declared terrain.
   - Night lights come from the coastal builder's whole-map pass. No scope
     state is EXZ-owned; WCG states beside EXZ stay lit only where they own
     the pixels.
