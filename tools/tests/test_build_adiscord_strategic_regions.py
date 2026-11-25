@@ -7,6 +7,7 @@ import unittest
 from unittest import mock
 
 from tools.builders import build_adiscord_strategic_regions as builder
+from tools.builders.build_adiscord_new_states import STATE_SPLITS
 from tools.lib.adiscord_planned_geography import east_stages
 from tools.validators.validate_adiscord_strategic_regions import planned_parent_region_issues
 
@@ -66,6 +67,8 @@ class PlannedProvinceRegionTests(unittest.TestCase):
             if region.get("stage", 2) in planned
             for state in region["states"]
         }
+        # A state split from a planned state takes its centre from its own provinces.
+        regions -= set(STATE_SPLITS)
         self.assertEqual(set(builder.MON_GROUPING_CENTRES), set(GEOGRAPHY["states"]) | regions)
 
     def test_planned_children_share_their_parent_state_region(self):

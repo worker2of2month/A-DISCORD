@@ -405,6 +405,8 @@ class LandscapeMasks:
 class TreeCellSample:
     state_id: int | None
     terrain_type: str
+    # Every pixel of the cell shows that terrain.
+    uniform: bool = False
 
 
 @dataclass(frozen=True)
@@ -620,6 +622,120 @@ def lattice_noise(xs: np.ndarray, ys: np.ndarray, cell: float, salt: int) -> np.
     return upper * (1.0 - sy) + lower * sy
 
 
+# Farmland: palette 5 of common/terrain/00_terrain.txt is graphical plains drawn
+# with the fields texture of the atlas. The province keeps its declared plains.
+FIELD_PALETTE = 5
+# Fields keep clear of the waterline, wider than the urban clearance band.
+FIELD_SHORE_PIXELS = 3.0
+FIELD_SETTLEMENT_REACH = 10.0
+FIELD_RIVER_REACH = 6.0
+FIELD_NOISE_CELL = 9.0
+FIELD_FRAY_CELL = 3.5
+FIELD_FRAY = 5.0
+FIELD_MIN_PATCH = 10
+# Every province keeps at least the rest of its land in its own palette.
+FIELD_MAX_SHARE = 0.6
+FIELD_SALT = 61
+# No settlement or river reach exceeds this margin, so a crop with it gives
+# every pixel the same answer as the whole map.
+FIELD_MARGIN = 24
+
+
+def field_mask(
+    eligible: np.ndarray,
+    settled: np.ndarray,
+    rivers: np.ndarray,
+    water: np.ndarray,
+    province_ids: np.ndarray,
+    origin: tuple[int, int] = (0, 0),
+) -> np.ndarray:
+    """Return the eligible pixels that turn into farmland.
+
+    Fields spread from settled pixels and along river valleys; wider rivers
+    have wider valleys. Value noise anchored to absolute map coordinates
+    (``origin`` is the map position of the first array pixel) varies the
+    reach and frays the edge, so a pixel gets the same answer in any window
+    and a repeated pass changes nothing. Settled pixels and the shoreline
+    never take fields, specks below FIELD_MIN_PATCH are dropped, and a
+    province turns at most FIELD_MAX_SHARE of its land into fields.
+    """
+    result = np.zeros(eligible.shape, bool)
+    if not eligible.any():
+        return result
+    ys, xs = np.nonzero(eligible)
+    top = max(int(ys.min()) - FIELD_MARGIN, 0)
+    left = max(int(xs.min()) - FIELD_MARGIN, 0)
+    bottom = min(int(ys.max()) + FIELD_MARGIN + 1, eligible.shape[0])
+    right = min(int(xs.max()) + FIELD_MARGIN + 1, eligible.shape[1])
+    window = (slice(top, bottom), slice(left, right))
+    land = ~water[window]
+    near_settlement = settled[window]
+    river = (rivers[window] < RIVER_SEA_PALETTE) & land
+    candidates = eligible[window] & ~near_settlement
+    if not land.all():
+        candidates &= distance_transform_edt(land) > FIELD_SHORE_PIXELS
+    gy, gx = np.mgrid[top:bottom, left:right]
+    gx = gx + origin[0]
+    gy = gy + origin[1]
+    fray = FIELD_FRAY * (lattice_noise(gx, gy, FIELD_FRAY_CELL, FIELD_SALT + 1) - 0.5)
+    score = np.full(candidates.shape, -1.0)
+    if near_settlement.any():
+        reach = FIELD_SETTLEMENT_REACH * (
+            0.25 + 1.25 * lattice_noise(gx, gy, FIELD_NOISE_CELL, FIELD_SALT)
+        )
+        distance = distance_transform_edt(~near_settlement) + fray
+        score = np.maximum(score, 1.0 - distance / reach)
+    if river.any():
+        distance, (ry, rx) = distance_transform_edt(~river, return_indices=True)
+        # River palettes run from 3 (narrowest) to 11 (widest).
+        width = np.clip((rivers[window][ry, rx].astype(float) - 3.0) / 8.0, 0.0, 1.0)
+        reach = (
+            FIELD_RIVER_REACH
+            * (0.5 + 0.5 * width)
+            * (0.2 + 1.3 * lattice_noise(gx, gy, FIELD_NOISE_CELL, FIELD_SALT + 2))
+        )
+        score = np.maximum(score, 1.0 - (distance + fray) / reach)
+    fields = candidates & (score > 0.0)
+    # The best-scored pixels of a province stay fields up to its share.
+    land_pixels = np.bincount(province_ids[~water].astype(np.int64).ravel())
+    ids = province_ids[window].astype(np.int64).ravel()
+    flat = np.flatnonzero(fields)
+    owners = ids[flat]
+    order = np.lexsort((flat, -score.ravel()[flat], owners))
+    ranked = owners[order]
+    rank = np.arange(len(order)) - np.searchsorted(ranked, ranked, side="left")
+    limit = np.floor(FIELD_MAX_SHARE * land_pixels[ranked]).astype(np.int64)
+    fields.flat[flat[order[rank >= limit]]] = False
+    pieces, _count = label(fields)
+    fields &= np.bincount(pieces.ravel())[pieces] >= FIELD_MIN_PATCH
+    result[window] = fields
+    return result
+
+
+def paint_ivn_fields(
+    terrain: Image.Image,
+    painted: np.ndarray,
+    plains: np.ndarray,
+    settlements: np.ndarray,
+    cities: Image.Image,
+    rivers: np.ndarray,
+    water: np.ndarray,
+    province_ids: np.ndarray,
+) -> None:
+    """Paint farmland over the plains pixels of the scope, in place.
+
+    ``plains`` marks the scope provinces declared plains. Urban pixels, the
+    city mask and settlement provinces are the settled land the fields grow
+    from; they keep their palettes, as do the other rural palettes.
+    """
+    city_mask = np.isin(np.asarray(cities), list(CITY_PALETTE_INDICES))
+    settled = (painted == URBAN_PALETTE) | city_mask | settlements
+    eligible = plains & (painted == UNIFORM_TERRAIN_PALETTES["plains"]) & ~city_mask
+    rivers = np.asarray(rivers).reshape(painted.shape)
+    painted[field_mask(eligible, settled, rivers, water, province_ids)] = FIELD_PALETTE
+    terrain.putdata(bytearray(painted.tobytes()))
+
+
 def level_towns_with_surroundings(
     base: np.ndarray, land: np.ndarray, towns: np.ndarray
 ) -> None:
@@ -812,6 +928,18 @@ def tree_probability(terrain_type: str) -> float:
         "hills": 0.025,
         "marsh": 0.08,
     }.get(terrain_type, 0.0)
+
+
+def tree_cell_probability(sample: TreeCellSample) -> float:
+    """Chance that a tree cell carries trees.
+
+    A cell lying wholly on forest is always wooded, so a forest province is
+    covered in full; a cell where forest meets other ground keeps the
+    ordinary forest share, which frays the edge of the wood.
+    """
+    if sample.terrain_type == "forest" and sample.uniform:
+        return 1.0
+    return tree_probability(sample.terrain_type)
 
 
 def palette_types() -> dict[int, str]:
@@ -1109,7 +1237,7 @@ def _tree_cell_sample_from_pixels(
         terrain_counts,
         key=lambda value: (terrain_counts[value], priority.get(value, 0)),
     )
-    return TreeCellSample(state_id, terrain_type)
+    return TreeCellSample(state_id, terrain_type, len(terrain_counts) == 1)
 
 
 def tree_cell_sample(
@@ -1168,7 +1296,7 @@ def _render_trees_with_metrics(
                 if pixels[tree_index] != source_pixels[tree_index]:
                     outside_changes += 1
                 continue
-            probability = tree_probability(sample.terrain_type)
+            probability = tree_cell_probability(sample)
             if blocked is not None and blocked[ty, tx]:
                 pixels[tree_index] = 0
             elif stable_unit_hash(tx, ty, 23) < probability:
@@ -4810,6 +4938,23 @@ def _build_expected() -> GeographyOutputs:
         )
         rivers = river_source.copy()
     rivers.putdata(river_pixels.tobytes())
+    # Farmland follows the final river courses. It repaints plains pixels only,
+    # so the declared terrain, trees and metrics above stay as they are.
+    paint_ivn_fields(
+        terrain,
+        painted,
+        (relief | island)
+        & province_mask(
+            packed,
+            province_colors,
+            frozenset(province for province, kind in desired.items() if kind == "plains"),
+        ),
+        province_mask(packed, province_colors, SETTLEMENT_PROVINCES),
+        cities,
+        river_pixels,
+        water,
+        province_ids,
+    )
     all_river_issues = river_issues(river_pixels, river_paths, packed, water)
     if stage2:
         all_river_issues += stage2_river_issues(
@@ -4885,8 +5030,10 @@ def coverage_issues(outputs: GeographyOutputs) -> list[str]:
     for province_id in metrics.mountain_provinces_without_foothills:
         issues.append(f"mountain province {province_id} has no hills or mountain neighbour")
     occupancy = metrics.tree_occupancy
+    # A cell wholly on forest is always wooded; cells where forest meets other
+    # ground keep the ordinary share and cells by the water none.
     for terrain_type, minimum, maximum in (
-        ("forest", 0.50, 0.72),
+        ("forest", 0.75, 0.90),
         ("plains", 0.02, 0.07),
         ("hills", 0.01, 0.05),
     ):

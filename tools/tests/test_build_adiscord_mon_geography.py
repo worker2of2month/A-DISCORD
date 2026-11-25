@@ -18,7 +18,12 @@ from scipy.ndimage import distance_transform_edt, label
 
 from tools.builders import build_adiscord_coastal_geography as coastal
 from tools.builders import build_adiscord_mon_geography as mon
-from tools.builders.build_adiscord_ivn_geography import normal_from_height
+from tools.builders.build_adiscord_ivn_geography import (
+    FIELD_MAX_SHARE,
+    FIELD_MIN_PATCH,
+    FIELD_SHORE_PIXELS,
+    normal_from_height,
+)
 from tools.builders.build_adiscord_new_states import STATE_SPLITS
 from tools.lib import adiscord_vorkerland_theatre_manifest as theatre
 from tools.lib.adiscord_planned_geography import east_stage_labels, east_stages
@@ -268,6 +273,32 @@ class PureHelperTests(unittest.TestCase):
         self.assertEqual(int(rivers[2, 6]), 1)
         self.assertEqual(int(rivers[3, 6]), 0)
         self.assertEqual(int((rivers < mon.RIVER_SEA_PALETTE).sum()), 3)
+
+    def test_a_river_cuts_a_ridge_with_a_wide_gentle_valley(self) -> None:
+        size = 200
+        ridge = 100.0 + 60.0 * np.exp(-(((np.arange(size) - 100) / 10.0) ** 2))
+        field = np.tile(ridge, (size, 1))
+        rivers = np.full((size, size), mon.RIVER_LAND_PALETTE, np.uint8)
+        rivers[100, 4:196] = 10
+        rivers[100, 4] = mon.RIVER_SOURCE_PALETTE
+        water = np.zeros((size, size), bool)
+        water[:, 196:] = True
+        scope = np.zeros((size, size), bool)
+        scope[3:197, 3:196] = True
+        before = field.copy()
+        mon.carve_river_beds(field, rivers, water, scope, before.copy(), np.ones((size, size)))
+        bed = field[100, 4:196]
+        self.assertLessEqual(float(np.max(bed - np.minimum.accumulate(bed))), 0.01)
+        self.assertLessEqual(float(bed.max()), 100.01)
+        # Across the river the walls of the 60-unit cut rise gently, not as a trench.
+        walls = np.abs(np.diff(field[88:113, 80:121], axis=0))
+        self.assertLessEqual(float(walls.max()), 2.5)
+        np.testing.assert_array_equal(field[~scope], before[~scope])
+
+    def test_field_states_follow_the_fields_flag_of_mon_and_each_region(self) -> None:
+        data = {"states": [1, 2], "regions": {"A": {"states": [3], "fields": True}, "B": {"states": [4]}}}
+        self.assertEqual(mon.field_states(data), [3])
+        self.assertEqual(mon.field_states({**data, "fields": True}), [1, 2, 3])
 
 
 class Stage2HelperTests(unittest.TestCase):
@@ -1190,14 +1221,14 @@ class PlanTests(unittest.TestCase):
             changed = current(path) != decode(self.plan.outputs[path])
             self.assertFalse((changed & ~self.mon).any(), path)
             self.assertFalse((changed & self.held).any(), path)
-        # A frozen pixel keeps its heights and takes only the terrain its province declares.
+        # A frozen pixel of a rural province keeps its heights and takes only the terrain its province declares.
         terrain = decode(self.plan.outputs[mon.TERRAIN])
         changed = (current(mon.TERRAIN) != terrain) & self.frozen
         shown = mon.palette_types()
         for y, x in zip(*np.nonzero(changed)):
             declared = self.declared[int(self.grid[y, x])]
-            expected = {"urban", "plains"} if declared == "urban" else {declared}
-            self.assertIn(shown[int(terrain[y, x])], expected, (int(x), int(y)))
+            if declared != "urban":
+                self.assertEqual(shown[int(terrain[y, x])], declared, (int(x), int(y)))
         before = current(mon.RIVERS)
         after = self.rivers
         outside = (before != after) & ~self.mon
@@ -1303,28 +1334,55 @@ class PlanTests(unittest.TestCase):
                 minimum = mon.TOWN_REMAINDER_MIN_PIXELS if parent in self.scope.towns else mon.REMAINDER_MIN_PIXELS
                 self.assertGreaterEqual((self.grid == remainder).sum(), minimum, remainder)
 
-    def test_settlement_houses_fill_their_provinces(self) -> None:
-        """Every urban province is built up to its border and no further; its city group follows its tier."""
+    def test_settlement_houses_cover_their_provinces(self) -> None:
+        """Houses cover at least 75 % of an urban province off the shore, with a frayed edge, and stay inside it."""
         cities_bmp = decode(self.plan.outputs[mon.CITIES])
         terrain = decode(self.plan.outputs[mon.TERRAIN])
         shore = mon.urban_blocked(self.water)
         urban = np.isin(self.grid, sorted(self.scope.urban))
         values = mon.settlement_values(self.data)
+        shares = []
         for province in sorted(self.scope.urban):
-            mask = (self.grid == province) & ~self.held
-            inland = mask & ~shore
-            self.assertTrue((terrain[inland] == mon.URBAN_PALETTE).all(), province)
-            self.assertTrue((terrain[mask & shore] == mon.URBAN_FALLBACK_PALETTE).all(), province)
+            inland = (self.grid == province) & ~self.held & ~shore
+            if not inland.any():
+                continue
+            built = inland & (terrain == mon.URBAN_PALETTE)
+            shares.append(built.sum() / inland.sum())
+            self.assertGreaterEqual(shares[-1], 0.75, province)
             large = province in self.scope.districts or (
                 province not in self.scope.towns and values.get(province, 1) >= mon.LARGE_CITY_VALUE
             )
             expected = mon.CITY_HOUSES_INDEX if large else mon.SMALL_CITY_INDEX
-            self.assertTrue((cities_bmp[inland] == expected).all(), province)
-            self.assertTrue((cities_bmp[mask & shore] == mon.CITY_BACKGROUND_INDEX).all(), province)
+            self.assertTrue((cities_bmp[built] == expected).all(), province)
+            self.assertTrue((cities_bmp[inland & ~built] == mon.CITY_BACKGROUND_INDEX).all(), province)
+        # The outlines stay frayed: most urban provinces keep some open ground.
+        self.assertGreater(sum(share < 1 for share in shares), len(shares) // 2)
         # No houses or urban ground in the rural provinces this pass paints.
         rural = self.mon & ~urban & ~self.held & ~self.frozen
         self.assertFalse((rural & (terrain == mon.URBAN_PALETTE)).any())
         self.assertFalse((rural & (cities_bmp == mon.CITY_HOUSES_INDEX)).any())
+
+    def test_forest_provinces_are_wooded_throughout(self) -> None:
+        """Forest provinces show the forest palette off the shore; every tree cell wholly on their forest is wooded."""
+        terrain = decode(self.plan.outputs[mon.TERRAIN])
+        trees = decode(self.plan.outputs[mon.TREES])
+        shore = mon.urban_blocked(self.water)
+        forest_palettes = [index for index, kind in mon.palette_types().items() if kind == "forest"]
+        forest_ids = sorted(province for province in self.scope.provinces if self.declared[province] == "forest")
+        painted = self.mon & ~self.held
+        for province in forest_ids:
+            inland = (self.grid == province) & painted & ~shore
+            if inland.any():
+                self.assertGreaterEqual(np.isin(terrain[inland], forest_palettes).mean(), 0.95, province)
+        forest = np.isin(self.grid, forest_ids) & painted & np.isin(terrain, forest_palettes)
+        cells = wholly_covered_cells(forest, trees.shape)
+        cells &= ~mon.tree_cells_blocked(self.water, trees.shape[1], trees.shape[0])
+        # Kept ground keeps its trees, and the cells round a town stay bare.
+        whole = mon.Window(0, self.grid.shape[0], 0, self.grid.shape[1])
+        towns = np.isin(self.grid, sorted(self.scope.urban))
+        cells &= ~mon.tree_cells_touching(self.held | towns, whole, self.grid.shape, trees.shape)
+        self.assertTrue(cells.any())
+        self.assertTrue((trees[cells] > 0).all())
 
     def test_settlements_stand_on_their_planned_provinces(self) -> None:
         self.assertEqual([issue for issue in self.plan.issues if "planned province" in issue or "is not urban" in issue], [])
@@ -1503,6 +1561,38 @@ class PlanTests(unittest.TestCase):
         for _tag, entry in mon.all_settlements(self.data):
             if entry["kind"] not in ("district", "adopt"):
                 self.assertIn(f"| {entry['name']} |", table)
+
+    def test_fields_cover_rural_plains_of_the_field_regions_only(self) -> None:
+        """Farmland stays on declared plains, off the city mask, houses and shore, within its share."""
+        terrain = decode(self.plan.outputs[mon.TERRAIN])
+        cities_bmp = decode(self.plan.outputs[mon.CITIES])
+        painted = self.mon & ~self.held & ~self.frozen
+        fields = painted & (terrain == mon.FIELD_PALETTE)
+        self.assertTrue(fields.any())
+        self.assertFalse(np.isin(cities_bmp[fields], list(mon.CITY_PALETTE_INDICES)).any())
+        self.assertGreater(float(distance_transform_edt(~self.water)[fields].min()), FIELD_SHORE_PIXELS)
+        field_states = set(mon.field_states(self.data))
+        owners = self.grid[fields]
+        for province in np.unique(owners).tolist():
+            with self.subTest(province=province):
+                self.assertEqual(self.declared[province], "plains")
+                self.assertIn(self.scope.state_of[province], field_states)
+                land = int(((self.grid == province) & ~self.water).sum())
+                self.assertLessEqual(int((owners == province).sum()), FIELD_MAX_SHARE * land)
+        pieces, _count = label(fields)
+        self.assertGreaterEqual(int(np.bincount(pieces.ravel())[1:].min()), FIELD_MIN_PATCH)
+
+
+def wholly_covered_cells(mask: np.ndarray, tree_shape: tuple[int, int]) -> np.ndarray:
+    """Tree cells whose whole footprint, as the tree sampler reads it, lies in ``mask``."""
+    tree_height, tree_width = tree_shape
+    height, width = mask.shape
+    rows = np.searchsorted((np.arange(tree_height) * height) // tree_height, np.arange(height), "right") - 1
+    columns = np.searchsorted((np.arange(tree_width) * width) // tree_width, np.arange(width), "right") - 1
+    cell = (rows[:, None] * tree_width + columns[None, :]).ravel()
+    total = np.bincount(cell, minlength=tree_height * tree_width)
+    inside = np.bincount(cell, weights=mask.ravel().astype(float), minlength=tree_height * tree_width)
+    return (inside == total).reshape(tree_shape)
 
 
 def stage2_applied() -> bool:

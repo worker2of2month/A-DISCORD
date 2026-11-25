@@ -20,10 +20,10 @@ from tools.lib import coastal_clearance as clearance
 
 
 HEIGHT_OUTSIDE_ISLAND_SHA256 = (
-    "3E54C54318E0F7E60B4D16DBF69D3B95C5E3A0531039D4396017DC8DEA99772D"
+    "1CCE5C78E263661850AB8CE4F42415F69E803840E6E4D76F987F49640DF06DBD"
 )
 NORMAL_OUTSIDE_FEATHER_SHA256 = (
-    "3E4AC178A9E07613AD7F16F2A5B77F590929844C73A76A34B33A0EA71E994518"
+    "C429B56629EC710DCD2EDF7A33E8EAFCF68F9AB8D3BD04695DDC5480EA50582C"
 )
 
 
@@ -465,8 +465,8 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         metrics = builder.expected().metrics
         self.assertEqual(metrics.mountain_provinces_without_foothills, ())
         occupancy = metrics.tree_occupancy
-        self.assertGreaterEqual(occupancy["forest"], 0.50)
-        self.assertLessEqual(occupancy["forest"], 0.72)
+        self.assertGreaterEqual(occupancy["forest"], 0.75)
+        self.assertLessEqual(occupancy["forest"], 0.90)
         self.assertGreaterEqual(occupancy["plains"], 0.02)
         self.assertLessEqual(occupancy["plains"], 0.07)
         self.assertGreaterEqual(occupancy["hills"], 0.01)
@@ -723,6 +723,9 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 )
                 if terrain_type == "urban":
                     expected[shore] = clearance.URBAN_FALLBACK_PALETTE
+                if terrain_type == "plains":
+                    # Farmland is graphical plains as well.
+                    expected[terrain == builder.FIELD_PALETTE] = builder.FIELD_PALETTE
                 np.testing.assert_array_equal(terrain[mask], expected[mask])
 
     def test_mainland_provinces_are_painted_in_one_terrain(self) -> None:
@@ -747,6 +750,30 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 painted = [types[int(value)] for value in terrain[mask]]
                 matching = painted.count(outputs.desired[province_id])
                 self.assertGreaterEqual(matching / len(painted), 0.9)
+
+    def test_forest_provinces_are_wooded_throughout(self) -> None:
+        """Forest provinces show the forest palette off the shore; every tree cell wholly on their forest is wooded."""
+        outputs = builder.expected()
+        _lines, _newline, _bom, colours, _declared = builder.definition_contract()
+        with Image.open(builder.PROVINCES_PATH) as provinces:
+            province_rgb = np.asarray(provinces.convert("RGB"))
+        packed = builder.packed_rgb(province_rgb)
+        water = clearance.water_mask(province_rgb, clearance.water_colours(builder.DEFINITION_PATH))
+        shore = clearance.urban_blocked(water)
+        terrain = np.asarray(outputs.terrain)
+        trees = np.asarray(outputs.trees)
+        forest_palettes = [index for index, kind in builder.palette_types().items() if kind == "forest"]
+        forest_ids = sorted(province for province, kind in outputs.desired.items() if kind == "forest")
+        for province_id in forest_ids:
+            with self.subTest(province=province_id):
+                inland = builder.province_mask(packed, colours, frozenset({province_id})) & ~shore
+                if inland.any():
+                    self.assertGreaterEqual(np.isin(terrain[inland], forest_palettes).mean(), 0.95)
+        forest = builder.province_mask(packed, colours, frozenset(forest_ids)) & np.isin(terrain, forest_palettes)
+        cells = wholly_covered_cells(forest, trees.shape)
+        cells &= ~clearance.tree_cells_blocked(water, trees.shape[1], trees.shape[0])
+        self.assertTrue(cells.any())
+        self.assertTrue((trees[cells] > 0).all())
 
     def test_city_mask_pixels_remain_urban_inside_ivn_scope(self) -> None:
         outputs = builder.expected()
@@ -816,6 +843,18 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
     def test_province_geometry_is_unchanged(self) -> None:
         self.assertEqual(builder.province_geometry_issues(), [])
 
+
+
+def wholly_covered_cells(mask: np.ndarray, tree_shape: tuple[int, int]) -> np.ndarray:
+    """Tree cells whose whole footprint, as the tree sampler reads it, lies in ``mask``."""
+    tree_height, tree_width = tree_shape
+    height, width = mask.shape
+    rows = np.searchsorted((np.arange(tree_height) * height) // tree_height, np.arange(height), "right") - 1
+    columns = np.searchsorted((np.arange(tree_width) * width) // tree_width, np.arange(width), "right") - 1
+    cell = (rows[:, None] * tree_width + columns[None, :]).ravel()
+    total = np.bincount(cell, minlength=tree_height * tree_width)
+    inside = np.bincount(cell, weights=mask.ravel().astype(float), minlength=tree_height * tree_width)
+    return (inside == total).reshape(tree_shape)
 
 
 def synthetic_manifest() -> dict:
@@ -1297,6 +1336,112 @@ class Stage2DryRunTests(unittest.TestCase):
         self.assertLess(genuine_after, genuine_before)
         self.assertFalse({"5", "8"} & set(after["river_palettes"]))
         self.assertEqual(after["provinces"], before["provinces"] + len(self.plan["provinces"]))
+
+
+def field_canvas() -> dict[str, np.ndarray]:
+    """A 90x90 coast: sea at the west edge, a town, a river and a small province by the town."""
+    province_ids = np.ones((90, 90), np.int64)
+    province_ids[:, 45:] = 2
+    province_ids[30:40, 46:56] = 3
+    water = np.zeros(province_ids.shape, bool)
+    water[:, :6] = True
+    province_ids[water] = 9
+    settled = np.zeros(province_ids.shape, bool)
+    settled[30:36, 40:46] = True
+    rivers = np.full(province_ids.shape, builder.RIVER_LAND_PALETTE, np.uint8)
+    rivers[70, 6:] = 7
+    rivers[water] = builder.RIVER_SEA_PALETTE
+    eligible = ~water & ~settled
+    return {
+        "eligible": eligible,
+        "settled": settled,
+        "rivers": rivers,
+        "water": water,
+        "province_ids": province_ids,
+    }
+
+
+class FieldMaskTests(unittest.TestCase):
+    """Farmland on a synthetic coast: where it grows and what it leaves alone."""
+
+    def fields(self, canvas: dict[str, np.ndarray], origin: tuple[int, int] = (2600, 900)) -> np.ndarray:
+        return builder.field_mask(**canvas, origin=origin)
+
+    def test_the_field_palette_is_graphical_plains(self) -> None:
+        self.assertEqual(builder.palette_types()[builder.FIELD_PALETTE], "plains")
+
+    def test_fields_grow_from_settlements_and_rivers_on_eligible_land_only(self) -> None:
+        canvas = field_canvas()
+        fields = self.fields(canvas)
+        self.assertTrue(fields.any())
+        self.assertFalse((fields & ~canvas["eligible"]).any())
+        self.assertFalse((fields & canvas["settled"]).any())
+        shore = distance_transform_edt(~canvas["water"])
+        self.assertGreater(float(shore[fields].min()), builder.FIELD_SHORE_PIXELS)
+        river = canvas["rivers"] < builder.RIVER_SEA_PALETTE
+        settlement_reach = builder.FIELD_SETTLEMENT_REACH * 1.5 + builder.FIELD_FRAY / 2
+        river_reach = builder.FIELD_RIVER_REACH * 1.5 + builder.FIELD_FRAY / 2
+        near = (distance_transform_edt(~canvas["settled"]) <= settlement_reach) | (
+            distance_transform_edt(~river) <= river_reach
+        )
+        self.assertFalse((fields & ~near).any())
+        self.assertTrue((fields & (distance_transform_edt(~river) <= 3)).any())
+
+    def test_a_province_keeps_its_own_palette_and_specks_are_dropped(self) -> None:
+        canvas = field_canvas()
+        fields = self.fields(canvas)
+        land = canvas["province_ids"][~canvas["water"]]
+        for province in (1, 2, 3):
+            with self.subTest(province=province):
+                limit = int(builder.FIELD_MAX_SHARE * int((land == province).sum()))
+                self.assertLessEqual(int((fields & (canvas["province_ids"] == province)).sum()), limit)
+        # The small province beside the town lies wholly within reach and is capped.
+        self.assertGreater(int((fields & (canvas["province_ids"] == 3)).sum()), 0)
+        pieces, _count = label(fields)
+        self.assertGreaterEqual(int(np.bincount(pieces.ravel())[1:].min()), builder.FIELD_MIN_PATCH)
+
+    def test_a_pixel_gets_the_same_answer_in_any_window_and_pass(self) -> None:
+        canvas = field_canvas()
+        fields = self.fields(canvas)
+        np.testing.assert_array_equal(fields, self.fields(canvas))
+        margin = 30
+        padded = {
+            "eligible": np.pad(canvas["eligible"], margin, constant_values=False),
+            "settled": np.pad(canvas["settled"], margin, constant_values=False),
+            "rivers": np.pad(canvas["rivers"], margin, constant_values=builder.RIVER_LAND_PALETTE),
+            "water": np.pad(canvas["water"], margin, constant_values=False),
+            "province_ids": np.pad(canvas["province_ids"], margin, constant_values=0),
+        }
+        wide = self.fields(padded, (2600 - margin, 900 - margin))
+        np.testing.assert_array_equal(wide[margin:-margin, margin:-margin], fields)
+
+
+class FieldOutputTests(unittest.TestCase):
+    """The farmland of the generated IVN and IIA terrain."""
+
+    def test_fields_cover_only_rural_plains_away_from_the_shore(self) -> None:
+        outputs = builder.expected()
+        _lines, _newline, _bom, colours, _declared = builder.definition_contract()
+        with Image.open(builder.PROVINCES_PATH) as provinces:
+            province_rgb = np.asarray(provinces.convert("RGB"))
+        packed = builder.packed_rgb(province_rgb)
+        water = clearance.water_mask(province_rgb, clearance.water_colours(builder.DEFINITION_PATH))
+        terrain = np.asarray(outputs.terrain)
+        cities = np.asarray(outputs.cities)
+        scope = builder.province_mask(packed, colours, frozenset(colours))
+        fields = scope & (terrain == builder.FIELD_PALETTE)
+        self.assertTrue(fields.any())
+        self.assertFalse(np.isin(cities[fields], list(terrain_builder.CITY_PALETTE_INDICES)).any())
+        self.assertGreater(float(distance_transform_edt(~water)[fields].min()), builder.FIELD_SHORE_PIXELS)
+        province_of = {(red << 16) | (green << 8) | blue: province for province, (red, green, blue) in colours.items()}
+        land_values, land_counts = np.unique(packed[scope & ~water], return_counts=True)
+        land = dict(zip(land_values.tolist(), land_counts.tolist()))
+        field_values, field_counts = np.unique(packed[fields], return_counts=True)
+        for value, count in zip(field_values.tolist(), field_counts.tolist()):
+            province_id = province_of[value]
+            with self.subTest(province=province_id):
+                self.assertEqual(outputs.desired[province_id], "plains")
+                self.assertLessEqual(count, builder.FIELD_MAX_SHARE * land[value])
 
 
 if __name__ == "__main__":

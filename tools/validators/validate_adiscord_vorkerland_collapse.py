@@ -39,7 +39,6 @@ except ModuleNotFoundError:
 
 try:
     from tools.builders import build_adiscord_strategic_regions as map_regions
-    from tools.builders.build_adiscord_new_states import STATE_SPLITS
     from tools.lib.adiscord_planned_geography import load_planned_geography
     from tools.lib.vorkerland_collapse_manifest import (
         AUTHORED_STATE_PARTITIONS,
@@ -61,7 +60,6 @@ try:
     )
 except (ModuleNotFoundError, ImportError):
     from builders import build_adiscord_strategic_regions as map_regions
-    from builders.build_adiscord_new_states import STATE_SPLITS
     from lib.adiscord_planned_geography import load_planned_geography
     from lib.vorkerland_collapse_manifest import (
         AUTHORED_STATE_PARTITIONS,
@@ -443,15 +441,10 @@ def validate_manifest(root: Path, issues: list[str]) -> None:
 
 
 def validate_partition_children(planned: tuple, issues: list[str]) -> None:
-    """A planned child must be assigned to the piece that holds its root parent.
-
-    The plan predates the state split, so a child in a new half is assigned to
-    the state that half was cut from.
-    """
+    """A planned child must be assigned to the piece that holds its root parent."""
     planned_states = {entry.province: entry.state for entry in planned}
     for child, piece in sorted(partition_children(AUTHORED_STATE_PARTITIONS, planned).items()):
-        planned_piece = STATE_SPLITS[piece]["parent"] if piece in STATE_SPLITS else piece
-        if planned_states[child] != planned_piece:
+        if planned_states[child] != piece:
             issues.append(
                 f"planned province {child}: its root parent lies in state {piece}, "
                 f"but the plan assigns it to state {planned_states[child]}"

@@ -5964,11 +5964,11 @@ class PlannedPartitionChildrenTests(unittest.TestCase):
         self.assertIn(265, AUTHORED_STATE_PARTITIONS[80][737])
         self.assertIn(16704, AUTHORED_STATE_PARTITIONS[80][738])
         self.assertIn(12930, AUTHORED_STATE_PARTITIONS[80][199])
-        # The geography plan names the state before the split.
+        # The geography plan names the half that holds the root parent.
         issues: list[str] = []
-        collapse_validator.validate_partition_children((self.child(90_000, 258, 71),), issues)
+        collapse_validator.validate_partition_children((self.child(90_000, 258, 734),), issues)
         self.assertEqual(issues, [])
-        collapse_validator.validate_partition_children((self.child(90_000, 258, 194),), issues)
+        collapse_validator.validate_partition_children((self.child(90_000, 258, 71),), issues)
         self.assertEqual(len(issues), 1)
 
     def test_manifest_partitions_are_derived_from_the_geography_data(self) -> None:

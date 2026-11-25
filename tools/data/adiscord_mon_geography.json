@@ -1,6 +1,7 @@
 {
   "schema": 1,
   "states": [425, 438, 439, 444, 445, 448, 453, 456, 459, 460, 462, 464, 466, 467, 468, 469, 470, 471, 472, 473],
+  "fields": true,
   "heights": {
     "min": 97,
     "max": 190,
@@ -361,6 +362,7 @@
     "BOR": {
       "name": "Borean Republic",
       "states": [89, 126, 135, 139, 140, 142, 143],
+      "fields": true,
       "capital_state": 140,
       "landforms": {"89": "plains"},
       "levels": [
@@ -414,6 +416,7 @@
     "DOL": {
       "name": "Dolnian Union",
       "states": [133, 136, 137, 138, 141],
+      "fields": true,
       "capital_state": 138,
       "levels": [
         {"name": "Grey clearing", "states": [133], "range": [108, 122]},
@@ -460,6 +463,7 @@
     "RIN": {
       "name": "Rina Palatinate",
       "states": [134, 147, 148, 149],
+      "fields": true,
       "capital_state": 149,
       "levels": [
         {"name": "Kamenka hills", "states": [134], "range": [124, 154]},
@@ -500,6 +504,7 @@
     "TMR": {
       "name": "Timer Chamber",
       "states": [409, 410, 416, 419, 423, 426, 429, 431, 436, 443, 454, 455],
+      "fields": true,
       "capital_state": 423,
       "levels": [
         {"name": "Iveran uplands", "states": [409], "range": [130, 148]},
@@ -571,6 +576,7 @@
     "VEL": {
       "name": "Vel Cantonal Union",
       "states": [414, 417, 418, 421, 428, 434],
+      "fields": true,
       "capital_state": 434,
       "levels": [
         {"name": "Kavren uplands", "states": [414], "range": [128, 146]},
@@ -616,6 +622,7 @@
     "DRV": {
       "name": "Draven Free Communes",
       "states": [440, 450, 451, 458, 463, 465],
+      "fields": true,
       "capital_state": 458,
       "levels": [
         {"name": "Pervan uplands", "states": [440], "range": [128, 146]},
@@ -662,6 +669,7 @@
       "name": "Vorkerland",
       "stage": 3,
       "states": [27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 82, 200, 201, 320, 323, 324, 325],
+      "fields": true,
       "capital_state": 32,
       "split_threshold": 180,
       "split_part": 100,
@@ -746,6 +754,7 @@
       "name": "Isaiah",
       "stage": 3,
       "states": [75, 106],
+      "fields": true,
       "capital_state": 75,
       "split_threshold": 180,
       "split_part": 100,
@@ -785,6 +794,7 @@
       "name": "Zshatsk",
       "stage": 3,
       "states": [81, 110, 124],
+      "fields": true,
       "capital_state": 81,
       "split_threshold": 180,
       "split_part": 100,
@@ -828,6 +838,7 @@
       "name": "Riven",
       "stage": 3,
       "states": [79, 306, 308, 309, 327],
+      "fields": true,
       "capital_state": 306,
       "split_threshold": 180,
       "split_part": 100,
@@ -878,6 +889,7 @@
       "name": "Yor",
       "stage": 3,
       "states": [102, 107, 108, 109, 111, 121, 122, 123],
+      "fields": true,
       "capital_state": 123,
       "split_threshold": 180,
       "split_part": 100,
@@ -937,6 +949,7 @@
       "name": "Eastern Autonomous Zone",
       "stage": 3,
       "states": [72, 195, 196, 322],
+      "fields": true,
       "capital_state": 72,
       "split_threshold": 180,
       "split_part": 100,
@@ -979,6 +992,7 @@
       "name": "Western Rimat",
       "stage": 3,
       "states": [71, 734, 90, 91, 93, 94, 194, 735, 202, 328],
+      "fields": true,
       "capital_state": 71,
       "split_threshold": 180,
       "split_part": 100,
@@ -1029,6 +1043,7 @@
       "name": "Vladar",
       "stage": 3,
       "states": [74, 105, 197, 311, 312, 313, 314],
+      "fields": true,
       "capital_state": 74,
       "split_threshold": 180,
       "split_part": 100,
@@ -1085,6 +1100,7 @@
       "name": "Romelia",
       "stage": 3,
       "states": [73, 736, 144, 145, 319, 321],
+      "fields": true,
       "capital_state": 73,
       "split_threshold": 180,
       "split_part": 100,
@@ -1142,6 +1158,7 @@
       "name": "Solarino",
       "stage": 3,
       "states": [76, 104, 198, 307, 310],
+      "fields": true,
       "capital_state": 76,
       "split_threshold": 180,
       "split_part": 100,
@@ -1187,6 +1204,7 @@
       "name": "Zlatorechye",
       "stage": 3,
       "states": [80, 737, 146, 150, 199, 738, 315, 316, 317, 318],
+      "fields": true,
       "capital_state": 80,
       "split_threshold": 180,
       "split_part": 100,
@@ -1253,6 +1271,7 @@
       "name": "Western Cordon",
       "stage": 3,
       "states": [151, 156, 157, 158, 159, 160, 161, 162, 163, 223],
+      "fields": true,
       "capital_state": 159,
       "split_threshold": 180,
       "split_part": 100,

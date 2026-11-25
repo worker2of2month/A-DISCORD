@@ -685,6 +685,11 @@ Measured on 2026-11-25:
   into a Gaussian valley whose radius grows with its depth and with the
   border weight of the relief. Declared terrain is measured on the relief
   before this cut, so a gorge leaves a mountain province mountainous.
+- More than 48 px from unchanged land the radius grows twice as fast with
+  depth (cut / 2.5 instead of cut / 5), so a deep cut through an upland is a
+  broad valley with gentle walls rather than a flat-floored trench that
+  breaks the wide river mesh. Closer to unchanged land the width eases
+  back, so the valley meets no wall at the edge of the relief.
 - No 2x2 square of the scope holds four provinces: the engine rejects it as
   an X crossing, and the builder gives one scope pixel to a neighbour.
 
@@ -695,21 +700,30 @@ Measured on 2026-11-25:
   per town stood as a terrace with cliffs.
 - City groups of `map/cities.txt`: index 15 draws the western houses, index 1
   the low blocks of a small town.
-- Every city, district and town is built up to its province border and
-  never past it, with no open ground: terrain palette 13 and the houses of
-  its tier on every pixel. Only the shoreline band stays clear (fallback
-  palette, no houses), so no building stands over water. A metropolis does
-  not spread into its neighbours.
+- Every city, district and town is built inside its own province and
+  never past it; a metropolis does not spread into its neighbours. Its
+  houses (terrain palette 13 and the city group of its tier) cover 78-90 %
+  of the province outside the shoreline band, drawn per province, so no
+  town falls under 75 %. The footprint grows from the interior centre with
+  lobes and lattice noise, keeps off river banks while the rest of the
+  province holds its share, and keeps a frayed edge. The unbuilt rest and
+  the shoreline band take the palette of the nearest rural pixel, so no
+  building stands over water.
 - Cities of VP 4 and more and every district draw index 15; cities of VP
   2-3 and the towns index 1.
 - Town relief eases over the whole urban province, feathered inward from
-  its edge, so a filled town meets its neighbours without a terrace.
+  its edge, so a built-up town meets its neighbours without a terrace.
 - Adopted cities, kept city terrains and the frozen ground of
   `keep_provinces` and `no_split_states` keep their terrain, city masks and
   trees. Every other frozen pixel (the IVN band, keep zones, `keep_above`)
   keeps its heights only: where its palette shows another terrain than its
   province declares, it takes the declared palette, and permanent snow
   (palettes 16 and 19) stays. Trees follow the painted terrain there.
+- A forest province is wooded throughout: its land carries a forest
+  palette, and every tree cell lying wholly on forest carries trees. A
+  cell where the forest meets other ground keeps the ordinary forest share
+  of 62 %, so a wood frays only at its edge; cells by the water stay bare.
+  Plains, hills and marsh keep their sparse, situational trees.
 
 ### 13.6 Ownership and ordering
 

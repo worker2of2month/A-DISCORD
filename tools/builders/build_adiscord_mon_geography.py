@@ -33,6 +33,9 @@ A region may also author ``split_threshold`` and ``split_part`` (pixels),
 relief stays). A settlement of kind ``adopt`` names an existing city
 ``province`` that the state keeps instead of a carved one.
 
+``fields: true``, at the top level for MON or in a region, paints farmland
+over the rural plains of those states.
+
 The scope is a set of state ids, never the current owners of those states.
 The geometry raster stacks the reviewed changes of every stage: Stage 1
 fills the rows above the ``sheet_row`` of the next stage, and each later
@@ -76,8 +79,10 @@ from tools.builders.build_adiscord_coastal_geography import (
 from tools.builders.build_adiscord_ivn_geography import (
     CITY_DONOR_SHARE,
     CITY_MIN_NEIGHBOURS,
+    CITY_PALETTE_INDICES,
     CITY_PIXELS,
     CITY_SITE_DISTANCE,
+    FIELD_PALETTE,
     RIVER_LAND_PALETTE,
     RIVER_MOUTH_RADIUS,
     RIVER_SEA_PALETTE,
@@ -94,6 +99,7 @@ from tools.builders.build_adiscord_ivn_geography import (
     _snap_river_point,
     _tree_cell_sample_from_pixels,
     carve_junction_city,
+    field_mask,
     interior_river_pixels_by_state,
     lattice_noise,
     masked_slopes,
@@ -114,14 +120,13 @@ from tools.builders.build_adiscord_ivn_geography import (
     smooth_state_borders,
     stable_unit_hash,
     supply_node_points,
-    tree_probability,
+    tree_cell_probability,
     write_state_smoothing_previews,
 )
 from tools.lib.adiscord_planned_geography import east_stages
 from tools.lib.adiscord_starting_navies import STARTING_NAVIES
 from tools.lib.city_terrains import CITY_TERRAINS
 from tools.lib.coastal_clearance import (
-    URBAN_FALLBACK_PALETTE,
     tree_cells_blocked,
     urban_blocked,
 )
@@ -169,6 +174,13 @@ VILLAGE_SPACING = 15.0
 VILLAGE_CORE_PIXELS = 8
 # Cities of this value and the districts draw the western houses; smaller cities and the towns the low blocks.
 LARGE_CITY_VALUE = 4
+# Houses cover at least the first share of an urban province outside the
+# shore band; a draw per province adds up to the second, so outlines stay frayed.
+SETTLEMENT_COVER = (0.78, 0.9)
+# Lobes and lattice noise make an outline ragged instead of a disc.
+FOOTPRINT_LOBES = (0.42, 0.3, 0.18)
+FOOTPRINT_NOISE = 0.35
+FOOTPRINT_NOISE_CELL = 3.0
 # A gorge river inside the scope may run on borders this far from its state line.
 CANYON_LANE_WIDTH = 2.5
 # Settlements stay out of a canyon: easing the town relief would fill the gorge.
@@ -223,9 +235,15 @@ RAVINE_FLOOR_TOLERANCE = 3
 # A river bed never rises downstream. Where the ground does, the river cuts a valley
 # whose depth fades with a Gaussian of radius RIVER_VALLEY_BASE plus the cut over
 # RIVER_VALLEY_SPREAD, so a deep cut through a ridge opens a wide pass, not a trench.
+# Away from the edge of the relief the cut spreads over RIVER_VALLEY_INNER_SPREAD
+# instead, so the walls of a deep cut stay gentle and the river mesh lies on a
+# broad floor. Within RIVER_VALLEY_EDGE_FADE pixels of unchanged land the
+# spread eases back, so the wide valley meets no wall at the edge of the relief.
 RIVER_VALLEY_BASE = 2.0
 RIVER_VALLEY_SPREAD = 5.0
-RIVER_VALLEY_REACH = 24
+RIVER_VALLEY_INNER_SPREAD = 2.5
+RIVER_VALLEY_EDGE_FADE = 48.0
+RIVER_VALLEY_REACH = 48
 REACHABLE_PIECE_PIXELS = 50
 # A course that cuts a province is routed again without the cutting pixels.
 ROUTE_ATTEMPTS = 12
@@ -2674,25 +2692,113 @@ def settlement_values(data: dict) -> dict[int, int]:
     return values
 
 
-def settlement_footprints(data: dict, scope: Scope, labels: np.ndarray, painted: np.ndarray) -> np.ndarray:
-    """The city group of every house of the carved cities, districts and towns.
+@dataclass
+class Footprints:
+    """Built pixels of every carved settlement and the city group each one draws."""
 
-    Houses fill each painted urban province up to its border and never past
-    it. Cities of LARGE_CITY_VALUE and up and the districts draw the western
-    houses; smaller cities and the towns the low blocks.
+    built: np.ndarray
+    models: np.ndarray
+
+
+def footprint_score(shape: tuple[int, int], anchor: tuple[int, int], size: int, salt: int, origin: tuple[int, int]) -> np.ndarray:
+    """Growth order of a footprint: distance from the anchor stretched into lobes, plus noise.
+
+    ``origin`` is the map (x, y) of the first cell, so the noise follows map coordinates.
+    """
+    ay, ax = anchor
+    ys, xs = np.mgrid[0:shape[0], 0:shape[1]].astype(float)
+    angle = np.arctan2(ys - ay, xs - ax)
+    stretch = np.ones(shape)
+    for harmonic, amplitude in enumerate(FOOTPRINT_LOBES, 1):
+        phase = 2.0 * np.pi * stable_unit_hash(salt, harmonic, 41)
+        stretch += amplitude * np.cos(harmonic * angle - phase)
+    radius = np.sqrt(size / np.pi)
+    noise = lattice_noise(xs + origin[0], ys + origin[1], FOOTPRINT_NOISE_CELL, salt)
+    return np.hypot(ys - ay, xs - ax) / (radius * stretch) + FOOTPRINT_NOISE * noise
+
+
+def grow_footprint(allowed: np.ndarray, anchor: tuple[int, int], size: int, score: np.ndarray) -> np.ndarray:
+    """Take ``size`` allowed pixels from ``anchor`` (y, x), 4-connected in the order of ``score``.
+
+    When the piece round the anchor is used up, growth goes on from the
+    lowest-scored allowed pixel left, so a province cut by a river or the
+    shore band still reaches its size.
+    """
+    selected = np.zeros(allowed.shape, bool)
+    seen = np.zeros(allowed.shape, bool)
+    ay, ax = anchor
+    frontier = [(float(score[ay, ax]), ay, ax)]
+    seen[ay, ax] = True
+    count = 0
+    while count < size:
+        if not frontier:
+            left = allowed & ~seen
+            if not left.any():
+                break
+            ys, xs = np.nonzero(left)
+            first = int(np.lexsort((xs, ys, score[ys, xs]))[0])
+            frontier = [(float(score[ys[first], xs[first]]), int(ys[first]), int(xs[first]))]
+            seen[ys[first], xs[first]] = True
+        _score, y, x = heapq.heappop(frontier)
+        selected[y, x] = True
+        count += 1
+        for ny, nx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
+            if 0 <= ny < allowed.shape[0] and 0 <= nx < allowed.shape[1] and allowed[ny, nx] and not seen[ny, nx]:
+                seen[ny, nx] = True
+                heapq.heappush(frontier, (float(score[ny, nx]), ny, nx))
+    return selected
+
+
+def settlement_footprints(
+    data: dict,
+    scope: Scope,
+    labels: np.ndarray,
+    grid: np.ndarray,
+    window: Window,
+    painted: np.ndarray,
+    shore: np.ndarray,
+    forbidden: np.ndarray,
+) -> Footprints:
+    """Lay out the houses of every carved city, district and town inside its own province.
+
+    A footprint grows from the interior centre of the province over a share
+    of SETTLEMENT_COVER of its land outside the shore band, with a ragged
+    outline, and never reaches another province. It keeps off river banks
+    while the rest of the province holds its share. Cities of
+    LARGE_CITY_VALUE and up and the districts draw the western houses;
+    smaller cities and the towns the low blocks.
     """
     values = settlement_values(data)
-    built = np.isin(labels, sorted(scope.urban)) & painted
-    large = sorted(
-        province
-        for province in scope.urban
-        if province in scope.districts
-        or (province not in scope.towns and values.get(province, 1) >= LARGE_CITY_VALUE)
-    )
+    boxes = find_objects(grid)
+    built = np.zeros(labels.shape, bool)
     models = np.full(labels.shape, CITY_BACKGROUND_INDEX, np.uint8)
-    models[built] = SMALL_CITY_INDEX
-    models[built & np.isin(labels, large)] = CITY_HOUSES_INDEX
-    return models
+    low, high = SETTLEMENT_COVER
+    for province in sorted(scope.urban):
+        if boxes[province - 1] is None:
+            continue
+        inland = (labels == province) & painted & ~shore
+        if not inland.any():
+            continue
+        ys, xs = np.nonzero(inland)
+        crop = (slice(int(ys.min()), int(ys.max()) + 1), slice(int(xs.min()), int(xs.max()) + 1))
+        own = inland[crop]
+        size = ceil((low + (high - low) * stable_unit_hash(province, 0, 43)) * int(own.sum()))
+        allowed = own & ~forbidden[crop]
+        if int(allowed.sum()) < size:
+            allowed = own
+        _oy, _ox, _inside, _depth, (cx, cy) = province_interior(grid, province, boxes[province - 1])
+        anchor = (cy - window.y0 - crop[0].start, cx - window.x0 - crop[1].start)
+        if not (0 <= anchor[0] < own.shape[0] and 0 <= anchor[1] < own.shape[1] and allowed[anchor]):
+            ays, axs = np.nonzero(allowed)
+            nearest = int(np.argmin((ays - anchor[0]) ** 2 + (axs - anchor[1]) ** 2))
+            anchor = (int(ays[nearest]), int(axs[nearest]))
+        score = footprint_score(own.shape, anchor, size, province, (window.x0 + crop[1].start, window.y0 + crop[0].start))
+        piece = grow_footprint(allowed, anchor, size, score)
+        built[crop] |= piece
+        value = values.get(province, 1)
+        large = province in scope.districts or (province not in scope.towns and value >= LARGE_CITY_VALUE)
+        models[crop][piece] = CITY_HOUSES_INDEX if large else SMALL_CITY_INDEX
+    return Footprints(built, models)
 
 
 def render_trees(
@@ -2718,11 +2824,38 @@ def render_trees(
                 continue
             if blocked[ty, tx]:
                 result[ty, tx] = 0
-            elif stable_unit_hash(tx, ty, 23) < tree_probability(sample.terrain_type):
+            elif stable_unit_hash(tx, ty, 23) < tree_cell_probability(sample):
                 result[ty, tx] = TREE_PALETTES[stable_unit_hash(tx, ty, 29) >= 0.65]
             else:
                 result[ty, tx] = 0
     return result
+
+
+def field_states(data: dict) -> list[int]:
+    """The states of MON (top-level ``fields``) and of every region that authors ``fields``."""
+    tags = {tag for tag, region in data.get("regions", {}).items() if region.get("fields")}
+    if data.get("fields"):
+        tags.add("MON")
+    return [state_id for tag, states in region_states(data).items() if tag in tags for state_id in states]
+
+
+def paint_fields(geography: Geography, data: dict, terrain: np.ndarray, cities: np.ndarray) -> None:
+    """Paint farmland over the declared plains of the field regions, in place.
+
+    Runs on the window after paint_layers: the fields grow from settlements and
+    rivers and take only pixels left in the plains palette, so houses, the city
+    mask, the shoreline band and the other rural palettes stay as painted.
+    """
+    plains = [province for province, terrain_type in geography.desired.items() if terrain_type == "plains"]
+    city_mask = np.isin(cities, list(CITY_PALETTE_INDICES))
+    eligible = geography.painted & np.isin(geography.states, field_states(data)) & np.isin(geography.labels, plains)
+    eligible &= (terrain == RURAL_PALETTES["plains"]) & ~city_mask
+    settled = geography.cities | (terrain == URBAN_PALETTE)
+    for core in geography.cores.values():
+        settled |= core
+    origin = (geography.window.x0, geography.window.y0)
+    fields = field_mask(eligible, settled, geography.network.pixels, geography.water, geography.labels, origin)
+    terrain[fields] = FIELD_PALETTE
 
 
 def tree_cells_touching(mask: np.ndarray, window: Window, shape: tuple[int, int], tree_shape: tuple[int, int]) -> np.ndarray:
@@ -2989,7 +3122,8 @@ class Geography:
     # Adopted cities, kept city terrains, and the frozen pixels of keep_provinces
     # and no_split_states: their terrain, city mask and trees stay.
     held: np.ndarray | None = None
-    # The city group of every built pixel.
+    # Urban-province pixels without houses, and the city group of every built pixel.
+    unbuilt: np.ndarray | None = None
     models: np.ndarray | None = None
 
     @property
@@ -3205,7 +3339,9 @@ def build_geography(
     floor, ceiling = height_limits(data, ground.states)
     kept = kept_terrains(scope, definition)
     held, held_cities = held_pixels(data, scope, definition, labels, mon, ground.states, ground.frozen)
-    models = settlement_footprints(data, scope, labels, mon & ~held)
+    footprints = settlement_footprints(data, scope, labels, grid, window, mon & ~held, shore, forbidden)
+    # Urban ground left unbuilt shows the land around it.
+    unbuilt = ground.cities & ~held & ~footprints.built
     towns = ground.cities.copy()
     for core in cores.values():
         towns |= core
@@ -3241,7 +3377,7 @@ def build_geography(
     desired, counts = province_types(classes, labels, scope, urban_pixels, kept)
     return Geography(
         window, labels, mon, ground.states, ground.water, ground.cities, heights, network, classes, desired, counts,
-        cores, shore, ground.relief_scope, ground.canyons, ground.frozen, held, models,
+        cores, shore, ground.relief_scope, ground.canyons, ground.frozen, held, unbuilt, footprints.models,
     )
 
 
@@ -3364,12 +3500,15 @@ def carve_river_beds(
                 incoming[receiver] -= 1
         pending = [index for index in pending if index not in ready]
     height, width = field.shape
+    inner = np.clip(distance_transform_edt(scope) / RIVER_VALLEY_EDGE_FADE, 0.0, 1.0)
+    inner = inner * inner * (3.0 - 2.0 * inner)
     for y, x in zip(*np.nonzero(~np.isnan(beds) & scope)):
         bed = float(beds[y, x])
         cut = float(ground[y, x]) - bed
         if cut <= 0.5:
             continue
-        radius = RIVER_VALLEY_BASE + cut / RIVER_VALLEY_SPREAD
+        widening = 1.0 / RIVER_VALLEY_SPREAD + (1.0 / RIVER_VALLEY_INNER_SPREAD - 1.0 / RIVER_VALLEY_SPREAD) * inner[y, x]
+        radius = RIVER_VALLEY_BASE + cut * widening
         reach = int(min(np.ceil(2.2 * radius), RIVER_VALLEY_REACH))
         y0, y1 = max(y - reach, 0), min(y + reach + 1, height)
         x0, x1 = max(x - reach, 0), min(x + reach + 1, width)
@@ -3478,6 +3617,7 @@ def build_plan(root: Path = ROOT, data: dict | None = None) -> MonPlan:
     terrain = sources["terrain"].copy()
     cities = sources["cities"].copy()
     paint_layers(geography, scope, terrain[window.s], cities[window.s])
+    paint_fields(geography, data, terrain[window.s], cities[window.s])
     state_pixels = np.zeros(grid.shape, np.int64)
     state_pixels[window.s] = geography.states
     kinds = definition.kinds()
@@ -3662,12 +3802,13 @@ PERMANENT_SNOW_PALETTES = (16, 19)
 def paint_layers(geography: Geography, scope: Scope, terrain: np.ndarray, cities: np.ndarray) -> None:
     """Paint the MON terrain palettes and city masks of the window, in place.
 
-    Every rural province takes the one palette of its declared terrain, and
-    every urban province palette 13 and the houses of its tier up to its
-    border, except on the shoreline band, where city meshes would float
-    over the water. A frozen pixel keeps its heights; where its own palette
-    shows another terrain than its province declares it takes the declared
-    palette, and permanent snow stays. Kept pixels stay as they are.
+    Every rural province takes the one palette of its declared terrain. The
+    houses of an urban province carry palette 13 and the city group of its
+    tier; its unbuilt pixels and its shoreline band, where city meshes would
+    float over the water, take the palette of the nearest rural pixel. A
+    frozen pixel keeps its heights; where its own palette shows another
+    terrain than its province declares it takes the declared palette, and
+    permanent snow stays. Kept pixels stay as they are.
     """
     labels = geography.labels
     painted = geography.painted
@@ -3686,13 +3827,19 @@ def paint_layers(geography: Geography, scope: Scope, terrain: np.ndarray, cities
         declared = type_of[labels]
         wrong = refreshed & (declared != "") & (shown[terrain] != declared) & ~np.isin(terrain, PERMANENT_SNOW_PALETTES)
         terrain[wrong] = palette_of[labels[wrong]]
-    built = geography.cities & (painted | refreshed)
+    urban = geography.cities & (painted | refreshed)
+    unbuilt = geography.unbuilt if geography.unbuilt is not None else np.zeros(labels.shape, bool)
+    unbuilt = unbuilt & urban
+    rural = geography.mon & ~geography.cities
+    if unbuilt.any() and rural.any():
+        _distance, (ny, nx) = distance_transform_edt(~rural, return_indices=True)
+        terrain[unbuilt] = terrain[ny[unbuilt], nx[unbuilt]]
+    built = urban & ~unbuilt
     for core in geography.cores.values():
         built |= core & painted
     houses = built & ~geography.shore
     terrain[houses] = URBAN_PALETTE
-    terrain[built & geography.shore] = URBAN_FALLBACK_PALETTE
-    cities[painted | built] = CITY_BACKGROUND_INDEX
+    cities[painted | urban] = CITY_BACKGROUND_INDEX
     models = geography.models if geography.models is not None else np.full(labels.shape, CITY_HOUSES_INDEX, np.uint8)
     cities[houses] = models[houses]
 
