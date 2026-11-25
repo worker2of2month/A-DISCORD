@@ -2,7 +2,8 @@ state={
 	id=106
 	name="STATE_106"
 	provinces={
-		782 1270 1615 1831 2902 2949 3145 4091 5636 7731 9315 10372 11944 
+		782 1270 1615 1831 2902 2949 3145 4091 5636 7731 9315 10372 11944
+		20381 20501 20502 20503 20504 20505 20506 20507
 	}
 	manpower = 3800000
 	buildings_max_level_factor = 1.000
@@ -12,7 +13,8 @@ state={
 		owner=EYR
 		add_core_of=EYR
 		victory_points = { 11944 10 }
-		victory_points = { 2949 3 }
+		victory_points = { 2949 2 }
+		victory_points = { 2902 1 }
 
 		buildings = {
 			air_base = 2

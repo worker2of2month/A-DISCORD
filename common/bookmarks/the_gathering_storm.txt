@@ -102,10 +102,7 @@ bookmarks = {
 			history = "MON_BOOKMARK_DESC"
 			ideology = chauvinism
 			ideas = {
-				MON_throne_of_fifteen_crowns
 				MON_imperial_general_staff
-				MON_arsenal_belt
-				MON_hierarchy_of_peoples
 			}
 		}
 

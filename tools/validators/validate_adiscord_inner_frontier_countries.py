@@ -18,6 +18,7 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 
 try:
     from tools.builders.build_adiscord_inner_frontier_countries import (
+        BUILDER_MODULE,
         CLAIMS_BY_STATE,
         COUNTRIES,
         COUNTRY_DIR,
@@ -38,7 +39,13 @@ try:
         render_country_history,
         render_oob,
         render_state,
+        settlement_points,
         state_path,
+        victory_point_localisation,
+    )
+    from tools.builders.build_adiscord_northern_countries import (
+        generated_block_entries,
+        load_mon_geography,
     )
     from tools.builders.build_adiscord_strategic_regions import (
         build_state_adjacency,
@@ -48,6 +55,7 @@ try:
     )
 except ModuleNotFoundError:
     from builders.build_adiscord_inner_frontier_countries import (
+        BUILDER_MODULE,
         CLAIMS_BY_STATE,
         COUNTRIES,
         COUNTRY_DIR,
@@ -68,7 +76,13 @@ except ModuleNotFoundError:
         render_country_history,
         render_oob,
         render_state,
+        settlement_points,
         state_path,
+        victory_point_localisation,
+    )
+    from builders.build_adiscord_northern_countries import (
+        generated_block_entries,
+        load_mon_geography,
     )
     from builders.build_adiscord_strategic_regions import (
         build_state_adjacency,
@@ -556,15 +570,15 @@ def validate() -> list[str]:
         )
     issues.extend(validate_external_gate_cleanup(split_effect, collapse_on_actions))
 
-    for country in COUNTRIES.values():
-        settlement_states = {int(country["capital"])} | {
-            int(state_id)
-            for state_id, _name, _value in country.get("secondary_vps", ())
-        }
-        for state_id in settlement_states:
-            key = f"VICTORY_POINTS_{principal_provinces[state_id]}"
-            if key not in vp_loc:
-                issues.append(f"missing generated victory-point localisation {key}")
+    expected_vp_loc = list(
+        victory_point_localisation(
+            principal_provinces, settlement_points(load_mon_geography())
+        ).items()
+    )
+    if generated_block_entries(vp_loc, BUILDER_MODULE) != expected_vp_loc:
+        issues.append(
+            f"{VP_LOCALISATION.relative_to(ROOT)} inner-frontier block is not synchronized with the inner-frontier builder"
+        )
 
     expected_rly_localisation = {
         "RLY": "Релейн",

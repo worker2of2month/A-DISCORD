@@ -1312,7 +1312,7 @@ class EastFinalWarTests(unittest.TestCase):
 
 
 def contest_world(focuses=()):
-    """A cabinet Kefreyt facing an AI Montar Empire before the contest begins."""
+    """A cabinet Kefreyt facing an AI Principality of Arken before the contest begins."""
     world = ReckoningWorld()
     world.data["VAL"]["vars"]["VAL_peace_regime"] = 2
     world.data["VAL"]["focuses"].update(focuses)

@@ -20,6 +20,7 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
+from tools.lib.adiscord_planned_geography import east_stages
 from tools.lib.paths import repository_root
 
 
@@ -358,20 +359,37 @@ def mountain_building_heights(
 def applied_mon_plan(
     root: Path, province_by_color: dict[tuple[int, int, int], int]
 ) -> dict | None:
-    """Return the planned MON geometry once its provinces exist on the map.
+    """Return the planned eastern geometry of every stage whose provinces exist on the map.
 
-    Before the geography apply the map still holds the uncarved provinces and
-    the old relief, so neither building heights nor anchor rows change.
+    Each stage reaches the map whole. Before its apply the map still holds the
+    uncarved provinces and the old relief, so neither building heights nor
+    anchor rows change in its states. Stage 1 brings the MON states, a later
+    stage the regions of its number (2 when a region names none).
     """
     path = root / MON_GEOGRAPHY_PATH
     if not path.exists():
         return None
     geography = json.loads(path.read_text(encoding="utf-8"))
-    plan = geography.get("planned", {})
-    planned_ids = {int(entry["province"]) for entry in plan.get("provinces", ())}
-    if not planned_ids or not planned_ids <= set(province_by_color.values()):
+    present = set(province_by_color.values())
+    applied: dict[int, dict] = {}
+    for number, stage in enumerate(east_stages(geography), start=1):
+        planned_ids = {int(entry["province"]) for entry in stage.get("provinces", ())}
+        if planned_ids and planned_ids <= present:
+            applied[int(stage.get("stage", number))] = stage
+    if not applied:
         return None
-    return {**plan, "states": geography["states"]}
+    entries = [entry for stage in applied.values() for entry in stage["provinces"]]
+    states = [*geography["states"]] if 1 in applied else []
+    states += [
+        state
+        for region in geography.get("regions", {}).values()
+        if int(region.get("stage", 2)) in applied
+        for state in region["states"]
+    ]
+    cities = {
+        parent: city for stage in applied.values() for key in ("cities", "towns") for parent, city in stage.get(key, {}).items()
+    }
+    return {"provinces": entries, "cities": cities, "states": states}
 
 
 def mon_scope_provinces(root: Path, plan: dict) -> frozenset[int]:
@@ -396,21 +414,32 @@ def _province_anchor_pixel(
     province_at,
     packed_pixels: np.ndarray,
     colour: int,
+    state_id: int | None = None,
 ) -> tuple[str, str]:
     """Slot 0 when native truncation and rounding both resolve to the province.
 
     Otherwise the interior pixel nearest the province centroid, so the anchor
-    stays inside a carved province even without a usable unit stack.
+    stays inside a carved province even without a usable unit stack. With a
+    state, the anchor also stays off that state's permanent landmarks: the
+    clearance pass would move a row there into a neighbouring province.
     """
+
+    def clear(x: float, z: float) -> bool:
+        return state_id is None or not in_landmark_zone(state_id, x, z)
+
     if slot_zero is not None:
         x, _height, z = map(float, slot_zero)
-        if all(
+        if clear(x, z) and all(
             province_at(convert(x), convert(z)) == province for convert in (int, round)
         ):
             return f"{x:.2f}", f"{z:.2f}"
     rows, columns = np.nonzero(packed_pixels == colour)
     if not len(rows):
         raise RuntimeError(f"province {province} has no pixels for its anchor rows")
+    height = packed_pixels.shape[0]
+    outside = np.array([clear(float(column), float(height - 1 - row)) for row, column in zip(rows, columns)])
+    if outside.any():
+        rows, columns = rows[outside], columns[outside]
     same = packed_pixels[
         np.clip(rows[:, None] + (-1, 1, 0, 0), 0, packed_pixels.shape[0] - 1),
         np.clip(columns[:, None] + (0, 0, -1, 1), 0, packed_pixels.shape[1] - 1),
@@ -465,6 +494,7 @@ def mon_province_rows_plan(root: Path, lines: list[str]) -> tuple[list[str], lis
                     province_at,
                     packed_pixels,
                     (red << 16) | (green << 8) | blue,
+                    state_by_province[province],
                 )
             return anchors[province]
 
@@ -670,6 +700,33 @@ def khan_bunker_clearance(lines: list[str]) -> list[str]:
     return result
 
 
+# (state, landmark_x, landmark_z, radius, destination_x, destination_y,
+# destination_z).  Destinations are in the same state and deliberately
+# use already-authored land anchors from that state where possible.
+PERMANENT_LANDMARK_ZONES = (
+    (41, 3782.49, 969.30, 8.0, "3791.00", "11.00", "969.00"),
+    (66, 3480.06, 946.54, 5.0, "3482.00", "13.80", "942.00"),
+    (49, 3487.83, 934.76, 10.0, "3473.00", "17.55", "970.00"),
+    (215, 3595.70, 767.51, 10.0, "3556.00", "10.95", "718.00"),
+    (51, 3492.22, 976.80, 10.0, "3374.00", "14.38", "934.00"),
+    (28, 3745.84, 940.78, 8.0, "3743.00", "10.30", "931.00"),
+    (125, 3530.00, 904.52, 12.0, "3501.00", "12.00", "877.00"),
+    (125, 3545.96, 903.63, 12.0, "3501.00", "12.00", "877.00"),
+    (125, 3536.24, 906.55, 12.0, "3503.00", "12.03", "890.00"),
+    (48, 3718.20, 913.50, 8.0, "3730.00", "10.25", "911.00"),
+    (699, 3977.10, 934.50, 10.0, "3970.00", "12.57", "926.00"),
+    (75, 2901.50, 618.50, 4.5, "2914.00", "10.53", "617.00"),
+)
+
+
+def in_landmark_zone(state_id: int, x: float, z: float) -> bool:
+    """Whether a building anchor of the state lies on one of its permanent landmarks."""
+    return any(
+        zone_state == state_id and (x - landmark_x) ** 2 + (z - landmark_z) ** 2 <= radius**2
+        for zone_state, landmark_x, landmark_z, radius, *_destination in PERMANENT_LANDMARK_ZONES
+    )
+
+
 def permanent_landmark_clearance(lines: list[str]) -> list[str]:
     """Move vanilla building visuals away from large always-visible landmarks.
 
@@ -678,23 +735,6 @@ def permanent_landmark_clearance(lines: list[str]) -> list[str]:
     happen to be present in a generated file.  Every destination is in the
     original state and uses an existing terrain anchor where possible.
     """
-    # (state, landmark_x, landmark_z, radius, destination_x, destination_y,
-    # destination_z).  Destinations are in the same state and deliberately
-    # use already-authored land anchors from that state where possible.
-    zones = (
-        (41, 3782.49, 969.30, 8.0, "3791.00", "11.00", "969.00"),
-        (66, 3480.06, 946.54, 5.0, "3482.00", "13.80", "942.00"),
-        (49, 3487.83, 934.76, 10.0, "3473.00", "17.55", "970.00"),
-        (215, 3595.70, 767.51, 10.0, "3556.00", "10.95", "718.00"),
-        (51, 3492.22, 976.80, 10.0, "3374.00", "14.38", "934.00"),
-        (28, 3745.84, 940.78, 8.0, "3743.00", "10.30", "931.00"),
-        (125, 3530.00, 904.52, 12.0, "3501.00", "12.00", "877.00"),
-        (125, 3545.96, 903.63, 12.0, "3501.00", "12.00", "877.00"),
-        (125, 3536.24, 906.55, 12.0, "3503.00", "12.03", "890.00"),
-        (48, 3718.20, 913.50, 8.0, "3730.00", "10.25", "911.00"),
-        (699, 3977.10, 934.50, 10.0, "3970.00", "12.57", "926.00"),
-        (75, 2901.50, 618.50, 4.5, "2914.00", "10.53", "617.00"),
-    )
     result = []
     for line in lines:
         fields = line.split(";")
@@ -706,7 +746,7 @@ def permanent_landmark_clearance(lines: list[str]) -> list[str]:
                 and not is_border_dam(fields)
             ):
                 x, z = float(fields[2]), float(fields[4])
-                for zone_state, landmark_x, landmark_z, radius, dx, dy, dz in zones:
+                for zone_state, landmark_x, landmark_z, radius, dx, dy, dz in PERMANENT_LANDMARK_ZONES:
                     if zone_state == state_id and (
                         (x - landmark_x) ** 2 + (z - landmark_z) ** 2
                     ) <= radius**2:

@@ -173,16 +173,17 @@ class MonSettlementTableTest(unittest.TestCase):
             northern.mon_planned_ids(table)
 
     def test_victory_points_must_lie_in_their_state_once(self):
-        lists = {state_id: (state_id,) for state_id in northern.COUNTRIES["MON"]["states"]}
-        cities = {state_id: state_id for state_id in northern.COUNTRIES["MON"]["states"]}
+        scope = northern.MONTAR_STATES
+        lists = {state_id: (state_id,) for state_id in scope}
+        cities = {state_id: state_id for state_id in scope}
         with self.assertRaisesRegex(RuntimeError, "outside state 469"):
-            northern.check_mon_settlements(lists, cities, ((469, 460, 1, "Корвель"),))
+            northern.check_mon_settlements(lists, cities, ((469, 460, 1, "Корвель"),), scope)
         with self.assertRaisesRegex(RuntimeError, "already holds"):
             northern.check_mon_settlements(
-                lists, cities, ((469, 469, 20, "Монтера"), (469, 469, 1, "Фаллен"))
+                lists, cities, ((469, 469, 20, "Монтера"), (469, 469, 1, "Фаллен")), scope
             )
         with self.assertRaisesRegex(RuntimeError, "one city per state"):
-            northern.check_mon_settlements(lists, {469: 469}, ())
+            northern.check_mon_settlements(lists, {469: 469}, (), scope)
 
     def test_localisation_names_every_rendered_point(self):
         _profiles, principal = build_profiles()
@@ -222,23 +223,30 @@ class MonSettlementTableTest(unittest.TestCase):
             northern.english_name_gaps(specification, localisation),
         )
 
-    def test_reviewed_english_pairs_cover_every_city_and_village(self):
+    def test_reviewed_english_pairs_cover_every_rendered_settlement(self):
         import json
 
         catalogue = json.loads(northern.ENGLISH_NAMES.read_text(encoding="utf-8"))
         specification = northern.english_specification(catalogue)
         table = northern.load_mon_geography()
+        scope = northern.geography_scope_states(table) & northern.EXPECTED_STATES
+        for state_id, province_id, _value, name in northern.mon_settlement_points(table):
+            if state_id not in scope:
+                continue
+            with self.subTest(province=province_id):
+                review = specification["entries"][f"VICTORY_POINTS_{province_id}"]
+                self.assertEqual(name, review["russian"])
         for entry in table["settlements"]:
-            if entry["kind"] == "city":
-                review = specification["entries"][f"VICTORY_POINTS_{entry['parent']}"]
-                self.assertEqual(entry["name"], review["russian"])
-            elif entry["kind"] == "village":
+            if entry["kind"] == "village":
                 self.assertIn(entry["name"], specification["village_names"])
 
-    def test_placed_villages_render_after_the_city_and_other_states_stay_unchanged(self):
+    def test_placed_villages_render_after_the_cities_and_other_states_stay_unchanged(self):
         baseline, _principal = build_profiles()
         table = copy.deepcopy(northern.load_mon_geography())
         cities = northern.mon_city_parents(table)
+        second_cities = {
+            entry["state"]: entry["parent"] for entry in table["stage2"]["settlements"]
+        }
         for entry in table["settlements"]:
             if entry["kind"] == "village":
                 entry["province"] = None
@@ -251,29 +259,209 @@ class MonSettlementTableTest(unittest.TestCase):
             entry["province"] = next(
                 province
                 for province in baseline[state_id]["provinces"]
-                if province != cities[state_id]
+                if province not in (cities[state_id], second_cities.get(state_id))
             )
             placed[state_id] = entry["province"]
         with patch.object(northern, "load_mon_geography", return_value=table):
             profiles, principal = build_profiles()
-        for state_id in northern.COUNTRIES["MON"]["states"]:
+        for state_id in northern.MONTAR_STATES:
             with self.subTest(state=state_id):
                 self.assertEqual(cities[state_id], principal[state_id])
+                expected = [cities[state_id]]
+                if state_id in second_cities:
+                    expected.append(second_cities[state_id])
+                expected.append(placed[state_id])
                 points = profiles[state_id]["victory_points"]
-                self.assertEqual(cities[state_id], points[0][0])
-                self.assertEqual(placed[state_id], points[1][0])
-                self.assertEqual(2, len(points))
+                self.assertEqual(expected, [province for province, _value, _name in points])
         rendered = northern.render_state(469, profiles[469])
         self.assertIn(
             "\t\tvictory_points = { 2845 20 }\n"
+            f"\t\tvictory_points = {{ {second_cities[469]} 3 }}\n"
             f"\t\tvictory_points = {{ {placed[469]} 2 }}\n",
             rendered,
         )
-        for state_id in set(profiles) - set(northern.COUNTRIES["MON"]["states"]):
+        for state_id in set(profiles) - set(northern.MONTAR_STATES):
             self.assertEqual(
                 northern.render_state(state_id, baseline[state_id]),
                 northern.render_state(state_id, profiles[state_id]),
             )
+
+
+def regional_geography():
+    """A MON state with a second city and a neighbour region, in the Stage 2 schema."""
+
+    def planned(province, state, parent, kind):
+        return {"province": province, "rgb": [1, 2, province % 256], "state": state, "parent": parent, "kind": kind}
+
+    table = sample_geography(
+        planned=(planned(90001, 469, 2845, "remainder"),),
+        villages={"Фаллен": 693},
+    )
+    table["states"] = [469, 460]
+    table["stage2"] = {
+        "settlements": [
+            {"state": 469, "kind": "city", "parent": 11523, "value": 3, "name": "Фалленбрюк", "name_en": "Fallenbruck"},
+        ],
+        "planned": {
+            "provinces": [
+                planned(90101, 423, 4630, "remainder"),
+                planned(90102, 423, 5797, "district"),
+                planned(90103, 423, 9794, "part"),
+                planned(90104, 469, 90001, "part"),
+            ],
+        },
+    }
+    table["regions"] = {
+        "TMR": {
+            "states": [423, 455],
+            "settlements": [
+                {"state": 423, "kind": "city", "parent": 5797, "value": 10, "name": "Тимер", "name_en": "Timer"},
+                {"state": 423, "kind": "district", "parent": 5797},
+                {"state": 455, "kind": "city", "parent": 1757, "value": 5, "name": "Орваль", "name_en": "Orval"},
+                {"state": 423, "kind": "town", "province": 4630, "value": 2, "name": "Мейдар", "name_en": "Meidar"},
+            ],
+        },
+    }
+    return table
+
+
+class EasternGeographyTableTest(unittest.TestCase):
+    def test_scope_is_keyed_by_state_across_all_regions(self):
+        self.assertEqual({469, 460, 423, 455}, northern.geography_scope_states(regional_geography()))
+
+    def test_neighbour_cities_are_principal_and_second_cities_are_not(self):
+        table = regional_geography()
+        self.assertEqual(
+            {469: 2845, 460: 6028, 423: 5797, 455: 1757}, northern.mon_city_parents(table)
+        )
+        self.assertEqual(
+            (
+                (469, 2845, 20, "Монтера"),
+                (460, 6028, 8, "Вальд"),
+                (469, 11523, 3, "Фалленбрюк"),
+                (423, 5797, 10, "Тимер"),
+                (455, 1757, 5, "Орваль"),
+                (469, 693, 2, "Фаллен"),
+                (423, 4630, 2, "Мейдар"),
+            ),
+            northern.mon_settlement_points(table),
+        )
+
+    def test_each_plan_stage_reaches_the_map_whole(self):
+        table = regional_geography()
+        self.assertEqual({}, northern.mon_planned_provinces(table, {2845}))
+        self.assertEqual(
+            {469: {90001}}, northern.mon_planned_provinces(table, {90001})
+        )
+        self.assertEqual(
+            {469: {90001, 90104}, 423: {90101, 90102, 90103}},
+            northern.mon_planned_provinces(table, {90001, 90101, 90102, 90103, 90104}),
+        )
+        with self.assertRaisesRegex(RuntimeError, "Stage 2 province plan is only partly"):
+            northern.mon_planned_provinces(table, {90001, 90101})
+        entries = northern.mon_planned_entries(table, {90001, 90101, 90102, 90103, 90104})
+        self.assertEqual(
+            {90001: 2845, 90101: 4630, 90102: 5797, 90103: 9794, 90104: 2845},
+            northern.mon_planned_roots(entries),
+        )
+
+    def test_a_later_stage_joins_once_planned_and_adopts_its_city(self):
+        table = regional_geography()
+        table["regions"]["WRK"] = {
+            "stage": 3,
+            "states": [32],
+            "settlements": [{"state": 32, "kind": "adopt", "province": None}],
+        }
+        self.assertNotIn(32, northern.geography_scope_states(table))
+        self.assertNotIn(32, northern.mon_city_parents(table))
+        table["regions"]["WRK"]["settlements"][0]["province"] = 16428
+        table["stages"] = [
+            {"stage": 3, "provinces": [{"province": 90201, "rgb": [1, 2, 3], "state": 32, "parent": 6192, "kind": "part"}]}
+        ]
+        self.assertIn(32, northern.geography_scope_states(table))
+        self.assertEqual(16428, northern.mon_city_parents(table)[32])
+        planned = northern.mon_planned_provinces(table, {90001, 90201})
+        self.assertEqual({90201}, set(planned[32]))
+        with self.assertRaisesRegex(RuntimeError, "Stage 3 province plan is only partly"):
+            table["stages"][0]["provinces"].append(
+                {"province": 90202, "rgb": [1, 2, 4], "state": 32, "parent": 6192, "kind": "part"}
+            )
+            northern.mon_planned_provinces(table, {90001, 90201})
+
+    def test_a_planned_province_appears_once(self):
+        table = regional_geography()
+        table["stage2"]["planned"]["provinces"].append(dict(table["planned"]["provinces"][0]))
+        with self.assertRaisesRegex(RuntimeError, "more than one plan entry"):
+            northern.mon_planned_ids(table)
+
+    def test_planned_province_may_not_sit_in_another_state(self):
+        shells = {469: (469, (2845,), "climate"), 460: (460, (6028, 90001), "climate")}
+        with self.assertRaisesRegex(RuntimeError, "already in state 460"):
+            northern.state_province_lists(shells, {469: frozenset({90001})})
+
+    def test_scope_states_take_their_settlements_and_other_states_the_manifest(self):
+        points = northern.mon_settlement_points(regional_geography())
+        country = {
+            "states": (423, 455, 409),
+            "capital": 423,
+            "capital_name": "Тимер",
+            "secondary_vps": ((455, "Орваль", 5), (409, "Иверан", 3)),
+        }
+        principal = {423: 9794, 455: 12300, 409: 3309}
+        victory_points = northern.scope_victory_points(
+            "TMR", country, principal, points, frozenset({423, 455})
+        )
+        self.assertEqual(
+            {
+                423: [(5797, 10, "Тимер"), (4630, 2, "Мейдар")],
+                455: [(1757, 5, "Орваль")],
+                409: [(3309, 3, "Иверан")],
+            },
+            victory_points,
+        )
+        with self.assertRaisesRegex(RuntimeError, "named Тимер in the geography table"):
+            northern.scope_victory_points(
+                "TMR", {**country, "capital_name": "Другой"}, principal, points, frozenset({423, 455})
+            )
+
+    def test_country_names_follow_its_settlements_in_table_order(self):
+        points = northern.mon_settlement_points(regional_geography())
+        localisation: dict[str, str] = {}
+        country = {
+            "states": (423, 455, 409),
+            "capital": 423,
+            "capital_name": "Тимер",
+            "secondary_vps": ((409, "Иверан", 3),),
+        }
+        northern.add_country_victory_point_names(
+            localisation, country, {423: 9794, 455: 12300, 409: 3309}, points
+        )
+        self.assertEqual(
+            [
+                ("VICTORY_POINTS_5797", "Тимер"),
+                ("VICTORY_POINTS_1757", "Орваль"),
+                ("VICTORY_POINTS_4630", "Мейдар"),
+                ("VICTORY_POINTS_3309", "Иверан"),
+            ],
+            list(localisation.items()),
+        )
+
+    def test_rendered_geography_states_hold_every_table_point(self):
+        table = northern.load_mon_geography()
+        scope = northern.geography_scope_states(table) & northern.EXPECTED_STATES
+        profiles, principal = build_profiles()
+        expected: dict[int, list[int]] = defaultdict(list)
+        for state_id, province_id, _value, _name in northern.mon_settlement_points(table):
+            if state_id in scope:
+                expected[state_id].append(province_id)
+        cities = northern.mon_city_parents(table)
+        for state_id in scope:
+            with self.subTest(state=state_id):
+                self.assertEqual(cities[state_id], principal[state_id])
+                self.assertEqual(
+                    expected[state_id],
+                    [province for province, _value, _name in profiles[state_id]["victory_points"]],
+                )
 
 
 if __name__ == "__main__":

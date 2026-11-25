@@ -10283,6 +10283,7 @@ ADISCORD_vorkerland_rom_tru_category = {
 		available = {
 			has_war = no
 			controls_state = 199
+			controls_state = 738
 		}
 		cost = 40
 		days_remove = 30

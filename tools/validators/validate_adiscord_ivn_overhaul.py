@@ -18,7 +18,7 @@ from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
-EXPECTED_IVN_GEOMETRY_SHA256 = "cb6bc328cc1ba38b262139baa872c91e3c913bea4570f71132818755939a6ceb"
+EXPECTED_IVN_GEOMETRY_SHA256 = "e9365448fde204f2116345d7d0a7e55a3771632811d3dd9b072a2c72e6516fae"
 
 
 def province_geometry_digest(image: Image.Image, colors: dict[int, tuple[int, int, int]]) -> str:
@@ -78,7 +78,7 @@ def collect_issues() -> list[str]:
                     f"state {state_id}: Ivanland victory-point manifest drifted"
                 )
 
-        for state_id in (128, 693, 694):
+        for state_id in sorted(state_builder.IVANLAND_ISLAND_STATES):
             source = _text(state_builder.state_path(state_id))
             if not re.search(r"\bowner\s*=\s*IIA\b", source) or not re.search(
                 r"\badd_core_of\s*=\s*IIA\b", source

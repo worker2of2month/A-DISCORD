@@ -7,9 +7,10 @@ state = {
 	manpower = 1127305
 	state_category = town
 	history = {
-		owner = MON
-		add_core_of = MON
+		owner = TAL
+		add_core_of = TAL
 		victory_points = { 6835 4 }
+		victory_points = { 8435 2 }
 		victory_points = { 16302 1 }
 		buildings = {
 			infrastructure = 4
@@ -19,7 +20,9 @@ state = {
 	}
 	provinces = {
 		1290 4388 4557 5609 5933 6073 6284 6661 6835 7252 7552 7717 8435 9162 10227 11305
-		11601 16302 16304 19298
+		11601 16302 16304 19298 19312 19333 19539 19540 19541 19542 19543 19544 19545 19546 19547 19548
+		19549 19550 19551 19552 19553 19554 19555 19556 19557 19558 19559 19560 19561 19562 19563 19564
+		19565
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.5

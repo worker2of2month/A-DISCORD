@@ -2817,6 +2817,13 @@ focus_tree = {
 					instant_build = yes
 				}
 			}
+			739 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
 		}
 		ai_will_do = {
 			base = 25
@@ -2962,6 +2969,17 @@ focus_tree = {
 		completion_reward = {
 			navy_experience = 15
 			693 = {
+				add_building_construction = {
+					type = coastal_bunker
+					level = 2
+					province = {
+						all_provinces = yes
+						limit_to_coastal = yes
+					}
+					instant_build = yes
+				}
+			}
+			739 = {
 				add_building_construction = {
 					type = coastal_bunker
 					level = 2

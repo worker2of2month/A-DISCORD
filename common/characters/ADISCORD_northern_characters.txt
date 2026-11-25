@@ -223,7 +223,56 @@ characters = {
 			expire = "2200.1.1.1"
 			id = -1
 			desc = MON_Marius_II_Arken_desc
-			traits = { MON_emperor_of_the_northern_marches }
+		}
+	}
+
+	KLV_Oskar_Kelvor = {
+		name = KLV_Oskar_Kelvor
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	TAL_Marta_Liren = {
+		name = TAL_Marta_Liren
+		gender = female
+		country_leader = {
+			ideology = humanism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	SLV_Erik_Rendar = {
+		name = SLV_Erik_Rendar
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	ARK_Ida_Breiden = {
+		name = ARK_Ida_Breiden
+		gender = female
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	UVA_Konrad_Ulvar = {
+		name = UVA_Konrad_Ulvar
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "2200.1.1.1"
+		}
+	}
+
+	VLT_Otto_Terlan = {
+		name = VLT_Otto_Terlan
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
 		}
 	}
 }

@@ -7,9 +7,10 @@ state = {
 	manpower = 1160681
 	state_category = large_town
 	history = {
-		owner = MON
-		add_core_of = MON
+		owner = SLV
+		add_core_of = SLV
 		victory_points = { 3859 5 }
+		victory_points = { 12916 2 }
 		victory_points = { 5474 1 }
 		buildings = {
 			infrastructure = 4
@@ -19,7 +20,8 @@ state = {
 	}
 	provinces = {
 		674 1008 1228 1240 1278 1579 2112 3859 4779 5252 5474 5963 6016 6247 6289 7356
-		8769 8933 9729 9734 9776 10056 11179 12408 12673 12916 19294
+		8769 8933 9729 9734 9776 10056 11179 12408 12673 12916 19294 19313 19334 19566 19567 19568
+		19569 19570 19571 19572 19573 19574 19575 19576 19577 19578 19579 19580 19581 19582 19583
 	}
 	resources = {
 		aluminium = 3

@@ -31,7 +31,8 @@ LOCALISATION_PATHS = tuple(
         "parties_l_russian.yml",
     )
 )
-MON_HISTORY = Path("history/countries/MON - Montar Empire.txt")
+MON_HISTORY = Path("history/countries/MON - Principality of Arken.txt")
+WRK_HISTORY = Path("history/countries/WRK - WorkerLand.txt")
 RIN_HISTORY = Path("history/countries/RIN - Rhine Palatinate.txt")
 RIN_COUNTRY = Path("common/countries/RIN.txt")
 RIN_OOB = Path("history/units/RIN.txt")
@@ -95,6 +96,7 @@ def collect_issues() -> list[str]:
             IDEAS,
             CHARACTERS,
             MON_HISTORY,
+            WRK_HISTORY,
             RIN_HISTORY,
             RIN_COUNTRY,
             RIN_OOB,
@@ -205,11 +207,11 @@ def collect_issues() -> list[str]:
                 "ADISCORD_release_non_participating_minor_optimization = yes", block
             )
         ]
-        if len(release_positions) != 2 or any(
+        if len(release_positions) != 1 or any(
             position > event_position for position in release_positions
         ):
             issues.append(
-                f"{block_name} must release dormant MON and RIN before scheduling the event"
+                f"{block_name} must release RIN before scheduling the event"
             )
     if "ADISCORD_rin_is_vorkerland_war_actor = yes" not in war:
         issues.append("on_war producer is not restricted to a Vorkerland claimant")
@@ -441,12 +443,13 @@ def collect_issues() -> list[str]:
             "RIN mission category is not limited to the playable southern side"
         )
 
-    mon_history = texts[MON_HISTORY]
+    if "target = RIN" in texts[MON_HISTORY]:
+        issues.append("The Principality of Arken must not start as RIN overlord")
     if not re.search(
         r"(?s)set_autonomy\s*=\s*\{[^{}]*target\s*=\s*RIN[^{}]*autonomous_state\s*=\s*autonomy_puppet",
-        mon_history,
+        texts[WRK_HISTORY],
     ):
-        issues.append("MON history does not establish RIN as its starting puppet")
+        issues.append("WRK history does not establish RIN as its starting puppet")
     rin_history = texts[RIN_HISTORY]
     rin_country = texts[RIN_COUNTRY]
     for field, expected in (
@@ -469,7 +472,7 @@ def collect_issues() -> list[str]:
     except ValueError as exc:
         issues.append(str(exc))
         regency = ""
-    if "GFX_Portrait_Forul_Generic_9" not in regency:
+    if "GFX_portrait_RIN_Northern_Court_Regency" not in regency:
         issues.append("RIN northern court regency lacks its authored portrait")
     if "country_leader =" in regency:
         issues.append("RIN northern court gains a leader role before the civil-war split")

@@ -5,6 +5,7 @@ state={
 	provinces={
 		2553 5448 11841 12189 16659 16660 16661 16662 16663 16664 16681 16683
 		16686 19028 19029 19030 19031 19032
+		20307 20352 20353 20354 20355
 	}
 	manpower = 80000
 	buildings_max_level_factor = 1.000
@@ -15,6 +16,7 @@ state={
 		add_core_of = IIA
 		victory_points = { 11841 3 }
 		victory_points = { 12189 1 }
+		victory_points = { 20307 1 }
 		buildings = {
 			infrastructure = 2
 			11841 = { naval_base = 2 }

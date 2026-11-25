@@ -2,7 +2,8 @@ state={
 	id=109
 	name="STATE_109"
 	provinces={
-		1477 1492 2926 3007 3043 4404 5772 6104 9478 11743 16574 16655 
+		1477 1492 2926 3007 3043 4404 5772 6104 9478 11743 16574 16655
+		20392 20581 20582 20583 20584 20585 20586 20587 20588 20589 20590 20591 20592
 	}
 	manpower = 900000
 	buildings_max_level_factor = 1.000
@@ -11,7 +12,8 @@ state={
 	history={
 		owner=YOR
 		add_core_of=YOR
-		victory_points = { 16574 3 }
+		victory_points = { 16574 2 }
+		victory_points = { 3043 1 }
 
 		buildings = {
 			arms_factory = 1

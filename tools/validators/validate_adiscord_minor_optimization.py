@@ -101,7 +101,7 @@ EXPECTED_SLOTS = {
     "KRL": 3,
     "KYZ": 2,
     "LYS": 3,
-    "MON": 4,
+    "ARK": 4,
     "NVR": 2,
     "ORV": 2,
     "RIN": 3,
@@ -147,12 +147,11 @@ SCAN_EXCLUSIONS = {
     ).resolve(),
 }
 
-# RIN and MON remain suppressed before the Vorkerland war, then a one-shot
-# feature router releases both countries before it schedules their crisis.
+# The Vorkerland war hook releases RIN before it schedules the oath crisis.
 # Keep the exception path-scoped: a reference anywhere else is still a
 # regression that silently turns a dormant country into an active participant.
 EVENT_AWAKENED_PARTICIPATION = {
-    tag: {
+    "RIN": {
         Path("events/ADISCORD_rin_oath_crisis_events.txt"),
         Path("common/decisions/ADISCORD_rin_oath_crisis_decisions.txt"),
         Path("common/decisions/categories/ADISCORD_rin_oath_crisis_categories.txt"),
@@ -160,8 +159,10 @@ EVENT_AWAKENED_PARTICIPATION = {
         Path("common/scripted_effects/ADISCORD_rin_oath_crisis_effects.txt"),
         Path("common/scripted_triggers/ADISCORD_rin_oath_crisis_triggers.txt"),
     }
-    for tag in ("MON", "RIN")
 }
+
+# The metropolitan collapse settles the Palatinate's subject status before the war hook.
+EVENT_AWAKENED_PARTICIPATION["RIN"].add(Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt"))
 
 # Imperial proclamation wakes Relyn before RUS can choose a frontier war.
 EVENT_AWAKENED_PARTICIPATION["RLY"] = {
@@ -299,9 +300,6 @@ VAL_PARTNER_FILES = {
     Path("common/scripted_effects/ADISCORD_VAL_effects.txt"),
     Path("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
 }
-EVENT_AWAKENED_PARTICIPATION["MON"].update(
-    RUS_CRISIS_SHARED_FILES | {RUS_CRISIS_AI_FILE}
-)
 EVENT_AWAKENED_PARTICIPATION["RLY"].update(
     RUS_CRISIS_SHARED_FILES | RUS_FRONTIER_FILES | VAL_PARTNER_FILES
 )

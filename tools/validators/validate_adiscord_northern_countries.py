@@ -19,6 +19,7 @@ try:
         COUNTRIES,
         EXPECTED_STATES,
         FLAG_DIR,
+        MONTAR_SUCCESSORS,
         ROOT,
         VP_LOCALISATION,
         build_profiles,
@@ -37,6 +38,7 @@ except ModuleNotFoundError:
         COUNTRIES,
         EXPECTED_STATES,
         FLAG_DIR,
+        MONTAR_SUCCESSORS,
         ROOT,
         VP_LOCALISATION,
         build_profiles,
@@ -60,9 +62,9 @@ EXPECTED_IDEAS = {
     "SKN": ("SKN_reserve_districts",),
     "LYS": ("LYS_bonded_warehouses",),
     "VES": ("VES_border_charters",),
-    "MON": (
+    "MON": ("MON_imperial_general_staff",),
+    "ARK": (
         "MON_throne_of_fifteen_crowns",
-        "MON_imperial_general_staff",
         "MON_arsenal_belt",
         "MON_hierarchy_of_peoples",
     ),
@@ -73,7 +75,6 @@ EXPECTED_TRAITS = {
     "HON": "HON_first_citizen",
     "SKN": "SKN_iron_marshal",
     "VES": "VES_warden_of_western_gates",
-    "MON": "MON_emperor_of_the_northern_marches",
 }
 
 LEADERS = {
@@ -97,6 +98,12 @@ LEADERS = {
     "VEL": "VEL_Marten_Rovel",
     "ARS": "ARS_Lina_Arsal",
     "VLD": "VLD_Irma_Vald",
+    "KLV": "KLV_Oskar_Kelvor",
+    "TAL": "TAL_Marta_Liren",
+    "SLV": "SLV_Erik_Rendar",
+    "ARK": "ARK_Ida_Breiden",
+    "UVA": "UVA_Konrad_Ulvar",
+    "VLT": "VLT_Otto_Terlan",
     "MON": "MON_Marius_II_Arken",
 }
 
@@ -140,7 +147,7 @@ def validate_mon_geography(principal_provinces: dict[int, int], vp_loc: str) -> 
     pending = sorted(set(mon_planned_ids(geography)) - set(details))
     if pending:
         issues.append(
-            f"MON province plan is not on the map yet ({len(pending)} ids from {pending[0]}); "
+            f"eastern province plan is not on the map yet ({len(pending)} ids from {pending[0]}); "
             "apply build_adiscord_mon_geography before the northern states"
         )
     points = mon_settlement_points(geography)
@@ -171,8 +178,14 @@ def validate() -> list[str]:
         "DRV": {440, 450, 451, 458, 463, 465},
         "VEL": {414, 417, 418, 421, 428, 434},
         "ARS": {441, 449},
-        "VLD": set(),
-        "MON": {425, 438, 439, 444, 445, 448, 453, 456, 459, 460, 462, 464, 466, 467, 468, 469, 470, 471, 472, 473},
+        "ARK": {459, 467},
+        "VLD": {444, 460},
+        "KLV": {425, 438},
+        "TAL": {453, 439},
+        "SLV": {445, 448, 456},
+        "MON": {468, 469, 472, 473},
+        "UVA": {464, 470},
+        "VLT": {466, 462, 471},
     }
     for tag, expected_states in expected_split_territories.items():
         actual_states = set(COUNTRIES[tag]["states"])
@@ -188,31 +201,26 @@ def validate() -> list[str]:
         ("LYS", "KDL"): (3_500_000, 7, 3, 4),
         ("TMR", "ARS"): (4_563_736, 9, 4, 5),
         ("DRV", "VEL"): (2_229_418, 4, 2, 3),
-        ("MON",): (24_000_000, 48, 36, 36),
-        ("VLD",): (0, 0, 0, 0),
+        tuple(MONTAR_SUCCESSORS): (24_000_000, 48, 36, 36),
     }
     for tags, expected in preserved_split_totals.items():
         actual = (
-            sum(int(COUNTRIES[tag]["population"]) for tag in tags),
-            sum(int(COUNTRIES[tag]["civilian"]) for tag in tags),
-            sum(int(COUNTRIES[tag]["military"]) for tag in tags),
+            *(sum(profiles[state][field] for tag in tags for state in COUNTRIES[tag]["states"])
+              for field in ("population", "civilian", "military")),
             sum(int(COUNTRIES[tag]["divisions"]) for tag in tags),
         )
         if actual != expected:
             issues.append(
                 f"split balance for {'/'.join(tags)} expected {expected}, found {actual}"
             )
-    if 457 in set(COUNTRIES["MON"]["states"]) or 457 not in set(
-        COUNTRIES["KDL"]["states"]
-    ):
-        issues.append("state 457 must belong to KDL rather than MON")
-    if 439 not in COUNTRIES["MON"]["states"]:
-        issues.append("state 439 must belong to MON")
+    if 457 not in COUNTRIES["KDL"]["states"]:
+        issues.append("state 457 must belong to KDL")
     if owner_totals("ORV") != (0, 0, 0):
         issues.append("ORV must not own starting territory")
     regional_resources: Counter[str] = Counter()
-    for tag in ("DRV", "VEL", "MON", "TMR"):
-        regional_resources.update(COUNTRIES[tag]["resources"])
+    for tag in ("DRV", "VEL", "TMR", *MONTAR_SUCCESSORS):
+        for state in COUNTRIES[tag]["states"]:
+            regional_resources.update(profiles[state]["resources"])
     if regional_resources != {
         "steel": 31,
         "coal": 32,
@@ -225,13 +233,6 @@ def validate() -> list[str]:
     for state_id in (426, 436, 454, 455):
         if "add_core_of = ORV" not in state_path(state_id).read_text(encoding="utf-8"):
             issues.append(f"state {state_id} must preserve its ORV core")
-    for state_id in (460, 467, 472):
-        source = state_path(state_id).read_text(encoding="utf-8")
-        if "owner = MON" not in source or "add_core_of = VLD" not in source:
-            issues.append(f"state {state_id} must start in MON with its VLD core")
-    if owner_totals("VLD") != (0, 0, 0):
-        issues.append("VLD must not own starting territory")
-
     tags_source = read("common/country_tags/04_ADISCORD_northern_countries_tags.txt")
     characters = read("common/characters/ADISCORD_northern_characters.txt")
     traits = read("common/country_leader/ADISCORD_northern_traits.txt")
@@ -374,6 +375,10 @@ def validate() -> list[str]:
                         f"{flag.relative_to(ROOT)} expected RGBA {size}, found {image.mode} {image.size}"
                     )
 
+    marius = re.search(r"(?ms)^\tMON_Marius_II_Arken = \{.*?^\t\}", characters)
+    if not marius or "MON_emperor_of_the_northern_marches" in marius[0]:
+        issues.append("Marius II must lead the Principality of Arken without the Northern Marches trait")
+
     for portrait_id, relative_path in (
         (
             "GFX_portrait_MON_Marius_II_Arken",
@@ -405,41 +410,23 @@ def validate() -> list[str]:
             issues.append(f"missing generated victory-point localisation {key}")
     issues.extend(validate_mon_geography(principal_provinces, vp_loc))
 
-    mon_population, mon_civilian, mon_military = owner_totals("MON")
-    if mon_population != int(COUNTRIES["MON"]["population"]) or (
-        mon_civilian,
-        mon_military,
-    ) != (48, 36):
-        issues.append(
-            "MON must match its population manifest and retain 48+36 factories"
-        )
-    for tag in set(COUNTRIES) - {"MON"}:
-        population, civilian, military = owner_totals(tag)
-        if (
-            mon_population <= population
-            or mon_civilian + mon_military <= civilian + military
-        ):
-            issues.append(f"MON is not stronger than northern peer {tag}")
-    if mon_population >= owner_totals("WRK")[0]:
-        issues.append("MON must retain a smaller population than united WRK")
-    mon_history = named_history("MON")
-    mon_oob = read("history/units/MON.txt")
+    armies = "".join(read(f"history/units/{tag}.txt") for tag in MONTAR_SUCCESSORS)
     for template, expected in (("Imperial Line Division", 28), ("Imperial Frontier Brigade", 8)):
-        deployed = mon_oob.count(f'division_template = "{template}"')
-        if deployed != expected:
-            issues.append(f"MON must deploy {expected} formations of {template}, found {deployed}")
-    if mon_oob.count("start_equipment_factor = 1.00") != 36:
-        issues.append("MON must start with 36 fully equipped divisions")
-    if mon_history:
-        history = mon_history.read_text(encoding="utf-8")
-        for equipment, amount in (("infantry_equipment", 80000), ("ADISCORD_squad_weapons_equipment", 1200), ("artillery_equipment", 720)):
-            pattern = rf"type\s*=\s*{equipment}\s+amount\s*=\s*{amount}\b"
-            if not re.search(pattern, history):
-                issues.append(f"MON must reserve {amount} {equipment} for reinforcement")
-        if "add_manpower = 200000" not in history:
-            issues.append("MON must start with its 200000-person manpower reserve")
-    if mon_history and len(EXPECTED_IDEAS["MON"]) != 4:
-        issues.append("MON must start with exactly four bespoke national spirits")
+        if armies.count(f'division_template = "{template}"') != expected:
+            issues.append(f"the Montar successors must deploy {expected} formations of {template}")
+    if armies.count("start_equipment_factor = 1.00") != 36:
+        issues.append("the Montar successors must deploy 36 fully equipped divisions")
+    reserves = Counter()
+    for tag in MONTAR_SUCCESSORS:
+        history_path = named_history(tag)
+        if history_path:
+            history = history_path.read_text(encoding="utf-8")
+            for equipment, amount in re.findall(r"type\s*=\s*(\w+)\s+amount\s*=\s*(\d+)", history):
+                reserves[equipment] += int(amount)
+            reserves["manpower"] += sum(map(int, re.findall(r"add_manpower\s*=\s*(\d+)", history)))
+    if reserves != {"infantry_equipment": 80000, "ADISCORD_squad_weapons_equipment": 1200,
+                   "artillery_equipment": 720, "manpower": 200000}:
+        issues.append("combined Montar reinforcement reserves do not match the regional totals")
     if "????" in country_loc or "????" in vp_loc:
         issues.append("northern Russian localisation contains encoding damage")
 

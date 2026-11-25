@@ -2844,11 +2844,13 @@ ADISCORD_vorkerland_setup_wps = {
 ADISCORD_vorkerland_setup_psd = {
 	PSD = {
 		transfer_state = 194
+		transfer_state = 735
 		transfer_state = 93
 		transfer_state = 94
 		transfer_state = 328
 	}
 	194 = { add_core_of = PSD set_state_controller_to = PSD }
+	735 = { add_core_of = PSD set_state_controller_to = PSD }
 	93 = { add_core_of = PSD set_state_controller_to = PSD }
 	94 = { add_core_of = PSD set_state_controller_to = PSD }
 	328 = { add_core_of = PSD set_state_controller_to = PSD }
@@ -2946,8 +2948,10 @@ ADISCORD_vorkerland_setup_sra = {
 ADISCORD_vorkerland_setup_zta = {
 	ZTA = {
 		transfer_state = 199
+		transfer_state = 738
 	}
 	199 = { add_core_of = ZTA set_state_controller_to = ZTA }
+	738 = { add_core_of = ZTA set_state_controller_to = ZTA }
 	ZTA = {
 		promote_character = { character = ZTA_Viktor_Holt ideology = chauvinism_ideology }
 		set_capital = { state = 199 }
@@ -3347,6 +3351,7 @@ ADISCORD_vorkerland_setup_ivanland_mandate = {
 	90 = { add_core_of = IBA add_claim_by = IBA set_state_controller_to = IBA }
 	91 = { remove_core_of = IBL add_core_of = IBA add_claim_by = IBA set_state_controller_to = IBA }
 	71 = { add_claim_by = IBA }
+	734 = { add_claim_by = IBA }
 	IBA = {
 		set_capital = { state = 90 }
 		if = {
@@ -3400,8 +3405,10 @@ ADISCORD_vorkerland_settle_second_intervention = {
 			limit = {
 				OR = {
 					state = 71
+					state = 734
 					state = 202
 					state = 194
+					state = 735
 					state = 328
 				}
 				OR = {
@@ -4336,6 +4343,7 @@ ADISCORD_vorkerland_apply_initial_map = {
 	ZAO = { transfer_state = 72 }
 	PWR = {
 		transfer_state = 71
+		transfer_state = 734
 		transfer_state = 90
 		transfer_state = 91
 		transfer_state = 202
@@ -4343,9 +4351,15 @@ ADISCORD_vorkerland_apply_initial_map = {
 	91 = { add_core_of = PWR set_state_controller_to = PWR }
 	202 = { add_core_of = PWR set_state_controller_to = PWR }
 	VLA = { transfer_state = 74 }
-	ROM = { transfer_state = 73 }
+	ROM = {
+		transfer_state = 73
+		transfer_state = 736
+	}
 	SOL = { transfer_state = 76 }
-	TRU = { transfer_state = 80 }
+	TRU = {
+		transfer_state = 80
+		transfer_state = 737
+	}
 
 	ADISCORD_vorkerland_setup_tva = yes
 	ADISCORD_vorkerland_setup_wtd = yes
@@ -5677,6 +5691,7 @@ ADISCORD_vorkerland_retire_dead_breakaway_claims = {
 	if = {
 		limit = { NOT = { country_exists = ZTA } }
 		199 = { remove_core_of = ZTA }
+		738 = { remove_core_of = ZTA }
 	}
 	if = {
 		limit = { NOT = { country_exists = EBA } }
@@ -5704,6 +5719,7 @@ ADISCORD_vorkerland_retire_dead_breakaway_claims = {
 		93 = { remove_core_of = PSD }
 		94 = { remove_core_of = PSD }
 		194 = { remove_core_of = PSD }
+		735 = { remove_core_of = PSD }
 		328 = { remove_core_of = PSD }
 	}
 	if = {
@@ -8598,6 +8614,13 @@ ADISCORD_vorkerland_ensure_claimant_home_cores = {
 }
 
 ADISCORD_vorkerland_begin_collapse = {
+	if = {
+		limit = { RIN = { is_subject_of = ROOT } }
+		set_autonomy = {
+			target = RIN
+			autonomy_state = autonomy_free
+		}
+	}
 	ADISCORD_end_party_coalition = yes
 	EYR = { load_focus_tree = { tree = generic_focus keep_completed = yes } }
 	EGC = { load_focus_tree = { tree = generic_focus keep_completed = yes } }
@@ -11055,7 +11078,7 @@ ADISCORD_vorkerland_form_free_republics_league = {
 		limit = {
 			OR = {
 				AND = { tag = ROM owns_state = 144 owns_state = 145 owns_state = 319 owns_state = 321 NOT = { has_war_with = DVA } }
-				AND = { tag = TRU owns_state = 199 NOT = { has_war_with = ZTA } }
+				AND = { tag = TRU owns_state = 199 owns_state = 738 NOT = { has_war_with = ZTA } }
 			}
 			ROM = { exists = yes is_subject = no is_in_faction = no has_capitulated = no }
 			TRU = { exists = yes is_subject = no is_in_faction = no has_capitulated = no }

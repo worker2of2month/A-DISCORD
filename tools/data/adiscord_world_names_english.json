@@ -1561,9 +1561,93 @@
           "russian": "Иторские Ворота",
           "english": "Itoran Gate"
         },
+        "VICTORY_POINTS_6262": {
+          "russian": "Заозёрье",
+          "english": "Zaozerye"
+        },
+        "VICTORY_POINTS_698": {
+          "russian": "Курганск",
+          "english": "Kurgansk"
+        },
+        "VICTORY_POINTS_7042": {
+          "russian": "Глухов",
+          "english": "Glukhov"
+        },
+        "VICTORY_POINTS_5787": {
+          "russian": "Студенец",
+          "english": "Studenets"
+        },
+        "VICTORY_POINTS_7878": {
+          "russian": "Тихогорск",
+          "english": "Tikhogorsk"
+        },
+        "VICTORY_POINTS_1257": {
+          "russian": "Озёрки",
+          "english": "Ozyorki"
+        },
+        "VICTORY_POINTS_5227": {
+          "russian": "Старая Застава",
+          "english": "Old Outpost"
+        },
+        "VICTORY_POINTS_8060": {
+          "russian": "Рыбачье",
+          "english": "Rybachye"
+        },
+        "VICTORY_POINTS_10025": {
+          "russian": "Пустынка",
+          "english": "Pustynka"
+        },
+        "VICTORY_POINTS_3592": {
+          "russian": "Ковыльное",
+          "english": "Kovylnoye"
+        },
+        "VICTORY_POINTS_12215": {
+          "russian": "Истоки",
+          "english": "Istoki"
+        },
+        "VICTORY_POINTS_7571": {
+          "russian": "Перевальное",
+          "english": "Perevalnoye"
+        },
         "VICTORY_POINTS_887": {
           "russian": "Дольн",
           "english": "Doln"
+        },
+        "VICTORY_POINTS_6720": {
+          "russian": "Просечье",
+          "english": "Prosechye"
+        },
+        "VICTORY_POINTS_9078": {
+          "russian": "Суходол",
+          "english": "Sukhodol"
+        },
+        "VICTORY_POINTS_3894": {
+          "russian": "Березняки",
+          "english": "Bereznyaki"
+        },
+        "VICTORY_POINTS_389": {
+          "russian": "Рубежное",
+          "english": "Rubezhnoye"
+        },
+        "VICTORY_POINTS_8249": {
+          "russian": "Дольнский Брод",
+          "english": "Doln Ford"
+        },
+        "VICTORY_POINTS_12497": {
+          "russian": "Серый Бор",
+          "english": "Sery Bor"
+        },
+        "VICTORY_POINTS_4020": {
+          "russian": "Лощинка",
+          "english": "Loshchinka"
+        },
+        "VICTORY_POINTS_8818": {
+          "russian": "Перелески",
+          "english": "Pereleski"
+        },
+        "VICTORY_POINTS_6432": {
+          "russian": "Опушка",
+          "english": "Opushka"
         },
         "VICTORY_POINTS_6779": {
           "russian": "Рина",
@@ -1572,6 +1656,30 @@
         "VICTORY_POINTS_3267": {
           "russian": "Палатинский Двор",
           "english": "Palatine Court"
+        },
+        "VICTORY_POINTS_3657": {
+          "russian": "Каменецк",
+          "english": "Kamenetsk"
+        },
+        "VICTORY_POINTS_7913": {
+          "russian": "Старосёлье",
+          "english": "Staroselye"
+        },
+        "VICTORY_POINTS_1684": {
+          "russian": "Пескари",
+          "english": "Peskari"
+        },
+        "VICTORY_POINTS_5248": {
+          "russian": "Белостепье",
+          "english": "Belostepye"
+        },
+        "VICTORY_POINTS_11708": {
+          "russian": "Каменный Яр",
+          "english": "Kamenny Yar"
+        },
+        "VICTORY_POINTS_3240": {
+          "russian": "Ямская",
+          "english": "Yamskaya"
         },
         "VICTORY_POINTS_2240": {
           "russian": "Кремень",
@@ -1677,6 +1785,98 @@
           "russian": "Тимер",
           "english": "Timer"
         },
+        "VICTORY_POINTS_1757": {
+          "russian": "Орваль",
+          "english": "Orval"
+        },
+        "VICTORY_POINTS_3309": {
+          "russian": "Иверан",
+          "english": "Iveran"
+        },
+        "VICTORY_POINTS_4206": {
+          "russian": "Ильден",
+          "english": "Ilden"
+        },
+        "VICTORY_POINTS_3035": {
+          "russian": "Келвинген",
+          "english": "Kelvingen"
+        },
+        "VICTORY_POINTS_6941": {
+          "russian": "Левард",
+          "english": "Levard"
+        },
+        "VICTORY_POINTS_12726": {
+          "russian": "Мелран",
+          "english": "Melran"
+        },
+        "VICTORY_POINTS_10425": {
+          "russian": "Нелвен",
+          "english": "Nelven"
+        },
+        "VICTORY_POINTS_1905": {
+          "russian": "Нордар",
+          "english": "Nordar"
+        },
+        "VICTORY_POINTS_11235": {
+          "russian": "Тальвиц",
+          "english": "Talwitz"
+        },
+        "VICTORY_POINTS_10795": {
+          "russian": "Бастарн",
+          "english": "Bastarn"
+        },
+        "VICTORY_POINTS_12273": {
+          "russian": "Остерфельд",
+          "english": "Osterfeld"
+        },
+        "VICTORY_POINTS_4630": {
+          "russian": "Мейдар",
+          "english": "Meidar"
+        },
+        "VICTORY_POINTS_2814": {
+          "russian": "Фрайвальд",
+          "english": "Freiwald"
+        },
+        "VICTORY_POINTS_11576": {
+          "russian": "Иверанский карьер",
+          "english": "Iveran Quarry"
+        },
+        "VICTORY_POINTS_981": {
+          "russian": "Мельхоф",
+          "english": "Melhof"
+        },
+        "VICTORY_POINTS_12001": {
+          "russian": "Аштерн",
+          "english": "Ashtern"
+        },
+        "VICTORY_POINTS_9759": {
+          "russian": "Левардская смолокурня",
+          "english": "Levard Tarworks"
+        },
+        "VICTORY_POINTS_8677": {
+          "russian": "Мелранские копи",
+          "english": "Melran Mines"
+        },
+        "VICTORY_POINTS_11285": {
+          "russian": "Нелвенский перевал",
+          "english": "Nelven Pass"
+        },
+        "VICTORY_POINTS_7575": {
+          "russian": "Хаффен",
+          "english": "Haffen"
+        },
+        "VICTORY_POINTS_5493": {
+          "russian": "Ведмар",
+          "english": "Wedmar"
+        },
+        "VICTORY_POINTS_10947": {
+          "russian": "Гратхоф",
+          "english": "Grathof"
+        },
+        "VICTORY_POINTS_9791": {
+          "russian": "Римбах",
+          "english": "Rimbach"
+        },
         "VICTORY_POINTS_4819": {
           "russian": "Лисмар",
           "english": "Lismar"
@@ -1693,17 +1893,101 @@
           "russian": "Вестмар",
           "english": "Vestmar"
         },
-        "VICTORY_POINTS_2421": {
-          "russian": "Вельск",
-          "english": "Velsk"
-        },
         "VICTORY_POINTS_269": {
           "russian": "Дравен",
           "english": "Draven"
         },
-        "VICTORY_POINTS_1757": {
-          "russian": "Орваль",
-          "english": "Orval"
+        "VICTORY_POINTS_11837": {
+          "russian": "Перван",
+          "english": "Pervan"
+        },
+        "VICTORY_POINTS_4578": {
+          "russian": "Севард",
+          "english": "Sevard"
+        },
+        "VICTORY_POINTS_4764": {
+          "russian": "Селлан",
+          "english": "Sellan"
+        },
+        "VICTORY_POINTS_452": {
+          "russian": "Ракенау",
+          "english": "Rakenau"
+        },
+        "VICTORY_POINTS_250": {
+          "russian": "Гранау",
+          "english": "Granau"
+        },
+        "VICTORY_POINTS_4050": {
+          "russian": "Тейвар",
+          "english": "Teyvar"
+        },
+        "VICTORY_POINTS_4002": {
+          "russian": "Перванский рудник",
+          "english": "Pervan Mine"
+        },
+        "VICTORY_POINTS_4547": {
+          "russian": "Лесная Коммуна",
+          "english": "Forest Commune"
+        },
+        "VICTORY_POINTS_8834": {
+          "russian": "Мооргоф",
+          "english": "Moorhof"
+        },
+        "VICTORY_POINTS_8853": {
+          "russian": "Вольный Брод",
+          "english": "Free Ford"
+        },
+        "VICTORY_POINTS_12084": {
+          "russian": "Коммунарская мельница",
+          "english": "Communard Mill"
+        },
+        "VICTORY_POINTS_2421": {
+          "russian": "Вельск",
+          "english": "Velsk"
+        },
+        "VICTORY_POINTS_9304": {
+          "russian": "Каврен",
+          "english": "Kavren"
+        },
+        "VICTORY_POINTS_6745": {
+          "russian": "Кердор",
+          "english": "Kerdor"
+        },
+        "VICTORY_POINTS_12678": {
+          "russian": "Лаврен",
+          "english": "Lavren"
+        },
+        "VICTORY_POINTS_785": {
+          "russian": "Лорден",
+          "english": "Lorden"
+        },
+        "VICTORY_POINTS_4601": {
+          "russian": "Невард",
+          "english": "Nevard"
+        },
+        "VICTORY_POINTS_2758": {
+          "russian": "Орлан",
+          "english": "Orlan"
+        },
+        "VICTORY_POINTS_11354": {
+          "russian": "Кавренская застава",
+          "english": "Kavren Outpost"
+        },
+        "VICTORY_POINTS_8520": {
+          "russian": "Кердорские копи",
+          "english": "Kerdor Pits"
+        },
+        "VICTORY_POINTS_951": {
+          "russian": "Таннбург",
+          "english": "Tannburg"
+        },
+        "VICTORY_POINTS_764": {
+          "russian": "Лорденская ярмарка",
+          "english": "Lorden Fair"
+        },
+        "VICTORY_POINTS_8957": {
+          "russian": "Невардский водопад",
+          "english": "Nevard Falls"
         },
         "VICTORY_POINTS_5982": {
           "russian": "Арсаль",
@@ -1788,6 +2072,78 @@
         "VICTORY_POINTS_8159": {
           "russian": "Хальден",
           "english": "Halden"
+        },
+        "VICTORY_POINTS_5808": {
+          "russian": "Бергау",
+          "english": "Bergau"
+        },
+        "VICTORY_POINTS_506": {
+          "russian": "Эльстерн",
+          "english": "Elstern"
+        },
+        "VICTORY_POINTS_2343": {
+          "russian": "Виттлар",
+          "english": "Wittlar"
+        },
+        "VICTORY_POINTS_5023": {
+          "russian": "Тарвиц",
+          "english": "Tarwitz"
+        },
+        "VICTORY_POINTS_709": {
+          "russian": "Мархейм",
+          "english": "Marheim"
+        },
+        "VICTORY_POINTS_9684": {
+          "russian": "Зальцбрунн",
+          "english": "Salzbrunn"
+        },
+        "VICTORY_POINTS_8435": {
+          "russian": "Зеедорф",
+          "english": "Seedorf"
+        },
+        "VICTORY_POINTS_12916": {
+          "russian": "Эммерих",
+          "english": "Emmerich"
+        },
+        "VICTORY_POINTS_6371": {
+          "russian": "Аркенфельд",
+          "english": "Arkenfeld"
+        },
+        "VICTORY_POINTS_1472": {
+          "russian": "Штальберг",
+          "english": "Stahlberg"
+        },
+        "VICTORY_POINTS_734": {
+          "russian": "Терлинген",
+          "english": "Terlingen"
+        },
+        "VICTORY_POINTS_1537": {
+          "russian": "Ведельн",
+          "english": "Wedeln"
+        },
+        "VICTORY_POINTS_2508": {
+          "russian": "Фельзенау",
+          "english": "Felsenau"
+        },
+        "VICTORY_POINTS_12165": {
+          "russian": "Эссенборг",
+          "english": "Essenborg"
+        },
+        "VICTORY_POINTS_11523": {
+          "russian": "Фалленбрюк",
+          "english": "Fallenbruck"
+        },
+        "VICTORY_POINTS_3973": {
+          "russian": "Лаутен",
+          "english": "Lauten"
+        },
+        "VICTORY_POINTS_8026": {
+          "russian": "Хорстен",
+          "english": "Horsten"
+        },
+        "VICTORY_POINTS_6511": {
+          "russian": "Эрцхайм",
+          "english": "Erzheim"
         },
         "VICTORY_POINTS_1674": {
           "russian": "Верхний Келвор",
@@ -3146,6 +3502,30 @@
         "STATE_733": {
           "russian": "Вейранская граница",
           "english": "Veyran Border"
+        },
+        "STATE_734": {
+          "russian": "Риматское ополье",
+          "english": "Rimat Fields"
+        },
+        "STATE_735": {
+          "russian": "Грейнская пойма",
+          "english": "Grein Floodplain"
+        },
+        "STATE_736": {
+          "russian": "Северная Ромелия",
+          "english": "Northern Romelia"
+        },
+        "STATE_737": {
+          "russian": "Южное Златоречье",
+          "english": "Southern Zlatorechye"
+        },
+        "STATE_738": {
+          "russian": "Сухоключский округ",
+          "english": "Dry Klyuch District"
+        },
+        "STATE_739": {
+          "russian": "Рейдальская пуща",
+          "english": "Reydal Forest"
         }
       }
     },
@@ -4826,7 +5206,480 @@
         "VICTORY_POINTS_19115": {
           "russian": "Эйден",
           "english": "Eiden"
+        },
+        "VICTORY_POINTS_20290": {
+          "russian": "Марьин Брод",
+          "english": "Maryin Brod"
+        },
+        "VICTORY_POINTS_20291": {
+          "russian": "Серенжский Перевоз",
+          "english": "Serenga Ferry"
+        },
+        "VICTORY_POINTS_20292": {
+          "russian": "Ведринка",
+          "english": "Vedrinka"
+        },
+        "VICTORY_POINTS_20293": {
+          "russian": "Таларские Мельницы",
+          "english": "Talara Mills"
+        },
+        "VICTORY_POINTS_20294": {
+          "russian": "Нижняя Кантория",
+          "english": "Lower Kantoriya"
+        },
+        "VICTORY_POINTS_20295": {
+          "russian": "Малая Моресса",
+          "english": "Little Moressa"
+        },
+        "VICTORY_POINTS_20296": {
+          "russian": "Лакорский Брод",
+          "english": "Lakora Ford"
+        },
+        "VICTORY_POINTS_20297": {
+          "russian": "Ильванка",
+          "english": "Ilvanka"
+        },
+        "VICTORY_POINTS_20298": {
+          "russian": "Верхняя Ольсия",
+          "english": "Upper Olsiya"
+        },
+        "VICTORY_POINTS_20299": {
+          "russian": "Северомарск",
+          "english": "Severomarsk"
+        },
+        "VICTORY_POINTS_20300": {
+          "russian": "Фьельстад",
+          "english": "Fjelstad"
+        },
+        "VICTORY_POINTS_20301": {
+          "russian": "Кордонная Слобода",
+          "english": "Cordon Sloboda"
+        },
+        "VICTORY_POINTS_20302": {
+          "russian": "Сторожевое",
+          "english": "Storozhevoye"
+        },
+        "VICTORY_POINTS_20303": {
+          "russian": "Ямщиково",
+          "english": "Yamshchikovo"
+        },
+        "VICTORY_POINTS_20304": {
+          "russian": "Закатное",
+          "english": "Zakatnoye"
+        },
+        "VICTORY_POINTS_20305": {
+          "russian": "Восходное",
+          "english": "Voskhodnoye"
+        },
+        "VICTORY_POINTS_20306": {
+          "russian": "Рейдальсвик",
+          "english": "Reydalsvik"
+        },
+        "VICTORY_POINTS_20307": {
+          "russian": "Кайрстранд",
+          "english": "Kairstrand"
+        },
+        "VICTORY_POINTS_20308": {
+          "russian": "Истоково",
+          "english": "Istokovo"
+        },
+        "VICTORY_POINTS_20309": {
+          "russian": "Восточномарск",
+          "english": "Vostochnomarsk"
+        },
+        "VICTORY_POINTS_20310": {
+          "russian": "Порубежное",
+          "english": "Porubezhnoye"
+        },
+        "VICTORY_POINTS_20311": {
+          "russian": "Полуденное",
+          "english": "Poludennoye"
+        },
+        "VICTORY_POINTS_20312": {
+          "russian": "Боровое",
+          "english": "Borovoye"
+        },
+        "VICTORY_POINTS_20313": {
+          "russian": "Дюнное",
+          "english": "Dyunnoye"
+        },
+        "VICTORY_POINTS_20314": {
+          "russian": "Причальное",
+          "english": "Prichalnoye"
+        },
+        "VICTORY_POINTS_20315": {
+          "russian": "Межмарье",
+          "english": "Mezhmarye"
+        },
+        "VICTORY_POINTS_20316": {
+          "russian": "Клюквенное",
+          "english": "Klyukvennoye"
+        },
+        "VICTORY_POINTS_6850": {
+          "russian": "Нордталь",
+          "english": "Nordtal"
+        },
+        "VICTORY_POINTS_5180": {
+          "russian": "Вальдек",
+          "english": "Waldeck"
+        },
+        "VICTORY_POINTS_5371": {
+          "russian": "Остмор",
+          "english": "Ostmoor"
+        },
+        "VICTORY_POINTS_2540": {
+          "russian": "Сауренбах",
+          "english": "Saurenbach"
+        },
+        "VICTORY_POINTS_7703": {
+          "russian": "Ринген",
+          "english": "Ringen"
+        },
+        "VICTORY_POINTS_3688": {
+          "russian": "Моргрунд",
+          "english": "Morgrund"
+        },
+        "VICTORY_POINTS_6774": {
+          "russian": "Ханаим",
+          "english": "Khanaim"
+        },
+        "VICTORY_POINTS_2902": {
+          "russian": "Сутрицкий Колодец",
+          "english": "Sutritsa Well"
+        },
+        "VICTORY_POINTS_9012": {
+          "russian": "Зшатский Посад",
+          "english": "Zshatsk Posad"
+        },
+        "VICTORY_POINTS_2238": {
+          "russian": "Сухая Балка",
+          "english": "Dry Gully"
+        },
+        "VICTORY_POINTS_4143": {
+          "russian": "Выцкие Выселки",
+          "english": "Vytsk Vyselki"
+        },
+        "VICTORY_POINTS_11456": {
+          "russian": "Нижний Грейн",
+          "english": "Lower Grein"
+        },
+        "VICTORY_POINTS_5866": {
+          "russian": "Верхний Ривен",
+          "english": "Upper Riven"
+        },
+        "VICTORY_POINTS_5307": {
+          "russian": "Большая Вахта",
+          "english": "Great Vakhta"
+        },
+        "VICTORY_POINTS_2488": {
+          "russian": "Лангарская Пристань",
+          "english": "Langar Landing"
+        },
+        "VICTORY_POINTS_10999": {
+          "russian": "Кернов",
+          "english": "Kernov"
+        },
+        "VICTORY_POINTS_8064": {
+          "russian": "Орвинский Брод",
+          "english": "Orvin Ford"
+        },
+        "VICTORY_POINTS_11267": {
+          "russian": "Вычск",
+          "english": "Vychsk"
+        },
+        "VICTORY_POINTS_3043": {
+          "russian": "Песчаные Орвы",
+          "english": "Sandy Orvy"
+        },
+        "VICTORY_POINTS_1173": {
+          "russian": "Меркенская Гать",
+          "english": "Merken Causeway"
+        },
+        "VICTORY_POINTS_16562": {
+          "russian": "Лауренск",
+          "english": "Laurensk"
+        },
+        "VICTORY_POINTS_16602": {
+          "russian": "Йорская Слобода",
+          "english": "Yor Sloboda"
+        },
+        "VICTORY_POINTS_3738": {
+          "russian": "Риматский Пост",
+          "english": "Rimat Post"
+        },
+        "VICTORY_POINTS_8032": {
+          "russian": "Норвен",
+          "english": "Norven"
+        },
+        "VICTORY_POINTS_12995": {
+          "russian": "Норвенская Пристань",
+          "english": "Norven Pier"
+        },
+        "VICTORY_POINTS_7129": {
+          "russian": "Центральная станция",
+          "english": "Central Station"
+        },
+        "VICTORY_POINTS_7934": {
+          "russian": "Хольденский Разъезд",
+          "english": "Holden Siding"
+        },
+        "VICTORY_POINTS_8824": {
+          "russian": "Восточный Кордон",
+          "english": "Eastern Cordon"
+        },
+        "VICTORY_POINTS_258": {
+          "russian": "Риматская Слобода",
+          "english": "Rimat Sloboda"
+        },
+        "VICTORY_POINTS_5380": {
+          "russian": "Норвейнский Хутор",
+          "english": "Norvein Farmstead"
+        },
+        "VICTORY_POINTS_4952": {
+          "russian": "Крайтов",
+          "english": "Kraitov"
+        },
+        "VICTORY_POINTS_1296": {
+          "russian": "Вальденская Мельница",
+          "english": "Valden Mill"
+        },
+        "VICTORY_POINTS_4425": {
+          "russian": "Подсолен",
+          "english": "Podsolen"
+        },
+        "VICTORY_POINTS_2339": {
+          "russian": "Восточная станция",
+          "english": "Eastern Station"
+        },
+        "VICTORY_POINTS_9269": {
+          "russian": "Грейнский Перевоз",
+          "english": "Grein Ferry"
+        },
+        "VICTORY_POINTS_5689": {
+          "russian": "Восточный Хутор",
+          "english": "East Farmstead"
+        },
+        "VICTORY_POINTS_3492": {
+          "russian": "Лагрен",
+          "english": "Lagren"
+        },
+        "VICTORY_POINTS_7406": {
+          "russian": "Эбернталь",
+          "english": "Eberntal"
+        },
+        "VICTORY_POINTS_5905": {
+          "russian": "Фельден",
+          "english": "Felden"
+        },
+        "VICTORY_POINTS_3722": {
+          "russian": "Хеймар",
+          "english": "Heimar"
+        },
+        "VICTORY_POINTS_11471": {
+          "russian": "Нижневладарск",
+          "english": "Nizhnevladarsk"
+        },
+        "VICTORY_POINTS_2706": {
+          "russian": "Владарка",
+          "english": "Vladarka"
+        },
+        "VICTORY_POINTS_5405": {
+          "russian": "Линден",
+          "english": "Linden"
+        },
+        "VICTORY_POINTS_4671": {
+          "russian": "Вейсфельд",
+          "english": "Weissfeld"
+        },
+        "VICTORY_POINTS_7954": {
+          "russian": "Тихий Луг",
+          "english": "Quiet Meadow"
+        },
+        "VICTORY_POINTS_455": {
+          "russian": "Южнодольск",
+          "english": "Yuzhnodolsk"
+        },
+        "VICTORY_POINTS_10605": {
+          "russian": "Тихий Затон",
+          "english": "Quiet Backwater"
+        },
+        "VICTORY_POINTS_11999": {
+          "russian": "Ромель",
+          "english": "Romel"
+        },
+        "VICTORY_POINTS_6383": {
+          "russian": "Ромельский Хутор",
+          "english": "Romel Farmstead"
+        },
+        "VICTORY_POINTS_9366": {
+          "russian": "Нижнеромельск",
+          "english": "Nizhneromelsk"
+        },
+        "VICTORY_POINTS_10200": {
+          "russian": "Камышовка",
+          "english": "Kamyshovka"
+        },
+        "VICTORY_POINTS_5741": {
+          "russian": "Знойное",
+          "english": "Znoynoye"
+        },
+        "VICTORY_POINTS_741": {
+          "russian": "Котловинск",
+          "english": "Kotlovinsk"
+        },
+        "VICTORY_POINTS_4185": {
+          "russian": "Солончак",
+          "english": "Solonchak"
+        },
+        "VICTORY_POINTS_12739": {
+          "russian": "Вейденский Брод",
+          "english": "Weiden Ford"
+        },
+        "VICTORY_POINTS_265": {
+          "russian": "Златоустье",
+          "english": "Zlatoustye"
+        },
+        "VICTORY_POINTS_1280": {
+          "russian": "Златая Заводь",
+          "english": "Golden Creek"
+        },
+        "VICTORY_POINTS_7644": {
+          "russian": "Златоверх",
+          "english": "Zlatoverkh"
+        },
+        "VICTORY_POINTS_5614": {
+          "russian": "Бережки",
+          "english": "Berezhki"
+        },
+        "VICTORY_POINTS_5309": {
+          "russian": "Верховский Погост",
+          "english": "Verkhovye Pogost"
+        },
+        "VICTORY_POINTS_16603": {
+          "russian": "Оствинка",
+          "english": "Ostvinka"
         }
+      },
+      "village_names": {
+        "Боровое": "Borovoye",
+        "Ведринка": "Vedrinka",
+        "Верхняя Ольсия": "Upper Olsiya",
+        "Восточномарск": "Vostochnomarsk",
+        "Восходное": "Voskhodnoye",
+        "Дюнное": "Dyunnoye",
+        "Закатное": "Zakatnoye",
+        "Ильванка": "Ilvanka",
+        "Истоково": "Istokovo",
+        "Кайрстранд": "Kairstrand",
+        "Клюквенное": "Klyukvennoye",
+        "Кордонная Слобода": "Cordon Sloboda",
+        "Лакорский Брод": "Lakora Ford",
+        "Малая Моресса": "Little Moressa",
+        "Марьин Брод": "Maryin Brod",
+        "Межмарье": "Mezhmarye",
+        "Нижняя Кантория": "Lower Kantoriya",
+        "Полуденное": "Poludennoye",
+        "Порубежное": "Porubezhnoye",
+        "Причальное": "Prichalnoye",
+        "Пущанск": "Pushchansk",
+        "Рейдальсвик": "Reydalsvik",
+        "Северомарск": "Severomarsk",
+        "Серенжский Перевоз": "Serenga Ferry",
+        "Сторожевое": "Storozhevoye",
+        "Таларские Мельницы": "Talara Mills",
+        "Фьельстад": "Fjelstad",
+        "Ямщиково": "Yamshchikovo",
+        "Нордталь": "Nordtal",
+        "Вальдек": "Waldeck",
+        "Остмор": "Ostmoor",
+        "Сауренбах": "Saurenbach",
+        "Ринген": "Ringen",
+        "Моргрунд": "Morgrund",
+        "Ханаим": "Khanaim",
+        "Сутрицкий Колодец": "Sutritsa Well",
+        "Зшатский Посад": "Zshatsk Posad",
+        "Сухая Балка": "Dry Gully",
+        "Выцкие Выселки": "Vytsk Vyselki",
+        "Нижний Грейн": "Lower Grein",
+        "Верхний Ривен": "Upper Riven",
+        "Большая Вахта": "Great Vakhta",
+        "Лангарская Пристань": "Langar Landing",
+        "Кернов": "Kernov",
+        "Орвинский Брод": "Orvin Ford",
+        "Вычск": "Vychsk",
+        "Песчаные Орвы": "Sandy Orvy",
+        "Меркенская Гать": "Merken Causeway",
+        "Лауренск": "Laurensk",
+        "Йорская Слобода": "Yor Sloboda",
+        "Риматский Пост": "Rimat Post",
+        "Норвен": "Norven",
+        "Норвенская Пристань": "Norven Pier",
+        "Центральная станция": "Central Station",
+        "Хольденский Разъезд": "Holden Siding",
+        "Восточный Пост": "Eastern Post",
+        "Восточный Кордон": "Eastern Cordon",
+        "Риматская Слобода": "Rimat Sloboda",
+        "Норвейн": "Norvein",
+        "Норвейнский Хутор": "Norvein Farmstead",
+        "Крайт": "Krait",
+        "Крайтов": "Kraitov",
+        "Вальден": "Valden",
+        "Вальденская Мельница": "Valden Mill",
+        "Солен": "Solen",
+        "Подсолен": "Podsolen",
+        "Восточная станция": "Eastern Station",
+        "Грейнский Перевоз": "Grein Ferry",
+        "Пустырь": "Pustyr",
+        "Восточный Хутор": "East Farmstead",
+        "Лагрен": "Lagren",
+        "Эбернталь": "Eberntal",
+        "Фельден": "Felden",
+        "Хеймар": "Heimar",
+        "Нижневладарск": "Nizhnevladarsk",
+        "Владарка": "Vladarka",
+        "Линден": "Linden",
+        "Вейсфельд": "Weissfeld",
+        "Тихий Луг": "Quiet Meadow",
+        "Южнодольск": "Yuzhnodolsk",
+        "Тихий Затон": "Quiet Backwater",
+        "Ромель": "Romel",
+        "Ромельский Хутор": "Romel Farmstead",
+        "Нижнеромельск": "Nizhneromelsk",
+        "Камышовка": "Kamyshovka",
+        "Знойное": "Znoynoye",
+        "Котловинск": "Kotlovinsk",
+        "Солончак": "Solonchak",
+        "Вейденский Брод": "Weiden Ford",
+        "Златоустье": "Zlatoustye",
+        "Порубежье": "Porubezhye",
+        "Каменный Уступ": "Stone Scarp",
+        "Сухоборье": "Sukhoborye",
+        "Валежник": "Valezhnik",
+        "Златая Заводь": "Golden Creek",
+        "Златоверх": "Zlatoverkh",
+        "Бережки": "Berezhki",
+        "Верховский Погост": "Verkhovye Pogost",
+        "Оствинка": "Ostvinka",
+        "Колейск": "Koleysk",
+        "Обочина": "Wayside",
+        "Туманск": "Tumansk",
+        "Мглино": "Mglino",
+        "Вересковск": "Vereskovsk",
+        "Ольховый Двор": "Alder Yard",
+        "Каменобродск": "Kamenobrodsk",
+        "Галечник": "Shingle Bank",
+        "Леман": "Leman",
+        "Увальск": "Uvalsk",
+        "Перелесье": "Perelesye",
+        "Осинник": "Aspen Grove",
+        "Кремень": "Kremen",
+        "Северный Разъезд": "North Siding",
+        "Нижнезлатск": "Nizhnezlatsk",
+        "Подзлатье": "Podzlatye",
+        "Окраинск": "Okrainsk",
+        "Дозорное": "Dozornoye",
+        "Ракитное": "Rakitnoye",
+        "Рыбацкий Стан": "Fishers Camp"
       }
     }
   ]

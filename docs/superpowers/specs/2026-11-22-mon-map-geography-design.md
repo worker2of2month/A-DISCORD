@@ -584,3 +584,146 @@ with the `rules-reviewer` agent.
 - VP names in both languages, MON divisions standing in their cities, supply
   hubs drawn inside the hub cities.
 - A short Kefreyt-Montera war in a test campaign for the capitulation pace.
+
+## 13. Stage 2: more city provinces, smaller provinces, the neighbours
+
+Author's orders (2026-11-25): "Нужно побольше городов-провинций, а также
+проработать карту Борейской республики, Дольнского союза", "И других соседей,
+кроме зоны и Воркерланда", "провинции поменьше сделай, где слишком большие",
+"В идеале они должны быть +- как у стеландера: около круглые". The author chose
+splitting provinces larger than 130 px, villages becoming carved towns, a city
+per neighbour state, and the MON treatment of relief, rivers and terrain for
+the neighbours.
+
+### 13.1 Scope
+
+| Tag | Country | States |
+|---|---|---|
+| MON region | Montar Empire and its crown holdings | the 20 states of section 2, whatever their current owner |
+| BOR | Borean Republic | 89, 126, 135, 139, 140, 142, 143 |
+| DOL | Dolnian Union | 133, 136, 137, 138, 141 |
+| RIN | Rina Palatinate | 134, 147, 148, 149 |
+| TMR | Timer Chamber | 409, 410, 416, 419, 423, 426, 429, 431, 436, 443, 454, 455 |
+| VEL | Vel Cantonal Union | 414, 417, 418, 421, 428, 434 |
+| DRV | Draven Free Communes | 440, 450, 451, 458, 463, 465 |
+
+The Exclusion Zone (EXZ), the Vorkerland countries and the Vorkerland outer
+screen (WCG) are excluded. The scope is defined by state ids in the data, not
+by current owners. A concurrent rework splits MON into crown holdings (KLV,
+ARK, VLD, VLT, SLV, TAL, UVA). The geography builder must not depend on those
+owners.
+
+Measured on 2026-11-25:
+- Stelander (STP) provinces have a median of 59 px, p90 109, and roundness
+  about 0.5 (area divided by the area of the circle around the centroid).
+- The scope holds 1268 land provinces with a median of 130 px, a p90 of 203
+  and a maximum of 640, at the same roundness.
+- No scope state is in `adiscord_southern_cities.json` or the IVN manifest.
+
+### 13.2 Province splitting
+
+- Every rural land province larger than 130 px is split into
+  `ceil(area / 80)` compact parts of about 80 px. Use `compact_partition`, or
+  an equivalent geodesic k-means, with smoothing.
+- Parts stay inside their state, and river pixels plus their neighbours are
+  locked. Each part reaches a roundness of at least 0.35 and has at least
+  40 px.
+- The part holding the parent's VP, supply hub, railway contacts and most of
+  its pixels keeps the parent id. The other parts get new ids. Railway chains
+  through a split parent stay physically adjacent, or are rerouted through
+  the new parts, as in stage 1.
+- Coastal provinces, provinces with a naval base or port anchor, lakes, and
+  provinces owned by another geography builder are never split.
+- Expected result: about 690 provinces split and about 1000 new ids. The
+  engine border budget (65,536; 57,371 adjacent pairs on 2026-11-25) must keep
+  at least 2,000 spare after stage 2. The builder reports the projected count
+  and refuses a plan that breaks that margin.
+
+### 13.3 Settlements
+
+- **MON.** Every village becomes a carved town of 30-40 px with urban terrain,
+  `cities.bmp` 15 and VP 1-2, named as in 6.2. States of more than 30
+  provinces after splitting get a second carved city, VP 2-3, with a new name.
+- **Neighbours.** Every state gets a carved city of 40-50 px; the country
+  capital gets 45 px plus a district. Every state also gets one carved town.
+- **VP values by country scale.**
+  - Capital: 10 (TMR, VEL, DRV) or 8 (BOR, DOL, RIN).
+  - Other cities: 3-5.
+  - Towns: 1-2.
+  - Existing VP provinces keep their ids and become the cities of their
+    states.
+- **Names.** Russian with an English pair, following each country's
+  toponyms: its state names and existing VP names. Check every name against
+  all localisation for collisions, as in 6.2. The table is authored in the
+  JSON and reviewed by the author at the preview checkpoint.
+
+### 13.4 Relief, rivers, terrain
+
+- The method is the one of sections 5.2-5.4, per country, from its state
+  names (upland, hills, forest, plain, lakes).
+- Rivers follow the rules of sections 5.3 and 13.5. The heightmap blends to
+  outside heights at the scope edge. The existing Rina canyon stays.
+- Each country gets its own terrain acceptance bands, recorded in the JSON.
+  Bands are measured over the original provinces, with parts counted as their
+  parent.
+
+### 13.5 River network rules (stage 1 findings, binding)
+
+- Tributaries carry no green source; their only marker is the red flow-in
+  pixel at the junction. Only rivers ending in water have a green source.
+- Widths never shrink downstream and use only palettes 3, 4, 6, 7, 9, 10 and
+  11.
+- A receiver is at least as wide as the tributary at the join, and one step
+  wider below it.
+- Every course is a simple 4-connected path with no 2x2 blocks. A receiver
+  pixel touches at most one red pixel, on a straight stretch.
+- Junctions are at least 8 px apart.
+- A walk from every green and red pixel draws each river pixel exactly once.
+- A river bed never rises downstream. Inside the relief scope the builder
+  lowers the ground along each walk to the lowest bed met so far; a
+  tributary is no lower than its receiver at the junction. The cut fades
+  into a Gaussian valley whose radius grows with its depth and with the
+  border weight of the relief. Declared terrain is measured on the relief
+  before this cut, so a gorge leaves a mountain province mountainous.
+- No 2x2 square of the scope holds four provinces: the engine rejects it as
+  an X crossing, and the builder gives one scope pixel to a neighbour.
+
+### 13.5a Settlement look (2026-11-25)
+
+- Towns lie on a smoothed copy of the relief and ease in from the land at
+  their edge over 3 px; the land around them keeps its heights. A flat level
+  per town stood as a terrace with cliffs.
+- City groups of `map/cities.txt`: index 15 draws the western houses, index 1
+  the low blocks of a small town.
+- A settlement of VP 8 or more is a metropolis: about 90 + 5 x VP built
+  pixels spread over the provinces of its state around the city, index 15.
+- A city of VP 4-6 and every district fills about its own province with a
+  ragged edge that may reach 3 px past it, index 15. A city of VP 2-3 does
+  the same with index 1.
+- A town is a built patch of 10-16 px inside its province, index 1, like
+  the harbour of Steel Shield. The rest of an urban province takes the
+  palette of the nearest rural pixel.
+- Lobes and lattice noise shape every outline. Adopted and frozen provinces
+  keep their city masks.
+
+### 13.6 Ownership and ordering
+
+- **Builder.** The builder becomes region-generic. Rename it to
+  `build_adiscord_east_geography.py` with data file
+  `tools/data/adiscord_east_geography.json`, holding one section per region.
+  Move the MON data into it and update the owners family, tests and docs
+  together.
+- **State lists and VPs.** For TMR, VEL and DRV these come from
+  `build_adiscord_northern_countries.py`. For BOR, DOL and RIN they come from
+  `build_adiscord_inner_frontier_countries.py`. Both read the same JSON and
+  follow the pattern of 7.1.
+- **What waits for the crown-holdings rework.** These parts start only after
+  that rework is finished and committed:
+  - the `northern_countries` changes;
+  - the theatre rail changes;
+  - the owners-registry edits;
+  - any apply.
+- **What can start now.** The builder, its data, its plan and its previews.
+- **Apply chain.** As in section 8, plus `inner_frontier_countries` after
+  `northern_countries`, and the EXZ snapshot children for any split
+  province of 460 and 472.

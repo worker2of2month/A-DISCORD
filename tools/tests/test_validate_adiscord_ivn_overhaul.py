@@ -190,36 +190,38 @@ ORIGINAL_PROVINCES = {
     },
 }
 
-REPARTITIONED_STATES = (25, 127, 128, 693, 694, 695, 696, 697, 698, 713, 714, 715, 716, 717)
+REPARTITIONED_STATES = (25, 127, 128, 693, 694, 695, 696, 697, 698, 713, 714, 715, 716, 717, 739)
 
 EXPECTED_VPS = {
-    25: {16568: 10},
-    92: {16823: 1},
-    95: {3318: 3},
-    96: {16818: 3},
-    97: {838: 3},
-    98: {2448: 5},
-    99: {882: 7},
-    100: {16817: 5},
-    101: {9327: 3, 638: 1},
-    127: {16816: 3, 3245: 1},
-    128: {18993: 1},
-    129: {1971: 1},
-    130: {16822: 2},
-    131: {16821: 2},
-    132: {16815: 2, 4739: 1},
-    164: {16824: 1},
-    693: {18994: 5, 16692: 1, 16695: 1, 16700: 1},
-    694: {11841: 3, 12189: 1},
-    695: {16820: 3, 9608: 1},
-    696: {16826: 3},
-    697: {16828: 3, 5055: 1},
-    698: {16831: 3, 1890: 1},
-    713: {8615: 1},
-    714: {16829: 3, 3503: 1},
-    715: {16825: 2},
-    716: {16830: 2},
-    717: {16819: 2, 16827: 2},
+    25: {16568: 10, 20290: 2},
+    92: {16823: 1, 20291: 1},
+    95: {3318: 3, 20292: 1},
+    96: {16818: 3, 20293: 1},
+    97: {838: 3, 20294: 1},
+    98: {2448: 5, 20295: 2},
+    99: {882: 7, 20296: 2},
+    100: {16817: 5, 20297: 2},
+    101: {9327: 3, 638: 1, 20298: 1},
+    127: {16816: 3, 3245: 1, 20299: 1},
+    128: {18993: 1, 20300: 1},
+    129: {1971: 1, 20301: 1},
+    130: {16822: 2, 20302: 1},
+    131: {16821: 2, 20303: 1},
+    132: {16815: 2, 4739: 1, 20304: 1},
+    164: {16824: 1, 20305: 1},
+    693: {18994: 5, 16692: 1, 16700: 1, 20306: 2},
+    694: {11841: 3, 12189: 1, 20307: 1},
+    695: {16820: 3, 9608: 1, 20308: 1},
+    696: {16826: 3, 20309: 1},
+    697: {16828: 3, 5055: 1, 20310: 1},
+    698: {16831: 3, 1890: 1, 20311: 1},
+    713: {8615: 3, 20312: 1},
+    714: {16829: 3, 3503: 1, 20313: 1},
+    715: {16825: 2, 20314: 1},
+    716: {16830: 2, 20315: 1},
+    717: {16819: 2, 16827: 2, 20316: 1},
+    # The western half of Reydal; its centre rises to a minor city.
+    739: {16695: 3},
 }
 
 
@@ -320,7 +322,7 @@ class IvanlandOverhaulContractTests(unittest.TestCase):
         self.assertEqual(len(flattened), len(set(flattened)))
         carved = {
             int(entry["province"])
-            for entry in geography_builder.PROVINCE_MANIFEST["provinces"]
+            for entry in geography_builder.planned_entries(geography_builder.PROVINCE_MANIFEST)
             if entry["state"] in REPARTITIONED_STATES
         }
         original = set().union(*ORIGINAL_PROVINCES.values())
@@ -337,7 +339,8 @@ class IvanlandOverhaulContractTests(unittest.TestCase):
             "industrial_complex": 9,
             "arms_factory": 5,
             "air_base": 3,
-            "local_supplies": 15.0,
+            # The split copies local supplies into 739.
+            "local_supplies": 16.5,
             "steel": 24,
         }
         sources = [state_text(state_id) for state_id in REPARTITIONED_STATES]
@@ -423,7 +426,7 @@ class IvanlandOverhaulContractTests(unittest.TestCase):
         self.assertNotIn("location = 18993", oob)
 
     def test_split_states_have_valid_map_building_anchors(self) -> None:
-        affected = {25, 128, 693, 694, 695, 696, 697, 698}
+        affected = {25, 128, 693, 694, 695, 696, 697, 698, 739}
         issues = [
             issue
             for issue in map_buildings.validate(ROOT)

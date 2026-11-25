@@ -8,6 +8,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from tools.builders import build_adiscord_new_states as builder
+from tools.lib.adiscord_planned_geography import PlannedGeography, PlannedProvince, planned_geography
 from tools.lib.adiscord_vorkerland_theatre_manifest import (
     UNITY_TOWER_NAME,
     UNITY_TOWER_PROVINCE,
@@ -19,6 +20,8 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
     VORKERLAND_THEATRE_RETIRED_VP_IDS,
     VORKERLAND_THEATRE_VICTORY_POINTS,
     VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
+    merge_planned_victory_points,
+    package_total_errors,
 )
 from tools.validators import validate_adiscord_new_states as validator
 from tools.tests.test_adiscord_shl_furnaces import block, focus_definition, shared_definitions, walk_entries
@@ -342,10 +345,11 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
         )
         self.assertEqual(builder.set_scalar(updated, "local_supplies", "6.0"), updated)
 
-    def test_nden_has_two_exact_theatre_victory_points(self) -> None:
+    def test_nden_has_exact_theatre_victory_points(self) -> None:
+        # The town of Nordtal takes one point of the Nden package from 5090.
         self.assertEqual(
             VORKERLAND_THEATRE_VICTORY_POINTS[27],
-            ((16614, 3), (5090, 3)),
+            ((16614, 3), (5090, 2), (6850, 1)),
         )
         state = builder.state_path(27).read_text(encoding="utf-8-sig")
         self.assertEqual(
@@ -361,7 +365,7 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
     def test_disconnected_urban_settlements_receive_victory_points(self) -> None:
         expected = {
             310: ((16588, 1),),
-            318: ((16642, 3), (16624, 1)),
+            318: ((16642, 2), (16624, 1), (16603, 1)),
         }
         for state_id, expected_vps in expected.items():
             with self.subTest(state=state_id):
@@ -412,7 +416,9 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
             73: ((16703, 1),),
             144: ((16694, 1),),
             145: ((16691, 3),),
-            199: ((16690, 3), (16696, 1), (16704, 1)),
+            199: ((16690, 3), (16696, 1)),
+            # Dry Klyuch is the centre of the half cut from 199.
+            738: ((16704, 3),),
         }
         self.assertEqual(builder.SETTLEMENT_CLUSTER_VICTORY_POINTS, expected)
         self.assertIn((16697, 3), VORKERLAND_THEATRE_VICTORY_POINTS[325])
@@ -493,9 +499,12 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
         # The Itoran mandates and the corridor successors keep their capitals.
         for state_id, province in ((90, 5135), (91, 4007), (194, 2339), (195, 8032), (196, 7129)):
             self.assertEqual(builder.REGIONAL_SETTLEMENTS[state_id][0][0], province)
+        # Rural markers follow the city points; planned Stage 2 towns follow them.
         for state_id, points in builder.IVANLAND_RURAL_SETTLEMENTS.items():
+            overhaul = builder.IVANLAND_OVERHAUL_VICTORY_POINTS[state_id]
+            planned = len(builder.IVANLAND_PLANNED_SETTLEMENTS.get(state_id, ()))
             self.assertEqual(
-                builder.IVANLAND_OVERHAUL_VICTORY_POINTS[state_id][-len(points):],
+                overhaul[len(overhaul) - planned - len(points):len(overhaul) - planned],
                 tuple((province, value) for province, value, _name in points),
             )
 
@@ -911,6 +920,389 @@ class DamirTransferTests(unittest.TestCase):
         name = "SHL_sell_road_stations"
         sale = shared_definitions("common/scripted_effects/ADISCORD_SHL_scripted_effects.txt", (name,))[name]
         self.assertCountEqual([entry.value for entry in walk_entries(sale) if entry.key == "transfer_state"], stations)
+
+
+# Province ids that scripts, OOBs, ports and hubs address directly. A planned
+# split keeps the parent id on one piece, so these never leave their states.
+SECTION_7_LITERAL_PROVINCES = frozenset({
+    12227, 16400, 16397, 6192, 6713, 3248,
+    16428,
+    16568, 4443, 8243, 11944, 10730, 11841, 2553, 5986, 18994,
+    16622,
+})
+SECTION_7_OOB_TAGS = ("WRK", "VAD", "TVA", "IVN", "IIA", "PWR", "ROM", "TRU", "VLA", "ZAO", "SOL", "WCG", "KRM", "LMN")
+FIRST_SYNTHETIC_PROVINCE = 90_000
+
+
+def section_7_literals() -> frozenset[int]:
+    from tools.lib.adiscord_starting_navies import STARTING_NAVIES
+
+    ports = {STARTING_NAVIES[tag].port for tag in ("IVN", "IIA", "WRK")}
+    locations = set()
+    for path in sorted((builder.ROOT / "history/units").glob("*.txt")):
+        if path.stem.split("_", 1)[0] in SECTION_7_OOB_TAGS and not path.stem.endswith("_air"):
+            locations.update(map(int, re.findall(r"\blocation\s*=\s*(\d+)", path.read_text(encoding="utf-8-sig"))))
+    return SECTION_7_LITERAL_PROVINCES | ports | locations
+
+
+def rural_province(state_id: int) -> int:
+    """Return a listed province of the state that holds no VP, for a synthetic split."""
+    path = builder.state_path(state_id)
+    victory_points = {province for province, _value in builder.history_victory_points(path.read_text(encoding="utf-8"))}
+    return min(builder.state_file_provinces(path) - victory_points - section_7_literals())
+
+
+class EastGeographyPlanTests(unittest.TestCase):
+    """Synthetic applied plans: the narrow mode appends, names and redistributes exactly."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.owned = builder.state_history_states()
+        cls.temp = tempfile.TemporaryDirectory()
+        cls.state_dir = Path(cls.temp.name)
+        for path in builder.STATE_DIR.glob("*.txt"):
+            shutil.copy(path, cls.state_dir / path.name)
+        cls.eyr_town = rural_province(102)
+        cls.pwr_city = rural_province(71)
+        cls.ivn_city = rural_province(713)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.temp.cleanup()
+
+    def synthetic_data(self) -> tuple[dict, dict, frozenset[int]]:
+        """Return an IVN manifest, an east geography with a `stages` list and the defined ids."""
+        ivn = {
+            "schema": 1,
+            "stage2": {
+                "first_id": FIRST_SYNTHETIC_PROVINCE,
+                "provinces": [
+                    {"province": FIRST_SYNTHETIC_PROVINCE, "parent": self.ivn_city, "state": 713, "kind": "remainder"},
+                ],
+                "cities": {str(self.ivn_city): self.ivn_city},
+                "settlements": [
+                    {"state": 713, "kind": "city", "parent": self.ivn_city, "value": 3,
+                     "name": "Синтетический Пущанск", "name_en": "Synthetic Pushchansk"},
+                ],
+            },
+        }
+        east = {
+            "schema": 1,
+            "stages": [
+                {
+                    "first_id": FIRST_SYNTHETIC_PROVINCE + 1,
+                    "provinces": [
+                        {"province": FIRST_SYNTHETIC_PROVINCE + 1, "parent": self.eyr_town, "state": 102, "kind": "remainder"},
+                        {"province": FIRST_SYNTHETIC_PROVINCE + 2, "parent": self.pwr_city, "state": 71, "kind": "remainder"},
+                        {"province": FIRST_SYNTHETIC_PROVINCE + 3, "parent": FIRST_SYNTHETIC_PROVINCE + 2, "state": 71, "kind": "part"},
+                        {"province": FIRST_SYNTHETIC_PROVINCE + 4, "parent": 16622, "state": 72, "kind": "part"},
+                    ],
+                    "cities": {str(self.pwr_city): self.pwr_city},
+                    "towns": {str(self.eyr_town): self.eyr_town},
+                },
+            ],
+            "regions": {
+                "EYR": {
+                    "states": [75, 106, 102],
+                    "settlements": [
+                        {"state": 102, "kind": "town", "parent": self.eyr_town, "value": 2,
+                         "name": "Синтетический Йорсен", "name_en": "Synthetic Yorsen"},
+                    ],
+                    "vp_overrides": {"16594": 8},
+                },
+                "PWR": {
+                    "states": [71, 72],
+                    "settlements": [
+                        {"state": 71, "kind": "city", "parent": self.pwr_city, "value": 4,
+                         "name": "Синтетический Тракт", "name_en": "Synthetic Trakt"},
+                        {"state": 72, "kind": "adopt", "province": 16622},
+                    ],
+                },
+            },
+        }
+        defined = frozenset(builder.definition_land_provinces() | set(range(FIRST_SYNTHETIC_PROVINCE, FIRST_SYNTHETIC_PROVINCE + 5)))
+        return ivn, east, defined
+
+    def synthetic_plan(self) -> PlannedGeography:
+        ivn, east, defined = self.synthetic_data()
+        return planned_geography(ivn, east, defined).for_states(self.owned)
+
+    def plan(self, planned: PlannedGeography, land: frozenset[int] | None = None) -> dict[Path, bytes]:
+        land = land or frozenset(builder.definition_land_provinces() | {entry.province for entry in planned.provinces})
+        with patch.object(builder, "STATE_DIR", self.state_dir), patch.object(
+            builder, "definition_land_provinces", return_value=land
+        ):
+            return builder.east_geography_plan(planned)
+
+    def state_text(self, outputs: dict[Path, bytes], state_id: int) -> str:
+        with patch.object(builder, "STATE_DIR", self.state_dir):
+            path = builder.state_path(state_id)
+        return outputs.get(path, path.read_bytes()).decode("utf-8")
+
+    @staticmethod
+    def listed(source: str) -> list[int]:
+        opening, closing = builder.named_block(source, "provinces")
+        return list(map(int, re.findall(r"\d+", source[opening:closing])))
+
+    def test_empty_plan_changes_nothing(self) -> None:
+        self.assertEqual(builder.east_geography_plan(PlannedGeography()), {})
+        ivn, east, defined = self.synthetic_data()
+        unplanned = frozenset(defined - set(range(FIRST_SYNTHETIC_PROVINCE, FIRST_SYNTHETIC_PROVINCE + 5)))
+        self.assertEqual(planned_geography(ivn, east, unplanned), PlannedGeography())
+        self.assertEqual(planned_geography({}, {"schema": 1}, defined), PlannedGeography())
+        if not builder.PLANNED_GEOGRAPHY.provinces:
+            self.assertEqual(builder.east_geography_plan(), {})
+
+    def test_a_partly_defined_stage_is_rejected(self) -> None:
+        ivn, east, defined = self.synthetic_data()
+        with self.assertRaisesRegex(RuntimeError, "East stage 1 province plan is only partly on the map"):
+            planned_geography(ivn, east, defined - {FIRST_SYNTHETIC_PROVINCE + 3})
+
+    def test_older_planned_layers_are_read_when_stages_are_absent(self) -> None:
+        ivn, east, defined = self.synthetic_data()
+        layered = {key: value for key, value in east.items() if key != "stages"}
+        layered["planned"] = east["stages"][0]
+        self.assertEqual(planned_geography(ivn, layered, defined), planned_geography(ivn, east, defined))
+
+    def test_appended_provinces_join_their_state_exactly_once(self) -> None:
+        planned = self.synthetic_plan()
+        outputs = self.plan(planned)
+        expected = {
+            713: {FIRST_SYNTHETIC_PROVINCE},
+            102: {FIRST_SYNTHETIC_PROVINCE + 1},
+            71: {FIRST_SYNTHETIC_PROVINCE + 2, FIRST_SYNTHETIC_PROVINCE + 3},
+            72: {FIRST_SYNTHETIC_PROVINCE + 4},
+        }
+        everywhere = []
+        for path in self.state_dir.glob("*.txt"):
+            everywhere.extend(self.listed(outputs.get(path, path.read_bytes()).decode("utf-8")))
+        for state_id, children in expected.items():
+            listed = self.listed(self.state_text(outputs, state_id))
+            for child in children:
+                self.assertEqual(listed.count(child), 1, (state_id, child))
+                self.assertEqual(everywhere.count(child), 1, child)
+        self.assertIn(16622, self.listed(self.state_text(outputs, 72)))
+
+    def test_plan_is_idempotent(self) -> None:
+        planned = self.synthetic_plan()
+        with tempfile.TemporaryDirectory() as temp:
+            state_dir = Path(temp)
+            for path in self.state_dir.glob("*.txt"):
+                shutil.copy(path, state_dir / path.name)
+            land = frozenset(builder.definition_land_provinces() | {entry.province for entry in planned.provinces})
+            with patch.object(builder, "STATE_DIR", state_dir), patch.object(
+                builder, "definition_land_provinces", return_value=land
+            ):
+                first = builder.east_geography_plan(planned)
+                for path, data in first.items():
+                    if path.parent == state_dir:
+                        path.write_bytes(data)
+                second = builder.east_geography_plan(planned)
+            for path, data in second.items():
+                if path.parent == state_dir:
+                    self.assertEqual(path.read_bytes(), data, path.name)
+
+    def test_victory_points_follow_their_tables_and_keep_package_totals(self) -> None:
+        planned = self.synthetic_plan()
+        outputs = self.plan(planned)
+        vps = {state_id: builder.history_victory_points(self.state_text(outputs, state_id)) for state_id in (102, 71, 713)}
+        authored = dict(builder.AUTHORED_THEATRE_VICTORY_POINTS[102])
+        self.assertEqual(
+            vps[102],
+            ((16594, 8), *((province, authored[province]) for province in (16580, 16575, 16570, 4841)), (self.eyr_town, 2)),
+        )
+        self.assertEqual(vps[71][-1], (self.pwr_city, 4))
+        self.assertEqual(vps[713][-1], (self.ivn_city, 3))
+        merged = builder.theatre_victory_points(planned)
+        self.assertEqual(package_total_errors(merged), [])
+        self.assertEqual(merged[UNITY_TOWER_STATE], VORKERLAND_PROTECTED_LANDMARK_VPS[UNITY_TOWER_STATE])
+        localisation = next(data for path, data in outputs.items() if path.name == "victory_points_l_russian.yml")
+        for settlement in planned.vp_settlements():
+            self.assertIn(
+                f' VICTORY_POINTS_{settlement.province}: "{settlement.name}"\n', localisation.decode("utf-8-sig")
+            )
+
+    def test_overrides_that_move_a_package_total_are_refused(self) -> None:
+        ivn, east, defined = self.synthetic_data()
+        east["regions"]["EYR"]["vp_overrides"] = {}
+        planned = planned_geography(ivn, east, defined).for_states(self.owned)
+        with self.assertRaisesRegex(RuntimeError, "Vorkerland package EYR: expected VP total 43, found 45"):
+            self.plan(planned)
+        with self.assertRaisesRegex(ValueError, "cannot change the Unity Tower VP"):
+            merge_planned_victory_points(builder.AUTHORED_THEATRE_VICTORY_POINTS, (), {UNITY_TOWER_PROVINCE: 3})
+        with self.assertRaisesRegex(ValueError, "outside the theatre"):
+            merge_planned_victory_points(builder.AUTHORED_THEATRE_VICTORY_POINTS, (), {12241: 3})
+
+    def test_carved_settlements_are_approved_urban_victory_points(self) -> None:
+        self.assertLessEqual(builder.PLANNED_URBAN_SETTLEMENTS, validator.APPROVED_NON_URBAN_SETTLEMENT_VPS)
+        terrains = {
+            int(fields[0]): fields[6]
+            for line in (builder.ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines()
+            if len(fields := line.split(";")) > 6 and fields[0].isdigit()
+        }
+        state_id, province = next(
+            (state_id, province)
+            for state_id in sorted(self.owned)
+            if state_id not in builder.REGIONAL_SETTLEMENTS
+            and state_id not in builder.NAM_ARCHIPELAGO_STATE_NAMES
+            for province in sorted(builder.state_file_provinces(builder.state_path(state_id)))
+            if terrains.get(province) in builder.CITY_TERRAINS
+        )
+        table = {state_id: ((province, 2, "Синтетический посад"),)}
+        with patch.object(builder, "REGIONAL_SETTLEMENTS", table):
+            with self.assertRaisesRegex(RuntimeError, f"urban VP {province}: expected at least 10 points"):
+                builder.regional_settlement_plan()
+            with patch.object(builder, "PLANNED_URBAN_SETTLEMENTS", frozenset({province})):
+                builder.regional_settlement_plan()
+
+    def test_a_planned_split_never_removes_a_literal_province(self) -> None:
+        owners = builder.state_file_owners()
+        literals = sorted(
+            province
+            for province in section_7_literals() - {UNITY_TOWER_PROVINCE}
+            if owners.get(province) in self.owned
+        )
+        self.assertIn(6713, literals)
+        self.assertIn(16568, literals)
+        entries = [
+            PlannedProvince(FIRST_SYNTHETIC_PROVINCE + index, province, owners[province], "remainder", "east", "test")
+            for index, province in enumerate(literals)
+        ]
+        outputs = self.plan(PlannedGeography(tuple(entries)))
+        for entry in entries:
+            listed = self.listed(self.state_text(outputs, entry.state))
+            self.assertEqual(listed.count(entry.parent), 1, entry.parent)
+            self.assertEqual(listed.count(entry.province), 1, entry.province)
+
+    def test_unity_tower_and_foreign_parents_are_refused(self) -> None:
+        tower = PlannedProvince(FIRST_SYNTHETIC_PROVINCE, UNITY_TOWER_PROVINCE, UNITY_TOWER_STATE, "part", "east", "test")
+        with self.assertRaisesRegex(RuntimeError, "cut from the Unity Tower province"):
+            self.plan(PlannedGeography((tower,)))
+        foreign = PlannedProvince(FIRST_SYNTHETIC_PROVINCE, 16622, 71, "part", "east", "test")
+        with self.assertRaisesRegex(RuntimeError, "has a parent 16622 outside the state"):
+            self.plan(PlannedGeography((foreign,)))
+        sea = PlannedProvince(FIRST_SYNTHETIC_PROVINCE, 16622, 72, "part", "east", "test")
+        with self.assertRaisesRegex(RuntimeError, "is not land"):
+            self.plan(PlannedGeography((sea,)), land=builder.definition_land_provinces())
+
+    def test_an_existing_victory_point_must_be_adopted(self) -> None:
+        ivn, east, defined = self.synthetic_data()
+        # Old Highway (12241) lies in the half the state split cuts from 71.
+        east["regions"]["PWR"]["settlements"][0]["parent"] = 12241
+        with self.assertRaisesRegex(RuntimeError, "state 734: planned city 12241 already holds an authored VP"):
+            self.plan(builder.split_planned_geography(planned_geography(ivn, east, defined).for_states(self.owned)))
+        with self.assertRaisesRegex(ValueError, "state 102: a planned settlement repeats a theatre VP"):
+            merge_planned_victory_points(builder.AUTHORED_THEATRE_VICTORY_POINTS, ((102, 16594, 2),), {})
+
+    def test_renderers_keep_planned_provinces(self) -> None:
+        child = FIRST_SYNTHETIC_PROVINCE
+        real = builder.PLANNED_STATE_PROVINCES
+        planned = {**real, 306: frozenset({child}), 713: real.get(713, frozenset()) | {child + 1}}
+        with patch.object(builder, "PLANNED_STATE_PROVINCES", planned):
+            self.assertIn(child + 1, builder.ivanland_state_provinces(713))
+            self.assertIn(child, self.listed(builder.render_state(306, builder.STARTING_OWNERS[306])))
+        # The split check compares the Itoran state files with the plan applied to them.
+        with patch.object(builder, "PLANNED_STATE_PROVINCES", {**real, 306: frozenset({child})}):
+            builder.validate_ivanland_split_inputs()
+
+    def test_waiting_english_names_are_promoted_once_rendered(self) -> None:
+        planned = self.synthetic_plan()
+        town = next(entry for entry in planned.vp_settlements() if entry.state == 102)
+        key = f"VICTORY_POINTS_{town.province}"
+        specification = {"entries": {}, "village_names": {town.name: town.name_en}}
+        localisation = f' {key}: "{town.name}"\n'
+        town_only = PlannedGeography(settlements=(town,))
+        gaps = builder.promote_planned_names(specification, town_only, "", apply=True)
+        self.assertEqual(len(gaps), 1)
+        self.assertIn("run --apply-east-geography first", gaps[0])
+        gaps = builder.promote_planned_names(specification, town_only, localisation, apply=False)
+        self.assertIn("is promoted by --apply", gaps[0])
+        self.assertEqual(builder.promote_planned_names(specification, town_only, localisation, apply=True), [])
+        self.assertEqual(specification["entries"][key], {"russian": town.name, "english": town.name_en})
+
+
+class StateSplitTests(unittest.TestCase):
+    """The six state splits after the stage 3 geography."""
+
+    def test_split_rules_conserve_totals(self) -> None:
+        self.assertEqual(builder.split_amount(800_000, 0.52, 10_000), 420_000)
+        self.assertEqual(builder.split_amount(190_000, 0.473, 10_000), 90_000)
+        self.assertEqual(
+            builder.split_factory_levels({"industrial_complex": 1, "arms_factory": 2}),
+            {"industrial_complex": 1, "arms_factory": 0, "dockyard": 0},
+        )
+        self.assertEqual(
+            builder.split_factory_levels({"industrial_complex": 2, "arms_factory": 2}),
+            {"industrial_complex": 1, "arms_factory": 0, "dockyard": 0},
+        )
+        self.assertEqual(builder.split_factory_levels({"industrial_complex": 1})["industrial_complex"], 0)
+        self.assertEqual(builder.split_factory_levels({"arms_factory": 2})["arms_factory"], 1)
+        self.assertEqual(builder.split_category(380_000, 2, True, "town"), "town")
+        self.assertEqual(builder.split_category(680_000, 1, False, "large_town"), "town")
+        self.assertEqual(builder.split_category(800_000, 1, True, "town"), "town")
+        self.assertEqual(builder.split_category(290_000, 1, False, "town"), "rural")
+        for parent, child in ((73, 736), (80, 737)):
+            whole = sum(builder.VORKERLAND_STATE_RESOURCES[state_id]["steel"] for state_id in (parent, child))
+            self.assertEqual(whole, {73: 6, 80: 8}[parent])
+
+    def test_profiles_split_the_whole_state(self) -> None:
+        whole = {71: 800_000, 194: 850_000, 73: 1_300_000, 80: 1_350_000, 199: 750_000, 693: 190_000}
+        for child, split in builder.STATE_SPLITS.items():
+            parent = split["parent"]
+            with self.subTest(state=child):
+                profiles = builder.LEGACY_STATE_PROFILES
+                self.assertEqual(profiles[parent]["population"] + profiles[child]["population"], whole[parent])
+                self.assertEqual(profiles[child]["population"] % 10_000, 0)
+                self.assertEqual(profiles[child]["infrastructure"], profiles[parent]["infrastructure"])
+                self.assertEqual(profiles[child]["supplies"], profiles[parent]["supplies"])
+
+    def test_provinces_follow_the_cut_and_planned_parts_their_root(self) -> None:
+        self.assertEqual(builder.split_half(71, 12241), 734)
+        self.assertEqual(builder.split_half(71, 16591), 71)
+        self.assertEqual(builder.split_half(734, 16591), 71)
+        self.assertEqual(builder.split_half(199, 12930), 199)
+        self.assertEqual(builder.split_half(306, 16643), 306)
+        roots = {FIRST_SYNTHETIC_PROVINCE: 258, FIRST_SYNTHETIC_PROVINCE + 1: 16591}
+        with patch.object(builder, "PLANNED_ROOTS", roots):
+            self.assertEqual(builder.split_half(71, FIRST_SYNTHETIC_PROVINCE), 734)
+            self.assertEqual(builder.split_half(71, FIRST_SYNTHETIC_PROVINCE + 1), 71)
+
+    def test_victory_points_follow_their_provinces(self) -> None:
+        rimat_fields = {province: value for province, value, _name in builder.REGIONAL_SETTLEMENTS[734]}
+        self.assertEqual(rimat_fields, {12241: 1, 258: 3})
+        self.assertNotIn(12241, {province for province, _value, _name in builder.AUTHORED_REGIONAL_SETTLEMENTS[71]})
+        self.assertEqual(builder.IVANLAND_OVERHAUL_VICTORY_POINTS[739], ((16695, 3),))
+        self.assertNotIn(16695, dict(builder.IVANLAND_OVERHAUL_VICTORY_POINTS[693]))
+        self.assertIn(739, builder.IVANLAND_ISLAND_STATES)
+        self.assertIn(739, builder.IVANLAND_SPLIT_FAMILIES[128])
+        for child, split in builder.STATE_SPLITS.items():
+            with self.subTest(state=child):
+                self.assertEqual(builder.GENERATED_STATE_NAMES[child], split["name"])
+                self.assertTrue(split["filename"].startswith(f"{child}-"))
+
+    def test_plan_cuts_each_family_into_its_two_halves(self) -> None:
+        outputs = builder.state_split_plan()
+        sources = {
+            int(path.name.split("-", 1)[0]): data.decode("utf-8")
+            for path, data in outputs.items()
+            if path.suffix == ".txt"
+        }
+        for child, split in builder.STATE_SPLITS.items():
+            parent = split["parent"]
+            with self.subTest(state=child):
+                halves = {state_id: validator_provinces(sources[state_id]) for state_id in (parent, child)}
+                self.assertFalse(halves[parent] & halves[child])
+                self.assertTrue(set(split["provinces"]) <= halves[child])
+                self.assertIn(f"victory_points = {{ {split['centre']} 3 }}", sources[child])
+        names = next(data for path, data in outputs.items() if path.suffix == ".yml")
+        self.assertTrue(names.startswith(b"\xef\xbb\xbf"))
+        for child, split in builder.STATE_SPLITS.items():
+            self.assertIn(f' STATE_{child}: "{split["name"]}"'.encode("utf-8"), names)
+
+
+def validator_provinces(source: str) -> set[int]:
+    match = re.search(r"provinces\s*=\s*\{([^}]*)\}", source)
+    return set(map(int, re.findall(r"\d+", match.group(1))))
 
 
 if __name__ == "__main__":

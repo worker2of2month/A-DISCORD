@@ -12,9 +12,11 @@ state = {
 			industrial_complex = 1
 			arms_factory = 1
 		}
+		victory_points = { 11471 1 }
 	}
 	provinces = {
 		1794 10911 11471 16637
+		20420 20657 20658 20659 20660 20661 20662
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.0

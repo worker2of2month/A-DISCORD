@@ -25,14 +25,14 @@ class RinOathCrisisContractTests(unittest.TestCase):
     def test_integrated_validator_contract(self) -> None:
         self.assertEqual(collect_issues(), [])
 
-    def test_war_edge_producer_is_one_shot_and_releases_both_minors(self) -> None:
+    def test_war_edge_producer_is_one_shot_and_releases_the_palatinate(self) -> None:
         on_actions = read_country_on_actions(ON_ACTIONS, 'rin')
         war = named_block(on_actions, "on_war")
         self.assertIn("ADISCORD_rin_is_vorkerland_war_actor = yes", war)
         self.assertIn("ADISCORD_rin_oath_crisis_can_schedule = yes", war)
         self.assertEqual(war.count("ADISCORD_rin_crisis.1 days = 7"), 1)
         self.assertEqual(
-            war.count("ADISCORD_release_non_participating_minor_optimization = yes"), 2
+            war.count("ADISCORD_release_non_participating_minor_optimization = yes"), 1
         )
         event_position = war.find("ADISCORD_rin_crisis.1 days = 7")
         for match in re.finditer(
@@ -134,7 +134,7 @@ class RinOathCrisisContractTests(unittest.TestCase):
 
     def test_northern_court_uses_authored_chauvinist_leader(self) -> None:
         regency = named_block(read(CHARACTERS), "RIN_Northern_Court_Regency")
-        self.assertIn("GFX_Portrait_Forul_Generic_9", regency)
+        self.assertIn("GFX_portrait_RIN_Northern_Court_Regency", regency)
         self.assertNotIn("country_leader =", regency)
         self.assertEqual(
             read(RIN_HISTORY).count("recruit_character = RIN_Northern_Court_Regency"),

@@ -6,7 +6,8 @@ state = {
 	history = {
 		owner = TRU
 		add_core_of = TRU
-		victory_points = { 8803 3 }
+		victory_points = { 8803 2 }
+		victory_points = { 5309 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -16,6 +17,7 @@ state = {
 	provinces = {
 		1853 2159 2200 2490 2501 3031 5309 7483 8803 9929 9985 11384
 		12019 12832 12847
+		20443 20755 20756 20757 20758
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.0

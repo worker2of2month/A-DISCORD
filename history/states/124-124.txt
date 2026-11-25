@@ -2,7 +2,8 @@ state={
 	id=124
 	name="STATE_124"
 	provinces={
-		592 3848 4143 4911 8315 9225 9460 9948 12763 16579 16604 16607 16609 16610 
+		592 3848 4143 4911 8315 9225 9460 9948 12763 16579 16604 16607 16609 16610
+		20384 20534 20535 20536 20537 20538
 	}
 	manpower = 650000
 	buildings_max_level_factor = 1.000
@@ -11,7 +12,8 @@ state={
 	history={
 		owner=EGC
 		add_core_of=EGC
-		victory_points = { 16579 3 }
+		victory_points = { 16579 2 }
+		victory_points = { 4143 1 }
 
 		buildings = {
 			arms_factory = 1

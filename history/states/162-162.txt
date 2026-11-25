@@ -8,6 +8,8 @@ state = {
 		owner = WCG
 		add_core_of = WCG
 		add_core_of = KRM
+		victory_points = { 855 3 }
+		victory_points = { 11283 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -15,7 +17,7 @@ state = {
 		}
 	}
 	provinces = {
-		476 855 3809 4677 6515 7287 8658 8695 11283
+		476 855 3809 4677 6515 7287 8658 8695 11283 20460 20461 20768 20769 20770
 	}
 	resources = {
 		coal = 3

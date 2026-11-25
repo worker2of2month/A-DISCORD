@@ -15,6 +15,7 @@ from pathlib import Path
 from PIL import Image
 from tools.builders.build_adiscord_ivn_geography import IIA_STATE_IDS as ISLAND_ADMINISTRATION_STATE_IDS
 from tools.builders.build_adiscord_new_states import ISLAND_DISTRICTS, NAM_ARCHIPELAGO_ISLANDS
+from tools.lib.adiscord_planned_geography import east_stages
 from tools.lib.paths import repository_root
 
 
@@ -429,7 +430,7 @@ BASE_REGIONS = (
         "northern-march",
         "Северная марка",
         "cool_maritime",
-        (89, 127, 128, 129, 130, 131, 132, 164, 693, 694, 715),
+        (89, 127, 128, 129, 130, 131, 132, 164, 693, 694, 715, 739),
     ),
     Region(
         7,
@@ -450,7 +451,7 @@ BASE_REGIONS = (
         "western-lowlands",
         "Западные равнины",
         "temperate_continental",
-        (26, 71, 90, 91, 93, 94, 103, 194, 202, 328),
+        (26, 71, 90, 91, 93, 94, 103, 194, 202, 328, 734, 735),
     ),
     Region(248, "lakora-coast", "Лакорское побережье", "temperate_wet", (96, 99, 100, 101)),
     Region(
@@ -486,14 +487,14 @@ BASE_REGIONS = (
         "frealor-marshes",
         "Фреалорские топи",
         "temperate_wet",
-        (73, 144, 145, 319, 321),
+        (73, 144, 145, 319, 321, 736),
     ),
     Region(
         11,
         "zlatoriver",
         "Златоречье",
         "temperate_wet",
-        (80, 199, 315, 316, 317, 318),
+        (80, 199, 315, 316, 317, 318, 737, 738),
     ),
     Region(
         252,
@@ -1879,17 +1880,31 @@ def sea_minimum_snow_level(climate: str, month: int) -> float:
     return 0.0
 
 
-# A carved Montar city keeps its parent's id, so only the remainders and
-# districts are new. They count as the parent for weather samples and for the
-# state weights and centres of region grouping; adjacency keeps them, because
-# the state's pixels are unchanged.
-MON_PLANNED_PARENT = {
-    entry["province"]: entry["parent"]
-    for entry in json.loads((ROOT / "tools/data/adiscord_mon_geography.json").read_bytes())["planned"]["provinces"]
-}
-# Region grouping flips on sub-pixel shifts of state centres. Carving moves
-# slot 0 of the Montar cities and donors while every state keeps its pixels,
-# so these states keep their centres measured on the uncarved map.
+EAST_GEOGRAPHY = json.loads((ROOT / "tools/data/adiscord_mon_geography.json").read_bytes())
+
+
+# A carved eastern city keeps its parent's id, so only remainders, districts,
+# towns and split parts are new. Each counts as the original province it was
+# cut from (a part cut from a planned remainder follows that remainder's
+# parent) for weather samples and for the state weights and centres of region
+# grouping; adjacency keeps them, because every state keeps its pixels.
+def _east_planned_parents() -> dict[int, int]:
+    entries = [entry for stage in east_stages(EAST_GEOGRAPHY) for entry in stage.get("provinces", ())]
+    parents = {int(entry["province"]): int(entry["parent"]) for entry in entries}
+    roots = {}
+    for province in parents:
+        root = parents[province]
+        while root in parents:
+            root = parents[root]
+        roots[province] = root
+    return roots
+
+
+MON_PLANNED_PARENT = _east_planned_parents()
+# Region grouping flips on sub-pixel shifts of state centres. Carving and
+# splitting move slot 0 inside the eastern states while every state keeps its
+# pixels, so these states keep their centres measured on the uncarved map.
+# From Stage 3 on the geography planner records them in its stage record.
 MON_GROUPING_CENTRES = {
     425: (3374.423076923077, 1184.6923076923076),
     438: (3358.88, 1135.72),
@@ -1911,7 +1926,54 @@ MON_GROUPING_CENTRES = {
     471: (3184.25, 968.7083333333334),
     472: (3358.8, 929.6666666666666),
     473: (3302.1923076923076, 928.1153846153846),
+    89: (2928.769230769231, 1034.8461538461538),
+    126: (2893.1875, 963.9375),
+    133: (3072.277777777778, 919.5),
+    134: (3118.681818181818, 938.5),
+    135: (2972.909090909091, 924.7272727272727),
+    136: (3009.5, 933.8333333333334),
+    137: (3039.3333333333335, 940.6666666666666),
+    138: (2999.8888888888887, 966.8888888888889),
+    139: (2958.777777777778, 942.1111111111111),
+    140: (2925.8888888888887, 955.2222222222222),
+    141: (2972.3846153846152, 985.7692307692307),
+    142: (2971.75, 1023.5),
+    143: (2946.875, 977.0),
+    147: (3169.4166666666665, 923.75),
+    148: (3207.8333333333335, 925.9166666666666),
+    149: (3243.9166666666665, 930.0833333333334),
+    409: (3473.1739130434785, 1248.7391304347825),
+    410: (3545.7619047619046, 1243.7142857142858),
+    414: (3272.090909090909, 1227.9545454545455),
+    416: (3383.4736842105262, 1224.842105263158),
+    417: (3312.96, 1221.04),
+    418: (3209.8260869565215, 1212.0869565217392),
+    419: (3611.4285714285716, 1196.5714285714287),
+    421: (3149.0833333333335, 1191.375),
+    423: (3558.185185185185, 1188.1851851851852),
+    426: (3464.1111111111113, 1184.6296296296296),
+    428: (3249.785714285714, 1178.1785714285713),
+    429: (3505.25, 1170.7142857142858),
+    431: (3636.6190476190477, 1169.8095238095239),
+    434: (3173.3333333333335, 1145.75),
+    436: (3441.769230769231, 1143.423076923077),
+    440: (3119.28, 1130.72),
+    443: (3549.3928571428573, 1127.1785714285713),
+    450: (3056.6296296296296, 1093.0),
+    451: (3011.8333333333335, 1085.611111111111),
+    454: (3540.5185185185187, 1082.3333333333333),
+    455: (3472.6, 1091.7333333333333),
+    458: (3116.2083333333335, 1061.2083333333333),
+    463: (3071.8076923076924, 1022.8076923076923),
+    465: (3021.9615384615386, 1010.2692307692307),
 }
+MON_GROUPING_CENTRES.update(
+    {
+        int(state_id): (float(x), float(z))
+        for stage in EAST_GEOGRAPHY.get("stages", ())
+        for state_id, (x, z) in stage.get("grouping_centres", {}).items()
+    }
+)
 # Weather envelopes use one geographic sample per original province. Splitting
 # a tactical district must not increase the weight of its latitude.
 DISTRICT_PARENT = {

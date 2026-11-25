@@ -2,7 +2,8 @@ state={
 	id=123
 	name="STATE_123"
 	provinces={
-		3823 16558 16576 16602 16627 
+		3823 16558 16576 16602 16627
+		20395 20597 20598
 	}
 	manpower = 2400000
 	buildings_max_level_factor = 1.000
@@ -12,6 +13,7 @@ state={
 		owner=YOR
 		add_core_of=YOR
 		victory_points = { 16576 5 }
+		victory_points = { 16602 1 }
 
 		buildings = {
 			arms_factory = 2

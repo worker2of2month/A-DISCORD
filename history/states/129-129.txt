@@ -4,6 +4,7 @@ state={
 	name="STATE_129"
 	provinces={
 		1971 2058 2805 3131 9100 12160
+		20301 20332 20333 20334
 	}
 	manpower = 550000
 	buildings_max_level_factor = 1.000
@@ -13,6 +14,7 @@ state={
 		owner = IVN
 		add_core_of = IVN
 		victory_points = { 1971 1 }
+		victory_points = { 20301 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1

@@ -6718,6 +6718,10 @@ RUS_ba_vorkerland_resolve_defeat = {
 		event_target:ADISCORD_vorkerland_nation = { transfer_state = 80 }
 	}
 	if = {
+		limit = { 737 = { is_owned_by = RUS } }
+		event_target:ADISCORD_vorkerland_nation = { transfer_state = 737 }
+	}
+	if = {
 		limit = { 146 = { is_owned_by = RUS } }
 		event_target:ADISCORD_vorkerland_nation = { transfer_state = 146 }
 	}
@@ -6728,6 +6732,10 @@ RUS_ba_vorkerland_resolve_defeat = {
 	if = {
 		limit = { 199 = { is_owned_by = RUS } }
 		event_target:ADISCORD_vorkerland_nation = { transfer_state = 199 }
+	}
+	if = {
+		limit = { 738 = { is_owned_by = RUS } }
+		event_target:ADISCORD_vorkerland_nation = { transfer_state = 738 }
 	}
 	if = {
 		limit = { 315 = { is_owned_by = RUS } }

@@ -3,6 +3,7 @@ state={
 	name="STATE_93"
 	provinces={
 		1296 3729 4706 4858 6245 8611
+		20408 20409
 	}
 	manpower = 500000
 	state_category = rural
@@ -16,6 +17,7 @@ state={
 			industrial_complex = 1
 			infrastructure = 2
 		}
-		victory_points = { 3729 1 }
+		victory_points = { 3729 3 }
+		victory_points = { 1296 1 }
 	}
 }

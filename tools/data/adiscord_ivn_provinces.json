@@ -679,7 +679,7 @@
     {
       "province": 19005,
       "parent": 2219,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         82,
@@ -690,7 +690,7 @@
     {
       "province": 19006,
       "parent": 2219,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         121,
@@ -701,7 +701,7 @@
     {
       "province": 19007,
       "parent": 2991,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         191,
@@ -712,7 +712,7 @@
     {
       "province": 19008,
       "parent": 2991,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         115,
@@ -723,7 +723,7 @@
     {
       "province": 19009,
       "parent": 2991,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         122,
@@ -734,7 +734,7 @@
     {
       "province": 19010,
       "parent": 2991,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         183,
@@ -745,7 +745,7 @@
     {
       "province": 19011,
       "parent": 2991,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         218,
@@ -756,7 +756,7 @@
     {
       "province": 19012,
       "parent": 4334,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         89,
@@ -767,7 +767,7 @@
     {
       "province": 19013,
       "parent": 4334,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         184,
@@ -778,7 +778,7 @@
     {
       "province": 19014,
       "parent": 6928,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         50,
@@ -789,7 +789,7 @@
     {
       "province": 19015,
       "parent": 6928,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         51,
@@ -800,7 +800,7 @@
     {
       "province": 19016,
       "parent": 6928,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         125,
@@ -811,7 +811,7 @@
     {
       "province": 19017,
       "parent": 6928,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         83,
@@ -866,7 +866,7 @@
     {
       "province": 19022,
       "parent": 8048,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         86,
@@ -877,7 +877,7 @@
     {
       "province": 19023,
       "parent": 8048,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         179,
@@ -888,7 +888,7 @@
     {
       "province": 19024,
       "parent": 8048,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         255,
@@ -899,7 +899,7 @@
     {
       "province": 19025,
       "parent": 8048,
-      "state": 693,
+      "state": 739,
       "kind": "split",
       "rgb": [
         120,
@@ -1090,5 +1090,1239 @@
     "12054": 16830,
     "12076": 16831,
     "16568": 16568
+  },
+  "stage2": {
+    "origin": [
+      2655,
+      856
+    ],
+    "sheet_row": 477,
+    "first_id": 20289,
+    "provinces": [
+      {
+        "province": 20289,
+        "parent": 8615,
+        "state": 713,
+        "kind": "remainder",
+        "rgb": [
+          216,
+          20,
+          159
+        ]
+      },
+      {
+        "province": 20290,
+        "parent": 694,
+        "state": 25,
+        "kind": "town",
+        "rgb": [
+          127,
+          145,
+          82
+        ]
+      },
+      {
+        "province": 20291,
+        "parent": 11480,
+        "state": 92,
+        "kind": "town",
+        "rgb": [
+          185,
+          149,
+          242
+        ]
+      },
+      {
+        "province": 20292,
+        "parent": 6020,
+        "state": 95,
+        "kind": "town",
+        "rgb": [
+          145,
+          122,
+          121
+        ]
+      },
+      {
+        "province": 20293,
+        "parent": 9183,
+        "state": 96,
+        "kind": "town",
+        "rgb": [
+          84,
+          50,
+          216
+        ]
+      },
+      {
+        "province": 20294,
+        "parent": 3182,
+        "state": 97,
+        "kind": "town",
+        "rgb": [
+          182,
+          25,
+          56
+        ]
+      },
+      {
+        "province": 20295,
+        "parent": 9174,
+        "state": 98,
+        "kind": "town",
+        "rgb": [
+          24,
+          22,
+          151
+        ]
+      },
+      {
+        "province": 20296,
+        "parent": 11458,
+        "state": 99,
+        "kind": "town",
+        "rgb": [
+          125,
+          153,
+          159
+        ]
+      },
+      {
+        "province": 20297,
+        "parent": 4567,
+        "state": 100,
+        "kind": "town",
+        "rgb": [
+          51,
+          149,
+          125
+        ]
+      },
+      {
+        "province": 20298,
+        "parent": 10000,
+        "state": 101,
+        "kind": "town",
+        "rgb": [
+          58,
+          54,
+          117
+        ]
+      },
+      {
+        "province": 20299,
+        "parent": 8345,
+        "state": 127,
+        "kind": "town",
+        "rgb": [
+          245,
+          81,
+          27
+        ]
+      },
+      {
+        "province": 20300,
+        "parent": 579,
+        "state": 128,
+        "kind": "town",
+        "rgb": [
+          251,
+          144,
+          60
+        ]
+      },
+      {
+        "province": 20301,
+        "parent": 12160,
+        "state": 129,
+        "kind": "town",
+        "rgb": [
+          153,
+          251,
+          153
+        ]
+      },
+      {
+        "province": 20302,
+        "parent": 9862,
+        "state": 130,
+        "kind": "town",
+        "rgb": [
+          250,
+          26,
+          215
+        ]
+      },
+      {
+        "province": 20303,
+        "parent": 8458,
+        "state": 131,
+        "kind": "town",
+        "rgb": [
+          21,
+          152,
+          55
+        ]
+      },
+      {
+        "province": 20304,
+        "parent": 3630,
+        "state": 132,
+        "kind": "town",
+        "rgb": [
+          61,
+          150,
+          62
+        ]
+      },
+      {
+        "province": 20305,
+        "parent": 9685,
+        "state": 164,
+        "kind": "town",
+        "rgb": [
+          218,
+          59,
+          121
+        ]
+      },
+      {
+        "province": 20306,
+        "parent": 19035,
+        "state": 693,
+        "kind": "town",
+        "rgb": [
+          191,
+          48,
+          62
+        ]
+      },
+      {
+        "province": 20307,
+        "parent": 19031,
+        "state": 694,
+        "kind": "town",
+        "rgb": [
+          16,
+          95,
+          18
+        ]
+      },
+      {
+        "province": 20308,
+        "parent": 5016,
+        "state": 695,
+        "kind": "town",
+        "rgb": [
+          50,
+          215,
+          218
+        ]
+      },
+      {
+        "province": 20309,
+        "parent": 3847,
+        "state": 696,
+        "kind": "town",
+        "rgb": [
+          121,
+          125,
+          123
+        ]
+      },
+      {
+        "province": 20310,
+        "parent": 1429,
+        "state": 697,
+        "kind": "town",
+        "rgb": [
+          184,
+          159,
+          24
+        ]
+      },
+      {
+        "province": 20311,
+        "parent": 3648,
+        "state": 698,
+        "kind": "town",
+        "rgb": [
+          93,
+          244,
+          180
+        ]
+      },
+      {
+        "province": 20312,
+        "parent": 5540,
+        "state": 713,
+        "kind": "town",
+        "rgb": [
+          119,
+          148,
+          116
+        ]
+      },
+      {
+        "province": 20313,
+        "parent": 16838,
+        "state": 714,
+        "kind": "town",
+        "rgb": [
+          81,
+          85,
+          242
+        ]
+      },
+      {
+        "province": 20314,
+        "parent": 1659,
+        "state": 715,
+        "kind": "town",
+        "rgb": [
+          29,
+          86,
+          221
+        ]
+      },
+      {
+        "province": 20315,
+        "parent": 2736,
+        "state": 716,
+        "kind": "town",
+        "rgb": [
+          252,
+          190,
+          208
+        ]
+      },
+      {
+        "province": 20316,
+        "parent": 1385,
+        "state": 717,
+        "kind": "town",
+        "rgb": [
+          190,
+          155,
+          249
+        ]
+      },
+      {
+        "province": 20317,
+        "parent": 694,
+        "state": 25,
+        "kind": "part",
+        "rgb": [
+          126,
+          49,
+          144
+        ]
+      },
+      {
+        "province": 20318,
+        "parent": 694,
+        "state": 25,
+        "kind": "part",
+        "rgb": [
+          121,
+          158,
+          149
+        ]
+      },
+      {
+        "province": 20319,
+        "parent": 4576,
+        "state": 95,
+        "kind": "part",
+        "rgb": [
+          81,
+          57,
+          27
+        ]
+      },
+      {
+        "province": 20320,
+        "parent": 1421,
+        "state": 96,
+        "kind": "part",
+        "rgb": [
+          63,
+          60,
+          208
+        ]
+      },
+      {
+        "province": 20321,
+        "parent": 7453,
+        "state": 96,
+        "kind": "part",
+        "rgb": [
+          124,
+          84,
+          247
+        ]
+      },
+      {
+        "province": 20322,
+        "parent": 7453,
+        "state": 96,
+        "kind": "part",
+        "rgb": [
+          222,
+          214,
+          61
+        ]
+      },
+      {
+        "province": 20323,
+        "parent": 11554,
+        "state": 98,
+        "kind": "part",
+        "rgb": [
+          149,
+          56,
+          54
+        ]
+      },
+      {
+        "province": 20324,
+        "parent": 1697,
+        "state": 127,
+        "kind": "part",
+        "rgb": [
+          245,
+          255,
+          54
+        ]
+      },
+      {
+        "province": 20325,
+        "parent": 1697,
+        "state": 127,
+        "kind": "part",
+        "rgb": [
+          182,
+          21,
+          218
+        ]
+      },
+      {
+        "province": 20326,
+        "parent": 2752,
+        "state": 127,
+        "kind": "part",
+        "rgb": [
+          91,
+          244,
+          144
+        ]
+      },
+      {
+        "province": 20327,
+        "parent": 7603,
+        "state": 127,
+        "kind": "part",
+        "rgb": [
+          241,
+          253,
+          28
+        ]
+      },
+      {
+        "province": 20328,
+        "parent": 8345,
+        "state": 127,
+        "kind": "part",
+        "rgb": [
+          48,
+          127,
+          219
+        ]
+      },
+      {
+        "province": 20329,
+        "parent": 8345,
+        "state": 127,
+        "kind": "part",
+        "rgb": [
+          118,
+          216,
+          222
+        ]
+      },
+      {
+        "province": 20330,
+        "parent": 12463,
+        "state": 127,
+        "kind": "part",
+        "rgb": [
+          125,
+          152,
+          89
+        ]
+      },
+      {
+        "province": 20331,
+        "parent": 12463,
+        "state": 127,
+        "kind": "part",
+        "rgb": [
+          86,
+          82,
+          157
+        ]
+      },
+      {
+        "province": 20332,
+        "parent": 2058,
+        "state": 129,
+        "kind": "part",
+        "rgb": [
+          90,
+          61,
+          221
+        ]
+      },
+      {
+        "province": 20333,
+        "parent": 12160,
+        "state": 129,
+        "kind": "part",
+        "rgb": [
+          92,
+          21,
+          55
+        ]
+      },
+      {
+        "province": 20334,
+        "parent": 12160,
+        "state": 129,
+        "kind": "part",
+        "rgb": [
+          178,
+          188,
+          249
+        ]
+      },
+      {
+        "province": 20335,
+        "parent": 9657,
+        "state": 130,
+        "kind": "part",
+        "rgb": [
+          93,
+          55,
+          92
+        ]
+      },
+      {
+        "province": 20336,
+        "parent": 9657,
+        "state": 130,
+        "kind": "part",
+        "rgb": [
+          114,
+          176,
+          221
+        ]
+      },
+      {
+        "province": 20337,
+        "parent": 3915,
+        "state": 131,
+        "kind": "part",
+        "rgb": [
+          49,
+          52,
+          246
+        ]
+      },
+      {
+        "province": 20338,
+        "parent": 8458,
+        "state": 131,
+        "kind": "part",
+        "rgb": [
+          82,
+          214,
+          209
+        ]
+      },
+      {
+        "province": 20339,
+        "parent": 8458,
+        "state": 131,
+        "kind": "part",
+        "rgb": [
+          114,
+          217,
+          253
+        ]
+      },
+      {
+        "province": 20340,
+        "parent": 12895,
+        "state": 131,
+        "kind": "part",
+        "rgb": [
+          116,
+          82,
+          122
+        ]
+      },
+      {
+        "province": 20341,
+        "parent": 12895,
+        "state": 131,
+        "kind": "part",
+        "rgb": [
+          24,
+          115,
+          51
+        ]
+      },
+      {
+        "province": 20342,
+        "parent": 4061,
+        "state": 132,
+        "kind": "part",
+        "rgb": [
+          87,
+          54,
+          250
+        ]
+      },
+      {
+        "province": 20343,
+        "parent": 4061,
+        "state": 132,
+        "kind": "part",
+        "rgb": [
+          16,
+          147,
+          240
+        ]
+      },
+      {
+        "province": 20344,
+        "parent": 9685,
+        "state": 164,
+        "kind": "part",
+        "rgb": [
+          58,
+          17,
+          149
+        ]
+      },
+      {
+        "province": 20345,
+        "parent": 6928,
+        "state": 739,
+        "kind": "part",
+        "rgb": [
+          221,
+          127,
+          146
+        ]
+      },
+      {
+        "province": 20346,
+        "parent": 6928,
+        "state": 739,
+        "kind": "part",
+        "rgb": [
+          30,
+          183,
+          117
+        ]
+      },
+      {
+        "province": 20347,
+        "parent": 7678,
+        "state": 693,
+        "kind": "part",
+        "rgb": [
+          116,
+          191,
+          84
+        ]
+      },
+      {
+        "province": 20348,
+        "parent": 7678,
+        "state": 693,
+        "kind": "part",
+        "rgb": [
+          125,
+          19,
+          181
+        ]
+      },
+      {
+        "province": 20349,
+        "parent": 16680,
+        "state": 693,
+        "kind": "part",
+        "rgb": [
+          27,
+          20,
+          147
+        ]
+      },
+      {
+        "province": 20350,
+        "parent": 16680,
+        "state": 693,
+        "kind": "part",
+        "rgb": [
+          246,
+          123,
+          222
+        ]
+      },
+      {
+        "province": 20351,
+        "parent": 19015,
+        "state": 739,
+        "kind": "part",
+        "rgb": [
+          183,
+          115,
+          53
+        ]
+      },
+      {
+        "province": 20352,
+        "parent": 16681,
+        "state": 694,
+        "kind": "part",
+        "rgb": [
+          188,
+          250,
+          120
+        ]
+      },
+      {
+        "province": 20353,
+        "parent": 16681,
+        "state": 694,
+        "kind": "part",
+        "rgb": [
+          80,
+          116,
+          184
+        ]
+      },
+      {
+        "province": 20354,
+        "parent": 16686,
+        "state": 694,
+        "kind": "part",
+        "rgb": [
+          123,
+          18,
+          116
+        ]
+      },
+      {
+        "province": 20355,
+        "parent": 16686,
+        "state": 694,
+        "kind": "part",
+        "rgb": [
+          243,
+          176,
+          155
+        ]
+      },
+      {
+        "province": 20356,
+        "parent": 3541,
+        "state": 695,
+        "kind": "part",
+        "rgb": [
+          220,
+          63,
+          22
+        ]
+      },
+      {
+        "province": 20357,
+        "parent": 1304,
+        "state": 696,
+        "kind": "part",
+        "rgb": [
+          179,
+          17,
+          254
+        ]
+      },
+      {
+        "province": 20358,
+        "parent": 5573,
+        "state": 696,
+        "kind": "part",
+        "rgb": [
+          240,
+          122,
+          27
+        ]
+      },
+      {
+        "province": 20359,
+        "parent": 5273,
+        "state": 697,
+        "kind": "part",
+        "rgb": [
+          90,
+          27,
+          28
+        ]
+      },
+      {
+        "province": 20360,
+        "parent": 5273,
+        "state": 697,
+        "kind": "part",
+        "rgb": [
+          187,
+          117,
+          190
+        ]
+      },
+      {
+        "province": 20361,
+        "parent": 3017,
+        "state": 698,
+        "kind": "part",
+        "rgb": [
+          189,
+          126,
+          28
+        ]
+      },
+      {
+        "province": 20362,
+        "parent": 3017,
+        "state": 698,
+        "kind": "part",
+        "rgb": [
+          176,
+          216,
+          93
+        ]
+      },
+      {
+        "province": 20363,
+        "parent": 3302,
+        "state": 698,
+        "kind": "part",
+        "rgb": [
+          123,
+          125,
+          212
+        ]
+      },
+      {
+        "province": 20364,
+        "parent": 3302,
+        "state": 698,
+        "kind": "part",
+        "rgb": [
+          113,
+          217,
+          126
+        ]
+      },
+      {
+        "province": 20365,
+        "parent": 9611,
+        "state": 698,
+        "kind": "part",
+        "rgb": [
+          183,
+          185,
+          48
+        ]
+      },
+      {
+        "province": 20366,
+        "parent": 5611,
+        "state": 714,
+        "kind": "part",
+        "rgb": [
+          62,
+          90,
+          53
+        ]
+      },
+      {
+        "province": 20367,
+        "parent": 5611,
+        "state": 714,
+        "kind": "part",
+        "rgb": [
+          28,
+          158,
+          181
+        ]
+      },
+      {
+        "province": 20368,
+        "parent": 12410,
+        "state": 714,
+        "kind": "part",
+        "rgb": [
+          81,
+          189,
+          90
+        ]
+      },
+      {
+        "province": 20369,
+        "parent": 12410,
+        "state": 714,
+        "kind": "part",
+        "rgb": [
+          16,
+          117,
+          53
+        ]
+      },
+      {
+        "province": 20370,
+        "parent": 1659,
+        "state": 715,
+        "kind": "part",
+        "rgb": [
+          147,
+          212,
+          50
+        ]
+      },
+      {
+        "province": 20371,
+        "parent": 1659,
+        "state": 715,
+        "kind": "part",
+        "rgb": [
+          25,
+          29,
+          116
+        ]
+      },
+      {
+        "province": 20372,
+        "parent": 1681,
+        "state": 715,
+        "kind": "part",
+        "rgb": [
+          216,
+          214,
+          86
+        ]
+      },
+      {
+        "province": 20373,
+        "parent": 1681,
+        "state": 715,
+        "kind": "part",
+        "rgb": [
+          51,
+          152,
+          221
+        ]
+      }
+    ],
+    "cities": {
+      "8615": 8615
+    },
+    "towns": {
+      "579": 20300,
+      "694": 20290,
+      "1385": 20316,
+      "1429": 20310,
+      "1659": 20314,
+      "2736": 20315,
+      "3182": 20294,
+      "3630": 20304,
+      "3648": 20311,
+      "3847": 20309,
+      "4567": 20297,
+      "5016": 20308,
+      "5540": 20312,
+      "6020": 20292,
+      "8345": 20299,
+      "8458": 20303,
+      "9174": 20295,
+      "9183": 20293,
+      "9685": 20305,
+      "9862": 20302,
+      "10000": 20298,
+      "11458": 20296,
+      "11480": 20291,
+      "12160": 20301,
+      "16838": 20313,
+      "19031": 20307,
+      "19035": 20306
+    },
+    "settlements": [
+      {
+        "state": 713,
+        "kind": "city",
+        "province": 8615,
+        "parent": 8615,
+        "value": 3,
+        "name": "Пущанск",
+        "name_en": "Pushchansk"
+      },
+      {
+        "state": 25,
+        "kind": "town",
+        "province": 20290,
+        "parent": 694,
+        "value": 2,
+        "name": "Марьин Брод",
+        "name_en": "Maryin Brod"
+      },
+      {
+        "state": 92,
+        "kind": "town",
+        "province": 20291,
+        "parent": 11480,
+        "value": 1,
+        "name": "Серенжский Перевоз",
+        "name_en": "Serenga Ferry"
+      },
+      {
+        "state": 95,
+        "kind": "town",
+        "province": 20292,
+        "parent": 6020,
+        "value": 1,
+        "name": "Ведринка",
+        "name_en": "Vedrinka"
+      },
+      {
+        "state": 96,
+        "kind": "town",
+        "province": 20293,
+        "parent": 9183,
+        "value": 1,
+        "name": "Таларские Мельницы",
+        "name_en": "Talara Mills"
+      },
+      {
+        "state": 97,
+        "kind": "town",
+        "province": 20294,
+        "parent": 3182,
+        "value": 1,
+        "name": "Нижняя Кантория",
+        "name_en": "Lower Kantoriya"
+      },
+      {
+        "state": 98,
+        "kind": "town",
+        "province": 20295,
+        "parent": 9174,
+        "value": 2,
+        "name": "Малая Моресса",
+        "name_en": "Little Moressa"
+      },
+      {
+        "state": 99,
+        "kind": "town",
+        "province": 20296,
+        "parent": 11458,
+        "value": 2,
+        "name": "Лакорский Брод",
+        "name_en": "Lakora Ford"
+      },
+      {
+        "state": 100,
+        "kind": "town",
+        "province": 20297,
+        "parent": 4567,
+        "value": 2,
+        "name": "Ильванка",
+        "name_en": "Ilvanka"
+      },
+      {
+        "state": 101,
+        "kind": "town",
+        "province": 20298,
+        "parent": 10000,
+        "value": 1,
+        "name": "Верхняя Ольсия",
+        "name_en": "Upper Olsiya"
+      },
+      {
+        "state": 127,
+        "kind": "town",
+        "province": 20299,
+        "parent": 8345,
+        "value": 1,
+        "name": "Северомарск",
+        "name_en": "Severomarsk"
+      },
+      {
+        "state": 128,
+        "kind": "town",
+        "province": 20300,
+        "parent": 579,
+        "value": 1,
+        "name": "Фьельстад",
+        "name_en": "Fjelstad"
+      },
+      {
+        "state": 129,
+        "kind": "town",
+        "province": 20301,
+        "parent": 12160,
+        "value": 1,
+        "name": "Кордонная Слобода",
+        "name_en": "Cordon Sloboda"
+      },
+      {
+        "state": 130,
+        "kind": "town",
+        "province": 20302,
+        "parent": 9862,
+        "value": 1,
+        "name": "Сторожевое",
+        "name_en": "Storozhevoye"
+      },
+      {
+        "state": 131,
+        "kind": "town",
+        "province": 20303,
+        "parent": 8458,
+        "value": 1,
+        "name": "Ямщиково",
+        "name_en": "Yamshchikovo"
+      },
+      {
+        "state": 132,
+        "kind": "town",
+        "province": 20304,
+        "parent": 3630,
+        "value": 1,
+        "name": "Закатное",
+        "name_en": "Zakatnoye"
+      },
+      {
+        "state": 164,
+        "kind": "town",
+        "province": 20305,
+        "parent": 9685,
+        "value": 1,
+        "name": "Восходное",
+        "name_en": "Voskhodnoye"
+      },
+      {
+        "state": 693,
+        "kind": "town",
+        "province": 20306,
+        "parent": 19035,
+        "value": 2,
+        "name": "Рейдальсвик",
+        "name_en": "Reydalsvik"
+      },
+      {
+        "state": 694,
+        "kind": "town",
+        "province": 20307,
+        "parent": 19031,
+        "value": 1,
+        "name": "Кайрстранд",
+        "name_en": "Kairstrand"
+      },
+      {
+        "state": 695,
+        "kind": "town",
+        "province": 20308,
+        "parent": 5016,
+        "value": 1,
+        "name": "Истоково",
+        "name_en": "Istokovo"
+      },
+      {
+        "state": 696,
+        "kind": "town",
+        "province": 20309,
+        "parent": 3847,
+        "value": 1,
+        "name": "Восточномарск",
+        "name_en": "Vostochnomarsk"
+      },
+      {
+        "state": 697,
+        "kind": "town",
+        "province": 20310,
+        "parent": 1429,
+        "value": 1,
+        "name": "Порубежное",
+        "name_en": "Porubezhnoye"
+      },
+      {
+        "state": 698,
+        "kind": "town",
+        "province": 20311,
+        "parent": 3648,
+        "value": 1,
+        "name": "Полуденное",
+        "name_en": "Poludennoye"
+      },
+      {
+        "state": 713,
+        "kind": "town",
+        "province": 20312,
+        "parent": 5540,
+        "value": 1,
+        "name": "Боровое",
+        "name_en": "Borovoye"
+      },
+      {
+        "state": 714,
+        "kind": "town",
+        "province": 20313,
+        "parent": 16838,
+        "value": 1,
+        "name": "Дюнное",
+        "name_en": "Dyunnoye"
+      },
+      {
+        "state": 715,
+        "kind": "town",
+        "province": 20314,
+        "parent": 1659,
+        "value": 1,
+        "name": "Причальное",
+        "name_en": "Prichalnoye"
+      },
+      {
+        "state": 716,
+        "kind": "town",
+        "province": 20315,
+        "parent": 2736,
+        "value": 1,
+        "name": "Межмарье",
+        "name_en": "Mezhmarye"
+      },
+      {
+        "state": 717,
+        "kind": "town",
+        "province": 20316,
+        "parent": 1385,
+        "value": 1,
+        "name": "Клюквенное",
+        "name_en": "Klyukvennoye"
+      }
+    ],
+    "irregular_parts": [
+      20334
+    ]
   }
 }

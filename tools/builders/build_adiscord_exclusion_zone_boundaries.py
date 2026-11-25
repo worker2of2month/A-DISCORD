@@ -21,7 +21,8 @@ from tools.builders.build_adiscord_northern_countries import (
     format_provinces,
     load_definition,
     load_mon_geography,
-    mon_planned_provinces,
+    mon_planned_entries,
+    mon_planned_roots,
 )
 from tools.builders.build_adiscord_new_states import (
     DIRTY_ZONE_VICTORY_POINTS,
@@ -136,13 +137,37 @@ def load_source() -> dict[int, set[int]]:
         int(state_id): set(provinces)
         for state_id, provinces in payload["states"].items()
     }
-    # Provinces carved from MON parents postdate the snapshot. They join the
-    # snapshot entry of their MON state, so the snapshot itself stays frozen.
     _colors, details = load_definition()
-    for state_id, provinces in mon_planned_provinces(load_mon_geography(), details).items():
-        if state_id in states:
-            states[state_id].update(provinces)
+    entries = mon_planned_entries(load_mon_geography(), details)
+    for state_id, provinces in snapshot_children(states, entries).items():
+        states[state_id].update(provinces)
     return states
+
+
+def snapshot_children(
+    snapshot: dict[int, set[int]], entries: tuple[dict[str, object], ...]
+) -> dict[int, set[int]]:
+    """Place the planned provinces of the eastern geography in the snapshot.
+
+    They postdate the snapshot, which itself stays frozen. Each joins the
+    snapshot state of the original province it was cut from, so it follows that
+    province through the realignment (state 461 hands its 1472 component to
+    460); a province cut from land outside the snapshot joins the snapshot
+    entry of its own state, if any.
+    """
+    snapshot_states = {
+        province_id: state_id
+        for state_id, provinces in snapshot.items()
+        for province_id in provinces
+    }
+    roots = mon_planned_roots(entries)
+    children: dict[int, set[int]] = {}
+    for entry in entries:
+        province_id = int(entry["province"])
+        state_id = snapshot_states.get(roots[province_id], int(entry["state"]))
+        if state_id in snapshot:
+            children.setdefault(state_id, set()).add(province_id)
+    return children
 
 
 def load_current_owners() -> dict[int, str]:

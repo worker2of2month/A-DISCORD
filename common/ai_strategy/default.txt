@@ -650,6 +650,7 @@ ADISCORD_leave_ally_frontlines = {
 	}
 	ai_strategy = { type = dont_defend_ally_borders id = AIN value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = APH value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = ARK value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = ARS value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = AUR value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = AZH value = 100 }
@@ -696,6 +697,7 @@ ADISCORD_leave_ally_frontlines = {
 	ai_strategy = { type = dont_defend_ally_borders id = KDL value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = KDR value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = KHV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = KLV value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = KRL value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = KRM value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = KYZ value = 100 }
@@ -742,6 +744,7 @@ ADISCORD_leave_ally_frontlines = {
 	ai_strategy = { type = dont_defend_ally_borders id = SLA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SLF value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SLI value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = SLV value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SMD value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SNG value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SOD value = 100 }
@@ -753,12 +756,14 @@ ADISCORD_leave_ally_frontlines = {
 	ai_strategy = { type = dont_defend_ally_borders id = STS value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SVL value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = SWB value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = TAL value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = TFF value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = TGD value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = TMR value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = TRU value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = TVA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = ULV value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = UVA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = VAD value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = VAL value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = VEL value = 100 }
@@ -766,6 +771,7 @@ ADISCORD_leave_ally_frontlines = {
 	ai_strategy = { type = dont_defend_ally_borders id = VHV value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = VLA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = VLD value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = VLT value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = VRA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = WCA value = 100 }
 	ai_strategy = { type = dont_defend_ally_borders id = WCG value = 100 }

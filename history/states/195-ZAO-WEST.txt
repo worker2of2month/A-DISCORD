@@ -3,6 +3,7 @@ state={
 	name=STATE_195
 	provinces={
 		647 806 1100 1111 2896 3534 4528 4634 7090 7230 8032 9075 9149 9158 9727 10606 11635 11717 12025 12995
+		20397 20398 20599
 	}
 	manpower = 800000
 	state_category = town
@@ -16,6 +17,7 @@ state={
 			infrastructure = 3
 		}
 		add_core_of=ZAO
-		victory_points = { 8032 2 }
+		victory_points = { 8032 3 }
+		victory_points = { 12995 1 }
 	}
 }

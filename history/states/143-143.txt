@@ -7,13 +7,16 @@ state = {
 	history = {
 		owner = BOR
 		add_core_of = BOR
+		victory_points = { 7878 3 }
+		victory_points = { 7571 2 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
 		}
 	}
 	provinces = {
-		1660 5525 7038 7571 7878 8400 8490 11088
+		1660 5525 7038 7571 7878 8400 8490 11088 19352 19359 19808 19809 19810 19811 19812 19813
+		19814
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.7

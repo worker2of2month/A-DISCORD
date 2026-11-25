@@ -1,5 +1,11 @@
 """Shared data for the Vorkerland collapse feature and its validator."""
 
+from __future__ import annotations
+
+from collections.abc import Iterable, Mapping
+
+from .adiscord_planned_geography import PlannedProvince, load_planned_geography, planned_roots
+
 TAGS = (
     "TVA",
     "WTD",
@@ -143,96 +149,104 @@ CAPITALS = {
     "CSL": (104, 7778),
 }
 
-STATE_PARTITIONS = {
+# Province sets of the legacy states split for the collapse, before the east
+# geography stage reaches the map; STATE_PARTITIONS adds its planned children.
+# The later state split gives 71, 194, 80 and 199 a new half each (734, 735,
+# 737, 738), which joins the same successor as the half it was cut from.
+AUTHORED_STATE_PARTITIONS = {
     71: {
         71: (
-            258,
             339,
-            623,
             672,
-            1129,
             1156,
             1514,
             1980,
-            2713,
-            3925,
             4212,
             4771,
             5154,
-            5225,
-            5508,
-            5691,
             5859,
-            5893,
-            6038,
-            6295,
             6592,
             7360,
-            7381,
-            8101,
-            8409,
             8468,
             8620,
-            8901,
             8949,
-            8988,
             9363,
             9988,
-            10324,
-            10388,
-            10734,
             11454,
-            11690,
-            11971,
-            12030,
-            12241,
-            12444,
             12473,
             12520,
-            12733,
             12801,
-            12877,
             16559,
             16561,
             16591,
         ),
         194: (
-            773,
             1128,
-            1375,
             1685,
-            1906,
             1968,
             2192,
-            2202,
             2339,
-            2363,
-            2571,
             2740,
-            3757,
             4381,
-            5469,
             6461,
             6921,
             7869,
             7989,
             8238,
             8679,
-            8869,
-            8881,
-            9269,
             9453,
             9725,
-            9908,
             9935,
             10250,
             10345,
             11082,
-            11505,
             12023,
             12103,
             12302,
             12441,
+        ),
+        734: (
+            258,
+            623,
+            1129,
+            2713,
+            3925,
+            5225,
+            5508,
+            5691,
+            5893,
+            6038,
+            6295,
+            7381,
+            8101,
+            8409,
+            8901,
+            8988,
+            10324,
+            10388,
+            10734,
+            11690,
+            11971,
+            12030,
+            12241,
+            12444,
+            12733,
+            12877,
+        ),
+        735: (
+            773,
+            1375,
+            1906,
+            2202,
+            2363,
+            2571,
+            3757,
+            5469,
+            8869,
+            8881,
+            9269,
+            9908,
+            11505,
         ),
     },
     72: {
@@ -364,69 +378,37 @@ STATE_PARTITIONS = {
     },
     80: {
         80: (
-            265,
             449,
-            686,
             860,
-            868,
             1423,
-            1426,
             1581,
             1672,
             1969,
             2914,
-            3083,
-            3567,
-            3997,
             4133,
-            4278,
-            5153,
             5358,
-            5376,
             5676,
-            6399,
             7434,
             7770,
-            7819,
             8849,
-            9464,
-            9845,
-            10034,
-            10609,
-            10624,
             10746,
             11472,
             16619,
             16633,
-            16634,
         ),
         199: (
             531,
             976,
-            1280,
             1889,
-            3345,
-            3518,
             4501,
-            5314,
-            5524,
-            5679,
-            5888,
             6456,
             6465,
             6759,
-            6820,
-            7267,
-            7942,
             9448,
             9811,
             10990,
-            11379,
-            11563,
-            11592,
             12508,
             12930,
-            16665,
             16669,
             16671,
             16674,
@@ -434,7 +416,87 @@ STATE_PARTITIONS = {
             16678,
             16690,
             16696,
+        ),
+        737: (
+            265,
+            686,
+            868,
+            1426,
+            3083,
+            3567,
+            3997,
+            4278,
+            5153,
+            5376,
+            6399,
+            7819,
+            9464,
+            9845,
+            10034,
+            10609,
+            10624,
+            16634,
+        ),
+        738: (
+            1280,
+            3345,
+            3518,
+            5314,
+            5524,
+            5679,
+            5888,
+            6820,
+            7267,
+            7942,
+            11379,
+            11563,
+            11592,
+            16665,
             16704,
         ),
     },
 }
+
+
+def partition_children(
+    partitions: Mapping[int, Mapping[int, tuple[int, ...]]],
+    planned: Iterable[PlannedProvince],
+) -> dict[int, int]:
+    """Map each planned child whose root parent is partitioned to the piece holding that root.
+
+    A parent keeps its id when it is split, so the root parent never leaves
+    its piece and the capitals stay where they are.
+    """
+    pieces = {
+        province_id: state_id
+        for partition in partitions.values()
+        for state_id, provinces in partition.items()
+        for province_id in provinces
+    }
+    return {
+        province_id: pieces[root]
+        for province_id, root in planned_roots(planned).items()
+        if root in pieces
+    }
+
+
+def with_planned_children(
+    partitions: Mapping[int, Mapping[int, tuple[int, ...]]],
+    planned: Iterable[PlannedProvince],
+) -> dict[int, dict[int, tuple[int, ...]]]:
+    children = partition_children(partitions, planned)
+    return {
+        source_state: {
+            state_id: (
+                *provinces,
+                *sorted(child for child, piece in children.items() if piece == state_id),
+            )
+            for state_id, provinces in partition.items()
+        }
+        for source_state, partition in partitions.items()
+    }
+
+
+STATE_PARTITIONS = with_planned_children(
+    AUTHORED_STATE_PARTITIONS, load_planned_geography().provinces
+)

@@ -1,0 +1,32 @@
+capital = 425
+oob = "KLV"
+
+recruit_character = KLV_Oskar_Kelvor
+
+set_politics = {
+	ruling_party = hedonism
+	elections_allowed = no
+}
+set_popularities = {
+	hedonism = 70
+	pragmatism = 30
+}
+set_stability = 0.58
+set_war_support = 0.45
+set_research_slots = 2
+add_manpower = 30000
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 12000
+	producer = KLV
+}
+add_equipment_to_stockpile = {
+	type = ADISCORD_squad_weapons_equipment
+	amount = 180
+	producer = KLV
+}
+add_equipment_to_stockpile = {
+	type = artillery_equipment
+	amount = 108
+	producer = KLV
+}

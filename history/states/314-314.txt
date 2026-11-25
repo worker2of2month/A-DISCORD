@@ -6,14 +6,16 @@ state = {
 	history = {
 		owner = VLA
 		add_core_of = VLA
-		victory_points = { 5405 1 }
+		victory_points = { 5405 3 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
 		}
+		victory_points = { 4671 1 }
 	}
 	provinces = {
 		282 827 1208 1521 1801 4361 4671 5405 9362 12161 12454
+		20422 20423 20668 20669 20670 20671 20672 20673 20674 20675 20676 20677
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.0

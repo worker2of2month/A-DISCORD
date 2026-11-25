@@ -7,6 +7,8 @@ state = {
 	history = {
 		owner = RIN
 		add_core_of = RIN
+		victory_points = { 7913 3 }
+		victory_points = { 3240 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -14,7 +16,8 @@ state = {
 		}
 	}
 	provinces = {
-		682 2347 2524 3196 3240 4837 5065 6662 7913 10161 10739 12083
+		682 2347 2524 3196 3240 4837 5065 6662 7913 10161 10739 12083 19375 19379 19861 19862
+		19863 19864 19865 19866
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.9

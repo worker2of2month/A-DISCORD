@@ -7,9 +7,8 @@ state = {
 	manpower = 895333
 	state_category = town
 	history = {
-		owner = MON
-		add_core_of = MON
-		add_core_of = VLD
+		owner = ARK
+		add_core_of = ARK
 		victory_points = { 418 4 }
 		victory_points = { 7045 1 }
 		buildings = {
@@ -20,6 +19,7 @@ state = {
 	}
 	provinces = {
 		418 1528 2111 4595 4956 5327 5909 5940 6936 7045 7477 7743 11227 11375 12926 19300
+		19319 19677 19678 19679 19680 19681 19682 19683 19684 19685 19686
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.5

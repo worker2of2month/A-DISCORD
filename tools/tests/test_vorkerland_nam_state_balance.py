@@ -1533,7 +1533,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 ):
                     owned_and_core[tag].add(int(state_match.group(1)))
 
-        iia_state_ids = {128, 693, 694}
+        iia_state_ids = {128, 693, 694, 739}
         profile_state_ids = set(builder.IVANLAND_STATE_PROFILES)
         self.assertEqual(owned_and_core["IIA"], iia_state_ids)
         self.assertEqual(owned_and_core["IVN"], profile_state_ids - iia_state_ids)

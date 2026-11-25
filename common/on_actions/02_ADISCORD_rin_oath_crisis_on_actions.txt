@@ -7,10 +7,7 @@ on_actions = {
 					ADISCORD_rin_oath_crisis_can_schedule = yes
 				}
 				set_global_flag = ADISCORD_rin_oath_crisis_scheduled
-				MON = {
-					ADISCORD_release_non_participating_minor_optimization = yes
-					country_event = { id = ADISCORD_mon_court.1 }
-				}
+				MON = { country_event = { id = ADISCORD_mon_court.1 } }
 				RIN = {
 					ADISCORD_release_non_participating_minor_optimization = yes
 					country_event = { id = ADISCORD_rin_crisis.1 days = 7 }

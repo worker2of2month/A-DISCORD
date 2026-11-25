@@ -9,6 +9,7 @@ state = {
 		add_core_of = WCG
 		add_core_of = KRM
 		victory_points = { 2240 5 }
+		victory_points = { 1500 1 }
 		buildings = {
 			infrastructure = 4
 			industrial_complex = 2
@@ -17,7 +18,8 @@ state = {
 		}
 	}
 	provinces = {
-		448 1500 1698 2240 2267 2376 3061 3616 6401 8157 9910 12037 12282
+		448 1500 1698 2240 2267 2376 3061 3616 6401 8157 9910 12037 12282 20458 20459 20765
+		20766 20767
 	}
 	resources = {
 		tungsten = 4

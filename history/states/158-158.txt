@@ -8,12 +8,14 @@ state = {
 		owner = WCG
 		add_core_of = WCG
 		add_core_of = LMN
+		victory_points = { 6718 3 }
+		victory_points = { 7407 1 }
 		buildings = {
 			infrastructure = 2
 		}
 	}
 	provinces = {
-		2172 6718 7407 9451 9971 11170
+		2172 6718 7407 9451 9971 11170 20451 20452 20761 20762 20763 20764
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.9

@@ -11,12 +11,14 @@ state = {
 		add_core_of = TMR
 		add_core_of = ORV
 		victory_points = { 1757 5 }
+		victory_points = { 2814 1 }
 		buildings = {
 			infrastructure = 3
 		}
 	}
 	provinces = {
-		896 912 1757 2008 2126 2792 2814 4573 4820 4867 9124 11593 11749 12230 12300
+		896 912 1757 2008 2126 2792 2814 4573 4820 4867 9124 11593 11749 12230 12300 19382
+		19394 20074 20075 20076 20077 20078 20079 20080
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.4

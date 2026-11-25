@@ -3,6 +3,7 @@ state={
 	name="STATE_107"
 	provinces={
 		2114 2539 3296 3321 5626 5973 6433 7085 7676 7742 8064 8432 8774 9159 11692 12250 12488 12848 16563 16628 16629 16635 16640 16656 16657 16658 16702
+		20390 20571 20572 20573 20574 20575
 	}
 	manpower = 1200000
 	buildings_max_level_factor = 1.000
@@ -17,7 +18,8 @@ state={
 	    }
 		victory_points = { 16635 1 }
 		victory_points = { 16640 1 }
-		victory_points = { 2539 5 }
+		victory_points = { 2539 4 }
 		victory_points = { 16702 1 }
+		victory_points = { 8064 1 }
 	}
 }

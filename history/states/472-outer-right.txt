@@ -9,7 +9,6 @@ state = {
 	history = {
 		owner = MON
 		add_core_of = MON
-		add_core_of = VLD
 		victory_points = { 10095 4 }
 		victory_points = { 5506 1 }
 		buildings = {
@@ -20,6 +19,7 @@ state = {
 	}
 	provinces = {
 		1037 1314 1870 4901 5365 5506 6270 8181 8253 8551 9555 10095 10645 11665 11713 19302
+		19325 19742 19743 19744 19745 19746 19747 19748 19749 19750 19751
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.5

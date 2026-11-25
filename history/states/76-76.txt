@@ -3,6 +3,7 @@ state={
 	name="STATE_76"
 	provinces={
 		336 2552 2866 2988 3905 5721 5741 6443 9452 9833 10964 11090 16582
+		20431 20686 20687 20688 20689 20690 20691 20692 20693 20694 20695 20696 20697
 	}
 	manpower = 950000
 	state_category = town
@@ -17,5 +18,6 @@ state={
 		}
 		add_core_of = SOL
 		victory_points = { 16582 3 }
+		victory_points = { 5741 2 }
 	}
 }

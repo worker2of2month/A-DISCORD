@@ -7,9 +7,10 @@ state = {
 	manpower = 1157731
 	state_category = town
 	history = {
-		owner = MON
-		add_core_of = MON
+		owner = UVA
+		add_core_of = UVA
 		victory_points = { 10504 4 }
+		victory_points = { 1537 2 }
 		victory_points = { 1993 1 }
 		buildings = {
 			infrastructure = 4
@@ -19,7 +20,8 @@ state = {
 	}
 	provinces = {
 		364 586 1537 1553 1854 1868 1993 2269 2721 2908 4150 5875 7034 7072 8196 8874
-		9157 9254 9353 9851 10048 10076 10504 12453 12616 12706 19299
+		9157 9254 9353 9851 10048 10076 10504 12453 12616 12706 19299 19317 19338 19645 19646 19647
+		19648 19649 19650 19651 19652 19653 19654 19655 19656 19657 19658 19659 19660
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.7

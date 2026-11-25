@@ -13,7 +13,7 @@ division_template = {
 units = {
 	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 6779 division_template = "Palatine Line Division" start_experience_factor = 0.25 start_equipment_factor = 0.86 }
 	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 3657 division_template = "Palatine Line Division" start_experience_factor = 0.25 start_equipment_factor = 0.86 }
-	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 12195 division_template = "Palatine Line Division" start_experience_factor = 0.25 start_equipment_factor = 0.86 }
+	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 13002 division_template = "Palatine Line Division" start_experience_factor = 0.25 start_equipment_factor = 0.86 }
 	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 3267 division_template = "Palatine Line Division" start_experience_factor = 0.25 start_equipment_factor = 0.86 }
 	division = { division_name = { is_name_ordered = yes name_order = 5 } location = 7913 division_template = "Palatine Line Division" start_experience_factor = 0.25 start_equipment_factor = 0.86 }
 }

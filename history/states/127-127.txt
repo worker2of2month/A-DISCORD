@@ -5,6 +5,7 @@ state={
 	provinces={
 		595 1697 2097 2752 3245 4553 6896 7148 7603 8345 9053 9336
 		12463 16816 16832 16833
+		20299 20324 20325 20326 20327 20328 20329 20330 20331
 	}
 	manpower = 480000
 	buildings_max_level_factor = 1.000
@@ -15,6 +16,7 @@ state={
 		add_core_of = IVN
 		victory_points = { 16816 3 }
 		victory_points = { 3245 1 }
+		victory_points = { 20299 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1

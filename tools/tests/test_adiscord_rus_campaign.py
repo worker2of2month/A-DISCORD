@@ -6800,7 +6800,7 @@ class RusBlackArmyBranchTests(unittest.TestCase):
         ("RUS_ba_military_districts", "RUS_ba_guard_marches", "RUS_ba_black_banner_east"),
     ]
     DECISIONS = ["RUS_ba_commandant_levy", "RUS_ba_breach_war", "RUS_ba_raid"]
-    WEST = [151, 156, 157, 158, 159, 160, 161, 162, 163, 223, 80, 146, 150, 199, 315, 316, 317, 318]
+    WEST = [151, 156, 157, 158, 159, 160, 161, 162, 163, 223, 80, 146, 150, 199, 315, 316, 317, 318, 737, 738]
 
     applied = RusScientistsBranchTests.applied
     preview = RusScientistsBranchTests.preview

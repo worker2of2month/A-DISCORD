@@ -9,7 +9,8 @@ state = {
 	history = {
 		owner = DRV
 		add_core_of = DRV
-		victory_points = { 269 5 }
+		victory_points = { 269 10 }
+		victory_points = { 4050 2 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -18,7 +19,8 @@ state = {
 	}
 	provinces = {
 		269 1309 1329 2147 2227 3493 3564 3784 4050 4078 5654 6999 7344 7442 7823 8036
-		8675 9212 10384 10916 12170 12355 12586 12883
+		8675 9212 10384 10916 12170 12355 12586 12883 19418 19419 19425 20239 20240 20241 20242 20243
+		20244 20245 20246 20247 20248 20249 20250 20251 20252 20253 20254 20255 20256 20257 20258
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.8

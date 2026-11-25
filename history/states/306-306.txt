@@ -10,6 +10,7 @@ state = {
 		owner=RIV
 		add_core_of=RIV
 		victory_points = { 16643 5 }
+		victory_points = { 5866 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 2
@@ -19,6 +20,7 @@ state = {
 	}
 	provinces = {
 		509 660 5866 8016 8599 12365 12404 16621 16643
+		20386 20545 20546 20547 20548 20549 20550 20551
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.0

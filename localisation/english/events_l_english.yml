@@ -1,9 +1,9 @@
 ﻿l_english:
- ADISCORD_mon_court.1.t: "The Council of Fifteen Crowns"
- ADISCORD_mon_court.1.d: "Two timetables for the same railway lie on Marius II's desk. One sends grain to market. The other sends shells to the southern arsenals. Both bear the imperial seal.\n\nThe Chamber of Crowns asks for a seat on the council of ministers. Its delegates will answer to the throne for deliveries from their estates. The General Staff wants a seat as well, on one condition. The League of Town Charters must close. Its councils have refused to give up their freight wagons to the army. The treasurer waits outside the door. By morning he needs a single timetable."
+ ADISCORD_mon_court.1.t: "The First Arken Cabinet"
+ ADISCORD_mon_court.1.d: "Two timetables for the same railway lie on Marius II's desk. One sends grain to market. The other sends shells to the southern arsenals. Both bear the imperial seal.\n\nThe Chamber of Crowns asks for a seat on the council of ministers. Its delegates will answer to the prince for deliveries from their estates. The General Staff wants a seat as well, on one condition. The League of Town Charters must close. Its councils have refused to give up their freight wagons to the army. The treasurer waits outside the door. By morning he needs a single timetable."
  ADISCORD_mon_court.1.houses: "Let the Chamber answer for the provinces."
  ADISCORD_mon_court.1.staff: "Put the staff in charge of supply and close the League."
- ADISCORD_mon_court.1.throne: "The throne will settle the timetables."
+ ADISCORD_mon_court.1.throne: "Marius will sign the timetable himself."
  MON_houses_cabinet_tt: "The Chamber of Crowns will join the Arken government."
  MON_staff_cabinet_tt: "The Imperial General Staff will join the Arken government. The League of Town Charters will be banned."
  ADISCORD_rin_crisis.1.t: "Two Oaths Demand an Answer"
@@ -26,7 +26,7 @@
  ADISCORD_rin_crisis.12.d: "Rina's civil war has ended in victory for the northern court. Armed resistance in the southern cities has been broken, and the crown palatinate is being established as the country's common order. The supporters of the northern oath can now extend the court's authority beyond their former domains.\n\nFor the cities, this defeats their attempt to make the charters the supreme basis of state authority. The victors must govern territories that recently rejected their demands. The military outcome is settled; the stability of the restored palatinate will depend on whether the court can hold the south after the fighting ends."
  ADISCORD_rin_crisis.12.a: "The crown has restored its authority over the palatinate."
  ADISCORD_rin_crisis.14.t: "Rina Reaffirms Its Oath to Montera"
- ADISCORD_rin_crisis.14.d: "Rina's court has reaffirmed its loyalty to Montera, refusing to support the southern cities in the dispute over the two oaths. Against the backdrop of Vorkerland's collapse, the palatine has chosen royal authority and continued dependence on his northern patron.\n\nAn armed split has been avoided, but the concession does not resolve the conflict between the court and the city charters. The southern councils have lost their ability to determine the country's foreign policy, while the crown has assumed responsibility for preserving internal order. The old compromise ended with a decision by the court, rather than an agreement between both sides."
+ ADISCORD_rin_crisis.14.d: "Rina's court has reaffirmed its loyalty to Montera, refusing to support the southern cities in the dispute over the two oaths. Against the backdrop of Vorkerland's collapse, the palatine has chosen royal authority and the protection of the northern crown.\n\nAn armed split has been avoided, but the concession does not resolve the conflict between the court and the city charters. The southern councils have lost their ability to determine the country's foreign policy, while the crown has assumed responsibility for preserving internal order. The old compromise ended with a decision by the court, rather than an agreement between both sides."
  ADISCORD_rin_crisis.14.a: "The palatine has chosen the northern oath."
 
  MINIMIZE_EVENT: "§GClick§! to minimise. The event will be placed in the event area's §HEvents and Decisions§! section."

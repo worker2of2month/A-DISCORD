@@ -969,9 +969,11 @@ focus_tree = {
 			163 = { add_claim_by = RUS }
 			223 = { add_claim_by = RUS }
 			80 = { add_claim_by = RUS }
+			737 = { add_claim_by = RUS }
 			146 = { add_claim_by = RUS }
 			150 = { add_claim_by = RUS }
 			199 = { add_claim_by = RUS }
+			738 = { add_claim_by = RUS }
 			315 = { add_claim_by = RUS }
 			316 = { add_claim_by = RUS }
 			317 = { add_claim_by = RUS }

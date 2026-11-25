@@ -9,13 +9,16 @@ state = {
 	history = {
 		owner = DRV
 		add_core_of = DRV
+		victory_points = { 4764 4 }
+		victory_points = { 8834 1 }
 		buildings = {
 			infrastructure = 2
 		}
 	}
 	provinces = {
 		156 377 553 1565 1825 2081 2888 3774 4153 4484 4764 6520 8487 8610 8712 8834
-		9084 11966
+		9084 11966 19422 19428 20226 20227 20228 20229 20230 20231 20232 20233 20234 20235 20236 20237
+		20238
 	}
 	resources = {
 		tungsten = 1

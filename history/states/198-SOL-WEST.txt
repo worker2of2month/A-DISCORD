@@ -3,6 +3,8 @@ state={
 	name=STATE_198
 	provinces={
 		513 741 3183 4185 6510 6764 8323 8570 9104 9193 9466 11282 11411 11659 12232 12564 12584
+		20432 20433 20698 20699 20700 20701 20702 20703 20704 20705 20706 20707 20708 20709 20710 20711
+		20712 20713 20714
 	}
 	manpower = 800000
 	state_category = town
@@ -16,5 +18,7 @@ state={
 			industrial_complex = 2
 		}
 		add_core_of=SOL
+		victory_points = { 741 4 }
+		victory_points = { 4185 1 }
 	}
 }

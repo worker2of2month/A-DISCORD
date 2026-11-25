@@ -7,6 +7,7 @@ state={
 	}
 	provinces={
 		694 3714 12313 16568
+		20290 20317 20318
 	}
 	manpower = 780000
 	buildings_max_level_factor = 1.000
@@ -16,6 +17,7 @@ state={
 		owner = IVN
 		add_core_of = IVN
 		victory_points = { 16568 10 }
+		victory_points = { 20290 2 }
 		buildings = {
 			infrastructure = 5
 			industrial_complex = 2

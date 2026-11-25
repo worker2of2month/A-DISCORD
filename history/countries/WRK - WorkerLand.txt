@@ -89,6 +89,10 @@ set_research_slots = 5
 ####### Diplomacy
 
 set_autonomy = {
+	target = RIN
+	autonomous_state = autonomy_puppet
+}
+set_autonomy = {
 	target = NAM
 	autonomous_state = autonomy_colony
 }

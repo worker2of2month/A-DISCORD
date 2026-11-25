@@ -1,0 +1,32 @@
+capital = 448
+oob = "SLV"
+
+recruit_character = SLV_Erik_Rendar
+
+set_politics = {
+	ruling_party = etatism
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 70
+	pragmatism = 30
+}
+set_stability = 0.58
+set_war_support = 0.45
+set_research_slots = 2
+add_manpower = 20000
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 8000
+	producer = SLV
+}
+add_equipment_to_stockpile = {
+	type = ADISCORD_squad_weapons_equipment
+	amount = 120
+	producer = SLV
+}
+add_equipment_to_stockpile = {
+	type = artillery_equipment
+	amount = 72
+	producer = SLV
+}

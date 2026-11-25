@@ -420,7 +420,7 @@ class PartyRepresentationTests(unittest.TestCase):
         self.assertEqual(scalar(block(player, "country_event"), "days"), "3")
         crisis = parsed(directory / "02_ADISCORD_rin_oath_crisis_on_actions.txt")
         wake, = (e.value for e in walk(crisis) if e.key == "MON")
-        self.assertEqual([e.key for e in wake], ["ADISCORD_release_non_participating_minor_optimization", "country_event"])
+        self.assertEqual([e.key for e in wake], ["country_event"])
         self.assertEqual(scalar(block(wake, "country_event"), "id"), mon)
         self.assertEqual(scalar(country_event("ADISCORD_MON_events.txt", mon), "fire_only_once"), "yes")
 

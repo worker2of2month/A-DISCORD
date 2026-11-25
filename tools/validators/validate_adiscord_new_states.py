@@ -41,19 +41,22 @@ from tools.builders.build_adiscord_new_states import (
     NAM_COALITION_FRONT_RESOURCES,
     NAM_COALITION_REGIONS,
     NAM_LEGACY_VICTORY_POINTS,
+    PLANNED_GEOGRAPHY,
+    PLANNED_URBAN_SETTLEMENTS,
     REGIONAL_SETTLEMENTS,
     SECONDARY_CENTRES,
     SETTLEMENT_CLUSTER_CENTRES,
     SETTLEMENT_CLUSTER_VICTORY_POINTS,
     SHL_RESOURCES,
     SOUTHERN_CAPITAL_DISTRICTS,
+    SPLIT_CENTRE_VALUE,
+    STATE_SPLITS,
     STATE_PROFILES,
     STATE_RESOURCES,
     STARTING_OWNERS,
     VORKERLAND_CENTRES,
     VORKERLAND_LEGACY_VICTORY_POINTS,
     VORKERLAND_LEGACY_PROFILES,
-    VORKERLAND_MINOR_VPS,
     render_state,
     state_path,
 )
@@ -87,9 +90,10 @@ NORTHERN_SETTLEMENT_STATES = {
     for country in NORTHERN_COUNTRIES.values()
     for state_id, _name, _value in country.get("secondary_vps", ())
 }
-# MON villages keep their rural declared terrain by design; the MON geography
-# tests hold the carved cities urban. Both are approved by province only.
-MON_SETTLEMENT_VPS = frozenset(
+# Every victory point of the eastern geography table (the MON region and its
+# neighbours: cities, second cities, villages and towns) is approved by
+# province only; the geography tests hold their declared terrain.
+EAST_SETTLEMENT_VPS = frozenset(
     province_id for _state_id, province_id, _value, _name in load_mon_settlement_points()
 )
 INNER_FRONTIER_SETTLEMENT_STATES = {
@@ -119,12 +123,11 @@ APPROVED_NON_URBAN_SETTLEMENT_VPS = (
         for province_id, _value in points
     )
     | frozenset(province_id for province_id, _value in VORKERLAND_CENTRES.values())
-    | frozenset(province_id for province_id, _value in VORKERLAND_MINOR_VPS.values())
     | frozenset(
         _NORTHERN_PRINCIPAL_PROVINCES[state_id]
         for state_id in NORTHERN_SETTLEMENT_STATES
     )
-    | MON_SETTLEMENT_VPS
+    | EAST_SETTLEMENT_VPS
     | frozenset(
         _INNER_FRONTIER_PRINCIPAL_PROVINCES[state_id]
         for state_id in INNER_FRONTIER_SETTLEMENT_STATES
@@ -135,14 +138,17 @@ APPROVED_NON_URBAN_SETTLEMENT_VPS = (
         for points in REMAINDER_VICTORY_POINTS.values()
         for province_id, _value in points
     )
+    # Carved cities and towns of the applied map plans, approved by province
+    # from the geography data; their builders hold the declared terrain.
+    | PLANNED_URBAN_SETTLEMENTS
 )
 
 EBA_EXPECTED_VPS = {
     197: {16623: 10},
-    311: {5905: 1},
+    311: {5905: 3},
     312: {16637: 3},
     313: {16617: 3},
-    314: {5405: 1},
+    314: {5405: 3},
 }
 
 EBA_EXPECTED_VP_NAMES = {
@@ -311,6 +317,11 @@ def normalized_builder_profile(state_id: int) -> dict[str, int | float | str]:
     }
 
 
+def theatre_value(state_id: int, province_id: int, value: int) -> int:
+    """The VP of a central-theatre province as its package redistributes it."""
+    return dict(VORKERLAND_THEATRE_VICTORY_POINTS.get(state_id, ())).get(province_id, value)
+
+
 def validate_states() -> None:
     localisation = "\n".join(
         text(path) for path in (ROOT / "localisation/russian").glob("*.yml")
@@ -345,6 +356,30 @@ def validate_states() -> None:
         check(
             bool(re.search(rf"(?m)^\s*STATE_{state_id}:\s*\".+\"", localisation)),
             f"state {state_id}: missing Russian name",
+        )
+
+    # Each new half of a state split keeps its parent's owner and cores, holds
+    # its centre at the centre value and carries its Russian name.
+    for state_id, split in sorted(STATE_SPLITS.items()):
+        source = text(state_path(state_id))
+        parent_source = text(state_path(split["parent"]))
+        for key in ("owner", "add_core_of", "add_claim_by"):
+            check(
+                sorted(re.findall(rf"(?m)^\s*{key}\s*=\s*([A-Z0-9]{{3}})\s*$", source))
+                == sorted(re.findall(rf"(?m)^\s*{key}\s*=\s*([A-Z0-9]{{3}})\s*$", parent_source)),
+                f"state {state_id}: {key} differs from its parent {split['parent']}",
+            )
+        points = {
+            int(province): int(value)
+            for province, value in re.findall(r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source)
+        }
+        check(
+            points.get(split["centre"]) == SPLIT_CENTRE_VALUE,
+            f"state {state_id}: centre {split['centre']} must hold VP {SPLIT_CENTRE_VALUE}",
+        )
+        check(
+            bool(re.search(rf'(?m)^\s*STATE_{state_id}:\s*"{re.escape(split["name"])}"', localisation)),
+            f"state {state_id}: missing Russian name {split['name']!r}",
         )
 
     southern_tags = {"KDR", "RHM", "SDR", "MZR", "KYZ", "SHL", "GLP", "AZH", "WEF"}
@@ -504,6 +539,7 @@ def validate_states() -> None:
             )
         }
         for province_id, value in expected_vps:
+            value = theatre_value(state_id, province_id, value)
             check(
                 actual_vps.get(province_id) == value,
                 f"Vorkerland legacy state {state_id}: expected VP {province_id}:{value}",
@@ -612,6 +648,16 @@ def validate_states() -> None:
         check(
             actual_total == VORKERLAND_THEATRE_PACKAGE_TOTALS[package],
             f"Vorkerland package {package}: expected VP total {VORKERLAND_THEATRE_PACKAGE_TOTALS[package]}, found {actual_total}",
+        )
+
+    for settlement in PLANNED_GEOGRAPHY.vp_settlements():
+        matches = re.findall(
+            rf'(?m)^\s*VICTORY_POINTS_{settlement.province}:(?:\d+)?\s*"([^"]*)"\s*$',
+            vp_localisation,
+        )
+        check(
+            matches == [settlement.name],
+            f"planned settlement {settlement.province}: expected Russian name {settlement.name!r}, found {matches}",
         )
 
     for province_id, expected_name in VORKERLAND_THEATRE_VP_NAME_OVERRIDES.items():
@@ -761,7 +807,6 @@ def validate_states() -> None:
         **SECONDARY_CENTRES,
         **MINOR_VPS,
         **VORKERLAND_CENTRES,
-        **VORKERLAND_MINOR_VPS,
         **SETTLEMENT_CLUSTER_CENTRES,
     }
     # The coalition split owns complete VP lists, superseding generic centres.
@@ -794,6 +839,7 @@ def validate_states() -> None:
         if state_id in exact_victory_points:
             continue
         source = text(state_path(state_id))
+        value = theatre_value(state_id, province_id, value)
         vp_pattern = rf"victory_points\s*=\s*\{{\s*{province_id}\s+{value}\s*\}}"
         if (
             province_terrain.get(province_id) in SETTLEMENT_TERRAINS

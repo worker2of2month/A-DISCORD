@@ -7,13 +7,14 @@ import unittest
 from unittest import mock
 
 from tools.builders import build_adiscord_strategic_regions as builder
+from tools.lib.adiscord_planned_geography import east_stages
 from tools.validators.validate_adiscord_strategic_regions import planned_parent_region_issues
 
 
 GEOGRAPHY = json.loads(
     (builder.ROOT / "tools/data/adiscord_mon_geography.json").read_text(encoding="utf-8")
 )
-CITY, REMAINDER, DISTRICT, OTHER = 19901, 19902, 19903, 19904
+CITY, REMAINDER, DISTRICT, OTHER = 90901, 90902, 90903, 90904
 
 
 class PlannedProvinceRegionTests(unittest.TestCase):
@@ -46,14 +47,26 @@ class PlannedProvinceRegionTests(unittest.TestCase):
         self.assertIn(f"planned province {DISTRICT}", issues[0])
 
     def test_plan_is_wired_into_the_weather_parents(self):
-        expected = {
-            entry["province"]: entry["parent"] for entry in GEOGRAPHY["planned"]["provinces"]
-        }
+        entries = [entry for stage in east_stages(GEOGRAPHY) for entry in stage.get("provinces", ())]
+        parents = {entry["province"]: entry["parent"] for entry in entries}
+        expected = {}
+        for province, parent in parents.items():
+            while parent in parents:
+                parent = parents[parent]
+            expected[province] = parent
         self.assertEqual(builder.MON_PLANNED_PARENT, expected)
         self.assertLessEqual(expected.items(), builder.DISTRICT_PARENT.items())
 
-    def test_every_montar_state_keeps_a_pinned_grouping_centre(self):
-        self.assertEqual(set(builder.MON_GROUPING_CENTRES), set(GEOGRAPHY["states"]))
+    def test_every_eastern_state_keeps_a_pinned_grouping_centre(self):
+        # From Stage 3 on a region's centres arrive with the record of its planned stage.
+        planned = {2} | {stage["stage"] for stage in GEOGRAPHY.get("stages", ())}
+        regions = {
+            state
+            for region in GEOGRAPHY["regions"].values()
+            if region.get("stage", 2) in planned
+            for state in region["states"]
+        }
+        self.assertEqual(set(builder.MON_GROUPING_CENTRES), set(GEOGRAPHY["states"]) | regions)
 
     def test_planned_children_share_their_parent_state_region(self):
         region_by_state = {

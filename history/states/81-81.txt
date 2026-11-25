@@ -3,6 +3,7 @@ state={
 	name="STATE_81"
 	provinces={
 		4603 5978 8565 9012 10261 10926 11051 12971 16587 16597 16600 16616 16620
+		20382 20508 20509 20510 20511 20512 20513 20514
 	}
 	manpower = 2200000
 	buildings_max_level_factor = 1.000
@@ -13,7 +14,8 @@ state={
 		add_core_of=EGC
 		victory_points = { 16587 10 }
 		victory_points = { 16616 2 }
-		victory_points = { 16620 2 }
+		victory_points = { 16620 1 }
+		victory_points = { 9012 1 }
 
 		buildings = {
 			air_base = 2

@@ -7,13 +7,15 @@ state = {
 	history = {
 		owner = DOL
 		add_core_of = DOL
+		victory_points = { 3894 3 }
+		victory_points = { 8818 1 }
 		buildings = {
 			infrastructure = 2
 			industrial_complex = 1
 		}
 	}
 	provinces = {
-		636 1380 3894 6406 7542 7577 7635 8818 12089
+		636 1380 3894 6406 7542 7577 7635 8818 12089 19364 19369 19827 19828 19829 19830
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.1

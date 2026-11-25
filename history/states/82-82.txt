@@ -5,7 +5,8 @@ state={
 	history = {
 		owner = WRK
 		add_core_of = WRK
-		victory_points = { 8059 5 }
+		victory_points = { 8059 4 }
+		victory_points = { 5180 1 }
 		buildings = {
 			industrial_complex = 1
 			arms_factory = 1
@@ -13,7 +14,8 @@ state={
 		}
 	}
 	provinces={
-		1764 2620 3215 3310 4590 5180 5337 5568 7357 8059 
+		1764 2620 3215 3310 4590 5180 5337 5568 7357 8059
+		20375 20473 20474 20475 20476
 	}
 	manpower = 800000
 	buildings_max_level_factor = 1.000

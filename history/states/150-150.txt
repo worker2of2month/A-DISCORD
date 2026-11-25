@@ -8,6 +8,8 @@ state = {
 		owner = TRU
 		add_core_of = TRU
 		add_core_of = RIN
+		victory_points = { 12747 3 }
+		victory_points = { 8261 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -15,7 +17,7 @@ state = {
 		}
 	}
 	provinces = {
-		1821 4283 5518 8261 8871 9444 12747 12873
+		1821 4283 5518 8261 8871 9444 12747 12873 20438 20439
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.9

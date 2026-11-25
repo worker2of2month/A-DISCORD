@@ -119,7 +119,7 @@ ADISCORD_initialize_foreign_minister = {
 	KYZ = { add_ideas = minister_KYZ_Tahir_Usman }
 	LUR = { add_ideas = minister_LUR_Ivar_Nerlin }
 	LYS = { add_ideas = minister_LYS_Lorenz_Mahl }
-	MON = { add_ideas = minister_MON_Marco_Bellini }
+	ARK = { add_ideas = minister_MON_Marco_Bellini }
 	MRV = { add_ideas = minister_MRV_Henrik_Saren }
 	MZR = { add_ideas = minister_MZR_Karim_Saleh }
 	NAM = { add_ideas = minister_NAM_Pavel_Ordyntsev }

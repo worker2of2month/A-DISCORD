@@ -7,9 +7,10 @@ state = {
 	manpower = 1160517
 	state_category = large_town
 	history = {
-		owner = MON
-		add_core_of = MON
+		owner = KLV
+		add_core_of = KLV
 		victory_points = { 212 5 }
+		victory_points = { 5808 2 }
 		victory_points = { 1674 1 }
 		buildings = {
 			infrastructure = 4
@@ -19,7 +20,9 @@ state = {
 	}
 	provinces = {
 		212 768 1573 1674 1754 1762 1855 3712 3946 4451 5489 5808 6809 7431 8667 8733
-		9454 9668 9939 10442 10518 10992 11304 11500 12370 12758 19292
+		9454 9668 9939 10442 10518 10992 11304 11500 12370 12758 19292 19306 19327 19431 19432 19433
+		19434 19435 19436 19437 19438 19439 19440 19441 19442 19443 19444 19445 19446 19447 19448 19449
+		19450
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.9

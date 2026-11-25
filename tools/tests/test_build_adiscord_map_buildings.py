@@ -223,6 +223,25 @@ class MonProvinceAnchorTests(unittest.TestCase):
             self.assertEqual(builder.mon_relief_provinces(self.root, builder.load_province_by_color(self.root)), frozenset())
             self.assertEqual(builder.mountain_building_heights(self.root, self.lines), (self.lines, []))
 
+    def test_a_later_stage_joins_the_scope_once_its_provinces_are_on_the_map(self):
+        geography = json.loads((self.root / "tools/data/adiscord_mon_geography.json").read_text(encoding="utf-8"))
+        geography["regions"] = {"X": {"stage": 3, "states": [999]}}
+        geography["stages"] = [
+            {"stage": 3, "provinces": [{"province": 19999, "state": 999, "parent": FOREIGN, "kind": "part"}], "towns": {}}
+        ]
+        path = self.root / "tools/data/adiscord_mon_geography.json"
+        path.write_text(json.dumps(geography), encoding="utf-8")
+        colours = builder.load_province_by_color(self.root)
+        plan = builder.applied_mon_plan(self.root, colours)
+        self.assertEqual(plan["states"], [469])
+        self.assertEqual([entry["province"] for entry in plan["provinces"]], [REMAINDER])
+        geography["stages"][0]["provinces"][0]["province"] = FOREIGN
+        geography["stages"][0]["towns"] = {str(FOREIGN): FOREIGN}
+        path.write_text(json.dumps(geography), encoding="utf-8")
+        plan = builder.applied_mon_plan(self.root, colours)
+        self.assertEqual(plan["states"], [469, 999])
+        self.assertIn(str(FOREIGN), plan["cities"])
+
     def test_heights_follow_the_relief_only_inside_the_mon_scope(self):
         planned, changed = builder.mountain_building_heights(self.root, self.lines)
         self.assertEqual(changed, [1, 2])

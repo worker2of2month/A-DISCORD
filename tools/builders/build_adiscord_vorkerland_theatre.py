@@ -11,6 +11,7 @@ from pathlib import Path
 
 from tools.builders import build_adiscord_strategic_regions as map_regions
 from tools.builders.build_adiscord_new_states import CITY_RAILWAYS, COUNTRY_RAILWAYS, southern_city_rail_route
+from tools.builders.build_adiscord_northern_countries import MONTAR_STATES
 from tools.lib.paths import repository_root
 from tools.lib.vorkerland_collapse_manifest import (
     DIRTY_GROUPS,
@@ -28,7 +29,7 @@ OSV_CAPITAL_RAIL = (1, (16642, 1540, 1818))
 STARTING_SUPPLY_RAILS = (
     ("STP", (119, 1, 16440), (16547, 16440)),
     ("YPR", (33, 73, 11), (16372, 11)),
-    ("SOL", (9104, 6716), (16582, 9104)),
+    ("SOL", (9104, 20704, 6716), (16582, 9104)),
     ("SOL", (4156, 8570), (16582, 16584)),
     ("BTL", (16556, 1397, 3344, 378, 1919, 2968, 2285), (3344, 16556, 2285)),
     ("DAN", (569, 4242, 11636, 7274), (569, 7274)),
@@ -47,20 +48,20 @@ COALITION_SUPPLY_RAILS = {
 COALITION_SUPPLY_HUB_STATES = {10422: 70, 6577: 727}
 COALITION_SUPPLY_ENDPOINTS = {"EFL": (16717, 10422, 6495), "AZH": (16893, 6577, 493)}
 # The imperial network joins the northern cities to Montera and the existing
-# southern railway without relying on transit through neighbouring countries.
+# southern railway across the successor states.
 MON_CAPITAL_PROVINCE = 2845
 MON_SUPPLY_RAILS = (
-    (2, (2845, 19285, 10317, 11261, 11145, 4432, 3934, 9899)),
+    (2, (2845, 19285, 10317, 11261, 11145, 19314, 4432, 3934, 9899)),
     (2, (2845, 7088, 19300, 418)),
     (2, (9899, 19287, 6800, 460, 16308, 2210, 12563, 19288, 6028)),
     (2, (6028, 5475, 12975, 8798, 5730, 1702, 19296, 2090)),
-    (2, (2090, 11682, 11789, 9420, 1855, 10992, 212)),
+    (2, (2090, 11682, 11789, 9420, 1855, 19437, 10992, 212)),
     (2, (212, 768, 5489, 10541, 19295, 7210, 12168, 5283, 19303, 9322)),
-    (2, (9322, 9807, 9741, 16330, 709, 635, 19297, 7404)),
-    (2, (7404, 5509, 12916, 12408, 12689, 300, 8865)),
-    (2, (9899, 4152, 1606, 6284, 7717, 6873, 1228, 8933, 7356, 19294, 3859)),
-    (2, (3859, 9729, 4374, 11365, 19304, 11224, 5575, 19305, 8159, 5183, 10008, 6748)),
-    (2, (8865, 1718, 12389, 9684, 10076, 12706, 1537, 2269, 9254, 10504, 19299, 1993, 7072)),
+    (2, (9322, 9807, 19308, 9741, 16330, 19331, 709, 19502, 635, 19297, 7404)),
+    (2, (7404, 5509, 19507, 19334, 12916, 12408, 12689, 300, 8865)),
+    (2, (9899, 4152, 1606, 6284, 19552, 7717, 19310, 6873, 1228, 8933, 7356, 19294, 3859)),
+    (2, (3859, 9729, 4374, 11365, 19304, 11224, 19675, 19665, 5575, 19305, 8159, 5183, 10008, 6748)),
+    (2, (8865, 1718, 12389, 19332, 9684, 10076, 12706, 1537, 2269, 9254, 10504, 19299, 1993, 19317, 19659, 7072)),
     # Upgrade the existing capital spur; the southern line retains its level.
     (2, (2845, 8790, 715, 12285)),
 )
@@ -81,7 +82,7 @@ MON_SUPPLY_HUB_STATES = {
 }
 # Capturing Kalten and the Pustograd corridor opens a western supply route
 # without requiring control of Starolesye or the bunker.
-MON_KALTEN_RAIL = (1, (8798, 6168, 1472, 10282, 3783))
+MON_KALTEN_RAIL = (1, (8798, 6168, 19336, 1472, 10282, 3783))
 MON_KALTEN_CORRIDOR_STATES = frozenset({710, 461, 51})
 MON_KALTEN_CORRIDOR_HUBS = (3783, 12219)
 # The western line must join the bunker without crossing a third country.
@@ -236,6 +237,7 @@ WEST_TRUNK_RAIL_UPGRADES = (
         (
             5135,
             12072,
+            20604,
             1029,
             7764,
             3743,
@@ -243,8 +245,10 @@ WEST_TRUNK_RAIL_UPGRADES = (
             9453,
             7869,
             1128,
+            20412,
             2339,
             5469,
+            20609,
             2571,
             9908,
             2620,
@@ -257,9 +261,9 @@ WEST_TRUNK_RAIL_UPGRADES = (
             12227,
         ),
     ),
-    (2, (16379, 16367, 16355, 16361, 16370, 5135, 6801, 16578)),
-    (2, (16568, 694, 5611, 2380, 16831, 10403, 8328, 11815, 4567, 6010, 16361)),
-    (2, (16568, 694, 5611, 2380, 16831, 10403, 8328)),
+    (2, (16379, 16367, 16355, 16361, 16370, 20404, 5135, 6801, 16578)),
+    (2, (16568, 20317, 694, 5611, 2380, 16831, 10403, 8328, 11815, 4567, 6010, 16361)),
+    (2, (16568, 20317, 694, 5611, 2380, 16831, 10403, 8328)),
 )
 # Itoran lines stay inside the starting borders and use the carved city
 # provinces, never their rural parents: the IVN geography pass rewrites a
@@ -276,6 +280,7 @@ ITORA_SUPPLY_RAILS = (
             4909,
             1861,
             7508,
+            1862,
             8615,
             10158,
             10810,
@@ -291,7 +296,7 @@ ITORA_SUPPLY_RAILS = (
         ),
     ),
     # Eastern trunk: Salemar line - Moressa - Vedrina - Serenga.
-    (2, (8328, 9611, 11554, 5788, 2448, 8716, 3182, 8130, 3318, 4260, 4302, 16823)),
+    (2, (8328, 9611, 8371, 20323, 11554, 5788, 2448, 8716, 3182, 8130, 3318, 4260, 4302, 16823)),
     # Northern frontier.
     (
         1,
@@ -312,17 +317,17 @@ ITORA_SUPPLY_RAILS = (
             16824,
         ),
     ),
-    (1, (1971, 3803, 8458, 16821, 8284, 16815)),
-    (1, (12614, 1659, 16825)),
+    (1, (1971, 3803, 8458, 20339, 16821, 8284, 16815)),
+    (1, (12614, 6694, 1659, 16825)),
     # Western ring through the Rinval fens and the Longar hill line.
     (1, (16568, 9614, 401, 7263, 16827, 5273, 16863, 16828, 9132, 5055, 11487, 3304, 3541)),
     (1, (3181, 2211, 2025, 2157, 16826, 11132, 4037, 9133, 3245, 4553, 9100, 1971)),
     # Southern towns.
     (1, (2448, 957, 3951, 838)),
-    (1, (16817, 11396, 882, 1091, 16818, 1421, 7453, 5187, 11985, 3318)),
+    (1, (16817, 11396, 882, 1091, 16818, 1421, 7453, 20321, 5187, 11985, 3318)),
     (1, (11815, 11396)),
     (1, (5611, 10313, 1890, 8839, 3453, 638, 9167, 9327)),
-    (1, (5611, 16829)),
+    (1, (5611, 20367, 16829)),
 )
 ITORA_SUPPLY_HUB_STATES = {
     16830: 716,  # Sredinsk.
@@ -340,8 +345,8 @@ ITORA_SUPPLY_HUB_STATES = {
 # trunk: Serenga - Norven in the north, Talara - Norvein across the border and
 # Rimat - Revel in the south, where the existing Revel spur closes the loop.
 WEST_CORRIDOR_RAILS = (
-    (1, (16823, 6507, 3729, 12738, 4659, 4166, 2896, 4528, 8032)),
-    (1, (1421, 12072)),
+    (1, (16823, 6507, 20408, 3729, 12738, 4659, 4166, 2896, 4528, 8032)),
+    (1, (1421, 9183, 12072)),
     (
         1,
         (
@@ -355,16 +360,19 @@ WEST_CORRIDOR_RAILS = (
             12733,
             1129,
             9492,
+            20414,
             5170,
+            20612,
             8881,
             3757,
+            20610,
             2571,
             8059,
         ),
     ),
 )
 WEST_CORRIDOR_OWNERS = frozenset({"IVN", "PWR", "ZAO", "WRK"})
-WEST_CORRIDOR_HUB_STATES = {3743: 91, 4166: 94, 12241: 71}
+WEST_CORRIDOR_HUB_STATES = {3743: 91, 4166: 94, 12241: 734}
 WEST_THEATRE_RAILS = (
     *WEST_TRUNK_RAIL_UPGRADES,
     *ITORA_SUPPLY_RAILS,
@@ -976,7 +984,7 @@ def validate() -> list[str]:
             for province in route:
                 if province_types.get(province) != "land":
                     issues.append(f"MON railway leaves land at {province}")
-                if state_owners.get(state_by_province.get(province)) != "MON":
+                if state_by_province.get(province) not in MONTAR_STATES:
                     issues.append(
                         f"MON railway leaves its starting territory at {province}"
                     )
@@ -992,7 +1000,7 @@ def validate() -> list[str]:
             for neighbour in rail_graph[province]:
                 if (
                     neighbour not in reached
-                    and state_owners.get(state_by_province.get(neighbour)) == "MON"
+                    and state_by_province.get(neighbour) in MONTAR_STATES
                 ):
                     reached.add(neighbour)
                     pending.append(neighbour)
@@ -1001,7 +1009,7 @@ def validate() -> list[str]:
                 issues.append(f"MON supply hub {hub} must occur exactly once")
             if (
                 state_by_province.get(hub) != expected_state
-                or state_owners.get(expected_state) != "MON"
+                or expected_state not in MONTAR_STATES
             ):
                 issues.append(f"MON supply hub {hub} moved outside its starting state")
             if province_types.get(hub) != "land":
@@ -1013,7 +1021,8 @@ def validate() -> list[str]:
         kalten_level, kalten_route = MON_KALTEN_RAIL
         if source.splitlines().count(render_rail_line(kalten_level, kalten_route)) != 1:
             issues.append("MON Kalten connection must occur exactly once at level 1")
-        for province, expected_state in zip(kalten_route, (460, 460, 460, 460, 710)):
+        kalten_states = (*(460,) * (len(kalten_route) - 1), 710)
+        for province, expected_state in zip(kalten_route, kalten_states):
             if (
                 province_types.get(province) != "land"
                 or state_by_province.get(province) != expected_state
@@ -1022,9 +1031,7 @@ def validate() -> list[str]:
         for first, second in zip(kalten_route, kalten_route[1:]):
             if second not in physical.get(first, set()):
                 issues.append(f"MON Kalten rail segment {first}-{second} is not physically adjacent")
-        corridor_states = MON_KALTEN_CORRIDOR_STATES | {
-            state for state, owner in state_owners.items() if owner == "MON"
-        }
+        corridor_states = MON_KALTEN_CORRIDOR_STATES | MONTAR_STATES
         pending = [MON_CAPITAL_PROVINCE]
         reached = set(pending)
         while pending:

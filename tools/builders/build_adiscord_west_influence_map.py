@@ -380,7 +380,7 @@ for(const info of Object.values(data.states)){let [a,b,r,d]=info.box;if(x>=a&&x<
 panel.addEventListener('pointerleave',()=>tip.style.display='none');
 function refresh(){Object.entries(data.states).forEach(([s,info])=>nodes[s].style.backgroundPosition=`-${((data.frames[info.owner]||1)-1)*(info.box[2]-info.box[0])}px 0`);data.countries.forEach(tag=>badges[tag].style.backgroundPosition=`-${(data.frames[tag]-1)*36}px 0`);}
 data.countries.forEach(tag=>{let label=document.createElement('label');label.textContent=data.labels[tag];let select=document.createElement('select');select.id='select_'+tag;labels.forEach((name,i)=>{let o=document.createElement('option');o.textContent=name;o.value=i+1;o.selected=i+1===data.frames[tag];select.append(o);});select.onchange=()=>{data.frames[tag]=Number(select.value);refresh();};label.append(select);document.getElementById('controls').append(label);});
-document.getElementById('collapse').onclick=()=>{for(const [state,tag] of Object.entries({194:'PSD',93:'PSD',94:'PSD',328:'PSD',195:'WPA',196:'WPS',322:'WPS',90:'IBA',91:'IBA'})){data.states[state].owner=tag;data.frames[tag]=2;document.getElementById('select_'+tag).value=2;}refresh();};
+document.getElementById('collapse').onclick=()=>{for(const [state,tag] of Object.entries({194:'PSD',735:'PSD',93:'PSD',94:'PSD',328:'PSD',195:'WPA',196:'WPS',322:'WPS',90:'IBA',91:'IBA'})){data.states[state].owner=tag;data.frames[tag]=2;document.getElementById('select_'+tag).value=2;}refresh();};
 </script></html>'''.replace("__DATA__", data)).encode("utf-8")
 
 

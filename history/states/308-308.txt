@@ -6,7 +6,8 @@ state = {
 	history = {
 		owner=RIV
 		add_core_of=RIV
-		victory_points = { 16615 3 }
+		victory_points = { 16615 2 }
+		victory_points = { 5307 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -14,6 +15,7 @@ state = {
 	}
 	provinces = {
 		3025 3583 5307 6551 8082 9500 11556 16599 16615
+		20387 20552 20553 20554 20555 20556 20557 20558 20559 20560 20561
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.5

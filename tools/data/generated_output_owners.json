@@ -890,6 +890,7 @@
         "history/states/70[0-9]-*.txt",
         "history/states/71[0-9]-*.txt",
         "history/states/72[0-9]-*.txt",
+        "history/states/73[4-9]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"
@@ -948,6 +949,12 @@
         "history/units/DRV.txt",
         "history/units/ORV.txt",
         "history/units/ARS.txt",
+        "history/units/KLV.txt",
+        "history/units/TAL.txt",
+        "history/units/SLV.txt",
+        "history/units/ARK.txt",
+        "history/units/UVA.txt",
+        "history/units/VLT.txt",
         "history/units/VLD.txt",
         "history/units/MON.txt",
         "localisation/russian/victory_points_l_russian.yml",
@@ -970,6 +977,12 @@
         "gfx/flags/**/SVL.tga",
         "gfx/flags/**/TMR.tga",
         "gfx/flags/**/VES.tga",
+        "gfx/flags/**/KLV.tga",
+        "gfx/flags/**/TAL.tga",
+        "gfx/flags/**/SLV.tga",
+        "gfx/flags/**/ARK.tga",
+        "gfx/flags/**/UVA.tga",
+        "gfx/flags/**/VLT.tga",
         "gfx/flags/**/VLD.tga",
         "gfx/flags/**/VRA.tga"
       ],
@@ -1057,7 +1070,8 @@
         "map/trees.bmp",
         "map/rivers.bmp",
         "map/cities.bmp",
-        "map/unitstacks.txt"
+        "map/unitstacks.txt",
+        "map/railways.txt"
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_mon_geography.py",
@@ -1066,6 +1080,9 @@
         "tools/builders/build_adiscord_ivn_geography.py",
         "tools/builders/build_adiscord_coastal_geography.py",
         "tools/lib/coastal_clearance.py",
+        "tools/builders/build_adiscord_vorkerland_theatre.py",
+        "tools/lib/city_terrains.py",
+        "tools/lib/adiscord_planned_geography.py",
         "history/states/*.txt",
         "localisation/russian/state_names_l_russian.yml",
         "common/terrain/00_terrain.txt",
@@ -1095,7 +1112,7 @@
       ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Owns the Montar Empire layers inside the province set of its 20 states and the planned provinces listed in tools/data/adiscord_mon_geography.json: the reviewed city geometry stamped from tools/data/adiscord_mon_province_geometry.png into provinces.bmp, the appended definition.csv rows and field 6 of every MON province, heightmap, terrain, tree, river and city-mask pixels of MON, the far wall of each authored canyon in a band of foreign heightmap pixels beside the MON border, world_normal cells under those pixels plus their one-cell feather, native unit anchors of carved, remainder, district and donor provinces and of any province whose borders the carving changed, and the anchor heights of every MON row. Every other byte stays as it is; trade regions own continent field 7, coastal geography owns the night-light alpha and terrain_snow owns snow conversion."
+      "overlap_explanation": "Owns the eastern geography layers inside the province set of the MON region and of every planned region in tools/data/adiscord_mon_geography.json (stage by stage), and the planned provinces listed there: the reviewed geometry stamped from tools/data/adiscord_mon_province_geometry.png into provinces.bmp, the appended definition.csv rows and field 6 of every scope province except kept city terrains, adopted cities and pinned provinces, heightmap, terrain, tree, river and city-mask pixels of the scope outside its frozen and kept pixels, the far wall of each authored canyon in a band of foreign heightmap pixels beside the MON border, world_normal cells under those pixels plus their one-cell feather, native unit anchors of carved, remainder, district, part and donor provinces and of any province whose borders the carving changed, the anchor heights of every scope row, and in railways.txt only the railway lines without another owner whose segment a carve or split broke, which take the new provinces between their ends. Lines the Vorkerland theatre builder renders are never rewritten here; their breaks are reported and that builder reroutes them. Every other byte stays as it is; trade regions own continent field 7, coastal geography owns the night-light alpha, vorkerland_cities owns the city masks of the adopted Vorkerland cities and terrain_snow owns snow conversion."
     },
     {
       "id": "remainder_states",
@@ -3355,6 +3372,7 @@
       "output_globs": [
         "map/terrain.bmp",
         "map/trees.bmp",
+        "map/cities.bmp",
         "map/heightmap.bmp",
         "map/world_normal.bmp",
         "map/definition.csv",
@@ -3397,7 +3415,7 @@
       ],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "This pass owns terrain, trees, height and normal-map layers inside the explicit IVN/IIA province set (each IIA island province is painted and raised from its declared terrain), preserves shared land city-mask pixels as urban palette 13, and owns definition.csv terrain field 6 there; trade regions own continent field 7 and terrain_snow owns compatible snow conversion. It stamps the reviewed IVN mainland province geometry into provinces.bmp, appends its new definition rows and coastal flags, owns river pixels outside the authored-river provinces, unit-anchor positions and heights of IVN provinces, land unit-anchor heights of IIA provinces, and IVN railway segments rerouted through the carved cities."
+      "overlap_explanation": "This pass owns terrain, trees, height and normal-map layers inside the explicit IVN/IIA province set (each IIA island province is painted and raised from its declared terrain), preserves shared land city-mask pixels as urban palette 13, paints the western houses (cities.bmp index 15) on every IVN/IIA settlement province outside the shoreline band, and owns definition.csv terrain field 6 there; trade regions own continent field 7 and terrain_snow owns compatible snow conversion. It stamps the reviewed IVN mainland province geometry into provinces.bmp, appends its new definition rows and coastal flags, owns river pixels outside the authored-river provinces, unit-anchor positions and heights of IVN provinces, land unit-anchor heights of IIA provinces, and IVN railway segments rerouted through the carved cities and Stage 2 parts, frontier segments included."
     },
     {
       "id": "nam_focus_icons",

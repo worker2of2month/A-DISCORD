@@ -1,0 +1,32 @@
+capital = 464
+oob = "UVA"
+
+recruit_character = UVA_Konrad_Ulvar
+
+set_politics = {
+	ruling_party = hedonism
+	elections_allowed = no
+}
+set_popularities = {
+	hedonism = 70
+	pragmatism = 30
+}
+set_stability = 0.58
+set_war_support = 0.45
+set_research_slots = 2
+add_manpower = 20000
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 8000
+	producer = UVA
+}
+add_equipment_to_stockpile = {
+	type = ADISCORD_squad_weapons_equipment
+	amount = 120
+	producer = UVA
+}
+add_equipment_to_stockpile = {
+	type = artillery_equipment
+	amount = 72
+	producer = UVA
+}

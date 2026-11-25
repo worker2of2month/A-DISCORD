@@ -8,6 +8,8 @@ state = {
 		owner = RIN
 		add_core_of = RIN
 		add_claim_by = MON
+		victory_points = { 3657 4 }
+		victory_points = { 11708 2 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -16,7 +18,8 @@ state = {
 	}
 	provinces = {
 		917 1407 1525 2334 2765 2868 3329 3657 3786 4523 4535 4868 6217 6549 6575 9289
-		9397 10195 10391 10813 11708 12918
+		9397 10195 10391 10813 11708 12918 19374 19378 19839 19840 19841 19842 19843 19844 19845 19846
+		19847 19848 19849 19850 19851 19852
 	}
 	resources = {
 		steel = 4

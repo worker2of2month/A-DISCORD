@@ -22,7 +22,15 @@ from tools.validators.validate_adiscord_vorkerland_collapse import (
     validate,
     validate_premature_wrk_release_contract,
 )
-from tools.lib.vorkerland_collapse_manifest import CAPITALS, TAGS
+from tools.lib.adiscord_planned_geography import PlannedProvince, load_planned_geography
+from tools.lib.vorkerland_collapse_manifest import (
+    AUTHORED_STATE_PARTITIONS,
+    CAPITALS,
+    STATE_PARTITIONS,
+    TAGS,
+    partition_children,
+    with_planned_children,
+)
 from tools.lib.adiscord_vorkerland_theatre_manifest import (
     UNITY_TOWER_NAME,
     UNITY_TOWER_PROVINCE,
@@ -1293,7 +1301,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "WKR": {32, 33, 40, 200, 201},
             "WTD": {34},
             "VAD": {75, 106, 107, 121},
-            "PWR": {71, 90, 91, 202},
+            "PWR": {71, 90, 91, 202, 734},
             "TVA": {36, 37, 38, 39, 324},
             "EYR": {102, 109, 111, 325},
             "EGC": {81, 110, 124},
@@ -1304,7 +1312,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "SWB": {35},
             "VHV": {315, 316, 317},
             "OSV": {318, 320},
-            "ZTA": {199},
+            "ZTA": {199, 738},
         }
         for tag, states in expected_states.items():
             if tag in {"WKR", "VAD", "PWR"}:
@@ -5898,6 +5906,78 @@ class ConsolidatedSourceTests(unittest.TestCase):
         self.assertEqual(
             source_section(loc, "test_loc"), "l_russian:\n key: \"value\"\n"
         )
+
+
+class PlannedPartitionChildrenTests(unittest.TestCase):
+    """New ids of a planned split join the collapse partition of their root parent."""
+
+    @staticmethod
+    def child(province: int, parent: int, state: int) -> PlannedProvince:
+        return PlannedProvince(province, parent, state, "part", "east", "test")
+
+    def test_children_follow_their_root_parent_into_its_piece(self) -> None:
+        planned = (
+            self.child(90_000, 16622, 72),
+            self.child(90_001, 90_000, 72),
+            self.child(90_002, 2339, 194),
+            self.child(90_003, 16623, 197),
+            self.child(90_004, 9104, 198),
+            self.child(90_005, 12930, 199),
+            self.child(90_006, 6713, 32),
+        )
+        self.assertEqual(
+            partition_children(AUTHORED_STATE_PARTITIONS, planned),
+            {90_000: 72, 90_001: 72, 90_002: 194, 90_003: 197, 90_004: 198, 90_005: 199},
+        )
+        partitions = with_planned_children(AUTHORED_STATE_PARTITIONS, planned)
+        self.assertEqual(partitions[72][72][-2:], (90_000, 90_001))
+        self.assertEqual(partitions[71][194][-1], 90_002)
+        for source_state, partition in AUTHORED_STATE_PARTITIONS.items():
+            for state_id, provinces in partition.items():
+                self.assertEqual(partitions[source_state][state_id][: len(provinces)], provinces)
+
+    def test_capitals_keep_their_ids(self) -> None:
+        planned = tuple(
+            self.child(90_000 + index, province, state_id)
+            for index, (state_id, province) in enumerate(CAPITALS.values())
+        )
+        partitions = with_planned_children(AUTHORED_STATE_PARTITIONS, planned)
+        for state_id, province in CAPITALS.values():
+            for partition in partitions.values():
+                if state_id in partition:
+                    self.assertIn(province, partition[state_id])
+
+    def test_validator_rejects_a_child_planned_into_another_piece(self) -> None:
+        issues: list[str] = []
+        collapse_validator.validate_partition_children((self.child(90_000, 2339, 71),), issues)
+        self.assertEqual(
+            issues,
+            ["planned province 90000: its root parent lies in state 194, but the plan assigns it to state 71"],
+        )
+        issues.clear()
+        collapse_validator.validate_partition_children((self.child(90_000, 2339, 194),), issues)
+        self.assertEqual(issues, [])
+
+    def test_split_halves_join_the_successor_of_the_state_they_were_cut_from(self) -> None:
+        self.assertIn(258, AUTHORED_STATE_PARTITIONS[71][734])
+        self.assertIn(9269, AUTHORED_STATE_PARTITIONS[71][735])
+        self.assertIn(265, AUTHORED_STATE_PARTITIONS[80][737])
+        self.assertIn(16704, AUTHORED_STATE_PARTITIONS[80][738])
+        self.assertIn(12930, AUTHORED_STATE_PARTITIONS[80][199])
+        # The geography plan names the state before the split.
+        issues: list[str] = []
+        collapse_validator.validate_partition_children((self.child(90_000, 258, 71),), issues)
+        self.assertEqual(issues, [])
+        collapse_validator.validate_partition_children((self.child(90_000, 258, 194),), issues)
+        self.assertEqual(len(issues), 1)
+
+    def test_manifest_partitions_are_derived_from_the_geography_data(self) -> None:
+        self.assertEqual(
+            STATE_PARTITIONS,
+            with_planned_children(AUTHORED_STATE_PARTITIONS, load_planned_geography().provinces),
+        )
+        if not load_planned_geography().provinces:
+            self.assertEqual(STATE_PARTITIONS, AUTHORED_STATE_PARTITIONS)
 
 
 if __name__ == "__main__":

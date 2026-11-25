@@ -9,6 +9,7 @@ state = {
 		add_core_of = WCG
 		add_core_of = LMN
 		victory_points = { 7656 5 }
+		victory_points = { 963 2 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -16,7 +17,7 @@ state = {
 		}
 	}
 	provinces = {
-		963 2143 2704 3734 5018 5702 5834 7656 12554
+		963 2143 2704 3734 5018 5702 5834 7656 12554 20453 20454 20455
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.9

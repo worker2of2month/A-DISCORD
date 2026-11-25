@@ -5,6 +5,11 @@ The province lists in states 89, 126, 133-163, 179 and 223 remain
 authoritative.  This follow-up owns only their starting countries, population,
 industry, resources, claims, victory points, OOB placement and flags.
 
+The BOR, DOL and RIN states of the eastern geography add the provinces planned
+for them in ``tools/data/adiscord_mon_geography.json`` once the map defines
+them, and take their victory points, names and principal (city) provinces from
+its settlement tables.
+
 The western continent (states 474-550) is intentionally outside this builder.
 """
 
@@ -20,14 +25,22 @@ from pathlib import Path
 from PIL import Image
 
 from tools.builders.build_adiscord_northern_countries import (
+    add_country_victory_point_names,
+    check_mon_settlements,
     distribute_levels,
     format_provinces,
+    geography_scope_states,
     largest_remainder,
     load_definition,
+    load_mon_geography,
     load_pixel_areas,
     load_positions,
+    mon_city_parents,
+    mon_planned_provinces,
+    mon_settlement_points,
     regiment_block,
     render_flag,
+    scope_victory_points,
 )
 from tools.lib.paths import repository_root
 from tools.lib.localisation import replace_generated_localisation_block
@@ -40,6 +53,7 @@ COUNTRY_DIR = ROOT / "common" / "countries"
 COUNTRY_HISTORY_DIR = ROOT / "history" / "countries"
 FLAG_DIR = ROOT / "gfx" / "flags"
 VP_LOCALISATION = ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
+BUILDER_MODULE = "tools.builders.build_adiscord_inner_frontier_countries"
 EXZ_LOCALISATION = ROOT / "localisation" / "russian" / "countries_l_russian.yml"
 EXZ_LOCALISATION_MARKER = "tools.builders.build_adiscord_inner_frontier_countries:exz"
 EXZ_LOCALISATION_ENTRIES = {
@@ -319,17 +333,43 @@ def parse_state(path: Path) -> tuple[int, tuple[int, ...]]:
     )
 
 
+def settlement_points(
+    geography: dict[str, object],
+) -> tuple[tuple[int, int, int, str], ...]:
+    """Return the settlement points of the inner-frontier states in the geography scope."""
+    scope = geography_scope_states(geography) & EXPECTED_STATES
+    return tuple(point for point in mon_settlement_points(geography) if point[0] in scope)
+
+
 def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
     color_to_province, details = load_definition()
     areas = load_pixel_areas(color_to_province)
     positions = load_positions()
-    shells = {
-        state_id: parse_state(state_path(state_id))[1] for state_id in EXPECTED_STATES
+    geography = load_mon_geography()
+    # The BOR, DOL and RIN states; the northern builder renders the MON region,
+    # TMR, VEL and DRV from the same table.
+    scope = geography_scope_states(geography) & EXPECTED_STATES
+    planned = mon_planned_provinces(geography, details)
+    shells: dict[int, tuple[int, ...]] = {}
+    for state_id in EXPECTED_STATES:
+        provinces = parse_state(state_path(state_id))[1]
+        if state_id in scope and state_id in planned:
+            provinces = tuple(sorted(set(provinces) | planned[state_id]))
+        shells[state_id] = provinces
+    cities = {
+        state_id: province_id
+        for state_id, province_id in mon_city_parents(geography).items()
+        if state_id in scope
     }
+    points = settlement_points(geography)
+    check_mon_settlements(shells, cities, points, scope)
     principal_provinces: dict[int, int] = {}
     state_pixels: dict[int, int] = {}
     for state_id, provinces in shells.items():
         state_pixels[state_id] = sum(areas[province_id] for province_id in provinces)
+        if state_id in cities:
+            principal_provinces[state_id] = cities[state_id]
+            continue
         urban = [
             province_id
             for province_id in provinces
@@ -392,11 +432,9 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
             ).items():
                 resources_by_state[state_id][resource] += amount
 
-        vp_values: dict[int, tuple[str, int]] = {
-            capital: (str(country["capital_name"]), 5)
-        }
-        for state_id, name, value in country.get("secondary_vps", ()):
-            vp_values[int(state_id)] = (str(name), int(value))
+        victory_points = scope_victory_points(
+            tag, country, principal_provinces, points, scope
+        )
 
         for state_id in states:
             population = populations[state_id]
@@ -420,8 +458,7 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
                 "military": military[state_id],
                 "air_base": air_bases[state_id],
                 "resources": dict(resources_by_state[state_id]),
-                "vp": vp_values.get(state_id),
-                "vp_province": principal_provinces[state_id],
+                "victory_points": tuple(victory_points.get(state_id, ())),
                 "claims": CLAIMS_BY_STATE.get(state_id, ()),
                 "local_supplies": round(
                     min(7.0, 0.8 + infrastructure * 0.55 + factories * 0.20), 1
@@ -440,9 +477,8 @@ def render_state(state_id: int, profile: dict[str, object]) -> str:
     if profile["successor"] != profile["owner"]:
         history.append(f"\t\tadd_core_of = {profile['successor']}")
     history.extend(f"\t\tadd_claim_by = {tag}" for tag in profile["claims"])
-    if profile["vp"]:
-        _name, value = profile["vp"]
-        history.append(f"\t\tvictory_points = {{ {profile['vp_province']} {value} }}")
+    for province_id, value, _name in profile["victory_points"]:
+        history.append(f"\t\tvictory_points = {{ {province_id} {value} }}")
     history.extend(
         ("\t\tbuildings = {", f"\t\t\tinfrastructure = {profile['infrastructure']}")
     )
@@ -639,6 +675,19 @@ def write_country_sources() -> None:
         )
 
 
+def victory_point_localisation(
+    principal_provinces: dict[int, int],
+    points: tuple[tuple[int, int, int, str], ...],
+) -> dict[str, str]:
+    """Russian names in manifest order; geography states name their settlement points."""
+    localisation: dict[str, str] = {}
+    for country in COUNTRIES.values():
+        add_country_victory_point_names(
+            localisation, country, principal_provinces, points
+        )
+    return localisation
+
+
 def apply() -> None:
     profiles, principal_provinces = build_profiles()
     for state_id, profile in sorted(profiles.items()):
@@ -658,20 +707,12 @@ def apply() -> None:
         encoding="utf-8",
         newline="\n",
     )
-    localisation: dict[str, str] = {}
-    for country in COUNTRIES.values():
-        capital_state = int(country["capital"])
-        localisation[f"VICTORY_POINTS_{principal_provinces[capital_state]}"] = str(
-            country["capital_name"]
-        )
-        for state_id, name, _value in country.get("secondary_vps", ()):
-            localisation[f"VICTORY_POINTS_{principal_provinces[int(state_id)]}"] = str(
-                name
-            )
     replace_generated_localisation_block(
         VP_LOCALISATION,
-        "tools.builders.build_adiscord_inner_frontier_countries",
-        localisation,
+        BUILDER_MODULE,
+        victory_point_localisation(
+            principal_provinces, settlement_points(load_mon_geography())
+        ),
     )
     replace_generated_localisation_block(
         EXZ_LOCALISATION,

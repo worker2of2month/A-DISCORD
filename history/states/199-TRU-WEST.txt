@@ -2,22 +2,22 @@ state={
 	id=199
 	name=STATE_199
 	provinces={
-		531 976 1280 1889 3345 3518 4501 5314 5524 5679 5888 6456 6465 6759 6820 7267 7942 9448 9811 10990 11379 11563 11592 12508 12930 16665 16669 16671 16674 16676 16678 16690 16696 16704
+		531 976 1889 4501 6456 6465 6759 9448 9811 10990 12508 12930
+		16669 16671 16674 16676 16678 16690 16696 20739 20742 20743 20744 20745
+		20746 20747 20748
 	}
-	manpower = 750000
-	state_category = town
+	manpower = 460000
+	state_category = rural
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.0
 	history={
 		owner=TRU
 		buildings={
-			industrial_complex = 1
 			infrastructure = 3
 			arms_factory = 2
 		}
 		add_core_of=TRU
 		victory_points = { 16690 3 }
 		victory_points = { 16696 1 }
-		victory_points = { 16704 1 }
 	}
 }

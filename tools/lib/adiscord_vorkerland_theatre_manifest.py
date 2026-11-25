@@ -1,6 +1,16 @@
-"""Exact victory-point contract for the central Vorkerland war theatre."""
+"""Exact victory-point contract for the central Vorkerland war theatre.
+
+The authored table is the contract before the east geography stage reaches the
+map. Once it does, its new cities and towns join their states' lists and the
+region's `vp_overrides` redistribute points inside each package, so
+`VORKERLAND_THEATRE_VICTORY_POINTS` is the merged table every consumer reads.
+"""
 
 from __future__ import annotations
+
+from collections.abc import Iterable, Mapping
+
+from .adiscord_planned_geography import load_planned_geography
 
 
 UNITY_TOWER_STATE = 40
@@ -12,7 +22,7 @@ VORKERLAND_PROTECTED_LANDMARK_VPS = {
 }
 
 
-VORKERLAND_THEATRE_VICTORY_POINTS: dict[int, tuple[tuple[int, int], ...]] = {
+AUTHORED_THEATRE_VICTORY_POINTS: dict[int, tuple[tuple[int, int], ...]] = {
     27: ((16614, 3), (5090, 3)),
     32: ((6713, 30), (16405, 10)),
     33: ((3248, 10), (3913, 3)),
@@ -134,6 +144,64 @@ VORKERLAND_THEATRE_PACKAGE_TOTALS: dict[str, int] = {
     "WTD": 10,
     "TGD": 22,
 }
+
+
+def merge_planned_victory_points(
+    authored: Mapping[int, tuple[tuple[int, int], ...]],
+    settlements: Iterable[tuple[int, int, int]],
+    overrides: Mapping[int, int],
+) -> dict[int, tuple[tuple[int, int], ...]]:
+    """Append planned (state, province, value) settlements, then apply overrides.
+
+    Settlements of states outside the theatre are ignored; they belong to the
+    ordinary regional tables. A settlement may not repeat an authored VP (an
+    adopted city changes value through an override), the protected landmark
+    never changes and every override must name a VP of the merged table.
+    """
+    additions: dict[int, list[tuple[int, int]]] = {}
+    for state_id, province_id, value in settlements:
+        if state_id in authored:
+            additions.setdefault(state_id, []).append((province_id, value))
+    merged: dict[int, tuple[tuple[int, int], ...]] = {}
+    for state_id, points in authored.items():
+        added = tuple(additions.get(state_id, ()))
+        listed = [province_id for province_id, _value in (*points, *added)]
+        if len(listed) != len(set(listed)):
+            raise ValueError(f"state {state_id}: a planned settlement repeats a theatre VP")
+        merged[state_id] = tuple(
+            (province_id, overrides.get(province_id, value))
+            for province_id, value in (*points, *added)
+        )
+    unknown = sorted(set(overrides) - {province_id for points in merged.values() for province_id, _ in points})
+    if unknown:
+        raise ValueError(f"VP overrides name provinces outside the theatre: {unknown}")
+    if merged.get(UNITY_TOWER_STATE) != VORKERLAND_PROTECTED_LANDMARK_VPS[UNITY_TOWER_STATE]:
+        raise ValueError("planned geography cannot change the Unity Tower VP")
+    if any(value < 1 for points in merged.values() for _province_id, value in points):
+        raise ValueError("a theatre VP override must keep at least one point")
+    return merged
+
+
+def package_total_errors(points: Mapping[int, tuple[tuple[int, int], ...]]) -> list[str]:
+    """Report every package whose total differs from its exact contract."""
+    errors = []
+    for package, states in VORKERLAND_THEATRE_PACKAGES.items():
+        total = sum(value for state_id in states for _province_id, value in points.get(state_id, ()))
+        if total != VORKERLAND_THEATRE_PACKAGE_TOTALS[package]:
+            errors.append(
+                f"Vorkerland package {package}: expected VP total "
+                f"{VORKERLAND_THEATRE_PACKAGE_TOTALS[package]}, found {total}"
+            )
+    return errors
+
+
+def planned_theatre_victory_points() -> dict[int, tuple[tuple[int, int], ...]]:
+    planned = load_planned_geography().for_states(AUTHORED_THEATRE_VICTORY_POINTS)
+    settlements = ((entry.state, entry.province, entry.value) for entry in planned.vp_settlements())
+    return merge_planned_victory_points(AUTHORED_THEATRE_VICTORY_POINTS, settlements, planned.vp_overrides)
+
+
+VORKERLAND_THEATRE_VICTORY_POINTS = planned_theatre_victory_points()
 
 
 VORKERLAND_THEATRE_VP_PROVINCES = frozenset(

@@ -27,9 +27,17 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_rin_crisis.1.b
-		trigger = { is_subject_of = MON }
+		trigger = {
+			is_subject = no
+			MON = {
+				exists = yes
+				is_subject = no
+				NOT = { has_war_with = RIN }
+			}
+		}
 		ai_chance = { base = 0 }
 		remove_ideas = RIN_two_oaths
+		MON = { puppet = RIN }
 		add_ideas = RIN_crown_palatin
 		add_stability = -0.05
 		add_political_power = -50

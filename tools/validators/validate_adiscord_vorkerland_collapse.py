@@ -39,7 +39,10 @@ except ModuleNotFoundError:
 
 try:
     from tools.builders import build_adiscord_strategic_regions as map_regions
+    from tools.builders.build_adiscord_new_states import STATE_SPLITS
+    from tools.lib.adiscord_planned_geography import load_planned_geography
     from tools.lib.vorkerland_collapse_manifest import (
+        AUTHORED_STATE_PARTITIONS,
         CAPITALS,
         CONTAMINATED_STATES,
         DIRTY_GROUPS,
@@ -47,6 +50,7 @@ try:
         EXZ_REMAINDER_GROUPS,
         STATE_PARTITIONS,
         TAGS,
+        partition_children,
     )
     from tools.lib.adiscord_vorkerland_theatre_manifest import (
         UNITY_TOWER_NAME,
@@ -57,7 +61,10 @@ try:
     )
 except (ModuleNotFoundError, ImportError):
     from builders import build_adiscord_strategic_regions as map_regions
+    from builders.build_adiscord_new_states import STATE_SPLITS
+    from lib.adiscord_planned_geography import load_planned_geography
     from lib.vorkerland_collapse_manifest import (
+        AUTHORED_STATE_PARTITIONS,
         CAPITALS,
         CONTAMINATED_STATES,
         DIRTY_GROUPS,
@@ -65,6 +72,7 @@ except (ModuleNotFoundError, ImportError):
         EXZ_REMAINDER_GROUPS,
         STATE_PARTITIONS,
         TAGS,
+        partition_children,
     )
     from lib.adiscord_vorkerland_theatre_manifest import (
         UNITY_TOWER_NAME,
@@ -111,6 +119,7 @@ PERIPHERY_STATES = (
     *range(306, 326),
     327,
     328,
+    *range(734, 739),
 )
 STALE_SYSTEM_TOKENS = (
     "ADISCORD_vorkerland_stalemate",
@@ -430,6 +439,27 @@ def validate_manifest(root: Path, issues: list[str]) -> None:
         issues.append("EXZ remainder groups overlap playable dirty states")
     if set(STATE_PARTITIONS) != {71, 72, 74, 76, 80}:
         issues.append("legacy state partition manifest changed unexpectedly")
+    validate_partition_children(load_planned_geography().provinces, issues)
+
+
+def validate_partition_children(planned: tuple, issues: list[str]) -> None:
+    """A planned child must be assigned to the piece that holds its root parent.
+
+    The plan predates the state split, so a child in a new half is assigned to
+    the state that half was cut from.
+    """
+    planned_states = {entry.province: entry.state for entry in planned}
+    for child, piece in sorted(partition_children(AUTHORED_STATE_PARTITIONS, planned).items()):
+        planned_piece = STATE_SPLITS[piece]["parent"] if piece in STATE_SPLITS else piece
+        if planned_states[child] != planned_piece:
+            issues.append(
+                f"planned province {child}: its root parent lies in state {piece}, "
+                f"but the plan assigns it to state {planned_states[child]}"
+            )
+    for partition in STATE_PARTITIONS.values():
+        for state_id, provinces in partition.items():
+            if len(provinces) != len(set(provinces)):
+                issues.append(f"state {state_id}: partition lists a province twice")
 
 
 def validate_states(root: Path, issues: list[str]) -> None:
@@ -2052,7 +2082,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "WKR": {32, 33, 40, 200, 201},
         "WTD": {34},
         "VAD": {75, 106, 107, 121},
-        "PWR": {71, 90, 91, 202},
+        "PWR": {71, 90, 91, 202, 734},
         "TVA": {36, 37, 38, 39, 324},
         "EYR": {102, 109, 111, 325},
         "EGC": {81, 110, 124},
@@ -2063,7 +2093,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "SWB": {35},
         "VHV": {315, 316, 317},
         "OSV": {318, 320},
-        "ZTA": {199},
+        "ZTA": {199, 738},
     }
     for tag, expected in expected_central_states.items():
         actual = initial_tag_states(effects, tag)

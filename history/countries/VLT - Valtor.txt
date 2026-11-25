@@ -1,0 +1,32 @@
+capital = 471
+oob = "VLT"
+
+recruit_character = VLT_Otto_Terlan
+
+set_politics = {
+	ruling_party = pragmatism
+	elections_allowed = yes
+}
+set_popularities = {
+	pragmatism = 70
+	humanism = 30
+}
+set_stability = 0.58
+set_war_support = 0.45
+set_research_slots = 2
+add_manpower = 30000
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 12000
+	producer = VLT
+}
+add_equipment_to_stockpile = {
+	type = ADISCORD_squad_weapons_equipment
+	amount = 180
+	producer = VLT
+}
+add_equipment_to_stockpile = {
+	type = artillery_equipment
+	amount = 108
+	producer = VLT
+}

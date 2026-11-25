@@ -741,4 +741,10 @@
  STATE_731: "Loran Sands"
  STATE_732: "Bayrat Mines"
  STATE_733: "Veyran Border"
+ STATE_734: "Rimat Fields"
+ STATE_735: "Grein Floodplain"
+ STATE_736: "Northern Romelia"
+ STATE_737: "Southern Zlatorechye"
+ STATE_738: "Dry Klyuch District"
+ STATE_739: "Reydal Forest"
  # END GENERATED: tools.builders.build_adiscord_new_states

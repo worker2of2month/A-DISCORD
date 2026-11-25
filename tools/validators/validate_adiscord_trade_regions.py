@@ -14,9 +14,10 @@ from tools.builders.build_adiscord_trade_regions import (
     TradeRegionPlan,
     build_plan,
 )
+from tools.lib.adiscord_planned_geography import defined_provinces, east_stage_labels, east_stages, stage_is_applied
 
 
-EXPECTED_STATE_COUNTS = {1: 67, 2: 65, 3: 91, 4: 8, 5: 100, 6: 42, 7: 360}
+EXPECTED_STATE_COUNTS = {1: 67, 2: 65, 3: 91, 4: 8, 5: 105, 6: 43, 7: 360}
 BASE_PROVINCE_COUNTS = {
     1: 626,
     2: 752,
@@ -91,8 +92,27 @@ def expected_province_counts(root: Path, plan: TradeRegionPlan, issues: list[str
             counts[continent] += 1
             if plan.province_continents.get(part["province"]) != continent:
                 issues.append(f"province {part['province']}: must inherit trade region {continent} from {home}")
+    itora = json.loads((root / "tools/data/adiscord_ivn_provinces.json").read_bytes())
+    for entry in itora.get("stage2", {}).get("provinces", ()):
+        parent, province = entry["parent"], entry["province"]
+        continent = plan.province_continents.get(parent)
+        if continent is None:
+            issues.append(f"province {parent}: IVN parent has no trade region")
+            continue
+        counts[continent] += 1
+        if plan.province_continents.get(province) != continent:
+            issues.append(f"province {province}: must inherit trade region {continent} from {parent}")
     montar = json.loads((root / "tools/data/adiscord_mon_geography.json").read_bytes())
-    for entry in montar["planned"]["provinces"]:
+    # A planned stage counts once its provinces are on the map; each stage arrives whole.
+    defined = defined_provinces(root)
+    stages = east_stages(montar)
+    entries = [
+        entry
+        for stage, stage_label in zip(stages, east_stage_labels(stages))
+        if stage_is_applied(stage, stage_label, defined)
+        for entry in stage["provinces"]
+    ]
+    for entry in entries:
         parent, province = entry["parent"], entry["province"]
         continent = plan.province_continents.get(parent)
         if continent is None:

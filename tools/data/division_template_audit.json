@@ -4649,6 +4649,148 @@
       }
     },
     {
+      "key": "oob_ark_imperial_line_division",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/ARK.txt",
+        "owner": "ARK"
+      },
+      "technical_name": "Imperial Line Division",
+      "display_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 48.5,
+        "manpower": 6500,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 24,
+          "infantry_equipment": 5850
+        },
+        "supply": 0.6
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_ark_imperial_line_division"
+      }
+    },
+    {
+      "key": "oob_klv_imperial_line_division",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/KLV.txt",
+        "owner": "KLV"
+      },
+      "technical_name": "Imperial Line Division",
+      "display_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 48.5,
+        "manpower": 6500,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 24,
+          "infantry_equipment": 5850
+        },
+        "supply": 0.6
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_klv_imperial_line_division"
+      }
+    },
+    {
       "key": "oob_mon_imperial_line_division",
       "source": {
         "kind": "oob",
@@ -4720,6 +4862,469 @@
       }
     },
     {
+      "key": "oob_slv_imperial_line_division",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/SLV.txt",
+        "owner": "SLV"
+      },
+      "technical_name": "Imperial Line Division",
+      "display_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 48.5,
+        "manpower": 6500,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 24,
+          "infantry_equipment": 5850
+        },
+        "supply": 0.6
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_slv_imperial_line_division"
+      }
+    },
+    {
+      "key": "oob_tal_imperial_line_division",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/TAL.txt",
+        "owner": "TAL"
+      },
+      "technical_name": "Imperial Line Division",
+      "display_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 48.5,
+        "manpower": 6500,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 24,
+          "infantry_equipment": 5850
+        },
+        "supply": 0.6
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_tal_imperial_line_division"
+      }
+    },
+    {
+      "key": "oob_uva_imperial_line_division",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/UVA.txt",
+        "owner": "UVA"
+      },
+      "technical_name": "Imperial Line Division",
+      "display_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 48.5,
+        "manpower": 6500,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 24,
+          "infantry_equipment": 5850
+        },
+        "supply": 0.6
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_uva_imperial_line_division"
+      }
+    },
+    {
+      "key": "oob_vld_imperial_line_division",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/VLD.txt",
+        "owner": "VLD"
+      },
+      "technical_name": "Imperial Line Division",
+      "display_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 48.5,
+        "manpower": 6500,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 24,
+          "infantry_equipment": 5850
+        },
+        "supply": 0.6
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_vld_imperial_line_division"
+      }
+    },
+    {
+      "key": "oob_vlt_imperial_line_division",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/VLT.txt",
+        "owner": "VLT"
+      },
+      "technical_name": "Imperial Line Division",
+      "display_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_line_artillery",
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 48.5,
+        "manpower": 6500,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 24,
+          "infantry_equipment": 5850
+        },
+        "supply": 0.6
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_vlt_imperial_line_division"
+      }
+    },
+    {
+      "key": "oob_ark_imperial_frontier_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/ARK.txt",
+        "owner": "ARK"
+      },
+      "technical_name": "Imperial Frontier Brigade",
+      "display_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 4000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32,
+          "infantry_equipment": 3600
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_ark_imperial_frontier_brigade"
+      }
+    },
+    {
+      "key": "oob_klv_imperial_frontier_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/KLV.txt",
+        "owner": "KLV"
+      },
+      "technical_name": "Imperial Frontier Brigade",
+      "display_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 4000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32,
+          "infantry_equipment": 3600
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_klv_imperial_frontier_brigade"
+      }
+    },
+    {
       "key": "oob_mon_imperial_frontier_brigade",
       "source": {
         "kind": "oob",
@@ -4771,6 +5376,276 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_mon_imperial_frontier_brigade"
+      }
+    },
+    {
+      "key": "oob_slv_imperial_frontier_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/SLV.txt",
+        "owner": "SLV"
+      },
+      "technical_name": "Imperial Frontier Brigade",
+      "display_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 4000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32,
+          "infantry_equipment": 3600
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_slv_imperial_frontier_brigade"
+      }
+    },
+    {
+      "key": "oob_tal_imperial_frontier_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/TAL.txt",
+        "owner": "TAL"
+      },
+      "technical_name": "Imperial Frontier Brigade",
+      "display_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 4000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32,
+          "infantry_equipment": 3600
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_tal_imperial_frontier_brigade"
+      }
+    },
+    {
+      "key": "oob_uva_imperial_frontier_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/UVA.txt",
+        "owner": "UVA"
+      },
+      "technical_name": "Imperial Frontier Brigade",
+      "display_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 4000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32,
+          "infantry_equipment": 3600
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_uva_imperial_frontier_brigade"
+      }
+    },
+    {
+      "key": "oob_vld_imperial_frontier_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/VLD.txt",
+        "owner": "VLD"
+      },
+      "technical_name": "Imperial Frontier Brigade",
+      "display_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 4000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32,
+          "infantry_equipment": 3600
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_vld_imperial_frontier_brigade"
+      }
+    },
+    {
+      "key": "oob_vlt_imperial_frontier_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/VLT.txt",
+        "owner": "VLT"
+      },
+      "technical_name": "Imperial Frontier Brigade",
+      "display_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 4000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 32,
+          "infantry_equipment": 3600
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_vlt_imperial_frontier_brigade"
       }
     },
     {
@@ -12176,53 +13051,6 @@
       }
     },
     {
-      "key": "oob_vld_northern_militia",
-      "source": {
-        "kind": "oob",
-        "path": "history/units/VLD.txt",
-        "owner": "VLD"
-      },
-      "technical_name": "Northern Militia",
-      "display_name": "Northern Militia",
-      "legacy_names": [
-        "Северная дружина"
-      ],
-      "regiments": [
-        {
-          "type": "ADISCORD_militia",
-          "x": 0,
-          "y": 0
-        },
-        {
-          "type": "ADISCORD_militia",
-          "x": 1,
-          "y": 0
-        },
-        {
-          "type": "ADISCORD_militia",
-          "x": 2,
-          "y": 0
-        }
-      ],
-      "support": [],
-      "computed": {
-        "organization": 40.75,
-        "manpower": 3000,
-        "equipment": {
-          "infantry_equipment": 2700
-        },
-        "supply": 0.12
-      },
-      "equipment_availability": {
-        "infantry_equipment": true
-      },
-      "ai_role": "territorial",
-      "replacement_path": {
-        "kind": "retain",
-        "target": "oob_vld_northern_militia"
-      }
-    },
-    {
       "key": "oob_vra_northern_militia",
       "source": {
         "kind": "oob",
@@ -16570,6 +17398,18 @@
       "count": 11
     },
     {
+      "key": "ark_oob_imperial_frontier_brigade_xp_0_2_eq_1",
+      "path": "history/units/ARK.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
       "key": "mon_oob_imperial_frontier_brigade_xp_0_2_eq_1",
       "path": "history/units/MON.txt",
       "kind": "oob",
@@ -16579,7 +17419,67 @@
       ],
       "start_experience_factor": 0.2,
       "start_equipment_factor": 1.0,
-      "count": 8
+      "count": 2
+    },
+    {
+      "key": "uva_oob_imperial_frontier_brigade_xp_0_2_eq_1",
+      "path": "history/units/UVA.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
+      "key": "vld_oob_imperial_frontier_brigade_xp_0_2_eq_1",
+      "path": "history/units/VLD.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1.0,
+      "count": 2
+    },
+    {
+      "key": "vlt_oob_imperial_frontier_brigade_xp_0_2_eq_1",
+      "path": "history/units/VLT.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Frontier Brigade",
+      "legacy_names": [
+        "Имперская пограничная бригада"
+      ],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1.0,
+      "count": 2
+    },
+    {
+      "key": "ark_oob_imperial_line_division_xp_0_3_eq_1",
+      "path": "history/units/ARK.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0,
+      "count": 4
+    },
+    {
+      "key": "klv_oob_imperial_line_division_xp_0_3_eq_1",
+      "path": "history/units/KLV.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0,
+      "count": 6
     },
     {
       "key": "mon_oob_imperial_line_division_xp_0_3_eq_1",
@@ -16591,7 +17491,67 @@
       ],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1.0,
-      "count": 28
+      "count": 2
+    },
+    {
+      "key": "slv_oob_imperial_line_division_xp_0_3_eq_1",
+      "path": "history/units/SLV.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0,
+      "count": 4
+    },
+    {
+      "key": "tal_oob_imperial_line_division_xp_0_3_eq_1",
+      "path": "history/units/TAL.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0,
+      "count": 4
+    },
+    {
+      "key": "uva_oob_imperial_line_division_xp_0_3_eq_1",
+      "path": "history/units/UVA.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0,
+      "count": 2
+    },
+    {
+      "key": "vld_oob_imperial_line_division_xp_0_3_eq_1",
+      "path": "history/units/VLD.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0,
+      "count": 3
+    },
+    {
+      "key": "vlt_oob_imperial_line_division_xp_0_3_eq_1",
+      "path": "history/units/VLT.txt",
+      "kind": "oob",
+      "technical_name": "Imperial Line Division",
+      "legacy_names": [
+        "Имперская линейная дивизия"
+      ],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0,
+      "count": 3
     },
     {
       "key": "mzr_oob_cistern_watch_xp_0_1_eq_0_45",

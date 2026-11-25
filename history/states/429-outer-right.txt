@@ -9,6 +9,8 @@ state = {
 	history = {
 		owner = TMR
 		add_core_of = TMR
+		victory_points = { 10425 3 }
+		victory_points = { 11285 1 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -16,7 +18,8 @@ state = {
 	}
 	provinces = {
 		167 347 847 849 1479 3048 3101 3405 4663 4990 5003 5559 6523 6939 7689 7707
-		8191 8486 8725 8868 10136 10180 10425 10972 11285 12032 12492 12904
+		8191 8486 8725 8868 10136 10180 10425 10972 11285 12032 12492 12904 19388 19400 20002 20003
+		20004 20005 20006 20007 20008 20009 20010 20011 20012 20013 20014 20015
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.6

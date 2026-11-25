@@ -2,21 +2,22 @@ state={
 	id=80
 	name="STATE_80"
 	provinces={
-		265 449 686 860 868 1423 1426 1581 1672 1969 2914 3083 3567 3997 4133 4278 5153 5358 5376 5676 6399 7434 7770 7819 8849 9464 9845 10034 10609 10624 10746 11472 16619 16633 16634
+		449 860 1423 1581 1672 1969 2914 4133 5358 5676 7434 7770
+		8849 10746 11472 16619 16633 20735 20736 20737 20738
 	}
-	manpower = 1350000
+	manpower = 670000
 	buildings_max_level_factor = 1.000
-	state_category = large_town
+	state_category = town
 	local_supplies = 3.5
 	resources = {
-		steel = 8
+		steel = 4
 	}
 	history = {
 		owner = TRU
 		buildings = {
 			arms_factory = 2
 			infrastructure = 3
-			industrial_complex = 2
+			industrial_complex = 1
 		}
 		add_core_of = TRU
 		victory_points = { 16619 5 }

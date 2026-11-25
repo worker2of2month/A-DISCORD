@@ -3,6 +3,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 from dataclasses import dataclass
 import hashlib
+import json
 from io import BytesIO
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -11,7 +12,7 @@ import unittest
 
 import numpy as np
 from PIL import Image
-from scipy.ndimage import binary_dilation, distance_transform_edt
+from scipy.ndimage import binary_dilation, distance_transform_edt, label
 
 from tools.builders import build_adiscord_ivn_geography as builder
 from tools.builders import build_adiscord_terrain_snow as terrain_builder
@@ -19,10 +20,10 @@ from tools.lib import coastal_clearance as clearance
 
 
 HEIGHT_OUTSIDE_ISLAND_SHA256 = (
-    "40C256842B5781D6C5E113DE3FEF69F1BC660B534B518AFB39BAA25BB5837CBC"
+    "517387B6EB8E4DA59AF01A029399EDCDE305CDDE30F9BC713236F8E0B259E842"
 )
 NORMAL_OUTSIDE_FEATHER_SHA256 = (
-    "557AE550EC78FAEF8D423B384134AA77C620B008911D03DFB9002EC7F27087FE"
+    "D74F5F11E97E7DE7AA573BFFB6DA475025CD43A58123DE033478B311E18260DA"
 )
 
 
@@ -67,13 +68,13 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                     province_id: (index + 1, index + 1, index + 1)
                     for index, province_id in enumerate(province_by_state.values())
                 }
-                provinces = Image.new("L", (5, 2), 0)
+                provinces = Image.new("L", (6, 2), 0)
             else:
                 definition_colors = {
                     province_id: (index + 1, 0, 0)
                     for index, province_id in enumerate(province_by_state.values())
                 }
-                provinces = Image.new("RGB", (5, 2), (0, 0, 0))
+                provinces = Image.new("RGB", (6, 2), (0, 0, 0))
             pixels = list(provinces.get_flattened_data())
             for index, state_id in enumerate(state_ids):
                 if state_id not in absent_from_bitmap:
@@ -98,20 +99,20 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             masks = builder.landscape_masks(
                 fixture.provinces, fixture.definition_colors
             )
-        self.assertEqual(masks.north, bytearray([1] * 10))
+        self.assertEqual(masks.north, bytearray([1] * 11 + [0]))
         self.assertEqual(
             [index for index, value in enumerate(masks.island) if value],
-            [1, 7, 8],
+            [1, 7, 8, 10],
         )
-        self.assertEqual(masks.island_bbox, (1, 0, 3, 1))
+        self.assertEqual(masks.island_bbox, (1, 0, 4, 1))
 
     def test_landscape_masks_accepts_grayscale_fixture(self) -> None:
         with self.landscape_fixture(grayscale=True) as fixture:
             masks = builder.landscape_masks(
                 fixture.provinces, fixture.definition_colors
             )
-        self.assertEqual(masks.north, bytearray([1] * 10))
-        self.assertEqual(masks.island_bbox, (1, 0, 3, 1))
+        self.assertEqual(masks.north, bytearray([1] * 11 + [0]))
+        self.assertEqual(masks.island_bbox, (1, 0, 4, 1))
 
     def test_landscape_masks_rejects_definition_missing_state_province(self) -> None:
         with self.landscape_fixture() as fixture:
@@ -142,10 +143,10 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 builder.landscape_masks(ConversionFailure(), fixture.definition_colors)
 
     def test_landscape_scope_is_exact(self) -> None:
-        self.assertEqual(builder.ISLAND_HEIGHT_STATE_IDS, frozenset({128, 693, 694}))
+        self.assertEqual(builder.ISLAND_HEIGHT_STATE_IDS, frozenset({128, 693, 694, 739}))
         self.assertEqual(
             builder.NORTHERN_LANDSCAPE_STATE_IDS,
-            frozenset({127, 128, 129, 130, 131, 132, 164, 693, 694, 715}),
+            frozenset({127, 128, 129, 130, 131, 132, 164, 693, 694, 715, 739}),
         )
 
     def test_distance_from_edge_increases_inward(self) -> None:
@@ -562,6 +563,12 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             packed, colours, frozenset(builder.ISLAND_PROVINCE_TERRAIN)
         )
         coast_distance = distance_transform_edt(island)
+        # Upland relief is authored per original province; Stage 2 parts
+        # share it, so the spread is measured over the province and its parts.
+        parents = builder.stage2_parents(builder.PROVINCE_MANIFEST)
+        families: dict[int, set[int]] = {}
+        for province_id in builder.ISLAND_PROVINCE_TERRAIN:
+            families.setdefault(builder.stage2_root(province_id, parents), set()).add(province_id)
         means: dict[str, list[float]] = {}
         for province_id, terrain_type in builder.ISLAND_PROVINCE_TERRAIN.items():
             mask = builder.province_mask(packed, colours, frozenset({province_id}))
@@ -570,7 +577,14 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             with self.subTest(province=province_id, terrain=terrain_type):
                 self.assertGreaterEqual(int(values.min()), builder.HEIGHT_MIN)
                 if terrain_type in builder.ISLAND_UPLAND_TYPES:
-                    self.assertGreaterEqual(float(values.std()), 3.5)
+                    family = families[builder.stage2_root(province_id, parents)]
+                    upland = frozenset(
+                        member
+                        for member in family
+                        if builder.ISLAND_PROVINCE_TERRAIN[member] in builder.ISLAND_UPLAND_TYPES
+                    )
+                    spread = heights[builder.province_mask(packed, colours, upland)]
+                    self.assertGreaterEqual(float(spread.std()), 3.5)
                 elif terrain_type == "urban":
                     # A town stands at the level of the land around it.
                     ring = binary_dilation(mask, iterations=3) & ~mask & island
@@ -775,6 +789,11 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             with self.subTest(states=sorted(state_ids)):
                 with self.assertRaisesRegex(RuntimeError, "already have reviewed"):
                     builder.plan_province_geometry(state_ids, settlements)
+        # A stored Stage 2 plan is never replanned either.
+        planned = json.loads(manifest.decode("utf-8"))
+        planned["stage2"] = {"provinces": [{"province": 1, "parent": 2, "state": 25, "kind": "part"}]}
+        with self.assertRaisesRegex(RuntimeError, "Stage 2 plan exists"):
+            builder.plan_stage2(planned)
         self.assertEqual(builder.PROVINCE_MANIFEST_PATH.read_bytes(), manifest)
         self.assertEqual(builder.PROVINCE_GEOMETRY_PATH.read_bytes(), geometry)
 
@@ -796,6 +815,476 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_province_geometry_is_unchanged(self) -> None:
         self.assertEqual(builder.province_geometry_issues(), [])
+
+
+
+def synthetic_manifest() -> dict:
+    """A Stage 1 split of 10675 and of an island parent, then Stage 2 parts, a town and a city."""
+    return {
+        "schema": 1,
+        "origin": [0, 0],
+        "provinces": [
+            {"province": 900, "parent": 10675, "state": 714, "kind": "split", "rgb": [1, 1, 1]},
+            {"province": 901, "parent": 1191, "state": 693, "kind": "split", "rgb": [2, 2, 2]},
+            {"province": 902, "parent": 1304, "state": 696, "kind": "split", "rgb": [3, 3, 3]},
+        ],
+        "cities": {"579": 18993},
+        "stage2": {
+            "origin": [0, 0],
+            "sheet_row": 2,
+            "first_id": 950,
+            "provinces": [
+                {"province": 950, "parent": 10675, "state": 714, "kind": "part", "rgb": [4, 4, 4]},
+                {"province": 951, "parent": 900, "state": 714, "kind": "part", "rgb": [5, 5, 5]},
+                {"province": 952, "parent": 901, "state": 693, "kind": "part", "rgb": [6, 6, 6]},
+                {"province": 953, "parent": 952, "state": 693, "kind": "part", "rgb": [7, 7, 7]},
+                {"province": 954, "parent": 6928, "state": 693, "kind": "town", "rgb": [8, 8, 8]},
+                {"province": 955, "parent": 1304, "state": 696, "kind": "remainder", "rgb": [9, 9, 9]},
+                {"province": 956, "parent": 955, "state": 696, "kind": "part", "rgb": [10, 10, 10]},
+            ],
+            "cities": {"1304": 1304},
+            "towns": {"6928": 954},
+        },
+    }
+
+
+class Stage2ManifestTests(unittest.TestCase):
+    def test_tables_without_a_stage2_plan_match_the_reviewed_stage1(self) -> None:
+        manifest = json.loads(builder.PROVINCE_MANIFEST_PATH.read_text(encoding="utf-8"))
+        if builder.has_stage2_plan(manifest):
+            self.skipTest("the manifest holds a Stage 2 plan")
+        tables = builder.manifest_tables(manifest)
+        stage1 = {
+            int(entry["province"]): (
+                "urban"
+                if entry["kind"] == "city"
+                else builder.ISLAND_PARENT_TERRAIN[int(entry["parent"])]
+            )
+            for entry in manifest["provinces"]
+            if int(entry["parent"]) in builder.ISLAND_PARENT_TERRAIN
+        }
+        self.assertEqual(tables.island_terrain, {**builder.ISLAND_PARENT_TERRAIN, **stage1})
+        self.assertEqual(
+            tables.city_provinces,
+            frozenset(int(city) for city in manifest["cities"].values()),
+        )
+        self.assertEqual(tables.relief_excluded, frozenset({8885, 9037, 10675, 11000}))
+        self.assertEqual(builder.stage2_children({694, 16568}), set())
+        sheet = np.zeros((5, 4, 4), np.uint8)
+        layers = builder.geometry_layers(manifest, sheet)
+        self.assertEqual(len(layers), 1)
+        self.assertIs(layers[0][1], sheet)
+
+    def test_plan_states_follow_the_state_files(self) -> None:
+        manifest = json.loads(builder.PROVINCE_MANIFEST_PATH.read_text(encoding="utf-8"))
+        plan = builder.stage2_plan(manifest)
+        state_of = builder.province_state_contract(builder.SCOPED_STATE_IDS)
+        entries = [*manifest["provinces"], *plan.get("provinces", []), *plan.get("settlements", [])]
+        stale = [
+            (entry["province"], entry["state"], state_of[int(entry["province"])])
+            for entry in entries
+            if state_of.get(int(entry["province"]), entry["state"]) != entry["state"]
+        ]
+        self.assertEqual(stale, [])
+
+    def test_stage2_tables_resolve_through_the_root_before_stage2(self) -> None:
+        tables = builder.manifest_tables(synthetic_manifest())
+        # A Stage 1 split of an excluded parent stays in the relief; Stage 2 parts follow their root.
+        self.assertIn(950, tables.relief_excluded)
+        self.assertNotIn(900, tables.relief_excluded)
+        self.assertNotIn(951, tables.relief_excluded)
+        # Island parts take the terrain of their root; the town and the city are urban.
+        self.assertEqual(tables.island_terrain[952], builder.ISLAND_PARENT_TERRAIN[1191])
+        self.assertEqual(tables.island_terrain[953], builder.ISLAND_PARENT_TERRAIN[1191])
+        self.assertEqual(tables.island_terrain[954], "urban")
+        self.assertIn(954, tables.island_urban)
+        # A city keeps its parent id; its remainder and that remainder's parts keep authored rivers.
+        self.assertIn(1304, tables.city_provinces)
+        self.assertTrue({902, 955, 956} <= tables.authored_rivers)
+
+    def test_geometry_layers_split_the_raster_at_its_sheet_row(self) -> None:
+        manifest = synthetic_manifest()
+        sheet = np.arange(5 * 3 * 4, dtype=np.uint8).reshape(5, 3, 4)
+        (first_origin, first), (second_origin, second) = builder.geometry_layers(manifest, sheet)
+        self.assertEqual((first_origin, second_origin), ([0, 0], [0, 0]))
+        np.testing.assert_array_equal(first, sheet[:2])
+        np.testing.assert_array_equal(second, sheet[2:])
+
+    def test_stamp_layer_refuses_land_outside_the_scope(self) -> None:
+        rgb = np.zeros((2, 3, 3), np.uint8)
+        rgb[0, 0] = (1, 1, 1)
+        rgb[0, 1] = (9, 9, 9)
+        layer = np.zeros((1, 2, 4), np.uint8)
+        layer[0, 0] = (2, 2, 2, 255)
+        colours = {1: (1, 1, 1), 2: (2, 2, 2), 3: (9, 9, 9)}
+        builder.stamp_layer(rgb, layer, (0, 0), colours, frozenset({1, 2}))
+        self.assertEqual(tuple(rgb[0, 0]), (2, 2, 2))
+        layer[0, 1] = (2, 2, 2, 255)
+        with self.assertRaisesRegex(RuntimeError, "outside its scope"):
+            builder.stamp_layer(rgb, layer, (0, 0), colours, frozenset({1, 2}))
+
+    def test_planned_settlements_cover_every_state_with_unique_names(self) -> None:
+        towns = [entry.state for entry in builder.STAGE2_SETTLEMENTS if entry.kind == "town"]
+        self.assertEqual(len(towns), len(set(towns)))
+        # A split half counts its centre as its settlement.
+        centres = builder.split_centres()
+        self.assertEqual(set(towns) | (set(centres) & builder.SCOPED_STATE_IDS), set(builder.SCOPED_STATE_IDS))
+        state_of = builder.province_state_contract(builder.SCOPED_STATE_IDS)
+        for state_id in set(centres) & builder.SCOPED_STATE_IDS:
+            self.assertEqual(state_of[centres[state_id]], state_id)
+        names = [entry.name for entry in builder.STAGE2_SETTLEMENTS]
+        english = [entry.name_en for entry in builder.STAGE2_SETTLEMENTS]
+        self.assertEqual(len(names), len(set(names)))
+        self.assertEqual(len(english), len(set(english)))
+        for entry in builder.STAGE2_SETTLEMENTS:
+            with self.subTest(settlement=entry.name_en):
+                low, high = (3, 5) if entry.kind == "city" else (1, 2)
+                self.assertTrue(low <= entry.value <= high)
+                self.assertTrue(entry.name_en.isascii())
+                self.assertNotIn("—", entry.name + entry.name_en)
+        self.assertEqual(
+            builder.settlement_name_collisions(builder.REPOSITORY_ROOT, builder.STAGE2_SETTLEMENTS), []
+        )
+
+
+def river_canvas(width: int = 12, height: int = 8) -> np.ndarray:
+    return np.full((height, width), builder.RIVER_LAND_PALETTE, np.uint8)
+
+
+class Stage2RiverRuleTests(unittest.TestCase):
+    """The drawing rules on a receiver running east into the sea and a tributary from the north."""
+
+    def network(self) -> tuple[np.ndarray, np.ndarray]:
+        rivers = river_canvas()
+        water = np.zeros(rivers.shape, bool)
+        water[:, 11] = True
+        rivers[5, 1] = builder.RIVER_SOURCE_PALETTE
+        rivers[5, 2:11] = (3, 3, 4, 4, 6, 6, 6, 7, 7)
+        # A tributary with a source at its head, too wide and shrinking downstream.
+        rivers[1, 5] = builder.RIVER_SOURCE_PALETTE
+        rivers[2, 5] = 9
+        rivers[3, 5] = 7
+        rivers[4, 5] = builder.RIVER_FLOW_IN_PALETTE
+        return rivers, water
+
+    def test_settling_gives_tributaries_widths_no_wider_than_their_receiver(self) -> None:
+        rivers, water = self.network()
+        inside = np.ones(rivers.shape, bool)
+        self.assertTrue(builder.course_rule_issues(rivers, inside, water, (0, 0)))
+        builder.settle_course_widths(rivers, inside, water)
+        self.assertEqual(builder.course_rule_issues(rivers, inside, water, (0, 0)), [])
+        tributary = [int(rivers[y, 5]) for y in (1, 2, 3)]
+        self.assertNotIn(builder.RIVER_SOURCE_PALETTE, tributary)
+        self.assertEqual(tributary, sorted(tributary))
+        self.assertLessEqual(max(tributary), int(rivers[5, 5]))
+        self.assertEqual(rivers[5, 1], builder.RIVER_SOURCE_PALETTE)
+        self.assertEqual(rivers[4, 5], builder.RIVER_FLOW_IN_PALETTE)
+        body = [int(value) for value in rivers[5, 2:11]]
+        self.assertEqual(body, sorted(body))
+        self.assertFalse(set(body) - set(builder.NATIVE_RIVER_WIDTHS))
+
+    def test_settling_leaves_pixels_outside_the_editable_area(self) -> None:
+        rivers, water = self.network()
+        editable = np.zeros(rivers.shape, bool)
+        before = rivers.copy()
+        builder.settle_course_widths(rivers, editable, water)
+        np.testing.assert_array_equal(rivers, before)
+
+    def test_state_line_turns_are_corners_beside_foreign_land_only(self) -> None:
+        ids = np.array(
+            [
+                [1, 1, 1, 1, 9, 9],
+                [1, 1, 1, 9, 9, 9],
+                [1, 1, 1, 9, 9, 9],
+                [1, 2, 1, 9, 9, 9],
+                [1, 1, 1, 1, 9, 9],
+            ]
+        )
+        inside = ids != 9
+        turns = builder.state_line_turns(ids, inside)
+        # (0, 2) touches province 9 only at a corner; (4, 2) also touches province 2
+        # at a corner, and (2, 2) touches 9 across an edge.
+        self.assertTrue(turns[0, 2])
+        self.assertFalse(turns[4, 2])
+        self.assertFalse(turns[2, 2])
+
+
+SMOOTHING_STATES = {1: 10, 2: 10, 3: 20, 4: 20}
+SMOOTHING_SCOPE = frozenset({10, 20})
+
+
+def smoothing_canvas() -> np.ndarray:
+    """State 10 (provinces 1 and 2) west of state 20 (3 and 4); their inner lines are offset."""
+    labels = np.zeros((30, 30), np.int32)
+    labels[:15, :15] = 1
+    labels[15:, :15] = 2
+    labels[:12, 15:] = 3
+    labels[12:, 15:] = 4
+    return labels
+
+
+def four_province_squares(labels: np.ndarray) -> int:
+    a, b, c, d = labels[:-1, :-1], labels[:-1, 1:], labels[1:, :-1], labels[1:, 1:]
+    return int(((a != b) & (a != c) & (a != d) & (b != c) & (b != d) & (c != d)).sum())
+
+
+class StateBorderSmoothingTests(unittest.TestCase):
+    """The state-line smoothing of spec 13.3 on small synthetic windows."""
+
+    def smooth(self, labels: np.ndarray, **options) -> builder.StateSmoothing:
+        land = options.pop("land", np.ones(labels.shape, bool))
+        river = options.pop("river", np.zeros(labels.shape, bool))
+        return builder.smooth_state_borders(labels, SMOOTHING_STATES, SMOOTHING_SCOPE, land, river, **options)
+
+    def assert_contracts(self, before: np.ndarray, result: builder.StateSmoothing) -> None:
+        after = result.labels
+        self.assertEqual(set(np.unique(after).tolist()), set(np.unique(before).tolist()))
+        for province in np.unique(after).tolist():
+            mask = after == province
+            self.assertEqual(label(mask)[1], 1, f"province {province} split")
+            self.assertGreaterEqual(int(mask.sum()), min(builder.STATE_SMOOTHING_MIN_PIXELS, int((before == province).sum())))
+        self.assertLessEqual(four_province_squares(after), four_province_squares(before))
+        self.assertEqual(result.rail_lost, ())
+
+    def test_a_tooth_rejoins_the_state_round_it_and_the_line_shortens(self) -> None:
+        labels = smoothing_canvas()
+        labels[5:8, 12:15] = 3
+        result = self.smooth(labels)
+        self.assertTrue(result.stable)
+        self.assertGreater(result.moved, 0)
+        self.assertLess(result.state_edges_after, result.state_edges_before)
+        self.assertEqual(result.labels[6, 12], 1)
+        self.assertEqual(sum(result.transfers.values()), result.moved)
+        self.assert_contracts(labels, result)
+        # Every moved pixel joined a province that it touches across a pixel edge.
+        for y, x in np.argwhere(result.labels != labels).tolist():
+            beside = {int(result.labels[y + dy, x + dx]) for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1))}
+            self.assertIn(int(result.labels[y, x]), beside)
+
+    def test_a_straight_line_stays(self) -> None:
+        labels = smoothing_canvas()
+        result = self.smooth(labels)
+        self.assertEqual(result.moved, 0)
+        self.assertTrue(result.stable)
+
+    def test_a_second_run_moves_nothing(self) -> None:
+        labels = smoothing_canvas()
+        labels[5:8, 12:15] = 3
+        labels[18:21, 15:18] = 2
+        first = self.smooth(labels)
+        second = self.smooth(first.labels)
+        self.assertGreater(first.moved, 0)
+        self.assertTrue(first.stable)
+        self.assertEqual(second.moved, 0)
+        self.assertEqual(second.pass_moves, ())
+        np.testing.assert_array_equal(second.labels, first.labels)
+
+    def test_protected_pixels_never_move(self) -> None:
+        labels = smoothing_canvas()
+        labels[5:8, 12:15] = 3
+        eight = np.ones((3, 3), bool)
+        river = np.zeros(labels.shape, bool)
+        river[4:9, 13] = True
+        frozen = np.zeros(labels.shape, bool)
+        frozen[5:8, 12:15] = True
+        water = np.zeros(labels.shape, bool)
+        water[3, 10:15] = True
+        cases = (
+            ({"river": river}, binary_dilation(river, eight)),
+            ({"frozen": frozen}, frozen),
+            ({"settlements": frozenset({1})}, binary_dilation(labels == 1, eight)),
+            ({"land": ~water}, binary_dilation(water, eight)),
+        )
+        for options, protected in cases:
+            with self.subTest(protection=sorted(options)):
+                result = self.smooth(labels, **options)
+                np.testing.assert_array_equal(result.labels[protected], labels[protected])
+                self.assert_contracts(labels, result)
+        self.assertGreater(self.smooth(labels, frozen=frozen).moved, 0)
+
+    def test_a_province_keeps_its_minimum_size(self) -> None:
+        labels = smoothing_canvas()
+        labels[3:12, 12:15] = 5
+        states = {**SMOOTHING_STATES, 5: 20}
+        land = np.ones(labels.shape, bool)
+        river = np.zeros(labels.shape, bool)
+        result = builder.smooth_state_borders(labels, states, SMOOTHING_SCOPE, land, river)
+        self.assertEqual(int((labels == 5).sum()), 27)
+        self.assertGreaterEqual(int((result.labels == 5).sum()), builder.STATE_SMOOTHING_MIN_PIXELS)
+        self.assertGreater(result.moved, 0)
+        self.assert_contracts(labels, result)
+        larger = builder.smooth_state_borders(labels, states, SMOOTHING_SCOPE, land, river, min_pixels={5: 27})
+        self.assertEqual(int((larger.labels == 5).sum()), 27)
+
+    def test_a_province_is_never_cut_in_two(self) -> None:
+        labels = smoothing_canvas()
+        # A blob of province 3 inside state 10, held only by a one-pixel neck.
+        labels[4:11, 3:9] = 3
+        labels[7, 9:15] = 3
+        result = self.smooth(labels)
+        self.assertGreater(result.moved, 0)
+        self.assert_contracts(labels, result)
+        self.assertTrue((result.labels[7, 9:15] == 3).all())
+
+    def test_railway_segments_keep_their_contact(self) -> None:
+        labels = smoothing_canvas()
+        # A tooth of 3 holds the contact between 1 and 4; the smoothing would close it.
+        labels[8:13, 11:15] = 3
+        self.assertIn(4, builder.province_adjacency(labels)[1])
+        free = self.smooth(labels)
+        self.assertNotIn(4, builder.province_adjacency(free.labels)[1])
+        kept = self.smooth(labels, rail_pairs={(4, 1)})
+        self.assertIn(4, builder.province_adjacency(kept.labels)[1])
+        self.assertEqual(kept.rail_segments, 1)
+        self.assertGreater(kept.moved, 0)
+        self.assert_contracts(labels, kept)
+
+    def test_no_move_closes_a_four_province_square(self) -> None:
+        labels = np.array(
+            [
+                [1, 1, 3],
+                [1, 2, 4],
+                [2, 2, 4],
+            ]
+        )
+        self.assertTrue(builder._closes_four_corner(labels, 1, 1, 5))
+        self.assertFalse(builder._closes_four_corner(labels, 1, 1, 1))
+
+    def test_interior_river_pixels_are_counted_per_state(self) -> None:
+        states = np.array(
+            [
+                [10, 10, 10, 20],
+                [10, 10, 10, 20],
+                [0, 0, 0, 0],
+            ]
+        )
+        land = states > 0
+        river = np.zeros(states.shape, bool)
+        river[0, 1] = True
+        river[1, 2] = True
+        river[1, 3] = True
+        counts = builder.interior_river_pixels_by_state(river, states, land, SMOOTHING_SCOPE)
+        # (1, 2) and (1, 3) lie on the state line; (0, 1) has only state 10 round it.
+        self.assertEqual(counts, {10: 1})
+
+    def test_a_course_prefers_a_state_line_where_one_runs_beside_it(self) -> None:
+        # Two equally long ways round a block; only the lower one is a state line.
+        allowed = np.zeros((7, 9), bool)
+        allowed[1, 1:8] = True
+        allowed[5, 1:8] = True
+        allowed[1:6, 1] = True
+        allowed[1:6, 7] = True
+        heights = np.zeros(allowed.shape, np.uint8)
+        packed = np.zeros(allowed.shape, np.int64)
+        preferred = np.zeros(allowed.shape, bool)
+        preferred[5, 1:8] = True
+        path = builder._route_river((1, 3), [(7, 3)], allowed, heights, packed, preferred)
+        self.assertIn((4, 5), path)
+        self.assertNotIn((4, 1), path)
+        plain = builder._route_river((1, 3), [(7, 3)], allowed, heights, packed)
+        self.assertEqual(len(plain), len(path))
+
+    def test_moved_pixels_join_the_stage2_layer(self) -> None:
+        manifest = {"stage2": {"origin": [4, 4], "sheet_row": 2}}
+        sheet = np.zeros((5, 6, 4), np.uint8)
+        sheet[:2] = 7
+        sheet[2:, :3] = (1, 1, 1, 255)
+        sheet[3, 1, 3] = 0
+        window = builder._mon().Window(0, 10, 0, 10)
+        moved = np.zeros((10, 10), bool)
+        moved[2, 5] = True
+        labels = np.zeros((10, 10), np.int32)
+        labels[2, 5] = 9
+        origin, combined = builder.stage2_sheet_with_moves(manifest, sheet, moved, labels, window, {9: (9, 8, 7)})
+        self.assertEqual(origin, [4, 2])
+        np.testing.assert_array_equal(combined[:2, :6], sheet[:2])
+        layer = combined[2:]
+        self.assertEqual(tuple(layer[0, 1]), (9, 8, 7, 255))
+        # The earlier layer keeps its pixels, now two rows lower; its transparent pixel stays transparent.
+        np.testing.assert_array_equal(layer[2:5, 0:3][..., 3] > 0, sheet[2:, :3][..., 3] > 0)
+
+
+class Stage2DryRunTests(unittest.TestCase):
+    """Plan Stage 2 on the current map and apply it to copies outside the repository."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        manifest = json.loads(builder.PROVINCE_MANIFEST_PATH.read_text(encoding="utf-8"))
+        if builder.has_stage2_plan(manifest):
+            raise unittest.SkipTest("the manifest holds a Stage 2 plan; its own checks apply")
+        cls.directory = TemporaryDirectory()
+        cls.root = Path(cls.directory.name)
+        cls.stored = (
+            builder.PROVINCE_MANIFEST_PATH.read_bytes(),
+            builder.PROVINCE_GEOMETRY_PATH.read_bytes(),
+        )
+        cls.report = builder.write_stage2_plan(cls.root)
+        cls.manifest_bytes = (cls.root / "tools/data/adiscord_ivn_provinces.json").read_bytes()
+        cls.plan = json.loads(cls.manifest_bytes.decode("utf-8"))["stage2"]
+        cls.result = builder.dry_run_stage2(cls.root)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.directory.cleanup()
+
+    def test_the_repository_plan_files_stay_untouched(self) -> None:
+        self.assertEqual(
+            (builder.PROVINCE_MANIFEST_PATH.read_bytes(), builder.PROVINCE_GEOMETRY_PATH.read_bytes()),
+            self.stored,
+        )
+        self.assertEqual(builder.MAP_ROOT, builder.REPOSITORY_ROOT)
+
+    def test_stage1_of_the_manifest_and_raster_stays_byte_for_byte(self) -> None:
+        manifest = json.loads(self.manifest_bytes.decode("utf-8"))
+        del manifest["stage2"]
+        newline = b"\r\n" if b"\r\n" in self.stored[0] else b"\n"
+        dumped = (json.dumps(manifest, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        self.assertEqual(dumped.replace(b"\n", newline), self.stored[0])
+        with Image.open(BytesIO(self.stored[1])) as source:
+            first = np.asarray(source.convert("RGBA"))
+        with Image.open(self.root / "tools/data/adiscord_ivn_province_geometry.png") as source:
+            sheet = np.asarray(source.convert("RGBA"))
+        self.assertEqual(self.plan["sheet_row"], first.shape[0])
+        np.testing.assert_array_equal(sheet[: first.shape[0], : first.shape[1]], first)
+
+    def test_new_ids_follow_the_definition_and_keep_the_border_margin(self) -> None:
+        rows = builder.DEFINITION_PATH.read_text(encoding="utf-8-sig").splitlines()
+        last = max(int(line.split(";")[0]) for line in rows if line[:1].isdigit())
+        ids = [int(entry["province"]) for entry in self.plan["provinces"]]
+        self.assertEqual(ids, list(range(last + 1, last + 1 + len(ids))))
+        self.assertGreaterEqual(builder.BORDER_BUDGET - self.report["borders"], builder.BORDER_MARGIN)
+        self.assertEqual(self.result["after"]["borders"], self.report["borders"])
+
+    def test_parts_cities_and_towns_have_their_sizes_and_shapes(self) -> None:
+        low, high = self.report["part_pixels"]
+        self.assertGreaterEqual(low, builder.STAGE2_PART_MIN_PIXELS)
+        irregular = set(self.report["irregular_parts"])
+        for parent, ids in self.report["splits"].items():
+            self.assertEqual(int(parent), ids[0])
+        self.assertTrue(irregular <= {province for ids in self.report["splits"].values() for province in ids})
+        for city, size in self.report["city_pixels"].items():
+            self.assertTrue(builder.STAGE2_CITY_SIZE[0] <= size <= builder.STAGE2_CITY_SIZE[1], city)
+        for town, size in self.report["town_pixels"].items():
+            self.assertTrue(builder.STAGE2_TOWN_SIZE[0] <= size <= builder.STAGE2_TOWN_SIZE[1], town)
+        states = {entry["state"] for entry in self.plan["settlements"] if entry["kind"] == "town"}
+        self.assertEqual(states, set(builder.SCOPED_STATE_IDS))
+
+    def test_one_pass_settles_the_geometry_and_the_rules(self) -> None:
+        issues = self.result["issues_after_one_pass"]
+        self.assertEqual([issue for issue in issues if "drifted" in issue or "not adjacent" in issue], [])
+        self.assertEqual([issue for issue in issues if issue.startswith("Stage 2") or "named by id" in issue], [])
+        self.assertEqual([issue for issue in issues if "naval base" in issue], [])
+        river = [issue for issue in issues if issue.startswith("map/rivers.bmp")]
+        for rule in ("cut IVN/IIA provinces", "palette 5 or 8", "2x2", "third course", "source pixel", "shrink", "wider than", "settlements"):
+            self.assertEqual([issue for issue in river if rule in issue], [], rule)
+
+    def test_rivers_leave_fewer_interior_pixels_and_no_forbidden_widths(self) -> None:
+        before, after = self.result["before"], self.result["after"]
+        genuine_before = before["off_border_river_pixels"] - before["state_line_turn_pixels"]
+        genuine_after = after["off_border_river_pixels"] - after["state_line_turn_pixels"]
+        self.assertLess(genuine_after, genuine_before)
+        self.assertFalse({"5", "8"} & set(after["river_palettes"]))
+        self.assertEqual(after["provinces"], before["provinces"] + len(self.plan["provinces"]))
 
 
 if __name__ == "__main__":

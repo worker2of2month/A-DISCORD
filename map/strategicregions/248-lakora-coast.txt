@@ -5,7 +5,7 @@ strategic_region={
 	provinces={
 		638 702 882 888 1091 1167 1421 2942 3003 3411 3453 3846 4567 5187 5586 5681 5788 6010 6095 6214 6418 6714 6866 7453
 		8257 8796 8839 9167 9183 9292 9327 10000 10032 10335 10381 10608 10716 10882 10891 11059 11135 11396 11458 11815 12342 12639 16817 16818
-		16834 16845 16846 16852
+		16834 16845 16846 16852 20293 20296 20297 20298 20320 20321 20322
 	}
 	weather={
 		period={
@@ -36,11 +36,11 @@ strategic_region={
 		}
 		period={
 			between={ 0.2 30.2 }
-			temperature={ -2.0 14.0 }
+			temperature={ -3.0 13.0 }
 			no_phenomenon=0.35
-			rain_light=0.55
-			rain_heavy=0.24
-			snow=0.11
+			rain_light=0.52
+			rain_heavy=0.22
+			snow=0.14
 			blizzard=0.00
 			arctic_water=0.00
 			mud=1.25
@@ -140,11 +140,11 @@ strategic_region={
 		}
 		period={
 			between={ 0.10 29.10 }
-			temperature={ -2.0 13.0 }
+			temperature={ -3.0 12.0 }
 			no_phenomenon=0.35
-			rain_light=0.55
-			rain_heavy=0.24
-			snow=0.12
+			rain_light=0.51
+			rain_heavy=0.22
+			snow=0.15
 			blizzard=0.00
 			arctic_water=0.00
 			mud=1.25

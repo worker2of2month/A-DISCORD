@@ -9,7 +9,8 @@ state = {
 	history = {
 		owner = VEL
 		add_core_of = VEL
-		victory_points = { 2421 5 }
+		victory_points = { 2421 10 }
+		victory_points = { 2758 2 }
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
@@ -18,7 +19,8 @@ state = {
 	}
 	provinces = {
 		523 763 796 1248 2421 2758 4618 4895 5548 5757 6122 6263 6303 6630 7044 7780
-		8568 9499 9642 10823 10962 11093 11371 12395
+		8568 9499 9642 10823 10962 11093 11371 12395 19405 19406 19412 20178 20179 20180 20181 20182
+		20183 20184 20185 20186 20187 20188 20189 20190
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.8

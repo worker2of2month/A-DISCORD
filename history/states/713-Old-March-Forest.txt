@@ -4,6 +4,7 @@ state={
 	name="STATE_713"
 	provinces={
 		722 1105 1862 5540 7508 8615 10158 10810
+		20289 20312
 	}
 	manpower = 200000
 	buildings_max_level_factor = 1.000
@@ -12,7 +13,8 @@ state={
 	history = {
 		owner = IVN
 		add_core_of = IVN
-		victory_points = { 8615 1 }
+		victory_points = { 8615 3 }
+		victory_points = { 20312 1 }
 		buildings = {
 			infrastructure = 3
 			arms_factory = 1

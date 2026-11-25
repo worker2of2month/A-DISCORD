@@ -5162,8 +5162,8 @@ ideas = {
 			picture = generic_political_advisor_europe_2
 			cost = 75
 			removal_cost = -1
-			allowed = { tag = MON }
-			visible = { tag = MON }
+			allowed = { tag = ARK }
+			visible = { tag = ARK }
 			available = { STP_party_minister_change_allowed = yes }
 			allowed_to_remove = { STP_party_minister_change_allowed = yes }
 			traits = { minister_trait_foreign_minister }

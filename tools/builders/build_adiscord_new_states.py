@@ -13,6 +13,8 @@ import argparse
 import json
 import re
 from collections.abc import Iterable
+from dataclasses import replace
+from fnmatch import fnmatchcase
 from pathlib import Path
 
 from tools.builders.build_adiscord_map_buildings import (
@@ -22,19 +24,305 @@ from tools.builders.build_adiscord_map_buildings import (
     synchronize_buildings,
 )
 from tools.lib.adiscord_core_state_balance_manifest import EXPECTED_RESOURCES, TARGET_STATES
+from tools.lib.adiscord_planned_geography import (
+    VP_SETTLEMENT_KINDS,
+    PlannedGeography,
+    load_planned_geography,
+)
 from tools.lib.adiscord_vorkerland_theatre_manifest import (
+    AUTHORED_THEATRE_VICTORY_POINTS,
     UNITY_TOWER_NAME,
     UNITY_TOWER_PROVINCE,
     VORKERLAND_PROTECTED_LANDMARK_VPS,
     VORKERLAND_THEATRE_RETIRED_VP_IDS,
     VORKERLAND_THEATRE_VICTORY_POINTS,
     VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
+    merge_planned_victory_points,
+    package_total_errors,
 )
 from tools.lib.city_terrains import CITY_TERRAINS
 from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 STATE_DIR = ROOT / "history" / "states"
+
+
+def state_history_states() -> frozenset[int]:
+    """Return the states whose files match this builder's state_history output globs."""
+    owners = json.loads((ROOT / "tools/data/generated_output_owners.json").read_text(encoding="utf-8"))
+    family = next(family for family in owners["families"] if family["id"] == "state_history")
+    patterns = tuple(pattern for pattern in family["output_globs"] if pattern.startswith("history/states/"))
+    return frozenset(
+        int(path.name.split("-", 1)[0])
+        for path in STATE_DIR.glob("*.txt")
+        if any(fnmatchcase(f"history/states/{path.name}", pattern) for pattern in patterns)
+    )
+
+
+# The six largest states of the Vorkerland and Itora fronts are cut in two
+# after the stage 3 geography. The parent keeps its id, its capital, its main
+# VP and every province the table does not list; the new half takes
+# `provinces`. A planned province the table does not list follows its root
+# parent.
+# `share` is the new half's measured land share; manpower and resources follow
+# it. `centre` is the new half's largest settlement: no VP of the half reaches
+# SPLIT_CENTRE_VALUE, so the centre is raised to it.
+STATE_SPLITS = {
+    734: {
+        "parent": 71,
+        "filename": "734-Rimat-Fields.txt",
+        "name": "Риматское ополье",
+        "share": 0.52,
+        "centre": 258,
+        "provinces": (
+            258, 623, 1129, 2713, 3925, 5225, 5508, 5691, 5893, 6038, 6295, 7381,
+            8101, 8409, 8901, 8988, 10324, 10388, 10734, 11690, 11971, 12030, 12241, 12444,
+            12733, 12877,
+        ),
+    },
+    735: {
+        "parent": 194,
+        "filename": "735-Grein-Floodplain.txt",
+        "name": "Грейнская пойма",
+        "share": 0.429,
+        "centre": 9269,
+        "provinces": (
+            773, 1375, 1906, 2202, 2363, 2571, 3757, 5469, 8869, 8881, 9269, 9908,
+            11505,
+        ),
+    },
+    736: {
+        "parent": 73,
+        "filename": "736-Northern-Romelia.txt",
+        "name": "Северная Ромелия",
+        "share": 0.501,
+        "centre": 16618,
+        "provinces": (
+            404, 2767, 2916, 4423, 4795, 4859, 4924, 4931, 5762, 5878, 6742, 6927,
+            7615, 8019, 8912, 9266, 9537, 10555, 10696, 10747, 12850, 12946, 16618,
+        ),
+    },
+    737: {
+        "parent": 80,
+        "filename": "737-Southern-Zlatorechye.txt",
+        "name": "Южное Златоречье",
+        "share": 0.506,
+        "centre": 265,
+        "provinces": (
+            265, 686, 868, 1426, 3083, 3567, 3997, 4278, 5153, 5376, 6399, 7819,
+            9464, 9845, 10034, 10609, 10624, 16634,
+        ),
+    },
+    738: {
+        "parent": 199,
+        "filename": "738-Dry-Klyuch.txt",
+        "name": "Сухоключский округ",
+        "share": 0.389,
+        "centre": 16704,
+        "provinces": (
+            1280, 3345, 3518, 5314, 5524, 5679, 5888, 6820, 7267, 7942, 11379, 11563,
+            11592, 16665, 16704,
+        ),
+    },
+    739: {
+        "parent": 693,
+        "filename": "739-Raidal-Forest.txt",
+        "name": "Рейдальская пуща",
+        "share": 0.473,
+        "centre": 16695,
+        "provinces": (
+            2219, 2991, 4334, 6928, 8048, 16695, 19005, 19006, 19007, 19008, 19009, 19010,
+            19011, 19012, 19013, 19014, 19015, 19016, 19017, 19022, 19023, 19024, 19025,
+        ),
+    },
+}
+SPLIT_CENTRE_VALUE = 3
+SPLIT_CHILDREN = {split["parent"]: child for child, split in STATE_SPLITS.items()}
+SPLIT_PROVINCES = {child: frozenset(split["provinces"]) for child, split in STATE_SPLITS.items()}
+# Building levels divided between the halves; the parent keeps the rest.
+SPLIT_FACTORIES = ("industrial_complex", "arms_factory", "dockyard")
+CATEGORY_RANKS = (
+    "wasteland", "enclave", "tiny_island", "pastoral", "small_island", "rural",
+    "large_island", "town", "large_town", "city", "large_city", "metropolis", "megalopolis",
+)
+PLANNED_ROOTS = load_planned_geography().roots()
+COUNTRY_CAPITAL_STATES = frozenset(
+    int(state_id)
+    for path in (ROOT / "history" / "countries").glob("*.txt")
+    for state_id in re.findall(r"(?m)^\s*capital\s*=\s*(\d+)", path.read_text(encoding="utf-8-sig", errors="replace"))
+)
+
+
+def split_root(state_id: int) -> int:
+    """Return the state a split half was cut from, or the state itself."""
+    return STATE_SPLITS[state_id]["parent"] if state_id in STATE_SPLITS else state_id
+
+
+def split_family(state_ids: Iterable[int]) -> frozenset[int]:
+    """Add the new halves of the given split parents."""
+    members = set(state_ids)
+    return frozenset(members | {SPLIT_CHILDREN[state_id] for state_id in members if state_id in SPLIT_CHILDREN})
+
+
+def split_half(state_id: int, province: int) -> int:
+    """Return the half of a split family that holds `province`."""
+    parent = split_root(state_id)
+    child = SPLIT_CHILDREN.get(parent)
+    if child is None:
+        return state_id
+    if province in SPLIT_PROVINCES[child]:
+        return child
+    return child if PLANNED_ROOTS.get(province) in SPLIT_PROVINCES[child] else parent
+
+
+def split_point_value(state_id: int, province: int, value: int) -> int:
+    """Raise the centre of a new half to SPLIT_CENTRE_VALUE; other VPs keep their value."""
+    if state_id in STATE_SPLITS and province == STATE_SPLITS[state_id]["centre"]:
+        return max(value, SPLIT_CENTRE_VALUE)
+    return value
+
+
+def split_items(table: dict[int, tuple], locate=lambda province: province) -> dict[int, tuple]:
+    """Move every item of a split parent to the half that holds its province.
+
+    An item is a province or a tuple that starts with one; `locate` maps it to
+    the province on the map. Parents keep their key even when emptied.
+    """
+    result: dict[int, tuple] = {}
+    for state_id, items in table.items():
+        result.setdefault(state_id, ())
+        for item in items:
+            province = locate(item if isinstance(item, int) else item[0])
+            half = split_half(state_id, province)
+            result[half] = (*result.get(half, ()), item)
+    return result
+
+
+def split_points(table: dict[int, tuple], locate=lambda province: province) -> dict[int, tuple]:
+    """Move (province, value, ...) points to their halves and raise each centre."""
+    return {
+        state_id: tuple(
+            (province, split_point_value(state_id, locate(province), value), *rest)
+            for province, value, *rest in points
+        )
+        for state_id, points in split_items(table, locate).items()
+    }
+
+
+def split_amount(total: int, share: float, unit: int = 1) -> int:
+    """Return the new half's part of `total`, rounded half up to `unit`."""
+    return int(total * share / unit + 0.5) * unit
+
+
+def split_resources(table: dict[int, dict[str, int]]) -> dict[int, dict[str, int]]:
+    """Divide each split parent's deposits by land share; totals are conserved."""
+    result = dict(table)
+    for child, split in STATE_SPLITS.items():
+        deposits = table.get(split["parent"])
+        if not deposits:
+            continue
+        moved = {resource: split_amount(amount, split["share"]) for resource, amount in deposits.items()}
+        result[split["parent"]] = {
+            resource: amount - moved[resource]
+            for resource, amount in deposits.items()
+            if amount - moved[resource]
+        }
+        result[child] = {resource: amount for resource, amount in moved.items() if amount}
+    return result
+
+
+def split_factory_levels(levels: dict[str, int]) -> dict[str, int]:
+    """Return the factories the new half takes from n >= 2: max(1, (n - 1) // 2).
+
+    The parent keeps the larger part. Civilian factories move first, so each
+    collapse successor's capital state keeps its two military factories.
+    """
+    total = sum(levels.get(building, 0) for building in SPLIT_FACTORIES)
+    count = max(1, (total - 1) // 2) if total >= 2 else 0
+    moved = {}
+    for building in SPLIT_FACTORIES:
+        moved[building] = min(levels.get(building, 0), count)
+        count -= moved[building]
+    return moved
+
+
+def split_category(population: int, factories: int, capital: bool, ceiling: str) -> str:
+    """Category of a half from its population, as the frontier country builders set it.
+
+    A capital is a large town from 750,000 residents and a town below; other
+    halves are towns from 650,000 residents or three factories, rural below.
+    A half never ranks above the category of the state it was cut from.
+    """
+    if capital:
+        category = "large_town" if population >= 750_000 else "town"
+    elif population >= 650_000 or factories > 2:
+        category = "town"
+    else:
+        category = "rural"
+    return min(category, ceiling, key=CATEGORY_RANKS.index)
+
+
+def split_profiles(profiles: dict[int, dict[str, object]]) -> dict[int, dict[str, object]]:
+    """Derive both halves' profiles from each split parent's whole-state profile."""
+    result = dict(profiles)
+    for child, split in STATE_SPLITS.items():
+        parent = split["parent"]
+        if parent not in profiles:
+            continue
+        whole = profiles[parent]
+        moved_population = split_amount(int(whole["population"]), split["share"], 10_000)
+        levels = {
+            "industrial_complex": int(whole.get("civilian", 0)),
+            "arms_factory": int(whole.get("military", 0)),
+        }
+        moved = split_factory_levels(levels)
+        halves = {
+            parent: (int(whole["population"]) - moved_population, {key: levels[key] - moved[key] for key in levels}),
+            child: (moved_population, {key: moved[key] for key in levels}),
+        }
+        for state_id, (population, factories) in halves.items():
+            # Air bases and special buildings stay with the parent.
+            profile = {
+                key: value
+                for key, value in whole.items()
+                if state_id == parent or key not in {"air_base", "custom_buildings"}
+            }
+            profile["population"] = population
+            profile["civilian"] = factories["industrial_complex"]
+            profile["military"] = factories["arms_factory"]
+            profile["category"] = split_category(
+                population,
+                sum(factories.values()),
+                state_id == parent and parent in COUNTRY_CAPITAL_STATES,
+                str(whole["category"]),
+            )
+            result[state_id] = profile
+    return result
+
+
+def split_planned_geography(planned: PlannedGeography) -> PlannedGeography:
+    """Assign the planned provinces and settlements of split parents to their halves."""
+    provinces = tuple(
+        replace(entry, state=split_half(entry.state, entry.province)) for entry in planned.provinces
+    )
+    settlements = []
+    for entry in planned.settlements:
+        half = split_half(entry.state, entry.province)
+        value = entry.value
+        if entry.kind in VP_SETTLEMENT_KINDS:
+            value = split_point_value(half, entry.province, value)
+        settlements.append(replace(entry, state=half, value=value))
+    return PlannedGeography(provinces, tuple(settlements), planned.vp_overrides)
+
+
+# Provinces and settlements of the map builders' applied plans in the states
+# this builder owns. Empty until a recorded stage reaches definition.csv.
+PLANNED_GEOGRAPHY = split_planned_geography(load_planned_geography().for_states(state_history_states()))
+PLANNED_STATE_PROVINCES = PLANNED_GEOGRAPHY.provinces_by_state()
+# Carved cities and towns are urban at the VP values of a minor settlement.
+PLANNED_URBAN_SETTLEMENTS = frozenset(
+    entry.province for entry in PLANNED_GEOGRAPHY.vp_settlements()
+)
 
 SOUTHERN_GEOGRAPHY = json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_text(encoding="utf-8"))
 SOUTHERN_CITIES = SOUTHERN_GEOGRAPHY["cities"]
@@ -536,7 +824,7 @@ NAM_COALITION_FRONT_RESOURCES = {
 # and concentrated, but give each major industrial bloc one real supply source.
 # The Unity Tower is a sealed administrative ruin rather than an extractive
 # site, so its former steel deposit is deliberately absent.
-VORKERLAND_STATE_RESOURCES = {
+VORKERLAND_STATE_RESOURCES = split_resources({
     33: {"steel": 16},
     38: {"steel": 10},
     72: {"steel": 8},
@@ -549,9 +837,9 @@ VORKERLAND_STATE_RESOURCES = {
     145: {"steel": 6},
     197: {"steel": 8},
     306: {"steel": 6},
-}
+})
 
-IVANLAND_STATE_RESOURCES = {
+IVANLAND_STATE_RESOURCES = split_resources({
     25: {"steel": 6},
     99: {"steel": 16},
     695: {"steel": 2},
@@ -560,7 +848,7 @@ IVANLAND_STATE_RESOURCES = {
     698: {"steel": 4},
     714: {"steel": 2},
     716: {"steel": 2},
-}
+})
 
 AFRELA_STATE_RESOURCES = {
     232: {"rubber": 4},
@@ -661,18 +949,11 @@ VORKERLAND_CENTRES = {
     327: (16641, 5),
 }
 
-# Named railway settlements give Macri's wide republic small local objectives
-# without pretending that every stop is a full urban centre.
-VORKERLAND_MINOR_VPS = {
-    311: (5905, 1),
-    314: (5405, 1),
-}
-
 # Every settlement block that is physically separated from the settlements a
 # state already marks is its own war objective, so it carries its own victory
 # point. A state that had no objective at all gets its largest block valued by
 # state category (rural and wasteland 1, town 3); every further block is a
-# minor marker worth 1, matching VORKERLAND_MINOR_VPS and states 310/318.
+# minor marker worth 1, matching states 310/318.
 # These entries feed render_state, so each holds a single centre.
 SETTLEMENT_CLUSTER_CENTRES = {
     329: (16524, 1),
@@ -681,12 +962,12 @@ SETTLEMENT_CLUSTER_CENTRES = {
 # The same rule for states whose metadata is patched in place rather than
 # rebuilt. Order matters: the validators compare generated VP blocks exactly,
 # and ensure_history_victory_points appends new markers in this order.
-SETTLEMENT_CLUSTER_VICTORY_POINTS = {
+SETTLEMENT_CLUSTER_VICTORY_POINTS = split_points({
     73: ((16703, 1),),
     144: ((16694, 1),),
     145: ((16691, 3),),
     199: ((16690, 3), (16696, 1), (16704, 1)),
-}
+})
 
 SETTLEMENT_CLUSTER_VICTORY_POINT_NAMES = {
     16690: "Златогорск",
@@ -724,22 +1005,17 @@ REGIONAL_SETTLEMENTS = {
     68: ((7750, 2, "Оллен"), (324, 2, "Верхний Мельн"), (12135, 1, "Ровель")),
     69: ((8758, 2, "Хадаш"), (5288, 1, "Айн-Джар"), (1568, 1, "Месран")),
     70: ((9411, 2, "Вестен"), (10422, 2, "Тальвик"), (7567, 2, "Ольмар")),
-    # Every state on the approaches to the Rimat corridor has a war objective.
+    # Every state on the approaches to the Rimat corridor has a war objective; the
+    # corridor cities of states 90-94, 194-196, 322 and 328 come from the east
+    # geography plan.
     71: ((12241, 1, "Старый Тракт"),),
     88: ((16429, 1, "Шахтёрская пристань"),),
-    90: ((5135, 2, "Норвейн"),),
-    91: ((4007, 2, "Крайт"),),
-    93: ((3729, 1, "Вальден"),),
-    94: ((4166, 1, "Солен"),),
     112: ((3332, 1, "Северный Рейнг"),),
     115: ((1524, 1, "Рейнгский перевал"),),
     116: ((3344, 1, "Нижний Рейнг"),),
     117: ((12455, 2, "Ливен"),),
     174: ((5869, 2, "Феннский перевал"), (5261, 2, "Бринн"), (8479, 2, "Феннская застава")),
     175: ((10006, 1, "Марен"), (3444, 2, "Линден")),
-    194: ((2339, 2, "Восточная станция"),),
-    195: ((8032, 2, "Норвен"),),
-    196: ((7129, 2, "Центральная станция"),),
     218: ((7047, 2, "Западный Рейнг"),),
     225: ((11393, 2, "Китовка"), (11606, 1, "Камбалий"), (3350, 2, "Дозорный")),
     226: ((4396, 1, "Сельдяной"), (8537, 1, "Чаечий")),
@@ -834,8 +1110,6 @@ REGIONAL_SETTLEMENTS = {
     302: ((4350, 2, "Доринский торг"),),
     304: ((2265, 2, "Актар"),),
     305: ((10842, 1, "Лерис"), (6879, 2, "Верхний Лерис")),
-    322: ((2304, 1, "Восточный Пост"),),
-    328: ((9492, 1, "Пустырь"),),
     688: ((9211, 2, "Старая Штольня"), (10967, 1, "Горный Посад")),
     689: ((8358, 2, "Вересковый"),),
     690: ((1015, 2, "Буровая"),),
@@ -889,6 +1163,27 @@ for town in SOUTHERN_CITIES:
             (town["province"], town["value"], town["name"]),
         )
 
+REGIONAL_SETTLEMENTS = split_points(REGIONAL_SETTLEMENTS)
+
+
+def planned_settlement_table(source: str, theatre: bool) -> dict[int, tuple[tuple[int, int, str], ...]]:
+    """Group one plan's VP settlements by state, inside or outside the central theatre."""
+    table: dict[int, tuple[tuple[int, int, str], ...]] = {}
+    for entry in PLANNED_GEOGRAPHY.vp_settlements():
+        if entry.source != source or (entry.state in AUTHORED_THEATRE_VICTORY_POINTS) != theatre:
+            continue
+        table[entry.state] = (*table.get(entry.state, ()), (entry.province, entry.value, entry.name))
+    return table
+
+
+# Theatre settlements take their values from the merged theatre manifest and
+# IVN settlements join the Ivanland tables; the rest are regional settlements.
+AUTHORED_REGIONAL_SETTLEMENTS = dict(REGIONAL_SETTLEMENTS)
+PLANNED_THEATRE_SETTLEMENTS = planned_settlement_table("east", theatre=True)
+IVANLAND_PLANNED_SETTLEMENTS = planned_settlement_table("ivn", theatre=False)
+for state_id, settlements in planned_settlement_table("east", theatre=False).items():
+    REGIONAL_SETTLEMENTS[state_id] = (*REGIONAL_SETTLEMENTS.get(state_id, ()), *settlements)
+
 # Explicit profiles replace the old pseudo-random 24-72k population formula
 # around the densely populated Vorkernsberg conurbation.
 STATE_PROFILES = {
@@ -919,7 +1214,7 @@ STATE_PROFILES = {
 # Vorkerland's legacy state files predate the Nudge split.  These values keep
 # every civil-war front inhabited and supplied without flattening the old
 # resources, victory points, bunkers and state ownership into generated data.
-VORKERLAND_LEGACY_PROFILES = {
+VORKERLAND_LEGACY_PROFILES = split_profiles({
     40: {"population": 20_000, "category": "megalopolis", "infrastructure": 5, "civilian": 6, "military": 4, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_science_center": 1}},
     71: {"population": 800_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
     72: {"population": 850_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 2, "supplies": 3.0},
@@ -939,7 +1234,7 @@ VORKERLAND_LEGACY_PROFILES = {
     197: {"population": 1_400_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 1, "air_base": 1, "supplies": 4.5},
     198: {"population": 800_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
     199: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-}
+})
 
 # These border states must remain mobilizable when the collapse fronts open;
 # a history-level DMZ survives the ownership transfer and freezes those wars.
@@ -1056,7 +1351,7 @@ NAM_VICTORY_BORDER_RESOURCES = {
 # theatre builder; these profiles set infrastructure and local supply only.
 # The civil-war partition keeps each parent's population and factories:
 # 25 -> 25/713/714, 127 -> 127/715, 695 -> 695/716 and 697 -> 697/717.
-IVANLAND_STATE_PROFILES = {
+IVANLAND_STATE_PROFILES = split_profiles({
     25: {"population": 780_000, "category": "large_city", "infrastructure": 5, "civilian": 2, "military": 1, "air_base": 2, "supplies": 1.0},
     92: {"population": 480_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 4.0},
     95: {"population": 780_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 2, "air_base": 1, "supplies": 5.0},
@@ -1084,9 +1379,9 @@ IVANLAND_STATE_PROFILES = {
     715: {"population": 270_000, "category": "rural", "infrastructure": 3, "civilian": 1, "supplies": 1.0},
     716: {"population": 300_000, "category": "rural", "infrastructure": 2, "military": 1, "supplies": 0.5},
     717: {"population": 220_000, "category": "rural", "infrastructure": 2, "supplies": 0.5},
-}
+})
 
-IVANLAND_OVERHAUL_PROVINCES = {
+IVANLAND_OVERHAUL_PROVINCES = split_items({
     128: (579, 7125, 8423, 9072, 16685),
     693: (1191, 1744, 2219, 2991, 4334, 6905, 6928, 7678, 8048, 10730, 16679, 16680, 16688, 16692, 16695, 16700),
     694: (2553, 5448, 11841, 12189, 16659, 16660, 16661, 16662, 16663, 16664, 16681, 16683, 16686),
@@ -1114,7 +1409,7 @@ IVANLAND_OVERHAUL_PROVINCES = {
     131: (2262, 3803, 3915, 5927, 5989, 8458, 12858, 12895),
     132: (423, 1090, 1157, 2537, 3630, 4061, 4739, 5781, 7693, 8272, 8284, 8338, 10752, 12641),
     164: (4217, 7713, 8532, 9685, 9894, 10130, 11382),
-}
+})
 
 # Cities, rural sectors and split provinces carved by the reviewed IVN map
 # geometry. The manifest assigns each carved province to its current state;
@@ -1126,7 +1421,7 @@ IVANLAND_GEOMETRY_PROVINCES = {
     state_id: tuple(
         int(entry["province"])
         for entry in IVANLAND_GEOMETRY_MANIFEST["provinces"]
-        if entry["state"] == state_id
+        if split_half(int(entry["state"]), int(entry["province"])) == state_id
     )
     for state_id in IVANLAND_OVERHAUL_PROVINCES
 }
@@ -1139,7 +1434,11 @@ IVANLAND_CITY_PROVINCES = {
 def ivanland_state_provinces(state_id: int) -> tuple[int, ...]:
     return tuple(
         sorted(
-            (*IVANLAND_OVERHAUL_PROVINCES[state_id], *IVANLAND_GEOMETRY_PROVINCES[state_id])
+            (
+                *IVANLAND_OVERHAUL_PROVINCES[state_id],
+                *IVANLAND_GEOMETRY_PROVINCES[state_id],
+                *PLANNED_STATE_PROVINCES.get(state_id, ()),
+            )
         )
     )
 
@@ -1154,6 +1453,11 @@ IVANLAND_SPLIT_FAMILIES = {
         for state_id in (92, 95, 96, 97, 98, 99, 100, 101, 129, 130, 131, 132, 164)
     },
 }
+IVANLAND_SPLIT_FAMILIES = {
+    parent: tuple(sorted(split_family(members))) for parent, members in IVANLAND_SPLIT_FAMILIES.items()
+}
+# The island administration owns the island states and their split halves.
+IVANLAND_ISLAND_STATES = split_family((128, 693, 694))
 
 IVANLAND_OVERHAUL_FILENAMES = {
     25: "25-PLACEHOLDER.txt",
@@ -1174,10 +1478,15 @@ IVANLAND_OVERHAUL_FILENAMES = {
         state_id: f"{state_id}-{state_id}.txt"
         for state_id in (92, 95, 96, 97, 98, 99, 100, 101, 129, 130, 131, 132, 164)
     },
+    **{
+        child: split["filename"]
+        for child, split in STATE_SPLITS.items()
+        if split["parent"] in IVANLAND_OVERHAUL_PROVINCES
+    },
 }
 
 # Victory points of the original settlement provinces; the map uses their cities.
-IVANLAND_SETTLEMENT_VICTORY_POINTS = {
+IVANLAND_SETTLEMENT_VICTORY_POINTS = split_points({
     25: ((16568, 10),),
     92: ((3462, 1),),
     95: ((3318, 3),),
@@ -1205,21 +1514,21 @@ IVANLAND_SETTLEMENT_VICTORY_POINTS = {
     715: ((5203, 2),),
     716: ((12054, 2),),
     717: ((932, 2), (6350, 2)),
-}
+}, locate=lambda province: IVANLAND_CITY_PROVINCES.get(province, province))
 
 # Second settlements of the widest Itoran states and the only one of the Old
 # March forest. They remain rural markers: the province geometry carves a
-# city only for IVANLAND_SETTLEMENT_VICTORY_POINTS.
-IVANLAND_RURAL_SETTLEMENTS = {
+# city only for IVANLAND_SETTLEMENT_VICTORY_POINTS and the Stage 2 plan,
+# whose city of state 713 holds Pushchansk.
+IVANLAND_RURAL_SETTLEMENTS = split_points({
     101: ((638, 1, "Малая Ольсия"),),
     127: ((3245, 1, "Кордонный Перевал"),),
     132: ((4739, 1, "Дальняя Серенга"),),
     695: ((9608, 1, "Марково"),),
     697: ((5055, 1, "Западномарск"),),
     698: ((1890, 1, "Южномарск"),),
-    713: ((8615, 1, "Пущанск"),),
     714: ((3503, 1, "Взморье"),),
-}
+})
 
 IVANLAND_OVERHAUL_VICTORY_POINTS = {
     state_id: (
@@ -1231,15 +1540,19 @@ IVANLAND_OVERHAUL_VICTORY_POINTS = {
             (province, value)
             for province, value, _name in IVANLAND_RURAL_SETTLEMENTS.get(state_id, ())
         ),
+        *(
+            (province, value)
+            for province, value, _name in IVANLAND_PLANNED_SETTLEMENTS.get(state_id, ())
+        ),
     )
     for state_id, points in IVANLAND_SETTLEMENT_VICTORY_POINTS.items()
 }
 
-IVANLAND_OVERHAUL_PROVINCE_BUILDINGS = {
+IVANLAND_OVERHAUL_PROVINCE_BUILDINGS = split_items({
     25: ((16568, "naval_base", 8),),
     693: ((10730, "naval_base", 1),),
     694: ((11841, "naval_base", 2), (2553, "naval_base", 1)),
-}
+})
 
 # Afrela is populous enough to sustain its regional diplomacy and volunteer
 # missions, but remains a medium power.  State 232 stays a small island port;
@@ -1645,9 +1958,15 @@ IVANLAND_VICTORY_POINT_NAMES = {
     },
     **{
         province: name
-        for settlements in IVANLAND_RURAL_SETTLEMENTS.values()
+        for settlements in (*IVANLAND_RURAL_SETTLEMENTS.values(), *IVANLAND_PLANNED_SETTLEMENTS.values())
         for province, _value, name in settlements
     },
+}
+
+PLANNED_THEATRE_VP_NAMES = {
+    province: name
+    for settlements in PLANNED_THEATRE_SETTLEMENTS.values()
+    for province, _value, name in settlements
 }
 
 GENERATED_VICTORY_POINT_NAMES = {
@@ -1657,6 +1976,7 @@ GENERATED_VICTORY_POINT_NAMES = {
     **IVANLAND_VICTORY_POINT_NAMES,
     **SETTLEMENT_CLUSTER_VICTORY_POINT_NAMES,
     **VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
+    **PLANNED_THEATRE_VP_NAMES,
     **DIRTY_ZONE_VICTORY_POINT_NAMES,
     11: "$STATE_15$",
     4: "$STATE_19$",
@@ -1733,6 +2053,7 @@ GENERATED_STATE_NAMES = {
     SHL_LORAN_SANDS_STATE_ID: "Лоранские пески",
     SHL_BAYRAT_MINES_STATE_ID: "Байратские копи",
     SHL_VEYRAN_BORDER_STATE_ID: "Вейранская граница",
+    **{child: split["name"] for child, split in STATE_SPLITS.items()},
 }
 
 COASTAL_CITY_POINTS = {
@@ -1760,13 +2081,13 @@ GENERATED_VICTORY_POINT_NAMES.update(COASTAL_CITY_NAMES)
 GENERATED_VICTORY_POINT_NAMES.update({entry["province"]: entry["name"] for entry in SOUTHERN_CITIES})
 GENERATED_LEGACY_VICTORY_POINTS.update(COASTAL_CITY_POINTS)
 
-VORKERLAND_INITIAL_MAP_LEGACY_STATES = {
+VORKERLAND_INITIAL_MAP_LEGACY_STATES = split_family({
     27, 32, 33, 34, 35, 36, 37, 38, 39, 40,
     71, 72, 73, 74, 75, 76, 79, 80, 81, 82,
     90, 91, 93, 94, 102, 104, 105, 106, 107, 108, 109, 110, 111,
     121, 122, 123, 124, 144, 145, 194, 195, 196, 197, 198, 199,
     200, 201, 202,
-}
+})
 
 STELANDER_REGIONAL_PROFILES = {
     43: {"population": TARGET_STATES[43][2], "category": "town", "infrastructure": 2, "civilian": 2, "supplies": 0.0},
@@ -1823,6 +2144,11 @@ WASTELANDS = {238, 254, 258, 264, 267, 288, 292, 296, 329, 330}
 
 def state_path(state_id: int) -> Path:
     matches = sorted(STATE_DIR.glob(f"{state_id}-*.txt"))
+    if not matches and state_id in STATE_SPLITS:
+        raise RuntimeError(
+            f"state {state_id}: the split of state {STATE_SPLITS[state_id]['parent']} "
+            "is not applied; run --apply-state-splits first"
+        )
     if len(matches) != 1:
         raise RuntimeError(f"state {state_id}: expected one file, found {len(matches)}")
     return matches[0]
@@ -1954,6 +2280,8 @@ def render_state(
     else:
         provinces = list(manifest)
     provinces = list(with_rural_splits(set(provinces) | set(EXTRA_PROVINCES_BY_STATE.get(state_id, ()))))
+    if state_id in PLANNED_STATE_PROVINCES:
+        provinces = sorted(set(provinces) | PLANNED_STATE_PROVINCES[state_id])
     if state_id in SOUTHERN_CITY_POINTS:
         provinces = sorted(set(provinces) | {SOUTHERN_CITY_POINTS[state_id][0]})
     if not provinces:
@@ -1971,7 +2299,6 @@ def render_state(
         **SECONDARY_CENTRES,
         **MINOR_VPS,
         **VORKERLAND_CENTRES,
-        **VORKERLAND_MINOR_VPS,
         **SETTLEMENT_CLUSTER_CENTRES,
     }
     if state_id in VORKERLAND_THEATRE_VICTORY_POINTS:
@@ -1988,7 +2315,7 @@ def render_state(
         province, value = centres[state_id]
         if province not in provinces:
             raise RuntimeError(f"state {state_id}: city VP {province} is outside the state")
-        if province in urban_provinces or VORKERLAND_MINOR_VPS.get(state_id) == (province, value):
+        if province in urban_provinces:
             history.append(f"\t\tvictory_points = {{ {province} {value} }}")
 
     for province, value, _name in REGIONAL_SETTLEMENTS.get(state_id, ()):
@@ -2539,6 +2866,9 @@ def validate_ivanland_split_inputs() -> None:
         carved = frozenset().union(
             *(frozenset(IVANLAND_GEOMETRY_PROVINCES[state_id]) for state_id in members)
         )
+        planned = frozenset().union(
+            *(PLANNED_STATE_PROVINCES.get(state_id, frozenset()) for state_id in members)
+        )
         current: set[int] = set()
         for state_id in members:
             matches = tuple(STATE_DIR.glob(f"{state_id}-*.txt"))
@@ -2549,7 +2879,7 @@ def validate_ivanland_split_inputs() -> None:
             if not match:
                 raise RuntimeError(f"state {state_id}: missing provinces block")
             current.update(map(int, re.findall(r"\d+", match.group(1))))
-        if frozenset(current) not in {original, original | carved}:
+        if frozenset(current) not in {original, original | carved, original | carved | planned}:
             raise RuntimeError(f"state {parent}: Ivanland split manifest drifted")
     for state_id, filename in IVANLAND_OVERHAUL_FILENAMES.items():
         target = STATE_DIR / filename
@@ -2558,22 +2888,27 @@ def validate_ivanland_split_inputs() -> None:
             raise RuntimeError(f"state {state_id}: id is already occupied by {matches}")
 
 
+def render_ivanland_state(state_id: int, provinces: tuple[int, ...]) -> str:
+    """Render one Ivanland overhaul state from its profile, VP and building tables."""
+    return render_resource_war_state(
+        state_id,
+        IVANLAND_OVERHAUL_FILENAMES[state_id],
+        provinces,
+        "IIA" if state_id in IVANLAND_ISLAND_STATES else "IVN",
+        IVANLAND_STATE_PROFILES[state_id],
+        IVANLAND_STATE_RESOURCES.get(state_id),
+        IVANLAND_OVERHAUL_VICTORY_POINTS[state_id],
+        IVANLAND_OVERHAUL_PROVINCE_BUILDINGS.get(state_id, ()),
+    )
+
+
 def split_ivanland_overhaul_states() -> None:
     """Split Ivanland's island and Old March using the reviewed province manifest."""
     validate_ivanland_split_inputs()
 
     for state_id in IVANLAND_OVERHAUL_PROVINCES:
-        owner = "IIA" if state_id in {128, 693, 694} else "IVN"
-        write_resource_war_state(
-            state_id,
-            IVANLAND_OVERHAUL_FILENAMES[state_id],
-            ivanland_state_provinces(state_id),
-            owner,
-            IVANLAND_STATE_PROFILES[state_id],
-            IVANLAND_STATE_RESOURCES.get(state_id),
-            IVANLAND_OVERHAUL_VICTORY_POINTS[state_id],
-            IVANLAND_OVERHAUL_PROVINCE_BUILDINGS.get(state_id, ()),
-        )
+        source = render_ivanland_state(state_id, ivanland_state_provinces(state_id))
+        (STATE_DIR / IVANLAND_OVERHAUL_FILENAMES[state_id]).write_text(source, encoding="utf-8", newline="\n")
 
     for state_id, points in IVANLAND_OVERHAUL_VICTORY_POINTS.items():
         if state_id in IVANLAND_OVERHAUL_PROVINCES:
@@ -3116,12 +3451,14 @@ def shahrabad_split_plan() -> dict[Path, bytes]:
     return outputs
 
 
-def synchronize_shahrabad_split_buildings() -> None:
-    """Move building anchors with their provinces and complete each new state's set."""
-    expected_moves = {
-        (parent, child): set(carved)
-        for parent, (child, _original, carved) in SHL_SPLIT_FAMILIES.items()
-    }
+def synchronize_split_buildings(
+    expected_moves: dict[tuple[int, int], set[int]], split_states: set[int], label: str
+) -> None:
+    """Move building anchors with their provinces and complete each split state's set.
+
+    `expected_moves` maps (parent, new state) to the provinces the split moved;
+    any other map/buildings mismatch stops the repair.
+    """
     _, mismatches = audit_buildings(ROOT)
     unexpected = [
         mismatch for mismatch in mismatches
@@ -3133,13 +3470,23 @@ def synchronize_shahrabad_split_buildings() -> None:
         raise RuntimeError(f"unrelated map/buildings state mismatches: {unexpected[:5]}")
     if mismatches:
         synchronize_buildings(ROOT, apply=True)
-    split_states = set(SHL_SPLIT_FAMILIES) | set(SHL_SPLIT_FILENAMES)
     if ensure_state_spawn_positions(ROOT, split_states):
         # Added anchors take unit-stack heights; relief provinces need the surface height.
         synchronize_buildings(ROOT, apply=True)
     _, remaining = audit_buildings(ROOT)
     if remaining:
-        raise RuntimeError(f"Shahrabad split spawn-position repair drifted: {remaining[:5]}")
+        raise RuntimeError(f"{label} spawn-position repair drifted: {remaining[:5]}")
+
+
+def synchronize_shahrabad_split_buildings() -> None:
+    synchronize_split_buildings(
+        {
+            (parent, child): set(carved)
+            for parent, (child, _original, carved) in SHL_SPLIT_FAMILIES.items()
+        },
+        set(SHL_SPLIT_FAMILIES) | set(SHL_SPLIT_FILENAMES),
+        "Shahrabad split",
+    )
 
 
 def update_shahrabad_split(apply: bool) -> int:
@@ -3153,6 +3500,278 @@ def update_shahrabad_split(apply: bool) -> int:
         synchronize_shahrabad_split_buildings()
         if any(path.read_bytes() != data for path, data in shahrabad_split_plan().items()):
             raise RuntimeError("Shahrabad split is not idempotent")
+        return 0
+    return int(bool(changed))
+
+
+def history_section(source: str) -> str:
+    history_open, history_close = named_block(source, "history")
+    return source[history_open:history_close + 1]
+
+
+def history_buildings_block(source: str) -> str:
+    """Return the body of the history buildings block, or an empty string."""
+    history = history_section(source)
+    match = re.search(r"(?m)^\s*buildings\s*=\s*\{", history)
+    if not match:
+        return ""
+    opening = history.find("{", match.start(), match.end())
+    return history[opening + 1:matching_brace(history, opening)]
+
+
+def history_building_levels(source: str) -> dict[str, int]:
+    """Return the state-level building levels; province entries are skipped."""
+    block = history_buildings_block(source)
+    while re.search(r"\{[^{}]*\}", block):
+        block = re.sub(r"(?:\w+\s*=\s*)?\{[^{}]*\}", "", block)
+    return {name: int(level) for name, level in re.findall(r"(?m)^\s*([a-z_]+)\s*=\s*(\d+)\s*$", block)}
+
+
+def history_province_buildings(source: str) -> tuple[tuple[int, str, int], ...]:
+    """Return the one-building province entries of a state's history."""
+    return tuple(
+        (int(province), building, int(level))
+        for province, building, level in re.findall(
+            r"(?m)^\s*(\d+)\s*=\s*\{\s*([a-z_]+)\s*=\s*(\d+)\s*\}\s*$", history_buildings_block(source)
+        )
+    )
+
+
+def remove_history_province_building(source: str, province: int) -> str:
+    history_open, history_close = named_block(source, "history")
+    history = re.sub(
+        rf"(?m)^[ \t]*{province}\s*=\s*\{{\s*[a-z_]+\s*=\s*\d+\s*\}}[ \t]*\n", "", source[history_open:history_close + 1]
+    )
+    return source[:history_open] + history + source[history_close + 1:]
+
+
+def state_resource_levels(source: str) -> dict[str, int]:
+    match = re.search(r"(?m)^\s*resources\s*=\s*\{", source)
+    if not match:
+        return {}
+    opening = source.find("{", match.start(), match.end())
+    body = source[opening + 1:matching_brace(source, opening)]
+    return {resource: int(amount) for resource, amount in re.findall(r"(?m)^\s*([a-z_]+)\s*=\s*(\d+)\s*$", body)}
+
+
+def state_scalar(source: str, key: str) -> str:
+    match = re.search(rf"(?m)^\s*{re.escape(key)}\s*=\s*([^\s#]+)", source)
+    if not match:
+        raise RuntimeError(f"state has no {key}")
+    return match.group(1)
+
+
+def split_family_provinces(child: int) -> frozenset[int]:
+    """Return every listed and planned province of a split parent and its new half."""
+    parent = STATE_SPLITS[child]["parent"]
+    child_path = STATE_DIR / STATE_SPLITS[child]["filename"]
+    family = set(state_file_provinces(state_path(parent)))
+    if child_path.exists():
+        family |= state_file_provinces(child_path)
+    for state_id in (parent, child):
+        family |= PLANNED_STATE_PROVINCES.get(state_id, frozenset())
+    outside = sorted(SPLIT_PROVINCES[child] - family)
+    if outside:
+        raise RuntimeError(f"state {child}: split provinces {outside[:5]} are outside state {parent}")
+    return frozenset(family)
+
+
+def check_split_victory_points(child: int, halves: dict[int, tuple[tuple[int, int], ...]]) -> None:
+    """The parent keeps the highest original VP; the new half's centre alone reaches the centre value."""
+    parent = STATE_SPLITS[child]["parent"]
+    centre = STATE_SPLITS[child]["centre"]
+    child_points = dict(halves[child])
+    if child_points.get(centre, 0) < SPLIT_CENTRE_VALUE:
+        raise RuntimeError(f"state {child}: centre {centre} has no VP of {SPLIT_CENTRE_VALUE}")
+    if any(value >= SPLIT_CENTRE_VALUE for province, value in child_points.items() if province != centre):
+        raise RuntimeError(f"state {child}: another VP already reaches {SPLIT_CENTRE_VALUE}; drop the centre")
+    others = [value for province, value in child_points.items() if province != centre]
+    if not halves[parent] or max(value for _province, value in halves[parent]) < max(others, default=0):
+        raise RuntimeError(f"state {parent}: the parent must keep the highest VP of the split")
+
+
+def legacy_split_sources(child: int) -> dict[Path, bytes]:
+    """Cut one legacy Vorkerland state in place and render its new half.
+
+    Totals are read from both halves' files, so every run reproduces the same
+    cut. Infrastructure, local supplies, owner, cores and claims are copied
+    from the parent; buildings and VPs follow their provinces. The builder
+    profiles must agree, or a later legacy-profile pass would undo the cut.
+    """
+    split = STATE_SPLITS[child]
+    parent = split["parent"]
+    parent_path = state_path(parent)
+    child_path = STATE_DIR / split["filename"]
+    original = parent_path.read_bytes().decode("utf-8-sig")
+    newline = "\r\n" if "\r\n" in original else "\n"
+    parent_source = original.replace("\r\n", "\n")
+    sources = [parent_source]
+    if child_path.exists():
+        sources.append(child_path.read_text(encoding="utf-8-sig"))
+
+    family = split_family_provinces(child)
+    halves = {
+        state_id: tuple(sorted(province for province in family if split_half(parent, province) == state_id))
+        for state_id in (parent, child)
+    }
+    population = sum(int(state_scalar(source, "manpower")) for source in sources)
+    moved_population = split_amount(population, split["share"], 10_000)
+    levels = {
+        building: sum(history_building_levels(source).get(building, 0) for source in sources)
+        for building in SPLIT_FACTORIES
+    }
+    moved_levels = split_factory_levels(levels)
+    deposits: dict[str, int] = {}
+    for source in sources:
+        for resource, amount in state_resource_levels(source).items():
+            deposits[resource] = deposits.get(resource, 0) + amount
+    moved_deposits = {resource: split_amount(amount, split["share"]) for resource, amount in deposits.items()}
+    family_points: dict[int, int] = {}
+    for source in sources:
+        for province, value in history_victory_points(source):
+            family_points.setdefault(province, value)
+    points = {
+        state_id: tuple(
+            (province, split_point_value(state_id, province, value))
+            for province, value in family_points.items()
+            if split_half(parent, province) == state_id
+        )
+        for state_id in (parent, child)
+    }
+    check_split_victory_points(child, points)
+    province_buildings = {entry[0]: entry for source in sources for entry in history_province_buildings(source)}
+    ceiling = max((state_scalar(source, "state_category") for source in sources), key=CATEGORY_RANKS.index)
+    factories = {
+        parent: {building: levels[building] - moved_levels[building] for building in SPLIT_FACTORIES},
+        child: moved_levels,
+    }
+    residents = {parent: population - moved_population, child: moved_population}
+    categories = {
+        state_id: split_category(
+            residents[state_id],
+            sum(factories[state_id].values()),
+            state_id == parent and parent in COUNTRY_CAPITAL_STATES,
+            ceiling,
+        )
+        for state_id in (parent, child)
+    }
+    shares = {
+        parent: {resource: amount - moved_deposits[resource] for resource, amount in deposits.items()},
+        child: moved_deposits,
+    }
+    for state_id in (parent, child):
+        profile = LEGACY_STATE_PROFILES.get(state_id, {})
+        tabled = REGIONAL_STATE_RESOURCES.get(state_id, {})
+        if (
+            int(profile.get("population", -1)) != residents[state_id]
+            or profile.get("category") != categories[state_id]
+            or int(profile.get("civilian", 0)) > factories[state_id]["industrial_complex"]
+            or int(profile.get("military", 0)) > factories[state_id]["arms_factory"]
+            or any(shares[state_id].get(resource, 0) != amount for resource, amount in tabled.items())
+        ):
+            raise RuntimeError(f"state {state_id}: the split disagrees with its builder profile")
+
+    source = replace_state_provinces(parent_source, halves[parent])
+    source = set_scalar(source, "manpower", str(residents[parent]))
+    source = set_scalar(source, "state_category", categories[parent])
+    for building in SPLIT_FACTORIES:
+        if levels[building]:
+            source = set_history_building_level(source, building, factories[parent][building])
+    for resource, amount in shares[parent].items():
+        source = ensure_state_resources(source, {resource: amount}) if amount else remove_state_resource(source, resource)
+    for province in province_buildings:
+        if split_half(parent, province) == child:
+            source = remove_history_province_building(source, province)
+    source = replace_history_victory_points(source, points[parent])
+
+    owner = re.search(r"(?m)^\s*owner\s*=\s*([A-Z0-9]{3})\s*$", history_section(parent_source)).group(1)
+    tags = [
+        f"\t\t{key} = {tag}"
+        for key in ("add_core_of", "add_claim_by")
+        for tag in re.findall(rf"(?m)^\s*{key}\s*=\s*([A-Z0-9]{{3}})\s*$", history_section(parent_source))
+        if (key, tag) != ("add_core_of", owner)
+    ]
+    rendered = render_resource_war_state(
+        child,
+        split["filename"],
+        halves[child],
+        owner,
+        {
+            "population": residents[child],
+            "category": categories[child],
+            "infrastructure": history_building_levels(parent_source).get("infrastructure", 0),
+            "civilian": moved_levels["industrial_complex"],
+            "military": moved_levels["arms_factory"],
+            "custom_buildings": {"dockyard": moved_levels["dockyard"]},
+            "supplies": float(state_scalar(parent_source, "local_supplies")),
+        },
+        {resource: amount for resource, amount in moved_deposits.items() if amount},
+        points[child],
+        tuple(entry for province, entry in sorted(province_buildings.items()) if split_half(parent, province) == child),
+    )
+    core_line = f"\t\tadd_core_of = {owner}\n"
+    rendered = rendered.replace(core_line, core_line + "".join(f"{line}\n" for line in tags), 1)
+    return {
+        parent_path: source.replace("\n", newline).encode("utf-8"),
+        child_path: rendered.encode("utf-8"),
+    }
+
+
+def state_split_plan() -> dict[Path, bytes]:
+    """Cut the six split parents into their halves and name the new states.
+
+    Legacy Vorkerland parents are patched in place and their new halves are
+    rendered; Ivanland halves are rendered whole from the split tables. A
+    parent is accepted only while the table's provinces still belong to it.
+    """
+    outputs: dict[Path, bytes] = {}
+    for child, split in STATE_SPLITS.items():
+        parent = split["parent"]
+        child_path = STATE_DIR / split["filename"]
+        existing = tuple(STATE_DIR.glob(f"{child}-*.txt"))
+        if existing and existing != (child_path,):
+            raise RuntimeError(f"state {child}: ID occupied by another state")
+        if parent not in IVANLAND_OVERHAUL_PROVINCES:
+            outputs.update(legacy_split_sources(child))
+            continue
+        family = split_family_provinces(child)
+        check_split_victory_points(child, IVANLAND_OVERHAUL_VICTORY_POINTS)
+        for state_id in (parent, child):
+            provinces = ivanland_state_provinces(state_id)
+            if set(provinces) != {province for province in family if split_half(parent, province) == state_id}:
+                raise RuntimeError(f"state {state_id}: the split half differs from its Ivanland manifest")
+            path = STATE_DIR / IVANLAND_OVERHAUL_FILENAMES[state_id]
+            outputs[path] = render_ivanland_state(state_id, provinces).encode("utf-8")
+    path = ROOT / "localisation/russian/state_names_l_russian.yml"
+    source = path.read_text(encoding="utf-8-sig")
+    for child, split in STATE_SPLITS.items():
+        source = replace_localisation_value(source, f"STATE_{child}", split["name"])
+    outputs[path] = source.encode("utf-8-sig")
+    return outputs
+
+
+def synchronize_state_split_buildings() -> None:
+    synchronize_split_buildings(
+        {
+            (split["parent"], child): set(state_file_provinces(STATE_DIR / split["filename"]))
+            for child, split in STATE_SPLITS.items()
+        },
+        set(STATE_SPLITS) | set(SPLIT_CHILDREN),
+        "state split",
+    )
+
+
+def update_state_splits(apply: bool) -> int:
+    outputs = state_split_plan()
+    changed = [path for path, data in outputs.items() if not path.exists() or path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply:
+        synchronize_state_split_buildings()
+        if any(path.read_bytes() != data for path, data in state_split_plan().items()):
+            raise RuntimeError("state splits are not idempotent")
         return 0
     return int(bool(changed))
 
@@ -3208,18 +3827,28 @@ def with_island_districts(source: str, state_id: int) -> str:
     return with_appended_provinces(source, island_district_provinces(state_id), 16)
 
 
-def archipelago_island_plan() -> dict[Path, bytes]:
-    """Add every raised island and island district to its state's province list and nothing else."""
-    land = {
+def definition_land_provinces() -> frozenset[int]:
+    return frozenset(
         int(row[0])
         for line in (ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines()
         if len(row := line.split(";")) > 4 and row[0].isdigit() and row[4] == "land"
-    }
+    )
+
+
+def state_file_owners() -> dict[int, int]:
+    """Map every listed province to the state whose file lists it."""
     owners: dict[int, int] = {}
     for path in STATE_DIR.glob("*.txt"):
         state_id = int(path.name.split("-", 1)[0])
         for province in state_file_provinces(path):
             owners[province] = state_id
+    return owners
+
+
+def archipelago_island_plan() -> dict[Path, bytes]:
+    """Add every raised island and island district to its state's province list and nothing else."""
+    land = definition_land_provinces()
+    owners = state_file_owners()
     outputs = {}
     for district in ISLAND_DISTRICTS:
         if owners.get(district["parent"]) != district["state"]:
@@ -3254,6 +3883,243 @@ def update_archipelago_islands(apply: bool) -> int:
             raise RuntimeError("archipelago island provinces are not idempotent")
         return 0
     return int(bool(changed))
+
+
+def history_victory_points(source: str) -> tuple[tuple[int, int], ...]:
+    history_open, history_close = named_block(source, "history")
+    return tuple(
+        (int(province), int(value))
+        for province, value in re.findall(
+            r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", source[history_open:history_close]
+        )
+    )
+
+
+def authored_victory_point_provinces(state_id: int) -> frozenset[int]:
+    """Return the state's VP provinces in the authored tables, without any plan."""
+    centres = {
+        **CAPITALS,
+        **SECONDARY_CENTRES,
+        **MINOR_VPS,
+        **VORKERLAND_CENTRES,
+        **SETTLEMENT_CLUSTER_CENTRES,
+    }
+    points = (
+        *AUTHORED_THEATRE_VICTORY_POINTS.get(state_id, ()),
+        *(
+            (IVANLAND_CITY_PROVINCES.get(province, province), value)
+            for province, value in IVANLAND_SETTLEMENT_VICTORY_POINTS.get(state_id, ())
+        ),
+        *((province, value) for province, value, _name in IVANLAND_RURAL_SETTLEMENTS.get(state_id, ())),
+        *((province, value) for province, value, _name in AUTHORED_REGIONAL_SETTLEMENTS.get(state_id, ())),
+        *VORKERLAND_LEGACY_VICTORY_POINTS.get(state_id, ()),
+        *SETTLEMENT_CLUSTER_VICTORY_POINTS.get(state_id, ()),
+        *((centres[state_id],) if state_id in centres else ()),
+    )
+    return frozenset(province for province, _value in points)
+
+
+def validate_planned_geography(
+    planned: PlannedGeography, owners: dict[int, int], land: frozenset[int]
+) -> None:
+    """Reject a planned province whose parent, map row or listing does not fit its state."""
+    planned_states = {entry.province: entry.state for entry in planned.provinces}
+    for entry in planned.provinces:
+        label = f"state {entry.state}: planned province {entry.province}"
+        if entry.parent == UNITY_TOWER_PROVINCE:
+            raise RuntimeError(f"{label} is cut from the Unity Tower province")
+        # The state split may separate a part from its parent and lists the
+        # halves on its own, so both checks accept the whole split family.
+        family = split_root(entry.state)
+        if split_root(owners.get(entry.parent, planned_states.get(entry.parent))) != family:
+            raise RuntimeError(f"{label} has a parent {entry.parent} outside the state")
+        if entry.province not in land:
+            raise RuntimeError(f"{label} is not land")
+        if split_root(owners.get(entry.province, entry.state)) != family:
+            raise RuntimeError(f"{label} is listed by state {owners[entry.province]}")
+    for entry in planned.settlements:
+        if (entry.source == "ivn") != (entry.state in IVANLAND_OVERHAUL_PROVINCES):
+            raise RuntimeError(
+                f"state {entry.state}: {entry.source} settlement {entry.province} "
+                "belongs to the other geography builder"
+            )
+    for entry in planned.vp_settlements():
+        if entry.province in authored_victory_point_provinces(entry.state):
+            raise RuntimeError(
+                f"state {entry.state}: planned {entry.kind} {entry.province} already holds "
+                "an authored VP; declare it as adopt"
+            )
+
+
+def planned_settlement_names(planned: PlannedGeography) -> dict[int, str]:
+    """Return the Russian VP names of the planned settlements, unique across the map."""
+    names = {entry.province: entry.name for entry in planned.vp_settlements()}
+    unnamed = sorted(province for province, name in names.items() if not name)
+    if unnamed:
+        raise RuntimeError(f"planned settlements without a Russian name: {unnamed}")
+    values = list(names.values())
+    repeated = sorted({name for name in values if values.count(name) > 1})
+    if repeated:
+        raise RuntimeError(f"planned settlement names repeat: {repeated}")
+    taken: dict[str, str] = {}
+    for filename in ("victory_points_l_russian.yml", "state_names_l_russian.yml"):
+        source = (ROOT / "localisation/russian" / filename).read_text(encoding="utf-8-sig")
+        taken.update(re.findall(r'(?m)^[ \t]*([\w.-]+):\d*[ \t]*"([^"]*)"', source))
+    # A settlement that keeps the name its province already carried adds no
+    # repeat, even when an older VP elsewhere shares that name.
+    clashes = sorted(
+        f"{province} {name} ({key})"
+        for province, name in names.items()
+        if taken.get(f"VICTORY_POINTS_{province}") != name
+        for key, value in taken.items()
+        if value == name and key != f"VICTORY_POINTS_{province}"
+    )
+    if clashes:
+        raise RuntimeError(f"planned settlement names already used: {clashes}")
+    return names
+
+
+def theatre_victory_points(planned: PlannedGeography) -> dict[int, tuple[tuple[int, int], ...]]:
+    """Merge the planned theatre settlements and overrides with exact package totals."""
+    settlements = planned.for_states(AUTHORED_THEATRE_VICTORY_POINTS).vp_settlements()
+    points = merge_planned_victory_points(
+        AUTHORED_THEATRE_VICTORY_POINTS,
+        ((entry.state, entry.province, entry.value) for entry in settlements),
+        planned.vp_overrides,
+    )
+    errors = package_total_errors(points)
+    if errors:
+        raise RuntimeError("; ".join(errors))
+    return points
+
+
+def east_geography_plan(planned: PlannedGeography | None = None) -> dict[Path, bytes]:
+    """Append applied planned provinces to their states and set the planned VPs and names.
+
+    Only states with planned provinces or settlements and theatre states whose
+    VPs moved are rendered, so an empty plan changes nothing. Theatre states
+    take the merged manifest exactly; Ivanland states keep their manifest VP
+    block and gain the planned ones last; other states get them as
+    regional_settlement_plan sets them.
+    """
+    planned = PLANNED_GEOGRAPHY if planned is None else planned
+    if not (planned.provinces or planned.settlements or planned.vp_overrides):
+        return {}
+    validate_planned_geography(planned, state_file_owners(), definition_land_provinces())
+    theatre = theatre_victory_points(planned)
+    names = planned_settlement_names(planned)
+    by_state = planned.provinces_by_state()
+    settlements: dict[int, tuple[tuple[int, int], ...]] = {}
+    for entry in planned.vp_settlements():
+        settlements[entry.state] = (*settlements.get(entry.state, ()), (entry.province, entry.value))
+    moved = {
+        state_id
+        for state_id, points in theatre.items()
+        if points != AUTHORED_THEATRE_VICTORY_POINTS[state_id]
+    }
+    outputs = {}
+    for state_id in sorted(set(by_state) | set(settlements) | moved):
+        path = state_path(state_id)
+        original = path.read_bytes().decode("utf-8")
+        newline = "\r\n" if "\r\n" in original else "\n"
+        source = with_appended_provinces(
+            original.replace("\r\n", "\n"), by_state.get(state_id, frozenset()), 16
+        )
+        own = settlements.get(state_id, ())
+        opening, closing = named_block(source, "provinces")
+        members = set(map(int, re.findall(r"\d+", source[opening:closing])))
+        outside = sorted(
+            province
+            for province, _value in (*theatre.get(state_id, ()), *own)
+            if province not in members
+        )
+        if outside:
+            raise RuntimeError(f"state {state_id}: planned VPs outside the state: {outside}")
+        if state_id in theatre:
+            source = replace_history_victory_points(source, theatre[state_id])
+        elif state_id in IVANLAND_OVERHAUL_PROVINCES and own:
+            listed = {province for province, _value in own}
+            kept = tuple(point for point in history_victory_points(source) if point[0] not in listed)
+            source = replace_history_victory_points(source, (*kept, *own))
+        else:
+            source = ensure_history_victory_points(source, own)
+        outputs[path] = source.replace("\n", newline).encode("utf-8")
+    if names:
+        localisation_path = ROOT / "localisation/russian/victory_points_l_russian.yml"
+        localisation = localisation_path.read_text(encoding="utf-8-sig")
+        for province, name in names.items():
+            localisation = replace_localisation_value(localisation, f"VICTORY_POINTS_{province}", name)
+        outputs[localisation_path] = localisation.encode("utf-8-sig")
+    return outputs
+
+
+def update_east_geography(apply: bool) -> int:
+    outputs = east_geography_plan()
+    changed = [path for path, data in outputs.items() if path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply:
+        if any(path.read_bytes() != data for path, data in east_geography_plan().items()):
+            raise RuntimeError("east geography provinces are not idempotent")
+        return 0
+    return int(bool(changed))
+
+
+def promote_planned_names(
+    specification: dict[str, object], planned: PlannedGeography, localisation: str, *, apply: bool
+) -> list[str]:
+    """Key reviewed names of planned settlements by the provinces their plans chose.
+
+    Names are reviewed before their provinces exist, so they wait in
+    ``village_names`` keyed by the Russian name; a name is promoted once its
+    Russian VP entry is rendered. Returns the settlements still without a pair.
+    """
+    reviewed = specification["entries"]
+    waiting = specification.get("village_names", {})
+    rendered = dict(re.findall(r'(?m)^[ \t]*(VICTORY_POINTS_\d+):\d*[ \t]*"([^"]*)"', localisation))
+    gaps = []
+    for entry in planned.vp_settlements():
+        key = f"VICTORY_POINTS_{entry.province}"
+        if key in reviewed:
+            continue
+        if rendered.get(key) != entry.name:
+            gaps.append(f"{key} ({entry.name}) is not rendered: run --apply-east-geography first")
+        elif entry.name not in waiting:
+            gaps.append(f"{key} ({entry.name}) has no reviewed English name in village_names")
+        elif apply:
+            reviewed[key] = {"russian": entry.name, "english": waiting[entry.name]}
+        else:
+            gaps.append(f"{key} ({entry.name}): reviewed name {waiting[entry.name]!r} is promoted by --apply")
+    return gaps
+
+
+def sync_english_localisation(*, apply: bool) -> int:
+    """Promote waiting planned-settlement names, then render the reviewed English names."""
+    from tools.lib.localisation import sync_builder_english_localisation
+
+    owner = "tools.builders.build_adiscord_new_states"
+    names_path = ROOT / "tools/data/adiscord_world_names_english.json"
+    localisation_path = ROOT / "localisation/russian/victory_points_l_russian.yml"
+    catalogue = json.loads(names_path.read_text(encoding="utf-8"))
+    specification = next(
+        entry
+        for entry in catalogue[owner]
+        if entry["source"] == localisation_path.relative_to(ROOT).as_posix()
+    )
+    before = len(specification["entries"])
+    gaps = promote_planned_names(
+        specification, PLANNED_GEOGRAPHY, localisation_path.read_text(encoding="utf-8-sig"), apply=apply
+    )
+    if gaps:
+        print(f"English names of planned settlements need review ({len(gaps)}):")
+        for gap in gaps:
+            print(f"- {gap}")
+        return 1
+    if len(specification["entries"]) != before:
+        names_path.write_bytes((json.dumps(catalogue, indent=2, ensure_ascii=False) + "\n").encode("utf-8"))
+    return sync_builder_english_localisation(ROOT, owner, apply=apply)
 
 
 def svetlogorye_homeland_plan() -> dict[Path, bytes]:
@@ -3470,6 +4336,9 @@ def regional_settlement_plan() -> dict[Path, bytes]:
         source = path.read_text(encoding="utf-8-sig")
         province_open, province_close = named_block(source, "provinces")
         provinces = set(map(int, re.findall(r"\d+", source[province_open:province_close])))
+        # Planned provinces count before --apply-east-geography lists them, so
+        # a pending append is reported as drift rather than an invalid VP.
+        provinces |= PLANNED_STATE_PROVINCES.get(state_id, frozenset())
         for province, value, name in settlements:
             if province in seen or province not in provinces or definitions.get(province, ("", ""))[0] != "land":
                 raise RuntimeError(f"state {state_id}: duplicate or invalid regional VP {province}")
@@ -3479,8 +4348,9 @@ def regional_settlement_plan() -> dict[Path, bytes]:
                 and state_id in NAM_ARCHIPELAGO_STATE_NAMES
                 and 1 <= value <= 3
             )
+            planned_settlement = province in PLANNED_URBAN_SETTLEMENTS and 1 <= value <= 5
             if terrain in CITY_TERRAINS:
-                if value < 10 and not island_town:
+                if value < 10 and not island_town and not planned_settlement:
                     raise RuntimeError(f"urban VP {province}: expected at least 10 points")
             elif not 1 <= value <= 3:
                 raise RuntimeError(f"regional VP {province}: expected a minor settlement value")
@@ -3520,6 +4390,7 @@ def apply() -> None:
     split_svetlogorsk_from_nam()
     split_ivanland_overhaul_states()
     update_shahrabad_split(True)
+    update_state_splits(True)
     for state_id, owner in sorted(STARTING_OWNERS.items()):
         if state_id in NAM_COALITION_REGIONS:
             continue
@@ -3527,6 +4398,7 @@ def apply() -> None:
     apply_legacy_state_profiles()
     update_svetlogorye_homeland(True)
     update_archipelago_islands(True)
+    update_east_geography(True)
     update_coastal_city_states(True)
     update_southern_settlements(True)
     update_stelander_islands(True)
@@ -3650,12 +4522,7 @@ def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
         elif state_id in STARTING_OWNERS:
             result = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
         elif state_id in IVANLAND_OVERHAUL_PROVINCES:
-            owner = "IIA" if state_id in {128, 693, 694} else "IVN"
-            result = render_resource_war_state(
-                state_id, path.name, provinces, owner, IVANLAND_STATE_PROFILES[state_id],
-                IVANLAND_STATE_RESOURCES.get(state_id), IVANLAND_OVERHAUL_VICTORY_POINTS[state_id],
-                IVANLAND_OVERHAUL_PROVINCE_BUILDINGS.get(state_id, ()),
-            ).encode("utf-8")
+            result = render_ivanland_state(state_id, provinces).encode("utf-8")
         elif state_id == 49:
             result = render_resource_war_state(
                 state_id, path.name, provinces, "EXZ", LEGACY_STATE_PROFILES[state_id],
@@ -3777,6 +4644,16 @@ def main() -> int:
         action="store_true",
         help="split the four largest Shahrabad districts and name every Shahrabad town",
     )
+    actions.add_argument(
+        "--check-state-splits",
+        action="store_true",
+        help="validate the six Vorkerland and Itora state splits without writing files",
+    )
+    actions.add_argument(
+        "--apply-state-splits",
+        action="store_true",
+        help="cut the six split parents, write their new halves and name the new states",
+    )
     actions.add_argument("--check-svetlogorye-homeland", action="store_true")
     actions.add_argument("--apply-svetlogorye-homeland", action="store_true")
     actions.add_argument(
@@ -3788,6 +4665,16 @@ def main() -> int:
         "--apply-archipelago-islands",
         action="store_true",
         help="add raised island provinces to their states without touching other state data",
+    )
+    actions.add_argument(
+        "--check-east-geography",
+        action="store_true",
+        help="check the applied IVN and east geography plans against their state lists and VPs",
+    )
+    actions.add_argument(
+        "--apply-east-geography",
+        action="store_true",
+        help="append the applied planned provinces to their states and set their VPs and Russian names",
     )
     actions.add_argument("--apply-coastal-cities", action="store_true")
     actions.add_argument("--check-southern-settlements", action="store_true")
@@ -3806,11 +4693,7 @@ def main() -> int:
     if args.check_country_districts or args.apply_country_districts:
         return update_country_districts(args.apply_country_districts)
     if args.english_localisation:
-        from tools.lib.localisation import sync_builder_english_localisation
-
-        return sync_builder_english_localisation(
-            ROOT, "tools.builders.build_adiscord_new_states", apply=args.apply
-        )
+        return sync_english_localisation(apply=args.apply)
     if args.check_coalition_regions or args.apply_coalition_regions:
         return update_coalition_regions(args.apply_coalition_regions)
     if args.check_nam_vps or args.apply_nam_vps:
@@ -3826,10 +4709,14 @@ def main() -> int:
         return update_shahrabad_population(args.apply_shahrabad_population)
     if args.check_shahrabad_split or args.apply_shahrabad_split:
         return update_shahrabad_split(args.apply_shahrabad_split)
+    if args.check_state_splits or args.apply_state_splits:
+        return update_state_splits(args.apply_state_splits)
     if args.check_svetlogorye_homeland or args.apply_svetlogorye_homeland:
         return update_svetlogorye_homeland(args.apply_svetlogorye_homeland)
     if args.check_archipelago_islands or args.apply_archipelago_islands:
         return update_archipelago_islands(args.apply_archipelago_islands)
+    if args.check_east_geography or args.apply_east_geography:
+        return update_east_geography(args.apply_east_geography)
     if args.check_regional_settlements or args.apply_regional_settlements:
         return update_regional_settlements(args.apply_regional_settlements)
     if args.check_stelander_islands or args.apply_stelander_islands:
@@ -3899,11 +4786,14 @@ def main() -> int:
     regional_drift = update_regional_settlements(False)
     shahrabad_drift = update_shahrabad_population(False)
     shahrabad_split_drift = update_shahrabad_split(False)
+    state_split_drift = update_state_splits(False)
     svetlogorye_drift = update_svetlogorye_homeland(False)
     archipelago_drift = update_archipelago_islands(False)
+    east_drift = update_east_geography(False)
     return max(
         coalition_drift, island_drift, port_drift, regional_drift, shahrabad_drift,
-        shahrabad_split_drift, svetlogorye_drift, archipelago_drift, validate_main(),
+        shahrabad_split_drift, state_split_drift, svetlogorye_drift, archipelago_drift,
+        east_drift, validate_main(),
     )
 
 
